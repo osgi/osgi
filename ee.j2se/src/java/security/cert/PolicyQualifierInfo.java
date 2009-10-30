@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package java.security.cert;
-public final class PolicyQualifierInfo {
-	public PolicyQualifierInfo(byte[] var0) throws java.io.IOException { }
-	public byte[] getEncoded() { return null; }
-	public byte[] getPolicyQualifier() { return null; }
-	public java.lang.String getPolicyQualifierId() { return null; }
+public class PolicyQualifierInfo {
+	public PolicyQualifierInfo(byte[] var0) throws java.io.IOException { } 
+	public final byte[] getEncoded() { return null; }
+	public final byte[] getPolicyQualifier() { return null; }
+	public final java.lang.String getPolicyQualifierId() { return null; }
 }
 

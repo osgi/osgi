@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package java.awt.dnd;
 public class DragGestureEvent extends java.util.EventObject {
-	public DragGestureEvent(java.awt.dnd.DragGestureRecognizer var0, int var1, java.awt.Point var2, java.util.List var3) { super((java.lang.Object) null); }
+	public DragGestureEvent(java.awt.dnd.DragGestureRecognizer var0, int var1, java.awt.Point var2, java.util.List<? extends java.awt.event.InputEvent> var3)  { super((java.lang.Object) null); } 
 	public java.awt.Component getComponent() { return null; }
 	public int getDragAction() { return 0; }
 	public java.awt.Point getDragOrigin() { return null; }
 	public java.awt.dnd.DragSource getDragSource() { return null; }
 	public java.awt.dnd.DragGestureRecognizer getSourceAsDragGestureRecognizer() { return null; }
 	public java.awt.event.InputEvent getTriggerEvent() { return null; }
-	public java.util.Iterator iterator() { return null; }
+	public java.util.Iterator<java.awt.event.InputEvent> iterator() { return null; }
 	public void startDrag(java.awt.Cursor var0, java.awt.Image var1, java.awt.Point var2, java.awt.datatransfer.Transferable var3, java.awt.dnd.DragSourceListener var4) { }
 	public void startDrag(java.awt.Cursor var0, java.awt.datatransfer.Transferable var1) { }
 	public void startDrag(java.awt.Cursor var0, java.awt.datatransfer.Transferable var1, java.awt.dnd.DragSourceListener var2) { }

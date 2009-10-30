@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 
 package java.util.jar;
 public class JarEntry extends java.util.zip.ZipEntry {
-	public JarEntry(java.lang.String var0) { super((java.util.zip.ZipEntry) null); }
-	public JarEntry(java.util.jar.JarEntry var0) { super((java.util.zip.ZipEntry) null); }
-	public JarEntry(java.util.zip.ZipEntry var0) { super((java.util.zip.ZipEntry) null); }
+	public JarEntry(java.lang.String var0)  { super((java.util.zip.ZipEntry) null); } 
+	public JarEntry(java.util.jar.JarEntry var0)  { super((java.util.zip.ZipEntry) null); } 
+	public JarEntry(java.util.zip.ZipEntry var0)  { super((java.util.zip.ZipEntry) null); } 
 	public java.util.jar.Attributes getAttributes() throws java.io.IOException { return null; }
 	public java.security.cert.Certificate[] getCertificates() { return null; }
+	public java.security.CodeSigner[] getCodeSigners() { return null; }
 }
 

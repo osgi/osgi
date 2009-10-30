@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt.image;
 public class LookupOp implements java.awt.image.BufferedImageOp, java.awt.image.RasterOp {
-	public LookupOp(java.awt.image.LookupTable var0, java.awt.RenderingHints var1) { }
+	public LookupOp(java.awt.image.LookupTable var0, java.awt.RenderingHints var1) { } 
 	public java.awt.image.BufferedImage createCompatibleDestImage(java.awt.image.BufferedImage var0, java.awt.image.ColorModel var1) { return null; }
 	public java.awt.image.WritableRaster createCompatibleDestRaster(java.awt.image.Raster var0) { return null; }
 	public final java.awt.image.BufferedImage filter(java.awt.image.BufferedImage var0, java.awt.image.BufferedImage var1) { return null; }

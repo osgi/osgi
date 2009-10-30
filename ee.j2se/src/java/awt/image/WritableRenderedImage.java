@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  */
 
 package java.awt.image;
-public abstract interface WritableRenderedImage extends java.awt.image.RenderedImage {
-	public abstract void addTileObserver(java.awt.image.TileObserver var0);
-	public abstract java.awt.image.WritableRaster getWritableTile(int var0, int var1);
-	public abstract java.awt.Point[] getWritableTileIndices();
-	public abstract boolean hasTileWriters();
-	public abstract boolean isTileWritable(int var0, int var1);
-	public abstract void releaseWritableTile(int var0, int var1);
-	public abstract void removeTileObserver(java.awt.image.TileObserver var0);
-	public abstract void setData(java.awt.image.Raster var0);
+public interface WritableRenderedImage extends java.awt.image.RenderedImage {
+	void addTileObserver(java.awt.image.TileObserver var0);
+	java.awt.image.WritableRaster getWritableTile(int var0, int var1);
+	java.awt.Point[] getWritableTileIndices();
+	boolean hasTileWriters();
+	boolean isTileWritable(int var0, int var1);
+	void releaseWritableTile(int var0, int var1);
+	void removeTileObserver(java.awt.image.TileObserver var0);
+	void setData(java.awt.image.Raster var0);
 }
 

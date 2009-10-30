@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package java.awt.image;
 public class ImageFilter implements java.awt.image.ImageConsumer, java.lang.Cloneable {
-	public ImageFilter() { }
+	protected java.awt.image.ImageConsumer consumer;
+	public ImageFilter() { } 
 	public java.lang.Object clone() { return null; }
 	public java.awt.image.ImageFilter getFilterInstance(java.awt.image.ImageConsumer var0) { return null; }
 	public void imageComplete(int var0) { }
@@ -26,7 +27,6 @@ public class ImageFilter implements java.awt.image.ImageConsumer, java.lang.Clon
 	public void setHints(int var0) { }
 	public void setPixels(int var0, int var1, int var2, int var3, java.awt.image.ColorModel var4, byte[] var5, int var6, int var7) { }
 	public void setPixels(int var0, int var1, int var2, int var3, java.awt.image.ColorModel var4, int[] var5, int var6, int var7) { }
-	public void setProperties(java.util.Hashtable var0) { }
-	protected java.awt.image.ImageConsumer consumer;
+	public void setProperties(java.util.Hashtable<?,?> var0) { }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,11 @@
 
 package javax.swing;
 public abstract class AbstractAction implements java.io.Serializable, java.lang.Cloneable, javax.swing.Action {
-	public AbstractAction() { }
-	public AbstractAction(java.lang.String var0) { }
-	public AbstractAction(java.lang.String var0, javax.swing.Icon var1) { }
+	protected javax.swing.event.SwingPropertyChangeSupport changeSupport;
+	protected boolean enabled;
+	public AbstractAction() { } 
+	public AbstractAction(java.lang.String var0) { } 
+	public AbstractAction(java.lang.String var0, javax.swing.Icon var1) { } 
 	public void addPropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	protected java.lang.Object clone() throws java.lang.CloneNotSupportedException { return null; }
 	protected void firePropertyChange(java.lang.String var0, java.lang.Object var1, java.lang.Object var2) { }
@@ -29,7 +31,5 @@ public abstract class AbstractAction implements java.io.Serializable, java.lang.
 	public void putValue(java.lang.String var0, java.lang.Object var1) { }
 	public void removePropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	public void setEnabled(boolean var0) { }
-	protected javax.swing.event.SwingPropertyChangeSupport changeSupport;
-	protected boolean enabled;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package javax.swing;
-public abstract interface ScrollPaneConstants {
+public interface ScrollPaneConstants {
 	public final static java.lang.String COLUMN_HEADER = "COLUMN_HEADER";
 	public final static java.lang.String HORIZONTAL_SCROLLBAR = "HORIZONTAL_SCROLLBAR";
 	public final static int HORIZONTAL_SCROLLBAR_ALWAYS = 32;

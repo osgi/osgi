@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.text;
 public class FieldView extends javax.swing.text.PlainView {
-	public FieldView(javax.swing.text.Element var0) { super((javax.swing.text.Element) null); }
+	public FieldView(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null); } 
 	protected java.awt.Shape adjustAllocation(java.awt.Shape var0) { return null; }
 	protected java.awt.FontMetrics getFontMetrics() { return null; }
 }

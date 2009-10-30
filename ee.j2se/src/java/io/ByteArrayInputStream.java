@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package java.io;
 public class ByteArrayInputStream extends java.io.InputStream {
-	public ByteArrayInputStream(byte[] var0) { }
-	public ByteArrayInputStream(byte[] var0, int var1, int var2) { }
+	protected byte[] buf;
+	protected int count;
+	protected int mark;
+	protected int pos;
+	public ByteArrayInputStream(byte[] var0) { } 
+	public ByteArrayInputStream(byte[] var0, int var1, int var2) { } 
 	public int available() { return 0; }
 	public void mark(int var0) { }
 	public int read() { return 0; }
 	public int read(byte[] var0, int var1, int var2) { return 0; }
 	public void reset() { }
 	public long skip(long var0) { return 0l; }
-	protected byte[] buf;
-	protected int count;
-	protected int mark;
-	protected int pos;
 }
 

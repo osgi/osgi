@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,17 @@
 
 package javax.swing.tree;
 public class DefaultTreeSelectionModel implements java.io.Serializable, java.lang.Cloneable, javax.swing.tree.TreeSelectionModel {
-	public DefaultTreeSelectionModel() { }
+	public final static java.lang.String SELECTION_MODE_PROPERTY = "selectionMode";
+	protected javax.swing.event.SwingPropertyChangeSupport changeSupport;
+	protected int leadIndex;
+	protected javax.swing.tree.TreePath leadPath;
+	protected int leadRow;
+	protected javax.swing.DefaultListSelectionModel listSelectionModel;
+	protected javax.swing.event.EventListenerList listenerList;
+	protected javax.swing.tree.RowMapper rowMapper;
+	protected javax.swing.tree.TreePath[] selection;
+	protected int selectionMode;
+	public DefaultTreeSelectionModel() { } 
 	public void addPropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	public void addSelectionPath(javax.swing.tree.TreePath var0) { }
 	public void addSelectionPaths(javax.swing.tree.TreePath[] var0) { }
@@ -29,7 +39,7 @@ public class DefaultTreeSelectionModel implements java.io.Serializable, java.lan
 	protected void fireValueChanged(javax.swing.event.TreeSelectionEvent var0) { }
 	public javax.swing.tree.TreePath getLeadSelectionPath() { return null; }
 	public int getLeadSelectionRow() { return 0; }
-	public java.util.EventListener[] getListeners(java.lang.Class var0) { return null; }
+	public <T extends java.util.EventListener> T[] getListeners(java.lang.Class<T> var0) { return null; }
 	public int getMaxSelectionRow() { return 0; }
 	public int getMinSelectionRow() { return 0; }
 	public java.beans.PropertyChangeListener[] getPropertyChangeListeners() { return null; }
@@ -45,7 +55,7 @@ public class DefaultTreeSelectionModel implements java.io.Serializable, java.lan
 	public boolean isPathSelected(javax.swing.tree.TreePath var0) { return false; }
 	public boolean isRowSelected(int var0) { return false; }
 	public boolean isSelectionEmpty() { return false; }
-	protected void notifyPathChange(java.util.Vector var0, javax.swing.tree.TreePath var1) { }
+	protected void notifyPathChange(java.util.Vector<javax.swing.tree.PathPlaceHolder> var0, javax.swing.tree.TreePath var1) { }
 	public void removePropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	public void removeSelectionPath(javax.swing.tree.TreePath var0) { }
 	public void removeSelectionPaths(javax.swing.tree.TreePath[] var0) { }
@@ -56,15 +66,5 @@ public class DefaultTreeSelectionModel implements java.io.Serializable, java.lan
 	public void setSelectionPath(javax.swing.tree.TreePath var0) { }
 	public void setSelectionPaths(javax.swing.tree.TreePath[] var0) { }
 	protected void updateLeadIndex() { }
-	public final static java.lang.String SELECTION_MODE_PROPERTY = "selectionMode";
-	protected javax.swing.event.SwingPropertyChangeSupport changeSupport;
-	protected int leadIndex;
-	protected javax.swing.tree.TreePath leadPath;
-	protected int leadRow;
-	protected javax.swing.DefaultListSelectionModel listSelectionModel;
-	protected javax.swing.event.EventListenerList listenerList;
-	protected javax.swing.tree.RowMapper rowMapper;
-	protected javax.swing.tree.TreePath[] selection;
-	protected int selectionMode;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.beans;
 public class MethodDescriptor extends java.beans.FeatureDescriptor {
-	public MethodDescriptor(java.lang.reflect.Method var0) { }
-	public MethodDescriptor(java.lang.reflect.Method var0, java.beans.ParameterDescriptor[] var1) { }
+	public MethodDescriptor(java.lang.reflect.Method var0) { } 
+	public MethodDescriptor(java.lang.reflect.Method var0, java.beans.ParameterDescriptor[] var1) { } 
 	public java.lang.reflect.Method getMethod() { return null; }
 	public java.beans.ParameterDescriptor[] getParameterDescriptors() { return null; }
 }

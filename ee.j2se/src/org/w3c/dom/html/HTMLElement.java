@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,16 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLElement extends org.w3c.dom.Element {
-	public abstract java.lang.String getClassName();
-	public abstract java.lang.String getDir();
-	public abstract java.lang.String getId();
-	public abstract java.lang.String getLang();
-	public abstract java.lang.String getTitle();
-	public abstract void setClassName(java.lang.String var0);
-	public abstract void setDir(java.lang.String var0);
-	public abstract void setId(java.lang.String var0);
-	public abstract void setLang(java.lang.String var0);
-	public abstract void setTitle(java.lang.String var0);
+public interface HTMLElement extends org.w3c.dom.Element {
+	java.lang.String getClassName();
+	java.lang.String getDir();
+	java.lang.String getId();
+	java.lang.String getLang();
+	java.lang.String getTitle();
+	void setClassName(java.lang.String var0);
+	void setDir(java.lang.String var0);
+	void setId(java.lang.String var0);
+	void setLang(java.lang.String var0);
+	void setTitle(java.lang.String var0);
 }
 

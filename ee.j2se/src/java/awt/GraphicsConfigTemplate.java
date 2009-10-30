@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package java.awt;
 public abstract class GraphicsConfigTemplate implements java.io.Serializable {
-	public GraphicsConfigTemplate() { }
-	public abstract java.awt.GraphicsConfiguration getBestConfiguration(java.awt.GraphicsConfiguration[] var0);
-	public abstract boolean isGraphicsConfigSupported(java.awt.GraphicsConfiguration var0);
 	public final static int PREFERRED = 2;
 	public final static int REQUIRED = 1;
 	public final static int UNNECESSARY = 3;
+	public GraphicsConfigTemplate() { } 
+	public abstract java.awt.GraphicsConfiguration getBestConfiguration(java.awt.GraphicsConfiguration[] var0);
+	public abstract boolean isGraphicsConfigSupported(java.awt.GraphicsConfiguration var0);
 }
 

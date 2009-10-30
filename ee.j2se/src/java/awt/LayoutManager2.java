@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package java.awt;
-public abstract interface LayoutManager2 extends java.awt.LayoutManager {
-	public abstract void addLayoutComponent(java.awt.Component var0, java.lang.Object var1);
-	public abstract float getLayoutAlignmentX(java.awt.Container var0);
-	public abstract float getLayoutAlignmentY(java.awt.Container var0);
-	public abstract void invalidateLayout(java.awt.Container var0);
-	public abstract java.awt.Dimension maximumLayoutSize(java.awt.Container var0);
+public interface LayoutManager2 extends java.awt.LayoutManager {
+	void addLayoutComponent(java.awt.Component var0, java.lang.Object var1);
+	float getLayoutAlignmentX(java.awt.Container var0);
+	float getLayoutAlignmentY(java.awt.Container var0);
+	void invalidateLayout(java.awt.Container var0);
+	java.awt.Dimension maximumLayoutSize(java.awt.Container var0);
 }
 

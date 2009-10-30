@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,20 @@
 
 package javax.swing;
 public class ToolTipManager extends java.awt.event.MouseAdapter implements java.awt.event.MouseMotionListener {
+	protected class insideTimerAction implements java.awt.event.ActionListener {
+		protected insideTimerAction() { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	protected class outsideTimerAction implements java.awt.event.ActionListener {
+		protected outsideTimerAction() { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	protected class stillInsideTimerAction implements java.awt.event.ActionListener {
+		protected stillInsideTimerAction() { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	protected boolean heavyWeightPopupEnabled;
+	protected boolean lightWeightPopupEnabled;
 	public int getDismissDelay() { return 0; }
 	public int getInitialDelay() { return 0; }
 	public int getReshowDelay() { return 0; }
@@ -31,20 +45,6 @@ public class ToolTipManager extends java.awt.event.MouseAdapter implements java.
 	public void setReshowDelay(int var0) { }
 	public static javax.swing.ToolTipManager sharedInstance() { return null; }
 	public void unregisterComponent(javax.swing.JComponent var0) { }
-	protected boolean heavyWeightPopupEnabled;
-	protected boolean lightWeightPopupEnabled;
-	protected class insideTimerAction implements java.awt.event.ActionListener {
-		protected insideTimerAction() { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	protected class outsideTimerAction implements java.awt.event.ActionListener {
-		protected outsideTimerAction() { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	protected class stillInsideTimerAction implements java.awt.event.ActionListener {
-		protected stillInsideTimerAction() { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
 	private ToolTipManager() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package javax.rmi.CORBA;
-public abstract interface PortableRemoteObjectDelegate {
-	public abstract void connect(java.rmi.Remote var0, java.rmi.Remote var1) throws java.rmi.RemoteException;
-	public abstract void exportObject(java.rmi.Remote var0) throws java.rmi.RemoteException;
-	public abstract java.lang.Object narrow(java.lang.Object var0, java.lang.Class var1);
-	public abstract java.rmi.Remote toStub(java.rmi.Remote var0) throws java.rmi.NoSuchObjectException;
-	public abstract void unexportObject(java.rmi.Remote var0) throws java.rmi.NoSuchObjectException;
+public interface PortableRemoteObjectDelegate {
+	void connect(java.rmi.Remote var0, java.rmi.Remote var1) throws java.rmi.RemoteException;
+	void exportObject(java.rmi.Remote var0) throws java.rmi.RemoteException;
+	java.lang.Object narrow(java.lang.Object var0, java.lang.Class var1);
+	java.rmi.Remote toStub(java.rmi.Remote var0) throws java.rmi.NoSuchObjectException;
+	void unexportObject(java.rmi.Remote var0) throws java.rmi.NoSuchObjectException;
 }
 

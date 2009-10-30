@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ public class MidiSystem {
 	public static javax.sound.midi.Sequence getSequence(java.io.InputStream var0) throws java.io.IOException, javax.sound.midi.InvalidMidiDataException { return null; }
 	public static javax.sound.midi.Sequence getSequence(java.net.URL var0) throws java.io.IOException, javax.sound.midi.InvalidMidiDataException { return null; }
 	public static javax.sound.midi.Sequencer getSequencer() throws javax.sound.midi.MidiUnavailableException { return null; }
+	public static javax.sound.midi.Sequencer getSequencer(boolean var0) throws javax.sound.midi.MidiUnavailableException { return null; }
 	public static javax.sound.midi.Soundbank getSoundbank(java.io.File var0) throws java.io.IOException, javax.sound.midi.InvalidMidiDataException { return null; }
 	public static javax.sound.midi.Soundbank getSoundbank(java.io.InputStream var0) throws java.io.IOException, javax.sound.midi.InvalidMidiDataException { return null; }
 	public static javax.sound.midi.Soundbank getSoundbank(java.net.URL var0) throws java.io.IOException, javax.sound.midi.InvalidMidiDataException { return null; }

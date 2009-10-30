@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
 
 package javax.xml.transform;
 public abstract class Transformer {
-	protected Transformer() { }
+	protected Transformer() { } 
 	public abstract void clearParameters();
 	public abstract javax.xml.transform.ErrorListener getErrorListener();
 	public abstract java.util.Properties getOutputProperties();
 	public abstract java.lang.String getOutputProperty(java.lang.String var0);
 	public abstract java.lang.Object getParameter(java.lang.String var0);
 	public abstract javax.xml.transform.URIResolver getURIResolver();
+	public void reset() { }
 	public abstract void setErrorListener(javax.xml.transform.ErrorListener var0);
 	public abstract void setOutputProperties(java.util.Properties var0);
 	public abstract void setOutputProperty(java.lang.String var0, java.lang.String var1);

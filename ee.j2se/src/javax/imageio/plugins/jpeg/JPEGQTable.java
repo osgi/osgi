@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package javax.imageio.plugins.jpeg;
 public class JPEGQTable {
-	public JPEGQTable(int[] var0) { }
-	public javax.imageio.plugins.jpeg.JPEGQTable getScaledInstance(float var0, boolean var1) { return null; }
-	public int[] getTable() { return null; }
 	public final static javax.imageio.plugins.jpeg.JPEGQTable K1Div2Luminance; static { K1Div2Luminance = null; }
 	public final static javax.imageio.plugins.jpeg.JPEGQTable K1Luminance; static { K1Luminance = null; }
 	public final static javax.imageio.plugins.jpeg.JPEGQTable K2Chrominance; static { K2Chrominance = null; }
 	public final static javax.imageio.plugins.jpeg.JPEGQTable K2Div2Chrominance; static { K2Div2Chrominance = null; }
+	public JPEGQTable(int[] var0) { } 
+	public javax.imageio.plugins.jpeg.JPEGQTable getScaledInstance(float var0, boolean var1) { return null; }
+	public int[] getTable() { return null; }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,10 @@
 
 package javax.print.attribute;
 public abstract class Size2DSyntax implements java.io.Serializable, java.lang.Cloneable {
-	protected Size2DSyntax(float var0, float var1, int var2) { }
-	protected Size2DSyntax(int var0, int var1, int var2) { }
+	public final static int INCH = 25400;
+	public final static int MM = 1000;
+	protected Size2DSyntax(float var0, float var1, int var2) { } 
+	protected Size2DSyntax(int var0, int var1, int var2) { } 
 	public float[] getSize(int var0) { return null; }
 	public float getX(int var0) { return 0.0f; }
 	protected int getXMicrometers() { return 0; }
@@ -25,7 +27,5 @@ public abstract class Size2DSyntax implements java.io.Serializable, java.lang.Cl
 	protected int getYMicrometers() { return 0; }
 	public int hashCode() { return 0; }
 	public java.lang.String toString(int var0, java.lang.String var1) { return null; }
-	public final static int INCH = 25400;
-	public final static int MM = 1000;
 }
 

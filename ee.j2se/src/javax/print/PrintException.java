@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package javax.print;
 public class PrintException extends java.lang.Exception {
-	public PrintException() { }
-	public PrintException(java.lang.Exception var0) { }
-	public PrintException(java.lang.String var0) { }
-	public PrintException(java.lang.String var0, java.lang.Exception var1) { }
+	public PrintException() { } 
+	public PrintException(java.lang.Exception var0) { } 
+	public PrintException(java.lang.String var0) { } 
+	public PrintException(java.lang.String var0, java.lang.Exception var1) { } 
 }
 

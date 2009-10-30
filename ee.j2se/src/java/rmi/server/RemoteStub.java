@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.rmi.server;
 public abstract class RemoteStub extends java.rmi.server.RemoteObject {
-	protected RemoteStub() { }
-	protected RemoteStub(java.rmi.server.RemoteRef var0) { }
+	protected RemoteStub() { } 
+	protected RemoteStub(java.rmi.server.RemoteRef var0) { } 
 	/** @deprecated */ protected static void setRef(java.rmi.server.RemoteStub var0, java.rmi.server.RemoteRef var1) { }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package java.applet;
-public abstract interface AppletStub {
-	public abstract void appletResize(int var0, int var1);
-	public abstract java.applet.AppletContext getAppletContext();
-	public abstract java.net.URL getCodeBase();
-	public abstract java.net.URL getDocumentBase();
-	public abstract java.lang.String getParameter(java.lang.String var0);
-	public abstract boolean isActive();
+public interface AppletStub {
+	void appletResize(int var0, int var1);
+	java.applet.AppletContext getAppletContext();
+	java.net.URL getCodeBase();
+	java.net.URL getDocumentBase();
+	java.lang.String getParameter(java.lang.String var0);
+	boolean isActive();
 }
 

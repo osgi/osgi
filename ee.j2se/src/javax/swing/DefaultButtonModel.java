@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,18 @@
 
 package javax.swing;
 public class DefaultButtonModel implements java.io.Serializable, javax.swing.ButtonModel {
-	public DefaultButtonModel() { }
+	public final static int ARMED = 1;
+	public final static int ENABLED = 8;
+	public final static int PRESSED = 4;
+	public final static int ROLLOVER = 16;
+	public final static int SELECTED = 2;
+	protected java.lang.String actionCommand;
+	protected javax.swing.event.ChangeEvent changeEvent;
+	protected javax.swing.ButtonGroup group;
+	protected javax.swing.event.EventListenerList listenerList;
+	protected int mnemonic;
+	protected int stateMask;
+	public DefaultButtonModel() { } 
 	public void addActionListener(java.awt.event.ActionListener var0) { }
 	public void addChangeListener(javax.swing.event.ChangeListener var0) { }
 	public void addItemListener(java.awt.event.ItemListener var0) { }
@@ -28,7 +39,7 @@ public class DefaultButtonModel implements java.io.Serializable, javax.swing.But
 	public javax.swing.event.ChangeListener[] getChangeListeners() { return null; }
 	public javax.swing.ButtonGroup getGroup() { return null; }
 	public java.awt.event.ItemListener[] getItemListeners() { return null; }
-	public java.util.EventListener[] getListeners(java.lang.Class var0) { return null; }
+	public <T extends java.util.EventListener> T[] getListeners(java.lang.Class<T> var0) { return null; }
 	public int getMnemonic() { return 0; }
 	public java.lang.Object[] getSelectedObjects() { return null; }
 	public boolean isArmed() { return false; }
@@ -47,16 +58,5 @@ public class DefaultButtonModel implements java.io.Serializable, javax.swing.But
 	public void setPressed(boolean var0) { }
 	public void setRollover(boolean var0) { }
 	public void setSelected(boolean var0) { }
-	public final static int ARMED = 1;
-	public final static int ENABLED = 8;
-	public final static int PRESSED = 4;
-	public final static int ROLLOVER = 16;
-	public final static int SELECTED = 2;
-	protected java.lang.String actionCommand;
-	protected javax.swing.event.ChangeEvent changeEvent;
-	protected javax.swing.ButtonGroup group;
-	protected javax.swing.event.EventListenerList listenerList;
-	protected int mnemonic;
-	protected int stateMask;
 }
 

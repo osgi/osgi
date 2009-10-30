@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
 
 package javax.xml.transform.stream;
 public class StreamSource implements javax.xml.transform.Source {
-	public StreamSource() { }
-	public StreamSource(java.io.File var0) { }
-	public StreamSource(java.io.InputStream var0) { }
-	public StreamSource(java.io.InputStream var0, java.lang.String var1) { }
-	public StreamSource(java.io.Reader var0) { }
-	public StreamSource(java.io.Reader var0, java.lang.String var1) { }
-	public StreamSource(java.lang.String var0) { }
+	public final static java.lang.String FEATURE = "http://javax.xml.transform.stream.StreamSource/feature";
+	public StreamSource() { } 
+	public StreamSource(java.io.File var0) { } 
+	public StreamSource(java.io.InputStream var0) { } 
+	public StreamSource(java.io.InputStream var0, java.lang.String var1) { } 
+	public StreamSource(java.io.Reader var0) { } 
+	public StreamSource(java.io.Reader var0, java.lang.String var1) { } 
+	public StreamSource(java.lang.String var0) { } 
 	public java.io.InputStream getInputStream() { return null; }
 	public java.lang.String getPublicId() { return null; }
 	public java.io.Reader getReader() { return null; }
@@ -32,6 +33,5 @@ public class StreamSource implements javax.xml.transform.Source {
 	public void setReader(java.io.Reader var0) { }
 	public void setSystemId(java.io.File var0) { }
 	public void setSystemId(java.lang.String var0) { }
-	public final static java.lang.String FEATURE = "http://javax.xml.transform.stream.StreamSource/feature";
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,10 @@
 
 package java.security.cert;
 public class TrustAnchor {
-	public TrustAnchor(java.lang.String var0, java.security.PublicKey var1, byte[] var2) { }
-	public TrustAnchor(java.security.cert.X509Certificate var0, byte[] var1) { }
+	public TrustAnchor(java.lang.String var0, java.security.PublicKey var1, byte[] var2) { } 
+	public TrustAnchor(java.security.cert.X509Certificate var0, byte[] var1) { } 
+	public TrustAnchor(javax.security.auth.x500.X500Principal var0, java.security.PublicKey var1, byte[] var2) { } 
+	public final javax.security.auth.x500.X500Principal getCA() { return null; }
 	public final java.lang.String getCAName() { return null; }
 	public final java.security.PublicKey getCAPublicKey() { return null; }
 	public final byte[] getNameConstraints() { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package org.xml.sax.ext;
-public abstract interface DeclHandler {
-	public abstract void attributeDecl(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3, java.lang.String var4) throws org.xml.sax.SAXException;
-	public abstract void elementDecl(java.lang.String var0, java.lang.String var1) throws org.xml.sax.SAXException;
-	public abstract void externalEntityDecl(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws org.xml.sax.SAXException;
-	public abstract void internalEntityDecl(java.lang.String var0, java.lang.String var1) throws org.xml.sax.SAXException;
+public interface DeclHandler {
+	void attributeDecl(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3, java.lang.String var4) throws org.xml.sax.SAXException;
+	void elementDecl(java.lang.String var0, java.lang.String var1) throws org.xml.sax.SAXException;
+	void externalEntityDecl(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws org.xml.sax.SAXException;
+	void internalEntityDecl(java.lang.String var0, java.lang.String var1) throws org.xml.sax.SAXException;
 }
 

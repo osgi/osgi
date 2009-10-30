@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.util.logging;
 public class MemoryHandler extends java.util.logging.Handler {
-	public MemoryHandler() { }
-	public MemoryHandler(java.util.logging.Handler var0, int var1, java.util.logging.Level var2) { }
+	public MemoryHandler() { } 
+	public MemoryHandler(java.util.logging.Handler var0, int var1, java.util.logging.Level var2) { } 
 	public void close() { }
 	public void flush() { }
 	public java.util.logging.Level getPushLevel() { return null; }

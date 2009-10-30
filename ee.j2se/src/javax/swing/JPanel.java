@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package javax.swing;
 public class JPanel extends javax.swing.JComponent implements javax.accessibility.Accessible {
-	public JPanel() { }
-	public JPanel(java.awt.LayoutManager var0) { }
-	public JPanel(java.awt.LayoutManager var0, boolean var1) { }
-	public JPanel(boolean var0) { }
+	protected class AccessibleJPanel extends javax.swing.JComponent.AccessibleJComponent {
+		protected AccessibleJPanel() { } 
+	}
+	public JPanel() { } 
+	public JPanel(java.awt.LayoutManager var0) { } 
+	public JPanel(java.awt.LayoutManager var0, boolean var1) { } 
+	public JPanel(boolean var0) { } 
 	public javax.swing.plaf.PanelUI getUI() { return null; }
 	public void setUI(javax.swing.plaf.PanelUI var0) { }
-	protected class AccessibleJPanel extends javax.swing.JComponent.AccessibleJComponent {
-		protected AccessibleJPanel() { }
-	}
 }
 

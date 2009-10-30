@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,15 @@
 
 package java.util;
 public class GregorianCalendar extends java.util.Calendar {
-	public GregorianCalendar() { }
-	public GregorianCalendar(int var0, int var1, int var2) { }
-	public GregorianCalendar(int var0, int var1, int var2, int var3, int var4) { }
-	public GregorianCalendar(int var0, int var1, int var2, int var3, int var4, int var5) { }
-	public GregorianCalendar(java.util.Locale var0) { }
-	public GregorianCalendar(java.util.TimeZone var0) { }
-	public GregorianCalendar(java.util.TimeZone var0, java.util.Locale var1) { }
+	public final static int AD = 1;
+	public final static int BC = 0;
+	public GregorianCalendar() { } 
+	public GregorianCalendar(int var0, int var1, int var2) { } 
+	public GregorianCalendar(int var0, int var1, int var2, int var3, int var4) { } 
+	public GregorianCalendar(int var0, int var1, int var2, int var3, int var4, int var5) { } 
+	public GregorianCalendar(java.util.Locale var0) { } 
+	public GregorianCalendar(java.util.TimeZone var0) { } 
+	public GregorianCalendar(java.util.TimeZone var0, java.util.Locale var1) { } 
 	public void add(int var0, int var1) { }
 	protected void computeFields() { }
 	protected void computeTime() { }
@@ -34,7 +36,5 @@ public class GregorianCalendar extends java.util.Calendar {
 	public boolean isLeapYear(int var0) { return false; }
 	public void roll(int var0, boolean var1) { }
 	public void setGregorianChange(java.util.Date var0) { }
-	public final static int AD = 1;
-	public final static int BC = 0;
 }
 

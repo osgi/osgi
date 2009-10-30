@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,16 @@ public final class ImageIO {
 	public static javax.imageio.stream.ImageOutputStream createImageOutputStream(java.lang.Object var0) throws java.io.IOException { return null; }
 	public static java.io.File getCacheDirectory() { return null; }
 	public static javax.imageio.ImageReader getImageReader(javax.imageio.ImageWriter var0) { return null; }
-	public static java.util.Iterator getImageReaders(java.lang.Object var0) { return null; }
-	public static java.util.Iterator getImageReadersByFormatName(java.lang.String var0) { return null; }
-	public static java.util.Iterator getImageReadersByMIMEType(java.lang.String var0) { return null; }
-	public static java.util.Iterator getImageReadersBySuffix(java.lang.String var0) { return null; }
-	public static java.util.Iterator getImageTranscoders(javax.imageio.ImageReader var0, javax.imageio.ImageWriter var1) { return null; }
+	public static java.util.Iterator<javax.imageio.ImageReader> getImageReaders(java.lang.Object var0) { return null; }
+	public static java.util.Iterator<javax.imageio.ImageReader> getImageReadersByFormatName(java.lang.String var0) { return null; }
+	public static java.util.Iterator<javax.imageio.ImageReader> getImageReadersByMIMEType(java.lang.String var0) { return null; }
+	public static java.util.Iterator<javax.imageio.ImageReader> getImageReadersBySuffix(java.lang.String var0) { return null; }
+	public static java.util.Iterator<javax.imageio.ImageTranscoder> getImageTranscoders(javax.imageio.ImageReader var0, javax.imageio.ImageWriter var1) { return null; }
 	public static javax.imageio.ImageWriter getImageWriter(javax.imageio.ImageReader var0) { return null; }
-	public static java.util.Iterator getImageWriters(javax.imageio.ImageTypeSpecifier var0, java.lang.String var1) { return null; }
-	public static java.util.Iterator getImageWritersByFormatName(java.lang.String var0) { return null; }
-	public static java.util.Iterator getImageWritersByMIMEType(java.lang.String var0) { return null; }
-	public static java.util.Iterator getImageWritersBySuffix(java.lang.String var0) { return null; }
+	public static java.util.Iterator<javax.imageio.ImageWriter> getImageWriters(javax.imageio.ImageTypeSpecifier var0, java.lang.String var1) { return null; }
+	public static java.util.Iterator<javax.imageio.ImageWriter> getImageWritersByFormatName(java.lang.String var0) { return null; }
+	public static java.util.Iterator<javax.imageio.ImageWriter> getImageWritersByMIMEType(java.lang.String var0) { return null; }
+	public static java.util.Iterator<javax.imageio.ImageWriter> getImageWritersBySuffix(java.lang.String var0) { return null; }
 	public static java.lang.String[] getReaderFormatNames() { return null; }
 	public static java.lang.String[] getReaderMIMETypes() { return null; }
 	public static boolean getUseCache() { return false; }

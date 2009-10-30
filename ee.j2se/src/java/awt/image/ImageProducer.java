@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package java.awt.image;
-public abstract interface ImageProducer {
-	public abstract void addConsumer(java.awt.image.ImageConsumer var0);
-	public abstract boolean isConsumer(java.awt.image.ImageConsumer var0);
-	public abstract void removeConsumer(java.awt.image.ImageConsumer var0);
-	public abstract void requestTopDownLeftRightResend(java.awt.image.ImageConsumer var0);
-	public abstract void startProduction(java.awt.image.ImageConsumer var0);
+public interface ImageProducer {
+	void addConsumer(java.awt.image.ImageConsumer var0);
+	boolean isConsumer(java.awt.image.ImageConsumer var0);
+	void removeConsumer(java.awt.image.ImageConsumer var0);
+	void requestTopDownLeftRightResend(java.awt.image.ImageConsumer var0);
+	void startProduction(java.awt.image.ImageConsumer var0);
 }
 

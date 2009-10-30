@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package org.omg.CORBA;
-public abstract interface DynValue extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
-	public abstract org.omg.CORBA.TCKind current_member_kind();
-	public abstract java.lang.String current_member_name();
-	public abstract org.omg.CORBA.NameValuePair[] get_members();
-	public abstract void set_members(org.omg.CORBA.NameValuePair[] var0) throws org.omg.CORBA.DynAnyPackage.InvalidSeq;
+/** @deprecated */ public interface DynValue extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
+	org.omg.CORBA.TCKind current_member_kind();
+	java.lang.String current_member_name();
+	org.omg.CORBA.NameValuePair[] get_members();
+	void set_members(org.omg.CORBA.NameValuePair[] var0) throws org.omg.CORBA.DynAnyPackage.InvalidSeq;
 }
 

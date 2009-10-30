@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.security.cert;
 public class PKIXBuilderParameters extends java.security.cert.PKIXParameters {
-	public PKIXBuilderParameters(java.security.KeyStore var0, java.security.cert.CertSelector var1) throws java.security.InvalidAlgorithmParameterException, java.security.KeyStoreException { super((java.util.Set) null); }
-	public PKIXBuilderParameters(java.util.Set var0, java.security.cert.CertSelector var1) throws java.security.InvalidAlgorithmParameterException { super((java.util.Set) null); }
+	public PKIXBuilderParameters(java.security.KeyStore var0, java.security.cert.CertSelector var1) throws java.security.InvalidAlgorithmParameterException, java.security.KeyStoreException  { super((java.util.Set<java.security.cert.TrustAnchor>) null); } 
+	public PKIXBuilderParameters(java.util.Set<java.security.cert.TrustAnchor> var0, java.security.cert.CertSelector var1) throws java.security.InvalidAlgorithmParameterException  { super((java.util.Set<java.security.cert.TrustAnchor>) null); } 
 	public int getMaxPathLength() { return 0; }
 	public void setMaxPathLength(int var0) { }
 }

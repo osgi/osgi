@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.swing.text;
 public class InternationalFormatter extends javax.swing.text.DefaultFormatter {
-	public InternationalFormatter() { }
-	public InternationalFormatter(java.text.Format var0) { }
+	public InternationalFormatter() { } 
+	public InternationalFormatter(java.text.Format var0) { } 
 	public java.text.Format.Field[] getFields(int var0) { return null; }
 	public java.text.Format getFormat() { return null; }
 	public java.lang.Comparable getMaximum() { return null; }

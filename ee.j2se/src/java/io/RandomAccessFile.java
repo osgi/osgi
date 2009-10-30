@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,15 @@
  */
 
 package java.io;
-public class RandomAccessFile implements java.io.DataInput, java.io.DataOutput {
-	public RandomAccessFile(java.io.File var0, java.lang.String var1) throws java.io.FileNotFoundException { }
-	public RandomAccessFile(java.lang.String var0, java.lang.String var1) throws java.io.FileNotFoundException { }
+public class RandomAccessFile implements java.io.Closeable, java.io.DataInput, java.io.DataOutput {
+	public RandomAccessFile(java.io.File var0, java.lang.String var1) throws java.io.FileNotFoundException { } 
+	public RandomAccessFile(java.lang.String var0, java.lang.String var1) throws java.io.FileNotFoundException { } 
 	public void close() throws java.io.IOException { }
 	public final java.nio.channels.FileChannel getChannel() { return null; }
 	public final java.io.FileDescriptor getFD() throws java.io.IOException { return null; }
-	public long getFilePointer() throws java.io.IOException { return 0l; }
-	public long length() throws java.io.IOException { return 0l; }
-	public int read() throws java.io.IOException { return 0; }
+	public native long getFilePointer() throws java.io.IOException;
+	public native long length() throws java.io.IOException;
+	public native int read() throws java.io.IOException;
 	public int read(byte[] var0) throws java.io.IOException { return 0; }
 	public int read(byte[] var0, int var1, int var2) throws java.io.IOException { return 0; }
 	public final boolean readBoolean() throws java.io.IOException { return false; }
@@ -40,10 +40,10 @@ public class RandomAccessFile implements java.io.DataInput, java.io.DataOutput {
 	public final java.lang.String readUTF() throws java.io.IOException { return null; }
 	public final int readUnsignedByte() throws java.io.IOException { return 0; }
 	public final int readUnsignedShort() throws java.io.IOException { return 0; }
-	public void seek(long var0) throws java.io.IOException { }
-	public void setLength(long var0) throws java.io.IOException { }
+	public native void seek(long var0) throws java.io.IOException;
+	public native void setLength(long var0) throws java.io.IOException;
 	public int skipBytes(int var0) throws java.io.IOException { return 0; }
-	public void write(int var0) throws java.io.IOException { }
+	public native void write(int var0) throws java.io.IOException;
 	public void write(byte[] var0) throws java.io.IOException { }
 	public void write(byte[] var0, int var1, int var2) throws java.io.IOException { }
 	public final void writeBoolean(boolean var0) throws java.io.IOException { }

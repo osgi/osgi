@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,10 @@
 
 package java.awt.image;
 public class ConvolveOp implements java.awt.image.BufferedImageOp, java.awt.image.RasterOp {
-	public ConvolveOp(java.awt.image.Kernel var0) { }
-	public ConvolveOp(java.awt.image.Kernel var0, int var1, java.awt.RenderingHints var2) { }
+	public final static int EDGE_NO_OP = 1;
+	public final static int EDGE_ZERO_FILL = 0;
+	public ConvolveOp(java.awt.image.Kernel var0) { } 
+	public ConvolveOp(java.awt.image.Kernel var0, int var1, java.awt.RenderingHints var2) { } 
 	public java.awt.image.BufferedImage createCompatibleDestImage(java.awt.image.BufferedImage var0, java.awt.image.ColorModel var1) { return null; }
 	public java.awt.image.WritableRaster createCompatibleDestRaster(java.awt.image.Raster var0) { return null; }
 	public final java.awt.image.BufferedImage filter(java.awt.image.BufferedImage var0, java.awt.image.BufferedImage var1) { return null; }
@@ -28,7 +30,5 @@ public class ConvolveOp implements java.awt.image.BufferedImageOp, java.awt.imag
 	public final java.awt.image.Kernel getKernel() { return null; }
 	public final java.awt.geom.Point2D getPoint2D(java.awt.geom.Point2D var0, java.awt.geom.Point2D var1) { return null; }
 	public final java.awt.RenderingHints getRenderingHints() { return null; }
-	public final static int EDGE_NO_OP = 1;
-	public final static int EDGE_ZERO_FILL = 0;
 }
 

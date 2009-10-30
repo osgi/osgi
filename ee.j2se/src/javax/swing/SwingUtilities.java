@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ public class SwingUtilities implements javax.swing.SwingConstants {
 	public static int getAccessibleIndexInParent(java.awt.Component var0) { return 0; }
 	public static javax.accessibility.AccessibleStateSet getAccessibleStateSet(java.awt.Component var0) { return null; }
 	public static java.awt.Container getAncestorNamed(java.lang.String var0, java.awt.Component var1) { return null; }
-	public static java.awt.Container getAncestorOfClass(java.lang.Class var0, java.awt.Component var1) { return null; }
+	public static java.awt.Container getAncestorOfClass(java.lang.Class<?> var0, java.awt.Component var1) { return null; }
 	public static java.awt.Component getDeepestComponentAt(java.awt.Component var0, int var1, int var2) { return null; }
 	public static java.awt.Rectangle getLocalBounds(java.awt.Component var0) { return null; }
 	public static java.awt.Component getRoot(java.awt.Component var0) { return null; }

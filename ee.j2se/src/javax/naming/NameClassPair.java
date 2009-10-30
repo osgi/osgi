@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,15 @@
 
 package javax.naming;
 public class NameClassPair implements java.io.Serializable {
-	public NameClassPair(java.lang.String var0, java.lang.String var1) { }
-	public NameClassPair(java.lang.String var0, java.lang.String var1, boolean var2) { }
+	public NameClassPair(java.lang.String var0, java.lang.String var1) { } 
+	public NameClassPair(java.lang.String var0, java.lang.String var1, boolean var2) { } 
 	public java.lang.String getClassName() { return null; }
 	public java.lang.String getName() { return null; }
+	public java.lang.String getNameInNamespace() { return null; }
 	public boolean isRelative() { return false; }
 	public void setClassName(java.lang.String var0) { }
 	public void setName(java.lang.String var0) { }
+	public void setNameInNamespace(java.lang.String var0) { }
 	public void setRelative(boolean var0) { }
 }
 

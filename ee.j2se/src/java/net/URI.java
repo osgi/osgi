@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package java.net;
-public final class URI implements java.io.Serializable, java.lang.Comparable {
-	public URI(java.lang.String var0) throws java.net.URISyntaxException { }
-	public URI(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws java.net.URISyntaxException { }
-	public URI(java.lang.String var0, java.lang.String var1, java.lang.String var2, int var3, java.lang.String var4, java.lang.String var5, java.lang.String var6) throws java.net.URISyntaxException { }
-	public URI(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) throws java.net.URISyntaxException { }
-	public URI(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3, java.lang.String var4) throws java.net.URISyntaxException { }
-	public int compareTo(java.lang.Object var0) { return 0; }
+public final class URI implements java.io.Serializable, java.lang.Comparable<java.net.URI> {
+	public URI(java.lang.String var0) throws java.net.URISyntaxException { } 
+	public URI(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws java.net.URISyntaxException { } 
+	public URI(java.lang.String var0, java.lang.String var1, java.lang.String var2, int var3, java.lang.String var4, java.lang.String var5, java.lang.String var6) throws java.net.URISyntaxException { } 
+	public URI(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) throws java.net.URISyntaxException { } 
+	public URI(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3, java.lang.String var4) throws java.net.URISyntaxException { } 
+	public int compareTo(java.net.URI var0) { return 0; }
 	public static java.net.URI create(java.lang.String var0) { return null; }
 	public java.lang.String getAuthority() { return null; }
 	public java.lang.String getFragment() { return null; }

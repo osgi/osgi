@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package javax.naming.directory;
 public class BasicAttributes implements javax.naming.directory.Attributes {
-	public BasicAttributes() { }
-	public BasicAttributes(java.lang.String var0, java.lang.Object var1) { }
-	public BasicAttributes(java.lang.String var0, java.lang.Object var1, boolean var2) { }
-	public BasicAttributes(boolean var0) { }
+	public BasicAttributes() { } 
+	public BasicAttributes(java.lang.String var0, java.lang.Object var1) { } 
+	public BasicAttributes(java.lang.String var0, java.lang.Object var1, boolean var2) { } 
+	public BasicAttributes(boolean var0) { } 
 	public java.lang.Object clone() { return null; }
 	public javax.naming.directory.Attribute get(java.lang.String var0) { return null; }
-	public javax.naming.NamingEnumeration getAll() { return null; }
-	public javax.naming.NamingEnumeration getIDs() { return null; }
+	public javax.naming.NamingEnumeration<javax.naming.directory.Attribute> getAll() { return null; }
+	public javax.naming.NamingEnumeration<java.lang.String> getIDs() { return null; }
 	public int hashCode() { return 0; }
 	public boolean isCaseIgnored() { return false; }
 	public javax.naming.directory.Attribute put(java.lang.String var0, java.lang.Object var1) { return null; }

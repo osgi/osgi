@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,6 @@
 
 package java.awt.color;
 public class ICC_Profile implements java.io.Serializable {
-	protected void finalize() { }
-	public int getColorSpaceType() { return 0; }
-	public byte[] getData() { return null; }
-	public byte[] getData(int var0) { return null; }
-	public static java.awt.color.ICC_Profile getInstance(int var0) { return null; }
-	public static java.awt.color.ICC_Profile getInstance(java.io.InputStream var0) throws java.io.IOException { return null; }
-	public static java.awt.color.ICC_Profile getInstance(java.lang.String var0) throws java.io.IOException { return null; }
-	public static java.awt.color.ICC_Profile getInstance(byte[] var0) { return null; }
-	public int getMajorVersion() { return 0; }
-	public int getMinorVersion() { return 0; }
-	public int getNumComponents() { return 0; }
-	public int getPCSType() { return 0; }
-	public int getProfileClass() { return 0; }
-	protected java.lang.Object readResolve() throws java.io.ObjectStreamException { return null; }
-	public void setData(int var0, byte[] var1) { }
-	public void write(java.io.OutputStream var0) throws java.io.IOException { }
-	public void write(java.lang.String var0) throws java.io.IOException { }
 	public final static int CLASS_ABSTRACT = 5;
 	public final static int CLASS_COLORSPACECONVERSION = 4;
 	public final static int CLASS_DEVICELINK = 3;
@@ -56,9 +39,12 @@ public class ICC_Profile implements java.io.Serializable {
 	public final static int icHdrModel = 52;
 	public final static int icHdrPcs = 20;
 	public final static int icHdrPlatform = 40;
+	public final static int icHdrProfileID = 84;
 	public final static int icHdrRenderingIntent = 64;
 	public final static int icHdrSize = 0;
 	public final static int icHdrVersion = 8;
+	public final static int icICCAbsoluteColorimetric = 3;
+	public final static int icMediaRelativeColorimetric = 1;
 	public final static int icPerceptual = 0;
 	public final static int icRelativeColorimetric = 1;
 	public final static int icSaturation = 2;
@@ -70,13 +56,17 @@ public class ICC_Profile implements java.io.Serializable {
 	public final static int icSigBToA1Tag = 1110589745;
 	public final static int icSigBToA2Tag = 1110589746;
 	public final static int icSigBlueColorantTag = 1649957210;
+	public final static int icSigBlueMatrixColumnTag = 1649957210;
 	public final static int icSigBlueTRCTag = 1649693251;
 	public final static int icSigCalibrationDateTimeTag = 1667329140;
 	public final static int icSigCharTargetTag = 1952543335;
+	public final static int icSigChromaticAdaptationTag = 1667785060;
 	public final static int icSigChromaticityTag = 1667789421;
 	public final static int icSigCmyData = 1129142560;
 	public final static int icSigCmykData = 1129142603;
 	public final static int icSigColorSpaceClass = 1936744803;
+	public final static int icSigColorantOrderTag = 1668051567;
+	public final static int icSigColorantTableTag = 1668051572;
 	public final static int icSigCopyrightTag = 1668313716;
 	public final static int icSigCrdInfoTag = 1668441193;
 	public final static int icSigDeviceMfgDescTag = 1684893284;
@@ -87,6 +77,7 @@ public class ICC_Profile implements java.io.Serializable {
 	public final static int icSigGrayData = 1196573017;
 	public final static int icSigGrayTRCTag = 1800688195;
 	public final static int icSigGreenColorantTag = 1733843290;
+	public final static int icSigGreenMatrixColumnTag = 1733843290;
 	public final static int icSigGreenTRCTag = 1733579331;
 	public final static int icSigHead = 1751474532;
 	public final static int icSigHlsData = 1212961568;
@@ -115,6 +106,7 @@ public class ICC_Profile implements java.io.Serializable {
 	public final static int icSigPs2CSATag = 1886597747;
 	public final static int icSigPs2RenderingIntentTag = 1886597737;
 	public final static int icSigRedColorantTag = 1918392666;
+	public final static int icSigRedMatrixColumnTag = 1918392666;
 	public final static int icSigRedTRCTag = 1918128707;
 	public final static int icSigRgbData = 1380401696;
 	public final static int icSigScreeningDescTag = 1935897188;
@@ -143,6 +135,23 @@ public class ICC_Profile implements java.io.Serializable {
 	public final static int icTagReserved = 4;
 	public final static int icTagType = 0;
 	public final static int icXYZNumberX = 8;
+	protected void finalize() { }
+	public int getColorSpaceType() { return 0; }
+	public byte[] getData() { return null; }
+	public byte[] getData(int var0) { return null; }
+	public static java.awt.color.ICC_Profile getInstance(int var0) { return null; }
+	public static java.awt.color.ICC_Profile getInstance(java.io.InputStream var0) throws java.io.IOException { return null; }
+	public static java.awt.color.ICC_Profile getInstance(java.lang.String var0) throws java.io.IOException { return null; }
+	public static java.awt.color.ICC_Profile getInstance(byte[] var0) { return null; }
+	public int getMajorVersion() { return 0; }
+	public int getMinorVersion() { return 0; }
+	public int getNumComponents() { return 0; }
+	public int getPCSType() { return 0; }
+	public int getProfileClass() { return 0; }
+	protected java.lang.Object readResolve() throws java.io.ObjectStreamException { return null; }
+	public void setData(int var0, byte[] var1) { }
+	public void write(java.io.OutputStream var0) throws java.io.IOException { }
+	public void write(java.lang.String var0) throws java.io.IOException { }
 	ICC_Profile() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,51 +15,7 @@
  */
 
 package java.util;
-public abstract class Calendar implements java.io.Serializable, java.lang.Cloneable {
-	protected Calendar() { }
-	protected Calendar(java.util.TimeZone var0, java.util.Locale var1) { }
-	public abstract void add(int var0, int var1);
-	public boolean after(java.lang.Object var0) { return false; }
-	public boolean before(java.lang.Object var0) { return false; }
-	public final void clear() { }
-	public final void clear(int var0) { }
-	public java.lang.Object clone() { return null; }
-	protected void complete() { }
-	protected abstract void computeFields();
-	protected abstract void computeTime();
-	public int get(int var0) { return 0; }
-	public int getActualMaximum(int var0) { return 0; }
-	public int getActualMinimum(int var0) { return 0; }
-	public static java.util.Locale[] getAvailableLocales() { return null; }
-	public int getFirstDayOfWeek() { return 0; }
-	public abstract int getGreatestMinimum(int var0);
-	public static java.util.Calendar getInstance() { return null; }
-	public static java.util.Calendar getInstance(java.util.Locale var0) { return null; }
-	public static java.util.Calendar getInstance(java.util.TimeZone var0) { return null; }
-	public static java.util.Calendar getInstance(java.util.TimeZone var0, java.util.Locale var1) { return null; }
-	public abstract int getLeastMaximum(int var0);
-	public abstract int getMaximum(int var0);
-	public int getMinimalDaysInFirstWeek() { return 0; }
-	public abstract int getMinimum(int var0);
-	public final java.util.Date getTime() { return null; }
-	public long getTimeInMillis() { return 0l; }
-	public java.util.TimeZone getTimeZone() { return null; }
-	public int hashCode() { return 0; }
-	protected final int internalGet(int var0) { return 0; }
-	public boolean isLenient() { return false; }
-	public final boolean isSet(int var0) { return false; }
-	public void roll(int var0, int var1) { }
-	public abstract void roll(int var0, boolean var1);
-	public void set(int var0, int var1) { }
-	public final void set(int var0, int var1, int var2) { }
-	public final void set(int var0, int var1, int var2, int var3, int var4) { }
-	public final void set(int var0, int var1, int var2, int var3, int var4, int var5) { }
-	public void setFirstDayOfWeek(int var0) { }
-	public void setLenient(boolean var0) { }
-	public void setMinimalDaysInFirstWeek(int var0) { }
-	public final void setTime(java.util.Date var0) { }
-	public void setTimeInMillis(long var0) { }
-	public void setTimeZone(java.util.TimeZone var0) { }
+public abstract class Calendar implements java.io.Serializable, java.lang.Cloneable, java.lang.Comparable<java.util.Calendar> {
 	public final static int AM = 0;
 	public final static int AM_PM = 9;
 	public final static int APRIL = 3;
@@ -106,5 +62,50 @@ public abstract class Calendar implements java.io.Serializable, java.lang.Clonea
 	protected boolean[] isSet;
 	protected boolean isTimeSet;
 	protected long time;
+	protected Calendar() { } 
+	protected Calendar(java.util.TimeZone var0, java.util.Locale var1) { } 
+	public abstract void add(int var0, int var1);
+	public boolean after(java.lang.Object var0) { return false; }
+	public boolean before(java.lang.Object var0) { return false; }
+	public final void clear() { }
+	public final void clear(int var0) { }
+	public java.lang.Object clone() { return null; }
+	public int compareTo(java.util.Calendar var0) { return 0; }
+	protected void complete() { }
+	protected abstract void computeFields();
+	protected abstract void computeTime();
+	public int get(int var0) { return 0; }
+	public int getActualMaximum(int var0) { return 0; }
+	public int getActualMinimum(int var0) { return 0; }
+	public static java.util.Locale[] getAvailableLocales() { return null; }
+	public int getFirstDayOfWeek() { return 0; }
+	public abstract int getGreatestMinimum(int var0);
+	public static java.util.Calendar getInstance() { return null; }
+	public static java.util.Calendar getInstance(java.util.Locale var0) { return null; }
+	public static java.util.Calendar getInstance(java.util.TimeZone var0) { return null; }
+	public static java.util.Calendar getInstance(java.util.TimeZone var0, java.util.Locale var1) { return null; }
+	public abstract int getLeastMaximum(int var0);
+	public abstract int getMaximum(int var0);
+	public int getMinimalDaysInFirstWeek() { return 0; }
+	public abstract int getMinimum(int var0);
+	public final java.util.Date getTime() { return null; }
+	public long getTimeInMillis() { return 0l; }
+	public java.util.TimeZone getTimeZone() { return null; }
+	public int hashCode() { return 0; }
+	protected final int internalGet(int var0) { return 0; }
+	public boolean isLenient() { return false; }
+	public final boolean isSet(int var0) { return false; }
+	public void roll(int var0, int var1) { }
+	public abstract void roll(int var0, boolean var1);
+	public void set(int var0, int var1) { }
+	public final void set(int var0, int var1, int var2) { }
+	public final void set(int var0, int var1, int var2, int var3, int var4) { }
+	public final void set(int var0, int var1, int var2, int var3, int var4, int var5) { }
+	public void setFirstDayOfWeek(int var0) { }
+	public void setLenient(boolean var0) { }
+	public void setMinimalDaysInFirstWeek(int var0) { }
+	public final void setTime(java.util.Date var0) { }
+	public void setTimeInMillis(long var0) { }
+	public void setTimeZone(java.util.TimeZone var0) { }
 }
 

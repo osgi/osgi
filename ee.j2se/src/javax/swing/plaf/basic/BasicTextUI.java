@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,13 @@
 
 package javax.swing.plaf.basic;
 public abstract class BasicTextUI extends javax.swing.plaf.TextUI implements javax.swing.text.ViewFactory {
-	public BasicTextUI() { }
+	public static class BasicCaret extends javax.swing.text.DefaultCaret implements javax.swing.plaf.UIResource {
+		public BasicCaret() { } 
+	}
+	public static class BasicHighlighter extends javax.swing.text.DefaultHighlighter implements javax.swing.plaf.UIResource {
+		public BasicHighlighter() { } 
+	}
+	public BasicTextUI() { } 
 	public javax.swing.text.View create(javax.swing.text.Element var0) { return null; }
 	public javax.swing.text.View create(javax.swing.text.Element var0, int var1, int var2) { return null; }
 	protected javax.swing.text.Caret createCaret() { return null; }
@@ -47,11 +53,5 @@ public abstract class BasicTextUI extends javax.swing.plaf.TextUI implements jav
 	protected void uninstallListeners() { }
 	public int viewToModel(javax.swing.text.JTextComponent var0, java.awt.Point var1) { return 0; }
 	public int viewToModel(javax.swing.text.JTextComponent var0, java.awt.Point var1, javax.swing.text.Position.Bias[] var2) { return 0; }
-	public static class BasicCaret extends javax.swing.text.DefaultCaret implements javax.swing.plaf.UIResource {
-		public BasicCaret() { }
-	}
-	public static class BasicHighlighter extends javax.swing.text.DefaultHighlighter implements javax.swing.plaf.UIResource {
-		public BasicHighlighter() { }
-	}
 }
 

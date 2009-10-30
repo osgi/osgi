@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package javax.sql;
-public abstract interface PooledConnection {
-	public abstract void addConnectionEventListener(javax.sql.ConnectionEventListener var0);
-	public abstract void close() throws java.sql.SQLException;
-	public abstract java.sql.Connection getConnection() throws java.sql.SQLException;
-	public abstract void removeConnectionEventListener(javax.sql.ConnectionEventListener var0);
+public interface PooledConnection {
+	void addConnectionEventListener(javax.sql.ConnectionEventListener var0);
+	void close() throws java.sql.SQLException;
+	java.sql.Connection getConnection() throws java.sql.SQLException;
+	void removeConnectionEventListener(javax.sql.ConnectionEventListener var0);
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,12 @@
 
 package java.awt;
 public class Menu extends java.awt.MenuItem implements java.awt.MenuContainer, javax.accessibility.Accessible {
-	public Menu() { }
-	public Menu(java.lang.String var0) { }
-	public Menu(java.lang.String var0, boolean var1) { }
+	protected class AccessibleAWTMenu extends java.awt.MenuItem.AccessibleAWTMenuItem {
+		protected AccessibleAWTMenu() { } 
+	}
+	public Menu() { } 
+	public Menu(java.lang.String var0) { } 
+	public Menu(java.lang.String var0, boolean var1) { } 
 	public java.awt.MenuItem add(java.awt.MenuItem var0) { return null; }
 	public void add(java.lang.String var0) { }
 	public void addSeparator() { }
@@ -32,8 +35,5 @@ public class Menu extends java.awt.MenuItem implements java.awt.MenuContainer, j
 	public void remove(int var0) { }
 	public void remove(java.awt.MenuComponent var0) { }
 	public void removeAll() { }
-	protected class AccessibleAWTMenu extends java.awt.MenuItem.AccessibleAWTMenuItem {
-		protected AccessibleAWTMenu() { }
-	}
 }
 

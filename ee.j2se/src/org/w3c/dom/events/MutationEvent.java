@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,15 @@
  */
 
 package org.w3c.dom.events;
-public abstract interface MutationEvent extends org.w3c.dom.events.Event {
-	public abstract short getAttrChange();
-	public abstract java.lang.String getAttrName();
-	public abstract java.lang.String getNewValue();
-	public abstract java.lang.String getPrevValue();
-	public abstract org.w3c.dom.Node getRelatedNode();
-	public abstract void initMutationEvent(java.lang.String var0, boolean var1, boolean var2, org.w3c.dom.Node var3, java.lang.String var4, java.lang.String var5, java.lang.String var6, short var7);
+public interface MutationEvent extends org.w3c.dom.events.Event {
 	public final static short ADDITION = 2;
 	public final static short MODIFICATION = 1;
 	public final static short REMOVAL = 3;
+	short getAttrChange();
+	java.lang.String getAttrName();
+	java.lang.String getNewValue();
+	java.lang.String getPrevValue();
+	org.w3c.dom.Node getRelatedNode();
+	void initMutationEvent(java.lang.String var0, boolean var1, boolean var2, org.w3c.dom.Node var3, java.lang.String var4, java.lang.String var5, java.lang.String var6, short var7);
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,13 @@
  */
 
 package org.w3c.dom;
-public abstract interface Attr extends org.w3c.dom.Node {
-	public abstract java.lang.String getName();
-	public abstract org.w3c.dom.Element getOwnerElement();
-	public abstract boolean getSpecified();
-	public abstract java.lang.String getValue();
-	public abstract void setValue(java.lang.String var0);
+public interface Attr extends org.w3c.dom.Node {
+	java.lang.String getName();
+	org.w3c.dom.Element getOwnerElement();
+	org.w3c.dom.TypeInfo getSchemaTypeInfo();
+	boolean getSpecified();
+	java.lang.String getValue();
+	boolean isId();
+	void setValue(java.lang.String var0);
 }
 

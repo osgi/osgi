@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.util;
 public class EventObject implements java.io.Serializable {
-	public EventObject(java.lang.Object var0) { }
-	public java.lang.Object getSource() { return null; }
 	protected java.lang.Object source;
+	public EventObject(java.lang.Object var0) { } 
+	public java.lang.Object getSource() { return null; }
 }
 

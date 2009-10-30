@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 package java.beans;
 public class XMLDecoder {
-	public XMLDecoder(java.io.InputStream var0) { }
-	public XMLDecoder(java.io.InputStream var0, java.lang.Object var1) { }
-	public XMLDecoder(java.io.InputStream var0, java.lang.Object var1, java.beans.ExceptionListener var2) { }
+	public XMLDecoder(java.io.InputStream var0) { } 
+	public XMLDecoder(java.io.InputStream var0, java.lang.Object var1) { } 
+	public XMLDecoder(java.io.InputStream var0, java.lang.Object var1, java.beans.ExceptionListener var2) { } 
+	public XMLDecoder(java.io.InputStream var0, java.lang.Object var1, java.beans.ExceptionListener var2, java.lang.ClassLoader var3) { } 
 	public void close() { }
 	public java.beans.ExceptionListener getExceptionListener() { return null; }
 	public java.lang.Object getOwner() { return null; }

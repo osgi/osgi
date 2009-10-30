@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package javax.print.attribute.standard;
 public final class PresentationDirection extends javax.print.attribute.EnumSyntax implements javax.print.attribute.PrintJobAttribute, javax.print.attribute.PrintRequestAttribute {
-	public final java.lang.Class getCategory() { return null; }
-	public final java.lang.String getName() { return null; }
 	public final static javax.print.attribute.standard.PresentationDirection TOBOTTOM_TOLEFT; static { TOBOTTOM_TOLEFT = null; }
 	public final static javax.print.attribute.standard.PresentationDirection TOBOTTOM_TORIGHT; static { TOBOTTOM_TORIGHT = null; }
 	public final static javax.print.attribute.standard.PresentationDirection TOLEFT_TOBOTTOM; static { TOLEFT_TOBOTTOM = null; }
@@ -26,6 +24,8 @@ public final class PresentationDirection extends javax.print.attribute.EnumSynta
 	public final static javax.print.attribute.standard.PresentationDirection TORIGHT_TOTOP; static { TORIGHT_TOTOP = null; }
 	public final static javax.print.attribute.standard.PresentationDirection TOTOP_TOLEFT; static { TOTOP_TOLEFT = null; }
 	public final static javax.print.attribute.standard.PresentationDirection TOTOP_TORIGHT; static { TOTOP_TORIGHT = null; }
-	private PresentationDirection() { super(0); } /* generated constructor to prevent compiler adding default public constructor */
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
+	public final java.lang.String getName() { return null; }
+	private PresentationDirection()  { super(0); } /* generated constructor to prevent compiler adding default public constructor */
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,17 @@
 
 package javax.swing;
 public class JFrame extends java.awt.Frame implements javax.accessibility.Accessible, javax.swing.RootPaneContainer, javax.swing.WindowConstants {
-	public JFrame() { }
-	public JFrame(java.awt.GraphicsConfiguration var0) { }
-	public JFrame(java.lang.String var0) { }
-	public JFrame(java.lang.String var0, java.awt.GraphicsConfiguration var1) { }
+	protected class AccessibleJFrame extends java.awt.Frame.AccessibleAWTFrame {
+		protected AccessibleJFrame() { } 
+	}
+	public final static int EXIT_ON_CLOSE = 3;
+	protected javax.accessibility.AccessibleContext accessibleContext;
+	protected javax.swing.JRootPane rootPane;
+	protected boolean rootPaneCheckingEnabled;
+	public JFrame() { } 
+	public JFrame(java.awt.GraphicsConfiguration var0) { } 
+	public JFrame(java.lang.String var0) { } 
+	public JFrame(java.lang.String var0, java.awt.GraphicsConfiguration var1) { } 
 	protected javax.swing.JRootPane createRootPane() { return null; }
 	protected void frameInit() { }
 	public java.awt.Container getContentPane() { return null; }
@@ -34,16 +41,10 @@ public class JFrame extends java.awt.Frame implements javax.accessibility.Access
 	public void setDefaultCloseOperation(int var0) { }
 	public static void setDefaultLookAndFeelDecorated(boolean var0) { }
 	public void setGlassPane(java.awt.Component var0) { }
+	public void setIconImage(java.awt.Image var0) { }
 	public void setJMenuBar(javax.swing.JMenuBar var0) { }
 	public void setLayeredPane(javax.swing.JLayeredPane var0) { }
 	protected void setRootPane(javax.swing.JRootPane var0) { }
 	protected void setRootPaneCheckingEnabled(boolean var0) { }
-	public final static int EXIT_ON_CLOSE = 3;
-	protected javax.accessibility.AccessibleContext accessibleContext;
-	protected javax.swing.JRootPane rootPane;
-	protected boolean rootPaneCheckingEnabled;
-	protected class AccessibleJFrame extends java.awt.Frame.AccessibleAWTFrame {
-		protected AccessibleJFrame() { }
-	}
 }
 

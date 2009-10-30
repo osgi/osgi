@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package javax.crypto.spec;
 public class RC5ParameterSpec implements java.security.spec.AlgorithmParameterSpec {
-	public RC5ParameterSpec(int var0, int var1, int var2) { }
-	public RC5ParameterSpec(int var0, int var1, int var2, byte[] var3) { }
-	public RC5ParameterSpec(int var0, int var1, int var2, byte[] var3, int var4) { }
+	public RC5ParameterSpec(int var0, int var1, int var2) { } 
+	public RC5ParameterSpec(int var0, int var1, int var2, byte[] var3) { } 
+	public RC5ParameterSpec(int var0, int var1, int var2, byte[] var3, int var4) { } 
 	public byte[] getIV() { return null; }
 	public int getRounds() { return 0; }
 	public int getVersion() { return 0; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package javax.print;
-public abstract interface DocPrintJob {
-	public abstract void addPrintJobAttributeListener(javax.print.event.PrintJobAttributeListener var0, javax.print.attribute.PrintJobAttributeSet var1);
-	public abstract void addPrintJobListener(javax.print.event.PrintJobListener var0);
-	public abstract javax.print.attribute.PrintJobAttributeSet getAttributes();
-	public abstract javax.print.PrintService getPrintService();
-	public abstract void print(javax.print.Doc var0, javax.print.attribute.PrintRequestAttributeSet var1) throws javax.print.PrintException;
-	public abstract void removePrintJobAttributeListener(javax.print.event.PrintJobAttributeListener var0);
-	public abstract void removePrintJobListener(javax.print.event.PrintJobListener var0);
+public interface DocPrintJob {
+	void addPrintJobAttributeListener(javax.print.event.PrintJobAttributeListener var0, javax.print.attribute.PrintJobAttributeSet var1);
+	void addPrintJobListener(javax.print.event.PrintJobListener var0);
+	javax.print.attribute.PrintJobAttributeSet getAttributes();
+	javax.print.PrintService getPrintService();
+	void print(javax.print.Doc var0, javax.print.attribute.PrintRequestAttributeSet var1) throws javax.print.PrintException;
+	void removePrintJobAttributeListener(javax.print.event.PrintJobAttributeListener var0);
+	void removePrintJobListener(javax.print.event.PrintJobListener var0);
 }
 

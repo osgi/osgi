@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package java.beans.beancontext;
 public class BeanContextMembershipEvent extends java.beans.beancontext.BeanContextEvent {
-	public BeanContextMembershipEvent(java.beans.beancontext.BeanContext var0, java.util.Collection var1) { super((java.beans.beancontext.BeanContext) null); }
-	public BeanContextMembershipEvent(java.beans.beancontext.BeanContext var0, java.lang.Object[] var1) { super((java.beans.beancontext.BeanContext) null); }
+	protected java.util.Collection children;
+	public BeanContextMembershipEvent(java.beans.beancontext.BeanContext var0, java.util.Collection var1)  { super((java.beans.beancontext.BeanContext) null); } 
+	public BeanContextMembershipEvent(java.beans.beancontext.BeanContext var0, java.lang.Object[] var1)  { super((java.beans.beancontext.BeanContext) null); } 
 	public boolean contains(java.lang.Object var0) { return false; }
 	public java.util.Iterator iterator() { return null; }
 	public int size() { return 0; }
 	public java.lang.Object[] toArray() { return null; }
-	protected java.util.Collection children;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package java.security.cert;
 public class CertPathValidatorException extends java.security.GeneralSecurityException {
-	public CertPathValidatorException() { }
-	public CertPathValidatorException(java.lang.String var0) { }
-	public CertPathValidatorException(java.lang.String var0, java.lang.Throwable var1) { }
-	public CertPathValidatorException(java.lang.String var0, java.lang.Throwable var1, java.security.cert.CertPath var2, int var3) { }
-	public CertPathValidatorException(java.lang.Throwable var0) { }
+	public CertPathValidatorException() { } 
+	public CertPathValidatorException(java.lang.String var0) { } 
+	public CertPathValidatorException(java.lang.String var0, java.lang.Throwable var1) { } 
+	public CertPathValidatorException(java.lang.String var0, java.lang.Throwable var1, java.security.cert.CertPath var2, int var3) { } 
+	public CertPathValidatorException(java.lang.Throwable var0) { } 
 	public java.security.cert.CertPath getCertPath() { return null; }
 	public int getIndex() { return 0; }
 }

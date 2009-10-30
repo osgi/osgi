@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,17 @@
  */
 
 package javax.swing.undo;
-public abstract interface UndoableEdit {
-	public abstract boolean addEdit(javax.swing.undo.UndoableEdit var0);
-	public abstract boolean canRedo();
-	public abstract boolean canUndo();
-	public abstract void die();
-	public abstract java.lang.String getPresentationName();
-	public abstract java.lang.String getRedoPresentationName();
-	public abstract java.lang.String getUndoPresentationName();
-	public abstract boolean isSignificant();
-	public abstract void redo();
-	public abstract boolean replaceEdit(javax.swing.undo.UndoableEdit var0);
-	public abstract void undo();
+public interface UndoableEdit {
+	boolean addEdit(javax.swing.undo.UndoableEdit var0);
+	boolean canRedo();
+	boolean canUndo();
+	void die();
+	java.lang.String getPresentationName();
+	java.lang.String getRedoPresentationName();
+	java.lang.String getUndoPresentationName();
+	boolean isSignificant();
+	void redo();
+	boolean replaceEdit(javax.swing.undo.UndoableEdit var0);
+	void undo();
 }
 

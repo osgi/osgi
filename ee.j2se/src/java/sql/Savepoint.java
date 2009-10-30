@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package java.sql;
-public abstract interface Savepoint {
-	public abstract int getSavepointId() throws java.sql.SQLException;
-	public abstract java.lang.String getSavepointName() throws java.sql.SQLException;
+public interface Savepoint {
+	int getSavepointId() throws java.sql.SQLException;
+	java.lang.String getSavepointName() throws java.sql.SQLException;
 }
 

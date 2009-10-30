@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.util;
 public class BitSet implements java.io.Serializable, java.lang.Cloneable {
-	public BitSet() { }
-	public BitSet(int var0) { }
+	public BitSet() { } 
+	public BitSet(int var0) { } 
 	public void and(java.util.BitSet var0) { }
 	public void andNot(java.util.BitSet var0) { }
 	public int cardinality() { return 0; }

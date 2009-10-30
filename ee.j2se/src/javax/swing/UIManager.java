@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,12 @@
 
 package javax.swing;
 public class UIManager implements java.io.Serializable {
-	public UIManager() { }
+	public static class LookAndFeelInfo {
+		public LookAndFeelInfo(java.lang.String var0, java.lang.String var1) { } 
+		public java.lang.String getClassName() { return null; }
+		public java.lang.String getName() { return null; }
+	}
+	public UIManager() { } 
 	public static void addAuxiliaryLookAndFeel(javax.swing.LookAndFeel var0) { }
 	public static void addPropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	public static java.lang.Object get(java.lang.Object var0) { return null; }
@@ -56,10 +61,5 @@ public class UIManager implements java.io.Serializable {
 	public static void setInstalledLookAndFeels(javax.swing.UIManager.LookAndFeelInfo[] var0) { }
 	public static void setLookAndFeel(java.lang.String var0) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException, javax.swing.UnsupportedLookAndFeelException { }
 	public static void setLookAndFeel(javax.swing.LookAndFeel var0) throws javax.swing.UnsupportedLookAndFeelException { }
-	public static class LookAndFeelInfo {
-		public LookAndFeelInfo(java.lang.String var0, java.lang.String var1) { }
-		public java.lang.String getClassName() { return null; }
-		public java.lang.String getName() { return null; }
-	}
 }
 

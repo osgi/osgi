@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,6 @@
 
 package java.awt.event;
 public class WindowEvent extends java.awt.event.ComponentEvent {
-	public WindowEvent(java.awt.Window var0, int var1) { super((java.awt.Component) null, 0); }
-	public WindowEvent(java.awt.Window var0, int var1, int var2, int var3) { super((java.awt.Component) null, 0); }
-	public WindowEvent(java.awt.Window var0, int var1, java.awt.Window var2) { super((java.awt.Component) null, 0); }
-	public WindowEvent(java.awt.Window var0, int var1, java.awt.Window var2, int var3, int var4) { super((java.awt.Component) null, 0); }
-	public int getNewState() { return 0; }
-	public int getOldState() { return 0; }
-	public java.awt.Window getOppositeWindow() { return null; }
-	public java.awt.Window getWindow() { return null; }
 	public final static int WINDOW_ACTIVATED = 205;
 	public final static int WINDOW_CLOSED = 202;
 	public final static int WINDOW_CLOSING = 201;
@@ -36,5 +28,13 @@ public class WindowEvent extends java.awt.event.ComponentEvent {
 	public final static int WINDOW_LOST_FOCUS = 208;
 	public final static int WINDOW_OPENED = 200;
 	public final static int WINDOW_STATE_CHANGED = 209;
+	public WindowEvent(java.awt.Window var0, int var1)  { super((java.awt.Component) null, 0); } 
+	public WindowEvent(java.awt.Window var0, int var1, int var2, int var3)  { super((java.awt.Component) null, 0); } 
+	public WindowEvent(java.awt.Window var0, int var1, java.awt.Window var2)  { super((java.awt.Component) null, 0); } 
+	public WindowEvent(java.awt.Window var0, int var1, java.awt.Window var2, int var3, int var4)  { super((java.awt.Component) null, 0); } 
+	public int getNewState() { return 0; }
+	public int getOldState() { return 0; }
+	public java.awt.Window getOppositeWindow() { return null; }
+	public java.awt.Window getWindow() { return null; }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 
 package javax.security.auth.kerberos;
 public class KerberosKey implements javax.crypto.SecretKey, javax.security.auth.Destroyable {
-	public KerberosKey(javax.security.auth.kerberos.KerberosPrincipal var0, byte[] var1, int var2, int var3) { }
-	public KerberosKey(javax.security.auth.kerberos.KerberosPrincipal var0, char[] var1, java.lang.String var2) { }
+	private final static long serialVersionUID = -4625402278148246993l;
+	public KerberosKey(javax.security.auth.kerberos.KerberosPrincipal var0, byte[] var1, int var2, int var3) { } 
+	public KerberosKey(javax.security.auth.kerberos.KerberosPrincipal var0, char[] var1, java.lang.String var2) { } 
 	public void destroy() throws javax.security.auth.DestroyFailedException { }
 	public final java.lang.String getAlgorithm() { return null; }
 	public final byte[] getEncoded() { return null; }

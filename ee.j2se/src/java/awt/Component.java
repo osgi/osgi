@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,95 @@
 
 package java.awt;
 public abstract class Component implements java.awt.MenuContainer, java.awt.image.ImageObserver, java.io.Serializable {
-	protected Component() { }
+	protected abstract class AccessibleAWTComponent extends javax.accessibility.AccessibleContext implements java.io.Serializable, javax.accessibility.AccessibleComponent {
+		protected class AccessibleAWTComponentHandler implements java.awt.event.ComponentListener {
+			protected AccessibleAWTComponentHandler() { } 
+			public void componentHidden(java.awt.event.ComponentEvent var0) { }
+			public void componentMoved(java.awt.event.ComponentEvent var0) { }
+			public void componentResized(java.awt.event.ComponentEvent var0) { }
+			public void componentShown(java.awt.event.ComponentEvent var0) { }
+		}
+		protected class AccessibleAWTFocusHandler implements java.awt.event.FocusListener {
+			protected AccessibleAWTFocusHandler() { } 
+			public void focusGained(java.awt.event.FocusEvent var0) { }
+			public void focusLost(java.awt.event.FocusEvent var0) { }
+		}
+		protected java.awt.event.ComponentListener accessibleAWTComponentHandler;
+		protected java.awt.event.FocusListener accessibleAWTFocusHandler;
+		protected AccessibleAWTComponent() { } 
+		public void addFocusListener(java.awt.event.FocusListener var0) { }
+		public boolean contains(java.awt.Point var0) { return false; }
+		public javax.accessibility.Accessible getAccessibleAt(java.awt.Point var0) { return null; }
+		public javax.accessibility.Accessible getAccessibleChild(int var0) { return null; }
+		public int getAccessibleChildrenCount() { return 0; }
+		public int getAccessibleIndexInParent() { return 0; }
+		public javax.accessibility.AccessibleRole getAccessibleRole() { return null; }
+		public javax.accessibility.AccessibleStateSet getAccessibleStateSet() { return null; }
+		public java.awt.Color getBackground() { return null; }
+		public java.awt.Rectangle getBounds() { return null; }
+		public java.awt.Cursor getCursor() { return null; }
+		public java.awt.Font getFont() { return null; }
+		public java.awt.FontMetrics getFontMetrics(java.awt.Font var0) { return null; }
+		public java.awt.Color getForeground() { return null; }
+		public java.util.Locale getLocale() { return null; }
+		public java.awt.Point getLocation() { return null; }
+		public java.awt.Point getLocationOnScreen() { return null; }
+		public java.awt.Dimension getSize() { return null; }
+		public boolean isEnabled() { return false; }
+		public boolean isFocusTraversable() { return false; }
+		public boolean isShowing() { return false; }
+		public boolean isVisible() { return false; }
+		public void removeFocusListener(java.awt.event.FocusListener var0) { }
+		public void requestFocus() { }
+		public void setBackground(java.awt.Color var0) { }
+		public void setBounds(java.awt.Rectangle var0) { }
+		public void setCursor(java.awt.Cursor var0) { }
+		public void setEnabled(boolean var0) { }
+		public void setFont(java.awt.Font var0) { }
+		public void setForeground(java.awt.Color var0) { }
+		public void setLocation(java.awt.Point var0) { }
+		public void setSize(java.awt.Dimension var0) { }
+		public void setVisible(boolean var0) { }
+	}
+	protected class BltBufferStrategy extends java.awt.image.BufferStrategy {
+		protected java.awt.image.VolatileImage[] backBuffers;
+		protected java.awt.BufferCapabilities caps;
+		protected int height;
+		protected boolean validatedContents;
+		protected int width;
+		protected BltBufferStrategy(int var0, java.awt.BufferCapabilities var1) { } 
+		public boolean contentsLost() { return false; }
+		public boolean contentsRestored() { return false; }
+		protected void createBackBuffers(int var0) { }
+		public java.awt.BufferCapabilities getCapabilities() { return null; }
+		public java.awt.Graphics getDrawGraphics() { return null; }
+		protected void revalidate() { }
+		public void show() { }
+	}
+	protected class FlipBufferStrategy extends java.awt.image.BufferStrategy {
+		protected java.awt.BufferCapabilities caps;
+		protected java.awt.Image drawBuffer;
+		protected java.awt.image.VolatileImage drawVBuffer;
+		protected int numBuffers;
+		protected boolean validatedContents;
+		protected FlipBufferStrategy(int var0, java.awt.BufferCapabilities var1) throws java.awt.AWTException { } 
+		public boolean contentsLost() { return false; }
+		public boolean contentsRestored() { return false; }
+		protected void createBuffers(int var0, java.awt.BufferCapabilities var1) throws java.awt.AWTException { }
+		protected void destroyBuffers() { }
+		protected void flip(java.awt.BufferCapabilities.FlipContents var0) { }
+		protected java.awt.Image getBackBuffer() { return null; }
+		public java.awt.BufferCapabilities getCapabilities() { return null; }
+		public java.awt.Graphics getDrawGraphics() { return null; }
+		protected void revalidate() { }
+		public void show() { }
+	}
+	public final static float BOTTOM_ALIGNMENT = 1.0f;
+	public final static float CENTER_ALIGNMENT = 0.5f;
+	public final static float LEFT_ALIGNMENT = 0.0f;
+	public final static float RIGHT_ALIGNMENT = 1.0f;
+	public final static float TOP_ALIGNMENT = 0.0f;
+	protected Component() { } 
 	/** @deprecated */ public boolean action(java.awt.Event var0, java.lang.Object var1) { return false; }
 	public void add(java.awt.PopupMenu var0) { }
 	public void addComponentListener(java.awt.event.ComponentListener var0) { }
@@ -52,8 +140,14 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	/** @deprecated */ public void enable(boolean var0) { }
 	protected final void enableEvents(long var0) { }
 	public void enableInputMethods(boolean var0) { }
+	public void firePropertyChange(java.lang.String var0, byte var1, byte var2) { }
+	public void firePropertyChange(java.lang.String var0, char var1, char var2) { }
+	public void firePropertyChange(java.lang.String var0, double var1, double var2) { }
+	public void firePropertyChange(java.lang.String var0, float var1, float var2) { }
 	protected void firePropertyChange(java.lang.String var0, int var1, int var2) { }
+	public void firePropertyChange(java.lang.String var0, long var1, long var2) { }
 	protected void firePropertyChange(java.lang.String var0, java.lang.Object var1, java.lang.Object var2) { }
+	public void firePropertyChange(java.lang.String var0, short var1, short var2) { }
 	protected void firePropertyChange(java.lang.String var0, boolean var1, boolean var2) { }
 	public javax.accessibility.AccessibleContext getAccessibleContext() { return null; }
 	public float getAlignmentX() { return 0.0f; }
@@ -70,7 +164,7 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public java.awt.dnd.DropTarget getDropTarget() { return null; }
 	public java.awt.Container getFocusCycleRootAncestor() { return null; }
 	public java.awt.event.FocusListener[] getFocusListeners() { return null; }
-	public java.util.Set getFocusTraversalKeys(int var0) { return null; }
+	public java.util.Set<java.awt.AWTKeyStroke> getFocusTraversalKeys(int var0) { return null; }
 	public boolean getFocusTraversalKeysEnabled() { return false; }
 	public java.awt.Font getFont() { return null; }
 	public java.awt.FontMetrics getFontMetrics(java.awt.Font var0) { return null; }
@@ -85,7 +179,7 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public java.awt.event.InputMethodListener[] getInputMethodListeners() { return null; }
 	public java.awt.im.InputMethodRequests getInputMethodRequests() { return null; }
 	public java.awt.event.KeyListener[] getKeyListeners() { return null; }
-	public java.util.EventListener[] getListeners(java.lang.Class var0) { return null; }
+	public <T extends java.util.EventListener> T[] getListeners(java.lang.Class<T> var0) { return null; }
 	public java.util.Locale getLocale() { return null; }
 	public java.awt.Point getLocation() { return null; }
 	public java.awt.Point getLocation(java.awt.Point var0) { return null; }
@@ -94,6 +188,7 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public java.awt.Dimension getMinimumSize() { return null; }
 	public java.awt.event.MouseListener[] getMouseListeners() { return null; }
 	public java.awt.event.MouseMotionListener[] getMouseMotionListeners() { return null; }
+	public java.awt.Point getMousePosition() { return null; }
 	public java.awt.event.MouseWheelListener[] getMouseWheelListeners() { return null; }
 	public java.lang.String getName() { return null; }
 	public java.awt.Container getParent() { return null; }
@@ -127,7 +222,10 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public boolean isFontSet() { return false; }
 	public boolean isForegroundSet() { return false; }
 	public boolean isLightweight() { return false; }
+	public boolean isMaximumSizeSet() { return false; }
+	public boolean isMinimumSizeSet() { return false; }
 	public boolean isOpaque() { return false; }
+	public boolean isPreferredSizeSet() { return false; }
 	public boolean isShowing() { return false; }
 	public boolean isValid() { return false; }
 	public boolean isVisible() { return false; }
@@ -201,7 +299,7 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public void setCursor(java.awt.Cursor var0) { }
 	public void setDropTarget(java.awt.dnd.DropTarget var0) { }
 	public void setEnabled(boolean var0) { }
-	public void setFocusTraversalKeys(int var0, java.util.Set var1) { }
+	public void setFocusTraversalKeys(int var0, java.util.Set<? extends java.awt.AWTKeyStroke> var1) { }
 	public void setFocusTraversalKeysEnabled(boolean var0) { }
 	public void setFocusable(boolean var0) { }
 	public void setFont(java.awt.Font var0) { }
@@ -210,7 +308,10 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public void setLocale(java.util.Locale var0) { }
 	public void setLocation(int var0, int var1) { }
 	public void setLocation(java.awt.Point var0) { }
+	public void setMaximumSize(java.awt.Dimension var0) { }
+	public void setMinimumSize(java.awt.Dimension var0) { }
 	public void setName(java.lang.String var0) { }
+	public void setPreferredSize(java.awt.Dimension var0) { }
 	public void setSize(int var0, int var1) { }
 	public void setSize(java.awt.Dimension var0) { }
 	public void setVisible(boolean var0) { }
@@ -222,93 +323,5 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public void transferFocusUpCycle() { }
 	public void update(java.awt.Graphics var0) { }
 	public void validate() { }
-	public final static float BOTTOM_ALIGNMENT = 1.0f;
-	public final static float CENTER_ALIGNMENT = 0.5f;
-	public final static float LEFT_ALIGNMENT = 0.0f;
-	public final static float RIGHT_ALIGNMENT = 1.0f;
-	public final static float TOP_ALIGNMENT = 0.0f;
-	protected abstract class AccessibleAWTComponent extends javax.accessibility.AccessibleContext implements java.io.Serializable, javax.accessibility.AccessibleComponent {
-		protected AccessibleAWTComponent() { }
-		public void addFocusListener(java.awt.event.FocusListener var0) { }
-		public boolean contains(java.awt.Point var0) { return false; }
-		public javax.accessibility.Accessible getAccessibleAt(java.awt.Point var0) { return null; }
-		public javax.accessibility.Accessible getAccessibleChild(int var0) { return null; }
-		public int getAccessibleChildrenCount() { return 0; }
-		public int getAccessibleIndexInParent() { return 0; }
-		public javax.accessibility.AccessibleRole getAccessibleRole() { return null; }
-		public javax.accessibility.AccessibleStateSet getAccessibleStateSet() { return null; }
-		public java.awt.Color getBackground() { return null; }
-		public java.awt.Rectangle getBounds() { return null; }
-		public java.awt.Cursor getCursor() { return null; }
-		public java.awt.Font getFont() { return null; }
-		public java.awt.FontMetrics getFontMetrics(java.awt.Font var0) { return null; }
-		public java.awt.Color getForeground() { return null; }
-		public java.util.Locale getLocale() { return null; }
-		public java.awt.Point getLocation() { return null; }
-		public java.awt.Point getLocationOnScreen() { return null; }
-		public java.awt.Dimension getSize() { return null; }
-		public boolean isEnabled() { return false; }
-		public boolean isFocusTraversable() { return false; }
-		public boolean isShowing() { return false; }
-		public boolean isVisible() { return false; }
-		public void removeFocusListener(java.awt.event.FocusListener var0) { }
-		public void requestFocus() { }
-		public void setBackground(java.awt.Color var0) { }
-		public void setBounds(java.awt.Rectangle var0) { }
-		public void setCursor(java.awt.Cursor var0) { }
-		public void setEnabled(boolean var0) { }
-		public void setFont(java.awt.Font var0) { }
-		public void setForeground(java.awt.Color var0) { }
-		public void setLocation(java.awt.Point var0) { }
-		public void setSize(java.awt.Dimension var0) { }
-		public void setVisible(boolean var0) { }
-		protected java.awt.event.ComponentListener accessibleAWTComponentHandler;
-		protected java.awt.event.FocusListener accessibleAWTFocusHandler;
-		protected class AccessibleAWTComponentHandler implements java.awt.event.ComponentListener {
-			protected AccessibleAWTComponentHandler() { }
-			public void componentHidden(java.awt.event.ComponentEvent var0) { }
-			public void componentMoved(java.awt.event.ComponentEvent var0) { }
-			public void componentResized(java.awt.event.ComponentEvent var0) { }
-			public void componentShown(java.awt.event.ComponentEvent var0) { }
-		}
-		protected class AccessibleAWTFocusHandler implements java.awt.event.FocusListener {
-			protected AccessibleAWTFocusHandler() { }
-			public void focusGained(java.awt.event.FocusEvent var0) { }
-			public void focusLost(java.awt.event.FocusEvent var0) { }
-		}
-	}
-	protected class BltBufferStrategy extends java.awt.image.BufferStrategy {
-		protected BltBufferStrategy(int var0, java.awt.BufferCapabilities var1) { }
-		public boolean contentsLost() { return false; }
-		public boolean contentsRestored() { return false; }
-		protected void createBackBuffers(int var0) { }
-		public java.awt.BufferCapabilities getCapabilities() { return null; }
-		public java.awt.Graphics getDrawGraphics() { return null; }
-		protected void revalidate() { }
-		public void show() { }
-		protected java.awt.image.VolatileImage[] backBuffers;
-		protected java.awt.BufferCapabilities caps;
-		protected int height;
-		protected boolean validatedContents;
-		protected int width;
-	}
-	protected class FlipBufferStrategy extends java.awt.image.BufferStrategy {
-		protected FlipBufferStrategy(int var0, java.awt.BufferCapabilities var1) throws java.awt.AWTException { }
-		public boolean contentsLost() { return false; }
-		public boolean contentsRestored() { return false; }
-		protected void createBuffers(int var0, java.awt.BufferCapabilities var1) throws java.awt.AWTException { }
-		protected void destroyBuffers() { }
-		protected void flip(java.awt.BufferCapabilities.FlipContents var0) { }
-		protected java.awt.Image getBackBuffer() { return null; }
-		public java.awt.BufferCapabilities getCapabilities() { return null; }
-		public java.awt.Graphics getDrawGraphics() { return null; }
-		protected void revalidate() { }
-		public void show() { }
-		protected java.awt.BufferCapabilities caps;
-		protected java.awt.Image drawBuffer;
-		protected java.awt.image.VolatileImage drawVBuffer;
-		protected int numBuffers;
-		protected boolean validatedContents;
-	}
 }
 

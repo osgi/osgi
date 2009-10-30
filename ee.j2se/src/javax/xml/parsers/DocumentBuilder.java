@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,19 @@
 
 package javax.xml.parsers;
 public abstract class DocumentBuilder {
-	protected DocumentBuilder() { }
+	protected DocumentBuilder() { } 
 	public abstract org.w3c.dom.DOMImplementation getDOMImplementation();
+	public javax.xml.validation.Schema getSchema() { return null; }
 	public abstract boolean isNamespaceAware();
 	public abstract boolean isValidating();
+	public boolean isXIncludeAware() { return false; }
 	public abstract org.w3c.dom.Document newDocument();
 	public org.w3c.dom.Document parse(java.io.File var0) throws java.io.IOException, org.xml.sax.SAXException { return null; }
 	public org.w3c.dom.Document parse(java.io.InputStream var0) throws java.io.IOException, org.xml.sax.SAXException { return null; }
 	public org.w3c.dom.Document parse(java.io.InputStream var0, java.lang.String var1) throws java.io.IOException, org.xml.sax.SAXException { return null; }
 	public org.w3c.dom.Document parse(java.lang.String var0) throws java.io.IOException, org.xml.sax.SAXException { return null; }
 	public abstract org.w3c.dom.Document parse(org.xml.sax.InputSource var0) throws java.io.IOException, org.xml.sax.SAXException;
+	public void reset() { }
 	public abstract void setEntityResolver(org.xml.sax.EntityResolver var0);
 	public abstract void setErrorHandler(org.xml.sax.ErrorHandler var0);
 }

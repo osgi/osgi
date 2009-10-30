@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package javax.print.attribute.standard;
 public final class PrinterState extends javax.print.attribute.EnumSyntax implements javax.print.attribute.PrintServiceAttribute {
-	protected PrinterState(int var0) { super(0); }
-	public final java.lang.Class getCategory() { return null; }
-	public final java.lang.String getName() { return null; }
 	public final static javax.print.attribute.standard.PrinterState IDLE; static { IDLE = null; }
 	public final static javax.print.attribute.standard.PrinterState PROCESSING; static { PROCESSING = null; }
 	public final static javax.print.attribute.standard.PrinterState STOPPED; static { STOPPED = null; }
 	public final static javax.print.attribute.standard.PrinterState UNKNOWN; static { UNKNOWN = null; }
+	protected PrinterState(int var0)  { super(0); } 
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
+	public final java.lang.String getName() { return null; }
 }
 

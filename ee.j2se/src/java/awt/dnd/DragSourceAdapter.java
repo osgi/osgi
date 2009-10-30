@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt.dnd;
 public abstract class DragSourceAdapter implements java.awt.dnd.DragSourceListener, java.awt.dnd.DragSourceMotionListener {
-	public DragSourceAdapter() { }
+	public DragSourceAdapter() { } 
 	public void dragDropEnd(java.awt.dnd.DragSourceDropEvent var0) { }
 	public void dragEnter(java.awt.dnd.DragSourceDragEvent var0) { }
 	public void dragExit(java.awt.dnd.DragSourceEvent var0) { }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package org.omg.CORBA;
-public abstract interface DynEnum extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
-	public abstract java.lang.String value_as_string();
-	public abstract void value_as_string(java.lang.String var0);
-	public abstract int value_as_ulong();
-	public abstract void value_as_ulong(int var0);
+/** @deprecated */ public interface DynEnum extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
+	java.lang.String value_as_string();
+	void value_as_string(java.lang.String var0);
+	int value_as_ulong();
+	void value_as_ulong(int var0);
 }
 

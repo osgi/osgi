@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.net.ssl;
 public class SSLSessionBindingEvent extends java.util.EventObject {
-	public SSLSessionBindingEvent(javax.net.ssl.SSLSession var0, java.lang.String var1) { super((java.lang.Object) null); }
+	public SSLSessionBindingEvent(javax.net.ssl.SSLSession var0, java.lang.String var1)  { super((java.lang.Object) null); } 
 	public java.lang.String getName() { return null; }
 	public javax.net.ssl.SSLSession getSession() { return null; }
 }

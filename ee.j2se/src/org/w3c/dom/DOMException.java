@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package org.w3c.dom;
 public class DOMException extends java.lang.RuntimeException {
-	public DOMException(short var0, java.lang.String var1) { }
 	public final static short DOMSTRING_SIZE_ERR = 2;
 	public final static short HIERARCHY_REQUEST_ERR = 3;
 	public final static short INDEX_SIZE_ERR = 1;
@@ -31,7 +30,10 @@ public class DOMException extends java.lang.RuntimeException {
 	public final static short NO_DATA_ALLOWED_ERR = 6;
 	public final static short NO_MODIFICATION_ALLOWED_ERR = 7;
 	public final static short SYNTAX_ERR = 12;
+	public final static short TYPE_MISMATCH_ERR = 17;
+	public final static short VALIDATION_ERR = 16;
 	public final static short WRONG_DOCUMENT_ERR = 4;
 	public short code;
+	public DOMException(short var0, java.lang.String var1) { } 
 }
 

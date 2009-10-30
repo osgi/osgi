@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package javax.sql;
-public abstract interface RowSetInternal {
-	public abstract java.sql.Connection getConnection() throws java.sql.SQLException;
-	public abstract java.sql.ResultSet getOriginal() throws java.sql.SQLException;
-	public abstract java.sql.ResultSet getOriginalRow() throws java.sql.SQLException;
-	public abstract java.lang.Object[] getParams() throws java.sql.SQLException;
-	public abstract void setMetaData(javax.sql.RowSetMetaData var0) throws java.sql.SQLException;
+public interface RowSetInternal {
+	java.sql.Connection getConnection() throws java.sql.SQLException;
+	java.sql.ResultSet getOriginal() throws java.sql.SQLException;
+	java.sql.ResultSet getOriginalRow() throws java.sql.SQLException;
+	java.lang.Object[] getParams() throws java.sql.SQLException;
+	void setMetaData(javax.sql.RowSetMetaData var0) throws java.sql.SQLException;
 }
 

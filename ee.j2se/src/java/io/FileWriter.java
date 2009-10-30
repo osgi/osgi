@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package java.io;
 public class FileWriter extends java.io.OutputStreamWriter {
-	public FileWriter(java.io.File var0) throws java.io.IOException { super((java.io.OutputStream) null, (java.nio.charset.CharsetEncoder) null); }
-	public FileWriter(java.io.File var0, boolean var1) throws java.io.IOException { super((java.io.OutputStream) null, (java.nio.charset.CharsetEncoder) null); }
-	public FileWriter(java.io.FileDescriptor var0) { super((java.io.OutputStream) null, (java.nio.charset.CharsetEncoder) null); }
-	public FileWriter(java.lang.String var0) throws java.io.IOException { super((java.io.OutputStream) null, (java.nio.charset.CharsetEncoder) null); }
-	public FileWriter(java.lang.String var0, boolean var1) throws java.io.IOException { super((java.io.OutputStream) null, (java.nio.charset.CharsetEncoder) null); }
+	public FileWriter(java.io.File var0) throws java.io.IOException  { super((java.io.OutputStream) null, (java.nio.charset.CharsetEncoder) null); } 
+	public FileWriter(java.io.File var0, boolean var1) throws java.io.IOException  { super((java.io.OutputStream) null, (java.nio.charset.CharsetEncoder) null); } 
+	public FileWriter(java.io.FileDescriptor var0)  { super((java.io.OutputStream) null, (java.nio.charset.CharsetEncoder) null); } 
+	public FileWriter(java.lang.String var0) throws java.io.IOException  { super((java.io.OutputStream) null, (java.nio.charset.CharsetEncoder) null); } 
+	public FileWriter(java.lang.String var0, boolean var1) throws java.io.IOException  { super((java.io.OutputStream) null, (java.nio.charset.CharsetEncoder) null); } 
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.text.html.parser;
 public class ParserDelegator extends javax.swing.text.html.HTMLEditorKit.Parser implements java.io.Serializable {
-	public ParserDelegator() { }
+	public ParserDelegator() { } 
 	protected static javax.swing.text.html.parser.DTD createDTD(javax.swing.text.html.parser.DTD var0, java.lang.String var1) { return null; }
 	public void parse(java.io.Reader var0, javax.swing.text.html.HTMLEditorKit.ParserCallback var1, boolean var2) throws java.io.IOException { }
 	protected static void setDefaultDTD() { }

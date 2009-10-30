@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package java.beans.beancontext;
 public abstract class BeanContextEvent extends java.util.EventObject {
-	protected BeanContextEvent(java.beans.beancontext.BeanContext var0) { super((java.lang.Object) null); }
+	protected java.beans.beancontext.BeanContext propagatedFrom;
+	protected BeanContextEvent(java.beans.beancontext.BeanContext var0)  { super((java.lang.Object) null); } 
 	public java.beans.beancontext.BeanContext getBeanContext() { return null; }
 	public java.beans.beancontext.BeanContext getPropagatedFrom() { return null; }
 	public boolean isPropagated() { return false; }
 	public void setPropagatedFrom(java.beans.beancontext.BeanContext var0) { }
-	protected java.beans.beancontext.BeanContext propagatedFrom;
 }
 

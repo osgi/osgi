@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 
 package javax.crypto.spec;
 public class SecretKeySpec implements java.security.spec.KeySpec, javax.crypto.SecretKey {
-	public SecretKeySpec(byte[] var0, int var1, int var2, java.lang.String var3) { }
-	public SecretKeySpec(byte[] var0, java.lang.String var1) { }
+	private final static long serialVersionUID = 6577238317307289933l;
+	public SecretKeySpec(byte[] var0, int var1, int var2, java.lang.String var3) { } 
+	public SecretKeySpec(byte[] var0, java.lang.String var1) { } 
 	public java.lang.String getAlgorithm() { return null; }
 	public byte[] getEncoded() { return null; }
 	public java.lang.String getFormat() { return null; }

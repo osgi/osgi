@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.swing.text;
 public final class StringContent implements java.io.Serializable, javax.swing.text.AbstractDocument.Content {
-	public StringContent() { }
-	public StringContent(int var0) { }
+	public StringContent() { } 
+	public StringContent(int var0) { } 
 	public javax.swing.text.Position createPosition(int var0) throws javax.swing.text.BadLocationException { return null; }
 	public void getChars(int var0, int var1, javax.swing.text.Segment var2) throws javax.swing.text.BadLocationException { }
 	protected java.util.Vector getPositionsInRange(java.util.Vector var0, int var1, int var2) { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,14 @@
 
 package javax.swing.tree;
 public class DefaultMutableTreeNode implements java.io.Serializable, java.lang.Cloneable, javax.swing.tree.MutableTreeNode {
-	public DefaultMutableTreeNode() { }
-	public DefaultMutableTreeNode(java.lang.Object var0) { }
-	public DefaultMutableTreeNode(java.lang.Object var0, boolean var1) { }
+	public final static java.util.Enumeration<javax.swing.tree.TreeNode> EMPTY_ENUMERATION; static { EMPTY_ENUMERATION = null; }
+	protected boolean allowsChildren;
+	protected java.util.Vector children;
+	protected javax.swing.tree.MutableTreeNode parent;
+	protected java.lang.Object userObject;
+	public DefaultMutableTreeNode() { } 
+	public DefaultMutableTreeNode(java.lang.Object var0) { } 
+	public DefaultMutableTreeNode(java.lang.Object var0, boolean var1) { } 
 	public void add(javax.swing.tree.MutableTreeNode var0) { }
 	public java.util.Enumeration breadthFirstEnumeration() { return null; }
 	public java.util.Enumeration children() { return null; }
@@ -69,10 +74,5 @@ public class DefaultMutableTreeNode implements java.io.Serializable, java.lang.C
 	public void setAllowsChildren(boolean var0) { }
 	public void setParent(javax.swing.tree.MutableTreeNode var0) { }
 	public void setUserObject(java.lang.Object var0) { }
-	public final static java.util.Enumeration EMPTY_ENUMERATION; static { EMPTY_ENUMERATION = null; }
-	protected boolean allowsChildren;
-	protected java.util.Vector children;
-	protected javax.swing.tree.MutableTreeNode parent;
-	protected java.lang.Object userObject;
 }
 

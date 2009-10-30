@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,10 @@
 
 package java.awt;
 public class MenuBar extends java.awt.MenuComponent implements java.awt.MenuContainer, javax.accessibility.Accessible {
-	public MenuBar() { }
+	protected class AccessibleAWTMenuBar extends java.awt.MenuComponent.AccessibleAWTMenuComponent {
+		protected AccessibleAWTMenuBar() { } 
+	}
+	public MenuBar() { } 
 	public java.awt.Menu add(java.awt.Menu var0) { return null; }
 	public void addNotify() { }
 	/** @deprecated */ public int countMenus() { return 0; }
@@ -28,9 +31,6 @@ public class MenuBar extends java.awt.MenuComponent implements java.awt.MenuCont
 	public void remove(int var0) { }
 	public void remove(java.awt.MenuComponent var0) { }
 	public void setHelpMenu(java.awt.Menu var0) { }
-	public java.util.Enumeration shortcuts() { return null; }
-	protected class AccessibleAWTMenuBar extends java.awt.MenuComponent.AccessibleAWTMenuComponent {
-		protected AccessibleAWTMenuBar() { }
-	}
+	public java.util.Enumeration<java.awt.MenuShortcut> shortcuts() { return null; }
 }
 

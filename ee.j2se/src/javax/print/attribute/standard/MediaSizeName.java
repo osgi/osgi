@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package javax.print.attribute.standard;
 public class MediaSizeName extends javax.print.attribute.standard.Media {
-	protected MediaSizeName(int var0) { super(0); }
 	public final static javax.print.attribute.standard.MediaSizeName A; static { A = null; }
 	public final static javax.print.attribute.standard.MediaSizeName B; static { B = null; }
 	public final static javax.print.attribute.standard.MediaSizeName C; static { C = null; }
@@ -90,5 +89,6 @@ public class MediaSizeName extends javax.print.attribute.standard.Media {
 	public final static javax.print.attribute.standard.MediaSizeName PERSONAL_ENVELOPE; static { PERSONAL_ENVELOPE = null; }
 	public final static javax.print.attribute.standard.MediaSizeName QUARTO; static { QUARTO = null; }
 	public final static javax.print.attribute.standard.MediaSizeName TABLOID; static { TABLOID = null; }
+	protected MediaSizeName(int var0)  { super(0); } 
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package javax.swing.plaf;
 public class ColorUIResource extends java.awt.Color implements javax.swing.plaf.UIResource {
-	public ColorUIResource(float var0, float var1, float var2) { super((java.awt.color.ColorSpace) null, (float[]) null, 0.0f); }
-	public ColorUIResource(int var0) { super((java.awt.color.ColorSpace) null, (float[]) null, 0.0f); }
-	public ColorUIResource(int var0, int var1, int var2) { super((java.awt.color.ColorSpace) null, (float[]) null, 0.0f); }
-	public ColorUIResource(java.awt.Color var0) { super((java.awt.color.ColorSpace) null, (float[]) null, 0.0f); }
+	public ColorUIResource(float var0, float var1, float var2)  { super((java.awt.color.ColorSpace) null, (float[]) null, 0.0f); } 
+	public ColorUIResource(int var0)  { super((java.awt.color.ColorSpace) null, (float[]) null, 0.0f); } 
+	public ColorUIResource(int var0, int var1, int var2)  { super((java.awt.color.ColorSpace) null, (float[]) null, 0.0f); } 
+	public ColorUIResource(java.awt.Color var0)  { super((java.awt.color.ColorSpace) null, (float[]) null, 0.0f); } 
 }
 

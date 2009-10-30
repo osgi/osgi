@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package java.util.logging;
 public class FileHandler extends java.util.logging.StreamHandler {
-	public FileHandler() throws java.io.IOException { }
-	public FileHandler(java.lang.String var0) throws java.io.IOException { }
-	public FileHandler(java.lang.String var0, int var1, int var2) throws java.io.IOException { }
-	public FileHandler(java.lang.String var0, int var1, int var2, boolean var3) throws java.io.IOException { }
-	public FileHandler(java.lang.String var0, boolean var1) throws java.io.IOException { }
+	public FileHandler() throws java.io.IOException { } 
+	public FileHandler(java.lang.String var0) throws java.io.IOException { } 
+	public FileHandler(java.lang.String var0, int var1, int var2) throws java.io.IOException { } 
+	public FileHandler(java.lang.String var0, int var1, int var2, boolean var3) throws java.io.IOException { } 
+	public FileHandler(java.lang.String var0, boolean var1) throws java.io.IOException { } 
 }
 

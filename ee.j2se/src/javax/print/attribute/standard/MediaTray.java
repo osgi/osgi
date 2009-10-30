@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package javax.print.attribute.standard;
 public class MediaTray extends javax.print.attribute.standard.Media implements javax.print.attribute.Attribute {
-	protected MediaTray(int var0) { super(0); }
 	public final static javax.print.attribute.standard.MediaTray BOTTOM; static { BOTTOM = null; }
 	public final static javax.print.attribute.standard.MediaTray ENVELOPE; static { ENVELOPE = null; }
 	public final static javax.print.attribute.standard.MediaTray LARGE_CAPACITY; static { LARGE_CAPACITY = null; }
@@ -25,5 +24,6 @@ public class MediaTray extends javax.print.attribute.standard.Media implements j
 	public final static javax.print.attribute.standard.MediaTray MIDDLE; static { MIDDLE = null; }
 	public final static javax.print.attribute.standard.MediaTray SIDE; static { SIDE = null; }
 	public final static javax.print.attribute.standard.MediaTray TOP; static { TOP = null; }
+	protected MediaTray(int var0)  { super(0); } 
 }
 

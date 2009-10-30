@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.security.cert;
 public abstract class X509Certificate extends javax.security.cert.Certificate {
-	public X509Certificate() { }
+	public X509Certificate() { } 
 	public abstract void checkValidity() throws javax.security.cert.CertificateExpiredException, javax.security.cert.CertificateNotYetValidException;
 	public abstract void checkValidity(java.util.Date var0) throws javax.security.cert.CertificateExpiredException, javax.security.cert.CertificateNotYetValidException;
 	public final static javax.security.cert.X509Certificate getInstance(java.io.InputStream var0) throws javax.security.cert.CertificateException { return null; }

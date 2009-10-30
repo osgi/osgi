@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,62 @@
 
 package javax.swing.plaf.basic;
 public class BasicInternalFrameUI extends javax.swing.plaf.InternalFrameUI {
-	public BasicInternalFrameUI(javax.swing.JInternalFrame var0) { }
+	protected class BasicInternalFrameListener implements javax.swing.event.InternalFrameListener {
+		protected BasicInternalFrameListener() { } 
+		public void internalFrameActivated(javax.swing.event.InternalFrameEvent var0) { }
+		public void internalFrameClosed(javax.swing.event.InternalFrameEvent var0) { }
+		public void internalFrameClosing(javax.swing.event.InternalFrameEvent var0) { }
+		public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent var0) { }
+		public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent var0) { }
+		public void internalFrameIconified(javax.swing.event.InternalFrameEvent var0) { }
+		public void internalFrameOpened(javax.swing.event.InternalFrameEvent var0) { }
+	}
+	protected class BorderListener extends javax.swing.event.MouseInputAdapter implements javax.swing.SwingConstants {
+		protected final int RESIZE_NONE = 0;
+		protected BorderListener() { } 
+	}
+	protected class ComponentHandler implements java.awt.event.ComponentListener {
+		protected ComponentHandler() { } 
+		public void componentHidden(java.awt.event.ComponentEvent var0) { }
+		public void componentMoved(java.awt.event.ComponentEvent var0) { }
+		public void componentResized(java.awt.event.ComponentEvent var0) { }
+		public void componentShown(java.awt.event.ComponentEvent var0) { }
+	}
+	protected class GlassPaneDispatcher implements javax.swing.event.MouseInputListener {
+		protected GlassPaneDispatcher() { } 
+		public void mouseClicked(java.awt.event.MouseEvent var0) { }
+		public void mouseDragged(java.awt.event.MouseEvent var0) { }
+		public void mouseEntered(java.awt.event.MouseEvent var0) { }
+		public void mouseExited(java.awt.event.MouseEvent var0) { }
+		public void mouseMoved(java.awt.event.MouseEvent var0) { }
+		public void mousePressed(java.awt.event.MouseEvent var0) { }
+		public void mouseReleased(java.awt.event.MouseEvent var0) { }
+	}
+	public class InternalFrameLayout implements java.awt.LayoutManager {
+		public InternalFrameLayout() { } 
+		public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }
+		public void layoutContainer(java.awt.Container var0) { }
+		public java.awt.Dimension minimumLayoutSize(java.awt.Container var0) { return null; }
+		public java.awt.Dimension preferredLayoutSize(java.awt.Container var0) { return null; }
+		public void removeLayoutComponent(java.awt.Component var0) { }
+	}
+	public class InternalFramePropertyChangeListener implements java.beans.PropertyChangeListener {
+		public InternalFramePropertyChangeListener() { } 
+		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
+	}
+	protected javax.swing.event.MouseInputAdapter borderListener;
+	protected java.awt.event.ComponentListener componentListener;
+	protected javax.swing.JComponent eastPane;
+	protected javax.swing.JInternalFrame frame;
+	protected javax.swing.event.MouseInputListener glassPaneDispatcher;
+	protected java.awt.LayoutManager internalFrameLayout;
+	protected javax.swing.JComponent northPane;
+	/** @deprecated */ protected javax.swing.KeyStroke openMenuKey;
+	protected java.beans.PropertyChangeListener propertyChangeListener;
+	protected javax.swing.JComponent southPane;
+	protected javax.swing.plaf.basic.BasicInternalFrameTitlePane titlePane;
+	protected javax.swing.JComponent westPane;
+	public BasicInternalFrameUI(javax.swing.JInternalFrame var0) { } 
 	protected void activateFrame(javax.swing.JInternalFrame var0) { }
 	protected void closeFrame(javax.swing.JInternalFrame var0) { }
 	protected javax.swing.event.MouseInputAdapter createBorderListener(javax.swing.JInternalFrame var0) { return null; }
@@ -62,60 +117,5 @@ public class BasicInternalFrameUI extends javax.swing.plaf.InternalFrameUI {
 	protected void uninstallDefaults() { }
 	protected void uninstallKeyboardActions() { }
 	protected void uninstallListeners() { }
-	protected javax.swing.event.MouseInputAdapter borderListener;
-	protected java.awt.event.ComponentListener componentListener;
-	protected javax.swing.JComponent eastPane;
-	protected javax.swing.JInternalFrame frame;
-	protected javax.swing.event.MouseInputListener glassPaneDispatcher;
-	protected java.awt.LayoutManager internalFrameLayout;
-	protected javax.swing.JComponent northPane;
-	/** @deprecated */ protected javax.swing.KeyStroke openMenuKey;
-	protected java.beans.PropertyChangeListener propertyChangeListener;
-	protected javax.swing.JComponent southPane;
-	protected javax.swing.plaf.basic.BasicInternalFrameTitlePane titlePane;
-	protected javax.swing.JComponent westPane;
-	protected class BasicInternalFrameListener implements javax.swing.event.InternalFrameListener {
-		protected BasicInternalFrameListener() { }
-		public void internalFrameActivated(javax.swing.event.InternalFrameEvent var0) { }
-		public void internalFrameClosed(javax.swing.event.InternalFrameEvent var0) { }
-		public void internalFrameClosing(javax.swing.event.InternalFrameEvent var0) { }
-		public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent var0) { }
-		public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent var0) { }
-		public void internalFrameIconified(javax.swing.event.InternalFrameEvent var0) { }
-		public void internalFrameOpened(javax.swing.event.InternalFrameEvent var0) { }
-	}
-	protected class BorderListener extends javax.swing.event.MouseInputAdapter implements javax.swing.SwingConstants {
-		protected BorderListener() { }
-		protected final int RESIZE_NONE = 0;
-	}
-	protected class ComponentHandler implements java.awt.event.ComponentListener {
-		protected ComponentHandler() { }
-		public void componentHidden(java.awt.event.ComponentEvent var0) { }
-		public void componentMoved(java.awt.event.ComponentEvent var0) { }
-		public void componentResized(java.awt.event.ComponentEvent var0) { }
-		public void componentShown(java.awt.event.ComponentEvent var0) { }
-	}
-	protected class GlassPaneDispatcher implements javax.swing.event.MouseInputListener {
-		protected GlassPaneDispatcher() { }
-		public void mouseClicked(java.awt.event.MouseEvent var0) { }
-		public void mouseDragged(java.awt.event.MouseEvent var0) { }
-		public void mouseEntered(java.awt.event.MouseEvent var0) { }
-		public void mouseExited(java.awt.event.MouseEvent var0) { }
-		public void mouseMoved(java.awt.event.MouseEvent var0) { }
-		public void mousePressed(java.awt.event.MouseEvent var0) { }
-		public void mouseReleased(java.awt.event.MouseEvent var0) { }
-	}
-	public class InternalFrameLayout implements java.awt.LayoutManager {
-		public InternalFrameLayout() { }
-		public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }
-		public void layoutContainer(java.awt.Container var0) { }
-		public java.awt.Dimension minimumLayoutSize(java.awt.Container var0) { return null; }
-		public java.awt.Dimension preferredLayoutSize(java.awt.Container var0) { return null; }
-		public void removeLayoutComponent(java.awt.Component var0) { }
-	}
-	public class InternalFramePropertyChangeListener implements java.beans.PropertyChangeListener {
-		public InternalFramePropertyChangeListener() { }
-		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
-	}
 }
 

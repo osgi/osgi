@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt.event;
 public abstract class WindowAdapter implements java.awt.event.WindowFocusListener, java.awt.event.WindowListener, java.awt.event.WindowStateListener {
-	public WindowAdapter() { }
+	public WindowAdapter() { } 
 	public void windowActivated(java.awt.event.WindowEvent var0) { }
 	public void windowClosed(java.awt.event.WindowEvent var0) { }
 	public void windowClosing(java.awt.event.WindowEvent var0) { }

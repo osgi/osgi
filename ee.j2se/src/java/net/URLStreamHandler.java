@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
 
 package java.net;
 public abstract class URLStreamHandler {
-	public URLStreamHandler() { }
+	public URLStreamHandler() { } 
 	protected boolean equals(java.net.URL var0, java.net.URL var1) { return false; }
 	protected int getDefaultPort() { return 0; }
 	protected java.net.InetAddress getHostAddress(java.net.URL var0) { return null; }
 	protected int hashCode(java.net.URL var0) { return 0; }
 	protected boolean hostsEqual(java.net.URL var0, java.net.URL var1) { return false; }
 	protected abstract java.net.URLConnection openConnection(java.net.URL var0) throws java.io.IOException;
+	protected java.net.URLConnection openConnection(java.net.URL var0, java.net.Proxy var1) throws java.io.IOException { return null; }
 	protected void parseURL(java.net.URL var0, java.lang.String var1, int var2, int var3) { }
 	protected boolean sameFile(java.net.URL var0, java.net.URL var1) { return false; }
 	/** @deprecated */ protected void setURL(java.net.URL var0, java.lang.String var1, java.lang.String var2, int var3, java.lang.String var4, java.lang.String var5) { }

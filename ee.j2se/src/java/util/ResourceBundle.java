@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package java.util;
 public abstract class ResourceBundle {
-	public ResourceBundle() { }
+	protected java.util.ResourceBundle parent;
+	public ResourceBundle() { } 
 	public final static java.util.ResourceBundle getBundle(java.lang.String var0) { return null; }
 	public final static java.util.ResourceBundle getBundle(java.lang.String var0, java.util.Locale var1) { return null; }
 	public static java.util.ResourceBundle getBundle(java.lang.String var0, java.util.Locale var1, java.lang.ClassLoader var2) { return null; }
-	public abstract java.util.Enumeration getKeys();
+	public abstract java.util.Enumeration<java.lang.String> getKeys();
 	public java.util.Locale getLocale() { return null; }
 	public final java.lang.Object getObject(java.lang.String var0) { return null; }
 	public final java.lang.String getString(java.lang.String var0) { return null; }
 	public final java.lang.String[] getStringArray(java.lang.String var0) { return null; }
 	protected abstract java.lang.Object handleGetObject(java.lang.String var0);
 	protected void setParent(java.util.ResourceBundle var0) { }
-	protected java.util.ResourceBundle parent;
 }
 

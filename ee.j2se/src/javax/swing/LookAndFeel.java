@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,12 @@
 
 package javax.swing;
 public abstract class LookAndFeel {
-	public LookAndFeel() { }
+	public LookAndFeel() { } 
 	public javax.swing.UIDefaults getDefaults() { return null; }
 	public abstract java.lang.String getDescription();
 	public static java.lang.Object getDesktopPropertyValue(java.lang.String var0, java.lang.Object var1) { return null; }
+	public javax.swing.Icon getDisabledIcon(javax.swing.JComponent var0, javax.swing.Icon var1) { return null; }
+	public javax.swing.Icon getDisabledSelectedIcon(javax.swing.JComponent var0, javax.swing.Icon var1) { return null; }
 	public abstract java.lang.String getID();
 	public abstract java.lang.String getName();
 	public boolean getSupportsWindowDecorations() { return false; }
@@ -27,11 +29,12 @@ public abstract class LookAndFeel {
 	public static void installBorder(javax.swing.JComponent var0, java.lang.String var1) { }
 	public static void installColors(javax.swing.JComponent var0, java.lang.String var1, java.lang.String var2) { }
 	public static void installColorsAndFont(javax.swing.JComponent var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) { }
+	public static void installProperty(javax.swing.JComponent var0, java.lang.String var1, java.lang.Object var2) { }
 	public abstract boolean isNativeLookAndFeel();
 	public abstract boolean isSupportedLookAndFeel();
 	public static void loadKeyBindings(javax.swing.InputMap var0, java.lang.Object[] var1) { }
 	public static javax.swing.ComponentInputMap makeComponentInputMap(javax.swing.JComponent var0, java.lang.Object[] var1) { return null; }
-	public static java.lang.Object makeIcon(java.lang.Class var0, java.lang.String var1) { return null; }
+	public static java.lang.Object makeIcon(java.lang.Class<?> var0, java.lang.String var1) { return null; }
 	public static javax.swing.InputMap makeInputMap(java.lang.Object[] var0) { return null; }
 	public static javax.swing.text.JTextComponent.KeyBinding[] makeKeyBindings(java.lang.Object[] var0) { return null; }
 	public void provideErrorFeedback(java.awt.Component var0) { }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.print.event;
 public class PrintJobAttributeEvent extends javax.print.event.PrintEvent {
-	public PrintJobAttributeEvent(javax.print.DocPrintJob var0, javax.print.attribute.PrintJobAttributeSet var1) { super((java.lang.Object) null); }
+	public PrintJobAttributeEvent(javax.print.DocPrintJob var0, javax.print.attribute.PrintJobAttributeSet var1)  { super((java.lang.Object) null); } 
 	public javax.print.attribute.PrintJobAttributeSet getAttributes() { return null; }
 	public javax.print.DocPrintJob getPrintJob() { return null; }
 }

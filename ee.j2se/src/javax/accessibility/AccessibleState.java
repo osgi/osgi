@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package javax.accessibility;
 public class AccessibleState extends javax.accessibility.AccessibleBundle {
-	protected AccessibleState(java.lang.String var0) { }
 	public final static javax.accessibility.AccessibleState ACTIVE; static { ACTIVE = null; }
 	public final static javax.accessibility.AccessibleState ARMED; static { ARMED = null; }
 	public final static javax.accessibility.AccessibleState BUSY; static { BUSY = null; }
@@ -30,6 +29,8 @@ public class AccessibleState extends javax.accessibility.AccessibleBundle {
 	public final static javax.accessibility.AccessibleState FOCUSED; static { FOCUSED = null; }
 	public final static javax.accessibility.AccessibleState HORIZONTAL; static { HORIZONTAL = null; }
 	public final static javax.accessibility.AccessibleState ICONIFIED; static { ICONIFIED = null; }
+	public final static javax.accessibility.AccessibleState INDETERMINATE; static { INDETERMINATE = null; }
+	public final static javax.accessibility.AccessibleState MANAGES_DESCENDANTS; static { MANAGES_DESCENDANTS = null; }
 	public final static javax.accessibility.AccessibleState MODAL; static { MODAL = null; }
 	public final static javax.accessibility.AccessibleState MULTISELECTABLE; static { MULTISELECTABLE = null; }
 	public final static javax.accessibility.AccessibleState MULTI_LINE; static { MULTI_LINE = null; }
@@ -41,7 +42,9 @@ public class AccessibleState extends javax.accessibility.AccessibleBundle {
 	public final static javax.accessibility.AccessibleState SHOWING; static { SHOWING = null; }
 	public final static javax.accessibility.AccessibleState SINGLE_LINE; static { SINGLE_LINE = null; }
 	public final static javax.accessibility.AccessibleState TRANSIENT; static { TRANSIENT = null; }
+	public final static javax.accessibility.AccessibleState TRUNCATED; static { TRUNCATED = null; }
 	public final static javax.accessibility.AccessibleState VERTICAL; static { VERTICAL = null; }
 	public final static javax.accessibility.AccessibleState VISIBLE; static { VISIBLE = null; }
+	protected AccessibleState(java.lang.String var0) { } 
 }
 

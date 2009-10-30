@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package javax.transaction.xa;
-public abstract interface Xid {
-	public abstract byte[] getBranchQualifier();
-	public abstract int getFormatId();
-	public abstract byte[] getGlobalTransactionId();
+public interface Xid {
 	public final static int MAXBQUALSIZE = 64;
 	public final static int MAXGTRIDSIZE = 64;
+	byte[] getBranchQualifier();
+	int getFormatId();
+	byte[] getGlobalTransactionId();
 }
 

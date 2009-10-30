@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package java.awt.event;
-public abstract interface ComponentListener extends java.util.EventListener {
-	public abstract void componentHidden(java.awt.event.ComponentEvent var0);
-	public abstract void componentMoved(java.awt.event.ComponentEvent var0);
-	public abstract void componentResized(java.awt.event.ComponentEvent var0);
-	public abstract void componentShown(java.awt.event.ComponentEvent var0);
+public interface ComponentListener extends java.util.EventListener {
+	void componentHidden(java.awt.event.ComponentEvent var0);
+	void componentMoved(java.awt.event.ComponentEvent var0);
+	void componentResized(java.awt.event.ComponentEvent var0);
+	void componentShown(java.awt.event.ComponentEvent var0);
 }
 

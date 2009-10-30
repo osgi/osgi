@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package javax.swing.event;
-public abstract interface MenuDragMouseListener extends java.util.EventListener {
-	public abstract void menuDragMouseDragged(javax.swing.event.MenuDragMouseEvent var0);
-	public abstract void menuDragMouseEntered(javax.swing.event.MenuDragMouseEvent var0);
-	public abstract void menuDragMouseExited(javax.swing.event.MenuDragMouseEvent var0);
-	public abstract void menuDragMouseReleased(javax.swing.event.MenuDragMouseEvent var0);
+public interface MenuDragMouseListener extends java.util.EventListener {
+	void menuDragMouseDragged(javax.swing.event.MenuDragMouseEvent var0);
+	void menuDragMouseEntered(javax.swing.event.MenuDragMouseEvent var0);
+	void menuDragMouseExited(javax.swing.event.MenuDragMouseEvent var0);
+	void menuDragMouseReleased(javax.swing.event.MenuDragMouseEvent var0);
 }
 

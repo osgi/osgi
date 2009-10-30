@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,21 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLTableRowElement extends org.w3c.dom.html.HTMLElement {
-	public abstract void deleteCell(int var0);
-	public abstract java.lang.String getAlign();
-	public abstract java.lang.String getBgColor();
-	public abstract org.w3c.dom.html.HTMLCollection getCells();
-	public abstract java.lang.String getCh();
-	public abstract java.lang.String getChOff();
-	public abstract int getRowIndex();
-	public abstract int getSectionRowIndex();
-	public abstract java.lang.String getVAlign();
-	public abstract org.w3c.dom.html.HTMLElement insertCell(int var0);
-	public abstract void setAlign(java.lang.String var0);
-	public abstract void setBgColor(java.lang.String var0);
-	public abstract void setCh(java.lang.String var0);
-	public abstract void setChOff(java.lang.String var0);
-	public abstract void setVAlign(java.lang.String var0);
+public interface HTMLTableRowElement extends org.w3c.dom.html.HTMLElement {
+	void deleteCell(int var0);
+	java.lang.String getAlign();
+	java.lang.String getBgColor();
+	org.w3c.dom.html.HTMLCollection getCells();
+	java.lang.String getCh();
+	java.lang.String getChOff();
+	int getRowIndex();
+	int getSectionRowIndex();
+	java.lang.String getVAlign();
+	org.w3c.dom.html.HTMLElement insertCell(int var0);
+	void setAlign(java.lang.String var0);
+	void setBgColor(java.lang.String var0);
+	void setCh(java.lang.String var0);
+	void setChOff(java.lang.String var0);
+	void setVAlign(java.lang.String var0);
 }
 

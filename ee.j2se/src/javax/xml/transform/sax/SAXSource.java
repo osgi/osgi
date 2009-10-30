@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 package javax.xml.transform.sax;
 public class SAXSource implements javax.xml.transform.Source {
-	public SAXSource() { }
-	public SAXSource(org.xml.sax.InputSource var0) { }
-	public SAXSource(org.xml.sax.XMLReader var0, org.xml.sax.InputSource var1) { }
+	public final static java.lang.String FEATURE = "http://javax.xml.transform.sax.SAXSource/feature";
+	public SAXSource() { } 
+	public SAXSource(org.xml.sax.InputSource var0) { } 
+	public SAXSource(org.xml.sax.XMLReader var0, org.xml.sax.InputSource var1) { } 
 	public org.xml.sax.InputSource getInputSource() { return null; }
 	public java.lang.String getSystemId() { return null; }
 	public org.xml.sax.XMLReader getXMLReader() { return null; }
@@ -26,6 +27,5 @@ public class SAXSource implements javax.xml.transform.Source {
 	public void setSystemId(java.lang.String var0) { }
 	public void setXMLReader(org.xml.sax.XMLReader var0) { }
 	public static org.xml.sax.InputSource sourceToInputSource(javax.xml.transform.Source var0) { return null; }
-	public final static java.lang.String FEATURE = "http://javax.xml.transform.sax.SAXSource/feature";
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,46 @@
 
 package java.awt.geom;
 public abstract class Rectangle2D extends java.awt.geom.RectangularShape {
-	protected Rectangle2D() { }
+	public static class Double extends java.awt.geom.Rectangle2D {
+		public double height;
+		public double width;
+		public double x;
+		public double y;
+		public Double() { } 
+		public Double(double var0, double var1, double var2, double var3) { } 
+		public java.awt.geom.Rectangle2D createIntersection(java.awt.geom.Rectangle2D var0) { return null; }
+		public java.awt.geom.Rectangle2D createUnion(java.awt.geom.Rectangle2D var0) { return null; }
+		public double getHeight() { return 0.0d; }
+		public double getWidth() { return 0.0d; }
+		public double getX() { return 0.0d; }
+		public double getY() { return 0.0d; }
+		public boolean isEmpty() { return false; }
+		public int outcode(double var0, double var1) { return 0; }
+		public void setRect(double var0, double var1, double var2, double var3) { }
+	}
+	public static class Float extends java.awt.geom.Rectangle2D {
+		public float height;
+		public float width;
+		public float x;
+		public float y;
+		public Float() { } 
+		public Float(float var0, float var1, float var2, float var3) { } 
+		public java.awt.geom.Rectangle2D createIntersection(java.awt.geom.Rectangle2D var0) { return null; }
+		public java.awt.geom.Rectangle2D createUnion(java.awt.geom.Rectangle2D var0) { return null; }
+		public double getHeight() { return 0.0d; }
+		public double getWidth() { return 0.0d; }
+		public double getX() { return 0.0d; }
+		public double getY() { return 0.0d; }
+		public boolean isEmpty() { return false; }
+		public int outcode(double var0, double var1) { return 0; }
+		public void setRect(double var0, double var1, double var2, double var3) { }
+		public void setRect(float var0, float var1, float var2, float var3) { }
+	}
+	public final static int OUT_BOTTOM = 8;
+	public final static int OUT_LEFT = 1;
+	public final static int OUT_RIGHT = 4;
+	public final static int OUT_TOP = 2;
+	protected Rectangle2D() { } 
 	public void add(double var0, double var1) { }
 	public void add(java.awt.geom.Point2D var0) { }
 	public void add(java.awt.geom.Rectangle2D var0) { }
@@ -37,44 +76,5 @@ public abstract class Rectangle2D extends java.awt.geom.RectangularShape {
 	public abstract void setRect(double var0, double var1, double var2, double var3);
 	public void setRect(java.awt.geom.Rectangle2D var0) { }
 	public static void union(java.awt.geom.Rectangle2D var0, java.awt.geom.Rectangle2D var1, java.awt.geom.Rectangle2D var2) { }
-	public final static int OUT_BOTTOM = 8;
-	public final static int OUT_LEFT = 1;
-	public final static int OUT_RIGHT = 4;
-	public final static int OUT_TOP = 2;
-	public static class Double extends java.awt.geom.Rectangle2D {
-		public Double() { }
-		public Double(double var0, double var1, double var2, double var3) { }
-		public java.awt.geom.Rectangle2D createIntersection(java.awt.geom.Rectangle2D var0) { return null; }
-		public java.awt.geom.Rectangle2D createUnion(java.awt.geom.Rectangle2D var0) { return null; }
-		public double getHeight() { return 0.0d; }
-		public double getWidth() { return 0.0d; }
-		public double getX() { return 0.0d; }
-		public double getY() { return 0.0d; }
-		public boolean isEmpty() { return false; }
-		public int outcode(double var0, double var1) { return 0; }
-		public void setRect(double var0, double var1, double var2, double var3) { }
-		public double height;
-		public double width;
-		public double x;
-		public double y;
-	}
-	public static class Float extends java.awt.geom.Rectangle2D {
-		public Float() { }
-		public Float(float var0, float var1, float var2, float var3) { }
-		public java.awt.geom.Rectangle2D createIntersection(java.awt.geom.Rectangle2D var0) { return null; }
-		public java.awt.geom.Rectangle2D createUnion(java.awt.geom.Rectangle2D var0) { return null; }
-		public double getHeight() { return 0.0d; }
-		public double getWidth() { return 0.0d; }
-		public double getX() { return 0.0d; }
-		public double getY() { return 0.0d; }
-		public boolean isEmpty() { return false; }
-		public int outcode(double var0, double var1) { return 0; }
-		public void setRect(double var0, double var1, double var2, double var3) { }
-		public void setRect(float var0, float var1, float var2, float var3) { }
-		public float height;
-		public float width;
-		public float x;
-		public float y;
-	}
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package java.beans;
-public abstract interface AppletInitializer {
-	public abstract void activate(java.applet.Applet var0);
-	public abstract void initialize(java.applet.Applet var0, java.beans.beancontext.BeanContext var1);
+public interface AppletInitializer {
+	void activate(java.applet.Applet var0);
+	void initialize(java.applet.Applet var0, java.beans.beancontext.BeanContext var1);
 }
 

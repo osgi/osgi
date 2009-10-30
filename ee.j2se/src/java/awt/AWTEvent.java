@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,6 @@
 
 package java.awt;
 public abstract class AWTEvent extends java.util.EventObject {
-	public AWTEvent(java.awt.Event var0) { super((java.lang.Object) null); }
-	public AWTEvent(java.lang.Object var0, int var1) { super((java.lang.Object) null); }
-	protected void consume() { }
-	public int getID() { return 0; }
-	protected boolean isConsumed() { return false; }
-	public java.lang.String paramString() { return null; }
-	public void setSource(java.lang.Object var0) { }
 	public final static long ACTION_EVENT_MASK = 128l;
 	public final static long ADJUSTMENT_EVENT_MASK = 256l;
 	public final static long COMPONENT_EVENT_MASK = 1l;
@@ -45,5 +38,12 @@ public abstract class AWTEvent extends java.util.EventObject {
 	public final static long WINDOW_STATE_EVENT_MASK = 262144l;
 	protected boolean consumed;
 	protected int id;
+	public AWTEvent(java.awt.Event var0)  { super((java.lang.Object) null); } 
+	public AWTEvent(java.lang.Object var0, int var1)  { super((java.lang.Object) null); } 
+	protected void consume() { }
+	public int getID() { return 0; }
+	protected boolean isConsumed() { return false; }
+	public java.lang.String paramString() { return null; }
+	public void setSource(java.lang.Object var0) { }
 }
 

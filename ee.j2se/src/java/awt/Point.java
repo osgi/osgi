@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,11 @@
 
 package java.awt;
 public class Point extends java.awt.geom.Point2D implements java.io.Serializable {
-	public Point() { }
-	public Point(int var0, int var1) { }
-	public Point(java.awt.Point var0) { }
+	public int x;
+	public int y;
+	public Point() { } 
+	public Point(int var0, int var1) { } 
+	public Point(java.awt.Point var0) { } 
 	public java.awt.Point getLocation() { return null; }
 	public double getX() { return 0.0d; }
 	public double getY() { return 0.0d; }
@@ -27,7 +29,5 @@ public class Point extends java.awt.geom.Point2D implements java.io.Serializable
 	public void setLocation(int var0, int var1) { }
 	public void setLocation(java.awt.Point var0) { }
 	public void translate(int var0, int var1) { }
-	public int x;
-	public int y;
 }
 

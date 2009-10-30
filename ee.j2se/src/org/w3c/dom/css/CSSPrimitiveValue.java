@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,7 @@
  */
 
 package org.w3c.dom.css;
-public abstract interface CSSPrimitiveValue extends org.w3c.dom.css.CSSValue {
-	public abstract org.w3c.dom.css.Counter getCounterValue();
-	public abstract float getFloatValue(short var0);
-	public abstract short getPrimitiveType();
-	public abstract org.w3c.dom.css.RGBColor getRGBColorValue();
-	public abstract org.w3c.dom.css.Rect getRectValue();
-	public abstract java.lang.String getStringValue();
-	public abstract void setFloatValue(short var0, float var1);
-	public abstract void setStringValue(short var0, java.lang.String var1);
+public interface CSSPrimitiveValue extends org.w3c.dom.css.CSSValue {
 	public final static short CSS_ATTR = 22;
 	public final static short CSS_CM = 6;
 	public final static short CSS_COUNTER = 23;
@@ -50,5 +42,13 @@ public abstract interface CSSPrimitiveValue extends org.w3c.dom.css.CSSValue {
 	public final static short CSS_STRING = 19;
 	public final static short CSS_UNKNOWN = 0;
 	public final static short CSS_URI = 20;
+	org.w3c.dom.css.Counter getCounterValue();
+	float getFloatValue(short var0);
+	short getPrimitiveType();
+	org.w3c.dom.css.RGBColor getRGBColorValue();
+	org.w3c.dom.css.Rect getRectValue();
+	java.lang.String getStringValue();
+	void setFloatValue(short var0, float var1);
+	void setStringValue(short var0, java.lang.String var1);
 }
 

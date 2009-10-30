@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,15 @@
 
 package javax.swing;
 public class JTextArea extends javax.swing.text.JTextComponent {
-	public JTextArea() { }
-	public JTextArea(int var0, int var1) { }
-	public JTextArea(java.lang.String var0) { }
-	public JTextArea(java.lang.String var0, int var1, int var2) { }
-	public JTextArea(javax.swing.text.Document var0) { }
-	public JTextArea(javax.swing.text.Document var0, java.lang.String var1, int var2, int var3) { }
+	protected class AccessibleJTextArea extends javax.swing.text.JTextComponent.AccessibleJTextComponent {
+		protected AccessibleJTextArea() { } 
+	}
+	public JTextArea() { } 
+	public JTextArea(int var0, int var1) { } 
+	public JTextArea(java.lang.String var0) { } 
+	public JTextArea(java.lang.String var0, int var1, int var2) { } 
+	public JTextArea(javax.swing.text.Document var0) { } 
+	public JTextArea(javax.swing.text.Document var0, java.lang.String var1, int var2, int var3) { } 
 	public void append(java.lang.String var0) { }
 	protected javax.swing.text.Document createDefaultModel() { return null; }
 	protected int getColumnWidth() { return 0; }
@@ -42,8 +45,5 @@ public class JTextArea extends javax.swing.text.JTextComponent {
 	public void setRows(int var0) { }
 	public void setTabSize(int var0) { }
 	public void setWrapStyleWord(boolean var0) { }
-	protected class AccessibleJTextArea extends javax.swing.text.JTextComponent.AccessibleJTextComponent {
-		protected AccessibleJTextArea() { }
-	}
 }
 

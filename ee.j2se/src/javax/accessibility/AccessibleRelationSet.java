@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 
 package javax.accessibility;
 public class AccessibleRelationSet {
-	public AccessibleRelationSet() { }
-	public AccessibleRelationSet(javax.accessibility.AccessibleRelation[] var0) { }
+	protected java.util.Vector<javax.accessibility.AccessibleRelation> relations;
+	public AccessibleRelationSet() { } 
+	public AccessibleRelationSet(javax.accessibility.AccessibleRelation[] var0) { } 
 	public boolean add(javax.accessibility.AccessibleRelation var0) { return false; }
 	public void addAll(javax.accessibility.AccessibleRelation[] var0) { }
 	public void clear() { }
@@ -26,6 +27,5 @@ public class AccessibleRelationSet {
 	public boolean remove(javax.accessibility.AccessibleRelation var0) { return false; }
 	public int size() { return 0; }
 	public javax.accessibility.AccessibleRelation[] toArray() { return null; }
-	protected java.util.Vector relations;
 }
 

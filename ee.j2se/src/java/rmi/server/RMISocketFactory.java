@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.rmi.server;
 public abstract class RMISocketFactory implements java.rmi.server.RMIClientSocketFactory, java.rmi.server.RMIServerSocketFactory {
-	public RMISocketFactory() { }
+	public RMISocketFactory() { } 
 	public static java.rmi.server.RMISocketFactory getDefaultSocketFactory() { return null; }
 	public static java.rmi.server.RMIFailureHandler getFailureHandler() { return null; }
 	public static java.rmi.server.RMISocketFactory getSocketFactory() { return null; }

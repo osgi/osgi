@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,12 @@
 
 package javax.swing;
 public class SizeRequirements implements java.io.Serializable {
-	public SizeRequirements() { }
-	public SizeRequirements(int var0, int var1, int var2, float var3) { }
+	public float alignment;
+	public int maximum;
+	public int minimum;
+	public int preferred;
+	public SizeRequirements() { } 
+	public SizeRequirements(int var0, int var1, int var2, float var3) { } 
 	public static int[] adjustSizes(int var0, javax.swing.SizeRequirements[] var1) { return null; }
 	public static void calculateAlignedPositions(int var0, javax.swing.SizeRequirements var1, javax.swing.SizeRequirements[] var2, int[] var3, int[] var4) { }
 	public static void calculateAlignedPositions(int var0, javax.swing.SizeRequirements var1, javax.swing.SizeRequirements[] var2, int[] var3, int[] var4, boolean var5) { }
@@ -25,9 +29,5 @@ public class SizeRequirements implements java.io.Serializable {
 	public static void calculateTiledPositions(int var0, javax.swing.SizeRequirements var1, javax.swing.SizeRequirements[] var2, int[] var3, int[] var4, boolean var5) { }
 	public static javax.swing.SizeRequirements getAlignedSizeRequirements(javax.swing.SizeRequirements[] var0) { return null; }
 	public static javax.swing.SizeRequirements getTiledSizeRequirements(javax.swing.SizeRequirements[] var0) { return null; }
-	public float alignment;
-	public int maximum;
-	public int minimum;
-	public int preferred;
 }
 

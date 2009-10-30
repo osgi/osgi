@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,6 @@
 
 package javax.swing.plaf.basic;
 public class DefaultMenuLayout extends javax.swing.BoxLayout implements javax.swing.plaf.UIResource {
-	public DefaultMenuLayout(java.awt.Container var0, int var1) { super((java.awt.Container) null, 0); }
+	public DefaultMenuLayout(java.awt.Container var0, int var1)  { super((java.awt.Container) null, 0); } 
 }
 

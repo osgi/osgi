@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,16 @@
  */
 
 package java.applet;
-public abstract interface AppletContext {
-	public abstract java.applet.Applet getApplet(java.lang.String var0);
-	public abstract java.util.Enumeration getApplets();
-	public abstract java.applet.AudioClip getAudioClip(java.net.URL var0);
-	public abstract java.awt.Image getImage(java.net.URL var0);
-	public abstract java.io.InputStream getStream(java.lang.String var0);
-	public abstract java.util.Iterator getStreamKeys();
-	public abstract void setStream(java.lang.String var0, java.io.InputStream var1) throws java.io.IOException;
-	public abstract void showDocument(java.net.URL var0);
-	public abstract void showDocument(java.net.URL var0, java.lang.String var1);
-	public abstract void showStatus(java.lang.String var0);
+public interface AppletContext {
+	java.applet.Applet getApplet(java.lang.String var0);
+	java.util.Enumeration<java.applet.Applet> getApplets();
+	java.applet.AudioClip getAudioClip(java.net.URL var0);
+	java.awt.Image getImage(java.net.URL var0);
+	java.io.InputStream getStream(java.lang.String var0);
+	java.util.Iterator<java.lang.String> getStreamKeys();
+	void setStream(java.lang.String var0, java.io.InputStream var1) throws java.io.IOException;
+	void showDocument(java.net.URL var0);
+	void showDocument(java.net.URL var0, java.lang.String var1);
+	void showStatus(java.lang.String var0);
 }
 

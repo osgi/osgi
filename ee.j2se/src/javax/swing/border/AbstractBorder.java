@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.border;
 public abstract class AbstractBorder implements java.io.Serializable, javax.swing.border.Border {
-	public AbstractBorder() { }
+	public AbstractBorder() { } 
 	public java.awt.Insets getBorderInsets(java.awt.Component var0) { return null; }
 	public java.awt.Insets getBorderInsets(java.awt.Component var0, java.awt.Insets var1) { return null; }
 	public java.awt.Rectangle getInteriorRectangle(java.awt.Component var0, int var1, int var2, int var3, int var4) { return null; }

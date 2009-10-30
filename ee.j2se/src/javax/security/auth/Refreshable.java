@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package javax.security.auth;
-public abstract interface Refreshable {
-	public abstract boolean isCurrent();
-	public abstract void refresh() throws javax.security.auth.RefreshFailedException;
+public interface Refreshable {
+	boolean isCurrent();
+	void refresh() throws javax.security.auth.RefreshFailedException;
 }
 

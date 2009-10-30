@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package org.w3c.dom.events;
-public abstract interface UIEvent extends org.w3c.dom.events.Event {
-	public abstract int getDetail();
-	public abstract org.w3c.dom.views.AbstractView getView();
-	public abstract void initUIEvent(java.lang.String var0, boolean var1, boolean var2, org.w3c.dom.views.AbstractView var3, int var4);
+public interface UIEvent extends org.w3c.dom.events.Event {
+	int getDetail();
+	org.w3c.dom.views.AbstractView getView();
+	void initUIEvent(java.lang.String var0, boolean var1, boolean var2, org.w3c.dom.views.AbstractView var3, int var4);
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,7 @@
  */
 
 package org.w3c.dom.traversal;
-public abstract interface NodeFilter {
-	public abstract short acceptNode(org.w3c.dom.Node var0);
+public interface NodeFilter {
 	public final static short FILTER_ACCEPT = 1;
 	public final static short FILTER_REJECT = 2;
 	public final static short FILTER_SKIP = 3;
@@ -33,5 +32,6 @@ public abstract interface NodeFilter {
 	public final static int SHOW_NOTATION = 2048;
 	public final static int SHOW_PROCESSING_INSTRUCTION = 64;
 	public final static int SHOW_TEXT = 4;
+	short acceptNode(org.w3c.dom.Node var0);
 }
 

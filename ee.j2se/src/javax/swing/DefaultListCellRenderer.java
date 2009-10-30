@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package javax.swing;
 public class DefaultListCellRenderer extends javax.swing.JLabel implements java.io.Serializable, javax.swing.ListCellRenderer {
-	public DefaultListCellRenderer() { }
-	public java.awt.Component getListCellRendererComponent(javax.swing.JList var0, java.lang.Object var1, int var2, boolean var3, boolean var4) { return null; }
-	protected static javax.swing.border.Border noFocusBorder;
 	public static class UIResource extends javax.swing.DefaultListCellRenderer implements javax.swing.plaf.UIResource {
-		public UIResource() { }
+		public UIResource() { } 
 	}
+	protected static javax.swing.border.Border noFocusBorder;
+	public DefaultListCellRenderer() { } 
+	public java.awt.Component getListCellRendererComponent(javax.swing.JList var0, java.lang.Object var1, int var2, boolean var3, boolean var4) { return null; }
 }
 

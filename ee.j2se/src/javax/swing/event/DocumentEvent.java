@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,12 @@
  */
 
 package javax.swing.event;
-public abstract interface DocumentEvent {
-	public abstract javax.swing.event.DocumentEvent.ElementChange getChange(javax.swing.text.Element var0);
-	public abstract javax.swing.text.Document getDocument();
-	public abstract int getLength();
-	public abstract int getOffset();
-	public abstract javax.swing.event.DocumentEvent.EventType getType();
-	public static abstract interface ElementChange {
-		public abstract javax.swing.text.Element[] getChildrenAdded();
-		public abstract javax.swing.text.Element[] getChildrenRemoved();
-		public abstract javax.swing.text.Element getElement();
-		public abstract int getIndex();
+public interface DocumentEvent {
+	public interface ElementChange {
+		javax.swing.text.Element[] getChildrenAdded();
+		javax.swing.text.Element[] getChildrenRemoved();
+		javax.swing.text.Element getElement();
+		int getIndex();
 	}
 	public static final class EventType {
 		public final static javax.swing.event.DocumentEvent.EventType CHANGE; static { CHANGE = null; }
@@ -33,5 +28,10 @@ public abstract interface DocumentEvent {
 		public final static javax.swing.event.DocumentEvent.EventType REMOVE; static { REMOVE = null; }
 		private EventType() { } /* generated constructor to prevent compiler adding default public constructor */
 	}
+	javax.swing.event.DocumentEvent.ElementChange getChange(javax.swing.text.Element var0);
+	javax.swing.text.Document getDocument();
+	int getLength();
+	int getOffset();
+	javax.swing.event.DocumentEvent.EventType getType();
 }
 

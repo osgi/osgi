@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.text;
 public class BoxView extends javax.swing.text.CompositeView {
-	public BoxView(javax.swing.text.Element var0, int var1) { super((javax.swing.text.Element) null); }
+	public BoxView(javax.swing.text.Element var0, int var1)  { super((javax.swing.text.Element) null); } 
 	protected void baselineLayout(int var0, int var1, int[] var2, int[] var3) { }
 	protected javax.swing.SizeRequirements baselineRequirements(int var0, javax.swing.SizeRequirements var1) { return null; }
 	protected javax.swing.SizeRequirements calculateMajorAxisRequirements(int var0, javax.swing.SizeRequirements var1) { return null; }

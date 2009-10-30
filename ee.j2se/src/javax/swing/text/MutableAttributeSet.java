@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package javax.swing.text;
-public abstract interface MutableAttributeSet extends javax.swing.text.AttributeSet {
-	public abstract void addAttribute(java.lang.Object var0, java.lang.Object var1);
-	public abstract void addAttributes(javax.swing.text.AttributeSet var0);
-	public abstract void removeAttribute(java.lang.Object var0);
-	public abstract void removeAttributes(java.util.Enumeration var0);
-	public abstract void removeAttributes(javax.swing.text.AttributeSet var0);
-	public abstract void setResolveParent(javax.swing.text.AttributeSet var0);
+public interface MutableAttributeSet extends javax.swing.text.AttributeSet {
+	void addAttribute(java.lang.Object var0, java.lang.Object var1);
+	void addAttributes(javax.swing.text.AttributeSet var0);
+	void removeAttribute(java.lang.Object var0);
+	void removeAttributes(java.util.Enumeration<?> var0);
+	void removeAttributes(javax.swing.text.AttributeSet var0);
+	void setResolveParent(javax.swing.text.AttributeSet var0);
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,14 @@
 
 package java.awt;
 public class FlowLayout implements java.awt.LayoutManager, java.io.Serializable {
-	public FlowLayout() { }
-	public FlowLayout(int var0) { }
-	public FlowLayout(int var0, int var1, int var2) { }
+	public final static int CENTER = 1;
+	public final static int LEADING = 3;
+	public final static int LEFT = 0;
+	public final static int RIGHT = 2;
+	public final static int TRAILING = 4;
+	public FlowLayout() { } 
+	public FlowLayout(int var0) { } 
+	public FlowLayout(int var0, int var1, int var2) { } 
 	public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }
 	public int getAlignment() { return 0; }
 	public int getHgap() { return 0; }
@@ -30,10 +35,5 @@ public class FlowLayout implements java.awt.LayoutManager, java.io.Serializable 
 	public void setAlignment(int var0) { }
 	public void setHgap(int var0) { }
 	public void setVgap(int var0) { }
-	public final static int CENTER = 1;
-	public final static int LEADING = 3;
-	public final static int LEFT = 0;
-	public final static int RIGHT = 2;
-	public final static int TRAILING = 4;
 }
 

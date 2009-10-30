@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.security.auth.callback;
 public class ChoiceCallback implements java.io.Serializable, javax.security.auth.callback.Callback {
-	public ChoiceCallback(java.lang.String var0, java.lang.String[] var1, int var2, boolean var3) { }
+	public ChoiceCallback(java.lang.String var0, java.lang.String[] var1, int var2, boolean var3) { } 
 	public boolean allowMultipleSelections() { return false; }
 	public java.lang.String[] getChoices() { return null; }
 	public int getDefaultChoice() { return 0; }

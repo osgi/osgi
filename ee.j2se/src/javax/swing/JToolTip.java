@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package javax.swing;
 public class JToolTip extends javax.swing.JComponent implements javax.accessibility.Accessible {
-	public JToolTip() { }
+	protected class AccessibleJToolTip extends javax.swing.JComponent.AccessibleJComponent {
+		protected AccessibleJToolTip() { } 
+	}
+	public JToolTip() { } 
 	public javax.swing.JComponent getComponent() { return null; }
 	public java.lang.String getTipText() { return null; }
 	public javax.swing.plaf.ToolTipUI getUI() { return null; }
 	public void setComponent(javax.swing.JComponent var0) { }
 	public void setTipText(java.lang.String var0) { }
-	protected class AccessibleJToolTip extends javax.swing.JComponent.AccessibleJComponent {
-		protected AccessibleJToolTip() { }
-	}
 }
 

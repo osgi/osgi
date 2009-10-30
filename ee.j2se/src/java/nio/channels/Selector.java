@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 package java.nio.channels;
 public abstract class Selector {
-	protected Selector() { }
+	protected Selector() { } 
 	public abstract void close() throws java.io.IOException;
 	public abstract boolean isOpen();
-	public abstract java.util.Set keys();
+	public abstract java.util.Set<java.nio.channels.SelectionKey> keys();
 	public static java.nio.channels.Selector open() throws java.io.IOException { return null; }
 	public abstract java.nio.channels.spi.SelectorProvider provider();
 	public abstract int select() throws java.io.IOException;
 	public abstract int select(long var0) throws java.io.IOException;
 	public abstract int selectNow() throws java.io.IOException;
-	public abstract java.util.Set selectedKeys();
+	public abstract java.util.Set<java.nio.channels.SelectionKey> selectedKeys();
 	public abstract java.nio.channels.Selector wakeup();
 }
 

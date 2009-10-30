@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package java.awt;
 public class Canvas extends java.awt.Component implements javax.accessibility.Accessible {
-	public Canvas() { }
-	public Canvas(java.awt.GraphicsConfiguration var0) { }
+	protected class AccessibleAWTCanvas extends java.awt.Component.AccessibleAWTComponent {
+		protected AccessibleAWTCanvas() { } 
+	}
+	public Canvas() { } 
+	public Canvas(java.awt.GraphicsConfiguration var0) { } 
 	public void createBufferStrategy(int var0) { }
 	public void createBufferStrategy(int var0, java.awt.BufferCapabilities var1) throws java.awt.AWTException { }
 	public java.awt.image.BufferStrategy getBufferStrategy() { return null; }
-	protected class AccessibleAWTCanvas extends java.awt.Component.AccessibleAWTComponent {
-		protected AccessibleAWTCanvas() { }
-	}
 }
 

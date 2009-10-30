@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,33 @@
 
 package javax.swing.text;
 public class AsyncBoxView extends javax.swing.text.View {
-	public AsyncBoxView(javax.swing.text.Element var0, int var1) { super((javax.swing.text.Element) null); }
+	public class ChildLocator {
+		protected java.awt.Rectangle childAlloc;
+		protected java.awt.Rectangle lastAlloc;
+		protected javax.swing.text.AsyncBoxView.ChildState lastValidOffset;
+		public ChildLocator() { } 
+		public void childChanged(javax.swing.text.AsyncBoxView.ChildState var0) { }
+		protected java.awt.Shape getChildAllocation(int var0) { return null; }
+		public java.awt.Shape getChildAllocation(int var0, java.awt.Shape var1) { return null; }
+		public int getViewIndexAtPoint(float var0, float var1, java.awt.Shape var2) { return 0; }
+		protected int getViewIndexAtVisualOffset(float var0) { return 0; }
+		public void paintChildren(java.awt.Graphics var0) { }
+		protected void setAllocation(java.awt.Shape var0) { }
+	}
+	public class ChildState implements java.lang.Runnable {
+		public ChildState(javax.swing.text.View var0) { } 
+		public javax.swing.text.View getChildView() { return null; }
+		public float getMajorOffset() { return 0.0f; }
+		public float getMajorSpan() { return 0.0f; }
+		public float getMinorOffset() { return 0.0f; }
+		public float getMinorSpan() { return 0.0f; }
+		public boolean isLayoutValid() { return false; }
+		public void preferenceChanged(boolean var0, boolean var1) { }
+		public void run() { }
+		public void setMajorOffset(float var0) { }
+	}
+	protected javax.swing.text.AsyncBoxView.ChildLocator locator;
+	public AsyncBoxView(javax.swing.text.Element var0, int var1)  { super((javax.swing.text.Element) null); } 
 	protected javax.swing.text.AsyncBoxView.ChildState createChildState(javax.swing.text.View var0) { return null; }
 	protected void flushRequirementChanges() { }
 	public float getBottomInset() { return 0.0f; }
@@ -43,31 +69,5 @@ public class AsyncBoxView extends javax.swing.text.View {
 	public void setRightInset(float var0) { }
 	public void setTopInset(float var0) { }
 	public int viewToModel(float var0, float var1, java.awt.Shape var2, javax.swing.text.Position.Bias[] var3) { return 0; }
-	protected javax.swing.text.AsyncBoxView.ChildLocator locator;
-	public class ChildLocator {
-		public ChildLocator() { }
-		public void childChanged(javax.swing.text.AsyncBoxView.ChildState var0) { }
-		protected java.awt.Shape getChildAllocation(int var0) { return null; }
-		public java.awt.Shape getChildAllocation(int var0, java.awt.Shape var1) { return null; }
-		public int getViewIndexAtPoint(float var0, float var1, java.awt.Shape var2) { return 0; }
-		protected int getViewIndexAtVisualOffset(float var0) { return 0; }
-		public void paintChildren(java.awt.Graphics var0) { }
-		protected void setAllocation(java.awt.Shape var0) { }
-		protected java.awt.Rectangle childAlloc;
-		protected java.awt.Rectangle lastAlloc;
-		protected javax.swing.text.AsyncBoxView.ChildState lastValidOffset;
-	}
-	public class ChildState implements java.lang.Runnable {
-		public ChildState(javax.swing.text.View var0) { }
-		public javax.swing.text.View getChildView() { return null; }
-		public float getMajorOffset() { return 0.0f; }
-		public float getMajorSpan() { return 0.0f; }
-		public float getMinorOffset() { return 0.0f; }
-		public float getMinorSpan() { return 0.0f; }
-		public boolean isLayoutValid() { return false; }
-		public void preferenceChanged(boolean var0, boolean var1) { }
-		public void run() { }
-		public void setMajorOffset(float var0) { }
-	}
 }
 

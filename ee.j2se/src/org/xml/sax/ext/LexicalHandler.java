@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package org.xml.sax.ext;
-public abstract interface LexicalHandler {
-	public abstract void comment(char[] var0, int var1, int var2) throws org.xml.sax.SAXException;
-	public abstract void endCDATA() throws org.xml.sax.SAXException;
-	public abstract void endDTD() throws org.xml.sax.SAXException;
-	public abstract void endEntity(java.lang.String var0) throws org.xml.sax.SAXException;
-	public abstract void startCDATA() throws org.xml.sax.SAXException;
-	public abstract void startDTD(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws org.xml.sax.SAXException;
-	public abstract void startEntity(java.lang.String var0) throws org.xml.sax.SAXException;
+public interface LexicalHandler {
+	void comment(char[] var0, int var1, int var2) throws org.xml.sax.SAXException;
+	void endCDATA() throws org.xml.sax.SAXException;
+	void endDTD() throws org.xml.sax.SAXException;
+	void endEntity(java.lang.String var0) throws org.xml.sax.SAXException;
+	void startCDATA() throws org.xml.sax.SAXException;
+	void startDTD(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws org.xml.sax.SAXException;
+	void startEntity(java.lang.String var0) throws org.xml.sax.SAXException;
 }
 

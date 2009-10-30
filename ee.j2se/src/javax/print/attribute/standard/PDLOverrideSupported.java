@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package javax.print.attribute.standard;
 public class PDLOverrideSupported extends javax.print.attribute.EnumSyntax implements javax.print.attribute.PrintServiceAttribute {
-	protected PDLOverrideSupported(int var0) { super(0); }
-	public final java.lang.Class getCategory() { return null; }
-	public final java.lang.String getName() { return null; }
 	public final static javax.print.attribute.standard.PDLOverrideSupported ATTEMPTED; static { ATTEMPTED = null; }
 	public final static javax.print.attribute.standard.PDLOverrideSupported NOT_ATTEMPTED; static { NOT_ATTEMPTED = null; }
+	protected PDLOverrideSupported(int var0)  { super(0); } 
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
+	public final java.lang.String getName() { return null; }
 }
 

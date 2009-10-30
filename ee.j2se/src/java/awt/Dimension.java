@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,11 @@
 
 package java.awt;
 public class Dimension extends java.awt.geom.Dimension2D implements java.io.Serializable {
-	public Dimension() { }
-	public Dimension(int var0, int var1) { }
-	public Dimension(java.awt.Dimension var0) { }
+	public int height;
+	public int width;
+	public Dimension() { } 
+	public Dimension(int var0, int var1) { } 
+	public Dimension(java.awt.Dimension var0) { } 
 	public double getHeight() { return 0.0d; }
 	public java.awt.Dimension getSize() { return null; }
 	public double getWidth() { return 0.0d; }
@@ -26,7 +28,5 @@ public class Dimension extends java.awt.geom.Dimension2D implements java.io.Seri
 	public void setSize(double var0, double var1) { }
 	public void setSize(int var0, int var1) { }
 	public void setSize(java.awt.Dimension var0) { }
-	public int height;
-	public int width;
 }
 

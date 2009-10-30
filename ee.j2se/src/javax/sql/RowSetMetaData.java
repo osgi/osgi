@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,23 +15,23 @@
  */
 
 package javax.sql;
-public abstract interface RowSetMetaData extends java.sql.ResultSetMetaData {
-	public abstract void setAutoIncrement(int var0, boolean var1) throws java.sql.SQLException;
-	public abstract void setCaseSensitive(int var0, boolean var1) throws java.sql.SQLException;
-	public abstract void setCatalogName(int var0, java.lang.String var1) throws java.sql.SQLException;
-	public abstract void setColumnCount(int var0) throws java.sql.SQLException;
-	public abstract void setColumnDisplaySize(int var0, int var1) throws java.sql.SQLException;
-	public abstract void setColumnLabel(int var0, java.lang.String var1) throws java.sql.SQLException;
-	public abstract void setColumnName(int var0, java.lang.String var1) throws java.sql.SQLException;
-	public abstract void setColumnType(int var0, int var1) throws java.sql.SQLException;
-	public abstract void setColumnTypeName(int var0, java.lang.String var1) throws java.sql.SQLException;
-	public abstract void setCurrency(int var0, boolean var1) throws java.sql.SQLException;
-	public abstract void setNullable(int var0, int var1) throws java.sql.SQLException;
-	public abstract void setPrecision(int var0, int var1) throws java.sql.SQLException;
-	public abstract void setScale(int var0, int var1) throws java.sql.SQLException;
-	public abstract void setSchemaName(int var0, java.lang.String var1) throws java.sql.SQLException;
-	public abstract void setSearchable(int var0, boolean var1) throws java.sql.SQLException;
-	public abstract void setSigned(int var0, boolean var1) throws java.sql.SQLException;
-	public abstract void setTableName(int var0, java.lang.String var1) throws java.sql.SQLException;
+public interface RowSetMetaData extends java.sql.ResultSetMetaData {
+	void setAutoIncrement(int var0, boolean var1) throws java.sql.SQLException;
+	void setCaseSensitive(int var0, boolean var1) throws java.sql.SQLException;
+	void setCatalogName(int var0, java.lang.String var1) throws java.sql.SQLException;
+	void setColumnCount(int var0) throws java.sql.SQLException;
+	void setColumnDisplaySize(int var0, int var1) throws java.sql.SQLException;
+	void setColumnLabel(int var0, java.lang.String var1) throws java.sql.SQLException;
+	void setColumnName(int var0, java.lang.String var1) throws java.sql.SQLException;
+	void setColumnType(int var0, int var1) throws java.sql.SQLException;
+	void setColumnTypeName(int var0, java.lang.String var1) throws java.sql.SQLException;
+	void setCurrency(int var0, boolean var1) throws java.sql.SQLException;
+	void setNullable(int var0, int var1) throws java.sql.SQLException;
+	void setPrecision(int var0, int var1) throws java.sql.SQLException;
+	void setScale(int var0, int var1) throws java.sql.SQLException;
+	void setSchemaName(int var0, java.lang.String var1) throws java.sql.SQLException;
+	void setSearchable(int var0, boolean var1) throws java.sql.SQLException;
+	void setSigned(int var0, boolean var1) throws java.sql.SQLException;
+	void setTableName(int var0, java.lang.String var1) throws java.sql.SQLException;
 }
 

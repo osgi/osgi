@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.lang;
 public class StringIndexOutOfBoundsException extends java.lang.IndexOutOfBoundsException {
-	public StringIndexOutOfBoundsException() { }
-	public StringIndexOutOfBoundsException(int var0) { }
-	public StringIndexOutOfBoundsException(java.lang.String var0) { }
+	public StringIndexOutOfBoundsException() { } 
+	public StringIndexOutOfBoundsException(int var0) { } 
+	public StringIndexOutOfBoundsException(java.lang.String var0) { } 
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package java.awt.event;
 public class TextEvent extends java.awt.AWTEvent {
-	public TextEvent(java.lang.Object var0, int var1) { super((java.lang.Object) null, 0); }
 	public final static int TEXT_FIRST = 900;
 	public final static int TEXT_LAST = 900;
 	public final static int TEXT_VALUE_CHANGED = 900;
+	public TextEvent(java.lang.Object var0, int var1)  { super((java.lang.Object) null, 0); } 
 }
 

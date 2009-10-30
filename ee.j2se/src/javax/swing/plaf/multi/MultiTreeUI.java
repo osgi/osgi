@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package javax.swing.plaf.multi;
 public class MultiTreeUI extends javax.swing.plaf.TreeUI {
-	public MultiTreeUI() { }
+	protected java.util.Vector uis;
+	public MultiTreeUI() { } 
 	public void cancelEditing(javax.swing.JTree var0) { }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	public javax.swing.tree.TreePath getClosestPathForLocation(javax.swing.JTree var0, int var1, int var2) { return null; }
@@ -29,6 +30,5 @@ public class MultiTreeUI extends javax.swing.plaf.TreeUI {
 	public boolean isEditing(javax.swing.JTree var0) { return false; }
 	public void startEditingAtPath(javax.swing.JTree var0, javax.swing.tree.TreePath var1) { }
 	public boolean stopEditing(javax.swing.JTree var0) { return false; }
-	protected java.util.Vector uis;
 }
 

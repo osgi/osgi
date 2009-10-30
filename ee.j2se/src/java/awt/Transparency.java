@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package java.awt;
-public abstract interface Transparency {
-	public abstract int getTransparency();
+public interface Transparency {
 	public final static int BITMASK = 2;
 	public final static int OPAQUE = 1;
 	public final static int TRANSLUCENT = 3;
+	int getTransparency();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,16 @@
 
 package javax.swing.text.html.parser;
 public final class Element implements java.io.Serializable, javax.swing.text.html.parser.DTDConstants {
+	public javax.swing.text.html.parser.AttributeList atts;
+	public javax.swing.text.html.parser.ContentModel content;
+	public java.lang.Object data;
+	public java.util.BitSet exclusions;
+	public java.util.BitSet inclusions;
+	public int index;
+	public java.lang.String name;
+	public boolean oEnd;
+	public boolean oStart;
+	public int type;
 	public javax.swing.text.html.parser.AttributeList getAttribute(java.lang.String var0) { return null; }
 	public javax.swing.text.html.parser.AttributeList getAttributeByValue(java.lang.String var0) { return null; }
 	public javax.swing.text.html.parser.AttributeList getAttributes() { return null; }
@@ -27,16 +37,6 @@ public final class Element implements java.io.Serializable, javax.swing.text.htm
 	public static int name2type(java.lang.String var0) { return 0; }
 	public boolean omitEnd() { return false; }
 	public boolean omitStart() { return false; }
-	public javax.swing.text.html.parser.AttributeList atts;
-	public javax.swing.text.html.parser.ContentModel content;
-	public java.lang.Object data;
-	public java.util.BitSet exclusions;
-	public java.util.BitSet inclusions;
-	public int index;
-	public java.lang.String name;
-	public boolean oEnd;
-	public boolean oStart;
-	public int type;
 	private Element() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

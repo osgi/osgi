@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package javax.print.attribute.standard;
 public class JobStateReason extends javax.print.attribute.EnumSyntax implements javax.print.attribute.Attribute {
-	protected JobStateReason(int var0) { super(0); }
-	public final java.lang.Class getCategory() { return null; }
-	public final java.lang.String getName() { return null; }
 	public final static javax.print.attribute.standard.JobStateReason ABORTED_BY_SYSTEM; static { ABORTED_BY_SYSTEM = null; }
 	public final static javax.print.attribute.standard.JobStateReason COMPRESSION_ERROR; static { COMPRESSION_ERROR = null; }
 	public final static javax.print.attribute.standard.JobStateReason DOCUMENT_ACCESS_ERROR; static { DOCUMENT_ACCESS_ERROR = null; }
@@ -48,5 +45,8 @@ public class JobStateReason extends javax.print.attribute.EnumSyntax implements 
 	public final static javax.print.attribute.standard.JobStateReason SUBMISSION_INTERRUPTED; static { SUBMISSION_INTERRUPTED = null; }
 	public final static javax.print.attribute.standard.JobStateReason UNSUPPORTED_COMPRESSION; static { UNSUPPORTED_COMPRESSION = null; }
 	public final static javax.print.attribute.standard.JobStateReason UNSUPPORTED_DOCUMENT_FORMAT; static { UNSUPPORTED_DOCUMENT_FORMAT = null; }
+	protected JobStateReason(int var0)  { super(0); } 
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
+	public final java.lang.String getName() { return null; }
 }
 

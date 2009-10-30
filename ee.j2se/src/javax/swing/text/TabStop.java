@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,6 @@
 
 package javax.swing.text;
 public class TabStop implements java.io.Serializable {
-	public TabStop(float var0) { }
-	public TabStop(float var0, int var1, int var2) { }
-	public int getAlignment() { return 0; }
-	public int getLeader() { return 0; }
-	public float getPosition() { return 0.0f; }
-	public int hashCode() { return 0; }
 	public final static int ALIGN_BAR = 5;
 	public final static int ALIGN_CENTER = 2;
 	public final static int ALIGN_DECIMAL = 4;
@@ -33,5 +27,11 @@ public class TabStop implements java.io.Serializable {
 	public final static int LEAD_NONE = 0;
 	public final static int LEAD_THICKLINE = 4;
 	public final static int LEAD_UNDERLINE = 3;
+	public TabStop(float var0) { } 
+	public TabStop(float var0, int var1, int var2) { } 
+	public int getAlignment() { return 0; }
+	public int getLeader() { return 0; }
+	public float getPosition() { return 0.0f; }
+	public int hashCode() { return 0; }
 }
 

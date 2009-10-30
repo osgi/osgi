@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package org.omg.CORBA;
-public abstract interface PolicyOperations {
-	public abstract org.omg.CORBA.Policy copy();
-	public abstract void destroy();
-	public abstract int policy_type();
+public interface PolicyOperations {
+	org.omg.CORBA.Policy copy();
+	void destroy();
+	int policy_type();
 }
 

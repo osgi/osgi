@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,12 @@
  */
 
 package java.awt.image;
-public abstract class VolatileImage extends java.awt.Image {
-	public VolatileImage() { }
+public abstract class VolatileImage extends java.awt.Image implements java.awt.Transparency {
+	public final static int IMAGE_INCOMPATIBLE = 2;
+	public final static int IMAGE_OK = 0;
+	public final static int IMAGE_RESTORED = 1;
+	protected int transparency;
+	public VolatileImage() { } 
 	public abstract boolean contentsLost();
 	public abstract java.awt.Graphics2D createGraphics();
 	public void flush() { }
@@ -25,10 +29,8 @@ public abstract class VolatileImage extends java.awt.Image {
 	public abstract int getHeight();
 	public abstract java.awt.image.BufferedImage getSnapshot();
 	public java.awt.image.ImageProducer getSource() { return null; }
+	public int getTransparency() { return 0; }
 	public abstract int getWidth();
 	public abstract int validate(java.awt.GraphicsConfiguration var0);
-	public final static int IMAGE_INCOMPATIBLE = 2;
-	public final static int IMAGE_OK = 0;
-	public final static int IMAGE_RESTORED = 1;
 }
 

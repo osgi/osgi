@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 package javax.swing.border;
 public class LineBorder extends javax.swing.border.AbstractBorder {
-	public LineBorder(java.awt.Color var0) { }
-	public LineBorder(java.awt.Color var0, int var1) { }
-	public LineBorder(java.awt.Color var0, int var1, boolean var2) { }
+	protected java.awt.Color lineColor;
+	protected boolean roundedCorners;
+	protected int thickness;
+	public LineBorder(java.awt.Color var0) { } 
+	public LineBorder(java.awt.Color var0, int var1) { } 
+	public LineBorder(java.awt.Color var0, int var1, boolean var2) { } 
 	public static javax.swing.border.Border createBlackLineBorder() { return null; }
 	public static javax.swing.border.Border createGrayLineBorder() { return null; }
 	public java.awt.Color getLineColor() { return null; }
 	public boolean getRoundedCorners() { return false; }
 	public int getThickness() { return 0; }
-	protected java.awt.Color lineColor;
-	protected boolean roundedCorners;
-	protected int thickness;
 }
 

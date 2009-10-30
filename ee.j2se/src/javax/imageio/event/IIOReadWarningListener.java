@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package javax.imageio.event;
-public abstract interface IIOReadWarningListener extends java.util.EventListener {
-	public abstract void warningOccurred(javax.imageio.ImageReader var0, java.lang.String var1);
+public interface IIOReadWarningListener extends java.util.EventListener {
+	void warningOccurred(javax.imageio.ImageReader var0, java.lang.String var1);
 }
 

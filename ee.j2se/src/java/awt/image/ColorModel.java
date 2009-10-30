@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,10 @@
 
 package java.awt.image;
 public abstract class ColorModel implements java.awt.Transparency {
-	public ColorModel(int var0) { }
-	protected ColorModel(int var0, int[] var1, java.awt.color.ColorSpace var2, boolean var3, boolean var4, int var5, int var6) { }
+	protected int pixel_bits;
+	protected int transferType;
+	public ColorModel(int var0) { } 
+	protected ColorModel(int var0, int[] var1, java.awt.color.ColorSpace var2, boolean var3, boolean var4, int var5, int var6) { } 
 	public java.awt.image.ColorModel coerceData(java.awt.image.WritableRaster var0, boolean var1) { return null; }
 	public java.awt.image.SampleModel createCompatibleSampleModel(int var0, int var1) { return null; }
 	public java.awt.image.WritableRaster createCompatibleWritableRaster(int var0, int var1) { return null; }
@@ -57,7 +59,5 @@ public abstract class ColorModel implements java.awt.Transparency {
 	public final boolean isAlphaPremultiplied() { return false; }
 	public boolean isCompatibleRaster(java.awt.image.Raster var0) { return false; }
 	public boolean isCompatibleSampleModel(java.awt.image.SampleModel var0) { return false; }
-	protected int pixel_bits;
-	protected int transferType;
 }
 

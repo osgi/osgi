@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package java.awt.image;
 public class ReplicateScaleFilter extends java.awt.image.ImageFilter {
-	public ReplicateScaleFilter(int var0, int var1) { }
 	protected int destHeight;
 	protected int destWidth;
 	protected java.lang.Object outpixbuf;
@@ -24,5 +23,6 @@ public class ReplicateScaleFilter extends java.awt.image.ImageFilter {
 	protected int srcWidth;
 	protected int[] srccols;
 	protected int[] srcrows;
+	public ReplicateScaleFilter(int var0, int var1) { } 
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,15 @@
 
 package javax.swing.plaf.basic;
 public class BasicColorChooserUI extends javax.swing.plaf.ColorChooserUI {
-	public BasicColorChooserUI() { }
+	public class PropertyHandler implements java.beans.PropertyChangeListener {
+		public PropertyHandler() { } 
+		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
+	}
+	protected javax.swing.JColorChooser chooser;
+	protected javax.swing.colorchooser.AbstractColorChooserPanel[] defaultChoosers;
+	protected javax.swing.event.ChangeListener previewListener;
+	protected java.beans.PropertyChangeListener propertyChangeListener;
+	public BasicColorChooserUI() { } 
 	protected javax.swing.colorchooser.AbstractColorChooserPanel[] createDefaultChoosers() { return null; }
 	protected java.beans.PropertyChangeListener createPropertyChangeListener() { return null; }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
@@ -26,12 +34,5 @@ public class BasicColorChooserUI extends javax.swing.plaf.ColorChooserUI {
 	protected void uninstallDefaultChoosers() { }
 	protected void uninstallDefaults() { }
 	protected void uninstallListeners() { }
-	protected javax.swing.colorchooser.AbstractColorChooserPanel[] defaultChoosers;
-	protected javax.swing.event.ChangeListener previewListener;
-	protected java.beans.PropertyChangeListener propertyChangeListener;
-	public class PropertyHandler implements java.beans.PropertyChangeListener {
-		public PropertyHandler() { }
-		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
-	}
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package javax.accessibility;
 public class AccessibleRole extends javax.accessibility.AccessibleBundle {
-	protected AccessibleRole(java.lang.String var0) { }
 	public final static javax.accessibility.AccessibleRole ALERT; static { ALERT = null; }
 	public final static javax.accessibility.AccessibleRole AWT_COMPONENT; static { AWT_COMPONENT = null; }
 	public final static javax.accessibility.AccessibleRole CANVAS; static { CANVAS = null; }
@@ -29,12 +28,15 @@ public class AccessibleRole extends javax.accessibility.AccessibleBundle {
 	public final static javax.accessibility.AccessibleRole DESKTOP_PANE; static { DESKTOP_PANE = null; }
 	public final static javax.accessibility.AccessibleRole DIALOG; static { DIALOG = null; }
 	public final static javax.accessibility.AccessibleRole DIRECTORY_PANE; static { DIRECTORY_PANE = null; }
+	public final static javax.accessibility.AccessibleRole EDITBAR; static { EDITBAR = null; }
 	public final static javax.accessibility.AccessibleRole FILE_CHOOSER; static { FILE_CHOOSER = null; }
 	public final static javax.accessibility.AccessibleRole FILLER; static { FILLER = null; }
 	public final static javax.accessibility.AccessibleRole FONT_CHOOSER; static { FONT_CHOOSER = null; }
+	public final static javax.accessibility.AccessibleRole FOOTER; static { FOOTER = null; }
 	public final static javax.accessibility.AccessibleRole FRAME; static { FRAME = null; }
 	public final static javax.accessibility.AccessibleRole GLASS_PANE; static { GLASS_PANE = null; }
 	public final static javax.accessibility.AccessibleRole GROUP_BOX; static { GROUP_BOX = null; }
+	public final static javax.accessibility.AccessibleRole HEADER; static { HEADER = null; }
 	public final static javax.accessibility.AccessibleRole HYPERLINK; static { HYPERLINK = null; }
 	public final static javax.accessibility.AccessibleRole ICON; static { ICON = null; }
 	public final static javax.accessibility.AccessibleRole INTERNAL_FRAME; static { INTERNAL_FRAME = null; }
@@ -49,13 +51,16 @@ public class AccessibleRole extends javax.accessibility.AccessibleBundle {
 	public final static javax.accessibility.AccessibleRole PAGE_TAB; static { PAGE_TAB = null; }
 	public final static javax.accessibility.AccessibleRole PAGE_TAB_LIST; static { PAGE_TAB_LIST = null; }
 	public final static javax.accessibility.AccessibleRole PANEL; static { PANEL = null; }
+	public final static javax.accessibility.AccessibleRole PARAGRAPH; static { PARAGRAPH = null; }
 	public final static javax.accessibility.AccessibleRole PASSWORD_TEXT; static { PASSWORD_TEXT = null; }
 	public final static javax.accessibility.AccessibleRole POPUP_MENU; static { POPUP_MENU = null; }
 	public final static javax.accessibility.AccessibleRole PROGRESS_BAR; static { PROGRESS_BAR = null; }
+	public final static javax.accessibility.AccessibleRole PROGRESS_MONITOR; static { PROGRESS_MONITOR = null; }
 	public final static javax.accessibility.AccessibleRole PUSH_BUTTON; static { PUSH_BUTTON = null; }
 	public final static javax.accessibility.AccessibleRole RADIO_BUTTON; static { RADIO_BUTTON = null; }
 	public final static javax.accessibility.AccessibleRole ROOT_PANE; static { ROOT_PANE = null; }
 	public final static javax.accessibility.AccessibleRole ROW_HEADER; static { ROW_HEADER = null; }
+	public final static javax.accessibility.AccessibleRole RULER; static { RULER = null; }
 	public final static javax.accessibility.AccessibleRole SCROLL_BAR; static { SCROLL_BAR = null; }
 	public final static javax.accessibility.AccessibleRole SCROLL_PANE; static { SCROLL_PANE = null; }
 	public final static javax.accessibility.AccessibleRole SEPARATOR; static { SEPARATOR = null; }
@@ -73,5 +78,6 @@ public class AccessibleRole extends javax.accessibility.AccessibleBundle {
 	public final static javax.accessibility.AccessibleRole UNKNOWN; static { UNKNOWN = null; }
 	public final static javax.accessibility.AccessibleRole VIEWPORT; static { VIEWPORT = null; }
 	public final static javax.accessibility.AccessibleRole WINDOW; static { WINDOW = null; }
+	protected AccessibleRole(java.lang.String var0) { } 
 }
 

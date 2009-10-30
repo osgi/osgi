@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package java.awt.peer;
-public abstract interface ScrollPanePeer extends java.awt.peer.ContainerPeer {
-	public abstract void childResized(int var0, int var1);
-	public abstract int getHScrollbarHeight();
-	public abstract int getVScrollbarWidth();
-	public abstract void setScrollPosition(int var0, int var1);
-	public abstract void setUnitIncrement(java.awt.Adjustable var0, int var1);
-	public abstract void setValue(java.awt.Adjustable var0, int var1);
+public interface ScrollPanePeer extends java.awt.peer.ContainerPeer {
+	void childResized(int var0, int var1);
+	int getHScrollbarHeight();
+	int getVScrollbarWidth();
+	void setScrollPosition(int var0, int var1);
+	void setUnitIncrement(java.awt.Adjustable var0, int var1);
+	void setValue(java.awt.Adjustable var0, int var1);
 }
 

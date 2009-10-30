@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.security.spec;
 public abstract class EncodedKeySpec implements java.security.spec.KeySpec {
-	public EncodedKeySpec(byte[] var0) { }
+	public EncodedKeySpec(byte[] var0) { } 
 	public byte[] getEncoded() { return null; }
 	public abstract java.lang.String getFormat();
 }

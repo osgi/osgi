@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,17 @@
  */
 
 package java.awt.dnd.peer;
-public abstract interface DropTargetContextPeer {
-	public abstract void acceptDrag(int var0);
-	public abstract void acceptDrop(int var0);
-	public abstract void dropComplete(boolean var0);
-	public abstract java.awt.dnd.DropTarget getDropTarget();
-	public abstract int getTargetActions();
-	public abstract java.awt.datatransfer.DataFlavor[] getTransferDataFlavors();
-	public abstract java.awt.datatransfer.Transferable getTransferable();
-	public abstract boolean isTransferableJVMLocal();
-	public abstract void rejectDrag();
-	public abstract void rejectDrop();
-	public abstract void setTargetActions(int var0);
+public interface DropTargetContextPeer {
+	void acceptDrag(int var0);
+	void acceptDrop(int var0);
+	void dropComplete(boolean var0);
+	java.awt.dnd.DropTarget getDropTarget();
+	int getTargetActions();
+	java.awt.datatransfer.DataFlavor[] getTransferDataFlavors();
+	java.awt.datatransfer.Transferable getTransferable();
+	boolean isTransferableJVMLocal();
+	void rejectDrag();
+	void rejectDrop();
+	void setTargetActions(int var0);
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.text;
 public class IconView extends javax.swing.text.View {
-	public IconView(javax.swing.text.Element var0) { super((javax.swing.text.Element) null); }
+	public IconView(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null); } 
 	public float getPreferredSpan(int var0) { return 0.0f; }
 	public java.awt.Shape modelToView(int var0, java.awt.Shape var1, javax.swing.text.Position.Bias var2) throws javax.swing.text.BadLocationException { return null; }
 	public void paint(java.awt.Graphics var0, java.awt.Shape var1) { }

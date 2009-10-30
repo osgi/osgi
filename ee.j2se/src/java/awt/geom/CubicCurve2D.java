@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,60 @@
 
 package java.awt.geom;
 public abstract class CubicCurve2D implements java.awt.Shape, java.lang.Cloneable {
-	protected CubicCurve2D() { }
+	public static class Double extends java.awt.geom.CubicCurve2D {
+		public double ctrlx1;
+		public double ctrlx2;
+		public double ctrly1;
+		public double ctrly2;
+		public double x1;
+		public double x2;
+		public double y1;
+		public double y2;
+		public Double() { } 
+		public Double(double var0, double var1, double var2, double var3, double var4, double var5, double var6, double var7) { } 
+		public java.awt.geom.Rectangle2D getBounds2D() { return null; }
+		public java.awt.geom.Point2D getCtrlP1() { return null; }
+		public java.awt.geom.Point2D getCtrlP2() { return null; }
+		public double getCtrlX1() { return 0.0d; }
+		public double getCtrlX2() { return 0.0d; }
+		public double getCtrlY1() { return 0.0d; }
+		public double getCtrlY2() { return 0.0d; }
+		public java.awt.geom.Point2D getP1() { return null; }
+		public java.awt.geom.Point2D getP2() { return null; }
+		public double getX1() { return 0.0d; }
+		public double getX2() { return 0.0d; }
+		public double getY1() { return 0.0d; }
+		public double getY2() { return 0.0d; }
+		public void setCurve(double var0, double var1, double var2, double var3, double var4, double var5, double var6, double var7) { }
+	}
+	public static class Float extends java.awt.geom.CubicCurve2D {
+		public float ctrlx1;
+		public float ctrlx2;
+		public float ctrly1;
+		public float ctrly2;
+		public float x1;
+		public float x2;
+		public float y1;
+		public float y2;
+		public Float() { } 
+		public Float(float var0, float var1, float var2, float var3, float var4, float var5, float var6, float var7) { } 
+		public java.awt.geom.Rectangle2D getBounds2D() { return null; }
+		public java.awt.geom.Point2D getCtrlP1() { return null; }
+		public java.awt.geom.Point2D getCtrlP2() { return null; }
+		public double getCtrlX1() { return 0.0d; }
+		public double getCtrlX2() { return 0.0d; }
+		public double getCtrlY1() { return 0.0d; }
+		public double getCtrlY2() { return 0.0d; }
+		public java.awt.geom.Point2D getP1() { return null; }
+		public java.awt.geom.Point2D getP2() { return null; }
+		public double getX1() { return 0.0d; }
+		public double getX2() { return 0.0d; }
+		public double getY1() { return 0.0d; }
+		public double getY2() { return 0.0d; }
+		public void setCurve(double var0, double var1, double var2, double var3, double var4, double var5, double var6, double var7) { }
+		public void setCurve(float var0, float var1, float var2, float var3, float var4, float var5, float var6, float var7) { }
+	}
+	protected CubicCurve2D() { } 
 	public java.lang.Object clone() { return null; }
 	public boolean contains(double var0, double var1) { return false; }
 	public boolean contains(double var0, double var1, double var2, double var3) { return false; }
@@ -55,58 +108,5 @@ public abstract class CubicCurve2D implements java.awt.Shape, java.lang.Cloneabl
 	public void subdivide(java.awt.geom.CubicCurve2D var0, java.awt.geom.CubicCurve2D var1) { }
 	public static void subdivide(java.awt.geom.CubicCurve2D var0, java.awt.geom.CubicCurve2D var1, java.awt.geom.CubicCurve2D var2) { }
 	public static void subdivide(double[] var0, int var1, double[] var2, int var3, double[] var4, int var5) { }
-	public static class Double extends java.awt.geom.CubicCurve2D {
-		public Double() { }
-		public Double(double var0, double var1, double var2, double var3, double var4, double var5, double var6, double var7) { }
-		public java.awt.geom.Rectangle2D getBounds2D() { return null; }
-		public java.awt.geom.Point2D getCtrlP1() { return null; }
-		public java.awt.geom.Point2D getCtrlP2() { return null; }
-		public double getCtrlX1() { return 0.0d; }
-		public double getCtrlX2() { return 0.0d; }
-		public double getCtrlY1() { return 0.0d; }
-		public double getCtrlY2() { return 0.0d; }
-		public java.awt.geom.Point2D getP1() { return null; }
-		public java.awt.geom.Point2D getP2() { return null; }
-		public double getX1() { return 0.0d; }
-		public double getX2() { return 0.0d; }
-		public double getY1() { return 0.0d; }
-		public double getY2() { return 0.0d; }
-		public void setCurve(double var0, double var1, double var2, double var3, double var4, double var5, double var6, double var7) { }
-		public double ctrlx1;
-		public double ctrlx2;
-		public double ctrly1;
-		public double ctrly2;
-		public double x1;
-		public double x2;
-		public double y1;
-		public double y2;
-	}
-	public static class Float extends java.awt.geom.CubicCurve2D {
-		public Float() { }
-		public Float(float var0, float var1, float var2, float var3, float var4, float var5, float var6, float var7) { }
-		public java.awt.geom.Rectangle2D getBounds2D() { return null; }
-		public java.awt.geom.Point2D getCtrlP1() { return null; }
-		public java.awt.geom.Point2D getCtrlP2() { return null; }
-		public double getCtrlX1() { return 0.0d; }
-		public double getCtrlX2() { return 0.0d; }
-		public double getCtrlY1() { return 0.0d; }
-		public double getCtrlY2() { return 0.0d; }
-		public java.awt.geom.Point2D getP1() { return null; }
-		public java.awt.geom.Point2D getP2() { return null; }
-		public double getX1() { return 0.0d; }
-		public double getX2() { return 0.0d; }
-		public double getY1() { return 0.0d; }
-		public double getY2() { return 0.0d; }
-		public void setCurve(double var0, double var1, double var2, double var3, double var4, double var5, double var6, double var7) { }
-		public void setCurve(float var0, float var1, float var2, float var3, float var4, float var5, float var6, float var7) { }
-		public float ctrlx1;
-		public float ctrlx2;
-		public float ctrly1;
-		public float ctrly2;
-		public float x1;
-		public float x2;
-		public float y1;
-		public float y2;
-	}
 }
 

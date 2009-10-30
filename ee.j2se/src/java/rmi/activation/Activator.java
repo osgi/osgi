@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package java.rmi.activation;
-public abstract interface Activator extends java.rmi.Remote {
-	public abstract java.rmi.MarshalledObject activate(java.rmi.activation.ActivationID var0, boolean var1) throws java.rmi.RemoteException, java.rmi.activation.ActivationException;
+public interface Activator extends java.rmi.Remote {
+	java.rmi.MarshalledObject activate(java.rmi.activation.ActivationID var0, boolean var1) throws java.rmi.RemoteException, java.rmi.activation.ActivationException;
 }
 

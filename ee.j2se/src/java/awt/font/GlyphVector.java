@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,12 @@
 
 package java.awt.font;
 public abstract class GlyphVector implements java.lang.Cloneable {
-	public GlyphVector() { }
+	public final static int FLAG_COMPLEX_GLYPHS = 8;
+	public final static int FLAG_HAS_POSITION_ADJUSTMENTS = 2;
+	public final static int FLAG_HAS_TRANSFORMS = 1;
+	public final static int FLAG_MASK = 15;
+	public final static int FLAG_RUN_RTL = 4;
+	public GlyphVector() { } 
 	public abstract boolean equals(java.awt.font.GlyphVector var0);
 	public abstract java.awt.Font getFont();
 	public abstract java.awt.font.FontRenderContext getFontRenderContext();
@@ -44,10 +49,5 @@ public abstract class GlyphVector implements java.lang.Cloneable {
 	public abstract void performDefaultLayout();
 	public abstract void setGlyphPosition(int var0, java.awt.geom.Point2D var1);
 	public abstract void setGlyphTransform(int var0, java.awt.geom.AffineTransform var1);
-	public final static int FLAG_COMPLEX_GLYPHS = 8;
-	public final static int FLAG_HAS_POSITION_ADJUSTMENTS = 2;
-	public final static int FLAG_HAS_TRANSFORMS = 1;
-	public final static int FLAG_MASK = 15;
-	public final static int FLAG_RUN_RTL = 4;
 }
 

@@ -1,6 +1,10 @@
-Bundle-Description					: Contains the Java 2 SE 1.4 execution environment stubbed classes and sources
-Bundle-Version						: 1.4.0.$(project.build)
-Bundle-RequiredExecutionEnvironment	: J2SE-1.4
+javac.source 			= 1.5
+javac.target 			= 1.5
+
+-nouses = true
+Bundle-Description					: Contains the Java 2 SE 1.5 execution environment stubbed classes and sources
+Bundle-Version						: 1.5.0.$(project.build)
+Bundle-RequiredExecutionEnvironment	: J2SE-1.5
 
 Export-Package						: java.*;-noimport:=true, javax.*;-noimport:=true, org.*;-noimport:=true
 Include-Resource 					: legal/about.html, legal/LICENSE

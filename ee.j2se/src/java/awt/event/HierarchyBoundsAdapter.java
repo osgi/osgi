@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt.event;
 public abstract class HierarchyBoundsAdapter implements java.awt.event.HierarchyBoundsListener {
-	public HierarchyBoundsAdapter() { }
+	public HierarchyBoundsAdapter() { } 
 	public void ancestorMoved(java.awt.event.HierarchyEvent var0) { }
 	public void ancestorResized(java.awt.event.HierarchyEvent var0) { }
 }

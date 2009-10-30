@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,56 @@
 
 package javax.swing;
 public abstract class AbstractButton extends javax.swing.JComponent implements java.awt.ItemSelectable, javax.swing.SwingConstants {
-	public AbstractButton() { }
+	protected abstract class AccessibleAbstractButton extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleAction, javax.accessibility.AccessibleExtendedComponent, javax.accessibility.AccessibleText, javax.accessibility.AccessibleValue {
+		protected AccessibleAbstractButton() { } 
+		public boolean doAccessibleAction(int var0) { return false; }
+		public int getAccessibleActionCount() { return 0; }
+		public java.lang.String getAccessibleActionDescription(int var0) { return null; }
+		public java.lang.String getAfterIndex(int var0, int var1) { return null; }
+		public java.lang.String getAtIndex(int var0, int var1) { return null; }
+		public java.lang.String getBeforeIndex(int var0, int var1) { return null; }
+		public int getCaretPosition() { return 0; }
+		public int getCharCount() { return 0; }
+		public javax.swing.text.AttributeSet getCharacterAttribute(int var0) { return null; }
+		public java.awt.Rectangle getCharacterBounds(int var0) { return null; }
+		public java.lang.Number getCurrentAccessibleValue() { return null; }
+		public int getIndexAtPoint(java.awt.Point var0) { return 0; }
+		public java.lang.Number getMaximumAccessibleValue() { return null; }
+		public java.lang.Number getMinimumAccessibleValue() { return null; }
+		public java.lang.String getSelectedText() { return null; }
+		public int getSelectionEnd() { return 0; }
+		public int getSelectionStart() { return 0; }
+		public boolean setCurrentAccessibleValue(java.lang.Number var0) { return false; }
+	}
+	protected class ButtonChangeListener implements java.io.Serializable, javax.swing.event.ChangeListener {
+		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
+		private ButtonChangeListener() { } /* generated constructor to prevent compiler adding default public constructor */
+	}
+	public final static java.lang.String BORDER_PAINTED_CHANGED_PROPERTY = "borderPainted";
+	public final static java.lang.String CONTENT_AREA_FILLED_CHANGED_PROPERTY = "contentAreaFilled";
+	public final static java.lang.String DISABLED_ICON_CHANGED_PROPERTY = "disabledIcon";
+	public final static java.lang.String DISABLED_SELECTED_ICON_CHANGED_PROPERTY = "disabledSelectedIcon";
+	public final static java.lang.String FOCUS_PAINTED_CHANGED_PROPERTY = "focusPainted";
+	public final static java.lang.String HORIZONTAL_ALIGNMENT_CHANGED_PROPERTY = "horizontalAlignment";
+	public final static java.lang.String HORIZONTAL_TEXT_POSITION_CHANGED_PROPERTY = "horizontalTextPosition";
+	public final static java.lang.String ICON_CHANGED_PROPERTY = "icon";
+	public final static java.lang.String MARGIN_CHANGED_PROPERTY = "margin";
+	public final static java.lang.String MNEMONIC_CHANGED_PROPERTY = "mnemonic";
+	public final static java.lang.String MODEL_CHANGED_PROPERTY = "model";
+	public final static java.lang.String PRESSED_ICON_CHANGED_PROPERTY = "pressedIcon";
+	public final static java.lang.String ROLLOVER_ENABLED_CHANGED_PROPERTY = "rolloverEnabled";
+	public final static java.lang.String ROLLOVER_ICON_CHANGED_PROPERTY = "rolloverIcon";
+	public final static java.lang.String ROLLOVER_SELECTED_ICON_CHANGED_PROPERTY = "rolloverSelectedIcon";
+	public final static java.lang.String SELECTED_ICON_CHANGED_PROPERTY = "selectedIcon";
+	public final static java.lang.String TEXT_CHANGED_PROPERTY = "text";
+	public final static java.lang.String VERTICAL_ALIGNMENT_CHANGED_PROPERTY = "verticalAlignment";
+	public final static java.lang.String VERTICAL_TEXT_POSITION_CHANGED_PROPERTY = "verticalTextPosition";
+	protected java.awt.event.ActionListener actionListener;
+	protected javax.swing.event.ChangeEvent changeEvent;
+	protected javax.swing.event.ChangeListener changeListener;
+	protected java.awt.event.ItemListener itemListener;
+	protected javax.swing.ButtonModel model;
+	public AbstractButton() { } 
 	public void addActionListener(java.awt.event.ActionListener var0) { }
 	public void addChangeListener(javax.swing.event.ChangeListener var0) { }
 	public void addItemListener(java.awt.event.ItemListener var0) { }
@@ -95,54 +144,5 @@ public abstract class AbstractButton extends javax.swing.JComponent implements j
 	public void setUI(javax.swing.plaf.ButtonUI var0) { }
 	public void setVerticalAlignment(int var0) { }
 	public void setVerticalTextPosition(int var0) { }
-	public final static java.lang.String BORDER_PAINTED_CHANGED_PROPERTY = "borderPainted";
-	public final static java.lang.String CONTENT_AREA_FILLED_CHANGED_PROPERTY = "contentAreaFilled";
-	public final static java.lang.String DISABLED_ICON_CHANGED_PROPERTY = "disabledIcon";
-	public final static java.lang.String DISABLED_SELECTED_ICON_CHANGED_PROPERTY = "disabledSelectedIcon";
-	public final static java.lang.String FOCUS_PAINTED_CHANGED_PROPERTY = "focusPainted";
-	public final static java.lang.String HORIZONTAL_ALIGNMENT_CHANGED_PROPERTY = "horizontalAlignment";
-	public final static java.lang.String HORIZONTAL_TEXT_POSITION_CHANGED_PROPERTY = "horizontalTextPosition";
-	public final static java.lang.String ICON_CHANGED_PROPERTY = "icon";
-	public final static java.lang.String MARGIN_CHANGED_PROPERTY = "margin";
-	public final static java.lang.String MNEMONIC_CHANGED_PROPERTY = "mnemonic";
-	public final static java.lang.String MODEL_CHANGED_PROPERTY = "model";
-	public final static java.lang.String PRESSED_ICON_CHANGED_PROPERTY = "pressedIcon";
-	public final static java.lang.String ROLLOVER_ENABLED_CHANGED_PROPERTY = "rolloverEnabled";
-	public final static java.lang.String ROLLOVER_ICON_CHANGED_PROPERTY = "rolloverIcon";
-	public final static java.lang.String ROLLOVER_SELECTED_ICON_CHANGED_PROPERTY = "rolloverSelectedIcon";
-	public final static java.lang.String SELECTED_ICON_CHANGED_PROPERTY = "selectedIcon";
-	public final static java.lang.String TEXT_CHANGED_PROPERTY = "text";
-	public final static java.lang.String VERTICAL_ALIGNMENT_CHANGED_PROPERTY = "verticalAlignment";
-	public final static java.lang.String VERTICAL_TEXT_POSITION_CHANGED_PROPERTY = "verticalTextPosition";
-	protected java.awt.event.ActionListener actionListener;
-	protected javax.swing.event.ChangeEvent changeEvent;
-	protected javax.swing.event.ChangeListener changeListener;
-	protected java.awt.event.ItemListener itemListener;
-	protected javax.swing.ButtonModel model;
-	protected abstract class AccessibleAbstractButton extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleAction, javax.accessibility.AccessibleExtendedComponent, javax.accessibility.AccessibleText, javax.accessibility.AccessibleValue {
-		protected AccessibleAbstractButton() { }
-		public boolean doAccessibleAction(int var0) { return false; }
-		public int getAccessibleActionCount() { return 0; }
-		public java.lang.String getAccessibleActionDescription(int var0) { return null; }
-		public java.lang.String getAfterIndex(int var0, int var1) { return null; }
-		public java.lang.String getAtIndex(int var0, int var1) { return null; }
-		public java.lang.String getBeforeIndex(int var0, int var1) { return null; }
-		public int getCaretPosition() { return 0; }
-		public int getCharCount() { return 0; }
-		public javax.swing.text.AttributeSet getCharacterAttribute(int var0) { return null; }
-		public java.awt.Rectangle getCharacterBounds(int var0) { return null; }
-		public java.lang.Number getCurrentAccessibleValue() { return null; }
-		public int getIndexAtPoint(java.awt.Point var0) { return 0; }
-		public java.lang.Number getMaximumAccessibleValue() { return null; }
-		public java.lang.Number getMinimumAccessibleValue() { return null; }
-		public java.lang.String getSelectedText() { return null; }
-		public int getSelectionEnd() { return 0; }
-		public int getSelectionStart() { return 0; }
-		public boolean setCurrentAccessibleValue(java.lang.Number var0) { return false; }
-	}
-	protected class ButtonChangeListener implements java.io.Serializable, javax.swing.event.ChangeListener {
-		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
-		private ButtonChangeListener() { } /* generated constructor to prevent compiler adding default public constructor */
-	}
 }
 

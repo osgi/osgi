@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,19 @@
 
 package javax.swing;
 public class JPopupMenu extends javax.swing.JComponent implements javax.accessibility.Accessible, javax.swing.MenuElement {
-	public JPopupMenu() { }
-	public JPopupMenu(java.lang.String var0) { }
+	protected class AccessibleJPopupMenu extends javax.swing.JComponent.AccessibleJComponent implements java.beans.PropertyChangeListener {
+		protected AccessibleJPopupMenu() { } 
+		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
+	}
+	public static class Separator extends javax.swing.JSeparator {
+		public Separator() { } 
+	}
+	public JPopupMenu() { } 
+	public JPopupMenu(java.lang.String var0) { } 
 	public javax.swing.JMenuItem add(java.lang.String var0) { return null; }
 	public javax.swing.JMenuItem add(javax.swing.Action var0) { return null; }
 	public javax.swing.JMenuItem add(javax.swing.JMenuItem var0) { return null; }
+	public void addMenuKeyListener(javax.swing.event.MenuKeyListener var0) { }
 	public void addPopupMenuListener(javax.swing.event.PopupMenuListener var0) { }
 	public void addSeparator() { }
 	protected java.beans.PropertyChangeListener createActionChangeListener(javax.swing.JMenuItem var0) { return null; }
@@ -35,6 +43,7 @@ public class JPopupMenu extends javax.swing.JComponent implements javax.accessib
 	public java.awt.Component getInvoker() { return null; }
 	public java.lang.String getLabel() { return null; }
 	public java.awt.Insets getMargin() { return null; }
+	public javax.swing.event.MenuKeyListener[] getMenuKeyListeners() { return null; }
 	public javax.swing.event.PopupMenuListener[] getPopupMenuListeners() { return null; }
 	public javax.swing.SingleSelectionModel getSelectionModel() { return null; }
 	public javax.swing.MenuElement[] getSubElements() { return null; }
@@ -48,6 +57,7 @@ public class JPopupMenu extends javax.swing.JComponent implements javax.accessib
 	public void pack() { }
 	public void processKeyEvent(java.awt.event.KeyEvent var0, javax.swing.MenuElement[] var1, javax.swing.MenuSelectionManager var2) { }
 	public void processMouseEvent(java.awt.event.MouseEvent var0, javax.swing.MenuElement[] var1, javax.swing.MenuSelectionManager var2) { }
+	public void removeMenuKeyListener(javax.swing.event.MenuKeyListener var0) { }
 	public void removePopupMenuListener(javax.swing.event.PopupMenuListener var0) { }
 	public void setBorderPainted(boolean var0) { }
 	public static void setDefaultLightWeightPopupEnabled(boolean var0) { }
@@ -60,11 +70,5 @@ public class JPopupMenu extends javax.swing.JComponent implements javax.accessib
 	public void setSelectionModel(javax.swing.SingleSelectionModel var0) { }
 	public void setUI(javax.swing.plaf.PopupMenuUI var0) { }
 	public void show(java.awt.Component var0, int var1, int var2) { }
-	protected class AccessibleJPopupMenu extends javax.swing.JComponent.AccessibleJComponent {
-		protected AccessibleJPopupMenu() { }
-	}
-	public static class Separator extends javax.swing.JSeparator {
-		public Separator() { }
-	}
 }
 

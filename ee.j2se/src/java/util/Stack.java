@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package java.util;
-public class Stack extends java.util.Vector {
-	public Stack() { }
+public class Stack<E> extends java.util.Vector<E> {
+	public Stack() { } 
 	public boolean empty() { return false; }
-	public java.lang.Object peek() { return null; }
-	public java.lang.Object pop() { return null; }
-	public java.lang.Object push(java.lang.Object var0) { return null; }
+	public E peek() { return null; }
+	public E pop() { return null; }
+	public E push(E var0) { return null; }
 	public int search(java.lang.Object var0) { return 0; }
 }
 

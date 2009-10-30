@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,31 @@
 
 package javax.swing.plaf.basic;
 public class BasicMenuItemUI extends javax.swing.plaf.MenuItemUI {
-	public BasicMenuItemUI() { }
+	protected class MouseInputHandler implements javax.swing.event.MouseInputListener {
+		protected MouseInputHandler() { } 
+		public void mouseClicked(java.awt.event.MouseEvent var0) { }
+		public void mouseDragged(java.awt.event.MouseEvent var0) { }
+		public void mouseEntered(java.awt.event.MouseEvent var0) { }
+		public void mouseExited(java.awt.event.MouseEvent var0) { }
+		public void mouseMoved(java.awt.event.MouseEvent var0) { }
+		public void mousePressed(java.awt.event.MouseEvent var0) { }
+		public void mouseReleased(java.awt.event.MouseEvent var0) { }
+	}
+	protected java.awt.Font acceleratorFont;
+	protected java.awt.Color acceleratorForeground;
+	protected java.awt.Color acceleratorSelectionForeground;
+	protected javax.swing.Icon arrowIcon;
+	protected javax.swing.Icon checkIcon;
+	protected int defaultTextIconGap;
+	protected java.awt.Color disabledForeground;
+	protected javax.swing.event.MenuDragMouseListener menuDragMouseListener;
+	protected javax.swing.JMenuItem menuItem;
+	protected javax.swing.event.MenuKeyListener menuKeyListener;
+	protected javax.swing.event.MouseInputListener mouseInputListener;
+	protected boolean oldBorderPainted;
+	protected java.awt.Color selectionBackground;
+	protected java.awt.Color selectionForeground;
+	public BasicMenuItemUI() { } 
 	protected javax.swing.event.MenuDragMouseListener createMenuDragMouseListener(javax.swing.JComponent var0) { return null; }
 	protected javax.swing.event.MenuKeyListener createMenuKeyListener(javax.swing.JComponent var0) { return null; }
 	protected javax.swing.event.MouseInputListener createMouseInputListener(javax.swing.JComponent var0) { return null; }
@@ -36,29 +60,5 @@ public class BasicMenuItemUI extends javax.swing.plaf.MenuItemUI {
 	protected void uninstallDefaults() { }
 	protected void uninstallKeyboardActions() { }
 	protected void uninstallListeners() { }
-	protected java.awt.Font acceleratorFont;
-	protected java.awt.Color acceleratorForeground;
-	protected java.awt.Color acceleratorSelectionForeground;
-	protected javax.swing.Icon arrowIcon;
-	protected javax.swing.Icon checkIcon;
-	protected int defaultTextIconGap;
-	protected java.awt.Color disabledForeground;
-	protected javax.swing.event.MenuDragMouseListener menuDragMouseListener;
-	protected javax.swing.JMenuItem menuItem;
-	protected javax.swing.event.MenuKeyListener menuKeyListener;
-	protected javax.swing.event.MouseInputListener mouseInputListener;
-	protected boolean oldBorderPainted;
-	protected java.awt.Color selectionBackground;
-	protected java.awt.Color selectionForeground;
-	protected class MouseInputHandler implements javax.swing.event.MouseInputListener {
-		protected MouseInputHandler() { }
-		public void mouseClicked(java.awt.event.MouseEvent var0) { }
-		public void mouseDragged(java.awt.event.MouseEvent var0) { }
-		public void mouseEntered(java.awt.event.MouseEvent var0) { }
-		public void mouseExited(java.awt.event.MouseEvent var0) { }
-		public void mouseMoved(java.awt.event.MouseEvent var0) { }
-		public void mousePressed(java.awt.event.MouseEvent var0) { }
-		public void mouseReleased(java.awt.event.MouseEvent var0) { }
-	}
 }
 

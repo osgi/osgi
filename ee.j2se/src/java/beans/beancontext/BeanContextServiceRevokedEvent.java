@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package java.beans.beancontext;
 public class BeanContextServiceRevokedEvent extends java.beans.beancontext.BeanContextEvent {
-	public BeanContextServiceRevokedEvent(java.beans.beancontext.BeanContextServices var0, java.lang.Class var1, boolean var2) { super((java.beans.beancontext.BeanContext) null); }
+	protected java.lang.Class serviceClass;
+	public BeanContextServiceRevokedEvent(java.beans.beancontext.BeanContextServices var0, java.lang.Class var1, boolean var2)  { super((java.beans.beancontext.BeanContext) null); } 
 	public java.lang.Class getServiceClass() { return null; }
 	public java.beans.beancontext.BeanContextServices getSourceAsBeanContextServices() { return null; }
 	public boolean isCurrentServiceInvalidNow() { return false; }
 	public boolean isServiceClass(java.lang.Class var0) { return false; }
-	protected java.lang.Class serviceClass;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
 
 package javax.swing;
 public class JCheckBox extends javax.swing.JToggleButton implements javax.accessibility.Accessible {
-	public JCheckBox() { }
-	public JCheckBox(java.lang.String var0) { }
-	public JCheckBox(java.lang.String var0, javax.swing.Icon var1) { }
-	public JCheckBox(java.lang.String var0, javax.swing.Icon var1, boolean var2) { }
-	public JCheckBox(java.lang.String var0, boolean var1) { }
-	public JCheckBox(javax.swing.Action var0) { }
-	public JCheckBox(javax.swing.Icon var0) { }
-	public JCheckBox(javax.swing.Icon var0, boolean var1) { }
+	protected class AccessibleJCheckBox extends javax.swing.JToggleButton.AccessibleJToggleButton {
+		protected AccessibleJCheckBox() { } 
+	}
+	public final static java.lang.String BORDER_PAINTED_FLAT_CHANGED_PROPERTY = "borderPaintedFlat";
+	public JCheckBox() { } 
+	public JCheckBox(java.lang.String var0) { } 
+	public JCheckBox(java.lang.String var0, javax.swing.Icon var1) { } 
+	public JCheckBox(java.lang.String var0, javax.swing.Icon var1, boolean var2) { } 
+	public JCheckBox(java.lang.String var0, boolean var1) { } 
+	public JCheckBox(javax.swing.Action var0) { } 
+	public JCheckBox(javax.swing.Icon var0) { } 
+	public JCheckBox(javax.swing.Icon var0, boolean var1) { } 
 	public boolean isBorderPaintedFlat() { return false; }
 	public void setBorderPaintedFlat(boolean var0) { }
-	public final static java.lang.String BORDER_PAINTED_FLAT_CHANGED_PROPERTY = "borderPaintedFlat";
-	protected class AccessibleJCheckBox extends javax.swing.JToggleButton.AccessibleJToggleButton {
-		protected AccessibleJCheckBox() { }
-	}
 }
 

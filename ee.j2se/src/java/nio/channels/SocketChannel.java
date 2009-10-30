@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.nio.channels;
 public abstract class SocketChannel extends java.nio.channels.spi.AbstractSelectableChannel implements java.nio.channels.ByteChannel, java.nio.channels.GatheringByteChannel, java.nio.channels.ScatteringByteChannel {
-	protected SocketChannel(java.nio.channels.spi.SelectorProvider var0) { super((java.nio.channels.spi.SelectorProvider) null); }
+	protected SocketChannel(java.nio.channels.spi.SelectorProvider var0)  { super((java.nio.channels.spi.SelectorProvider) null); } 
 	public abstract boolean connect(java.net.SocketAddress var0) throws java.io.IOException;
 	public abstract boolean finishConnect() throws java.io.IOException;
 	public abstract boolean isConnected();

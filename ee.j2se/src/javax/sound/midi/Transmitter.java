@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.sound.midi;
-public abstract interface Transmitter {
-	public abstract void close();
-	public abstract javax.sound.midi.Receiver getReceiver();
-	public abstract void setReceiver(javax.sound.midi.Receiver var0);
+public interface Transmitter {
+	void close();
+	javax.sound.midi.Receiver getReceiver();
+	void setReceiver(javax.sound.midi.Receiver var0);
 }
 

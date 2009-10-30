@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,22 @@
  */
 
 package java.util;
-public class LinkedList extends java.util.AbstractSequentialList implements java.io.Serializable, java.lang.Cloneable, java.util.List {
-	public LinkedList() { }
-	public LinkedList(java.util.Collection var0) { }
-	public void addFirst(java.lang.Object var0) { }
-	public void addLast(java.lang.Object var0) { }
+public class LinkedList<E> extends java.util.AbstractSequentialList<E> implements java.io.Serializable, java.lang.Cloneable, java.util.List<E>, java.util.Queue<E> {
+	public LinkedList() { } 
+	public LinkedList(java.util.Collection<? extends E> var0) { } 
+	public void addFirst(E var0) { }
+	public void addLast(E var0) { }
 	public java.lang.Object clone() { return null; }
-	public java.lang.Object getFirst() { return null; }
-	public java.lang.Object getLast() { return null; }
-	public java.util.ListIterator listIterator(int var0) { return null; }
-	public java.lang.Object removeFirst() { return null; }
-	public java.lang.Object removeLast() { return null; }
+	public E element() { return null; }
+	public E getFirst() { return null; }
+	public E getLast() { return null; }
+	public java.util.ListIterator<E> listIterator(int var0) { return null; }
+	public boolean offer(E var0) { return false; }
+	public E peek() { return null; }
+	public E poll() { return null; }
+	public E remove() { return null; }
+	public E removeFirst() { return null; }
+	public E removeLast() { return null; }
 	public int size() { return 0; }
 }
 

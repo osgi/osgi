@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  */
 
 package org.w3c.dom.stylesheets;
-public abstract interface StyleSheet {
-	public abstract boolean getDisabled();
-	public abstract java.lang.String getHref();
-	public abstract org.w3c.dom.stylesheets.MediaList getMedia();
-	public abstract org.w3c.dom.Node getOwnerNode();
-	public abstract org.w3c.dom.stylesheets.StyleSheet getParentStyleSheet();
-	public abstract java.lang.String getTitle();
-	public abstract java.lang.String getType();
-	public abstract void setDisabled(boolean var0);
+public interface StyleSheet {
+	boolean getDisabled();
+	java.lang.String getHref();
+	org.w3c.dom.stylesheets.MediaList getMedia();
+	org.w3c.dom.Node getOwnerNode();
+	org.w3c.dom.stylesheets.StyleSheet getParentStyleSheet();
+	java.lang.String getTitle();
+	java.lang.String getType();
+	void setDisabled(boolean var0);
 }
 

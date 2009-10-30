@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,21 @@
  */
 
 package java.io;
-public abstract interface DataInput {
-	public abstract boolean readBoolean() throws java.io.IOException;
-	public abstract byte readByte() throws java.io.IOException;
-	public abstract char readChar() throws java.io.IOException;
-	public abstract double readDouble() throws java.io.IOException;
-	public abstract float readFloat() throws java.io.IOException;
-	public abstract void readFully(byte[] var0) throws java.io.IOException;
-	public abstract void readFully(byte[] var0, int var1, int var2) throws java.io.IOException;
-	public abstract int readInt() throws java.io.IOException;
-	public abstract java.lang.String readLine() throws java.io.IOException;
-	public abstract long readLong() throws java.io.IOException;
-	public abstract short readShort() throws java.io.IOException;
-	public abstract java.lang.String readUTF() throws java.io.IOException;
-	public abstract int readUnsignedByte() throws java.io.IOException;
-	public abstract int readUnsignedShort() throws java.io.IOException;
-	public abstract int skipBytes(int var0) throws java.io.IOException;
+public interface DataInput {
+	boolean readBoolean() throws java.io.IOException;
+	byte readByte() throws java.io.IOException;
+	char readChar() throws java.io.IOException;
+	double readDouble() throws java.io.IOException;
+	float readFloat() throws java.io.IOException;
+	void readFully(byte[] var0) throws java.io.IOException;
+	void readFully(byte[] var0, int var1, int var2) throws java.io.IOException;
+	int readInt() throws java.io.IOException;
+	java.lang.String readLine() throws java.io.IOException;
+	long readLong() throws java.io.IOException;
+	short readShort() throws java.io.IOException;
+	java.lang.String readUTF() throws java.io.IOException;
+	int readUnsignedByte() throws java.io.IOException;
+	int readUnsignedShort() throws java.io.IOException;
+	int skipBytes(int var0) throws java.io.IOException;
 }
 

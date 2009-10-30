@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package java.beans;
 public class IndexedPropertyDescriptor extends java.beans.PropertyDescriptor {
-	public IndexedPropertyDescriptor(java.lang.String var0, java.lang.Class var1) throws java.beans.IntrospectionException { super((java.lang.String) null, (java.lang.reflect.Method) null, (java.lang.reflect.Method) null); }
-	public IndexedPropertyDescriptor(java.lang.String var0, java.lang.Class var1, java.lang.String var2, java.lang.String var3, java.lang.String var4, java.lang.String var5) throws java.beans.IntrospectionException { super((java.lang.String) null, (java.lang.reflect.Method) null, (java.lang.reflect.Method) null); }
-	public IndexedPropertyDescriptor(java.lang.String var0, java.lang.reflect.Method var1, java.lang.reflect.Method var2, java.lang.reflect.Method var3, java.lang.reflect.Method var4) throws java.beans.IntrospectionException { super((java.lang.String) null, (java.lang.reflect.Method) null, (java.lang.reflect.Method) null); }
-	public java.lang.Class getIndexedPropertyType() { return null; }
+	public IndexedPropertyDescriptor(java.lang.String var0, java.lang.Class<?> var1) throws java.beans.IntrospectionException  { super((java.lang.String) null, (java.lang.Class<?>) null); } 
+	public IndexedPropertyDescriptor(java.lang.String var0, java.lang.Class<?> var1, java.lang.String var2, java.lang.String var3, java.lang.String var4, java.lang.String var5) throws java.beans.IntrospectionException  { super((java.lang.String) null, (java.lang.Class<?>) null); } 
+	public IndexedPropertyDescriptor(java.lang.String var0, java.lang.reflect.Method var1, java.lang.reflect.Method var2, java.lang.reflect.Method var3, java.lang.reflect.Method var4) throws java.beans.IntrospectionException  { super((java.lang.String) null, (java.lang.Class<?>) null); } 
+	public java.lang.Class<?> getIndexedPropertyType() { return null; }
 	public java.lang.reflect.Method getIndexedReadMethod() { return null; }
 	public java.lang.reflect.Method getIndexedWriteMethod() { return null; }
 	public void setIndexedReadMethod(java.lang.reflect.Method var0) throws java.beans.IntrospectionException { }

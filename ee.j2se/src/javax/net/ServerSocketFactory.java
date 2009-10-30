@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.net;
 public abstract class ServerSocketFactory {
-	protected ServerSocketFactory() { }
+	protected ServerSocketFactory() { } 
 	public java.net.ServerSocket createServerSocket() throws java.io.IOException { return null; }
 	public abstract java.net.ServerSocket createServerSocket(int var0) throws java.io.IOException;
 	public abstract java.net.ServerSocket createServerSocket(int var0, int var1) throws java.io.IOException;

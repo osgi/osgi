@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.naming.ldap;
 public abstract class ControlFactory {
-	protected ControlFactory() { }
+	protected ControlFactory() { } 
 	public abstract javax.naming.ldap.Control getControlInstance(javax.naming.ldap.Control var0) throws javax.naming.NamingException;
-	public static javax.naming.ldap.Control getControlInstance(javax.naming.ldap.Control var0, javax.naming.Context var1, java.util.Hashtable var2) throws javax.naming.NamingException { return null; }
+	public static javax.naming.ldap.Control getControlInstance(javax.naming.ldap.Control var0, javax.naming.Context var1, java.util.Hashtable<?,?> var2) throws javax.naming.NamingException { return null; }
 }
 

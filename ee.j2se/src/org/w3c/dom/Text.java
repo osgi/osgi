@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,10 @@
  */
 
 package org.w3c.dom;
-public abstract interface Text extends org.w3c.dom.CharacterData {
-	public abstract org.w3c.dom.Text splitText(int var0);
+public interface Text extends org.w3c.dom.CharacterData {
+	java.lang.String getWholeText();
+	boolean isElementContentWhitespace();
+	org.w3c.dom.Text replaceWholeText(java.lang.String var0);
+	org.w3c.dom.Text splitText(int var0);
 }
 

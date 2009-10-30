@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,15 @@
  */
 
 package java.nio.charset;
-public abstract class Charset implements java.lang.Comparable {
-	protected Charset(java.lang.String var0, java.lang.String[] var1) { }
-	public final java.util.Set aliases() { return null; }
-	public static java.util.SortedMap availableCharsets() { return null; }
+public abstract class Charset implements java.lang.Comparable<java.nio.charset.Charset> {
+	protected Charset(java.lang.String var0, java.lang.String[] var1) { } 
+	public final java.util.Set<java.lang.String> aliases() { return null; }
+	public static java.util.SortedMap<java.lang.String,java.nio.charset.Charset> availableCharsets() { return null; }
 	public boolean canEncode() { return false; }
-	public final int compareTo(java.lang.Object var0) { return 0; }
+	public final int compareTo(java.nio.charset.Charset var0) { return 0; }
 	public abstract boolean contains(java.nio.charset.Charset var0);
 	public final java.nio.CharBuffer decode(java.nio.ByteBuffer var0) { return null; }
+	public static java.nio.charset.Charset defaultCharset() { return null; }
 	public java.lang.String displayName() { return null; }
 	public java.lang.String displayName(java.util.Locale var0) { return null; }
 	public final java.nio.ByteBuffer encode(java.lang.String var0) { return null; }

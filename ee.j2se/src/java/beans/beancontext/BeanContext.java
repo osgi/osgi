@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package java.beans.beancontext;
-public abstract interface BeanContext extends java.beans.DesignMode, java.beans.Visibility, java.beans.beancontext.BeanContextChild, java.util.Collection {
-	public abstract void addBeanContextMembershipListener(java.beans.beancontext.BeanContextMembershipListener var0);
-	public abstract java.net.URL getResource(java.lang.String var0, java.beans.beancontext.BeanContextChild var1);
-	public abstract java.io.InputStream getResourceAsStream(java.lang.String var0, java.beans.beancontext.BeanContextChild var1);
-	public abstract java.lang.Object instantiateChild(java.lang.String var0) throws java.io.IOException, java.lang.ClassNotFoundException;
-	public abstract void removeBeanContextMembershipListener(java.beans.beancontext.BeanContextMembershipListener var0);
+public interface BeanContext extends java.beans.DesignMode, java.beans.Visibility, java.beans.beancontext.BeanContextChild, java.util.Collection {
 	public final static java.lang.Object globalHierarchyLock = null;
+	void addBeanContextMembershipListener(java.beans.beancontext.BeanContextMembershipListener var0);
+	java.net.URL getResource(java.lang.String var0, java.beans.beancontext.BeanContextChild var1);
+	java.io.InputStream getResourceAsStream(java.lang.String var0, java.beans.beancontext.BeanContextChild var1);
+	java.lang.Object instantiateChild(java.lang.String var0) throws java.io.IOException, java.lang.ClassNotFoundException;
+	void removeBeanContextMembershipListener(java.beans.beancontext.BeanContextMembershipListener var0);
 }
 

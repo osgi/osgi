@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package java.util;
-public abstract class AbstractSequentialList extends java.util.AbstractList {
-	protected AbstractSequentialList() { }
-	public java.lang.Object get(int var0) { return null; }
-	public abstract java.util.ListIterator listIterator(int var0);
+public abstract class AbstractSequentialList<E> extends java.util.AbstractList<E> {
+	protected AbstractSequentialList() { } 
+	public E get(int var0) { return null; }
+	public abstract java.util.ListIterator<E> listIterator(int var0);
 }
 

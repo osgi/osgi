@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package javax.naming.spi;
-public abstract interface Resolver {
-	public abstract javax.naming.spi.ResolveResult resolveToClass(java.lang.String var0, java.lang.Class var1) throws javax.naming.NamingException;
-	public abstract javax.naming.spi.ResolveResult resolveToClass(javax.naming.Name var0, java.lang.Class var1) throws javax.naming.NamingException;
+public interface Resolver {
+	javax.naming.spi.ResolveResult resolveToClass(java.lang.String var0, java.lang.Class<? extends javax.naming.Context> var1) throws javax.naming.NamingException;
+	javax.naming.spi.ResolveResult resolveToClass(javax.naming.Name var0, java.lang.Class<? extends javax.naming.Context> var1) throws javax.naming.NamingException;
 }
 

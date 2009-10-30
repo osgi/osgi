@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt.image;
 public class Kernel implements java.lang.Cloneable {
-	public Kernel(int var0, int var1, float[] var2) { }
+	public Kernel(int var0, int var1, float[] var2) { } 
 	public java.lang.Object clone() { return null; }
 	public final int getHeight() { return 0; }
 	public final float[] getKernelData(float[] var0) { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  */
 
 package javax.imageio.stream;
-public abstract interface ImageOutputStream extends java.io.DataOutput, javax.imageio.stream.ImageInputStream {
-	public abstract void writeBit(int var0) throws java.io.IOException;
-	public abstract void writeBits(long var0, int var1) throws java.io.IOException;
-	public abstract void writeChars(char[] var0, int var1, int var2) throws java.io.IOException;
-	public abstract void writeDoubles(double[] var0, int var1, int var2) throws java.io.IOException;
-	public abstract void writeFloats(float[] var0, int var1, int var2) throws java.io.IOException;
-	public abstract void writeInts(int[] var0, int var1, int var2) throws java.io.IOException;
-	public abstract void writeLongs(long[] var0, int var1, int var2) throws java.io.IOException;
-	public abstract void writeShorts(short[] var0, int var1, int var2) throws java.io.IOException;
+public interface ImageOutputStream extends java.io.DataOutput, javax.imageio.stream.ImageInputStream {
+	void writeBit(int var0) throws java.io.IOException;
+	void writeBits(long var0, int var1) throws java.io.IOException;
+	void writeChars(char[] var0, int var1, int var2) throws java.io.IOException;
+	void writeDoubles(double[] var0, int var1, int var2) throws java.io.IOException;
+	void writeFloats(float[] var0, int var1, int var2) throws java.io.IOException;
+	void writeInts(int[] var0, int var1, int var2) throws java.io.IOException;
+	void writeLongs(long[] var0, int var1, int var2) throws java.io.IOException;
+	void writeShorts(short[] var0, int var1, int var2) throws java.io.IOException;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package javax.transaction.xa;
 public class XAException extends java.lang.Exception {
-	public XAException() { }
-	public XAException(int var0) { }
-	public XAException(java.lang.String var0) { }
 	public final static int XAER_ASYNC = -2;
 	public final static int XAER_DUPID = -8;
 	public final static int XAER_INVAL = -5;
@@ -45,5 +42,8 @@ public class XAException extends java.lang.Exception {
 	public final static int XA_RDONLY = 3;
 	public final static int XA_RETRY = 4;
 	public int errorCode;
+	public XAException() { } 
+	public XAException(int var0) { } 
+	public XAException(java.lang.String var0) { } 
 }
 

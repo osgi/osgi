@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package java.util.prefs;
 public abstract class AbstractPreferences extends java.util.prefs.Preferences {
-	protected AbstractPreferences(java.util.prefs.AbstractPreferences var0, java.lang.String var1) { }
+	protected final java.lang.Object lock; { lock = null; }
+	protected boolean newNode;
+	protected AbstractPreferences(java.util.prefs.AbstractPreferences var0, java.lang.String var1) { } 
 	public java.lang.String absolutePath() { return null; }
 	public void addNodeChangeListener(java.util.prefs.NodeChangeListener var0) { }
 	public void addPreferenceChangeListener(java.util.prefs.PreferenceChangeListener var0) { }
@@ -63,7 +65,5 @@ public abstract class AbstractPreferences extends java.util.prefs.Preferences {
 	public void sync() throws java.util.prefs.BackingStoreException { }
 	protected abstract void syncSpi() throws java.util.prefs.BackingStoreException;
 	public java.lang.String toString() { return null; }
-	protected final java.lang.Object lock; { lock = null; }
-	protected boolean newNode;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,12 @@
  */
 
 package javax.accessibility;
-public abstract interface AccessibleAction {
-	public abstract boolean doAccessibleAction(int var0);
-	public abstract int getAccessibleActionCount();
-	public abstract java.lang.String getAccessibleActionDescription(int var0);
+public interface AccessibleAction {
+	public final static java.lang.String DECREMENT = null;
+	public final static java.lang.String INCREMENT = null;
+	public final static java.lang.String TOGGLE_EXPAND = null;
+	boolean doAccessibleAction(int var0);
+	int getAccessibleActionCount();
+	java.lang.String getAccessibleActionDescription(int var0);
 }
 

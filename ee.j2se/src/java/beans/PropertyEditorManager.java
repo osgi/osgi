@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package java.beans;
 public class PropertyEditorManager {
-	public PropertyEditorManager() { }
-	public static java.beans.PropertyEditor findEditor(java.lang.Class var0) { return null; }
+	public PropertyEditorManager() { } 
+	public static java.beans.PropertyEditor findEditor(java.lang.Class<?> var0) { return null; }
 	public static java.lang.String[] getEditorSearchPath() { return null; }
-	public static void registerEditor(java.lang.Class var0, java.lang.Class var1) { }
+	public static void registerEditor(java.lang.Class<?> var0, java.lang.Class<?> var1) { }
 	public static void setEditorSearchPath(java.lang.String[] var0) { }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package javax.naming;
 public class Binding extends javax.naming.NameClassPair {
-	public Binding(java.lang.String var0, java.lang.Object var1) { super((java.lang.String) null, (java.lang.String) null, false); }
-	public Binding(java.lang.String var0, java.lang.Object var1, boolean var2) { super((java.lang.String) null, (java.lang.String) null, false); }
-	public Binding(java.lang.String var0, java.lang.String var1, java.lang.Object var2) { super((java.lang.String) null, (java.lang.String) null, false); }
-	public Binding(java.lang.String var0, java.lang.String var1, java.lang.Object var2, boolean var3) { super((java.lang.String) null, (java.lang.String) null, false); }
+	public Binding(java.lang.String var0, java.lang.Object var1)  { super((java.lang.String) null, (java.lang.String) null, false); } 
+	public Binding(java.lang.String var0, java.lang.Object var1, boolean var2)  { super((java.lang.String) null, (java.lang.String) null, false); } 
+	public Binding(java.lang.String var0, java.lang.String var1, java.lang.Object var2)  { super((java.lang.String) null, (java.lang.String) null, false); } 
+	public Binding(java.lang.String var0, java.lang.String var1, java.lang.Object var2, boolean var3)  { super((java.lang.String) null, (java.lang.String) null, false); } 
 	public java.lang.Object getObject() { return null; }
 	public void setObject(java.lang.Object var0) { }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,17 @@
  */
 
 package java.util;
-public class Date implements java.io.Serializable, java.lang.Cloneable, java.lang.Comparable {
-	public Date() { }
-	/** @deprecated */ public Date(int var0, int var1, int var2) { }
-	/** @deprecated */ public Date(int var0, int var1, int var2, int var3, int var4) { }
-	/** @deprecated */ public Date(int var0, int var1, int var2, int var3, int var4, int var5) { }
-	public Date(long var0) { }
-	/** @deprecated */ public Date(java.lang.String var0) { }
+public class Date implements java.io.Serializable, java.lang.Cloneable, java.lang.Comparable<java.util.Date> {
+	public Date() { } 
+	/** @deprecated */ public Date(int var0, int var1, int var2) { } 
+	/** @deprecated */ public Date(int var0, int var1, int var2, int var3, int var4) { } 
+	/** @deprecated */ public Date(int var0, int var1, int var2, int var3, int var4, int var5) { } 
+	public Date(long var0) { } 
+	/** @deprecated */ public Date(java.lang.String var0) { } 
 	/** @deprecated */ public static long UTC(int var0, int var1, int var2, int var3, int var4, int var5) { return 0l; }
 	public boolean after(java.util.Date var0) { return false; }
 	public boolean before(java.util.Date var0) { return false; }
 	public java.lang.Object clone() { return null; }
-	public int compareTo(java.lang.Object var0) { return 0; }
 	public int compareTo(java.util.Date var0) { return 0; }
 	/** @deprecated */ public int getDate() { return 0; }
 	/** @deprecated */ public int getDay() { return 0; }

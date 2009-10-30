@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,15 @@
 
 package javax.imageio.metadata;
 public abstract class IIOMetadata {
-	protected IIOMetadata() { }
-	protected IIOMetadata(boolean var0, java.lang.String var1, java.lang.String var2, java.lang.String[] var3, java.lang.String[] var4) { }
+	protected javax.imageio.metadata.IIOMetadataController controller;
+	protected javax.imageio.metadata.IIOMetadataController defaultController;
+	protected java.lang.String[] extraMetadataFormatClassNames;
+	protected java.lang.String[] extraMetadataFormatNames;
+	protected java.lang.String nativeMetadataFormatClassName;
+	protected java.lang.String nativeMetadataFormatName;
+	protected boolean standardFormatSupported;
+	protected IIOMetadata() { } 
+	protected IIOMetadata(boolean var0, java.lang.String var1, java.lang.String var2, java.lang.String[] var3, java.lang.String[] var4) { } 
 	public boolean activateController() { return false; }
 	public abstract org.w3c.dom.Node getAsTree(java.lang.String var0);
 	public javax.imageio.metadata.IIOMetadataController getController() { return null; }
@@ -42,12 +49,5 @@ public abstract class IIOMetadata {
 	public abstract void reset();
 	public void setController(javax.imageio.metadata.IIOMetadataController var0) { }
 	public void setFromTree(java.lang.String var0, org.w3c.dom.Node var1) throws javax.imageio.metadata.IIOInvalidTreeException { }
-	protected javax.imageio.metadata.IIOMetadataController controller;
-	protected javax.imageio.metadata.IIOMetadataController defaultController;
-	protected java.lang.String[] extraMetadataFormatClassNames;
-	protected java.lang.String[] extraMetadataFormatNames;
-	protected java.lang.String nativeMetadataFormatClassName;
-	protected java.lang.String nativeMetadataFormatName;
-	protected boolean standardFormatSupported;
 }
 

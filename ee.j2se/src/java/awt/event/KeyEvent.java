@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,6 @@
 
 package java.awt.event;
 public class KeyEvent extends java.awt.event.InputEvent {
-	/** @deprecated */ public KeyEvent(java.awt.Component var0, int var1, long var2, int var3, int var4) { }
-	public KeyEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, char var5) { }
-	public KeyEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, char var5, int var6) { }
-	public char getKeyChar() { return '\0'; }
-	public int getKeyCode() { return 0; }
-	public int getKeyLocation() { return 0; }
-	public static java.lang.String getKeyModifiersText(int var0) { return null; }
-	public static java.lang.String getKeyText(int var0) { return null; }
-	public boolean isActionKey() { return false; }
-	public void setKeyChar(char var0) { }
-	public void setKeyCode(int var0) { }
-	/** @deprecated */ public void setModifiers(int var0) { }
 	public final static char CHAR_UNDEFINED = 65535;
 	public final static int KEY_FIRST = 400;
 	public final static int KEY_LAST = 402;
@@ -64,6 +52,7 @@ public class KeyEvent extends java.awt.event.InputEvent {
 	public final static int VK_BACK_QUOTE = 192;
 	public final static int VK_BACK_SLASH = 92;
 	public final static int VK_BACK_SPACE = 8;
+	public final static int VK_BEGIN = 65368;
 	public final static int VK_BRACELEFT = 161;
 	public final static int VK_BRACERIGHT = 162;
 	public final static int VK_C = 67;
@@ -76,6 +65,7 @@ public class KeyEvent extends java.awt.event.InputEvent {
 	public final static int VK_COLON = 513;
 	public final static int VK_COMMA = 44;
 	public final static int VK_COMPOSE = 65312;
+	public final static int VK_CONTEXT_MENU = 525;
 	public final static int VK_CONTROL = 17;
 	public final static int VK_CONVERT = 28;
 	public final static int VK_COPY = 65485;
@@ -222,8 +212,21 @@ public class KeyEvent extends java.awt.event.InputEvent {
 	public final static int VK_UP = 38;
 	public final static int VK_V = 86;
 	public final static int VK_W = 87;
+	public final static int VK_WINDOWS = 524;
 	public final static int VK_X = 88;
 	public final static int VK_Y = 89;
 	public final static int VK_Z = 90;
+	/** @deprecated */ public KeyEvent(java.awt.Component var0, int var1, long var2, int var3, int var4) { } 
+	public KeyEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, char var5) { } 
+	public KeyEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, char var5, int var6) { } 
+	public char getKeyChar() { return '\0'; }
+	public int getKeyCode() { return 0; }
+	public int getKeyLocation() { return 0; }
+	public static java.lang.String getKeyModifiersText(int var0) { return null; }
+	public static java.lang.String getKeyText(int var0) { return null; }
+	public boolean isActionKey() { return false; }
+	public void setKeyChar(char var0) { }
+	public void setKeyCode(int var0) { }
+	/** @deprecated */ public void setModifiers(int var0) { }
 }
 

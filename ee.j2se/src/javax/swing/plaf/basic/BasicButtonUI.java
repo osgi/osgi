@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package javax.swing.plaf.basic;
 public class BasicButtonUI extends javax.swing.plaf.ButtonUI {
-	public BasicButtonUI() { }
+	protected int defaultTextIconGap;
+	protected int defaultTextShiftOffset;
+	public BasicButtonUI() { } 
 	protected void clearTextShiftOffset() { }
 	protected javax.swing.plaf.basic.BasicButtonListener createButtonListener(javax.swing.AbstractButton var0) { return null; }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
@@ -35,7 +37,5 @@ public class BasicButtonUI extends javax.swing.plaf.ButtonUI {
 	protected void uninstallDefaults(javax.swing.AbstractButton var0) { }
 	protected void uninstallKeyboardActions(javax.swing.AbstractButton var0) { }
 	protected void uninstallListeners(javax.swing.AbstractButton var0) { }
-	protected int defaultTextIconGap;
-	protected int defaultTextShiftOffset;
 }
 

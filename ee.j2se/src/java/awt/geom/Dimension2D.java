@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt.geom;
 public abstract class Dimension2D implements java.lang.Cloneable {
-	protected Dimension2D() { }
+	protected Dimension2D() { } 
 	public java.lang.Object clone() { return null; }
 	public abstract double getHeight();
 	public abstract double getWidth();

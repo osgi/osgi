@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt.dnd;
 public abstract class DropTargetAdapter implements java.awt.dnd.DropTargetListener {
-	public DropTargetAdapter() { }
+	public DropTargetAdapter() { } 
 	public void dragEnter(java.awt.dnd.DropTargetDragEvent var0) { }
 	public void dragExit(java.awt.dnd.DropTargetEvent var0) { }
 	public void dragOver(java.awt.dnd.DropTargetDragEvent var0) { }

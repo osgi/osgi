@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,11 @@
  */
 
 package java.awt.peer;
-public abstract interface WindowPeer extends java.awt.peer.ContainerPeer {
-	public abstract void toBack();
-	public abstract void toFront();
+public interface WindowPeer extends java.awt.peer.ContainerPeer {
+	boolean requestWindowFocus();
+	void toBack();
+	void toFront();
+	void updateAlwaysOnTop();
+	void updateFocusableWindowState();
 }
 

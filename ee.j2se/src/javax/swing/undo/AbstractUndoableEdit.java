@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package javax.swing.undo;
 public class AbstractUndoableEdit implements java.io.Serializable, javax.swing.undo.UndoableEdit {
-	public AbstractUndoableEdit() { }
+	protected final static java.lang.String RedoName = "Redo";
+	protected final static java.lang.String UndoName = "Undo";
+	public AbstractUndoableEdit() { } 
 	public boolean addEdit(javax.swing.undo.UndoableEdit var0) { return false; }
 	public boolean canRedo() { return false; }
 	public boolean canUndo() { return false; }
@@ -28,7 +30,5 @@ public class AbstractUndoableEdit implements java.io.Serializable, javax.swing.u
 	public void redo() { }
 	public boolean replaceEdit(javax.swing.undo.UndoableEdit var0) { return false; }
 	public void undo() { }
-	protected final static java.lang.String RedoName = "Redo";
-	protected final static java.lang.String UndoName = "Undo";
 }
 

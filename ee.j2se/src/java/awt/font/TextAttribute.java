@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package java.awt.font;
 public final class TextAttribute extends java.text.AttributedCharacterIterator.Attribute {
-	protected TextAttribute(java.lang.String var0) { super((java.lang.String) null); }
 	public final static java.awt.font.TextAttribute BACKGROUND; static { BACKGROUND = null; }
 	public final static java.awt.font.TextAttribute BIDI_EMBEDDING; static { BIDI_EMBEDDING = null; }
 	public final static java.awt.font.TextAttribute CHAR_REPLACEMENT; static { CHAR_REPLACEMENT = null; }
@@ -69,5 +68,6 @@ public final class TextAttribute extends java.text.AttributedCharacterIterator.A
 	public final static java.lang.Float WIDTH_REGULAR; static { WIDTH_REGULAR = null; }
 	public final static java.lang.Float WIDTH_SEMI_CONDENSED; static { WIDTH_SEMI_CONDENSED = null; }
 	public final static java.lang.Float WIDTH_SEMI_EXTENDED; static { WIDTH_SEMI_EXTENDED = null; }
+	protected TextAttribute(java.lang.String var0)  { super((java.lang.String) null); } 
 }
 

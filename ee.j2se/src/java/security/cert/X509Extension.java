@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package java.security.cert;
-public abstract interface X509Extension {
-	public abstract java.util.Set getCriticalExtensionOIDs();
-	public abstract byte[] getExtensionValue(java.lang.String var0);
-	public abstract java.util.Set getNonCriticalExtensionOIDs();
-	public abstract boolean hasUnsupportedCriticalExtension();
+public interface X509Extension {
+	java.util.Set<java.lang.String> getCriticalExtensionOIDs();
+	byte[] getExtensionValue(java.lang.String var0);
+	java.util.Set<java.lang.String> getNonCriticalExtensionOIDs();
+	boolean hasUnsupportedCriticalExtension();
 }
 

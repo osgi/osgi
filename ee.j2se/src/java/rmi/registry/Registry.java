@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package java.rmi.registry;
-public abstract interface Registry extends java.rmi.Remote {
-	public abstract void bind(java.lang.String var0, java.rmi.Remote var1) throws java.rmi.AlreadyBoundException, java.rmi.RemoteException;
-	public abstract java.lang.String[] list() throws java.rmi.RemoteException;
-	public abstract java.rmi.Remote lookup(java.lang.String var0) throws java.rmi.NotBoundException, java.rmi.RemoteException;
-	public abstract void rebind(java.lang.String var0, java.rmi.Remote var1) throws java.rmi.RemoteException;
-	public abstract void unbind(java.lang.String var0) throws java.rmi.NotBoundException, java.rmi.RemoteException;
+public interface Registry extends java.rmi.Remote {
 	public final static int REGISTRY_PORT = 1099;
+	void bind(java.lang.String var0, java.rmi.Remote var1) throws java.rmi.AlreadyBoundException, java.rmi.RemoteException;
+	java.lang.String[] list() throws java.rmi.RemoteException;
+	java.rmi.Remote lookup(java.lang.String var0) throws java.rmi.NotBoundException, java.rmi.RemoteException;
+	void rebind(java.lang.String var0, java.rmi.Remote var1) throws java.rmi.RemoteException;
+	void unbind(java.lang.String var0) throws java.rmi.NotBoundException, java.rmi.RemoteException;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package org.omg.CORBA;
 public abstract class NVList {
-	public NVList() { }
+	public NVList() { } 
 	public abstract org.omg.CORBA.NamedValue add(int var0);
 	public abstract org.omg.CORBA.NamedValue add_item(java.lang.String var0, int var1);
 	public abstract org.omg.CORBA.NamedValue add_value(java.lang.String var0, org.omg.CORBA.Any var1, int var2);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,15 @@
  */
 
 package javax.naming.directory;
-public abstract interface Attributes extends java.io.Serializable, java.lang.Cloneable {
-	public abstract java.lang.Object clone();
-	public abstract javax.naming.directory.Attribute get(java.lang.String var0);
-	public abstract javax.naming.NamingEnumeration getAll();
-	public abstract javax.naming.NamingEnumeration getIDs();
-	public abstract boolean isCaseIgnored();
-	public abstract javax.naming.directory.Attribute put(java.lang.String var0, java.lang.Object var1);
-	public abstract javax.naming.directory.Attribute put(javax.naming.directory.Attribute var0);
-	public abstract javax.naming.directory.Attribute remove(java.lang.String var0);
-	public abstract int size();
+public interface Attributes extends java.io.Serializable, java.lang.Cloneable {
+	java.lang.Object clone();
+	javax.naming.directory.Attribute get(java.lang.String var0);
+	javax.naming.NamingEnumeration<? extends javax.naming.directory.Attribute> getAll();
+	javax.naming.NamingEnumeration<java.lang.String> getIDs();
+	boolean isCaseIgnored();
+	javax.naming.directory.Attribute put(java.lang.String var0, java.lang.Object var1);
+	javax.naming.directory.Attribute put(javax.naming.directory.Attribute var0);
+	javax.naming.directory.Attribute remove(java.lang.String var0);
+	int size();
 }
 

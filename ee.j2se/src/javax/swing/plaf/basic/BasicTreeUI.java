@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,132 @@
 
 package javax.swing.plaf.basic;
 public class BasicTreeUI extends javax.swing.plaf.TreeUI {
-	public BasicTreeUI() { }
+	public class CellEditorHandler implements javax.swing.event.CellEditorListener {
+		public CellEditorHandler() { } 
+		public void editingCanceled(javax.swing.event.ChangeEvent var0) { }
+		public void editingStopped(javax.swing.event.ChangeEvent var0) { }
+	}
+	public class ComponentHandler extends java.awt.event.ComponentAdapter implements java.awt.event.ActionListener {
+		protected javax.swing.JScrollBar scrollBar;
+		protected javax.swing.Timer timer;
+		public ComponentHandler() { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+		protected javax.swing.JScrollPane getScrollPane() { return null; }
+		protected void startTimer() { }
+	}
+	public class FocusHandler implements java.awt.event.FocusListener {
+		public FocusHandler() { } 
+		public void focusGained(java.awt.event.FocusEvent var0) { }
+		public void focusLost(java.awt.event.FocusEvent var0) { }
+	}
+	public class KeyHandler extends java.awt.event.KeyAdapter {
+		protected boolean isKeyDown;
+		protected javax.swing.Action repeatKeyAction;
+		public KeyHandler() { } 
+	}
+	public class MouseHandler extends java.awt.event.MouseAdapter implements java.awt.event.MouseMotionListener {
+		public MouseHandler() { } 
+		public void mouseDragged(java.awt.event.MouseEvent var0) { }
+		public void mouseMoved(java.awt.event.MouseEvent var0) { }
+	}
+	public class MouseInputHandler implements javax.swing.event.MouseInputListener {
+		protected java.awt.Component destination;
+		protected java.awt.Component source;
+		public MouseInputHandler(java.awt.Component var0, java.awt.Component var1, java.awt.event.MouseEvent var2) { } 
+		public void mouseClicked(java.awt.event.MouseEvent var0) { }
+		public void mouseDragged(java.awt.event.MouseEvent var0) { }
+		public void mouseEntered(java.awt.event.MouseEvent var0) { }
+		public void mouseExited(java.awt.event.MouseEvent var0) { }
+		public void mouseMoved(java.awt.event.MouseEvent var0) { }
+		public void mousePressed(java.awt.event.MouseEvent var0) { }
+		public void mouseReleased(java.awt.event.MouseEvent var0) { }
+		protected void removeFromSource() { }
+	}
+	public class NodeDimensionsHandler extends javax.swing.tree.AbstractLayoutCache.NodeDimensions {
+		public NodeDimensionsHandler() { } 
+		public java.awt.Rectangle getNodeDimensions(java.lang.Object var0, int var1, int var2, boolean var3, java.awt.Rectangle var4) { return null; }
+		protected int getRowX(int var0, int var1) { return 0; }
+	}
+	public class PropertyChangeHandler implements java.beans.PropertyChangeListener {
+		public PropertyChangeHandler() { } 
+		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
+	}
+	public class SelectionModelPropertyChangeHandler implements java.beans.PropertyChangeListener {
+		public SelectionModelPropertyChangeHandler() { } 
+		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
+	}
+	public class TreeCancelEditingAction extends javax.swing.AbstractAction {
+		public TreeCancelEditingAction(java.lang.String var0) { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	public class TreeExpansionHandler implements javax.swing.event.TreeExpansionListener {
+		public TreeExpansionHandler() { } 
+		public void treeCollapsed(javax.swing.event.TreeExpansionEvent var0) { }
+		public void treeExpanded(javax.swing.event.TreeExpansionEvent var0) { }
+	}
+	public class TreeHomeAction extends javax.swing.AbstractAction {
+		protected int direction;
+		public TreeHomeAction(int var0, java.lang.String var1) { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	public class TreeIncrementAction extends javax.swing.AbstractAction {
+		protected int direction;
+		public TreeIncrementAction(int var0, java.lang.String var1) { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	public class TreeModelHandler implements javax.swing.event.TreeModelListener {
+		public TreeModelHandler() { } 
+		public void treeNodesChanged(javax.swing.event.TreeModelEvent var0) { }
+		public void treeNodesInserted(javax.swing.event.TreeModelEvent var0) { }
+		public void treeNodesRemoved(javax.swing.event.TreeModelEvent var0) { }
+		public void treeStructureChanged(javax.swing.event.TreeModelEvent var0) { }
+	}
+	public class TreePageAction extends javax.swing.AbstractAction {
+		protected int direction;
+		public TreePageAction(int var0, java.lang.String var1) { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	public class TreeSelectionHandler implements javax.swing.event.TreeSelectionListener {
+		public TreeSelectionHandler() { } 
+		public void valueChanged(javax.swing.event.TreeSelectionEvent var0) { }
+	}
+	public class TreeToggleAction extends javax.swing.AbstractAction {
+		public TreeToggleAction(java.lang.String var0) { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	public class TreeTraverseAction extends javax.swing.AbstractAction {
+		protected int direction;
+		public TreeTraverseAction(int var0, java.lang.String var1) { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	protected javax.swing.tree.TreeCellEditor cellEditor;
+	protected javax.swing.Icon collapsedIcon;
+	protected boolean createdCellEditor;
+	protected boolean createdRenderer;
+	protected javax.swing.tree.TreeCellRenderer currentCellRenderer;
+	protected int depthOffset;
+	protected java.util.Hashtable<javax.swing.tree.TreePath,java.lang.Boolean> drawingCache;
+	protected java.awt.Component editingComponent;
+	protected javax.swing.tree.TreePath editingPath;
+	protected int editingRow;
+	protected boolean editorHasDifferentSize;
+	protected javax.swing.Icon expandedIcon;
+	protected boolean largeModel;
+	protected int lastSelectedRow;
+	protected int leftChildIndent;
+	protected javax.swing.tree.AbstractLayoutCache.NodeDimensions nodeDimensions;
+	protected java.awt.Dimension preferredMinSize;
+	protected java.awt.Dimension preferredSize;
+	protected javax.swing.CellRendererPane rendererPane;
+	protected int rightChildIndent;
+	protected boolean stopEditingInCompleteEditing;
+	protected int totalChildIndent;
+	protected javax.swing.JTree tree;
+	protected javax.swing.tree.TreeModel treeModel;
+	protected javax.swing.tree.TreeSelectionModel treeSelectionModel;
+	protected javax.swing.tree.AbstractLayoutCache treeState;
+	protected boolean validCachedPreferredSize;
+	public BasicTreeUI() { } 
 	public void cancelEditing(javax.swing.JTree var0) { }
 	protected void checkForClickInExpandControl(javax.swing.tree.TreePath var0, int var1, int var2) { }
 	protected void completeEditing() { }
@@ -63,6 +188,7 @@ public class BasicTreeUI extends javax.swing.plaf.TreeUI {
 	public int getRowCount(javax.swing.JTree var0) { return 0; }
 	public int getRowForPath(javax.swing.JTree var0, javax.swing.tree.TreePath var1) { return 0; }
 	protected int getRowHeight() { return 0; }
+	protected int getRowX(int var0, int var1) { return 0; }
 	protected javax.swing.tree.TreeSelectionModel getSelectionModel() { return null; }
 	protected boolean getShowsRootHandles() { return false; }
 	protected int getVerticalLegBuffer() { return 0; }
@@ -122,130 +248,5 @@ public class BasicTreeUI extends javax.swing.plaf.TreeUI {
 	protected void updateLayoutCacheExpandedNodes() { }
 	protected void updateRenderer() { }
 	protected void updateSize() { }
-	protected javax.swing.tree.TreeCellEditor cellEditor;
-	protected javax.swing.Icon collapsedIcon;
-	protected boolean createdCellEditor;
-	protected boolean createdRenderer;
-	protected javax.swing.tree.TreeCellRenderer currentCellRenderer;
-	protected int depthOffset;
-	protected java.util.Hashtable drawingCache;
-	protected java.awt.Component editingComponent;
-	protected javax.swing.tree.TreePath editingPath;
-	protected int editingRow;
-	protected boolean editorHasDifferentSize;
-	protected javax.swing.Icon expandedIcon;
-	protected boolean largeModel;
-	protected int lastSelectedRow;
-	protected int leftChildIndent;
-	protected javax.swing.tree.AbstractLayoutCache.NodeDimensions nodeDimensions;
-	protected java.awt.Dimension preferredMinSize;
-	protected java.awt.Dimension preferredSize;
-	protected javax.swing.CellRendererPane rendererPane;
-	protected int rightChildIndent;
-	protected boolean stopEditingInCompleteEditing;
-	protected int totalChildIndent;
-	protected javax.swing.JTree tree;
-	protected javax.swing.tree.TreeModel treeModel;
-	protected javax.swing.tree.TreeSelectionModel treeSelectionModel;
-	protected javax.swing.tree.AbstractLayoutCache treeState;
-	protected boolean validCachedPreferredSize;
-	public class CellEditorHandler implements javax.swing.event.CellEditorListener {
-		public CellEditorHandler() { }
-		public void editingCanceled(javax.swing.event.ChangeEvent var0) { }
-		public void editingStopped(javax.swing.event.ChangeEvent var0) { }
-	}
-	public class ComponentHandler extends java.awt.event.ComponentAdapter implements java.awt.event.ActionListener {
-		public ComponentHandler() { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-		protected javax.swing.JScrollPane getScrollPane() { return null; }
-		protected void startTimer() { }
-		protected javax.swing.JScrollBar scrollBar;
-		protected javax.swing.Timer timer;
-	}
-	public class FocusHandler implements java.awt.event.FocusListener {
-		public FocusHandler() { }
-		public void focusGained(java.awt.event.FocusEvent var0) { }
-		public void focusLost(java.awt.event.FocusEvent var0) { }
-	}
-	public class KeyHandler extends java.awt.event.KeyAdapter {
-		public KeyHandler() { }
-		protected boolean isKeyDown;
-		protected javax.swing.Action repeatKeyAction;
-	}
-	public class MouseHandler extends java.awt.event.MouseAdapter implements java.awt.event.MouseMotionListener {
-		public MouseHandler() { }
-		public void mouseDragged(java.awt.event.MouseEvent var0) { }
-		public void mouseMoved(java.awt.event.MouseEvent var0) { }
-	}
-	public class MouseInputHandler implements javax.swing.event.MouseInputListener {
-		public MouseInputHandler(java.awt.Component var0, java.awt.Component var1, java.awt.event.MouseEvent var2) { }
-		public void mouseClicked(java.awt.event.MouseEvent var0) { }
-		public void mouseDragged(java.awt.event.MouseEvent var0) { }
-		public void mouseEntered(java.awt.event.MouseEvent var0) { }
-		public void mouseExited(java.awt.event.MouseEvent var0) { }
-		public void mouseMoved(java.awt.event.MouseEvent var0) { }
-		public void mousePressed(java.awt.event.MouseEvent var0) { }
-		public void mouseReleased(java.awt.event.MouseEvent var0) { }
-		protected void removeFromSource() { }
-		protected java.awt.Component destination;
-		protected java.awt.Component source;
-	}
-	public class NodeDimensionsHandler extends javax.swing.tree.AbstractLayoutCache.NodeDimensions {
-		public NodeDimensionsHandler() { }
-		public java.awt.Rectangle getNodeDimensions(java.lang.Object var0, int var1, int var2, boolean var3, java.awt.Rectangle var4) { return null; }
-		protected int getRowX(int var0, int var1) { return 0; }
-	}
-	public class PropertyChangeHandler implements java.beans.PropertyChangeListener {
-		public PropertyChangeHandler() { }
-		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
-	}
-	public class SelectionModelPropertyChangeHandler implements java.beans.PropertyChangeListener {
-		public SelectionModelPropertyChangeHandler() { }
-		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
-	}
-	public class TreeCancelEditingAction extends javax.swing.AbstractAction {
-		public TreeCancelEditingAction(java.lang.String var0) { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	public class TreeExpansionHandler implements javax.swing.event.TreeExpansionListener {
-		public TreeExpansionHandler() { }
-		public void treeCollapsed(javax.swing.event.TreeExpansionEvent var0) { }
-		public void treeExpanded(javax.swing.event.TreeExpansionEvent var0) { }
-	}
-	public class TreeHomeAction extends javax.swing.AbstractAction {
-		public TreeHomeAction(int var0, java.lang.String var1) { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-		protected int direction;
-	}
-	public class TreeIncrementAction extends javax.swing.AbstractAction {
-		public TreeIncrementAction(int var0, java.lang.String var1) { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-		protected int direction;
-	}
-	public class TreeModelHandler implements javax.swing.event.TreeModelListener {
-		public TreeModelHandler() { }
-		public void treeNodesChanged(javax.swing.event.TreeModelEvent var0) { }
-		public void treeNodesInserted(javax.swing.event.TreeModelEvent var0) { }
-		public void treeNodesRemoved(javax.swing.event.TreeModelEvent var0) { }
-		public void treeStructureChanged(javax.swing.event.TreeModelEvent var0) { }
-	}
-	public class TreePageAction extends javax.swing.AbstractAction {
-		public TreePageAction(int var0, java.lang.String var1) { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-		protected int direction;
-	}
-	public class TreeSelectionHandler implements javax.swing.event.TreeSelectionListener {
-		public TreeSelectionHandler() { }
-		public void valueChanged(javax.swing.event.TreeSelectionEvent var0) { }
-	}
-	public class TreeToggleAction extends javax.swing.AbstractAction {
-		public TreeToggleAction(java.lang.String var0) { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	public class TreeTraverseAction extends javax.swing.AbstractAction {
-		public TreeTraverseAction(int var0, java.lang.String var1) { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-		protected int direction;
-	}
 }
 

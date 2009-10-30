@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package java.lang;
-public class InheritableThreadLocal extends java.lang.ThreadLocal {
-	public InheritableThreadLocal() { }
-	protected java.lang.Object childValue(java.lang.Object var0) { return null; }
+public class InheritableThreadLocal<T> extends java.lang.ThreadLocal<T> {
+	public InheritableThreadLocal() { } 
+	protected T childValue(T var0) { return null; }
 }
 

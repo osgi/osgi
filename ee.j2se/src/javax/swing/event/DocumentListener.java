@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.swing.event;
-public abstract interface DocumentListener extends java.util.EventListener {
-	public abstract void changedUpdate(javax.swing.event.DocumentEvent var0);
-	public abstract void insertUpdate(javax.swing.event.DocumentEvent var0);
-	public abstract void removeUpdate(javax.swing.event.DocumentEvent var0);
+public interface DocumentListener extends java.util.EventListener {
+	void changedUpdate(javax.swing.event.DocumentEvent var0);
+	void insertUpdate(javax.swing.event.DocumentEvent var0);
+	void removeUpdate(javax.swing.event.DocumentEvent var0);
 }
 

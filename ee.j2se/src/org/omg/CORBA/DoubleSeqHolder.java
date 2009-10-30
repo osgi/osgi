@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package org.omg.CORBA;
 public final class DoubleSeqHolder implements org.omg.CORBA.portable.Streamable {
-	public DoubleSeqHolder() { }
-	public DoubleSeqHolder(double[] var0) { }
+	public double[] value;
+	public DoubleSeqHolder() { } 
+	public DoubleSeqHolder(double[] var0) { } 
 	public void _read(org.omg.CORBA.portable.InputStream var0) { }
 	public org.omg.CORBA.TypeCode _type() { return null; }
 	public void _write(org.omg.CORBA.portable.OutputStream var0) { }
-	public double[] value;
 }
 

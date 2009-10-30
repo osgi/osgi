@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 
 package javax.swing.text;
 public class NavigationFilter {
-	public NavigationFilter() { }
-	public int getNextVisualPositionFrom(javax.swing.text.JTextComponent var0, int var1, javax.swing.text.Position.Bias var2, int var3, javax.swing.text.Position.Bias[] var4) throws javax.swing.text.BadLocationException { return 0; }
-	public void moveDot(javax.swing.text.NavigationFilter.FilterBypass var0, int var1, javax.swing.text.Position.Bias var2) { }
-	public void setDot(javax.swing.text.NavigationFilter.FilterBypass var0, int var1, javax.swing.text.Position.Bias var2) { }
 	public static abstract class FilterBypass {
-		public FilterBypass() { }
+		public FilterBypass() { } 
 		public abstract javax.swing.text.Caret getCaret();
 		public abstract void moveDot(int var0, javax.swing.text.Position.Bias var1);
 		public abstract void setDot(int var0, javax.swing.text.Position.Bias var1);
 	}
+	public NavigationFilter() { } 
+	public int getNextVisualPositionFrom(javax.swing.text.JTextComponent var0, int var1, javax.swing.text.Position.Bias var2, int var3, javax.swing.text.Position.Bias[] var4) throws javax.swing.text.BadLocationException { return 0; }
+	public void moveDot(javax.swing.text.NavigationFilter.FilterBypass var0, int var1, javax.swing.text.Position.Bias var2) { }
+	public void setDot(javax.swing.text.NavigationFilter.FilterBypass var0, int var1, javax.swing.text.Position.Bias var2) { }
 }
 

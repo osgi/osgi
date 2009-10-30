@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.filechooser;
 public abstract class FileView {
-	public FileView() { }
+	public FileView() { } 
 	public java.lang.String getDescription(java.io.File var0) { return null; }
 	public javax.swing.Icon getIcon(java.io.File var0) { return null; }
 	public java.lang.String getName(java.io.File var0) { return null; }

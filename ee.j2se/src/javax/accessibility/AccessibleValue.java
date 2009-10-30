@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package javax.accessibility;
-public abstract interface AccessibleValue {
-	public abstract java.lang.Number getCurrentAccessibleValue();
-	public abstract java.lang.Number getMaximumAccessibleValue();
-	public abstract java.lang.Number getMinimumAccessibleValue();
-	public abstract boolean setCurrentAccessibleValue(java.lang.Number var0);
+public interface AccessibleValue {
+	java.lang.Number getCurrentAccessibleValue();
+	java.lang.Number getMaximumAccessibleValue();
+	java.lang.Number getMinimumAccessibleValue();
+	boolean setCurrentAccessibleValue(java.lang.Number var0);
 }
 

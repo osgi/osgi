@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package java.awt;
-public abstract interface LayoutManager {
-	public abstract void addLayoutComponent(java.lang.String var0, java.awt.Component var1);
-	public abstract void layoutContainer(java.awt.Container var0);
-	public abstract java.awt.Dimension minimumLayoutSize(java.awt.Container var0);
-	public abstract java.awt.Dimension preferredLayoutSize(java.awt.Container var0);
-	public abstract void removeLayoutComponent(java.awt.Component var0);
+public interface LayoutManager {
+	void addLayoutComponent(java.lang.String var0, java.awt.Component var1);
+	void layoutContainer(java.awt.Container var0);
+	java.awt.Dimension minimumLayoutSize(java.awt.Container var0);
+	java.awt.Dimension preferredLayoutSize(java.awt.Container var0);
+	void removeLayoutComponent(java.awt.Component var0);
 }
 

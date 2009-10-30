@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.swing.event;
-public abstract interface AncestorListener extends java.util.EventListener {
-	public abstract void ancestorAdded(javax.swing.event.AncestorEvent var0);
-	public abstract void ancestorMoved(javax.swing.event.AncestorEvent var0);
-	public abstract void ancestorRemoved(javax.swing.event.AncestorEvent var0);
+public interface AncestorListener extends java.util.EventListener {
+	void ancestorAdded(javax.swing.event.AncestorEvent var0);
+	void ancestorMoved(javax.swing.event.AncestorEvent var0);
+	void ancestorRemoved(javax.swing.event.AncestorEvent var0);
 }
 

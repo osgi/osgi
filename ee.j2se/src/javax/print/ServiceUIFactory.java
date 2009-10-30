@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package javax.print;
 public abstract class ServiceUIFactory {
-	public ServiceUIFactory() { }
-	public abstract java.lang.Object getUI(int var0, java.lang.String var1);
-	public abstract java.lang.String[] getUIClassNamesForRole(int var0);
 	public final static int ABOUT_UIROLE = 1;
 	public final static int ADMIN_UIROLE = 2;
 	public final static java.lang.String DIALOG_UI = "java.awt.Dialog";
@@ -27,5 +24,8 @@ public abstract class ServiceUIFactory {
 	public final static int MAIN_UIROLE = 3;
 	public final static java.lang.String PANEL_UI = "java.awt.Panel";
 	public final static int RESERVED_UIROLE = 99;
+	public ServiceUIFactory() { } 
+	public abstract java.lang.Object getUI(int var0, java.lang.String var1);
+	public abstract java.lang.String[] getUIClassNamesForRole(int var0);
 }
 

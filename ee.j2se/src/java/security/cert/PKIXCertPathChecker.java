@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package java.security.cert;
 public abstract class PKIXCertPathChecker implements java.lang.Cloneable {
-	protected PKIXCertPathChecker() { }
-	public abstract void check(java.security.cert.Certificate var0, java.util.Collection var1) throws java.security.cert.CertPathValidatorException;
+	protected PKIXCertPathChecker() { } 
+	public abstract void check(java.security.cert.Certificate var0, java.util.Collection<java.lang.String> var1) throws java.security.cert.CertPathValidatorException;
 	public java.lang.Object clone() { return null; }
-	public abstract java.util.Set getSupportedExtensions();
+	public abstract java.util.Set<java.lang.String> getSupportedExtensions();
 	public abstract void init(boolean var0) throws java.security.cert.CertPathValidatorException;
 	public abstract boolean isForwardCheckingSupported();
 }

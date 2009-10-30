@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,20 @@
 
 package java.awt.image;
 public class Raster {
-	protected Raster(java.awt.image.SampleModel var0, java.awt.Point var1) { }
-	protected Raster(java.awt.image.SampleModel var0, java.awt.image.DataBuffer var1, java.awt.Point var2) { }
-	protected Raster(java.awt.image.SampleModel var0, java.awt.image.DataBuffer var1, java.awt.Rectangle var2, java.awt.Point var3, java.awt.image.Raster var4) { }
+	protected java.awt.image.DataBuffer dataBuffer;
+	protected int height;
+	protected int minX;
+	protected int minY;
+	protected int numBands;
+	protected int numDataElements;
+	protected java.awt.image.Raster parent;
+	protected java.awt.image.SampleModel sampleModel;
+	protected int sampleModelTranslateX;
+	protected int sampleModelTranslateY;
+	protected int width;
+	protected Raster(java.awt.image.SampleModel var0, java.awt.Point var1) { } 
+	protected Raster(java.awt.image.SampleModel var0, java.awt.image.DataBuffer var1, java.awt.Point var2) { } 
+	protected Raster(java.awt.image.SampleModel var0, java.awt.image.DataBuffer var1, java.awt.Rectangle var2, java.awt.Point var3, java.awt.image.Raster var4) { } 
 	public static java.awt.image.WritableRaster createBandedRaster(int var0, int var1, int var2, int var3, java.awt.Point var4) { return null; }
 	public static java.awt.image.WritableRaster createBandedRaster(int var0, int var1, int var2, int var3, int[] var4, int[] var5, java.awt.Point var6) { return null; }
 	public static java.awt.image.WritableRaster createBandedRaster(java.awt.image.DataBuffer var0, int var1, int var2, int var3, int[] var4, int[] var5, java.awt.Point var6) { return null; }
@@ -65,16 +76,5 @@ public class Raster {
 	public int[] getSamples(int var0, int var1, int var2, int var3, int var4, int[] var5) { return null; }
 	public final int getTransferType() { return 0; }
 	public final int getWidth() { return 0; }
-	protected java.awt.image.DataBuffer dataBuffer;
-	protected int height;
-	protected int minX;
-	protected int minY;
-	protected int numBands;
-	protected int numDataElements;
-	protected java.awt.image.Raster parent;
-	protected java.awt.image.SampleModel sampleModel;
-	protected int sampleModelTranslateX;
-	protected int sampleModelTranslateY;
-	protected int width;
 }
 

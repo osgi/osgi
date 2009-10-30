@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  */
 
 package javax.swing.tree;
-public abstract interface TreeModel {
-	public abstract void addTreeModelListener(javax.swing.event.TreeModelListener var0);
-	public abstract java.lang.Object getChild(java.lang.Object var0, int var1);
-	public abstract int getChildCount(java.lang.Object var0);
-	public abstract int getIndexOfChild(java.lang.Object var0, java.lang.Object var1);
-	public abstract java.lang.Object getRoot();
-	public abstract boolean isLeaf(java.lang.Object var0);
-	public abstract void removeTreeModelListener(javax.swing.event.TreeModelListener var0);
-	public abstract void valueForPathChanged(javax.swing.tree.TreePath var0, java.lang.Object var1);
+public interface TreeModel {
+	void addTreeModelListener(javax.swing.event.TreeModelListener var0);
+	java.lang.Object getChild(java.lang.Object var0, int var1);
+	int getChildCount(java.lang.Object var0);
+	int getIndexOfChild(java.lang.Object var0, java.lang.Object var1);
+	java.lang.Object getRoot();
+	boolean isLeaf(java.lang.Object var0);
+	void removeTreeModelListener(javax.swing.event.TreeModelListener var0);
+	void valueForPathChanged(javax.swing.tree.TreePath var0, java.lang.Object var1);
 }
 

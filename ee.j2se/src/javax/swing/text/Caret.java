@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,23 +15,23 @@
  */
 
 package javax.swing.text;
-public abstract interface Caret {
-	public abstract void addChangeListener(javax.swing.event.ChangeListener var0);
-	public abstract void deinstall(javax.swing.text.JTextComponent var0);
-	public abstract int getBlinkRate();
-	public abstract int getDot();
-	public abstract java.awt.Point getMagicCaretPosition();
-	public abstract int getMark();
-	public abstract void install(javax.swing.text.JTextComponent var0);
-	public abstract boolean isSelectionVisible();
-	public abstract boolean isVisible();
-	public abstract void moveDot(int var0);
-	public abstract void paint(java.awt.Graphics var0);
-	public abstract void removeChangeListener(javax.swing.event.ChangeListener var0);
-	public abstract void setBlinkRate(int var0);
-	public abstract void setDot(int var0);
-	public abstract void setMagicCaretPosition(java.awt.Point var0);
-	public abstract void setSelectionVisible(boolean var0);
-	public abstract void setVisible(boolean var0);
+public interface Caret {
+	void addChangeListener(javax.swing.event.ChangeListener var0);
+	void deinstall(javax.swing.text.JTextComponent var0);
+	int getBlinkRate();
+	int getDot();
+	java.awt.Point getMagicCaretPosition();
+	int getMark();
+	void install(javax.swing.text.JTextComponent var0);
+	boolean isSelectionVisible();
+	boolean isVisible();
+	void moveDot(int var0);
+	void paint(java.awt.Graphics var0);
+	void removeChangeListener(javax.swing.event.ChangeListener var0);
+	void setBlinkRate(int var0);
+	void setDot(int var0);
+	void setMagicCaretPosition(java.awt.Point var0);
+	void setSelectionVisible(boolean var0);
+	void setVisible(boolean var0);
 }
 

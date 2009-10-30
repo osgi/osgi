@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.swing.event;
-public abstract interface MenuKeyListener extends java.util.EventListener {
-	public abstract void menuKeyPressed(javax.swing.event.MenuKeyEvent var0);
-	public abstract void menuKeyReleased(javax.swing.event.MenuKeyEvent var0);
-	public abstract void menuKeyTyped(javax.swing.event.MenuKeyEvent var0);
+public interface MenuKeyListener extends java.util.EventListener {
+	void menuKeyPressed(javax.swing.event.MenuKeyEvent var0);
+	void menuKeyReleased(javax.swing.event.MenuKeyEvent var0);
+	void menuKeyTyped(javax.swing.event.MenuKeyEvent var0);
 }
 

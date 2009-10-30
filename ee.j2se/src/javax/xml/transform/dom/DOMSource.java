@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package javax.xml.transform.dom;
 public class DOMSource implements javax.xml.transform.Source {
-	public DOMSource() { }
-	public DOMSource(org.w3c.dom.Node var0) { }
-	public DOMSource(org.w3c.dom.Node var0, java.lang.String var1) { }
+	public final static java.lang.String FEATURE = "http://javax.xml.transform.dom.DOMSource/feature";
+	public DOMSource() { } 
+	public DOMSource(org.w3c.dom.Node var0) { } 
+	public DOMSource(org.w3c.dom.Node var0, java.lang.String var1) { } 
 	public org.w3c.dom.Node getNode() { return null; }
 	public java.lang.String getSystemId() { return null; }
 	public void setNode(org.w3c.dom.Node var0) { }
 	public void setSystemId(java.lang.String var0) { }
-	public final static java.lang.String FEATURE = "http://javax.xml.transform.dom.DOMSource/feature";
 }
 

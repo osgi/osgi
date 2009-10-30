@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.security.cert;
 public abstract class CertStoreSpi {
-	public CertStoreSpi(java.security.cert.CertStoreParameters var0) throws java.security.InvalidAlgorithmParameterException { }
-	public abstract java.util.Collection engineGetCRLs(java.security.cert.CRLSelector var0) throws java.security.cert.CertStoreException;
-	public abstract java.util.Collection engineGetCertificates(java.security.cert.CertSelector var0) throws java.security.cert.CertStoreException;
+	public CertStoreSpi(java.security.cert.CertStoreParameters var0) throws java.security.InvalidAlgorithmParameterException { } 
+	public abstract java.util.Collection<? extends java.security.cert.CRL> engineGetCRLs(java.security.cert.CRLSelector var0) throws java.security.cert.CertStoreException;
+	public abstract java.util.Collection<? extends java.security.cert.Certificate> engineGetCertificates(java.security.cert.CertSelector var0) throws java.security.cert.CertStoreException;
 }
 

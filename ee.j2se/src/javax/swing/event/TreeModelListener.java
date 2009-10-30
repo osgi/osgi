@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package javax.swing.event;
-public abstract interface TreeModelListener extends java.util.EventListener {
-	public abstract void treeNodesChanged(javax.swing.event.TreeModelEvent var0);
-	public abstract void treeNodesInserted(javax.swing.event.TreeModelEvent var0);
-	public abstract void treeNodesRemoved(javax.swing.event.TreeModelEvent var0);
-	public abstract void treeStructureChanged(javax.swing.event.TreeModelEvent var0);
+public interface TreeModelListener extends java.util.EventListener {
+	void treeNodesChanged(javax.swing.event.TreeModelEvent var0);
+	void treeNodesInserted(javax.swing.event.TreeModelEvent var0);
+	void treeNodesRemoved(javax.swing.event.TreeModelEvent var0);
+	void treeStructureChanged(javax.swing.event.TreeModelEvent var0);
 }
 

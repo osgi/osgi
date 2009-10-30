@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package javax.swing;
 public class SpinnerNumberModel extends javax.swing.AbstractSpinnerModel implements java.io.Serializable {
-	public SpinnerNumberModel() { }
-	public SpinnerNumberModel(double var0, double var1, double var2, double var3) { }
-	public SpinnerNumberModel(int var0, int var1, int var2, int var3) { }
-	public SpinnerNumberModel(java.lang.Number var0, java.lang.Comparable var1, java.lang.Comparable var2, java.lang.Number var3) { }
+	public SpinnerNumberModel() { } 
+	public SpinnerNumberModel(double var0, double var1, double var2, double var3) { } 
+	public SpinnerNumberModel(int var0, int var1, int var2, int var3) { } 
+	public SpinnerNumberModel(java.lang.Number var0, java.lang.Comparable var1, java.lang.Comparable var2, java.lang.Number var3) { } 
 	public java.lang.Comparable getMaximum() { return null; }
 	public java.lang.Comparable getMinimum() { return null; }
 	public java.lang.Object getNextValue() { return null; }

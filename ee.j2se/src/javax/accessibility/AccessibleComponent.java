@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,33 +15,33 @@
  */
 
 package javax.accessibility;
-public abstract interface AccessibleComponent {
-	public abstract void addFocusListener(java.awt.event.FocusListener var0);
-	public abstract boolean contains(java.awt.Point var0);
-	public abstract javax.accessibility.Accessible getAccessibleAt(java.awt.Point var0);
-	public abstract java.awt.Color getBackground();
-	public abstract java.awt.Rectangle getBounds();
-	public abstract java.awt.Cursor getCursor();
-	public abstract java.awt.Font getFont();
-	public abstract java.awt.FontMetrics getFontMetrics(java.awt.Font var0);
-	public abstract java.awt.Color getForeground();
-	public abstract java.awt.Point getLocation();
-	public abstract java.awt.Point getLocationOnScreen();
-	public abstract java.awt.Dimension getSize();
-	public abstract boolean isEnabled();
-	public abstract boolean isFocusTraversable();
-	public abstract boolean isShowing();
-	public abstract boolean isVisible();
-	public abstract void removeFocusListener(java.awt.event.FocusListener var0);
-	public abstract void requestFocus();
-	public abstract void setBackground(java.awt.Color var0);
-	public abstract void setBounds(java.awt.Rectangle var0);
-	public abstract void setCursor(java.awt.Cursor var0);
-	public abstract void setEnabled(boolean var0);
-	public abstract void setFont(java.awt.Font var0);
-	public abstract void setForeground(java.awt.Color var0);
-	public abstract void setLocation(java.awt.Point var0);
-	public abstract void setSize(java.awt.Dimension var0);
-	public abstract void setVisible(boolean var0);
+public interface AccessibleComponent {
+	void addFocusListener(java.awt.event.FocusListener var0);
+	boolean contains(java.awt.Point var0);
+	javax.accessibility.Accessible getAccessibleAt(java.awt.Point var0);
+	java.awt.Color getBackground();
+	java.awt.Rectangle getBounds();
+	java.awt.Cursor getCursor();
+	java.awt.Font getFont();
+	java.awt.FontMetrics getFontMetrics(java.awt.Font var0);
+	java.awt.Color getForeground();
+	java.awt.Point getLocation();
+	java.awt.Point getLocationOnScreen();
+	java.awt.Dimension getSize();
+	boolean isEnabled();
+	boolean isFocusTraversable();
+	boolean isShowing();
+	boolean isVisible();
+	void removeFocusListener(java.awt.event.FocusListener var0);
+	void requestFocus();
+	void setBackground(java.awt.Color var0);
+	void setBounds(java.awt.Rectangle var0);
+	void setCursor(java.awt.Cursor var0);
+	void setEnabled(boolean var0);
+	void setFont(java.awt.Font var0);
+	void setForeground(java.awt.Color var0);
+	void setLocation(java.awt.Point var0);
+	void setSize(java.awt.Dimension var0);
+	void setVisible(boolean var0);
 }
 

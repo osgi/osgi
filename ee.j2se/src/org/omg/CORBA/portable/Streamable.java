@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package org.omg.CORBA.portable;
-public abstract interface Streamable {
-	public abstract void _read(org.omg.CORBA.portable.InputStream var0);
-	public abstract org.omg.CORBA.TypeCode _type();
-	public abstract void _write(org.omg.CORBA.portable.OutputStream var0);
+public interface Streamable {
+	void _read(org.omg.CORBA.portable.InputStream var0);
+	org.omg.CORBA.TypeCode _type();
+	void _write(org.omg.CORBA.portable.OutputStream var0);
 }
 

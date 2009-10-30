@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,19 @@
  */
 
 package java.lang;
-public final class Boolean implements java.io.Serializable {
-	public Boolean(java.lang.String var0) { }
-	public Boolean(boolean var0) { }
+public final class Boolean implements java.io.Serializable, java.lang.Comparable<java.lang.Boolean> {
+	public final static java.lang.Boolean FALSE; static { FALSE = null; }
+	public final static java.lang.Boolean TRUE; static { TRUE = null; }
+	public final static java.lang.Class<java.lang.Boolean> TYPE; static { TYPE = null; }
+	public Boolean(java.lang.String var0) { } 
+	public Boolean(boolean var0) { } 
 	public boolean booleanValue() { return false; }
+	public int compareTo(java.lang.Boolean var0) { return 0; }
 	public static boolean getBoolean(java.lang.String var0) { return false; }
 	public int hashCode() { return 0; }
+	public static boolean parseBoolean(java.lang.String var0) { return false; }
 	public static java.lang.String toString(boolean var0) { return null; }
 	public static java.lang.Boolean valueOf(java.lang.String var0) { return null; }
 	public static java.lang.Boolean valueOf(boolean var0) { return null; }
-	public final static java.lang.Boolean FALSE; static { FALSE = null; }
-	public final static java.lang.Boolean TRUE; static { TRUE = null; }
-	public final static java.lang.Class TYPE; static { TYPE = null; }
 }
 

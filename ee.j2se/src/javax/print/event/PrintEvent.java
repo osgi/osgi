@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,6 @@
 
 package javax.print.event;
 public class PrintEvent extends java.util.EventObject {
-	public PrintEvent(java.lang.Object var0) { super((java.lang.Object) null); }
+	public PrintEvent(java.lang.Object var0)  { super((java.lang.Object) null); } 
 }
 

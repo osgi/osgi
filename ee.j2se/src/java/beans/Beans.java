@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package java.beans;
 public class Beans {
-	public Beans() { }
-	public static java.lang.Object getInstanceOf(java.lang.Object var0, java.lang.Class var1) { return null; }
+	public Beans() { } 
+	public static java.lang.Object getInstanceOf(java.lang.Object var0, java.lang.Class<?> var1) { return null; }
 	public static java.lang.Object instantiate(java.lang.ClassLoader var0, java.lang.String var1) throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
 	public static java.lang.Object instantiate(java.lang.ClassLoader var0, java.lang.String var1, java.beans.beancontext.BeanContext var2) throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
 	public static java.lang.Object instantiate(java.lang.ClassLoader var0, java.lang.String var1, java.beans.beancontext.BeanContext var2, java.beans.AppletInitializer var3) throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
 	public static boolean isDesignTime() { return false; }
 	public static boolean isGuiAvailable() { return false; }
-	public static boolean isInstanceOf(java.lang.Object var0, java.lang.Class var1) { return false; }
+	public static boolean isInstanceOf(java.lang.Object var0, java.lang.Class<?> var1) { return false; }
 	public static void setDesignTime(boolean var0) { }
 	public static void setGuiAvailable(boolean var0) { }
 }

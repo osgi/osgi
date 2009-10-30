@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.net.ssl;
-public abstract interface X509TrustManager extends javax.net.ssl.TrustManager {
-	public abstract void checkClientTrusted(java.security.cert.X509Certificate[] var0, java.lang.String var1) throws java.security.cert.CertificateException;
-	public abstract void checkServerTrusted(java.security.cert.X509Certificate[] var0, java.lang.String var1) throws java.security.cert.CertificateException;
-	public abstract java.security.cert.X509Certificate[] getAcceptedIssuers();
+public interface X509TrustManager extends javax.net.ssl.TrustManager {
+	void checkClientTrusted(java.security.cert.X509Certificate[] var0, java.lang.String var1) throws java.security.cert.CertificateException;
+	void checkServerTrusted(java.security.cert.X509Certificate[] var0, java.lang.String var1) throws java.security.cert.CertificateException;
+	java.security.cert.X509Certificate[] getAcceptedIssuers();
 }
 

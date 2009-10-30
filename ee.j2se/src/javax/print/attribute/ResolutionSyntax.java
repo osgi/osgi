@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package javax.print.attribute;
 public abstract class ResolutionSyntax implements java.io.Serializable, java.lang.Cloneable {
-	public ResolutionSyntax(int var0, int var1, int var2) { }
+	public final static int DPCM = 254;
+	public final static int DPI = 100;
+	public ResolutionSyntax(int var0, int var1, int var2) { } 
 	public int getCrossFeedResolution(int var0) { return 0; }
 	protected int getCrossFeedResolutionDphi() { return 0; }
 	public int getFeedResolution(int var0) { return 0; }
@@ -25,7 +27,5 @@ public abstract class ResolutionSyntax implements java.io.Serializable, java.lan
 	public int hashCode() { return 0; }
 	public boolean lessThanOrEquals(javax.print.attribute.ResolutionSyntax var0) { return false; }
 	public java.lang.String toString(int var0, java.lang.String var1) { return null; }
-	public final static int DPCM = 254;
-	public final static int DPI = 100;
 }
 

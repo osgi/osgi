@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.plaf;
 public abstract class PopupMenuUI extends javax.swing.plaf.ComponentUI {
-	public PopupMenuUI() { }
+	public PopupMenuUI() { } 
 	public javax.swing.Popup getPopup(javax.swing.JPopupMenu var0, int var1, int var2) { return null; }
 	public boolean isPopupTrigger(java.awt.event.MouseEvent var0) { return false; }
 }

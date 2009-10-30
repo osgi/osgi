@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,11 @@
 
 package javax.imageio.stream;
 public abstract class ImageInputStreamImpl implements javax.imageio.stream.ImageInputStream {
-	public ImageInputStreamImpl() { }
+	protected int bitOffset;
+	protected java.nio.ByteOrder byteOrder;
+	protected long flushedPos;
+	protected long streamPos;
+	public ImageInputStreamImpl() { } 
 	protected final void checkClosed() throws java.io.IOException { }
 	public void close() throws java.io.IOException { }
 	public void flush() throws java.io.IOException { }
@@ -61,9 +65,5 @@ public abstract class ImageInputStreamImpl implements javax.imageio.stream.Image
 	public void setByteOrder(java.nio.ByteOrder var0) { }
 	public int skipBytes(int var0) throws java.io.IOException { return 0; }
 	public long skipBytes(long var0) throws java.io.IOException { return 0l; }
-	protected int bitOffset;
-	protected java.nio.ByteOrder byteOrder;
-	protected long flushedPos;
-	protected long streamPos;
 }
 

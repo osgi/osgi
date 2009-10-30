@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.rmi;
 public final class MarshalledObject implements java.io.Serializable {
-	public MarshalledObject(java.lang.Object var0) throws java.io.IOException { }
+	public MarshalledObject(java.lang.Object var0) throws java.io.IOException { } 
 	public java.lang.Object get() throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
 	public int hashCode() { return 0; }
 }

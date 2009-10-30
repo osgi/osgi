@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.util;
 public class PropertyResourceBundle extends java.util.ResourceBundle {
-	public PropertyResourceBundle(java.io.InputStream var0) throws java.io.IOException { }
-	public java.util.Enumeration getKeys() { return null; }
+	public PropertyResourceBundle(java.io.InputStream var0) throws java.io.IOException { } 
+	public java.util.Enumeration<java.lang.String> getKeys() { return null; }
 	public java.lang.Object handleGetObject(java.lang.String var0) { return null; }
 }
 

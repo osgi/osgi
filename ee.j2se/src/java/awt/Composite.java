@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package java.awt;
-public abstract interface Composite {
-	public abstract java.awt.CompositeContext createContext(java.awt.image.ColorModel var0, java.awt.image.ColorModel var1, java.awt.RenderingHints var2);
+public interface Composite {
+	java.awt.CompositeContext createContext(java.awt.image.ColorModel var0, java.awt.image.ColorModel var1, java.awt.RenderingHints var2);
 }
 

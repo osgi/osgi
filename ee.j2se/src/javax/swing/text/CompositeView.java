@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.text;
 public abstract class CompositeView extends javax.swing.text.View {
-	public CompositeView(javax.swing.text.Element var0) { super((javax.swing.text.Element) null); }
+	public CompositeView(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null); } 
 	protected abstract void childAllocation(int var0, java.awt.Rectangle var1);
 	protected boolean flipEastAndWestAtEnds(int var0, javax.swing.text.Position.Bias var1) { return false; }
 	protected short getBottomInset() { return 0; }

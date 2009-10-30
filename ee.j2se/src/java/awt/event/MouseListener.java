@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package java.awt.event;
-public abstract interface MouseListener extends java.util.EventListener {
-	public abstract void mouseClicked(java.awt.event.MouseEvent var0);
-	public abstract void mouseEntered(java.awt.event.MouseEvent var0);
-	public abstract void mouseExited(java.awt.event.MouseEvent var0);
-	public abstract void mousePressed(java.awt.event.MouseEvent var0);
-	public abstract void mouseReleased(java.awt.event.MouseEvent var0);
+public interface MouseListener extends java.util.EventListener {
+	void mouseClicked(java.awt.event.MouseEvent var0);
+	void mouseEntered(java.awt.event.MouseEvent var0);
+	void mouseExited(java.awt.event.MouseEvent var0);
+	void mousePressed(java.awt.event.MouseEvent var0);
+	void mouseReleased(java.awt.event.MouseEvent var0);
 }
 

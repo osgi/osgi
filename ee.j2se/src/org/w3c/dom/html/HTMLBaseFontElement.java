@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLBaseFontElement extends org.w3c.dom.html.HTMLElement {
-	public abstract java.lang.String getColor();
-	public abstract java.lang.String getFace();
-	public abstract java.lang.String getSize();
-	public abstract void setColor(java.lang.String var0);
-	public abstract void setFace(java.lang.String var0);
-	public abstract void setSize(java.lang.String var0);
+public interface HTMLBaseFontElement extends org.w3c.dom.html.HTMLElement {
+	java.lang.String getColor();
+	java.lang.String getFace();
+	java.lang.String getSize();
+	void setColor(java.lang.String var0);
+	void setFace(java.lang.String var0);
+	void setSize(java.lang.String var0);
 }
 

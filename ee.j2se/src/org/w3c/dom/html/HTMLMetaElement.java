@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLMetaElement extends org.w3c.dom.html.HTMLElement {
-	public abstract java.lang.String getContent();
-	public abstract java.lang.String getHttpEquiv();
-	public abstract java.lang.String getName();
-	public abstract java.lang.String getScheme();
-	public abstract void setContent(java.lang.String var0);
-	public abstract void setHttpEquiv(java.lang.String var0);
-	public abstract void setName(java.lang.String var0);
-	public abstract void setScheme(java.lang.String var0);
+public interface HTMLMetaElement extends org.w3c.dom.html.HTMLElement {
+	java.lang.String getContent();
+	java.lang.String getHttpEquiv();
+	java.lang.String getName();
+	java.lang.String getScheme();
+	void setContent(java.lang.String var0);
+	void setHttpEquiv(java.lang.String var0);
+	void setName(java.lang.String var0);
+	void setScheme(java.lang.String var0);
 }
 

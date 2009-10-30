@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package org.w3c.dom.css;
-public abstract interface CSSCharsetRule extends org.w3c.dom.css.CSSRule {
-	public abstract java.lang.String getEncoding();
-	public abstract void setEncoding(java.lang.String var0);
+public interface CSSCharsetRule extends org.w3c.dom.css.CSSRule {
+	java.lang.String getEncoding();
+	void setEncoding(java.lang.String var0);
 }
 

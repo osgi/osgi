@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package java.awt.event;
-public abstract interface FocusListener extends java.util.EventListener {
-	public abstract void focusGained(java.awt.event.FocusEvent var0);
-	public abstract void focusLost(java.awt.event.FocusEvent var0);
+public interface FocusListener extends java.util.EventListener {
+	void focusGained(java.awt.event.FocusEvent var0);
+	void focusLost(java.awt.event.FocusEvent var0);
 }
 

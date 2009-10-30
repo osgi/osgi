@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,27 @@
  */
 
 package javax.net.ssl;
-public abstract interface SSLSession {
-	public abstract java.lang.String getCipherSuite();
-	public abstract long getCreationTime();
-	public abstract byte[] getId();
-	public abstract long getLastAccessedTime();
-	public abstract java.security.cert.Certificate[] getLocalCertificates();
-	public abstract javax.security.cert.X509Certificate[] getPeerCertificateChain() throws javax.net.ssl.SSLPeerUnverifiedException;
-	public abstract java.security.cert.Certificate[] getPeerCertificates() throws javax.net.ssl.SSLPeerUnverifiedException;
-	public abstract java.lang.String getPeerHost();
-	public abstract java.lang.String getProtocol();
-	public abstract javax.net.ssl.SSLSessionContext getSessionContext();
-	public abstract java.lang.Object getValue(java.lang.String var0);
-	public abstract java.lang.String[] getValueNames();
-	public abstract void invalidate();
-	public abstract void putValue(java.lang.String var0, java.lang.Object var1);
-	public abstract void removeValue(java.lang.String var0);
+public interface SSLSession {
+	int getApplicationBufferSize();
+	java.lang.String getCipherSuite();
+	long getCreationTime();
+	byte[] getId();
+	long getLastAccessedTime();
+	java.security.cert.Certificate[] getLocalCertificates();
+	java.security.Principal getLocalPrincipal();
+	int getPacketBufferSize();
+	javax.security.cert.X509Certificate[] getPeerCertificateChain() throws javax.net.ssl.SSLPeerUnverifiedException;
+	java.security.cert.Certificate[] getPeerCertificates() throws javax.net.ssl.SSLPeerUnverifiedException;
+	java.lang.String getPeerHost();
+	int getPeerPort();
+	java.security.Principal getPeerPrincipal() throws javax.net.ssl.SSLPeerUnverifiedException;
+	java.lang.String getProtocol();
+	javax.net.ssl.SSLSessionContext getSessionContext();
+	java.lang.Object getValue(java.lang.String var0);
+	java.lang.String[] getValueNames();
+	void invalidate();
+	boolean isValid();
+	void putValue(java.lang.String var0, java.lang.Object var1);
+	void removeValue(java.lang.String var0);
 }
 

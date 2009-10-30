@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package javax.swing.event;
 public class EventListenerList implements java.io.Serializable {
-	public EventListenerList() { }
-	public void add(java.lang.Class var0, java.util.EventListener var1) { }
-	public int getListenerCount() { return 0; }
-	public int getListenerCount(java.lang.Class var0) { return 0; }
-	public java.lang.Object[] getListenerList() { return null; }
-	public java.util.EventListener[] getListeners(java.lang.Class var0) { return null; }
-	public void remove(java.lang.Class var0, java.util.EventListener var1) { }
 	protected java.lang.Object[] listenerList;
+	public EventListenerList() { } 
+	public <T extends java.util.EventListener> void add(java.lang.Class<T> var0, T var1) { }
+	public int getListenerCount() { return 0; }
+	public int getListenerCount(java.lang.Class<?> var0) { return 0; }
+	public java.lang.Object[] getListenerList() { return null; }
+	public <T extends java.util.EventListener> T[] getListeners(java.lang.Class<T> var0) { return null; }
+	public <T extends java.util.EventListener> void remove(java.lang.Class<T> var0, T var1) { }
 }
 

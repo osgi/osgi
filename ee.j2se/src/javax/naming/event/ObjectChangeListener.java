@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package javax.naming.event;
-public abstract interface ObjectChangeListener extends javax.naming.event.NamingListener {
-	public abstract void objectChanged(javax.naming.event.NamingEvent var0);
+public interface ObjectChangeListener extends javax.naming.event.NamingListener {
+	void objectChanged(javax.naming.event.NamingEvent var0);
 }
 

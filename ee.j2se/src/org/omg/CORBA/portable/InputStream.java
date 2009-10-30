@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package org.omg.CORBA.portable;
 public abstract class InputStream extends java.io.InputStream {
-	public InputStream() { }
+	public InputStream() { } 
 	public org.omg.CORBA.ORB orb() { return null; }
 	public int read() throws java.io.IOException { return 0; }
 	public org.omg.CORBA.Context read_Context() { return null; }

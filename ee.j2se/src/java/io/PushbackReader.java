@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.io;
 public class PushbackReader extends java.io.FilterReader {
-	public PushbackReader(java.io.Reader var0) { super((java.io.Reader) null); }
-	public PushbackReader(java.io.Reader var0, int var1) { super((java.io.Reader) null); }
+	public PushbackReader(java.io.Reader var0)  { super((java.io.Reader) null); } 
+	public PushbackReader(java.io.Reader var0, int var1)  { super((java.io.Reader) null); } 
 	public void unread(int var0) throws java.io.IOException { }
 	public void unread(char[] var0) throws java.io.IOException { }
 	public void unread(char[] var0, int var1, int var2) throws java.io.IOException { }

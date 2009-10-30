@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package org.xml.sax.helpers;
 public class ParserAdapter implements org.xml.sax.DocumentHandler, org.xml.sax.XMLReader {
-	public ParserAdapter() throws org.xml.sax.SAXException { }
-	public ParserAdapter(org.xml.sax.Parser var0) { }
+	public ParserAdapter() throws org.xml.sax.SAXException { } 
+	public ParserAdapter(org.xml.sax.Parser var0) { } 
 	public void characters(char[] var0, int var1, int var2) throws org.xml.sax.SAXException { }
 	public void endDocument() throws org.xml.sax.SAXException { }
 	public void endElement(java.lang.String var0) throws org.xml.sax.SAXException { }

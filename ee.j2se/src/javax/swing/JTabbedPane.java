@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,30 @@
 
 package javax.swing;
 public class JTabbedPane extends javax.swing.JComponent implements java.io.Serializable, javax.accessibility.Accessible, javax.swing.SwingConstants {
-	public JTabbedPane() { }
-	public JTabbedPane(int var0) { }
-	public JTabbedPane(int var0, int var1) { }
+	protected class AccessibleJTabbedPane extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleSelection, javax.swing.event.ChangeListener {
+		public AccessibleJTabbedPane() { } 
+		public void addAccessibleSelection(int var0) { }
+		public void clearAccessibleSelection() { }
+		public javax.accessibility.Accessible getAccessibleSelection(int var0) { return null; }
+		public int getAccessibleSelectionCount() { return 0; }
+		public boolean isAccessibleChildSelected(int var0) { return false; }
+		public void removeAccessibleSelection(int var0) { }
+		public void selectAllAccessibleSelection() { }
+		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
+	}
+	protected class ModelListener implements java.io.Serializable, javax.swing.event.ChangeListener {
+		protected ModelListener() { } 
+		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
+	}
+	public final static int SCROLL_TAB_LAYOUT = 1;
+	public final static int WRAP_TAB_LAYOUT = 0;
+	protected javax.swing.event.ChangeEvent changeEvent;
+	protected javax.swing.event.ChangeListener changeListener;
+	protected javax.swing.SingleSelectionModel model;
+	protected int tabPlacement;
+	public JTabbedPane() { } 
+	public JTabbedPane(int var0) { } 
+	public JTabbedPane(int var0, int var1) { } 
 	public void addChangeListener(javax.swing.event.ChangeListener var0) { }
 	public void addTab(java.lang.String var0, java.awt.Component var1) { }
 	public void addTab(java.lang.String var0, javax.swing.Icon var1, java.awt.Component var2) { }
@@ -68,26 +89,5 @@ public class JTabbedPane extends javax.swing.JComponent implements java.io.Seria
 	public void setTitleAt(int var0, java.lang.String var1) { }
 	public void setToolTipTextAt(int var0, java.lang.String var1) { }
 	public void setUI(javax.swing.plaf.TabbedPaneUI var0) { }
-	public final static int SCROLL_TAB_LAYOUT = 1;
-	public final static int WRAP_TAB_LAYOUT = 0;
-	protected javax.swing.event.ChangeEvent changeEvent;
-	protected javax.swing.event.ChangeListener changeListener;
-	protected javax.swing.SingleSelectionModel model;
-	protected int tabPlacement;
-	protected class AccessibleJTabbedPane extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleSelection, javax.swing.event.ChangeListener {
-		public AccessibleJTabbedPane() { }
-		public void addAccessibleSelection(int var0) { }
-		public void clearAccessibleSelection() { }
-		public javax.accessibility.Accessible getAccessibleSelection(int var0) { return null; }
-		public int getAccessibleSelectionCount() { return 0; }
-		public boolean isAccessibleChildSelected(int var0) { return false; }
-		public void removeAccessibleSelection(int var0) { }
-		public void selectAllAccessibleSelection() { }
-		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
-	}
-	protected class ModelListener implements java.io.Serializable, javax.swing.event.ChangeListener {
-		protected ModelListener() { }
-		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
-	}
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package org.omg.CORBA;
-public abstract interface IDLTypeOperations extends org.omg.CORBA.IRObjectOperations {
-	public abstract org.omg.CORBA.TypeCode type();
+public interface IDLTypeOperations extends org.omg.CORBA.IRObjectOperations {
+	org.omg.CORBA.TypeCode type();
 }
 

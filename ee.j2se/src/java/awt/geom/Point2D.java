@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,26 @@
 
 package java.awt.geom;
 public abstract class Point2D implements java.lang.Cloneable {
-	protected Point2D() { }
+	public static class Double extends java.awt.geom.Point2D {
+		public double x;
+		public double y;
+		public Double() { } 
+		public Double(double var0, double var1) { } 
+		public double getX() { return 0.0d; }
+		public double getY() { return 0.0d; }
+		public void setLocation(double var0, double var1) { }
+	}
+	public static class Float extends java.awt.geom.Point2D {
+		public float x;
+		public float y;
+		public Float() { } 
+		public Float(float var0, float var1) { } 
+		public double getX() { return 0.0d; }
+		public double getY() { return 0.0d; }
+		public void setLocation(double var0, double var1) { }
+		public void setLocation(float var0, float var1) { }
+	}
+	protected Point2D() { } 
 	public java.lang.Object clone() { return null; }
 	public double distance(double var0, double var1) { return 0.0d; }
 	public static double distance(double var0, double var1, double var2, double var3) { return 0.0d; }
@@ -29,24 +48,5 @@ public abstract class Point2D implements java.lang.Cloneable {
 	public int hashCode() { return 0; }
 	public abstract void setLocation(double var0, double var1);
 	public void setLocation(java.awt.geom.Point2D var0) { }
-	public static class Double extends java.awt.geom.Point2D {
-		public Double() { }
-		public Double(double var0, double var1) { }
-		public double getX() { return 0.0d; }
-		public double getY() { return 0.0d; }
-		public void setLocation(double var0, double var1) { }
-		public double x;
-		public double y;
-	}
-	public static class Float extends java.awt.geom.Point2D {
-		public Float() { }
-		public Float(float var0, float var1) { }
-		public double getX() { return 0.0d; }
-		public double getY() { return 0.0d; }
-		public void setLocation(double var0, double var1) { }
-		public void setLocation(float var0, float var1) { }
-		public float x;
-		public float y;
-	}
 }
 

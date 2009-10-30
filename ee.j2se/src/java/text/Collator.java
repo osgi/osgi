@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,15 @@
  */
 
 package java.text;
-public abstract class Collator implements java.lang.Cloneable, java.util.Comparator {
-	protected Collator() { }
+public abstract class Collator implements java.lang.Cloneable, java.util.Comparator<java.lang.Object> {
+	public final static int CANONICAL_DECOMPOSITION = 1;
+	public final static int FULL_DECOMPOSITION = 2;
+	public final static int IDENTICAL = 3;
+	public final static int NO_DECOMPOSITION = 0;
+	public final static int PRIMARY = 0;
+	public final static int SECONDARY = 1;
+	public final static int TERTIARY = 2;
+	protected Collator() { } 
 	public java.lang.Object clone() { return null; }
 	public int compare(java.lang.Object var0, java.lang.Object var1) { return 0; }
 	public abstract int compare(java.lang.String var0, java.lang.String var1);
@@ -30,12 +37,5 @@ public abstract class Collator implements java.lang.Cloneable, java.util.Compara
 	public abstract int hashCode();
 	public void setDecomposition(int var0) { }
 	public void setStrength(int var0) { }
-	public final static int CANONICAL_DECOMPOSITION = 1;
-	public final static int FULL_DECOMPOSITION = 2;
-	public final static int IDENTICAL = 3;
-	public final static int NO_DECOMPOSITION = 0;
-	public final static int PRIMARY = 0;
-	public final static int SECONDARY = 1;
-	public final static int TERTIARY = 2;
 }
 

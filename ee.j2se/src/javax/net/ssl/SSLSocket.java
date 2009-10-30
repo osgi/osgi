@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package javax.net.ssl;
 public abstract class SSLSocket extends java.net.Socket {
-	protected SSLSocket() { }
-	protected SSLSocket(java.lang.String var0, int var1) throws java.io.IOException { }
-	protected SSLSocket(java.lang.String var0, int var1, java.net.InetAddress var2, int var3) throws java.io.IOException { }
-	protected SSLSocket(java.net.InetAddress var0, int var1) throws java.io.IOException { }
-	protected SSLSocket(java.net.InetAddress var0, int var1, java.net.InetAddress var2, int var3) throws java.io.IOException { }
+	protected SSLSocket() { } 
+	protected SSLSocket(java.lang.String var0, int var1) throws java.io.IOException { } 
+	protected SSLSocket(java.lang.String var0, int var1, java.net.InetAddress var2, int var3) throws java.io.IOException { } 
+	protected SSLSocket(java.net.InetAddress var0, int var1) throws java.io.IOException { } 
+	protected SSLSocket(java.net.InetAddress var0, int var1, java.net.InetAddress var2, int var3) throws java.io.IOException { } 
 	public abstract void addHandshakeCompletedListener(javax.net.ssl.HandshakeCompletedListener var0);
 	public abstract boolean getEnableSessionCreation();
 	public abstract java.lang.String[] getEnabledCipherSuites();

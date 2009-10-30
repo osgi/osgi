@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package javax.print.attribute.standard;
 public class Finishings extends javax.print.attribute.EnumSyntax implements javax.print.attribute.DocAttribute, javax.print.attribute.PrintJobAttribute, javax.print.attribute.PrintRequestAttribute {
-	protected Finishings(int var0) { super(0); }
-	public final java.lang.Class getCategory() { return null; }
-	public final java.lang.String getName() { return null; }
 	public final static javax.print.attribute.standard.Finishings BIND; static { BIND = null; }
 	public final static javax.print.attribute.standard.Finishings COVER; static { COVER = null; }
 	public final static javax.print.attribute.standard.Finishings EDGE_STITCH; static { EDGE_STITCH = null; }
@@ -37,5 +34,8 @@ public class Finishings extends javax.print.attribute.EnumSyntax implements java
 	public final static javax.print.attribute.standard.Finishings STAPLE_DUAL_TOP; static { STAPLE_DUAL_TOP = null; }
 	public final static javax.print.attribute.standard.Finishings STAPLE_TOP_LEFT; static { STAPLE_TOP_LEFT = null; }
 	public final static javax.print.attribute.standard.Finishings STAPLE_TOP_RIGHT; static { STAPLE_TOP_RIGHT = null; }
+	protected Finishings(int var0)  { super(0); } 
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
+	public final java.lang.String getName() { return null; }
 }
 

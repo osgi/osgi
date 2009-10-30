@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,18 @@
  */
 
 package org.xml.sax;
-public abstract interface Attributes {
-	public abstract int getIndex(java.lang.String var0);
-	public abstract int getIndex(java.lang.String var0, java.lang.String var1);
-	public abstract int getLength();
-	public abstract java.lang.String getLocalName(int var0);
-	public abstract java.lang.String getQName(int var0);
-	public abstract java.lang.String getType(int var0);
-	public abstract java.lang.String getType(java.lang.String var0);
-	public abstract java.lang.String getType(java.lang.String var0, java.lang.String var1);
-	public abstract java.lang.String getURI(int var0);
-	public abstract java.lang.String getValue(int var0);
-	public abstract java.lang.String getValue(java.lang.String var0);
-	public abstract java.lang.String getValue(java.lang.String var0, java.lang.String var1);
+public interface Attributes {
+	int getIndex(java.lang.String var0);
+	int getIndex(java.lang.String var0, java.lang.String var1);
+	int getLength();
+	java.lang.String getLocalName(int var0);
+	java.lang.String getQName(int var0);
+	java.lang.String getType(int var0);
+	java.lang.String getType(java.lang.String var0);
+	java.lang.String getType(java.lang.String var0, java.lang.String var1);
+	java.lang.String getURI(int var0);
+	java.lang.String getValue(int var0);
+	java.lang.String getValue(java.lang.String var0);
+	java.lang.String getValue(java.lang.String var0, java.lang.String var1);
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package java.awt.font;
-public abstract interface MultipleMaster {
-	public abstract java.awt.Font deriveMMFont(float[] var0);
-	public abstract java.awt.Font deriveMMFont(float[] var0, float var1, float var2, float var3, float var4);
-	public abstract float[] getDesignAxisDefaults();
-	public abstract java.lang.String[] getDesignAxisNames();
-	public abstract float[] getDesignAxisRanges();
-	public abstract int getNumDesignAxes();
+public interface MultipleMaster {
+	java.awt.Font deriveMMFont(float[] var0);
+	java.awt.Font deriveMMFont(float[] var0, float var1, float var2, float var3, float var4);
+	float[] getDesignAxisDefaults();
+	java.lang.String[] getDesignAxisNames();
+	float[] getDesignAxisRanges();
+	int getNumDesignAxes();
 }
 

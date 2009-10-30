@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package javax.swing;
 public class ButtonGroup implements java.io.Serializable {
-	public ButtonGroup() { }
+	protected java.util.Vector<javax.swing.AbstractButton> buttons;
+	public ButtonGroup() { } 
 	public void add(javax.swing.AbstractButton var0) { }
 	public int getButtonCount() { return 0; }
-	public java.util.Enumeration getElements() { return null; }
+	public java.util.Enumeration<javax.swing.AbstractButton> getElements() { return null; }
 	public javax.swing.ButtonModel getSelection() { return null; }
 	public boolean isSelected(javax.swing.ButtonModel var0) { return false; }
 	public void remove(javax.swing.AbstractButton var0) { }
 	public void setSelected(javax.swing.ButtonModel var0, boolean var1) { }
-	protected java.util.Vector buttons;
 }
 

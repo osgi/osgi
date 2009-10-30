@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
 
 package java.security.cert;
 public abstract class X509CRL extends java.security.cert.CRL implements java.security.cert.X509Extension {
-	protected X509CRL() { super((java.lang.String) null); }
+	protected X509CRL()  { super((java.lang.String) null); } 
 	public abstract byte[] getEncoded() throws java.security.cert.CRLException;
 	public abstract java.security.Principal getIssuerDN();
 	public javax.security.auth.x500.X500Principal getIssuerX500Principal() { return null; }
 	public abstract java.util.Date getNextUpdate();
 	public abstract java.security.cert.X509CRLEntry getRevokedCertificate(java.math.BigInteger var0);
-	public abstract java.util.Set getRevokedCertificates();
+	public java.security.cert.X509CRLEntry getRevokedCertificate(java.security.cert.X509Certificate var0) { return null; }
+	public abstract java.util.Set<? extends java.security.cert.X509CRLEntry> getRevokedCertificates();
 	public abstract java.lang.String getSigAlgName();
 	public abstract java.lang.String getSigAlgOID();
 	public abstract byte[] getSigAlgParams();

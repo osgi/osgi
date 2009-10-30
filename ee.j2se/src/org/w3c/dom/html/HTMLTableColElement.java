@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,18 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLTableColElement extends org.w3c.dom.html.HTMLElement {
-	public abstract java.lang.String getAlign();
-	public abstract java.lang.String getCh();
-	public abstract java.lang.String getChOff();
-	public abstract int getSpan();
-	public abstract java.lang.String getVAlign();
-	public abstract java.lang.String getWidth();
-	public abstract void setAlign(java.lang.String var0);
-	public abstract void setCh(java.lang.String var0);
-	public abstract void setChOff(java.lang.String var0);
-	public abstract void setSpan(int var0);
-	public abstract void setVAlign(java.lang.String var0);
-	public abstract void setWidth(java.lang.String var0);
+public interface HTMLTableColElement extends org.w3c.dom.html.HTMLElement {
+	java.lang.String getAlign();
+	java.lang.String getCh();
+	java.lang.String getChOff();
+	int getSpan();
+	java.lang.String getVAlign();
+	java.lang.String getWidth();
+	void setAlign(java.lang.String var0);
+	void setCh(java.lang.String var0);
+	void setChOff(java.lang.String var0);
+	void setSpan(int var0);
+	void setVAlign(java.lang.String var0);
+	void setWidth(java.lang.String var0);
 }
 

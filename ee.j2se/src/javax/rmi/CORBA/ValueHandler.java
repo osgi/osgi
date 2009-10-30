@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package javax.rmi.CORBA;
-public abstract interface ValueHandler {
-	public abstract java.lang.String getRMIRepositoryID(java.lang.Class var0);
-	public abstract org.omg.SendingContext.RunTime getRunTimeCodeBase();
-	public abstract boolean isCustomMarshaled(java.lang.Class var0);
-	public abstract java.io.Serializable readValue(org.omg.CORBA.portable.InputStream var0, int var1, java.lang.Class var2, java.lang.String var3, org.omg.SendingContext.RunTime var4);
-	public abstract java.io.Serializable writeReplace(java.io.Serializable var0);
-	public abstract void writeValue(org.omg.CORBA.portable.OutputStream var0, java.io.Serializable var1);
+public interface ValueHandler {
+	java.lang.String getRMIRepositoryID(java.lang.Class var0);
+	org.omg.SendingContext.RunTime getRunTimeCodeBase();
+	boolean isCustomMarshaled(java.lang.Class var0);
+	java.io.Serializable readValue(org.omg.CORBA.portable.InputStream var0, int var1, java.lang.Class var2, java.lang.String var3, org.omg.SendingContext.RunTime var4);
+	java.io.Serializable writeReplace(java.io.Serializable var0);
+	void writeValue(org.omg.CORBA.portable.OutputStream var0, java.io.Serializable var1);
 }
 

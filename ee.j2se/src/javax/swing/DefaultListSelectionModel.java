@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package javax.swing;
 public class DefaultListSelectionModel implements java.io.Serializable, java.lang.Cloneable, javax.swing.ListSelectionModel {
-	public DefaultListSelectionModel() { }
+	protected boolean leadAnchorNotificationEnabled;
+	protected javax.swing.event.EventListenerList listenerList;
+	public DefaultListSelectionModel() { } 
 	public void addListSelectionListener(javax.swing.event.ListSelectionListener var0) { }
 	public void addSelectionInterval(int var0, int var1) { }
 	public void clearSelection() { }
@@ -27,7 +29,7 @@ public class DefaultListSelectionModel implements java.io.Serializable, java.lan
 	public int getAnchorSelectionIndex() { return 0; }
 	public int getLeadSelectionIndex() { return 0; }
 	public javax.swing.event.ListSelectionListener[] getListSelectionListeners() { return null; }
-	public java.util.EventListener[] getListeners(java.lang.Class var0) { return null; }
+	public <T extends java.util.EventListener> T[] getListeners(java.lang.Class<T> var0) { return null; }
 	public int getMaxSelectionIndex() { return 0; }
 	public int getMinSelectionIndex() { return 0; }
 	public int getSelectionMode() { return 0; }
@@ -36,6 +38,7 @@ public class DefaultListSelectionModel implements java.io.Serializable, java.lan
 	public boolean isLeadAnchorNotificationEnabled() { return false; }
 	public boolean isSelectedIndex(int var0) { return false; }
 	public boolean isSelectionEmpty() { return false; }
+	public void moveLeadSelectionIndex(int var0) { }
 	public void removeIndexInterval(int var0, int var1) { }
 	public void removeListSelectionListener(javax.swing.event.ListSelectionListener var0) { }
 	public void removeSelectionInterval(int var0, int var1) { }
@@ -45,7 +48,5 @@ public class DefaultListSelectionModel implements java.io.Serializable, java.lan
 	public void setSelectionInterval(int var0, int var1) { }
 	public void setSelectionMode(int var0) { }
 	public void setValueIsAdjusting(boolean var0) { }
-	protected boolean leadAnchorNotificationEnabled;
-	protected javax.swing.event.EventListenerList listenerList;
 }
 

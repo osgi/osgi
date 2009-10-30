@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,10 @@
  */
 
 package java.lang;
-public class Package {
+public class Package implements java.lang.reflect.AnnotatedElement {
+	public <A extends java.lang.annotation.Annotation> A getAnnotation(java.lang.Class<A> var0) { return null; }
+	public java.lang.annotation.Annotation[] getAnnotations() { return null; }
+	public java.lang.annotation.Annotation[] getDeclaredAnnotations() { return null; }
 	public java.lang.String getImplementationTitle() { return null; }
 	public java.lang.String getImplementationVendor() { return null; }
 	public java.lang.String getImplementationVersion() { return null; }
@@ -26,6 +29,7 @@ public class Package {
 	public java.lang.String getSpecificationVendor() { return null; }
 	public java.lang.String getSpecificationVersion() { return null; }
 	public int hashCode() { return 0; }
+	public boolean isAnnotationPresent(java.lang.Class<? extends java.lang.annotation.Annotation> var0) { return false; }
 	public boolean isCompatibleWith(java.lang.String var0) { return false; }
 	public boolean isSealed() { return false; }
 	public boolean isSealed(java.net.URL var0) { return false; }

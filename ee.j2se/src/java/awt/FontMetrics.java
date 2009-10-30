@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package java.awt;
 public abstract class FontMetrics implements java.io.Serializable {
-	protected FontMetrics(java.awt.Font var0) { }
+	protected java.awt.Font font;
+	protected FontMetrics(java.awt.Font var0) { } 
 	public int bytesWidth(byte[] var0, int var1, int var2) { return 0; }
 	public int charWidth(char var0) { return 0; }
 	public int charWidth(int var0) { return 0; }
@@ -42,6 +43,5 @@ public abstract class FontMetrics implements java.io.Serializable {
 	public int[] getWidths() { return null; }
 	public boolean hasUniformLineMetrics() { return false; }
 	public int stringWidth(java.lang.String var0) { return 0; }
-	protected java.awt.Font font;
 }
 

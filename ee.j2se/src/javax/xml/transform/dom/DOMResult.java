@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,17 @@
 
 package javax.xml.transform.dom;
 public class DOMResult implements javax.xml.transform.Result {
-	public DOMResult() { }
-	public DOMResult(org.w3c.dom.Node var0) { }
-	public DOMResult(org.w3c.dom.Node var0, java.lang.String var1) { }
+	public final static java.lang.String FEATURE = "http://javax.xml.transform.dom.DOMResult/feature";
+	public DOMResult() { } 
+	public DOMResult(org.w3c.dom.Node var0) { } 
+	public DOMResult(org.w3c.dom.Node var0, java.lang.String var1) { } 
+	public DOMResult(org.w3c.dom.Node var0, org.w3c.dom.Node var1) { } 
+	public DOMResult(org.w3c.dom.Node var0, org.w3c.dom.Node var1, java.lang.String var2) { } 
+	public org.w3c.dom.Node getNextSibling() { return null; }
 	public org.w3c.dom.Node getNode() { return null; }
 	public java.lang.String getSystemId() { return null; }
+	public void setNextSibling(org.w3c.dom.Node var0) { }
 	public void setNode(org.w3c.dom.Node var0) { }
 	public void setSystemId(java.lang.String var0) { }
-	public final static java.lang.String FEATURE = "http://javax.xml.transform.dom.DOMResult/feature";
 }
 

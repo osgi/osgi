@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,15 @@
 
 package java.io;
 public class StreamTokenizer {
-	/** @deprecated */ public StreamTokenizer(java.io.InputStream var0) { }
-	public StreamTokenizer(java.io.Reader var0) { }
+	public final static int TT_EOF = -1;
+	public final static int TT_EOL = 10;
+	public final static int TT_NUMBER = -2;
+	public final static int TT_WORD = -3;
+	public double nval;
+	public java.lang.String sval;
+	public int ttype;
+	/** @deprecated */ public StreamTokenizer(java.io.InputStream var0) { } 
+	public StreamTokenizer(java.io.Reader var0) { } 
 	public void commentChar(int var0) { }
 	public void eolIsSignificant(boolean var0) { }
 	public int lineno() { return 0; }
@@ -33,12 +40,5 @@ public class StreamTokenizer {
 	public void slashStarComments(boolean var0) { }
 	public void whitespaceChars(int var0, int var1) { }
 	public void wordChars(int var0, int var1) { }
-	public final static int TT_EOF = -1;
-	public final static int TT_EOL = 10;
-	public final static int TT_NUMBER = -2;
-	public final static int TT_WORD = -3;
-	public double nval;
-	public java.lang.String sval;
-	public int ttype;
 }
 

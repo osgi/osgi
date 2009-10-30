@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package javax.xml.transform;
-public abstract interface URIResolver {
-	public abstract javax.xml.transform.Source resolve(java.lang.String var0, java.lang.String var1) throws javax.xml.transform.TransformerException;
+public interface URIResolver {
+	javax.xml.transform.Source resolve(java.lang.String var0, java.lang.String var1) throws javax.xml.transform.TransformerException;
 }
 

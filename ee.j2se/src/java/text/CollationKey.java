@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,7 @@
  */
 
 package java.text;
-public final class CollationKey implements java.lang.Comparable {
-	public int compareTo(java.lang.Object var0) { return 0; }
+public final class CollationKey implements java.lang.Comparable<java.text.CollationKey> {
 	public int compareTo(java.text.CollationKey var0) { return 0; }
 	public java.lang.String getSourceString() { return null; }
 	public int hashCode() { return 0; }

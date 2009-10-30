@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package java.awt.event;
 public class ComponentEvent extends java.awt.AWTEvent {
-	public ComponentEvent(java.awt.Component var0, int var1) { super((java.lang.Object) null, 0); }
-	public java.awt.Component getComponent() { return null; }
 	public final static int COMPONENT_FIRST = 100;
 	public final static int COMPONENT_HIDDEN = 103;
 	public final static int COMPONENT_LAST = 103;
 	public final static int COMPONENT_MOVED = 100;
 	public final static int COMPONENT_RESIZED = 101;
 	public final static int COMPONENT_SHOWN = 102;
+	public ComponentEvent(java.awt.Component var0, int var1)  { super((java.lang.Object) null, 0); } 
+	public java.awt.Component getComponent() { return null; }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package org.w3c.dom.events;
-public abstract interface EventTarget {
-	public abstract void addEventListener(java.lang.String var0, org.w3c.dom.events.EventListener var1, boolean var2);
-	public abstract boolean dispatchEvent(org.w3c.dom.events.Event var0);
-	public abstract void removeEventListener(java.lang.String var0, org.w3c.dom.events.EventListener var1, boolean var2);
+public interface EventTarget {
+	void addEventListener(java.lang.String var0, org.w3c.dom.events.EventListener var1, boolean var2);
+	boolean dispatchEvent(org.w3c.dom.events.Event var0);
+	void removeEventListener(java.lang.String var0, org.w3c.dom.events.EventListener var1, boolean var2);
 }
 

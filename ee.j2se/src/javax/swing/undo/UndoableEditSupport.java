@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,12 @@
 
 package javax.swing.undo;
 public class UndoableEditSupport {
-	public UndoableEditSupport() { }
-	public UndoableEditSupport(java.lang.Object var0) { }
+	protected javax.swing.undo.CompoundEdit compoundEdit;
+	protected java.util.Vector<javax.swing.event.UndoableEditListener> listeners;
+	protected java.lang.Object realSource;
+	protected int updateLevel;
+	public UndoableEditSupport() { } 
+	public UndoableEditSupport(java.lang.Object var0) { } 
 	protected void _postEdit(javax.swing.undo.UndoableEdit var0) { }
 	public void addUndoableEditListener(javax.swing.event.UndoableEditListener var0) { }
 	public void beginUpdate() { }
@@ -27,9 +31,5 @@ public class UndoableEditSupport {
 	public int getUpdateLevel() { return 0; }
 	public void postEdit(javax.swing.undo.UndoableEdit var0) { }
 	public void removeUndoableEditListener(javax.swing.event.UndoableEditListener var0) { }
-	protected javax.swing.undo.CompoundEdit compoundEdit;
-	protected java.util.Vector listeners;
-	protected java.lang.Object realSource;
-	protected int updateLevel;
 }
 

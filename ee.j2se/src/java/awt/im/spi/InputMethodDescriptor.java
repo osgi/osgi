@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package java.awt.im.spi;
-public abstract interface InputMethodDescriptor {
-	public abstract java.awt.im.spi.InputMethod createInputMethod() throws java.lang.Exception;
-	public abstract java.util.Locale[] getAvailableLocales() throws java.awt.AWTException;
-	public abstract java.lang.String getInputMethodDisplayName(java.util.Locale var0, java.util.Locale var1);
-	public abstract java.awt.Image getInputMethodIcon(java.util.Locale var0);
-	public abstract boolean hasDynamicLocaleList();
+public interface InputMethodDescriptor {
+	java.awt.im.spi.InputMethod createInputMethod() throws java.lang.Exception;
+	java.util.Locale[] getAvailableLocales() throws java.awt.AWTException;
+	java.lang.String getInputMethodDisplayName(java.util.Locale var0, java.util.Locale var1);
+	java.awt.Image getInputMethodIcon(java.util.Locale var0);
+	boolean hasDynamicLocaleList();
 }
 

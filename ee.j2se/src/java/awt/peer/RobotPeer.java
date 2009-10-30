@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  */
 
 package java.awt.peer;
-public abstract interface RobotPeer {
-	public abstract int getRGBPixel(int var0, int var1);
-	public abstract int[] getRGBPixels(java.awt.Rectangle var0);
-	public abstract void keyPress(int var0);
-	public abstract void keyRelease(int var0);
-	public abstract void mouseMove(int var0, int var1);
-	public abstract void mousePress(int var0);
-	public abstract void mouseRelease(int var0);
-	public abstract void mouseWheel(int var0);
+public interface RobotPeer {
+	int getRGBPixel(int var0, int var1);
+	int[] getRGBPixels(java.awt.Rectangle var0);
+	void keyPress(int var0);
+	void keyRelease(int var0);
+	void mouseMove(int var0, int var1);
+	void mousePress(int var0);
+	void mouseRelease(int var0);
+	void mouseWheel(int var0);
 }
 

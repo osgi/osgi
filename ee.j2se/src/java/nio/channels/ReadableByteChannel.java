@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package java.nio.channels;
-public abstract interface ReadableByteChannel extends java.nio.channels.Channel {
-	public abstract int read(java.nio.ByteBuffer var0) throws java.io.IOException;
+public interface ReadableByteChannel extends java.nio.channels.Channel {
+	int read(java.nio.ByteBuffer var0) throws java.io.IOException;
 }
 

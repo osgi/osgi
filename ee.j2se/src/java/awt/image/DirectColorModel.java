@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package java.awt.image;
 public class DirectColorModel extends java.awt.image.PackedColorModel {
-	public DirectColorModel(int var0, int var1, int var2, int var3) { super((java.awt.color.ColorSpace) null, 0, (int[]) null, 0, false, 0, 0); }
-	public DirectColorModel(int var0, int var1, int var2, int var3, int var4) { super((java.awt.color.ColorSpace) null, 0, (int[]) null, 0, false, 0, 0); }
-	public DirectColorModel(java.awt.color.ColorSpace var0, int var1, int var2, int var3, int var4, int var5, boolean var6, int var7) { super((java.awt.color.ColorSpace) null, 0, (int[]) null, 0, false, 0, 0); }
+	public DirectColorModel(int var0, int var1, int var2, int var3)  { super((java.awt.color.ColorSpace) null, 0, (int[]) null, 0, false, 0, 0); } 
+	public DirectColorModel(int var0, int var1, int var2, int var3, int var4)  { super((java.awt.color.ColorSpace) null, 0, (int[]) null, 0, false, 0, 0); } 
+	public DirectColorModel(java.awt.color.ColorSpace var0, int var1, int var2, int var3, int var4, int var5, boolean var6, int var7)  { super((java.awt.color.ColorSpace) null, 0, (int[]) null, 0, false, 0, 0); } 
 	public final java.awt.image.ColorModel coerceData(java.awt.image.WritableRaster var0, boolean var1) { return null; }
 	public final java.awt.image.WritableRaster createCompatibleWritableRaster(int var0, int var1) { return null; }
 	public final int getAlpha(int var0) { return 0; }

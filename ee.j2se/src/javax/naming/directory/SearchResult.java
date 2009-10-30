@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package javax.naming.directory;
 public class SearchResult extends javax.naming.Binding {
-	public SearchResult(java.lang.String var0, java.lang.Object var1, javax.naming.directory.Attributes var2) { super((java.lang.String) null, (java.lang.String) null, (java.lang.Object) null, false); }
-	public SearchResult(java.lang.String var0, java.lang.Object var1, javax.naming.directory.Attributes var2, boolean var3) { super((java.lang.String) null, (java.lang.String) null, (java.lang.Object) null, false); }
-	public SearchResult(java.lang.String var0, java.lang.String var1, java.lang.Object var2, javax.naming.directory.Attributes var3) { super((java.lang.String) null, (java.lang.String) null, (java.lang.Object) null, false); }
-	public SearchResult(java.lang.String var0, java.lang.String var1, java.lang.Object var2, javax.naming.directory.Attributes var3, boolean var4) { super((java.lang.String) null, (java.lang.String) null, (java.lang.Object) null, false); }
+	public SearchResult(java.lang.String var0, java.lang.Object var1, javax.naming.directory.Attributes var2)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.Object) null, false); } 
+	public SearchResult(java.lang.String var0, java.lang.Object var1, javax.naming.directory.Attributes var2, boolean var3)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.Object) null, false); } 
+	public SearchResult(java.lang.String var0, java.lang.String var1, java.lang.Object var2, javax.naming.directory.Attributes var3)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.Object) null, false); } 
+	public SearchResult(java.lang.String var0, java.lang.String var1, java.lang.Object var2, javax.naming.directory.Attributes var3, boolean var4)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.Object) null, false); } 
 	public javax.naming.directory.Attributes getAttributes() { return null; }
 	public void setAttributes(javax.naming.directory.Attributes var0) { }
 }

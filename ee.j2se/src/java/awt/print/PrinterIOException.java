@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt.print;
 public class PrinterIOException extends java.awt.print.PrinterException {
-	public PrinterIOException(java.io.IOException var0) { }
+	public PrinterIOException(java.io.IOException var0) { } 
 	public java.io.IOException getIOException() { return null; }
 }
 

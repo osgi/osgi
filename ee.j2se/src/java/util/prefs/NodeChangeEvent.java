@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.util.prefs;
 public class NodeChangeEvent extends java.util.EventObject {
-	public NodeChangeEvent(java.util.prefs.Preferences var0, java.util.prefs.Preferences var1) { super((java.lang.Object) null); }
+	public NodeChangeEvent(java.util.prefs.Preferences var0, java.util.prefs.Preferences var1)  { super((java.lang.Object) null); } 
 	public java.util.prefs.Preferences getChild() { return null; }
 	public java.util.prefs.Preferences getParent() { return null; }
 }

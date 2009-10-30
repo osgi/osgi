@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package java.nio.channels.spi;
 public abstract class AbstractSelector extends java.nio.channels.Selector {
-	protected AbstractSelector(java.nio.channels.spi.SelectorProvider var0) { }
+	protected AbstractSelector(java.nio.channels.spi.SelectorProvider var0) { } 
 	protected final void begin() { }
-	protected final java.util.Set cancelledKeys() { return null; }
+	protected final java.util.Set<java.nio.channels.SelectionKey> cancelledKeys() { return null; }
 	public final void close() throws java.io.IOException { }
 	protected final void deregister(java.nio.channels.spi.AbstractSelectionKey var0) { }
 	protected final void end() { }

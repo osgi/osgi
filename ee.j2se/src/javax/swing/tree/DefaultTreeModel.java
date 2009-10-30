@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,11 @@
 
 package javax.swing.tree;
 public class DefaultTreeModel implements java.io.Serializable, javax.swing.tree.TreeModel {
-	public DefaultTreeModel(javax.swing.tree.TreeNode var0) { }
-	public DefaultTreeModel(javax.swing.tree.TreeNode var0, boolean var1) { }
+	protected boolean asksAllowsChildren;
+	protected javax.swing.event.EventListenerList listenerList;
+	protected javax.swing.tree.TreeNode root;
+	public DefaultTreeModel(javax.swing.tree.TreeNode var0) { } 
+	public DefaultTreeModel(javax.swing.tree.TreeNode var0, boolean var1) { } 
 	public void addTreeModelListener(javax.swing.event.TreeModelListener var0) { }
 	public boolean asksAllowsChildren() { return false; }
 	protected void fireTreeNodesChanged(java.lang.Object var0, java.lang.Object[] var1, int[] var2, java.lang.Object[] var3) { }
@@ -27,7 +30,7 @@ public class DefaultTreeModel implements java.io.Serializable, javax.swing.tree.
 	public java.lang.Object getChild(java.lang.Object var0, int var1) { return null; }
 	public int getChildCount(java.lang.Object var0) { return 0; }
 	public int getIndexOfChild(java.lang.Object var0, java.lang.Object var1) { return 0; }
-	public java.util.EventListener[] getListeners(java.lang.Class var0) { return null; }
+	public <T extends java.util.EventListener> T[] getListeners(java.lang.Class<T> var0) { return null; }
 	public javax.swing.tree.TreeNode[] getPathToRoot(javax.swing.tree.TreeNode var0) { return null; }
 	protected javax.swing.tree.TreeNode[] getPathToRoot(javax.swing.tree.TreeNode var0, int var1) { return null; }
 	public java.lang.Object getRoot() { return null; }
@@ -46,8 +49,5 @@ public class DefaultTreeModel implements java.io.Serializable, javax.swing.tree.
 	public void setAsksAllowsChildren(boolean var0) { }
 	public void setRoot(javax.swing.tree.TreeNode var0) { }
 	public void valueForPathChanged(javax.swing.tree.TreePath var0, java.lang.Object var1) { }
-	protected boolean asksAllowsChildren;
-	protected javax.swing.event.EventListenerList listenerList;
-	protected javax.swing.tree.TreeNode root;
 }
 

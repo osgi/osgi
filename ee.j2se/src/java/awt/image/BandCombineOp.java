@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt.image;
 public class BandCombineOp implements java.awt.image.RasterOp {
-	public BandCombineOp(float[][] var0, java.awt.RenderingHints var1) { }
+	public BandCombineOp(float[][] var0, java.awt.RenderingHints var1) { } 
 	public java.awt.image.WritableRaster createCompatibleDestRaster(java.awt.image.Raster var0) { return null; }
 	public java.awt.image.WritableRaster filter(java.awt.image.Raster var0, java.awt.image.WritableRaster var1) { return null; }
 	public final java.awt.geom.Rectangle2D getBounds2D(java.awt.image.Raster var0) { return null; }

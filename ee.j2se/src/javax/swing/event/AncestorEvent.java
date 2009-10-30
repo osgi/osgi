@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package javax.swing.event;
 public class AncestorEvent extends java.awt.AWTEvent {
-	public AncestorEvent(javax.swing.JComponent var0, int var1, java.awt.Container var2, java.awt.Container var3) { super((java.lang.Object) null, 0); }
-	public java.awt.Container getAncestor() { return null; }
-	public java.awt.Container getAncestorParent() { return null; }
-	public javax.swing.JComponent getComponent() { return null; }
 	public final static int ANCESTOR_ADDED = 1;
 	public final static int ANCESTOR_MOVED = 3;
 	public final static int ANCESTOR_REMOVED = 2;
+	public AncestorEvent(javax.swing.JComponent var0, int var1, java.awt.Container var2, java.awt.Container var3)  { super((java.lang.Object) null, 0); } 
+	public java.awt.Container getAncestor() { return null; }
+	public java.awt.Container getAncestorParent() { return null; }
+	public javax.swing.JComponent getComponent() { return null; }
 }
 

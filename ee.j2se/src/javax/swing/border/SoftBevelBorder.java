@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.swing.border;
 public class SoftBevelBorder extends javax.swing.border.BevelBorder {
-	public SoftBevelBorder(int var0) { super(0, (java.awt.Color) null, (java.awt.Color) null, (java.awt.Color) null, (java.awt.Color) null); }
-	public SoftBevelBorder(int var0, java.awt.Color var1, java.awt.Color var2) { super(0, (java.awt.Color) null, (java.awt.Color) null, (java.awt.Color) null, (java.awt.Color) null); }
-	public SoftBevelBorder(int var0, java.awt.Color var1, java.awt.Color var2, java.awt.Color var3, java.awt.Color var4) { super(0, (java.awt.Color) null, (java.awt.Color) null, (java.awt.Color) null, (java.awt.Color) null); }
+	public SoftBevelBorder(int var0)  { super(0, (java.awt.Color) null, (java.awt.Color) null, (java.awt.Color) null, (java.awt.Color) null); } 
+	public SoftBevelBorder(int var0, java.awt.Color var1, java.awt.Color var2)  { super(0, (java.awt.Color) null, (java.awt.Color) null, (java.awt.Color) null, (java.awt.Color) null); } 
+	public SoftBevelBorder(int var0, java.awt.Color var1, java.awt.Color var2, java.awt.Color var3, java.awt.Color var4)  { super(0, (java.awt.Color) null, (java.awt.Color) null, (java.awt.Color) null, (java.awt.Color) null); } 
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,21 @@
  */
 
 package javax.sound.midi;
-public abstract interface Synthesizer extends javax.sound.midi.MidiDevice {
-	public abstract javax.sound.midi.Instrument[] getAvailableInstruments();
-	public abstract javax.sound.midi.MidiChannel[] getChannels();
-	public abstract javax.sound.midi.Soundbank getDefaultSoundbank();
-	public abstract long getLatency();
-	public abstract javax.sound.midi.Instrument[] getLoadedInstruments();
-	public abstract int getMaxPolyphony();
-	public abstract javax.sound.midi.VoiceStatus[] getVoiceStatus();
-	public abstract boolean isSoundbankSupported(javax.sound.midi.Soundbank var0);
-	public abstract boolean loadAllInstruments(javax.sound.midi.Soundbank var0);
-	public abstract boolean loadInstrument(javax.sound.midi.Instrument var0);
-	public abstract boolean loadInstruments(javax.sound.midi.Soundbank var0, javax.sound.midi.Patch[] var1);
-	public abstract boolean remapInstrument(javax.sound.midi.Instrument var0, javax.sound.midi.Instrument var1);
-	public abstract void unloadAllInstruments(javax.sound.midi.Soundbank var0);
-	public abstract void unloadInstrument(javax.sound.midi.Instrument var0);
-	public abstract void unloadInstruments(javax.sound.midi.Soundbank var0, javax.sound.midi.Patch[] var1);
+public interface Synthesizer extends javax.sound.midi.MidiDevice {
+	javax.sound.midi.Instrument[] getAvailableInstruments();
+	javax.sound.midi.MidiChannel[] getChannels();
+	javax.sound.midi.Soundbank getDefaultSoundbank();
+	long getLatency();
+	javax.sound.midi.Instrument[] getLoadedInstruments();
+	int getMaxPolyphony();
+	javax.sound.midi.VoiceStatus[] getVoiceStatus();
+	boolean isSoundbankSupported(javax.sound.midi.Soundbank var0);
+	boolean loadAllInstruments(javax.sound.midi.Soundbank var0);
+	boolean loadInstrument(javax.sound.midi.Instrument var0);
+	boolean loadInstruments(javax.sound.midi.Soundbank var0, javax.sound.midi.Patch[] var1);
+	boolean remapInstrument(javax.sound.midi.Instrument var0, javax.sound.midi.Instrument var1);
+	void unloadAllInstruments(javax.sound.midi.Soundbank var0);
+	void unloadInstrument(javax.sound.midi.Instrument var0);
+	void unloadInstruments(javax.sound.midi.Soundbank var0, javax.sound.midi.Patch[] var1);
 }
 

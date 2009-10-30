@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package org.omg.CORBA;
 public abstract class SystemException extends java.lang.RuntimeException {
-	protected SystemException(java.lang.String var0, int var1, org.omg.CORBA.CompletionStatus var2) { }
 	public org.omg.CORBA.CompletionStatus completed;
 	public int minor;
+	protected SystemException(java.lang.String var0, int var1, org.omg.CORBA.CompletionStatus var2) { } 
 }
 

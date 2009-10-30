@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package javax.swing.plaf.metal;
 public class MetalScrollBarUI extends javax.swing.plaf.basic.BasicScrollBarUI {
-	public MetalScrollBarUI() { }
-	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	public final static java.lang.String FREE_STANDING_PROP = "JScrollBar.isFreeStanding";
 	protected javax.swing.plaf.metal.MetalBumps bumps;
 	protected javax.swing.plaf.metal.MetalScrollButton decreaseButton;
@@ -26,5 +24,7 @@ public class MetalScrollBarUI extends javax.swing.plaf.basic.BasicScrollBarUI {
 	protected int scrollBarWidth;
 	private static java.awt.Color thumbColor;
 	private static java.awt.Color thumbHighlightColor;
+	public MetalScrollBarUI() { } 
+	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 }
 

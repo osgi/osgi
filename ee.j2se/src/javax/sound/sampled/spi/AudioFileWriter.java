@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.sound.sampled.spi;
 public abstract class AudioFileWriter {
-	public AudioFileWriter() { }
+	public AudioFileWriter() { } 
 	public abstract javax.sound.sampled.AudioFileFormat.Type[] getAudioFileTypes();
 	public abstract javax.sound.sampled.AudioFileFormat.Type[] getAudioFileTypes(javax.sound.sampled.AudioInputStream var0);
 	public boolean isFileTypeSupported(javax.sound.sampled.AudioFileFormat.Type var0) { return false; }

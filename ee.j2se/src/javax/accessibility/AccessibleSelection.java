@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package javax.accessibility;
-public abstract interface AccessibleSelection {
-	public abstract void addAccessibleSelection(int var0);
-	public abstract void clearAccessibleSelection();
-	public abstract javax.accessibility.Accessible getAccessibleSelection(int var0);
-	public abstract int getAccessibleSelectionCount();
-	public abstract boolean isAccessibleChildSelected(int var0);
-	public abstract void removeAccessibleSelection(int var0);
-	public abstract void selectAllAccessibleSelection();
+public interface AccessibleSelection {
+	void addAccessibleSelection(int var0);
+	void clearAccessibleSelection();
+	javax.accessibility.Accessible getAccessibleSelection(int var0);
+	int getAccessibleSelectionCount();
+	boolean isAccessibleChildSelected(int var0);
+	void removeAccessibleSelection(int var0);
+	void selectAllAccessibleSelection();
 }
 

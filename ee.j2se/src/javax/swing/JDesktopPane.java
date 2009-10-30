@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,12 @@
 
 package javax.swing;
 public class JDesktopPane extends javax.swing.JLayeredPane implements javax.accessibility.Accessible {
-	public JDesktopPane() { }
+	protected class AccessibleJDesktopPane extends javax.swing.JComponent.AccessibleJComponent {
+		protected AccessibleJDesktopPane() { } 
+	}
+	public final static int LIVE_DRAG_MODE = 0;
+	public final static int OUTLINE_DRAG_MODE = 1;
+	public JDesktopPane() { } 
 	public javax.swing.JInternalFrame[] getAllFrames() { return null; }
 	public javax.swing.JInternalFrame[] getAllFramesInLayer(int var0) { return null; }
 	public javax.swing.DesktopManager getDesktopManager() { return null; }
@@ -27,10 +32,5 @@ public class JDesktopPane extends javax.swing.JLayeredPane implements javax.acce
 	public void setDragMode(int var0) { }
 	public void setSelectedFrame(javax.swing.JInternalFrame var0) { }
 	public void setUI(javax.swing.plaf.DesktopPaneUI var0) { }
-	public static int LIVE_DRAG_MODE;
-	public static int OUTLINE_DRAG_MODE;
-	protected class AccessibleJDesktopPane extends javax.swing.JComponent.AccessibleJComponent {
-		protected AccessibleJDesktopPane() { }
-	}
 }
 

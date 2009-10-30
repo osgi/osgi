@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.naming.ldap;
 public class InitialLdapContext extends javax.naming.directory.InitialDirContext implements javax.naming.ldap.LdapContext {
-	public InitialLdapContext() throws javax.naming.NamingException { }
-	public InitialLdapContext(java.util.Hashtable var0, javax.naming.ldap.Control[] var1) throws javax.naming.NamingException { }
+	public InitialLdapContext() throws javax.naming.NamingException { } 
+	public InitialLdapContext(java.util.Hashtable<?,?> var0, javax.naming.ldap.Control[] var1) throws javax.naming.NamingException { } 
 	public javax.naming.ldap.ExtendedResponse extendedOperation(javax.naming.ldap.ExtendedRequest var0) throws javax.naming.NamingException { return null; }
 	public javax.naming.ldap.Control[] getConnectControls() throws javax.naming.NamingException { return null; }
 	public javax.naming.ldap.Control[] getRequestControls() throws javax.naming.NamingException { return null; }

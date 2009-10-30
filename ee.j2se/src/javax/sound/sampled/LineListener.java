@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package javax.sound.sampled;
-public abstract interface LineListener extends java.util.EventListener {
-	public abstract void update(javax.sound.sampled.LineEvent var0);
+public interface LineListener extends java.util.EventListener {
+	void update(javax.sound.sampled.LineEvent var0);
 }
 

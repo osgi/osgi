@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package java.lang.reflect;
 public class Proxy implements java.io.Serializable {
-	protected Proxy(java.lang.reflect.InvocationHandler var0) { }
-	public static java.lang.reflect.InvocationHandler getInvocationHandler(java.lang.Object var0) { return null; }
-	public static java.lang.Class getProxyClass(java.lang.ClassLoader var0, java.lang.Class[] var1) { return null; }
-	public static boolean isProxyClass(java.lang.Class var0) { return false; }
-	public static java.lang.Object newProxyInstance(java.lang.ClassLoader var0, java.lang.Class[] var1, java.lang.reflect.InvocationHandler var2) { return null; }
 	protected java.lang.reflect.InvocationHandler h;
+	protected Proxy(java.lang.reflect.InvocationHandler var0) { } 
+	public static java.lang.reflect.InvocationHandler getInvocationHandler(java.lang.Object var0) { return null; }
+	public static java.lang.Class<?> getProxyClass(java.lang.ClassLoader var0, java.lang.Class<?>[] var1) { return null; }
+	public static boolean isProxyClass(java.lang.Class<?> var0) { return false; }
+	public static java.lang.Object newProxyInstance(java.lang.ClassLoader var0, java.lang.Class<?>[] var1, java.lang.reflect.InvocationHandler var2) { return null; }
 }
 

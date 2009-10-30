@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,11 @@
 
 package javax.swing.text;
 public class ParagraphView extends javax.swing.text.FlowView implements javax.swing.text.TabExpander {
-	public ParagraphView(javax.swing.text.Element var0) { super((javax.swing.text.Element) null, 0); }
+	class Row extends javax.swing.text.BoxView {
+		private Row()  { super((javax.swing.text.Element) null, 0); } /* generated constructor to prevent compiler adding default public constructor */
+	}
+	protected int firstLineIndent;
+	public ParagraphView(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null, 0); } 
 	protected void adjustRow(javax.swing.text.ParagraphView.Row var0, int var1, int var2) { }
 	public javax.swing.text.View breakView(int var0, float var1, java.awt.Shape var2) { return null; }
 	protected javax.swing.text.View createRow() { return null; }
@@ -33,9 +37,5 @@ public class ParagraphView extends javax.swing.text.FlowView implements javax.sw
 	protected void setJustification(int var0) { }
 	protected void setLineSpacing(float var0) { }
 	protected void setPropertiesFromAttributes() { }
-	protected int firstLineIndent;
-	class Row extends javax.swing.text.BoxView {
-		private Row() { super((javax.swing.text.Element) null, 0); } /* generated constructor to prevent compiler adding default public constructor */
-	}
 }
 

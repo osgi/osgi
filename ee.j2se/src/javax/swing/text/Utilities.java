@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.text;
 public class Utilities {
-	public Utilities() { }
+	public Utilities() { } 
 	public final static int drawTabbedText(javax.swing.text.Segment var0, int var1, int var2, java.awt.Graphics var3, javax.swing.text.TabExpander var4, int var5) { return 0; }
 	public final static int getBreakLocation(javax.swing.text.Segment var0, java.awt.FontMetrics var1, int var2, int var3, javax.swing.text.TabExpander var4, int var5) { return 0; }
 	public final static int getNextWord(javax.swing.text.JTextComponent var0, int var1) throws javax.swing.text.BadLocationException { return 0; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.plaf.metal;
 public class MetalLookAndFeel extends javax.swing.plaf.basic.BasicLookAndFeel {
-	public MetalLookAndFeel() { }
+	public MetalLookAndFeel() { } 
 	protected void createDefaultTheme() { }
 	public static javax.swing.plaf.ColorUIResource getAcceleratorForeground() { return null; }
 	public static javax.swing.plaf.ColorUIResource getAcceleratorSelectedForeground() { return null; }
@@ -29,6 +29,7 @@ public class MetalLookAndFeel extends javax.swing.plaf.basic.BasicLookAndFeel {
 	public static javax.swing.plaf.ColorUIResource getControlShadow() { return null; }
 	public static javax.swing.plaf.ColorUIResource getControlTextColor() { return null; }
 	public static javax.swing.plaf.FontUIResource getControlTextFont() { return null; }
+	public static javax.swing.plaf.metal.MetalTheme getCurrentTheme() { return null; }
 	public java.lang.String getDescription() { return null; }
 	public static javax.swing.plaf.ColorUIResource getDesktopColor() { return null; }
 	public static javax.swing.plaf.ColorUIResource getFocusColor() { return null; }

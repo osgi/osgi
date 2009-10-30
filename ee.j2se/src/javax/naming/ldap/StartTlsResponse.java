@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package javax.naming.ldap;
 public abstract class StartTlsResponse implements javax.naming.ldap.ExtendedResponse {
-	protected StartTlsResponse() { }
+	public final static java.lang.String OID = "1.3.6.1.4.1.1466.20037";
+	protected StartTlsResponse() { } 
 	public abstract void close() throws java.io.IOException;
 	public byte[] getEncodedValue() { return null; }
 	public java.lang.String getID() { return null; }
@@ -24,6 +25,5 @@ public abstract class StartTlsResponse implements javax.naming.ldap.ExtendedResp
 	public abstract javax.net.ssl.SSLSession negotiate(javax.net.ssl.SSLSocketFactory var0) throws java.io.IOException;
 	public abstract void setEnabledCipherSuites(java.lang.String[] var0);
 	public abstract void setHostnameVerifier(javax.net.ssl.HostnameVerifier var0);
-	public final static java.lang.String OID = "1.3.6.1.4.1.1466.20037";
 }
 

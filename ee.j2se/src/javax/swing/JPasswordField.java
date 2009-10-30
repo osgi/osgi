@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package javax.swing;
 public class JPasswordField extends javax.swing.JTextField {
-	public JPasswordField() { }
-	public JPasswordField(int var0) { }
-	public JPasswordField(java.lang.String var0) { }
-	public JPasswordField(java.lang.String var0, int var1) { }
-	public JPasswordField(javax.swing.text.Document var0, java.lang.String var1, int var2) { }
+	protected class AccessibleJPasswordField extends javax.swing.JTextField.AccessibleJTextField {
+		protected AccessibleJPasswordField() { } 
+	}
+	public JPasswordField() { } 
+	public JPasswordField(int var0) { } 
+	public JPasswordField(java.lang.String var0) { } 
+	public JPasswordField(java.lang.String var0, int var1) { } 
+	public JPasswordField(javax.swing.text.Document var0, java.lang.String var1, int var2) { } 
 	public boolean echoCharIsSet() { return false; }
 	public char getEchoChar() { return '\0'; }
 	public char[] getPassword() { return null; }
 	public void setEchoChar(char var0) { }
-	protected class AccessibleJPasswordField extends javax.swing.JTextField.AccessibleJTextField {
-		protected AccessibleJPasswordField() { }
-	}
 }
 

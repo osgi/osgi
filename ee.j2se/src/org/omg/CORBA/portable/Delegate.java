@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package org.omg.CORBA.portable;
 public abstract class Delegate {
-	public Delegate() { }
+	public Delegate() { } 
 	public abstract org.omg.CORBA.Request create_request(org.omg.CORBA.Object var0, org.omg.CORBA.Context var1, java.lang.String var2, org.omg.CORBA.NVList var3, org.omg.CORBA.NamedValue var4);
 	public abstract org.omg.CORBA.Request create_request(org.omg.CORBA.Object var0, org.omg.CORBA.Context var1, java.lang.String var2, org.omg.CORBA.NVList var3, org.omg.CORBA.NamedValue var4, org.omg.CORBA.ExceptionList var5, org.omg.CORBA.ContextList var6);
 	public abstract org.omg.CORBA.Object duplicate(org.omg.CORBA.Object var0);

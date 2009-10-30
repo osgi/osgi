@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 package javax.swing.text.html.parser;
 public final class ContentModel implements java.io.Serializable {
-	public ContentModel() { }
-	public ContentModel(int var0, java.lang.Object var1, javax.swing.text.html.parser.ContentModel var2) { }
-	public ContentModel(int var0, javax.swing.text.html.parser.ContentModel var1) { }
-	public ContentModel(javax.swing.text.html.parser.Element var0) { }
-	public boolean empty() { return false; }
-	public javax.swing.text.html.parser.Element first() { return null; }
-	public boolean first(java.lang.Object var0) { return false; }
-	public void getElements(java.util.Vector var0) { }
 	public java.lang.Object content;
 	public javax.swing.text.html.parser.ContentModel next;
 	public int type;
+	public ContentModel() { } 
+	public ContentModel(int var0, java.lang.Object var1, javax.swing.text.html.parser.ContentModel var2) { } 
+	public ContentModel(int var0, javax.swing.text.html.parser.ContentModel var1) { } 
+	public ContentModel(javax.swing.text.html.parser.Element var0) { } 
+	public boolean empty() { return false; }
+	public javax.swing.text.html.parser.Element first() { return null; }
+	public boolean first(java.lang.Object var0) { return false; }
+	public void getElements(java.util.Vector<javax.swing.text.html.parser.Element> var0) { }
 }
 

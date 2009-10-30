@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,27 +15,27 @@
  */
 
 package java.awt.image;
-public abstract interface RenderedImage {
-	public abstract java.awt.image.WritableRaster copyData(java.awt.image.WritableRaster var0);
-	public abstract java.awt.image.ColorModel getColorModel();
-	public abstract java.awt.image.Raster getData();
-	public abstract java.awt.image.Raster getData(java.awt.Rectangle var0);
-	public abstract int getHeight();
-	public abstract int getMinTileX();
-	public abstract int getMinTileY();
-	public abstract int getMinX();
-	public abstract int getMinY();
-	public abstract int getNumXTiles();
-	public abstract int getNumYTiles();
-	public abstract java.lang.Object getProperty(java.lang.String var0);
-	public abstract java.lang.String[] getPropertyNames();
-	public abstract java.awt.image.SampleModel getSampleModel();
-	public abstract java.util.Vector getSources();
-	public abstract java.awt.image.Raster getTile(int var0, int var1);
-	public abstract int getTileGridXOffset();
-	public abstract int getTileGridYOffset();
-	public abstract int getTileHeight();
-	public abstract int getTileWidth();
-	public abstract int getWidth();
+public interface RenderedImage {
+	java.awt.image.WritableRaster copyData(java.awt.image.WritableRaster var0);
+	java.awt.image.ColorModel getColorModel();
+	java.awt.image.Raster getData();
+	java.awt.image.Raster getData(java.awt.Rectangle var0);
+	int getHeight();
+	int getMinTileX();
+	int getMinTileY();
+	int getMinX();
+	int getMinY();
+	int getNumXTiles();
+	int getNumYTiles();
+	java.lang.Object getProperty(java.lang.String var0);
+	java.lang.String[] getPropertyNames();
+	java.awt.image.SampleModel getSampleModel();
+	java.util.Vector<java.awt.image.RenderedImage> getSources();
+	java.awt.image.Raster getTile(int var0, int var1);
+	int getTileGridXOffset();
+	int getTileGridYOffset();
+	int getTileHeight();
+	int getTileWidth();
+	int getWidth();
 }
 

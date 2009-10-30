@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package org.w3c.dom.stylesheets;
-public abstract interface MediaList {
-	public abstract void appendMedium(java.lang.String var0);
-	public abstract void deleteMedium(java.lang.String var0);
-	public abstract int getLength();
-	public abstract java.lang.String getMediaText();
-	public abstract java.lang.String item(int var0);
-	public abstract void setMediaText(java.lang.String var0);
+public interface MediaList {
+	void appendMedium(java.lang.String var0);
+	void deleteMedium(java.lang.String var0);
+	int getLength();
+	java.lang.String getMediaText();
+	java.lang.String item(int var0);
+	void setMediaText(java.lang.String var0);
 }
 

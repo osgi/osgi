@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package javax.swing.plaf.multi;
 public class MultiOptionPaneUI extends javax.swing.plaf.OptionPaneUI {
-	public MultiOptionPaneUI() { }
+	protected java.util.Vector uis;
+	public MultiOptionPaneUI() { } 
 	public boolean containsCustomComponents(javax.swing.JOptionPane var0) { return false; }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	public javax.swing.plaf.ComponentUI[] getUIs() { return null; }
 	public void selectInitialValue(javax.swing.JOptionPane var0) { }
-	protected java.util.Vector uis;
 }
 

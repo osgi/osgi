@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package org.omg.CORBA.portable;
 public abstract class ObjectImpl implements org.omg.CORBA.Object {
-	public ObjectImpl() { }
+	public ObjectImpl() { } 
 	public org.omg.CORBA.Request _create_request(org.omg.CORBA.Context var0, java.lang.String var1, org.omg.CORBA.NVList var2, org.omg.CORBA.NamedValue var3) { return null; }
 	public org.omg.CORBA.Request _create_request(org.omg.CORBA.Context var0, java.lang.String var1, org.omg.CORBA.NVList var2, org.omg.CORBA.NamedValue var3, org.omg.CORBA.ExceptionList var4, org.omg.CORBA.ContextList var5) { return null; }
 	public org.omg.CORBA.Object _duplicate() { return null; }

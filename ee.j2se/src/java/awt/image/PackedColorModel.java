@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.awt.image;
 public abstract class PackedColorModel extends java.awt.image.ColorModel {
-	public PackedColorModel(java.awt.color.ColorSpace var0, int var1, int var2, int var3, int var4, int var5, boolean var6, int var7, int var8) { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); }
-	public PackedColorModel(java.awt.color.ColorSpace var0, int var1, int[] var2, int var3, boolean var4, int var5, int var6) { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); }
+	public PackedColorModel(java.awt.color.ColorSpace var0, int var1, int var2, int var3, int var4, int var5, boolean var6, int var7, int var8)  { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); } 
+	public PackedColorModel(java.awt.color.ColorSpace var0, int var1, int[] var2, int var3, boolean var4, int var5, int var6)  { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); } 
 	public final int getMask(int var0) { return 0; }
 	public final int[] getMasks() { return null; }
 }

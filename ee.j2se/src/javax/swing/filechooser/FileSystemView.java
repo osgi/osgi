@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.filechooser;
 public abstract class FileSystemView {
-	public FileSystemView() { }
+	public FileSystemView() { } 
 	public java.io.File createFileObject(java.io.File var0, java.lang.String var1) { return null; }
 	public java.io.File createFileObject(java.lang.String var0) { return null; }
 	protected java.io.File createFileSystemRoot(java.io.File var0) { return null; }

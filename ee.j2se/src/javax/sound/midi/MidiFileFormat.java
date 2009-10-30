@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,20 @@
 
 package javax.sound.midi;
 public class MidiFileFormat {
-	public MidiFileFormat(int var0, float var1, int var2, int var3, long var4) { }
-	public int getByteLength() { return 0; }
-	public float getDivisionType() { return 0.0f; }
-	public long getMicrosecondLength() { return 0l; }
-	public int getResolution() { return 0; }
-	public int getType() { return 0; }
 	public final static int UNKNOWN_LENGTH = -1;
 	protected int byteLength;
 	protected float divisionType;
 	protected long microsecondLength;
 	protected int resolution;
 	protected int type;
+	public MidiFileFormat(int var0, float var1, int var2, int var3, long var4) { } 
+	public MidiFileFormat(int var0, float var1, int var2, int var3, long var4, java.util.Map<java.lang.String,java.lang.Object> var5) { } 
+	public int getByteLength() { return 0; }
+	public float getDivisionType() { return 0.0f; }
+	public long getMicrosecondLength() { return 0l; }
+	public java.lang.Object getProperty(java.lang.String var0) { return null; }
+	public int getResolution() { return 0; }
+	public int getType() { return 0; }
+	public java.util.Map<java.lang.String,java.lang.Object> properties() { return null; }
 }
 

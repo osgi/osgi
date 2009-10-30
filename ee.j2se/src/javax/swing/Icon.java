@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.swing;
-public abstract interface Icon {
-	public abstract int getIconHeight();
-	public abstract int getIconWidth();
-	public abstract void paintIcon(java.awt.Component var0, java.awt.Graphics var1, int var2, int var3);
+public interface Icon {
+	int getIconHeight();
+	int getIconWidth();
+	void paintIcon(java.awt.Component var0, java.awt.Graphics var1, int var2, int var3);
 }
 

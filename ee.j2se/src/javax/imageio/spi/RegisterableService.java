@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package javax.imageio.spi;
-public abstract interface RegisterableService {
-	public abstract void onDeregistration(javax.imageio.spi.ServiceRegistry var0, java.lang.Class var1);
-	public abstract void onRegistration(javax.imageio.spi.ServiceRegistry var0, java.lang.Class var1);
+public interface RegisterableService {
+	void onDeregistration(javax.imageio.spi.ServiceRegistry var0, java.lang.Class<?> var1);
+	void onRegistration(javax.imageio.spi.ServiceRegistry var0, java.lang.Class<?> var1);
 }
 

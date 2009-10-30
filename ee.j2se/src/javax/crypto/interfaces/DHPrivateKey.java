@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,8 @@
  */
 
 package javax.crypto.interfaces;
-public abstract interface DHPrivateKey extends java.security.PrivateKey, javax.crypto.interfaces.DHKey {
-	public abstract java.math.BigInteger getX();
+public interface DHPrivateKey extends java.security.PrivateKey, javax.crypto.interfaces.DHKey {
+	public final static long serialVersionUID = 2211791113380396553l;
+	java.math.BigInteger getX();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package javax.swing;
-public abstract interface ComboBoxEditor {
-	public abstract void addActionListener(java.awt.event.ActionListener var0);
-	public abstract java.awt.Component getEditorComponent();
-	public abstract java.lang.Object getItem();
-	public abstract void removeActionListener(java.awt.event.ActionListener var0);
-	public abstract void selectAll();
-	public abstract void setItem(java.lang.Object var0);
+public interface ComboBoxEditor {
+	void addActionListener(java.awt.event.ActionListener var0);
+	java.awt.Component getEditorComponent();
+	java.lang.Object getItem();
+	void removeActionListener(java.awt.event.ActionListener var0);
+	void selectAll();
+	void setItem(java.lang.Object var0);
 }
 

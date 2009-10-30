@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package javax.net.ssl;
-public abstract interface SSLSessionContext {
-	public abstract java.util.Enumeration getIds();
-	public abstract javax.net.ssl.SSLSession getSession(byte[] var0);
-	public abstract int getSessionCacheSize();
-	public abstract int getSessionTimeout();
-	public abstract void setSessionCacheSize(int var0);
-	public abstract void setSessionTimeout(int var0);
+public interface SSLSessionContext {
+	java.util.Enumeration getIds();
+	javax.net.ssl.SSLSession getSession(byte[] var0);
+	int getSessionCacheSize();
+	int getSessionTimeout();
+	void setSessionCacheSize(int var0);
+	void setSessionTimeout(int var0);
 }
 

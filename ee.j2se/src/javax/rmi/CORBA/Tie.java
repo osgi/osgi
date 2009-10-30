@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package javax.rmi.CORBA;
-public abstract interface Tie extends org.omg.CORBA.portable.InvokeHandler {
-	public abstract void deactivate() throws java.rmi.NoSuchObjectException;
-	public abstract java.rmi.Remote getTarget();
-	public abstract org.omg.CORBA.ORB orb();
-	public abstract void orb(org.omg.CORBA.ORB var0);
-	public abstract void setTarget(java.rmi.Remote var0);
-	public abstract org.omg.CORBA.Object thisObject();
+public interface Tie extends org.omg.CORBA.portable.InvokeHandler {
+	void deactivate() throws java.rmi.NoSuchObjectException;
+	java.rmi.Remote getTarget();
+	org.omg.CORBA.ORB orb();
+	void orb(org.omg.CORBA.ORB var0);
+	void setTarget(java.rmi.Remote var0);
+	org.omg.CORBA.Object thisObject();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.security.cert;
 public class PKIXCertPathBuilderResult extends java.security.cert.PKIXCertPathValidatorResult implements java.security.cert.CertPathBuilderResult {
-	public PKIXCertPathBuilderResult(java.security.cert.CertPath var0, java.security.cert.TrustAnchor var1, java.security.cert.PolicyNode var2, java.security.PublicKey var3) { super((java.security.cert.TrustAnchor) null, (java.security.cert.PolicyNode) null, (java.security.PublicKey) null); }
+	public PKIXCertPathBuilderResult(java.security.cert.CertPath var0, java.security.cert.TrustAnchor var1, java.security.cert.PolicyNode var2, java.security.PublicKey var3)  { super((java.security.cert.TrustAnchor) null, (java.security.cert.PolicyNode) null, (java.security.PublicKey) null); } 
 	public java.security.cert.CertPath getCertPath() { return null; }
 }
 

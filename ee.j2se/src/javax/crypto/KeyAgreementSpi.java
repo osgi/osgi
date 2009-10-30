@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.crypto;
 public abstract class KeyAgreementSpi {
-	public KeyAgreementSpi() { }
+	public KeyAgreementSpi() { } 
 	protected abstract java.security.Key engineDoPhase(java.security.Key var0, boolean var1) throws java.security.InvalidKeyException;
 	protected abstract byte[] engineGenerateSecret();
 	protected abstract javax.crypto.SecretKey engineGenerateSecret(java.lang.String var0) throws java.security.InvalidKeyException, java.security.NoSuchAlgorithmException;

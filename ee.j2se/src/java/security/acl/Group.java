@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package java.security.acl;
-public abstract interface Group extends java.security.Principal {
-	public abstract boolean addMember(java.security.Principal var0);
-	public abstract boolean isMember(java.security.Principal var0);
-	public abstract java.util.Enumeration members();
-	public abstract boolean removeMember(java.security.Principal var0);
+public interface Group extends java.security.Principal {
+	boolean addMember(java.security.Principal var0);
+	boolean isMember(java.security.Principal var0);
+	java.util.Enumeration<? extends java.security.Principal> members();
+	boolean removeMember(java.security.Principal var0);
 }
 

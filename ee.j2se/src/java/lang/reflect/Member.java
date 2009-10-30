@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,12 @@
  */
 
 package java.lang.reflect;
-public abstract interface Member {
-	public abstract java.lang.Class getDeclaringClass();
-	public abstract int getModifiers();
-	public abstract java.lang.String getName();
+public interface Member {
 	public final static int DECLARED = 1;
 	public final static int PUBLIC = 0;
+	java.lang.Class getDeclaringClass();
+	int getModifiers();
+	java.lang.String getName();
+	boolean isSynthetic();
 }
 

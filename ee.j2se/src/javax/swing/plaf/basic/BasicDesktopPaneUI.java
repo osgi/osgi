@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,26 @@
 
 package javax.swing.plaf.basic;
 public class BasicDesktopPaneUI extends javax.swing.plaf.DesktopPaneUI {
-	public BasicDesktopPaneUI() { }
-	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
-	protected void installDefaults() { }
-	protected void installDesktopManager() { }
-	protected void installKeyboardActions() { }
-	protected void registerKeyboardActions() { }
-	protected void uninstallDefaults() { }
-	protected void uninstallDesktopManager() { }
-	protected void uninstallKeyboardActions() { }
-	protected void unregisterKeyboardActions() { }
+	protected class CloseAction extends javax.swing.AbstractAction {
+		protected CloseAction() { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	protected class MaximizeAction extends javax.swing.AbstractAction {
+		protected MaximizeAction() { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	protected class MinimizeAction extends javax.swing.AbstractAction {
+		protected MinimizeAction() { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	protected class NavigateAction extends javax.swing.AbstractAction {
+		protected NavigateAction() { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	protected class OpenAction extends javax.swing.AbstractAction {
+		protected OpenAction() { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
 	/** @deprecated */ protected javax.swing.KeyStroke closeKey;
 	protected javax.swing.JDesktopPane desktop;
 	protected javax.swing.DesktopManager desktopManager;
@@ -33,25 +43,18 @@ public class BasicDesktopPaneUI extends javax.swing.plaf.DesktopPaneUI {
 	/** @deprecated */ protected javax.swing.KeyStroke minimizeKey;
 	/** @deprecated */ protected javax.swing.KeyStroke navigateKey;
 	/** @deprecated */ protected javax.swing.KeyStroke navigateKey2;
-	protected class CloseAction extends javax.swing.AbstractAction {
-		protected CloseAction() { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	protected class MaximizeAction extends javax.swing.AbstractAction {
-		protected MaximizeAction() { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	protected class MinimizeAction extends javax.swing.AbstractAction {
-		protected MinimizeAction() { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	protected class NavigateAction extends javax.swing.AbstractAction {
-		protected NavigateAction() { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	protected class OpenAction extends javax.swing.AbstractAction {
-		protected OpenAction() { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
+	public BasicDesktopPaneUI() { } 
+	protected java.beans.PropertyChangeListener createPropertyChangeListener() { return null; }
+	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
+	protected void installDefaults() { }
+	protected void installDesktopManager() { }
+	protected void installKeyboardActions() { }
+	protected void installListeners() { }
+	protected void registerKeyboardActions() { }
+	protected void uninstallDefaults() { }
+	protected void uninstallDesktopManager() { }
+	protected void uninstallKeyboardActions() { }
+	protected void uninstallListeners() { }
+	protected void unregisterKeyboardActions() { }
 }
 

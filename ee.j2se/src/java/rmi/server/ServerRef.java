@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package java.rmi.server;
-public abstract interface ServerRef extends java.rmi.server.RemoteRef {
-	public abstract java.rmi.server.RemoteStub exportObject(java.rmi.Remote var0, java.lang.Object var1) throws java.rmi.RemoteException;
-	public abstract java.lang.String getClientHost() throws java.rmi.server.ServerNotActiveException;
+public interface ServerRef extends java.rmi.server.RemoteRef {
 	public final static long serialVersionUID = -4557750989390278438l;
+	java.rmi.server.RemoteStub exportObject(java.rmi.Remote var0, java.lang.Object var1) throws java.rmi.RemoteException;
+	java.lang.String getClientHost() throws java.rmi.server.ServerNotActiveException;
 }
 

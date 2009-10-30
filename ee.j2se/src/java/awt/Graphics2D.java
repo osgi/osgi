@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.awt;
 public abstract class Graphics2D extends java.awt.Graphics {
-	protected Graphics2D() { }
-	public abstract void addRenderingHints(java.util.Map var0);
+	protected Graphics2D() { } 
+	public abstract void addRenderingHints(java.util.Map<?,?> var0);
 	public abstract void clip(java.awt.Shape var0);
 	public abstract void draw(java.awt.Shape var0);
 	public abstract void drawGlyphVector(java.awt.font.GlyphVector var0, float var1, float var2);
@@ -45,7 +45,7 @@ public abstract class Graphics2D extends java.awt.Graphics {
 	public abstract void setComposite(java.awt.Composite var0);
 	public abstract void setPaint(java.awt.Paint var0);
 	public abstract void setRenderingHint(java.awt.RenderingHints.Key var0, java.lang.Object var1);
-	public abstract void setRenderingHints(java.util.Map var0);
+	public abstract void setRenderingHints(java.util.Map<?,?> var0);
 	public abstract void setStroke(java.awt.Stroke var0);
 	public abstract void setTransform(java.awt.geom.AffineTransform var0);
 	public abstract void shear(double var0, double var1);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,11 @@
 
 package javax.naming.directory;
 public class SearchControls implements java.io.Serializable {
-	public SearchControls() { }
-	public SearchControls(int var0, long var1, int var2, java.lang.String[] var3, boolean var4, boolean var5) { }
+	public final static int OBJECT_SCOPE = 0;
+	public final static int ONELEVEL_SCOPE = 1;
+	public final static int SUBTREE_SCOPE = 2;
+	public SearchControls() { } 
+	public SearchControls(int var0, long var1, int var2, java.lang.String[] var3, boolean var4, boolean var5) { } 
 	public long getCountLimit() { return 0l; }
 	public boolean getDerefLinkFlag() { return false; }
 	public java.lang.String[] getReturningAttributes() { return null; }
@@ -30,8 +33,5 @@ public class SearchControls implements java.io.Serializable {
 	public void setReturningObjFlag(boolean var0) { }
 	public void setSearchScope(int var0) { }
 	public void setTimeLimit(int var0) { }
-	public final static int OBJECT_SCOPE = 0;
-	public final static int ONELEVEL_SCOPE = 1;
-	public final static int SUBTREE_SCOPE = 2;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,32 +15,32 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLAnchorElement extends org.w3c.dom.html.HTMLElement {
-	public abstract void blur();
-	public abstract void focus();
-	public abstract java.lang.String getAccessKey();
-	public abstract java.lang.String getCharset();
-	public abstract java.lang.String getCoords();
-	public abstract java.lang.String getHref();
-	public abstract java.lang.String getHreflang();
-	public abstract java.lang.String getName();
-	public abstract java.lang.String getRel();
-	public abstract java.lang.String getRev();
-	public abstract java.lang.String getShape();
-	public abstract int getTabIndex();
-	public abstract java.lang.String getTarget();
-	public abstract java.lang.String getType();
-	public abstract void setAccessKey(java.lang.String var0);
-	public abstract void setCharset(java.lang.String var0);
-	public abstract void setCoords(java.lang.String var0);
-	public abstract void setHref(java.lang.String var0);
-	public abstract void setHreflang(java.lang.String var0);
-	public abstract void setName(java.lang.String var0);
-	public abstract void setRel(java.lang.String var0);
-	public abstract void setRev(java.lang.String var0);
-	public abstract void setShape(java.lang.String var0);
-	public abstract void setTabIndex(int var0);
-	public abstract void setTarget(java.lang.String var0);
-	public abstract void setType(java.lang.String var0);
+public interface HTMLAnchorElement extends org.w3c.dom.html.HTMLElement {
+	void blur();
+	void focus();
+	java.lang.String getAccessKey();
+	java.lang.String getCharset();
+	java.lang.String getCoords();
+	java.lang.String getHref();
+	java.lang.String getHreflang();
+	java.lang.String getName();
+	java.lang.String getRel();
+	java.lang.String getRev();
+	java.lang.String getShape();
+	int getTabIndex();
+	java.lang.String getTarget();
+	java.lang.String getType();
+	void setAccessKey(java.lang.String var0);
+	void setCharset(java.lang.String var0);
+	void setCoords(java.lang.String var0);
+	void setHref(java.lang.String var0);
+	void setHreflang(java.lang.String var0);
+	void setName(java.lang.String var0);
+	void setRel(java.lang.String var0);
+	void setRev(java.lang.String var0);
+	void setShape(java.lang.String var0);
+	void setTabIndex(int var0);
+	void setTarget(java.lang.String var0);
+	void setType(java.lang.String var0);
 }
 

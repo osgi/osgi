@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package javax.print.attribute.standard;
 public class MediaName extends javax.print.attribute.standard.Media implements javax.print.attribute.Attribute {
-	protected MediaName(int var0) { super(0); }
 	public final static javax.print.attribute.standard.MediaName ISO_A4_TRANSPARENT; static { ISO_A4_TRANSPARENT = null; }
 	public final static javax.print.attribute.standard.MediaName ISO_A4_WHITE; static { ISO_A4_WHITE = null; }
 	public final static javax.print.attribute.standard.MediaName NA_LETTER_TRANSPARENT; static { NA_LETTER_TRANSPARENT = null; }
 	public final static javax.print.attribute.standard.MediaName NA_LETTER_WHITE; static { NA_LETTER_WHITE = null; }
+	protected MediaName(int var0)  { super(0); } 
 }
 

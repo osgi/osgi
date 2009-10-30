@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package javax.swing;
-public abstract interface ComboBoxModel extends javax.swing.ListModel {
-	public abstract java.lang.Object getSelectedItem();
-	public abstract void setSelectedItem(java.lang.Object var0);
+public interface ComboBoxModel extends javax.swing.ListModel {
+	java.lang.Object getSelectedItem();
+	void setSelectedItem(java.lang.Object var0);
 }
 

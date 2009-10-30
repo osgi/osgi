@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,25 @@
 
 package javax.swing;
 public class JProgressBar extends javax.swing.JComponent implements javax.accessibility.Accessible, javax.swing.SwingConstants {
-	public JProgressBar() { }
-	public JProgressBar(int var0) { }
-	public JProgressBar(int var0, int var1) { }
-	public JProgressBar(int var0, int var1, int var2) { }
-	public JProgressBar(javax.swing.BoundedRangeModel var0) { }
+	protected class AccessibleJProgressBar extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleValue {
+		protected AccessibleJProgressBar() { } 
+		public java.lang.Number getCurrentAccessibleValue() { return null; }
+		public java.lang.Number getMaximumAccessibleValue() { return null; }
+		public java.lang.Number getMinimumAccessibleValue() { return null; }
+		public boolean setCurrentAccessibleValue(java.lang.Number var0) { return false; }
+	}
+	protected javax.swing.event.ChangeEvent changeEvent;
+	protected javax.swing.event.ChangeListener changeListener;
+	protected javax.swing.BoundedRangeModel model;
+	protected int orientation;
+	protected boolean paintBorder;
+	protected boolean paintString;
+	protected java.lang.String progressString;
+	public JProgressBar() { } 
+	public JProgressBar(int var0) { } 
+	public JProgressBar(int var0, int var1) { } 
+	public JProgressBar(int var0, int var1, int var2) { } 
+	public JProgressBar(javax.swing.BoundedRangeModel var0) { } 
 	public void addChangeListener(javax.swing.event.ChangeListener var0) { }
 	protected javax.swing.event.ChangeListener createChangeListener() { return null; }
 	protected void fireStateChanged() { }
@@ -47,19 +61,5 @@ public class JProgressBar extends javax.swing.JComponent implements javax.access
 	public void setStringPainted(boolean var0) { }
 	public void setUI(javax.swing.plaf.ProgressBarUI var0) { }
 	public void setValue(int var0) { }
-	protected javax.swing.event.ChangeEvent changeEvent;
-	protected javax.swing.event.ChangeListener changeListener;
-	protected javax.swing.BoundedRangeModel model;
-	protected int orientation;
-	protected boolean paintBorder;
-	protected boolean paintString;
-	protected java.lang.String progressString;
-	protected class AccessibleJProgressBar extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleValue {
-		protected AccessibleJProgressBar() { }
-		public java.lang.Number getCurrentAccessibleValue() { return null; }
-		public java.lang.Number getMaximumAccessibleValue() { return null; }
-		public java.lang.Number getMinimumAccessibleValue() { return null; }
-		public boolean setCurrentAccessibleValue(java.lang.Number var0) { return false; }
-	}
 }
 

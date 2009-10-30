@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.security;
 public final class KeyPair implements java.io.Serializable {
-	public KeyPair(java.security.PublicKey var0, java.security.PrivateKey var1) { }
+	public KeyPair(java.security.PublicKey var0, java.security.PrivateKey var1) { } 
 	public java.security.PrivateKey getPrivate() { return null; }
 	public java.security.PublicKey getPublic() { return null; }
 }

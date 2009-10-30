@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.plaf.basic;
 public class BasicButtonListener implements java.awt.event.FocusListener, java.awt.event.MouseListener, java.awt.event.MouseMotionListener, java.beans.PropertyChangeListener, javax.swing.event.ChangeListener {
-	public BasicButtonListener(javax.swing.AbstractButton var0) { }
+	public BasicButtonListener(javax.swing.AbstractButton var0) { } 
 	protected void checkOpacity(javax.swing.AbstractButton var0) { }
 	public void focusGained(java.awt.event.FocusEvent var0) { }
 	public void focusLost(java.awt.event.FocusEvent var0) { }

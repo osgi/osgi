@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,23 @@
 
 package java.io;
 public class ObjectOutputStream extends java.io.OutputStream implements java.io.ObjectOutput, java.io.ObjectStreamConstants {
-	protected ObjectOutputStream() throws java.io.IOException { }
-	public ObjectOutputStream(java.io.OutputStream var0) throws java.io.IOException { }
-	protected void annotateClass(java.lang.Class var0) throws java.io.IOException { }
-	protected void annotateProxyClass(java.lang.Class var0) throws java.io.IOException { }
+	public static abstract class PutField {
+		public PutField() { } 
+		public abstract void put(java.lang.String var0, byte var1);
+		public abstract void put(java.lang.String var0, char var1);
+		public abstract void put(java.lang.String var0, double var1);
+		public abstract void put(java.lang.String var0, float var1);
+		public abstract void put(java.lang.String var0, int var1);
+		public abstract void put(java.lang.String var0, long var1);
+		public abstract void put(java.lang.String var0, java.lang.Object var1);
+		public abstract void put(java.lang.String var0, short var1);
+		public abstract void put(java.lang.String var0, boolean var1);
+		/** @deprecated */ public abstract void write(java.io.ObjectOutput var0) throws java.io.IOException;
+	}
+	protected ObjectOutputStream() throws java.io.IOException { } 
+	public ObjectOutputStream(java.io.OutputStream var0) throws java.io.IOException { } 
+	protected void annotateClass(java.lang.Class<?> var0) throws java.io.IOException { }
+	protected void annotateProxyClass(java.lang.Class<?> var0) throws java.io.IOException { }
 	public void defaultWriteObject() throws java.io.IOException { }
 	protected void drain() throws java.io.IOException { }
 	protected boolean enableReplaceObject(boolean var0) { return false; }
@@ -45,18 +58,5 @@ public class ObjectOutputStream extends java.io.OutputStream implements java.io.
 	protected void writeStreamHeader() throws java.io.IOException { }
 	public void writeUTF(java.lang.String var0) throws java.io.IOException { }
 	public void writeUnshared(java.lang.Object var0) throws java.io.IOException { }
-	public static abstract class PutField {
-		public PutField() { }
-		public abstract void put(java.lang.String var0, byte var1);
-		public abstract void put(java.lang.String var0, char var1);
-		public abstract void put(java.lang.String var0, double var1);
-		public abstract void put(java.lang.String var0, float var1);
-		public abstract void put(java.lang.String var0, int var1);
-		public abstract void put(java.lang.String var0, long var1);
-		public abstract void put(java.lang.String var0, java.lang.Object var1);
-		public abstract void put(java.lang.String var0, short var1);
-		public abstract void put(java.lang.String var0, boolean var1);
-		/** @deprecated */ public abstract void write(java.io.ObjectOutput var0) throws java.io.IOException;
-	}
 }
 

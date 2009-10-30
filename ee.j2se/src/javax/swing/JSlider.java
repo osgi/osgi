@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,26 @@
 
 package javax.swing;
 public class JSlider extends javax.swing.JComponent implements javax.accessibility.Accessible, javax.swing.SwingConstants {
-	public JSlider() { }
-	public JSlider(int var0) { }
-	public JSlider(int var0, int var1) { }
-	public JSlider(int var0, int var1, int var2) { }
-	public JSlider(int var0, int var1, int var2, int var3) { }
-	public JSlider(javax.swing.BoundedRangeModel var0) { }
+	protected class AccessibleJSlider extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleValue {
+		protected AccessibleJSlider() { } 
+		public java.lang.Number getCurrentAccessibleValue() { return null; }
+		public java.lang.Number getMaximumAccessibleValue() { return null; }
+		public java.lang.Number getMinimumAccessibleValue() { return null; }
+		public boolean setCurrentAccessibleValue(java.lang.Number var0) { return false; }
+	}
+	protected javax.swing.event.ChangeEvent changeEvent;
+	protected javax.swing.event.ChangeListener changeListener;
+	protected int majorTickSpacing;
+	protected int minorTickSpacing;
+	protected int orientation;
+	protected javax.swing.BoundedRangeModel sliderModel;
+	protected boolean snapToTicks;
+	public JSlider() { } 
+	public JSlider(int var0) { } 
+	public JSlider(int var0, int var1) { } 
+	public JSlider(int var0, int var1, int var2) { } 
+	public JSlider(int var0, int var1, int var2, int var3) { } 
+	public JSlider(javax.swing.BoundedRangeModel var0) { } 
 	public void addChangeListener(javax.swing.event.ChangeListener var0) { }
 	protected javax.swing.event.ChangeListener createChangeListener() { return null; }
 	public java.util.Hashtable createStandardLabels(int var0) { return null; }
@@ -62,19 +76,5 @@ public class JSlider extends javax.swing.JComponent implements javax.accessibili
 	public void setValue(int var0) { }
 	public void setValueIsAdjusting(boolean var0) { }
 	protected void updateLabelUIs() { }
-	protected javax.swing.event.ChangeEvent changeEvent;
-	protected javax.swing.event.ChangeListener changeListener;
-	protected int majorTickSpacing;
-	protected int minorTickSpacing;
-	protected int orientation;
-	protected javax.swing.BoundedRangeModel sliderModel;
-	protected boolean snapToTicks;
-	protected class AccessibleJSlider extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleValue {
-		protected AccessibleJSlider() { }
-		public java.lang.Number getCurrentAccessibleValue() { return null; }
-		public java.lang.Number getMaximumAccessibleValue() { return null; }
-		public java.lang.Number getMinimumAccessibleValue() { return null; }
-		public boolean setCurrentAccessibleValue(java.lang.Number var0) { return false; }
-	}
 }
 

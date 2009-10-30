@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,16 @@
 
 package javax.swing.tree;
 public abstract class AbstractLayoutCache implements javax.swing.tree.RowMapper {
-	public AbstractLayoutCache() { }
+	public static abstract class NodeDimensions {
+		public NodeDimensions() { } 
+		public abstract java.awt.Rectangle getNodeDimensions(java.lang.Object var0, int var1, int var2, boolean var3, java.awt.Rectangle var4);
+	}
+	protected javax.swing.tree.AbstractLayoutCache.NodeDimensions nodeDimensions;
+	protected boolean rootVisible;
+	protected int rowHeight;
+	protected javax.swing.tree.TreeModel treeModel;
+	protected javax.swing.tree.TreeSelectionModel treeSelectionModel;
+	public AbstractLayoutCache() { } 
 	public abstract java.awt.Rectangle getBounds(javax.swing.tree.TreePath var0, java.awt.Rectangle var1);
 	public abstract boolean getExpandedState(javax.swing.tree.TreePath var0);
 	public javax.swing.tree.TreeModel getModel() { return null; }
@@ -32,7 +41,7 @@ public abstract class AbstractLayoutCache implements javax.swing.tree.RowMapper 
 	public int[] getRowsForPaths(javax.swing.tree.TreePath[] var0) { return null; }
 	public javax.swing.tree.TreeSelectionModel getSelectionModel() { return null; }
 	public abstract int getVisibleChildCount(javax.swing.tree.TreePath var0);
-	public abstract java.util.Enumeration getVisiblePathsFrom(javax.swing.tree.TreePath var0);
+	public abstract java.util.Enumeration<javax.swing.tree.TreePath> getVisiblePathsFrom(javax.swing.tree.TreePath var0);
 	public abstract void invalidatePathBounds(javax.swing.tree.TreePath var0);
 	public abstract void invalidateSizes();
 	public abstract boolean isExpanded(javax.swing.tree.TreePath var0);
@@ -48,14 +57,5 @@ public abstract class AbstractLayoutCache implements javax.swing.tree.RowMapper 
 	public abstract void treeNodesInserted(javax.swing.event.TreeModelEvent var0);
 	public abstract void treeNodesRemoved(javax.swing.event.TreeModelEvent var0);
 	public abstract void treeStructureChanged(javax.swing.event.TreeModelEvent var0);
-	protected javax.swing.tree.AbstractLayoutCache.NodeDimensions nodeDimensions;
-	protected boolean rootVisible;
-	protected int rowHeight;
-	protected javax.swing.tree.TreeModel treeModel;
-	protected javax.swing.tree.TreeSelectionModel treeSelectionModel;
-	public static abstract class NodeDimensions {
-		public NodeDimensions() { }
-		public abstract java.awt.Rectangle getNodeDimensions(java.lang.Object var0, int var1, int var2, boolean var3, java.awt.Rectangle var4);
-	}
 }
 

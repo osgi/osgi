@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package java.sql;
-public abstract interface Struct {
-	public abstract java.lang.Object[] getAttributes() throws java.sql.SQLException;
-	public abstract java.lang.Object[] getAttributes(java.util.Map var0) throws java.sql.SQLException;
-	public abstract java.lang.String getSQLTypeName() throws java.sql.SQLException;
+public interface Struct {
+	java.lang.Object[] getAttributes() throws java.sql.SQLException;
+	java.lang.Object[] getAttributes(java.util.Map<java.lang.String,java.lang.Class<?>> var0) throws java.sql.SQLException;
+	java.lang.String getSQLTypeName() throws java.sql.SQLException;
 }
 

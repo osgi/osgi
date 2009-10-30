@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package java.rmi.activation;
-public abstract interface ActivationMonitor extends java.rmi.Remote {
-	public abstract void activeObject(java.rmi.activation.ActivationID var0, java.rmi.MarshalledObject var1) throws java.rmi.RemoteException, java.rmi.activation.UnknownObjectException;
-	public abstract void inactiveGroup(java.rmi.activation.ActivationGroupID var0, long var1) throws java.rmi.RemoteException, java.rmi.activation.UnknownGroupException;
-	public abstract void inactiveObject(java.rmi.activation.ActivationID var0) throws java.rmi.RemoteException, java.rmi.activation.UnknownObjectException;
+public interface ActivationMonitor extends java.rmi.Remote {
+	void activeObject(java.rmi.activation.ActivationID var0, java.rmi.MarshalledObject var1) throws java.rmi.RemoteException, java.rmi.activation.UnknownObjectException;
+	void inactiveGroup(java.rmi.activation.ActivationGroupID var0, long var1) throws java.rmi.RemoteException, java.rmi.activation.UnknownGroupException;
+	void inactiveObject(java.rmi.activation.ActivationID var0) throws java.rmi.RemoteException, java.rmi.activation.UnknownObjectException;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.plaf.metal;
 public abstract class MetalTheme {
-	public MetalTheme() { }
+	public MetalTheme() { } 
 	public void addCustomEntriesToTable(javax.swing.UIDefaults var0) { }
 	public javax.swing.plaf.ColorUIResource getAcceleratorForeground() { return null; }
 	public javax.swing.plaf.ColorUIResource getAcceleratorSelectedForeground() { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,18 @@
 
 package java.awt;
 public class TextArea extends java.awt.TextComponent {
-	public TextArea() { }
-	public TextArea(int var0, int var1) { }
-	public TextArea(java.lang.String var0) { }
-	public TextArea(java.lang.String var0, int var1, int var2) { }
-	public TextArea(java.lang.String var0, int var1, int var2, int var3) { }
+	protected class AccessibleAWTTextArea extends java.awt.TextComponent.AccessibleAWTTextComponent {
+		protected AccessibleAWTTextArea() { } 
+	}
+	public final static int SCROLLBARS_BOTH = 0;
+	public final static int SCROLLBARS_HORIZONTAL_ONLY = 2;
+	public final static int SCROLLBARS_NONE = 3;
+	public final static int SCROLLBARS_VERTICAL_ONLY = 1;
+	public TextArea() { } 
+	public TextArea(int var0, int var1) { } 
+	public TextArea(java.lang.String var0) { } 
+	public TextArea(java.lang.String var0, int var1, int var2) { } 
+	public TextArea(java.lang.String var0, int var1, int var2, int var3) { } 
 	public void append(java.lang.String var0) { }
 	/** @deprecated */ public void appendText(java.lang.String var0) { }
 	public int getColumns() { return 0; }
@@ -36,12 +43,5 @@ public class TextArea extends java.awt.TextComponent {
 	/** @deprecated */ public void replaceText(java.lang.String var0, int var1, int var2) { }
 	public void setColumns(int var0) { }
 	public void setRows(int var0) { }
-	public final static int SCROLLBARS_BOTH = 0;
-	public final static int SCROLLBARS_HORIZONTAL_ONLY = 2;
-	public final static int SCROLLBARS_NONE = 3;
-	public final static int SCROLLBARS_VERTICAL_ONLY = 1;
-	protected class AccessibleAWTTextArea extends java.awt.TextComponent.AccessibleAWTTextComponent {
-		protected AccessibleAWTTextArea() { }
-	}
 }
 

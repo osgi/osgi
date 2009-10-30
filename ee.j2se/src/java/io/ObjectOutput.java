@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package java.io;
-public abstract interface ObjectOutput extends java.io.DataOutput {
-	public abstract void close() throws java.io.IOException;
-	public abstract void flush() throws java.io.IOException;
-	public abstract void writeObject(java.lang.Object var0) throws java.io.IOException;
+public interface ObjectOutput extends java.io.DataOutput {
+	void close() throws java.io.IOException;
+	void flush() throws java.io.IOException;
+	void writeObject(java.lang.Object var0) throws java.io.IOException;
 }
 

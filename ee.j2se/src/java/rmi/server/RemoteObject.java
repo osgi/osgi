@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package java.rmi.server;
 public abstract class RemoteObject implements java.io.Serializable, java.rmi.Remote {
-	protected RemoteObject() { }
-	protected RemoteObject(java.rmi.server.RemoteRef var0) { }
+	protected java.rmi.server.RemoteRef ref;
+	protected RemoteObject() { } 
+	protected RemoteObject(java.rmi.server.RemoteRef var0) { } 
 	public java.rmi.server.RemoteRef getRef() { return null; }
 	public int hashCode() { return 0; }
 	public static java.rmi.Remote toStub(java.rmi.Remote var0) throws java.rmi.NoSuchObjectException { return null; }
-	protected java.rmi.server.RemoteRef ref;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package javax.swing;
-public abstract interface RootPaneContainer {
-	public abstract java.awt.Container getContentPane();
-	public abstract java.awt.Component getGlassPane();
-	public abstract javax.swing.JLayeredPane getLayeredPane();
-	public abstract javax.swing.JRootPane getRootPane();
-	public abstract void setContentPane(java.awt.Container var0);
-	public abstract void setGlassPane(java.awt.Component var0);
-	public abstract void setLayeredPane(javax.swing.JLayeredPane var0);
+public interface RootPaneContainer {
+	java.awt.Container getContentPane();
+	java.awt.Component getGlassPane();
+	javax.swing.JLayeredPane getLayeredPane();
+	javax.swing.JRootPane getRootPane();
+	void setContentPane(java.awt.Container var0);
+	void setGlassPane(java.awt.Component var0);
+	void setLayeredPane(javax.swing.JLayeredPane var0);
 }
 

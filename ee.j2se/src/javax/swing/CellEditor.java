@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package javax.swing;
-public abstract interface CellEditor {
-	public abstract void addCellEditorListener(javax.swing.event.CellEditorListener var0);
-	public abstract void cancelCellEditing();
-	public abstract java.lang.Object getCellEditorValue();
-	public abstract boolean isCellEditable(java.util.EventObject var0);
-	public abstract void removeCellEditorListener(javax.swing.event.CellEditorListener var0);
-	public abstract boolean shouldSelectCell(java.util.EventObject var0);
-	public abstract boolean stopCellEditing();
+public interface CellEditor {
+	void addCellEditorListener(javax.swing.event.CellEditorListener var0);
+	void cancelCellEditing();
+	java.lang.Object getCellEditorValue();
+	boolean isCellEditable(java.util.EventObject var0);
+	void removeCellEditorListener(javax.swing.event.CellEditorListener var0);
+	boolean shouldSelectCell(java.util.EventObject var0);
+	boolean stopCellEditing();
 }
 

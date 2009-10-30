@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package javax.print.attribute.standard;
 public class PrinterStateReason extends javax.print.attribute.EnumSyntax implements javax.print.attribute.Attribute {
-	protected PrinterStateReason(int var0) { super(0); }
-	public final java.lang.Class getCategory() { return null; }
-	public final java.lang.String getName() { return null; }
 	public final static javax.print.attribute.standard.PrinterStateReason CONNECTING_TO_DEVICE; static { CONNECTING_TO_DEVICE = null; }
 	public final static javax.print.attribute.standard.PrinterStateReason COVER_OPEN; static { COVER_OPEN = null; }
 	public final static javax.print.attribute.standard.PrinterStateReason DEVELOPER_EMPTY; static { DEVELOPER_EMPTY = null; }
@@ -52,5 +49,8 @@ public class PrinterStateReason extends javax.print.attribute.EnumSyntax impleme
 	public final static javax.print.attribute.standard.PrinterStateReason TIMED_OUT; static { TIMED_OUT = null; }
 	public final static javax.print.attribute.standard.PrinterStateReason TONER_EMPTY; static { TONER_EMPTY = null; }
 	public final static javax.print.attribute.standard.PrinterStateReason TONER_LOW; static { TONER_LOW = null; }
+	protected PrinterStateReason(int var0)  { super(0); } 
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
+	public final java.lang.String getName() { return null; }
 }
 

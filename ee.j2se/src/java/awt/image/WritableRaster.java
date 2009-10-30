@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package java.awt.image;
 public class WritableRaster extends java.awt.image.Raster {
-	protected WritableRaster(java.awt.image.SampleModel var0, java.awt.Point var1) { super((java.awt.image.SampleModel) null, (java.awt.image.DataBuffer) null, (java.awt.Rectangle) null, (java.awt.Point) null, (java.awt.image.Raster) null); }
-	protected WritableRaster(java.awt.image.SampleModel var0, java.awt.image.DataBuffer var1, java.awt.Point var2) { super((java.awt.image.SampleModel) null, (java.awt.image.DataBuffer) null, (java.awt.Rectangle) null, (java.awt.Point) null, (java.awt.image.Raster) null); }
-	protected WritableRaster(java.awt.image.SampleModel var0, java.awt.image.DataBuffer var1, java.awt.Rectangle var2, java.awt.Point var3, java.awt.image.WritableRaster var4) { super((java.awt.image.SampleModel) null, (java.awt.image.DataBuffer) null, (java.awt.Rectangle) null, (java.awt.Point) null, (java.awt.image.Raster) null); }
+	protected WritableRaster(java.awt.image.SampleModel var0, java.awt.Point var1)  { super((java.awt.image.SampleModel) null, (java.awt.image.DataBuffer) null, (java.awt.Rectangle) null, (java.awt.Point) null, (java.awt.image.Raster) null); } 
+	protected WritableRaster(java.awt.image.SampleModel var0, java.awt.image.DataBuffer var1, java.awt.Point var2)  { super((java.awt.image.SampleModel) null, (java.awt.image.DataBuffer) null, (java.awt.Rectangle) null, (java.awt.Point) null, (java.awt.image.Raster) null); } 
+	protected WritableRaster(java.awt.image.SampleModel var0, java.awt.image.DataBuffer var1, java.awt.Rectangle var2, java.awt.Point var3, java.awt.image.WritableRaster var4)  { super((java.awt.image.SampleModel) null, (java.awt.image.DataBuffer) null, (java.awt.Rectangle) null, (java.awt.Point) null, (java.awt.image.Raster) null); } 
 	public java.awt.image.WritableRaster createWritableChild(int var0, int var1, int var2, int var3, int var4, int var5, int[] var6) { return null; }
 	public java.awt.image.WritableRaster createWritableTranslatedChild(int var0, int var1) { return null; }
 	public java.awt.image.WritableRaster getWritableParent() { return null; }

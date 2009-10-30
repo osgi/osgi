@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,13 @@
 
 package javax.swing;
 public class JApplet extends java.applet.Applet implements javax.accessibility.Accessible, javax.swing.RootPaneContainer {
-	public JApplet() { }
+	protected class AccessibleJApplet extends java.applet.Applet.AccessibleApplet {
+		protected AccessibleJApplet() { } 
+	}
+	protected javax.accessibility.AccessibleContext accessibleContext;
+	protected javax.swing.JRootPane rootPane;
+	protected boolean rootPaneCheckingEnabled;
+	public JApplet() { } 
 	protected javax.swing.JRootPane createRootPane() { return null; }
 	public java.awt.Container getContentPane() { return null; }
 	public java.awt.Component getGlassPane() { return null; }
@@ -30,11 +36,5 @@ public class JApplet extends java.applet.Applet implements javax.accessibility.A
 	public void setLayeredPane(javax.swing.JLayeredPane var0) { }
 	protected void setRootPane(javax.swing.JRootPane var0) { }
 	protected void setRootPaneCheckingEnabled(boolean var0) { }
-	protected javax.accessibility.AccessibleContext accessibleContext;
-	protected javax.swing.JRootPane rootPane;
-	protected boolean rootPaneCheckingEnabled;
-	protected class AccessibleJApplet extends java.applet.Applet.AccessibleApplet {
-		protected AccessibleJApplet() { }
-	}
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package java.beans;
-public abstract interface DesignMode {
-	public abstract boolean isDesignTime();
-	public abstract void setDesignTime(boolean var0);
+public interface DesignMode {
 	public final static java.lang.String PROPERTYNAME = "designTime";
+	boolean isDesignTime();
+	void setDesignTime(boolean var0);
 }
 

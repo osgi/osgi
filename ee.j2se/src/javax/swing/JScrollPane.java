@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,31 @@
 
 package javax.swing;
 public class JScrollPane extends javax.swing.JComponent implements javax.accessibility.Accessible, javax.swing.ScrollPaneConstants {
-	public JScrollPane() { }
-	public JScrollPane(int var0, int var1) { }
-	public JScrollPane(java.awt.Component var0) { }
-	public JScrollPane(java.awt.Component var0, int var1, int var2) { }
+	protected class AccessibleJScrollPane extends javax.swing.JComponent.AccessibleJComponent implements java.beans.PropertyChangeListener, javax.swing.event.ChangeListener {
+		protected javax.swing.JViewport viewPort;
+		public AccessibleJScrollPane() { } 
+		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
+		public void resetViewPort() { }
+		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
+	}
+	protected class ScrollBar extends javax.swing.JScrollBar implements javax.swing.plaf.UIResource {
+		public ScrollBar(int var0) { } 
+	}
+	protected javax.swing.JViewport columnHeader;
+	protected javax.swing.JScrollBar horizontalScrollBar;
+	protected int horizontalScrollBarPolicy;
+	protected java.awt.Component lowerLeft;
+	protected java.awt.Component lowerRight;
+	protected javax.swing.JViewport rowHeader;
+	protected java.awt.Component upperLeft;
+	protected java.awt.Component upperRight;
+	protected javax.swing.JScrollBar verticalScrollBar;
+	protected int verticalScrollBarPolicy;
+	protected javax.swing.JViewport viewport;
+	public JScrollPane() { } 
+	public JScrollPane(int var0, int var1) { } 
+	public JScrollPane(java.awt.Component var0) { } 
+	public JScrollPane(java.awt.Component var0, int var1, int var2) { } 
 	public javax.swing.JScrollBar createHorizontalScrollBar() { return null; }
 	public javax.swing.JScrollBar createVerticalScrollBar() { return null; }
 	protected javax.swing.JViewport createViewport() { return null; }
@@ -49,25 +70,5 @@ public class JScrollPane extends javax.swing.JComponent implements javax.accessi
 	public void setViewportBorder(javax.swing.border.Border var0) { }
 	public void setViewportView(java.awt.Component var0) { }
 	public void setWheelScrollingEnabled(boolean var0) { }
-	protected javax.swing.JViewport columnHeader;
-	protected javax.swing.JScrollBar horizontalScrollBar;
-	protected int horizontalScrollBarPolicy;
-	protected java.awt.Component lowerLeft;
-	protected java.awt.Component lowerRight;
-	protected javax.swing.JViewport rowHeader;
-	protected java.awt.Component upperLeft;
-	protected java.awt.Component upperRight;
-	protected javax.swing.JScrollBar verticalScrollBar;
-	protected int verticalScrollBarPolicy;
-	protected javax.swing.JViewport viewport;
-	protected class AccessibleJScrollPane extends javax.swing.JComponent.AccessibleJComponent implements javax.swing.event.ChangeListener {
-		public AccessibleJScrollPane() { }
-		public void resetViewPort() { }
-		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
-		protected javax.swing.JViewport viewPort;
-	}
-	protected class ScrollBar extends javax.swing.JScrollBar implements javax.swing.plaf.UIResource {
-		public ScrollBar(int var0) { }
-	}
 }
 

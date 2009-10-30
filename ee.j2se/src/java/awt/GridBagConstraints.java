@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package java.awt;
 public class GridBagConstraints implements java.io.Serializable, java.lang.Cloneable {
-	public GridBagConstraints() { }
-	public GridBagConstraints(int var0, int var1, int var2, int var3, double var4, double var5, int var6, int var7, java.awt.Insets var8, int var9, int var10) { }
-	public java.lang.Object clone() { return null; }
 	public final static int BOTH = 1;
 	public final static int CENTER = 10;
 	public final static int EAST = 13;
@@ -53,5 +50,8 @@ public class GridBagConstraints implements java.io.Serializable, java.lang.Clone
 	public int ipady;
 	public double weightx;
 	public double weighty;
+	public GridBagConstraints() { } 
+	public GridBagConstraints(int var0, int var1, int var2, int var3, double var4, double var5, int var6, int var7, java.awt.Insets var8, int var9, int var10) { } 
+	public java.lang.Object clone() { return null; }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.net.ssl;
 public abstract class SSLServerSocketFactory extends javax.net.ServerSocketFactory {
-	protected SSLServerSocketFactory() { }
+	protected SSLServerSocketFactory() { } 
 	public static javax.net.ServerSocketFactory getDefault() { return null; }
 	public abstract java.lang.String[] getDefaultCipherSuites();
 	public abstract java.lang.String[] getSupportedCipherSuites();

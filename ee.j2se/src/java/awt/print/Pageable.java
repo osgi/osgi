@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package java.awt.print;
-public abstract interface Pageable {
-	public abstract int getNumberOfPages();
-	public abstract java.awt.print.PageFormat getPageFormat(int var0);
-	public abstract java.awt.print.Printable getPrintable(int var0);
+public interface Pageable {
 	public final static int UNKNOWN_NUMBER_OF_PAGES = -1;
+	int getNumberOfPages();
+	java.awt.print.PageFormat getPageFormat(int var0);
+	java.awt.print.Printable getPrintable(int var0);
 }
 

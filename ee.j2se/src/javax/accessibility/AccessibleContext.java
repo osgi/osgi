@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,32 @@
 
 package javax.accessibility;
 public abstract class AccessibleContext {
-	public AccessibleContext() { }
+	public final static java.lang.String ACCESSIBLE_ACTION_PROPERTY = "accessibleActionProperty";
+	public final static java.lang.String ACCESSIBLE_ACTIVE_DESCENDANT_PROPERTY = "AccessibleActiveDescendant";
+	public final static java.lang.String ACCESSIBLE_CARET_PROPERTY = "AccessibleCaret";
+	public final static java.lang.String ACCESSIBLE_CHILD_PROPERTY = "AccessibleChild";
+	public final static java.lang.String ACCESSIBLE_COMPONENT_BOUNDS_CHANGED = "accessibleComponentBoundsChanged";
+	public final static java.lang.String ACCESSIBLE_DESCRIPTION_PROPERTY = "AccessibleDescription";
+	public final static java.lang.String ACCESSIBLE_HYPERTEXT_OFFSET = "AccessibleHypertextOffset";
+	public final static java.lang.String ACCESSIBLE_INVALIDATE_CHILDREN = "accessibleInvalidateChildren";
+	public final static java.lang.String ACCESSIBLE_NAME_PROPERTY = "AccessibleName";
+	public final static java.lang.String ACCESSIBLE_SELECTION_PROPERTY = "AccessibleSelection";
+	public final static java.lang.String ACCESSIBLE_STATE_PROPERTY = "AccessibleState";
+	public final static java.lang.String ACCESSIBLE_TABLE_CAPTION_CHANGED = "accessibleTableCaptionChanged";
+	public final static java.lang.String ACCESSIBLE_TABLE_COLUMN_DESCRIPTION_CHANGED = "accessibleTableColumnDescriptionChanged";
+	public final static java.lang.String ACCESSIBLE_TABLE_COLUMN_HEADER_CHANGED = "accessibleTableColumnHeaderChanged";
+	public final static java.lang.String ACCESSIBLE_TABLE_MODEL_CHANGED = "accessibleTableModelChanged";
+	public final static java.lang.String ACCESSIBLE_TABLE_ROW_DESCRIPTION_CHANGED = "accessibleTableRowDescriptionChanged";
+	public final static java.lang.String ACCESSIBLE_TABLE_ROW_HEADER_CHANGED = "accessibleTableRowHeaderChanged";
+	public final static java.lang.String ACCESSIBLE_TABLE_SUMMARY_CHANGED = "accessibleTableSummaryChanged";
+	public final static java.lang.String ACCESSIBLE_TEXT_ATTRIBUTES_CHANGED = "accessibleTextAttributesChanged";
+	public final static java.lang.String ACCESSIBLE_TEXT_PROPERTY = "AccessibleText";
+	public final static java.lang.String ACCESSIBLE_VALUE_PROPERTY = "AccessibleValue";
+	public final static java.lang.String ACCESSIBLE_VISIBLE_DATA_PROPERTY = "AccessibleVisibleData";
+	protected java.lang.String accessibleDescription;
+	protected java.lang.String accessibleName;
+	protected javax.accessibility.Accessible accessibleParent;
+	public AccessibleContext() { } 
 	public void addPropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	public void firePropertyChange(java.lang.String var0, java.lang.Object var1, java.lang.Object var2) { }
 	public javax.accessibility.AccessibleAction getAccessibleAction() { return null; }
@@ -41,27 +66,5 @@ public abstract class AccessibleContext {
 	public void setAccessibleDescription(java.lang.String var0) { }
 	public void setAccessibleName(java.lang.String var0) { }
 	public void setAccessibleParent(javax.accessibility.Accessible var0) { }
-	public final static java.lang.String ACCESSIBLE_ACTION_PROPERTY = "accessibleActionProperty";
-	public final static java.lang.String ACCESSIBLE_ACTIVE_DESCENDANT_PROPERTY = "AccessibleActiveDescendant";
-	public final static java.lang.String ACCESSIBLE_CARET_PROPERTY = "AccessibleCaret";
-	public final static java.lang.String ACCESSIBLE_CHILD_PROPERTY = "AccessibleChild";
-	public final static java.lang.String ACCESSIBLE_DESCRIPTION_PROPERTY = "AccessibleDescription";
-	public final static java.lang.String ACCESSIBLE_HYPERTEXT_OFFSET = "AccessibleHypertextOffset";
-	public final static java.lang.String ACCESSIBLE_NAME_PROPERTY = "AccessibleName";
-	public final static java.lang.String ACCESSIBLE_SELECTION_PROPERTY = "AccessibleSelection";
-	public final static java.lang.String ACCESSIBLE_STATE_PROPERTY = "AccessibleState";
-	public final static java.lang.String ACCESSIBLE_TABLE_CAPTION_CHANGED = "accessibleTableCaptionChanged";
-	public final static java.lang.String ACCESSIBLE_TABLE_COLUMN_DESCRIPTION_CHANGED = "accessibleTableColumnDescriptionChanged";
-	public final static java.lang.String ACCESSIBLE_TABLE_COLUMN_HEADER_CHANGED = "accessibleTableColumnHeaderChanged";
-	public final static java.lang.String ACCESSIBLE_TABLE_MODEL_CHANGED = "accessibleTableModelChanged";
-	public final static java.lang.String ACCESSIBLE_TABLE_ROW_DESCRIPTION_CHANGED = "accessibleTableRowDescriptionChanged";
-	public final static java.lang.String ACCESSIBLE_TABLE_ROW_HEADER_CHANGED = "accessibleTableRowHeaderChanged";
-	public final static java.lang.String ACCESSIBLE_TABLE_SUMMARY_CHANGED = "accessibleTableSummaryChanged";
-	public final static java.lang.String ACCESSIBLE_TEXT_PROPERTY = "AccessibleText";
-	public final static java.lang.String ACCESSIBLE_VALUE_PROPERTY = "AccessibleValue";
-	public final static java.lang.String ACCESSIBLE_VISIBLE_DATA_PROPERTY = "AccessibleVisibleData";
-	protected java.lang.String accessibleDescription;
-	protected java.lang.String accessibleName;
-	protected javax.accessibility.Accessible accessibleParent;
 }
 

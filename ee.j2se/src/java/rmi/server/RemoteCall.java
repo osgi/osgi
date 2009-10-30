@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package java.rmi.server;
-/** @deprecated */ public abstract interface RemoteCall {
-	/** @deprecated */ public abstract void done() throws java.io.IOException;
-	/** @deprecated */ public abstract void executeCall() throws java.lang.Exception;
-	/** @deprecated */ public abstract java.io.ObjectInput getInputStream() throws java.io.IOException;
-	/** @deprecated */ public abstract java.io.ObjectOutput getOutputStream() throws java.io.IOException;
-	/** @deprecated */ public abstract java.io.ObjectOutput getResultStream(boolean var0) throws java.io.IOException;
-	/** @deprecated */ public abstract void releaseInputStream() throws java.io.IOException;
-	/** @deprecated */ public abstract void releaseOutputStream() throws java.io.IOException;
+/** @deprecated */ public interface RemoteCall {
+	/** @deprecated */ void done() throws java.io.IOException;
+	/** @deprecated */ void executeCall() throws java.lang.Exception;
+	/** @deprecated */ java.io.ObjectInput getInputStream() throws java.io.IOException;
+	/** @deprecated */ java.io.ObjectOutput getOutputStream() throws java.io.IOException;
+	/** @deprecated */ java.io.ObjectOutput getResultStream(boolean var0) throws java.io.IOException;
+	/** @deprecated */ void releaseInputStream() throws java.io.IOException;
+	/** @deprecated */ void releaseOutputStream() throws java.io.IOException;
 }
 

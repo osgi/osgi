@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.print;
 public abstract class StreamPrintService implements javax.print.PrintService {
-	protected StreamPrintService(java.io.OutputStream var0) { }
+	protected StreamPrintService(java.io.OutputStream var0) { } 
 	public void dispose() { }
 	public abstract java.lang.String getOutputFormat();
 	public java.io.OutputStream getOutputStream() { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package java.awt.dnd.peer;
-public abstract interface DragSourceContextPeer {
-	public abstract java.awt.Cursor getCursor();
-	public abstract void setCursor(java.awt.Cursor var0);
-	public abstract void startDrag(java.awt.dnd.DragSourceContext var0, java.awt.Cursor var1, java.awt.Image var2, java.awt.Point var3);
-	public abstract void transferablesFlavorsChanged();
+public interface DragSourceContextPeer {
+	java.awt.Cursor getCursor();
+	void setCursor(java.awt.Cursor var0);
+	void startDrag(java.awt.dnd.DragSourceContext var0, java.awt.Cursor var1, java.awt.Image var2, java.awt.Point var3);
+	void transferablesFlavorsChanged();
 }
 

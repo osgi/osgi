@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package org.omg.CORBA;
 public class TCKind {
-	/** @deprecated */ protected TCKind(int var0) { }
-	public static org.omg.CORBA.TCKind from_int(int var0) { return null; }
-	public int value() { return 0; }
 	public final static int _tk_Principal = 13;
 	public final static int _tk_TypeCode = 12;
 	public final static int _tk_abstract_interface = 32;
@@ -85,5 +82,8 @@ public class TCKind {
 	public final static org.omg.CORBA.TCKind tk_void; static { tk_void = null; }
 	public final static org.omg.CORBA.TCKind tk_wchar; static { tk_wchar = null; }
 	public final static org.omg.CORBA.TCKind tk_wstring; static { tk_wstring = null; }
+	/** @deprecated */ protected TCKind(int var0) { } 
+	public static org.omg.CORBA.TCKind from_int(int var0) { return null; }
+	public int value() { return 0; }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.util;
 public class Arrays {
-	public static java.util.List asList(java.lang.Object[] var0) { return null; }
+	public static <T> java.util.List<T> asList(T[] var0) { return null; }
 	public static int binarySearch(byte[] var0, byte var1) { return 0; }
 	public static int binarySearch(char[] var0, char var1) { return 0; }
 	public static int binarySearch(double[] var0, double var1) { return 0; }
@@ -24,8 +24,11 @@ public class Arrays {
 	public static int binarySearch(int[] var0, int var1) { return 0; }
 	public static int binarySearch(long[] var0, long var1) { return 0; }
 	public static int binarySearch(java.lang.Object[] var0, java.lang.Object var1) { return 0; }
-	public static int binarySearch(java.lang.Object[] var0, java.lang.Object var1, java.util.Comparator var2) { return 0; }
+	public static <T> int binarySearch(T[] var0, T var1, java.util.Comparator<? super T> var2) { return 0; }
 	public static int binarySearch(short[] var0, short var1) { return 0; }
+	public static boolean deepEquals(java.lang.Object[] var0, java.lang.Object[] var1) { return false; }
+	public static int deepHashCode(java.lang.Object[] var0) { return 0; }
+	public static java.lang.String deepToString(java.lang.Object[] var0) { return null; }
 	public static boolean equals(byte[] var0, byte[] var1) { return false; }
 	public static boolean equals(char[] var0, char[] var1) { return false; }
 	public static boolean equals(double[] var0, double[] var1) { return false; }
@@ -53,6 +56,15 @@ public class Arrays {
 	public static void fill(short[] var0, short var1) { }
 	public static void fill(boolean[] var0, int var1, int var2, boolean var3) { }
 	public static void fill(boolean[] var0, boolean var1) { }
+	public static int hashCode(byte[] var0) { return 0; }
+	public static int hashCode(char[] var0) { return 0; }
+	public static int hashCode(double[] var0) { return 0; }
+	public static int hashCode(float[] var0) { return 0; }
+	public static int hashCode(int[] var0) { return 0; }
+	public static int hashCode(long[] var0) { return 0; }
+	public static int hashCode(java.lang.Object[] var0) { return 0; }
+	public static int hashCode(short[] var0) { return 0; }
+	public static int hashCode(boolean[] var0) { return 0; }
 	public static void sort(byte[] var0) { }
 	public static void sort(byte[] var0, int var1, int var2) { }
 	public static void sort(char[] var0) { }
@@ -67,10 +79,19 @@ public class Arrays {
 	public static void sort(long[] var0, int var1, int var2) { }
 	public static void sort(java.lang.Object[] var0) { }
 	public static void sort(java.lang.Object[] var0, int var1, int var2) { }
-	public static void sort(java.lang.Object[] var0, int var1, int var2, java.util.Comparator var3) { }
-	public static void sort(java.lang.Object[] var0, java.util.Comparator var1) { }
+	public static <T> void sort(T[] var0, int var1, int var2, java.util.Comparator<? super T> var3) { }
+	public static <T> void sort(T[] var0, java.util.Comparator<? super T> var1) { }
 	public static void sort(short[] var0) { }
 	public static void sort(short[] var0, int var1, int var2) { }
+	public static java.lang.String toString(byte[] var0) { return null; }
+	public static java.lang.String toString(char[] var0) { return null; }
+	public static java.lang.String toString(double[] var0) { return null; }
+	public static java.lang.String toString(float[] var0) { return null; }
+	public static java.lang.String toString(int[] var0) { return null; }
+	public static java.lang.String toString(long[] var0) { return null; }
+	public static java.lang.String toString(java.lang.Object[] var0) { return null; }
+	public static java.lang.String toString(short[] var0) { return null; }
+	public static java.lang.String toString(boolean[] var0) { return null; }
 	private Arrays() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

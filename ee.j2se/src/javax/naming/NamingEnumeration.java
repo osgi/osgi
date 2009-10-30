@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.naming;
-public abstract interface NamingEnumeration extends java.util.Enumeration {
-	public abstract void close() throws javax.naming.NamingException;
-	public abstract boolean hasMore() throws javax.naming.NamingException;
-	public abstract java.lang.Object next() throws javax.naming.NamingException;
+public interface NamingEnumeration<T> extends java.util.Enumeration<T> {
+	void close() throws javax.naming.NamingException;
+	boolean hasMore() throws javax.naming.NamingException;
+	T next() throws javax.naming.NamingException;
 }
 

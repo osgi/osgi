@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.xml.transform.sax;
-public abstract interface TemplatesHandler extends org.xml.sax.ContentHandler {
-	public abstract java.lang.String getSystemId();
-	public abstract javax.xml.transform.Templates getTemplates();
-	public abstract void setSystemId(java.lang.String var0);
+public interface TemplatesHandler extends org.xml.sax.ContentHandler {
+	java.lang.String getSystemId();
+	javax.xml.transform.Templates getTemplates();
+	void setSystemId(java.lang.String var0);
 }
 

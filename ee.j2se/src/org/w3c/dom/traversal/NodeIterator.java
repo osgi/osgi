@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package org.w3c.dom.traversal;
-public abstract interface NodeIterator {
-	public abstract void detach();
-	public abstract boolean getExpandEntityReferences();
-	public abstract org.w3c.dom.traversal.NodeFilter getFilter();
-	public abstract org.w3c.dom.Node getRoot();
-	public abstract int getWhatToShow();
-	public abstract org.w3c.dom.Node nextNode();
-	public abstract org.w3c.dom.Node previousNode();
+public interface NodeIterator {
+	void detach();
+	boolean getExpandEntityReferences();
+	org.w3c.dom.traversal.NodeFilter getFilter();
+	org.w3c.dom.Node getRoot();
+	int getWhatToShow();
+	org.w3c.dom.Node nextNode();
+	org.w3c.dom.Node previousNode();
 }
 

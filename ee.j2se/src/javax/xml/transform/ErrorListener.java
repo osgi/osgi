@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.xml.transform;
-public abstract interface ErrorListener {
-	public abstract void error(javax.xml.transform.TransformerException var0) throws javax.xml.transform.TransformerException;
-	public abstract void fatalError(javax.xml.transform.TransformerException var0) throws javax.xml.transform.TransformerException;
-	public abstract void warning(javax.xml.transform.TransformerException var0) throws javax.xml.transform.TransformerException;
+public interface ErrorListener {
+	void error(javax.xml.transform.TransformerException var0) throws javax.xml.transform.TransformerException;
+	void fatalError(javax.xml.transform.TransformerException var0) throws javax.xml.transform.TransformerException;
+	void warning(javax.xml.transform.TransformerException var0) throws javax.xml.transform.TransformerException;
 }
 

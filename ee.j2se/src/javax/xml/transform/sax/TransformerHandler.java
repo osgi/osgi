@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package javax.xml.transform.sax;
-public abstract interface TransformerHandler extends org.xml.sax.ContentHandler, org.xml.sax.DTDHandler, org.xml.sax.ext.LexicalHandler {
-	public abstract java.lang.String getSystemId();
-	public abstract javax.xml.transform.Transformer getTransformer();
-	public abstract void setResult(javax.xml.transform.Result var0);
-	public abstract void setSystemId(java.lang.String var0);
+public interface TransformerHandler extends org.xml.sax.ContentHandler, org.xml.sax.DTDHandler, org.xml.sax.ext.LexicalHandler {
+	java.lang.String getSystemId();
+	javax.xml.transform.Transformer getTransformer();
+	void setResult(javax.xml.transform.Result var0);
+	void setSystemId(java.lang.String var0);
 }
 

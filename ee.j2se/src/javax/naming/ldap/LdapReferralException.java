@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.naming.ldap;
 public abstract class LdapReferralException extends javax.naming.ReferralException {
-	protected LdapReferralException() { }
-	protected LdapReferralException(java.lang.String var0) { }
-	public abstract javax.naming.Context getReferralContext(java.util.Hashtable var0, javax.naming.ldap.Control[] var1) throws javax.naming.NamingException;
+	protected LdapReferralException() { } 
+	protected LdapReferralException(java.lang.String var0) { } 
+	public abstract javax.naming.Context getReferralContext(java.util.Hashtable<?,?> var0, javax.naming.ldap.Control[] var1) throws javax.naming.NamingException;
 }
 

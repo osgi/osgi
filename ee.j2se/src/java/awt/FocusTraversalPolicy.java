@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt;
 public abstract class FocusTraversalPolicy {
-	public FocusTraversalPolicy() { }
+	public FocusTraversalPolicy() { } 
 	public abstract java.awt.Component getComponentAfter(java.awt.Container var0, java.awt.Component var1);
 	public abstract java.awt.Component getComponentBefore(java.awt.Container var0, java.awt.Component var1);
 	public abstract java.awt.Component getDefaultComponent(java.awt.Container var0);

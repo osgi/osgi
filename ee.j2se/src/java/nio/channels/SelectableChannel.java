@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.nio.channels;
 public abstract class SelectableChannel extends java.nio.channels.spi.AbstractInterruptibleChannel implements java.nio.channels.Channel {
-	protected SelectableChannel() { }
+	protected SelectableChannel() { } 
 	public abstract java.lang.Object blockingLock();
 	public abstract java.nio.channels.SelectableChannel configureBlocking(boolean var0) throws java.io.IOException;
 	public abstract boolean isBlocking();

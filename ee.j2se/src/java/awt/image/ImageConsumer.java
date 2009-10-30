@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,7 @@
  */
 
 package java.awt.image;
-public abstract interface ImageConsumer {
-	public abstract void imageComplete(int var0);
-	public abstract void setColorModel(java.awt.image.ColorModel var0);
-	public abstract void setDimensions(int var0, int var1);
-	public abstract void setHints(int var0);
-	public abstract void setPixels(int var0, int var1, int var2, int var3, java.awt.image.ColorModel var4, byte[] var5, int var6, int var7);
-	public abstract void setPixels(int var0, int var1, int var2, int var3, java.awt.image.ColorModel var4, int[] var5, int var6, int var7);
-	public abstract void setProperties(java.util.Hashtable var0);
+public interface ImageConsumer {
 	public final static int COMPLETESCANLINES = 4;
 	public final static int IMAGEABORTED = 4;
 	public final static int IMAGEERROR = 1;
@@ -32,5 +25,12 @@ public abstract interface ImageConsumer {
 	public final static int SINGLEPASS = 8;
 	public final static int STATICIMAGEDONE = 3;
 	public final static int TOPDOWNLEFTRIGHT = 2;
+	void imageComplete(int var0);
+	void setColorModel(java.awt.image.ColorModel var0);
+	void setDimensions(int var0, int var1);
+	void setHints(int var0);
+	void setPixels(int var0, int var1, int var2, int var3, java.awt.image.ColorModel var4, byte[] var5, int var6, int var7);
+	void setPixels(int var0, int var1, int var2, int var3, java.awt.image.ColorModel var4, int[] var5, int var6, int var7);
+	void setProperties(java.util.Hashtable<?,?> var0);
 }
 

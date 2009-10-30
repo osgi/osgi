@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,31 +15,8 @@
  */
 
 package java.util.jar;
-public class Attributes implements java.lang.Cloneable, java.util.Map {
-	public Attributes() { }
-	public Attributes(int var0) { }
-	public Attributes(java.util.jar.Attributes var0) { }
-	public void clear() { }
-	public java.lang.Object clone() { return null; }
-	public boolean containsKey(java.lang.Object var0) { return false; }
-	public boolean containsValue(java.lang.Object var0) { return false; }
-	public java.util.Set entrySet() { return null; }
-	public java.lang.Object get(java.lang.Object var0) { return null; }
-	public java.lang.String getValue(java.lang.String var0) { return null; }
-	public java.lang.String getValue(java.util.jar.Attributes.Name var0) { return null; }
-	public int hashCode() { return 0; }
-	public boolean isEmpty() { return false; }
-	public java.util.Set keySet() { return null; }
-	public java.lang.Object put(java.lang.Object var0, java.lang.Object var1) { return null; }
-	public void putAll(java.util.Map var0) { }
-	public java.lang.String putValue(java.lang.String var0, java.lang.String var1) { return null; }
-	public java.lang.Object remove(java.lang.Object var0) { return null; }
-	public int size() { return 0; }
-	public java.util.Collection values() { return null; }
-	protected java.util.Map map;
+public class Attributes implements java.lang.Cloneable, java.util.Map<java.lang.Object,java.lang.Object> {
 	public static class Name {
-		public Name(java.lang.String var0) { }
-		public int hashCode() { return 0; }
 		public final static java.util.jar.Attributes.Name CLASS_PATH; static { CLASS_PATH = null; }
 		public final static java.util.jar.Attributes.Name CONTENT_TYPE; static { CONTENT_TYPE = null; }
 		public final static java.util.jar.Attributes.Name EXTENSION_INSTALLATION; static { EXTENSION_INSTALLATION = null; }
@@ -57,6 +34,29 @@ public class Attributes implements java.lang.Cloneable, java.util.Map {
 		public final static java.util.jar.Attributes.Name SPECIFICATION_TITLE; static { SPECIFICATION_TITLE = null; }
 		public final static java.util.jar.Attributes.Name SPECIFICATION_VENDOR; static { SPECIFICATION_VENDOR = null; }
 		public final static java.util.jar.Attributes.Name SPECIFICATION_VERSION; static { SPECIFICATION_VERSION = null; }
+		public Name(java.lang.String var0) { } 
+		public int hashCode() { return 0; }
 	}
+	protected java.util.Map<java.lang.Object,java.lang.Object> map;
+	public Attributes() { } 
+	public Attributes(int var0) { } 
+	public Attributes(java.util.jar.Attributes var0) { } 
+	public void clear() { }
+	public java.lang.Object clone() { return null; }
+	public boolean containsKey(java.lang.Object var0) { return false; }
+	public boolean containsValue(java.lang.Object var0) { return false; }
+	public java.util.Set<java.util.Map.Entry<java.lang.Object,java.lang.Object>> entrySet() { return null; }
+	public java.lang.Object get(java.lang.Object var0) { return null; }
+	public java.lang.String getValue(java.lang.String var0) { return null; }
+	public java.lang.String getValue(java.util.jar.Attributes.Name var0) { return null; }
+	public int hashCode() { return 0; }
+	public boolean isEmpty() { return false; }
+	public java.util.Set<java.lang.Object> keySet() { return null; }
+	public java.lang.Object put(java.lang.Object var0, java.lang.Object var1) { return null; }
+	public void putAll(java.util.Map<?,?> var0) { }
+	public java.lang.String putValue(java.lang.String var0, java.lang.String var1) { return null; }
+	public java.lang.Object remove(java.lang.Object var0) { return null; }
+	public int size() { return 0; }
+	public java.util.Collection<java.lang.Object> values() { return null; }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.rmi.server;
 public final class UID implements java.io.Serializable {
-	public UID() { }
-	public UID(short var0) { }
+	public UID() { } 
+	public UID(short var0) { } 
 	public int hashCode() { return 0; }
 	public static java.rmi.server.UID read(java.io.DataInput var0) throws java.io.IOException { return null; }
 	public void write(java.io.DataOutput var0) throws java.io.IOException { }

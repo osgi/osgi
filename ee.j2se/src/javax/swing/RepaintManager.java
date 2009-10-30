@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing;
 public class RepaintManager {
-	public RepaintManager() { }
+	public RepaintManager() { } 
 	public void addDirtyRegion(javax.swing.JComponent var0, int var1, int var2, int var3, int var4) { }
 	public void addInvalidComponent(javax.swing.JComponent var0) { }
 	public static javax.swing.RepaintManager currentManager(java.awt.Component var0) { return null; }

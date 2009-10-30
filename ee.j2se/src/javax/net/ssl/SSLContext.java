@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package javax.net.ssl;
 public class SSLContext {
-	protected SSLContext(javax.net.ssl.SSLContextSpi var0, java.security.Provider var1, java.lang.String var2) { }
+	protected SSLContext(javax.net.ssl.SSLContextSpi var0, java.security.Provider var1, java.lang.String var2) { } 
+	public final javax.net.ssl.SSLEngine createSSLEngine() { return null; }
+	public final javax.net.ssl.SSLEngine createSSLEngine(java.lang.String var0, int var1) { return null; }
 	public final javax.net.ssl.SSLSessionContext getClientSessionContext() { return null; }
 	public static javax.net.ssl.SSLContext getInstance(java.lang.String var0) throws java.security.NoSuchAlgorithmException { return null; }
 	public static javax.net.ssl.SSLContext getInstance(java.lang.String var0, java.lang.String var1) throws java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException { return null; }

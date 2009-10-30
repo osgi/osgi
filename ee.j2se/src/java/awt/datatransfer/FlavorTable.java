@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package java.awt.datatransfer;
-public abstract interface FlavorTable extends java.awt.datatransfer.FlavorMap {
-	public abstract java.util.List getFlavorsForNative(java.lang.String var0);
-	public abstract java.util.List getNativesForFlavor(java.awt.datatransfer.DataFlavor var0);
+public interface FlavorTable extends java.awt.datatransfer.FlavorMap {
+	java.util.List<java.awt.datatransfer.DataFlavor> getFlavorsForNative(java.lang.String var0);
+	java.util.List<java.lang.String> getNativesForFlavor(java.awt.datatransfer.DataFlavor var0);
 }
 

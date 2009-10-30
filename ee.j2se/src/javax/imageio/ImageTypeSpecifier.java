@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,10 @@
 
 package javax.imageio;
 public class ImageTypeSpecifier {
-	public ImageTypeSpecifier(java.awt.image.ColorModel var0, java.awt.image.SampleModel var1) { }
-	public ImageTypeSpecifier(java.awt.image.RenderedImage var0) { }
+	protected java.awt.image.ColorModel colorModel;
+	protected java.awt.image.SampleModel sampleModel;
+	public ImageTypeSpecifier(java.awt.image.ColorModel var0, java.awt.image.SampleModel var1) { } 
+	public ImageTypeSpecifier(java.awt.image.RenderedImage var0) { } 
 	public static javax.imageio.ImageTypeSpecifier createBanded(java.awt.color.ColorSpace var0, int[] var1, int[] var2, int var3, boolean var4, boolean var5) { return null; }
 	public java.awt.image.BufferedImage createBufferedImage(int var0, int var1) { return null; }
 	public static javax.imageio.ImageTypeSpecifier createFromBufferedImageType(int var0) { return null; }
@@ -34,7 +36,6 @@ public class ImageTypeSpecifier {
 	public int getNumComponents() { return 0; }
 	public java.awt.image.SampleModel getSampleModel() { return null; }
 	public java.awt.image.SampleModel getSampleModel(int var0, int var1) { return null; }
-	protected java.awt.image.ColorModel colorModel;
-	protected java.awt.image.SampleModel sampleModel;
+	public int hashCode() { return 0; }
 }
 

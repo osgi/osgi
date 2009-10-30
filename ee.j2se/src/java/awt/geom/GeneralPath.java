@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,12 @@
 
 package java.awt.geom;
 public final class GeneralPath implements java.awt.Shape, java.lang.Cloneable {
-	public GeneralPath() { }
-	public GeneralPath(int var0) { }
-	public GeneralPath(int var0, int var1) { }
-	public GeneralPath(java.awt.Shape var0) { }
+	public final static int WIND_EVEN_ODD = 0;
+	public final static int WIND_NON_ZERO = 1;
+	public GeneralPath() { } 
+	public GeneralPath(int var0) { } 
+	public GeneralPath(int var0, int var1) { } 
+	public GeneralPath(java.awt.Shape var0) { } 
 	public void append(java.awt.Shape var0, boolean var1) { }
 	public void append(java.awt.geom.PathIterator var0, boolean var1) { }
 	public java.lang.Object clone() { return null; }
@@ -44,7 +46,5 @@ public final class GeneralPath implements java.awt.Shape, java.lang.Cloneable {
 	public void reset() { }
 	public void setWindingRule(int var0) { }
 	public void transform(java.awt.geom.AffineTransform var0) { }
-	public final static int WIND_EVEN_ODD = 0;
-	public final static int WIND_NON_ZERO = 1;
 }
 

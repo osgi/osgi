@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.print.attribute;
 public abstract class URISyntax implements java.io.Serializable, java.lang.Cloneable {
-	protected URISyntax(java.net.URI var0) { }
+	protected URISyntax(java.net.URI var0) { } 
 	public java.net.URI getURI() { return null; }
 	public int hashCode() { return 0; }
 }

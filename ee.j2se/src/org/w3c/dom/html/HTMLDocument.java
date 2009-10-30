@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,25 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLDocument extends org.w3c.dom.Document {
-	public abstract void close();
-	public abstract org.w3c.dom.html.HTMLCollection getAnchors();
-	public abstract org.w3c.dom.html.HTMLCollection getApplets();
-	public abstract org.w3c.dom.html.HTMLElement getBody();
-	public abstract java.lang.String getCookie();
-	public abstract java.lang.String getDomain();
-	public abstract org.w3c.dom.NodeList getElementsByName(java.lang.String var0);
-	public abstract org.w3c.dom.html.HTMLCollection getForms();
-	public abstract org.w3c.dom.html.HTMLCollection getImages();
-	public abstract org.w3c.dom.html.HTMLCollection getLinks();
-	public abstract java.lang.String getReferrer();
-	public abstract java.lang.String getTitle();
-	public abstract java.lang.String getURL();
-	public abstract void open();
-	public abstract void setBody(org.w3c.dom.html.HTMLElement var0);
-	public abstract void setCookie(java.lang.String var0);
-	public abstract void setTitle(java.lang.String var0);
-	public abstract void write(java.lang.String var0);
-	public abstract void writeln(java.lang.String var0);
+public interface HTMLDocument extends org.w3c.dom.Document {
+	void close();
+	org.w3c.dom.html.HTMLCollection getAnchors();
+	org.w3c.dom.html.HTMLCollection getApplets();
+	org.w3c.dom.html.HTMLElement getBody();
+	java.lang.String getCookie();
+	java.lang.String getDomain();
+	org.w3c.dom.NodeList getElementsByName(java.lang.String var0);
+	org.w3c.dom.html.HTMLCollection getForms();
+	org.w3c.dom.html.HTMLCollection getImages();
+	org.w3c.dom.html.HTMLCollection getLinks();
+	java.lang.String getReferrer();
+	java.lang.String getTitle();
+	java.lang.String getURL();
+	void open();
+	void setBody(org.w3c.dom.html.HTMLElement var0);
+	void setCookie(java.lang.String var0);
+	void setTitle(java.lang.String var0);
+	void write(java.lang.String var0);
+	void writeln(java.lang.String var0);
 }
 

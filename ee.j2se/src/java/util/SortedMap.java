@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package java.util;
-public abstract interface SortedMap extends java.util.Map {
-	public abstract java.util.Comparator comparator();
-	public abstract java.lang.Object firstKey();
-	public abstract java.util.SortedMap headMap(java.lang.Object var0);
-	public abstract java.lang.Object lastKey();
-	public abstract java.util.SortedMap subMap(java.lang.Object var0, java.lang.Object var1);
-	public abstract java.util.SortedMap tailMap(java.lang.Object var0);
+public interface SortedMap<K,V> extends java.util.Map<K,V> {
+	java.util.Comparator<? super K> comparator();
+	K firstKey();
+	java.util.SortedMap<K,V> headMap(K var0);
+	K lastKey();
+	java.util.SortedMap<K,V> subMap(K var0, K var1);
+	java.util.SortedMap<K,V> tailMap(K var0);
 }
 

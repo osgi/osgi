@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,20 @@
  */
 
 package org.xml.sax;
-public abstract interface XMLReader {
-	public abstract org.xml.sax.ContentHandler getContentHandler();
-	public abstract org.xml.sax.DTDHandler getDTDHandler();
-	public abstract org.xml.sax.EntityResolver getEntityResolver();
-	public abstract org.xml.sax.ErrorHandler getErrorHandler();
-	public abstract boolean getFeature(java.lang.String var0) throws org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException;
-	public abstract java.lang.Object getProperty(java.lang.String var0) throws org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException;
-	public abstract void parse(java.lang.String var0) throws java.io.IOException, org.xml.sax.SAXException;
-	public abstract void parse(org.xml.sax.InputSource var0) throws java.io.IOException, org.xml.sax.SAXException;
-	public abstract void setContentHandler(org.xml.sax.ContentHandler var0);
-	public abstract void setDTDHandler(org.xml.sax.DTDHandler var0);
-	public abstract void setEntityResolver(org.xml.sax.EntityResolver var0);
-	public abstract void setErrorHandler(org.xml.sax.ErrorHandler var0);
-	public abstract void setFeature(java.lang.String var0, boolean var1) throws org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException;
-	public abstract void setProperty(java.lang.String var0, java.lang.Object var1) throws org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException;
+public interface XMLReader {
+	org.xml.sax.ContentHandler getContentHandler();
+	org.xml.sax.DTDHandler getDTDHandler();
+	org.xml.sax.EntityResolver getEntityResolver();
+	org.xml.sax.ErrorHandler getErrorHandler();
+	boolean getFeature(java.lang.String var0) throws org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException;
+	java.lang.Object getProperty(java.lang.String var0) throws org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException;
+	void parse(java.lang.String var0) throws java.io.IOException, org.xml.sax.SAXException;
+	void parse(org.xml.sax.InputSource var0) throws java.io.IOException, org.xml.sax.SAXException;
+	void setContentHandler(org.xml.sax.ContentHandler var0);
+	void setDTDHandler(org.xml.sax.DTDHandler var0);
+	void setEntityResolver(org.xml.sax.EntityResolver var0);
+	void setErrorHandler(org.xml.sax.ErrorHandler var0);
+	void setFeature(java.lang.String var0, boolean var1) throws org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException;
+	void setProperty(java.lang.String var0, java.lang.Object var1) throws org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException;
 }
 

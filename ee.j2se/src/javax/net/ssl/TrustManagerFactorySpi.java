@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.net.ssl;
 public abstract class TrustManagerFactorySpi {
-	public TrustManagerFactorySpi() { }
+	public TrustManagerFactorySpi() { } 
 	protected abstract javax.net.ssl.TrustManager[] engineGetTrustManagers();
 	protected abstract void engineInit(java.security.KeyStore var0) throws java.security.KeyStoreException;
 	protected abstract void engineInit(javax.net.ssl.ManagerFactoryParameters var0) throws java.security.InvalidAlgorithmParameterException;

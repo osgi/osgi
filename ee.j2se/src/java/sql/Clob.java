@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,17 @@
  */
 
 package java.sql;
-public abstract interface Clob {
-	public abstract java.io.InputStream getAsciiStream() throws java.sql.SQLException;
-	public abstract java.io.Reader getCharacterStream() throws java.sql.SQLException;
-	public abstract java.lang.String getSubString(long var0, int var1) throws java.sql.SQLException;
-	public abstract long length() throws java.sql.SQLException;
-	public abstract long position(java.lang.String var0, long var1) throws java.sql.SQLException;
-	public abstract long position(java.sql.Clob var0, long var1) throws java.sql.SQLException;
-	public abstract java.io.OutputStream setAsciiStream(long var0) throws java.sql.SQLException;
-	public abstract java.io.Writer setCharacterStream(long var0) throws java.sql.SQLException;
-	public abstract int setString(long var0, java.lang.String var1) throws java.sql.SQLException;
-	public abstract int setString(long var0, java.lang.String var1, int var2, int var3) throws java.sql.SQLException;
-	public abstract void truncate(long var0) throws java.sql.SQLException;
+public interface Clob {
+	java.io.InputStream getAsciiStream() throws java.sql.SQLException;
+	java.io.Reader getCharacterStream() throws java.sql.SQLException;
+	java.lang.String getSubString(long var0, int var1) throws java.sql.SQLException;
+	long length() throws java.sql.SQLException;
+	long position(java.lang.String var0, long var1) throws java.sql.SQLException;
+	long position(java.sql.Clob var0, long var1) throws java.sql.SQLException;
+	java.io.OutputStream setAsciiStream(long var0) throws java.sql.SQLException;
+	java.io.Writer setCharacterStream(long var0) throws java.sql.SQLException;
+	int setString(long var0, java.lang.String var1) throws java.sql.SQLException;
+	int setString(long var0, java.lang.String var1, int var2, int var3) throws java.sql.SQLException;
+	void truncate(long var0) throws java.sql.SQLException;
 }
 

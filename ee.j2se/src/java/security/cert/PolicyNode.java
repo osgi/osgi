@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package java.security.cert;
-public abstract interface PolicyNode {
-	public abstract java.util.Iterator getChildren();
-	public abstract int getDepth();
-	public abstract java.util.Set getExpectedPolicies();
-	public abstract java.security.cert.PolicyNode getParent();
-	public abstract java.util.Set getPolicyQualifiers();
-	public abstract java.lang.String getValidPolicy();
-	public abstract boolean isCritical();
+public interface PolicyNode {
+	java.util.Iterator<? extends java.security.cert.PolicyNode> getChildren();
+	int getDepth();
+	java.util.Set<java.lang.String> getExpectedPolicies();
+	java.security.cert.PolicyNode getParent();
+	java.util.Set<? extends java.security.cert.PolicyQualifierInfo> getPolicyQualifiers();
+	java.lang.String getValidPolicy();
+	boolean isCritical();
 }
 

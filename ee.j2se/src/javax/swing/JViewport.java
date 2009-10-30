@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,21 @@
 
 package javax.swing;
 public class JViewport extends javax.swing.JComponent implements javax.accessibility.Accessible {
-	public JViewport() { }
+	protected class AccessibleJViewport extends javax.swing.JComponent.AccessibleJComponent {
+		protected AccessibleJViewport() { } 
+	}
+	protected class ViewListener extends java.awt.event.ComponentAdapter implements java.io.Serializable {
+		protected ViewListener() { } 
+	}
+	public final static int BACKINGSTORE_SCROLL_MODE = 2;
+	public final static int BLIT_SCROLL_MODE = 1;
+	public final static int SIMPLE_SCROLL_MODE = 0;
+	/** @deprecated */ protected boolean backingStore;
+	protected java.awt.Image backingStoreImage;
+	protected boolean isViewSizeSet;
+	protected java.awt.Point lastPaintPosition;
+	protected boolean scrollUnderway;
+	public JViewport() { } 
 	public void addChangeListener(javax.swing.event.ChangeListener var0) { }
 	protected boolean computeBlit(int var0, int var1, java.awt.Point var2, java.awt.Point var3, java.awt.Dimension var4, java.awt.Rectangle var5) { return false; }
 	protected java.awt.LayoutManager createLayoutManager() { return null; }
@@ -44,19 +58,5 @@ public class JViewport extends javax.swing.JComponent implements javax.accessibi
 	public void setViewSize(java.awt.Dimension var0) { }
 	public java.awt.Dimension toViewCoordinates(java.awt.Dimension var0) { return null; }
 	public java.awt.Point toViewCoordinates(java.awt.Point var0) { return null; }
-	public final static int BACKINGSTORE_SCROLL_MODE = 2;
-	public final static int BLIT_SCROLL_MODE = 1;
-	public final static int SIMPLE_SCROLL_MODE = 0;
-	/** @deprecated */ protected boolean backingStore;
-	protected java.awt.Image backingStoreImage;
-	protected boolean isViewSizeSet;
-	protected java.awt.Point lastPaintPosition;
-	protected boolean scrollUnderway;
-	protected class AccessibleJViewport extends javax.swing.JComponent.AccessibleJComponent {
-		protected AccessibleJViewport() { }
-	}
-	protected class ViewListener extends java.awt.event.ComponentAdapter implements java.io.Serializable {
-		protected ViewListener() { }
-	}
 }
 

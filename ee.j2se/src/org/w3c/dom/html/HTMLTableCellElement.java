@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,35 +15,35 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLTableCellElement extends org.w3c.dom.html.HTMLElement {
-	public abstract java.lang.String getAbbr();
-	public abstract java.lang.String getAlign();
-	public abstract java.lang.String getAxis();
-	public abstract java.lang.String getBgColor();
-	public abstract int getCellIndex();
-	public abstract java.lang.String getCh();
-	public abstract java.lang.String getChOff();
-	public abstract int getColSpan();
-	public abstract java.lang.String getHeaders();
-	public abstract java.lang.String getHeight();
-	public abstract boolean getNoWrap();
-	public abstract int getRowSpan();
-	public abstract java.lang.String getScope();
-	public abstract java.lang.String getVAlign();
-	public abstract java.lang.String getWidth();
-	public abstract void setAbbr(java.lang.String var0);
-	public abstract void setAlign(java.lang.String var0);
-	public abstract void setAxis(java.lang.String var0);
-	public abstract void setBgColor(java.lang.String var0);
-	public abstract void setCh(java.lang.String var0);
-	public abstract void setChOff(java.lang.String var0);
-	public abstract void setColSpan(int var0);
-	public abstract void setHeaders(java.lang.String var0);
-	public abstract void setHeight(java.lang.String var0);
-	public abstract void setNoWrap(boolean var0);
-	public abstract void setRowSpan(int var0);
-	public abstract void setScope(java.lang.String var0);
-	public abstract void setVAlign(java.lang.String var0);
-	public abstract void setWidth(java.lang.String var0);
+public interface HTMLTableCellElement extends org.w3c.dom.html.HTMLElement {
+	java.lang.String getAbbr();
+	java.lang.String getAlign();
+	java.lang.String getAxis();
+	java.lang.String getBgColor();
+	int getCellIndex();
+	java.lang.String getCh();
+	java.lang.String getChOff();
+	int getColSpan();
+	java.lang.String getHeaders();
+	java.lang.String getHeight();
+	boolean getNoWrap();
+	int getRowSpan();
+	java.lang.String getScope();
+	java.lang.String getVAlign();
+	java.lang.String getWidth();
+	void setAbbr(java.lang.String var0);
+	void setAlign(java.lang.String var0);
+	void setAxis(java.lang.String var0);
+	void setBgColor(java.lang.String var0);
+	void setCh(java.lang.String var0);
+	void setChOff(java.lang.String var0);
+	void setColSpan(int var0);
+	void setHeaders(java.lang.String var0);
+	void setHeight(java.lang.String var0);
+	void setNoWrap(boolean var0);
+	void setRowSpan(int var0);
+	void setScope(java.lang.String var0);
+	void setVAlign(java.lang.String var0);
+	void setWidth(java.lang.String var0);
 }
 

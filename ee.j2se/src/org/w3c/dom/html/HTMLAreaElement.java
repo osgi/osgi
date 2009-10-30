@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,22 +15,22 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLAreaElement extends org.w3c.dom.html.HTMLElement {
-	public abstract java.lang.String getAccessKey();
-	public abstract java.lang.String getAlt();
-	public abstract java.lang.String getCoords();
-	public abstract java.lang.String getHref();
-	public abstract boolean getNoHref();
-	public abstract java.lang.String getShape();
-	public abstract int getTabIndex();
-	public abstract java.lang.String getTarget();
-	public abstract void setAccessKey(java.lang.String var0);
-	public abstract void setAlt(java.lang.String var0);
-	public abstract void setCoords(java.lang.String var0);
-	public abstract void setHref(java.lang.String var0);
-	public abstract void setNoHref(boolean var0);
-	public abstract void setShape(java.lang.String var0);
-	public abstract void setTabIndex(int var0);
-	public abstract void setTarget(java.lang.String var0);
+public interface HTMLAreaElement extends org.w3c.dom.html.HTMLElement {
+	java.lang.String getAccessKey();
+	java.lang.String getAlt();
+	java.lang.String getCoords();
+	java.lang.String getHref();
+	boolean getNoHref();
+	java.lang.String getShape();
+	int getTabIndex();
+	java.lang.String getTarget();
+	void setAccessKey(java.lang.String var0);
+	void setAlt(java.lang.String var0);
+	void setCoords(java.lang.String var0);
+	void setHref(java.lang.String var0);
+	void setNoHref(boolean var0);
+	void setShape(java.lang.String var0);
+	void setTabIndex(int var0);
+	void setTarget(java.lang.String var0);
 }
 

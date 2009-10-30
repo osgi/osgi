@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,23 @@
 
 package java.io;
 public class PrintWriter extends java.io.Writer {
-	public PrintWriter(java.io.OutputStream var0) { }
-	public PrintWriter(java.io.OutputStream var0, boolean var1) { }
-	public PrintWriter(java.io.Writer var0) { }
-	public PrintWriter(java.io.Writer var0, boolean var1) { }
+	protected java.io.Writer out;
+	public PrintWriter(java.io.File var0) throws java.io.FileNotFoundException { } 
+	public PrintWriter(java.io.File var0, java.lang.String var1) throws java.io.FileNotFoundException, java.io.UnsupportedEncodingException { } 
+	public PrintWriter(java.io.OutputStream var0) { } 
+	public PrintWriter(java.io.OutputStream var0, boolean var1) { } 
+	public PrintWriter(java.io.Writer var0) { } 
+	public PrintWriter(java.io.Writer var0, boolean var1) { } 
+	public PrintWriter(java.lang.String var0) throws java.io.FileNotFoundException { } 
+	public PrintWriter(java.lang.String var0, java.lang.String var1) throws java.io.FileNotFoundException, java.io.UnsupportedEncodingException { } 
+	public java.io.PrintWriter append(char var0) { return null; }
+	public java.io.PrintWriter append(java.lang.CharSequence var0) { return null; }
+	public java.io.PrintWriter append(java.lang.CharSequence var0, int var1, int var2) { return null; }
 	public boolean checkError() { return false; }
 	public void close() { }
 	public void flush() { }
+	public java.io.PrintWriter format(java.lang.String var0, java.lang.Object[] var1) { return null; }
+	public java.io.PrintWriter format(java.util.Locale var0, java.lang.String var1, java.lang.Object[] var2) { return null; }
 	public void print(char var0) { }
 	public void print(double var0) { }
 	public void print(float var0) { }
@@ -32,6 +42,8 @@ public class PrintWriter extends java.io.Writer {
 	public void print(java.lang.String var0) { }
 	public void print(boolean var0) { }
 	public void print(char[] var0) { }
+	public java.io.PrintWriter printf(java.lang.String var0, java.lang.Object[] var1) { return null; }
+	public java.io.PrintWriter printf(java.util.Locale var0, java.lang.String var1, java.lang.Object[] var2) { return null; }
 	public void println() { }
 	public void println(char var0) { }
 	public void println(double var0) { }
@@ -48,6 +60,5 @@ public class PrintWriter extends java.io.Writer {
 	public void write(java.lang.String var0, int var1, int var2) { }
 	public void write(char[] var0) { }
 	public void write(char[] var0, int var1, int var2) { }
-	protected java.io.Writer out;
 }
 

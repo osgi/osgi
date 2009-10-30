@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,13 @@
 
 package java.security.spec;
 public class PSSParameterSpec implements java.security.spec.AlgorithmParameterSpec {
-	public PSSParameterSpec(int var0) { }
+	public final static java.security.spec.PSSParameterSpec DEFAULT; static { DEFAULT = null; }
+	public PSSParameterSpec(int var0) { } 
+	public PSSParameterSpec(java.lang.String var0, java.lang.String var1, java.security.spec.AlgorithmParameterSpec var2, int var3, int var4) { } 
+	public java.lang.String getDigestAlgorithm() { return null; }
+	public java.lang.String getMGFAlgorithm() { return null; }
+	public java.security.spec.AlgorithmParameterSpec getMGFParameters() { return null; }
 	public int getSaltLength() { return 0; }
+	public int getTrailerField() { return 0; }
 }
 

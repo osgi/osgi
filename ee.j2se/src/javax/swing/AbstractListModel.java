@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package javax.swing;
 public abstract class AbstractListModel implements java.io.Serializable, javax.swing.ListModel {
-	public AbstractListModel() { }
+	protected javax.swing.event.EventListenerList listenerList;
+	public AbstractListModel() { } 
 	public void addListDataListener(javax.swing.event.ListDataListener var0) { }
 	protected void fireContentsChanged(java.lang.Object var0, int var1, int var2) { }
 	protected void fireIntervalAdded(java.lang.Object var0, int var1, int var2) { }
 	protected void fireIntervalRemoved(java.lang.Object var0, int var1, int var2) { }
 	public javax.swing.event.ListDataListener[] getListDataListeners() { return null; }
-	public java.util.EventListener[] getListeners(java.lang.Class var0) { return null; }
+	public <T extends java.util.EventListener> T[] getListeners(java.lang.Class<T> var0) { return null; }
 	public void removeListDataListener(javax.swing.event.ListDataListener var0) { }
-	protected javax.swing.event.EventListenerList listenerList;
 }
 

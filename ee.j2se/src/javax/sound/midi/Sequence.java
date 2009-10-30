@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,16 @@
 
 package javax.sound.midi;
 public class Sequence {
-	public Sequence(float var0, int var1) throws javax.sound.midi.InvalidMidiDataException { }
-	public Sequence(float var0, int var1, int var2) throws javax.sound.midi.InvalidMidiDataException { }
+	public final static float PPQ = 0.0f;
+	public final static float SMPTE_24 = 24.0f;
+	public final static float SMPTE_25 = 25.0f;
+	public final static float SMPTE_30 = 30.0f;
+	public final static float SMPTE_30DROP = 29.97f;
+	protected float divisionType;
+	protected int resolution;
+	protected java.util.Vector<javax.sound.midi.Track> tracks;
+	public Sequence(float var0, int var1) throws javax.sound.midi.InvalidMidiDataException { } 
+	public Sequence(float var0, int var1, int var2) throws javax.sound.midi.InvalidMidiDataException { } 
 	public javax.sound.midi.Track createTrack() { return null; }
 	public boolean deleteTrack(javax.sound.midi.Track var0) { return false; }
 	public float getDivisionType() { return 0.0f; }
@@ -26,13 +34,5 @@ public class Sequence {
 	public int getResolution() { return 0; }
 	public long getTickLength() { return 0l; }
 	public javax.sound.midi.Track[] getTracks() { return null; }
-	public final static float PPQ = 0.0f;
-	public final static float SMPTE_24 = 24.0f;
-	public final static float SMPTE_25 = 25.0f;
-	public final static float SMPTE_30 = 30.0f;
-	public final static float SMPTE_30DROP = 29.97f;
-	protected float divisionType;
-	protected int resolution;
-	protected java.util.Vector tracks;
 }
 

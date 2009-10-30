@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,9 @@
 
 package javax.swing;
 public class DefaultCellEditor extends javax.swing.AbstractCellEditor implements javax.swing.table.TableCellEditor, javax.swing.tree.TreeCellEditor {
-	public DefaultCellEditor(javax.swing.JCheckBox var0) { }
-	public DefaultCellEditor(javax.swing.JComboBox var0) { }
-	public DefaultCellEditor(javax.swing.JTextField var0) { }
-	public java.lang.Object getCellEditorValue() { return null; }
-	public int getClickCountToStart() { return 0; }
-	public java.awt.Component getComponent() { return null; }
-	public java.awt.Component getTableCellEditorComponent(javax.swing.JTable var0, java.lang.Object var1, boolean var2, int var3, int var4) { return null; }
-	public java.awt.Component getTreeCellEditorComponent(javax.swing.JTree var0, java.lang.Object var1, boolean var2, boolean var3, boolean var4, int var5) { return null; }
-	public void setClickCountToStart(int var0) { }
-	protected int clickCountToStart;
-	protected javax.swing.DefaultCellEditor.EditorDelegate delegate;
-	protected javax.swing.JComponent editorComponent;
 	protected class EditorDelegate implements java.awt.event.ActionListener, java.awt.event.ItemListener, java.io.Serializable {
-		protected EditorDelegate() { }
+		protected java.lang.Object value;
+		protected EditorDelegate() { } 
 		public void actionPerformed(java.awt.event.ActionEvent var0) { }
 		public void cancelCellEditing() { }
 		public java.lang.Object getCellEditorValue() { return null; }
@@ -39,7 +28,18 @@ public class DefaultCellEditor extends javax.swing.AbstractCellEditor implements
 		public boolean shouldSelectCell(java.util.EventObject var0) { return false; }
 		public boolean startCellEditing(java.util.EventObject var0) { return false; }
 		public boolean stopCellEditing() { return false; }
-		protected java.lang.Object value;
 	}
+	protected int clickCountToStart;
+	protected javax.swing.DefaultCellEditor.EditorDelegate delegate;
+	protected javax.swing.JComponent editorComponent;
+	public DefaultCellEditor(javax.swing.JCheckBox var0) { } 
+	public DefaultCellEditor(javax.swing.JComboBox var0) { } 
+	public DefaultCellEditor(javax.swing.JTextField var0) { } 
+	public java.lang.Object getCellEditorValue() { return null; }
+	public int getClickCountToStart() { return 0; }
+	public java.awt.Component getComponent() { return null; }
+	public java.awt.Component getTableCellEditorComponent(javax.swing.JTable var0, java.lang.Object var1, boolean var2, int var3, int var4) { return null; }
+	public java.awt.Component getTreeCellEditorComponent(javax.swing.JTree var0, java.lang.Object var1, boolean var2, boolean var3, boolean var4, int var5) { return null; }
+	public void setClickCountToStart(int var0) { }
 }
 

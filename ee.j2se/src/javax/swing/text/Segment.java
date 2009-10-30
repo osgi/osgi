@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,11 @@
 
 package javax.swing.text;
 public class Segment implements java.lang.Cloneable, java.text.CharacterIterator {
-	public Segment() { }
-	public Segment(char[] var0, int var1, int var2) { }
+	public char[] array;
+	public int count;
+	public int offset;
+	public Segment() { } 
+	public Segment(char[] var0, int var1, int var2) { } 
 	public java.lang.Object clone() { return null; }
 	public char current() { return '\0'; }
 	public char first() { return '\0'; }
@@ -30,8 +33,5 @@ public class Segment implements java.lang.Cloneable, java.text.CharacterIterator
 	public char previous() { return '\0'; }
 	public char setIndex(int var0) { return '\0'; }
 	public void setPartialReturn(boolean var0) { }
-	public char[] array;
-	public int count;
-	public int offset;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,6 @@
 
 package java.util.logging;
 public class Level implements java.io.Serializable {
-	protected Level(java.lang.String var0, int var1) { }
-	protected Level(java.lang.String var0, int var1, java.lang.String var2) { }
-	public java.lang.String getLocalizedName() { return null; }
-	public java.lang.String getName() { return null; }
-	public java.lang.String getResourceBundleName() { return null; }
-	public int hashCode() { return 0; }
-	public final int intValue() { return 0; }
-	public static java.util.logging.Level parse(java.lang.String var0) { return null; }
-	public final java.lang.String toString() { return null; }
 	public final static java.util.logging.Level ALL; static { ALL = null; }
 	public final static java.util.logging.Level CONFIG; static { CONFIG = null; }
 	public final static java.util.logging.Level FINE; static { FINE = null; }
@@ -34,5 +25,14 @@ public class Level implements java.io.Serializable {
 	public final static java.util.logging.Level OFF; static { OFF = null; }
 	public final static java.util.logging.Level SEVERE; static { SEVERE = null; }
 	public final static java.util.logging.Level WARNING; static { WARNING = null; }
+	protected Level(java.lang.String var0, int var1) { } 
+	protected Level(java.lang.String var0, int var1, java.lang.String var2) { } 
+	public java.lang.String getLocalizedName() { return null; }
+	public java.lang.String getName() { return null; }
+	public java.lang.String getResourceBundleName() { return null; }
+	public int hashCode() { return 0; }
+	public final int intValue() { return 0; }
+	public static java.util.logging.Level parse(java.lang.String var0) { return null; }
+	public final java.lang.String toString() { return null; }
 }
 

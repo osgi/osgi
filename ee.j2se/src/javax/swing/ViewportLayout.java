@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing;
 public class ViewportLayout implements java.awt.LayoutManager, java.io.Serializable {
-	public ViewportLayout() { }
+	public ViewportLayout() { } 
 	public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }
 	public void layoutContainer(java.awt.Container var0) { }
 	public java.awt.Dimension minimumLayoutSize(java.awt.Container var0) { return null; }

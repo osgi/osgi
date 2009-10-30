@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package java.security;
-/** @deprecated */ public abstract interface Certificate {
-	public abstract void decode(java.io.InputStream var0) throws java.io.IOException, java.security.KeyException;
-	public abstract void encode(java.io.OutputStream var0) throws java.io.IOException, java.security.KeyException;
-	public abstract java.lang.String getFormat();
-	public abstract java.security.Principal getGuarantor();
-	public abstract java.security.Principal getPrincipal();
-	public abstract java.security.PublicKey getPublicKey();
-	public abstract java.lang.String toString(boolean var0);
+/** @deprecated */ public interface Certificate {
+	void decode(java.io.InputStream var0) throws java.io.IOException, java.security.KeyException;
+	void encode(java.io.OutputStream var0) throws java.io.IOException, java.security.KeyException;
+	java.lang.String getFormat();
+	java.security.Principal getGuarantor();
+	java.security.Principal getPrincipal();
+	java.security.PublicKey getPublicKey();
+	java.lang.String toString(boolean var0);
 }
 

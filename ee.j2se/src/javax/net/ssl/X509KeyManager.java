@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package javax.net.ssl;
-public abstract interface X509KeyManager extends javax.net.ssl.KeyManager {
-	public abstract java.lang.String chooseClientAlias(java.lang.String[] var0, java.security.Principal[] var1, java.net.Socket var2);
-	public abstract java.lang.String chooseServerAlias(java.lang.String var0, java.security.Principal[] var1, java.net.Socket var2);
-	public abstract java.security.cert.X509Certificate[] getCertificateChain(java.lang.String var0);
-	public abstract java.lang.String[] getClientAliases(java.lang.String var0, java.security.Principal[] var1);
-	public abstract java.security.PrivateKey getPrivateKey(java.lang.String var0);
-	public abstract java.lang.String[] getServerAliases(java.lang.String var0, java.security.Principal[] var1);
+public interface X509KeyManager extends javax.net.ssl.KeyManager {
+	java.lang.String chooseClientAlias(java.lang.String[] var0, java.security.Principal[] var1, java.net.Socket var2);
+	java.lang.String chooseServerAlias(java.lang.String var0, java.security.Principal[] var1, java.net.Socket var2);
+	java.security.cert.X509Certificate[] getCertificateChain(java.lang.String var0);
+	java.lang.String[] getClientAliases(java.lang.String var0, java.security.Principal[] var1);
+	java.security.PrivateKey getPrivateKey(java.lang.String var0);
+	java.lang.String[] getServerAliases(java.lang.String var0, java.security.Principal[] var1);
 }
 

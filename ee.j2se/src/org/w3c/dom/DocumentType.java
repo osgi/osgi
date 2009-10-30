@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package org.w3c.dom;
-public abstract interface DocumentType extends org.w3c.dom.Node {
-	public abstract org.w3c.dom.NamedNodeMap getEntities();
-	public abstract java.lang.String getInternalSubset();
-	public abstract java.lang.String getName();
-	public abstract org.w3c.dom.NamedNodeMap getNotations();
-	public abstract java.lang.String getPublicId();
-	public abstract java.lang.String getSystemId();
+public interface DocumentType extends org.w3c.dom.Node {
+	org.w3c.dom.NamedNodeMap getEntities();
+	java.lang.String getInternalSubset();
+	java.lang.String getName();
+	org.w3c.dom.NamedNodeMap getNotations();
+	java.lang.String getPublicId();
+	java.lang.String getSystemId();
 }
 

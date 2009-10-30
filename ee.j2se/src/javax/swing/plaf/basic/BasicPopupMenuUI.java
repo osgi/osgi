@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package javax.swing.plaf.basic;
 public class BasicPopupMenuUI extends javax.swing.plaf.PopupMenuUI {
-	public BasicPopupMenuUI() { }
+	protected javax.swing.JPopupMenu popupMenu;
+	public BasicPopupMenuUI() { } 
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	public void installDefaults() { }
 	protected void installKeyboardActions() { }
@@ -24,6 +25,5 @@ public class BasicPopupMenuUI extends javax.swing.plaf.PopupMenuUI {
 	protected void uninstallDefaults() { }
 	protected void uninstallKeyboardActions() { }
 	protected void uninstallListeners() { }
-	protected javax.swing.JPopupMenu popupMenu;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package javax.swing.tree;
 public class TreePath implements java.io.Serializable {
-	protected TreePath() { }
-	public TreePath(java.lang.Object var0) { }
-	protected TreePath(javax.swing.tree.TreePath var0, java.lang.Object var1) { }
-	public TreePath(java.lang.Object[] var0) { }
-	protected TreePath(java.lang.Object[] var0, int var1) { }
+	protected TreePath() { } 
+	public TreePath(java.lang.Object var0) { } 
+	protected TreePath(javax.swing.tree.TreePath var0, java.lang.Object var1) { } 
+	public TreePath(java.lang.Object[] var0) { } 
+	protected TreePath(java.lang.Object[] var0, int var1) { } 
 	public java.lang.Object getLastPathComponent() { return null; }
 	public javax.swing.tree.TreePath getParentPath() { return null; }
 	public java.lang.Object[] getPath() { return null; }

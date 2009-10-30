@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.print.attribute;
 public abstract class EnumSyntax implements java.io.Serializable, java.lang.Cloneable {
-	protected EnumSyntax(int var0) { }
+	protected EnumSyntax(int var0) { } 
 	public java.lang.Object clone() { return null; }
 	protected javax.print.attribute.EnumSyntax[] getEnumValueTable() { return null; }
 	protected int getOffset() { return 0; }

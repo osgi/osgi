@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 
 package javax.swing.text;
 public class LabelView extends javax.swing.text.GlyphView implements javax.swing.text.TabableView {
-	public LabelView(javax.swing.text.Element var0) { super((javax.swing.text.Element) null); }
+	public LabelView(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null); } 
 	/** @deprecated */ protected java.awt.FontMetrics getFontMetrics() { return null; }
+	protected void setBackground(java.awt.Color var0) { }
 	protected void setPropertiesFromAttributes() { }
 	protected void setStrikeThrough(boolean var0) { }
 	protected void setSubscript(boolean var0) { }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,29 @@
 
 package javax.imageio;
 public class ImageWriteParam extends javax.imageio.IIOParam {
-	protected ImageWriteParam() { }
-	public ImageWriteParam(java.util.Locale var0) { }
+	public final static int MODE_COPY_FROM_METADATA = 3;
+	public final static int MODE_DEFAULT = 1;
+	public final static int MODE_DISABLED = 0;
+	public final static int MODE_EXPLICIT = 2;
+	protected boolean canOffsetTiles;
+	protected boolean canWriteCompressed;
+	protected boolean canWriteProgressive;
+	protected boolean canWriteTiles;
+	protected int compressionMode;
+	protected float compressionQuality;
+	protected java.lang.String compressionType;
+	protected java.lang.String[] compressionTypes;
+	protected java.util.Locale locale;
+	protected java.awt.Dimension[] preferredTileSizes;
+	protected int progressiveMode;
+	protected int tileGridXOffset;
+	protected int tileGridYOffset;
+	protected int tileHeight;
+	protected int tileWidth;
+	protected int tilingMode;
+	protected boolean tilingSet;
+	protected ImageWriteParam() { } 
+	public ImageWriteParam(java.util.Locale var0) { } 
 	public boolean canOffsetTiles() { return false; }
 	public boolean canWriteCompressed() { return false; }
 	public boolean canWriteProgressive() { return false; }
@@ -47,26 +68,5 @@ public class ImageWriteParam extends javax.imageio.IIOParam {
 	public void setTilingMode(int var0) { }
 	public void unsetCompression() { }
 	public void unsetTiling() { }
-	public final static int MODE_COPY_FROM_METADATA = 3;
-	public final static int MODE_DEFAULT = 1;
-	public final static int MODE_DISABLED = 0;
-	public final static int MODE_EXPLICIT = 2;
-	protected boolean canOffsetTiles;
-	protected boolean canWriteCompressed;
-	protected boolean canWriteProgressive;
-	protected boolean canWriteTiles;
-	protected int compressionMode;
-	protected float compressionQuality;
-	protected java.lang.String compressionType;
-	protected java.lang.String[] compressionTypes;
-	protected java.util.Locale locale;
-	protected java.awt.Dimension[] preferredTileSizes;
-	protected int progressiveMode;
-	protected int tileGridXOffset;
-	protected int tileGridYOffset;
-	protected int tileHeight;
-	protected int tileWidth;
-	protected int tilingMode;
-	protected boolean tilingSet;
 }
 

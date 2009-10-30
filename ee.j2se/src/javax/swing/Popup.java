@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.swing;
 public class Popup {
-	protected Popup() { }
-	protected Popup(java.awt.Component var0, java.awt.Component var1, int var2, int var3) { }
+	protected Popup() { } 
+	protected Popup(java.awt.Component var0, java.awt.Component var1, int var2, int var3) { } 
 	public void hide() { }
 	public void show() { }
 }

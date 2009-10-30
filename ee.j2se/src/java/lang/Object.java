@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package java.lang;
 public class Object {
-	public Object() { }
-	protected java.lang.Object clone() throws java.lang.CloneNotSupportedException { return null; }
+	public Object() { } 
+	protected native java.lang.Object clone() throws java.lang.CloneNotSupportedException;
 	public boolean equals(java.lang.Object var0) { return false; }
 	protected void finalize() throws java.lang.Throwable { }
-	public final java.lang.Class getClass() { return null; }
-	public int hashCode() { return 0; }
-	public final void notify() { }
-	public final void notifyAll() { }
+	public final native java.lang.Class<? extends java.lang.Object> getClass();
+	public native int hashCode();
+	public final native void notify();
+	public final native void notifyAll();
 	public java.lang.String toString() { return null; }
 	public final void wait() throws java.lang.InterruptedException { }
-	public final void wait(long var0) throws java.lang.InterruptedException { }
+	public final native void wait(long var0) throws java.lang.InterruptedException;
 	public final void wait(long var0, int var1) throws java.lang.InterruptedException { }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package javax.swing.text;
 public abstract class LayeredHighlighter implements javax.swing.text.Highlighter {
-	public LayeredHighlighter() { }
-	public abstract void paintLayeredHighlights(java.awt.Graphics var0, int var1, int var2, java.awt.Shape var3, javax.swing.text.JTextComponent var4, javax.swing.text.View var5);
 	public static abstract class LayerPainter implements javax.swing.text.Highlighter.HighlightPainter {
-		public LayerPainter() { }
+		public LayerPainter() { } 
 		public abstract java.awt.Shape paintLayer(java.awt.Graphics var0, int var1, int var2, java.awt.Shape var3, javax.swing.text.JTextComponent var4, javax.swing.text.View var5);
 	}
+	public LayeredHighlighter() { } 
+	public abstract void paintLayeredHighlights(java.awt.Graphics var0, int var1, int var2, java.awt.Shape var3, javax.swing.text.JTextComponent var4, javax.swing.text.View var5);
 }
 

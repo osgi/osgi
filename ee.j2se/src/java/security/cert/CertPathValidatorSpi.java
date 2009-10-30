@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.security.cert;
 public abstract class CertPathValidatorSpi {
-	public CertPathValidatorSpi() { }
+	public CertPathValidatorSpi() { } 
 	public abstract java.security.cert.CertPathValidatorResult engineValidate(java.security.cert.CertPath var0, java.security.cert.CertPathParameters var1) throws java.security.InvalidAlgorithmParameterException, java.security.cert.CertPathValidatorException;
 }
 

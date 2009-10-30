@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,25 @@
  */
 
 package javax.swing;
-public abstract interface ButtonModel extends java.awt.ItemSelectable {
-	public abstract void addActionListener(java.awt.event.ActionListener var0);
-	public abstract void addChangeListener(javax.swing.event.ChangeListener var0);
-	public abstract java.lang.String getActionCommand();
-	public abstract int getMnemonic();
-	public abstract boolean isArmed();
-	public abstract boolean isEnabled();
-	public abstract boolean isPressed();
-	public abstract boolean isRollover();
-	public abstract boolean isSelected();
-	public abstract void removeActionListener(java.awt.event.ActionListener var0);
-	public abstract void removeChangeListener(javax.swing.event.ChangeListener var0);
-	public abstract void setActionCommand(java.lang.String var0);
-	public abstract void setArmed(boolean var0);
-	public abstract void setEnabled(boolean var0);
-	public abstract void setGroup(javax.swing.ButtonGroup var0);
-	public abstract void setMnemonic(int var0);
-	public abstract void setPressed(boolean var0);
-	public abstract void setRollover(boolean var0);
-	public abstract void setSelected(boolean var0);
+public interface ButtonModel extends java.awt.ItemSelectable {
+	void addActionListener(java.awt.event.ActionListener var0);
+	void addChangeListener(javax.swing.event.ChangeListener var0);
+	java.lang.String getActionCommand();
+	int getMnemonic();
+	boolean isArmed();
+	boolean isEnabled();
+	boolean isPressed();
+	boolean isRollover();
+	boolean isSelected();
+	void removeActionListener(java.awt.event.ActionListener var0);
+	void removeChangeListener(javax.swing.event.ChangeListener var0);
+	void setActionCommand(java.lang.String var0);
+	void setArmed(boolean var0);
+	void setEnabled(boolean var0);
+	void setGroup(javax.swing.ButtonGroup var0);
+	void setMnemonic(int var0);
+	void setPressed(boolean var0);
+	void setRollover(boolean var0);
+	void setSelected(boolean var0);
 }
 

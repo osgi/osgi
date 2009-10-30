@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,14 @@
 
 package java.util.zip;
 public class Inflater {
-	public Inflater() { }
-	public Inflater(boolean var0) { }
+	public Inflater() { } 
+	public Inflater(boolean var0) { } 
 	public void end() { }
 	protected void finalize() { }
 	public boolean finished() { return false; }
 	public int getAdler() { return 0; }
+	public long getBytesRead() { return 0l; }
+	public long getBytesWritten() { return 0l; }
 	public int getRemaining() { return 0; }
 	public int getTotalIn() { return 0; }
 	public int getTotalOut() { return 0; }

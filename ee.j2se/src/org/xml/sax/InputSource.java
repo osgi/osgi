@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package org.xml.sax;
 public class InputSource {
-	public InputSource() { }
-	public InputSource(java.io.InputStream var0) { }
-	public InputSource(java.io.Reader var0) { }
-	public InputSource(java.lang.String var0) { }
+	public InputSource() { } 
+	public InputSource(java.io.InputStream var0) { } 
+	public InputSource(java.io.Reader var0) { } 
+	public InputSource(java.lang.String var0) { } 
 	public java.io.InputStream getByteStream() { return null; }
 	public java.io.Reader getCharacterStream() { return null; }
 	public java.lang.String getEncoding() { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.plaf.basic;
 public class BasicRootPaneUI extends javax.swing.plaf.RootPaneUI implements java.beans.PropertyChangeListener {
-	public BasicRootPaneUI() { }
+	public BasicRootPaneUI() { } 
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	protected void installComponents(javax.swing.JRootPane var0) { }
 	protected void installDefaults(javax.swing.JRootPane var0) { }

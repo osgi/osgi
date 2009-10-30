@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package org.w3c.dom.css;
-public abstract interface ViewCSS extends org.w3c.dom.views.AbstractView {
-	public abstract org.w3c.dom.css.CSSStyleDeclaration getComputedStyle(org.w3c.dom.Element var0, java.lang.String var1);
+public interface ViewCSS extends org.w3c.dom.views.AbstractView {
+	org.w3c.dom.css.CSSStyleDeclaration getComputedStyle(org.w3c.dom.Element var0, java.lang.String var1);
 }
 

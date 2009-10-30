@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.nio.charset;
 public abstract class CharsetEncoder {
-	protected CharsetEncoder(java.nio.charset.Charset var0, float var1, float var2) { }
-	protected CharsetEncoder(java.nio.charset.Charset var0, float var1, float var2, byte[] var3) { }
+	protected CharsetEncoder(java.nio.charset.Charset var0, float var1, float var2) { } 
+	protected CharsetEncoder(java.nio.charset.Charset var0, float var1, float var2, byte[] var3) { } 
 	public final float averageBytesPerChar() { return 0.0f; }
 	public boolean canEncode(char var0) { return false; }
 	public boolean canEncode(java.lang.CharSequence var0) { return false; }

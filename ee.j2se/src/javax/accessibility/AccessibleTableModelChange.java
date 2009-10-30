@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  */
 
 package javax.accessibility;
-public abstract interface AccessibleTableModelChange {
-	public abstract int getFirstColumn();
-	public abstract int getFirstRow();
-	public abstract int getLastColumn();
-	public abstract int getLastRow();
-	public abstract int getType();
+public interface AccessibleTableModelChange {
 	public final static int DELETE = -1;
 	public final static int INSERT = 1;
 	public final static int UPDATE = 0;
+	int getFirstColumn();
+	int getFirstRow();
+	int getLastColumn();
+	int getLastRow();
+	int getType();
 }
 

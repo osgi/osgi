@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package java.awt.peer;
-public abstract interface FileDialogPeer extends java.awt.peer.DialogPeer {
-	public abstract void setDirectory(java.lang.String var0);
-	public abstract void setFile(java.lang.String var0);
-	public abstract void setFilenameFilter(java.io.FilenameFilter var0);
+public interface FileDialogPeer extends java.awt.peer.DialogPeer {
+	void setDirectory(java.lang.String var0);
+	void setFile(java.lang.String var0);
+	void setFilenameFilter(java.io.FilenameFilter var0);
 }
 

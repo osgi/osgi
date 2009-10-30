@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package java.rmi.dgc;
-public abstract interface DGC extends java.rmi.Remote {
-	public abstract void clean(java.rmi.server.ObjID[] var0, long var1, java.rmi.dgc.VMID var2, boolean var3) throws java.rmi.RemoteException;
-	public abstract java.rmi.dgc.Lease dirty(java.rmi.server.ObjID[] var0, long var1, java.rmi.dgc.Lease var2) throws java.rmi.RemoteException;
+public interface DGC extends java.rmi.Remote {
+	void clean(java.rmi.server.ObjID[] var0, long var1, java.rmi.dgc.VMID var2, boolean var3) throws java.rmi.RemoteException;
+	java.rmi.dgc.Lease dirty(java.rmi.server.ObjID[] var0, long var1, java.rmi.dgc.Lease var2) throws java.rmi.RemoteException;
 }
 

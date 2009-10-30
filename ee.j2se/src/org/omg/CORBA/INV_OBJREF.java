@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package org.omg.CORBA;
 public final class INV_OBJREF extends org.omg.CORBA.SystemException {
-	public INV_OBJREF() { super((java.lang.String) null, 0, (org.omg.CORBA.CompletionStatus) null); }
-	public INV_OBJREF(int var0, org.omg.CORBA.CompletionStatus var1) { super((java.lang.String) null, 0, (org.omg.CORBA.CompletionStatus) null); }
-	public INV_OBJREF(java.lang.String var0) { super((java.lang.String) null, 0, (org.omg.CORBA.CompletionStatus) null); }
-	public INV_OBJREF(java.lang.String var0, int var1, org.omg.CORBA.CompletionStatus var2) { super((java.lang.String) null, 0, (org.omg.CORBA.CompletionStatus) null); }
+	public INV_OBJREF()  { super((java.lang.String) null, 0, (org.omg.CORBA.CompletionStatus) null); } 
+	public INV_OBJREF(int var0, org.omg.CORBA.CompletionStatus var1)  { super((java.lang.String) null, 0, (org.omg.CORBA.CompletionStatus) null); } 
+	public INV_OBJREF(java.lang.String var0)  { super((java.lang.String) null, 0, (org.omg.CORBA.CompletionStatus) null); } 
+	public INV_OBJREF(java.lang.String var0, int var1, org.omg.CORBA.CompletionStatus var2)  { super((java.lang.String) null, 0, (org.omg.CORBA.CompletionStatus) null); } 
 }
 

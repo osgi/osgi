@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,11 @@
 
 package javax.naming;
 public class CompoundName implements javax.naming.Name {
-	public CompoundName(java.lang.String var0, java.util.Properties var1) throws javax.naming.InvalidNameException { }
-	protected CompoundName(java.util.Enumeration var0, java.util.Properties var1) { }
+	protected javax.naming.NameImpl impl;
+	protected java.util.Properties mySyntax;
+	private final static long serialVersionUID = 3513100557083972036l;
+	public CompoundName(java.lang.String var0, java.util.Properties var1) throws javax.naming.InvalidNameException { } 
+	protected CompoundName(java.util.Enumeration<java.lang.String> var0, java.util.Properties var1) { } 
 	public javax.naming.Name add(int var0, java.lang.String var1) throws javax.naming.InvalidNameException { return null; }
 	public javax.naming.Name add(java.lang.String var0) throws javax.naming.InvalidNameException { return null; }
 	public javax.naming.Name addAll(int var0, javax.naming.Name var1) throws javax.naming.InvalidNameException { return null; }
@@ -26,7 +29,7 @@ public class CompoundName implements javax.naming.Name {
 	public int compareTo(java.lang.Object var0) { return 0; }
 	public boolean endsWith(javax.naming.Name var0) { return false; }
 	public java.lang.String get(int var0) { return null; }
-	public java.util.Enumeration getAll() { return null; }
+	public java.util.Enumeration<java.lang.String> getAll() { return null; }
 	public javax.naming.Name getPrefix(int var0) { return null; }
 	public javax.naming.Name getSuffix(int var0) { return null; }
 	public int hashCode() { return 0; }
@@ -34,7 +37,5 @@ public class CompoundName implements javax.naming.Name {
 	public java.lang.Object remove(int var0) throws javax.naming.InvalidNameException { return null; }
 	public int size() { return 0; }
 	public boolean startsWith(javax.naming.Name var0) { return false; }
-	protected javax.naming.NameImpl impl;
-	protected java.util.Properties mySyntax;
 }
 

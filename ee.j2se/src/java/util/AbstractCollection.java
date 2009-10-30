@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,18 @@
  */
 
 package java.util;
-public abstract class AbstractCollection implements java.util.Collection {
-	protected AbstractCollection() { }
-	public boolean add(java.lang.Object var0) { return false; }
-	public boolean addAll(java.util.Collection var0) { return false; }
+public abstract class AbstractCollection<E> implements java.util.Collection<E> {
+	protected AbstractCollection() { } 
+	public boolean add(E var0) { return false; }
+	public boolean addAll(java.util.Collection<? extends E> var0) { return false; }
 	public void clear() { }
 	public boolean contains(java.lang.Object var0) { return false; }
-	public boolean containsAll(java.util.Collection var0) { return false; }
+	public boolean containsAll(java.util.Collection<?> var0) { return false; }
 	public boolean isEmpty() { return false; }
 	public boolean remove(java.lang.Object var0) { return false; }
-	public boolean removeAll(java.util.Collection var0) { return false; }
-	public boolean retainAll(java.util.Collection var0) { return false; }
+	public boolean removeAll(java.util.Collection<?> var0) { return false; }
+	public boolean retainAll(java.util.Collection<?> var0) { return false; }
 	public java.lang.Object[] toArray() { return null; }
-	public java.lang.Object[] toArray(java.lang.Object[] var0) { return null; }
+	public <T> T[] toArray(T[] var0) { return null; }
 }
 

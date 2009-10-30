@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package java.awt.print;
-public abstract interface Printable {
-	public abstract int print(java.awt.Graphics var0, java.awt.print.PageFormat var1, int var2) throws java.awt.print.PrinterException;
+public interface Printable {
 	public final static int NO_SUCH_PAGE = 1;
 	public final static int PAGE_EXISTS = 0;
+	int print(java.awt.Graphics var0, java.awt.print.PageFormat var1, int var2) throws java.awt.print.PrinterException;
 }
 

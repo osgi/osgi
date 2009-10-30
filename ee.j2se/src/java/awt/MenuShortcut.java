@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.awt;
 public class MenuShortcut implements java.io.Serializable {
-	public MenuShortcut(int var0) { }
-	public MenuShortcut(int var0, boolean var1) { }
+	public MenuShortcut(int var0) { } 
+	public MenuShortcut(int var0, boolean var1) { } 
 	public boolean equals(java.awt.MenuShortcut var0) { return false; }
 	public int getKey() { return 0; }
 	public int hashCode() { return 0; }

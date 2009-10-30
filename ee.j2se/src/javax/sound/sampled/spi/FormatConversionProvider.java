@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.sound.sampled.spi;
 public abstract class FormatConversionProvider {
-	public FormatConversionProvider() { }
+	public FormatConversionProvider() { } 
 	public abstract javax.sound.sampled.AudioInputStream getAudioInputStream(javax.sound.sampled.AudioFormat.Encoding var0, javax.sound.sampled.AudioInputStream var1);
 	public abstract javax.sound.sampled.AudioInputStream getAudioInputStream(javax.sound.sampled.AudioFormat var0, javax.sound.sampled.AudioInputStream var1);
 	public abstract javax.sound.sampled.AudioFormat.Encoding[] getSourceEncodings();

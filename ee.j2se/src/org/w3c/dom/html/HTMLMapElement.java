@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLMapElement extends org.w3c.dom.html.HTMLElement {
-	public abstract org.w3c.dom.html.HTMLCollection getAreas();
-	public abstract java.lang.String getName();
-	public abstract void setName(java.lang.String var0);
+public interface HTMLMapElement extends org.w3c.dom.html.HTMLElement {
+	org.w3c.dom.html.HTMLCollection getAreas();
+	java.lang.String getName();
+	void setName(java.lang.String var0);
 }
 

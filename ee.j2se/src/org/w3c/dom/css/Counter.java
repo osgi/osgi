@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package org.w3c.dom.css;
-public abstract interface Counter {
-	public abstract java.lang.String getIdentifier();
-	public abstract java.lang.String getListStyle();
-	public abstract java.lang.String getSeparator();
+public interface Counter {
+	java.lang.String getIdentifier();
+	java.lang.String getListStyle();
+	java.lang.String getSeparator();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package java.lang;
 public class SecurityManager {
-	public SecurityManager() { }
+	/** @deprecated */ protected boolean inCheck;
+	public SecurityManager() { } 
 	public void checkAccept(java.lang.String var0, int var1) { }
 	public void checkAccess(java.lang.Thread var0) { }
 	public void checkAccess(java.lang.ThreadGroup var0) { }
@@ -29,7 +30,7 @@ public class SecurityManager {
 	public void checkExit(int var0) { }
 	public void checkLink(java.lang.String var0) { }
 	public void checkListen(int var0) { }
-	public void checkMemberAccess(java.lang.Class var0, int var1) { }
+	public void checkMemberAccess(java.lang.Class<?> var0, int var1) { }
 	public void checkMulticast(java.net.InetAddress var0) { }
 	/** @deprecated */ public void checkMulticast(java.net.InetAddress var0, byte var1) { }
 	public void checkPackageAccess(java.lang.String var0) { }
@@ -48,16 +49,15 @@ public class SecurityManager {
 	public boolean checkTopLevelWindow(java.lang.Object var0) { return false; }
 	public void checkWrite(java.io.FileDescriptor var0) { }
 	public void checkWrite(java.lang.String var0) { }
-	/** @deprecated */ protected int classDepth(java.lang.String var0) { return 0; }
+	/** @deprecated */ protected native int classDepth(java.lang.String var0);
 	/** @deprecated */ protected int classLoaderDepth() { return 0; }
 	/** @deprecated */ protected java.lang.ClassLoader currentClassLoader() { return null; }
-	/** @deprecated */ protected java.lang.Class currentLoadedClass() { return null; }
-	protected java.lang.Class[] getClassContext() { return null; }
+	/** @deprecated */ protected java.lang.Class<?> currentLoadedClass() { return null; }
+	protected native java.lang.Class[] getClassContext();
 	/** @deprecated */ public boolean getInCheck() { return false; }
 	public java.lang.Object getSecurityContext() { return null; }
 	public java.lang.ThreadGroup getThreadGroup() { return null; }
 	/** @deprecated */ protected boolean inClass(java.lang.String var0) { return false; }
 	/** @deprecated */ protected boolean inClassLoader() { return false; }
-	/** @deprecated */ protected boolean inCheck;
 }
 

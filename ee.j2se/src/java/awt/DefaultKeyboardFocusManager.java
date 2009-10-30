@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt;
 public class DefaultKeyboardFocusManager extends java.awt.KeyboardFocusManager {
-	public DefaultKeyboardFocusManager() { }
+	public DefaultKeyboardFocusManager() { } 
 	protected void dequeueKeyEvents(long var0, java.awt.Component var1) { }
 	protected void discardKeyEvents(java.awt.Component var0) { }
 	public boolean dispatchEvent(java.awt.AWTEvent var0) { return false; }

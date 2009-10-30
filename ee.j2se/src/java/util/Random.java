@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.util;
 public class Random implements java.io.Serializable {
-	public Random() { }
-	public Random(long var0) { }
+	public Random() { } 
+	public Random(long var0) { } 
 	protected int next(int var0) { return 0; }
 	public boolean nextBoolean() { return false; }
 	public void nextBytes(byte[] var0) { }

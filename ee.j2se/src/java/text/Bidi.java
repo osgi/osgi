@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,13 @@
 
 package java.text;
 public final class Bidi {
-	public Bidi(java.lang.String var0, int var1) { }
-	public Bidi(java.text.AttributedCharacterIterator var0) { }
-	public Bidi(char[] var0, int var1, byte[] var2, int var3, int var4, int var5) { }
+	public final static int DIRECTION_DEFAULT_LEFT_TO_RIGHT = -2;
+	public final static int DIRECTION_DEFAULT_RIGHT_TO_LEFT = -1;
+	public final static int DIRECTION_LEFT_TO_RIGHT = 0;
+	public final static int DIRECTION_RIGHT_TO_LEFT = 1;
+	public Bidi(java.lang.String var0, int var1) { } 
+	public Bidi(java.text.AttributedCharacterIterator var0) { } 
+	public Bidi(char[] var0, int var1, byte[] var2, int var3, int var4, int var5) { } 
 	public boolean baseIsLeftToRight() { return false; }
 	public java.text.Bidi createLineBidi(int var0, int var1) { return null; }
 	public int getBaseLevel() { return 0; }
@@ -33,9 +37,5 @@ public final class Bidi {
 	public boolean isRightToLeft() { return false; }
 	public static void reorderVisually(byte[] var0, int var1, java.lang.Object[] var2, int var3, int var4) { }
 	public static boolean requiresBidi(char[] var0, int var1, int var2) { return false; }
-	public final static int DIRECTION_DEFAULT_LEFT_TO_RIGHT = -2;
-	public final static int DIRECTION_DEFAULT_RIGHT_TO_LEFT = -1;
-	public final static int DIRECTION_LEFT_TO_RIGHT = 0;
-	public final static int DIRECTION_RIGHT_TO_LEFT = 1;
 }
 

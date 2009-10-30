@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,36 +15,36 @@
  */
 
 package javax.imageio.stream;
-public abstract interface ImageInputStream extends java.io.DataInput {
-	public abstract void close() throws java.io.IOException;
-	public abstract void flush() throws java.io.IOException;
-	public abstract void flushBefore(long var0) throws java.io.IOException;
-	public abstract int getBitOffset() throws java.io.IOException;
-	public abstract java.nio.ByteOrder getByteOrder();
-	public abstract long getFlushedPosition();
-	public abstract long getStreamPosition() throws java.io.IOException;
-	public abstract boolean isCached();
-	public abstract boolean isCachedFile();
-	public abstract boolean isCachedMemory();
-	public abstract long length() throws java.io.IOException;
-	public abstract void mark();
-	public abstract int read() throws java.io.IOException;
-	public abstract int read(byte[] var0) throws java.io.IOException;
-	public abstract int read(byte[] var0, int var1, int var2) throws java.io.IOException;
-	public abstract int readBit() throws java.io.IOException;
-	public abstract long readBits(int var0) throws java.io.IOException;
-	public abstract void readBytes(javax.imageio.stream.IIOByteBuffer var0, int var1) throws java.io.IOException;
-	public abstract void readFully(char[] var0, int var1, int var2) throws java.io.IOException;
-	public abstract void readFully(double[] var0, int var1, int var2) throws java.io.IOException;
-	public abstract void readFully(float[] var0, int var1, int var2) throws java.io.IOException;
-	public abstract void readFully(int[] var0, int var1, int var2) throws java.io.IOException;
-	public abstract void readFully(long[] var0, int var1, int var2) throws java.io.IOException;
-	public abstract void readFully(short[] var0, int var1, int var2) throws java.io.IOException;
-	public abstract long readUnsignedInt() throws java.io.IOException;
-	public abstract void reset() throws java.io.IOException;
-	public abstract void seek(long var0) throws java.io.IOException;
-	public abstract void setBitOffset(int var0) throws java.io.IOException;
-	public abstract void setByteOrder(java.nio.ByteOrder var0);
-	public abstract long skipBytes(long var0) throws java.io.IOException;
+public interface ImageInputStream extends java.io.DataInput {
+	void close() throws java.io.IOException;
+	void flush() throws java.io.IOException;
+	void flushBefore(long var0) throws java.io.IOException;
+	int getBitOffset() throws java.io.IOException;
+	java.nio.ByteOrder getByteOrder();
+	long getFlushedPosition();
+	long getStreamPosition() throws java.io.IOException;
+	boolean isCached();
+	boolean isCachedFile();
+	boolean isCachedMemory();
+	long length() throws java.io.IOException;
+	void mark();
+	int read() throws java.io.IOException;
+	int read(byte[] var0) throws java.io.IOException;
+	int read(byte[] var0, int var1, int var2) throws java.io.IOException;
+	int readBit() throws java.io.IOException;
+	long readBits(int var0) throws java.io.IOException;
+	void readBytes(javax.imageio.stream.IIOByteBuffer var0, int var1) throws java.io.IOException;
+	void readFully(char[] var0, int var1, int var2) throws java.io.IOException;
+	void readFully(double[] var0, int var1, int var2) throws java.io.IOException;
+	void readFully(float[] var0, int var1, int var2) throws java.io.IOException;
+	void readFully(int[] var0, int var1, int var2) throws java.io.IOException;
+	void readFully(long[] var0, int var1, int var2) throws java.io.IOException;
+	void readFully(short[] var0, int var1, int var2) throws java.io.IOException;
+	long readUnsignedInt() throws java.io.IOException;
+	void reset() throws java.io.IOException;
+	void seek(long var0) throws java.io.IOException;
+	void setBitOffset(int var0) throws java.io.IOException;
+	void setByteOrder(java.nio.ByteOrder var0);
+	long skipBytes(long var0) throws java.io.IOException;
 }
 

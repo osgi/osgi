@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package java.awt;
 public abstract class Toolkit {
-	public Toolkit() { }
+	protected final java.util.Map<java.lang.String,java.lang.Object> desktopProperties; { desktopProperties = null; }
+	protected final java.beans.PropertyChangeSupport desktopPropsSupport; { desktopPropsSupport = null; }
+	public Toolkit() { } 
 	public void addAWTEventListener(java.awt.event.AWTEventListener var0, long var1) { }
 	public void addPropertyChangeListener(java.lang.String var0, java.beans.PropertyChangeListener var1) { }
 	public abstract void beep();
@@ -29,7 +31,7 @@ public abstract class Toolkit {
 	protected java.awt.peer.LightweightPeer createComponent(java.awt.Component var0) { return null; }
 	public java.awt.Cursor createCustomCursor(java.awt.Image var0, java.awt.Point var1, java.lang.String var2) { return null; }
 	protected abstract java.awt.peer.DialogPeer createDialog(java.awt.Dialog var0);
-	public java.awt.dnd.DragGestureRecognizer createDragGestureRecognizer(java.lang.Class var0, java.awt.dnd.DragSource var1, java.awt.Component var2, int var3, java.awt.dnd.DragGestureListener var4) { return null; }
+	public <T extends java.awt.dnd.DragGestureRecognizer> T createDragGestureRecognizer(java.lang.Class<T> var0, java.awt.dnd.DragSource var1, java.awt.Component var2, int var3, java.awt.dnd.DragGestureListener var4) { return null; }
 	public abstract java.awt.dnd.peer.DragSourceContextPeer createDragSourceContextPeer(java.awt.dnd.DragGestureEvent var0);
 	protected abstract java.awt.peer.FileDialogPeer createFileDialog(java.awt.FileDialog var0);
 	protected abstract java.awt.peer.FramePeer createFrame(java.awt.Frame var0);
@@ -64,6 +66,7 @@ public abstract class Toolkit {
 	public boolean getLockingKeyState(int var0) { return false; }
 	public int getMaximumCursorColors() { return 0; }
 	public int getMenuShortcutKeyMask() { return 0; }
+	protected java.awt.peer.MouseInfoPeer getMouseInfoPeer() { return null; }
 	protected static java.awt.Container getNativeContainer(java.awt.Component var0) { return null; }
 	public java.awt.PrintJob getPrintJob(java.awt.Frame var0, java.lang.String var1, java.awt.JobAttributes var2, java.awt.PageAttributes var3) { return null; }
 	public abstract java.awt.PrintJob getPrintJob(java.awt.Frame var0, java.lang.String var1, java.util.Properties var2);
@@ -83,7 +86,7 @@ public abstract class Toolkit {
 	public boolean isFrameStateSupported(int var0) { return false; }
 	protected java.lang.Object lazilyLoadDesktopProperty(java.lang.String var0) { return null; }
 	protected void loadSystemColors(int[] var0) { }
-	public abstract java.util.Map mapInputMethodHighlight(java.awt.im.InputMethodHighlight var0);
+	public abstract java.util.Map<java.awt.font.TextAttribute,?> mapInputMethodHighlight(java.awt.im.InputMethodHighlight var0);
 	public abstract boolean prepareImage(java.awt.Image var0, int var1, int var2, java.awt.image.ImageObserver var3);
 	public void removeAWTEventListener(java.awt.event.AWTEventListener var0) { }
 	public void removePropertyChangeListener(java.lang.String var0, java.beans.PropertyChangeListener var1) { }
@@ -91,7 +94,5 @@ public abstract class Toolkit {
 	public void setDynamicLayout(boolean var0) { }
 	public void setLockingKeyState(int var0, boolean var1) { }
 	public abstract void sync();
-	protected final java.util.Map desktopProperties; { desktopProperties = null; }
-	protected final java.beans.PropertyChangeSupport desktopPropsSupport; { desktopPropsSupport = null; }
 }
 

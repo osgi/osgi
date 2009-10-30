@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,9 @@ public final class AttributeSetUtilities {
 	public static javax.print.attribute.PrintJobAttributeSet unmodifiableView(javax.print.attribute.PrintJobAttributeSet var0) { return null; }
 	public static javax.print.attribute.PrintRequestAttributeSet unmodifiableView(javax.print.attribute.PrintRequestAttributeSet var0) { return null; }
 	public static javax.print.attribute.PrintServiceAttributeSet unmodifiableView(javax.print.attribute.PrintServiceAttributeSet var0) { return null; }
-	public static java.lang.Class verifyAttributeCategory(java.lang.Object var0, java.lang.Class var1) { return null; }
-	public static javax.print.attribute.Attribute verifyAttributeValue(java.lang.Object var0, java.lang.Class var1) { return null; }
-	public static void verifyCategoryForValue(java.lang.Class var0, javax.print.attribute.Attribute var1) { }
+	public static java.lang.Class<?> verifyAttributeCategory(java.lang.Object var0, java.lang.Class<?> var1) { return null; }
+	public static javax.print.attribute.Attribute verifyAttributeValue(java.lang.Object var0, java.lang.Class<?> var1) { return null; }
+	public static void verifyCategoryForValue(java.lang.Class<?> var0, javax.print.attribute.Attribute var1) { }
 	private AttributeSetUtilities() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

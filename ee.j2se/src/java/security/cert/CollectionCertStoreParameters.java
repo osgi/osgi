@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package java.security.cert;
 public class CollectionCertStoreParameters implements java.security.cert.CertStoreParameters {
-	public CollectionCertStoreParameters() { }
-	public CollectionCertStoreParameters(java.util.Collection var0) { }
+	public CollectionCertStoreParameters() { } 
+	public CollectionCertStoreParameters(java.util.Collection<?> var0) { } 
 	public java.lang.Object clone() { return null; }
-	public java.util.Collection getCollection() { return null; }
+	public java.util.Collection<?> getCollection() { return null; }
 }
 

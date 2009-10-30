@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.io;
 public class FileReader extends java.io.InputStreamReader {
-	public FileReader(java.io.File var0) throws java.io.FileNotFoundException { super((java.io.InputStream) null, (java.nio.charset.CharsetDecoder) null); }
-	public FileReader(java.io.FileDescriptor var0) { super((java.io.InputStream) null, (java.nio.charset.CharsetDecoder) null); }
-	public FileReader(java.lang.String var0) throws java.io.FileNotFoundException { super((java.io.InputStream) null, (java.nio.charset.CharsetDecoder) null); }
+	public FileReader(java.io.File var0) throws java.io.FileNotFoundException  { super((java.io.InputStream) null, (java.nio.charset.CharsetDecoder) null); } 
+	public FileReader(java.io.FileDescriptor var0)  { super((java.io.InputStream) null, (java.nio.charset.CharsetDecoder) null); } 
+	public FileReader(java.lang.String var0) throws java.io.FileNotFoundException  { super((java.io.InputStream) null, (java.nio.charset.CharsetDecoder) null); } 
 }
 

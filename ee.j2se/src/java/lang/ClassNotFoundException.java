@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package java.lang;
 public class ClassNotFoundException extends java.lang.Exception {
-	public ClassNotFoundException() { }
-	public ClassNotFoundException(java.lang.String var0) { }
-	public ClassNotFoundException(java.lang.String var0, java.lang.Throwable var1) { }
+	public ClassNotFoundException() { } 
+	public ClassNotFoundException(java.lang.String var0) { } 
+	public ClassNotFoundException(java.lang.String var0, java.lang.Throwable var1) { } 
 	public java.lang.Throwable getException() { return null; }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package javax.swing.event;
-public abstract interface TableColumnModelListener extends java.util.EventListener {
-	public abstract void columnAdded(javax.swing.event.TableColumnModelEvent var0);
-	public abstract void columnMarginChanged(javax.swing.event.ChangeEvent var0);
-	public abstract void columnMoved(javax.swing.event.TableColumnModelEvent var0);
-	public abstract void columnRemoved(javax.swing.event.TableColumnModelEvent var0);
-	public abstract void columnSelectionChanged(javax.swing.event.ListSelectionEvent var0);
+public interface TableColumnModelListener extends java.util.EventListener {
+	void columnAdded(javax.swing.event.TableColumnModelEvent var0);
+	void columnMarginChanged(javax.swing.event.ChangeEvent var0);
+	void columnMoved(javax.swing.event.TableColumnModelEvent var0);
+	void columnRemoved(javax.swing.event.TableColumnModelEvent var0);
+	void columnSelectionChanged(javax.swing.event.ListSelectionEvent var0);
 }
 

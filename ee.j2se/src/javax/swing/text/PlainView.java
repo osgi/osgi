@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package javax.swing.text;
 public class PlainView extends javax.swing.text.View implements javax.swing.text.TabExpander {
-	public PlainView(javax.swing.text.Element var0) { super((javax.swing.text.Element) null); }
+	protected java.awt.FontMetrics metrics;
+	public PlainView(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null); } 
 	protected void damageLineRange(int var0, int var1, java.awt.Shape var2, java.awt.Component var3) { }
 	protected void drawLine(int var0, java.awt.Graphics var1, int var2, int var3) { }
 	protected int drawSelectedText(java.awt.Graphics var0, int var1, int var2, int var3, int var4) throws javax.swing.text.BadLocationException { return 0; }
@@ -31,6 +32,5 @@ public class PlainView extends javax.swing.text.View implements javax.swing.text
 	protected void updateDamage(javax.swing.event.DocumentEvent var0, java.awt.Shape var1, javax.swing.text.ViewFactory var2) { }
 	protected void updateMetrics() { }
 	public int viewToModel(float var0, float var1, java.awt.Shape var2, javax.swing.text.Position.Bias[] var3) { return 0; }
-	protected java.awt.FontMetrics metrics;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  */
 
 package org.w3c.dom;
-public abstract interface CharacterData extends org.w3c.dom.Node {
-	public abstract void appendData(java.lang.String var0);
-	public abstract void deleteData(int var0, int var1);
-	public abstract java.lang.String getData();
-	public abstract int getLength();
-	public abstract void insertData(int var0, java.lang.String var1);
-	public abstract void replaceData(int var0, int var1, java.lang.String var2);
-	public abstract void setData(java.lang.String var0);
-	public abstract java.lang.String substringData(int var0, int var1);
+public interface CharacterData extends org.w3c.dom.Node {
+	void appendData(java.lang.String var0);
+	void deleteData(int var0, int var1);
+	java.lang.String getData();
+	int getLength();
+	void insertData(int var0, java.lang.String var1);
+	void replaceData(int var0, int var1, java.lang.String var2);
+	void setData(java.lang.String var0);
+	java.lang.String substringData(int var0, int var1);
 }
 

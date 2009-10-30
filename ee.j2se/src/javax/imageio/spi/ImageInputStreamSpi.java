@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package javax.imageio.spi;
 public abstract class ImageInputStreamSpi extends javax.imageio.spi.IIOServiceProvider {
-	protected ImageInputStreamSpi() { }
-	public ImageInputStreamSpi(java.lang.String var0, java.lang.String var1, java.lang.Class var2) { }
+	protected java.lang.Class<?> inputClass;
+	protected ImageInputStreamSpi() { } 
+	public ImageInputStreamSpi(java.lang.String var0, java.lang.String var1, java.lang.Class<?> var2) { } 
 	public boolean canUseCacheFile() { return false; }
 	public javax.imageio.stream.ImageInputStream createInputStreamInstance(java.lang.Object var0) throws java.io.IOException { return null; }
 	public abstract javax.imageio.stream.ImageInputStream createInputStreamInstance(java.lang.Object var0, boolean var1, java.io.File var2) throws java.io.IOException;
-	public java.lang.Class getInputClass() { return null; }
+	public java.lang.Class<?> getInputClass() { return null; }
 	public boolean needsCacheFile() { return false; }
-	protected java.lang.Class inputClass;
 }
 

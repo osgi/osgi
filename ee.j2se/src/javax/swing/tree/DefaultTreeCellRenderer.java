@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,17 @@
 
 package javax.swing.tree;
 public class DefaultTreeCellRenderer extends javax.swing.JLabel implements javax.swing.tree.TreeCellRenderer {
-	public DefaultTreeCellRenderer() { }
+	protected java.awt.Color backgroundNonSelectionColor;
+	protected java.awt.Color backgroundSelectionColor;
+	protected java.awt.Color borderSelectionColor;
+	protected javax.swing.Icon closedIcon;
+	protected boolean hasFocus;
+	protected javax.swing.Icon leafIcon;
+	protected javax.swing.Icon openIcon;
+	protected boolean selected;
+	protected java.awt.Color textNonSelectionColor;
+	protected java.awt.Color textSelectionColor;
+	public DefaultTreeCellRenderer() { } 
 	public java.awt.Color getBackgroundNonSelectionColor() { return null; }
 	public java.awt.Color getBackgroundSelectionColor() { return null; }
 	public java.awt.Color getBorderSelectionColor() { return null; }
@@ -37,15 +47,5 @@ public class DefaultTreeCellRenderer extends javax.swing.JLabel implements javax
 	public void setOpenIcon(javax.swing.Icon var0) { }
 	public void setTextNonSelectionColor(java.awt.Color var0) { }
 	public void setTextSelectionColor(java.awt.Color var0) { }
-	protected java.awt.Color backgroundNonSelectionColor;
-	protected java.awt.Color backgroundSelectionColor;
-	protected java.awt.Color borderSelectionColor;
-	protected javax.swing.Icon closedIcon;
-	protected boolean hasFocus;
-	protected javax.swing.Icon leafIcon;
-	protected javax.swing.Icon openIcon;
-	protected boolean selected;
-	protected java.awt.Color textNonSelectionColor;
-	protected java.awt.Color textSelectionColor;
 }
 

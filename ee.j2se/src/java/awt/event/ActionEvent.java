@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,6 @@
 
 package java.awt.event;
 public class ActionEvent extends java.awt.AWTEvent {
-	public ActionEvent(java.lang.Object var0, int var1, java.lang.String var2) { super((java.lang.Object) null, 0); }
-	public ActionEvent(java.lang.Object var0, int var1, java.lang.String var2, int var3) { super((java.lang.Object) null, 0); }
-	public ActionEvent(java.lang.Object var0, int var1, java.lang.String var2, long var3, int var4) { super((java.lang.Object) null, 0); }
-	public java.lang.String getActionCommand() { return null; }
-	public int getModifiers() { return 0; }
-	public long getWhen() { return 0l; }
 	public final static int ACTION_FIRST = 1001;
 	public final static int ACTION_LAST = 1001;
 	public final static int ACTION_PERFORMED = 1001;
@@ -29,5 +23,11 @@ public class ActionEvent extends java.awt.AWTEvent {
 	public final static int CTRL_MASK = 2;
 	public final static int META_MASK = 4;
 	public final static int SHIFT_MASK = 1;
+	public ActionEvent(java.lang.Object var0, int var1, java.lang.String var2)  { super((java.lang.Object) null, 0); } 
+	public ActionEvent(java.lang.Object var0, int var1, java.lang.String var2, int var3)  { super((java.lang.Object) null, 0); } 
+	public ActionEvent(java.lang.Object var0, int var1, java.lang.String var2, long var3, int var4)  { super((java.lang.Object) null, 0); } 
+	public java.lang.String getActionCommand() { return null; }
+	public int getModifiers() { return 0; }
+	public long getWhen() { return 0l; }
 }
 

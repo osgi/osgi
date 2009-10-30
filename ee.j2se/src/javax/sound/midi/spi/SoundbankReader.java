@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.sound.midi.spi;
 public abstract class SoundbankReader {
-	public SoundbankReader() { }
+	public SoundbankReader() { } 
 	public abstract javax.sound.midi.Soundbank getSoundbank(java.io.File var0) throws java.io.IOException, javax.sound.midi.InvalidMidiDataException;
 	public abstract javax.sound.midi.Soundbank getSoundbank(java.io.InputStream var0) throws java.io.IOException, javax.sound.midi.InvalidMidiDataException;
 	public abstract javax.sound.midi.Soundbank getSoundbank(java.net.URL var0) throws java.io.IOException, javax.sound.midi.InvalidMidiDataException;

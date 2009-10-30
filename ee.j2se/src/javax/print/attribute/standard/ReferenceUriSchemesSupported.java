@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package javax.print.attribute.standard;
 public class ReferenceUriSchemesSupported extends javax.print.attribute.EnumSyntax implements javax.print.attribute.Attribute {
-	protected ReferenceUriSchemesSupported(int var0) { super(0); }
-	public final java.lang.Class getCategory() { return null; }
-	public final java.lang.String getName() { return null; }
 	public final static javax.print.attribute.standard.ReferenceUriSchemesSupported FILE; static { FILE = null; }
 	public final static javax.print.attribute.standard.ReferenceUriSchemesSupported FTP; static { FTP = null; }
 	public final static javax.print.attribute.standard.ReferenceUriSchemesSupported GOPHER; static { GOPHER = null; }
@@ -27,5 +24,8 @@ public class ReferenceUriSchemesSupported extends javax.print.attribute.EnumSynt
 	public final static javax.print.attribute.standard.ReferenceUriSchemesSupported NEWS; static { NEWS = null; }
 	public final static javax.print.attribute.standard.ReferenceUriSchemesSupported NNTP; static { NNTP = null; }
 	public final static javax.print.attribute.standard.ReferenceUriSchemesSupported WAIS; static { WAIS = null; }
+	protected ReferenceUriSchemesSupported(int var0)  { super(0); } 
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
+	public final java.lang.String getName() { return null; }
 }
 

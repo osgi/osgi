@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package java.nio;
 public final class ByteOrder {
-	public static java.nio.ByteOrder nativeOrder() { return null; }
 	public final static java.nio.ByteOrder BIG_ENDIAN; static { BIG_ENDIAN = null; }
 	public final static java.nio.ByteOrder LITTLE_ENDIAN; static { LITTLE_ENDIAN = null; }
+	public static java.nio.ByteOrder nativeOrder() { return null; }
 	private ByteOrder() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

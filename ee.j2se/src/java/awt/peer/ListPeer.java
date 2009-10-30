@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,21 @@
  */
 
 package java.awt.peer;
-public abstract interface ListPeer extends java.awt.peer.ComponentPeer {
-	public abstract void add(java.lang.String var0, int var1);
-	public abstract void addItem(java.lang.String var0, int var1);
-	public abstract void clear();
-	public abstract void delItems(int var0, int var1);
-	public abstract void deselect(int var0);
-	public abstract java.awt.Dimension getMinimumSize(int var0);
-	public abstract java.awt.Dimension getPreferredSize(int var0);
-	public abstract int[] getSelectedIndexes();
-	public abstract void makeVisible(int var0);
-	public abstract java.awt.Dimension minimumSize(int var0);
-	public abstract java.awt.Dimension preferredSize(int var0);
-	public abstract void removeAll();
-	public abstract void select(int var0);
-	public abstract void setMultipleMode(boolean var0);
-	public abstract void setMultipleSelections(boolean var0);
+public interface ListPeer extends java.awt.peer.ComponentPeer {
+	void add(java.lang.String var0, int var1);
+	void addItem(java.lang.String var0, int var1);
+	void clear();
+	void delItems(int var0, int var1);
+	void deselect(int var0);
+	java.awt.Dimension getMinimumSize(int var0);
+	java.awt.Dimension getPreferredSize(int var0);
+	int[] getSelectedIndexes();
+	void makeVisible(int var0);
+	java.awt.Dimension minimumSize(int var0);
+	java.awt.Dimension preferredSize(int var0);
+	void removeAll();
+	void select(int var0);
+	void setMultipleMode(boolean var0);
+	void setMultipleSelections(boolean var0);
 }
 

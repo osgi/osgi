@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,32 @@
 
 package java.awt;
 public class Frame extends java.awt.Window implements java.awt.MenuContainer {
-	public Frame() { super((java.awt.Window) null, (java.awt.GraphicsConfiguration) null); }
-	public Frame(java.awt.GraphicsConfiguration var0) { super((java.awt.Window) null, (java.awt.GraphicsConfiguration) null); }
-	public Frame(java.lang.String var0) { super((java.awt.Window) null, (java.awt.GraphicsConfiguration) null); }
-	public Frame(java.lang.String var0, java.awt.GraphicsConfiguration var1) { super((java.awt.Window) null, (java.awt.GraphicsConfiguration) null); }
+	protected class AccessibleAWTFrame extends java.awt.Window.AccessibleAWTWindow {
+		protected AccessibleAWTFrame() { } 
+	}
+	/** @deprecated */ public final static int CROSSHAIR_CURSOR = 1;
+	/** @deprecated */ public final static int DEFAULT_CURSOR = 0;
+	/** @deprecated */ public final static int E_RESIZE_CURSOR = 11;
+	/** @deprecated */ public final static int HAND_CURSOR = 12;
+	public final static int ICONIFIED = 1;
+	public final static int MAXIMIZED_BOTH = 6;
+	public final static int MAXIMIZED_HORIZ = 2;
+	public final static int MAXIMIZED_VERT = 4;
+	/** @deprecated */ public final static int MOVE_CURSOR = 13;
+	/** @deprecated */ public final static int NE_RESIZE_CURSOR = 7;
+	public final static int NORMAL = 0;
+	/** @deprecated */ public final static int NW_RESIZE_CURSOR = 6;
+	/** @deprecated */ public final static int N_RESIZE_CURSOR = 8;
+	/** @deprecated */ public final static int SE_RESIZE_CURSOR = 5;
+	/** @deprecated */ public final static int SW_RESIZE_CURSOR = 4;
+	/** @deprecated */ public final static int S_RESIZE_CURSOR = 9;
+	/** @deprecated */ public final static int TEXT_CURSOR = 2;
+	/** @deprecated */ public final static int WAIT_CURSOR = 3;
+	/** @deprecated */ public final static int W_RESIZE_CURSOR = 10;
+	public Frame()  { super((java.awt.Window) null, (java.awt.GraphicsConfiguration) null); } 
+	public Frame(java.awt.GraphicsConfiguration var0)  { super((java.awt.Window) null, (java.awt.GraphicsConfiguration) null); } 
+	public Frame(java.lang.String var0)  { super((java.awt.Window) null, (java.awt.GraphicsConfiguration) null); } 
+	public Frame(java.lang.String var0, java.awt.GraphicsConfiguration var1)  { super((java.awt.Window) null, (java.awt.GraphicsConfiguration) null); } 
 	/** @deprecated */ public int getCursorType() { return 0; }
 	public int getExtendedState() { return 0; }
 	public static java.awt.Frame[] getFrames() { return null; }
@@ -40,27 +62,5 @@ public class Frame extends java.awt.Window implements java.awt.MenuContainer {
 	public void setState(int var0) { }
 	public void setTitle(java.lang.String var0) { }
 	public void setUndecorated(boolean var0) { }
-	/** @deprecated */ public final static int CROSSHAIR_CURSOR = 1;
-	/** @deprecated */ public final static int DEFAULT_CURSOR = 0;
-	/** @deprecated */ public final static int E_RESIZE_CURSOR = 11;
-	/** @deprecated */ public final static int HAND_CURSOR = 12;
-	public final static int ICONIFIED = 1;
-	public final static int MAXIMIZED_BOTH = 6;
-	public final static int MAXIMIZED_HORIZ = 2;
-	public final static int MAXIMIZED_VERT = 4;
-	/** @deprecated */ public final static int MOVE_CURSOR = 13;
-	/** @deprecated */ public final static int NE_RESIZE_CURSOR = 7;
-	public final static int NORMAL = 0;
-	/** @deprecated */ public final static int NW_RESIZE_CURSOR = 6;
-	/** @deprecated */ public final static int N_RESIZE_CURSOR = 8;
-	/** @deprecated */ public final static int SE_RESIZE_CURSOR = 5;
-	/** @deprecated */ public final static int SW_RESIZE_CURSOR = 4;
-	/** @deprecated */ public final static int S_RESIZE_CURSOR = 9;
-	/** @deprecated */ public final static int TEXT_CURSOR = 2;
-	/** @deprecated */ public final static int WAIT_CURSOR = 3;
-	/** @deprecated */ public final static int W_RESIZE_CURSOR = 10;
-	protected class AccessibleAWTFrame extends java.awt.Window.AccessibleAWTWindow {
-		protected AccessibleAWTFrame() { }
-	}
 }
 

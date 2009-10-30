@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.rmi.server;
 public abstract class RemoteServer extends java.rmi.server.RemoteObject {
-	protected RemoteServer() { }
-	protected RemoteServer(java.rmi.server.RemoteRef var0) { }
+	protected RemoteServer() { } 
+	protected RemoteServer(java.rmi.server.RemoteRef var0) { } 
 	public static java.lang.String getClientHost() throws java.rmi.server.ServerNotActiveException { return null; }
 	public static java.io.PrintStream getLog() { return null; }
 	public static void setLog(java.io.OutputStream var0) { }

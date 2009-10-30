@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package org.xml.sax;
-public abstract interface XMLFilter extends org.xml.sax.XMLReader {
-	public abstract org.xml.sax.XMLReader getParent();
-	public abstract void setParent(org.xml.sax.XMLReader var0);
+public interface XMLFilter extends org.xml.sax.XMLReader {
+	org.xml.sax.XMLReader getParent();
+	void setParent(org.xml.sax.XMLReader var0);
 }
 

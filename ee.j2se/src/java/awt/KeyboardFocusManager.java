@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,11 @@
 
 package java.awt;
 public abstract class KeyboardFocusManager implements java.awt.KeyEventDispatcher, java.awt.KeyEventPostProcessor {
-	public KeyboardFocusManager() { }
+	public final static int BACKWARD_TRAVERSAL_KEYS = 1;
+	public final static int DOWN_CYCLE_TRAVERSAL_KEYS = 3;
+	public final static int FORWARD_TRAVERSAL_KEYS = 0;
+	public final static int UP_CYCLE_TRAVERSAL_KEYS = 2;
+	public KeyboardFocusManager() { } 
 	public void addKeyEventDispatcher(java.awt.KeyEventDispatcher var0) { }
 	public void addKeyEventPostProcessor(java.awt.KeyEventPostProcessor var0) { }
 	public void addPropertyChangeListener(java.beans.PropertyChangeListener var0) { }
@@ -39,7 +43,7 @@ public abstract class KeyboardFocusManager implements java.awt.KeyEventDispatche
 	public java.awt.Window getActiveWindow() { return null; }
 	public java.awt.Container getCurrentFocusCycleRoot() { return null; }
 	public static java.awt.KeyboardFocusManager getCurrentKeyboardFocusManager() { return null; }
-	public java.util.Set getDefaultFocusTraversalKeys(int var0) { return null; }
+	public java.util.Set<java.awt.AWTKeyStroke> getDefaultFocusTraversalKeys(int var0) { return null; }
 	public java.awt.FocusTraversalPolicy getDefaultFocusTraversalPolicy() { return null; }
 	public java.awt.Component getFocusOwner() { return null; }
 	public java.awt.Window getFocusedWindow() { return null; }
@@ -48,8 +52,8 @@ public abstract class KeyboardFocusManager implements java.awt.KeyEventDispatche
 	protected java.awt.Component getGlobalFocusOwner() { return null; }
 	protected java.awt.Window getGlobalFocusedWindow() { return null; }
 	protected java.awt.Component getGlobalPermanentFocusOwner() { return null; }
-	protected java.util.List getKeyEventDispatchers() { return null; }
-	protected java.util.List getKeyEventPostProcessors() { return null; }
+	protected java.util.List<java.awt.KeyEventDispatcher> getKeyEventDispatchers() { return null; }
+	protected java.util.List<java.awt.KeyEventPostProcessor> getKeyEventPostProcessors() { return null; }
 	public java.awt.Component getPermanentFocusOwner() { return null; }
 	public java.beans.PropertyChangeListener[] getPropertyChangeListeners() { return null; }
 	public java.beans.PropertyChangeListener[] getPropertyChangeListeners(java.lang.String var0) { return null; }
@@ -64,7 +68,7 @@ public abstract class KeyboardFocusManager implements java.awt.KeyEventDispatche
 	public void removeVetoableChangeListener(java.beans.VetoableChangeListener var0) { }
 	public void removeVetoableChangeListener(java.lang.String var0, java.beans.VetoableChangeListener var1) { }
 	public static void setCurrentKeyboardFocusManager(java.awt.KeyboardFocusManager var0) { }
-	public void setDefaultFocusTraversalKeys(int var0, java.util.Set var1) { }
+	public void setDefaultFocusTraversalKeys(int var0, java.util.Set<? extends java.awt.AWTKeyStroke> var1) { }
 	public void setDefaultFocusTraversalPolicy(java.awt.FocusTraversalPolicy var0) { }
 	protected void setGlobalActiveWindow(java.awt.Window var0) { }
 	public void setGlobalCurrentFocusCycleRoot(java.awt.Container var0) { }
@@ -73,9 +77,5 @@ public abstract class KeyboardFocusManager implements java.awt.KeyEventDispatche
 	protected void setGlobalPermanentFocusOwner(java.awt.Component var0) { }
 	public final void upFocusCycle() { }
 	public abstract void upFocusCycle(java.awt.Component var0);
-	public final static int BACKWARD_TRAVERSAL_KEYS = 1;
-	public final static int DOWN_CYCLE_TRAVERSAL_KEYS = 3;
-	public final static int FORWARD_TRAVERSAL_KEYS = 0;
-	public final static int UP_CYCLE_TRAVERSAL_KEYS = 2;
 }
 

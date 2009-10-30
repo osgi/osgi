@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,18 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLBodyElement extends org.w3c.dom.html.HTMLElement {
-	public abstract java.lang.String getALink();
-	public abstract java.lang.String getBackground();
-	public abstract java.lang.String getBgColor();
-	public abstract java.lang.String getLink();
-	public abstract java.lang.String getText();
-	public abstract java.lang.String getVLink();
-	public abstract void setALink(java.lang.String var0);
-	public abstract void setBackground(java.lang.String var0);
-	public abstract void setBgColor(java.lang.String var0);
-	public abstract void setLink(java.lang.String var0);
-	public abstract void setText(java.lang.String var0);
-	public abstract void setVLink(java.lang.String var0);
+public interface HTMLBodyElement extends org.w3c.dom.html.HTMLElement {
+	java.lang.String getALink();
+	java.lang.String getBackground();
+	java.lang.String getBgColor();
+	java.lang.String getLink();
+	java.lang.String getText();
+	java.lang.String getVLink();
+	void setALink(java.lang.String var0);
+	void setBackground(java.lang.String var0);
+	void setBgColor(java.lang.String var0);
+	void setLink(java.lang.String var0);
+	void setText(java.lang.String var0);
+	void setVLink(java.lang.String var0);
 }
 

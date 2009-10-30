@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.awt.image;
 public class ShortLookupTable extends java.awt.image.LookupTable {
-	public ShortLookupTable(int var0, short[] var1) { super(0, 0); }
-	public ShortLookupTable(int var0, short[][] var1) { super(0, 0); }
+	public ShortLookupTable(int var0, short[] var1)  { super(0, 0); } 
+	public ShortLookupTable(int var0, short[][] var1)  { super(0, 0); } 
 	public final short[][] getTable() { return null; }
 	public int[] lookupPixel(int[] var0, int[] var1) { return null; }
 	public short[] lookupPixel(short[] var0, short[] var1) { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package org.xml.sax;
-public abstract interface ErrorHandler {
-	public abstract void error(org.xml.sax.SAXParseException var0) throws org.xml.sax.SAXException;
-	public abstract void fatalError(org.xml.sax.SAXParseException var0) throws org.xml.sax.SAXException;
-	public abstract void warning(org.xml.sax.SAXParseException var0) throws org.xml.sax.SAXException;
+public interface ErrorHandler {
+	void error(org.xml.sax.SAXParseException var0) throws org.xml.sax.SAXException;
+	void fatalError(org.xml.sax.SAXParseException var0) throws org.xml.sax.SAXException;
+	void warning(org.xml.sax.SAXParseException var0) throws org.xml.sax.SAXException;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,19 @@
 
 package javax.swing.plaf.basic;
 public class BasicProgressBarUI extends javax.swing.plaf.ProgressBarUI {
-	public BasicProgressBarUI() { }
+	public class ChangeHandler implements javax.swing.event.ChangeListener {
+		public ChangeHandler() { } 
+		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
+	}
+	protected java.awt.Rectangle boxRect;
+	protected javax.swing.event.ChangeListener changeListener;
+	protected javax.swing.JProgressBar progressBar;
+	public BasicProgressBarUI() { } 
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	protected int getAmountFull(java.awt.Insets var0, int var1, int var2) { return 0; }
 	protected int getAnimationIndex() { return 0; }
 	protected java.awt.Rectangle getBox(java.awt.Rectangle var0) { return null; }
+	protected int getBoxLength(int var0, int var1) { return 0; }
 	protected int getCellLength() { return 0; }
 	protected int getCellSpacing() { return 0; }
 	protected java.awt.Dimension getPreferredInnerHorizontal() { return null; }
@@ -41,11 +49,5 @@ public class BasicProgressBarUI extends javax.swing.plaf.ProgressBarUI {
 	protected void stopAnimationTimer() { }
 	protected void uninstallDefaults() { }
 	protected void uninstallListeners() { }
-	protected javax.swing.event.ChangeListener changeListener;
-	protected javax.swing.JProgressBar progressBar;
-	public class ChangeHandler implements javax.swing.event.ChangeListener {
-		public ChangeHandler() { }
-		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
-	}
 }
 

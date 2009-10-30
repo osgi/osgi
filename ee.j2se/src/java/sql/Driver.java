@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package java.sql;
-public abstract interface Driver {
-	public abstract boolean acceptsURL(java.lang.String var0) throws java.sql.SQLException;
-	public abstract java.sql.Connection connect(java.lang.String var0, java.util.Properties var1) throws java.sql.SQLException;
-	public abstract int getMajorVersion();
-	public abstract int getMinorVersion();
-	public abstract java.sql.DriverPropertyInfo[] getPropertyInfo(java.lang.String var0, java.util.Properties var1) throws java.sql.SQLException;
-	public abstract boolean jdbcCompliant();
+public interface Driver {
+	boolean acceptsURL(java.lang.String var0) throws java.sql.SQLException;
+	java.sql.Connection connect(java.lang.String var0, java.util.Properties var1) throws java.sql.SQLException;
+	int getMajorVersion();
+	int getMinorVersion();
+	java.sql.DriverPropertyInfo[] getPropertyInfo(java.lang.String var0, java.util.Properties var1) throws java.sql.SQLException;
+	boolean jdbcCompliant();
 }
 

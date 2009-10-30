@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package java.awt.image;
-public abstract interface BufferedImageOp {
-	public abstract java.awt.image.BufferedImage createCompatibleDestImage(java.awt.image.BufferedImage var0, java.awt.image.ColorModel var1);
-	public abstract java.awt.image.BufferedImage filter(java.awt.image.BufferedImage var0, java.awt.image.BufferedImage var1);
-	public abstract java.awt.geom.Rectangle2D getBounds2D(java.awt.image.BufferedImage var0);
-	public abstract java.awt.geom.Point2D getPoint2D(java.awt.geom.Point2D var0, java.awt.geom.Point2D var1);
-	public abstract java.awt.RenderingHints getRenderingHints();
+public interface BufferedImageOp {
+	java.awt.image.BufferedImage createCompatibleDestImage(java.awt.image.BufferedImage var0, java.awt.image.ColorModel var1);
+	java.awt.image.BufferedImage filter(java.awt.image.BufferedImage var0, java.awt.image.BufferedImage var1);
+	java.awt.geom.Rectangle2D getBounds2D(java.awt.image.BufferedImage var0);
+	java.awt.geom.Point2D getPoint2D(java.awt.geom.Point2D var0, java.awt.geom.Point2D var1);
+	java.awt.RenderingHints getRenderingHints();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,22 @@
 
 package java.awt.geom;
 public class AffineTransform implements java.io.Serializable, java.lang.Cloneable {
-	public AffineTransform() { }
-	public AffineTransform(double var0, double var1, double var2, double var3, double var4, double var5) { }
-	public AffineTransform(float var0, float var1, float var2, float var3, float var4, float var5) { }
-	public AffineTransform(java.awt.geom.AffineTransform var0) { }
-	public AffineTransform(double[] var0) { }
-	public AffineTransform(float[] var0) { }
+	public final static int TYPE_FLIP = 64;
+	public final static int TYPE_GENERAL_ROTATION = 16;
+	public final static int TYPE_GENERAL_SCALE = 4;
+	public final static int TYPE_GENERAL_TRANSFORM = 32;
+	public final static int TYPE_IDENTITY = 0;
+	public final static int TYPE_MASK_ROTATION = 24;
+	public final static int TYPE_MASK_SCALE = 6;
+	public final static int TYPE_QUADRANT_ROTATION = 8;
+	public final static int TYPE_TRANSLATION = 1;
+	public final static int TYPE_UNIFORM_SCALE = 2;
+	public AffineTransform() { } 
+	public AffineTransform(double var0, double var1, double var2, double var3, double var4, double var5) { } 
+	public AffineTransform(float var0, float var1, float var2, float var3, float var4, float var5) { } 
+	public AffineTransform(java.awt.geom.AffineTransform var0) { } 
+	public AffineTransform(double[] var0) { } 
+	public AffineTransform(float[] var0) { } 
 	public java.lang.Object clone() { return null; }
 	public void concatenate(java.awt.geom.AffineTransform var0) { }
 	public java.awt.geom.AffineTransform createInverse() throws java.awt.geom.NoninvertibleTransformException { return null; }
@@ -66,15 +76,5 @@ public class AffineTransform implements java.io.Serializable, java.lang.Cloneabl
 	public void transform(float[] var0, int var1, float[] var2, int var3, int var4) { }
 	public void transform(java.awt.geom.Point2D[] var0, int var1, java.awt.geom.Point2D[] var2, int var3, int var4) { }
 	public void translate(double var0, double var1) { }
-	public final static int TYPE_FLIP = 64;
-	public final static int TYPE_GENERAL_ROTATION = 16;
-	public final static int TYPE_GENERAL_SCALE = 4;
-	public final static int TYPE_GENERAL_TRANSFORM = 32;
-	public final static int TYPE_IDENTITY = 0;
-	public final static int TYPE_MASK_ROTATION = 24;
-	public final static int TYPE_MASK_SCALE = 6;
-	public final static int TYPE_QUADRANT_ROTATION = 8;
-	public final static int TYPE_TRANSLATION = 1;
-	public final static int TYPE_UNIFORM_SCALE = 2;
 }
 

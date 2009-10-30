@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package java.io;
 public class BufferedOutputStream extends java.io.FilterOutputStream {
-	public BufferedOutputStream(java.io.OutputStream var0) { super((java.io.OutputStream) null); }
-	public BufferedOutputStream(java.io.OutputStream var0, int var1) { super((java.io.OutputStream) null); }
+	protected byte[] buf;
+	protected int count;
+	public BufferedOutputStream(java.io.OutputStream var0)  { super((java.io.OutputStream) null); } 
+	public BufferedOutputStream(java.io.OutputStream var0, int var1)  { super((java.io.OutputStream) null); } 
 	public void flush() throws java.io.IOException { }
 	public void write(int var0) throws java.io.IOException { }
 	public void write(byte[] var0, int var1, int var2) throws java.io.IOException { }
-	protected byte[] buf;
-	protected int count;
 }
 

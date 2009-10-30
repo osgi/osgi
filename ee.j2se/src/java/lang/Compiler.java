@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package java.lang;
 public final class Compiler {
-	public static java.lang.Object command(java.lang.Object var0) { return null; }
-	public static boolean compileClass(java.lang.Class var0) { return false; }
-	public static boolean compileClasses(java.lang.String var0) { return false; }
-	public static void disable() { }
-	public static void enable() { }
+	public static native java.lang.Object command(java.lang.Object var0);
+	public static native boolean compileClass(java.lang.Class<?> var0);
+	public static native boolean compileClasses(java.lang.String var0);
+	public static native void disable();
+	public static native void enable();
 	private Compiler() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

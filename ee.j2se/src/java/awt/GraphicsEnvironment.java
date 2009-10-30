@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt;
 public abstract class GraphicsEnvironment {
-	protected GraphicsEnvironment() { }
+	protected GraphicsEnvironment() { } 
 	public abstract java.awt.Graphics2D createGraphics(java.awt.image.BufferedImage var0);
 	public abstract java.awt.Font[] getAllFonts();
 	public abstract java.lang.String[] getAvailableFontFamilyNames();
@@ -28,5 +28,7 @@ public abstract class GraphicsEnvironment {
 	public abstract java.awt.GraphicsDevice[] getScreenDevices();
 	public static boolean isHeadless() { return false; }
 	public boolean isHeadlessInstance() { return false; }
+	public void preferLocaleFonts() { }
+	public void preferProportionalFonts() { }
 }
 

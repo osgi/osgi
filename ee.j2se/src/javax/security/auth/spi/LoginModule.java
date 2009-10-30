@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package javax.security.auth.spi;
-public abstract interface LoginModule {
-	public abstract boolean abort() throws javax.security.auth.login.LoginException;
-	public abstract boolean commit() throws javax.security.auth.login.LoginException;
-	public abstract void initialize(javax.security.auth.Subject var0, javax.security.auth.callback.CallbackHandler var1, java.util.Map var2, java.util.Map var3);
-	public abstract boolean login() throws javax.security.auth.login.LoginException;
-	public abstract boolean logout() throws javax.security.auth.login.LoginException;
+public interface LoginModule {
+	boolean abort() throws javax.security.auth.login.LoginException;
+	boolean commit() throws javax.security.auth.login.LoginException;
+	void initialize(javax.security.auth.Subject var0, javax.security.auth.callback.CallbackHandler var1, java.util.Map<java.lang.String,?> var2, java.util.Map<java.lang.String,?> var3);
+	boolean login() throws javax.security.auth.login.LoginException;
+	boolean logout() throws javax.security.auth.login.LoginException;
 }
 

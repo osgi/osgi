@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 package javax.swing;
 public class JRadioButtonMenuItem extends javax.swing.JMenuItem implements javax.accessibility.Accessible {
-	public JRadioButtonMenuItem() { }
-	public JRadioButtonMenuItem(java.lang.String var0) { }
-	public JRadioButtonMenuItem(java.lang.String var0, javax.swing.Icon var1) { }
-	public JRadioButtonMenuItem(java.lang.String var0, javax.swing.Icon var1, boolean var2) { }
-	public JRadioButtonMenuItem(java.lang.String var0, boolean var1) { }
-	public JRadioButtonMenuItem(javax.swing.Action var0) { }
-	public JRadioButtonMenuItem(javax.swing.Icon var0) { }
-	public JRadioButtonMenuItem(javax.swing.Icon var0, boolean var1) { }
 	protected class AccessibleJRadioButtonMenuItem extends javax.swing.JMenuItem.AccessibleJMenuItem {
-		protected AccessibleJRadioButtonMenuItem() { }
+		protected AccessibleJRadioButtonMenuItem() { } 
 	}
+	public JRadioButtonMenuItem() { } 
+	public JRadioButtonMenuItem(java.lang.String var0) { } 
+	public JRadioButtonMenuItem(java.lang.String var0, javax.swing.Icon var1) { } 
+	public JRadioButtonMenuItem(java.lang.String var0, javax.swing.Icon var1, boolean var2) { } 
+	public JRadioButtonMenuItem(java.lang.String var0, boolean var1) { } 
+	public JRadioButtonMenuItem(javax.swing.Action var0) { } 
+	public JRadioButtonMenuItem(javax.swing.Icon var0) { } 
+	public JRadioButtonMenuItem(javax.swing.Icon var0, boolean var1) { } 
 }
 

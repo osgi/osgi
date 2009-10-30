@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,6 @@
 
 package javax.security.auth.login;
 public class AppConfigurationEntry {
-	public AppConfigurationEntry(java.lang.String var0, javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag var1, java.util.Map var2) { }
-	public javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag getControlFlag() { return null; }
-	public java.lang.String getLoginModuleName() { return null; }
-	public java.util.Map getOptions() { return null; }
 	public static class LoginModuleControlFlag {
 		public final static javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag OPTIONAL; static { OPTIONAL = null; }
 		public final static javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag REQUIRED; static { REQUIRED = null; }
@@ -27,5 +23,9 @@ public class AppConfigurationEntry {
 		public final static javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag SUFFICIENT; static { SUFFICIENT = null; }
 		private LoginModuleControlFlag() { } /* generated constructor to prevent compiler adding default public constructor */
 	}
+	public AppConfigurationEntry(java.lang.String var0, javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag var1, java.util.Map<java.lang.String,?> var2) { } 
+	public javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag getControlFlag() { return null; }
+	public java.lang.String getLoginModuleName() { return null; }
+	public java.util.Map<java.lang.String,?> getOptions() { return null; }
 }
 

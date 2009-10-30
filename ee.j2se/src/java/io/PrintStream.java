@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,22 @@
  */
 
 package java.io;
-public class PrintStream extends java.io.FilterOutputStream {
-	public PrintStream(java.io.OutputStream var0) { super((java.io.OutputStream) null); }
-	public PrintStream(java.io.OutputStream var0, boolean var1) { super((java.io.OutputStream) null); }
-	public PrintStream(java.io.OutputStream var0, boolean var1, java.lang.String var2) throws java.io.UnsupportedEncodingException { super((java.io.OutputStream) null); }
+public class PrintStream extends java.io.FilterOutputStream implements java.io.Closeable, java.lang.Appendable {
+	public PrintStream(java.io.File var0) throws java.io.FileNotFoundException  { super((java.io.OutputStream) null); } 
+	public PrintStream(java.io.File var0, java.lang.String var1) throws java.io.FileNotFoundException, java.io.UnsupportedEncodingException  { super((java.io.OutputStream) null); } 
+	public PrintStream(java.io.OutputStream var0)  { super((java.io.OutputStream) null); } 
+	public PrintStream(java.io.OutputStream var0, boolean var1)  { super((java.io.OutputStream) null); } 
+	public PrintStream(java.io.OutputStream var0, boolean var1, java.lang.String var2) throws java.io.UnsupportedEncodingException  { super((java.io.OutputStream) null); } 
+	public PrintStream(java.lang.String var0) throws java.io.FileNotFoundException  { super((java.io.OutputStream) null); } 
+	public PrintStream(java.lang.String var0, java.lang.String var1) throws java.io.FileNotFoundException, java.io.UnsupportedEncodingException  { super((java.io.OutputStream) null); } 
+	public java.io.PrintStream append(char var0) { return null; }
+	public java.io.PrintStream append(java.lang.CharSequence var0) { return null; }
+	public java.io.PrintStream append(java.lang.CharSequence var0, int var1, int var2) { return null; }
 	public boolean checkError() { return false; }
 	public void close() { }
 	public void flush() { }
+	public java.io.PrintStream format(java.lang.String var0, java.lang.Object[] var1) { return null; }
+	public java.io.PrintStream format(java.util.Locale var0, java.lang.String var1, java.lang.Object[] var2) { return null; }
 	public void print(char var0) { }
 	public void print(double var0) { }
 	public void print(float var0) { }
@@ -31,6 +40,8 @@ public class PrintStream extends java.io.FilterOutputStream {
 	public void print(java.lang.String var0) { }
 	public void print(boolean var0) { }
 	public void print(char[] var0) { }
+	public java.io.PrintStream printf(java.lang.String var0, java.lang.Object[] var1) { return null; }
+	public java.io.PrintStream printf(java.util.Locale var0, java.lang.String var1, java.lang.Object[] var2) { return null; }
 	public void println() { }
 	public void println(char var0) { }
 	public void println(double var0) { }

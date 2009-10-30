@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package org.w3c.dom.css;
-public abstract interface CSSStyleSheet extends org.w3c.dom.stylesheets.StyleSheet {
-	public abstract void deleteRule(int var0);
-	public abstract org.w3c.dom.css.CSSRuleList getCssRules();
-	public abstract org.w3c.dom.css.CSSRule getOwnerRule();
-	public abstract int insertRule(java.lang.String var0, int var1);
+public interface CSSStyleSheet extends org.w3c.dom.stylesheets.StyleSheet {
+	void deleteRule(int var0);
+	org.w3c.dom.css.CSSRuleList getCssRules();
+	org.w3c.dom.css.CSSRule getOwnerRule();
+	int insertRule(java.lang.String var0, int var1);
 }
 

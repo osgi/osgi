@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package javax.swing.plaf.basic;
 public class BasicRadioButtonUI extends javax.swing.plaf.basic.BasicToggleButtonUI {
-	public BasicRadioButtonUI() { }
+	protected javax.swing.Icon icon;
+	public BasicRadioButtonUI() { } 
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	public javax.swing.Icon getDefaultIcon() { return null; }
 	public void paint(java.awt.Graphics var0, javax.swing.JComponent var1) { }
 	protected void paintFocus(java.awt.Graphics var0, java.awt.Rectangle var1, java.awt.Dimension var2) { }
-	protected javax.swing.Icon icon;
 }
 

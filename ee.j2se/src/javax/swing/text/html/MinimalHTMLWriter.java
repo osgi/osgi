@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.swing.text.html;
 public class MinimalHTMLWriter extends javax.swing.text.AbstractWriter {
-	public MinimalHTMLWriter(java.io.Writer var0, javax.swing.text.StyledDocument var1) { super((java.io.Writer) null, (javax.swing.text.Element) null, 0, 0); }
-	public MinimalHTMLWriter(java.io.Writer var0, javax.swing.text.StyledDocument var1, int var2, int var3) { super((java.io.Writer) null, (javax.swing.text.Element) null, 0, 0); }
+	public MinimalHTMLWriter(java.io.Writer var0, javax.swing.text.StyledDocument var1)  { super((java.io.Writer) null, (javax.swing.text.Element) null, 0, 0); } 
+	public MinimalHTMLWriter(java.io.Writer var0, javax.swing.text.StyledDocument var1, int var2, int var3)  { super((java.io.Writer) null, (javax.swing.text.Element) null, 0, 0); } 
 	protected void endFontTag() throws java.io.IOException { }
 	protected boolean inFontTag() { return false; }
 	protected boolean isText(javax.swing.text.Element var0) { return false; }

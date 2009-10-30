@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package java.awt.image;
 public final class DataBufferDouble extends java.awt.image.DataBuffer {
-	public DataBufferDouble(int var0) { super(0, 0, 0, (int[]) null); }
-	public DataBufferDouble(int var0, int var1) { super(0, 0, 0, (int[]) null); }
-	public DataBufferDouble(double[] var0, int var1) { super(0, 0, 0, (int[]) null); }
-	public DataBufferDouble(double[] var0, int var1, int var2) { super(0, 0, 0, (int[]) null); }
-	public DataBufferDouble(double[][] var0, int var1) { super(0, 0, 0, (int[]) null); }
-	public DataBufferDouble(double[][] var0, int var1, int[] var2) { super(0, 0, 0, (int[]) null); }
+	public DataBufferDouble(int var0)  { super(0, 0, 0, (int[]) null); } 
+	public DataBufferDouble(int var0, int var1)  { super(0, 0, 0, (int[]) null); } 
+	public DataBufferDouble(double[] var0, int var1)  { super(0, 0, 0, (int[]) null); } 
+	public DataBufferDouble(double[] var0, int var1, int var2)  { super(0, 0, 0, (int[]) null); } 
+	public DataBufferDouble(double[][] var0, int var1)  { super(0, 0, 0, (int[]) null); } 
+	public DataBufferDouble(double[][] var0, int var1, int[] var2)  { super(0, 0, 0, (int[]) null); } 
 	public double[][] getBankData() { return null; }
 	public double[] getData() { return null; }
 	public double[] getData(int var0) { return null; }

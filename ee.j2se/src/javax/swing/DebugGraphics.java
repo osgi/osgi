@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,13 @@
 
 package javax.swing;
 public class DebugGraphics extends java.awt.Graphics {
-	public DebugGraphics() { }
-	public DebugGraphics(java.awt.Graphics var0) { }
-	public DebugGraphics(java.awt.Graphics var0, javax.swing.JComponent var1) { }
+	public final static int BUFFERED_OPTION = 4;
+	public final static int FLASH_OPTION = 2;
+	public final static int LOG_OPTION = 1;
+	public final static int NONE_OPTION = -1;
+	public DebugGraphics() { } 
+	public DebugGraphics(java.awt.Graphics var0) { } 
+	public DebugGraphics(java.awt.Graphics var0, javax.swing.JComponent var1) { } 
 	public void clearRect(int var0, int var1, int var2, int var3) { }
 	public void clipRect(int var0, int var1, int var2, int var3) { }
 	public void copyArea(int var0, int var1, int var2, int var3, int var4, int var5) { }
@@ -66,9 +70,5 @@ public class DebugGraphics extends java.awt.Graphics {
 	public void setPaintMode() { }
 	public void setXORMode(java.awt.Color var0) { }
 	public void translate(int var0, int var1) { }
-	public final static int BUFFERED_OPTION = 4;
-	public final static int FLASH_OPTION = 2;
-	public final static int LOG_OPTION = 1;
-	public final static int NONE_OPTION = -1;
 }
 

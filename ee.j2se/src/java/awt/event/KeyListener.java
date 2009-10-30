@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package java.awt.event;
-public abstract interface KeyListener extends java.util.EventListener {
-	public abstract void keyPressed(java.awt.event.KeyEvent var0);
-	public abstract void keyReleased(java.awt.event.KeyEvent var0);
-	public abstract void keyTyped(java.awt.event.KeyEvent var0);
+public interface KeyListener extends java.util.EventListener {
+	void keyPressed(java.awt.event.KeyEvent var0);
+	void keyReleased(java.awt.event.KeyEvent var0);
+	void keyTyped(java.awt.event.KeyEvent var0);
 }
 

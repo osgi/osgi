@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt.image.renderable;
 public class RenderableImageProducer implements java.awt.image.ImageProducer, java.lang.Runnable {
-	public RenderableImageProducer(java.awt.image.renderable.RenderableImage var0, java.awt.image.renderable.RenderContext var1) { }
+	public RenderableImageProducer(java.awt.image.renderable.RenderableImage var0, java.awt.image.renderable.RenderContext var1) { } 
 	public void addConsumer(java.awt.image.ImageConsumer var0) { }
 	public boolean isConsumer(java.awt.image.ImageConsumer var0) { return false; }
 	public void removeConsumer(java.awt.image.ImageConsumer var0) { }

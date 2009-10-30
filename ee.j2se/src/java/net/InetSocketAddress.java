@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 package java.net;
 public class InetSocketAddress extends java.net.SocketAddress {
-	public InetSocketAddress(int var0) { }
-	public InetSocketAddress(java.lang.String var0, int var1) { }
-	public InetSocketAddress(java.net.InetAddress var0, int var1) { }
+	public InetSocketAddress(int var0) { } 
+	public InetSocketAddress(java.lang.String var0, int var1) { } 
+	public InetSocketAddress(java.net.InetAddress var0, int var1) { } 
+	public static java.net.InetSocketAddress createUnresolved(java.lang.String var0, int var1) { return null; }
 	public final boolean equals(java.lang.Object var0) { return false; }
 	public final java.net.InetAddress getAddress() { return null; }
 	public final java.lang.String getHostName() { return null; }

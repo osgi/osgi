@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,18 @@
  */
 
 package java.beans;
-public abstract interface PropertyEditor {
-	public abstract void addPropertyChangeListener(java.beans.PropertyChangeListener var0);
-	public abstract java.lang.String getAsText();
-	public abstract java.awt.Component getCustomEditor();
-	public abstract java.lang.String getJavaInitializationString();
-	public abstract java.lang.String[] getTags();
-	public abstract java.lang.Object getValue();
-	public abstract boolean isPaintable();
-	public abstract void paintValue(java.awt.Graphics var0, java.awt.Rectangle var1);
-	public abstract void removePropertyChangeListener(java.beans.PropertyChangeListener var0);
-	public abstract void setAsText(java.lang.String var0);
-	public abstract void setValue(java.lang.Object var0);
-	public abstract boolean supportsCustomEditor();
+public interface PropertyEditor {
+	void addPropertyChangeListener(java.beans.PropertyChangeListener var0);
+	java.lang.String getAsText();
+	java.awt.Component getCustomEditor();
+	java.lang.String getJavaInitializationString();
+	java.lang.String[] getTags();
+	java.lang.Object getValue();
+	boolean isPaintable();
+	void paintValue(java.awt.Graphics var0, java.awt.Rectangle var1);
+	void removePropertyChangeListener(java.beans.PropertyChangeListener var0);
+	void setAsText(java.lang.String var0);
+	void setValue(java.lang.Object var0);
+	boolean supportsCustomEditor();
 }
 

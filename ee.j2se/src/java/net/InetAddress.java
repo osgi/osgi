@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,8 @@ public class InetAddress implements java.io.Serializable {
 	public boolean isMCOrgLocal() { return false; }
 	public boolean isMCSiteLocal() { return false; }
 	public boolean isMulticastAddress() { return false; }
+	public boolean isReachable(int var0) throws java.io.IOException { return false; }
+	public boolean isReachable(java.net.NetworkInterface var0, int var1, int var2) throws java.io.IOException { return false; }
 	public boolean isSiteLocalAddress() { return false; }
 	InetAddress() { } /* generated constructor to prevent compiler adding default public constructor */
 }

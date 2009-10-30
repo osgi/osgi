@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.awt;
 public class Robot {
-	public Robot() throws java.awt.AWTException { }
-	public Robot(java.awt.GraphicsDevice var0) throws java.awt.AWTException { }
+	public Robot() throws java.awt.AWTException { } 
+	public Robot(java.awt.GraphicsDevice var0) throws java.awt.AWTException { } 
 	public java.awt.image.BufferedImage createScreenCapture(java.awt.Rectangle var0) { return null; }
 	public void delay(int var0) { }
 	public int getAutoDelay() { return 0; }

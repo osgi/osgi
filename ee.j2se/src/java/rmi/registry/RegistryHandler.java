@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package java.rmi.registry;
-/** @deprecated */ public abstract interface RegistryHandler {
-	/** @deprecated */ public abstract java.rmi.registry.Registry registryImpl(int var0) throws java.rmi.RemoteException;
-	/** @deprecated */ public abstract java.rmi.registry.Registry registryStub(java.lang.String var0, int var1) throws java.rmi.RemoteException;
+/** @deprecated */ public interface RegistryHandler {
+	/** @deprecated */ java.rmi.registry.Registry registryImpl(int var0) throws java.rmi.RemoteException;
+	/** @deprecated */ java.rmi.registry.Registry registryStub(java.lang.String var0, int var1) throws java.rmi.RemoteException;
 }
 

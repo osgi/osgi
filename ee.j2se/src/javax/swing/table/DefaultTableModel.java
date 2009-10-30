@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,14 @@
 
 package javax.swing.table;
 public class DefaultTableModel extends javax.swing.table.AbstractTableModel implements java.io.Serializable {
-	public DefaultTableModel() { }
-	public DefaultTableModel(int var0, int var1) { }
-	public DefaultTableModel(java.util.Vector var0, int var1) { }
-	public DefaultTableModel(java.util.Vector var0, java.util.Vector var1) { }
-	public DefaultTableModel(java.lang.Object[] var0, int var1) { }
-	public DefaultTableModel(java.lang.Object[][] var0, java.lang.Object[] var1) { }
+	protected java.util.Vector columnIdentifiers;
+	protected java.util.Vector dataVector;
+	public DefaultTableModel() { } 
+	public DefaultTableModel(int var0, int var1) { } 
+	public DefaultTableModel(java.util.Vector var0, int var1) { } 
+	public DefaultTableModel(java.util.Vector var0, java.util.Vector var1) { } 
+	public DefaultTableModel(java.lang.Object[] var0, int var1) { } 
+	public DefaultTableModel(java.lang.Object[][] var0, java.lang.Object[] var1) { } 
 	public void addColumn(java.lang.Object var0) { }
 	public void addColumn(java.lang.Object var0, java.util.Vector var1) { }
 	public void addColumn(java.lang.Object var0, java.lang.Object[] var1) { }
@@ -47,7 +49,5 @@ public class DefaultTableModel extends javax.swing.table.AbstractTableModel impl
 	public void setDataVector(java.lang.Object[][] var0, java.lang.Object[] var1) { }
 	public void setNumRows(int var0) { }
 	public void setRowCount(int var0) { }
-	protected java.util.Vector columnIdentifiers;
-	protected java.util.Vector dataVector;
 }
 

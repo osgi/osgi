@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,37 +16,6 @@
 
 package java.awt;
 public class Color implements java.awt.Paint, java.io.Serializable {
-	public Color(float var0, float var1, float var2) { }
-	public Color(float var0, float var1, float var2, float var3) { }
-	public Color(int var0) { }
-	public Color(int var0, int var1, int var2) { }
-	public Color(int var0, int var1, int var2, int var3) { }
-	public Color(int var0, boolean var1) { }
-	public Color(java.awt.color.ColorSpace var0, float[] var1, float var2) { }
-	public static int HSBtoRGB(float var0, float var1, float var2) { return 0; }
-	public static float[] RGBtoHSB(int var0, int var1, int var2, float[] var3) { return null; }
-	public java.awt.Color brighter() { return null; }
-	public java.awt.PaintContext createContext(java.awt.image.ColorModel var0, java.awt.Rectangle var1, java.awt.geom.Rectangle2D var2, java.awt.geom.AffineTransform var3, java.awt.RenderingHints var4) { return null; }
-	public java.awt.Color darker() { return null; }
-	public static java.awt.Color decode(java.lang.String var0) { return null; }
-	public int getAlpha() { return 0; }
-	public int getBlue() { return 0; }
-	public static java.awt.Color getColor(java.lang.String var0) { return null; }
-	public static java.awt.Color getColor(java.lang.String var0, int var1) { return null; }
-	public static java.awt.Color getColor(java.lang.String var0, java.awt.Color var1) { return null; }
-	public float[] getColorComponents(java.awt.color.ColorSpace var0, float[] var1) { return null; }
-	public float[] getColorComponents(float[] var0) { return null; }
-	public java.awt.color.ColorSpace getColorSpace() { return null; }
-	public float[] getComponents(java.awt.color.ColorSpace var0, float[] var1) { return null; }
-	public float[] getComponents(float[] var0) { return null; }
-	public int getGreen() { return 0; }
-	public static java.awt.Color getHSBColor(float var0, float var1, float var2) { return null; }
-	public int getRGB() { return 0; }
-	public float[] getRGBColorComponents(float[] var0) { return null; }
-	public float[] getRGBComponents(float[] var0) { return null; }
-	public int getRed() { return 0; }
-	public int getTransparency() { return 0; }
-	public int hashCode() { return 0; }
 	public final static java.awt.Color BLACK; static { BLACK = null; }
 	public final static java.awt.Color BLUE; static { BLUE = null; }
 	public final static java.awt.Color CYAN; static { CYAN = null; }
@@ -73,5 +42,36 @@ public class Color implements java.awt.Paint, java.io.Serializable {
 	public final static java.awt.Color red; static { red = null; }
 	public final static java.awt.Color white; static { white = null; }
 	public final static java.awt.Color yellow; static { yellow = null; }
+	public Color(float var0, float var1, float var2) { } 
+	public Color(float var0, float var1, float var2, float var3) { } 
+	public Color(int var0) { } 
+	public Color(int var0, int var1, int var2) { } 
+	public Color(int var0, int var1, int var2, int var3) { } 
+	public Color(int var0, boolean var1) { } 
+	public Color(java.awt.color.ColorSpace var0, float[] var1, float var2) { } 
+	public static int HSBtoRGB(float var0, float var1, float var2) { return 0; }
+	public static float[] RGBtoHSB(int var0, int var1, int var2, float[] var3) { return null; }
+	public java.awt.Color brighter() { return null; }
+	public java.awt.PaintContext createContext(java.awt.image.ColorModel var0, java.awt.Rectangle var1, java.awt.geom.Rectangle2D var2, java.awt.geom.AffineTransform var3, java.awt.RenderingHints var4) { return null; }
+	public java.awt.Color darker() { return null; }
+	public static java.awt.Color decode(java.lang.String var0) { return null; }
+	public int getAlpha() { return 0; }
+	public int getBlue() { return 0; }
+	public static java.awt.Color getColor(java.lang.String var0) { return null; }
+	public static java.awt.Color getColor(java.lang.String var0, int var1) { return null; }
+	public static java.awt.Color getColor(java.lang.String var0, java.awt.Color var1) { return null; }
+	public float[] getColorComponents(java.awt.color.ColorSpace var0, float[] var1) { return null; }
+	public float[] getColorComponents(float[] var0) { return null; }
+	public java.awt.color.ColorSpace getColorSpace() { return null; }
+	public float[] getComponents(java.awt.color.ColorSpace var0, float[] var1) { return null; }
+	public float[] getComponents(float[] var0) { return null; }
+	public int getGreen() { return 0; }
+	public static java.awt.Color getHSBColor(float var0, float var1, float var2) { return null; }
+	public int getRGB() { return 0; }
+	public float[] getRGBColorComponents(float[] var0) { return null; }
+	public float[] getRGBComponents(float[] var0) { return null; }
+	public int getRed() { return 0; }
+	public int getTransparency() { return 0; }
+	public int hashCode() { return 0; }
 }
 

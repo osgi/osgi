@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package java.util;
-public abstract interface ListIterator extends java.util.Iterator {
-	public abstract void add(java.lang.Object var0);
-	public abstract boolean hasPrevious();
-	public abstract int nextIndex();
-	public abstract java.lang.Object previous();
-	public abstract int previousIndex();
-	public abstract void set(java.lang.Object var0);
+public interface ListIterator<E> extends java.util.Iterator<E> {
+	void add(E var0);
+	boolean hasPrevious();
+	int nextIndex();
+	E previous();
+	int previousIndex();
+	void set(E var0);
 }
 

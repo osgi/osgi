@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package javax.swing.tree;
-public abstract interface MutableTreeNode extends javax.swing.tree.TreeNode {
-	public abstract void insert(javax.swing.tree.MutableTreeNode var0, int var1);
-	public abstract void remove(int var0);
-	public abstract void remove(javax.swing.tree.MutableTreeNode var0);
-	public abstract void removeFromParent();
-	public abstract void setParent(javax.swing.tree.MutableTreeNode var0);
-	public abstract void setUserObject(java.lang.Object var0);
+public interface MutableTreeNode extends javax.swing.tree.TreeNode {
+	void insert(javax.swing.tree.MutableTreeNode var0, int var1);
+	void remove(int var0);
+	void remove(javax.swing.tree.MutableTreeNode var0);
+	void removeFromParent();
+	void setParent(javax.swing.tree.MutableTreeNode var0);
+	void setUserObject(java.lang.Object var0);
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package java.util;
-public class LinkedHashMap extends java.util.HashMap {
-	public LinkedHashMap() { }
-	public LinkedHashMap(int var0) { }
-	public LinkedHashMap(int var0, float var1) { }
-	public LinkedHashMap(int var0, float var1, boolean var2) { }
-	public LinkedHashMap(java.util.Map var0) { }
-	protected boolean removeEldestEntry(java.util.Map.Entry var0) { return false; }
+public class LinkedHashMap<K,V> extends java.util.HashMap<K,V> implements java.util.Map<K,V> {
+	public LinkedHashMap() { } 
+	public LinkedHashMap(int var0) { } 
+	public LinkedHashMap(int var0, float var1) { } 
+	public LinkedHashMap(int var0, float var1, boolean var2) { } 
+	public LinkedHashMap(java.util.Map<? extends K,? extends V> var0) { } 
+	protected boolean removeEldestEntry(java.util.Map.Entry<K,V> var0) { return false; }
 }
 

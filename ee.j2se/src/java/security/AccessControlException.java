@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.security;
 public class AccessControlException extends java.lang.SecurityException {
-	public AccessControlException(java.lang.String var0) { }
-	public AccessControlException(java.lang.String var0, java.security.Permission var1) { }
+	public AccessControlException(java.lang.String var0) { } 
+	public AccessControlException(java.lang.String var0, java.security.Permission var1) { } 
 	public java.security.Permission getPermission() { return null; }
 }
 

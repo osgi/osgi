@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package java.awt.image.renderable;
-public abstract interface ContextualRenderedImageFactory extends java.awt.image.renderable.RenderedImageFactory {
-	public abstract java.awt.image.RenderedImage create(java.awt.image.renderable.RenderContext var0, java.awt.image.renderable.ParameterBlock var1);
-	public abstract java.awt.geom.Rectangle2D getBounds2D(java.awt.image.renderable.ParameterBlock var0);
-	public abstract java.lang.Object getProperty(java.awt.image.renderable.ParameterBlock var0, java.lang.String var1);
-	public abstract java.lang.String[] getPropertyNames();
-	public abstract boolean isDynamic();
-	public abstract java.awt.image.renderable.RenderContext mapRenderContext(int var0, java.awt.image.renderable.RenderContext var1, java.awt.image.renderable.ParameterBlock var2, java.awt.image.renderable.RenderableImage var3);
+public interface ContextualRenderedImageFactory extends java.awt.image.renderable.RenderedImageFactory {
+	java.awt.image.RenderedImage create(java.awt.image.renderable.RenderContext var0, java.awt.image.renderable.ParameterBlock var1);
+	java.awt.geom.Rectangle2D getBounds2D(java.awt.image.renderable.ParameterBlock var0);
+	java.lang.Object getProperty(java.awt.image.renderable.ParameterBlock var0, java.lang.String var1);
+	java.lang.String[] getPropertyNames();
+	boolean isDynamic();
+	java.awt.image.renderable.RenderContext mapRenderContext(int var0, java.awt.image.renderable.RenderContext var1, java.awt.image.renderable.ParameterBlock var2, java.awt.image.renderable.RenderableImage var3);
 }
 

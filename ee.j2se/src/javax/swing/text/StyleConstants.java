@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,52 @@
 
 package javax.swing.text;
 public class StyleConstants {
+	public static class CharacterConstants extends javax.swing.text.StyleConstants implements javax.swing.text.AttributeSet.CharacterAttribute {
+		private CharacterConstants() { } /* generated constructor to prevent compiler adding default public constructor */
+	}
+	public static class ColorConstants extends javax.swing.text.StyleConstants implements javax.swing.text.AttributeSet.CharacterAttribute, javax.swing.text.AttributeSet.ColorAttribute {
+		private ColorConstants() { } /* generated constructor to prevent compiler adding default public constructor */
+	}
+	public static class FontConstants extends javax.swing.text.StyleConstants implements javax.swing.text.AttributeSet.CharacterAttribute, javax.swing.text.AttributeSet.FontAttribute {
+		private FontConstants() { } /* generated constructor to prevent compiler adding default public constructor */
+	}
+	public static class ParagraphConstants extends javax.swing.text.StyleConstants implements javax.swing.text.AttributeSet.ParagraphAttribute {
+		private ParagraphConstants() { } /* generated constructor to prevent compiler adding default public constructor */
+	}
+	public final static int ALIGN_CENTER = 1;
+	public final static int ALIGN_JUSTIFIED = 3;
+	public final static int ALIGN_LEFT = 0;
+	public final static int ALIGN_RIGHT = 2;
+	public final static java.lang.Object Alignment; static { Alignment = null; }
+	public final static java.lang.Object Background; static { Background = null; }
+	public final static java.lang.Object BidiLevel; static { BidiLevel = null; }
+	public final static java.lang.Object Bold; static { Bold = null; }
+	public final static java.lang.Object ComponentAttribute; static { ComponentAttribute = null; }
+	public final static java.lang.String ComponentElementName = "component";
+	public final static java.lang.Object ComposedTextAttribute; static { ComposedTextAttribute = null; }
+	public final static java.lang.Object Family; static { Family = null; }
+	public final static java.lang.Object FirstLineIndent; static { FirstLineIndent = null; }
+	public final static java.lang.Object FontFamily; static { FontFamily = null; }
+	public final static java.lang.Object FontSize; static { FontSize = null; }
+	public final static java.lang.Object Foreground; static { Foreground = null; }
+	public final static java.lang.Object IconAttribute; static { IconAttribute = null; }
+	public final static java.lang.String IconElementName = "icon";
+	public final static java.lang.Object Italic; static { Italic = null; }
+	public final static java.lang.Object LeftIndent; static { LeftIndent = null; }
+	public final static java.lang.Object LineSpacing; static { LineSpacing = null; }
+	public final static java.lang.Object ModelAttribute; static { ModelAttribute = null; }
+	public final static java.lang.Object NameAttribute; static { NameAttribute = null; }
+	public final static java.lang.Object Orientation; static { Orientation = null; }
+	public final static java.lang.Object ResolveAttribute; static { ResolveAttribute = null; }
+	public final static java.lang.Object RightIndent; static { RightIndent = null; }
+	public final static java.lang.Object Size; static { Size = null; }
+	public final static java.lang.Object SpaceAbove; static { SpaceAbove = null; }
+	public final static java.lang.Object SpaceBelow; static { SpaceBelow = null; }
+	public final static java.lang.Object StrikeThrough; static { StrikeThrough = null; }
+	public final static java.lang.Object Subscript; static { Subscript = null; }
+	public final static java.lang.Object Superscript; static { Superscript = null; }
+	public final static java.lang.Object TabSet; static { TabSet = null; }
+	public final static java.lang.Object Underline; static { Underline = null; }
 	public static int getAlignment(javax.swing.text.AttributeSet var0) { return 0; }
 	public static java.awt.Color getBackground(javax.swing.text.AttributeSet var0) { return null; }
 	public static int getBidiLevel(javax.swing.text.AttributeSet var0) { return 0; }
@@ -58,78 +104,6 @@ public class StyleConstants {
 	public static void setSuperscript(javax.swing.text.MutableAttributeSet var0, boolean var1) { }
 	public static void setTabSet(javax.swing.text.MutableAttributeSet var0, javax.swing.text.TabSet var1) { }
 	public static void setUnderline(javax.swing.text.MutableAttributeSet var0, boolean var1) { }
-	public final static int ALIGN_CENTER = 1;
-	public final static int ALIGN_JUSTIFIED = 3;
-	public final static int ALIGN_LEFT = 0;
-	public final static int ALIGN_RIGHT = 2;
-	public final static java.lang.Object Alignment; static { Alignment = null; }
-	public final static java.lang.Object Background; static { Background = null; }
-	public final static java.lang.Object BidiLevel; static { BidiLevel = null; }
-	public final static java.lang.Object Bold; static { Bold = null; }
-	public final static java.lang.Object ComponentAttribute; static { ComponentAttribute = null; }
-	public final static java.lang.String ComponentElementName = "component";
-	public final static java.lang.Object ComposedTextAttribute; static { ComposedTextAttribute = null; }
-	public final static java.lang.Object FirstLineIndent; static { FirstLineIndent = null; }
-	public final static java.lang.Object FontFamily; static { FontFamily = null; }
-	public final static java.lang.Object FontSize; static { FontSize = null; }
-	public final static java.lang.Object Foreground; static { Foreground = null; }
-	public final static java.lang.Object IconAttribute; static { IconAttribute = null; }
-	public final static java.lang.String IconElementName = "icon";
-	public final static java.lang.Object Italic; static { Italic = null; }
-	public final static java.lang.Object LeftIndent; static { LeftIndent = null; }
-	public final static java.lang.Object LineSpacing; static { LineSpacing = null; }
-	public final static java.lang.Object ModelAttribute; static { ModelAttribute = null; }
-	public final static java.lang.Object NameAttribute; static { NameAttribute = null; }
-	public final static java.lang.Object Orientation; static { Orientation = null; }
-	public final static java.lang.Object ResolveAttribute; static { ResolveAttribute = null; }
-	public final static java.lang.Object RightIndent; static { RightIndent = null; }
-	public final static java.lang.Object SpaceAbove; static { SpaceAbove = null; }
-	public final static java.lang.Object SpaceBelow; static { SpaceBelow = null; }
-	public final static java.lang.Object StrikeThrough; static { StrikeThrough = null; }
-	public final static java.lang.Object Subscript; static { Subscript = null; }
-	public final static java.lang.Object Superscript; static { Superscript = null; }
-	public final static java.lang.Object TabSet; static { TabSet = null; }
-	public final static java.lang.Object Underline; static { Underline = null; }
-	public static class CharacterConstants extends javax.swing.text.StyleConstants implements javax.swing.text.AttributeSet.CharacterAttribute {
-		public final static java.lang.Object Background; static { Background = null; }
-		public final static java.lang.Object BidiLevel; static { BidiLevel = null; }
-		public final static java.lang.Object Bold; static { Bold = null; }
-		public final static java.lang.Object ComponentAttribute; static { ComponentAttribute = null; }
-		public final static java.lang.Object Family; static { Family = null; }
-		public final static java.lang.Object Foreground; static { Foreground = null; }
-		public final static java.lang.Object IconAttribute; static { IconAttribute = null; }
-		public final static java.lang.Object Italic; static { Italic = null; }
-		public final static java.lang.Object Size; static { Size = null; }
-		public final static java.lang.Object StrikeThrough; static { StrikeThrough = null; }
-		public final static java.lang.Object Subscript; static { Subscript = null; }
-		public final static java.lang.Object Superscript; static { Superscript = null; }
-		public final static java.lang.Object Underline; static { Underline = null; }
-		private CharacterConstants() { } /* generated constructor to prevent compiler adding default public constructor */
-	}
-	public static class ColorConstants extends javax.swing.text.StyleConstants implements javax.swing.text.AttributeSet.CharacterAttribute, javax.swing.text.AttributeSet.ColorAttribute {
-		public final static java.lang.Object Background; static { Background = null; }
-		public final static java.lang.Object Foreground; static { Foreground = null; }
-		private ColorConstants() { } /* generated constructor to prevent compiler adding default public constructor */
-	}
-	public static class FontConstants extends javax.swing.text.StyleConstants implements javax.swing.text.AttributeSet.CharacterAttribute, javax.swing.text.AttributeSet.FontAttribute {
-		public final static java.lang.Object Bold; static { Bold = null; }
-		public final static java.lang.Object Family; static { Family = null; }
-		public final static java.lang.Object Italic; static { Italic = null; }
-		public final static java.lang.Object Size; static { Size = null; }
-		private FontConstants() { } /* generated constructor to prevent compiler adding default public constructor */
-	}
-	public static class ParagraphConstants extends javax.swing.text.StyleConstants implements javax.swing.text.AttributeSet.ParagraphAttribute {
-		public final static java.lang.Object Alignment; static { Alignment = null; }
-		public final static java.lang.Object FirstLineIndent; static { FirstLineIndent = null; }
-		public final static java.lang.Object LeftIndent; static { LeftIndent = null; }
-		public final static java.lang.Object LineSpacing; static { LineSpacing = null; }
-		public final static java.lang.Object Orientation; static { Orientation = null; }
-		public final static java.lang.Object RightIndent; static { RightIndent = null; }
-		public final static java.lang.Object SpaceAbove; static { SpaceAbove = null; }
-		public final static java.lang.Object SpaceBelow; static { SpaceBelow = null; }
-		public final static java.lang.Object TabSet; static { TabSet = null; }
-		private ParagraphConstants() { } /* generated constructor to prevent compiler adding default public constructor */
-	}
 	StyleConstants() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

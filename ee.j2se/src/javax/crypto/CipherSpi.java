@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package javax.crypto;
 public abstract class CipherSpi {
-	public CipherSpi() { }
+	public CipherSpi() { } 
+	protected int engineDoFinal(java.nio.ByteBuffer var0, java.nio.ByteBuffer var1) throws javax.crypto.BadPaddingException, javax.crypto.IllegalBlockSizeException, javax.crypto.ShortBufferException { return 0; }
 	protected abstract byte[] engineDoFinal(byte[] var0, int var1, int var2) throws javax.crypto.BadPaddingException, javax.crypto.IllegalBlockSizeException;
 	protected abstract int engineDoFinal(byte[] var0, int var1, int var2, byte[] var3, int var4) throws javax.crypto.BadPaddingException, javax.crypto.IllegalBlockSizeException, javax.crypto.ShortBufferException;
 	protected abstract int engineGetBlockSize();
@@ -30,6 +31,7 @@ public abstract class CipherSpi {
 	protected abstract void engineSetMode(java.lang.String var0) throws java.security.NoSuchAlgorithmException;
 	protected abstract void engineSetPadding(java.lang.String var0) throws javax.crypto.NoSuchPaddingException;
 	protected java.security.Key engineUnwrap(byte[] var0, java.lang.String var1, int var2) throws java.security.InvalidKeyException, java.security.NoSuchAlgorithmException { return null; }
+	protected int engineUpdate(java.nio.ByteBuffer var0, java.nio.ByteBuffer var1) throws javax.crypto.ShortBufferException { return 0; }
 	protected abstract byte[] engineUpdate(byte[] var0, int var1, int var2);
 	protected abstract int engineUpdate(byte[] var0, int var1, int var2, byte[] var3, int var4) throws javax.crypto.ShortBufferException;
 	protected byte[] engineWrap(java.security.Key var0) throws java.security.InvalidKeyException, javax.crypto.IllegalBlockSizeException { return null; }

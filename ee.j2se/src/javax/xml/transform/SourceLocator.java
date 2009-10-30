@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package javax.xml.transform;
-public abstract interface SourceLocator {
-	public abstract int getColumnNumber();
-	public abstract int getLineNumber();
-	public abstract java.lang.String getPublicId();
-	public abstract java.lang.String getSystemId();
+public interface SourceLocator {
+	int getColumnNumber();
+	int getLineNumber();
+	java.lang.String getPublicId();
+	java.lang.String getSystemId();
 }
 

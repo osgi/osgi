@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package java.awt;
-public abstract interface PaintContext {
-	public abstract void dispose();
-	public abstract java.awt.image.ColorModel getColorModel();
-	public abstract java.awt.image.Raster getRaster(int var0, int var1, int var2, int var3);
+public interface PaintContext {
+	void dispose();
+	java.awt.image.ColorModel getColorModel();
+	java.awt.image.Raster getRaster(int var0, int var1, int var2, int var3);
 }
 

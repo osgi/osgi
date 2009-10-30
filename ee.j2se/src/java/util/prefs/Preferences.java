@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,10 @@
 
 package java.util.prefs;
 public abstract class Preferences {
-	protected Preferences() { }
+	public final static int MAX_KEY_LENGTH = 80;
+	public final static int MAX_NAME_LENGTH = 80;
+	public final static int MAX_VALUE_LENGTH = 8192;
+	protected Preferences() { } 
 	public abstract java.lang.String absolutePath();
 	public abstract void addNodeChangeListener(java.util.prefs.NodeChangeListener var0);
 	public abstract void addPreferenceChangeListener(java.util.prefs.PreferenceChangeListener var0);
@@ -51,13 +54,10 @@ public abstract class Preferences {
 	public abstract void removeNodeChangeListener(java.util.prefs.NodeChangeListener var0);
 	public abstract void removePreferenceChangeListener(java.util.prefs.PreferenceChangeListener var0);
 	public abstract void sync() throws java.util.prefs.BackingStoreException;
-	public static java.util.prefs.Preferences systemNodeForPackage(java.lang.Class var0) { return null; }
+	public static java.util.prefs.Preferences systemNodeForPackage(java.lang.Class<?> var0) { return null; }
 	public static java.util.prefs.Preferences systemRoot() { return null; }
 	public abstract java.lang.String toString();
-	public static java.util.prefs.Preferences userNodeForPackage(java.lang.Class var0) { return null; }
+	public static java.util.prefs.Preferences userNodeForPackage(java.lang.Class<?> var0) { return null; }
 	public static java.util.prefs.Preferences userRoot() { return null; }
-	public final static int MAX_KEY_LENGTH = 80;
-	public final static int MAX_NAME_LENGTH = 80;
-	public final static int MAX_VALUE_LENGTH = 8192;
 }
 

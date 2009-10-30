@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package javax.swing;
 public abstract class FocusManager extends java.awt.DefaultKeyboardFocusManager {
-	public FocusManager() { }
+	public final static java.lang.String FOCUS_MANAGER_CLASS_PROPERTY = "FocusManagerClassName";
+	public FocusManager() { } 
 	/** @deprecated */ public static void disableSwingFocusManager() { }
 	public static javax.swing.FocusManager getCurrentManager() { return null; }
 	/** @deprecated */ public static boolean isFocusManagerEnabled() { return false; }
 	public static void setCurrentManager(javax.swing.FocusManager var0) { }
-	public final static java.lang.String FOCUS_MANAGER_CLASS_PROPERTY = "FocusManagerClassName";
 }
 

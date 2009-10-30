@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,13 @@
 
 package java.beans.beancontext;
 public class BeanContextChildSupport implements java.beans.beancontext.BeanContextChild, java.beans.beancontext.BeanContextServicesListener, java.io.Serializable {
-	public BeanContextChildSupport() { }
-	public BeanContextChildSupport(java.beans.beancontext.BeanContextChild var0) { }
+	protected java.beans.beancontext.BeanContext beanContext;
+	public java.beans.beancontext.BeanContextChild beanContextChildPeer;
+	protected java.beans.PropertyChangeSupport pcSupport;
+	protected boolean rejectedSetBCOnce;
+	protected java.beans.VetoableChangeSupport vcSupport;
+	public BeanContextChildSupport() { } 
+	public BeanContextChildSupport(java.beans.beancontext.BeanContextChild var0) { } 
 	public void addPropertyChangeListener(java.lang.String var0, java.beans.PropertyChangeListener var1) { }
 	public void addVetoableChangeListener(java.lang.String var0, java.beans.VetoableChangeListener var1) { }
 	public void firePropertyChange(java.lang.String var0, java.lang.Object var1, java.lang.Object var2) { }
@@ -33,10 +38,5 @@ public class BeanContextChildSupport implements java.beans.beancontext.BeanConte
 	public void serviceRevoked(java.beans.beancontext.BeanContextServiceRevokedEvent var0) { }
 	public void setBeanContext(java.beans.beancontext.BeanContext var0) throws java.beans.PropertyVetoException { }
 	public boolean validatePendingSetBeanContext(java.beans.beancontext.BeanContext var0) { return false; }
-	protected java.beans.beancontext.BeanContext beanContext;
-	public java.beans.beancontext.BeanContextChild beanContextChildPeer;
-	protected java.beans.PropertyChangeSupport pcSupport;
-	protected boolean rejectedSetBCOnce;
-	protected java.beans.VetoableChangeSupport vcSupport;
 }
 

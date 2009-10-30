@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package java.rmi.server;
-/** @deprecated */ public abstract interface Skeleton {
-	/** @deprecated */ public abstract void dispatch(java.rmi.Remote var0, java.rmi.server.RemoteCall var1, int var2, long var3) throws java.lang.Exception;
-	/** @deprecated */ public abstract java.rmi.server.Operation[] getOperations();
+/** @deprecated */ public interface Skeleton {
+	/** @deprecated */ void dispatch(java.rmi.Remote var0, java.rmi.server.RemoteCall var1, int var2, long var3) throws java.lang.Exception;
+	/** @deprecated */ java.rmi.server.Operation[] getOperations();
 }
 

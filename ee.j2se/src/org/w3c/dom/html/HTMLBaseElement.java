@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLBaseElement extends org.w3c.dom.html.HTMLElement {
-	public abstract java.lang.String getHref();
-	public abstract java.lang.String getTarget();
-	public abstract void setHref(java.lang.String var0);
-	public abstract void setTarget(java.lang.String var0);
+public interface HTMLBaseElement extends org.w3c.dom.html.HTMLElement {
+	java.lang.String getHref();
+	java.lang.String getTarget();
+	void setHref(java.lang.String var0);
+	void setTarget(java.lang.String var0);
 }
 

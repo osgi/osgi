@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.tree;
 public class FixedHeightLayoutCache extends javax.swing.tree.AbstractLayoutCache {
-	public FixedHeightLayoutCache() { }
+	public FixedHeightLayoutCache() { } 
 	public java.awt.Rectangle getBounds(javax.swing.tree.TreePath var0, java.awt.Rectangle var1) { return null; }
 	public boolean getExpandedState(javax.swing.tree.TreePath var0) { return false; }
 	public javax.swing.tree.TreePath getPathClosestTo(int var0, int var1) { return null; }
@@ -24,7 +24,7 @@ public class FixedHeightLayoutCache extends javax.swing.tree.AbstractLayoutCache
 	public int getRowCount() { return 0; }
 	public int getRowForPath(javax.swing.tree.TreePath var0) { return 0; }
 	public int getVisibleChildCount(javax.swing.tree.TreePath var0) { return 0; }
-	public java.util.Enumeration getVisiblePathsFrom(javax.swing.tree.TreePath var0) { return null; }
+	public java.util.Enumeration<javax.swing.tree.TreePath> getVisiblePathsFrom(javax.swing.tree.TreePath var0) { return null; }
 	public void invalidatePathBounds(javax.swing.tree.TreePath var0) { }
 	public void invalidateSizes() { }
 	public boolean isExpanded(javax.swing.tree.TreePath var0) { return false; }

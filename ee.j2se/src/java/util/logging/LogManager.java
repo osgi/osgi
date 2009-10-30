@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,15 @@
 
 package java.util.logging;
 public class LogManager {
-	protected LogManager() { }
+	public final static java.lang.String LOGGING_MXBEAN_NAME = "java.util.logging:type=Logging";
+	protected LogManager() { } 
 	public boolean addLogger(java.util.logging.Logger var0) { return false; }
 	public void addPropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	public void checkAccess() { }
 	public static java.util.logging.LogManager getLogManager() { return null; }
 	public java.util.logging.Logger getLogger(java.lang.String var0) { return null; }
-	public java.util.Enumeration getLoggerNames() { return null; }
+	public java.util.Enumeration<java.lang.String> getLoggerNames() { return null; }
+	public static java.util.logging.LoggingMXBean getLoggingMXBean() { return null; }
 	public java.lang.String getProperty(java.lang.String var0) { return null; }
 	public void readConfiguration() throws java.io.IOException { }
 	public void readConfiguration(java.io.InputStream var0) throws java.io.IOException { }

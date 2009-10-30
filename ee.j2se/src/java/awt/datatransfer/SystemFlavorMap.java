@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ public final class SystemFlavorMap implements java.awt.datatransfer.FlavorMap, j
 	public static java.lang.String encodeDataFlavor(java.awt.datatransfer.DataFlavor var0) { return null; }
 	public static java.lang.String encodeJavaMIMEType(java.lang.String var0) { return null; }
 	public static java.awt.datatransfer.FlavorMap getDefaultFlavorMap() { return null; }
-	public java.util.List getFlavorsForNative(java.lang.String var0) { return null; }
-	public java.util.Map getFlavorsForNatives(java.lang.String[] var0) { return null; }
-	public java.util.List getNativesForFlavor(java.awt.datatransfer.DataFlavor var0) { return null; }
-	public java.util.Map getNativesForFlavors(java.awt.datatransfer.DataFlavor[] var0) { return null; }
+	public java.util.List<java.awt.datatransfer.DataFlavor> getFlavorsForNative(java.lang.String var0) { return null; }
+	public java.util.Map<java.lang.String,java.awt.datatransfer.DataFlavor> getFlavorsForNatives(java.lang.String[] var0) { return null; }
+	public java.util.List<java.lang.String> getNativesForFlavor(java.awt.datatransfer.DataFlavor var0) { return null; }
+	public java.util.Map<java.awt.datatransfer.DataFlavor,java.lang.String> getNativesForFlavors(java.awt.datatransfer.DataFlavor[] var0) { return null; }
 	public static boolean isJavaMIMEType(java.lang.String var0) { return false; }
 	public void setFlavorsForNative(java.lang.String var0, java.awt.datatransfer.DataFlavor[] var1) { }
 	public void setNativesForFlavor(java.awt.datatransfer.DataFlavor var0, java.lang.String[] var1) { }

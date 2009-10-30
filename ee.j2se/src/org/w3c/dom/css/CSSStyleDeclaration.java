@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,16 @@
  */
 
 package org.w3c.dom.css;
-public abstract interface CSSStyleDeclaration {
-	public abstract java.lang.String getCssText();
-	public abstract int getLength();
-	public abstract org.w3c.dom.css.CSSRule getParentRule();
-	public abstract org.w3c.dom.css.CSSValue getPropertyCSSValue(java.lang.String var0);
-	public abstract java.lang.String getPropertyPriority(java.lang.String var0);
-	public abstract java.lang.String getPropertyValue(java.lang.String var0);
-	public abstract java.lang.String item(int var0);
-	public abstract java.lang.String removeProperty(java.lang.String var0);
-	public abstract void setCssText(java.lang.String var0);
-	public abstract void setProperty(java.lang.String var0, java.lang.String var1, java.lang.String var2);
+public interface CSSStyleDeclaration {
+	java.lang.String getCssText();
+	int getLength();
+	org.w3c.dom.css.CSSRule getParentRule();
+	org.w3c.dom.css.CSSValue getPropertyCSSValue(java.lang.String var0);
+	java.lang.String getPropertyPriority(java.lang.String var0);
+	java.lang.String getPropertyValue(java.lang.String var0);
+	java.lang.String item(int var0);
+	java.lang.String removeProperty(java.lang.String var0);
+	void setCssText(java.lang.String var0);
+	void setProperty(java.lang.String var0, java.lang.String var1, java.lang.String var2);
 }
 

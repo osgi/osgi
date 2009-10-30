@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package org.omg.CORBA;
 public abstract class DoubleSeqHelper {
-	public DoubleSeqHelper() { }
+	public DoubleSeqHelper() { } 
 	public static double[] extract(org.omg.CORBA.Any var0) { return null; }
 	public static java.lang.String id() { return null; }
 	public static void insert(org.omg.CORBA.Any var0, double[] var1) { }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.beans;
 public class Expression extends java.beans.Statement {
-	public Expression(java.lang.Object var0, java.lang.Object var1, java.lang.String var2, java.lang.Object[] var3) { super((java.lang.Object) null, (java.lang.String) null, (java.lang.Object[]) null); }
-	public Expression(java.lang.Object var0, java.lang.String var1, java.lang.Object[] var2) { super((java.lang.Object) null, (java.lang.String) null, (java.lang.Object[]) null); }
+	public Expression(java.lang.Object var0, java.lang.Object var1, java.lang.String var2, java.lang.Object[] var3)  { super((java.lang.Object) null, (java.lang.String) null, (java.lang.Object[]) null); } 
+	public Expression(java.lang.Object var0, java.lang.String var1, java.lang.Object[] var2)  { super((java.lang.Object) null, (java.lang.String) null, (java.lang.Object[]) null); } 
 	public java.lang.Object getValue() throws java.lang.Exception { return null; }
 	public void setValue(java.lang.Object var0) { }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 
 package javax.swing.text;
 public abstract class AbstractWriter {
-	protected AbstractWriter(java.io.Writer var0, javax.swing.text.Document var1) { }
-	protected AbstractWriter(java.io.Writer var0, javax.swing.text.Document var1, int var2, int var3) { }
-	protected AbstractWriter(java.io.Writer var0, javax.swing.text.Element var1) { }
-	protected AbstractWriter(java.io.Writer var0, javax.swing.text.Element var1, int var2, int var3) { }
+	protected final static char NEWLINE = 10;
+	protected AbstractWriter(java.io.Writer var0, javax.swing.text.Document var1) { } 
+	protected AbstractWriter(java.io.Writer var0, javax.swing.text.Document var1, int var2, int var3) { } 
+	protected AbstractWriter(java.io.Writer var0, javax.swing.text.Element var1) { } 
+	protected AbstractWriter(java.io.Writer var0, javax.swing.text.Element var1, int var2, int var3) { } 
 	protected void decrIndent() { }
 	protected boolean getCanWrapLines() { return false; }
 	protected int getCurrentLineLength() { return 0; }
@@ -50,6 +51,5 @@ public abstract class AbstractWriter {
 	protected void write(char[] var0, int var1, int var2) throws java.io.IOException { }
 	protected void writeAttributes(javax.swing.text.AttributeSet var0) throws java.io.IOException { }
 	protected void writeLineSeparator() throws java.io.IOException { }
-	protected final static char NEWLINE = 10;
 }
 

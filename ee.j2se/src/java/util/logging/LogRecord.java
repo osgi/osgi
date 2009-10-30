@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.util.logging;
 public class LogRecord implements java.io.Serializable {
-	public LogRecord(java.util.logging.Level var0, java.lang.String var1) { }
+	public LogRecord(java.util.logging.Level var0, java.lang.String var1) { } 
 	public java.util.logging.Level getLevel() { return null; }
 	public java.lang.String getLoggerName() { return null; }
 	public java.lang.String getMessage() { return null; }

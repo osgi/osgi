@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.accessibility;
-public abstract interface AccessibleHypertext extends javax.accessibility.AccessibleText {
-	public abstract javax.accessibility.AccessibleHyperlink getLink(int var0);
-	public abstract int getLinkCount();
-	public abstract int getLinkIndex(int var0);
+public interface AccessibleHypertext extends javax.accessibility.AccessibleText {
+	javax.accessibility.AccessibleHyperlink getLink(int var0);
+	int getLinkCount();
+	int getLinkIndex(int var0);
 }
 

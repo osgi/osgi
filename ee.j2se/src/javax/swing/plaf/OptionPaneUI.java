@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.plaf;
 public abstract class OptionPaneUI extends javax.swing.plaf.ComponentUI {
-	public OptionPaneUI() { }
+	public OptionPaneUI() { } 
 	public abstract boolean containsCustomComponents(javax.swing.JOptionPane var0);
 	public abstract void selectInitialValue(javax.swing.JOptionPane var0);
 }

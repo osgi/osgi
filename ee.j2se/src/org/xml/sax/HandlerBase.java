@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package org.xml.sax;
 /** @deprecated */ public class HandlerBase implements org.xml.sax.DTDHandler, org.xml.sax.DocumentHandler, org.xml.sax.EntityResolver, org.xml.sax.ErrorHandler {
-	public HandlerBase() { }
+	public HandlerBase() { } 
 	public void characters(char[] var0, int var1, int var2) throws org.xml.sax.SAXException { }
 	public void endDocument() throws org.xml.sax.SAXException { }
 	public void endElement(java.lang.String var0) throws org.xml.sax.SAXException { }

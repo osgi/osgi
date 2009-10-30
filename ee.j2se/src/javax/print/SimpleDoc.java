@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.print;
 public final class SimpleDoc implements javax.print.Doc {
-	public SimpleDoc(java.lang.Object var0, javax.print.DocFlavor var1, javax.print.attribute.DocAttributeSet var2) { }
+	public SimpleDoc(java.lang.Object var0, javax.print.DocFlavor var1, javax.print.attribute.DocAttributeSet var2) { } 
 	public javax.print.attribute.DocAttributeSet getAttributes() { return null; }
 	public javax.print.DocFlavor getDocFlavor() { return null; }
 	public java.lang.Object getPrintData() throws java.io.IOException { return null; }

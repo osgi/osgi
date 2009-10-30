@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,7 @@
  */
 
 package java.net;
-public abstract interface SocketOptions {
-	public abstract java.lang.Object getOption(int var0) throws java.net.SocketException;
-	public abstract void setOption(int var0, java.lang.Object var1) throws java.net.SocketException;
+public interface SocketOptions {
 	public final static int IP_MULTICAST_IF = 16;
 	public final static int IP_MULTICAST_IF2 = 31;
 	public final static int IP_MULTICAST_LOOP = 18;
@@ -32,5 +30,7 @@ public abstract interface SocketOptions {
 	public final static int SO_SNDBUF = 4097;
 	public final static int SO_TIMEOUT = 4102;
 	public final static int TCP_NODELAY = 1;
+	java.lang.Object getOption(int var0) throws java.net.SocketException;
+	void setOption(int var0, java.lang.Object var1) throws java.net.SocketException;
 }
 

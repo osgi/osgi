@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,6 @@
 
 package javax.swing.border;
 public class TitledBorder extends javax.swing.border.AbstractBorder {
-	public TitledBorder(java.lang.String var0) { }
-	public TitledBorder(javax.swing.border.Border var0) { }
-	public TitledBorder(javax.swing.border.Border var0, java.lang.String var1) { }
-	public TitledBorder(javax.swing.border.Border var0, java.lang.String var1, int var2, int var3) { }
-	public TitledBorder(javax.swing.border.Border var0, java.lang.String var1, int var2, int var3, java.awt.Font var4) { }
-	public TitledBorder(javax.swing.border.Border var0, java.lang.String var1, int var2, int var3, java.awt.Font var4, java.awt.Color var5) { }
-	public javax.swing.border.Border getBorder() { return null; }
-	protected java.awt.Font getFont(java.awt.Component var0) { return null; }
-	public java.awt.Dimension getMinimumSize(java.awt.Component var0) { return null; }
-	public java.lang.String getTitle() { return null; }
-	public java.awt.Color getTitleColor() { return null; }
-	public java.awt.Font getTitleFont() { return null; }
-	public int getTitleJustification() { return 0; }
-	public int getTitlePosition() { return 0; }
-	public void setBorder(javax.swing.border.Border var0) { }
-	public void setTitle(java.lang.String var0) { }
-	public void setTitleColor(java.awt.Color var0) { }
-	public void setTitleFont(java.awt.Font var0) { }
-	public void setTitleJustification(int var0) { }
-	public void setTitlePosition(int var0) { }
 	public final static int ABOVE_BOTTOM = 4;
 	public final static int ABOVE_TOP = 1;
 	public final static int BELOW_BOTTOM = 6;
@@ -58,5 +38,25 @@ public class TitledBorder extends javax.swing.border.AbstractBorder {
 	protected java.awt.Font titleFont;
 	protected int titleJustification;
 	protected int titlePosition;
+	public TitledBorder(java.lang.String var0) { } 
+	public TitledBorder(javax.swing.border.Border var0) { } 
+	public TitledBorder(javax.swing.border.Border var0, java.lang.String var1) { } 
+	public TitledBorder(javax.swing.border.Border var0, java.lang.String var1, int var2, int var3) { } 
+	public TitledBorder(javax.swing.border.Border var0, java.lang.String var1, int var2, int var3, java.awt.Font var4) { } 
+	public TitledBorder(javax.swing.border.Border var0, java.lang.String var1, int var2, int var3, java.awt.Font var4, java.awt.Color var5) { } 
+	public javax.swing.border.Border getBorder() { return null; }
+	protected java.awt.Font getFont(java.awt.Component var0) { return null; }
+	public java.awt.Dimension getMinimumSize(java.awt.Component var0) { return null; }
+	public java.lang.String getTitle() { return null; }
+	public java.awt.Color getTitleColor() { return null; }
+	public java.awt.Font getTitleFont() { return null; }
+	public int getTitleJustification() { return 0; }
+	public int getTitlePosition() { return 0; }
+	public void setBorder(javax.swing.border.Border var0) { }
+	public void setTitle(java.lang.String var0) { }
+	public void setTitleColor(java.awt.Color var0) { }
+	public void setTitleFont(java.awt.Font var0) { }
+	public void setTitleJustification(int var0) { }
+	public void setTitlePosition(int var0) { }
 }
 

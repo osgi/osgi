@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,32 +15,32 @@
  */
 
 package javax.sound.midi;
-public abstract interface MidiChannel {
-	public abstract void allNotesOff();
-	public abstract void allSoundOff();
-	public abstract void controlChange(int var0, int var1);
-	public abstract int getChannelPressure();
-	public abstract int getController(int var0);
-	public abstract boolean getMono();
-	public abstract boolean getMute();
-	public abstract boolean getOmni();
-	public abstract int getPitchBend();
-	public abstract int getPolyPressure(int var0);
-	public abstract int getProgram();
-	public abstract boolean getSolo();
-	public abstract boolean localControl(boolean var0);
-	public abstract void noteOff(int var0);
-	public abstract void noteOff(int var0, int var1);
-	public abstract void noteOn(int var0, int var1);
-	public abstract void programChange(int var0);
-	public abstract void programChange(int var0, int var1);
-	public abstract void resetAllControllers();
-	public abstract void setChannelPressure(int var0);
-	public abstract void setMono(boolean var0);
-	public abstract void setMute(boolean var0);
-	public abstract void setOmni(boolean var0);
-	public abstract void setPitchBend(int var0);
-	public abstract void setPolyPressure(int var0, int var1);
-	public abstract void setSolo(boolean var0);
+public interface MidiChannel {
+	void allNotesOff();
+	void allSoundOff();
+	void controlChange(int var0, int var1);
+	int getChannelPressure();
+	int getController(int var0);
+	boolean getMono();
+	boolean getMute();
+	boolean getOmni();
+	int getPitchBend();
+	int getPolyPressure(int var0);
+	int getProgram();
+	boolean getSolo();
+	boolean localControl(boolean var0);
+	void noteOff(int var0);
+	void noteOff(int var0, int var1);
+	void noteOn(int var0, int var1);
+	void programChange(int var0);
+	void programChange(int var0, int var1);
+	void resetAllControllers();
+	void setChannelPressure(int var0);
+	void setMono(boolean var0);
+	void setMute(boolean var0);
+	void setOmni(boolean var0);
+	void setPitchBend(int var0);
+	void setPolyPressure(int var0, int var1);
+	void setSolo(boolean var0);
 }
 

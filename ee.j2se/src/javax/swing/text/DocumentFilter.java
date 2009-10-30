@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 package javax.swing.text;
 public class DocumentFilter {
-	public DocumentFilter() { }
-	public void insertString(javax.swing.text.DocumentFilter.FilterBypass var0, int var1, java.lang.String var2, javax.swing.text.AttributeSet var3) throws javax.swing.text.BadLocationException { }
-	public void remove(javax.swing.text.DocumentFilter.FilterBypass var0, int var1, int var2) throws javax.swing.text.BadLocationException { }
-	public void replace(javax.swing.text.DocumentFilter.FilterBypass var0, int var1, int var2, java.lang.String var3, javax.swing.text.AttributeSet var4) throws javax.swing.text.BadLocationException { }
 	public static abstract class FilterBypass {
-		public FilterBypass() { }
+		public FilterBypass() { } 
 		public abstract javax.swing.text.Document getDocument();
 		public abstract void insertString(int var0, java.lang.String var1, javax.swing.text.AttributeSet var2) throws javax.swing.text.BadLocationException;
 		public abstract void remove(int var0, int var1) throws javax.swing.text.BadLocationException;
 		public abstract void replace(int var0, int var1, java.lang.String var2, javax.swing.text.AttributeSet var3) throws javax.swing.text.BadLocationException;
 	}
+	public DocumentFilter() { } 
+	public void insertString(javax.swing.text.DocumentFilter.FilterBypass var0, int var1, java.lang.String var2, javax.swing.text.AttributeSet var3) throws javax.swing.text.BadLocationException { }
+	public void remove(javax.swing.text.DocumentFilter.FilterBypass var0, int var1, int var2) throws javax.swing.text.BadLocationException { }
+	public void replace(javax.swing.text.DocumentFilter.FilterBypass var0, int var1, int var2, java.lang.String var3, javax.swing.text.AttributeSet var4) throws javax.swing.text.BadLocationException { }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,15 @@
  */
 
 package javax.accessibility;
-public abstract interface AccessibleEditableText extends javax.accessibility.AccessibleText {
-	public abstract void cut(int var0, int var1);
-	public abstract void delete(int var0, int var1);
-	public abstract java.lang.String getTextRange(int var0, int var1);
-	public abstract void insertTextAtIndex(int var0, java.lang.String var1);
-	public abstract void paste(int var0);
-	public abstract void replaceText(int var0, int var1, java.lang.String var2);
-	public abstract void selectText(int var0, int var1);
-	public abstract void setAttributes(int var0, int var1, javax.swing.text.AttributeSet var2);
-	public abstract void setTextContents(java.lang.String var0);
+public interface AccessibleEditableText extends javax.accessibility.AccessibleText {
+	void cut(int var0, int var1);
+	void delete(int var0, int var1);
+	java.lang.String getTextRange(int var0, int var1);
+	void insertTextAtIndex(int var0, java.lang.String var1);
+	void paste(int var0);
+	void replaceText(int var0, int var1, java.lang.String var2);
+	void selectText(int var0, int var1);
+	void setAttributes(int var0, int var1, javax.swing.text.AttributeSet var2);
+	void setTextContents(java.lang.String var0);
 }
 

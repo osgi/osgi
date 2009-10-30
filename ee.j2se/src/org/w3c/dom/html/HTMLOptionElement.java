@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,19 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLOptionElement extends org.w3c.dom.html.HTMLElement {
-	public abstract boolean getDefaultSelected();
-	public abstract boolean getDisabled();
-	public abstract org.w3c.dom.html.HTMLFormElement getForm();
-	public abstract int getIndex();
-	public abstract java.lang.String getLabel();
-	public abstract boolean getSelected();
-	public abstract java.lang.String getText();
-	public abstract java.lang.String getValue();
-	public abstract void setDefaultSelected(boolean var0);
-	public abstract void setDisabled(boolean var0);
-	public abstract void setLabel(java.lang.String var0);
-	public abstract void setSelected(boolean var0);
-	public abstract void setValue(java.lang.String var0);
+public interface HTMLOptionElement extends org.w3c.dom.html.HTMLElement {
+	boolean getDefaultSelected();
+	boolean getDisabled();
+	org.w3c.dom.html.HTMLFormElement getForm();
+	int getIndex();
+	java.lang.String getLabel();
+	boolean getSelected();
+	java.lang.String getText();
+	java.lang.String getValue();
+	void setDefaultSelected(boolean var0);
+	void setDisabled(boolean var0);
+	void setLabel(java.lang.String var0);
+	void setSelected(boolean var0);
+	void setValue(java.lang.String var0);
 }
 

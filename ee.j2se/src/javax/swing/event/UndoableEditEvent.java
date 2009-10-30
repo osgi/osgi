@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.event;
 public class UndoableEditEvent extends java.util.EventObject {
-	public UndoableEditEvent(java.lang.Object var0, javax.swing.undo.UndoableEdit var1) { super((java.lang.Object) null); }
+	public UndoableEditEvent(java.lang.Object var0, javax.swing.undo.UndoableEdit var1)  { super((java.lang.Object) null); } 
 	public javax.swing.undo.UndoableEdit getEdit() { return null; }
 }
 

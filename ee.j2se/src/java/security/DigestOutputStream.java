@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package java.security;
 public class DigestOutputStream extends java.io.FilterOutputStream {
-	public DigestOutputStream(java.io.OutputStream var0, java.security.MessageDigest var1) { super((java.io.OutputStream) null); }
+	protected java.security.MessageDigest digest;
+	public DigestOutputStream(java.io.OutputStream var0, java.security.MessageDigest var1)  { super((java.io.OutputStream) null); } 
 	public java.security.MessageDigest getMessageDigest() { return null; }
 	public void on(boolean var0) { }
 	public void setMessageDigest(java.security.MessageDigest var0) { }
-	protected java.security.MessageDigest digest;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package javax.imageio.event;
-public abstract interface IIOReadUpdateListener extends java.util.EventListener {
-	public abstract void imageUpdate(javax.imageio.ImageReader var0, java.awt.image.BufferedImage var1, int var2, int var3, int var4, int var5, int var6, int var7, int[] var8);
-	public abstract void passComplete(javax.imageio.ImageReader var0, java.awt.image.BufferedImage var1);
-	public abstract void passStarted(javax.imageio.ImageReader var0, java.awt.image.BufferedImage var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8, int[] var9);
-	public abstract void thumbnailPassComplete(javax.imageio.ImageReader var0, java.awt.image.BufferedImage var1);
-	public abstract void thumbnailPassStarted(javax.imageio.ImageReader var0, java.awt.image.BufferedImage var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8, int[] var9);
-	public abstract void thumbnailUpdate(javax.imageio.ImageReader var0, java.awt.image.BufferedImage var1, int var2, int var3, int var4, int var5, int var6, int var7, int[] var8);
+public interface IIOReadUpdateListener extends java.util.EventListener {
+	void imageUpdate(javax.imageio.ImageReader var0, java.awt.image.BufferedImage var1, int var2, int var3, int var4, int var5, int var6, int var7, int[] var8);
+	void passComplete(javax.imageio.ImageReader var0, java.awt.image.BufferedImage var1);
+	void passStarted(javax.imageio.ImageReader var0, java.awt.image.BufferedImage var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8, int[] var9);
+	void thumbnailPassComplete(javax.imageio.ImageReader var0, java.awt.image.BufferedImage var1);
+	void thumbnailPassStarted(javax.imageio.ImageReader var0, java.awt.image.BufferedImage var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8, int[] var9);
+	void thumbnailUpdate(javax.imageio.ImageReader var0, java.awt.image.BufferedImage var1, int var2, int var3, int var4, int var5, int var6, int var7, int[] var8);
 }
 

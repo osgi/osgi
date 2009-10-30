@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,12 @@
  */
 
 package org.w3c.dom;
-public abstract interface Entity extends org.w3c.dom.Node {
-	public abstract java.lang.String getNotationName();
-	public abstract java.lang.String getPublicId();
-	public abstract java.lang.String getSystemId();
+public interface Entity extends org.w3c.dom.Node {
+	java.lang.String getInputEncoding();
+	java.lang.String getNotationName();
+	java.lang.String getPublicId();
+	java.lang.String getSystemId();
+	java.lang.String getXmlEncoding();
+	java.lang.String getXmlVersion();
 }
 

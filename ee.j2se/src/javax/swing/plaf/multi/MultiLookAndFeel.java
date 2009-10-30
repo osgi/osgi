@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.plaf.multi;
 public class MultiLookAndFeel extends javax.swing.LookAndFeel {
-	public MultiLookAndFeel() { }
+	public MultiLookAndFeel() { } 
 	public static javax.swing.plaf.ComponentUI createUIs(javax.swing.plaf.ComponentUI var0, java.util.Vector var1, javax.swing.JComponent var2) { return null; }
 	public java.lang.String getDescription() { return null; }
 	public java.lang.String getID() { return null; }

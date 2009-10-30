@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,7 @@
  */
 
 package javax.swing;
-public abstract interface Action extends java.awt.event.ActionListener {
-	public abstract void addPropertyChangeListener(java.beans.PropertyChangeListener var0);
-	public abstract java.lang.Object getValue(java.lang.String var0);
-	public abstract boolean isEnabled();
-	public abstract void putValue(java.lang.String var0, java.lang.Object var1);
-	public abstract void removePropertyChangeListener(java.beans.PropertyChangeListener var0);
-	public abstract void setEnabled(boolean var0);
+public interface Action extends java.awt.event.ActionListener {
 	public final static java.lang.String ACCELERATOR_KEY = "AcceleratorKey";
 	public final static java.lang.String ACTION_COMMAND_KEY = "ActionCommandKey";
 	public final static java.lang.String DEFAULT = "Default";
@@ -30,5 +24,11 @@ public abstract interface Action extends java.awt.event.ActionListener {
 	public final static java.lang.String NAME = "Name";
 	public final static java.lang.String SHORT_DESCRIPTION = "ShortDescription";
 	public final static java.lang.String SMALL_ICON = "SmallIcon";
+	void addPropertyChangeListener(java.beans.PropertyChangeListener var0);
+	java.lang.Object getValue(java.lang.String var0);
+	boolean isEnabled();
+	void putValue(java.lang.String var0, java.lang.Object var1);
+	void removePropertyChangeListener(java.beans.PropertyChangeListener var0);
+	void setEnabled(boolean var0);
 }
 

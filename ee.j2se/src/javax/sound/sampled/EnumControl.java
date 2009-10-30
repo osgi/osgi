@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package javax.sound.sampled;
 public abstract class EnumControl extends javax.sound.sampled.Control {
-	protected EnumControl(javax.sound.sampled.EnumControl.Type var0, java.lang.Object[] var1, java.lang.Object var2) { super((javax.sound.sampled.Control.Type) null); }
+	public static class Type extends javax.sound.sampled.Control.Type {
+		public final static javax.sound.sampled.EnumControl.Type REVERB; static { REVERB = null; }
+		protected Type(java.lang.String var0)  { super((java.lang.String) null); } 
+	}
+	protected EnumControl(javax.sound.sampled.EnumControl.Type var0, java.lang.Object[] var1, java.lang.Object var2)  { super((javax.sound.sampled.Control.Type) null); } 
 	public java.lang.Object getValue() { return null; }
 	public java.lang.Object[] getValues() { return null; }
 	public void setValue(java.lang.Object var0) { }
-	public static class Type extends javax.sound.sampled.Control.Type {
-		protected Type(java.lang.String var0) { super((java.lang.String) null); }
-		public final static javax.sound.sampled.EnumControl.Type REVERB; static { REVERB = null; }
-	}
 }
 

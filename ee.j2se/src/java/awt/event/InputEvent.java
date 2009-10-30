@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,6 @@
 
 package java.awt.event;
 public abstract class InputEvent extends java.awt.event.ComponentEvent {
-	public void consume() { }
-	public int getModifiers() { return 0; }
-	public int getModifiersEx() { return 0; }
-	public static java.lang.String getModifiersExText(int var0) { return null; }
-	public long getWhen() { return 0l; }
-	public boolean isAltDown() { return false; }
-	public boolean isAltGraphDown() { return false; }
-	public boolean isConsumed() { return false; }
-	public boolean isControlDown() { return false; }
-	public boolean isMetaDown() { return false; }
-	public boolean isShiftDown() { return false; }
 	public final static int ALT_DOWN_MASK = 512;
 	public final static int ALT_GRAPH_DOWN_MASK = 8192;
 	public final static int ALT_GRAPH_MASK = 32;
@@ -43,6 +32,17 @@ public abstract class InputEvent extends java.awt.event.ComponentEvent {
 	public final static int META_MASK = 4;
 	public final static int SHIFT_DOWN_MASK = 64;
 	public final static int SHIFT_MASK = 1;
-	InputEvent() { super((java.awt.Component) null, 0); } /* generated constructor to prevent compiler adding default public constructor */
+	public void consume() { }
+	public int getModifiers() { return 0; }
+	public int getModifiersEx() { return 0; }
+	public static java.lang.String getModifiersExText(int var0) { return null; }
+	public long getWhen() { return 0l; }
+	public boolean isAltDown() { return false; }
+	public boolean isAltGraphDown() { return false; }
+	public boolean isConsumed() { return false; }
+	public boolean isControlDown() { return false; }
+	public boolean isMetaDown() { return false; }
+	public boolean isShiftDown() { return false; }
+	InputEvent()  { super((java.awt.Component) null, 0); } /* generated constructor to prevent compiler adding default public constructor */
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,6 @@
 
 package java.awt;
 public class Event implements java.io.Serializable {
-	public Event(java.lang.Object var0, int var1, java.lang.Object var2) { }
-	public Event(java.lang.Object var0, long var1, int var2, int var3, int var4, int var5, int var6) { }
-	public Event(java.lang.Object var0, long var1, int var2, int var3, int var4, int var5, int var6, java.lang.Object var7) { }
-	public boolean controlDown() { return false; }
-	public boolean metaDown() { return false; }
-	protected java.lang.String paramString() { return null; }
-	public boolean shiftDown() { return false; }
-	public void translate(int var0, int var1) { }
 	public final static int ACTION_EVENT = 1001;
 	public final static int ALT_MASK = 8;
 	public final static int BACK_SPACE = 8;
@@ -98,5 +90,13 @@ public class Event implements java.io.Serializable {
 	public long when;
 	public int x;
 	public int y;
+	public Event(java.lang.Object var0, int var1, java.lang.Object var2) { } 
+	public Event(java.lang.Object var0, long var1, int var2, int var3, int var4, int var5, int var6) { } 
+	public Event(java.lang.Object var0, long var1, int var2, int var3, int var4, int var5, int var6, java.lang.Object var7) { } 
+	public boolean controlDown() { return false; }
+	public boolean metaDown() { return false; }
+	protected java.lang.String paramString() { return null; }
+	public boolean shiftDown() { return false; }
+	public void translate(int var0, int var1) { }
 }
 

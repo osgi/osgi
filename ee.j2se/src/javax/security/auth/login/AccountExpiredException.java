@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package javax.security.auth.login;
-public class AccountExpiredException extends javax.security.auth.login.LoginException {
-	public AccountExpiredException() { }
-	public AccountExpiredException(java.lang.String var0) { }
+public class AccountExpiredException extends javax.security.auth.login.AccountException {
+	public AccountExpiredException() { } 
+	public AccountExpiredException(java.lang.String var0) { } 
 }
 

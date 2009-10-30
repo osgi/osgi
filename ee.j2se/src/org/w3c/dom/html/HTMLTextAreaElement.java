@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,29 +15,29 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLTextAreaElement extends org.w3c.dom.html.HTMLElement {
-	public abstract void blur();
-	public abstract void focus();
-	public abstract java.lang.String getAccessKey();
-	public abstract int getCols();
-	public abstract java.lang.String getDefaultValue();
-	public abstract boolean getDisabled();
-	public abstract org.w3c.dom.html.HTMLFormElement getForm();
-	public abstract java.lang.String getName();
-	public abstract boolean getReadOnly();
-	public abstract int getRows();
-	public abstract int getTabIndex();
-	public abstract java.lang.String getType();
-	public abstract java.lang.String getValue();
-	public abstract void select();
-	public abstract void setAccessKey(java.lang.String var0);
-	public abstract void setCols(int var0);
-	public abstract void setDefaultValue(java.lang.String var0);
-	public abstract void setDisabled(boolean var0);
-	public abstract void setName(java.lang.String var0);
-	public abstract void setReadOnly(boolean var0);
-	public abstract void setRows(int var0);
-	public abstract void setTabIndex(int var0);
-	public abstract void setValue(java.lang.String var0);
+public interface HTMLTextAreaElement extends org.w3c.dom.html.HTMLElement {
+	void blur();
+	void focus();
+	java.lang.String getAccessKey();
+	int getCols();
+	java.lang.String getDefaultValue();
+	boolean getDisabled();
+	org.w3c.dom.html.HTMLFormElement getForm();
+	java.lang.String getName();
+	boolean getReadOnly();
+	int getRows();
+	int getTabIndex();
+	java.lang.String getType();
+	java.lang.String getValue();
+	void select();
+	void setAccessKey(java.lang.String var0);
+	void setCols(int var0);
+	void setDefaultValue(java.lang.String var0);
+	void setDisabled(boolean var0);
+	void setName(java.lang.String var0);
+	void setReadOnly(boolean var0);
+	void setRows(int var0);
+	void setTabIndex(int var0);
+	void setValue(java.lang.String var0);
 }
 

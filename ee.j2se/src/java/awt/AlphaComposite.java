@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,6 @@
 
 package java.awt;
 public final class AlphaComposite implements java.awt.Composite {
-	public java.awt.CompositeContext createContext(java.awt.image.ColorModel var0, java.awt.image.ColorModel var1, java.awt.RenderingHints var2) { return null; }
-	public float getAlpha() { return 0.0f; }
-	public static java.awt.AlphaComposite getInstance(int var0) { return null; }
-	public static java.awt.AlphaComposite getInstance(int var0, float var1) { return null; }
-	public int getRule() { return 0; }
-	public int hashCode() { return 0; }
 	public final static int CLEAR = 1;
 	public final static java.awt.AlphaComposite Clear; static { Clear = null; }
 	public final static int DST = 9;
@@ -46,6 +40,12 @@ public final class AlphaComposite implements java.awt.Composite {
 	public final static java.awt.AlphaComposite SrcOver; static { SrcOver = null; }
 	public final static int XOR = 12;
 	public final static java.awt.AlphaComposite Xor; static { Xor = null; }
+	public java.awt.CompositeContext createContext(java.awt.image.ColorModel var0, java.awt.image.ColorModel var1, java.awt.RenderingHints var2) { return null; }
+	public float getAlpha() { return 0.0f; }
+	public static java.awt.AlphaComposite getInstance(int var0) { return null; }
+	public static java.awt.AlphaComposite getInstance(int var0, float var1) { return null; }
+	public int getRule() { return 0; }
+	public int hashCode() { return 0; }
 	private AlphaComposite() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

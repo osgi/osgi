@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,15 @@
  */
 
 package javax.swing.table;
-public abstract interface TableModel {
-	public abstract void addTableModelListener(javax.swing.event.TableModelListener var0);
-	public abstract java.lang.Class getColumnClass(int var0);
-	public abstract int getColumnCount();
-	public abstract java.lang.String getColumnName(int var0);
-	public abstract int getRowCount();
-	public abstract java.lang.Object getValueAt(int var0, int var1);
-	public abstract boolean isCellEditable(int var0, int var1);
-	public abstract void removeTableModelListener(javax.swing.event.TableModelListener var0);
-	public abstract void setValueAt(java.lang.Object var0, int var1, int var2);
+public interface TableModel {
+	void addTableModelListener(javax.swing.event.TableModelListener var0);
+	java.lang.Class<?> getColumnClass(int var0);
+	int getColumnCount();
+	java.lang.String getColumnName(int var0);
+	int getRowCount();
+	java.lang.Object getValueAt(int var0, int var1);
+	boolean isCellEditable(int var0, int var1);
+	void removeTableModelListener(javax.swing.event.TableModelListener var0);
+	void setValueAt(java.lang.Object var0, int var1, int var2);
 }
 

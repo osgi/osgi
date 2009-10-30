@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package java.awt.image.renderable;
 public class RenderContext implements java.lang.Cloneable {
-	public RenderContext(java.awt.geom.AffineTransform var0) { }
-	public RenderContext(java.awt.geom.AffineTransform var0, java.awt.RenderingHints var1) { }
-	public RenderContext(java.awt.geom.AffineTransform var0, java.awt.Shape var1) { }
-	public RenderContext(java.awt.geom.AffineTransform var0, java.awt.Shape var1, java.awt.RenderingHints var2) { }
+	public RenderContext(java.awt.geom.AffineTransform var0) { } 
+	public RenderContext(java.awt.geom.AffineTransform var0, java.awt.RenderingHints var1) { } 
+	public RenderContext(java.awt.geom.AffineTransform var0, java.awt.Shape var1) { } 
+	public RenderContext(java.awt.geom.AffineTransform var0, java.awt.Shape var1, java.awt.RenderingHints var2) { } 
 	public java.lang.Object clone() { return null; }
 	public void concatenateTransform(java.awt.geom.AffineTransform var0) { }
 	/** @deprecated */ public void concetenateTransform(java.awt.geom.AffineTransform var0) { }

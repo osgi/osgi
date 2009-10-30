@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,21 @@
  */
 
 package java.lang.reflect;
-public final class Constructor extends java.lang.reflect.AccessibleObject implements java.lang.reflect.Member {
-	public java.lang.Class getDeclaringClass() { return null; }
-	public java.lang.Class[] getExceptionTypes() { return null; }
+public final class Constructor<T> extends java.lang.reflect.AccessibleObject implements java.lang.reflect.GenericDeclaration, java.lang.reflect.Member {
+	public java.lang.Class<T> getDeclaringClass() { return null; }
+	public java.lang.Class<?>[] getExceptionTypes() { return null; }
+	public java.lang.reflect.Type[] getGenericExceptionTypes() { return null; }
+	public java.lang.reflect.Type[] getGenericParameterTypes() { return null; }
 	public int getModifiers() { return 0; }
 	public java.lang.String getName() { return null; }
-	public java.lang.Class[] getParameterTypes() { return null; }
+	public java.lang.annotation.Annotation[][] getParameterAnnotations() { return null; }
+	public java.lang.Class<?>[] getParameterTypes() { return null; }
+	public java.lang.reflect.TypeVariable<java.lang.reflect.Constructor<T>>[] getTypeParameters() { return null; }
 	public int hashCode() { return 0; }
-	public java.lang.Object newInstance(java.lang.Object[] var0) throws java.lang.IllegalAccessException, java.lang.InstantiationException, java.lang.reflect.InvocationTargetException { return null; }
+	public boolean isSynthetic() { return false; }
+	public boolean isVarArgs() { return false; }
+	public T newInstance(java.lang.Object[] var0) throws java.lang.IllegalAccessException, java.lang.InstantiationException, java.lang.reflect.InvocationTargetException { return null; }
+	public java.lang.String toGenericString() { return null; }
 	private Constructor() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

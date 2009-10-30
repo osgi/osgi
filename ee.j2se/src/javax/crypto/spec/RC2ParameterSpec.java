@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package javax.crypto.spec;
 public class RC2ParameterSpec implements java.security.spec.AlgorithmParameterSpec {
-	public RC2ParameterSpec(int var0) { }
-	public RC2ParameterSpec(int var0, byte[] var1) { }
-	public RC2ParameterSpec(int var0, byte[] var1, int var2) { }
+	public RC2ParameterSpec(int var0) { } 
+	public RC2ParameterSpec(int var0, byte[] var1) { } 
+	public RC2ParameterSpec(int var0, byte[] var1, int var2) { } 
 	public int getEffectiveKeyBits() { return 0; }
 	public byte[] getIV() { return null; }
 	public int hashCode() { return 0; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,6 @@
 
 package java.awt.event;
 public class MouseEvent extends java.awt.event.InputEvent {
-	public MouseEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, int var5, int var6, boolean var7) { }
-	public MouseEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, int var5, int var6, boolean var7, int var8) { }
-	public int getButton() { return 0; }
-	public int getClickCount() { return 0; }
-	public static java.lang.String getMouseModifiersText(int var0) { return null; }
-	public java.awt.Point getPoint() { return null; }
-	public int getX() { return 0; }
-	public int getY() { return 0; }
-	public boolean isPopupTrigger() { return false; }
-	public void translatePoint(int var0, int var1) { }
 	public final static int BUTTON1 = 1;
 	public final static int BUTTON2 = 2;
 	public final static int BUTTON3 = 3;
@@ -40,5 +30,15 @@ public class MouseEvent extends java.awt.event.InputEvent {
 	public final static int MOUSE_RELEASED = 502;
 	public final static int MOUSE_WHEEL = 507;
 	public final static int NOBUTTON = 0;
+	public MouseEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, int var5, int var6, boolean var7) { } 
+	public MouseEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, int var5, int var6, boolean var7, int var8) { } 
+	public int getButton() { return 0; }
+	public int getClickCount() { return 0; }
+	public static java.lang.String getMouseModifiersText(int var0) { return null; }
+	public java.awt.Point getPoint() { return null; }
+	public int getX() { return 0; }
+	public int getY() { return 0; }
+	public boolean isPopupTrigger() { return false; }
+	public void translatePoint(int var0, int var1) { }
 }
 

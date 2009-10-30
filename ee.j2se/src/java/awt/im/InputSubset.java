@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,6 @@ public final class InputSubset extends java.lang.Character.Subset {
 	public final static java.awt.im.InputSubset LATIN_DIGITS; static { LATIN_DIGITS = null; }
 	public final static java.awt.im.InputSubset SIMPLIFIED_HANZI; static { SIMPLIFIED_HANZI = null; }
 	public final static java.awt.im.InputSubset TRADITIONAL_HANZI; static { TRADITIONAL_HANZI = null; }
-	private InputSubset() { super((java.lang.String) null); } /* generated constructor to prevent compiler adding default public constructor */
+	private InputSubset()  { super((java.lang.String) null); } /* generated constructor to prevent compiler adding default public constructor */
 }
 

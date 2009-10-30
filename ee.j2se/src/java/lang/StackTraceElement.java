@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package java.lang;
 public final class StackTraceElement implements java.io.Serializable {
+	public StackTraceElement(java.lang.String var0, java.lang.String var1, java.lang.String var2, int var3) { } 
 	public java.lang.String getClassName() { return null; }
 	public java.lang.String getFileName() { return null; }
 	public int getLineNumber() { return 0; }
 	public java.lang.String getMethodName() { return null; }
 	public int hashCode() { return 0; }
 	public boolean isNativeMethod() { return false; }
-	private StackTraceElement() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

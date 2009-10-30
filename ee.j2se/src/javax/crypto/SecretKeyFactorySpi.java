@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.crypto;
 public abstract class SecretKeyFactorySpi {
-	public SecretKeyFactorySpi() { }
+	public SecretKeyFactorySpi() { } 
 	protected abstract javax.crypto.SecretKey engineGenerateSecret(java.security.spec.KeySpec var0) throws java.security.spec.InvalidKeySpecException;
 	protected abstract java.security.spec.KeySpec engineGetKeySpec(javax.crypto.SecretKey var0, java.lang.Class var1) throws java.security.spec.InvalidKeySpecException;
 	protected abstract javax.crypto.SecretKey engineTranslateKey(javax.crypto.SecretKey var0) throws java.security.InvalidKeyException;

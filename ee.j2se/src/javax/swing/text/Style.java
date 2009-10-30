@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.swing.text;
-public abstract interface Style extends javax.swing.text.MutableAttributeSet {
-	public abstract void addChangeListener(javax.swing.event.ChangeListener var0);
-	public abstract java.lang.String getName();
-	public abstract void removeChangeListener(javax.swing.event.ChangeListener var0);
+public interface Style extends javax.swing.text.MutableAttributeSet {
+	void addChangeListener(javax.swing.event.ChangeListener var0);
+	java.lang.String getName();
+	void removeChangeListener(javax.swing.event.ChangeListener var0);
 }
 

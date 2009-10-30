@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.awt.dnd;
 public class DragSourceDragEvent extends java.awt.dnd.DragSourceEvent {
-	public DragSourceDragEvent(java.awt.dnd.DragSourceContext var0, int var1, int var2, int var3) { super((java.awt.dnd.DragSourceContext) null, 0, 0); }
-	public DragSourceDragEvent(java.awt.dnd.DragSourceContext var0, int var1, int var2, int var3, int var4, int var5) { super((java.awt.dnd.DragSourceContext) null, 0, 0); }
+	public DragSourceDragEvent(java.awt.dnd.DragSourceContext var0, int var1, int var2, int var3)  { super((java.awt.dnd.DragSourceContext) null, 0, 0); } 
+	public DragSourceDragEvent(java.awt.dnd.DragSourceContext var0, int var1, int var2, int var3, int var4, int var5)  { super((java.awt.dnd.DragSourceContext) null, 0, 0); } 
 	public int getDropAction() { return 0; }
 	public int getGestureModifiers() { return 0; }
 	public int getGestureModifiersEx() { return 0; }

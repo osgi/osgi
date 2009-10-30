@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package java.util.logging;
 public class Logger {
-	protected Logger(java.lang.String var0, java.lang.String var1) { }
+	public final static java.util.logging.Logger global; static { global = null; }
+	protected Logger(java.lang.String var0, java.lang.String var1) { } 
 	public void addHandler(java.util.logging.Handler var0) { }
 	public void config(java.lang.String var0) { }
 	public void entering(java.lang.String var0, java.lang.String var1) { }
@@ -62,6 +63,5 @@ public class Logger {
 	public void severe(java.lang.String var0) { }
 	public void throwing(java.lang.String var0, java.lang.String var1, java.lang.Throwable var2) { }
 	public void warning(java.lang.String var0) { }
-	public final static java.util.logging.Logger global; static { global = null; }
 }
 

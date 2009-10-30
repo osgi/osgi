@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,11 @@
 
 package java.awt;
 public class MediaTracker implements java.io.Serializable {
-	public MediaTracker(java.awt.Component var0) { }
+	public final static int ABORTED = 2;
+	public final static int COMPLETE = 8;
+	public final static int ERRORED = 4;
+	public final static int LOADING = 1;
+	public MediaTracker(java.awt.Component var0) { } 
 	public void addImage(java.awt.Image var0, int var1) { }
 	public void addImage(java.awt.Image var0, int var1, int var2, int var3) { }
 	public boolean checkAll() { return false; }
@@ -36,9 +40,5 @@ public class MediaTracker implements java.io.Serializable {
 	public boolean waitForAll(long var0) throws java.lang.InterruptedException { return false; }
 	public void waitForID(int var0) throws java.lang.InterruptedException { }
 	public boolean waitForID(int var0, long var1) throws java.lang.InterruptedException { return false; }
-	public final static int ABORTED = 2;
-	public final static int COMPLETE = 8;
-	public final static int ERRORED = 4;
-	public final static int LOADING = 1;
 }
 

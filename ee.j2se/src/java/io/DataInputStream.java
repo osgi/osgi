@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.io;
 public class DataInputStream extends java.io.FilterInputStream implements java.io.DataInput {
-	public DataInputStream(java.io.InputStream var0) { super((java.io.InputStream) null); }
+	public DataInputStream(java.io.InputStream var0)  { super((java.io.InputStream) null); } 
 	public final int read(byte[] var0) throws java.io.IOException { return 0; }
 	public final int read(byte[] var0, int var1, int var2) throws java.io.IOException { return 0; }
 	public final boolean readBoolean() throws java.io.IOException { return false; }

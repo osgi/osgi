@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.net;
 public class URISyntaxException extends java.lang.Exception {
-	public URISyntaxException(java.lang.String var0, java.lang.String var1) { }
-	public URISyntaxException(java.lang.String var0, java.lang.String var1, int var2) { }
+	public URISyntaxException(java.lang.String var0, java.lang.String var1) { } 
+	public URISyntaxException(java.lang.String var0, java.lang.String var1, int var2) { } 
 	public int getIndex() { return 0; }
 	public java.lang.String getInput() { return null; }
 	public java.lang.String getReason() { return null; }

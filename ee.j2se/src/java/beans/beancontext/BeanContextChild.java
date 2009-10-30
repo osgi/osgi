@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package java.beans.beancontext;
-public abstract interface BeanContextChild {
-	public abstract void addPropertyChangeListener(java.lang.String var0, java.beans.PropertyChangeListener var1);
-	public abstract void addVetoableChangeListener(java.lang.String var0, java.beans.VetoableChangeListener var1);
-	public abstract java.beans.beancontext.BeanContext getBeanContext();
-	public abstract void removePropertyChangeListener(java.lang.String var0, java.beans.PropertyChangeListener var1);
-	public abstract void removeVetoableChangeListener(java.lang.String var0, java.beans.VetoableChangeListener var1);
-	public abstract void setBeanContext(java.beans.beancontext.BeanContext var0) throws java.beans.PropertyVetoException;
+public interface BeanContextChild {
+	void addPropertyChangeListener(java.lang.String var0, java.beans.PropertyChangeListener var1);
+	void addVetoableChangeListener(java.lang.String var0, java.beans.VetoableChangeListener var1);
+	java.beans.beancontext.BeanContext getBeanContext();
+	void removePropertyChangeListener(java.lang.String var0, java.beans.PropertyChangeListener var1);
+	void removeVetoableChangeListener(java.lang.String var0, java.beans.VetoableChangeListener var1);
+	void setBeanContext(java.beans.beancontext.BeanContext var0) throws java.beans.PropertyVetoException;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.swing;
 public class SpinnerDateModel extends javax.swing.AbstractSpinnerModel implements java.io.Serializable {
-	public SpinnerDateModel() { }
-	public SpinnerDateModel(java.util.Date var0, java.lang.Comparable var1, java.lang.Comparable var2, int var3) { }
+	public SpinnerDateModel() { } 
+	public SpinnerDateModel(java.util.Date var0, java.lang.Comparable var1, java.lang.Comparable var2, int var3) { } 
 	public int getCalendarField() { return 0; }
 	public java.util.Date getDate() { return null; }
 	public java.lang.Comparable getEnd() { return null; }

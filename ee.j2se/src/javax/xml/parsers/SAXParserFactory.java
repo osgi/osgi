@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,18 @@
 
 package javax.xml.parsers;
 public abstract class SAXParserFactory {
-	protected SAXParserFactory() { }
+	protected SAXParserFactory() { } 
 	public abstract boolean getFeature(java.lang.String var0) throws javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException;
+	public javax.xml.validation.Schema getSchema() { return null; }
 	public boolean isNamespaceAware() { return false; }
 	public boolean isValidating() { return false; }
-	public static javax.xml.parsers.SAXParserFactory newInstance() throws javax.xml.parsers.FactoryConfigurationError { return null; }
+	public boolean isXIncludeAware() { return false; }
+	public static javax.xml.parsers.SAXParserFactory newInstance() { return null; }
 	public abstract javax.xml.parsers.SAXParser newSAXParser() throws javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXException;
 	public abstract void setFeature(java.lang.String var0, boolean var1) throws javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException;
 	public void setNamespaceAware(boolean var0) { }
+	public void setSchema(javax.xml.validation.Schema var0) { }
 	public void setValidating(boolean var0) { }
+	public void setXIncludeAware(boolean var0) { }
 }
 

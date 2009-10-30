@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package javax.naming.ldap;
 public class StartTlsRequest implements javax.naming.ldap.ExtendedRequest {
-	public StartTlsRequest() { }
+	public final static java.lang.String OID = "1.3.6.1.4.1.1466.20037";
+	public StartTlsRequest() { } 
 	public javax.naming.ldap.ExtendedResponse createExtendedResponse(java.lang.String var0, byte[] var1, int var2, int var3) throws javax.naming.NamingException { return null; }
 	public byte[] getEncodedValue() { return null; }
 	public java.lang.String getID() { return null; }
-	public final static java.lang.String OID = "1.3.6.1.4.1.1466.20037";
 }
 

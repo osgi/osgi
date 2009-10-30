@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,38 @@
 
 package javax.swing.text;
 public class DefaultEditorKit extends javax.swing.text.EditorKit {
-	public DefaultEditorKit() { }
-	public javax.swing.text.Caret createCaret() { return null; }
-	public javax.swing.text.Document createDefaultDocument() { return null; }
-	public javax.swing.Action[] getActions() { return null; }
-	public java.lang.String getContentType() { return null; }
-	public javax.swing.text.ViewFactory getViewFactory() { return null; }
-	public void read(java.io.InputStream var0, javax.swing.text.Document var1, int var2) throws java.io.IOException, javax.swing.text.BadLocationException { }
-	public void read(java.io.Reader var0, javax.swing.text.Document var1, int var2) throws java.io.IOException, javax.swing.text.BadLocationException { }
-	public void write(java.io.OutputStream var0, javax.swing.text.Document var1, int var2, int var3) throws java.io.IOException, javax.swing.text.BadLocationException { }
-	public void write(java.io.Writer var0, javax.swing.text.Document var1, int var2, int var3) throws java.io.IOException, javax.swing.text.BadLocationException { }
+	public static class BeepAction extends javax.swing.text.TextAction {
+		public BeepAction()  { super((java.lang.String) null); } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	public static class CopyAction extends javax.swing.text.TextAction {
+		public CopyAction()  { super((java.lang.String) null); } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	public static class CutAction extends javax.swing.text.TextAction {
+		public CutAction()  { super((java.lang.String) null); } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	public static class DefaultKeyTypedAction extends javax.swing.text.TextAction {
+		public DefaultKeyTypedAction()  { super((java.lang.String) null); } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	public static class InsertBreakAction extends javax.swing.text.TextAction {
+		public InsertBreakAction()  { super((java.lang.String) null); } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	public static class InsertContentAction extends javax.swing.text.TextAction {
+		public InsertContentAction()  { super((java.lang.String) null); } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	public static class InsertTabAction extends javax.swing.text.TextAction {
+		public InsertTabAction()  { super((java.lang.String) null); } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	public static class PasteAction extends javax.swing.text.TextAction {
+		public PasteAction()  { super((java.lang.String) null); } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
 	public final static java.lang.String EndOfLineStringProperty = "__EndOfLine__";
 	public final static java.lang.String backwardAction = "caret-backward";
 	public final static java.lang.String beepAction = "beep";
@@ -73,37 +95,15 @@ public class DefaultEditorKit extends javax.swing.text.EditorKit {
 	public final static java.lang.String selectionUpAction = "selection-up";
 	public final static java.lang.String upAction = "caret-up";
 	public final static java.lang.String writableAction = "set-writable";
-	public static class BeepAction extends javax.swing.text.TextAction {
-		public BeepAction() { super((java.lang.String) null); }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	public static class CopyAction extends javax.swing.text.TextAction {
-		public CopyAction() { super((java.lang.String) null); }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	public static class CutAction extends javax.swing.text.TextAction {
-		public CutAction() { super((java.lang.String) null); }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	public static class DefaultKeyTypedAction extends javax.swing.text.TextAction {
-		public DefaultKeyTypedAction() { super((java.lang.String) null); }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	public static class InsertBreakAction extends javax.swing.text.TextAction {
-		public InsertBreakAction() { super((java.lang.String) null); }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	public static class InsertContentAction extends javax.swing.text.TextAction {
-		public InsertContentAction() { super((java.lang.String) null); }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	public static class InsertTabAction extends javax.swing.text.TextAction {
-		public InsertTabAction() { super((java.lang.String) null); }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
-	public static class PasteAction extends javax.swing.text.TextAction {
-		public PasteAction() { super((java.lang.String) null); }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-	}
+	public DefaultEditorKit() { } 
+	public javax.swing.text.Caret createCaret() { return null; }
+	public javax.swing.text.Document createDefaultDocument() { return null; }
+	public javax.swing.Action[] getActions() { return null; }
+	public java.lang.String getContentType() { return null; }
+	public javax.swing.text.ViewFactory getViewFactory() { return null; }
+	public void read(java.io.InputStream var0, javax.swing.text.Document var1, int var2) throws java.io.IOException, javax.swing.text.BadLocationException { }
+	public void read(java.io.Reader var0, javax.swing.text.Document var1, int var2) throws java.io.IOException, javax.swing.text.BadLocationException { }
+	public void write(java.io.OutputStream var0, javax.swing.text.Document var1, int var2, int var3) throws java.io.IOException, javax.swing.text.BadLocationException { }
+	public void write(java.io.Writer var0, javax.swing.text.Document var1, int var2, int var3) throws java.io.IOException, javax.swing.text.BadLocationException { }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLLegendElement extends org.w3c.dom.html.HTMLElement {
-	public abstract java.lang.String getAccessKey();
-	public abstract java.lang.String getAlign();
-	public abstract org.w3c.dom.html.HTMLFormElement getForm();
-	public abstract void setAccessKey(java.lang.String var0);
-	public abstract void setAlign(java.lang.String var0);
+public interface HTMLLegendElement extends org.w3c.dom.html.HTMLElement {
+	java.lang.String getAccessKey();
+	java.lang.String getAlign();
+	org.w3c.dom.html.HTMLFormElement getForm();
+	void setAccessKey(java.lang.String var0);
+	void setAlign(java.lang.String var0);
 }
 

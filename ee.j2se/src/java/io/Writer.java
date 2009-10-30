@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,17 @@
  */
 
 package java.io;
-public abstract class Writer {
-	protected Writer() { }
-	protected Writer(java.lang.Object var0) { }
-	public abstract void close() throws java.io.IOException;
-	public abstract void flush() throws java.io.IOException;
+public abstract class Writer implements java.io.Closeable, java.io.Flushable, java.lang.Appendable {
+	protected java.lang.Object lock;
+	protected Writer() { } 
+	protected Writer(java.lang.Object var0) { } 
+	public java.io.Writer append(char var0) throws java.io.IOException { return null; }
+	public java.io.Writer append(java.lang.CharSequence var0) throws java.io.IOException { return null; }
+	public java.io.Writer append(java.lang.CharSequence var0, int var1, int var2) throws java.io.IOException { return null; }
 	public void write(int var0) throws java.io.IOException { }
 	public void write(java.lang.String var0) throws java.io.IOException { }
 	public void write(java.lang.String var0, int var1, int var2) throws java.io.IOException { }
 	public void write(char[] var0) throws java.io.IOException { }
 	public abstract void write(char[] var0, int var1, int var2) throws java.io.IOException;
-	protected java.lang.Object lock;
 }
 

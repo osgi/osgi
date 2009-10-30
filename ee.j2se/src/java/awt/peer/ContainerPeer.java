@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,16 @@
  */
 
 package java.awt.peer;
-public abstract interface ContainerPeer extends java.awt.peer.ComponentPeer {
-	public abstract void beginLayout();
-	public abstract void beginValidate();
-	public abstract void endLayout();
-	public abstract void endValidate();
-	public abstract java.awt.Insets getInsets();
-	public abstract java.awt.Insets insets();
-	public abstract boolean isPaintPending();
+public interface ContainerPeer extends java.awt.peer.ComponentPeer {
+	void beginLayout();
+	void beginValidate();
+	void cancelPendingPaint(int var0, int var1, int var2, int var3);
+	void endLayout();
+	void endValidate();
+	java.awt.Insets getInsets();
+	java.awt.Insets insets();
+	boolean isPaintPending();
+	boolean isRestackSupported();
+	void restack();
 }
 

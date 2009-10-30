@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,35 @@
 
 package javax.swing;
 public class JComboBox extends javax.swing.JComponent implements java.awt.ItemSelectable, java.awt.event.ActionListener, javax.accessibility.Accessible, javax.swing.event.ListDataListener {
-	public JComboBox() { }
-	public JComboBox(java.util.Vector var0) { }
-	public JComboBox(javax.swing.ComboBoxModel var0) { }
-	public JComboBox(java.lang.Object[] var0) { }
+	protected class AccessibleJComboBox extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleAction, javax.accessibility.AccessibleSelection {
+		public AccessibleJComboBox() { } 
+		public void addAccessibleSelection(int var0) { }
+		public void clearAccessibleSelection() { }
+		public boolean doAccessibleAction(int var0) { return false; }
+		public int getAccessibleActionCount() { return 0; }
+		public java.lang.String getAccessibleActionDescription(int var0) { return null; }
+		public javax.accessibility.Accessible getAccessibleSelection(int var0) { return null; }
+		public int getAccessibleSelectionCount() { return 0; }
+		public boolean isAccessibleChildSelected(int var0) { return false; }
+		public void removeAccessibleSelection(int var0) { }
+		public void selectAllAccessibleSelection() { }
+	}
+	public interface KeySelectionManager {
+		int selectionForKey(char var0, javax.swing.ComboBoxModel var1);
+	}
+	protected java.lang.String actionCommand;
+	protected javax.swing.ComboBoxModel dataModel;
+	protected javax.swing.ComboBoxEditor editor;
+	protected boolean isEditable;
+	protected javax.swing.JComboBox.KeySelectionManager keySelectionManager;
+	protected boolean lightWeightPopupEnabled;
+	protected int maximumRowCount;
+	protected javax.swing.ListCellRenderer renderer;
+	protected java.lang.Object selectedItemReminder;
+	public JComboBox() { } 
+	public JComboBox(java.util.Vector<?> var0) { } 
+	public JComboBox(javax.swing.ComboBoxModel var0) { } 
+	public JComboBox(java.lang.Object[] var0) { } 
 	public void actionPerformed(java.awt.event.ActionEvent var0) { }
 	public void addActionListener(java.awt.event.ActionListener var0) { }
 	public void addItem(java.lang.Object var0) { }
@@ -84,30 +109,5 @@ public class JComboBox extends javax.swing.JComponent implements java.awt.ItemSe
 	public void setSelectedItem(java.lang.Object var0) { }
 	public void setUI(javax.swing.plaf.ComboBoxUI var0) { }
 	public void showPopup() { }
-	protected java.lang.String actionCommand;
-	protected javax.swing.ComboBoxModel dataModel;
-	protected javax.swing.ComboBoxEditor editor;
-	protected boolean isEditable;
-	protected javax.swing.JComboBox.KeySelectionManager keySelectionManager;
-	protected boolean lightWeightPopupEnabled;
-	protected int maximumRowCount;
-	protected javax.swing.ListCellRenderer renderer;
-	protected java.lang.Object selectedItemReminder;
-	protected class AccessibleJComboBox extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleAction, javax.accessibility.AccessibleSelection {
-		protected AccessibleJComboBox() { }
-		public void addAccessibleSelection(int var0) { }
-		public void clearAccessibleSelection() { }
-		public boolean doAccessibleAction(int var0) { return false; }
-		public int getAccessibleActionCount() { return 0; }
-		public java.lang.String getAccessibleActionDescription(int var0) { return null; }
-		public javax.accessibility.Accessible getAccessibleSelection(int var0) { return null; }
-		public int getAccessibleSelectionCount() { return 0; }
-		public boolean isAccessibleChildSelected(int var0) { return false; }
-		public void removeAccessibleSelection(int var0) { }
-		public void selectAllAccessibleSelection() { }
-	}
-	public static abstract interface KeySelectionManager {
-		public abstract int selectionForKey(char var0, javax.swing.ComboBoxModel var1);
-	}
 }
 

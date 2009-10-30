@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package java.security;
 public abstract class SignatureSpi {
-	public SignatureSpi() { }
+	protected java.security.SecureRandom appRandom;
+	public SignatureSpi() { } 
 	public java.lang.Object clone() throws java.lang.CloneNotSupportedException { return null; }
 	/** @deprecated */ protected abstract java.lang.Object engineGetParameter(java.lang.String var0);
 	protected java.security.AlgorithmParameters engineGetParameters() { return null; }
@@ -28,9 +29,9 @@ public abstract class SignatureSpi {
 	protected abstract byte[] engineSign() throws java.security.SignatureException;
 	protected int engineSign(byte[] var0, int var1, int var2) throws java.security.SignatureException { return 0; }
 	protected abstract void engineUpdate(byte var0) throws java.security.SignatureException;
+	protected void engineUpdate(java.nio.ByteBuffer var0) { }
 	protected abstract void engineUpdate(byte[] var0, int var1, int var2) throws java.security.SignatureException;
 	protected abstract boolean engineVerify(byte[] var0) throws java.security.SignatureException;
 	protected boolean engineVerify(byte[] var0, int var1, int var2) throws java.security.SignatureException { return false; }
-	protected java.security.SecureRandom appRandom;
 }
 

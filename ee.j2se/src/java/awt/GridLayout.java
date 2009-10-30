@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package java.awt;
 public class GridLayout implements java.awt.LayoutManager, java.io.Serializable {
-	public GridLayout() { }
-	public GridLayout(int var0, int var1) { }
-	public GridLayout(int var0, int var1, int var2, int var3) { }
+	public GridLayout() { } 
+	public GridLayout(int var0, int var1) { } 
+	public GridLayout(int var0, int var1, int var2, int var3) { } 
 	public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }
 	public int getColumns() { return 0; }
 	public int getHgap() { return 0; }

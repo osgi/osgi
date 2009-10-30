@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,15 @@
 
 package javax.swing.text;
 public abstract class TableView extends javax.swing.text.BoxView {
-	public TableView(javax.swing.text.Element var0) { super((javax.swing.text.Element) null, 0); }
-	/** @deprecated */ protected javax.swing.text.TableView.TableCell createTableCell(javax.swing.text.Element var0) { return null; }
-	protected javax.swing.text.TableView.TableRow createTableRow(javax.swing.text.Element var0) { return null; }
-	protected void layoutColumns(int var0, int[] var1, int[] var2, javax.swing.SizeRequirements[] var3) { }
-	static abstract interface GridCell {
-		public abstract int getColumnCount();
-		public abstract int getGridColumn();
-		public abstract int getGridRow();
-		public abstract int getRowCount();
-		public abstract void setGridLocation(int var0, int var1);
+	interface GridCell {
+		int getColumnCount();
+		int getGridColumn();
+		int getGridRow();
+		int getRowCount();
+		void setGridLocation(int var0, int var1);
 	}
-	/** @deprecated */ public class TableCell extends javax.swing.text.BoxView implements javax.swing.text.TableView.GridCell {
-		public TableCell(javax.swing.text.Element var0) { super((javax.swing.text.Element) null, 0); }
+	public class TableCell extends javax.swing.text.BoxView implements javax.swing.text.TableView.GridCell {
+		public TableCell(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null, 0); } 
 		public int getColumnCount() { return 0; }
 		public int getGridColumn() { return 0; }
 		public int getGridRow() { return 0; }
@@ -36,7 +32,11 @@ public abstract class TableView extends javax.swing.text.BoxView {
 		public void setGridLocation(int var0, int var1) { }
 	}
 	public class TableRow extends javax.swing.text.BoxView {
-		public TableRow(javax.swing.text.Element var0) { super((javax.swing.text.Element) null, 0); }
+		public TableRow(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null, 0); } 
 	}
+	public TableView(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null, 0); } 
+	/** @deprecated */ protected javax.swing.text.TableView.TableCell createTableCell(javax.swing.text.Element var0) { return null; }
+	protected javax.swing.text.TableView.TableRow createTableRow(javax.swing.text.Element var0) { return null; }
+	protected void layoutColumns(int var0, int[] var1, int[] var2, javax.swing.SizeRequirements[] var3) { }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.security;
 public final class AccessControlContext {
-	public AccessControlContext(java.security.AccessControlContext var0, java.security.DomainCombiner var1) { }
-	public AccessControlContext(java.security.ProtectionDomain[] var0) { }
+	public AccessControlContext(java.security.AccessControlContext var0, java.security.DomainCombiner var1) { } 
+	public AccessControlContext(java.security.ProtectionDomain[] var0) { } 
 	public void checkPermission(java.security.Permission var0) { }
 	public java.security.DomainCombiner getDomainCombiner() { return null; }
 	public int hashCode() { return 0; }

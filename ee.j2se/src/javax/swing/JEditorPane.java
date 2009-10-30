@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,36 @@
 
 package javax.swing;
 public class JEditorPane extends javax.swing.text.JTextComponent {
-	public JEditorPane() { }
-	public JEditorPane(java.lang.String var0) throws java.io.IOException { }
-	public JEditorPane(java.lang.String var0, java.lang.String var1) { }
-	public JEditorPane(java.net.URL var0) throws java.io.IOException { }
+	protected class AccessibleJEditorPane extends javax.swing.text.JTextComponent.AccessibleJTextComponent {
+		protected AccessibleJEditorPane() { } 
+	}
+	protected class AccessibleJEditorPaneHTML extends javax.swing.JEditorPane.AccessibleJEditorPane {
+		protected AccessibleJEditorPaneHTML() { } 
+	}
+	protected class JEditorPaneAccessibleHypertextSupport extends javax.swing.JEditorPane.AccessibleJEditorPane implements javax.accessibility.AccessibleHypertext {
+		public class HTMLLink extends javax.accessibility.AccessibleHyperlink {
+			public HTMLLink(javax.swing.text.Element var0) { } 
+			public boolean doAccessibleAction(int var0) { return false; }
+			public java.lang.Object getAccessibleActionAnchor(int var0) { return null; }
+			public int getAccessibleActionCount() { return 0; }
+			public java.lang.String getAccessibleActionDescription(int var0) { return null; }
+			public java.lang.Object getAccessibleActionObject(int var0) { return null; }
+			public int getEndIndex() { return 0; }
+			public int getStartIndex() { return 0; }
+			public boolean isValid() { return false; }
+		}
+		public JEditorPaneAccessibleHypertextSupport() { } 
+		public javax.accessibility.AccessibleHyperlink getLink(int var0) { return null; }
+		public int getLinkCount() { return 0; }
+		public int getLinkIndex(int var0) { return 0; }
+		public java.lang.String getLinkText(int var0) { return null; }
+	}
+	public final static java.lang.String HONOR_DISPLAY_PROPERTIES = "JEditorPane.honorDisplayProperties";
+	public final static java.lang.String W3C_LENGTH_UNITS = "JEditorPane.w3cLengthUnits";
+	public JEditorPane() { } 
+	public JEditorPane(java.lang.String var0) throws java.io.IOException { } 
+	public JEditorPane(java.lang.String var0, java.lang.String var1) { } 
+	public JEditorPane(java.net.URL var0) throws java.io.IOException { } 
 	public void addHyperlinkListener(javax.swing.event.HyperlinkListener var0) { }
 	protected javax.swing.text.EditorKit createDefaultEditorKit() { return null; }
 	public static javax.swing.text.EditorKit createEditorKitForContentType(java.lang.String var0) { return null; }
@@ -41,29 +67,5 @@ public class JEditorPane extends javax.swing.text.JTextComponent {
 	public void setEditorKitForContentType(java.lang.String var0, javax.swing.text.EditorKit var1) { }
 	public void setPage(java.lang.String var0) throws java.io.IOException { }
 	public void setPage(java.net.URL var0) throws java.io.IOException { }
-	protected class AccessibleJEditorPane extends javax.swing.text.JTextComponent.AccessibleJTextComponent {
-		protected AccessibleJEditorPane() { }
-	}
-	protected class AccessibleJEditorPaneHTML extends javax.swing.JEditorPane.AccessibleJEditorPane {
-		protected AccessibleJEditorPaneHTML() { }
-	}
-	protected class JEditorPaneAccessibleHypertextSupport extends javax.swing.JEditorPane.AccessibleJEditorPane implements javax.accessibility.AccessibleHypertext {
-		public JEditorPaneAccessibleHypertextSupport() { }
-		public javax.accessibility.AccessibleHyperlink getLink(int var0) { return null; }
-		public int getLinkCount() { return 0; }
-		public int getLinkIndex(int var0) { return 0; }
-		public java.lang.String getLinkText(int var0) { return null; }
-		public class HTMLLink extends javax.accessibility.AccessibleHyperlink {
-			public HTMLLink(javax.swing.text.Element var0) { }
-			public boolean doAccessibleAction(int var0) { return false; }
-			public java.lang.Object getAccessibleActionAnchor(int var0) { return null; }
-			public int getAccessibleActionCount() { return 0; }
-			public java.lang.String getAccessibleActionDescription(int var0) { return null; }
-			public java.lang.Object getAccessibleActionObject(int var0) { return null; }
-			public int getEndIndex() { return 0; }
-			public int getStartIndex() { return 0; }
-			public boolean isValid() { return false; }
-		}
-	}
 }
 

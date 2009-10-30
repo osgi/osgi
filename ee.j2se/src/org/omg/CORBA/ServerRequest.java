@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package org.omg.CORBA;
 public abstract class ServerRequest {
-	public ServerRequest() { }
+	public ServerRequest() { } 
 	public void arguments(org.omg.CORBA.NVList var0) { }
 	public abstract org.omg.CORBA.Context ctx();
 	/** @deprecated */ public void except(org.omg.CORBA.Any var0) { }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,20 @@
 
 package javax.swing;
 public class JToggleButton extends javax.swing.AbstractButton implements javax.accessibility.Accessible {
-	public JToggleButton() { }
-	public JToggleButton(java.lang.String var0) { }
-	public JToggleButton(java.lang.String var0, javax.swing.Icon var1) { }
-	public JToggleButton(java.lang.String var0, javax.swing.Icon var1, boolean var2) { }
-	public JToggleButton(java.lang.String var0, boolean var1) { }
-	public JToggleButton(javax.swing.Action var0) { }
-	public JToggleButton(javax.swing.Icon var0) { }
-	public JToggleButton(javax.swing.Icon var0, boolean var1) { }
 	protected class AccessibleJToggleButton extends javax.swing.AbstractButton.AccessibleAbstractButton implements java.awt.event.ItemListener {
-		public AccessibleJToggleButton() { }
+		public AccessibleJToggleButton() { } 
 		public void itemStateChanged(java.awt.event.ItemEvent var0) { }
 	}
 	public static class ToggleButtonModel extends javax.swing.DefaultButtonModel {
-		public ToggleButtonModel() { }
+		public ToggleButtonModel() { } 
 	}
+	public JToggleButton() { } 
+	public JToggleButton(java.lang.String var0) { } 
+	public JToggleButton(java.lang.String var0, javax.swing.Icon var1) { } 
+	public JToggleButton(java.lang.String var0, javax.swing.Icon var1, boolean var2) { } 
+	public JToggleButton(java.lang.String var0, boolean var1) { } 
+	public JToggleButton(javax.swing.Action var0) { } 
+	public JToggleButton(javax.swing.Icon var0) { } 
+	public JToggleButton(javax.swing.Icon var0, boolean var1) { } 
 }
 

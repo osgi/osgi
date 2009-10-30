@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.io;
 public class PipedOutputStream extends java.io.OutputStream {
-	public PipedOutputStream() { }
-	public PipedOutputStream(java.io.PipedInputStream var0) throws java.io.IOException { }
+	public PipedOutputStream() { } 
+	public PipedOutputStream(java.io.PipedInputStream var0) throws java.io.IOException { } 
 	public void connect(java.io.PipedInputStream var0) throws java.io.IOException { }
 	public void flush() throws java.io.IOException { }
 	public void write(int var0) throws java.io.IOException { }

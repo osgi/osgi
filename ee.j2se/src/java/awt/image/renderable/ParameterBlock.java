@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,11 @@
 
 package java.awt.image.renderable;
 public class ParameterBlock implements java.io.Serializable, java.lang.Cloneable {
-	public ParameterBlock() { }
-	public ParameterBlock(java.util.Vector var0) { }
-	public ParameterBlock(java.util.Vector var0, java.util.Vector var1) { }
+	protected java.util.Vector<java.lang.Object> parameters;
+	protected java.util.Vector<java.lang.Object> sources;
+	public ParameterBlock() { } 
+	public ParameterBlock(java.util.Vector<java.lang.Object> var0) { } 
+	public ParameterBlock(java.util.Vector<java.lang.Object> var0, java.util.Vector<java.lang.Object> var1) { } 
 	public java.awt.image.renderable.ParameterBlock add(byte var0) { return null; }
 	public java.awt.image.renderable.ParameterBlock add(char var0) { return null; }
 	public java.awt.image.renderable.ParameterBlock add(double var0) { return null; }
@@ -39,12 +41,12 @@ public class ParameterBlock implements java.io.Serializable, java.lang.Cloneable
 	public int getNumSources() { return 0; }
 	public java.lang.Object getObjectParameter(int var0) { return null; }
 	public java.lang.Class[] getParamClasses() { return null; }
-	public java.util.Vector getParameters() { return null; }
+	public java.util.Vector<java.lang.Object> getParameters() { return null; }
 	public java.awt.image.renderable.RenderableImage getRenderableSource(int var0) { return null; }
 	public java.awt.image.RenderedImage getRenderedSource(int var0) { return null; }
 	public short getShortParameter(int var0) { return 0; }
 	public java.lang.Object getSource(int var0) { return null; }
-	public java.util.Vector getSources() { return null; }
+	public java.util.Vector<java.lang.Object> getSources() { return null; }
 	public void removeParameters() { }
 	public void removeSources() { }
 	public java.awt.image.renderable.ParameterBlock set(byte var0, int var1) { return null; }
@@ -55,11 +57,9 @@ public class ParameterBlock implements java.io.Serializable, java.lang.Cloneable
 	public java.awt.image.renderable.ParameterBlock set(long var0, int var1) { return null; }
 	public java.awt.image.renderable.ParameterBlock set(java.lang.Object var0, int var1) { return null; }
 	public java.awt.image.renderable.ParameterBlock set(short var0, int var1) { return null; }
-	public void setParameters(java.util.Vector var0) { }
+	public void setParameters(java.util.Vector<java.lang.Object> var0) { }
 	public java.awt.image.renderable.ParameterBlock setSource(java.lang.Object var0, int var1) { return null; }
-	public void setSources(java.util.Vector var0) { }
+	public void setSources(java.util.Vector<java.lang.Object> var0) { }
 	public java.lang.Object shallowClone() { return null; }
-	protected java.util.Vector parameters;
-	protected java.util.Vector sources;
 }
 

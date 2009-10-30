@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,14 @@
 
 package javax.imageio;
 public abstract class ImageWriter implements javax.imageio.ImageTranscoder {
-	protected ImageWriter(javax.imageio.spi.ImageWriterSpi var0) { }
+	protected java.util.Locale[] availableLocales;
+	protected java.util.Locale locale;
+	protected javax.imageio.spi.ImageWriterSpi originatingProvider;
+	protected java.lang.Object output;
+	protected java.util.List<javax.imageio.event.IIOWriteProgressListener> progressListeners;
+	protected java.util.List<javax.imageio.event.IIOWriteWarningListener> warningListeners;
+	protected java.util.List<java.util.Locale> warningLocales;
+	protected ImageWriter(javax.imageio.spi.ImageWriterSpi var0) { } 
 	public void abort() { }
 	protected boolean abortRequested() { return false; }
 	public void addIIOWriteProgressListener(javax.imageio.event.IIOWriteProgressListener var0) { }
@@ -45,9 +52,9 @@ public abstract class ImageWriter implements javax.imageio.ImageTranscoder {
 	public javax.imageio.spi.ImageWriterSpi getOriginatingProvider() { return null; }
 	public java.lang.Object getOutput() { return null; }
 	public java.awt.Dimension[] getPreferredThumbnailSizes(javax.imageio.ImageTypeSpecifier var0, javax.imageio.ImageWriteParam var1, javax.imageio.metadata.IIOMetadata var2, javax.imageio.metadata.IIOMetadata var3) { return null; }
-	public void prepareInsertEmpty(int var0, javax.imageio.ImageTypeSpecifier var1, int var2, int var3, javax.imageio.metadata.IIOMetadata var4, java.util.List var5, javax.imageio.ImageWriteParam var6) throws java.io.IOException { }
+	public void prepareInsertEmpty(int var0, javax.imageio.ImageTypeSpecifier var1, int var2, int var3, javax.imageio.metadata.IIOMetadata var4, java.util.List<? extends java.awt.image.BufferedImage> var5, javax.imageio.ImageWriteParam var6) throws java.io.IOException { }
 	public void prepareReplacePixels(int var0, java.awt.Rectangle var1) throws java.io.IOException { }
-	public void prepareWriteEmpty(javax.imageio.metadata.IIOMetadata var0, javax.imageio.ImageTypeSpecifier var1, int var2, int var3, javax.imageio.metadata.IIOMetadata var4, java.util.List var5, javax.imageio.ImageWriteParam var6) throws java.io.IOException { }
+	public void prepareWriteEmpty(javax.imageio.metadata.IIOMetadata var0, javax.imageio.ImageTypeSpecifier var1, int var2, int var3, javax.imageio.metadata.IIOMetadata var4, java.util.List<? extends java.awt.image.BufferedImage> var5, javax.imageio.ImageWriteParam var6) throws java.io.IOException { }
 	public void prepareWriteSequence(javax.imageio.metadata.IIOMetadata var0) throws java.io.IOException { }
 	protected void processImageComplete() { }
 	protected void processImageProgress(float var0) { }
@@ -75,12 +82,5 @@ public abstract class ImageWriter implements javax.imageio.ImageTranscoder {
 	public abstract void write(javax.imageio.metadata.IIOMetadata var0, javax.imageio.IIOImage var1, javax.imageio.ImageWriteParam var2) throws java.io.IOException;
 	public void writeInsert(int var0, javax.imageio.IIOImage var1, javax.imageio.ImageWriteParam var2) throws java.io.IOException { }
 	public void writeToSequence(javax.imageio.IIOImage var0, javax.imageio.ImageWriteParam var1) throws java.io.IOException { }
-	protected java.util.Locale[] availableLocales;
-	protected java.util.Locale locale;
-	protected javax.imageio.spi.ImageWriterSpi originatingProvider;
-	protected java.lang.Object output;
-	protected java.util.List progressListeners;
-	protected java.util.List warningListeners;
-	protected java.util.List warningLocales;
 }
 

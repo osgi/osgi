@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.awt.image;
 public class ByteLookupTable extends java.awt.image.LookupTable {
-	public ByteLookupTable(int var0, byte[] var1) { super(0, 0); }
-	public ByteLookupTable(int var0, byte[][] var1) { super(0, 0); }
+	public ByteLookupTable(int var0, byte[] var1)  { super(0, 0); } 
+	public ByteLookupTable(int var0, byte[][] var1)  { super(0, 0); } 
 	public final byte[][] getTable() { return null; }
 	public byte[] lookupPixel(byte[] var0, byte[] var1) { return null; }
 	public int[] lookupPixel(int[] var0, int[] var1) { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,44 @@
 
 package javax.swing.text;
 public abstract class JTextComponent extends javax.swing.JComponent implements javax.accessibility.Accessible, javax.swing.Scrollable {
-	public JTextComponent() { }
+	public class AccessibleJTextComponent extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleAction, javax.accessibility.AccessibleEditableText, javax.accessibility.AccessibleText, javax.swing.event.CaretListener, javax.swing.event.DocumentListener {
+		public AccessibleJTextComponent() { } 
+		public void caretUpdate(javax.swing.event.CaretEvent var0) { }
+		public void changedUpdate(javax.swing.event.DocumentEvent var0) { }
+		public void cut(int var0, int var1) { }
+		public void delete(int var0, int var1) { }
+		public boolean doAccessibleAction(int var0) { return false; }
+		public int getAccessibleActionCount() { return 0; }
+		public java.lang.String getAccessibleActionDescription(int var0) { return null; }
+		public java.lang.String getAfterIndex(int var0, int var1) { return null; }
+		public java.lang.String getAtIndex(int var0, int var1) { return null; }
+		public java.lang.String getBeforeIndex(int var0, int var1) { return null; }
+		public int getCaretPosition() { return 0; }
+		public int getCharCount() { return 0; }
+		public javax.swing.text.AttributeSet getCharacterAttribute(int var0) { return null; }
+		public java.awt.Rectangle getCharacterBounds(int var0) { return null; }
+		public int getIndexAtPoint(java.awt.Point var0) { return 0; }
+		public java.lang.String getSelectedText() { return null; }
+		public int getSelectionEnd() { return 0; }
+		public int getSelectionStart() { return 0; }
+		public java.lang.String getTextRange(int var0, int var1) { return null; }
+		public void insertTextAtIndex(int var0, java.lang.String var1) { }
+		public void insertUpdate(javax.swing.event.DocumentEvent var0) { }
+		public void paste(int var0) { }
+		public void removeUpdate(javax.swing.event.DocumentEvent var0) { }
+		public void replaceText(int var0, int var1, java.lang.String var2) { }
+		public void selectText(int var0, int var1) { }
+		public void setAttributes(int var0, int var1, javax.swing.text.AttributeSet var2) { }
+		public void setTextContents(java.lang.String var0) { }
+	}
+	public static class KeyBinding {
+		public java.lang.String actionName;
+		public javax.swing.KeyStroke key;
+		public KeyBinding(javax.swing.KeyStroke var0, java.lang.String var1) { } 
+	}
+	public final static java.lang.String DEFAULT_KEYMAP = "default";
+	public final static java.lang.String FOCUS_ACCELERATOR_KEY = "focusAcceleratorKey";
+	public JTextComponent() { } 
 	public void addCaretListener(javax.swing.event.CaretListener var0) { }
 	public void addInputMethodListener(java.awt.event.InputMethodListener var0) { }
 	public static javax.swing.text.Keymap addKeymap(java.lang.String var0, javax.swing.text.Keymap var1) { return null; }
@@ -81,42 +118,5 @@ public abstract class JTextComponent extends javax.swing.JComponent implements j
 	public void setUI(javax.swing.plaf.TextUI var0) { }
 	public int viewToModel(java.awt.Point var0) { return 0; }
 	public void write(java.io.Writer var0) throws java.io.IOException { }
-	public final static java.lang.String DEFAULT_KEYMAP = "default";
-	public final static java.lang.String FOCUS_ACCELERATOR_KEY = "focusAcceleratorKey";
-	public class AccessibleJTextComponent extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleAction, javax.accessibility.AccessibleEditableText, javax.accessibility.AccessibleText, javax.swing.event.CaretListener, javax.swing.event.DocumentListener {
-		public AccessibleJTextComponent() { }
-		public void caretUpdate(javax.swing.event.CaretEvent var0) { }
-		public void changedUpdate(javax.swing.event.DocumentEvent var0) { }
-		public void cut(int var0, int var1) { }
-		public void delete(int var0, int var1) { }
-		public boolean doAccessibleAction(int var0) { return false; }
-		public int getAccessibleActionCount() { return 0; }
-		public java.lang.String getAccessibleActionDescription(int var0) { return null; }
-		public java.lang.String getAfterIndex(int var0, int var1) { return null; }
-		public java.lang.String getAtIndex(int var0, int var1) { return null; }
-		public java.lang.String getBeforeIndex(int var0, int var1) { return null; }
-		public int getCaretPosition() { return 0; }
-		public int getCharCount() { return 0; }
-		public javax.swing.text.AttributeSet getCharacterAttribute(int var0) { return null; }
-		public java.awt.Rectangle getCharacterBounds(int var0) { return null; }
-		public int getIndexAtPoint(java.awt.Point var0) { return 0; }
-		public java.lang.String getSelectedText() { return null; }
-		public int getSelectionEnd() { return 0; }
-		public int getSelectionStart() { return 0; }
-		public java.lang.String getTextRange(int var0, int var1) { return null; }
-		public void insertTextAtIndex(int var0, java.lang.String var1) { }
-		public void insertUpdate(javax.swing.event.DocumentEvent var0) { }
-		public void paste(int var0) { }
-		public void removeUpdate(javax.swing.event.DocumentEvent var0) { }
-		public void replaceText(int var0, int var1, java.lang.String var2) { }
-		public void selectText(int var0, int var1) { }
-		public void setAttributes(int var0, int var1, javax.swing.text.AttributeSet var2) { }
-		public void setTextContents(java.lang.String var0) { }
-	}
-	public static class KeyBinding {
-		public KeyBinding(javax.swing.KeyStroke var0, java.lang.String var1) { }
-		public java.lang.String actionName;
-		public javax.swing.KeyStroke key;
-	}
 }
 

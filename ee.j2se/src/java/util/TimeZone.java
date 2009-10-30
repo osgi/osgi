@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package java.util;
 public abstract class TimeZone implements java.io.Serializable, java.lang.Cloneable {
-	public TimeZone() { }
+	public final static int LONG = 1;
+	public final static int SHORT = 0;
+	public TimeZone() { } 
 	public java.lang.Object clone() { return null; }
 	public static java.lang.String[] getAvailableIDs() { return null; }
 	public static java.lang.String[] getAvailableIDs(int var0) { return null; }
@@ -37,7 +39,5 @@ public abstract class TimeZone implements java.io.Serializable, java.lang.Clonea
 	public void setID(java.lang.String var0) { }
 	public abstract void setRawOffset(int var0);
 	public abstract boolean useDaylightTime();
-	public final static int LONG = 1;
-	public final static int SHORT = 0;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package javax.swing;
 public class CellRendererPane extends java.awt.Container implements javax.accessibility.Accessible {
-	public CellRendererPane() { }
+	protected class AccessibleCellRendererPane extends java.awt.Container.AccessibleAWTContainer {
+		protected AccessibleCellRendererPane() { } 
+	}
+	protected javax.accessibility.AccessibleContext accessibleContext;
+	public CellRendererPane() { } 
 	public void paintComponent(java.awt.Graphics var0, java.awt.Component var1, java.awt.Container var2, int var3, int var4, int var5, int var6) { }
 	public void paintComponent(java.awt.Graphics var0, java.awt.Component var1, java.awt.Container var2, int var3, int var4, int var5, int var6, boolean var7) { }
 	public void paintComponent(java.awt.Graphics var0, java.awt.Component var1, java.awt.Container var2, java.awt.Rectangle var3) { }
-	protected javax.accessibility.AccessibleContext accessibleContext;
-	protected class AccessibleCellRendererPane extends java.awt.Container.AccessibleAWTContainer {
-		protected AccessibleCellRendererPane() { }
-	}
 }
 

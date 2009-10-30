@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package javax.swing.tree;
-public abstract interface TreeCellRenderer {
-	public abstract java.awt.Component getTreeCellRendererComponent(javax.swing.JTree var0, java.lang.Object var1, boolean var2, boolean var3, boolean var4, int var5, boolean var6);
+public interface TreeCellRenderer {
+	java.awt.Component getTreeCellRendererComponent(javax.swing.JTree var0, java.lang.Object var1, boolean var2, boolean var3, boolean var4, int var5, boolean var6);
 }
 

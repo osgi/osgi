@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.beans;
 public abstract class PersistenceDelegate {
-	public PersistenceDelegate() { }
-	protected void initialize(java.lang.Class var0, java.lang.Object var1, java.lang.Object var2, java.beans.Encoder var3) { }
+	public PersistenceDelegate() { } 
+	protected void initialize(java.lang.Class<?> var0, java.lang.Object var1, java.lang.Object var2, java.beans.Encoder var3) { }
 	protected abstract java.beans.Expression instantiate(java.lang.Object var0, java.beans.Encoder var1);
 	protected boolean mutatesTo(java.lang.Object var0, java.lang.Object var1) { return false; }
 	public void writeObject(java.lang.Object var0, java.beans.Encoder var1) { }

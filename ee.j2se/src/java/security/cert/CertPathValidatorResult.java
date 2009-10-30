@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package java.security.cert;
-public abstract interface CertPathValidatorResult extends java.lang.Cloneable {
-	public abstract java.lang.Object clone();
+public interface CertPathValidatorResult extends java.lang.Cloneable {
+	java.lang.Object clone();
 }
 

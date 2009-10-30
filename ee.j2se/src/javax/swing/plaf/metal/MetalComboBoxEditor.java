@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package javax.swing.plaf.metal;
 public class MetalComboBoxEditor extends javax.swing.plaf.basic.BasicComboBoxEditor {
-	public MetalComboBoxEditor() { }
-	protected static java.awt.Insets editorBorderInsets;
 	public static class UIResource extends javax.swing.plaf.metal.MetalComboBoxEditor implements javax.swing.plaf.UIResource {
-		public UIResource() { }
+		public UIResource() { } 
 	}
+	protected static java.awt.Insets editorBorderInsets;
+	public MetalComboBoxEditor() { } 
 }
 

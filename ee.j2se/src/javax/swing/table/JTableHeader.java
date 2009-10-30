@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,51 +16,9 @@
 
 package javax.swing.table;
 public class JTableHeader extends javax.swing.JComponent implements javax.accessibility.Accessible, javax.swing.event.TableColumnModelListener {
-	public JTableHeader() { }
-	public JTableHeader(javax.swing.table.TableColumnModel var0) { }
-	public void columnAdded(javax.swing.event.TableColumnModelEvent var0) { }
-	public int columnAtPoint(java.awt.Point var0) { return 0; }
-	public void columnMarginChanged(javax.swing.event.ChangeEvent var0) { }
-	public void columnMoved(javax.swing.event.TableColumnModelEvent var0) { }
-	public void columnRemoved(javax.swing.event.TableColumnModelEvent var0) { }
-	public void columnSelectionChanged(javax.swing.event.ListSelectionEvent var0) { }
-	protected javax.swing.table.TableColumnModel createDefaultColumnModel() { return null; }
-	protected javax.swing.table.TableCellRenderer createDefaultRenderer() { return null; }
-	public javax.swing.table.TableColumnModel getColumnModel() { return null; }
-	public javax.swing.table.TableCellRenderer getDefaultRenderer() { return null; }
-	public javax.swing.table.TableColumn getDraggedColumn() { return null; }
-	public int getDraggedDistance() { return 0; }
-	public java.awt.Rectangle getHeaderRect(int var0) { return null; }
-	public boolean getReorderingAllowed() { return false; }
-	public boolean getResizingAllowed() { return false; }
-	public javax.swing.table.TableColumn getResizingColumn() { return null; }
-	public javax.swing.JTable getTable() { return null; }
-	public javax.swing.plaf.TableHeaderUI getUI() { return null; }
-	public boolean getUpdateTableInRealTime() { return false; }
-	protected void initializeLocalVars() { }
-	public void resizeAndRepaint() { }
-	public void setColumnModel(javax.swing.table.TableColumnModel var0) { }
-	public void setDefaultRenderer(javax.swing.table.TableCellRenderer var0) { }
-	public void setDraggedColumn(javax.swing.table.TableColumn var0) { }
-	public void setDraggedDistance(int var0) { }
-	public void setReorderingAllowed(boolean var0) { }
-	public void setResizingAllowed(boolean var0) { }
-	public void setResizingColumn(javax.swing.table.TableColumn var0) { }
-	public void setTable(javax.swing.JTable var0) { }
-	public void setUI(javax.swing.plaf.TableHeaderUI var0) { }
-	public void setUpdateTableInRealTime(boolean var0) { }
-	protected javax.swing.table.TableColumnModel columnModel;
-	protected javax.swing.table.TableColumn draggedColumn;
-	protected int draggedDistance;
-	protected boolean reorderingAllowed;
-	protected boolean resizingAllowed;
-	protected javax.swing.table.TableColumn resizingColumn;
-	protected javax.swing.JTable table;
-	protected boolean updateTableInRealTime;
 	protected class AccessibleJTableHeader extends javax.swing.JComponent.AccessibleJComponent {
-		protected AccessibleJTableHeader() { }
 		protected class AccessibleJTableHeaderEntry extends javax.accessibility.AccessibleContext implements javax.accessibility.Accessible, javax.accessibility.AccessibleComponent {
-			public AccessibleJTableHeaderEntry(int var0, javax.swing.table.JTableHeader var1, javax.swing.JTable var2) { }
+			public AccessibleJTableHeaderEntry(int var0, javax.swing.table.JTableHeader var1, javax.swing.JTable var2) { } 
 			public void addFocusListener(java.awt.event.FocusListener var0) { }
 			public boolean contains(java.awt.Point var0) { return false; }
 			public javax.accessibility.Accessible getAccessibleAt(java.awt.Point var0) { return null; }
@@ -96,6 +54,48 @@ public class JTableHeader extends javax.swing.JComponent implements javax.access
 			public void setSize(java.awt.Dimension var0) { }
 			public void setVisible(boolean var0) { }
 		}
+		protected AccessibleJTableHeader() { } 
 	}
+	protected javax.swing.table.TableColumnModel columnModel;
+	protected javax.swing.table.TableColumn draggedColumn;
+	protected int draggedDistance;
+	protected boolean reorderingAllowed;
+	protected boolean resizingAllowed;
+	protected javax.swing.table.TableColumn resizingColumn;
+	protected javax.swing.JTable table;
+	protected boolean updateTableInRealTime;
+	public JTableHeader() { } 
+	public JTableHeader(javax.swing.table.TableColumnModel var0) { } 
+	public void columnAdded(javax.swing.event.TableColumnModelEvent var0) { }
+	public int columnAtPoint(java.awt.Point var0) { return 0; }
+	public void columnMarginChanged(javax.swing.event.ChangeEvent var0) { }
+	public void columnMoved(javax.swing.event.TableColumnModelEvent var0) { }
+	public void columnRemoved(javax.swing.event.TableColumnModelEvent var0) { }
+	public void columnSelectionChanged(javax.swing.event.ListSelectionEvent var0) { }
+	protected javax.swing.table.TableColumnModel createDefaultColumnModel() { return null; }
+	protected javax.swing.table.TableCellRenderer createDefaultRenderer() { return null; }
+	public javax.swing.table.TableColumnModel getColumnModel() { return null; }
+	public javax.swing.table.TableCellRenderer getDefaultRenderer() { return null; }
+	public javax.swing.table.TableColumn getDraggedColumn() { return null; }
+	public int getDraggedDistance() { return 0; }
+	public java.awt.Rectangle getHeaderRect(int var0) { return null; }
+	public boolean getReorderingAllowed() { return false; }
+	public boolean getResizingAllowed() { return false; }
+	public javax.swing.table.TableColumn getResizingColumn() { return null; }
+	public javax.swing.JTable getTable() { return null; }
+	public javax.swing.plaf.TableHeaderUI getUI() { return null; }
+	public boolean getUpdateTableInRealTime() { return false; }
+	protected void initializeLocalVars() { }
+	public void resizeAndRepaint() { }
+	public void setColumnModel(javax.swing.table.TableColumnModel var0) { }
+	public void setDefaultRenderer(javax.swing.table.TableCellRenderer var0) { }
+	public void setDraggedColumn(javax.swing.table.TableColumn var0) { }
+	public void setDraggedDistance(int var0) { }
+	public void setReorderingAllowed(boolean var0) { }
+	public void setResizingAllowed(boolean var0) { }
+	public void setResizingColumn(javax.swing.table.TableColumn var0) { }
+	public void setTable(javax.swing.JTable var0) { }
+	public void setUI(javax.swing.plaf.TableHeaderUI var0) { }
+	public void setUpdateTableInRealTime(boolean var0) { }
 }
 

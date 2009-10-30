@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 package javax.naming;
 public class CompositeName implements javax.naming.Name {
-	public CompositeName() { }
-	public CompositeName(java.lang.String var0) throws javax.naming.InvalidNameException { }
-	protected CompositeName(java.util.Enumeration var0) { }
+	private final static long serialVersionUID = 1667768148915813118l;
+	public CompositeName() { } 
+	public CompositeName(java.lang.String var0) throws javax.naming.InvalidNameException { } 
+	protected CompositeName(java.util.Enumeration<java.lang.String> var0) { } 
 	public javax.naming.Name add(int var0, java.lang.String var1) throws javax.naming.InvalidNameException { return null; }
 	public javax.naming.Name add(java.lang.String var0) throws javax.naming.InvalidNameException { return null; }
 	public javax.naming.Name addAll(int var0, javax.naming.Name var1) throws javax.naming.InvalidNameException { return null; }
@@ -27,7 +28,7 @@ public class CompositeName implements javax.naming.Name {
 	public int compareTo(java.lang.Object var0) { return 0; }
 	public boolean endsWith(javax.naming.Name var0) { return false; }
 	public java.lang.String get(int var0) { return null; }
-	public java.util.Enumeration getAll() { return null; }
+	public java.util.Enumeration<java.lang.String> getAll() { return null; }
 	public javax.naming.Name getPrefix(int var0) { return null; }
 	public javax.naming.Name getSuffix(int var0) { return null; }
 	public int hashCode() { return 0; }

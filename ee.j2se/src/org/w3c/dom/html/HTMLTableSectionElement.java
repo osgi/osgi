@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,17 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLTableSectionElement extends org.w3c.dom.html.HTMLElement {
-	public abstract void deleteRow(int var0);
-	public abstract java.lang.String getAlign();
-	public abstract java.lang.String getCh();
-	public abstract java.lang.String getChOff();
-	public abstract org.w3c.dom.html.HTMLCollection getRows();
-	public abstract java.lang.String getVAlign();
-	public abstract org.w3c.dom.html.HTMLElement insertRow(int var0);
-	public abstract void setAlign(java.lang.String var0);
-	public abstract void setCh(java.lang.String var0);
-	public abstract void setChOff(java.lang.String var0);
-	public abstract void setVAlign(java.lang.String var0);
+public interface HTMLTableSectionElement extends org.w3c.dom.html.HTMLElement {
+	void deleteRow(int var0);
+	java.lang.String getAlign();
+	java.lang.String getCh();
+	java.lang.String getChOff();
+	org.w3c.dom.html.HTMLCollection getRows();
+	java.lang.String getVAlign();
+	org.w3c.dom.html.HTMLElement insertRow(int var0);
+	void setAlign(java.lang.String var0);
+	void setCh(java.lang.String var0);
+	void setChOff(java.lang.String var0);
+	void setVAlign(java.lang.String var0);
 }
 

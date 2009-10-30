@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,29 @@
 
 package javax.swing.tree;
 public class DefaultTreeCellEditor implements java.awt.event.ActionListener, javax.swing.event.TreeSelectionListener, javax.swing.tree.TreeCellEditor {
-	public DefaultTreeCellEditor(javax.swing.JTree var0, javax.swing.tree.DefaultTreeCellRenderer var1) { }
-	public DefaultTreeCellEditor(javax.swing.JTree var0, javax.swing.tree.DefaultTreeCellRenderer var1, javax.swing.tree.TreeCellEditor var2) { }
+	public class DefaultTextField extends javax.swing.JTextField {
+		protected javax.swing.border.Border border;
+		public DefaultTextField(javax.swing.border.Border var0) { } 
+	}
+	public class EditorContainer extends java.awt.Container {
+		public EditorContainer() { } 
+		public void EditorContainer() { }
+	}
+	protected java.awt.Color borderSelectionColor;
+	protected boolean canEdit;
+	protected java.awt.Component editingComponent;
+	protected java.awt.Container editingContainer;
+	protected javax.swing.Icon editingIcon;
+	protected java.awt.Font font;
+	protected javax.swing.tree.TreePath lastPath;
+	protected int lastRow;
+	protected int offset;
+	protected javax.swing.tree.TreeCellEditor realEditor;
+	protected javax.swing.tree.DefaultTreeCellRenderer renderer;
+	protected javax.swing.Timer timer;
+	protected javax.swing.JTree tree;
+	public DefaultTreeCellEditor(javax.swing.JTree var0, javax.swing.tree.DefaultTreeCellRenderer var1) { } 
+	public DefaultTreeCellEditor(javax.swing.JTree var0, javax.swing.tree.DefaultTreeCellRenderer var1, javax.swing.tree.TreeCellEditor var2) { } 
 	public void actionPerformed(java.awt.event.ActionEvent var0) { }
 	public void addCellEditorListener(javax.swing.event.CellEditorListener var0) { }
 	protected boolean canEditImmediately(java.util.EventObject var0) { return false; }
@@ -42,26 +63,5 @@ public class DefaultTreeCellEditor implements java.awt.event.ActionListener, jav
 	protected void startEditingTimer() { }
 	public boolean stopCellEditing() { return false; }
 	public void valueChanged(javax.swing.event.TreeSelectionEvent var0) { }
-	protected java.awt.Color borderSelectionColor;
-	protected boolean canEdit;
-	protected java.awt.Component editingComponent;
-	protected java.awt.Container editingContainer;
-	protected javax.swing.Icon editingIcon;
-	protected java.awt.Font font;
-	protected javax.swing.tree.TreePath lastPath;
-	protected int lastRow;
-	protected int offset;
-	protected javax.swing.tree.TreeCellEditor realEditor;
-	protected javax.swing.tree.DefaultTreeCellRenderer renderer;
-	protected javax.swing.Timer timer;
-	protected javax.swing.JTree tree;
-	public class DefaultTextField extends javax.swing.JTextField {
-		public DefaultTextField(javax.swing.border.Border var0) { }
-		protected javax.swing.border.Border border;
-	}
-	public class EditorContainer extends java.awt.Container {
-		public EditorContainer() { }
-		public void EditorContainer() { }
-	}
 }
 

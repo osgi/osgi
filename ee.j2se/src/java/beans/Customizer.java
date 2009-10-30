@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package java.beans;
-public abstract interface Customizer {
-	public abstract void addPropertyChangeListener(java.beans.PropertyChangeListener var0);
-	public abstract void removePropertyChangeListener(java.beans.PropertyChangeListener var0);
-	public abstract void setObject(java.lang.Object var0);
+public interface Customizer {
+	void addPropertyChangeListener(java.beans.PropertyChangeListener var0);
+	void removePropertyChangeListener(java.beans.PropertyChangeListener var0);
+	void setObject(java.lang.Object var0);
 }
 

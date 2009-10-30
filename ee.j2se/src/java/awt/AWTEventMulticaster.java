@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package java.awt;
 public class AWTEventMulticaster implements java.awt.event.ActionListener, java.awt.event.AdjustmentListener, java.awt.event.ComponentListener, java.awt.event.ContainerListener, java.awt.event.FocusListener, java.awt.event.HierarchyBoundsListener, java.awt.event.HierarchyListener, java.awt.event.InputMethodListener, java.awt.event.ItemListener, java.awt.event.KeyListener, java.awt.event.MouseListener, java.awt.event.MouseMotionListener, java.awt.event.MouseWheelListener, java.awt.event.TextListener, java.awt.event.WindowFocusListener, java.awt.event.WindowListener, java.awt.event.WindowStateListener {
-	protected AWTEventMulticaster(java.util.EventListener var0, java.util.EventListener var1) { }
+	protected final java.util.EventListener a; { a = null; }
+	protected final java.util.EventListener b; { b = null; }
+	protected AWTEventMulticaster(java.util.EventListener var0, java.util.EventListener var1) { } 
 	public void actionPerformed(java.awt.event.ActionEvent var0) { }
 	public static java.awt.event.ActionListener add(java.awt.event.ActionListener var0, java.awt.event.ActionListener var1) { return null; }
 	public static java.awt.event.AdjustmentListener add(java.awt.event.AdjustmentListener var0, java.awt.event.AdjustmentListener var1) { return null; }
@@ -48,7 +50,7 @@ public class AWTEventMulticaster implements java.awt.event.ActionListener, java.
 	public void componentShown(java.awt.event.ComponentEvent var0) { }
 	public void focusGained(java.awt.event.FocusEvent var0) { }
 	public void focusLost(java.awt.event.FocusEvent var0) { }
-	public static java.util.EventListener[] getListeners(java.util.EventListener var0, java.lang.Class var1) { return null; }
+	public static <T extends java.util.EventListener> T[] getListeners(java.util.EventListener var0, java.lang.Class<T> var1) { return null; }
 	public void hierarchyChanged(java.awt.event.HierarchyEvent var0) { }
 	public void inputMethodTextChanged(java.awt.event.InputMethodEvent var0) { }
 	public void itemStateChanged(java.awt.event.ItemEvent var0) { }
@@ -95,7 +97,5 @@ public class AWTEventMulticaster implements java.awt.event.ActionListener, java.
 	public void windowLostFocus(java.awt.event.WindowEvent var0) { }
 	public void windowOpened(java.awt.event.WindowEvent var0) { }
 	public void windowStateChanged(java.awt.event.WindowEvent var0) { }
-	protected final java.util.EventListener a; { a = null; }
-	protected final java.util.EventListener b; { b = null; }
 }
 

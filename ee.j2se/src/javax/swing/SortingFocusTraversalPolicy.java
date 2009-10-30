@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package javax.swing;
 public class SortingFocusTraversalPolicy extends javax.swing.InternalFrameFocusTraversalPolicy {
-	protected SortingFocusTraversalPolicy() { }
-	public SortingFocusTraversalPolicy(java.util.Comparator var0) { }
+	protected SortingFocusTraversalPolicy() { } 
+	public SortingFocusTraversalPolicy(java.util.Comparator<? super java.awt.Component> var0) { } 
 	protected boolean accept(java.awt.Component var0) { return false; }
-	protected java.util.Comparator getComparator() { return null; }
+	protected java.util.Comparator<? super java.awt.Component> getComparator() { return null; }
 	public java.awt.Component getComponentAfter(java.awt.Container var0, java.awt.Component var1) { return null; }
 	public java.awt.Component getComponentBefore(java.awt.Container var0, java.awt.Component var1) { return null; }
 	public java.awt.Component getDefaultComponent(java.awt.Container var0) { return null; }
 	public java.awt.Component getFirstComponent(java.awt.Container var0) { return null; }
 	public boolean getImplicitDownCycleTraversal() { return false; }
 	public java.awt.Component getLastComponent(java.awt.Container var0) { return null; }
-	protected void setComparator(java.util.Comparator var0) { }
+	protected void setComparator(java.util.Comparator<? super java.awt.Component> var0) { }
 	public void setImplicitDownCycleTraversal(boolean var0) { }
 }
 

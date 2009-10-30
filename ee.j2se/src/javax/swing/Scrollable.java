@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package javax.swing;
-public abstract interface Scrollable {
-	public abstract java.awt.Dimension getPreferredScrollableViewportSize();
-	public abstract int getScrollableBlockIncrement(java.awt.Rectangle var0, int var1, int var2);
-	public abstract boolean getScrollableTracksViewportHeight();
-	public abstract boolean getScrollableTracksViewportWidth();
-	public abstract int getScrollableUnitIncrement(java.awt.Rectangle var0, int var1, int var2);
+public interface Scrollable {
+	java.awt.Dimension getPreferredScrollableViewportSize();
+	int getScrollableBlockIncrement(java.awt.Rectangle var0, int var1, int var2);
+	boolean getScrollableTracksViewportHeight();
+	boolean getScrollableTracksViewportWidth();
+	int getScrollableUnitIncrement(java.awt.Rectangle var0, int var1, int var2);
 }
 

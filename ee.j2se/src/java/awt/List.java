@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,25 @@
 
 package java.awt;
 public class List extends java.awt.Component implements java.awt.ItemSelectable, javax.accessibility.Accessible {
-	public List() { }
-	public List(int var0) { }
-	public List(int var0, boolean var1) { }
+	protected class AccessibleAWTList extends java.awt.Component.AccessibleAWTComponent implements java.awt.event.ActionListener, java.awt.event.ItemListener, javax.accessibility.AccessibleSelection {
+		protected class AccessibleAWTListChild extends java.awt.Component.AccessibleAWTComponent implements javax.accessibility.Accessible {
+			public AccessibleAWTListChild(java.awt.List var0, int var1) { } 
+			public javax.accessibility.AccessibleContext getAccessibleContext() { return null; }
+		}
+		public AccessibleAWTList() { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+		public void addAccessibleSelection(int var0) { }
+		public void clearAccessibleSelection() { }
+		public javax.accessibility.Accessible getAccessibleSelection(int var0) { return null; }
+		public int getAccessibleSelectionCount() { return 0; }
+		public boolean isAccessibleChildSelected(int var0) { return false; }
+		public void itemStateChanged(java.awt.event.ItemEvent var0) { }
+		public void removeAccessibleSelection(int var0) { }
+		public void selectAllAccessibleSelection() { }
+	}
+	public List() { } 
+	public List(int var0) { } 
+	public List(int var0, boolean var1) { } 
 	public void add(java.lang.String var0) { }
 	public void add(java.lang.String var0, int var1) { }
 	public void addActionListener(java.awt.event.ActionListener var0) { }
@@ -62,21 +78,5 @@ public class List extends java.awt.Component implements java.awt.ItemSelectable,
 	public void select(int var0) { }
 	public void setMultipleMode(boolean var0) { }
 	/** @deprecated */ public void setMultipleSelections(boolean var0) { }
-	protected class AccessibleAWTList extends java.awt.Component.AccessibleAWTComponent implements java.awt.event.ActionListener, java.awt.event.ItemListener, javax.accessibility.AccessibleSelection {
-		public AccessibleAWTList() { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-		public void addAccessibleSelection(int var0) { }
-		public void clearAccessibleSelection() { }
-		public javax.accessibility.Accessible getAccessibleSelection(int var0) { return null; }
-		public int getAccessibleSelectionCount() { return 0; }
-		public boolean isAccessibleChildSelected(int var0) { return false; }
-		public void itemStateChanged(java.awt.event.ItemEvent var0) { }
-		public void removeAccessibleSelection(int var0) { }
-		public void selectAllAccessibleSelection() { }
-		protected class AccessibleAWTListChild extends java.awt.Component.AccessibleAWTComponent implements javax.accessibility.Accessible {
-			public AccessibleAWTListChild(java.awt.List var0, int var1) { }
-			public javax.accessibility.AccessibleContext getAccessibleContext() { return null; }
-		}
-	}
 }
 

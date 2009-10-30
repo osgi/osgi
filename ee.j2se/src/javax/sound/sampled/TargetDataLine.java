@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.sound.sampled;
-public abstract interface TargetDataLine extends javax.sound.sampled.DataLine {
-	public abstract void open(javax.sound.sampled.AudioFormat var0) throws javax.sound.sampled.LineUnavailableException;
-	public abstract void open(javax.sound.sampled.AudioFormat var0, int var1) throws javax.sound.sampled.LineUnavailableException;
-	public abstract int read(byte[] var0, int var1, int var2);
+public interface TargetDataLine extends javax.sound.sampled.DataLine {
+	void open(javax.sound.sampled.AudioFormat var0) throws javax.sound.sampled.LineUnavailableException;
+	void open(javax.sound.sampled.AudioFormat var0, int var1) throws javax.sound.sampled.LineUnavailableException;
+	int read(byte[] var0, int var1, int var2);
 }
 

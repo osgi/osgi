@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,19 @@
 
 package javax.swing;
 public class JToolBar extends javax.swing.JComponent implements javax.accessibility.Accessible, javax.swing.SwingConstants {
-	public JToolBar() { }
-	public JToolBar(int var0) { }
-	public JToolBar(java.lang.String var0) { }
-	public JToolBar(java.lang.String var0, int var1) { }
+	protected class AccessibleJToolBar extends javax.swing.JComponent.AccessibleJComponent {
+		protected AccessibleJToolBar() { } 
+	}
+	public static class Separator extends javax.swing.JSeparator {
+		public Separator() { } 
+		public Separator(java.awt.Dimension var0) { } 
+		public java.awt.Dimension getSeparatorSize() { return null; }
+		public void setSeparatorSize(java.awt.Dimension var0) { }
+	}
+	public JToolBar() { } 
+	public JToolBar(int var0) { } 
+	public JToolBar(java.lang.String var0) { } 
+	public JToolBar(java.lang.String var0, int var1) { } 
 	public javax.swing.JButton add(javax.swing.Action var0) { return null; }
 	public void addSeparator() { }
 	public void addSeparator(java.awt.Dimension var0) { }
@@ -39,14 +48,5 @@ public class JToolBar extends javax.swing.JComponent implements javax.accessibil
 	public void setOrientation(int var0) { }
 	public void setRollover(boolean var0) { }
 	public void setUI(javax.swing.plaf.ToolBarUI var0) { }
-	protected class AccessibleJToolBar extends javax.swing.JComponent.AccessibleJComponent {
-		protected AccessibleJToolBar() { }
-	}
-	public static class Separator extends javax.swing.JSeparator {
-		public Separator() { }
-		public Separator(java.awt.Dimension var0) { }
-		public java.awt.Dimension getSeparatorSize() { return null; }
-		public void setSeparatorSize(java.awt.Dimension var0) { }
-	}
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.swing.text;
 public class GapContent extends javax.swing.text.GapVector implements java.io.Serializable, javax.swing.text.AbstractDocument.Content {
-	public GapContent() { }
-	public GapContent(int var0) { }
+	public GapContent() { } 
+	public GapContent(int var0) { } 
 	protected java.lang.Object allocateArray(int var0) { return null; }
 	public javax.swing.text.Position createPosition(int var0) throws javax.swing.text.BadLocationException { return null; }
 	protected int getArrayLength() { return 0; }

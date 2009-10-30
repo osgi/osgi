@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.nio.channels;
 public abstract class ServerSocketChannel extends java.nio.channels.spi.AbstractSelectableChannel {
-	protected ServerSocketChannel(java.nio.channels.spi.SelectorProvider var0) { super((java.nio.channels.spi.SelectorProvider) null); }
+	protected ServerSocketChannel(java.nio.channels.spi.SelectorProvider var0)  { super((java.nio.channels.spi.SelectorProvider) null); } 
 	public abstract java.nio.channels.SocketChannel accept() throws java.io.IOException;
 	public static java.nio.channels.ServerSocketChannel open() throws java.io.IOException { return null; }
 	public abstract java.net.ServerSocket socket();

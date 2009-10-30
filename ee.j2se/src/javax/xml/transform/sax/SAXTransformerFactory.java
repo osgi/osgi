@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package javax.xml.transform.sax;
 public abstract class SAXTransformerFactory extends javax.xml.transform.TransformerFactory {
-	protected SAXTransformerFactory() { }
+	public final static java.lang.String FEATURE = "http://javax.xml.transform.sax.SAXTransformerFactory/feature";
+	public final static java.lang.String FEATURE_XMLFILTER = "http://javax.xml.transform.sax.SAXTransformerFactory/feature/xmlfilter";
+	protected SAXTransformerFactory() { } 
 	public abstract javax.xml.transform.sax.TemplatesHandler newTemplatesHandler() throws javax.xml.transform.TransformerConfigurationException;
 	public abstract javax.xml.transform.sax.TransformerHandler newTransformerHandler() throws javax.xml.transform.TransformerConfigurationException;
 	public abstract javax.xml.transform.sax.TransformerHandler newTransformerHandler(javax.xml.transform.Source var0) throws javax.xml.transform.TransformerConfigurationException;
 	public abstract javax.xml.transform.sax.TransformerHandler newTransformerHandler(javax.xml.transform.Templates var0) throws javax.xml.transform.TransformerConfigurationException;
 	public abstract org.xml.sax.XMLFilter newXMLFilter(javax.xml.transform.Source var0) throws javax.xml.transform.TransformerConfigurationException;
 	public abstract org.xml.sax.XMLFilter newXMLFilter(javax.xml.transform.Templates var0) throws javax.xml.transform.TransformerConfigurationException;
-	public final static java.lang.String FEATURE = "http://javax.xml.transform.sax.SAXTransformerFactory/feature";
-	public final static java.lang.String FEATURE_XMLFILTER = "http://javax.xml.transform.sax.SAXTransformerFactory/feature/xmlfilter";
 }
 

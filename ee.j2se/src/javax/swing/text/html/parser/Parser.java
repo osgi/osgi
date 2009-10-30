@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package javax.swing.text.html.parser;
 public class Parser implements javax.swing.text.html.parser.DTDConstants {
-	public Parser(javax.swing.text.html.parser.DTD var0) { }
+	protected javax.swing.text.html.parser.DTD dtd;
+	protected boolean strict;
+	public Parser(javax.swing.text.html.parser.DTD var0) { } 
 	protected void endTag(boolean var0) { }
 	protected void error(java.lang.String var0) { }
 	protected void error(java.lang.String var0, java.lang.String var1) { }
@@ -41,7 +43,5 @@ public class Parser implements javax.swing.text.html.parser.DTDConstants {
 	public java.lang.String parseDTDMarkup() throws java.io.IOException { return null; }
 	protected boolean parseMarkupDeclarations(java.lang.StringBuffer var0) throws java.io.IOException { return false; }
 	protected void startTag(javax.swing.text.html.parser.TagElement var0) throws javax.swing.text.ChangedCharSetException { }
-	protected javax.swing.text.html.parser.DTD dtd;
-	protected boolean strict;
 }
 

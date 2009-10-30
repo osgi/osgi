@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package javax.sound.midi;
 public abstract class SoundbankResource {
-	protected SoundbankResource(javax.sound.midi.Soundbank var0, java.lang.String var1, java.lang.Class var2) { }
+	protected SoundbankResource(javax.sound.midi.Soundbank var0, java.lang.String var1, java.lang.Class<?> var2) { } 
 	public abstract java.lang.Object getData();
-	public java.lang.Class getDataClass() { return null; }
+	public java.lang.Class<?> getDataClass() { return null; }
 	public java.lang.String getName() { return null; }
 	public javax.sound.midi.Soundbank getSoundbank() { return null; }
 }

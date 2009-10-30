@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,42 @@
 
 package java.awt.geom;
 public abstract class Line2D implements java.awt.Shape, java.lang.Cloneable {
-	protected Line2D() { }
+	public static class Double extends java.awt.geom.Line2D {
+		public double x1;
+		public double x2;
+		public double y1;
+		public double y2;
+		public Double() { } 
+		public Double(double var0, double var1, double var2, double var3) { } 
+		public Double(java.awt.geom.Point2D var0, java.awt.geom.Point2D var1) { } 
+		public java.awt.geom.Rectangle2D getBounds2D() { return null; }
+		public java.awt.geom.Point2D getP1() { return null; }
+		public java.awt.geom.Point2D getP2() { return null; }
+		public double getX1() { return 0.0d; }
+		public double getX2() { return 0.0d; }
+		public double getY1() { return 0.0d; }
+		public double getY2() { return 0.0d; }
+		public void setLine(double var0, double var1, double var2, double var3) { }
+	}
+	public static class Float extends java.awt.geom.Line2D {
+		public float x1;
+		public float x2;
+		public float y1;
+		public float y2;
+		public Float() { } 
+		public Float(float var0, float var1, float var2, float var3) { } 
+		public Float(java.awt.geom.Point2D var0, java.awt.geom.Point2D var1) { } 
+		public java.awt.geom.Rectangle2D getBounds2D() { return null; }
+		public java.awt.geom.Point2D getP1() { return null; }
+		public java.awt.geom.Point2D getP2() { return null; }
+		public double getX1() { return 0.0d; }
+		public double getX2() { return 0.0d; }
+		public double getY1() { return 0.0d; }
+		public double getY2() { return 0.0d; }
+		public void setLine(double var0, double var1, double var2, double var3) { }
+		public void setLine(float var0, float var1, float var2, float var3) { }
+	}
+	protected Line2D() { } 
 	public java.lang.Object clone() { return null; }
 	public boolean contains(double var0, double var1) { return false; }
 	public boolean contains(double var0, double var1, double var2, double var3) { return false; }
@@ -54,40 +89,5 @@ public abstract class Line2D implements java.awt.Shape, java.lang.Cloneable {
 	public abstract void setLine(double var0, double var1, double var2, double var3);
 	public void setLine(java.awt.geom.Line2D var0) { }
 	public void setLine(java.awt.geom.Point2D var0, java.awt.geom.Point2D var1) { }
-	public static class Double extends java.awt.geom.Line2D {
-		public Double() { }
-		public Double(double var0, double var1, double var2, double var3) { }
-		public Double(java.awt.geom.Point2D var0, java.awt.geom.Point2D var1) { }
-		public java.awt.geom.Rectangle2D getBounds2D() { return null; }
-		public java.awt.geom.Point2D getP1() { return null; }
-		public java.awt.geom.Point2D getP2() { return null; }
-		public double getX1() { return 0.0d; }
-		public double getX2() { return 0.0d; }
-		public double getY1() { return 0.0d; }
-		public double getY2() { return 0.0d; }
-		public void setLine(double var0, double var1, double var2, double var3) { }
-		public double x1;
-		public double x2;
-		public double y1;
-		public double y2;
-	}
-	public static class Float extends java.awt.geom.Line2D {
-		public Float() { }
-		public Float(float var0, float var1, float var2, float var3) { }
-		public Float(java.awt.geom.Point2D var0, java.awt.geom.Point2D var1) { }
-		public java.awt.geom.Rectangle2D getBounds2D() { return null; }
-		public java.awt.geom.Point2D getP1() { return null; }
-		public java.awt.geom.Point2D getP2() { return null; }
-		public double getX1() { return 0.0d; }
-		public double getX2() { return 0.0d; }
-		public double getY1() { return 0.0d; }
-		public double getY2() { return 0.0d; }
-		public void setLine(double var0, double var1, double var2, double var3) { }
-		public void setLine(float var0, float var1, float var2, float var3) { }
-		public float x1;
-		public float x2;
-		public float y1;
-		public float y2;
-	}
 }
 

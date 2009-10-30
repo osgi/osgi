@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,15 @@
  */
 
 package javax.imageio.event;
-public abstract interface IIOReadProgressListener extends java.util.EventListener {
-	public abstract void imageComplete(javax.imageio.ImageReader var0);
-	public abstract void imageProgress(javax.imageio.ImageReader var0, float var1);
-	public abstract void imageStarted(javax.imageio.ImageReader var0, int var1);
-	public abstract void readAborted(javax.imageio.ImageReader var0);
-	public abstract void sequenceComplete(javax.imageio.ImageReader var0);
-	public abstract void sequenceStarted(javax.imageio.ImageReader var0, int var1);
-	public abstract void thumbnailComplete(javax.imageio.ImageReader var0);
-	public abstract void thumbnailProgress(javax.imageio.ImageReader var0, float var1);
-	public abstract void thumbnailStarted(javax.imageio.ImageReader var0, int var1, int var2);
+public interface IIOReadProgressListener extends java.util.EventListener {
+	void imageComplete(javax.imageio.ImageReader var0);
+	void imageProgress(javax.imageio.ImageReader var0, float var1);
+	void imageStarted(javax.imageio.ImageReader var0, int var1);
+	void readAborted(javax.imageio.ImageReader var0);
+	void sequenceComplete(javax.imageio.ImageReader var0);
+	void sequenceStarted(javax.imageio.ImageReader var0, int var1);
+	void thumbnailComplete(javax.imageio.ImageReader var0);
+	void thumbnailProgress(javax.imageio.ImageReader var0, float var1);
+	void thumbnailStarted(javax.imageio.ImageReader var0, int var1, int var2);
 }
 

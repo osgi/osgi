@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package java.nio;
-public abstract class ByteBuffer extends java.nio.Buffer implements java.lang.Comparable {
+public abstract class ByteBuffer extends java.nio.Buffer implements java.lang.Comparable<java.nio.ByteBuffer> {
 	public static java.nio.ByteBuffer allocate(int var0) { return null; }
 	public static java.nio.ByteBuffer allocateDirect(int var0) { return null; }
 	public final byte[] array() { return null; }
@@ -28,7 +28,7 @@ public abstract class ByteBuffer extends java.nio.Buffer implements java.lang.Co
 	public abstract java.nio.ByteBuffer asReadOnlyBuffer();
 	public abstract java.nio.ShortBuffer asShortBuffer();
 	public abstract java.nio.ByteBuffer compact();
-	public int compareTo(java.lang.Object var0) { return 0; }
+	public int compareTo(java.nio.ByteBuffer var0) { return 0; }
 	public abstract java.nio.ByteBuffer duplicate();
 	public abstract byte get();
 	public abstract byte get(int var0);

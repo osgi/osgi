@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,11 @@
 
 package java.awt.image;
 public abstract class SampleModel {
-	public SampleModel(int var0, int var1, int var2, int var3) { }
+	protected int dataType;
+	protected int height;
+	protected int numBands;
+	protected int width;
+	public SampleModel(int var0, int var1, int var2, int var3) { } 
 	public abstract java.awt.image.SampleModel createCompatibleSampleModel(int var0, int var1);
 	public abstract java.awt.image.DataBuffer createDataBuffer();
 	public abstract java.awt.image.SampleModel createSubsetSampleModel(int[] var0);
@@ -56,9 +60,5 @@ public abstract class SampleModel {
 	public void setSamples(int var0, int var1, int var2, int var3, int var4, double[] var5, java.awt.image.DataBuffer var6) { }
 	public void setSamples(int var0, int var1, int var2, int var3, int var4, float[] var5, java.awt.image.DataBuffer var6) { }
 	public void setSamples(int var0, int var1, int var2, int var3, int var4, int[] var5, java.awt.image.DataBuffer var6) { }
-	protected int dataType;
-	protected int height;
-	protected int numBands;
-	protected int width;
 }
 

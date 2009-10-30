@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.beans;
 public class FeatureDescriptor {
-	public FeatureDescriptor() { }
-	public java.util.Enumeration attributeNames() { return null; }
+	public FeatureDescriptor() { } 
+	public java.util.Enumeration<java.lang.String> attributeNames() { return null; }
 	public java.lang.String getDisplayName() { return null; }
 	public java.lang.String getName() { return null; }
 	public java.lang.String getShortDescription() { return null; }

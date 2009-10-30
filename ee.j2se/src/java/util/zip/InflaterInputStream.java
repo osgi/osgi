@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package java.util.zip;
 public class InflaterInputStream extends java.io.FilterInputStream {
-	public InflaterInputStream(java.io.InputStream var0) { super((java.io.InputStream) null); }
-	public InflaterInputStream(java.io.InputStream var0, java.util.zip.Inflater var1) { super((java.io.InputStream) null); }
-	public InflaterInputStream(java.io.InputStream var0, java.util.zip.Inflater var1, int var2) { super((java.io.InputStream) null); }
-	protected void fill() throws java.io.IOException { }
 	protected byte[] buf;
 	protected java.util.zip.Inflater inf;
 	protected int len;
+	public InflaterInputStream(java.io.InputStream var0)  { super((java.io.InputStream) null); } 
+	public InflaterInputStream(java.io.InputStream var0, java.util.zip.Inflater var1)  { super((java.io.InputStream) null); } 
+	public InflaterInputStream(java.io.InputStream var0, java.util.zip.Inflater var1, int var2)  { super((java.io.InputStream) null); } 
+	protected void fill() throws java.io.IOException { }
 }
 

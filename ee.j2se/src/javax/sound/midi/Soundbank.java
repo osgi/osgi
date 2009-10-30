@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package javax.sound.midi;
-public abstract interface Soundbank {
-	public abstract java.lang.String getDescription();
-	public abstract javax.sound.midi.Instrument getInstrument(javax.sound.midi.Patch var0);
-	public abstract javax.sound.midi.Instrument[] getInstruments();
-	public abstract java.lang.String getName();
-	public abstract javax.sound.midi.SoundbankResource[] getResources();
-	public abstract java.lang.String getVendor();
-	public abstract java.lang.String getVersion();
+public interface Soundbank {
+	java.lang.String getDescription();
+	javax.sound.midi.Instrument getInstrument(javax.sound.midi.Patch var0);
+	javax.sound.midi.Instrument[] getInstruments();
+	java.lang.String getName();
+	javax.sound.midi.SoundbankResource[] getResources();
+	java.lang.String getVendor();
+	java.lang.String getVersion();
 }
 

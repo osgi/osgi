@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package org.omg.CORBA;
 public class _IDLTypeStub extends org.omg.CORBA.portable.ObjectImpl implements org.omg.CORBA.IDLType {
-	public _IDLTypeStub() { }
-	public _IDLTypeStub(org.omg.CORBA.portable.Delegate var0) { }
+	public _IDLTypeStub() { } 
+	public _IDLTypeStub(org.omg.CORBA.portable.Delegate var0) { } 
 	public java.lang.String[] _ids() { return null; }
 	public org.omg.CORBA.DefinitionKind def_kind() { return null; }
 	public void destroy() { }

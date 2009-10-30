@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package javax.print;
-public abstract interface MultiDoc {
-	public abstract javax.print.Doc getDoc() throws java.io.IOException;
-	public abstract javax.print.MultiDoc next() throws java.io.IOException;
+public interface MultiDoc {
+	javax.print.Doc getDoc() throws java.io.IOException;
+	javax.print.MultiDoc next() throws java.io.IOException;
 }
 

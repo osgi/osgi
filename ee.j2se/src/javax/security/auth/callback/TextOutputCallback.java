@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package javax.security.auth.callback;
 public class TextOutputCallback implements java.io.Serializable, javax.security.auth.callback.Callback {
-	public TextOutputCallback(int var0, java.lang.String var1) { }
-	public java.lang.String getMessage() { return null; }
-	public int getMessageType() { return 0; }
 	public final static int ERROR = 2;
 	public final static int INFORMATION = 0;
 	public final static int WARNING = 1;
+	public TextOutputCallback(int var0, java.lang.String var1) { } 
+	public java.lang.String getMessage() { return null; }
+	public int getMessageType() { return 0; }
 }
 

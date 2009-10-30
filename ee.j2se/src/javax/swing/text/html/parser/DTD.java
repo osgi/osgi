@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,23 @@
 
 package javax.swing.text.html.parser;
 public class DTD implements javax.swing.text.html.parser.DTDConstants {
-	protected DTD(java.lang.String var0) { }
+	public final static int FILE_VERSION = 1;
+	public final javax.swing.text.html.parser.Element applet; { applet = null; }
+	public final javax.swing.text.html.parser.Element base; { base = null; }
+	public final javax.swing.text.html.parser.Element body; { body = null; }
+	public java.util.Hashtable<java.lang.String,javax.swing.text.html.parser.Element> elementHash;
+	public java.util.Vector<javax.swing.text.html.parser.Element> elements;
+	public java.util.Hashtable<java.lang.Object,javax.swing.text.html.parser.Entity> entityHash;
+	public final javax.swing.text.html.parser.Element head; { head = null; }
+	public final javax.swing.text.html.parser.Element html; { html = null; }
+	public final javax.swing.text.html.parser.Element isindex; { isindex = null; }
+	public final javax.swing.text.html.parser.Element meta; { meta = null; }
+	public java.lang.String name;
+	public final javax.swing.text.html.parser.Element p; { p = null; }
+	public final javax.swing.text.html.parser.Element param; { param = null; }
+	public final javax.swing.text.html.parser.Element pcdata; { pcdata = null; }
+	public final javax.swing.text.html.parser.Element title; { title = null; }
+	protected DTD(java.lang.String var0) { } 
 	protected javax.swing.text.html.parser.AttributeList defAttributeList(java.lang.String var0, int var1, int var2, java.lang.String var3, java.lang.String var4, javax.swing.text.html.parser.AttributeList var5) { return null; }
 	protected javax.swing.text.html.parser.ContentModel defContentModel(int var0, java.lang.Object var1, javax.swing.text.html.parser.ContentModel var2) { return null; }
 	protected javax.swing.text.html.parser.Element defElement(java.lang.String var0, int var1, boolean var2, boolean var3, javax.swing.text.html.parser.ContentModel var4, java.lang.String[] var5, java.lang.String[] var6, javax.swing.text.html.parser.AttributeList var7) { return null; }
@@ -33,21 +49,5 @@ public class DTD implements javax.swing.text.html.parser.DTDConstants {
 	public java.lang.String getName() { return null; }
 	public static void putDTDHash(java.lang.String var0, javax.swing.text.html.parser.DTD var1) { }
 	public void read(java.io.DataInputStream var0) throws java.io.IOException { }
-	public static int FILE_VERSION;
-	public final javax.swing.text.html.parser.Element applet; { applet = null; }
-	public final javax.swing.text.html.parser.Element base; { base = null; }
-	public final javax.swing.text.html.parser.Element body; { body = null; }
-	public java.util.Hashtable elementHash;
-	public java.util.Vector elements;
-	public java.util.Hashtable entityHash;
-	public final javax.swing.text.html.parser.Element head; { head = null; }
-	public final javax.swing.text.html.parser.Element html; { html = null; }
-	public final javax.swing.text.html.parser.Element isindex; { isindex = null; }
-	public final javax.swing.text.html.parser.Element meta; { meta = null; }
-	public java.lang.String name;
-	public final javax.swing.text.html.parser.Element p; { p = null; }
-	public final javax.swing.text.html.parser.Element param; { param = null; }
-	public final javax.swing.text.html.parser.Element pcdata; { pcdata = null; }
-	public final javax.swing.text.html.parser.Element title; { title = null; }
 }
 

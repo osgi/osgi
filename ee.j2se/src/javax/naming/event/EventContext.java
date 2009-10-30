@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package javax.naming.event;
-public abstract interface EventContext extends javax.naming.Context {
-	public abstract void addNamingListener(java.lang.String var0, int var1, javax.naming.event.NamingListener var2) throws javax.naming.NamingException;
-	public abstract void addNamingListener(javax.naming.Name var0, int var1, javax.naming.event.NamingListener var2) throws javax.naming.NamingException;
-	public abstract void removeNamingListener(javax.naming.event.NamingListener var0) throws javax.naming.NamingException;
-	public abstract boolean targetMustExist() throws javax.naming.NamingException;
+public interface EventContext extends javax.naming.Context {
 	public final static int OBJECT_SCOPE = 0;
 	public final static int ONELEVEL_SCOPE = 1;
 	public final static int SUBTREE_SCOPE = 2;
+	void addNamingListener(java.lang.String var0, int var1, javax.naming.event.NamingListener var2) throws javax.naming.NamingException;
+	void addNamingListener(javax.naming.Name var0, int var1, javax.naming.event.NamingListener var2) throws javax.naming.NamingException;
+	void removeNamingListener(javax.naming.event.NamingListener var0) throws javax.naming.NamingException;
+	boolean targetMustExist() throws javax.naming.NamingException;
 }
 

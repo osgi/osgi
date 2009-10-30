@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,8 @@
 
 package java.awt;
 public abstract class MenuComponent implements java.io.Serializable {
-	public MenuComponent() { }
-	public final void dispatchEvent(java.awt.AWTEvent var0) { }
-	public javax.accessibility.AccessibleContext getAccessibleContext() { return null; }
-	public java.awt.Font getFont() { return null; }
-	public java.lang.String getName() { return null; }
-	public java.awt.MenuContainer getParent() { return null; }
-	/** @deprecated */ public java.awt.peer.MenuComponentPeer getPeer() { return null; }
-	protected final java.lang.Object getTreeLock() { return null; }
-	protected java.lang.String paramString() { return null; }
-	/** @deprecated */ public boolean postEvent(java.awt.Event var0) { return false; }
-	protected void processEvent(java.awt.AWTEvent var0) { }
-	public void removeNotify() { }
-	public void setFont(java.awt.Font var0) { }
-	public void setName(java.lang.String var0) { }
 	protected abstract class AccessibleAWTMenuComponent extends javax.accessibility.AccessibleContext implements java.io.Serializable, javax.accessibility.AccessibleComponent, javax.accessibility.AccessibleSelection {
-		protected AccessibleAWTMenuComponent() { }
+		protected AccessibleAWTMenuComponent() { } 
 		public void addAccessibleSelection(int var0) { }
 		public void addFocusListener(java.awt.event.FocusListener var0) { }
 		public void clearAccessibleSelection() { }
@@ -73,5 +59,19 @@ public abstract class MenuComponent implements java.io.Serializable {
 		public void setSize(java.awt.Dimension var0) { }
 		public void setVisible(boolean var0) { }
 	}
+	public MenuComponent() { } 
+	public final void dispatchEvent(java.awt.AWTEvent var0) { }
+	public javax.accessibility.AccessibleContext getAccessibleContext() { return null; }
+	public java.awt.Font getFont() { return null; }
+	public java.lang.String getName() { return null; }
+	public java.awt.MenuContainer getParent() { return null; }
+	/** @deprecated */ public java.awt.peer.MenuComponentPeer getPeer() { return null; }
+	protected final java.lang.Object getTreeLock() { return null; }
+	protected java.lang.String paramString() { return null; }
+	/** @deprecated */ public boolean postEvent(java.awt.Event var0) { return false; }
+	protected void processEvent(java.awt.AWTEvent var0) { }
+	public void removeNotify() { }
+	public void setFont(java.awt.Font var0) { }
+	public void setName(java.lang.String var0) { }
 }
 

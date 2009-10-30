@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,6 @@
 
 package javax.print.attribute.standard;
 public class MediaSize extends javax.print.attribute.Size2DSyntax implements javax.print.attribute.Attribute {
-	public MediaSize(float var0, float var1, int var2) { super(0, 0, 0); }
-	public MediaSize(float var0, float var1, int var2, javax.print.attribute.standard.MediaSizeName var3) { super(0, 0, 0); }
-	public MediaSize(int var0, int var1, int var2) { super(0, 0, 0); }
-	public MediaSize(int var0, int var1, int var2, javax.print.attribute.standard.MediaSizeName var3) { super(0, 0, 0); }
-	public static javax.print.attribute.standard.MediaSizeName findMedia(float var0, float var1, int var2) { return null; }
-	public final java.lang.Class getCategory() { return null; }
-	public static javax.print.attribute.standard.MediaSize getMediaSizeForName(javax.print.attribute.standard.MediaSizeName var0) { return null; }
-	public javax.print.attribute.standard.MediaSizeName getMediaSizeName() { return null; }
-	public final java.lang.String getName() { return null; }
 	public static final class Engineering {
 		public final static javax.print.attribute.standard.MediaSize A; static { A = null; }
 		public final static javax.print.attribute.standard.MediaSize B; static { B = null; }
@@ -131,7 +122,17 @@ public class MediaSize extends javax.print.attribute.Size2DSyntax implements jav
 		public final static javax.print.attribute.standard.MediaSize MONARCH_ENVELOPE; static { MONARCH_ENVELOPE = null; }
 		public final static javax.print.attribute.standard.MediaSize PERSONAL_ENVELOPE; static { PERSONAL_ENVELOPE = null; }
 		public final static javax.print.attribute.standard.MediaSize QUARTO; static { QUARTO = null; }
+		public final static javax.print.attribute.standard.MediaSize TABLOID; static { TABLOID = null; }
 		private Other() { } /* generated constructor to prevent compiler adding default public constructor */
 	}
+	public MediaSize(float var0, float var1, int var2)  { super(0, 0, 0); } 
+	public MediaSize(float var0, float var1, int var2, javax.print.attribute.standard.MediaSizeName var3)  { super(0, 0, 0); } 
+	public MediaSize(int var0, int var1, int var2)  { super(0, 0, 0); } 
+	public MediaSize(int var0, int var1, int var2, javax.print.attribute.standard.MediaSizeName var3)  { super(0, 0, 0); } 
+	public static javax.print.attribute.standard.MediaSizeName findMedia(float var0, float var1, int var2) { return null; }
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
+	public static javax.print.attribute.standard.MediaSize getMediaSizeForName(javax.print.attribute.standard.MediaSizeName var0) { return null; }
+	public javax.print.attribute.standard.MediaSizeName getMediaSizeName() { return null; }
+	public final java.lang.String getName() { return null; }
 }
 

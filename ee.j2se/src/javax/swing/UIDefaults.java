@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,26 @@
  */
 
 package javax.swing;
-public class UIDefaults extends java.util.Hashtable {
-	public UIDefaults() { }
-	public UIDefaults(java.lang.Object[] var0) { }
+public class UIDefaults extends java.util.Hashtable<java.lang.Object,java.lang.Object> {
+	public interface ActiveValue {
+		java.lang.Object createValue(javax.swing.UIDefaults var0);
+	}
+	public static class LazyInputMap implements javax.swing.UIDefaults.LazyValue {
+		public LazyInputMap(java.lang.Object[] var0) { } 
+		public java.lang.Object createValue(javax.swing.UIDefaults var0) { return null; }
+	}
+	public interface LazyValue {
+		java.lang.Object createValue(javax.swing.UIDefaults var0);
+	}
+	public static class ProxyLazyValue implements javax.swing.UIDefaults.LazyValue {
+		public ProxyLazyValue(java.lang.String var0) { } 
+		public ProxyLazyValue(java.lang.String var0, java.lang.String var1) { } 
+		public ProxyLazyValue(java.lang.String var0, java.lang.String var1, java.lang.Object[] var2) { } 
+		public ProxyLazyValue(java.lang.String var0, java.lang.Object[] var1) { } 
+		public java.lang.Object createValue(javax.swing.UIDefaults var0) { return null; }
+	}
+	public UIDefaults() { } 
+	public UIDefaults(java.lang.Object[] var0) { } 
 	public void addPropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	public void addResourceBundle(java.lang.String var0) { }
 	protected void firePropertyChange(java.lang.String var0, java.lang.Object var1, java.lang.Object var2) { }
@@ -44,30 +61,13 @@ public class UIDefaults extends java.util.Hashtable {
 	public java.lang.String getString(java.lang.Object var0) { return null; }
 	public java.lang.String getString(java.lang.Object var0, java.util.Locale var1) { return null; }
 	public javax.swing.plaf.ComponentUI getUI(javax.swing.JComponent var0) { return null; }
-	public java.lang.Class getUIClass(java.lang.String var0) { return null; }
-	public java.lang.Class getUIClass(java.lang.String var0, java.lang.ClassLoader var1) { return null; }
+	public java.lang.Class<? extends javax.swing.plaf.ComponentUI> getUIClass(java.lang.String var0) { return null; }
+	public java.lang.Class<? extends javax.swing.plaf.ComponentUI> getUIClass(java.lang.String var0, java.lang.ClassLoader var1) { return null; }
 	protected void getUIError(java.lang.String var0) { }
 	public java.lang.Object put(java.lang.Object var0, java.lang.Object var1) { return null; }
 	public void putDefaults(java.lang.Object[] var0) { }
 	public void removePropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	public void removeResourceBundle(java.lang.String var0) { }
 	public void setDefaultLocale(java.util.Locale var0) { }
-	public static abstract interface ActiveValue {
-		public abstract java.lang.Object createValue(javax.swing.UIDefaults var0);
-	}
-	public static class LazyInputMap implements javax.swing.UIDefaults.LazyValue {
-		public LazyInputMap(java.lang.Object[] var0) { }
-		public java.lang.Object createValue(javax.swing.UIDefaults var0) { return null; }
-	}
-	public static abstract interface LazyValue {
-		public abstract java.lang.Object createValue(javax.swing.UIDefaults var0);
-	}
-	public static class ProxyLazyValue implements javax.swing.UIDefaults.LazyValue {
-		public ProxyLazyValue(java.lang.String var0) { }
-		public ProxyLazyValue(java.lang.String var0, java.lang.String var1) { }
-		public ProxyLazyValue(java.lang.String var0, java.lang.String var1, java.lang.Object[] var2) { }
-		public ProxyLazyValue(java.lang.String var0, java.lang.Object[] var1) { }
-		public java.lang.Object createValue(javax.swing.UIDefaults var0) { return null; }
-	}
 }
 

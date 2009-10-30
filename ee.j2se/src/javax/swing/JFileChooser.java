@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,45 @@
 
 package javax.swing;
 public class JFileChooser extends javax.swing.JComponent implements javax.accessibility.Accessible {
-	public JFileChooser() { }
-	public JFileChooser(java.io.File var0) { }
-	public JFileChooser(java.io.File var0, javax.swing.filechooser.FileSystemView var1) { }
-	public JFileChooser(java.lang.String var0) { }
-	public JFileChooser(java.lang.String var0, javax.swing.filechooser.FileSystemView var1) { }
-	public JFileChooser(javax.swing.filechooser.FileSystemView var0) { }
+	protected class AccessibleJFileChooser extends javax.swing.JComponent.AccessibleJComponent {
+		protected AccessibleJFileChooser() { } 
+	}
+	public final static java.lang.String ACCEPT_ALL_FILE_FILTER_USED_CHANGED_PROPERTY = "acceptAllFileFilterUsedChanged";
+	public final static java.lang.String ACCESSORY_CHANGED_PROPERTY = "AccessoryChangedProperty";
+	public final static java.lang.String APPROVE_BUTTON_MNEMONIC_CHANGED_PROPERTY = "ApproveButtonMnemonicChangedProperty";
+	public final static java.lang.String APPROVE_BUTTON_TEXT_CHANGED_PROPERTY = "ApproveButtonTextChangedProperty";
+	public final static java.lang.String APPROVE_BUTTON_TOOL_TIP_TEXT_CHANGED_PROPERTY = "ApproveButtonToolTipTextChangedProperty";
+	public final static int APPROVE_OPTION = 0;
+	public final static java.lang.String APPROVE_SELECTION = "ApproveSelection";
+	public final static int CANCEL_OPTION = 1;
+	public final static java.lang.String CANCEL_SELECTION = "CancelSelection";
+	public final static java.lang.String CHOOSABLE_FILE_FILTER_CHANGED_PROPERTY = "ChoosableFileFilterChangedProperty";
+	public final static java.lang.String CONTROL_BUTTONS_ARE_SHOWN_CHANGED_PROPERTY = "ControlButtonsAreShownChangedProperty";
+	public final static int CUSTOM_DIALOG = 2;
+	public final static java.lang.String DIALOG_TITLE_CHANGED_PROPERTY = "DialogTitleChangedProperty";
+	public final static java.lang.String DIALOG_TYPE_CHANGED_PROPERTY = "DialogTypeChangedProperty";
+	public final static int DIRECTORIES_ONLY = 1;
+	public final static java.lang.String DIRECTORY_CHANGED_PROPERTY = "directoryChanged";
+	public final static int ERROR_OPTION = -1;
+	public final static int FILES_AND_DIRECTORIES = 2;
+	public final static int FILES_ONLY = 0;
+	public final static java.lang.String FILE_FILTER_CHANGED_PROPERTY = "fileFilterChanged";
+	public final static java.lang.String FILE_HIDING_CHANGED_PROPERTY = "FileHidingChanged";
+	public final static java.lang.String FILE_SELECTION_MODE_CHANGED_PROPERTY = "fileSelectionChanged";
+	public final static java.lang.String FILE_SYSTEM_VIEW_CHANGED_PROPERTY = "FileSystemViewChanged";
+	public final static java.lang.String FILE_VIEW_CHANGED_PROPERTY = "fileViewChanged";
+	public final static java.lang.String MULTI_SELECTION_ENABLED_CHANGED_PROPERTY = "MultiSelectionEnabledChangedProperty";
+	public final static int OPEN_DIALOG = 0;
+	public final static int SAVE_DIALOG = 1;
+	public final static java.lang.String SELECTED_FILES_CHANGED_PROPERTY = "SelectedFilesChangedProperty";
+	public final static java.lang.String SELECTED_FILE_CHANGED_PROPERTY = "SelectedFileChangedProperty";
+	protected javax.accessibility.AccessibleContext accessibleContext;
+	public JFileChooser() { } 
+	public JFileChooser(java.io.File var0) { } 
+	public JFileChooser(java.io.File var0, javax.swing.filechooser.FileSystemView var1) { } 
+	public JFileChooser(java.lang.String var0) { } 
+	public JFileChooser(java.lang.String var0, javax.swing.filechooser.FileSystemView var1) { } 
+	public JFileChooser(javax.swing.filechooser.FileSystemView var0) { } 
 	public boolean accept(java.io.File var0) { return false; }
 	public void addActionListener(java.awt.event.ActionListener var0) { }
 	public void addChoosableFileFilter(javax.swing.filechooser.FileFilter var0) { }
@@ -87,38 +120,5 @@ public class JFileChooser extends javax.swing.JComponent implements javax.access
 	public int showDialog(java.awt.Component var0, java.lang.String var1) { return 0; }
 	public int showOpenDialog(java.awt.Component var0) { return 0; }
 	public int showSaveDialog(java.awt.Component var0) { return 0; }
-	public final static java.lang.String ACCEPT_ALL_FILE_FILTER_USED_CHANGED_PROPERTY = "acceptAllFileFilterUsedChanged";
-	public final static java.lang.String ACCESSORY_CHANGED_PROPERTY = "AccessoryChangedProperty";
-	public final static java.lang.String APPROVE_BUTTON_MNEMONIC_CHANGED_PROPERTY = "ApproveButtonMnemonicChangedProperty";
-	public final static java.lang.String APPROVE_BUTTON_TEXT_CHANGED_PROPERTY = "ApproveButtonTextChangedProperty";
-	public final static java.lang.String APPROVE_BUTTON_TOOL_TIP_TEXT_CHANGED_PROPERTY = "ApproveButtonToolTipTextChangedProperty";
-	public final static int APPROVE_OPTION = 0;
-	public final static java.lang.String APPROVE_SELECTION = "ApproveSelection";
-	public final static int CANCEL_OPTION = 1;
-	public final static java.lang.String CANCEL_SELECTION = "CancelSelection";
-	public final static java.lang.String CHOOSABLE_FILE_FILTER_CHANGED_PROPERTY = "ChoosableFileFilterChangedProperty";
-	public final static java.lang.String CONTROL_BUTTONS_ARE_SHOWN_CHANGED_PROPERTY = "ControlButtonsAreShownChangedProperty";
-	public final static int CUSTOM_DIALOG = 2;
-	public final static java.lang.String DIALOG_TITLE_CHANGED_PROPERTY = "DialogTitleChangedProperty";
-	public final static java.lang.String DIALOG_TYPE_CHANGED_PROPERTY = "DialogTypeChangedProperty";
-	public final static int DIRECTORIES_ONLY = 1;
-	public final static java.lang.String DIRECTORY_CHANGED_PROPERTY = "directoryChanged";
-	public final static int ERROR_OPTION = -1;
-	public final static int FILES_AND_DIRECTORIES = 2;
-	public final static int FILES_ONLY = 0;
-	public final static java.lang.String FILE_FILTER_CHANGED_PROPERTY = "fileFilterChanged";
-	public final static java.lang.String FILE_HIDING_CHANGED_PROPERTY = "FileHidingChanged";
-	public final static java.lang.String FILE_SELECTION_MODE_CHANGED_PROPERTY = "fileSelectionChanged";
-	public final static java.lang.String FILE_SYSTEM_VIEW_CHANGED_PROPERTY = "FileSystemViewChanged";
-	public final static java.lang.String FILE_VIEW_CHANGED_PROPERTY = "fileViewChanged";
-	public final static java.lang.String MULTI_SELECTION_ENABLED_CHANGED_PROPERTY = "MultiSelectionEnabledChangedProperty";
-	public final static int OPEN_DIALOG = 0;
-	public final static int SAVE_DIALOG = 1;
-	public final static java.lang.String SELECTED_FILES_CHANGED_PROPERTY = "SelectedFilesChangedProperty";
-	public final static java.lang.String SELECTED_FILE_CHANGED_PROPERTY = "SelectedFileChangedProperty";
-	protected javax.accessibility.AccessibleContext accessibleContext;
-	protected class AccessibleJFileChooser extends javax.swing.JComponent.AccessibleJComponent {
-		protected AccessibleJFileChooser() { }
-	}
 }
 

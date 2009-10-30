@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package javax.swing.plaf.basic;
 public class BasicLabelUI extends javax.swing.plaf.LabelUI implements java.beans.PropertyChangeListener {
-	public BasicLabelUI() { }
+	protected static javax.swing.plaf.basic.BasicLabelUI labelUI;
+	public BasicLabelUI() { } 
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	protected void installComponents(javax.swing.JLabel var0) { }
 	protected void installDefaults(javax.swing.JLabel var0) { }
@@ -30,6 +31,5 @@ public class BasicLabelUI extends javax.swing.plaf.LabelUI implements java.beans
 	protected void uninstallDefaults(javax.swing.JLabel var0) { }
 	protected void uninstallKeyboardActions(javax.swing.JLabel var0) { }
 	protected void uninstallListeners(javax.swing.JLabel var0) { }
-	protected static javax.swing.plaf.basic.BasicLabelUI labelUI;
 }
 

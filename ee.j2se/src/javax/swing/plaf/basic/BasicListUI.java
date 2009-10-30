@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,55 @@
 
 package javax.swing.plaf.basic;
 public class BasicListUI extends javax.swing.plaf.ListUI {
-	public BasicListUI() { }
+	public class FocusHandler implements java.awt.event.FocusListener {
+		public FocusHandler() { } 
+		public void focusGained(java.awt.event.FocusEvent var0) { }
+		public void focusLost(java.awt.event.FocusEvent var0) { }
+		protected void repaintCellFocus() { }
+	}
+	public class ListDataHandler implements javax.swing.event.ListDataListener {
+		public ListDataHandler() { } 
+		public void contentsChanged(javax.swing.event.ListDataEvent var0) { }
+		public void intervalAdded(javax.swing.event.ListDataEvent var0) { }
+		public void intervalRemoved(javax.swing.event.ListDataEvent var0) { }
+	}
+	public class ListSelectionHandler implements javax.swing.event.ListSelectionListener {
+		public ListSelectionHandler() { } 
+		public void valueChanged(javax.swing.event.ListSelectionEvent var0) { }
+	}
+	public class MouseInputHandler implements javax.swing.event.MouseInputListener {
+		public MouseInputHandler() { } 
+		public void mouseClicked(java.awt.event.MouseEvent var0) { }
+		public void mouseDragged(java.awt.event.MouseEvent var0) { }
+		public void mouseEntered(java.awt.event.MouseEvent var0) { }
+		public void mouseExited(java.awt.event.MouseEvent var0) { }
+		public void mouseMoved(java.awt.event.MouseEvent var0) { }
+		public void mousePressed(java.awt.event.MouseEvent var0) { }
+		public void mouseReleased(java.awt.event.MouseEvent var0) { }
+	}
+	public class PropertyChangeHandler implements java.beans.PropertyChangeListener {
+		public PropertyChangeHandler() { } 
+		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
+	}
+	protected int cellHeight;
+	protected int[] cellHeights;
+	protected final static int cellRendererChanged = 64;
+	protected int cellWidth;
+	protected final static int fixedCellHeightChanged = 16;
+	protected final static int fixedCellWidthChanged = 8;
+	protected java.awt.event.FocusListener focusListener;
+	protected final static int fontChanged = 4;
+	protected javax.swing.JList list;
+	protected javax.swing.event.ListDataListener listDataListener;
+	protected javax.swing.event.ListSelectionListener listSelectionListener;
+	protected final static int modelChanged = 1;
+	protected javax.swing.event.MouseInputListener mouseInputListener;
+	protected java.beans.PropertyChangeListener propertyChangeListener;
+	protected final static int prototypeCellValueChanged = 32;
+	protected javax.swing.CellRendererPane rendererPane;
+	protected final static int selectionModelChanged = 2;
+	protected int updateLayoutStateNeeded;
+	public BasicListUI() { } 
 	protected int convertRowToY(int var0) { return 0; }
 	protected int convertYToRow(int var0) { return 0; }
 	protected java.awt.event.FocusListener createFocusListener() { return null; }
@@ -40,53 +88,5 @@ public class BasicListUI extends javax.swing.plaf.ListUI {
 	protected void uninstallKeyboardActions() { }
 	protected void uninstallListeners() { }
 	protected void updateLayoutState() { }
-	protected int cellHeight;
-	protected int[] cellHeights;
-	protected final static int cellRendererChanged = 64;
-	protected int cellWidth;
-	protected final static int fixedCellHeightChanged = 16;
-	protected final static int fixedCellWidthChanged = 8;
-	protected java.awt.event.FocusListener focusListener;
-	protected final static int fontChanged = 4;
-	protected javax.swing.JList list;
-	protected javax.swing.event.ListDataListener listDataListener;
-	protected javax.swing.event.ListSelectionListener listSelectionListener;
-	protected final static int modelChanged = 1;
-	protected javax.swing.event.MouseInputListener mouseInputListener;
-	protected java.beans.PropertyChangeListener propertyChangeListener;
-	protected final static int prototypeCellValueChanged = 32;
-	protected javax.swing.CellRendererPane rendererPane;
-	protected final static int selectionModelChanged = 2;
-	protected int updateLayoutStateNeeded;
-	public class FocusHandler implements java.awt.event.FocusListener {
-		public FocusHandler() { }
-		public void focusGained(java.awt.event.FocusEvent var0) { }
-		public void focusLost(java.awt.event.FocusEvent var0) { }
-		protected void repaintCellFocus() { }
-	}
-	public class ListDataHandler implements javax.swing.event.ListDataListener {
-		public ListDataHandler() { }
-		public void contentsChanged(javax.swing.event.ListDataEvent var0) { }
-		public void intervalAdded(javax.swing.event.ListDataEvent var0) { }
-		public void intervalRemoved(javax.swing.event.ListDataEvent var0) { }
-	}
-	public class ListSelectionHandler implements javax.swing.event.ListSelectionListener {
-		public ListSelectionHandler() { }
-		public void valueChanged(javax.swing.event.ListSelectionEvent var0) { }
-	}
-	public class MouseInputHandler implements javax.swing.event.MouseInputListener {
-		public MouseInputHandler() { }
-		public void mouseClicked(java.awt.event.MouseEvent var0) { }
-		public void mouseDragged(java.awt.event.MouseEvent var0) { }
-		public void mouseEntered(java.awt.event.MouseEvent var0) { }
-		public void mouseExited(java.awt.event.MouseEvent var0) { }
-		public void mouseMoved(java.awt.event.MouseEvent var0) { }
-		public void mousePressed(java.awt.event.MouseEvent var0) { }
-		public void mouseReleased(java.awt.event.MouseEvent var0) { }
-	}
-	public class PropertyChangeHandler implements java.beans.PropertyChangeListener {
-		public PropertyChangeHandler() { }
-		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
-	}
 }
 

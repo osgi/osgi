@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,37 @@
 
 package java.awt;
 public final class JobAttributes implements java.lang.Cloneable {
-	public JobAttributes() { }
-	public JobAttributes(int var0, java.awt.JobAttributes.DefaultSelectionType var1, java.awt.JobAttributes.DestinationType var2, java.awt.JobAttributes.DialogType var3, java.lang.String var4, int var5, int var6, java.awt.JobAttributes.MultipleDocumentHandlingType var7, int[][] var8, java.lang.String var9, java.awt.JobAttributes.SidesType var10) { }
-	public JobAttributes(java.awt.JobAttributes var0) { }
+	public static final class DefaultSelectionType extends java.awt.AttributeValue {
+		public final static java.awt.JobAttributes.DefaultSelectionType ALL; static { ALL = null; }
+		public final static java.awt.JobAttributes.DefaultSelectionType RANGE; static { RANGE = null; }
+		public final static java.awt.JobAttributes.DefaultSelectionType SELECTION; static { SELECTION = null; }
+		private DefaultSelectionType()  { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
+	}
+	public static final class DestinationType extends java.awt.AttributeValue {
+		public final static java.awt.JobAttributes.DestinationType FILE; static { FILE = null; }
+		public final static java.awt.JobAttributes.DestinationType PRINTER; static { PRINTER = null; }
+		private DestinationType()  { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
+	}
+	public static final class DialogType extends java.awt.AttributeValue {
+		public final static java.awt.JobAttributes.DialogType COMMON; static { COMMON = null; }
+		public final static java.awt.JobAttributes.DialogType NATIVE; static { NATIVE = null; }
+		public final static java.awt.JobAttributes.DialogType NONE; static { NONE = null; }
+		private DialogType()  { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
+	}
+	public static final class MultipleDocumentHandlingType extends java.awt.AttributeValue {
+		public final static java.awt.JobAttributes.MultipleDocumentHandlingType SEPARATE_DOCUMENTS_COLLATED_COPIES; static { SEPARATE_DOCUMENTS_COLLATED_COPIES = null; }
+		public final static java.awt.JobAttributes.MultipleDocumentHandlingType SEPARATE_DOCUMENTS_UNCOLLATED_COPIES; static { SEPARATE_DOCUMENTS_UNCOLLATED_COPIES = null; }
+		private MultipleDocumentHandlingType()  { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
+	}
+	public static final class SidesType extends java.awt.AttributeValue {
+		public final static java.awt.JobAttributes.SidesType ONE_SIDED; static { ONE_SIDED = null; }
+		public final static java.awt.JobAttributes.SidesType TWO_SIDED_LONG_EDGE; static { TWO_SIDED_LONG_EDGE = null; }
+		public final static java.awt.JobAttributes.SidesType TWO_SIDED_SHORT_EDGE; static { TWO_SIDED_SHORT_EDGE = null; }
+		private SidesType()  { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
+	}
+	public JobAttributes() { } 
+	public JobAttributes(int var0, java.awt.JobAttributes.DefaultSelectionType var1, java.awt.JobAttributes.DestinationType var2, java.awt.JobAttributes.DialogType var3, java.lang.String var4, int var5, int var6, java.awt.JobAttributes.MultipleDocumentHandlingType var7, int[][] var8, java.lang.String var9, java.awt.JobAttributes.SidesType var10) { } 
+	public JobAttributes(java.awt.JobAttributes var0) { } 
 	public java.lang.Object clone() { return null; }
 	public int getCopies() { return 0; }
 	public java.awt.JobAttributes.DefaultSelectionType getDefaultSelection() { return null; }
@@ -51,33 +79,5 @@ public final class JobAttributes implements java.lang.Cloneable {
 	public void setSides(java.awt.JobAttributes.SidesType var0) { }
 	public void setSidesToDefault() { }
 	public void setToPage(int var0) { }
-	public static final class DefaultSelectionType extends java.awt.AttributeValue {
-		public final static java.awt.JobAttributes.DefaultSelectionType ALL; static { ALL = null; }
-		public final static java.awt.JobAttributes.DefaultSelectionType RANGE; static { RANGE = null; }
-		public final static java.awt.JobAttributes.DefaultSelectionType SELECTION; static { SELECTION = null; }
-		private DefaultSelectionType() { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
-	}
-	public static final class DestinationType extends java.awt.AttributeValue {
-		public final static java.awt.JobAttributes.DestinationType FILE; static { FILE = null; }
-		public final static java.awt.JobAttributes.DestinationType PRINTER; static { PRINTER = null; }
-		private DestinationType() { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
-	}
-	public static final class DialogType extends java.awt.AttributeValue {
-		public final static java.awt.JobAttributes.DialogType COMMON; static { COMMON = null; }
-		public final static java.awt.JobAttributes.DialogType NATIVE; static { NATIVE = null; }
-		public final static java.awt.JobAttributes.DialogType NONE; static { NONE = null; }
-		private DialogType() { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
-	}
-	public static final class MultipleDocumentHandlingType extends java.awt.AttributeValue {
-		public final static java.awt.JobAttributes.MultipleDocumentHandlingType SEPARATE_DOCUMENTS_COLLATED_COPIES; static { SEPARATE_DOCUMENTS_COLLATED_COPIES = null; }
-		public final static java.awt.JobAttributes.MultipleDocumentHandlingType SEPARATE_DOCUMENTS_UNCOLLATED_COPIES; static { SEPARATE_DOCUMENTS_UNCOLLATED_COPIES = null; }
-		private MultipleDocumentHandlingType() { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
-	}
-	public static final class SidesType extends java.awt.AttributeValue {
-		public final static java.awt.JobAttributes.SidesType ONE_SIDED; static { ONE_SIDED = null; }
-		public final static java.awt.JobAttributes.SidesType TWO_SIDED_LONG_EDGE; static { TWO_SIDED_LONG_EDGE = null; }
-		public final static java.awt.JobAttributes.SidesType TWO_SIDED_SHORT_EDGE; static { TWO_SIDED_SHORT_EDGE = null; }
-		private SidesType() { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
-	}
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package java.awt.image;
 public class IndexColorModel extends java.awt.image.ColorModel {
-	public IndexColorModel(int var0, int var1, byte[] var2, int var3, boolean var4) { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); }
-	public IndexColorModel(int var0, int var1, byte[] var2, int var3, boolean var4, int var5) { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); }
-	public IndexColorModel(int var0, int var1, byte[] var2, byte[] var3, byte[] var4) { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); }
-	public IndexColorModel(int var0, int var1, byte[] var2, byte[] var3, byte[] var4, int var5) { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); }
-	public IndexColorModel(int var0, int var1, byte[] var2, byte[] var3, byte[] var4, byte[] var5) { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); }
-	public IndexColorModel(int var0, int var1, int[] var2, int var3, int var4, java.math.BigInteger var5) { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); }
-	public IndexColorModel(int var0, int var1, int[] var2, int var3, boolean var4, int var5, int var6) { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); }
+	public IndexColorModel(int var0, int var1, byte[] var2, int var3, boolean var4)  { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); } 
+	public IndexColorModel(int var0, int var1, byte[] var2, int var3, boolean var4, int var5)  { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); } 
+	public IndexColorModel(int var0, int var1, byte[] var2, byte[] var3, byte[] var4)  { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); } 
+	public IndexColorModel(int var0, int var1, byte[] var2, byte[] var3, byte[] var4, int var5)  { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); } 
+	public IndexColorModel(int var0, int var1, byte[] var2, byte[] var3, byte[] var4, byte[] var5)  { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); } 
+	public IndexColorModel(int var0, int var1, int[] var2, int var3, int var4, java.math.BigInteger var5)  { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); } 
+	public IndexColorModel(int var0, int var1, int[] var2, int var3, boolean var4, int var5, int var6)  { super(0, (int[]) null, (java.awt.color.ColorSpace) null, false, false, 0, 0); } 
 	public java.awt.image.BufferedImage convertToIntDiscrete(java.awt.image.Raster var0, boolean var1) { return null; }
 	public final int getAlpha(int var0) { return 0; }
 	public final void getAlphas(byte[] var0) { }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package org.omg.CORBA;
-public abstract interface DynFixed extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
-	public abstract byte[] get_value();
-	public abstract void set_value(byte[] var0) throws org.omg.CORBA.DynAnyPackage.InvalidValue;
+/** @deprecated */ public interface DynFixed extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
+	byte[] get_value();
+	void set_value(byte[] var0) throws org.omg.CORBA.DynAnyPackage.InvalidValue;
 }
 

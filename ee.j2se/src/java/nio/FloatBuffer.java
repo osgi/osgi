@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package java.nio;
-public abstract class FloatBuffer extends java.nio.Buffer implements java.lang.Comparable {
+public abstract class FloatBuffer extends java.nio.Buffer implements java.lang.Comparable<java.nio.FloatBuffer> {
 	public static java.nio.FloatBuffer allocate(int var0) { return null; }
 	public final float[] array() { return null; }
 	public final int arrayOffset() { return 0; }
 	public abstract java.nio.FloatBuffer asReadOnlyBuffer();
 	public abstract java.nio.FloatBuffer compact();
-	public int compareTo(java.lang.Object var0) { return 0; }
+	public int compareTo(java.nio.FloatBuffer var0) { return 0; }
 	public abstract java.nio.FloatBuffer duplicate();
 	public abstract float get();
 	public abstract float get(int var0);

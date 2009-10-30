@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package javax.swing.text;
 public class PlainDocument extends javax.swing.text.AbstractDocument {
-	public PlainDocument() { super((javax.swing.text.AbstractDocument.Content) null, (javax.swing.text.AbstractDocument.AttributeContext) null); }
-	public PlainDocument(javax.swing.text.AbstractDocument.Content var0) { super((javax.swing.text.AbstractDocument.Content) null, (javax.swing.text.AbstractDocument.AttributeContext) null); }
+	public final static java.lang.String lineLimitAttribute = "lineLimit";
+	public final static java.lang.String tabSizeAttribute = "tabSize";
+	public PlainDocument()  { super((javax.swing.text.AbstractDocument.Content) null, (javax.swing.text.AbstractDocument.AttributeContext) null); } 
+	public PlainDocument(javax.swing.text.AbstractDocument.Content var0)  { super((javax.swing.text.AbstractDocument.Content) null, (javax.swing.text.AbstractDocument.AttributeContext) null); } 
 	protected javax.swing.text.AbstractDocument.AbstractElement createDefaultRoot() { return null; }
 	public javax.swing.text.Element getDefaultRootElement() { return null; }
 	public javax.swing.text.Element getParagraphElement(int var0) { return null; }
-	public final static java.lang.String lineLimitAttribute = "lineLimit";
-	public final static java.lang.String tabSizeAttribute = "tabSize";
 }
 

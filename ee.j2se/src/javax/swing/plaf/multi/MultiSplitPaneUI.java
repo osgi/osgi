@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package javax.swing.plaf.multi;
 public class MultiSplitPaneUI extends javax.swing.plaf.SplitPaneUI {
-	public MultiSplitPaneUI() { }
+	protected java.util.Vector uis;
+	public MultiSplitPaneUI() { } 
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	public void finishedPaintingChildren(javax.swing.JSplitPane var0, java.awt.Graphics var1) { }
 	public int getDividerLocation(javax.swing.JSplitPane var0) { return 0; }
@@ -25,6 +26,5 @@ public class MultiSplitPaneUI extends javax.swing.plaf.SplitPaneUI {
 	public javax.swing.plaf.ComponentUI[] getUIs() { return null; }
 	public void resetToPreferredSizes(javax.swing.JSplitPane var0) { }
 	public void setDividerLocation(javax.swing.JSplitPane var0, int var1) { }
-	protected java.util.Vector uis;
 }
 

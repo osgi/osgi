@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.security.auth.callback;
 public class PasswordCallback implements java.io.Serializable, javax.security.auth.callback.Callback {
-	public PasswordCallback(java.lang.String var0, boolean var1) { }
+	public PasswordCallback(java.lang.String var0, boolean var1) { } 
 	public void clearPassword() { }
 	public char[] getPassword() { return null; }
 	public java.lang.String getPrompt() { return null; }

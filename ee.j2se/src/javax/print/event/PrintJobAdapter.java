@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.print.event;
 public abstract class PrintJobAdapter implements javax.print.event.PrintJobListener {
-	public PrintJobAdapter() { }
+	public PrintJobAdapter() { } 
 	public void printDataTransferCompleted(javax.print.event.PrintJobEvent var0) { }
 	public void printJobCanceled(javax.print.event.PrintJobEvent var0) { }
 	public void printJobCompleted(javax.print.event.PrintJobEvent var0) { }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package javax.swing;
-public abstract interface SpinnerModel {
-	public abstract void addChangeListener(javax.swing.event.ChangeListener var0);
-	public abstract java.lang.Object getNextValue();
-	public abstract java.lang.Object getPreviousValue();
-	public abstract java.lang.Object getValue();
-	public abstract void removeChangeListener(javax.swing.event.ChangeListener var0);
-	public abstract void setValue(java.lang.Object var0);
+public interface SpinnerModel {
+	void addChangeListener(javax.swing.event.ChangeListener var0);
+	java.lang.Object getNextValue();
+	java.lang.Object getPreviousValue();
+	java.lang.Object getValue();
+	void removeChangeListener(javax.swing.event.ChangeListener var0);
+	void setValue(java.lang.Object var0);
 }
 

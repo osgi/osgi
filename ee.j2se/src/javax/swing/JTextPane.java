@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.swing;
 public class JTextPane extends javax.swing.JEditorPane {
-	public JTextPane() { }
-	public JTextPane(javax.swing.text.StyledDocument var0) { }
+	public JTextPane() { } 
+	public JTextPane(javax.swing.text.StyledDocument var0) { } 
 	public javax.swing.text.Style addStyle(java.lang.String var0, javax.swing.text.Style var1) { return null; }
 	public javax.swing.text.AttributeSet getCharacterAttributes() { return null; }
 	public javax.swing.text.MutableAttributeSet getInputAttributes() { return null; }

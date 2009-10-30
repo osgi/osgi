@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.io;
 public class PipedReader extends java.io.Reader {
-	public PipedReader() { }
-	public PipedReader(java.io.PipedWriter var0) throws java.io.IOException { }
+	public PipedReader() { } 
+	public PipedReader(java.io.PipedWriter var0) throws java.io.IOException { } 
 	public void close() throws java.io.IOException { }
 	public void connect(java.io.PipedWriter var0) throws java.io.IOException { }
 	public int read() throws java.io.IOException { return 0; }

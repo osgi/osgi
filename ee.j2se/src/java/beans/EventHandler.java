@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package java.beans;
 public class EventHandler implements java.lang.reflect.InvocationHandler {
-	public EventHandler(java.lang.Object var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) { }
-	public static java.lang.Object create(java.lang.Class var0, java.lang.Object var1, java.lang.String var2) { return null; }
-	public static java.lang.Object create(java.lang.Class var0, java.lang.Object var1, java.lang.String var2, java.lang.String var3) { return null; }
-	public static java.lang.Object create(java.lang.Class var0, java.lang.Object var1, java.lang.String var2, java.lang.String var3, java.lang.String var4) { return null; }
+	public EventHandler(java.lang.Object var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) { } 
+	public static <T> T create(java.lang.Class<T> var0, java.lang.Object var1, java.lang.String var2) { return null; }
+	public static <T> T create(java.lang.Class<T> var0, java.lang.Object var1, java.lang.String var2, java.lang.String var3) { return null; }
+	public static <T> T create(java.lang.Class<T> var0, java.lang.Object var1, java.lang.String var2, java.lang.String var3, java.lang.String var4) { return null; }
 	public java.lang.String getAction() { return null; }
 	public java.lang.String getEventPropertyName() { return null; }
 	public java.lang.String getListenerMethodName() { return null; }

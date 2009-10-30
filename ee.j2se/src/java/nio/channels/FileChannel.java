@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,13 @@
 
 package java.nio.channels;
 public abstract class FileChannel extends java.nio.channels.spi.AbstractInterruptibleChannel implements java.nio.channels.ByteChannel, java.nio.channels.GatheringByteChannel, java.nio.channels.ScatteringByteChannel {
-	protected FileChannel() { }
+	public static class MapMode {
+		public final static java.nio.channels.FileChannel.MapMode PRIVATE; static { PRIVATE = null; }
+		public final static java.nio.channels.FileChannel.MapMode READ_ONLY; static { READ_ONLY = null; }
+		public final static java.nio.channels.FileChannel.MapMode READ_WRITE; static { READ_WRITE = null; }
+		private MapMode() { } /* generated constructor to prevent compiler adding default public constructor */
+	}
+	protected FileChannel() { } 
 	public abstract void force(boolean var0) throws java.io.IOException;
 	public final java.nio.channels.FileLock lock() throws java.io.IOException { return null; }
 	public abstract java.nio.channels.FileLock lock(long var0, long var1, boolean var2) throws java.io.IOException;
@@ -35,11 +41,5 @@ public abstract class FileChannel extends java.nio.channels.spi.AbstractInterrup
 	public abstract int write(java.nio.ByteBuffer var0) throws java.io.IOException;
 	public abstract int write(java.nio.ByteBuffer var0, long var1) throws java.io.IOException;
 	public final long write(java.nio.ByteBuffer[] var0) throws java.io.IOException { return 0l; }
-	public static class MapMode {
-		public final static java.nio.channels.FileChannel.MapMode PRIVATE; static { PRIVATE = null; }
-		public final static java.nio.channels.FileChannel.MapMode READ_ONLY; static { READ_ONLY = null; }
-		public final static java.nio.channels.FileChannel.MapMode READ_WRITE; static { READ_WRITE = null; }
-		private MapMode() { } /* generated constructor to prevent compiler adding default public constructor */
-	}
 }
 

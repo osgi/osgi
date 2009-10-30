@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,14 @@
  */
 
 package javax.print.attribute.standard;
-public final class PrinterStateReasons extends java.util.HashMap implements javax.print.attribute.PrintServiceAttribute {
-	public PrinterStateReasons() { }
-	public PrinterStateReasons(int var0) { }
-	public PrinterStateReasons(int var0, float var1) { }
-	public PrinterStateReasons(java.util.Map var0) { }
-	public final java.lang.Class getCategory() { return null; }
+public final class PrinterStateReasons extends java.util.HashMap<javax.print.attribute.standard.PrinterStateReason,javax.print.attribute.standard.Severity> implements javax.print.attribute.PrintServiceAttribute {
+	public PrinterStateReasons() { } 
+	public PrinterStateReasons(int var0) { } 
+	public PrinterStateReasons(int var0, float var1) { } 
+	public PrinterStateReasons(java.util.Map<javax.print.attribute.standard.PrinterStateReason,javax.print.attribute.standard.Severity> var0) { } 
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
 	public final java.lang.String getName() { return null; }
-	public java.util.Set printerStateReasonSet(javax.print.attribute.standard.Severity var0) { return null; }
+	public java.util.Set<javax.print.attribute.standard.PrinterStateReason> printerStateReasonSet(javax.print.attribute.standard.Severity var0) { return null; }
+	public javax.print.attribute.standard.Severity put(javax.print.attribute.standard.PrinterStateReason var0, javax.print.attribute.standard.Severity var1) { return null; }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,35 +16,10 @@
 
 package java.awt;
 public final class PageAttributes implements java.lang.Cloneable {
-	public PageAttributes() { }
-	public PageAttributes(java.awt.PageAttributes.ColorType var0, java.awt.PageAttributes.MediaType var1, java.awt.PageAttributes.OrientationRequestedType var2, java.awt.PageAttributes.OriginType var3, java.awt.PageAttributes.PrintQualityType var4, int[] var5) { }
-	public PageAttributes(java.awt.PageAttributes var0) { }
-	public java.lang.Object clone() { return null; }
-	public java.awt.PageAttributes.ColorType getColor() { return null; }
-	public java.awt.PageAttributes.MediaType getMedia() { return null; }
-	public java.awt.PageAttributes.OrientationRequestedType getOrientationRequested() { return null; }
-	public java.awt.PageAttributes.OriginType getOrigin() { return null; }
-	public java.awt.PageAttributes.PrintQualityType getPrintQuality() { return null; }
-	public int[] getPrinterResolution() { return null; }
-	public int hashCode() { return 0; }
-	public void set(java.awt.PageAttributes var0) { }
-	public void setColor(java.awt.PageAttributes.ColorType var0) { }
-	public void setMedia(java.awt.PageAttributes.MediaType var0) { }
-	public void setMediaToDefault() { }
-	public void setOrientationRequested(int var0) { }
-	public void setOrientationRequested(java.awt.PageAttributes.OrientationRequestedType var0) { }
-	public void setOrientationRequestedToDefault() { }
-	public void setOrigin(java.awt.PageAttributes.OriginType var0) { }
-	public void setPrintQuality(int var0) { }
-	public void setPrintQuality(java.awt.PageAttributes.PrintQualityType var0) { }
-	public void setPrintQualityToDefault() { }
-	public void setPrinterResolution(int var0) { }
-	public void setPrinterResolution(int[] var0) { }
-	public void setPrinterResolutionToDefault() { }
 	public static final class ColorType extends java.awt.AttributeValue {
 		public final static java.awt.PageAttributes.ColorType COLOR; static { COLOR = null; }
 		public final static java.awt.PageAttributes.ColorType MONOCHROME; static { MONOCHROME = null; }
-		private ColorType() { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
+		private ColorType()  { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
 	}
 	public static final class MediaType extends java.awt.AttributeValue {
 		public final static java.awt.PageAttributes.MediaType A; static { A = null; }
@@ -194,23 +169,48 @@ public final class PageAttributes implements java.lang.Cloneable {
 		public final static java.awt.PageAttributes.MediaType QUARTO; static { QUARTO = null; }
 		public final static java.awt.PageAttributes.MediaType STATEMENT; static { STATEMENT = null; }
 		public final static java.awt.PageAttributes.MediaType TABLOID; static { TABLOID = null; }
-		private MediaType() { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
+		private MediaType()  { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
 	}
 	public static final class OrientationRequestedType extends java.awt.AttributeValue {
 		public final static java.awt.PageAttributes.OrientationRequestedType LANDSCAPE; static { LANDSCAPE = null; }
 		public final static java.awt.PageAttributes.OrientationRequestedType PORTRAIT; static { PORTRAIT = null; }
-		private OrientationRequestedType() { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
+		private OrientationRequestedType()  { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
 	}
 	public static final class OriginType extends java.awt.AttributeValue {
 		public final static java.awt.PageAttributes.OriginType PHYSICAL; static { PHYSICAL = null; }
 		public final static java.awt.PageAttributes.OriginType PRINTABLE; static { PRINTABLE = null; }
-		private OriginType() { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
+		private OriginType()  { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
 	}
 	public static final class PrintQualityType extends java.awt.AttributeValue {
 		public final static java.awt.PageAttributes.PrintQualityType DRAFT; static { DRAFT = null; }
 		public final static java.awt.PageAttributes.PrintQualityType HIGH; static { HIGH = null; }
 		public final static java.awt.PageAttributes.PrintQualityType NORMAL; static { NORMAL = null; }
-		private PrintQualityType() { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
+		private PrintQualityType()  { super(0, (java.lang.String[]) null); } /* generated constructor to prevent compiler adding default public constructor */
 	}
+	public PageAttributes() { } 
+	public PageAttributes(java.awt.PageAttributes.ColorType var0, java.awt.PageAttributes.MediaType var1, java.awt.PageAttributes.OrientationRequestedType var2, java.awt.PageAttributes.OriginType var3, java.awt.PageAttributes.PrintQualityType var4, int[] var5) { } 
+	public PageAttributes(java.awt.PageAttributes var0) { } 
+	public java.lang.Object clone() { return null; }
+	public java.awt.PageAttributes.ColorType getColor() { return null; }
+	public java.awt.PageAttributes.MediaType getMedia() { return null; }
+	public java.awt.PageAttributes.OrientationRequestedType getOrientationRequested() { return null; }
+	public java.awt.PageAttributes.OriginType getOrigin() { return null; }
+	public java.awt.PageAttributes.PrintQualityType getPrintQuality() { return null; }
+	public int[] getPrinterResolution() { return null; }
+	public int hashCode() { return 0; }
+	public void set(java.awt.PageAttributes var0) { }
+	public void setColor(java.awt.PageAttributes.ColorType var0) { }
+	public void setMedia(java.awt.PageAttributes.MediaType var0) { }
+	public void setMediaToDefault() { }
+	public void setOrientationRequested(int var0) { }
+	public void setOrientationRequested(java.awt.PageAttributes.OrientationRequestedType var0) { }
+	public void setOrientationRequestedToDefault() { }
+	public void setOrigin(java.awt.PageAttributes.OriginType var0) { }
+	public void setPrintQuality(int var0) { }
+	public void setPrintQuality(java.awt.PageAttributes.PrintQualityType var0) { }
+	public void setPrintQualityToDefault() { }
+	public void setPrinterResolution(int var0) { }
+	public void setPrinterResolution(int[] var0) { }
+	public void setPrinterResolutionToDefault() { }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.security.cert;
 public class CertPathBuilder {
-	protected CertPathBuilder(java.security.cert.CertPathBuilderSpi var0, java.security.Provider var1, java.lang.String var2) { }
+	protected CertPathBuilder(java.security.cert.CertPathBuilderSpi var0, java.security.Provider var1, java.lang.String var2) { } 
 	public final java.security.cert.CertPathBuilderResult build(java.security.cert.CertPathParameters var0) throws java.security.InvalidAlgorithmParameterException, java.security.cert.CertPathBuilderException { return null; }
 	public final java.lang.String getAlgorithm() { return null; }
 	public final static java.lang.String getDefaultType() { return null; }

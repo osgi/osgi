@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,65 @@
 
 package javax.swing.plaf.basic;
 public class BasicTabbedPaneUI extends javax.swing.plaf.TabbedPaneUI implements javax.swing.SwingConstants {
-	public BasicTabbedPaneUI() { }
+	public class FocusHandler extends java.awt.event.FocusAdapter {
+		public FocusHandler() { } 
+	}
+	public class MouseHandler extends java.awt.event.MouseAdapter {
+		public MouseHandler() { } 
+	}
+	public class PropertyChangeHandler implements java.beans.PropertyChangeListener {
+		public PropertyChangeHandler() { } 
+		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
+	}
+	public class TabSelectionHandler implements javax.swing.event.ChangeListener {
+		public TabSelectionHandler() { } 
+		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
+	}
+	public class TabbedPaneLayout implements java.awt.LayoutManager {
+		public TabbedPaneLayout() { } 
+		public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }
+		public void calculateLayoutInfo() { }
+		protected java.awt.Dimension calculateSize(boolean var0) { return null; }
+		protected void calculateTabRects(int var0, int var1) { }
+		public void layoutContainer(java.awt.Container var0) { }
+		public java.awt.Dimension minimumLayoutSize(java.awt.Container var0) { return null; }
+		protected void normalizeTabRuns(int var0, int var1, int var2, int var3) { }
+		protected void padSelectedTab(int var0, int var1) { }
+		protected void padTabRun(int var0, int var1, int var2, int var3) { }
+		public java.awt.Dimension preferredLayoutSize(java.awt.Container var0) { return null; }
+		protected int preferredTabAreaHeight(int var0, int var1) { return 0; }
+		protected int preferredTabAreaWidth(int var0, int var1) { return 0; }
+		public void removeLayoutComponent(java.awt.Component var0) { }
+		protected void rotateTabRuns(int var0, int var1) { }
+	}
+	protected java.awt.Rectangle calcRect;
+	protected java.awt.Insets contentBorderInsets;
+	protected java.awt.Color darkShadow;
+	/** @deprecated */ protected javax.swing.KeyStroke downKey;
+	protected java.awt.Color focus;
+	protected java.awt.event.FocusListener focusListener;
+	protected java.awt.Color highlight;
+	/** @deprecated */ protected javax.swing.KeyStroke leftKey;
+	protected java.awt.Color lightHighlight;
+	protected int maxTabHeight;
+	protected int maxTabWidth;
+	protected java.awt.event.MouseListener mouseListener;
+	protected java.beans.PropertyChangeListener propertyChangeListener;
+	protected java.awt.Rectangle[] rects;
+	/** @deprecated */ protected javax.swing.KeyStroke rightKey;
+	protected int runCount;
+	protected int selectedRun;
+	protected java.awt.Insets selectedTabPadInsets;
+	protected java.awt.Color shadow;
+	protected java.awt.Insets tabAreaInsets;
+	protected javax.swing.event.ChangeListener tabChangeListener;
+	protected java.awt.Insets tabInsets;
+	protected javax.swing.JTabbedPane tabPane;
+	protected int tabRunOverlay;
+	protected int[] tabRuns;
+	protected int textIconGap;
+	/** @deprecated */ protected javax.swing.KeyStroke upKey;
+	public BasicTabbedPaneUI() { } 
 	protected void assureRectsCreated(int var0) { }
 	protected int calculateMaxTabHeight(int var0) { return 0; }
 	protected int calculateMaxTabWidth(int var0) { return 0; }
@@ -29,9 +87,11 @@ public class BasicTabbedPaneUI extends javax.swing.plaf.TabbedPaneUI implements 
 	protected java.awt.LayoutManager createLayoutManager() { return null; }
 	protected java.awt.event.MouseListener createMouseListener() { return null; }
 	protected java.beans.PropertyChangeListener createPropertyChangeListener() { return null; }
+	protected javax.swing.JButton createScrollButton(int var0) { return null; }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	protected void expandTabRunsArray() { }
 	protected java.awt.Insets getContentBorderInsets(int var0) { return null; }
+	protected int getFocusIndex() { return 0; }
 	protected java.awt.FontMetrics getFontMetrics() { return null; }
 	protected javax.swing.Icon getIconForTab(int var0) { return null; }
 	protected int getNextTabIndex(int var0) { return 0; }
@@ -40,6 +100,7 @@ public class BasicTabbedPaneUI extends javax.swing.plaf.TabbedPaneUI implements 
 	protected int getPreviousTabIndex(int var0) { return 0; }
 	protected int getPreviousTabIndexInRun(int var0, int var1) { return 0; }
 	protected int getPreviousTabRun(int var0) { return 0; }
+	protected int getRolloverTab() { return 0; }
 	protected int getRunForTab(int var0, int var1) { return 0; }
 	protected java.awt.Insets getSelectedTabPadInsets(int var0) { return null; }
 	protected java.awt.Insets getTabAreaInsets(int var0) { return null; }
@@ -79,6 +140,7 @@ public class BasicTabbedPaneUI extends javax.swing.plaf.TabbedPaneUI implements 
 	protected void selectNextTabInRun(int var0) { }
 	protected void selectPreviousTab(int var0) { }
 	protected void selectPreviousTabInRun(int var0) { }
+	protected void setRolloverTab(int var0) { }
 	protected void setVisibleComponent(java.awt.Component var0) { }
 	protected boolean shouldPadTabRun(int var0, int var1) { return false; }
 	protected boolean shouldRotateTabRuns(int var0) { return false; }
@@ -87,63 +149,5 @@ public class BasicTabbedPaneUI extends javax.swing.plaf.TabbedPaneUI implements 
 	protected void uninstallDefaults() { }
 	protected void uninstallKeyboardActions() { }
 	protected void uninstallListeners() { }
-	protected java.awt.Rectangle calcRect;
-	protected java.awt.Insets contentBorderInsets;
-	protected java.awt.Color darkShadow;
-	/** @deprecated */ protected javax.swing.KeyStroke downKey;
-	protected java.awt.Color focus;
-	protected java.awt.event.FocusListener focusListener;
-	protected java.awt.Color highlight;
-	/** @deprecated */ protected javax.swing.KeyStroke leftKey;
-	protected java.awt.Color lightHighlight;
-	protected int maxTabHeight;
-	protected int maxTabWidth;
-	protected java.awt.event.MouseListener mouseListener;
-	protected java.beans.PropertyChangeListener propertyChangeListener;
-	protected java.awt.Rectangle[] rects;
-	/** @deprecated */ protected javax.swing.KeyStroke rightKey;
-	protected int runCount;
-	protected int selectedRun;
-	protected java.awt.Insets selectedTabPadInsets;
-	protected java.awt.Color shadow;
-	protected java.awt.Insets tabAreaInsets;
-	protected javax.swing.event.ChangeListener tabChangeListener;
-	protected java.awt.Insets tabInsets;
-	protected javax.swing.JTabbedPane tabPane;
-	protected int tabRunOverlay;
-	protected int[] tabRuns;
-	protected int textIconGap;
-	/** @deprecated */ protected javax.swing.KeyStroke upKey;
-	public class FocusHandler extends java.awt.event.FocusAdapter {
-		public FocusHandler() { }
-	}
-	public class MouseHandler extends java.awt.event.MouseAdapter {
-		public MouseHandler() { }
-	}
-	public class PropertyChangeHandler implements java.beans.PropertyChangeListener {
-		public PropertyChangeHandler() { }
-		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
-	}
-	public class TabSelectionHandler implements javax.swing.event.ChangeListener {
-		public TabSelectionHandler() { }
-		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
-	}
-	public class TabbedPaneLayout implements java.awt.LayoutManager {
-		public TabbedPaneLayout() { }
-		public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }
-		public void calculateLayoutInfo() { }
-		protected java.awt.Dimension calculateSize(boolean var0) { return null; }
-		protected void calculateTabRects(int var0, int var1) { }
-		public void layoutContainer(java.awt.Container var0) { }
-		public java.awt.Dimension minimumLayoutSize(java.awt.Container var0) { return null; }
-		protected void normalizeTabRuns(int var0, int var1, int var2, int var3) { }
-		protected void padSelectedTab(int var0, int var1) { }
-		protected void padTabRun(int var0, int var1, int var2, int var3) { }
-		public java.awt.Dimension preferredLayoutSize(java.awt.Container var0) { return null; }
-		protected int preferredTabAreaHeight(int var0, int var1) { return 0; }
-		protected int preferredTabAreaWidth(int var0, int var1) { return 0; }
-		public void removeLayoutComponent(java.awt.Component var0) { }
-		protected void rotateTabRuns(int var0, int var1) { }
-	}
 }
 

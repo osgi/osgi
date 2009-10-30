@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,11 @@
 
 package java.net;
 public abstract class Authenticator {
-	public Authenticator() { }
+	public enum RequestorType {
+		PROXY,
+		SERVER;
+	}
+	public Authenticator() { } 
 	protected java.net.PasswordAuthentication getPasswordAuthentication() { return null; }
 	protected final java.lang.String getRequestingHost() { return null; }
 	protected final int getRequestingPort() { return 0; }
@@ -24,7 +28,10 @@ public abstract class Authenticator {
 	protected final java.lang.String getRequestingProtocol() { return null; }
 	protected final java.lang.String getRequestingScheme() { return null; }
 	protected final java.net.InetAddress getRequestingSite() { return null; }
+	protected java.net.URL getRequestingURL() { return null; }
+	protected java.net.Authenticator.RequestorType getRequestorType() { return null; }
 	public static java.net.PasswordAuthentication requestPasswordAuthentication(java.lang.String var0, java.net.InetAddress var1, int var2, java.lang.String var3, java.lang.String var4, java.lang.String var5) { return null; }
+	public static java.net.PasswordAuthentication requestPasswordAuthentication(java.lang.String var0, java.net.InetAddress var1, int var2, java.lang.String var3, java.lang.String var4, java.lang.String var5, java.net.URL var6, java.net.Authenticator.RequestorType var7) { return null; }
 	public static java.net.PasswordAuthentication requestPasswordAuthentication(java.net.InetAddress var0, int var1, java.lang.String var2, java.lang.String var3, java.lang.String var4) { return null; }
 	public static void setDefault(java.net.Authenticator var0) { }
 }

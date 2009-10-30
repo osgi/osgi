@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package org.w3c.dom.traversal;
-public abstract interface DocumentTraversal {
-	public abstract org.w3c.dom.traversal.NodeIterator createNodeIterator(org.w3c.dom.Node var0, int var1, org.w3c.dom.traversal.NodeFilter var2, boolean var3);
-	public abstract org.w3c.dom.traversal.TreeWalker createTreeWalker(org.w3c.dom.Node var0, int var1, org.w3c.dom.traversal.NodeFilter var2, boolean var3);
+public interface DocumentTraversal {
+	org.w3c.dom.traversal.NodeIterator createNodeIterator(org.w3c.dom.Node var0, int var1, org.w3c.dom.traversal.NodeFilter var2, boolean var3);
+	org.w3c.dom.traversal.TreeWalker createTreeWalker(org.w3c.dom.Node var0, int var1, org.w3c.dom.traversal.NodeFilter var2, boolean var3);
 }
 

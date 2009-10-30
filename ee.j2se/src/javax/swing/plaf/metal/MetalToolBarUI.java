@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,21 @@
 
 package javax.swing.plaf.metal;
 public class MetalToolBarUI extends javax.swing.plaf.basic.BasicToolBarUI {
-	public MetalToolBarUI() { }
+	protected class MetalContainerListener extends javax.swing.plaf.basic.BasicToolBarUI.ToolBarContListener {
+		protected MetalContainerListener() { } 
+	}
+	protected class MetalDockingListener extends javax.swing.plaf.basic.BasicToolBarUI.DockingListener {
+		public MetalDockingListener(javax.swing.JToolBar var0)  { super((javax.swing.JToolBar) null); } 
+	}
+	protected class MetalRolloverListener extends javax.swing.plaf.basic.BasicToolBarUI.PropertyListener {
+		protected MetalRolloverListener() { } 
+	}
+	protected java.awt.event.ContainerListener contListener;
+	protected java.beans.PropertyChangeListener rolloverListener;
+	public MetalToolBarUI() { } 
 	protected java.awt.event.ContainerListener createContainerListener() { return null; }
 	protected java.beans.PropertyChangeListener createRolloverListener() { return null; }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	protected void setDragOffset(java.awt.Point var0) { }
-	protected java.awt.event.ContainerListener contListener;
-	protected java.beans.PropertyChangeListener rolloverListener;
-	protected class MetalContainerListener extends javax.swing.plaf.basic.BasicToolBarUI.ToolBarContListener {
-		protected MetalContainerListener() { }
-	}
-	protected class MetalDockingListener extends javax.swing.plaf.basic.BasicToolBarUI.DockingListener {
-		public MetalDockingListener(javax.swing.JToolBar var0) { super((javax.swing.JToolBar) null); }
-	}
-	protected class MetalRolloverListener extends javax.swing.plaf.basic.BasicToolBarUI.PropertyListener {
-		protected MetalRolloverListener() { }
-	}
 }
 

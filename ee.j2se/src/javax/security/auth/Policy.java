@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.security.auth;
 /** @deprecated */ public abstract class Policy {
-	protected Policy() { }
+	protected Policy() { } 
 	public abstract java.security.PermissionCollection getPermissions(javax.security.auth.Subject var0, java.security.CodeSource var1);
 	public static javax.security.auth.Policy getPolicy() { return null; }
 	public abstract void refresh();

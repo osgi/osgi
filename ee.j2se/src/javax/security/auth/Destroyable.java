@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package javax.security.auth;
-public abstract interface Destroyable {
-	public abstract void destroy() throws javax.security.auth.DestroyFailedException;
-	public abstract boolean isDestroyed();
+public interface Destroyable {
+	void destroy() throws javax.security.auth.DestroyFailedException;
+	boolean isDestroyed();
 }
 

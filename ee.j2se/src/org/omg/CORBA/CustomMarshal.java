@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package org.omg.CORBA;
-public abstract interface CustomMarshal {
-	public abstract void marshal(org.omg.CORBA.DataOutputStream var0);
-	public abstract void unmarshal(org.omg.CORBA.DataInputStream var0);
+public interface CustomMarshal {
+	void marshal(org.omg.CORBA.DataOutputStream var0);
+	void unmarshal(org.omg.CORBA.DataInputStream var0);
 }
 

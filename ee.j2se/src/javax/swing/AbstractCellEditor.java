@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package javax.swing;
 public abstract class AbstractCellEditor implements java.io.Serializable, javax.swing.CellEditor {
-	public AbstractCellEditor() { }
+	protected javax.swing.event.ChangeEvent changeEvent;
+	protected javax.swing.event.EventListenerList listenerList;
+	public AbstractCellEditor() { } 
 	public void addCellEditorListener(javax.swing.event.CellEditorListener var0) { }
 	public void cancelCellEditing() { }
 	protected void fireEditingCanceled() { }
@@ -26,7 +28,5 @@ public abstract class AbstractCellEditor implements java.io.Serializable, javax.
 	public void removeCellEditorListener(javax.swing.event.CellEditorListener var0) { }
 	public boolean shouldSelectCell(java.util.EventObject var0) { return false; }
 	public boolean stopCellEditing() { return false; }
-	protected javax.swing.event.ChangeEvent changeEvent;
-	protected javax.swing.event.EventListenerList listenerList;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,10 @@
 
 package javax.swing.text.html.parser;
 public final class Entity implements javax.swing.text.html.parser.DTDConstants {
-	public Entity(java.lang.String var0, int var1, char[] var2) { }
+	public char[] data;
+	public java.lang.String name;
+	public int type;
+	public Entity(java.lang.String var0, int var1, char[] var2) { } 
 	public char[] getData() { return null; }
 	public java.lang.String getName() { return null; }
 	public java.lang.String getString() { return null; }
@@ -24,8 +27,5 @@ public final class Entity implements javax.swing.text.html.parser.DTDConstants {
 	public boolean isGeneral() { return false; }
 	public boolean isParameter() { return false; }
 	public static int name2type(java.lang.String var0) { return 0; }
-	public char[] data;
-	public java.lang.String name;
-	public int type;
 }
 

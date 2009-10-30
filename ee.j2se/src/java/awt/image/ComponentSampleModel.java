@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,14 @@
 
 package java.awt.image;
 public class ComponentSampleModel extends java.awt.image.SampleModel {
-	public ComponentSampleModel(int var0, int var1, int var2, int var3, int var4, int[] var5) { super(0, 0, 0, 0); }
-	public ComponentSampleModel(int var0, int var1, int var2, int var3, int var4, int[] var5, int[] var6) { super(0, 0, 0, 0); }
+	protected int[] bandOffsets;
+	protected int[] bankIndices;
+	protected int numBands;
+	protected int numBanks;
+	protected int pixelStride;
+	protected int scanlineStride;
+	public ComponentSampleModel(int var0, int var1, int var2, int var3, int var4, int[] var5)  { super(0, 0, 0, 0); } 
+	public ComponentSampleModel(int var0, int var1, int var2, int var3, int var4, int[] var5, int[] var6)  { super(0, 0, 0, 0); } 
 	public java.awt.image.SampleModel createCompatibleSampleModel(int var0, int var1) { return null; }
 	public java.awt.image.DataBuffer createDataBuffer() { return null; }
 	public java.awt.image.SampleModel createSubsetSampleModel(int[] var0) { return null; }
@@ -35,11 +41,5 @@ public class ComponentSampleModel extends java.awt.image.SampleModel {
 	public int hashCode() { return 0; }
 	public void setDataElements(int var0, int var1, java.lang.Object var2, java.awt.image.DataBuffer var3) { }
 	public void setSample(int var0, int var1, int var2, int var3, java.awt.image.DataBuffer var4) { }
-	protected int[] bandOffsets;
-	protected int[] bankIndices;
-	protected int numBands;
-	protected int numBanks;
-	protected int pixelStride;
-	protected int scanlineStride;
 }
 

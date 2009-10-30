@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package java.rmi.server;
-/** @deprecated */ public abstract interface LoaderHandler {
-	/** @deprecated */ public abstract java.lang.Object getSecurityContext(java.lang.ClassLoader var0);
-	/** @deprecated */ public abstract java.lang.Class loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException, java.net.MalformedURLException;
-	/** @deprecated */ public abstract java.lang.Class loadClass(java.net.URL var0, java.lang.String var1) throws java.lang.ClassNotFoundException, java.net.MalformedURLException;
+/** @deprecated */ public interface LoaderHandler {
 	public final static java.lang.String packagePrefix = "sun.rmi.server";
+	/** @deprecated */ java.lang.Object getSecurityContext(java.lang.ClassLoader var0);
+	/** @deprecated */ java.lang.Class<?> loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException, java.net.MalformedURLException;
+	/** @deprecated */ java.lang.Class<?> loadClass(java.net.URL var0, java.lang.String var1) throws java.lang.ClassNotFoundException, java.net.MalformedURLException;
 }
 

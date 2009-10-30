@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package javax.swing.plaf.metal;
 public class MetalToolTipUI extends javax.swing.plaf.basic.BasicToolTipUI {
-	public MetalToolTipUI() { }
+	public final static int padSpaceBetweenStrings = 12;
+	public MetalToolTipUI() { } 
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	public java.lang.String getAcceleratorString() { return null; }
 	protected boolean isAcceleratorHidden() { return false; }
-	public final static int padSpaceBetweenStrings = 12;
 }
 

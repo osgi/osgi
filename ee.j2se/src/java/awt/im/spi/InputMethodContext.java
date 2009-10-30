@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package java.awt.im.spi;
-public abstract interface InputMethodContext extends java.awt.im.InputMethodRequests {
-	public abstract javax.swing.JFrame createInputMethodJFrame(java.lang.String var0, boolean var1);
-	public abstract java.awt.Window createInputMethodWindow(java.lang.String var0, boolean var1);
-	public abstract void dispatchInputMethodEvent(int var0, java.text.AttributedCharacterIterator var1, int var2, java.awt.font.TextHitInfo var3, java.awt.font.TextHitInfo var4);
-	public abstract void enableClientWindowNotification(java.awt.im.spi.InputMethod var0, boolean var1);
+public interface InputMethodContext extends java.awt.im.InputMethodRequests {
+	javax.swing.JFrame createInputMethodJFrame(java.lang.String var0, boolean var1);
+	java.awt.Window createInputMethodWindow(java.lang.String var0, boolean var1);
+	void dispatchInputMethodEvent(int var0, java.text.AttributedCharacterIterator var1, int var2, java.awt.font.TextHitInfo var3, java.awt.font.TextHitInfo var4);
+	void enableClientWindowNotification(java.awt.im.spi.InputMethod var0, boolean var1);
 }
 

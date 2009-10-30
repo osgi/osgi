@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package java.awt.event;
 public class MouseWheelEvent extends java.awt.event.MouseEvent {
-	public MouseWheelEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, int var5, int var6, boolean var7, int var8, int var9, int var10) { super((java.awt.Component) null, 0, 0l, 0, 0, 0, 0, false, 0); }
+	public final static int WHEEL_BLOCK_SCROLL = 1;
+	public final static int WHEEL_UNIT_SCROLL = 0;
+	public MouseWheelEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, int var5, int var6, boolean var7, int var8, int var9, int var10)  { super((java.awt.Component) null, 0, 0l, 0, 0, 0, 0, false, 0); } 
 	public int getScrollAmount() { return 0; }
 	public int getScrollType() { return 0; }
 	public int getUnitsToScroll() { return 0; }
 	public int getWheelRotation() { return 0; }
-	public final static int WHEEL_BLOCK_SCROLL = 1;
-	public final static int WHEEL_UNIT_SCROLL = 0;
 }
 

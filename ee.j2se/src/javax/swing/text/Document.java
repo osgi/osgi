@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,25 @@
  */
 
 package javax.swing.text;
-public abstract interface Document {
-	public abstract void addDocumentListener(javax.swing.event.DocumentListener var0);
-	public abstract void addUndoableEditListener(javax.swing.event.UndoableEditListener var0);
-	public abstract javax.swing.text.Position createPosition(int var0) throws javax.swing.text.BadLocationException;
-	public abstract javax.swing.text.Element getDefaultRootElement();
-	public abstract javax.swing.text.Position getEndPosition();
-	public abstract int getLength();
-	public abstract java.lang.Object getProperty(java.lang.Object var0);
-	public abstract javax.swing.text.Element[] getRootElements();
-	public abstract javax.swing.text.Position getStartPosition();
-	public abstract java.lang.String getText(int var0, int var1) throws javax.swing.text.BadLocationException;
-	public abstract void getText(int var0, int var1, javax.swing.text.Segment var2) throws javax.swing.text.BadLocationException;
-	public abstract void insertString(int var0, java.lang.String var1, javax.swing.text.AttributeSet var2) throws javax.swing.text.BadLocationException;
-	public abstract void putProperty(java.lang.Object var0, java.lang.Object var1);
-	public abstract void remove(int var0, int var1) throws javax.swing.text.BadLocationException;
-	public abstract void removeDocumentListener(javax.swing.event.DocumentListener var0);
-	public abstract void removeUndoableEditListener(javax.swing.event.UndoableEditListener var0);
-	public abstract void render(java.lang.Runnable var0);
+public interface Document {
 	public final static java.lang.String StreamDescriptionProperty = "stream";
 	public final static java.lang.String TitleProperty = "title";
+	void addDocumentListener(javax.swing.event.DocumentListener var0);
+	void addUndoableEditListener(javax.swing.event.UndoableEditListener var0);
+	javax.swing.text.Position createPosition(int var0) throws javax.swing.text.BadLocationException;
+	javax.swing.text.Element getDefaultRootElement();
+	javax.swing.text.Position getEndPosition();
+	int getLength();
+	java.lang.Object getProperty(java.lang.Object var0);
+	javax.swing.text.Element[] getRootElements();
+	javax.swing.text.Position getStartPosition();
+	java.lang.String getText(int var0, int var1) throws javax.swing.text.BadLocationException;
+	void getText(int var0, int var1, javax.swing.text.Segment var2) throws javax.swing.text.BadLocationException;
+	void insertString(int var0, java.lang.String var1, javax.swing.text.AttributeSet var2) throws javax.swing.text.BadLocationException;
+	void putProperty(java.lang.Object var0, java.lang.Object var1);
+	void remove(int var0, int var1) throws javax.swing.text.BadLocationException;
+	void removeDocumentListener(javax.swing.event.DocumentListener var0);
+	void removeUndoableEditListener(javax.swing.event.UndoableEditListener var0);
+	void render(java.lang.Runnable var0);
 }
 

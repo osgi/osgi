@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
 
 package javax.swing;
 public class Timer implements java.io.Serializable {
-	public Timer(int var0, java.awt.event.ActionListener var1) { }
+	protected javax.swing.event.EventListenerList listenerList;
+	public Timer(int var0, java.awt.event.ActionListener var1) { } 
 	public void addActionListener(java.awt.event.ActionListener var0) { }
 	protected void fireActionPerformed(java.awt.event.ActionEvent var0) { }
 	public java.awt.event.ActionListener[] getActionListeners() { return null; }
 	public int getDelay() { return 0; }
 	public int getInitialDelay() { return 0; }
-	public java.util.EventListener[] getListeners(java.lang.Class var0) { return null; }
+	public <T extends java.util.EventListener> T[] getListeners(java.lang.Class<T> var0) { return null; }
 	public static boolean getLogTimers() { return false; }
 	public boolean isCoalesce() { return false; }
 	public boolean isRepeats() { return false; }
@@ -36,6 +37,5 @@ public class Timer implements java.io.Serializable {
 	public void setRepeats(boolean var0) { }
 	public void start() { }
 	public void stop() { }
-	protected javax.swing.event.EventListenerList listenerList;
 }
 

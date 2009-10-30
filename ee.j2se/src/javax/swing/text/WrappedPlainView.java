@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.swing.text;
 public class WrappedPlainView extends javax.swing.text.BoxView implements javax.swing.text.TabExpander {
-	public WrappedPlainView(javax.swing.text.Element var0) { super((javax.swing.text.Element) null, 0); }
-	public WrappedPlainView(javax.swing.text.Element var0, boolean var1) { super((javax.swing.text.Element) null, 0); }
+	public WrappedPlainView(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null, 0); } 
+	public WrappedPlainView(javax.swing.text.Element var0, boolean var1)  { super((javax.swing.text.Element) null, 0); } 
 	protected int calculateBreakPosition(int var0, int var1) { return 0; }
 	protected void drawLine(int var0, int var1, java.awt.Graphics var2, int var3, int var4) { }
 	protected int drawSelectedText(java.awt.Graphics var0, int var1, int var2, int var3, int var4) throws javax.swing.text.BadLocationException { return 0; }

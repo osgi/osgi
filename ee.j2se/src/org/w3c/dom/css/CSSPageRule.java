@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package org.w3c.dom.css;
-public abstract interface CSSPageRule extends org.w3c.dom.css.CSSRule {
-	public abstract java.lang.String getSelectorText();
-	public abstract org.w3c.dom.css.CSSStyleDeclaration getStyle();
-	public abstract void setSelectorText(java.lang.String var0);
+public interface CSSPageRule extends org.w3c.dom.css.CSSRule {
+	java.lang.String getSelectorText();
+	org.w3c.dom.css.CSSStyleDeclaration getStyle();
+	void setSelectorText(java.lang.String var0);
 }
 

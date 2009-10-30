@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package javax.swing.table;
-public abstract interface TableCellEditor extends javax.swing.CellEditor {
-	public abstract java.awt.Component getTableCellEditorComponent(javax.swing.JTable var0, java.lang.Object var1, boolean var2, int var3, int var4);
+public interface TableCellEditor extends javax.swing.CellEditor {
+	java.awt.Component getTableCellEditorComponent(javax.swing.JTable var0, java.lang.Object var1, boolean var2, int var3, int var4);
 }
 

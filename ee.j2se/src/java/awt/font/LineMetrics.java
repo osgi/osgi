@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt.font;
 public abstract class LineMetrics {
-	public LineMetrics() { }
+	public LineMetrics() { } 
 	public abstract float getAscent();
 	public abstract int getBaselineIndex();
 	public abstract float[] getBaselineOffsets();

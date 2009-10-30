@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,7 @@
 
 package javax.swing.text.html;
 public class CSS implements java.io.Serializable {
-	public CSS() { }
-	public static javax.swing.text.html.CSS.Attribute[] getAllAttributeKeys() { return null; }
-	public final static javax.swing.text.html.CSS.Attribute getAttribute(java.lang.String var0) { return null; }
 	public static final class Attribute {
-		public java.lang.String getDefaultValue() { return null; }
-		public boolean isInherited() { return false; }
 		public final static javax.swing.text.html.CSS.Attribute BACKGROUND; static { BACKGROUND = null; }
 		public final static javax.swing.text.html.CSS.Attribute BACKGROUND_ATTACHMENT; static { BACKGROUND_ATTACHMENT = null; }
 		public final static javax.swing.text.html.CSS.Attribute BACKGROUND_COLOR; static { BACKGROUND_COLOR = null; }
@@ -75,7 +70,12 @@ public class CSS implements java.io.Serializable {
 		public final static javax.swing.text.html.CSS.Attribute WHITE_SPACE; static { WHITE_SPACE = null; }
 		public final static javax.swing.text.html.CSS.Attribute WIDTH; static { WIDTH = null; }
 		public final static javax.swing.text.html.CSS.Attribute WORD_SPACING; static { WORD_SPACING = null; }
+		public java.lang.String getDefaultValue() { return null; }
+		public boolean isInherited() { return false; }
 		private Attribute() { } /* generated constructor to prevent compiler adding default public constructor */
 	}
+	public CSS() { } 
+	public static javax.swing.text.html.CSS.Attribute[] getAllAttributeKeys() { return null; }
+	public final static javax.swing.text.html.CSS.Attribute getAttribute(java.lang.String var0) { return null; }
 }
 

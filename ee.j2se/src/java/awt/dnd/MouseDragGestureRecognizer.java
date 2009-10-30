@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package java.awt.dnd;
 public abstract class MouseDragGestureRecognizer extends java.awt.dnd.DragGestureRecognizer implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener {
-	protected MouseDragGestureRecognizer(java.awt.dnd.DragSource var0) { super((java.awt.dnd.DragSource) null, (java.awt.Component) null, 0, (java.awt.dnd.DragGestureListener) null); }
-	protected MouseDragGestureRecognizer(java.awt.dnd.DragSource var0, java.awt.Component var1) { super((java.awt.dnd.DragSource) null, (java.awt.Component) null, 0, (java.awt.dnd.DragGestureListener) null); }
-	protected MouseDragGestureRecognizer(java.awt.dnd.DragSource var0, java.awt.Component var1, int var2) { super((java.awt.dnd.DragSource) null, (java.awt.Component) null, 0, (java.awt.dnd.DragGestureListener) null); }
-	protected MouseDragGestureRecognizer(java.awt.dnd.DragSource var0, java.awt.Component var1, int var2, java.awt.dnd.DragGestureListener var3) { super((java.awt.dnd.DragSource) null, (java.awt.Component) null, 0, (java.awt.dnd.DragGestureListener) null); }
+	protected MouseDragGestureRecognizer(java.awt.dnd.DragSource var0)  { super((java.awt.dnd.DragSource) null, (java.awt.Component) null, 0, (java.awt.dnd.DragGestureListener) null); } 
+	protected MouseDragGestureRecognizer(java.awt.dnd.DragSource var0, java.awt.Component var1)  { super((java.awt.dnd.DragSource) null, (java.awt.Component) null, 0, (java.awt.dnd.DragGestureListener) null); } 
+	protected MouseDragGestureRecognizer(java.awt.dnd.DragSource var0, java.awt.Component var1, int var2)  { super((java.awt.dnd.DragSource) null, (java.awt.Component) null, 0, (java.awt.dnd.DragGestureListener) null); } 
+	protected MouseDragGestureRecognizer(java.awt.dnd.DragSource var0, java.awt.Component var1, int var2, java.awt.dnd.DragGestureListener var3)  { super((java.awt.dnd.DragSource) null, (java.awt.Component) null, 0, (java.awt.dnd.DragGestureListener) null); } 
 	public void mouseClicked(java.awt.event.MouseEvent var0) { }
 	public void mouseDragged(java.awt.event.MouseEvent var0) { }
 	public void mouseEntered(java.awt.event.MouseEvent var0) { }

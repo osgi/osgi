@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.event;
 public class MenuKeyEvent extends java.awt.event.KeyEvent {
-	public MenuKeyEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, char var5, javax.swing.MenuElement[] var6, javax.swing.MenuSelectionManager var7) { super((java.awt.Component) null, 0, 0l, 0, 0, '\0', 0); }
+	public MenuKeyEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, char var5, javax.swing.MenuElement[] var6, javax.swing.MenuSelectionManager var7)  { super((java.awt.Component) null, 0, 0l, 0, 0, '\0', 0); } 
 	public javax.swing.MenuSelectionManager getMenuSelectionManager() { return null; }
 	public javax.swing.MenuElement[] getPath() { return null; }
 }

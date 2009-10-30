@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.awt;
 public class TexturePaint implements java.awt.Paint {
-	public TexturePaint(java.awt.image.BufferedImage var0, java.awt.geom.Rectangle2D var1) { }
+	public TexturePaint(java.awt.image.BufferedImage var0, java.awt.geom.Rectangle2D var1) { } 
 	public java.awt.PaintContext createContext(java.awt.image.ColorModel var0, java.awt.Rectangle var1, java.awt.geom.Rectangle2D var2, java.awt.geom.AffineTransform var3, java.awt.RenderingHints var4) { return null; }
 	public java.awt.geom.Rectangle2D getAnchorRect() { return null; }
 	public java.awt.image.BufferedImage getImage() { return null; }

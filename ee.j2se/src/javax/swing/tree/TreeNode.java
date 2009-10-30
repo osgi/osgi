@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package javax.swing.tree;
-public abstract interface TreeNode {
-	public abstract java.util.Enumeration children();
-	public abstract boolean getAllowsChildren();
-	public abstract javax.swing.tree.TreeNode getChildAt(int var0);
-	public abstract int getChildCount();
-	public abstract int getIndex(javax.swing.tree.TreeNode var0);
-	public abstract javax.swing.tree.TreeNode getParent();
-	public abstract boolean isLeaf();
+public interface TreeNode {
+	java.util.Enumeration children();
+	boolean getAllowsChildren();
+	javax.swing.tree.TreeNode getChildAt(int var0);
+	int getChildCount();
+	int getIndex(javax.swing.tree.TreeNode var0);
+	javax.swing.tree.TreeNode getParent();
+	boolean isLeaf();
 }
 

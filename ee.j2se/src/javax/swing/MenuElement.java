@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package javax.swing;
-public abstract interface MenuElement {
-	public abstract java.awt.Component getComponent();
-	public abstract javax.swing.MenuElement[] getSubElements();
-	public abstract void menuSelectionChanged(boolean var0);
-	public abstract void processKeyEvent(java.awt.event.KeyEvent var0, javax.swing.MenuElement[] var1, javax.swing.MenuSelectionManager var2);
-	public abstract void processMouseEvent(java.awt.event.MouseEvent var0, javax.swing.MenuElement[] var1, javax.swing.MenuSelectionManager var2);
+public interface MenuElement {
+	java.awt.Component getComponent();
+	javax.swing.MenuElement[] getSubElements();
+	void menuSelectionChanged(boolean var0);
+	void processKeyEvent(java.awt.event.KeyEvent var0, javax.swing.MenuElement[] var1, javax.swing.MenuSelectionManager var2);
+	void processMouseEvent(java.awt.event.MouseEvent var0, javax.swing.MenuElement[] var1, javax.swing.MenuSelectionManager var2);
 }
 

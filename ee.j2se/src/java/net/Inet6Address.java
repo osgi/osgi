@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,10 @@
 
 package java.net;
 public final class Inet6Address extends java.net.InetAddress {
+	public static java.net.Inet6Address getByAddress(java.lang.String var0, byte[] var1, int var2) throws java.net.UnknownHostException { return null; }
+	public static java.net.Inet6Address getByAddress(java.lang.String var0, byte[] var1, java.net.NetworkInterface var2) throws java.net.UnknownHostException { return null; }
+	public int getScopeId() { return 0; }
+	public java.net.NetworkInterface getScopedInterface() { return null; }
 	public boolean isIPv4CompatibleAddress() { return false; }
 	private Inet6Address() { } /* generated constructor to prevent compiler adding default public constructor */
 }

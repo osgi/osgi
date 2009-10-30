@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package java.awt.datatransfer;
-public abstract interface Transferable {
-	public abstract java.lang.Object getTransferData(java.awt.datatransfer.DataFlavor var0) throws java.awt.datatransfer.UnsupportedFlavorException, java.io.IOException;
-	public abstract java.awt.datatransfer.DataFlavor[] getTransferDataFlavors();
-	public abstract boolean isDataFlavorSupported(java.awt.datatransfer.DataFlavor var0);
+public interface Transferable {
+	java.lang.Object getTransferData(java.awt.datatransfer.DataFlavor var0) throws java.awt.datatransfer.UnsupportedFlavorException, java.io.IOException;
+	java.awt.datatransfer.DataFlavor[] getTransferDataFlavors();
+	boolean isDataFlavorSupported(java.awt.datatransfer.DataFlavor var0);
 }
 

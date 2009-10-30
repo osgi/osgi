@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,36 +15,7 @@
  */
 
 package javax.naming;
-public abstract interface Context {
-	public abstract java.lang.Object addToEnvironment(java.lang.String var0, java.lang.Object var1) throws javax.naming.NamingException;
-	public abstract void bind(java.lang.String var0, java.lang.Object var1) throws javax.naming.NamingException;
-	public abstract void bind(javax.naming.Name var0, java.lang.Object var1) throws javax.naming.NamingException;
-	public abstract void close() throws javax.naming.NamingException;
-	public abstract java.lang.String composeName(java.lang.String var0, java.lang.String var1) throws javax.naming.NamingException;
-	public abstract javax.naming.Name composeName(javax.naming.Name var0, javax.naming.Name var1) throws javax.naming.NamingException;
-	public abstract javax.naming.Context createSubcontext(java.lang.String var0) throws javax.naming.NamingException;
-	public abstract javax.naming.Context createSubcontext(javax.naming.Name var0) throws javax.naming.NamingException;
-	public abstract void destroySubcontext(java.lang.String var0) throws javax.naming.NamingException;
-	public abstract void destroySubcontext(javax.naming.Name var0) throws javax.naming.NamingException;
-	public abstract java.util.Hashtable getEnvironment() throws javax.naming.NamingException;
-	public abstract java.lang.String getNameInNamespace() throws javax.naming.NamingException;
-	public abstract javax.naming.NameParser getNameParser(java.lang.String var0) throws javax.naming.NamingException;
-	public abstract javax.naming.NameParser getNameParser(javax.naming.Name var0) throws javax.naming.NamingException;
-	public abstract javax.naming.NamingEnumeration list(java.lang.String var0) throws javax.naming.NamingException;
-	public abstract javax.naming.NamingEnumeration list(javax.naming.Name var0) throws javax.naming.NamingException;
-	public abstract javax.naming.NamingEnumeration listBindings(java.lang.String var0) throws javax.naming.NamingException;
-	public abstract javax.naming.NamingEnumeration listBindings(javax.naming.Name var0) throws javax.naming.NamingException;
-	public abstract java.lang.Object lookup(java.lang.String var0) throws javax.naming.NamingException;
-	public abstract java.lang.Object lookup(javax.naming.Name var0) throws javax.naming.NamingException;
-	public abstract java.lang.Object lookupLink(java.lang.String var0) throws javax.naming.NamingException;
-	public abstract java.lang.Object lookupLink(javax.naming.Name var0) throws javax.naming.NamingException;
-	public abstract void rebind(java.lang.String var0, java.lang.Object var1) throws javax.naming.NamingException;
-	public abstract void rebind(javax.naming.Name var0, java.lang.Object var1) throws javax.naming.NamingException;
-	public abstract java.lang.Object removeFromEnvironment(java.lang.String var0) throws javax.naming.NamingException;
-	public abstract void rename(java.lang.String var0, java.lang.String var1) throws javax.naming.NamingException;
-	public abstract void rename(javax.naming.Name var0, javax.naming.Name var1) throws javax.naming.NamingException;
-	public abstract void unbind(java.lang.String var0) throws javax.naming.NamingException;
-	public abstract void unbind(javax.naming.Name var0) throws javax.naming.NamingException;
+public interface Context {
 	public final static java.lang.String APPLET = "java.naming.applet";
 	public final static java.lang.String AUTHORITATIVE = "java.naming.authoritative";
 	public final static java.lang.String BATCHSIZE = "java.naming.batchsize";
@@ -60,5 +31,34 @@ public abstract interface Context {
 	public final static java.lang.String SECURITY_PROTOCOL = "java.naming.security.protocol";
 	public final static java.lang.String STATE_FACTORIES = "java.naming.factory.state";
 	public final static java.lang.String URL_PKG_PREFIXES = "java.naming.factory.url.pkgs";
+	java.lang.Object addToEnvironment(java.lang.String var0, java.lang.Object var1) throws javax.naming.NamingException;
+	void bind(java.lang.String var0, java.lang.Object var1) throws javax.naming.NamingException;
+	void bind(javax.naming.Name var0, java.lang.Object var1) throws javax.naming.NamingException;
+	void close() throws javax.naming.NamingException;
+	java.lang.String composeName(java.lang.String var0, java.lang.String var1) throws javax.naming.NamingException;
+	javax.naming.Name composeName(javax.naming.Name var0, javax.naming.Name var1) throws javax.naming.NamingException;
+	javax.naming.Context createSubcontext(java.lang.String var0) throws javax.naming.NamingException;
+	javax.naming.Context createSubcontext(javax.naming.Name var0) throws javax.naming.NamingException;
+	void destroySubcontext(java.lang.String var0) throws javax.naming.NamingException;
+	void destroySubcontext(javax.naming.Name var0) throws javax.naming.NamingException;
+	java.util.Hashtable<?,?> getEnvironment() throws javax.naming.NamingException;
+	java.lang.String getNameInNamespace() throws javax.naming.NamingException;
+	javax.naming.NameParser getNameParser(java.lang.String var0) throws javax.naming.NamingException;
+	javax.naming.NameParser getNameParser(javax.naming.Name var0) throws javax.naming.NamingException;
+	javax.naming.NamingEnumeration<javax.naming.NameClassPair> list(java.lang.String var0) throws javax.naming.NamingException;
+	javax.naming.NamingEnumeration<javax.naming.NameClassPair> list(javax.naming.Name var0) throws javax.naming.NamingException;
+	javax.naming.NamingEnumeration<javax.naming.Binding> listBindings(java.lang.String var0) throws javax.naming.NamingException;
+	javax.naming.NamingEnumeration<javax.naming.Binding> listBindings(javax.naming.Name var0) throws javax.naming.NamingException;
+	java.lang.Object lookup(java.lang.String var0) throws javax.naming.NamingException;
+	java.lang.Object lookup(javax.naming.Name var0) throws javax.naming.NamingException;
+	java.lang.Object lookupLink(java.lang.String var0) throws javax.naming.NamingException;
+	java.lang.Object lookupLink(javax.naming.Name var0) throws javax.naming.NamingException;
+	void rebind(java.lang.String var0, java.lang.Object var1) throws javax.naming.NamingException;
+	void rebind(javax.naming.Name var0, java.lang.Object var1) throws javax.naming.NamingException;
+	java.lang.Object removeFromEnvironment(java.lang.String var0) throws javax.naming.NamingException;
+	void rename(java.lang.String var0, java.lang.String var1) throws javax.naming.NamingException;
+	void rename(javax.naming.Name var0, javax.naming.Name var1) throws javax.naming.NamingException;
+	void unbind(java.lang.String var0) throws javax.naming.NamingException;
+	void unbind(javax.naming.Name var0) throws javax.naming.NamingException;
 }
 

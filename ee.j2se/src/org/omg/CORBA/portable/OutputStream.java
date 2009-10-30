@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package org.omg.CORBA.portable;
 public abstract class OutputStream extends java.io.OutputStream {
-	public OutputStream() { }
+	public OutputStream() { } 
 	public abstract org.omg.CORBA.portable.InputStream create_input_stream();
 	public org.omg.CORBA.ORB orb() { return null; }
 	public void write(int var0) throws java.io.IOException { }

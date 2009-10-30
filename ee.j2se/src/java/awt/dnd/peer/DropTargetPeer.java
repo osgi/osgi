@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package java.awt.dnd.peer;
-public abstract interface DropTargetPeer {
-	public abstract void addDropTarget(java.awt.dnd.DropTarget var0);
-	public abstract void removeDropTarget(java.awt.dnd.DropTarget var0);
+public interface DropTargetPeer {
+	void addDropTarget(java.awt.dnd.DropTarget var0);
+	void removeDropTarget(java.awt.dnd.DropTarget var0);
 }
 

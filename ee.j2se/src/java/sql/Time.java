@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.sql;
 public class Time extends java.util.Date {
-	/** @deprecated */ public Time(int var0, int var1, int var2) { }
-	public Time(long var0) { }
+	/** @deprecated */ public Time(int var0, int var1, int var2) { } 
+	public Time(long var0) { } 
 	public static java.sql.Time valueOf(java.lang.String var0) { return null; }
 }
 

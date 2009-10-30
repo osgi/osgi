@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.rmi;
 public class PortableRemoteObject {
-	protected PortableRemoteObject() throws java.rmi.RemoteException { }
+	protected PortableRemoteObject() throws java.rmi.RemoteException { } 
 	public static void connect(java.rmi.Remote var0, java.rmi.Remote var1) throws java.rmi.RemoteException { }
 	public static void exportObject(java.rmi.Remote var0) throws java.rmi.RemoteException { }
 	public static java.lang.Object narrow(java.lang.Object var0, java.lang.Class var1) { return null; }

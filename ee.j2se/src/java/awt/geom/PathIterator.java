@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,7 @@
  */
 
 package java.awt.geom;
-public abstract interface PathIterator {
-	public abstract int currentSegment(double[] var0);
-	public abstract int currentSegment(float[] var0);
-	public abstract int getWindingRule();
-	public abstract boolean isDone();
-	public abstract void next();
+public interface PathIterator {
 	public final static int SEG_CLOSE = 4;
 	public final static int SEG_CUBICTO = 3;
 	public final static int SEG_LINETO = 1;
@@ -28,5 +23,10 @@ public abstract interface PathIterator {
 	public final static int SEG_QUADTO = 2;
 	public final static int WIND_EVEN_ODD = 0;
 	public final static int WIND_NON_ZERO = 1;
+	int currentSegment(double[] var0);
+	int currentSegment(float[] var0);
+	int getWindingRule();
+	boolean isDone();
+	void next();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,22 @@
  */
 
 package javax.naming;
-public abstract interface Name extends java.io.Serializable, java.lang.Cloneable {
-	public abstract javax.naming.Name add(int var0, java.lang.String var1) throws javax.naming.InvalidNameException;
-	public abstract javax.naming.Name add(java.lang.String var0) throws javax.naming.InvalidNameException;
-	public abstract javax.naming.Name addAll(int var0, javax.naming.Name var1) throws javax.naming.InvalidNameException;
-	public abstract javax.naming.Name addAll(javax.naming.Name var0) throws javax.naming.InvalidNameException;
-	public abstract java.lang.Object clone();
-	public abstract int compareTo(java.lang.Object var0);
-	public abstract boolean endsWith(javax.naming.Name var0);
-	public abstract java.lang.String get(int var0);
-	public abstract java.util.Enumeration getAll();
-	public abstract javax.naming.Name getPrefix(int var0);
-	public abstract javax.naming.Name getSuffix(int var0);
-	public abstract boolean isEmpty();
-	public abstract java.lang.Object remove(int var0) throws javax.naming.InvalidNameException;
-	public abstract int size();
-	public abstract boolean startsWith(javax.naming.Name var0);
+public interface Name extends java.io.Serializable, java.lang.Cloneable, java.lang.Comparable<java.lang.Object> {
+	public final static long serialVersionUID = -3617482732056931635l;
+	javax.naming.Name add(int var0, java.lang.String var1) throws javax.naming.InvalidNameException;
+	javax.naming.Name add(java.lang.String var0) throws javax.naming.InvalidNameException;
+	javax.naming.Name addAll(int var0, javax.naming.Name var1) throws javax.naming.InvalidNameException;
+	javax.naming.Name addAll(javax.naming.Name var0) throws javax.naming.InvalidNameException;
+	java.lang.Object clone();
+	int compareTo(java.lang.Object var0);
+	boolean endsWith(javax.naming.Name var0);
+	java.lang.String get(int var0);
+	java.util.Enumeration<java.lang.String> getAll();
+	javax.naming.Name getPrefix(int var0);
+	javax.naming.Name getSuffix(int var0);
+	boolean isEmpty();
+	java.lang.Object remove(int var0) throws javax.naming.InvalidNameException;
+	int size();
+	boolean startsWith(javax.naming.Name var0);
 }
 

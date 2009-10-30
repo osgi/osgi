@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.text;
 public class PasswordView extends javax.swing.text.FieldView {
-	public PasswordView(javax.swing.text.Element var0) { super((javax.swing.text.Element) null); }
+	public PasswordView(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null); } 
 	protected int drawEchoCharacter(java.awt.Graphics var0, int var1, int var2, char var3) { return 0; }
 }
 

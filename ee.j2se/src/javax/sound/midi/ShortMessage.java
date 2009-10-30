@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,6 @@
 
 package javax.sound.midi;
 public class ShortMessage extends javax.sound.midi.MidiMessage {
-	public ShortMessage() { super((byte[]) null); }
-	protected ShortMessage(byte[] var0) { super((byte[]) null); }
-	public java.lang.Object clone() { return null; }
-	public int getChannel() { return 0; }
-	public int getCommand() { return 0; }
-	public int getData1() { return 0; }
-	public int getData2() { return 0; }
-	protected final int getDataLength(int var0) throws javax.sound.midi.InvalidMidiDataException { return 0; }
-	public void setMessage(int var0) throws javax.sound.midi.InvalidMidiDataException { }
-	public void setMessage(int var0, int var1, int var2) throws javax.sound.midi.InvalidMidiDataException { }
-	public void setMessage(int var0, int var1, int var2, int var3) throws javax.sound.midi.InvalidMidiDataException { }
 	public final static int ACTIVE_SENSING = 254;
 	public final static int CHANNEL_PRESSURE = 208;
 	public final static int CONTINUE = 251;
@@ -45,5 +34,16 @@ public class ShortMessage extends javax.sound.midi.MidiMessage {
 	public final static int SYSTEM_RESET = 255;
 	public final static int TIMING_CLOCK = 248;
 	public final static int TUNE_REQUEST = 246;
+	public ShortMessage()  { super((byte[]) null); } 
+	protected ShortMessage(byte[] var0)  { super((byte[]) null); } 
+	public java.lang.Object clone() { return null; }
+	public int getChannel() { return 0; }
+	public int getCommand() { return 0; }
+	public int getData1() { return 0; }
+	public int getData2() { return 0; }
+	protected final int getDataLength(int var0) throws javax.sound.midi.InvalidMidiDataException { return 0; }
+	public void setMessage(int var0) throws javax.sound.midi.InvalidMidiDataException { }
+	public void setMessage(int var0, int var1, int var2) throws javax.sound.midi.InvalidMidiDataException { }
+	public void setMessage(int var0, int var1, int var2, int var3) throws javax.sound.midi.InvalidMidiDataException { }
 }
 

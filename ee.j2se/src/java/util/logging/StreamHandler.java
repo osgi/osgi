@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.util.logging;
 public class StreamHandler extends java.util.logging.Handler {
-	public StreamHandler() { }
-	public StreamHandler(java.io.OutputStream var0, java.util.logging.Formatter var1) { }
+	public StreamHandler() { } 
+	public StreamHandler(java.io.OutputStream var0, java.util.logging.Formatter var1) { } 
 	public void close() { }
 	public void flush() { }
 	public void publish(java.util.logging.LogRecord var0) { }

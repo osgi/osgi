@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,12 @@
 
 package javax.swing.text;
 public class DefaultCaret extends java.awt.Rectangle implements java.awt.event.FocusListener, java.awt.event.MouseListener, java.awt.event.MouseMotionListener, javax.swing.text.Caret {
-	public DefaultCaret() { }
+	public final static int ALWAYS_UPDATE = 2;
+	public final static int NEVER_UPDATE = 1;
+	public final static int UPDATE_WHEN_ON_EDT = 0;
+	protected javax.swing.event.ChangeEvent changeEvent;
+	protected javax.swing.event.EventListenerList listenerList;
+	public DefaultCaret() { } 
 	public void addChangeListener(javax.swing.event.ChangeListener var0) { }
 	protected void adjustVisibility(java.awt.Rectangle var0) { }
 	protected void damage(java.awt.Rectangle var0) { }
@@ -28,11 +33,13 @@ public class DefaultCaret extends java.awt.Rectangle implements java.awt.event.F
 	public javax.swing.event.ChangeListener[] getChangeListeners() { return null; }
 	protected final javax.swing.text.JTextComponent getComponent() { return null; }
 	public int getDot() { return 0; }
-	public java.util.EventListener[] getListeners(java.lang.Class var0) { return null; }
+	public <T extends java.util.EventListener> T[] getListeners(java.lang.Class<T> var0) { return null; }
 	public java.awt.Point getMagicCaretPosition() { return null; }
 	public int getMark() { return 0; }
 	protected javax.swing.text.Highlighter.HighlightPainter getSelectionPainter() { return null; }
+	public int getUpdatePolicy() { return 0; }
 	public void install(javax.swing.text.JTextComponent var0) { }
+	public boolean isActive() { return false; }
 	public boolean isSelectionVisible() { return false; }
 	public boolean isVisible() { return false; }
 	public void mouseClicked(java.awt.event.MouseEvent var0) { }
@@ -52,8 +59,7 @@ public class DefaultCaret extends java.awt.Rectangle implements java.awt.event.F
 	public void setDot(int var0) { }
 	public void setMagicCaretPosition(java.awt.Point var0) { }
 	public void setSelectionVisible(boolean var0) { }
+	public void setUpdatePolicy(int var0) { }
 	public void setVisible(boolean var0) { }
-	protected javax.swing.event.ChangeEvent changeEvent;
-	protected javax.swing.event.EventListenerList listenerList;
 }
 

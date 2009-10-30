@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package java.beans;
-public abstract interface VetoableChangeListener extends java.util.EventListener {
-	public abstract void vetoableChange(java.beans.PropertyChangeEvent var0) throws java.beans.PropertyVetoException;
+public interface VetoableChangeListener extends java.util.EventListener {
+	void vetoableChange(java.beans.PropertyChangeEvent var0) throws java.beans.PropertyVetoException;
 }
 

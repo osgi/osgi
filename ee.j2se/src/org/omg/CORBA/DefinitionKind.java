@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package org.omg.CORBA;
 public class DefinitionKind implements org.omg.CORBA.portable.IDLEntity {
-	protected DefinitionKind(int var0) { }
-	public static org.omg.CORBA.DefinitionKind from_int(int var0) { return null; }
-	public int value() { return 0; }
 	public final static int _dk_AbstractInterface = 24;
 	public final static int _dk_Alias = 9;
 	public final static int _dk_Array = 16;
@@ -69,5 +66,8 @@ public class DefinitionKind implements org.omg.CORBA.portable.IDLEntity {
 	public final static org.omg.CORBA.DefinitionKind dk_Wstring; static { dk_Wstring = null; }
 	public final static org.omg.CORBA.DefinitionKind dk_all; static { dk_all = null; }
 	public final static org.omg.CORBA.DefinitionKind dk_none; static { dk_none = null; }
+	protected DefinitionKind(int var0) { } 
+	public static org.omg.CORBA.DefinitionKind from_int(int var0) { return null; }
+	public int value() { return 0; }
 }
 

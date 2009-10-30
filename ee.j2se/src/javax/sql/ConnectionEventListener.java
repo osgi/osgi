@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package javax.sql;
-public abstract interface ConnectionEventListener extends java.util.EventListener {
-	public abstract void connectionClosed(javax.sql.ConnectionEvent var0);
-	public abstract void connectionErrorOccurred(javax.sql.ConnectionEvent var0);
+public interface ConnectionEventListener extends java.util.EventListener {
+	void connectionClosed(javax.sql.ConnectionEvent var0);
+	void connectionErrorOccurred(javax.sql.ConnectionEvent var0);
 }
 

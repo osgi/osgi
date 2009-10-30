@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package javax.sound.midi;
 public abstract class MidiMessage implements java.lang.Cloneable {
-	protected MidiMessage(byte[] var0) { }
+	protected byte[] data;
+	protected int length;
+	protected MidiMessage(byte[] var0) { } 
 	public abstract java.lang.Object clone();
 	public int getLength() { return 0; }
 	public byte[] getMessage() { return null; }
 	public int getStatus() { return 0; }
 	protected void setMessage(byte[] var0, int var1) throws javax.sound.midi.InvalidMidiDataException { }
-	protected byte[] data;
-	protected int length;
 }
 

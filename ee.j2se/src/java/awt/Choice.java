@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,13 @@
 
 package java.awt;
 public class Choice extends java.awt.Component implements java.awt.ItemSelectable, javax.accessibility.Accessible {
-	public Choice() { }
+	protected class AccessibleAWTChoice extends java.awt.Component.AccessibleAWTComponent implements javax.accessibility.AccessibleAction {
+		public AccessibleAWTChoice() { } 
+		public boolean doAccessibleAction(int var0) { return false; }
+		public int getAccessibleActionCount() { return 0; }
+		public java.lang.String getAccessibleActionDescription(int var0) { return null; }
+	}
+	public Choice() { } 
 	public void add(java.lang.String var0) { }
 	public void addItem(java.lang.String var0) { }
 	public void addItemListener(java.awt.event.ItemListener var0) { }
@@ -35,11 +41,5 @@ public class Choice extends java.awt.Component implements java.awt.ItemSelectabl
 	public void removeItemListener(java.awt.event.ItemListener var0) { }
 	public void select(int var0) { }
 	public void select(java.lang.String var0) { }
-	protected class AccessibleAWTChoice extends java.awt.Component.AccessibleAWTComponent implements javax.accessibility.AccessibleAction {
-		public AccessibleAWTChoice() { }
-		public boolean doAccessibleAction(int var0) { return false; }
-		public int getAccessibleActionCount() { return 0; }
-		public java.lang.String getAccessibleActionDescription(int var0) { return null; }
-	}
 }
 

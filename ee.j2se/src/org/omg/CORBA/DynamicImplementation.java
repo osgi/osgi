@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package org.omg.CORBA;
 /** @deprecated */ public class DynamicImplementation extends org.omg.CORBA.portable.ObjectImpl {
-	public DynamicImplementation() { }
+	public DynamicImplementation() { } 
 	public java.lang.String[] _ids() { return null; }
 	/** @deprecated */ public void invoke(org.omg.CORBA.ServerRequest var0) { }
 }

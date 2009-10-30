@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package javax.imageio.metadata;
 public class IIOInvalidTreeException extends javax.imageio.IIOException {
-	public IIOInvalidTreeException(java.lang.String var0, java.lang.Throwable var1, org.w3c.dom.Node var2) { super((java.lang.String) null, (java.lang.Throwable) null); }
-	public IIOInvalidTreeException(java.lang.String var0, org.w3c.dom.Node var1) { super((java.lang.String) null, (java.lang.Throwable) null); }
-	public org.w3c.dom.Node getOffendingNode() { return null; }
 	protected org.w3c.dom.Node offendingNode;
+	public IIOInvalidTreeException(java.lang.String var0, java.lang.Throwable var1, org.w3c.dom.Node var2)  { super((java.lang.String) null, (java.lang.Throwable) null); } 
+	public IIOInvalidTreeException(java.lang.String var0, org.w3c.dom.Node var1)  { super((java.lang.String) null, (java.lang.Throwable) null); } 
+	public org.w3c.dom.Node getOffendingNode() { return null; }
 }
 

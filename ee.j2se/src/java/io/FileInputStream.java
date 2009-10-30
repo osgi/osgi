@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package java.io;
 public class FileInputStream extends java.io.InputStream {
-	public FileInputStream(java.io.File var0) throws java.io.FileNotFoundException { }
-	public FileInputStream(java.io.FileDescriptor var0) { }
-	public FileInputStream(java.lang.String var0) throws java.io.FileNotFoundException { }
-	public int available() throws java.io.IOException { return 0; }
+	public FileInputStream(java.io.File var0) throws java.io.FileNotFoundException { } 
+	public FileInputStream(java.io.FileDescriptor var0) { } 
+	public FileInputStream(java.lang.String var0) throws java.io.FileNotFoundException { } 
+	public native int available() throws java.io.IOException;
 	protected void finalize() throws java.io.IOException { }
 	public java.nio.channels.FileChannel getChannel() { return null; }
 	public final java.io.FileDescriptor getFD() throws java.io.IOException { return null; }
-	public int read() throws java.io.IOException { return 0; }
-	public long skip(long var0) throws java.io.IOException { return 0l; }
+	public native int read() throws java.io.IOException;
+	public native long skip(long var0) throws java.io.IOException;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package java.awt.event;
-public abstract interface WindowListener extends java.util.EventListener {
-	public abstract void windowActivated(java.awt.event.WindowEvent var0);
-	public abstract void windowClosed(java.awt.event.WindowEvent var0);
-	public abstract void windowClosing(java.awt.event.WindowEvent var0);
-	public abstract void windowDeactivated(java.awt.event.WindowEvent var0);
-	public abstract void windowDeiconified(java.awt.event.WindowEvent var0);
-	public abstract void windowIconified(java.awt.event.WindowEvent var0);
-	public abstract void windowOpened(java.awt.event.WindowEvent var0);
+public interface WindowListener extends java.util.EventListener {
+	void windowActivated(java.awt.event.WindowEvent var0);
+	void windowClosed(java.awt.event.WindowEvent var0);
+	void windowClosing(java.awt.event.WindowEvent var0);
+	void windowDeactivated(java.awt.event.WindowEvent var0);
+	void windowDeiconified(java.awt.event.WindowEvent var0);
+	void windowIconified(java.awt.event.WindowEvent var0);
+	void windowOpened(java.awt.event.WindowEvent var0);
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,16 @@
  */
 
 package java.sql;
-public abstract interface Array {
-	public abstract java.lang.Object getArray() throws java.sql.SQLException;
-	public abstract java.lang.Object getArray(long var0, int var1) throws java.sql.SQLException;
-	public abstract java.lang.Object getArray(long var0, int var1, java.util.Map var2) throws java.sql.SQLException;
-	public abstract java.lang.Object getArray(java.util.Map var0) throws java.sql.SQLException;
-	public abstract int getBaseType() throws java.sql.SQLException;
-	public abstract java.lang.String getBaseTypeName() throws java.sql.SQLException;
-	public abstract java.sql.ResultSet getResultSet() throws java.sql.SQLException;
-	public abstract java.sql.ResultSet getResultSet(long var0, int var1) throws java.sql.SQLException;
-	public abstract java.sql.ResultSet getResultSet(long var0, int var1, java.util.Map var2) throws java.sql.SQLException;
-	public abstract java.sql.ResultSet getResultSet(java.util.Map var0) throws java.sql.SQLException;
+public interface Array {
+	java.lang.Object getArray() throws java.sql.SQLException;
+	java.lang.Object getArray(long var0, int var1) throws java.sql.SQLException;
+	java.lang.Object getArray(long var0, int var1, java.util.Map<java.lang.String,java.lang.Class<?>> var2) throws java.sql.SQLException;
+	java.lang.Object getArray(java.util.Map<java.lang.String,java.lang.Class<?>> var0) throws java.sql.SQLException;
+	int getBaseType() throws java.sql.SQLException;
+	java.lang.String getBaseTypeName() throws java.sql.SQLException;
+	java.sql.ResultSet getResultSet() throws java.sql.SQLException;
+	java.sql.ResultSet getResultSet(long var0, int var1) throws java.sql.SQLException;
+	java.sql.ResultSet getResultSet(long var0, int var1, java.util.Map<java.lang.String,java.lang.Class<?>> var2) throws java.sql.SQLException;
+	java.sql.ResultSet getResultSet(java.util.Map<java.lang.String,java.lang.Class<?>> var0) throws java.sql.SQLException;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package org.xml.sax;
 public class SAXParseException extends org.xml.sax.SAXException {
-	public SAXParseException(java.lang.String var0, java.lang.String var1, java.lang.String var2, int var3, int var4) { super((java.lang.String) null, (java.lang.Exception) null); }
-	public SAXParseException(java.lang.String var0, java.lang.String var1, java.lang.String var2, int var3, int var4, java.lang.Exception var5) { super((java.lang.String) null, (java.lang.Exception) null); }
-	public SAXParseException(java.lang.String var0, org.xml.sax.Locator var1) { super((java.lang.String) null, (java.lang.Exception) null); }
-	public SAXParseException(java.lang.String var0, org.xml.sax.Locator var1, java.lang.Exception var2) { super((java.lang.String) null, (java.lang.Exception) null); }
+	public SAXParseException(java.lang.String var0, java.lang.String var1, java.lang.String var2, int var3, int var4) { } 
+	public SAXParseException(java.lang.String var0, java.lang.String var1, java.lang.String var2, int var3, int var4, java.lang.Exception var5) { } 
+	public SAXParseException(java.lang.String var0, org.xml.sax.Locator var1) { } 
+	public SAXParseException(java.lang.String var0, org.xml.sax.Locator var1, java.lang.Exception var2) { } 
 	public int getColumnNumber() { return 0; }
 	public int getLineNumber() { return 0; }
 	public java.lang.String getPublicId() { return null; }

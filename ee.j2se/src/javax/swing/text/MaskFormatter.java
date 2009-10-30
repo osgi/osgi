@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.swing.text;
 public class MaskFormatter extends javax.swing.text.DefaultFormatter {
-	public MaskFormatter() { }
-	public MaskFormatter(java.lang.String var0) throws java.text.ParseException { }
+	public MaskFormatter() { } 
+	public MaskFormatter(java.lang.String var0) throws java.text.ParseException { } 
 	public java.lang.String getInvalidCharacters() { return null; }
 	public java.lang.String getMask() { return null; }
 	public java.lang.String getPlaceholder() { return null; }

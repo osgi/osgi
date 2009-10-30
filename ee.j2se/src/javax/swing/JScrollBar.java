@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,20 @@
 
 package javax.swing;
 public class JScrollBar extends javax.swing.JComponent implements java.awt.Adjustable, javax.accessibility.Accessible {
-	public JScrollBar() { }
-	public JScrollBar(int var0) { }
-	public JScrollBar(int var0, int var1, int var2, int var3, int var4) { }
+	protected class AccessibleJScrollBar extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleValue {
+		protected AccessibleJScrollBar() { } 
+		public java.lang.Number getCurrentAccessibleValue() { return null; }
+		public java.lang.Number getMaximumAccessibleValue() { return null; }
+		public java.lang.Number getMinimumAccessibleValue() { return null; }
+		public boolean setCurrentAccessibleValue(java.lang.Number var0) { return false; }
+	}
+	protected int blockIncrement;
+	protected javax.swing.BoundedRangeModel model;
+	protected int orientation;
+	protected int unitIncrement;
+	public JScrollBar() { } 
+	public JScrollBar(int var0) { } 
+	public JScrollBar(int var0, int var1, int var2, int var3, int var4) { } 
 	public void addAdjustmentListener(java.awt.event.AdjustmentListener var0) { }
 	protected void fireAdjustmentValueChanged(int var0, int var1, int var2) { }
 	public java.awt.event.AdjustmentListener[] getAdjustmentListeners() { return null; }
@@ -46,16 +57,5 @@ public class JScrollBar extends javax.swing.JComponent implements java.awt.Adjus
 	public void setValueIsAdjusting(boolean var0) { }
 	public void setValues(int var0, int var1, int var2, int var3) { }
 	public void setVisibleAmount(int var0) { }
-	protected int blockIncrement;
-	protected javax.swing.BoundedRangeModel model;
-	protected int orientation;
-	protected int unitIncrement;
-	protected class AccessibleJScrollBar extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleValue {
-		protected AccessibleJScrollBar() { }
-		public java.lang.Number getCurrentAccessibleValue() { return null; }
-		public java.lang.Number getMaximumAccessibleValue() { return null; }
-		public java.lang.Number getMinimumAccessibleValue() { return null; }
-		public boolean setCurrentAccessibleValue(java.lang.Number var0) { return false; }
-	}
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.print.attribute.standard;
 public final class PrinterMoreInfo extends javax.print.attribute.URISyntax implements javax.print.attribute.PrintServiceAttribute {
-	public PrinterMoreInfo(java.net.URI var0) { super((java.net.URI) null); }
-	public final java.lang.Class getCategory() { return null; }
+	public PrinterMoreInfo(java.net.URI var0)  { super((java.net.URI) null); } 
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
 	public final java.lang.String getName() { return null; }
 }
 

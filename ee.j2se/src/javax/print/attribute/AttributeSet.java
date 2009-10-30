@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,19 @@
  */
 
 package javax.print.attribute;
-public abstract interface AttributeSet {
-	public abstract boolean add(javax.print.attribute.Attribute var0);
-	public abstract boolean addAll(javax.print.attribute.AttributeSet var0);
-	public abstract void clear();
-	public abstract boolean containsKey(java.lang.Class var0);
-	public abstract boolean containsValue(javax.print.attribute.Attribute var0);
-	public abstract boolean equals(java.lang.Object var0);
-	public abstract javax.print.attribute.Attribute get(java.lang.Class var0);
-	public abstract int hashCode();
-	public abstract boolean isEmpty();
-	public abstract boolean remove(java.lang.Class var0);
-	public abstract boolean remove(javax.print.attribute.Attribute var0);
-	public abstract int size();
-	public abstract javax.print.attribute.Attribute[] toArray();
+public interface AttributeSet {
+	boolean add(javax.print.attribute.Attribute var0);
+	boolean addAll(javax.print.attribute.AttributeSet var0);
+	void clear();
+	boolean containsKey(java.lang.Class<?> var0);
+	boolean containsValue(javax.print.attribute.Attribute var0);
+	boolean equals(java.lang.Object var0);
+	javax.print.attribute.Attribute get(java.lang.Class<?> var0);
+	int hashCode();
+	boolean isEmpty();
+	boolean remove(java.lang.Class<?> var0);
+	boolean remove(javax.print.attribute.Attribute var0);
+	int size();
+	javax.print.attribute.Attribute[] toArray();
 }
 

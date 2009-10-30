@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ public class DriverManager {
 	public static java.sql.Connection getConnection(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws java.sql.SQLException { return null; }
 	public static java.sql.Connection getConnection(java.lang.String var0, java.util.Properties var1) throws java.sql.SQLException { return null; }
 	public static java.sql.Driver getDriver(java.lang.String var0) throws java.sql.SQLException { return null; }
-	public static java.util.Enumeration getDrivers() { return null; }
+	public static java.util.Enumeration<java.sql.Driver> getDrivers() { return null; }
 	/** @deprecated */ public static java.io.PrintStream getLogStream() { return null; }
 	public static java.io.PrintWriter getLogWriter() { return null; }
 	public static int getLoginTimeout() { return 0; }

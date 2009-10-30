@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
 
 package java.security;
 public abstract class MessageDigestSpi {
-	public MessageDigestSpi() { }
+	public MessageDigestSpi() { } 
 	public java.lang.Object clone() throws java.lang.CloneNotSupportedException { return null; }
 	protected abstract byte[] engineDigest();
 	protected int engineDigest(byte[] var0, int var1, int var2) throws java.security.DigestException { return 0; }
 	protected int engineGetDigestLength() { return 0; }
 	protected abstract void engineReset();
 	protected abstract void engineUpdate(byte var0);
+	protected void engineUpdate(java.nio.ByteBuffer var0) { }
 	protected abstract void engineUpdate(byte[] var0, int var1, int var2);
 }
 

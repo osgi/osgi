@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.xml.transform;
 public abstract class TransformerFactory {
-	protected TransformerFactory() { }
+	protected TransformerFactory() { } 
 	public abstract javax.xml.transform.Source getAssociatedStylesheet(javax.xml.transform.Source var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) throws javax.xml.transform.TransformerConfigurationException;
 	public abstract java.lang.Object getAttribute(java.lang.String var0);
 	public abstract javax.xml.transform.ErrorListener getErrorListener();
@@ -28,6 +28,7 @@ public abstract class TransformerFactory {
 	public abstract javax.xml.transform.Transformer newTransformer(javax.xml.transform.Source var0) throws javax.xml.transform.TransformerConfigurationException;
 	public abstract void setAttribute(java.lang.String var0, java.lang.Object var1);
 	public abstract void setErrorListener(javax.xml.transform.ErrorListener var0);
+	public abstract void setFeature(java.lang.String var0, boolean var1) throws javax.xml.transform.TransformerConfigurationException;
 	public abstract void setURIResolver(javax.xml.transform.URIResolver var0);
 }
 

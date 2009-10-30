@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.plaf.basic;
 public class BasicIconFactory implements java.io.Serializable {
-	public BasicIconFactory() { }
+	public BasicIconFactory() { } 
 	public static javax.swing.Icon createEmptyFrameIcon() { return null; }
 	public static javax.swing.Icon getCheckBoxIcon() { return null; }
 	public static javax.swing.Icon getCheckBoxMenuItemIcon() { return null; }

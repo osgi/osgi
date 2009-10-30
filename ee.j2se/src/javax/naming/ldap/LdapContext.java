@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  */
 
 package javax.naming.ldap;
-public abstract interface LdapContext extends javax.naming.directory.DirContext {
-	public abstract javax.naming.ldap.ExtendedResponse extendedOperation(javax.naming.ldap.ExtendedRequest var0) throws javax.naming.NamingException;
-	public abstract javax.naming.ldap.Control[] getConnectControls() throws javax.naming.NamingException;
-	public abstract javax.naming.ldap.Control[] getRequestControls() throws javax.naming.NamingException;
-	public abstract javax.naming.ldap.Control[] getResponseControls() throws javax.naming.NamingException;
-	public abstract javax.naming.ldap.LdapContext newInstance(javax.naming.ldap.Control[] var0) throws javax.naming.NamingException;
-	public abstract void reconnect(javax.naming.ldap.Control[] var0) throws javax.naming.NamingException;
-	public abstract void setRequestControls(javax.naming.ldap.Control[] var0) throws javax.naming.NamingException;
+public interface LdapContext extends javax.naming.directory.DirContext {
 	public final static java.lang.String CONTROL_FACTORIES = "java.naming.factory.control";
+	javax.naming.ldap.ExtendedResponse extendedOperation(javax.naming.ldap.ExtendedRequest var0) throws javax.naming.NamingException;
+	javax.naming.ldap.Control[] getConnectControls() throws javax.naming.NamingException;
+	javax.naming.ldap.Control[] getRequestControls() throws javax.naming.NamingException;
+	javax.naming.ldap.Control[] getResponseControls() throws javax.naming.NamingException;
+	javax.naming.ldap.LdapContext newInstance(javax.naming.ldap.Control[] var0) throws javax.naming.NamingException;
+	void reconnect(javax.naming.ldap.Control[] var0) throws javax.naming.NamingException;
+	void setRequestControls(javax.naming.ldap.Control[] var0) throws javax.naming.NamingException;
 }
 

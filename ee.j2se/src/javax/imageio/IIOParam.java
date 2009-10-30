@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,17 @@
 
 package javax.imageio;
 public abstract class IIOParam {
-	protected IIOParam() { }
+	protected javax.imageio.IIOParamController controller;
+	protected javax.imageio.IIOParamController defaultController;
+	protected java.awt.Point destinationOffset;
+	protected javax.imageio.ImageTypeSpecifier destinationType;
+	protected int[] sourceBands;
+	protected java.awt.Rectangle sourceRegion;
+	protected int sourceXSubsampling;
+	protected int sourceYSubsampling;
+	protected int subsamplingXOffset;
+	protected int subsamplingYOffset;
+	protected IIOParam() { } 
 	public boolean activateController() { return false; }
 	public javax.imageio.IIOParamController getController() { return null; }
 	public javax.imageio.IIOParamController getDefaultController() { return null; }
@@ -35,15 +45,5 @@ public abstract class IIOParam {
 	public void setSourceBands(int[] var0) { }
 	public void setSourceRegion(java.awt.Rectangle var0) { }
 	public void setSourceSubsampling(int var0, int var1, int var2, int var3) { }
-	protected javax.imageio.IIOParamController controller;
-	protected javax.imageio.IIOParamController defaultController;
-	protected java.awt.Point destinationOffset;
-	protected javax.imageio.ImageTypeSpecifier destinationType;
-	protected int[] sourceBands;
-	protected java.awt.Rectangle sourceRegion;
-	protected int sourceXSubsampling;
-	protected int sourceYSubsampling;
-	protected int subsamplingXOffset;
-	protected int subsamplingYOffset;
 }
 

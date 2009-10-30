@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.security;
 public class GuardedObject implements java.io.Serializable {
-	public GuardedObject(java.lang.Object var0, java.security.Guard var1) { }
+	public GuardedObject(java.lang.Object var0, java.security.Guard var1) { } 
 	public java.lang.Object getObject() { return null; }
 }
 

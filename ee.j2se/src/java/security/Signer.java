@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package java.security;
 /** @deprecated */ public abstract class Signer extends java.security.Identity {
-	protected Signer() { }
-	public Signer(java.lang.String var0) { }
-	public Signer(java.lang.String var0, java.security.IdentityScope var1) throws java.security.KeyManagementException { }
+	protected Signer() { } 
+	public Signer(java.lang.String var0) { } 
+	public Signer(java.lang.String var0, java.security.IdentityScope var1) throws java.security.KeyManagementException { } 
 	public java.security.PrivateKey getPrivateKey() { return null; }
 	public final void setKeyPair(java.security.KeyPair var0) throws java.security.KeyException { }
 }

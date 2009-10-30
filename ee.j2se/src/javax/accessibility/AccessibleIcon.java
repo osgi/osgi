@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package javax.accessibility;
-public abstract interface AccessibleIcon {
-	public abstract java.lang.String getAccessibleIconDescription();
-	public abstract int getAccessibleIconHeight();
-	public abstract int getAccessibleIconWidth();
-	public abstract void setAccessibleIconDescription(java.lang.String var0);
+public interface AccessibleIcon {
+	java.lang.String getAccessibleIconDescription();
+	int getAccessibleIconHeight();
+	int getAccessibleIconWidth();
+	void setAccessibleIconDescription(java.lang.String var0);
 }
 

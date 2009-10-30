@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,10 @@
 
 package javax.swing.plaf.basic;
 public class BasicMenuBarUI extends javax.swing.plaf.MenuBarUI {
-	public BasicMenuBarUI() { }
+	protected javax.swing.event.ChangeListener changeListener;
+	protected java.awt.event.ContainerListener containerListener;
+	protected javax.swing.JMenuBar menuBar;
+	public BasicMenuBarUI() { } 
 	protected javax.swing.event.ChangeListener createChangeListener() { return null; }
 	protected java.awt.event.ContainerListener createContainerListener() { return null; }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
@@ -26,8 +29,5 @@ public class BasicMenuBarUI extends javax.swing.plaf.MenuBarUI {
 	protected void uninstallDefaults() { }
 	protected void uninstallKeyboardActions() { }
 	protected void uninstallListeners() { }
-	protected javax.swing.event.ChangeListener changeListener;
-	protected java.awt.event.ContainerListener containerListener;
-	protected javax.swing.JMenuBar menuBar;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,13 @@
 
 package java.awt;
 public class TextField extends java.awt.TextComponent {
-	public TextField() { }
-	public TextField(int var0) { }
-	public TextField(java.lang.String var0) { }
-	public TextField(java.lang.String var0, int var1) { }
+	protected class AccessibleAWTTextField extends java.awt.TextComponent.AccessibleAWTTextComponent {
+		protected AccessibleAWTTextField() { } 
+	}
+	public TextField() { } 
+	public TextField(int var0) { } 
+	public TextField(java.lang.String var0) { } 
+	public TextField(java.lang.String var0, int var1) { } 
 	public void addActionListener(java.awt.event.ActionListener var0) { }
 	public boolean echoCharIsSet() { return false; }
 	public java.awt.event.ActionListener[] getActionListeners() { return null; }
@@ -35,8 +38,5 @@ public class TextField extends java.awt.TextComponent {
 	public void setEchoChar(char var0) { }
 	/** @deprecated */ public void setEchoCharacter(char var0) { }
 	public void setText(java.lang.String var0) { }
-	protected class AccessibleAWTTextField extends java.awt.TextComponent.AccessibleAWTTextComponent {
-		protected AccessibleAWTTextField() { }
-	}
 }
 

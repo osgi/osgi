@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package javax.swing;
 public class SpinnerListModel extends javax.swing.AbstractSpinnerModel implements java.io.Serializable {
-	public SpinnerListModel() { }
-	public SpinnerListModel(java.util.List var0) { }
-	public SpinnerListModel(java.lang.Object[] var0) { }
-	public java.util.List getList() { return null; }
+	public SpinnerListModel() { } 
+	public SpinnerListModel(java.util.List<?> var0) { } 
+	public SpinnerListModel(java.lang.Object[] var0) { } 
+	public java.util.List<?> getList() { return null; }
 	public java.lang.Object getNextValue() { return null; }
 	public java.lang.Object getPreviousValue() { return null; }
 	public java.lang.Object getValue() { return null; }
-	public void setList(java.util.List var0) { }
+	public void setList(java.util.List<?> var0) { }
 	public void setValue(java.lang.Object var0) { }
 }
 

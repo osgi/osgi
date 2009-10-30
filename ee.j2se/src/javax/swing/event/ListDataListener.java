@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.swing.event;
-public abstract interface ListDataListener extends java.util.EventListener {
-	public abstract void contentsChanged(javax.swing.event.ListDataEvent var0);
-	public abstract void intervalAdded(javax.swing.event.ListDataEvent var0);
-	public abstract void intervalRemoved(javax.swing.event.ListDataEvent var0);
+public interface ListDataListener extends java.util.EventListener {
+	void contentsChanged(javax.swing.event.ListDataEvent var0);
+	void intervalAdded(javax.swing.event.ListDataEvent var0);
+	void intervalRemoved(javax.swing.event.ListDataEvent var0);
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.text;
 public class ComponentView extends javax.swing.text.View {
-	public ComponentView(javax.swing.text.Element var0) { super((javax.swing.text.Element) null); }
+	public ComponentView(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null); } 
 	protected java.awt.Component createComponent() { return null; }
 	public final java.awt.Component getComponent() { return null; }
 	public float getPreferredSpan(int var0) { return 0.0f; }

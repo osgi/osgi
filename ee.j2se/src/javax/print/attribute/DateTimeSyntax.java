@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.print.attribute;
 public abstract class DateTimeSyntax implements java.io.Serializable, java.lang.Cloneable {
-	protected DateTimeSyntax(java.util.Date var0) { }
+	protected DateTimeSyntax(java.util.Date var0) { } 
 	public java.util.Date getValue() { return null; }
 	public int hashCode() { return 0; }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.rmi.activation;
 public final class ActivationGroup_Stub extends java.rmi.server.RemoteStub implements java.rmi.Remote, java.rmi.activation.ActivationInstantiator {
-	public ActivationGroup_Stub(java.rmi.server.RemoteRef var0) { }
+	public ActivationGroup_Stub(java.rmi.server.RemoteRef var0) { } 
 	public java.rmi.MarshalledObject newInstance(java.rmi.activation.ActivationID var0, java.rmi.activation.ActivationDesc var1) throws java.rmi.RemoteException, java.rmi.activation.ActivationException { return null; }
 }
 

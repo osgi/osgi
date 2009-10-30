@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,16 @@
  */
 
 package java.awt;
-public abstract interface Shape {
-	public abstract boolean contains(double var0, double var1);
-	public abstract boolean contains(double var0, double var1, double var2, double var3);
-	public abstract boolean contains(java.awt.geom.Point2D var0);
-	public abstract boolean contains(java.awt.geom.Rectangle2D var0);
-	public abstract java.awt.Rectangle getBounds();
-	public abstract java.awt.geom.Rectangle2D getBounds2D();
-	public abstract java.awt.geom.PathIterator getPathIterator(java.awt.geom.AffineTransform var0);
-	public abstract java.awt.geom.PathIterator getPathIterator(java.awt.geom.AffineTransform var0, double var1);
-	public abstract boolean intersects(double var0, double var1, double var2, double var3);
-	public abstract boolean intersects(java.awt.geom.Rectangle2D var0);
+public interface Shape {
+	boolean contains(double var0, double var1);
+	boolean contains(double var0, double var1, double var2, double var3);
+	boolean contains(java.awt.geom.Point2D var0);
+	boolean contains(java.awt.geom.Rectangle2D var0);
+	java.awt.Rectangle getBounds();
+	java.awt.geom.Rectangle2D getBounds2D();
+	java.awt.geom.PathIterator getPathIterator(java.awt.geom.AffineTransform var0);
+	java.awt.geom.PathIterator getPathIterator(java.awt.geom.AffineTransform var0, double var1);
+	boolean intersects(double var0, double var1, double var2, double var3);
+	boolean intersects(java.awt.geom.Rectangle2D var0);
 }
 

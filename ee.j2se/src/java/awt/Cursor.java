@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,6 @@
 
 package java.awt;
 public class Cursor implements java.io.Serializable {
-	public Cursor(int var0) { }
-	protected Cursor(java.lang.String var0) { }
-	public static java.awt.Cursor getDefaultCursor() { return null; }
-	public java.lang.String getName() { return null; }
-	public static java.awt.Cursor getPredefinedCursor(int var0) { return null; }
-	public static java.awt.Cursor getSystemCustomCursor(java.lang.String var0) throws java.awt.AWTException { return null; }
-	public int getType() { return 0; }
 	public final static int CROSSHAIR_CURSOR = 1;
 	public final static int CUSTOM_CURSOR = -1;
 	public final static int DEFAULT_CURSOR = 0;
@@ -40,5 +33,12 @@ public class Cursor implements java.io.Serializable {
 	public final static int W_RESIZE_CURSOR = 10;
 	protected java.lang.String name;
 	protected static java.awt.Cursor[] predefined;
+	public Cursor(int var0) { } 
+	protected Cursor(java.lang.String var0) { } 
+	public static java.awt.Cursor getDefaultCursor() { return null; }
+	public java.lang.String getName() { return null; }
+	public static java.awt.Cursor getPredefinedCursor(int var0) { return null; }
+	public static java.awt.Cursor getSystemCustomCursor(java.lang.String var0) throws java.awt.AWTException { return null; }
+	public int getType() { return 0; }
 }
 

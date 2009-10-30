@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,58 @@
 
 package javax.swing;
 public class JInternalFrame extends javax.swing.JComponent implements javax.accessibility.Accessible, javax.swing.RootPaneContainer, javax.swing.WindowConstants {
-	public JInternalFrame() { }
-	public JInternalFrame(java.lang.String var0) { }
-	public JInternalFrame(java.lang.String var0, boolean var1) { }
-	public JInternalFrame(java.lang.String var0, boolean var1, boolean var2) { }
-	public JInternalFrame(java.lang.String var0, boolean var1, boolean var2, boolean var3) { }
-	public JInternalFrame(java.lang.String var0, boolean var1, boolean var2, boolean var3, boolean var4) { }
+	protected class AccessibleJInternalFrame extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleValue {
+		protected AccessibleJInternalFrame() { } 
+		public java.lang.Number getCurrentAccessibleValue() { return null; }
+		public java.lang.Number getMaximumAccessibleValue() { return null; }
+		public java.lang.Number getMinimumAccessibleValue() { return null; }
+		public boolean setCurrentAccessibleValue(java.lang.Number var0) { return false; }
+	}
+	public static class JDesktopIcon extends javax.swing.JComponent implements javax.accessibility.Accessible {
+		protected class AccessibleJDesktopIcon extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleValue {
+			protected AccessibleJDesktopIcon() { } 
+			public java.lang.Number getCurrentAccessibleValue() { return null; }
+			public java.lang.Number getMaximumAccessibleValue() { return null; }
+			public java.lang.Number getMinimumAccessibleValue() { return null; }
+			public boolean setCurrentAccessibleValue(java.lang.Number var0) { return false; }
+		}
+		public JDesktopIcon(javax.swing.JInternalFrame var0) { } 
+		public javax.swing.JDesktopPane getDesktopPane() { return null; }
+		public javax.swing.JInternalFrame getInternalFrame() { return null; }
+		public javax.swing.plaf.DesktopIconUI getUI() { return null; }
+		public void setInternalFrame(javax.swing.JInternalFrame var0) { }
+		public void setUI(javax.swing.plaf.DesktopIconUI var0) { }
+	}
+	public final static java.lang.String CONTENT_PANE_PROPERTY = "contentPane";
+	public final static java.lang.String FRAME_ICON_PROPERTY = "frameIcon";
+	public final static java.lang.String GLASS_PANE_PROPERTY = "glassPane";
+	public final static java.lang.String IS_CLOSED_PROPERTY = "closed";
+	public final static java.lang.String IS_ICON_PROPERTY = "icon";
+	public final static java.lang.String IS_MAXIMUM_PROPERTY = "maximum";
+	public final static java.lang.String IS_SELECTED_PROPERTY = "selected";
+	public final static java.lang.String LAYERED_PANE_PROPERTY = "layeredPane";
+	public final static java.lang.String MENU_BAR_PROPERTY = "JMenuBar";
+	public final static java.lang.String ROOT_PANE_PROPERTY = "rootPane";
+	public final static java.lang.String TITLE_PROPERTY = "title";
+	protected boolean closable;
+	protected javax.swing.JInternalFrame.JDesktopIcon desktopIcon;
+	protected javax.swing.Icon frameIcon;
+	protected boolean iconable;
+	protected boolean isClosed;
+	protected boolean isIcon;
+	protected boolean isMaximum;
+	protected boolean isSelected;
+	protected boolean maximizable;
+	protected boolean resizable;
+	protected javax.swing.JRootPane rootPane;
+	protected boolean rootPaneCheckingEnabled;
+	protected java.lang.String title;
+	public JInternalFrame() { } 
+	public JInternalFrame(java.lang.String var0) { } 
+	public JInternalFrame(java.lang.String var0, boolean var1) { } 
+	public JInternalFrame(java.lang.String var0, boolean var1, boolean var2) { } 
+	public JInternalFrame(java.lang.String var0, boolean var1, boolean var2, boolean var3) { } 
+	public JInternalFrame(java.lang.String var0, boolean var1, boolean var2, boolean var3, boolean var4) { } 
 	public void addInternalFrameListener(javax.swing.event.InternalFrameListener var0) { }
 	protected javax.swing.JRootPane createRootPane() { return null; }
 	public void dispose() { }
@@ -86,51 +132,5 @@ public class JInternalFrame extends javax.swing.JComponent implements javax.acce
 	public void setUI(javax.swing.plaf.InternalFrameUI var0) { }
 	public void toBack() { }
 	public void toFront() { }
-	public final static java.lang.String CONTENT_PANE_PROPERTY = "contentPane";
-	public final static java.lang.String FRAME_ICON_PROPERTY = "frameIcon";
-	public final static java.lang.String GLASS_PANE_PROPERTY = "glassPane";
-	public final static java.lang.String IS_CLOSED_PROPERTY = "closed";
-	public final static java.lang.String IS_ICON_PROPERTY = "icon";
-	public final static java.lang.String IS_MAXIMUM_PROPERTY = "maximum";
-	public final static java.lang.String IS_SELECTED_PROPERTY = "selected";
-	public final static java.lang.String LAYERED_PANE_PROPERTY = "layeredPane";
-	public final static java.lang.String MENU_BAR_PROPERTY = "JMenuBar";
-	public final static java.lang.String ROOT_PANE_PROPERTY = "rootPane";
-	public final static java.lang.String TITLE_PROPERTY = "title";
-	protected boolean closable;
-	protected javax.swing.JInternalFrame.JDesktopIcon desktopIcon;
-	protected javax.swing.Icon frameIcon;
-	protected boolean iconable;
-	protected boolean isClosed;
-	protected boolean isIcon;
-	protected boolean isMaximum;
-	protected boolean isSelected;
-	protected boolean maximizable;
-	protected boolean resizable;
-	protected javax.swing.JRootPane rootPane;
-	protected boolean rootPaneCheckingEnabled;
-	protected java.lang.String title;
-	protected class AccessibleJInternalFrame extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleValue {
-		protected AccessibleJInternalFrame() { }
-		public java.lang.Number getCurrentAccessibleValue() { return null; }
-		public java.lang.Number getMaximumAccessibleValue() { return null; }
-		public java.lang.Number getMinimumAccessibleValue() { return null; }
-		public boolean setCurrentAccessibleValue(java.lang.Number var0) { return false; }
-	}
-	public static class JDesktopIcon extends javax.swing.JComponent implements javax.accessibility.Accessible {
-		public JDesktopIcon(javax.swing.JInternalFrame var0) { }
-		public javax.swing.JDesktopPane getDesktopPane() { return null; }
-		public javax.swing.JInternalFrame getInternalFrame() { return null; }
-		public javax.swing.plaf.DesktopIconUI getUI() { return null; }
-		public void setInternalFrame(javax.swing.JInternalFrame var0) { }
-		public void setUI(javax.swing.plaf.DesktopIconUI var0) { }
-		protected class AccessibleJDesktopIcon extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleValue {
-			protected AccessibleJDesktopIcon() { }
-			public java.lang.Number getCurrentAccessibleValue() { return null; }
-			public java.lang.Number getMaximumAccessibleValue() { return null; }
-			public java.lang.Number getMinimumAccessibleValue() { return null; }
-			public boolean setCurrentAccessibleValue(java.lang.Number var0) { return false; }
-		}
-	}
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package java.awt.peer;
-public abstract interface MenuBarPeer extends java.awt.peer.MenuComponentPeer {
-	public abstract void addHelpMenu(java.awt.Menu var0);
-	public abstract void addMenu(java.awt.Menu var0);
-	public abstract void delMenu(int var0);
+public interface MenuBarPeer extends java.awt.peer.MenuComponentPeer {
+	void addHelpMenu(java.awt.Menu var0);
+	void addMenu(java.awt.Menu var0);
+	void delMenu(int var0);
 }
 

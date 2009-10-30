@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,32 @@
 
 package javax.swing.plaf.basic;
 public class BasicScrollPaneUI extends javax.swing.plaf.ScrollPaneUI implements javax.swing.ScrollPaneConstants {
-	public BasicScrollPaneUI() { }
+	public class HSBChangeListener implements javax.swing.event.ChangeListener {
+		public HSBChangeListener() { } 
+		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
+	}
+	protected class MouseWheelHandler implements java.awt.event.MouseWheelListener {
+		protected MouseWheelHandler() { } 
+		public void mouseWheelMoved(java.awt.event.MouseWheelEvent var0) { }
+	}
+	public class PropertyChangeHandler implements java.beans.PropertyChangeListener {
+		public PropertyChangeHandler() { } 
+		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
+	}
+	public class VSBChangeListener implements javax.swing.event.ChangeListener {
+		public VSBChangeListener() { } 
+		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
+	}
+	public class ViewportChangeHandler implements javax.swing.event.ChangeListener {
+		public ViewportChangeHandler() { } 
+		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
+	}
+	protected javax.swing.event.ChangeListener hsbChangeListener;
+	protected javax.swing.JScrollPane scrollpane;
+	protected java.beans.PropertyChangeListener spPropertyChangeListener;
+	protected javax.swing.event.ChangeListener viewportChangeListener;
+	protected javax.swing.event.ChangeListener vsbChangeListener;
+	public BasicScrollPaneUI() { } 
 	protected javax.swing.event.ChangeListener createHSBChangeListener() { return null; }
 	protected java.awt.event.MouseWheelListener createMouseWheelListener() { return null; }
 	protected java.beans.PropertyChangeListener createPropertyChangeListener() { return null; }
@@ -34,30 +59,5 @@ public class BasicScrollPaneUI extends javax.swing.plaf.ScrollPaneUI implements 
 	protected void updateRowHeader(java.beans.PropertyChangeEvent var0) { }
 	protected void updateScrollBarDisplayPolicy(java.beans.PropertyChangeEvent var0) { }
 	protected void updateViewport(java.beans.PropertyChangeEvent var0) { }
-	protected javax.swing.event.ChangeListener hsbChangeListener;
-	protected javax.swing.JScrollPane scrollpane;
-	protected java.beans.PropertyChangeListener spPropertyChangeListener;
-	protected javax.swing.event.ChangeListener viewportChangeListener;
-	protected javax.swing.event.ChangeListener vsbChangeListener;
-	public class HSBChangeListener implements javax.swing.event.ChangeListener {
-		public HSBChangeListener() { }
-		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
-	}
-	protected class MouseWheelHandler implements java.awt.event.MouseWheelListener {
-		protected MouseWheelHandler() { }
-		public void mouseWheelMoved(java.awt.event.MouseWheelEvent var0) { }
-	}
-	public class PropertyChangeHandler implements java.beans.PropertyChangeListener {
-		public PropertyChangeHandler() { }
-		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
-	}
-	public class VSBChangeListener implements javax.swing.event.ChangeListener {
-		public VSBChangeListener() { }
-		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
-	}
-	public class ViewportChangeHandler implements javax.swing.event.ChangeListener {
-		public ViewportChangeHandler() { }
-		public void stateChanged(javax.swing.event.ChangeEvent var0) { }
-	}
 }
 

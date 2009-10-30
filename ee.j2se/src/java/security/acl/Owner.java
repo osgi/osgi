@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package java.security.acl;
-public abstract interface Owner {
-	public abstract boolean addOwner(java.security.Principal var0, java.security.Principal var1) throws java.security.acl.NotOwnerException;
-	public abstract boolean deleteOwner(java.security.Principal var0, java.security.Principal var1) throws java.security.acl.LastOwnerException, java.security.acl.NotOwnerException;
-	public abstract boolean isOwner(java.security.Principal var0);
+public interface Owner {
+	boolean addOwner(java.security.Principal var0, java.security.Principal var1) throws java.security.acl.NotOwnerException;
+	boolean deleteOwner(java.security.Principal var0, java.security.Principal var1) throws java.security.acl.LastOwnerException, java.security.acl.NotOwnerException;
+	boolean isOwner(java.security.Principal var0);
 }
 

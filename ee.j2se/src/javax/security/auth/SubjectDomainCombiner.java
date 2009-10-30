@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.security.auth;
 public class SubjectDomainCombiner implements java.security.DomainCombiner {
-	public SubjectDomainCombiner(javax.security.auth.Subject var0) { }
+	public SubjectDomainCombiner(javax.security.auth.Subject var0) { } 
 	public java.security.ProtectionDomain[] combine(java.security.ProtectionDomain[] var0, java.security.ProtectionDomain[] var1) { return null; }
 	public javax.security.auth.Subject getSubject() { return null; }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package java.awt.event;
-public abstract interface MouseWheelListener extends java.util.EventListener {
-	public abstract void mouseWheelMoved(java.awt.event.MouseWheelEvent var0);
+public interface MouseWheelListener extends java.util.EventListener {
+	void mouseWheelMoved(java.awt.event.MouseWheelEvent var0);
 }
 

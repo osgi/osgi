@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.io;
 /** @deprecated */ public class LineNumberInputStream extends java.io.FilterInputStream {
-	public LineNumberInputStream(java.io.InputStream var0) { super((java.io.InputStream) null); }
+	public LineNumberInputStream(java.io.InputStream var0)  { super((java.io.InputStream) null); } 
 	public int getLineNumber() { return 0; }
 	public void mark(int var0) { }
 	public void reset() throws java.io.IOException { }

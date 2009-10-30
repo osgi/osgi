@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package javax.xml.transform.sax;
 public class SAXResult implements javax.xml.transform.Result {
-	public SAXResult() { }
-	public SAXResult(org.xml.sax.ContentHandler var0) { }
+	public final static java.lang.String FEATURE = "http://javax.xml.transform.sax.SAXResult/feature";
+	public SAXResult() { } 
+	public SAXResult(org.xml.sax.ContentHandler var0) { } 
 	public org.xml.sax.ContentHandler getHandler() { return null; }
 	public org.xml.sax.ext.LexicalHandler getLexicalHandler() { return null; }
 	public java.lang.String getSystemId() { return null; }
 	public void setHandler(org.xml.sax.ContentHandler var0) { }
 	public void setLexicalHandler(org.xml.sax.ext.LexicalHandler var0) { }
 	public void setSystemId(java.lang.String var0) { }
-	public final static java.lang.String FEATURE = "http://javax.xml.transform.sax.SAXResult/feature";
 }
 

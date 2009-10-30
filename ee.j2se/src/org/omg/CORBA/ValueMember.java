@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package org.omg.CORBA;
 public final class ValueMember implements org.omg.CORBA.portable.IDLEntity {
-	public ValueMember() { }
-	public ValueMember(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3, org.omg.CORBA.TypeCode var4, org.omg.CORBA.IDLType var5, short var6) { }
 	public short access;
 	public java.lang.String defined_in;
 	public java.lang.String id;
@@ -25,5 +23,7 @@ public final class ValueMember implements org.omg.CORBA.portable.IDLEntity {
 	public org.omg.CORBA.TypeCode type;
 	public org.omg.CORBA.IDLType type_def;
 	public java.lang.String version;
+	public ValueMember() { } 
+	public ValueMember(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3, org.omg.CORBA.TypeCode var4, org.omg.CORBA.IDLType var5, short var6) { } 
 }
 

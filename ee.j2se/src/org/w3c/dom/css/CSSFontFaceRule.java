@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package org.w3c.dom.css;
-public abstract interface CSSFontFaceRule extends org.w3c.dom.css.CSSRule {
-	public abstract org.w3c.dom.css.CSSStyleDeclaration getStyle();
+public interface CSSFontFaceRule extends org.w3c.dom.css.CSSRule {
+	org.w3c.dom.css.CSSStyleDeclaration getStyle();
 }
 

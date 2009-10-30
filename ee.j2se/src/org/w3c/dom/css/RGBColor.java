@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package org.w3c.dom.css;
-public abstract interface RGBColor {
-	public abstract org.w3c.dom.css.CSSPrimitiveValue getBlue();
-	public abstract org.w3c.dom.css.CSSPrimitiveValue getGreen();
-	public abstract org.w3c.dom.css.CSSPrimitiveValue getRed();
+public interface RGBColor {
+	org.w3c.dom.css.CSSPrimitiveValue getBlue();
+	org.w3c.dom.css.CSSPrimitiveValue getGreen();
+	org.w3c.dom.css.CSSPrimitiveValue getRed();
 }
 

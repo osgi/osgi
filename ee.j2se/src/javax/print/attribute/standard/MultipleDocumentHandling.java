@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package javax.print.attribute.standard;
 public class MultipleDocumentHandling extends javax.print.attribute.EnumSyntax implements javax.print.attribute.PrintJobAttribute, javax.print.attribute.PrintRequestAttribute {
-	protected MultipleDocumentHandling(int var0) { super(0); }
-	public final java.lang.Class getCategory() { return null; }
-	public final java.lang.String getName() { return null; }
 	public final static javax.print.attribute.standard.MultipleDocumentHandling SEPARATE_DOCUMENTS_COLLATED_COPIES; static { SEPARATE_DOCUMENTS_COLLATED_COPIES = null; }
 	public final static javax.print.attribute.standard.MultipleDocumentHandling SEPARATE_DOCUMENTS_UNCOLLATED_COPIES; static { SEPARATE_DOCUMENTS_UNCOLLATED_COPIES = null; }
 	public final static javax.print.attribute.standard.MultipleDocumentHandling SINGLE_DOCUMENT; static { SINGLE_DOCUMENT = null; }
 	public final static javax.print.attribute.standard.MultipleDocumentHandling SINGLE_DOCUMENT_NEW_SHEET; static { SINGLE_DOCUMENT_NEW_SHEET = null; }
+	protected MultipleDocumentHandling(int var0)  { super(0); } 
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
+	public final java.lang.String getName() { return null; }
 }
 

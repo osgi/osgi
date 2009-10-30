@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package javax.sound.sampled;
 public abstract class CompoundControl extends javax.sound.sampled.Control {
-	protected CompoundControl(javax.sound.sampled.CompoundControl.Type var0, javax.sound.sampled.Control[] var1) { super((javax.sound.sampled.Control.Type) null); }
-	public javax.sound.sampled.Control[] getMemberControls() { return null; }
 	public static class Type extends javax.sound.sampled.Control.Type {
-		protected Type(java.lang.String var0) { super((java.lang.String) null); }
+		protected Type(java.lang.String var0)  { super((java.lang.String) null); } 
 	}
+	protected CompoundControl(javax.sound.sampled.CompoundControl.Type var0, javax.sound.sampled.Control[] var1)  { super((javax.sound.sampled.Control.Type) null); } 
+	public javax.sound.sampled.Control[] getMemberControls() { return null; }
 }
 

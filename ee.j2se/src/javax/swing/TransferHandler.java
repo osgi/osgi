@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,12 @@
 
 package javax.swing;
 public class TransferHandler implements java.io.Serializable {
-	protected TransferHandler() { }
-	public TransferHandler(java.lang.String var0) { }
+	public final static int COPY = 1;
+	public final static int COPY_OR_MOVE = 3;
+	public final static int MOVE = 2;
+	public final static int NONE = 0;
+	protected TransferHandler() { } 
+	public TransferHandler(java.lang.String var0) { } 
 	public boolean canImport(javax.swing.JComponent var0, java.awt.datatransfer.DataFlavor[] var1) { return false; }
 	protected java.awt.datatransfer.Transferable createTransferable(javax.swing.JComponent var0) { return null; }
 	public void exportAsDrag(javax.swing.JComponent var0, java.awt.event.InputEvent var1, int var2) { }
@@ -29,9 +33,5 @@ public class TransferHandler implements java.io.Serializable {
 	public int getSourceActions(javax.swing.JComponent var0) { return 0; }
 	public javax.swing.Icon getVisualRepresentation(java.awt.datatransfer.Transferable var0) { return null; }
 	public boolean importData(javax.swing.JComponent var0, java.awt.datatransfer.Transferable var1) { return false; }
-	public final static int COPY = 1;
-	public final static int COPY_OR_MOVE = 3;
-	public final static int MOVE = 2;
-	public final static int NONE = 0;
 }
 

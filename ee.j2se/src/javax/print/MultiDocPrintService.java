@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package javax.print;
-public abstract interface MultiDocPrintService extends javax.print.PrintService {
-	public abstract javax.print.MultiDocPrintJob createMultiDocPrintJob();
+public interface MultiDocPrintService extends javax.print.PrintService {
+	javax.print.MultiDocPrintJob createMultiDocPrintJob();
 }
 

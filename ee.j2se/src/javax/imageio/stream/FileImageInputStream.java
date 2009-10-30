@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.imageio.stream;
 public class FileImageInputStream extends javax.imageio.stream.ImageInputStreamImpl {
-	public FileImageInputStream(java.io.File var0) throws java.io.IOException { }
-	public FileImageInputStream(java.io.RandomAccessFile var0) { }
+	public FileImageInputStream(java.io.File var0) throws java.io.IOException { } 
+	public FileImageInputStream(java.io.RandomAccessFile var0) { } 
 	public int read() throws java.io.IOException { return 0; }
 	public int read(byte[] var0, int var1, int var2) throws java.io.IOException { return 0; }
 }

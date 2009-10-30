@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package org.xml.sax;
-/** @deprecated */ public abstract interface AttributeList {
-	public abstract int getLength();
-	public abstract java.lang.String getName(int var0);
-	public abstract java.lang.String getType(int var0);
-	public abstract java.lang.String getType(java.lang.String var0);
-	public abstract java.lang.String getValue(int var0);
-	public abstract java.lang.String getValue(java.lang.String var0);
+/** @deprecated */ public interface AttributeList {
+	int getLength();
+	java.lang.String getName(int var0);
+	java.lang.String getType(int var0);
+	java.lang.String getType(java.lang.String var0);
+	java.lang.String getValue(int var0);
+	java.lang.String getValue(java.lang.String var0);
 }
 

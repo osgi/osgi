@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package javax.swing;
 public class MenuSelectionManager {
-	public MenuSelectionManager() { }
+	protected javax.swing.event.ChangeEvent changeEvent;
+	protected javax.swing.event.EventListenerList listenerList;
+	public MenuSelectionManager() { } 
 	public void addChangeListener(javax.swing.event.ChangeListener var0) { }
 	public void clearSelectedPath() { }
 	public java.awt.Component componentForPoint(java.awt.Component var0, java.awt.Point var1) { return null; }
@@ -29,7 +31,5 @@ public class MenuSelectionManager {
 	public void processMouseEvent(java.awt.event.MouseEvent var0) { }
 	public void removeChangeListener(javax.swing.event.ChangeListener var0) { }
 	public void setSelectedPath(javax.swing.MenuElement[] var0) { }
-	protected javax.swing.event.ChangeEvent changeEvent;
-	protected javax.swing.event.EventListenerList listenerList;
 }
 

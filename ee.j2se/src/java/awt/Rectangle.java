@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,17 @@
 
 package java.awt;
 public class Rectangle extends java.awt.geom.Rectangle2D implements java.awt.Shape, java.io.Serializable {
-	public Rectangle() { }
-	public Rectangle(int var0, int var1) { }
-	public Rectangle(int var0, int var1, int var2, int var3) { }
-	public Rectangle(java.awt.Dimension var0) { }
-	public Rectangle(java.awt.Point var0) { }
-	public Rectangle(java.awt.Point var0, java.awt.Dimension var1) { }
-	public Rectangle(java.awt.Rectangle var0) { }
+	public int height;
+	public int width;
+	public int x;
+	public int y;
+	public Rectangle() { } 
+	public Rectangle(int var0, int var1) { } 
+	public Rectangle(int var0, int var1, int var2, int var3) { } 
+	public Rectangle(java.awt.Dimension var0) { } 
+	public Rectangle(java.awt.Point var0) { } 
+	public Rectangle(java.awt.Point var0, java.awt.Dimension var1) { } 
+	public Rectangle(java.awt.Rectangle var0) { } 
 	public void add(int var0, int var1) { }
 	public void add(java.awt.Point var0) { }
 	public void add(java.awt.Rectangle var0) { }
@@ -56,9 +60,5 @@ public class Rectangle extends java.awt.geom.Rectangle2D implements java.awt.Sha
 	public void setSize(java.awt.Dimension var0) { }
 	public void translate(int var0, int var1) { }
 	public java.awt.Rectangle union(java.awt.Rectangle var0) { return null; }
-	public int height;
-	public int width;
-	public int x;
-	public int y;
 }
 

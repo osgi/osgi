@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package java.util;
-public class HashSet extends java.util.AbstractSet implements java.io.Serializable, java.lang.Cloneable, java.util.Set {
-	public HashSet() { }
-	public HashSet(int var0) { }
-	public HashSet(int var0, float var1) { }
-	public HashSet(java.util.Collection var0) { }
+public class HashSet<E> extends java.util.AbstractSet<E> implements java.io.Serializable, java.lang.Cloneable, java.util.Set<E> {
+	public HashSet() { } 
+	public HashSet(int var0) { } 
+	public HashSet(int var0, float var1) { } 
+	public HashSet(java.util.Collection<? extends E> var0) { } 
 	public java.lang.Object clone() { return null; }
-	public java.util.Iterator iterator() { return null; }
+	public java.util.Iterator<E> iterator() { return null; }
 	public int size() { return 0; }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,7 @@
  */
 
 package java.awt.font;
-public abstract interface OpenType {
-	public abstract byte[] getFontTable(int var0);
-	public abstract byte[] getFontTable(int var0, int var1, int var2);
-	public abstract byte[] getFontTable(java.lang.String var0);
-	public abstract byte[] getFontTable(java.lang.String var0, int var1, int var2);
-	public abstract int getFontTableSize(int var0);
-	public abstract int getFontTableSize(java.lang.String var0);
-	public abstract int getVersion();
+public interface OpenType {
 	public final static int TAG_ACNT = 1633906292;
 	public final static int TAG_AVAR = 1635148146;
 	public final static int TAG_BASE = 1111577413;
@@ -74,5 +67,12 @@ public abstract interface OpenType {
 	public final static int TAG_VDMX = 1447316824;
 	public final static int TAG_VHEA = 1986553185;
 	public final static int TAG_VMTX = 1986884728;
+	byte[] getFontTable(int var0);
+	byte[] getFontTable(int var0, int var1, int var2);
+	byte[] getFontTable(java.lang.String var0);
+	byte[] getFontTable(java.lang.String var0, int var1, int var2);
+	int getFontTableSize(int var0);
+	int getFontTableSize(java.lang.String var0);
+	int getVersion();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package java.net;
 public final class DatagramPacket {
-	public DatagramPacket(byte[] var0, int var1) { }
-	public DatagramPacket(byte[] var0, int var1, int var2) { }
-	public DatagramPacket(byte[] var0, int var1, int var2, java.net.InetAddress var3, int var4) { }
-	public DatagramPacket(byte[] var0, int var1, int var2, java.net.SocketAddress var3) throws java.net.SocketException { }
-	public DatagramPacket(byte[] var0, int var1, java.net.InetAddress var2, int var3) { }
-	public DatagramPacket(byte[] var0, int var1, java.net.SocketAddress var2) throws java.net.SocketException { }
+	public DatagramPacket(byte[] var0, int var1) { } 
+	public DatagramPacket(byte[] var0, int var1, int var2) { } 
+	public DatagramPacket(byte[] var0, int var1, int var2, java.net.InetAddress var3, int var4) { } 
+	public DatagramPacket(byte[] var0, int var1, int var2, java.net.SocketAddress var3) throws java.net.SocketException { } 
+	public DatagramPacket(byte[] var0, int var1, java.net.InetAddress var2, int var3) { } 
+	public DatagramPacket(byte[] var0, int var1, java.net.SocketAddress var2) throws java.net.SocketException { } 
 	public java.net.InetAddress getAddress() { return null; }
 	public byte[] getData() { return null; }
 	public int getLength() { return 0; }

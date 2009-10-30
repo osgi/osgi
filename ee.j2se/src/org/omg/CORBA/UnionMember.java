@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package org.omg.CORBA;
 public final class UnionMember implements org.omg.CORBA.portable.IDLEntity {
-	public UnionMember() { }
-	public UnionMember(java.lang.String var0, org.omg.CORBA.Any var1, org.omg.CORBA.TypeCode var2, org.omg.CORBA.IDLType var3) { }
 	public org.omg.CORBA.Any label;
 	public java.lang.String name;
 	public org.omg.CORBA.TypeCode type;
 	public org.omg.CORBA.IDLType type_def;
+	public UnionMember() { } 
+	public UnionMember(java.lang.String var0, org.omg.CORBA.Any var1, org.omg.CORBA.TypeCode var2, org.omg.CORBA.IDLType var3) { } 
 }
 

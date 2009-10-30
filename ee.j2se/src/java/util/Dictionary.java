@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  */
 
 package java.util;
-public abstract class Dictionary {
-	public Dictionary() { }
-	public abstract java.util.Enumeration elements();
-	public abstract java.lang.Object get(java.lang.Object var0);
+public abstract class Dictionary<K,V> {
+	public Dictionary() { } 
+	public abstract java.util.Enumeration<V> elements();
+	public abstract V get(java.lang.Object var0);
 	public abstract boolean isEmpty();
-	public abstract java.util.Enumeration keys();
-	public abstract java.lang.Object put(java.lang.Object var0, java.lang.Object var1);
-	public abstract java.lang.Object remove(java.lang.Object var0);
+	public abstract java.util.Enumeration<K> keys();
+	public abstract V put(K var0, V var1);
+	public abstract V remove(java.lang.Object var0);
 	public abstract int size();
 }
 

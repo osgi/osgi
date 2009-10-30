@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,13 @@
 
 package java.awt;
 public abstract class GraphicsConfiguration {
-	protected GraphicsConfiguration() { }
+	protected GraphicsConfiguration() { } 
 	public abstract java.awt.image.BufferedImage createCompatibleImage(int var0, int var1);
 	public abstract java.awt.image.BufferedImage createCompatibleImage(int var0, int var1, int var2);
 	public abstract java.awt.image.VolatileImage createCompatibleVolatileImage(int var0, int var1);
+	public abstract java.awt.image.VolatileImage createCompatibleVolatileImage(int var0, int var1, int var2);
 	public java.awt.image.VolatileImage createCompatibleVolatileImage(int var0, int var1, java.awt.ImageCapabilities var2) throws java.awt.AWTException { return null; }
+	public java.awt.image.VolatileImage createCompatibleVolatileImage(int var0, int var1, java.awt.ImageCapabilities var2, int var3) throws java.awt.AWTException { return null; }
 	public abstract java.awt.Rectangle getBounds();
 	public java.awt.BufferCapabilities getBufferCapabilities() { return null; }
 	public abstract java.awt.image.ColorModel getColorModel();

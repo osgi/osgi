@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,14 @@
  */
 
 package java.awt.peer;
-public abstract interface FramePeer extends java.awt.peer.WindowPeer {
-	public abstract int getState();
-	public abstract void setIconImage(java.awt.Image var0);
-	public abstract void setMaximizedBounds(java.awt.Rectangle var0);
-	public abstract void setMenuBar(java.awt.MenuBar var0);
-	public abstract void setResizable(boolean var0);
-	public abstract void setState(int var0);
-	public abstract void setTitle(java.lang.String var0);
+public interface FramePeer extends java.awt.peer.WindowPeer {
+	int getState();
+	void setBoundsPrivate(int var0, int var1, int var2, int var3);
+	void setIconImage(java.awt.Image var0);
+	void setMaximizedBounds(java.awt.Rectangle var0);
+	void setMenuBar(java.awt.MenuBar var0);
+	void setResizable(boolean var0);
+	void setState(int var0);
+	void setTitle(java.lang.String var0);
 }
 

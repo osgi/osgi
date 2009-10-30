@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 
 package java.security;
 public class SecureRandom extends java.util.Random {
-	public SecureRandom() { }
-	protected SecureRandom(java.security.SecureRandomSpi var0, java.security.Provider var1) { }
-	public SecureRandom(byte[] var0) { }
+	public SecureRandom() { } 
+	protected SecureRandom(java.security.SecureRandomSpi var0, java.security.Provider var1) { } 
+	public SecureRandom(byte[] var0) { } 
 	public byte[] generateSeed(int var0) { return null; }
+	public java.lang.String getAlgorithm() { return null; }
 	public static java.security.SecureRandom getInstance(java.lang.String var0) throws java.security.NoSuchAlgorithmException { return null; }
 	public static java.security.SecureRandom getInstance(java.lang.String var0, java.lang.String var1) throws java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException { return null; }
 	public static java.security.SecureRandom getInstance(java.lang.String var0, java.security.Provider var1) throws java.security.NoSuchAlgorithmException { return null; }

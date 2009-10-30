@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package javax.imageio.plugins.jpeg;
 public class JPEGHuffmanTable {
-	public JPEGHuffmanTable(short[] var0, short[] var1) { }
-	public short[] getLengths() { return null; }
-	public short[] getValues() { return null; }
 	public final static javax.imageio.plugins.jpeg.JPEGHuffmanTable StdACChrominance; static { StdACChrominance = null; }
 	public final static javax.imageio.plugins.jpeg.JPEGHuffmanTable StdACLuminance; static { StdACLuminance = null; }
 	public final static javax.imageio.plugins.jpeg.JPEGHuffmanTable StdDCChrominance; static { StdDCChrominance = null; }
 	public final static javax.imageio.plugins.jpeg.JPEGHuffmanTable StdDCLuminance; static { StdDCLuminance = null; }
+	public JPEGHuffmanTable(short[] var0, short[] var1) { } 
+	public short[] getLengths() { return null; }
+	public short[] getValues() { return null; }
 }
 

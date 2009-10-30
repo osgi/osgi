@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.security.spec;
 public class RSAMultiPrimePrivateCrtKeySpec extends java.security.spec.RSAPrivateKeySpec {
-	public RSAMultiPrimePrivateCrtKeySpec(java.math.BigInteger var0, java.math.BigInteger var1, java.math.BigInteger var2, java.math.BigInteger var3, java.math.BigInteger var4, java.math.BigInteger var5, java.math.BigInteger var6, java.math.BigInteger var7, java.security.spec.RSAOtherPrimeInfo[] var8) { super((java.math.BigInteger) null, (java.math.BigInteger) null); }
+	public RSAMultiPrimePrivateCrtKeySpec(java.math.BigInteger var0, java.math.BigInteger var1, java.math.BigInteger var2, java.math.BigInteger var3, java.math.BigInteger var4, java.math.BigInteger var5, java.math.BigInteger var6, java.math.BigInteger var7, java.security.spec.RSAOtherPrimeInfo[] var8)  { super((java.math.BigInteger) null, (java.math.BigInteger) null); } 
 	public java.math.BigInteger getCrtCoefficient() { return null; }
 	public java.security.spec.RSAOtherPrimeInfo[] getOtherPrimeInfo() { return null; }
 	public java.math.BigInteger getPrimeExponentP() { return null; }

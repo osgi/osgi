@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,14 @@
 
 package javax.swing.plaf.basic;
 public class BasicDesktopIconUI extends javax.swing.plaf.DesktopIconUI {
-	public BasicDesktopIconUI() { }
+	public class MouseInputHandler extends javax.swing.event.MouseInputAdapter {
+		public MouseInputHandler() { } 
+		public void moveAndRepaint(javax.swing.JComponent var0, int var1, int var2, int var3, int var4) { }
+	}
+	protected javax.swing.JInternalFrame.JDesktopIcon desktopIcon;
+	protected javax.swing.JInternalFrame frame;
+	protected javax.swing.JComponent iconPane;
+	public BasicDesktopIconUI() { } 
 	protected javax.swing.event.MouseInputListener createMouseInputListener() { return null; }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	public void deiconize() { }
@@ -27,11 +34,5 @@ public class BasicDesktopIconUI extends javax.swing.plaf.DesktopIconUI {
 	protected void uninstallComponents() { }
 	protected void uninstallDefaults() { }
 	protected void uninstallListeners() { }
-	protected javax.swing.JInternalFrame.JDesktopIcon desktopIcon;
-	protected javax.swing.JInternalFrame frame;
-	public class MouseInputHandler extends javax.swing.event.MouseInputAdapter {
-		public MouseInputHandler() { }
-		public void moveAndRepaint(javax.swing.JComponent var0, int var1, int var2, int var3, int var4) { }
-	}
 }
 

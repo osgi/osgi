@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package javax.print.attribute.standard;
 public class Compression extends javax.print.attribute.EnumSyntax implements javax.print.attribute.DocAttribute {
-	protected Compression(int var0) { super(0); }
-	public final java.lang.Class getCategory() { return null; }
-	public final java.lang.String getName() { return null; }
 	public final static javax.print.attribute.standard.Compression COMPRESS; static { COMPRESS = null; }
 	public final static javax.print.attribute.standard.Compression DEFLATE; static { DEFLATE = null; }
 	public final static javax.print.attribute.standard.Compression GZIP; static { GZIP = null; }
 	public final static javax.print.attribute.standard.Compression NONE; static { NONE = null; }
+	protected Compression(int var0)  { super(0); } 
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
+	public final java.lang.String getName() { return null; }
 }
 

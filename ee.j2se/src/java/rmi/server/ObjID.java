@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package java.rmi.server;
 public final class ObjID implements java.io.Serializable {
-	public ObjID() { }
-	public ObjID(int var0) { }
-	public int hashCode() { return 0; }
-	public static java.rmi.server.ObjID read(java.io.ObjectInput var0) throws java.io.IOException { return null; }
-	public void write(java.io.ObjectOutput var0) throws java.io.IOException { }
 	public final static int ACTIVATOR_ID = 1;
 	public final static int DGC_ID = 2;
 	public final static int REGISTRY_ID = 0;
+	public ObjID() { } 
+	public ObjID(int var0) { } 
+	public int hashCode() { return 0; }
+	public static java.rmi.server.ObjID read(java.io.ObjectInput var0) throws java.io.IOException { return null; }
+	public void write(java.io.ObjectOutput var0) throws java.io.IOException { }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,22 @@
 
 package javax.imageio;
 public class IIOImage {
-	public IIOImage(java.awt.image.Raster var0, java.util.List var1, javax.imageio.metadata.IIOMetadata var2) { }
-	public IIOImage(java.awt.image.RenderedImage var0, java.util.List var1, javax.imageio.metadata.IIOMetadata var2) { }
+	protected java.awt.image.RenderedImage image;
+	protected javax.imageio.metadata.IIOMetadata metadata;
+	protected java.awt.image.Raster raster;
+	protected java.util.List<? extends java.awt.image.BufferedImage> thumbnails;
+	public IIOImage(java.awt.image.Raster var0, java.util.List<? extends java.awt.image.BufferedImage> var1, javax.imageio.metadata.IIOMetadata var2) { } 
+	public IIOImage(java.awt.image.RenderedImage var0, java.util.List<? extends java.awt.image.BufferedImage> var1, javax.imageio.metadata.IIOMetadata var2) { } 
 	public javax.imageio.metadata.IIOMetadata getMetadata() { return null; }
 	public int getNumThumbnails() { return 0; }
 	public java.awt.image.Raster getRaster() { return null; }
 	public java.awt.image.RenderedImage getRenderedImage() { return null; }
 	public java.awt.image.BufferedImage getThumbnail(int var0) { return null; }
-	public java.util.List getThumbnails() { return null; }
+	public java.util.List<? extends java.awt.image.BufferedImage> getThumbnails() { return null; }
 	public boolean hasRaster() { return false; }
 	public void setMetadata(javax.imageio.metadata.IIOMetadata var0) { }
 	public void setRaster(java.awt.image.Raster var0) { }
 	public void setRenderedImage(java.awt.image.RenderedImage var0) { }
-	public void setThumbnails(java.util.List var0) { }
-	protected java.awt.image.RenderedImage image;
-	protected javax.imageio.metadata.IIOMetadata metadata;
-	protected java.awt.image.Raster raster;
-	protected java.util.List thumbnails;
+	public void setThumbnails(java.util.List<? extends java.awt.image.BufferedImage> var0) { }
 }
 

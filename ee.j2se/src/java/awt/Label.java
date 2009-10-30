@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,18 @@
 
 package java.awt;
 public class Label extends java.awt.Component implements javax.accessibility.Accessible {
-	public Label() { }
-	public Label(java.lang.String var0) { }
-	public Label(java.lang.String var0, int var1) { }
+	protected class AccessibleAWTLabel extends java.awt.Component.AccessibleAWTComponent {
+		public AccessibleAWTLabel() { } 
+	}
+	public final static int CENTER = 1;
+	public final static int LEFT = 0;
+	public final static int RIGHT = 2;
+	public Label() { } 
+	public Label(java.lang.String var0) { } 
+	public Label(java.lang.String var0, int var1) { } 
 	public int getAlignment() { return 0; }
 	public java.lang.String getText() { return null; }
 	public void setAlignment(int var0) { }
 	public void setText(java.lang.String var0) { }
-	public final static int CENTER = 1;
-	public final static int LEFT = 0;
-	public final static int RIGHT = 2;
-	protected class AccessibleAWTLabel extends java.awt.Component.AccessibleAWTComponent {
-		public AccessibleAWTLabel() { }
-	}
 }
 

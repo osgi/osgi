@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 
 package javax.swing.plaf.metal;
 public class MetalButtonUI extends javax.swing.plaf.basic.BasicButtonUI {
-	public MetalButtonUI() { }
+	protected java.awt.Color disabledTextColor;
+	protected java.awt.Color focusColor;
+	protected java.awt.Color selectColor;
+	public MetalButtonUI() { } 
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	protected java.awt.Color getDisabledTextColor() { return null; }
 	protected java.awt.Color getFocusColor() { return null; }
 	protected java.awt.Color getSelectColor() { return null; }
 	public void installDefaults(javax.swing.AbstractButton var0) { }
 	public void uninstallDefaults(javax.swing.AbstractButton var0) { }
-	protected java.awt.Color disabledTextColor;
-	protected java.awt.Color focusColor;
-	protected java.awt.Color selectColor;
 }
 

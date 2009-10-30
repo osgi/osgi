@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,17 @@
  */
 
 package java.text;
-public abstract interface CharacterIterator extends java.lang.Cloneable {
-	public abstract java.lang.Object clone();
-	public abstract char current();
-	public abstract char first();
-	public abstract int getBeginIndex();
-	public abstract int getEndIndex();
-	public abstract int getIndex();
-	public abstract char last();
-	public abstract char next();
-	public abstract char previous();
-	public abstract char setIndex(int var0);
+public interface CharacterIterator extends java.lang.Cloneable {
 	public final static char DONE = 65535;
+	java.lang.Object clone();
+	char current();
+	char first();
+	int getBeginIndex();
+	int getEndIndex();
+	int getIndex();
+	char last();
+	char next();
+	char previous();
+	char setIndex(int var0);
 }
 

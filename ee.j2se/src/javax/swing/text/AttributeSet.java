@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,25 @@
  */
 
 package javax.swing.text;
-public abstract interface AttributeSet {
-	public abstract boolean containsAttribute(java.lang.Object var0, java.lang.Object var1);
-	public abstract boolean containsAttributes(javax.swing.text.AttributeSet var0);
-	public abstract javax.swing.text.AttributeSet copyAttributes();
-	public abstract java.lang.Object getAttribute(java.lang.Object var0);
-	public abstract int getAttributeCount();
-	public abstract java.util.Enumeration getAttributeNames();
-	public abstract javax.swing.text.AttributeSet getResolveParent();
-	public abstract boolean isDefined(java.lang.Object var0);
-	public abstract boolean isEqual(javax.swing.text.AttributeSet var0);
+public interface AttributeSet {
+	public interface CharacterAttribute {
+	}
+	public interface ColorAttribute {
+	}
+	public interface FontAttribute {
+	}
+	public interface ParagraphAttribute {
+	}
 	public final static java.lang.Object NameAttribute = null;
 	public final static java.lang.Object ResolveAttribute = null;
-	public static abstract interface CharacterAttribute {
-	}
-	public static abstract interface ColorAttribute {
-	}
-	public static abstract interface FontAttribute {
-	}
-	public static abstract interface ParagraphAttribute {
-	}
+	boolean containsAttribute(java.lang.Object var0, java.lang.Object var1);
+	boolean containsAttributes(javax.swing.text.AttributeSet var0);
+	javax.swing.text.AttributeSet copyAttributes();
+	java.lang.Object getAttribute(java.lang.Object var0);
+	int getAttributeCount();
+	java.util.Enumeration<?> getAttributeNames();
+	javax.swing.text.AttributeSet getResolveParent();
+	boolean isDefined(java.lang.Object var0);
+	boolean isEqual(javax.swing.text.AttributeSet var0);
 }
 

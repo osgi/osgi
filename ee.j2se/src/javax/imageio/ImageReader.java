@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,18 @@
 
 package javax.imageio;
 public abstract class ImageReader {
-	protected ImageReader(javax.imageio.spi.ImageReaderSpi var0) { }
+	protected java.util.Locale[] availableLocales;
+	protected boolean ignoreMetadata;
+	protected java.lang.Object input;
+	protected java.util.Locale locale;
+	protected int minIndex;
+	protected javax.imageio.spi.ImageReaderSpi originatingProvider;
+	protected java.util.List<javax.imageio.event.IIOReadProgressListener> progressListeners;
+	protected boolean seekForwardOnly;
+	protected java.util.List<javax.imageio.event.IIOReadUpdateListener> updateListeners;
+	protected java.util.List<javax.imageio.event.IIOReadWarningListener> warningListeners;
+	protected java.util.List<java.util.Locale> warningLocales;
+	protected ImageReader(javax.imageio.spi.ImageReaderSpi var0) { } 
 	public void abort() { }
 	protected boolean abortRequested() { return false; }
 	public void addIIOReadProgressListener(javax.imageio.event.IIOReadProgressListener var0) { }
@@ -30,12 +41,12 @@ public abstract class ImageReader {
 	public float getAspectRatio(int var0) throws java.io.IOException { return 0.0f; }
 	public java.util.Locale[] getAvailableLocales() { return null; }
 	public javax.imageio.ImageReadParam getDefaultReadParam() { return null; }
-	protected static java.awt.image.BufferedImage getDestination(javax.imageio.ImageReadParam var0, java.util.Iterator var1, int var2, int var3) throws javax.imageio.IIOException { return null; }
+	protected static java.awt.image.BufferedImage getDestination(javax.imageio.ImageReadParam var0, java.util.Iterator<javax.imageio.ImageTypeSpecifier> var1, int var2, int var3) throws javax.imageio.IIOException { return null; }
 	public java.lang.String getFormatName() throws java.io.IOException { return null; }
 	public abstract int getHeight(int var0) throws java.io.IOException;
 	public abstract javax.imageio.metadata.IIOMetadata getImageMetadata(int var0) throws java.io.IOException;
-	public javax.imageio.metadata.IIOMetadata getImageMetadata(int var0, java.lang.String var1, java.util.Set var2) throws java.io.IOException { return null; }
-	public abstract java.util.Iterator getImageTypes(int var0) throws java.io.IOException;
+	public javax.imageio.metadata.IIOMetadata getImageMetadata(int var0, java.lang.String var1, java.util.Set<java.lang.String> var2) throws java.io.IOException { return null; }
+	public abstract java.util.Iterator<javax.imageio.ImageTypeSpecifier> getImageTypes(int var0) throws java.io.IOException;
 	public java.lang.Object getInput() { return null; }
 	public java.util.Locale getLocale() { return null; }
 	public int getMinIndex() { return 0; }
@@ -45,7 +56,7 @@ public abstract class ImageReader {
 	public javax.imageio.ImageTypeSpecifier getRawImageType(int var0) throws java.io.IOException { return null; }
 	protected static java.awt.Rectangle getSourceRegion(javax.imageio.ImageReadParam var0, int var1, int var2) { return null; }
 	public abstract javax.imageio.metadata.IIOMetadata getStreamMetadata() throws java.io.IOException;
-	public javax.imageio.metadata.IIOMetadata getStreamMetadata(java.lang.String var0, java.util.Set var1) throws java.io.IOException { return null; }
+	public javax.imageio.metadata.IIOMetadata getStreamMetadata(java.lang.String var0, java.util.Set<java.lang.String> var1) throws java.io.IOException { return null; }
 	public int getThumbnailHeight(int var0, int var1) throws java.io.IOException { return 0; }
 	public int getThumbnailWidth(int var0, int var1) throws java.io.IOException { return 0; }
 	public int getTileGridXOffset(int var0) throws java.io.IOException { return 0; }
@@ -78,7 +89,7 @@ public abstract class ImageReader {
 	public java.awt.image.BufferedImage read(int var0) throws java.io.IOException { return null; }
 	public abstract java.awt.image.BufferedImage read(int var0, javax.imageio.ImageReadParam var1) throws java.io.IOException;
 	public javax.imageio.IIOImage readAll(int var0, javax.imageio.ImageReadParam var1) throws java.io.IOException { return null; }
-	public java.util.Iterator readAll(java.util.Iterator var0) throws java.io.IOException { return null; }
+	public java.util.Iterator<javax.imageio.IIOImage> readAll(java.util.Iterator<? extends javax.imageio.ImageReadParam> var0) throws java.io.IOException { return null; }
 	public java.awt.image.RenderedImage readAsRenderedImage(int var0, javax.imageio.ImageReadParam var1) throws java.io.IOException { return null; }
 	public java.awt.image.Raster readRaster(int var0, javax.imageio.ImageReadParam var1) throws java.io.IOException { return null; }
 	public java.awt.image.BufferedImage readThumbnail(int var0, int var1) throws java.io.IOException { return null; }
@@ -96,16 +107,5 @@ public abstract class ImageReader {
 	public void setInput(java.lang.Object var0, boolean var1) { }
 	public void setInput(java.lang.Object var0, boolean var1, boolean var2) { }
 	public void setLocale(java.util.Locale var0) { }
-	protected java.util.Locale[] availableLocales;
-	protected boolean ignoreMetadata;
-	protected java.lang.Object input;
-	protected java.util.Locale locale;
-	protected int minIndex;
-	protected javax.imageio.spi.ImageReaderSpi originatingProvider;
-	protected java.util.List progressListeners;
-	protected boolean seekForwardOnly;
-	protected java.util.List updateListeners;
-	protected java.util.List warningListeners;
-	protected java.util.List warningLocales;
 }
 

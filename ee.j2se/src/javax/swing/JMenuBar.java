@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,17 @@
 
 package javax.swing;
 public class JMenuBar extends javax.swing.JComponent implements javax.accessibility.Accessible, javax.swing.MenuElement {
-	public JMenuBar() { }
+	protected class AccessibleJMenuBar extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleSelection {
+		protected AccessibleJMenuBar() { } 
+		public void addAccessibleSelection(int var0) { }
+		public void clearAccessibleSelection() { }
+		public javax.accessibility.Accessible getAccessibleSelection(int var0) { return null; }
+		public int getAccessibleSelectionCount() { return 0; }
+		public boolean isAccessibleChildSelected(int var0) { return false; }
+		public void removeAccessibleSelection(int var0) { }
+		public void selectAllAccessibleSelection() { }
+	}
+	public JMenuBar() { } 
 	public javax.swing.JMenu add(javax.swing.JMenu var0) { return null; }
 	public java.awt.Component getComponent() { return null; }
 	/** @deprecated */ public java.awt.Component getComponentAtIndex(int var0) { return null; }
@@ -39,15 +49,5 @@ public class JMenuBar extends javax.swing.JComponent implements javax.accessibil
 	public void setSelected(java.awt.Component var0) { }
 	public void setSelectionModel(javax.swing.SingleSelectionModel var0) { }
 	public void setUI(javax.swing.plaf.MenuBarUI var0) { }
-	protected class AccessibleJMenuBar extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleSelection {
-		protected AccessibleJMenuBar() { }
-		public void addAccessibleSelection(int var0) { }
-		public void clearAccessibleSelection() { }
-		public javax.accessibility.Accessible getAccessibleSelection(int var0) { return null; }
-		public int getAccessibleSelectionCount() { return 0; }
-		public boolean isAccessibleChildSelected(int var0) { return false; }
-		public void removeAccessibleSelection(int var0) { }
-		public void selectAllAccessibleSelection() { }
-	}
 }
 

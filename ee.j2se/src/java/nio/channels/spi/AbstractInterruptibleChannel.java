@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.nio.channels.spi;
 public abstract class AbstractInterruptibleChannel implements java.nio.channels.Channel, java.nio.channels.InterruptibleChannel {
-	protected AbstractInterruptibleChannel() { }
+	protected AbstractInterruptibleChannel() { } 
 	protected final void begin() { }
 	public final void close() throws java.io.IOException { }
 	protected final void end(boolean var0) throws java.nio.channels.AsynchronousCloseException { }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package java.lang;
 public class Throwable implements java.io.Serializable {
-	public Throwable() { }
-	public Throwable(java.lang.String var0) { }
-	public Throwable(java.lang.String var0, java.lang.Throwable var1) { }
-	public Throwable(java.lang.Throwable var0) { }
-	public java.lang.Throwable fillInStackTrace() { return null; }
+	public Throwable() { } 
+	public Throwable(java.lang.String var0) { } 
+	public Throwable(java.lang.String var0, java.lang.Throwable var1) { } 
+	public Throwable(java.lang.Throwable var0) { } 
+	public native java.lang.Throwable fillInStackTrace();
 	public java.lang.Throwable getCause() { return null; }
 	public java.lang.String getLocalizedMessage() { return null; }
 	public java.lang.String getMessage() { return null; }

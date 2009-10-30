@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,8 @@
 
 package javax.swing.plaf.basic;
 public class BasicTableHeaderUI extends javax.swing.plaf.TableHeaderUI {
-	public BasicTableHeaderUI() { }
-	protected javax.swing.event.MouseInputListener createMouseInputListener() { return null; }
-	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
-	protected void installDefaults() { }
-	protected void installKeyboardActions() { }
-	protected void installListeners() { }
-	protected void uninstallDefaults() { }
-	protected void uninstallKeyboardActions() { }
-	protected void uninstallListeners() { }
-	protected javax.swing.table.JTableHeader header;
-	protected javax.swing.event.MouseInputListener mouseInputListener;
-	protected javax.swing.CellRendererPane rendererPane;
 	public class MouseInputHandler implements javax.swing.event.MouseInputListener {
-		public MouseInputHandler() { }
+		public MouseInputHandler() { } 
 		public void mouseClicked(java.awt.event.MouseEvent var0) { }
 		public void mouseDragged(java.awt.event.MouseEvent var0) { }
 		public void mouseEntered(java.awt.event.MouseEvent var0) { }
@@ -38,5 +26,17 @@ public class BasicTableHeaderUI extends javax.swing.plaf.TableHeaderUI {
 		public void mousePressed(java.awt.event.MouseEvent var0) { }
 		public void mouseReleased(java.awt.event.MouseEvent var0) { }
 	}
+	protected javax.swing.table.JTableHeader header;
+	protected javax.swing.event.MouseInputListener mouseInputListener;
+	protected javax.swing.CellRendererPane rendererPane;
+	public BasicTableHeaderUI() { } 
+	protected javax.swing.event.MouseInputListener createMouseInputListener() { return null; }
+	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
+	protected void installDefaults() { }
+	protected void installKeyboardActions() { }
+	protected void installListeners() { }
+	protected void uninstallDefaults() { }
+	protected void uninstallKeyboardActions() { }
+	protected void uninstallListeners() { }
 }
 

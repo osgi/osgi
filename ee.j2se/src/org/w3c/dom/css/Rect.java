@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package org.w3c.dom.css;
-public abstract interface Rect {
-	public abstract org.w3c.dom.css.CSSPrimitiveValue getBottom();
-	public abstract org.w3c.dom.css.CSSPrimitiveValue getLeft();
-	public abstract org.w3c.dom.css.CSSPrimitiveValue getRight();
-	public abstract org.w3c.dom.css.CSSPrimitiveValue getTop();
+public interface Rect {
+	org.w3c.dom.css.CSSPrimitiveValue getBottom();
+	org.w3c.dom.css.CSSPrimitiveValue getLeft();
+	org.w3c.dom.css.CSSPrimitiveValue getRight();
+	org.w3c.dom.css.CSSPrimitiveValue getTop();
 }
 

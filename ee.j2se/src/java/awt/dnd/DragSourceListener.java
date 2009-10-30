@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package java.awt.dnd;
-public abstract interface DragSourceListener extends java.util.EventListener {
-	public abstract void dragDropEnd(java.awt.dnd.DragSourceDropEvent var0);
-	public abstract void dragEnter(java.awt.dnd.DragSourceDragEvent var0);
-	public abstract void dragExit(java.awt.dnd.DragSourceEvent var0);
-	public abstract void dragOver(java.awt.dnd.DragSourceDragEvent var0);
-	public abstract void dropActionChanged(java.awt.dnd.DragSourceDragEvent var0);
+public interface DragSourceListener extends java.util.EventListener {
+	void dragDropEnd(java.awt.dnd.DragSourceDropEvent var0);
+	void dragEnter(java.awt.dnd.DragSourceDragEvent var0);
+	void dragExit(java.awt.dnd.DragSourceEvent var0);
+	void dragOver(java.awt.dnd.DragSourceDragEvent var0);
+	void dropActionChanged(java.awt.dnd.DragSourceDragEvent var0);
 }
 

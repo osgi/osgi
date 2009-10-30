@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.nio.charset.spi;
 public abstract class CharsetProvider {
-	protected CharsetProvider() { }
+	protected CharsetProvider() { } 
 	public abstract java.nio.charset.Charset charsetForName(java.lang.String var0);
-	public abstract java.util.Iterator charsets();
+	public abstract java.util.Iterator<java.nio.charset.Charset> charsets();
 }
 

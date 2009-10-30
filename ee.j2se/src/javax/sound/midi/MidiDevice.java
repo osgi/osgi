@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,9 @@
  */
 
 package javax.sound.midi;
-public abstract interface MidiDevice {
-	public abstract void close();
-	public abstract javax.sound.midi.MidiDevice.Info getDeviceInfo();
-	public abstract int getMaxReceivers();
-	public abstract int getMaxTransmitters();
-	public abstract long getMicrosecondPosition();
-	public abstract javax.sound.midi.Receiver getReceiver() throws javax.sound.midi.MidiUnavailableException;
-	public abstract javax.sound.midi.Transmitter getTransmitter() throws javax.sound.midi.MidiUnavailableException;
-	public abstract boolean isOpen();
-	public abstract void open() throws javax.sound.midi.MidiUnavailableException;
+public interface MidiDevice {
 	public static class Info {
-		protected Info(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) { }
+		protected Info(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) { } 
 		public final boolean equals(java.lang.Object var0) { return false; }
 		public final java.lang.String getDescription() { return null; }
 		public final java.lang.String getName() { return null; }
@@ -35,5 +26,16 @@ public abstract interface MidiDevice {
 		public final int hashCode() { return 0; }
 		public final java.lang.String toString() { return null; }
 	}
+	void close();
+	javax.sound.midi.MidiDevice.Info getDeviceInfo();
+	int getMaxReceivers();
+	int getMaxTransmitters();
+	long getMicrosecondPosition();
+	javax.sound.midi.Receiver getReceiver() throws javax.sound.midi.MidiUnavailableException;
+	java.util.List<javax.sound.midi.Receiver> getReceivers();
+	javax.sound.midi.Transmitter getTransmitter() throws javax.sound.midi.MidiUnavailableException;
+	java.util.List<javax.sound.midi.Transmitter> getTransmitters();
+	boolean isOpen();
+	void open() throws javax.sound.midi.MidiUnavailableException;
 }
 

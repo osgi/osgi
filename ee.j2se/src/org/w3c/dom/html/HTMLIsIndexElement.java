@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLIsIndexElement extends org.w3c.dom.html.HTMLElement {
-	public abstract org.w3c.dom.html.HTMLFormElement getForm();
-	public abstract java.lang.String getPrompt();
-	public abstract void setPrompt(java.lang.String var0);
+public interface HTMLIsIndexElement extends org.w3c.dom.html.HTMLElement {
+	org.w3c.dom.html.HTMLFormElement getForm();
+	java.lang.String getPrompt();
+	void setPrompt(java.lang.String var0);
 }
 

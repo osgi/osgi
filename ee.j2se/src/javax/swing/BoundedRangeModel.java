@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,19 @@
  */
 
 package javax.swing;
-public abstract interface BoundedRangeModel {
-	public abstract void addChangeListener(javax.swing.event.ChangeListener var0);
-	public abstract int getExtent();
-	public abstract int getMaximum();
-	public abstract int getMinimum();
-	public abstract int getValue();
-	public abstract boolean getValueIsAdjusting();
-	public abstract void removeChangeListener(javax.swing.event.ChangeListener var0);
-	public abstract void setExtent(int var0);
-	public abstract void setMaximum(int var0);
-	public abstract void setMinimum(int var0);
-	public abstract void setRangeProperties(int var0, int var1, int var2, int var3, boolean var4);
-	public abstract void setValue(int var0);
-	public abstract void setValueIsAdjusting(boolean var0);
+public interface BoundedRangeModel {
+	void addChangeListener(javax.swing.event.ChangeListener var0);
+	int getExtent();
+	int getMaximum();
+	int getMinimum();
+	int getValue();
+	boolean getValueIsAdjusting();
+	void removeChangeListener(javax.swing.event.ChangeListener var0);
+	void setExtent(int var0);
+	void setMaximum(int var0);
+	void setMinimum(int var0);
+	void setRangeProperties(int var0, int var1, int var2, int var3, boolean var4);
+	void setValue(int var0);
+	void setValueIsAdjusting(boolean var0);
 }
 

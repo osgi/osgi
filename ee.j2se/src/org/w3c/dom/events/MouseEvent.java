@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,17 @@
  */
 
 package org.w3c.dom.events;
-public abstract interface MouseEvent extends org.w3c.dom.events.UIEvent {
-	public abstract boolean getAltKey();
-	public abstract short getButton();
-	public abstract int getClientX();
-	public abstract int getClientY();
-	public abstract boolean getCtrlKey();
-	public abstract boolean getMetaKey();
-	public abstract org.w3c.dom.events.EventTarget getRelatedTarget();
-	public abstract int getScreenX();
-	public abstract int getScreenY();
-	public abstract boolean getShiftKey();
-	public abstract void initMouseEvent(java.lang.String var0, boolean var1, boolean var2, org.w3c.dom.views.AbstractView var3, int var4, int var5, int var6, int var7, int var8, boolean var9, boolean var10, boolean var11, boolean var12, short var13, org.w3c.dom.events.EventTarget var14);
+public interface MouseEvent extends org.w3c.dom.events.UIEvent {
+	boolean getAltKey();
+	short getButton();
+	int getClientX();
+	int getClientY();
+	boolean getCtrlKey();
+	boolean getMetaKey();
+	org.w3c.dom.events.EventTarget getRelatedTarget();
+	int getScreenX();
+	int getScreenY();
+	boolean getShiftKey();
+	void initMouseEvent(java.lang.String var0, boolean var1, boolean var2, org.w3c.dom.views.AbstractView var3, int var4, int var5, int var6, int var7, int var8, boolean var9, boolean var10, boolean var11, boolean var12, short var13, org.w3c.dom.events.EventTarget var14);
 }
 

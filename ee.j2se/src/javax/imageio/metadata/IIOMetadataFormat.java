@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,33 +15,7 @@
  */
 
 package javax.imageio.metadata;
-public abstract interface IIOMetadataFormat {
-	public abstract boolean canNodeAppear(java.lang.String var0, javax.imageio.ImageTypeSpecifier var1);
-	public abstract int getAttributeDataType(java.lang.String var0, java.lang.String var1);
-	public abstract java.lang.String getAttributeDefaultValue(java.lang.String var0, java.lang.String var1);
-	public abstract java.lang.String getAttributeDescription(java.lang.String var0, java.lang.String var1, java.util.Locale var2);
-	public abstract java.lang.String[] getAttributeEnumerations(java.lang.String var0, java.lang.String var1);
-	public abstract int getAttributeListMaxLength(java.lang.String var0, java.lang.String var1);
-	public abstract int getAttributeListMinLength(java.lang.String var0, java.lang.String var1);
-	public abstract java.lang.String getAttributeMaxValue(java.lang.String var0, java.lang.String var1);
-	public abstract java.lang.String getAttributeMinValue(java.lang.String var0, java.lang.String var1);
-	public abstract java.lang.String[] getAttributeNames(java.lang.String var0);
-	public abstract int getAttributeValueType(java.lang.String var0, java.lang.String var1);
-	public abstract java.lang.String[] getChildNames(java.lang.String var0);
-	public abstract int getChildPolicy(java.lang.String var0);
-	public abstract java.lang.String getElementDescription(java.lang.String var0, java.util.Locale var1);
-	public abstract int getElementMaxChildren(java.lang.String var0);
-	public abstract int getElementMinChildren(java.lang.String var0);
-	public abstract int getObjectArrayMaxLength(java.lang.String var0);
-	public abstract int getObjectArrayMinLength(java.lang.String var0);
-	public abstract java.lang.Class getObjectClass(java.lang.String var0);
-	public abstract java.lang.Object getObjectDefaultValue(java.lang.String var0);
-	public abstract java.lang.Object[] getObjectEnumerations(java.lang.String var0);
-	public abstract java.lang.Comparable getObjectMaxValue(java.lang.String var0);
-	public abstract java.lang.Comparable getObjectMinValue(java.lang.String var0);
-	public abstract int getObjectValueType(java.lang.String var0);
-	public abstract java.lang.String getRootName();
-	public abstract boolean isAttributeRequired(java.lang.String var0, java.lang.String var1);
+public interface IIOMetadataFormat {
 	public final static int CHILD_POLICY_ALL = 1;
 	public final static int CHILD_POLICY_CHOICE = 3;
 	public final static int CHILD_POLICY_EMPTY = 0;
@@ -64,5 +38,31 @@ public abstract interface IIOMetadataFormat {
 	public final static int VALUE_RANGE_MIN_INCLUSIVE = 6;
 	public final static int VALUE_RANGE_MIN_INCLUSIVE_MASK = 4;
 	public final static int VALUE_RANGE_MIN_MAX_INCLUSIVE = 14;
+	boolean canNodeAppear(java.lang.String var0, javax.imageio.ImageTypeSpecifier var1);
+	int getAttributeDataType(java.lang.String var0, java.lang.String var1);
+	java.lang.String getAttributeDefaultValue(java.lang.String var0, java.lang.String var1);
+	java.lang.String getAttributeDescription(java.lang.String var0, java.lang.String var1, java.util.Locale var2);
+	java.lang.String[] getAttributeEnumerations(java.lang.String var0, java.lang.String var1);
+	int getAttributeListMaxLength(java.lang.String var0, java.lang.String var1);
+	int getAttributeListMinLength(java.lang.String var0, java.lang.String var1);
+	java.lang.String getAttributeMaxValue(java.lang.String var0, java.lang.String var1);
+	java.lang.String getAttributeMinValue(java.lang.String var0, java.lang.String var1);
+	java.lang.String[] getAttributeNames(java.lang.String var0);
+	int getAttributeValueType(java.lang.String var0, java.lang.String var1);
+	java.lang.String[] getChildNames(java.lang.String var0);
+	int getChildPolicy(java.lang.String var0);
+	java.lang.String getElementDescription(java.lang.String var0, java.util.Locale var1);
+	int getElementMaxChildren(java.lang.String var0);
+	int getElementMinChildren(java.lang.String var0);
+	int getObjectArrayMaxLength(java.lang.String var0);
+	int getObjectArrayMinLength(java.lang.String var0);
+	java.lang.Class<?> getObjectClass(java.lang.String var0);
+	java.lang.Object getObjectDefaultValue(java.lang.String var0);
+	java.lang.Object[] getObjectEnumerations(java.lang.String var0);
+	java.lang.Comparable<?> getObjectMaxValue(java.lang.String var0);
+	java.lang.Comparable<?> getObjectMinValue(java.lang.String var0);
+	int getObjectValueType(java.lang.String var0);
+	java.lang.String getRootName();
+	boolean isAttributeRequired(java.lang.String var0, java.lang.String var1);
 }
 

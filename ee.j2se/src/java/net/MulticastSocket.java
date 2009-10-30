@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package java.net;
 public class MulticastSocket extends java.net.DatagramSocket {
-	public MulticastSocket() throws java.io.IOException { }
-	public MulticastSocket(int var0) throws java.io.IOException { }
-	public MulticastSocket(java.net.SocketAddress var0) throws java.io.IOException { }
+	public MulticastSocket() throws java.io.IOException { } 
+	public MulticastSocket(int var0) throws java.io.IOException { } 
+	public MulticastSocket(java.net.SocketAddress var0) throws java.io.IOException { } 
 	public java.net.InetAddress getInterface() throws java.net.SocketException { return null; }
 	public boolean getLoopbackMode() throws java.net.SocketException { return false; }
 	public java.net.NetworkInterface getNetworkInterface() throws java.net.SocketException { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,17 @@
 
 package java.awt;
 public class GridBagLayout implements java.awt.LayoutManager2, java.io.Serializable {
-	public GridBagLayout() { }
+	protected final static int MAXGRIDSIZE = 512;
+	protected final static int MINSIZE = 1;
+	protected final static int PREFERREDSIZE = 2;
+	public double[] columnWeights;
+	public int[] columnWidths;
+	protected java.util.Hashtable<java.awt.Component,java.awt.GridBagConstraints> comptable;
+	protected java.awt.GridBagConstraints defaultConstraints;
+	protected java.awt.GridBagLayoutInfo layoutInfo;
+	public int[] rowHeights;
+	public double[] rowWeights;
+	public GridBagLayout() { } 
 	protected void AdjustForGravity(java.awt.GridBagConstraints var0, java.awt.Rectangle var1) { }
 	protected void ArrangeGrid(java.awt.Container var0) { }
 	protected java.awt.GridBagLayoutInfo GetLayoutInfo(java.awt.Container var0, int var1) { return null; }
@@ -42,15 +52,5 @@ public class GridBagLayout implements java.awt.LayoutManager2, java.io.Serializa
 	public java.awt.Dimension preferredLayoutSize(java.awt.Container var0) { return null; }
 	public void removeLayoutComponent(java.awt.Component var0) { }
 	public void setConstraints(java.awt.Component var0, java.awt.GridBagConstraints var1) { }
-	protected final static int MAXGRIDSIZE = 512;
-	protected final static int MINSIZE = 1;
-	protected final static int PREFERREDSIZE = 2;
-	public double[] columnWeights;
-	public int[] columnWidths;
-	protected java.util.Hashtable comptable;
-	protected java.awt.GridBagConstraints defaultConstraints;
-	protected java.awt.GridBagLayoutInfo layoutInfo;
-	public int[] rowHeights;
-	public double[] rowWeights;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package javax.swing.event;
 public class InternalFrameEvent extends java.awt.AWTEvent {
-	public InternalFrameEvent(javax.swing.JInternalFrame var0, int var1) { super((java.lang.Object) null, 0); }
-	public javax.swing.JInternalFrame getInternalFrame() { return null; }
 	public final static int INTERNAL_FRAME_ACTIVATED = 25554;
 	public final static int INTERNAL_FRAME_CLOSED = 25551;
 	public final static int INTERNAL_FRAME_CLOSING = 25550;
@@ -27,5 +25,7 @@ public class InternalFrameEvent extends java.awt.AWTEvent {
 	public final static int INTERNAL_FRAME_ICONIFIED = 25552;
 	public final static int INTERNAL_FRAME_LAST = 25555;
 	public final static int INTERNAL_FRAME_OPENED = 25549;
+	public InternalFrameEvent(javax.swing.JInternalFrame var0, int var1)  { super((java.lang.Object) null, 0); } 
+	public javax.swing.JInternalFrame getInternalFrame() { return null; }
 }
 

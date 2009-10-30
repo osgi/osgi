@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package javax.print;
-public abstract interface Doc {
-	public abstract javax.print.attribute.DocAttributeSet getAttributes();
-	public abstract javax.print.DocFlavor getDocFlavor();
-	public abstract java.lang.Object getPrintData() throws java.io.IOException;
-	public abstract java.io.Reader getReaderForText() throws java.io.IOException;
-	public abstract java.io.InputStream getStreamForBytes() throws java.io.IOException;
+public interface Doc {
+	javax.print.attribute.DocAttributeSet getAttributes();
+	javax.print.DocFlavor getDocFlavor();
+	java.lang.Object getPrintData() throws java.io.IOException;
+	java.io.Reader getReaderForText() throws java.io.IOException;
+	java.io.InputStream getStreamForBytes() throws java.io.IOException;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.plaf;
 public abstract class TextUI extends javax.swing.plaf.ComponentUI {
-	public TextUI() { }
+	public TextUI() { } 
 	public abstract void damageRange(javax.swing.text.JTextComponent var0, int var1, int var2);
 	public abstract void damageRange(javax.swing.text.JTextComponent var0, int var1, int var2, javax.swing.text.Position.Bias var3, javax.swing.text.Position.Bias var4);
 	public abstract javax.swing.text.EditorKit getEditorKit(javax.swing.text.JTextComponent var0);

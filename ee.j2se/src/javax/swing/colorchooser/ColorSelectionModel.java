@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package javax.swing.colorchooser;
-public abstract interface ColorSelectionModel {
-	public abstract void addChangeListener(javax.swing.event.ChangeListener var0);
-	public abstract java.awt.Color getSelectedColor();
-	public abstract void removeChangeListener(javax.swing.event.ChangeListener var0);
-	public abstract void setSelectedColor(java.awt.Color var0);
+public interface ColorSelectionModel {
+	void addChangeListener(javax.swing.event.ChangeListener var0);
+	java.awt.Color getSelectedColor();
+	void removeChangeListener(javax.swing.event.ChangeListener var0);
+	void setSelectedColor(java.awt.Color var0);
 }
 

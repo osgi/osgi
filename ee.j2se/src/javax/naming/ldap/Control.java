@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package javax.naming.ldap;
-public abstract interface Control extends java.io.Serializable {
-	public abstract byte[] getEncodedValue();
-	public abstract java.lang.String getID();
-	public abstract boolean isCritical();
+public interface Control extends java.io.Serializable {
 	public final static boolean CRITICAL = true;
 	public final static boolean NONCRITICAL = false;
+	byte[] getEncodedValue();
+	java.lang.String getID();
+	boolean isCritical();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.crypto;
 public abstract class ExemptionMechanismSpi {
-	public ExemptionMechanismSpi() { }
+	public ExemptionMechanismSpi() { } 
 	protected abstract byte[] engineGenExemptionBlob() throws javax.crypto.ExemptionMechanismException;
 	protected abstract int engineGenExemptionBlob(byte[] var0, int var1) throws javax.crypto.ExemptionMechanismException, javax.crypto.ShortBufferException;
 	protected abstract int engineGetOutputSize(int var0);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package java.util;
-public class LinkedHashSet extends java.util.HashSet implements java.io.Serializable, java.lang.Cloneable, java.util.Set {
-	public LinkedHashSet() { }
-	public LinkedHashSet(int var0) { }
-	public LinkedHashSet(int var0, float var1) { }
-	public LinkedHashSet(java.util.Collection var0) { }
+public class LinkedHashSet<E> extends java.util.HashSet<E> implements java.io.Serializable, java.lang.Cloneable, java.util.Set<E> {
+	public LinkedHashSet() { } 
+	public LinkedHashSet(int var0) { } 
+	public LinkedHashSet(int var0, float var1) { } 
+	public LinkedHashSet(java.util.Collection<? extends E> var0) { } 
 }
 

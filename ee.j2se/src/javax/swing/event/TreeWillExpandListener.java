@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package javax.swing.event;
-public abstract interface TreeWillExpandListener extends java.util.EventListener {
-	public abstract void treeWillCollapse(javax.swing.event.TreeExpansionEvent var0) throws javax.swing.tree.ExpandVetoException;
-	public abstract void treeWillExpand(javax.swing.event.TreeExpansionEvent var0) throws javax.swing.tree.ExpandVetoException;
+public interface TreeWillExpandListener extends java.util.EventListener {
+	void treeWillCollapse(javax.swing.event.TreeExpansionEvent var0) throws javax.swing.tree.ExpandVetoException;
+	void treeWillExpand(javax.swing.event.TreeExpansionEvent var0) throws javax.swing.tree.ExpandVetoException;
 }
 

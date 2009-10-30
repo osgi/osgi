@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.awt.geom;
 public class FlatteningPathIterator implements java.awt.geom.PathIterator {
-	public FlatteningPathIterator(java.awt.geom.PathIterator var0, double var1) { }
-	public FlatteningPathIterator(java.awt.geom.PathIterator var0, double var1, int var2) { }
+	public FlatteningPathIterator(java.awt.geom.PathIterator var0, double var1) { } 
+	public FlatteningPathIterator(java.awt.geom.PathIterator var0, double var1, int var2) { } 
 	public int currentSegment(double[] var0) { return 0; }
 	public int currentSegment(float[] var0) { return 0; }
 	public double getFlatness() { return 0.0d; }

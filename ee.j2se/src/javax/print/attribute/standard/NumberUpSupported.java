@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package javax.print.attribute.standard;
 public final class NumberUpSupported extends javax.print.attribute.SetOfIntegerSyntax implements javax.print.attribute.SupportedValuesAttribute {
-	public NumberUpSupported(int var0) { super((int[][]) null); }
-	public NumberUpSupported(int var0, int var1) { super((int[][]) null); }
-	public NumberUpSupported(int[][] var0) { super((int[][]) null); }
-	public final java.lang.Class getCategory() { return null; }
+	public NumberUpSupported(int var0)  { super((int[][]) null); } 
+	public NumberUpSupported(int var0, int var1)  { super((int[][]) null); } 
+	public NumberUpSupported(int[][] var0)  { super((int[][]) null); } 
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
 	public final java.lang.String getName() { return null; }
 }
 

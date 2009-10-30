@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,46 +16,59 @@
 
 package java.util;
 public class Collections {
-	public static int binarySearch(java.util.List var0, java.lang.Object var1) { return 0; }
-	public static int binarySearch(java.util.List var0, java.lang.Object var1, java.util.Comparator var2) { return 0; }
-	public static void copy(java.util.List var0, java.util.List var1) { }
-	public static java.util.Enumeration enumeration(java.util.Collection var0) { return null; }
-	public static void fill(java.util.List var0, java.lang.Object var1) { }
-	public static int indexOfSubList(java.util.List var0, java.util.List var1) { return 0; }
-	public static int lastIndexOfSubList(java.util.List var0, java.util.List var1) { return 0; }
-	public static java.util.ArrayList list(java.util.Enumeration var0) { return null; }
-	public static java.lang.Object max(java.util.Collection var0) { return null; }
-	public static java.lang.Object max(java.util.Collection var0, java.util.Comparator var1) { return null; }
-	public static java.lang.Object min(java.util.Collection var0) { return null; }
-	public static java.lang.Object min(java.util.Collection var0, java.util.Comparator var1) { return null; }
-	public static java.util.List nCopies(int var0, java.lang.Object var1) { return null; }
-	public static boolean replaceAll(java.util.List var0, java.lang.Object var1, java.lang.Object var2) { return false; }
-	public static void reverse(java.util.List var0) { }
-	public static java.util.Comparator reverseOrder() { return null; }
-	public static void rotate(java.util.List var0, int var1) { }
-	public static void shuffle(java.util.List var0) { }
-	public static void shuffle(java.util.List var0, java.util.Random var1) { }
-	public static java.util.Set singleton(java.lang.Object var0) { return null; }
-	public static java.util.List singletonList(java.lang.Object var0) { return null; }
-	public static java.util.Map singletonMap(java.lang.Object var0, java.lang.Object var1) { return null; }
-	public static void sort(java.util.List var0) { }
-	public static void sort(java.util.List var0, java.util.Comparator var1) { }
-	public static void swap(java.util.List var0, int var1, int var2) { }
-	public static java.util.Collection synchronizedCollection(java.util.Collection var0) { return null; }
-	public static java.util.List synchronizedList(java.util.List var0) { return null; }
-	public static java.util.Map synchronizedMap(java.util.Map var0) { return null; }
-	public static java.util.Set synchronizedSet(java.util.Set var0) { return null; }
-	public static java.util.SortedMap synchronizedSortedMap(java.util.SortedMap var0) { return null; }
-	public static java.util.SortedSet synchronizedSortedSet(java.util.SortedSet var0) { return null; }
-	public static java.util.Collection unmodifiableCollection(java.util.Collection var0) { return null; }
-	public static java.util.List unmodifiableList(java.util.List var0) { return null; }
-	public static java.util.Map unmodifiableMap(java.util.Map var0) { return null; }
-	public static java.util.Set unmodifiableSet(java.util.Set var0) { return null; }
-	public static java.util.SortedMap unmodifiableSortedMap(java.util.SortedMap var0) { return null; }
-	public static java.util.SortedSet unmodifiableSortedSet(java.util.SortedSet var0) { return null; }
 	public final static java.util.List EMPTY_LIST; static { EMPTY_LIST = null; }
 	public final static java.util.Map EMPTY_MAP; static { EMPTY_MAP = null; }
 	public final static java.util.Set EMPTY_SET; static { EMPTY_SET = null; }
+	public static <T> boolean addAll(java.util.Collection<? super T> var0, T[] var1) { return false; }
+	public static <T> int binarySearch(java.util.List<? extends java.lang.Comparable<? super T>> var0, T var1) { return 0; }
+	public static <T> int binarySearch(java.util.List<? extends T> var0, T var1, java.util.Comparator<? super T> var2) { return 0; }
+	public static <E> java.util.Collection<E> checkedCollection(java.util.Collection<E> var0, java.lang.Class<E> var1) { return null; }
+	public static <E> java.util.List<E> checkedList(java.util.List<E> var0, java.lang.Class<E> var1) { return null; }
+	public static <K,V> java.util.Map<K,V> checkedMap(java.util.Map<K,V> var0, java.lang.Class<K> var1, java.lang.Class<V> var2) { return null; }
+	public static <E> java.util.Set<E> checkedSet(java.util.Set<E> var0, java.lang.Class<E> var1) { return null; }
+	public static <K,V> java.util.SortedMap<K,V> checkedSortedMap(java.util.SortedMap<K,V> var0, java.lang.Class<K> var1, java.lang.Class<V> var2) { return null; }
+	public static <E> java.util.SortedSet<E> checkedSortedSet(java.util.SortedSet<E> var0, java.lang.Class<E> var1) { return null; }
+	public static <T> void copy(java.util.List<? super T> var0, java.util.List<? extends T> var1) { }
+	public static boolean disjoint(java.util.Collection<?> var0, java.util.Collection<?> var1) { return false; }
+	public final static <T> java.util.List<T> emptyList() { return null; }
+	public final static <K,V> java.util.Map<K,V> emptyMap() { return null; }
+	public final static <T> java.util.Set<T> emptySet() { return null; }
+	public static <T> java.util.Enumeration<T> enumeration(java.util.Collection<T> var0) { return null; }
+	public static <T> void fill(java.util.List<? super T> var0, T var1) { }
+	public static int frequency(java.util.Collection<?> var0, java.lang.Object var1) { return 0; }
+	public static int indexOfSubList(java.util.List<?> var0, java.util.List<?> var1) { return 0; }
+	public static int lastIndexOfSubList(java.util.List<?> var0, java.util.List<?> var1) { return 0; }
+	public static <T> java.util.ArrayList<T> list(java.util.Enumeration<T> var0) { return null; }
+	public static <T extends java.lang.Object & java.lang.Comparable<? super T>> T max(java.util.Collection<? extends T> var0) { return null; }
+	public static <T> T max(java.util.Collection<? extends T> var0, java.util.Comparator<? super T> var1) { return null; }
+	public static <T extends java.lang.Object & java.lang.Comparable<? super T>> T min(java.util.Collection<? extends T> var0) { return null; }
+	public static <T> T min(java.util.Collection<? extends T> var0, java.util.Comparator<? super T> var1) { return null; }
+	public static <T> java.util.List<T> nCopies(int var0, T var1) { return null; }
+	public static <T> boolean replaceAll(java.util.List<T> var0, T var1, T var2) { return false; }
+	public static void reverse(java.util.List<?> var0) { }
+	public static <T> java.util.Comparator<T> reverseOrder() { return null; }
+	public static <T> java.util.Comparator<T> reverseOrder(java.util.Comparator<T> var0) { return null; }
+	public static void rotate(java.util.List<?> var0, int var1) { }
+	public static void shuffle(java.util.List<?> var0) { }
+	public static void shuffle(java.util.List<?> var0, java.util.Random var1) { }
+	public static <T> java.util.Set<T> singleton(T var0) { return null; }
+	public static <T> java.util.List<T> singletonList(T var0) { return null; }
+	public static <K,V> java.util.Map<K,V> singletonMap(K var0, V var1) { return null; }
+	public static <T extends java.lang.Comparable<? super T>> void sort(java.util.List<T> var0) { }
+	public static <T> void sort(java.util.List<T> var0, java.util.Comparator<? super T> var1) { }
+	public static void swap(java.util.List<?> var0, int var1, int var2) { }
+	public static <T> java.util.Collection<T> synchronizedCollection(java.util.Collection<T> var0) { return null; }
+	public static <T> java.util.List<T> synchronizedList(java.util.List<T> var0) { return null; }
+	public static <K,V> java.util.Map<K,V> synchronizedMap(java.util.Map<K,V> var0) { return null; }
+	public static <T> java.util.Set<T> synchronizedSet(java.util.Set<T> var0) { return null; }
+	public static <K,V> java.util.SortedMap<K,V> synchronizedSortedMap(java.util.SortedMap<K,V> var0) { return null; }
+	public static <T> java.util.SortedSet<T> synchronizedSortedSet(java.util.SortedSet<T> var0) { return null; }
+	public static <T> java.util.Collection<T> unmodifiableCollection(java.util.Collection<? extends T> var0) { return null; }
+	public static <T> java.util.List<T> unmodifiableList(java.util.List<? extends T> var0) { return null; }
+	public static <K,V> java.util.Map<K,V> unmodifiableMap(java.util.Map<? extends K,? extends V> var0) { return null; }
+	public static <T> java.util.Set<T> unmodifiableSet(java.util.Set<? extends T> var0) { return null; }
+	public static <K,V> java.util.SortedMap<K,V> unmodifiableSortedMap(java.util.SortedMap<K,? extends V> var0) { return null; }
+	public static <T> java.util.SortedSet<T> unmodifiableSortedSet(java.util.SortedSet<T> var0) { return null; }
 	private Collections() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

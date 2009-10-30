@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package javax.swing.event;
-public abstract interface InternalFrameListener extends java.util.EventListener {
-	public abstract void internalFrameActivated(javax.swing.event.InternalFrameEvent var0);
-	public abstract void internalFrameClosed(javax.swing.event.InternalFrameEvent var0);
-	public abstract void internalFrameClosing(javax.swing.event.InternalFrameEvent var0);
-	public abstract void internalFrameDeactivated(javax.swing.event.InternalFrameEvent var0);
-	public abstract void internalFrameDeiconified(javax.swing.event.InternalFrameEvent var0);
-	public abstract void internalFrameIconified(javax.swing.event.InternalFrameEvent var0);
-	public abstract void internalFrameOpened(javax.swing.event.InternalFrameEvent var0);
+public interface InternalFrameListener extends java.util.EventListener {
+	void internalFrameActivated(javax.swing.event.InternalFrameEvent var0);
+	void internalFrameClosed(javax.swing.event.InternalFrameEvent var0);
+	void internalFrameClosing(javax.swing.event.InternalFrameEvent var0);
+	void internalFrameDeactivated(javax.swing.event.InternalFrameEvent var0);
+	void internalFrameDeiconified(javax.swing.event.InternalFrameEvent var0);
+	void internalFrameIconified(javax.swing.event.InternalFrameEvent var0);
+	void internalFrameOpened(javax.swing.event.InternalFrameEvent var0);
 }
 

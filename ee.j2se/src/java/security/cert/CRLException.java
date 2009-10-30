@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package java.security.cert;
 public class CRLException extends java.security.GeneralSecurityException {
-	public CRLException() { }
-	public CRLException(java.lang.String var0) { }
+	public CRLException() { } 
+	public CRLException(java.lang.String var0) { } 
+	public CRLException(java.lang.String var0, java.lang.Throwable var1) { } 
+	public CRLException(java.lang.Throwable var0) { } 
 }
 

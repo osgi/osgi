@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,44 +15,44 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLInputElement extends org.w3c.dom.html.HTMLElement {
-	public abstract void blur();
-	public abstract void click();
-	public abstract void focus();
-	public abstract java.lang.String getAccept();
-	public abstract java.lang.String getAccessKey();
-	public abstract java.lang.String getAlign();
-	public abstract java.lang.String getAlt();
-	public abstract boolean getChecked();
-	public abstract boolean getDefaultChecked();
-	public abstract java.lang.String getDefaultValue();
-	public abstract boolean getDisabled();
-	public abstract org.w3c.dom.html.HTMLFormElement getForm();
-	public abstract int getMaxLength();
-	public abstract java.lang.String getName();
-	public abstract boolean getReadOnly();
-	public abstract java.lang.String getSize();
-	public abstract java.lang.String getSrc();
-	public abstract int getTabIndex();
-	public abstract java.lang.String getType();
-	public abstract java.lang.String getUseMap();
-	public abstract java.lang.String getValue();
-	public abstract void select();
-	public abstract void setAccept(java.lang.String var0);
-	public abstract void setAccessKey(java.lang.String var0);
-	public abstract void setAlign(java.lang.String var0);
-	public abstract void setAlt(java.lang.String var0);
-	public abstract void setChecked(boolean var0);
-	public abstract void setDefaultChecked(boolean var0);
-	public abstract void setDefaultValue(java.lang.String var0);
-	public abstract void setDisabled(boolean var0);
-	public abstract void setMaxLength(int var0);
-	public abstract void setName(java.lang.String var0);
-	public abstract void setReadOnly(boolean var0);
-	public abstract void setSize(java.lang.String var0);
-	public abstract void setSrc(java.lang.String var0);
-	public abstract void setTabIndex(int var0);
-	public abstract void setUseMap(java.lang.String var0);
-	public abstract void setValue(java.lang.String var0);
+public interface HTMLInputElement extends org.w3c.dom.html.HTMLElement {
+	void blur();
+	void click();
+	void focus();
+	java.lang.String getAccept();
+	java.lang.String getAccessKey();
+	java.lang.String getAlign();
+	java.lang.String getAlt();
+	boolean getChecked();
+	boolean getDefaultChecked();
+	java.lang.String getDefaultValue();
+	boolean getDisabled();
+	org.w3c.dom.html.HTMLFormElement getForm();
+	int getMaxLength();
+	java.lang.String getName();
+	boolean getReadOnly();
+	java.lang.String getSize();
+	java.lang.String getSrc();
+	int getTabIndex();
+	java.lang.String getType();
+	java.lang.String getUseMap();
+	java.lang.String getValue();
+	void select();
+	void setAccept(java.lang.String var0);
+	void setAccessKey(java.lang.String var0);
+	void setAlign(java.lang.String var0);
+	void setAlt(java.lang.String var0);
+	void setChecked(boolean var0);
+	void setDefaultChecked(boolean var0);
+	void setDefaultValue(java.lang.String var0);
+	void setDisabled(boolean var0);
+	void setMaxLength(int var0);
+	void setName(java.lang.String var0);
+	void setReadOnly(boolean var0);
+	void setSize(java.lang.String var0);
+	void setSrc(java.lang.String var0);
+	void setTabIndex(int var0);
+	void setUseMap(java.lang.String var0);
+	void setValue(java.lang.String var0);
 }
 

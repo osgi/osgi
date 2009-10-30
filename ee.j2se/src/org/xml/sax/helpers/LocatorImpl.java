@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package org.xml.sax.helpers;
 public class LocatorImpl implements org.xml.sax.Locator {
-	public LocatorImpl() { }
-	public LocatorImpl(org.xml.sax.Locator var0) { }
+	public LocatorImpl() { } 
+	public LocatorImpl(org.xml.sax.Locator var0) { } 
 	public int getColumnNumber() { return 0; }
 	public int getLineNumber() { return 0; }
 	public java.lang.String getPublicId() { return null; }

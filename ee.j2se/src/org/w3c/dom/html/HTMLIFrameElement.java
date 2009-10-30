@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,27 +15,27 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLIFrameElement extends org.w3c.dom.html.HTMLElement {
-	public abstract java.lang.String getAlign();
-	public abstract org.w3c.dom.Document getContentDocument();
-	public abstract java.lang.String getFrameBorder();
-	public abstract java.lang.String getHeight();
-	public abstract java.lang.String getLongDesc();
-	public abstract java.lang.String getMarginHeight();
-	public abstract java.lang.String getMarginWidth();
-	public abstract java.lang.String getName();
-	public abstract java.lang.String getScrolling();
-	public abstract java.lang.String getSrc();
-	public abstract java.lang.String getWidth();
-	public abstract void setAlign(java.lang.String var0);
-	public abstract void setFrameBorder(java.lang.String var0);
-	public abstract void setHeight(java.lang.String var0);
-	public abstract void setLongDesc(java.lang.String var0);
-	public abstract void setMarginHeight(java.lang.String var0);
-	public abstract void setMarginWidth(java.lang.String var0);
-	public abstract void setName(java.lang.String var0);
-	public abstract void setScrolling(java.lang.String var0);
-	public abstract void setSrc(java.lang.String var0);
-	public abstract void setWidth(java.lang.String var0);
+public interface HTMLIFrameElement extends org.w3c.dom.html.HTMLElement {
+	java.lang.String getAlign();
+	org.w3c.dom.Document getContentDocument();
+	java.lang.String getFrameBorder();
+	java.lang.String getHeight();
+	java.lang.String getLongDesc();
+	java.lang.String getMarginHeight();
+	java.lang.String getMarginWidth();
+	java.lang.String getName();
+	java.lang.String getScrolling();
+	java.lang.String getSrc();
+	java.lang.String getWidth();
+	void setAlign(java.lang.String var0);
+	void setFrameBorder(java.lang.String var0);
+	void setHeight(java.lang.String var0);
+	void setLongDesc(java.lang.String var0);
+	void setMarginHeight(java.lang.String var0);
+	void setMarginWidth(java.lang.String var0);
+	void setName(java.lang.String var0);
+	void setScrolling(java.lang.String var0);
+	void setSrc(java.lang.String var0);
+	void setWidth(java.lang.String var0);
 }
 

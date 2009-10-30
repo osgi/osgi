@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,12 @@
 
 package java.beans;
 public class PropertyChangeSupport implements java.io.Serializable {
-	public PropertyChangeSupport(java.lang.Object var0) { }
+	public PropertyChangeSupport(java.lang.Object var0) { } 
 	public void addPropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	public void addPropertyChangeListener(java.lang.String var0, java.beans.PropertyChangeListener var1) { }
+	public void fireIndexedPropertyChange(java.lang.String var0, int var1, int var2, int var3) { }
+	public void fireIndexedPropertyChange(java.lang.String var0, int var1, java.lang.Object var2, java.lang.Object var3) { }
+	public void fireIndexedPropertyChange(java.lang.String var0, int var1, boolean var2, boolean var3) { }
 	public void firePropertyChange(java.beans.PropertyChangeEvent var0) { }
 	public void firePropertyChange(java.lang.String var0, int var1, int var2) { }
 	public void firePropertyChange(java.lang.String var0, java.lang.Object var1, java.lang.Object var2) { }

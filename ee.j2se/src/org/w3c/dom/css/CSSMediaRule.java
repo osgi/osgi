@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package org.w3c.dom.css;
-public abstract interface CSSMediaRule extends org.w3c.dom.css.CSSRule {
-	public abstract void deleteRule(int var0);
-	public abstract org.w3c.dom.css.CSSRuleList getCssRules();
-	public abstract org.w3c.dom.stylesheets.MediaList getMedia();
-	public abstract int insertRule(java.lang.String var0, int var1);
+public interface CSSMediaRule extends org.w3c.dom.css.CSSRule {
+	void deleteRule(int var0);
+	org.w3c.dom.css.CSSRuleList getCssRules();
+	org.w3c.dom.stylesheets.MediaList getMedia();
+	int insertRule(java.lang.String var0, int var1);
 }
 

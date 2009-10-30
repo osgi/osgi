@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package java.awt.peer;
-public abstract interface ChoicePeer extends java.awt.peer.ComponentPeer {
-	public abstract void add(java.lang.String var0, int var1);
-	public abstract void addItem(java.lang.String var0, int var1);
-	public abstract void remove(int var0);
-	public abstract void removeAll();
-	public abstract void select(int var0);
+public interface ChoicePeer extends java.awt.peer.ComponentPeer {
+	void add(java.lang.String var0, int var1);
+	void addItem(java.lang.String var0, int var1);
+	void remove(int var0);
+	void removeAll();
+	void select(int var0);
 }
 

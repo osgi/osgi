@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package javax.print.attribute.standard;
 public class JobState extends javax.print.attribute.EnumSyntax implements javax.print.attribute.PrintJobAttribute {
-	protected JobState(int var0) { super(0); }
-	public final java.lang.Class getCategory() { return null; }
-	public final java.lang.String getName() { return null; }
 	public final static javax.print.attribute.standard.JobState ABORTED; static { ABORTED = null; }
 	public final static javax.print.attribute.standard.JobState CANCELED; static { CANCELED = null; }
 	public final static javax.print.attribute.standard.JobState COMPLETED; static { COMPLETED = null; }
@@ -27,5 +24,8 @@ public class JobState extends javax.print.attribute.EnumSyntax implements javax.
 	public final static javax.print.attribute.standard.JobState PROCESSING; static { PROCESSING = null; }
 	public final static javax.print.attribute.standard.JobState PROCESSING_STOPPED; static { PROCESSING_STOPPED = null; }
 	public final static javax.print.attribute.standard.JobState UNKNOWN; static { UNKNOWN = null; }
+	protected JobState(int var0)  { super(0); } 
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
+	public final java.lang.String getName() { return null; }
 }
 

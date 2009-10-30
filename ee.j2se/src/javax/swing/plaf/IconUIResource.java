@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.plaf;
 public class IconUIResource implements java.io.Serializable, javax.swing.Icon, javax.swing.plaf.UIResource {
-	public IconUIResource(javax.swing.Icon var0) { }
+	public IconUIResource(javax.swing.Icon var0) { } 
 	public int getIconHeight() { return 0; }
 	public int getIconWidth() { return 0; }
 	public void paintIcon(java.awt.Component var0, java.awt.Graphics var1, int var2, int var3) { }

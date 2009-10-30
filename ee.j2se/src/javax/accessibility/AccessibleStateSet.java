@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package javax.accessibility;
 public class AccessibleStateSet {
-	public AccessibleStateSet() { }
-	public AccessibleStateSet(javax.accessibility.AccessibleState[] var0) { }
+	protected java.util.Vector<javax.accessibility.AccessibleState> states;
+	public AccessibleStateSet() { } 
+	public AccessibleStateSet(javax.accessibility.AccessibleState[] var0) { } 
 	public boolean add(javax.accessibility.AccessibleState var0) { return false; }
 	public void addAll(javax.accessibility.AccessibleState[] var0) { }
 	public void clear() { }
 	public boolean contains(javax.accessibility.AccessibleState var0) { return false; }
 	public boolean remove(javax.accessibility.AccessibleState var0) { return false; }
 	public javax.accessibility.AccessibleState[] toArray() { return null; }
-	protected java.util.Vector states;
 }
 

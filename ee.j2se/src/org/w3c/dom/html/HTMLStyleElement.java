@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLStyleElement extends org.w3c.dom.html.HTMLElement {
-	public abstract boolean getDisabled();
-	public abstract java.lang.String getMedia();
-	public abstract java.lang.String getType();
-	public abstract void setDisabled(boolean var0);
-	public abstract void setMedia(java.lang.String var0);
-	public abstract void setType(java.lang.String var0);
+public interface HTMLStyleElement extends org.w3c.dom.html.HTMLElement {
+	boolean getDisabled();
+	java.lang.String getMedia();
+	java.lang.String getType();
+	void setDisabled(boolean var0);
+	void setMedia(java.lang.String var0);
+	void setType(java.lang.String var0);
 }
 

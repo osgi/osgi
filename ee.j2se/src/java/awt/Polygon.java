@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,12 @@
 
 package java.awt;
 public class Polygon implements java.awt.Shape, java.io.Serializable {
-	public Polygon() { }
-	public Polygon(int[] var0, int[] var1, int var2) { }
+	protected java.awt.Rectangle bounds;
+	public int npoints;
+	public int[] xpoints;
+	public int[] ypoints;
+	public Polygon() { } 
+	public Polygon(int[] var0, int[] var1, int var2) { } 
 	public void addPoint(int var0, int var1) { }
 	public boolean contains(double var0, double var1) { return false; }
 	public boolean contains(double var0, double var1, double var2, double var3) { return false; }
@@ -36,9 +40,5 @@ public class Polygon implements java.awt.Shape, java.io.Serializable {
 	public void invalidate() { }
 	public void reset() { }
 	public void translate(int var0, int var1) { }
-	protected java.awt.Rectangle bounds;
-	public int npoints;
-	public int[] xpoints;
-	public int[] ypoints;
 }
 

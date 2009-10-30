@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package java.rmi.activation;
 public abstract class ActivationGroup extends java.rmi.server.UnicastRemoteObject implements java.rmi.activation.ActivationInstantiator {
-	protected ActivationGroup(java.rmi.activation.ActivationGroupID var0) throws java.rmi.RemoteException { }
+	protected ActivationGroup(java.rmi.activation.ActivationGroupID var0) throws java.rmi.RemoteException { } 
 	protected void activeObject(java.rmi.activation.ActivationID var0, java.rmi.MarshalledObject var1) throws java.rmi.RemoteException, java.rmi.activation.ActivationException { }
 	public abstract void activeObject(java.rmi.activation.ActivationID var0, java.rmi.Remote var1) throws java.rmi.RemoteException, java.rmi.activation.ActivationException;
 	public static java.rmi.activation.ActivationGroup createGroup(java.rmi.activation.ActivationGroupID var0, java.rmi.activation.ActivationGroupDesc var1, long var2) throws java.rmi.activation.ActivationException { return null; }

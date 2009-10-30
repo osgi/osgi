@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package javax.sound.midi;
 public class VoiceStatus {
-	public VoiceStatus() { }
 	public boolean active;
 	public int bank;
 	public int channel;
 	public int note;
 	public int program;
 	public int volume;
+	public VoiceStatus() { } 
 }
 

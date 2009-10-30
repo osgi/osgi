@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,25 @@
 
 package java.beans.beancontext;
 public class BeanContextSupport extends java.beans.beancontext.BeanContextChildSupport implements java.beans.PropertyChangeListener, java.beans.VetoableChangeListener, java.beans.beancontext.BeanContext, java.io.Serializable {
-	public BeanContextSupport() { }
-	public BeanContextSupport(java.beans.beancontext.BeanContext var0) { }
-	public BeanContextSupport(java.beans.beancontext.BeanContext var0, java.util.Locale var1) { }
-	public BeanContextSupport(java.beans.beancontext.BeanContext var0, java.util.Locale var1, boolean var2) { }
-	public BeanContextSupport(java.beans.beancontext.BeanContext var0, java.util.Locale var1, boolean var2, boolean var3) { }
+	protected class BCSChild implements java.io.Serializable {
+		BCSChild() { } /* generated constructor to prevent compiler adding default public constructor */
+	}
+	protected static final class BCSIterator implements java.util.Iterator {
+		public boolean hasNext() { return false; }
+		public java.lang.Object next() { return null; }
+		public void remove() { }
+		private BCSIterator() { } /* generated constructor to prevent compiler adding default public constructor */
+	}
+	protected java.util.ArrayList bcmListeners;
+	protected java.util.HashMap children;
+	protected boolean designTime;
+	protected java.util.Locale locale;
+	protected boolean okToUseGui;
+	public BeanContextSupport() { } 
+	public BeanContextSupport(java.beans.beancontext.BeanContext var0) { } 
+	public BeanContextSupport(java.beans.beancontext.BeanContext var0, java.util.Locale var1) { } 
+	public BeanContextSupport(java.beans.beancontext.BeanContext var0, java.util.Locale var1, boolean var2) { } 
+	public BeanContextSupport(java.beans.beancontext.BeanContext var0, java.util.Locale var1, boolean var2, boolean var3) { } 
 	public boolean add(java.lang.Object var0) { return false; }
 	public boolean addAll(java.util.Collection var0) { return false; }
 	public void addBeanContextMembershipListener(java.beans.beancontext.BeanContextMembershipListener var0) { }
@@ -77,19 +91,5 @@ public class BeanContextSupport extends java.beans.beancontext.BeanContextChildS
 	protected boolean validatePendingRemove(java.lang.Object var0) { return false; }
 	public void vetoableChange(java.beans.PropertyChangeEvent var0) throws java.beans.PropertyVetoException { }
 	public final void writeChildren(java.io.ObjectOutputStream var0) throws java.io.IOException { }
-	protected java.util.ArrayList bcmListeners;
-	protected java.util.HashMap children;
-	protected boolean designTime;
-	protected java.util.Locale locale;
-	protected boolean okToUseGui;
-	protected class BCSChild implements java.io.Serializable {
-		BCSChild() { } /* generated constructor to prevent compiler adding default public constructor */
-	}
-	protected static final class BCSIterator implements java.util.Iterator {
-		public boolean hasNext() { return false; }
-		public java.lang.Object next() { return null; }
-		public void remove() { }
-		private BCSIterator() { } /* generated constructor to prevent compiler adding default public constructor */
-	}
 }
 

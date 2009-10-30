@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package javax.naming.event;
-public abstract interface EventDirContext extends javax.naming.directory.DirContext, javax.naming.event.EventContext {
-	public abstract void addNamingListener(java.lang.String var0, java.lang.String var1, javax.naming.directory.SearchControls var2, javax.naming.event.NamingListener var3) throws javax.naming.NamingException;
-	public abstract void addNamingListener(java.lang.String var0, java.lang.String var1, java.lang.Object[] var2, javax.naming.directory.SearchControls var3, javax.naming.event.NamingListener var4) throws javax.naming.NamingException;
-	public abstract void addNamingListener(javax.naming.Name var0, java.lang.String var1, javax.naming.directory.SearchControls var2, javax.naming.event.NamingListener var3) throws javax.naming.NamingException;
-	public abstract void addNamingListener(javax.naming.Name var0, java.lang.String var1, java.lang.Object[] var2, javax.naming.directory.SearchControls var3, javax.naming.event.NamingListener var4) throws javax.naming.NamingException;
+public interface EventDirContext extends javax.naming.directory.DirContext, javax.naming.event.EventContext {
+	void addNamingListener(java.lang.String var0, java.lang.String var1, javax.naming.directory.SearchControls var2, javax.naming.event.NamingListener var3) throws javax.naming.NamingException;
+	void addNamingListener(java.lang.String var0, java.lang.String var1, java.lang.Object[] var2, javax.naming.directory.SearchControls var3, javax.naming.event.NamingListener var4) throws javax.naming.NamingException;
+	void addNamingListener(javax.naming.Name var0, java.lang.String var1, javax.naming.directory.SearchControls var2, javax.naming.event.NamingListener var3) throws javax.naming.NamingException;
+	void addNamingListener(javax.naming.Name var0, java.lang.String var1, java.lang.Object[] var2, javax.naming.directory.SearchControls var3, javax.naming.event.NamingListener var4) throws javax.naming.NamingException;
 }
 

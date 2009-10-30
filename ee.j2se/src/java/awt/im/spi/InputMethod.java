@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,22 +15,22 @@
  */
 
 package java.awt.im.spi;
-public abstract interface InputMethod {
-	public abstract void activate();
-	public abstract void deactivate(boolean var0);
-	public abstract void dispatchEvent(java.awt.AWTEvent var0);
-	public abstract void dispose();
-	public abstract void endComposition();
-	public abstract java.lang.Object getControlObject();
-	public abstract java.util.Locale getLocale();
-	public abstract void hideWindows();
-	public abstract boolean isCompositionEnabled();
-	public abstract void notifyClientWindowChange(java.awt.Rectangle var0);
-	public abstract void reconvert();
-	public abstract void removeNotify();
-	public abstract void setCharacterSubsets(java.lang.Character.Subset[] var0);
-	public abstract void setCompositionEnabled(boolean var0);
-	public abstract void setInputMethodContext(java.awt.im.spi.InputMethodContext var0);
-	public abstract boolean setLocale(java.util.Locale var0);
+public interface InputMethod {
+	void activate();
+	void deactivate(boolean var0);
+	void dispatchEvent(java.awt.AWTEvent var0);
+	void dispose();
+	void endComposition();
+	java.lang.Object getControlObject();
+	java.util.Locale getLocale();
+	void hideWindows();
+	boolean isCompositionEnabled();
+	void notifyClientWindowChange(java.awt.Rectangle var0);
+	void reconvert();
+	void removeNotify();
+	void setCharacterSubsets(java.lang.Character.Subset[] var0);
+	void setCompositionEnabled(boolean var0);
+	void setInputMethodContext(java.awt.im.spi.InputMethodContext var0);
+	boolean setLocale(java.util.Locale var0);
 }
 

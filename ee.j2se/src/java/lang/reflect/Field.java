@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,19 @@ public final class Field extends java.lang.reflect.AccessibleObject implements j
 	public boolean getBoolean(java.lang.Object var0) throws java.lang.IllegalAccessException { return false; }
 	public byte getByte(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0; }
 	public char getChar(java.lang.Object var0) throws java.lang.IllegalAccessException { return '\0'; }
-	public java.lang.Class getDeclaringClass() { return null; }
+	public java.lang.Class<?> getDeclaringClass() { return null; }
 	public double getDouble(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0.0d; }
 	public float getFloat(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0.0f; }
+	public java.lang.reflect.Type getGenericType() { return null; }
 	public int getInt(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0; }
 	public long getLong(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0l; }
 	public int getModifiers() { return 0; }
 	public java.lang.String getName() { return null; }
 	public short getShort(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0; }
-	public java.lang.Class getType() { return null; }
+	public java.lang.Class<?> getType() { return null; }
 	public int hashCode() { return 0; }
+	public boolean isEnumConstant() { return false; }
+	public boolean isSynthetic() { return false; }
 	public void set(java.lang.Object var0, java.lang.Object var1) throws java.lang.IllegalAccessException { }
 	public void setBoolean(java.lang.Object var0, boolean var1) throws java.lang.IllegalAccessException { }
 	public void setByte(java.lang.Object var0, byte var1) throws java.lang.IllegalAccessException { }
@@ -39,6 +42,7 @@ public final class Field extends java.lang.reflect.AccessibleObject implements j
 	public void setInt(java.lang.Object var0, int var1) throws java.lang.IllegalAccessException { }
 	public void setLong(java.lang.Object var0, long var1) throws java.lang.IllegalAccessException { }
 	public void setShort(java.lang.Object var0, short var1) throws java.lang.IllegalAccessException { }
+	public java.lang.String toGenericString() { return null; }
 	private Field() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

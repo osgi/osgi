@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing;
 public class DefaultListModel extends javax.swing.AbstractListModel {
-	public DefaultListModel() { }
+	public DefaultListModel() { } 
 	public void add(int var0, java.lang.Object var1) { }
 	public void addElement(java.lang.Object var0) { }
 	public int capacity() { return 0; }
@@ -24,7 +24,7 @@ public class DefaultListModel extends javax.swing.AbstractListModel {
 	public boolean contains(java.lang.Object var0) { return false; }
 	public void copyInto(java.lang.Object[] var0) { }
 	public java.lang.Object elementAt(int var0) { return null; }
-	public java.util.Enumeration elements() { return null; }
+	public java.util.Enumeration<?> elements() { return null; }
 	public void ensureCapacity(int var0) { }
 	public java.lang.Object firstElement() { return null; }
 	public java.lang.Object get(int var0) { return null; }

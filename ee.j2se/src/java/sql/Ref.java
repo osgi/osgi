@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package java.sql;
-public abstract interface Ref {
-	public abstract java.lang.String getBaseTypeName() throws java.sql.SQLException;
-	public abstract java.lang.Object getObject() throws java.sql.SQLException;
-	public abstract java.lang.Object getObject(java.util.Map var0) throws java.sql.SQLException;
-	public abstract void setObject(java.lang.Object var0) throws java.sql.SQLException;
+public interface Ref {
+	java.lang.String getBaseTypeName() throws java.sql.SQLException;
+	java.lang.Object getObject() throws java.sql.SQLException;
+	java.lang.Object getObject(java.util.Map<java.lang.String,java.lang.Class<?>> var0) throws java.sql.SQLException;
+	void setObject(java.lang.Object var0) throws java.sql.SQLException;
 }
 

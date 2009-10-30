@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,15 @@
 
 package javax.swing;
 public class JTextField extends javax.swing.text.JTextComponent implements javax.swing.SwingConstants {
-	public JTextField() { }
-	public JTextField(int var0) { }
-	public JTextField(java.lang.String var0) { }
-	public JTextField(java.lang.String var0, int var1) { }
-	public JTextField(javax.swing.text.Document var0, java.lang.String var1, int var2) { }
+	protected class AccessibleJTextField extends javax.swing.text.JTextComponent.AccessibleJTextComponent {
+		protected AccessibleJTextField() { } 
+	}
+	public final static java.lang.String notifyAction = "notify-field-accept";
+	public JTextField() { } 
+	public JTextField(int var0) { } 
+	public JTextField(java.lang.String var0) { } 
+	public JTextField(java.lang.String var0, int var1) { } 
+	public JTextField(javax.swing.text.Document var0, java.lang.String var1, int var2) { } 
 	public void addActionListener(java.awt.event.ActionListener var0) { }
 	protected void configurePropertiesFromAction(javax.swing.Action var0) { }
 	protected java.beans.PropertyChangeListener createActionPropertyChangeListener(javax.swing.Action var0) { return null; }
@@ -40,9 +44,5 @@ public class JTextField extends javax.swing.text.JTextComponent implements javax
 	public void setColumns(int var0) { }
 	public void setHorizontalAlignment(int var0) { }
 	public void setScrollOffset(int var0) { }
-	public final static java.lang.String notifyAction = "notify-field-accept";
-	protected class AccessibleJTextField extends javax.swing.text.JTextComponent.AccessibleJTextComponent {
-		protected AccessibleJTextField() { }
-	}
 }
 

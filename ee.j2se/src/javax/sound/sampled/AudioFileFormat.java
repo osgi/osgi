@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,26 @@
 
 package javax.sound.sampled;
 public class AudioFileFormat {
-	protected AudioFileFormat(javax.sound.sampled.AudioFileFormat.Type var0, int var1, javax.sound.sampled.AudioFormat var2, int var3) { }
-	public AudioFileFormat(javax.sound.sampled.AudioFileFormat.Type var0, javax.sound.sampled.AudioFormat var1, int var2) { }
-	public int getByteLength() { return 0; }
-	public javax.sound.sampled.AudioFormat getFormat() { return null; }
-	public int getFrameLength() { return 0; }
-	public javax.sound.sampled.AudioFileFormat.Type getType() { return null; }
 	public static class Type {
-		protected Type(java.lang.String var0, java.lang.String var1) { }
-		public final boolean equals(java.lang.Object var0) { return false; }
-		public java.lang.String getExtension() { return null; }
-		public final int hashCode() { return 0; }
-		public final java.lang.String toString() { return null; }
 		public final static javax.sound.sampled.AudioFileFormat.Type AIFC; static { AIFC = null; }
 		public final static javax.sound.sampled.AudioFileFormat.Type AIFF; static { AIFF = null; }
 		public final static javax.sound.sampled.AudioFileFormat.Type AU; static { AU = null; }
 		public final static javax.sound.sampled.AudioFileFormat.Type SND; static { SND = null; }
 		public final static javax.sound.sampled.AudioFileFormat.Type WAVE; static { WAVE = null; }
+		public Type(java.lang.String var0, java.lang.String var1) { } 
+		public final boolean equals(java.lang.Object var0) { return false; }
+		public java.lang.String getExtension() { return null; }
+		public final int hashCode() { return 0; }
+		public final java.lang.String toString() { return null; }
 	}
+	protected AudioFileFormat(javax.sound.sampled.AudioFileFormat.Type var0, int var1, javax.sound.sampled.AudioFormat var2, int var3) { } 
+	public AudioFileFormat(javax.sound.sampled.AudioFileFormat.Type var0, javax.sound.sampled.AudioFormat var1, int var2) { } 
+	public AudioFileFormat(javax.sound.sampled.AudioFileFormat.Type var0, javax.sound.sampled.AudioFormat var1, int var2, java.util.Map<java.lang.String,java.lang.Object> var3) { } 
+	public int getByteLength() { return 0; }
+	public javax.sound.sampled.AudioFormat getFormat() { return null; }
+	public int getFrameLength() { return 0; }
+	public java.lang.Object getProperty(java.lang.String var0) { return null; }
+	public javax.sound.sampled.AudioFileFormat.Type getType() { return null; }
+	public java.util.Map<java.lang.String,java.lang.Object> properties() { return null; }
 }
 

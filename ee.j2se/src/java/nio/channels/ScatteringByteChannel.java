@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package java.nio.channels;
-public abstract interface ScatteringByteChannel extends java.nio.channels.ReadableByteChannel {
-	public abstract long read(java.nio.ByteBuffer[] var0) throws java.io.IOException;
-	public abstract long read(java.nio.ByteBuffer[] var0, int var1, int var2) throws java.io.IOException;
+public interface ScatteringByteChannel extends java.nio.channels.ReadableByteChannel {
+	long read(java.nio.ByteBuffer[] var0) throws java.io.IOException;
+	long read(java.nio.ByteBuffer[] var0, int var1, int var2) throws java.io.IOException;
 }
 

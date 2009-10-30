@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package org.w3c.dom.css;
-public abstract interface CSSValue {
-	public abstract java.lang.String getCssText();
-	public abstract short getCssValueType();
-	public abstract void setCssText(java.lang.String var0);
+public interface CSSValue {
 	public final static short CSS_CUSTOM = 3;
 	public final static short CSS_INHERIT = 0;
 	public final static short CSS_PRIMITIVE_VALUE = 1;
 	public final static short CSS_VALUE_LIST = 2;
+	java.lang.String getCssText();
+	short getCssValueType();
+	void setCssText(java.lang.String var0);
 }
 

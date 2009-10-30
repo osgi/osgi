@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  */
 
 package javax.swing.plaf.basic;
-public abstract interface ComboPopup {
-	public abstract java.awt.event.KeyListener getKeyListener();
-	public abstract javax.swing.JList getList();
-	public abstract java.awt.event.MouseListener getMouseListener();
-	public abstract java.awt.event.MouseMotionListener getMouseMotionListener();
-	public abstract void hide();
-	public abstract boolean isVisible();
-	public abstract void show();
-	public abstract void uninstallingUI();
+public interface ComboPopup {
+	java.awt.event.KeyListener getKeyListener();
+	javax.swing.JList getList();
+	java.awt.event.MouseListener getMouseListener();
+	java.awt.event.MouseMotionListener getMouseMotionListener();
+	void hide();
+	boolean isVisible();
+	void show();
+	void uninstallingUI();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.plaf.basic;
 public class BasicToggleButtonUI extends javax.swing.plaf.basic.BasicButtonUI {
-	public BasicToggleButtonUI() { }
+	public BasicToggleButtonUI() { } 
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	protected void paintIcon(java.awt.Graphics var0, javax.swing.AbstractButton var1, java.awt.Rectangle var2) { }
 }

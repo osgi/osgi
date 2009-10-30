@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package java.security;
 public class AlgorithmParameters {
-	protected AlgorithmParameters(java.security.AlgorithmParametersSpi var0, java.security.Provider var1, java.lang.String var2) { }
+	protected AlgorithmParameters(java.security.AlgorithmParametersSpi var0, java.security.Provider var1, java.lang.String var2) { } 
 	public final java.lang.String getAlgorithm() { return null; }
 	public final byte[] getEncoded() throws java.io.IOException { return null; }
 	public final byte[] getEncoded(java.lang.String var0) throws java.io.IOException { return null; }
 	public static java.security.AlgorithmParameters getInstance(java.lang.String var0) throws java.security.NoSuchAlgorithmException { return null; }
 	public static java.security.AlgorithmParameters getInstance(java.lang.String var0, java.lang.String var1) throws java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException { return null; }
 	public static java.security.AlgorithmParameters getInstance(java.lang.String var0, java.security.Provider var1) throws java.security.NoSuchAlgorithmException { return null; }
-	public final java.security.spec.AlgorithmParameterSpec getParameterSpec(java.lang.Class var0) throws java.security.spec.InvalidParameterSpecException { return null; }
+	public final <T extends java.security.spec.AlgorithmParameterSpec> T getParameterSpec(java.lang.Class<T> var0) throws java.security.spec.InvalidParameterSpecException { return null; }
 	public final java.security.Provider getProvider() { return null; }
 	public final void init(java.security.spec.AlgorithmParameterSpec var0) throws java.security.spec.InvalidParameterSpecException { }
 	public final void init(byte[] var0) throws java.io.IOException { }

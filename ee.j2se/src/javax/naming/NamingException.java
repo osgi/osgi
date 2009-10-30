@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,12 @@
 
 package javax.naming;
 public class NamingException extends java.lang.Exception {
-	public NamingException() { }
-	public NamingException(java.lang.String var0) { }
+	protected javax.naming.Name remainingName;
+	protected javax.naming.Name resolvedName;
+	protected java.lang.Object resolvedObj;
+	protected java.lang.Throwable rootException;
+	public NamingException() { } 
+	public NamingException(java.lang.String var0) { } 
 	public void appendRemainingComponent(java.lang.String var0) { }
 	public void appendRemainingName(javax.naming.Name var0) { }
 	public java.lang.String getExplanation() { return null; }
@@ -31,9 +35,5 @@ public class NamingException extends java.lang.Exception {
 	public void setResolvedObj(java.lang.Object var0) { }
 	public void setRootCause(java.lang.Throwable var0) { }
 	public java.lang.String toString(boolean var0) { return null; }
-	protected javax.naming.Name remainingName;
-	protected javax.naming.Name resolvedName;
-	protected java.lang.Object resolvedObj;
-	protected java.lang.Throwable rootException;
 }
 

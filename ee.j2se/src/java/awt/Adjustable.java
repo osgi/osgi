@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +15,24 @@
  */
 
 package java.awt;
-public abstract interface Adjustable {
-	public abstract void addAdjustmentListener(java.awt.event.AdjustmentListener var0);
-	public abstract int getBlockIncrement();
-	public abstract int getMaximum();
-	public abstract int getMinimum();
-	public abstract int getOrientation();
-	public abstract int getUnitIncrement();
-	public abstract int getValue();
-	public abstract int getVisibleAmount();
-	public abstract void removeAdjustmentListener(java.awt.event.AdjustmentListener var0);
-	public abstract void setBlockIncrement(int var0);
-	public abstract void setMaximum(int var0);
-	public abstract void setMinimum(int var0);
-	public abstract void setUnitIncrement(int var0);
-	public abstract void setValue(int var0);
-	public abstract void setVisibleAmount(int var0);
+public interface Adjustable {
 	public final static int HORIZONTAL = 0;
 	public final static int NO_ORIENTATION = 2;
 	public final static int VERTICAL = 1;
+	void addAdjustmentListener(java.awt.event.AdjustmentListener var0);
+	int getBlockIncrement();
+	int getMaximum();
+	int getMinimum();
+	int getOrientation();
+	int getUnitIncrement();
+	int getValue();
+	int getVisibleAmount();
+	void removeAdjustmentListener(java.awt.event.AdjustmentListener var0);
+	void setBlockIncrement(int var0);
+	void setMaximum(int var0);
+	void setMinimum(int var0);
+	void setUnitIncrement(int var0);
+	void setValue(int var0);
+	void setVisibleAmount(int var0);
 }
 

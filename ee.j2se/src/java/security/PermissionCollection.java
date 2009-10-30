@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package java.security;
 public abstract class PermissionCollection implements java.io.Serializable {
-	public PermissionCollection() { }
+	public PermissionCollection() { } 
 	public abstract void add(java.security.Permission var0);
-	public abstract java.util.Enumeration elements();
+	public abstract java.util.Enumeration<java.security.Permission> elements();
 	public abstract boolean implies(java.security.Permission var0);
 	public boolean isReadOnly() { return false; }
 	public void setReadOnly() { }

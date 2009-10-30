@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,7 @@
  */
 
 package javax.transaction.xa;
-public abstract interface XAResource {
-	public abstract void commit(javax.transaction.xa.Xid var0, boolean var1) throws javax.transaction.xa.XAException;
-	public abstract void end(javax.transaction.xa.Xid var0, int var1) throws javax.transaction.xa.XAException;
-	public abstract void forget(javax.transaction.xa.Xid var0) throws javax.transaction.xa.XAException;
-	public abstract int getTransactionTimeout() throws javax.transaction.xa.XAException;
-	public abstract boolean isSameRM(javax.transaction.xa.XAResource var0) throws javax.transaction.xa.XAException;
-	public abstract int prepare(javax.transaction.xa.Xid var0) throws javax.transaction.xa.XAException;
-	public abstract javax.transaction.xa.Xid[] recover(int var0) throws javax.transaction.xa.XAException;
-	public abstract void rollback(javax.transaction.xa.Xid var0) throws javax.transaction.xa.XAException;
-	public abstract boolean setTransactionTimeout(int var0) throws javax.transaction.xa.XAException;
-	public abstract void start(javax.transaction.xa.Xid var0, int var1) throws javax.transaction.xa.XAException;
+public interface XAResource {
 	public final static int TMENDRSCAN = 8388608;
 	public final static int TMFAIL = 536870912;
 	public final static int TMJOIN = 2097152;
@@ -37,5 +27,15 @@ public abstract interface XAResource {
 	public final static int TMSUSPEND = 33554432;
 	public final static int XA_OK = 0;
 	public final static int XA_RDONLY = 3;
+	void commit(javax.transaction.xa.Xid var0, boolean var1) throws javax.transaction.xa.XAException;
+	void end(javax.transaction.xa.Xid var0, int var1) throws javax.transaction.xa.XAException;
+	void forget(javax.transaction.xa.Xid var0) throws javax.transaction.xa.XAException;
+	int getTransactionTimeout() throws javax.transaction.xa.XAException;
+	boolean isSameRM(javax.transaction.xa.XAResource var0) throws javax.transaction.xa.XAException;
+	int prepare(javax.transaction.xa.Xid var0) throws javax.transaction.xa.XAException;
+	javax.transaction.xa.Xid[] recover(int var0) throws javax.transaction.xa.XAException;
+	void rollback(javax.transaction.xa.Xid var0) throws javax.transaction.xa.XAException;
+	boolean setTransactionTimeout(int var0) throws javax.transaction.xa.XAException;
+	void start(javax.transaction.xa.Xid var0, int var1) throws javax.transaction.xa.XAException;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.text;
 public class DateFormatSymbols implements java.io.Serializable, java.lang.Cloneable {
-	public DateFormatSymbols() { }
-	public DateFormatSymbols(java.util.Locale var0) { }
+	public DateFormatSymbols() { } 
+	public DateFormatSymbols(java.util.Locale var0) { } 
 	public java.lang.Object clone() { return null; }
 	public java.lang.String[] getAmPmStrings() { return null; }
 	public java.lang.String[] getEras() { return null; }

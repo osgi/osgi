@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package javax.print.attribute.standard;
 public final class Sides extends javax.print.attribute.EnumSyntax implements javax.print.attribute.DocAttribute, javax.print.attribute.PrintJobAttribute, javax.print.attribute.PrintRequestAttribute {
-	protected Sides(int var0) { super(0); }
-	public final java.lang.Class getCategory() { return null; }
-	public final java.lang.String getName() { return null; }
 	public final static javax.print.attribute.standard.Sides DUPLEX; static { DUPLEX = null; }
 	public final static javax.print.attribute.standard.Sides ONE_SIDED; static { ONE_SIDED = null; }
 	public final static javax.print.attribute.standard.Sides TUMBLE; static { TUMBLE = null; }
 	public final static javax.print.attribute.standard.Sides TWO_SIDED_LONG_EDGE; static { TWO_SIDED_LONG_EDGE = null; }
 	public final static javax.print.attribute.standard.Sides TWO_SIDED_SHORT_EDGE; static { TWO_SIDED_SHORT_EDGE = null; }
+	protected Sides(int var0)  { super(0); } 
+	public final java.lang.Class<? extends javax.print.attribute.Attribute> getCategory() { return null; }
+	public final java.lang.String getName() { return null; }
 }
 

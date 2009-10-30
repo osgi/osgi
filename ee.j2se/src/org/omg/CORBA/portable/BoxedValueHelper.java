@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package org.omg.CORBA.portable;
-public abstract interface BoxedValueHelper {
-	public abstract java.lang.String get_id();
-	public abstract java.io.Serializable read_value(org.omg.CORBA.portable.InputStream var0);
-	public abstract void write_value(org.omg.CORBA.portable.OutputStream var0, java.io.Serializable var1);
+public interface BoxedValueHelper {
+	java.lang.String get_id();
+	java.io.Serializable read_value(org.omg.CORBA.portable.InputStream var0);
+	void write_value(org.omg.CORBA.portable.OutputStream var0, java.io.Serializable var1);
 }
 

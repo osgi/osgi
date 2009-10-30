@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package java.util;
-public class ArrayList extends java.util.AbstractList implements java.io.Serializable, java.lang.Cloneable, java.util.List, java.util.RandomAccess {
-	public ArrayList() { }
-	public ArrayList(int var0) { }
-	public ArrayList(java.util.Collection var0) { }
+public class ArrayList<E> extends java.util.AbstractList<E> implements java.io.Serializable, java.lang.Cloneable, java.util.List<E>, java.util.RandomAccess {
+	public ArrayList() { } 
+	public ArrayList(int var0) { } 
+	public ArrayList(java.util.Collection<? extends E> var0) { } 
 	public java.lang.Object clone() { return null; }
 	public void ensureCapacity(int var0) { }
-	public java.lang.Object get(int var0) { return null; }
+	public E get(int var0) { return null; }
 	public int size() { return 0; }
 	public void trimToSize() { }
 }

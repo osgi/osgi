@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package java.lang.ref;
-public abstract class Reference {
+public abstract class Reference<T> {
 	public void clear() { }
 	public boolean enqueue() { return false; }
-	public java.lang.Object get() { return null; }
+	public T get() { return null; }
 	public boolean isEnqueued() { return false; }
 	Reference() { } /* generated constructor to prevent compiler adding default public constructor */
 }

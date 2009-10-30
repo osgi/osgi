@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 package java.util;
-public abstract interface SortedSet extends java.util.Set {
-	public abstract java.util.Comparator comparator();
-	public abstract java.lang.Object first();
-	public abstract java.util.SortedSet headSet(java.lang.Object var0);
-	public abstract java.lang.Object last();
-	public abstract java.util.SortedSet subSet(java.lang.Object var0, java.lang.Object var1);
-	public abstract java.util.SortedSet tailSet(java.lang.Object var0);
+public interface SortedSet<E> extends java.util.Set<E> {
+	java.util.Comparator<? super E> comparator();
+	E first();
+	java.util.SortedSet<E> headSet(E var0);
+	E last();
+	java.util.SortedSet<E> subSet(E var0, E var1);
+	java.util.SortedSet<E> tailSet(E var0);
 }
 

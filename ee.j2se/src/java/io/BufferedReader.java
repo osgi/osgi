@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.io;
 public class BufferedReader extends java.io.Reader {
-	public BufferedReader(java.io.Reader var0) { }
-	public BufferedReader(java.io.Reader var0, int var1) { }
+	public BufferedReader(java.io.Reader var0) { } 
+	public BufferedReader(java.io.Reader var0, int var1) { } 
 	public void close() throws java.io.IOException { }
 	public int read(char[] var0, int var1, int var2) throws java.io.IOException { return 0; }
 	public java.lang.String readLine() throws java.io.IOException { return null; }

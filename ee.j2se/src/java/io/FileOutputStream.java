@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package java.io;
 public class FileOutputStream extends java.io.OutputStream {
-	public FileOutputStream(java.io.File var0) throws java.io.FileNotFoundException { }
-	public FileOutputStream(java.io.File var0, boolean var1) throws java.io.FileNotFoundException { }
-	public FileOutputStream(java.io.FileDescriptor var0) { }
-	public FileOutputStream(java.lang.String var0) throws java.io.FileNotFoundException { }
-	public FileOutputStream(java.lang.String var0, boolean var1) throws java.io.FileNotFoundException { }
+	public FileOutputStream(java.io.File var0) throws java.io.FileNotFoundException { } 
+	public FileOutputStream(java.io.File var0, boolean var1) throws java.io.FileNotFoundException { } 
+	public FileOutputStream(java.io.FileDescriptor var0) { } 
+	public FileOutputStream(java.lang.String var0) throws java.io.FileNotFoundException { } 
+	public FileOutputStream(java.lang.String var0, boolean var1) throws java.io.FileNotFoundException { } 
 	protected void finalize() throws java.io.IOException { }
 	public java.nio.channels.FileChannel getChannel() { return null; }
 	public final java.io.FileDescriptor getFD() throws java.io.IOException { return null; }
-	public void write(int var0) throws java.io.IOException { }
+	public native void write(int var0) throws java.io.IOException;
 }
 

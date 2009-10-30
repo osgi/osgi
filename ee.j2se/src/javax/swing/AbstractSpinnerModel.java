@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package javax.swing;
 public abstract class AbstractSpinnerModel implements javax.swing.SpinnerModel {
-	public AbstractSpinnerModel() { }
+	protected javax.swing.event.EventListenerList listenerList;
+	public AbstractSpinnerModel() { } 
 	public void addChangeListener(javax.swing.event.ChangeListener var0) { }
 	protected void fireStateChanged() { }
 	public javax.swing.event.ChangeListener[] getChangeListeners() { return null; }
-	public java.util.EventListener[] getListeners(java.lang.Class var0) { return null; }
+	public <T extends java.util.EventListener> T[] getListeners(java.lang.Class<T> var0) { return null; }
 	public void removeChangeListener(javax.swing.event.ChangeListener var0) { }
-	protected javax.swing.event.EventListenerList listenerList;
 }
 

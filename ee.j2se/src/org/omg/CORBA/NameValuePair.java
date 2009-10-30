@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package org.omg.CORBA;
 public final class NameValuePair implements org.omg.CORBA.portable.IDLEntity {
-	public NameValuePair() { }
-	public NameValuePair(java.lang.String var0, org.omg.CORBA.Any var1) { }
 	public java.lang.String id;
 	public org.omg.CORBA.Any value;
+	public NameValuePair() { } 
+	public NameValuePair(java.lang.String var0, org.omg.CORBA.Any var1) { } 
 }
 

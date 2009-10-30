@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package java.nio;
-public abstract class IntBuffer extends java.nio.Buffer implements java.lang.Comparable {
+public abstract class IntBuffer extends java.nio.Buffer implements java.lang.Comparable<java.nio.IntBuffer> {
 	public static java.nio.IntBuffer allocate(int var0) { return null; }
 	public final int[] array() { return null; }
 	public final int arrayOffset() { return 0; }
 	public abstract java.nio.IntBuffer asReadOnlyBuffer();
 	public abstract java.nio.IntBuffer compact();
-	public int compareTo(java.lang.Object var0) { return 0; }
+	public int compareTo(java.nio.IntBuffer var0) { return 0; }
 	public abstract java.nio.IntBuffer duplicate();
 	public abstract int get();
 	public abstract int get(int var0);

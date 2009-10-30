@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 package javax.print;
-public abstract interface URIException {
-	public abstract int getReason();
-	public abstract java.net.URI getUnsupportedURI();
+public interface URIException {
 	public final static int URIInaccessible = 1;
 	public final static int URIOtherProblem = -1;
 	public final static int URISchemeNotSupported = 2;
+	int getReason();
+	java.net.URI getUnsupportedURI();
 }
 

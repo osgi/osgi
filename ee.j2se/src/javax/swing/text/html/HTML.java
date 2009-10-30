@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,6 @@
 
 package javax.swing.text.html;
 public class HTML {
-	public HTML() { }
-	public static javax.swing.text.html.HTML.Attribute[] getAllAttributeKeys() { return null; }
-	public static javax.swing.text.html.HTML.Tag[] getAllTags() { return null; }
-	public static javax.swing.text.html.HTML.Attribute getAttributeKey(java.lang.String var0) { return null; }
-	public static int getIntegerAttributeValue(javax.swing.text.AttributeSet var0, javax.swing.text.html.HTML.Attribute var1, int var2) { return 0; }
-	public static javax.swing.text.html.HTML.Tag getTag(java.lang.String var0) { return null; }
-	public final static java.lang.String NULL_ATTRIBUTE_VALUE = "#DEFAULT";
 	public static final class Attribute {
 		public final static javax.swing.text.html.HTML.Attribute ACTION; static { ACTION = null; }
 		public final static javax.swing.text.html.HTML.Attribute ALIGN; static { ALIGN = null; }
@@ -107,12 +100,6 @@ public class HTML {
 		private Attribute() { } /* generated constructor to prevent compiler adding default public constructor */
 	}
 	public static class Tag {
-		public Tag() { }
-		protected Tag(java.lang.String var0) { }
-		protected Tag(java.lang.String var0, boolean var1, boolean var2) { }
-		public boolean breaksFlow() { return false; }
-		public boolean isBlock() { return false; }
-		public boolean isPreformatted() { return false; }
 		public final static javax.swing.text.html.HTML.Tag A; static { A = null; }
 		public final static javax.swing.text.html.HTML.Tag ADDRESS; static { ADDRESS = null; }
 		public final static javax.swing.text.html.HTML.Tag APPLET; static { APPLET = null; }
@@ -189,10 +176,23 @@ public class HTML {
 		public final static javax.swing.text.html.HTML.Tag U; static { U = null; }
 		public final static javax.swing.text.html.HTML.Tag UL; static { UL = null; }
 		public final static javax.swing.text.html.HTML.Tag VAR; static { VAR = null; }
+		public Tag() { } 
+		protected Tag(java.lang.String var0) { } 
+		protected Tag(java.lang.String var0, boolean var1, boolean var2) { } 
+		public boolean breaksFlow() { return false; }
+		public boolean isBlock() { return false; }
+		public boolean isPreformatted() { return false; }
 	}
 	public static class UnknownTag extends javax.swing.text.html.HTML.Tag implements java.io.Serializable {
-		public UnknownTag(java.lang.String var0) { }
+		public UnknownTag(java.lang.String var0) { } 
 		public int hashCode() { return 0; }
 	}
+	public final static java.lang.String NULL_ATTRIBUTE_VALUE = "#DEFAULT";
+	public HTML() { } 
+	public static javax.swing.text.html.HTML.Attribute[] getAllAttributeKeys() { return null; }
+	public static javax.swing.text.html.HTML.Tag[] getAllTags() { return null; }
+	public static javax.swing.text.html.HTML.Attribute getAttributeKey(java.lang.String var0) { return null; }
+	public static int getIntegerAttributeValue(javax.swing.text.AttributeSet var0, javax.swing.text.html.HTML.Attribute var1, int var2) { return 0; }
+	public static javax.swing.text.html.HTML.Tag getTag(java.lang.String var0) { return null; }
 }
 

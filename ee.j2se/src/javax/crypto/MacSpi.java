@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
 
 package javax.crypto;
 public abstract class MacSpi {
-	public MacSpi() { }
+	public MacSpi() { } 
 	public java.lang.Object clone() throws java.lang.CloneNotSupportedException { return null; }
 	protected abstract byte[] engineDoFinal();
 	protected abstract int engineGetMacLength();
 	protected abstract void engineInit(java.security.Key var0, java.security.spec.AlgorithmParameterSpec var1) throws java.security.InvalidAlgorithmParameterException, java.security.InvalidKeyException;
 	protected abstract void engineReset();
 	protected abstract void engineUpdate(byte var0);
+	protected void engineUpdate(java.nio.ByteBuffer var0) { }
 	protected abstract void engineUpdate(byte[] var0, int var1, int var2);
 }
 

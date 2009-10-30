@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package java.awt;
 public class CardLayout implements java.awt.LayoutManager2, java.io.Serializable {
-	public CardLayout() { }
-	public CardLayout(int var0, int var1) { }
+	public CardLayout() { } 
+	public CardLayout(int var0, int var1) { } 
 	public void addLayoutComponent(java.awt.Component var0, java.lang.Object var1) { }
 	/** @deprecated */ public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }
 	public void first(java.awt.Container var0) { }

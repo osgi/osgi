@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,14 @@
 
 package javax.xml.parsers;
 public abstract class SAXParser {
-	protected SAXParser() { }
+	protected SAXParser() { } 
 	public abstract org.xml.sax.Parser getParser() throws org.xml.sax.SAXException;
 	public abstract java.lang.Object getProperty(java.lang.String var0) throws org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException;
+	public javax.xml.validation.Schema getSchema() { return null; }
 	public abstract org.xml.sax.XMLReader getXMLReader() throws org.xml.sax.SAXException;
 	public abstract boolean isNamespaceAware();
 	public abstract boolean isValidating();
+	public boolean isXIncludeAware() { return false; }
 	public void parse(java.io.File var0, org.xml.sax.HandlerBase var1) throws java.io.IOException, org.xml.sax.SAXException { }
 	public void parse(java.io.File var0, org.xml.sax.helpers.DefaultHandler var1) throws java.io.IOException, org.xml.sax.SAXException { }
 	public void parse(java.io.InputStream var0, org.xml.sax.HandlerBase var1) throws java.io.IOException, org.xml.sax.SAXException { }
@@ -32,6 +34,7 @@ public abstract class SAXParser {
 	public void parse(java.lang.String var0, org.xml.sax.helpers.DefaultHandler var1) throws java.io.IOException, org.xml.sax.SAXException { }
 	public void parse(org.xml.sax.InputSource var0, org.xml.sax.HandlerBase var1) throws java.io.IOException, org.xml.sax.SAXException { }
 	public void parse(org.xml.sax.InputSource var0, org.xml.sax.helpers.DefaultHandler var1) throws java.io.IOException, org.xml.sax.SAXException { }
+	public void reset() { }
 	public abstract void setProperty(java.lang.String var0, java.lang.Object var1) throws org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException;
 }
 

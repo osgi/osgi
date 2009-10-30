@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.naming.directory;
 public class ModificationItem implements java.io.Serializable {
-	public ModificationItem(int var0, javax.naming.directory.Attribute var1) { }
+	public ModificationItem(int var0, javax.naming.directory.Attribute var1) { } 
 	public javax.naming.directory.Attribute getAttribute() { return null; }
 	public int getModificationOp() { return 0; }
 }

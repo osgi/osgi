@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package org.w3c.dom.html;
-public abstract interface HTMLLIElement extends org.w3c.dom.html.HTMLElement {
-	public abstract java.lang.String getType();
-	public abstract int getValue();
-	public abstract void setType(java.lang.String var0);
-	public abstract void setValue(int var0);
+public interface HTMLLIElement extends org.w3c.dom.html.HTMLElement {
+	java.lang.String getType();
+	int getValue();
+	void setType(java.lang.String var0);
+	void setValue(int var0);
 }
 

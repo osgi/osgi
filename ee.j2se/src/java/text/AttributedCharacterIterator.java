@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,25 @@
  */
 
 package java.text;
-public abstract interface AttributedCharacterIterator extends java.text.CharacterIterator {
-	public abstract java.util.Set getAllAttributeKeys();
-	public abstract java.lang.Object getAttribute(java.text.AttributedCharacterIterator.Attribute var0);
-	public abstract java.util.Map getAttributes();
-	public abstract int getRunLimit();
-	public abstract int getRunLimit(java.text.AttributedCharacterIterator.Attribute var0);
-	public abstract int getRunLimit(java.util.Set var0);
-	public abstract int getRunStart();
-	public abstract int getRunStart(java.text.AttributedCharacterIterator.Attribute var0);
-	public abstract int getRunStart(java.util.Set var0);
+public interface AttributedCharacterIterator extends java.text.CharacterIterator {
 	public static class Attribute implements java.io.Serializable {
-		protected Attribute(java.lang.String var0) { }
+		public final static java.text.AttributedCharacterIterator.Attribute INPUT_METHOD_SEGMENT; static { INPUT_METHOD_SEGMENT = null; }
+		public final static java.text.AttributedCharacterIterator.Attribute LANGUAGE; static { LANGUAGE = null; }
+		public final static java.text.AttributedCharacterIterator.Attribute READING; static { READING = null; }
+		protected Attribute(java.lang.String var0) { } 
 		public final boolean equals(java.lang.Object var0) { return false; }
 		protected java.lang.String getName() { return null; }
 		public final int hashCode() { return 0; }
 		protected java.lang.Object readResolve() throws java.io.InvalidObjectException { return null; }
-		public final static java.text.AttributedCharacterIterator.Attribute INPUT_METHOD_SEGMENT; static { INPUT_METHOD_SEGMENT = null; }
-		public final static java.text.AttributedCharacterIterator.Attribute LANGUAGE; static { LANGUAGE = null; }
-		public final static java.text.AttributedCharacterIterator.Attribute READING; static { READING = null; }
 	}
+	java.util.Set<java.text.AttributedCharacterIterator.Attribute> getAllAttributeKeys();
+	java.lang.Object getAttribute(java.text.AttributedCharacterIterator.Attribute var0);
+	java.util.Map<java.text.AttributedCharacterIterator.Attribute,java.lang.Object> getAttributes();
+	int getRunLimit();
+	int getRunLimit(java.text.AttributedCharacterIterator.Attribute var0);
+	int getRunLimit(java.util.Set<? extends java.text.AttributedCharacterIterator.Attribute> var0);
+	int getRunStart();
+	int getRunStart(java.text.AttributedCharacterIterator.Attribute var0);
+	int getRunStart(java.util.Set<? extends java.text.AttributedCharacterIterator.Attribute> var0);
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,10 @@
 
 package java.awt.print;
 public class PageFormat implements java.lang.Cloneable {
-	public PageFormat() { }
+	public final static int LANDSCAPE = 0;
+	public final static int PORTRAIT = 1;
+	public final static int REVERSE_LANDSCAPE = 2;
+	public PageFormat() { } 
 	public java.lang.Object clone() { return null; }
 	public double getHeight() { return 0.0d; }
 	public double getImageableHeight() { return 0.0d; }
@@ -29,8 +32,5 @@ public class PageFormat implements java.lang.Cloneable {
 	public double getWidth() { return 0.0d; }
 	public void setOrientation(int var0) { }
 	public void setPaper(java.awt.print.Paper var0) { }
-	public final static int LANDSCAPE = 0;
-	public final static int PORTRAIT = 1;
-	public final static int REVERSE_LANDSCAPE = 2;
 }
 

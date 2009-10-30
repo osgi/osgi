@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,16 @@
  */
 
 package javax.swing.text;
-public abstract interface Element {
-	public abstract javax.swing.text.AttributeSet getAttributes();
-	public abstract javax.swing.text.Document getDocument();
-	public abstract javax.swing.text.Element getElement(int var0);
-	public abstract int getElementCount();
-	public abstract int getElementIndex(int var0);
-	public abstract int getEndOffset();
-	public abstract java.lang.String getName();
-	public abstract javax.swing.text.Element getParentElement();
-	public abstract int getStartOffset();
-	public abstract boolean isLeaf();
+public interface Element {
+	javax.swing.text.AttributeSet getAttributes();
+	javax.swing.text.Document getDocument();
+	javax.swing.text.Element getElement(int var0);
+	int getElementCount();
+	int getElementIndex(int var0);
+	int getEndOffset();
+	java.lang.String getName();
+	javax.swing.text.Element getParentElement();
+	int getStartOffset();
+	boolean isLeaf();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,14 @@
 
 package java.awt;
 public class ScrollPane extends java.awt.Container implements javax.accessibility.Accessible {
-	public ScrollPane() { }
-	public ScrollPane(int var0) { }
+	protected class AccessibleAWTScrollPane extends java.awt.Container.AccessibleAWTContainer {
+		protected AccessibleAWTScrollPane() { } 
+	}
+	public final static int SCROLLBARS_ALWAYS = 1;
+	public final static int SCROLLBARS_AS_NEEDED = 0;
+	public final static int SCROLLBARS_NEVER = 2;
+	public ScrollPane() { } 
+	public ScrollPane(int var0) { } 
 	protected final void addImpl(java.awt.Component var0, java.lang.Object var1, int var2) { }
 	protected boolean eventTypeEnabled(int var0) { return false; }
 	public java.awt.Adjustable getHAdjustable() { return null; }
@@ -33,11 +39,5 @@ public class ScrollPane extends java.awt.Container implements javax.accessibilit
 	public void setScrollPosition(int var0, int var1) { }
 	public void setScrollPosition(java.awt.Point var0) { }
 	public void setWheelScrollingEnabled(boolean var0) { }
-	public final static int SCROLLBARS_ALWAYS = 1;
-	public final static int SCROLLBARS_AS_NEEDED = 0;
-	public final static int SCROLLBARS_NEVER = 2;
-	protected class AccessibleAWTScrollPane extends java.awt.Container.AccessibleAWTContainer {
-		protected AccessibleAWTScrollPane() { }
-	}
 }
 

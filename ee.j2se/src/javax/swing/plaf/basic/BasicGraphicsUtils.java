@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.plaf.basic;
 public class BasicGraphicsUtils {
-	public BasicGraphicsUtils() { }
+	public BasicGraphicsUtils() { } 
 	public static void drawBezel(java.awt.Graphics var0, int var1, int var2, int var3, int var4, boolean var5, boolean var6, java.awt.Color var7, java.awt.Color var8, java.awt.Color var9, java.awt.Color var10) { }
 	public static void drawDashedRect(java.awt.Graphics var0, int var1, int var2, int var3, int var4) { }
 	public static void drawEtchedRect(java.awt.Graphics var0, int var1, int var2, int var3, int var4, java.awt.Color var5, java.awt.Color var6, java.awt.Color var7, java.awt.Color var8) { }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 package javax.imageio.event;
-public abstract interface IIOWriteProgressListener extends java.util.EventListener {
-	public abstract void imageComplete(javax.imageio.ImageWriter var0);
-	public abstract void imageProgress(javax.imageio.ImageWriter var0, float var1);
-	public abstract void imageStarted(javax.imageio.ImageWriter var0, int var1);
-	public abstract void thumbnailComplete(javax.imageio.ImageWriter var0);
-	public abstract void thumbnailProgress(javax.imageio.ImageWriter var0, float var1);
-	public abstract void thumbnailStarted(javax.imageio.ImageWriter var0, int var1, int var2);
-	public abstract void writeAborted(javax.imageio.ImageWriter var0);
+public interface IIOWriteProgressListener extends java.util.EventListener {
+	void imageComplete(javax.imageio.ImageWriter var0);
+	void imageProgress(javax.imageio.ImageWriter var0, float var1);
+	void imageStarted(javax.imageio.ImageWriter var0, int var1);
+	void thumbnailComplete(javax.imageio.ImageWriter var0);
+	void thumbnailProgress(javax.imageio.ImageWriter var0, float var1);
+	void thumbnailStarted(javax.imageio.ImageWriter var0, int var1, int var2);
+	void writeAborted(javax.imageio.ImageWriter var0);
 }
 

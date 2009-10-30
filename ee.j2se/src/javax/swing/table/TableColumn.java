@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,25 @@
 
 package javax.swing.table;
 public class TableColumn implements java.io.Serializable {
-	public TableColumn() { }
-	public TableColumn(int var0) { }
-	public TableColumn(int var0, int var1) { }
-	public TableColumn(int var0, int var1, javax.swing.table.TableCellRenderer var2, javax.swing.table.TableCellEditor var3) { }
+	public final static java.lang.String CELL_RENDERER_PROPERTY = "cellRenderer";
+	public final static java.lang.String COLUMN_WIDTH_PROPERTY = "columWidth";
+	public final static java.lang.String HEADER_RENDERER_PROPERTY = "headerRenderer";
+	public final static java.lang.String HEADER_VALUE_PROPERTY = "headerValue";
+	protected javax.swing.table.TableCellEditor cellEditor;
+	protected javax.swing.table.TableCellRenderer cellRenderer;
+	protected javax.swing.table.TableCellRenderer headerRenderer;
+	protected java.lang.Object headerValue;
+	protected java.lang.Object identifier;
+	protected boolean isResizable;
+	protected int maxWidth;
+	protected int minWidth;
+	protected int modelIndex;
+	/** @deprecated */ protected int resizedPostingDisableCount;
+	protected int width;
+	public TableColumn() { } 
+	public TableColumn(int var0) { } 
+	public TableColumn(int var0, int var1) { } 
+	public TableColumn(int var0, int var1, javax.swing.table.TableCellRenderer var2, javax.swing.table.TableCellEditor var3) { } 
 	public void addPropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	protected javax.swing.table.TableCellRenderer createDefaultHeaderRenderer() { return null; }
 	/** @deprecated */ public void disableResizedPosting() { }
@@ -49,20 +64,5 @@ public class TableColumn implements java.io.Serializable {
 	public void setResizable(boolean var0) { }
 	public void setWidth(int var0) { }
 	public void sizeWidthToFit() { }
-	public final static java.lang.String CELL_RENDERER_PROPERTY = "cellRenderer";
-	public final static java.lang.String COLUMN_WIDTH_PROPERTY = "columWidth";
-	public final static java.lang.String HEADER_RENDERER_PROPERTY = "headerRenderer";
-	public final static java.lang.String HEADER_VALUE_PROPERTY = "headerValue";
-	protected javax.swing.table.TableCellEditor cellEditor;
-	protected javax.swing.table.TableCellRenderer cellRenderer;
-	protected javax.swing.table.TableCellRenderer headerRenderer;
-	protected java.lang.Object headerValue;
-	protected java.lang.Object identifier;
-	protected boolean isResizable;
-	protected int maxWidth;
-	protected int minWidth;
-	protected int modelIndex;
-	/** @deprecated */ protected int resizedPostingDisableCount;
-	protected int width;
 }
 

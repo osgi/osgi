@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.text;
 public class ZoneView extends javax.swing.text.BoxView {
-	public ZoneView(javax.swing.text.Element var0, int var1) { super((javax.swing.text.Element) null, 0); }
+	public ZoneView(javax.swing.text.Element var0, int var1)  { super((javax.swing.text.Element) null, 0); } 
 	protected javax.swing.text.View createZone(int var0, int var1) { return null; }
 	public int getMaxZonesLoaded() { return 0; }
 	public int getMaximumZoneSize() { return 0; }

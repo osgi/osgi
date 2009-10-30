@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package java.awt.event;
 public class ContainerEvent extends java.awt.event.ComponentEvent {
-	public ContainerEvent(java.awt.Component var0, int var1, java.awt.Component var2) { super((java.awt.Component) null, 0); }
-	public java.awt.Component getChild() { return null; }
-	public java.awt.Container getContainer() { return null; }
 	public final static int COMPONENT_ADDED = 300;
 	public final static int COMPONENT_REMOVED = 301;
 	public final static int CONTAINER_FIRST = 300;
 	public final static int CONTAINER_LAST = 301;
+	public ContainerEvent(java.awt.Component var0, int var1, java.awt.Component var2)  { super((java.awt.Component) null, 0); } 
+	public java.awt.Component getChild() { return null; }
+	public java.awt.Container getContainer() { return null; }
 }
 

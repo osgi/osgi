@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.sql;
-public abstract interface RowSetListener extends java.util.EventListener {
-	public abstract void cursorMoved(javax.sql.RowSetEvent var0);
-	public abstract void rowChanged(javax.sql.RowSetEvent var0);
-	public abstract void rowSetChanged(javax.sql.RowSetEvent var0);
+public interface RowSetListener extends java.util.EventListener {
+	void cursorMoved(javax.sql.RowSetEvent var0);
+	void rowChanged(javax.sql.RowSetEvent var0);
+	void rowSetChanged(javax.sql.RowSetEvent var0);
 }
 

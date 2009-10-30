@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package java.util;
-public class StringTokenizer implements java.util.Enumeration {
-	public StringTokenizer(java.lang.String var0) { }
-	public StringTokenizer(java.lang.String var0, java.lang.String var1) { }
-	public StringTokenizer(java.lang.String var0, java.lang.String var1, boolean var2) { }
+public class StringTokenizer implements java.util.Enumeration<java.lang.Object> {
+	public StringTokenizer(java.lang.String var0) { } 
+	public StringTokenizer(java.lang.String var0, java.lang.String var1) { } 
+	public StringTokenizer(java.lang.String var0, java.lang.String var1, boolean var2) { } 
 	public int countTokens() { return 0; }
 	public boolean hasMoreElements() { return false; }
 	public boolean hasMoreTokens() { return false; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,9 @@
 
 package javax.swing.plaf.metal;
 public class MetalSliderUI extends javax.swing.plaf.basic.BasicSliderUI {
-	public MetalSliderUI() { super((javax.swing.JSlider) null); }
-	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
-	protected int getThumbOverhang() { return 0; }
-	public int getTickLength() { return 0; }
-	protected int getTrackLength() { return 0; }
-	protected int getTrackWidth() { return 0; }
+	protected class MetalPropertyListener extends javax.swing.plaf.basic.BasicSliderUI.PropertyChangeHandler {
+		protected MetalPropertyListener() { } 
+	}
 	protected final java.lang.String SLIDER_FILL = "JSlider.isFilled";
 	protected final int TICK_BUFFER = 4;
 	protected static java.awt.Color darkShadowColor;
@@ -32,8 +29,11 @@ public class MetalSliderUI extends javax.swing.plaf.basic.BasicSliderUI {
 	protected static int tickLength;
 	protected static int trackWidth;
 	protected static javax.swing.Icon vertThumbIcon;
-	protected class MetalPropertyListener extends javax.swing.plaf.basic.BasicSliderUI.PropertyChangeHandler {
-		protected MetalPropertyListener() { }
-	}
+	public MetalSliderUI()  { super((javax.swing.JSlider) null); } 
+	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
+	protected int getThumbOverhang() { return 0; }
+	public int getTickLength() { return 0; }
+	protected int getTrackLength() { return 0; }
+	protected int getTrackWidth() { return 0; }
 }
 

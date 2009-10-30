@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package javax.swing.text.html.parser;
 public class TagElement {
-	public TagElement(javax.swing.text.html.parser.Element var0) { }
-	public TagElement(javax.swing.text.html.parser.Element var0, boolean var1) { }
+	public TagElement(javax.swing.text.html.parser.Element var0) { } 
+	public TagElement(javax.swing.text.html.parser.Element var0, boolean var1) { } 
 	public boolean breaksFlow() { return false; }
 	public boolean fictional() { return false; }
 	public javax.swing.text.html.parser.Element getElement() { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.swing.event;
 public class ListSelectionEvent extends java.util.EventObject {
-	public ListSelectionEvent(java.lang.Object var0, int var1, int var2, boolean var3) { super((java.lang.Object) null); }
+	public ListSelectionEvent(java.lang.Object var0, int var1, int var2, boolean var3)  { super((java.lang.Object) null); } 
 	public int getFirstIndex() { return 0; }
 	public int getLastIndex() { return 0; }
 	public boolean getValueIsAdjusting() { return false; }

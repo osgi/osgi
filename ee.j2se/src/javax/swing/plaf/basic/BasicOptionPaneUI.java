@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,41 @@
 
 package javax.swing.plaf.basic;
 public class BasicOptionPaneUI extends javax.swing.plaf.OptionPaneUI {
-	public BasicOptionPaneUI() { }
+	public class ButtonActionListener implements java.awt.event.ActionListener {
+		protected int buttonIndex;
+		public ButtonActionListener(int var0) { } 
+		public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	}
+	public static class ButtonAreaLayout implements java.awt.LayoutManager {
+		protected boolean centersChildren;
+		protected int padding;
+		protected boolean syncAllWidths;
+		public ButtonAreaLayout(boolean var0, int var1) { } 
+		public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }
+		public boolean getCentersChildren() { return false; }
+		public int getPadding() { return 0; }
+		public boolean getSyncAllWidths() { return false; }
+		public void layoutContainer(java.awt.Container var0) { }
+		public java.awt.Dimension minimumLayoutSize(java.awt.Container var0) { return null; }
+		public java.awt.Dimension preferredLayoutSize(java.awt.Container var0) { return null; }
+		public void removeLayoutComponent(java.awt.Component var0) { }
+		public void setCentersChildren(boolean var0) { }
+		public void setPadding(int var0) { }
+		public void setSyncAllWidths(boolean var0) { }
+	}
+	public class PropertyChangeHandler implements java.beans.PropertyChangeListener {
+		public PropertyChangeHandler() { } 
+		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
+	}
+	public final static int MinimumHeight = 90;
+	public final static int MinimumWidth = 262;
+	protected boolean hasCustomComponents;
+	protected java.awt.Component initialFocusComponent;
+	protected javax.swing.JComponent inputComponent;
+	protected java.awt.Dimension minimumSize;
+	protected javax.swing.JOptionPane optionPane;
+	protected java.beans.PropertyChangeListener propertyChangeListener;
+	public BasicOptionPaneUI() { } 
 	protected void addButtonComponents(java.awt.Container var0, java.lang.Object[] var1, int var2) { }
 	protected void addIcon(java.awt.Container var0) { }
 	protected void addMessageComponents(java.awt.Container var0, java.awt.GridBagConstraints var1, java.lang.Object var2, int var3, boolean var4) { }
@@ -47,39 +81,5 @@ public class BasicOptionPaneUI extends javax.swing.plaf.OptionPaneUI {
 	protected void uninstallDefaults() { }
 	protected void uninstallKeyboardActions() { }
 	protected void uninstallListeners() { }
-	public final static int MinimumHeight = 90;
-	public final static int MinimumWidth = 262;
-	protected boolean hasCustomComponents;
-	protected java.awt.Component initialFocusComponent;
-	protected javax.swing.JComponent inputComponent;
-	protected java.awt.Dimension minimumSize;
-	protected javax.swing.JOptionPane optionPane;
-	protected java.beans.PropertyChangeListener propertyChangeListener;
-	public class ButtonActionListener implements java.awt.event.ActionListener {
-		public ButtonActionListener(int var0) { }
-		public void actionPerformed(java.awt.event.ActionEvent var0) { }
-		protected int buttonIndex;
-	}
-	public static class ButtonAreaLayout implements java.awt.LayoutManager {
-		public ButtonAreaLayout(boolean var0, int var1) { }
-		public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }
-		public boolean getCentersChildren() { return false; }
-		public int getPadding() { return 0; }
-		public boolean getSyncAllWidths() { return false; }
-		public void layoutContainer(java.awt.Container var0) { }
-		public java.awt.Dimension minimumLayoutSize(java.awt.Container var0) { return null; }
-		public java.awt.Dimension preferredLayoutSize(java.awt.Container var0) { return null; }
-		public void removeLayoutComponent(java.awt.Component var0) { }
-		public void setCentersChildren(boolean var0) { }
-		public void setPadding(int var0) { }
-		public void setSyncAllWidths(boolean var0) { }
-		protected boolean centersChildren;
-		protected int padding;
-		protected boolean syncAllWidths;
-	}
-	public class PropertyChangeHandler implements java.beans.PropertyChangeListener {
-		public PropertyChangeHandler() { }
-		public void propertyChange(java.beans.PropertyChangeEvent var0) { }
-	}
 }
 

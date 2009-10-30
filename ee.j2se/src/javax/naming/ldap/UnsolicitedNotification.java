@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package javax.naming.ldap;
-public abstract interface UnsolicitedNotification extends javax.naming.ldap.ExtendedResponse, javax.naming.ldap.HasControls {
-	public abstract javax.naming.NamingException getException();
-	public abstract java.lang.String[] getReferrals();
+public interface UnsolicitedNotification extends javax.naming.ldap.ExtendedResponse, javax.naming.ldap.HasControls {
+	javax.naming.NamingException getException();
+	java.lang.String[] getReferrals();
 }
 

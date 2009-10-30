@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,14 @@
 
 package javax.swing.table;
 public class DefaultTableColumnModel implements java.beans.PropertyChangeListener, java.io.Serializable, javax.swing.event.ListSelectionListener, javax.swing.table.TableColumnModel {
-	public DefaultTableColumnModel() { }
+	protected javax.swing.event.ChangeEvent changeEvent;
+	protected int columnMargin;
+	protected boolean columnSelectionAllowed;
+	protected javax.swing.event.EventListenerList listenerList;
+	protected javax.swing.ListSelectionModel selectionModel;
+	protected java.util.Vector<javax.swing.table.TableColumn> tableColumns;
+	protected int totalColumnWidth;
+	public DefaultTableColumnModel() { } 
 	public void addColumn(javax.swing.table.TableColumn var0) { }
 	public void addColumnModelListener(javax.swing.event.TableColumnModelListener var0) { }
 	protected javax.swing.ListSelectionModel createSelectionModel() { return null; }
@@ -32,8 +39,8 @@ public class DefaultTableColumnModel implements java.beans.PropertyChangeListene
 	public int getColumnMargin() { return 0; }
 	public javax.swing.event.TableColumnModelListener[] getColumnModelListeners() { return null; }
 	public boolean getColumnSelectionAllowed() { return false; }
-	public java.util.Enumeration getColumns() { return null; }
-	public java.util.EventListener[] getListeners(java.lang.Class var0) { return null; }
+	public java.util.Enumeration<javax.swing.table.TableColumn> getColumns() { return null; }
+	public <T extends java.util.EventListener> T[] getListeners(java.lang.Class<T> var0) { return null; }
 	public int getSelectedColumnCount() { return 0; }
 	public int[] getSelectedColumns() { return null; }
 	public javax.swing.ListSelectionModel getSelectionModel() { return null; }
@@ -47,12 +54,5 @@ public class DefaultTableColumnModel implements java.beans.PropertyChangeListene
 	public void setColumnSelectionAllowed(boolean var0) { }
 	public void setSelectionModel(javax.swing.ListSelectionModel var0) { }
 	public void valueChanged(javax.swing.event.ListSelectionEvent var0) { }
-	protected javax.swing.event.ChangeEvent changeEvent;
-	protected int columnMargin;
-	protected boolean columnSelectionAllowed;
-	protected javax.swing.event.EventListenerList listenerList;
-	protected javax.swing.ListSelectionModel selectionModel;
-	protected java.util.Vector tableColumns;
-	protected int totalColumnWidth;
 }
 
