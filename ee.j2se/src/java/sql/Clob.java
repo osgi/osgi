@@ -16,8 +16,10 @@
 
 package java.sql;
 public interface Clob {
+	void free() throws java.sql.SQLException;
 	java.io.InputStream getAsciiStream() throws java.sql.SQLException;
 	java.io.Reader getCharacterStream() throws java.sql.SQLException;
+	java.io.Reader getCharacterStream(long var0, long var1) throws java.sql.SQLException;
 	java.lang.String getSubString(long var0, int var1) throws java.sql.SQLException;
 	long length() throws java.sql.SQLException;
 	long position(java.lang.String var0, long var1) throws java.sql.SQLException;

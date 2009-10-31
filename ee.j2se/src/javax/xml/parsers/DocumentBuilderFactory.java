@@ -29,6 +29,7 @@ public abstract class DocumentBuilderFactory {
 	public boolean isXIncludeAware() { return false; }
 	public abstract javax.xml.parsers.DocumentBuilder newDocumentBuilder() throws javax.xml.parsers.ParserConfigurationException;
 	public static javax.xml.parsers.DocumentBuilderFactory newInstance() { return null; }
+	public static javax.xml.parsers.DocumentBuilderFactory newInstance(java.lang.String var0, java.lang.ClassLoader var1) { return null; }
 	public abstract void setAttribute(java.lang.String var0, java.lang.Object var1);
 	public void setCoalescing(boolean var0) { }
 	public void setExpandEntityReferences(boolean var0) { }

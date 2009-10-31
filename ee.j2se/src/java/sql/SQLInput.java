@@ -31,8 +31,12 @@ public interface SQLInput {
 	float readFloat() throws java.sql.SQLException;
 	int readInt() throws java.sql.SQLException;
 	long readLong() throws java.sql.SQLException;
+	java.sql.NClob readNClob() throws java.sql.SQLException;
+	java.lang.String readNString() throws java.sql.SQLException;
 	java.lang.Object readObject() throws java.sql.SQLException;
 	java.sql.Ref readRef() throws java.sql.SQLException;
+	java.sql.RowId readRowId() throws java.sql.SQLException;
+	java.sql.SQLXML readSQLXML() throws java.sql.SQLException;
 	short readShort() throws java.sql.SQLException;
 	java.lang.String readString() throws java.sql.SQLException;
 	java.sql.Time readTime() throws java.sql.SQLException;

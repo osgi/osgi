@@ -37,6 +37,7 @@ public class AccessibleRole extends javax.accessibility.AccessibleBundle {
 	public final static javax.accessibility.AccessibleRole GLASS_PANE; static { GLASS_PANE = null; }
 	public final static javax.accessibility.AccessibleRole GROUP_BOX; static { GROUP_BOX = null; }
 	public final static javax.accessibility.AccessibleRole HEADER; static { HEADER = null; }
+	public final static javax.accessibility.AccessibleRole HTML_CONTAINER; static { HTML_CONTAINER = null; }
 	public final static javax.accessibility.AccessibleRole HYPERLINK; static { HYPERLINK = null; }
 	public final static javax.accessibility.AccessibleRole ICON; static { ICON = null; }
 	public final static javax.accessibility.AccessibleRole INTERNAL_FRAME; static { INTERNAL_FRAME = null; }

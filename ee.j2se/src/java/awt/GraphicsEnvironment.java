@@ -30,5 +30,6 @@ public abstract class GraphicsEnvironment {
 	public boolean isHeadlessInstance() { return false; }
 	public void preferLocaleFonts() { }
 	public void preferProportionalFonts() { }
+	public boolean registerFont(java.awt.Font var0) { return false; }
 }
 

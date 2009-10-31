@@ -19,9 +19,12 @@ public interface Action extends java.awt.event.ActionListener {
 	public final static java.lang.String ACCELERATOR_KEY = "AcceleratorKey";
 	public final static java.lang.String ACTION_COMMAND_KEY = "ActionCommandKey";
 	public final static java.lang.String DEFAULT = "Default";
+	public final static java.lang.String DISPLAYED_MNEMONIC_INDEX_KEY = "SwingDisplayedMnemonicIndexKey";
+	public final static java.lang.String LARGE_ICON_KEY = "SwingLargeIconKey";
 	public final static java.lang.String LONG_DESCRIPTION = "LongDescription";
 	public final static java.lang.String MNEMONIC_KEY = "MnemonicKey";
 	public final static java.lang.String NAME = "Name";
+	public final static java.lang.String SELECTED_KEY = "SwingSelectedKey";
 	public final static java.lang.String SHORT_DESCRIPTION = "ShortDescription";
 	public final static java.lang.String SMALL_ICON = "SmallIcon";
 	void addPropertyChangeListener(java.beans.PropertyChangeListener var0);

@@ -20,7 +20,7 @@ public class Object {
 	protected native java.lang.Object clone() throws java.lang.CloneNotSupportedException;
 	public boolean equals(java.lang.Object var0) { return false; }
 	protected void finalize() throws java.lang.Throwable { }
-	public final native java.lang.Class<? extends java.lang.Object> getClass();
+	public final native java.lang.Class<?> getClass();
 	public native int hashCode();
 	public final native void notify();
 	public final native void notifyAll();

@@ -18,6 +18,7 @@ package java.util.concurrent;
 public class ConcurrentHashMap<K,V> extends java.util.AbstractMap<K,V> implements java.io.Serializable, java.util.concurrent.ConcurrentMap<K,V> {
 	public ConcurrentHashMap() { } 
 	public ConcurrentHashMap(int var0) { } 
+	public ConcurrentHashMap(int var0, float var1) { } 
 	public ConcurrentHashMap(int var0, float var1, int var2) { } 
 	public ConcurrentHashMap(java.util.Map<? extends K,? extends V> var0) { } 
 	public boolean contains(java.lang.Object var0) { return false; }

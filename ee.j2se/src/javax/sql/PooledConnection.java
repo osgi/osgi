@@ -17,8 +17,10 @@
 package javax.sql;
 public interface PooledConnection {
 	void addConnectionEventListener(javax.sql.ConnectionEventListener var0);
+	void addStatementEventListener(javax.sql.StatementEventListener var0);
 	void close() throws java.sql.SQLException;
 	java.sql.Connection getConnection() throws java.sql.SQLException;
 	void removeConnectionEventListener(javax.sql.ConnectionEventListener var0);
+	void removeStatementEventListener(javax.sql.StatementEventListener var0);
 }
 

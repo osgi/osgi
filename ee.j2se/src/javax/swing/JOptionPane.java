@@ -64,6 +64,7 @@ public class JOptionPane extends javax.swing.JComponent implements javax.accessi
 	public JOptionPane(java.lang.Object var0, int var1, int var2, javax.swing.Icon var3, java.lang.Object[] var4) { } 
 	public JOptionPane(java.lang.Object var0, int var1, int var2, javax.swing.Icon var3, java.lang.Object[] var4, java.lang.Object var5) { } 
 	public javax.swing.JDialog createDialog(java.awt.Component var0, java.lang.String var1) { return null; }
+	public javax.swing.JDialog createDialog(java.lang.String var0) { return null; }
 	public javax.swing.JInternalFrame createInternalFrame(java.awt.Component var0, java.lang.String var1) { return null; }
 	public static javax.swing.JDesktopPane getDesktopPaneForComponent(java.awt.Component var0) { return null; }
 	public static java.awt.Frame getFrameForComponent(java.awt.Component var0) { return null; }

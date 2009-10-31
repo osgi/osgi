@@ -16,6 +16,7 @@
 
 package java.awt.peer;
 public interface RobotPeer {
+	void dispose();
 	int getRGBPixel(int var0, int var1);
 	int[] getRGBPixels(java.awt.Rectangle var0);
 	void keyPress(int var0);

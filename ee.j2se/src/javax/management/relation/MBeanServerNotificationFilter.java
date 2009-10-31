@@ -21,7 +21,7 @@ public class MBeanServerNotificationFilter extends javax.management.Notification
 	public void disableObjectName(javax.management.ObjectName var0) { }
 	public void enableAllObjectNames() { }
 	public void enableObjectName(javax.management.ObjectName var0) { }
-	public java.util.Vector getDisabledObjectNames() { return null; }
-	public java.util.Vector getEnabledObjectNames() { return null; }
+	public java.util.Vector<javax.management.ObjectName> getDisabledObjectNames() { return null; }
+	public java.util.Vector<javax.management.ObjectName> getEnabledObjectNames() { return null; }
 }
 

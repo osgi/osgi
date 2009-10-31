@@ -19,11 +19,11 @@ public interface OpenMBeanParameterInfo {
 	boolean equals(java.lang.Object var0);
 	java.lang.Object getDefaultValue();
 	java.lang.String getDescription();
-	java.util.Set getLegalValues();
-	java.lang.Comparable getMaxValue();
-	java.lang.Comparable getMinValue();
+	java.util.Set<?> getLegalValues();
+	java.lang.Comparable<?> getMaxValue();
+	java.lang.Comparable<?> getMinValue();
 	java.lang.String getName();
-	javax.management.openmbean.OpenType getOpenType();
+	javax.management.openmbean.OpenType<?> getOpenType();
 	boolean hasDefaultValue();
 	boolean hasLegalValues();
 	boolean hasMaxValue();

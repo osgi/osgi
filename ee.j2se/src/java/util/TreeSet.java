@@ -15,19 +15,30 @@
  */
 
 package java.util;
-public class TreeSet<E> extends java.util.AbstractSet<E> implements java.io.Serializable, java.lang.Cloneable, java.util.SortedSet<E> {
+public class TreeSet<E> extends java.util.AbstractSet<E> implements java.io.Serializable, java.lang.Cloneable, java.util.NavigableSet<E> {
 	public TreeSet() { } 
 	public TreeSet(java.util.Collection<? extends E> var0) { } 
 	public TreeSet(java.util.Comparator<? super E> var0) { } 
 	public TreeSet(java.util.SortedSet<E> var0) { } 
+	public E ceiling(E var0) { return null; }
 	public java.lang.Object clone() { return null; }
 	public java.util.Comparator<? super E> comparator() { return null; }
+	public java.util.Iterator<E> descendingIterator() { return null; }
+	public java.util.NavigableSet<E> descendingSet() { return null; }
 	public E first() { return null; }
+	public E floor(E var0) { return null; }
 	public java.util.SortedSet<E> headSet(E var0) { return null; }
+	public java.util.NavigableSet<E> headSet(E var0, boolean var1) { return null; }
+	public E higher(E var0) { return null; }
 	public java.util.Iterator<E> iterator() { return null; }
 	public E last() { return null; }
+	public E lower(E var0) { return null; }
+	public E pollFirst() { return null; }
+	public E pollLast() { return null; }
 	public int size() { return 0; }
 	public java.util.SortedSet<E> subSet(E var0, E var1) { return null; }
+	public java.util.NavigableSet<E> subSet(E var0, boolean var1, E var2, boolean var3) { return null; }
 	public java.util.SortedSet<E> tailSet(E var0) { return null; }
+	public java.util.NavigableSet<E> tailSet(E var0, boolean var1) { return null; }
 }
 

@@ -15,12 +15,12 @@
  */
 
 package javax.management;
-public class AttributeChangeNotificationFilter implements java.io.Serializable, javax.management.NotificationFilter {
+public class AttributeChangeNotificationFilter implements javax.management.NotificationFilter {
 	public AttributeChangeNotificationFilter() { } 
 	public void disableAllAttributes() { }
 	public void disableAttribute(java.lang.String var0) { }
 	public void enableAttribute(java.lang.String var0) { }
-	public java.util.Vector getEnabledAttributes() { return null; }
+	public java.util.Vector<java.lang.String> getEnabledAttributes() { return null; }
 	public boolean isNotificationEnabled(javax.management.Notification var0) { return false; }
 }
 

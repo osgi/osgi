@@ -32,8 +32,12 @@ public class SQLOutputImpl implements java.sql.SQLOutput {
 	public void writeFloat(float var0) throws java.sql.SQLException { }
 	public void writeInt(int var0) throws java.sql.SQLException { }
 	public void writeLong(long var0) throws java.sql.SQLException { }
+	public void writeNClob(java.sql.NClob var0) throws java.sql.SQLException { }
+	public void writeNString(java.lang.String var0) throws java.sql.SQLException { }
 	public void writeObject(java.sql.SQLData var0) throws java.sql.SQLException { }
 	public void writeRef(java.sql.Ref var0) throws java.sql.SQLException { }
+	public void writeRowId(java.sql.RowId var0) throws java.sql.SQLException { }
+	public void writeSQLXML(java.sql.SQLXML var0) throws java.sql.SQLException { }
 	public void writeShort(short var0) throws java.sql.SQLException { }
 	public void writeString(java.lang.String var0) throws java.sql.SQLException { }
 	public void writeStruct(java.sql.Struct var0) throws java.sql.SQLException { }

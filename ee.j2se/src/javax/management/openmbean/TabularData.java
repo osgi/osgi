@@ -25,12 +25,12 @@ public interface TabularData {
 	javax.management.openmbean.TabularType getTabularType();
 	int hashCode();
 	boolean isEmpty();
-	java.util.Set keySet();
+	java.util.Set<?> keySet();
 	void put(javax.management.openmbean.CompositeData var0);
 	void putAll(javax.management.openmbean.CompositeData[] var0);
 	javax.management.openmbean.CompositeData remove(java.lang.Object[] var0);
 	int size();
 	java.lang.String toString();
-	java.util.Collection values();
+	java.util.Collection<?> values();
 }
 

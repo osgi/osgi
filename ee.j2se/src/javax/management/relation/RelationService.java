@@ -23,19 +23,19 @@ public class RelationService extends javax.management.NotificationBroadcasterSup
 	public java.lang.Integer checkRoleWriting(javax.management.relation.Role var0, java.lang.String var1, java.lang.Boolean var2) throws javax.management.relation.RelationTypeNotFoundException { return null; }
 	public void createRelation(java.lang.String var0, java.lang.String var1, javax.management.relation.RoleList var2) throws javax.management.relation.InvalidRelationIdException, javax.management.relation.InvalidRoleValueException, javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RelationTypeNotFoundException, javax.management.relation.RoleNotFoundException { }
 	public void createRelationType(java.lang.String var0, javax.management.relation.RoleInfo[] var1) throws javax.management.relation.InvalidRelationTypeException { }
-	public java.util.Map findAssociatedMBeans(javax.management.ObjectName var0, java.lang.String var1, java.lang.String var2) { return null; }
-	public java.util.Map findReferencingRelations(javax.management.ObjectName var0, java.lang.String var1, java.lang.String var2) { return null; }
-	public java.util.List findRelationsOfType(java.lang.String var0) throws javax.management.relation.RelationTypeNotFoundException { return null; }
-	public java.util.List getAllRelationIds() { return null; }
-	public java.util.List getAllRelationTypeNames() { return null; }
+	public java.util.Map<javax.management.ObjectName,java.util.List<java.lang.String>> findAssociatedMBeans(javax.management.ObjectName var0, java.lang.String var1, java.lang.String var2) { return null; }
+	public java.util.Map<java.lang.String,java.util.List<java.lang.String>> findReferencingRelations(javax.management.ObjectName var0, java.lang.String var1, java.lang.String var2) { return null; }
+	public java.util.List<java.lang.String> findRelationsOfType(java.lang.String var0) throws javax.management.relation.RelationTypeNotFoundException { return null; }
+	public java.util.List<java.lang.String> getAllRelationIds() { return null; }
+	public java.util.List<java.lang.String> getAllRelationTypeNames() { return null; }
 	public javax.management.relation.RoleResult getAllRoles(java.lang.String var0) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException { return null; }
 	public boolean getPurgeFlag() { return false; }
-	public java.util.Map getReferencedMBeans(java.lang.String var0) throws javax.management.relation.RelationNotFoundException { return null; }
+	public java.util.Map<javax.management.ObjectName,java.util.List<java.lang.String>> getReferencedMBeans(java.lang.String var0) throws javax.management.relation.RelationNotFoundException { return null; }
 	public java.lang.String getRelationTypeName(java.lang.String var0) throws javax.management.relation.RelationNotFoundException { return null; }
-	public java.util.List getRole(java.lang.String var0, java.lang.String var1) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RoleNotFoundException { return null; }
+	public java.util.List<javax.management.ObjectName> getRole(java.lang.String var0, java.lang.String var1) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RoleNotFoundException { return null; }
 	public java.lang.Integer getRoleCardinality(java.lang.String var0, java.lang.String var1) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RoleNotFoundException { return null; }
 	public javax.management.relation.RoleInfo getRoleInfo(java.lang.String var0, java.lang.String var1) throws javax.management.relation.RelationTypeNotFoundException, javax.management.relation.RoleInfoNotFoundException { return null; }
-	public java.util.List getRoleInfos(java.lang.String var0) throws javax.management.relation.RelationTypeNotFoundException { return null; }
+	public java.util.List<javax.management.relation.RoleInfo> getRoleInfos(java.lang.String var0) throws javax.management.relation.RelationTypeNotFoundException { return null; }
 	public javax.management.relation.RoleResult getRoles(java.lang.String var0, java.lang.String[] var1) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException { return null; }
 	public void handleNotification(javax.management.Notification var0, java.lang.Object var1) { }
 	public java.lang.Boolean hasRelation(java.lang.String var0) { return null; }
@@ -50,11 +50,11 @@ public class RelationService extends javax.management.NotificationBroadcasterSup
 	public void removeRelation(java.lang.String var0) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException { }
 	public void removeRelationType(java.lang.String var0) throws javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RelationTypeNotFoundException { }
 	public void sendRelationCreationNotification(java.lang.String var0) throws javax.management.relation.RelationNotFoundException { }
-	public void sendRelationRemovalNotification(java.lang.String var0, java.util.List var1) throws javax.management.relation.RelationNotFoundException { }
-	public void sendRoleUpdateNotification(java.lang.String var0, javax.management.relation.Role var1, java.util.List var2) throws javax.management.relation.RelationNotFoundException { }
+	public void sendRelationRemovalNotification(java.lang.String var0, java.util.List<javax.management.ObjectName> var1) throws javax.management.relation.RelationNotFoundException { }
+	public void sendRoleUpdateNotification(java.lang.String var0, javax.management.relation.Role var1, java.util.List<javax.management.ObjectName> var2) throws javax.management.relation.RelationNotFoundException { }
 	public void setPurgeFlag(boolean var0) { }
 	public void setRole(java.lang.String var0, javax.management.relation.Role var1) throws javax.management.relation.InvalidRoleValueException, javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RoleNotFoundException { }
 	public javax.management.relation.RoleResult setRoles(java.lang.String var0, javax.management.relation.RoleList var1) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException { return null; }
-	public void updateRoleMap(java.lang.String var0, javax.management.relation.Role var1, java.util.List var2) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException { }
+	public void updateRoleMap(java.lang.String var0, javax.management.relation.Role var1, java.util.List<javax.management.ObjectName> var2) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException { }
 }
 

@@ -22,19 +22,19 @@ public interface RelationServiceMBean {
 	java.lang.Integer checkRoleWriting(javax.management.relation.Role var0, java.lang.String var1, java.lang.Boolean var2) throws javax.management.relation.RelationTypeNotFoundException;
 	void createRelation(java.lang.String var0, java.lang.String var1, javax.management.relation.RoleList var2) throws javax.management.relation.InvalidRelationIdException, javax.management.relation.InvalidRoleValueException, javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RelationTypeNotFoundException, javax.management.relation.RoleNotFoundException;
 	void createRelationType(java.lang.String var0, javax.management.relation.RoleInfo[] var1) throws javax.management.relation.InvalidRelationTypeException;
-	java.util.Map findAssociatedMBeans(javax.management.ObjectName var0, java.lang.String var1, java.lang.String var2);
-	java.util.Map findReferencingRelations(javax.management.ObjectName var0, java.lang.String var1, java.lang.String var2);
-	java.util.List findRelationsOfType(java.lang.String var0) throws javax.management.relation.RelationTypeNotFoundException;
-	java.util.List getAllRelationIds();
-	java.util.List getAllRelationTypeNames();
+	java.util.Map<javax.management.ObjectName,java.util.List<java.lang.String>> findAssociatedMBeans(javax.management.ObjectName var0, java.lang.String var1, java.lang.String var2);
+	java.util.Map<java.lang.String,java.util.List<java.lang.String>> findReferencingRelations(javax.management.ObjectName var0, java.lang.String var1, java.lang.String var2);
+	java.util.List<java.lang.String> findRelationsOfType(java.lang.String var0) throws javax.management.relation.RelationTypeNotFoundException;
+	java.util.List<java.lang.String> getAllRelationIds();
+	java.util.List<java.lang.String> getAllRelationTypeNames();
 	javax.management.relation.RoleResult getAllRoles(java.lang.String var0) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException;
 	boolean getPurgeFlag();
-	java.util.Map getReferencedMBeans(java.lang.String var0) throws javax.management.relation.RelationNotFoundException;
+	java.util.Map<javax.management.ObjectName,java.util.List<java.lang.String>> getReferencedMBeans(java.lang.String var0) throws javax.management.relation.RelationNotFoundException;
 	java.lang.String getRelationTypeName(java.lang.String var0) throws javax.management.relation.RelationNotFoundException;
-	java.util.List getRole(java.lang.String var0, java.lang.String var1) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RoleNotFoundException;
+	java.util.List<javax.management.ObjectName> getRole(java.lang.String var0, java.lang.String var1) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RoleNotFoundException;
 	java.lang.Integer getRoleCardinality(java.lang.String var0, java.lang.String var1) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RoleNotFoundException;
 	javax.management.relation.RoleInfo getRoleInfo(java.lang.String var0, java.lang.String var1) throws javax.management.relation.RelationTypeNotFoundException, javax.management.relation.RoleInfoNotFoundException;
-	java.util.List getRoleInfos(java.lang.String var0) throws javax.management.relation.RelationTypeNotFoundException;
+	java.util.List<javax.management.relation.RoleInfo> getRoleInfos(java.lang.String var0) throws javax.management.relation.RelationTypeNotFoundException;
 	javax.management.relation.RoleResult getRoles(java.lang.String var0, java.lang.String[] var1) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException;
 	java.lang.Boolean hasRelation(java.lang.String var0);
 	void isActive() throws javax.management.relation.RelationServiceNotRegisteredException;
@@ -44,11 +44,11 @@ public interface RelationServiceMBean {
 	void removeRelation(java.lang.String var0) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException;
 	void removeRelationType(java.lang.String var0) throws javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RelationTypeNotFoundException;
 	void sendRelationCreationNotification(java.lang.String var0) throws javax.management.relation.RelationNotFoundException;
-	void sendRelationRemovalNotification(java.lang.String var0, java.util.List var1) throws javax.management.relation.RelationNotFoundException;
-	void sendRoleUpdateNotification(java.lang.String var0, javax.management.relation.Role var1, java.util.List var2) throws javax.management.relation.RelationNotFoundException;
+	void sendRelationRemovalNotification(java.lang.String var0, java.util.List<javax.management.ObjectName> var1) throws javax.management.relation.RelationNotFoundException;
+	void sendRoleUpdateNotification(java.lang.String var0, javax.management.relation.Role var1, java.util.List<javax.management.ObjectName> var2) throws javax.management.relation.RelationNotFoundException;
 	void setPurgeFlag(boolean var0);
 	void setRole(java.lang.String var0, javax.management.relation.Role var1) throws javax.management.relation.InvalidRoleValueException, javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RelationTypeNotFoundException, javax.management.relation.RoleNotFoundException;
 	javax.management.relation.RoleResult setRoles(java.lang.String var0, javax.management.relation.RoleList var1) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException;
-	void updateRoleMap(java.lang.String var0, javax.management.relation.Role var1, java.util.List var2) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException;
+	void updateRoleMap(java.lang.String var0, javax.management.relation.Role var1, java.util.List<javax.management.ObjectName> var2) throws javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException;
 }
 

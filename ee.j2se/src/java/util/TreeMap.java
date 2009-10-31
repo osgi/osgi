@@ -15,18 +15,36 @@
  */
 
 package java.util;
-public class TreeMap<K,V> extends java.util.AbstractMap<K,V> implements java.io.Serializable, java.lang.Cloneable, java.util.SortedMap<K,V> {
+public class TreeMap<K,V> extends java.util.AbstractMap<K,V> implements java.io.Serializable, java.lang.Cloneable, java.util.NavigableMap<K,V> {
 	public TreeMap() { } 
 	public TreeMap(java.util.Comparator<? super K> var0) { } 
 	public TreeMap(java.util.Map<? extends K,? extends V> var0) { } 
 	public TreeMap(java.util.SortedMap<K,? extends V> var0) { } 
+	public java.util.Map.Entry<K,V> ceilingEntry(K var0) { return null; }
+	public K ceilingKey(K var0) { return null; }
 	public java.lang.Object clone() { return null; }
 	public java.util.Comparator<? super K> comparator() { return null; }
+	public java.util.NavigableSet<K> descendingKeySet() { return null; }
+	public java.util.NavigableMap<K,V> descendingMap() { return null; }
 	public java.util.Set<java.util.Map.Entry<K,V>> entrySet() { return null; }
+	public java.util.Map.Entry<K,V> firstEntry() { return null; }
 	public K firstKey() { return null; }
+	public java.util.Map.Entry<K,V> floorEntry(K var0) { return null; }
+	public K floorKey(K var0) { return null; }
 	public java.util.SortedMap<K,V> headMap(K var0) { return null; }
+	public java.util.NavigableMap<K,V> headMap(K var0, boolean var1) { return null; }
+	public java.util.Map.Entry<K,V> higherEntry(K var0) { return null; }
+	public K higherKey(K var0) { return null; }
+	public java.util.Map.Entry<K,V> lastEntry() { return null; }
 	public K lastKey() { return null; }
+	public java.util.Map.Entry<K,V> lowerEntry(K var0) { return null; }
+	public K lowerKey(K var0) { return null; }
+	public java.util.NavigableSet<K> navigableKeySet() { return null; }
+	public java.util.Map.Entry<K,V> pollFirstEntry() { return null; }
+	public java.util.Map.Entry<K,V> pollLastEntry() { return null; }
 	public java.util.SortedMap<K,V> subMap(K var0, K var1) { return null; }
+	public java.util.NavigableMap<K,V> subMap(K var0, boolean var1, K var2, boolean var3) { return null; }
 	public java.util.SortedMap<K,V> tailMap(K var0) { return null; }
+	public java.util.NavigableMap<K,V> tailMap(K var0, boolean var1) { return null; }
 }
 

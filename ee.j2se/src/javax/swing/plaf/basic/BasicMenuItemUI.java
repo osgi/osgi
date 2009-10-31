@@ -38,12 +38,14 @@ public class BasicMenuItemUI extends javax.swing.plaf.MenuItemUI {
 	protected javax.swing.event.MenuKeyListener menuKeyListener;
 	protected javax.swing.event.MouseInputListener mouseInputListener;
 	protected boolean oldBorderPainted;
+	protected java.beans.PropertyChangeListener propertyChangeListener;
 	protected java.awt.Color selectionBackground;
 	protected java.awt.Color selectionForeground;
 	public BasicMenuItemUI() { } 
 	protected javax.swing.event.MenuDragMouseListener createMenuDragMouseListener(javax.swing.JComponent var0) { return null; }
 	protected javax.swing.event.MenuKeyListener createMenuKeyListener(javax.swing.JComponent var0) { return null; }
 	protected javax.swing.event.MouseInputListener createMouseInputListener(javax.swing.JComponent var0) { return null; }
+	protected java.beans.PropertyChangeListener createPropertyChangeListener(javax.swing.JComponent var0) { return null; }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	protected void doClick(javax.swing.MenuSelectionManager var0) { }
 	public javax.swing.MenuElement[] getPath() { return null; }

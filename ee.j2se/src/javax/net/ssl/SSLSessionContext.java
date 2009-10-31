@@ -16,7 +16,7 @@
 
 package javax.net.ssl;
 public interface SSLSessionContext {
-	java.util.Enumeration getIds();
+	java.util.Enumeration<byte[]> getIds();
 	javax.net.ssl.SSLSession getSession(byte[] var0);
 	int getSessionCacheSize();
 	int getSessionTimeout();

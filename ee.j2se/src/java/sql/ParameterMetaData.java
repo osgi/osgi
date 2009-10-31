@@ -15,7 +15,7 @@
  */
 
 package java.sql;
-public interface ParameterMetaData {
+public interface ParameterMetaData extends java.sql.Wrapper {
 	public final static int parameterModeIn = 1;
 	public final static int parameterModeInOut = 2;
 	public final static int parameterModeOut = 4;

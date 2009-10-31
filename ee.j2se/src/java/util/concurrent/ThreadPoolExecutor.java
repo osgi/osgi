@@ -37,6 +37,8 @@ public class ThreadPoolExecutor extends java.util.concurrent.AbstractExecutorSer
 	public ThreadPoolExecutor(int var0, int var1, long var2, java.util.concurrent.TimeUnit var3, java.util.concurrent.BlockingQueue<java.lang.Runnable> var4, java.util.concurrent.ThreadFactory var5) { } 
 	public ThreadPoolExecutor(int var0, int var1, long var2, java.util.concurrent.TimeUnit var3, java.util.concurrent.BlockingQueue<java.lang.Runnable> var4, java.util.concurrent.ThreadFactory var5, java.util.concurrent.RejectedExecutionHandler var6) { } 
 	protected void afterExecute(java.lang.Runnable var0, java.lang.Throwable var1) { }
+	public void allowCoreThreadTimeOut(boolean var0) { }
+	public boolean allowsCoreThreadTimeOut() { return false; }
 	public boolean awaitTermination(long var0, java.util.concurrent.TimeUnit var1) throws java.lang.InterruptedException { return false; }
 	protected void beforeExecute(java.lang.Thread var0, java.lang.Runnable var1) { }
 	public void execute(java.lang.Runnable var0) { }

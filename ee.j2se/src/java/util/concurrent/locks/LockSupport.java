@@ -16,9 +16,13 @@
 
 package java.util.concurrent.locks;
 public class LockSupport {
+	public static java.lang.Object getBlocker(java.lang.Thread var0) { return null; }
 	public static void park() { }
+	public static void park(java.lang.Object var0) { }
 	public static void parkNanos(long var0) { }
+	public static void parkNanos(java.lang.Object var0, long var1) { }
 	public static void parkUntil(long var0) { }
+	public static void parkUntil(java.lang.Object var0, long var1) { }
 	public static void unpark(java.lang.Thread var0) { }
 	private LockSupport() { } /* generated constructor to prevent compiler adding default public constructor */
 }

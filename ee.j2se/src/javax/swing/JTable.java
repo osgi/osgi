@@ -15,7 +15,7 @@
  */
 
 package javax.swing;
-public class JTable extends javax.swing.JComponent implements javax.accessibility.Accessible, javax.swing.Scrollable, javax.swing.event.CellEditorListener, javax.swing.event.ListSelectionListener, javax.swing.event.TableColumnModelListener, javax.swing.event.TableModelListener {
+public class JTable extends javax.swing.JComponent implements javax.accessibility.Accessible, javax.swing.Scrollable, javax.swing.event.CellEditorListener, javax.swing.event.ListSelectionListener, javax.swing.event.RowSorterListener, javax.swing.event.TableColumnModelListener, javax.swing.event.TableModelListener {
 	protected class AccessibleJTable extends javax.swing.JComponent.AccessibleJComponent implements java.beans.PropertyChangeListener, javax.accessibility.AccessibleExtendedTable, javax.accessibility.AccessibleSelection, javax.swing.event.CellEditorListener, javax.swing.event.ListSelectionListener, javax.swing.event.TableColumnModelListener, javax.swing.event.TableModelListener {
 		protected class AccessibleJTableCell extends javax.accessibility.AccessibleContext implements javax.accessibility.Accessible, javax.accessibility.AccessibleComponent {
 			public AccessibleJTableCell(javax.swing.JTable var0, int var1, int var2, int var3) { } 
@@ -30,6 +30,8 @@ public class JTable extends javax.swing.JComponent implements javax.accessibilit
 			public javax.accessibility.AccessibleStateSet getAccessibleStateSet() { return null; }
 			public java.awt.Color getBackground() { return null; }
 			public java.awt.Rectangle getBounds() { return null; }
+			protected javax.accessibility.AccessibleContext getCurrentAccessibleContext() { return null; }
+			protected java.awt.Component getCurrentComponent() { return null; }
 			public java.awt.Cursor getCursor() { return null; }
 			public java.awt.Font getFont() { return null; }
 			public java.awt.FontMetrics getFontMetrics(java.awt.Font var0) { return null; }
@@ -116,6 +118,13 @@ public class JTable extends javax.swing.JComponent implements javax.accessibilit
 		public void tableRowsInserted(javax.swing.event.TableModelEvent var0) { }
 		public void valueChanged(javax.swing.event.ListSelectionEvent var0) { }
 	}
+	public static final class DropLocation extends javax.swing.TransferHandler.DropLocation {
+		public int getColumn() { return 0; }
+		public int getRow() { return 0; }
+		public boolean isInsertColumn() { return false; }
+		public boolean isInsertRow() { return false; }
+		private DropLocation()  { super((java.awt.Point) null); } /* generated constructor to prevent compiler adding default public constructor */
+	}
 	public enum PrintMode {
 		FIT_WIDTH,
 		NORMAL;
@@ -168,6 +177,8 @@ public class JTable extends javax.swing.JComponent implements javax.accessibilit
 	protected void configureEnclosingScrollPane() { }
 	public int convertColumnIndexToModel(int var0) { return 0; }
 	public int convertColumnIndexToView(int var0) { return 0; }
+	public int convertRowIndexToModel(int var0) { return 0; }
+	public int convertRowIndexToView(int var0) { return 0; }
 	protected javax.swing.table.TableColumnModel createDefaultColumnModel() { return null; }
 	public void createDefaultColumnsFromModel() { }
 	protected javax.swing.table.TableModel createDefaultDataModel() { return null; }
@@ -183,6 +194,7 @@ public class JTable extends javax.swing.JComponent implements javax.accessibilit
 	public void editingCanceled(javax.swing.event.ChangeEvent var0) { }
 	public void editingStopped(javax.swing.event.ChangeEvent var0) { }
 	public boolean getAutoCreateColumnsFromModel() { return false; }
+	public boolean getAutoCreateRowSorter() { return false; }
 	public int getAutoResizeMode() { return 0; }
 	public javax.swing.table.TableCellEditor getCellEditor() { return null; }
 	public javax.swing.table.TableCellEditor getCellEditor(int var0, int var1) { return null; }
@@ -198,9 +210,12 @@ public class JTable extends javax.swing.JComponent implements javax.accessibilit
 	public javax.swing.table.TableCellEditor getDefaultEditor(java.lang.Class<?> var0) { return null; }
 	public javax.swing.table.TableCellRenderer getDefaultRenderer(java.lang.Class<?> var0) { return null; }
 	public boolean getDragEnabled() { return false; }
+	public final javax.swing.JTable.DropLocation getDropLocation() { return null; }
+	public final javax.swing.DropMode getDropMode() { return null; }
 	public int getEditingColumn() { return 0; }
 	public int getEditingRow() { return 0; }
 	public java.awt.Component getEditorComponent() { return null; }
+	public boolean getFillsViewportHeight() { return false; }
 	public java.awt.Color getGridColor() { return null; }
 	public java.awt.Dimension getIntercellSpacing() { return null; }
 	public javax.swing.table.TableModel getModel() { return null; }
@@ -211,6 +226,7 @@ public class JTable extends javax.swing.JComponent implements javax.accessibilit
 	public int getRowHeight(int var0) { return 0; }
 	public int getRowMargin() { return 0; }
 	public boolean getRowSelectionAllowed() { return false; }
+	public javax.swing.RowSorter<? extends javax.swing.table.TableModel> getRowSorter() { return null; }
 	public int getScrollableBlockIncrement(java.awt.Rectangle var0, int var1, int var2) { return 0; }
 	public boolean getScrollableTracksViewportHeight() { return false; }
 	public boolean getScrollableTracksViewportWidth() { return false; }
@@ -229,6 +245,7 @@ public class JTable extends javax.swing.JComponent implements javax.accessibilit
 	public boolean getSurrendersFocusOnKeystroke() { return false; }
 	public javax.swing.table.JTableHeader getTableHeader() { return null; }
 	public javax.swing.plaf.TableUI getUI() { return null; }
+	public boolean getUpdateSelectionOnSort() { return false; }
 	public java.lang.Object getValueAt(int var0, int var1) { return null; }
 	protected void initializeLocalVars() { }
 	public boolean isCellEditable(int var0, int var1) { return false; }
@@ -243,6 +260,7 @@ public class JTable extends javax.swing.JComponent implements javax.accessibilit
 	public boolean print(javax.swing.JTable.PrintMode var0) throws java.awt.print.PrinterException { return false; }
 	public boolean print(javax.swing.JTable.PrintMode var0, java.text.MessageFormat var1, java.text.MessageFormat var2) throws java.awt.print.PrinterException { return false; }
 	public boolean print(javax.swing.JTable.PrintMode var0, java.text.MessageFormat var1, java.text.MessageFormat var2, boolean var3, javax.print.attribute.PrintRequestAttributeSet var4, boolean var5) throws java.awt.print.PrinterException { return false; }
+	public boolean print(javax.swing.JTable.PrintMode var0, java.text.MessageFormat var1, java.text.MessageFormat var2, boolean var3, javax.print.attribute.PrintRequestAttributeSet var4, boolean var5, javax.print.PrintService var6) throws java.awt.print.PrinterException { return false; }
 	public void removeColumn(javax.swing.table.TableColumn var0) { }
 	public void removeColumnSelectionInterval(int var0, int var1) { }
 	public void removeEditor() { }
@@ -251,6 +269,7 @@ public class JTable extends javax.swing.JComponent implements javax.accessibilit
 	public int rowAtPoint(java.awt.Point var0) { return 0; }
 	public void selectAll() { }
 	public void setAutoCreateColumnsFromModel(boolean var0) { }
+	public void setAutoCreateRowSorter(boolean var0) { }
 	public void setAutoResizeMode(int var0) { }
 	public void setCellEditor(javax.swing.table.TableCellEditor var0) { }
 	public void setCellSelectionEnabled(boolean var0) { }
@@ -260,8 +279,10 @@ public class JTable extends javax.swing.JComponent implements javax.accessibilit
 	public void setDefaultEditor(java.lang.Class<?> var0, javax.swing.table.TableCellEditor var1) { }
 	public void setDefaultRenderer(java.lang.Class<?> var0, javax.swing.table.TableCellRenderer var1) { }
 	public void setDragEnabled(boolean var0) { }
+	public final void setDropMode(javax.swing.DropMode var0) { }
 	public void setEditingColumn(int var0) { }
 	public void setEditingRow(int var0) { }
+	public void setFillsViewportHeight(boolean var0) { }
 	public void setGridColor(java.awt.Color var0) { }
 	public void setIntercellSpacing(java.awt.Dimension var0) { }
 	public void setModel(javax.swing.table.TableModel var0) { }
@@ -271,6 +292,7 @@ public class JTable extends javax.swing.JComponent implements javax.accessibilit
 	public void setRowMargin(int var0) { }
 	public void setRowSelectionAllowed(boolean var0) { }
 	public void setRowSelectionInterval(int var0, int var1) { }
+	public void setRowSorter(javax.swing.RowSorter<? extends javax.swing.table.TableModel> var0) { }
 	public void setSelectionBackground(java.awt.Color var0) { }
 	public void setSelectionForeground(java.awt.Color var0) { }
 	public void setSelectionMode(int var0) { }
@@ -281,11 +303,13 @@ public class JTable extends javax.swing.JComponent implements javax.accessibilit
 	public void setSurrendersFocusOnKeystroke(boolean var0) { }
 	public void setTableHeader(javax.swing.table.JTableHeader var0) { }
 	public void setUI(javax.swing.plaf.TableUI var0) { }
+	public void setUpdateSelectionOnSort(boolean var0) { }
 	public void setValueAt(java.lang.Object var0, int var1, int var2) { }
 	public void sizeColumnsToFit(int var0) { }
 	/** @deprecated */
 	@java.lang.Deprecated
 	public void sizeColumnsToFit(boolean var0) { }
+	public void sorterChanged(javax.swing.event.RowSorterEvent var0) { }
 	public void tableChanged(javax.swing.event.TableModelEvent var0) { }
 	protected void unconfigureEnclosingScrollPane() { }
 	public void valueChanged(javax.swing.event.ListSelectionEvent var0) { }

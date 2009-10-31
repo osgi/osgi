@@ -15,12 +15,8 @@
  */
 
 package javax.sql;
-public interface ConnectionPoolDataSource {
-	java.io.PrintWriter getLogWriter() throws java.sql.SQLException;
-	int getLoginTimeout() throws java.sql.SQLException;
+public interface ConnectionPoolDataSource extends javax.sql.CommonDataSource {
 	javax.sql.PooledConnection getPooledConnection() throws java.sql.SQLException;
 	javax.sql.PooledConnection getPooledConnection(java.lang.String var0, java.lang.String var1) throws java.sql.SQLException;
-	void setLogWriter(java.io.PrintWriter var0) throws java.sql.SQLException;
-	void setLoginTimeout(int var0) throws java.sql.SQLException;
 }
 

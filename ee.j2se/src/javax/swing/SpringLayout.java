@@ -32,10 +32,15 @@ public class SpringLayout implements java.awt.LayoutManager2 {
 		public void setX(javax.swing.Spring var0) { }
 		public void setY(javax.swing.Spring var0) { }
 	}
+	public final static java.lang.String BASELINE = "Baseline";
 	public final static java.lang.String EAST = "East";
+	public final static java.lang.String HEIGHT = "Height";
+	public final static java.lang.String HORIZONTAL_CENTER = "HorizontalCenter";
 	public final static java.lang.String NORTH = "North";
 	public final static java.lang.String SOUTH = "South";
+	public final static java.lang.String VERTICAL_CENTER = "VerticalCenter";
 	public final static java.lang.String WEST = "West";
+	public final static java.lang.String WIDTH = "Width";
 	public SpringLayout() { } 
 	public void addLayoutComponent(java.awt.Component var0, java.lang.Object var1) { }
 	public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }

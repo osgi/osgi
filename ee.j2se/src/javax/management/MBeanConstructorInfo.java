@@ -15,9 +15,10 @@
  */
 
 package javax.management;
-public class MBeanConstructorInfo extends javax.management.MBeanFeatureInfo implements java.io.Serializable, java.lang.Cloneable {
-	public MBeanConstructorInfo(java.lang.String var0, java.lang.String var1, javax.management.MBeanParameterInfo[] var2)  { super((java.lang.String) null, (java.lang.String) null); } 
-	public MBeanConstructorInfo(java.lang.String var0, java.lang.reflect.Constructor var1)  { super((java.lang.String) null, (java.lang.String) null); } 
+public class MBeanConstructorInfo extends javax.management.MBeanFeatureInfo implements java.lang.Cloneable {
+	public MBeanConstructorInfo(java.lang.String var0, java.lang.String var1, javax.management.MBeanParameterInfo[] var2)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
+	public MBeanConstructorInfo(java.lang.String var0, java.lang.String var1, javax.management.MBeanParameterInfo[] var2, javax.management.Descriptor var3)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
+	public MBeanConstructorInfo(java.lang.String var0, java.lang.reflect.Constructor var1)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
 	public java.lang.Object clone() { return null; }
 	public javax.management.MBeanParameterInfo[] getSignature() { return null; }
 }

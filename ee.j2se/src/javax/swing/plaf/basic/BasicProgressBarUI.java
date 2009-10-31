@@ -31,6 +31,7 @@ public class BasicProgressBarUI extends javax.swing.plaf.ProgressBarUI {
 	protected int getBoxLength(int var0, int var1) { return 0; }
 	protected int getCellLength() { return 0; }
 	protected int getCellSpacing() { return 0; }
+	protected final int getFrameCount() { return 0; }
 	protected java.awt.Dimension getPreferredInnerHorizontal() { return null; }
 	protected java.awt.Dimension getPreferredInnerVertical() { return null; }
 	protected java.awt.Color getSelectionBackground() { return null; }

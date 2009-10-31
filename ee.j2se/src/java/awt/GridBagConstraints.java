@@ -16,6 +16,15 @@
 
 package java.awt;
 public class GridBagConstraints implements java.io.Serializable, java.lang.Cloneable {
+	public final static int ABOVE_BASELINE = 1024;
+	public final static int ABOVE_BASELINE_LEADING = 1280;
+	public final static int ABOVE_BASELINE_TRAILING = 1536;
+	public final static int BASELINE = 256;
+	public final static int BASELINE_LEADING = 512;
+	public final static int BASELINE_TRAILING = 768;
+	public final static int BELOW_BASELINE = 1792;
+	public final static int BELOW_BASELINE_LEADING = 2048;
+	public final static int BELOW_BASELINE_TRAILING = 2304;
 	public final static int BOTH = 1;
 	public final static int CENTER = 10;
 	public final static int EAST = 13;

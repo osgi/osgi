@@ -15,14 +15,19 @@
  */
 
 package java.sql;
-public class SQLException extends java.lang.Exception {
+public class SQLException extends java.lang.Exception implements java.lang.Iterable<java.lang.Throwable> {
 	public SQLException() { } 
 	public SQLException(java.lang.String var0) { } 
 	public SQLException(java.lang.String var0, java.lang.String var1) { } 
 	public SQLException(java.lang.String var0, java.lang.String var1, int var2) { } 
+	public SQLException(java.lang.String var0, java.lang.String var1, int var2, java.lang.Throwable var3) { } 
+	public SQLException(java.lang.String var0, java.lang.String var1, java.lang.Throwable var2) { } 
+	public SQLException(java.lang.String var0, java.lang.Throwable var1) { } 
+	public SQLException(java.lang.Throwable var0) { } 
 	public int getErrorCode() { return 0; }
 	public java.sql.SQLException getNextException() { return null; }
 	public java.lang.String getSQLState() { return null; }
+	public java.util.Iterator<java.lang.Throwable> iterator() { return null; }
 	public void setNextException(java.sql.SQLException var0) { }
 }
 

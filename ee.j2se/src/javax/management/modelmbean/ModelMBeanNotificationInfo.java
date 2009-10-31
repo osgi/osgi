@@ -15,11 +15,10 @@
  */
 
 package javax.management.modelmbean;
-public class ModelMBeanNotificationInfo extends javax.management.MBeanNotificationInfo implements java.lang.Cloneable, javax.management.DescriptorAccess {
-	public ModelMBeanNotificationInfo(javax.management.modelmbean.ModelMBeanNotificationInfo var0)  { super((java.lang.String[]) null, (java.lang.String) null, (java.lang.String) null); } 
-	public ModelMBeanNotificationInfo(java.lang.String[] var0, java.lang.String var1, java.lang.String var2)  { super((java.lang.String[]) null, (java.lang.String) null, (java.lang.String) null); } 
-	public ModelMBeanNotificationInfo(java.lang.String[] var0, java.lang.String var1, java.lang.String var2, javax.management.Descriptor var3)  { super((java.lang.String[]) null, (java.lang.String) null, (java.lang.String) null); } 
-	public javax.management.Descriptor getDescriptor() { return null; }
+public class ModelMBeanNotificationInfo extends javax.management.MBeanNotificationInfo implements javax.management.DescriptorAccess {
+	public ModelMBeanNotificationInfo(javax.management.modelmbean.ModelMBeanNotificationInfo var0)  { super((java.lang.String[]) null, (java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
+	public ModelMBeanNotificationInfo(java.lang.String[] var0, java.lang.String var1, java.lang.String var2)  { super((java.lang.String[]) null, (java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
+	public ModelMBeanNotificationInfo(java.lang.String[] var0, java.lang.String var1, java.lang.String var2, javax.management.Descriptor var3)  { super((java.lang.String[]) null, (java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
 	public void setDescriptor(javax.management.Descriptor var0) { }
 }
 

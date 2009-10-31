@@ -19,6 +19,7 @@ public class SynthGraphicsUtils {
 	public SynthGraphicsUtils() { } 
 	public int computeStringWidth(javax.swing.plaf.synth.SynthContext var0, java.awt.Font var1, java.awt.FontMetrics var2, java.lang.String var3) { return 0; }
 	public void drawLine(javax.swing.plaf.synth.SynthContext var0, java.lang.Object var1, java.awt.Graphics var2, int var3, int var4, int var5, int var6) { }
+	public void drawLine(javax.swing.plaf.synth.SynthContext var0, java.lang.Object var1, java.awt.Graphics var2, int var3, int var4, int var5, int var6, java.lang.Object var7) { }
 	public int getMaximumCharHeight(javax.swing.plaf.synth.SynthContext var0) { return 0; }
 	public java.awt.Dimension getMaximumSize(javax.swing.plaf.synth.SynthContext var0, java.awt.Font var1, java.lang.String var2, javax.swing.Icon var3, int var4, int var5, int var6, int var7, int var8, int var9) { return null; }
 	public java.awt.Dimension getMinimumSize(javax.swing.plaf.synth.SynthContext var0, java.awt.Font var1, java.lang.String var2, javax.swing.Icon var3, int var4, int var5, int var6, int var7, int var8, int var9) { return null; }

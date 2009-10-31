@@ -36,8 +36,6 @@ public class BasicSplitPaneDivider extends java.awt.Container implements java.be
 	}
 	protected class MouseHandler extends java.awt.event.MouseAdapter implements java.awt.event.MouseMotionListener {
 		protected MouseHandler() { } 
-		public void mouseDragged(java.awt.event.MouseEvent var0) { }
-		public void mouseMoved(java.awt.event.MouseEvent var0) { }
 	}
 	protected class VerticalDragController extends javax.swing.plaf.basic.BasicSplitPaneDivider.DragController {
 		protected VerticalDragController(java.awt.event.MouseEvent var0)  { super((java.awt.event.MouseEvent) null); } 

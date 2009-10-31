@@ -23,8 +23,10 @@ public class BoxLayout implements java.awt.LayoutManager2, java.io.Serializable 
 	public BoxLayout(java.awt.Container var0, int var1) { } 
 	public void addLayoutComponent(java.awt.Component var0, java.lang.Object var1) { }
 	public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }
+	public final int getAxis() { return 0; }
 	public float getLayoutAlignmentX(java.awt.Container var0) { return 0.0f; }
 	public float getLayoutAlignmentY(java.awt.Container var0) { return 0.0f; }
+	public final java.awt.Container getTarget() { return null; }
 	public void invalidateLayout(java.awt.Container var0) { }
 	public void layoutContainer(java.awt.Container var0) { }
 	public java.awt.Dimension maximumLayoutSize(java.awt.Container var0) { return null; }

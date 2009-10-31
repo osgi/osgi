@@ -86,7 +86,6 @@ public class Frame extends java.awt.Window implements java.awt.MenuContainer {
 	@java.lang.Deprecated
 	public void setCursor(int var0) { }
 	public void setExtendedState(int var0) { }
-	public void setIconImage(java.awt.Image var0) { }
 	public void setMaximizedBounds(java.awt.Rectangle var0) { }
 	public void setMenuBar(java.awt.MenuBar var0) { }
 	public void setResizable(boolean var0) { }

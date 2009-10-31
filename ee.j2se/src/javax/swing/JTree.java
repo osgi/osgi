@@ -83,6 +83,11 @@ public class JTree extends javax.swing.JComponent implements javax.accessibility
 		public void treeStructureChanged(javax.swing.event.TreeModelEvent var0) { }
 		public void valueChanged(javax.swing.event.TreeSelectionEvent var0) { }
 	}
+	public static final class DropLocation extends javax.swing.TransferHandler.DropLocation {
+		public int getChildIndex() { return 0; }
+		public javax.swing.tree.TreePath getPath() { return null; }
+		private DropLocation()  { super((java.awt.Point) null); } /* generated constructor to prevent compiler adding default public constructor */
+	}
 	public static class DynamicUtilTreeNode extends javax.swing.tree.DefaultMutableTreeNode {
 		protected java.lang.Object childValue;
 		protected boolean hasChildren;
@@ -176,6 +181,8 @@ public class JTree extends javax.swing.JComponent implements javax.accessibility
 	protected static javax.swing.tree.TreeModel getDefaultTreeModel() { return null; }
 	protected java.util.Enumeration<javax.swing.tree.TreePath> getDescendantToggledPaths(javax.swing.tree.TreePath var0) { return null; }
 	public boolean getDragEnabled() { return false; }
+	public final javax.swing.JTree.DropLocation getDropLocation() { return null; }
+	public final javax.swing.DropMode getDropMode() { return null; }
 	public javax.swing.tree.TreePath getEditingPath() { return null; }
 	public java.util.Enumeration<javax.swing.tree.TreePath> getExpandedDescendants(javax.swing.tree.TreePath var0) { return null; }
 	public boolean getExpandsSelectedPaths() { return false; }
@@ -246,6 +253,7 @@ public class JTree extends javax.swing.JComponent implements javax.accessibility
 	public void setCellEditor(javax.swing.tree.TreeCellEditor var0) { }
 	public void setCellRenderer(javax.swing.tree.TreeCellRenderer var0) { }
 	public void setDragEnabled(boolean var0) { }
+	public final void setDropMode(javax.swing.DropMode var0) { }
 	public void setEditable(boolean var0) { }
 	protected void setExpandedState(javax.swing.tree.TreePath var0, boolean var1) { }
 	public void setExpandsSelectedPaths(boolean var0) { }

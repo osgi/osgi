@@ -16,8 +16,8 @@
 
 package javax.management.loading;
 public interface ClassLoaderRepository {
-	java.lang.Class loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException;
-	java.lang.Class loadClassBefore(java.lang.ClassLoader var0, java.lang.String var1) throws java.lang.ClassNotFoundException;
-	java.lang.Class loadClassWithout(java.lang.ClassLoader var0, java.lang.String var1) throws java.lang.ClassNotFoundException;
+	java.lang.Class<?> loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException;
+	java.lang.Class<?> loadClassBefore(java.lang.ClassLoader var0, java.lang.String var1) throws java.lang.ClassNotFoundException;
+	java.lang.Class<?> loadClassWithout(java.lang.ClassLoader var0, java.lang.String var1) throws java.lang.ClassNotFoundException;
 }
 

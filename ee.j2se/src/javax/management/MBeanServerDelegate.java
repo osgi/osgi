@@ -16,6 +16,7 @@
 
 package javax.management;
 public class MBeanServerDelegate implements javax.management.MBeanServerDelegateMBean, javax.management.NotificationEmitter {
+	public final static javax.management.ObjectName DELEGATE_NAME; static { DELEGATE_NAME = null; }
 	public MBeanServerDelegate() { } 
 	public void addNotificationListener(javax.management.NotificationListener var0, javax.management.NotificationFilter var1, java.lang.Object var2) { }
 	public java.lang.String getImplementationName() { return null; }

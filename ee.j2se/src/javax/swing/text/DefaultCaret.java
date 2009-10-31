@@ -33,9 +33,11 @@ public class DefaultCaret extends java.awt.Rectangle implements java.awt.event.F
 	public javax.swing.event.ChangeListener[] getChangeListeners() { return null; }
 	protected final javax.swing.text.JTextComponent getComponent() { return null; }
 	public int getDot() { return 0; }
+	public javax.swing.text.Position.Bias getDotBias() { return null; }
 	public <T extends java.util.EventListener> T[] getListeners(java.lang.Class<T> var0) { return null; }
 	public java.awt.Point getMagicCaretPosition() { return null; }
 	public int getMark() { return 0; }
+	public javax.swing.text.Position.Bias getMarkBias() { return null; }
 	protected javax.swing.text.Highlighter.HighlightPainter getSelectionPainter() { return null; }
 	public int getUpdatePolicy() { return 0; }
 	public void install(javax.swing.text.JTextComponent var0) { }
@@ -51,12 +53,14 @@ public class DefaultCaret extends java.awt.Rectangle implements java.awt.event.F
 	public void mouseReleased(java.awt.event.MouseEvent var0) { }
 	protected void moveCaret(java.awt.event.MouseEvent var0) { }
 	public void moveDot(int var0) { }
+	public void moveDot(int var0, javax.swing.text.Position.Bias var1) { }
 	public void paint(java.awt.Graphics var0) { }
 	protected void positionCaret(java.awt.event.MouseEvent var0) { }
 	public void removeChangeListener(javax.swing.event.ChangeListener var0) { }
 	protected final void repaint() { }
 	public void setBlinkRate(int var0) { }
 	public void setDot(int var0) { }
+	public void setDot(int var0, javax.swing.text.Position.Bias var1) { }
 	public void setMagicCaretPosition(java.awt.Point var0) { }
 	public void setSelectionVisible(boolean var0) { }
 	public void setUpdatePolicy(int var0) { }

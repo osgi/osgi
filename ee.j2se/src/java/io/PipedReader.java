@@ -17,7 +17,9 @@
 package java.io;
 public class PipedReader extends java.io.Reader {
 	public PipedReader() { } 
+	public PipedReader(int var0) { } 
 	public PipedReader(java.io.PipedWriter var0) throws java.io.IOException { } 
+	public PipedReader(java.io.PipedWriter var0, int var1) throws java.io.IOException { } 
 	public void close() throws java.io.IOException { }
 	public void connect(java.io.PipedWriter var0) throws java.io.IOException { }
 	public int read(char[] var0, int var1, int var2) throws java.io.IOException { return 0; }

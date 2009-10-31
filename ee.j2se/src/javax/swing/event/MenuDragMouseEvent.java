@@ -16,6 +16,7 @@
 
 package javax.swing.event;
 public class MenuDragMouseEvent extends java.awt.event.MouseEvent {
+	public MenuDragMouseEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, int var5, int var6, int var7, int var8, boolean var9, javax.swing.MenuElement[] var10, javax.swing.MenuSelectionManager var11)  { super((java.awt.Component) null, 0, 0l, 0, 0, 0, 0, false, 0); } 
 	public MenuDragMouseEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, int var5, int var6, boolean var7, javax.swing.MenuElement[] var8, javax.swing.MenuSelectionManager var9)  { super((java.awt.Component) null, 0, 0l, 0, 0, 0, 0, false, 0); } 
 	public javax.swing.MenuSelectionManager getMenuSelectionManager() { return null; }
 	public javax.swing.MenuElement[] getPath() { return null; }

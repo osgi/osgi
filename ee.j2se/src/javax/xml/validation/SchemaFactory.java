@@ -23,6 +23,7 @@ public abstract class SchemaFactory {
 	public abstract org.w3c.dom.ls.LSResourceResolver getResourceResolver();
 	public abstract boolean isSchemaLanguageSupported(java.lang.String var0);
 	public final static javax.xml.validation.SchemaFactory newInstance(java.lang.String var0) { return null; }
+	public static javax.xml.validation.SchemaFactory newInstance(java.lang.String var0, java.lang.String var1, java.lang.ClassLoader var2) { return null; }
 	public abstract javax.xml.validation.Schema newSchema() throws org.xml.sax.SAXException;
 	public javax.xml.validation.Schema newSchema(java.io.File var0) throws org.xml.sax.SAXException { return null; }
 	public javax.xml.validation.Schema newSchema(java.net.URL var0) throws org.xml.sax.SAXException { return null; }

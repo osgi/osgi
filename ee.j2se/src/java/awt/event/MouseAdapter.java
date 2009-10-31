@@ -15,12 +15,15 @@
  */
 
 package java.awt.event;
-public abstract class MouseAdapter implements java.awt.event.MouseListener {
+public abstract class MouseAdapter implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener, java.awt.event.MouseWheelListener {
 	public MouseAdapter() { } 
 	public void mouseClicked(java.awt.event.MouseEvent var0) { }
+	public void mouseDragged(java.awt.event.MouseEvent var0) { }
 	public void mouseEntered(java.awt.event.MouseEvent var0) { }
 	public void mouseExited(java.awt.event.MouseEvent var0) { }
+	public void mouseMoved(java.awt.event.MouseEvent var0) { }
 	public void mousePressed(java.awt.event.MouseEvent var0) { }
 	public void mouseReleased(java.awt.event.MouseEvent var0) { }
+	public void mouseWheelMoved(java.awt.event.MouseWheelEvent var0) { }
 }
 

@@ -26,11 +26,10 @@ public class MLet extends java.net.URLClassLoader implements java.io.Externaliza
 	public void addURL(java.lang.String var0) throws javax.management.ServiceNotFoundException { }
 	public void addURL(java.net.URL var0) { }
 	protected java.net.URL check(java.lang.String var0, java.net.URL var1, java.lang.String var2, javax.management.loading.MLetContent var3) throws java.lang.Exception { return null; }
-	protected java.lang.Class findClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
 	public java.lang.String getLibraryDirectory() { return null; }
-	public java.util.Set getMBeansFromURL(java.lang.String var0) throws javax.management.ServiceNotFoundException { return null; }
-	public java.util.Set getMBeansFromURL(java.net.URL var0) throws javax.management.ServiceNotFoundException { return null; }
-	public java.lang.Class loadClass(java.lang.String var0, javax.management.loading.ClassLoaderRepository var1) throws java.lang.ClassNotFoundException { return null; }
+	public java.util.Set<java.lang.Object> getMBeansFromURL(java.lang.String var0) throws javax.management.ServiceNotFoundException { return null; }
+	public java.util.Set<java.lang.Object> getMBeansFromURL(java.net.URL var0) throws javax.management.ServiceNotFoundException { return null; }
+	public java.lang.Class<?> loadClass(java.lang.String var0, javax.management.loading.ClassLoaderRepository var1) throws java.lang.ClassNotFoundException { return null; }
 	public void postDeregister() { }
 	public void postRegister(java.lang.Boolean var0) { }
 	public void preDeregister() throws java.lang.Exception { }

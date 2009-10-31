@@ -21,6 +21,7 @@ public class AtomicReferenceArray<E> implements java.io.Serializable {
 	public final boolean compareAndSet(int var0, E var1, E var2) { return false; }
 	public final E get(int var0) { return null; }
 	public final E getAndSet(int var0, E var1) { return null; }
+	public final void lazySet(int var0, E var1) { }
 	public final int length() { return 0; }
 	public final void set(int var0, E var1) { }
 	public final boolean weakCompareAndSet(int var0, E var1, E var2) { return false; }

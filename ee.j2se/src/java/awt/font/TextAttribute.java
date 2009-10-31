@@ -27,6 +27,10 @@ public final class TextAttribute extends java.text.AttributedCharacterIterator.A
 	public final static java.awt.font.TextAttribute JUSTIFICATION; static { JUSTIFICATION = null; }
 	public final static java.lang.Float JUSTIFICATION_FULL; static { JUSTIFICATION_FULL = null; }
 	public final static java.lang.Float JUSTIFICATION_NONE; static { JUSTIFICATION_NONE = null; }
+	public final static java.awt.font.TextAttribute KERNING; static { KERNING = null; }
+	public final static java.lang.Integer KERNING_ON; static { KERNING_ON = null; }
+	public final static java.awt.font.TextAttribute LIGATURES; static { LIGATURES = null; }
+	public final static java.lang.Integer LIGATURES_ON; static { LIGATURES_ON = null; }
 	public final static java.awt.font.TextAttribute NUMERIC_SHAPING; static { NUMERIC_SHAPING = null; }
 	public final static java.awt.font.TextAttribute POSTURE; static { POSTURE = null; }
 	public final static java.lang.Float POSTURE_OBLIQUE; static { POSTURE_OBLIQUE = null; }
@@ -42,6 +46,9 @@ public final class TextAttribute extends java.text.AttributedCharacterIterator.A
 	public final static java.lang.Integer SUPERSCRIPT_SUPER; static { SUPERSCRIPT_SUPER = null; }
 	public final static java.awt.font.TextAttribute SWAP_COLORS; static { SWAP_COLORS = null; }
 	public final static java.lang.Boolean SWAP_COLORS_ON; static { SWAP_COLORS_ON = null; }
+	public final static java.awt.font.TextAttribute TRACKING; static { TRACKING = null; }
+	public final static java.lang.Float TRACKING_LOOSE; static { TRACKING_LOOSE = null; }
+	public final static java.lang.Float TRACKING_TIGHT; static { TRACKING_TIGHT = null; }
 	public final static java.awt.font.TextAttribute TRANSFORM; static { TRANSFORM = null; }
 	public final static java.awt.font.TextAttribute UNDERLINE; static { UNDERLINE = null; }
 	public final static java.lang.Integer UNDERLINE_LOW_DASHED; static { UNDERLINE_LOW_DASHED = null; }

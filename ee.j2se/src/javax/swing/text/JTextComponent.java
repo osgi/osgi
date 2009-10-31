@@ -16,7 +16,7 @@
 
 package javax.swing.text;
 public abstract class JTextComponent extends javax.swing.JComponent implements javax.accessibility.Accessible, javax.swing.Scrollable {
-	public class AccessibleJTextComponent extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleAction, javax.accessibility.AccessibleEditableText, javax.accessibility.AccessibleText, javax.swing.event.CaretListener, javax.swing.event.DocumentListener {
+	public class AccessibleJTextComponent extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleAction, javax.accessibility.AccessibleEditableText, javax.accessibility.AccessibleExtendedText, javax.accessibility.AccessibleText, javax.swing.event.CaretListener, javax.swing.event.DocumentListener {
 		public AccessibleJTextComponent() { } 
 		public void caretUpdate(javax.swing.event.CaretEvent var0) { }
 		public void changedUpdate(javax.swing.event.DocumentEvent var0) { }
@@ -36,7 +36,11 @@ public abstract class JTextComponent extends javax.swing.JComponent implements j
 		public java.lang.String getSelectedText() { return null; }
 		public int getSelectionEnd() { return 0; }
 		public int getSelectionStart() { return 0; }
+		public java.awt.Rectangle getTextBounds(int var0, int var1) { return null; }
 		public java.lang.String getTextRange(int var0, int var1) { return null; }
+		public javax.accessibility.AccessibleTextSequence getTextSequenceAfter(int var0, int var1) { return null; }
+		public javax.accessibility.AccessibleTextSequence getTextSequenceAt(int var0, int var1) { return null; }
+		public javax.accessibility.AccessibleTextSequence getTextSequenceBefore(int var0, int var1) { return null; }
 		public void insertTextAtIndex(int var0, java.lang.String var1) { }
 		public void insertUpdate(javax.swing.event.DocumentEvent var0) { }
 		public void paste(int var0) { }
@@ -45,6 +49,11 @@ public abstract class JTextComponent extends javax.swing.JComponent implements j
 		public void selectText(int var0, int var1) { }
 		public void setAttributes(int var0, int var1, javax.swing.text.AttributeSet var2) { }
 		public void setTextContents(java.lang.String var0) { }
+	}
+	public static final class DropLocation extends javax.swing.TransferHandler.DropLocation {
+		public javax.swing.text.Position.Bias getBias() { return null; }
+		public int getIndex() { return 0; }
+		private DropLocation()  { super((java.awt.Point) null); } /* generated constructor to prevent compiler adding default public constructor */
 	}
 	public static class KeyBinding {
 		public java.lang.String actionName;
@@ -67,6 +76,8 @@ public abstract class JTextComponent extends javax.swing.JComponent implements j
 	public java.awt.Color getDisabledTextColor() { return null; }
 	public javax.swing.text.Document getDocument() { return null; }
 	public boolean getDragEnabled() { return false; }
+	public final javax.swing.text.JTextComponent.DropLocation getDropLocation() { return null; }
+	public final javax.swing.DropMode getDropMode() { return null; }
 	public char getFocusAccelerator() { return '\0'; }
 	public javax.swing.text.Highlighter getHighlighter() { return null; }
 	public javax.swing.text.Keymap getKeymap() { return null; }
@@ -74,6 +85,7 @@ public abstract class JTextComponent extends javax.swing.JComponent implements j
 	public java.awt.Insets getMargin() { return null; }
 	public javax.swing.text.NavigationFilter getNavigationFilter() { return null; }
 	public java.awt.Dimension getPreferredScrollableViewportSize() { return null; }
+	public java.awt.print.Printable getPrintable(java.text.MessageFormat var0, java.text.MessageFormat var1) { return null; }
 	public int getScrollableBlockIncrement(java.awt.Rectangle var0, int var1, int var2) { return 0; }
 	public boolean getScrollableTracksViewportHeight() { return false; }
 	public boolean getScrollableTracksViewportWidth() { return false; }
@@ -91,6 +103,9 @@ public abstract class JTextComponent extends javax.swing.JComponent implements j
 	public java.awt.Rectangle modelToView(int var0) throws javax.swing.text.BadLocationException { return null; }
 	public void moveCaretPosition(int var0) { }
 	public void paste() { }
+	public boolean print() throws java.awt.print.PrinterException { return false; }
+	public boolean print(java.text.MessageFormat var0, java.text.MessageFormat var1) throws java.awt.print.PrinterException { return false; }
+	public boolean print(java.text.MessageFormat var0, java.text.MessageFormat var1, boolean var2, javax.print.PrintService var3, javax.print.attribute.PrintRequestAttributeSet var4, boolean var5) throws java.awt.print.PrinterException { return false; }
 	public void read(java.io.Reader var0, java.lang.Object var1) throws java.io.IOException { }
 	public void removeCaretListener(javax.swing.event.CaretListener var0) { }
 	public static javax.swing.text.Keymap removeKeymap(java.lang.String var0) { return null; }
@@ -103,6 +118,7 @@ public abstract class JTextComponent extends javax.swing.JComponent implements j
 	public void setDisabledTextColor(java.awt.Color var0) { }
 	public void setDocument(javax.swing.text.Document var0) { }
 	public void setDragEnabled(boolean var0) { }
+	public final void setDropMode(javax.swing.DropMode var0) { }
 	public void setEditable(boolean var0) { }
 	public void setFocusAccelerator(char var0) { }
 	public void setHighlighter(javax.swing.text.Highlighter var0) { }

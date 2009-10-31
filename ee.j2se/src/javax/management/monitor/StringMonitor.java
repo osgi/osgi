@@ -18,6 +18,7 @@ package javax.management.monitor;
 public class StringMonitor extends javax.management.monitor.Monitor implements javax.management.monitor.StringMonitorMBean {
 	public StringMonitor() { } 
 	/** @deprecated */
+	@java.lang.Deprecated
 	public java.lang.String getDerivedGauge() { return null; }
 	public java.lang.String getDerivedGauge(javax.management.ObjectName var0) { return null; }
 	/** @deprecated */

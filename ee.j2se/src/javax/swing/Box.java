@@ -23,11 +23,9 @@ public class Box extends javax.swing.JComponent implements javax.accessibility.A
 		protected class AccessibleBoxFiller extends java.awt.Component.AccessibleAWTComponent {
 			protected AccessibleBoxFiller() { } 
 		}
-		protected javax.accessibility.AccessibleContext accessibleContext;
 		public Filler(java.awt.Dimension var0, java.awt.Dimension var1, java.awt.Dimension var2) { } 
 		public void changeShape(java.awt.Dimension var0, java.awt.Dimension var1, java.awt.Dimension var2) { }
 	}
-	protected javax.accessibility.AccessibleContext accessibleContext;
 	public Box(int var0) { } 
 	public static java.awt.Component createGlue() { return null; }
 	public static javax.swing.Box createHorizontalBox() { return null; }

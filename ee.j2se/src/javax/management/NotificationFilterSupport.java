@@ -15,12 +15,12 @@
  */
 
 package javax.management;
-public class NotificationFilterSupport implements java.io.Serializable, javax.management.NotificationFilter {
+public class NotificationFilterSupport implements javax.management.NotificationFilter {
 	public NotificationFilterSupport() { } 
 	public void disableAllTypes() { }
 	public void disableType(java.lang.String var0) { }
 	public void enableType(java.lang.String var0) { }
-	public java.util.Vector getEnabledTypes() { return null; }
+	public java.util.Vector<java.lang.String> getEnabledTypes() { return null; }
 	public boolean isNotificationEnabled(javax.management.Notification var0) { return false; }
 }
 

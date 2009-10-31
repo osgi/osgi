@@ -15,10 +15,10 @@
  */
 
 package javax.management.openmbean;
-public class TabularType extends javax.management.openmbean.OpenType implements java.io.Serializable {
+public class TabularType extends javax.management.openmbean.OpenType<javax.management.openmbean.TabularData> {
 	public TabularType(java.lang.String var0, java.lang.String var1, javax.management.openmbean.CompositeType var2, java.lang.String[] var3) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null); } 
 	public boolean equals(java.lang.Object var0) { return false; }
-	public java.util.List getIndexNames() { return null; }
+	public java.util.List<java.lang.String> getIndexNames() { return null; }
 	public javax.management.openmbean.CompositeType getRowType() { return null; }
 	public int hashCode() { return 0; }
 	public boolean isValue(java.lang.Object var0) { return false; }

@@ -17,10 +17,12 @@
 package javax.management;
 public interface Descriptor extends java.io.Serializable, java.lang.Cloneable {
 	java.lang.Object clone();
+	boolean equals(java.lang.Object var0);
 	java.lang.String[] getFieldNames();
 	java.lang.Object getFieldValue(java.lang.String var0);
-	java.lang.Object[] getFieldValues(java.lang.String[] var0);
+	java.lang.Object[] getFieldValues(java.lang.String... var0);
 	java.lang.String[] getFields();
+	int hashCode();
 	boolean isValid();
 	void removeField(java.lang.String var0);
 	void setField(java.lang.String var0, java.lang.Object var1);

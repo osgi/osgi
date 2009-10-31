@@ -20,12 +20,12 @@ public class DescriptorSupport implements javax.management.Descriptor {
 	public DescriptorSupport(int var0) throws javax.management.MBeanException { } 
 	public DescriptorSupport(java.lang.String var0) throws javax.management.MBeanException, javax.management.modelmbean.XMLParseException { } 
 	public DescriptorSupport(javax.management.modelmbean.DescriptorSupport var0) { } 
-	public DescriptorSupport(java.lang.String[] var0) { } 
+	public DescriptorSupport(java.lang.String... var0) { } 
 	public DescriptorSupport(java.lang.String[] var0, java.lang.Object[] var1) { } 
 	public java.lang.Object clone() { return null; }
 	public java.lang.String[] getFieldNames() { return null; }
 	public java.lang.Object getFieldValue(java.lang.String var0) { return null; }
-	public java.lang.Object[] getFieldValues(java.lang.String[] var0) { return null; }
+	public java.lang.Object[] getFieldValues(java.lang.String... var0) { return null; }
 	public java.lang.String[] getFields() { return null; }
 	public boolean isValid() { return false; }
 	public void removeField(java.lang.String var0) { }

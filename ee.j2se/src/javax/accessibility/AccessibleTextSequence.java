@@ -19,6 +19,6 @@ public class AccessibleTextSequence {
 	public int endIndex;
 	public int startIndex;
 	public java.lang.String text;
-	public AccessibleTextSequence() { } 
+	public AccessibleTextSequence(int var0, int var1, java.lang.String var2) { } 
 }
 

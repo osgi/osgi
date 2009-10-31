@@ -68,6 +68,11 @@ public class JList extends javax.swing.JComponent implements javax.accessibility
 		public void selectAllAccessibleSelection() { }
 		public void valueChanged(javax.swing.event.ListSelectionEvent var0) { }
 	}
+	public static final class DropLocation extends javax.swing.TransferHandler.DropLocation {
+		public int getIndex() { return 0; }
+		public boolean isInsert() { return false; }
+		private DropLocation()  { super((java.awt.Point) null); } /* generated constructor to prevent compiler adding default public constructor */
+	}
 	public final static int HORIZONTAL_WRAP = 2;
 	public final static int VERTICAL = 0;
 	public final static int VERTICAL_WRAP = 1;
@@ -85,6 +90,8 @@ public class JList extends javax.swing.JComponent implements javax.accessibility
 	public java.awt.Rectangle getCellBounds(int var0, int var1) { return null; }
 	public javax.swing.ListCellRenderer getCellRenderer() { return null; }
 	public boolean getDragEnabled() { return false; }
+	public final javax.swing.JList.DropLocation getDropLocation() { return null; }
+	public final javax.swing.DropMode getDropMode() { return null; }
 	public int getFirstVisibleIndex() { return 0; }
 	public int getFixedCellHeight() { return 0; }
 	public int getFixedCellWidth() { return 0; }
@@ -121,6 +128,7 @@ public class JList extends javax.swing.JComponent implements javax.accessibility
 	public void removeSelectionInterval(int var0, int var1) { }
 	public void setCellRenderer(javax.swing.ListCellRenderer var0) { }
 	public void setDragEnabled(boolean var0) { }
+	public final void setDropMode(javax.swing.DropMode var0) { }
 	public void setFixedCellHeight(int var0) { }
 	public void setFixedCellWidth(int var0) { }
 	public void setLayoutOrientation(int var0) { }

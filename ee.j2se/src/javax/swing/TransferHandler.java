@@ -16,13 +16,36 @@
 
 package javax.swing;
 public class TransferHandler implements java.io.Serializable {
+	public static class DropLocation {
+		protected DropLocation(java.awt.Point var0) { } 
+		public final java.awt.Point getDropPoint() { return null; }
+	}
+	interface HasGetTransferHandler {
+		javax.swing.TransferHandler getTransferHandler();
+	}
+	public static final class TransferSupport {
+		public TransferSupport(java.awt.Component var0, java.awt.datatransfer.Transferable var1) { } 
+		public java.awt.Component getComponent() { return null; }
+		public java.awt.datatransfer.DataFlavor[] getDataFlavors() { return null; }
+		public int getDropAction() { return 0; }
+		public javax.swing.TransferHandler.DropLocation getDropLocation() { return null; }
+		public int getSourceDropActions() { return 0; }
+		public java.awt.datatransfer.Transferable getTransferable() { return null; }
+		public int getUserDropAction() { return 0; }
+		public boolean isDataFlavorSupported(java.awt.datatransfer.DataFlavor var0) { return false; }
+		public boolean isDrop() { return false; }
+		public void setDropAction(int var0) { }
+		public void setShowDropLocation(boolean var0) { }
+	}
 	public final static int COPY = 1;
 	public final static int COPY_OR_MOVE = 3;
+	public final static int LINK = 1073741824;
 	public final static int MOVE = 2;
 	public final static int NONE = 0;
 	protected TransferHandler() { } 
 	public TransferHandler(java.lang.String var0) { } 
 	public boolean canImport(javax.swing.JComponent var0, java.awt.datatransfer.DataFlavor[] var1) { return false; }
+	public boolean canImport(javax.swing.TransferHandler.TransferSupport var0) { return false; }
 	protected java.awt.datatransfer.Transferable createTransferable(javax.swing.JComponent var0) { return null; }
 	public void exportAsDrag(javax.swing.JComponent var0, java.awt.event.InputEvent var1, int var2) { }
 	protected void exportDone(javax.swing.JComponent var0, java.awt.datatransfer.Transferable var1, int var2) { }
@@ -33,5 +56,6 @@ public class TransferHandler implements java.io.Serializable {
 	public int getSourceActions(javax.swing.JComponent var0) { return 0; }
 	public javax.swing.Icon getVisualRepresentation(java.awt.datatransfer.Transferable var0) { return null; }
 	public boolean importData(javax.swing.JComponent var0, java.awt.datatransfer.Transferable var1) { return false; }
+	public boolean importData(javax.swing.TransferHandler.TransferSupport var0) { return false; }
 }
 

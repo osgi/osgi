@@ -98,6 +98,8 @@ public class BasicTabbedPaneUI extends javax.swing.plaf.TabbedPaneUI implements 
 	protected javax.swing.JButton createScrollButton(int var0) { return null; }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	protected void expandTabRunsArray() { }
+	protected int getBaseline(int var0) { return 0; }
+	protected int getBaselineOffset() { return 0; }
 	protected java.awt.Insets getContentBorderInsets(int var0) { return null; }
 	protected int getFocusIndex() { return 0; }
 	protected java.awt.FontMetrics getFontMetrics() { return null; }

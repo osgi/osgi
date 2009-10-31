@@ -19,7 +19,7 @@ public abstract class Format implements java.io.Serializable, java.lang.Cloneabl
 	public static class Field extends java.text.AttributedCharacterIterator.Attribute {
 		protected Field(java.lang.String var0)  { super((java.lang.String) null); } 
 	}
-	public Format() { } 
+	protected Format() { } 
 	public java.lang.Object clone() { return null; }
 	public final java.lang.String format(java.lang.Object var0) { return null; }
 	public abstract java.lang.StringBuffer format(java.lang.Object var0, java.lang.StringBuffer var1, java.text.FieldPosition var2);

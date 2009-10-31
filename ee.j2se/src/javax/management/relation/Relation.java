@@ -17,11 +17,11 @@
 package javax.management.relation;
 public interface Relation {
 	javax.management.relation.RoleResult getAllRoles() throws javax.management.relation.RelationServiceNotRegisteredException;
-	java.util.Map getReferencedMBeans();
+	java.util.Map<javax.management.ObjectName,java.util.List<java.lang.String>> getReferencedMBeans();
 	java.lang.String getRelationId();
 	javax.management.ObjectName getRelationServiceName();
 	java.lang.String getRelationTypeName();
-	java.util.List getRole(java.lang.String var0) throws javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RoleNotFoundException;
+	java.util.List<javax.management.ObjectName> getRole(java.lang.String var0) throws javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RoleNotFoundException;
 	java.lang.Integer getRoleCardinality(java.lang.String var0) throws javax.management.relation.RoleNotFoundException;
 	javax.management.relation.RoleResult getRoles(java.lang.String[] var0) throws javax.management.relation.RelationServiceNotRegisteredException;
 	void handleMBeanUnregistration(javax.management.ObjectName var0, java.lang.String var1) throws javax.management.relation.InvalidRoleValueException, javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RelationTypeNotFoundException, javax.management.relation.RoleNotFoundException;

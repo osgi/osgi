@@ -15,16 +15,17 @@
  */
 
 package javax.management.openmbean;
-public class OpenMBeanAttributeInfoSupport extends javax.management.MBeanAttributeInfo implements java.io.Serializable, javax.management.openmbean.OpenMBeanAttributeInfo {
-	public OpenMBeanAttributeInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType var2, boolean var3, boolean var4, boolean var5)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false); } 
-	public OpenMBeanAttributeInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType var2, boolean var3, boolean var4, boolean var5, java.lang.Object var6) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false); } 
-	public OpenMBeanAttributeInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType var2, boolean var3, boolean var4, boolean var5, java.lang.Object var6, java.lang.Comparable var7, java.lang.Comparable var8) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false); } 
-	public OpenMBeanAttributeInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType var2, boolean var3, boolean var4, boolean var5, java.lang.Object var6, java.lang.Object[] var7) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false); } 
+public class OpenMBeanAttributeInfoSupport extends javax.management.MBeanAttributeInfo implements javax.management.openmbean.OpenMBeanAttributeInfo {
+	public OpenMBeanAttributeInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType<?> var2, boolean var3, boolean var4, boolean var5)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false, (javax.management.Descriptor) null); } 
+	public <T> OpenMBeanAttributeInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType<T> var2, boolean var3, boolean var4, boolean var5, T var6) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false, (javax.management.Descriptor) null); } 
+	public <T> OpenMBeanAttributeInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType<T> var2, boolean var3, boolean var4, boolean var5, T var6, java.lang.Comparable<T> var7, java.lang.Comparable<T> var8) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false, (javax.management.Descriptor) null); } 
+	public <T> OpenMBeanAttributeInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType<T> var2, boolean var3, boolean var4, boolean var5, T var6, T[] var7) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false, (javax.management.Descriptor) null); } 
+	public OpenMBeanAttributeInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType<?> var2, boolean var3, boolean var4, boolean var5, javax.management.Descriptor var6)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false, (javax.management.Descriptor) null); } 
 	public java.lang.Object getDefaultValue() { return null; }
-	public java.util.Set getLegalValues() { return null; }
-	public java.lang.Comparable getMaxValue() { return null; }
-	public java.lang.Comparable getMinValue() { return null; }
-	public javax.management.openmbean.OpenType getOpenType() { return null; }
+	public java.util.Set<?> getLegalValues() { return null; }
+	public java.lang.Comparable<?> getMaxValue() { return null; }
+	public java.lang.Comparable<?> getMinValue() { return null; }
+	public javax.management.openmbean.OpenType<?> getOpenType() { return null; }
 	public boolean hasDefaultValue() { return false; }
 	public boolean hasLegalValues() { return false; }
 	public boolean hasMaxValue() { return false; }

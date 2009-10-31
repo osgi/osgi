@@ -50,48 +50,105 @@ public abstract class BaseRowSet implements java.io.Serializable, java.lang.Clon
 	protected void notifyRowSetChanged() throws java.sql.SQLException { }
 	public void removeRowSetListener(javax.sql.RowSetListener var0) { }
 	public void setArray(int var0, java.sql.Array var1) throws java.sql.SQLException { }
+	public void setAsciiStream(int var0, java.io.InputStream var1) throws java.sql.SQLException { }
 	public void setAsciiStream(int var0, java.io.InputStream var1, int var2) throws java.sql.SQLException { }
+	public void setAsciiStream(java.lang.String var0, java.io.InputStream var1) throws java.sql.SQLException { }
+	public void setAsciiStream(java.lang.String var0, java.io.InputStream var1, int var2) throws java.sql.SQLException { }
 	public void setBigDecimal(int var0, java.math.BigDecimal var1) throws java.sql.SQLException { }
+	public void setBigDecimal(java.lang.String var0, java.math.BigDecimal var1) throws java.sql.SQLException { }
+	public void setBinaryStream(int var0, java.io.InputStream var1) throws java.sql.SQLException { }
 	public void setBinaryStream(int var0, java.io.InputStream var1, int var2) throws java.sql.SQLException { }
+	public void setBinaryStream(java.lang.String var0, java.io.InputStream var1) throws java.sql.SQLException { }
+	public void setBinaryStream(java.lang.String var0, java.io.InputStream var1, int var2) throws java.sql.SQLException { }
+	public void setBlob(int var0, java.io.InputStream var1) throws java.sql.SQLException { }
+	public void setBlob(int var0, java.io.InputStream var1, long var2) throws java.sql.SQLException { }
 	public void setBlob(int var0, java.sql.Blob var1) throws java.sql.SQLException { }
+	public void setBlob(java.lang.String var0, java.io.InputStream var1) throws java.sql.SQLException { }
+	public void setBlob(java.lang.String var0, java.io.InputStream var1, long var2) throws java.sql.SQLException { }
+	public void setBlob(java.lang.String var0, java.sql.Blob var1) throws java.sql.SQLException { }
 	public void setBoolean(int var0, boolean var1) throws java.sql.SQLException { }
+	public void setBoolean(java.lang.String var0, boolean var1) throws java.sql.SQLException { }
 	public void setByte(int var0, byte var1) throws java.sql.SQLException { }
+	public void setByte(java.lang.String var0, byte var1) throws java.sql.SQLException { }
 	public void setBytes(int var0, byte[] var1) throws java.sql.SQLException { }
+	public void setBytes(java.lang.String var0, byte[] var1) throws java.sql.SQLException { }
+	public void setCharacterStream(int var0, java.io.Reader var1) throws java.sql.SQLException { }
 	public void setCharacterStream(int var0, java.io.Reader var1, int var2) throws java.sql.SQLException { }
+	public void setCharacterStream(java.lang.String var0, java.io.Reader var1) throws java.sql.SQLException { }
+	public void setCharacterStream(java.lang.String var0, java.io.Reader var1, int var2) throws java.sql.SQLException { }
+	public void setClob(int var0, java.io.Reader var1) throws java.sql.SQLException { }
+	public void setClob(int var0, java.io.Reader var1, long var2) throws java.sql.SQLException { }
 	public void setClob(int var0, java.sql.Clob var1) throws java.sql.SQLException { }
+	public void setClob(java.lang.String var0, java.io.Reader var1) throws java.sql.SQLException { }
+	public void setClob(java.lang.String var0, java.io.Reader var1, long var2) throws java.sql.SQLException { }
+	public void setClob(java.lang.String var0, java.sql.Clob var1) throws java.sql.SQLException { }
 	public void setCommand(java.lang.String var0) throws java.sql.SQLException { }
 	public void setConcurrency(int var0) throws java.sql.SQLException { }
 	public void setDataSourceName(java.lang.String var0) throws java.sql.SQLException { }
 	public void setDate(int var0, java.sql.Date var1) throws java.sql.SQLException { }
 	public void setDate(int var0, java.sql.Date var1, java.util.Calendar var2) throws java.sql.SQLException { }
+	public void setDate(java.lang.String var0, java.sql.Date var1) throws java.sql.SQLException { }
+	public void setDate(java.lang.String var0, java.sql.Date var1, java.util.Calendar var2) throws java.sql.SQLException { }
 	public void setDouble(int var0, double var1) throws java.sql.SQLException { }
+	public void setDouble(java.lang.String var0, double var1) throws java.sql.SQLException { }
 	public void setEscapeProcessing(boolean var0) throws java.sql.SQLException { }
 	public void setFetchDirection(int var0) throws java.sql.SQLException { }
 	public void setFetchSize(int var0) throws java.sql.SQLException { }
 	public void setFloat(int var0, float var1) throws java.sql.SQLException { }
+	public void setFloat(java.lang.String var0, float var1) throws java.sql.SQLException { }
 	public void setInt(int var0, int var1) throws java.sql.SQLException { }
+	public void setInt(java.lang.String var0, int var1) throws java.sql.SQLException { }
 	public void setLong(int var0, long var1) throws java.sql.SQLException { }
+	public void setLong(java.lang.String var0, long var1) throws java.sql.SQLException { }
 	public void setMaxFieldSize(int var0) throws java.sql.SQLException { }
 	public void setMaxRows(int var0) throws java.sql.SQLException { }
+	public void setNCharacterStream(int var0, java.io.Reader var1) throws java.sql.SQLException { }
+	public void setNCharacterStream(int var0, java.io.Reader var1, long var2) throws java.sql.SQLException { }
+	public void setNCharacterStream(java.lang.String var0, java.io.Reader var1) throws java.sql.SQLException { }
+	public void setNCharacterStream(java.lang.String var0, java.io.Reader var1, long var2) throws java.sql.SQLException { }
+	public void setNClob(int var0, java.io.Reader var1) throws java.sql.SQLException { }
+	public void setNClob(int var0, java.io.Reader var1, long var2) throws java.sql.SQLException { }
+	public void setNClob(int var0, java.sql.NClob var1) throws java.sql.SQLException { }
+	public void setNClob(java.lang.String var0, java.io.Reader var1) throws java.sql.SQLException { }
+	public void setNClob(java.lang.String var0, java.io.Reader var1, long var2) throws java.sql.SQLException { }
+	public void setNClob(java.lang.String var0, java.sql.NClob var1) throws java.sql.SQLException { }
+	public void setNString(int var0, java.lang.String var1) throws java.sql.SQLException { }
+	public void setNString(java.lang.String var0, java.lang.String var1) throws java.sql.SQLException { }
 	public void setNull(int var0, int var1) throws java.sql.SQLException { }
 	public void setNull(int var0, int var1, java.lang.String var2) throws java.sql.SQLException { }
+	public void setNull(java.lang.String var0, int var1) throws java.sql.SQLException { }
+	public void setNull(java.lang.String var0, int var1, java.lang.String var2) throws java.sql.SQLException { }
 	public void setObject(int var0, java.lang.Object var1) throws java.sql.SQLException { }
 	public void setObject(int var0, java.lang.Object var1, int var2) throws java.sql.SQLException { }
 	public void setObject(int var0, java.lang.Object var1, int var2, int var3) throws java.sql.SQLException { }
+	public void setObject(java.lang.String var0, java.lang.Object var1) throws java.sql.SQLException { }
+	public void setObject(java.lang.String var0, java.lang.Object var1, int var2) throws java.sql.SQLException { }
+	public void setObject(java.lang.String var0, java.lang.Object var1, int var2, int var3) throws java.sql.SQLException { }
 	public void setPassword(java.lang.String var0) { }
 	public void setQueryTimeout(int var0) throws java.sql.SQLException { }
 	public void setReadOnly(boolean var0) { }
 	public void setRef(int var0, java.sql.Ref var1) throws java.sql.SQLException { }
+	public void setRowId(int var0, java.sql.RowId var1) throws java.sql.SQLException { }
+	public void setRowId(java.lang.String var0, java.sql.RowId var1) throws java.sql.SQLException { }
+	public void setSQLXML(int var0, java.sql.SQLXML var1) throws java.sql.SQLException { }
+	public void setSQLXML(java.lang.String var0, java.sql.SQLXML var1) throws java.sql.SQLException { }
 	public void setShort(int var0, short var1) throws java.sql.SQLException { }
+	public void setShort(java.lang.String var0, short var1) throws java.sql.SQLException { }
 	public void setShowDeleted(boolean var0) throws java.sql.SQLException { }
 	public void setString(int var0, java.lang.String var1) throws java.sql.SQLException { }
+	public void setString(java.lang.String var0, java.lang.String var1) throws java.sql.SQLException { }
 	public void setTime(int var0, java.sql.Time var1) throws java.sql.SQLException { }
 	public void setTime(int var0, java.sql.Time var1, java.util.Calendar var2) throws java.sql.SQLException { }
+	public void setTime(java.lang.String var0, java.sql.Time var1) throws java.sql.SQLException { }
+	public void setTime(java.lang.String var0, java.sql.Time var1, java.util.Calendar var2) throws java.sql.SQLException { }
 	public void setTimestamp(int var0, java.sql.Timestamp var1) throws java.sql.SQLException { }
 	public void setTimestamp(int var0, java.sql.Timestamp var1, java.util.Calendar var2) throws java.sql.SQLException { }
+	public void setTimestamp(java.lang.String var0, java.sql.Timestamp var1) throws java.sql.SQLException { }
+	public void setTimestamp(java.lang.String var0, java.sql.Timestamp var1, java.util.Calendar var2) throws java.sql.SQLException { }
 	public void setTransactionIsolation(int var0) throws java.sql.SQLException { }
 	public void setType(int var0) throws java.sql.SQLException { }
 	public void setTypeMap(java.util.Map<java.lang.String,java.lang.Class<?>> var0) { }
+	public void setURL(int var0, java.net.URL var1) throws java.sql.SQLException { }
 	/** @deprecated */
 	public void setUnicodeStream(int var0, java.io.InputStream var1, int var2) throws java.sql.SQLException { }
 	public void setUrl(java.lang.String var0) throws java.sql.SQLException { }

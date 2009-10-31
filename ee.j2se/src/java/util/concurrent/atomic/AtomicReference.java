@@ -21,6 +21,7 @@ public class AtomicReference<V> implements java.io.Serializable {
 	public final boolean compareAndSet(V var0, V var1) { return false; }
 	public final V get() { return null; }
 	public final V getAndSet(V var0) { return null; }
+	public final void lazySet(V var0) { }
 	public final void set(V var0) { }
 	public final boolean weakCompareAndSet(V var0, V var1) { return false; }
 }

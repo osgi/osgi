@@ -25,6 +25,7 @@ public class JTextField extends javax.swing.text.JTextComponent implements javax
 	public JTextField(java.lang.String var0) { } 
 	public JTextField(java.lang.String var0, int var1) { } 
 	public JTextField(javax.swing.text.Document var0, java.lang.String var1, int var2) { } 
+	protected void actionPropertyChanged(javax.swing.Action var0, java.lang.String var1) { }
 	public void addActionListener(java.awt.event.ActionListener var0) { }
 	protected void configurePropertiesFromAction(javax.swing.Action var0) { }
 	protected java.beans.PropertyChangeListener createActionPropertyChangeListener(javax.swing.Action var0) { return null; }

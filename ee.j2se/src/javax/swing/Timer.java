@@ -20,6 +20,7 @@ public class Timer implements java.io.Serializable {
 	public Timer(int var0, java.awt.event.ActionListener var1) { } 
 	public void addActionListener(java.awt.event.ActionListener var0) { }
 	protected void fireActionPerformed(java.awt.event.ActionEvent var0) { }
+	public java.lang.String getActionCommand() { return null; }
 	public java.awt.event.ActionListener[] getActionListeners() { return null; }
 	public int getDelay() { return 0; }
 	public int getInitialDelay() { return 0; }
@@ -30,6 +31,7 @@ public class Timer implements java.io.Serializable {
 	public boolean isRunning() { return false; }
 	public void removeActionListener(java.awt.event.ActionListener var0) { }
 	public void restart() { }
+	public void setActionCommand(java.lang.String var0) { }
 	public void setCoalesce(boolean var0) { }
 	public void setDelay(int var0) { }
 	public void setInitialDelay(int var0) { }

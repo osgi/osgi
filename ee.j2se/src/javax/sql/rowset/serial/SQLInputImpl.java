@@ -32,8 +32,12 @@ public class SQLInputImpl implements java.sql.SQLInput {
 	public float readFloat() throws java.sql.SQLException { return 0.0f; }
 	public int readInt() throws java.sql.SQLException { return 0; }
 	public long readLong() throws java.sql.SQLException { return 0l; }
+	public java.sql.NClob readNClob() throws java.sql.SQLException { return null; }
+	public java.lang.String readNString() throws java.sql.SQLException { return null; }
 	public java.lang.Object readObject() throws java.sql.SQLException { return null; }
 	public java.sql.Ref readRef() throws java.sql.SQLException { return null; }
+	public java.sql.RowId readRowId() throws java.sql.SQLException { return null; }
+	public java.sql.SQLXML readSQLXML() throws java.sql.SQLException { return null; }
 	public short readShort() throws java.sql.SQLException { return 0; }
 	public java.lang.String readString() throws java.sql.SQLException { return null; }
 	public java.sql.Time readTime() throws java.sql.SQLException { return null; }

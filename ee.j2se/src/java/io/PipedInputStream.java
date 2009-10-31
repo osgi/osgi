@@ -21,7 +21,9 @@ public class PipedInputStream extends java.io.InputStream {
 	protected int in;
 	protected int out;
 	public PipedInputStream() { } 
+	public PipedInputStream(int var0) { } 
 	public PipedInputStream(java.io.PipedOutputStream var0) throws java.io.IOException { } 
+	public PipedInputStream(java.io.PipedOutputStream var0, int var1) throws java.io.IOException { } 
 	public void connect(java.io.PipedOutputStream var0) throws java.io.IOException { }
 	public int read() throws java.io.IOException { return 0; }
 	protected void receive(int var0) throws java.io.IOException { }

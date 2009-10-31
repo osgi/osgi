@@ -21,7 +21,6 @@ public class ModelMBeanOperationInfo extends javax.management.MBeanOperationInfo
 	public ModelMBeanOperationInfo(java.lang.String var0, java.lang.reflect.Method var1)  { super((java.lang.String) null, (java.lang.reflect.Method) null); } 
 	public ModelMBeanOperationInfo(java.lang.String var0, java.lang.reflect.Method var1, javax.management.Descriptor var2)  { super((java.lang.String) null, (java.lang.reflect.Method) null); } 
 	public ModelMBeanOperationInfo(javax.management.modelmbean.ModelMBeanOperationInfo var0)  { super((java.lang.String) null, (java.lang.reflect.Method) null); } 
-	public javax.management.Descriptor getDescriptor() { return null; }
 	public void setDescriptor(javax.management.Descriptor var0) { }
 }
 

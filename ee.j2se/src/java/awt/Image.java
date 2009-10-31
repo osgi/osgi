@@ -24,7 +24,7 @@ public abstract class Image {
 	public final static java.lang.Object UndefinedProperty; static { UndefinedProperty = null; }
 	protected float accelerationPriority;
 	public Image() { } 
-	public abstract void flush();
+	public void flush() { }
 	public float getAccelerationPriority() { return 0.0f; }
 	public java.awt.ImageCapabilities getCapabilities(java.awt.GraphicsConfiguration var0) { return null; }
 	public abstract java.awt.Graphics getGraphics();

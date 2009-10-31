@@ -24,6 +24,6 @@ public interface CompositeData {
 	javax.management.openmbean.CompositeType getCompositeType();
 	int hashCode();
 	java.lang.String toString();
-	java.util.Collection values();
+	java.util.Collection<?> values();
 }
 

@@ -46,6 +46,7 @@ public class JComboBox extends javax.swing.JComponent implements java.awt.ItemSe
 	public JComboBox(javax.swing.ComboBoxModel var0) { } 
 	public JComboBox(java.lang.Object[] var0) { } 
 	public void actionPerformed(java.awt.event.ActionEvent var0) { }
+	protected void actionPropertyChanged(javax.swing.Action var0, java.lang.String var1) { }
 	public void addActionListener(java.awt.event.ActionListener var0) { }
 	public void addItem(java.lang.Object var0) { }
 	public void addItemListener(java.awt.event.ItemListener var0) { }

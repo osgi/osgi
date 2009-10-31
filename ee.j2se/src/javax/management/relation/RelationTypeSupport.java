@@ -21,6 +21,6 @@ public class RelationTypeSupport implements javax.management.relation.RelationTy
 	protected void addRoleInfo(javax.management.relation.RoleInfo var0) throws javax.management.relation.InvalidRelationTypeException { }
 	public java.lang.String getRelationTypeName() { return null; }
 	public javax.management.relation.RoleInfo getRoleInfo(java.lang.String var0) throws javax.management.relation.RoleInfoNotFoundException { return null; }
-	public java.util.List getRoleInfos() { return null; }
+	public java.util.List<javax.management.relation.RoleInfo> getRoleInfos() { return null; }
 }
 

@@ -15,7 +15,7 @@
  */
 
 package java.security;
-public class UnrecoverableKeyException extends java.security.GeneralSecurityException {
+public class UnrecoverableKeyException extends java.security.UnrecoverableEntryException {
 	public UnrecoverableKeyException() { } 
 	public UnrecoverableKeyException(java.lang.String var0) { } 
 }

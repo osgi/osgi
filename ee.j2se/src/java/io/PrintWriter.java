@@ -29,6 +29,7 @@ public class PrintWriter extends java.io.Writer {
 	public java.io.PrintWriter append(java.lang.CharSequence var0) { return null; }
 	public java.io.PrintWriter append(java.lang.CharSequence var0, int var1, int var2) { return null; }
 	public boolean checkError() { return false; }
+	protected void clearError() { }
 	public void close() { }
 	public void flush() { }
 	public java.io.PrintWriter format(java.lang.String var0, java.lang.Object... var1) { return null; }

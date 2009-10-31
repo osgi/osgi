@@ -32,6 +32,7 @@ public final class Locale implements java.io.Serializable, java.lang.Cloneable {
 	public final static java.util.Locale KOREA; static { KOREA = null; }
 	public final static java.util.Locale KOREAN; static { KOREAN = null; }
 	public final static java.util.Locale PRC; static { PRC = null; }
+	public final static java.util.Locale ROOT; static { ROOT = null; }
 	public final static java.util.Locale SIMPLIFIED_CHINESE; static { SIMPLIFIED_CHINESE = null; }
 	public final static java.util.Locale TAIWAN; static { TAIWAN = null; }
 	public final static java.util.Locale TRADITIONAL_CHINESE; static { TRADITIONAL_CHINESE = null; }

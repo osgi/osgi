@@ -16,6 +16,8 @@
 
 package java.lang.management;
 public interface ThreadMXBean {
+	java.lang.management.ThreadInfo[] dumpAllThreads(boolean var0, boolean var1);
+	long[] findDeadlockedThreads();
 	long[] findMonitorDeadlockedThreads();
 	long[] getAllThreadIds();
 	long getCurrentThreadCpuTime();
@@ -28,9 +30,12 @@ public interface ThreadMXBean {
 	java.lang.management.ThreadInfo getThreadInfo(long var0, int var1);
 	java.lang.management.ThreadInfo[] getThreadInfo(long[] var0);
 	java.lang.management.ThreadInfo[] getThreadInfo(long[] var0, int var1);
+	java.lang.management.ThreadInfo[] getThreadInfo(long[] var0, boolean var1, boolean var2);
 	long getThreadUserTime(long var0);
 	long getTotalStartedThreadCount();
 	boolean isCurrentThreadCpuTimeSupported();
+	boolean isObjectMonitorUsageSupported();
+	boolean isSynchronizerUsageSupported();
 	boolean isThreadContentionMonitoringEnabled();
 	boolean isThreadContentionMonitoringSupported();
 	boolean isThreadCpuTimeEnabled();

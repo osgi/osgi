@@ -18,8 +18,8 @@ package java.util.concurrent;
 public class Executors {
 	public static java.util.concurrent.Callable<java.lang.Object> callable(java.lang.Runnable var0) { return null; }
 	public static <T> java.util.concurrent.Callable<T> callable(java.lang.Runnable var0, T var1) { return null; }
-	public static java.util.concurrent.Callable<java.lang.Object> callable(java.security.PrivilegedAction var0) { return null; }
-	public static java.util.concurrent.Callable<java.lang.Object> callable(java.security.PrivilegedExceptionAction var0) { return null; }
+	public static java.util.concurrent.Callable<java.lang.Object> callable(java.security.PrivilegedAction<?> var0) { return null; }
+	public static java.util.concurrent.Callable<java.lang.Object> callable(java.security.PrivilegedExceptionAction<?> var0) { return null; }
 	public static java.util.concurrent.ThreadFactory defaultThreadFactory() { return null; }
 	public static java.util.concurrent.ExecutorService newCachedThreadPool() { return null; }
 	public static java.util.concurrent.ExecutorService newCachedThreadPool(java.util.concurrent.ThreadFactory var0) { return null; }

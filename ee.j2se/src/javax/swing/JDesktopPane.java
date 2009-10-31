@@ -28,6 +28,7 @@ public class JDesktopPane extends javax.swing.JLayeredPane implements javax.acce
 	public int getDragMode() { return 0; }
 	public javax.swing.JInternalFrame getSelectedFrame() { return null; }
 	public javax.swing.plaf.DesktopPaneUI getUI() { return null; }
+	public javax.swing.JInternalFrame selectFrame(boolean var0) { return null; }
 	public void setDesktopManager(javax.swing.DesktopManager var0) { }
 	public void setDragMode(int var0) { }
 	public void setSelectedFrame(javax.swing.JInternalFrame var0) { }

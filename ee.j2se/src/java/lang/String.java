@@ -30,7 +30,9 @@ public final class String implements java.io.Serializable, java.lang.CharSequenc
 	@java.lang.Deprecated
 	public String(byte[] var0, int var1, int var2, int var3) { } 
 	public String(byte[] var0, int var1, int var2, java.lang.String var3) throws java.io.UnsupportedEncodingException { } 
+	public String(byte[] var0, int var1, int var2, java.nio.charset.Charset var3) { } 
 	public String(byte[] var0, java.lang.String var1) throws java.io.UnsupportedEncodingException { } 
+	public String(byte[] var0, java.nio.charset.Charset var1) { } 
 	public String(char[] var0) { } 
 	public String(char[] var0, int var1, int var2) { } 
 	public String(int[] var0, int var1, int var2) { } 
@@ -55,12 +57,14 @@ public final class String implements java.io.Serializable, java.lang.CharSequenc
 	@java.lang.Deprecated
 	public void getBytes(int var0, int var1, byte[] var2, int var3) { }
 	public byte[] getBytes(java.lang.String var0) throws java.io.UnsupportedEncodingException { return null; }
+	public byte[] getBytes(java.nio.charset.Charset var0) { return null; }
 	public void getChars(int var0, int var1, char[] var2, int var3) { }
 	public int indexOf(int var0) { return 0; }
 	public int indexOf(int var0, int var1) { return 0; }
 	public int indexOf(java.lang.String var0) { return 0; }
 	public int indexOf(java.lang.String var0, int var1) { return 0; }
 	public native java.lang.String intern();
+	public boolean isEmpty() { return false; }
 	public int lastIndexOf(int var0) { return 0; }
 	public int lastIndexOf(int var0, int var1) { return 0; }
 	public int lastIndexOf(java.lang.String var0) { return 0; }

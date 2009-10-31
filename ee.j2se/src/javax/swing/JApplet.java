@@ -15,7 +15,7 @@
  */
 
 package javax.swing;
-public class JApplet extends java.applet.Applet implements javax.accessibility.Accessible, javax.swing.RootPaneContainer {
+public class JApplet extends java.applet.Applet implements javax.accessibility.Accessible, javax.swing.RootPaneContainer, javax.swing.TransferHandler.HasGetTransferHandler {
 	protected class AccessibleJApplet extends java.applet.Applet.AccessibleApplet {
 		protected AccessibleJApplet() { } 
 	}
@@ -29,6 +29,7 @@ public class JApplet extends java.applet.Applet implements javax.accessibility.A
 	public javax.swing.JMenuBar getJMenuBar() { return null; }
 	public javax.swing.JLayeredPane getLayeredPane() { return null; }
 	public javax.swing.JRootPane getRootPane() { return null; }
+	public javax.swing.TransferHandler getTransferHandler() { return null; }
 	protected boolean isRootPaneCheckingEnabled() { return false; }
 	public void setContentPane(java.awt.Container var0) { }
 	public void setGlassPane(java.awt.Component var0) { }
@@ -36,5 +37,6 @@ public class JApplet extends java.applet.Applet implements javax.accessibility.A
 	public void setLayeredPane(javax.swing.JLayeredPane var0) { }
 	protected void setRootPane(javax.swing.JRootPane var0) { }
 	protected void setRootPaneCheckingEnabled(boolean var0) { }
+	public void setTransferHandler(javax.swing.TransferHandler var0) { }
 }
 

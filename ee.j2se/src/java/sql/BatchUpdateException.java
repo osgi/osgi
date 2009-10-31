@@ -18,9 +18,14 @@ package java.sql;
 public class BatchUpdateException extends java.sql.SQLException {
 	public BatchUpdateException() { } 
 	public BatchUpdateException(java.lang.String var0, java.lang.String var1, int var2, int[] var3) { } 
+	public BatchUpdateException(java.lang.String var0, java.lang.String var1, int var2, int[] var3, java.lang.Throwable var4) { } 
 	public BatchUpdateException(java.lang.String var0, java.lang.String var1, int[] var2) { } 
+	public BatchUpdateException(java.lang.String var0, java.lang.String var1, int[] var2, java.lang.Throwable var3) { } 
 	public BatchUpdateException(java.lang.String var0, int[] var1) { } 
+	public BatchUpdateException(java.lang.String var0, int[] var1, java.lang.Throwable var2) { } 
+	public BatchUpdateException(java.lang.Throwable var0) { } 
 	public BatchUpdateException(int[] var0) { } 
+	public BatchUpdateException(int[] var0, java.lang.Throwable var1) { } 
 	public int[] getUpdateCounts() { return null; }
 }
 

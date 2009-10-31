@@ -21,9 +21,11 @@ public final class X500Principal implements java.io.Serializable, java.security.
 	public final static java.lang.String RFC2253 = "RFC2253";
 	public X500Principal(java.io.InputStream var0) { } 
 	public X500Principal(java.lang.String var0) { } 
+	public X500Principal(java.lang.String var0, java.util.Map<java.lang.String,java.lang.String> var1) { } 
 	public X500Principal(byte[] var0) { } 
 	public byte[] getEncoded() { return null; }
 	public java.lang.String getName() { return null; }
 	public java.lang.String getName(java.lang.String var0) { return null; }
+	public java.lang.String getName(java.lang.String var0, java.util.Map<java.lang.String,java.lang.String> var1) { return null; }
 }
 

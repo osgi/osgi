@@ -32,6 +32,8 @@ public class InitialContext implements javax.naming.Context {
 	public javax.naming.Context createSubcontext(javax.naming.Name var0) throws javax.naming.NamingException { return null; }
 	public void destroySubcontext(java.lang.String var0) throws javax.naming.NamingException { }
 	public void destroySubcontext(javax.naming.Name var0) throws javax.naming.NamingException { }
+	public static <T> T doLookup(java.lang.String var0) throws javax.naming.NamingException { return null; }
+	public static <T> T doLookup(javax.naming.Name var0) throws javax.naming.NamingException { return null; }
 	protected javax.naming.Context getDefaultInitCtx() throws javax.naming.NamingException { return null; }
 	public java.util.Hashtable<?,?> getEnvironment() throws javax.naming.NamingException { return null; }
 	public java.lang.String getNameInNamespace() throws javax.naming.NamingException { return null; }

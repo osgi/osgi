@@ -15,13 +15,14 @@
  */
 
 package javax.management.remote.rmi;
-public class RMIConnector implements java.io.Serializable, javax.management.remote.JMXConnector {
+public class RMIConnector implements java.io.Serializable, javax.management.remote.JMXAddressable, javax.management.remote.JMXConnector {
 	public RMIConnector(javax.management.remote.JMXServiceURL var0, java.util.Map<java.lang.String,?> var1) { } 
 	public RMIConnector(javax.management.remote.rmi.RMIServer var0, java.util.Map<java.lang.String,?> var1) { } 
 	public void addConnectionNotificationListener(javax.management.NotificationListener var0, javax.management.NotificationFilter var1, java.lang.Object var2) { }
 	public void close() throws java.io.IOException { }
 	public void connect() throws java.io.IOException { }
 	public void connect(java.util.Map<java.lang.String,?> var0) throws java.io.IOException { }
+	public javax.management.remote.JMXServiceURL getAddress() { return null; }
 	public java.lang.String getConnectionId() throws java.io.IOException { return null; }
 	public javax.management.MBeanServerConnection getMBeanServerConnection() throws java.io.IOException { return null; }
 	public javax.management.MBeanServerConnection getMBeanServerConnection(javax.security.auth.Subject var0) throws java.io.IOException { return null; }

@@ -15,7 +15,7 @@
  */
 
 package javax.management.openmbean;
-public class InvalidKeyException extends java.lang.IllegalArgumentException implements java.io.Serializable {
+public class InvalidKeyException extends java.lang.IllegalArgumentException {
 	public InvalidKeyException() { } 
 	public InvalidKeyException(java.lang.String var0) { } 
 }

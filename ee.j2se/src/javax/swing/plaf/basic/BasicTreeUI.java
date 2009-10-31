@@ -41,8 +41,6 @@ public class BasicTreeUI extends javax.swing.plaf.TreeUI {
 	}
 	public class MouseHandler extends java.awt.event.MouseAdapter implements java.awt.event.MouseMotionListener {
 		public MouseHandler() { } 
-		public void mouseDragged(java.awt.event.MouseEvent var0) { }
-		public void mouseMoved(java.awt.event.MouseEvent var0) { }
 	}
 	public class MouseInputHandler implements javax.swing.event.MouseInputListener {
 		protected java.awt.Component destination;

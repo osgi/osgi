@@ -26,6 +26,7 @@ public abstract class AtomicLongFieldUpdater<T> {
 	public long getAndIncrement(T var0) { return 0l; }
 	public long getAndSet(T var0, long var1) { return 0l; }
 	public long incrementAndGet(T var0) { return 0l; }
+	public abstract void lazySet(T var0, long var1);
 	public static <U> java.util.concurrent.atomic.AtomicLongFieldUpdater<U> newUpdater(java.lang.Class<U> var0, java.lang.String var1) { return null; }
 	public abstract void set(T var0, long var1);
 	public abstract boolean weakCompareAndSet(T var0, long var1, long var2);

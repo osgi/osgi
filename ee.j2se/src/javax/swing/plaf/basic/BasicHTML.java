@@ -20,6 +20,7 @@ public class BasicHTML {
 	public final static java.lang.String propertyKey = "html";
 	public BasicHTML() { } 
 	public static javax.swing.text.View createHTMLView(javax.swing.JComponent var0, java.lang.String var1) { return null; }
+	public static int getHTMLBaseline(javax.swing.text.View var0, int var1, int var2) { return 0; }
 	public static boolean isHTMLString(java.lang.String var0) { return false; }
 	public static void updateRenderer(javax.swing.JComponent var0, java.lang.String var1) { }
 }

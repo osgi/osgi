@@ -16,7 +16,10 @@
 
 package java.lang;
 public final class Float extends java.lang.Number implements java.lang.Comparable<java.lang.Float> {
+	public final static int MAX_EXPONENT = 127;
 	public final static float MAX_VALUE = 3.4028235E38f;
+	public final static int MIN_EXPONENT = -126;
+	public final static float MIN_NORMAL = 1.17549435E-38f;
 	public final static float MIN_VALUE = 1.4E-45f;
 	public final static float NEGATIVE_INFINITY = -1.0f / 0.0f;
 	public final static float NaN = 0.0f / 0.0f;
@@ -29,7 +32,7 @@ public final class Float extends java.lang.Number implements java.lang.Comparabl
 	public static int compare(float var0, float var1) { return 0; }
 	public int compareTo(java.lang.Float var0) { return 0; }
 	public double doubleValue() { return 0.0d; }
-	public static native int floatToIntBits(float var0);
+	public static int floatToIntBits(float var0) { return 0; }
 	public static native int floatToRawIntBits(float var0);
 	public float floatValue() { return 0.0f; }
 	public static native float intBitsToFloat(int var0);

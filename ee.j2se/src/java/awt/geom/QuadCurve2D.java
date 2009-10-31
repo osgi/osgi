@@ -16,7 +16,7 @@
 
 package java.awt.geom;
 public abstract class QuadCurve2D implements java.awt.Shape, java.lang.Cloneable {
-	public static class Double extends java.awt.geom.QuadCurve2D {
+	public static class Double extends java.awt.geom.QuadCurve2D implements java.io.Serializable {
 		public double ctrlx;
 		public double ctrly;
 		public double x1;
@@ -37,7 +37,7 @@ public abstract class QuadCurve2D implements java.awt.Shape, java.lang.Cloneable
 		public double getY2() { return 0.0d; }
 		public void setCurve(double var0, double var1, double var2, double var3, double var4, double var5) { }
 	}
-	public static class Float extends java.awt.geom.QuadCurve2D {
+	public static class Float extends java.awt.geom.QuadCurve2D implements java.io.Serializable {
 		public float ctrlx;
 		public float ctrly;
 		public float x1;

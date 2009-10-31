@@ -23,14 +23,12 @@ public class DriverManager {
 	public static java.sql.Driver getDriver(java.lang.String var0) throws java.sql.SQLException { return null; }
 	public static java.util.Enumeration<java.sql.Driver> getDrivers() { return null; }
 	/** @deprecated */
-	@java.lang.Deprecated
 	public static java.io.PrintStream getLogStream() { return null; }
 	public static java.io.PrintWriter getLogWriter() { return null; }
 	public static int getLoginTimeout() { return 0; }
 	public static void println(java.lang.String var0) { }
 	public static void registerDriver(java.sql.Driver var0) throws java.sql.SQLException { }
 	/** @deprecated */
-	@java.lang.Deprecated
 	public static void setLogStream(java.io.PrintStream var0) { }
 	public static void setLogWriter(java.io.PrintWriter var0) { }
 	public static void setLoginTimeout(int var0) { }

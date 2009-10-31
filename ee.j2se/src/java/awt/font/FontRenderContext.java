@@ -17,10 +17,15 @@
 package java.awt.font;
 public class FontRenderContext {
 	protected FontRenderContext() { } 
+	public FontRenderContext(java.awt.geom.AffineTransform var0, java.lang.Object var1, java.lang.Object var2) { } 
 	public FontRenderContext(java.awt.geom.AffineTransform var0, boolean var1, boolean var2) { } 
 	public boolean equals(java.awt.font.FontRenderContext var0) { return false; }
+	public java.lang.Object getAntiAliasingHint() { return null; }
+	public java.lang.Object getFractionalMetricsHint() { return null; }
 	public java.awt.geom.AffineTransform getTransform() { return null; }
+	public int getTransformType() { return 0; }
 	public boolean isAntiAliased() { return false; }
+	public boolean isTransformed() { return false; }
 	public boolean usesFractionalMetrics() { return false; }
 }
 

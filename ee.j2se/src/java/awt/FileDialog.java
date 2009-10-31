@@ -18,12 +18,12 @@ package java.awt;
 public class FileDialog extends java.awt.Dialog {
 	public final static int LOAD = 0;
 	public final static int SAVE = 1;
-	public FileDialog(java.awt.Dialog var0)  { super((java.awt.Frame) null, false); } 
-	public FileDialog(java.awt.Dialog var0, java.lang.String var1)  { super((java.awt.Frame) null, false); } 
-	public FileDialog(java.awt.Dialog var0, java.lang.String var1, int var2)  { super((java.awt.Frame) null, false); } 
-	public FileDialog(java.awt.Frame var0)  { super((java.awt.Frame) null, false); } 
-	public FileDialog(java.awt.Frame var0, java.lang.String var1)  { super((java.awt.Frame) null, false); } 
-	public FileDialog(java.awt.Frame var0, java.lang.String var1, int var2)  { super((java.awt.Frame) null, false); } 
+	public FileDialog(java.awt.Dialog var0)  { super((java.awt.Window) null, (java.lang.String) null, (java.awt.Dialog.ModalityType) null, (java.awt.GraphicsConfiguration) null); } 
+	public FileDialog(java.awt.Dialog var0, java.lang.String var1)  { super((java.awt.Window) null, (java.lang.String) null, (java.awt.Dialog.ModalityType) null, (java.awt.GraphicsConfiguration) null); } 
+	public FileDialog(java.awt.Dialog var0, java.lang.String var1, int var2)  { super((java.awt.Window) null, (java.lang.String) null, (java.awt.Dialog.ModalityType) null, (java.awt.GraphicsConfiguration) null); } 
+	public FileDialog(java.awt.Frame var0)  { super((java.awt.Window) null, (java.lang.String) null, (java.awt.Dialog.ModalityType) null, (java.awt.GraphicsConfiguration) null); } 
+	public FileDialog(java.awt.Frame var0, java.lang.String var1)  { super((java.awt.Window) null, (java.lang.String) null, (java.awt.Dialog.ModalityType) null, (java.awt.GraphicsConfiguration) null); } 
+	public FileDialog(java.awt.Frame var0, java.lang.String var1, int var2)  { super((java.awt.Window) null, (java.lang.String) null, (java.awt.Dialog.ModalityType) null, (java.awt.GraphicsConfiguration) null); } 
 	public java.lang.String getDirectory() { return null; }
 	public java.lang.String getFile() { return null; }
 	public java.io.FilenameFilter getFilenameFilter() { return null; }

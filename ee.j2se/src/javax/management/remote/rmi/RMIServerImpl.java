@@ -15,7 +15,7 @@
  */
 
 package javax.management.remote.rmi;
-public abstract class RMIServerImpl implements javax.management.remote.rmi.RMIServer {
+public abstract class RMIServerImpl implements java.io.Closeable, javax.management.remote.rmi.RMIServer {
 	public RMIServerImpl(java.util.Map<java.lang.String,?> var0) { } 
 	protected void clientClosed(javax.management.remote.rmi.RMIConnection var0) throws java.io.IOException { }
 	public void close() throws java.io.IOException { }

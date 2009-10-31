@@ -19,6 +19,7 @@ public class ButtonGroup implements java.io.Serializable {
 	protected java.util.Vector<javax.swing.AbstractButton> buttons;
 	public ButtonGroup() { } 
 	public void add(javax.swing.AbstractButton var0) { }
+	public void clearSelection() { }
 	public int getButtonCount() { return 0; }
 	public java.util.Enumeration<javax.swing.AbstractButton> getElements() { return null; }
 	public javax.swing.ButtonModel getSelection() { return null; }

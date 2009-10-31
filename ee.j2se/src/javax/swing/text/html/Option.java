@@ -15,7 +15,7 @@
  */
 
 package javax.swing.text.html;
-public class Option {
+public class Option implements java.io.Serializable {
 	public Option(javax.swing.text.AttributeSet var0) { } 
 	public javax.swing.text.AttributeSet getAttributes() { return null; }
 	public java.lang.String getLabel() { return null; }

@@ -20,6 +20,7 @@ public abstract class Enum<E extends java.lang.Enum<E>> implements java.io.Seria
 	protected final java.lang.Object clone() throws java.lang.CloneNotSupportedException { return null; }
 	public final int compareTo(E var0) { return 0; }
 	public final boolean equals(java.lang.Object var0) { return false; }
+	protected final void finalize() { }
 	public final java.lang.Class<E> getDeclaringClass() { return null; }
 	public final int hashCode() { return 0; }
 	public final java.lang.String name() { return null; }

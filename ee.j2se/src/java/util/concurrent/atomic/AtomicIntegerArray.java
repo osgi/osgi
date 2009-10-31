@@ -27,6 +27,7 @@ public class AtomicIntegerArray implements java.io.Serializable {
 	public final int getAndIncrement(int var0) { return 0; }
 	public final int getAndSet(int var0, int var1) { return 0; }
 	public final int incrementAndGet(int var0) { return 0; }
+	public final void lazySet(int var0, int var1) { }
 	public final int length() { return 0; }
 	public final void set(int var0, int var1) { }
 	public final boolean weakCompareAndSet(int var0, int var1, int var2) { return false; }

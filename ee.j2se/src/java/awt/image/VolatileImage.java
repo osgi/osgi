@@ -23,7 +23,6 @@ public abstract class VolatileImage extends java.awt.Image implements java.awt.T
 	public VolatileImage() { } 
 	public abstract boolean contentsLost();
 	public abstract java.awt.Graphics2D createGraphics();
-	public void flush() { }
 	public abstract java.awt.ImageCapabilities getCapabilities();
 	public java.awt.Graphics getGraphics() { return null; }
 	public abstract int getHeight();

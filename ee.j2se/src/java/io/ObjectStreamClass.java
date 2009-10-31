@@ -23,6 +23,7 @@ public class ObjectStreamClass implements java.io.Serializable {
 	public java.lang.String getName() { return null; }
 	public long getSerialVersionUID() { return 0l; }
 	public static java.io.ObjectStreamClass lookup(java.lang.Class<?> var0) { return null; }
+	public static java.io.ObjectStreamClass lookupAny(java.lang.Class<?> var0) { return null; }
 	private ObjectStreamClass() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

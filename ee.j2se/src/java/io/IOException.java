@@ -18,5 +18,7 @@ package java.io;
 public class IOException extends java.lang.Exception {
 	public IOException() { } 
 	public IOException(java.lang.String var0) { } 
+	public IOException(java.lang.String var0, java.lang.Throwable var1) { } 
+	public IOException(java.lang.Throwable var0) { } 
 }
 

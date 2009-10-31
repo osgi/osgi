@@ -20,6 +20,10 @@ public class SQLWarning extends java.sql.SQLException {
 	public SQLWarning(java.lang.String var0) { } 
 	public SQLWarning(java.lang.String var0, java.lang.String var1) { } 
 	public SQLWarning(java.lang.String var0, java.lang.String var1, int var2) { } 
+	public SQLWarning(java.lang.String var0, java.lang.String var1, int var2, java.lang.Throwable var3) { } 
+	public SQLWarning(java.lang.String var0, java.lang.String var1, java.lang.Throwable var2) { } 
+	public SQLWarning(java.lang.String var0, java.lang.Throwable var1) { } 
+	public SQLWarning(java.lang.Throwable var0) { } 
 	public java.sql.SQLWarning getNextWarning() { return null; }
 	public void setNextWarning(java.sql.SQLWarning var0) { }
 }

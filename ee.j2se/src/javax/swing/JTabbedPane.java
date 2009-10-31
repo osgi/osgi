@@ -58,6 +58,7 @@ public class JTabbedPane extends javax.swing.JComponent implements java.io.Seria
 	public javax.swing.SingleSelectionModel getModel() { return null; }
 	public java.awt.Component getSelectedComponent() { return null; }
 	public int getSelectedIndex() { return 0; }
+	public java.awt.Component getTabComponentAt(int var0) { return null; }
 	public int getTabCount() { return 0; }
 	public int getTabLayoutPolicy() { return 0; }
 	public int getTabPlacement() { return 0; }
@@ -69,6 +70,7 @@ public class JTabbedPane extends javax.swing.JComponent implements java.io.Seria
 	public int indexOfComponent(java.awt.Component var0) { return 0; }
 	public int indexOfTab(java.lang.String var0) { return 0; }
 	public int indexOfTab(javax.swing.Icon var0) { return 0; }
+	public int indexOfTabComponent(java.awt.Component var0) { return 0; }
 	public void insertTab(java.lang.String var0, javax.swing.Icon var1, java.awt.Component var2, java.lang.String var3, int var4) { }
 	public boolean isEnabledAt(int var0) { return false; }
 	public void removeChangeListener(javax.swing.event.ChangeListener var0) { }
@@ -84,6 +86,7 @@ public class JTabbedPane extends javax.swing.JComponent implements java.io.Seria
 	public void setModel(javax.swing.SingleSelectionModel var0) { }
 	public void setSelectedComponent(java.awt.Component var0) { }
 	public void setSelectedIndex(int var0) { }
+	public void setTabComponentAt(int var0, java.awt.Component var1) { }
 	public void setTabLayoutPolicy(int var0) { }
 	public void setTabPlacement(int var0) { }
 	public void setTitleAt(int var0, java.lang.String var1) { }

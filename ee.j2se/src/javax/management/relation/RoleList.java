@@ -15,14 +15,20 @@
  */
 
 package javax.management.relation;
-public class RoleList extends java.util.ArrayList {
+public class RoleList extends java.util.ArrayList<java.lang.Object> {
 	public RoleList() { } 
 	public RoleList(int var0) { } 
-	public RoleList(java.util.List var0) { } 
+	public RoleList(java.util.List<javax.management.relation.Role> var0) { } 
+	public void add(int var0, java.lang.Object var1) { }
 	public void add(int var0, javax.management.relation.Role var1) { }
+	public boolean add(java.lang.Object var0) { return false; }
 	public void add(javax.management.relation.Role var0) { }
+	public boolean addAll(int var0, java.util.Collection<?> var1) { return false; }
 	public boolean addAll(int var0, javax.management.relation.RoleList var1) { return false; }
+	public boolean addAll(java.util.Collection<?> var0) { return false; }
 	public boolean addAll(javax.management.relation.RoleList var0) { return false; }
+	public java.util.List<javax.management.relation.Role> asList() { return null; }
+	public java.lang.Object set(int var0, java.lang.Object var1) { return null; }
 	public void set(int var0, javax.management.relation.Role var1) { }
 }
 

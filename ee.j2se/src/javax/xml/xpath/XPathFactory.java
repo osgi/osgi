@@ -23,6 +23,7 @@ public abstract class XPathFactory {
 	public abstract boolean isObjectModelSupported(java.lang.String var0);
 	public final static javax.xml.xpath.XPathFactory newInstance() { return null; }
 	public final static javax.xml.xpath.XPathFactory newInstance(java.lang.String var0) throws javax.xml.xpath.XPathFactoryConfigurationException { return null; }
+	public static javax.xml.xpath.XPathFactory newInstance(java.lang.String var0, java.lang.String var1, java.lang.ClassLoader var2) throws javax.xml.xpath.XPathFactoryConfigurationException { return null; }
 	public abstract javax.xml.xpath.XPath newXPath();
 	public abstract void setFeature(java.lang.String var0, boolean var1) throws javax.xml.xpath.XPathFactoryConfigurationException;
 	public abstract void setXPathFunctionResolver(javax.xml.xpath.XPathFunctionResolver var0);

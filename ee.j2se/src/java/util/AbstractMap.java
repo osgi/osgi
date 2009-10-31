@@ -16,6 +16,20 @@
 
 package java.util;
 public abstract class AbstractMap<K,V> implements java.util.Map<K,V> {
+	public static class SimpleEntry<K,V> implements java.io.Serializable, java.util.Map.Entry<K,V> {
+		public SimpleEntry(K var0, V var1) { } 
+		public SimpleEntry(java.util.Map.Entry<? extends K,? extends V> var0) { } 
+		public K getKey() { return null; }
+		public V getValue() { return null; }
+		public V setValue(V var0) { return null; }
+	}
+	public static class SimpleImmutableEntry<K,V> implements java.io.Serializable, java.util.Map.Entry<K,V> {
+		public SimpleImmutableEntry(K var0, V var1) { } 
+		public SimpleImmutableEntry(java.util.Map.Entry<? extends K,? extends V> var0) { } 
+		public K getKey() { return null; }
+		public V getValue() { return null; }
+		public V setValue(V var0) { return null; }
+	}
 	protected AbstractMap() { } 
 	public void clear() { }
 	public boolean containsKey(java.lang.Object var0) { return false; }

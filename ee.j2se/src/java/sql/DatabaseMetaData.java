@@ -15,7 +15,7 @@
  */
 
 package java.sql;
-public interface DatabaseMetaData {
+public interface DatabaseMetaData extends java.sql.Wrapper {
 	public final static short attributeNoNulls = 0;
 	public final static short attributeNullable = 1;
 	public final static short attributeNullableUnknown = 2;
@@ -28,6 +28,18 @@ public interface DatabaseMetaData {
 	public final static int columnNoNulls = 0;
 	public final static int columnNullable = 1;
 	public final static int columnNullableUnknown = 2;
+	public final static int functionColumnIn = 1;
+	public final static int functionColumnInOut = 2;
+	public final static int functionColumnOut = 3;
+	public final static int functionColumnResult = 5;
+	public final static int functionColumnUnknown = 0;
+	public final static int functionNoNulls = 0;
+	public final static int functionNoTable = 1;
+	public final static int functionNullable = 1;
+	public final static int functionNullableUnknown = 2;
+	public final static int functionResultUnknown = 0;
+	public final static int functionReturn = 4;
+	public final static int functionReturnsTable = 2;
 	public final static int importedKeyCascade = 0;
 	public final static int importedKeyInitiallyDeferred = 5;
 	public final static int importedKeyInitiallyImmediate = 6;
@@ -48,6 +60,7 @@ public interface DatabaseMetaData {
 	public final static int procedureNullableUnknown = 2;
 	public final static int procedureResultUnknown = 0;
 	public final static int procedureReturnsResult = 2;
+	public final static int sqlStateSQL = 2;
 	public final static int sqlStateSQL99 = 2;
 	public final static int sqlStateXOpen = 1;
 	public final static short tableIndexClustered = 1;
@@ -66,6 +79,7 @@ public interface DatabaseMetaData {
 	public final static int versionColumnUnknown = 0;
 	boolean allProceduresAreCallable() throws java.sql.SQLException;
 	boolean allTablesAreSelectable() throws java.sql.SQLException;
+	boolean autoCommitFailureClosesAllResultSets() throws java.sql.SQLException;
 	boolean dataDefinitionCausesTransactionCommit() throws java.sql.SQLException;
 	boolean dataDefinitionIgnoredInTransactions() throws java.sql.SQLException;
 	boolean deletesAreDetected(int var0) throws java.sql.SQLException;
@@ -75,6 +89,7 @@ public interface DatabaseMetaData {
 	java.lang.String getCatalogSeparator() throws java.sql.SQLException;
 	java.lang.String getCatalogTerm() throws java.sql.SQLException;
 	java.sql.ResultSet getCatalogs() throws java.sql.SQLException;
+	java.sql.ResultSet getClientInfoProperties() throws java.sql.SQLException;
 	java.sql.ResultSet getColumnPrivileges(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) throws java.sql.SQLException;
 	java.sql.ResultSet getColumns(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) throws java.sql.SQLException;
 	java.sql.Connection getConnection() throws java.sql.SQLException;
@@ -90,6 +105,8 @@ public interface DatabaseMetaData {
 	java.lang.String getDriverVersion() throws java.sql.SQLException;
 	java.sql.ResultSet getExportedKeys(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws java.sql.SQLException;
 	java.lang.String getExtraNameCharacters() throws java.sql.SQLException;
+	java.sql.ResultSet getFunctionColumns(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) throws java.sql.SQLException;
+	java.sql.ResultSet getFunctions(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws java.sql.SQLException;
 	java.lang.String getIdentifierQuoteString() throws java.sql.SQLException;
 	java.sql.ResultSet getImportedKeys(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws java.sql.SQLException;
 	java.sql.ResultSet getIndexInfo(java.lang.String var0, java.lang.String var1, java.lang.String var2, boolean var3, boolean var4) throws java.sql.SQLException;
@@ -121,10 +138,12 @@ public interface DatabaseMetaData {
 	java.lang.String getProcedureTerm() throws java.sql.SQLException;
 	java.sql.ResultSet getProcedures(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws java.sql.SQLException;
 	int getResultSetHoldability() throws java.sql.SQLException;
+	java.sql.RowIdLifetime getRowIdLifetime() throws java.sql.SQLException;
 	java.lang.String getSQLKeywords() throws java.sql.SQLException;
 	int getSQLStateType() throws java.sql.SQLException;
 	java.lang.String getSchemaTerm() throws java.sql.SQLException;
 	java.sql.ResultSet getSchemas() throws java.sql.SQLException;
+	java.sql.ResultSet getSchemas(java.lang.String var0, java.lang.String var1) throws java.sql.SQLException;
 	java.lang.String getSearchStringEscape() throws java.sql.SQLException;
 	java.lang.String getStringFunctions() throws java.sql.SQLException;
 	java.sql.ResultSet getSuperTables(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws java.sql.SQLException;
@@ -216,6 +235,7 @@ public interface DatabaseMetaData {
 	boolean supportsSchemasInTableDefinitions() throws java.sql.SQLException;
 	boolean supportsSelectForUpdate() throws java.sql.SQLException;
 	boolean supportsStatementPooling() throws java.sql.SQLException;
+	boolean supportsStoredFunctionsUsingCallSyntax() throws java.sql.SQLException;
 	boolean supportsStoredProcedures() throws java.sql.SQLException;
 	boolean supportsSubqueriesInComparisons() throws java.sql.SQLException;
 	boolean supportsSubqueriesInExists() throws java.sql.SQLException;

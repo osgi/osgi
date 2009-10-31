@@ -15,9 +15,10 @@
  */
 
 package javax.management;
-public class MBeanAttributeInfo extends javax.management.MBeanFeatureInfo implements java.io.Serializable, java.lang.Cloneable {
-	public MBeanAttributeInfo(java.lang.String var0, java.lang.String var1, java.lang.String var2, boolean var3, boolean var4, boolean var5)  { super((java.lang.String) null, (java.lang.String) null); } 
-	public MBeanAttributeInfo(java.lang.String var0, java.lang.String var1, java.lang.reflect.Method var2, java.lang.reflect.Method var3) throws javax.management.IntrospectionException  { super((java.lang.String) null, (java.lang.String) null); } 
+public class MBeanAttributeInfo extends javax.management.MBeanFeatureInfo implements java.lang.Cloneable {
+	public MBeanAttributeInfo(java.lang.String var0, java.lang.String var1, java.lang.String var2, boolean var3, boolean var4, boolean var5)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
+	public MBeanAttributeInfo(java.lang.String var0, java.lang.String var1, java.lang.String var2, boolean var3, boolean var4, boolean var5, javax.management.Descriptor var6)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
+	public MBeanAttributeInfo(java.lang.String var0, java.lang.String var1, java.lang.reflect.Method var2, java.lang.reflect.Method var3) throws javax.management.IntrospectionException  { super((java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
 	public java.lang.Object clone() { return null; }
 	public java.lang.String getType() { return null; }
 	public boolean isIs() { return false; }

@@ -16,7 +16,7 @@
 
 package javax.xml.datatype;
 public abstract class DatatypeFactory {
-	public final static java.lang.String DATATYPEFACTORY_IMPLEMENTATION_CLASS = "com.sun.org.apache.xerces.internal.jaxp.datatype.DatatypeFactoryImpl";
+	public final static java.lang.String DATATYPEFACTORY_IMPLEMENTATION_CLASS; static { DATATYPEFACTORY_IMPLEMENTATION_CLASS = null; }
 	public final static java.lang.String DATATYPEFACTORY_PROPERTY = "javax.xml.datatype.DatatypeFactory";
 	protected DatatypeFactory() { } 
 	public abstract javax.xml.datatype.Duration newDuration(long var0);
@@ -32,6 +32,7 @@ public abstract class DatatypeFactory {
 	public javax.xml.datatype.Duration newDurationYearMonth(boolean var0, int var1, int var2) { return null; }
 	public javax.xml.datatype.Duration newDurationYearMonth(boolean var0, java.math.BigInteger var1, java.math.BigInteger var2) { return null; }
 	public static javax.xml.datatype.DatatypeFactory newInstance() throws javax.xml.datatype.DatatypeConfigurationException { return null; }
+	public static javax.xml.datatype.DatatypeFactory newInstance(java.lang.String var0, java.lang.ClassLoader var1) throws javax.xml.datatype.DatatypeConfigurationException { return null; }
 	public abstract javax.xml.datatype.XMLGregorianCalendar newXMLGregorianCalendar();
 	public javax.xml.datatype.XMLGregorianCalendar newXMLGregorianCalendar(int var0, int var1, int var2, int var3, int var4, int var5, int var6, int var7) { return null; }
 	public abstract javax.xml.datatype.XMLGregorianCalendar newXMLGregorianCalendar(java.lang.String var0);

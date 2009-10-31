@@ -15,7 +15,7 @@
  */
 
 package java.sql;
-public interface ResultSetMetaData {
+public interface ResultSetMetaData extends java.sql.Wrapper {
 	public final static int columnNoNulls = 0;
 	public final static int columnNullable = 1;
 	public final static int columnNullableUnknown = 2;

@@ -16,12 +16,12 @@
 
 package java.rmi.activation;
 public final class ActivationDesc implements java.io.Serializable {
-	public ActivationDesc(java.lang.String var0, java.lang.String var1, java.rmi.MarshalledObject var2) throws java.rmi.activation.ActivationException { } 
-	public ActivationDesc(java.lang.String var0, java.lang.String var1, java.rmi.MarshalledObject var2, boolean var3) throws java.rmi.activation.ActivationException { } 
-	public ActivationDesc(java.rmi.activation.ActivationGroupID var0, java.lang.String var1, java.lang.String var2, java.rmi.MarshalledObject var3) { } 
-	public ActivationDesc(java.rmi.activation.ActivationGroupID var0, java.lang.String var1, java.lang.String var2, java.rmi.MarshalledObject var3, boolean var4) { } 
+	public ActivationDesc(java.lang.String var0, java.lang.String var1, java.rmi.MarshalledObject<?> var2) throws java.rmi.activation.ActivationException { } 
+	public ActivationDesc(java.lang.String var0, java.lang.String var1, java.rmi.MarshalledObject<?> var2, boolean var3) throws java.rmi.activation.ActivationException { } 
+	public ActivationDesc(java.rmi.activation.ActivationGroupID var0, java.lang.String var1, java.lang.String var2, java.rmi.MarshalledObject<?> var3) { } 
+	public ActivationDesc(java.rmi.activation.ActivationGroupID var0, java.lang.String var1, java.lang.String var2, java.rmi.MarshalledObject<?> var3, boolean var4) { } 
 	public java.lang.String getClassName() { return null; }
-	public java.rmi.MarshalledObject getData() { return null; }
+	public java.rmi.MarshalledObject<?> getData() { return null; }
 	public java.rmi.activation.ActivationGroupID getGroupID() { return null; }
 	public java.lang.String getLocation() { return null; }
 	public boolean getRestartMode() { return false; }

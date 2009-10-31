@@ -29,6 +29,7 @@ public abstract class SSLEngine {
 	public abstract boolean getNeedClientAuth();
 	public java.lang.String getPeerHost() { return null; }
 	public int getPeerPort() { return 0; }
+	public javax.net.ssl.SSLParameters getSSLParameters() { return null; }
 	public abstract javax.net.ssl.SSLSession getSession();
 	public abstract java.lang.String[] getSupportedCipherSuites();
 	public abstract java.lang.String[] getSupportedProtocols();
@@ -40,6 +41,7 @@ public abstract class SSLEngine {
 	public abstract void setEnabledCipherSuites(java.lang.String[] var0);
 	public abstract void setEnabledProtocols(java.lang.String[] var0);
 	public abstract void setNeedClientAuth(boolean var0);
+	public void setSSLParameters(javax.net.ssl.SSLParameters var0) { }
 	public abstract void setUseClientMode(boolean var0);
 	public abstract void setWantClientAuth(boolean var0);
 	public javax.net.ssl.SSLEngineResult unwrap(java.nio.ByteBuffer var0, java.nio.ByteBuffer var1) throws javax.net.ssl.SSLException { return null; }

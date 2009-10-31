@@ -16,9 +16,11 @@
 
 package javax.accessibility;
 public interface AccessibleAction {
+	public final static java.lang.String CLICK = null;
 	public final static java.lang.String DECREMENT = null;
 	public final static java.lang.String INCREMENT = null;
 	public final static java.lang.String TOGGLE_EXPAND = null;
+	public final static java.lang.String TOGGLE_POPUP = null;
 	boolean doAccessibleAction(int var0);
 	int getAccessibleActionCount();
 	java.lang.String getAccessibleActionDescription(int var0);

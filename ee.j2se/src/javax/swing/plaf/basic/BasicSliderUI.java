@@ -94,8 +94,10 @@ public class BasicSliderUI extends javax.swing.plaf.SliderUI {
 	protected int getHeightOfHighValueLabel() { return 0; }
 	protected int getHeightOfLowValueLabel() { return 0; }
 	protected int getHeightOfTallestLabel() { return 0; }
+	protected java.lang.Integer getHighestValue() { return null; }
 	protected java.awt.Component getHighestValueLabel() { return null; }
 	protected java.awt.Color getHighlightColor() { return null; }
+	protected java.lang.Integer getLowestValue() { return null; }
 	protected java.awt.Component getLowestValueLabel() { return null; }
 	public java.awt.Dimension getMinimumHorizontalSize() { return null; }
 	public java.awt.Dimension getMinimumVerticalSize() { return null; }
@@ -111,6 +113,7 @@ public class BasicSliderUI extends javax.swing.plaf.SliderUI {
 	protected void installKeyboardActions(javax.swing.JSlider var0) { }
 	protected void installListeners(javax.swing.JSlider var0) { }
 	protected boolean isDragging() { return false; }
+	protected boolean labelsHaveSameBaselines() { return false; }
 	public void paintFocus(java.awt.Graphics var0) { }
 	protected void paintHorizontalLabel(java.awt.Graphics var0, int var1, java.awt.Component var2) { }
 	public void paintLabels(java.awt.Graphics var0) { }
@@ -134,5 +137,6 @@ public class BasicSliderUI extends javax.swing.plaf.SliderUI {
 	public int valueForYPosition(int var0) { return 0; }
 	protected int xPositionForValue(int var0) { return 0; }
 	protected int yPositionForValue(int var0) { return 0; }
+	protected int yPositionForValue(int var0, int var1, int var2) { return 0; }
 }
 

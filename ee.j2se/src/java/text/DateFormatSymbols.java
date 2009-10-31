@@ -20,7 +20,10 @@ public class DateFormatSymbols implements java.io.Serializable, java.lang.Clonea
 	public DateFormatSymbols(java.util.Locale var0) { } 
 	public java.lang.Object clone() { return null; }
 	public java.lang.String[] getAmPmStrings() { return null; }
+	public static java.util.Locale[] getAvailableLocales() { return null; }
 	public java.lang.String[] getEras() { return null; }
+	public final static java.text.DateFormatSymbols getInstance() { return null; }
+	public final static java.text.DateFormatSymbols getInstance(java.util.Locale var0) { return null; }
 	public java.lang.String getLocalPatternChars() { return null; }
 	public java.lang.String[] getMonths() { return null; }
 	public java.lang.String[] getShortMonths() { return null; }

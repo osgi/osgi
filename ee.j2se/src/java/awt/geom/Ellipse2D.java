@@ -16,7 +16,7 @@
 
 package java.awt.geom;
 public abstract class Ellipse2D extends java.awt.geom.RectangularShape {
-	public static class Double extends java.awt.geom.Ellipse2D {
+	public static class Double extends java.awt.geom.Ellipse2D implements java.io.Serializable {
 		public double height;
 		public double width;
 		public double x;
@@ -31,7 +31,7 @@ public abstract class Ellipse2D extends java.awt.geom.RectangularShape {
 		public boolean isEmpty() { return false; }
 		public void setFrame(double var0, double var1, double var2, double var3) { }
 	}
-	public static class Float extends java.awt.geom.Ellipse2D {
+	public static class Float extends java.awt.geom.Ellipse2D implements java.io.Serializable {
 		public float height;
 		public float width;
 		public float x;

@@ -15,7 +15,7 @@
  */
 
 package javax.swing;
-public class JWindow extends java.awt.Window implements javax.accessibility.Accessible, javax.swing.RootPaneContainer {
+public class JWindow extends java.awt.Window implements javax.accessibility.Accessible, javax.swing.RootPaneContainer, javax.swing.TransferHandler.HasGetTransferHandler {
 	protected class AccessibleJWindow extends java.awt.Window.AccessibleAWTWindow {
 		protected AccessibleJWindow() { } 
 	}
@@ -32,12 +32,14 @@ public class JWindow extends java.awt.Window implements javax.accessibility.Acce
 	public java.awt.Component getGlassPane() { return null; }
 	public javax.swing.JLayeredPane getLayeredPane() { return null; }
 	public javax.swing.JRootPane getRootPane() { return null; }
+	public javax.swing.TransferHandler getTransferHandler() { return null; }
 	protected boolean isRootPaneCheckingEnabled() { return false; }
 	public void setContentPane(java.awt.Container var0) { }
 	public void setGlassPane(java.awt.Component var0) { }
 	public void setLayeredPane(javax.swing.JLayeredPane var0) { }
 	protected void setRootPane(javax.swing.JRootPane var0) { }
 	protected void setRootPaneCheckingEnabled(boolean var0) { }
+	public void setTransferHandler(javax.swing.TransferHandler var0) { }
 	protected void windowInit() { }
 }
 

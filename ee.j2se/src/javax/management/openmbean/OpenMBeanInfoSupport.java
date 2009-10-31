@@ -15,7 +15,8 @@
  */
 
 package javax.management.openmbean;
-public class OpenMBeanInfoSupport extends javax.management.MBeanInfo implements java.io.Serializable, javax.management.openmbean.OpenMBeanInfo {
-	public OpenMBeanInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenMBeanAttributeInfo[] var2, javax.management.openmbean.OpenMBeanConstructorInfo[] var3, javax.management.openmbean.OpenMBeanOperationInfo[] var4, javax.management.MBeanNotificationInfo[] var5)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.MBeanAttributeInfo[]) null, (javax.management.MBeanConstructorInfo[]) null, (javax.management.MBeanOperationInfo[]) null, (javax.management.MBeanNotificationInfo[]) null); } 
+public class OpenMBeanInfoSupport extends javax.management.MBeanInfo implements javax.management.openmbean.OpenMBeanInfo {
+	public OpenMBeanInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenMBeanAttributeInfo[] var2, javax.management.openmbean.OpenMBeanConstructorInfo[] var3, javax.management.openmbean.OpenMBeanOperationInfo[] var4, javax.management.MBeanNotificationInfo[] var5)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.MBeanAttributeInfo[]) null, (javax.management.MBeanConstructorInfo[]) null, (javax.management.MBeanOperationInfo[]) null, (javax.management.MBeanNotificationInfo[]) null, (javax.management.Descriptor) null); } 
+	public OpenMBeanInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenMBeanAttributeInfo[] var2, javax.management.openmbean.OpenMBeanConstructorInfo[] var3, javax.management.openmbean.OpenMBeanOperationInfo[] var4, javax.management.MBeanNotificationInfo[] var5, javax.management.Descriptor var6)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.MBeanAttributeInfo[]) null, (javax.management.MBeanConstructorInfo[]) null, (javax.management.MBeanOperationInfo[]) null, (javax.management.MBeanNotificationInfo[]) null, (javax.management.Descriptor) null); } 
 }
 

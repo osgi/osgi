@@ -66,6 +66,7 @@ public abstract class AbstractButton extends javax.swing.JComponent implements j
 	protected java.awt.event.ItemListener itemListener;
 	protected javax.swing.ButtonModel model;
 	public AbstractButton() { } 
+	protected void actionPropertyChanged(javax.swing.Action var0, java.lang.String var1) { }
 	public void addActionListener(java.awt.event.ActionListener var0) { }
 	public void addChangeListener(javax.swing.event.ChangeListener var0) { }
 	public void addItemListener(java.awt.event.ItemListener var0) { }
@@ -88,6 +89,7 @@ public abstract class AbstractButton extends javax.swing.JComponent implements j
 	public javax.swing.Icon getDisabledIcon() { return null; }
 	public javax.swing.Icon getDisabledSelectedIcon() { return null; }
 	public int getDisplayedMnemonicIndex() { return 0; }
+	public boolean getHideActionText() { return false; }
 	public int getHorizontalAlignment() { return 0; }
 	public int getHorizontalTextPosition() { return 0; }
 	public javax.swing.Icon getIcon() { return null; }
@@ -126,6 +128,7 @@ public abstract class AbstractButton extends javax.swing.JComponent implements j
 	public void setDisabledSelectedIcon(javax.swing.Icon var0) { }
 	public void setDisplayedMnemonicIndex(int var0) { }
 	public void setFocusPainted(boolean var0) { }
+	public void setHideActionText(boolean var0) { }
 	public void setHorizontalAlignment(int var0) { }
 	public void setHorizontalTextPosition(int var0) { }
 	public void setIcon(javax.swing.Icon var0) { }

@@ -19,6 +19,7 @@ public interface OperatingSystemMXBean {
 	java.lang.String getArch();
 	int getAvailableProcessors();
 	java.lang.String getName();
+	double getSystemLoadAverage();
 	java.lang.String getVersion();
 }
 

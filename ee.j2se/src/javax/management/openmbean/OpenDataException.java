@@ -15,7 +15,7 @@
  */
 
 package javax.management.openmbean;
-public class OpenDataException extends javax.management.JMException implements java.io.Serializable {
+public class OpenDataException extends javax.management.JMException {
 	public OpenDataException() { } 
 	public OpenDataException(java.lang.String var0) { } 
 }

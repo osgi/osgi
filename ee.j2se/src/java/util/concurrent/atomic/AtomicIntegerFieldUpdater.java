@@ -26,6 +26,7 @@ public abstract class AtomicIntegerFieldUpdater<T> {
 	public int getAndIncrement(T var0) { return 0; }
 	public int getAndSet(T var0, int var1) { return 0; }
 	public int incrementAndGet(T var0) { return 0; }
+	public abstract void lazySet(T var0, int var1);
 	public static <U> java.util.concurrent.atomic.AtomicIntegerFieldUpdater<U> newUpdater(java.lang.Class<U> var0, java.lang.String var1) { return null; }
 	public abstract void set(T var0, int var1);
 	public abstract boolean weakCompareAndSet(T var0, int var1, int var2);

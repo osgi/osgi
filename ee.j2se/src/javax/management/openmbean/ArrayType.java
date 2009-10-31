@@ -15,12 +15,16 @@
  */
 
 package javax.management.openmbean;
-public class ArrayType extends javax.management.openmbean.OpenType implements java.io.Serializable {
-	public ArrayType(int var0, javax.management.openmbean.OpenType var1) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null); } 
+public class ArrayType<T> extends javax.management.openmbean.OpenType<T> {
+	public ArrayType(int var0, javax.management.openmbean.OpenType<?> var1) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null); } 
+	public ArrayType(javax.management.openmbean.SimpleType<?> var0, boolean var1) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null); } 
 	public boolean equals(java.lang.Object var0) { return false; }
+	public static <E> javax.management.openmbean.ArrayType<E[]> getArrayType(javax.management.openmbean.OpenType<E> var0) throws javax.management.openmbean.OpenDataException { return null; }
 	public int getDimension() { return 0; }
-	public javax.management.openmbean.OpenType getElementOpenType() { return null; }
+	public javax.management.openmbean.OpenType<?> getElementOpenType() { return null; }
+	public static <T> javax.management.openmbean.ArrayType<T> getPrimitiveArrayType(java.lang.Class<T> var0) { return null; }
 	public int hashCode() { return 0; }
+	public boolean isPrimitiveArray() { return false; }
 	public boolean isValue(java.lang.Object var0) { return false; }
 	public java.lang.String toString() { return null; }
 }

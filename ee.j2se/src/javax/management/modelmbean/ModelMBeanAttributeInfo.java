@@ -15,13 +15,12 @@
  */
 
 package javax.management.modelmbean;
-public class ModelMBeanAttributeInfo extends javax.management.MBeanAttributeInfo implements java.lang.Cloneable, javax.management.DescriptorAccess {
-	public ModelMBeanAttributeInfo(java.lang.String var0, java.lang.String var1, java.lang.String var2, boolean var3, boolean var4, boolean var5)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false); } 
-	public ModelMBeanAttributeInfo(java.lang.String var0, java.lang.String var1, java.lang.String var2, boolean var3, boolean var4, boolean var5, javax.management.Descriptor var6)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false); } 
+public class ModelMBeanAttributeInfo extends javax.management.MBeanAttributeInfo implements javax.management.DescriptorAccess {
+	public ModelMBeanAttributeInfo(java.lang.String var0, java.lang.String var1, java.lang.String var2, boolean var3, boolean var4, boolean var5)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false, (javax.management.Descriptor) null); } 
+	public ModelMBeanAttributeInfo(java.lang.String var0, java.lang.String var1, java.lang.String var2, boolean var3, boolean var4, boolean var5, javax.management.Descriptor var6)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false, (javax.management.Descriptor) null); } 
 	public ModelMBeanAttributeInfo(java.lang.String var0, java.lang.String var1, java.lang.reflect.Method var2, java.lang.reflect.Method var3) throws javax.management.IntrospectionException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.reflect.Method) null, (java.lang.reflect.Method) null); } 
 	public ModelMBeanAttributeInfo(java.lang.String var0, java.lang.String var1, java.lang.reflect.Method var2, java.lang.reflect.Method var3, javax.management.Descriptor var4) throws javax.management.IntrospectionException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.reflect.Method) null, (java.lang.reflect.Method) null); } 
-	public ModelMBeanAttributeInfo(javax.management.modelmbean.ModelMBeanAttributeInfo var0)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false); } 
-	public javax.management.Descriptor getDescriptor() { return null; }
+	public ModelMBeanAttributeInfo(javax.management.modelmbean.ModelMBeanAttributeInfo var0)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, false, false, false, (javax.management.Descriptor) null); } 
 	public void setDescriptor(javax.management.Descriptor var0) { }
 }
 

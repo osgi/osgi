@@ -15,7 +15,7 @@
  */
 
 package javax.management.openmbean;
-public class KeyAlreadyExistsException extends java.lang.IllegalArgumentException implements java.io.Serializable {
+public class KeyAlreadyExistsException extends java.lang.IllegalArgumentException {
 	public KeyAlreadyExistsException() { } 
 	public KeyAlreadyExistsException(java.lang.String var0) { } 
 }

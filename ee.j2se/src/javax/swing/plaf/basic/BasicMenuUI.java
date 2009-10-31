@@ -36,11 +36,9 @@ public class BasicMenuUI extends javax.swing.plaf.basic.BasicMenuItemUI {
 	}
 	protected javax.swing.event.ChangeListener changeListener;
 	protected javax.swing.event.MenuListener menuListener;
-	protected java.beans.PropertyChangeListener propertyChangeListener;
 	public BasicMenuUI() { } 
 	protected javax.swing.event.ChangeListener createChangeListener(javax.swing.JComponent var0) { return null; }
 	protected javax.swing.event.MenuListener createMenuListener(javax.swing.JComponent var0) { return null; }
-	protected java.beans.PropertyChangeListener createPropertyChangeListener(javax.swing.JComponent var0) { return null; }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	protected void setupPostTimer(javax.swing.JMenu var0) { }
 }

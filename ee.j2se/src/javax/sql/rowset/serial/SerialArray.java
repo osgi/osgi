@@ -18,6 +18,7 @@ package javax.sql.rowset.serial;
 public class SerialArray implements java.io.Serializable, java.lang.Cloneable, java.sql.Array {
 	public SerialArray(java.sql.Array var0) throws java.sql.SQLException { } 
 	public SerialArray(java.sql.Array var0, java.util.Map<java.lang.String,java.lang.Class<?>> var1) throws java.sql.SQLException { } 
+	public void free() throws java.sql.SQLException { }
 	public java.lang.Object getArray() throws javax.sql.rowset.serial.SerialException { return null; }
 	public java.lang.Object getArray(long var0, int var1) throws javax.sql.rowset.serial.SerialException { return null; }
 	public java.lang.Object getArray(long var0, int var1, java.util.Map<java.lang.String,java.lang.Class<?>> var2) throws javax.sql.rowset.serial.SerialException { return null; }

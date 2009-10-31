@@ -32,6 +32,7 @@ public class RenderingHints implements java.lang.Cloneable, java.util.Map<java.l
 	public final static java.awt.RenderingHints.Key KEY_RENDERING; static { KEY_RENDERING = null; }
 	public final static java.awt.RenderingHints.Key KEY_STROKE_CONTROL; static { KEY_STROKE_CONTROL = null; }
 	public final static java.awt.RenderingHints.Key KEY_TEXT_ANTIALIASING; static { KEY_TEXT_ANTIALIASING = null; }
+	public final static java.awt.RenderingHints.Key KEY_TEXT_LCD_CONTRAST; static { KEY_TEXT_LCD_CONTRAST = null; }
 	public final static java.lang.Object VALUE_ALPHA_INTERPOLATION_DEFAULT; static { VALUE_ALPHA_INTERPOLATION_DEFAULT = null; }
 	public final static java.lang.Object VALUE_ALPHA_INTERPOLATION_QUALITY; static { VALUE_ALPHA_INTERPOLATION_QUALITY = null; }
 	public final static java.lang.Object VALUE_ALPHA_INTERPOLATION_SPEED; static { VALUE_ALPHA_INTERPOLATION_SPEED = null; }
@@ -57,6 +58,11 @@ public class RenderingHints implements java.lang.Cloneable, java.util.Map<java.l
 	public final static java.lang.Object VALUE_STROKE_NORMALIZE; static { VALUE_STROKE_NORMALIZE = null; }
 	public final static java.lang.Object VALUE_STROKE_PURE; static { VALUE_STROKE_PURE = null; }
 	public final static java.lang.Object VALUE_TEXT_ANTIALIAS_DEFAULT; static { VALUE_TEXT_ANTIALIAS_DEFAULT = null; }
+	public final static java.lang.Object VALUE_TEXT_ANTIALIAS_GASP; static { VALUE_TEXT_ANTIALIAS_GASP = null; }
+	public final static java.lang.Object VALUE_TEXT_ANTIALIAS_LCD_HBGR; static { VALUE_TEXT_ANTIALIAS_LCD_HBGR = null; }
+	public final static java.lang.Object VALUE_TEXT_ANTIALIAS_LCD_HRGB; static { VALUE_TEXT_ANTIALIAS_LCD_HRGB = null; }
+	public final static java.lang.Object VALUE_TEXT_ANTIALIAS_LCD_VBGR; static { VALUE_TEXT_ANTIALIAS_LCD_VBGR = null; }
+	public final static java.lang.Object VALUE_TEXT_ANTIALIAS_LCD_VRGB; static { VALUE_TEXT_ANTIALIAS_LCD_VRGB = null; }
 	public final static java.lang.Object VALUE_TEXT_ANTIALIAS_OFF; static { VALUE_TEXT_ANTIALIAS_OFF = null; }
 	public final static java.lang.Object VALUE_TEXT_ANTIALIAS_ON; static { VALUE_TEXT_ANTIALIAS_ON = null; }
 	public RenderingHints(java.awt.RenderingHints.Key var0, java.lang.Object var1) { } 

@@ -17,10 +17,10 @@
 package java.util.concurrent;
 public interface ExecutorService extends java.util.concurrent.Executor {
 	boolean awaitTermination(long var0, java.util.concurrent.TimeUnit var1) throws java.lang.InterruptedException;
-	<T> java.util.List<java.util.concurrent.Future<T>> invokeAll(java.util.Collection<java.util.concurrent.Callable<T>> var0) throws java.lang.InterruptedException;
-	<T> java.util.List<java.util.concurrent.Future<T>> invokeAll(java.util.Collection<java.util.concurrent.Callable<T>> var0, long var1, java.util.concurrent.TimeUnit var2) throws java.lang.InterruptedException;
-	<T> T invokeAny(java.util.Collection<java.util.concurrent.Callable<T>> var0) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException;
-	<T> T invokeAny(java.util.Collection<java.util.concurrent.Callable<T>> var0, long var1, java.util.concurrent.TimeUnit var2) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException, java.util.concurrent.TimeoutException;
+	<T> java.util.List<java.util.concurrent.Future<T>> invokeAll(java.util.Collection<? extends java.util.concurrent.Callable<T>> var0) throws java.lang.InterruptedException;
+	<T> java.util.List<java.util.concurrent.Future<T>> invokeAll(java.util.Collection<? extends java.util.concurrent.Callable<T>> var0, long var1, java.util.concurrent.TimeUnit var2) throws java.lang.InterruptedException;
+	<T> T invokeAny(java.util.Collection<? extends java.util.concurrent.Callable<T>> var0) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException;
+	<T> T invokeAny(java.util.Collection<? extends java.util.concurrent.Callable<T>> var0, long var1, java.util.concurrent.TimeUnit var2) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException, java.util.concurrent.TimeoutException;
 	boolean isShutdown();
 	boolean isTerminated();
 	void shutdown();

@@ -15,15 +15,15 @@
  */
 
 package javax.management.openmbean;
-public class CompositeType extends javax.management.openmbean.OpenType implements java.io.Serializable {
-	public CompositeType(java.lang.String var0, java.lang.String var1, java.lang.String[] var2, java.lang.String[] var3, javax.management.openmbean.OpenType[] var4) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null); } 
+public class CompositeType extends javax.management.openmbean.OpenType<javax.management.openmbean.CompositeData> {
+	public CompositeType(java.lang.String var0, java.lang.String var1, java.lang.String[] var2, java.lang.String[] var3, javax.management.openmbean.OpenType<?>[] var4) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null); } 
 	public boolean containsKey(java.lang.String var0) { return false; }
 	public boolean equals(java.lang.Object var0) { return false; }
 	public java.lang.String getDescription(java.lang.String var0) { return null; }
-	public javax.management.openmbean.OpenType getType(java.lang.String var0) { return null; }
+	public javax.management.openmbean.OpenType<?> getType(java.lang.String var0) { return null; }
 	public int hashCode() { return 0; }
 	public boolean isValue(java.lang.Object var0) { return false; }
-	public java.util.Set keySet() { return null; }
+	public java.util.Set<java.lang.String> keySet() { return null; }
 	public java.lang.String toString() { return null; }
 }
 

@@ -32,6 +32,7 @@ public class BasicToolBarUI extends javax.swing.plaf.ToolBarUI implements javax.
 	protected class DragWindow extends java.awt.Window {
 		public java.awt.Color getBorderColor() { return null; }
 		public java.awt.Point getOffset() { return null; }
+		public int getOrientation() { return 0; }
 		public void setBorderColor(java.awt.Color var0) { }
 		public void setOffset(java.awt.Point var0) { }
 		public void setOrientation(int var0) { }
@@ -95,6 +96,8 @@ public class BasicToolBarUI extends javax.swing.plaf.ToolBarUI implements javax.
 	protected void floatAt(java.awt.Point var0, java.awt.Point var1) { }
 	public java.awt.Color getDockingColor() { return null; }
 	public java.awt.Color getFloatingColor() { return null; }
+	protected javax.swing.border.Border getNonRolloverBorder(javax.swing.AbstractButton var0) { return null; }
+	protected javax.swing.border.Border getRolloverBorder(javax.swing.AbstractButton var0) { return null; }
 	protected void installComponents() { }
 	protected void installDefaults() { }
 	protected void installKeyboardActions() { }

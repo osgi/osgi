@@ -15,7 +15,7 @@
  */
 
 package java.util.concurrent.locks;
-public abstract class AbstractQueuedSynchronizer implements java.io.Serializable {
+public abstract class AbstractQueuedSynchronizer extends java.util.concurrent.locks.AbstractOwnableSynchronizer implements java.io.Serializable {
 	public class ConditionObject implements java.io.Serializable, java.util.concurrent.locks.Condition {
 		public ConditionObject() { } 
 		public final void await() throws java.lang.InterruptedException { }

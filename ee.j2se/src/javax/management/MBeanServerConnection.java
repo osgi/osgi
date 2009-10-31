@@ -32,8 +32,8 @@ public interface MBeanServerConnection {
 	java.lang.Object invoke(javax.management.ObjectName var0, java.lang.String var1, java.lang.Object[] var2, java.lang.String[] var3) throws java.io.IOException, javax.management.InstanceNotFoundException, javax.management.MBeanException, javax.management.ReflectionException;
 	boolean isInstanceOf(javax.management.ObjectName var0, java.lang.String var1) throws java.io.IOException, javax.management.InstanceNotFoundException;
 	boolean isRegistered(javax.management.ObjectName var0) throws java.io.IOException;
-	java.util.Set queryMBeans(javax.management.ObjectName var0, javax.management.QueryExp var1) throws java.io.IOException;
-	java.util.Set queryNames(javax.management.ObjectName var0, javax.management.QueryExp var1) throws java.io.IOException;
+	java.util.Set<javax.management.ObjectInstance> queryMBeans(javax.management.ObjectName var0, javax.management.QueryExp var1) throws java.io.IOException;
+	java.util.Set<javax.management.ObjectName> queryNames(javax.management.ObjectName var0, javax.management.QueryExp var1) throws java.io.IOException;
 	void removeNotificationListener(javax.management.ObjectName var0, javax.management.NotificationListener var1) throws java.io.IOException, javax.management.InstanceNotFoundException, javax.management.ListenerNotFoundException;
 	void removeNotificationListener(javax.management.ObjectName var0, javax.management.NotificationListener var1, javax.management.NotificationFilter var2, java.lang.Object var3) throws java.io.IOException, javax.management.InstanceNotFoundException, javax.management.ListenerNotFoundException;
 	void removeNotificationListener(javax.management.ObjectName var0, javax.management.ObjectName var1) throws java.io.IOException, javax.management.InstanceNotFoundException, javax.management.ListenerNotFoundException;

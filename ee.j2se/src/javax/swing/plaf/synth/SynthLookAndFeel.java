@@ -27,6 +27,7 @@ public class SynthLookAndFeel extends javax.swing.plaf.basic.BasicLookAndFeel {
 	public boolean isNativeLookAndFeel() { return false; }
 	public boolean isSupportedLookAndFeel() { return false; }
 	public void load(java.io.InputStream var0, java.lang.Class<?> var1) throws java.text.ParseException { }
+	public void load(java.net.URL var0) throws java.io.IOException, java.text.ParseException { }
 	public static void setStyleFactory(javax.swing.plaf.synth.SynthStyleFactory var0) { }
 	public boolean shouldUpdateStyleOnAncestorChanged() { return false; }
 	public static void updateStyles(java.awt.Component var0) { }

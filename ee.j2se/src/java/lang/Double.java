@@ -16,7 +16,10 @@
 
 package java.lang;
 public final class Double extends java.lang.Number implements java.lang.Comparable<java.lang.Double> {
+	public final static int MAX_EXPONENT = 1023;
 	public final static double MAX_VALUE = 1.7976931348623157E308d;
+	public final static int MIN_EXPONENT = -1022;
+	public final static double MIN_NORMAL = 2.2250738585072014E-308d;
 	public final static double MIN_VALUE = 4.9E-324d;
 	public final static double NEGATIVE_INFINITY = -1.0d / 0.0d;
 	public final static double NaN = 0.0d / 0.0d;
@@ -27,7 +30,7 @@ public final class Double extends java.lang.Number implements java.lang.Comparab
 	public Double(java.lang.String var0) { } 
 	public static int compare(double var0, double var1) { return 0; }
 	public int compareTo(java.lang.Double var0) { return 0; }
-	public static native long doubleToLongBits(double var0);
+	public static long doubleToLongBits(double var0) { return 0l; }
 	public static native long doubleToRawLongBits(double var0);
 	public double doubleValue() { return 0.0d; }
 	public float floatValue() { return 0.0f; }

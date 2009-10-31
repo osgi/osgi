@@ -15,16 +15,20 @@
  */
 
 package java.text;
-public final class DecimalFormatSymbols implements java.io.Serializable, java.lang.Cloneable {
+public class DecimalFormatSymbols implements java.io.Serializable, java.lang.Cloneable {
 	public DecimalFormatSymbols() { } 
 	public DecimalFormatSymbols(java.util.Locale var0) { } 
 	public java.lang.Object clone() { return null; }
+	public static java.util.Locale[] getAvailableLocales() { return null; }
 	public java.util.Currency getCurrency() { return null; }
 	public java.lang.String getCurrencySymbol() { return null; }
 	public char getDecimalSeparator() { return '\0'; }
 	public char getDigit() { return '\0'; }
+	public java.lang.String getExponentSeparator() { return null; }
 	public char getGroupingSeparator() { return '\0'; }
 	public java.lang.String getInfinity() { return null; }
+	public final static java.text.DecimalFormatSymbols getInstance() { return null; }
+	public final static java.text.DecimalFormatSymbols getInstance(java.util.Locale var0) { return null; }
 	public java.lang.String getInternationalCurrencySymbol() { return null; }
 	public char getMinusSign() { return '\0'; }
 	public char getMonetaryDecimalSeparator() { return '\0'; }
@@ -37,6 +41,7 @@ public final class DecimalFormatSymbols implements java.io.Serializable, java.la
 	public void setCurrencySymbol(java.lang.String var0) { }
 	public void setDecimalSeparator(char var0) { }
 	public void setDigit(char var0) { }
+	public void setExponentSeparator(java.lang.String var0) { }
 	public void setGroupingSeparator(char var0) { }
 	public void setInfinity(java.lang.String var0) { }
 	public void setInternationalCurrencySymbol(java.lang.String var0) { }

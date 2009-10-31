@@ -30,6 +30,7 @@ public class AtomicLong extends java.lang.Number implements java.io.Serializable
 	public final long getAndSet(long var0) { return 0l; }
 	public final long incrementAndGet() { return 0l; }
 	public int intValue() { return 0; }
+	public final void lazySet(long var0) { }
 	public long longValue() { return 0l; }
 	public final void set(long var0) { }
 	public final boolean weakCompareAndSet(long var0, long var1) { return false; }

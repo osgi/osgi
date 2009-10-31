@@ -18,7 +18,7 @@ package javax.management;
 public class MBeanServerFactory {
 	public static javax.management.MBeanServer createMBeanServer() { return null; }
 	public static javax.management.MBeanServer createMBeanServer(java.lang.String var0) { return null; }
-	public static java.util.ArrayList findMBeanServer(java.lang.String var0) { return null; }
+	public static java.util.ArrayList<javax.management.MBeanServer> findMBeanServer(java.lang.String var0) { return null; }
 	public static javax.management.loading.ClassLoaderRepository getClassLoaderRepository(javax.management.MBeanServer var0) { return null; }
 	public static javax.management.MBeanServer newMBeanServer() { return null; }
 	public static javax.management.MBeanServer newMBeanServer(java.lang.String var0) { return null; }

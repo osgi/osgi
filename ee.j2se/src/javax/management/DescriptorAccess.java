@@ -15,8 +15,7 @@
  */
 
 package javax.management;
-public interface DescriptorAccess {
-	javax.management.Descriptor getDescriptor();
+public interface DescriptorAccess extends javax.management.DescriptorRead {
 	void setDescriptor(javax.management.Descriptor var0);
 }
 

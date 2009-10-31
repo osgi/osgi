@@ -16,7 +16,7 @@
 
 package java.awt.geom;
 public abstract class RoundRectangle2D extends java.awt.geom.RectangularShape {
-	public static class Double extends java.awt.geom.RoundRectangle2D {
+	public static class Double extends java.awt.geom.RoundRectangle2D implements java.io.Serializable {
 		public double archeight;
 		public double arcwidth;
 		public double height;
@@ -35,7 +35,7 @@ public abstract class RoundRectangle2D extends java.awt.geom.RectangularShape {
 		public boolean isEmpty() { return false; }
 		public void setRoundRect(double var0, double var1, double var2, double var3, double var4, double var5) { }
 	}
-	public static class Float extends java.awt.geom.RoundRectangle2D {
+	public static class Float extends java.awt.geom.RoundRectangle2D implements java.io.Serializable {
 		public float archeight;
 		public float arcwidth;
 		public float height;

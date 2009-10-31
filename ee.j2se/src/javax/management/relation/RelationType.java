@@ -18,6 +18,6 @@ package javax.management.relation;
 public interface RelationType extends java.io.Serializable {
 	java.lang.String getRelationTypeName();
 	javax.management.relation.RoleInfo getRoleInfo(java.lang.String var0) throws javax.management.relation.RoleInfoNotFoundException;
-	java.util.List getRoleInfos();
+	java.util.List<javax.management.relation.RoleInfo> getRoleInfos();
 }
 

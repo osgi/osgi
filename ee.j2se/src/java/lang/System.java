@@ -21,6 +21,7 @@ public final class System {
 	public final static java.io.PrintStream out; static { out = null; }
 	public static native void arraycopy(java.lang.Object var0, int var1, java.lang.Object var2, int var3, int var4);
 	public static java.lang.String clearProperty(java.lang.String var0) { return null; }
+	public static java.io.Console console() { return null; }
 	public static native long currentTimeMillis();
 	public static void exit(int var0) { }
 	public static void gc() { }

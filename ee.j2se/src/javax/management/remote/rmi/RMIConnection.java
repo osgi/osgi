@@ -15,10 +15,9 @@
  */
 
 package javax.management.remote.rmi;
-public interface RMIConnection extends java.rmi.Remote {
+public interface RMIConnection extends java.io.Closeable, java.rmi.Remote {
 	void addNotificationListener(javax.management.ObjectName var0, javax.management.ObjectName var1, java.rmi.MarshalledObject var2, java.rmi.MarshalledObject var3, javax.security.auth.Subject var4) throws java.io.IOException, javax.management.InstanceNotFoundException;
 	java.lang.Integer[] addNotificationListeners(javax.management.ObjectName[] var0, java.rmi.MarshalledObject[] var1, javax.security.auth.Subject[] var2) throws java.io.IOException, javax.management.InstanceNotFoundException;
-	void close() throws java.io.IOException;
 	javax.management.ObjectInstance createMBean(java.lang.String var0, javax.management.ObjectName var1, java.rmi.MarshalledObject var2, java.lang.String[] var3, javax.security.auth.Subject var4) throws java.io.IOException, javax.management.InstanceAlreadyExistsException, javax.management.MBeanException, javax.management.NotCompliantMBeanException, javax.management.ReflectionException;
 	javax.management.ObjectInstance createMBean(java.lang.String var0, javax.management.ObjectName var1, javax.management.ObjectName var2, java.rmi.MarshalledObject var3, java.lang.String[] var4, javax.security.auth.Subject var5) throws java.io.IOException, javax.management.InstanceAlreadyExistsException, javax.management.InstanceNotFoundException, javax.management.MBeanException, javax.management.NotCompliantMBeanException, javax.management.ReflectionException;
 	javax.management.ObjectInstance createMBean(java.lang.String var0, javax.management.ObjectName var1, javax.management.ObjectName var2, javax.security.auth.Subject var3) throws java.io.IOException, javax.management.InstanceAlreadyExistsException, javax.management.InstanceNotFoundException, javax.management.MBeanException, javax.management.NotCompliantMBeanException, javax.management.ReflectionException;

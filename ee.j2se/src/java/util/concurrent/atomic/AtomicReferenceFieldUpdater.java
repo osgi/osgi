@@ -20,6 +20,7 @@ public abstract class AtomicReferenceFieldUpdater<T,V> {
 	public abstract boolean compareAndSet(T var0, V var1, V var2);
 	public abstract V get(T var0);
 	public V getAndSet(T var0, V var1) { return null; }
+	public abstract void lazySet(T var0, V var1);
 	public static <U,W> java.util.concurrent.atomic.AtomicReferenceFieldUpdater<U,W> newUpdater(java.lang.Class<U> var0, java.lang.Class<W> var1, java.lang.String var2) { return null; }
 	public abstract void set(T var0, V var1);
 	public abstract boolean weakCompareAndSet(T var0, V var1, V var2);

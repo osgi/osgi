@@ -20,9 +20,11 @@ public abstract class SSLContextSpi {
 	protected abstract javax.net.ssl.SSLEngine engineCreateSSLEngine();
 	protected abstract javax.net.ssl.SSLEngine engineCreateSSLEngine(java.lang.String var0, int var1);
 	protected abstract javax.net.ssl.SSLSessionContext engineGetClientSessionContext();
+	protected javax.net.ssl.SSLParameters engineGetDefaultSSLParameters() { return null; }
 	protected abstract javax.net.ssl.SSLSessionContext engineGetServerSessionContext();
 	protected abstract javax.net.ssl.SSLServerSocketFactory engineGetServerSocketFactory();
 	protected abstract javax.net.ssl.SSLSocketFactory engineGetSocketFactory();
+	protected javax.net.ssl.SSLParameters engineGetSupportedSSLParameters() { return null; }
 	protected abstract void engineInit(javax.net.ssl.KeyManager[] var0, javax.net.ssl.TrustManager[] var1, java.security.SecureRandom var2) throws java.security.KeyManagementException;
 }
 

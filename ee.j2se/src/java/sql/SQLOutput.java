@@ -31,8 +31,12 @@ public interface SQLOutput {
 	void writeFloat(float var0) throws java.sql.SQLException;
 	void writeInt(int var0) throws java.sql.SQLException;
 	void writeLong(long var0) throws java.sql.SQLException;
+	void writeNClob(java.sql.NClob var0) throws java.sql.SQLException;
+	void writeNString(java.lang.String var0) throws java.sql.SQLException;
 	void writeObject(java.sql.SQLData var0) throws java.sql.SQLException;
 	void writeRef(java.sql.Ref var0) throws java.sql.SQLException;
+	void writeRowId(java.sql.RowId var0) throws java.sql.SQLException;
+	void writeSQLXML(java.sql.SQLXML var0) throws java.sql.SQLException;
 	void writeShort(short var0) throws java.sql.SQLException;
 	void writeString(java.lang.String var0) throws java.sql.SQLException;
 	void writeStruct(java.sql.Struct var0) throws java.sql.SQLException;

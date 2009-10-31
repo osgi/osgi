@@ -17,7 +17,7 @@
 package java.rmi.activation;
 public abstract class ActivationGroup extends java.rmi.server.UnicastRemoteObject implements java.rmi.activation.ActivationInstantiator {
 	protected ActivationGroup(java.rmi.activation.ActivationGroupID var0) throws java.rmi.RemoteException { } 
-	protected void activeObject(java.rmi.activation.ActivationID var0, java.rmi.MarshalledObject var1) throws java.rmi.RemoteException, java.rmi.activation.ActivationException { }
+	protected void activeObject(java.rmi.activation.ActivationID var0, java.rmi.MarshalledObject<? extends java.rmi.Remote> var1) throws java.rmi.RemoteException, java.rmi.activation.ActivationException { }
 	public abstract void activeObject(java.rmi.activation.ActivationID var0, java.rmi.Remote var1) throws java.rmi.RemoteException, java.rmi.activation.ActivationException;
 	public static java.rmi.activation.ActivationGroup createGroup(java.rmi.activation.ActivationGroupID var0, java.rmi.activation.ActivationGroupDesc var1, long var2) throws java.rmi.activation.ActivationException { return null; }
 	public static java.rmi.activation.ActivationGroupID currentGroupID() { return null; }

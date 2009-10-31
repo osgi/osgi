@@ -44,6 +44,7 @@ public final class TextLayout implements java.lang.Cloneable {
 	public byte getCharacterLevel(int var0) { return 0; }
 	public float getDescent() { return 0.0f; }
 	public java.awt.font.TextLayout getJustifiedLayout(float var0) { return null; }
+	public java.awt.font.LayoutPath getLayoutPath() { return null; }
 	public float getLeading() { return 0.0f; }
 	public java.awt.Shape getLogicalHighlightShape(int var0, int var1) { return null; }
 	public java.awt.Shape getLogicalHighlightShape(int var0, int var1, java.awt.geom.Rectangle2D var2) { return null; }
@@ -55,6 +56,7 @@ public final class TextLayout implements java.lang.Cloneable {
 	public java.awt.font.TextHitInfo getNextRightHit(int var0, java.awt.font.TextLayout.CaretPolicy var1) { return null; }
 	public java.awt.font.TextHitInfo getNextRightHit(java.awt.font.TextHitInfo var0) { return null; }
 	public java.awt.Shape getOutline(java.awt.geom.AffineTransform var0) { return null; }
+	public java.awt.Rectangle getPixelBounds(java.awt.font.FontRenderContext var0, float var1, float var2) { return null; }
 	public float getVisibleAdvance() { return 0.0f; }
 	public java.awt.Shape getVisualHighlightShape(java.awt.font.TextHitInfo var0, java.awt.font.TextHitInfo var1) { return null; }
 	public java.awt.Shape getVisualHighlightShape(java.awt.font.TextHitInfo var0, java.awt.font.TextHitInfo var1, java.awt.geom.Rectangle2D var2) { return null; }
@@ -62,6 +64,7 @@ public final class TextLayout implements java.lang.Cloneable {
 	protected void handleJustify(float var0) { }
 	public java.awt.font.TextHitInfo hitTestChar(float var0, float var1) { return null; }
 	public java.awt.font.TextHitInfo hitTestChar(float var0, float var1, java.awt.geom.Rectangle2D var2) { return null; }
+	public void hitToPoint(java.awt.font.TextHitInfo var0, java.awt.geom.Point2D var1) { }
 	public boolean isLeftToRight() { return false; }
 	public boolean isVertical() { return false; }
 }

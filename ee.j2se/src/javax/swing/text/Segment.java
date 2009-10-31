@@ -15,12 +15,13 @@
  */
 
 package javax.swing.text;
-public class Segment implements java.lang.Cloneable, java.text.CharacterIterator {
+public class Segment implements java.lang.CharSequence, java.lang.Cloneable, java.text.CharacterIterator {
 	public char[] array;
 	public int count;
 	public int offset;
 	public Segment() { } 
 	public Segment(char[] var0, int var1, int var2) { } 
+	public char charAt(int var0) { return '\0'; }
 	public java.lang.Object clone() { return null; }
 	public char current() { return '\0'; }
 	public char first() { return '\0'; }
@@ -29,9 +30,11 @@ public class Segment implements java.lang.Cloneable, java.text.CharacterIterator
 	public int getIndex() { return 0; }
 	public boolean isPartialReturn() { return false; }
 	public char last() { return '\0'; }
+	public int length() { return 0; }
 	public char next() { return '\0'; }
 	public char previous() { return '\0'; }
 	public char setIndex(int var0) { return '\0'; }
 	public void setPartialReturn(boolean var0) { }
+	public java.lang.CharSequence subSequence(int var0, int var1) { return null; }
 }
 

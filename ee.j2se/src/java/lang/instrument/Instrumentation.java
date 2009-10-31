@@ -17,11 +17,19 @@
 package java.lang.instrument;
 public interface Instrumentation {
 	void addTransformer(java.lang.instrument.ClassFileTransformer var0);
+	void addTransformer(java.lang.instrument.ClassFileTransformer var0, boolean var1);
+	void appendToBootstrapClassLoaderSearch(java.util.jar.JarFile var0);
+	void appendToSystemClassLoaderSearch(java.util.jar.JarFile var0);
 	java.lang.Class[] getAllLoadedClasses();
 	java.lang.Class[] getInitiatedClasses(java.lang.ClassLoader var0);
 	long getObjectSize(java.lang.Object var0);
+	boolean isModifiableClass(java.lang.Class<?> var0);
+	boolean isNativeMethodPrefixSupported();
 	boolean isRedefineClassesSupported();
-	void redefineClasses(java.lang.instrument.ClassDefinition[] var0) throws java.lang.ClassNotFoundException, java.lang.instrument.UnmodifiableClassException;
+	boolean isRetransformClassesSupported();
+	void redefineClasses(java.lang.instrument.ClassDefinition... var0) throws java.lang.ClassNotFoundException, java.lang.instrument.UnmodifiableClassException;
 	boolean removeTransformer(java.lang.instrument.ClassFileTransformer var0);
+	void retransformClasses(java.lang.Class<?>... var0) throws java.lang.instrument.UnmodifiableClassException;
+	void setNativeMethodPrefix(java.lang.instrument.ClassFileTransformer var0, java.lang.String var1);
 }
 

@@ -15,7 +15,7 @@
  */
 
 package javax.management.remote;
-public abstract class JMXConnectorServer extends javax.management.NotificationBroadcasterSupport implements javax.management.MBeanRegistration, javax.management.remote.JMXConnectorServerMBean {
+public abstract class JMXConnectorServer extends javax.management.NotificationBroadcasterSupport implements javax.management.MBeanRegistration, javax.management.remote.JMXAddressable, javax.management.remote.JMXConnectorServerMBean {
 	public final static java.lang.String AUTHENTICATOR = "jmx.remote.authenticator";
 	public JMXConnectorServer() { } 
 	public JMXConnectorServer(javax.management.MBeanServer var0) { } 

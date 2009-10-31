@@ -17,10 +17,12 @@
 package java.util.concurrent;
 public abstract class AbstractExecutorService implements java.util.concurrent.ExecutorService {
 	public AbstractExecutorService() { } 
-	public <T> java.util.List<java.util.concurrent.Future<T>> invokeAll(java.util.Collection<java.util.concurrent.Callable<T>> var0) throws java.lang.InterruptedException { return null; }
-	public <T> java.util.List<java.util.concurrent.Future<T>> invokeAll(java.util.Collection<java.util.concurrent.Callable<T>> var0, long var1, java.util.concurrent.TimeUnit var2) throws java.lang.InterruptedException { return null; }
-	public <T> T invokeAny(java.util.Collection<java.util.concurrent.Callable<T>> var0) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException { return null; }
-	public <T> T invokeAny(java.util.Collection<java.util.concurrent.Callable<T>> var0, long var1, java.util.concurrent.TimeUnit var2) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException, java.util.concurrent.TimeoutException { return null; }
+	public <T> java.util.List<java.util.concurrent.Future<T>> invokeAll(java.util.Collection<? extends java.util.concurrent.Callable<T>> var0) throws java.lang.InterruptedException { return null; }
+	public <T> java.util.List<java.util.concurrent.Future<T>> invokeAll(java.util.Collection<? extends java.util.concurrent.Callable<T>> var0, long var1, java.util.concurrent.TimeUnit var2) throws java.lang.InterruptedException { return null; }
+	public <T> T invokeAny(java.util.Collection<? extends java.util.concurrent.Callable<T>> var0) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException { return null; }
+	public <T> T invokeAny(java.util.Collection<? extends java.util.concurrent.Callable<T>> var0, long var1, java.util.concurrent.TimeUnit var2) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException, java.util.concurrent.TimeoutException { return null; }
+	protected <T> java.util.concurrent.RunnableFuture<T> newTaskFor(java.lang.Runnable var0, T var1) { return null; }
+	protected <T> java.util.concurrent.RunnableFuture<T> newTaskFor(java.util.concurrent.Callable<T> var0) { return null; }
 	public java.util.concurrent.Future<?> submit(java.lang.Runnable var0) { return null; }
 	public <T> java.util.concurrent.Future<T> submit(java.lang.Runnable var0, T var1) { return null; }
 	public <T> java.util.concurrent.Future<T> submit(java.util.concurrent.Callable<T> var0) { return null; }

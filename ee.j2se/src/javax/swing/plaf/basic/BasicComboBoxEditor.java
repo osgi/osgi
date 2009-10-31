@@ -22,6 +22,7 @@ public class BasicComboBoxEditor implements java.awt.event.FocusListener, javax.
 	protected javax.swing.JTextField editor;
 	public BasicComboBoxEditor() { } 
 	public void addActionListener(java.awt.event.ActionListener var0) { }
+	protected javax.swing.JTextField createEditorComponent() { return null; }
 	public void focusGained(java.awt.event.FocusEvent var0) { }
 	public void focusLost(java.awt.event.FocusEvent var0) { }
 	public java.awt.Component getEditorComponent() { return null; }

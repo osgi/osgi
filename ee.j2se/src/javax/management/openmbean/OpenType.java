@@ -15,8 +15,11 @@
  */
 
 package javax.management.openmbean;
-public abstract class OpenType implements java.io.Serializable {
+public abstract class OpenType<T> implements java.io.Serializable {
+	/** @deprecated */
+	@java.lang.Deprecated
 	public final static java.lang.String[] ALLOWED_CLASSNAMES; static { ALLOWED_CLASSNAMES = null; }
+	public final static java.util.List<java.lang.String> ALLOWED_CLASSNAMES_LIST; static { ALLOWED_CLASSNAMES_LIST = null; }
 	protected OpenType(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws javax.management.openmbean.OpenDataException { } 
 	public abstract boolean equals(java.lang.Object var0);
 	public java.lang.String getClassName() { return null; }

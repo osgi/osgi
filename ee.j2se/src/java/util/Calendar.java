@@ -16,6 +16,7 @@
 
 package java.util;
 public abstract class Calendar implements java.io.Serializable, java.lang.Cloneable, java.lang.Comparable<java.util.Calendar> {
+	public final static int ALL_STYLES = 0;
 	public final static int AM = 0;
 	public final static int AM_PM = 9;
 	public final static int APRIL = 3;
@@ -36,6 +37,7 @@ public abstract class Calendar implements java.io.Serializable, java.lang.Clonea
 	public final static int JANUARY = 0;
 	public final static int JULY = 6;
 	public final static int JUNE = 5;
+	public final static int LONG = 2;
 	public final static int MARCH = 2;
 	public final static int MAY = 4;
 	public final static int MILLISECOND = 14;
@@ -48,6 +50,7 @@ public abstract class Calendar implements java.io.Serializable, java.lang.Clonea
 	public final static int SATURDAY = 7;
 	public final static int SECOND = 13;
 	public final static int SEPTEMBER = 8;
+	public final static int SHORT = 1;
 	public final static int SUNDAY = 1;
 	public final static int THURSDAY = 5;
 	public final static int TUESDAY = 3;
@@ -78,6 +81,8 @@ public abstract class Calendar implements java.io.Serializable, java.lang.Clonea
 	public int getActualMaximum(int var0) { return 0; }
 	public int getActualMinimum(int var0) { return 0; }
 	public static java.util.Locale[] getAvailableLocales() { return null; }
+	public java.lang.String getDisplayName(int var0, int var1, java.util.Locale var2) { return null; }
+	public java.util.Map<java.lang.String,java.lang.Integer> getDisplayNames(int var0, int var1, java.util.Locale var2) { return null; }
 	public int getFirstDayOfWeek() { return 0; }
 	public abstract int getGreatestMinimum(int var0);
 	public static java.util.Calendar getInstance() { return null; }

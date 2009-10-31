@@ -15,10 +15,10 @@
  */
 
 package java.text;
-public final class CollationKey implements java.lang.Comparable<java.text.CollationKey> {
-	public int compareTo(java.text.CollationKey var0) { return 0; }
+public abstract class CollationKey implements java.lang.Comparable<java.text.CollationKey> {
+	protected CollationKey(java.lang.String var0) { } 
+	public abstract int compareTo(java.text.CollationKey var0);
 	public java.lang.String getSourceString() { return null; }
-	public byte[] toByteArray() { return null; }
-	private CollationKey() { } /* generated constructor to prevent compiler adding default public constructor */
+	public abstract byte[] toByteArray();
 }
 

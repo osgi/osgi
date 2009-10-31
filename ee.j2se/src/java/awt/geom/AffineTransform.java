@@ -40,8 +40,12 @@ public class AffineTransform implements java.io.Serializable, java.lang.Cloneabl
 	public void deltaTransform(double[] var0, int var1, double[] var2, int var3, int var4) { }
 	public double getDeterminant() { return 0.0d; }
 	public void getMatrix(double[] var0) { }
+	public static java.awt.geom.AffineTransform getQuadrantRotateInstance(int var0) { return null; }
+	public static java.awt.geom.AffineTransform getQuadrantRotateInstance(int var0, double var1, double var2) { return null; }
 	public static java.awt.geom.AffineTransform getRotateInstance(double var0) { return null; }
+	public static java.awt.geom.AffineTransform getRotateInstance(double var0, double var1) { return null; }
 	public static java.awt.geom.AffineTransform getRotateInstance(double var0, double var1, double var2) { return null; }
+	public static java.awt.geom.AffineTransform getRotateInstance(double var0, double var1, double var2, double var3) { return null; }
 	public static java.awt.geom.AffineTransform getScaleInstance(double var0, double var1) { return null; }
 	public double getScaleX() { return 0.0d; }
 	public double getScaleY() { return 0.0d; }
@@ -54,14 +58,23 @@ public class AffineTransform implements java.io.Serializable, java.lang.Cloneabl
 	public int getType() { return 0; }
 	public java.awt.geom.Point2D inverseTransform(java.awt.geom.Point2D var0, java.awt.geom.Point2D var1) throws java.awt.geom.NoninvertibleTransformException { return null; }
 	public void inverseTransform(double[] var0, int var1, double[] var2, int var3, int var4) throws java.awt.geom.NoninvertibleTransformException { }
+	public void invert() throws java.awt.geom.NoninvertibleTransformException { }
 	public boolean isIdentity() { return false; }
 	public void preConcatenate(java.awt.geom.AffineTransform var0) { }
+	public void quadrantRotate(int var0) { }
+	public void quadrantRotate(int var0, double var1, double var2) { }
 	public void rotate(double var0) { }
+	public void rotate(double var0, double var1) { }
 	public void rotate(double var0, double var1, double var2) { }
+	public void rotate(double var0, double var1, double var2, double var3) { }
 	public void scale(double var0, double var1) { }
 	public void setToIdentity() { }
+	public void setToQuadrantRotation(int var0) { }
+	public void setToQuadrantRotation(int var0, double var1, double var2) { }
 	public void setToRotation(double var0) { }
+	public void setToRotation(double var0, double var1) { }
 	public void setToRotation(double var0, double var1, double var2) { }
+	public void setToRotation(double var0, double var1, double var2, double var3) { }
 	public void setToScale(double var0, double var1) { }
 	public void setToShear(double var0, double var1) { }
 	public void setToTranslation(double var0, double var1) { }

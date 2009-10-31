@@ -20,6 +20,8 @@ public class SSLContext {
 	public final javax.net.ssl.SSLEngine createSSLEngine() { return null; }
 	public final javax.net.ssl.SSLEngine createSSLEngine(java.lang.String var0, int var1) { return null; }
 	public final javax.net.ssl.SSLSessionContext getClientSessionContext() { return null; }
+	public static javax.net.ssl.SSLContext getDefault() throws java.security.NoSuchAlgorithmException { return null; }
+	public final javax.net.ssl.SSLParameters getDefaultSSLParameters() { return null; }
 	public static javax.net.ssl.SSLContext getInstance(java.lang.String var0) throws java.security.NoSuchAlgorithmException { return null; }
 	public static javax.net.ssl.SSLContext getInstance(java.lang.String var0, java.lang.String var1) throws java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException { return null; }
 	public static javax.net.ssl.SSLContext getInstance(java.lang.String var0, java.security.Provider var1) throws java.security.NoSuchAlgorithmException { return null; }
@@ -28,6 +30,8 @@ public class SSLContext {
 	public final javax.net.ssl.SSLSessionContext getServerSessionContext() { return null; }
 	public final javax.net.ssl.SSLServerSocketFactory getServerSocketFactory() { return null; }
 	public final javax.net.ssl.SSLSocketFactory getSocketFactory() { return null; }
+	public final javax.net.ssl.SSLParameters getSupportedSSLParameters() { return null; }
 	public final void init(javax.net.ssl.KeyManager[] var0, javax.net.ssl.TrustManager[] var1, java.security.SecureRandom var2) throws java.security.KeyManagementException { }
+	public static void setDefault(javax.net.ssl.SSLContext var0) { }
 }
 

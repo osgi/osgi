@@ -83,6 +83,7 @@ public class JInternalFrame extends javax.swing.JComponent implements javax.acce
 	public java.awt.Component getGlassPane() { return null; }
 	public javax.swing.event.InternalFrameListener[] getInternalFrameListeners() { return null; }
 	public javax.swing.JMenuBar getJMenuBar() { return null; }
+	public java.awt.Cursor getLastCursor() { return null; }
 	public int getLayer() { return 0; }
 	public javax.swing.JLayeredPane getLayeredPane() { return null; }
 	/** @deprecated */

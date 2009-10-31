@@ -34,6 +34,7 @@ public class UIDefaults extends java.util.Hashtable<java.lang.Object,java.lang.O
 		public java.lang.Object createValue(javax.swing.UIDefaults var0) { return null; }
 	}
 	public UIDefaults() { } 
+	public UIDefaults(int var0, float var1) { } 
 	public UIDefaults(java.lang.Object[] var0) { } 
 	public void addPropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	public void addResourceBundle(java.lang.String var0) { }

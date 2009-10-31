@@ -16,10 +16,14 @@
 
 package java.nio;
 public abstract class Buffer {
+	public abstract java.lang.Object array();
+	public abstract int arrayOffset();
 	public final int capacity() { return 0; }
 	public final java.nio.Buffer clear() { return null; }
 	public final java.nio.Buffer flip() { return null; }
+	public abstract boolean hasArray();
 	public final boolean hasRemaining() { return false; }
+	public abstract boolean isDirect();
 	public abstract boolean isReadOnly();
 	public final int limit() { return 0; }
 	public final java.nio.Buffer limit(int var0) { return null; }

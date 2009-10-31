@@ -22,6 +22,7 @@ public abstract class PrinterJob {
 	public abstract java.awt.print.PageFormat defaultPage(java.awt.print.PageFormat var0);
 	public abstract int getCopies();
 	public abstract java.lang.String getJobName();
+	public java.awt.print.PageFormat getPageFormat(javax.print.attribute.PrintRequestAttributeSet var0) { return null; }
 	public javax.print.PrintService getPrintService() { return null; }
 	public static java.awt.print.PrinterJob getPrinterJob() { return null; }
 	public abstract java.lang.String getUserName();

@@ -25,6 +25,7 @@ public abstract class FontMetrics implements java.io.Serializable {
 	public int getAscent() { return 0; }
 	public int getDescent() { return 0; }
 	public java.awt.Font getFont() { return null; }
+	public java.awt.font.FontRenderContext getFontRenderContext() { return null; }
 	public int getHeight() { return 0; }
 	public int getLeading() { return 0; }
 	public java.awt.font.LineMetrics getLineMetrics(java.lang.String var0, int var1, int var2, java.awt.Graphics var3) { return null; }

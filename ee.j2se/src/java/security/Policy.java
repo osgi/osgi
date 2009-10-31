@@ -16,12 +16,21 @@
 
 package java.security;
 public abstract class Policy {
+	public interface Parameters {
+	}
+	public final static java.security.PermissionCollection UNSUPPORTED_EMPTY_COLLECTION; static { UNSUPPORTED_EMPTY_COLLECTION = null; }
 	public Policy() { } 
-	public abstract java.security.PermissionCollection getPermissions(java.security.CodeSource var0);
+	public static java.security.Policy getInstance(java.lang.String var0, java.security.Policy.Parameters var1) throws java.security.NoSuchAlgorithmException { return null; }
+	public static java.security.Policy getInstance(java.lang.String var0, java.security.Policy.Parameters var1, java.lang.String var2) throws java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException { return null; }
+	public static java.security.Policy getInstance(java.lang.String var0, java.security.Policy.Parameters var1, java.security.Provider var2) throws java.security.NoSuchAlgorithmException { return null; }
+	public java.security.Policy.Parameters getParameters() { return null; }
+	public java.security.PermissionCollection getPermissions(java.security.CodeSource var0) { return null; }
 	public java.security.PermissionCollection getPermissions(java.security.ProtectionDomain var0) { return null; }
 	public static java.security.Policy getPolicy() { return null; }
+	public java.security.Provider getProvider() { return null; }
+	public java.lang.String getType() { return null; }
 	public boolean implies(java.security.ProtectionDomain var0, java.security.Permission var1) { return false; }
-	public abstract void refresh();
+	public void refresh() { }
 	public static void setPolicy(java.security.Policy var0) { }
 }
 

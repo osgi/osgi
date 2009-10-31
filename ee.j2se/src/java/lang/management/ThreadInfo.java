@@ -19,9 +19,12 @@ public class ThreadInfo {
 	public static java.lang.management.ThreadInfo from(javax.management.openmbean.CompositeData var0) { return null; }
 	public long getBlockedCount() { return 0l; }
 	public long getBlockedTime() { return 0l; }
+	public java.lang.management.LockInfo getLockInfo() { return null; }
 	public java.lang.String getLockName() { return null; }
 	public long getLockOwnerId() { return 0l; }
 	public java.lang.String getLockOwnerName() { return null; }
+	public java.lang.management.MonitorInfo[] getLockedMonitors() { return null; }
+	public java.lang.management.LockInfo[] getLockedSynchronizers() { return null; }
 	public java.lang.StackTraceElement[] getStackTrace() { return null; }
 	public long getThreadId() { return 0l; }
 	public java.lang.String getThreadName() { return null; }

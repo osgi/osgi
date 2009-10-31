@@ -15,7 +15,7 @@
  */
 
 package java.sql;
-public interface ResultSet {
+public interface ResultSet extends java.sql.Wrapper {
 	public final static int CLOSE_CURSORS_AT_COMMIT = 2;
 	public final static int CONCUR_READ_ONLY = 1007;
 	public final static int CONCUR_UPDATABLE = 1008;
@@ -41,11 +41,9 @@ public interface ResultSet {
 	java.io.InputStream getAsciiStream(java.lang.String var0) throws java.sql.SQLException;
 	java.math.BigDecimal getBigDecimal(int var0) throws java.sql.SQLException;
 	/** @deprecated */
-	@java.lang.Deprecated
 	java.math.BigDecimal getBigDecimal(int var0, int var1) throws java.sql.SQLException;
 	java.math.BigDecimal getBigDecimal(java.lang.String var0) throws java.sql.SQLException;
 	/** @deprecated */
-	@java.lang.Deprecated
 	java.math.BigDecimal getBigDecimal(java.lang.String var0, int var1) throws java.sql.SQLException;
 	java.io.InputStream getBinaryStream(int var0) throws java.sql.SQLException;
 	java.io.InputStream getBinaryStream(java.lang.String var0) throws java.sql.SQLException;
@@ -73,11 +71,18 @@ public interface ResultSet {
 	int getFetchSize() throws java.sql.SQLException;
 	float getFloat(int var0) throws java.sql.SQLException;
 	float getFloat(java.lang.String var0) throws java.sql.SQLException;
+	int getHoldability() throws java.sql.SQLException;
 	int getInt(int var0) throws java.sql.SQLException;
 	int getInt(java.lang.String var0) throws java.sql.SQLException;
 	long getLong(int var0) throws java.sql.SQLException;
 	long getLong(java.lang.String var0) throws java.sql.SQLException;
 	java.sql.ResultSetMetaData getMetaData() throws java.sql.SQLException;
+	java.io.Reader getNCharacterStream(int var0) throws java.sql.SQLException;
+	java.io.Reader getNCharacterStream(java.lang.String var0) throws java.sql.SQLException;
+	java.sql.NClob getNClob(int var0) throws java.sql.SQLException;
+	java.sql.NClob getNClob(java.lang.String var0) throws java.sql.SQLException;
+	java.lang.String getNString(int var0) throws java.sql.SQLException;
+	java.lang.String getNString(java.lang.String var0) throws java.sql.SQLException;
 	java.lang.Object getObject(int var0) throws java.sql.SQLException;
 	java.lang.Object getObject(int var0, java.util.Map<java.lang.String,java.lang.Class<?>> var1) throws java.sql.SQLException;
 	java.lang.Object getObject(java.lang.String var0) throws java.sql.SQLException;
@@ -85,6 +90,10 @@ public interface ResultSet {
 	java.sql.Ref getRef(int var0) throws java.sql.SQLException;
 	java.sql.Ref getRef(java.lang.String var0) throws java.sql.SQLException;
 	int getRow() throws java.sql.SQLException;
+	java.sql.RowId getRowId(int var0) throws java.sql.SQLException;
+	java.sql.RowId getRowId(java.lang.String var0) throws java.sql.SQLException;
+	java.sql.SQLXML getSQLXML(int var0) throws java.sql.SQLException;
+	java.sql.SQLXML getSQLXML(java.lang.String var0) throws java.sql.SQLException;
 	short getShort(int var0) throws java.sql.SQLException;
 	short getShort(java.lang.String var0) throws java.sql.SQLException;
 	java.sql.Statement getStatement() throws java.sql.SQLException;
@@ -102,15 +111,14 @@ public interface ResultSet {
 	java.net.URL getURL(int var0) throws java.sql.SQLException;
 	java.net.URL getURL(java.lang.String var0) throws java.sql.SQLException;
 	/** @deprecated */
-	@java.lang.Deprecated
 	java.io.InputStream getUnicodeStream(int var0) throws java.sql.SQLException;
 	/** @deprecated */
-	@java.lang.Deprecated
 	java.io.InputStream getUnicodeStream(java.lang.String var0) throws java.sql.SQLException;
 	java.sql.SQLWarning getWarnings() throws java.sql.SQLException;
 	void insertRow() throws java.sql.SQLException;
 	boolean isAfterLast() throws java.sql.SQLException;
 	boolean isBeforeFirst() throws java.sql.SQLException;
+	boolean isClosed() throws java.sql.SQLException;
 	boolean isFirst() throws java.sql.SQLException;
 	boolean isLast() throws java.sql.SQLException;
 	boolean last() throws java.sql.SQLException;
@@ -127,13 +135,25 @@ public interface ResultSet {
 	void setFetchSize(int var0) throws java.sql.SQLException;
 	void updateArray(int var0, java.sql.Array var1) throws java.sql.SQLException;
 	void updateArray(java.lang.String var0, java.sql.Array var1) throws java.sql.SQLException;
+	void updateAsciiStream(int var0, java.io.InputStream var1) throws java.sql.SQLException;
 	void updateAsciiStream(int var0, java.io.InputStream var1, int var2) throws java.sql.SQLException;
+	void updateAsciiStream(int var0, java.io.InputStream var1, long var2) throws java.sql.SQLException;
+	void updateAsciiStream(java.lang.String var0, java.io.InputStream var1) throws java.sql.SQLException;
 	void updateAsciiStream(java.lang.String var0, java.io.InputStream var1, int var2) throws java.sql.SQLException;
+	void updateAsciiStream(java.lang.String var0, java.io.InputStream var1, long var2) throws java.sql.SQLException;
 	void updateBigDecimal(int var0, java.math.BigDecimal var1) throws java.sql.SQLException;
 	void updateBigDecimal(java.lang.String var0, java.math.BigDecimal var1) throws java.sql.SQLException;
+	void updateBinaryStream(int var0, java.io.InputStream var1) throws java.sql.SQLException;
 	void updateBinaryStream(int var0, java.io.InputStream var1, int var2) throws java.sql.SQLException;
+	void updateBinaryStream(int var0, java.io.InputStream var1, long var2) throws java.sql.SQLException;
+	void updateBinaryStream(java.lang.String var0, java.io.InputStream var1) throws java.sql.SQLException;
 	void updateBinaryStream(java.lang.String var0, java.io.InputStream var1, int var2) throws java.sql.SQLException;
+	void updateBinaryStream(java.lang.String var0, java.io.InputStream var1, long var2) throws java.sql.SQLException;
+	void updateBlob(int var0, java.io.InputStream var1) throws java.sql.SQLException;
+	void updateBlob(int var0, java.io.InputStream var1, long var2) throws java.sql.SQLException;
 	void updateBlob(int var0, java.sql.Blob var1) throws java.sql.SQLException;
+	void updateBlob(java.lang.String var0, java.io.InputStream var1) throws java.sql.SQLException;
+	void updateBlob(java.lang.String var0, java.io.InputStream var1, long var2) throws java.sql.SQLException;
 	void updateBlob(java.lang.String var0, java.sql.Blob var1) throws java.sql.SQLException;
 	void updateBoolean(int var0, boolean var1) throws java.sql.SQLException;
 	void updateBoolean(java.lang.String var0, boolean var1) throws java.sql.SQLException;
@@ -141,9 +161,17 @@ public interface ResultSet {
 	void updateByte(java.lang.String var0, byte var1) throws java.sql.SQLException;
 	void updateBytes(int var0, byte[] var1) throws java.sql.SQLException;
 	void updateBytes(java.lang.String var0, byte[] var1) throws java.sql.SQLException;
+	void updateCharacterStream(int var0, java.io.Reader var1) throws java.sql.SQLException;
 	void updateCharacterStream(int var0, java.io.Reader var1, int var2) throws java.sql.SQLException;
+	void updateCharacterStream(int var0, java.io.Reader var1, long var2) throws java.sql.SQLException;
+	void updateCharacterStream(java.lang.String var0, java.io.Reader var1) throws java.sql.SQLException;
 	void updateCharacterStream(java.lang.String var0, java.io.Reader var1, int var2) throws java.sql.SQLException;
+	void updateCharacterStream(java.lang.String var0, java.io.Reader var1, long var2) throws java.sql.SQLException;
+	void updateClob(int var0, java.io.Reader var1) throws java.sql.SQLException;
+	void updateClob(int var0, java.io.Reader var1, long var2) throws java.sql.SQLException;
 	void updateClob(int var0, java.sql.Clob var1) throws java.sql.SQLException;
+	void updateClob(java.lang.String var0, java.io.Reader var1) throws java.sql.SQLException;
+	void updateClob(java.lang.String var0, java.io.Reader var1, long var2) throws java.sql.SQLException;
 	void updateClob(java.lang.String var0, java.sql.Clob var1) throws java.sql.SQLException;
 	void updateDate(int var0, java.sql.Date var1) throws java.sql.SQLException;
 	void updateDate(java.lang.String var0, java.sql.Date var1) throws java.sql.SQLException;
@@ -155,6 +183,18 @@ public interface ResultSet {
 	void updateInt(java.lang.String var0, int var1) throws java.sql.SQLException;
 	void updateLong(int var0, long var1) throws java.sql.SQLException;
 	void updateLong(java.lang.String var0, long var1) throws java.sql.SQLException;
+	void updateNCharacterStream(int var0, java.io.Reader var1) throws java.sql.SQLException;
+	void updateNCharacterStream(int var0, java.io.Reader var1, long var2) throws java.sql.SQLException;
+	void updateNCharacterStream(java.lang.String var0, java.io.Reader var1) throws java.sql.SQLException;
+	void updateNCharacterStream(java.lang.String var0, java.io.Reader var1, long var2) throws java.sql.SQLException;
+	void updateNClob(int var0, java.io.Reader var1) throws java.sql.SQLException;
+	void updateNClob(int var0, java.io.Reader var1, long var2) throws java.sql.SQLException;
+	void updateNClob(int var0, java.sql.NClob var1) throws java.sql.SQLException;
+	void updateNClob(java.lang.String var0, java.io.Reader var1) throws java.sql.SQLException;
+	void updateNClob(java.lang.String var0, java.io.Reader var1, long var2) throws java.sql.SQLException;
+	void updateNClob(java.lang.String var0, java.sql.NClob var1) throws java.sql.SQLException;
+	void updateNString(int var0, java.lang.String var1) throws java.sql.SQLException;
+	void updateNString(java.lang.String var0, java.lang.String var1) throws java.sql.SQLException;
 	void updateNull(int var0) throws java.sql.SQLException;
 	void updateNull(java.lang.String var0) throws java.sql.SQLException;
 	void updateObject(int var0, java.lang.Object var1) throws java.sql.SQLException;
@@ -164,6 +204,10 @@ public interface ResultSet {
 	void updateRef(int var0, java.sql.Ref var1) throws java.sql.SQLException;
 	void updateRef(java.lang.String var0, java.sql.Ref var1) throws java.sql.SQLException;
 	void updateRow() throws java.sql.SQLException;
+	void updateRowId(int var0, java.sql.RowId var1) throws java.sql.SQLException;
+	void updateRowId(java.lang.String var0, java.sql.RowId var1) throws java.sql.SQLException;
+	void updateSQLXML(int var0, java.sql.SQLXML var1) throws java.sql.SQLException;
+	void updateSQLXML(java.lang.String var0, java.sql.SQLXML var1) throws java.sql.SQLException;
 	void updateShort(int var0, short var1) throws java.sql.SQLException;
 	void updateShort(java.lang.String var0, short var1) throws java.sql.SQLException;
 	void updateString(int var0, java.lang.String var1) throws java.sql.SQLException;

@@ -17,7 +17,6 @@
 package java.sql;
 public class Date extends java.util.Date {
 	/** @deprecated */
-	@java.lang.Deprecated
 	public Date(int var0, int var1, int var2) { } 
 	public Date(long var0) { } 
 	public static java.sql.Date valueOf(java.lang.String var0) { return null; }

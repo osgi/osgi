@@ -16,10 +16,17 @@
 
 package java.awt.peer;
 public interface WindowPeer extends java.awt.peer.ContainerPeer {
+	void repositionSecurityWarning();
 	boolean requestWindowFocus();
+	void setAlwaysOnTop(boolean var0);
+	void setModalBlocked(java.awt.Dialog var0, boolean var1);
+	void setOpacity(float var0);
+	void setOpaque(boolean var0);
 	void toBack();
 	void toFront();
-	void updateAlwaysOnTop();
 	void updateFocusableWindowState();
+	void updateIconImages();
+	void updateMinimumSize();
+	void updateWindow(java.awt.image.BufferedImage var0);
 }
 

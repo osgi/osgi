@@ -32,7 +32,7 @@ public abstract class NumberFormat extends java.text.Format {
 	}
 	public final static int FRACTION_FIELD = 1;
 	public final static int INTEGER_FIELD = 0;
-	public NumberFormat() { } 
+	protected NumberFormat() { } 
 	public final java.lang.String format(double var0) { return null; }
 	public abstract java.lang.StringBuffer format(double var0, java.lang.StringBuffer var1, java.text.FieldPosition var2);
 	public final java.lang.String format(long var0) { return null; }
@@ -54,6 +54,7 @@ public abstract class NumberFormat extends java.text.Format {
 	public static java.text.NumberFormat getNumberInstance(java.util.Locale var0) { return null; }
 	public final static java.text.NumberFormat getPercentInstance() { return null; }
 	public static java.text.NumberFormat getPercentInstance(java.util.Locale var0) { return null; }
+	public java.math.RoundingMode getRoundingMode() { return null; }
 	public boolean isGroupingUsed() { return false; }
 	public boolean isParseIntegerOnly() { return false; }
 	public java.lang.Number parse(java.lang.String var0) throws java.text.ParseException { return null; }
@@ -66,5 +67,6 @@ public abstract class NumberFormat extends java.text.Format {
 	public void setMinimumFractionDigits(int var0) { }
 	public void setMinimumIntegerDigits(int var0) { }
 	public void setParseIntegerOnly(boolean var0) { }
+	public void setRoundingMode(java.math.RoundingMode var0) { }
 }
 

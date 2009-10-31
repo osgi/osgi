@@ -16,6 +16,9 @@
 
 package java.util.logging;
 public class Logger {
+	public final static java.lang.String GLOBAL_LOGGER_NAME = "global";
+	/** @deprecated */
+	@java.lang.Deprecated
 	public final static java.util.logging.Logger global; static { global = null; }
 	protected Logger(java.lang.String var0, java.lang.String var1) { } 
 	public void addHandler(java.util.logging.Handler var0) { }

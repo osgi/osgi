@@ -20,6 +20,8 @@ public class ScheduledThreadPoolExecutor extends java.util.concurrent.ThreadPool
 	public ScheduledThreadPoolExecutor(int var0, java.util.concurrent.RejectedExecutionHandler var1)  { super(0, 0, 0l, (java.util.concurrent.TimeUnit) null, (java.util.concurrent.BlockingQueue<java.lang.Runnable>) null, (java.util.concurrent.ThreadFactory) null, (java.util.concurrent.RejectedExecutionHandler) null); } 
 	public ScheduledThreadPoolExecutor(int var0, java.util.concurrent.ThreadFactory var1)  { super(0, 0, 0l, (java.util.concurrent.TimeUnit) null, (java.util.concurrent.BlockingQueue<java.lang.Runnable>) null, (java.util.concurrent.ThreadFactory) null, (java.util.concurrent.RejectedExecutionHandler) null); } 
 	public ScheduledThreadPoolExecutor(int var0, java.util.concurrent.ThreadFactory var1, java.util.concurrent.RejectedExecutionHandler var2)  { super(0, 0, 0l, (java.util.concurrent.TimeUnit) null, (java.util.concurrent.BlockingQueue<java.lang.Runnable>) null, (java.util.concurrent.ThreadFactory) null, (java.util.concurrent.RejectedExecutionHandler) null); } 
+	protected <V> java.util.concurrent.RunnableScheduledFuture<V> decorateTask(java.lang.Runnable var0, java.util.concurrent.RunnableScheduledFuture<V> var1) { return null; }
+	protected <V> java.util.concurrent.RunnableScheduledFuture<V> decorateTask(java.util.concurrent.Callable<V> var0, java.util.concurrent.RunnableScheduledFuture<V> var1) { return null; }
 	public boolean getContinueExistingPeriodicTasksAfterShutdownPolicy() { return false; }
 	public boolean getExecuteExistingDelayedTasksAfterShutdownPolicy() { return false; }
 	public java.util.concurrent.ScheduledFuture<?> schedule(java.lang.Runnable var0, long var1, java.util.concurrent.TimeUnit var2) { return null; }

@@ -20,7 +20,7 @@ public interface OpenMBeanOperationInfo {
 	java.lang.String getDescription();
 	int getImpact();
 	java.lang.String getName();
-	javax.management.openmbean.OpenType getReturnOpenType();
+	javax.management.openmbean.OpenType<?> getReturnOpenType();
 	java.lang.String getReturnType();
 	javax.management.MBeanParameterInfo[] getSignature();
 	int hashCode();

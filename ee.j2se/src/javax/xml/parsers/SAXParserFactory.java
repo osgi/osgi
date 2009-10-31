@@ -23,6 +23,7 @@ public abstract class SAXParserFactory {
 	public boolean isValidating() { return false; }
 	public boolean isXIncludeAware() { return false; }
 	public static javax.xml.parsers.SAXParserFactory newInstance() { return null; }
+	public static javax.xml.parsers.SAXParserFactory newInstance(java.lang.String var0, java.lang.ClassLoader var1) { return null; }
 	public abstract javax.xml.parsers.SAXParser newSAXParser() throws javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXException;
 	public abstract void setFeature(java.lang.String var0, boolean var1) throws javax.xml.parsers.ParserConfigurationException, org.xml.sax.SAXNotRecognizedException, org.xml.sax.SAXNotSupportedException;
 	public void setNamespaceAware(boolean var0) { }

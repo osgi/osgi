@@ -46,8 +46,6 @@ public class HTMLEditorKit extends javax.swing.text.StyledEditorKit implements j
 	public static class LinkController extends java.awt.event.MouseAdapter implements java.awt.event.MouseMotionListener, java.io.Serializable {
 		public LinkController() { } 
 		protected void activateLink(int var0, javax.swing.JEditorPane var1) { }
-		public void mouseDragged(java.awt.event.MouseEvent var0) { }
-		public void mouseMoved(java.awt.event.MouseEvent var0) { }
 	}
 	public static abstract class Parser {
 		public Parser() { } 

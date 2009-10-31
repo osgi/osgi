@@ -20,6 +20,7 @@ public class Collections {
 	public final static java.util.Map EMPTY_MAP; static { EMPTY_MAP = null; }
 	public final static java.util.Set EMPTY_SET; static { EMPTY_SET = null; }
 	public static <T> boolean addAll(java.util.Collection<? super T> var0, T... var1) { return false; }
+	public static <T> java.util.Queue<T> asLifoQueue(java.util.Deque<T> var0) { return null; }
 	public static <T> int binarySearch(java.util.List<? extends java.lang.Comparable<? super T>> var0, T var1) { return 0; }
 	public static <T> int binarySearch(java.util.List<? extends T> var0, T var1, java.util.Comparator<? super T> var2) { return 0; }
 	public static <E> java.util.Collection<E> checkedCollection(java.util.Collection<E> var0, java.lang.Class<E> var1) { return null; }
@@ -44,6 +45,7 @@ public class Collections {
 	public static <T extends java.lang.Object & java.lang.Comparable<? super T>> T min(java.util.Collection<? extends T> var0) { return null; }
 	public static <T> T min(java.util.Collection<? extends T> var0, java.util.Comparator<? super T> var1) { return null; }
 	public static <T> java.util.List<T> nCopies(int var0, T var1) { return null; }
+	public static <E> java.util.Set<E> newSetFromMap(java.util.Map<E,java.lang.Boolean> var0) { return null; }
 	public static <T> boolean replaceAll(java.util.List<T> var0, T var1, T var2) { return false; }
 	public static void reverse(java.util.List<?> var0) { }
 	public static <T> java.util.Comparator<T> reverseOrder() { return null; }

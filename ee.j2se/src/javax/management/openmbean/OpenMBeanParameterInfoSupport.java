@@ -15,16 +15,17 @@
  */
 
 package javax.management.openmbean;
-public class OpenMBeanParameterInfoSupport extends javax.management.MBeanParameterInfo implements java.io.Serializable, javax.management.openmbean.OpenMBeanParameterInfo {
-	public OpenMBeanParameterInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType var2)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null); } 
-	public OpenMBeanParameterInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType var2, java.lang.Object var3) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null); } 
-	public OpenMBeanParameterInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType var2, java.lang.Object var3, java.lang.Comparable var4, java.lang.Comparable var5) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null); } 
-	public OpenMBeanParameterInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType var2, java.lang.Object var3, java.lang.Object[] var4) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null); } 
+public class OpenMBeanParameterInfoSupport extends javax.management.MBeanParameterInfo implements javax.management.openmbean.OpenMBeanParameterInfo {
+	public OpenMBeanParameterInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType<?> var2)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
+	public <T> OpenMBeanParameterInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType<T> var2, T var3) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
+	public <T> OpenMBeanParameterInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType<T> var2, T var3, java.lang.Comparable<T> var4, java.lang.Comparable<T> var5) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
+	public <T> OpenMBeanParameterInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType<T> var2, T var3, T[] var4) throws javax.management.openmbean.OpenDataException  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
+	public OpenMBeanParameterInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenType<?> var2, javax.management.Descriptor var3)  { super((java.lang.String) null, (java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
 	public java.lang.Object getDefaultValue() { return null; }
-	public java.util.Set getLegalValues() { return null; }
-	public java.lang.Comparable getMaxValue() { return null; }
-	public java.lang.Comparable getMinValue() { return null; }
-	public javax.management.openmbean.OpenType getOpenType() { return null; }
+	public java.util.Set<?> getLegalValues() { return null; }
+	public java.lang.Comparable<?> getMaxValue() { return null; }
+	public java.lang.Comparable<?> getMinValue() { return null; }
+	public javax.management.openmbean.OpenType<?> getOpenType() { return null; }
 	public boolean hasDefaultValue() { return false; }
 	public boolean hasLegalValues() { return false; }
 	public boolean hasMaxValue() { return false; }

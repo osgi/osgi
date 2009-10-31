@@ -21,6 +21,7 @@ public class AtomicBoolean implements java.io.Serializable {
 	public final boolean compareAndSet(boolean var0, boolean var1) { return false; }
 	public final boolean get() { return false; }
 	public final boolean getAndSet(boolean var0) { return false; }
+	public final void lazySet(boolean var0) { }
 	public final void set(boolean var0) { }
 	public boolean weakCompareAndSet(boolean var0, boolean var1) { return false; }
 }

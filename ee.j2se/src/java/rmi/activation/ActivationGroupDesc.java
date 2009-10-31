@@ -21,11 +21,11 @@ public final class ActivationGroupDesc implements java.io.Serializable {
 		public java.lang.String[] getCommandOptions() { return null; }
 		public java.lang.String getCommandPath() { return null; }
 	}
-	public ActivationGroupDesc(java.lang.String var0, java.lang.String var1, java.rmi.MarshalledObject var2, java.util.Properties var3, java.rmi.activation.ActivationGroupDesc.CommandEnvironment var4) { } 
+	public ActivationGroupDesc(java.lang.String var0, java.lang.String var1, java.rmi.MarshalledObject<?> var2, java.util.Properties var3, java.rmi.activation.ActivationGroupDesc.CommandEnvironment var4) { } 
 	public ActivationGroupDesc(java.util.Properties var0, java.rmi.activation.ActivationGroupDesc.CommandEnvironment var1) { } 
 	public java.lang.String getClassName() { return null; }
 	public java.rmi.activation.ActivationGroupDesc.CommandEnvironment getCommandEnvironment() { return null; }
-	public java.rmi.MarshalledObject getData() { return null; }
+	public java.rmi.MarshalledObject<?> getData() { return null; }
 	public java.lang.String getLocation() { return null; }
 	public java.util.Properties getPropertyOverrides() { return null; }
 }

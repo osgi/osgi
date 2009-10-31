@@ -27,6 +27,8 @@ public class ReentrantReadWriteLock implements java.io.Serializable, java.util.c
 	}
 	public static class WriteLock implements java.io.Serializable, java.util.concurrent.locks.Lock {
 		protected WriteLock(java.util.concurrent.locks.ReentrantReadWriteLock var0) { } 
+		public int getHoldCount() { return 0; }
+		public boolean isHeldByCurrentThread() { return false; }
 		public void lock() { }
 		public void lockInterruptibly() throws java.lang.InterruptedException { }
 		public java.util.concurrent.locks.Condition newCondition() { return null; }
@@ -41,6 +43,7 @@ public class ReentrantReadWriteLock implements java.io.Serializable, java.util.c
 	protected java.util.Collection<java.lang.Thread> getQueuedReaderThreads() { return null; }
 	protected java.util.Collection<java.lang.Thread> getQueuedThreads() { return null; }
 	protected java.util.Collection<java.lang.Thread> getQueuedWriterThreads() { return null; }
+	public int getReadHoldCount() { return 0; }
 	public int getReadLockCount() { return 0; }
 	public int getWaitQueueLength(java.util.concurrent.locks.Condition var0) { return 0; }
 	protected java.util.Collection<java.lang.Thread> getWaitingThreads(java.util.concurrent.locks.Condition var0) { return null; }

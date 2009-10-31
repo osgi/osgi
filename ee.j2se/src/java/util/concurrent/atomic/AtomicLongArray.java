@@ -27,6 +27,7 @@ public class AtomicLongArray implements java.io.Serializable {
 	public final long getAndIncrement(int var0) { return 0l; }
 	public final long getAndSet(int var0, long var1) { return 0l; }
 	public final long incrementAndGet(int var0) { return 0l; }
+	public final void lazySet(int var0, long var1) { }
 	public final int length() { return 0; }
 	public final void set(int var0, long var1) { }
 	public final boolean weakCompareAndSet(int var0, long var1, long var2) { return false; }

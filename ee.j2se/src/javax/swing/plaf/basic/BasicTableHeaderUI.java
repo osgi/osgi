@@ -32,9 +32,11 @@ public class BasicTableHeaderUI extends javax.swing.plaf.TableHeaderUI {
 	public BasicTableHeaderUI() { } 
 	protected javax.swing.event.MouseInputListener createMouseInputListener() { return null; }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
+	protected int getRolloverColumn() { return 0; }
 	protected void installDefaults() { }
 	protected void installKeyboardActions() { }
 	protected void installListeners() { }
+	protected void rolloverColumnUpdated(int var0, int var1) { }
 	protected void uninstallDefaults() { }
 	protected void uninstallKeyboardActions() { }
 	protected void uninstallListeners() { }

@@ -25,13 +25,10 @@ public abstract class BreakIterator implements java.lang.Cloneable {
 	public static java.util.Locale[] getAvailableLocales() { return null; }
 	public static java.text.BreakIterator getCharacterInstance() { return null; }
 	public static java.text.BreakIterator getCharacterInstance(java.util.Locale var0) { return null; }
-	protected static int getInt(byte[] var0, int var1) { return 0; }
 	public static java.text.BreakIterator getLineInstance() { return null; }
 	public static java.text.BreakIterator getLineInstance(java.util.Locale var0) { return null; }
-	protected static long getLong(byte[] var0, int var1) { return 0l; }
 	public static java.text.BreakIterator getSentenceInstance() { return null; }
 	public static java.text.BreakIterator getSentenceInstance(java.util.Locale var0) { return null; }
-	protected static short getShort(byte[] var0, int var1) { return 0; }
 	public abstract java.text.CharacterIterator getText();
 	public static java.text.BreakIterator getWordInstance() { return null; }
 	public static java.text.BreakIterator getWordInstance(java.util.Locale var0) { return null; }

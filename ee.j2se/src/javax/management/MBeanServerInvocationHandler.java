@@ -17,7 +17,11 @@
 package javax.management;
 public class MBeanServerInvocationHandler implements java.lang.reflect.InvocationHandler {
 	public MBeanServerInvocationHandler(javax.management.MBeanServerConnection var0, javax.management.ObjectName var1) { } 
+	public MBeanServerInvocationHandler(javax.management.MBeanServerConnection var0, javax.management.ObjectName var1, boolean var2) { } 
+	public javax.management.MBeanServerConnection getMBeanServerConnection() { return null; }
+	public javax.management.ObjectName getObjectName() { return null; }
 	public java.lang.Object invoke(java.lang.Object var0, java.lang.reflect.Method var1, java.lang.Object[] var2) throws java.lang.Throwable { return null; }
-	public static java.lang.Object newProxyInstance(javax.management.MBeanServerConnection var0, javax.management.ObjectName var1, java.lang.Class var2, boolean var3) { return null; }
+	public boolean isMXBean() { return false; }
+	public static <T> T newProxyInstance(javax.management.MBeanServerConnection var0, javax.management.ObjectName var1, java.lang.Class<T> var2, boolean var3) { return null; }
 }
 

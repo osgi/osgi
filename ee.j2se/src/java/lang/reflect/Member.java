@@ -18,7 +18,7 @@ package java.lang.reflect;
 public interface Member {
 	public final static int DECLARED = 1;
 	public final static int PUBLIC = 0;
-	java.lang.Class getDeclaringClass();
+	java.lang.Class<?> getDeclaringClass();
 	int getModifiers();
 	java.lang.String getName();
 	boolean isSynthetic();

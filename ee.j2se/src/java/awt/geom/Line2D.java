@@ -16,7 +16,7 @@
 
 package java.awt.geom;
 public abstract class Line2D implements java.awt.Shape, java.lang.Cloneable {
-	public static class Double extends java.awt.geom.Line2D {
+	public static class Double extends java.awt.geom.Line2D implements java.io.Serializable {
 		public double x1;
 		public double x2;
 		public double y1;
@@ -33,7 +33,7 @@ public abstract class Line2D implements java.awt.Shape, java.lang.Cloneable {
 		public double getY2() { return 0.0d; }
 		public void setLine(double var0, double var1, double var2, double var3) { }
 	}
-	public static class Float extends java.awt.geom.Line2D {
+	public static class Float extends java.awt.geom.Line2D implements java.io.Serializable {
 		public float x1;
 		public float x2;
 		public float y1;

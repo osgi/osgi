@@ -15,7 +15,7 @@
  */
 
 package java.util.concurrent;
-public class FutureTask<V> implements java.lang.Runnable, java.util.concurrent.Future<V> {
+public class FutureTask<V> implements java.util.concurrent.RunnableFuture<V> {
 	public FutureTask(java.lang.Runnable var0, V var1) { } 
 	public FutureTask(java.util.concurrent.Callable<V> var0) { } 
 	public boolean cancel(boolean var0) { return false; }

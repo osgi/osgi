@@ -18,7 +18,6 @@ package java.awt.peer;
 public interface ContainerPeer extends java.awt.peer.ComponentPeer {
 	void beginLayout();
 	void beginValidate();
-	void cancelPendingPaint(int var0, int var1, int var2, int var3);
 	void endLayout();
 	void endValidate();
 	java.awt.Insets getInsets();

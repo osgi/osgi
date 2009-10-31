@@ -19,11 +19,11 @@ public interface MLetMBean {
 	void addURL(java.lang.String var0) throws javax.management.ServiceNotFoundException;
 	void addURL(java.net.URL var0);
 	java.lang.String getLibraryDirectory();
-	java.util.Set getMBeansFromURL(java.lang.String var0) throws javax.management.ServiceNotFoundException;
-	java.util.Set getMBeansFromURL(java.net.URL var0) throws javax.management.ServiceNotFoundException;
+	java.util.Set<java.lang.Object> getMBeansFromURL(java.lang.String var0) throws javax.management.ServiceNotFoundException;
+	java.util.Set<java.lang.Object> getMBeansFromURL(java.net.URL var0) throws javax.management.ServiceNotFoundException;
 	java.net.URL getResource(java.lang.String var0);
 	java.io.InputStream getResourceAsStream(java.lang.String var0);
-	java.util.Enumeration getResources(java.lang.String var0) throws java.io.IOException;
+	java.util.Enumeration<java.net.URL> getResources(java.lang.String var0) throws java.io.IOException;
 	java.net.URL[] getURLs();
 	void setLibraryDirectory(java.lang.String var0);
 }

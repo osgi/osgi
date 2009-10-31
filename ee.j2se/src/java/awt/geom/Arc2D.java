@@ -16,7 +16,7 @@
 
 package java.awt.geom;
 public abstract class Arc2D extends java.awt.geom.RectangularShape {
-	public static class Double extends java.awt.geom.Arc2D {
+	public static class Double extends java.awt.geom.Arc2D implements java.io.Serializable {
 		public double extent;
 		public double height;
 		public double start;
@@ -39,7 +39,7 @@ public abstract class Arc2D extends java.awt.geom.RectangularShape {
 		public void setAngleStart(double var0) { }
 		public void setArc(double var0, double var1, double var2, double var3, double var4, double var5, int var6) { }
 	}
-	public static class Float extends java.awt.geom.Arc2D {
+	public static class Float extends java.awt.geom.Arc2D implements java.io.Serializable {
 		public float extent;
 		public float height;
 		public float start;

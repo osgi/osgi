@@ -66,6 +66,12 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 		public void setSize(java.awt.Dimension var0) { }
 		public void setVisible(boolean var0) { }
 	}
+	public enum BaselineResizeBehavior {
+		CENTER_OFFSET,
+		CONSTANT_ASCENT,
+		CONSTANT_DESCENT,
+		OTHER;
+	}
 	protected class BltBufferStrategy extends java.awt.image.BufferStrategy {
 		protected java.awt.image.VolatileImage[] backBuffers;
 		protected java.awt.BufferCapabilities caps;
@@ -165,6 +171,8 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public float getAlignmentX() { return 0.0f; }
 	public float getAlignmentY() { return 0.0f; }
 	public java.awt.Color getBackground() { return null; }
+	public int getBaseline(int var0, int var1) { return 0; }
+	public java.awt.Component.BaselineResizeBehavior getBaselineResizeBehavior() { return null; }
 	public java.awt.Rectangle getBounds() { return null; }
 	public java.awt.Rectangle getBounds(java.awt.Rectangle var0) { return null; }
 	public java.awt.image.ColorModel getColorModel() { return null; }

@@ -19,6 +19,6 @@ public class AccessibleAttributeSequence {
 	public javax.swing.text.AttributeSet attributes;
 	public int endIndex;
 	public int startIndex;
-	public AccessibleAttributeSequence() { } 
+	public AccessibleAttributeSequence(int var0, int var1, javax.swing.text.AttributeSet var2) { } 
 }
 

@@ -18,14 +18,43 @@ package java.util;
 public class Arrays {
 	public static <T> java.util.List<T> asList(T... var0) { return null; }
 	public static int binarySearch(byte[] var0, byte var1) { return 0; }
+	public static int binarySearch(byte[] var0, int var1, int var2, byte var3) { return 0; }
 	public static int binarySearch(char[] var0, char var1) { return 0; }
+	public static int binarySearch(char[] var0, int var1, int var2, char var3) { return 0; }
 	public static int binarySearch(double[] var0, double var1) { return 0; }
+	public static int binarySearch(double[] var0, int var1, int var2, double var3) { return 0; }
 	public static int binarySearch(float[] var0, float var1) { return 0; }
+	public static int binarySearch(float[] var0, int var1, int var2, float var3) { return 0; }
 	public static int binarySearch(int[] var0, int var1) { return 0; }
+	public static int binarySearch(int[] var0, int var1, int var2, int var3) { return 0; }
+	public static int binarySearch(long[] var0, int var1, int var2, long var3) { return 0; }
 	public static int binarySearch(long[] var0, long var1) { return 0; }
+	public static int binarySearch(java.lang.Object[] var0, int var1, int var2, java.lang.Object var3) { return 0; }
+	public static <T> int binarySearch(T[] var0, int var1, int var2, T var3, java.util.Comparator<? super T> var4) { return 0; }
 	public static int binarySearch(java.lang.Object[] var0, java.lang.Object var1) { return 0; }
 	public static <T> int binarySearch(T[] var0, T var1, java.util.Comparator<? super T> var2) { return 0; }
+	public static int binarySearch(short[] var0, int var1, int var2, short var3) { return 0; }
 	public static int binarySearch(short[] var0, short var1) { return 0; }
+	public static byte[] copyOf(byte[] var0, int var1) { return null; }
+	public static char[] copyOf(char[] var0, int var1) { return null; }
+	public static double[] copyOf(double[] var0, int var1) { return null; }
+	public static float[] copyOf(float[] var0, int var1) { return null; }
+	public static int[] copyOf(int[] var0, int var1) { return null; }
+	public static long[] copyOf(long[] var0, int var1) { return null; }
+	public static <T> T[] copyOf(T[] var0, int var1) { return null; }
+	public static <T,U> T[] copyOf(U[] var0, int var1, java.lang.Class<? extends T[]> var2) { return null; }
+	public static short[] copyOf(short[] var0, int var1) { return null; }
+	public static boolean[] copyOf(boolean[] var0, int var1) { return null; }
+	public static byte[] copyOfRange(byte[] var0, int var1, int var2) { return null; }
+	public static char[] copyOfRange(char[] var0, int var1, int var2) { return null; }
+	public static double[] copyOfRange(double[] var0, int var1, int var2) { return null; }
+	public static float[] copyOfRange(float[] var0, int var1, int var2) { return null; }
+	public static int[] copyOfRange(int[] var0, int var1, int var2) { return null; }
+	public static long[] copyOfRange(long[] var0, int var1, int var2) { return null; }
+	public static <T> T[] copyOfRange(T[] var0, int var1, int var2) { return null; }
+	public static <T,U> T[] copyOfRange(U[] var0, int var1, int var2, java.lang.Class<? extends T[]> var3) { return null; }
+	public static short[] copyOfRange(short[] var0, int var1, int var2) { return null; }
+	public static boolean[] copyOfRange(boolean[] var0, int var1, int var2) { return null; }
 	public static boolean deepEquals(java.lang.Object[] var0, java.lang.Object[] var1) { return false; }
 	public static int deepHashCode(java.lang.Object[] var0) { return 0; }
 	public static java.lang.String deepToString(java.lang.Object[] var0) { return null; }

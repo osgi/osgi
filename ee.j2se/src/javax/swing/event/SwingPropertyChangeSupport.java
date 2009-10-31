@@ -17,5 +17,7 @@
 package javax.swing.event;
 public final class SwingPropertyChangeSupport extends java.beans.PropertyChangeSupport {
 	public SwingPropertyChangeSupport(java.lang.Object var0)  { super((java.lang.Object) null); } 
+	public SwingPropertyChangeSupport(java.lang.Object var0, boolean var1)  { super((java.lang.Object) null); } 
+	public final boolean isNotifyOnEDT() { return false; }
 }
 

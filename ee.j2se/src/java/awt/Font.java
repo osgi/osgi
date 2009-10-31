@@ -18,20 +18,26 @@ package java.awt;
 public class Font implements java.io.Serializable {
 	public final static int BOLD = 1;
 	public final static int CENTER_BASELINE = 1;
+	public final static java.lang.String DIALOG = "Dialog";
+	public final static java.lang.String DIALOG_INPUT = "DialogInput";
 	public final static int HANGING_BASELINE = 2;
 	public final static int ITALIC = 2;
 	public final static int LAYOUT_LEFT_TO_RIGHT = 0;
 	public final static int LAYOUT_NO_LIMIT_CONTEXT = 4;
 	public final static int LAYOUT_NO_START_CONTEXT = 2;
 	public final static int LAYOUT_RIGHT_TO_LEFT = 1;
+	public final static java.lang.String MONOSPACED = "Monospaced";
 	public final static int PLAIN = 0;
 	public final static int ROMAN_BASELINE = 0;
+	public final static java.lang.String SANS_SERIF = "SansSerif";
+	public final static java.lang.String SERIF = "Serif";
 	public final static int TRUETYPE_FONT = 0;
 	public final static int TYPE1_FONT = 1;
 	protected java.lang.String name;
 	protected float pointSize;
 	protected int size;
 	protected int style;
+	protected Font(java.awt.Font var0) { } 
 	public Font(java.lang.String var0, int var1, int var2) { } 
 	public Font(java.util.Map<? extends java.text.AttributedCharacterIterator.Attribute,?> var0) { } 
 	public boolean canDisplay(char var0) { return false; }
@@ -83,6 +89,7 @@ public class Font implements java.io.Serializable {
 	public java.awt.geom.Rectangle2D getStringBounds(char[] var0, int var1, int var2, java.awt.font.FontRenderContext var3) { return null; }
 	public int getStyle() { return 0; }
 	public java.awt.geom.AffineTransform getTransform() { return null; }
+	public boolean hasLayoutAttributes() { return false; }
 	public boolean hasUniformLineMetrics() { return false; }
 	public boolean isBold() { return false; }
 	public boolean isItalic() { return false; }

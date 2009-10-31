@@ -15,21 +15,21 @@
  */
 
 package javax.management.openmbean;
-public final class SimpleType extends javax.management.openmbean.OpenType implements java.io.Serializable {
-	public final static javax.management.openmbean.SimpleType BIGDECIMAL; static { BIGDECIMAL = null; }
-	public final static javax.management.openmbean.SimpleType BIGINTEGER; static { BIGINTEGER = null; }
-	public final static javax.management.openmbean.SimpleType BOOLEAN; static { BOOLEAN = null; }
-	public final static javax.management.openmbean.SimpleType BYTE; static { BYTE = null; }
-	public final static javax.management.openmbean.SimpleType CHARACTER; static { CHARACTER = null; }
-	public final static javax.management.openmbean.SimpleType DATE; static { DATE = null; }
-	public final static javax.management.openmbean.SimpleType DOUBLE; static { DOUBLE = null; }
-	public final static javax.management.openmbean.SimpleType FLOAT; static { FLOAT = null; }
-	public final static javax.management.openmbean.SimpleType INTEGER; static { INTEGER = null; }
-	public final static javax.management.openmbean.SimpleType LONG; static { LONG = null; }
-	public final static javax.management.openmbean.SimpleType OBJECTNAME; static { OBJECTNAME = null; }
-	public final static javax.management.openmbean.SimpleType SHORT; static { SHORT = null; }
-	public final static javax.management.openmbean.SimpleType STRING; static { STRING = null; }
-	public final static javax.management.openmbean.SimpleType VOID; static { VOID = null; }
+public final class SimpleType<T> extends javax.management.openmbean.OpenType<T> {
+	public final static javax.management.openmbean.SimpleType<java.math.BigDecimal> BIGDECIMAL; static { BIGDECIMAL = null; }
+	public final static javax.management.openmbean.SimpleType<java.math.BigInteger> BIGINTEGER; static { BIGINTEGER = null; }
+	public final static javax.management.openmbean.SimpleType<java.lang.Boolean> BOOLEAN; static { BOOLEAN = null; }
+	public final static javax.management.openmbean.SimpleType<java.lang.Byte> BYTE; static { BYTE = null; }
+	public final static javax.management.openmbean.SimpleType<java.lang.Character> CHARACTER; static { CHARACTER = null; }
+	public final static javax.management.openmbean.SimpleType<java.util.Date> DATE; static { DATE = null; }
+	public final static javax.management.openmbean.SimpleType<java.lang.Double> DOUBLE; static { DOUBLE = null; }
+	public final static javax.management.openmbean.SimpleType<java.lang.Float> FLOAT; static { FLOAT = null; }
+	public final static javax.management.openmbean.SimpleType<java.lang.Integer> INTEGER; static { INTEGER = null; }
+	public final static javax.management.openmbean.SimpleType<java.lang.Long> LONG; static { LONG = null; }
+	public final static javax.management.openmbean.SimpleType<javax.management.ObjectName> OBJECTNAME; static { OBJECTNAME = null; }
+	public final static javax.management.openmbean.SimpleType<java.lang.Short> SHORT; static { SHORT = null; }
+	public final static javax.management.openmbean.SimpleType<java.lang.String> STRING; static { STRING = null; }
+	public final static javax.management.openmbean.SimpleType<java.lang.Void> VOID; static { VOID = null; }
 	public boolean equals(java.lang.Object var0) { return false; }
 	public int hashCode() { return 0; }
 	public boolean isValue(java.lang.Object var0) { return false; }

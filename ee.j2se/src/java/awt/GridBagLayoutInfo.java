@@ -15,7 +15,7 @@
  */
 
 package java.awt;
-class GridBagLayoutInfo implements java.io.Serializable {
+public class GridBagLayoutInfo implements java.io.Serializable {
 	private GridBagLayoutInfo() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

@@ -28,7 +28,6 @@ public abstract class LongBuffer extends java.nio.Buffer implements java.lang.Co
 	public java.nio.LongBuffer get(long[] var0) { return null; }
 	public java.nio.LongBuffer get(long[] var0, int var1, int var2) { return null; }
 	public final boolean hasArray() { return false; }
-	public abstract boolean isDirect();
 	public abstract java.nio.ByteOrder order();
 	public abstract java.nio.LongBuffer put(int var0, long var1);
 	public abstract java.nio.LongBuffer put(long var0);

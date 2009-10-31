@@ -16,9 +16,9 @@
 
 package java.awt.peer;
 public interface FramePeer extends java.awt.peer.WindowPeer {
+	java.awt.Rectangle getBoundsPrivate();
 	int getState();
 	void setBoundsPrivate(int var0, int var1, int var2, int var3);
-	void setIconImage(java.awt.Image var0);
 	void setMaximizedBounds(java.awt.Rectangle var0);
 	void setMenuBar(java.awt.MenuBar var0);
 	void setResizable(boolean var0);

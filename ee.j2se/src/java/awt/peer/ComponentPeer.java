@@ -23,6 +23,7 @@ public interface ComponentPeer {
 	public final static int SET_CLIENT_SIZE = 4;
 	public final static int SET_LOCATION = 1;
 	public final static int SET_SIZE = 2;
+	void applyShape(sun.java2d.pipe.Region var0);
 	boolean canDetermineObscurity();
 	int checkImage(java.awt.Image var0, int var1, int var2, java.awt.image.ImageObserver var3);
 	void coalescePaintEvent(java.awt.event.PaintEvent var0);
@@ -34,7 +35,7 @@ public interface ComponentPeer {
 	void disable();
 	void dispose();
 	void enable();
-	void flip(java.awt.BufferCapabilities.FlipContents var0);
+	void flip(int var0, int var1, int var2, int var3, java.awt.BufferCapabilities.FlipContents var4);
 	java.awt.Image getBackBuffer();
 	java.awt.Rectangle getBounds();
 	java.awt.image.ColorModel getColorModel();
@@ -59,7 +60,7 @@ public interface ComponentPeer {
 	void print(java.awt.Graphics var0);
 	void repaint(long var0, int var1, int var2, int var3, int var4);
 	void reparent(java.awt.peer.ContainerPeer var0);
-	boolean requestFocus(java.awt.Component var0, boolean var1, boolean var2, long var3);
+	boolean requestFocus(java.awt.Component var0, boolean var1, boolean var2, long var3, sun.awt.CausedFocusEvent.Cause var4);
 	void reshape(int var0, int var1, int var2, int var3);
 	void setBackground(java.awt.Color var0);
 	void setBounds(int var0, int var1, int var2, int var3, int var4);

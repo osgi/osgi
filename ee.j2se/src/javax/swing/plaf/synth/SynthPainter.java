@@ -63,7 +63,9 @@ public abstract class SynthPainter {
 	public void paintPopupMenuBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintPopupMenuBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintProgressBarBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintProgressBarBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintProgressBarBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintProgressBarBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintProgressBarForeground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintRadioButtonBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintRadioButtonBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
@@ -72,27 +74,38 @@ public abstract class SynthPainter {
 	public void paintRootPaneBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintRootPaneBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintScrollBarBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintScrollBarBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintScrollBarBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintScrollBarBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintScrollBarThumbBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintScrollBarThumbBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintScrollBarTrackBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintScrollBarTrackBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintScrollBarTrackBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintScrollBarTrackBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintScrollPaneBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintScrollPaneBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintSeparatorBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintSeparatorBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintSeparatorBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintSeparatorBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintSeparatorForeground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintSliderBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintSliderBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintSliderBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintSliderBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintSliderThumbBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintSliderThumbBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintSliderTrackBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintSliderTrackBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintSliderTrackBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintSliderTrackBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintSpinnerBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintSpinnerBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintSplitPaneBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintSplitPaneBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintSplitPaneDividerBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintSplitPaneDividerBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintSplitPaneDividerForeground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintSplitPaneDragDivider(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintTabbedPaneBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
@@ -100,9 +113,13 @@ public abstract class SynthPainter {
 	public void paintTabbedPaneContentBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintTabbedPaneContentBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintTabbedPaneTabAreaBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintTabbedPaneTabAreaBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintTabbedPaneTabAreaBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintTabbedPaneTabAreaBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintTabbedPaneTabBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
+	public void paintTabbedPaneTabBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6, int var7) { }
 	public void paintTabbedPaneTabBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
+	public void paintTabbedPaneTabBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6, int var7) { }
 	public void paintTableBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintTableBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintTableHeaderBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
@@ -116,11 +133,17 @@ public abstract class SynthPainter {
 	public void paintToggleButtonBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintToggleButtonBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintToolBarBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintToolBarBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintToolBarBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintToolBarBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintToolBarContentBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintToolBarContentBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintToolBarContentBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintToolBarContentBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintToolBarDragWindowBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintToolBarDragWindowBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintToolBarDragWindowBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
+	public void paintToolBarDragWindowBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5, int var6) { }
 	public void paintToolTipBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintToolTipBorder(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }
 	public void paintTreeBackground(javax.swing.plaf.synth.SynthContext var0, java.awt.Graphics var1, int var2, int var3, int var4, int var5) { }

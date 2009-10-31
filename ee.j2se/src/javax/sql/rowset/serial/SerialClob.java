@@ -18,8 +18,10 @@ package javax.sql.rowset.serial;
 public class SerialClob implements java.io.Serializable, java.lang.Cloneable, java.sql.Clob {
 	public SerialClob(java.sql.Clob var0) throws java.sql.SQLException { } 
 	public SerialClob(char[] var0) throws java.sql.SQLException { } 
+	public void free() throws java.sql.SQLException { }
 	public java.io.InputStream getAsciiStream() throws java.sql.SQLException { return null; }
 	public java.io.Reader getCharacterStream() throws javax.sql.rowset.serial.SerialException { return null; }
+	public java.io.Reader getCharacterStream(long var0, long var1) throws java.sql.SQLException { return null; }
 	public java.lang.String getSubString(long var0, int var1) throws javax.sql.rowset.serial.SerialException { return null; }
 	public long length() throws javax.sql.rowset.serial.SerialException { return 0l; }
 	public long position(java.lang.String var0, long var1) throws java.sql.SQLException { return 0l; }

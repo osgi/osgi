@@ -41,6 +41,8 @@ public final class AlphaComposite implements java.awt.Composite {
 	public final static int XOR = 12;
 	public final static java.awt.AlphaComposite Xor; static { Xor = null; }
 	public java.awt.CompositeContext createContext(java.awt.image.ColorModel var0, java.awt.image.ColorModel var1, java.awt.RenderingHints var2) { return null; }
+	public java.awt.AlphaComposite derive(float var0) { return null; }
+	public java.awt.AlphaComposite derive(int var0) { return null; }
 	public float getAlpha() { return 0.0f; }
 	public static java.awt.AlphaComposite getInstance(int var0) { return null; }
 	public static java.awt.AlphaComposite getInstance(int var0, float var1) { return null; }

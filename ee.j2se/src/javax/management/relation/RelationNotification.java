@@ -22,12 +22,12 @@ public class RelationNotification extends javax.management.Notification {
 	public final static java.lang.String RELATION_MBEAN_CREATION = "jmx.relation.creation.mbean";
 	public final static java.lang.String RELATION_MBEAN_REMOVAL = "jmx.relation.removal.mbean";
 	public final static java.lang.String RELATION_MBEAN_UPDATE = "jmx.relation.update.mbean";
-	public RelationNotification(java.lang.String var0, java.lang.Object var1, long var2, long var3, java.lang.String var4, java.lang.String var5, java.lang.String var6, javax.management.ObjectName var7, java.lang.String var8, java.util.List var9, java.util.List var10)  { super((java.lang.String) null, (java.lang.Object) null, 0l, (java.lang.String) null); } 
-	public RelationNotification(java.lang.String var0, java.lang.Object var1, long var2, long var3, java.lang.String var4, java.lang.String var5, java.lang.String var6, javax.management.ObjectName var7, java.util.List var8)  { super((java.lang.String) null, (java.lang.Object) null, 0l, (java.lang.String) null); } 
-	public java.util.List getMBeansToUnregister() { return null; }
-	public java.util.List getNewRoleValue() { return null; }
+	public RelationNotification(java.lang.String var0, java.lang.Object var1, long var2, long var3, java.lang.String var4, java.lang.String var5, java.lang.String var6, javax.management.ObjectName var7, java.lang.String var8, java.util.List<javax.management.ObjectName> var9, java.util.List<javax.management.ObjectName> var10)  { super((java.lang.String) null, (java.lang.Object) null, 0l, (java.lang.String) null); } 
+	public RelationNotification(java.lang.String var0, java.lang.Object var1, long var2, long var3, java.lang.String var4, java.lang.String var5, java.lang.String var6, javax.management.ObjectName var7, java.util.List<javax.management.ObjectName> var8)  { super((java.lang.String) null, (java.lang.Object) null, 0l, (java.lang.String) null); } 
+	public java.util.List<javax.management.ObjectName> getMBeansToUnregister() { return null; }
+	public java.util.List<javax.management.ObjectName> getNewRoleValue() { return null; }
 	public javax.management.ObjectName getObjectName() { return null; }
-	public java.util.List getOldRoleValue() { return null; }
+	public java.util.List<javax.management.ObjectName> getOldRoleValue() { return null; }
 	public java.lang.String getRelationId() { return null; }
 	public java.lang.String getRelationTypeName() { return null; }
 	public java.lang.String getRoleName() { return null; }

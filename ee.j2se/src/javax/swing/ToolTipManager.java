@@ -35,8 +35,6 @@ public class ToolTipManager extends java.awt.event.MouseAdapter implements java.
 	public int getReshowDelay() { return 0; }
 	public boolean isEnabled() { return false; }
 	public boolean isLightWeightPopupEnabled() { return false; }
-	public void mouseDragged(java.awt.event.MouseEvent var0) { }
-	public void mouseMoved(java.awt.event.MouseEvent var0) { }
 	public void registerComponent(javax.swing.JComponent var0) { }
 	public void setDismissDelay(int var0) { }
 	public void setEnabled(boolean var0) { }

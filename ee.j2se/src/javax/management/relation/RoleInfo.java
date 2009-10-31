@@ -16,7 +16,7 @@
 
 package javax.management.relation;
 public class RoleInfo implements java.io.Serializable {
-	public static int ROLE_CARDINALITY_INFINITY;
+	public final static int ROLE_CARDINALITY_INFINITY = -1;
 	public RoleInfo(java.lang.String var0, java.lang.String var1) throws java.lang.ClassNotFoundException, javax.management.NotCompliantMBeanException { } 
 	public RoleInfo(java.lang.String var0, java.lang.String var1, boolean var2, boolean var3) throws java.lang.ClassNotFoundException, javax.management.NotCompliantMBeanException { } 
 	public RoleInfo(java.lang.String var0, java.lang.String var1, boolean var2, boolean var3, int var4, int var5, java.lang.String var6) throws java.lang.ClassNotFoundException, javax.management.NotCompliantMBeanException, javax.management.relation.InvalidRoleInfoException { } 

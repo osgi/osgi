@@ -39,8 +39,6 @@ public class BasicScrollBarUI extends javax.swing.plaf.ScrollBarUI implements ja
 		protected int currentMouseY;
 		protected int offset;
 		protected TrackListener() { } 
-		public void mouseDragged(java.awt.event.MouseEvent var0) { }
-		public void mouseMoved(java.awt.event.MouseEvent var0) { }
 	}
 	protected final static int DECREASE_HIGHLIGHT = 1;
 	protected final static int INCREASE_HIGHLIGHT = 2;

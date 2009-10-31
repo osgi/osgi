@@ -30,6 +30,7 @@ public class AtomicInteger extends java.lang.Number implements java.io.Serializa
 	public final int getAndSet(int var0) { return 0; }
 	public final int incrementAndGet() { return 0; }
 	public int intValue() { return 0; }
+	public final void lazySet(int var0) { }
 	public long longValue() { return 0l; }
 	public final void set(int var0) { }
 	public final boolean weakCompareAndSet(int var0, int var1) { return false; }

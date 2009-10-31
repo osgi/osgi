@@ -71,6 +71,7 @@ public final class Scanner implements java.util.Iterator<java.lang.String> {
 	public short nextShort(int var0) { return 0; }
 	public int radix() { return 0; }
 	public void remove() { }
+	public java.util.Scanner reset() { return null; }
 	public java.util.Scanner skip(java.lang.String var0) { return null; }
 	public java.util.Scanner skip(java.util.regex.Pattern var0) { return null; }
 	public java.util.Scanner useDelimiter(java.lang.String var0) { return null; }

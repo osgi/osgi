@@ -15,7 +15,7 @@
  */
 
 package java.sql;
-public interface Connection {
+public interface Connection extends java.sql.Wrapper {
 	public final static int TRANSACTION_NONE = 0;
 	public final static int TRANSACTION_READ_COMMITTED = 2;
 	public final static int TRANSACTION_READ_UNCOMMITTED = 1;
@@ -24,11 +24,19 @@ public interface Connection {
 	void clearWarnings() throws java.sql.SQLException;
 	void close() throws java.sql.SQLException;
 	void commit() throws java.sql.SQLException;
+	java.sql.Array createArrayOf(java.lang.String var0, java.lang.Object[] var1) throws java.sql.SQLException;
+	java.sql.Blob createBlob() throws java.sql.SQLException;
+	java.sql.Clob createClob() throws java.sql.SQLException;
+	java.sql.NClob createNClob() throws java.sql.SQLException;
+	java.sql.SQLXML createSQLXML() throws java.sql.SQLException;
 	java.sql.Statement createStatement() throws java.sql.SQLException;
 	java.sql.Statement createStatement(int var0, int var1) throws java.sql.SQLException;
 	java.sql.Statement createStatement(int var0, int var1, int var2) throws java.sql.SQLException;
+	java.sql.Struct createStruct(java.lang.String var0, java.lang.Object[] var1) throws java.sql.SQLException;
 	boolean getAutoCommit() throws java.sql.SQLException;
 	java.lang.String getCatalog() throws java.sql.SQLException;
+	java.util.Properties getClientInfo() throws java.sql.SQLException;
+	java.lang.String getClientInfo(java.lang.String var0) throws java.sql.SQLException;
 	int getHoldability() throws java.sql.SQLException;
 	java.sql.DatabaseMetaData getMetaData() throws java.sql.SQLException;
 	int getTransactionIsolation() throws java.sql.SQLException;
@@ -36,6 +44,7 @@ public interface Connection {
 	java.sql.SQLWarning getWarnings() throws java.sql.SQLException;
 	boolean isClosed() throws java.sql.SQLException;
 	boolean isReadOnly() throws java.sql.SQLException;
+	boolean isValid(int var0) throws java.sql.SQLException;
 	java.lang.String nativeSQL(java.lang.String var0) throws java.sql.SQLException;
 	java.sql.CallableStatement prepareCall(java.lang.String var0) throws java.sql.SQLException;
 	java.sql.CallableStatement prepareCall(java.lang.String var0, int var1, int var2) throws java.sql.SQLException;
@@ -51,6 +60,8 @@ public interface Connection {
 	void rollback(java.sql.Savepoint var0) throws java.sql.SQLException;
 	void setAutoCommit(boolean var0) throws java.sql.SQLException;
 	void setCatalog(java.lang.String var0) throws java.sql.SQLException;
+	void setClientInfo(java.lang.String var0, java.lang.String var1) throws java.sql.SQLClientInfoException;
+	void setClientInfo(java.util.Properties var0) throws java.sql.SQLClientInfoException;
 	void setHoldability(int var0) throws java.sql.SQLException;
 	void setReadOnly(boolean var0) throws java.sql.SQLException;
 	java.sql.Savepoint setSavepoint() throws java.sql.SQLException;

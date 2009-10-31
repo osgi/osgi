@@ -37,7 +37,6 @@ public class BufferedImage extends java.awt.Image implements java.awt.Transparen
 	public void coerceData(boolean var0) { }
 	public java.awt.image.WritableRaster copyData(java.awt.image.WritableRaster var0) { return null; }
 	public java.awt.Graphics2D createGraphics() { return null; }
-	public void flush() { }
 	public java.awt.image.WritableRaster getAlphaRaster() { return null; }
 	public java.awt.image.ColorModel getColorModel() { return null; }
 	public java.awt.image.Raster getData() { return null; }

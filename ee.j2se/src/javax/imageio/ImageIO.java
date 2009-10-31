@@ -30,9 +30,11 @@ public final class ImageIO {
 	public static java.util.Iterator<javax.imageio.ImageWriter> getImageWritersByFormatName(java.lang.String var0) { return null; }
 	public static java.util.Iterator<javax.imageio.ImageWriter> getImageWritersByMIMEType(java.lang.String var0) { return null; }
 	public static java.util.Iterator<javax.imageio.ImageWriter> getImageWritersBySuffix(java.lang.String var0) { return null; }
+	public static java.lang.String[] getReaderFileSuffixes() { return null; }
 	public static java.lang.String[] getReaderFormatNames() { return null; }
 	public static java.lang.String[] getReaderMIMETypes() { return null; }
 	public static boolean getUseCache() { return false; }
+	public static java.lang.String[] getWriterFileSuffixes() { return null; }
 	public static java.lang.String[] getWriterFormatNames() { return null; }
 	public static java.lang.String[] getWriterMIMETypes() { return null; }
 	public static java.awt.image.BufferedImage read(java.io.File var0) throws java.io.IOException { return null; }

@@ -18,7 +18,9 @@ package javax.sql.rowset.serial;
 public class SerialBlob implements java.io.Serializable, java.lang.Cloneable, java.sql.Blob {
 	public SerialBlob(java.sql.Blob var0) throws java.sql.SQLException { } 
 	public SerialBlob(byte[] var0) throws java.sql.SQLException { } 
+	public void free() throws java.sql.SQLException { }
 	public java.io.InputStream getBinaryStream() throws javax.sql.rowset.serial.SerialException { return null; }
+	public java.io.InputStream getBinaryStream(long var0, long var1) throws java.sql.SQLException { return null; }
 	public byte[] getBytes(long var0, int var1) throws javax.sql.rowset.serial.SerialException { return null; }
 	public long length() throws javax.sql.rowset.serial.SerialException { return 0l; }
 	public long position(java.sql.Blob var0, long var1) throws java.sql.SQLException { return 0l; }

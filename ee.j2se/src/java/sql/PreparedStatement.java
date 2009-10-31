@@ -24,14 +24,24 @@ public interface PreparedStatement extends java.sql.Statement {
 	java.sql.ResultSetMetaData getMetaData() throws java.sql.SQLException;
 	java.sql.ParameterMetaData getParameterMetaData() throws java.sql.SQLException;
 	void setArray(int var0, java.sql.Array var1) throws java.sql.SQLException;
+	void setAsciiStream(int var0, java.io.InputStream var1) throws java.sql.SQLException;
 	void setAsciiStream(int var0, java.io.InputStream var1, int var2) throws java.sql.SQLException;
+	void setAsciiStream(int var0, java.io.InputStream var1, long var2) throws java.sql.SQLException;
 	void setBigDecimal(int var0, java.math.BigDecimal var1) throws java.sql.SQLException;
+	void setBinaryStream(int var0, java.io.InputStream var1) throws java.sql.SQLException;
 	void setBinaryStream(int var0, java.io.InputStream var1, int var2) throws java.sql.SQLException;
+	void setBinaryStream(int var0, java.io.InputStream var1, long var2) throws java.sql.SQLException;
+	void setBlob(int var0, java.io.InputStream var1) throws java.sql.SQLException;
+	void setBlob(int var0, java.io.InputStream var1, long var2) throws java.sql.SQLException;
 	void setBlob(int var0, java.sql.Blob var1) throws java.sql.SQLException;
 	void setBoolean(int var0, boolean var1) throws java.sql.SQLException;
 	void setByte(int var0, byte var1) throws java.sql.SQLException;
 	void setBytes(int var0, byte[] var1) throws java.sql.SQLException;
+	void setCharacterStream(int var0, java.io.Reader var1) throws java.sql.SQLException;
 	void setCharacterStream(int var0, java.io.Reader var1, int var2) throws java.sql.SQLException;
+	void setCharacterStream(int var0, java.io.Reader var1, long var2) throws java.sql.SQLException;
+	void setClob(int var0, java.io.Reader var1) throws java.sql.SQLException;
+	void setClob(int var0, java.io.Reader var1, long var2) throws java.sql.SQLException;
 	void setClob(int var0, java.sql.Clob var1) throws java.sql.SQLException;
 	void setDate(int var0, java.sql.Date var1) throws java.sql.SQLException;
 	void setDate(int var0, java.sql.Date var1, java.util.Calendar var2) throws java.sql.SQLException;
@@ -39,12 +49,20 @@ public interface PreparedStatement extends java.sql.Statement {
 	void setFloat(int var0, float var1) throws java.sql.SQLException;
 	void setInt(int var0, int var1) throws java.sql.SQLException;
 	void setLong(int var0, long var1) throws java.sql.SQLException;
+	void setNCharacterStream(int var0, java.io.Reader var1) throws java.sql.SQLException;
+	void setNCharacterStream(int var0, java.io.Reader var1, long var2) throws java.sql.SQLException;
+	void setNClob(int var0, java.io.Reader var1) throws java.sql.SQLException;
+	void setNClob(int var0, java.io.Reader var1, long var2) throws java.sql.SQLException;
+	void setNClob(int var0, java.sql.NClob var1) throws java.sql.SQLException;
+	void setNString(int var0, java.lang.String var1) throws java.sql.SQLException;
 	void setNull(int var0, int var1) throws java.sql.SQLException;
 	void setNull(int var0, int var1, java.lang.String var2) throws java.sql.SQLException;
 	void setObject(int var0, java.lang.Object var1) throws java.sql.SQLException;
 	void setObject(int var0, java.lang.Object var1, int var2) throws java.sql.SQLException;
 	void setObject(int var0, java.lang.Object var1, int var2, int var3) throws java.sql.SQLException;
 	void setRef(int var0, java.sql.Ref var1) throws java.sql.SQLException;
+	void setRowId(int var0, java.sql.RowId var1) throws java.sql.SQLException;
+	void setSQLXML(int var0, java.sql.SQLXML var1) throws java.sql.SQLException;
 	void setShort(int var0, short var1) throws java.sql.SQLException;
 	void setString(int var0, java.lang.String var1) throws java.sql.SQLException;
 	void setTime(int var0, java.sql.Time var1) throws java.sql.SQLException;
@@ -53,7 +71,6 @@ public interface PreparedStatement extends java.sql.Statement {
 	void setTimestamp(int var0, java.sql.Timestamp var1, java.util.Calendar var2) throws java.sql.SQLException;
 	void setURL(int var0, java.net.URL var1) throws java.sql.SQLException;
 	/** @deprecated */
-	@java.lang.Deprecated
 	void setUnicodeStream(int var0, java.io.InputStream var1, int var2) throws java.sql.SQLException;
 }
 

@@ -21,6 +21,8 @@ public abstract class ComponentUI {
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	public javax.accessibility.Accessible getAccessibleChild(javax.swing.JComponent var0, int var1) { return null; }
 	public int getAccessibleChildrenCount(javax.swing.JComponent var0) { return 0; }
+	public int getBaseline(javax.swing.JComponent var0, int var1, int var2) { return 0; }
+	public java.awt.Component.BaselineResizeBehavior getBaselineResizeBehavior(javax.swing.JComponent var0) { return null; }
 	public java.awt.Dimension getMaximumSize(javax.swing.JComponent var0) { return null; }
 	public java.awt.Dimension getMinimumSize(javax.swing.JComponent var0) { return null; }
 	public java.awt.Dimension getPreferredSize(javax.swing.JComponent var0) { return null; }

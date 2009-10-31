@@ -16,6 +16,6 @@
 
 package java.rmi.activation;
 public interface ActivationInstantiator extends java.rmi.Remote {
-	java.rmi.MarshalledObject newInstance(java.rmi.activation.ActivationID var0, java.rmi.activation.ActivationDesc var1) throws java.rmi.RemoteException, java.rmi.activation.ActivationException;
+	java.rmi.MarshalledObject<? extends java.rmi.Remote> newInstance(java.rmi.activation.ActivationID var0, java.rmi.activation.ActivationDesc var1) throws java.rmi.RemoteException, java.rmi.activation.ActivationException;
 }
 

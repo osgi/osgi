@@ -17,11 +17,14 @@
 package javax.swing.plaf.basic;
 public class BasicDirectoryModel extends javax.swing.AbstractListModel implements java.beans.PropertyChangeListener {
 	public BasicDirectoryModel(javax.swing.JFileChooser var0) { } 
+	public void addPropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	public boolean contains(java.lang.Object var0) { return false; }
 	public void fireContentsChanged() { }
+	protected void firePropertyChange(java.lang.String var0, java.lang.Object var1, java.lang.Object var2) { }
 	public java.util.Vector<java.io.File> getDirectories() { return null; }
 	public java.lang.Object getElementAt(int var0) { return null; }
 	public java.util.Vector<java.io.File> getFiles() { return null; }
+	public java.beans.PropertyChangeListener[] getPropertyChangeListeners() { return null; }
 	public int getSize() { return 0; }
 	public int indexOf(java.lang.Object var0) { return 0; }
 	public void intervalAdded(javax.swing.event.ListDataEvent var0) { }
@@ -29,6 +32,7 @@ public class BasicDirectoryModel extends javax.swing.AbstractListModel implement
 	public void invalidateFileCache() { }
 	protected boolean lt(java.io.File var0, java.io.File var1) { return false; }
 	public void propertyChange(java.beans.PropertyChangeEvent var0) { }
+	public void removePropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	public boolean renameFile(java.io.File var0, java.io.File var1) { return false; }
 	protected void sort(java.util.Vector<? extends java.io.File> var0) { }
 	public void validateFileCache() { }

@@ -18,9 +18,9 @@ package java.awt;
 public abstract class GraphicsConfiguration {
 	protected GraphicsConfiguration() { } 
 	public abstract java.awt.image.BufferedImage createCompatibleImage(int var0, int var1);
-	public abstract java.awt.image.BufferedImage createCompatibleImage(int var0, int var1, int var2);
-	public abstract java.awt.image.VolatileImage createCompatibleVolatileImage(int var0, int var1);
-	public abstract java.awt.image.VolatileImage createCompatibleVolatileImage(int var0, int var1, int var2);
+	public java.awt.image.BufferedImage createCompatibleImage(int var0, int var1, int var2) { return null; }
+	public java.awt.image.VolatileImage createCompatibleVolatileImage(int var0, int var1) { return null; }
+	public java.awt.image.VolatileImage createCompatibleVolatileImage(int var0, int var1, int var2) { return null; }
 	public java.awt.image.VolatileImage createCompatibleVolatileImage(int var0, int var1, java.awt.ImageCapabilities var2) throws java.awt.AWTException { return null; }
 	public java.awt.image.VolatileImage createCompatibleVolatileImage(int var0, int var1, java.awt.ImageCapabilities var2, int var3) throws java.awt.AWTException { return null; }
 	public abstract java.awt.Rectangle getBounds();

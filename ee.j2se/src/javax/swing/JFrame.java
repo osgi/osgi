@@ -15,7 +15,7 @@
  */
 
 package javax.swing;
-public class JFrame extends java.awt.Frame implements javax.accessibility.Accessible, javax.swing.RootPaneContainer, javax.swing.WindowConstants {
+public class JFrame extends java.awt.Frame implements javax.accessibility.Accessible, javax.swing.RootPaneContainer, javax.swing.TransferHandler.HasGetTransferHandler, javax.swing.WindowConstants {
 	protected class AccessibleJFrame extends java.awt.Frame.AccessibleAWTFrame {
 		protected AccessibleJFrame() { } 
 	}
@@ -35,6 +35,7 @@ public class JFrame extends java.awt.Frame implements javax.accessibility.Access
 	public javax.swing.JMenuBar getJMenuBar() { return null; }
 	public javax.swing.JLayeredPane getLayeredPane() { return null; }
 	public javax.swing.JRootPane getRootPane() { return null; }
+	public javax.swing.TransferHandler getTransferHandler() { return null; }
 	public static boolean isDefaultLookAndFeelDecorated() { return false; }
 	protected boolean isRootPaneCheckingEnabled() { return false; }
 	public void setContentPane(java.awt.Container var0) { }
@@ -45,5 +46,6 @@ public class JFrame extends java.awt.Frame implements javax.accessibility.Access
 	public void setLayeredPane(javax.swing.JLayeredPane var0) { }
 	protected void setRootPane(javax.swing.JRootPane var0) { }
 	protected void setRootPaneCheckingEnabled(boolean var0) { }
+	public void setTransferHandler(javax.swing.TransferHandler var0) { }
 }
 

@@ -15,7 +15,7 @@
  */
 
 package java.sql;
-public interface Statement {
+public interface Statement extends java.sql.Wrapper {
 	public final static int CLOSE_ALL_RESULTS = 3;
 	public final static int CLOSE_CURRENT_RESULT = 1;
 	public final static int EXECUTE_FAILED = -3;
@@ -53,12 +53,15 @@ public interface Statement {
 	int getResultSetType() throws java.sql.SQLException;
 	int getUpdateCount() throws java.sql.SQLException;
 	java.sql.SQLWarning getWarnings() throws java.sql.SQLException;
+	boolean isClosed() throws java.sql.SQLException;
+	boolean isPoolable() throws java.sql.SQLException;
 	void setCursorName(java.lang.String var0) throws java.sql.SQLException;
 	void setEscapeProcessing(boolean var0) throws java.sql.SQLException;
 	void setFetchDirection(int var0) throws java.sql.SQLException;
 	void setFetchSize(int var0) throws java.sql.SQLException;
 	void setMaxFieldSize(int var0) throws java.sql.SQLException;
 	void setMaxRows(int var0) throws java.sql.SQLException;
+	void setPoolable(boolean var0) throws java.sql.SQLException;
 	void setQueryTimeout(int var0) throws java.sql.SQLException;
 }
 

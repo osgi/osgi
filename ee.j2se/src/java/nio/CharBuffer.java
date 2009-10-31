@@ -32,7 +32,6 @@ public abstract class CharBuffer extends java.nio.Buffer implements java.lang.Ap
 	public java.nio.CharBuffer get(char[] var0) { return null; }
 	public java.nio.CharBuffer get(char[] var0, int var1, int var2) { return null; }
 	public final boolean hasArray() { return false; }
-	public abstract boolean isDirect();
 	public final int length() { return 0; }
 	public abstract java.nio.ByteOrder order();
 	public abstract java.nio.CharBuffer put(char var0);

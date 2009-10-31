@@ -24,6 +24,7 @@ public class File implements java.io.Serializable, java.lang.Comparable<java.io.
 	public File(java.lang.String var0) { } 
 	public File(java.lang.String var0, java.lang.String var1) { } 
 	public File(java.net.URI var0) { } 
+	public boolean canExecute() { return false; }
 	public boolean canRead() { return false; }
 	public boolean canWrite() { return false; }
 	public int compareTo(java.io.File var0) { return 0; }
@@ -37,10 +38,13 @@ public class File implements java.io.Serializable, java.lang.Comparable<java.io.
 	public java.lang.String getAbsolutePath() { return null; }
 	public java.io.File getCanonicalFile() throws java.io.IOException { return null; }
 	public java.lang.String getCanonicalPath() throws java.io.IOException { return null; }
+	public long getFreeSpace() { return 0l; }
 	public java.lang.String getName() { return null; }
 	public java.lang.String getParent() { return null; }
 	public java.io.File getParentFile() { return null; }
 	public java.lang.String getPath() { return null; }
+	public long getTotalSpace() { return 0l; }
+	public long getUsableSpace() { return 0l; }
 	public boolean isAbsolute() { return false; }
 	public boolean isDirectory() { return false; }
 	public boolean isFile() { return false; }
@@ -56,9 +60,17 @@ public class File implements java.io.Serializable, java.lang.Comparable<java.io.
 	public boolean mkdir() { return false; }
 	public boolean mkdirs() { return false; }
 	public boolean renameTo(java.io.File var0) { return false; }
+	public boolean setExecutable(boolean var0) { return false; }
+	public boolean setExecutable(boolean var0, boolean var1) { return false; }
 	public boolean setLastModified(long var0) { return false; }
 	public boolean setReadOnly() { return false; }
+	public boolean setReadable(boolean var0) { return false; }
+	public boolean setReadable(boolean var0, boolean var1) { return false; }
+	public boolean setWritable(boolean var0) { return false; }
+	public boolean setWritable(boolean var0, boolean var1) { return false; }
 	public java.net.URI toURI() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
 	public java.net.URL toURL() throws java.net.MalformedURLException { return null; }
 }
 

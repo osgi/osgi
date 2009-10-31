@@ -15,12 +15,11 @@
  */
 
 package javax.management.modelmbean;
-public class ModelMBeanConstructorInfo extends javax.management.MBeanConstructorInfo implements java.lang.Cloneable, javax.management.DescriptorAccess {
+public class ModelMBeanConstructorInfo extends javax.management.MBeanConstructorInfo implements javax.management.DescriptorAccess {
 	public ModelMBeanConstructorInfo(java.lang.String var0, java.lang.String var1, javax.management.MBeanParameterInfo[] var2)  { super((java.lang.String) null, (java.lang.reflect.Constructor) null); } 
 	public ModelMBeanConstructorInfo(java.lang.String var0, java.lang.String var1, javax.management.MBeanParameterInfo[] var2, javax.management.Descriptor var3)  { super((java.lang.String) null, (java.lang.reflect.Constructor) null); } 
 	public ModelMBeanConstructorInfo(java.lang.String var0, java.lang.reflect.Constructor var1)  { super((java.lang.String) null, (java.lang.reflect.Constructor) null); } 
 	public ModelMBeanConstructorInfo(java.lang.String var0, java.lang.reflect.Constructor var1, javax.management.Descriptor var2)  { super((java.lang.String) null, (java.lang.reflect.Constructor) null); } 
-	public javax.management.Descriptor getDescriptor() { return null; }
 	public void setDescriptor(javax.management.Descriptor var0) { }
 }
 

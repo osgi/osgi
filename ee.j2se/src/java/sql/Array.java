@@ -16,6 +16,7 @@
 
 package java.sql;
 public interface Array {
+	void free() throws java.sql.SQLException;
 	java.lang.Object getArray() throws java.sql.SQLException;
 	java.lang.Object getArray(long var0, int var1) throws java.sql.SQLException;
 	java.lang.Object getArray(long var0, int var1, java.util.Map<java.lang.String,java.lang.Class<?>> var2) throws java.sql.SQLException;

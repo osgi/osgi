@@ -40,7 +40,7 @@ public class Container extends java.awt.Component {
 	public java.awt.Component findComponentAt(java.awt.Point var0) { return null; }
 	public java.awt.Component getComponent(int var0) { return null; }
 	public int getComponentCount() { return 0; }
-	public final int getComponentZOrder(java.awt.Component var0) { return 0; }
+	public int getComponentZOrder(java.awt.Component var0) { return 0; }
 	public java.awt.Component[] getComponents() { return null; }
 	public java.awt.event.ContainerListener[] getContainerListeners() { return null; }
 	public java.awt.FocusTraversalPolicy getFocusTraversalPolicy() { return null; }
@@ -61,7 +61,7 @@ public class Container extends java.awt.Component {
 	public void remove(java.awt.Component var0) { }
 	public void removeAll() { }
 	public void removeContainerListener(java.awt.event.ContainerListener var0) { }
-	public final void setComponentZOrder(java.awt.Component var0, int var1) { }
+	public void setComponentZOrder(java.awt.Component var0, int var1) { }
 	public void setFocusCycleRoot(boolean var0) { }
 	public void setFocusTraversalPolicy(java.awt.FocusTraversalPolicy var0) { }
 	public final void setFocusTraversalPolicyProvider(boolean var0) { }

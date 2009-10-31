@@ -17,6 +17,8 @@
 package javax.swing;
 public class RepaintManager {
 	public RepaintManager() { } 
+	public void addDirtyRegion(java.applet.Applet var0, int var1, int var2, int var3, int var4) { }
+	public void addDirtyRegion(java.awt.Window var0, int var1, int var2, int var3, int var4) { }
 	public void addDirtyRegion(javax.swing.JComponent var0, int var1, int var2, int var3, int var4) { }
 	public void addInvalidComponent(javax.swing.JComponent var0) { }
 	public static javax.swing.RepaintManager currentManager(java.awt.Component var0) { return null; }

@@ -38,15 +38,20 @@ public class Window extends java.awt.Container implements javax.accessibility.Ac
 	public final java.awt.Container getFocusCycleRootAncestor() { return null; }
 	public java.awt.Component getFocusOwner() { return null; }
 	public boolean getFocusableWindowState() { return false; }
+	public java.util.List<java.awt.Image> getIconImages() { return null; }
+	public java.awt.Dialog.ModalExclusionType getModalExclusionType() { return null; }
 	public java.awt.Component getMostRecentFocusOwner() { return null; }
 	public java.awt.Window[] getOwnedWindows() { return null; }
 	public java.awt.Window getOwner() { return null; }
+	public static java.awt.Window[] getOwnerlessWindows() { return null; }
 	public final java.lang.String getWarningString() { return null; }
 	public java.awt.event.WindowFocusListener[] getWindowFocusListeners() { return null; }
 	public java.awt.event.WindowListener[] getWindowListeners() { return null; }
 	public java.awt.event.WindowStateListener[] getWindowStateListeners() { return null; }
+	public static java.awt.Window[] getWindows() { return null; }
 	public boolean isActive() { return false; }
 	public final boolean isAlwaysOnTop() { return false; }
+	public boolean isAlwaysOnTopSupported() { return false; }
 	public final boolean isFocusCycleRoot() { return false; }
 	public final boolean isFocusableWindow() { return false; }
 	public boolean isFocused() { return false; }
@@ -61,8 +66,11 @@ public class Window extends java.awt.Container implements javax.accessibility.Ac
 	public final void setAlwaysOnTop(boolean var0) { }
 	public final void setFocusCycleRoot(boolean var0) { }
 	public void setFocusableWindowState(boolean var0) { }
+	public void setIconImage(java.awt.Image var0) { }
+	public void setIconImages(java.util.List<? extends java.awt.Image> var0) { }
 	public void setLocationByPlatform(boolean var0) { }
 	public void setLocationRelativeTo(java.awt.Component var0) { }
+	public void setModalExclusionType(java.awt.Dialog.ModalExclusionType var0) { }
 	public void toBack() { }
 	public void toFront() { }
 }

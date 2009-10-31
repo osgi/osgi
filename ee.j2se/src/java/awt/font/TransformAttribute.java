@@ -16,6 +16,7 @@
 
 package java.awt.font;
 public final class TransformAttribute implements java.io.Serializable {
+	public final static java.awt.font.TransformAttribute IDENTITY; static { IDENTITY = null; }
 	public TransformAttribute(java.awt.geom.AffineTransform var0) { } 
 	public java.awt.geom.AffineTransform getTransform() { return null; }
 	public boolean isIdentity() { return false; }

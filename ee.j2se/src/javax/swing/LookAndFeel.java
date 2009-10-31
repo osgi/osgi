@@ -23,6 +23,7 @@ public abstract class LookAndFeel {
 	public javax.swing.Icon getDisabledIcon(javax.swing.JComponent var0, javax.swing.Icon var1) { return null; }
 	public javax.swing.Icon getDisabledSelectedIcon(javax.swing.JComponent var0, javax.swing.Icon var1) { return null; }
 	public abstract java.lang.String getID();
+	public javax.swing.LayoutStyle getLayoutStyle() { return null; }
 	public abstract java.lang.String getName();
 	public boolean getSupportsWindowDecorations() { return false; }
 	public void initialize() { }

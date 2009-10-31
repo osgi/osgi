@@ -16,7 +16,9 @@
 
 package java.sql;
 public interface Blob {
+	void free() throws java.sql.SQLException;
 	java.io.InputStream getBinaryStream() throws java.sql.SQLException;
+	java.io.InputStream getBinaryStream(long var0, long var1) throws java.sql.SQLException;
 	byte[] getBytes(long var0, int var1) throws java.sql.SQLException;
 	long length() throws java.sql.SQLException;
 	long position(java.sql.Blob var0, long var1) throws java.sql.SQLException;

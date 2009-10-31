@@ -20,12 +20,12 @@ public interface TimerMBean {
 	java.lang.Integer addNotification(java.lang.String var0, java.lang.String var1, java.lang.Object var2, java.util.Date var3, long var4);
 	java.lang.Integer addNotification(java.lang.String var0, java.lang.String var1, java.lang.Object var2, java.util.Date var3, long var4, long var5);
 	java.lang.Integer addNotification(java.lang.String var0, java.lang.String var1, java.lang.Object var2, java.util.Date var3, long var4, long var5, boolean var6);
-	java.util.Vector getAllNotificationIDs();
+	java.util.Vector<java.lang.Integer> getAllNotificationIDs();
 	java.util.Date getDate(java.lang.Integer var0);
 	java.lang.Boolean getFixedRate(java.lang.Integer var0);
 	int getNbNotifications();
 	java.lang.Long getNbOccurences(java.lang.Integer var0);
-	java.util.Vector getNotificationIDs(java.lang.String var0);
+	java.util.Vector<java.lang.Integer> getNotificationIDs(java.lang.String var0);
 	java.lang.String getNotificationMessage(java.lang.Integer var0);
 	java.lang.String getNotificationType(java.lang.Integer var0);
 	java.lang.Object getNotificationUserData(java.lang.Integer var0);

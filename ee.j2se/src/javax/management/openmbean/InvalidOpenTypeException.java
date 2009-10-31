@@ -15,7 +15,7 @@
  */
 
 package javax.management.openmbean;
-public class InvalidOpenTypeException extends java.lang.IllegalArgumentException implements java.io.Serializable {
+public class InvalidOpenTypeException extends java.lang.IllegalArgumentException {
 	public InvalidOpenTypeException() { } 
 	public InvalidOpenTypeException(java.lang.String var0) { } 
 }

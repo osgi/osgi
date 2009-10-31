@@ -15,14 +15,21 @@
  */
 
 package javax.management;
-public class AttributeList extends java.util.ArrayList {
+public class AttributeList extends java.util.ArrayList<java.lang.Object> {
 	public AttributeList() { } 
 	public AttributeList(int var0) { } 
+	public AttributeList(java.util.List<javax.management.Attribute> var0) { } 
 	public AttributeList(javax.management.AttributeList var0) { } 
+	public void add(int var0, java.lang.Object var1) { }
 	public void add(int var0, javax.management.Attribute var1) { }
+	public boolean add(java.lang.Object var0) { return false; }
 	public void add(javax.management.Attribute var0) { }
+	public boolean addAll(int var0, java.util.Collection<?> var1) { return false; }
 	public boolean addAll(int var0, javax.management.AttributeList var1) { return false; }
+	public boolean addAll(java.util.Collection<?> var0) { return false; }
 	public boolean addAll(javax.management.AttributeList var0) { return false; }
+	public java.util.List<javax.management.Attribute> asList() { return null; }
+	public java.lang.Object set(int var0, java.lang.Object var1) { return null; }
 	public void set(int var0, javax.management.Attribute var1) { }
 }
 

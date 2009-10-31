@@ -16,7 +16,7 @@
 
 package java.awt.geom;
 public abstract class Point2D implements java.lang.Cloneable {
-	public static class Double extends java.awt.geom.Point2D {
+	public static class Double extends java.awt.geom.Point2D implements java.io.Serializable {
 		public double x;
 		public double y;
 		public Double() { } 
@@ -25,7 +25,7 @@ public abstract class Point2D implements java.lang.Cloneable {
 		public double getY() { return 0.0d; }
 		public void setLocation(double var0, double var1) { }
 	}
-	public static class Float extends java.awt.geom.Point2D {
+	public static class Float extends java.awt.geom.Point2D implements java.io.Serializable {
 		public float x;
 		public float y;
 		public Float() { } 

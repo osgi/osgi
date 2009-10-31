@@ -15,10 +15,9 @@
  */
 
 package javax.management.remote;
-public interface JMXConnector {
+public interface JMXConnector extends java.io.Closeable {
 	public final static java.lang.String CREDENTIALS = "jmx.remote.credentials";
 	void addConnectionNotificationListener(javax.management.NotificationListener var0, javax.management.NotificationFilter var1, java.lang.Object var2);
-	void close() throws java.io.IOException;
 	void connect() throws java.io.IOException;
 	void connect(java.util.Map<java.lang.String,?> var0) throws java.io.IOException;
 	java.lang.String getConnectionId() throws java.io.IOException;

@@ -15,11 +15,13 @@
  */
 
 package javax.management;
-public class MBeanFeatureInfo implements java.io.Serializable {
+public class MBeanFeatureInfo implements java.io.Serializable, javax.management.DescriptorRead {
 	protected java.lang.String description;
 	protected java.lang.String name;
 	public MBeanFeatureInfo(java.lang.String var0, java.lang.String var1) { } 
+	public MBeanFeatureInfo(java.lang.String var0, java.lang.String var1, javax.management.Descriptor var2) { } 
 	public java.lang.String getDescription() { return null; }
+	public javax.management.Descriptor getDescriptor() { return null; }
 	public java.lang.String getName() { return null; }
 }
 

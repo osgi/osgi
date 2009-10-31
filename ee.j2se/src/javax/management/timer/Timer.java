@@ -26,12 +26,12 @@ public class Timer extends javax.management.NotificationBroadcasterSupport imple
 	public java.lang.Integer addNotification(java.lang.String var0, java.lang.String var1, java.lang.Object var2, java.util.Date var3, long var4) { return null; }
 	public java.lang.Integer addNotification(java.lang.String var0, java.lang.String var1, java.lang.Object var2, java.util.Date var3, long var4, long var5) { return null; }
 	public java.lang.Integer addNotification(java.lang.String var0, java.lang.String var1, java.lang.Object var2, java.util.Date var3, long var4, long var5, boolean var6) { return null; }
-	public java.util.Vector getAllNotificationIDs() { return null; }
+	public java.util.Vector<java.lang.Integer> getAllNotificationIDs() { return null; }
 	public java.util.Date getDate(java.lang.Integer var0) { return null; }
 	public java.lang.Boolean getFixedRate(java.lang.Integer var0) { return null; }
 	public int getNbNotifications() { return 0; }
 	public java.lang.Long getNbOccurences(java.lang.Integer var0) { return null; }
-	public java.util.Vector getNotificationIDs(java.lang.String var0) { return null; }
+	public java.util.Vector<java.lang.Integer> getNotificationIDs(java.lang.String var0) { return null; }
 	public java.lang.String getNotificationMessage(java.lang.Integer var0) { return null; }
 	public java.lang.String getNotificationType(java.lang.Integer var0) { return null; }
 	public java.lang.Object getNotificationUserData(java.lang.Integer var0) { return null; }

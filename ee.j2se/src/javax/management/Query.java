@@ -39,6 +39,7 @@ public class Query {
 	public static javax.management.QueryExp gt(javax.management.ValueExp var0, javax.management.ValueExp var1) { return null; }
 	public static javax.management.QueryExp in(javax.management.ValueExp var0, javax.management.ValueExp[] var1) { return null; }
 	public static javax.management.QueryExp initialSubString(javax.management.AttributeValueExp var0, javax.management.StringValueExp var1) { return null; }
+	public static javax.management.QueryExp isInstanceOf(javax.management.StringValueExp var0) { return null; }
 	public static javax.management.QueryExp leq(javax.management.ValueExp var0, javax.management.ValueExp var1) { return null; }
 	public static javax.management.QueryExp lt(javax.management.ValueExp var0, javax.management.ValueExp var1) { return null; }
 	public static javax.management.QueryExp match(javax.management.AttributeValueExp var0, javax.management.StringValueExp var1) { return null; }

@@ -15,7 +15,7 @@
  */
 
 package javax.swing;
-public abstract class JComponent extends java.awt.Container implements java.io.Serializable {
+public abstract class JComponent extends java.awt.Container implements java.io.Serializable, javax.swing.TransferHandler.HasGetTransferHandler {
 	public abstract class AccessibleJComponent extends java.awt.Container.AccessibleAWTContainer implements javax.accessibility.AccessibleExtendedComponent {
 		protected class AccessibleContainerHandler implements java.awt.event.ContainerListener {
 			protected AccessibleContainerHandler() { } 
@@ -88,6 +88,7 @@ public abstract class JComponent extends java.awt.Container implements java.io.S
 	@java.lang.Deprecated
 	public boolean isManagingFocus() { return false; }
 	public boolean isOptimizedDrawingEnabled() { return false; }
+	public final boolean isPaintingForPrint() { return false; }
 	public boolean isPaintingTile() { return false; }
 	public boolean isRequestFocusEnabled() { return false; }
 	public boolean isValidateRoot() { return false; }

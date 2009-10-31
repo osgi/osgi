@@ -15,7 +15,8 @@
  */
 
 package javax.management.openmbean;
-public class OpenMBeanConstructorInfoSupport extends javax.management.MBeanConstructorInfo implements java.io.Serializable, javax.management.openmbean.OpenMBeanConstructorInfo {
+public class OpenMBeanConstructorInfoSupport extends javax.management.MBeanConstructorInfo implements javax.management.openmbean.OpenMBeanConstructorInfo {
 	public OpenMBeanConstructorInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenMBeanParameterInfo[] var2)  { super((java.lang.String) null, (java.lang.reflect.Constructor) null); } 
+	public OpenMBeanConstructorInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenMBeanParameterInfo[] var2, javax.management.Descriptor var3)  { super((java.lang.String) null, (java.lang.reflect.Constructor) null); } 
 }
 

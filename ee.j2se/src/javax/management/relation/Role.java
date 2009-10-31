@@ -16,12 +16,12 @@
 
 package javax.management.relation;
 public class Role implements java.io.Serializable {
-	public Role(java.lang.String var0, java.util.List var1) { } 
+	public Role(java.lang.String var0, java.util.List<javax.management.ObjectName> var1) { } 
 	public java.lang.Object clone() { return null; }
 	public java.lang.String getRoleName() { return null; }
-	public java.util.List getRoleValue() { return null; }
-	public static java.lang.String roleValueToString(java.util.List var0) { return null; }
+	public java.util.List<javax.management.ObjectName> getRoleValue() { return null; }
+	public static java.lang.String roleValueToString(java.util.List<javax.management.ObjectName> var0) { return null; }
 	public void setRoleName(java.lang.String var0) { }
-	public void setRoleValue(java.util.List var0) { }
+	public void setRoleValue(java.util.List<javax.management.ObjectName> var0) { }
 }
 

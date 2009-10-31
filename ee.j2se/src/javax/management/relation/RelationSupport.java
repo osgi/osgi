@@ -19,11 +19,11 @@ public class RelationSupport implements javax.management.MBeanRegistration, java
 	public RelationSupport(java.lang.String var0, javax.management.ObjectName var1, java.lang.String var2, javax.management.relation.RoleList var3) throws javax.management.relation.InvalidRoleValueException { } 
 	public RelationSupport(java.lang.String var0, javax.management.ObjectName var1, javax.management.MBeanServer var2, java.lang.String var3, javax.management.relation.RoleList var4) throws javax.management.relation.InvalidRoleValueException { } 
 	public javax.management.relation.RoleResult getAllRoles() throws javax.management.relation.RelationServiceNotRegisteredException { return null; }
-	public java.util.Map getReferencedMBeans() { return null; }
+	public java.util.Map<javax.management.ObjectName,java.util.List<java.lang.String>> getReferencedMBeans() { return null; }
 	public java.lang.String getRelationId() { return null; }
 	public javax.management.ObjectName getRelationServiceName() { return null; }
 	public java.lang.String getRelationTypeName() { return null; }
-	public java.util.List getRole(java.lang.String var0) throws javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RoleNotFoundException { return null; }
+	public java.util.List<javax.management.ObjectName> getRole(java.lang.String var0) throws javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RoleNotFoundException { return null; }
 	public java.lang.Integer getRoleCardinality(java.lang.String var0) throws javax.management.relation.RoleNotFoundException { return null; }
 	public javax.management.relation.RoleResult getRoles(java.lang.String[] var0) throws javax.management.relation.RelationServiceNotRegisteredException { return null; }
 	public void handleMBeanUnregistration(javax.management.ObjectName var0, java.lang.String var1) throws javax.management.relation.InvalidRoleValueException, javax.management.relation.RelationNotFoundException, javax.management.relation.RelationServiceNotRegisteredException, javax.management.relation.RelationTypeNotFoundException, javax.management.relation.RoleNotFoundException { }

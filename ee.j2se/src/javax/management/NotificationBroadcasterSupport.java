@@ -17,6 +17,9 @@
 package javax.management;
 public class NotificationBroadcasterSupport implements javax.management.NotificationEmitter {
 	public NotificationBroadcasterSupport() { } 
+	public NotificationBroadcasterSupport(java.util.concurrent.Executor var0) { } 
+	public NotificationBroadcasterSupport(java.util.concurrent.Executor var0, javax.management.MBeanNotificationInfo... var1) { } 
+	public NotificationBroadcasterSupport(javax.management.MBeanNotificationInfo... var0) { } 
 	public void addNotificationListener(javax.management.NotificationListener var0, javax.management.NotificationFilter var1, java.lang.Object var2) { }
 	public javax.management.MBeanNotificationInfo[] getNotificationInfo() { return null; }
 	protected void handleNotification(javax.management.NotificationListener var0, javax.management.Notification var1, java.lang.Object var2) { }

@@ -15,14 +15,7 @@
  */
 
 package javax.swing.event;
-public abstract class MouseInputAdapter implements javax.swing.event.MouseInputListener {
+public abstract class MouseInputAdapter extends java.awt.event.MouseAdapter implements javax.swing.event.MouseInputListener {
 	public MouseInputAdapter() { } 
-	public void mouseClicked(java.awt.event.MouseEvent var0) { }
-	public void mouseDragged(java.awt.event.MouseEvent var0) { }
-	public void mouseEntered(java.awt.event.MouseEvent var0) { }
-	public void mouseExited(java.awt.event.MouseEvent var0) { }
-	public void mouseMoved(java.awt.event.MouseEvent var0) { }
-	public void mousePressed(java.awt.event.MouseEvent var0) { }
-	public void mouseReleased(java.awt.event.MouseEvent var0) { }
 }
 

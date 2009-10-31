@@ -16,13 +16,14 @@
 
 package java.util.concurrent;
 public interface BlockingQueue<E> extends java.util.Queue<E> {
-	boolean add(E var0);
+	boolean contains(java.lang.Object var0);
 	int drainTo(java.util.Collection<? super E> var0);
 	int drainTo(java.util.Collection<? super E> var0, int var1);
 	boolean offer(E var0, long var1, java.util.concurrent.TimeUnit var2) throws java.lang.InterruptedException;
 	E poll(long var0, java.util.concurrent.TimeUnit var1) throws java.lang.InterruptedException;
 	void put(E var0) throws java.lang.InterruptedException;
 	int remainingCapacity();
+	boolean remove(java.lang.Object var0);
 	E take() throws java.lang.InterruptedException;
 }
 

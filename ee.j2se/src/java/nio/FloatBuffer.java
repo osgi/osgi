@@ -28,7 +28,6 @@ public abstract class FloatBuffer extends java.nio.Buffer implements java.lang.C
 	public java.nio.FloatBuffer get(float[] var0) { return null; }
 	public java.nio.FloatBuffer get(float[] var0, int var1, int var2) { return null; }
 	public final boolean hasArray() { return false; }
-	public abstract boolean isDirect();
 	public abstract java.nio.ByteOrder order();
 	public abstract java.nio.FloatBuffer put(float var0);
 	public abstract java.nio.FloatBuffer put(int var0, float var1);

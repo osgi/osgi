@@ -17,6 +17,8 @@
 package javax.swing.border;
 public abstract class AbstractBorder implements java.io.Serializable, javax.swing.border.Border {
 	public AbstractBorder() { } 
+	public int getBaseline(java.awt.Component var0, int var1, int var2) { return 0; }
+	public java.awt.Component.BaselineResizeBehavior getBaselineResizeBehavior(java.awt.Component var0) { return null; }
 	public java.awt.Insets getBorderInsets(java.awt.Component var0) { return null; }
 	public java.awt.Insets getBorderInsets(java.awt.Component var0, java.awt.Insets var1) { return null; }
 	public java.awt.Rectangle getInteriorRectangle(java.awt.Component var0, int var1, int var2, int var3, int var4) { return null; }

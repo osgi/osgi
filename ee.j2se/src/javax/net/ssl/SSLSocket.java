@@ -26,6 +26,7 @@ public abstract class SSLSocket extends java.net.Socket {
 	public abstract java.lang.String[] getEnabledCipherSuites();
 	public abstract java.lang.String[] getEnabledProtocols();
 	public abstract boolean getNeedClientAuth();
+	public javax.net.ssl.SSLParameters getSSLParameters() { return null; }
 	public abstract javax.net.ssl.SSLSession getSession();
 	public abstract java.lang.String[] getSupportedCipherSuites();
 	public abstract java.lang.String[] getSupportedProtocols();
@@ -36,6 +37,7 @@ public abstract class SSLSocket extends java.net.Socket {
 	public abstract void setEnabledCipherSuites(java.lang.String[] var0);
 	public abstract void setEnabledProtocols(java.lang.String[] var0);
 	public abstract void setNeedClientAuth(boolean var0);
+	public void setSSLParameters(javax.net.ssl.SSLParameters var0) { }
 	public abstract void setUseClientMode(boolean var0);
 	public abstract void setWantClientAuth(boolean var0);
 	public abstract void startHandshake() throws java.io.IOException;

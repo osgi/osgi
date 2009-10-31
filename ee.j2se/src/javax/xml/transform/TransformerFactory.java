@@ -23,6 +23,7 @@ public abstract class TransformerFactory {
 	public abstract boolean getFeature(java.lang.String var0);
 	public abstract javax.xml.transform.URIResolver getURIResolver();
 	public static javax.xml.transform.TransformerFactory newInstance() throws javax.xml.transform.TransformerFactoryConfigurationError { return null; }
+	public static javax.xml.transform.TransformerFactory newInstance(java.lang.String var0, java.lang.ClassLoader var1) throws javax.xml.transform.TransformerFactoryConfigurationError { return null; }
 	public abstract javax.xml.transform.Templates newTemplates(javax.xml.transform.Source var0) throws javax.xml.transform.TransformerConfigurationException;
 	public abstract javax.xml.transform.Transformer newTransformer() throws javax.xml.transform.TransformerConfigurationException;
 	public abstract javax.xml.transform.Transformer newTransformer(javax.xml.transform.Source var0) throws javax.xml.transform.TransformerConfigurationException;

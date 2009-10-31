@@ -15,15 +15,16 @@
  */
 
 package javax.management.loading;
-class MLetContent {
-	public MLetContent(java.net.URL var0, java.util.Map var1) { } 
-	public java.util.Map getAttributes() { return null; }
+public class MLetContent {
+	public MLetContent(java.net.URL var0, java.util.Map<java.lang.String,java.lang.String> var1, java.util.List<java.lang.String> var2, java.util.List<java.lang.String> var3) { } 
+	public java.util.Map<java.lang.String,java.lang.String> getAttributes() { return null; }
 	public java.lang.String getCode() { return null; }
 	public java.net.URL getCodeBase() { return null; }
 	public java.net.URL getDocumentBase() { return null; }
 	public java.lang.String getJarFiles() { return null; }
 	public java.lang.String getName() { return null; }
-	public java.lang.Object getParameter(java.lang.String var0) { return null; }
+	public java.util.List<java.lang.String> getParameterTypes() { return null; }
+	public java.util.List<java.lang.String> getParameterValues() { return null; }
 	public java.lang.String getSerializedObject() { return null; }
 	public java.lang.String getVersion() { return null; }
 }

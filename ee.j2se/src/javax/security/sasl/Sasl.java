@@ -16,6 +16,7 @@
 
 package javax.security.sasl;
 public class Sasl {
+	public final static java.lang.String CREDENTIALS = "javax.security.sasl.credentials";
 	public final static java.lang.String MAX_BUFFER = "javax.security.sasl.maxbuffer";
 	public final static java.lang.String POLICY_FORWARD_SECRECY = "javax.security.sasl.policy.forward";
 	public final static java.lang.String POLICY_NOACTIVE = "javax.security.sasl.policy.noactive";

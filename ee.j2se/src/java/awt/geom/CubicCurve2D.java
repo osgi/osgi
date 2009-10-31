@@ -16,7 +16,7 @@
 
 package java.awt.geom;
 public abstract class CubicCurve2D implements java.awt.Shape, java.lang.Cloneable {
-	public static class Double extends java.awt.geom.CubicCurve2D {
+	public static class Double extends java.awt.geom.CubicCurve2D implements java.io.Serializable {
 		public double ctrlx1;
 		public double ctrlx2;
 		public double ctrly1;
@@ -42,7 +42,7 @@ public abstract class CubicCurve2D implements java.awt.Shape, java.lang.Cloneabl
 		public double getY2() { return 0.0d; }
 		public void setCurve(double var0, double var1, double var2, double var3, double var4, double var5, double var6, double var7) { }
 	}
-	public static class Float extends java.awt.geom.CubicCurve2D {
+	public static class Float extends java.awt.geom.CubicCurve2D implements java.io.Serializable {
 		public float ctrlx1;
 		public float ctrlx2;
 		public float ctrly1;

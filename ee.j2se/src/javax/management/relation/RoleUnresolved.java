@@ -16,13 +16,13 @@
 
 package javax.management.relation;
 public class RoleUnresolved implements java.io.Serializable {
-	public RoleUnresolved(java.lang.String var0, java.util.List var1, int var2) { } 
+	public RoleUnresolved(java.lang.String var0, java.util.List<javax.management.ObjectName> var1, int var2) { } 
 	public java.lang.Object clone() { return null; }
 	public int getProblemType() { return 0; }
 	public java.lang.String getRoleName() { return null; }
-	public java.util.List getRoleValue() { return null; }
+	public java.util.List<javax.management.ObjectName> getRoleValue() { return null; }
 	public void setProblemType(int var0) { }
 	public void setRoleName(java.lang.String var0) { }
-	public void setRoleValue(java.util.List var0) { }
+	public void setRoleValue(java.util.List<javax.management.ObjectName> var0) { }
 }
 

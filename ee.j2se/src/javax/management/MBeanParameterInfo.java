@@ -15,8 +15,9 @@
  */
 
 package javax.management;
-public class MBeanParameterInfo extends javax.management.MBeanFeatureInfo implements java.io.Serializable, java.lang.Cloneable {
-	public MBeanParameterInfo(java.lang.String var0, java.lang.String var1, java.lang.String var2)  { super((java.lang.String) null, (java.lang.String) null); } 
+public class MBeanParameterInfo extends javax.management.MBeanFeatureInfo implements java.lang.Cloneable {
+	public MBeanParameterInfo(java.lang.String var0, java.lang.String var1, java.lang.String var2)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
+	public MBeanParameterInfo(java.lang.String var0, java.lang.String var1, java.lang.String var2, javax.management.Descriptor var3)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.Descriptor) null); } 
 	public java.lang.Object clone() { return null; }
 	public java.lang.String getType() { return null; }
 }

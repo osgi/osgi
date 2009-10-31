@@ -15,13 +15,15 @@
  */
 
 package javax.management;
-public class MBeanInfo implements java.io.Serializable, java.lang.Cloneable {
+public class MBeanInfo implements java.io.Serializable, java.lang.Cloneable, javax.management.DescriptorRead {
 	public MBeanInfo(java.lang.String var0, java.lang.String var1, javax.management.MBeanAttributeInfo[] var2, javax.management.MBeanConstructorInfo[] var3, javax.management.MBeanOperationInfo[] var4, javax.management.MBeanNotificationInfo[] var5) { } 
+	public MBeanInfo(java.lang.String var0, java.lang.String var1, javax.management.MBeanAttributeInfo[] var2, javax.management.MBeanConstructorInfo[] var3, javax.management.MBeanOperationInfo[] var4, javax.management.MBeanNotificationInfo[] var5, javax.management.Descriptor var6) { } 
 	public java.lang.Object clone() { return null; }
 	public javax.management.MBeanAttributeInfo[] getAttributes() { return null; }
 	public java.lang.String getClassName() { return null; }
 	public javax.management.MBeanConstructorInfo[] getConstructors() { return null; }
 	public java.lang.String getDescription() { return null; }
+	public javax.management.Descriptor getDescriptor() { return null; }
 	public javax.management.MBeanNotificationInfo[] getNotifications() { return null; }
 	public javax.management.MBeanOperationInfo[] getOperations() { return null; }
 }

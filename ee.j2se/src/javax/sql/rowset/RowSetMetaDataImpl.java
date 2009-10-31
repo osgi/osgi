@@ -37,6 +37,7 @@ public class RowSetMetaDataImpl implements java.io.Serializable, javax.sql.RowSe
 	public boolean isReadOnly(int var0) throws java.sql.SQLException { return false; }
 	public boolean isSearchable(int var0) throws java.sql.SQLException { return false; }
 	public boolean isSigned(int var0) throws java.sql.SQLException { return false; }
+	public boolean isWrapperFor(java.lang.Class<?> var0) throws java.sql.SQLException { return false; }
 	public boolean isWritable(int var0) throws java.sql.SQLException { return false; }
 	public void setAutoIncrement(int var0, boolean var1) throws java.sql.SQLException { }
 	public void setCaseSensitive(int var0, boolean var1) throws java.sql.SQLException { }
@@ -55,5 +56,6 @@ public class RowSetMetaDataImpl implements java.io.Serializable, javax.sql.RowSe
 	public void setSearchable(int var0, boolean var1) throws java.sql.SQLException { }
 	public void setSigned(int var0, boolean var1) throws java.sql.SQLException { }
 	public void setTableName(int var0, java.lang.String var1) throws java.sql.SQLException { }
+	public <T> T unwrap(java.lang.Class<T> var0) throws java.sql.SQLException { return null; }
 }
 

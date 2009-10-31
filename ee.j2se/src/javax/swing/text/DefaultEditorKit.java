@@ -59,7 +59,9 @@ public class DefaultEditorKit extends javax.swing.text.EditorKit {
 	public final static java.lang.String cutAction = "cut-to-clipboard";
 	public final static java.lang.String defaultKeyTypedAction = "default-typed";
 	public final static java.lang.String deleteNextCharAction = "delete-next";
+	public final static java.lang.String deleteNextWordAction = "delete-next-word";
 	public final static java.lang.String deletePrevCharAction = "delete-previous";
+	public final static java.lang.String deletePrevWordAction = "delete-previous-word";
 	public final static java.lang.String downAction = "caret-down";
 	public final static java.lang.String endAction = "caret-end";
 	public final static java.lang.String endLineAction = "caret-end-line";

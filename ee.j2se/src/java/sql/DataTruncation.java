@@ -17,6 +17,7 @@
 package java.sql;
 public class DataTruncation extends java.sql.SQLWarning {
 	public DataTruncation(int var0, boolean var1, boolean var2, int var3, int var4) { } 
+	public DataTruncation(int var0, boolean var1, boolean var2, int var3, int var4, java.lang.Throwable var5) { } 
 	public int getDataSize() { return 0; }
 	public int getIndex() { return 0; }
 	public boolean getParameter() { return false; }

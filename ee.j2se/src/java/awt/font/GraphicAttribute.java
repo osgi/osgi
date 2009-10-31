@@ -29,5 +29,6 @@ public abstract class GraphicAttribute {
 	public java.awt.geom.Rectangle2D getBounds() { return null; }
 	public abstract float getDescent();
 	public java.awt.font.GlyphJustificationInfo getJustificationInfo() { return null; }
+	public java.awt.Shape getOutline(java.awt.geom.AffineTransform var0) { return null; }
 }
 

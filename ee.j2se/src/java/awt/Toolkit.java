@@ -30,6 +30,7 @@ public abstract class Toolkit {
 	protected abstract java.awt.peer.ChoicePeer createChoice(java.awt.Choice var0);
 	protected java.awt.peer.LightweightPeer createComponent(java.awt.Component var0) { return null; }
 	public java.awt.Cursor createCustomCursor(java.awt.Image var0, java.awt.Point var1, java.lang.String var2) { return null; }
+	protected abstract java.awt.peer.DesktopPeer createDesktopPeer(java.awt.Desktop var0);
 	protected abstract java.awt.peer.DialogPeer createDialog(java.awt.Dialog var0);
 	public <T extends java.awt.dnd.DragGestureRecognizer> T createDragGestureRecognizer(java.lang.Class<T> var0, java.awt.dnd.DragSource var1, java.awt.Component var2, int var3, java.awt.dnd.DragGestureListener var4) { return null; }
 	public abstract java.awt.dnd.peer.DragSourceContextPeer createDragSourceContextPeer(java.awt.dnd.DragGestureEvent var0);
@@ -87,9 +88,12 @@ public abstract class Toolkit {
 	protected abstract java.awt.EventQueue getSystemEventQueueImpl();
 	public java.awt.datatransfer.Clipboard getSystemSelection() { return null; }
 	protected void initializeDesktopProperties() { }
+	public boolean isAlwaysOnTopSupported() { return false; }
 	public boolean isDynamicLayoutActive() { return false; }
 	protected boolean isDynamicLayoutSet() { return false; }
 	public boolean isFrameStateSupported(int var0) { return false; }
+	public abstract boolean isModalExclusionTypeSupported(java.awt.Dialog.ModalExclusionType var0);
+	public abstract boolean isModalityTypeSupported(java.awt.Dialog.ModalityType var0);
 	protected java.lang.Object lazilyLoadDesktopProperty(java.lang.String var0) { return null; }
 	protected void loadSystemColors(int[] var0) { }
 	public abstract java.util.Map<java.awt.font.TextAttribute,?> mapInputMethodHighlight(java.awt.im.InputMethodHighlight var0);

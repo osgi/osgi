@@ -29,11 +29,15 @@ public final class StrictMath {
 	public static native double atan2(double var0, double var1);
 	public static native double cbrt(double var0);
 	public static native double ceil(double var0);
+	public static double copySign(double var0, double var1) { return 0.0d; }
+	public static float copySign(float var0, float var1) { return 0.0f; }
 	public static native double cos(double var0);
 	public static native double cosh(double var0);
 	public static native double exp(double var0);
 	public static native double expm1(double var0);
 	public static native double floor(double var0);
+	public static int getExponent(double var0) { return 0; }
+	public static int getExponent(float var0) { return 0; }
 	public static native double hypot(double var0, double var1);
 	public static native double log(double var0);
 	public static native double log10(double var0);
@@ -46,11 +50,17 @@ public final class StrictMath {
 	public static float min(float var0, float var1) { return 0.0f; }
 	public static int min(int var0, int var1) { return 0; }
 	public static long min(long var0, long var1) { return 0l; }
+	public static double nextAfter(double var0, double var1) { return 0.0d; }
+	public static float nextAfter(float var0, double var1) { return 0.0f; }
+	public static double nextUp(double var0) { return 0.0d; }
+	public static float nextUp(float var0) { return 0.0f; }
 	public static native double pow(double var0, double var1);
 	public static double random() { return 0.0d; }
 	public static double rint(double var0) { return 0.0d; }
 	public static long round(double var0) { return 0l; }
 	public static int round(float var0) { return 0; }
+	public static double scalb(double var0, int var1) { return 0.0d; }
+	public static float scalb(float var0, int var1) { return 0.0f; }
 	public static double signum(double var0) { return 0.0d; }
 	public static float signum(float var0) { return 0.0f; }
 	public static native double sin(double var0);

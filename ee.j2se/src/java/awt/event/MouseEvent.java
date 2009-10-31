@@ -30,14 +30,18 @@ public class MouseEvent extends java.awt.event.InputEvent {
 	public final static int MOUSE_RELEASED = 502;
 	public final static int MOUSE_WHEEL = 507;
 	public final static int NOBUTTON = 0;
+	public MouseEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, int var5, int var6, int var7, int var8, boolean var9, int var10) { } 
 	public MouseEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, int var5, int var6, boolean var7) { } 
 	public MouseEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, int var5, int var6, boolean var7, int var8) { } 
 	public int getButton() { return 0; }
 	public int getClickCount() { return 0; }
+	public java.awt.Point getLocationOnScreen() { return null; }
 	public static java.lang.String getMouseModifiersText(int var0) { return null; }
 	public java.awt.Point getPoint() { return null; }
 	public int getX() { return 0; }
+	public int getXOnScreen() { return 0; }
 	public int getY() { return 0; }
+	public int getYOnScreen() { return 0; }
 	public boolean isPopupTrigger() { return false; }
 	public void translatePoint(int var0, int var1) { }
 }
