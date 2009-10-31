@@ -34,7 +34,9 @@ public abstract class FontMetrics implements java.io.Serializable {
 	public int getMaxAdvance() { return 0; }
 	public int getMaxAscent() { return 0; }
 	public java.awt.geom.Rectangle2D getMaxCharBounds(java.awt.Graphics var0) { return null; }
-	/** @deprecated */ public int getMaxDecent() { return 0; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public int getMaxDecent() { return 0; }
 	public int getMaxDescent() { return 0; }
 	public java.awt.geom.Rectangle2D getStringBounds(java.lang.String var0, int var1, int var2, java.awt.Graphics var3) { return null; }
 	public java.awt.geom.Rectangle2D getStringBounds(java.lang.String var0, java.awt.Graphics var1) { return null; }

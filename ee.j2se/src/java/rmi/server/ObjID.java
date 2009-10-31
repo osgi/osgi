@@ -21,7 +21,6 @@ public final class ObjID implements java.io.Serializable {
 	public final static int REGISTRY_ID = 0;
 	public ObjID() { } 
 	public ObjID(int var0) { } 
-	public int hashCode() { return 0; }
 	public static java.rmi.server.ObjID read(java.io.ObjectInput var0) throws java.io.IOException { return null; }
 	public void write(java.io.ObjectOutput var0) throws java.io.IOException { }
 }

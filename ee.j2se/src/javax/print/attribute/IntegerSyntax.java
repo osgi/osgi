@@ -19,6 +19,5 @@ public abstract class IntegerSyntax implements java.io.Serializable, java.lang.C
 	protected IntegerSyntax(int var0) { } 
 	protected IntegerSyntax(int var0, int var1, int var2) { } 
 	public int getValue() { return 0; }
-	public int hashCode() { return 0; }
 }
 

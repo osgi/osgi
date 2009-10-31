@@ -15,7 +15,9 @@
  */
 
 package javax.management.timer;
-/** @deprecated */ public class TimerAlarmClockNotification extends javax.management.Notification {
+/** @deprecated */
+@java.lang.Deprecated
+public class TimerAlarmClockNotification extends javax.management.Notification {
 	public TimerAlarmClockNotification(javax.management.timer.TimerAlarmClock var0)  { super((java.lang.String) null, (java.lang.Object) null, 0l, (java.lang.String) null); } 
 }
 

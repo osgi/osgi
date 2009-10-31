@@ -25,6 +25,5 @@ public final class ActivationDesc implements java.io.Serializable {
 	public java.rmi.activation.ActivationGroupID getGroupID() { return null; }
 	public java.lang.String getLocation() { return null; }
 	public boolean getRestartMode() { return false; }
-	public int hashCode() { return 0; }
 }
 

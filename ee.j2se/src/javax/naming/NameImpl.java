@@ -26,7 +26,6 @@ class NameImpl {
 	public java.util.Enumeration getAll() { return null; }
 	public java.util.Enumeration getPrefix(int var0) { return null; }
 	public java.util.Enumeration getSuffix(int var0) { return null; }
-	public int hashCode() { return 0; }
 	public boolean isEmpty() { return false; }
 	public java.lang.Object remove(int var0) { return null; }
 	public int size() { return 0; }

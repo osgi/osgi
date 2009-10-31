@@ -91,7 +91,6 @@ public abstract class Calendar implements java.io.Serializable, java.lang.Clonea
 	public final java.util.Date getTime() { return null; }
 	public long getTimeInMillis() { return 0l; }
 	public java.util.TimeZone getTimeZone() { return null; }
-	public int hashCode() { return 0; }
 	protected final int internalGet(int var0) { return 0; }
 	public boolean isLenient() { return false; }
 	public final boolean isSet(int var0) { return false; }

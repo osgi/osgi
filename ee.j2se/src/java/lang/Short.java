@@ -26,7 +26,6 @@ public final class Short extends java.lang.Number implements java.lang.Comparabl
 	public static java.lang.Short decode(java.lang.String var0) { return null; }
 	public double doubleValue() { return 0.0d; }
 	public float floatValue() { return 0.0f; }
-	public int hashCode() { return 0; }
 	public int intValue() { return 0; }
 	public long longValue() { return 0l; }
 	public static short parseShort(java.lang.String var0) { return 0; }

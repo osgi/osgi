@@ -24,6 +24,5 @@ public class MBeanInfo implements java.io.Serializable, java.lang.Cloneable {
 	public java.lang.String getDescription() { return null; }
 	public javax.management.MBeanNotificationInfo[] getNotifications() { return null; }
 	public javax.management.MBeanOperationInfo[] getOperations() { return null; }
-	public int hashCode() { return 0; }
 }
 

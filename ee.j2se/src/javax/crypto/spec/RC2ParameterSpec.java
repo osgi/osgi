@@ -21,6 +21,5 @@ public class RC2ParameterSpec implements java.security.spec.AlgorithmParameterSp
 	public RC2ParameterSpec(int var0, byte[] var1, int var2) { } 
 	public int getEffectiveKeyBits() { return 0; }
 	public byte[] getIV() { return null; }
-	public int hashCode() { return 0; }
 }
 

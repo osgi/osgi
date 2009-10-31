@@ -28,7 +28,6 @@ public final class Method extends java.lang.reflect.AccessibleObject implements 
 	public java.lang.Class<?>[] getParameterTypes() { return null; }
 	public java.lang.Class<?> getReturnType() { return null; }
 	public java.lang.reflect.TypeVariable<java.lang.reflect.Method>[] getTypeParameters() { return null; }
-	public int hashCode() { return 0; }
 	public java.lang.Object invoke(java.lang.Object var0, java.lang.Object... var1) throws java.lang.IllegalAccessException, java.lang.reflect.InvocationTargetException { return null; }
 	public boolean isBridge() { return false; }
 	public boolean isSynthetic() { return false; }

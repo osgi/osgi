@@ -67,7 +67,9 @@ public abstract class JComponent extends java.awt.Container implements java.io.S
 	public final javax.swing.InputMap getInputMap(int var0) { return null; }
 	public javax.swing.InputVerifier getInputVerifier() { return null; }
 	public java.awt.Insets getInsets(java.awt.Insets var0) { return null; }
-	/** @deprecated */ public java.awt.Component getNextFocusableComponent() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Component getNextFocusableComponent() { return null; }
 	public java.awt.Point getPopupLocation(java.awt.event.MouseEvent var0) { return null; }
 	public javax.swing.KeyStroke[] getRegisteredKeyStrokes() { return null; }
 	public javax.swing.JRootPane getRootPane() { return null; }
@@ -82,7 +84,9 @@ public abstract class JComponent extends java.awt.Container implements java.io.S
 	public java.awt.Rectangle getVisibleRect() { return null; }
 	public void grabFocus() { }
 	public static boolean isLightweightComponent(java.awt.Component var0) { return false; }
-	/** @deprecated */ public boolean isManagingFocus() { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean isManagingFocus() { return false; }
 	public boolean isOptimizedDrawingEnabled() { return false; }
 	public boolean isPaintingTile() { return false; }
 	public boolean isRequestFocusEnabled() { return false; }
@@ -103,7 +107,9 @@ public abstract class JComponent extends java.awt.Container implements java.io.S
 	public void removeAncestorListener(javax.swing.event.AncestorListener var0) { }
 	public void removeVetoableChangeListener(java.beans.VetoableChangeListener var0) { }
 	public void repaint(java.awt.Rectangle var0) { }
-	/** @deprecated */ public boolean requestDefaultFocus() { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean requestDefaultFocus() { return false; }
 	public boolean requestFocus(boolean var0) { return false; }
 	public void resetKeyboardActions() { }
 	public void revalidate() { }
@@ -120,7 +126,9 @@ public abstract class JComponent extends java.awt.Container implements java.io.S
 	public void setInheritsPopupMenu(boolean var0) { }
 	public final void setInputMap(int var0, javax.swing.InputMap var1) { }
 	public void setInputVerifier(javax.swing.InputVerifier var0) { }
-	/** @deprecated */ public void setNextFocusableComponent(java.awt.Component var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void setNextFocusableComponent(java.awt.Component var0) { }
 	public void setOpaque(boolean var0) { }
 	public void setRequestFocusEnabled(boolean var0) { }
 	public void setToolTipText(java.lang.String var0) { }

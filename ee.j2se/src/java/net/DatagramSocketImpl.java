@@ -26,7 +26,9 @@ public abstract class DatagramSocketImpl implements java.net.SocketOptions {
 	protected void disconnect() { }
 	protected java.io.FileDescriptor getFileDescriptor() { return null; }
 	protected int getLocalPort() { return 0; }
-	/** @deprecated */ protected abstract byte getTTL() throws java.io.IOException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected abstract byte getTTL() throws java.io.IOException;
 	protected abstract int getTimeToLive() throws java.io.IOException;
 	protected abstract void join(java.net.InetAddress var0) throws java.io.IOException;
 	protected abstract void joinGroup(java.net.SocketAddress var0, java.net.NetworkInterface var1) throws java.io.IOException;
@@ -36,7 +38,9 @@ public abstract class DatagramSocketImpl implements java.net.SocketOptions {
 	protected abstract int peekData(java.net.DatagramPacket var0) throws java.io.IOException;
 	protected abstract void receive(java.net.DatagramPacket var0) throws java.io.IOException;
 	protected abstract void send(java.net.DatagramPacket var0) throws java.io.IOException;
-	/** @deprecated */ protected abstract void setTTL(byte var0) throws java.io.IOException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected abstract void setTTL(byte var0) throws java.io.IOException;
 	protected abstract void setTimeToLive(int var0) throws java.io.IOException;
 }
 

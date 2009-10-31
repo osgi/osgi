@@ -19,7 +19,9 @@ public interface CallableStatement extends java.sql.PreparedStatement {
 	java.sql.Array getArray(int var0) throws java.sql.SQLException;
 	java.sql.Array getArray(java.lang.String var0) throws java.sql.SQLException;
 	java.math.BigDecimal getBigDecimal(int var0) throws java.sql.SQLException;
-	/** @deprecated */ java.math.BigDecimal getBigDecimal(int var0, int var1) throws java.sql.SQLException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.math.BigDecimal getBigDecimal(int var0, int var1) throws java.sql.SQLException;
 	java.math.BigDecimal getBigDecimal(java.lang.String var0) throws java.sql.SQLException;
 	java.sql.Blob getBlob(int var0) throws java.sql.SQLException;
 	java.sql.Blob getBlob(java.lang.String var0) throws java.sql.SQLException;

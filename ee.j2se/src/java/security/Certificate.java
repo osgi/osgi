@@ -15,7 +15,9 @@
  */
 
 package java.security;
-/** @deprecated */ public interface Certificate {
+/** @deprecated */
+@java.lang.Deprecated
+public interface Certificate {
 	void decode(java.io.InputStream var0) throws java.io.IOException, java.security.KeyException;
 	void encode(java.io.OutputStream var0) throws java.io.IOException, java.security.KeyException;
 	java.lang.String getFormat();

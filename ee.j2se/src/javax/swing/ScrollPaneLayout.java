@@ -41,7 +41,9 @@ public class ScrollPaneLayout implements java.awt.LayoutManager, java.io.Seriali
 	public javax.swing.JScrollBar getVerticalScrollBar() { return null; }
 	public int getVerticalScrollBarPolicy() { return 0; }
 	public javax.swing.JViewport getViewport() { return null; }
-	/** @deprecated */ public java.awt.Rectangle getViewportBorderBounds(javax.swing.JScrollPane var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Rectangle getViewportBorderBounds(javax.swing.JScrollPane var0) { return null; }
 	public void layoutContainer(java.awt.Container var0) { }
 	public java.awt.Dimension minimumLayoutSize(java.awt.Container var0) { return null; }
 	public java.awt.Dimension preferredLayoutSize(java.awt.Container var0) { return null; }

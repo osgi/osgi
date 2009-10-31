@@ -22,17 +22,23 @@ public class MulticastSocket extends java.net.DatagramSocket {
 	public java.net.InetAddress getInterface() throws java.net.SocketException { return null; }
 	public boolean getLoopbackMode() throws java.net.SocketException { return false; }
 	public java.net.NetworkInterface getNetworkInterface() throws java.net.SocketException { return null; }
-	/** @deprecated */ public byte getTTL() throws java.io.IOException { return 0; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public byte getTTL() throws java.io.IOException { return 0; }
 	public int getTimeToLive() throws java.io.IOException { return 0; }
 	public void joinGroup(java.net.InetAddress var0) throws java.io.IOException { }
 	public void joinGroup(java.net.SocketAddress var0, java.net.NetworkInterface var1) throws java.io.IOException { }
 	public void leaveGroup(java.net.InetAddress var0) throws java.io.IOException { }
 	public void leaveGroup(java.net.SocketAddress var0, java.net.NetworkInterface var1) throws java.io.IOException { }
-	/** @deprecated */ public void send(java.net.DatagramPacket var0, byte var1) throws java.io.IOException { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void send(java.net.DatagramPacket var0, byte var1) throws java.io.IOException { }
 	public void setInterface(java.net.InetAddress var0) throws java.net.SocketException { }
 	public void setLoopbackMode(boolean var0) throws java.net.SocketException { }
 	public void setNetworkInterface(java.net.NetworkInterface var0) throws java.net.SocketException { }
-	/** @deprecated */ public void setTTL(byte var0) throws java.io.IOException { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void setTTL(byte var0) throws java.io.IOException { }
 	public void setTimeToLive(int var0) throws java.io.IOException { }
 }
 

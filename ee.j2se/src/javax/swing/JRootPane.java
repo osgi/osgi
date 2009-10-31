@@ -48,8 +48,12 @@ public class JRootPane extends javax.swing.JComponent implements javax.accessibi
 	public final static int WARNING_DIALOG = 8;
 	protected java.awt.Container contentPane;
 	protected javax.swing.JButton defaultButton;
-	/** @deprecated */ protected javax.swing.JRootPane.DefaultAction defaultPressAction;
-	/** @deprecated */ protected javax.swing.JRootPane.DefaultAction defaultReleaseAction;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.JRootPane.DefaultAction defaultPressAction;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.JRootPane.DefaultAction defaultReleaseAction;
 	protected java.awt.Component glassPane;
 	protected javax.swing.JLayeredPane layeredPane;
 	protected javax.swing.JMenuBar menuBar;
@@ -63,7 +67,9 @@ public class JRootPane extends javax.swing.JComponent implements javax.accessibi
 	public java.awt.Component getGlassPane() { return null; }
 	public javax.swing.JMenuBar getJMenuBar() { return null; }
 	public javax.swing.JLayeredPane getLayeredPane() { return null; }
-	/** @deprecated */ public javax.swing.JMenuBar getMenuBar() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public javax.swing.JMenuBar getMenuBar() { return null; }
 	public javax.swing.plaf.RootPaneUI getUI() { return null; }
 	public int getWindowDecorationStyle() { return 0; }
 	public void setContentPane(java.awt.Container var0) { }
@@ -71,7 +77,9 @@ public class JRootPane extends javax.swing.JComponent implements javax.accessibi
 	public void setGlassPane(java.awt.Component var0) { }
 	public void setJMenuBar(javax.swing.JMenuBar var0) { }
 	public void setLayeredPane(javax.swing.JLayeredPane var0) { }
-	/** @deprecated */ public void setMenuBar(javax.swing.JMenuBar var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void setMenuBar(javax.swing.JMenuBar var0) { }
 	public void setUI(javax.swing.plaf.RootPaneUI var0) { }
 	public void setWindowDecorationStyle(int var0) { }
 }

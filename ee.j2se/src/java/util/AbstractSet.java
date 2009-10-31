@@ -17,6 +17,5 @@
 package java.util;
 public abstract class AbstractSet<E> extends java.util.AbstractCollection<E> implements java.util.Set<E> {
 	protected AbstractSet() { } 
-	public int hashCode() { return 0; }
 }
 

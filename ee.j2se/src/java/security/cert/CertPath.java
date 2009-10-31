@@ -26,7 +26,6 @@ public abstract class CertPath implements java.io.Serializable {
 	public abstract byte[] getEncoded(java.lang.String var0) throws java.security.cert.CertificateEncodingException;
 	public abstract java.util.Iterator<java.lang.String> getEncodings();
 	public java.lang.String getType() { return null; }
-	public int hashCode() { return 0; }
 	protected java.lang.Object writeReplace() throws java.io.ObjectStreamException { return null; }
 }
 

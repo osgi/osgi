@@ -15,7 +15,9 @@
  */
 
 package org.omg.CORBA;
-/** @deprecated */ public interface DynValue extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
+/** @deprecated */
+@java.lang.Deprecated
+public interface DynValue extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
 	org.omg.CORBA.TCKind current_member_kind();
 	java.lang.String current_member_name();
 	org.omg.CORBA.NameValuePair[] get_members();

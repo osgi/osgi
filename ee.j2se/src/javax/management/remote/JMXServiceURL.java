@@ -23,6 +23,5 @@ public class JMXServiceURL implements java.io.Serializable {
 	public int getPort() { return 0; }
 	public java.lang.String getProtocol() { return null; }
 	public java.lang.String getURLPath() { return null; }
-	public int hashCode() { return 0; }
 }
 

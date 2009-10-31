@@ -31,7 +31,6 @@ public class CompositeName implements javax.naming.Name {
 	public java.util.Enumeration<java.lang.String> getAll() { return null; }
 	public javax.naming.Name getPrefix(int var0) { return null; }
 	public javax.naming.Name getSuffix(int var0) { return null; }
-	public int hashCode() { return 0; }
 	public boolean isEmpty() { return false; }
 	public java.lang.Object remove(int var0) throws javax.naming.InvalidNameException { return null; }
 	public int size() { return 0; }

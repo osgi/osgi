@@ -18,6 +18,5 @@ package javax.management.remote;
 public class JMXPrincipal implements java.io.Serializable, java.security.Principal {
 	public JMXPrincipal(java.lang.String var0) { } 
 	public java.lang.String getName() { return null; }
-	public int hashCode() { return 0; }
 }
 

@@ -61,7 +61,6 @@ public final class JobAttributes implements java.lang.Cloneable {
 	public java.lang.String getPrinter() { return null; }
 	public java.awt.JobAttributes.SidesType getSides() { return null; }
 	public int getToPage() { return 0; }
-	public int hashCode() { return 0; }
 	public void set(java.awt.JobAttributes var0) { }
 	public void setCopies(int var0) { }
 	public void setCopiesToDefault() { }

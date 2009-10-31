@@ -30,7 +30,6 @@ public final class Long extends java.lang.Number implements java.lang.Comparable
 	public static java.lang.Long getLong(java.lang.String var0) { return null; }
 	public static java.lang.Long getLong(java.lang.String var0, long var1) { return null; }
 	public static java.lang.Long getLong(java.lang.String var0, java.lang.Long var1) { return null; }
-	public int hashCode() { return 0; }
 	public static long highestOneBit(long var0) { return 0l; }
 	public int intValue() { return 0; }
 	public long longValue() { return 0l; }

@@ -40,9 +40,13 @@ public interface ResultSet {
 	java.io.InputStream getAsciiStream(int var0) throws java.sql.SQLException;
 	java.io.InputStream getAsciiStream(java.lang.String var0) throws java.sql.SQLException;
 	java.math.BigDecimal getBigDecimal(int var0) throws java.sql.SQLException;
-	/** @deprecated */ java.math.BigDecimal getBigDecimal(int var0, int var1) throws java.sql.SQLException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.math.BigDecimal getBigDecimal(int var0, int var1) throws java.sql.SQLException;
 	java.math.BigDecimal getBigDecimal(java.lang.String var0) throws java.sql.SQLException;
-	/** @deprecated */ java.math.BigDecimal getBigDecimal(java.lang.String var0, int var1) throws java.sql.SQLException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.math.BigDecimal getBigDecimal(java.lang.String var0, int var1) throws java.sql.SQLException;
 	java.io.InputStream getBinaryStream(int var0) throws java.sql.SQLException;
 	java.io.InputStream getBinaryStream(java.lang.String var0) throws java.sql.SQLException;
 	java.sql.Blob getBlob(int var0) throws java.sql.SQLException;
@@ -97,8 +101,12 @@ public interface ResultSet {
 	int getType() throws java.sql.SQLException;
 	java.net.URL getURL(int var0) throws java.sql.SQLException;
 	java.net.URL getURL(java.lang.String var0) throws java.sql.SQLException;
-	/** @deprecated */ java.io.InputStream getUnicodeStream(int var0) throws java.sql.SQLException;
-	/** @deprecated */ java.io.InputStream getUnicodeStream(java.lang.String var0) throws java.sql.SQLException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.io.InputStream getUnicodeStream(int var0) throws java.sql.SQLException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.io.InputStream getUnicodeStream(java.lang.String var0) throws java.sql.SQLException;
 	java.sql.SQLWarning getWarnings() throws java.sql.SQLException;
 	void insertRow() throws java.sql.SQLException;
 	boolean isAfterLast() throws java.sql.SQLException;

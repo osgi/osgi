@@ -24,7 +24,6 @@ public class BasicAttributes implements javax.naming.directory.Attributes {
 	public javax.naming.directory.Attribute get(java.lang.String var0) { return null; }
 	public javax.naming.NamingEnumeration<javax.naming.directory.Attribute> getAll() { return null; }
 	public javax.naming.NamingEnumeration<java.lang.String> getIDs() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isCaseIgnored() { return false; }
 	public javax.naming.directory.Attribute put(java.lang.String var0, java.lang.Object var1) { return null; }
 	public javax.naming.directory.Attribute put(javax.naming.directory.Attribute var0) { return null; }

@@ -19,8 +19,12 @@ public class RMIClassLoader {
 	public static java.lang.String getClassAnnotation(java.lang.Class<?> var0) { return null; }
 	public static java.lang.ClassLoader getClassLoader(java.lang.String var0) throws java.net.MalformedURLException { return null; }
 	public static java.rmi.server.RMIClassLoaderSpi getDefaultProviderInstance() { return null; }
-	/** @deprecated */ public static java.lang.Object getSecurityContext(java.lang.ClassLoader var0) { return null; }
-	/** @deprecated */ public static java.lang.Class<?> loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException, java.net.MalformedURLException { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static java.lang.Object getSecurityContext(java.lang.ClassLoader var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static java.lang.Class<?> loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException, java.net.MalformedURLException { return null; }
 	public static java.lang.Class<?> loadClass(java.lang.String var0, java.lang.String var1) throws java.lang.ClassNotFoundException, java.net.MalformedURLException { return null; }
 	public static java.lang.Class<?> loadClass(java.lang.String var0, java.lang.String var1, java.lang.ClassLoader var2) throws java.lang.ClassNotFoundException, java.net.MalformedURLException { return null; }
 	public static java.lang.Class<?> loadClass(java.net.URL var0, java.lang.String var1) throws java.lang.ClassNotFoundException, java.net.MalformedURLException { return null; }

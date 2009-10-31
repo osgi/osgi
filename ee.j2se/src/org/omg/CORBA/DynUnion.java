@@ -15,7 +15,9 @@
  */
 
 package org.omg.CORBA;
-/** @deprecated */ public interface DynUnion extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
+/** @deprecated */
+@java.lang.Deprecated
+public interface DynUnion extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
 	org.omg.CORBA.DynAny discriminator();
 	org.omg.CORBA.TCKind discriminator_kind();
 	org.omg.CORBA.DynAny member();

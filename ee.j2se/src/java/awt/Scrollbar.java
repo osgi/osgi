@@ -31,24 +31,34 @@ public class Scrollbar extends java.awt.Component implements java.awt.Adjustable
 	public void addAdjustmentListener(java.awt.event.AdjustmentListener var0) { }
 	public java.awt.event.AdjustmentListener[] getAdjustmentListeners() { return null; }
 	public int getBlockIncrement() { return 0; }
-	/** @deprecated */ public int getLineIncrement() { return 0; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public int getLineIncrement() { return 0; }
 	public int getMaximum() { return 0; }
 	public int getMinimum() { return 0; }
 	public int getOrientation() { return 0; }
-	/** @deprecated */ public int getPageIncrement() { return 0; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public int getPageIncrement() { return 0; }
 	public int getUnitIncrement() { return 0; }
 	public int getValue() { return 0; }
 	public boolean getValueIsAdjusting() { return false; }
-	/** @deprecated */ public int getVisible() { return 0; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public int getVisible() { return 0; }
 	public int getVisibleAmount() { return 0; }
 	protected void processAdjustmentEvent(java.awt.event.AdjustmentEvent var0) { }
 	public void removeAdjustmentListener(java.awt.event.AdjustmentListener var0) { }
 	public void setBlockIncrement(int var0) { }
-	/** @deprecated */ public void setLineIncrement(int var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void setLineIncrement(int var0) { }
 	public void setMaximum(int var0) { }
 	public void setMinimum(int var0) { }
 	public void setOrientation(int var0) { }
-	/** @deprecated */ public void setPageIncrement(int var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void setPageIncrement(int var0) { }
 	public void setUnitIncrement(int var0) { }
 	public void setValue(int var0) { }
 	public void setValueIsAdjusting(boolean var0) { }

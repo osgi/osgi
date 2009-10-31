@@ -27,7 +27,9 @@ public class ObjectOutputStream extends java.io.OutputStream implements java.io.
 		public abstract void put(java.lang.String var0, java.lang.Object var1);
 		public abstract void put(java.lang.String var0, short var1);
 		public abstract void put(java.lang.String var0, boolean var1);
-		/** @deprecated */ public abstract void write(java.io.ObjectOutput var0) throws java.io.IOException;
+		/** @deprecated */
+		@java.lang.Deprecated
+		public abstract void write(java.io.ObjectOutput var0) throws java.io.IOException;
 	}
 	protected ObjectOutputStream() throws java.io.IOException { } 
 	public ObjectOutputStream(java.io.OutputStream var0) throws java.io.IOException { } 

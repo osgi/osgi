@@ -18,6 +18,5 @@ package java.rmi;
 public final class MarshalledObject implements java.io.Serializable {
 	public MarshalledObject(java.lang.Object var0) throws java.io.IOException { } 
 	public java.lang.Object get() throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
-	public int hashCode() { return 0; }
 }
 

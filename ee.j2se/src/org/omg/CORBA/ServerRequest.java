@@ -19,11 +19,19 @@ public abstract class ServerRequest {
 	public ServerRequest() { } 
 	public void arguments(org.omg.CORBA.NVList var0) { }
 	public abstract org.omg.CORBA.Context ctx();
-	/** @deprecated */ public void except(org.omg.CORBA.Any var0) { }
-	/** @deprecated */ public java.lang.String op_name() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void except(org.omg.CORBA.Any var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.lang.String op_name() { return null; }
 	public java.lang.String operation() { return null; }
-	/** @deprecated */ public void params(org.omg.CORBA.NVList var0) { }
-	/** @deprecated */ public void result(org.omg.CORBA.Any var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void params(org.omg.CORBA.NVList var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void result(org.omg.CORBA.Any var0) { }
 	public void set_exception(org.omg.CORBA.Any var0) { }
 	public void set_result(org.omg.CORBA.Any var0) { }
 }

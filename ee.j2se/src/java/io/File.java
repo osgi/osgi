@@ -41,7 +41,6 @@ public class File implements java.io.Serializable, java.lang.Comparable<java.io.
 	public java.lang.String getParent() { return null; }
 	public java.io.File getParentFile() { return null; }
 	public java.lang.String getPath() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isAbsolute() { return false; }
 	public boolean isDirectory() { return false; }
 	public boolean isFile() { return false; }

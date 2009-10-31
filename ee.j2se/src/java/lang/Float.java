@@ -32,7 +32,6 @@ public final class Float extends java.lang.Number implements java.lang.Comparabl
 	public static native int floatToIntBits(float var0);
 	public static native int floatToRawIntBits(float var0);
 	public float floatValue() { return 0.0f; }
-	public int hashCode() { return 0; }
 	public static native float intBitsToFloat(int var0);
 	public int intValue() { return 0; }
 	public boolean isInfinite() { return false; }

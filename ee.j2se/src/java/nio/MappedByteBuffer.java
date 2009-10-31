@@ -19,6 +19,6 @@ public abstract class MappedByteBuffer extends java.nio.ByteBuffer {
 	public final java.nio.MappedByteBuffer force() { return null; }
 	public final boolean isLoaded() { return false; }
 	public final java.nio.MappedByteBuffer load() { return null; }
-	MappedByteBuffer() { } /* generated constructor to prevent compiler adding default public constructor */
+	private MappedByteBuffer() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

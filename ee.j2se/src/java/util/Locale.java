@@ -58,7 +58,6 @@ public final class Locale implements java.io.Serializable, java.lang.Cloneable {
 	public static java.lang.String[] getISOLanguages() { return null; }
 	public java.lang.String getLanguage() { return null; }
 	public java.lang.String getVariant() { return null; }
-	public int hashCode() { return 0; }
 	public static void setDefault(java.util.Locale var0) { }
 	public final java.lang.String toString() { return null; }
 }

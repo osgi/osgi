@@ -55,7 +55,6 @@ public abstract class JTextComponent extends javax.swing.JComponent implements j
 	public final static java.lang.String FOCUS_ACCELERATOR_KEY = "focusAcceleratorKey";
 	public JTextComponent() { } 
 	public void addCaretListener(javax.swing.event.CaretListener var0) { }
-	public void addInputMethodListener(java.awt.event.InputMethodListener var0) { }
 	public static javax.swing.text.Keymap addKeymap(java.lang.String var0, javax.swing.text.Keymap var1) { return null; }
 	public void copy() { }
 	public void cut() { }

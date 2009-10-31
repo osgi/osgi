@@ -19,6 +19,5 @@ public class ECFieldFp implements java.security.spec.ECField {
 	public ECFieldFp(java.math.BigInteger var0) { } 
 	public int getFieldSize() { return 0; }
 	public java.math.BigInteger getP() { return null; }
-	public int hashCode() { return 0; }
 }
 

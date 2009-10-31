@@ -15,7 +15,9 @@
  */
 
 package java.security;
-/** @deprecated */ public abstract class Identity implements java.io.Serializable, java.security.Principal {
+/** @deprecated */
+@java.lang.Deprecated
+public abstract class Identity implements java.io.Serializable, java.security.Principal {
 	protected Identity() { } 
 	public Identity(java.lang.String var0) { } 
 	public Identity(java.lang.String var0, java.security.IdentityScope var1) throws java.security.KeyManagementException { } 
@@ -26,7 +28,6 @@ package java.security;
 	public final java.lang.String getName() { return null; }
 	public java.security.PublicKey getPublicKey() { return null; }
 	public final java.security.IdentityScope getScope() { return null; }
-	public int hashCode() { return 0; }
 	protected boolean identityEquals(java.security.Identity var0) { return false; }
 	public void removeCertificate(java.security.Certificate var0) throws java.security.KeyManagementException { }
 	public void setInfo(java.lang.String var0) { }

@@ -16,7 +16,7 @@
 
 package javax.management.openmbean;
 public class OpenMBeanOperationInfoSupport extends javax.management.MBeanOperationInfo implements java.io.Serializable, javax.management.openmbean.OpenMBeanOperationInfo {
-	public OpenMBeanOperationInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenMBeanParameterInfo[] var2, javax.management.openmbean.OpenType var3, int var4)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.MBeanParameterInfo[]) null, (java.lang.String) null, 0); } 
+	public OpenMBeanOperationInfoSupport(java.lang.String var0, java.lang.String var1, javax.management.openmbean.OpenMBeanParameterInfo[] var2, javax.management.openmbean.OpenType var3, int var4)  { super((java.lang.String) null, (java.lang.reflect.Method) null); } 
 	public javax.management.openmbean.OpenType getReturnOpenType() { return null; }
 }
 

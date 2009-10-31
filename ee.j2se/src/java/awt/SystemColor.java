@@ -69,7 +69,6 @@ public final class SystemColor extends java.awt.Color implements java.io.Seriali
 	public final static java.awt.SystemColor window; static { window = null; }
 	public final static java.awt.SystemColor windowBorder; static { windowBorder = null; }
 	public final static java.awt.SystemColor windowText; static { windowText = null; }
-	public java.awt.PaintContext createContext(java.awt.image.ColorModel var0, java.awt.Rectangle var1, java.awt.geom.Rectangle2D var2, java.awt.geom.AffineTransform var3, java.awt.RenderingHints var4) { return null; }
 	private SystemColor()  { super((java.awt.color.ColorSpace) null, (float[]) null, 0.0f); } /* generated constructor to prevent compiler adding default public constructor */
 }
 

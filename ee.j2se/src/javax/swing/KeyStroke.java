@@ -17,7 +17,9 @@
 package javax.swing;
 public class KeyStroke extends java.awt.AWTKeyStroke {
 	public static javax.swing.KeyStroke getKeyStroke(char var0) { return null; }
-	/** @deprecated */ public static javax.swing.KeyStroke getKeyStroke(char var0, boolean var1) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static javax.swing.KeyStroke getKeyStroke(char var0, boolean var1) { return null; }
 	public static javax.swing.KeyStroke getKeyStroke(int var0, int var1) { return null; }
 	public static javax.swing.KeyStroke getKeyStroke(int var0, int var1, boolean var2) { return null; }
 	public static javax.swing.KeyStroke getKeyStroke(java.lang.Character var0, int var1) { return null; }

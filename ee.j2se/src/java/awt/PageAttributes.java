@@ -197,7 +197,6 @@ public final class PageAttributes implements java.lang.Cloneable {
 	public java.awt.PageAttributes.OriginType getOrigin() { return null; }
 	public java.awt.PageAttributes.PrintQualityType getPrintQuality() { return null; }
 	public int[] getPrinterResolution() { return null; }
-	public int hashCode() { return 0; }
 	public void set(java.awt.PageAttributes var0) { }
 	public void setColor(java.awt.PageAttributes.ColorType var0) { }
 	public void setMedia(java.awt.PageAttributes.MediaType var0) { }

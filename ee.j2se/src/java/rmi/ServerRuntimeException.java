@@ -15,7 +15,11 @@
  */
 
 package java.rmi;
-/** @deprecated */ public class ServerRuntimeException extends java.rmi.RemoteException {
-	/** @deprecated */ public ServerRuntimeException(java.lang.String var0, java.lang.Exception var1) { } 
+/** @deprecated */
+@java.lang.Deprecated
+public class ServerRuntimeException extends java.rmi.RemoteException {
+	/** @deprecated */
+	@java.lang.Deprecated
+	public ServerRuntimeException(java.lang.String var0, java.lang.Exception var1) { } 
 }
 

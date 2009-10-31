@@ -15,7 +15,9 @@
  */
 
 package java.security;
-/** @deprecated */ public abstract class IdentityScope extends java.security.Identity {
+/** @deprecated */
+@java.lang.Deprecated
+public abstract class IdentityScope extends java.security.Identity {
 	protected IdentityScope() { } 
 	public IdentityScope(java.lang.String var0) { } 
 	public IdentityScope(java.lang.String var0, java.security.IdentityScope var1) throws java.security.KeyManagementException { } 

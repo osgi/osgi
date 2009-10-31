@@ -20,7 +20,6 @@ public abstract class RemoteObject implements java.io.Serializable, java.rmi.Rem
 	protected RemoteObject() { } 
 	protected RemoteObject(java.rmi.server.RemoteRef var0) { } 
 	public java.rmi.server.RemoteRef getRef() { return null; }
-	public int hashCode() { return 0; }
 	public static java.rmi.Remote toStub(java.rmi.Remote var0) throws java.rmi.NoSuchObjectException { return null; }
 }
 

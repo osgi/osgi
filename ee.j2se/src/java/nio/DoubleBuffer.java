@@ -28,7 +28,6 @@ public abstract class DoubleBuffer extends java.nio.Buffer implements java.lang.
 	public java.nio.DoubleBuffer get(double[] var0) { return null; }
 	public java.nio.DoubleBuffer get(double[] var0, int var1, int var2) { return null; }
 	public final boolean hasArray() { return false; }
-	public int hashCode() { return 0; }
 	public abstract boolean isDirect();
 	public abstract java.nio.ByteOrder order();
 	public abstract java.nio.DoubleBuffer put(double var0);
@@ -39,6 +38,6 @@ public abstract class DoubleBuffer extends java.nio.Buffer implements java.lang.
 	public abstract java.nio.DoubleBuffer slice();
 	public static java.nio.DoubleBuffer wrap(double[] var0) { return null; }
 	public static java.nio.DoubleBuffer wrap(double[] var0, int var1, int var2) { return null; }
-	DoubleBuffer() { } /* generated constructor to prevent compiler adding default public constructor */
+	private DoubleBuffer() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

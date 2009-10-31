@@ -19,6 +19,5 @@ public class SaslException extends java.io.IOException {
 	public SaslException() { } 
 	public SaslException(java.lang.String var0) { } 
 	public SaslException(java.lang.String var0, java.lang.Throwable var1) { } 
-	public java.lang.Throwable initCause(java.lang.Throwable var0) { return null; }
 }
 

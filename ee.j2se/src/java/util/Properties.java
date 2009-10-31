@@ -26,7 +26,9 @@ public class Properties extends java.util.Hashtable<java.lang.Object,java.lang.O
 	public void load(java.io.InputStream var0) throws java.io.IOException { }
 	public void loadFromXML(java.io.InputStream var0) throws java.io.IOException { }
 	public java.util.Enumeration<?> propertyNames() { return null; }
-	/** @deprecated */ public void save(java.io.OutputStream var0, java.lang.String var1) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void save(java.io.OutputStream var0, java.lang.String var1) { }
 	public java.lang.Object setProperty(java.lang.String var0, java.lang.String var1) { return null; }
 	public void store(java.io.OutputStream var0, java.lang.String var1) throws java.io.IOException { }
 	public void storeToXML(java.io.OutputStream var0, java.lang.String var1) throws java.io.IOException { }

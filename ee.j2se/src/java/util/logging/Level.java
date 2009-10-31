@@ -30,7 +30,6 @@ public class Level implements java.io.Serializable {
 	public java.lang.String getLocalizedName() { return null; }
 	public java.lang.String getName() { return null; }
 	public java.lang.String getResourceBundleName() { return null; }
-	public int hashCode() { return 0; }
 	public final int intValue() { return 0; }
 	public static java.util.logging.Level parse(java.lang.String var0) { return null; }
 	public final java.lang.String toString() { return null; }

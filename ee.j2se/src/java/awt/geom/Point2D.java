@@ -45,7 +45,6 @@ public abstract class Point2D implements java.lang.Cloneable {
 	public double distanceSq(java.awt.geom.Point2D var0) { return 0.0d; }
 	public abstract double getX();
 	public abstract double getY();
-	public int hashCode() { return 0; }
 	public abstract void setLocation(double var0, double var1);
 	public void setLocation(java.awt.geom.Point2D var0) { }
 }

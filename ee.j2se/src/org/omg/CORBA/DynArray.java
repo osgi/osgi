@@ -15,7 +15,9 @@
  */
 
 package org.omg.CORBA;
-/** @deprecated */ public interface DynArray extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
+/** @deprecated */
+@java.lang.Deprecated
+public interface DynArray extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
 	org.omg.CORBA.Any[] get_elements();
 	void set_elements(org.omg.CORBA.Any[] var0) throws org.omg.CORBA.DynAnyPackage.InvalidSeq;
 }

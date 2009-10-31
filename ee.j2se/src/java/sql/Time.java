@@ -16,7 +16,9 @@
 
 package java.sql;
 public class Time extends java.util.Date {
-	/** @deprecated */ public Time(int var0, int var1, int var2) { } 
+	/** @deprecated */
+	@java.lang.Deprecated
+	public Time(int var0, int var1, int var2) { } 
 	public Time(long var0) { } 
 	public static java.sql.Time valueOf(java.lang.String var0) { return null; }
 }

@@ -55,7 +55,6 @@ public abstract class ColorModel implements java.awt.Transparency {
 	public int getTransparency() { return 0; }
 	public int[] getUnnormalizedComponents(float[] var0, int var1, int[] var2, int var3) { return null; }
 	public final boolean hasAlpha() { return false; }
-	public int hashCode() { return 0; }
 	public final boolean isAlphaPremultiplied() { return false; }
 	public boolean isCompatibleRaster(java.awt.image.Raster var0) { return false; }
 	public boolean isCompatibleSampleModel(java.awt.image.SampleModel var0) { return false; }

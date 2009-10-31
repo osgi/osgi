@@ -24,7 +24,6 @@ public class PropertyDescriptor extends java.beans.FeatureDescriptor {
 	public java.lang.Class<?> getPropertyType() { return null; }
 	public java.lang.reflect.Method getReadMethod() { return null; }
 	public java.lang.reflect.Method getWriteMethod() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isBound() { return false; }
 	public boolean isConstrained() { return false; }
 	public void setBound(boolean var0) { }

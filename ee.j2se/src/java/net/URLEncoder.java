@@ -16,7 +16,9 @@
 
 package java.net;
 public class URLEncoder {
-	/** @deprecated */ public static java.lang.String encode(java.lang.String var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static java.lang.String encode(java.lang.String var0) { return null; }
 	public static java.lang.String encode(java.lang.String var0, java.lang.String var1) throws java.io.UnsupportedEncodingException { return null; }
 	private URLEncoder() { } /* generated constructor to prevent compiler adding default public constructor */
 }

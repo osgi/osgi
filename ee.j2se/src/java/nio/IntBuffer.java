@@ -28,7 +28,6 @@ public abstract class IntBuffer extends java.nio.Buffer implements java.lang.Com
 	public java.nio.IntBuffer get(int[] var0) { return null; }
 	public java.nio.IntBuffer get(int[] var0, int var1, int var2) { return null; }
 	public final boolean hasArray() { return false; }
-	public int hashCode() { return 0; }
 	public abstract boolean isDirect();
 	public abstract java.nio.ByteOrder order();
 	public abstract java.nio.IntBuffer put(int var0);
@@ -39,6 +38,6 @@ public abstract class IntBuffer extends java.nio.Buffer implements java.lang.Com
 	public abstract java.nio.IntBuffer slice();
 	public static java.nio.IntBuffer wrap(int[] var0) { return null; }
 	public static java.nio.IntBuffer wrap(int[] var0, int var1, int var2) { return null; }
-	IntBuffer() { } /* generated constructor to prevent compiler adding default public constructor */
+	private IntBuffer() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

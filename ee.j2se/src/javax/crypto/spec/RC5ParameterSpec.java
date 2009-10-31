@@ -23,6 +23,5 @@ public class RC5ParameterSpec implements java.security.spec.AlgorithmParameterSp
 	public int getRounds() { return 0; }
 	public int getVersion() { return 0; }
 	public int getWordSize() { return 0; }
-	public int hashCode() { return 0; }
 }
 

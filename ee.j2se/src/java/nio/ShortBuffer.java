@@ -28,7 +28,6 @@ public abstract class ShortBuffer extends java.nio.Buffer implements java.lang.C
 	public java.nio.ShortBuffer get(short[] var0) { return null; }
 	public java.nio.ShortBuffer get(short[] var0, int var1, int var2) { return null; }
 	public final boolean hasArray() { return false; }
-	public int hashCode() { return 0; }
 	public abstract boolean isDirect();
 	public abstract java.nio.ByteOrder order();
 	public abstract java.nio.ShortBuffer put(int var0, short var1);
@@ -39,6 +38,6 @@ public abstract class ShortBuffer extends java.nio.Buffer implements java.lang.C
 	public abstract java.nio.ShortBuffer slice();
 	public static java.nio.ShortBuffer wrap(short[] var0) { return null; }
 	public static java.nio.ShortBuffer wrap(short[] var0, int var1, int var2) { return null; }
-	ShortBuffer() { } /* generated constructor to prevent compiler adding default public constructor */
+	private ShortBuffer() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

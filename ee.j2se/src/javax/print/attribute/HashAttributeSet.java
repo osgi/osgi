@@ -30,7 +30,6 @@ public class HashAttributeSet implements java.io.Serializable, javax.print.attri
 	public boolean containsKey(java.lang.Class<?> var0) { return false; }
 	public boolean containsValue(javax.print.attribute.Attribute var0) { return false; }
 	public javax.print.attribute.Attribute get(java.lang.Class<?> var0) { return null; }
-	public int hashCode() { return 0; }
 	public boolean isEmpty() { return false; }
 	public boolean remove(java.lang.Class<?> var0) { return false; }
 	public boolean remove(javax.print.attribute.Attribute var0) { return false; }

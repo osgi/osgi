@@ -16,7 +16,9 @@
 
 package javax.management;
 public class AttributeValueExp implements javax.management.ValueExp {
-	/** @deprecated */ public AttributeValueExp() { } 
+	/** @deprecated */
+	@java.lang.Deprecated
+	public AttributeValueExp() { } 
 	public AttributeValueExp(java.lang.String var0) { } 
 	public javax.management.ValueExp apply(javax.management.ObjectName var0) throws javax.management.BadAttributeValueExpException, javax.management.BadBinaryOpValueExpException, javax.management.BadStringOperationException, javax.management.InvalidApplicationException { return null; }
 	protected java.lang.Object getAttribute(javax.management.ObjectName var0) { return null; }

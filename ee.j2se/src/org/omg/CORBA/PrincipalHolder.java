@@ -15,7 +15,9 @@
  */
 
 package org.omg.CORBA;
-/** @deprecated */ public final class PrincipalHolder implements org.omg.CORBA.portable.Streamable {
+/** @deprecated */
+@java.lang.Deprecated
+public final class PrincipalHolder implements org.omg.CORBA.portable.Streamable {
 	public org.omg.CORBA.Principal value;
 	public PrincipalHolder() { } 
 	public PrincipalHolder(org.omg.CORBA.Principal var0) { } 

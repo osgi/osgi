@@ -43,14 +43,22 @@ public class Rectangle extends java.awt.geom.Rectangle2D implements java.awt.Sha
 	public double getX() { return 0.0d; }
 	public double getY() { return 0.0d; }
 	public void grow(int var0, int var1) { }
-	/** @deprecated */ public boolean inside(int var0, int var1) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean inside(int var0, int var1) { return false; }
 	public java.awt.Rectangle intersection(java.awt.Rectangle var0) { return null; }
 	public boolean intersects(java.awt.Rectangle var0) { return false; }
 	public boolean isEmpty() { return false; }
-	/** @deprecated */ public void move(int var0, int var1) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void move(int var0, int var1) { }
 	public int outcode(double var0, double var1) { return 0; }
-	/** @deprecated */ public void reshape(int var0, int var1, int var2, int var3) { }
-	/** @deprecated */ public void resize(int var0, int var1) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void reshape(int var0, int var1, int var2, int var3) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void resize(int var0, int var1) { }
 	public void setBounds(int var0, int var1, int var2, int var3) { }
 	public void setBounds(java.awt.Rectangle var0) { }
 	public void setLocation(int var0, int var1) { }

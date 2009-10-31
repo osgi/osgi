@@ -29,12 +29,16 @@ public class Polygon implements java.awt.Shape, java.io.Serializable {
 	public boolean contains(java.awt.Point var0) { return false; }
 	public boolean contains(java.awt.geom.Point2D var0) { return false; }
 	public boolean contains(java.awt.geom.Rectangle2D var0) { return false; }
-	/** @deprecated */ public java.awt.Rectangle getBoundingBox() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Rectangle getBoundingBox() { return null; }
 	public java.awt.Rectangle getBounds() { return null; }
 	public java.awt.geom.Rectangle2D getBounds2D() { return null; }
 	public java.awt.geom.PathIterator getPathIterator(java.awt.geom.AffineTransform var0) { return null; }
 	public java.awt.geom.PathIterator getPathIterator(java.awt.geom.AffineTransform var0, double var1) { return null; }
-	/** @deprecated */ public boolean inside(int var0, int var1) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean inside(int var0, int var1) { return false; }
 	public boolean intersects(double var0, double var1, double var2, double var3) { return false; }
 	public boolean intersects(java.awt.geom.Rectangle2D var0) { return false; }
 	public void invalidate() { }

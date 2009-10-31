@@ -15,8 +15,14 @@
  */
 
 package java.rmi.server;
-/** @deprecated */ public class Operation {
-	/** @deprecated */ public Operation(java.lang.String var0) { } 
-	/** @deprecated */ public java.lang.String getOperation() { return null; }
+/** @deprecated */
+@java.lang.Deprecated
+public class Operation {
+	/** @deprecated */
+	@java.lang.Deprecated
+	public Operation(java.lang.String var0) { } 
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.lang.String getOperation() { return null; }
 }
 

@@ -18,7 +18,6 @@ package java.text;
 public final class CollationKey implements java.lang.Comparable<java.text.CollationKey> {
 	public int compareTo(java.text.CollationKey var0) { return 0; }
 	public java.lang.String getSourceString() { return null; }
-	public int hashCode() { return 0; }
 	public byte[] toByteArray() { return null; }
 	private CollationKey() { } /* generated constructor to prevent compiler adding default public constructor */
 }

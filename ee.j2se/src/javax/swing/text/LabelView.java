@@ -17,7 +17,9 @@
 package javax.swing.text;
 public class LabelView extends javax.swing.text.GlyphView implements javax.swing.text.TabableView {
 	public LabelView(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null); } 
-	/** @deprecated */ protected java.awt.FontMetrics getFontMetrics() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.awt.FontMetrics getFontMetrics() { return null; }
 	protected void setBackground(java.awt.Color var0) { }
 	protected void setPropertiesFromAttributes() { }
 	protected void setStrikeThrough(boolean var0) { }

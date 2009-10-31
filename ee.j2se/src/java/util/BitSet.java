@@ -29,7 +29,6 @@ public class BitSet implements java.io.Serializable, java.lang.Cloneable {
 	public void flip(int var0, int var1) { }
 	public boolean get(int var0) { return false; }
 	public java.util.BitSet get(int var0, int var1) { return null; }
-	public int hashCode() { return 0; }
 	public boolean intersects(java.util.BitSet var0) { return false; }
 	public boolean isEmpty() { return false; }
 	public int length() { return 0; }

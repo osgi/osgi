@@ -15,7 +15,11 @@
  */
 
 package java.rmi.server;
-/** @deprecated */ public class SkeletonMismatchException extends java.rmi.RemoteException {
-	/** @deprecated */ public SkeletonMismatchException(java.lang.String var0) { } 
+/** @deprecated */
+@java.lang.Deprecated
+public class SkeletonMismatchException extends java.rmi.RemoteException {
+	/** @deprecated */
+	@java.lang.Deprecated
+	public SkeletonMismatchException(java.lang.String var0) { } 
 }
 

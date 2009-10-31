@@ -15,7 +15,9 @@
  */
 
 package org.omg.CORBA;
-/** @deprecated */ public interface DynAny extends org.omg.CORBA.Object {
+/** @deprecated */
+@java.lang.Deprecated
+public interface DynAny extends org.omg.CORBA.Object {
 	void assign(org.omg.CORBA.DynAny var0) throws org.omg.CORBA.DynAnyPackage.Invalid;
 	org.omg.CORBA.DynAny copy();
 	org.omg.CORBA.DynAny current_component();

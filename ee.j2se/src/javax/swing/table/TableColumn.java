@@ -29,7 +29,9 @@ public class TableColumn implements java.io.Serializable {
 	protected int maxWidth;
 	protected int minWidth;
 	protected int modelIndex;
-	/** @deprecated */ protected int resizedPostingDisableCount;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected int resizedPostingDisableCount;
 	protected int width;
 	public TableColumn() { } 
 	public TableColumn(int var0) { } 
@@ -37,8 +39,12 @@ public class TableColumn implements java.io.Serializable {
 	public TableColumn(int var0, int var1, javax.swing.table.TableCellRenderer var2, javax.swing.table.TableCellEditor var3) { } 
 	public void addPropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	protected javax.swing.table.TableCellRenderer createDefaultHeaderRenderer() { return null; }
-	/** @deprecated */ public void disableResizedPosting() { }
-	/** @deprecated */ public void enableResizedPosting() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void disableResizedPosting() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void enableResizedPosting() { }
 	public javax.swing.table.TableCellEditor getCellEditor() { return null; }
 	public javax.swing.table.TableCellRenderer getCellRenderer() { return null; }
 	public javax.swing.table.TableCellRenderer getHeaderRenderer() { return null; }

@@ -31,7 +31,6 @@ public abstract class X509CRL extends java.security.cert.CRL implements java.sec
 	public abstract byte[] getTBSCertList() throws java.security.cert.CRLException;
 	public abstract java.util.Date getThisUpdate();
 	public abstract int getVersion();
-	public int hashCode() { return 0; }
 	public abstract void verify(java.security.PublicKey var0) throws java.security.InvalidKeyException, java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException, java.security.SignatureException, java.security.cert.CRLException;
 	public abstract void verify(java.security.PublicKey var0, java.lang.String var1) throws java.security.InvalidKeyException, java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException, java.security.SignatureException, java.security.cert.CRLException;
 }

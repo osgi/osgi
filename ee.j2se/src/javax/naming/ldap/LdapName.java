@@ -37,7 +37,6 @@ public class LdapName implements javax.naming.Name {
 	public javax.naming.ldap.Rdn getRdn(int var0) { return null; }
 	public java.util.List<javax.naming.ldap.Rdn> getRdns() { return null; }
 	public javax.naming.Name getSuffix(int var0) { return null; }
-	public int hashCode() { return 0; }
 	public boolean isEmpty() { return false; }
 	public java.lang.Object remove(int var0) throws javax.naming.InvalidNameException { return null; }
 	public int size() { return 0; }

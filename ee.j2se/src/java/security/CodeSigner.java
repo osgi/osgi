@@ -19,6 +19,5 @@ public final class CodeSigner implements java.io.Serializable {
 	public CodeSigner(java.security.cert.CertPath var0, java.security.Timestamp var1) { } 
 	public java.security.cert.CertPath getSignerCertPath() { return null; }
 	public java.security.Timestamp getTimestamp() { return null; }
-	public int hashCode() { return 0; }
 }
 

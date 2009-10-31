@@ -29,7 +29,6 @@ public final class Subject implements java.io.Serializable {
 	public java.util.Set<java.lang.Object> getPublicCredentials() { return null; }
 	public <T> java.util.Set<T> getPublicCredentials(java.lang.Class<T> var0) { return null; }
 	public static javax.security.auth.Subject getSubject(java.security.AccessControlContext var0) { return null; }
-	public int hashCode() { return 0; }
 	public boolean isReadOnly() { return false; }
 	public void setReadOnly() { }
 }

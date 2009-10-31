@@ -22,6 +22,5 @@ public class TabSet implements java.io.Serializable {
 	public int getTabCount() { return 0; }
 	public int getTabIndex(javax.swing.text.TabStop var0) { return 0; }
 	public int getTabIndexAfter(float var0) { return 0; }
-	public int hashCode() { return 0; }
 }
 

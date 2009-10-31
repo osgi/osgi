@@ -54,7 +54,6 @@ public abstract class NumberFormat extends java.text.Format {
 	public static java.text.NumberFormat getNumberInstance(java.util.Locale var0) { return null; }
 	public final static java.text.NumberFormat getPercentInstance() { return null; }
 	public static java.text.NumberFormat getPercentInstance(java.util.Locale var0) { return null; }
-	public int hashCode() { return 0; }
 	public boolean isGroupingUsed() { return false; }
 	public boolean isParseIntegerOnly() { return false; }
 	public java.lang.Number parse(java.lang.String var0) throws java.text.ParseException { return null; }

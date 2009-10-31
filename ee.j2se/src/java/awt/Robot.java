@@ -31,7 +31,6 @@ public class Robot {
 	public void mouseWheel(int var0) { }
 	public void setAutoDelay(int var0) { }
 	public void setAutoWaitForIdle(boolean var0) { }
-	public java.lang.String toString() { return null; }
 	public void waitForIdle() { }
 }
 

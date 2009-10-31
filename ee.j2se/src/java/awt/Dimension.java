@@ -24,7 +24,6 @@ public class Dimension extends java.awt.geom.Dimension2D implements java.io.Seri
 	public double getHeight() { return 0.0d; }
 	public java.awt.Dimension getSize() { return null; }
 	public double getWidth() { return 0.0d; }
-	public int hashCode() { return 0; }
 	public void setSize(double var0, double var1) { }
 	public void setSize(int var0, int var1) { }
 	public void setSize(java.awt.Dimension var0) { }

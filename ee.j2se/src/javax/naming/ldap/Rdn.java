@@ -24,7 +24,6 @@ public class Rdn implements java.io.Serializable, java.lang.Comparable<java.lang
 	public static java.lang.String escapeValue(java.lang.Object var0) { return null; }
 	public java.lang.String getType() { return null; }
 	public java.lang.Object getValue() { return null; }
-	public int hashCode() { return 0; }
 	public int size() { return 0; }
 	public javax.naming.directory.Attributes toAttributes() { return null; }
 	public static java.lang.Object unescapeValue(java.lang.String var0) { return null; }

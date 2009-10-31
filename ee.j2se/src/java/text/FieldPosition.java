@@ -23,7 +23,6 @@ public class FieldPosition {
 	public int getEndIndex() { return 0; }
 	public int getField() { return 0; }
 	public java.text.Format.Field getFieldAttribute() { return null; }
-	public int hashCode() { return 0; }
 	public void setBeginIndex(int var0) { }
 	public void setEndIndex(int var0) { }
 }

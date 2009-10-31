@@ -32,7 +32,9 @@ public class BorderLayout implements java.awt.LayoutManager2, java.io.Serializab
 	public BorderLayout() { } 
 	public BorderLayout(int var0, int var1) { } 
 	public void addLayoutComponent(java.awt.Component var0, java.lang.Object var1) { }
-	/** @deprecated */ public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }
 	public java.lang.Object getConstraints(java.awt.Component var0) { return null; }
 	public int getHgap() { return 0; }
 	public float getLayoutAlignmentX(java.awt.Container var0) { return 0.0f; }

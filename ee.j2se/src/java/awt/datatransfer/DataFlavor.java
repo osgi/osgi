@@ -21,7 +21,9 @@ public class DataFlavor implements java.io.Externalizable, java.lang.Cloneable {
 	public final static java.lang.String javaJVMLocalObjectMimeType = "application/x-java-jvm-local-objectref";
 	public final static java.lang.String javaRemoteObjectMimeType = "application/x-java-remote-object";
 	public final static java.lang.String javaSerializedObjectMimeType = "application/x-java-serialized-object";
-	/** @deprecated */ public final static java.awt.datatransfer.DataFlavor plainTextFlavor; static { plainTextFlavor = null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public final static java.awt.datatransfer.DataFlavor plainTextFlavor; static { plainTextFlavor = null; }
 	public final static java.awt.datatransfer.DataFlavor stringFlavor; static { stringFlavor = null; }
 	public DataFlavor() { } 
 	public DataFlavor(java.lang.Class<?> var0, java.lang.String var1) { } 
@@ -30,7 +32,9 @@ public class DataFlavor implements java.io.Externalizable, java.lang.Cloneable {
 	public DataFlavor(java.lang.String var0, java.lang.String var1, java.lang.ClassLoader var2) throws java.lang.ClassNotFoundException { } 
 	public java.lang.Object clone() throws java.lang.CloneNotSupportedException { return null; }
 	public boolean equals(java.awt.datatransfer.DataFlavor var0) { return false; }
-	/** @deprecated */ public boolean equals(java.lang.String var0) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean equals(java.lang.String var0) { return false; }
 	public final java.lang.Class<?> getDefaultRepresentationClass() { return null; }
 	public final java.lang.String getDefaultRepresentationClassAsString() { return null; }
 	public java.lang.String getHumanPresentableName() { return null; }
@@ -41,7 +45,6 @@ public class DataFlavor implements java.io.Externalizable, java.lang.Cloneable {
 	public java.lang.Class<?> getRepresentationClass() { return null; }
 	public java.lang.String getSubType() { return null; }
 	public final static java.awt.datatransfer.DataFlavor getTextPlainUnicodeFlavor() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isFlavorJavaFileListType() { return false; }
 	public boolean isFlavorRemoteObjectType() { return false; }
 	public boolean isFlavorSerializedObjectType() { return false; }
@@ -56,8 +59,12 @@ public class DataFlavor implements java.io.Externalizable, java.lang.Cloneable {
 	public boolean isRepresentationClassRemote() { return false; }
 	public boolean isRepresentationClassSerializable() { return false; }
 	public boolean match(java.awt.datatransfer.DataFlavor var0) { return false; }
-	/** @deprecated */ protected java.lang.String normalizeMimeType(java.lang.String var0) { return null; }
-	/** @deprecated */ protected java.lang.String normalizeMimeTypeParameter(java.lang.String var0, java.lang.String var1) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.lang.String normalizeMimeType(java.lang.String var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.lang.String normalizeMimeTypeParameter(java.lang.String var0, java.lang.String var1) { return null; }
 	public void readExternal(java.io.ObjectInput var0) throws java.io.IOException, java.lang.ClassNotFoundException { }
 	public final static java.awt.datatransfer.DataFlavor selectBestTextFlavor(java.awt.datatransfer.DataFlavor[] var0) { return null; }
 	public void setHumanPresentableName(java.lang.String var0) { }

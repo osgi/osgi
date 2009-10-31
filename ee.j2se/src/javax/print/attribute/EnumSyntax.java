@@ -22,7 +22,6 @@ public abstract class EnumSyntax implements java.io.Serializable, java.lang.Clon
 	protected int getOffset() { return 0; }
 	protected java.lang.String[] getStringTable() { return null; }
 	public int getValue() { return 0; }
-	public int hashCode() { return 0; }
 	protected java.lang.Object readResolve() throws java.io.ObjectStreamException { return null; }
 }
 

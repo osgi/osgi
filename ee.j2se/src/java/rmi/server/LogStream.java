@@ -15,16 +15,30 @@
  */
 
 package java.rmi.server;
-/** @deprecated */ public class LogStream extends java.io.PrintStream {
+/** @deprecated */
+@java.lang.Deprecated
+public class LogStream extends java.io.PrintStream {
 	public final static int BRIEF = 10;
 	public final static int SILENT = 0;
 	public final static int VERBOSE = 20;
-	/** @deprecated */ public static java.io.PrintStream getDefaultStream() { return null; }
-	/** @deprecated */ public java.io.OutputStream getOutputStream() { return null; }
-	/** @deprecated */ public static java.rmi.server.LogStream log(java.lang.String var0) { return null; }
-	/** @deprecated */ public static int parseLevel(java.lang.String var0) { return 0; }
-	/** @deprecated */ public static void setDefaultStream(java.io.PrintStream var0) { }
-	/** @deprecated */ public void setOutputStream(java.io.OutputStream var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static java.io.PrintStream getDefaultStream() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.io.OutputStream getOutputStream() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static java.rmi.server.LogStream log(java.lang.String var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static int parseLevel(java.lang.String var0) { return 0; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static void setDefaultStream(java.io.PrintStream var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void setOutputStream(java.io.OutputStream var0) { }
 	private LogStream()  { super((java.io.OutputStream) null, false); } /* generated constructor to prevent compiler adding default public constructor */
 }
 

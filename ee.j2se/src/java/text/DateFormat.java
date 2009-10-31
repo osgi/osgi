@@ -82,7 +82,6 @@ public abstract class DateFormat extends java.text.Format {
 	public final static java.text.DateFormat getTimeInstance(int var0) { return null; }
 	public final static java.text.DateFormat getTimeInstance(int var0, java.util.Locale var1) { return null; }
 	public java.util.TimeZone getTimeZone() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isLenient() { return false; }
 	public java.util.Date parse(java.lang.String var0) throws java.text.ParseException { return null; }
 	public abstract java.util.Date parse(java.lang.String var0, java.text.ParsePosition var1);

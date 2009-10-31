@@ -34,7 +34,6 @@ public final class URL implements java.io.Serializable {
 	public java.lang.String getQuery() { return null; }
 	public java.lang.String getRef() { return null; }
 	public java.lang.String getUserInfo() { return null; }
-	public int hashCode() { return 0; }
 	public java.net.URLConnection openConnection() throws java.io.IOException { return null; }
 	public java.net.URLConnection openConnection(java.net.Proxy var0) throws java.io.IOException { return null; }
 	public final java.io.InputStream openStream() throws java.io.IOException { return null; }

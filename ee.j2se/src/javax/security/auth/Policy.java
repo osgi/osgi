@@ -15,7 +15,9 @@
  */
 
 package javax.security.auth;
-/** @deprecated */ public abstract class Policy {
+/** @deprecated */
+@java.lang.Deprecated
+public abstract class Policy {
 	protected Policy() { } 
 	public abstract java.security.PermissionCollection getPermissions(javax.security.auth.Subject var0, java.security.CodeSource var1);
 	public static javax.security.auth.Policy getPolicy() { return null; }

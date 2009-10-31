@@ -20,7 +20,6 @@ public class PushbackInputStream extends java.io.FilterInputStream {
 	protected int pos;
 	public PushbackInputStream(java.io.InputStream var0)  { super((java.io.InputStream) null); } 
 	public PushbackInputStream(java.io.InputStream var0, int var1)  { super((java.io.InputStream) null); } 
-	public void close() throws java.io.IOException { }
 	public void unread(int var0) throws java.io.IOException { }
 	public void unread(byte[] var0) throws java.io.IOException { }
 	public void unread(byte[] var0, int var1, int var2) throws java.io.IOException { }

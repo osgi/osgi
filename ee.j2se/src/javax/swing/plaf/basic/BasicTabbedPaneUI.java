@@ -50,18 +50,24 @@ public class BasicTabbedPaneUI extends javax.swing.plaf.TabbedPaneUI implements 
 	protected java.awt.Rectangle calcRect;
 	protected java.awt.Insets contentBorderInsets;
 	protected java.awt.Color darkShadow;
-	/** @deprecated */ protected javax.swing.KeyStroke downKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke downKey;
 	protected java.awt.Color focus;
 	protected java.awt.event.FocusListener focusListener;
 	protected java.awt.Color highlight;
-	/** @deprecated */ protected javax.swing.KeyStroke leftKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke leftKey;
 	protected java.awt.Color lightHighlight;
 	protected int maxTabHeight;
 	protected int maxTabWidth;
 	protected java.awt.event.MouseListener mouseListener;
 	protected java.beans.PropertyChangeListener propertyChangeListener;
 	protected java.awt.Rectangle[] rects;
-	/** @deprecated */ protected javax.swing.KeyStroke rightKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke rightKey;
 	protected int runCount;
 	protected int selectedRun;
 	protected java.awt.Insets selectedTabPadInsets;
@@ -73,7 +79,9 @@ public class BasicTabbedPaneUI extends javax.swing.plaf.TabbedPaneUI implements 
 	protected int tabRunOverlay;
 	protected int[] tabRuns;
 	protected int textIconGap;
-	/** @deprecated */ protected javax.swing.KeyStroke upKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke upKey;
 	public BasicTabbedPaneUI() { } 
 	protected void assureRectsCreated(int var0) { }
 	protected int calculateMaxTabHeight(int var0) { return 0; }

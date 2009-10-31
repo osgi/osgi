@@ -22,9 +22,15 @@ public interface MBeanServer extends javax.management.MBeanServerConnection {
 	javax.management.ObjectInstance createMBean(java.lang.String var0, javax.management.ObjectName var1, javax.management.ObjectName var2) throws javax.management.InstanceAlreadyExistsException, javax.management.InstanceNotFoundException, javax.management.MBeanException, javax.management.NotCompliantMBeanException, javax.management.ReflectionException;
 	javax.management.ObjectInstance createMBean(java.lang.String var0, javax.management.ObjectName var1, javax.management.ObjectName var2, java.lang.Object[] var3, java.lang.String[] var4) throws javax.management.InstanceAlreadyExistsException, javax.management.InstanceNotFoundException, javax.management.MBeanException, javax.management.NotCompliantMBeanException, javax.management.ReflectionException;
 	javax.management.ObjectInstance createMBean(java.lang.String var0, javax.management.ObjectName var1, java.lang.Object[] var2, java.lang.String[] var3) throws javax.management.InstanceAlreadyExistsException, javax.management.MBeanException, javax.management.NotCompliantMBeanException, javax.management.ReflectionException;
-	/** @deprecated */ java.io.ObjectInputStream deserialize(java.lang.String var0, javax.management.ObjectName var1, byte[] var2) throws javax.management.OperationsException, javax.management.ReflectionException;
-	/** @deprecated */ java.io.ObjectInputStream deserialize(java.lang.String var0, byte[] var1) throws javax.management.OperationsException, javax.management.ReflectionException;
-	/** @deprecated */ java.io.ObjectInputStream deserialize(javax.management.ObjectName var0, byte[] var1) throws javax.management.OperationsException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.io.ObjectInputStream deserialize(java.lang.String var0, javax.management.ObjectName var1, byte[] var2) throws javax.management.OperationsException, javax.management.ReflectionException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.io.ObjectInputStream deserialize(java.lang.String var0, byte[] var1) throws javax.management.OperationsException, javax.management.ReflectionException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.io.ObjectInputStream deserialize(javax.management.ObjectName var0, byte[] var1) throws javax.management.OperationsException;
 	java.lang.Object getAttribute(javax.management.ObjectName var0, java.lang.String var1) throws javax.management.AttributeNotFoundException, javax.management.InstanceNotFoundException, javax.management.MBeanException, javax.management.ReflectionException;
 	javax.management.AttributeList getAttributes(javax.management.ObjectName var0, java.lang.String[] var1) throws javax.management.InstanceNotFoundException, javax.management.ReflectionException;
 	java.lang.ClassLoader getClassLoader(javax.management.ObjectName var0) throws javax.management.InstanceNotFoundException;

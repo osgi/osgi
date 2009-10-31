@@ -22,7 +22,9 @@ public abstract class InputStream extends java.io.InputStream {
 	public org.omg.CORBA.Context read_Context() { return null; }
 	public abstract org.omg.CORBA.Object read_Object();
 	public org.omg.CORBA.Object read_Object(java.lang.Class var0) { return null; }
-	/** @deprecated */ public org.omg.CORBA.Principal read_Principal() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public org.omg.CORBA.Principal read_Principal() { return null; }
 	public abstract org.omg.CORBA.TypeCode read_TypeCode();
 	public abstract org.omg.CORBA.Any read_any();
 	public abstract boolean read_boolean();

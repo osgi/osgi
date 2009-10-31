@@ -24,6 +24,5 @@ public final class DisplayMode {
 	public int getHeight() { return 0; }
 	public int getRefreshRate() { return 0; }
 	public int getWidth() { return 0; }
-	public int hashCode() { return 0; }
 }
 

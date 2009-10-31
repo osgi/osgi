@@ -22,6 +22,5 @@ public class EllipticCurve {
 	public java.math.BigInteger getB() { return null; }
 	public java.security.spec.ECField getField() { return null; }
 	public byte[] getSeed() { return null; }
-	public int hashCode() { return 0; }
 }
 

@@ -22,7 +22,9 @@ public abstract class OutputStream extends java.io.OutputStream {
 	public void write(int var0) throws java.io.IOException { }
 	public void write_Context(org.omg.CORBA.Context var0, org.omg.CORBA.ContextList var1) { }
 	public abstract void write_Object(org.omg.CORBA.Object var0);
-	/** @deprecated */ public void write_Principal(org.omg.CORBA.Principal var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void write_Principal(org.omg.CORBA.Principal var0) { }
 	public abstract void write_TypeCode(org.omg.CORBA.TypeCode var0);
 	public abstract void write_any(org.omg.CORBA.Any var0);
 	public abstract void write_boolean(boolean var0);

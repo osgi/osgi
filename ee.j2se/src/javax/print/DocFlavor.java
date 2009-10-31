@@ -110,6 +110,5 @@ public class DocFlavor implements java.io.Serializable, java.lang.Cloneable {
 	public java.lang.String getMimeType() { return null; }
 	public java.lang.String getParameter(java.lang.String var0) { return null; }
 	public java.lang.String getRepresentationClassName() { return null; }
-	public int hashCode() { return 0; }
 }
 

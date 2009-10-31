@@ -23,7 +23,6 @@ public class ByteArrayInputStream extends java.io.InputStream {
 	public ByteArrayInputStream(byte[] var0) { } 
 	public ByteArrayInputStream(byte[] var0, int var1, int var2) { } 
 	public int available() { return 0; }
-	public void mark(int var0) { }
 	public int read() { return 0; }
 	public int read(byte[] var0, int var1, int var2) { return 0; }
 	public void reset() { }

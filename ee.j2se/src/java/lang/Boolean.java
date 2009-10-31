@@ -24,7 +24,6 @@ public final class Boolean implements java.io.Serializable, java.lang.Comparable
 	public boolean booleanValue() { return false; }
 	public int compareTo(java.lang.Boolean var0) { return 0; }
 	public static boolean getBoolean(java.lang.String var0) { return false; }
-	public int hashCode() { return 0; }
 	public static boolean parseBoolean(java.lang.String var0) { return false; }
 	public static java.lang.String toString(boolean var0) { return null; }
 	public static java.lang.Boolean valueOf(java.lang.String var0) { return null; }

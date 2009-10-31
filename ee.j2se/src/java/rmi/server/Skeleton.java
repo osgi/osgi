@@ -15,8 +15,14 @@
  */
 
 package java.rmi.server;
-/** @deprecated */ public interface Skeleton {
-	/** @deprecated */ void dispatch(java.rmi.Remote var0, java.rmi.server.RemoteCall var1, int var2, long var3) throws java.lang.Exception;
-	/** @deprecated */ java.rmi.server.Operation[] getOperations();
+/** @deprecated */
+@java.lang.Deprecated
+public interface Skeleton {
+	/** @deprecated */
+	@java.lang.Deprecated
+	void dispatch(java.rmi.Remote var0, java.rmi.server.RemoteCall var1, int var2, long var3) throws java.lang.Exception;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.rmi.server.Operation[] getOperations();
 }
 

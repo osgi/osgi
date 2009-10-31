@@ -15,7 +15,9 @@
  */
 
 package org.omg.CORBA;
-/** @deprecated */ public interface DynEnum extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
+/** @deprecated */
+@java.lang.Deprecated
+public interface DynEnum extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
 	java.lang.String value_as_string();
 	void value_as_string(java.lang.String var0);
 	int value_as_ulong();

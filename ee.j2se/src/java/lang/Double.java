@@ -31,7 +31,6 @@ public final class Double extends java.lang.Number implements java.lang.Comparab
 	public static native long doubleToRawLongBits(double var0);
 	public double doubleValue() { return 0.0d; }
 	public float floatValue() { return 0.0f; }
-	public int hashCode() { return 0; }
 	public int intValue() { return 0; }
 	public boolean isInfinite() { return false; }
 	public static boolean isInfinite(double var0) { return false; }

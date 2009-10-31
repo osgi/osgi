@@ -216,7 +216,9 @@ public class KeyEvent extends java.awt.event.InputEvent {
 	public final static int VK_X = 88;
 	public final static int VK_Y = 89;
 	public final static int VK_Z = 90;
-	/** @deprecated */ public KeyEvent(java.awt.Component var0, int var1, long var2, int var3, int var4) { } 
+	/** @deprecated */
+	@java.lang.Deprecated
+	public KeyEvent(java.awt.Component var0, int var1, long var2, int var3, int var4) { } 
 	public KeyEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, char var5) { } 
 	public KeyEvent(java.awt.Component var0, int var1, long var2, int var3, int var4, char var5, int var6) { } 
 	public char getKeyChar() { return '\0'; }
@@ -227,6 +229,8 @@ public class KeyEvent extends java.awt.event.InputEvent {
 	public boolean isActionKey() { return false; }
 	public void setKeyChar(char var0) { }
 	public void setKeyCode(int var0) { }
-	/** @deprecated */ public void setModifiers(int var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void setModifiers(int var0) { }
 }
 

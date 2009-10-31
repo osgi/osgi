@@ -36,13 +36,23 @@ public class BasicDesktopPaneUI extends javax.swing.plaf.DesktopPaneUI {
 		protected OpenAction() { } 
 		public void actionPerformed(java.awt.event.ActionEvent var0) { }
 	}
-	/** @deprecated */ protected javax.swing.KeyStroke closeKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke closeKey;
 	protected javax.swing.JDesktopPane desktop;
 	protected javax.swing.DesktopManager desktopManager;
-	/** @deprecated */ protected javax.swing.KeyStroke maximizeKey;
-	/** @deprecated */ protected javax.swing.KeyStroke minimizeKey;
-	/** @deprecated */ protected javax.swing.KeyStroke navigateKey;
-	/** @deprecated */ protected javax.swing.KeyStroke navigateKey2;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke maximizeKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke minimizeKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke navigateKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke navigateKey2;
 	public BasicDesktopPaneUI() { } 
 	protected java.beans.PropertyChangeListener createPropertyChangeListener() { return null; }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }

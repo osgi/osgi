@@ -20,8 +20,5 @@ public class BufferedOutputStream extends java.io.FilterOutputStream {
 	protected int count;
 	public BufferedOutputStream(java.io.OutputStream var0)  { super((java.io.OutputStream) null); } 
 	public BufferedOutputStream(java.io.OutputStream var0, int var1)  { super((java.io.OutputStream) null); } 
-	public void flush() throws java.io.IOException { }
-	public void write(int var0) throws java.io.IOException { }
-	public void write(byte[] var0, int var1, int var2) throws java.io.IOException { }
 }
 

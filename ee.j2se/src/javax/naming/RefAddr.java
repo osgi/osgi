@@ -20,6 +20,5 @@ public abstract class RefAddr implements java.io.Serializable {
 	protected RefAddr(java.lang.String var0) { } 
 	public abstract java.lang.Object getContent();
 	public java.lang.String getType() { return null; }
-	public int hashCode() { return 0; }
 }
 

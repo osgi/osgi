@@ -23,7 +23,6 @@ public class CompositeDataSupport implements java.io.Serializable, javax.managem
 	public java.lang.Object get(java.lang.String var0) { return null; }
 	public java.lang.Object[] getAll(java.lang.String[] var0) { return null; }
 	public javax.management.openmbean.CompositeType getCompositeType() { return null; }
-	public int hashCode() { return 0; }
 	public java.util.Collection values() { return null; }
 }
 

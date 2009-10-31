@@ -35,7 +35,6 @@ public class Attributes implements java.lang.Cloneable, java.util.Map<java.lang.
 		public final static java.util.jar.Attributes.Name SPECIFICATION_VENDOR; static { SPECIFICATION_VENDOR = null; }
 		public final static java.util.jar.Attributes.Name SPECIFICATION_VERSION; static { SPECIFICATION_VERSION = null; }
 		public Name(java.lang.String var0) { } 
-		public int hashCode() { return 0; }
 	}
 	protected java.util.Map<java.lang.Object,java.lang.Object> map;
 	public Attributes() { } 
@@ -49,7 +48,6 @@ public class Attributes implements java.lang.Cloneable, java.util.Map<java.lang.
 	public java.lang.Object get(java.lang.Object var0) { return null; }
 	public java.lang.String getValue(java.lang.String var0) { return null; }
 	public java.lang.String getValue(java.util.jar.Attributes.Name var0) { return null; }
-	public int hashCode() { return 0; }
 	public boolean isEmpty() { return false; }
 	public java.util.Set<java.lang.Object> keySet() { return null; }
 	public java.lang.Object put(java.lang.Object var0, java.lang.Object var1) { return null; }

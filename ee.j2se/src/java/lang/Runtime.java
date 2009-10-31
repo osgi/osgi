@@ -27,8 +27,12 @@ public class Runtime {
 	public void exit(int var0) { }
 	public native long freeMemory();
 	public native void gc();
-	/** @deprecated */ public java.io.InputStream getLocalizedInputStream(java.io.InputStream var0) { return null; }
-	/** @deprecated */ public java.io.OutputStream getLocalizedOutputStream(java.io.OutputStream var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.io.InputStream getLocalizedInputStream(java.io.InputStream var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.io.OutputStream getLocalizedOutputStream(java.io.OutputStream var0) { return null; }
 	public static java.lang.Runtime getRuntime() { return null; }
 	public void halt(int var0) { }
 	public void load(java.lang.String var0) { }
@@ -36,7 +40,9 @@ public class Runtime {
 	public native long maxMemory();
 	public boolean removeShutdownHook(java.lang.Thread var0) { return false; }
 	public void runFinalization() { }
-	/** @deprecated */ public static void runFinalizersOnExit(boolean var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static void runFinalizersOnExit(boolean var0) { }
 	public native long totalMemory();
 	public native void traceInstructions(boolean var0);
 	public native void traceMethodCalls(boolean var0);

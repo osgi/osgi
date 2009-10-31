@@ -45,7 +45,6 @@ public final class AlphaComposite implements java.awt.Composite {
 	public static java.awt.AlphaComposite getInstance(int var0) { return null; }
 	public static java.awt.AlphaComposite getInstance(int var0, float var1) { return null; }
 	public int getRule() { return 0; }
-	public int hashCode() { return 0; }
 	private AlphaComposite() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

@@ -19,12 +19,16 @@ public abstract class SignatureSpi {
 	protected java.security.SecureRandom appRandom;
 	public SignatureSpi() { } 
 	public java.lang.Object clone() throws java.lang.CloneNotSupportedException { return null; }
-	/** @deprecated */ protected abstract java.lang.Object engineGetParameter(java.lang.String var0);
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected abstract java.lang.Object engineGetParameter(java.lang.String var0);
 	protected java.security.AlgorithmParameters engineGetParameters() { return null; }
 	protected abstract void engineInitSign(java.security.PrivateKey var0) throws java.security.InvalidKeyException;
 	protected void engineInitSign(java.security.PrivateKey var0, java.security.SecureRandom var1) throws java.security.InvalidKeyException { }
 	protected abstract void engineInitVerify(java.security.PublicKey var0) throws java.security.InvalidKeyException;
-	/** @deprecated */ protected abstract void engineSetParameter(java.lang.String var0, java.lang.Object var1);
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected abstract void engineSetParameter(java.lang.String var0, java.lang.Object var1);
 	protected void engineSetParameter(java.security.spec.AlgorithmParameterSpec var0) throws java.security.InvalidAlgorithmParameterException { }
 	protected abstract byte[] engineSign() throws java.security.SignatureException;
 	protected int engineSign(byte[] var0, int var1, int var2) throws java.security.SignatureException { return 0; }

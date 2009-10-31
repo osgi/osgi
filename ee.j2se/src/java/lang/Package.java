@@ -28,7 +28,6 @@ public class Package implements java.lang.reflect.AnnotatedElement {
 	public java.lang.String getSpecificationTitle() { return null; }
 	public java.lang.String getSpecificationVendor() { return null; }
 	public java.lang.String getSpecificationVersion() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isAnnotationPresent(java.lang.Class<? extends java.lang.annotation.Annotation> var0) { return false; }
 	public boolean isCompatibleWith(java.lang.String var0) { return false; }
 	public boolean isSealed() { return false; }

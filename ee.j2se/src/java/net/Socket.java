@@ -19,10 +19,14 @@ public class Socket {
 	public Socket() { } 
 	public Socket(java.lang.String var0, int var1) throws java.io.IOException { } 
 	public Socket(java.lang.String var0, int var1, java.net.InetAddress var2, int var3) throws java.io.IOException { } 
-	/** @deprecated */ public Socket(java.lang.String var0, int var1, boolean var2) throws java.io.IOException { } 
+	/** @deprecated */
+	@java.lang.Deprecated
+	public Socket(java.lang.String var0, int var1, boolean var2) throws java.io.IOException { } 
 	public Socket(java.net.InetAddress var0, int var1) throws java.io.IOException { } 
 	public Socket(java.net.InetAddress var0, int var1, java.net.InetAddress var2, int var3) throws java.io.IOException { } 
-	/** @deprecated */ public Socket(java.net.InetAddress var0, int var1, boolean var2) throws java.io.IOException { } 
+	/** @deprecated */
+	@java.lang.Deprecated
+	public Socket(java.net.InetAddress var0, int var1, boolean var2) throws java.io.IOException { } 
 	public Socket(java.net.Proxy var0) { } 
 	protected Socket(java.net.SocketImpl var0) throws java.net.SocketException { } 
 	public void bind(java.net.SocketAddress var0) throws java.io.IOException { }

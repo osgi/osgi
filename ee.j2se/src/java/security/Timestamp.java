@@ -19,6 +19,5 @@ public final class Timestamp implements java.io.Serializable {
 	public Timestamp(java.util.Date var0, java.security.cert.CertPath var1) { } 
 	public java.security.cert.CertPath getSignerCertPath() { return null; }
 	public java.util.Date getTimestamp() { return null; }
-	public int hashCode() { return 0; }
 }
 

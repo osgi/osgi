@@ -17,6 +17,5 @@
 package java.awt;
 abstract class AttributeValue {
 	protected AttributeValue(int var0, java.lang.String[] var1) { } 
-	public int hashCode() { return 0; }
 }
 

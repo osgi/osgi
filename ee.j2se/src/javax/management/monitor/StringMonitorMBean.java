@@ -16,9 +16,13 @@
 
 package javax.management.monitor;
 public interface StringMonitorMBean extends javax.management.monitor.MonitorMBean {
-	/** @deprecated */ java.lang.String getDerivedGauge();
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.lang.String getDerivedGauge();
 	java.lang.String getDerivedGauge(javax.management.ObjectName var0);
-	/** @deprecated */ long getDerivedGaugeTimeStamp();
+	/** @deprecated */
+	@java.lang.Deprecated
+	long getDerivedGaugeTimeStamp();
 	long getDerivedGaugeTimeStamp(javax.management.ObjectName var0);
 	boolean getNotifyDiffer();
 	boolean getNotifyMatch();

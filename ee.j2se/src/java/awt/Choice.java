@@ -26,7 +26,9 @@ public class Choice extends java.awt.Component implements java.awt.ItemSelectabl
 	public void add(java.lang.String var0) { }
 	public void addItem(java.lang.String var0) { }
 	public void addItemListener(java.awt.event.ItemListener var0) { }
-	/** @deprecated */ public int countItems() { return 0; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public int countItems() { return 0; }
 	public java.lang.String getItem(int var0) { return null; }
 	public int getItemCount() { return 0; }
 	public java.awt.event.ItemListener[] getItemListeners() { return null; }

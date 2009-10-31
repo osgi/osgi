@@ -26,7 +26,6 @@ public final class Byte extends java.lang.Number implements java.lang.Comparable
 	public static java.lang.Byte decode(java.lang.String var0) { return null; }
 	public double doubleValue() { return 0.0d; }
 	public float floatValue() { return 0.0f; }
-	public int hashCode() { return 0; }
 	public int intValue() { return 0; }
 	public long longValue() { return 0l; }
 	public static byte parseByte(java.lang.String var0) { return 0; }

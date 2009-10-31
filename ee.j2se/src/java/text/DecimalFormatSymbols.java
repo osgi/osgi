@@ -33,7 +33,6 @@ public final class DecimalFormatSymbols implements java.io.Serializable, java.la
 	public char getPerMill() { return '\0'; }
 	public char getPercent() { return '\0'; }
 	public char getZeroDigit() { return '\0'; }
-	public int hashCode() { return 0; }
 	public void setCurrency(java.util.Currency var0) { }
 	public void setCurrencySymbol(java.lang.String var0) { }
 	public void setDecimalSeparator(char var0) { }

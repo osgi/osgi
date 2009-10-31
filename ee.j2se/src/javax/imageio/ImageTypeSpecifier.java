@@ -36,6 +36,5 @@ public class ImageTypeSpecifier {
 	public int getNumComponents() { return 0; }
 	public java.awt.image.SampleModel getSampleModel() { return null; }
 	public java.awt.image.SampleModel getSampleModel(int var0, int var1) { return null; }
-	public int hashCode() { return 0; }
 }
 

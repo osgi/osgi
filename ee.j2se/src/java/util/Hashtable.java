@@ -27,9 +27,7 @@ public class Hashtable<K,V> extends java.util.Dictionary<K,V> implements java.io
 	public boolean containsValue(java.lang.Object var0) { return false; }
 	public java.util.Enumeration<V> elements() { return null; }
 	public java.util.Set<java.util.Map.Entry<K,V>> entrySet() { return null; }
-	public boolean equals(java.lang.Object var0) { return false; }
 	public V get(java.lang.Object var0) { return null; }
-	public int hashCode() { return 0; }
 	public boolean isEmpty() { return false; }
 	public java.util.Set<K> keySet() { return null; }
 	public java.util.Enumeration<K> keys() { return null; }
@@ -38,7 +36,6 @@ public class Hashtable<K,V> extends java.util.Dictionary<K,V> implements java.io
 	protected void rehash() { }
 	public V remove(java.lang.Object var0) { return null; }
 	public int size() { return 0; }
-	public java.lang.String toString() { return null; }
 	public java.util.Collection<V> values() { return null; }
 }
 

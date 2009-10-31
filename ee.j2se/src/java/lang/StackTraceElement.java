@@ -21,7 +21,6 @@ public final class StackTraceElement implements java.io.Serializable {
 	public java.lang.String getFileName() { return null; }
 	public int getLineNumber() { return 0; }
 	public java.lang.String getMethodName() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isNativeMethod() { return false; }
 }
 

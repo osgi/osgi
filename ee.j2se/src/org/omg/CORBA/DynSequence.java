@@ -15,7 +15,9 @@
  */
 
 package org.omg.CORBA;
-/** @deprecated */ public interface DynSequence extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
+/** @deprecated */
+@java.lang.Deprecated
+public interface DynSequence extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
 	org.omg.CORBA.Any[] get_elements();
 	int length();
 	void length(int var0);

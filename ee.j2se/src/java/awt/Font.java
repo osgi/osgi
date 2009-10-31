@@ -72,7 +72,9 @@ public class Font implements java.io.Serializable {
 	public java.lang.String getName() { return null; }
 	public int getNumGlyphs() { return 0; }
 	public java.lang.String getPSName() { return null; }
-	/** @deprecated */ public java.awt.peer.FontPeer getPeer() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.peer.FontPeer getPeer() { return null; }
 	public int getSize() { return 0; }
 	public float getSize2D() { return 0.0f; }
 	public java.awt.geom.Rectangle2D getStringBounds(java.lang.String var0, int var1, int var2, java.awt.font.FontRenderContext var3) { return null; }
@@ -82,7 +84,6 @@ public class Font implements java.io.Serializable {
 	public int getStyle() { return 0; }
 	public java.awt.geom.AffineTransform getTransform() { return null; }
 	public boolean hasUniformLineMetrics() { return false; }
-	public int hashCode() { return 0; }
 	public boolean isBold() { return false; }
 	public boolean isItalic() { return false; }
 	public boolean isPlain() { return false; }

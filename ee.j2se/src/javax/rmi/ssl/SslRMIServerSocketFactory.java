@@ -22,6 +22,5 @@ public class SslRMIServerSocketFactory implements java.rmi.server.RMIServerSocke
 	public final java.lang.String[] getEnabledCipherSuites() { return null; }
 	public final java.lang.String[] getEnabledProtocols() { return null; }
 	public final boolean getNeedClientAuth() { return false; }
-	public int hashCode() { return 0; }
 }
 

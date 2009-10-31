@@ -25,7 +25,6 @@ public final class Constructor<T> extends java.lang.reflect.AccessibleObject imp
 	public java.lang.annotation.Annotation[][] getParameterAnnotations() { return null; }
 	public java.lang.Class<?>[] getParameterTypes() { return null; }
 	public java.lang.reflect.TypeVariable<java.lang.reflect.Constructor<T>>[] getTypeParameters() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isSynthetic() { return false; }
 	public boolean isVarArgs() { return false; }
 	public T newInstance(java.lang.Object... var0) throws java.lang.IllegalAccessException, java.lang.InstantiationException, java.lang.reflect.InvocationTargetException { return null; }

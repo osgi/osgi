@@ -25,6 +25,5 @@ public final class MathContext implements java.io.Serializable {
 	public MathContext(java.lang.String var0) { } 
 	public int getPrecision() { return 0; }
 	public java.math.RoundingMode getRoundingMode() { return null; }
-	public int hashCode() { return 0; }
 }
 

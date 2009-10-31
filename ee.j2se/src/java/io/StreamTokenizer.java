@@ -23,7 +23,9 @@ public class StreamTokenizer {
 	public double nval;
 	public java.lang.String sval;
 	public int ttype;
-	/** @deprecated */ public StreamTokenizer(java.io.InputStream var0) { } 
+	/** @deprecated */
+	@java.lang.Deprecated
+	public StreamTokenizer(java.io.InputStream var0) { } 
 	public StreamTokenizer(java.io.Reader var0) { } 
 	public void commentChar(int var0) { }
 	public void eolIsSignificant(boolean var0) { }

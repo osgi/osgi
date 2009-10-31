@@ -18,11 +18,17 @@ package java.rmi.server;
 public interface RemoteRef extends java.io.Externalizable {
 	public final static java.lang.String packagePrefix = "sun.rmi.server";
 	public final static long serialVersionUID = 3632638527362204081l;
-	/** @deprecated */ void done(java.rmi.server.RemoteCall var0) throws java.rmi.RemoteException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	void done(java.rmi.server.RemoteCall var0) throws java.rmi.RemoteException;
 	java.lang.String getRefClass(java.io.ObjectOutput var0);
 	java.lang.Object invoke(java.rmi.Remote var0, java.lang.reflect.Method var1, java.lang.Object[] var2, long var3) throws java.lang.Exception;
-	/** @deprecated */ void invoke(java.rmi.server.RemoteCall var0) throws java.lang.Exception;
-	/** @deprecated */ java.rmi.server.RemoteCall newCall(java.rmi.server.RemoteObject var0, java.rmi.server.Operation[] var1, int var2, long var3) throws java.rmi.RemoteException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	void invoke(java.rmi.server.RemoteCall var0) throws java.lang.Exception;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.rmi.server.RemoteCall newCall(java.rmi.server.RemoteObject var0, java.rmi.server.Operation[] var1, int var2, long var3) throws java.rmi.RemoteException;
 	boolean remoteEquals(java.rmi.server.RemoteRef var0);
 	int remoteHashCode();
 	java.lang.String remoteToString();

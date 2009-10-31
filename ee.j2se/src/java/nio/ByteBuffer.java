@@ -47,7 +47,6 @@ public abstract class ByteBuffer extends java.nio.Buffer implements java.lang.Co
 	public abstract short getShort();
 	public abstract short getShort(int var0);
 	public final boolean hasArray() { return false; }
-	public int hashCode() { return 0; }
 	public abstract boolean isDirect();
 	public final java.nio.ByteOrder order() { return null; }
 	public final java.nio.ByteBuffer order(java.nio.ByteOrder var0) { return null; }

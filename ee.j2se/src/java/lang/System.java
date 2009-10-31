@@ -37,7 +37,9 @@ public final class System {
 	public static native java.lang.String mapLibraryName(java.lang.String var0);
 	public static native long nanoTime();
 	public static void runFinalization() { }
-	/** @deprecated */ public static void runFinalizersOnExit(boolean var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static void runFinalizersOnExit(boolean var0) { }
 	public static void setErr(java.io.PrintStream var0) { }
 	public static void setIn(java.io.InputStream var0) { }
 	public static void setOut(java.io.PrintStream var0) { }

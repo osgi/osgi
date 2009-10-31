@@ -20,13 +20,17 @@ public interface MonitorMBean {
 	boolean containsObservedObject(javax.management.ObjectName var0);
 	long getGranularityPeriod();
 	java.lang.String getObservedAttribute();
-	/** @deprecated */ javax.management.ObjectName getObservedObject();
+	/** @deprecated */
+	@java.lang.Deprecated
+	javax.management.ObjectName getObservedObject();
 	javax.management.ObjectName[] getObservedObjects();
 	boolean isActive();
 	void removeObservedObject(javax.management.ObjectName var0);
 	void setGranularityPeriod(long var0);
 	void setObservedAttribute(java.lang.String var0);
-	/** @deprecated */ void setObservedObject(javax.management.ObjectName var0);
+	/** @deprecated */
+	@java.lang.Deprecated
+	void setObservedObject(javax.management.ObjectName var0);
 	void start();
 	void stop();
 }

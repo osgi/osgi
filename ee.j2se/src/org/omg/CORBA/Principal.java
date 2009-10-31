@@ -15,9 +15,15 @@
  */
 
 package org.omg.CORBA;
-/** @deprecated */ public class Principal {
+/** @deprecated */
+@java.lang.Deprecated
+public class Principal {
 	public Principal() { } 
-	/** @deprecated */ public byte[] name() { return null; }
-	/** @deprecated */ public void name(byte[] var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public byte[] name() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void name(byte[] var0) { }
 }
 

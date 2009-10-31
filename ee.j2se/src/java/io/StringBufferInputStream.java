@@ -15,7 +15,9 @@
  */
 
 package java.io;
-/** @deprecated */ public class StringBufferInputStream extends java.io.InputStream {
+/** @deprecated */
+@java.lang.Deprecated
+public class StringBufferInputStream extends java.io.InputStream {
 	protected java.lang.String buffer;
 	protected int count;
 	protected int pos;

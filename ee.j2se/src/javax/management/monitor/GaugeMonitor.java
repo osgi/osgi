@@ -17,9 +17,13 @@
 package javax.management.monitor;
 public class GaugeMonitor extends javax.management.monitor.Monitor implements javax.management.monitor.GaugeMonitorMBean {
 	public GaugeMonitor() { } 
-	/** @deprecated */ public java.lang.Number getDerivedGauge() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.lang.Number getDerivedGauge() { return null; }
 	public java.lang.Number getDerivedGauge(javax.management.ObjectName var0) { return null; }
-	/** @deprecated */ public long getDerivedGaugeTimeStamp() { return 0l; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public long getDerivedGaugeTimeStamp() { return 0l; }
 	public long getDerivedGaugeTimeStamp(javax.management.ObjectName var0) { return 0l; }
 	public boolean getDifferenceMode() { return false; }
 	public java.lang.Number getHighThreshold() { return null; }

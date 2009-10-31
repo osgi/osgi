@@ -15,7 +15,8 @@
  */
 
 package org.xml.sax.helpers;
-/** @deprecated */ public class AttributeListImpl implements org.xml.sax.AttributeList {
+/** @deprecated */
+public class AttributeListImpl implements org.xml.sax.AttributeList {
 	public AttributeListImpl() { } 
 	public AttributeListImpl(org.xml.sax.AttributeList var0) { } 
 	public void addAttribute(java.lang.String var0, java.lang.String var1, java.lang.String var2) { }

@@ -38,7 +38,9 @@ public class HTMLEditorKit extends javax.swing.text.StyledEditorKit implements j
 		public InsertHTMLTextAction(java.lang.String var0, java.lang.String var1, javax.swing.text.html.HTML.Tag var2, javax.swing.text.html.HTML.Tag var3, javax.swing.text.html.HTML.Tag var4, javax.swing.text.html.HTML.Tag var5)  { super((java.lang.String) null); } 
 		public void actionPerformed(java.awt.event.ActionEvent var0) { }
 		protected void insertAtBoundary(javax.swing.JEditorPane var0, javax.swing.text.html.HTMLDocument var1, int var2, javax.swing.text.Element var3, java.lang.String var4, javax.swing.text.html.HTML.Tag var5, javax.swing.text.html.HTML.Tag var6) { }
-		/** @deprecated */ protected void insertAtBoundry(javax.swing.JEditorPane var0, javax.swing.text.html.HTMLDocument var1, int var2, javax.swing.text.Element var3, java.lang.String var4, javax.swing.text.html.HTML.Tag var5, javax.swing.text.html.HTML.Tag var6) { }
+		/** @deprecated */
+		@java.lang.Deprecated
+		protected void insertAtBoundry(javax.swing.JEditorPane var0, javax.swing.text.html.HTMLDocument var1, int var2, javax.swing.text.Element var3, java.lang.String var4, javax.swing.text.html.HTML.Tag var5, javax.swing.text.html.HTML.Tag var6) { }
 		protected void insertHTML(javax.swing.JEditorPane var0, javax.swing.text.html.HTMLDocument var1, int var2, java.lang.String var3, int var4, int var5, javax.swing.text.html.HTML.Tag var6) { }
 	}
 	public static class LinkController extends java.awt.event.MouseAdapter implements java.awt.event.MouseMotionListener, java.io.Serializable {

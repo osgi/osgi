@@ -34,7 +34,6 @@ public class Reference implements java.io.Serializable, java.lang.Cloneable {
 	public java.lang.String getClassName() { return null; }
 	public java.lang.String getFactoryClassLocation() { return null; }
 	public java.lang.String getFactoryClassName() { return null; }
-	public int hashCode() { return 0; }
 	public java.lang.Object remove(int var0) { return null; }
 	public int size() { return 0; }
 }

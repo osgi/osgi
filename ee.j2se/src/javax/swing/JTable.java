@@ -175,7 +175,9 @@ public class JTable extends javax.swing.JComponent implements javax.accessibilit
 	protected void createDefaultRenderers() { }
 	protected javax.swing.ListSelectionModel createDefaultSelectionModel() { return null; }
 	protected javax.swing.table.JTableHeader createDefaultTableHeader() { return null; }
-	/** @deprecated */ public static javax.swing.JScrollPane createScrollPaneForTable(javax.swing.JTable var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static javax.swing.JScrollPane createScrollPaneForTable(javax.swing.JTable var0) { return null; }
 	public boolean editCellAt(int var0, int var1) { return false; }
 	public boolean editCellAt(int var0, int var1, java.util.EventObject var2) { return false; }
 	public void editingCanceled(javax.swing.event.ChangeEvent var0) { }
@@ -281,7 +283,9 @@ public class JTable extends javax.swing.JComponent implements javax.accessibilit
 	public void setUI(javax.swing.plaf.TableUI var0) { }
 	public void setValueAt(java.lang.Object var0, int var1, int var2) { }
 	public void sizeColumnsToFit(int var0) { }
-	/** @deprecated */ public void sizeColumnsToFit(boolean var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void sizeColumnsToFit(boolean var0) { }
 	public void tableChanged(javax.swing.event.TableModelEvent var0) { }
 	protected void unconfigureEnclosingScrollPane() { }
 	public void valueChanged(javax.swing.event.ListSelectionEvent var0) { }

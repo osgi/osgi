@@ -18,6 +18,5 @@ package java.rmi.activation;
 public class ActivationID implements java.io.Serializable {
 	public ActivationID(java.rmi.activation.Activator var0) { } 
 	public java.rmi.Remote activate(boolean var0) throws java.rmi.RemoteException, java.rmi.activation.ActivationException { return null; }
-	public int hashCode() { return 0; }
 }
 

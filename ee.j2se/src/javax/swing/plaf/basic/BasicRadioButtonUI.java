@@ -20,7 +20,6 @@ public class BasicRadioButtonUI extends javax.swing.plaf.basic.BasicToggleButton
 	public BasicRadioButtonUI() { } 
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	public javax.swing.Icon getDefaultIcon() { return null; }
-	public void paint(java.awt.Graphics var0, javax.swing.JComponent var1) { }
 	protected void paintFocus(java.awt.Graphics var0, java.awt.Rectangle var1, java.awt.Dimension var2) { }
 }
 

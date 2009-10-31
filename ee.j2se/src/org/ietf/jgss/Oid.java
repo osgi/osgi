@@ -21,6 +21,5 @@ public class Oid {
 	public Oid(byte[] var0) throws org.ietf.jgss.GSSException { } 
 	public boolean containedIn(org.ietf.jgss.Oid[] var0) { return false; }
 	public byte[] getDER() throws org.ietf.jgss.GSSException { return null; }
-	public int hashCode() { return 0; }
 }
 

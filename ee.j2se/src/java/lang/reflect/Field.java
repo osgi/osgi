@@ -30,7 +30,6 @@ public final class Field extends java.lang.reflect.AccessibleObject implements j
 	public java.lang.String getName() { return null; }
 	public short getShort(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0; }
 	public java.lang.Class<?> getType() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isEnumConstant() { return false; }
 	public boolean isSynthetic() { return false; }
 	public void set(java.lang.Object var0, java.lang.Object var1) throws java.lang.IllegalAccessException { }

@@ -20,7 +20,6 @@ public class MenuShortcut implements java.io.Serializable {
 	public MenuShortcut(int var0, boolean var1) { } 
 	public boolean equals(java.awt.MenuShortcut var0) { return false; }
 	public int getKey() { return 0; }
-	public int hashCode() { return 0; }
 	protected java.lang.String paramString() { return null; }
 	public boolean usesShiftModifier() { return false; }
 }

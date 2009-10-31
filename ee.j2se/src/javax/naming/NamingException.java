@@ -29,7 +29,6 @@ public class NamingException extends java.lang.Exception {
 	public javax.naming.Name getResolvedName() { return null; }
 	public java.lang.Object getResolvedObj() { return null; }
 	public java.lang.Throwable getRootCause() { return null; }
-	public java.lang.Throwable initCause(java.lang.Throwable var0) { return null; }
 	public void setRemainingName(javax.naming.Name var0) { }
 	public void setResolvedName(javax.naming.Name var0) { }
 	public void setResolvedObj(java.lang.Object var0) { }

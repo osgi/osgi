@@ -52,6 +52,8 @@ public interface PreparedStatement extends java.sql.Statement {
 	void setTimestamp(int var0, java.sql.Timestamp var1) throws java.sql.SQLException;
 	void setTimestamp(int var0, java.sql.Timestamp var1, java.util.Calendar var2) throws java.sql.SQLException;
 	void setURL(int var0, java.net.URL var1) throws java.sql.SQLException;
-	/** @deprecated */ void setUnicodeStream(int var0, java.io.InputStream var1, int var2) throws java.sql.SQLException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	void setUnicodeStream(int var0, java.io.InputStream var1, int var2) throws java.sql.SQLException;
 }
 

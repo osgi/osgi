@@ -23,7 +23,6 @@ public class JarFile extends java.util.zip.ZipFile {
 	public JarFile(java.lang.String var0) throws java.io.IOException  { super((java.lang.String) null); } 
 	public JarFile(java.lang.String var0, boolean var1) throws java.io.IOException  { super((java.lang.String) null); } 
 	public java.util.Enumeration<java.util.jar.JarEntry> entries() { return null; }
-	public java.io.InputStream getInputStream(java.util.zip.ZipEntry var0) throws java.io.IOException { return null; }
 	public java.util.jar.JarEntry getJarEntry(java.lang.String var0) { return null; }
 	public java.util.jar.Manifest getManifest() throws java.io.IOException { return null; }
 }

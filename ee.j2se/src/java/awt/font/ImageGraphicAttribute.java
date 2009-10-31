@@ -23,6 +23,5 @@ public final class ImageGraphicAttribute extends java.awt.font.GraphicAttribute 
 	public float getAdvance() { return 0.0f; }
 	public float getAscent() { return 0.0f; }
 	public float getDescent() { return 0.0f; }
-	public int hashCode() { return 0; }
 }
 

@@ -46,7 +46,9 @@ public abstract class HttpURLConnection extends java.net.URLConnection {
 	public final static int HTTP_REQ_TOO_LONG = 414;
 	public final static int HTTP_RESET = 205;
 	public final static int HTTP_SEE_OTHER = 303;
-	/** @deprecated */ public final static int HTTP_SERVER_ERROR = 500;
+	/** @deprecated */
+	@java.lang.Deprecated
+	public final static int HTTP_SERVER_ERROR = 500;
 	public final static int HTTP_UNAUTHORIZED = 401;
 	public final static int HTTP_UNAVAILABLE = 503;
 	public final static int HTTP_UNSUPPORTED_TYPE = 415;

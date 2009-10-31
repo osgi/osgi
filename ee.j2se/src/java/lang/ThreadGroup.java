@@ -20,7 +20,9 @@ public class ThreadGroup implements java.lang.Thread.UncaughtExceptionHandler {
 	public ThreadGroup(java.lang.ThreadGroup var0, java.lang.String var1) { } 
 	public int activeCount() { return 0; }
 	public int activeGroupCount() { return 0; }
-	/** @deprecated */ public boolean allowThreadSuspension(boolean var0) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean allowThreadSuspension(boolean var0) { return false; }
 	public final void checkAccess() { }
 	public final void destroy() { }
 	public int enumerate(java.lang.Thread[] var0) { return 0; }
@@ -35,11 +37,17 @@ public class ThreadGroup implements java.lang.Thread.UncaughtExceptionHandler {
 	public boolean isDestroyed() { return false; }
 	public void list() { }
 	public final boolean parentOf(java.lang.ThreadGroup var0) { return false; }
-	/** @deprecated */ public final void resume() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public final void resume() { }
 	public final void setDaemon(boolean var0) { }
 	public final void setMaxPriority(int var0) { }
-	/** @deprecated */ public final void stop() { }
-	/** @deprecated */ public final void suspend() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public final void stop() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public final void suspend() { }
 	public void uncaughtException(java.lang.Thread var0, java.lang.Throwable var1) { }
 }
 

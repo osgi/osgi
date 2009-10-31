@@ -26,7 +26,9 @@ public abstract class URLStreamHandler {
 	protected java.net.URLConnection openConnection(java.net.URL var0, java.net.Proxy var1) throws java.io.IOException { return null; }
 	protected void parseURL(java.net.URL var0, java.lang.String var1, int var2, int var3) { }
 	protected boolean sameFile(java.net.URL var0, java.net.URL var1) { return false; }
-	/** @deprecated */ protected void setURL(java.net.URL var0, java.lang.String var1, java.lang.String var2, int var3, java.lang.String var4, java.lang.String var5) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected void setURL(java.net.URL var0, java.lang.String var1, java.lang.String var2, int var3, java.lang.String var4, java.lang.String var5) { }
 	protected void setURL(java.net.URL var0, java.lang.String var1, java.lang.String var2, int var3, java.lang.String var4, java.lang.String var5, java.lang.String var6, java.lang.String var7, java.lang.String var8) { }
 	protected java.lang.String toExternalForm(java.net.URL var0) { return null; }
 }

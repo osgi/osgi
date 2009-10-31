@@ -34,7 +34,6 @@ public class RepaintManager {
 	public static void setCurrentManager(javax.swing.RepaintManager var0) { }
 	public void setDoubleBufferMaximumSize(java.awt.Dimension var0) { }
 	public void setDoubleBufferingEnabled(boolean var0) { }
-	public java.lang.String toString() { return null; }
 	public void validateInvalidComponents() { }
 }
 

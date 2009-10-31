@@ -23,7 +23,6 @@ public final class TextHitInfo {
 	public int getInsertionIndex() { return 0; }
 	public java.awt.font.TextHitInfo getOffsetHit(int var0) { return null; }
 	public java.awt.font.TextHitInfo getOtherHit() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isLeadingEdge() { return false; }
 	public static java.awt.font.TextHitInfo leading(int var0) { return null; }
 	public static java.awt.font.TextHitInfo trailing(int var0) { return null; }

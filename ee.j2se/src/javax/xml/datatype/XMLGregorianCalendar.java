@@ -34,7 +34,6 @@ public abstract class XMLGregorianCalendar implements java.lang.Cloneable {
 	public abstract int getTimezone();
 	public abstract javax.xml.namespace.QName getXMLSchemaType();
 	public abstract int getYear();
-	public int hashCode() { return 0; }
 	public abstract boolean isValid();
 	public abstract javax.xml.datatype.XMLGregorianCalendar normalize();
 	public abstract void reset();

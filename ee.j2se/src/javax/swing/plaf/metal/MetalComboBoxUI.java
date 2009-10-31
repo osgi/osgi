@@ -20,6 +20,8 @@ public class MetalComboBoxUI extends javax.swing.plaf.basic.BasicComboBoxUI {
 		public MetalComboBoxLayoutManager() { } 
 		public void superLayout(java.awt.Container var0) { }
 	}
+	/** @deprecated */
+	@java.lang.Deprecated
 	public class MetalComboPopup extends javax.swing.plaf.basic.BasicComboPopup {
 		public MetalComboPopup(javax.swing.JComboBox var0)  { super((javax.swing.JComboBox) null); } 
 		public void delegateFocus(java.awt.event.MouseEvent var0) { }
@@ -31,9 +33,13 @@ public class MetalComboBoxUI extends javax.swing.plaf.basic.BasicComboBoxUI {
 	public void configureEditor() { }
 	public java.beans.PropertyChangeListener createPropertyChangeListener() { return null; }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
-	/** @deprecated */ protected void editablePropertyChanged(java.beans.PropertyChangeEvent var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected void editablePropertyChanged(java.beans.PropertyChangeEvent var0) { }
 	public void layoutComboBox(java.awt.Container var0, javax.swing.plaf.metal.MetalComboBoxUI.MetalComboBoxLayoutManager var1) { }
-	/** @deprecated */ protected void removeListeners() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected void removeListeners() { }
 	public void unconfigureEditor() { }
 }
 

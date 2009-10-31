@@ -29,7 +29,6 @@ public class MessageFormat extends java.text.Format {
 	public java.text.Format[] getFormats() { return null; }
 	public java.text.Format[] getFormatsByArgumentIndex() { return null; }
 	public java.util.Locale getLocale() { return null; }
-	public int hashCode() { return 0; }
 	public java.lang.Object[] parse(java.lang.String var0) throws java.text.ParseException { return null; }
 	public java.lang.Object[] parse(java.lang.String var0, java.text.ParsePosition var1) { return null; }
 	public java.lang.Object parseObject(java.lang.String var0, java.text.ParsePosition var1) { return null; }

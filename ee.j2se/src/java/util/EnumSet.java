@@ -29,6 +29,6 @@ public abstract class EnumSet<E extends java.lang.Enum<E>> extends java.util.Abs
 	public static <E extends java.lang.Enum<E>> java.util.EnumSet<E> of(E var0, E var1, E var2, E var3, E var4) { return null; }
 	public static <E extends java.lang.Enum<E>> java.util.EnumSet<E> of(E var0, E... var1) { return null; }
 	public static <E extends java.lang.Enum<E>> java.util.EnumSet<E> range(E var0, E var1) { return null; }
-	EnumSet() { } /* generated constructor to prevent compiler adding default public constructor */
+	private EnumSet() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

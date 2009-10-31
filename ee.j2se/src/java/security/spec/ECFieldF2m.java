@@ -23,6 +23,5 @@ public class ECFieldF2m implements java.security.spec.ECField {
 	public int getM() { return 0; }
 	public int[] getMidTermsOfReductionPolynomial() { return null; }
 	public java.math.BigInteger getReductionPolynomial() { return null; }
-	public int hashCode() { return 0; }
 }
 

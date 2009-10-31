@@ -20,7 +20,9 @@ public final class ComponentOrientation implements java.io.Serializable {
 	public final static java.awt.ComponentOrientation RIGHT_TO_LEFT; static { RIGHT_TO_LEFT = null; }
 	public final static java.awt.ComponentOrientation UNKNOWN; static { UNKNOWN = null; }
 	public static java.awt.ComponentOrientation getOrientation(java.util.Locale var0) { return null; }
-	/** @deprecated */ public static java.awt.ComponentOrientation getOrientation(java.util.ResourceBundle var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static java.awt.ComponentOrientation getOrientation(java.util.ResourceBundle var0) { return null; }
 	public boolean isHorizontal() { return false; }
 	public boolean isLeftToRight() { return false; }
 	private ComponentOrientation() { } /* generated constructor to prevent compiler adding default public constructor */

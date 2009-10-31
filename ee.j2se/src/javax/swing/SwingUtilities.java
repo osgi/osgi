@@ -27,7 +27,9 @@ public class SwingUtilities implements javax.swing.SwingConstants {
 	public static void convertPointFromScreen(java.awt.Point var0, java.awt.Component var1) { }
 	public static void convertPointToScreen(java.awt.Point var0, java.awt.Component var1) { }
 	public static java.awt.Rectangle convertRectangle(java.awt.Component var0, java.awt.Rectangle var1, java.awt.Component var2) { return null; }
-	/** @deprecated */ public static java.awt.Component findFocusOwner(java.awt.Component var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static java.awt.Component findFocusOwner(java.awt.Component var0) { return null; }
 	public static javax.accessibility.Accessible getAccessibleAt(java.awt.Component var0, java.awt.Point var1) { return null; }
 	public static javax.accessibility.Accessible getAccessibleChild(java.awt.Component var0, int var1) { return null; }
 	public static int getAccessibleChildrenCount(java.awt.Component var0) { return 0; }

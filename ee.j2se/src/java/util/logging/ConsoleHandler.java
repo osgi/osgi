@@ -17,7 +17,5 @@
 package java.util.logging;
 public class ConsoleHandler extends java.util.logging.StreamHandler {
 	public ConsoleHandler() { } 
-	public void close() { }
-	public void publish(java.util.logging.LogRecord var0) { }
 }
 

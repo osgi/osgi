@@ -15,9 +15,13 @@
  */
 
 package org.omg.CORBA;
-/** @deprecated */ public class DynamicImplementation extends org.omg.CORBA.portable.ObjectImpl {
+/** @deprecated */
+@java.lang.Deprecated
+public class DynamicImplementation extends org.omg.CORBA.portable.ObjectImpl {
 	public DynamicImplementation() { } 
 	public java.lang.String[] _ids() { return null; }
-	/** @deprecated */ public void invoke(org.omg.CORBA.ServerRequest var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void invoke(org.omg.CORBA.ServerRequest var0) { }
 }
 

@@ -15,7 +15,9 @@
  */
 
 package javax.swing.text;
-/** @deprecated */ public abstract class DefaultTextUI extends javax.swing.plaf.basic.BasicTextUI {
+/** @deprecated */
+@java.lang.Deprecated
+public abstract class DefaultTextUI extends javax.swing.plaf.basic.BasicTextUI {
 	public DefaultTextUI() { } 
 }
 

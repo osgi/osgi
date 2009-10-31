@@ -27,7 +27,6 @@ public final class MediaPrintableArea implements javax.print.attribute.DocAttrib
 	public float getWidth(int var0) { return 0.0f; }
 	public float getX(int var0) { return 0.0f; }
 	public float getY(int var0) { return 0.0f; }
-	public int hashCode() { return 0; }
 	public java.lang.String toString(int var0, java.lang.String var1) { return null; }
 }
 

@@ -15,7 +15,8 @@
  */
 
 package org.xml.sax.helpers;
-/** @deprecated */ public class ParserFactory {
+/** @deprecated */
+public class ParserFactory {
 	public static org.xml.sax.Parser makeParser() throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException { return null; }
 	public static org.xml.sax.Parser makeParser(java.lang.String var0) throws java.lang.ClassNotFoundException, java.lang.IllegalAccessException, java.lang.InstantiationException { return null; }
 	private ParserFactory() { } /* generated constructor to prevent compiler adding default public constructor */

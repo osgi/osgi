@@ -45,7 +45,9 @@ public class ObjectInputStream extends java.io.InputStream implements java.io.Ob
 	public void readFully(byte[] var0) throws java.io.IOException { }
 	public void readFully(byte[] var0, int var1, int var2) throws java.io.IOException { }
 	public int readInt() throws java.io.IOException { return 0; }
-	/** @deprecated */ public java.lang.String readLine() throws java.io.IOException { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.lang.String readLine() throws java.io.IOException { return null; }
 	public long readLong() throws java.io.IOException { return 0l; }
 	public final java.lang.Object readObject() throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
 	protected java.lang.Object readObjectOverride() throws java.io.IOException, java.lang.ClassNotFoundException { return null; }

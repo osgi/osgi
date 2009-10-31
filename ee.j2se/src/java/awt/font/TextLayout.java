@@ -60,7 +60,6 @@ public final class TextLayout implements java.lang.Cloneable {
 	public java.awt.Shape getVisualHighlightShape(java.awt.font.TextHitInfo var0, java.awt.font.TextHitInfo var1, java.awt.geom.Rectangle2D var2) { return null; }
 	public java.awt.font.TextHitInfo getVisualOtherHit(java.awt.font.TextHitInfo var0) { return null; }
 	protected void handleJustify(float var0) { }
-	public int hashCode() { return 0; }
 	public java.awt.font.TextHitInfo hitTestChar(float var0, float var1) { return null; }
 	public java.awt.font.TextHitInfo hitTestChar(float var0, float var1, java.awt.geom.Rectangle2D var2) { return null; }
 	public boolean isLeftToRight() { return false; }

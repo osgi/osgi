@@ -15,7 +15,9 @@
  */
 
 package javax.management.loading;
-/** @deprecated */ public class DefaultLoaderRepository {
+/** @deprecated */
+@java.lang.Deprecated
+public class DefaultLoaderRepository {
 	public DefaultLoaderRepository() { } 
 	public static java.lang.Class loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
 	public static java.lang.Class loadClassWithout(java.lang.ClassLoader var0, java.lang.String var1) throws java.lang.ClassNotFoundException { return null; }

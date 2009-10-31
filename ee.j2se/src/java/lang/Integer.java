@@ -30,7 +30,6 @@ public final class Integer extends java.lang.Number implements java.lang.Compara
 	public static java.lang.Integer getInteger(java.lang.String var0) { return null; }
 	public static java.lang.Integer getInteger(java.lang.String var0, int var1) { return null; }
 	public static java.lang.Integer getInteger(java.lang.String var0, java.lang.Integer var1) { return null; }
-	public int hashCode() { return 0; }
 	public static int highestOneBit(int var0) { return 0; }
 	public int intValue() { return 0; }
 	public long longValue() { return 0l; }

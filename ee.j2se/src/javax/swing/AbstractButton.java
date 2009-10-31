@@ -93,7 +93,9 @@ public abstract class AbstractButton extends javax.swing.JComponent implements j
 	public javax.swing.Icon getIcon() { return null; }
 	public int getIconTextGap() { return 0; }
 	public java.awt.event.ItemListener[] getItemListeners() { return null; }
-	/** @deprecated */ public java.lang.String getLabel() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.lang.String getLabel() { return null; }
 	public java.awt.Insets getMargin() { return null; }
 	public int getMnemonic() { return 0; }
 	public javax.swing.ButtonModel getModel() { return null; }
@@ -128,7 +130,9 @@ public abstract class AbstractButton extends javax.swing.JComponent implements j
 	public void setHorizontalTextPosition(int var0) { }
 	public void setIcon(javax.swing.Icon var0) { }
 	public void setIconTextGap(int var0) { }
-	/** @deprecated */ public void setLabel(java.lang.String var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void setLabel(java.lang.String var0) { }
 	public void setMargin(java.awt.Insets var0) { }
 	public void setMnemonic(char var0) { }
 	public void setMnemonic(int var0) { }

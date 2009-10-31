@@ -24,7 +24,6 @@ public abstract class ResolutionSyntax implements java.io.Serializable, java.lan
 	public int getFeedResolution(int var0) { return 0; }
 	protected int getFeedResolutionDphi() { return 0; }
 	public int[] getResolution(int var0) { return null; }
-	public int hashCode() { return 0; }
 	public boolean lessThanOrEquals(javax.print.attribute.ResolutionSyntax var0) { return false; }
 	public java.lang.String toString(int var0, java.lang.String var1) { return null; }
 }

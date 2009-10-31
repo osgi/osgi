@@ -65,7 +65,6 @@ public abstract class Rectangle2D extends java.awt.geom.RectangularShape {
 	public abstract java.awt.geom.Rectangle2D createUnion(java.awt.geom.Rectangle2D var0);
 	public java.awt.geom.Rectangle2D getBounds2D() { return null; }
 	public java.awt.geom.PathIterator getPathIterator(java.awt.geom.AffineTransform var0) { return null; }
-	public int hashCode() { return 0; }
 	public static void intersect(java.awt.geom.Rectangle2D var0, java.awt.geom.Rectangle2D var1, java.awt.geom.Rectangle2D var2) { }
 	public boolean intersects(double var0, double var1, double var2, double var3) { return false; }
 	public boolean intersectsLine(double var0, double var1, double var2, double var3) { return false; }

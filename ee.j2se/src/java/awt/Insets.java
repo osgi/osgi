@@ -22,7 +22,6 @@ public class Insets implements java.io.Serializable, java.lang.Cloneable {
 	public int top;
 	public Insets(int var0, int var1, int var2, int var3) { } 
 	public java.lang.Object clone() { return null; }
-	public int hashCode() { return 0; }
 	public void set(int var0, int var1, int var2, int var3) { }
 }
 

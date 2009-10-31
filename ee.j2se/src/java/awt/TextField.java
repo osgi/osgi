@@ -30,13 +30,18 @@ public class TextField extends java.awt.TextComponent {
 	public char getEchoChar() { return '\0'; }
 	public java.awt.Dimension getMinimumSize(int var0) { return null; }
 	public java.awt.Dimension getPreferredSize(int var0) { return null; }
-	/** @deprecated */ public java.awt.Dimension minimumSize(int var0) { return null; }
-	/** @deprecated */ public java.awt.Dimension preferredSize(int var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Dimension minimumSize(int var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Dimension preferredSize(int var0) { return null; }
 	protected void processActionEvent(java.awt.event.ActionEvent var0) { }
 	public void removeActionListener(java.awt.event.ActionListener var0) { }
 	public void setColumns(int var0) { }
 	public void setEchoChar(char var0) { }
-	/** @deprecated */ public void setEchoCharacter(char var0) { }
-	public void setText(java.lang.String var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void setEchoCharacter(char var0) { }
 }
 

@@ -15,7 +15,9 @@
  */
 
 package javax.accessibility;
-/** @deprecated */ public class AccessibleResourceBundle extends java.util.ListResourceBundle {
+/** @deprecated */
+@java.lang.Deprecated
+public class AccessibleResourceBundle extends java.util.ListResourceBundle {
 	public AccessibleResourceBundle() { } 
 	public java.lang.Object[][] getContents() { return null; }
 }

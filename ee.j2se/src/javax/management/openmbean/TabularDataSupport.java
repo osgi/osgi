@@ -29,7 +29,6 @@ public class TabularDataSupport implements java.io.Serializable, java.lang.Clone
 	public java.lang.Object get(java.lang.Object var0) { return null; }
 	public javax.management.openmbean.CompositeData get(java.lang.Object[] var0) { return null; }
 	public javax.management.openmbean.TabularType getTabularType() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isEmpty() { return false; }
 	public java.util.Set keySet() { return null; }
 	public java.lang.Object put(java.lang.Object var0, java.lang.Object var1) { return null; }

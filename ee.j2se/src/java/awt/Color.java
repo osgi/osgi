@@ -72,6 +72,5 @@ public class Color implements java.awt.Paint, java.io.Serializable {
 	public float[] getRGBComponents(float[] var0) { return null; }
 	public int getRed() { return 0; }
 	public int getTransparency() { return 0; }
-	public int hashCode() { return 0; }
 }
 

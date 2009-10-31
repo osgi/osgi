@@ -29,7 +29,6 @@ public class AWTKeyStroke implements java.io.Serializable {
 	public final int getKeyCode() { return 0; }
 	public final int getKeyEventType() { return 0; }
 	public final int getModifiers() { return 0; }
-	public int hashCode() { return 0; }
 	public final boolean isOnKeyRelease() { return false; }
 	protected java.lang.Object readResolve() throws java.io.ObjectStreamException { return null; }
 	protected static void registerSubclass(java.lang.Class<?> var0) { }

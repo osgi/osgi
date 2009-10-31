@@ -24,6 +24,5 @@ public class ZipOutputStream extends java.util.zip.DeflaterOutputStream implemen
 	public void setComment(java.lang.String var0) { }
 	public void setLevel(int var0) { }
 	public void setMethod(int var0) { }
-	public void write(byte[] var0, int var1, int var2) throws java.io.IOException { }
 }
 

@@ -16,22 +16,30 @@
 
 package javax.management.monitor;
 public interface CounterMonitorMBean extends javax.management.monitor.MonitorMBean {
-	/** @deprecated */ java.lang.Number getDerivedGauge();
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.lang.Number getDerivedGauge();
 	java.lang.Number getDerivedGauge(javax.management.ObjectName var0);
-	/** @deprecated */ long getDerivedGaugeTimeStamp();
+	/** @deprecated */
+	@java.lang.Deprecated
+	long getDerivedGaugeTimeStamp();
 	long getDerivedGaugeTimeStamp(javax.management.ObjectName var0);
 	boolean getDifferenceMode();
 	java.lang.Number getInitThreshold();
 	java.lang.Number getModulus();
 	boolean getNotify();
 	java.lang.Number getOffset();
-	/** @deprecated */ java.lang.Number getThreshold();
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.lang.Number getThreshold();
 	java.lang.Number getThreshold(javax.management.ObjectName var0);
 	void setDifferenceMode(boolean var0);
 	void setInitThreshold(java.lang.Number var0);
 	void setModulus(java.lang.Number var0);
 	void setNotify(boolean var0);
 	void setOffset(java.lang.Number var0);
-	/** @deprecated */ void setThreshold(java.lang.Number var0);
+	/** @deprecated */
+	@java.lang.Deprecated
+	void setThreshold(java.lang.Number var0);
 }
 

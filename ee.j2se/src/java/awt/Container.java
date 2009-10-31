@@ -33,9 +33,9 @@ public class Container extends java.awt.Component {
 	public java.awt.Component add(java.lang.String var0, java.awt.Component var1) { return null; }
 	public void addContainerListener(java.awt.event.ContainerListener var0) { }
 	protected void addImpl(java.awt.Component var0, java.lang.Object var1, int var2) { }
-	public void addPropertyChangeListener(java.beans.PropertyChangeListener var0) { }
-	public void addPropertyChangeListener(java.lang.String var0, java.beans.PropertyChangeListener var1) { }
-	/** @deprecated */ public int countComponents() { return 0; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public int countComponents() { return 0; }
 	public java.awt.Component findComponentAt(int var0, int var1) { return null; }
 	public java.awt.Component findComponentAt(java.awt.Point var0) { return null; }
 	public java.awt.Component getComponent(int var0) { return null; }
@@ -47,7 +47,9 @@ public class Container extends java.awt.Component {
 	public java.awt.Insets getInsets() { return null; }
 	public java.awt.LayoutManager getLayout() { return null; }
 	public java.awt.Point getMousePosition(boolean var0) { return null; }
-	/** @deprecated */ public java.awt.Insets insets() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Insets insets() { return null; }
 	public boolean isAncestorOf(java.awt.Component var0) { return false; }
 	public boolean isFocusCycleRoot() { return false; }
 	public final boolean isFocusTraversalPolicyProvider() { return false; }

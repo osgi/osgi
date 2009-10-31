@@ -17,7 +17,8 @@
 package java.rmi.dgc;
 public final class VMID implements java.io.Serializable {
 	public VMID() { } 
-	public int hashCode() { return 0; }
-	/** @deprecated */ public static boolean isUnique() { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static boolean isUnique() { return false; }
 }
 

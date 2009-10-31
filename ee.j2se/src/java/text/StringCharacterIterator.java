@@ -25,7 +25,6 @@ public final class StringCharacterIterator implements java.text.CharacterIterato
 	public int getBeginIndex() { return 0; }
 	public int getEndIndex() { return 0; }
 	public int getIndex() { return 0; }
-	public int hashCode() { return 0; }
 	public char last() { return '\0'; }
 	public char next() { return '\0'; }
 	public char previous() { return '\0'; }

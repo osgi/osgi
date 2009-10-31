@@ -43,8 +43,6 @@ public class BeanContextServicesSupport extends java.beans.beancontext.BeanConte
 	public void addBeanContextServicesListener(java.beans.beancontext.BeanContextServicesListener var0) { }
 	public boolean addService(java.lang.Class var0, java.beans.beancontext.BeanContextServiceProvider var1) { return false; }
 	protected boolean addService(java.lang.Class var0, java.beans.beancontext.BeanContextServiceProvider var1, boolean var2) { return false; }
-	protected void bcsPreDeserializationHook(java.io.ObjectInputStream var0) throws java.io.IOException, java.lang.ClassNotFoundException { }
-	protected void bcsPreSerializationHook(java.io.ObjectOutputStream var0) throws java.io.IOException { }
 	protected java.beans.beancontext.BeanContextServicesSupport.BCSSServiceProvider createBCSSServiceProvider(java.lang.Class var0, java.beans.beancontext.BeanContextServiceProvider var1) { return null; }
 	protected final void fireServiceAdded(java.beans.beancontext.BeanContextServiceAvailableEvent var0) { }
 	protected final void fireServiceAdded(java.lang.Class var0) { }
@@ -57,8 +55,6 @@ public class BeanContextServicesSupport extends java.beans.beancontext.BeanConte
 	public java.lang.Object getService(java.beans.beancontext.BeanContextChild var0, java.lang.Object var1, java.lang.Class var2, java.lang.Object var3, java.beans.beancontext.BeanContextServiceRevokedListener var4) throws java.util.TooManyListenersException { return null; }
 	public boolean hasService(java.lang.Class var0) { return false; }
 	public void initialize() { }
-	protected void initializeBeanContextResources() { }
-	protected void releaseBeanContextResources() { }
 	public void releaseService(java.beans.beancontext.BeanContextChild var0, java.lang.Object var1, java.lang.Object var2) { }
 	public void removeBeanContextServicesListener(java.beans.beancontext.BeanContextServicesListener var0) { }
 	public void revokeService(java.lang.Class var0, java.beans.beancontext.BeanContextServiceProvider var1, boolean var2) { }

@@ -18,6 +18,5 @@ package java.rmi.activation;
 public class ActivationGroupID implements java.io.Serializable {
 	public ActivationGroupID(java.rmi.activation.ActivationSystem var0) { } 
 	public java.rmi.activation.ActivationSystem getSystem() { return null; }
-	public int hashCode() { return 0; }
 }
 

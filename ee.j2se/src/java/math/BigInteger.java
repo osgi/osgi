@@ -40,7 +40,6 @@ public class BigInteger extends java.lang.Number implements java.lang.Comparable
 	public float floatValue() { return 0.0f; }
 	public java.math.BigInteger gcd(java.math.BigInteger var0) { return null; }
 	public int getLowestSetBit() { return 0; }
-	public int hashCode() { return 0; }
 	public int intValue() { return 0; }
 	public boolean isProbablePrime(int var0) { return false; }
 	public long longValue() { return 0l; }

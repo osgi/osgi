@@ -26,7 +26,6 @@ public class TreePath implements java.io.Serializable {
 	public java.lang.Object[] getPath() { return null; }
 	public java.lang.Object getPathComponent(int var0) { return null; }
 	public int getPathCount() { return 0; }
-	public int hashCode() { return 0; }
 	public boolean isDescendant(javax.swing.tree.TreePath var0) { return false; }
 	public javax.swing.tree.TreePath pathByAddingChild(java.lang.Object var0) { return null; }
 }

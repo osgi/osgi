@@ -19,6 +19,5 @@ public abstract class TextSyntax implements java.io.Serializable, java.lang.Clon
 	protected TextSyntax(java.lang.String var0, java.util.Locale var1) { } 
 	public java.util.Locale getLocale() { return null; }
 	public java.lang.String getValue() { return null; }
-	public int hashCode() { return 0; }
 }
 

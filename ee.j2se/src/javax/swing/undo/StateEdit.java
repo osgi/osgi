@@ -25,8 +25,6 @@ public class StateEdit extends javax.swing.undo.AbstractUndoableEdit {
 	public StateEdit(javax.swing.undo.StateEditable var0, java.lang.String var1) { } 
 	public void end() { }
 	protected void init(javax.swing.undo.StateEditable var0, java.lang.String var1) { }
-	public void redo() { }
 	protected void removeRedundantState() { }
-	public void undo() { }
 }
 

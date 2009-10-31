@@ -25,8 +25,12 @@ public class Window extends java.awt.Container implements javax.accessibility.Ac
 	public void addWindowFocusListener(java.awt.event.WindowFocusListener var0) { }
 	public void addWindowListener(java.awt.event.WindowListener var0) { }
 	public void addWindowStateListener(java.awt.event.WindowStateListener var0) { }
-	/** @deprecated */ public void applyResourceBundle(java.lang.String var0) { }
-	/** @deprecated */ public void applyResourceBundle(java.util.ResourceBundle var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void applyResourceBundle(java.lang.String var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void applyResourceBundle(java.util.ResourceBundle var0) { }
 	public void createBufferStrategy(int var0) { }
 	public void createBufferStrategy(int var0, java.awt.BufferCapabilities var1) throws java.awt.AWTException { }
 	public void dispose() { }

@@ -38,7 +38,6 @@ public final class URI implements java.io.Serializable, java.lang.Comparable<jav
 	public java.lang.String getScheme() { return null; }
 	public java.lang.String getSchemeSpecificPart() { return null; }
 	public java.lang.String getUserInfo() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isAbsolute() { return false; }
 	public boolean isOpaque() { return false; }
 	public java.net.URI normalize() { return null; }

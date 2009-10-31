@@ -41,7 +41,6 @@ public class JFrame extends java.awt.Frame implements javax.accessibility.Access
 	public void setDefaultCloseOperation(int var0) { }
 	public static void setDefaultLookAndFeelDecorated(boolean var0) { }
 	public void setGlassPane(java.awt.Component var0) { }
-	public void setIconImage(java.awt.Image var0) { }
 	public void setJMenuBar(javax.swing.JMenuBar var0) { }
 	public void setLayeredPane(javax.swing.JLayeredPane var0) { }
 	protected void setRootPane(javax.swing.JRootPane var0) { }

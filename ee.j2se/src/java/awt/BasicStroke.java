@@ -34,6 +34,5 @@ public class BasicStroke implements java.awt.Stroke {
 	public int getLineJoin() { return 0; }
 	public float getLineWidth() { return 0.0f; }
 	public float getMiterLimit() { return 0.0f; }
-	public int hashCode() { return 0; }
 }
 

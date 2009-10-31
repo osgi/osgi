@@ -29,7 +29,9 @@ public class JMenuBar extends javax.swing.JComponent implements javax.accessibil
 	public JMenuBar() { } 
 	public javax.swing.JMenu add(javax.swing.JMenu var0) { return null; }
 	public java.awt.Component getComponent() { return null; }
-	/** @deprecated */ public java.awt.Component getComponentAtIndex(int var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Component getComponentAtIndex(int var0) { return null; }
 	public int getComponentIndex(java.awt.Component var0) { return 0; }
 	public javax.swing.JMenu getHelpMenu() { return null; }
 	public java.awt.Insets getMargin() { return null; }

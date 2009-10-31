@@ -42,7 +42,6 @@ public abstract class Provider extends java.util.Properties {
 	protected void putService(java.security.Provider.Service var0) { }
 	public java.lang.Object remove(java.lang.Object var0) { return null; }
 	protected void removeService(java.security.Provider.Service var0) { }
-	public java.lang.String toString() { return null; }
 	public java.util.Collection<java.lang.Object> values() { return null; }
 }
 

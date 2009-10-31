@@ -16,11 +16,11 @@
 
 package javax.management.modelmbean;
 public class ModelMBeanOperationInfo extends javax.management.MBeanOperationInfo implements javax.management.DescriptorAccess {
-	public ModelMBeanOperationInfo(java.lang.String var0, java.lang.String var1, javax.management.MBeanParameterInfo[] var2, java.lang.String var3, int var4)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.MBeanParameterInfo[]) null, (java.lang.String) null, 0); } 
-	public ModelMBeanOperationInfo(java.lang.String var0, java.lang.String var1, javax.management.MBeanParameterInfo[] var2, java.lang.String var3, int var4, javax.management.Descriptor var5)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.MBeanParameterInfo[]) null, (java.lang.String) null, 0); } 
-	public ModelMBeanOperationInfo(java.lang.String var0, java.lang.reflect.Method var1)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.MBeanParameterInfo[]) null, (java.lang.String) null, 0); } 
-	public ModelMBeanOperationInfo(java.lang.String var0, java.lang.reflect.Method var1, javax.management.Descriptor var2)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.MBeanParameterInfo[]) null, (java.lang.String) null, 0); } 
-	public ModelMBeanOperationInfo(javax.management.modelmbean.ModelMBeanOperationInfo var0)  { super((java.lang.String) null, (java.lang.String) null, (javax.management.MBeanParameterInfo[]) null, (java.lang.String) null, 0); } 
+	public ModelMBeanOperationInfo(java.lang.String var0, java.lang.String var1, javax.management.MBeanParameterInfo[] var2, java.lang.String var3, int var4)  { super((java.lang.String) null, (java.lang.reflect.Method) null); } 
+	public ModelMBeanOperationInfo(java.lang.String var0, java.lang.String var1, javax.management.MBeanParameterInfo[] var2, java.lang.String var3, int var4, javax.management.Descriptor var5)  { super((java.lang.String) null, (java.lang.reflect.Method) null); } 
+	public ModelMBeanOperationInfo(java.lang.String var0, java.lang.reflect.Method var1)  { super((java.lang.String) null, (java.lang.reflect.Method) null); } 
+	public ModelMBeanOperationInfo(java.lang.String var0, java.lang.reflect.Method var1, javax.management.Descriptor var2)  { super((java.lang.String) null, (java.lang.reflect.Method) null); } 
+	public ModelMBeanOperationInfo(javax.management.modelmbean.ModelMBeanOperationInfo var0)  { super((java.lang.String) null, (java.lang.reflect.Method) null); } 
 	public javax.management.Descriptor getDescriptor() { return null; }
 	public void setDescriptor(javax.management.Descriptor var0) { }
 }

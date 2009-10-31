@@ -62,7 +62,6 @@ public class AsyncBoxView extends javax.swing.text.View {
 	protected void minorRequirementChange(javax.swing.text.AsyncBoxView.ChildState var0) { }
 	public java.awt.Shape modelToView(int var0, java.awt.Shape var1, javax.swing.text.Position.Bias var2) throws javax.swing.text.BadLocationException { return null; }
 	public void paint(java.awt.Graphics var0, java.awt.Shape var1) { }
-	public void preferenceChanged(javax.swing.text.View var0, boolean var1, boolean var2) { }
 	public void setBottomInset(float var0) { }
 	protected void setEstimatedMajorSpan(boolean var0) { }
 	public void setLeftInset(float var0) { }

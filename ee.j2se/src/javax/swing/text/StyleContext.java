@@ -56,7 +56,6 @@ public class StyleContext implements java.io.Serializable, javax.swing.text.Abst
 		public int getAttributeCount() { return 0; }
 		public java.util.Enumeration<?> getAttributeNames() { return null; }
 		public javax.swing.text.AttributeSet getResolveParent() { return null; }
-		public int hashCode() { return 0; }
 		public boolean isDefined(java.lang.Object var0) { return false; }
 		public boolean isEqual(javax.swing.text.AttributeSet var0) { return false; }
 	}

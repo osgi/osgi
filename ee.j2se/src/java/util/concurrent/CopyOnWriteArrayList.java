@@ -30,7 +30,6 @@ public class CopyOnWriteArrayList<E> implements java.io.Serializable, java.lang.
 	public boolean contains(java.lang.Object var0) { return false; }
 	public boolean containsAll(java.util.Collection<?> var0) { return false; }
 	public E get(int var0) { return null; }
-	public int hashCode() { return 0; }
 	public int indexOf(java.lang.Object var0) { return 0; }
 	public int indexOf(E var0, int var1) { return 0; }
 	public boolean isEmpty() { return false; }

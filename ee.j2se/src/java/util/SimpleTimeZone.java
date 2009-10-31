@@ -25,7 +25,6 @@ public class SimpleTimeZone extends java.util.TimeZone {
 	public SimpleTimeZone(int var0, java.lang.String var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8, int var9, int var10, int var11, int var12) { } 
 	public int getOffset(int var0, int var1, int var2, int var3, int var4, int var5) { return 0; }
 	public int getRawOffset() { return 0; }
-	public int hashCode() { return 0; }
 	public boolean inDaylightTime(java.util.Date var0) { return false; }
 	public void setDSTSavings(int var0) { }
 	public void setEndRule(int var0, int var1, int var2) { }

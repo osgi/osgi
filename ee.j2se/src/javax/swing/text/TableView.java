@@ -23,6 +23,8 @@ public abstract class TableView extends javax.swing.text.BoxView {
 		int getRowCount();
 		void setGridLocation(int var0, int var1);
 	}
+	/** @deprecated */
+	@java.lang.Deprecated
 	public class TableCell extends javax.swing.text.BoxView implements javax.swing.text.TableView.GridCell {
 		public TableCell(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null, 0); } 
 		public int getColumnCount() { return 0; }
@@ -35,7 +37,9 @@ public abstract class TableView extends javax.swing.text.BoxView {
 		public TableRow(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null, 0); } 
 	}
 	public TableView(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null, 0); } 
-	/** @deprecated */ protected javax.swing.text.TableView.TableCell createTableCell(javax.swing.text.Element var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.text.TableView.TableCell createTableCell(javax.swing.text.Element var0) { return null; }
 	protected javax.swing.text.TableView.TableRow createTableRow(javax.swing.text.Element var0) { return null; }
 	protected void layoutColumns(int var0, int[] var1, int[] var2, javax.swing.SizeRequirements[] var3) { }
 }

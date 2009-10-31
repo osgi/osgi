@@ -25,7 +25,9 @@ public class Menu extends java.awt.MenuItem implements java.awt.MenuContainer, j
 	public java.awt.MenuItem add(java.awt.MenuItem var0) { return null; }
 	public void add(java.lang.String var0) { }
 	public void addSeparator() { }
-	/** @deprecated */ public int countItems() { return 0; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public int countItems() { return 0; }
 	public java.awt.MenuItem getItem(int var0) { return null; }
 	public int getItemCount() { return 0; }
 	public void insert(java.awt.MenuItem var0, int var1) { }

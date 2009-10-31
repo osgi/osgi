@@ -58,9 +58,15 @@ public abstract class Toolkit {
 	public abstract java.awt.image.ColorModel getColorModel();
 	public static java.awt.Toolkit getDefaultToolkit() { return null; }
 	public final java.lang.Object getDesktopProperty(java.lang.String var0) { return null; }
-	/** @deprecated */ public abstract java.lang.String[] getFontList();
-	/** @deprecated */ public abstract java.awt.FontMetrics getFontMetrics(java.awt.Font var0);
-	/** @deprecated */ protected abstract java.awt.peer.FontPeer getFontPeer(java.lang.String var0, int var1);
+	/** @deprecated */
+	@java.lang.Deprecated
+	public abstract java.lang.String[] getFontList();
+	/** @deprecated */
+	@java.lang.Deprecated
+	public abstract java.awt.FontMetrics getFontMetrics(java.awt.Font var0);
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected abstract java.awt.peer.FontPeer getFontPeer(java.lang.String var0, int var1);
 	public abstract java.awt.Image getImage(java.lang.String var0);
 	public abstract java.awt.Image getImage(java.net.URL var0);
 	public boolean getLockingKeyState(int var0) { return false; }

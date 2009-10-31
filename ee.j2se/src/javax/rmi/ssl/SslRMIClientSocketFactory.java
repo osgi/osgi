@@ -18,6 +18,5 @@ package javax.rmi.ssl;
 public class SslRMIClientSocketFactory implements java.io.Serializable, java.rmi.server.RMIClientSocketFactory {
 	public SslRMIClientSocketFactory() { } 
 	public java.net.Socket createSocket(java.lang.String var0, int var1) throws java.io.IOException { return null; }
-	public int hashCode() { return 0; }
 }
 

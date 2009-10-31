@@ -18,6 +18,5 @@ package javax.print.attribute;
 public abstract class DateTimeSyntax implements java.io.Serializable, java.lang.Cloneable {
 	protected DateTimeSyntax(java.util.Date var0) { } 
 	public java.util.Date getValue() { return null; }
-	public int hashCode() { return 0; }
 }
 

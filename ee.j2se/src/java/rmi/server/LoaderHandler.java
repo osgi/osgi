@@ -15,10 +15,18 @@
  */
 
 package java.rmi.server;
-/** @deprecated */ public interface LoaderHandler {
+/** @deprecated */
+@java.lang.Deprecated
+public interface LoaderHandler {
 	public final static java.lang.String packagePrefix = "sun.rmi.server";
-	/** @deprecated */ java.lang.Object getSecurityContext(java.lang.ClassLoader var0);
-	/** @deprecated */ java.lang.Class<?> loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException, java.net.MalformedURLException;
-	/** @deprecated */ java.lang.Class<?> loadClass(java.net.URL var0, java.lang.String var1) throws java.lang.ClassNotFoundException, java.net.MalformedURLException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.lang.Object getSecurityContext(java.lang.ClassLoader var0);
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.lang.Class<?> loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException, java.net.MalformedURLException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.lang.Class<?> loadClass(java.net.URL var0, java.lang.String var1) throws java.lang.ClassNotFoundException, java.net.MalformedURLException;
 }
 

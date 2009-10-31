@@ -22,7 +22,6 @@ public final class UUID implements java.io.Serializable, java.lang.Comparable<ja
 	public static java.util.UUID fromString(java.lang.String var0) { return null; }
 	public long getLeastSignificantBits() { return 0l; }
 	public long getMostSignificantBits() { return 0l; }
-	public int hashCode() { return 0; }
 	public static java.util.UUID nameUUIDFromBytes(byte[] var0) { return null; }
 	public long node() { return 0l; }
 	public static java.util.UUID randomUUID() { return null; }

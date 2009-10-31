@@ -35,7 +35,9 @@ public abstract class URLConnection {
 	public java.lang.String getContentType() { return null; }
 	public long getDate() { return 0l; }
 	public static boolean getDefaultAllowUserInteraction() { return false; }
-	/** @deprecated */ public static java.lang.String getDefaultRequestProperty(java.lang.String var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static java.lang.String getDefaultRequestProperty(java.lang.String var0) { return null; }
 	public boolean getDefaultUseCaches() { return false; }
 	public boolean getDoInput() { return false; }
 	public boolean getDoOutput() { return false; }
@@ -63,7 +65,9 @@ public abstract class URLConnection {
 	public void setConnectTimeout(int var0) { }
 	public static void setContentHandlerFactory(java.net.ContentHandlerFactory var0) { }
 	public static void setDefaultAllowUserInteraction(boolean var0) { }
-	/** @deprecated */ public static void setDefaultRequestProperty(java.lang.String var0, java.lang.String var1) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static void setDefaultRequestProperty(java.lang.String var0, java.lang.String var1) { }
 	public void setDefaultUseCaches(boolean var0) { }
 	public void setDoInput(boolean var0) { }
 	public void setDoOutput(boolean var0) { }

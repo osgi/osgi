@@ -17,9 +17,12 @@
 package javax.management.monitor;
 public class StringMonitor extends javax.management.monitor.Monitor implements javax.management.monitor.StringMonitorMBean {
 	public StringMonitor() { } 
-	/** @deprecated */ public java.lang.String getDerivedGauge() { return null; }
+	/** @deprecated */
+	public java.lang.String getDerivedGauge() { return null; }
 	public java.lang.String getDerivedGauge(javax.management.ObjectName var0) { return null; }
-	/** @deprecated */ public long getDerivedGaugeTimeStamp() { return 0l; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public long getDerivedGaugeTimeStamp() { return 0l; }
 	public long getDerivedGaugeTimeStamp(javax.management.ObjectName var0) { return 0l; }
 	public boolean getNotifyDiffer() { return false; }
 	public boolean getNotifyMatch() { return false; }

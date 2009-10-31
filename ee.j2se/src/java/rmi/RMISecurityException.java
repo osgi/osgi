@@ -15,8 +15,14 @@
  */
 
 package java.rmi;
-/** @deprecated */ public class RMISecurityException extends java.lang.SecurityException {
-	/** @deprecated */ public RMISecurityException(java.lang.String var0) { } 
-	/** @deprecated */ public RMISecurityException(java.lang.String var0, java.lang.String var1) { } 
+/** @deprecated */
+@java.lang.Deprecated
+public class RMISecurityException extends java.lang.SecurityException {
+	/** @deprecated */
+	@java.lang.Deprecated
+	public RMISecurityException(java.lang.String var0) { } 
+	/** @deprecated */
+	@java.lang.Deprecated
+	public RMISecurityException(java.lang.String var0, java.lang.String var1) { } 
 }
 

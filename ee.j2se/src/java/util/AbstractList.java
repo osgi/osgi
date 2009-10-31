@@ -20,7 +20,6 @@ public abstract class AbstractList<E> extends java.util.AbstractCollection<E> im
 	protected AbstractList() { } 
 	public void add(int var0, E var1) { }
 	public boolean addAll(int var0, java.util.Collection<? extends E> var1) { return false; }
-	public int hashCode() { return 0; }
 	public int indexOf(java.lang.Object var0) { return 0; }
 	public java.util.Iterator<E> iterator() { return null; }
 	public int lastIndexOf(java.lang.Object var0) { return 0; }

@@ -21,6 +21,5 @@ public class ChannelBinding {
 	public java.net.InetAddress getAcceptorAddress() { return null; }
 	public byte[] getApplicationData() { return null; }
 	public java.net.InetAddress getInitiatorAddress() { return null; }
-	public int hashCode() { return 0; }
 }
 

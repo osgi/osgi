@@ -25,7 +25,6 @@ public class InetAddress implements java.io.Serializable {
 	public java.lang.String getHostAddress() { return null; }
 	public java.lang.String getHostName() { return null; }
 	public static java.net.InetAddress getLocalHost() throws java.net.UnknownHostException { return null; }
-	public int hashCode() { return 0; }
 	public boolean isAnyLocalAddress() { return false; }
 	public boolean isLinkLocalAddress() { return false; }
 	public boolean isLoopbackAddress() { return false; }

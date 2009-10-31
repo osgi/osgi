@@ -66,7 +66,9 @@ public class BasicInternalFrameUI extends javax.swing.plaf.InternalFrameUI {
 	protected javax.swing.event.MouseInputListener glassPaneDispatcher;
 	protected java.awt.LayoutManager internalFrameLayout;
 	protected javax.swing.JComponent northPane;
-	/** @deprecated */ protected javax.swing.KeyStroke openMenuKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke openMenuKey;
 	protected java.beans.PropertyChangeListener propertyChangeListener;
 	protected javax.swing.JComponent southPane;
 	protected javax.swing.plaf.basic.BasicInternalFrameTitlePane titlePane;

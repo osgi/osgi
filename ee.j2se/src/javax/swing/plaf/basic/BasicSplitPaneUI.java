@@ -75,41 +75,77 @@ public class BasicSplitPaneUI extends javax.swing.plaf.SplitPaneUI {
 	protected final static java.lang.String NON_CONTINUOUS_DIVIDER = "nonContinuousDivider";
 	protected int beginDragDividerLocation;
 	protected javax.swing.plaf.basic.BasicSplitPaneDivider divider;
-	/** @deprecated */ protected javax.swing.KeyStroke dividerResizeToggleKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke dividerResizeToggleKey;
 	protected int dividerSize;
-	/** @deprecated */ protected javax.swing.KeyStroke downKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke downKey;
 	protected boolean draggingHW;
-	/** @deprecated */ protected javax.swing.KeyStroke endKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke endKey;
 	protected java.awt.event.FocusListener focusListener;
-	/** @deprecated */ protected javax.swing.KeyStroke homeKey;
-	/** @deprecated */ protected java.awt.event.ActionListener keyboardDownRightListener;
-	/** @deprecated */ protected java.awt.event.ActionListener keyboardEndListener;
-	/** @deprecated */ protected java.awt.event.ActionListener keyboardHomeListener;
-	/** @deprecated */ protected java.awt.event.ActionListener keyboardResizeToggleListener;
-	/** @deprecated */ protected java.awt.event.ActionListener keyboardUpLeftListener;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke homeKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.awt.event.ActionListener keyboardDownRightListener;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.awt.event.ActionListener keyboardEndListener;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.awt.event.ActionListener keyboardHomeListener;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.awt.event.ActionListener keyboardResizeToggleListener;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.awt.event.ActionListener keyboardUpLeftListener;
 	protected javax.swing.plaf.basic.BasicSplitPaneUI.BasicHorizontalLayoutManager layoutManager;
-	/** @deprecated */ protected javax.swing.KeyStroke leftKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke leftKey;
 	protected java.awt.Component nonContinuousLayoutDivider;
 	protected java.beans.PropertyChangeListener propertyChangeListener;
-	/** @deprecated */ protected javax.swing.KeyStroke rightKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke rightKey;
 	protected javax.swing.JSplitPane splitPane;
-	/** @deprecated */ protected javax.swing.KeyStroke upKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke upKey;
 	public BasicSplitPaneUI() { } 
 	public javax.swing.plaf.basic.BasicSplitPaneDivider createDefaultDivider() { return null; }
 	protected java.awt.Component createDefaultNonContinuousLayoutDivider() { return null; }
 	protected java.awt.event.FocusListener createFocusListener() { return null; }
-	/** @deprecated */ protected java.awt.event.ActionListener createKeyboardDownRightListener() { return null; }
-	/** @deprecated */ protected java.awt.event.ActionListener createKeyboardEndListener() { return null; }
-	/** @deprecated */ protected java.awt.event.ActionListener createKeyboardHomeListener() { return null; }
-	/** @deprecated */ protected java.awt.event.ActionListener createKeyboardResizeToggleListener() { return null; }
-	/** @deprecated */ protected java.awt.event.ActionListener createKeyboardUpLeftListener() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.awt.event.ActionListener createKeyboardDownRightListener() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.awt.event.ActionListener createKeyboardEndListener() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.awt.event.ActionListener createKeyboardHomeListener() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.awt.event.ActionListener createKeyboardResizeToggleListener() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.awt.event.ActionListener createKeyboardUpLeftListener() { return null; }
 	protected java.beans.PropertyChangeListener createPropertyChangeListener() { return null; }
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	protected void dragDividerTo(int var0) { }
 	protected void finishDraggingTo(int var0) { }
 	public void finishedPaintingChildren(javax.swing.JSplitPane var0, java.awt.Graphics var1) { }
 	public javax.swing.plaf.basic.BasicSplitPaneDivider getDivider() { return null; }
-	/** @deprecated */ protected int getDividerBorderSize() { return 0; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected int getDividerBorderSize() { return 0; }
 	public int getDividerLocation(javax.swing.JSplitPane var0) { return 0; }
 	public java.awt.Insets getInsets(javax.swing.JComponent var0) { return null; }
 	public int getLastDragLocation() { return 0; }

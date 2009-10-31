@@ -40,7 +40,6 @@ public final class NumericShaper implements java.io.Serializable {
 	public static java.awt.font.NumericShaper getContextualShaper(int var0, int var1) { return null; }
 	public int getRanges() { return 0; }
 	public static java.awt.font.NumericShaper getShaper(int var0) { return null; }
-	public int hashCode() { return 0; }
 	public boolean isContextual() { return false; }
 	public void shape(char[] var0, int var1, int var2) { }
 	public void shape(char[] var0, int var1, int var2, int var3) { }

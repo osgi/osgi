@@ -16,7 +16,9 @@
 
 package java.lang;
 public class SecurityManager {
-	/** @deprecated */ protected boolean inCheck;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected boolean inCheck;
 	public SecurityManager() { } 
 	public void checkAccept(java.lang.String var0, int var1) { }
 	public void checkAccess(java.lang.Thread var0) { }
@@ -32,7 +34,9 @@ public class SecurityManager {
 	public void checkListen(int var0) { }
 	public void checkMemberAccess(java.lang.Class<?> var0, int var1) { }
 	public void checkMulticast(java.net.InetAddress var0) { }
-	/** @deprecated */ public void checkMulticast(java.net.InetAddress var0, byte var1) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void checkMulticast(java.net.InetAddress var0, byte var1) { }
 	public void checkPackageAccess(java.lang.String var0) { }
 	public void checkPackageDefinition(java.lang.String var0) { }
 	public void checkPermission(java.security.Permission var0) { }
@@ -49,15 +53,29 @@ public class SecurityManager {
 	public boolean checkTopLevelWindow(java.lang.Object var0) { return false; }
 	public void checkWrite(java.io.FileDescriptor var0) { }
 	public void checkWrite(java.lang.String var0) { }
-	/** @deprecated */ protected native int classDepth(java.lang.String var0);
-	/** @deprecated */ protected int classLoaderDepth() { return 0; }
-	/** @deprecated */ protected java.lang.ClassLoader currentClassLoader() { return null; }
-	/** @deprecated */ protected java.lang.Class<?> currentLoadedClass() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected native int classDepth(java.lang.String var0);
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected int classLoaderDepth() { return 0; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.lang.ClassLoader currentClassLoader() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.lang.Class<?> currentLoadedClass() { return null; }
 	protected native java.lang.Class[] getClassContext();
-	/** @deprecated */ public boolean getInCheck() { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean getInCheck() { return false; }
 	public java.lang.Object getSecurityContext() { return null; }
 	public java.lang.ThreadGroup getThreadGroup() { return null; }
-	/** @deprecated */ protected boolean inClass(java.lang.String var0) { return false; }
-	/** @deprecated */ protected boolean inClassLoader() { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected boolean inClass(java.lang.String var0) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected boolean inClassLoader() { return false; }
 }
 

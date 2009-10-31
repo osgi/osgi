@@ -38,14 +38,28 @@ public class List extends java.awt.Component implements java.awt.ItemSelectable,
 	public void add(java.lang.String var0) { }
 	public void add(java.lang.String var0, int var1) { }
 	public void addActionListener(java.awt.event.ActionListener var0) { }
-	/** @deprecated */ public void addItem(java.lang.String var0) { }
-	/** @deprecated */ public void addItem(java.lang.String var0, int var1) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void addItem(java.lang.String var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void addItem(java.lang.String var0, int var1) { }
 	public void addItemListener(java.awt.event.ItemListener var0) { }
-	/** @deprecated */ public boolean allowsMultipleSelections() { return false; }
-	/** @deprecated */ public void clear() { }
-	/** @deprecated */ public int countItems() { return 0; }
-	/** @deprecated */ public void delItem(int var0) { }
-	/** @deprecated */ public void delItems(int var0, int var1) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean allowsMultipleSelections() { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void clear() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public int countItems() { return 0; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void delItem(int var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void delItems(int var0, int var1) { }
 	public void deselect(int var0) { }
 	public java.awt.event.ActionListener[] getActionListeners() { return null; }
 	public java.lang.String getItem(int var0) { return null; }
@@ -63,10 +77,16 @@ public class List extends java.awt.Component implements java.awt.ItemSelectable,
 	public int getVisibleIndex() { return 0; }
 	public boolean isIndexSelected(int var0) { return false; }
 	public boolean isMultipleMode() { return false; }
-	/** @deprecated */ public boolean isSelected(int var0) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean isSelected(int var0) { return false; }
 	public void makeVisible(int var0) { }
-	/** @deprecated */ public java.awt.Dimension minimumSize(int var0) { return null; }
-	/** @deprecated */ public java.awt.Dimension preferredSize(int var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Dimension minimumSize(int var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Dimension preferredSize(int var0) { return null; }
 	protected void processActionEvent(java.awt.event.ActionEvent var0) { }
 	protected void processItemEvent(java.awt.event.ItemEvent var0) { }
 	public void remove(int var0) { }
@@ -77,6 +97,8 @@ public class List extends java.awt.Component implements java.awt.ItemSelectable,
 	public void replaceItem(java.lang.String var0, int var1) { }
 	public void select(int var0) { }
 	public void setMultipleMode(boolean var0) { }
-	/** @deprecated */ public void setMultipleSelections(boolean var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void setMultipleSelections(boolean var0) { }
 }
 

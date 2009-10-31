@@ -24,8 +24,6 @@ public class AudioInputStream extends java.io.InputStream {
 	public AudioInputStream(javax.sound.sampled.TargetDataLine var0) { } 
 	public javax.sound.sampled.AudioFormat getFormat() { return null; }
 	public long getFrameLength() { return 0l; }
-	public void mark(int var0) { }
 	public int read() throws java.io.IOException { return 0; }
-	public void reset() throws java.io.IOException { }
 }
 

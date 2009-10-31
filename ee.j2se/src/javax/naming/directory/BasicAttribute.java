@@ -35,7 +35,6 @@ public class BasicAttribute implements javax.naming.directory.Attribute {
 	public javax.naming.directory.DirContext getAttributeDefinition() throws javax.naming.NamingException { return null; }
 	public javax.naming.directory.DirContext getAttributeSyntaxDefinition() throws javax.naming.NamingException { return null; }
 	public java.lang.String getID() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isOrdered() { return false; }
 	public java.lang.Object remove(int var0) { return null; }
 	public boolean remove(java.lang.Object var0) { return false; }

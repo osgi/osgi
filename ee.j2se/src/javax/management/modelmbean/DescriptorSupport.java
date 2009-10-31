@@ -31,7 +31,6 @@ public class DescriptorSupport implements javax.management.Descriptor {
 	public void removeField(java.lang.String var0) { }
 	public void setField(java.lang.String var0, java.lang.Object var1) { }
 	public void setFields(java.lang.String[] var0, java.lang.Object[] var1) { }
-	public java.lang.String toString() { return null; }
 	public java.lang.String toXMLString() { return null; }
 }
 

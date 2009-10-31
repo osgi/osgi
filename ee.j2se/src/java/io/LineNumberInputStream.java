@@ -15,11 +15,11 @@
  */
 
 package java.io;
-/** @deprecated */ public class LineNumberInputStream extends java.io.FilterInputStream {
+/** @deprecated */
+@java.lang.Deprecated
+public class LineNumberInputStream extends java.io.FilterInputStream {
 	public LineNumberInputStream(java.io.InputStream var0)  { super((java.io.InputStream) null); } 
 	public int getLineNumber() { return 0; }
-	public void mark(int var0) { }
-	public void reset() throws java.io.IOException { }
 	public void setLineNumber(int var0) { }
 }
 

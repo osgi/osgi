@@ -32,7 +32,6 @@ public abstract class CharBuffer extends java.nio.Buffer implements java.lang.Ap
 	public java.nio.CharBuffer get(char[] var0) { return null; }
 	public java.nio.CharBuffer get(char[] var0, int var1, int var2) { return null; }
 	public final boolean hasArray() { return false; }
-	public int hashCode() { return 0; }
 	public abstract boolean isDirect();
 	public final int length() { return 0; }
 	public abstract java.nio.ByteOrder order();
@@ -49,6 +48,6 @@ public abstract class CharBuffer extends java.nio.Buffer implements java.lang.Ap
 	public static java.nio.CharBuffer wrap(java.lang.CharSequence var0, int var1, int var2) { return null; }
 	public static java.nio.CharBuffer wrap(char[] var0) { return null; }
 	public static java.nio.CharBuffer wrap(char[] var0, int var1, int var2) { return null; }
-	CharBuffer() { } /* generated constructor to prevent compiler adding default public constructor */
+	private CharBuffer() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

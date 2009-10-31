@@ -20,7 +20,6 @@ public class FontRenderContext {
 	public FontRenderContext(java.awt.geom.AffineTransform var0, boolean var1, boolean var2) { } 
 	public boolean equals(java.awt.font.FontRenderContext var0) { return false; }
 	public java.awt.geom.AffineTransform getTransform() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isAntiAliased() { return false; }
 	public boolean usesFractionalMetrics() { return false; }
 }

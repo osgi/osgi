@@ -19,7 +19,6 @@ public abstract class Certificate {
 	public Certificate() { } 
 	public abstract byte[] getEncoded() throws javax.security.cert.CertificateEncodingException;
 	public abstract java.security.PublicKey getPublicKey();
-	public int hashCode() { return 0; }
 	public abstract java.lang.String toString();
 	public abstract void verify(java.security.PublicKey var0) throws java.security.InvalidKeyException, java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException, java.security.SignatureException, javax.security.cert.CertificateException;
 	public abstract void verify(java.security.PublicKey var0, java.lang.String var1) throws java.security.InvalidKeyException, java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException, java.security.SignatureException, javax.security.cert.CertificateException;

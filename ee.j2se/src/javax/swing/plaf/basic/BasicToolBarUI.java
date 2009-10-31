@@ -58,18 +58,26 @@ public class BasicToolBarUI extends javax.swing.plaf.ToolBarUI implements javax.
 	protected java.awt.Color dockingBorderColor;
 	protected java.awt.Color dockingColor;
 	protected javax.swing.event.MouseInputListener dockingListener;
-	/** @deprecated */ protected javax.swing.KeyStroke downKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke downKey;
 	protected javax.swing.plaf.basic.BasicToolBarUI.DragWindow dragWindow;
 	protected java.awt.Color floatingBorderColor;
 	protected java.awt.Color floatingColor;
 	protected int focusedCompIndex;
-	/** @deprecated */ protected javax.swing.KeyStroke leftKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke leftKey;
 	protected java.beans.PropertyChangeListener propertyListener;
-	/** @deprecated */ protected javax.swing.KeyStroke rightKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke rightKey;
 	protected javax.swing.JToolBar toolBar;
 	protected java.awt.event.ContainerListener toolBarContListener;
 	protected java.awt.event.FocusListener toolBarFocusListener;
-	/** @deprecated */ protected javax.swing.KeyStroke upKey;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected javax.swing.KeyStroke upKey;
 	public BasicToolBarUI() { } 
 	public boolean canDock(java.awt.Component var0, java.awt.Point var1) { return false; }
 	protected javax.swing.event.MouseInputListener createDockingListener() { return null; }

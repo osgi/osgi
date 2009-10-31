@@ -21,10 +21,14 @@ public abstract class Monitor extends javax.management.NotificationBroadcasterSu
 	protected final static int OBSERVED_OBJECT_ERROR_NOTIFIED = 1;
 	protected final static int RESET_FLAGS_ALREADY_NOTIFIED = 0;
 	protected final static int RUNTIME_ERROR_NOTIFIED = 8;
-	/** @deprecated */ protected int alreadyNotified;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected int alreadyNotified;
 	protected int[] alreadyNotifieds;
 	protected final static int capacityIncrement = 16;
-	/** @deprecated */ protected java.lang.String dbgTag;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected java.lang.String dbgTag;
 	protected int elementCount;
 	protected javax.management.MBeanServer server;
 	public Monitor() { } 
@@ -32,7 +36,9 @@ public abstract class Monitor extends javax.management.NotificationBroadcasterSu
 	public boolean containsObservedObject(javax.management.ObjectName var0) { return false; }
 	public long getGranularityPeriod() { return 0l; }
 	public java.lang.String getObservedAttribute() { return null; }
-	/** @deprecated */ public javax.management.ObjectName getObservedObject() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public javax.management.ObjectName getObservedObject() { return null; }
 	public javax.management.ObjectName[] getObservedObjects() { return null; }
 	public boolean isActive() { return false; }
 	public void postDeregister() { }
@@ -42,6 +48,8 @@ public abstract class Monitor extends javax.management.NotificationBroadcasterSu
 	public void removeObservedObject(javax.management.ObjectName var0) { }
 	public void setGranularityPeriod(long var0) { }
 	public void setObservedAttribute(java.lang.String var0) { }
-	/** @deprecated */ public void setObservedObject(javax.management.ObjectName var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void setObservedObject(javax.management.ObjectName var0) { }
 }
 

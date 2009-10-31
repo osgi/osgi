@@ -92,7 +92,8 @@ public abstract class BaseRowSet implements java.io.Serializable, java.lang.Clon
 	public void setTransactionIsolation(int var0) throws java.sql.SQLException { }
 	public void setType(int var0) throws java.sql.SQLException { }
 	public void setTypeMap(java.util.Map<java.lang.String,java.lang.Class<?>> var0) { }
-	/** @deprecated */ public void setUnicodeStream(int var0, java.io.InputStream var1, int var2) throws java.sql.SQLException { }
+	/** @deprecated */
+	public void setUnicodeStream(int var0, java.io.InputStream var1, int var2) throws java.sql.SQLException { }
 	public void setUrl(java.lang.String var0) throws java.sql.SQLException { }
 	public void setUsername(java.lang.String var0) { }
 }

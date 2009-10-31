@@ -15,7 +15,8 @@
  */
 
 package org.xml.sax;
-/** @deprecated */ public interface Parser {
+/** @deprecated */
+public interface Parser {
 	void parse(java.lang.String var0) throws java.io.IOException, org.xml.sax.SAXException;
 	void parse(org.xml.sax.InputSource var0) throws java.io.IOException, org.xml.sax.SAXException;
 	void setDTDHandler(org.xml.sax.DTDHandler var0);

@@ -19,11 +19,9 @@ public class FileInputStream extends java.io.InputStream {
 	public FileInputStream(java.io.File var0) throws java.io.FileNotFoundException { } 
 	public FileInputStream(java.io.FileDescriptor var0) { } 
 	public FileInputStream(java.lang.String var0) throws java.io.FileNotFoundException { } 
-	public native int available() throws java.io.IOException;
 	protected void finalize() throws java.io.IOException { }
 	public java.nio.channels.FileChannel getChannel() { return null; }
 	public final java.io.FileDescriptor getFD() throws java.io.IOException { return null; }
 	public native int read() throws java.io.IOException;
-	public native long skip(long var0) throws java.io.IOException;
 }
 

@@ -15,7 +15,9 @@
  */
 
 package java.rmi.server;
-/** @deprecated */ public class SkeletonNotFoundException extends java.rmi.RemoteException {
+/** @deprecated */
+@java.lang.Deprecated
+public class SkeletonNotFoundException extends java.rmi.RemoteException {
 	public SkeletonNotFoundException(java.lang.String var0) { } 
 	public SkeletonNotFoundException(java.lang.String var0, java.lang.Exception var1) { } 
 }

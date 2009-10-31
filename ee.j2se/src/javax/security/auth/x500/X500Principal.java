@@ -25,6 +25,5 @@ public final class X500Principal implements java.io.Serializable, java.security.
 	public byte[] getEncoded() { return null; }
 	public java.lang.String getName() { return null; }
 	public java.lang.String getName(java.lang.String var0) { return null; }
-	public int hashCode() { return 0; }
 }
 

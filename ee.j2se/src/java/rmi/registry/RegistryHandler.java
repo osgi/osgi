@@ -15,8 +15,14 @@
  */
 
 package java.rmi.registry;
-/** @deprecated */ public interface RegistryHandler {
-	/** @deprecated */ java.rmi.registry.Registry registryImpl(int var0) throws java.rmi.RemoteException;
-	/** @deprecated */ java.rmi.registry.Registry registryStub(java.lang.String var0, int var1) throws java.rmi.RemoteException;
+/** @deprecated */
+@java.lang.Deprecated
+public interface RegistryHandler {
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.rmi.registry.Registry registryImpl(int var0) throws java.rmi.RemoteException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.rmi.registry.Registry registryStub(java.lang.String var0, int var1) throws java.rmi.RemoteException;
 }
 

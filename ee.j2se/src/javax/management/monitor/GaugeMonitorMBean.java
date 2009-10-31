@@ -16,9 +16,13 @@
 
 package javax.management.monitor;
 public interface GaugeMonitorMBean extends javax.management.monitor.MonitorMBean {
-	/** @deprecated */ java.lang.Number getDerivedGauge();
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.lang.Number getDerivedGauge();
 	java.lang.Number getDerivedGauge(javax.management.ObjectName var0);
-	/** @deprecated */ long getDerivedGaugeTimeStamp();
+	/** @deprecated */
+	@java.lang.Deprecated
+	long getDerivedGaugeTimeStamp();
 	long getDerivedGaugeTimeStamp(javax.management.ObjectName var0);
 	boolean getDifferenceMode();
 	java.lang.Number getHighThreshold();

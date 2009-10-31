@@ -20,6 +20,5 @@ public class ObjectInstance implements java.io.Serializable {
 	public ObjectInstance(javax.management.ObjectName var0, java.lang.String var1) { } 
 	public java.lang.String getClassName() { return null; }
 	public javax.management.ObjectName getObjectName() { return null; }
-	public int hashCode() { return 0; }
 }
 

@@ -15,7 +15,8 @@
  */
 
 package org.xml.sax;
-/** @deprecated */ public interface DocumentHandler {
+/** @deprecated */
+public interface DocumentHandler {
 	void characters(char[] var0, int var1, int var2) throws org.xml.sax.SAXException;
 	void endDocument() throws org.xml.sax.SAXException;
 	void endElement(java.lang.String var0) throws org.xml.sax.SAXException;

@@ -54,7 +54,9 @@ public abstract class View implements javax.swing.SwingConstants {
 	public void insert(int var0, javax.swing.text.View var1) { }
 	public void insertUpdate(javax.swing.event.DocumentEvent var0, java.awt.Shape var1, javax.swing.text.ViewFactory var2) { }
 	public boolean isVisible() { return false; }
-	/** @deprecated */ public java.awt.Shape modelToView(int var0, java.awt.Shape var1) throws javax.swing.text.BadLocationException { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Shape modelToView(int var0, java.awt.Shape var1) throws javax.swing.text.BadLocationException { return null; }
 	public abstract java.awt.Shape modelToView(int var0, java.awt.Shape var1, javax.swing.text.Position.Bias var2) throws javax.swing.text.BadLocationException;
 	public java.awt.Shape modelToView(int var0, javax.swing.text.Position.Bias var1, int var2, javax.swing.text.Position.Bias var3, java.awt.Shape var4) throws javax.swing.text.BadLocationException { return null; }
 	public abstract void paint(java.awt.Graphics var0, java.awt.Shape var1);
@@ -67,7 +69,9 @@ public abstract class View implements javax.swing.SwingConstants {
 	public void setSize(float var0, float var1) { }
 	protected boolean updateChildren(javax.swing.event.DocumentEvent.ElementChange var0, javax.swing.event.DocumentEvent var1, javax.swing.text.ViewFactory var2) { return false; }
 	protected void updateLayout(javax.swing.event.DocumentEvent.ElementChange var0, javax.swing.event.DocumentEvent var1, java.awt.Shape var2) { }
-	/** @deprecated */ public int viewToModel(float var0, float var1, java.awt.Shape var2) { return 0; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public int viewToModel(float var0, float var1, java.awt.Shape var2) { return 0; }
 	public abstract int viewToModel(float var0, float var1, java.awt.Shape var2, javax.swing.text.Position.Bias[] var3);
 }
 

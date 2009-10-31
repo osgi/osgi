@@ -25,7 +25,9 @@ public class JViewport extends javax.swing.JComponent implements javax.accessibi
 	public final static int BACKINGSTORE_SCROLL_MODE = 2;
 	public final static int BLIT_SCROLL_MODE = 1;
 	public final static int SIMPLE_SCROLL_MODE = 0;
-	/** @deprecated */ protected boolean backingStore;
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected boolean backingStore;
 	protected java.awt.Image backingStoreImage;
 	protected boolean isViewSizeSet;
 	protected java.awt.Point lastPaintPosition;
@@ -46,9 +48,13 @@ public class JViewport extends javax.swing.JComponent implements javax.accessibi
 	public java.awt.Point getViewPosition() { return null; }
 	public java.awt.Rectangle getViewRect() { return null; }
 	public java.awt.Dimension getViewSize() { return null; }
-	/** @deprecated */ public boolean isBackingStoreEnabled() { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean isBackingStoreEnabled() { return false; }
 	public void removeChangeListener(javax.swing.event.ChangeListener var0) { }
-	/** @deprecated */ public void setBackingStoreEnabled(boolean var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void setBackingStoreEnabled(boolean var0) { }
 	public final void setBorder(javax.swing.border.Border var0) { }
 	public void setExtentSize(java.awt.Dimension var0) { }
 	public void setScrollMode(int var0) { }

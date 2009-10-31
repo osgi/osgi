@@ -18,6 +18,5 @@ package javax.print.attribute;
 public abstract class URISyntax implements java.io.Serializable, java.lang.Cloneable {
 	protected URISyntax(java.net.URI var0) { } 
 	public java.net.URI getURI() { return null; }
-	public int hashCode() { return 0; }
 }
 

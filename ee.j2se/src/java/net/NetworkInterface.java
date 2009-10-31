@@ -22,7 +22,6 @@ public final class NetworkInterface {
 	public java.util.Enumeration<java.net.InetAddress> getInetAddresses() { return null; }
 	public java.lang.String getName() { return null; }
 	public static java.util.Enumeration<java.net.NetworkInterface> getNetworkInterfaces() throws java.net.SocketException { return null; }
-	public int hashCode() { return 0; }
 	private NetworkInterface() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

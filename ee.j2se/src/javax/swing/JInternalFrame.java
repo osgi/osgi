@@ -85,7 +85,9 @@ public class JInternalFrame extends javax.swing.JComponent implements javax.acce
 	public javax.swing.JMenuBar getJMenuBar() { return null; }
 	public int getLayer() { return 0; }
 	public javax.swing.JLayeredPane getLayeredPane() { return null; }
-	/** @deprecated */ public javax.swing.JMenuBar getMenuBar() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public javax.swing.JMenuBar getMenuBar() { return null; }
 	public java.awt.Component getMostRecentFocusOwner() { return null; }
 	public java.awt.Rectangle getNormalBounds() { return null; }
 	public java.lang.String getTitle() { return null; }
@@ -122,7 +124,9 @@ public class JInternalFrame extends javax.swing.JComponent implements javax.acce
 	public void setLayeredPane(javax.swing.JLayeredPane var0) { }
 	public void setMaximizable(boolean var0) { }
 	public void setMaximum(boolean var0) throws java.beans.PropertyVetoException { }
-	/** @deprecated */ public void setMenuBar(javax.swing.JMenuBar var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void setMenuBar(javax.swing.JMenuBar var0) { }
 	public void setNormalBounds(java.awt.Rectangle var0) { }
 	public void setResizable(boolean var0) { }
 	protected void setRootPane(javax.swing.JRootPane var0) { }

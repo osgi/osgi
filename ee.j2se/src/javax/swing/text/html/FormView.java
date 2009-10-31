@@ -19,8 +19,12 @@ public class FormView extends javax.swing.text.ComponentView implements java.awt
 	protected class MouseEventListener extends java.awt.event.MouseAdapter {
 		protected MouseEventListener() { } 
 	}
-	/** @deprecated */ public final static java.lang.String RESET; static { RESET = null; }
-	/** @deprecated */ public final static java.lang.String SUBMIT; static { SUBMIT = null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public final static java.lang.String RESET; static { RESET = null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public final static java.lang.String SUBMIT; static { SUBMIT = null; }
 	public FormView(javax.swing.text.Element var0)  { super((javax.swing.text.Element) null); } 
 	public void actionPerformed(java.awt.event.ActionEvent var0) { }
 	protected void imageSubmit(java.lang.String var0) { }

@@ -15,13 +15,29 @@
  */
 
 package java.rmi.server;
-/** @deprecated */ public interface RemoteCall {
-	/** @deprecated */ void done() throws java.io.IOException;
-	/** @deprecated */ void executeCall() throws java.lang.Exception;
-	/** @deprecated */ java.io.ObjectInput getInputStream() throws java.io.IOException;
-	/** @deprecated */ java.io.ObjectOutput getOutputStream() throws java.io.IOException;
-	/** @deprecated */ java.io.ObjectOutput getResultStream(boolean var0) throws java.io.IOException;
-	/** @deprecated */ void releaseInputStream() throws java.io.IOException;
-	/** @deprecated */ void releaseOutputStream() throws java.io.IOException;
+/** @deprecated */
+@java.lang.Deprecated
+public interface RemoteCall {
+	/** @deprecated */
+	@java.lang.Deprecated
+	void done() throws java.io.IOException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	void executeCall() throws java.lang.Exception;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.io.ObjectInput getInputStream() throws java.io.IOException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.io.ObjectOutput getOutputStream() throws java.io.IOException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	java.io.ObjectOutput getResultStream(boolean var0) throws java.io.IOException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	void releaseInputStream() throws java.io.IOException;
+	/** @deprecated */
+	@java.lang.Deprecated
+	void releaseOutputStream() throws java.io.IOException;
 }
 

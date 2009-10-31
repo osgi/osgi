@@ -18,7 +18,6 @@ package javax.swing;
 public class JFormattedTextField extends javax.swing.JTextField {
 	public static abstract class AbstractFormatter implements java.io.Serializable {
 		public AbstractFormatter() { } 
-		protected java.lang.Object clone() throws java.lang.CloneNotSupportedException { return null; }
 		protected javax.swing.Action[] getActions() { return null; }
 		protected javax.swing.text.DocumentFilter getDocumentFilter() { return null; }
 		protected javax.swing.JFormattedTextField getFormattedTextField() { return null; }

@@ -40,9 +40,13 @@ public class Thread implements java.lang.Runnable {
 	public Thread(java.lang.ThreadGroup var0, java.lang.String var1) { } 
 	public static int activeCount() { return 0; }
 	public final void checkAccess() { }
-	/** @deprecated */ public native int countStackFrames();
+	/** @deprecated */
+	@java.lang.Deprecated
+	public native int countStackFrames();
 	public static native java.lang.Thread currentThread();
-	/** @deprecated */ public void destroy() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void destroy() { }
 	public static void dumpStack() { }
 	public static int enumerate(java.lang.Thread[] var0) { return 0; }
 	public static java.util.Map<java.lang.Thread,java.lang.StackTraceElement[]> getAllStackTraces() { return null; }
@@ -64,7 +68,9 @@ public class Thread implements java.lang.Runnable {
 	public final void join() throws java.lang.InterruptedException { }
 	public final void join(long var0) throws java.lang.InterruptedException { }
 	public final void join(long var0, int var1) throws java.lang.InterruptedException { }
-	/** @deprecated */ public final void resume() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public final void resume() { }
 	public void run() { }
 	public void setContextClassLoader(java.lang.ClassLoader var0) { }
 	public final void setDaemon(boolean var0) { }
@@ -75,9 +81,15 @@ public class Thread implements java.lang.Runnable {
 	public static native void sleep(long var0) throws java.lang.InterruptedException;
 	public static void sleep(long var0, int var1) throws java.lang.InterruptedException { }
 	public void start() { }
-	/** @deprecated */ public final void stop() { }
-	/** @deprecated */ public final void stop(java.lang.Throwable var0) { }
-	/** @deprecated */ public final void suspend() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public final void stop() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public final void stop(java.lang.Throwable var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public final void suspend() { }
 	public static native void yield();
 }
 

@@ -17,7 +17,9 @@
 package java.security;
 public final class Security {
 	public static int addProvider(java.security.Provider var0) { return 0; }
-	/** @deprecated */ public static java.lang.String getAlgorithmProperty(java.lang.String var0, java.lang.String var1) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static java.lang.String getAlgorithmProperty(java.lang.String var0, java.lang.String var1) { return null; }
 	public static java.util.Set<java.lang.String> getAlgorithms(java.lang.String var0) { return null; }
 	public static java.lang.String getProperty(java.lang.String var0) { return null; }
 	public static java.security.Provider getProvider(java.lang.String var0) { return null; }

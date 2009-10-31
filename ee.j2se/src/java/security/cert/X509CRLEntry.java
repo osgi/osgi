@@ -22,7 +22,6 @@ public abstract class X509CRLEntry implements java.security.cert.X509Extension {
 	public abstract java.util.Date getRevocationDate();
 	public abstract java.math.BigInteger getSerialNumber();
 	public abstract boolean hasExtensions();
-	public int hashCode() { return 0; }
 	public abstract java.lang.String toString();
 }
 

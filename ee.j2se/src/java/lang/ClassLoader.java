@@ -22,7 +22,9 @@ public abstract class ClassLoader {
 	protected final java.lang.Class<?> defineClass(java.lang.String var0, java.nio.ByteBuffer var1, java.security.ProtectionDomain var2) throws java.lang.ClassFormatError { return null; }
 	protected final java.lang.Class<?> defineClass(java.lang.String var0, byte[] var1, int var2, int var3) throws java.lang.ClassFormatError { return null; }
 	protected final java.lang.Class<?> defineClass(java.lang.String var0, byte[] var1, int var2, int var3, java.security.ProtectionDomain var4) throws java.lang.ClassFormatError { return null; }
-	/** @deprecated */ protected final java.lang.Class<?> defineClass(byte[] var0, int var1, int var2) throws java.lang.ClassFormatError { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected final java.lang.Class<?> defineClass(byte[] var0, int var1, int var2) throws java.lang.ClassFormatError { return null; }
 	protected java.lang.Package definePackage(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3, java.lang.String var4, java.lang.String var5, java.lang.String var6, java.net.URL var7) { return null; }
 	protected java.lang.Class<?> findClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
 	protected java.lang.String findLibrary(java.lang.String var0) { return null; }

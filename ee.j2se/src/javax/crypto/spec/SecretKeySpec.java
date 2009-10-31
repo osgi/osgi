@@ -22,6 +22,5 @@ public class SecretKeySpec implements java.security.spec.KeySpec, javax.crypto.S
 	public java.lang.String getAlgorithm() { return null; }
 	public byte[] getEncoded() { return null; }
 	public java.lang.String getFormat() { return null; }
-	public int hashCode() { return 0; }
 }
 

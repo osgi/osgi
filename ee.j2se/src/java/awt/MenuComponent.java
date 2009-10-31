@@ -65,10 +65,14 @@ public abstract class MenuComponent implements java.io.Serializable {
 	public java.awt.Font getFont() { return null; }
 	public java.lang.String getName() { return null; }
 	public java.awt.MenuContainer getParent() { return null; }
-	/** @deprecated */ public java.awt.peer.MenuComponentPeer getPeer() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.peer.MenuComponentPeer getPeer() { return null; }
 	protected final java.lang.Object getTreeLock() { return null; }
 	protected java.lang.String paramString() { return null; }
-	/** @deprecated */ public boolean postEvent(java.awt.Event var0) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean postEvent(java.awt.Event var0) { return false; }
 	protected void processEvent(java.awt.AWTEvent var0) { }
 	public void removeNotify() { }
 	public void setFont(java.awt.Font var0) { }

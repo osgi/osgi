@@ -21,7 +21,6 @@ public class CodeSource implements java.io.Serializable {
 	public final java.security.cert.Certificate[] getCertificates() { return null; }
 	public final java.security.CodeSigner[] getCodeSigners() { return null; }
 	public final java.net.URL getLocation() { return null; }
-	public int hashCode() { return 0; }
 	public boolean implies(java.security.CodeSource var0) { return false; }
 }
 

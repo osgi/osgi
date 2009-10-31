@@ -18,9 +18,13 @@ package javax.swing;
 public abstract class FocusManager extends java.awt.DefaultKeyboardFocusManager {
 	public final static java.lang.String FOCUS_MANAGER_CLASS_PROPERTY = "FocusManagerClassName";
 	public FocusManager() { } 
-	/** @deprecated */ public static void disableSwingFocusManager() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static void disableSwingFocusManager() { }
 	public static javax.swing.FocusManager getCurrentManager() { return null; }
-	/** @deprecated */ public static boolean isFocusManagerEnabled() { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static boolean isFocusManagerEnabled() { return false; }
 	public static void setCurrentManager(javax.swing.FocusManager var0) { }
 }
 

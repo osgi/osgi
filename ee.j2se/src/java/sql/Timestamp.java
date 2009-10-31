@@ -16,7 +16,9 @@
 
 package java.sql;
 public class Timestamp extends java.util.Date {
-	/** @deprecated */ public Timestamp(int var0, int var1, int var2, int var3, int var4, int var5, int var6) { } 
+	/** @deprecated */
+	@java.lang.Deprecated
+	public Timestamp(int var0, int var1, int var2, int var3, int var4, int var5, int var6) { } 
 	public Timestamp(long var0) { } 
 	public boolean after(java.sql.Timestamp var0) { return false; }
 	public boolean before(java.sql.Timestamp var0) { return false; }

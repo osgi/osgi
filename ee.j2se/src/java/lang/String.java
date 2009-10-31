@@ -22,9 +22,13 @@ public final class String implements java.io.Serializable, java.lang.CharSequenc
 	public String(java.lang.StringBuffer var0) { } 
 	public String(java.lang.StringBuilder var0) { } 
 	public String(byte[] var0) { } 
-	/** @deprecated */ public String(byte[] var0, int var1) { } 
+	/** @deprecated */
+	@java.lang.Deprecated
+	public String(byte[] var0, int var1) { } 
 	public String(byte[] var0, int var1, int var2) { } 
-	/** @deprecated */ public String(byte[] var0, int var1, int var2, int var3) { } 
+	/** @deprecated */
+	@java.lang.Deprecated
+	public String(byte[] var0, int var1, int var2, int var3) { } 
 	public String(byte[] var0, int var1, int var2, java.lang.String var3) throws java.io.UnsupportedEncodingException { } 
 	public String(byte[] var0, java.lang.String var1) throws java.io.UnsupportedEncodingException { } 
 	public String(char[] var0) { } 
@@ -47,10 +51,11 @@ public final class String implements java.io.Serializable, java.lang.CharSequenc
 	public static java.lang.String format(java.lang.String var0, java.lang.Object... var1) { return null; }
 	public static java.lang.String format(java.util.Locale var0, java.lang.String var1, java.lang.Object... var2) { return null; }
 	public byte[] getBytes() { return null; }
-	/** @deprecated */ public void getBytes(int var0, int var1, byte[] var2, int var3) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void getBytes(int var0, int var1, byte[] var2, int var3) { }
 	public byte[] getBytes(java.lang.String var0) throws java.io.UnsupportedEncodingException { return null; }
 	public void getChars(int var0, int var1, char[] var2, int var3) { }
-	public int hashCode() { return 0; }
 	public int indexOf(int var0) { return 0; }
 	public int indexOf(int var0, int var1) { return 0; }
 	public int indexOf(java.lang.String var0) { return 0; }

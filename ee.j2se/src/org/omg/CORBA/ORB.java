@@ -22,14 +22,28 @@ public abstract class ORB {
 	public abstract org.omg.CORBA.TypeCode create_alias_tc(java.lang.String var0, java.lang.String var1, org.omg.CORBA.TypeCode var2);
 	public abstract org.omg.CORBA.Any create_any();
 	public abstract org.omg.CORBA.TypeCode create_array_tc(int var0, org.omg.CORBA.TypeCode var1);
-	/** @deprecated */ public org.omg.CORBA.DynAny create_basic_dyn_any(org.omg.CORBA.TypeCode var0) throws org.omg.CORBA.ORBPackage.InconsistentTypeCode { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public org.omg.CORBA.DynAny create_basic_dyn_any(org.omg.CORBA.TypeCode var0) throws org.omg.CORBA.ORBPackage.InconsistentTypeCode { return null; }
 	public abstract org.omg.CORBA.ContextList create_context_list();
-	/** @deprecated */ public org.omg.CORBA.DynAny create_dyn_any(org.omg.CORBA.Any var0) { return null; }
-	/** @deprecated */ public org.omg.CORBA.DynArray create_dyn_array(org.omg.CORBA.TypeCode var0) throws org.omg.CORBA.ORBPackage.InconsistentTypeCode { return null; }
-	/** @deprecated */ public org.omg.CORBA.DynEnum create_dyn_enum(org.omg.CORBA.TypeCode var0) throws org.omg.CORBA.ORBPackage.InconsistentTypeCode { return null; }
-	/** @deprecated */ public org.omg.CORBA.DynSequence create_dyn_sequence(org.omg.CORBA.TypeCode var0) throws org.omg.CORBA.ORBPackage.InconsistentTypeCode { return null; }
-	/** @deprecated */ public org.omg.CORBA.DynStruct create_dyn_struct(org.omg.CORBA.TypeCode var0) throws org.omg.CORBA.ORBPackage.InconsistentTypeCode { return null; }
-	/** @deprecated */ public org.omg.CORBA.DynUnion create_dyn_union(org.omg.CORBA.TypeCode var0) throws org.omg.CORBA.ORBPackage.InconsistentTypeCode { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public org.omg.CORBA.DynAny create_dyn_any(org.omg.CORBA.Any var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public org.omg.CORBA.DynArray create_dyn_array(org.omg.CORBA.TypeCode var0) throws org.omg.CORBA.ORBPackage.InconsistentTypeCode { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public org.omg.CORBA.DynEnum create_dyn_enum(org.omg.CORBA.TypeCode var0) throws org.omg.CORBA.ORBPackage.InconsistentTypeCode { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public org.omg.CORBA.DynSequence create_dyn_sequence(org.omg.CORBA.TypeCode var0) throws org.omg.CORBA.ORBPackage.InconsistentTypeCode { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public org.omg.CORBA.DynStruct create_dyn_struct(org.omg.CORBA.TypeCode var0) throws org.omg.CORBA.ORBPackage.InconsistentTypeCode { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public org.omg.CORBA.DynUnion create_dyn_union(org.omg.CORBA.TypeCode var0) throws org.omg.CORBA.ORBPackage.InconsistentTypeCode { return null; }
 	public abstract org.omg.CORBA.TypeCode create_enum_tc(java.lang.String var0, java.lang.String var1, java.lang.String[] var2);
 	public abstract org.omg.CORBA.Environment create_environment();
 	public abstract org.omg.CORBA.ExceptionList create_exception_list();
@@ -42,7 +56,9 @@ public abstract class ORB {
 	public org.omg.CORBA.NVList create_operation_list(org.omg.CORBA.Object var0) { return null; }
 	public abstract org.omg.CORBA.portable.OutputStream create_output_stream();
 	public org.omg.CORBA.Policy create_policy(int var0, org.omg.CORBA.Any var1) throws org.omg.CORBA.PolicyError { return null; }
-	/** @deprecated */ public abstract org.omg.CORBA.TypeCode create_recursive_sequence_tc(int var0, int var1);
+	/** @deprecated */
+	@java.lang.Deprecated
+	public abstract org.omg.CORBA.TypeCode create_recursive_sequence_tc(int var0, int var1);
 	public org.omg.CORBA.TypeCode create_recursive_tc(java.lang.String var0) { return null; }
 	public abstract org.omg.CORBA.TypeCode create_sequence_tc(int var0, org.omg.CORBA.TypeCode var1);
 	public abstract org.omg.CORBA.TypeCode create_string_tc(int var0);
@@ -53,7 +69,9 @@ public abstract class ORB {
 	public abstract org.omg.CORBA.TypeCode create_wstring_tc(int var0);
 	public void destroy() { }
 	public void disconnect(org.omg.CORBA.Object var0) { }
-	/** @deprecated */ public org.omg.CORBA.Current get_current() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public org.omg.CORBA.Current get_current() { return null; }
 	public abstract org.omg.CORBA.Context get_default_context();
 	public abstract org.omg.CORBA.Request get_next_response() throws org.omg.CORBA.WrongTransaction;
 	public abstract org.omg.CORBA.TypeCode get_primitive_tc(org.omg.CORBA.TCKind var0);

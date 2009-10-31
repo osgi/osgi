@@ -82,7 +82,9 @@ public class TCKind {
 	public final static org.omg.CORBA.TCKind tk_void; static { tk_void = null; }
 	public final static org.omg.CORBA.TCKind tk_wchar; static { tk_wchar = null; }
 	public final static org.omg.CORBA.TCKind tk_wstring; static { tk_wstring = null; }
-	/** @deprecated */ protected TCKind(int var0) { } 
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected TCKind(int var0) { } 
 	public static org.omg.CORBA.TCKind from_int(int var0) { return null; }
 	public int value() { return 0; }
 }

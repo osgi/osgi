@@ -130,7 +130,9 @@ public final class Character implements java.io.Serializable, java.lang.Comparab
 		public final static java.lang.Character.UnicodeBlock SUPPLEMENTAL_MATHEMATICAL_OPERATORS; static { SUPPLEMENTAL_MATHEMATICAL_OPERATORS = null; }
 		public final static java.lang.Character.UnicodeBlock SUPPLEMENTARY_PRIVATE_USE_AREA_A; static { SUPPLEMENTARY_PRIVATE_USE_AREA_A = null; }
 		public final static java.lang.Character.UnicodeBlock SUPPLEMENTARY_PRIVATE_USE_AREA_B; static { SUPPLEMENTARY_PRIVATE_USE_AREA_B = null; }
-		/** @deprecated */ public final static java.lang.Character.UnicodeBlock SURROGATES_AREA; static { SURROGATES_AREA = null; }
+		/** @deprecated */
+		@java.lang.Deprecated
+		public final static java.lang.Character.UnicodeBlock SURROGATES_AREA; static { SURROGATES_AREA = null; }
 		public final static java.lang.Character.UnicodeBlock SYRIAC; static { SYRIAC = null; }
 		public final static java.lang.Character.UnicodeBlock TAGALOG; static { TAGALOG = null; }
 		public final static java.lang.Character.UnicodeBlock TAGBANWA; static { TAGBANWA = null; }
@@ -240,7 +242,6 @@ public final class Character implements java.io.Serializable, java.lang.Comparab
 	public static int getNumericValue(int var0) { return 0; }
 	public static int getType(char var0) { return 0; }
 	public static int getType(int var0) { return 0; }
-	public int hashCode() { return 0; }
 	public static boolean isDefined(char var0) { return false; }
 	public static boolean isDefined(int var0) { return false; }
 	public static boolean isDigit(char var0) { return false; }
@@ -254,8 +255,12 @@ public final class Character implements java.io.Serializable, java.lang.Comparab
 	public static boolean isJavaIdentifierPart(int var0) { return false; }
 	public static boolean isJavaIdentifierStart(char var0) { return false; }
 	public static boolean isJavaIdentifierStart(int var0) { return false; }
-	/** @deprecated */ public static boolean isJavaLetter(char var0) { return false; }
-	/** @deprecated */ public static boolean isJavaLetterOrDigit(char var0) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static boolean isJavaLetter(char var0) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static boolean isJavaLetterOrDigit(char var0) { return false; }
 	public static boolean isLetter(char var0) { return false; }
 	public static boolean isLetter(int var0) { return false; }
 	public static boolean isLetterOrDigit(char var0) { return false; }
@@ -265,7 +270,9 @@ public final class Character implements java.io.Serializable, java.lang.Comparab
 	public static boolean isLowerCase(int var0) { return false; }
 	public static boolean isMirrored(char var0) { return false; }
 	public static boolean isMirrored(int var0) { return false; }
-	/** @deprecated */ public static boolean isSpace(char var0) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public static boolean isSpace(char var0) { return false; }
 	public static boolean isSpaceChar(char var0) { return false; }
 	public static boolean isSpaceChar(int var0) { return false; }
 	public static boolean isSupplementaryCodePoint(int var0) { return false; }

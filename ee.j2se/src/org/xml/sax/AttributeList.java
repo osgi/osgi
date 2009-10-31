@@ -15,7 +15,8 @@
  */
 
 package org.xml.sax;
-/** @deprecated */ public interface AttributeList {
+/** @deprecated */
+public interface AttributeList {
 	int getLength();
 	java.lang.String getName(int var0);
 	java.lang.String getType(int var0);

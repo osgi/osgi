@@ -32,6 +32,5 @@ public class TabStop implements java.io.Serializable {
 	public int getAlignment() { return 0; }
 	public int getLeader() { return 0; }
 	public float getPosition() { return 0.0f; }
-	public int hashCode() { return 0; }
 }
 

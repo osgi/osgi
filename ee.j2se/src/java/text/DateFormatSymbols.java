@@ -27,7 +27,6 @@ public class DateFormatSymbols implements java.io.Serializable, java.lang.Clonea
 	public java.lang.String[] getShortWeekdays() { return null; }
 	public java.lang.String[] getWeekdays() { return null; }
 	public java.lang.String[][] getZoneStrings() { return null; }
-	public int hashCode() { return 0; }
 	public void setAmPmStrings(java.lang.String[] var0) { }
 	public void setEras(java.lang.String[] var0) { }
 	public void setLocalPatternChars(java.lang.String var0) { }

@@ -29,7 +29,6 @@ public class ZipEntry implements java.lang.Cloneable, java.util.zip.ZipConstants
 	public java.lang.String getName() { return null; }
 	public long getSize() { return 0l; }
 	public long getTime() { return 0l; }
-	public int hashCode() { return 0; }
 	public boolean isDirectory() { return false; }
 	public void setComment(java.lang.String var0) { }
 	public void setCompressedSize(long var0) { }

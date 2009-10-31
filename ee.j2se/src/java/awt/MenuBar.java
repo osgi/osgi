@@ -22,7 +22,9 @@ public class MenuBar extends java.awt.MenuComponent implements java.awt.MenuCont
 	public MenuBar() { } 
 	public java.awt.Menu add(java.awt.Menu var0) { return null; }
 	public void addNotify() { }
-	/** @deprecated */ public int countMenus() { return 0; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public int countMenus() { return 0; }
 	public void deleteShortcut(java.awt.MenuShortcut var0) { }
 	public java.awt.Menu getHelpMenu() { return null; }
 	public java.awt.Menu getMenu(int var0) { return null; }

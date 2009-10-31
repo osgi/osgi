@@ -28,7 +28,6 @@ public class IndexColorModel extends java.awt.image.ColorModel {
 	public final void getAlphas(byte[] var0) { }
 	public final int getBlue(int var0) { return 0; }
 	public final void getBlues(byte[] var0) { }
-	public java.lang.Object getDataElements(int var0, java.lang.Object var1) { return null; }
 	public final int getGreen(int var0) { return 0; }
 	public final void getGreens(byte[] var0) { }
 	public final int getMapSize() { return 0; }

@@ -53,7 +53,9 @@ public abstract class Graphics {
 	public abstract java.awt.Shape getClip();
 	public abstract java.awt.Rectangle getClipBounds();
 	public java.awt.Rectangle getClipBounds(java.awt.Rectangle var0) { return null; }
-	/** @deprecated */ public java.awt.Rectangle getClipRect() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Rectangle getClipRect() { return null; }
 	public abstract java.awt.Color getColor();
 	public abstract java.awt.Font getFont();
 	public java.awt.FontMetrics getFontMetrics() { return null; }

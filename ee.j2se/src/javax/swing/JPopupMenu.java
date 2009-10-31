@@ -37,7 +37,9 @@ public class JPopupMenu extends javax.swing.JComponent implements javax.accessib
 	protected void firePopupMenuWillBecomeInvisible() { }
 	protected void firePopupMenuWillBecomeVisible() { }
 	public java.awt.Component getComponent() { return null; }
-	/** @deprecated */ public java.awt.Component getComponentAtIndex(int var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Component getComponentAtIndex(int var0) { return null; }
 	public int getComponentIndex(java.awt.Component var0) { return 0; }
 	public static boolean getDefaultLightWeightPopupEnabled() { return false; }
 	public java.awt.Component getInvoker() { return null; }

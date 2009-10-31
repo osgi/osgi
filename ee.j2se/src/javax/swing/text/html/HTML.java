@@ -185,7 +185,6 @@ public class HTML {
 	}
 	public static class UnknownTag extends javax.swing.text.html.HTML.Tag implements java.io.Serializable {
 		public UnknownTag(java.lang.String var0) { } 
-		public int hashCode() { return 0; }
 	}
 	public final static java.lang.String NULL_ATTRIBUTE_VALUE = "#DEFAULT";
 	public HTML() { } 

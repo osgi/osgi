@@ -23,9 +23,5 @@ public class BufferedInputStream extends java.io.FilterInputStream {
 	protected int pos;
 	public BufferedInputStream(java.io.InputStream var0)  { super((java.io.InputStream) null); } 
 	public BufferedInputStream(java.io.InputStream var0, int var1)  { super((java.io.InputStream) null); } 
-	public int available() throws java.io.IOException { return 0; }
-	public int read() throws java.io.IOException { return 0; }
-	public int read(byte[] var0, int var1, int var2) throws java.io.IOException { return 0; }
-	public long skip(long var0) throws java.io.IOException { return 0l; }
 }
 

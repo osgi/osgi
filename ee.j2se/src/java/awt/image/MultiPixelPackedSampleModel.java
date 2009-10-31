@@ -31,7 +31,6 @@ public class MultiPixelPackedSampleModel extends java.awt.image.SampleModel {
 	public int[] getSampleSize() { return null; }
 	public int getSampleSize(int var0) { return 0; }
 	public int getScanlineStride() { return 0; }
-	public int hashCode() { return 0; }
 	public void setDataElements(int var0, int var1, java.lang.Object var2, java.awt.image.DataBuffer var3) { }
 	public void setSample(int var0, int var1, int var2, int var3, java.awt.image.DataBuffer var4) { }
 }

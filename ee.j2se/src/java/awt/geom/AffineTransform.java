@@ -52,7 +52,6 @@ public class AffineTransform implements java.io.Serializable, java.lang.Cloneabl
 	public double getTranslateX() { return 0.0d; }
 	public double getTranslateY() { return 0.0d; }
 	public int getType() { return 0; }
-	public int hashCode() { return 0; }
 	public java.awt.geom.Point2D inverseTransform(java.awt.geom.Point2D var0, java.awt.geom.Point2D var1) throws java.awt.geom.NoninvertibleTransformException { return null; }
 	public void inverseTransform(double[] var0, int var1, double[] var2, int var3, int var4) throws java.awt.geom.NoninvertibleTransformException { }
 	public boolean isIdentity() { return false; }

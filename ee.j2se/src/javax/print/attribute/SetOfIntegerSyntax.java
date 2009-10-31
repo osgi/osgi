@@ -23,7 +23,6 @@ public abstract class SetOfIntegerSyntax implements java.io.Serializable, java.l
 	public boolean contains(int var0) { return false; }
 	public boolean contains(javax.print.attribute.IntegerSyntax var0) { return false; }
 	public int[][] getMembers() { return null; }
-	public int hashCode() { return 0; }
 	public int next(int var0) { return 0; }
 }
 

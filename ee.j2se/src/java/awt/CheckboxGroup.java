@@ -17,9 +17,13 @@
 package java.awt;
 public class CheckboxGroup implements java.io.Serializable {
 	public CheckboxGroup() { } 
-	/** @deprecated */ public java.awt.Checkbox getCurrent() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Checkbox getCurrent() { return null; }
 	public java.awt.Checkbox getSelectedCheckbox() { return null; }
-	/** @deprecated */ public void setCurrent(java.awt.Checkbox var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void setCurrent(java.awt.Checkbox var0) { }
 	public void setSelectedCheckbox(java.awt.Checkbox var0) { }
 }
 

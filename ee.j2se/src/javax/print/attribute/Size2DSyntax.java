@@ -25,7 +25,6 @@ public abstract class Size2DSyntax implements java.io.Serializable, java.lang.Cl
 	protected int getXMicrometers() { return 0; }
 	public float getY(int var0) { return 0.0f; }
 	protected int getYMicrometers() { return 0; }
-	public int hashCode() { return 0; }
 	public java.lang.String toString(int var0, java.lang.String var1) { return null; }
 }
 

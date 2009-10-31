@@ -22,7 +22,6 @@ public abstract class AbstractAction implements java.io.Serializable, java.lang.
 	public AbstractAction(java.lang.String var0) { } 
 	public AbstractAction(java.lang.String var0, javax.swing.Icon var1) { } 
 	public void addPropertyChangeListener(java.beans.PropertyChangeListener var0) { }
-	protected java.lang.Object clone() throws java.lang.CloneNotSupportedException { return null; }
 	protected void firePropertyChange(java.lang.String var0, java.lang.Object var1, java.lang.Object var2) { }
 	public java.lang.Object[] getKeys() { return null; }
 	public java.beans.PropertyChangeListener[] getPropertyChangeListeners() { return null; }

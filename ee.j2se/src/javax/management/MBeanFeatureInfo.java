@@ -21,6 +21,5 @@ public class MBeanFeatureInfo implements java.io.Serializable {
 	public MBeanFeatureInfo(java.lang.String var0, java.lang.String var1) { } 
 	public java.lang.String getDescription() { return null; }
 	public java.lang.String getName() { return null; }
-	public int hashCode() { return 0; }
 }
 

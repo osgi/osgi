@@ -15,7 +15,8 @@
  */
 
 package org.xml.sax;
-/** @deprecated */ public class HandlerBase implements org.xml.sax.DTDHandler, org.xml.sax.DocumentHandler, org.xml.sax.EntityResolver, org.xml.sax.ErrorHandler {
+/** @deprecated */
+public class HandlerBase implements org.xml.sax.DTDHandler, org.xml.sax.DocumentHandler, org.xml.sax.EntityResolver, org.xml.sax.ErrorHandler {
 	public HandlerBase() { } 
 	public void characters(char[] var0, int var1, int var2) throws org.xml.sax.SAXException { }
 	public void endDocument() throws org.xml.sax.SAXException { }

@@ -19,7 +19,6 @@ public class PipedOutputStream extends java.io.OutputStream {
 	public PipedOutputStream() { } 
 	public PipedOutputStream(java.io.PipedInputStream var0) throws java.io.IOException { } 
 	public void connect(java.io.PipedInputStream var0) throws java.io.IOException { }
-	public void flush() throws java.io.IOException { }
 	public void write(int var0) throws java.io.IOException { }
 }
 

@@ -68,7 +68,6 @@ public class RenderingHints implements java.lang.Cloneable, java.util.Map<java.l
 	public boolean containsValue(java.lang.Object var0) { return false; }
 	public java.util.Set<java.util.Map.Entry<java.lang.Object,java.lang.Object>> entrySet() { return null; }
 	public java.lang.Object get(java.lang.Object var0) { return null; }
-	public int hashCode() { return 0; }
 	public boolean isEmpty() { return false; }
 	public java.util.Set<java.lang.Object> keySet() { return null; }
 	public java.lang.Object put(java.lang.Object var0, java.lang.Object var1) { return null; }

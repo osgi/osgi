@@ -20,6 +20,5 @@ public class ECPoint {
 	public ECPoint(java.math.BigInteger var0, java.math.BigInteger var1) { } 
 	public java.math.BigInteger getAffineX() { return null; }
 	public java.math.BigInteger getAffineY() { return null; }
-	public int hashCode() { return 0; }
 }
 

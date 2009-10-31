@@ -32,10 +32,16 @@ public class MenuItem extends java.awt.MenuComponent implements javax.accessibil
 	public void addActionListener(java.awt.event.ActionListener var0) { }
 	public void addNotify() { }
 	public void deleteShortcut() { }
-	/** @deprecated */ public void disable() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void disable() { }
 	protected final void disableEvents(long var0) { }
-	/** @deprecated */ public void enable() { }
-	/** @deprecated */ public void enable(boolean var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void enable() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void enable(boolean var0) { }
 	protected final void enableEvents(long var0) { }
 	public java.lang.String getActionCommand() { return null; }
 	public java.awt.event.ActionListener[] getActionListeners() { return null; }

@@ -32,7 +32,6 @@ public class Timer extends javax.management.NotificationBroadcasterSupport imple
 	public int getNbNotifications() { return 0; }
 	public java.lang.Long getNbOccurences(java.lang.Integer var0) { return null; }
 	public java.util.Vector getNotificationIDs(java.lang.String var0) { return null; }
-	public javax.management.MBeanNotificationInfo[] getNotificationInfo() { return null; }
 	public java.lang.String getNotificationMessage(java.lang.Integer var0) { return null; }
 	public java.lang.String getNotificationType(java.lang.Integer var0) { return null; }
 	public java.lang.Object getNotificationUserData(java.lang.Integer var0) { return null; }

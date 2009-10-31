@@ -19,8 +19,6 @@ public class DataOutputStream extends java.io.FilterOutputStream implements java
 	protected int written;
 	public DataOutputStream(java.io.OutputStream var0)  { super((java.io.OutputStream) null); } 
 	public final int size() { return 0; }
-	public void write(int var0) throws java.io.IOException { }
-	public void write(byte[] var0, int var1, int var2) throws java.io.IOException { }
 	public final void writeBoolean(boolean var0) throws java.io.IOException { }
 	public final void writeByte(int var0) throws java.io.IOException { }
 	public final void writeBytes(java.lang.String var0) throws java.io.IOException { }

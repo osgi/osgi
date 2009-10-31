@@ -27,6 +27,5 @@ public final class KerberosPrincipal implements java.io.Serializable, java.secur
 	public java.lang.String getName() { return null; }
 	public int getNameType() { return 0; }
 	public java.lang.String getRealm() { return null; }
-	public int hashCode() { return 0; }
 }
 

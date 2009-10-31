@@ -17,24 +17,16 @@
 package javax.swing.undo;
 public class UndoManager extends javax.swing.undo.CompoundEdit implements javax.swing.event.UndoableEditListener {
 	public UndoManager() { } 
-	public boolean addEdit(javax.swing.undo.UndoableEdit var0) { return false; }
-	public boolean canRedo() { return false; }
-	public boolean canUndo() { return false; }
 	public boolean canUndoOrRedo() { return false; }
 	public void discardAllEdits() { }
 	protected javax.swing.undo.UndoableEdit editToBeRedone() { return null; }
 	protected javax.swing.undo.UndoableEdit editToBeUndone() { return null; }
-	public void end() { }
 	public int getLimit() { return 0; }
-	public java.lang.String getRedoPresentationName() { return null; }
 	public java.lang.String getUndoOrRedoPresentationName() { return null; }
-	public java.lang.String getUndoPresentationName() { return null; }
-	public void redo() { }
 	protected void redoTo(javax.swing.undo.UndoableEdit var0) { }
 	public void setLimit(int var0) { }
 	protected void trimEdits(int var0, int var1) { }
 	protected void trimForLimit() { }
-	public void undo() { }
 	public void undoOrRedo() { }
 	protected void undoTo(javax.swing.undo.UndoableEdit var0) { }
 	public void undoableEditHappened(javax.swing.event.UndoableEditEvent var0) { }

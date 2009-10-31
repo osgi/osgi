@@ -18,6 +18,8 @@ package java.rmi.server;
 public abstract class RemoteStub extends java.rmi.server.RemoteObject {
 	protected RemoteStub() { } 
 	protected RemoteStub(java.rmi.server.RemoteRef var0) { } 
-	/** @deprecated */ protected static void setRef(java.rmi.server.RemoteStub var0, java.rmi.server.RemoteRef var1) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected static void setRef(java.rmi.server.RemoteStub var0, java.rmi.server.RemoteRef var1) { }
 }
 

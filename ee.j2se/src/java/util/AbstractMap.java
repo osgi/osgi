@@ -18,11 +18,9 @@ package java.util;
 public abstract class AbstractMap<K,V> implements java.util.Map<K,V> {
 	protected AbstractMap() { } 
 	public void clear() { }
-	protected java.lang.Object clone() throws java.lang.CloneNotSupportedException { return null; }
 	public boolean containsKey(java.lang.Object var0) { return false; }
 	public boolean containsValue(java.lang.Object var0) { return false; }
 	public V get(java.lang.Object var0) { return null; }
-	public int hashCode() { return 0; }
 	public boolean isEmpty() { return false; }
 	public java.util.Set<K> keySet() { return null; }
 	public V put(K var0, V var1) { return null; }

@@ -105,7 +105,9 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public final static float RIGHT_ALIGNMENT = 1.0f;
 	public final static float TOP_ALIGNMENT = 0.0f;
 	protected Component() { } 
-	/** @deprecated */ public boolean action(java.awt.Event var0, java.lang.Object var1) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean action(java.awt.Event var0, java.lang.Object var1) { return false; }
 	public void add(java.awt.PopupMenu var0) { }
 	public void addComponentListener(java.awt.event.ComponentListener var0) { }
 	public void addFocusListener(java.awt.event.FocusListener var0) { }
@@ -121,7 +123,9 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public void addPropertyChangeListener(java.lang.String var0, java.beans.PropertyChangeListener var1) { }
 	public void applyComponentOrientation(java.awt.ComponentOrientation var0) { }
 	public boolean areFocusTraversalKeysSet(int var0) { return false; }
-	/** @deprecated */ public java.awt.Rectangle bounds() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Rectangle bounds() { return null; }
 	public int checkImage(java.awt.Image var0, int var1, int var2, java.awt.image.ImageObserver var3) { return 0; }
 	public int checkImage(java.awt.Image var0, java.awt.image.ImageObserver var1) { return 0; }
 	protected java.awt.AWTEvent coalesceEvents(java.awt.AWTEvent var0, java.awt.AWTEvent var1) { return null; }
@@ -131,13 +135,21 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public java.awt.Image createImage(java.awt.image.ImageProducer var0) { return null; }
 	public java.awt.image.VolatileImage createVolatileImage(int var0, int var1) { return null; }
 	public java.awt.image.VolatileImage createVolatileImage(int var0, int var1, java.awt.ImageCapabilities var2) throws java.awt.AWTException { return null; }
-	/** @deprecated */ public void deliverEvent(java.awt.Event var0) { }
-	/** @deprecated */ public void disable() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void deliverEvent(java.awt.Event var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void disable() { }
 	protected final void disableEvents(long var0) { }
 	public final void dispatchEvent(java.awt.AWTEvent var0) { }
 	public void doLayout() { }
-	/** @deprecated */ public void enable() { }
-	/** @deprecated */ public void enable(boolean var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void enable() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void enable(boolean var0) { }
 	protected final void enableEvents(long var0) { }
 	public void enableInputMethods(boolean var0) { }
 	public void firePropertyChange(java.lang.String var0, byte var1, byte var2) { }
@@ -192,7 +204,9 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public java.awt.event.MouseWheelListener[] getMouseWheelListeners() { return null; }
 	public java.lang.String getName() { return null; }
 	public java.awt.Container getParent() { return null; }
-	/** @deprecated */ public java.awt.peer.ComponentPeer getPeer() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.peer.ComponentPeer getPeer() { return null; }
 	public java.awt.Dimension getPreferredSize() { return null; }
 	public java.beans.PropertyChangeListener[] getPropertyChangeListeners() { return null; }
 	public java.beans.PropertyChangeListener[] getPropertyChangeListeners(java.lang.String var0) { return null; }
@@ -203,12 +217,20 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public int getWidth() { return 0; }
 	public int getX() { return 0; }
 	public int getY() { return 0; }
-	/** @deprecated */ public boolean gotFocus(java.awt.Event var0, java.lang.Object var1) { return false; }
-	/** @deprecated */ public boolean handleEvent(java.awt.Event var0) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean gotFocus(java.awt.Event var0, java.lang.Object var1) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean handleEvent(java.awt.Event var0) { return false; }
 	public boolean hasFocus() { return false; }
-	/** @deprecated */ public void hide() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void hide() { }
 	public boolean imageUpdate(java.awt.Image var0, int var1, int var2, int var3, int var4, int var5) { return false; }
-	/** @deprecated */ public boolean inside(int var0, int var1) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean inside(int var0, int var1) { return false; }
 	public void invalidate() { }
 	public boolean isBackgroundSet() { return false; }
 	public boolean isCursorSet() { return false; }
@@ -217,7 +239,9 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public boolean isEnabled() { return false; }
 	public boolean isFocusCycleRoot(java.awt.Container var0) { return false; }
 	public boolean isFocusOwner() { return false; }
-	/** @deprecated */ public boolean isFocusTraversable() { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean isFocusTraversable() { return false; }
 	public boolean isFocusable() { return false; }
 	public boolean isFontSet() { return false; }
 	public boolean isForegroundSet() { return false; }
@@ -229,31 +253,65 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public boolean isShowing() { return false; }
 	public boolean isValid() { return false; }
 	public boolean isVisible() { return false; }
-	/** @deprecated */ public boolean keyDown(java.awt.Event var0, int var1) { return false; }
-	/** @deprecated */ public boolean keyUp(java.awt.Event var0, int var1) { return false; }
-	/** @deprecated */ public void layout() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean keyDown(java.awt.Event var0, int var1) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean keyUp(java.awt.Event var0, int var1) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void layout() { }
 	public void list() { }
 	public void list(java.io.PrintStream var0) { }
 	public void list(java.io.PrintStream var0, int var1) { }
 	public void list(java.io.PrintWriter var0) { }
 	public void list(java.io.PrintWriter var0, int var1) { }
-	/** @deprecated */ public java.awt.Component locate(int var0, int var1) { return null; }
-	/** @deprecated */ public java.awt.Point location() { return null; }
-	/** @deprecated */ public boolean lostFocus(java.awt.Event var0, java.lang.Object var1) { return false; }
-	/** @deprecated */ public java.awt.Dimension minimumSize() { return null; }
-	/** @deprecated */ public boolean mouseDown(java.awt.Event var0, int var1, int var2) { return false; }
-	/** @deprecated */ public boolean mouseDrag(java.awt.Event var0, int var1, int var2) { return false; }
-	/** @deprecated */ public boolean mouseEnter(java.awt.Event var0, int var1, int var2) { return false; }
-	/** @deprecated */ public boolean mouseExit(java.awt.Event var0, int var1, int var2) { return false; }
-	/** @deprecated */ public boolean mouseMove(java.awt.Event var0, int var1, int var2) { return false; }
-	/** @deprecated */ public boolean mouseUp(java.awt.Event var0, int var1, int var2) { return false; }
-	/** @deprecated */ public void move(int var0, int var1) { }
-	/** @deprecated */ public void nextFocus() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Component locate(int var0, int var1) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Point location() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean lostFocus(java.awt.Event var0, java.lang.Object var1) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Dimension minimumSize() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean mouseDown(java.awt.Event var0, int var1, int var2) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean mouseDrag(java.awt.Event var0, int var1, int var2) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean mouseEnter(java.awt.Event var0, int var1, int var2) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean mouseExit(java.awt.Event var0, int var1, int var2) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean mouseMove(java.awt.Event var0, int var1, int var2) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean mouseUp(java.awt.Event var0, int var1, int var2) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void move(int var0, int var1) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void nextFocus() { }
 	public void paint(java.awt.Graphics var0) { }
 	public void paintAll(java.awt.Graphics var0) { }
 	protected java.lang.String paramString() { return null; }
-	/** @deprecated */ public boolean postEvent(java.awt.Event var0) { return false; }
-	/** @deprecated */ public java.awt.Dimension preferredSize() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public boolean postEvent(java.awt.Event var0) { return false; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Dimension preferredSize() { return null; }
 	public boolean prepareImage(java.awt.Image var0, int var1, int var2, java.awt.image.ImageObserver var3) { return false; }
 	public boolean prepareImage(java.awt.Image var0, java.awt.image.ImageObserver var1) { return false; }
 	public void print(java.awt.Graphics var0) { }
@@ -289,9 +347,15 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	protected boolean requestFocus(boolean var0) { return false; }
 	public boolean requestFocusInWindow() { return false; }
 	protected boolean requestFocusInWindow(boolean var0) { return false; }
-	/** @deprecated */ public void reshape(int var0, int var1, int var2, int var3) { }
-	/** @deprecated */ public void resize(int var0, int var1) { }
-	/** @deprecated */ public void resize(java.awt.Dimension var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void reshape(int var0, int var1, int var2, int var3) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void resize(int var0, int var1) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void resize(java.awt.Dimension var0) { }
 	public void setBackground(java.awt.Color var0) { }
 	public void setBounds(int var0, int var1, int var2, int var3) { }
 	public void setBounds(java.awt.Rectangle var0) { }
@@ -315,9 +379,15 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public void setSize(int var0, int var1) { }
 	public void setSize(java.awt.Dimension var0) { }
 	public void setVisible(boolean var0) { }
-	/** @deprecated */ public void show() { }
-	/** @deprecated */ public void show(boolean var0) { }
-	/** @deprecated */ public java.awt.Dimension size() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void show() { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void show(boolean var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public java.awt.Dimension size() { return null; }
 	public void transferFocus() { }
 	public void transferFocusBackward() { }
 	public void transferFocusUpCycle() { }

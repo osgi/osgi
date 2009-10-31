@@ -25,14 +25,18 @@ public abstract class Signature extends java.security.SignatureSpi {
 	public static java.security.Signature getInstance(java.lang.String var0) throws java.security.NoSuchAlgorithmException { return null; }
 	public static java.security.Signature getInstance(java.lang.String var0, java.lang.String var1) throws java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException { return null; }
 	public static java.security.Signature getInstance(java.lang.String var0, java.security.Provider var1) throws java.security.NoSuchAlgorithmException { return null; }
-	/** @deprecated */ public final java.lang.Object getParameter(java.lang.String var0) { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public final java.lang.Object getParameter(java.lang.String var0) { return null; }
 	public final java.security.AlgorithmParameters getParameters() { return null; }
 	public final java.security.Provider getProvider() { return null; }
 	public final void initSign(java.security.PrivateKey var0) throws java.security.InvalidKeyException { }
 	public final void initSign(java.security.PrivateKey var0, java.security.SecureRandom var1) throws java.security.InvalidKeyException { }
 	public final void initVerify(java.security.PublicKey var0) throws java.security.InvalidKeyException { }
 	public final void initVerify(java.security.cert.Certificate var0) throws java.security.InvalidKeyException { }
-	/** @deprecated */ public final void setParameter(java.lang.String var0, java.lang.Object var1) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public final void setParameter(java.lang.String var0, java.lang.Object var1) { }
 	public final void setParameter(java.security.spec.AlgorithmParameterSpec var0) throws java.security.InvalidAlgorithmParameterException { }
 	public final byte[] sign() throws java.security.SignatureException { return null; }
 	public final int sign(byte[] var0, int var1, int var2) throws java.security.SignatureException { return 0; }

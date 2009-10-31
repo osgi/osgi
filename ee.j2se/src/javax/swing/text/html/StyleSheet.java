@@ -26,8 +26,6 @@ public class StyleSheet extends javax.swing.text.StyleContext {
 		private ListPainter() { } /* generated constructor to prevent compiler adding default public constructor */
 	}
 	public StyleSheet() { } 
-	public javax.swing.text.AttributeSet addAttribute(javax.swing.text.AttributeSet var0, java.lang.Object var1, java.lang.Object var2) { return null; }
-	public javax.swing.text.AttributeSet addAttributes(javax.swing.text.AttributeSet var0, javax.swing.text.AttributeSet var1) { return null; }
 	public void addCSSAttribute(javax.swing.text.MutableAttributeSet var0, javax.swing.text.html.CSS.Attribute var1, java.lang.String var2) { }
 	public boolean addCSSAttributeFromHTML(javax.swing.text.MutableAttributeSet var0, javax.swing.text.html.CSS.Attribute var1, java.lang.String var2) { return false; }
 	public void addRule(java.lang.String var0) { }
@@ -45,9 +43,6 @@ public class StyleSheet extends javax.swing.text.StyleContext {
 	public javax.swing.text.AttributeSet getViewAttributes(javax.swing.text.View var0) { return null; }
 	public void importStyleSheet(java.net.URL var0) { }
 	public void loadRules(java.io.Reader var0, java.net.URL var1) throws java.io.IOException { }
-	public javax.swing.text.AttributeSet removeAttribute(javax.swing.text.AttributeSet var0, java.lang.Object var1) { return null; }
-	public javax.swing.text.AttributeSet removeAttributes(javax.swing.text.AttributeSet var0, java.util.Enumeration<?> var1) { return null; }
-	public javax.swing.text.AttributeSet removeAttributes(javax.swing.text.AttributeSet var0, javax.swing.text.AttributeSet var1) { return null; }
 	public void removeStyleSheet(javax.swing.text.html.StyleSheet var0) { }
 	public void setBase(java.net.URL var0) { }
 	public void setBaseFontSize(int var0) { }

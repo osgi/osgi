@@ -22,12 +22,16 @@ public class RenderContext implements java.lang.Cloneable {
 	public RenderContext(java.awt.geom.AffineTransform var0, java.awt.Shape var1, java.awt.RenderingHints var2) { } 
 	public java.lang.Object clone() { return null; }
 	public void concatenateTransform(java.awt.geom.AffineTransform var0) { }
-	/** @deprecated */ public void concetenateTransform(java.awt.geom.AffineTransform var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void concetenateTransform(java.awt.geom.AffineTransform var0) { }
 	public java.awt.Shape getAreaOfInterest() { return null; }
 	public java.awt.RenderingHints getRenderingHints() { return null; }
 	public java.awt.geom.AffineTransform getTransform() { return null; }
 	public void preConcatenateTransform(java.awt.geom.AffineTransform var0) { }
-	/** @deprecated */ public void preConcetenateTransform(java.awt.geom.AffineTransform var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void preConcetenateTransform(java.awt.geom.AffineTransform var0) { }
 	public void setAreaOfInterest(java.awt.Shape var0) { }
 	public void setRenderingHints(java.awt.RenderingHints var0) { }
 	public void setTransform(java.awt.geom.AffineTransform var0) { }

@@ -30,7 +30,6 @@ public class ObjectName implements java.io.Serializable, javax.management.QueryE
 	public java.lang.String getKeyProperty(java.lang.String var0) { return null; }
 	public java.util.Hashtable getKeyPropertyList() { return null; }
 	public java.lang.String getKeyPropertyListString() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isDomainPattern() { return false; }
 	public boolean isPattern() { return false; }
 	public boolean isPropertyPattern() { return false; }

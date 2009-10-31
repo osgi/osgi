@@ -40,6 +40,5 @@ public abstract class ObjectImpl implements org.omg.CORBA.Object {
 	public org.omg.CORBA.portable.ServantObject _servant_preinvoke(java.lang.String var0, java.lang.Class var1) { return null; }
 	public void _set_delegate(org.omg.CORBA.portable.Delegate var0) { }
 	public org.omg.CORBA.Object _set_policy_override(org.omg.CORBA.Policy[] var0, org.omg.CORBA.SetOverrideType var1) { return null; }
-	public int hashCode() { return 0; }
 }
 

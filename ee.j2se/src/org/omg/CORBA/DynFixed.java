@@ -15,7 +15,9 @@
  */
 
 package org.omg.CORBA;
-/** @deprecated */ public interface DynFixed extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
+/** @deprecated */
+@java.lang.Deprecated
+public interface DynFixed extends org.omg.CORBA.DynAny, org.omg.CORBA.Object {
 	byte[] get_value();
 	void set_value(byte[] var0) throws org.omg.CORBA.DynAnyPackage.InvalidValue;
 }

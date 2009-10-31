@@ -21,7 +21,9 @@ public abstract class Any implements org.omg.CORBA.portable.IDLEntity {
 	public abstract org.omg.CORBA.portable.OutputStream create_output_stream();
 	public abstract boolean equal(org.omg.CORBA.Any var0);
 	public abstract org.omg.CORBA.Object extract_Object();
-	/** @deprecated */ public org.omg.CORBA.Principal extract_Principal() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public org.omg.CORBA.Principal extract_Principal() { return null; }
 	public org.omg.CORBA.portable.Streamable extract_Streamable() { return null; }
 	public abstract org.omg.CORBA.TypeCode extract_TypeCode();
 	public abstract java.io.Serializable extract_Value();
@@ -43,7 +45,9 @@ public abstract class Any implements org.omg.CORBA.portable.IDLEntity {
 	public abstract java.lang.String extract_wstring();
 	public abstract void insert_Object(org.omg.CORBA.Object var0);
 	public abstract void insert_Object(org.omg.CORBA.Object var0, org.omg.CORBA.TypeCode var1);
-	/** @deprecated */ public void insert_Principal(org.omg.CORBA.Principal var0) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	public void insert_Principal(org.omg.CORBA.Principal var0) { }
 	public void insert_Streamable(org.omg.CORBA.portable.Streamable var0) { }
 	public abstract void insert_TypeCode(org.omg.CORBA.TypeCode var0);
 	public abstract void insert_Value(java.io.Serializable var0);
