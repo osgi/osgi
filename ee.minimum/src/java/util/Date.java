@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +17,8 @@
 
 package java.util;
 public class Date implements java.io.Serializable, java.lang.Cloneable, java.lang.Comparable {
-	public Date() { }
-	public Date(long var0) { }
+	public Date() { } 
+	public Date(long var0) { } 
 	public boolean after(java.util.Date var0) { return false; }
 	public boolean before(java.util.Date var0) { return false; }
 	public java.lang.Object clone() { return null; }

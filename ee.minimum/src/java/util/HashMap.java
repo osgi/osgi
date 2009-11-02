@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +17,10 @@
 
 package java.util;
 public class HashMap extends java.util.AbstractMap implements java.io.Serializable, java.lang.Cloneable, java.util.Map {
-	public HashMap() { }
-	public HashMap(int var0) { }
-	public HashMap(int var0, float var1) { }
-	public HashMap(java.util.Map var0) { }
+	public HashMap() { } 
+	public HashMap(int var0) { } 
+	public HashMap(int var0, float var1) { } 
+	public HashMap(java.util.Map var0) { } 
 	public java.lang.Object clone() { return null; }
 	public java.util.Set entrySet() { return null; }
 }

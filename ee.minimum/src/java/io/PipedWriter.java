@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +17,8 @@
 
 package java.io;
 public class PipedWriter extends java.io.Writer {
-	public PipedWriter() { }
-	public PipedWriter(java.io.PipedReader var0) throws java.io.IOException { }
+	public PipedWriter() { } 
+	public PipedWriter(java.io.PipedReader var0) throws java.io.IOException { } 
 	public void close() throws java.io.IOException { }
 	public void connect(java.io.PipedReader var0) throws java.io.IOException { }
 	public void flush() throws java.io.IOException { }

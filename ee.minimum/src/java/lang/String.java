@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +17,17 @@
 
 package java.lang;
 public final class String implements java.io.Serializable, java.lang.CharSequence, java.lang.Comparable {
-	public String() { }
-	public String(java.lang.String var0) { }
-	public String(java.lang.StringBuffer var0) { }
-	public String(byte[] var0) { }
-	public String(byte[] var0, int var1, int var2) { }
-	public String(byte[] var0, int var1, int var2, java.lang.String var3) throws java.io.UnsupportedEncodingException { }
-	public String(byte[] var0, java.lang.String var1) throws java.io.UnsupportedEncodingException { }
-	public String(char[] var0) { }
-	public String(char[] var0, int var1, int var2) { }
-	public char charAt(int var0) { return 0; }
+	public final static java.util.Comparator CASE_INSENSITIVE_ORDER; static { CASE_INSENSITIVE_ORDER = null; }
+	public String() { } 
+	public String(java.lang.String var0) { } 
+	public String(java.lang.StringBuffer var0) { } 
+	public String(byte[] var0) { } 
+	public String(byte[] var0, int var1, int var2) { } 
+	public String(byte[] var0, int var1, int var2, java.lang.String var3) throws java.io.UnsupportedEncodingException { } 
+	public String(byte[] var0, java.lang.String var1) throws java.io.UnsupportedEncodingException { } 
+	public String(char[] var0) { } 
+	public String(char[] var0, int var1, int var2) { } 
+	public char charAt(int var0) { return '\0'; }
 	public int compareTo(java.lang.Object var0) { return 0; }
 	public int compareTo(java.lang.String var0) { return 0; }
 	public int compareToIgnoreCase(java.lang.String var0) { return 0; }
@@ -74,6 +73,5 @@ public final class String implements java.io.Serializable, java.lang.CharSequenc
 	public static java.lang.String valueOf(boolean var0) { return null; }
 	public static java.lang.String valueOf(char[] var0) { return null; }
 	public static java.lang.String valueOf(char[] var0, int var1, int var2) { return null; }
-	public final static java.util.Comparator CASE_INSENSITIVE_ORDER; static { CASE_INSENSITIVE_ORDER = null; }
 }
 

@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +17,9 @@
 
 package java.util;
 public class Collections {
+	public final static java.util.List EMPTY_LIST; static { EMPTY_LIST = null; }
+	public final static java.util.Map EMPTY_MAP; static { EMPTY_MAP = null; }
+	public final static java.util.Set EMPTY_SET; static { EMPTY_SET = null; }
 	public static int binarySearch(java.util.List var0, java.lang.Object var1) { return 0; }
 	public static int binarySearch(java.util.List var0, java.lang.Object var1, java.util.Comparator var2) { return 0; }
 	public static void copy(java.util.List var0, java.util.List var1) { }
@@ -56,9 +57,6 @@ public class Collections {
 	public static java.util.Set unmodifiableSet(java.util.Set var0) { return null; }
 	public static java.util.SortedMap unmodifiableSortedMap(java.util.SortedMap var0) { return null; }
 	public static java.util.SortedSet unmodifiableSortedSet(java.util.SortedSet var0) { return null; }
-	public final static java.util.List EMPTY_LIST; static { EMPTY_LIST = null; }
-	public final static java.util.Map EMPTY_MAP; static { EMPTY_MAP = null; }
-	public final static java.util.Set EMPTY_SET; static { EMPTY_SET = null; }
 	private Collections() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

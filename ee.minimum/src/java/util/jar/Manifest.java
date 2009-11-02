@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +17,9 @@
 
 package java.util.jar;
 public class Manifest implements java.lang.Cloneable {
-	public Manifest() { }
-	public Manifest(java.io.InputStream var0) throws java.io.IOException { }
-	public Manifest(java.util.jar.Manifest var0) { }
+	public Manifest() { } 
+	public Manifest(java.io.InputStream var0) throws java.io.IOException { } 
+	public Manifest(java.util.jar.Manifest var0) { } 
 	public void clear() { }
 	public java.lang.Object clone() { return null; }
 	public java.util.jar.Attributes getAttributes(java.lang.String var0) { return null; }

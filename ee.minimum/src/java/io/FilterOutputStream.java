@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +17,8 @@
 
 package java.io;
 public class FilterOutputStream extends java.io.OutputStream {
-	public FilterOutputStream(java.io.OutputStream var0) { }
-	public void write(int var0) throws java.io.IOException { }
 	protected java.io.OutputStream out;
+	public FilterOutputStream(java.io.OutputStream var0) { } 
+	public void write(int var0) throws java.io.IOException { }
 }
 

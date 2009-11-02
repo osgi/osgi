@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +17,9 @@
 
 package java.io;
 public abstract class Reader {
-	protected Reader() { }
-	protected Reader(java.lang.Object var0) { }
+	protected java.lang.Object lock;
+	protected Reader() { } 
+	protected Reader(java.lang.Object var0) { } 
 	public abstract void close() throws java.io.IOException;
 	public void mark(int var0) throws java.io.IOException { }
 	public boolean markSupported() { return false; }
@@ -30,6 +29,5 @@ public abstract class Reader {
 	public boolean ready() throws java.io.IOException { return false; }
 	public void reset() throws java.io.IOException { }
 	public long skip(long var0) throws java.io.IOException { return 0l; }
-	protected java.lang.Object lock;
 }
 

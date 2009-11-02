@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +17,14 @@
 
 package java.math;
 public class BigInteger extends java.lang.Number implements java.lang.Comparable {
-	public BigInteger(int var0, int var1, java.util.Random var2) { }
-	public BigInteger(int var0, java.util.Random var1) { }
-	public BigInteger(int var0, byte[] var1) { }
-	public BigInteger(java.lang.String var0) { }
-	public BigInteger(java.lang.String var0, int var1) { }
-	public BigInteger(byte[] var0) { }
+	public final static java.math.BigInteger ONE; static { ONE = null; }
+	public final static java.math.BigInteger ZERO; static { ZERO = null; }
+	public BigInteger(int var0, int var1, java.util.Random var2) { } 
+	public BigInteger(int var0, java.util.Random var1) { } 
+	public BigInteger(int var0, byte[] var1) { } 
+	public BigInteger(java.lang.String var0) { } 
+	public BigInteger(java.lang.String var0, int var1) { } 
+	public BigInteger(byte[] var0) { } 
 	public java.math.BigInteger abs() { return null; }
 	public java.math.BigInteger add(java.math.BigInteger var0) { return null; }
 	public java.math.BigInteger and(java.math.BigInteger var0) { return null; }
@@ -65,7 +65,5 @@ public class BigInteger extends java.lang.Number implements java.lang.Comparable
 	public java.lang.String toString(int var0) { return null; }
 	public static java.math.BigInteger valueOf(long var0) { return null; }
 	public java.math.BigInteger xor(java.math.BigInteger var0) { return null; }
-	public final static java.math.BigInteger ONE; static { ONE = null; }
-	public final static java.math.BigInteger ZERO; static { ZERO = null; }
 }
 

@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,8 @@
 
 package java.text;
 public abstract class BreakIterator implements java.lang.Cloneable {
-	protected BreakIterator() { }
+	public final static int DONE = -1;
+	protected BreakIterator() { } 
 	public java.lang.Object clone() { return null; }
 	public abstract int current();
 	public abstract int first();
@@ -42,6 +41,5 @@ public abstract class BreakIterator implements java.lang.Cloneable {
 	public abstract int previous();
 	public void setText(java.lang.String var0) { }
 	public abstract void setText(java.text.CharacterIterator var0);
-	public final static int DONE = -1;
 }
 

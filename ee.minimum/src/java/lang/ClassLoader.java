@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +17,8 @@
 
 package java.lang;
 public abstract class ClassLoader {
-	protected ClassLoader() { }
-	protected ClassLoader(java.lang.ClassLoader var0) { }
+	protected ClassLoader() { } 
+	protected ClassLoader(java.lang.ClassLoader var0) { } 
 	public void clearAssertionStatus() { }
 	protected final java.lang.Class defineClass(java.lang.String var0, byte[] var1, int var2, int var3) throws java.lang.ClassFormatError { return null; }
 	protected final java.lang.Class defineClass(java.lang.String var0, byte[] var1, int var2, int var3, java.security.ProtectionDomain var4) throws java.lang.ClassFormatError { return null; }

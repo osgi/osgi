@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +17,12 @@
 
 package java.net;
 public class Socket {
-	public Socket() { }
-	public Socket(java.lang.String var0, int var1) throws java.io.IOException { }
-	public Socket(java.lang.String var0, int var1, java.net.InetAddress var2, int var3) throws java.io.IOException { }
-	public Socket(java.net.InetAddress var0, int var1) throws java.io.IOException { }
-	public Socket(java.net.InetAddress var0, int var1, java.net.InetAddress var2, int var3) throws java.io.IOException { }
-	protected Socket(java.net.SocketImpl var0) throws java.net.SocketException { }
+	public Socket() { } 
+	public Socket(java.lang.String var0, int var1) throws java.io.IOException { } 
+	public Socket(java.lang.String var0, int var1, java.net.InetAddress var2, int var3) throws java.io.IOException { } 
+	public Socket(java.net.InetAddress var0, int var1) throws java.io.IOException { } 
+	public Socket(java.net.InetAddress var0, int var1, java.net.InetAddress var2, int var3) throws java.io.IOException { } 
+	protected Socket(java.net.SocketImpl var0) throws java.net.SocketException { } 
 	public void bind(java.net.SocketAddress var0) throws java.io.IOException { }
 	public void close() throws java.io.IOException { }
 	public void connect(java.net.SocketAddress var0) throws java.io.IOException { }

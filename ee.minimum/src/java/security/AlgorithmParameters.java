@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,7 @@
 
 package java.security;
 public class AlgorithmParameters {
-	protected AlgorithmParameters(java.security.AlgorithmParametersSpi var0, java.security.Provider var1, java.lang.String var2) { }
+	protected AlgorithmParameters(java.security.AlgorithmParametersSpi var0, java.security.Provider var1, java.lang.String var2) { } 
 	public final java.lang.String getAlgorithm() { return null; }
 	public final byte[] getEncoded() throws java.io.IOException { return null; }
 	public final byte[] getEncoded(java.lang.String var0) throws java.io.IOException { return null; }

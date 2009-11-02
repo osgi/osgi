@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,7 @@
 
 package java.security;
 public class AlgorithmParameterGenerator {
-	protected AlgorithmParameterGenerator(java.security.AlgorithmParameterGeneratorSpi var0, java.security.Provider var1, java.lang.String var2) { }
+	protected AlgorithmParameterGenerator(java.security.AlgorithmParameterGeneratorSpi var0, java.security.Provider var1, java.lang.String var2) { } 
 	public final java.security.AlgorithmParameters generateParameters() { return null; }
 	public final java.lang.String getAlgorithm() { return null; }
 	public static java.security.AlgorithmParameterGenerator getInstance(java.lang.String var0) throws java.security.NoSuchAlgorithmException { return null; }

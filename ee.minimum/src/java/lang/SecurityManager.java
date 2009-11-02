@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,7 @@
 
 package java.lang;
 public class SecurityManager {
-	public SecurityManager() { }
+	public SecurityManager() { } 
 	public void checkAccept(java.lang.String var0, int var1) { }
 	public void checkAccess(java.lang.Thread var0) { }
 	public void checkAccess(java.lang.ThreadGroup var0) { }
@@ -34,7 +32,8 @@ public class SecurityManager {
 	public void checkListen(int var0) { }
 	public void checkMemberAccess(java.lang.Class var0, int var1) { }
 	public void checkMulticast(java.net.InetAddress var0) { }
-	/** @deprecated */ public void checkMulticast(java.net.InetAddress var0, byte var1) { }
+	/** @deprecated */
+	public void checkMulticast(java.net.InetAddress var0, byte var1) { }
 	public void checkPackageAccess(java.lang.String var0) { }
 	public void checkPackageDefinition(java.lang.String var0) { }
 	public void checkPermission(java.security.Permission var0) { }

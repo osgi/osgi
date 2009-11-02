@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,11 @@
 
 package java.security;
 public abstract class Signature extends java.security.SignatureSpi {
-	protected Signature(java.lang.String var0) { }
+	protected final static int SIGN = 2;
+	protected final static int UNINITIALIZED = 0;
+	protected final static int VERIFY = 3;
+	protected int state;
+	protected Signature(java.lang.String var0) { } 
 	public final java.lang.String getAlgorithm() { return null; }
 	public static java.security.Signature getInstance(java.lang.String var0) throws java.security.NoSuchAlgorithmException { return null; }
 	public static java.security.Signature getInstance(java.lang.String var0, java.lang.String var1) throws java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException { return null; }
@@ -38,9 +40,5 @@ public abstract class Signature extends java.security.SignatureSpi {
 	public final void update(byte[] var0, int var1, int var2) throws java.security.SignatureException { }
 	public final boolean verify(byte[] var0) throws java.security.SignatureException { return false; }
 	public final boolean verify(byte[] var0, int var1, int var2) throws java.security.SignatureException { return false; }
-	protected final static int SIGN = 2;
-	protected final static int UNINITIALIZED = 0;
-	protected final static int VERIFY = 3;
-	protected int state;
 }
 

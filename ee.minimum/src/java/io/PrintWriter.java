@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +17,11 @@
 
 package java.io;
 public class PrintWriter extends java.io.Writer {
-	public PrintWriter(java.io.OutputStream var0) { }
-	public PrintWriter(java.io.OutputStream var0, boolean var1) { }
-	public PrintWriter(java.io.Writer var0) { }
-	public PrintWriter(java.io.Writer var0, boolean var1) { }
+	protected java.io.Writer out;
+	public PrintWriter(java.io.OutputStream var0) { } 
+	public PrintWriter(java.io.OutputStream var0, boolean var1) { } 
+	public PrintWriter(java.io.Writer var0) { } 
+	public PrintWriter(java.io.Writer var0, boolean var1) { } 
 	public boolean checkError() { return false; }
 	public void close() { }
 	public void flush() { }
@@ -51,6 +50,5 @@ public class PrintWriter extends java.io.Writer {
 	public void write(java.lang.String var0, int var1, int var2) { }
 	public void write(char[] var0) { }
 	public void write(char[] var0, int var1, int var2) { }
-	protected java.io.Writer out;
 }
 

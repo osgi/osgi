@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,23 @@
 
 package java.text;
 public abstract class NumberFormat extends java.text.Format {
-	public NumberFormat() { }
+	public static class Field extends java.text.Format.Field {
+		public final static java.text.NumberFormat.Field CURRENCY; static { CURRENCY = null; }
+		public final static java.text.NumberFormat.Field DECIMAL_SEPARATOR; static { DECIMAL_SEPARATOR = null; }
+		public final static java.text.NumberFormat.Field EXPONENT; static { EXPONENT = null; }
+		public final static java.text.NumberFormat.Field EXPONENT_SIGN; static { EXPONENT_SIGN = null; }
+		public final static java.text.NumberFormat.Field EXPONENT_SYMBOL; static { EXPONENT_SYMBOL = null; }
+		public final static java.text.NumberFormat.Field FRACTION; static { FRACTION = null; }
+		public final static java.text.NumberFormat.Field GROUPING_SEPARATOR; static { GROUPING_SEPARATOR = null; }
+		public final static java.text.NumberFormat.Field INTEGER; static { INTEGER = null; }
+		public final static java.text.NumberFormat.Field PERCENT; static { PERCENT = null; }
+		public final static java.text.NumberFormat.Field PERMILLE; static { PERMILLE = null; }
+		public final static java.text.NumberFormat.Field SIGN; static { SIGN = null; }
+		protected Field(java.lang.String var0)  { super((java.lang.String) null); } 
+	}
+	public final static int FRACTION_FIELD = 1;
+	public final static int INTEGER_FIELD = 0;
+	public NumberFormat() { } 
 	public final java.lang.String format(double var0) { return null; }
 	public abstract java.lang.StringBuffer format(double var0, java.lang.StringBuffer var1, java.text.FieldPosition var2);
 	public final java.lang.String format(long var0) { return null; }
@@ -53,21 +67,5 @@ public abstract class NumberFormat extends java.text.Format {
 	public void setMinimumFractionDigits(int var0) { }
 	public void setMinimumIntegerDigits(int var0) { }
 	public void setParseIntegerOnly(boolean var0) { }
-	public final static int FRACTION_FIELD = 1;
-	public final static int INTEGER_FIELD = 0;
-	public static class Field extends java.text.Format.Field {
-		protected Field(java.lang.String var0) { super((java.lang.String) null); }
-		public final static java.text.NumberFormat.Field CURRENCY; static { CURRENCY = null; }
-		public final static java.text.NumberFormat.Field DECIMAL_SEPARATOR; static { DECIMAL_SEPARATOR = null; }
-		public final static java.text.NumberFormat.Field EXPONENT; static { EXPONENT = null; }
-		public final static java.text.NumberFormat.Field EXPONENT_SIGN; static { EXPONENT_SIGN = null; }
-		public final static java.text.NumberFormat.Field EXPONENT_SYMBOL; static { EXPONENT_SYMBOL = null; }
-		public final static java.text.NumberFormat.Field FRACTION; static { FRACTION = null; }
-		public final static java.text.NumberFormat.Field GROUPING_SEPARATOR; static { GROUPING_SEPARATOR = null; }
-		public final static java.text.NumberFormat.Field INTEGER; static { INTEGER = null; }
-		public final static java.text.NumberFormat.Field PERCENT; static { PERCENT = null; }
-		public final static java.text.NumberFormat.Field PERMILLE; static { PERMILLE = null; }
-		public final static java.text.NumberFormat.Field SIGN; static { SIGN = null; }
-	}
 }
 

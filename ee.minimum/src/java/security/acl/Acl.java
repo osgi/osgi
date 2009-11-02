@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +16,14 @@
  */
 
 package java.security.acl;
-public abstract interface Acl extends java.security.acl.Owner {
-	public abstract boolean addEntry(java.security.Principal var0, java.security.acl.AclEntry var1) throws java.security.acl.NotOwnerException;
-	public abstract boolean checkPermission(java.security.Principal var0, java.security.acl.Permission var1);
-	public abstract java.util.Enumeration entries();
-	public abstract java.lang.String getName();
-	public abstract java.util.Enumeration getPermissions(java.security.Principal var0);
-	public abstract boolean removeEntry(java.security.Principal var0, java.security.acl.AclEntry var1) throws java.security.acl.NotOwnerException;
-	public abstract void setName(java.security.Principal var0, java.lang.String var1) throws java.security.acl.NotOwnerException;
-	public abstract java.lang.String toString();
+public interface Acl extends java.security.acl.Owner {
+	boolean addEntry(java.security.Principal var0, java.security.acl.AclEntry var1) throws java.security.acl.NotOwnerException;
+	boolean checkPermission(java.security.Principal var0, java.security.acl.Permission var1);
+	java.util.Enumeration entries();
+	java.lang.String getName();
+	java.util.Enumeration getPermissions(java.security.Principal var0);
+	boolean removeEntry(java.security.Principal var0, java.security.acl.AclEntry var1) throws java.security.acl.NotOwnerException;
+	void setName(java.security.Principal var0, java.lang.String var1) throws java.security.acl.NotOwnerException;
+	java.lang.String toString();
 }
 

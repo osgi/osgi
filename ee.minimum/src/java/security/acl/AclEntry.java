@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +16,16 @@
  */
 
 package java.security.acl;
-public abstract interface AclEntry extends java.lang.Cloneable {
-	public abstract boolean addPermission(java.security.acl.Permission var0);
-	public abstract boolean checkPermission(java.security.acl.Permission var0);
-	public abstract java.lang.Object clone();
-	public abstract java.security.Principal getPrincipal();
-	public abstract boolean isNegative();
-	public abstract java.util.Enumeration permissions();
-	public abstract boolean removePermission(java.security.acl.Permission var0);
-	public abstract void setNegativePermissions();
-	public abstract boolean setPrincipal(java.security.Principal var0);
-	public abstract java.lang.String toString();
+public interface AclEntry extends java.lang.Cloneable {
+	boolean addPermission(java.security.acl.Permission var0);
+	boolean checkPermission(java.security.acl.Permission var0);
+	java.lang.Object clone();
+	java.security.Principal getPrincipal();
+	boolean isNegative();
+	java.util.Enumeration permissions();
+	boolean removePermission(java.security.acl.Permission var0);
+	void setNegativePermissions();
+	boolean setPrincipal(java.security.Principal var0);
+	java.lang.String toString();
 }
 

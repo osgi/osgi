@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +17,9 @@
 
 package java.net;
 public class URLClassLoader extends java.security.SecureClassLoader {
-	public URLClassLoader(java.net.URL[] var0) { }
-	public URLClassLoader(java.net.URL[] var0, java.lang.ClassLoader var1) { }
-	public URLClassLoader(java.net.URL[] var0, java.lang.ClassLoader var1, java.net.URLStreamHandlerFactory var2) { }
+	public URLClassLoader(java.net.URL[] var0) { } 
+	public URLClassLoader(java.net.URL[] var0, java.lang.ClassLoader var1) { } 
+	public URLClassLoader(java.net.URL[] var0, java.lang.ClassLoader var1, java.net.URLStreamHandlerFactory var2) { } 
 	protected void addURL(java.net.URL var0) { }
 	protected java.lang.Package definePackage(java.lang.String var0, java.util.jar.Manifest var1, java.net.URL var2) { return null; }
 	public java.net.URL findResource(java.lang.String var0) { return null; }

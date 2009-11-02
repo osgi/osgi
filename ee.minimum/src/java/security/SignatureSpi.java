@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,8 @@
 
 package java.security;
 public abstract class SignatureSpi {
-	public SignatureSpi() { }
+	protected java.security.SecureRandom appRandom;
+	public SignatureSpi() { } 
 	public java.lang.Object clone() throws java.lang.CloneNotSupportedException { return null; }
 	protected java.security.AlgorithmParameters engineGetParameters() { return null; }
 	protected abstract void engineInitSign(java.security.PrivateKey var0) throws java.security.InvalidKeyException;
@@ -32,6 +31,5 @@ public abstract class SignatureSpi {
 	protected abstract void engineUpdate(byte[] var0, int var1, int var2) throws java.security.SignatureException;
 	protected abstract boolean engineVerify(byte[] var0) throws java.security.SignatureException;
 	protected boolean engineVerify(byte[] var0, int var1, int var2) throws java.security.SignatureException { return false; }
-	protected java.security.SecureRandom appRandom;
 }
 

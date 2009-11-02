@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,23 +17,23 @@
 
 package java.text;
 public final class DecimalFormatSymbols implements java.io.Serializable, java.lang.Cloneable {
-	public DecimalFormatSymbols() { }
-	public DecimalFormatSymbols(java.util.Locale var0) { }
+	public DecimalFormatSymbols() { } 
+	public DecimalFormatSymbols(java.util.Locale var0) { } 
 	public java.lang.Object clone() { return null; }
 	public java.util.Currency getCurrency() { return null; }
 	public java.lang.String getCurrencySymbol() { return null; }
-	public char getDecimalSeparator() { return 0; }
-	public char getDigit() { return 0; }
-	public char getGroupingSeparator() { return 0; }
+	public char getDecimalSeparator() { return '\0'; }
+	public char getDigit() { return '\0'; }
+	public char getGroupingSeparator() { return '\0'; }
 	public java.lang.String getInfinity() { return null; }
 	public java.lang.String getInternationalCurrencySymbol() { return null; }
-	public char getMinusSign() { return 0; }
-	public char getMonetaryDecimalSeparator() { return 0; }
+	public char getMinusSign() { return '\0'; }
+	public char getMonetaryDecimalSeparator() { return '\0'; }
 	public java.lang.String getNaN() { return null; }
-	public char getPatternSeparator() { return 0; }
-	public char getPerMill() { return 0; }
-	public char getPercent() { return 0; }
-	public char getZeroDigit() { return 0; }
+	public char getPatternSeparator() { return '\0'; }
+	public char getPerMill() { return '\0'; }
+	public char getPercent() { return '\0'; }
+	public char getZeroDigit() { return '\0'; }
 	public void setCurrency(java.util.Currency var0) { }
 	public void setCurrencySymbol(java.lang.String var0) { }
 	public void setDecimalSeparator(char var0) { }

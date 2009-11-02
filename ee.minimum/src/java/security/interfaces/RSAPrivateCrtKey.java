@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +16,12 @@
  */
 
 package java.security.interfaces;
-public abstract interface RSAPrivateCrtKey extends java.security.interfaces.RSAPrivateKey {
-	public abstract java.math.BigInteger getCrtCoefficient();
-	public abstract java.math.BigInteger getPrimeExponentP();
-	public abstract java.math.BigInteger getPrimeExponentQ();
-	public abstract java.math.BigInteger getPrimeP();
-	public abstract java.math.BigInteger getPrimeQ();
-	public abstract java.math.BigInteger getPublicExponent();
+public interface RSAPrivateCrtKey extends java.security.interfaces.RSAPrivateKey {
+	java.math.BigInteger getCrtCoefficient();
+	java.math.BigInteger getPrimeExponentP();
+	java.math.BigInteger getPrimeExponentQ();
+	java.math.BigInteger getPrimeP();
+	java.math.BigInteger getPrimeQ();
+	java.math.BigInteger getPublicExponent();
 }
 

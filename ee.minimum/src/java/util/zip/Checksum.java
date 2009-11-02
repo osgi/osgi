@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +16,10 @@
  */
 
 package java.util.zip;
-public abstract interface Checksum {
-	public abstract long getValue();
-	public abstract void reset();
-	public abstract void update(int var0);
-	public abstract void update(byte[] var0, int var1, int var2);
+public interface Checksum {
+	long getValue();
+	void reset();
+	void update(int var0);
+	void update(byte[] var0, int var1, int var2);
 }
 

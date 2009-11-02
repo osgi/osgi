@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,7 @@
 
 package java.security;
 public abstract class Provider extends java.util.Properties {
-	protected Provider(java.lang.String var0, double var1, java.lang.String var2) { }
+	protected Provider(java.lang.String var0, double var1, java.lang.String var2) { } 
 	public java.lang.String getInfo() { return null; }
 	public java.lang.String getName() { return null; }
 	public double getVersion() { return 0.0d; }

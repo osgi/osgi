@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +17,13 @@
 
 package java.util.jar;
 public class JarFile extends java.util.zip.ZipFile {
-	public JarFile(java.io.File var0) throws java.io.IOException { super((java.io.File) null); }
-	public JarFile(java.io.File var0, boolean var1) throws java.io.IOException { super((java.io.File) null); }
-	public JarFile(java.io.File var0, boolean var1, int var2) throws java.io.IOException { super((java.io.File) null); }
-	public JarFile(java.lang.String var0) throws java.io.IOException { super((java.io.File) null); }
-	public JarFile(java.lang.String var0, boolean var1) throws java.io.IOException { super((java.io.File) null); }
+	public final static java.lang.String MANIFEST_NAME = "META-INF/MANIFEST.MF";
+	public JarFile(java.io.File var0) throws java.io.IOException  { super((java.lang.String) null); } 
+	public JarFile(java.io.File var0, boolean var1) throws java.io.IOException  { super((java.lang.String) null); } 
+	public JarFile(java.io.File var0, boolean var1, int var2) throws java.io.IOException  { super((java.lang.String) null); } 
+	public JarFile(java.lang.String var0) throws java.io.IOException  { super((java.lang.String) null); } 
+	public JarFile(java.lang.String var0, boolean var1) throws java.io.IOException  { super((java.lang.String) null); } 
 	public java.util.jar.JarEntry getJarEntry(java.lang.String var0) { return null; }
 	public java.util.jar.Manifest getManifest() throws java.io.IOException { return null; }
-	public final static java.lang.String MANIFEST_NAME = "META-INF/MANIFEST.MF";
 }
 

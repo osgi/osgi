@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,8 @@
 
 package java.io;
 public class DataOutputStream extends java.io.FilterOutputStream implements java.io.DataOutput {
-	public DataOutputStream(java.io.OutputStream var0) { super((java.io.OutputStream) null); }
+	protected int written;
+	public DataOutputStream(java.io.OutputStream var0)  { super((java.io.OutputStream) null); } 
 	public final int size() { return 0; }
 	public final void writeBoolean(boolean var0) throws java.io.IOException { }
 	public final void writeByte(int var0) throws java.io.IOException { }
@@ -32,6 +31,5 @@ public class DataOutputStream extends java.io.FilterOutputStream implements java
 	public final void writeLong(long var0) throws java.io.IOException { }
 	public final void writeShort(int var0) throws java.io.IOException { }
 	public final void writeUTF(java.lang.String var0) throws java.io.IOException { }
-	protected int written;
 }
 

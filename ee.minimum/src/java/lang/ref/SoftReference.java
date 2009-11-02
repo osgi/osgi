@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,7 @@
 
 package java.lang.ref;
 public class SoftReference extends java.lang.ref.Reference {
-	public SoftReference(java.lang.Object var0) { }
-	public SoftReference(java.lang.Object var0, java.lang.ref.ReferenceQueue var1) { }
+	public SoftReference(java.lang.Object var0) { } 
+	public SoftReference(java.lang.Object var0, java.lang.ref.ReferenceQueue var1) { } 
 }
 

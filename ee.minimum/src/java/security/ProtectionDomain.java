@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +17,8 @@
 
 package java.security;
 public class ProtectionDomain {
-	public ProtectionDomain(java.security.CodeSource var0, java.security.PermissionCollection var1) { }
-	public ProtectionDomain(java.security.CodeSource var0, java.security.PermissionCollection var1, java.lang.ClassLoader var2, java.security.Principal[] var3) { }
+	public ProtectionDomain(java.security.CodeSource var0, java.security.PermissionCollection var1) { } 
+	public ProtectionDomain(java.security.CodeSource var0, java.security.PermissionCollection var1, java.lang.ClassLoader var2, java.security.Principal[] var3) { } 
 	public final java.lang.ClassLoader getClassLoader() { return null; }
 	public final java.security.CodeSource getCodeSource() { return null; }
 	public final java.security.PermissionCollection getPermissions() { return null; }

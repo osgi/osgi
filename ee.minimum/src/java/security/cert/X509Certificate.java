@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,7 @@
 
 package java.security.cert;
 public abstract class X509Certificate extends java.security.cert.Certificate implements java.security.cert.X509Extension {
-	protected X509Certificate() { super((java.lang.String) null); }
+	protected X509Certificate()  { super((java.lang.String) null); } 
 	public abstract void checkValidity() throws java.security.cert.CertificateExpiredException, java.security.cert.CertificateNotYetValidException;
 	public abstract void checkValidity(java.util.Date var0) throws java.security.cert.CertificateExpiredException, java.security.cert.CertificateNotYetValidException;
 	public abstract int getBasicConstraints();

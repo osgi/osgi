@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +17,9 @@
 
 package java.io;
 public class PrintStream extends java.io.FilterOutputStream {
-	public PrintStream(java.io.OutputStream var0) { super((java.io.OutputStream) null); }
-	public PrintStream(java.io.OutputStream var0, boolean var1) { super((java.io.OutputStream) null); }
-	public PrintStream(java.io.OutputStream var0, boolean var1, java.lang.String var2) throws java.io.UnsupportedEncodingException { super((java.io.OutputStream) null); }
+	public PrintStream(java.io.OutputStream var0)  { super((java.io.OutputStream) null); } 
+	public PrintStream(java.io.OutputStream var0, boolean var1)  { super((java.io.OutputStream) null); } 
+	public PrintStream(java.io.OutputStream var0, boolean var1, java.lang.String var2) throws java.io.UnsupportedEncodingException  { super((java.io.OutputStream) null); } 
 	public boolean checkError() { return false; }
 	public void close() { }
 	public void flush() { }

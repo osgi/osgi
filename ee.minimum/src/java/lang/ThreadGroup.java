@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +17,8 @@
 
 package java.lang;
 public class ThreadGroup {
-	public ThreadGroup(java.lang.String var0) { }
-	public ThreadGroup(java.lang.ThreadGroup var0, java.lang.String var1) { }
+	public ThreadGroup(java.lang.String var0) { } 
+	public ThreadGroup(java.lang.ThreadGroup var0, java.lang.String var1) { } 
 	public int activeCount() { return 0; }
 	public int activeGroupCount() { return 0; }
 	public final void checkAccess() { }

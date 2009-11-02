@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +17,9 @@
 
 package java.lang;
 public final class StringBuffer implements java.io.Serializable, java.lang.CharSequence {
-	public StringBuffer() { }
-	public StringBuffer(int var0) { }
-	public StringBuffer(java.lang.String var0) { }
+	public StringBuffer() { } 
+	public StringBuffer(int var0) { } 
+	public StringBuffer(java.lang.String var0) { } 
 	public java.lang.StringBuffer append(char var0) { return null; }
 	public java.lang.StringBuffer append(double var0) { return null; }
 	public java.lang.StringBuffer append(float var0) { return null; }
@@ -34,7 +32,7 @@ public final class StringBuffer implements java.io.Serializable, java.lang.CharS
 	public java.lang.StringBuffer append(char[] var0) { return null; }
 	public java.lang.StringBuffer append(char[] var0, int var1, int var2) { return null; }
 	public int capacity() { return 0; }
-	public char charAt(int var0) { return 0; }
+	public char charAt(int var0) { return '\0'; }
 	public java.lang.StringBuffer delete(int var0, int var1) { return null; }
 	public java.lang.StringBuffer deleteCharAt(int var0) { return null; }
 	public void ensureCapacity(int var0) { }

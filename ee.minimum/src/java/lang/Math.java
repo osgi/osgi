@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +17,8 @@
 
 package java.lang;
 public final class Math {
+	public final static double E = 2.718281828459045d;
+	public final static double PI = 3.141592653589793d;
 	public static double IEEEremainder(double var0, double var1) { return 0.0d; }
 	public static double abs(double var0) { return 0.0d; }
 	public static float abs(float var0) { return 0.0f; }
@@ -51,8 +51,6 @@ public final class Math {
 	public static double tan(double var0) { return 0.0d; }
 	public static double toDegrees(double var0) { return 0.0d; }
 	public static double toRadians(double var0) { return 0.0d; }
-	public final static double E = 2.718281828459045d;
-	public final static double PI = 3.141592653589793d;
 	private Math() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

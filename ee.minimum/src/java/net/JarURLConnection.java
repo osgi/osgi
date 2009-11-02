@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,8 @@
 
 package java.net;
 public abstract class JarURLConnection extends java.net.URLConnection {
-	protected JarURLConnection(java.net.URL var0) throws java.net.MalformedURLException { super((java.net.URL) null); }
+	protected java.net.URLConnection jarFileURLConnection;
+	protected JarURLConnection(java.net.URL var0) throws java.net.MalformedURLException  { super((java.net.URL) null); } 
 	public java.util.jar.Attributes getAttributes() throws java.io.IOException { return null; }
 	public java.security.cert.Certificate[] getCertificates() throws java.io.IOException { return null; }
 	public java.lang.String getEntryName() { return null; }
@@ -28,6 +27,5 @@ public abstract class JarURLConnection extends java.net.URLConnection {
 	public java.net.URL getJarFileURL() { return null; }
 	public java.util.jar.Attributes getMainAttributes() throws java.io.IOException { return null; }
 	public java.util.jar.Manifest getManifest() throws java.io.IOException { return null; }
-	protected java.net.URLConnection jarFileURLConnection;
 }
 

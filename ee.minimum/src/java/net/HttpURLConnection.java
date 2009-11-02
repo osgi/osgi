@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +17,6 @@
 
 package java.net;
 public abstract class HttpURLConnection extends java.net.URLConnection {
-	protected HttpURLConnection(java.net.URL var0) { super((java.net.URL) null); }
-	public abstract void disconnect();
-	public java.io.InputStream getErrorStream() { return null; }
-	public static boolean getFollowRedirects() { return false; }
-	public boolean getInstanceFollowRedirects() { return false; }
-	public java.lang.String getRequestMethod() { return null; }
-	public int getResponseCode() throws java.io.IOException { return 0; }
-	public java.lang.String getResponseMessage() throws java.io.IOException { return null; }
-	public static void setFollowRedirects(boolean var0) { }
-	public void setInstanceFollowRedirects(boolean var0) { }
-	public void setRequestMethod(java.lang.String var0) throws java.net.ProtocolException { }
-	public abstract boolean usingProxy();
 	public final static int HTTP_ACCEPTED = 202;
 	public final static int HTTP_BAD_GATEWAY = 502;
 	public final static int HTTP_BAD_METHOD = 405;
@@ -70,5 +56,17 @@ public abstract class HttpURLConnection extends java.net.URLConnection {
 	protected java.lang.String method;
 	protected int responseCode;
 	protected java.lang.String responseMessage;
+	protected HttpURLConnection(java.net.URL var0)  { super((java.net.URL) null); } 
+	public abstract void disconnect();
+	public java.io.InputStream getErrorStream() { return null; }
+	public static boolean getFollowRedirects() { return false; }
+	public boolean getInstanceFollowRedirects() { return false; }
+	public java.lang.String getRequestMethod() { return null; }
+	public int getResponseCode() throws java.io.IOException { return 0; }
+	public java.lang.String getResponseMessage() throws java.io.IOException { return null; }
+	public static void setFollowRedirects(boolean var0) { }
+	public void setInstanceFollowRedirects(boolean var0) { }
+	public void setRequestMethod(java.lang.String var0) throws java.net.ProtocolException { }
+	public abstract boolean usingProxy();
 }
 

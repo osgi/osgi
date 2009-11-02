@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,7 @@
 
 package java.security;
 public final class UnresolvedPermission extends java.security.Permission implements java.io.Serializable {
-	public UnresolvedPermission(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.security.cert.Certificate[] var3) { super((java.lang.String) null); }
+	public UnresolvedPermission(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.security.cert.Certificate[] var3)  { super((java.lang.String) null); } 
 	public boolean equals(java.lang.Object var0) { return false; }
 	public java.lang.String getActions() { return null; }
 	public int hashCode() { return 0; }

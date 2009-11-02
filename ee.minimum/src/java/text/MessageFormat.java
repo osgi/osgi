@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +17,12 @@
 
 package java.text;
 public class MessageFormat extends java.text.Format {
-	public MessageFormat(java.lang.String var0) { }
-	public MessageFormat(java.lang.String var0, java.util.Locale var1) { }
+	public static class Field extends java.text.Format.Field {
+		public final static java.text.MessageFormat.Field ARGUMENT; static { ARGUMENT = null; }
+		protected Field(java.lang.String var0)  { super((java.lang.String) null); } 
+	}
+	public MessageFormat(java.lang.String var0) { } 
+	public MessageFormat(java.lang.String var0, java.util.Locale var1) { } 
 	public void applyPattern(java.lang.String var0) { }
 	public final java.lang.StringBuffer format(java.lang.Object var0, java.lang.StringBuffer var1, java.text.FieldPosition var2) { return null; }
 	public static java.lang.String format(java.lang.String var0, java.lang.Object[] var1) { return null; }
@@ -37,9 +39,5 @@ public class MessageFormat extends java.text.Format {
 	public void setFormatsByArgumentIndex(java.text.Format[] var0) { }
 	public void setLocale(java.util.Locale var0) { }
 	public java.lang.String toPattern() { return null; }
-	public static class Field extends java.text.Format.Field {
-		protected Field(java.lang.String var0) { super((java.lang.String) null); }
-		public final static java.text.MessageFormat.Field ARGUMENT; static { ARGUMENT = null; }
-	}
 }
 

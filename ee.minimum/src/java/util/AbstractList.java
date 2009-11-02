@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,8 @@
 
 package java.util;
 public abstract class AbstractList extends java.util.AbstractCollection implements java.util.List {
-	protected AbstractList() { }
+	protected int modCount;
+	protected AbstractList() { } 
 	public void add(int var0, java.lang.Object var1) { }
 	public boolean addAll(int var0, java.util.Collection var1) { return false; }
 	public int indexOf(java.lang.Object var0) { return 0; }
@@ -31,6 +30,5 @@ public abstract class AbstractList extends java.util.AbstractCollection implemen
 	protected void removeRange(int var0, int var1) { }
 	public java.lang.Object set(int var0, java.lang.Object var1) { return null; }
 	public java.util.List subList(int var0, int var1) { return null; }
-	protected int modCount;
 }
 

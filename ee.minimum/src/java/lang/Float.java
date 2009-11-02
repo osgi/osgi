@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +17,15 @@
 
 package java.lang;
 public final class Float extends java.lang.Number implements java.lang.Comparable {
-	public Float(double var0) { }
-	public Float(float var0) { }
-	public Float(java.lang.String var0) { }
+	public final static float MAX_VALUE = 3.4028235E38f;
+	public final static float MIN_VALUE = 1.4E-45f;
+	public final static float NEGATIVE_INFINITY = -1.0f / 0.0f;
+	public final static float NaN = 0.0f / 0.0f;
+	public final static float POSITIVE_INFINITY = 1.0f / 0.0f;
+	public final static java.lang.Class TYPE; static { TYPE = null; }
+	public Float(double var0) { } 
+	public Float(float var0) { } 
+	public Float(java.lang.String var0) { } 
 	public static int compare(float var0, float var1) { return 0; }
 	public int compareTo(java.lang.Float var0) { return 0; }
 	public int compareTo(java.lang.Object var0) { return 0; }
@@ -39,11 +43,5 @@ public final class Float extends java.lang.Number implements java.lang.Comparabl
 	public static float parseFloat(java.lang.String var0) { return 0.0f; }
 	public static java.lang.String toString(float var0) { return null; }
 	public static java.lang.Float valueOf(java.lang.String var0) { return null; }
-	public final static float MAX_VALUE = 3.4028235E38f;
-	public final static float MIN_VALUE = 1.4E-45f;
-	public final static float NEGATIVE_INFINITY = -1.0f / 0.0f;
-	public final static float NaN = 0.0f / 0.0f;
-	public final static float POSITIVE_INFINITY = 1.0f / 0.0f;
-	public final static java.lang.Class TYPE; static { TYPE = null; }
 }
 

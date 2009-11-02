@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,7 @@
 
 package java.net;
 public abstract class ContentHandler {
-	public ContentHandler() { }
+	public ContentHandler() { } 
 	public abstract java.lang.Object getContent(java.net.URLConnection var0) throws java.io.IOException;
 	public java.lang.Object getContent(java.net.URLConnection var0, java.lang.Class[] var1) throws java.io.IOException { return null; }
 }

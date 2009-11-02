@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +17,12 @@
 
 package java.net;
 public final class URL implements java.io.Serializable {
-	public URL(java.lang.String var0) throws java.net.MalformedURLException { }
-	public URL(java.lang.String var0, java.lang.String var1, int var2, java.lang.String var3) throws java.net.MalformedURLException { }
-	public URL(java.lang.String var0, java.lang.String var1, int var2, java.lang.String var3, java.net.URLStreamHandler var4) throws java.net.MalformedURLException { }
-	public URL(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws java.net.MalformedURLException { }
-	public URL(java.net.URL var0, java.lang.String var1) throws java.net.MalformedURLException { }
-	public URL(java.net.URL var0, java.lang.String var1, java.net.URLStreamHandler var2) throws java.net.MalformedURLException { }
+	public URL(java.lang.String var0) throws java.net.MalformedURLException { } 
+	public URL(java.lang.String var0, java.lang.String var1, int var2, java.lang.String var3) throws java.net.MalformedURLException { } 
+	public URL(java.lang.String var0, java.lang.String var1, int var2, java.lang.String var3, java.net.URLStreamHandler var4) throws java.net.MalformedURLException { } 
+	public URL(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws java.net.MalformedURLException { } 
+	public URL(java.net.URL var0, java.lang.String var1) throws java.net.MalformedURLException { } 
+	public URL(java.net.URL var0, java.lang.String var1, java.net.URLStreamHandler var2) throws java.net.MalformedURLException { } 
 	public java.lang.String getAuthority() { return null; }
 	public final java.lang.Object getContent() throws java.io.IOException { return null; }
 	public final java.lang.Object getContent(java.lang.Class[] var0) throws java.io.IOException { return null; }

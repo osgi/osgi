@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,11 @@
 
 package java.net;
 public abstract class SocketImpl implements java.net.SocketOptions {
-	public SocketImpl() { }
+	protected java.net.InetAddress address;
+	protected java.io.FileDescriptor fd;
+	protected int localport;
+	protected int port;
+	public SocketImpl() { } 
 	protected abstract void accept(java.net.SocketImpl var0) throws java.io.IOException;
 	protected abstract int available() throws java.io.IOException;
 	protected abstract void bind(java.net.InetAddress var0, int var1) throws java.io.IOException;
@@ -39,9 +41,5 @@ public abstract class SocketImpl implements java.net.SocketOptions {
 	protected void shutdownInput() throws java.io.IOException { }
 	protected void shutdownOutput() throws java.io.IOException { }
 	protected boolean supportsUrgentData() { return false; }
-	protected java.net.InetAddress address;
-	protected java.io.FileDescriptor fd;
-	protected int localport;
-	protected int port;
 }
 

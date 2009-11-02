@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +17,11 @@
 
 package java.lang;
 public final class Integer extends java.lang.Number implements java.lang.Comparable {
-	public Integer(int var0) { }
-	public Integer(java.lang.String var0) { }
+	public final static int MAX_VALUE = 2147483647;
+	public final static int MIN_VALUE = -2147483648;
+	public final static java.lang.Class TYPE; static { TYPE = null; }
+	public Integer(int var0) { } 
+	public Integer(java.lang.String var0) { } 
 	public int compareTo(java.lang.Integer var0) { return 0; }
 	public int compareTo(java.lang.Object var0) { return 0; }
 	public static java.lang.Integer decode(java.lang.String var0) { return null; }
@@ -40,8 +41,5 @@ public final class Integer extends java.lang.Number implements java.lang.Compara
 	public static java.lang.String toString(int var0, int var1) { return null; }
 	public static java.lang.Integer valueOf(java.lang.String var0) { return null; }
 	public static java.lang.Integer valueOf(java.lang.String var0, int var1) { return null; }
-	public final static int MAX_VALUE = 2147483647;
-	public final static int MIN_VALUE = -2147483648;
-	public final static java.lang.Class TYPE; static { TYPE = null; }
 }
 

@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +17,7 @@
 
 package java.security;
 public abstract class AlgorithmParametersSpi {
-	public AlgorithmParametersSpi() { }
+	public AlgorithmParametersSpi() { } 
 	protected abstract byte[] engineGetEncoded() throws java.io.IOException;
 	protected abstract byte[] engineGetEncoded(java.lang.String var0) throws java.io.IOException;
 	protected abstract java.security.spec.AlgorithmParameterSpec engineGetParameterSpec(java.lang.Class var0) throws java.security.spec.InvalidParameterSpecException;

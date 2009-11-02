@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +17,13 @@
 
 package java.io;
 public class ObjectStreamField implements java.lang.Comparable {
-	public ObjectStreamField(java.lang.String var0, java.lang.Class var1) { }
-	public ObjectStreamField(java.lang.String var0, java.lang.Class var1, boolean var2) { }
+	public ObjectStreamField(java.lang.String var0, java.lang.Class var1) { } 
+	public ObjectStreamField(java.lang.String var0, java.lang.Class var1, boolean var2) { } 
 	public int compareTo(java.lang.Object var0) { return 0; }
 	public java.lang.String getName() { return null; }
 	public int getOffset() { return 0; }
 	public java.lang.Class getType() { return null; }
-	public char getTypeCode() { return 0; }
+	public char getTypeCode() { return '\0'; }
 	public java.lang.String getTypeString() { return null; }
 	public boolean isPrimitive() { return false; }
 	protected void setOffset(int var0) { }

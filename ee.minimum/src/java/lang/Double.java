@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +17,14 @@
 
 package java.lang;
 public final class Double extends java.lang.Number implements java.lang.Comparable {
-	public Double(double var0) { }
-	public Double(java.lang.String var0) { }
+	public final static double MAX_VALUE = 1.7976931348623157E308d;
+	public final static double MIN_VALUE; static { MIN_VALUE = 0.0d; }
+	public final static double NEGATIVE_INFINITY = -1.0d / 0.0d;
+	public final static double NaN = 0.0d / 0.0d;
+	public final static double POSITIVE_INFINITY = 1.0d / 0.0d;
+	public final static java.lang.Class TYPE; static { TYPE = null; }
+	public Double(double var0) { } 
+	public Double(java.lang.String var0) { } 
 	public static int compare(double var0, double var1) { return 0; }
 	public int compareTo(java.lang.Double var0) { return 0; }
 	public int compareTo(java.lang.Object var0) { return 0; }
@@ -38,11 +42,5 @@ public final class Double extends java.lang.Number implements java.lang.Comparab
 	public static double parseDouble(java.lang.String var0) { return 0.0d; }
 	public static java.lang.String toString(double var0) { return null; }
 	public static java.lang.Double valueOf(java.lang.String var0) { return null; }
-	public final static double MAX_VALUE = 1.7976931348623157E308d;
-	public final static double MIN_VALUE; static { MIN_VALUE = 0.0d; }
-	public final static double NEGATIVE_INFINITY = -1.0d / 0.0d;
-	public final static double NaN = 0.0d / 0.0d;
-	public final static double POSITIVE_INFINITY = 1.0d / 0.0d;
-	public final static java.lang.Class TYPE; static { TYPE = null; }
 }
 

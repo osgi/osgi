@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +17,12 @@
 
 package java.io;
 public class BufferedInputStream extends java.io.FilterInputStream {
-	public BufferedInputStream(java.io.InputStream var0) { super((java.io.InputStream) null); }
-	public BufferedInputStream(java.io.InputStream var0, int var1) { super((java.io.InputStream) null); }
 	protected byte[] buf;
 	protected int count;
 	protected int marklimit;
 	protected int markpos;
 	protected int pos;
+	public BufferedInputStream(java.io.InputStream var0)  { super((java.io.InputStream) null); } 
+	public BufferedInputStream(java.io.InputStream var0, int var1)  { super((java.io.InputStream) null); } 
 }
 

@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +16,21 @@
  */
 
 package java.util;
-public abstract interface Collection {
-	public abstract boolean add(java.lang.Object var0);
-	public abstract boolean addAll(java.util.Collection var0);
-	public abstract void clear();
-	public abstract boolean contains(java.lang.Object var0);
-	public abstract boolean containsAll(java.util.Collection var0);
-	public abstract boolean equals(java.lang.Object var0);
-	public abstract int hashCode();
-	public abstract boolean isEmpty();
-	public abstract java.util.Iterator iterator();
-	public abstract boolean remove(java.lang.Object var0);
-	public abstract boolean removeAll(java.util.Collection var0);
-	public abstract boolean retainAll(java.util.Collection var0);
-	public abstract int size();
-	public abstract java.lang.Object[] toArray();
-	public abstract java.lang.Object[] toArray(java.lang.Object[] var0);
+public interface Collection {
+	boolean add(java.lang.Object var0);
+	boolean addAll(java.util.Collection var0);
+	void clear();
+	boolean contains(java.lang.Object var0);
+	boolean containsAll(java.util.Collection var0);
+	boolean equals(java.lang.Object var0);
+	int hashCode();
+	boolean isEmpty();
+	java.util.Iterator iterator();
+	boolean remove(java.lang.Object var0);
+	boolean removeAll(java.util.Collection var0);
+	boolean retainAll(java.util.Collection var0);
+	int size();
+	java.lang.Object[] toArray();
+	java.lang.Object[] toArray(java.lang.Object[] var0);
 }
 

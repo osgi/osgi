@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +17,8 @@
 
 package java.text;
 public class ChoiceFormat extends java.text.NumberFormat {
-	public ChoiceFormat(java.lang.String var0) { }
-	public ChoiceFormat(double[] var0, java.lang.String[] var1) { }
+	public ChoiceFormat(java.lang.String var0) { } 
+	public ChoiceFormat(double[] var0, java.lang.String[] var1) { } 
 	public void applyPattern(java.lang.String var0) { }
 	public java.lang.StringBuffer format(double var0, java.lang.StringBuffer var1, java.text.FieldPosition var2) { return null; }
 	public java.lang.StringBuffer format(long var0, java.lang.StringBuffer var1, java.text.FieldPosition var2) { return null; }

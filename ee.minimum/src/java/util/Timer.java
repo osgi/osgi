@@ -1,8 +1,6 @@
 /*
- * $Revision$
- *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +17,8 @@
 
 package java.util;
 public class Timer {
-	public Timer() { }
-	public Timer(boolean var0) { }
+	public Timer() { } 
+	public Timer(boolean var0) { } 
 	public void cancel() { }
 	public void schedule(java.util.TimerTask var0, long var1) { }
 	public void schedule(java.util.TimerTask var0, long var1, long var2) { }
