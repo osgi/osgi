@@ -16,18 +16,18 @@
  */
 
 package java.util;
-public abstract class AbstractMap implements java.util.Map {
+public abstract class AbstractMap<K,V> implements java.util.Map<K,V> {
 	protected AbstractMap() { } 
 	public void clear() { }
 	public boolean containsKey(java.lang.Object var0) { return false; }
 	public boolean containsValue(java.lang.Object var0) { return false; }
-	public java.lang.Object get(java.lang.Object var0) { return null; }
+	public V get(java.lang.Object var0) { return null; }
 	public boolean isEmpty() { return false; }
-	public java.util.Set keySet() { return null; }
-	public java.lang.Object put(java.lang.Object var0, java.lang.Object var1) { return null; }
-	public void putAll(java.util.Map var0) { }
-	public java.lang.Object remove(java.lang.Object var0) { return null; }
+	public java.util.Set<K> keySet() { return null; }
+	public V put(K var0, V var1) { return null; }
+	public void putAll(java.util.Map<? extends K,? extends V> var0) { }
+	public V remove(java.lang.Object var0) { return null; }
 	public int size() { return 0; }
-	public java.util.Collection values() { return null; }
+	public java.util.Collection<V> values() { return null; }
 }
 

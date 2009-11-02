@@ -27,14 +27,14 @@ public interface AttributedCharacterIterator extends java.text.CharacterIterator
 		public final int hashCode() { return 0; }
 		protected java.lang.Object readResolve() throws java.io.InvalidObjectException { return null; }
 	}
-	java.util.Set getAllAttributeKeys();
+	java.util.Set<java.text.AttributedCharacterIterator.Attribute> getAllAttributeKeys();
 	java.lang.Object getAttribute(java.text.AttributedCharacterIterator.Attribute var0);
-	java.util.Map getAttributes();
+	java.util.Map<java.text.AttributedCharacterIterator.Attribute,java.lang.Object> getAttributes();
 	int getRunLimit();
 	int getRunLimit(java.text.AttributedCharacterIterator.Attribute var0);
-	int getRunLimit(java.util.Set var0);
+	int getRunLimit(java.util.Set<? extends java.text.AttributedCharacterIterator.Attribute> var0);
 	int getRunStart();
 	int getRunStart(java.text.AttributedCharacterIterator.Attribute var0);
-	int getRunStart(java.util.Set var0);
+	int getRunStart(java.util.Set<? extends java.text.AttributedCharacterIterator.Attribute> var0);
 }
 

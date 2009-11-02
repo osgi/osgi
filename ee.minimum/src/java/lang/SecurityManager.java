@@ -30,7 +30,7 @@ public class SecurityManager {
 	public void checkExit(int var0) { }
 	public void checkLink(java.lang.String var0) { }
 	public void checkListen(int var0) { }
-	public void checkMemberAccess(java.lang.Class var0, int var1) { }
+	public void checkMemberAccess(java.lang.Class<?> var0, int var1) { }
 	public void checkMulticast(java.net.InetAddress var0) { }
 	/** @deprecated */
 	public void checkMulticast(java.net.InetAddress var0, byte var1) { }

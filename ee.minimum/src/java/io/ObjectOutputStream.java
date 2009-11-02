@@ -33,8 +33,8 @@ public class ObjectOutputStream extends java.io.OutputStream implements java.io.
 	}
 	protected ObjectOutputStream() throws java.io.IOException { } 
 	public ObjectOutputStream(java.io.OutputStream var0) throws java.io.IOException { } 
-	protected void annotateClass(java.lang.Class var0) throws java.io.IOException { }
-	protected void annotateProxyClass(java.lang.Class var0) throws java.io.IOException { }
+	protected void annotateClass(java.lang.Class<?> var0) throws java.io.IOException { }
+	protected void annotateProxyClass(java.lang.Class<?> var0) throws java.io.IOException { }
 	public void defaultWriteObject() throws java.io.IOException { }
 	protected void drain() throws java.io.IOException { }
 	protected boolean enableReplaceObject(boolean var0) { return false; }

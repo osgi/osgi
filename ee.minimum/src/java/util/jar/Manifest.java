@@ -23,7 +23,7 @@ public class Manifest implements java.lang.Cloneable {
 	public void clear() { }
 	public java.lang.Object clone() { return null; }
 	public java.util.jar.Attributes getAttributes(java.lang.String var0) { return null; }
-	public java.util.Map getEntries() { return null; }
+	public java.util.Map<java.lang.String,java.util.jar.Attributes> getEntries() { return null; }
 	public java.util.jar.Attributes getMainAttributes() { return null; }
 	public void read(java.io.InputStream var0) throws java.io.IOException { }
 	public void write(java.io.OutputStream var0) throws java.io.IOException { }

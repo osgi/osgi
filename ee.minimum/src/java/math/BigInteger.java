@@ -16,7 +16,7 @@
  */
 
 package java.math;
-public class BigInteger extends java.lang.Number implements java.lang.Comparable {
+public class BigInteger extends java.lang.Number implements java.lang.Comparable<java.math.BigInteger> {
 	public final static java.math.BigInteger ONE; static { ONE = null; }
 	public final static java.math.BigInteger ZERO; static { ZERO = null; }
 	public BigInteger(int var0, int var1, java.util.Random var2) { } 
@@ -32,7 +32,6 @@ public class BigInteger extends java.lang.Number implements java.lang.Comparable
 	public int bitCount() { return 0; }
 	public int bitLength() { return 0; }
 	public java.math.BigInteger clearBit(int var0) { return null; }
-	public int compareTo(java.lang.Object var0) { return 0; }
 	public int compareTo(java.math.BigInteger var0) { return 0; }
 	public java.math.BigInteger divide(java.math.BigInteger var0) { return null; }
 	public java.math.BigInteger[] divideAndRemainder(java.math.BigInteger var0) { return null; }

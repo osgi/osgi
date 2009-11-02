@@ -16,14 +16,13 @@
  */
 
 package java.lang;
-public final class Byte extends java.lang.Number implements java.lang.Comparable {
+public final class Byte extends java.lang.Number implements java.lang.Comparable<java.lang.Byte> {
 	public final static byte MAX_VALUE = 127;
 	public final static byte MIN_VALUE = -128;
-	public final static java.lang.Class TYPE; static { TYPE = null; }
+	public final static java.lang.Class<java.lang.Byte> TYPE; static { TYPE = null; }
 	public Byte(byte var0) { } 
 	public Byte(java.lang.String var0) { } 
 	public int compareTo(java.lang.Byte var0) { return 0; }
-	public int compareTo(java.lang.Object var0) { return 0; }
 	public static java.lang.Byte decode(java.lang.String var0) { return null; }
 	public double doubleValue() { return 0.0d; }
 	public float floatValue() { return 0.0f; }

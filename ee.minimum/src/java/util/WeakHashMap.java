@@ -16,11 +16,11 @@
  */
 
 package java.util;
-public class WeakHashMap extends java.util.AbstractMap implements java.util.Map {
+public class WeakHashMap<K,V> extends java.util.AbstractMap<K,V> implements java.util.Map<K,V> {
 	public WeakHashMap() { } 
 	public WeakHashMap(int var0) { } 
 	public WeakHashMap(int var0, float var1) { } 
-	public WeakHashMap(java.util.Map var0) { } 
-	public java.util.Set entrySet() { return null; }
+	public WeakHashMap(java.util.Map<? extends K,? extends V> var0) { } 
+	public java.util.Set<java.util.Map.Entry<K,V>> entrySet() { return null; }
 }
 

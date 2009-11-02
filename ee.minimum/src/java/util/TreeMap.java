@@ -16,18 +16,18 @@
  */
 
 package java.util;
-public class TreeMap extends java.util.AbstractMap implements java.io.Serializable, java.lang.Cloneable, java.util.SortedMap {
+public class TreeMap<K,V> extends java.util.AbstractMap<K,V> implements java.io.Serializable, java.lang.Cloneable, java.util.SortedMap<K,V> {
 	public TreeMap() { } 
-	public TreeMap(java.util.Comparator var0) { } 
-	public TreeMap(java.util.Map var0) { } 
-	public TreeMap(java.util.SortedMap var0) { } 
+	public TreeMap(java.util.Comparator<? super K> var0) { } 
+	public TreeMap(java.util.Map<? extends K,? extends V> var0) { } 
+	public TreeMap(java.util.SortedMap<K,? extends V> var0) { } 
 	public java.lang.Object clone() { return null; }
-	public java.util.Comparator comparator() { return null; }
-	public java.util.Set entrySet() { return null; }
-	public java.lang.Object firstKey() { return null; }
-	public java.util.SortedMap headMap(java.lang.Object var0) { return null; }
-	public java.lang.Object lastKey() { return null; }
-	public java.util.SortedMap subMap(java.lang.Object var0, java.lang.Object var1) { return null; }
-	public java.util.SortedMap tailMap(java.lang.Object var0) { return null; }
+	public java.util.Comparator<? super K> comparator() { return null; }
+	public java.util.Set<java.util.Map.Entry<K,V>> entrySet() { return null; }
+	public K firstKey() { return null; }
+	public java.util.SortedMap<K,V> headMap(K var0) { return null; }
+	public K lastKey() { return null; }
+	public java.util.SortedMap<K,V> subMap(K var0, K var1) { return null; }
+	public java.util.SortedMap<K,V> tailMap(K var0) { return null; }
 }
 

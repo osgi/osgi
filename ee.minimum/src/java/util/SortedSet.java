@@ -16,12 +16,12 @@
  */
 
 package java.util;
-public interface SortedSet extends java.util.Set {
-	java.util.Comparator comparator();
-	java.lang.Object first();
-	java.util.SortedSet headSet(java.lang.Object var0);
-	java.lang.Object last();
-	java.util.SortedSet subSet(java.lang.Object var0, java.lang.Object var1);
-	java.util.SortedSet tailSet(java.lang.Object var0);
+public interface SortedSet<E> extends java.util.Set<E> {
+	java.util.Comparator<? super E> comparator();
+	E first();
+	java.util.SortedSet<E> headSet(E var0);
+	E last();
+	java.util.SortedSet<E> subSet(E var0, E var1);
+	java.util.SortedSet<E> tailSet(E var0);
 }
 

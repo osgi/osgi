@@ -18,10 +18,10 @@
 package java.security;
 public final class AccessController {
 	public static void checkPermission(java.security.Permission var0) { }
-	public static java.lang.Object doPrivileged(java.security.PrivilegedAction var0) { return null; }
-	public static java.lang.Object doPrivileged(java.security.PrivilegedAction var0, java.security.AccessControlContext var1) { return null; }
-	public static java.lang.Object doPrivileged(java.security.PrivilegedExceptionAction var0) throws java.security.PrivilegedActionException { return null; }
-	public static java.lang.Object doPrivileged(java.security.PrivilegedExceptionAction var0, java.security.AccessControlContext var1) throws java.security.PrivilegedActionException { return null; }
+	public static <T> T doPrivileged(java.security.PrivilegedAction<T> var0) { return null; }
+	public static <T> T doPrivileged(java.security.PrivilegedAction<T> var0, java.security.AccessControlContext var1) { return null; }
+	public static <T> T doPrivileged(java.security.PrivilegedExceptionAction<T> var0) throws java.security.PrivilegedActionException { return null; }
+	public static <T> T doPrivileged(java.security.PrivilegedExceptionAction<T> var0, java.security.AccessControlContext var1) throws java.security.PrivilegedActionException { return null; }
 	public static java.security.AccessControlContext getContext() { return null; }
 	private AccessController() { } /* generated constructor to prevent compiler adding default public constructor */
 }

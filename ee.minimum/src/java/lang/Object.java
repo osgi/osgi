@@ -21,7 +21,7 @@ public class Object {
 	protected java.lang.Object clone() throws java.lang.CloneNotSupportedException { return null; }
 	public boolean equals(java.lang.Object var0) { return false; }
 	protected void finalize() throws java.lang.Throwable { }
-	public final java.lang.Class getClass() { return null; }
+	public final java.lang.Class<?> getClass() { return null; }
 	public int hashCode() { return 0; }
 	public final void notify() { }
 	public final void notifyAll() { }

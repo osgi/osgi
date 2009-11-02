@@ -16,8 +16,8 @@
  */
 
 package java.lang;
-public class InheritableThreadLocal extends java.lang.ThreadLocal {
+public class InheritableThreadLocal<T> extends java.lang.ThreadLocal<T> {
 	public InheritableThreadLocal() { } 
-	protected java.lang.Object childValue(java.lang.Object var0) { return null; }
+	protected T childValue(T var0) { return null; }
 }
 

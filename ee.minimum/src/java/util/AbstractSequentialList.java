@@ -16,9 +16,9 @@
  */
 
 package java.util;
-public abstract class AbstractSequentialList extends java.util.AbstractList {
+public abstract class AbstractSequentialList<E> extends java.util.AbstractList<E> {
 	protected AbstractSequentialList() { } 
-	public java.lang.Object get(int var0) { return null; }
-	public abstract java.util.ListIterator listIterator(int var0);
+	public E get(int var0) { return null; }
+	public abstract java.util.ListIterator<E> listIterator(int var0);
 }
 

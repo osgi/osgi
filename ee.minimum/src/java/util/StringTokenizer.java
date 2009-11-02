@@ -16,7 +16,7 @@
  */
 
 package java.util;
-public class StringTokenizer implements java.util.Enumeration {
+public class StringTokenizer implements java.util.Enumeration<java.lang.Object> {
 	public StringTokenizer(java.lang.String var0) { } 
 	public StringTokenizer(java.lang.String var0, java.lang.String var1) { } 
 	public StringTokenizer(java.lang.String var0, java.lang.String var1, boolean var2) { } 

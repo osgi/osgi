@@ -16,7 +16,7 @@
  */
 
 package java.util;
-public class Properties extends java.util.Hashtable {
+public class Properties extends java.util.Hashtable<java.lang.Object,java.lang.Object> {
 	protected java.util.Properties defaults;
 	public Properties() { } 
 	public Properties(java.util.Properties var0) { } 
@@ -25,7 +25,7 @@ public class Properties extends java.util.Hashtable {
 	public void list(java.io.PrintStream var0) { }
 	public void list(java.io.PrintWriter var0) { }
 	public void load(java.io.InputStream var0) throws java.io.IOException { }
-	public java.util.Enumeration propertyNames() { return null; }
+	public java.util.Enumeration<?> propertyNames() { return null; }
 	/** @deprecated */
 	public void save(java.io.OutputStream var0, java.lang.String var1) { }
 	public java.lang.Object setProperty(java.lang.String var0, java.lang.String var1) { return null; }

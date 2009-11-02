@@ -18,7 +18,7 @@
 package java.security;
 public class KeyStore {
 	protected KeyStore(java.security.KeyStoreSpi var0, java.security.Provider var1, java.lang.String var2) { } 
-	public final java.util.Enumeration aliases() throws java.security.KeyStoreException { return null; }
+	public final java.util.Enumeration<java.lang.String> aliases() throws java.security.KeyStoreException { return null; }
 	public final boolean containsAlias(java.lang.String var0) throws java.security.KeyStoreException { return false; }
 	public final void deleteEntry(java.lang.String var0) throws java.security.KeyStoreException { }
 	public final java.security.cert.Certificate getCertificate(java.lang.String var0) throws java.security.KeyStoreException { return null; }

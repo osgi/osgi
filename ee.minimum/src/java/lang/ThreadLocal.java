@@ -16,10 +16,10 @@
  */
 
 package java.lang;
-public class ThreadLocal {
+public class ThreadLocal<T> {
 	public ThreadLocal() { } 
-	public java.lang.Object get() { return null; }
-	protected java.lang.Object initialValue() { return null; }
-	public void set(java.lang.Object var0) { }
+	public T get() { return null; }
+	protected T initialValue() { return null; }
+	public void set(T var0) { }
 }
 

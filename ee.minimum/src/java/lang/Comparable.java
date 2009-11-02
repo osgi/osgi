@@ -16,7 +16,7 @@
  */
 
 package java.lang;
-public interface Comparable {
-	int compareTo(java.lang.Object var0);
+public interface Comparable<T> {
+	int compareTo(T var0);
 }
 

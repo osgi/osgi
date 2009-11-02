@@ -19,7 +19,7 @@ package java.security.acl;
 public interface Group extends java.security.Principal {
 	boolean addMember(java.security.Principal var0);
 	boolean isMember(java.security.Principal var0);
-	java.util.Enumeration members();
+	java.util.Enumeration<? extends java.security.Principal> members();
 	boolean removeMember(java.security.Principal var0);
 }
 

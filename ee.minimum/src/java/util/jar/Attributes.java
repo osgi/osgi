@@ -16,7 +16,7 @@
  */
 
 package java.util.jar;
-public class Attributes implements java.lang.Cloneable, java.util.Map {
+public class Attributes implements java.lang.Cloneable, java.util.Map<java.lang.Object,java.lang.Object> {
 	public static class Name {
 		public final static java.util.jar.Attributes.Name CLASS_PATH; static { CLASS_PATH = null; }
 		public final static java.util.jar.Attributes.Name CONTENT_TYPE; static { CONTENT_TYPE = null; }
@@ -37,7 +37,7 @@ public class Attributes implements java.lang.Cloneable, java.util.Map {
 		public final static java.util.jar.Attributes.Name SPECIFICATION_VERSION; static { SPECIFICATION_VERSION = null; }
 		public Name(java.lang.String var0) { } 
 	}
-	protected java.util.Map map;
+	protected java.util.Map<java.lang.Object,java.lang.Object> map;
 	public Attributes() { } 
 	public Attributes(int var0) { } 
 	public Attributes(java.util.jar.Attributes var0) { } 
@@ -45,17 +45,17 @@ public class Attributes implements java.lang.Cloneable, java.util.Map {
 	public java.lang.Object clone() { return null; }
 	public boolean containsKey(java.lang.Object var0) { return false; }
 	public boolean containsValue(java.lang.Object var0) { return false; }
-	public java.util.Set entrySet() { return null; }
+	public java.util.Set<java.util.Map.Entry<java.lang.Object,java.lang.Object>> entrySet() { return null; }
 	public java.lang.Object get(java.lang.Object var0) { return null; }
 	public java.lang.String getValue(java.lang.String var0) { return null; }
 	public java.lang.String getValue(java.util.jar.Attributes.Name var0) { return null; }
 	public boolean isEmpty() { return false; }
-	public java.util.Set keySet() { return null; }
+	public java.util.Set<java.lang.Object> keySet() { return null; }
 	public java.lang.Object put(java.lang.Object var0, java.lang.Object var1) { return null; }
-	public void putAll(java.util.Map var0) { }
+	public void putAll(java.util.Map<?,?> var0) { }
 	public java.lang.String putValue(java.lang.String var0, java.lang.String var1) { return null; }
 	public java.lang.Object remove(java.lang.Object var0) { return null; }
 	public int size() { return 0; }
-	public java.util.Collection values() { return null; }
+	public java.util.Collection<java.lang.Object> values() { return null; }
 }
 

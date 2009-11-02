@@ -17,13 +17,13 @@
 
 package java.lang.reflect;
 public final class Method extends java.lang.reflect.AccessibleObject implements java.lang.reflect.Member {
-	public java.lang.Class getDeclaringClass() { return null; }
-	public java.lang.Class[] getExceptionTypes() { return null; }
+	public java.lang.Class<?> getDeclaringClass() { return null; }
+	public java.lang.Class<?>[] getExceptionTypes() { return null; }
 	public int getModifiers() { return 0; }
 	public java.lang.String getName() { return null; }
-	public java.lang.Class[] getParameterTypes() { return null; }
-	public java.lang.Class getReturnType() { return null; }
-	public java.lang.Object invoke(java.lang.Object var0, java.lang.Object[] var1) throws java.lang.IllegalAccessException, java.lang.reflect.InvocationTargetException { return null; }
+	public java.lang.Class<?>[] getParameterTypes() { return null; }
+	public java.lang.Class<?> getReturnType() { return null; }
+	public java.lang.Object invoke(java.lang.Object var0, java.lang.Object... var1) throws java.lang.IllegalAccessException, java.lang.reflect.InvocationTargetException { return null; }
 	private Method() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

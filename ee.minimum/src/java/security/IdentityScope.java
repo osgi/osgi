@@ -26,7 +26,7 @@ public abstract class IdentityScope extends java.security.Identity {
 	public java.security.Identity getIdentity(java.security.Principal var0) { return null; }
 	public abstract java.security.Identity getIdentity(java.security.PublicKey var0);
 	public static java.security.IdentityScope getSystemScope() { return null; }
-	public abstract java.util.Enumeration identities();
+	public abstract java.util.Enumeration<java.security.Identity> identities();
 	public abstract void removeIdentity(java.security.Identity var0) throws java.security.KeyManagementException;
 	protected static void setSystemScope(java.security.IdentityScope var0) { }
 	public abstract int size();

@@ -19,9 +19,9 @@ package java.security.acl;
 public interface Acl extends java.security.acl.Owner {
 	boolean addEntry(java.security.Principal var0, java.security.acl.AclEntry var1) throws java.security.acl.NotOwnerException;
 	boolean checkPermission(java.security.Principal var0, java.security.acl.Permission var1);
-	java.util.Enumeration entries();
+	java.util.Enumeration<java.security.acl.AclEntry> entries();
 	java.lang.String getName();
-	java.util.Enumeration getPermissions(java.security.Principal var0);
+	java.util.Enumeration<java.security.acl.Permission> getPermissions(java.security.Principal var0);
 	boolean removeEntry(java.security.Principal var0, java.security.acl.AclEntry var1) throws java.security.acl.NotOwnerException;
 	void setName(java.security.Principal var0, java.lang.String var1) throws java.security.acl.NotOwnerException;
 	java.lang.String toString();

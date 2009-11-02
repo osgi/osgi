@@ -16,9 +16,9 @@
  */
 
 package java.util;
-public interface Iterator {
+public interface Iterator<E> {
 	boolean hasNext();
-	java.lang.Object next();
+	E next();
 	void remove();
 }
 

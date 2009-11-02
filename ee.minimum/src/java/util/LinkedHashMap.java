@@ -16,12 +16,12 @@
  */
 
 package java.util;
-public class LinkedHashMap extends java.util.HashMap {
+public class LinkedHashMap<K,V> extends java.util.HashMap<K,V> {
 	public LinkedHashMap() { } 
 	public LinkedHashMap(int var0) { } 
 	public LinkedHashMap(int var0, float var1) { } 
 	public LinkedHashMap(int var0, float var1, boolean var2) { } 
-	public LinkedHashMap(java.util.Map var0) { } 
-	protected boolean removeEldestEntry(java.util.Map.Entry var0) { return false; }
+	public LinkedHashMap(java.util.Map<? extends K,? extends V> var0) { } 
+	protected boolean removeEldestEntry(java.util.Map.Entry<K,V> var0) { return false; }
 }
 

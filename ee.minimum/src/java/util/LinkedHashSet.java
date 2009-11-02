@@ -16,10 +16,10 @@
  */
 
 package java.util;
-public class LinkedHashSet extends java.util.HashSet implements java.io.Serializable, java.lang.Cloneable, java.util.Set {
+public class LinkedHashSet<E> extends java.util.HashSet<E> implements java.io.Serializable, java.lang.Cloneable, java.util.Set<E> {
 	public LinkedHashSet() { } 
 	public LinkedHashSet(int var0) { } 
 	public LinkedHashSet(int var0, float var1) { } 
-	public LinkedHashSet(java.util.Collection var0) { } 
+	public LinkedHashSet(java.util.Collection<? extends E> var0) { } 
 }
 

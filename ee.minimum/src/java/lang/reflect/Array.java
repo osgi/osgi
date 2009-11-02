@@ -27,8 +27,8 @@ public final class Array {
 	public static int getLength(java.lang.Object var0) { return 0; }
 	public static long getLong(java.lang.Object var0, int var1) { return 0l; }
 	public static short getShort(java.lang.Object var0, int var1) { return 0; }
-	public static java.lang.Object newInstance(java.lang.Class var0, int var1) { return null; }
-	public static java.lang.Object newInstance(java.lang.Class var0, int[] var1) { return null; }
+	public static java.lang.Object newInstance(java.lang.Class<?> var0, int var1) { return null; }
+	public static java.lang.Object newInstance(java.lang.Class<?> var0, int[] var1) { return null; }
 	public static void set(java.lang.Object var0, int var1, java.lang.Object var2) { }
 	public static void setBoolean(java.lang.Object var0, int var1, boolean var2) { }
 	public static void setByte(java.lang.Object var0, int var1, byte var2) { }

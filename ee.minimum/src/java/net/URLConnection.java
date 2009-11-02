@@ -45,13 +45,13 @@ public abstract class URLConnection {
 	public long getHeaderFieldDate(java.lang.String var0, long var1) { return 0l; }
 	public int getHeaderFieldInt(java.lang.String var0, int var1) { return 0; }
 	public java.lang.String getHeaderFieldKey(int var0) { return null; }
-	public java.util.Map getHeaderFields() { return null; }
+	public java.util.Map<java.lang.String,java.util.List<java.lang.String>> getHeaderFields() { return null; }
 	public long getIfModifiedSince() { return 0l; }
 	public java.io.InputStream getInputStream() throws java.io.IOException { return null; }
 	public long getLastModified() { return 0l; }
 	public java.io.OutputStream getOutputStream() throws java.io.IOException { return null; }
 	public java.security.Permission getPermission() throws java.io.IOException { return null; }
-	public java.util.Map getRequestProperties() { return null; }
+	public java.util.Map<java.lang.String,java.util.List<java.lang.String>> getRequestProperties() { return null; }
 	public java.lang.String getRequestProperty(java.lang.String var0) { return null; }
 	public java.net.URL getURL() { return null; }
 	public boolean getUseCaches() { return false; }

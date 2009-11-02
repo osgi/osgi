@@ -16,14 +16,13 @@
  */
 
 package java.lang;
-public final class Long extends java.lang.Number implements java.lang.Comparable {
+public final class Long extends java.lang.Number implements java.lang.Comparable<java.lang.Long> {
 	public final static long MAX_VALUE = 9223372036854775807l;
 	public final static long MIN_VALUE = -9223372036854775808l;
-	public final static java.lang.Class TYPE; static { TYPE = null; }
+	public final static java.lang.Class<java.lang.Long> TYPE; static { TYPE = null; }
 	public Long(long var0) { } 
 	public Long(java.lang.String var0) { } 
 	public int compareTo(java.lang.Long var0) { return 0; }
-	public int compareTo(java.lang.Object var0) { return 0; }
 	public static java.lang.Long decode(java.lang.String var0) { return null; }
 	public double doubleValue() { return 0.0d; }
 	public float floatValue() { return 0.0f; }

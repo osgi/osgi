@@ -23,7 +23,7 @@ public class URLClassLoader extends java.security.SecureClassLoader {
 	protected void addURL(java.net.URL var0) { }
 	protected java.lang.Package definePackage(java.lang.String var0, java.util.jar.Manifest var1, java.net.URL var2) { return null; }
 	public java.net.URL findResource(java.lang.String var0) { return null; }
-	public java.util.Enumeration findResources(java.lang.String var0) throws java.io.IOException { return null; }
+	public java.util.Enumeration<java.net.URL> findResources(java.lang.String var0) throws java.io.IOException { return null; }
 	public java.net.URL[] getURLs() { return null; }
 	public static java.net.URLClassLoader newInstance(java.net.URL[] var0) { return null; }
 	public static java.net.URLClassLoader newInstance(java.net.URL[] var0, java.lang.ClassLoader var1) { return null; }

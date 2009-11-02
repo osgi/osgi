@@ -16,19 +16,19 @@
  */
 
 package java.util;
-public class TreeSet extends java.util.AbstractSet implements java.io.Serializable, java.lang.Cloneable, java.util.SortedSet {
+public class TreeSet<E> extends java.util.AbstractSet<E> implements java.io.Serializable, java.lang.Cloneable, java.util.SortedSet<E> {
 	public TreeSet() { } 
-	public TreeSet(java.util.Collection var0) { } 
-	public TreeSet(java.util.Comparator var0) { } 
-	public TreeSet(java.util.SortedSet var0) { } 
+	public TreeSet(java.util.Collection<? extends E> var0) { } 
+	public TreeSet(java.util.Comparator<? super E> var0) { } 
+	public TreeSet(java.util.SortedSet<E> var0) { } 
 	public java.lang.Object clone() { return null; }
-	public java.util.Comparator comparator() { return null; }
-	public java.lang.Object first() { return null; }
-	public java.util.SortedSet headSet(java.lang.Object var0) { return null; }
-	public java.util.Iterator iterator() { return null; }
-	public java.lang.Object last() { return null; }
+	public java.util.Comparator<? super E> comparator() { return null; }
+	public E first() { return null; }
+	public java.util.SortedSet<E> headSet(E var0) { return null; }
+	public java.util.Iterator<E> iterator() { return null; }
+	public E last() { return null; }
 	public int size() { return 0; }
-	public java.util.SortedSet subSet(java.lang.Object var0, java.lang.Object var1) { return null; }
-	public java.util.SortedSet tailSet(java.lang.Object var0) { return null; }
+	public java.util.SortedSet<E> subSet(E var0, E var1) { return null; }
+	public java.util.SortedSet<E> tailSet(E var0) { return null; }
 }
 

@@ -16,8 +16,8 @@
  */
 
 package java.lang;
-public final class String implements java.io.Serializable, java.lang.CharSequence, java.lang.Comparable {
-	public final static java.util.Comparator CASE_INSENSITIVE_ORDER; static { CASE_INSENSITIVE_ORDER = null; }
+public final class String implements java.io.Serializable, java.lang.CharSequence, java.lang.Comparable<java.lang.String> {
+	public final static java.util.Comparator<java.lang.String> CASE_INSENSITIVE_ORDER; static { CASE_INSENSITIVE_ORDER = null; }
 	public String() { } 
 	public String(java.lang.String var0) { } 
 	public String(java.lang.StringBuffer var0) { } 
@@ -28,7 +28,6 @@ public final class String implements java.io.Serializable, java.lang.CharSequenc
 	public String(char[] var0) { } 
 	public String(char[] var0, int var1, int var2) { } 
 	public char charAt(int var0) { return '\0'; }
-	public int compareTo(java.lang.Object var0) { return 0; }
 	public int compareTo(java.lang.String var0) { return 0; }
 	public int compareToIgnoreCase(java.lang.String var0) { return 0; }
 	public java.lang.String concat(java.lang.String var0) { return null; }

@@ -16,13 +16,12 @@
  */
 
 package java.lang;
-public final class Short extends java.lang.Number implements java.lang.Comparable {
+public final class Short extends java.lang.Number implements java.lang.Comparable<java.lang.Short> {
 	public final static short MAX_VALUE = 32767;
 	public final static short MIN_VALUE = -32768;
-	public final static java.lang.Class TYPE; static { TYPE = null; }
+	public final static java.lang.Class<java.lang.Short> TYPE; static { TYPE = null; }
 	public Short(java.lang.String var0) { } 
 	public Short(short var0) { } 
-	public int compareTo(java.lang.Object var0) { return 0; }
 	public int compareTo(java.lang.Short var0) { return 0; }
 	public static java.lang.Short decode(java.lang.String var0) { return null; }
 	public double doubleValue() { return 0.0d; }

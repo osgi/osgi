@@ -18,7 +18,7 @@
 package java.security;
 public abstract class KeyStoreSpi {
 	public KeyStoreSpi() { } 
-	public abstract java.util.Enumeration engineAliases();
+	public abstract java.util.Enumeration<java.lang.String> engineAliases();
 	public abstract boolean engineContainsAlias(java.lang.String var0);
 	public abstract void engineDeleteEntry(java.lang.String var0) throws java.security.KeyStoreException;
 	public abstract java.security.cert.Certificate engineGetCertificate(java.lang.String var0);

@@ -16,21 +16,21 @@
  */
 
 package java.util;
-public interface Collection {
-	boolean add(java.lang.Object var0);
-	boolean addAll(java.util.Collection var0);
+public interface Collection<E> {
+	boolean add(E var0);
+	boolean addAll(java.util.Collection<? extends E> var0);
 	void clear();
 	boolean contains(java.lang.Object var0);
-	boolean containsAll(java.util.Collection var0);
+	boolean containsAll(java.util.Collection<?> var0);
 	boolean equals(java.lang.Object var0);
 	int hashCode();
 	boolean isEmpty();
-	java.util.Iterator iterator();
+	java.util.Iterator<E> iterator();
 	boolean remove(java.lang.Object var0);
-	boolean removeAll(java.util.Collection var0);
-	boolean retainAll(java.util.Collection var0);
+	boolean removeAll(java.util.Collection<?> var0);
+	boolean retainAll(java.util.Collection<?> var0);
 	int size();
 	java.lang.Object[] toArray();
-	java.lang.Object[] toArray(java.lang.Object[] var0);
+	<T> T[] toArray(T[] var0);
 }
 

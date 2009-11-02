@@ -16,19 +16,18 @@
  */
 
 package java.lang;
-public final class Float extends java.lang.Number implements java.lang.Comparable {
+public final class Float extends java.lang.Number implements java.lang.Comparable<java.lang.Float> {
 	public final static float MAX_VALUE = 3.4028235E38f;
 	public final static float MIN_VALUE = 1.4E-45f;
 	public final static float NEGATIVE_INFINITY = -1.0f / 0.0f;
 	public final static float NaN = 0.0f / 0.0f;
 	public final static float POSITIVE_INFINITY = 1.0f / 0.0f;
-	public final static java.lang.Class TYPE; static { TYPE = null; }
+	public final static java.lang.Class<java.lang.Float> TYPE; static { TYPE = null; }
 	public Float(double var0) { } 
 	public Float(float var0) { } 
 	public Float(java.lang.String var0) { } 
 	public static int compare(float var0, float var1) { return 0; }
 	public int compareTo(java.lang.Float var0) { return 0; }
-	public int compareTo(java.lang.Object var0) { return 0; }
 	public double doubleValue() { return 0.0d; }
 	public static int floatToIntBits(float var0) { return 0; }
 	public static int floatToRawIntBits(float var0) { return 0; }

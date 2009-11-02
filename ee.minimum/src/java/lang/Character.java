@@ -16,7 +16,7 @@
  */
 
 package java.lang;
-public final class Character implements java.io.Serializable, java.lang.Comparable {
+public final class Character implements java.io.Serializable, java.lang.Comparable<java.lang.Character> {
 	public static class Subset {
 		protected Subset(java.lang.String var0) { } 
 		public final boolean equals(java.lang.Object var0) { return false; }
@@ -164,13 +164,12 @@ public final class Character implements java.io.Serializable, java.lang.Comparab
 	public final static byte START_PUNCTUATION = 21;
 	public final static byte SURROGATE = 19;
 	public final static byte TITLECASE_LETTER = 3;
-	public final static java.lang.Class TYPE; static { TYPE = null; }
+	public final static java.lang.Class<java.lang.Character> TYPE; static { TYPE = null; }
 	public final static byte UNASSIGNED = 0;
 	public final static byte UPPERCASE_LETTER = 1;
 	public Character(char var0) { } 
 	public char charValue() { return '\0'; }
 	public int compareTo(java.lang.Character var0) { return 0; }
-	public int compareTo(java.lang.Object var0) { return 0; }
 	public static int digit(char var0, int var1) { return 0; }
 	public static char forDigit(int var0, int var1) { return '\0'; }
 	public static byte getDirectionality(char var0) { return 0; }

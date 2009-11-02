@@ -16,7 +16,7 @@
  */
 
 package java.util;
-public interface Set extends java.util.Collection {
+public interface Set<E> extends java.util.Collection<E> {
 	boolean equals(java.lang.Object var0);
 	int hashCode();
 }

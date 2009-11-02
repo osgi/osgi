@@ -22,7 +22,7 @@ public interface AclEntry extends java.lang.Cloneable {
 	java.lang.Object clone();
 	java.security.Principal getPrincipal();
 	boolean isNegative();
-	java.util.Enumeration permissions();
+	java.util.Enumeration<java.security.acl.Permission> permissions();
 	boolean removePermission(java.security.acl.Permission var0);
 	void setNegativePermissions();
 	boolean setPrincipal(java.security.Principal var0);

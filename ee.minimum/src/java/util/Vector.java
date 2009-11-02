@@ -16,31 +16,31 @@
  */
 
 package java.util;
-public class Vector extends java.util.AbstractList implements java.io.Serializable, java.lang.Cloneable, java.util.List, java.util.RandomAccess {
+public class Vector<E> extends java.util.AbstractList<E> implements java.io.Serializable, java.lang.Cloneable, java.util.List<E>, java.util.RandomAccess {
 	protected int capacityIncrement;
 	protected int elementCount;
 	protected java.lang.Object[] elementData;
 	public Vector() { } 
 	public Vector(int var0) { } 
 	public Vector(int var0, int var1) { } 
-	public Vector(java.util.Collection var0) { } 
-	public void addElement(java.lang.Object var0) { }
+	public Vector(java.util.Collection<? extends E> var0) { } 
+	public void addElement(E var0) { }
 	public int capacity() { return 0; }
 	public java.lang.Object clone() { return null; }
 	public void copyInto(java.lang.Object[] var0) { }
-	public java.lang.Object elementAt(int var0) { return null; }
-	public java.util.Enumeration elements() { return null; }
+	public E elementAt(int var0) { return null; }
+	public java.util.Enumeration<E> elements() { return null; }
 	public void ensureCapacity(int var0) { }
-	public java.lang.Object firstElement() { return null; }
-	public java.lang.Object get(int var0) { return null; }
+	public E firstElement() { return null; }
+	public E get(int var0) { return null; }
 	public int indexOf(java.lang.Object var0, int var1) { return 0; }
-	public void insertElementAt(java.lang.Object var0, int var1) { }
-	public java.lang.Object lastElement() { return null; }
+	public void insertElementAt(E var0, int var1) { }
+	public E lastElement() { return null; }
 	public int lastIndexOf(java.lang.Object var0, int var1) { return 0; }
 	public void removeAllElements() { }
 	public boolean removeElement(java.lang.Object var0) { return false; }
 	public void removeElementAt(int var0) { }
-	public void setElementAt(java.lang.Object var0, int var1) { }
+	public void setElementAt(E var0, int var1) { }
 	public void setSize(int var0) { }
 	public int size() { return 0; }
 	public void trimToSize() { }

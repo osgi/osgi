@@ -16,13 +16,12 @@
  */
 
 package java.util;
-public class Date implements java.io.Serializable, java.lang.Cloneable, java.lang.Comparable {
+public class Date implements java.io.Serializable, java.lang.Cloneable, java.lang.Comparable<java.util.Date> {
 	public Date() { } 
 	public Date(long var0) { } 
 	public boolean after(java.util.Date var0) { return false; }
 	public boolean before(java.util.Date var0) { return false; }
 	public java.lang.Object clone() { return null; }
-	public int compareTo(java.lang.Object var0) { return 0; }
 	public int compareTo(java.util.Date var0) { return 0; }
 	public long getTime() { return 0l; }
 	public void setTime(long var0) { }

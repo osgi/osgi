@@ -16,12 +16,12 @@
  */
 
 package java.util;
-public interface ListIterator extends java.util.Iterator {
-	void add(java.lang.Object var0);
+public interface ListIterator<E> extends java.util.Iterator<E> {
+	void add(E var0);
 	boolean hasPrevious();
 	int nextIndex();
-	java.lang.Object previous();
+	E previous();
 	int previousIndex();
-	void set(java.lang.Object var0);
+	void set(E var0);
 }
 

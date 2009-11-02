@@ -16,18 +16,18 @@
  */
 
 package java.util;
-public interface List extends java.util.Collection {
-	void add(int var0, java.lang.Object var1);
-	boolean addAll(int var0, java.util.Collection var1);
+public interface List<E> extends java.util.Collection<E> {
+	void add(int var0, E var1);
+	boolean addAll(int var0, java.util.Collection<? extends E> var1);
 	boolean equals(java.lang.Object var0);
-	java.lang.Object get(int var0);
+	E get(int var0);
 	int hashCode();
 	int indexOf(java.lang.Object var0);
 	int lastIndexOf(java.lang.Object var0);
-	java.util.ListIterator listIterator();
-	java.util.ListIterator listIterator(int var0);
-	java.lang.Object remove(int var0);
-	java.lang.Object set(int var0, java.lang.Object var1);
-	java.util.List subList(int var0, int var1);
+	java.util.ListIterator<E> listIterator();
+	java.util.ListIterator<E> listIterator(int var0);
+	E remove(int var0);
+	E set(int var0, E var1);
+	java.util.List<E> subList(int var0, int var1);
 }
 

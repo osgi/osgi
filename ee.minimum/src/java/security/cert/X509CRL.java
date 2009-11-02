@@ -23,7 +23,7 @@ public abstract class X509CRL extends java.security.cert.CRL implements java.sec
 	public javax.security.auth.x500.X500Principal getIssuerX500Principal() { return null; }
 	public abstract java.util.Date getNextUpdate();
 	public abstract java.security.cert.X509CRLEntry getRevokedCertificate(java.math.BigInteger var0);
-	public abstract java.util.Set getRevokedCertificates();
+	public abstract java.util.Set<? extends java.security.cert.X509CRLEntry> getRevokedCertificates();
 	public abstract java.lang.String getSigAlgName();
 	public abstract java.lang.String getSigAlgOID();
 	public abstract byte[] getSigAlgParams();

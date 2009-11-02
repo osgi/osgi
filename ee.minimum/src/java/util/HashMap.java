@@ -16,12 +16,12 @@
  */
 
 package java.util;
-public class HashMap extends java.util.AbstractMap implements java.io.Serializable, java.lang.Cloneable, java.util.Map {
+public class HashMap<K,V> extends java.util.AbstractMap<K,V> implements java.io.Serializable, java.lang.Cloneable, java.util.Map<K,V> {
 	public HashMap() { } 
 	public HashMap(int var0) { } 
 	public HashMap(int var0, float var1) { } 
-	public HashMap(java.util.Map var0) { } 
+	public HashMap(java.util.Map<? extends K,? extends V> var0) { } 
 	public java.lang.Object clone() { return null; }
-	public java.util.Set entrySet() { return null; }
+	public java.util.Set<java.util.Map.Entry<K,V>> entrySet() { return null; }
 }
 

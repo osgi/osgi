@@ -19,7 +19,7 @@ package java.lang;
 public final class Boolean implements java.io.Serializable {
 	public final static java.lang.Boolean FALSE; static { FALSE = null; }
 	public final static java.lang.Boolean TRUE; static { TRUE = null; }
-	public final static java.lang.Class TYPE; static { TYPE = null; }
+	public final static java.lang.Class<java.lang.Boolean> TYPE; static { TYPE = null; }
 	public Boolean(java.lang.String var0) { } 
 	public Boolean(boolean var0) { } 
 	public boolean booleanValue() { return false; }

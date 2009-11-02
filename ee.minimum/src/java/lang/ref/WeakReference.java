@@ -16,8 +16,8 @@
  */
 
 package java.lang.ref;
-public class WeakReference extends java.lang.ref.Reference {
-	public WeakReference(java.lang.Object var0) { } 
-	public WeakReference(java.lang.Object var0, java.lang.ref.ReferenceQueue var1) { } 
+public class WeakReference<T> extends java.lang.ref.Reference<T> {
+	public WeakReference(T var0) { } 
+	public WeakReference(T var0, java.lang.ref.ReferenceQueue<? super T> var1) { } 
 }
 

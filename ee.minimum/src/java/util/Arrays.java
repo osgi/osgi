@@ -17,7 +17,7 @@
 
 package java.util;
 public class Arrays {
-	public static java.util.List asList(java.lang.Object[] var0) { return null; }
+	public static <T> java.util.List<T> asList(T... var0) { return null; }
 	public static int binarySearch(byte[] var0, byte var1) { return 0; }
 	public static int binarySearch(char[] var0, char var1) { return 0; }
 	public static int binarySearch(double[] var0, double var1) { return 0; }
@@ -25,7 +25,7 @@ public class Arrays {
 	public static int binarySearch(int[] var0, int var1) { return 0; }
 	public static int binarySearch(long[] var0, long var1) { return 0; }
 	public static int binarySearch(java.lang.Object[] var0, java.lang.Object var1) { return 0; }
-	public static int binarySearch(java.lang.Object[] var0, java.lang.Object var1, java.util.Comparator var2) { return 0; }
+	public static <T> int binarySearch(T[] var0, T var1, java.util.Comparator<? super T> var2) { return 0; }
 	public static int binarySearch(short[] var0, short var1) { return 0; }
 	public static boolean equals(byte[] var0, byte[] var1) { return false; }
 	public static boolean equals(char[] var0, char[] var1) { return false; }
@@ -68,8 +68,8 @@ public class Arrays {
 	public static void sort(long[] var0, int var1, int var2) { }
 	public static void sort(java.lang.Object[] var0) { }
 	public static void sort(java.lang.Object[] var0, int var1, int var2) { }
-	public static void sort(java.lang.Object[] var0, int var1, int var2, java.util.Comparator var3) { }
-	public static void sort(java.lang.Object[] var0, java.util.Comparator var1) { }
+	public static <T> void sort(T[] var0, int var1, int var2, java.util.Comparator<? super T> var3) { }
+	public static <T> void sort(T[] var0, java.util.Comparator<? super T> var1) { }
 	public static void sort(short[] var0) { }
 	public static void sort(short[] var0, int var1, int var2) { }
 	private Arrays() { } /* generated constructor to prevent compiler adding default public constructor */

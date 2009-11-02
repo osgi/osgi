@@ -16,8 +16,8 @@
  */
 
 package java.util;
-public interface Enumeration {
+public interface Enumeration<E> {
 	boolean hasMoreElements();
-	java.lang.Object nextElement();
+	E nextElement();
 }
 

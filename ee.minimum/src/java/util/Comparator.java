@@ -16,8 +16,8 @@
  */
 
 package java.util;
-public interface Comparator {
-	int compare(java.lang.Object var0, java.lang.Object var1);
+public interface Comparator<T> {
+	int compare(T var0, T var1);
 	boolean equals(java.lang.Object var0);
 }
 

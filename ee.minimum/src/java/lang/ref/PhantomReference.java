@@ -16,7 +16,7 @@
  */
 
 package java.lang.ref;
-public class PhantomReference extends java.lang.ref.Reference {
-	public PhantomReference(java.lang.Object var0, java.lang.ref.ReferenceQueue var1) { } 
+public class PhantomReference<T> extends java.lang.ref.Reference<T> {
+	public PhantomReference(T var0, java.lang.ref.ReferenceQueue<? super T> var1) { } 
 }
 

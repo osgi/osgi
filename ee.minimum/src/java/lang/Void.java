@@ -17,7 +17,7 @@
 
 package java.lang;
 public final class Void {
-	public final static java.lang.Class TYPE; static { TYPE = null; }
+	public final static java.lang.Class<java.lang.Void> TYPE; static { TYPE = null; }
 	private Void() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

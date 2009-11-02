@@ -16,7 +16,7 @@
  */
 
 package java.text;
-public abstract class Collator implements java.lang.Cloneable, java.util.Comparator {
+public abstract class Collator implements java.lang.Cloneable, java.util.Comparator<java.lang.Object> {
 	public final static int CANONICAL_DECOMPOSITION = 1;
 	public final static int FULL_DECOMPOSITION = 2;
 	public final static int IDENTICAL = 3;

@@ -16,13 +16,13 @@
  */
 
 package java.lang.reflect;
-public final class Constructor extends java.lang.reflect.AccessibleObject implements java.lang.reflect.Member {
-	public java.lang.Class getDeclaringClass() { return null; }
-	public java.lang.Class[] getExceptionTypes() { return null; }
+public final class Constructor<T> extends java.lang.reflect.AccessibleObject implements java.lang.reflect.Member {
+	public java.lang.Class<T> getDeclaringClass() { return null; }
+	public java.lang.Class<?>[] getExceptionTypes() { return null; }
 	public int getModifiers() { return 0; }
 	public java.lang.String getName() { return null; }
-	public java.lang.Class[] getParameterTypes() { return null; }
-	public java.lang.Object newInstance(java.lang.Object[] var0) throws java.lang.IllegalAccessException, java.lang.InstantiationException, java.lang.reflect.InvocationTargetException { return null; }
+	public java.lang.Class<?>[] getParameterTypes() { return null; }
+	public T newInstance(java.lang.Object... var0) throws java.lang.IllegalAccessException, java.lang.InstantiationException, java.lang.reflect.InvocationTargetException { return null; }
 	private Constructor() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

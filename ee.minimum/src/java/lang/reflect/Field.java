@@ -21,7 +21,7 @@ public final class Field extends java.lang.reflect.AccessibleObject implements j
 	public boolean getBoolean(java.lang.Object var0) throws java.lang.IllegalAccessException { return false; }
 	public byte getByte(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0; }
 	public char getChar(java.lang.Object var0) throws java.lang.IllegalAccessException { return '\0'; }
-	public java.lang.Class getDeclaringClass() { return null; }
+	public java.lang.Class<?> getDeclaringClass() { return null; }
 	public double getDouble(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0.0d; }
 	public float getFloat(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0.0f; }
 	public int getInt(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0; }
@@ -29,7 +29,7 @@ public final class Field extends java.lang.reflect.AccessibleObject implements j
 	public int getModifiers() { return 0; }
 	public java.lang.String getName() { return null; }
 	public short getShort(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0; }
-	public java.lang.Class getType() { return null; }
+	public java.lang.Class<?> getType() { return null; }
 	public void set(java.lang.Object var0, java.lang.Object var1) throws java.lang.IllegalAccessException { }
 	public void setBoolean(java.lang.Object var0, boolean var1) throws java.lang.IllegalAccessException { }
 	public void setByte(java.lang.Object var0, byte var1) throws java.lang.IllegalAccessException { }

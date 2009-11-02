@@ -16,12 +16,12 @@
  */
 
 package java.util;
-public class Stack extends java.util.Vector {
+public class Stack<E> extends java.util.Vector<E> {
 	public Stack() { } 
 	public boolean empty() { return false; }
-	public java.lang.Object peek() { return null; }
-	public java.lang.Object pop() { return null; }
-	public java.lang.Object push(java.lang.Object var0) { return null; }
+	public E peek() { return null; }
+	public E pop() { return null; }
+	public E push(E var0) { return null; }
 	public int search(java.lang.Object var0) { return 0; }
 }
 

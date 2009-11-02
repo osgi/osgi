@@ -16,12 +16,12 @@
  */
 
 package java.util;
-public interface SortedMap extends java.util.Map {
-	java.util.Comparator comparator();
-	java.lang.Object firstKey();
-	java.util.SortedMap headMap(java.lang.Object var0);
-	java.lang.Object lastKey();
-	java.util.SortedMap subMap(java.lang.Object var0, java.lang.Object var1);
-	java.util.SortedMap tailMap(java.lang.Object var0);
+public interface SortedMap<K,V> extends java.util.Map<K,V> {
+	java.util.Comparator<? super K> comparator();
+	K firstKey();
+	java.util.SortedMap<K,V> headMap(K var0);
+	K lastKey();
+	java.util.SortedMap<K,V> subMap(K var0, K var1);
+	java.util.SortedMap<K,V> tailMap(K var0);
 }
 

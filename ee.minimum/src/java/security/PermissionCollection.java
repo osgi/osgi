@@ -19,7 +19,7 @@ package java.security;
 public abstract class PermissionCollection implements java.io.Serializable {
 	public PermissionCollection() { } 
 	public abstract void add(java.security.Permission var0);
-	public abstract java.util.Enumeration elements();
+	public abstract java.util.Enumeration<java.security.Permission> elements();
 	public abstract boolean implies(java.security.Permission var0);
 	public boolean isReadOnly() { return false; }
 	public void setReadOnly() { }

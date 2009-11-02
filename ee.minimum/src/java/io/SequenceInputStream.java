@@ -18,7 +18,7 @@
 package java.io;
 public class SequenceInputStream extends java.io.InputStream {
 	public SequenceInputStream(java.io.InputStream var0, java.io.InputStream var1) { } 
-	public SequenceInputStream(java.util.Enumeration var0) { } 
+	public SequenceInputStream(java.util.Enumeration<? extends java.io.InputStream> var0) { } 
 	public int read() throws java.io.IOException { return 0; }
 }
 

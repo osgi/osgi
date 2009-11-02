@@ -16,7 +16,7 @@
  */
 
 package java.security;
-public interface PrivilegedExceptionAction {
-	java.lang.Object run() throws java.lang.Exception;
+public interface PrivilegedExceptionAction<T> {
+	T run() throws java.lang.Exception;
 }
 

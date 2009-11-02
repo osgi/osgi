@@ -22,7 +22,7 @@ public abstract class ResourceBundle {
 	public final static java.util.ResourceBundle getBundle(java.lang.String var0) { return null; }
 	public final static java.util.ResourceBundle getBundle(java.lang.String var0, java.util.Locale var1) { return null; }
 	public static java.util.ResourceBundle getBundle(java.lang.String var0, java.util.Locale var1, java.lang.ClassLoader var2) { return null; }
-	public abstract java.util.Enumeration getKeys();
+	public abstract java.util.Enumeration<java.lang.String> getKeys();
 	public java.util.Locale getLocale() { return null; }
 	public final java.lang.Object getObject(java.lang.String var0) { return null; }
 	public final java.lang.String getString(java.lang.String var0) { return null; }

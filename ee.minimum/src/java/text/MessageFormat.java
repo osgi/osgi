@@ -25,7 +25,7 @@ public class MessageFormat extends java.text.Format {
 	public MessageFormat(java.lang.String var0, java.util.Locale var1) { } 
 	public void applyPattern(java.lang.String var0) { }
 	public final java.lang.StringBuffer format(java.lang.Object var0, java.lang.StringBuffer var1, java.text.FieldPosition var2) { return null; }
-	public static java.lang.String format(java.lang.String var0, java.lang.Object[] var1) { return null; }
+	public static java.lang.String format(java.lang.String var0, java.lang.Object... var1) { return null; }
 	public final java.lang.StringBuffer format(java.lang.Object[] var0, java.lang.StringBuffer var1, java.text.FieldPosition var2) { return null; }
 	public java.text.Format[] getFormats() { return null; }
 	public java.text.Format[] getFormatsByArgumentIndex() { return null; }

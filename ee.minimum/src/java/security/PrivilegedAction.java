@@ -16,7 +16,7 @@
  */
 
 package java.security;
-public interface PrivilegedAction {
-	java.lang.Object run();
+public interface PrivilegedAction<T> {
+	T run();
 }
 

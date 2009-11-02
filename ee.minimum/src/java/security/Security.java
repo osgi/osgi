@@ -18,12 +18,12 @@
 package java.security;
 public final class Security {
 	public static int addProvider(java.security.Provider var0) { return 0; }
-	public static java.util.Set getAlgorithms(java.lang.String var0) { return null; }
+	public static java.util.Set<java.lang.String> getAlgorithms(java.lang.String var0) { return null; }
 	public static java.lang.String getProperty(java.lang.String var0) { return null; }
 	public static java.security.Provider getProvider(java.lang.String var0) { return null; }
 	public static java.security.Provider[] getProviders() { return null; }
 	public static java.security.Provider[] getProviders(java.lang.String var0) { return null; }
-	public static java.security.Provider[] getProviders(java.util.Map var0) { return null; }
+	public static java.security.Provider[] getProviders(java.util.Map<java.lang.String,java.lang.String> var0) { return null; }
 	public static int insertProviderAt(java.security.Provider var0, int var1) { return 0; }
 	public static void removeProvider(java.lang.String var0) { }
 	public static void setProperty(java.lang.String var0, java.lang.String var1) { }

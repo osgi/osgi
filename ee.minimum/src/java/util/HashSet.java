@@ -16,13 +16,13 @@
  */
 
 package java.util;
-public class HashSet extends java.util.AbstractSet implements java.io.Serializable, java.lang.Cloneable, java.util.Set {
+public class HashSet<E> extends java.util.AbstractSet<E> implements java.io.Serializable, java.lang.Cloneable, java.util.Set<E> {
 	public HashSet() { } 
 	public HashSet(int var0) { } 
 	public HashSet(int var0, float var1) { } 
-	public HashSet(java.util.Collection var0) { } 
+	public HashSet(java.util.Collection<? extends E> var0) { } 
 	public java.lang.Object clone() { return null; }
-	public java.util.Iterator iterator() { return null; }
+	public java.util.Iterator<E> iterator() { return null; }
 	public int size() { return 0; }
 }
 

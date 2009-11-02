@@ -58,9 +58,9 @@ public class ObjectInputStream extends java.io.InputStream implements java.io.Ob
 	public int readUnsignedByte() throws java.io.IOException { return 0; }
 	public int readUnsignedShort() throws java.io.IOException { return 0; }
 	public void registerValidation(java.io.ObjectInputValidation var0, int var1) throws java.io.InvalidObjectException, java.io.NotActiveException { }
-	protected java.lang.Class resolveClass(java.io.ObjectStreamClass var0) throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
+	protected java.lang.Class<?> resolveClass(java.io.ObjectStreamClass var0) throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
 	protected java.lang.Object resolveObject(java.lang.Object var0) throws java.io.IOException { return null; }
-	protected java.lang.Class resolveProxyClass(java.lang.String[] var0) throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
+	protected java.lang.Class<?> resolveProxyClass(java.lang.String[] var0) throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
 	public int skipBytes(int var0) throws java.io.IOException { return 0; }
 }
 

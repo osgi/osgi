@@ -16,7 +16,7 @@
  */
 
 package java.math;
-public class BigDecimal extends java.lang.Number implements java.lang.Comparable {
+public class BigDecimal extends java.lang.Number implements java.lang.Comparable<java.math.BigDecimal> {
 	public final static int ROUND_CEILING = 2;
 	public final static int ROUND_DOWN = 1;
 	public final static int ROUND_FLOOR = 3;
@@ -31,7 +31,6 @@ public class BigDecimal extends java.lang.Number implements java.lang.Comparable
 	public BigDecimal(java.math.BigInteger var0, int var1) { } 
 	public java.math.BigDecimal abs() { return null; }
 	public java.math.BigDecimal add(java.math.BigDecimal var0) { return null; }
-	public int compareTo(java.lang.Object var0) { return 0; }
 	public int compareTo(java.math.BigDecimal var0) { return 0; }
 	public java.math.BigDecimal divide(java.math.BigDecimal var0, int var1) { return null; }
 	public java.math.BigDecimal divide(java.math.BigDecimal var0, int var1, int var2) { return null; }

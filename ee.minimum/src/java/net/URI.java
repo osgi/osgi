@@ -16,7 +16,7 @@
  */
 
 package java.net;
-public final class URI implements java.io.Serializable, java.lang.Comparable {
+public final class URI implements java.io.Serializable, java.lang.Comparable<Object> {
 	public URI(java.lang.String var0) throws java.net.URISyntaxException { } 
 	public URI(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws java.net.URISyntaxException { } 
 	public URI(java.lang.String var0, java.lang.String var1, java.lang.String var2, int var3, java.lang.String var4, java.lang.String var5, java.lang.String var6) throws java.net.URISyntaxException { } 

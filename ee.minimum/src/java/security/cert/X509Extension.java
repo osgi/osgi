@@ -17,9 +17,9 @@
 
 package java.security.cert;
 public interface X509Extension {
-	java.util.Set getCriticalExtensionOIDs();
+	java.util.Set<java.lang.String> getCriticalExtensionOIDs();
 	byte[] getExtensionValue(java.lang.String var0);
-	java.util.Set getNonCriticalExtensionOIDs();
+	java.util.Set<java.lang.String> getNonCriticalExtensionOIDs();
 	boolean hasUnsupportedCriticalExtension();
 }
 

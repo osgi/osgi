@@ -16,18 +16,17 @@
  */
 
 package java.lang;
-public final class Double extends java.lang.Number implements java.lang.Comparable {
+public final class Double extends java.lang.Number implements java.lang.Comparable<java.lang.Double> {
 	public final static double MAX_VALUE = 1.7976931348623157E308d;
 	public final static double MIN_VALUE; static { MIN_VALUE = 0.0d; }
 	public final static double NEGATIVE_INFINITY = -1.0d / 0.0d;
 	public final static double NaN = 0.0d / 0.0d;
 	public final static double POSITIVE_INFINITY = 1.0d / 0.0d;
-	public final static java.lang.Class TYPE; static { TYPE = null; }
+	public final static java.lang.Class<java.lang.Double> TYPE; static { TYPE = null; }
 	public Double(double var0) { } 
 	public Double(java.lang.String var0) { } 
 	public static int compare(double var0, double var1) { return 0; }
 	public int compareTo(java.lang.Double var0) { return 0; }
-	public int compareTo(java.lang.Object var0) { return 0; }
 	public static long doubleToLongBits(double var0) { return 0l; }
 	public static long doubleToRawLongBits(double var0) { return 0l; }
 	public double doubleValue() { return 0.0d; }
