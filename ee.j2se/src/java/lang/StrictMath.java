@@ -18,30 +18,30 @@ package java.lang;
 public final class StrictMath {
 	public final static double E = 2.718281828459045d;
 	public final static double PI = 3.141592653589793d;
-	public static native double IEEEremainder(double var0, double var1);
+	public static double IEEEremainder(double var0, double var1) { return 0.0d; }
 	public static double abs(double var0) { return 0.0d; }
 	public static float abs(float var0) { return 0.0f; }
 	public static int abs(int var0) { return 0; }
 	public static long abs(long var0) { return 0l; }
-	public static native double acos(double var0);
-	public static native double asin(double var0);
-	public static native double atan(double var0);
-	public static native double atan2(double var0, double var1);
-	public static native double cbrt(double var0);
-	public static native double ceil(double var0);
+	public static double acos(double var0) { return 0.0d; }
+	public static double asin(double var0) { return 0.0d; }
+	public static double atan(double var0) { return 0.0d; }
+	public static double atan2(double var0, double var1) { return 0.0d; }
+	public static double cbrt(double var0) { return 0.0d; }
+	public static double ceil(double var0) { return 0.0d; }
 	public static double copySign(double var0, double var1) { return 0.0d; }
 	public static float copySign(float var0, float var1) { return 0.0f; }
-	public static native double cos(double var0);
-	public static native double cosh(double var0);
-	public static native double exp(double var0);
-	public static native double expm1(double var0);
-	public static native double floor(double var0);
+	public static double cos(double var0) { return 0.0d; }
+	public static double cosh(double var0) { return 0.0d; }
+	public static double exp(double var0) { return 0.0d; }
+	public static double expm1(double var0) { return 0.0d; }
+	public static double floor(double var0) { return 0.0d; }
 	public static int getExponent(double var0) { return 0; }
 	public static int getExponent(float var0) { return 0; }
-	public static native double hypot(double var0, double var1);
-	public static native double log(double var0);
-	public static native double log10(double var0);
-	public static native double log1p(double var0);
+	public static double hypot(double var0, double var1) { return 0.0d; }
+	public static double log(double var0) { return 0.0d; }
+	public static double log10(double var0) { return 0.0d; }
+	public static double log1p(double var0) { return 0.0d; }
 	public static double max(double var0, double var1) { return 0.0d; }
 	public static float max(float var0, float var1) { return 0.0f; }
 	public static int max(int var0, int var1) { return 0; }
@@ -54,7 +54,7 @@ public final class StrictMath {
 	public static float nextAfter(float var0, double var1) { return 0.0f; }
 	public static double nextUp(double var0) { return 0.0d; }
 	public static float nextUp(float var0) { return 0.0f; }
-	public static native double pow(double var0, double var1);
+	public static double pow(double var0, double var1) { return 0.0d; }
 	public static double random() { return 0.0d; }
 	public static double rint(double var0) { return 0.0d; }
 	public static long round(double var0) { return 0l; }
@@ -63,11 +63,11 @@ public final class StrictMath {
 	public static float scalb(float var0, int var1) { return 0.0f; }
 	public static double signum(double var0) { return 0.0d; }
 	public static float signum(float var0) { return 0.0f; }
-	public static native double sin(double var0);
-	public static native double sinh(double var0);
-	public static native double sqrt(double var0);
-	public static native double tan(double var0);
-	public static native double tanh(double var0);
+	public static double sin(double var0) { return 0.0d; }
+	public static double sinh(double var0) { return 0.0d; }
+	public static double sqrt(double var0) { return 0.0d; }
+	public static double tan(double var0) { return 0.0d; }
+	public static double tanh(double var0) { return 0.0d; }
 	public static double toDegrees(double var0) { return 0.0d; }
 	public static double toRadians(double var0) { return 0.0d; }
 	public static double ulp(double var0) { return 0.0d; }

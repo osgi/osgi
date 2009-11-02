@@ -19,10 +19,10 @@ public final class System {
 	public final static java.io.PrintStream err; static { err = null; }
 	public final static java.io.InputStream in; static { in = null; }
 	public final static java.io.PrintStream out; static { out = null; }
-	public static native void arraycopy(java.lang.Object var0, int var1, java.lang.Object var2, int var3, int var4);
+	public static void arraycopy(java.lang.Object var0, int var1, java.lang.Object var2, int var3, int var4) { }
 	public static java.lang.String clearProperty(java.lang.String var0) { return null; }
 	public static java.io.Console console() { return null; }
-	public static native long currentTimeMillis();
+	public static long currentTimeMillis() { return 0l; }
 	public static void exit(int var0) { }
 	public static void gc() { }
 	public static java.util.Properties getProperties() { return null; }
@@ -31,12 +31,12 @@ public final class System {
 	public static java.lang.SecurityManager getSecurityManager() { return null; }
 	public static java.util.Map<java.lang.String,java.lang.String> getenv() { return null; }
 	public static java.lang.String getenv(java.lang.String var0) { return null; }
-	public static native int identityHashCode(java.lang.Object var0);
+	public static int identityHashCode(java.lang.Object var0) { return 0; }
 	public static java.nio.channels.Channel inheritedChannel() throws java.io.IOException { return null; }
 	public static void load(java.lang.String var0) { }
 	public static void loadLibrary(java.lang.String var0) { }
-	public static native java.lang.String mapLibraryName(java.lang.String var0);
-	public static native long nanoTime();
+	public static java.lang.String mapLibraryName(java.lang.String var0) { return null; }
+	public static long nanoTime() { return 0l; }
 	public static void runFinalization() { }
 	/** @deprecated */
 	@java.lang.Deprecated

@@ -42,8 +42,8 @@ public class Thread implements java.lang.Runnable {
 	public final void checkAccess() { }
 	/** @deprecated */
 	@java.lang.Deprecated
-	public native int countStackFrames();
-	public static native java.lang.Thread currentThread();
+	public int countStackFrames() { return 0; }
+	public static java.lang.Thread currentThread() { return null; }
 	/** @deprecated */
 	@java.lang.Deprecated
 	public void destroy() { }
@@ -59,10 +59,10 @@ public class Thread implements java.lang.Runnable {
 	public java.lang.Thread.State getState() { return null; }
 	public final java.lang.ThreadGroup getThreadGroup() { return null; }
 	public java.lang.Thread.UncaughtExceptionHandler getUncaughtExceptionHandler() { return null; }
-	public static native boolean holdsLock(java.lang.Object var0);
+	public static boolean holdsLock(java.lang.Object var0) { return false; }
 	public void interrupt() { }
 	public static boolean interrupted() { return false; }
-	public final native boolean isAlive();
+	public final boolean isAlive() { return false; }
 	public final boolean isDaemon() { return false; }
 	public boolean isInterrupted() { return false; }
 	public final void join() throws java.lang.InterruptedException { }
@@ -78,7 +78,7 @@ public class Thread implements java.lang.Runnable {
 	public final void setName(java.lang.String var0) { }
 	public final void setPriority(int var0) { }
 	public void setUncaughtExceptionHandler(java.lang.Thread.UncaughtExceptionHandler var0) { }
-	public static native void sleep(long var0) throws java.lang.InterruptedException;
+	public static void sleep(long var0) throws java.lang.InterruptedException { }
 	public static void sleep(long var0, int var1) throws java.lang.InterruptedException { }
 	public void start() { }
 	/** @deprecated */
@@ -90,6 +90,6 @@ public class Thread implements java.lang.Runnable {
 	/** @deprecated */
 	@java.lang.Deprecated
 	public final void suspend() { }
-	public static native void yield();
+	public static void yield() { }
 }
 

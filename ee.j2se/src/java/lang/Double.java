@@ -31,7 +31,7 @@ public final class Double extends java.lang.Number implements java.lang.Comparab
 	public static int compare(double var0, double var1) { return 0; }
 	public int compareTo(java.lang.Double var0) { return 0; }
 	public static long doubleToLongBits(double var0) { return 0l; }
-	public static native long doubleToRawLongBits(double var0);
+	public static long doubleToRawLongBits(double var0) { return 0l; }
 	public double doubleValue() { return 0.0d; }
 	public float floatValue() { return 0.0f; }
 	public int intValue() { return 0; }
@@ -39,7 +39,7 @@ public final class Double extends java.lang.Number implements java.lang.Comparab
 	public static boolean isInfinite(double var0) { return false; }
 	public boolean isNaN() { return false; }
 	public static boolean isNaN(double var0) { return false; }
-	public static native double longBitsToDouble(long var0);
+	public static double longBitsToDouble(long var0) { return 0.0d; }
 	public long longValue() { return 0l; }
 	public static double parseDouble(java.lang.String var0) { return 0.0d; }
 	public static java.lang.String toHexString(double var0) { return null; }

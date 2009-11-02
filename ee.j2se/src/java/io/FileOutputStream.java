@@ -24,6 +24,6 @@ public class FileOutputStream extends java.io.OutputStream {
 	protected void finalize() throws java.io.IOException { }
 	public java.nio.channels.FileChannel getChannel() { return null; }
 	public final java.io.FileDescriptor getFD() throws java.io.IOException { return null; }
-	public native void write(int var0) throws java.io.IOException;
+	public void write(int var0) throws java.io.IOException { }
 }
 

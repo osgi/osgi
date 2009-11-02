@@ -33,9 +33,9 @@ public final class Float extends java.lang.Number implements java.lang.Comparabl
 	public int compareTo(java.lang.Float var0) { return 0; }
 	public double doubleValue() { return 0.0d; }
 	public static int floatToIntBits(float var0) { return 0; }
-	public static native int floatToRawIntBits(float var0);
+	public static int floatToRawIntBits(float var0) { return 0; }
 	public float floatValue() { return 0.0f; }
-	public static native float intBitsToFloat(int var0);
+	public static float intBitsToFloat(int var0) { return 0.0f; }
 	public int intValue() { return 0; }
 	public boolean isInfinite() { return false; }
 	public static boolean isInfinite(float var0) { return false; }

@@ -17,10 +17,10 @@
 package java.security;
 public final class AccessController {
 	public static void checkPermission(java.security.Permission var0) { }
-	public static native <T> T doPrivileged(java.security.PrivilegedAction<T> var0);
-	public static native <T> T doPrivileged(java.security.PrivilegedAction<T> var0, java.security.AccessControlContext var1);
-	public static native <T> T doPrivileged(java.security.PrivilegedExceptionAction<T> var0) throws java.security.PrivilegedActionException;
-	public static native <T> T doPrivileged(java.security.PrivilegedExceptionAction<T> var0, java.security.AccessControlContext var1) throws java.security.PrivilegedActionException;
+	public static <T> T doPrivileged(java.security.PrivilegedAction<T> var0) { return null; }
+	public static <T> T doPrivileged(java.security.PrivilegedAction<T> var0, java.security.AccessControlContext var1) { return null; }
+	public static <T> T doPrivileged(java.security.PrivilegedExceptionAction<T> var0) throws java.security.PrivilegedActionException { return null; }
+	public static <T> T doPrivileged(java.security.PrivilegedExceptionAction<T> var0, java.security.AccessControlContext var1) throws java.security.PrivilegedActionException { return null; }
 	public static <T> T doPrivilegedWithCombiner(java.security.PrivilegedAction<T> var0) { return null; }
 	public static <T> T doPrivilegedWithCombiner(java.security.PrivilegedExceptionAction<T> var0) throws java.security.PrivilegedActionException { return null; }
 	public static java.security.AccessControlContext getContext() { return null; }

@@ -16,11 +16,11 @@
 
 package java.lang;
 public final class Compiler {
-	public static native java.lang.Object command(java.lang.Object var0);
-	public static native boolean compileClass(java.lang.Class<?> var0);
-	public static native boolean compileClasses(java.lang.String var0);
-	public static native void disable();
-	public static native void enable();
+	public static java.lang.Object command(java.lang.Object var0) { return null; }
+	public static boolean compileClass(java.lang.Class<?> var0) { return false; }
+	public static boolean compileClasses(java.lang.String var0) { return false; }
+	public static void disable() { }
+	public static void enable() { }
 	private Compiler() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

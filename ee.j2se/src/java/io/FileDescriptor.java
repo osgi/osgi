@@ -20,7 +20,7 @@ public final class FileDescriptor {
 	public final static java.io.FileDescriptor in; static { in = null; }
 	public final static java.io.FileDescriptor out; static { out = null; }
 	public FileDescriptor() { } 
-	public native void sync() throws java.io.SyncFailedException;
+	public void sync() throws java.io.SyncFailedException { }
 	public boolean valid() { return false; }
 }
 

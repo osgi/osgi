@@ -21,9 +21,9 @@ public class RandomAccessFile implements java.io.Closeable, java.io.DataInput, j
 	public void close() throws java.io.IOException { }
 	public final java.nio.channels.FileChannel getChannel() { return null; }
 	public final java.io.FileDescriptor getFD() throws java.io.IOException { return null; }
-	public native long getFilePointer() throws java.io.IOException;
-	public native long length() throws java.io.IOException;
-	public native int read() throws java.io.IOException;
+	public long getFilePointer() throws java.io.IOException { return 0l; }
+	public long length() throws java.io.IOException { return 0l; }
+	public int read() throws java.io.IOException { return 0; }
 	public int read(byte[] var0) throws java.io.IOException { return 0; }
 	public int read(byte[] var0, int var1, int var2) throws java.io.IOException { return 0; }
 	public final boolean readBoolean() throws java.io.IOException { return false; }
@@ -40,10 +40,10 @@ public class RandomAccessFile implements java.io.Closeable, java.io.DataInput, j
 	public final java.lang.String readUTF() throws java.io.IOException { return null; }
 	public final int readUnsignedByte() throws java.io.IOException { return 0; }
 	public final int readUnsignedShort() throws java.io.IOException { return 0; }
-	public native void seek(long var0) throws java.io.IOException;
-	public native void setLength(long var0) throws java.io.IOException;
+	public void seek(long var0) throws java.io.IOException { }
+	public void setLength(long var0) throws java.io.IOException { }
 	public int skipBytes(int var0) throws java.io.IOException { return 0; }
-	public native void write(int var0) throws java.io.IOException;
+	public void write(int var0) throws java.io.IOException { }
 	public void write(byte[] var0) throws java.io.IOException { }
 	public void write(byte[] var0, int var1, int var2) throws java.io.IOException { }
 	public final void writeBoolean(boolean var0) throws java.io.IOException { }

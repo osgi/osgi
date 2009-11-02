@@ -26,7 +26,7 @@ public final class Class<T> implements java.io.Serializable, java.lang.reflect.A
 	public java.lang.String getCanonicalName() { return null; }
 	public java.lang.ClassLoader getClassLoader() { return null; }
 	public java.lang.Class<?>[] getClasses() { return null; }
-	public native java.lang.Class<?> getComponentType();
+	public java.lang.Class<?> getComponentType() { return null; }
 	public java.lang.reflect.Constructor<T> getConstructor(java.lang.Class<?>... var0) throws java.lang.NoSuchMethodException { return null; }
 	public java.lang.reflect.Constructor<?>[] getConstructors() { return null; }
 	public java.lang.annotation.Annotation[] getDeclaredAnnotations() { return null; }
@@ -37,7 +37,7 @@ public final class Class<T> implements java.io.Serializable, java.lang.reflect.A
 	public java.lang.reflect.Field[] getDeclaredFields() { return null; }
 	public java.lang.reflect.Method getDeclaredMethod(java.lang.String var0, java.lang.Class<?>... var1) throws java.lang.NoSuchMethodException { return null; }
 	public java.lang.reflect.Method[] getDeclaredMethods() { return null; }
-	public native java.lang.Class<?> getDeclaringClass();
+	public java.lang.Class<?> getDeclaringClass() { return null; }
 	public java.lang.Class<?> getEnclosingClass() { return null; }
 	public java.lang.reflect.Constructor<?> getEnclosingConstructor() { return null; }
 	public java.lang.reflect.Method getEnclosingMethod() { return null; }
@@ -46,30 +46,30 @@ public final class Class<T> implements java.io.Serializable, java.lang.reflect.A
 	public java.lang.reflect.Field[] getFields() { return null; }
 	public java.lang.reflect.Type[] getGenericInterfaces() { return null; }
 	public java.lang.reflect.Type getGenericSuperclass() { return null; }
-	public native java.lang.Class<?>[] getInterfaces();
+	public java.lang.Class<?>[] getInterfaces() { return null; }
 	public java.lang.reflect.Method getMethod(java.lang.String var0, java.lang.Class<?>... var1) throws java.lang.NoSuchMethodException { return null; }
 	public java.lang.reflect.Method[] getMethods() { return null; }
-	public native int getModifiers();
+	public int getModifiers() { return 0; }
 	public java.lang.String getName() { return null; }
 	public java.lang.Package getPackage() { return null; }
 	public java.security.ProtectionDomain getProtectionDomain() { return null; }
 	public java.net.URL getResource(java.lang.String var0) { return null; }
 	public java.io.InputStream getResourceAsStream(java.lang.String var0) { return null; }
-	public native java.lang.Object[] getSigners();
+	public java.lang.Object[] getSigners() { return null; }
 	public java.lang.String getSimpleName() { return null; }
-	public native java.lang.Class<? super T> getSuperclass();
+	public java.lang.Class<? super T> getSuperclass() { return null; }
 	public java.lang.reflect.TypeVariable<java.lang.Class<T>>[] getTypeParameters() { return null; }
 	public boolean isAnnotation() { return false; }
 	public boolean isAnnotationPresent(java.lang.Class<? extends java.lang.annotation.Annotation> var0) { return false; }
 	public boolean isAnonymousClass() { return false; }
-	public native boolean isArray();
-	public native boolean isAssignableFrom(java.lang.Class<?> var0);
+	public boolean isArray() { return false; }
+	public boolean isAssignableFrom(java.lang.Class<?> var0) { return false; }
 	public boolean isEnum() { return false; }
-	public native boolean isInstance(java.lang.Object var0);
-	public native boolean isInterface();
+	public boolean isInstance(java.lang.Object var0) { return false; }
+	public boolean isInterface() { return false; }
 	public boolean isLocalClass() { return false; }
 	public boolean isMemberClass() { return false; }
-	public native boolean isPrimitive();
+	public boolean isPrimitive() { return false; }
 	public boolean isSynthetic() { return false; }
 	public T newInstance() throws java.lang.IllegalAccessException, java.lang.InstantiationException { return null; }
 	private Class() { } /* generated constructor to prevent compiler adding default public constructor */
