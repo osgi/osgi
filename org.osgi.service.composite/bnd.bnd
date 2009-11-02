@@ -4,6 +4,6 @@ javac.target            = jsr14
 nodeploy						= true
 Export-Package: ${p}.*
 -runpath =
--buildpath = ee.j2se; version=1.5, \
+-buildpath = ee.minimum; version=1.2.1, \
 	org.osgi.framework;					version=project
 	
