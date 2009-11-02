@@ -20,6 +20,8 @@ import java.util.*;
 import org.osgi.framework.*;
 
 /**
+ * 
+ * 
  * A description of an endpoint that provides sufficient information for a
  * compatible distribution provider to create a connection to this endpoint
  * 
@@ -337,7 +339,6 @@ public class EndpointDescription {
 	 * therefore derived from the URI.
 	 */
 	public int hashCode() {
-		// TODO
 		return getRemoteURI().hashCode();
 	}
 

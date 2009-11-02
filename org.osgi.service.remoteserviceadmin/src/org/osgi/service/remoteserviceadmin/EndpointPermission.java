@@ -25,6 +25,12 @@ import java.util.*;
 import org.osgi.framework.*;
 
 /**
+ * <pre>
+ * -------------------------------------------------------------
+ * THIS CLASS IS A PLACEHOLDER (COPIED FROM SERVICE PERMISSION)!
+ * -------------------------------------------------------------
+ * </pre>
+ * 
  * A bundle's authority to register or get a service.
  * <ul>
  * <li>The <code>register</code> action allows a bundle to register a service
