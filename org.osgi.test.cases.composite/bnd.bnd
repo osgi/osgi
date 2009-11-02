@@ -1,3 +1,6 @@
+javac.source            = 1.5
+javac.target            = jsr14
+
 Bundle-Version: 4.2.0.${project.build}
 
 Private-Package						= \
@@ -13,7 +16,7 @@ Export-Package						= \
 	org.osgi.service.composite;					version=project , \
 	osgi.core;									version=4.2		, \
 	osgi.cmpn;									version=4.2		, \
-	ee.minimum;									version=1.2		, \
+	ee.minimum;									version=1.2.1		, \
 	${junit}
 
 Include-Resource					= \
