@@ -17,8 +17,8 @@
 package org.osgi.jmx;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collections;
+import java.util.List;
 
 import javax.management.openmbean.ArrayType;
 import javax.management.openmbean.CompositeType;
@@ -191,8 +191,8 @@ public class JmxConstants {
 	 * <li>{@link #P_LONG}</li>
 	 * <li>{@link #P_SHORT}</li>
 	 */
-	public final static Set<String>		SCALAR				= new HashSet<String>(
-																	Arrays
+	public final static List<String>	SCALAR				= Collections
+																	.unmodifiableList(Arrays
 																			.asList(
 																					STRING,
 																					INTEGER,
@@ -260,7 +260,7 @@ public class JmxConstants {
 	public static final Item			TYPE_ITEM			= new Item(
 																	TYPE,
 																	"The type of the property",
-																	SimpleType.STRING, //
+																	SimpleType.STRING,
 																	STRING,
 																	INTEGER,
 																	LONG,
