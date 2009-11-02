@@ -118,7 +118,6 @@ public interface Constants {
 	 * 
 	 * @deprecated As of 1.2.
 	 */
-	@Deprecated
 	public static final String	EXPORT_SERVICE							= "Export-Service";
 
 	/**
@@ -152,7 +151,6 @@ public interface Constants {
 	 * 
 	 * @deprecated As of 1.2.
 	 */
-	@Deprecated
 	public static final String	IMPORT_SERVICE							= "Import-Service";
 
 	/**
@@ -225,7 +223,6 @@ public interface Constants {
 	 * @deprecated As of 1.3. This has been replaced by
 	 *             {@link #VERSION_ATTRIBUTE}.
 	 */
-	@Deprecated
 	public static final String	PACKAGE_SPECIFICATION_VERSION			= "specification-version";
 
 	/**

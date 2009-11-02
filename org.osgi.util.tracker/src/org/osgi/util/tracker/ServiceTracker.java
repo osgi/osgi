@@ -295,7 +295,6 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 					else {
 						if (trackReference != null) {
 							if (trackReference.getBundle() != null) {
-								@SuppressWarnings("unchecked")
 								ServiceReference<S>[] single = new ServiceReference[] {trackReference};
 								references = single;
 							}
@@ -337,7 +336,6 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	private ServiceReference<S>[] getInitialReferences(
 			boolean trackAllServices, String className, String filterString)
 			throws InvalidSyntaxException {
-		@SuppressWarnings("unchecked")
 		ServiceReference<S>[] result = (ServiceReference<S>[]) ((trackAllServices) ? context
 				.getAllServiceReferences(className, filterString)
 				: context.getServiceReferences(className, filterString));
@@ -420,7 +418,6 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * @see ServiceTrackerCustomizer#addingService(ServiceReference)
 	 */
 	public T addingService(ServiceReference<S> reference) {
-		@SuppressWarnings("unchecked")
 		T result = (T) context.getService(reference);
 		return result;
 	}
@@ -531,7 +528,6 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 			if (length == 0) {
 				return null;
 			}
-			@SuppressWarnings("unchecked")
 			ServiceReference<S>[] result = new ServiceReference[length];
 			return t.getTracked(result);
 		}
@@ -809,7 +805,6 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 			if (closed) {
 				return;
 			}
-			@SuppressWarnings("unchecked")
 			final ServiceReference<S> reference = (ServiceReference<S>) event
 					.getServiceReference();
 			if (DEBUG) {
@@ -843,7 +838,6 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * 
 		 * @GuardedBy this
 		 */
-		@Override
 		void modified() {
 			super.modified(); /* increment the modification count */
 			ServiceTracker.this.modified();
@@ -858,7 +852,6 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * @return Customized object for the tracked item or <code>null</code>
 		 *         if the item is not to be tracked.
 		 */
-		@Override
 		T customizerAdding(final ServiceReference<S> item,
 				final ServiceEvent related) {
 			return customizer.addingService(item);
@@ -872,7 +865,6 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
 		 */
-		@Override
 		void customizerModified(final ServiceReference<S> item,
 				final ServiceEvent related, final T object) {
 			customizer.modifiedService(item, object);
@@ -886,7 +878,6 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
 		 */
-		@Override
 		void customizerRemoved(final ServiceReference<S> item,
 				final ServiceEvent related, final T object) {
 			customizer.removedService(item, object);

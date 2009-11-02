@@ -6,6 +6,7 @@ Private-Package						= ${p}.junit, \
 Export-Package						= ${p}.service
 
 -buildpath							= \
+	ee.minimum; 							version=1.2.1, \
 	org.osgi.framework;						version=project, \
 	org.osgi.util.tracker;					version=project, \
 	org.osgi.test.support;					version=project, \

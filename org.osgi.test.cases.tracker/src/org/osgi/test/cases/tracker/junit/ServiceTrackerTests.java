@@ -53,7 +53,6 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		Bundle tb = installBundle("tb1.jar");
 
 		// Creates ServiceTracker object with ServiceReference to testservice1
-		@SuppressWarnings("unchecked")
 		ServiceReference<TestService1> sr = (ServiceReference<TestService1>) getContext()
 				.getServiceReference(TestService1.NAME);
 		ServiceTracker<TestService1, TestService1> st = new ServiceTracker<TestService1, TestService1>(
@@ -405,7 +404,6 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 					"The number of Services being tracked by ServiceTracker 1 is: 1",
 					1, st.size());
 
-			@SuppressWarnings("unchecked")
 			ServiceReference<TestService1> sr = (ServiceReference<TestService1>) context
 					.getServiceReference(TestService1.NAME);
 			st.remove(sr);
@@ -488,7 +486,6 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 				ts1Props.put("compatible", new Float(1.0));
 				ts1Props.put("description", "TestService 1 in tbc");
 
-				@SuppressWarnings("unchecked")
 				ServiceRegistration<TestService1> tsr1 = (ServiceRegistration<TestService1>) context
 						.registerService(TestService1.NAME, new TestService1() {
 							// empty
@@ -538,7 +535,6 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			assertEquals("ServiceTracker.getTrackingCount() == 0", 0, st
 					.getTrackingCount());
 
-			@SuppressWarnings("unchecked")
 			ServiceRegistration<TestService3> sr = (ServiceRegistration<TestService3>) context
 					.registerService(TestService3.NAME, new TestService3() {
 						// empty
@@ -568,7 +564,6 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		};
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.TRUE);
-		@SuppressWarnings("unchecked")
 		ServiceRegistration<Runnable> reg = (ServiceRegistration<Runnable>) getContext()
 				.registerService(Runnable.class.getName(), runIt, props);
 		ServiceTracker<Runnable, ServiceReference<Runnable>> testTracker = null;
@@ -660,7 +655,6 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		};
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.FALSE);
-		@SuppressWarnings("unchecked")
 		ServiceRegistration<Runnable> reg = (ServiceRegistration<Runnable>) getContext()
 				.registerService(Runnable.class.getName(), runIt, props);
 		ServiceTracker<Runnable, ServiceReference<Runnable>> testTracker = null;
@@ -752,7 +746,6 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		};
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.TRUE);
-		@SuppressWarnings("unchecked")
 		ServiceRegistration<Runnable> reg = (ServiceRegistration<Runnable>) getContext()
 				.registerService(
 				Runnable.class.getName(), runIt, props);
@@ -836,12 +829,10 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.TRUE);
 		props.put(Constants.SERVICE_RANKING, new Integer(15));
-		@SuppressWarnings("unchecked")
 		ServiceRegistration<Runnable> reg1 = (ServiceRegistration<Runnable>) getContext()
 				.registerService(
 				Runnable.class.getName(), runIt, props);
 		props.put(Constants.SERVICE_RANKING, new Integer(10));
-		@SuppressWarnings("unchecked")
 		ServiceRegistration<Runnable> reg2 = (ServiceRegistration<Runnable>) getContext()
 				.registerService(
 				Runnable.class.getName(), runIt, props);

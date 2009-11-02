@@ -297,7 +297,6 @@ public final class BundlePermission extends BasicPermission {
 	 * @return <code>true</code> if the specified <code>BundlePermission</code>
 	 *         action is implied by this object; <code>false</code> otherwise.
 	 */
-	@Override
 	public boolean implies(Permission p) {
 		if (!(p instanceof BundlePermission)) {
 			return false;
@@ -322,7 +321,6 @@ public final class BundlePermission extends BasicPermission {
 	 * @return Canonical string representation of the <code>BundlePermission
 	 *         </code> actions.
 	 */
-	@Override
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
@@ -365,7 +363,6 @@ public final class BundlePermission extends BasicPermission {
 	 * 
 	 * @return A new <code>PermissionCollection</code> object.
 	 */
-	@Override
 	public PermissionCollection newPermissionCollection() {
 		return new BundlePermissionCollection();
 	}
@@ -384,7 +381,6 @@ public final class BundlePermission extends BasicPermission {
 	 *         name and actions as this <code>BundlePermission</code> object;
 	 *         <code>false</code> otherwise.
 	 */
-	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -405,7 +401,6 @@ public final class BundlePermission extends BasicPermission {
 	 * 
 	 * @return A hash code value for this object.
 	 */
-	@Override
 	public int hashCode() {
 		int h = 31 * 17 + getName().hashCode();
 		h = 31 * h + getActions().hashCode();
@@ -482,7 +477,6 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * @throws SecurityException If this <code>BundlePermissionCollection</code>
 	 *         object has been marked read-only.
 	 */
-	@Override
 	public void add(final Permission permission) {
 		if (!(permission instanceof BundlePermission)) {
 			throw new IllegalArgumentException("invalid permission: "
@@ -526,7 +520,6 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * @return <code>true</code> if <code>permission</code> is a proper subset
 	 *         of a permission in the set; <code>false</code> otherwise.
 	 */
-	@Override
 	public boolean implies(final Permission permission) {
 		if (!(permission instanceof BundlePermission)) {
 			return false;
@@ -586,10 +579,8 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>BundlePermission</code> objects.
 	 */
-	@Override
 	public synchronized Enumeration<Permission> elements() {
 		Collection< ? > values = permissions.values();
-		@SuppressWarnings("unchecked")
 		Enumeration<Permission> result = (Enumeration<Permission>) Collections
 				.enumeration(values);
 		return result;
@@ -613,7 +604,6 @@ final class BundlePermissionCollection extends PermissionCollection {
 	private synchronized void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
-		@SuppressWarnings("unchecked")
 		Hashtable<String, BundlePermission> hashtable = (Hashtable<String, BundlePermission>) gfields
 				.get("permissions", null);
 		permissions = new HashMap<String, BundlePermission>(hashtable);

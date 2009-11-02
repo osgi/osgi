@@ -68,7 +68,6 @@ public final class PackagePermission extends BasicPermission {
 	 * 
 	 * @deprecated Since 1.5. Use <code>exportonly</code> instead.
 	 */
-	@Deprecated
 	public final static String				EXPORT				= "export";
 
 	/**
@@ -389,7 +388,6 @@ public final class PackagePermission extends BasicPermission {
 	 * @return <code>true</code> if the specified permission is implied by this
 	 *         object; <code>false</code> otherwise.
 	 */
-	@Override
 	public boolean implies(Permission p) {
 		if (!(p instanceof PackagePermission)) {
 			return false;
@@ -442,7 +440,6 @@ public final class PackagePermission extends BasicPermission {
 	 * @return Canonical string representation of the
 	 *         <code>PackagePermission</code> actions.
 	 */
-	@Override
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
@@ -472,7 +469,6 @@ public final class PackagePermission extends BasicPermission {
 	 * 
 	 * @return A new <code>PermissionCollection</code> object.
 	 */
-	@Override
 	public PermissionCollection newPermissionCollection() {
 		return new PackagePermissionCollection();
 	}
@@ -491,7 +487,6 @@ public final class PackagePermission extends BasicPermission {
 	 *         actions as this <code>PackagePermission</code> object;
 	 *         <code>false</code> otherwise.
 	 */
-	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -514,7 +509,6 @@ public final class PackagePermission extends BasicPermission {
 	 * 
 	 * @return A hash code value for this object.
 	 */
-	@Override
 	public int hashCode() {
 		int h = 31 * 17 + getName().hashCode();
 		h = 31 * h + getActions().hashCode();
@@ -639,7 +633,6 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 *         <code>PackagePermissionCollection</code> object has been marked
 	 *         read-only.
 	 */
-	@Override
 	public void add(final Permission permission) {
 		if (!(permission instanceof PackagePermission)) {
 			throw new IllegalArgumentException("invalid permission: "
@@ -703,7 +696,6 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * @return <code>true</code> if <code>permission</code> is a proper subset
 	 *         of a permission in the set; <code>false</code> otherwise.
 	 */
-	@Override
 	public boolean implies(final Permission permission) {
 		if (!(permission instanceof PackagePermission)) {
 			return false;
@@ -783,7 +775,6 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>PackagePermission</code> objects.
 	 */
-	@Override
 	public synchronized Enumeration<Permission> elements() {
 		List<PackagePermission> all = new ArrayList<PackagePermission>(
 				permissions.values());
@@ -792,7 +783,6 @@ final class PackagePermissionCollection extends PermissionCollection {
 			all.addAll(pc.values());
 		}
 		Collection< ? > values = all;
-		@SuppressWarnings("unchecked")
 		Enumeration<Permission> result = (Enumeration<Permission>) Collections
 				.enumeration(values);
 		return result;
@@ -818,12 +808,10 @@ final class PackagePermissionCollection extends PermissionCollection {
 	private synchronized void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
-		@SuppressWarnings("unchecked")
 		Hashtable<String, PackagePermission> hashtable = (Hashtable<String, PackagePermission>) gfields
 				.get("permissions", null);
 		permissions = new HashMap<String, PackagePermission>(hashtable);
 		all_allowed = gfields.get("all_allowed", false);
-		@SuppressWarnings("unchecked")
 		HashMap<String, PackagePermission> fp = (HashMap<String, PackagePermission>) gfields
 				.get("filterPermissions", null);
 		filterPermissions = fp;

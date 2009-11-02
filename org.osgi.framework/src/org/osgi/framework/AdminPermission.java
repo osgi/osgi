@@ -609,7 +609,6 @@ public final class AdminPermission extends BasicPermission {
 	 * @return <code>true</code> if the specified permission is implied by this
 	 *         object; <code>false</code> otherwise.
 	 */
-	@Override
 	public boolean implies(Permission p) {
 		if (!(p instanceof AdminPermission)) {
 			return false;
@@ -682,7 +681,6 @@ public final class AdminPermission extends BasicPermission {
 	 * @return Canonical string representation of the
 	 *         <code>AdminPermission</code> actions.
 	 */
-	@Override
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
@@ -755,7 +753,6 @@ public final class AdminPermission extends BasicPermission {
 	 * 
 	 * @return A new <code>PermissionCollection</code> object.
 	 */
-	@Override
 	public PermissionCollection newPermissionCollection() {
 		return new AdminPermissionCollection();
 	}
@@ -767,7 +764,6 @@ public final class AdminPermission extends BasicPermission {
 	 * @return <code>true</code> if <code>obj</code> is equivalent to this
 	 *         <code>AdminPermission</code>; <code>false</code> otherwise.
 	 */
-	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -791,7 +787,6 @@ public final class AdminPermission extends BasicPermission {
 	 * 
 	 * @return Hash code value for this object.
 	 */
-	@Override
 	public int hashCode() {
 		int h = 31 * 17 + getName().hashCode();
 		h = 31 * h + getActions().hashCode();
@@ -919,7 +914,6 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * @throws SecurityException If this <code>AdminPermissionCollection</code>
 	 *         object has been marked read-only.
 	 */
-	@Override
 	public void add(Permission permission) {
 		if (!(permission instanceof AdminPermission)) {
 			throw new IllegalArgumentException("invalid permission: "
@@ -968,7 +962,6 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 *         <code>AdminPermission</code> in this collection,
 	 *         <code>false</code> otherwise.
 	 */
-	@Override
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof AdminPermission)) {
 			return false;
@@ -1012,10 +1005,8 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>AdminPermission</code> objects.
 	 */
-	@Override
 	public synchronized Enumeration<Permission> elements() {
 		Collection< ? > values = permissions.values();
-		@SuppressWarnings("unchecked")
 		Enumeration<Permission> result = (Enumeration<Permission>) Collections
 				.enumeration(values);
 		return result;
@@ -1040,7 +1031,6 @@ final class AdminPermissionCollection extends PermissionCollection {
 			throws IOException,
 			ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
-		@SuppressWarnings("unchecked")
 		Hashtable<String, AdminPermission> hashtable = (Hashtable<String, AdminPermission>) gfields
 				.get("permissions", null);
 		permissions = new HashMap<String, AdminPermission>(hashtable);

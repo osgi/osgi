@@ -441,7 +441,6 @@ public class FrameworkUtil {
 		 * 
 		 * @return This <code>Filter</code>'s filter string.
 		 */
-		@Override
 		public String toString() {
 			String result = filterString;
 			if (result == null) {
@@ -567,7 +566,6 @@ public class FrameworkUtil {
 		 *         <code>this.toString().equals(obj.toString()</code>;
 		 *         <code>false</code> otherwise.
 		 */
-		@Override
 		public boolean equals(Object obj) {
 			if (obj == this) {
 				return true;
@@ -589,7 +587,6 @@ public class FrameworkUtil {
 		 * 
 		 * @return The hashCode of this <code>Filter</code>.
 		 */
-		@Override
 		public int hashCode() {
 			return this.toString().hashCode();
 		}
@@ -746,7 +743,6 @@ public class FrameworkUtil {
 						.booleanValue(), value2);
 			}
 			if (value1 instanceof Comparable< ? >) {
-				@SuppressWarnings("unchecked")
 				Comparable<Object> comparable = (Comparable<Object>) value1;
 				return compare_Comparable(operation, comparable, value2);
 			}
@@ -1137,8 +1133,7 @@ public class FrameworkUtil {
 			return false;
 		}
 
-		@SuppressWarnings("unchecked")
-		private static final Class[]	constructorType	= new Class[] {String.class};
+		private static final Class< ? >[]	constructorType	= new Class[] {String.class};
 
 		private boolean compare_Comparable(int operation,
 				Comparable<Object> value1, Object value2) {
@@ -1630,7 +1625,6 @@ public class FrameworkUtil {
 			this.keys = keyList.toArray(new String[keyList.size()]);
 		}
 
-		@Override
 		public Object get(Object o) {
 			String k = (String) o;
 			for (int i = 0, length = keys.length; i < length; i++) {
@@ -1642,32 +1636,26 @@ public class FrameworkUtil {
 			return null;
 		}
 
-		@Override
 		public boolean isEmpty() {
 			throw new UnsupportedOperationException();
 		}
 
-		@Override
 		public Enumeration<String> keys() {
 			throw new UnsupportedOperationException();
 		}
 
-		@Override
 		public Enumeration<Object> elements() {
 			throw new UnsupportedOperationException();
 		}
 
-		@Override
 		public Object put(String key, Object value) {
 			throw new UnsupportedOperationException();
 		}
 
-		@Override
 		public Object remove(Object key) {
 			throw new UnsupportedOperationException();
 		}
 
-		@Override
 		public int size() {
 			throw new UnsupportedOperationException();
 		}
@@ -1687,7 +1675,6 @@ public class FrameworkUtil {
 			this.reference = reference;
 		}
 
-		@Override
 		public Object get(Object key) {
 			if (reference == null) {
 				return null;
@@ -1695,32 +1682,26 @@ public class FrameworkUtil {
 			return reference.getProperty((String) key);
 		}
 
-		@Override
 		public boolean isEmpty() {
 			throw new UnsupportedOperationException();
 		}
 
-		@Override
 		public Enumeration<String> keys() {
 			throw new UnsupportedOperationException();
 		}
 
-		@Override
 		public Enumeration<Object> elements() {
 			throw new UnsupportedOperationException();
 		}
 
-		@Override
 		public Object put(String key, Object value) {
 			throw new UnsupportedOperationException();
 		}
 
-		@Override
 		public Object remove(Object key) {
 			throw new UnsupportedOperationException();
 		}
 
-		@Override
 		public int size() {
 			throw new UnsupportedOperationException();
 		}

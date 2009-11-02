@@ -175,7 +175,6 @@ public class FrameworkEvent extends EventObject {
 	 *             the other constructor with the System Bundle as the event
 	 *             source.
 	 */
-	@Deprecated
 	public FrameworkEvent(int type, Object source) {
 		super(source);
 		this.type = type;

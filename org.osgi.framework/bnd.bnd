@@ -3,7 +3,7 @@ javac.target            = jsr14
 #-nope							=true
 nodeploy						=true
 Export-Package: ${p}.*
--buildpath =
+-buildpath = ee.minimum; version=1.2.1
 -runpath =
 
 
