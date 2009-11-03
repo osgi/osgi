@@ -116,7 +116,7 @@ public class RemoteConstants {
 	 *
 	 * The value of this property is of type <code>String+</code>.
 	 */
-	public final String SERVICE_IMPORTED_CONFIGS = "service.imported.configs";
+	public final static String SERVICE_IMPORTED_CONFIGS = "service.imported.configs";
 
 	/**
 	 * A list of intents that this service implements. This property has dual
