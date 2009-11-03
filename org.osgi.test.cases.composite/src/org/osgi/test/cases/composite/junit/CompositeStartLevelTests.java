@@ -69,6 +69,9 @@ public class CompositeStartLevelTests extends AbstractCompositeTestCase {
 			startCompositeBundle(composite1);
 			startCompositeBundle(composite2);
 
+			assertEquals("Wrong framework startlevel", 3, composite1StartLevel.getStartLevel());
+			assertEquals("Wrong framework startlevel", 4, composite2StartLevel.getStartLevel());
+
 			Bundle parentTb1 = install("tb1.jar");
 			Bundle composite1Tb1 = installConstituent(composite1, "tb1_1", "tb1.jar");
 			Bundle composite2Tb1 = installConstituent(composite2, "tb1_2", "tb1.jar");
