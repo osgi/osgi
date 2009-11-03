@@ -31,6 +31,10 @@ Include-Resource					= \
 -runproperties					= report=true
 
 Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.jmx, org.osgi.jmx.cm, org.osgi.jmx.codec, org.osgi.jmx.framework, \
-									  org.osgi.jmx.permissionadmin, org.osgi.jmx.provisioning, org.osgi.jmx.useradmin
-	
+-signaturetest                      = \
+            org.osgi.jmx, \
+            org.osgi.jmx.cm, \
+            org.osgi.jmx.framework, \
+			org.osgi.jmx.permissionadmin, \
+			org.osgi.jmx.provisioning, \
+			org.osgi.jmx.useradmin
