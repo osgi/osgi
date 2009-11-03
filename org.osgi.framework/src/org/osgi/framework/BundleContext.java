@@ -495,5 +495,5 @@ public interface BundleContext extends Framework {
 	 * @since 1.6
 	 */
 	public <S> ServiceRegistration<S> registerService(Class<S> clazz,
-			Object service, Dictionary<String, Object> properties);
+			S service, Dictionary<String, Object> properties);
 }
