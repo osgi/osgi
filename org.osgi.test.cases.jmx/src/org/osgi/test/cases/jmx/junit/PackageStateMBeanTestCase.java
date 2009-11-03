@@ -1,12 +1,10 @@
 package org.osgi.test.cases.jmx.junit;
 
-import java.io.IOException;
+import java.io.*;
 
-import org.osgi.framework.Bundle;
-import org.osgi.jmx.JmxConstants;
-import org.osgi.jmx.service.framework.PackageStateMBean;
-import org.osgi.service.packageadmin.ExportedPackage;
-import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.framework.*;
+import org.osgi.jmx.framework.*;
+import org.osgi.service.packageadmin.*;
 
 public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 	
@@ -25,8 +23,8 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 		testBundle1 = super.install("tb1.jar");
 		testBundle1.start();
 		
-		super.waitForRegistering(createObjectName(JmxConstants.PACKAGE_STATE));
-		pMBean = getMBeanFromServer(JmxConstants.PACKAGE_STATE,
+		super.waitForRegistering(createObjectName(PackageStateMBean.OBJECTNAME));
+		pMBean = getMBeanFromServer(PackageStateMBean.OBJECTNAME,
 				PackageStateMBean.class);
 		pAdmin = (PackageAdmin) getContext().getService(
 				getContext().getServiceReference(
@@ -75,13 +73,13 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 	}
 
 
-	public void testGetPackages() {
+	public void testGetPackages() throws IOException {
 		assertNotNull(pMBean);
 		assertNotNull(pAdmin);
 		/*
 		 * FIXME: https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1385  
 		 */
-		pMBean.getPackages();
+		pMBean.listPackages();
 	}
 
 	public void testIsRemovalPending() throws IOException {
@@ -102,6 +100,6 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		super.waitForUnRegistering(createObjectName(JmxConstants.PACKAGE_STATE));
+		super.waitForUnRegistering(createObjectName(PackageStateMBean.OBJECTNAME));
 	}
 }

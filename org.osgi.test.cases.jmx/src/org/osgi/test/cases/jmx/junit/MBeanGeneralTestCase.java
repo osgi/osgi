@@ -99,6 +99,7 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 
 	// public void testManagedBundle2() throws Exception {}
 
+	@SuppressWarnings("unchecked")
 	protected <T> T getMBeanFromServer(String objectName, Class<T> type) {
 		ObjectName objectName0;
 		try {

@@ -1,25 +1,21 @@
 package org.osgi.test.cases.jmx.junit;
 
-import java.io.IOException;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.io.*;
+import java.util.*;
 
-import org.osgi.jmx.JmxConstants;
-import org.osgi.jmx.codec.OSGiProperties;
-import org.osgi.jmx.service.provisioning.ProvisioningMBean;
-import org.osgi.service.provisioning.ProvisioningService;
+import org.osgi.jmx.service.provisioning.*;
+import org.osgi.service.provisioning.*;
 
 public class ProvisioningMBeanTestCase extends MBeanGeneralTestCase {
-	private ProvisioningMBean pMBean;
+	private ProvisioningServiceMBean pMBean;
 	private ProvisioningService pService;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		super.waitForRegistering(createObjectName(JmxConstants.PS_SERVICE));
-		pMBean = getMBeanFromServer(JmxConstants.PS_SERVICE,
-				ProvisioningMBean.class);
+		super.waitForRegistering(createObjectName(ProvisioningServiceMBean.OBJECTNAME));
+		pMBean = getMBeanFromServer(ProvisioningServiceMBean.OBJECTNAME,
+				ProvisioningServiceMBean.class);
 		pService = (ProvisioningService) getContext().getService(
 				getContext().getServiceReference(
 						ProvisioningService.class.getName()));
@@ -31,10 +27,10 @@ public class ProvisioningMBeanTestCase extends MBeanGeneralTestCase {
 		assertNotNull(pService);
 
 		assertNotNull("Failed to retrieve provisioning information from MBean",
-				pMBean.getInformation());
+				pMBean.listInformation());
 
 		Hashtable<String, Object> table = OSGiProperties.propertiesFrom(pMBean
-				.getInformation());
+				.listInformation());
 
 		Dictionary dict = pService.getInformation();
 		compareDictAndTable(dict, table);
@@ -49,7 +45,7 @@ public class ProvisioningMBeanTestCase extends MBeanGeneralTestCase {
 		dict.put("one.key", "another.value");
 		pMBean.addInformation(OSGiProperties.tableFrom(dict));
 		Hashtable<String, Object> table = OSGiProperties.propertiesFrom(pMBean
-				.getInformation());
+				.listInformation());
 		compareDictAndTable(dict, table);
 	}
 
@@ -67,6 +63,6 @@ public class ProvisioningMBeanTestCase extends MBeanGeneralTestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		super.waitForUnRegistering(createObjectName(JmxConstants.PS_SERVICE));
+		super.waitForUnRegistering(createObjectName(ProvisioningServiceMBean.OBJECTNAME));
 	}
 }

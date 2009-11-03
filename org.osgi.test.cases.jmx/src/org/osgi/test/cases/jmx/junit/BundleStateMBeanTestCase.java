@@ -1,13 +1,9 @@
 package org.osgi.test.cases.jmx.junit;
 
-import java.io.IOException;
-import java.util.Hashtable;
+import java.io.*;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.ServiceReference;
-import org.osgi.jmx.JmxConstants;
-import org.osgi.jmx.codec.OSGiProperties;
-import org.osgi.jmx.service.framework.BundleStateMBean;
+import org.osgi.framework.*;
+import org.osgi.jmx.framework.*;
 
 public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 	private Bundle testBundle1;
@@ -23,8 +19,8 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 		testBundle1 = super.install("tb1.jar");
 		testBundle1.start();
 	
-		super.waitForRegistering(createObjectName(JmxConstants.BUNDLE_STATE));
-		bsMBean = getMBeanFromServer(JmxConstants.BUNDLE_STATE,
+		super.waitForRegistering(createObjectName(BundleStateMBean.OBJECTNAME));
+		bsMBean = getMBeanFromServer(BundleStateMBean.OBJECTNAME,
 				BundleStateMBean.class);	
 		
 	}
@@ -33,9 +29,9 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 		assertNotNull(bsMBean);
 
 		//assuming that tb1 depends on tb2
-		bsMBean.getDependencies(testBundle1.getBundleId());
+		bsMBean.getRequiredBundles(testBundle1.getBundleId());
 		boolean found = false; 
-		for(long bundleId : bsMBean.getDependencies(testBundle1.getBundleId())) {
+		for(long bundleId : bsMBean.getRequiredBundles(testBundle1.getBundleId())) {
 			if(bundleId == testBundle2.getBundleId()) {
 				found = true;
 				break;
@@ -46,19 +42,19 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 		 */
 		assertTrue(
 				"testbundle1 depends on testbundle2. This dependency was not reflected "
-						+ "by the result of the call to getDependencies. result: "
-						+ bsMBean.getDependencies(testBundle1.getBundleId()),
+						+ "by the result of the call to getRequiredBundles. result: "
+						+ bsMBean.getRequiredBundles(testBundle1.getBundleId()),
 				found);
 	}
 
 	public void testGetBundles() throws IOException {
 		assertNotNull(bsMBean);
-		assertTrue("getBundles() did not return any data.", bsMBean.getBundles().size()> 0);
+		assertTrue("listBundles() did not return any data.", bsMBean.listBundles().size()> 0);
 		/*
 		 * FIXME:  
 		 * https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1386
 		 */
-		Hashtable<String, Object> props = OSGiProperties.propertiesFrom(bsMBean.getBundles());
+		//Hashtable<String, Object> props = OSGiProperties.propertiesFrom(bsMBean.listBundles());
 	}
 
 
@@ -245,6 +241,6 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		super.waitForUnRegistering(createObjectName(JmxConstants.PACKAGE_STATE));
+		super.waitForUnRegistering(createObjectName(PackageStateMBean.OBJECTNAME));
 	}
 }

@@ -1,11 +1,9 @@
 package org.osgi.test.cases.jmx.junit;
 
-import java.io.IOException;
+import java.io.*;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.ServiceReference;
-import org.osgi.jmx.JmxConstants;
-import org.osgi.jmx.service.framework.ServiceStateMBean;
+import org.osgi.framework.*;
+import org.osgi.jmx.framework.*;
 
 public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 
@@ -24,8 +22,8 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 		testBundle1 = super.install("tb1.jar");
 		testBundle1.start();
 	
-		super.waitForRegistering(createObjectName(JmxConstants.SERVICE_STATE));
-		ssMBean = getMBeanFromServer(JmxConstants.SERVICE_STATE,
+		super.waitForRegistering(createObjectName(ServiceStateMBean.OBJECTNAME));
+		ssMBean = getMBeanFromServer(ServiceStateMBean.OBJECTNAME,
 				ServiceStateMBean.class);	
 		
 	}
@@ -36,7 +34,7 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 		
 		Long serviceId = getServiceId(expectedInterface); 
 		boolean found = false;
-		for(String serviceInterface : ssMBean.getServiceInterfaces(serviceId)) {
+		for(String serviceInterface : ssMBean.getObjectClass(serviceId)) {
 			if(serviceInterface.equals(expectedInterface)) {
 				found = true;
 				break;
@@ -68,7 +66,7 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 		assertNotNull(ssMBean);
 		
 		long expectedBundleId = testBundle2.getBundleId();
-		long bundleID = ssMBean.getBundle(getServiceId(expectedInterface));
+		long bundleID = ssMBean.getBundleIdentifier(getServiceId(expectedInterface));
 		assertTrue("getBUndle for serviceId " + expectedInterface
 				+ " returned the wrong bundleId: " + bundleID,
 				expectedBundleId == bundleID);
@@ -125,12 +123,13 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 	 *      CompositeType that defines each row of the table.
 	 * 
 	 * @return the tabular respresentation of the service state
+	 * @throws IOException 
 	 */
-	public void testGetServices() {
+	public void testGetServices() throws IOException {
 		assertNotNull(ssMBean);
 		assertTrue("did not get any properties for service the " +
 				"service-state of the system ",
-				ssMBean.getServices().size() > 0);
+				ssMBean.listServices().size() > 0);
 	}
 
 	/**
@@ -165,6 +164,6 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		super.waitForUnRegistering(createObjectName(JmxConstants.SERVICE_STATE));
+		super.waitForUnRegistering(createObjectName(ServiceStateMBean.OBJECTNAME));
 	}
 }

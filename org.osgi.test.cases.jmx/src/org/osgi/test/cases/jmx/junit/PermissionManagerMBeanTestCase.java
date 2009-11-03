@@ -1,14 +1,13 @@
 package org.osgi.test.cases.jmx.junit;
 
-import java.io.IOException;
+import java.io.*;
 
-import org.osgi.framework.Bundle;
-import org.osgi.jmx.JmxConstants;
-import org.osgi.jmx.service.permissionadmin.PermissionManagerMBean;
-import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.framework.*;
+import org.osgi.jmx.service.permissionadmin.*;
+import org.osgi.service.permissionadmin.*;
 
 public class PermissionManagerMBeanTestCase extends MBeanGeneralTestCase {
-	private PermissionManagerMBean pMBean;
+	private PermissionAdminMBean pMBean;
 	private PermissionAdmin pAdmin;
 
 	@Override
@@ -19,9 +18,9 @@ public class PermissionManagerMBeanTestCase extends MBeanGeneralTestCase {
 		testbundle.start();
 		
 		super.install("tb1.jar");
-		super.waitForRegistering(createObjectName(JmxConstants.PA_SERVICE));
-		pMBean = getMBeanFromServer(JmxConstants.PA_SERVICE,
-				PermissionManagerMBean.class);
+		super.waitForRegistering(createObjectName(PermissionAdminMBean.OBJECTNAME));
+		pMBean = getMBeanFromServer(PermissionAdminMBean.OBJECTNAME,
+				PermissionAdminMBean.class);
 		pAdmin = (PermissionAdmin) getContext().getService(
 				getContext().getServiceReference(
 						PermissionAdmin.class.getName()));
@@ -31,7 +30,7 @@ public class PermissionManagerMBeanTestCase extends MBeanGeneralTestCase {
 		assertNotNull(pMBean);
 
 		String[] serviceLocation = pAdmin.getLocations();
-		String[] mBeanLocations = pMBean.getLocations();
+		String[] mBeanLocations = pMBean.listLocations();
 		assertEquals(
 				"got different information from mbean and direct service-call.",
 				serviceLocation, mBeanLocations);
@@ -40,6 +39,6 @@ public class PermissionManagerMBeanTestCase extends MBeanGeneralTestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		super.waitForUnRegistering(createObjectName(JmxConstants.PA_SERVICE));
+		super.waitForUnRegistering(createObjectName(PermissionAdminMBean.OBJECTNAME));
 	}
 }

@@ -1,25 +1,24 @@
 package org.osgi.test.cases.jmx.junit;
 
-import java.io.IOException;
+import java.io.*;
 
-import org.osgi.jmx.JmxConstants;
-import org.osgi.jmx.service.useradmin.UserManagerMBean;
+import org.osgi.jmx.service.useradmin.*;
 
 public class UserManagerMBeanTestCase extends MBeanGeneralTestCase {
-	private UserManagerMBean userManagerMBean;
+	private UserAdminMBean userManagerMBean;
 	
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		super.waitForRegistering(createObjectName(JmxConstants.UA_SERVICE));
-		userManagerMBean = getMBeanFromServer(JmxConstants.UA_SERVICE, UserManagerMBean.class);
+		super.waitForRegistering(createObjectName(UserAdminMBean.OBJECTNAME));
+		userManagerMBean = getMBeanFromServer(UserAdminMBean.OBJECTNAME, UserAdminMBean.class);
 	}
 
 	public void testCreateUser() throws IOException {
 		
 		int numberOfUsersBefore = 0;
-		if(userManagerMBean.getUsers() != null) {
-			numberOfUsersBefore = userManagerMBean.getUsers().length;
+		if(userManagerMBean.listUsers() != null) {
+			numberOfUsersBefore = userManagerMBean.listUsers().length;
 		}
 		
 		userManagerMBean.createUser("foo");
@@ -29,7 +28,7 @@ public class UserManagerMBeanTestCase extends MBeanGeneralTestCase {
 		assertNotNull(userManagerMBean.getUser("bar"));
 		assertNotNull(userManagerMBean.getUser("knorke"));
 		
-		assertEquals(numberOfUsersBefore + 3, userManagerMBean.getUsers().length);
+		assertEquals(numberOfUsersBefore + 3, userManagerMBean.listUsers().length);
 	}
 	
 	public void testCreateGroup() throws IOException {
@@ -75,10 +74,10 @@ public class UserManagerMBeanTestCase extends MBeanGeneralTestCase {
 			//just catch and forget the provoced exception
 		}
 		userManagerMBean.createUser(username);
-		userManagerMBean.addCredential(UserManagerMBean.ENCODED_CREDENTIALS, "bar", username);
+		userManagerMBean.addCredential(UserAdminMBean.CREDENTIALS, "bar", username);
 		assertTrue("failed to retrieve previously added credentials.", userManagerMBean.getCredentials(username).values().size() > 0);
 		
-		userManagerMBean.removeCredential(UserManagerMBean.ENCODED_CREDENTIALS, username);
+		userManagerMBean.removeCredential(UserAdminMBean.CREDENTIALS, username);
 		assertTrue("failed to removeCredential for user " + username, userManagerMBean.getCredentials(username).values().size() == 0);
 	}
 
@@ -86,7 +85,7 @@ public class UserManagerMBeanTestCase extends MBeanGeneralTestCase {
 		String roleName = "user.anyone";
 		String groupName = "board";
 		
-		for(String rname : (String[])userManagerMBean.getGroup(groupName).get(UserManagerMBean.GROUP_MEMBERS)) {
+		for(String rname : (String[])userManagerMBean.getGroup(groupName).get(UserAdminMBean.MEMBERS)) {
 			if(rname.equals(roleName)) {
 				assertTrue(userManagerMBean.removeMember(groupName, roleName));
 			}
@@ -124,7 +123,7 @@ public class UserManagerMBeanTestCase extends MBeanGeneralTestCase {
 		String group2 = "Chorknaben";
 		userManagerMBean.createGroup(group1);
 		userManagerMBean.createGroup(group2);
-		assertTrue("failed to get previously created groups.", userManagerMBean.getGroups().length >= 2);
+		assertTrue("failed to get previously created groups.", userManagerMBean.listGroups().length >= 2);
 	}
 
 	public void testGetImpliedRoles() throws IOException {
@@ -187,12 +186,12 @@ public class UserManagerMBeanTestCase extends MBeanGeneralTestCase {
 	}
 
 	public void testGetUsers() throws IOException {
-		int nuberOfUsers = userManagerMBean.getUsers().length;
+		int nuberOfUsers = userManagerMBean.listUsers().length;
 		userManagerMBean.createUser("Hans Meier");
 		userManagerMBean.createUser("Werner Schmidt");
 		userManagerMBean.createUser("Alois Müller");
 		assertTrue("Could not retrieve the additionally added users",
-				nuberOfUsers + 3 == userManagerMBean.getUsers().length);
+				nuberOfUsers + 3 == userManagerMBean.listUsers().length);
 	}
 	
 	public void testRemoveRole() throws IOException {
@@ -201,16 +200,16 @@ public class UserManagerMBeanTestCase extends MBeanGeneralTestCase {
 		userManagerMBean.createUser("Werner Schmidt");
 		userManagerMBean.createUser("Alois Müller");
 		
-		for(String userName : userManagerMBean.getUsers()) {
+		for(String userName : userManagerMBean.listUsers()) {
 			userManagerMBean.removeRole(userName);
 		}
-		assertTrue("failed to remove all users", userManagerMBean.getUsers().length == 0);
+		assertTrue("failed to remove all users", userManagerMBean.listUsers().length == 0);
 	}
 
 	
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		super.waitForUnRegistering(createObjectName(JmxConstants.UA_SERVICE));
+		super.waitForUnRegistering(createObjectName(UserAdminMBean.OBJECTNAME));
 	}
 }
