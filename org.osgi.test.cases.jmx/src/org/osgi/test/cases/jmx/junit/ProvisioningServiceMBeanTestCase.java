@@ -6,7 +6,7 @@ import java.util.*;
 import org.osgi.jmx.service.provisioning.*;
 import org.osgi.service.provisioning.*;
 
-public class ProvisioningMBeanTestCase extends MBeanGeneralTestCase {
+public class ProvisioningServiceMBeanTestCase extends MBeanGeneralTestCase {
 	private ProvisioningServiceMBean pMBean;
 	private ProvisioningService pService;
 

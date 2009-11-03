@@ -4,7 +4,7 @@ import java.io.*;
 
 import org.osgi.jmx.service.useradmin.*;
 
-public class UserManagerMBeanTestCase extends MBeanGeneralTestCase {
+public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 	private UserAdminMBean userManagerMBean;
 	
 	@Override

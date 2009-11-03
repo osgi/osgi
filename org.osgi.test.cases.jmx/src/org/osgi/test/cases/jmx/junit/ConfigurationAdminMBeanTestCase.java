@@ -6,7 +6,7 @@ import org.osgi.framework.*;
 import org.osgi.jmx.service.cm.*;
 import org.osgi.service.cm.*;
 
-public class ConfigAdminManagerMBeanTestCase extends MBeanGeneralTestCase {
+public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 	private ConfigurationAdmin configAdminService;
 	private ConfigurationAdminMBean configAdminMBean;
 	private BundleContext bundleContext;

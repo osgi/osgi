@@ -6,7 +6,7 @@ import org.osgi.framework.*;
 import org.osgi.jmx.service.permissionadmin.*;
 import org.osgi.service.permissionadmin.*;
 
-public class PermissionManagerMBeanTestCase extends MBeanGeneralTestCase {
+public class PermissionAdminMBeanTestCase extends MBeanGeneralTestCase {
 	private PermissionAdminMBean pMBean;
 	private PermissionAdmin pAdmin;
 
