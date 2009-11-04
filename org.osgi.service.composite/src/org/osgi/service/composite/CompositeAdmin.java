@@ -55,18 +55,18 @@ public interface CompositeAdmin {
 	 * <li>The <code>CompositeBundle</code> object for the newly installed composite is 
 	 * returned</li>
 	 * </ol>
-	 * </p>
+	 *
 	 * <b>Postconditions, no exceptions thrown </b>
 	 * <ul>
 	 * <li><code>getState()</code> in &#x007B; <code>INSTALLED</code>,
-	 * <code>RESOLVED</code> &#x007D;.
-	 * <li>Composite has a unique ID.
+	 * <code>RESOLVED</code> &#x007D;.</li>
+	 * <li>Composite has a unique ID.</li>
 	 * <li>The composite framework is initialized, in the {@linkplain Bundle#STARTING} 
-	 * state and its start-level is set to 0.
+	 * state and its start-level is set to 0.</li>
 	 * </ul>
 	 * <b>Postconditions, when an exception is thrown </b>
 	 * <ul>
-	 * <li>Composite is not installed and no trace of the composite exists.
+	 * <li>Composite is not installed and no trace of the composite exists.</li>
 	 * </ul>
 	 * @param location The location identifier of the composite to install. 
 	 * @param compositeManifest The meta-data describing the composite.  This includes
