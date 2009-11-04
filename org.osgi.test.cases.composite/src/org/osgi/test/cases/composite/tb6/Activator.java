@@ -29,9 +29,9 @@ import org.osgi.test.cases.composite.TestRegistryListenerHook;
 public class Activator implements BundleActivator {
 
 	public void start(BundleContext context) throws Exception {
-		context.registerService(EventHook.class.getName(), TestRegistryEventHook.instance, null);
-		context.registerService(FindHook.class.getName(), TestRegistryFindHook.instance, null);
-		context.registerService(ListenerHook.class.getName(), TestRegistryListenerHook.instance, null);
+		context.registerService("org.osgi.framework.hooks.service.EventHook", TestRegistryEventHook.instance, null);
+		context.registerService("org.osgi.framework.hooks.service.FindHook", TestRegistryFindHook.instance, null);
+		context.registerService("org.osgi.framework.hooks.service.ListenerHook", TestRegistryListenerHook.instance, null);
 	}
 
 	public void stop(BundleContext context) throws Exception {
