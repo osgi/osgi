@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.security.cert.X509Certificate;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
@@ -80,7 +81,7 @@ public interface Bundle {
 	 * <p>
 	 * The value of <code>UNINSTALLED</code> is 0x00000001.
 	 */
-	public static final int	UNINSTALLED				= 0x00000001;
+	int						UNINSTALLED				= 0x00000001;
 
 	/**
 	 * The bundle is installed but not yet resolved.
@@ -96,7 +97,7 @@ public interface Bundle {
 	 * <p>
 	 * The value of <code>INSTALLED</code> is 0x00000002.
 	 */
-	public static final int	INSTALLED				= 0x00000002;
+	int	INSTALLED				= 0x00000002;
 
 	/**
 	 * The bundle is resolved and is able to be started.
@@ -123,7 +124,7 @@ public interface Bundle {
 	 * <p>
 	 * The value of <code>RESOLVED</code> is 0x00000004.
 	 */
-	public static final int	RESOLVED				= 0x00000004;
+	int	RESOLVED				= 0x00000004;
 
 	/**
 	 * The bundle is in the process of starting.
@@ -143,7 +144,7 @@ public interface Bundle {
 	 * <p>
 	 * The value of <code>STARTING</code> is 0x00000008.
 	 */
-	public static final int	STARTING				= 0x00000008;
+	int	STARTING				= 0x00000008;
 
 	/**
 	 * The bundle is in the process of stopping.
@@ -157,7 +158,7 @@ public interface Bundle {
 	 * <p>
 	 * The value of <code>STOPPING</code> is 0x00000010.
 	 */
-	public static final int	STOPPING				= 0x00000010;
+	int	STOPPING				= 0x00000010;
 
 	/**
 	 * The bundle is now running.
@@ -168,7 +169,7 @@ public interface Bundle {
 	 * <p>
 	 * The value of <code>ACTIVE</code> is 0x00000020.
 	 */
-	public static final int	ACTIVE					= 0x00000020;
+	int	ACTIVE					= 0x00000020;
 
 	/**
 	 * The bundle start operation is transient and the persistent autostart
@@ -183,7 +184,7 @@ public interface Bundle {
 	 * @since 1.4
 	 * @see #start(int)
 	 */
-	public static final int	START_TRANSIENT			= 0x00000001;
+	int	START_TRANSIENT			= 0x00000001;
 
 	/**
 	 * The bundle start operation must activate the bundle according to the
@@ -199,7 +200,7 @@ public interface Bundle {
 	 * @see Constants#BUNDLE_ACTIVATIONPOLICY
 	 * @see #start(int)
 	 */
-	public static final int	START_ACTIVATION_POLICY	= 0x00000002;
+	int	START_ACTIVATION_POLICY	= 0x00000002;
 
 	/**
 	 * The bundle stop is transient and the persistent autostart setting of the
@@ -214,7 +215,7 @@ public interface Bundle {
 	 * @since 1.4
 	 * @see #stop(int)
 	 */
-	public static final int	STOP_TRANSIENT			= 0x00000001;
+	int	STOP_TRANSIENT			= 0x00000001;
 
 	/**
 	 * Request that all certificates used to sign the bundle be returned.
@@ -222,7 +223,7 @@ public interface Bundle {
 	 * @since 1.5
 	 * @see #getSignerCertificates(int)
 	 */
-	public final static int	SIGNERS_ALL				= 1;
+	int	SIGNERS_ALL				= 1;
 
 	/**
 	 * Request that only certificates used to sign the bundle that are trusted
@@ -231,7 +232,15 @@ public interface Bundle {
 	 * @since 1.5
 	 * @see #getSignerCertificates(int)
 	 */
-	public final static int	SIGNERS_TRUSTED			= 2;
+	int	SIGNERS_TRUSTED			= 2;
+
+	/**
+	 * Bundle type indicating the bundle is a fragment bundle.
+	 * 
+	 * @since 1.6
+	 * @see #getTypes()
+	 */
+	int	BUNDLE_TYPE_FRAGMENT	= 0x00000001;
 
 	/**
 	 * Returns this bundle's current state.
@@ -243,7 +252,7 @@ public interface Bundle {
 	 *         <code>RESOLVED</code>,<code>STARTING</code>,
 	 *         <code>STOPPING</code>,<code>ACTIVE</code>.
 	 */
-	public int getState();
+	int getState();
 
 	/**
 	 * Starts this bundle.
@@ -367,7 +376,7 @@ public interface Bundle {
 	 *         Environment supports permissions.
 	 * @since 1.4
 	 */
-	public void start(int options) throws BundleException;
+	void start(int options) throws BundleException;
 
 	/**
 	 * Starts this bundle with no options.
@@ -386,7 +395,7 @@ public interface Bundle {
 	 *         Environment supports permissions.
 	 * @see #start(int)
 	 */
-	public void start() throws BundleException;
+	void start() throws BundleException;
 
 	/**
 	 * Stops this bundle.
@@ -465,7 +474,7 @@ public interface Bundle {
 	 *         Environment supports permissions.
 	 * @since 1.4
 	 */
-	public void stop(int options) throws BundleException;
+	void stop(int options) throws BundleException;
 
 	/**
 	 * Stops this bundle with no options.
@@ -482,7 +491,7 @@ public interface Bundle {
 	 *         Environment supports permissions.
 	 * @see #start(int)
 	 */
-	public void stop() throws BundleException;
+	void stop() throws BundleException;
 
 	/**
 	 * Updates this bundle from an <code>InputStream</code>.
@@ -570,7 +579,7 @@ public interface Bundle {
 	 * @see #stop()
 	 * @see #start()
 	 */
-	public void update(InputStream input) throws BundleException;
+	void update(InputStream input) throws BundleException;
 
 	/**
 	 * Updates this bundle.
@@ -588,7 +597,7 @@ public interface Bundle {
 	 *         supports permissions.
 	 * @see #update(InputStream)
 	 */
-	public void update() throws BundleException;
+	void update() throws BundleException;
 
 	/**
 	 * Uninstalls this bundle.
@@ -653,7 +662,7 @@ public interface Bundle {
 	 *         Runtime Environment supports permissions.
 	 * @see #stop()
 	 */
-	public void uninstall() throws BundleException;
+	void uninstall() throws BundleException;
 
 	/**
 	 * Returns this bundle's Manifest headers and values. This method returns
@@ -694,7 +703,7 @@ public interface Bundle {
 	 *         the Java Runtime Environment supports permissions.
 	 * @see Constants#BUNDLE_LOCALIZATION
 	 */
-	public Dictionary<String,String> getHeaders();
+	Dictionary<String, String> getHeaders();
 
 	/**
 	 * Returns this bundle's unique identifier. This bundle is assigned a unique
@@ -718,7 +727,7 @@ public interface Bundle {
 	 * 
 	 * @return The unique identifier of this bundle.
 	 */
-	public long getBundleId();
+	long getBundleId();
 
 	/**
 	 * Returns this bundle's location identifier.
@@ -738,7 +747,7 @@ public interface Bundle {
 	 *         appropriate <code>AdminPermission[this,METADATA]</code>, and
 	 *         the Java Runtime Environment supports permissions.
 	 */
-	public String getLocation();
+	String getLocation();
 
 	/**
 	 * Returns this bundle's <code>ServiceReference</code> list for all
@@ -764,7 +773,7 @@ public interface Bundle {
 	 * @see ServiceReference
 	 * @see ServicePermission
 	 */
-	public ServiceReference< ? >[] getRegisteredServices();
+	ServiceReference< ? >[] getRegisteredServices();
 
 	/**
 	 * Returns this bundle's <code>ServiceReference</code> list for all
@@ -790,7 +799,7 @@ public interface Bundle {
 	 * @see ServiceReference
 	 * @see ServicePermission
 	 */
-	public ServiceReference< ? >[] getServicesInUse();
+	ServiceReference< ? >[] getServicesInUse();
 
 	/**
 	 * Determines if this bundle has the specified permissions.
@@ -819,7 +828,7 @@ public interface Bundle {
 	 * @throws IllegalStateException If this bundle has been
 	 *         uninstalled.
 	 */
-	public boolean hasPermission(Object permission);
+	boolean hasPermission(Object permission);
 
 	/**
 	 * Find the specified resource from this bundle's class loader.
@@ -849,7 +858,7 @@ public interface Bundle {
 	 * @see #findEntries
 	 * @since 1.1
 	 */
-	public URL getResource(String name);
+	URL getResource(String name);
 
 	/**
 	 * Returns this bundle's Manifest headers and values localized to the
@@ -911,7 +920,7 @@ public interface Bundle {
 	 * @see Constants#BUNDLE_LOCALIZATION
 	 * @since 1.3
 	 */
-	public Dictionary<String, String> getHeaders(String locale);
+	Dictionary<String, String> getHeaders(String locale);
 
 	/**
 	 * Returns the symbolic name of this bundle as specified by its
@@ -928,7 +937,7 @@ public interface Bundle {
 	 *         bundle does not have a symbolic name.
 	 * @since 1.3
 	 */
-	public String getSymbolicName();
+	String getSymbolicName();
 
 	/**
 	 * Loads the specified class using this bundle's class loader.
@@ -962,7 +971,7 @@ public interface Bundle {
 	 *         uninstalled.
 	 * @since 1.3
 	 */
-	public Class< ? > loadClass(String name) throws ClassNotFoundException;
+	Class< ? > loadClass(String name) throws ClassNotFoundException;
 
 	/**
 	 * Find the specified resources from this bundle's class loader.
@@ -991,7 +1000,7 @@ public interface Bundle {
 	 * @throws IOException If there is an I/O error.
 	 * @since 1.3
 	 */
-	public Enumeration<URL> getResources(String name) throws IOException;
+	Enumeration<URL> getResources(String name) throws IOException;
 
 	/**
 	 * Returns an Enumeration of all the paths (<code>String</code> objects)
@@ -1021,7 +1030,7 @@ public interface Bundle {
 	 *         uninstalled.
 	 * @since 1.3
 	 */
-	public Enumeration<String> getEntryPaths(String path);
+	Enumeration<String> getEntryPaths(String path);
 
 	/**
 	 * Returns a URL to the entry at the specified path in this bundle. This
@@ -1045,7 +1054,7 @@ public interface Bundle {
 	 *         uninstalled.
 	 * @since 1.3
 	 */
-	public URL getEntry(String path);
+	URL getEntry(String path);
 
 	/**
 	 * Returns the time when this bundle was last modified. A bundle is
@@ -1058,7 +1067,7 @@ public interface Bundle {
 	 * @return The time when this bundle was last modified.
 	 * @since 1.3
 	 */
-	public long getLastModified();
+	long getLastModified();
 
 	/**
 	 * Returns entries in this bundle and its attached fragments. This bundle's
@@ -1126,7 +1135,7 @@ public interface Bundle {
 	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @since 1.3
 	 */
-	public Enumeration<URL> findEntries(String path, String filePattern,
+	Enumeration<URL> findEntries(String path, String filePattern,
 			boolean recurse);
 
 	/**
@@ -1149,7 +1158,7 @@ public interface Bundle {
 	 *         the Java Runtime Environment supports permissions.
 	 * @since 1.4
 	 */
-	public BundleContext getBundleContext();
+	BundleContext getBundleContext();
 
 	/**
 	 * Return the certificates for the signers of this bundle and the
@@ -1176,7 +1185,7 @@ public interface Bundle {
 	 *         {@link #SIGNERS_TRUSTED}.
 	 * @since 1.5
 	 */
-	public Map<X509Certificate, List<X509Certificate>> getSignerCertificates(
+	Map<X509Certificate, List<X509Certificate>> getSignerCertificates(
 			int signersType);
 	
 	/**
@@ -1191,5 +1200,164 @@ public interface Bundle {
 	 * @return The version of this bundle.
 	 * @since 1.5
 	 */
-	public Version getVersion();
+	Version getVersion();
+
+	/**
+	 * Returns the special types of this bundle. The bundle type values are:
+	 * <ul>
+	 * <li>{@link #BUNDLE_TYPE_FRAGMENT}
+	 * </ul>
+	 * 
+	 * A bundle may be more than one type at a time. A type code is used to
+	 * identify the bundle type for future extendability.
+	 * 
+	 * <p>
+	 * If this bundle is not one or more of the defined types then 0 is
+	 * returned.
+	 * 
+	 * @return The special types of this bundle. The type values are ORed
+	 *         together.
+	 * @since 1.6
+	 */
+	int getTypes();
+
+	/**
+	 * Returns the attached fragment bundles for this bundle. If this bundle is
+	 * a fragment then an empty collection is returned. If no fragments are
+	 * attached to this bundle then an empty collection is returned.
+	 * <p>
+	 * This method does not attempt to resolve the specified bundle. If this
+	 * bundle is not resolved then an empty collection is returned.
+	 * 
+	 * @return A <code>Collection</code> of fragment <code>Bundle</code>s which
+	 *         may be empty if this bundle does not have any attached fragment
+	 *         bundles or this bundle is not resolved.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
+	 * @since 1.6
+	 */
+	Collection<Bundle> getFragments();
+
+	/**
+	 * Returns the host bundles to which this fragment bundle is attached.
+	 * 
+	 * @return A <code>Collection</code> of host <code>Bundle</code>s to which
+	 *         this fragment is attached or an empty collection if this bundle
+	 *         is not a fragment or is not attached to any host bundles.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
+	 * @since 1.6
+	 */
+	Collection<Bundle> getHosts();
+
+	/**
+	 * Returns the exported packages for this bundle.
+	 * 
+	 * If this bundle is the system bundle (that is, the bundle with id zero),
+	 * this method returns all the packages known to be exported by the system
+	 * bundle. This will include the package specified by the
+	 * {@link Constants#FRAMEWORK_SYSTEMPACKAGES} system property as well as any
+	 * other package exported by the framework implementation.
+	 * 
+	 * @return A <code>Collection</code> of {@link Package}s or an empty
+	 *         collection if this bundle has no exported packages.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
+	 * @since 1.6
+	 */
+	Collection<Package> getExportedPackages();
+
+	/**
+	 * Returns the bundles that currently require this bundle.
+	 * 
+	 * <p>
+	 * If this bundle is required and then re-exported by another bundle then
+	 * all the bundles of the re-exporting bundle are included in the result.
+	 * 
+	 * @return A <code>Collection</code> of <code>Bundle</code>s currently
+	 *         requiring this bundle. The collection will be empty if no bundles
+	 *         require this bundle.
+	 * @since 1.6
+	 * @throws IllegalStateException If this bundle has been uninstalled.
+	 */
+	Collection<Bundle> getRequiringBundles();
+
+	/**
+	 * Return the assigned start level value for this Bundle.
+	 * 
+	 * @return The start level value of this Bundle.
+	 * @throws java.lang.IllegalArgumentException If this bundle has been
+	 *         uninstalled.
+	 * @see #setStartLevel(int)
+	 * @throws IllegalStateException If this bundle has been uninstalled.
+	 * @since 1.6
+	 */
+	int getStartLevel();
+
+	/**
+	 * Assign a start level value to this Bundle.
+	 * 
+	 * <p>
+	 * This bundle will be assigned the specified start level. The start level
+	 * value assigned to this bundle will be persistently recorded by the
+	 * Framework.
+	 * <p>
+	 * If the new start level for this bundle is lower than or equal to the
+	 * active start level of the Framework and this bundle's autostart setting
+	 * indicates this bundle must be started, the Framework will start this
+	 * bundle as described in the {@link Bundle#start(int)} method using the
+	 * {@link Bundle#START_TRANSIENT} option. The
+	 * {@link Bundle#START_ACTIVATION_POLICY} option must also be used if
+	 * {@link #isActivationPolicyUsed()} returns <code>true</code>. The actual
+	 * starting of this bundle must occur asynchronously.
+	 * <p>
+	 * If the new start level for this bundle is higher than the active start
+	 * level of the Framework, the Framework will stop this bundle as described
+	 * in the {@link Bundle#stop(int)} method using the
+	 * {@link Bundle#STOP_TRANSIENT} option. The actual stopping of this bundle
+	 * must occur asynchronously.
+	 * 
+	 * @param startlevel The new start level for the specified Bundle.
+	 * @throws IllegalArgumentException If this bundle has been uninstalled, or
+	 *         if the specified start level is less than or equal to zero, or if
+	 *         this bundle is the system bundle.
+	 * @throws SecurityException If the caller does not have
+	 *         <code>AdminPermission[bundle,EXECUTE]</code> and the Java runtime
+	 *         environment supports permissions.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
+	 * @since 1.6
+	 */
+	void setStartLevel(int startlevel);
+
+	/**
+	 * Returns whether this bundle's autostart setting indicates it must be
+	 * started.
+	 * <p>
+	 * The autostart setting of a bundle indicates whether the bundle is to be
+	 * started when its start level is reached.
+	 * 
+	 * @return <code>true</code> if the autostart setting of this bundle
+	 *         indicates it is to be started. <code>false</code> otherwise.
+	 * @throws java.lang.IllegalArgumentException If this bundle has been
+	 *         uninstalled.
+	 * @see Bundle#START_TRANSIENT
+	 * @throws IllegalStateException If this bundle has been uninstalled.
+	 * @since 1.6
+	 */
+	boolean isPersistentlyStarted();
+
+	/**
+	 * Returns whether this bundle's autostart setting indicates that the
+	 * activation policy declared in the bundle manifest must be used.
+	 * <p>
+	 * The autostart setting of a bundle indicates whether the bundle's declared
+	 * activation policy is to be used when the bundle is started.
+	 * 
+	 * @return <code>true</code> if this bundle's autostart setting indicates
+	 *         the activation policy declared in the manifest must be used.
+	 *         <code>false</code> if this bundle must be eagerly activated.
+	 * @throws java.lang.IllegalArgumentException If this bundle has been
+	 *         uninstalled.
+	 * @see Bundle#START_ACTIVATION_POLICY
+	 * @throws IllegalStateException If this bundle has been uninstalled.
+	 * @since 1.6
+	 */
+	boolean isActivationPolicyUsed();
 }

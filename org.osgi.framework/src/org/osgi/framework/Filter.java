@@ -85,7 +85,7 @@ public interface Filter {
 	 * Compares this <code>Filter</code> to another <code>Filter</code>.
 	 * 
 	 * <p>
-	 * This method returns the result of calling
+	 * This implementation returns the result of calling
 	 * <code>this.toString().equals(obj.toString())</code>.
 	 * 
 	 * @param obj The object to compare against this <code>Filter</code>.
@@ -100,7 +100,7 @@ public interface Filter {
 	 * Returns the hashCode for this <code>Filter</code>.
 	 * 
 	 * <p>
-	 * This method returns the result of calling
+	 * This implementation returns the result of calling
 	 * <code>this.toString().hashCode()</code>.
 	 * 
 	 * @return The hashCode of this <code>Filter</code>.
