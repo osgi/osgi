@@ -29,14 +29,10 @@ import java.util.Dictionary;
  * <ul>
  * <li>Subscribe to events published by the Framework.
  * <li>Register service objects with the Framework service registry.
- * <li>Retrieve <code>ServiceReferences</code> from the Framework service
- * registry.
  * <li>Get and release service objects for a referenced service.
- * <li>Install new bundles in the Framework.
- * <li>Get the list of bundles installed in the Framework.
  * <li>Get the {@link Bundle} object for a bundle.
- * <li>Create <code>File</code> objects for files in a persistent storage
- * area provided for the bundle by the Framework.
+ * <li>Create <code>File</code> objects for files in a persistent storage area
+ * provided for the bundle by the Framework.
  * </ul>
  * 
  * <p>
@@ -47,7 +43,8 @@ import java.util.Dictionary;
  * stopped using the {@link BundleActivator#stop} method. A
  * <code>BundleContext</code> object is generally for the private use of its
  * associated bundle and is not meant to be shared with other bundles in the
- * OSGi environment.
+ * OSGi environment. A <code>BundleContext</code> object is also a
+ * {@link FrameworkContext} object.
  * 
  * <p>
  * The <code>Bundle</code> object associated with a <code>BundleContext</code>
@@ -57,10 +54,10 @@ import java.util.Dictionary;
  * The <code>BundleContext</code> object is only valid during the execution of
  * its context bundle; that is, during the period from when the context bundle
  * is in the <code>STARTING</code>, <code>STOPPING</code>, and
- * <code>ACTIVE</code> bundle states. If the <code>BundleContext</code>
- * object is used subsequently, an <code>IllegalStateException</code> must be
- * thrown. The <code>BundleContext</code> object must never be reused after
- * its context bundle is stopped.
+ * <code>ACTIVE</code> bundle states. If the <code>BundleContext</code> object
+ * is used subsequently, an <code>IllegalStateException</code> must be thrown.
+ * The <code>BundleContext</code> object must never be reused after its context
+ * bundle is stopped.
  * 
  * <p>
  * The Framework is the only entity that can create <code>BundleContext</code>
@@ -70,7 +67,7 @@ import java.util.Dictionary;
  * @version $Revision$
  */
 
-public interface BundleContext extends Framework {
+public interface BundleContext extends FrameworkContext {
 
 	/**
 	 * Returns the <code>Bundle</code> object associated with this

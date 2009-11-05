@@ -1308,5 +1308,19 @@ public interface Constants {
 	 * This property may be supplied in the properties <code>Dictionary</code>
 	 * object passed to the <code>BundleContext.registerService</code> method.
 	 */
-	public static final String	SERVICE_DESCRIPTION						= "service.description"; 
+	public static final String	SERVICE_DESCRIPTION						= "service.description";
+
+	/**
+	 * Framework environment property identifying the Framework's universally
+	 * unique identifier (UUID). A UUID represents a 128-bit value. See the
+	 * <code>toString</code> method of <code>java.util.UUID</code> for the
+	 * format of this string.
+	 * 
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <code>BundleContext.getProperty</code> method.
+	 * 
+	 * @since 1.6
+	 */
+	public static final String	FRAMEWORK_UUID							= "org.osgi.framework.uuid";
 }

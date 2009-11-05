@@ -22,14 +22,51 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * A bundle's execution context within the Framework. The context is used to
+ * grant access to methods of the Framework in which the bundle is installed.
  * 
- * TODO Add Javadoc comment for this type.
+ * <p>
+ * <code>FrameworkContext</code> methods allow a bundle to:
+ * <ul>
+ * <li>Retrieve <code>ServiceReferences</code> from the Framework service
+ * registry.</li>
+ * <li>Install new bundles in the Framework.</li>
+ * <li>Get the list of bundles installed in the Framework.</li>
+ * <li>Get framework environment properties.</li>
+ * <li>Refresh Bundles.</li>
+ * <li>Modify the framework start level.</li>
+ * </ul>
+ * 
+ * <p>
+ * A <code>FrameworkContext</code> object will be created and provided to the
+ * bundle associated with this context when it is started using the
+ * {@link BundleActivator#start} method. The same <code>FrameworkContext</code>
+ * object will be passed to the bundle associated with this context when it is
+ * stopped using the {@link BundleActivator#stop} method.
+ * 
+ * <p>
+ * The <code>Bundle</code> object associated with a
+ * <code>FrameworkContext</code> object is called the <em>context bundle</em>.
+ * 
+ * <p>
+ * The <code>FrameworkContext</code> object is only valid during the execution
+ * of its context bundle; that is, during the period from when the context
+ * bundle is in the <code>STARTING</code>, <code>STOPPING</code>, and
+ * <code>ACTIVE</code> bundle states. If the <code>FrameworkContext</code>
+ * object is used subsequently, an <code>IllegalStateException</code> must be
+ * thrown. The <code>FrameworkContext</code> object must never be reused after
+ * its context bundle is stopped.
+ * 
+ * <p>
+ * The Framework is the only entity that can create
+ * <code>FrameworkContext</code> objects and they are only valid within the
+ * Framework that created them.
  * 
  * @since 1.6
  * @ThreadSafe
  * @version $Revision$
  */
-public interface Framework {
+public interface FrameworkContext {
 	/**
 	 * Returns the value of the specified property. If the key is not found in
 	 * the Framework properties, the system properties are then searched. The
@@ -108,7 +145,8 @@ public interface Framework {
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         <code>AdminPermission[installed bundle,LIFECYCLE]</code>, and the
 	 *         Java Runtime Environment supports permissions.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @since 1.0
 	 */
 	Bundle installBundle(String location, InputStream input)
@@ -128,7 +166,8 @@ public interface Framework {
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         <code>AdminPermission[installed bundle,LIFECYCLE]</code>, and the
 	 *         Java Runtime Environment supports permissions.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @see #installBundle(String, InputStream)
 	 * @since 1.0
 	 */
@@ -210,7 +249,8 @@ public interface Framework {
 	 *         search.
 	 * @throws InvalidSyntaxException If the specified <code>filter</code>
 	 *         contains an invalid filter expression that cannot be parsed.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @since 1.0
 	 */
 	ServiceReference< ? >[] getServiceReferences(String clazz,
@@ -263,7 +303,8 @@ public interface Framework {
 	 *         search.
 	 * @throws InvalidSyntaxException If the specified <code>filter</code>
 	 *         contains an invalid filter expression that cannot be parsed.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @since 1.3
 	 */
 	ServiceReference< ? >[] getAllServiceReferences(String clazz,
@@ -280,10 +321,9 @@ public interface Framework {
 	 * 
 	 * <p>
 	 * This method is the same as calling
-	 * {@link BundleContext#getServiceReferences(String, String)} with a
-	 * <code>null</code> filter expression. It is provided as a convenience for
-	 * when the caller is interested in any service that implements the
-	 * specified class.
+	 * {@link #getServiceReferences(String, String)} with a <code>null</code>
+	 * filter expression. It is provided as a convenience for when the caller is
+	 * interested in any service that implements the specified class.
 	 * <p>
 	 * If multiple such services exist, the service with the highest ranking (as
 	 * specified in its {@link Constants#SERVICE_RANKING} property) is returned.
@@ -295,7 +335,8 @@ public interface Framework {
 	 * @param clazz The class name with which the service was registered.
 	 * @return A <code>ServiceReference</code> object, or <code>null</code> if
 	 *         no services are registered which implement the named class.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @see #getServiceReferences(String, String)
 	 * @since 1.0
 	 */
@@ -315,7 +356,8 @@ public interface Framework {
 	 * @throws InvalidSyntaxException If <code>filter</code> contains an invalid
 	 *         filter string that cannot be parsed.
 	 * @throws NullPointerException If <code>filter</code> is null.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @see "Framework specification for a description of the filter string syntax."
 	 * @see FrameworkUtil#createFilter(String)
 	 * @since 1.1
@@ -333,10 +375,9 @@ public interface Framework {
 	 * 
 	 * <p>
 	 * This method is the same as calling
-	 * {@link BundleContext#getServiceReferences(String, String)} with a
-	 * <code>null</code> filter expression. It is provided as a convenience for
-	 * when the caller is interested in any service that implements the
-	 * specified class.
+	 * {@link #getServiceReferences(String, String)} with a <code>null</code>
+	 * filter expression. It is provided as a convenience for when the caller is
+	 * interested in any service that implements the specified class.
 	 * <p>
 	 * If multiple such services exist, the service with the highest ranking (as
 	 * specified in its {@link Constants#SERVICE_RANKING} property) is returned.
@@ -349,7 +390,8 @@ public interface Framework {
 	 * @param clazz The class name with which the service was registered.
 	 * @return A <code>ServiceReference</code> object, or <code>null</code> if
 	 *         no services are registered which implement the named class.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @see #getServiceReferences(String, String)
 	 * @since 1.6
 	 */
@@ -407,7 +449,8 @@ public interface Framework {
 	 *         empty if no services are registered which satisfy the search.
 	 * @throws InvalidSyntaxException If the specified <code>filter</code>
 	 *         contains an invalid filter expression that cannot be parsed.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @since 1.6
 	 */
 	<S> Collection<ServiceReference<S>> getServiceReferences(
@@ -422,7 +465,8 @@ public interface Framework {
 	 * @return A <code>Collection</code> of exported {@link Package}s, or an
 	 *         empty collection if no exported packages with the specified name
 	 *         exist.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @since 1.6
 	 */
 	Collection<Package> getExportedPackages(String name);
@@ -491,10 +535,11 @@ public interface Framework {
 	 *         runtime environment supports permissions.
 	 * @throws IllegalArgumentException If the specified <code>Bundle</code>s
 	 *         were not created by this framework.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @since 1.6
 	 */
-	void refreshPackages(Bundle... bundles);
+	void refreshBundles(Bundle... bundles);
 
 	/**
 	 * Resolve the specified bundles. The Framework must attempt to resolve the
@@ -517,7 +562,8 @@ public interface Framework {
 	 *         runtime environment supports permissions.
 	 * @throws IllegalArgumentException If the specified <code>Bundle</code>s
 	 *         were not created by this framework.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @since 1.6
 	 */
 	boolean resolveBundles(Bundle... bundles);
@@ -540,7 +586,8 @@ public interface Framework {
 	 *         name belonging to the specified version range ordered in
 	 *         descending version order, or an empty list if no bundles are
 	 *         found.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @since 1.6
 	 */
 	List<Bundle> getBundles(String symbolicName,
@@ -555,7 +602,8 @@ public interface Framework {
 	 * 
 	 * @return The active start level value of the Framework.
 	 * @see #setStartLevel(int)
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @since 1.6
 	 */
 	public int getStartLevel();
@@ -620,7 +668,8 @@ public interface Framework {
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the
 	 *         Java runtime environment supports permissions.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @since 1.6
 	 */
 	void setStartLevel(int startlevel);
@@ -631,7 +680,8 @@ public interface Framework {
 	 * 
 	 * @return The initial start level value for Bundles.
 	 * @see #setInitialBundleStartLevel(int)
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @since 1.6
 	 */
 	int getInitialBundleStartLevel();
@@ -646,8 +696,9 @@ public interface Framework {
 	 * Framework.
 	 * 
 	 * <p>
-	 * When a Bundle is installed via <code>BundleContext.installBundle</code>,
-	 * it is assigned the initial bundle start level value.
+	 * When a Bundle is installed via
+	 * <code>FrameworkContext.installBundle</code>, it is assigned the initial
+	 * bundle start level value.
 	 * 
 	 * <p>
 	 * The default initial bundle start level value is 1 unless this method has
@@ -662,7 +713,8 @@ public interface Framework {
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the
 	 *         Java runtime environment supports permissions.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @since 1.6
 	 */
 	void setInitialBundleStartLevel(int startlevel);
