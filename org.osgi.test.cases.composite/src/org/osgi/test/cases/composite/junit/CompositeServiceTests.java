@@ -345,6 +345,86 @@ public class CompositeServiceTests extends AbstractCompositeTestCase {
 		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb4Impl.jar"}, new String[] {"tb4v1.jar"}, "tb4client.jar", false, null);
 	}
 
+	// TODO this is experimental to support composite affinity
+	public void testServiceExportImportAffinity01a() {
+		Map manifestExport = new HashMap();
+		String exportBSN = getName() + ".export";
+		String exportVersion = "2.0.0";
+		manifestExport.put(Constants.BUNDLE_SYMBOLICNAME, exportBSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport.put(Constants.BUNDLE_VERSION, exportVersion);
+		manifestExport.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params");
+		manifestExport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite");
+		manifestExport.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService)");
+
+		Map manifestImport = new HashMap();
+		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params, org.osgi.test.cases.composite");
+		manifestImport.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, 
+				"\"(objectClass=org.osgi.test.cases.composite.tb4.SomeService)\"; " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
+		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb4v1.jar", "tb4Impl.jar"}, null, "tb4client.jar", false, null);
+	}
+
+	// TODO this is experimental to support composite affinity
+	public void testServiceExportImportAffinity01b() {
+		Map manifestExport = new HashMap();
+		String exportBSN = getName() + ".export";
+		String exportVersion = "2.0.0";
+		manifestExport.put(Constants.BUNDLE_SYMBOLICNAME, exportBSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport.put(Constants.BUNDLE_VERSION, exportVersion);
+		manifestExport.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params");
+		manifestExport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite");
+		manifestExport.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService)");
+
+		Map manifestImport = new HashMap();
+		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb4; tb4version=1, org.osgi.test.cases.composite.tb4.params; tb4version=1, org.osgi.test.cases.composite");
+		manifestImport.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "\"(&(test.property=v1)(objectClass=org.osgi.test.cases.composite.tb4.SomeService))\"; " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
+		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb4v1.jar", "tb4v2.jar", "tb4v1Impl.jar", "tb4v2Impl.jar"}, null, "tb4v1client.jar", false, null);
+	}
+
+	// TODO this is experimental to support composite affinity
+	public void testServiceExportImportAffinity01c() {
+		Map manifestExport = new HashMap();
+		String exportBSN = getName() + ".export";
+		String exportVersion = "2.0.0";
+		manifestExport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport.put(Constants.BUNDLE_VERSION, exportVersion);
+		manifestExport.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params");
+		manifestExport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite");
+		manifestExport.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService)");
+
+		Map manifestImport = new HashMap();
+		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb4; tb4version=1, org.osgi.test.cases.composite.tb4.params; tb4version=1, org.osgi.test.cases.composite");
+		manifestImport.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "\"(&(test.property=v1)(objectClass=org.osgi.test.cases.composite.tb4.SomeService))\"; " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
+		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb4v1.jar", "tb4v2.jar", "tb4v1Impl.jar", "tb4v2Impl.jar"}, null, "tb4v2client.jar", true, wrongServiceProp);
+	}
+
+	// TODO this is experimental to support composite affinity
+	public void testServiceExportImportAffinity01d() {
+		Map manifestExport = new HashMap();
+		String exportBSN = getName() + ".export";
+		String exportVersion = "2.0.0";
+		manifestExport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport.put(Constants.BUNDLE_VERSION, exportVersion);
+		manifestExport.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params");
+		manifestExport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite");
+		manifestExport.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService)");
+
+		Map manifestImport = new HashMap();
+		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb4; tb4version=2, org.osgi.test.cases.composite.tb4.params; tb4version=2, org.osgi.test.cases.composite");
+		manifestImport.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "\"(objectClass=org.osgi.test.cases.composite.tb4.SomeService)\"; " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"expect.failure\"; " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
+		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb4v1.jar", "tb4v2.jar", "tb4v1Impl.jar", "tb4v2Impl.jar"}, null, "tb4v1client.jar", true, noServiceRef);
+	}
+
 	public void testServiceExportImport02a() {
 		Map manifestExport1 = new HashMap();
 		manifestExport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
@@ -437,6 +517,122 @@ public class CompositeServiceTests extends AbstractCompositeTestCase {
 		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 
 		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, new String[] {"tb4Impl.jar"}, new String[] {"tb4v1.jar"}, "tb4client.jar", false, null);
+	}
+
+	// TODO this is experimental to support composite affinity
+	public void testServiceExportImportAffinity02a() {
+		Map manifestExport1 = new HashMap();
+		String export1BSN = getName() + ".export1";
+		String export1Version = "2.0.0";
+		manifestExport1.put(Constants.BUNDLE_SYMBOLICNAME, export1BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport1.put(Constants.BUNDLE_VERSION, export1Version);
+		manifestExport1.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params");
+		manifestExport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite");
+		manifestExport1.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService)");
+		Map manifestExport2 = new HashMap(manifestExport1);
+		String export2BSN = getName() + ".export2";
+		String export2Version = "2.0.0";
+		manifestExport2.put(Constants.BUNDLE_VERSION, export2Version);
+		manifestExport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+
+		Map manifestImport1 = new HashMap();
+		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params, org.osgi.test.cases.composite");
+		manifestImport1.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService); " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
+		Map manifestImport2 = new HashMap(manifestImport1);
+		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport2.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService)");
+
+		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, new String[] {"tb4v1.jar", "tb4Impl.jar"}, null, "tb4client.jar", false, null);
+	}
+
+	// TODO this is experimental to support composite affinity
+	public void testServiceExportImportAffinity02b() {
+		Map manifestExport1 = new HashMap();
+		String export1BSN = getName() + ".export1";
+		String export1Version = "2.0.0";
+		manifestExport1.put(Constants.BUNDLE_SYMBOLICNAME, export1BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport1.put(Constants.BUNDLE_VERSION, export1Version);
+		manifestExport1.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params");
+		manifestExport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite");
+		manifestExport1.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService)");
+		Map manifestExport2 = new HashMap(manifestExport1);
+		String export2BSN = getName() + ".export2";
+		String export2Version = "2.0.0";
+		manifestExport2.put(Constants.BUNDLE_VERSION, export2Version);
+		manifestExport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+
+		Map manifestImport1 = new HashMap();
+		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params, org.osgi.test.cases.composite");
+		manifestImport1.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService); " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[1.0.0, 1.1.0)\"");
+		Map manifestImport2 = new HashMap(manifestImport1);
+		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport2.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService)");
+
+		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, new String[] {"tb4v1.jar", "tb4Impl.jar"}, null, "tb4client.jar", true, noServiceRef);
+	}
+
+	// TODO this is experimental to support composite affinity
+	public void testServiceExportImportAffinity02c() {
+		Map manifestExport1 = new HashMap();
+		String export1BSN = getName() + ".export1";
+		String export1Version = "2.0.0";
+		manifestExport1.put(Constants.BUNDLE_SYMBOLICNAME, export1BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport1.put(Constants.BUNDLE_VERSION, export1Version);
+		manifestExport1.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params");
+		manifestExport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite");
+		manifestExport1.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService)");
+		Map manifestExport2 = new HashMap(manifestExport1);
+		String export2BSN = getName() + ".export2";
+		String export2Version = "2.0.0";
+		manifestExport2.put(Constants.BUNDLE_VERSION, export2Version);
+		manifestExport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+
+		Map manifestImport1 = new HashMap();
+		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params, org.osgi.test.cases.composite");
+		manifestImport1.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService); " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + export2BSN + "\"; " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
+		Map manifestImport2 = new HashMap(manifestImport1);
+		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport2.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService)");
+
+		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, new String[] {"tb4v1.jar", "tb4Impl.jar"}, null, "tb4client.jar", true, noServiceRef);
+	}
+
+	// TODO this is experimental to support composite affinity
+	public void testServiceExportImportAffinity02d() {
+		Map manifestExport1 = new HashMap();
+		String export1BSN = getName() + ".export1";
+		String export1Version = "2.0.0";
+		manifestExport1.put(Constants.BUNDLE_SYMBOLICNAME, export1BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport1.put(Constants.BUNDLE_VERSION, export1Version);
+		manifestExport1.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params");
+		manifestExport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite");
+		manifestExport1.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService)");
+		Map manifestExport2 = new HashMap(manifestExport1);
+		String export2BSN = getName() + ".export2";
+		String export2Version = "2.0.0";
+		manifestExport2.put(Constants.BUNDLE_VERSION, export2Version);
+		manifestExport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+
+		Map manifestImport1 = new HashMap();
+		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params, org.osgi.test.cases.composite");
+		manifestImport1.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService)");
+		Map manifestImport2 = new HashMap(manifestImport1);
+		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport2.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService); " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
+
+		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, new String[] {"tb4v1.jar", "tb4Impl.jar"}, null, "tb4client.jar", true, noServiceRef);
 	}
 
 	class ServiceReferenceTestHandler implements TestHandler {

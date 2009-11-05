@@ -52,6 +52,8 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 	protected ServiceReference paRef;
 	protected PackageAdmin pa;
 	protected List installedBundles;
+	public static final String COMPOSITE_AFFINITY_NAME_DIRECTIVE = "composite-symbolic-name-affinity"; //$NON-NLS-1$
+	public static final String COMPOSITE_AFFINITY_VERSION_DIRECTIVE = "composite-version-affinity"; //$NON-NLS-1$
 
 	public void setUp() {
 		compRef = getContext().getServiceReference(CompositeAdmin.class.getName());
