@@ -31,6 +31,8 @@ import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.composite.AbstractCompositeTestCase;
 
 public class CompositeResolutionTests extends AbstractCompositeTestCase {
+	private static final String COMPOSITE_AFFINITY_NAME_DIRECTIVE = "composite-symbolic-name-affinity"; //$NON-NLS-1$
+	private static final String COMPOSITE_AFFINITY_VERSION_DIRECTIVE = "composite-version-affinity"; //$NON-NLS-1$
 
 	public void testSingletons01() {
 		// Test singletons in the same composite
@@ -395,7 +397,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		doTestExportPolicy01(manifest, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
 	}
 
-	// TODO this is experimental to support RFP 121 requirement to import all
+	// TODO this is experimental to support RFP 121 requirement to export all
 	public void testPackageExport01i() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
@@ -403,7 +405,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		doTestExportPolicy01(manifest, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", false, null);
 	}
 
-	// TODO this is experimental to support RFP 121 requirement to import all
+	// TODO this is experimental to support RFP 121 requirement to export all
 	public void testPackageExport01j() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
@@ -411,7 +413,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		doTestExportPolicy01(manifest, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
 	}
 
-	// TODO this is experimental to support RFP 121 requirement to import all
+	// TODO this is experimental to support RFP 121 requirement to export all
 	public void testPackageExport01k() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
@@ -704,6 +706,69 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb3v1.jar", "tb3v2.jar"}, null, "tb3client.jar", false, null);
 	}
 
+	// TODO this is experimental to support composite affinity
+	public void testPackageExportImportAffinity01a() {
+		Map manifestExport = new HashMap();
+		String exportBSN = getName() + ".export";
+		String exportVersion = "2.0.0";
+		manifestExport.put(Constants.BUNDLE_SYMBOLICNAME, exportBSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport.put(Constants.BUNDLE_VERSION, exportVersion);
+		manifestExport.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+
+		Map manifestImport = new HashMap();
+		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
+				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\", " +
+				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
+		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", false, null);
+	}
+
+	// TODO this is experimental to support composite affinity
+	public void testPackageExportImportAffinity01b() {
+		Map manifestExport = new HashMap();
+		String exportBSN = getName() + ".export";
+		String exportVersion = "2.0.0";
+		manifestExport.put(Constants.BUNDLE_SYMBOLICNAME, exportBSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport.put(Constants.BUNDLE_VERSION, exportVersion);
+		manifestExport.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+
+		Map manifestImport = new HashMap();
+		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
+				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[1.0.0, 1.1.0)\", " +
+				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[1.0.0, 1.1.0)\"");
+		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
+	}
+
+	// TODO this is experimental to support composite affinity
+	public void testPackageExportImportAffinity01c() {
+		Map manifestExport = new HashMap();
+		String exportBSN = getName() + ".export";
+		String exportVersion = "2.0.0";
+		manifestExport.put(Constants.BUNDLE_SYMBOLICNAME, exportBSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport.put(Constants.BUNDLE_VERSION, exportVersion);
+		manifestExport.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+
+		Map manifestImport = new HashMap();
+		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
+				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"fail\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\", " +
+				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"fail\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
+		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
+	}
+
 	public void testPackageExportImport02a() {
 		Map manifestExport1 = new HashMap();
 		manifestExport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
@@ -736,4 +801,177 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
 	}
 
+	// TODO this is experimental to support composite affinity
+	public void testPackageExportImportAffinity02a() {
+		Map manifestExport1 = new HashMap();
+		String export1BSN = getName() + ".export1";
+		String export1Version = "2.0.0";
+		manifestExport1.put(Constants.BUNDLE_VERSION, export1Version);
+		manifestExport1.put(Constants.BUNDLE_SYMBOLICNAME, export1BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport1.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+		Map manifestExport2 = new HashMap(manifestExport1);
+		String export2BSN = getName() + ".export2";
+		String export2Version = "2.0.0";
+		manifestExport2.put(Constants.BUNDLE_VERSION, export2Version);
+		manifestExport2.put(Constants.BUNDLE_SYMBOLICNAME, export2BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+
+		Map manifestImport1 = new HashMap();
+		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
+				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\", " +
+				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
+		Map manifestImport2 = new HashMap();
+		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport2.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+
+		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", false, null);
+	}
+
+	// TODO this is experimental to support composite affinity
+	public void testPackageExportImportAffinity02b() {
+		Map manifestExport1 = new HashMap();
+		String export1BSN = getName() + ".export1";
+		String export1Version = "2.0.0";
+		manifestExport1.put(Constants.BUNDLE_VERSION, export1Version);
+		manifestExport1.put(Constants.BUNDLE_SYMBOLICNAME, export1BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport1.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+		Map manifestExport2 = new HashMap(manifestExport1);
+		String export2BSN = getName() + ".export2";
+		String export2Version = "2.0.0";
+		manifestExport2.put(Constants.BUNDLE_VERSION, export2Version);
+		manifestExport2.put(Constants.BUNDLE_SYMBOLICNAME, export2BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+
+		Map manifestImport1 = new HashMap();
+		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
+				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[1.0.0, 1.1.0)\", " +
+				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[1.0.0, 1.1.0)\"");
+		Map manifestImport2 = new HashMap();
+		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport2.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+
+		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
+	}
+
+	// TODO this is experimental to support composite affinity
+	public void testPackageExportImportAffinity02c() {
+		Map manifestExport1 = new HashMap();
+		String export1BSN = getName() + ".export1";
+		String export1Version = "2.0.0";
+		manifestExport1.put(Constants.BUNDLE_VERSION, export1Version);
+		manifestExport1.put(Constants.BUNDLE_SYMBOLICNAME, export1BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport1.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+		Map manifestExport2 = new HashMap(manifestExport1);
+		String export2BSN = getName() + ".export2";
+		String export2Version = "2.0.0";
+		manifestExport2.put(Constants.BUNDLE_VERSION, export2Version);
+		manifestExport2.put(Constants.BUNDLE_SYMBOLICNAME, export2BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+
+		Map manifestImport1 = new HashMap();
+		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
+				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + export2BSN + "\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\", " +
+				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + export2BSN + "\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
+		Map manifestImport2 = new HashMap();
+		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport2.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+
+		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
+	}
+
+	// TODO this is experimental to support composite affinity
+	public void testPackageExportImportAffinity02d() {
+		Map manifestExport1 = new HashMap();
+		String export1BSN = getName() + ".export1";
+		String export1Version = "2.0.0";
+		manifestExport1.put(Constants.BUNDLE_VERSION, export1Version);
+		manifestExport1.put(Constants.BUNDLE_SYMBOLICNAME, export1BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport1.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+		Map manifestExport2 = new HashMap(manifestExport1);
+		String export2BSN = getName() + ".export2";
+		String export2Version = "2.0.0";
+		manifestExport2.put(Constants.BUNDLE_VERSION, export2Version);
+		manifestExport2.put(Constants.BUNDLE_SYMBOLICNAME, export2BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+
+		Map manifestImport1 = new HashMap();
+		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+		Map manifestImport2 = new HashMap();
+		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport2.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
+				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\", " +
+				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
+
+		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
+	}
+
+	// TODO this is experimental to support composite affinity
+	public void testPackageExportImportAffinity02e() {
+		Map manifestExport1 = new HashMap();
+		String export1BSN = getName() + ".export1";
+		String export1Version = "2.0.0";
+		manifestExport1.put(Constants.BUNDLE_VERSION, export1Version);
+		manifestExport1.put(Constants.BUNDLE_SYMBOLICNAME, export1BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport1.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+		Map manifestExport2 = new HashMap(manifestExport1);
+		String export2BSN = getName() + ".export2";
+		String export2Version = "2.0.0";
+		manifestExport2.put(Constants.BUNDLE_VERSION, export2Version);
+		manifestExport2.put(Constants.BUNDLE_SYMBOLICNAME, export2BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+
+		Map manifestImport1 = new HashMap();
+		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
+				"org.osgi.test.cases.composite.tb3.params,org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
+		Map manifestImport2 = new HashMap();
+		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport2.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+
+		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", false, null);
+	}
+
+	// TODO this is experimental to support composite affinity
+	public void testPackageExportImportAffinity02f() {
+		Map manifestExport1 = new HashMap();
+		String export1BSN = getName() + ".export1";
+		String export1Version = "2.0.0";
+		manifestExport1.put(Constants.BUNDLE_VERSION, export1Version);
+		manifestExport1.put(Constants.BUNDLE_SYMBOLICNAME, export1BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport1.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+		Map manifestExport2 = new HashMap(manifestExport1);
+		String export2BSN = getName() + ".export2";
+		String export2Version = "2.0.0";
+		manifestExport2.put(Constants.BUNDLE_VERSION, export2Version);
+		manifestExport2.put(Constants.BUNDLE_SYMBOLICNAME, export2BSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+
+		Map manifestImport1 = new HashMap();
+		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
+				"org.osgi.test.cases.composite.tb3.params,org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
+				COMPOSITE_AFFINITY_NAME_DIRECTIVE + ":=\"" + export2BSN + "\"; " +
+				COMPOSITE_AFFINITY_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
+		Map manifestImport2 = new HashMap();
+		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport2.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+
+		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
+	}
 }
