@@ -240,7 +240,7 @@ public interface Bundle {
 	 * @since 1.6
 	 * @see #getTypes()
 	 */
-	int	BUNDLE_TYPE_FRAGMENT	= 0x00000001;
+	int	TYPE_FRAGMENT	= 0x00000001;
 
 	/**
 	 * Returns this bundle's current state.
@@ -1205,7 +1205,7 @@ public interface Bundle {
 	/**
 	 * Returns the special types of this bundle. The bundle type values are:
 	 * <ul>
-	 * <li>{@link #BUNDLE_TYPE_FRAGMENT}
+	 * <li>{@link #TYPE_FRAGMENT}
 	 * </ul>
 	 * 
 	 * A bundle may be more than one type at a time. A type code is used to
