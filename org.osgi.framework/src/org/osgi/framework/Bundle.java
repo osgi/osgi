@@ -1274,8 +1274,8 @@ public interface Bundle {
 	 * @return A <code>Collection</code> of <code>Bundle</code>s currently
 	 *         requiring this bundle. The collection will be empty if no bundles
 	 *         require this bundle.
-	 * @since 1.6
 	 * @throws IllegalStateException If this bundle has been uninstalled.
+	 * @since 1.6
 	 */
 	Collection<Bundle> getRequiringBundles();
 
@@ -1315,13 +1315,12 @@ public interface Bundle {
 	 * must occur asynchronously.
 	 * 
 	 * @param startlevel The new start level for the specified Bundle.
-	 * @throws IllegalArgumentException If this bundle has been uninstalled, or
-	 *         if the specified start level is less than or equal to zero, or if
-	 *         this bundle is the system bundle.
+	 * @throws IllegalArgumentException If the specified start level is less
+	 *         than or equal to zero, or if this bundle is the system bundle.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AdminPermission[bundle,EXECUTE]</code> and the Java runtime
 	 *         environment supports permissions.
-	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @since 1.6
 	 */
 	void setStartLevel(int startlevel);
@@ -1335,10 +1334,8 @@ public interface Bundle {
 	 * 
 	 * @return <code>true</code> if the autostart setting of this bundle
 	 *         indicates it is to be started. <code>false</code> otherwise.
-	 * @throws java.lang.IllegalArgumentException If this bundle has been
-	 *         uninstalled.
-	 * @see Bundle#START_TRANSIENT
 	 * @throws IllegalStateException If this bundle has been uninstalled.
+	 * @see #START_TRANSIENT
 	 * @since 1.6
 	 */
 	boolean isPersistentlyStarted();
@@ -1353,10 +1350,8 @@ public interface Bundle {
 	 * @return <code>true</code> if this bundle's autostart setting indicates
 	 *         the activation policy declared in the manifest must be used.
 	 *         <code>false</code> if this bundle must be eagerly activated.
-	 * @throws java.lang.IllegalArgumentException If this bundle has been
-	 *         uninstalled.
-	 * @see Bundle#START_ACTIVATION_POLICY
 	 * @throws IllegalStateException If this bundle has been uninstalled.
+	 * @see #START_ACTIVATION_POLICY
 	 * @since 1.6
 	 */
 	boolean isActivationPolicyUsed();

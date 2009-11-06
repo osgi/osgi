@@ -590,8 +590,7 @@ public interface FrameworkContext {
 	 *         valid.
 	 * @since 1.6
 	 */
-	List<Bundle> getBundles(String symbolicName,
-			String versionRange);
+	List<Bundle> getBundles(String symbolicName, String versionRange);
 
 	/**
 	 * Return the active start level value of the Framework.
@@ -601,9 +600,9 @@ public interface FrameworkContext {
 	 * requested start level.
 	 * 
 	 * @return The active start level value of the Framework.
-	 * @see #setStartLevel(int)
 	 * @throws IllegalStateException If this FrameworkContext is no longer
 	 *         valid.
+	 * @see #setStartLevel(int)
 	 * @since 1.6
 	 */
 	public int getStartLevel();
@@ -665,11 +664,11 @@ public interface FrameworkContext {
 	 * @param startlevel The requested start level for the Framework.
 	 * @throws IllegalArgumentException If the specified start level is less
 	 *         than or equal to zero.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the
 	 *         Java runtime environment supports permissions.
-	 * @throws IllegalStateException If this FrameworkContext is no longer
-	 *         valid.
 	 * @since 1.6
 	 */
 	void setStartLevel(int startlevel);
@@ -679,9 +678,9 @@ public interface FrameworkContext {
 	 * is first installed.
 	 * 
 	 * @return The initial start level value for Bundles.
-	 * @see #setInitialBundleStartLevel(int)
 	 * @throws IllegalStateException If this FrameworkContext is no longer
 	 *         valid.
+	 * @see #setInitialBundleStartLevel(int)
 	 * @since 1.6
 	 */
 	int getInitialBundleStartLevel();
@@ -710,11 +709,11 @@ public interface FrameworkContext {
 	 * @param startlevel The initial start level for newly installed bundles.
 	 * @throws IllegalArgumentException If the specified start level is less
 	 *         than or equal to zero.
+	 * @throws IllegalStateException If this FrameworkContext is no longer
+	 *         valid.
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the
 	 *         Java runtime environment supports permissions.
-	 * @throws IllegalStateException If this FrameworkContext is no longer
-	 *         valid.
 	 * @since 1.6
 	 */
 	void setInitialBundleStartLevel(int startlevel);
