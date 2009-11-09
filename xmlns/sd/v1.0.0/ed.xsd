@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
     /*
-    * $Revision$
-    * 
     * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
     * 
     * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,76 +17,70 @@
     */
 -->
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
-    xmlns:sd="http://www.osgi.org/xmlns/sd/v1.0.0"
-    targetNamespace="http://www.osgi.org/xmlns/sd/v1.0.0"
-    elementFormDefault="qualified" 
+    xmlns:ed="http://www.osgi.org/xmlns/ed/v1.0.0"
+    targetNamespace="http://www.osgi.org/xmlns/ed/v1.0.0"
+    elementFormDefault="unqualified" 
     version="1.0.0">
 
     <annotation>
         <documentation xml:lang="en">
-            This is the XML Schema for service descriptions used by
-            Distributed OSGi. Service descriptions are used to describe
-            remote services to a client. An extender, such as a local
-            Discovery Service can look for service descriptions in
-            installed bundles and then a Distribution Software can
-            create proxies to the remote services based on the service
-            descriptions.
+            This is the XML Schema for endpoint descriptions used by
+            the Remote Service Admin Specification. Endpoint descriptions 
+            are used to describe remote services to a client in cases 
+            where a real live Discovery system isn't used. An extender, 
+            such as a local Discovery Service can look for service 
+            descriptions in installed bundles and inform the Topology 
+            Manager of these remote services. The Topology Manager can then
+            instruct the Remote Service Admin to create client proxies for
+            these services.
         </documentation>
     </annotation>
 
-    <element name="service-descriptions"
-        type="sd:Tservice-descriptions" />
+    <element name="endpoint-descriptions"
+        type="ed:Tendpoint-descriptions" />
 
-    <complexType name="Tservice-descriptions">
+    <complexType name="Tendpoint-descriptions">
         <sequence>
-            <element name="service-description"
-                type="sd:Tservice-description" minOccurs="1" maxOccurs="unbounded" />
+            <element name="endpoint-description"
+                type="ed:Tendpoint-description" minOccurs="1" maxOccurs="unbounded" />
             <!-- It is non-deterministic, per W3C XML Schema 1.0: http://www.w3.org/TR/xmlschema-1/#cos-nonambig
-                to use namespace="##any" below. -->
+                 to use namespace="##any" below. -->
             <any namespace="##other" processContents="lax" minOccurs="0"
                 maxOccurs="unbounded" />
         </sequence>
         <anyAttribute />
     </complexType>
 
-    <complexType name="Tservice-description">
+    <complexType name="Tendpoint-description">
         <annotation>
             <documentation xml:lang="en">
-                A Distribution Software is required to register a proxy
-                with the interface(s) and any properties provided. If
-                any 'intents' properties are specified then the
-                Distribution Software should only register a proxy if it
-                can support those intents.
+                A Distribution Provider can register a proxy with the properties 
+                provided. 
+                Whether or not it is instructed to do so, is up to the Topology 
+                Manager.
+                If any 'intents' properties are specified then the Distribution 
+                Provider should only register a proxy if it can support those 
+                intents.
             </documentation>
         </annotation>
         <sequence>
-            <element name="provide" type="sd:Tprovide" minOccurs="1"
-                maxOccurs="unbounded" />
-            <element name="property" type="sd:Tproperty" minOccurs="0"
+            <!-- TODO arrays ... -->
+            <element name="property" type="ed:Tproperty" minOccurs="0"
                 maxOccurs="unbounded" />
             <!-- It is non-deterministic, per W3C XML Schema 1.0: http://www.w3.org/TR/xmlschema-1/#cos-nonambig
-                to use namespace="##any" below. -->
+                 to use namespace="##any" below. -->
             <any namespace="##other" processContents="lax" minOccurs="0"
                 maxOccurs="unbounded" />
         </sequence>
         <anyAttribute />
     </complexType>
     
-    <complexType name="Tprovide">
-        <sequence>
-            <any namespace="##any" processContents="lax" minOccurs="0"
-                maxOccurs="unbounded" />
-        </sequence>
-        <attribute name="interface" type="token" use="required" />
-        <anyAttribute />
-    </complexType>    
-
     <complexType name="Tproperty">
         <simpleContent>
             <extension base="string">
                 <attribute name="name" type="string" use="required" />
                 <attribute name="value" type="string" use="optional" />
-                <attribute name="type" type="sd:Tjava-types"
+                <attribute name="type" type="ed:Tjava-types"
                     default="String" use="optional" />
                 <anyAttribute />
             </extension>
