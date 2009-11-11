@@ -18,7 +18,7 @@
 			nonavbar="false" 
 			notree="false" 
 			packagenames="${javadoc.packages}" 
-			source="1.3" 
+			source="1.5" 
 			splitindex="true" 
 			use="false" 
 			version="false"
@@ -26,7 +26,7 @@
 			docencoding="UTF-8"
 			charset="UTF-8">
 		    <bootclasspath>
-      			<pathelement location="${repo}/ee.foundation/ee.foundation-1.1.0.jar"/>
+      			<pathelement location="${repo}/ee.j2se/ee.j2se-1.5.0.jar"/>
     		</bootclasspath>
 		    <classpath>
       			<pathelement location="${licensed-repo}/org.osgi.impl.bundle.servlet/org.osgi.impl.bundle.servlet-2.1.0.jar"/>
