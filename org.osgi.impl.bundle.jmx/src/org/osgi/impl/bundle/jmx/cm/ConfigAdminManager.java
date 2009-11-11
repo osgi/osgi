@@ -14,10 +14,7 @@
  * the License.
  */
 package org.osgi.impl.bundle.jmx.cm;
-
-import static org.osgi.jmx.codec.OSGiProperties.parse;
-import static org.osgi.jmx.codec.OSGiProperties.propertiesFrom;
-import static org.osgi.jmx.codec.OSGiProperties.tableFrom;
+ import static org.osgi.impl.bundle.jmx.codec.OSGiProperties.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,15 +25,15 @@ import java.util.logging.Logger;
 
 import javax.management.openmbean.TabularData;
 
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.jmx.service.cm.ConfigAdminManagerMBean;
+import org.osgi.framework.InvalidSyntaxException; 
+import org.osgi.jmx.service.cm.ConfigurationAdminMBean;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
 /** 
  * 
  */
-public class ConfigAdminManager implements ConfigAdminManagerMBean {
+public class ConfigAdminManager implements ConfigurationAdminMBean {
 
 	protected ConfigurationAdmin admin;
 	private static final Logger log = Logger.getLogger(ConfigAdminManager.class
@@ -187,68 +184,6 @@ public class ConfigAdminManager implements ConfigAdminManagerMBean {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.osgi.jmx.compendium.ConfigAdminManagerMBean#deleteProperty(java.lang
-	 * .String, java.lang.String)
-	 */
-	@SuppressWarnings("unchecked")
-	public void deleteProperty(String pid, String key) throws IOException {
-		Configuration conf = admin.getConfiguration(pid, null);
-		Dictionary props = conf.getProperties();
-		if (props != null) {
-			props.remove(key);
-			conf.update(props);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.osgi.jmx.compendium.ConfigAdminManagerMBean#deleteProperty(java.lang
-	 * .String, java.lang.String, java.lang.String)
-	 */
-	@SuppressWarnings("unchecked")
-	public void deleteProperty(String pid, String location, String key)
-			throws IOException {
-		Configuration conf = admin.getConfiguration(pid, location);
-		Dictionary props = conf.getProperties();
-		if (props != null) {
-			props.remove(key);
-			conf.update(props);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seeorg.osgi.jmx.compendium.ConfigAdminManagerMBean#
-	 * deletePropertyFromConfigurations(java.lang.String, java.lang.String)
-	 */
-	@SuppressWarnings("unchecked")
-	public void deletePropertyFromConfigurations(String filter, String key)
-			throws IOException {
-		Configuration[] confs;
-		try {
-			confs = admin.listConfigurations(filter);
-		} catch (InvalidSyntaxException e) {
-			log.log(Level.SEVERE, "Invalid filter argument: " + filter, e);
-			throw new IllegalArgumentException("Invalid filter: " + e);
-		}
-		if (confs != null) {
-			for (Configuration conf : confs) {
-				Dictionary dic = conf.getProperties();
-				if (dic != null) {
-					dic.remove(key);
-					conf.update(dic);
-				}
-			}
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * org.osgi.jmx.compendium.ConfigAdminManagerMBean#getBundleLocation(java
 	 * .lang.String)
 	 */
@@ -314,7 +249,7 @@ public class ConfigAdminManager implements ConfigAdminManagerMBean {
 	 * org.osgi.jmx.compendium.ConfigAdminManagerMBean#listConfigurations(java
 	 * .lang.String)
 	 */
-	public String[][] listConfigurations(String filter) throws IOException {
+	public String[][] getConfigurations(String filter) throws IOException {
 		ArrayList<String[]> pids = new ArrayList<String[]>();
 		Configuration[] configurations;
 		try {

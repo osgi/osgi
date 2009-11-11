@@ -15,15 +15,6 @@
  */
 package org.osgi.impl.bundle.jmx;
 
-import static org.osgi.jmx.JmxConstants.BUNDLE_STATE;
-import static org.osgi.jmx.JmxConstants.CM_SERVICE;
-import static org.osgi.jmx.JmxConstants.FRAMEWORK;
-import static org.osgi.jmx.JmxConstants.PACKAGE_STATE;
-import static org.osgi.jmx.JmxConstants.PA_SERVICE;
-import static org.osgi.jmx.JmxConstants.PS_SERVICE;
-import static org.osgi.jmx.JmxConstants.SERVICE_STATE;
-import static org.osgi.jmx.JmxConstants.UA_SERVICE;
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -49,14 +40,13 @@ import org.osgi.impl.bundle.jmx.framework.ServiceState;
 import org.osgi.impl.bundle.jmx.permissionadmin.PermissionManager;
 import org.osgi.impl.bundle.jmx.provisioning.Provisioning;
 import org.osgi.impl.bundle.jmx.useradmin.UserManager;
-import org.osgi.jmx.service.cm.ConfigAdminManagerMBean;
-import org.osgi.jmx.service.framework.BundleStateMBean;
-import org.osgi.jmx.service.framework.FrameworkMBean;
-import org.osgi.jmx.service.framework.PackageStateMBean;
-import org.osgi.jmx.service.framework.ServiceStateMBean;
-import org.osgi.jmx.service.permissionadmin.PermissionManagerMBean;
-import org.osgi.jmx.service.provisioning.ProvisioningMBean;
-import org.osgi.jmx.service.useradmin.UserManagerMBean;
+import org.osgi.jmx.framework.BundleStateMBean;
+import org.osgi.jmx.framework.FrameworkMBean;
+import org.osgi.jmx.framework.PackageStateMBean;
+import org.osgi.jmx.framework.ServiceStateMBean;
+import org.osgi.jmx.service.cm.ConfigurationAdminMBean;
+import org.osgi.jmx.service.provisioning.ProvisioningServiceMBean;
+import org.osgi.jmx.service.useradmin.UserAdminMBean;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.permissionadmin.PermissionAdmin;
@@ -83,10 +73,10 @@ public class Activator implements BundleActivator {
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
 		this.bundleContext = bundleContext;
-		frameworkName = new ObjectName(FRAMEWORK);
-		bundlesStateName = new ObjectName(BUNDLE_STATE);
-		serviceStateName = new ObjectName(SERVICE_STATE);
-		packageStateName = new ObjectName(PACKAGE_STATE);
+		frameworkName = new ObjectName(FrameworkMBean.OBJECTNAME);
+		bundlesStateName = new ObjectName(BundleStateMBean.OBJECTNAME);
+		serviceStateName = new ObjectName(ServiceStateMBean.OBJECTNAME);
+		packageStateName = new ObjectName(PackageStateMBean.OBJECTNAME);
 
 		mbeanServiceTracker = new ServiceTracker(bundleContext,
 				MBeanServer.class.getCanonicalName(), new MBeanServiceTracker());
@@ -361,10 +351,11 @@ public class Activator implements BundleActivator {
 
 		public ConfigAdminTracker() {
 			try {
-				name = new ObjectName(CM_SERVICE);
+				name = new ObjectName(ConfigurationAdminMBean.OBJECTNAME);
 			} catch (Throwable e) {
 				throw new IllegalStateException(
-						"unable to create object name: " + CM_SERVICE);
+						"unable to create object name: "
+								+ ConfigurationAdminMBean.OBJECTNAME);
 			}
 		}
 
@@ -391,7 +382,7 @@ public class Activator implements BundleActivator {
 
 			try {
 				manager = new StandardMBean(new ConfigAdminManager(admin),
-						ConfigAdminManagerMBean.class);
+						ConfigurationAdminMBean.class);
 			} catch (NotCompliantMBeanException e1) {
 				log.log(Level.SEVERE,
 						"Unable to create Configuration Admin Manager");
@@ -457,10 +448,11 @@ public class Activator implements BundleActivator {
 
 		public PermissionAdminTracker() {
 			try {
-				name = new ObjectName(PA_SERVICE);
+				name = new ObjectName(ProvisioningServiceMBean.OBJECTNAME);
 			} catch (Throwable e) {
 				throw new IllegalStateException(
-						"unable to create object name: " + PA_SERVICE);
+						"unable to create object name: "
+								+ ProvisioningServiceMBean.OBJECTNAME);
 			}
 		}
 
@@ -485,7 +477,7 @@ public class Activator implements BundleActivator {
 			}
 			try {
 				manager = new StandardMBean(new PermissionManager(admin),
-						PermissionManagerMBean.class);
+						ProvisioningServiceMBean.class);
 			} catch (NotCompliantMBeanException e1) {
 				log.log(Level.SEVERE,
 						"Unable to create Permission Admin Manager");
@@ -549,10 +541,11 @@ public class Activator implements BundleActivator {
 
 		public ProvisioningServiceTracker() {
 			try {
-				name = new ObjectName(PS_SERVICE);
+				name = new ObjectName(ProvisioningServiceMBean.OBJECTNAME);
 			} catch (Throwable e) {
 				throw new IllegalStateException(
-						"unable to create object name: " + PS_SERVICE);
+						"unable to create object name: "
+								+ ProvisioningServiceMBean.OBJECTNAME);
 			}
 		}
 
@@ -578,7 +571,7 @@ public class Activator implements BundleActivator {
 			}
 			try {
 				provisioning = new StandardMBean(new Provisioning(service),
-						ProvisioningMBean.class);
+						ProvisioningServiceMBean.class);
 			} catch (NotCompliantMBeanException e1) {
 				log.log(Level.SEVERE,
 						"Unable to create Provisioning Service Manager");
@@ -643,10 +636,11 @@ public class Activator implements BundleActivator {
 
 		public UserAdminTracker() {
 			try {
-				name = new ObjectName(UA_SERVICE);
+				name = new ObjectName(UserAdminMBean.OBJECTNAME);
 			} catch (Throwable e) {
 				throw new IllegalStateException(
-						"unable to create object name: " + UA_SERVICE);
+						"unable to create object name: "
+								+ UserAdminMBean.OBJECTNAME);
 			}
 		}
 
@@ -671,7 +665,7 @@ public class Activator implements BundleActivator {
 			}
 			try {
 				manager = new StandardMBean(new UserManager(admin),
-						UserManagerMBean.class);
+						UserAdminMBean.class);
 			} catch (NotCompliantMBeanException e1) {
 				log.log(Level.SEVERE, "Unable to create User Admin Manager");
 				return admin;

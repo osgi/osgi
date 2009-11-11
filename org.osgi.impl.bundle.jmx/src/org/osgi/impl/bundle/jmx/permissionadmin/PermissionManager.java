@@ -17,14 +17,14 @@ package org.osgi.impl.bundle.jmx.permissionadmin;
 
 import java.io.IOException;
 
-import org.osgi.jmx.service.permissionadmin.PermissionManagerMBean;
+import org.osgi.jmx.service.permissionadmin.PermissionAdminMBean;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /** 
  * 
  */
-public class PermissionManager implements PermissionManagerMBean {
+public class PermissionManager implements PermissionAdminMBean {
 
 	protected PermissionAdmin admin;
 
@@ -35,9 +35,9 @@ public class PermissionManager implements PermissionManagerMBean {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.osgi.jmx.compendium.PermissionManagerMBean#getLocations()
+	 * @see org.osgi.jmx.compendium.PermissionManagerMBean#listLocations()
 	 */
-	public String[] getLocations() throws IOException {
+	public String[] listLocations() throws IOException {
 		return admin.getLocations();
 	}
 
@@ -82,9 +82,9 @@ public class PermissionManager implements PermissionManagerMBean {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.osgi.jmx.compendium.PermissionManagerMBean#getDefaultPermissions()
+	 * org.osgi.jmx.compendium.PermissionManagerMBean#listDefaultPermissions()
 	 */
-	public String[] getDefaultPermissions() throws IOException {
+	public String[] listDefaultPermissions() throws IOException {
 		PermissionInfo[] permissions = admin.getDefaultPermissions();
 		if (permissions == null) {
 			return null;

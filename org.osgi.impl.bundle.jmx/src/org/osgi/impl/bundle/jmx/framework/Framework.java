@@ -24,9 +24,9 @@ import javax.management.openmbean.CompositeData;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import org.osgi.jmx.codec.BundleBatchActionResult;
-import org.osgi.jmx.codec.BundleBatchInstallResult;
-import org.osgi.jmx.service.framework.FrameworkMBean;
+import org.osgi.impl.bundle.jmx.framework.codec.BundleBatchActionResult;
+import org.osgi.impl.bundle.jmx.framework.codec.BundleBatchInstallResult;
+import org.osgi.jmx.framework.FrameworkMBean;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.startlevel.StartLevel;
 

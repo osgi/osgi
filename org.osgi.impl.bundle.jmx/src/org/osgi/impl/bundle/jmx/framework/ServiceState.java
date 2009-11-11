@@ -33,10 +33,10 @@ import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.bundle.jmx.Monitor;
-import org.osgi.jmx.codec.OSGiProperties;
-import org.osgi.jmx.codec.OSGiService;
-import org.osgi.jmx.codec.OSGiServiceEvent;
-import org.osgi.jmx.service.framework.ServiceStateMBean;
+import org.osgi.impl.bundle.jmx.codec.OSGiProperties;
+import org.osgi.impl.bundle.jmx.framework.codec.OSGiService;
+import org.osgi.impl.bundle.jmx.framework.codec.OSGiServiceEvent;
+import org.osgi.jmx.framework.ServiceStateMBean;
 import org.osgi.util.tracker.ServiceTracker;
 
 /** 
@@ -47,7 +47,7 @@ public class ServiceState extends Monitor implements ServiceStateMBean {
 		this.bc = bc;
 	}
 
-	public long getBundle(long serviceId) throws IOException {
+	public long getBundleIdentifier(long serviceId) throws IOException {
 		return ref(serviceId).getBundle().getBundleId();
 	}
 
@@ -61,17 +61,17 @@ public class ServiceState extends Monitor implements ServiceStateMBean {
 	 * @see org.osgi.jmx.core.ServiceStateMBean#getBundle(long)
 	 */
 
-	public String[] getServiceInterfaces(long serviceId) throws IOException {
+	public String[] getObjectClass(long serviceId) throws IOException {
 		return (String[]) ref(serviceId).getProperty(OBJECTCLASS);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.osgi.jmx.core.ServiceStateMBean#getProperties(long)
+	 * @see org.osgi.jmx.core.ServiceStateMBean#listServices()
 	 */
 
-	public TabularData getServices() {
+	public TabularData listServices() {
 		ArrayList<OSGiService> services = new ArrayList<OSGiService>();
 		for (Bundle bundle : bc.getBundles()) {
 			ServiceReference[] refs = bundle.getRegisteredServices();
@@ -126,7 +126,7 @@ public class ServiceState extends Monitor implements ServiceStateMBean {
 		return new AllServiceListener() {
 			public void serviceChanged(ServiceEvent serviceEvent) {
 				Notification notification = new Notification(
-						SERVICE_EVENT_TYPE, objectName, sequenceNumber++);
+						ServiceStateMBean.EVENT, objectName, sequenceNumber++);
 				notification.setUserData(new OSGiServiceEvent(serviceEvent)
 						.asCompositeData());
 				sendNotification(notification);

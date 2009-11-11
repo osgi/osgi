@@ -24,12 +24,12 @@ import javax.management.openmbean.TabularData;
 
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.impl.bundle.jmx.Monitor;
-import org.osgi.jmx.codec.OSGiAuthorization;
-import org.osgi.jmx.codec.OSGiGroup;
-import org.osgi.jmx.codec.OSGiProperties;
-import org.osgi.jmx.codec.OSGiRole;
-import org.osgi.jmx.codec.OSGiUser;
-import org.osgi.jmx.service.useradmin.UserManagerMBean;
+import org.osgi.impl.bundle.jmx.codec.OSGiProperties;
+import org.osgi.impl.bundle.jmx.useradmin.codec.OSGiAuthorization;
+import org.osgi.impl.bundle.jmx.useradmin.codec.OSGiGroup;
+import org.osgi.impl.bundle.jmx.useradmin.codec.OSGiRole;
+import org.osgi.impl.bundle.jmx.useradmin.codec.OSGiUser;
+import org.osgi.jmx.service.useradmin.UserAdminMBean;
 import org.osgi.service.useradmin.Group;
 import org.osgi.service.useradmin.Role;
 import org.osgi.service.useradmin.User;
@@ -38,7 +38,7 @@ import org.osgi.service.useradmin.UserAdmin;
 /** 
  * 
  */
-public class UserManager extends Monitor implements UserManagerMBean {
+public class UserManager extends Monitor implements UserAdminMBean {
 
 	protected UserAdmin admin;
 
@@ -158,7 +158,6 @@ public class UserManager extends Monitor implements UserManagerMBean {
 		admin.createRole(name, Role.USER);
 	}
 
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -204,7 +203,7 @@ public class UserManager extends Monitor implements UserManagerMBean {
 		} catch (ClassCastException e) {
 			throw new IllegalArgumentException("Not a user: " + username);
 		}
-		if (user == null) { 
+		if (user == null) {
 			throw new IllegalArgumentException("Not a user: " + username);
 		}
 		return OSGiProperties.tableFrom(user.getCredentials());
@@ -232,9 +231,9 @@ public class UserManager extends Monitor implements UserManagerMBean {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.osgi.jmx.compendium.UserManagerMBean#getGroups()
+	 * @see org.osgi.jmx.compendium.UserManagerMBean#listGroups()
 	 */
-	public String[] getGroups() throws IOException {
+	public String[] listGroups() throws IOException {
 		Role[] roles;
 		try {
 			roles = admin.getRoles(null);
@@ -369,9 +368,9 @@ public class UserManager extends Monitor implements UserManagerMBean {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.osgi.jmx.compendium.UserManagerMBean#getRoles()
+	 * @see org.osgi.jmx.compendium.UserManagerMBean#listRoles()
 	 */
-	public String[] getRoles() throws IOException {
+	public String[] listRoles() throws IOException {
 		Role[] roles;
 		try {
 			roles = admin.getRoles(null);
@@ -438,9 +437,9 @@ public class UserManager extends Monitor implements UserManagerMBean {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.osgi.jmx.compendium.UserManagerMBean#getUsers()
+	 * @see org.osgi.jmx.compendium.UserManagerMBean#listUsers()
 	 */
-	public String[] getUsers() throws IOException {
+	public String[] listUsers() throws IOException {
 		Role[] roles;
 		try {
 			roles = admin.getRoles(null);

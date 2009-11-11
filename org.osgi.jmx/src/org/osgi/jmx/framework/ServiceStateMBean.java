@@ -36,79 +36,72 @@ public interface ServiceStateMBean {
 	/**
 	 * The fully qualified object name of this mbean.
 	 */
-	String			OBJECTNAME				= JmxConstants.OSGI_CORE
-													+ ":type=serviceState,version=1.5";
+	String OBJECTNAME = JmxConstants.OSGI_CORE
+			+ ":type=serviceState,version=1.5";
 	/**
 	 * The key BUNDLE_IDENTIFIER, used in {@link #BUNDLE_IDENTIFIER_ITEM}.
 	 */
-	String			BUNDLE_IDENTIFIER		= "BundleIdentifier";
+	String BUNDLE_IDENTIFIER = "BundleIdentifier";
 	/**
 	 * The item containing the bundle identifier in {@link #SERVICE_TYPE}. The
 	 * key is {@link #BUNDLE_IDENTIFIER} and the type is {@link SimpleType#LONG}
 	 * .
 	 */
-	Item			BUNDLE_IDENTIFIER_ITEM	= new Item(
-													BUNDLE_IDENTIFIER,
-													"The identifier of the bundle the service belongs to",
-													SimpleType.LONG);
+	Item BUNDLE_IDENTIFIER_ITEM = new Item(BUNDLE_IDENTIFIER,
+			"The identifier of the bundle the service belongs to",
+			SimpleType.LONG);
 
 	/**
 	 * The key OBJECT_CLASS, used {@link #OBJECT_CLASS_ITEM}.
 	 */
-	String			OBJECT_CLASS			= "objectClass";
+	String OBJECT_CLASS = "objectClass";
 
 	/**
 	 * The item containing the interfaces of the service in
 	 * {@link #SERVICE_TYPE}. The key is {@link #OBJECT_CLASS} and the type is
 	 * {@link JmxConstants#STRING_ARRAY_TYPE}.
 	 */
-	Item			OBJECT_CLASS_ITEM		= new Item(
-													OBJECT_CLASS,
-													"An string array containing the interfaces under which the service has been registered",
-													JmxConstants.STRING_ARRAY_TYPE);
+	Item OBJECT_CLASS_ITEM = new Item(
+			OBJECT_CLASS,
+			"An string array containing the interfaces under which the service has been registered",
+			JmxConstants.STRING_ARRAY_TYPE);
 
 	/**
 	 * The key IDENTIFIER, used {@link #IDENTIFIER_ITEM}.
 	 */
-	String			IDENTIFIER				= "Identifier";
+	String IDENTIFIER = "Identifier";
 
 	/**
 	 * The item containing the service identifier in {@link #SERVICE_TYPE}. The
 	 * key is {@link #IDENTIFIER} and the type is {@link SimpleType#LONG}.
 	 */
-	Item			IDENTIFIER_ITEM			= new Item(
-													IDENTIFIER,
-													"The identifier of the service",
-													SimpleType.LONG);
+	Item IDENTIFIER_ITEM = new Item(IDENTIFIER,
+			"The identifier of the service", SimpleType.LONG);
 
 	/**
 	 * The key USING_BUNDLES, used in {@link #USING_BUNDLES_ITEM}.
 	 */
-	String			USING_BUNDLES			= "UsingBundles";
+	String USING_BUNDLES = "UsingBundles";
 
 	/**
 	 * The item containing the bundles using the service in
 	 * {@link #SERVICE_TYPE}. The key is {@link #USING_BUNDLES} and the type is
 	 * {@link JmxConstants#LONG_ARRAY_TYPE}.
 	 */
-	Item			USING_BUNDLES_ITEM		= new Item(
-													USING_BUNDLES,
-													"The bundles using the service",
-													JmxConstants.LONG_ARRAY_TYPE);
+	Item USING_BUNDLES_ITEM = new Item(USING_BUNDLES,
+			"The bundles using the service", JmxConstants.LONG_ARRAY_TYPE);
 
 	/**
 	 * The key PROPERTIES, used in {@link #PROPERTIES_ITEM}.
 	 */
-	String			PROPERTIES				= "Properties";
+	String PROPERTIES = "Properties";
 
 	/**
 	 * The item containing service properties. The key is {@link #PROPERTIES}
 	 * and the type is {@link JmxConstants#PROPERTIES_TYPE}.
 	 */
-	Item			PROPERTIES_ITEM			= new Item(
-													PROPERTIES,
-													"The service properties",
-													JmxConstants.PROPERTIES_TYPE);
+	Item PROPERTIES_ITEM = new Item(PROPERTIES, "The service properties",
+			JmxConstants.PROPERTIES_TYPE);
 
 	/**
 	 * The item names in the CompositeData representing the service. This type
@@ -121,45 +114,96 @@ public interface ServiceStateMBean {
 	 * <li>{@link #USING_BUNDLES}</li>
 	 * </ul>
 	 */
-	CompositeType	SERVICE_TYPE			= Item
-													.compositeType(
-															"SERVICE",
-															"This type encapsulates an OSGi service",
-															BUNDLE_IDENTIFIER_ITEM,
-															IDENTIFIER_ITEM,
-															OBJECT_CLASS_ITEM,
-															PROPERTIES_ITEM,
-															USING_BUNDLES_ITEM);
+	CompositeType SERVICE_TYPE = Item.compositeType("SERVICE",
+			"This type encapsulates an OSGi service", BUNDLE_IDENTIFIER_ITEM,
+			IDENTIFIER_ITEM, OBJECT_CLASS_ITEM, PROPERTIES_ITEM,
+			USING_BUNDLES_ITEM);
 
 	/**
 	 * The Tabular Type for a Service table. The rows consists of
 	 * {@link #SERVICE_TYPE} Composite Data and the index is {@link #IDENTIFIER}
 	 * .
 	 */
-	TabularType		SERVICES_TYPE			= Item
-													.tabularType(
-															"SERVICES",
-															"The table of all services",
-															SERVICE_TYPE,
-															IDENTIFIER);
+	TabularType SERVICES_TYPE = Item.tabularType("SERVICES",
+			"The table of all services", SERVICE_TYPE, IDENTIFIER);
+
+	/**
+	 * The key BUNDLE_LOCATION, used in {@link #SERVICE_EVENT_TYPE}.
+	 */
+	String BUNDLE_LOCATION = "BundleLocation";
+	/**
+	 * The item containing the bundle location in {@link #EVENT_ITEM}. The key
+	 * is {@link #BUNDLE_LOCATION} and the the type is {@link SimpleType#STRING}
+	 * .
+	 */
+	Item BUNDLE_LOCATION_ITEM = new Item(BUNDLE_LOCATION,
+			"The location of the bundle", SimpleType.STRING);
+	/**
+	 * The key BUNDLE_SYMBOLIC_NAME, used in {@link #SERVICE_EVENT_TYPE}.
+	 */
+	String BUNDLE_SYMBOLIC_NAME = "BundleSymbolicName";
+
+	/**
+	 * The item containing the symbolic name in {@link #EVENT}. The key is
+	 * {@link #BUNDLE_SYMBOLIC_NAME} and the the type is
+	 * {@link SimpleType#STRING}.
+	 */
+	Item BUNDLE_SYMBOLIC_NAME_ITEM = new Item(BUNDLE_SYMBOLIC_NAME,
+			"The symbolic name of the bundle", SimpleType.STRING);
+
+	/**
+	 * The key EVENT, used in {@link #EVENT_ITEM}.
+	 */
+	String EVENT = "ServiceEvent";
+
+	/**
+	 * The item containing the event type. The key is {@link #EVENT} and the
+	 * type is {@link SimpleType#INTEGER}
+	 */
+	Item EVENT_ITEM = new Item(
+			EVENT,
+			"The eventType of the event: {REGISTERED=1, MODIFIED=2 UNREGISTERING=3}",
+			SimpleType.INTEGER);
+
+	/**
+	 * The Composite Type that represents a service event. This composite
+	 * consists of:
+	 * <ul>
+	 * <li>{@link #IDENTIFIER}</li>
+	 * <li>{@link #OBJECT_CLASS}</li>
+	 * <li>{@link #BUNDLE_LOCATION}</li>
+	 * <li>{@link #BUNDLE_SYMBOLIC_NAME}</li>
+	 * <li>{@link #EVENT}</li>
+	 * </ul>
+	 */
+	CompositeType SERVICE_EVENT_TYPE = Item.compositeType("SERVICE_EVENT",
+			"This type encapsulates OSGi service events", IDENTIFIER_ITEM,
+			OBJECT_CLASS_ITEM, BUNDLE_IDENTIFIER_ITEM, BUNDLE_LOCATION_ITEM,
+			BUNDLE_SYMBOLIC_NAME_ITEM, EVENT_ITEM);
 
 	/**
 	 * Answer the list of interfaces that this service implements
 	 * 
-	 * @param serviceId the identifier of the service
+	 * @param serviceId
+	 *            the identifier of the service
 	 * @return the list of interfaces
-	 * @throws IOException if the operation fails
-	 * @throws IllegalArgumentException if the service indicated does not exist
+	 * @throws IOException
+	 *             if the operation fails
+	 * @throws IllegalArgumentException
+	 *             if the service indicated does not exist
 	 */
 	public String[] getObjectClass(long serviceId) throws IOException;
 
 	/**
 	 * Answer the bundle identifier of the bundle which registered the service
 	 * 
-	 * @param serviceId the identifier of the service
+	 * @param serviceId
+	 *            the identifier of the service
 	 * @return the identifier for the bundle
-	 * @throws IOException if the operation fails
-	 * @throws IllegalArgumentException if the service indicated does not exist
+	 * @throws IOException
+	 *             if the operation fails
+	 * @throws IllegalArgumentException
+	 *             if the service indicated does not exist
 	 */
 	long getBundleIdentifier(long serviceId) throws IOException;
 
@@ -168,12 +212,15 @@ public interface ServiceStateMBean {
 	 * 
 	 * @see JmxConstants#PROPERTIES_TYPE for the details of the TabularType
 	 * 
-	 * @param serviceId the identifier of the service
+	 * @param serviceId
+	 *            the identifier of the service
 	 * @return the table of properties. These include the standard mandatory
 	 *         service.id and objectClass properties as defined in the
 	 *         <code>org.osgi.framework.Constants</code> interface
-	 * @throws IOException if the operation fails
-	 * @throws IllegalArgumentException if the service indicated does not exist
+	 * @throws IOException
+	 *             if the operation fails
+	 * @throws IllegalArgumentException
+	 *             if the service indicated does not exist
 	 */
 	TabularData getProperties(long serviceId) throws IOException;
 
@@ -183,18 +230,23 @@ public interface ServiceStateMBean {
 	 * @see #SERVICES_TYPE for the details of the TabularType
 	 * 
 	 * @return the tabular representation of the service state
-	 * @throws IOException If the operation fails
-	 * @throws IllegalArgumentException if the service indicated does not exist
+	 * @throws IOException
+	 *             If the operation fails
+	 * @throws IllegalArgumentException
+	 *             if the service indicated does not exist
 	 */
 	TabularData listServices() throws IOException;
 
 	/**
 	 * Answer the list of identifiers of the bundles that use the service
 	 * 
-	 * @param serviceId the identifier of the service
+	 * @param serviceId
+	 *            the identifier of the service
 	 * @return the list of bundle identifiers
-	 * @throws IOException if the operation fails
-	 * @throws IllegalArgumentException if the service indicated does not exist
+	 * @throws IOException
+	 *             if the operation fails
+	 * @throws IllegalArgumentException
+	 *             if the service indicated does not exist
 	 */
 	long[] getUsingBundles(long serviceId) throws IOException;
 

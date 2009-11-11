@@ -26,10 +26,10 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleListener;
 import org.osgi.impl.bundle.jmx.Monitor;
-import org.osgi.jmx.codec.OSGiBundle;
-import org.osgi.jmx.codec.OSGiBundleEvent;
-import org.osgi.jmx.codec.Util;
-import org.osgi.jmx.service.framework.BundleStateMBean;
+import org.osgi.impl.bundle.jmx.codec.Util;
+import org.osgi.impl.bundle.jmx.framework.codec.OSGiBundle;
+import org.osgi.impl.bundle.jmx.framework.codec.OSGiBundleEvent;
+import org.osgi.jmx.framework.BundleStateMBean;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.startlevel.StartLevel;
@@ -49,7 +49,7 @@ public class BundleState extends Monitor implements BundleStateMBean {
 	 * 
 	 * @see org.osgi.jmx.core.BundleStateMBean#getBundleDependencies()
 	 */
-	public long[] getDependencies(long bundleIdentifier) throws IOException {
+	public long[] listDependencies(long bundleIdentifier) throws IOException {
 		return Util.getBundleDependencies(bundle(bundleIdentifier), admin);
 	}
 
@@ -58,7 +58,7 @@ public class BundleState extends Monitor implements BundleStateMBean {
 	 * 
 	 * @see org.osgi.jmx.core.BundleStateMBean#getBundles()
 	 */
-	public TabularData getBundles() throws IOException {
+	public TabularData listBundles() throws IOException {
 		try {
 			ArrayList<OSGiBundle> bundles = new ArrayList<OSGiBundle>();
 			for (Bundle bundle : bc.getBundles()) {
@@ -78,7 +78,8 @@ public class BundleState extends Monitor implements BundleStateMBean {
 	 * @see org.osgi.jmx.core.BundleStateMBean#getExportedPackages()
 	 */
 	public String[] getExportedPackages(long bundleId) throws IOException {
-		ExportedPackage[] packages = admin.getExportedPackages(bundle(bundleId));
+		ExportedPackage[] packages = admin
+				.getExportedPackages(bundle(bundleId));
 		if (packages == null) {
 			return new String[0];
 		}
@@ -192,6 +193,14 @@ public class BundleState extends Monitor implements BundleStateMBean {
 		return bundle(bundleId).getSymbolicName();
 	}
 
+	public String getLocation(long bundleId) throws IOException {
+		return bundle(bundleId).getLocation();
+	}
+
+	public long[] getRequiredBundles(long bundleIdentifier) throws IOException {
+		return Util.getBundleDependencies(bundle(bundleIdentifier), admin);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -260,8 +269,8 @@ public class BundleState extends Monitor implements BundleStateMBean {
 	protected BundleListener getBundleListener() {
 		return new BundleListener() {
 			public void bundleChanged(BundleEvent bundleEvent) {
-				Notification notification = new Notification(BUNDLE_EVENT_TYPE,
-						objectName, sequenceNumber++);
+				Notification notification = new Notification(
+						BundleStateMBean.EVENT, objectName, sequenceNumber++);
 				notification.setUserData(new OSGiBundleEvent(bundleEvent)
 						.asCompositeData());
 				sendNotification(notification);

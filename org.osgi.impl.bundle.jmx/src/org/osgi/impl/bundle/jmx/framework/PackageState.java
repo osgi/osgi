@@ -24,8 +24,8 @@ import javax.management.openmbean.TabularData;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Version;
-import org.osgi.jmx.codec.OSGiPackage;
-import org.osgi.jmx.service.framework.PackageStateMBean;
+import org.osgi.impl.bundle.jmx.framework.codec.OSGiPackage;
+import org.osgi.jmx.framework.PackageStateMBean;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 
@@ -48,7 +48,8 @@ public class PackageState implements PackageStateMBean {
 	public long getExportingBundle(String packageName, String version)
 			throws IOException {
 		Version v = Version.parseVersion(version);
-		ExportedPackage[] exportedPackages = admin.getExportedPackages(packageName);
+		ExportedPackage[] exportedPackages = admin
+				.getExportedPackages(packageName);
 		if (exportedPackages == null) {
 			return -1;
 		}
@@ -70,7 +71,8 @@ public class PackageState implements PackageStateMBean {
 	public long[] getImportingBundles(String packageName, String version)
 			throws IOException {
 		Version v = Version.parseVersion(version);
-		ExportedPackage[] exportedPackages = admin.getExportedPackages(packageName);
+		ExportedPackage[] exportedPackages = admin
+				.getExportedPackages(packageName);
 		if (exportedPackages == null) {
 			return new long[0];
 		}
@@ -90,16 +92,16 @@ public class PackageState implements PackageStateMBean {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.osgi.jmx.core.PackageStateMBean#getPackages()
+	 * @see org.osgi.jmx.core.PackageStateMBean#listPackages()
 	 */
-	public TabularData getPackages() {
+	public TabularData listPackages() {
 		Set<OSGiPackage> packages = new HashSet<OSGiPackage>();
 		for (Bundle bundle : bc.getBundles()) {
 			ExportedPackage[] pkgs = admin.getExportedPackages(bundle);
 			if (pkgs != null) {
 				for (ExportedPackage pkg : pkgs) {
 					packages.add(new OSGiPackage(pkg));
-				} 
+				}
 			}
 		}
 		return OSGiPackage.tableFrom(packages);
@@ -115,7 +117,8 @@ public class PackageState implements PackageStateMBean {
 	public boolean isRemovalPending(String packageName, String version)
 			throws IOException {
 		Version v = Version.parseVersion(version);
-		ExportedPackage[] exportedPackages = admin.getExportedPackages(packageName);
+		ExportedPackage[] exportedPackages = admin
+				.getExportedPackages(packageName);
 		if (exportedPackages == null) {
 			return false;
 		}

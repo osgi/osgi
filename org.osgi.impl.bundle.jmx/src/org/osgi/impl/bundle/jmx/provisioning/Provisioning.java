@@ -15,8 +15,8 @@
  */
 package org.osgi.impl.bundle.jmx.provisioning;
 
-import static org.osgi.jmx.codec.OSGiProperties.propertiesFrom;
-import static org.osgi.jmx.codec.OSGiProperties.tableFrom;
+import static org.osgi.impl.bundle.jmx.codec.OSGiProperties.propertiesFrom;
+import static org.osgi.impl.bundle.jmx.codec.OSGiProperties.tableFrom;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,13 +25,13 @@ import java.util.zip.ZipInputStream;
 
 import javax.management.openmbean.TabularData;
 
-import org.osgi.jmx.service.provisioning.ProvisioningMBean;
+import org.osgi.jmx.service.provisioning.ProvisioningServiceMBean;
 import org.osgi.service.provisioning.ProvisioningService;
 
 /** 
  * 
  */
-public class Provisioning implements ProvisioningMBean {
+public class Provisioning implements ProvisioningServiceMBean {
 	protected ProvisioningService provisioning;
 
 	public Provisioning(ProvisioningService provisioning) {
@@ -69,9 +69,9 @@ public class Provisioning implements ProvisioningMBean {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.osgi.jmx.compendium.ProvisioningMBean#getInformation()
+	 * @see org.osgi.jmx.compendium.ProvisioningMBean#listInformation()
 	 */
-	public TabularData getInformation() throws IOException {
+	public TabularData listInformation() throws IOException {
 		return tableFrom(provisioning.getInformation());
 	}
 
