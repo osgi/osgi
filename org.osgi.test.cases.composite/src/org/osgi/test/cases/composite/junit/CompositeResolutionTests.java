@@ -101,6 +101,20 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		}
 	}
 
+	public void testSingletons05() {
+		// Test singletons in nested composites which requires a bundle with same BSN from the parent 
+		// (but no bundle installed in parent)
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb2");
+		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
+		Bundle tb2v2 = installConstituent(composite, "tb2v2", "tb2v2.jar");
+		PackageAdmin pa1 = (PackageAdmin) getService(composite.getSystemBundleContext(), PackageAdmin.class.getName());
+		pa1.resolveBundles(new Bundle[] {tb2v2});
+		assertTrue("Resolution is incorrect: " + tb2v2.getVersion(), tb2v2.getState() != Bundle.RESOLVED);
+		uninstallCompositeBundle(composite);
+	}
+
 	public void testFragments01() throws BundleException, IOException {
 		// Test fragment resolution in a composite which has both the fragment and host installed
 		Map manifest = new HashMap();
