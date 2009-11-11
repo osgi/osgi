@@ -18,6 +18,7 @@ package org.osgi.util.tracker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -30,11 +31,14 @@ import java.util.Map;
  * tracked items. This is not a public class. It is only for use by the
  * implementation of the Tracker class.
  * 
+ * @param <S> The tracked item. It is the key.
+ * @param <T> The value mapped to the tracked item.
+ * @param <R> The reason the tracked item is being tracked or untracked.
  * @ThreadSafe
  * @version $Revision$
  * @since 1.4
  */
-abstract class AbstractTracked<S, R, T> {
+abstract class AbstractTracked<S, T, R> {
 	/* set this to true to compile in debug messages */
 	static final boolean		DEBUG	= false;
 
@@ -377,14 +381,14 @@ abstract class AbstractTracked<S, R, T> {
 	}
 
 	/**
-	 * Return the list of tracked items.
+	 * Copy the tracked items into an array.
 	 * 
 	 * @param list An array to contain the tracked items.
 	 * @return The specified list if it is large enough to hold the tracked
 	 *         items or a new array large enough to hold the tracked items.
 	 * @GuardedBy this
 	 */
-	S[] getTracked(final S[] list) {
+	S[] copyKeys(final S[] list) {
 		return tracked.keySet().toArray(list);
 	}
 
@@ -410,6 +414,30 @@ abstract class AbstractTracked<S, R, T> {
 	 */
 	int getTrackingCount() {
 		return trackingCount;
+	}
+
+	/**
+	 * Copy the tracked items and associated values into the specified map.
+	 * 
+	 * @param <M> Type of <code>Map</code> to hold the tracked items and
+	 *        associated values.
+	 * @param map The map into which to copy the tracked items and associated
+	 *        values.
+	 * @return The specified map.
+	 * @GuardedBy this
+	 * @since 1.5
+	 */
+	<M extends Map< ? super S, ? super T>> M copyEntries(final M map) {
+		/*
+		 * We do not do map.putAll(tracked) since we must not expose the
+		 * internal map object, tracked, to user code.
+		 */
+		for (Iterator<Map.Entry<S, T>> iter = tracked.entrySet().iterator(); iter
+				.hasNext();) {
+			Map.Entry<S, T> e = iter.next();
+			map.put(e.getKey(), e.getValue());
+		}
+		return map;
 	}
 
 	/**

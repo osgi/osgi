@@ -26,7 +26,12 @@
 
 package org.osgi.test.cases.tracker.junit;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -557,11 +562,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 	public void testServiceTracker01() {
 		// simple ServiceTracker test
-		Runnable runIt = new Runnable() {
-			public void run() {
-				// nothing
-			}
-		};
+		Runnable runIt = new Service();
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.TRUE);
 		ServiceRegistration<Runnable> reg = (ServiceRegistration<Runnable>) getContext()
@@ -648,11 +649,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 	public void testServiceTracker02() {
 		// simple ServiceTracker test
-		Runnable runIt = new Runnable() {
-			public void run() {
-				// nothing
-			}
-		};
+		Runnable runIt = new Service();
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.FALSE);
 		ServiceRegistration<Runnable> reg = (ServiceRegistration<Runnable>) getContext()
@@ -739,11 +736,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 	public void testServiceTracker03() {
 		// simple ServiceTracker test
-		Runnable runIt = new Runnable() {
-			public void run() {
-				// nothing
-			}
-		};
+		Runnable runIt = new Service();
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.TRUE);
 		ServiceRegistration<Runnable> reg = (ServiceRegistration<Runnable>) getContext()
@@ -821,11 +814,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 	}
 
 	public void testModifiedRanking() {
-		Runnable runIt = new Runnable() {
-			public void run() {
-				// nothing
-			}
-		};
+		Runnable runIt = new Service();
 		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.TRUE);
 		props.put(Constants.SERVICE_RANKING, new Integer(15));
@@ -867,9 +856,64 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		}
 	}
 
+	public void testMap() {
+		Service runIt = new Service();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
+		props.put(getName(), Boolean.TRUE);
+		props.put(Constants.SERVICE_RANKING, new Integer(15));
+		ServiceRegistration<Service> reg1 = getContext().registerService(
+				Service.class, runIt, props);
+		props.put(Constants.SERVICE_RANKING, new Integer(10));
+		ServiceRegistration<Service> reg2 = getContext().registerService(
+				Service.class, runIt, props);
+		ServiceTracker<Service, Service> testTracker = null;
+		try {
+			testTracker = new ServiceTracker<Service, Service>(getContext(),
+					Service.class, null);
+			Map<ServiceReference<Service>, Service> map = testTracker
+					.getTracked(new HashMap<ServiceReference<Service>, Service>());
+			assertEquals("wrong size", testTracker.size(), map.size());
+			testTracker.open();
+
+			SortedMap<ServiceReference<Service>, Service> sortedMap = testTracker
+					.getTracked(new TreeMap<ServiceReference<Service>, Service>(
+							Collections.reverseOrder()));
+			assertEquals("wrong service reference", reg1.getReference(),
+					sortedMap.firstKey());
+			assertEquals("wrong service reference", reg2.getReference(),
+					sortedMap.lastKey());
+			assertEquals("wrong size", testTracker.size(), sortedMap.size());
+
+			props.put(Constants.SERVICE_RANKING, new Integer(20));
+			reg2.setProperties(props);
+
+			sortedMap = testTracker
+					.getTracked(new TreeMap<ServiceReference<Service>, Service>(
+							Collections.reverseOrder()));
+			assertEquals("wrong service reference", reg2.getReference(),
+					sortedMap.firstKey());
+			assertEquals("wrong service reference", reg1.getReference(),
+					sortedMap.lastKey());
+			assertEquals("wrong size", testTracker.size(), sortedMap.size());
+		}
+		finally {
+			if (reg1 != null)
+				reg1.unregister();
+			if (reg2 != null)
+				reg2.unregister();
+			if (testTracker != null)
+				testTracker.close();
+		}
+	}
+
 	private void clearResults(boolean[] results) {
 		for (int i = 0; i < results.length; i++)
 			results[i] = false;
 	}
 
+	static class Service implements Runnable {
+		public void run() {
+			// nothing
+		}
+	};
 }

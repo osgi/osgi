@@ -16,6 +16,8 @@
 
 package org.osgi.util.tracker;
 
+import java.util.Map;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -288,7 +290,7 @@ public class BundleTracker<T> implements BundleTrackerCustomizer<T> {
 			if (length == 0) {
 				return null;
 			}
-			return t.getTracked(new Bundle[length]);
+			return t.copyKeys(new Bundle[length]);
 		}
 	}
 
@@ -375,13 +377,37 @@ public class BundleTracker<T> implements BundleTrackerCustomizer<T> {
 	}
 
 	/**
+	 * Copies the <code>Bundle</code>s and customized objects for all bundles
+	 * being tracked by this <code>BundleTracker</code> into the specified
+	 * <code>Map</code>.
+	 * 
+	 * @param <M> Type of <code>Map</code> to hold the <code>Bundle</code>s and
+	 *        customized objects.
+	 * @param map A <code>Map</code> into which the <code>Bundle</code>s and
+	 *        customized objects for all services being tracked by this
+	 *        <code>BundleTracker</code> are copied. If no bundles are being
+	 *        tracked, then nothing is added to the specified map.
+	 * @return The specified map.
+	 * @since 1.5
+	 */
+	public <M extends Map< ? super Bundle, ? super T>> M getTracked(M map) {
+		final Tracked t = tracked();
+		if (t == null) { /* if BundleTracker is not open */
+			return map;
+		}
+		synchronized (t) {
+			return t.copyEntries(map);
+		}
+	}
+
+	/**
 	 * Inner class which subclasses AbstractTracked. This class is the
 	 * <code>SynchronousBundleListener</code> object for the tracker.
 	 * 
 	 * @ThreadSafe
 	 * @since 1.4
 	 */
-	class Tracked extends AbstractTracked<Bundle, BundleEvent, T> implements
+	class Tracked extends AbstractTracked<Bundle, T, BundleEvent> implements
 			SynchronousBundleListener {
 		/**
 		 * Tracked constructor.

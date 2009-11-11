@@ -16,6 +16,8 @@
 
 package org.osgi.util.tracker;
 
+import java.util.Map;
+
 import org.osgi.framework.AllServiceListener;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -237,6 +239,30 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 			 */
 			throw new NullPointerException();
 		}
+	}
+
+	/**
+	 * Create a <code>ServiceTracker</code> on the specified class.
+	 * 
+	 * <p>
+	 * Services registered under the name of the specified class will be tracked
+	 * by this <code>ServiceTracker</code>.
+	 * 
+	 * @param context The <code>BundleContext</code> against which the tracking
+	 *        is done.
+	 * @param clazz The class of the services to be tracked.
+	 * @param customizer The customizer object to call when services are added,
+	 *        modified, or removed in this <code>ServiceTracker</code>. If
+	 *        customizer is <code>null</code>, then this
+	 *        <code>ServiceTracker</code> will be used as the
+	 *        <code>ServiceTrackerCustomizer</code> and this
+	 *        <code>ServiceTracker</code> will call the
+	 *        <code>ServiceTrackerCustomizer</code> methods on itself.
+	 * @since 1.5
+	 */
+	public ServiceTracker(final BundleContext context, final Class<S> clazz,
+			final ServiceTrackerCustomizer<S, T> customizer) {
+		this(context, clazz.getName(), customizer);
 	}
 
 	/**
@@ -529,7 +555,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 				return null;
 			}
 			ServiceReference<S>[] result = new ServiceReference[length];
-			return t.getTracked(result);
+			return t.copyKeys(result);
 		}
 	}
 
@@ -776,12 +802,47 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	}
 
 	/**
+	 * Copies the <code>ServiceReference</code>s and service objects for all
+	 * services being tracked by this <code>ServiceTracker</code> into the
+	 * specified <code>Map</code>.
+	 * 
+	 * <p>
+	 * For example, to get a sorted map with the first entry being the service
+	 * with the highest ranking and the lowest service id, do the following:
+	 * 
+	 * <pre>
+	 * SortedMap&lt;ServiceReference&lt;S&gt;, T&gt;	map	= getTracked(new TreeMap&lt;ServiceReference&lt;S&gt;, T&gt;(
+	 * 												Collections.reverseOrder()));
+	 * </pre>
+	 * 
+	 * @param <M> Type of <code>Map</code> to hold the
+	 *        <code>ServiceReference</code>s and service objects.
+	 * @param map A <code>Map</code> into which the
+	 *        <code>ServiceReference</code>s and service objects for all
+	 *        services being tracked by this <code>ServiceTracker</code> are
+	 *        copied. If no services are being tracked, then nothing is added to
+	 *        the specified map.
+	 * @return The specified map.
+	 * @since 1.5
+	 */
+	public <M extends Map< ? super ServiceReference<S>, ? super T>> M getTracked(
+			M map) {
+		final Tracked t = tracked();
+		if (t == null) { /* if ServiceTracker is not open */
+			return map;
+		}
+		synchronized (t) {
+			return t.copyEntries(map);
+		}
+	}
+
+	/**
 	 * Inner class which subclasses AbstractTracked. This class is the
 	 * <code>ServiceListener</code> object for the tracker.
 	 * 
 	 * @ThreadSafe
 	 */
-	class Tracked extends AbstractTracked<ServiceReference<S>, ServiceEvent, T>
+	class Tracked extends AbstractTracked<ServiceReference<S>, T, ServiceEvent>
 			implements ServiceListener {
 		/**
 		 * Tracked constructor.
