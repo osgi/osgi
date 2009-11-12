@@ -33,26 +33,30 @@ public class Item {
 	/**
 	 * The name of this item.
 	 */
-	private final String	name;
+	private final String name;
 
 	/**
 	 * The description of this item.
 	 */
-	private final String	description;
+	private final String description;
 
 	/**
 	 * The type of this item.
 	 */
-	private final OpenType	type;
+	private final OpenType type;
 
 	/**
 	 * Create a triple of name, description, and type. This triplet is used in
 	 * the creation of a Composite Type.
 	 * 
-	 * @param name The name of the item.
-	 * @param description The description of the item.
-	 * @param type The Open Type of this item.
-	 * @param restrictions Ignored, contains list of restrictions
+	 * @param name
+	 *            The name of the item.
+	 * @param description
+	 *            The description of the item.
+	 * @param type
+	 *            The Open Type of this item.
+	 * @param restrictions
+	 *            Ignored, contains list of restrictions
 	 */
 	public Item(String name, String description, OpenType type,
 			String... restrictions) {
@@ -68,20 +72,23 @@ public class Item {
 	/**
 	 * Create a Tabular Type.
 	 * 
-	 * @param name The name of the Tabular Type.
-	 * @param description The description of the Tabular Type.
-	 * @param rowType The Open Type for a row
-	 * @param index The names of the items that form the index .
+	 * @param name
+	 *            The name of the Tabular Type.
+	 * @param description
+	 *            The description of the Tabular Type.
+	 * @param rowType
+	 *            The Open Type for a row
+	 * @param index
+	 *            The names of the items that form the index .
 	 * @return A new Tabular Type composed from the parameters.
-	 * @throws RuntimeException when the Tabular Type throws an
-	 *         OpenDataException
+	 * @throws RuntimeException
+	 *             when the Tabular Type throws an OpenDataException
 	 */
 	static public TabularType tabularType(String name, String description,
 			CompositeType rowType, String... index) {
 		try {
 			return new TabularType(name, description, rowType, index);
-		}
-		catch (OpenDataException e) {
+		} catch (OpenDataException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -89,12 +96,15 @@ public class Item {
 	/**
 	 * Create a Composite Type
 	 * 
-	 * @param name The name of the Tabular Type.
-	 * @param description The description of the Tabular Type.
-	 * @param items The items that describe the composite type.
+	 * @param name
+	 *            The name of the Tabular Type.
+	 * @param description
+	 *            The description of the Tabular Type.
+	 * @param items
+	 *            The items that describe the composite type.
 	 * @return a new Composite Type
-	 * @throws RuntimeException when the Tabular Type throws an
-	 *         OpenDataException
+	 * @throws RuntimeException
+	 *             when the Tabular Type throws an OpenDataException
 	 */
 	static public CompositeType compositeType(String name, String description,
 			Item... items) {
@@ -104,15 +114,16 @@ public class Item {
 	/**
 	 * Return a new Array Type.
 	 * 
-	 * @param dim The dimension
-	 * @param elementType The element type
+	 * @param dim
+	 *            The dimension
+	 * @param elementType
+	 *            The element type
 	 * @return A new Array Type
 	 */
 	public static ArrayType arrayType(int dim, OpenType elementType) {
 		try {
 			return new ArrayType(dim, elementType);
-		}
-		catch (OpenDataException e) {
+		} catch (OpenDataException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -121,12 +132,17 @@ public class Item {
 	 * Extend a Composite Type by adding new items. Items can override items in
 	 * the parent type.
 	 * 
-	 * @param parent The parent type, can be <code>null</code>
-	 * @param name The name of the type
-	 * @param description The description of the type
-	 * @param items The items that should be added/override to the parent type
+	 * @param parent
+	 *            The parent type, can be <code>null</code>
+	 * @param name
+	 *            The name of the type
+	 * @param description
+	 *            The description of the type
+	 * @param items
+	 *            The items that should be added/override to the parent type
 	 * @return A new Composite Type that extends the parent type
-	 * @throws RuntimeException when an OpenDataException is thrown
+	 * @throws RuntimeException
+	 *             when an OpenDataException is thrown
 	 */
 	public static CompositeType extend(CompositeType parent, String name,
 			String description, Item... items) {
@@ -146,17 +162,26 @@ public class Item {
 		String descriptions[] = new String[all.size()];
 		OpenType types[] = new OpenType[all.size()];
 
-		for (int n = 0; n < types.length; n++) {
-			names[n] = items[n].name;
-			descriptions[n] = items[n].description;
-			types[n] = items[n].type;
+		int m = 0;
+		if (parent != null) {
+			for (Object key : parent.keySet()) {
+				names[m] = (String) key;
+				descriptions[m] = parent.getDescription(names[m]);
+				types[m] = parent.getType(names[m]);
+				m++;
+			}
+		}
+
+		for (int n = m; n < all.size(); n++) { 
+			names[n] = items[n - m].name;
+			descriptions[n] = items[n - m].description;
+			types[n] = items[n - m].type;
 		}
 
 		try {
 			return new CompositeType(name, description, names, descriptions,
 					types);
-		}
-		catch (OpenDataException e) {
+		} catch (OpenDataException e) {
 			throw new RuntimeException(e);
 		}
 	}
