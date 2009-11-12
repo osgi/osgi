@@ -3,20 +3,38 @@ javac.target 			= 1.5
 
 Bundle-Version: 4.2.0.${project.build}
 
-Private-Package						= ${p}.*
 
--buildpath							= ee.j2se; version=1.5, \
-    org.osgi.test.support;                  version=project , \
-	org.osgi.service.jpa;					version=project	, \
-	osgi.core;								version=4.2		, \
-	org.apache.geronimo.specs.geronimo-jpa_3.0_spec; version=latest, \
+Export-Package						= \
+	org.osgi.service.jpa
+	
+Private-Package						= \
+	org.osgi.test.support.* , \
+	${p}.*
+
+Include-Resource 					= \
+	rootPersistenceBundle.jar , \
+	classpathPersistenceBundle.jar , \
+	webInfClassesPersistenceBundle.jar , \
+	webInfLibPersistenceBundle.jar , \
+	invalidRangeVersionedPersistenceBundle.jar , \
+	specificVersionVersionedPersistenceBundle.jar , \
+	validRangeVersionedPersistenceBundle.jar
+
+-buildpath							= \
+	ee.j2se; 						version=1.5, \
+    org.osgi.test.support;          version=project , \
+	org.osgi.service.jpa;			version=project	, \
+	osgi.core;						version=4.2		, \
+	org.apache.geronimo.specs.geronimo-jpa_3.0_spec; version=latest , \
 	${junit}
-
+	
 -runbundles						= \
-	org.osgi.impl.service.jpa; version=project
-
+	org.osgi.impl.service.jpa;       version=project , \
+	org.apache.geronimo.specs.geronimo-jpa_3.0_spec; version=latest , \
+	
 -runproperties					= report=true
 
 Test-Cases							= ${testcases}
+
 -signaturetest                      = org.osgi.service.jpa
 	

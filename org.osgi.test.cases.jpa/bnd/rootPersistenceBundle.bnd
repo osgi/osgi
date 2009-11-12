@@ -1,0 +1,4 @@
+Bundle-Name:                             ${p}.rootPersistenceBundle
+Bundle-Version:                          4.2.0.${project.build}
+Include-Resource = \
+	META-INF/persistence.xml = resources/persistence.xml

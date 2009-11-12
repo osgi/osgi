@@ -1,0 +1,4 @@
+Bundle-Name:                             ${p}.webInfLibJar
+Bundle-Version:                          4.2.0.${project.build}
+Include-Resource = \
+	META-INF/persistence.xml = resources/WEB-INF/lib/persistence.xml

@@ -1,0 +1,4 @@
+Bundle-Name:                             ${p}.webInfClassesPersistenceBundle
+Bundle-Version:                          4.2.0.${project.build}
+Include-Resource = \
+	WEB-INF/classes/META-INF/persistence.xml = resources/WEB-INF/classes/persistence.xml

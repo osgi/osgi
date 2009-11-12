@@ -18,8 +18,31 @@
 
 package org.osgi.test.cases.jpa.junit;
 
-import org.osgi.test.support.OSGiTestCase;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 
-public class JPATestCase extends OSGiTestCase {
-	// need to add JPA tests
+import org.osgi.framework.Bundle;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+
+public class JPATestCase extends DefaultTestBundleControl {
+
+
+	@PersistenceUnit(unitName="testUnit1")
+	EntityManagerFactory emf;
+	
+	public void testEntityManagerFactoryRegistration() throws Exception {
+		Bundle persistenceBundle = installBundle("rootPersistenceBundle.jar");
+		try {
+			EntityManagerFactory registeredEmf = (EntityManagerFactory) getService(EntityManagerFactory.class,  "(osgi.jpa.persistence.unit.name=testUnit1)");
+			
+			if (registeredEmf == null) {
+				fail("Unable to find the EntityManagerFactory registered in the service registry");
+			}
+			
+		} catch (Exception ex) {
+			fail("Unable to find the EntityManagerFactory registered in the service registry", ex.getCause());
+		} finally {
+			uninstallBundle(persistenceBundle);
+		}
+	}
 }
