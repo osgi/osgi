@@ -1,6 +1,7 @@
 package org.osgi.test.cases.jmx.junit;
 
 import java.io.*;
+import java.util.Arrays;
 
 import org.osgi.framework.*;
 import org.osgi.jmx.service.permissionadmin.*;
@@ -31,9 +32,9 @@ public class PermissionAdminMBeanTestCase extends MBeanGeneralTestCase {
 
 		String[] serviceLocation = pAdmin.getLocations();
 		String[] mBeanLocations = pMBean.listLocations();
-		assertEquals(
+		assertTrue(
 				"got different information from mbean and direct service-call.",
-				serviceLocation, mBeanLocations);
+				Arrays.equals(serviceLocation, mBeanLocations));
 	}
 
 	@Override
