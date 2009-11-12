@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.osgi.service.remoteserviceadmin;
 
 import java.util.Collection;
@@ -15,9 +31,8 @@ import org.osgi.framework.ServiceReference;
  * The API allows a remote manager to export a service, to import a service, and
  * find out about the current imports and exports.
  * 
- * 
- * 
  * @ThreadSafe
+ * @version $Revision$
  */
 public interface RemoteServiceAdmin {
 
@@ -28,6 +43,8 @@ public interface RemoteServiceAdmin {
 	 * exported service. This method can return null if the service could not be
 	 * exported because the endpoint could not be implemented by this Remote
 	 * Service Admin.
+	 * 
+	 * TODO Peter to update for case insensitive properties
 	 * 
 	 * The properties on a Service Reference are case insensitive while the
 	 * properties on a <code>properties</code> are case sensitive. A value in
@@ -45,30 +62,22 @@ public interface RemoteServiceAdmin {
 	 *        endpoint will be determined by the properties on the service. The
 	 *        properties are the same as given for an exported service. They are
 	 *        overlaid over any properties the service defines (case
-	 *        insensitive). This parameter can be <code>null</code>, this
-	 *        should be treated as an empty map.
+	 *        insensitive). This parameter can be <code>null</code>, this should
+	 *        be treated as an empty map.
 	 * @return An Export Registration that combines the Endpoint Description and
 	 *         the Service Reference or <code>null</code> if the service could
 	 *         not be exported
-	 * @throws IllegalArgumentException
-	 * @throws UnsupportedOperationException
-	 * 
-	 * TODO discuss case difference in properties
-	 * 
-	 * TODO More exceptions?
-	 * TODO Can you export ANY service by providing the proper properties?
+	 * @throws IllegalArgumentException TODO Jan to update exception javadoc
+	 * @throws UnsupportedOperationException TODO Jan to update exception
+	 *         javadoc
 	 */
-	List/* <ExportRegistration> */exportService(ServiceReference ref,
-			Map/* <String,Object> */properties)
-			throws IllegalArgumentException, UnsupportedOperationException;
+	List<ExportRegistration> exportService(ServiceReference ref,
+			Map<String, Object> properties);
 
 	/**
 	 * Import a service from an endpoint. The Remote Service Admin must use the
 	 * given endpoint to create a proxy. This method can return null if the
 	 * service could not be imported.
-	 * 
-	 * TODO if the import reg. is valid (getException==null), can we then assume the 
-	 * service is registered?
 	 * 
 	 * If an endpoint can not be imported because no
 	 * {@link EndpointPermission#IMPORT} can be obtained, then this endpoint
@@ -77,8 +86,8 @@ public interface RemoteServiceAdmin {
 	 * 
 	 * @param endpoint The Endpoint Description to be used for import
 	 * @return An Import Registration that combines the Endpoint Description and
-	 *         the Service Reference or <code>null</code> if the endpoint
-	 *         could not be imported
+	 *         the Service Reference or <code>null</code> if the endpoint could
+	 *         not be imported
 	 */
 	ImportRegistration importService(EndpointDescription endpoint);
 
@@ -89,7 +98,7 @@ public interface RemoteServiceAdmin {
 	 * @throws SecurityException When the caller no
 	 *         {@link EndpointPermission#READ} could be obtained
 	 */
-	Collection/* <ExportReference> */getExportedServices();
+	Collection<ExportReference> getExportedServices();
 
 	/**
 	 * Answer the currently active Import References.
@@ -100,6 +109,6 @@ public interface RemoteServiceAdmin {
 	 * @throws SecurityException When the caller no
 	 *         {@link EndpointPermission#READ} could be obtained
 	 */
-	Collection/* <ImportReference> */getImportedEndpoints();
+	Collection<ImportReference> getImportedEndpoints();
 
 }
