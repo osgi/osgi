@@ -16,25 +16,19 @@
 
 package org.osgi.impl.bundle.jmx.useradmin.codec;
 
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeDataSupport;
 import javax.management.openmbean.OpenDataException;
-import javax.management.openmbean.TabularData;
 
-import org.osgi.impl.bundle.jmx.codec.OSGiProperties;
 import org.osgi.jmx.service.useradmin.UserAdminMBean;
 import org.osgi.service.useradmin.Role;
 
 /** 
  * 
  */
-@SuppressWarnings("unchecked")
 public class OSGiRole {
 
 	/**
@@ -45,10 +39,6 @@ public class OSGiRole {
 	 * The type of the role
 	 */
 	protected int type;
-	/**
-	 * The properties of the role
-	 */
-	protected Hashtable<String, Object> properties;
 
 	/**
 	 * Construct and instance from the composite data representation
@@ -59,8 +49,6 @@ public class OSGiRole {
 	public OSGiRole(CompositeData data) {
 		name = (String) data.get(UserAdminMBean.NAME);
 		type = (Integer) data.get(UserAdminMBean.TYPE);
-		properties = OSGiProperties.propertiesFrom((TabularData) data
-				.get(UserAdminMBean.PROPERTIES));
 	}
 
 	/**
@@ -71,12 +59,6 @@ public class OSGiRole {
 	public OSGiRole(Role role) {
 		name = role.getName();
 		type = role.getType();
-		properties = new Hashtable<String, Object>();
-		Dictionary props = role.getProperties();
-		for (Enumeration keys = props.keys(); keys.hasMoreElements();) {
-			String key = (String) keys.nextElement();
-			properties.put(key, props.get(key));
-		}
 	}
 
 	/**
@@ -90,8 +72,6 @@ public class OSGiRole {
 		Map<String, Object> items = new HashMap<String, Object>();
 		items.put(UserAdminMBean.NAME, name);
 		items.put(UserAdminMBean.TYPE, type);
-		items.put(UserAdminMBean.PROPERTIES, OSGiProperties
-				.tableFrom(properties));
 		return new CompositeDataSupport(UserAdminMBean.ROLE_TYPE, items);
 	}
 
@@ -107,12 +87,5 @@ public class OSGiRole {
 	 */
 	public int getType() {
 		return type;
-	}
-
-	/**
-	 * @return the credentials
-	 */
-	public Map<String, Object> getProperties() {
-		return properties;
 	}
 }

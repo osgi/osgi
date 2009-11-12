@@ -116,7 +116,7 @@ public interface ServiceStateMBean {
 	 */
 	CompositeType SERVICE_TYPE = Item.compositeType("SERVICE",
 			"This type encapsulates an OSGi service", BUNDLE_IDENTIFIER_ITEM,
-			IDENTIFIER_ITEM, OBJECT_CLASS_ITEM, PROPERTIES_ITEM,
+			IDENTIFIER_ITEM, OBJECT_CLASS_ITEM,
 			USING_BUNDLES_ITEM);
 
 	/**

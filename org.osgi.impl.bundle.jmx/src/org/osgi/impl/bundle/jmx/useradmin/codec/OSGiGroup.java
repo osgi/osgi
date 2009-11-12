@@ -23,7 +23,6 @@ import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeDataSupport;
 import javax.management.openmbean.OpenDataException;
 
-import org.osgi.impl.bundle.jmx.codec.OSGiProperties;
 import org.osgi.jmx.service.useradmin.UserAdminMBean;
 import org.osgi.service.useradmin.Group;
 import org.osgi.service.useradmin.Role;
@@ -91,10 +90,6 @@ public class OSGiGroup extends OSGiUser {
 		Map<String, Object> items = new HashMap<String, Object>();
 		items.put(UserAdminMBean.NAME, name);
 		items.put(UserAdminMBean.TYPE, type);
-		items.put(UserAdminMBean.PROPERTIES, OSGiProperties
-				.tableFrom(properties));
-		items.put(UserAdminMBean.CREDENTIALS, OSGiProperties
-				.tableFrom(credentials));
 		items.put(UserAdminMBean.MEMBERS, members);
 		items.put(UserAdminMBean.REQUIRED_MEMBERS, requiredMembers);
 		return new CompositeDataSupport(UserAdminMBean.GROUP_TYPE, items);

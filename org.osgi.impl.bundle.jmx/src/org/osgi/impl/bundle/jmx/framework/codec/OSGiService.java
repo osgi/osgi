@@ -23,7 +23,6 @@ import static org.osgi.impl.bundle.jmx.codec.Util.longArrayFrom;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import javax.management.openmbean.CompositeData;
@@ -33,7 +32,6 @@ import javax.management.openmbean.TabularData;
 import javax.management.openmbean.TabularDataSupport;
 
 import org.osgi.framework.ServiceReference;
-import org.osgi.impl.bundle.jmx.codec.OSGiProperties;
 import org.osgi.impl.bundle.jmx.codec.Util;
 import org.osgi.jmx.framework.ServiceStateMBean;
 
@@ -76,9 +74,7 @@ public class OSGiService {
 	@SuppressWarnings("boxing")
 	public OSGiService(CompositeData data) {
 		this((Long) data.get(ServiceStateMBean.IDENTIFIER), (String[]) data
-				.get(ServiceStateMBean.OBJECT_CLASS), OSGiProperties
-				.propertiesFrom((TabularData) data
-						.get(ServiceStateMBean.PROPERTIES)), (Long) data
+				.get(ServiceStateMBean.OBJECT_CLASS), (Long) data
 				.get(ServiceStateMBean.BUNDLE_IDENTIFIER),
 				longArrayFrom((Long[]) data
 						.get(ServiceStateMBean.USING_BUNDLES)));
@@ -93,12 +89,10 @@ public class OSGiService {
 	 * @param bundle
 	 * @param usingBundles
 	 */
-	public OSGiService(long identifier, String[] interfaces,
-			Hashtable<String, Object> properties, long bundle,
+	public OSGiService(long identifier, String[] interfaces, long bundle,
 			long[] usingBundles) {
 		this.identifier = identifier;
 		this.interfaces = interfaces;
-		this.properties = properties;
 		this.bundle = bundle;
 		this.usingBundles = usingBundles;
 	}
@@ -113,9 +107,8 @@ public class OSGiService {
 	@SuppressWarnings("boxing")
 	public OSGiService(ServiceReference reference) {
 		this((Long) reference.getProperty(SERVICE_ID), (String[]) reference
-				.getProperty(OBJECTCLASS), propertiesOf(reference), reference
-				.getBundle().getBundleId(), Util.bundleIds(reference
-				.getUsingBundles()));
+				.getProperty(OBJECTCLASS), reference.getBundle().getBundleId(),
+				Util.bundleIds(reference.getUsingBundles()));
 	}
 
 	/**
@@ -146,8 +139,6 @@ public class OSGiService {
 		items.put(ServiceStateMBean.IDENTIFIER, identifier);
 		items.put(ServiceStateMBean.OBJECT_CLASS, interfaces);
 		items.put(ServiceStateMBean.BUNDLE_IDENTIFIER, bundle);
-		items.put(ServiceStateMBean.PROPERTIES, OSGiProperties
-				.tableFrom(properties));
 		items.put(ServiceStateMBean.USING_BUNDLES, LongArrayFrom(usingBundles));
 
 		try {
@@ -186,24 +177,8 @@ public class OSGiService {
 		return usingBundles;
 	}
 
-	/**
-	 * @return the properties of the service
-	 */
-	public Map<String, Object> getProperties() {
-		return properties;
-	}
-
-	private Hashtable<String, Object> properties;
 	private long bundle;
 	private long identifier;
 	private String[] interfaces;
 	private long[] usingBundles;
-
-	static Hashtable<String, Object> propertiesOf(ServiceReference reference) {
-		Hashtable<String, Object> props = new Hashtable<String, Object>();
-		for (String key : reference.getPropertyKeys()) {
-			props.put(key, reference.getProperty(key));
-		}
-		return props;
-	}
 }

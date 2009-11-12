@@ -16,30 +16,20 @@
 
 package org.osgi.impl.bundle.jmx.useradmin.codec;
 
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeDataSupport;
 import javax.management.openmbean.OpenDataException;
-import javax.management.openmbean.TabularData;
 
-import org.osgi.impl.bundle.jmx.codec.OSGiProperties;
 import org.osgi.jmx.service.useradmin.UserAdminMBean;
 import org.osgi.service.useradmin.User;
 
 /** 
  * 
  */
-@SuppressWarnings("unchecked")
 public class OSGiUser extends OSGiRole {
-	/**
-	 * The credentials of the user
-	 */
-	protected Hashtable<String, Object> credentials;
 
 	/**
 	 * Construct an instance from the supplied OSGi user
@@ -48,12 +38,6 @@ public class OSGiUser extends OSGiRole {
 	 */
 	public OSGiUser(User user) {
 		super(user);
-		credentials = new Hashtable<String, Object>();
-		Dictionary<String, Object> c = user.getCredentials();
-		for (Enumeration keys = c.keys(); keys.hasMoreElements();) {
-			String key = (String) keys.nextElement();
-			credentials.put(key, c.get(key));
-		}
 	}
 
 	/**
@@ -63,8 +47,6 @@ public class OSGiUser extends OSGiRole {
 	 */
 	public OSGiUser(CompositeData data) {
 		super(data);
-		credentials = OSGiProperties.propertiesFrom((TabularData) data
-				.get(UserAdminMBean.CREDENTIALS));
 	}
 
 	/**
@@ -78,18 +60,7 @@ public class OSGiUser extends OSGiRole {
 		Map<String, Object> items = new HashMap<String, Object>();
 		items.put(UserAdminMBean.NAME, name);
 		items.put(UserAdminMBean.TYPE, type);
-		items.put(UserAdminMBean.PROPERTIES, OSGiProperties
-				.tableFrom(properties));
-		items.put(UserAdminMBean.CREDENTIALS, OSGiProperties
-				.tableFrom(credentials));
 		return new CompositeDataSupport(UserAdminMBean.USER_TYPE, items);
-	}
-
-	/**
-	 * @return the credentials
-	 */
-	public Map<String, Object> getCredentials() {
-		return credentials;
 	}
 
 }
