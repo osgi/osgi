@@ -32,7 +32,7 @@ import org.osgi.test.cases.composite.AbstractCompositeTestCase;
 
 public class CompositeStartLevelTests extends AbstractCompositeTestCase {
 
-	public void testStartLevel01a() {
+	public void testStartLevel01() {
 		// Test scoping of start-level service
 		Map configuration1 = new HashMap();
 		configuration1.put(Constants.FRAMEWORK_BEGINNING_STARTLEVEL, "3");
@@ -123,94 +123,6 @@ public class CompositeStartLevelTests extends AbstractCompositeTestCase {
 		}
 	}
 
-	public void testStartLevel01b() {
-		// Test scoping of start-level using new Bundle/Context API
-		Map configuration1 = new HashMap();
-		configuration1.put(Constants.FRAMEWORK_BEGINNING_STARTLEVEL, "3");
-		CompositeBundle composite1 = createCompositeBundle(compAdmin, getName() + "_1", null, configuration1);
-
-		Map configuration2 = new HashMap();
-		configuration2.put(Constants.FRAMEWORK_BEGINNING_STARTLEVEL, "4");
-		CompositeBundle composite2 = createCompositeBundle(compAdmin, getName() + "_2", null, configuration2);
-	
-		TestFrameworkListener composite1Listener = new TestFrameworkListener(FrameworkEvent.STARTLEVEL_CHANGED);
-		TestFrameworkListener composite2Listener = new TestFrameworkListener(FrameworkEvent.STARTLEVEL_CHANGED);
-		TestFrameworkListener parentListener= new TestFrameworkListener(FrameworkEvent.STARTLEVEL_CHANGED);
-
-		final int previousInitBundleStartLevel = getContext().getInitialBundleStartLevel();
-		final int previousStartLevel = getContext().getStartLevel();
-		if (previousInitBundleStartLevel != 2)
-			getContext().setInitialBundleStartLevel(2);
-		if (previousStartLevel != 1) {
-			getContext().setStartLevel(1);
-			try {
-				// hack to wait for start-level change
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// nothing
-			} 
-		}
-
-		composite1.getSystemBundleContext().setInitialBundleStartLevel(4);
-		composite2.getSystemBundleContext().setInitialBundleStartLevel(5);
-		try {
-			startCompositeBundle(composite1);
-			startCompositeBundle(composite2);
-
-			assertEquals("Wrong framework startlevel", 3, composite1.getSystemBundleContext().getStartLevel());
-			assertEquals("Wrong framework startlevel", 4, composite2.getSystemBundleContext().getStartLevel());
-
-			Bundle parentTb1 = install("tb1.jar");
-			Bundle composite1Tb1 = installConstituent(composite1, "tb1_1", "tb1.jar");
-			Bundle composite2Tb1 = installConstituent(composite2, "tb1_2", "tb1.jar");
-
-			assertEquals("Wrong start level for bundle: " + parentTb1.getLocation(), 2, parentTb1.getStartLevel());
-			assertEquals("Wrong start level for bundle: " + composite1Tb1.getLocation(), 4, composite1Tb1.getStartLevel());
-			assertEquals("Wrong start level for bundle: " + composite2Tb1.getLocation(), 5, composite2Tb1.getStartLevel());
-
-			try {
-				parentTb1.start();
-				composite1Tb1.start();
-				composite2Tb1.start();
-			} catch (BundleException e) {
-				fail("Failed to start test bundles", e);
-			}
-
-			assertTrue("Bundle should not be started: " + parentTb1.getLocation(), Bundle.ACTIVE != parentTb1.getState());
-			assertTrue("Bundle should not be started: " + composite1Tb1.getLocation(), Bundle.ACTIVE != composite1Tb1.getState());
-			assertTrue("Bundle should not be started: " + composite2Tb1.getLocation(), Bundle.ACTIVE != composite2Tb1.getState());
-
-			getContext().addFrameworkListener(parentListener);
-			composite1.getSystemBundleContext().addFrameworkListener(composite1Listener);
-			composite2.getSystemBundleContext().addFrameworkListener(composite2Listener);
-
-			// increment start-level
-			doTestStartLevel(null, getContext().getBundle(0).getBundleContext(), 2, parentTb1, parentListener, 
-					new Bundle[] {composite1Tb1, composite2Tb1}, new TestListener[] {composite1Listener, composite2Listener});
-			// decrement start-level
-			doTestStartLevel(null, getContext().getBundle(0).getBundleContext(), 1, parentTb1, parentListener, 
-					new Bundle[] {composite1Tb1, composite2Tb1}, new TestListener[] {composite1Listener, composite2Listener});
-
-			// increment start-level
-			doTestStartLevel(null, composite1.getSystemBundleContext(), 4, composite1Tb1, composite1Listener, 
-					new Bundle[] {parentTb1, composite2Tb1}, new TestListener[] {parentListener, composite2Listener});
-			// decrement start-level
-			doTestStartLevel(null, composite1.getSystemBundleContext(), 1, composite1Tb1, composite1Listener, 
-					new Bundle[] {parentTb1, composite2Tb1}, new TestListener[] {parentListener, composite2Listener});
-
-			// increment start-level
-			doTestStartLevel(null, composite2.getSystemBundleContext(), 5, composite2Tb1, composite2Listener, 
-					new Bundle[] {parentTb1, composite1Tb1}, new TestListener[] {parentListener, composite1Listener});
-			// decrement start-level
-			doTestStartLevel(null, composite2.getSystemBundleContext(), 1, composite2Tb1, composite2Listener, 
-					new Bundle[] {parentTb1, composite1Tb1}, new TestListener[] {parentListener, composite1Listener});
-		} finally {
-			getContext().setInitialBundleStartLevel(previousInitBundleStartLevel);
-			getContext().setStartLevel(previousStartLevel);
-			getContext().removeFrameworkListener(parentListener);
-		}
-	}
-
 	public void testStartLevel02() {
 		// Test start-level service with invalid bundles
 		Map configuration1 = new HashMap();
@@ -228,12 +140,9 @@ public class CompositeStartLevelTests extends AbstractCompositeTestCase {
 	}
 
 	private void doTestStartLevel(StartLevel service, BundleContext slContext, int startLevel, Bundle activeBundle, TestListener activeListener, Bundle[] resolvedBundles, TestListener[] resolvedListeners) {
-		int activeBundleSL = service == null ? activeBundle.getStartLevel() : service.getBundleStartLevel(activeBundle);
-		int curFrameworkSL = service == null ? slContext.getStartLevel() : service.getStartLevel();
-		if (service == null)
-			slContext.setStartLevel(startLevel);
-		else
-			service.setStartLevel(startLevel);
+		int activeBundleSL = service.getBundleStartLevel(activeBundle);
+		int curFrameworkSL = service.getStartLevel();
+		service.setStartLevel(startLevel);
 
 		FrameworkEvent[] activeEvents = (FrameworkEvent[]) activeListener.getResults(new FrameworkEvent[1]);
 		FrameworkEvent[] expectedEvents = new FrameworkEvent[1];
