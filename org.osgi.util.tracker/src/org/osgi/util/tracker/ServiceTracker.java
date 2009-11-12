@@ -16,7 +16,9 @@
 
 package org.osgi.util.tracker;
 
-import java.util.Map;
+import java.util.Collections;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.osgi.framework.AllServiceListener;
 import org.osgi.framework.BundleContext;
@@ -802,31 +804,21 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	}
 
 	/**
-	 * Copies the <code>ServiceReference</code>s and service objects for all
-	 * services being tracked by this <code>ServiceTracker</code> into the
-	 * specified <code>Map</code>.
+	 * Return a <code>SortedMap</code> of the <code>ServiceReference</code>s and
+	 * service objects for all services being tracked by this
+	 * <code>ServiceTracker</code>. The map is sorted in reverse natural order
+	 * of <code>ServiceReference</code>. That is, the first entry is the service
+	 * with the highest ranking and the lowest service id.
 	 * 
-	 * <p>
-	 * For example, to get a sorted map with the first entry being the service
-	 * with the highest ranking and the lowest service id, do the following:
-	 * 
-	 * <pre>
-	 * SortedMap&lt;ServiceReference&lt;S&gt;, T&gt;	map	= getTracked(new TreeMap&lt;ServiceReference&lt;S&gt;, T&gt;(
-	 * 												Collections.reverseOrder()));
-	 * </pre>
-	 * 
-	 * @param <M> Type of <code>Map</code> to hold the
-	 *        <code>ServiceReference</code>s and service objects.
-	 * @param map A <code>Map</code> into which the
-	 *        <code>ServiceReference</code>s and service objects for all
-	 *        services being tracked by this <code>ServiceTracker</code> are
-	 *        copied. If no services are being tracked, then nothing is added to
-	 *        the specified map.
-	 * @return The specified map.
+	 * @return A <code>SortedMap</code> with the <code>ServiceReference</code>s
+	 *         and service objects for all services being tracked by this
+	 *         <code>ServiceTracker</code>. If no services are being tracked,
+	 *         then the returned map is empty.
 	 * @since 1.5
 	 */
-	public <M extends Map< ? super ServiceReference<S>, ? super T>> M getTracked(
-			M map) {
+	public SortedMap<ServiceReference<S>, T> getTracked() {
+		SortedMap<ServiceReference<S>, T> map = new TreeMap<ServiceReference<S>, T>(
+				Collections.reverseOrder());
 		final Tracked t = tracked();
 		if (t == null) { /* if ServiceTracker is not open */
 			return map;

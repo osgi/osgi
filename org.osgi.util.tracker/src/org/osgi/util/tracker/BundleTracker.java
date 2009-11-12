@@ -16,6 +16,7 @@
 
 package org.osgi.util.tracker;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -377,20 +378,17 @@ public class BundleTracker<T> implements BundleTrackerCustomizer<T> {
 	}
 
 	/**
-	 * Copies the <code>Bundle</code>s and customized objects for all bundles
-	 * being tracked by this <code>BundleTracker</code> into the specified
-	 * <code>Map</code>.
+	 * Return a <code>Map</code> with the <code>Bundle</code>s and customized
+	 * objects for all bundles being tracked by this <code>BundleTracker</code>.
 	 * 
-	 * @param <M> Type of <code>Map</code> to hold the <code>Bundle</code>s and
-	 *        customized objects.
-	 * @param map A <code>Map</code> into which the <code>Bundle</code>s and
-	 *        customized objects for all services being tracked by this
-	 *        <code>BundleTracker</code> are copied. If no bundles are being
-	 *        tracked, then nothing is added to the specified map.
-	 * @return The specified map.
+	 * @return A <code>Map</code> with the <code>Bundle</code>s and customized
+	 *         objects for all services being tracked by this
+	 *         <code>BundleTracker</code>. If no bundles are being tracked, then
+	 *         the returned map is empty.
 	 * @since 1.5
 	 */
-	public <M extends Map< ? super Bundle, ? super T>> M getTracked(M map) {
+	public Map<Bundle, T> getTracked() {
+		Map<Bundle, T> map = new HashMap<Bundle, T>();
 		final Tracked t = tracked();
 		if (t == null) { /* if BundleTracker is not open */
 			return map;

@@ -26,12 +26,9 @@
 
 package org.osgi.test.cases.tracker.junit;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.SortedMap;
-import java.util.TreeMap;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -871,13 +868,12 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			testTracker = new ServiceTracker<Service, Service>(getContext(),
 					Service.class, null);
 			Map<ServiceReference<Service>, Service> map = testTracker
-					.getTracked(new HashMap<ServiceReference<Service>, Service>());
+					.getTracked();
 			assertEquals("wrong size", testTracker.size(), map.size());
 			testTracker.open();
 
 			SortedMap<ServiceReference<Service>, Service> sortedMap = testTracker
-					.getTracked(new TreeMap<ServiceReference<Service>, Service>(
-							Collections.reverseOrder()));
+					.getTracked();
 			assertEquals("wrong service reference", reg1.getReference(),
 					sortedMap.firstKey());
 			assertEquals("wrong service reference", reg2.getReference(),
@@ -887,9 +883,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			props.put(Constants.SERVICE_RANKING, new Integer(20));
 			reg2.setProperties(props);
 
-			sortedMap = testTracker
-					.getTracked(new TreeMap<ServiceReference<Service>, Service>(
-							Collections.reverseOrder()));
+			sortedMap = testTracker.getTracked();
 			assertEquals("wrong service reference", reg2.getReference(),
 					sortedMap.firstKey());
 			assertEquals("wrong service reference", reg1.getReference(),

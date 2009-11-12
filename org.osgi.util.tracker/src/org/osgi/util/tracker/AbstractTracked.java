@@ -18,7 +18,6 @@ package org.osgi.util.tracker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -422,21 +421,14 @@ abstract class AbstractTracked<S, T, R> {
 	 * @param <M> Type of <code>Map</code> to hold the tracked items and
 	 *        associated values.
 	 * @param map The map into which to copy the tracked items and associated
-	 *        values.
+	 *        values. This map must not be a user provided map so that user code
+	 *        is not executed while synchronized on this.
 	 * @return The specified map.
 	 * @GuardedBy this
 	 * @since 1.5
 	 */
 	<M extends Map< ? super S, ? super T>> M copyEntries(final M map) {
-		/*
-		 * We do not do map.putAll(tracked) since we must not expose the
-		 * internal map object, tracked, to user code.
-		 */
-		for (Iterator<Map.Entry<S, T>> iter = tracked.entrySet().iterator(); iter
-				.hasNext();) {
-			Map.Entry<S, T> e = iter.next();
-			map.put(e.getKey(), e.getValue());
-		}
+		map.putAll(tracked);
 		return map;
 	}
 

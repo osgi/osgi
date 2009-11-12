@@ -17,7 +17,6 @@
 package org.osgi.test.cases.tracker.junit;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -50,8 +49,7 @@ public class BundleTrackerTests extends OSGiTestCase {
 				Object tracked = bt.getObject(bundle);
 				assertEquals("default tracked != bundle", bundle, tracked);
 			}
-			Map<Bundle, Bundle> map = bt
-					.getTracked(new HashMap<Bundle, Bundle>());
+			Map<Bundle, Bundle> map = bt.getTracked();
 			assertEquals("size() != map.size()", size, map.size());
 			for (Iterator<Map.Entry<Bundle, Bundle>> iter = map.entrySet()
 					.iterator(); iter.hasNext();) {
@@ -68,7 +66,7 @@ public class BundleTrackerTests extends OSGiTestCase {
 		assertEquals("size not zero", 0, size);
 		bundles = bt.getBundles();
 		assertNull("getBundles() not null", bundles);
-		Map<Bundle, Bundle> map = bt.getTracked(new HashMap<Bundle, Bundle>());
+		Map<Bundle, Bundle> map = bt.getTracked();
 		assertEquals("size() != map.size()", size, map.size());
 
 		bt.open();
@@ -83,7 +81,7 @@ public class BundleTrackerTests extends OSGiTestCase {
 				Object tracked = bt.getObject(bundle);
 				assertEquals("default tracked != bundle", bundle, tracked);
 			}
-			map = bt.getTracked(new HashMap<Bundle, Bundle>());
+			map = bt.getTracked();
 			assertEquals("size() != map.size()", size, map.size());
 			for (Iterator<Map.Entry<Bundle, Bundle>> iter = map.entrySet()
 					.iterator(); iter.hasNext();) {
@@ -100,7 +98,7 @@ public class BundleTrackerTests extends OSGiTestCase {
 		assertEquals("size not zero", 0, size);
 		bundles = bt.getBundles();
 		assertNull("getBundles() not null", bundles);
-		map = bt.getTracked(new HashMap<Bundle, Bundle>());
+		map = bt.getTracked();
 		assertEquals("size() != map.size()", size, map.size());
 	}
 
@@ -184,8 +182,7 @@ public class BundleTrackerTests extends OSGiTestCase {
 				assertEquals("tracked.getBundle() != bundle", bundle, tracked
 						.getBundle());
 			}
-			Map<Bundle, BundleWrapper> map = bt
-					.getTracked(new HashMap<Bundle, BundleWrapper>());
+			Map<Bundle, BundleWrapper> map = bt.getTracked();
 			assertEquals("size() != map.size()", bt.size(), map.size());
 			for (Iterator<Map.Entry<Bundle, BundleWrapper>> iter = map
 					.entrySet().iterator(); iter.hasNext();) {
@@ -224,8 +221,7 @@ public class BundleTrackerTests extends OSGiTestCase {
 				assertEquals("tracked.getBundle() != bundle", bundle, tracked
 						.getBundle());
 			}
-			Map<Bundle, BundleWrapper> map = bt
-					.getTracked(new HashMap<Bundle, BundleWrapper>());
+			Map<Bundle, BundleWrapper> map = bt.getTracked();
 			assertEquals("size() != map.size()", bt.size(), map.size());
 			for (Iterator<Map.Entry<Bundle, BundleWrapper>> iter = map
 					.entrySet().iterator(); iter.hasNext();) {
