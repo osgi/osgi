@@ -26,6 +26,7 @@ import java.security.BasicPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
 import java.security.PrivilegedAction;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
@@ -33,6 +34,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -1006,10 +1008,8 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * @return Enumeration of all <code>AdminPermission</code> objects.
 	 */
 	public synchronized Enumeration<Permission> elements() {
-		Collection< ? > values = permissions.values();
-		Enumeration<Permission> result = (Enumeration<Permission>) Collections
-				.enumeration(values);
-		return result;
+		List<Permission> all = new ArrayList<Permission>(permissions.values());
+		return Collections.enumeration(all);
 	}
 	
 	/* serialization logic */

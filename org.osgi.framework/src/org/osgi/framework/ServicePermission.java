@@ -897,16 +897,12 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * @return Enumeration of all the ServicePermission objects.
 	 */
 	public synchronized Enumeration<Permission> elements() {
-		List<ServicePermission> all = new ArrayList<ServicePermission>(
-				permissions.values());
+		List<Permission> all = new ArrayList<Permission>(permissions.values());
 		Map<String, ServicePermission> pc = filterPermissions;
 		if (pc != null) {
 			all.addAll(pc.values());
 		}
-		Collection< ? > values = all;
-		Enumeration<Permission> result = (Enumeration<Permission>) Collections
-				.enumeration(values);
-		return result;
+		return Collections.enumeration(all);
 	}
 	
 	/* serialization logic */

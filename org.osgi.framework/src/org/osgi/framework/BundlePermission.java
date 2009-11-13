@@ -23,11 +23,12 @@ import java.io.ObjectStreamField;
 import java.security.BasicPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -580,10 +581,8 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * @return Enumeration of all <code>BundlePermission</code> objects.
 	 */
 	public synchronized Enumeration<Permission> elements() {
-		Collection< ? > values = permissions.values();
-		Enumeration<Permission> result = (Enumeration<Permission>) Collections
-				.enumeration(values);
-		return result;
+		List<Permission> all = new ArrayList<Permission>(permissions.values());
+		return Collections.enumeration(all);
 	}
 	
 	/* serialization logic */

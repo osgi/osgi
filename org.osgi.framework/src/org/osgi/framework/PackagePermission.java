@@ -776,16 +776,12 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * @return Enumeration of all <code>PackagePermission</code> objects.
 	 */
 	public synchronized Enumeration<Permission> elements() {
-		List<PackagePermission> all = new ArrayList<PackagePermission>(
-				permissions.values());
+		List<Permission> all = new ArrayList<Permission>(permissions.values());
 		Map<String, PackagePermission> pc = filterPermissions;
 		if (pc != null) {
 			all.addAll(pc.values());
 		}
-		Collection< ? > values = all;
-		Enumeration<Permission> result = (Enumeration<Permission>) Collections
-				.enumeration(values);
-		return result;
+		return Collections.enumeration(all);
 	}
 
 	/* serialization logic */
