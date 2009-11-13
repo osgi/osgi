@@ -346,7 +346,7 @@ public final class PackagePermission extends BasicPermission {
 	 * @param filterString The filter string to parse.
 	 * @return a Filter for this bundle. If the specified filterString is not a
 	 *         filter expression, then <code>null</code> is returned.
-	 * @throws InvalidSyntaxException If the filter syntax is invalid.
+	 * @throws IllegalArgumentException If the filter syntax is invalid.
 	 */
 	private static Filter parseFilter(String filterString) {
 		filterString = filterString.trim();
@@ -354,7 +354,15 @@ public final class PackagePermission extends BasicPermission {
 			return null;
 		}
 
-		return FrameworkUtil.createFilter(filterString);
+		try {
+			return FrameworkUtil.createFilter(filterString);
+		}
+		catch (InvalidSyntaxException e) {
+			IllegalArgumentException iae = new IllegalArgumentException(
+					"invalid filter");
+			iae.initCause(e);
+			throw iae;
+		}
 	}
 
 	/**
