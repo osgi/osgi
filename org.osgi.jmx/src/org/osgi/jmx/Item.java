@@ -1,6 +1,6 @@
 package org.osgi.jmx;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -151,31 +151,24 @@ public class Item {
 		if (parent != null) {
 			for (Object nm : parent.keySet()) {
 				String key = (String) nm;
-				all.add(new Item((String) nm, parent.getDescription(key),
+				all.add(new Item(key, parent.getDescription(key),
 						parent.getType(key)));
 			}
 		}
 
-		all.addAll(Arrays.asList(items));
+		Collections.addAll(all, items);
 
-		String names[] = new String[all.size()];
-		String descriptions[] = new String[all.size()];
-		OpenType types[] = new OpenType[all.size()];
+		int size = all.size();
+		String names[] = new String[size];
+		String descriptions[] = new String[size];
+		OpenType types[] = new OpenType[size];
 
 		int m = 0;
-		if (parent != null) {
-			for (Object key : parent.keySet()) {
-				names[m] = (String) key;
-				descriptions[m] = parent.getDescription(names[m]);
-				types[m] = parent.getType(names[m]);
-				m++;
-			}
-		}
-
-		for (int n = m; n < all.size(); n++) { 
-			names[n] = items[n - m].name;
-			descriptions[n] = items[n - m].description;
-			types[n] = items[n - m].type;
+		for (Item item : all) {
+			names[m] = item.name;
+			descriptions[m] = item.description;
+			types[m] = item.type;
+			m++;
 		}
 
 		try {
