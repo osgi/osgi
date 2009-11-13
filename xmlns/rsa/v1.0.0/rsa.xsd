@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    /*
+    * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+    * 
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    *      http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+    */
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:rsa="http://www.osgi.org/xmlns/rsa/v1.0.0"
+  targetNamespace="http://www.osgi.org/xmlns/rsa/v1.0.0"
+  elementFormDefault="unqualified" version="1.0.0">
+
+  <annotation>
+    <documentation xml:lang="en">
+      This is the XML Schema for endpoint descriptions used by
+      the Remote Service Admin Specification. Endpoint descriptions
+      are used to describe remote services to a client in cases
+      where a real live Discovery system isn't used. An extender,
+      such as a local Discovery Service can look for service
+      descriptions in installed bundles and inform the Topology
+      Manager of these remote services. The Topology Manager can then
+      instruct the Remote Service Admin to create client proxies for
+      these services.
+    </documentation>
+  </annotation>
+
+  <element name="endpoint-descriptions" type="rsa:Tendpoint-descriptions" />
+
+  <complexType name="Tendpoint-descriptions">
+    <sequence>
+      <element name="endpoint-description" type="rsa:Tendpoint-description"
+        minOccurs="1" maxOccurs="unbounded" />
+      <!--
+        It is non-deterministic, per W3C XML Schema 1.0:
+        http://www.w3.org/TR/xmlschema-1/#cos-nonambig to use
+        namespace="##any" below.
+      -->
+      <any namespace="##other" processContents="lax" minOccurs="0"
+        maxOccurs="unbounded" />
+    </sequence>
+    <anyAttribute />
+  </complexType>
+
+  <complexType name="Tendpoint-description">
+    <annotation>
+      <documentation xml:lang="en">
+        A Distribution Provider can register a proxy with the properties
+        provided. Whether or not it is instructed to do so, is up to the
+        Topology Manager. If any 'intents' properties are specified then the 
+        Distribution Provider should only register a proxy if it can support
+        those intents.
+      </documentation>
+    </annotation>
+    <sequence>
+      <element name="property" type="rsa:Tproperty" minOccurs="0"
+        maxOccurs="unbounded" />
+      <!--
+        It is non-deterministic, per W3C XML Schema 1.0:
+        http://www.w3.org/TR/xmlschema-1/#cos-nonambig to use
+        namespace="##any" below.
+      -->
+      <any namespace="##other" processContents="lax" minOccurs="0"
+        maxOccurs="unbounded" />
+    </sequence>
+    <anyAttribute />
+  </complexType>
+
+  <complexType name="Tproperty" mixed="true">
+    <sequence>
+      <element name="value" minOccurs="0" maxOccurs="unbounded" type="string" />
+      <any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+    </sequence>
+    <attribute name="name" type="string" use="required" />
+    <attribute name="value" type="string" use="optional" />
+    <attribute name="type" type="rsa:Tproperty-types" default="String"
+      use="optional" />
+    <anyAttribute />
+  </complexType>
+
+  <simpleType name="Tproperty-types">
+    <restriction base="string">
+      <enumeration value="String" />
+      <enumeration value="Long" />
+      <enumeration value="Double" />
+      <enumeration value="Float" />
+      <enumeration value="Integer" />
+      <enumeration value="Byte" />
+      <enumeration value="Character" />
+      <enumeration value="Boolean" />
+      <enumeration value="Short" />
+      <enumeration value="XML" />
+    </restriction>
+  </simpleType>
+
+  <attribute name="must-understand" type="boolean" default="false">
+    <annotation>
+      <documentation xml:lang="en">
+        This attribute should be used by extensions to documents
+        to require that the document consumer understand the
+        extension.
+      </documentation>
+    </annotation>
+  </attribute>
+</schema>
