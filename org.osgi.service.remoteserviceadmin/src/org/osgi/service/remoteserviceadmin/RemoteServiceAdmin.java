@@ -17,7 +17,6 @@
 package org.osgi.service.remoteserviceadmin;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.ServiceReference;
@@ -51,12 +50,15 @@ public interface RemoteServiceAdmin {
 	 * the <code>properties</code> must therefore override any case variant in
 	 * the properties of the Service Reference.
 	 * 
-	 * If an endpoint can not be created because no
-	 * {@link EndpointPermission#EXPORT} can be obtained to export this service,
-	 * then this endpoint must be ignored and no Export Registration must be
-	 * included in the returned list.
+	 * <p>
+	 * If the caller does not have the appropriate
+	 * <code>EndpointPermission[endpoint,EXPORT]</code> for an endpoint, and the
+	 * Java Runtime Environment supports permissions, then the
+	 * {@link ExportRegistration#getException() getException} method on the
+	 * corresponding returned {@link ExportRegistration} will return a
+	 * <code>SecurityException</code>.
 	 * 
-	 * @param ref The Service Reference to export
+	 * @param reference The Service Reference to export.
 	 * @param properties The properties to create a local endpoint that can be
 	 *        implemented by this Remote Service Admin. If this is null, the
 	 *        endpoint will be determined by the properties on the service. The
@@ -64,14 +66,17 @@ public interface RemoteServiceAdmin {
 	 *        overlaid over any properties the service defines (case
 	 *        insensitive). This parameter can be <code>null</code>, this should
 	 *        be treated as an empty map.
+	 * 
+	 *        TODO Peter The return description does not mesh with returning a
+	 *        list! Why a list and not just one?
 	 * @return An Export Registration that combines the Endpoint Description and
 	 *         the Service Reference or <code>null</code> if the service could
-	 *         not be exported
+	 *         not be exported.
 	 * @throws IllegalArgumentException TODO Jan to update exception javadoc
 	 * @throws UnsupportedOperationException TODO Jan to update exception
 	 *         javadoc
 	 */
-	List<ExportRegistration> exportService(ServiceReference ref,
+	Collection<ExportRegistration> exportService(ServiceReference reference,
 			Map<String, Object> properties);
 
 	/**
@@ -79,35 +84,41 @@ public interface RemoteServiceAdmin {
 	 * given endpoint to create a proxy. This method can return null if the
 	 * service could not be imported.
 	 * 
-	 * If an endpoint can not be imported because no
-	 * {@link EndpointPermission#IMPORT} can be obtained, then this endpoint
-	 * must be ignored and no Import Registration must included in the returned
-	 * list.
-	 * 
-	 * @param endpoint The Endpoint Description to be used for import
+	 * @param endpoint The Endpoint Description to be used for import.
 	 * @return An Import Registration that combines the Endpoint Description and
 	 *         the Service Reference or <code>null</code> if the endpoint could
-	 *         not be imported
+	 *         not be imported.
+	 * @throws SecurityException If the caller does not have the appropriate
+	 *         <code>EndpointPermission[endpoint,IMPORT]</code> for the
+	 *         endpoint, and the Java Runtime Environment supports permissions.
 	 */
 	ImportRegistration importService(EndpointDescription endpoint);
 
 	/**
-	 * Answer the currently active Export References.
+	 * Return the currently active Export References.
 	 * 
-	 * @return A collection of Export Registrations that are currently active.
-	 * @throws SecurityException When the caller no
-	 *         {@link EndpointPermission#READ} could be obtained
+	 * <p>
+	 * If the caller does not have the appropriate
+	 * <code>EndpointPermission[endpoint,READ]</code> for an endpoint, and the
+	 * Java Runtime Environment supports permissions, then returned collection
+	 * will not contain a reference to the exported endpoint.
+	 * 
+	 * @return A <code>Collection</code> of {@link ExportReference}s that are
+	 *         currently active.
 	 */
 	Collection<ExportReference> getExportedServices();
 
 	/**
-	 * Answer the currently active Import References.
+	 * Return the currently active Import References.
 	 * 
-	 * @throws SecurityException When the caller no EndpointPermission LIST
-	 *         could be obtained
-	 * @return A collection of Import Registrations that are currently active.
-	 * @throws SecurityException When the caller no
-	 *         {@link EndpointPermission#READ} could be obtained
+	 * <p>
+	 * If the caller does not have the appropriate
+	 * <code>EndpointPermission[endpoint,READ]</code> for an endpoint, and the
+	 * Java Runtime Environment supports permissions, then returned collection
+	 * will not contain a reference to the imported endpoint.
+	 * 
+	 * @return A <code>Collection</code> of {@link ImportReference}s that are
+	 *         currently active.
 	 */
 	Collection<ImportReference> getImportedEndpoints();
 
