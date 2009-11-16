@@ -72,9 +72,12 @@ public interface RemoteServiceAdmin {
 	 * @return An Export Registration that combines the Endpoint Description and
 	 *         the Service Reference or <code>null</code> if the service could
 	 *         not be exported.
-	 * @throws IllegalArgumentException TODO Jan to update exception javadoc
-	 * @throws UnsupportedOperationException TODO Jan to update exception
-	 *         javadoc
+	 * @throws IllegalArgumentException If any of the properties has a value that 
+	 *         is not syntactically correct or if the service properties and the 
+	 *         overlaid properties do not contain a 
+	 *         {@link RemoteConstants#SERVICE_EXPORTED_INTERFACES} entry.
+	 * @throws UnsupportedOperationException If any of the intents expressed through 
+	 *         the properties is not csupported by the distribution provider.
 	 */
 	Collection<ExportRegistration> exportService(ServiceReference reference,
 			Map<String, Object> properties);
