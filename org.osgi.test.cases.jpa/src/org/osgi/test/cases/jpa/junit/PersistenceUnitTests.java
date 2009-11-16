@@ -182,7 +182,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 			}
 			
 			Bundle persistenceUnitBundle = persistenceUnit.getDefiningBundle();
-			if (persistenceUnitBundle == null) {
+			if (!(persistenceUnitBundle == persistenceBundle)) {
 				fail("Unable to retrieve the persistence unit bundle from the PersistenceUnitInfoService instance");
 			}
 			
@@ -222,15 +222,21 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 			String bundleVersion = (String) unitRef.getProperty(PersistenceUnitInfoService.PERSISTENCE_BUNDLE_SYMBOLIC_NAME);
 			
 			if (unitName == null) {
-				fail("The " + PersistenceUnitInfoService.PERSISTENCE_UNIT_NAME + " property is not set");
+				fail("The " + PersistenceUnitInfoService.PERSISTENCE_UNIT_NAME + " property is not set.");
+			} else if (!unitName.equals("testUnit1")) {
+				fail("The " + PersistenceUnitInfoService.PERSISTENCE_UNIT_NAME + " property is not set correctly.  Received unitName=" + unitName + " but expected unitName=testUnit1");
 			}
 			
 			if (bundleName == null) {
-				fail("The " + PersistenceUnitInfoService.PERSISTENCE_BUNDLE_SYMBOLIC_NAME + " property is not set");
+				fail("The " + PersistenceUnitInfoService.PERSISTENCE_BUNDLE_SYMBOLIC_NAME + " property is not set.");
+			} else if (!bundleName.equals(persistenceBundle.getSymbolicName())) {
+				fail("The " + PersistenceUnitInfoService.PERSISTENCE_BUNDLE_SYMBOLIC_NAME + " property is not set correctly.  Received bundleName=" + bundleName + " but expected bundleName=" + persistenceBundle.getSymbolicName());
 			}
 			
 			if (bundleVersion == null) {
-				fail("The " + PersistenceUnitInfoService.PERSISTENCE_BUNDLE_VERSION + " property is not set");
+				fail("The " + PersistenceUnitInfoService.PERSISTENCE_BUNDLE_VERSION + " property is not set.");
+			} else if (!bundleVersion.equals(persistenceBundle.getVersion())) {
+				fail("The " + PersistenceUnitInfoService.PERSISTENCE_BUNDLE_VERSION + " property is not set correctly.  Received bundleVersion=" + bundleVersion + " but expected bundleVersion=" + persistenceBundle.getVersion());
 			}
 		} catch (Exception ex) {
 			fail("Unable to verify PersistenctUnitInfoService service properties.", ex.getCause());
