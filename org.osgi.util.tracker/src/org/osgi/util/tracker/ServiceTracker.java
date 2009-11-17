@@ -150,7 +150,19 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		this.customizer = (customizer == null) ? this : customizer;
 		this.listenerFilter = "(" + Constants.SERVICE_ID + "="
 				+ reference.getProperty(Constants.SERVICE_ID).toString() + ")";
-		this.filter = context.createFilter(listenerFilter);
+		try {
+			this.filter = context.createFilter(listenerFilter);
+		}
+		catch (InvalidSyntaxException e) {
+			/*
+			 * we could only get this exception if the ServiceReference was
+			 * invalid
+			 */
+			IllegalArgumentException iae = new IllegalArgumentException(
+					"unexpected InvalidSyntaxException: " + e.getMessage());
+			iae.initCause(e);
+			throw iae;
+		}
 	}
 
 	/**
@@ -180,7 +192,19 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		// we call clazz.toString to verify clazz is non-null!
 		this.listenerFilter = "(" + Constants.OBJECTCLASS + "="
 				+ clazz.toString() + ")";
-		this.filter = context.createFilter(listenerFilter);
+		try {
+			this.filter = context.createFilter(listenerFilter);
+		}
+		catch (InvalidSyntaxException e) {
+			/*
+			 * we could only get this exception if the clazz argument was
+			 * malformed
+			 */
+			IllegalArgumentException iae = new IllegalArgumentException(
+					"unexpected InvalidSyntaxException: " + e.getMessage());
+			iae.initCause(e);
+			throw iae;
+		}
 	}
 
 	/**
@@ -289,26 +313,33 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 			}
 			t = trackAllServices ? new AllTracked() : new Tracked();
 			synchronized (t) {
-				context.addServiceListener(t, listenerFilter);
-				ServiceReference<S>[] references = null;
-				if (trackClass != null) {
-					references = getInitialReferences(trackAllServices,
-							trackClass, null);
-				}
-				else {
-					if (trackReference != null) {
-						if (trackReference.getBundle() != null) {
-							ServiceReference<S>[] single = new ServiceReference[] {trackReference};
-							references = single;
+				try {
+					context.addServiceListener(t, listenerFilter);
+					ServiceReference<S>[] references = null;
+					if (trackClass != null) {
+						references = getInitialReferences(trackAllServices,
+								trackClass, null);
+					}
+					else {
+						if (trackReference != null) {
+							if (trackReference.getBundle() != null) {
+								ServiceReference<S>[] single = new ServiceReference[] {trackReference};
+								references = single;
+							}
+						}
+						else { /* user supplied filter */
+							references = getInitialReferences(trackAllServices,
+									null, listenerFilter);
 						}
 					}
-					else { /* user supplied filter */
-						references = getInitialReferences(trackAllServices,
-								null, listenerFilter);
-					}
+					/* set tracked with the initial references */
+					t.setInitial(references);
 				}
-				/* set tracked with the initial references */
-				t.setInitial(references);
+				catch (InvalidSyntaxException e) {
+					throw new RuntimeException(
+							"unexpected InvalidSyntaxException: "
+									+ e.getMessage(), e);
+				}
 			}
 			tracked = t;
 		}
@@ -331,7 +362,8 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 *         invalid syntax.
 	 */
 	private ServiceReference<S>[] getInitialReferences(
-			boolean trackAllServices, String className, String filterString) {
+			boolean trackAllServices, String className, String filterString)
+			throws InvalidSyntaxException {
 		ServiceReference<S>[] result = (ServiceReference<S>[]) ((trackAllServices) ? context
 				.getAllServiceReferences(className, filterString)
 				: context.getServiceReferences(className, filterString));
