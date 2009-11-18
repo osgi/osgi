@@ -79,25 +79,25 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		verifyFramework();
 		
 		// TODO not supported by RI yet
-//		Set supportedConfigTypes = getSupportedConfigTypes();
+		Set supportedConfigTypes = getSupportedConfigTypes();
 
 		// load the external properties file with the config types for the server side service
 		Hashtable properties = loadServerTCKProperties();
 
 		// TODO not supported by RI yet
-//		// make sure the given config type is in the set of supported config types
-//		String str = (String) properties.get(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS);
-//		
-//		// I hate not having String.split() available
-//		StringTokenizer st = new StringTokenizer(str, " ");
-//		boolean found = false;
-//		while (st.hasMoreTokens()) {
-//			if (supportedConfigTypes.contains(st.nextToken())) {
-//				found = true;
-//				break;
-//			}
-//		}
-//		assertTrue("the given service.exported.configs type is not supported by the installed Distribution Provider", found);
+		// make sure the given config type is in the set of supported config types
+		String str = (String) properties.get(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS);
+		
+		// I hate not having String.split() available
+		StringTokenizer st = new StringTokenizer(str, " ");
+		boolean found = false;
+		while (st.hasMoreTokens()) {
+			if (supportedConfigTypes.contains(st.nextToken())) {
+				found = true;
+				break;
+			}
+		}
+		assertTrue("the given service.exported.configs type is not supported by the installed Distribution Provider", found);
 		
 		// add some properties for testing
 		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, "*");
