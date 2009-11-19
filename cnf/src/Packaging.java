@@ -232,6 +232,11 @@ public class Packaging implements AnalyzerPlugin {
 			Manifest m = s.getManifest();
 			String bsn = m.getMainAttributes().getValue(
 					Constants.BUNDLE_SYMBOLICNAME);
+			if ( bsn == null ) {
+				analyzer.error("Invalid bundle in flattening a path (no bsn set): %s", sub.getAbsolutePath());
+				return;
+			}
+			
 			int n = bsn.indexOf(';');
 			if (n > 0)
 				bsn = bsn.substring(0, n);
