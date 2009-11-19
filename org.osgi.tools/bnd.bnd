@@ -1,5 +1,5 @@
--source 1.5
--target 1.5
+javac.source            = 1.5
+javac.target            = 1.5
 -sub org.osgi.tools.*.bnd
 
 -buildpath: \
