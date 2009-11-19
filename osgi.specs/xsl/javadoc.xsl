@@ -36,6 +36,7 @@
 		</h1>
 		<em class="REMARK"><xsl:value-of select="."/>
 		</em>
+		<xsl:message>Formatting error in <xsl:value-of select="."/></xsl:message>
 	</xsl:template>
 	
 	<xsl:template match="class" mode="index">
@@ -54,7 +55,7 @@
 				<h2 class="Heading2">
 					<xsl:value-of select="@modifiers"/>
 					<xsl:text> </xsl:text>
-					<xsl:value-of select="@name"/>
+					<xsl:value-of select="@name"/><xsl:value-of select="@typeParam"/>
 					<xsl:choose>
 					   <xsl:when test="@interface">
                             <xsl:for-each select="implements[@local]">
@@ -66,7 +67,7 @@
                                         ,
                                     </xsl:otherwise>
                                 </xsl:choose>
-                                <xsl:value-of select="@name"/>
+                                <xsl:value-of select="@qn"/>
                             </xsl:for-each>
 					   </xsl:when>
 					   <xsl:otherwise>
@@ -83,11 +84,19 @@
         								,
         							</xsl:otherwise>
         						</xsl:choose>
-        						<xsl:value-of select="@name"/>
+        						<xsl:value-of select="@qn"/>
         					</xsl:for-each>
         				</xsl:otherwise>
     				</xsl:choose>
 				</h2>
+                <xsl:for-each select="param">
+                    <p class="parameter">
+                        <tab/>
+                        <em class="key"><xsl:value-of select="@name"/></em>
+                        <tab/>
+                        <xsl:apply-templates select="." mode="html"/>
+                    </p>
+                </xsl:for-each>
 				<xsl:apply-templates select="description" mode="html"/>
 				<xsl:call-template name="descriptors"><xsl:with-param name="target" select="."/></xsl:call-template>
 				<xsl:if test="field">
@@ -132,6 +141,14 @@
 				<xsl:value-of select="@name"/>
 			</xsl:for-each>
 		</h3>
+		<xsl:if test="normalize-space(@typeArgs)">
+            <p class="parameter">
+                <tab/>
+		          <em class="key">Type Arguments</em>
+		        <tab/>
+		        <em class="Code"><xsl:value-of select="normalize-space(@typeArgs)"/></em>
+            </p>
+		</xsl:if>		
 		<xsl:for-each select="param">
 			<p class="parameter">
 				<tab/>
