@@ -374,7 +374,7 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
-		doTestExportPolicy01(manifest, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
+		doTestExportPolicy01(manifest, new String[] {"tb3v2.jar"}, null, "tb3v1client.jar", true, null);
 	}
 
 	public void testPackageExport01e() {
