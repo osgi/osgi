@@ -38,13 +38,30 @@ public class Packaging implements AnalyzerPlugin {
 
 		// For each project listed ...
 		Map<String, Map<String, String>> ct = pb.parseHeader(pack);
+		if (ct.isEmpty()) {
+			analyzer.warning("No projects to pack");
+			return false;
+		}
+
+		// Do the shared stuff, we use our project as a template
+		Project us = pb.getProject();
+		Collection<Container> runpath = us.getRunpath();
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("# Workspace information\n");
+		sb.append("-runpath = ");
+		flatten(analyzer, sb, jar, runpath, true);
+		sb.append('\n');
+		jar.putResource("shared.inc", new EmbeddedResource(sb.toString()
+				.getBytes("UTF-8"), 0));
+
 		for (Map.Entry<String, Map<String, String>> entry : ct.entrySet()) {
 			try {
 				Project project = workspace.getProject(entry.getKey());
 				if (!project.isValid())
 					analyzer.error("Invalid project to pack: %s", project);
 				else
-					pack(analyzer, jar, project);
+					pack(analyzer, jar, project, runpath);
 			}
 			catch (Exception t) {
 				analyzer.error("While packaging %s got %s", entry.getKey(), t);
@@ -63,8 +80,9 @@ public class Packaging implements AnalyzerPlugin {
 		else
 			analyzer.error("Cannot find bnd's jar file in a repository ");
 
-		List<Container> extra = pb.getProject().getBundles(Constants.STRATEGY_HIGHEST, "com.springsource.junit");
-		flatten(analyzer,null,jar,extra,true);
+		List<Container> extra = pb.getProject().getBundles(
+				Constants.STRATEGY_HIGHEST, "com.springsource.junit");
+		flatten(analyzer, null, jar, extra, true);
 
 		StringBuilder script = new StringBuilder();
 		script.append("java -jar jar/bnd.jar runtests -title ");
@@ -85,8 +103,8 @@ public class Packaging implements AnalyzerPlugin {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	private void pack(Analyzer analyzer, Jar jar, Project project)
-			throws Exception {
+	private void pack(Analyzer analyzer, Jar jar, Project project,
+			Collection<Container> sharedRunpath) throws Exception {
 		Collection<Container> runpath = project.getRunpath();
 		Collection<Container> runbundles = project.getRunbundles();
 		String runproperties = project.getProperty(Constants.RUNPROPERTIES);
@@ -94,17 +112,19 @@ public class Packaging implements AnalyzerPlugin {
 
 		sb.append("# bnd pack for project " + project + "\n");
 		sb.append("# " + new Date() + "\n");
+		sb.append("-include= ~shared.inc\n");
 		sb.append("build=.\n");
 		sb.append("\n");
 		sb.append("-target = ");
 		flatten(analyzer, sb, jar, project, Collections.EMPTY_MAP, true);
 		sb.deleteCharAt(sb.length() - 1);
 
-		sb.append("\n");
-		sb.append("\n");
-		sb.append("-runpath = ");
-		flatten(analyzer, sb, jar, runpath, false);
-
+		if (!equals(runpath, sharedRunpath)) {
+			sb.append("\n");
+			sb.append("\n");
+			sb.append("-runpath = ");
+			flatten(analyzer, sb, jar, runpath, false);
+		}
 		sb.append("\n\n");
 		sb.append("-runbundles = ");
 		flatten(analyzer, sb, jar, runbundles, false);
@@ -147,6 +167,18 @@ public class Packaging implements AnalyzerPlugin {
 
 	}
 
+	private <T> boolean equals(Collection<? extends T> a,
+			Collection<? extends T> b) {
+		if ( a.size() != b.size())
+			return false;
+
+		for ( T x : a ) {
+			if ( ! b.contains(x))
+				return false;
+		}
+		return true;
+	}
+
 	private void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
 			Collection<Container> path, boolean store) throws Exception {
 		for (Container container : path) {
@@ -181,7 +213,8 @@ public class Packaging implements AnalyzerPlugin {
 	}
 
 	private void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
-			Project project, Map<String, String> map, boolean store) throws Exception {
+			Project project, Map<String, String> map, boolean store)
+			throws Exception {
 		File[] subs = project.getBuildFiles();
 		analyzer.getInfo(project);
 		if (subs == null) {
@@ -211,10 +244,10 @@ public class Packaging implements AnalyzerPlugin {
 
 			String path = "jar/" + bsn + "-" + v.getMajor() + "."
 					+ v.getMinor() + "." + v.getMicro() + ".jar";
-			
-			if ( store )
+
+			if (store)
 				jar.putResource(path, new FileResource(sub));
-			
+
 			if (sb != null) {
 				sb.append("\\\n    ");
 				sb.append(path);
