@@ -18,23 +18,20 @@
 package org.osgi.test.cases.composite.junit;
 
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.composite.CompositeBundle;
 import org.osgi.service.composite.CompositeConstants;
+import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.service.packageadmin.RequiredBundle;
 import org.osgi.test.cases.composite.AbstractCompositeTestCase;
-import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.cases.composite.TestHandler;
 
 public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 
@@ -383,5 +380,163 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 			}
 			getContext().removeBundleListener(testListener);
 		}
+	}
+
+	public void testGetSystemBundlePackages() {
+		// test getting system bundle packages
+		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), null, null);
+
+		PackageAdmin compositePA = (PackageAdmin) getService(composite.getSystemBundleContext(), PackageAdmin.class.getName());
+		ExportedPackage[] systemPackages = compositePA.getExportedPackages(composite.getSystemBundleContext().getBundle(0));
+		assertNotNull(systemPackages);
+		
+		uninstallCompositeBundle(composite);
+	}
+
+	public void testPackageAdminImport01a() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
+				"org.osgi.test.cases.composite.tb3; tb3version=1, org.osgi.test.cases.composite.tb3.params; tb3version=1");
+		doTestImportPolicy01(manifest, new String[] {"tb3v1.jar"}, new String[] {"tb1.jar"}, "tb3v1client.jar", false,
+				new PackageAdminHandler(new String[] {"org.osgi.test.cases.composite.tb3"}, null, null, null));
+	}
+
+	public void testPackageAdminImport01b() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
+				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
+		doTestImportPolicy01(manifest, new String[] {"tb3v1.jar"}, new String[] {"tb1.jar"}, "tb3v1client.jar", true,
+				new PackageAdminHandler(null, null, new String[] {"org.osgi.test.cases.composite.tb3"}, null));
+	}
+
+	public void testPackageAdminExport01a() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, 
+				"org.osgi.test.cases.composite.tb3; tb3version=1, org.osgi.test.cases.composite.tb3.params; tb3version=1");
+		doTestExportPolicy01(manifest, new String[] {"tb3v1.jar"}, new String[] {"tb1.jar"}, "tb3v1client.jar", false,
+				new PackageAdminHandler(new String[] {"org.osgi.test.cases.composite.tb3"}, null, null, null));
+	}
+
+	public void testPackageAdminExport01b() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, 
+				"org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
+		doTestExportPolicy01(manifest, new String[] {"tb3v1.jar"}, new String[] {"tb1.jar"}, "tb3v1client.jar", true,
+				new PackageAdminHandler(null, null, new String[] {"org.osgi.test.cases.composite.tb3"}, null));
+	}
+
+	public void testPackageAdminRequire01a() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.0, 1.1)\"");
+		doTestImportPolicy01(manifest, new String[] {"tb3v1.jar"}, new String[] {"tb1.jar"}, "tb3v1requireClient.jar", false, 
+				new PackageAdminHandler(null, new String[] {"org.osgi.test.cases.composite.tb3"}, null, null));
+	}
+
+	public void testPackageAdminRequire01b() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.1,1.2)\"");
+		doTestImportPolicy01(manifest, new String[] {"tb3v1.jar"}, new String[] {"tb1.jar"}, "tb3v1requireClient.jar", true,
+				new PackageAdminHandler(null, null, null, new String[] {"org.osgi.test.cases.composite.tb3"}));
+	}
+
+	public void testPackageAdminExportImport01a() {
+		Map manifestExport = new HashMap();
+		manifestExport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; tb3version=1, org.osgi.test.cases.composite.tb3.params; tb3version=1");
+		Map manifestImport = new HashMap();
+		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb3v1.jar"}, new String[] {"tb1.jar"}, "tb3v1client.jar", false,
+				new PackageAdminHandler(new String[] {"org.osgi.test.cases.composite.tb3"}, null, null, null));
+	}
+
+	public void testPackageAdminExportImport01b() {
+		Map manifestExport = new HashMap();
+		manifestExport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestExport.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3; tb3version=2, org.osgi.test.cases.composite.tb3.params; tb3version=2");
+		Map manifestImport = new HashMap();
+		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
+		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb3v1.jar"}, new String[] {"tb1.jar"}, "tb3v1client.jar", true, 
+				new PackageAdminHandler(null, null, new String[] {"org.osgi.test.cases.composite.tb3"}, null));
+	}
+
+	public class PackageAdminHandler implements TestHandler {
+		private final String[] expectedPackages;
+		private final String[] expectedBundles;
+		private final String[] missingPackages;
+		private final String[] missingBundles;
+
+
+
+		public PackageAdminHandler(String[] expectedPackages,
+				String[] expectedBundles, String[] missingPackages,
+				String[] missingBundles) {
+			this.expectedPackages = expectedPackages;
+			this.expectedBundles = expectedBundles;
+			this.missingPackages = missingPackages;
+			this.missingBundles = missingBundles;
+		}
+
+		public void handleBundles(Bundle[] exportBundles,
+				Bundle[] importBundles, Bundle client) {
+			// we assume the first importBundles is active
+			assertNotNull("importBundles is null", importBundles);
+			assertTrue("No importBundles", importBundles.length > 0);
+			Bundle importBundle = importBundles[0];
+			assertEquals("Wrong state for bundle", Bundle.ACTIVE, importBundle.getState());
+			PackageAdmin pa = (PackageAdmin) getService(importBundle.getBundleContext(), PackageAdmin.class.getName());
+			if (expectedPackages != null)
+				for (int i = 0; i < expectedPackages.length; i++) {
+					ExportedPackage[] exports = pa.getExportedPackages(expectedPackages[i]);
+					assertNotNull(exports);
+					assertTrue(exports.length > 0);
+					for (int j = 0; j < exports.length; j++) {
+						boolean found = false;
+						Bundle exporter = exports[j].getExportingBundle();
+						for (int k = 0; k < exportBundles.length && !found; k++) {
+							found = exporter == exportBundles[k];
+						}
+						assertTrue("Could not find exporter for: " + expectedPackages[i], found);
+					}
+					
+				}
+			if (expectedBundles != null)
+				for (int i = 0; i < expectedBundles.length; i++) {
+					RequiredBundle[] required = pa.getRequiredBundles(expectedBundles[i]);
+					assertNotNull(required);
+					assertTrue(required.length > 0);
+					for (int j = 0; j < required.length; j++) {
+						boolean found = false;
+						Bundle exporter = required[j].getBundle();
+						for (int k = 0; k < exportBundles.length && !found; k++) {
+							found = exporter == exportBundles[k];
+						}
+						assertTrue("Could not find bundle for: " + expectedBundles[i], found);
+					}
+					
+				}
+			if (missingPackages != null)
+				for (int i = 0; i < missingPackages.length; i++) {
+					ExportedPackage[] exports = pa.getExportedPackages(missingPackages[i]);
+					assertNull("Exports is not null for: " + missingPackages[i], exports);
+				}
+			if (missingBundles != null)
+				for (int i = 0; i < missingBundles.length; i++) {
+					RequiredBundle[] required = pa.getRequiredBundles(missingBundles[i]);
+					assertNull("Bundles is not null for: " + missingBundles[i], required);
+				}
+		}
+
+		public void handleException(Throwable t) {
+			// nothing
+		}
+
 	}
 }
