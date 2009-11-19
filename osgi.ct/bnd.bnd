@@ -1,6 +1,5 @@
 -include            : layout.bnd
 -dependson          : osgi.ri, ${build.tests}
--reportnewer 		: true
 -resourceonly       : true
 
 # Build the osgi spec files
