@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    /*
+    * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+    * 
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    *      http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+    */
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca/200903"
+  xmlns:scact="http://www.osgi.org/xmlns/scact/v1.0.0" targetNamespace="http://www.osgi.org/xmlns/scact/v1.0.0"
+  version="1.0.0" elementFormDefault="qualified">
+
+  <import namespace="http://docs.oasis-open.org/ns/opencsa/sca/200903" schemaLocation="http://docs.oasis-open.org/opencsa/sca-assembly/sca-policy-1.1-cd02.xsd" />
+  <import namespace="http://docs.oasis-open.org/ns/opencsa/sca/200903" schemaLocation="http://docs.oasis-open.org/opencsa/sca-assembly/sca-core-1.1-cd03.xsd" />
+
+  <annotation>
+    <documentation xml:lang="en">
+      This is the XML Schema for sca-config used by the
+      SCA configuration type specification. An instance of
+      an sca-config document can optionally contain bindings,
+      intents and policySets. These elements described the detailed
+      configuration for how the service should be made available (e.g. as a
+      soap/http Web service). The SCA specifications from OASIS define the
+      binding types which can be included in a bindings document and how
+      intents and policySets can provide detailed configuration for
+      policies.
+        </documentation>
+  </annotation>
+
+  <element name="sca-config" type="scact:Tsca-config" />
+
+  <complexType name="Tsca-config">
+    <choice minOccurs="0" maxOccurs="unbounded">
+      <element ref="sca:binding" />
+      <element ref="sca:intent" />
+      <element ref="sca:policySet" />
+    </choice>
+    <attribute name="targetNamespace" type="anyURI" use="required" />
+  </complexType>
+
+  <attribute name="must-understand" type="boolean" default="false">
+    <annotation>
+      <documentation xml:lang="en">
+        This attribute should be used by extensions to documents
+        to require that the document consumer understand the extension.
+      </documentation>
+    </annotation>
+  </attribute>
+</schema>
