@@ -1,3 +1,5 @@
+-source 1.5
+-target 1.5
 -sub org.osgi.tools.*.bnd
 
 -buildpath: \
@@ -9,8 +11,9 @@
 	com.springsource.junit;				version="[3.8,4)", 	\
 	nanoxml,												\
 	org.objectweb.asm;					version="[2.2.2,3)",\
-	ee.j2se; 							version=1.4,		\
-	com.sun.tools
+	ee.j2se; 							version=1.5,		\
+	com.sun.tools;                      version=1.5.0
+
 
 bin.includes = \
 	org.osgi.tools.cmapps.jar, \
