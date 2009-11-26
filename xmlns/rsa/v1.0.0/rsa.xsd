@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
+  <!--
     /*
-    * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
-    * 
-    * Licensed under the Apache License, Version 2.0 (the "License");
-    * you may not use this file except in compliance with the License.
-    * You may obtain a copy of the License at
-    *
-    *      http://www.apache.org/licenses/LICENSE-2.0
-    *
-    * Unless required by applicable law or agreed to in writing, software
-    * distributed under the License is distributed on an "AS IS" BASIS,
-    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    * See the License for the specific language governing permissions and
-    * limitations under the License.
-    */
--->
-<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:rsa="http://www.osgi.org/xmlns/rsa/v1.0.0"
+     * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+     *
+     * Licensed under the Apache License, Version 2.0 (the "License");
+     * you may not use this file except in compliance with the License.
+     * You may obtain a copy of the License at
+     *
+     * http://www.apache.org/licenses/LICENSE-2.0
+     *
+     * Unless required by applicable law or agreed to in writing, software
+     * distributed under the License is distributed on an "AS IS" BASIS,
+     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     * See the License for the specific language governing permissions and
+     * limitations under the License.
+     */
+  -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+  xmlns:rsa="http://www.osgi.org/xmlns/rsa/v1.0.0"
   targetNamespace="http://www.osgi.org/xmlns/rsa/v1.0.0"
   elementFormDefault="unqualified" version="1.0.0">
 
@@ -39,14 +40,14 @@
   <complexType name="Tendpoint-descriptions">
     <sequence>
       <element name="endpoint-description" type="rsa:Tendpoint-description"
-        minOccurs="1" maxOccurs="unbounded" />
-      <!--
-        It is non-deterministic, per W3C XML Schema 1.0:
-        http://www.w3.org/TR/xmlschema-1/#cos-nonambig to use
-        namespace="##any" below.
-      -->
-      <any namespace="##other" processContents="lax" minOccurs="0"
-        maxOccurs="unbounded" />
+               minOccurs="1" maxOccurs="unbounded" />
+        <!--
+          It is non-deterministic, per W3C XML Schema 1.0:
+          http://www.w3.org/TR/xmlschema-1/#cos-nonambig to use
+          namespace="##any" below.
+        -->
+      <any namespace="##other" minOccurs="0" maxOccurs="unbounded"
+           processContents="lax" />
     </sequence>
     <anyAttribute />
   </complexType>
@@ -56,51 +57,96 @@
       <documentation xml:lang="en">
         A Distribution Provider can register a proxy with the properties
         provided. Whether or not it is instructed to do so, is up to the
-        Topology Manager. If any 'intents' properties are specified then the 
-        Distribution Provider should only register a proxy if it can support
+        Topology Manager. If any 'intents' properties are specified then the
+        Distribution Provider should only register a proxy if it can support 
         those intents.
       </documentation>
     </annotation>
     <sequence>
-      <element name="property" type="rsa:Tproperty" minOccurs="0"
-        maxOccurs="unbounded" />
-      <!--
-        It is non-deterministic, per W3C XML Schema 1.0:
-        http://www.w3.org/TR/xmlschema-1/#cos-nonambig to use
-        namespace="##any" below.
-      -->
-      <any namespace="##other" processContents="lax" minOccurs="0"
-        maxOccurs="unbounded" />
+      <element name="property" type="rsa:Tproperty" minOccurs="1"
+               maxOccurs="unbounded" />
+      <any namespace="##other" minOccurs="0" maxOccurs="unbounded"
+           processContents="lax" />
     </sequence>
     <anyAttribute />
   </complexType>
 
   <complexType name="Tproperty" mixed="true">
     <sequence>
-      <element name="value" minOccurs="0" maxOccurs="unbounded" type="string" />
-      <any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+      <choice minOccurs="0" maxOccurs="1">
+        <element name="array" type="rsa:Tmulti-value"/>
+        <element name="list" type="rsa:Tmulti-value"/>
+        <element name="set" type="rsa:Tmulti-value"/>
+        <element name="xml" type="rsa:Txml"/>
+      </choice>
+      <any namespace="##other" minOccurs="0" maxOccurs="unbounded"
+           processContents="lax" />
     </sequence>
     <attribute name="name" type="string" use="required" />
     <attribute name="value" type="string" use="optional" />
-    <attribute name="type" type="rsa:Tproperty-types" default="String"
-      use="optional" />
+    <attribute name="value-type" type="rsa:Tvalue-types" default="String" use="optional" />
     <anyAttribute />
   </complexType>
-
-  <simpleType name="Tproperty-types">
+  
+  <complexType name="Tmulti-value">
+    <sequence>
+      <element name="value" minOccurs="0" maxOccurs="unbounded" type="rsa:Tvalue"/>
+      <any namespace="##other" minOccurs="0" maxOccurs="unbounded"
+           processContents="lax" />      
+    </sequence>
+    <anyAttribute />
+  </complexType>
+  
+  <complexType name="Tvalue" mixed="true">
+    <sequence>
+      <element name="xml" minOccurs="0" maxOccurs="1" type="rsa:Txml"/>
+      <any namespace="##other" minOccurs="0" maxOccurs="unbounded"
+           processContents="lax" />      
+    </sequence>
+    <anyAttribute />
+  </complexType>
+  
+  <!-- Specifies the data type of a property or of the elements in a multi-value  
+       property. Numerical and boolean values are trimmed before they are processed.
+       Simple types are automatically boxed if needed. Only the array data type 
+       allows for simple type values. When specifying a simple type on any other 
+       type of property it will automatically be boxed. -->
+  <simpleType name="Tvalue-types">
     <restriction base="string">
       <enumeration value="String" />
+      <enumeration value="long" />
       <enumeration value="Long" />
+      <enumeration value="double" />
       <enumeration value="Double" />
+      <enumeration value="float" />
       <enumeration value="Float" />
+      <enumeration value="int" />
       <enumeration value="Integer" />
+      <enumeration value="byte" />
       <enumeration value="Byte" />
+      <enumeration value="char" />
       <enumeration value="Character" />
+      <enumeration value="boolean" />
       <enumeration value="Boolean" />
+      <enumeration value="short" />
       <enumeration value="Short" />
-      <enumeration value="XML" />
     </restriction>
   </simpleType>
+  
+  <!-- This complex type allows literal XML to be specified in an <xml/> tag (which 
+       is more convenient than putting it in a CDATA section). 
+       The embedded XML must be well-formed and not be in the rsa namespace. It will 
+       be put in a String value of a property or in an element of a multi-value 
+       property of base type String. The XML will be prefixed with the standard 
+       <?XML ?> header which is copied from the enclosing document. Hence it will 
+       carry the same version and encoding as the document in the rsa namespace. -->
+  <complexType name="Txml">
+    <sequence>
+      <any namespace="##other" minOccurs="0" maxOccurs="1"
+           processContents="lax" />
+    </sequence>
+    <anyAttribute />
+  </complexType>
 
   <attribute name="must-understand" type="boolean" default="false">
     <annotation>
