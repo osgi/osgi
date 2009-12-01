@@ -33,7 +33,7 @@ public class URLContext1Activator implements BundleActivator {
 	
 	public void start(BundleContext context) throws Exception {
 		Hashtable props = new Hashtable();
-		props.put("osgi.jndi.urlScheme","ct");
+		props.put("osgi.jndi.url.scheme","ct");
 		
 		ctURLContextFactory factory = new ctURLContextFactory();
 		
