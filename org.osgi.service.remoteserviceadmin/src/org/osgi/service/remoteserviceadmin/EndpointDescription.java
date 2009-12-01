@@ -18,6 +18,8 @@ package org.osgi.service.remoteserviceadmin;
 
 import static org.osgi.service.remoteserviceadmin.RemoteConstants.*;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -64,47 +66,73 @@ public class EndpointDescription {
     private final String                remoteFrameworkUUID;
     private final String                remoteUri;
 
-    /**
-     * Create an Endpoint Description based on a Map.
-     * 
-     * @param properties The map to create the Endpoint Description from.
-     * @throws IllegalArgumentException When the properties are not proper for
-     *         an Endpoint Description
-     */
+	/**
+	 * Create an Endpoint Description based on a Map.
+	 * 
+	 * <p>
+	 * The {@link RemoteConstants#ENDPOINT_URI} property must be set.
+	 * 
+	 * @param properties The map from which to create the Endpoint Description.
+	 *        The keys in the map must be type <code>String</code> and, since
+	 *        the keys are case insensitive, there must be no duplicates with
+	 *        case variation.
+	 * @throws IllegalArgumentException When the properties are not proper for
+	 *         an Endpoint Description.
+	 */
 
     public EndpointDescription(Map<String, Object> properties) {
-        this(properties, null);
-        if (properties == null) {
-            throw new NullPointerException("properties must not be null");
+		Map<String, Object> props = new TreeMap<String, Object>(
+				String.CASE_INSENSITIVE_ORDER);
+		try {
+			props.putAll(properties);
+		}
+		catch (ClassCastException e) {
+			IllegalArgumentException iae = new IllegalArgumentException(
+					"non-String key in properties");
+			iae.initCause(e);
+			throw iae;
+		}
+		if (props.size() < properties.size()) {
+			throw new IllegalArgumentException(
+					"duplicate keys with different cases in properties");
         }
+
+		this.properties = Collections.unmodifiableMap(props);
+		/* properties must be initialized before calling the following methods */
+		interfaces = verifyObjectClassProperty();
+		remoteServiceId = verifyLongProperty(ENDPOINT_ID);
+		remoteFrameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
+		remoteUri = verifyStringProperty(ENDPOINT_URI);
+		if (remoteUri == null) {
+			throw new IllegalArgumentException(ENDPOINT_URI
+					+ " property must be set");
+		}
     }
 
-    /**
-     * Create an Endpoint Description based on a reference and optionally a map
-     * of additional properties. The properties on the original service take
-     * precedence over the ones in the map.
-     * 
-     * @param reference A service reference that can be exported
-     * @param properties Additional properties to add. Can be <code>null</code>.
-     * @throws IllegalArgumentException When the properties are not proper for
-     *         an Endpoint Description
-     */
-    public EndpointDescription(ServiceReference reference,
-            Map<String, Object> properties) {
-        this(properties, reference);
-        if (reference == null) {
-            throw new NullPointerException("reference must not be null");
-        }
-    }
-
-    private EndpointDescription(Map<String, Object> map,
-            ServiceReference reference) {
+	/**
+	 * Create an Endpoint Description based on a service reference and a map of
+	 * properties. The properties in the map take precedence over the properties
+	 * in the service reference.
+	 * 
+	 * <p>
+	 * The {@link RemoteConstants#ENDPOINT_URI} property must be set.
+	 * 
+	 * @param reference A service reference that can be exported.
+	 * @param properties Map of properties. This argument can be
+	 *        <code>null</code>. The keys in the map must be type
+	 *        <code>String</code> and, since the keys are case insensitive,
+	 *        there must be no duplicates with case variation.
+	 * @throws IllegalArgumentException When the properties are not proper for
+	 *         an Endpoint Description
+	 */
+	public EndpointDescription(final ServiceReference reference,
+			final Map<String, Object> properties) {
         Map<String, Object> props = new TreeMap<String, Object>(
                 String.CASE_INSENSITIVE_ORDER);
 
-        if (map != null) {
+		if (properties != null) {
             try {
-                props.putAll(map);
+				props.putAll(properties);
             }
             catch (ClassCastException e) {
                 IllegalArgumentException iae = new IllegalArgumentException(
@@ -112,27 +140,50 @@ public class EndpointDescription {
                 iae.initCause(e);
                 throw iae;
             }
-            if (props.size() < map.size()) {
+			if (props.size() < properties.size()) {
                 throw new IllegalArgumentException(
                         "duplicate keys with different cases in properties");
             }
         }
 
-        if (reference != null) {
-            for (String key : reference.getPropertyKeys()) {
-                if (!props.containsKey(key)) {
-                    props.put(key, reference.getProperty(key));
-                }
-            }
+		for (String key : reference.getPropertyKeys()) {
+			if (!props.containsKey(key)) {
+				props.put(key, reference.getProperty(key));
+			}
         }
 
-        properties = Collections.unmodifiableMap(props);
+		if (!props.containsKey(ENDPOINT_ID)) {
+			props.put(ENDPOINT_ID, reference.getProperty(Constants.SERVICE_ID));
+		}
+		if (!props.containsKey(ENDPOINT_FRAMEWORK_UUID)) {
+			String uuid = null;
+			try {
+				uuid = AccessController
+						.doPrivileged(new PrivilegedAction<String>() {
+							public String run() {
+								return reference.getBundle().getBundleContext()
+										.getProperty("org.osgi.framework.uuid");
+							}
+						});
+			}
+			catch (SecurityException e) {
+				// if we don't have permission, we can't get the property
+			}
+			if (uuid != null) {
+				props.put(ENDPOINT_FRAMEWORK_UUID, uuid);
+			}
+		}
+		this.properties = Collections.unmodifiableMap(props);
         /* properties must be initialized before calling the following methods */
         interfaces = verifyObjectClassProperty();
         remoteServiceId = verifyLongProperty(ENDPOINT_ID);
         remoteFrameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
         remoteUri = verifyStringProperty(ENDPOINT_URI);
-    }
+		if (remoteUri == null) {
+			throw new IllegalArgumentException(ENDPOINT_URI
+					+ " property must be set");
+		}
+	}
 
     /**
      * Verify and obtain the interface list from the properties.
@@ -149,11 +200,12 @@ public class EndpointDescription {
         }
         if (!(o instanceof String[])) {
             throw new IllegalArgumentException(
-                    "objectClass must be of type String[]");
+					"objectClass value must be of type String[]");
         }
         String[] objectClass = (String[]) o;
         for (String interf : objectClass) {
             try {
+				/* Make sure any interface version properties are well formed */
                 getInterfaceVersion(interf);
             }
             catch (IllegalArgumentException e) {
@@ -166,51 +218,46 @@ public class EndpointDescription {
         return Collections.unmodifiableList(Arrays.asList(objectClass));
     }
 
-    /**
-     * Verify and obtain a required String property.
-     * 
-     * @param propName The name of the property
-     * @return The value of the property.
-     * @throws IllegalArgumentException when the property is not set or doesn't
-     *         have the correct data type.
-     */
+	/**
+	 * Verify and obtain a required String property.
+	 * 
+	 * @param propName The name of the property
+	 * @return The value of the property or null if the property is not set.
+	 * @throws IllegalArgumentException when the property doesn't have the
+	 *         correct data type.
+	 */
     private String verifyStringProperty(String propName) {
         Object r = properties.get(propName);
-        if (r == null) {
-            throw new IllegalArgumentException("Required property not set: "
-                    + propName);
-        }
-        if (!(r instanceof String)) {
-            throw new IllegalArgumentException(
-                    "Required property is not a String: " + propName);
-        }
-        return (String) r;
+		try {
+			return (String) r;
+		}
+		catch (ClassCastException e) {
+			IllegalArgumentException iae = new IllegalArgumentException(
+					"property value is not a String: " + propName);
+			iae.initCause(e);
+			throw iae;
+		}
     }
 
-    /**
-     * Verify and obtain a required long property.
-     * 
-     * @param propName The name of the property
-     * @return The value of the property.
-     * @throws IllegalArgumentException when the property is not set or doesn't
-     *         have the correct data type.
-     */
+	/**
+	 * Verify and obtain a required long property.
+	 * 
+	 * @param propName The name of the property
+	 * @return The value of the property or 0 if the property is not set.
+	 * @throws IllegalArgumentException when the property doesn't have the
+	 *         correct data type or cannot be parsed to a long.
+	 */
     private long verifyLongProperty(String propName) {
         Object r = properties.get(propName);
         if (r == null) {
-            throw new IllegalArgumentException("Required property not set: "
-                    + propName);
-        }
-        if (!(r instanceof String)) {
-            throw new IllegalArgumentException(
-                    "Required property is not a string: " + propName);
+			return 0l;
         }
         try {
             return Long.parseLong((String) r);
         }
-        catch (NumberFormatException e) {
+		catch (RuntimeException e) {
             IllegalArgumentException iae = new IllegalArgumentException(
-                    "Required property cannot be parsed as a long: " + propName);
+					"property value cannot be parsed as a long: " + propName);
             iae.initCause(e);
             throw iae;
         }
@@ -248,34 +295,41 @@ public class EndpointDescription {
         return interfaces;
     }
 
-    /**
-     * Provide the version of the given interface.
-     * 
-     * The version is encoded by prefixing the given interface name with
-     * <code>endpoint.interface.version.</code>, and then using this as an
-     * endpoint property key. For example:
-     * 
-     * <pre>
-     * endpoint.interface.version.com.acme.Foo
-     * </pre>
-     * 
-     * The value of this property is in String format and will be converted to a
-     * <code>Version</code> object by this method.
-     * 
-     * @param name The name of the interface for which a version is requested.
-     * @return The version of the given interface or <code>null</code> if the
-     *         interface has no version in this Endpoint Description.
-     * @throws IllegalArgumentException If the version property value is not
-     *         String.
-     */
+	/**
+	 * Provide the version of the given interface.
+	 * 
+	 * The version is encoded by prefixing the given interface name with
+	 * <code>endpoint.interface.version.</code>, and then using this as an
+	 * endpoint property key. For example:
+	 * 
+	 * <pre>
+	 * endpoint.interface.version.com.acme.Foo
+	 * </pre>
+	 * 
+	 * The value of this property is in String format and will be converted to a
+	 * <code>Version</code> object by this method.
+	 * 
+	 * @param name The name of the interface for which a version is requested.
+	 * @return The version of the given interface or
+	 *         <code>Version.emptyVersion</code> if the interface has no version
+	 *         in this Endpoint Description.
+	 * @throws IllegalArgumentException If the version property value is not
+	 *         String.
+	 */
     public Version getInterfaceVersion(String name) {
         String key = ENDPOINT_INTERACE_VERSION_ + name;
-        Object version = properties.get(key);
-        if (!(version instanceof String)) {
-            throw new IllegalArgumentException(key
-                    + " property is not a String");
-        }
-        return Version.parseVersion((String) version);
+		Object value = properties.get(key);
+		String version;
+		try {
+			version = (String) value;
+		}
+		catch (ClassCastException e) {
+			IllegalArgumentException iae = new IllegalArgumentException(key
+					+ " property value is not a String");
+			iae.initCause(e);
+			throw iae;
+		}
+		return Version.parseVersion(version);
     }
 
     /**
@@ -378,15 +432,15 @@ public class EndpointDescription {
         return Collections.EMPTY_LIST;
     }
 
-    /**
-     * Return the framework UUID for the remote service, if present.
-     * 
-     * The value of the remote framework uuid is stored in the
-     * {@link RemoteConstants#ENDPOINT_FRAMEWORK_UUID} endpoint property.
-     * 
-     * @return Remote Framework UUID, or null if this endpoint is not associated
-     *         with an OSGi service
-     */
+	/**
+	 * Return the framework UUID for the remote service, if present.
+	 * 
+	 * The value of the remote framework uuid is stored in the
+	 * {@link RemoteConstants#ENDPOINT_FRAMEWORK_UUID} endpoint property.
+	 * 
+	 * @return Remote Framework UUID, or null if this endpoint is not associated
+	 *         with an OSGi framework having a framework uuid.
+	 */
     public String getRemoteFrameworkUUID() {
         return remoteFrameworkUUID;
     }
@@ -417,7 +471,7 @@ public class EndpointDescription {
             return true;
         }
 
-        if (getRemoteFrameworkUUID() == null) {
+		if (this.getRemoteFrameworkUUID() == null) {
             return false;
         }
 
@@ -489,9 +543,9 @@ public class EndpointDescription {
         return f.matchCase(d);
     }
 
-    /**
-     * Unmodifiable wrapper for Dictionary.
-     */
+	/**
+	 * Unmodifiable Dictionary wrapper for a Map.
+	 */
     private static class UnmodifiableDictionary<K, V> extends Dictionary<K, V> {
         private final Map<K, V> wrapped;
 
