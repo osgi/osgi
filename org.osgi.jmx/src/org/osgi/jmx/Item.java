@@ -17,7 +17,7 @@ import javax.management.openmbean.TabularType;
  * This class contains a number of methods that make it possible to create open
  * types for {@link CompositeType}, {@link TabularType}, and {@link ArrayType}.
  * The normal creation throws a checked exception, making it impossible to use
- * them in a static initializer. They constructors are also not very suitable
+ * them in a static initializer. The constructors are also not very suitable
  * for static construction.
  * 
  * 
