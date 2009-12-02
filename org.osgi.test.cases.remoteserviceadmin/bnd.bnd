@@ -17,6 +17,7 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+	osgi.enterprise;								version=latest
 	
 
 -runproperties = report=true, \
