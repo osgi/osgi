@@ -693,6 +693,14 @@ public class EndpointDescriptionTests extends TestCase {
 		filter = "(" + ENDPOINT_FRAMEWORK_UUID + "=*)";
 		assertTrue("filter does not match", ed2.matches(filter));
 		assertFalse("filter matches", ed1.matches(filter));
+
+		try {
+			ed1.matches("(xx=foo");
+			fail("invalid filter syntax allowed");
+		}
+		catch (IllegalArgumentException e) {
+			// expected
+		}
 	}
 
 	private EndpointDescription newEndpointDescription(ServiceReference ref,
