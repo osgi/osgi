@@ -72,7 +72,8 @@ enterprise.packages = ${replace;$(enterprise.specs);^.*$;$0.*}
 enterprise.resources = {legal/about.html}, \
   						legal/LICENSE, \
   						xmlns/blueprint=../xmlns/blueprint, \
-  						xmlns/rsa=../xmlns/rsa
+  						xmlns/rsa=../xmlns/rsa, \
+  						xmlns/scact=../xmlns/scact
 
 mobile.specs = \
 	 info.dmtree, \
