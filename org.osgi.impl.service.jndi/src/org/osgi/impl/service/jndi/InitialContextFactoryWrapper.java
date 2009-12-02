@@ -17,6 +17,7 @@ package org.osgi.impl.service.jndi;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
+import javax.naming.directory.DirContext;
 import javax.naming.spi.InitialContextFactory;
 import java.util.Hashtable;
 
@@ -38,7 +39,18 @@ class InitialContextFactoryWrapper implements InitialContextFactory {
 
 	public Context getInitialContext(Hashtable environment)
 			throws NamingException {
-		return new ContextWrapperImpl(m_initialContextFactory
-				.getInitialContext(environment), m_factoryManager);
+		
+		final Context contextToReturn = 
+			m_initialContextFactory.getInitialContext(environment);
+
+		if(contextToReturn instanceof DirContext) {
+			// for now, just return the DirContext directly
+			// TODO, consider wrapping DirContext instances
+			return contextToReturn;
+		} else {
+			return new ContextWrapperImpl(contextToReturn, m_factoryManager);
+		}
+		
+		
 	}
 }

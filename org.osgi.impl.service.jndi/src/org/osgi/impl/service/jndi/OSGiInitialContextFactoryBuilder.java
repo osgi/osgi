@@ -39,6 +39,7 @@ import javax.naming.RefAddr;
 import javax.naming.Reference;
 import javax.naming.Referenceable;
 import javax.naming.StringRefAddr;
+import javax.naming.spi.DirObjectFactory;
 import javax.naming.spi.InitialContextFactory;
 import javax.naming.spi.InitialContextFactoryBuilder;
 import javax.naming.spi.ObjectFactory;
@@ -61,7 +62,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * request. The builder uses the OSGi service registry to locate JNDI providers.
  * 
  */
-public class OSGiInitialContextFactoryBuilder implements
+class OSGiInitialContextFactoryBuilder implements
 		InitialContextFactoryBuilder, ObjectFactoryBuilder, FactoryManager {
 
 	private static Logger m_logger = 
@@ -79,6 +80,7 @@ public class OSGiInitialContextFactoryBuilder implements
 	private ServiceTracker		m_objectFactoryServiceTracker			= null;
 	private ServiceTracker		m_objectFactoryBuilderServiceTracker	= null;
 	private ServiceTracker		m_urlContextFactoryServiceTracker		= null;
+	private ServiceTracker      m_dirObjectFactoryServiceTracker        = null;
 
 	public OSGiInitialContextFactoryBuilder(BundleContext bundleContext) {
 		m_bundleContext = bundleContext;
@@ -245,6 +247,7 @@ public class OSGiInitialContextFactoryBuilder implements
 		m_objectFactoryServiceTracker.close();
 		m_objectFactoryBuilderServiceTracker.close();
 		m_urlContextFactoryServiceTracker.close();
+		m_dirObjectFactoryServiceTracker.close();
 	}
 
 	private void createServiceTrackers(BundleContext bundleContext) {
@@ -257,6 +260,17 @@ public class OSGiInitialContextFactoryBuilder implements
 
 		m_objectFactoryServiceTracker = new ServiceTracker(bundleContext,
 				ObjectFactory.class.getName(), null) {
+			public Object addingService(ServiceReference serviceReference) {
+				if (serviceReference.getProperty(JndiConstants.JNDI_URLSCHEME) == null) {
+					return super.addingService(serviceReference);
+				}
+
+				return null;
+			}
+		};
+		
+		m_dirObjectFactoryServiceTracker = new ServiceTracker(bundleContext,
+				DirObjectFactory.class.getName(), null) {
 			public Object addingService(ServiceReference serviceReference) {
 				if (serviceReference.getProperty(JndiConstants.JNDI_URLSCHEME) == null) {
 					return super.addingService(serviceReference);
@@ -286,6 +300,7 @@ public class OSGiInitialContextFactoryBuilder implements
 
 		m_objectFactoryServiceTracker.open();
 		m_objectFactoryBuilderServiceTracker.open();
+		m_dirObjectFactoryServiceTracker.open();
 
 		m_urlContextFactoryServiceTracker.open();
 	}

@@ -27,13 +27,13 @@ public class JndiConstants {
 	 * Factories as OSGi Services. The value of this property should be the URL
 	 * scheme that is supported by the published service.
 	 */
-	public static final String	JNDI_URLSCHEME		= "osgi.jndi.urlScheme";
+	public static final String	JNDI_URLSCHEME		= "osgi.jndi.url.scheme";
 
 	/**
 	 * This service property is set on an OSGi service to provide a name that
 	 * can be used to locate the service other than the service interface name.
 	 */
-	public static final String	JNDI_SERVICENAME	= "osgi.jndi.serviceName";
+	public static final String	JNDI_SERVICENAME	= "osgi.jndi.service.name";
 
 	private JndiConstants() {
 		// non-instantiable
