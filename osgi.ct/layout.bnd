@@ -74,6 +74,7 @@ build.enterprise.tests = \
 	org.osgi.test.cases.jdbc, \
     org.osgi.test.cases.jmx, \
 	org.osgi.test.cases.jndi, \
+    org.osgi.test.cases.remoteserviceadmin, \
     org.osgi.test.cases.remoteservices, \
 	org.osgi.test.cases.transaction
 
