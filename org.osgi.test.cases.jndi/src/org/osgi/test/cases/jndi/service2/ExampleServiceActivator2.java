@@ -15,7 +15,7 @@
  */
 
 
-package org.osgi.test.cases.jndi.service1;
+package org.osgi.test.cases.jndi.service2;
 
 import java.util.Hashtable;
 
@@ -27,23 +27,33 @@ import org.osgi.test.cases.jndi.service.ExampleService;
 /** 
  * @version $Revision$ $Date$
  */
-public class ExampleServiceActivator implements BundleActivator {
 
-	private ServiceRegistration sr;
+public class ExampleServiceActivator2 implements BundleActivator {
 	
+	private ServiceRegistration sr1;
+	private ServiceRegistration sr2;
+
 	public void start(BundleContext context) throws Exception {
-		Hashtable props = new Hashtable();
-		props.put("osgi.jndi.service.name", "ExampleService");
-		props.put("javaee.application.name", "applicationName");
-		props.put("javaee.application.version", "applicationVersion");
+		Hashtable props1 = new Hashtable();
+		props1.put("osgi.jndi.service.name", "ExampleService1");
+		props1.put("javaee.application.name", "applicationName");
+		props1.put("javaee.application.version", "applicationVersion");
 		
-		ExampleService service = new ExampleService();
+		ExampleService service1 = new ExampleService();
 		
-		sr = context.registerService(ExampleService.class.getName(), service, props);		
+		sr1 = context.registerService(ExampleService.class.getName(), service1, props1);	
+		
+		Hashtable props2 = new Hashtable();
+		props2.put("osgi.jndi.service.name", "ExampleService2");
+		
+		ExampleService service2 = new ExampleService();
+		
+		sr2 = context.registerService(ExampleService.class.getName(), service2, props2);
 	}
 
 	public void stop(BundleContext context) throws Exception {
-		sr.unregister();
+		sr1.unregister();
+		sr2.unregister();
 	}
 
 }

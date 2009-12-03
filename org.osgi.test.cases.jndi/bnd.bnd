@@ -20,14 +20,18 @@ Include-Resource 					= \
 	objectFactory2.jar , \
 	objectFactoryBuilder1.jar , \
 	service1.jar , \
+	service2.jar , \
 	urlContext1.jar , \
 	jndi.properties=resources/jndi.properties
 	
 Test-Cases							= ${testcases}
 
 -buildpath							= ee.j2se; version=1.5, \
+	org.osgi.service.jndi;					version=project, \
     org.osgi.test.support;                  version=project, \
 	osgi.core; 								version=4.2, \
 	${junit}
 	
 -runbundles = org.osgi.impl.service.jndi; version=project
+
+-signaturetest 						= org.osgi.service.jndi

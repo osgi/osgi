@@ -16,10 +16,13 @@
 
 package org.osgi.test.cases.jndi.tests;
 
+import javax.naming.Binding;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingEnumeration;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.jndi.service.ExampleService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -36,7 +39,7 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 	public void testServiceLookup() throws Exception {
 		// Install the bundle needed for this test
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
-		Bundle testBundle = installBundle("service1.jar");
+		Bundle serviceBundle = installBundle("service1.jar");
 		// Grab the default initialContext so we can access the service registry
 		Context ctx = new InitialContext();
 		try {
@@ -50,15 +53,48 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 			if (ctx != null) {
 				ctx.close();
 			}
-			uninstallBundle(testBundle);
+			uninstallBundle(serviceBundle);
 			uninstallBundle(factoryBundle);
 		}
+	}
+	
+	public void testMultipleServiceLookup() throws Exception {
+		// Install the bundle needed for this test
+		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
+		Bundle serviceBundle = installBundle("service2.jar");
+		// Grab the default initialContext so we can access the service registry
+		Context ctx = new InitialContext();
+		Context serviceListContext = null;
+		try {
+			assertNotNull("The context should not be null", ctx);
+			// Lookup the matching services
+			serviceListContext = (Context) ctx.lookup("osgi:servicelist/org.osgi.test.cases.jndi.service.ExampleService");
+			// Verify we received a context
+			assertNotNull("The context should not be null", serviceListContext);
+			// Check that the services we were expecting were found
+			ServiceReference[] expectedServices = serviceBundle.getRegisteredServices();
+			for (int i=0; i < expectedServices.length; i++) {
+				ExampleService service = (ExampleService) serviceListContext.lookup("(service.id="+ (String)expectedServices[i].getProperty("service.id") + ")");
+				// We should find a corresponding service for each registered service from the bundle
+				assertNotNull("Could not find one of the expected services in the returned context", service);
+			}
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			if (serviceListContext != null) {
+				serviceListContext.close();
+			}
+			uninstallBundle(serviceBundle);
+			uninstallBundle(factoryBundle);
+		}
+		
 	}
 
 	public void testServiceNameProperty() throws Exception {
 		// Install the bundles need for this test
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
-		Bundle testBundle = installBundle("service1.jar");
+		Bundle serviceBundle = installBundle("service1.jar");
 		// Grab the default InitialContext so we can access the service registry
 		Context ctx = new InitialContext();
 		try {
@@ -72,7 +108,7 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 			if (ctx != null) {
 				ctx.close();
 			}
-			uninstallBundle(testBundle);
+			uninstallBundle(serviceBundle);
 			uninstallBundle(factoryBundle);
 		}
 	}

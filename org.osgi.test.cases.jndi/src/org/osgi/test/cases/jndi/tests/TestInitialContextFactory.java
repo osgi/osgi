@@ -55,7 +55,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 				ctx.close();
 				fail("The correct Context object was not found");
 			}
-			Object testObject = (Object) ctx.lookup("testObject");
+			Object testObject = ctx.lookup("testObject");
 			assertNotNull(testObject);
 		} finally {
 			// Cleanup after the test completes
@@ -235,7 +235,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		try {
 			ctx = new InitialContext(env);
 			assertNotNull("The context should not be null", ctx);
-			ctx.lookup("testObject");
+			Object testObject = ctx.lookup("testObject");
 		} catch (javax.naming.NoInitialContextException ex) {
 			return;
 		} finally {
