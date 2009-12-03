@@ -18,6 +18,7 @@
 package org.osgi.test.cases.jndi.tests;
 
 import org.osgi.framework.Bundle;
+import org.osgi.service.jndi.JNDIContextAdmin;
 import org.osgi.test.cases.jndi.provider.CTObjectFactory;
 import org.osgi.test.cases.jndi.provider.CTReference;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -36,8 +37,18 @@ public class TestJNDIContextAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle contextFactoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle objectFactoryBundle = installBundle("objectFactory1.jar");
-		// Create a reference object we can use for testing.
-		CTReference ref = new CTReference(String.class.getName(), CTObjectFactory.class.getName());
-		
+		// Grab the JNDIContextAdmin service
+		JNDIContextAdmin ctxAdmin = (JNDIContextAdmin) getService(JNDIContextAdmin.class);
+		try {
+			// Create a reference object we can use for testing.
+			CTReference ref = new CTReference(String.class.getName(), CTObjectFactory.class.getName());
+			// Resolve the reference
+			String testString = (String) ctxAdmin.getObjectInstance(ref, null, null, null);
+			assertNotNull(testString);
+		} finally {
+			uninstallBundle(objectFactoryBundle);
+			uninstallBundle(contextFactoryBundle);
+			ungetService(ctxAdmin);
+		}
 	}
 }
