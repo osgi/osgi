@@ -203,14 +203,19 @@ public class RemoteConstants {
 
 	/**
 	 * Prefix for an endpoint property identifying the interface Java package
-	 * version for an interface For example, the property
-	 * endpoint.interface.version.com.acme.Foo=1.3 describes the version for the
-	 * com.acme.Foo interface. This endpoint property for an interface does not
-	 * have to be set. If not set, the value must be assumed to be 0.
+	 * version for an interface. For example, the property
+	 * endpoint.package.version.com.acme=1.3 describes the version of the
+	 * package for the com.acme.Foo interface. This endpoint property for an
+	 * interface package does not have to be set. If not set, the value must be
+	 * assumed to be 0.
+	 * 
+	 * <p>
+	 * Since endpoint properties are stored in a case insensitive map, case
+	 * variants of a package name are folded together.
 	 * 
 	 * <p>
 	 * The value of this property must be of type <code>String</code>.
 	 */
-	public final static String	ENDPOINT_INTERACE_VERSION_		= "endpoint.interface.version.";
+	public final static String	ENDPOINT_PACKAGE_VERSION_		= "endpoint.package.version.";
 
 }

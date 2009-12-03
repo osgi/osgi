@@ -204,13 +204,18 @@ public class EndpointDescription {
 		}
 		String[] objectClass = (String[]) o;
 		for (String interf : objectClass) {
+			int index = interf.lastIndexOf('.');
+			if (index == -1) {
+				continue;
+			}
+			String packageName = interf.substring(0, index);
 			try {
-				/* Make sure any interface version properties are well formed */
-				getInterfaceVersion(interf);
+				/* Make sure any package version properties are well formed */
+				getPackageVersion(packageName);
 			}
 			catch (IllegalArgumentException e) {
 				IllegalArgumentException iae = new IllegalArgumentException(
-						"Improper version for interface " + interf);
+						"Improper version for package " + packageName);
 				iae.initCause(e);
 				throw iae;
 			}
@@ -293,28 +298,30 @@ public class EndpointDescription {
 	}
 
 	/**
-	 * Provide the version of the given interface.
+	 * Provide the version of the given package name.
 	 * 
-	 * The version is encoded by prefixing the given interface name with
-	 * <code>endpoint.interface.version.</code>, and then using this as an
-	 * endpoint property key. For example:
+	 * The version is encoded by prefixing the given package name with
+	 * {@link RemoteConstants#ENDPOINT_PACKAGE_VERSION_
+	 * endpoint.package.version.}, and then using this as an endpoint property
+	 * key. For example:
 	 * 
 	 * <pre>
-	 * endpoint.interface.version.com.acme.Foo
+	 * endpoint.package.version.com.acme
 	 * </pre>
 	 * 
 	 * The value of this property is in String format and will be converted to a
 	 * <code>Version</code> object by this method.
 	 * 
-	 * @param name The name of the interface for which a version is requested.
-	 * @return The version of the given interface or
-	 *         <code>Version.emptyVersion</code> if the interface has no version
+	 * @param packageName The name of the package for which a version is
+	 *        requested.
+	 * @return The version of the specified package or
+	 *         <code>Version.emptyVersion</code> if the package has no version
 	 *         in this Endpoint Description.
 	 * @throws IllegalArgumentException If the version property value is not
 	 *         String.
 	 */
-	public Version getInterfaceVersion(String name) {
-		String key = ENDPOINT_INTERACE_VERSION_ + name;
+	public Version getPackageVersion(String packageName) {
+		String key = ENDPOINT_PACKAGE_VERSION_ + packageName;
 		Object value = properties.get(key);
 		String version;
 		try {

@@ -107,44 +107,50 @@ public class EndpointDescriptionTests extends TestCase {
 		assertEquals("should have 2 interfaces", 2, interfs.size());
 		assertEquals("first interface wrong", objectClass[0], interfs.get(0));
 		assertEquals("second interface wrong", objectClass[1], interfs.get(1));
-		assertEquals("interface version wrong", Version.emptyVersion, ed
-				.getInterfaceVersion(objectClass[0]));
-		assertEquals("interface version wrong", Version.emptyVersion, ed
-				.getInterfaceVersion(objectClass[1]));
-		assertEquals("interface version wrong", Version.emptyVersion, ed
-				.getInterfaceVersion("xxx"));
+		assertEquals("package version wrong", Version.emptyVersion, ed
+				.getPackageVersion(getPackageName(objectClass[0])));
+		assertEquals("package version wrong", Version.emptyVersion, ed
+				.getPackageVersion(getPackageName(objectClass[1])));
+		assertEquals("package version wrong", Version.emptyVersion, ed
+				.getPackageVersion("xxx"));
 
-		props.put(ENDPOINT_INTERACE_VERSION_ + objectClass[0], "bad version");
+		props.put(ENDPOINT_PACKAGE_VERSION_ + getPackageName(objectClass[0]),
+				"bad version");
 		try {
 			ed = newEndpointDescription(props);
-			fail("invalid interface version property");
+			fail("invalid package version property");
 		}
 		catch (IllegalArgumentException e) {
 			// expected
 		}
 
 		Version someVersion = new Version(1, 2, 3, "somequalifier");
-		props.put(ENDPOINT_INTERACE_VERSION_ + objectClass[0], someVersion
+		props.put(ENDPOINT_PACKAGE_VERSION_ + getPackageName(objectClass[0]),
+				someVersion
 				.toString());
 		ed = newEndpointDescription(props);
-		assertEquals("interface version wrong", someVersion, ed
-				.getInterfaceVersion(objectClass[0]));
+		assertEquals("package version wrong", someVersion, ed
+				.getPackageVersion(getPackageName(objectClass[0])));
 
-		props.remove(ENDPOINT_INTERACE_VERSION_ + objectClass[0]);
-		props.put(ENDPOINT_INTERACE_VERSION_ + objectClass[1], "bad version");
+		props
+				.remove(ENDPOINT_PACKAGE_VERSION_
+						+ getPackageName(objectClass[0]));
+		props.put(ENDPOINT_PACKAGE_VERSION_ + getPackageName(objectClass[1]),
+				"bad version");
 		try {
 			ed = newEndpointDescription(props);
-			fail("invalid interface version property");
+			fail("invalid package version property");
 		}
 		catch (IllegalArgumentException e) {
 			// expected
 		}
 
-		props.put(ENDPOINT_INTERACE_VERSION_ + objectClass[1], someVersion
+		props.put(ENDPOINT_PACKAGE_VERSION_ + getPackageName(objectClass[1]),
+				someVersion
 				.toString());
 		ed = newEndpointDescription(props);
-		assertEquals("interface version wrong", someVersion, ed
-				.getInterfaceVersion(objectClass[1]));
+		assertEquals("package version wrong", someVersion, ed
+				.getPackageVersion(getPackageName(objectClass[1])));
 
 	}
 
@@ -281,49 +287,42 @@ public class EndpointDescriptionTests extends TestCase {
 		assertEquals("should have 2 interfaces", 2, interfs.size());
 		assertEquals("first interface wrong", objectClass[0], interfs.get(0));
 		assertEquals("second interface wrong", objectClass[1], interfs.get(1));
-		assertEquals("interface version wrong", Version.emptyVersion, ed
-				.getInterfaceVersion(objectClass[0]));
-		assertEquals("interface version wrong", Version.emptyVersion, ed
-				.getInterfaceVersion(objectClass[1]));
-		assertEquals("interface version wrong", Version.emptyVersion, ed
-				.getInterfaceVersion("xxx"));
+		assertEquals("package version wrong", Version.emptyVersion, ed
+				.getPackageVersion(getPackageName(objectClass[0])));
+		assertEquals("package version wrong", Version.emptyVersion, ed
+				.getPackageVersion(getPackageName(objectClass[1])));
+		assertEquals("package version wrong", Version.emptyVersion, ed
+				.getPackageVersion("xxx"));
 
-		serviceProps.put(ENDPOINT_INTERACE_VERSION_ + objectClass[0],
+		serviceProps.put(ENDPOINT_PACKAGE_VERSION_
+				+ getPackageName(objectClass[0]),
 				"bad version");
 		try {
 			ed = newEndpointDescription(ref, props);
-			fail("invalid interface version property");
+			fail("invalid package version property");
 		}
 		catch (IllegalArgumentException e) {
 			// expected
 		}
 
 		Version someVersion = new Version(1, 2, 3, "somequalifier");
-		serviceProps.put(ENDPOINT_INTERACE_VERSION_ + objectClass[0],
+		serviceProps.put(ENDPOINT_PACKAGE_VERSION_
+				+ getPackageName(objectClass[0]),
 				someVersion.toString());
 		ed = newEndpointDescription(ref, props);
-		assertEquals("interface version wrong", someVersion, ed
-				.getInterfaceVersion(objectClass[0]));
+		assertEquals("package version wrong", someVersion, ed
+				.getPackageVersion(getPackageName(objectClass[0])));
 
-		serviceProps.put(ENDPOINT_INTERACE_VERSION_ + objectClass[1],
+		serviceProps.put(ENDPOINT_PACKAGE_VERSION_
+				+ getPackageName(objectClass[1]),
 				"bad version");
 		try {
 			ed = newEndpointDescription(ref, props);
-			fail("invalid interface version property");
+			fail("invalid package version property");
 		}
 		catch (IllegalArgumentException e) {
 			// expected
 		}
-
-		// TODO the following fails because we put case sensitive interface
-		// names into case insensitive keys
-		// serviceProps.put(ENDPOINT_INTERACE_VERSION_ + objectClass[1],
-		// someVersion.toString());
-		// props.put(ENDPOINT_INTERACE_VERSION_ + objectClass[0], "2.2.4.q");
-		// ed = newEndpointDescription(ref, props);
-		// assertEquals("interface version wrong", someVersion, ed
-		// .getInterfaceVersion(objectClass[1]));
-
 	}
 
 	public void testIntents() {
@@ -755,6 +754,14 @@ public class EndpointDescriptionTests extends TestCase {
 		catch (RuntimeException e) {
 			// expected
 		}
+	}
+
+	private String getPackageName(String className) {
+		int index = className.lastIndexOf('.');
+		if (index == -1) {
+			return "";
+		}
+		return className.substring(0, index);
 	}
 
 	public static BundleContext newMockBundleContext(String uuid) {
