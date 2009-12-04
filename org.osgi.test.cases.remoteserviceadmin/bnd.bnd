@@ -3,8 +3,12 @@ javac.target            = jsr14
 Bundle-Version						: 1.0.0.${project.build}
 Bundle-Description					: Remote Service Admin test cases.
 
+Export-Package 					= ${p}.common;version=1.0.0
+	
 Private-Package						= org.osgi.test.support.*, \
 	${p}.*
+	
+Include-Resource					= resources
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.remoteserviceadmin
@@ -17,11 +21,19 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.enterprise;								version=latest
+	osgi.enterprise;					    version=latest	, \
+	osgi.cmpn;								version=latest	, \
+	org.apache.cxf.dosgi.singlebundle;      version=latest, \
+	org.osgi.impl.service.log;				version=latest
 	
 
 -runproperties = report=true, \
 	osgi.compatibility.bootdelegation=false, \
 	osgi.resolverMode=strict, \
-	osgi.support.multipleHosts=true
+	osgi.support.multipleHosts=true, \
+	${p}.bundles=${repo;org.apache.cxf.dosgi.singlebundle}|${repo;osgi.core}|${repo;osgi.cmpn}|${repo;org.osgi.impl.service.log}, \
+	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.address", \
+	service.exported.configs=org.apache.cxf.ws, \
+	org.apache.cxf.ws.address=http://localhost:9090/test
+	
 	
