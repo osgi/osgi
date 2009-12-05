@@ -16,7 +16,6 @@
 package org.osgi.test.cases.remoteserviceadmin.junit;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -204,12 +203,21 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		f.getBundleContext().ungetService(sr);
 		
 		String pkgXtras = f.getBundleContext().getProperty(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA);
-		List<String> pkgList = new ArrayList<String>(Arrays.asList(pkgXtras.split(",")));
+		List<String> pkgList = splitString(pkgXtras, ",");
 		
 		for (int i=0;i<exportedPkgs.length;i++) {
 			pkgList.remove(exportedPkgs[i].getName());
 		}
 		assertTrue("Framework does not export some packages " + pkgList, pkgList.isEmpty());
+	}
+
+	private List<String> splitString(String string, String delim) {
+		List<String> result = new ArrayList<String>();
+		for (StringTokenizer st = new StringTokenizer(string, delim); st
+				.hasMoreTokens();) {
+			result.add(st.nextToken());
+		}
+		return result;
 	}
 
 	class EndpointListenerImpl implements EndpointListener {
