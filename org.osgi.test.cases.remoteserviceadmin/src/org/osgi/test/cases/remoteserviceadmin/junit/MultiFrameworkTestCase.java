@@ -266,6 +266,8 @@ public abstract class MultiFrameworkTestCase extends OSGiTestCase {
 	}
 
 	private void installFramework() throws Exception {
+		System.out.println("Installing child framework");
+		
 		Framework f = getFramework();
 		
 		List bundles = new LinkedList();
@@ -279,7 +281,7 @@ public abstract class MultiFrameworkTestCase extends OSGiTestCase {
 			assertNotNull(b);
 			assertEquals("Bundle " + b.getSymbolicName() + " is not INSTALLED", Bundle.INSTALLED, b.getState());
 			
-			System.out.println("installed bundle " + b.getSymbolicName());
+			System.out.println("installed bundle " + b.getSymbolicName() + " " + b.getVersion());
 			bundles.add(b);
 		}
 		

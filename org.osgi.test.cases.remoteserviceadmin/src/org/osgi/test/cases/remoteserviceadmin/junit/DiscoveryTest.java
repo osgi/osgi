@@ -15,11 +15,14 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.junit;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.*;
+import java.util.StringTokenizer;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -31,6 +34,7 @@ import org.osgi.service.remoteserviceadmin.EndpointDescription;
 import org.osgi.service.remoteserviceadmin.EndpointListener;
 import org.osgi.service.remoteserviceadmin.RemoteConstants;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
+import org.osgi.test.support.compatibility.Semaphore;
 
 /**
  * Test the discovery portion of the spec by registering a EndpointDescription
@@ -47,6 +51,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	/**
 	 * Package to be exported by the server side System Bundle
 	 */
+	private static final String ORG_OSGI_TEST_CASES_REMOTESERVICES_JUNIT = "org.osgi.test.cases.remoteserviceadmin.junit";
 	private static final String ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON = "org.osgi.test.cases.remoteserviceadmin.common";
 
 	/**
@@ -57,16 +62,11 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
 		
 		//make sure that the server framework System Bundle exports the interfaces
-        String systemPacakagesXtra = (String) configuration.get(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA);
-        if (systemPacakagesXtra == null) {
-            systemPacakagesXtra = ORG_OSGI_SERVICE_REMOTESERVICEADMIN + ","
-                                  + ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON;
-        } else {
-            systemPacakagesXtra = systemPacakagesXtra + ","
-                                  + ORG_OSGI_SERVICE_REMOTESERVICEADMIN + ","
-                                  + ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON;
-        }
-        configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPacakagesXtra);
+        String systemPackagesXtra = ORG_OSGI_SERVICE_REMOTESERVICEADMIN + ","
+                                  + ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON + ","
+                                  + ORG_OSGI_TEST_CASES_REMOTESERVICES_JUNIT;
+        configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
+        configuration.put("osgi.console", "1112");
 		return configuration;
 	}
 
@@ -92,18 +92,29 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		
 		
 		// create an EndpointDescription
+		Long endpointID = new Long(12345);
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("mykey", "has been overridden");
 		properties.put(RemoteConstants.SERVICE_IMPORTED, A.class.getName());
 		properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
-		properties.put(RemoteConstants.ENDPOINT_ID, "myid");
+		properties.put(RemoteConstants.ENDPOINT_ID, endpointID);
 		properties.put(RemoteConstants.ENDPOINT_FRAMEWORK_UUID, getContext().getProperty("org.osgi.framework.uuid"));
 		properties.put(RemoteConstants.ENDPOINT_URI, "someURI");
 		EndpointDescription endpoint = new EndpointDescription(reference, properties);
 		assertNotNull(endpoint);
+		assertEquals("Endpoint properties are supposed to trump service properties", "has been overridden", endpoint.getProperties().get("mykey"));
 		
-		// TODO on the child framework side:
+		// on the child framework side:
 		//  register an EndpointListener interested in remote services
+		final String endpointListenerFilter = "(!(org.osgi.framework.uuid=" + getFramework().getBundleContext().getProperty("org.osgi.framework.uuid") + "))";
+		Hashtable<String, String> endpointListenerProperties = new Hashtable<String, String>();
+		endpointListenerProperties.put(EndpointListener.ENDPOINT_LISTENER_SCOPE, endpointListenerFilter);
+		
+		EndpointListenerImpl endpointListenerImpl = new EndpointListenerImpl();
+		
+		ServiceRegistration endpointListenerRegistration = getFramework().getBundleContext().registerService(
+				EndpointListener.class.getName(), endpointListenerImpl, endpointListenerProperties);
+		assertNotNull(endpointListenerRegistration);
 		
 		// on the parent side:
 		//  emulate a manager bundle and tell the network/discovery bundle about the endpoint
@@ -114,8 +125,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		boolean foundListener = false;
 		for (ServiceReference sr : listeners) {
 			EndpointListener listener = (EndpointListener) getContext().getService(sr);
-			String scope = (String) sr.getProperty(EndpointListener.ENDPOINT_LISTENER_SCOPE);
-			String matchedFilter = isInterested(scope, properties);
+			Object scope = sr.getProperty(EndpointListener.ENDPOINT_LISTENER_SCOPE);
+			String matchedFilter = isInterested(scope, endpoint);
 			
 			if (matchedFilter != null) {
 				foundListener = true;
@@ -123,28 +134,67 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			}
 		}
 		assertTrue("no interested EndointListener found", foundListener);
+		System.out.println("informed EndpointListener in parent frmaework about service A");
 		
-		// TODO check that the EndpointListener on the child framework is called with the description
+		// check that the EndpointListener on the child framework is called with the description
 		// of the parent framework EndpointDescription
+		endpointListenerImpl.getSem().waitForSignal();
+		
+		assertEquals("filter doesn't match", endpointListenerFilter, endpointListenerImpl.getMatchedFilter());
+		EndpointDescription ep = endpointListenerImpl.getAddedEndpoint();
+		assertNotNull(ep);
+		assertEquals(endpointID.longValue(), ep.getRemoteServiceID());
+		assertEquals("someURI", ep.getRemoteURI());
+		assertEquals(getContext().getProperty("org.osgi.framework.uuid"), ep.getRemoteFrameworkUUID());
+		assertTrue(ep.getInterfaces().contains(A.class.getName()));
+		assertTrue(ep.getIntents().contains("my_intent_is_for_this_to_work"));
+		assertEquals("has been overridden", ep.getProperties().get("mykey"));
 	}
 	
 	/**
 	 * @param scope
-	 * @param properties
+	 * @param description
 	 * @return
 	 */
-	private String isInterested(String scope, Map<String, Object> properties) {
-		// TODO
+	private String isInterested(Object scopeobj, EndpointDescription description) {
+		if (scopeobj instanceof List<?>) {
+			List<String> scope = (List<String>) scopeobj;
+			for (Iterator<String> it = scope.iterator(); it.hasNext();) {
+				String filter = it.next();
+
+				if (description.matches(filter)) {
+					return filter;
+				}
+			}
+		} else if (scopeobj instanceof String[]) {
+			String[] scope = (String[]) scopeobj;
+			for (String filter : scope) {
+				if (description.matches(filter)) {
+					return filter;
+				}
+			}
+		} else if (scopeobj instanceof String) {
+			StringTokenizer st = new StringTokenizer((String)scopeobj, " ");
+			for (; st.hasMoreTokens();) {
+				String filter = st.nextToken();
+				if (description.matches(filter)) {
+					return filter;
+				}
+			}
+		}
 		return null;
 	}
 
 	/**
-	 * Verifies the server side framework that it exports the test packages for the interface
+	 * Verifies the child framework that it exports the test packages for the interface
 	 * used by the test service.
 	 * @throws Exception
 	 */
 	private void verifyFramework() throws Exception {
 		Framework f = getFramework();
+//		assertFalse("child framework must have a different UUID",
+//				getContext().getProperty("org.osgi.framework.uuid").equals(f.getBundleContext().getProperty("org.osgi.framework.uuid")));
+		
 		ServiceReference sr = f.getBundleContext().getServiceReference(PackageAdmin.class.getName());
 		assertNotNull("Framework is not supplying PackageAdmin service", sr);
 		
@@ -153,11 +203,67 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		assertNotNull(exportedPkgs);
 		f.getBundleContext().ungetService(sr);
 		
-		boolean found = false; 
-		for (int i=0;i<exportedPkgs.length && !found;i++) {
-			found = ORG_OSGI_SERVICE_REMOTESERVICEADMIN.equals(exportedPkgs[i].getName());
+		String pkgXtras = f.getBundleContext().getProperty(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA);
+		List<String> pkgList = new ArrayList<String>(Arrays.asList(pkgXtras.split(",")));
+		
+		for (int i=0;i<exportedPkgs.length;i++) {
+			pkgList.remove(exportedPkgs[i].getName());
 		}
-		assertTrue("Framework System Bundle is not exporting package " + ORG_OSGI_SERVICE_REMOTESERVICEADMIN, found);
+		assertTrue("Framework does not export some packages " + pkgList, pkgList.isEmpty());
 	}
 
+	class EndpointListenerImpl implements EndpointListener {
+		private Semaphore sem = new Semaphore(0);
+		private String matchedFilter;
+		private EndpointDescription addedEndpoint;
+		private EndpointDescription removedEndpoint;
+
+		/**
+		 * @see org.osgi.service.remoteserviceadmin.EndpointListener#endpointAdded(org.osgi.service.remoteserviceadmin.EndpointDescription, java.lang.String)
+		 */
+		public void endpointAdded(EndpointDescription endpoint,
+				String matchedFilter) {
+			this.addedEndpoint = endpoint;
+			this.matchedFilter = matchedFilter;
+			sem.signal();
+		}
+
+		/**
+		 * @see org.osgi.service.remoteserviceadmin.EndpointListener#endpointRemoved(org.osgi.service.remoteserviceadmin.EndpointDescription, java.lang.String)
+		 */
+		public void endpointRemoved(EndpointDescription endpoint,
+				String matchedFilter) {
+			this.removedEndpoint = endpoint;
+			this.matchedFilter = matchedFilter;
+			sem.signal();
+		}
+		
+		/**
+		 * @return the sem
+		 */
+		public Semaphore getSem() {
+			return sem;
+		}
+		
+		/**
+		 * @return the matchedFilter
+		 */
+		public String getMatchedFilter() {
+			return matchedFilter;
+		}
+		
+		/**
+		 * @return the addedEndpoint
+		 */
+		public EndpointDescription getAddedEndpoint() {
+			return addedEndpoint;
+		}
+		
+		/**
+		 * @return the removedEndpoint
+		 */
+		public EndpointDescription getRemovedEndpoint() {
+			return removedEndpoint;
+		}
+	}
 }
