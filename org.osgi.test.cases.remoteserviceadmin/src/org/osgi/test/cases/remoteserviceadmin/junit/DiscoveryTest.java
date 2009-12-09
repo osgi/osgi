@@ -137,7 +137,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		
 		// check that the EndpointListener on the child framework is called with the description
 		// of the parent framework EndpointDescription
-		endpointListenerImpl.getSem().waitForSignal();
+		endpointListenerImpl.getSem().waitForSignal(6000);
 		
 		assertEquals("filter doesn't match", endpointListenerFilter, endpointListenerImpl.getMatchedFilter());
 		EndpointDescription ep = endpointListenerImpl.getAddedEndpoint();
