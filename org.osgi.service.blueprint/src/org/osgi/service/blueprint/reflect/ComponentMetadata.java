@@ -71,5 +71,5 @@ public interface ComponentMetadata extends NonNullMetadata {
 	 * @return An immutable List of component ids that are explicitly declared
 	 *         as a dependency, or an empty List if none.
 	 */
-	List/* <String> */getDependsOn();
+	List<String> getDependsOn();
 }

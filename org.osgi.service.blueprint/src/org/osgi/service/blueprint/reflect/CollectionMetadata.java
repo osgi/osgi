@@ -37,7 +37,7 @@ public interface CollectionMetadata extends NonNullMetadata {
 	 * @return The type of the collection. <code>Object[]</code> is returned to
 	 *         indicate an array.
 	 */
-	Class/* <?> */getCollectionClass();
+	Class<?> getCollectionClass();
 
 	/**
 	 * Return the type specified for the values of the collection.
@@ -53,5 +53,5 @@ public interface CollectionMetadata extends NonNullMetadata {
 	 * 
 	 * @return A List of Metadata for the values of the collection.
 	 */
-	List /* <Metadata> */getValues();
+	List<? extends Metadata> getValues();
 }

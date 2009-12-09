@@ -46,7 +46,7 @@ package org.osgi.service.blueprint.container;
 public class ReifiedType {
 	private final static ReifiedType	OBJECT	= new ReifiedType(Object.class);
 
-	private final Class					clazz;
+	private final Class<?>					clazz;
 
 	/**
 	 * Create a Reified Type for a raw Java class without any generic type
@@ -55,7 +55,7 @@ public class ReifiedType {
 	 * 
 	 * @param clazz The raw class of the Reified Type.
 	 */
-	public ReifiedType(Class clazz) {
+	public ReifiedType(Class<?> clazz) {
 		this.clazz = clazz;
 	}
 
@@ -75,7 +75,7 @@ public class ReifiedType {
 	 * 
 	 * @return The raw class represented by this type.
 	 */
-	public Class getRawClass() {
+	public Class<?> getRawClass() {
 		return clazz;
 	}
 

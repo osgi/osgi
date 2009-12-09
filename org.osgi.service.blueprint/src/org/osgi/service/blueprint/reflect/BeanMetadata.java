@@ -85,7 +85,7 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 *         method or constructor of the bean. The List is empty if no
 	 *         arguments are specified for the bean.
 	 */
-	List/* <BeanArgument> */getArguments();
+	List<BeanArgument> getArguments();
 
 	/**
 	 * Return the properties for the bean.
@@ -97,7 +97,7 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	 *         if no property injection is specified for the bean.
 	 * 
 	 */
-	List /* <BeanProperty> */getProperties();
+	List<BeanProperty> getProperties();
 
 	/**
 	 * Return the name of the factory method for the bean.

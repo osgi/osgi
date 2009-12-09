@@ -48,7 +48,7 @@ public interface BlueprintContainer {
 	 * @return An immutable Set of Strings, containing the ids of all of the
 	 *         components managed within this Blueprint Container.
 	 */
-	Set/* <String> */getComponentIds();
+	Set<String> getComponentIds();
 
 	/**
 	 * Return the component instance for the specified component id.
@@ -89,12 +89,13 @@ public interface BlueprintContainer {
 	 * {@link ServiceMetadata}. The collection will include all Component
 	 * Metadata objects of the requested type, including components that are
 	 * declared inline.
+	 * @param <T> The return sub class of Component Metadata
 	 * 
 	 * @param type The super type or type of the requested Component Metadata
 	 *        objects.
 	 * @return An immutable collection of Component Metadata objects of the
 	 *         specified type.
 	 */
-	/* <T extends ComponentMetadata> */Collection/* <T> */getMetadata(
-			Class/* <T> */type);
+	 <T extends ComponentMetadata> Collection<T> getMetadata(
+			Class<T> type);
 }

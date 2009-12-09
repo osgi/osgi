@@ -98,5 +98,5 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	 *         receive bind and unbind events. The Collection is empty if no
 	 *         reference listeners are specified for the service reference.
 	 */
-	Collection /* <ReferenceListener> */getReferenceListeners();
+	Collection<ReferenceListener> getReferenceListeners();
 }

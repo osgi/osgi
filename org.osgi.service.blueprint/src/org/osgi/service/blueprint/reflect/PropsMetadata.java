@@ -39,5 +39,5 @@ public interface PropsMetadata extends NonNullMetadata {
 	 *         the properties. The List is empty if no entries are specified for
 	 *         the properties.
 	 */
-	List/* <MapEntry> */getEntries();
+	List<MapEntry> getEntries();
 }

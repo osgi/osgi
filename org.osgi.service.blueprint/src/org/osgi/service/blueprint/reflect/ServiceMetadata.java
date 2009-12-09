@@ -83,7 +83,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 *         supporting. The List is empty if using <code>auto-export</code>
 	 *         or no interface names are specified for the service.
 	 */
-	List/* <String> */getInterfaces();
+	List<String> getInterfaces();
 
 	/**
 	 * Return the auto-export mode for the service.
@@ -109,7 +109,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 *         declared properties to be advertised with the service. The List
 	 *         is empty if no service properties are specified for the service.
 	 */
-	List/* <MapEntry> */getServiceProperties();
+	List<MapEntry> getServiceProperties();
 
 	/**
 	 * Return the ranking value to use when advertising the service. If the
@@ -134,5 +134,5 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 *         with the framework. The Collection is empty if no registration
 	 *         listeners are specified for the service.
 	 */
-	Collection /* <RegistrationListener> */getRegistrationListeners();
+	Collection<RegistrationListener> getRegistrationListeners();
 }
