@@ -20,6 +20,7 @@ package org.osgi.test.cases.jndi.tests;
 import java.util.Hashtable;
 
 import javax.naming.Context;
+import javax.naming.NoInitialContextException;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.jndi.JNDIContextManager;
@@ -37,7 +38,29 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 
 public class TestJNDIContextManager extends DefaultTestBundleControl {
-	
+	 
+	public void testLookupOfJREProvidedContexts() throws Exception {
+		// No provider bundle needed.  The JRE is the provider
+		// Grab the JNDIContextManager service
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		// Create environment to grab built in LDAP provider
+		Hashtable env = new Hashtable();
+		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.dns.DnsContextFactory");
+		// Grab the context
+		Context ctx = null;		
+		try {
+			ctx = ctxManager.newInitialContext(env);
+			// Verify that we actually received the context
+			assertNotNull("The context should not be null", ctx);
+			Hashtable ctxEnv = ctx.getEnvironment();
+			assertEquals((String)env.get(Context.INITIAL_CONTEXT_FACTORY), (String)ctxEnv.get(Context.INITIAL_CONTEXT_FACTORY));
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			ungetService(ctxManager);
+		}
+	}
 	public void testLookupWithSpecificInitialContextFactory() throws Exception {
 		// install provider bundle
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
@@ -170,6 +193,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			assertNotNull("The context should not be null", ctx);
 			ctx.lookup("testObject");
 		} catch (javax.naming.NoInitialContextException ex) {
+			pass("javax.naming.NoInitialContextException caugh in testLookupWithNoMatchingContext: SUCCESS");
 			return;
 		} finally {
 			// If we don't get the exception, then this test fails
@@ -201,6 +225,75 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			}
 			uninstallBundle(factoryBundle);
 			uninstallBundle(serviceBundle);
+			ungetService(ctxManager);
+		}
+	}
+	
+	public void testProviderUnregistration() throws Exception {
+		// Install a bundle for grabbing a context
+		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
+		// Grab the JNDIContextManager service
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		// Setup the environment
+		Hashtable env = new Hashtable();
+		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
+		// Grab the context
+		Context ctx = null;
+		try {
+			ctx = ctxManager.newInitialContext(env);
+			assertNotNull("The context should not be null", ctx);
+			ctx.bind("testObject", new Object());
+			// Remove the bundle containing the provider.  The backing for the context should be removed as well.
+			uninstallBundle(factoryBundle);
+			Object obj = ctx.lookup("testObject");
+		} catch (javax.naming.NoInitialContextException ex) {
+			// This is what we're expecting to receive.
+			pass("javax.naming.NoInitialContextException caugh in testProviderUnregistration: SUCCESS");
+			return;
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			if (factoryBundle.getState() == Bundle.INSTALLED) {
+				uninstallBundle(factoryBundle);
+			}
+			ungetService(ctxManager);
+		}
+		
+		failException("testProviderUnregistration failed", javax.naming.NoInitialContextException.class);
+	}
+	public void testContextRebinding() throws Exception {
+		// Install a bundle for grabbing a context
+		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
+		// Grab the JNDIContextManager service
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		// Setup the environment
+		Hashtable env = new Hashtable();
+		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
+		// Grab a context
+		Context ctx = null;
+		try {
+			ctx = ctxManager.newInitialContext(env);
+			// Verify that we actually received the context
+			assertNotNull("The context should not be null", ctx);
+			ctx.bind("testObject", new Object());
+			// Remove the bundle containing the prvoider.  The backing for the context should be removed as well.
+			uninstallBundle(factoryBundle);
+			Object obj = ctx.lookup("testObject");
+		} catch (javax.naming.NoInitialContextException ex) {
+			// do nothing here
+		}
+		
+		// Install a bundle that can be used to rebind the context
+		Bundle builderBundle = installBundle("initialContextFactoryBuilder1.jar");
+		// See if the rebinding occurs as it should
+		try {
+			Object obj = ctx.lookup("testObject");
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			uninstallBundle(builderBundle);
 			ungetService(ctxManager);
 		}
 	}
