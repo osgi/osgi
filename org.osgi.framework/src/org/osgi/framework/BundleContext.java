@@ -583,11 +583,12 @@ public interface BundleContext {
 	 * <p>
 	 * This method is the same as calling
 	 * {@link BundleContext#getServiceReferences(String, String)} with a
-	 * <code>null</code> filter expression. It is provided as a convenience for
+	 * <code>null</code> filter expression and then finding the reference with the highest priority. It is provided as a convenience for
 	 * when the caller is interested in any service that implements the
 	 * specified class.
 	 * <p>
-	 * If multiple such services exist, the service with the highest ranking (as
+	 * If multiple such services exist, the service with the highest priority is selected. This priority is 
+	 * defined as the service reference with the highest ranking (as
 	 * specified in its {@link Constants#SERVICE_RANKING} property) is returned.
 	 * <p>
 	 * If there is a tie in ranking, the service with the lowest service ID (as
