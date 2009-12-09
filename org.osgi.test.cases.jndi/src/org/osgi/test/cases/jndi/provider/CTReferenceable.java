@@ -17,35 +17,15 @@
 
 package org.osgi.test.cases.jndi.provider;
 
-import javax.naming.RefAddr;
+import javax.naming.NamingException;
 import javax.naming.Reference;
+import javax.naming.Referenceable;
 
-/**
- * @version $Revision$ $Date$
- */
-public class CTReference extends Reference {
+public class CTReferenceable implements Referenceable {
 
-	private static final long	serialVersionUID	= 1L;
-
-	public CTReference(String className) {
-		super(className, null, null);
-	}
-	
-	public CTReference(String className, RefAddr addr) {
-		super(className, addr);
-	}
-	
-	public CTReference(String className, String factoryName) {
-		super(className, factoryName, null);
-	}
-	
-	public String getClassName() {
-		return className;
+	public Reference getReference() throws NamingException {
+		Reference ref = new CTReference(String.class.getName(), CTObjectFactory.class.getName());
+		return ref;
 	}
 
-	public String getFactoryClassName() {
-		return classFactory; 
-	}	
-	
-	
 }
