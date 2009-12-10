@@ -1,0 +1,4 @@
+Bundle-SymbolicName: ${p}tb1
+Bundle-Name: ${p}.tb1
+Bundle-Version: 4.2.0.${project.build}
+Export-Package = ${p}.tb1

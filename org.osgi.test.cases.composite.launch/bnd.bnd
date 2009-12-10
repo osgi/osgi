@@ -1,0 +1,26 @@
+Bundle-Version: 4.2.0.${project.build}
+
+Private-Package						= org.osgi.test.support.*, \
+	${p}.junit
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+	org.osgi.service.composite;					version=project , \
+	osgi.core;									version=4.2		, \
+	osgi.cmpn;									version=4.2		, \
+	ee.minimum;									version=1.2		, \
+	${junit}
+
+Include-Resource = \
+    launch.tb1.jar, \
+    launch.tb2.jar
+
+-runbundles						= 
+
+-runproperties					= report=true, \
+	osgi.compatibility.bootdelegation=false, \
+	osgi.support.multipleHosts=true, \
+	noframework=true, \
+	org.osgi.test.cases.composite.launch=generated/testStorageRoot
+
+Test-Cases							= ${testcases}
