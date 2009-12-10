@@ -15,7 +15,11 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.junit;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -94,6 +98,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		Long endpointID = new Long(12345);
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("mykey", "has been overridden");
+//		properties.put(Constants.OBJECTCLASS, new String [] {A.class.getName()}); // needed?
 		properties.put(RemoteConstants.SERVICE_IMPORTED, A.class.getName());
 		properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 		properties.put(RemoteConstants.ENDPOINT_ID, endpointID);
@@ -105,9 +110,33 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		
 		// on the child framework side:
 		//  register an EndpointListener interested in remote services
-		final String endpointListenerFilter = "(!(org.osgi.framework.uuid=" + getFramework().getBundleContext().getProperty("org.osgi.framework.uuid") + "))";
+		final String endpointListenerFilter = "(&(objectClass=" + A.class.getName() + ")!(org.osgi.framework.uuid=" + getFramework().getBundleContext().getProperty("org.osgi.framework.uuid") + "))";
 		Hashtable<String, String> endpointListenerProperties = new Hashtable<String, String>();
 		endpointListenerProperties.put(EndpointListener.ENDPOINT_LISTENER_SCOPE, endpointListenerFilter);
+		
+		/* */ // davidb some diagnostics here:
+        ServiceReference paSR = getFramework().getBundleContext().getServiceReference(PackageAdmin.class.getName());
+        PackageAdmin pkgAdmin = (PackageAdmin) getFramework().getBundleContext().getService(paSR);
+        ExportedPackage exportedPackage = pkgAdmin.getExportedPackage("org.osgi.service.remoteserviceadmin");
+        System.out.println("*** Exported package: " + exportedPackage);
+		System.out.println("*** org.osgi.service.remoteserviceadmin exported by " + exportedPackage.getExportingBundle());
+		System.out.println("*** org.osgi.service.remoteserviceadmin imported by " + Arrays.asList(exportedPackage.getImportingBundles()));
+		
+		Class epCLS = exportedPackage.getExportingBundle().loadClass(EndpointListener.class.getName());
+		System.out.println("*** Endpoint Listener Class loaded from Bundle: " + epCLS);
+		System.out.println("*** Endpoint Listener Class in test: " + EndpointListener.class);
+		System.out.println("*** Are they equal?: " + EndpointListener.class.equals(epCLS));
+		
+		// davidb ok, so let's register a service with the exporter's bundle context that implements its version of EndpointListener...
+		Object epl = 
+		    Proxy.newProxyInstance(epCLS.getClassLoader(), new Class [] {epCLS}, new InvocationHandler() {            
+		        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		            System.out.println("### Endpoint Listener Invoked: " + method + "#" + (args != null ? Arrays.asList(args) : null));
+		            return null;
+		        }
+        });
+		exportedPackage.getExportingBundle().getBundleContext().registerService(EndpointListener.class.getName(), epl, endpointListenerProperties);
+        /* */ // davidb end additions
 		
 		EndpointListenerImpl endpointListenerImpl = new EndpointListenerImpl();
 		
@@ -140,14 +169,14 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		endpointListenerImpl.getSem().waitForSignal(6000);
 		
 		assertEquals("filter doesn't match", endpointListenerFilter, endpointListenerImpl.getMatchedFilter());
-		EndpointDescription ep = endpointListenerImpl.getAddedEndpoint();
+		EndpointDescription ep = endpointListenerImpl.getAddedEndpoint(); 
 		assertNotNull(ep);
 		assertEquals(endpointID.longValue(), ep.getRemoteServiceID());
 		assertEquals("someURI", ep.getRemoteURI());
 		assertEquals(getContext().getProperty("org.osgi.framework.uuid"), ep.getRemoteFrameworkUUID());
 		assertTrue(ep.getInterfaces().contains(A.class.getName()));
 		assertTrue(ep.getIntents().contains("my_intent_is_for_this_to_work"));
-		assertEquals("has been overridden", ep.getProperties().get("mykey"));
+		assertEquals("has been overridden", ep.getProperties().get("mykey")); 
 	}
 	
 	/**
