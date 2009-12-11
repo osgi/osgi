@@ -42,18 +42,21 @@ import org.osgi.framework.Version;
  * A description of an endpoint that provides sufficient information for a
  * compatible distribution provider to create a connection to this endpoint
  * 
- * An Endpoint Description is easy to transfer between different systems. This
- * allows it to be used as a communications device to convey available endpoint
- * information to nodes in a network.
+ * An Endpoint Description is easy to transfer between different systems because
+ * it is property based where the property keys are strings and the values are
+ * simple types. This allows it to be used as a communications device to convey
+ * available endpoint information to nodes in a network.
  * 
- * An Endpoint Description reflects the perspective of an importer. That is, the
- * property keys have been chosen to match filters that are created by client
- * bundles that need a service. Therefore the map must not contain any
- * service.exported.* property and must contain the service.imported.* ones.
+ * An Endpoint Description reflects the perspective of an <i>importer</i>. That
+ * is, the property keys have been chosen to match filters that are created by
+ * client bundles that need a service. Therefore the map must not contain any
+ * <code>service.exported.*</code> property and must contain the corresponding
+ * <code>service.imported.*</code> ones.
  * 
- * The service.intents property contains the intents provided by the service
- * itself combined with the intents added by the exporting distribution
- * provider. Qualified intents appear expanded on this property.
+ * The <code>service.intents</code> property must contain the intents provided
+ * by the service itself combined with the intents added by the exporting
+ * distribution provider. Qualified intents appear fully expanded on this
+ * property.
  * 
  * @Immutable
  * @version $Revision$
@@ -67,7 +70,7 @@ public class EndpointDescription {
 	private final String				remoteUri;
 
 	/**
-	 * Create an Endpoint Description based on a Map.
+	 * Create an Endpoint Description from a Map.
 	 * 
 	 * <p>
 	 * The {@link RemoteConstants#ENDPOINT_URI} property must be set.
@@ -94,7 +97,9 @@ public class EndpointDescription {
 		}
 		if (props.size() < properties.size()) {
 			throw new IllegalArgumentException(
-					"duplicate keys with different cases in properties");
+					"duplicate keys with different cases in properties: "
+							+ new ArrayList<String>(props.keySet())
+									.removeAll(properties.keySet()));
 		}
 
 		this.properties = Collections.unmodifiableMap(props);
@@ -110,10 +115,15 @@ public class EndpointDescription {
 	}
 
 	/**
-	 * Create an Endpoint Description based on a service reference and a map of
+	 * Create an Endpoint Description based on a Service Reference and a Map of
 	 * properties. The properties in the map take precedence over the properties
-	 * in the service reference.
+	 * in the Service Reference.
 	 * 
+	 * <p>
+	 * This method will automatically set the
+	 * {@link RemoteConstants#ENDPOINT_FRAMEWORK_UUID} and
+	 * {@link RemoteConstants#ENDPOINT_ID} properties based on the Service
+	 * Reference if this are not given as properties.
 	 * <p>
 	 * The {@link RemoteConstants#ENDPOINT_URI} property must be set.
 	 * 
@@ -142,7 +152,9 @@ public class EndpointDescription {
 			}
 			if (props.size() < properties.size()) {
 				throw new IllegalArgumentException(
-						"duplicate keys with different cases in properties");
+						"duplicate keys with different cases in properties: "
+								+ new ArrayList<String>(props.keySet())
+										.removeAll(properties.keySet()));
 			}
 		}
 
@@ -494,13 +506,15 @@ public class EndpointDescription {
 	}
 
 	/**
-	 * Compares this <code>EndpointDescription</code> object to another object.
+	 * Compares this <code>EndpointDescription</code> object to another
+	 * object.
 	 * 
 	 * <p>
 	 * An Endpoint Description is considered to be <b>equal to</b> another
 	 * Endpoint Description if their URIs are equal.
 	 * 
-	 * @param other The <code>EndpointDescription</code> object to be compared.
+	 * @param other The <code>EndpointDescription</code> object to be
+	 *        compared.
 	 * @return <code>true</code> if <code>object</code> is a
 	 *         <code>EndpointDescription</code> and is equal to this object;
 	 *         <code>false</code> otherwise.
@@ -517,8 +531,8 @@ public class EndpointDescription {
 	}
 
 	/**
-	 * Tests the properties of this <code>EndpointDescription</code> against the
-	 * given filter using a case insensitive match.
+	 * Tests the properties of this <code>EndpointDescription</code> against
+	 * the given filter using a case insensitive match.
 	 * 
 	 * @param filter The filter to test.
 	 * @return <code>true</code> If the properties of this
