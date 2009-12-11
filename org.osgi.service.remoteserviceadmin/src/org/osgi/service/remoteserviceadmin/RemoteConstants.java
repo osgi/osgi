@@ -30,10 +30,9 @@ public class RemoteConstants {
 	 * Service property identifying the configuration types supported by a
 	 * distribution provider. Registered by the distribution provider on one of
 	 * its services to indicate the supported configuration types.
-	 * 
 	 * <p>
 	 * The value of this property must be of type <code>String</code>,
-	 * <code>String[]</code>, or <code>Collection</code> of <code>String</code>.
+	 * <code>String[]</code>, or <code>Collection&lt;String>&gt;</code> of <code>String</code>.
 	 */
 	public static final String	REMOTE_CONFIGS_SUPPORTED		= "remote.configs.supported";
 
@@ -44,7 +43,7 @@ public class RemoteConstants {
 	 * 
 	 * <p>
 	 * The value of this property must be of type <code>String</code>,
-	 * <code>String[]</code>, or <code>Collection</code> of <code>String</code>.
+	 * <code>String[]</code>, or <code>Collection<&lt;String>&gt;/code> of <code>String</code>.
 	 */
 	public static final String	REMOTE_INTENTS_SUPPORTED		= "remote.intents.supported";
 
@@ -153,14 +152,7 @@ public class RemoteConstants {
 	 * provider that these intents are already implemented by the exported
 	 * service object.</li>
 	 * <li>A distribution provider must use this property to convey the combined
-	 * intents of:</li>
-	 * <ul>
-	 * <li>The exporting service, and</li>
-	 * <li>the intents that the exporting distribution provider adds, and</li>
-	 * <li>the intents that the importing distribution provider adds.</li>
-	 * </ul>
-	 * <i></i>
-	 * 
+	 * intents of: The exporting service, and, the intents that the exporting distribution provider adds, and the intents that the importing distribution provider adds.</li>
 	 * </ul> To export a service, a distribution provider must expand any
 	 * qualified intents. Both the exporting and importing distribution
 	 * providers must recognize all intents before a service can be distributed.
