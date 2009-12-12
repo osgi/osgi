@@ -35,12 +35,13 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  *
  */
-public abstract class MultiFrameworkTestCase extends OSGiTestCase {
+public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*OSGiTestCase*/ {
 	private static final String STORAGEROOT = "org.osgi.test.cases.remoteserviceadmin.storageroot";
 	private static final String DEFAULT_STORAGEROOT = "generated/testframeworkstorage";
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";

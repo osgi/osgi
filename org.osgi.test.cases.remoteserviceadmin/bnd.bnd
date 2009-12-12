@@ -8,7 +8,10 @@ Export-Package 					= ${p}.common;version=1.0.0
 Private-Package						= org.osgi.test.support.*, \
 	${p}.*
 	
-Include-Resource					= resources
+Bundle-Category: osgi,test
+
+Include-Resource					= \
+	tb1.jar=tb1.jar, \
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.remoteserviceadmin
