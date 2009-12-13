@@ -35,7 +35,6 @@ import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
 import org.osgi.service.remoteserviceadmin.EndpointListener;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
-import org.osgi.test.cases.remoteserviceadmin.common.TestService;
 import org.osgi.test.support.compatibility.Semaphore;
 
 /**
@@ -54,7 +53,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	 * Package to be exported by the server side System Bundle
 	 */
 	private static final String ORG_OSGI_TEST_CASES_REMOTESERVICES_JUNIT = "org.osgi.test.cases.remoteserviceadmin.junit";
-	private static final String ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON = "org.osgi.test.cases.remoteserviceadmin.common";
+	private static final String ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON = "org.osgi.test.cases.remoteserviceadmin.common;version=\"1.0.0\"";
 	private static final String JUNIT_FRAMEWORK = "junit.framework;version=\"3.8.2\"";
 
 	/**
@@ -65,8 +64,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
 		
 		//make sure that the server framework System Bundle exports the interfaces
-        String systemPackagesXtra = ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON + ","
-                                  + ORG_OSGI_TEST_CASES_REMOTESERVICES_JUNIT + ","
+        String systemPackagesXtra = //ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON + ","
+                                  ORG_OSGI_TEST_CASES_REMOTESERVICES_JUNIT + ","
                                   + JUNIT_FRAMEWORK;
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
         configuration.put("osgi.console", "1112");
@@ -216,14 +215,6 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 
 		// start test bundle in child framework
 		tb1Bundle.start();
-		
-		// call the test method
-		ServiceReference tb1TestServiceRef = getFramework().getBundleContext().getServiceReference(TestService.class.getName());
-		assertNotNull(tb1TestServiceRef);
-		TestService tb1TestService = (TestService) getFramework().getBundleContext().getService(tb1TestServiceRef);
-		assertNotNull(tb1TestService);
-		
-		tb1TestService.test();
 		
 		// verify callback in parent framework
 		endpointListenerImpl.getSem().waitForSignal(6000);

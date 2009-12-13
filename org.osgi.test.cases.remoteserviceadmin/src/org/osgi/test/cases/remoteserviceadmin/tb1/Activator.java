@@ -33,13 +33,12 @@ import org.osgi.service.remoteserviceadmin.EndpointListener;
 import org.osgi.service.remoteserviceadmin.RemoteConstants;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
-import org.osgi.test.cases.remoteserviceadmin.common.TestService;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  *
  */
-public class Activator implements BundleActivator, A, TestService {
+public class Activator implements BundleActivator, A {
 	ServiceRegistration registration;
 	BundleContext       context;
 
@@ -53,7 +52,9 @@ public class Activator implements BundleActivator, A, TestService {
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 
-		registration = context.registerService(new String[]{A.class.getName(), TestService.class.getName()}, this, dictionary);
+		registration = context.registerService(new String[]{A.class.getName()}, this, dictionary);
+		
+		test();
 	}
 
 	/**

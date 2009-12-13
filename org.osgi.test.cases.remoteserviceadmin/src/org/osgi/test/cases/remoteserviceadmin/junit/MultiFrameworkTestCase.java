@@ -34,7 +34,9 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
-import org.osgi.test.support.OSGiTestCase;
+
+import org.eclipse.osgi.launch.*;
+
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -163,8 +165,9 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 
 	private Class loadFrameworkClass(String className)
 			throws ClassNotFoundException {
-		BundleContext context = getBundleContextWithoutFail();
-        return context == null ? Class.forName(className) : getContext().getBundle(0).loadClass(className);
+//		BundleContext context = getBundleContextWithoutFail();
+//        return context == null ? Class.forName(className) : context.getBundle().loadClass(className);// getContext().getBundle(0).loadClass(className);
+		return EquinoxFactory.class;
 	}
 
 	private BundleContext getBundleContextWithoutFail() {
