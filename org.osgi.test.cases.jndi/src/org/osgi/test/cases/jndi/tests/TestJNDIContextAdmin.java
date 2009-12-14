@@ -20,7 +20,6 @@ package org.osgi.test.cases.jndi.tests;
 import java.util.Hashtable;
 
 import javax.naming.Context;
-import javax.naming.RefAddr;
 import javax.naming.StringRefAddr;
 
 import org.osgi.framework.Bundle;
@@ -29,7 +28,7 @@ import org.osgi.service.jndi.JNDIContextManager;
 import org.osgi.test.cases.jndi.provider.CTInitialContextFactory;
 import org.osgi.test.cases.jndi.provider.CTObjectFactory;
 import org.osgi.test.cases.jndi.provider.CTReference;
-import org.osgi.test.cases.jndi.provider.CTReferenceable;
+import org.osgi.test.cases.jndi.provider.CTTestObject;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /** 
@@ -50,10 +49,10 @@ public class TestJNDIContextAdmin extends DefaultTestBundleControl {
 		JNDIContextAdmin ctxAdmin = (JNDIContextAdmin) getService(JNDIContextAdmin.class);
 		try {
 			// Create a referenceable object for testing
-			CTReferenceable ref = new CTReferenceable();
+			CTTestObject ref = new CTTestObject("pass");
 			// Resolve the reference
-			String testString = (String) ctxAdmin.getObjectInstance(ref, null, null, null);
-			assertNotNull(testString);
+			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref, null, null, null);
+			assertEquals(ref.getValue(), testObject.getValue());
 		} finally {
 			uninstallBundle(objectFactoryBundle);
 			uninstallBundle(contextFactoryBundle);
@@ -69,8 +68,8 @@ public class TestJNDIContextAdmin extends DefaultTestBundleControl {
 		JNDIContextAdmin ctxAdmin = (JNDIContextAdmin) getService(JNDIContextAdmin.class);
 		try {
 			// Do a getObjectInstance call with only the object class as an option
-			String testString = (String) ctxAdmin.getObjectInstance(String.class.getName(), null, null, null);
-			assertNotNull(testString);
+			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(CTTestObject.class.getName(), null, null, null);
+			assertNotNull(testObject);
 		} finally {
 			uninstallBundle(objectFactoryBuilderBundle);
 			uninstallBundle(contextFactoryBundle);
@@ -86,10 +85,10 @@ public class TestJNDIContextAdmin extends DefaultTestBundleControl {
 		JNDIContextAdmin ctxAdmin = (JNDIContextAdmin) getService(JNDIContextAdmin.class);
 		try {
 			// Create a reference object we can use for testing.
-			CTReference ref = new CTReference(String.class.getName(), CTObjectFactory.class.getName());
+			CTReference ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());
 			// Resolve the reference
-			String testString = (String) ctxAdmin.getObjectInstance(ref, null, null, null);
-			assertNotNull(testString);
+			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref, null, null, null);
+			assertNotNull(testObject);
 		} finally {
 			uninstallBundle(objectFactoryBundle);
 			uninstallBundle(contextFactoryBundle);
@@ -112,13 +111,13 @@ public class TestJNDIContextAdmin extends DefaultTestBundleControl {
 		Context ctx = null;
 		try {
 			ctx = ctxManager.newInitialContext(env);
-			String bindString = "pass";
-			ctx.bind("testString", bindString);
-			StringRefAddr addr = new StringRefAddr("URL", "ct://testString"); 
+			CTTestObject bindObject = new CTTestObject("pass");
+			ctx.bind("testObject", bindObject);
+			StringRefAddr addr = new StringRefAddr("URL", "ct://testObject"); 
 			// Create a reference object we can use for testing
-			CTReference ref = new CTReference(String.class.getName(), addr);
-			String testString = (String) ctxAdmin.getObjectInstance(ref, null, ctx, null);
-			assertEquals(bindString, testString);
+			CTReference ref = new CTReference(CTTestObject.class.getName(), addr);
+			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref, null, ctx, null);
+			assertEquals(bindObject.getValue(), testObject.getValue());
 		} finally {
 			uninstallBundle(contextFactoryBundle);
 			uninstallBundle(urlContextBundle);
@@ -136,10 +135,10 @@ public class TestJNDIContextAdmin extends DefaultTestBundleControl {
 		JNDIContextAdmin ctxAdmin = (JNDIContextAdmin) getService(JNDIContextAdmin.class);
 		try {
 			// Create a reference object we can use for testing
-			CTReference ref = new CTReference(String.class.getName(), CTObjectFactory.class.getName());
+			CTReference ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());
 			// Resolve the reference
-			String testString = (String) ctxAdmin.getObjectInstance(ref, null, null, null);
-			assertNotNull(testString);
+			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref, null, null, null);
+			assertNotNull(testObject);
 		} finally {
 			uninstallBundle(objectFactoryBuilderBundle);
 			uninstallBundle(contextFactoryBundle);
@@ -154,7 +153,7 @@ public class TestJNDIContextAdmin extends DefaultTestBundleControl {
 		JNDIContextAdmin ctxAdmin = (JNDIContextAdmin) getService(JNDIContextAdmin.class);
 		try {
 			// Create a reference object we can use for testing.
-			CTReference ref = new CTReference(String.class.getName(), CTObjectFactory.class.getName());
+			CTReference ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());
 			// Resolve the reference, we should get back the reference we provided since the necessary
 			// objectFactory isn't available
 			CTReference returnedRef = (CTReference) ctxAdmin.getObjectInstance(ref, null, null, null);

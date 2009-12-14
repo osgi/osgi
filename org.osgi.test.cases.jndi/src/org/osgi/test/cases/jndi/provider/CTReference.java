@@ -38,6 +38,9 @@ public class CTReference extends Reference {
 	public CTReference(String className, String factoryName) {
 		super(className, factoryName, null);
 	}
+	public CTReference(String className, RefAddr addr, String factory, String factoryLocation) {
+		super(className, addr, factory, factoryLocation);
+	}
 	
 	public String getClassName() {
 		return className;

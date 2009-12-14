@@ -21,6 +21,8 @@ import java.util.Hashtable;
 
 import javax.naming.Context;
 import javax.naming.Name;
+import javax.naming.RefAddr;
+import javax.naming.Referenceable;
 
 /**
  * @version $Revision$ $Date$
@@ -39,8 +41,14 @@ public class CTObjectFactory implements javax.naming.spi.ObjectFactory {
 
 	public Object getObjectInstance(Object obj, Name name, Context context,
 			Hashtable table) throws Exception {
+			
 		if (obj instanceof CTReference) {
-			return new String();
+			RefAddr value = ((CTReference) obj).get("value"); 
+			if (value != null) {
+				return new CTTestObject(value.getContent().toString());
+			} 
+			
+			return new CTTestObject();
 		}
 		return null;
 	}

@@ -28,6 +28,8 @@ import javax.naming.NameParser;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.OperationNotSupportedException;
+import javax.naming.Reference;
+import javax.naming.Referenceable;
 import javax.naming.spi.NamingManager;
 
 /**
@@ -66,6 +68,10 @@ public class CTContext implements Context {
 			throw new NamingException("Unable to bind object to null name");
 		} else if (obj == null) {
 			throw new NamingException("Unable to bind, object is null");
+		}
+		
+		if ( obj instanceof Referenceable) {
+			obj = ((Referenceable) obj).getReference();
 		}
 		
 		storage.put(name.toString(), obj);
@@ -146,7 +152,7 @@ public class CTContext implements Context {
 		
 		Object obj = storage.get(name.toString());
 		
-		if (obj instanceof CTReference) {
+		if (obj instanceof Reference || obj instanceof Referenceable) {		
 			try {
 				return NamingManager.getObjectInstance(obj, null, null, null);
 			} catch (Exception ex) {

@@ -20,11 +20,43 @@ package org.osgi.test.cases.jndi.provider;
 import javax.naming.NamingException;
 import javax.naming.Reference;
 import javax.naming.Referenceable;
+import javax.naming.StringRefAddr;
 
-public class CTReferenceable implements Referenceable {
+/**
+ * Test Object that can be returned by an ObjectFactory
+ * 
+ * @version $Revision $ $Date$
+ */
+
+public class CTTestObject implements Referenceable {
+	
+	private String value;
+	
+	public CTTestObject() {
+		
+	}
+	
+	public CTTestObject(String value) {
+		this.value = value;
+	}
+	
+	public void setValue(String value) {
+		this.value = value;
+	}
+	
+	public String getValue() {
+		return this.value;
+	}
 
 	public Reference getReference() throws NamingException {
-		Reference ref = new CTReference(String.class.getName(), CTObjectFactory.class.getName());
+		Reference ref = null;
+		
+		if (this.value != null) {
+			StringRefAddr storedValue = new StringRefAddr("value", this.value);
+			ref = new CTReference(CTTestObject.class.getName(), storedValue, CTObjectFactory.class.getName(), null);
+		} else {
+			ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());
+		}
 		return ref;
 	}
 
