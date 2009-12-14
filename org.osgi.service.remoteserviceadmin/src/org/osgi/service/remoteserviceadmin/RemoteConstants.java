@@ -32,7 +32,7 @@ public class RemoteConstants {
 	 * its services to indicate the supported configuration types.
 	 * <p>
 	 * The value of this property must be of type <code>String</code>,
-	 * <code>String[]</code>, or <code>Collection&lt;String>&gt;</code> of <code>String</code>.
+	 * <code>String[]</code>, or <code>Collection&lt;String&gt;</code>.
 	 */
 	public static final String	REMOTE_CONFIGS_SUPPORTED		= "remote.configs.supported";
 
@@ -43,7 +43,7 @@ public class RemoteConstants {
 	 * 
 	 * <p>
 	 * The value of this property must be of type <code>String</code>,
-	 * <code>String[]</code>, or <code>Collection<&lt;String>&gt;/code> of <code>String</code>.
+	 * <code>String[]</code>, or <code>Collection&lt;String&gt;</code>.
 	 */
 	public static final String	REMOTE_INTENTS_SUPPORTED		= "remote.intents.supported";
 
@@ -58,7 +58,7 @@ public class RemoteConstants {
 	 * <code>Dictionary</code> object passed to the
 	 * <code>BundleContext.registerService</code> method. The value of this
 	 * property must be of type <code>String</code>, <code>String[]</code>, or
-	 * <code>Collection</code> of <code>String</code>.
+	 * <code>Collection&lt;String&gt;</code>.
 	 */
 	public static final String	SERVICE_EXPORTED_CONFIGS		= "service.exported.configs";
 
@@ -74,7 +74,7 @@ public class RemoteConstants {
 	 * <code>Dictionary</code> object passed to the
 	 * <code>BundleContext.registerService</code> method. The value of this
 	 * property must be of type <code>String</code>, <code>String[]</code>, or
-	 * <code>Collection</code> of <code>String</code>.
+	 * <code>Collection&lt;String&gt;</code>.
 	 */
 	public static final String	SERVICE_EXPORTED_INTENTS		= "service.exported.intents";
 
@@ -93,7 +93,7 @@ public class RemoteConstants {
 	 * <code>Dictionary</code> object passed to the
 	 * <code>BundleContext.registerService</code> method. The value of this
 	 * property must be of type <code>String</code>, <code>String[]</code>, or
-	 * <code>Collection</code> of <code>String</code>.
+	 * <code>Collection&lt;String&gt;</code>.
 	 */
 	public static final String	SERVICE_EXPORTED_INTENTS_EXTRA	= "service.exported.intents.extra";
 
@@ -112,7 +112,7 @@ public class RemoteConstants {
 	 * <code>Dictionary</code> object passed to the
 	 * <code>BundleContext.registerService</code> method. The value of this
 	 * property must be of type <code>String</code>, <code>String[]</code>, or
-	 * <code>Collection</code> of <code>String</code>.
+	 * <code>Collection&lt;String&gt;</code>.
 	 */
 	public static final String	SERVICE_EXPORTED_INTERFACES		= "service.exported.interfaces";
 
@@ -138,7 +138,7 @@ public class RemoteConstants {
 	 * 
 	 * <p>
 	 * The value of this property must be of type <code>String</code>,
-	 * <code>String[]</code>, or <code>Collection</code> of <code>String</code>.
+	 * <code>String[]</code>, or <code>Collection&lt;String&gt;</code>.
 	 * 
 	 * @see #SERVICE_EXPORTED_CONFIGS
 	 */
@@ -152,14 +152,17 @@ public class RemoteConstants {
 	 * provider that these intents are already implemented by the exported
 	 * service object.</li>
 	 * <li>A distribution provider must use this property to convey the combined
-	 * intents of: The exporting service, and, the intents that the exporting distribution provider adds, and the intents that the importing distribution provider adds.</li>
-	 * </ul> To export a service, a distribution provider must expand any
-	 * qualified intents. Both the exporting and importing distribution
-	 * providers must recognize all intents before a service can be distributed.
+	 * intents of: The exporting service, and, the intents that the exporting
+	 * distribution provider adds, and the intents that the importing
+	 * distribution provider adds.</li>
+	 * </ul>
+	 * To export a service, a distribution provider must expand any qualified
+	 * intents. Both the exporting and importing distribution providers must
+	 * recognize all intents before a service can be distributed.
 	 * 
 	 * <p>
 	 * The value of this property must be of type <code>String</code>,
-	 * <code>String[]</code>, or <code>Collection</code> of <code>String</code>.
+	 * <code>String[]</code>, or <code>Collection&lt;String&gt;</code>.
 	 */
 	public static final String	SERVICE_INTENTS					= "service.intents";
 
