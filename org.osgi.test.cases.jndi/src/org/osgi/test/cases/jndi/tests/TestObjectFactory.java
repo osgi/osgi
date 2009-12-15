@@ -179,7 +179,7 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 		try {
 			ctx = new InitialContext();
 			assertNotNull("The context should not be null", ctx);
-			CTObjectFactory of = (CTObjectFactory) ctx.lookup("osgi:services/org.osgi.test.cases.jndi.provider.CTObjectFactory");
+			CTObjectFactory of = (CTObjectFactory) ctx.lookup("osgi:service/org.osgi.test.cases.jndi.provider.CTObjectFactory");
 			Hashtable ofEnv = of.getEnvironment();
 			if (!ofEnv.containsKey("test1")) {
 				fail("The right context was not returned");

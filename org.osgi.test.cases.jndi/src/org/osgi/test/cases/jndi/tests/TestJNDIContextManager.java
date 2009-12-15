@@ -217,7 +217,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		try {
 			ctx = ctxManager.newInitialContext();
 			assertNotNull("The context should not be null", ctx);
-			ExampleService service = (ExampleService) ctx.lookup("osgi:services/org.osgi.test.cases.jndi.service.ExampleService");
+			ExampleService service = (ExampleService) ctx.lookup("osgi:service/org.osgi.test.cases.jndi.service.ExampleService");
 			assertNotNull(service);
 		} finally {
 			if (ctx != null) {
@@ -248,7 +248,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			Object obj = ctx.lookup("testObject");
 		} catch (javax.naming.NoInitialContextException ex) {
 			// This is what we're expecting to receive.
-			pass("javax.naming.NoInitialContextException caugh in testProviderUnregistration: SUCCESS");
+			pass("javax.naming.NoInitialContextException caught in testProviderUnregistration: SUCCESS");
 			return;
 		} finally {
 			if (ctx != null) {

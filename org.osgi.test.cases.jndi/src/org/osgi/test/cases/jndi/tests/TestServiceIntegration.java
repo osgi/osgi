@@ -22,6 +22,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingEnumeration;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.jndi.service.ExampleService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -45,7 +46,7 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 		try {
 			assertNotNull("The context should not be null", ctx);
 			// Lookup the example service
-			ExampleService service = (ExampleService) ctx.lookup("osgi:services/org.osgi.test.cases.jndi.service.ExampleService");
+			ExampleService service = (ExampleService) ctx.lookup("osgi:service/org.osgi.test.cases.jndi.service.ExampleService");
 			// Verify that we actually got the service
 			assertNotNull(service);
 			// Cleanup after the test completes
@@ -91,6 +92,24 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 		
 	}
 
+	public void testBundleContextLookup() throws Exception {
+		// Install the bundles needed for this test
+		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
+		// Grab the default initialContext so we can access the service registry
+		Context ctx = new InitialContext();
+		try {
+			assertNotNull("The context should not be null", ctx);
+			// Lookup the bundle context
+			BundleContext bundleCtx = (BundleContext) ctx.lookup("osgi:framework/bundleContext");
+			assertNotNull("The bundle context should not be null", bundleCtx);
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			uninstallBundle(factoryBundle);
+		}
+	}
+	
 	public void testServiceNameProperty() throws Exception {
 		// Install the bundles need for this test
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
@@ -100,7 +119,7 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 		try {
 			assertNotNull("The context should not be null", ctx);
 			// Lookup the example service using the service name
-			ExampleService service = (ExampleService) ctx.lookup("osgi:services/ExampleService");
+			ExampleService service = (ExampleService) ctx.lookup("osgi:service/ExampleService");
 			// Verify that we actually got the service
 			assertNotNull(service);
 		} finally {

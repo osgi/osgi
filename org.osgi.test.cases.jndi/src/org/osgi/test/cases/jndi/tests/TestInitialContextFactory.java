@@ -255,7 +255,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 		InitialContext ctx = new InitialContext();
 		try {
 			assertNotNull("The context should not be null", ctx);
-			CTInitialContextFactory ctf = (CTInitialContextFactory) ctx.lookup("osgi:services/org.osgi.test.cases.jndi.provider.CTInitialContextFactory");
+			CTInitialContextFactory ctf = (CTInitialContextFactory) ctx.lookup("osgi:service/org.osgi.test.cases.jndi.provider.CTInitialContextFactory");
 			// Let's grab a context instance and check the environment
 			Hashtable ctxEnv = ctf.getInitialContext(null).getEnvironment();
 			if (!ctxEnv.containsKey("test1")) {
