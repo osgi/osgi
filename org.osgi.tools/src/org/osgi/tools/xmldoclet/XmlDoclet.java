@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 
 import com.sun.javadoc.*;
-import com.sun.tools.javac.tree.Tree.*;
 
 public class XmlDoclet extends Doclet {
 	PrintWriter	pw;
@@ -475,31 +474,68 @@ public class XmlDoclet extends Doclet {
 	String simplify(String name) {
 		if (name.startsWith("java.") || name.startsWith("org.osgi.")
 				|| name.startsWith(currentPackage)) {
-			int n = name.lastIndexOf('.');
+			int n;
+			if ( name.endsWith("...")) {
+				n= name.lastIndexOf('.', name.length()-4);
+			} else
+				n= name.lastIndexOf('.');
 			name = name.substring(n + 1);
 		}
 		return name;
 	}
 
 	String flatten(String signature) {
-		StringTokenizer st = new StringTokenizer(signature, "(, )");
-		StringBuffer out = new StringBuffer();
-		out.append("(");
+		List<String> parts = new ArrayList<String>();
+
+		int i = 1;
+		int begin = i;
+		outer: while (i < signature.length()) {
+			switch (signature.charAt(i)) {
+				case '<' :
+					parts.add(signature.substring(begin, i));
+					i = skip(signature, i + 1);
+					begin=i+1;
+					break;
+
+				case ' ' :
+					begin = i+1;
+					break;
+					
+				case ',' :
+					if (begin < i) {
+						parts.add(signature.substring(begin, i));
+					}
+					begin = i + 1;
+					break;
+
+				case ')' :
+					if (begin < i) {
+						parts.add(signature.substring(begin, i));
+					}
+					break outer;
+			}
+			i++;
+		}
+		StringBuilder sb = new StringBuilder();
 		String del = "";
-		while (st.hasMoreTokens()) {
-			String type = st.nextToken();
-			out.append(del);
-			if (type.endsWith("...")) {
-				String simple = simplify(type.substring(0, type.length() - 3));
-				out.append(simple + "...");
-			}
-			else {
-				out.append(simplify(type));
-			}
+		sb.append("(");
+		for (String s : parts) {
+			sb.append(del);
+			sb.append(simplify(s));
 			del = ",";
 		}
-		out.append(")");
-		return out.toString();
+		sb.append(")");
+		return sb.toString();
+	}
+
+	int skip(String s, int n) {
+		while (n < s.length() && s.charAt(n) != '>') {
+			if (s.charAt(n)=='<' ) 
+				n = skip(s, n + 1);
+			else
+				n++;
+		}
+		return n;
 	}
 
 	String escape(String in) {
