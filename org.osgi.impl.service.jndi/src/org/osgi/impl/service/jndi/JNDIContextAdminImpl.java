@@ -30,10 +30,8 @@ import org.osgi.service.jndi.JNDIContextAdmin;
 class JNDIContextAdminImpl implements JNDIContextAdmin {
 
 	private final OSGiInitialContextFactoryBuilder m_objectFactoryBuilder;
-	private final Bundle m_callingBundle;
 	
 	public JNDIContextAdminImpl(Bundle callingBundle, OSGiInitialContextFactoryBuilder builder) {
-		m_callingBundle = callingBundle;
 		m_objectFactoryBuilder = builder;
 	}
 	

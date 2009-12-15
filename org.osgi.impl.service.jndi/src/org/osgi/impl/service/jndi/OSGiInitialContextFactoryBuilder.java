@@ -23,7 +23,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -190,18 +189,7 @@ class OSGiInitialContextFactoryBuilder implements
 				}
 			}
 			else {
-				ObjectFactory urlContextFactory = 
-					getURLContextFactoryFromReference(reference);
-				if (urlContextFactory != null) {
-					return urlContextFactory;
-				}
-				
-				// search for InitialContextFactoryBuilder implementations that
-				// are published as OSGi services
-				ObjectFactory objectFactory = getObjectFactoryFromBuilder(environment, reference);
-				if(objectFactory != null) {
-					return objectFactory;
-				}
+				return new NoFactoryNameSpecifiedObjectFactory();
 			}
 		}
 
@@ -224,7 +212,7 @@ class OSGiInitialContextFactoryBuilder implements
 	 */
 	public ObjectFactory getURLContextFactory(String urlScheme) {
 		if (m_urlContextFactoryServiceTracker.getServiceReferences() != null) {
-			ServiceReference[] serviceReferences = sortServiceReferences(m_urlContextFactoryServiceTracker);
+			ServiceReference[] serviceReferences = ServiceUtils.sortServiceReferences(m_urlContextFactoryServiceTracker);
 			for (int i = 0; i < serviceReferences.length; i++) {
 				ServiceReference serviceReference = serviceReferences[i];
 				if (serviceReference.getProperty(JndiConstants.JNDI_URLSCHEME)
@@ -307,7 +295,7 @@ class OSGiInitialContextFactoryBuilder implements
 
 	private Object obtainFactoryService(String factoryServiceInterface,
 			ServiceTracker serviceTracker) {
-		ServiceReference[] serviceReferences = sortServiceReferences(serviceTracker);
+		ServiceReference[] serviceReferences = ServiceUtils.sortServiceReferences(serviceTracker);
 		for (int i = 0; i < serviceReferences.length; i++) {
 			ServiceReference serviceReference = serviceReferences[i];
 			String[] serviceInterfaces = (String[]) serviceReference
@@ -335,7 +323,7 @@ class OSGiInitialContextFactoryBuilder implements
 	private InitialContextFactory getContextFactoryFromBuilder(
 			Hashtable environment) {
 		if (m_contextFactoryBuilderServiceTracker.getServiceReferences() != null) {
-			final ServiceReference[] serviceReferences = sortServiceReferences(m_contextFactoryBuilderServiceTracker);
+			final ServiceReference[] serviceReferences = ServiceUtils.sortServiceReferences(m_contextFactoryBuilderServiceTracker);
 			for (int i = 0; i < serviceReferences.length; i++) {
 				ServiceReference serviceReference = serviceReferences[i];
 				InitialContextFactoryBuilder builder = (InitialContextFactoryBuilder) m_bundleContext
@@ -375,7 +363,7 @@ class OSGiInitialContextFactoryBuilder implements
 	 */
 	private ObjectFactory getObjectFactoryFromBuilder(Hashtable environment, Reference reference) {
 		if (m_objectFactoryBuilderServiceTracker.getServiceReferences() != null) {
-			final ServiceReference[] serviceReferences = sortServiceReferences(m_objectFactoryBuilderServiceTracker);
+			final ServiceReference[] serviceReferences = ServiceUtils.sortServiceReferences(m_objectFactoryBuilderServiceTracker);
 			for (int i = 0; i < serviceReferences.length; i++) {
 				ServiceReference serviceReference = serviceReferences[i];
 				ObjectFactoryBuilder builder = (ObjectFactoryBuilder) m_bundleContext
@@ -405,11 +393,10 @@ class OSGiInitialContextFactoryBuilder implements
 	 * resolve the reference.  
 	 * 
 	 * @param reference to be resolved
-	 * @return a URL Context Factory (of type ObjectFactory) that can 
-	 *         resolve the given reference, or null if no matching URL
-	 *         context factory was found. 
+	 * @return an object resolved from a URL Context Factory, or null if no URL
+	 * 	       Context Factory could resolve the reference.   
 	 */
-	private ObjectFactory getURLContextFactoryFromReference(final Reference reference) {
+	private Object getObjectFromURLContextFactoryFromReference(final Reference reference, Hashtable environment) {
 		Enumeration refAddresses = reference.getAll();
 		while(refAddresses.hasMoreElements()) {
 			RefAddr address = (RefAddr)refAddresses.nextElement();
@@ -420,7 +407,11 @@ class OSGiInitialContextFactoryBuilder implements
 					ObjectFactory objectFactory = 
 						getURLContextFactory(uri.getScheme());
 					if(objectFactory != null) {
-						return objectFactory;
+						Object objToReturn = objectFactory.getObjectInstance(urlContent, null, null, environment);
+						if(objToReturn != null) {
+							// return the first object that is constructed from a URL string reference address
+							return objToReturn;
+						}
 					}
 				}
 				catch (URISyntaxException e) {
@@ -558,37 +549,6 @@ class OSGiInitialContextFactoryBuilder implements
 		return new ServiceTracker(bundleContext, serviceInterface, null);
 	}
 
-	/**
-	 * Utility method to sort an array of ServiceReferences using the service
-	 * ranking (if specified).
-	 * 
-	 * This utility should follow any service ranking rules already defined in
-	 * the OSGi spec.
-	 * 
-	 * @param serviceTracker tracker to use to provide the initial array to sort
-	 * @return sorted array of ServiceReferences, or a zero-length array if no
-	 *         matching services were found
-	 */
-	private static ServiceReference[] sortServiceReferences(
-			ServiceTracker serviceTracker) {
-		final ServiceReference[] serviceReferences = serviceTracker
-				.getServiceReferences();
-		if (serviceReferences == null) {
-			return new ServiceReference[0];
-		}
-
-		Arrays.sort(serviceReferences, new Comparator() {
-			public int compare(Object objectOne, Object objectTwo) {
-				ServiceReference serviceReferenceOne = (ServiceReference) objectOne;
-				ServiceReference serviceReferenceTwo = (ServiceReference) objectTwo;
-				return serviceReferenceTwo.compareTo(serviceReferenceOne);
-			}
-		});
-
-		return serviceReferences;
-	}
-	
-	
 	private static final class ReturnReferenceInfoObjectFactory implements ObjectFactory {
 		private final Object m_refInfo;
 		
@@ -601,6 +561,51 @@ class OSGiInitialContextFactoryBuilder implements
 				return m_refInfo;
 		}
 	}
+	
+
+	/**
+	 * Inner ObjectFactory implementation used to handle cases where a Reference
+	 * is specified, but the Reference does not indicate which ObjectFactory should be used
+	 * to resolve the object.  
+	 * 
+	 * This factory will dynamically attempt to use a URL context factory to 
+	 * resolve the object (if a Reference Address of type "URL" is detected), 
+	 * and will also consult the known ObjectFactoryBuilder services if no other 
+	 * way to resolve the reference exists.  
+	 *
+	 * 
+	 * @version $Revision$
+	 */
+	private final class NoFactoryNameSpecifiedObjectFactory implements ObjectFactory {
+
+		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment) throws Exception {
+			if(refInfo == null) {
+				return null;
+			}
+			
+			if(refInfo instanceof Reference) {
+				Reference reference = (Reference)refInfo;
+				Object resolvedObject = 
+					getObjectFromURLContextFactoryFromReference(reference, environment);
+				if (resolvedObject != null) {
+					return resolvedObject;
+				}
+				
+				// search for InitialContextFactoryBuilder implementations that
+				// are published as OSGi services
+				ObjectFactory objectFactory = getObjectFactoryFromBuilder(environment, reference);
+				if(objectFactory != null) {
+					// if found, use to attempt object resolution
+					return objectFactory.getObjectInstance(refInfo, null, null, environment);
+				}
+			}
+
+			// in all other cases, return refInfo
+			return refInfo;
+		}
+		
+	}
+	
 	
 	
 }

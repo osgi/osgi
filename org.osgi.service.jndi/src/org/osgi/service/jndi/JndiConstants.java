@@ -20,6 +20,7 @@ package org.osgi.service.jndi;
  * Constants for the JNDI Factory Manager implementation.
  * 
  * @version $Revision$
+ * @Immutable
  */
 public class JndiConstants {
 	/**

@@ -30,6 +30,7 @@ import javax.naming.directory.DirContext;
  * relying on the InitialContext constructor.  
  * 
  * @version $Revision$
+ * @NotThreadSafe
  */
 public interface JNDIContextManager {
 

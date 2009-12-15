@@ -15,11 +15,15 @@
  */
 package org.osgi.impl.service.jndi;
 
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
-import javax.naming.OperationNotSupportedException;
+import javax.naming.NoInitialContextException;
 import javax.naming.directory.DirContext;
 import javax.naming.spi.InitialContextFactory;
 import javax.naming.spi.InitialContextFactoryBuilder;
@@ -31,40 +35,71 @@ class JNDIContextManagerImpl implements JNDIContextManager {
 
 	private final InitialContextFactoryBuilder	m_builder;
 	
-	private final Bundle m_callingBundle;
+	/* list of Context implementations */
+	private final List m_listOfContexts = 
+		Collections.synchronizedList(new LinkedList());
 
 	JNDIContextManagerImpl(Bundle callingBundle) {
 		// create a new builder for each client bundle
 		// since the JNDI services (factories) should be accessed
 		// by the JNDIContextManager service on behalf of the calling bundle
 		m_builder = new OSGiInitialContextFactoryBuilder(callingBundle.getBundleContext());
-		m_callingBundle = callingBundle;
 	}
 
 
 	public Context newInitialContext() throws NamingException {
-		InitialContextFactory factory = 
-			m_builder.createInitialContextFactory(new Hashtable());
-		return factory.getInitialContext(new Hashtable());
+		final Context initialContext = createNewInitialContext(new Hashtable());
+		m_listOfContexts.add(initialContext);
+		return initialContext;
 	}
 
 	public Context newInitialContext(Hashtable environment)
 			throws NamingException {
-		return createNewInitialContext(environment);
+		final Context initialContext = createNewInitialContext(environment);
+		m_listOfContexts.add(initialContext);
+		return initialContext;
 	}
 
 	public DirContext newInitialDirContext() throws NamingException {
-		throw new OperationNotSupportedException("not supported yet");
+		Context contextToReturn = createNewInitialContext(new Hashtable());
+		if(contextToReturn instanceof DirContext) {
+			m_listOfContexts.add(contextToReturn);
+			return (DirContext)contextToReturn;
+		}
+		
+		throw new NoInitialContextException("DirContext could not be created.  The matching InitialContextFactory did not create a matching type."); 
 	}
 
 	public DirContext newInitialDirContext(Hashtable environment)
 			throws NamingException {
 		Context context = createNewInitialContext(environment);
 		if(context instanceof DirContext) {
+			m_listOfContexts.add(context);
 			return (DirContext)context;
 		}
 		
-		throw new NamingException("DirContext could not be created.  The matching InitialContextFactory did not create a matching type.");
+		throw new NoInitialContextException("DirContext could not be created.  The matching InitialContextFactory did not create a matching type.");
+	}
+	
+	/**
+	 * Closes all the known context implementations that have 
+	 * been provided by this service.  
+	 */
+	void close() {
+		Iterator iterator = m_listOfContexts.iterator();
+		// call close() on all known contexts
+		while(iterator.hasNext()) {
+			Context context = (Context)iterator.next();
+			try {
+				context.close();
+			}
+			catch (NamingException e) {
+				//TODO, add logging here
+				e.printStackTrace();
+			}
+		}
+		
+		m_listOfContexts.clear();
 	}
 
 	private Context createNewInitialContext(final Hashtable environment)

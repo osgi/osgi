@@ -15,23 +15,55 @@
  */
 package org.osgi.impl.service.jndi;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleEvent;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.SynchronousBundleListener;
 
 class JNDIContextManagerServiceFactoryImpl implements ServiceFactory {
 
+	// map of bundles to context managers
+	private Map m_mapOfManagers = 
+		Collections.synchronizedMap(new HashMap());
+	
 	JNDIContextManagerServiceFactoryImpl() {
 	}
 	
 	public Object getService(Bundle bundle, ServiceRegistration registration) {
-		return new JNDIContextManagerImpl(bundle);
+		final JNDIContextManagerImpl jndiContextManagerImpl = new JNDIContextManagerImpl(bundle);
+		m_mapOfManagers.put(bundle, jndiContextManagerImpl);
+		bundle.getBundleContext().addBundleListener(new ContextManagerBundleListener());
+		return jndiContextManagerImpl;
 	}
 
-	public void ungetService(Bundle bundle, ServiceRegistration registration,
-			Object service) {
-		// TODO Auto-generated method stub
-		// TODO, add cleanup code here
+	public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
+		closeContextManager(bundle);
+	}
+
+	private void closeContextManager(Bundle bundle) {
+		JNDIContextManagerImpl jndiContextManagerImpl = 
+			(JNDIContextManagerImpl)m_mapOfManagers.get(bundle);
+		if(jndiContextManagerImpl != null) {
+			jndiContextManagerImpl.close();
+			m_mapOfManagers.remove(bundle);
+		}
+	}
+	
+	
+	private class ContextManagerBundleListener implements SynchronousBundleListener {
+		public void bundleChanged(BundleEvent event) {
+			if(event.getType() == BundleEvent.STOPPED) {
+				if(m_mapOfManagers.containsKey(event.getBundle())) {
+					closeContextManager(event.getBundle());
+				}
+			}
+		}
+		
 	}
 
 }

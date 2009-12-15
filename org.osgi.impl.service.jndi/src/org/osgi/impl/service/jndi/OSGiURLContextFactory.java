@@ -148,36 +148,34 @@ public class OSGiURLContextFactory implements ObjectFactory {
 
 		private static Object getService(BundleContext bundleContext,
 				OSGiURLParser urlParser) throws InvalidSyntaxException {
-			if (urlParser.hasFilter()) {
-				ServiceReference[] serviceReferences = 
-					bundleContext.getServiceReferences(urlParser.getServiceInterface(),
-								                       urlParser.getFilter());
-				if (serviceReferences != null) {
-					// return the first reference for now
-					// TODO, consider sorting this by priority
-					return bundleContext.getService(serviceReferences[0]);
+			
+			ServiceReference[] serviceReferences = 
+				bundleContext.getServiceReferences(urlParser.getServiceInterface(),
+							                       urlParser.getFilter());
+			if (serviceReferences != null) {
+				final ServiceReference[] sortedServiceReferences = 
+					ServiceUtils.sortServiceReferences(serviceReferences);
+				if (urlParser.isServiceListURL()) {
+					// return a Context that can handle service.id lookups
+					return new OSGiServiceListContext(bundleContext, sortedServiceReferences);
+				}
+				else {
+					return bundleContext.getService(sortedServiceReferences[0]);
 				}
 			}
 			else {
-				ServiceReference serviceReference = 
-					bundleContext.getServiceReference(urlParser.getServiceInterface());
-				if (serviceReference != null) {
-					return bundleContext.getService(serviceReference);
-				}
-				else {
-					// service interface name may not map to a published name
-					// check the registry for a service that supports the
-					// osgi.jndi.serviceName property
-					final String serviceNameFilter = "("
-							+ JndiConstants.JNDI_SERVICENAME
-							+ "=" + urlParser.getServiceInterface() + ")";
-					ServiceReference[] serviceReferencesByName = bundleContext
-							.getServiceReferences(null, serviceNameFilter);
-					if (serviceReferencesByName != null) {
-						// TODO, consider sorting this by priority
-						return bundleContext
-								.getService(serviceReferencesByName[0]);
-					}
+				// service interface name may not map to a published name
+				// check the registry for a service that supports the
+				// osgi.jndi.serviceName property
+				final String serviceNameFilter = "("
+						+ JndiConstants.JNDI_SERVICENAME + "="
+						+ urlParser.getServiceInterface() + ")";
+				ServiceReference[] serviceReferencesByName = 
+					bundleContext.getServiceReferences(null, serviceNameFilter);
+				if (serviceReferencesByName != null) {
+					final ServiceReference[] sortedServiceReferences = 
+						ServiceUtils.sortServiceReferences(serviceReferencesByName);
+					return bundleContext.getService(sortedServiceReferences[0]);
 				}
 			}
 
