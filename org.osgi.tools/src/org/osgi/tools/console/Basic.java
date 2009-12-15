@@ -2,13 +2,13 @@ package org.osgi.tools.console;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.net.URL;
+import java.net.*;
 import java.util.*;
 
 import org.osgi.framework.*;
 import org.osgi.service.log.*;
 import org.osgi.service.packageadmin.*;
-import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.service.permissionadmin.*;
 import org.osgi.tools.command.*;
 
 /**
@@ -931,12 +931,15 @@ public class Basic implements CommandProvider {
 				+ "BASIC\r\n"
 				+ "cd <dir>                        Change directory (for v cmd -> sets PWD)\r\n"
 				+ "capture                         Capture the console until a <cr> is hit\r\n"
+				+ "content <id>                    List the entry paths\r\n"
 				+ "exports [-s]                    List all exports\r\n"
 				+ "decompile <service_id>          Decompile the interfaces of the given interface\r\n"
 				+ "free                            free memory\r\n"
+				+ "fragments <id>                  See the fragments for a host\r\n"
 				+ "framework                       Show framework info\r\n"
 				+ "gc                              garbage collect\r\n"
 				+ "headers <id>                    Show the manifest headers\r\n"
+				+ "hosts <id>                      See the hosts for a fragment\r\n"
 				+ "inspect <id>                    inspect bundle <id>\r\n"
 				+ "install <url>                   install a bundle\r\n"
 				+ "interrupt <thread>              interrupt thread\r\n"
@@ -950,6 +953,7 @@ public class Basic implements CommandProvider {
 				+ "lss [ \"<filter>\" ]              list services, filter is LDAP syntax, no spaces\r\n"
 				+ "registered <id>                 Services registered by <id>\r\n"
 				+ "restart                         Restart the framework\r\n"
+				+ "required <id>                   See the required bundles\r\n"
 				+ "shutdown                        Stops the system bundle\r\n"
 				+ "ss <sid>                        Show service\r\n"
 				+ "start <id>                      Start bundle\r\n"
@@ -1065,5 +1069,60 @@ public class Basic implements CommandProvider {
 		BufferedReader rdr = new BufferedReader(
 				new InputStreamReader(System.in));
 		return rdr.readLine();
+	}
+	
+	public Object _fragments(CommandInterpreter intp) throws IOException {
+		PackageAdmin pa = getPackageAdmin();
+		
+		Bundle host = getBundle(intp);
+		if ( host == null )
+			return "Please specify host bundle id";
+		
+		if ( pa.getBundleType(host) != PackageAdmin.BUNDLE_TYPE_FRAGMENT)
+			return "This bundle is a fragment and can therefore not host: " + toString(host);
+
+		return pa.getFragments(host);
+	}
+	
+	public Object _hosts(CommandInterpreter intp) throws IOException {
+		PackageAdmin pa = getPackageAdmin();
+		
+		Bundle fragment = getBundle(intp);
+		if ( fragment == null )
+			return "Please specify a fragment bundle id";
+		
+		if ( pa.getBundleType(fragment) != PackageAdmin.BUNDLE_TYPE_FRAGMENT)
+			return "This bundle is not a fragment: " + toString(fragment);
+		
+		return pa.getHosts(fragment);
+	}
+	
+	
+	public Object _required(CommandInterpreter intp) throws IOException {
+		PackageAdmin pa = getPackageAdmin();
+		
+		Bundle fragment = getBundle(intp);
+		if ( fragment == null )
+			return "Please specify a fragment bundle id";
+		
+		if ( pa.getBundleType(fragment) != PackageAdmin.BUNDLE_TYPE_FRAGMENT)
+			return "This bundle is not a fragment: " + toString(fragment);
+		
+		return pa.getRequiredBundles(null);
+	}
+	
+	
+	public Object _contents(CommandInterpreter intp ) throws Exception {
+		StringBuffer sb = new StringBuffer();
+		Bundle b = getBundle(intp);
+		if ( b == null )
+			return "Please specify a valid bundle id";
+
+		Enumeration<?> e = b.findEntries("/", "*", true);
+		while ( e.hasMoreElements() ) {
+			sb.append(e.nextElement());
+			sb.append("\n");
+		}
+		return sb.toString();
 	}
 }
