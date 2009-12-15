@@ -120,13 +120,14 @@ public final class EndpointPermission extends Permission {
 	 * this permission to see the presence of distributed services. The
 	 * <code>import</code> action allows the owner of this permission to import
 	 * an endpoint. The <code>export</code> action allows the owner of this
-	 * permission to export a service under the specified name.
+	 * permission to export a service.
 	 * 
 	 * @param filterString The filter string or &quot;*&quot; to match all
 	 *        endpoints.
-	 * @param actions <code>read</code>,<code>import</code>,<code>export</code>
-	 *        (canonical order).
-	 * @throws IllegalArgumentException If the filter has an invalid syntax.
+	 * @param actions The actions <code>read</code>, <code>import</code>, or
+	 *        <code>export</code>.
+	 * @throws IllegalArgumentException If the filter has an invalid syntax or
+	 *         the actions are not valid.
 	 */
 	public EndpointPermission(String filterString, String actions) {
 		this(filterString, parseActions(actions));
@@ -134,17 +135,16 @@ public final class EndpointPermission extends Permission {
 
 	/**
 	 * Creates a new requested <code>EndpointPermission</code> object to be used
-	 * by code that must perform <code>checkPermission</code> for the
-	 * <code>read</code> or <code>import</code> actions.
+	 * by code that must perform <code>checkPermission</code>.
 	 * <code>EndpointPermission</code> objects created with this constructor
-	 * cannot be added to a <code>EndpointPermission</code> permission
+	 * cannot be added to an <code>EndpointPermission</code> permission
 	 * collection.
 	 * 
 	 * @param endpoint The requested endpoint.
-	 * @param actions The action <code>read</code> or <code>import</code>.
-	 * @throws IllegalArgumentException If the specified action is not
-	 *         <code>read</code> or <code>import</code> or endpoint is
-	 *         <code>null</code>.
+	 * @param actions The actions <code>read</code>, <code>import</code>, or
+	 *        <code>export</code>.
+	 * @throws IllegalArgumentException If the endpoint is <code>null</code> or
+	 *         the actions are not valid.
 	 */
 	public EndpointPermission(EndpointDescription endpoint, String actions) {
 		super(createName(endpoint));
@@ -373,8 +373,8 @@ public final class EndpointPermission extends Permission {
 
 	/**
 	 * Returns the canonical string representation of the actions. Always
-	 * returns present actions in the following order: <code>read</code>,
-	 * <code>import</code>, <code>export</code>.
+	 * returns present actions in the following canonical order:
+	 * <code>read</code>, <code>import</code>, <code>export</code>.
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
@@ -422,12 +422,12 @@ public final class EndpointPermission extends Permission {
 	/**
 	 * Determines the equality of two EndpointPermission objects.
 	 * 
-	 * Checks that specified object has the same class name and action as this
-	 * <code>EndpointPermission</code>.
+	 * Checks that specified object has the same name, actions and endpoint as
+	 * this <code>EndpointPermission</code>.
 	 * 
 	 * @param obj The object to test for equality.
 	 * @return true if obj is a <code>EndpointPermission</code>, and has the
-	 *         same class name and actions as this
+	 *         same name, actions and endpoint as this
 	 *         <code>EndpointPermission</code> object; <code>false</code>
 	 *         otherwise.
 	 */
