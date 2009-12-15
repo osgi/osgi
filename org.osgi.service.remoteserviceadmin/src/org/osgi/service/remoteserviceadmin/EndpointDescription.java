@@ -552,6 +552,19 @@ public class EndpointDescription {
 			iae.initCause(e);
 			throw iae;
 		}
+		return matches(f);
+	}
+
+	/**
+	 * Package private method used by EndpointPermission which already has a
+	 * parsed Filter object.
+	 * 
+	 * @param f The filter to test.
+	 * @return <code>true</code> If the properties of this
+	 *         <code>EndpointDescription</code> match the filter,
+	 *         <code>false</code> otherwise.
+	 */
+	boolean matches(Filter f) {
 		Dictionary<String, Object> d = new UnmodifiableDictionary<String, Object>(
 				properties);
 		/*
@@ -597,6 +610,10 @@ public class EndpointDescription {
 
 		public int size() {
 			return wrapped.size();
+		}
+
+		public String toString() {
+			return wrapped.toString();
 		}
 	}
 }
