@@ -31,7 +31,7 @@ public class CTObjectFactoryBuilder implements javax.naming.spi.ObjectFactoryBui
 
 	public ObjectFactory createObjectFactory(Object obj, Hashtable var1)
 			throws NamingException {
-		if (obj instanceof CTReference) {
+		if (obj instanceof CTReference || obj instanceof String) {
 			return new CTObjectFactory();
 		} else { 
 			return null;

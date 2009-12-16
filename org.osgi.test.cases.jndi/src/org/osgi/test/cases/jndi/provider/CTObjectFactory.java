@@ -46,9 +46,12 @@ public class CTObjectFactory implements javax.naming.spi.ObjectFactory {
 			RefAddr value = ((CTReference) obj).get("value"); 
 			if (value != null) {
 				return new CTTestObject(value.getContent().toString());
-			} 
-			
+			} 			
 			return new CTTestObject();
+		} else if (obj instanceof String) {
+			if (((String)obj).equals(CTTestObject.class.getName())) {
+				return new CTTestObject();
+			}
 		}
 		return null;
 	}
