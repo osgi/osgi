@@ -16,7 +16,8 @@
 
 package org.osgi.test.cases.remoteserviceadmin.junit;
 
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_URI;
+import static org.osgi.framework.Constants.OBJECTCLASS;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.*;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
@@ -63,7 +64,7 @@ public class EndpointPermissionTests extends PermissionTestCase {
 
 		// null arg
 		invalidEndpointPermission((String) null, "import");
-		invalidEndpointPermission((EndpointDescription) null, "import");
+		invalidEndpointPermission((EndpointDescription) null, null, "import");
 		invalidEndpointPermission("(a=b)", null);
 	}
 
@@ -71,6 +72,8 @@ public class EndpointPermissionTests extends PermissionTestCase {
 		String someURI = "someuri";
 		Map<String, Object> ep = new HashMap<String, Object>();
 		ep.put(ENDPOINT_URI, someURI);
+		ep.put(OBJECTCLASS, new String[] {"foo"});
+		ep.put(SERVICE_IMPORTED_CONFIGS, "config");
 		EndpointDescription ed = new EndpointDescription(ep);
 		String filterString = "(" + ENDPOINT_URI + "=" + someURI + ")";
 		Permission op = new PropertyPermission("java.home", "read");
@@ -92,16 +95,19 @@ public class EndpointPermissionTests extends PermissionTestCase {
 		EndpointPermission p18 = new EndpointPermission(filterString,
 				"rEAd, impORt, EXport");
 
-		EndpointPermission p21 = new EndpointPermission(ed,
+		EndpointPermission p21 = new EndpointPermission(ed, null,
 				"    IMPORT,read   ");
-		EndpointPermission p22 = new EndpointPermission(ed, "READ  ,   import");
-		EndpointPermission p23 = new EndpointPermission(ed, "expORT   ");
+		EndpointPermission p22 = new EndpointPermission(ed, null,
+				"READ  ,   import");
+		EndpointPermission p23 = new EndpointPermission(ed, null, "expORT   ");
 
-		EndpointPermission p24 = new EndpointPermission(ed, "    Import    ");
-		EndpointPermission p25 = new EndpointPermission(ed, "rEAd   ");
-		EndpointPermission p26 = new EndpointPermission(ed, "rEAd,export");
-		EndpointPermission p27 = new EndpointPermission(ed, "impORt, EXport");
-		EndpointPermission p28 = new EndpointPermission(ed,
+		EndpointPermission p24 = new EndpointPermission(ed, null,
+				"    Import    ");
+		EndpointPermission p25 = new EndpointPermission(ed, null, "rEAd   ");
+		EndpointPermission p26 = new EndpointPermission(ed, null, "rEAd,export");
+		EndpointPermission p27 = new EndpointPermission(ed, null,
+				"impORt, EXport");
+		EndpointPermission p28 = new EndpointPermission(ed, null,
 				"rEAd, impORt, EXport");
 
 		assertEquals("read,import", p11.getActions());
@@ -339,12 +345,15 @@ public class EndpointPermissionTests extends PermissionTestCase {
 		String someURI = "someuri";
 		Map<String, Object> ep = new HashMap<String, Object>();
 		ep.put(ENDPOINT_URI, someURI);
+		ep.put(OBJECTCLASS, new String[] {"foo"});
+		ep.put(SERVICE_IMPORTED_CONFIGS, "config");
 		EndpointDescription ed = new EndpointDescription(ep);
 		String filterString = "(" + ENDPOINT_URI + "=" + someURI + ")";
 
 		EndpointPermission importuri = new EndpointPermission(filterString,
 				"import");
-		EndpointPermission both = new EndpointPermission(ed, "import,export");
+		EndpointPermission both = new EndpointPermission(ed, null,
+				"import,export");
 		PermissionCollection pc = importx.newPermissionCollection();
 		assertAddPermission(pc, export);
 		assertAddPermission(pc, importuri);
@@ -362,8 +371,10 @@ public class EndpointPermissionTests extends PermissionTestCase {
 				"import");
 		Map<String, Object> ep = new HashMap<String, Object>();
 		ep.put(ENDPOINT_URI, "com.foo.service2");
+		ep.put(OBJECTCLASS, new String[] {"foo"});
+		ep.put(SERVICE_IMPORTED_CONFIGS, "config");
 		EndpointDescription ed = new EndpointDescription(ep);
-		EndpointPermission p35 = new EndpointPermission(ed, "import");
+		EndpointPermission p35 = new EndpointPermission(ed, null, "import");
 		EndpointPermission p38 = new EndpointPermission("*", "import");
 
 		assertImplies(p31, p35);
@@ -450,18 +461,22 @@ public class EndpointPermissionTests extends PermissionTestCase {
 
 		Map<String, Object> ep1 = new HashMap<String, Object>();
 		ep1.put(ENDPOINT_URI, "com.foo.service2");
+		ep1.put(OBJECTCLASS, new String[] {"foo"});
+		ep1.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ep1.put("id", "2");
 		ep1.put("location", "test.location");
 		ep1.put("name", "test.bsn");
 		EndpointPermission p46 = new EndpointPermission(
-				new EndpointDescription(ep1), "import");
+				new EndpointDescription(ep1), null, "import");
 		Map<String, Object> ep2 = new HashMap<String, Object>();
 		ep2.put(ENDPOINT_URI, "com.bar.service2");
+		ep2.put(OBJECTCLASS, new String[] {"foo"});
+		ep2.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ep2.put("id", "3");
 		ep2.put("location", "not.location");
 		ep2.put("name", "not.bsn");
 		EndpointPermission p47 = new EndpointPermission(
-				new EndpointDescription(ep2), "import");
+				new EndpointDescription(ep2), null, "import");
 
 		assertImplies(p41, p46);
 		assertImplies(p42, p46);
@@ -523,24 +538,30 @@ public class EndpointPermissionTests extends PermissionTestCase {
 				"import");
 		Map<String, Object> ep = new HashMap<String, Object>();
 		ep.put(ENDPOINT_URI, "com.foo.service2");
+		ep.put(OBJECTCLASS, new String[] {"foo"});
+		ep.put(SERVICE_IMPORTED_CONFIGS, "config");
 		EndpointDescription ed = new EndpointDescription(ep);
-		EndpointPermission p55 = new EndpointPermission(ed, "import");
+		EndpointPermission p55 = new EndpointPermission(ed, null, "import");
 		EndpointPermission p59 = new EndpointPermission("*", "import");
 
 		Map<String, Object> ep1 = new HashMap<String, Object>();
 		ep1.put(ENDPOINT_URI, "com.foo.service2");
+		ep1.put(OBJECTCLASS, new String[] {"foo"});
+		ep1.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ep1.put("id", "2");
 		ep1.put("location", "test.location");
 		ep1.put("name", "test.bsn");
 		EndpointPermission p5a = new EndpointPermission(
-				new EndpointDescription(ep1), "import");
+				new EndpointDescription(ep1), null, "import");
 		Map<String, Object> ep2 = new HashMap<String, Object>();
 		ep2.put(ENDPOINT_URI, "com.bar.service2");
+		ep2.put(OBJECTCLASS, new String[] {"foo"});
+		ep2.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ep2.put("id", "3");
 		ep2.put("location", "not.location");
 		ep2.put("name", "not.bsn");
 		EndpointPermission p5b = new EndpointPermission(
-				new EndpointDescription(ep2), "import");
+				new EndpointDescription(ep2), null, "import");
 
 		PermissionCollection pc;
 		pc = p51.newPermissionCollection();
@@ -623,6 +644,32 @@ public class EndpointPermissionTests extends PermissionTestCase {
 		assertSerializable(pc);
 	}
 
+	public void testLocalUUID() {
+		String someUUID = "some.uuid";
+		EndpointPermission p61 = new EndpointPermission(
+				"  (endpoint.framework.uuid  =some.uuid)", "import");
+		EndpointPermission p62 = new EndpointPermission(
+				"(endpoint.framework.uuid=<<LOCAL>>)", "import");
+		Map<String, Object> ep = new HashMap<String, Object>();
+		ep.put(ENDPOINT_URI, "com.foo.service2");
+		ep.put(OBJECTCLASS, new String[] {"foo"});
+		ep.put(SERVICE_IMPORTED_CONFIGS, "config");
+		ep.put(ENDPOINT_FRAMEWORK_UUID, someUUID);
+		EndpointDescription ed = new EndpointDescription(ep);
+		EndpointPermission p63 = new EndpointPermission(ed, null, "import");
+		EndpointPermission p64 = new EndpointPermission(ed, "other.uuid",
+				"import");
+		EndpointPermission p65 = new EndpointPermission(ed, someUUID, "import");
+
+		assertImplies(p61, p63);
+		assertImplies(p61, p64);
+		assertImplies(p61, p65);
+
+		assertNotImplies(p62, p63);
+		assertNotImplies(p62, p64);
+		assertImplies(p62, p65);
+	}
+
 	private void invalidEndpointPermission(String filterString, String actions) {
 		try {
 			EndpointPermission p = new EndpointPermission(filterString, actions);
@@ -634,9 +681,10 @@ public class EndpointPermissionTests extends PermissionTestCase {
 	}
 
 	private static void invalidEndpointPermission(EndpointDescription endpoint,
-			String actions) {
+			String localFrameworkUUID, String actions) {
 		try {
-			EndpointPermission p = new EndpointPermission(endpoint, actions);
+			EndpointPermission p = new EndpointPermission(endpoint,
+					localFrameworkUUID, actions);
 			fail(p + " created with invalid arguments");
 		}
 		catch (IllegalArgumentException e) {

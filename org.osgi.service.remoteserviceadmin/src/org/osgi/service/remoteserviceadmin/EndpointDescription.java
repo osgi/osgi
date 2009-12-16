@@ -572,19 +572,6 @@ public class EndpointDescription {
 			iae.initCause(e);
 			throw iae;
 		}
-		return matches(f);
-	}
-
-	/**
-	 * Package private method used by EndpointPermission which already has a
-	 * parsed Filter object.
-	 * 
-	 * @param f The filter to test.
-	 * @return <code>true</code> If the properties of this
-	 *         <code>EndpointDescription</code> match the filter,
-	 *         <code>false</code> otherwise.
-	 */
-	boolean matches(Filter f) {
 		Dictionary<String, Object> d = new UnmodifiableDictionary<String, Object>(
 				properties);
 		/*
@@ -595,9 +582,10 @@ public class EndpointDescription {
 	}
 
 	/**
-	 * Unmodifiable Dictionary wrapper for a Map.
+	 * Unmodifiable Dictionary wrapper for a Map. This class is also used by
+	 * EndpointPermission.
 	 */
-	private static class UnmodifiableDictionary<K, V> extends Dictionary<K, V> {
+	static class UnmodifiableDictionary<K, V> extends Dictionary<K, V> {
 		private final Map<K, V>	wrapped;
 
 		UnmodifiableDictionary(Map<K, V> wrapped) {

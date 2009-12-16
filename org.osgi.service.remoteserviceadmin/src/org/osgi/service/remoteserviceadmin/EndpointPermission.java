@@ -16,7 +16,7 @@
 
 package org.osgi.service.remoteserviceadmin;
 
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_URI;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.*;
 
 import java.io.IOException;
 import java.io.NotSerializableException;
@@ -28,11 +28,13 @@ import java.security.PermissionCollection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
@@ -98,7 +100,13 @@ public final class EndpointPermission extends Permission {
 	 * The endpoint used by this EndpointPermission. Must be null if not
 	 * constructed with a endpoint.
 	 */
-	transient final EndpointDescription	endpoint;
+	transient final EndpointDescription					endpoint;
+	
+	/**
+	 * This dictionary holds the properties of the permission, used to match a
+	 * filter in implies.
+	 */
+	private transient final Dictionary<String, Object>	properties;
 
 	/**
 	 * If this EndpointPermission was not constructed with an
@@ -141,15 +149,34 @@ public final class EndpointPermission extends Permission {
 	 * collection.
 	 * 
 	 * @param endpoint The requested endpoint.
+	 * @param localFrameworkUUID The UUID of the local framework. This is used
+	 *        to support matching the
+	 *        {@link RemoteConstants#ENDPOINT_FRAMEWORK_UUID
+	 *        endpoint.framework.uuid} endpoint property to the
+	 *        <code>&lt;&lt;LOCAL&gt;&gt;</code> value in the filter expression.
 	 * @param actions The actions <code>read</code>, <code>import</code>, or
 	 *        <code>export</code>.
 	 * @throws IllegalArgumentException If the endpoint is <code>null</code> or
 	 *         the actions are not valid.
 	 */
-	public EndpointPermission(EndpointDescription endpoint, String actions) {
+	public EndpointPermission(EndpointDescription endpoint,
+			String localFrameworkUUID, String actions) {
 		super(createName(endpoint));
 		setTransients(null, parseActions(actions));
+		Map<String, Object> props;
+		if ((localFrameworkUUID != null)
+				&& localFrameworkUUID.equals(endpoint.getRemoteFrameworkUUID())) {
+			props = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
+			props.putAll(endpoint.getProperties());
+			props.put(ENDPOINT_FRAMEWORK_UUID, new String[] {
+					endpoint.getRemoteFrameworkUUID(), "<<LOCAL>>"});
+		}
+		else {
+			props = endpoint.getProperties();
+		}
 		this.endpoint = endpoint;
+		this.properties = new EndpointDescription.UnmodifiableDictionary<String, Object>(
+				props);
 	}
 
 	/**
@@ -178,6 +205,7 @@ public final class EndpointPermission extends Permission {
 		super(name);
 		setTransients(parseFilter(name), mask);
 		this.endpoint = null;
+		this.properties = null;
 	}
 
 	/**
@@ -368,7 +396,7 @@ public final class EndpointPermission extends Permission {
 			// it's "*"
 			return true;
 		}
-		return requested.matches(f);
+		return f.matchCase(requested.getProperties());
 	}
 
 	/**
@@ -494,15 +522,10 @@ public final class EndpointPermission extends Permission {
 	/**
 	 * Called by <code><@link EndpointPermission#implies(Permission)></code>.
 	 * 
-	 * @param f The filter to match against the EndpointDescription.
-	 * @return false if there is no endpoint or the filter does not match the
-	 *         endpoint. true otherwise.
+	 * @return a dictionary of properties for this permission.
 	 */
-	private boolean matches(Filter f) {
-		if (endpoint == null) {
-			return false;
-		}
-		return endpoint.matches(f);
+	private Dictionary<String, Object> getProperties() {
+		return properties;
 	}
 }
 
