@@ -73,7 +73,9 @@ public class EndpointDescription {
 	 * Create an Endpoint Description from a Map.
 	 * 
 	 * <p>
-	 * The {@link RemoteConstants#ENDPOINT_URI} property must be set.
+	 * The {@link RemoteConstants#ENDPOINT_URI endpoint.uri},
+	 * {@link RemoteConstants#SERVICE_IMPORTED_CONFIGS service.imported.configs}
+	 * and <code>objectClass</code> properties must be set.
 	 * 
 	 * @param properties The map from which to create the Endpoint Description.
 	 *        The keys in the map must be type <code>String</code> and, since
@@ -102,6 +104,9 @@ public class EndpointDescription {
 									.removeAll(properties.keySet()));
 		}
 
+		if (!props.containsKey(SERVICE_IMPORTED)) {
+			props.put(SERVICE_IMPORTED, Boolean.toString(true));
+		}
 		this.properties = Collections.unmodifiableMap(props);
 		/* properties must be initialized before calling the following methods */
 		interfaces = verifyObjectClassProperty();
@@ -112,6 +117,10 @@ public class EndpointDescription {
 			throw new IllegalArgumentException(ENDPOINT_URI
 					+ " property must be set");
 		}
+		if (getConfigurationTypes().isEmpty()) {
+			throw new IllegalArgumentException(SERVICE_IMPORTED_CONFIGS
+					+ " property must be set and non-empty");
+		}
 	}
 
 	/**
@@ -121,11 +130,15 @@ public class EndpointDescription {
 	 * 
 	 * <p>
 	 * This method will automatically set the
-	 * {@link RemoteConstants#ENDPOINT_FRAMEWORK_UUID} and
-	 * {@link RemoteConstants#ENDPOINT_ID} properties based on the Service
-	 * Reference if this are not given as properties.
+	 * {@link RemoteConstants#ENDPOINT_FRAMEWORK_UUID endpoint.framework.uuid}
+	 * and {@link RemoteConstants#ENDPOINT_ID endpoint.id} properties based on
+	 * the specified Service Reference as well as the
+	 * {@link RemoteConstants#SERVICE_IMPORTED service.imported} property if
+	 * they are not specified as properties.
 	 * <p>
-	 * The {@link RemoteConstants#ENDPOINT_URI} property must be set.
+	 * The {@link RemoteConstants#ENDPOINT_URI endpoint.uri},
+	 * {@link RemoteConstants#SERVICE_IMPORTED_CONFIGS service.imported.configs}
+	 * and <code>objectClass</code> properties must be set.
 	 * 
 	 * @param reference A service reference that can be exported.
 	 * @param properties Map of properties. This argument can be
@@ -185,6 +198,9 @@ public class EndpointDescription {
 				props.put(ENDPOINT_FRAMEWORK_UUID, uuid);
 			}
 		}
+		if (!props.containsKey(SERVICE_IMPORTED)) {
+			props.put(SERVICE_IMPORTED, Boolean.toString(true));
+		}
 		this.properties = Collections.unmodifiableMap(props);
 		/* properties must be initialized before calling the following methods */
 		interfaces = verifyObjectClassProperty();
@@ -195,26 +211,30 @@ public class EndpointDescription {
 			throw new IllegalArgumentException(ENDPOINT_URI
 					+ " property must be set");
 		}
+		if (getConfigurationTypes().isEmpty()) {
+			throw new IllegalArgumentException(SERVICE_IMPORTED_CONFIGS
+					+ " property must be set and non-empty");
+		}
 	}
 
 	/**
 	 * Verify and obtain the interface list from the properties.
 	 * 
 	 * @return A list with the interface names.
-	 * @throws IllegalArgumentException When the properties do not contain the
-	 *         right values for and interface list.
-	 * 
+	 * @throws IllegalArgumentException If the objectClass property is not set
+	 *         or is empty or if the package version property values are
+	 *         malformed.
 	 */
 	private List<String> verifyObjectClassProperty() {
 		Object o = properties.get(Constants.OBJECTCLASS);
-		if (o == null) {
-			return Collections.EMPTY_LIST;
-		}
 		if (!(o instanceof String[])) {
 			throw new IllegalArgumentException(
 					"objectClass value must be of type String[]");
 		}
 		String[] objectClass = (String[]) o;
+		if (objectClass.length < 1) {
+			throw new IllegalArgumentException("objectClass is empty");
+		}
 		for (String interf : objectClass) {
 			int index = interf.lastIndexOf('.');
 			if (index == -1) {
@@ -438,7 +458,7 @@ public class EndpointDescription {
 			List<String> result = new ArrayList<String>(values.size());
 			for (Iterator< ? > iter = values.iterator(); iter.hasNext();) {
 				Object v = iter.next();
-				if ((v != null) && (v instanceof String)) {
+				if (v instanceof String) {
 					result.add((String) v);
 				}
 			}
