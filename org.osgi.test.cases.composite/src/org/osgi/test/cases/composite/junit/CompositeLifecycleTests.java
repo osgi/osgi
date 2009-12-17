@@ -18,14 +18,17 @@
 package org.osgi.test.cases.composite.junit;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.composite.CompositeAdmin;
 import org.osgi.service.composite.CompositeBundle;
+import org.osgi.service.composite.CompositeConstants;
 import org.osgi.test.cases.composite.AbstractCompositeTestCase;
 
 public class CompositeLifecycleTests extends AbstractCompositeTestCase {
@@ -72,17 +75,32 @@ public class CompositeLifecycleTests extends AbstractCompositeTestCase {
 	}
 
 	public void testCompositeCreate04() {
-		// test create and uninstall
+		// test create a composite at an existing normal bundle location
 		Bundle tb1 = install("tb1.jar");
+		// expected to fail because a non composite is already installed at the location
 		createCompositeBundle(compAdmin, tb1.getLocation(), null, null, true);
 	}
 
 	public void testCompositeCreate05() {
-		// test create and uninstall
+		// test create a composite at an existing composite location
 		CompositeBundle composite1 = createCompositeBundle(compAdmin, getName(), null, null);
 		CompositeBundle composite2 = createCompositeBundle(compAdmin, getName(), null, null);
 		assertTrue("Expected the CompositeBundle objects to be identical", composite1 == composite2);
 		uninstallCompositeBundle(composite1);
+	}
+
+	public void testCompositeCreate06() {
+		Map manifest1 = new HashMap();
+		manifest1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=true");
+		manifest1.put(Constants.BUNDLE_VERSION, "1.0.0");
+		CompositeBundle composite1 = createCompositeBundle(compAdmin, getName() + 1, manifest1, null);
+	
+		Map manifest2 = new HashMap();
+		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=true");
+		manifest2.put(Constants.BUNDLE_VERSION, "2.0.0");
+		CompositeBundle composite2 = createCompositeBundle(compAdmin, getName() + 2, manifest2, null);
+
+		assertFalse("Composites should not be the same", composite1 == composite2);
 	}
 
 	public void testConstituentLifeCycle01() {
@@ -224,4 +242,5 @@ public class CompositeLifecycleTests extends AbstractCompositeTestCase {
 			uninstallCompositeBundle(composite);
 		}
 	}
+
 }
