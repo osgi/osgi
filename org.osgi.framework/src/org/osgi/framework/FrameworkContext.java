@@ -398,15 +398,15 @@ public interface FrameworkContext {
 	<S> ServiceReference<S> getServiceReference(Class<S> clazz);
 
 	/**
-	 * Returns an array of <code>ServiceReference</code> objects. The returned
-	 * array of <code>ServiceReference</code> objects contains services that
+	 * Returns a collection of <code>ServiceReference</code> objects. The returned
+	 * collection of <code>ServiceReference</code> objects contains services that
 	 * were registered under the specified class, match the specified filter
 	 * expression, and the packages for the class names under which the services
 	 * were registered match the context bundle's packages as defined in
 	 * {@link ServiceReference#isAssignableTo(Bundle, String)}.
 	 * 
 	 * <p>
-	 * The list is valid at the time of the call to this method. However since
+	 * The collection is valid at the time of the call to this method. However since
 	 * the Framework is a very dynamic environment, services can be modified or
 	 * unregistered at any time.
 	 * 
@@ -421,7 +421,7 @@ public interface FrameworkContext {
 	 * message where the filter became unparsable.
 	 * 
 	 * <p>
-	 * The result is an array of <code>ServiceReference</code> objects for all
+	 * The result is a collection of <code>ServiceReference</code> objects for all
 	 * services that meet all of the following conditions:
 	 * <ul>
 	 * <li>If the specified class name, <code>clazz</code>, is not
