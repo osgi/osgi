@@ -142,7 +142,7 @@
        carry the same version and encoding as the document in the rsa namespace. -->
   <complexType name="Txml">
     <sequence>
-      <any namespace="##other" minOccurs="0" maxOccurs="1"
+      <any namespace="##other" minOccurs="1" maxOccurs="1"
            processContents="lax" />
     </sequence>
     <anyAttribute />
