@@ -13,7 +13,7 @@ Include-Resource: \
 
 InitialProvisioning-Entries: \
  x-type-delay-ref.ipa;type=text, \
- load-status;type=text', \
- simple-prov.jar;extra=type=bundle-url, \
- delay-prov.jar;extra='type=bundle-url, \
+ load-status;type=text, \
+ simple-prov.jar;type=bundle-url, \
+ delay-prov.jar;type=bundle-url, \
  provisioning.start.bundle;type=text
