@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -36,7 +37,13 @@ import org.osgi.framework.launch.FrameworkFactory;
 import org.osgi.service.composite.CompositeAdmin;
 import org.osgi.service.composite.CompositeBundle;
 import org.osgi.service.composite.CompositeConstants;
+import org.osgi.service.condpermadmin.ConditionInfo;
+import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
+import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
+import org.osgi.service.condpermadmin.ConditionalPermissionUpdate;
 import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.service.startlevel.StartLevel;
 import org.osgi.test.support.OSGiTestCase;
 
@@ -689,5 +696,124 @@ public class CompositePersistenceTests extends OSGiTestCase {
 
 		stopFramework(rootFramework);
 		assertFalse("Composite is active", composite.getState() == Bundle.ACTIVE);
+	}
+
+	// TODO should split this out into another project;  the RI has Cond/PermAdmin services available even without a security manager set
+	// For now we just make sure there is a Cond/PermAdmin service available before preceeding to test.
+	public void testPermisisonAdminPersistence01() {
+		// get and save a configuration for the root framework
+		Map configuration = getConfiguration(getName());
+		// create a root framework
+		Framework rootFramework = createFramework(configuration);
+		startFramework(rootFramework);
+		if (rootFramework.getBundleContext().getServiceReference(PermissionAdmin.class.getName()) == null) {
+			System.err.println("Cannot run test without PermissionAdmin: " + getName());
+			return;
+		}
+		if (rootFramework.getBundleContext().getServiceReference(ConditionalPermissionAdmin.class.getName()) == null) {
+			System.err.println("Cannot run test without ConditionalPermissionAdmin: " + getName());
+			return;
+		}
+		
+		CompositeAdmin compositeAdmin = (CompositeAdmin) getService(rootFramework.getBundleContext(), CompositeAdmin.class.getName());
+
+		// create a composite to test persistence
+		CompositeBundle composite1 = createCompositeBundle(compositeAdmin, getName() + "_1", null, null);
+		long compID1 = composite1.getBundleId(); // save the id for later
+		try {
+			composite1.start();
+		} catch (BundleException e) {
+			fail("Failed to mark composite for start", e);
+		}
+
+		PermissionAdmin permAdmin1 = (PermissionAdmin) getService(composite1.getSystemBundleContext(), PermissionAdmin.class.getName());
+		PermissionInfo defaultPerm1 = new PermissionInfo("w.WPermission", null, null);
+		permAdmin1.setDefaultPermissions(new PermissionInfo[] {defaultPerm1});
+		PermissionInfo locationPerm1 = new PermissionInfo("x.XPermission", null, null);
+		permAdmin1.setPermissions("y", new PermissionInfo[] {locationPerm1});
+		ConditionalPermissionAdmin condAdmin1 = (ConditionalPermissionAdmin) getService(composite1.getSystemBundleContext(), ConditionalPermissionAdmin.class.getName());
+		ConditionalPermissionUpdate update1 = condAdmin1.newConditionalPermissionUpdate();
+		List infos1 = update1.getConditionalPermissionInfos();
+		ConditionalPermissionInfo info1 = condAdmin1.newConditionalPermissionInfo("a", new ConditionInfo[] {new ConditionInfo("a.ACondition", new String[0])},
+				new PermissionInfo[] {new PermissionInfo("a.APermission", null, null)}, ConditionalPermissionInfo.ALLOW);
+		infos1.add(info1);
+		update1.commit();
+
+		// create a composite to test persistence
+		CompositeBundle composite2 = createCompositeBundle(compositeAdmin, getName() + "_2", null, null);
+		long compID2 = composite2.getBundleId(); // save the id for later
+		try {
+			composite2.start();
+		} catch (BundleException e) {
+			fail("Failed to mark composite for start", e);
+		}
+
+		PermissionAdmin permAdmin2 = (PermissionAdmin) getService(composite2.getSystemBundleContext(), PermissionAdmin.class.getName());
+		PermissionInfo defaultPerm2 = new PermissionInfo("y.YPermission", null, null);
+		permAdmin2.setDefaultPermissions(new PermissionInfo[] {defaultPerm2});
+		PermissionInfo locationPerm2 = new PermissionInfo("z.ZPermission", null, null);
+		permAdmin2.setPermissions("z", new PermissionInfo[] {locationPerm2});
+		ConditionalPermissionAdmin condAdmin2 = (ConditionalPermissionAdmin) getService(composite2.getSystemBundleContext(), ConditionalPermissionAdmin.class.getName());
+		ConditionalPermissionUpdate update2 = condAdmin2.newConditionalPermissionUpdate();
+		List infos2 = update2.getConditionalPermissionInfos();
+		ConditionalPermissionInfo info2 = condAdmin2.newConditionalPermissionInfo("b", new ConditionInfo[] {new ConditionInfo("b.BCondition", new String[0])},
+				new PermissionInfo[] {new PermissionInfo("b.BPermission", null, null)}, ConditionalPermissionInfo.ALLOW);
+		infos2.add(info2);
+		update2.commit();
+
+		stopFramework(rootFramework);
+		assertFalse("Composite is active", composite2.getState() == Bundle.ACTIVE);
+
+		// reify the root framework from the previously used storage area
+		rootFramework = createFramework(configuration);
+		startFramework(rootFramework);
+		composite1 = (CompositeBundle) rootFramework.getBundleContext().getBundle(compID1);
+		assertNotNull(composite1);
+		assertEquals("Composite1 is not active", Bundle.ACTIVE, composite1.getState());
+		composite2 = (CompositeBundle) rootFramework.getBundleContext().getBundle(compID2);
+		assertNotNull(composite2);
+		assertEquals("Composite2 is not active", Bundle.ACTIVE, composite2.getState());
+
+		permAdmin1 = (PermissionAdmin) getService(composite1.getSystemBundleContext(), PermissionAdmin.class.getName());
+		PermissionInfo[] defaultPerms1 = permAdmin1.getDefaultPermissions();
+		assertNotNull("Default permissions is null.", defaultPerms1);
+		assertEquals("Wrong number of permissions.", 1, defaultPerms1.length);
+		assertEquals("Wrong permission info.", defaultPerm1.getEncoded(), defaultPerms1[0].getEncoded());
+		String[] locations1 = permAdmin1.getLocations();
+		assertNotNull("locations is null.", locations1);
+		assertEquals("Wrong number of locations.", 1, locations1.length);
+		assertEquals("Wrong location.", "y", locations1[0]);
+		PermissionInfo[] locationPerms1 = permAdmin1.getPermissions(locations1[0]);
+		assertEquals("Wrong number of permissions.", 1, locationPerms1.length);
+		assertEquals("Wrong permission info.", locationPerm1.getEncoded(), locationPerms1[0].getEncoded());
+		condAdmin1 = (ConditionalPermissionAdmin) getService(composite1.getSystemBundleContext(), ConditionalPermissionAdmin.class.getName());
+		update1 = condAdmin1.newConditionalPermissionUpdate();
+		infos1 = update1.getConditionalPermissionInfos();
+		assertEquals("Wrong number of infos.", 1, infos1.size());
+		ConditionalPermissionInfo info1_reify = (ConditionalPermissionInfo) infos1.get(0);
+		assertEquals("Wrong info", info1.getEncoded(), info1_reify.getEncoded());
+
+		permAdmin2 = (PermissionAdmin) getService(composite2.getSystemBundleContext(), PermissionAdmin.class.getName());
+		PermissionInfo[] defaultPerms2 = permAdmin2.getDefaultPermissions();
+		assertNotNull("Default permissions is null.", defaultPerms2);
+		assertEquals("Wrong number of permissions.", 1, defaultPerms2.length);
+		assertEquals("Wrong permission info.", defaultPerm2.getEncoded(), defaultPerms2[0].getEncoded());
+		String[] locations2 = permAdmin2.getLocations();
+		assertNotNull("locations is null.", locations2);
+		assertEquals("Wrong number of locations.", 1, locations2.length);
+		assertEquals("Wrong location.", "z", locations2[0]);
+		PermissionInfo[] locationPerms2 = permAdmin2.getPermissions(locations2[0]);
+		assertEquals("Wrong number of permissions.", 1, locationPerms2.length);
+		assertEquals("Wrong permission info.", locationPerm2.getEncoded(), locationPerms2[0].getEncoded());
+		condAdmin2 = (ConditionalPermissionAdmin) getService(composite2.getSystemBundleContext(), ConditionalPermissionAdmin.class.getName());
+		update2 = condAdmin2.newConditionalPermissionUpdate();
+		infos2 = update2.getConditionalPermissionInfos();
+		assertEquals("Wrong number of infos.", 1, infos2.size());
+		ConditionalPermissionInfo info2_reify = (ConditionalPermissionInfo) infos2.get(0);
+		assertEquals("Wrong info", info2.getEncoded(), info2_reify.getEncoded());
+
+		stopFramework(rootFramework);
+		assertFalse("Composite is active", composite2.getState() == Bundle.ACTIVE);
+
 	}
 }
