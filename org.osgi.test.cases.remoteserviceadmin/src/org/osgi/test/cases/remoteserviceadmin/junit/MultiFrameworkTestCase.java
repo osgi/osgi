@@ -162,11 +162,8 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 
 	private Class loadFrameworkClass(String className)
 			throws ClassNotFoundException {
-//		BundleContext context = getBundleContextWithoutFail();
-//        return context == null ? Class.forName(className) : context.getBundle().loadClass(className);// getContext().getBundle(0).loadClass(className);
-		// return EquinoxFactory.class;
-		fail("OSGi Compliance Tests cannot rely upon a specific implementation of any specification");
-		return null;
+		BundleContext context = getBundleContextWithoutFail();
+        return context == null ? Class.forName(className) : getContext().getBundle(0).loadClass(className);
 	}
 
 	private BundleContext getBundleContextWithoutFail() {

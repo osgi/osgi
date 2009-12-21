@@ -50,6 +50,7 @@ public class Activator implements BundleActivator, A {
 		
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put("mykey", "will be overridden");
+		dictionary.put("myprop", "myvalue");
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 
 		registration = context.registerService(new String[]{A.class.getName()}, this, dictionary);
@@ -86,7 +87,8 @@ public class Activator implements BundleActivator, A {
 		properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 		properties.put(RemoteConstants.ENDPOINT_ID, endpointID);
 		properties.put(RemoteConstants.ENDPOINT_FRAMEWORK_UUID, context.getProperty("org.osgi.framework.uuid"));
-		properties.put(RemoteConstants.ENDPOINT_URI, "someURI");
+		properties.put(RemoteConstants.ENDPOINT_URI, "someURI"); // mandatory
+		properties.put(RemoteConstants.SERVICE_IMPORTED_CONFIGS, "A"); // mandatory
 		EndpointDescription endpoint = new EndpointDescription(registration.getReference(), properties);
 		
 		Assert.assertNotNull(endpoint);
@@ -111,7 +113,7 @@ public class Activator implements BundleActivator, A {
 				listener.endpointAdded(endpoint, matchedFilter);
 			}
 		}
-		Assert.assertTrue("no interested EndointListener found", foundListener);
+		Assert.assertTrue("no interested EndpointListener found", foundListener);
 	}
 	
 	/**

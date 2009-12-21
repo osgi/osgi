@@ -65,8 +65,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		
 		//make sure that the server framework System Bundle exports the interfaces
         String systemPackagesXtra = //ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON + ","
-                                  ORG_OSGI_TEST_CASES_REMOTESERVICES_JUNIT + ","
-                                  + JUNIT_FRAMEWORK;
+//                                  ORG_OSGI_TEST_CASES_REMOTESERVICES_JUNIT + "," +
+                                    JUNIT_FRAMEWORK;
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
         configuration.put("osgi.console", "1112");
 		return configuration;
@@ -197,14 +197,20 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		// verify that the server framework is exporting the test packages
 		verifyFramework();
 		
+		//
 		// install test bundle in child framework
+		//
 		BundleContext childContext = getFramework().getBundleContext();
 		
 		Bundle tb1Bundle = installBundle(childContext, "/tb1.jar");
 		assertNotNull(tb1Bundle);
 		
+		//
 		// register EndpointListener in parent framework
+		//
 		final EndpointListenerImpl endpointListenerImpl = new EndpointListenerImpl();
+		
+		// TODO: the current RI requires objectClass to be set in the filter, but that shouldn't be mandated
 		final String endpointListenerFilter = "(&(objectClass=" + A.class.getName() + ")(!(org.osgi.framework.uuid=" + getContext().getProperty("org.osgi.framework.uuid") + ")))";
 		Hashtable<String, String> endpointListenerProperties = new Hashtable<String, String>();
 		endpointListenerProperties.put(EndpointListener.ENDPOINT_LISTENER_SCOPE, endpointListenerFilter);
@@ -214,20 +220,24 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		assertNotNull(endpointListenerRegistration);
 
 		// start test bundle in child framework
+		// this will run the test in the child framework and fail
 		tb1Bundle.start();
 		
 		// verify callback in parent framework
 		endpointListenerImpl.getSem().waitForSignal(6000);
 		
 		assertEquals("filter doesn't match", endpointListenerFilter, endpointListenerImpl.getMatchedFilter());
+		
 		EndpointDescription ep = endpointListenerImpl.getAddedEndpoint(); 
 		assertNotNull(ep);
-		assertEquals(12345, ep.getRemoteServiceID());
-		assertEquals("someURI", ep.getRemoteURI());
-		assertEquals(getFramework().getBundleContext().getProperty("org.osgi.framework.uuid"), ep.getRemoteFrameworkUUID());
-		assertTrue(ep.getInterfaces().contains(A.class.getName()));
-		assertTrue(ep.getIntents().contains("my_intent_is_for_this_to_work"));
-		assertEquals("has been overridden", ep.getProperties().get("mykey")); 
+		assertEquals("remote service id is incorrect", 12345, ep.getRemoteServiceID());
+		assertEquals("remote.uri does not match", "someURI", ep.getRemoteURI());
+		assertEquals("remote framework id is incorrect", getFramework().getBundleContext().getProperty("org.osgi.framework.uuid"), ep.getRemoteFrameworkUUID());
+		assertFalse("remote framework id has to be UUID of remote not local framework", ep.getRemoteFrameworkUUID().equals(getContext().getProperty("org.osgi.framework.uuid")));
+		assertTrue("discovered interfaces don't contain " + A.class.getName(), ep.getInterfaces().contains(A.class.getName()));
+		assertTrue("intent list does not contain 'my_intent_is_for_this_to_work'", ep.getIntents().contains("my_intent_is_for_this_to_work"));
+		assertEquals("the property of the service should have been overridden by the EndpointDescription", "has been overridden", ep.getProperties().get("mykey")); 
+		assertEquals("the property myprop is missing", "myvalue", ep.getProperties().get("myprop")); 
 	}
 	
 	
