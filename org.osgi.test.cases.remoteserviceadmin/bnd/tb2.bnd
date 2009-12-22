@@ -1,0 +1,6 @@
+Bundle-Name:                             ${p}.tb2
+Bundle-Version:                          1.0
+Private-Package:                         ${p}.tb2.*, \
+ ${p}.common 
+Export-Package:                          ${p}.common
+Bundle-Activator: 											${p}.tb2.Activator

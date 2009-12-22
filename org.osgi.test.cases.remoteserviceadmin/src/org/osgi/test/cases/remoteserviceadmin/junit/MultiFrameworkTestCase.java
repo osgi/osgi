@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,8 +33,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
+import org.osgi.service.packageadmin.ExportedPackage;
+import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -295,5 +299,64 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 				System.out.println("started bundle " + b.getSymbolicName());
 			}
 		}
+	}
+	/**
+	 * Verifies the child framework that it exports the test packages for the interface
+	 * used by the test service.
+	 * @throws Exception
+	 */
+	protected void verifyFramework() throws Exception {
+		Framework f = getFramework();
+//		assertFalse("child framework must have a different UUID",
+//				getContext().getProperty("org.osgi.framework.uuid").equals(f.getBundleContext().getProperty("org.osgi.framework.uuid")));
+		
+		ServiceReference sr = f.getBundleContext().getServiceReference(PackageAdmin.class.getName());
+		assertNotNull("Framework is not supplying PackageAdmin service", sr);
+		
+		PackageAdmin pkgAdmin = (PackageAdmin) f.getBundleContext().getService(sr);
+		ExportedPackage[] exportedPkgs = pkgAdmin.getExportedPackages(f.getBundleContext().getBundle());
+		assertNotNull(exportedPkgs);
+		f.getBundleContext().ungetService(sr);
+		
+		String pkgXtras = f.getBundleContext().getProperty(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA);
+		List<String> pkgList = splitString(pkgXtras, ",");
+		
+		for (int i=0;i<exportedPkgs.length;i++) {
+			String name = exportedPkgs[i].getName();
+			pkgList.remove(name);
+		}
+		assertTrue("Framework does not export some packages " + pkgList, pkgList.isEmpty());
+	}
+
+	/**
+	 * Install a bundle using the given BundleContext
+	 * 
+	 * @param context BundleContext of target framework
+	 * @param bundle URL to the bundle.
+	 * @return Bundle object
+	 */
+	protected Bundle installBundle(BundleContext context, String bundle) throws Exception {
+		if (!bundle.startsWith(getWebServer())) {
+			bundle = getWebServer() + bundle;
+		}
+		URL location = new URL(bundle);
+		InputStream inputStream = location.openStream();
+		
+		Bundle b = context.installBundle(bundle, inputStream);
+		return b;
+	}
+
+	private List<String> splitString(String string, String delim) {
+		List<String> result = new ArrayList<String>();
+		for (StringTokenizer st = new StringTokenizer(string, delim); st
+				.hasMoreTokens();) {
+			String token = st.nextToken();
+			int pos = token.indexOf(";");
+			if (pos != -1) {
+				token = token.substring(0, pos);
+			}
+			result.add(token);
+		}
+		return result;
 	}
 }

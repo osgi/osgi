@@ -32,15 +32,17 @@ import org.osgi.service.remoteserviceadmin.EndpointDescription;
 import org.osgi.service.remoteserviceadmin.EndpointListener;
 import org.osgi.service.remoteserviceadmin.RemoteConstants;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
+import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  *
  */
-public class Activator implements BundleActivator, A {
+public class Activator implements BundleActivator, A, B {
 	ServiceRegistration registration;
 	BundleContext       context;
+	EndpointDescription endpoint;
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
@@ -63,6 +65,8 @@ public class Activator implements BundleActivator, A {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		registration.unregister();
+		
+		stoptest();
 	}
 
 	/**
@@ -73,9 +77,13 @@ public class Activator implements BundleActivator, A {
 	}
 
 	/**
-	 * @see org.osgi.test.cases.remoteserviceadmin.common.TestService#test()
+	 * @see org.osgi.test.cases.remoteserviceadmin.common.B#getB()
 	 */
-	public void test() throws Exception {
+	public String getB() {
+		return "this is B";
+	}
+	
+	private void test() throws Exception {
 		//
 		// create an EndpointDescription
 		//
@@ -89,7 +97,7 @@ public class Activator implements BundleActivator, A {
 		properties.put(RemoteConstants.ENDPOINT_FRAMEWORK_UUID, context.getProperty("org.osgi.framework.uuid"));
 		properties.put(RemoteConstants.ENDPOINT_URI, "someURI"); // mandatory
 		properties.put(RemoteConstants.SERVICE_IMPORTED_CONFIGS, "A"); // mandatory
-		EndpointDescription endpoint = new EndpointDescription(registration.getReference(), properties);
+		endpoint = new EndpointDescription(registration.getReference(), properties);
 		
 		Assert.assertNotNull(endpoint);
 		Assert.assertEquals("Endpoint properties are supposed to trump service properties", "has been overridden", endpoint.getProperties().get("mykey"));
@@ -111,6 +119,32 @@ public class Activator implements BundleActivator, A {
 			if (matchedFilter != null) {
 				foundListener = true;
 				listener.endpointAdded(endpoint, matchedFilter);
+			}
+		}
+		Assert.assertTrue("no interested EndpointListener found", foundListener);
+	}
+
+	/**
+	 * 
+	 */
+	private void stoptest() throws Exception {
+		// 
+		// find the EndpointListeners and call them with the endpoint description
+		//
+		String filter = "(" + EndpointListener.ENDPOINT_LISTENER_SCOPE + "=*)"; // see 122.6.1
+		ServiceReference[] listeners = context.getServiceReferences(EndpointListener.class.getName(), filter);
+		Assert.assertNotNull("no EndpointListeners found", listeners);
+		
+		boolean foundListener = false;
+		for (ServiceReference sr : listeners) {
+			EndpointListener listener = (EndpointListener) context.getService(sr);
+			Object scope = sr.getProperty(EndpointListener.ENDPOINT_LISTENER_SCOPE);
+			
+			String matchedFilter = isInterested(scope, endpoint);
+			
+			if (matchedFilter != null) {
+				foundListener = true;
+				listener.endpointRemoved(endpoint, matchedFilter);
 			}
 		}
 		Assert.assertTrue("no interested EndpointListener found", foundListener);
