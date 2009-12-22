@@ -16,7 +16,7 @@
 
 package org.osgi.service.jndi;
 
-import java.util.Hashtable;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -53,7 +53,7 @@ public interface JNDIContextManager {
 	 * @throws NamingException upon any error that occurs during context
 	 *         creation
 	 */
-	public Context newInitialContext(Hashtable environment)
+	public Context newInitialContext(Map environment)
 			throws NamingException;
 
 	/**
@@ -75,7 +75,7 @@ public interface JNDIContextManager {
 	 * @throws NamingException upon any error that occurs during context
 	 *         creation
 	 */
-	public DirContext newInitialDirContext(Hashtable environment)
+	public DirContext newInitialDirContext(Map environment)
 			throws NamingException;
 
 }

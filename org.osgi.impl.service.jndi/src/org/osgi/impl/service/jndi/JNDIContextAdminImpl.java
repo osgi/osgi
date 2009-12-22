@@ -16,6 +16,7 @@
 package org.osgi.impl.service.jndi;
 
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.Name;
@@ -26,8 +27,9 @@ import javax.naming.spi.ObjectFactory;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.jndi.JNDIContextAdmin;
+import org.osgi.service.jndi.JNDIProviderAdmin;
 
-class JNDIContextAdminImpl implements JNDIContextAdmin {
+class JNDIContextAdminImpl implements JNDIContextAdmin, JNDIProviderAdmin {
 
 	private final OSGiInitialContextFactoryBuilder m_objectFactoryBuilder;
 	
@@ -36,12 +38,16 @@ class JNDIContextAdminImpl implements JNDIContextAdmin {
 	}
 	
 	
-	public Object getObjectInstance(Object refInfo, Name name, Context context,
-			Hashtable environment) throws NamingException {
+	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment) throws NamingException {
+		Hashtable jndiEnvironment = new Hashtable();
+		if (environment != null) {
+			//TODO, consider deep copy here? 
+			jndiEnvironment.putAll(environment);
+		}
 		ObjectFactory objectFactory = 
-			m_objectFactoryBuilder.createObjectFactory(refInfo, environment);
+			m_objectFactoryBuilder.createObjectFactory(refInfo, jndiEnvironment);
 		try {
-			return objectFactory.getObjectInstance(refInfo, name, context, environment);
+			return objectFactory.getObjectInstance(refInfo, name, context, jndiEnvironment);
 		}
 		catch (Exception e) {
 			NamingException namingException = new NamingException("Error while attempting to resolve reference");
@@ -51,7 +57,7 @@ class JNDIContextAdminImpl implements JNDIContextAdmin {
 	}
 
 	public Object getObjectInstance(Object refInfo, Name name, Context context,
-			Hashtable environment, Attributes attributes)
+			Map environment, Attributes attributes)
 			throws NamingException {
 		throw new OperationNotSupportedException("Not Implemented yet");
 	}

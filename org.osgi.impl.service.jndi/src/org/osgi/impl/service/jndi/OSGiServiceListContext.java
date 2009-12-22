@@ -116,8 +116,7 @@ class OSGiServiceListContext implements Context {
 		return null;
 	}
 
-	public NamingEnumeration list(String var0) throws NamingException {
-		// TODO, implement list support
+	public NamingEnumeration list(String name) throws NamingException {
 		operationNotSupported();
 		return null;
 	}
@@ -229,6 +228,48 @@ class OSGiServiceListContext implements Context {
 			Long serviceId = (Long)serviceReferences[i].getProperty("service.id");
 			mapOfServices.put(serviceId, serviceReferences[i]);
 		}
+	}
+	
+	
+	private static class ServiceBasedListNamingEnumeration implements NamingEnumeration {
+
+		private boolean m_isOpen = false;
+		
+		private int m_index = -1;
+		
+		private final BundleContext m_bundleContext;
+		
+		private final ServiceReference[] m_serviceReferences;
+		
+		ServiceBasedListNamingEnumeration(BundleContext bundleContext, ServiceReference[] serviceReferences) {
+			m_bundleContext = bundleContext;
+			m_serviceReferences = serviceReferences;
+			if(m_serviceReferences.length > 0) {
+				m_isOpen = true;
+				m_index = 0;
+			}
+		}
+		
+		public void close() throws NamingException {
+			m_isOpen = false;
+		}
+
+		public boolean hasMore() throws NamingException {
+			return (m_index < m_serviceReferences.length);
+		}
+
+		public Object next() throws NamingException {
+			throw new OperationNotSupportedException("This operation is not supported yet");
+		}
+
+		public boolean hasMoreElements() {
+			return (m_index < m_serviceReferences.length);
+		}
+
+		public Object nextElement() {
+			return m_serviceReferences[m_index++];
+		}
+		
 	}
 
 }

@@ -17,6 +17,9 @@ package org.osgi.impl.service.jndi;
 
 import javax.naming.spi.ObjectFactory;
 
+import org.osgi.framework.BundleContext;
+
+
 /**
  * Interface that defines the basic usage of the Factory Manager in RFC 142.
  * 
@@ -36,4 +39,6 @@ public interface FactoryManager {
 	 *         scheme
 	 */
 	public ObjectFactory getURLContextFactory(String urlScheme);
+	
+	public BundleContext getBundleContext();
 }

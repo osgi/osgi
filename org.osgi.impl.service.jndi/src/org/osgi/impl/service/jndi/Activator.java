@@ -16,8 +16,12 @@
 package org.osgi.impl.service.jndi;
 
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 
+import javax.naming.spi.InitialContextFactoryBuilder;
 import javax.naming.spi.NamingManager;
 import javax.naming.spi.ObjectFactory;
 
@@ -26,6 +30,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jndi.JNDIContextAdmin;
 import org.osgi.service.jndi.JNDIContextManager;
+import org.osgi.service.jndi.JNDIProviderAdmin;
 import org.osgi.service.jndi.JndiConstants;
 
 /**
@@ -45,9 +50,7 @@ public class Activator implements BundleActivator {
 
 	private BundleContext						m_bundleContext					= null;
 	private OSGiInitialContextFactoryBuilder	m_builder						= null;
-	private ServiceRegistration					m_osgiUrlFactoryRegistration	= null;
-	private ServiceRegistration					m_contextManagerRegistration	= null;
-	private ServiceRegistration                 m_contextAdminRegistration      = null;
+	private final List                          m_listOfServiceRegistrations = new LinkedList();
 
 	/*
 	 * Create the Factory Manager's builder implementation, and register it with
@@ -70,6 +73,9 @@ public class Activator implements BundleActivator {
 
 		m_logger.info("Registering URL Context Factory for 'osgi' URL scheme");
 		registerOSGiURLContextFactory();
+		
+		m_logger.info("Registering Default Runtime Builder for JRE-provided factories");
+		registerDefaultRuntimeBuilder();
 		
 		m_logger.info("Registering JNDIContextManager service");
 		// register the JNDIContextManager service once all Factory
@@ -94,20 +100,12 @@ public class Activator implements BundleActivator {
 		if (m_builder != null) {
 			m_builder.close();
 		}
-
-		if (m_osgiUrlFactoryRegistration != null) {
-			m_osgiUrlFactoryRegistration.unregister();
-		}
 		
-		// unregister the JNDIContextManager service, so that 
-		// other services can be made aware that the JNDI bundle is shutting
-		// down
-		if (m_contextManagerRegistration != null) {
-			m_contextManagerRegistration.unregister();
-		}
-		
-		if (m_contextAdminRegistration != null) {
-			m_contextAdminRegistration.unregister();
+		Iterator iterator = m_listOfServiceRegistrations.iterator();
+		while(iterator.hasNext()) {
+			ServiceRegistration serviceRegistration = 
+				(ServiceRegistration)iterator.next();
+			serviceRegistration.unregister();
 		}
 	}
 
@@ -120,26 +118,50 @@ public class Activator implements BundleActivator {
 		serviceProperties.put(JndiConstants.JNDI_URLSCHEME,
 				              OSGI_URL_SCHEME);
 
-		m_osgiUrlFactoryRegistration = 
+		ServiceRegistration serviceRegistration = 
 			m_bundleContext.registerService(ObjectFactory.class.getName(), 
 										    new OSGiURLContextFactory(m_bundleContext), 
 										    serviceProperties);
+		m_listOfServiceRegistrations.add(serviceRegistration);
+	}
+	
+	
+	/**
+	 * Registers the InitialContextFactoryBuilder implementation that 
+	 * is responsible for loading the JDK-defined providers that must be
+	 * loaded from the boot classpath.  
+	 * 
+	 */
+	private void registerDefaultRuntimeBuilder() {
+		ServiceRegistration serviceRegistration = 
+			m_bundleContext.registerService(InitialContextFactoryBuilder.class.getName(), 
+					                        new DefaultRuntimeInitialContextFactoryBuilder(), 
+					                        null);
+		m_listOfServiceRegistrations.add(serviceRegistration);
 	}
 	
 	
 	private void registerJNDIContextManager() {
-		m_contextManagerRegistration = 
+		ServiceRegistration serviceRegistration = 
 			m_bundleContext.registerService(JNDIContextManager.class.getName(),
 					                        new JNDIContextManagerServiceFactoryImpl(),
 					                        null);
+		m_listOfServiceRegistrations.add(serviceRegistration);
 	}
 	
 
 	private void registerJNDIContextAdmin() {
-		m_contextAdminRegistration =  
-			m_bundleContext.registerService(JNDIContextAdmin.class.getName(),
+		// register ProviderAdmin service under both names for now
+		// TODO, only register under JNDIProviderAdmin once the 
+		//       test cases are modified.  
+		String[] interfaces = 
+		  { JNDIProviderAdmin.class.getName(), JNDIContextAdmin.class.getName() };
+		
+		ServiceRegistration serviceRegistration =  
+			m_bundleContext.registerService(interfaces,
 					                        new JNDIContextAdminServiceFactoryImpl(m_builder),
 					                        null);
+		m_listOfServiceRegistrations.add(serviceRegistration);
 	}
 
 }

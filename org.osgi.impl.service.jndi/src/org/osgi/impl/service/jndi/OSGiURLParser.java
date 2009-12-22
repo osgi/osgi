@@ -21,10 +21,7 @@ package org.osgi.impl.service.jndi;
  */
 class OSGiURLParser {
 
-	//TODO, remove the OLD prefix once the test cases are ported over
-	private static final String	OLD_OSGI_SERVICES_PREFIX	= "osgi:services/";
-	// TODO, remove NEW from this name once the test cases are ported over
-	private static final String NEW_OSGI_SERVICES_PREFIX    = "osgi:service/";
+	private static final String OSGI_SERVICE_PREFIX    = "osgi:service/";
 	
 	private static final String OSGI_SERVICE_LIST_PREFIX = "osgi:servicelist/";
 
@@ -39,22 +36,19 @@ class OSGiURLParser {
 	}
 
 	public void parse() {
-		if (m_osgiURL.startsWith(OLD_OSGI_SERVICES_PREFIX)) {
-			parseURLData(OLD_OSGI_SERVICES_PREFIX);
+		if (m_osgiURL.startsWith(OSGI_SERVICE_PREFIX)) {
+			parseURLData(OSGI_SERVICE_PREFIX);
 		}
 		else {
-			if(m_osgiURL.startsWith(NEW_OSGI_SERVICES_PREFIX)) {
-				parseURLData(NEW_OSGI_SERVICES_PREFIX);
-			} else {
-				if(m_osgiURL.startsWith(OSGI_SERVICE_LIST_PREFIX)) {
-					parseURLData(OSGI_SERVICE_LIST_PREFIX);
-					m_isServiceList = true;
-				} else {
-					throw new IllegalStateException(
-					"URL did not conform to the OSGi URL Syntax");
-				}
-				
+			if (m_osgiURL.startsWith(OSGI_SERVICE_LIST_PREFIX)) {
+				parseURLData(OSGI_SERVICE_LIST_PREFIX);
+				m_isServiceList = true;
 			}
+			else {
+				throw new IllegalStateException(
+						"URL did not conform to the OSGi URL Syntax");
+			}
+
 		}
 	}
 	

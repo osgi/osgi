@@ -26,6 +26,9 @@ import java.util.Hashtable;
  */
 class ContextWrapperImpl implements Context, ContextWrapper {
 
+	//TODO, move this to a common interface/class
+	private static final String OSGI_BUNDLE_CONTEXT_LOOKUP = "osgi:framework/bundleContext";
+	
 	private final Context			m_context;
 	private final FactoryManager	m_factoryManager;
 
@@ -44,6 +47,11 @@ class ContextWrapperImpl implements Context, ContextWrapper {
 
 	public Object lookup(String name) throws NamingException {
 		if (isURLRequest(name)) {
+			//TODO, consider using service factory for osgi URL
+			if(name.equals(OSGI_BUNDLE_CONTEXT_LOOKUP)) {
+				return m_factoryManager.getBundleContext();
+			}
+			
 			// attempt to find a URL Context Factory to satisfy this lookup
 			// request
 			ObjectFactory objectFactory = 

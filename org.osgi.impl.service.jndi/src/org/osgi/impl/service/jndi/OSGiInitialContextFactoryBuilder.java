@@ -120,16 +120,6 @@ class OSGiInitialContextFactoryBuilder implements
 				}
 			}
 			
-			// attempt to load this provider from the system classpath
-			try {
-				Class clazz = 
-					getClass().getClassLoader().loadClass(initialContextFactoryName);
-				return (InitialContextFactory)clazz.newInstance();
-			}
-			catch (Exception e) {
-				m_logger.log(Level.FINEST, "Error while trying to load system-level JNDI provider", e);
-			}
-			
 			throw new NoInitialContextException(NO_CONTEXT_FACTORIES_MSG); 
 		}
 		else {
@@ -161,45 +151,15 @@ class OSGiInitialContextFactoryBuilder implements
 	 * matching JNDI service providers for resolving references.
 	 * 
 	 */
-	public ObjectFactory createObjectFactory(Object obj, Hashtable environment)
-			throws NamingException {
+	public ObjectFactory createObjectFactory(Object obj, Hashtable environment) throws NamingException {
 		if (m_objectFactoryServiceTracker == null) {
 			throw new NoInitialContextException("No Object factories available");
 		}
 
-		final Object objToResolve = getObjectToResolve(obj);
-		if (objToResolve instanceof Reference) {
-			final Reference reference = (Reference) objToResolve;
-			if (reference.getFactoryClassName() != null) {
-				// if a factory class name is specified, look through the list
-				// of known ObjectFactories, and try to find a service published
-				// that also supports the custom interface.
-				Object factory = 
-					obtainFactoryService(reference.getFactoryClassName(), m_objectFactoryServiceTracker);
-				if (factory != null) {
-					return (ObjectFactory) factory;
-				} else {
-					// search for InitialContextFactoryBuilder implementations that
-					// are published as OSGi services
-					ObjectFactory objectFactory = 
-						getObjectFactoryFromBuilder(environment, reference);
-					if(objectFactory != null) {
-						return objectFactory;
-					}
-				}
-			}
-			else {
-				return new NoFactoryNameSpecifiedObjectFactory();
-			}
-		}
-
-		// if no matching ObjectFactory services exist,
-		// return a specialized ObjectFactory implementation that
-		// merely returns the reference passed in.  
-		// This allows the Factory Manager to more closely comply with the
-		// behavior specified in the javadoc for NamingManger.getObjectInstance()
-		return new ReturnReferenceInfoObjectFactory(obj);
+		return new ReturnReferenceInfoObjectFactory(createInnerObjectFactory(obj));
 	}
+
+	
 
 		
 	/**
@@ -223,6 +183,22 @@ class OSGiInitialContextFactoryBuilder implements
 			}
 		}
 		return null;
+	}
+	
+	
+
+	/**
+	 * Returns the bundle context associated with this Factory Manager. 
+	 * 
+	 * TODO, implement support for osgi URL context factory
+	 * TODO, implement support for static singleton usage
+	 * 
+	 * @return BundleContext associated with this builder/manager. 
+	 * 
+	 * @see org.osgi.impl.service.jndi.FactoryManager#getClientBundleContext()
+	 */
+	public BundleContext getBundleContext() {
+		return m_bundleContext;
 	}
 
 	/**
@@ -357,11 +333,11 @@ class OSGiInitialContextFactoryBuilder implements
 	 * given precedence as per Section 5.2.2.1 of RFC 142. 
 	 * 
 	 * @param environment the JNDI environment
-	 * @param reference the Reference to resolve
+	 * @param refInfo the Object to resolve
 	 * @return an ObjectFactory instance that matches this Reference, 
 	 *         or null if no match can be found. 
 	 */
-	private ObjectFactory getObjectFactoryFromBuilder(Hashtable environment, Reference reference) {
+	private ObjectFactory getObjectFactoryFromBuilder(Hashtable environment, Object refInfo) {
 		if (m_objectFactoryBuilderServiceTracker.getServiceReferences() != null) {
 			final ServiceReference[] serviceReferences = ServiceUtils.sortServiceReferences(m_objectFactoryBuilderServiceTracker);
 			for (int i = 0; i < serviceReferences.length; i++) {
@@ -370,7 +346,7 @@ class OSGiInitialContextFactoryBuilder implements
 						.getService(serviceReference);
 				try {
 					ObjectFactory factory = 
-						builder.createObjectFactory(reference, environment);
+						builder.createObjectFactory(refInfo, environment);
 		
 					if (factory != null) {
 						return factory;
@@ -446,6 +422,23 @@ class OSGiInitialContextFactoryBuilder implements
 	}
 	
 	
+	private ObjectFactory createInnerObjectFactory(Object obj) throws NamingException {
+		final Object objToResolve = getObjectToResolve(obj);
+		if (objToResolve instanceof Reference) {
+			final Reference reference = (Reference) objToResolve;
+			if (reference.getFactoryClassName() != null) {
+				return new FactoryNameSpecifiedObjectFactory();
+			}
+			else {
+				return new NoFactoryNameSpecifiedObjectFactory();
+			}
+		}
+		else {
+			return new NoReferenceObjectFactory();
+		}
+	}
+	
+	
 	/**
 	 * Utility method for creating the set of environment properties from the 
 	 * following sources (in order of priority):
@@ -482,6 +475,24 @@ class OSGiInitialContextFactoryBuilder implements
 	}
 
 	
+
+	private Object resolveObjectUsingBuilders(Object objectToResolve, Name name, Context context, 
+			                                  Hashtable environment)
+			throws Exception {
+		// search for InitialContextFactoryBuilder implementations that
+		// are published as OSGi services
+		ObjectFactory objectFactory = 
+			getObjectFactoryFromBuilder(environment, objectToResolve);
+		if(objectFactory != null) {
+			Object resolvedObject = objectFactory.getObjectInstance(objectToResolve, name, context, environment);
+			if(resolvedObject != null) {
+				return resolvedObject;
+			}
+		}
+		
+		return null;
+	}
+
 	/**
 	 * Checks the thread context classloader in order to search for a 
 	 * jndi.properties file.  
@@ -549,16 +560,42 @@ class OSGiInitialContextFactoryBuilder implements
 		return new ServiceTracker(bundleContext, serviceInterface, null);
 	}
 
+	
+	/**
+	 *  Query the inner ObjectFactory instance to see if that factory
+	 *  can resolve the object.  
+	 *  
+	 *  If no matching ObjectFactory services exist that can resolve the object,
+	 *  return a specialized ObjectFactory implementation that
+	 *  merely returns the reference passed in. This allows the Factory 
+	 *  Manager to more closely comply with the behavior specified in the 
+	 *  javadoc for NamingManger.getObjectInstance()
+	 *
+	 * 
+	 * @version $Revision$
+	 */
 	private static final class ReturnReferenceInfoObjectFactory implements ObjectFactory {
-		private final Object m_refInfo;
+		private final ObjectFactory m_objectFactory;
 		
-		public ReturnReferenceInfoObjectFactory(Object refInfo) {
-			m_refInfo = refInfo;
+		
+		public ReturnReferenceInfoObjectFactory(ObjectFactory objectFactory) {
+			m_objectFactory = objectFactory;
 		}
 		
-		public Object getObjectInstance(Object var0, Name var1,
-				Context var2, Hashtable var3) throws Exception {
-				return m_refInfo;
+		public Object getObjectInstance(Object refInfo, Name name,
+				Context context, Hashtable environment) throws Exception {
+
+			if (m_objectFactory != null) {
+				Object resolvedObject = 
+					m_objectFactory.getObjectInstance(refInfo, name, 
+							                          context, environment);
+				if (resolvedObject != null) {
+					return resolvedObject;
+				}
+			}
+
+			// in all other cases return refInfo
+			return refInfo;
 		}
 	}
 	
@@ -583,25 +620,70 @@ class OSGiInitialContextFactoryBuilder implements
 				return null;
 			}
 			
-			if(refInfo instanceof Reference) {
-				Reference reference = (Reference)refInfo;
-				Object resolvedObject = 
+			Object objectToResolve = getObjectToResolve(refInfo);
+			if(objectToResolve instanceof Reference) {
+				Reference reference = (Reference)objectToResolve;
+				Object resolvedObjectFromURL = 
 					getObjectFromURLContextFactoryFromReference(reference, environment);
-				if (resolvedObject != null) {
-					return resolvedObject;
+				if (resolvedObjectFromURL != null) {
+					return resolvedObjectFromURL;
 				}
 				
-				// search for InitialContextFactoryBuilder implementations that
-				// are published as OSGi services
-				ObjectFactory objectFactory = getObjectFactoryFromBuilder(environment, reference);
-				if(objectFactory != null) {
-					// if found, use to attempt object resolution
-					return objectFactory.getObjectInstance(refInfo, null, null, environment);
-				}
+				return resolveObjectUsingBuilders(objectToResolve, name, context, environment);
 			}
 
-			// in all other cases, return refInfo
-			return refInfo;
+			return null;
+		}
+		
+	}
+	
+	
+	
+	/**
+	 * Inner ObjectFactory implementation used to handle cases where a Reference
+	 * is specified, and the Reference indicates which ObjectFactory should be used
+	 * to resolve the object.  
+	 * 
+	 * This factory will dynamically attempt to use locate the specified 
+	 * factory in the OSGi service registry, and will also consult the known 
+	 * ObjectFactoryBuilder services if no other way to resolve the reference 
+	 * exists.  
+	 *
+	 * 
+	 * @version $Revision$
+	 */
+	private final class FactoryNameSpecifiedObjectFactory implements ObjectFactory {
+
+		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment) throws Exception {
+			Object objectToResolve = getObjectToResolve(refInfo);
+			if(objectToResolve instanceof Reference) {
+				// if a factory class name is specified, look through the list
+				// of known ObjectFactories, and try to find a service published
+				// that also supports the custom interface.
+				Reference reference = (Reference)objectToResolve;
+				Object factory = 
+					obtainFactoryService(reference.getFactoryClassName(), m_objectFactoryServiceTracker);
+				if (factory != null) {
+					ObjectFactory objectFactory = (ObjectFactory)factory;
+					Object resolvedObject = 
+						objectFactory.getObjectInstance(objectToResolve, name, context, environment);
+					if(resolvedObject != null) {
+						return resolvedObject;
+					}
+				} else {
+					return resolveObjectUsingBuilders(objectToResolve, name, context, environment);					
+				}
+			}
+			
+			return null;
+		}
+		
+	}
+	
+	
+	private class NoReferenceObjectFactory implements ObjectFactory {
+		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment) throws Exception {
+			return resolveObjectUsingBuilders(refInfo, name, context, environment);
 		}
 		
 	}

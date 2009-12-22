@@ -20,6 +20,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -53,7 +54,7 @@ class JNDIContextManagerImpl implements JNDIContextManager {
 		return initialContext;
 	}
 
-	public Context newInitialContext(Hashtable environment)
+	public Context newInitialContext(Map environment)
 			throws NamingException {
 		final Context initialContext = createNewInitialContext(environment);
 		m_listOfContexts.add(initialContext);
@@ -70,7 +71,7 @@ class JNDIContextManagerImpl implements JNDIContextManager {
 		throw new NoInitialContextException("DirContext could not be created.  The matching InitialContextFactory did not create a matching type."); 
 	}
 
-	public DirContext newInitialDirContext(Hashtable environment)
+	public DirContext newInitialDirContext(Map environment)
 			throws NamingException {
 		Context context = createNewInitialContext(environment);
 		if(context instanceof DirContext) {
@@ -102,11 +103,12 @@ class JNDIContextManagerImpl implements JNDIContextManager {
 		m_listOfContexts.clear();
 	}
 
-	private Context createNewInitialContext(final Hashtable environment)
+	private Context createNewInitialContext(final Map environment)
 			throws NamingException {
+		final Hashtable jndiEnvironment = new Hashtable(environment);
 		InitialContextFactory factory = 
-			m_builder.createInitialContextFactory(environment);
-		return factory.getInitialContext(environment);
+			m_builder.createInitialContextFactory(jndiEnvironment);
+		return factory.getInitialContext(jndiEnvironment);
 	}
 
 }

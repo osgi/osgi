@@ -14,37 +14,31 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.jndi;
 
 import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.Name;
-import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
 
-
 /**
- *
- * This interface defines the OSGi service interface for the JNDIContextAdmin service.  
- * 
- * This service provides the ability to resolve JNDI References in a dynamic fashion that
- * does not require calls to NamingManager.getObjectInstance().  The methods of this service
- * provide similar reference resolution, but rely on the OSGi Service Registry in order to find
- * ObjectFactory instances that can convert a Reference to an Object.   
- * 
- * This service will typically be used by OSGi-aware JNDI Service Providers.  
- * 
- * @version $Revision$
- * @NotThreadSafe
- * 
- * @deprecated This interface is now deprecated.  Please move to using the 
- *             JNDIProviderAdmin interface.  
- */
-public interface JNDIContextAdmin {
-	
+*
+* This interface defines the OSGi service interface for the JNDIProviderAdmin service.  
+* 
+* This service provides the ability to resolve JNDI References in a dynamic fashion that
+* does not require calls to NamingManager.getObjectInstance().  The methods of this service
+* provide similar reference resolution, but rely on the OSGi Service Registry in order to find
+* ObjectFactory instances that can convert a Reference to an Object.   
+* 
+* This service will typically be used by OSGi-aware JNDI Service Providers.  
+* 
+* @version $Revision$
+* @NotThreadSafe
+*/
+public interface JNDIProviderAdmin {
+
 	/**
 	 * Resolve the object from the given reference.  
 	 * 
@@ -56,10 +50,10 @@ public interface JNDIContextAdmin {
 	 * @return an Object based on the reference passed in, or the original reference object
 	 * 	if the reference could not be resolved.  
 	 * 
-	 * @throws NamingException in the event that an error occurs while attempting to resolve
+	 * @throws Exception in the event that an error occurs while attempting to resolve
 	 * the JNDI reference. 
 	 */
-	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment) throws NamingException;
+	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment) throws Exception;
 
 	/**
 	 * @param refInfo Reference info
@@ -70,11 +64,9 @@ public interface JNDIContextAdmin {
 	 * @return an Object based on the reference passed in, or the original reference object
 	 * 	if the reference could not be resolved.
 	 * 
-	 * @throws NamingException in the event that an error occurs while attempting to resolve
+	 * @throws Exception in the event that an error occurs while attempting to resolve
 	 * the JNDI reference. 
 	 */
-	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment, Attributes attributes) throws NamingException;
-
-	
+	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment, Attributes attributes) throws Exception;
 
 }
