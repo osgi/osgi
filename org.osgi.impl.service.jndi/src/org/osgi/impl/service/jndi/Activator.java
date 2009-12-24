@@ -28,10 +28,10 @@ import javax.naming.spi.ObjectFactory;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.jndi.JNDIConstants;
 import org.osgi.service.jndi.JNDIContextAdmin;
 import org.osgi.service.jndi.JNDIContextManager;
 import org.osgi.service.jndi.JNDIProviderAdmin;
-import org.osgi.service.jndi.JndiConstants;
 
 /**
  * Activator implementation for the JNDI Factory Manager Bundle.
@@ -115,7 +115,7 @@ public class Activator implements BundleActivator {
 	 */
 	private void registerOSGiURLContextFactory() {
 		Hashtable serviceProperties = new Hashtable();
-		serviceProperties.put(JndiConstants.JNDI_URLSCHEME,
+		serviceProperties.put(JNDIConstants.JNDI_URLSCHEME,
 				              OSGI_URL_SCHEME);
 
 		ServiceRegistration serviceRegistration = 

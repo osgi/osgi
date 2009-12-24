@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance 2009. All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ package org.osgi.service.jndi;
  * @version $Revision$
  * @Immutable
  */
-public class JndiConstants {
+public class JNDIConstants {
 	/**
 	 * This service property is set by JNDI Providers that publish URL Context
 	 * Factories as OSGi Services. The value of this property should be the URL
@@ -36,7 +36,7 @@ public class JndiConstants {
 	 */
 	public static final String	JNDI_SERVICENAME	= "osgi.jndi.service.name";
 
-	private JndiConstants() {
+	private JNDIConstants() {
 		// non-instantiable
 	}
 }

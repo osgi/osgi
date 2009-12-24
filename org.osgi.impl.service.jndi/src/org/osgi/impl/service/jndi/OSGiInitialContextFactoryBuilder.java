@@ -49,7 +49,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.jndi.JndiConstants;
+import org.osgi.service.jndi.JNDIConstants;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -175,7 +175,7 @@ class OSGiInitialContextFactoryBuilder implements
 			ServiceReference[] serviceReferences = ServiceUtils.sortServiceReferences(m_urlContextFactoryServiceTracker);
 			for (int i = 0; i < serviceReferences.length; i++) {
 				ServiceReference serviceReference = serviceReferences[i];
-				if (serviceReference.getProperty(JndiConstants.JNDI_URLSCHEME)
+				if (serviceReference.getProperty(JNDIConstants.JNDI_URLSCHEME)
 						.equals(urlScheme)) {
 					return (ObjectFactory) m_bundleContext
 							.getService(serviceReference);
@@ -225,7 +225,7 @@ class OSGiInitialContextFactoryBuilder implements
 		m_objectFactoryServiceTracker = new ServiceTracker(bundleContext,
 				ObjectFactory.class.getName(), null) {
 			public Object addingService(ServiceReference serviceReference) {
-				if (serviceReference.getProperty(JndiConstants.JNDI_URLSCHEME) == null) {
+				if (serviceReference.getProperty(JNDIConstants.JNDI_URLSCHEME) == null) {
 					return super.addingService(serviceReference);
 				}
 
@@ -236,7 +236,7 @@ class OSGiInitialContextFactoryBuilder implements
 		m_dirObjectFactoryServiceTracker = new ServiceTracker(bundleContext,
 				DirObjectFactory.class.getName(), null) {
 			public Object addingService(ServiceReference serviceReference) {
-				if (serviceReference.getProperty(JndiConstants.JNDI_URLSCHEME) == null) {
+				if (serviceReference.getProperty(JNDIConstants.JNDI_URLSCHEME) == null) {
 					return super.addingService(serviceReference);
 				}
 
@@ -250,7 +250,7 @@ class OSGiInitialContextFactoryBuilder implements
 		m_urlContextFactoryServiceTracker = new ServiceTracker(bundleContext,
 				ObjectFactory.class.getName(), null) {
 			public Object addingService(ServiceReference serviceReference) {
-				if (serviceReference.getProperty(JndiConstants.JNDI_URLSCHEME) != null) {
+				if (serviceReference.getProperty(JNDIConstants.JNDI_URLSCHEME) != null) {
 					return super.addingService(serviceReference);
 				}
 

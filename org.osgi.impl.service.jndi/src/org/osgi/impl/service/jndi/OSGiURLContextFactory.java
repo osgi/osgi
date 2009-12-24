@@ -31,7 +31,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.jndi.JndiConstants;
+import org.osgi.service.jndi.JNDIConstants;
 
 /**
  * A URL context factory that supports lookups of OSGi services.
@@ -168,7 +168,7 @@ public class OSGiURLContextFactory implements ObjectFactory {
 				// check the registry for a service that supports the
 				// osgi.jndi.serviceName property
 				final String serviceNameFilter = "("
-						+ JndiConstants.JNDI_SERVICENAME + "="
+						+ JNDIConstants.JNDI_SERVICENAME + "="
 						+ urlParser.getServiceInterface() + ")";
 				ServiceReference[] serviceReferencesByName = 
 					bundleContext.getServiceReferences(null, serviceNameFilter);
