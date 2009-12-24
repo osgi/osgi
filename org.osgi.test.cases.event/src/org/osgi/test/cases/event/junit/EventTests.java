@@ -75,16 +75,19 @@ public class EventTests extends OSGiTestCase {
 	}
 
 	public void testProperties() throws Exception {
-		assertEquals("constant incorrect", "event.topics",
-				EventConstants.EVENT_TOPIC);
+		assertConstant("event.topics", "EVENT_TOPIC", EventConstants.class);
 		String t1 = "a/b";
 		Map m1 = new HashMap();
 		m1.put("foo", "bar");
+		String[] a1 = new String[] {"foo", "bar"};
+		m1.put("baz", a1);
 		m1.put(Boolean.TRUE, "baz"); // non-string key must not cause error
 		Hashtable m2 = new Hashtable();
 		m2.put("foo", "bar");
+		m2.put("baz", a1);
 		Dictionary m3 = new Hashtable();
 		m3.put("foo", "bar");
+		m3.put("baz", a1);
 
 		Event e1 = new Event(t1, m1);
 		Event e2 = new Event(t1, (Dictionary) m2);
@@ -105,11 +108,11 @@ public class EventTests extends OSGiTestCase {
 		assertEquals("bar", e2.getProperty("foo"));
 		assertEquals("bar", e3.getProperty("foo"));
 
-		assertEquals("wrong amount of properties", 2,
+		assertEquals("wrong amount of properties", 3,
 				e1.getPropertyNames().length);
-		assertEquals("wrong amount of properties", 2,
+		assertEquals("wrong amount of properties", 3,
 				e2.getPropertyNames().length);
-		assertEquals("wrong amount of properties", 2,
+		assertEquals("wrong amount of properties", 3,
 				e3.getPropertyNames().length);
 
 		assertTrue("events not equal", e1.equals(e2));
@@ -135,5 +138,37 @@ public class EventTests extends OSGiTestCase {
 		assertTrue("filter does not match", e1.matches(f2));
 		assertTrue("filter does not match", e2.matches(f2));
 		assertTrue("filter does not match", e3.matches(f2));
+	}
+
+	public void testPropertiesNotEquals() {
+		String t1 = "a/b";
+		Map m1 = new HashMap();
+		m1.put("foo", "bar");
+		m1.put("baz", new String[] {"foo", "bar"});
+		Hashtable m2 = new Hashtable();
+		m2.put("foo", "bar");
+		m2.put("baz", new String[] {"foo", "bar"});
+		Dictionary m3 = new Hashtable();
+		m3.put("foo", "bar");
+		m3.put("baz", new String[] {"foo", "bar"});
+
+		Event e1 = new Event(t1, m1);
+		Event e2 = new Event(t1, (Dictionary) m2);
+		Event e3 = new Event(t1, m3);
+
+		assertFalse("events equal", e1.equals(e2));
+		assertFalse("events equal", e1.equals(e3));
+		assertFalse("events equal", e2.equals(e1));
+		assertFalse("events equal", e2.equals(e3));
+		assertFalse("events equal", e3.equals(e1));
+		assertFalse("events equal", e3.equals(e2));
+
+		assertFalse("event hashcodes equal", e1.hashCode() == e2.hashCode());
+		assertFalse("event hashcodes equal", e1.hashCode() == e3.hashCode());
+		assertFalse("event hashcodes equal", e2.hashCode() == e1.hashCode());
+		assertFalse("event hashcodes equal", e2.hashCode() == e3.hashCode());
+		assertFalse("event hashcodes equal", e3.hashCode() == e1.hashCode());
+		assertFalse("event hashcodes equal", e3.hashCode() == e2.hashCode());
+
 	}
 }

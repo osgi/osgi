@@ -146,7 +146,9 @@ public class Event {
 	 * 
 	 * <p>
 	 * An event is considered to be <b>equal to</b> another event if the topic
-	 * is equal and the properties are equal.
+	 * is equal and the properties are equal. The properties are compared using
+	 * the <code>java.util.Map.equals()</code> rules which includes identity
+	 * comparison for array values.
 	 * 
 	 * @param object The <code>Event</code> object to be compared.
 	 * @return <code>true</code> if <code>object</code> is a <code>Event</code>
@@ -182,7 +184,7 @@ public class Event {
 	 * @return The string representation of this event.
 	 */
 	public String toString() {
-		return getClass().getName() + " [topic=" + topic + "]";  
+		return getClass().getName() + " [topic=" + topic + "]";
 	}
 
 	/**
@@ -192,70 +194,76 @@ public class Event {
 	 * @throws IllegalArgumentException If the topic name is invalid.
 	 */
 	private static void validateTopicName(String topic) {
-	    char[] chars = topic.toCharArray();
-	    int length = chars.length;
-	    if (length == 0) {
+		char[] chars = topic.toCharArray();
+		int length = chars.length;
+		if (length == 0) {
 			throw new IllegalArgumentException("empty topic");
 		}
 		for (int i = 0; i < length; i++) {
-	        char ch = chars[i];
-	        if (ch == '/') {
-	        	// Can't start or end with a '/' but anywhere else is okay
+			char ch = chars[i];
+			if (ch == '/') {
+				// Can't start or end with a '/' but anywhere else is okay
 				if (i == 0 || (i == length - 1)) {
-	                throw new IllegalArgumentException(
-							"invalid topic: "
-							+ topic); 
-	            }
-	            // Can't have "//" as that implies empty token
-	            if (chars[i-1] == '/') {
-	                throw new IllegalArgumentException(
-							"invalid topic: "
-							+ topic); 
-	            }
-	            continue;
-	        }
-	        if (('A' <= ch) && (ch <= 'Z')) {
-	            continue;
-	        }
-	        if (('a' <= ch) && (ch <= 'z')) {
-	            continue;
-	        }
-	        if (('0' <= ch) && (ch <= '9')) {
-	            continue;
-	        }
-	        if ((ch == '_') || (ch == '-')) {
-	            continue;
-	        }
-	        throw new IllegalArgumentException("invalid topic: " + topic); 
-	    }
+					throw new IllegalArgumentException("invalid topic: "
+							+ topic);
+				}
+				// Can't have "//" as that implies empty token
+				if (chars[i - 1] == '/') {
+					throw new IllegalArgumentException("invalid topic: "
+							+ topic);
+				}
+				continue;
+			}
+			if (('A' <= ch) && (ch <= 'Z')) {
+				continue;
+			}
+			if (('a' <= ch) && (ch <= 'z')) {
+				continue;
+			}
+			if (('0' <= ch) && (ch <= '9')) {
+				continue;
+			}
+			if ((ch == '_') || (ch == '-')) {
+				continue;
+			}
+			throw new IllegalArgumentException("invalid topic: " + topic);
+		}
 	}
-	
+
 	/**
 	 * Unmodifiable wrapper for Dictionary.
 	 */
 	private static class UnmodifiableDictionary extends Dictionary {
 		private final Map	wrapped;
+
 		UnmodifiableDictionary(Map wrapped) {
 			this.wrapped = wrapped;
 		}
+
 		public Enumeration elements() {
 			return Collections.enumeration(wrapped.values());
 		}
+
 		public Object get(Object key) {
 			return wrapped.get(key);
 		}
+
 		public boolean isEmpty() {
 			return wrapped.isEmpty();
 		}
+
 		public Enumeration keys() {
 			return Collections.enumeration(wrapped.keySet());
 		}
+
 		public Object put(Object key, Object value) {
 			throw new UnsupportedOperationException();
 		}
+
 		public Object remove(Object key) {
 			throw new UnsupportedOperationException();
 		}
+
 		public int size() {
 			return wrapped.size();
 		}
