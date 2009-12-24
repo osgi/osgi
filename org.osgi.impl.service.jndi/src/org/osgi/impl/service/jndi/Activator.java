@@ -29,7 +29,6 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.jndi.JNDIConstants;
-import org.osgi.service.jndi.JNDIContextAdmin;
 import org.osgi.service.jndi.JNDIContextManager;
 import org.osgi.service.jndi.JNDIProviderAdmin;
 
@@ -83,7 +82,7 @@ public class Activator implements BundleActivator {
 		registerJNDIContextManager();
 		// register the JNDIContextAdmin interface, used by OSGi-aware
 		// context implementations to resolve JNDI references
-		registerJNDIContextAdmin();
+		registerJNDIProviderAdmin();
 	}
 
 	
@@ -150,16 +149,13 @@ public class Activator implements BundleActivator {
 	}
 	
 
-	private void registerJNDIContextAdmin() {
-		// register ProviderAdmin service under both names for now
-		// TODO, only register under JNDIProviderAdmin once the 
-		//       test cases are modified.  
+	private void registerJNDIProviderAdmin() {
 		String[] interfaces = 
-		  { JNDIProviderAdmin.class.getName(), JNDIContextAdmin.class.getName() };
+ {JNDIProviderAdmin.class.getName()};
 		
 		ServiceRegistration serviceRegistration =  
 			m_bundleContext.registerService(interfaces,
-					                        new JNDIContextAdminServiceFactoryImpl(m_builder),
+					                        new JNDIProviderAdminServiceFactoryImpl(m_builder),
 					                        null);
 		m_listOfServiceRegistrations.add(serviceRegistration);
 	}

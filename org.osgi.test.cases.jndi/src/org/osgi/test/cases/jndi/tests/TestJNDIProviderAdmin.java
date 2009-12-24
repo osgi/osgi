@@ -23,30 +23,31 @@ import javax.naming.Context;
 import javax.naming.StringRefAddr;
 
 import org.osgi.framework.Bundle;
-import org.osgi.service.jndi.JNDIContextAdmin;
 import org.osgi.service.jndi.JNDIContextManager;
+import org.osgi.service.jndi.JNDIProviderAdmin;
 import org.osgi.test.cases.jndi.provider.CTInitialContextFactory;
 import org.osgi.test.cases.jndi.provider.CTObjectFactory;
 import org.osgi.test.cases.jndi.provider.CTReference;
 import org.osgi.test.cases.jndi.provider.CTTestObject;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
-/** 
+/**
  * 
- * A set of methods to test the functionality of the JNDIContextAdmin interface
+ * A set of methods to test the functionality of the JNDIProviderAdmin interface
  * 
- * @version $Revision$ $Date$
+ * @version $Revision$ $Date: 2009-12-14 16:08:27 -0500 (Mon, 14 Dec
+ *          2009) $
  * 
  */
 
-public class TestJNDIContextAdmin extends DefaultTestBundleControl {
+public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 
 	public void testGetObjectInstanceWithReferenceable() throws Exception {
 		// Install the required bundles
 		Bundle contextFactoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle objectFactoryBundle = installBundle("objectFactory1.jar");
-		// Grab the JNDIContextAdmin service
-		JNDIContextAdmin ctxAdmin = (JNDIContextAdmin) getService(JNDIContextAdmin.class);
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
 		try {
 			// Create a referenceable object for testing
 			CTTestObject ref = new CTTestObject("pass");
@@ -64,8 +65,8 @@ public class TestJNDIContextAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle contextFactoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle objectFactoryBuilderBundle = installBundle("objectFactoryBuilder1.jar");
-		// Grab the JNDIContextAdmin service
-		JNDIContextAdmin ctxAdmin = (JNDIContextAdmin) getService(JNDIContextAdmin.class);
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
 		try {
 			// Do a getObjectInstance call with only the object class as an option
 			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(CTTestObject.class.getName(), null, null, null);
@@ -81,8 +82,8 @@ public class TestJNDIContextAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle contextFactoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle objectFactoryBundle = installBundle("objectFactory1.jar");
-		// Grab the JNDIContextAdmin service
-		JNDIContextAdmin ctxAdmin = (JNDIContextAdmin) getService(JNDIContextAdmin.class);
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
 		try {
 			// Create a reference object we can use for testing.
 			CTReference ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());
@@ -101,8 +102,8 @@ public class TestJNDIContextAdmin extends DefaultTestBundleControl {
 		Bundle contextFactoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle urlContextBundle = installBundle("urlContext1.jar");
 		Bundle objectFactoryBundle = installBundle("objectFactory1.jar");
-		// Grab the JNDIContextAdmin service
-		JNDIContextAdmin ctxAdmin = (JNDIContextAdmin) getService(JNDIContextAdmin.class);
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
 		// Grab the JNDIContextManager service
 		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
 		// Setup context so we can grab the reference from it
@@ -131,8 +132,8 @@ public class TestJNDIContextAdmin extends DefaultTestBundleControl {
 		// Install the required bundles
 		Bundle contextFactoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle objectFactoryBuilderBundle = installBundle("objectFactoryBuilder1.jar");
-		// Grab the JNDIContextAdmin service
-		JNDIContextAdmin ctxAdmin = (JNDIContextAdmin) getService(JNDIContextAdmin.class);
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
 		try {
 			// Create a reference object we can use for testing
 			CTReference ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());
@@ -149,8 +150,8 @@ public class TestJNDIContextAdmin extends DefaultTestBundleControl {
 	public void testGetObjectInstanceWithMissingFactory() throws Exception {
 		// Install the required bundles
 		Bundle contextFactoryBundle = installBundle("initialContextFactory1.jar");
-		// Grab the JNDIContextAdmin service
-		JNDIContextAdmin ctxAdmin = (JNDIContextAdmin) getService(JNDIContextAdmin.class);
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
 		try {
 			// Create a reference object we can use for testing.
 			CTReference ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());

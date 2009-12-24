@@ -26,14 +26,13 @@ import javax.naming.directory.Attributes;
 import javax.naming.spi.ObjectFactory;
 
 import org.osgi.framework.Bundle;
-import org.osgi.service.jndi.JNDIContextAdmin;
 import org.osgi.service.jndi.JNDIProviderAdmin;
 
-class JNDIContextAdminImpl implements JNDIContextAdmin, JNDIProviderAdmin {
+class JNDIProviderAdminImpl implements JNDIProviderAdmin {
 
 	private final OSGiInitialContextFactoryBuilder m_objectFactoryBuilder;
 	
-	public JNDIContextAdminImpl(Bundle callingBundle, OSGiInitialContextFactoryBuilder builder) {
+	public JNDIProviderAdminImpl(Bundle callingBundle, OSGiInitialContextFactoryBuilder builder) {
 		m_objectFactoryBuilder = builder;
 	}
 	

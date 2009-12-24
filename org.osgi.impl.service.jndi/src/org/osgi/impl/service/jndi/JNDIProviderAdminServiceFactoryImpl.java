@@ -25,11 +25,11 @@ import org.osgi.framework.ServiceRegistration;
  * 
  * @version $Revision$
  */
-class JNDIContextAdminServiceFactoryImpl implements ServiceFactory {
+class JNDIProviderAdminServiceFactoryImpl implements ServiceFactory {
 
 	private final OSGiInitialContextFactoryBuilder m_builder;
 	
-	public JNDIContextAdminServiceFactoryImpl(OSGiInitialContextFactoryBuilder builder) {
+	public JNDIProviderAdminServiceFactoryImpl(OSGiInitialContextFactoryBuilder builder) {
 		m_builder = builder;
 	}
 	
@@ -40,7 +40,7 @@ class JNDIContextAdminServiceFactoryImpl implements ServiceFactory {
 	 * @see org.osgi.framework.ServiceFactory#getService(org.osgi.framework.Bundle, org.osgi.framework.ServiceRegistration)
 	 */
 	public Object getService(Bundle bundle, ServiceRegistration registration) {
-		return new JNDIContextAdminImpl(bundle, m_builder);
+		return new JNDIProviderAdminImpl(bundle, m_builder);
 	}
 
 	/**
