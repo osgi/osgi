@@ -36,64 +36,60 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class PersistenceUnitTests extends DefaultTestBundleControl {
 
-	public void testRootPersistenceBundle() throws Exception {
-		Bundle persistenceBundle = installBundle("rootPersistenceBundle.jar");
+	public void testDefaultPersistenceLocation() throws Exception {
+		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
 		try {
-			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit1)");
+			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService (PersistenceUnitInfoService.class, "(osgi.unit.name=testUnit1)");
 			if (persistenceUnit == null) {
 				fail("Failed to retrieve the specified persistence unit.");
-			}
-		} catch (Exception ex) {
-			fail("Failed to retrieve the specified persistence unit.", ex.getCause());
+			} 
 		} finally {
 			uninstallBundle(persistenceBundle);
 		}
 	}
 	
-	public void testJarRootPersistenceBundle() throws Exception {
-		Bundle persistenceBundle = installBundle("classpathPersistenceBundle.jar");
+	public void testNonStandardPersistenceLocation() throws Exception {
+		Bundle persistenceBundle = installBundle("nonStandardPersistenceLocation.jar");
 		try {
-			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit2)");
+			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService (PersistenceUnitInfoService.class, "(osgi.unit.name=testUnit2)");
 			if (persistenceUnit == null) {
 				fail("Failed to retrieve the specified persistence unit.");
-			}
-		} catch (Exception ex) {
-			fail("Failed to retrieve the specified persistence unit.", ex.getCause());
+			} 
 		} finally {
 			uninstallBundle(persistenceBundle);
 		}
 	}
 	
-	public void testWebInfClassesPersistenceBundle() throws Exception {
-		Bundle persistenceBundle = installBundle("webInfClassesPersistenceBundle.jar");
+	public void testMultiplePersistenceLocations() throws Exception {
+		Bundle persistenceBundle = installBundle("multiplePersistenceLocations.jar");
 		try {
-			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit3)");
-			if (persistenceUnit == null) {
+			PersistenceUnitInfoService persistenceUnit1 = (PersistenceUnitInfoService) getService (PersistenceUnitInfoService.class, "(osgi.unit.name=testUnit3)");
+			if (persistenceUnit1 == null) {
 				fail("Failed to retrieve the specified persistence unit.");
 			}
-		} catch (Exception ex) {
-			fail("Failed to retrieve the specified persistence unit.", ex.getCause());
+			PersistenceUnitInfoService persistenceUnit2 = (PersistenceUnitInfoService) getService (PersistenceUnitInfoService.class, "(osgi.unit.name=testUnit4)");
+			if (persistenceUnit2 == null) {
+				fail("Failed to retrieve the specified persistence unit.");
+			}
 		} finally {
 			uninstallBundle(persistenceBundle);
 		}
 	}
 	
-	public void testWebInfJarRootPersistenceBundle() throws Exception {
-		Bundle persistenceBundle = installBundle("webInfLibPersistenceBundle.jar");
-		try {
-			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit4)");
+	public void testNestedJarPersistenceLocation() throws Exception {
+		Bundle persistenceBundle = installBundle("nestedJarPersistenceLocation.jar");
+		try { 
+			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService (PersistenceUnitInfoService.class, "(osgi.unit.name=testUnit5)");
 			if (persistenceUnit == null) {
 				fail("Failed to retrieve the specified persistence unit.");
 			}
-		} catch (Exception ex) {
-			fail("Failed to retrieve the specified persistence unit.", ex.getCause());
 		} finally {
 			uninstallBundle(persistenceBundle);
 		}
 	}
 	
 	public void testMetadata() throws Exception {
-		Bundle persistenceBundle = installBundle("rootPersistenceBundle.jar");
+		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
 		try {
 			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit1)");
 			if (persistenceUnit == null) {
@@ -114,7 +110,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 	}
 	
 	public void testProviderReference() throws Exception {
-		Bundle persistenceBundle = installBundle("rootPersistenceBundle.jar");
+		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
  		try {
 			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit1)");
 			if (persistenceUnit == null) {
@@ -134,7 +130,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 	}
 	
 	public void testPersistenceXmlUrl() throws Exception {
-		Bundle persistenceBundle = installBundle("rootPersistenceBundle.jar");
+		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
 		try {
 			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit1)");
 			if (persistenceUnit == null) {
@@ -154,7 +150,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 	}
 	
 	public void testPersistenceRootUrl() throws Exception {
-		Bundle persistenceBundle = installBundle("rootPersistenceBundle.jar");
+		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
 		try {
 			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit1)");
 			if (persistenceUnit == null) {
@@ -174,7 +170,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 	}
 	
 	public void testPersistenceUnitBundle() throws Exception {
-		Bundle persistenceBundle = installBundle("rootPersistenceBundle.jar");
+		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
 		try {
 			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit1)");
 			if (persistenceUnit == null) {
@@ -194,7 +190,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 	}
 	
 	public void testPersistenceUnitClassloader() throws Exception {
-		Bundle persistenceBundle = installBundle("rootPersistenceBundle.jar");
+		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
 		try {
 			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit1)");
 			if (persistenceUnit == null) {
@@ -214,7 +210,9 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 	}
 	
 	public void testPesistenceServiceProperties() throws Exception {
-		Bundle persistenceBundle = installBundle("rootPersistenceBundle.jar");
+		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
+		
+		// TODO: JPA - Replace with appropriate PersistenceUnitInfoService variables when the interface is updated.
 		try {
 			ServiceReference unitRef = getContext().getServiceReference(PersistenceUnitInfoService.class.getName());
 			String unitName = (String) unitRef.getProperty(PersistenceUnitInfoService.PERSISTENCE_UNIT_NAME);

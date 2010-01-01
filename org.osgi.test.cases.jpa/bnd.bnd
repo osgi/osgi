@@ -3,7 +3,6 @@ javac.target 			= 1.5
 
 Bundle-Version: 4.2.0.${project.build}
 
-
 Export-Package						= \
 	org.osgi.service.jpa
 	
@@ -12,13 +11,10 @@ Private-Package						= \
 	${p}.*
 
 Include-Resource 					= \
-	rootPersistenceBundle.jar , \
-	classpathPersistenceBundle.jar , \
-	webInfClassesPersistenceBundle.jar , \
-	webInfLibPersistenceBundle.jar , \
-	invalidRangeVersionedPersistenceBundle.jar , \
-	specificVersionVersionedPersistenceBundle.jar , \
-	validRangeVersionedPersistenceBundle.jar
+	defaultPersistenceLocation.jar , \
+	nonStandardPersistenceLocation.jar , \
+	multiplePersistenceLocations.jar , \
+	nestedJarPersistenceLocation.jar
 
 -buildpath							= \
 	ee.j2se; 						version=1.5, \

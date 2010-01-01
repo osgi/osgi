@@ -1,0 +1,7 @@
+Bundle-Name:                             ${p}.multiplePersistenceLocations
+Bundle-Version:                          4.2.0.${project.build}
+Meta-Persistence: 						 persistence/jpa.xml
+
+Include-Resource = \
+	persistence/jpa.xml = resources/multiplePersistenceLocations/persistence/jpa.xml ,
+	META-INF/persistence.xml = resources/multiplePersistenceLocations/META-INF/persistence.xml

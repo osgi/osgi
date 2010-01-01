@@ -1,0 +1,6 @@
+Bundle-Name:                             ${p}.defaultPersistenceLocation
+Bundle-Version:                          4.2.0.${project.build}
+Meta-Persistence:
+
+Include-Resource = \
+	META-INF/persistence.xml = resources/defaultPersistenceLocation/META-INF/persistence.xml
