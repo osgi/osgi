@@ -30,7 +30,6 @@ import java.util.StringTokenizer;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
@@ -39,6 +38,11 @@ import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.scaconfigtype.common.A;
 import org.osgi.util.tracker.ServiceTracker;
 
+import static org.osgi.framework.Constants.*;
+import static org.osgi.test.cases.scaconfigtype.junit.DistributionProviderConstants.*;
+import static org.osgi.test.cases.scaconfigtype.junit.RemoteServiceConstants.*;
+import static org.osgi.test.cases.scaconfigtype.junit.SCAConfigConstants.*;
+
 /**
  * Tests are documented in the <a href="https://www.osgi.org/members/svn/documents/trunk/rfcs/rfc0119/working_docs/service.scaconfigurationtype.tck.odt">SCA TCK Planning Document</a>
  * 
@@ -46,8 +50,6 @@ import org.osgi.util.tracker.ServiceTracker;
  *
  */
 public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
-
-	private static final String ORG_OSGI_SCA_CONFIG_TYPE = "org.osgi.sca";
 
 	/**
 	 * Package to be exported by the server side System Bundle
@@ -151,8 +153,8 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		ServiceReference[] refs = tracker.getServiceReferences();
 		assertEquals( "Unexpected service reference length", 1, refs.length );
 		
-		Object config = refs[0].getProperty("service.imported.configs");
-		assertTrue( propertyToList( config ).contains( "org.osgi.sca" ) );
+		Object config = refs[0].getProperty(SERVICE_IMPORTED_CONFIGS);
+		assertTrue( propertyToList( config ).contains(ORG_OSGI_SCA_CONFIG_TYPE) );
 		
 		tracker.close();
 	}
@@ -283,7 +285,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //		Filter filter = getFramework().getBundleContext().createFilter("(&(objectClass=*)(" +
 //				DistributionProviderConstants.REMOTE_CONFIGS_SUPPORTED + "=*))");
 		Filter filter = getFramework().getBundleContext().createFilter("(" +
-				DistributionProviderConstants.REMOTE_CONFIGS_SUPPORTED + "=*)");
+				REMOTE_CONFIGS_SUPPORTED + "=*)");
 		ServiceTracker dpTracker = new ServiceTracker(getFramework().getBundleContext(), filter, null);
 		dpTracker.open();
 		
@@ -292,7 +294,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		ServiceReference dpReference = dpTracker.getServiceReference();
 		assertNotNull(dpReference);
 		
-		List supportedConfigTypes = propertyToList(DistributionProviderConstants.REMOTE_CONFIGS_SUPPORTED); // collect all supported config types
+		List supportedConfigTypes = propertyToList(REMOTE_CONFIGS_SUPPORTED); // collect all supported config types
 		
 		dpTracker.close();
 		
@@ -324,10 +326,10 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	
 	public Map getConfiguration() {
 		Map configuration = new HashMap();
-		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
+		configuration.put(FRAMEWORK_STORAGE_CLEAN, "true");
 		
 		//make sure that the server framework System Bundle exports the interfaces
-        String systemPacakagesXtra = (String) configuration.get(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA);
+        String systemPacakagesXtra = (String) configuration.get(FRAMEWORK_SYSTEMPACKAGES_EXTRA);
         if (systemPacakagesXtra == null) {
             systemPacakagesXtra = ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON;
         } else {
@@ -336,7 +338,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
                                   + ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON
                                   + ORG_OSGI_SERVICE_SCACONFIGTYPE;
         }
-        configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPacakagesXtra);
+        configuration.put(FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPacakagesXtra);
 		return configuration;
 	}
 }
