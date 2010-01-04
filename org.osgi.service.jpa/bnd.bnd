@@ -1,10 +1,10 @@
 javac.source 			= 1.5
 javac.target 			= 1.5
 
--nope							= true
-nodeploy						= true
+-nope				= true
+nodeploy			= true
 
--buildpath 					= ee.j2se; version=1.5, \
-	osgi.core;					version=4.2, \
-	org.apache.geronimo.specs.geronimo-jpa_3.0_spec; version=latest
+-buildpath 			= ee.j2se; version=1.5, \
+	osgi.core;			version=4.2, \
+	javax.persistence;		version=latest
 	
