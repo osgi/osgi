@@ -58,5 +58,5 @@ public interface EntityManagerFactoryBuilder {
      *
 	 * @return An EntityManagerFactory for the persistence unit associated with this service.
 	 */
-    EntityManagerFactory createEntityManagerFactory(Map props);
+	EntityManagerFactory createEntityManagerFactory(Map<String, Object> props);
 }
