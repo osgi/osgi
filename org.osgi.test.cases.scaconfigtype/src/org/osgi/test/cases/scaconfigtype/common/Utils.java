@@ -32,7 +32,7 @@ public class Utils {
 		ServiceReference dpReference = dpTracker.getServiceReference();
 		Assert.assertNotNull(dpReference);
 		
-		List supportedConfigTypes = propertyToList(REMOTE_CONFIGS_SUPPORTED); // collect all supported config types
+		List supportedConfigTypes = propertyToList(dpReference.getProperty(REMOTE_CONFIGS_SUPPORTED)); // collect all supported config types
 		
 		dpTracker.close();
 		

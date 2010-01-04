@@ -17,20 +17,23 @@ package org.osgi.test.cases.scaconfigtype.junit.ct12;
 
 import java.util.Hashtable;
 
+import java.util.List;
+
+import junit.framework.Assert;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.scaconfigtype.common.A;
 import org.osgi.test.cases.scaconfigtype.common.B;
 import org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants;
 import org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants;
+import org.osgi.test.cases.scaconfigtype.common.Utils;
 
 /**
  * @author <a href="mailto:david.savage@paremus.com">David Savage</a>
  *
  */
 public class Activator implements BundleActivator, A, B {
-	ServiceRegistration registration;
 	BundleContext       context;
 
 	/**
@@ -43,24 +46,32 @@ public class Activator implements BundleActivator, A, B {
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, SCAConfigConstants.ORG_OSGI_SCA);
 
-		registration = context.registerService(new String[]{A.class.getName()}, this, dictionary);
+		context.registerService(new String[]{A.class.getName()}, this, dictionary);
 		
 		dictionary = new Hashtable<String, String>();
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, B.class.getName());
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, fabricateConfigType());
 
-		registration = context.registerService(new String[]{A.class.getName()}, this, dictionary);
+		context.registerService(new String[]{A.class.getName()}, this, dictionary);
 	}
 
-	private String fabricateConfigType() {
-		return "foo.bar.baz";
+	private String fabricateConfigType() throws Exception {
+		List types = Utils.getSupportedConfigTypes(context);
+		
+		Assert.assertFalse(types.isEmpty());
+		String type = (String) types.get(0);
+		do {
+			type += ".foo";
+		}
+		while ( types.contains( type ) );
+		
+		return type;
 	}
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		registration.unregister();
 	}
 
 	/**

@@ -19,16 +19,15 @@ import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.scaconfigtype.common.A;
 import org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants;
+import org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants;
 
 /**
  * @author <a href="mailto:david.savage@paremus.com">David Savage</a>
  *
  */
 public class Activator implements BundleActivator, A {
-	ServiceRegistration registration;
 	BundleContext       context;
 
 	/**
@@ -39,14 +38,14 @@ public class Activator implements BundleActivator, A {
 		
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
-		registration = context.registerService(new String[]{A.class.getName()}, this, dictionary);
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, SCAConfigConstants.ORG_OSGI_SCA);
+		context.registerService(new String[]{A.class.getName()}, this, dictionary);
 	}
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		registration.unregister();
 	}
 
 	/**

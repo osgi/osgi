@@ -308,15 +308,15 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		configuration.put(FRAMEWORK_STORAGE_CLEAN, "true");
 		
 		//make sure that the server framework System Bundle exports the interfaces
-        String systemPacakagesXtra = (String) configuration.get(FRAMEWORK_SYSTEMPACKAGES_EXTRA);
-        if (systemPacakagesXtra == null) {
-            systemPacakagesXtra = ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON;
+        String systemPackagesXtra = (String) configuration.get(FRAMEWORK_SYSTEMPACKAGES_EXTRA);
+        if (systemPackagesXtra == null) {
+            systemPackagesXtra = ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON;
         } else {
-            systemPacakagesXtra = systemPacakagesXtra
+            systemPackagesXtra = systemPackagesXtra
                                   + ","
                                   + ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON;
         }
-        configuration.put(FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPacakagesXtra);
+        configuration.put(FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
 		return configuration;
 	}
 }
