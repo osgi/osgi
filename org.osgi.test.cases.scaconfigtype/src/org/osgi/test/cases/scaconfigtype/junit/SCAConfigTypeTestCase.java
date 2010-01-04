@@ -141,18 +141,18 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		// install test bundle in child framework
 		BundleContext childContext = getFramework().getBundleContext();
 		
-		Bundle tb1Bundle = installBundle(childContext, "/tb1.jar");
-		assertNotNull(tb1Bundle);
+		Bundle tckBundle = installBundle(childContext, "/tck13.jar");
+		assertNotNull(tckBundle);
 		
-		// 
+		// wait for test service to be registered in this framework
 		ServiceTracker tracker = new ServiceTracker(getContext(), A.class.getName(), null);
 		A service = (A) tracker.waitForService(10000);
 		
 		assertNotNull( "Missing test service", service );
-		
 		ServiceReference[] refs = tracker.getServiceReferences();
 		assertEquals( "Unexpected service reference length", 1, refs.length );
 		
+		// check service is registered with sca config type header
 		Object config = refs[0].getProperty(SERVICE_IMPORTED_CONFIGS);
 		assertTrue( propertyToList( config ).contains(ORG_OSGI_SCA_CONFIG_TYPE) );
 		

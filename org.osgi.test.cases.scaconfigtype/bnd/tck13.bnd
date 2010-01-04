@@ -1,0 +1,6 @@
+Bundle-Name:                             ${p}.tck13
+Bundle-Version:                          1.0
+Private-Package:                         ${p}.tck13.*, \
+ ${p}.common 
+Export-Package:                          ${p}.common
+Bundle-Activator:                        ${p}.tck13.Activator
