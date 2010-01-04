@@ -15,12 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.scaconfigtype.junit;
+package org.osgi.test.cases.scaconfigtype.common;
 
 /**
  * @author <a href="mailto:david.savage@paremus.com">David Savage</a>
  *
  */
 public interface SCAConfigConstants {
-	static final String ORG_OSGI_SCA_CONFIG_TYPE = "org.osgi.sca";
+	static final String ORG_OSGI_SCA = "org.osgi.sca";
 }

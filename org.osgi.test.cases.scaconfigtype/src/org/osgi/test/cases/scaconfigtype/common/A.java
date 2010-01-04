@@ -20,6 +20,7 @@ package org.osgi.test.cases.scaconfigtype.common;
  *
  */
 public interface A {
+	static String A = "this is A";
 	String getA();
 }
 

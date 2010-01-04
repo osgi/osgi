@@ -20,28 +20,23 @@ package org.osgi.test.cases.scaconfigtype.junit;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.scaconfigtype.common.A;
+import org.osgi.test.cases.scaconfigtype.common.B;
+import org.osgi.test.cases.scaconfigtype.common.Utils;
 import org.osgi.util.tracker.ServiceTracker;
 
 import static org.osgi.framework.Constants.*;
-import static org.osgi.test.cases.scaconfigtype.junit.DistributionProviderConstants.*;
-import static org.osgi.test.cases.scaconfigtype.junit.RemoteServiceConstants.*;
-import static org.osgi.test.cases.scaconfigtype.junit.SCAConfigConstants.*;
+import static org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants.*;
+import static org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants.*;
 
 /**
  * Tests are documented in the <a href="https://www.osgi.org/members/svn/documents/trunk/rfcs/rfc0119/working_docs/service.scaconfigurationtype.tck.odt">SCA TCK Planning Document</a>
@@ -51,11 +46,6 @@ import static org.osgi.test.cases.scaconfigtype.junit.SCAConfigConstants.*;
  */
 public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
-	/**
-	 * Package to be exported by the server side System Bundle
-	 */
-	private static final String ORG_OSGI_SERVICE_SCACONFIGTYPE = "org.osgi.service.scaconfigtype";
-	
 	/**
 	 * Package to be exported by the server side System Bundle
 	 */
@@ -73,56 +63,57 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	 * TCK.1
 	 * @throws Exception
 	 */
-	public void testEndpointLifecycle() throws Exception {		
-		fail("TODO not yet implemented");
-	}
+//	public void testEndpointLifecycle() throws Exception {		
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.4
 	 * @throws Exception
 	 */
-	public void testSCAConfigurationManifestHeader() throws Exception {
-		fail("TODO not yet implemented");
-	}
+//	public void testSCAConfigurationManifestHeader() throws Exception {
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.6
 	 * @throws Exception
 	 */
-	public void testFindEntriesSCAConfigurationManifestHeader() throws Exception {
-		fail("TODO not yet implemented");
-	}
+//	public void testFindEntriesSCAConfigurationManifestHeader() throws Exception {
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.7
 	 * @throws Exception
 	 */
-	public void testAbsolutePathSCAConfigurationManifestHeader() throws Exception {
-		fail("TODO not yet implemented");
-	}
+//	public void testAbsolutePathSCAConfigurationManifestHeader() throws Exception {
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.8
 	 * @throws Exception
 	 */
-	public void testDirectorySCAConfigurationManifestHeader() throws Exception {
-		fail("TODO not yet implemented");
-	}
+//	public void testDirectorySCAConfigurationManifestHeader() throws Exception {
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.9
 	 * @throws Exception
 	 */
-	public void testAbsentSCAConfigurationManifestHeader() throws Exception {
-		fail("TODO not yet implemented");
-	}
+//	public void testAbsentSCAConfigurationManifestHeader() throws Exception {
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.11
 	 * @throws Exception
 	 */
 	public void testSCAConfigTypeServiceHeader() throws Exception {
-		assertTrue( "Expected supported config type " + ORG_OSGI_SCA_CONFIG_TYPE, getSupportedConfigTypes().contains( ORG_OSGI_SCA_CONFIG_TYPE ) );
+		assertTrue( "Expected supported config type " + ORG_OSGI_SCA, Utils.getSupportedConfigTypes(getContext()).contains( ORG_OSGI_SCA ) );
+		assertTrue( "Expected supported config type " + ORG_OSGI_SCA, Utils.getSupportedConfigTypes(getFramework().getBundleContext()).contains( ORG_OSGI_SCA ) );
 	}
 	
 	/**
@@ -130,7 +121,36 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	 * @throws Exception
 	 */
 	public void testExportedConfigs() throws Exception {
-		fail("TODO not yet implemented");
+		// install test bundle in child framework
+		BundleContext childContext = getFramework().getBundleContext();
+		
+		Bundle tckBundle = installBundle(childContext, "/tck12.jar");
+		assertNotNull(tckBundle);
+		tckBundle.start();
+		
+		// wait for test service to be registered in this framework
+		ServiceTracker tracker = new ServiceTracker(getContext(), A.class.getName(), null);
+		A serviceA = (A) tracker.waitForService(10000);
+		
+		assertNotNull( "Missing test service", serviceA );
+		ServiceReference[] refs = tracker.getServiceReferences();
+		assertEquals( "Unexpected service reference length", 1, refs.length );
+
+		// check service is functional
+		assertEquals( "Invalid service response", A.A, serviceA.getA() );
+		
+		// check service is registered with sca config type header
+		Object config = refs[0].getProperty(SERVICE_IMPORTED_CONFIGS);
+		assertTrue( Utils.propertyToList( config ).contains(ORG_OSGI_SCA) );
+		tracker.close();
+		
+		// search for b service which is registered with a fabricated config type
+		// assert this is not picked up by the RI
+		tracker = new ServiceTracker(getContext(), B.class.getName(), null);
+		B serviceB = (B) tracker.waitForService(10000);
+		assertNull( "Unexpected test service", serviceB );
+		
+		tracker.close();
 	}
 	
 	/**
@@ -143,18 +163,22 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		
 		Bundle tckBundle = installBundle(childContext, "/tck13.jar");
 		assertNotNull(tckBundle);
+		tckBundle.start();
 		
 		// wait for test service to be registered in this framework
 		ServiceTracker tracker = new ServiceTracker(getContext(), A.class.getName(), null);
-		A service = (A) tracker.waitForService(10000);
+		A serviceA = (A) tracker.waitForService(10000);
 		
-		assertNotNull( "Missing test service", service );
+		assertNotNull( "Missing test service", serviceA );
 		ServiceReference[] refs = tracker.getServiceReferences();
 		assertEquals( "Unexpected service reference length", 1, refs.length );
 		
+		// check service is functional
+		assertEquals( "Invalid service response", A.A, serviceA.getA() );
+		
 		// check service is registered with sca config type header
 		Object config = refs[0].getProperty(SERVICE_IMPORTED_CONFIGS);
-		assertTrue( propertyToList( config ).contains(ORG_OSGI_SCA_CONFIG_TYPE) );
+		assertTrue( Utils.propertyToList( config ).contains(ORG_OSGI_SCA) );
 		
 		tracker.close();
 	}
@@ -163,106 +187,83 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	 * TCK.14
 	 * @throws Exception
 	 */
-	public void testQNameForm() throws Exception {
-		fail("TODO not yet implemented");
-	}
+//	public void testQNameForm() throws Exception {
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.15
 	 * @throws Exception
 	 */
-	public void testNCNameForm() throws Exception {
-		fail("TODO not yet implemented");
-	}
+//	public void testNCNameForm() throws Exception {
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.23
 	 * @throws Exception
 	 */
-	public void testInvalidBindingXML() throws Exception {
-		fail("TODO not yet implemented");
-	}
+//	public void testInvalidBindingXML() throws Exception {
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.24
 	 * @throws Exception
 	 */
-	public void testDuplicateBinding() throws Exception {
-		fail("TODO not yet implemented");
-	}
+//	public void testDuplicateBinding() throws Exception {
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.25
 	 * @throws Exception
 	 */
-	public void testUnknownBinding() throws Exception {
-		fail("TODO not yet implemented");
-	}
+//	public void testUnknownBinding() throws Exception {
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.26
 	 * @throws Exception
 	 */
-	public void testSupportedIntents() throws Exception {
-		fail("TODO not yet implemented");
-	}
+//	public void testSupportedIntents() throws Exception {
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.30
 	 * @throws Exception
 	 */
-	public void testEndpointImported() throws Exception {
-		fail("TODO not yet implemented");
-	}
+//	public void testEndpointImported() throws Exception {
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.31
 	 * @throws Exception
 	 */
 	// TODO is this a duplicate?
-	public void testSCAConfigTypeServiceHeader2() throws Exception {
-		fail("TODO not yet implemented");
-	}
+//	public void testSCAConfigTypeServiceHeader2() throws Exception {
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.32
 	 * @throws Exception
 	 */
-	public void testBindingTypeTypesHeader() throws Exception {
-		fail("TODO not yet implemented");
-	}
+//	public void testBindingTypeTypesHeader() throws Exception {
+//		fail("TODO not yet implemented");
+//	}
 	
 	/**
 	 * TCK.35, TCK.36, TCK.37
 	 * @throws Exception
 	 */
-	public void testEndpointConfig() throws Exception {
-		fail("TODO not yet implemented");
-	}	
+//	public void testEndpointConfig() throws Exception {
+//		fail("TODO not yet implemented");
+//	}	
 		
-	private List propertyToList(Object configProperty) {
-		List list = new ArrayList(); // collect all supported config types
-		if (configProperty instanceof String) {
-			// TODO verify if space delimiter is valid for all sca properties
-			StringTokenizer st = new StringTokenizer((String)configProperty, " ");
-			while (st.hasMoreTokens()) {
-				list.add(st.nextToken());
-			}
-		} else if (configProperty instanceof Collection) {
-			Collection col = (Collection) configProperty;
-			for (Iterator it=col.iterator(); it.hasNext(); ) {
-				list.add(it.next());
-			}
-		} else { // assume String[]
-			String[] arr = (String[])configProperty;
-			for (int i=0; i<arr.length; i++) {
-				list.add(arr[i]);
-			}
-		}
-		
-		return list;
-	}
-
 	/**
 	 * @param context
 	 * @param bundle
@@ -278,29 +279,6 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		Bundle b = context.installBundle(bundle, inputStream);
 		return b;
 	}
-
-	
-	private List getSupportedConfigTypes() throws Exception {
-		// make sure there is a Distribution Provider installed in the framework
-//		Filter filter = getFramework().getBundleContext().createFilter("(&(objectClass=*)(" +
-//				DistributionProviderConstants.REMOTE_CONFIGS_SUPPORTED + "=*))");
-		Filter filter = getFramework().getBundleContext().createFilter("(" +
-				REMOTE_CONFIGS_SUPPORTED + "=*)");
-		ServiceTracker dpTracker = new ServiceTracker(getFramework().getBundleContext(), filter, null);
-		dpTracker.open();
-		
-		Object dp = dpTracker.waitForService(10000L);
-		assertNotNull("No DistributionProvider found", dp);
-		ServiceReference dpReference = dpTracker.getServiceReference();
-		assertNotNull(dpReference);
-		
-		List supportedConfigTypes = propertyToList(REMOTE_CONFIGS_SUPPORTED); // collect all supported config types
-		
-		dpTracker.close();
-		
-		return supportedConfigTypes;
-	}
-
 
 	/**
 	 * Verifies the server side framework that it exports the test packages for the interface
@@ -322,6 +300,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 			found = ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON.equals(exportedPkgs[i].getName());
 		}
 		assertTrue("Framework System Bundle is not exporting package " + ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON, found);
+		f.getBundleContext().ungetService(sr);
 	}
 	
 	public Map getConfiguration() {
@@ -335,8 +314,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         } else {
             systemPacakagesXtra = systemPacakagesXtra
                                   + ","
-                                  + ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON
-                                  + ORG_OSGI_SERVICE_SCACONFIGTYPE;
+                                  + ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON;
         }
         configuration.put(FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPacakagesXtra);
 		return configuration;

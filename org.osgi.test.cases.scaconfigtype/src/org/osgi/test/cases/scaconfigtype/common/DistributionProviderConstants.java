@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.scaconfigtype.junit;
+package org.osgi.test.cases.scaconfigtype.common;
 
 /**
  * The constants described here are set on a service that identifies the

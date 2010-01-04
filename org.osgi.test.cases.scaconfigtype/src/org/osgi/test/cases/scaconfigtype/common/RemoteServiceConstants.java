@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.scaconfigtype.junit;
+package org.osgi.test.cases.scaconfigtype.common;
 
 /**
  * Remote Service Properties. These properties are set on services that are
