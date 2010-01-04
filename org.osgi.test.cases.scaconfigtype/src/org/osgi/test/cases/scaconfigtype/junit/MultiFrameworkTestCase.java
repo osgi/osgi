@@ -34,13 +34,13 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
-import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  *
  */
-public abstract class MultiFrameworkTestCase extends OSGiTestCase {
+public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 	private static final String ORG_OSGI_TEST_CASES_SCACONFIG_TYPE_BUNDLES = "org.osgi.test.cases.scaconfigtype.bundles";
 	
 	private static final String STORAGEROOT = "org.osgi.test.cases.scaconfigtype.storageroot";
