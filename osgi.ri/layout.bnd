@@ -38,7 +38,8 @@ build.enterprise.impls = \
 	org.osgi.impl.service.jdbc, \
 	org.osgi.impl.bundle.jmx, \
 	org.osgi.impl.service.jndi, \
-	org.osgi.impl.service.jpa, \
 	org.osgi.impl.service.log, \
 	org.osgi.impl.service.useradmin
+#Remove from build until it compiles again
+#	org.osgi.impl.service.jpa, \
 	

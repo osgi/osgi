@@ -13,4 +13,4 @@ Export-Package = \
 -buildpath 					= ee.j2se; version=1.5, \
 	org.osgi.service.jpa;		version=project, \
 	osgi.core;					version=4.2, \
-	org.apache.geronimo.specs.geronimo-jpa_3.0_spec; version=latest
+	javax.persistence;		version=2.0
