@@ -40,6 +40,8 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
+	private static final String ORG_OSGI_SCA_CONFIG_TYPE = "org.osgi.sca";
+
 	/**
 	 * Package to be exported by the server side System Bundle
 	 */
@@ -53,7 +55,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	public void testSCAConfigTypeServiceHeader() throws Exception {
 		// verify that the server framework is exporting the test packages
 		verifyFramework();
-		assertTrue( getSupportedConfigTypes().contains( "org.osgi.sca" ) );
+		assertTrue( "Expected supported config type " + ORG_OSGI_SCA_CONFIG_TYPE, getSupportedConfigTypes().contains( ORG_OSGI_SCA_CONFIG_TYPE ) );
 	}
 	
 	private Set getSupportedConfigTypes() throws Exception {
