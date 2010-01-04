@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.scaconfigtype.junit.tck13;
+package org.osgi.test.cases.scaconfigtype.junit.ct12;
 
 import java.util.Hashtable;
 
@@ -21,13 +21,15 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.scaconfigtype.common.A;
+import org.osgi.test.cases.scaconfigtype.common.B;
 import org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants;
+import org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants;
 
 /**
  * @author <a href="mailto:david.savage@paremus.com">David Savage</a>
  *
  */
-public class Activator implements BundleActivator, A {
+public class Activator implements BundleActivator, A, B {
 	ServiceRegistration registration;
 	BundleContext       context;
 
@@ -39,7 +41,19 @@ public class Activator implements BundleActivator, A {
 		
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, SCAConfigConstants.ORG_OSGI_SCA);
+
 		registration = context.registerService(new String[]{A.class.getName()}, this, dictionary);
+		
+		dictionary = new Hashtable<String, String>();
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, B.class.getName());
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, fabricateConfigType());
+
+		registration = context.registerService(new String[]{A.class.getName()}, this, dictionary);
+	}
+
+	private String fabricateConfigType() {
+		return "foo.bar.baz";
 	}
 
 	/**
@@ -55,4 +69,8 @@ public class Activator implements BundleActivator, A {
 	public String getA() {
 		return A;
 	}
+
+	public String getB() {
+		return B;
+	}	
 }

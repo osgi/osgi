@@ -1,5 +1,0 @@
-Bundle-Name:                             ${p}.tck13
-Bundle-Version:                          1.0
-Private-Package:                         ${p}.junit.tck13.*, \
- ${p}.common.*
-Bundle-Activator:                        ${p}.junit.tck13.Activator

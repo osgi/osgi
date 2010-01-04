@@ -6,8 +6,8 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.*
 
 Include-Resource					= \
-	tck12.jar=tck12.jar, \
-	tck13.jar=tck13.jar, \
+	ct12.jar=ct12.jar, \
+	ct13.jar=ct13.jar, \
 	
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

@@ -1,0 +1,5 @@
+Bundle-Name:                             ${p}.ct13
+Bundle-Version:                          1.0
+Private-Package:                         ${p}.junit.ct13.*, \
+ ${p}.common.*
+Bundle-Activator:                        ${p}.junit.ct13.Activator

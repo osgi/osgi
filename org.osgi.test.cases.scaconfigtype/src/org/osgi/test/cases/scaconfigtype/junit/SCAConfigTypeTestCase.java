@@ -60,7 +60,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	}
 	
 	/**
-	 * TCK.1
+	 * CT.1
 	 * @throws Exception
 	 */
 //	public void testEndpointLifecycle() throws Exception {		
@@ -68,7 +68,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.4
+	 * CT.4
 	 * @throws Exception
 	 */
 //	public void testSCAConfigurationManifestHeader() throws Exception {
@@ -76,7 +76,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.6
+	 * CT.6
 	 * @throws Exception
 	 */
 //	public void testFindEntriesSCAConfigurationManifestHeader() throws Exception {
@@ -84,7 +84,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.7
+	 * CT.7
 	 * @throws Exception
 	 */
 //	public void testAbsolutePathSCAConfigurationManifestHeader() throws Exception {
@@ -92,7 +92,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.8
+	 * CT.8
 	 * @throws Exception
 	 */
 //	public void testDirectorySCAConfigurationManifestHeader() throws Exception {
@@ -100,7 +100,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.9
+	 * CT.9
 	 * @throws Exception
 	 */
 //	public void testAbsentSCAConfigurationManifestHeader() throws Exception {
@@ -108,7 +108,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.11
+	 * CT.11
 	 * @throws Exception
 	 */
 	public void testSCAConfigTypeServiceHeader() throws Exception {
@@ -117,16 +117,16 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	}
 	
 	/**
-	 * TCK.12
+	 * CT.12
 	 * @throws Exception
 	 */
 	public void testExportedConfigs() throws Exception {
 		// install test bundle in child framework
 		BundleContext childContext = getFramework().getBundleContext();
 		
-		Bundle tckBundle = installBundle(childContext, "/tck12.jar");
-		assertNotNull(tckBundle);
-		tckBundle.start();
+		Bundle ctBundle = installBundle(childContext, "/ct12.jar");
+		assertNotNull(ctBundle);
+		ctBundle.start();
 		
 		// wait for test service to be registered in this framework
 		ServiceTracker tracker = new ServiceTracker(getContext(), A.class.getName(), null);
@@ -154,16 +154,16 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	}
 	
 	/**
-	 * TCK.13
+	 * CT.13
 	 * @throws Exception
 	 */
 	public void testImportedConfigs() throws Exception {
 		// install test bundle in child framework
 		BundleContext childContext = getFramework().getBundleContext();
 		
-		Bundle tckBundle = installBundle(childContext, "/tck13.jar");
-		assertNotNull(tckBundle);
-		tckBundle.start();
+		Bundle ctBundle = installBundle(childContext, "/ct13.jar");
+		assertNotNull(ctBundle);
+		ctBundle.start();
 		
 		// wait for test service to be registered in this framework
 		ServiceTracker tracker = new ServiceTracker(getContext(), A.class.getName(), null);
@@ -184,7 +184,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	}
 	
 	/**
-	 * TCK.14
+	 * CT.14
 	 * @throws Exception
 	 */
 //	public void testQNameForm() throws Exception {
@@ -192,7 +192,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.15
+	 * CT.15
 	 * @throws Exception
 	 */
 //	public void testNCNameForm() throws Exception {
@@ -200,7 +200,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.23
+	 * CT.23
 	 * @throws Exception
 	 */
 //	public void testInvalidBindingXML() throws Exception {
@@ -208,7 +208,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.24
+	 * CT.24
 	 * @throws Exception
 	 */
 //	public void testDuplicateBinding() throws Exception {
@@ -216,7 +216,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.25
+	 * CT.25
 	 * @throws Exception
 	 */
 //	public void testUnknownBinding() throws Exception {
@@ -224,7 +224,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.26
+	 * CT.26
 	 * @throws Exception
 	 */
 //	public void testSupportedIntents() throws Exception {
@@ -232,7 +232,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.30
+	 * CT.30
 	 * @throws Exception
 	 */
 //	public void testEndpointImported() throws Exception {
@@ -240,7 +240,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.31
+	 * CT.31
 	 * @throws Exception
 	 */
 	// TODO is this a duplicate?
@@ -249,7 +249,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.32
+	 * CT.32
 	 * @throws Exception
 	 */
 //	public void testBindingTypeTypesHeader() throws Exception {
@@ -257,7 +257,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	}
 	
 	/**
-	 * TCK.35, TCK.36, TCK.37
+	 * CT.35, CT.36, CT.37
 	 * @throws Exception
 	 */
 //	public void testEndpointConfig() throws Exception {
