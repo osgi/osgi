@@ -59,7 +59,7 @@ public interface PackageStateMBean {
 
 	/**
 	 * The item containing the bundle identifier in {@link #PACKAGE_TYPE}. The
-	 * key is {@link #EXPORTING_BUNDLES} and the type is {@link SimpleType#LONG}.
+	 * key is {@link #IMPORTING_BUNDLES} and the type is {@link JmxConstants#LONG_ARRAY_TYPE}.
 	 */
 	Item			IMPORTING_BUNDLES_ITEM	= new Item(
 													IMPORTING_BUNDLES,
