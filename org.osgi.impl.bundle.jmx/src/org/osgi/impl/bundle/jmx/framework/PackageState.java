@@ -84,7 +84,8 @@ public class PackageState implements PackageStateMBean {
 			return new long[0];
 		}
 		for (ExportedPackage pkg : exportedPackages) {
-			if (pkg.getVersion().equals(v)) {
+			if (pkg.getVersion().equals(v)
+					&& pkg.getExportingBundle().getBundleId() == exportingBundle) {
 				Bundle[] bundles = pkg.getImportingBundles();
 				long[] ids = new long[bundles.length];
 				for (int i = 0; i < bundles.length; i++) {
@@ -130,7 +131,8 @@ public class PackageState implements PackageStateMBean {
 			return false;
 		}
 		for (ExportedPackage pkg : exportedPackages) {
-			if (pkg.getVersion().equals(v)) {
+			if (pkg.getVersion().equals(v)
+					&& pkg.getExportingBundle().getBundleId() == exportingBundle) {
 				return pkg.isRemovalPending();
 			}
 		}
