@@ -42,10 +42,11 @@ public interface PackageStateMBean {
 	 * The key EXPORTING_BUNDLE, used in {@link #EXPORTING_BUNDLES_ITEM}.
 	 */
 	String			EXPORTING_BUNDLES		= "ExportingBundles";
-	
+
 	/**
 	 * The item containing the bundle identifier in {@link #PACKAGE_TYPE}. The
-	 * key is {@link #EXPORTING_BUNDLES} and the type is {@link SimpleType#LONG}.
+	 * key is {@link #EXPORTING_BUNDLES} and the type is
+	 * {@link JmxConstants#LONG_ARRAY_TYPE}.
 	 */
 	Item			EXPORTING_BUNDLES_ITEM	= new Item(
 													EXPORTING_BUNDLES,
