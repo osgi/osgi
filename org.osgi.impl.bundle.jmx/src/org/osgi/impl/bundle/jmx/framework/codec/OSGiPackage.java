@@ -77,8 +77,9 @@ public class OSGiPackage {
 	public OSGiPackage(CompositeData data) {
 		this((String) data.get(PackageStateMBean.NAME), (String) data
 				.get(PackageStateMBean.VERSION), (Boolean) data
-				.get(PackageStateMBean.REMOVAL_PENDING), (Long) data
-				.get(PackageStateMBean.EXPORTING_BUNDLE),
+				.get(PackageStateMBean.REMOVAL_PENDING),
+				longArrayFrom((Long[]) data
+						.get(PackageStateMBean.EXPORTING_BUNDLES)),
 				longArrayFrom((Long[]) data
 						.get(PackageStateMBean.IMPORTING_BUNDLES)));
 	}
@@ -91,8 +92,9 @@ public class OSGiPackage {
 	 */
 	public OSGiPackage(ExportedPackage pkg) {
 		this(pkg.getName(), pkg.getVersion().toString(),
-				pkg.isRemovalPending(), pkg.getExportingBundle().getBundleId(),
-				Util.bundleIds(pkg.getImportingBundles()));
+				pkg.isRemovalPending(), new long[] { pkg.getExportingBundle()
+						.getBundleId() }, Util.bundleIds(pkg
+						.getImportingBundles()));
 	}
 
 	/**
@@ -101,15 +103,15 @@ public class OSGiPackage {
 	 * @param name
 	 * @param version
 	 * @param removalPending
-	 * @param exportingBundle
+	 * @param exportingBundles
 	 * @param importingBundles
 	 */
 	public OSGiPackage(String name, String version, boolean removalPending,
-			long exportingBundle, long[] importingBundles) {
+			long[] exportingBundles, long[] importingBundles) {
 		this.name = name;
 		this.version = version;
 		this.removalPending = removalPending;
-		this.exportingBundle = exportingBundle;
+		this.exportingBundles = exportingBundles;
 		this.importingBundles = importingBundles;
 	}
 
@@ -139,7 +141,8 @@ public class OSGiPackage {
 		items.put(PackageStateMBean.NAME, name);
 		items.put(PackageStateMBean.VERSION, version);
 		items.put(PackageStateMBean.REMOVAL_PENDING, removalPending);
-		items.put(PackageStateMBean.EXPORTING_BUNDLE, exportingBundle);
+		items.put(PackageStateMBean.EXPORTING_BUNDLES,
+				LongArrayFrom(exportingBundles));
 		items.put(PackageStateMBean.IMPORTING_BUNDLES,
 				LongArrayFrom(importingBundles));
 
@@ -152,10 +155,10 @@ public class OSGiPackage {
 	}
 
 	/**
-	 * @return the identifier of the exporting bundle
+	 * @return the identifier of the exporting bundles
 	 */
-	public long getExportingBundle() {
-		return exportingBundle;
+	public long[] getExportingBundles() {
+		return exportingBundles;
 	}
 
 	/**
@@ -186,7 +189,7 @@ public class OSGiPackage {
 		return removalPending;
 	}
 
-	private long exportingBundle;
+	private long[] exportingBundles;
 	private long[] importingBundles;
 	private String name;
 	private boolean removalPending;

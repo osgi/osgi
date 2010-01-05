@@ -165,25 +165,24 @@ public class Framework implements FrameworkMBean {
 	 * 
 	 * @see org.osgi.jmx.core.FrameworkMBean#refreshPackages(long[])
 	 */
-	public CompositeData refreshPackages(long[] bundleIdentifiers)
-			throws IOException {
+	public void refreshPackages(long[] bundleIdentifiers) throws IOException {
 		Bundle[] bundles = new Bundle[bundleIdentifiers.length];
 		for (int i = 0; i < bundleIdentifiers.length; i++) {
 			try {
 				bundles[i] = bundle(bundleIdentifiers[i]);
 			} catch (Throwable e) {
-				return new BundleBatchActionResult(e.toString(), new long[] {},
-						bundleIdentifiers[i], bundleIdentifiers)
-						.asCompositeData();
+				IOException iox = new IOException("Unable to refresh packages");
+				iox.initCause(e);
+				throw iox;
 			}
 		}
 		try {
 			admin.refreshPackages(bundles);
 		} catch (Throwable e) {
-			return new BundleBatchActionResult(e.toString(), new long[] {},
-					-1L, bundleIdentifiers).asCompositeData();
+			IOException iox = new IOException("Unable to refresh packages");
+			iox.initCause(e);
+			throw iox;
 		}
-		return new BundleBatchActionResult().asCompositeData();
 	}
 
 	/*

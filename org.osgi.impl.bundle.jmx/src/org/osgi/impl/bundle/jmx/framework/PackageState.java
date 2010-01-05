@@ -16,6 +16,7 @@
 package org.osgi.impl.bundle.jmx.framework;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,23 +43,29 @@ public class PackageState implements PackageStateMBean {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.osgi.jmx.core.PackageStateMBean#getExportingBundle(java.lang.String,
+	 * org.osgi.jmx.core.PackageStateMBean#getExportingBundles(java.lang.String,
 	 * java.lang.String)
 	 */
-	public long getExportingBundle(String packageName, String version)
+	public long[] getExportingBundles(String packageName, String version)
 			throws IOException {
 		Version v = Version.parseVersion(version);
 		ExportedPackage[] exportedPackages = admin
 				.getExportedPackages(packageName);
 		if (exportedPackages == null) {
-			return -1;
+			return new long[0];
 		}
+		ArrayList<Long> bundleIdentifiers = new ArrayList<Long>();
 		for (ExportedPackage pkg : exportedPackages) {
 			if (pkg.getVersion().equals(v)) {
-				return pkg.getExportingBundle().getBundleId();
+				bundleIdentifiers.add(pkg.getExportingBundle().getBundleId());
 			}
 		}
-		return -1;
+		long[] bundles = new long[bundleIdentifiers.size()];
+		int i = 0;
+		for (long id : bundleIdentifiers) {
+			bundles[i++] = id;
+		}
+		return bundles;
 	}
 
 	/*
@@ -66,10 +73,10 @@ public class PackageState implements PackageStateMBean {
 	 * 
 	 * @see
 	 * org.osgi.jmx.core.PackageStateMBean#getImportingBundles(java.lang.String,
-	 * java.lang.String)
+	 * java.lang.String, long)
 	 */
-	public long[] getImportingBundles(String packageName, String version)
-			throws IOException {
+	public long[] getImportingBundles(String packageName, String version,
+			long exportingBundle) throws IOException {
 		Version v = Version.parseVersion(version);
 		ExportedPackage[] exportedPackages = admin
 				.getExportedPackages(packageName);
@@ -112,10 +119,10 @@ public class PackageState implements PackageStateMBean {
 	 * 
 	 * @see
 	 * org.osgi.jmx.core.PackageStateMBean#isRemovalPending(java.lang.String,
-	 * java.lang.String)
+	 * java.lang.String, long)
 	 */
-	public boolean isRemovalPending(String packageName, String version)
-			throws IOException {
+	public boolean isRemovalPending(String packageName, String version,
+			long exportingBundle) throws IOException {
 		Version v = Version.parseVersion(version);
 		ExportedPackage[] exportedPackages = admin
 				.getExportedPackages(packageName);
