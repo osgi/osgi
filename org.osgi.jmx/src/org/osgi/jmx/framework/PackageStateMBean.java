@@ -39,19 +39,18 @@ public interface PackageStateMBean {
 													+ ":type=packageState,version=1.5";
 
 	/**
-	 * The key EXPORTING_BUNDLE, used in {@link #EXPORTING_BUNDLE_ITEM}.
+	 * The key EXPORTING_BUNDLE, used in {@link #EXPORTING_BUNDLES_ITEM}.
 	 */
-	String			EXPORTING_BUNDLE		= "ExportingBundle";
+	String			EXPORTING_BUNDLES		= "ExportingBundles";
+	
 	/**
 	 * The item containing the bundle identifier in {@link #PACKAGE_TYPE}. The
-	 * key is {@link #EXPORTING_BUNDLE} and the type is {@link SimpleType#LONG}.
-	 * 
-	 * ### Is ExportingBundle not a better name?
+	 * key is {@link #EXPORTING_BUNDLES} and the type is {@link SimpleType#LONG}.
 	 */
-	Item			EXPORTING_BUNDLE_ITEM	= new Item(
-													EXPORTING_BUNDLE,
-													"The bundle the package belongs to",
-													SimpleType.LONG);
+	Item			EXPORTING_BUNDLES_ITEM	= new Item(
+													EXPORTING_BUNDLES,
+													"The bundles the package belongs to",
+													JmxConstants.LONG_ARRAY_TYPE);
 
 	/**
 	 * The key IMPORTING_BUNDLES, used in {@link #IMPORTING_BUNDLES_ITEM}.
@@ -60,12 +59,13 @@ public interface PackageStateMBean {
 
 	/**
 	 * The item containing the bundle identifier in {@link #PACKAGE_TYPE}. The
-	 * key is {@link #EXPORTING_BUNDLE} and the type is {@link SimpleType#LONG}.
+	 * key is {@link #EXPORTING_BUNDLES} and the type is {@link SimpleType#LONG}.
 	 */
 	Item			IMPORTING_BUNDLES_ITEM	= new Item(
 													IMPORTING_BUNDLES,
 													"The importing bundles of the package",
 													JmxConstants.LONG_ARRAY_TYPE);
+
 
 	/**
 	 * The key NAME, used in {@link #NAME_ITEM}.
@@ -73,8 +73,8 @@ public interface PackageStateMBean {
 	String			NAME					= "Name";
 
 	/**
-	 * The item containing the name of the package in {@link #PACKAGE_TYPE}. The
-	 * key is {@link #NAME} and the type is {@link SimpleType#LONG}.
+	 * The item containing the name of the package in {@link #PACKAGE_TYPE}.
+	 * The key is {@link #NAME} and the type is {@link SimpleType#LONG}.
 	 */
 	Item			NAME_ITEM				= new Item(NAME,
 													"The package name",
@@ -86,7 +86,8 @@ public interface PackageStateMBean {
 	 */
 	String			REMOVAL_PENDING			= "RemovalPending";
 	/**
-	 * 
+	 * The item representing the removal pending status of a package. The key is
+	 * {@link #REMOVAL_PENDING} and the type is {@link SimpleType#BOOLEAN}.
 	 */
 	Item			REMOVAL_PENDING_ITEM	= new Item(
 													REMOVAL_PENDING,
@@ -109,22 +110,22 @@ public interface PackageStateMBean {
 													SimpleType.STRING);
 
 	/**
-	 * The item names in the CompositeData representing the package. This type
+	 * The Composite Type for a CompositeData representing a package. This type
 	 * consists of:
 	 * <ul>
-	 * <li>{@link #EXPORTING_BUNDLE_ITEM}</li>
+	 * <li>{@link #EXPORTING_BUNDLES_ITEM}</li>
 	 * <li>{@link #IMPORTING_BUNDLES_ITEM}</li>
 	 * <li>{@link #NAME_ITEM}</li>
 	 * <li>{@link #REMOVAL_PENDING_ITEM}</li>
 	 * <li>{@link #VERSION_ITEM}</li>
 	 * </ul>
-	 * The key is defined as {@link #NAME} and {@link #EXPORTING_BUNDLE}
+	 * The key is defined as {@link #NAME} and {@link #EXPORTING_BUNDLES}
 	 */
 	CompositeType	PACKAGE_TYPE			= Item
 													.compositeType(
 															"PACKAGE",
 															"This type encapsulates an OSGi package",
-															EXPORTING_BUNDLE_ITEM,
+															EXPORTING_BUNDLES_ITEM,
 															IMPORTING_BUNDLES_ITEM,
 															NAME_ITEM,
 															REMOVAL_PENDING_ITEM,
@@ -132,39 +133,38 @@ public interface PackageStateMBean {
 
 	/**
 	 * The Tabular Type used in {@link #listPackages()}. They key is
-	 * {@link #NAME}, {@link #VERSION}, and {@link #EXPORTING_BUNDLE}.
+	 * {@link #NAME}, {@link #VERSION}, and {@link #EXPORTING_BUNDLES}.
 	 */
 	TabularType		PACKAGES_TYPE			= Item.tabularType("PACKAGES",
 													"A table of packages",
 													PACKAGE_TYPE, NAME,
-													VERSION, EXPORTING_BUNDLE);
+													VERSION, EXPORTING_BUNDLES);
 
 	/**
 	 * Answer the identifier of the bundle exporting the package
 	 * 
 	 * @param packageName - the package name
 	 * @param version - the version of the package
-	 * @return the bundle identifier or -1 if there is no bundle
+	 * @return the bundle identifiers exporting such a package
 	 * @throws IOException if the operation fails
 	 * @throws IllegalArgumentException if the package indicated does not exist
 	 */
-	long getExportingBundle(String packageName, String version)
+	long[] getExportingBundles(String packageName, String version)
 			throws IOException;
 
 	/**
 	 * Answer the list of identifiers of the bundles importing the package
 	 * 
-	 * ### packageName and version is not unique
-	 * 
-	 * @param packageName - the package name
-	 * @param version - the version of the package
+	 * @param packageName The package name
+	 * @param version The version of the package
+	 * @param exportingBundle The exporting bundle for the given package
 	 * @return the list of bundle identifiers
 	 * @throws IOException if the operation fails
 	 * @throws IllegalArgumentException if the package indicated does not exist
 	 * 
 	 */
-	long[] getImportingBundles(String packageName, String version)
-			throws IOException;
+	long[] getImportingBundles(String packageName, String version,
+			long exportingBundle) throws IOException;
 
 	/**
 	 * Answer the package state of the system in tabular form
@@ -181,14 +181,15 @@ public interface PackageStateMBean {
 	 * Answer if this package is exported by a bundle which has been updated or
 	 * uninstalled
 	 * 
-	 * @param packageName - the package name
-	 * @param version - the version of the package
+	 * @param packageName The package name
+	 * @param version The version of the package
+	 * @param exportingBundle The bundle exporting the package
 	 * @return true if this package is being exported by a bundle that has been
 	 *         updated or uninstalled.
 	 * @throws IOException if the operation fails
 	 * @throws IllegalArgumentException if the package indicated does not exist
 	 */
-	boolean isRemovalPending(String packageName, String version)
+	boolean isRemovalPending(String packageName, String version, long exportingBundle)
 			throws IOException;
 
 }

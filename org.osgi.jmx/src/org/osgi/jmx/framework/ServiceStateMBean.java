@@ -104,7 +104,7 @@ public interface ServiceStateMBean {
 			JmxConstants.PROPERTIES_TYPE);
 
 	/**
-	 * The item names in the CompositeData representing the service. This type
+	 * The Composite Type for a CompositeData representing a service. This type
 	 * consists of:
 	 * <ul>
 	 * <li>{@link #BUNDLE_IDENTIFIER}</li>

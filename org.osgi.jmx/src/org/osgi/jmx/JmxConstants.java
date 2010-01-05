@@ -73,97 +73,97 @@ public class JmxConstants {
 	public final static String			VECTOR_OF			= "Vector of ";
 
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * {@link java.lang.String}
 	 */
 	public static final String			STRING				= "String";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * {@link java.lang.Integer}
 	 */
 	public static final String			INTEGER				= "Integer";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * {@link java.lang.Long}
 	 */
 	public static final String			LONG				= "Long";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * {@link java.lang.Float}
 	 */
 	public static final String			FLOAT				= "Float";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * {@link java.lang.Double}
 	 */
 	public static final String			DOUBLE				= "Double";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * {@link java.lang.Byte}
 	 */
 	public static final String			BYTE				= "Byte";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * {@link java.lang.Short}
 	 */
 	public static final String			SHORT				= "Short";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * {@link java.lang.Character}
 	 */
 	public static final String			CHARACTER			= "Character";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * {@link java.lang.Boolean}
 	 */
 	public static final String			BOOLEAN				= "Boolean";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * {@link java.math.BigDecimal}
 	 */
 	public static final String			BIGDECIMAL			= "BigDecimal";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * {@link java.math.BigInteger}
 	 */
 	public static final String			BIGINTEGER			= "BigInteger";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * the <code>double</code> primitive type.
 	 */
 	public static final String			P_DOUBLE			= "double";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * the <code>float</code> primitive type.
 	 */
 	public static final String			P_FLOAT				= "float";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * the <code>long</code> primitive type.
 	 */
 	public static final String			P_LONG				= "long";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * the <code>int</code> primitive type.
 	 */
 	public static final String			P_INT				= "int";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * the <code>short</code> primitive type.
 	 */
 	public static final String			P_SHORT				= "short";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * the <code>byte</code> primitive type.
 	 */
 	public static final String			P_BYTE				= "byte";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * the <code>char</code> primitive type.
 	 */
 	public static final String			P_CHAR				= "char";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} <code>Type</code> value in the case of
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * the <code>boolean</code> primitive type.
 	 */
 	public static final String			P_BOOLEAN			= "boolean";
@@ -241,9 +241,7 @@ public class JmxConstants {
 																	SimpleType.STRING);
 
 	/**
-	 * The key PROPERTY_TYPE.
-	 * 
-	 * ### can we call this value PropertyType and service type ServiceType?
+	 * The key TYPE.
 	 */
 	public static final String			TYPE				= "Type";
 
@@ -253,9 +251,6 @@ public class JmxConstants {
 	 * 
 	 * TYPE ::= ( 'Array of ' | 'Vector of ' )? {@link #SCALAR}
 	 * 
-	 * ### why can't we just use the class name?
-	 * 
-	 * ### why do we have to distinguish between primitives and wrappers?
 	 */
 	public static final Item			TYPE_ITEM			= new Item(
 																	TYPE,
@@ -289,7 +284,7 @@ public class JmxConstants {
 	public static final CompositeType	PROPERTY_TYPE		= Item
 																	.compositeType(
 																			"PROPERTY",
-																			"This type encapsulates a key/value pair",
+																			"This type encapsulates a key/value pair with a type identifier",
 																			KEY_ITEM,
 																			VALUE_ITEM,
 																			TYPE_ITEM);

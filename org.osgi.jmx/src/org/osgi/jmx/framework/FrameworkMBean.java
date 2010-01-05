@@ -30,9 +30,6 @@ import org.osgi.jmx.JmxConstants;
  * For many operations, it provides a batch mechanism to avoid excessive message
  * passing when interacting remotely.
  * 
- * ### Need to indicate which fields are mandatory and which fields are
- * optional?
- * 
  * @version $Revision$
  */
 public interface FrameworkMBean {
@@ -271,13 +268,9 @@ public interface FrameworkMBean {
 			throws IOException;
 
 	/**
-	 * Force the update, replacement or removal of the pacakges identified by
+	 * Force the update, replacement or removal of the packages identified by
 	 * the list of bundles
 	 * 
-	 * @see #BATCH_ACTION_RESULT_TYPE for the precise specification of the
-	 *      CompositeData type representing the returned result.
-	 * 
-	 *      ### there is not result???
 	 * @param bundleIdentifier the bundle identifier
 	 * @throws IOException if the operation failed
 	 */
@@ -287,21 +280,16 @@ public interface FrameworkMBean {
 	 * Force the update, replacement or removal of the packages identified by
 	 * the list of bundles.
 	 * 
-	 * 
-	 * @see #BATCH_ACTION_RESULT_TYPE for the precise specification of the
-	 *      CompositeData type representing the returned result.
-	 * 
 	 * @param bundleIdentifiers the array of bundle identifiers
-	 * @return the resulting state from executing the operation
 	 * @throws IOException if the operation failed
 	 */
-	CompositeData refreshPackages(long[] bundleIdentifiers) throws IOException;
+	void refreshPackages(long[] bundleIdentifiers) throws IOException;
 
 	/**
 	 * Resolve the bundle indicated by the unique symbolic name and version
 	 * 
 	 * @param bundleIdentifier the bundle identifier
-	 * @return true if the bundle was resolved, false otherwise
+	 * @return <code>true</code> if the bundle was resolved, false otherwise
 	 * @throws IOException if the operation does not succeed
 	 * @throws IllegalArgumentException if the bundle indicated does not exist
 	 */
@@ -311,7 +299,7 @@ public interface FrameworkMBean {
 	 * Batch resolve the bundles indicated by the list of bundle identifiers
 	 * 
 	 * @param bundleIdentifiers = the identifiers of the bundles to resolve
-	 * @return true if the bundles were resolved, false otherwise
+	 * @return <code>true</code> if the bundles were resolved, false otherwise
 	 * @throws IOException if the operation does not succeed
 	 */
 	boolean resolveBundles(long[] bundleIdentifiers) throws IOException;
@@ -492,4 +480,4 @@ public interface FrameworkMBean {
 	 */
 	void updateFramework() throws IOException;
 
-}
+ }
