@@ -219,7 +219,7 @@ public interface BundleStateMBean {
 	Item REMOVAL_PENDING_ITEM = new Item(REMOVAL_PENDING,
 			"Whether the bundle is pending removal", SimpleType.BOOLEAN);
 	/**
-	 * The key REQUIRED, used in {@value #REQUIRED_ITEM}.
+	 * The key REQUIRED, used in {@link #REQUIRED_ITEM}.
 	 */
 	String REQUIRED = "Required";
 
@@ -230,7 +230,7 @@ public interface BundleStateMBean {
 	Item REQUIRED_ITEM = new Item(REQUIRED, "Whether the bundle is required",
 			SimpleType.BOOLEAN);
 	/**
-	 * The key FRAGMENT, used in {@value #FRAGMENT_ITEM}.
+	 * The key FRAGMENT, used in {@link #FRAGMENT_ITEM}.
 	 */
 	String FRAGMENT = "Fragment";
 
@@ -241,7 +241,7 @@ public interface BundleStateMBean {
 	Item FRAGMENT_ITEM = new Item(FRAGMENT, "Whether the bundle is a fragment",
 			SimpleType.BOOLEAN);
 	/**
-	 * The key REGISTERED_SERVICES, used in {@value #REGISTERED_SERVICES_ITEM}.
+	 * The key REGISTERED_SERVICES, used in {@link #REGISTERED_SERVICES_ITEM}.
 	 */
 	String REGISTERED_SERVICES = "RegisteredServices";
 
@@ -254,7 +254,7 @@ public interface BundleStateMBean {
 			"The registered services of the bundle",
 			JmxConstants.LONG_ARRAY_TYPE);
 	/**
-	 * The key SERVICES_IN_USE, used in {@value #SERVICES_IN_USE_ITEM}.
+	 * The key SERVICES_IN_USE, used in {@link #SERVICES_IN_USE_ITEM}.
 	 */
 	String SERVICES_IN_USE = "ServicesInUse";
 
