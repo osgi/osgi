@@ -31,6 +31,7 @@ import org.osgi.jmx.JmxConstants;
  * passing when interacting remotely.
  * 
  * @version $Revision$
+ * @ThreadSafe
  */
 public interface FrameworkMBean {
 	/**

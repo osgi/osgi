@@ -32,6 +32,7 @@ import org.osgi.jmx.JmxConstants;
  * bundle state of the framework.
  * 
  * @version $Revision$
+ * @ThreadSafe
  */
 public interface BundleStateMBean {
 	/**

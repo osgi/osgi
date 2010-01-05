@@ -28,6 +28,9 @@ import org.osgi.jmx.JmxConstants;
 
 /**
  * This MBean provides the management interface to the OSGi User Manager Service
+ * 
+ * @version $Revision$
+ * @ThreadSafe
  */
 public interface UserAdminMBean {
 	/**
