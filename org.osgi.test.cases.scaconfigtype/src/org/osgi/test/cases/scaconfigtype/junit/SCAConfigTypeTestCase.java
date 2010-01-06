@@ -130,6 +130,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		
 		// wait for test service to be registered in this framework
 		ServiceTracker tracker = new ServiceTracker(getContext(), A.class.getName(), null);
+		tracker.open();
 		A serviceA = (A) tracker.waitForService(10000);
 		
 		assertNotNull( "Missing test service", serviceA );
@@ -147,6 +148,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		// search for b service which is registered with a fabricated config type
 		// assert this is not picked up by the RI
 		tracker = new ServiceTracker(getContext(), B.class.getName(), null);
+		tracker.open();
 		B serviceB = (B) tracker.waitForService(10000);
 		assertNull( "Unexpected test service", serviceB );
 		
@@ -167,6 +169,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		
 		// wait for test service to be registered in this framework
 		ServiceTracker tracker = new ServiceTracker(getContext(), A.class.getName(), null);
+		tracker.open();
 		A serviceA = (A) tracker.waitForService(10000);
 		
 		assertNotNull( "Missing test service", serviceA );
