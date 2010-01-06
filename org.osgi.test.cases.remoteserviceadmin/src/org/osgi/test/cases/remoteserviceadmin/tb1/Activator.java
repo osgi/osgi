@@ -93,9 +93,9 @@ public class Activator implements BundleActivator, A, B {
 //		properties.put(Constants.OBJECTCLASS, new String [] {A.class.getName()}); // needed? no, already in servicereference
 		properties.put(RemoteConstants.SERVICE_IMPORTED, A.class.getName());
 		properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
-		properties.put(RemoteConstants.ENDPOINT_ID, endpointID);
+		properties.put(RemoteConstants.ENDPOINT_SERVICE_ID, endpointID);
 		properties.put(RemoteConstants.ENDPOINT_FRAMEWORK_UUID, context.getProperty("org.osgi.framework.uuid"));
-		properties.put(RemoteConstants.ENDPOINT_URI, "someURI"); // mandatory
+		properties.put(RemoteConstants.ENDPOINT_ID, "someURI"); // mandatory
 		properties.put(RemoteConstants.SERVICE_IMPORTED_CONFIGS, "A"); // mandatory
 		endpoint = new EndpointDescription(registration.getReference(), properties);
 		

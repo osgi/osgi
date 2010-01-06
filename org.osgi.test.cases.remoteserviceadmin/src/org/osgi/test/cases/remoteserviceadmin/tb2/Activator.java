@@ -119,7 +119,7 @@ public class Activator implements BundleActivator, A, B {
 			Assert.assertTrue(ed.getInterfaces().contains(A.class.getName()));
 			Assert.assertFalse(ed.getInterfaces().contains(B.class.getName()));
 			
-			Assert.assertNotNull(ed.getRemoteURI());
+			Assert.assertNotNull(ed.getRemoteID());
 			Assert.assertNotNull(ed.getConfigurationTypes());
 			Assert.assertFalse(ed.getConfigurationTypes().isEmpty());
 			Assert.assertTrue(ed.getIntents().contains("my_intent_is_for_this_to_work"));
