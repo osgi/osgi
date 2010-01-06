@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,15 +65,15 @@ import org.osgi.framework.Version;
 public class EndpointDescription {
 	private final Map<String, Object>	properties;
 	private final List<String>			interfaces;
-	private final long					remoteServiceId;
+	private final long					remoteServiceID;
 	private final String				remoteFrameworkUUID;
-	private final String				remoteUri;
+	private final String				remoteID;
 
 	/**
 	 * Create an Endpoint Description from a Map.
 	 * 
 	 * <p>
-	 * The {@link RemoteConstants#ENDPOINT_URI endpoint.uri},
+	 * The {@link RemoteConstants#ENDPOINT_ID endpoint.id},
 	 * {@link RemoteConstants#SERVICE_IMPORTED_CONFIGS service.imported.configs}
 	 * and <code>objectClass</code> properties must be set.
 	 * 
@@ -110,11 +110,11 @@ public class EndpointDescription {
 		this.properties = Collections.unmodifiableMap(props);
 		/* properties must be initialized before calling the following methods */
 		interfaces = verifyObjectClassProperty();
-		remoteServiceId = verifyLongProperty(ENDPOINT_ID);
+		remoteServiceID = verifyLongProperty(ENDPOINT_SERVICE_ID);
 		remoteFrameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
-		remoteUri = verifyStringProperty(ENDPOINT_URI);
-		if (remoteUri == null) {
-			throw new IllegalArgumentException(ENDPOINT_URI
+		remoteID = verifyStringProperty(ENDPOINT_ID);
+		if (remoteID == null) {
+			throw new IllegalArgumentException(ENDPOINT_ID
 					+ " property must be set");
 		}
 		if (getConfigurationTypes().isEmpty()) {
@@ -131,12 +131,12 @@ public class EndpointDescription {
 	 * <p>
 	 * This method will automatically set the
 	 * {@link RemoteConstants#ENDPOINT_FRAMEWORK_UUID endpoint.framework.uuid}
-	 * and {@link RemoteConstants#ENDPOINT_ID endpoint.id} properties based on
-	 * the specified Service Reference as well as the
+	 * and {@link RemoteConstants#ENDPOINT_SERVICE_ID endpoint.service.id}
+	 * properties based on the specified Service Reference as well as the
 	 * {@link RemoteConstants#SERVICE_IMPORTED service.imported} property if
 	 * they are not specified as properties.
 	 * <p>
-	 * The {@link RemoteConstants#ENDPOINT_URI endpoint.uri},
+	 * The {@link RemoteConstants#ENDPOINT_ID endpoint.id},
 	 * {@link RemoteConstants#SERVICE_IMPORTED_CONFIGS service.imported.configs}
 	 * and <code>objectClass</code> properties must be set.
 	 * 
@@ -177,8 +177,8 @@ public class EndpointDescription {
 			}
 		}
 
-		if (!props.containsKey(ENDPOINT_ID)) {
-			props.put(ENDPOINT_ID, reference.getProperty(Constants.SERVICE_ID));
+		if (!props.containsKey(ENDPOINT_SERVICE_ID)) {
+			props.put(ENDPOINT_SERVICE_ID, reference.getProperty(Constants.SERVICE_ID));
 		}
 		if (!props.containsKey(ENDPOINT_FRAMEWORK_UUID)) {
 			String uuid = null;
@@ -204,11 +204,11 @@ public class EndpointDescription {
 		this.properties = Collections.unmodifiableMap(props);
 		/* properties must be initialized before calling the following methods */
 		interfaces = verifyObjectClassProperty();
-		remoteServiceId = verifyLongProperty(ENDPOINT_ID);
+		remoteServiceID = verifyLongProperty(ENDPOINT_SERVICE_ID);
 		remoteFrameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
-		remoteUri = verifyStringProperty(ENDPOINT_URI);
-		if (remoteUri == null) {
-			throw new IllegalArgumentException(ENDPOINT_URI
+		remoteID = verifyStringProperty(ENDPOINT_ID);
+		if (remoteID == null) {
+			throw new IllegalArgumentException(ENDPOINT_ID
 					+ " property must be set");
 		}
 		if (getConfigurationTypes().isEmpty()) {
@@ -301,19 +301,19 @@ public class EndpointDescription {
 	}
 
 	/**
-	 * Returns the endpoint's URI.
+	 * Returns the endpoint's id.
 	 * 
-	 * The URI is an opaque id for an endpoint in URI form. No two different
-	 * endpoints must have the same URI, two Endpoint Descriptions with the same
-	 * URI must represent the same endpoint.
+	 * The id is an opaque id for an endpoint. No two different endpoints must
+	 * have the same id. Two Endpoint Descriptions with the same id must
+	 * represent the same endpoint.
 	 * 
-	 * The value of the URI is stored in the
-	 * {@link RemoteConstants#ENDPOINT_URI} property.
+	 * The value of the id is stored in the
+	 * {@link RemoteConstants#ENDPOINT_ID} property.
 	 * 
-	 * @return The URI of the endpoint, never <code>null</code>.
+	 * @return The id of the endpoint, never <code>null</code>.
 	 */
-	public String getRemoteURI() {
-		return remoteUri;
+	public String getRemoteID() {
+		return remoteID;
 	}
 
 	/**
@@ -376,14 +376,14 @@ public class EndpointDescription {
 	 * id for a service.
 	 * 
 	 * The value of the remote service id is stored in the
-	 * {@link RemoteConstants#ENDPOINT_ID} endpoint property.
+	 * {@link RemoteConstants#ENDPOINT_SERVICE_ID} endpoint property.
 	 * 
 	 * @return Service id of a service or 0 if this Endpoint Description does
-	 *         not relate to an OSGi service
+	 *         not relate to an OSGi service.
 	 * 
 	 */
 	public long getRemoteServiceID() {
-		return remoteServiceId;
+		return remoteServiceID;
 	}
 
 	/**
@@ -496,7 +496,7 @@ public class EndpointDescription {
 	 * as the given Endpoint Description.
 	 * 
 	 * Two Endpoint Descriptions point to the same service if they have the same
-	 * URI or their framework UUIDs and remote service ids are equal.
+	 * id or their framework UUIDs and remote service ids are equal.
 	 * 
 	 * @param other The Endpoint Description to look at
 	 * @return True if this endpoint description points to the same service as
@@ -522,19 +522,17 @@ public class EndpointDescription {
 	 * @return An integer which is a hash code value for this object.
 	 */
 	public int hashCode() {
-		return getRemoteURI().hashCode();
+		return getRemoteID().hashCode();
 	}
 
 	/**
-	 * Compares this <code>EndpointDescription</code> object to another
-	 * object.
+	 * Compares this <code>EndpointDescription</code> object to another object.
 	 * 
 	 * <p>
 	 * An Endpoint Description is considered to be <b>equal to</b> another
-	 * Endpoint Description if their URIs are equal.
+	 * Endpoint Description if their ids are equal.
 	 * 
-	 * @param other The <code>EndpointDescription</code> object to be
-	 *        compared.
+	 * @param other The <code>EndpointDescription</code> object to be compared.
 	 * @return <code>true</code> if <code>object</code> is a
 	 *         <code>EndpointDescription</code> and is equal to this object;
 	 *         <code>false</code> otherwise.
@@ -546,8 +544,8 @@ public class EndpointDescription {
 		if (!(other instanceof EndpointDescription)) {
 			return false;
 		}
-		return getRemoteURI().equals(
-				((EndpointDescription) other).getRemoteURI());
+		return getRemoteID().equals(
+				((EndpointDescription) other).getRemoteID());
 	}
 
 	/**

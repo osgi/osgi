@@ -69,13 +69,13 @@ public class EndpointPermissionTests extends PermissionTestCase {
 	}
 
 	public void testActions() {
-		String someURI = "someuri";
+		String someId = "someId";
 		Map<String, Object> ep = new HashMap<String, Object>();
-		ep.put(ENDPOINT_URI, someURI);
+		ep.put(ENDPOINT_ID, someId);
 		ep.put(OBJECTCLASS, new String[] {"foo"});
 		ep.put(SERVICE_IMPORTED_CONFIGS, "config");
 		EndpointDescription ed = new EndpointDescription(ep);
-		String filterString = "(" + ENDPOINT_URI + "=" + someURI + ")";
+		String filterString = "(" + ENDPOINT_ID + "=" + someId + ")";
 		Permission op = new PropertyPermission("java.home", "read");
 
 		EndpointPermission p11 = new EndpointPermission(filterString,
@@ -342,35 +342,35 @@ public class EndpointPermissionTests extends PermissionTestCase {
 		assertNotImplies(read, importx);
 		assertNotImplies(read, export);
 
-		String someURI = "someuri";
+		String someId = "someId";
 		Map<String, Object> ep = new HashMap<String, Object>();
-		ep.put(ENDPOINT_URI, someURI);
+		ep.put(ENDPOINT_ID, someId);
 		ep.put(OBJECTCLASS, new String[] {"foo"});
 		ep.put(SERVICE_IMPORTED_CONFIGS, "config");
 		EndpointDescription ed = new EndpointDescription(ep);
-		String filterString = "(" + ENDPOINT_URI + "=" + someURI + ")";
+		String filterString = "(" + ENDPOINT_ID + "=" + someId + ")";
 
-		EndpointPermission importuri = new EndpointPermission(filterString,
+		EndpointPermission importid = new EndpointPermission(filterString,
 				"import");
 		EndpointPermission both = new EndpointPermission(ed, null,
 				"import,export");
 		PermissionCollection pc = importx.newPermissionCollection();
 		assertAddPermission(pc, export);
-		assertAddPermission(pc, importuri);
+		assertAddPermission(pc, importid);
 		assertImplies(pc, both);
 	}
 
 	public void testFiltersName() {
 		EndpointPermission p31 = new EndpointPermission(
-				"  (endpoint.uri  =com.foo.service2)", "import");
+				"  (endpoint.id  =com.foo.service2)", "import");
 		EndpointPermission p32 = new EndpointPermission(
-				"(endpoint.uri=com.foo.*)", "import");
-		EndpointPermission p33 = new EndpointPermission("(endpoint.uri=com.*)",
+				"(endpoint.id=com.foo.*)", "import");
+		EndpointPermission p33 = new EndpointPermission("(endpoint.id=com.*)",
 				"import");
-		EndpointPermission p34 = new EndpointPermission("(endpoint.uri=*)",
+		EndpointPermission p34 = new EndpointPermission("(endpoint.id=*)",
 				"import");
 		Map<String, Object> ep = new HashMap<String, Object>();
-		ep.put(ENDPOINT_URI, "com.foo.service2");
+		ep.put(ENDPOINT_ID, "com.foo.service2");
 		ep.put(OBJECTCLASS, new String[] {"foo"});
 		ep.put(SERVICE_IMPORTED_CONFIGS, "config");
 		EndpointDescription ed = new EndpointDescription(ep);
@@ -457,10 +457,10 @@ public class EndpointPermissionTests extends PermissionTestCase {
 		EndpointPermission p43 = new EndpointPermission("(name=test.*)",
 				"import");
 		EndpointPermission p45 = new EndpointPermission(
-				"(endpoint.uri=com.foo.*)", "import");
+				"(endpoint.id=com.foo.*)", "import");
 
 		Map<String, Object> ep1 = new HashMap<String, Object>();
-		ep1.put(ENDPOINT_URI, "com.foo.service2");
+		ep1.put(ENDPOINT_ID, "com.foo.service2");
 		ep1.put(OBJECTCLASS, new String[] {"foo"});
 		ep1.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ep1.put("id", "2");
@@ -469,7 +469,7 @@ public class EndpointPermissionTests extends PermissionTestCase {
 		EndpointPermission p46 = new EndpointPermission(
 				new EndpointDescription(ep1), null, "import");
 		Map<String, Object> ep2 = new HashMap<String, Object>();
-		ep2.put(ENDPOINT_URI, "com.bar.service2");
+		ep2.put(ENDPOINT_ID, "com.bar.service2");
 		ep2.put(OBJECTCLASS, new String[] {"foo"});
 		ep2.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ep2.put("id", "3");
@@ -529,15 +529,15 @@ public class EndpointPermissionTests extends PermissionTestCase {
 
 	public void testPermissionCollection() {
 		EndpointPermission p51 = new EndpointPermission(
-				"  (endpoint.uri  =com.foo.service2)", "import");
+				"  (endpoint.id  =com.foo.service2)", "import");
 		EndpointPermission p52 = new EndpointPermission(
-				"(endpoint.uri=com.foo.*)", "import");
-		EndpointPermission p53 = new EndpointPermission("(endpoint.uri=com.*)",
+				"(endpoint.id=com.foo.*)", "import");
+		EndpointPermission p53 = new EndpointPermission("(endpoint.id=com.*)",
 				"import");
-		EndpointPermission p54 = new EndpointPermission("(endpoint.uri=*)",
+		EndpointPermission p54 = new EndpointPermission("(endpoint.id=*)",
 				"import");
 		Map<String, Object> ep = new HashMap<String, Object>();
-		ep.put(ENDPOINT_URI, "com.foo.service2");
+		ep.put(ENDPOINT_ID, "com.foo.service2");
 		ep.put(OBJECTCLASS, new String[] {"foo"});
 		ep.put(SERVICE_IMPORTED_CONFIGS, "config");
 		EndpointDescription ed = new EndpointDescription(ep);
@@ -545,7 +545,7 @@ public class EndpointPermissionTests extends PermissionTestCase {
 		EndpointPermission p59 = new EndpointPermission("*", "import");
 
 		Map<String, Object> ep1 = new HashMap<String, Object>();
-		ep1.put(ENDPOINT_URI, "com.foo.service2");
+		ep1.put(ENDPOINT_ID, "com.foo.service2");
 		ep1.put(OBJECTCLASS, new String[] {"foo"});
 		ep1.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ep1.put("id", "2");
@@ -554,7 +554,7 @@ public class EndpointPermissionTests extends PermissionTestCase {
 		EndpointPermission p5a = new EndpointPermission(
 				new EndpointDescription(ep1), null, "import");
 		Map<String, Object> ep2 = new HashMap<String, Object>();
-		ep2.put(ENDPOINT_URI, "com.bar.service2");
+		ep2.put(ENDPOINT_ID, "com.bar.service2");
 		ep2.put(OBJECTCLASS, new String[] {"foo"});
 		ep2.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ep2.put("id", "3");
@@ -651,7 +651,7 @@ public class EndpointPermissionTests extends PermissionTestCase {
 		EndpointPermission p62 = new EndpointPermission(
 				"(endpoint.framework.uuid=<<LOCAL>>)", "import");
 		Map<String, Object> ep = new HashMap<String, Object>();
-		ep.put(ENDPOINT_URI, "com.foo.service2");
+		ep.put(ENDPOINT_ID, "com.foo.service2");
 		ep.put(OBJECTCLASS, new String[] {"foo"});
 		ep.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ep.put(ENDPOINT_FRAMEWORK_UUID, someUUID);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -189,8 +189,8 @@ public final class EndpointPermission extends Permission {
 		if (endpoint == null) {
 			throw new IllegalArgumentException("invalid endpoint: null");
 		}
-		StringBuffer sb = new StringBuffer("(" + ENDPOINT_URI + "=");
-		sb.append(endpoint.getRemoteURI());
+		StringBuffer sb = new StringBuffer("(" + ENDPOINT_ID + "=");
+		sb.append(endpoint.getRemoteID());
 		sb.append(")");
 		return sb.toString();
 	}

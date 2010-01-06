@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -169,13 +169,13 @@ public class RemoteConstants {
 	/* above are from Ch 13 Remote Service spec. */
 
 	/**
-	 * Endpoint property identifying the URI for this endpoint. This service
+	 * Endpoint property identifying the id for this endpoint. This service
 	 * property must always be set.
 	 * 
 	 * <p>
 	 * The value of this property must be of type <code>String</code>.
 	 */
-	public final static String	ENDPOINT_URI					= "endpoint.uri";
+	public final static String	ENDPOINT_ID						= "endpoint.id";
 
 	/**
 	 * Endpoint property identifying the service id of the exported service. Can
@@ -184,7 +184,7 @@ public class RemoteConstants {
 	 * <p>
 	 * The value of this property must be of type <code>Long</code>.
 	 */
-	public final static String	ENDPOINT_ID						= "endpoint.id";
+	public final static String	ENDPOINT_SERVICE_ID				= "endpoint.service.id";
 
 	/**
 	 * Endpoint property identifying the universally unique id of the exporting

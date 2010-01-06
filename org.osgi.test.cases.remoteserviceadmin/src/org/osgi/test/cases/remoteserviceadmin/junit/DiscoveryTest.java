@@ -102,7 +102,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		EndpointDescription ep = endpointListenerImpl.getAddedEndpoint(); 
 		assertNotNull(ep);
 		assertEquals("remote service id is incorrect", 12345, ep.getRemoteServiceID());
-		assertEquals("remote.uri does not match", "someURI", ep.getRemoteURI());
+		assertEquals("remote.id does not match", "someURI", ep.getRemoteID());
 		assertEquals("remote framework id is incorrect", getFramework().getBundleContext().getProperty("org.osgi.framework.uuid"), ep.getRemoteFrameworkUUID());
 		assertFalse("remote framework id has to be UUID of remote not local framework", ep.getRemoteFrameworkUUID().equals(getContext().getProperty("org.osgi.framework.uuid")));
 		assertTrue("discovered interfaces don't contain " + A.class.getName(), ep.getInterfaces().contains(A.class.getName()));
@@ -128,7 +128,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		ep = endpointListenerImpl.getRemovedEndpoint();
 		assertNotNull(ep);
 		assertEquals("remote service id is incorrect", 12345, ep.getRemoteServiceID());
-		assertEquals("remote.uri does not match", "someURI", ep.getRemoteURI());
+		assertEquals("remote.id does not match", "someURI", ep.getRemoteID());
 		assertEquals("remote framework id is incorrect", getFramework().getBundleContext().getProperty("org.osgi.framework.uuid"), ep.getRemoteFrameworkUUID());
 		assertFalse("remote framework id has to be UUID of remote not local framework", ep.getRemoteFrameworkUUID().equals(getContext().getProperty("org.osgi.framework.uuid")));
 		assertTrue("discovered interfaces don't contain " + A.class.getName(), ep.getInterfaces().contains(A.class.getName()));

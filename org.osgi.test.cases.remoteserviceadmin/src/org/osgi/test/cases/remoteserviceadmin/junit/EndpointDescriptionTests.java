@@ -51,8 +51,8 @@ public class EndpointDescriptionTests extends TestCase {
 		}
 
 		String testUUID = "testUUID";
-		String someURI = "someuri";
-		props.put(ENDPOINT_URI, someURI);
+		String someId = "someId";
+		props.put(ENDPOINT_ID, someId);
 		try {
 			ed = newEndpointDescription(props);
 			fail("missing required properties");
@@ -72,7 +72,7 @@ public class EndpointDescriptionTests extends TestCase {
 
 		props.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ed = newEndpointDescription(props);
-		assertEquals("wrong remote uri", someURI, ed.getRemoteURI());
+		assertEquals("wrong remote id", someId, ed.getRemoteID());
 
 		assertEquals("remote service id should be zero", 0l, ed
 				.getRemoteServiceID());
@@ -83,7 +83,7 @@ public class EndpointDescriptionTests extends TestCase {
 		ed = newEndpointDescription(props);
 		assertEquals("wrong uuid", testUUID, ed.getRemoteFrameworkUUID());
 
-		props.put(ENDPOINT_ID, "not a valid long");
+		props.put(ENDPOINT_SERVICE_ID, "not a valid long");
 		try {
 			ed = newEndpointDescription(props);
 			fail("invalid endpoint.id property");
@@ -92,7 +92,7 @@ public class EndpointDescriptionTests extends TestCase {
 			// expected
 		}
 
-		props.put(ENDPOINT_ID, new Object());
+		props.put(ENDPOINT_SERVICE_ID, new Object());
 		try {
 			ed = newEndpointDescription(props);
 			fail("invalid endpoint.id property");
@@ -102,7 +102,7 @@ public class EndpointDescriptionTests extends TestCase {
 		}
 
 		Long someID = new Long(12l);
-		props.put(ENDPOINT_ID, someID);
+		props.put(ENDPOINT_SERVICE_ID, someID);
 		ed = newEndpointDescription(props);
 		assertEquals("wrong id", someID.longValue(), ed.getRemoteServiceID());
 
@@ -183,8 +183,8 @@ public class EndpointDescriptionTests extends TestCase {
 		EndpointDescription ed;
 		Map<String, Object> props = new HashMap<String, Object>();
 		String testUUID = "testUUID";
-		String someURI = "someuri";
-		props.put(ENDPOINT_URI, someURI);
+		String someId = "someId";
+		props.put(ENDPOINT_ID, someId);
 		props.put(OBJECTCLASS, new String[] {"foo"});
 		props.put(SERVICE_IMPORTED_CONFIGS, "config");
 		BundleContext testContext = newMockBundleContext(testUUID);
@@ -261,8 +261,8 @@ public class EndpointDescriptionTests extends TestCase {
 			// expected
 		}
 
-		String someURI = "someuri";
-		props.put(ENDPOINT_URI, someURI);
+		String someId = "someId";
+		props.put(ENDPOINT_ID, someId);
 		try {
 			ed = newEndpointDescription(ref, null);
 			fail("missing required properties");
@@ -271,7 +271,7 @@ public class EndpointDescriptionTests extends TestCase {
 			// expected
 		}
 
-		serviceProps.put(ENDPOINT_URI, someURI);
+		serviceProps.put(ENDPOINT_ID, someId);
 		try {
 			ed = newEndpointDescription(ref, props);
 			fail("missing required properties");
@@ -301,7 +301,7 @@ public class EndpointDescriptionTests extends TestCase {
 
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ed = newEndpointDescription(ref, null);
-		assertEquals("wrong remote uri", someURI, ed.getRemoteURI());
+		assertEquals("wrong remote id", someId, ed.getRemoteID());
 
 		assertEquals("remote service id should be zero", 0l, ed
 				.getRemoteServiceID());
@@ -313,7 +313,7 @@ public class EndpointDescriptionTests extends TestCase {
 		assertEquals("wrong uuid", "newUUID", ed.getRemoteFrameworkUUID());
 		props.remove(ENDPOINT_FRAMEWORK_UUID);
 
-		props.put(ENDPOINT_ID, "not a valid long");
+		props.put(ENDPOINT_SERVICE_ID, "not a valid long");
 		try {
 			ed = newEndpointDescription(ref, props);
 			fail("invalid endpoint.id property");
@@ -322,7 +322,7 @@ public class EndpointDescriptionTests extends TestCase {
 			// expected
 		}
 
-		props.put(ENDPOINT_ID, new Object());
+		props.put(ENDPOINT_SERVICE_ID, new Object());
 		try {
 			ed = newEndpointDescription(ref, props);
 			fail("invalid endpoint.id property");
@@ -332,7 +332,7 @@ public class EndpointDescriptionTests extends TestCase {
 		}
 
 		Long someID = new Long(12l);
-		props.remove(ENDPOINT_ID);
+		props.remove(ENDPOINT_SERVICE_ID);
 		serviceProps.put(SERVICE_ID, someID);
 		ed = newEndpointDescription(ref, props);
 		assertEquals("wrong id", someID.longValue(), ed.getRemoteServiceID());
@@ -400,8 +400,8 @@ public class EndpointDescriptionTests extends TestCase {
 	public void testIntents() {
 		EndpointDescription ed;
 		Map<String, Object> props = new HashMap<String, Object>();
-		String someURI = "someuri";
-		props.put(ENDPOINT_URI, someURI);
+		String someId = "someId";
+		props.put(ENDPOINT_ID, someId);
 		props.put(OBJECTCLASS, new String[] {"foo"});
 		props.put(SERVICE_IMPORTED_CONFIGS, "config");
 		String testUUID = "testUUID";
@@ -410,7 +410,7 @@ public class EndpointDescriptionTests extends TestCase {
 				testContext);
 		Map<String, Object> serviceProps = new TreeMap<String, Object>(
 				String.CASE_INSENSITIVE_ORDER);
-		serviceProps.put(ENDPOINT_URI, someURI);
+		serviceProps.put(ENDPOINT_ID, someId);
 		serviceProps.put(OBJECTCLASS, new String[] {"foo"});
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
@@ -523,8 +523,8 @@ public class EndpointDescriptionTests extends TestCase {
 	public void testConfigurationsTypes() {
 		EndpointDescription ed;
 		Map<String, Object> props = new HashMap<String, Object>();
-		String someURI = "someuri";
-		props.put(ENDPOINT_URI, someURI);
+		String someId = "someId";
+		props.put(ENDPOINT_ID, someId);
 		props.put(OBJECTCLASS, new String[] {"foo"});
 		props.put(SERVICE_IMPORTED_CONFIGS, "config");
 		String testUUID = "testUUID";
@@ -533,7 +533,7 @@ public class EndpointDescriptionTests extends TestCase {
 				testContext);
 		Map<String, Object> serviceProps = new TreeMap<String, Object>(
 				String.CASE_INSENSITIVE_ORDER);
-		serviceProps.put(ENDPOINT_URI, someURI);
+		serviceProps.put(ENDPOINT_ID, someId);
 		serviceProps.put(OBJECTCLASS, new String[] {"foo"});
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
@@ -642,8 +642,8 @@ public class EndpointDescriptionTests extends TestCase {
 
 	public void testHashcode() {
 		Map<String, Object> props = new HashMap<String, Object>();
-		String someURI = "someuri";
-		props.put(ENDPOINT_URI, someURI);
+		String someId = "someId";
+		props.put(ENDPOINT_ID, someId);
 		props.put(OBJECTCLASS, new String[] {"foo"});
 		props.put(SERVICE_IMPORTED_CONFIGS, "config");
 		String testUUID = "testUUID";
@@ -652,7 +652,7 @@ public class EndpointDescriptionTests extends TestCase {
 				testContext);
 		Map<String, Object> serviceProps = new TreeMap<String, Object>(
 				String.CASE_INSENSITIVE_ORDER);
-		serviceProps.put(ENDPOINT_URI, someURI);
+		serviceProps.put(ENDPOINT_ID, someId);
 		serviceProps.put(OBJECTCLASS, new String[] {"foo"});
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
@@ -660,7 +660,7 @@ public class EndpointDescriptionTests extends TestCase {
 
 		ed1 = newEndpointDescription(props);
 		ed2 = newEndpointDescription(ref, null);
-		props.put(ENDPOINT_URI, "other.uri");
+		props.put(ENDPOINT_ID, "other.id");
 		ed3 = newEndpointDescription(props);
 
 		assertTrue("hashCode should equal", ed1.hashCode() == ed2.hashCode());
@@ -672,8 +672,8 @@ public class EndpointDescriptionTests extends TestCase {
 
 	public void testEquals() {
 		Map<String, Object> props = new HashMap<String, Object>();
-		String someURI = "someuri";
-		props.put(ENDPOINT_URI, someURI);
+		String someId = "someId";
+		props.put(ENDPOINT_ID, someId);
 		props.put(OBJECTCLASS, new String[] {"foo"});
 		props.put(SERVICE_IMPORTED_CONFIGS, "config");
 		String testUUID = "testUUID";
@@ -682,7 +682,7 @@ public class EndpointDescriptionTests extends TestCase {
 				testContext);
 		Map<String, Object> serviceProps = new TreeMap<String, Object>(
 				String.CASE_INSENSITIVE_ORDER);
-		serviceProps.put(ENDPOINT_URI, someURI);
+		serviceProps.put(ENDPOINT_ID, someId);
 		serviceProps.put(OBJECTCLASS, new String[] {"foo"});
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
@@ -690,7 +690,7 @@ public class EndpointDescriptionTests extends TestCase {
 
 		ed1 = newEndpointDescription(props);
 		ed2 = newEndpointDescription(ref, null);
-		props.put(ENDPOINT_URI, "other.uri");
+		props.put(ENDPOINT_ID, "other.id");
 		ed3 = newEndpointDescription(props);
 
 		assertTrue("should equal", ed1.equals(ed2));
@@ -707,7 +707,7 @@ public class EndpointDescriptionTests extends TestCase {
 
 	public void testIsSame() {
 		Map<String, Object> props = new HashMap<String, Object>();
-		props.put(ENDPOINT_URI, "uri1");
+		props.put(ENDPOINT_ID, "id1");
 		props.put(OBJECTCLASS, new String[] {"foo"});
 		props.put(SERVICE_IMPORTED_CONFIGS, "config");
 		String testUUID = "testUUID";
@@ -716,11 +716,11 @@ public class EndpointDescriptionTests extends TestCase {
 				testContext);
 		Map<String, Object> serviceProps = new TreeMap<String, Object>(
 				String.CASE_INSENSITIVE_ORDER);
-		serviceProps.put(ENDPOINT_URI, "uri2");
+		serviceProps.put(ENDPOINT_ID, "id2");
 		serviceProps.put(OBJECTCLASS, new String[] {"foo"});
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
 		Long someID = new Long(12l);
-		props.put(ENDPOINT_ID, someID);
+		props.put(ENDPOINT_SERVICE_ID, someID);
 		serviceProps.put(SERVICE_ID, someID);
 		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
 		EndpointDescription ed1, ed2, ed3, ed4;
@@ -728,7 +728,7 @@ public class EndpointDescriptionTests extends TestCase {
 		ed1 = newEndpointDescription(props);
 		ed2 = newEndpointDescription(ref, null);
 		ed3 = newEndpointDescription(props);
-		props.put(ENDPOINT_URI, "uri4");
+		props.put(ENDPOINT_ID, "id4");
 		props.put(ENDPOINT_FRAMEWORK_UUID, testUUID);
 		ed4 = newEndpointDescription(props);
 
@@ -744,7 +744,7 @@ public class EndpointDescriptionTests extends TestCase {
 
 	public void testMatches() {
 		Map<String, Object> props = new HashMap<String, Object>();
-		props.put(ENDPOINT_URI, "uri1");
+		props.put(ENDPOINT_ID, "id1");
 		props.put(OBJECTCLASS, new String[] {"foo"});
 		props.put(SERVICE_IMPORTED_CONFIGS, "config");
 		String testUUID = "testUUID";
@@ -753,11 +753,11 @@ public class EndpointDescriptionTests extends TestCase {
 				testContext);
 		Map<String, Object> serviceProps = new TreeMap<String, Object>(
 				String.CASE_INSENSITIVE_ORDER);
-		serviceProps.put(ENDPOINT_URI, "uri2");
+		serviceProps.put(ENDPOINT_ID, "id2");
 		serviceProps.put(OBJECTCLASS, new String[] {"foo"});
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
 		Long someID = new Long(12l);
-		props.put(ENDPOINT_ID, someID);
+		props.put(ENDPOINT_SERVICE_ID, someID);
 		serviceProps.put(SERVICE_ID, someID);
 		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
 		EndpointDescription ed1, ed2;
@@ -765,11 +765,11 @@ public class EndpointDescriptionTests extends TestCase {
 		ed1 = newEndpointDescription(props);
 		ed2 = newEndpointDescription(ref, null);
 
-		String filter = "(" + ENDPOINT_URI + "=uri1)";
+		String filter = "(" + ENDPOINT_ID + "=id1)";
 		assertTrue("filter does not match", ed1.matches(filter));
 		assertFalse("filter matches", ed2.matches(filter));
 
-		filter = "(ENDPOINT.uri=uri2)";
+		filter = "(ENDPOINT.id=id2)";
 		assertTrue("filter does not match", ed2.matches(filter));
 		assertFalse("filter matches", ed1.matches(filter));
 
