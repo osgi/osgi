@@ -115,6 +115,13 @@ URL                     http://cxf.apache.org/
 License					licenses/ASL-2.0.txt
 Modifications           none (this was made specially for us, but is in the general apache build)
 
+org.apache.tuscany.sca.bundle -------------------------------------------------------
+Copyright               Copyright (c) 2004 Apache Software Foundation, All Rights Reserved
+Used                    scaconfigtype
+URL                     http://tuscany.apache.org/
+License					licenses/ASL-2.0.txt
+Modifications           none (this was made specially for us, NOT YET IN in the general apache build) sourced from http://people.apache.org/~rfeng/tuscany/tuscany-bundle.jar
+
 org.apache.felix.main  --------------------------------------------------------------------
 Copyright               Copyright (c) 2004 Apache Software Foundation, All Rights Reserved
 Used                    general testing

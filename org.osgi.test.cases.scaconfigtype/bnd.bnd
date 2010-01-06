@@ -18,8 +18,9 @@ Include-Resource					= \
 	${junit}
 
 -runbundles							= \
-	org.apache.cxf.dosgi.singlebundle;      version=latest, \
+	org.apache.tuscany.sca.bundle;      version=2.0.0, \
 	osgi.cmpn;								version=latest	, \
+        ee.j2se;						version=latest
 	org.osgi.impl.service.log;				version=latest
 	
 # TODO bundles contains ${repo;com.springsource.junit} factor out to ${junit} as above
@@ -27,7 +28,7 @@ Include-Resource					= \
 	osgi.compatibility.bootdelegation=false, \
 	osgi.resolverMode=strict, \
 	osgi.support.multipleHosts=true, \
-	${p}.bundles=${repo;com.springsource.junit}|${repo;org.apache.cxf.dosgi.singlebundle}|${repo;osgi.core}|${repo;osgi.cmpn}|${repo;org.osgi.impl.service.log}, \
+	${p}.bundles=${repo;com.springsource.junit}|${repo;org.apache.tuscany.sca.bundle}|${repo;osgi.core}|${repo;osgi.cmpn}|${repo;org.osgi.impl.service.log}, \
 	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.address", \
 	service.exported.configs=org.apache.cxf.ws, \
 	org.apache.cxf.ws.address=http://localhost:9090/test
