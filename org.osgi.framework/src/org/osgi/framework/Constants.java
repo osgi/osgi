@@ -1136,7 +1136,7 @@ public interface Constants {
 	 * @see #FRAMEWORK_EXECPERMISSION
 	 * @since 1.6
 	 */
-	public final static String	FRAMEWORK_COMMAND_ABSPATH				= "${abspath}";
+	public final static String	FRAMEWORK_COMMAND_ABSPATH				= "abspath";
 
 	/**
 	 * Specifies the trust repositories used by the framework. The value is a
