@@ -27,6 +27,4 @@ Import-Package = \
     org.osgi.test.cases.transaction.waittime=30
 
 Test-Cases							= ${testcases}
--signaturetest                      = javax.transaction, javax.transaction.xa
-
 	
