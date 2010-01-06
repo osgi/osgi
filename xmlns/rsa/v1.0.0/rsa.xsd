@@ -19,7 +19,7 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
   xmlns:rsa="http://www.osgi.org/xmlns/rsa/v1.0.0"
   targetNamespace="http://www.osgi.org/xmlns/rsa/v1.0.0"
-  elementFormDefault="unqualified" version="1.0.0">
+  elementFormDefault="qualified" version="1.0.0">
 
   <annotation>
     <documentation xml:lang="en">
