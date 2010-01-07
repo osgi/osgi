@@ -5,8 +5,5 @@
    version="1.0">
 	<persistence-unit name="testUnit1">
 		<description>Persistence unit for testing persistence.xml discovery in META-INF folder of root of bundle</description>
-		<properties>
-			<property name="testMetadata" value="success"/>
-		</properties>
 	</persistence-unit>
 </persistence>

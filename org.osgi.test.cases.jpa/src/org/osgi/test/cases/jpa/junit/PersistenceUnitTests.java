@@ -17,13 +17,11 @@
 
 package org.osgi.test.cases.jpa.junit;
 
-import java.net.URL;
-import java.util.Map;
-import java.util.Properties;
+import javax.persistence.spi.PersistenceProvider;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.jpa.PersistenceUnitInfoService;
+import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -38,206 +36,110 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 
 	public void testDefaultPersistenceLocation() throws Exception {
 		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
+		EntityManagerFactoryBuilder persistenceUnit = null;
+		
 		try {
-			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService (PersistenceUnitInfoService.class, "(osgi.unit.name=testUnit1)");
+			persistenceUnit = (EntityManagerFactoryBuilder) getService (EntityManagerFactoryBuilder.class, "(osgi.unit.name=testUnit1)");
 			if (persistenceUnit == null) {
 				fail("Failed to retrieve the specified persistence unit.");
 			} 
 		} finally {
+			if (persistenceUnit != null) {
+				ungetService(persistenceUnit);
+			}
 			uninstallBundle(persistenceBundle);
 		}
 	}
 	
 	public void testNonStandardPersistenceLocation() throws Exception {
 		Bundle persistenceBundle = installBundle("nonStandardPersistenceLocation.jar");
+		EntityManagerFactoryBuilder persistenceUnit = null;
+		
 		try {
-			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService (PersistenceUnitInfoService.class, "(osgi.unit.name=testUnit2)");
+			persistenceUnit = (EntityManagerFactoryBuilder) getService (EntityManagerFactoryBuilder.class, "(osgi.unit.name=testUnit2)");
 			if (persistenceUnit == null) {
 				fail("Failed to retrieve the specified persistence unit.");
 			} 
 		} finally {
+			if (persistenceUnit != null) {
+				ungetService(persistenceUnit);
+			}
 			uninstallBundle(persistenceBundle);
 		}
 	}
 	
 	public void testMultiplePersistenceLocations() throws Exception {
 		Bundle persistenceBundle = installBundle("multiplePersistenceLocations.jar");
+		EntityManagerFactoryBuilder persistenceUnit1 = null;
+		EntityManagerFactoryBuilder persistenceUnit2 = null;
+		
 		try {
-			PersistenceUnitInfoService persistenceUnit1 = (PersistenceUnitInfoService) getService (PersistenceUnitInfoService.class, "(osgi.unit.name=testUnit3)");
+			persistenceUnit1 = (EntityManagerFactoryBuilder) getService (EntityManagerFactoryBuilder.class, "(osgi.unit.name=testUnit3)");
 			if (persistenceUnit1 == null) {
 				fail("Failed to retrieve the specified persistence unit.");
 			}
-			PersistenceUnitInfoService persistenceUnit2 = (PersistenceUnitInfoService) getService (PersistenceUnitInfoService.class, "(osgi.unit.name=testUnit4)");
+			persistenceUnit2 = (EntityManagerFactoryBuilder) getService (EntityManagerFactoryBuilder.class, "(osgi.unit.name=testUnit4)");
 			if (persistenceUnit2 == null) {
 				fail("Failed to retrieve the specified persistence unit.");
 			}
 		} finally {
+			if (persistenceUnit1 != null) {
+				ungetService(persistenceUnit1);
+			}
+			
+			if (persistenceUnit2 != null) {
+				ungetService(persistenceUnit2);
+			}
 			uninstallBundle(persistenceBundle);
 		}
 	}
 	
 	public void testNestedJarPersistenceLocation() throws Exception {
 		Bundle persistenceBundle = installBundle("nestedJarPersistenceLocation.jar");
+		EntityManagerFactoryBuilder persistenceUnit = null;
+		
 		try { 
-			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService (PersistenceUnitInfoService.class, "(osgi.unit.name=testUnit5)");
+			persistenceUnit = (EntityManagerFactoryBuilder) getService (EntityManagerFactoryBuilder.class, "(osgi.unit.name=testUnit5)");
 			if (persistenceUnit == null) {
 				fail("Failed to retrieve the specified persistence unit.");
 			}
 		} finally {
+			if (persistenceUnit != null) {
+				ungetService(persistenceUnit);
+			}
 			uninstallBundle(persistenceBundle);
 		}
 	}
 	
-	public void testMetadata() throws Exception {
-		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
-		try {
-			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit1)");
-			if (persistenceUnit == null) {
-				fail("Failed to retrieve the specified persistence unit.");
-			}
-			
-			Map<String,Object> testMetadata = (Map<String,Object>) persistenceUnit.getPersistenceXmlMetadata();
-			Properties testProperties = (Properties) testMetadata.get(PersistenceUnitInfoService.PROPERTIES);
-			if (!testProperties.containsKey("testMetadata")) {
-				fail("The PersistenceUnitInfoService metadata does not contain the properties defined in the persistence.xml file.");
-			}
-			
-		} catch (Exception ex) {
-			fail("Failed to retrieve the PersistenceUnitInfoService metadata.", ex.getCause());
-		} finally {
-			uninstallBundle(persistenceBundle);
-		}
-	}
-	
-	public void testProviderReference() throws Exception {
-		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
- 		try {
-			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit1)");
-			if (persistenceUnit == null) {
-				fail("Failed to retrieve the specified persistence unit.");
-			}
-			
-			ServiceReference provider = (ServiceReference) persistenceUnit.getProviderReference();
-			if (provider == null) {
-				fail("Unable to retrieve the persistence provider service reference from the PersistenceUnitInfoService instance.");
-			} 
-			
-		} catch (Exception ex) {
-				fail("Unable to retrieve the persistence provider service reference from the PersistenceUnitInfoService instance.", ex.getCause());
-		} finally {
-			uninstallBundle(persistenceBundle);
-		}
-	}
-	
-	public void testPersistenceXmlUrl() throws Exception {
-		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
-		try {
-			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit1)");
-			if (persistenceUnit == null) {
-				fail("Failed to retrieve the specified persistence unit.");
-			}
-			
-			URL persistenceXmlUrl = persistenceUnit.getPersistenceXmlLocation();
-			if (persistenceXmlUrl == null) {
-				fail("Unable to retrieve the persistence.xml url from the PersistenceUnitInfoService instance");
-			}	
-			
-		} catch (Exception ex) {
-			fail("Unable to retrieve the persistence.xml url from the PersistenceUnitInfoService instance", ex.getCause());
-		} finally {
-			uninstallBundle(persistenceBundle);
-		}
-	}
-	
-	public void testPersistenceRootUrl() throws Exception {
-		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
-		try {
-			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit1)");
-			if (persistenceUnit == null) {
-				fail("Failed to retrieve the specified persistence unit.");
-			}
-			
-			URL persistenceRootUrl = persistenceUnit.getPersistenceUnitRoot();
-			if (persistenceRootUrl == null) {
-				fail("Unable to retrieve the persistence.xml root url from the PersistenceUnitInfoService instance");
-			}
-			
-		} catch (Exception ex) {
-			fail("Unable to retrieve the persistence.xml root url from the PersistenceUnitInfoService instance", ex.getCause());
-		} finally {
-			uninstallBundle(persistenceBundle);
-		}
-	}
-	
-	public void testPersistenceUnitBundle() throws Exception {
-		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
-		try {
-			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit1)");
-			if (persistenceUnit == null) {
-				fail("Failed to retrieve the specified persistence unit.");
-			}
-			
-			Bundle persistenceUnitBundle = persistenceUnit.getDefiningBundle();
-			if (!(persistenceUnitBundle == persistenceBundle)) {
-				fail("Unable to retrieve the persistence unit bundle from the PersistenceUnitInfoService instance");
-			}
-			
-		} catch (Exception ex) {
-			fail("Unable to retrieve the persistence unit bundle from the PersistenceUnitInfoService instance", ex.getCause());
-		} finally {
-			uninstallBundle(persistenceBundle);
-		}
-	}
-	
-	public void testPersistenceUnitClassloader() throws Exception {
-		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
-		try {
-			PersistenceUnitInfoService persistenceUnit = (PersistenceUnitInfoService) getService(PersistenceUnitInfoService.class, "(osgi.jpa.persistence.unit.name=testUnit1)");
-			if (persistenceUnit == null) {
-				fail("Failed to retrieve the specified persistence unit.");
-			}
-			
-			ClassLoader persistenceClassloader = persistenceUnit.getClassLoader();
-			if (persistenceClassloader == null) {
-				fail("Unable to retrieve the persistence classloader from the PersistenceUnitInfoService instance");
-			}
-			
-		} catch (Exception ex) {
-			fail("Unable to retrieve the persistence classloader from the PersistenceUnitInfoService instance", ex.getCause());
-		} finally {
-			uninstallBundle(persistenceBundle);
-		}
-	}
-	
-	public void testPesistenceServiceProperties() throws Exception {
+	public void testPesistenceUnitServiceProperties() throws Exception {
 		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
 		
-		// TODO: JPA - Replace with appropriate PersistenceUnitInfoService variables when the interface is updated.
 		try {
-			ServiceReference unitRef = getContext().getServiceReference(PersistenceUnitInfoService.class.getName());
-			String unitName = (String) unitRef.getProperty(PersistenceUnitInfoService.PERSISTENCE_UNIT_NAME);
-			String bundleName = (String) unitRef.getProperty(PersistenceUnitInfoService.PERSISTENCE_BUNDLE_SYMBOLIC_NAME);
-			String bundleVersion = (String) unitRef.getProperty(PersistenceUnitInfoService.PERSISTENCE_BUNDLE_SYMBOLIC_NAME);
+			ServiceReference unitRef = getContext().getServiceReference(EntityManagerFactoryBuilder.class.getName());
+			String unitName = (String) unitRef.getProperty("osgi.unit.name");
+			String unitVersion = (String) unitRef.getProperty("osgi.unit.version");
+			String providerName = (String) unitRef.getProperty("osgi.provider");
 			
 			if (unitName == null) {
-				fail("The " + PersistenceUnitInfoService.PERSISTENCE_UNIT_NAME + " property is not set.");
+				fail("The osgi.unit.name property is not set.");
 			} else if (!unitName.equals("testUnit1")) {
-				fail("The " + PersistenceUnitInfoService.PERSISTENCE_UNIT_NAME + " property is not set correctly.  Received unitName=" + unitName + " but expected unitName=testUnit1");
+				fail("The osgi.unit.name property is not set correctly.  Received osgi.unit.name=" + unitName + " but expected osgi.unit.name=testUnit1");
 			}
 			
-			if (bundleName == null) {
-				fail("The " + PersistenceUnitInfoService.PERSISTENCE_BUNDLE_SYMBOLIC_NAME + " property is not set.");
-			} else if (!bundleName.equals(persistenceBundle.getSymbolicName())) {
-				fail("The " + PersistenceUnitInfoService.PERSISTENCE_BUNDLE_SYMBOLIC_NAME + " property is not set correctly.  Received bundleName=" + bundleName + " but expected bundleName=" + persistenceBundle.getSymbolicName());
+			if (unitVersion == null) {
+				fail("The osgi.unit.version property is not set.");
+			} else if (!unitVersion.equals(persistenceBundle.getVersion().toString())) {
+				fail("The osgi.unit.version property is not set correctly.  Received osgi.unit.version=" + unitVersion + " but expected osgi.unit.version=" + persistenceBundle.getVersion().toString());
 			}
 			
-			if (bundleVersion == null) {
-				fail("The " + PersistenceUnitInfoService.PERSISTENCE_BUNDLE_VERSION + " property is not set.");
-			} else if (!bundleVersion.equals(persistenceBundle.getVersion())) {
-				fail("The " + PersistenceUnitInfoService.PERSISTENCE_BUNDLE_VERSION + " property is not set correctly.  Received bundleVersion=" + bundleVersion + " but expected bundleVersion=" + persistenceBundle.getVersion());
+			ServiceReference providerRef = (ServiceReference) getServiceReference(PersistenceProvider.class);
+			if (providerName == null) {
+				fail("The osgi.provider property is not set.");
+			} else if (!providerName.equals(providerRef.getProperty("javax.persistence.provider"))) {
+				fail("The osgi.provider property is not set correctly.  Received osgi.provider=" + providerName + " but expected osgi.provider=" + providerRef.getProperty("javax.persistence.provider"));
 			}
 		} catch (Exception ex) {
-			fail("Unable to verify PersistenctUnitInfoService service properties.", ex.getCause());
+			fail("Unable to verify PersistenctUnitInfoService service properties.", ex);
 		} finally {
 			uninstallBundle(persistenceBundle);
 		}

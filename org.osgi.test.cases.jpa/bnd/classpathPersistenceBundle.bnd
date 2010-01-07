@@ -1,7 +1,0 @@
-Bundle-Name:                             ${p}.classpathPersistenceBundle
-Bundle-Version:                          4.2.0.${project.build}
-Include-Resource = \
-	jar/classpathJar.jar = classpathJar.jar
-	
-Bundle-ClassPath = \
-	.,jar/classpathJar.jar

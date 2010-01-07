@@ -20,13 +20,14 @@ Include-Resource 					= \
 	ee.j2se; 						version=1.5, \
     org.osgi.test.support;          version=project , \
 	org.osgi.service.jpa;			version=project	, \
+	org.osgi.service.jdbc;			version=project , \
 	osgi.core;						version=4.2		, \
-	javax.persistence;		version=2.0, \
+	javax.persistence;				version=2.0, \
 	${junit}
 	
 -runbundles						= \
-	org.osgi.impl.service.jpa;       version=project , \
-	org.apache.geronimo.specs.geronimo-jpa_3.0_spec; version=latest , \
+	org.osgi.impl.service.jpa;      version=project , \
+	javax.persistence;				version=2.0 , \
 	
 -runproperties					= report=true
 

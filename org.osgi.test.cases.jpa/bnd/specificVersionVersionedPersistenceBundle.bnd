@@ -1,4 +1,0 @@
-Bundle-Name:                             ${p}.specificVersionVersionedPersistenceBundle
-Bundle-Version:                          4.2.0.${project.build}
-Include-Resource = \
-	META-INF/persistence.xml = resources/versionedProviders/specificVersion/persistence.xml

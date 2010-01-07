@@ -1,0 +1,6 @@
+Bundle-Name:                             ${p}.emfBuilderBundle
+Bundle-Version:                          4.2.0.${project.build}
+Meta-Persistence:
+
+Include-Resource = \
+	META-INF/persistence.xml = resources/emfBuilderBundle/META-INF/persistence.xml
