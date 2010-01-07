@@ -48,7 +48,7 @@ Export-Package =\
 
 # Comments out -runbundles. For some reason bnd is upset by -runbundles refering to
 # non-existent repo entries during bndprepare ant task. I asked Peter to make a change to bnd.
--runbundles						= \
+XX-runbundles						= \
 	org.osgi.impl.service.log; 			version=latest, \
 	org.eclipse.equinox.event; 			version=latest, \
 	osgi.cmpn; 							version=latest, \
