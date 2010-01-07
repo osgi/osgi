@@ -6,8 +6,8 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.*
 
 Include-Resource					= \
-	ct12.jar=ct12.jar, \
-	ct13.jar=ct13.jar, \
+	ct12.jar, \
+	ct13.jar, \
 	
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
@@ -18,9 +18,8 @@ Include-Resource					= \
 	${junit}
 
 -runbundles							= \
-	org.apache.tuscany.sca.bundle;      version=2.0.0, \
+	org.apache.tuscany.sca.bundle;      version=2.0, \
 	osgi.cmpn;								version=latest	, \
-        ee.j2se;						version=latest
 	org.osgi.impl.service.log;				version=latest
 	
 # TODO bundles contains ${repo;com.springsource.junit} factor out to ${junit} as above
