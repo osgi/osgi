@@ -29,7 +29,7 @@ Export-Package = \
 	ee.j2se;version=1.4, \
 	osgi.core;version=4.2, \
 	org.apache.geronimo.transaction;version=2.1.2, \
-	org.slf4j;version=1.4.3, \
-	org.slf4j.impl;version=1.4.3, \
+	slf4j.api;version=1.4.3, \
+	slf4j.simple;version=1.4.3, \
 	${junit}
 
