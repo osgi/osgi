@@ -100,6 +100,4 @@ XX-runbundles						= \
 	org.osgi.service.webcontainer.http.port=8080
 
 Test-Cases						= ${testcases}
--signaturetest                  = javax.servlet, javax.servlet.http
-
 	
