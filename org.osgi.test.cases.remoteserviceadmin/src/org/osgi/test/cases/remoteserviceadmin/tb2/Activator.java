@@ -17,12 +17,12 @@ package org.osgi.test.cases.remoteserviceadmin.tb2;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 
 import junit.framework.Assert;
 
@@ -146,16 +146,32 @@ public class Activator implements BundleActivator, A, B {
 	 * @throws IOException 
 	 */
 	private void exportEndpointDescription(EndpointDescription ed) throws IOException {
-		Properties props = new Properties();
+		// Marc Schaaf: I switched to Java servialization to support String[] and lists as 
+		// EndpointDescription Properties. The Byte Array is encoded as a HEX string to save 
+		// it as a system property
 		
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(bos);
+			
+		
+		Map<String, Object> props = new HashMap<String, Object>();
 		for (Iterator<String> it = ed.getProperties().keySet().iterator(); it.hasNext();) {
 			String key = it.next();
 			props.put(key, ed.getProperties().get(key));
 		}
+
+		oos.writeObject(props);
+
+		// encode byte[] as hex 
+		byte[] ba = bos.toByteArray();
+		String out = "";
+		for (int x=0; x < ba.length; ++x) {
+			out += Integer.toString( ( ba[x] & 0xff ) + 0x100, 16).substring( 1 );
+		}
 		
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		props.store(bos, null);
-		System.getProperties().put("RSA_TCK.EndpointDescription_" + registrationCounter++, bos.toString());
+		
+		System.getProperties().put("RSA_TCK.EndpointDescription_" + registrationCounter++, out);
+		
 	}
 	
 	private int registrationCounter = 0;

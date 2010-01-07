@@ -17,10 +17,9 @@ package org.osgi.test.cases.remoteserviceadmin.junit;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Enumeration;
+import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import junit.framework.Assert;
 
@@ -102,7 +101,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		assertNotNull(importRef);
 		ServiceReference sref = importRef.getImportedService();
 		assertNotNull(sref);
-		assertEquals("has been overridded", sref.getProperty("mykey"));
+		assertEquals("has been overridden", sref.getProperty("mykey"));
 		assertNotNull(sref.getProperty(RemoteConstants.SERVICE_IMPORTED));
 		
 		A serviceA = (A) getContext().getService(sref);
@@ -116,6 +115,11 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		//
 		tb2Bundle.stop();
 		
+		//Marc Schaaf: To really unimport the service the ImportRegistration needs 
+		// to be closed. This is normally the Topology Manager which should decide 
+		// if the service is not needed anymore. 
+		importReg.close();
+		
 		assertFalse(rsa.getImportedEndpoints().contains(importRef));
 		assertNull(getContext().getServiceReference(A.class.getName()));
 	}
@@ -126,14 +130,31 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	 */
 	private EndpointDescription reconstructEndpoint() throws IOException {
 		String propstr = System.getProperty("RSA_TCK.EndpointDescription_0");
-		Properties props = new Properties();
-		props.load(new ByteArrayInputStream(propstr.getBytes()));
 		
-		Map<String, Object> properties = new HashMap<String, Object>();
-		for (Enumeration<Object> e = props.keys(); e.hasMoreElements();) {
-			String key = (String) e.nextElement();
-			properties.put(key, props.get(key));
+		// see org.osgi.test.cases.remoteserviceadmin.tb2.Activator#exportEndpointDescription()
+		// decode byte[] from hex
+		byte[] ba = new byte[propstr.length()/2];
+		
+		for (int x=0; x < ba.length; ++x) {
+            int sp = x*2;
+            int a = Integer.parseInt(""+propstr.charAt(sp),16);
+            int b = Integer.parseInt(""+propstr.charAt(sp+1),16);
+            ba[x] = (byte)(a*16 + b);
 		}
-		return new EndpointDescription(properties);
+		
+		ByteArrayInputStream bis = new ByteArrayInputStream(ba);
+		ObjectInputStream ois = new ObjectInputStream(bis);
+		
+		Map<String,Object> props = null;
+		try {
+			props = (Map<String, Object>)ois.readObject();
+		} catch (ClassNotFoundException e) {e.printStackTrace();}
+		
+		assert(props!=null);
+		
+		return new EndpointDescription(props);
 	}
+	
+
+
 }
