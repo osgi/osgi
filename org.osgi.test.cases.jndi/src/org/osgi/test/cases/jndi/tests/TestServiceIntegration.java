@@ -39,7 +39,6 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 
 	public void testServiceLookup() throws Exception {
 		// Install the bundle needed for this test
-		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle serviceBundle = installBundle("service1.jar");
 		// Grab the default initialContext so we can access the service registry
 		Context ctx = new InitialContext();
@@ -55,13 +54,11 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 				ctx.close();
 			}
 			uninstallBundle(serviceBundle);
-			uninstallBundle(factoryBundle);
 		}
 	}
 	
 	public void testMultipleServiceLookup() throws Exception {
 		// Install the bundle needed for this test
-		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle serviceBundle = installBundle("service2.jar");
 		// Grab the default initialContext so we can access the service registry
 		Context ctx = new InitialContext();
@@ -87,14 +84,12 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 				serviceListContext.close();
 			}
 			uninstallBundle(serviceBundle);
-			uninstallBundle(factoryBundle);
 		}
 		
 	}
 
 	public void testBundleContextLookup() throws Exception {
 		// Install the bundles needed for this test
-		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		// Grab the default initialContext so we can access the service registry
 		Context ctx = new InitialContext();
 		try {
@@ -106,13 +101,11 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 			if (ctx != null) {
 				ctx.close();
 			}
-			uninstallBundle(factoryBundle);
 		}
 	}
 	
 	public void testServiceNameProperty() throws Exception {
 		// Install the bundles need for this test
-		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle serviceBundle = installBundle("service1.jar");
 		// Grab the default InitialContext so we can access the service registry
 		Context ctx = new InitialContext();
@@ -128,7 +121,6 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 				ctx.close();
 			}
 			uninstallBundle(serviceBundle);
-			uninstallBundle(factoryBundle);
 		}
 	}
 
