@@ -23,6 +23,7 @@ import org.osgi.test.cases.scaconfigtype.common.A;
 import org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants;
 import org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants;
 import org.osgi.test.cases.scaconfigtype.common.TestConstants;
+import org.osgi.test.cases.scaconfigtype.common.Utils;
 
 /**
  * @author <a href="mailto:david.savage@paremus.com">David Savage</a>
@@ -37,10 +38,7 @@ public class Activator implements BundleActivator, A {
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 		
-		Hashtable<String, String> dictionary = new Hashtable<String, String>();
-		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
-		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, SCAConfigConstants.ORG_OSGI_SCA_CONFIG);
-		dictionary.put(SCAConfigConstants.ORG_OSGI_SCA_BINDING, TestConstants.BINDING_A_NCNAME);
+		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_NCNAME);
 		context.registerService(new String[]{A.class.getName()}, this, dictionary);
 	}
 

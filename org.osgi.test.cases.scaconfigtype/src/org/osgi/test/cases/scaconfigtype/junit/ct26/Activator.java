@@ -43,30 +43,27 @@ public class Activator implements BundleActivator, A, B {
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 		
-		Hashtable<String, String> dictionary = new Hashtable<String, String>();
-		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
-		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, SCAConfigConstants.ORG_OSGI_SCA_CONFIG);
-		dictionary.put(SCAConfigConstants.ORG_OSGI_SCA_BINDING, TestConstants.BINDING_A_NCNAME);
+		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_NCNAME);
 		
-		// find supported intent and add it to service
-		List intents = Utils.getSupportedIntentTypes(context);		
+		// find supported intent 
+		List intents = Utils.getSupportedIntentTypes(context);
 		Assert.assertFalse( "Expected intent types", intents.isEmpty() );
-		
+				
+		// and real intent to service
 		String realIntent = (String) intents.get(0);
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS_EXTRA, realIntent);
 		
+		// register service A
 		context.registerService(new String[]{A.class.getName()}, this, dictionary);
-		
-		dictionary = new Hashtable<String, String>();
-		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, B.class.getName());
-		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, SCAConfigConstants.ORG_OSGI_SCA_CONFIG);
-		dictionary.put(SCAConfigConstants.ORG_OSGI_SCA_BINDING, TestConstants.BINDING_B_NCNAME);
+
+		// create new attributes
+		dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_B_NCNAME);
 		
 		// fabricate a new intent from existing intents
 		String fabricatedIntent = Utils.fabricateValue(intents);
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS_EXTRA, fabricatedIntent);
 
-
+		// register service B
 		context.registerService(new String[]{B.class.getName()}, this, dictionary);
 	}
 

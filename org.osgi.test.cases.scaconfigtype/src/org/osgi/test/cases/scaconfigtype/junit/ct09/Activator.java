@@ -13,17 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.scaconfigtype.junit.ct12;
+package org.osgi.test.cases.scaconfigtype.junit.ct09;
 
 import java.util.Hashtable;
-
-import java.util.List;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.scaconfigtype.common.A;
-import org.osgi.test.cases.scaconfigtype.common.B;
-import org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants;
 import org.osgi.test.cases.scaconfigtype.common.TestConstants;
 import org.osgi.test.cases.scaconfigtype.common.Utils;
 
@@ -31,7 +27,7 @@ import org.osgi.test.cases.scaconfigtype.common.Utils;
  * @author <a href="mailto:david.savage@paremus.com">David Savage</a>
  *
  */
-public class Activator implements BundleActivator, A, B {
+public class Activator implements BundleActivator, A {
 	BundleContext       context;
 
 	/**
@@ -39,19 +35,8 @@ public class Activator implements BundleActivator, A, B {
 	 */
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
-		
 		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_NCNAME);
 		context.registerService(new String[]{A.class.getName()}, this, dictionary);
-		
-		dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_B_NCNAME);
-		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, fabricateConfigType());
-
-		context.registerService(new String[]{B.class.getName()}, this, dictionary);
-	}
-
-	private String fabricateConfigType() throws Exception {
-		List types = Utils.getSupportedConfigTypes(context);
-		return Utils.fabricateValue(types);
 	}
 
 	/**
@@ -66,8 +51,4 @@ public class Activator implements BundleActivator, A, B {
 	public String getA() {
 		return A;
 	}
-
-	public String getB() {
-		return B;
-	}	
 }

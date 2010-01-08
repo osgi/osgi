@@ -1,0 +1,7 @@
+Bundle-Name:                             ${p}.ct09
+Bundle-Version:                          1.0
+Private-Package:                         ${p}.junit.ct09.*, \
+ ${p}.common.*
+Bundle-Activator:                        ${p}.junit.ct09.Activator
+Include-Resource					= \
+	OSGI-INF/sca-config/bindings/binding.xml=resources/OSGI-INF/sca-config/bindings/binding.xml

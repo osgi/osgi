@@ -99,9 +99,25 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	 * CT.9
 	 * @throws Exception
 	 */
-//	public void testAbsentSCAConfigurationManifestHeader() throws Exception {
-//		fail("TODO not yet implemented");
-//	}
+	public void testAbsentSCAConfigurationManifestHeader() throws Exception {
+		// install test bundle in child framework
+		BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
+		BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
+		
+		installAndStartBundle(serverContext, "/ct09.jar");
+		// TODO don't technically need to start client bundle but this checks it's resolved
+		installAndStartBundle(clientContext, "/ct09client.jar");
+		
+		// wait for test service to be registered in this framework
+		ServiceTracker tracker = new ServiceTracker(clientContext, A.class.getName(), null);
+		tracker.open();
+		A serviceA = (A) tracker.waitForService(SERVICE_TIMEOUT);
+		
+		// service should not be registered as ct9.jar does not include an SCA-Configuration header
+		assertNull( "Unexpected test service", serviceA );
+		
+		tracker.close();
+	}
 	
 	/**
 	 * CT.11

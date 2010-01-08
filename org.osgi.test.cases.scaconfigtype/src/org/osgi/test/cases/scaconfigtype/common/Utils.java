@@ -22,6 +22,7 @@ import static org.osgi.test.cases.scaconfigtype.common.DistributionProviderConst
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -38,6 +39,14 @@ import org.osgi.util.tracker.ServiceTracker;
  *
  */
 public class Utils {
+	public static Hashtable getBasicSCAAttributes(String bindingName) {
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, "*");
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, SCAConfigConstants.ORG_OSGI_SCA_CONFIG);
+		dictionary.put(SCAConfigConstants.ORG_OSGI_SCA_BINDING, bindingName);
+		return dictionary;
+	}
+
 	public static List getSupportedConfigTypes(BundleContext ctx) throws Exception {
 		return getServiceAdvert(ctx, REMOTE_CONFIGS_SUPPORTED);
 	}
@@ -105,6 +114,6 @@ public class Utils {
 		
 		dpTracker.close();		
 		return vals;
-	}	
+	}
 
 }

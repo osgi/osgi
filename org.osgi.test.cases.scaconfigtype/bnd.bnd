@@ -6,6 +6,8 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.*
 
 Include-Resource					= \
+	ct09.jar, \
+	ct09client.jar, \
 	ct12.jar, \
 	ct12client.jar, \
 	ct13.jar, \
