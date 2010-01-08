@@ -114,7 +114,7 @@ public class BundleExportPackageTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleExportPackage009() throws Exception {
         final Map<String, Object> options = createOptions(EXPORTS4, "/tw4");
-        this.b = super.installWar(options, "tw1.war", true);
+        this.b = super.installWar(options, "wmtw4.war", true);
         super.generalHeadersTest(options, "wmtw4.war", true, this.b);
     }
     

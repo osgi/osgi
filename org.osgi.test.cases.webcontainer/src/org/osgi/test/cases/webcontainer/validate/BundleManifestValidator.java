@@ -337,6 +337,7 @@ public class BundleManifestValidator extends Assert implements Validator{
                 log("from original manifest " + key + ": " + attributes.get(key));
                 log("from bundle headers " + key + ": " + this.dictionary.get(key.toString()));
                 if (key.equals("version")) {
+                    // we need to make sure version=1.0 and version=1.0.0 are the same
                     assertEquals("checking if other attributes from original manifest is preserved", Version.parseVersion((String)attributes.get(key)), Version.parseVersion((String)this.dictionary.get(key.toString())));                               
                 } else {
                     assertEquals("checking if other attributes from original manifest is preserved", attributes.get(key), this.dictionary.get(key.toString()));           
