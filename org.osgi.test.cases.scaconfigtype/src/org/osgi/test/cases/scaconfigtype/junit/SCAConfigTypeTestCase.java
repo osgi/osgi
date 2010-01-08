@@ -21,7 +21,6 @@ package org.osgi.test.cases.scaconfigtype.junit;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;

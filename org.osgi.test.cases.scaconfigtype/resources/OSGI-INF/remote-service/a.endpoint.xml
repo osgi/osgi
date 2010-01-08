@@ -7,4 +7,9 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <property name ="service.imported.configs">org.osgi.sca</property> 
     <property name ="org.osgi.sca.binding">serviceA</property> 
   </endpoint-description> 
+  <endpoint-description> 
+    <property name ="objectClass">org.osgi.test.cases.scaconfigtype.common.B</property> 
+    <property name ="service.imported.configs">org.osgi.sca</property> 
+    <property name ="org.osgi.sca.binding">serviceB</property> 
+  </endpoint-description> 
 </rsa:endpoint-descriptions> 

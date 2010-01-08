@@ -19,14 +19,13 @@ import java.util.Hashtable;
 
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.scaconfigtype.common.A;
 import org.osgi.test.cases.scaconfigtype.common.B;
 import org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants;
 import org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants;
+import org.osgi.test.cases.scaconfigtype.common.TestConstants;
 import org.osgi.test.cases.scaconfigtype.common.Utils;
 
 /**
@@ -45,12 +44,14 @@ public class Activator implements BundleActivator, A, B {
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, SCAConfigConstants.ORG_OSGI_SCA_CONFIG);
+		dictionary.put(SCAConfigConstants.ORG_OSGI_SCA_BINDING, TestConstants.BINDING_A_NCNAME);
 
 		context.registerService(new String[]{A.class.getName()}, this, dictionary);
 		
 		dictionary = new Hashtable<String, String>();
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, B.class.getName());
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, fabricateConfigType());
+		dictionary.put(SCAConfigConstants.ORG_OSGI_SCA_BINDING, TestConstants.BINDING_B_NCNAME);
 
 		context.registerService(new String[]{B.class.getName()}, this, dictionary);
 	}

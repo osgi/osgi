@@ -29,8 +29,10 @@ public interface TestConstants {
 	
 	static final String ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON = "org.osgi.test.cases.scaconfigtype.common";
 	
-	static final String BINDING_A_NCNAME = "serviceA";
 	static final String SERVER_FRAMEWORK = "server";
 	static final String CLIENT_FRAMEWORK = "client";
 	static final long SERVICE_TIMEOUT = Long.getLong("org.osgi.test.cases.scaconfigtype.timeout", 5000);
+	
+	static final String BINDING_A_NCNAME = "serviceA";
+	static final String BINDING_B_NCNAME = "serviceB";
 }

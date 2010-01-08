@@ -1,6 +1,9 @@
 <scact:sca-config targetNamespace="http://acme.com/defintions" 
   xmlns:scact ="http://www.osgi.org/xmlns/scact/v1.0.0" 
-  xmlns:sca ="http://docs.oasis-open.org/ns/opencsa/sca/200912"> 
-  <sca:binding.ws name="serviceA" 
-    uri="http://localhost:9000/A"/>
+  xmlns:sca ="http://docs.oasis-open.org/ns/opencsa/sca/200912">
+   
+  <sca:binding.ws name="serviceA" uri="http://localhost:9000/A"/>
+    
+  <sca:binding.ws name="serviceB" uri="http://localhost:9000/B"/>
+  
 </scact:sca-config> 
