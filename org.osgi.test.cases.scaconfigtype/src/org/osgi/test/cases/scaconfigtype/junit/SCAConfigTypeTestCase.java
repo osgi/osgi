@@ -112,8 +112,8 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	 * @throws Exception
 	 */
 	public void testSCAConfigTypeServiceHeader() throws Exception {
-		assertTrue( "Expected supported config type " + ORG_OSGI_SCA, Utils.getSupportedConfigTypes(getContext()).contains( ORG_OSGI_SCA ) );
-		assertTrue( "Expected supported config type " + ORG_OSGI_SCA, Utils.getSupportedConfigTypes(getFramework().getBundleContext()).contains( ORG_OSGI_SCA ) );
+		assertTrue( "Expected supported config type " + ORG_OSGI_SCA_CONFIG, Utils.getSupportedConfigTypes(getContext()).contains( ORG_OSGI_SCA_CONFIG ) );
+		assertTrue( "Expected supported config type " + ORG_OSGI_SCA_CONFIG, Utils.getSupportedConfigTypes(getFramework().getBundleContext()).contains( ORG_OSGI_SCA_CONFIG ) );
 	}
 	
 	/**
@@ -142,7 +142,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		
 		// check service is registered with sca config type header
 		Object config = refs[0].getProperty(SERVICE_IMPORTED_CONFIGS);
-		assertTrue( Utils.propertyToList( config ).contains(ORG_OSGI_SCA) );
+		assertTrue( Utils.propertyToList( config ).contains(ORG_OSGI_SCA_CONFIG) );
 		tracker.close();
 		
 		// search for b service which is registered with a fabricated config type
@@ -181,7 +181,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		
 		// check service is registered with sca config type header
 		Object config = refs[0].getProperty(SERVICE_IMPORTED_CONFIGS);
-		assertTrue( Utils.propertyToList( config ).contains(ORG_OSGI_SCA) );
+		assertTrue( Utils.propertyToList( config ).contains(ORG_OSGI_SCA_CONFIG) );
 		
 		tracker.close();
 	}

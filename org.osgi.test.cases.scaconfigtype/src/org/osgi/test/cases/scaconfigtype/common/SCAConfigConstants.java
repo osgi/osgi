@@ -22,5 +22,7 @@ package org.osgi.test.cases.scaconfigtype.common;
  *
  */
 public interface SCAConfigConstants {
-	static final String ORG_OSGI_SCA = "org.osgi.sca";
+	static final String ORG_OSGI_SCA_CONFIG = "org.osgi.sca";
+	
+	static final String ORG_OSGI_SCA_BINDING = "org.osgi.sca.binding";
 }

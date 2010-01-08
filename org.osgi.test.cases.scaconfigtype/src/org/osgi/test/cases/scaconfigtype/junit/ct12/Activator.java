@@ -44,7 +44,7 @@ public class Activator implements BundleActivator, A, B {
 		
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
-		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, SCAConfigConstants.ORG_OSGI_SCA);
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, SCAConfigConstants.ORG_OSGI_SCA_CONFIG);
 
 		context.registerService(new String[]{A.class.getName()}, this, dictionary);
 		

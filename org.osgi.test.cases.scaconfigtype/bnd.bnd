@@ -8,6 +8,11 @@ Private-Package						= org.osgi.test.support.*, \
 Include-Resource					= \
 	ct12.jar, \
 	ct13.jar, \
+	OSGI-INF/remote-service/a.endpoint.xml=resources/OSGI-INF/remote-service/a.endpoint.xml, \
+	OSGI-INF/sca-config/bindings/binding.xml=resources/OSGI-INF/sca-config/bindings/binding.xml, \
+	
+SCA-Configuration					= \
+    OSGI-INF/sca-config/bindings/binding.xml, \
 	
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
@@ -18,7 +23,7 @@ Include-Resource					= \
 	${junit}
 
 -runbundles							= \
-	org.apache.tuscany.sca.bundle;      version=2.0, \
+	org.apache.tuscany.sca.bundle;      version=latest, \
 	osgi.cmpn;								version=latest	, \
 	org.osgi.impl.service.log;				version=latest
 	

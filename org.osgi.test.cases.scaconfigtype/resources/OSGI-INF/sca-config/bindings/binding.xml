@@ -1,0 +1,6 @@
+<scact:sca-config targetNamespace="http://acme.com/defintions" 
+  xmlns:scact ="http://www.osgi.org/xmlns/scact/v1.0.0" 
+  xmlns:sca ="http://docs.oasis-open.org/ns/opencsa/sca/200903"> 
+  <sca:binding.ws name="AWS" 
+    uri="http://localhost:9000/A" requires="sca:soap.1_2" />
+</scact:sca-config> 
