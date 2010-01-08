@@ -17,12 +17,14 @@ package org.osgi.test.cases.webcontainer.junit;
 
 import java.util.Enumeration;
 
+import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.spi.InitialContextFactory;
 import javax.naming.spi.InitialContextFactoryBuilder;
 
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.jndi.JNDIContextManager;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
@@ -36,6 +38,7 @@ import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
  */
 public class JNDITest extends WebContainerTestBundleControl {
 
+    private JNDIContextManager cm;
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -51,19 +54,12 @@ public class JNDITest extends WebContainerTestBundleControl {
 
         // verify JNDI in OSGi service is installed
         log("verify JNDI in OSGi service is installed.  The tests in this class require JNDI in OSGi being installed.");
-        log("check if there is any JNDI service provider that is registered as an OSGi service under  the javax.naming.spi.InitialContextFactory interface");
+        log("check if there is any OSGi service under the JNDIContextManager interface");
         ServiceReference sr = getContext().getServiceReference(
-                InitialContextFactory.class.getName());
+                JNDIContextManager.class.getName());
         if (sr != null) {
-            assertNotNull("InitialContextFactory should not be null",
-                    (InitialContextFactory) getContext().getService(sr));
-        } else {
-            log("check if there is any JNDI service provider that is registered as an OSGi service under  the javax.naming.spi.InitialContextFactoryBuilder interface");
-            sr = getContext().getServiceReference(
-                    InitialContextFactoryBuilder.class.getName());
-            assertNotNull("sr should not be null", sr);
-            assertNotNull("InitialContextFactoryBuilder should not be null",
-                    (InitialContextFactoryBuilder) getContext().getService(sr));
+            cm = (JNDIContextManager) getContext().getService(sr);
+            assertNotNull("JNDIContextManager should not be null", cm);
         }
 
     }
@@ -76,7 +72,8 @@ public class JNDITest extends WebContainerTestBundleControl {
                 "Current ClassLoader should be implementing BundleReference",
                 cl instanceof BundleReference);
         Thread.currentThread().setContextClassLoader(cl);
-        InitialContext context = new InitialContext();
+        Context context = cm.newInitialContext();
+        //InitialContext context = new InitialContext();
         LogService logService = (LogService) context
                 .lookup("osgi:services/org.osgi.service.log");
         assertNotNull(logService);

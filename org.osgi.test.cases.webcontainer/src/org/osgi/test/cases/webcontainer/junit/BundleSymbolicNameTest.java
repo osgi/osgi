@@ -145,7 +145,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      * verify Bundle-SymbolicName and Bundle-Version has to be unique
      */
     public void testBundleSymbolicNameError001() throws Exception {
-        final Map<String, Object> options = createOptions(SYMBOLICNAME1, null, "/tw1");
+        final Map<String, Object> options = createOptions(SYMBOLICNAME1, VERSION10, "/tw1");
         this.b = super.installWar(options, "tw1.war", true);
         super.generalHeadersTest(options, "tw1.war", true, this.b);
 

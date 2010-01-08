@@ -288,9 +288,8 @@ public class ServletContextRegistrationTest extends
 				ServletContext.class.getName(),
 				"(" + OSGI_WEB_CONTEXTPATH + "="
 						+ (String) bundle.getHeaders().get(WEB_CONTEXT_PATH) + ")");
-		// TODO uncomment the following 2 lines out when bug 1416 is resolved.
-		// assertNotNull(srs);
-		// assertEquals(sc, (ServletContext)getContext().getService(srs[0]));
+		assertNotNull(srs);
+		assertEquals(sc, (ServletContext)getContext().getService(srs[0]));
 
 		// rough test able to access the app
 		assertTrue("should be able to access " + cp, super.ableAccessPath(cp));

@@ -82,8 +82,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         validateBundleManifestVersion();
         validateBundleClassPath();
         validateImportPackage();
-        // TODO uncomment this line when bug 1416 is fixed
-        //validateWebContextPath();
+        validateWebContextPath();
         validateOthersPreserved();
     }
     
@@ -187,7 +186,7 @@ public class BundleManifestValidator extends Assert implements Validator{
      * validate the existence of Bundle-ClassPath as it is required
      * Also validate:
      * 1. initializing the first path entry to "WEB-INF/classes" if it is not there
-     * 2. adding each of the libraries from “WEB-INF/lib” if not already present on path. 
+     * 2. adding each of the libraries from WEB-INF/lib if not already present on path. 
      * 3. append any Bundle-ClassPath deploy options
      */
     public void validateBundleClassPath() throws Exception {

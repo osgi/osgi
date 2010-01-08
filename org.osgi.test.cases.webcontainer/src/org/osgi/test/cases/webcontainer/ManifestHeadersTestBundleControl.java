@@ -107,7 +107,7 @@ public abstract class ManifestHeadersTestBundleControl extends
         Manifest originalManifest = super.getManifestFromWarName(warName);
 
         // check manifest generated correctly
-        BundleManifestValidator validator = new BundleManifestValidator(b,
+        BundleManifestValidator validator = new BundleManifestValidator(bundle,
                 originalManifest, options, this.debug);
         try {
             validator.validate();
