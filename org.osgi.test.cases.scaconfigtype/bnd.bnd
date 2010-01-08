@@ -10,6 +10,8 @@ Include-Resource					= \
 	ct12client.jar, \
 	ct13.jar, \
 	ct13client.jar, \
+	ct26.jar, \
+	ct26client.jar, \
 	
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

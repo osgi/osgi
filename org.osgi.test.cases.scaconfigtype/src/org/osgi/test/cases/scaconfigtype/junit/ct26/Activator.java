@@ -15,9 +15,6 @@
  */
 package org.osgi.test.cases.scaconfigtype.junit.ct26;
 
-import static org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants.ORG_OSGI_SCA_CONFIG;
-import static org.osgi.test.cases.scaconfigtype.common.TestConstants.SERVER_FRAMEWORK;
-
 import java.util.Hashtable;
 
 import java.util.List;
@@ -59,16 +56,13 @@ public class Activator implements BundleActivator, A, B {
 		dictionary = new Hashtable<String, String>();
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, B.class.getName());
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, SCAConfigConstants.ORG_OSGI_SCA_CONFIG);
+		
+		// fabricate a new intent from existing intents
 		String fabricatedIntent = Utils.fabricateValue(intents);
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS_EXTRA, fabricatedIntent);
 
 
 		context.registerService(new String[]{B.class.getName()}, this, dictionary);
-	}
-
-	private String fabricateConfigType() throws Exception {
-		List types = Utils.getSupportedConfigTypes(context);
-		return Utils.fabricateValue(types);
 	}
 
 	/**

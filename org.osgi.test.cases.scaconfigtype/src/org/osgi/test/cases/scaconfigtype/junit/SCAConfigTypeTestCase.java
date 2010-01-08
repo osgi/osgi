@@ -123,9 +123,9 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
 		BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
 		
-		// TODO don't technically need to start bundle but checks it's resolved
-		installAndStartBundle(clientContext, "/ct12client.jar");		
 		installAndStartBundle(serverContext, "/ct12.jar");
+		// TODO don't technically need to start client bundle but this checks it's resolved
+		installAndStartBundle(clientContext, "/ct12client.jar");		
 		
 		// wait for test service to be registered in this framework
 		ServiceTracker tracker = new ServiceTracker(clientContext, A.class.getName(), null);
@@ -164,7 +164,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
 		
 		installAndStartBundle(serverContext, "/ct13.jar");
-		// TODO don't technically need to start bundle but checks it's resolved
+		// TODO don't technically need to start client bundle but this checks it's resolved
 		installAndStartBundle(clientContext, "/ct13client.jar");
 		
 		// wait for test service to be registered in this framework
@@ -235,9 +235,9 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
 		BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
 		
-		// TODO don't technically need to start bundle but checks it's resolved
-		installAndStartBundle(clientContext, "/ct26client.jar");		
 		installAndStartBundle(serverContext, "/ct26.jar");
+		// TODO don't technically need to start client bundle but this checks it's resolved
+		installAndStartBundle(clientContext, "/ct26client.jar");		
 		
 		// wait for test service to be registered in this framework
 		ServiceTracker tracker = new ServiceTracker(clientContext, A.class.getName(), null);
@@ -361,7 +361,6 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	public Map getConfiguration() {
 		Map configuration = new HashMap();
 		configuration.put(FRAMEWORK_STORAGE_CLEAN, "true");
-		configuration.put(FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT, "true");
 		
 		//make sure that the server framework System Bundle exports the interfaces
         String systemPackagesXtra = (String) configuration.get(FRAMEWORK_SYSTEMPACKAGES_EXTRA);
