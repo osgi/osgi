@@ -301,7 +301,6 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		
 	private Bundle installAndStartBundle(BundleContext context, String bundle) {
 		Bundle b = installBundle(context, bundle);
-		assertNotNull(b);
 		try {
 			b.start();
 			
@@ -316,21 +315,25 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	 * @return
 	 */
 	private Bundle installBundle(BundleContext context, String bundle) {
+		Bundle b = null;
+		
 		if (!bundle.startsWith(getWebServer())) {
 			bundle = getWebServer() + bundle;
 		}
+		
 		try {
 			URL location = new URL(bundle);
 			InputStream inputStream = location.openStream();
 			
-			Bundle b = context.installBundle(bundle, inputStream);
-			return b;
+			b = context.installBundle(bundle, inputStream);
 		}
 		catch (Exception e) {
 			fail( "Failed to install bundle " + bundle, e);
-			// impossible but make compiler happy
-			return null;
 		}
+		
+		assertNotNull(b);
+		
+		return b;
 	}
 
 	/**
