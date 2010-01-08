@@ -271,8 +271,8 @@ public class BundleManifestValidator extends Assert implements Validator{
         if (mImports != null) {
             String[] mi = toArray((String)mImports);
             for (int i = 0; i< mi.length; i++) {
-                boolean exist = exist(mi[i], actualImportsArray, true);
-                if (!exist) {
+                boolean exist = existLoose(mi[i], actualImportsArray);
+                if (!exist && dImports != null) {
                     // it is possible because of the conflicts with dImports
                     assertTrue(existLoose(getPackage(mi[i]), (String[])dImports));
                     assertTrue(existLoose(getPackage(mi[i]), actualImportsArray));
@@ -336,8 +336,12 @@ public class BundleManifestValidator extends Assert implements Validator{
                 // compare the other attribute with what is in the dictionary from the bundle.getHeaders()
                 log("from original manifest " + key + ": " + attributes.get(key));
                 log("from bundle headers " + key + ": " + this.dictionary.get(key.toString()));
-               assertEquals("checking if other attributes from original manifest is preserved", attributes.get(key), this.dictionary.get(key.toString()));
-            }           
+                if (key.equals("version")) {
+                    assertEquals("checking if other attributes from original manifest is preserved", Version.parseVersion((String)attributes.get(key)), Version.parseVersion((String)this.dictionary.get(key.toString())));                               
+                } else {
+                    assertEquals("checking if other attributes from original manifest is preserved", attributes.get(key), this.dictionary.get(key.toString()));           
+                }
+            }
         }
     }
     
