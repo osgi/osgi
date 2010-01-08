@@ -214,7 +214,7 @@
 		<url-pattern>/HTTPSessionListenerServlet</url-pattern>
 	</servlet-mapping>
 	<!-- Define a Security Constraint on this Application -->
-	<security-constraint>
+	<!-- <security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Listener Servlet</web-resource-name>
 			<url-pattern>/SecurityTestServlet</url-pattern>
@@ -222,12 +222,12 @@
 		<auth-constraint>
 			<role-name>manager</role-name>
 		</auth-constraint>
-	</security-constraint>
+	</security-constraint> -->
 
 	<!-- Define the Login Configuration for this Application -->
-	<login-config>
+	<!-- <login-config>
 		<auth-method>BASIC</auth-method>
 		<realm-name>TestWar3 Application</realm-name>
-	</login-config>
+	</login-config> -->
 
 </web-app>
