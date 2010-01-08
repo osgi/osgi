@@ -1,6 +1,6 @@
 package org.osgi.test.cases.scaconfigtype.common;
 
-import static org.osgi.test.cases.scaconfigtype.common.DistributionProviderConstants.REMOTE_CONFIGS_SUPPORTED;
+import static org.osgi.test.cases.scaconfigtype.common.DistributionProviderConstants.*;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -14,36 +14,56 @@ import java.util.StringTokenizer;
 import junit.framework.Assert;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class Utils {
 	public static List getSupportedConfigTypes(BundleContext ctx) throws Exception {
-		// make sure there is a Distribution Provider installed in the framework
-//		Filter filter = getFramework().getBundleContext().createFilter("(&(objectClass=*)(" +
-//				DistributionProviderConstants.REMOTE_CONFIGS_SUPPORTED + "=*))");
+		return getServiceAdvert(ctx, REMOTE_CONFIGS_SUPPORTED);
+	}
+	
+	public static List getSupportedIntentTypes(BundleContext ctx) throws Exception {
+		return getServiceAdvert(ctx, REMOTE_INTENTS_SUPPORTED);
+	}
+	
+	public static String fabricateValue(List values) {
+		Assert.assertFalse(values.isEmpty());
+		
+		String type = (String) values.get(0);
+		do {
+			type += ".foo";
+		}
+		while ( values.contains( type ) );
+		
+		return type;
+
+	}
+	
+	private static List getServiceAdvert(BundleContext ctx, String key) throws Exception {
 		Filter filter = ctx.createFilter("(" +
-				REMOTE_CONFIGS_SUPPORTED + "=*)");
+				key + "=*)");
 		ServiceTracker dpTracker = new ServiceTracker(ctx, filter, null);
 		dpTracker.open();
 		
-		Object dp = dpTracker.waitForService(10000L);
+		List vals = Collections.EMPTY_LIST;
 		
+		Object dp = dpTracker.waitForService(10000L);
+
 		if ( dp != null ) {
 			ServiceReference dpReference = dpTracker.getServiceReference();
 
 			if ( dpReference != null ) { 
 				// collect all supported config types
-				List supportedConfigTypes = propertyToList(dpReference.getProperty(REMOTE_CONFIGS_SUPPORTED)); 				
+				vals = propertyToList(dpReference.getProperty(key)); 				
 				dpTracker.close();
-				return supportedConfigTypes;
+				return vals;
 			}			
 		}
 		
 		dpTracker.close();		
-		return Collections.EMPTY_LIST;
+		return vals;
+
 	}
 	
 	public static List propertyToList(Object configProperty) {

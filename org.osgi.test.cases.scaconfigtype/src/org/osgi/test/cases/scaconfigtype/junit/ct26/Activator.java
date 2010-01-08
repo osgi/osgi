@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.scaconfigtype.junit.ct12;
+package org.osgi.test.cases.scaconfigtype.junit.ct26;
+
+import static org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants.ORG_OSGI_SCA_CONFIG;
+import static org.osgi.test.cases.scaconfigtype.common.TestConstants.SERVER_FRAMEWORK;
 
 import java.util.Hashtable;
 
@@ -45,12 +48,20 @@ public class Activator implements BundleActivator, A, B {
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, SCAConfigConstants.ORG_OSGI_SCA_CONFIG);
-
+		List intents = Utils.getSupportedIntentTypes(context);		
+		Assert.assertFalse( "Expected intent types", intents.isEmpty() );
+		
+		String realIntent = (String) intents.get(0);
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS_EXTRA, realIntent);
+		
 		context.registerService(new String[]{A.class.getName()}, this, dictionary);
 		
 		dictionary = new Hashtable<String, String>();
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, B.class.getName());
-		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, fabricateConfigType());
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, SCAConfigConstants.ORG_OSGI_SCA_CONFIG);
+		String fabricatedIntent = Utils.fabricateValue(intents);
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS_EXTRA, fabricatedIntent);
+
 
 		context.registerService(new String[]{B.class.getName()}, this, dictionary);
 	}

@@ -21,6 +21,7 @@ package org.osgi.test.cases.scaconfigtype.junit;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -229,9 +230,41 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	 * CT.26
 	 * @throws Exception
 	 */
-//	public void testSupportedIntents() throws Exception {
-//		fail("TODO not yet implemented");
-//	}
+	public void testSupportedIntents() throws Exception {
+		// install test bundle in child framework
+		BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
+		BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
+		
+		// TODO don't technically need to start bundle but checks it's resolved
+		installAndStartBundle(clientContext, "/ct26client.jar");		
+		installAndStartBundle(serverContext, "/ct26.jar");
+		
+		// wait for test service to be registered in this framework
+		ServiceTracker tracker = new ServiceTracker(clientContext, A.class.getName(), null);
+		tracker.open();
+		A serviceA = (A) tracker.waitForService(SERVICE_TIMEOUT);
+		
+		assertNotNull( "Missing test service", serviceA );
+		ServiceReference[] refs = tracker.getServiceReferences();
+		assertEquals( "Unexpected service reference length", 1, refs.length );
+
+		// check service is functional
+		assertEquals( "Invalid service response", A.A, serviceA.getA() );
+		
+		// check service is registered with the intents header
+		Object intents = refs[0].getProperty(SERVICE_INTENTS);
+		assertFalse( Utils.propertyToList( intents ).isEmpty() );
+		tracker.close();
+		
+		// search for b service which is registered with a fabricated intent type
+		// assert this is not picked up by the RI
+		tracker = new ServiceTracker(clientContext, B.class.getName(), null);
+		tracker.open();
+		B serviceB = (B) tracker.waitForService(SERVICE_TIMEOUT);
+		assertNull( "Unexpected test service", serviceB );
+		
+		tracker.close();
+	}
 	
 	/**
 	 * CT.30

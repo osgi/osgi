@@ -1,0 +1,9 @@
+Bundle-Name:                             ${p}.ct26
+Bundle-Version:                          1.0
+Private-Package:                         ${p}.junit.ct26.*, \
+ ${p}.common.*
+Bundle-Activator:                        ${p}.junit.ct26.Activator
+Include-Resource					= \
+	OSGI-INF/sca-config/bindings/binding.xml=resources/OSGI-INF/sca-config/bindings/binding.xml, \
+	
+SCA-Configuration: OSGI-INF/sca-config/bindings/binding.xml
