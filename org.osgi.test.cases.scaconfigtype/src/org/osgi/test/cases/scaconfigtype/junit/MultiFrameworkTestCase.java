@@ -16,6 +16,7 @@
 package org.osgi.test.cases.scaconfigtype.junit;
 
 import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,16 +38,14 @@ import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
+import static org.osgi.test.cases.scaconfigtype.common.TestConstants.*;
+
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  * @author <a href="mailto:david.savage@paremus.com">David Savage</a>
  *
  */
 public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
-	private static final String ORG_OSGI_TEST_CASES_SCACONFIG_TYPE_BUNDLES = "org.osgi.test.cases.scaconfigtype.bundles";
-	
-	private static final String STORAGEROOT = "org.osgi.test.cases.scaconfigtype.storageroot";
-	private static final String DEFAULT_STORAGEROOT = "generated/testframeworkstorage";
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
 	
 	private HashMap<String, Framework> frameworks = new HashMap<String, Framework>();

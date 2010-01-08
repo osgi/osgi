@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 import org.osgi.service.packageadmin.ExportedPackage;
@@ -47,12 +48,6 @@ import static org.osgi.test.cases.scaconfigtype.common.TestConstants.*;
  */
 public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
-	/**
-	 * Package to be exported by the server side System Bundle
-	 */
-	private static final String ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON = "org.osgi.test.cases.scaconfigtype.common";
-	
-	
 	protected void setUp() throws Exception {
 		super.setUp();
 		
@@ -122,24 +117,19 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	 * CT.12
 //	 * @throws Exception
 //	 */
-	public void testExportedConfigs() throws Exception {
+	public void testExportedConfigs() throws InterruptedException {
 		// install test bundle in child framework
 		BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
 		BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
 		
-		Bundle ctBundle = installBundle(serverContext, "/ct12.jar");
-		assertNotNull(ctBundle);
-		ctBundle.start();
-		
-		ctBundle = installBundle(clientContext, "/ct12client.jar");
-		assertNotNull(ctBundle);
 		// TODO don't technically need to start bundle but checks it's resolved
-		ctBundle.start();
+		installAndStartBundle(clientContext, "/ct12client.jar");		
+		installAndStartBundle(serverContext, "/ct12.jar");
 		
 		// wait for test service to be registered in this framework
 		ServiceTracker tracker = new ServiceTracker(clientContext, A.class.getName(), null);
 		tracker.open();
-		A serviceA = (A) tracker.waitForService(10000);
+		A serviceA = (A) tracker.waitForService(SERVICE_TIMEOUT);
 		
 		assertNotNull( "Missing test service", serviceA );
 		ServiceReference[] refs = tracker.getServiceReferences();
@@ -157,7 +147,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		// assert this is not picked up by the RI
 		tracker = new ServiceTracker(clientContext, B.class.getName(), null);
 		tracker.open();
-		B serviceB = (B) tracker.waitForService(10000);
+		B serviceB = (B) tracker.waitForService(SERVICE_TIMEOUT);
 		assertNull( "Unexpected test service", serviceB );
 		
 		tracker.close();
@@ -167,24 +157,19 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //	 * CT.13
 //	 * @throws Exception
 //	 */
-	public void testImportedConfigs() throws Exception {
+	public void testImportedConfigs() throws InterruptedException {
 		// install test bundle in child framework
 		BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
 		BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
 		
-		Bundle ctBundle = installBundle(serverContext, "/ct13.jar");
-		assertNotNull(ctBundle);
-		ctBundle.start();
-		
-		ctBundle = installBundle(clientContext, "/ct13client.jar");
-		assertNotNull(ctBundle);
+		installAndStartBundle(serverContext, "/ct13.jar");
 		// TODO don't technically need to start bundle but checks it's resolved
-		ctBundle.start();
+		installAndStartBundle(clientContext, "/ct13client.jar");
 		
 		// wait for test service to be registered in this framework
 		ServiceTracker tracker = new ServiceTracker(clientContext, A.class.getName(), null);
 		tracker.open();
-		A serviceA = (A) tracker.waitForService(10000);
+		A serviceA = (A) tracker.waitForService(SERVICE_TIMEOUT);
 		
 		assertNotNull( "Missing test service", serviceA );
 		ServiceReference[] refs = tracker.getServiceReferences();
@@ -281,20 +266,38 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 //		fail("TODO not yet implemented");
 //	}	
 		
+	private Bundle installAndStartBundle(BundleContext context, String bundle) {
+		Bundle b = installBundle(context, bundle);
+		assertNotNull(b);
+		try {
+			b.start();
+			
+		} catch (BundleException e) {
+			fail( "Failed to start bundle " + bundle, e);
+		}
+		return b;
+	}
 	/**
 	 * @param context
 	 * @param bundle
 	 * @return
 	 */
-	private Bundle installBundle(BundleContext context, String bundle) throws Exception {
+	private Bundle installBundle(BundleContext context, String bundle) {
 		if (!bundle.startsWith(getWebServer())) {
 			bundle = getWebServer() + bundle;
 		}
-		URL location = new URL(bundle);
-		InputStream inputStream = location.openStream();
-		
-		Bundle b = context.installBundle(bundle, inputStream);
-		return b;
+		try {
+			URL location = new URL(bundle);
+			InputStream inputStream = location.openStream();
+			
+			Bundle b = context.installBundle(bundle, inputStream);
+			return b;
+		}
+		catch (Exception e) {
+			fail( "Failed to install bundle " + bundle, e);
+			// impossible but make compiler happy
+			return null;
+		}
 	}
 
 	/**
