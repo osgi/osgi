@@ -46,7 +46,7 @@ public interface EntityManagerFactoryBuilder {
      * The class name of the provider that registered the service and implements 
      * the JPA javax.persistence.PersistenceProvider interface.
      */
-    public static final String JPA_PROVIDER = "osgi.provider";
+    public static final String JPA_UNIT_PROVIDER = "osgi.unit.provider";
 
 	/**
 	 * Return an EntityManagerFactory instance configured according to the properties
