@@ -374,9 +374,14 @@ public class BundleManifestValidator extends Assert implements Validator{
     private boolean existLoose(String exist, String[] c) {
         boolean find = false;
         for (int j = 0; j < c.length; j++) {
-            if (trimAll(c[j]).indexOf(trimAll(exist)) > -1) {
-                find = true;
-                break;
+            ManifestPackage p1 = new ManifestPackage(exist);
+            ManifestPackage p2 = new ManifestPackage(c[j]);
+            if (p1.getPackageName().equalsIgnoreCase(p2.getPackageName())) {
+                // check if their version match
+                if (p1.getPackageVersion().compareTo(p2.getPackageVersion()) == 0) {
+                    find = true;
+                    break;
+                }
             }
         }
         return find;
