@@ -4,8 +4,7 @@ xmlns:rsa="http://www.osgi.org/xmlns/rsa/v1.0.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
   <endpoint-description> 
     <property name ="objectClass">org.osgi.test.cases.scaconfigtype.common.A</property> 
-    <property name ="service.intents">confidentiality</property> 
     <property name ="service.imported.configs">org.osgi.sca</property> 
-    <property name ="org.osgi.sca.binding" type="String" value="A.WS"/> 
+    <property name ="org.osgi.sca.binding">serviceA</property> 
   </endpoint-description> 
 </rsa:endpoint-descriptions> 

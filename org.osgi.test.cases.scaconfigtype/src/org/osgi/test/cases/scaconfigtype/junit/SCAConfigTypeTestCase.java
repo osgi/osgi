@@ -37,6 +37,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import static org.osgi.framework.Constants.*;
 import static org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants.*;
 import static org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants.*;
+import static org.osgi.test.cases.scaconfigtype.common.TestConstants.*;
 
 /**
  * Tests are documented in the <a href="https://www.osgi.org/members/svn/documents/trunk/rfcs/rfc0119/working_docs/service.scaconfigurationtype.tck.odt">SCA TCK Planning Document</a>
@@ -56,7 +57,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		super.setUp();
 		
 		// verify that the server framework is exporting the test packages
-		verifyFramework();
+		verifyFramework(getFramework(SERVER_FRAMEWORK));
 	}
 	
 	/**
@@ -112,24 +113,31 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	 * @throws Exception
 	 */
 	public void testSCAConfigTypeServiceHeader() throws Exception {
-		assertTrue( "Expected supported config type " + ORG_OSGI_SCA_CONFIG, Utils.getSupportedConfigTypes(getContext()).contains( ORG_OSGI_SCA_CONFIG ) );
-		assertTrue( "Expected supported config type " + ORG_OSGI_SCA_CONFIG, Utils.getSupportedConfigTypes(getFramework().getBundleContext()).contains( ORG_OSGI_SCA_CONFIG ) );
+		// sanity check that sca is not installed in test framework - do all testing in sub frameworks
+		assertFalse( "Unexpected supported config type " + ORG_OSGI_SCA_CONFIG, Utils.getSupportedConfigTypes(getContext()).contains( ORG_OSGI_SCA_CONFIG ) );
+		assertTrue( "Expected supported config type " + ORG_OSGI_SCA_CONFIG, Utils.getSupportedConfigTypes(getFramework(SERVER_FRAMEWORK).getBundleContext()).contains( ORG_OSGI_SCA_CONFIG ) );
 	}
 	
-	/**
-	 * CT.12
-	 * @throws Exception
-	 */
+//	/**
+//	 * CT.12
+//	 * @throws Exception
+//	 */
 	public void testExportedConfigs() throws Exception {
 		// install test bundle in child framework
-		BundleContext childContext = getFramework().getBundleContext();
+		BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
+		BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
 		
-		Bundle ctBundle = installBundle(childContext, "/ct12.jar");
+		Bundle ctBundle = installBundle(serverContext, "/ct12.jar");
 		assertNotNull(ctBundle);
 		ctBundle.start();
 		
+		ctBundle = installBundle(clientContext, "/ct12client.jar");
+		assertNotNull(ctBundle);
+		// TODO don't technically need to start bundle but checks it's resolved
+		ctBundle.start();
+		
 		// wait for test service to be registered in this framework
-		ServiceTracker tracker = new ServiceTracker(getContext(), A.class.getName(), null);
+		ServiceTracker tracker = new ServiceTracker(clientContext, A.class.getName(), null);
 		tracker.open();
 		A serviceA = (A) tracker.waitForService(10000);
 		
@@ -147,7 +155,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		
 		// search for b service which is registered with a fabricated config type
 		// assert this is not picked up by the RI
-		tracker = new ServiceTracker(getContext(), B.class.getName(), null);
+		tracker = new ServiceTracker(clientContext, B.class.getName(), null);
 		tracker.open();
 		B serviceB = (B) tracker.waitForService(10000);
 		assertNull( "Unexpected test service", serviceB );
@@ -155,20 +163,26 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		tracker.close();
 	}
 	
-	/**
-	 * CT.13
-	 * @throws Exception
-	 */
+//	/**
+//	 * CT.13
+//	 * @throws Exception
+//	 */
 	public void testImportedConfigs() throws Exception {
 		// install test bundle in child framework
-		BundleContext childContext = getFramework().getBundleContext();
+		BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
+		BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
 		
-		Bundle ctBundle = installBundle(childContext, "/ct13.jar");
+		Bundle ctBundle = installBundle(serverContext, "/ct13.jar");
 		assertNotNull(ctBundle);
 		ctBundle.start();
 		
+		ctBundle = installBundle(clientContext, "/ct13client.jar");
+		assertNotNull(ctBundle);
+		// TODO don't technically need to start bundle but checks it's resolved
+		ctBundle.start();
+		
 		// wait for test service to be registered in this framework
-		ServiceTracker tracker = new ServiceTracker(getContext(), A.class.getName(), null);
+		ServiceTracker tracker = new ServiceTracker(clientContext, A.class.getName(), null);
 		tracker.open();
 		A serviceA = (A) tracker.waitForService(10000);
 		
@@ -288,8 +302,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	 * used by the test service.
 	 * @throws Exception
 	 */
-	private void verifyFramework() throws Exception {
-		Framework f = getFramework();
+	private void verifyFramework(Framework f) throws Exception {
 		ServiceReference sr = f.getBundleContext().getServiceReference(PackageAdmin.class.getName());
 		assertNotNull("Framework is not supplying PackageAdmin service", sr);
 		
@@ -309,6 +322,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	public Map getConfiguration() {
 		Map configuration = new HashMap();
 		configuration.put(FRAMEWORK_STORAGE_CLEAN, "true");
+		configuration.put(FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT, "true");
 		
 		//make sure that the server framework System Bundle exports the interfaces
         String systemPackagesXtra = (String) configuration.get(FRAMEWORK_SYSTEMPACKAGES_EXTRA);

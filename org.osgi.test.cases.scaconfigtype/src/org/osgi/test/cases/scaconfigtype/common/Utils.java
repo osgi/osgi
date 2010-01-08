@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -13,6 +14,7 @@ import java.util.StringTokenizer;
 import junit.framework.Assert;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -28,15 +30,20 @@ public class Utils {
 		dpTracker.open();
 		
 		Object dp = dpTracker.waitForService(10000L);
-		Assert.assertNotNull("No DistributionProvider found", dp);
-		ServiceReference dpReference = dpTracker.getServiceReference();
-		Assert.assertNotNull(dpReference);
 		
-		List supportedConfigTypes = propertyToList(dpReference.getProperty(REMOTE_CONFIGS_SUPPORTED)); // collect all supported config types
+		if ( dp != null ) {
+			ServiceReference dpReference = dpTracker.getServiceReference();
+
+			if ( dpReference != null ) { 
+				// collect all supported config types
+				List supportedConfigTypes = propertyToList(dpReference.getProperty(REMOTE_CONFIGS_SUPPORTED)); 				
+				dpTracker.close();
+				return supportedConfigTypes;
+			}			
+		}
 		
-		dpTracker.close();
-		
-		return supportedConfigTypes;
+		dpTracker.close();		
+		return Collections.EMPTY_LIST;
 	}
 	
 	public static List propertyToList(Object configProperty) {

@@ -7,12 +7,9 @@ Private-Package						= org.osgi.test.support.*, \
 
 Include-Resource					= \
 	ct12.jar, \
+	ct12client.jar, \
 	ct13.jar, \
-	OSGI-INF/remote-service/a.endpoint.xml=resources/OSGI-INF/remote-service/a.endpoint.xml, \
-	OSGI-INF/sca-config/bindings/binding.xml=resources/OSGI-INF/sca-config/bindings/binding.xml, \
-	
-SCA-Configuration					= \
-    OSGI-INF/sca-config/bindings/binding.xml, \
+	ct13client.jar, \
 	
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
@@ -23,19 +20,14 @@ SCA-Configuration					= \
 	${junit}
 
 -runbundles							= \
-	org.apache.tuscany.sca.bundle;      version=latest, \
 	osgi.cmpn;								version=latest	, \
-	org.osgi.impl.service.log;				version=latest
 	
 # TODO bundles contains ${repo;com.springsource.junit} factor out to ${junit} as above
 -runproperties = report=true, \
 	osgi.compatibility.bootdelegation=false, \
 	osgi.resolverMode=strict, \
 	osgi.support.multipleHosts=true, \
-	${p}.bundles=${repo;com.springsource.junit}|${repo;org.apache.tuscany.sca.bundle}|${repo;osgi.core}|${repo;osgi.cmpn}|${repo;org.osgi.impl.service.log}, \
-	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.address", \
-	service.exported.configs=org.apache.cxf.ws, \
-	org.apache.cxf.ws.address=http://localhost:9090/test
+	${p}.bundles=${repo;com.springsource.junit}|${repo;org.apache.tuscany.sca.bundle}|${repo;osgi.core}|${repo;osgi.cmpn}|${repo;org.osgi.impl.service.log}
 
 Test-Cases							= ${testcases}
 	

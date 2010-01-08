@@ -1,9 +1,8 @@
-Bundle-Name:                             ${p}.ct13
+Bundle-Name:                             ${p}.ct12client
 Bundle-Version:                          1.0
-Private-Package:                         ${p}.junit.ct13.*, \
- ${p}.common.*
-Bundle-Activator:                        ${p}.junit.ct13.Activator
+Private-Package:                         ${p}.common.*
 Include-Resource					= \
+	OSGI-INF/remote-service/a.endpoint.xml=resources/OSGI-INF/remote-service/a.endpoint.xml, \
 	OSGI-INF/sca-config/bindings/binding.xml=resources/OSGI-INF/sca-config/bindings/binding.xml, \
 	
 SCA-Configuration: OSGI-INF/sca-config/bindings/binding.xml

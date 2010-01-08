@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,6 +39,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
+ * @author <a href="mailto:david.savage@paremus.com">David Savage</a>
  *
  */
 public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
@@ -46,36 +48,33 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 	private static final String STORAGEROOT = "org.osgi.test.cases.scaconfigtype.storageroot";
 	private static final String DEFAULT_STORAGEROOT = "generated/testframeworkstorage";
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
-	private Framework framework;
-	private String frameworkFactoryClassName;
+	
+	private HashMap<String, Framework> frameworks = new HashMap<String, Framework>();
+	
 	private FrameworkFactory frameworkFactory;
-	private String rootStorageArea;
+	private Map<String, Object> configuration;
 
 	/**
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		frameworkFactoryClassName = getFrameworkFactoryClassName();
-		assertNotNull("Could not find framework factory class", frameworkFactoryClassName);
 		frameworkFactory = getFrameworkFactory();
 
-		rootStorageArea = getStorageAreaRoot();
+		String rootStorageArea = getStorageAreaRoot();
 		assertNotNull("No storage area root found", rootStorageArea);
+		
 		File rootFile = new File(rootStorageArea);
 		delete(rootFile);
+		
 		assertFalse("Root storage area is not a directory: " + rootFile.getPath(), rootFile.exists() && !rootFile.isDirectory());
+		
 		if (!rootFile.isDirectory())
 			assertTrue("Could not create root directory: " + rootFile.getPath(), rootFile.mkdirs());
 		
-		Map configuration = getConfiguration();
-		configuration.put(Constants.FRAMEWORK_STORAGE, rootFile.getAbsolutePath());
+		configuration = getConfiguration();
 		
-		framework = createFramework(configuration);
-		initFramework();
-		startFramework();
-		
-		installFramework();
+		configuration.put(Constants.FRAMEWORK_STORAGE, rootFile.getAbsolutePath());		
 	}
 
 
@@ -83,15 +82,31 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
-		stopFramework();
+		try {
+			for ( Iterator i = frameworks.values().iterator(); i.hasNext(); ) {
+				Framework f = (Framework) i.next();
+				stopFramework(f);
+			}
+		}
+		finally {
+			frameworks.clear();
+		}
+
 		super.tearDown();
 	}
 
 	/**
 	 * @return started Framework instance
 	 */
-	public Framework getFramework() {
-		Framework f = framework;
+	public synchronized Framework getFramework(String name) {
+		Framework f = frameworks.get(name);
+		if ( f == null ) {
+			f = createFramework(configuration);
+			initFramework(f);
+			startFramework(f);
+			installFramework(f);
+			frameworks.put(name, f);
+		}
 		if (f == null || f.getState() != Bundle.ACTIVE) {
 			fail("Framework is not started yet");
 		}
@@ -111,20 +126,24 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 	 * @throws BundleException
 	 * @throws IOException
 	 */
-	public Bundle installBundle(String bundle) throws BundleException, IOException {
-		BundleContext fwkContext = getFramework().getBundleContext();
-		assertNotNull("Framework context is null", fwkContext);
-		URL input = getBundleInput(bundle);
-		assertNotNull("Cannot find resource: " + bundle, input);
-		return fwkContext.installBundle(bundle, input.openStream());
-	}
+//	public Bundle installBundle(String bundle) throws BundleException, IOException {
+//		BundleContext fwkContext = getFramework().getBundleContext();
+//		assertNotNull("Framework context is null", fwkContext);
+//		URL input = getBundleInput(bundle);
+//		assertNotNull("Cannot find resource: " + bundle, input);
+//		return fwkContext.installBundle(bundle, input.openStream());
+//	}
+//	
+//	private URL getBundleInput(String bundle) {
+//		BundleContext context = getBundleContextWithoutFail();
+//	    return context == null ? this.getClass().getResource(bundle) : context.getBundle().getEntry(bundle);
+//	}
 
 	private String getFrameworkFactoryClassName() throws IOException {
 		BundleContext context = getBundleContextWithoutFail();
         URL factoryService = context == null ? this.getClass().getResource(FRAMEWORK_FACTORY) : context.getBundle(0).getEntry(FRAMEWORK_FACTORY);
 		assertNotNull("Could not locate: " + FRAMEWORK_FACTORY, factoryService);
 		return getClassName(factoryService);
-
 	}
 
 	private String getClassName(URL factoryService) throws IOException {
@@ -180,6 +199,8 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 
 	private FrameworkFactory getFrameworkFactory() {
 		try {
+			String frameworkFactoryClassName = getFrameworkFactoryClassName();
+			assertNotNull("Could not find framework factory class", frameworkFactoryClassName);
 			Class clazz = loadFrameworkClass(frameworkFactoryClassName);
 			return (FrameworkFactory) clazz.newInstance();
 		} catch (Exception e) {
@@ -217,13 +238,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 		return framework;
 	}
 
-	private URL getBundleInput(String bundle) {
-		BundleContext context = getBundleContextWithoutFail();
-		return context == null ? this.getClass().getResource(bundle) : context.getBundle().getEntry(bundle);
-	}
-
-
-	private void initFramework() {
+	private void initFramework(Framework framework) {
 		try {
 			framework.init();
 			assertNotNull("BundleContext is null after init", framework.getBundleContext());
@@ -234,7 +249,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 		assertEquals("Wrong framework state after init", Bundle.STARTING, framework.getState());
 	}
 
-	private void startFramework() {
+	private void startFramework(Framework framework) {
 		try {
 			framework.start();
 			assertNotNull("BundleContext is null after start", framework.getBundleContext());
@@ -246,7 +261,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 
 	}
 
-	private void stopFramework() {
+	private void stopFramework(Framework framework) {
 		int previousState = framework.getState();
 		try {
             framework.stop();
@@ -267,9 +282,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 		assertEquals("Wrong framework state after init", expectedState, framework.getState());
 	}
 
-	private void installFramework() throws Exception {
-		Framework f = getFramework();
-		
+	private void installFramework(Framework f) {
 		List bundles = new LinkedList();
 		
 		StringTokenizer st = new StringTokenizer(System.getProperty(
@@ -277,22 +290,31 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 		while (st.hasMoreTokens()) {
 			String bundle = st.nextToken();
 			
-			Bundle b = f.getBundleContext().installBundle("file:" + bundle);
-			assertNotNull(b);
-			assertEquals("Bundle " + b.getSymbolicName() + " is not INSTALLED", Bundle.INSTALLED, b.getState());
+			try {
+				Bundle b = f.getBundleContext().installBundle("file:" + bundle);
+				assertNotNull(b);
+				assertEquals("Bundle " + b.getSymbolicName() + " is not INSTALLED", Bundle.INSTALLED, b.getState());
+				
+				System.out.println("installed bundle " + b.getSymbolicName());
+				bundles.add(b);
+			} catch (BundleException e) {
+				fail("Failed to install bundle: " + bundle, e);
+			}
 			
-			System.out.println("installed bundle " + b.getSymbolicName());
-			bundles.add(b);
 		}
 		
 		for (Iterator it = bundles.iterator(); it.hasNext();) {
 			Bundle b = (Bundle) it.next();
 			
 			if (b.getHeaders().get(Constants.FRAGMENT_HOST) == null) {
-				b.start();
-				assertEquals("Bundle " + b.getSymbolicName() + " is not ACTIVE", Bundle.ACTIVE, b.getState());
-				
-				System.out.println("started bundle " + b.getSymbolicName());
+				try {
+					b.start();
+					assertEquals("Bundle " + b.getSymbolicName() + " is not ACTIVE", Bundle.ACTIVE, b.getState());
+					
+					System.out.println("started bundle " + b.getSymbolicName());
+				} catch (BundleException e) {
+					fail("Failed to start bundle: " + b.getSymbolicName(), e);
+				}
 			}
 		}
 	}
