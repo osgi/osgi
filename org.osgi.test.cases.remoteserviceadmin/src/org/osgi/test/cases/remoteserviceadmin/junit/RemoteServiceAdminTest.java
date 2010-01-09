@@ -18,6 +18,7 @@ package org.osgi.test.cases.remoteserviceadmin.junit;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +34,7 @@ import org.osgi.service.remoteserviceadmin.ImportRegistration;
 import org.osgi.service.remoteserviceadmin.RemoteConstants;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
+import org.osgi.test.cases.remoteserviceadmin.common.B;
 
 /**
  * Use RSA service to register a service in a child framework and then import
@@ -92,6 +94,16 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		// reconstruct the endpoint description
 		EndpointDescription endpoint = reconstructEndpoint();
 		
+		//
+		// 122.4.2: Importing
+		// test an unsupported config type
+		//
+		Map<String, Object> map = new HashMap<String, Object>(endpoint.getProperties());
+		map.put(RemoteConstants.SERVICE_IMPORTED_CONFIGS, "guaranteed_unsupported_" + System.currentTimeMillis());
+		EndpointDescription clone = new EndpointDescription(map);
+		assertNull("122.4.2: with no supported config type no service may be imported", rsa.importService(clone));
+		
+		// positive test:
 		// import the service
 		ImportRegistration importReg = rsa.importService(endpoint);
 		assertNotNull(importReg);
@@ -102,8 +114,13 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		ServiceReference sref = importRef.getImportedService();
 		assertNotNull(sref);
 		assertEquals("has been overridden", sref.getProperty("mykey"));
-		assertNotNull(sref.getProperty(RemoteConstants.SERVICE_IMPORTED));
+		assertNotNull("122.4.2: the service.imported property has to be set", sref.getProperty(RemoteConstants.SERVICE_IMPORTED));
+		assertNotNull(sref.getProperty(RemoteConstants.SERVICE_IMPORTED_CONFIGS));
+		// TODO check intents property
 		
+		// TODO add event listener and RSAListener tests
+		//
+		// invoke the service
 		A serviceA = (A) getContext().getService(sref);
 		assertNotNull(serviceA);
 		assertEquals("this is A", serviceA.getA());
@@ -155,6 +172,26 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		return new EndpointDescription(props);
 	}
 	
+	class TestService implements A, B, Serializable {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
+		/**
+		 * @see org.osgi.test.cases.remoteserviceadmin.common.A#getA()
+		 */
+		public String getA() {
+			return "this is A";
+		}
+
+		/**
+		 * @see org.osgi.test.cases.remoteserviceadmin.common.B#getB()
+		 */
+		public String getB() {
+			return "this is B";
+		}
+		
+	}
 
 }
