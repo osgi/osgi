@@ -204,9 +204,14 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         assertNull("Bundle b2 should be null as install failed", b2);
 
         options = createOptions(null);
-        b2 = super.installWar(options, "tw3.war", true);
-        super.generalHeadersTest(options, "tw3.war", true, b2);
-        uninstallBundle(b2);
+        try {
+            b2 = super.installWar(options, "tw3.war", true);
+            super.generalHeadersTest(options, "tw3.war", true, b2);       
+        } finally {
+            if (b2 != null) {
+                uninstallBundle(b2);
+            }
+        }
     }
 
     /*
@@ -217,50 +222,49 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         this.b = super.installWar(options, "tw1.war", true);
         super.generalHeadersTest(options, "tw1.war", true, this.b);
         
-        options = createOptions(WEBCONTEXTPATH2);
-        Bundle b2 = super.installWar(options, "tw2.war", false);
-        super.generalHeadersTest(options, "tw2.war", false, b2);
-
-        options = createOptions(WEBCONTEXTPATH3);
-        Bundle b3 = super.installWar(options, "tw3.war", false);
-        super.generalHeadersTest(options, "tw3.war", false, b3);
-        
-        options = createOptions(WEBCONTEXTPATH4);
-        Bundle b4 = super.installWar(options, "tw4.war", true);
-        super.generalHeadersTest(options, "tw4.war", true, b4);
-        
-        options = createOptions(WEBCONTEXTPATH5);
-        Bundle b5 = super.installWar(options, "tw5.war", false);
-        super.generalHeadersTest(options, "tw5.war", false, b5);
-        
-        options = createOptions(LONGWEBCONTEXTPATH);
-        Bundle b6 = super.installWar(options, "tw1.war", false);
-        super.generalHeadersTest(options, "tw1.war", false, b6);
-        
-        options = createOptions(LONGWEBCONTEXTPATH2);
-        Bundle b7 = super.installWar(options, "tw2.war", true);
-        super.generalHeadersTest(options, "tw2.war", true, b6);
-        
-        options = createOptions(LONGWEBCONTEXTPATH3);
-        Bundle b8 = super.installWar(options, "tw3.war", true);
-        super.generalHeadersTest(options, "tw3.war", true, b8);
-        
-        options = createOptions(null);
-        Bundle b9 = super.installWar(options, "tw4.war", false);
-        super.generalHeadersTest(options, "tw4.war", false, b9);
-        
-        Bundle b10 = super.installWar(options, "tw5.war", true);
-        super.generalHeadersTest(options, "tw5.war", true, b10);
-        
-        uninstallBundle(b2);
-        uninstallBundle(b3);
-        uninstallBundle(b4);
-        uninstallBundle(b5);
-        uninstallBundle(b6);
-        uninstallBundle(b7);
-        uninstallBundle(b8);
-        uninstallBundle(b9);
-        uninstallBundle(b10);
+        Bundle[] bundles = new Bundle[9];
+        try {
+            options = createOptions(WEBCONTEXTPATH2);
+            bundles[0] = super.installWar(options, "tw2.war", false);
+            super.generalHeadersTest(options, "tw2.war", false, bundles[0]);
+    
+            options = createOptions(WEBCONTEXTPATH3);
+            bundles[1] = super.installWar(options, "tw3.war", false);
+            super.generalHeadersTest(options, "tw3.war", false, bundles[1]);
+            
+            options = createOptions(WEBCONTEXTPATH4);
+            bundles[2] = super.installWar(options, "tw4.war", true);
+            super.generalHeadersTest(options, "tw4.war", true, bundles[2]);
+            
+            options = createOptions(WEBCONTEXTPATH5);
+            bundles[3] = super.installWar(options, "tw5.war", false);
+            super.generalHeadersTest(options, "tw5.war", false, bundles[3]);
+            
+            options = createOptions(LONGWEBCONTEXTPATH);
+            bundles[4] = super.installWar(options, "tw1.war", false);
+            super.generalHeadersTest(options, "tw1.war", false, bundles[4]);
+            
+            options = createOptions(LONGWEBCONTEXTPATH2);
+            bundles[5] = super.installWar(options, "tw2.war", true);
+            super.generalHeadersTest(options, "tw2.war", true, bundles[5]);
+            
+            options = createOptions(LONGWEBCONTEXTPATH3);
+            bundles[6] = super.installWar(options, "tw3.war", true);
+            super.generalHeadersTest(options, "tw3.war", true, bundles[6]);
+            
+            options = createOptions(null);
+            bundles[7] = super.installWar(options, "tw4.war", false);
+            super.generalHeadersTest(options, "tw4.war", false, bundles[7]);
+            
+            bundles[8] = super.installWar(options, "tw5.war", true);
+            super.generalHeadersTest(options, "tw5.war", true, bundles[8]);
+        } finally {
+            for (int i = 0; i < bundles.length; i++) {
+                if (bundles[i] != null) {
+                    uninstallBundle(bundles[i]);
+                }
+            }
+        }
     }
 
     /*
@@ -269,12 +273,17 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
     public void testMultipleWebContextPath002() throws Exception {
         Bundle[] bundles = new Bundle[100];
         final Map<String, Object> options = new HashMap<String, Object>();
-        for (int i = 0; i < 100; i++) {
-            bundles[i] = super.installWar(options, "tw1.war", true);
-            super.generalHeadersTest(options, "tw1.war", true, bundles[i]);
-        }
-        for (int i = 0; i < 100; i++) {
-            uninstallBundle(bundles[i]);
+        try {
+            for (int i = 0; i < 100; i++) {
+                bundles[i] = super.installWar(options, "tw1.war", true);
+                super.generalHeadersTest(options, "tw1.war", true, bundles[i]);
+            }
+        } finally {
+            for (int i = 0; i < 100; i++) {
+                if (bundles[i] != null) {
+                    uninstallBundle(bundles[i]);
+                }
+            }
         }
     }
 }

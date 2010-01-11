@@ -58,7 +58,7 @@ public abstract class ManifestHeadersTestBundleControl extends
     protected static final String SYMBOLICNAME1 = "ct-testwar1";
     protected static final String SYMBOLICNAME2 = "ct-testwar2asdacakjdlkjasldja;dk;k121pi2910-921-0lkajdlkajsdlsadjlaksdjskajdklsajdklasjdksakdjaksljdaksljd";
     protected static final String SYMBOLICNAME3 = "ct-testwar3-----------aklsdmklajsdl kajskldjaldlasjdklajdlksa;djklajsdkljakldjskaljdkaljsdlksjadklsajdkasdj";
-    protected static final String SYMBOLICNAME4 = "ct-testwar4--//laksldkl; laksldk;askd;aslkd;laksdlksaldkl;laksdpqoeiewihrfrhbgsmndb123e32";
+    protected static final String SYMBOLICNAME4 = "ct-testwar4--//laksldkl;laksldk;askd;aslkd;laksdlksaldkl;laksdpqoeiewihrfrhbgsmndb123e32";
     protected static final String SYMBOLICNAME5 = "ct-testwar5";
     protected static final String VERSION10 = "1.0";
     

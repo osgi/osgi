@@ -112,9 +112,6 @@ public class BundleManifestValidator extends Assert implements Validator{
         } else if (mSymbolicName != null) {
             assertEquals((String)mSymbolicName, this.b.getSymbolicName());
         } 
-        
-        // TODO: can we verify if the symbolic name is unique?
-        // TODO: possible test case: what if a deployer or manifest specifies a non-unique symbolic name?
     }
     
     /** 

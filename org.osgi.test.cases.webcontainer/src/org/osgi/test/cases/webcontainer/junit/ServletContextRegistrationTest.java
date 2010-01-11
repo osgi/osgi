@@ -107,14 +107,13 @@ public class ServletContextRegistrationTest extends
 	 */
 	public void testMultiServletContextReg001() throws Exception {
 		final Map<String, Object> option = createOptions(null, null, null);
-		this.b = super.installWar(option, "tw1.war", true);	
+		this.b = super.installWar(option, "tw1.war", true);
+		
 		Bundle b2 = super.installWar(option, "tw1.war", true);
 		Bundle b3 = super.installWar(option, "tw1.war", true);
 		registerWarBundleTest(option, "tw1.war", true, this.b);
 		registerWarBundleTest(option, "tw1.war", true, b2);
 		registerWarBundleTest(option, "tw1.war", true, b3);
-		// uninstallBundle(b2);
-		// uninstallBundle(b3);
 	}
 
 	/*
@@ -160,26 +159,32 @@ public class ServletContextRegistrationTest extends
 		this.b = super.installWar(option, "tw1.war", true);
 		registerWarBundleTest(option, "tw1.war", true, this.b);
 		
-		option = createOptions("1.0", "ct-testwar2", "/tw2");
-		Bundle b2 = super.installWar(option, "tw2.war", true);
-		registerWarBundleTest(option, "tw2.war", true, b2);
-		
-		option = createOptions("1.0", "ct-testwar3", "/tw3");
-		Bundle b3 = super.installWar(option,  "tw3.war", true);
-		registerWarBundleTest(option, "tw3.war", true, b3);
-		
-		option = createOptions("1.0", "ct-testwar4",
-		"/tw4");
-		Bundle b4 = super.installWar(option,  "tw4.war", true);
-		registerWarBundleTest(option, "tw4.war", true, b4);
-		
-		option = createOptions("1.0", "ct-testwar5", "/tw5");
-		Bundle b5 = super.installWar(option,  "tw5.war", true);
-		registerWarBundleTest(option, "tw5.war", true, b5);
-		uninstallBundle(b2);
-		uninstallBundle(b3);
-		uninstallBundle(b4);
-		uninstallBundle(b5);
+		Bundle[] bundles = new Bundle[4];
+		try {
+    		option = createOptions("1.0", "ct-testwar2", "/tw2");
+    		bundles[0] = super.installWar(option, "tw2.war", true);
+    		registerWarBundleTest(option, "tw2.war", true, bundles[0]);
+    		
+    		option = createOptions("1.0", "ct-testwar3", "/tw3");
+    		bundles[1] = super.installWar(option,  "tw3.war", true);
+    		registerWarBundleTest(option, "tw3.war", true, bundles[1]);
+    		
+    		option = createOptions("1.0", "ct-testwar4",
+    		"/tw4");
+    		bundles[2] = super.installWar(option,  "tw4.war", true);
+    		registerWarBundleTest(option, "tw4.war", true, bundles[2]);
+    		
+    		option = createOptions("1.0", "ct-testwar5", "/tw5");
+    		bundles[3] = super.installWar(option,  "tw5.war", true);
+    		registerWarBundleTest(option, "tw5.war", true, bundles[3]);
+        } finally {
+            for (int i = 0; i < bundles.length; i++) {
+                if (bundles[i] != null) {
+                    uninstallBundle(bundles[i]);
+                }
+            }
+        }
+
 	}
 
     /*
@@ -193,11 +198,11 @@ public class ServletContextRegistrationTest extends
                 bundles[i] = super.installWar(option, "tw1.war", true);
                 registerWarBundleTest(option, "tw1.war", true, bundles[i]);
             }
-        } catch (Exception e) {
-            fail("Exception generated from test " + e.getCause());
         } finally {
             for (int i = 0; i < 100; i++) {
-                uninstallBundle(bundles[i]);
+                if (bundles[i] != null) {
+                    uninstallBundle(bundles[i]);
+                }
             }
         }
     }

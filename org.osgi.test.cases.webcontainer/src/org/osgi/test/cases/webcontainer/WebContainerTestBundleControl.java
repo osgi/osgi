@@ -101,11 +101,18 @@ public abstract class WebContainerTestBundleControl extends
             if (debug) {
                 log("bundleName to be passed into installBundle is " + loc);
             }
-            return installBundle(loc, start);
+            b = installBundle(loc);
+            if (start) {
+                b.start();
+            }
         } catch (BundleException e) {
-            // expected
-        }
-        return null;
+            if (debug) {
+                log("installWar failed: " + options + " warName: " + warName + "Exception: " + e.getCause());
+            }
+        } 
+        
+        return b;
+        
     }
 
     protected void prepare(String wcp) throws Exception {
@@ -438,6 +445,27 @@ public abstract class WebContainerTestBundleControl extends
             if (start) {
                 b.start();
             }
+            return b;
+        } catch (Exception e) {
+            log("Not able to install testbundle " + bundleName);
+            log("Nested " + e.getCause());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+    
+    @Override
+    public Bundle installBundle(String bundleName)
+            throws Exception {
+        try {
+            if (bundleName.indexOf(getWebServer()) < 0) {
+                bundleName = getWebServer() + bundleName;
+            }
+            URL url = new URL(bundleName);
+            InputStream in = url.openStream();
+
+            Bundle b = getContext().installBundle(bundleName, in);
+
             return b;
         } catch (Exception e) {
             log("Not able to install testbundle " + bundleName);
