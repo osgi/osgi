@@ -182,20 +182,25 @@ public class ServletContextRegistrationTest extends
 		uninstallBundle(b5);
 	}
 
-	/*
-	 * verify install 100 web applications
-	 */
-	public void testMultiServletContextReg005() throws Exception {
-		Bundle[] bundles = new Bundle[100];
-		final Map<String, Object> option = new HashMap<String, Object>();
-		for (int i = 0; i < 100; i++) {
-			bundles[i] = super.installWar(option, "tw1.war", true);
-			registerWarBundleTest(option, "tw1.war", true, bundles[i]);
-		}
-		for (int i = 0; i < 100; i++) {
-			uninstallBundle(bundles[i]);
-		}
-	}
+    /*
+     * verify install 100 web applications
+     */
+    public void testMultiServletContextReg005() throws Exception {
+        Bundle[] bundles = new Bundle[100];
+        final Map<String, Object> option = new HashMap<String, Object>();
+        try {
+            for (int i = 0; i < 100; i++) {
+                bundles[i] = super.installWar(option, "tw1.war", true);
+                registerWarBundleTest(option, "tw1.war", true, bundles[i]);
+            }
+        } catch (Exception e) {
+            fail("Exception generated from test " + e.getCause());
+        } finally {
+            for (int i = 0; i < 100; i++) {
+                uninstallBundle(bundles[i]);
+            }
+        }
+    }
 
 	private Map<String, Object> createOptions(String version, String sname, String cp) {
 		final Map<String, Object> options = new HashMap<String, Object>();

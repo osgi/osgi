@@ -208,7 +208,7 @@ public abstract class WebContainerTestBundleControl extends
         } else if (warName.indexOf("tw3.war") > -1) {
             path += "/ResourceServlet2";
         } else if (warName.indexOf("tw4.war") > -1) {
-            path += "/TestServlet1";
+            path += "/TestServlet1/TestServlet2";
         } else if (warName.indexOf("tw5.war") > -1) {
             path += "/ClasspathTestServlet";
         }
@@ -350,7 +350,7 @@ public abstract class WebContainerTestBundleControl extends
      * check the response of TestServlet1 of tw4
      */
     protected void checkTW4TestServletResponse(String response) throws Exception {
-        assertEquals("", response);
+        assertEquals("<html><head><title>TestWar4-TestServlet</title></head><body>no test case is specified</body></html>", response);
     }
     
     /*

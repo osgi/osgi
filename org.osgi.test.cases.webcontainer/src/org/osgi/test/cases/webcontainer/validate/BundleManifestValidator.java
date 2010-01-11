@@ -290,7 +290,6 @@ public class BundleManifestValidator extends Assert implements Validator{
      * 1. the deployer specified Web-ContextPath value will be used.
      * 2. Otherwise, preserve the Web-ContextPath value in the manifest file
      */
-     // TODO: it is still not clear if Web-ContextPath is required.
     public void validateWebContextPath() throws Exception {
         // verify Web-ContextPath exists
         log(WEB_CONTEXT_PATH + " must exist as it is required");
