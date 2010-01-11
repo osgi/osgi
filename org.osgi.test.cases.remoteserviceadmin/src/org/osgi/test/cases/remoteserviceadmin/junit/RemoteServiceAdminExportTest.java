@@ -397,7 +397,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				assertEquals("org/osgi/service/remoteserviceadmin/EXPORT_UNREGISTRATION", event.getTopic());
 				assertEquals(sref.getBundle(), event.getProperty("bundle"));
 				assertEquals(sref.getBundle().getSymbolicName(), event.getProperty("bundle.symbolicname"));
-				assertEquals(description, event.getProperty("export.unregistration"));
+				// Marc Schaaf: changed from export.unregistration to export.registration
+				assertEquals(description, event.getProperty("export.registration"));
 				rsaevent = (RemoteServiceAdminEvent) event.getProperty("event");
 				assertNotNull(rsaevent);
 				assertEquals(RemoteServiceAdminEvent.EXPORT_UNREGISTRATION, rsaevent.getType());
