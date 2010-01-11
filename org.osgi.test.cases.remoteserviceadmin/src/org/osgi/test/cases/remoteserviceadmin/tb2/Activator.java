@@ -139,6 +139,7 @@ public class Activator implements BundleActivator, A, B {
 			
 			EndpointDescription ed = ref.getExportedEndpoint();
 			Assert.assertNotNull(ed);
+			Assert.assertNotNull(ed.getProperties().get("objectClass"));
 			Assert.assertTrue(ed.getInterfaces().contains(A.class.getName()));
 			Assert.assertFalse(ed.getInterfaces().contains(B.class.getName()));
 			
@@ -147,6 +148,7 @@ public class Activator implements BundleActivator, A, B {
 			Assert.assertFalse(ed.getConfigurationTypes().isEmpty());
 			Assert.assertTrue(ed.getIntents().contains("my_intent_is_for_this_to_work"));
 			Assert.assertEquals(context.getProperty("org.osgi.framework.uuid"), ed.getRemoteFrameworkUUID());
+			Assert.assertNotNull(ed.getProperties().get("endpoint.service.id"));
 			
 			exportEndpointDescription(ed);
 		}
