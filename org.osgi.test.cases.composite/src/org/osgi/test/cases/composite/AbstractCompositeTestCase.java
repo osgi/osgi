@@ -52,8 +52,8 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 	protected ServiceReference paRef;
 	protected PackageAdmin pa;
 	protected List installedBundles;
-	public static final String COMPOSITE_AFFINITY_NAME_DIRECTIVE = "composite-symbolic-name-affinity"; //$NON-NLS-1$
-	public static final String COMPOSITE_AFFINITY_VERSION_DIRECTIVE = "composite-version-affinity"; //$NON-NLS-1$
+	public static final String COMPOSITE_SYMBOLICNAME_DIRECTIVE = "composite-symbolic-name"; //$NON-NLS-1$
+	public static final String COMPOSITE_AFFINITY_VERSION = "composite-version"; //$NON-NLS-1$
 
 	public void setUp() {
 		compRef = getContext().getServiceReference(CompositeAdmin.class.getName());
@@ -215,7 +215,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 			URL content = getBundleContent(name);
 			String externalForm = content.toExternalForm();
 			if (location == null)
-				location = externalForm;
+				location = externalForm + "#" + name;
 			BundleContext context = composite.getSystemBundleContext();
 			Bundle result = (externalForm.equals(location)) ? context.installBundle(location) : context.installBundle(location, content.openStream());		
 			if (expectFail)
