@@ -65,9 +65,9 @@ import org.osgi.framework.Version;
 public class EndpointDescription {
 	private final Map<String, Object>	properties;
 	private final List<String>			interfaces;
-	private final long					remoteServiceID;
-	private final String				remoteFrameworkUUID;
-	private final String				remoteID;
+	private final long					serviceId;
+	private final String				frameworkUUID;
+	private final String				id;
 
 	/**
 	 * Create an Endpoint Description from a Map.
@@ -110,10 +110,10 @@ public class EndpointDescription {
 		this.properties = Collections.unmodifiableMap(props);
 		/* properties must be initialized before calling the following methods */
 		interfaces = verifyObjectClassProperty();
-		remoteServiceID = verifyLongProperty(ENDPOINT_SERVICE_ID);
-		remoteFrameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
-		remoteID = verifyStringProperty(ENDPOINT_ID);
-		if (remoteID == null) {
+		serviceId = verifyLongProperty(ENDPOINT_SERVICE_ID);
+		frameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
+		id = verifyStringProperty(ENDPOINT_ID);
+		if (id == null) {
 			throw new IllegalArgumentException(ENDPOINT_ID
 					+ " property must be set");
 		}
@@ -204,10 +204,10 @@ public class EndpointDescription {
 		this.properties = Collections.unmodifiableMap(props);
 		/* properties must be initialized before calling the following methods */
 		interfaces = verifyObjectClassProperty();
-		remoteServiceID = verifyLongProperty(ENDPOINT_SERVICE_ID);
-		remoteFrameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
-		remoteID = verifyStringProperty(ENDPOINT_ID);
-		if (remoteID == null) {
+		serviceId = verifyLongProperty(ENDPOINT_SERVICE_ID);
+		frameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
+		id = verifyStringProperty(ENDPOINT_ID);
+		if (id == null) {
 			throw new IllegalArgumentException(ENDPOINT_ID
 					+ " property must be set");
 		}
@@ -312,8 +312,8 @@ public class EndpointDescription {
 	 * 
 	 * @return The id of the endpoint, never <code>null</code>.
 	 */
-	public String getRemoteID() {
-		return remoteID;
+	public String getId() {
+		return id;
 	}
 
 	/**
@@ -382,8 +382,8 @@ public class EndpointDescription {
 	 *         not relate to an OSGi service.
 	 * 
 	 */
-	public long getRemoteServiceID() {
-		return remoteServiceID;
+	public long getServiceId() {
+		return serviceId;
 	}
 
 	/**
@@ -477,8 +477,8 @@ public class EndpointDescription {
 	 * @return Remote Framework UUID, or null if this endpoint is not associated
 	 *         with an OSGi framework having a framework uuid.
 	 */
-	public String getRemoteFrameworkUUID() {
-		return remoteFrameworkUUID;
+	public String getFrameworkUUID() {
+		return frameworkUUID;
 	}
 
 	/**
@@ -507,13 +507,13 @@ public class EndpointDescription {
 			return true;
 		}
 
-		if (this.getRemoteFrameworkUUID() == null) {
+		if (this.getFrameworkUUID() == null) {
 			return false;
 		}
 
-		return (this.getRemoteServiceID() == other.getRemoteServiceID())
-				&& this.getRemoteFrameworkUUID().equals(
-						other.getRemoteFrameworkUUID());
+		return (this.getServiceId() == other.getServiceId())
+				&& this.getFrameworkUUID().equals(
+						other.getFrameworkUUID());
 	}
 
 	/**
@@ -522,7 +522,7 @@ public class EndpointDescription {
 	 * @return An integer which is a hash code value for this object.
 	 */
 	public int hashCode() {
-		return getRemoteID().hashCode();
+		return getId().hashCode();
 	}
 
 	/**
@@ -544,8 +544,8 @@ public class EndpointDescription {
 		if (!(other instanceof EndpointDescription)) {
 			return false;
 		}
-		return getRemoteID().equals(
-				((EndpointDescription) other).getRemoteID());
+		return getId().equals(
+				((EndpointDescription) other).getId());
 	}
 
 	/**

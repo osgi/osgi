@@ -67,11 +67,8 @@ public interface RemoteServiceAdmin {
 	 *        insensitive). This parameter can be <code>null</code>, this should
 	 *        be treated as an empty map.
 	 * 
-	 *        TODO Peter The return description does not mesh with returning a
-	 *        list! Why a list and not just one?
 	 * @return An Export Registration that combines the Endpoint Description and
-	 *         the Service Reference or <code>null</code> if the service could
-	 *         not be exported.
+	 *         the Service Reference.
 	 * @throws IllegalArgumentException If any of the properties has a value
 	 *         that is not syntactically correct or if the service properties
 	 *         and the overlaid properties do not contain a

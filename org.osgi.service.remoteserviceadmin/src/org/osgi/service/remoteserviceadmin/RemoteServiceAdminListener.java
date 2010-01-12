@@ -17,7 +17,7 @@
 package org.osgi.service.remoteserviceadmin;
 
 /**
- * A {@link RemoteServiceAdminEvent} listener is notified asynchronously of any
+ * A {@link RemoteServiceAdminEvent} listener is notified synchronously of any
  * export or import registrations and unregistrations.
  * 
  * <p>

@@ -165,11 +165,11 @@ public final class EndpointPermission extends Permission {
 		setTransients(null, parseActions(actions));
 		Map<String, Object> props;
 		if ((localFrameworkUUID != null)
-				&& localFrameworkUUID.equals(endpoint.getRemoteFrameworkUUID())) {
+				&& localFrameworkUUID.equals(endpoint.getFrameworkUUID())) {
 			props = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
 			props.putAll(endpoint.getProperties());
 			props.put(ENDPOINT_FRAMEWORK_UUID, new String[] {
-					endpoint.getRemoteFrameworkUUID(), "<<LOCAL>>"});
+					endpoint.getFrameworkUUID(), "<<LOCAL>>"});
 		}
 		else {
 			props = endpoint.getProperties();
@@ -190,7 +190,7 @@ public final class EndpointPermission extends Permission {
 			throw new IllegalArgumentException("invalid endpoint: null");
 		}
 		StringBuffer sb = new StringBuffer("(" + ENDPOINT_ID + "=");
-		sb.append(endpoint.getRemoteID());
+		sb.append(endpoint.getId());
 		sb.append(")");
 		return sb.toString();
 	}
