@@ -718,9 +718,9 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"some.parent\", " +
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"some.parent\", " +
 				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"some.parent\"");
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"some.parent\"");
 		doTestImportPolicy01(manifestImport, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
 	}
 
@@ -737,11 +737,11 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[2.0.0, 2.1.0)\", " +
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\", " +
 				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[2.0.0, 2.1.0)\"");
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
 		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", false, null);
 	}
 
@@ -758,11 +758,11 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[1.0.0, 1.1.0)\", " +
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[1.0.0, 1.1.0)\", " +
 				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[1.0.0, 1.1.0)\"");
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + exportBSN + "\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[1.0.0, 1.1.0)\"");
 		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
 	}
 
@@ -779,11 +779,11 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"fail\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[2.0.0, 2.1.0)\", " +
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"fail\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\", " +
 				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"fail\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[2.0.0, 2.1.0)\"");
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"fail\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
 		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
 	}
 
@@ -804,11 +804,11 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"fail\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[2.0.0, 2.1.0)\", " +
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"fail\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\", " +
 				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"fail\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[2.0.0, 2.1.0)\"");
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"fail\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
 		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
 	}
 
@@ -862,11 +862,11 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[2.0.0, 2.1.0)\", " +
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\", " +
 				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[2.0.0, 2.1.0)\"");
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
 		Map manifestImport2 = new HashMap();
 		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport2.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
@@ -892,11 +892,11 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[1.0.0, 1.1.0)\", " +
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[1.0.0, 1.1.0)\", " +
 				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[1.0.0, 1.1.0)\"");
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[1.0.0, 1.1.0)\"");
 		Map manifestImport2 = new HashMap();
 		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport2.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
@@ -922,11 +922,11 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export2BSN + "\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[2.0.0, 2.1.0)\", " +
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export2BSN + "\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\", " +
 				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export2BSN + "\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[2.0.0, 2.1.0)\"");
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export2BSN + "\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
 		Map manifestImport2 = new HashMap();
 		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport2.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
@@ -955,11 +955,11 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport2.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[2.0.0, 2.1.0)\", " +
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\", " +
 				"org.osgi.test.cases.composite.tb3.params; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[2.0.0, 2.1.0)\"");
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
 
 		doTestExportImportPolicy02(manifestExport1, manifestExport2, manifestImport1, manifestImport2, new String[] {"tb3v1.jar"}, null, "tb3v1client.jar", true, null);
 	}
@@ -982,8 +982,8 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3.params,org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[2.0.0, 2.1.0)\"");
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export1BSN + "\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
 		Map manifestImport2 = new HashMap();
 		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport2.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
@@ -1009,8 +1009,8 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		manifestImport1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import1; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport1.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, 
 				"org.osgi.test.cases.composite.tb3.params,org.osgi.test.cases.composite.tb3; version=\"1.0\"; " +
-				AbstractCompositeTestCase.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export2BSN + "\"; " +
-				AbstractCompositeTestCase.COMPOSITE_AFFINITY_VERSION + ":=\"[2.0.0, 2.1.0)\"");
+				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"" + export2BSN + "\"; " +
+				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
 		Map manifestImport2 = new HashMap();
 		manifestImport2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 		manifestImport2.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3; version=\"1.0\", org.osgi.test.cases.composite.tb3.params; version=\"1.0\"");
