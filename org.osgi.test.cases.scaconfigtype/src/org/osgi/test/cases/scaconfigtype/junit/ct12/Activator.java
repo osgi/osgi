@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.scaconfigtype.junit.ct12;
 
+import static org.osgi.test.cases.scaconfigtype.common.DistributionProviderConstants.*;
+
 import java.util.Hashtable;
 
 import java.util.List;
@@ -50,7 +52,7 @@ public class Activator implements BundleActivator, A, B {
 	}
 
 	private String fabricateConfigType() throws Exception {
-		List types = Utils.getSupportedConfigTypes(context);
+		List types = Utils.getServiceAdvert(context, REMOTE_CONFIGS_SUPPORTED);
 		return Utils.fabricateValue(types);
 	}
 

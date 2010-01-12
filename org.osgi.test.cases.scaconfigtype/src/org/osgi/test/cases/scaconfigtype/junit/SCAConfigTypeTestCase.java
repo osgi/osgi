@@ -18,9 +18,20 @@
 
 package org.osgi.test.cases.scaconfigtype.junit;
 
+import static org.osgi.framework.Constants.FRAMEWORK_STORAGE_CLEAN;
+import static org.osgi.framework.Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA;
+import static org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants.SERVICE_IMPORTED_CONFIGS;
+import static org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants.SERVICE_INTENTS;
+import static org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants.ORG_OSGI_SCA_CONFIG;
+import static org.osgi.test.cases.scaconfigtype.common.TestConstants.CLIENT_FRAMEWORK;
+import static org.osgi.test.cases.scaconfigtype.common.TestConstants.ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON;
+import static org.osgi.test.cases.scaconfigtype.common.TestConstants.SERVER_FRAMEWORK;
+import static org.osgi.test.cases.scaconfigtype.common.TestConstants.SERVICE_TIMEOUT;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -36,6 +47,7 @@ import org.osgi.test.cases.scaconfigtype.common.Utils;
 import org.osgi.util.tracker.ServiceTracker;
 
 import static org.osgi.framework.Constants.*;
+import static org.osgi.test.cases.scaconfigtype.common.DistributionProviderConstants.REMOTE_CONFIGS_SUPPORTED;
 import static org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants.*;
 import static org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants.*;
 import static org.osgi.test.cases.scaconfigtype.common.TestConstants.*;
@@ -125,14 +137,18 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 	 */
 	public void testSCAConfigTypeServiceHeader() throws Exception {
 		// sanity check that sca is not installed in test framework - do all testing in sub frameworks
-		assertFalse( "Unexpected supported config type " + ORG_OSGI_SCA_CONFIG, Utils.getSupportedConfigTypes(getContext()).contains( ORG_OSGI_SCA_CONFIG ) );
-		assertTrue( "Expected supported config type " + ORG_OSGI_SCA_CONFIG, Utils.getSupportedConfigTypes(getFramework(SERVER_FRAMEWORK).getBundleContext()).contains( ORG_OSGI_SCA_CONFIG ) );
+		List configs = Utils.getServiceAdvert(getContext(), REMOTE_CONFIGS_SUPPORTED);
+		assertFalse( "Unexpected supported config type " + ORG_OSGI_SCA_CONFIG, configs.contains( ORG_OSGI_SCA_CONFIG ) );
+		
+		// check server framework contains sca provider
+		configs = Utils.getServiceAdvert(getFramework(SERVER_FRAMEWORK).getBundleContext(), REMOTE_CONFIGS_SUPPORTED);
+		assertTrue( "Expected supported config type " + ORG_OSGI_SCA_CONFIG, configs.contains( ORG_OSGI_SCA_CONFIG ) );
 	}
 	
-//	/**
-//	 * CT.12
-//	 * @throws Exception
-//	 */
+	/**
+	 * CT.12
+	 * @throws InterruptedException 
+	 */
 	public void testExportedConfigs() throws InterruptedException {
 		// install test bundle in child framework
 		BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
@@ -140,10 +156,11 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		
 		installAndStartBundle(serverContext, "/ct12.jar");
 		// TODO don't technically need to start client bundle but this checks it's resolved
-		installAndStartBundle(clientContext, "/ct12client.jar");		
+		Bundle clientBundle = installAndStartBundle(clientContext, "/ct12client.jar");		
 		
 		// wait for test service to be registered in this framework
-		ServiceTracker tracker = new ServiceTracker(clientContext, A.class.getName(), null);
+		// [rfeng] We need to use the client bundle as it's the one that can load A.class
+		ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
 		tracker.open();
 		A serviceA = (A) tracker.waitForService(SERVICE_TIMEOUT);
 		
@@ -161,7 +178,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		
 		// search for b service which is registered with a fabricated config type
 		// assert this is not picked up by the RI
-		tracker = new ServiceTracker(clientContext, B.class.getName(), null);
+		tracker = new ServiceTracker(clientBundle.getBundleContext(), B.class.getName(), null);
 		tracker.open();
 		B serviceB = (B) tracker.waitForService(SERVICE_TIMEOUT);
 		assertNull( "Unexpected test service", serviceB );
@@ -169,10 +186,10 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		tracker.close();
 	}
 	
-//	/**
-//	 * CT.13
-//	 * @throws Exception
-//	 */
+	/**
+	 * CT.13
+	 * @throws InterruptedException 
+	 */
 	public void testImportedConfigs() throws InterruptedException {
 		// install test bundle in child framework
 		BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
@@ -180,10 +197,10 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		
 		installAndStartBundle(serverContext, "/ct13.jar");
 		// TODO don't technically need to start client bundle but this checks it's resolved
-		installAndStartBundle(clientContext, "/ct13client.jar");
+		Bundle clientBundle = installAndStartBundle(clientContext, "/ct13client.jar");
 		
 		// wait for test service to be registered in this framework
-		ServiceTracker tracker = new ServiceTracker(clientContext, A.class.getName(), null);
+		ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
 		tracker.open();
 		A serviceA = (A) tracker.waitForService(SERVICE_TIMEOUT);
 		
@@ -252,10 +269,10 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		
 		installAndStartBundle(serverContext, "/ct26.jar");
 		// TODO don't technically need to start client bundle but this checks it's resolved
-		installAndStartBundle(clientContext, "/ct26client.jar");		
+		Bundle clientBundle = installAndStartBundle(clientContext, "/ct26client.jar");		
 		
 		// wait for test service to be registered in this framework
-		ServiceTracker tracker = new ServiceTracker(clientContext, A.class.getName(), null);
+		ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
 		tracker.open();
 		A serviceA = (A) tracker.waitForService(SERVICE_TIMEOUT);
 		
@@ -273,7 +290,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		
 		// search for b service which is registered with a fabricated intent type
 		// assert this is not picked up by the RI
-		tracker = new ServiceTracker(clientContext, B.class.getName(), null);
+		tracker = new ServiceTracker(clientBundle.getBundleContext(), B.class.getName(), null);
 		tracker.open();
 		B serviceB = (B) tracker.waitForService(SERVICE_TIMEOUT);
 		assertNull( "Unexpected test service", serviceB );
@@ -373,8 +390,8 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 		f.getBundleContext().ungetService(sr);
 	}
 	
-	public Map getConfiguration() {
-		Map configuration = new HashMap();
+	public Map<String, String> getConfiguration() {
+		Map<String, String> configuration = new HashMap<String, String>();
 		configuration.put(FRAMEWORK_STORAGE_CLEAN, "true");
 		
 		//make sure that the server framework System Bundle exports the interfaces

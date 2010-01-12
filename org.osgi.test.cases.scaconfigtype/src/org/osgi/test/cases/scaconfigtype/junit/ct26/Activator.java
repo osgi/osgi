@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.scaconfigtype.junit.ct26;
 
+import static org.osgi.test.cases.scaconfigtype.common.DistributionProviderConstants.REMOTE_INTENTS_SUPPORTED;
+
 import java.util.Hashtable;
 
 import java.util.List;
@@ -46,7 +48,7 @@ public class Activator implements BundleActivator, A, B {
 		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_NCNAME);
 		
 		// find supported intent 
-		List intents = Utils.getSupportedIntentTypes(context);
+		List intents = Utils.getServiceAdvert(context, REMOTE_INTENTS_SUPPORTED);
 		Assert.assertFalse( "Expected intent types", intents.isEmpty() );
 				
 		// and real intent to service

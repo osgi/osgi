@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<rsa:endpoint-descriptions 
-xmlns:rsa="http://www.osgi.org/xmlns/rsa/v1.0.0"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
-  <endpoint-description> 
-    <property name ="objectClass">org.osgi.test.cases.scaconfigtype.common.A</property> 
-    <property name ="service.imported.configs">org.osgi.sca</property> 
-    <property name ="org.osgi.sca.binding">serviceA</property> 
-  </endpoint-description> 
-  <endpoint-description> 
-    <property name ="objectClass">org.osgi.test.cases.scaconfigtype.common.B</property> 
-    <property name ="service.imported.configs">org.osgi.sca</property> 
-    <property name ="org.osgi.sca.binding">serviceB</property> 
-  </endpoint-description> 
+<?xml version="1.0" encoding="UTF-8"?>
+<rsa:endpoint-descriptions xmlns:rsa="http://www.osgi.org/xmlns/rsa/v1.0.0" 
+    xmlns:acme="http://acme.com/defintions"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <rsa:endpoint-description>
+        <rsa:property name="objectClass" value="org.osgi.test.cases.scaconfigtype.common.A" />
+        <rsa:property name="service.imported.configs" value="org.osgi.sca" />
+        <rsa:property name="org.osgi.sca.bindings" value="{http://acme.com/defintions}serviceA" />
+    </rsa:endpoint-description>
+    <rsa:endpoint-description>
+        <rsa:property name="objectClass" value="org.osgi.test.cases.scaconfigtype.common.B" />
+        <rsa:property name="service.imported.configs" value="org.osgi.sca" />
+        <rsa:property name="org.osgi.sca.bindings" value="{http://acme.com/defintions}serviceB" />
+    </rsa:endpoint-description>
 </rsa:endpoint-descriptions> 

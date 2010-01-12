@@ -17,13 +17,12 @@
  */
 package org.osgi.test.cases.scaconfigtype.common;
 
-import static org.osgi.test.cases.scaconfigtype.common.DistributionProviderConstants.*;
+//import static org.osgi.test.cases.scaconfigtype.common.DistributionProviderConstants.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -39,6 +38,11 @@ import org.osgi.util.tracker.ServiceTracker;
  *
  */
 public class Utils {
+	/**
+	 * Creates the basic SCA attributes to export a service with the given sca binding name
+	 * @param bindingName
+	 * @return
+	 */
 	public static Hashtable getBasicSCAAttributes(String bindingName) {
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, "*");
@@ -47,14 +51,11 @@ public class Utils {
 		return dictionary;
 	}
 
-	public static List getSupportedConfigTypes(BundleContext ctx) throws Exception {
-		return getServiceAdvert(ctx, REMOTE_CONFIGS_SUPPORTED);
-	}
-	
-	public static List getSupportedIntentTypes(BundleContext ctx) throws Exception {
-		return getServiceAdvert(ctx, REMOTE_INTENTS_SUPPORTED);
-	}
-	
+	/**
+	 * Creates a new value not previously contained in this list
+	 * @param values
+	 * @return
+	 */
 	public static String fabricateValue(List values) {
 		Assert.assertFalse(values.isEmpty());
 		
@@ -68,6 +69,15 @@ public class Utils {
 
 	}
 	
+	/**
+	 * Converts the property value to a list of values from the following classes:
+	 *   <ul>
+	 *   <li>String space delimited</li>
+	 *   <li>Collection</ul>
+	 *   <li>String[]</ul>
+	 * @param configProperty
+	 * @return
+	 */
 	public static List propertyToList(Object configProperty) {
 		List list = new ArrayList(); // collect all supported config types
 		if (configProperty instanceof String) {
@@ -78,9 +88,7 @@ public class Utils {
 			}
 		} else if (configProperty instanceof Collection) {
 			Collection col = (Collection) configProperty;
-			for (Iterator it=col.iterator(); it.hasNext(); ) {
-				list.add(it.next());
-			}
+			list.addAll(col);
 		} else { // assume String[]
 			String[] arr = (String[])configProperty;
 			for (int i=0; i<arr.length; i++) {
@@ -91,7 +99,16 @@ public class Utils {
 		return list;
 	}
 
-	private static List getServiceAdvert(BundleContext ctx, String key) throws Exception {
+	/**
+	 * Looks for a service that exports the specified key and returns the list of values
+	 * associated with that key
+	 * 
+	 * @param ctx
+	 * @param key
+	 * @return
+	 * @throws Exception
+	 */
+	public static List getServiceAdvert(BundleContext ctx, String key) throws Exception {
 		Filter filter = ctx.createFilter("(" +
 				key + "=*)");
 		ServiceTracker dpTracker = new ServiceTracker(ctx, filter, null);
@@ -99,7 +116,7 @@ public class Utils {
 		
 		List vals = Collections.EMPTY_LIST;
 		
-		Object dp = dpTracker.waitForService(10000L);
+		Object dp = dpTracker.waitForService(TestConstants.SERVICE_TIMEOUT);
 
 		if ( dp != null ) {
 			ServiceReference dpReference = dpTracker.getServiceReference();
