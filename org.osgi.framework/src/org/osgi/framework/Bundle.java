@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.security.cert.X509Certificate;
-import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
@@ -57,8 +56,8 @@ import java.util.Map;
  * 
  * <p>
  * A bundle should only execute code when its state is one of
- * <code>STARTING</code>,<code>ACTIVE</code>, or <code>STOPPING</code>.
- * An <code>UNINSTALLED</code> bundle can not be set to another state; it is a
+ * <code>STARTING</code>,<code>ACTIVE</code>, or <code>STOPPING</code>. An
+ * <code>UNINSTALLED</code> bundle can not be set to another state; it is a
  * zombie and can only be reached because references are kept somewhere.
  * 
  * <p>
@@ -66,10 +65,17 @@ import java.util.Map;
  * <code>Bundle</code> objects, and these objects are only valid within the
  * Framework that created them.
  * 
+ * <p>
+ * Bundles have a natural ordering such that if two <code>Bundle</code>s have
+ * the same {@link #getBundleId() bundle id} they are equal. A
+ * <code>Bundle</code> is less than another <code>Bundle</code> if it has a
+ * lower {@link #getBundleId() bundle id} and is greater if it has a higher
+ * bundle id.
+ * 
  * @ThreadSafe
  * @version $Revision$
  */
-public interface Bundle {
+public interface Bundle extends Comparable<Bundle> {
 	/**
 	 * The bundle is uninstalled and may not be used.
 	 * 
@@ -1203,6 +1209,24 @@ public interface Bundle {
 	Version getVersion();
 
 	/**
+	 * Adapt a bundle to the specifed type.
+	 * 
+	 * <p>
+	 * Adapting a bundle to the specified type may require certain checks,
+	 * including security checks, to succeed. If a check does not succeed, then
+	 * the bundle cannot be adapted and <code>null</code> is returned.
+	 * 
+	 * @param <A> The type to which the bundle is to be adapted.
+	 * @param type Class object for the type to which the bundle is to be
+	 *        adapted.
+	 * @return The object, of the specified type, to which the bundle has been
+	 *         adapted or <code>null</code> if the bundle cannot be adapted to
+	 *         the specifed type.
+	 * @since 1.6
+	 */
+	<A> A adapt(Class<A> type);
+
+	/**
 	 * Returns the special types of this bundle. The bundle type values are:
 	 * <ul>
 	 * <li>{@link #TYPE_FRAGMENT}
@@ -1221,138 +1245,4 @@ public interface Bundle {
 	 */
 	int getTypes();
 
-	/**
-	 * Returns the attached fragment bundles for this bundle. If this bundle is
-	 * a fragment then an empty collection is returned. If no fragments are
-	 * attached to this bundle then an empty collection is returned.
-	 * <p>
-	 * This method does not attempt to resolve the specified bundle. If this
-	 * bundle is not resolved then an empty collection is returned.
-	 * 
-	 * @return A <code>Collection</code> of fragment <code>Bundle</code>s which
-	 *         may be empty if this bundle does not have any attached fragment
-	 *         bundles or this bundle is not resolved.
-	 * @throws IllegalStateException If this bundle has been uninstalled.
-	 * @since 1.6
-	 */
-	Collection<Bundle> getFragments();
-
-	/**
-	 * Returns the host bundles to which this fragment bundle is attached.
-	 * 
-	 * @return A <code>Collection</code> of host <code>Bundle</code>s to which
-	 *         this fragment is attached or an empty collection if this bundle
-	 *         is not a fragment or is not attached to any host bundles.
-	 * @throws IllegalStateException If this bundle has been uninstalled.
-	 * @since 1.6
-	 */
-	Collection<Bundle> getHosts();
-
-	/**
-	 * Returns the exported packages for this bundle.
-	 * 
-	 * If this bundle is the system bundle (that is, the bundle with id zero),
-	 * this method returns all the packages known to be exported by the system
-	 * bundle. This will include the package specified by the
-	 * {@link Constants#FRAMEWORK_SYSTEMPACKAGES} system property as well as any
-	 * other package exported by the framework implementation.
-	 * 
-	 * @return A <code>Collection</code> of {@link Package}s or an empty
-	 *         collection if this bundle has no exported packages.
-	 * @throws IllegalStateException If this bundle has been uninstalled.
-	 * @since 1.6
-	 */
-	Collection<Package> getExportedPackages();
-
-	/**
-	 * Returns the bundles that currently require this bundle.
-	 * 
-	 * <p>
-	 * If this bundle is required and then re-exported by another bundle then
-	 * all the bundles of the re-exporting bundle are included in the result.
-	 * 
-	 * @return A <code>Collection</code> of <code>Bundle</code>s currently
-	 *         requiring this bundle. The collection will be empty if no bundles
-	 *         require this bundle.
-	 * @throws IllegalStateException If this bundle has been uninstalled.
-	 * @since 1.6
-	 */
-	Collection<Bundle> getRequiringBundles();
-
-	/**
-	 * Return the assigned start level value for this Bundle.
-	 * 
-	 * @return The start level value of this Bundle.
-	 * @throws java.lang.IllegalArgumentException If this bundle has been
-	 *         uninstalled.
-	 * @see #setStartLevel(int)
-	 * @throws IllegalStateException If this bundle has been uninstalled.
-	 * @since 1.6
-	 */
-	int getStartLevel();
-
-	/**
-	 * Assign a start level value to this Bundle.
-	 * 
-	 * <p>
-	 * This bundle will be assigned the specified start level. The start level
-	 * value assigned to this bundle will be persistently recorded by the
-	 * Framework.
-	 * <p>
-	 * If the new start level for this bundle is lower than or equal to the
-	 * active start level of the Framework and this bundle's autostart setting
-	 * indicates this bundle must be started, the Framework will start this
-	 * bundle as described in the {@link Bundle#start(int)} method using the
-	 * {@link Bundle#START_TRANSIENT} option. The
-	 * {@link Bundle#START_ACTIVATION_POLICY} option must also be used if
-	 * {@link #isActivationPolicyUsed()} returns <code>true</code>. The actual
-	 * starting of this bundle must occur asynchronously.
-	 * <p>
-	 * If the new start level for this bundle is higher than the active start
-	 * level of the Framework, the Framework will stop this bundle as described
-	 * in the {@link Bundle#stop(int)} method using the
-	 * {@link Bundle#STOP_TRANSIENT} option. The actual stopping of this bundle
-	 * must occur asynchronously.
-	 * 
-	 * @param startlevel The new start level for the specified Bundle.
-	 * @throws IllegalArgumentException If the specified start level is less
-	 *         than or equal to zero, or if this bundle is the system bundle.
-	 * @throws IllegalStateException If this bundle has been uninstalled.
-	 * @throws SecurityException If the caller does not have
-	 *         <code>AdminPermission[bundle,EXECUTE]</code> and the Java runtime
-	 *         environment supports permissions.
-	 * @since 1.6
-	 */
-	void setStartLevel(int startlevel);
-
-	/**
-	 * Returns whether this bundle's autostart setting indicates it must be
-	 * started.
-	 * <p>
-	 * The autostart setting of a bundle indicates whether the bundle is to be
-	 * started when its start level is reached.
-	 * 
-	 * @return <code>true</code> if the autostart setting of this bundle
-	 *         indicates it is to be started. <code>false</code> otherwise.
-	 * @throws IllegalStateException If this bundle has been uninstalled.
-	 * @see #START_TRANSIENT
-	 * @since 1.6
-	 */
-	boolean isPersistentlyStarted();
-
-	/**
-	 * Returns whether this bundle's autostart setting indicates that the
-	 * activation policy declared in the bundle manifest must be used.
-	 * <p>
-	 * The autostart setting of a bundle indicates whether the bundle's declared
-	 * activation policy is to be used when the bundle is started.
-	 * 
-	 * @return <code>true</code> if this bundle's autostart setting indicates
-	 *         the activation policy declared in the manifest must be used.
-	 *         <code>false</code> if this bundle must be eagerly activated.
-	 * @throws IllegalStateException If this bundle has been uninstalled.
-	 * @see #START_ACTIVATION_POLICY
-	 * @since 1.6
-	 */
-	boolean isActivationPolicyUsed();
 }

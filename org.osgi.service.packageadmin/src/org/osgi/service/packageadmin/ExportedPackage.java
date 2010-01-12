@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ import org.osgi.framework.Version;
  * <code>getExportingBundle()</code> and <code>getImportingBundles()</code>
  * return <code>null</code>.
  * 
+ * @deprecated As of 1.3. Replaced by {@link PackageExport}.
  * @ThreadSafe
  * @version $Revision$
  */
