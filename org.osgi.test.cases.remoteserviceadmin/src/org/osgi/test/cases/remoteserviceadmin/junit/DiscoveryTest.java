@@ -101,10 +101,15 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		
 		EndpointDescription ep = endpointListenerImpl.getAddedEndpoint(); 
 		assertNotNull(ep);
-		assertEquals("remote service id is incorrect", 12345, ep.getRemoteServiceID());
-		assertEquals("remote.id does not match", "someURI", ep.getRemoteID());
-		assertEquals("remote framework id is incorrect", getFramework().getBundleContext().getProperty("org.osgi.framework.uuid"), ep.getRemoteFrameworkUUID());
-		assertFalse("remote framework id has to be UUID of remote not local framework", ep.getRemoteFrameworkUUID().equals(getContext().getProperty("org.osgi.framework.uuid")));
+		assertEquals("remote service id is incorrect", 12345, ep.getServiceId());
+		assertEquals("remote.id does not match", "someURI", ep.getId());
+		assertEquals("remote framework id is incorrect", getFramework()
+				.getBundleContext().getProperty("org.osgi.framework.uuid"), ep
+				.getFrameworkUUID());
+		assertFalse(
+				"remote framework id has to be UUID of remote not local framework",
+				ep.getFrameworkUUID().equals(
+						getContext().getProperty("org.osgi.framework.uuid")));
 		assertTrue("discovered interfaces don't contain " + A.class.getName(), ep.getInterfaces().contains(A.class.getName()));
 		assertFalse("discovered interfaces must not contain " + B.class.getName(), ep.getInterfaces().contains(B.class.getName()));
 		assertTrue("intent list does not contain 'my_intent_is_for_this_to_work'", ep.getIntents().contains("my_intent_is_for_this_to_work"));
@@ -127,10 +132,15 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 
 		ep = endpointListenerImpl.getRemovedEndpoint();
 		assertNotNull(ep);
-		assertEquals("remote service id is incorrect", 12345, ep.getRemoteServiceID());
-		assertEquals("remote.id does not match", "someURI", ep.getRemoteID());
-		assertEquals("remote framework id is incorrect", getFramework().getBundleContext().getProperty("org.osgi.framework.uuid"), ep.getRemoteFrameworkUUID());
-		assertFalse("remote framework id has to be UUID of remote not local framework", ep.getRemoteFrameworkUUID().equals(getContext().getProperty("org.osgi.framework.uuid")));
+		assertEquals("remote service id is incorrect", 12345, ep.getServiceId());
+		assertEquals("remote.id does not match", "someURI", ep.getId());
+		assertEquals("remote framework id is incorrect", getFramework()
+				.getBundleContext().getProperty("org.osgi.framework.uuid"), ep
+				.getFrameworkUUID());
+		assertFalse(
+				"remote framework id has to be UUID of remote not local framework",
+				ep.getFrameworkUUID().equals(
+						getContext().getProperty("org.osgi.framework.uuid")));
 		assertTrue("discovered interfaces don't contain " + A.class.getName(), ep.getInterfaces().contains(A.class.getName()));
 		assertFalse("discovered interfaces must not contain " + B.class.getName(), ep.getInterfaces().contains(B.class.getName()));
 		assertTrue("intent list does not contain 'my_intent_is_for_this_to_work'", ep.getIntents().contains("my_intent_is_for_this_to_work"));

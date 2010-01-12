@@ -72,16 +72,16 @@ public class EndpointDescriptionTests extends TestCase {
 
 		props.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ed = newEndpointDescription(props);
-		assertEquals("wrong remote id", someId, ed.getRemoteID());
+		assertEquals("wrong remote id", someId, ed.getId());
 
 		assertEquals("remote service id should be zero", 0l, ed
-				.getRemoteServiceID());
+.getServiceId());
 		assertNull("remote framework uuid should be null", ed
-				.getRemoteFrameworkUUID());
+				.getFrameworkUUID());
 
 		props.put(ENDPOINT_FRAMEWORK_UUID, testUUID);
 		ed = newEndpointDescription(props);
-		assertEquals("wrong uuid", testUUID, ed.getRemoteFrameworkUUID());
+		assertEquals("wrong uuid", testUUID, ed.getFrameworkUUID());
 
 		props.put(ENDPOINT_SERVICE_ID, "not a valid long");
 		try {
@@ -104,7 +104,7 @@ public class EndpointDescriptionTests extends TestCase {
 		Long someID = new Long(12l);
 		props.put(ENDPOINT_SERVICE_ID, someID);
 		ed = newEndpointDescription(props);
-		assertEquals("wrong id", someID.longValue(), ed.getRemoteServiceID());
+		assertEquals("wrong id", someID.longValue(), ed.getServiceId());
 
 		props.put(OBJECTCLASS, "not a String[]");
 		try {
@@ -301,16 +301,16 @@ public class EndpointDescriptionTests extends TestCase {
 
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ed = newEndpointDescription(ref, null);
-		assertEquals("wrong remote id", someId, ed.getRemoteID());
+		assertEquals("wrong remote id", someId, ed.getId());
 
 		assertEquals("remote service id should be zero", 0l, ed
-				.getRemoteServiceID());
-		assertEquals("wrong uuid", testUUID, ed.getRemoteFrameworkUUID());
+.getServiceId());
+		assertEquals("wrong uuid", testUUID, ed.getFrameworkUUID());
 
 		props.put(ENDPOINT_FRAMEWORK_UUID, "newUUID");
 		props.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ed = newEndpointDescription(props);
-		assertEquals("wrong uuid", "newUUID", ed.getRemoteFrameworkUUID());
+		assertEquals("wrong uuid", "newUUID", ed.getFrameworkUUID());
 		props.remove(ENDPOINT_FRAMEWORK_UUID);
 
 		props.put(ENDPOINT_SERVICE_ID, "not a valid long");
@@ -335,7 +335,7 @@ public class EndpointDescriptionTests extends TestCase {
 		props.remove(ENDPOINT_SERVICE_ID);
 		serviceProps.put(SERVICE_ID, someID);
 		ed = newEndpointDescription(ref, props);
-		assertEquals("wrong id", someID.longValue(), ed.getRemoteServiceID());
+		assertEquals("wrong id", someID.longValue(), ed.getServiceId());
 
 		String[] objectClass = new String[] {"com.acme.Foo", "com.acme.FOO"};
 		props.put(OBJECTCLASS, objectClass);
