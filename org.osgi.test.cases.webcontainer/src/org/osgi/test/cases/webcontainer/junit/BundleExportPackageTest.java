@@ -25,8 +25,8 @@ import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
 /**
  * @version $Rev$ $Date$
  * 
- *          test Export-Package manifest header processed correctly with various
- *          scenarios
+ *          test Export-Package manifest header as url parameter can be 
+ *          copied unmodified to the wab manifest by the web url handler
  */
 public class BundleExportPackageTest extends ManifestHeadersTestBundleControl {
 

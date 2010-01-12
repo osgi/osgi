@@ -119,7 +119,7 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
     /*
      * verify when Bundle-Classpath is not specified
      */
-    public void testBundleClasspath019() throws Exception {
+    public void testBundleClasspath009() throws Exception {
         final Map<String, Object> options = createOptions(null, "/tw5");
         this.b = super.installWar(options, "wm2tw5.war", true);
         super.generalHeadersTest(options, "wm2tw5.war", true, this.b);
@@ -129,91 +129,10 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
     /*
      * verify when Bundle-Classpath is not specified
      */
-    public void testBundleClasspath020() throws Exception {
+    public void testBundleClasspath010() throws Exception {
         final Map<String, Object> options = createOptions(null, "/tw5");
         this.b = super.installWar(options, "wm3tw5.war", true);
         super.generalHeadersTest(options, "wm3tw5.war", true, this.b);
         classpassServletTest(this.b);
-    }
-
-
-    /*
-     * error case, when Bundle-Classpath specified by deployer is valid but cannot locate the file
-     * 
-     */
-    public void testBundleClasspathError001() throws Exception {
-        // specify install options
-        final Map<String, Object> options = new HashMap<String, Object>();
-        options.put(Constants.BUNDLE_CLASSPATH, CLASSPATH4);
-        options.put(WEB_CONTEXT_PATH, "/tw4");
-        // install the war file
-        log("install war file: tw4.war at context path /tw4");
-        // won't be able to installBundle correctly if Bundle-Classpath is specified
-        // improperly
-        try {
-            this.b = installBundle(super.getWarURL("tw4.war", options), false);
-        } catch (BundleException be) {
-            fail("should not be getting install BundleException as Bundle-Classpath contains jar that doesn't exist");
-        }
-        assertNotNull("Bundle b should be not null", this.b);
-        assertEquals("Checking Bundle state is installed", b.getState(), Bundle.INSTALLED);
-        
-        try {
-            this.b.start();
-            fail("No exception thrown, Error!");
-        } catch (BundleException be) {
-            // expected
-        }
-        // test unable to access /tw4 yet as it is not installed
-        assertFalse("should not be able to access /tw4", super
-                .ableAccessPath("/tw4/"));
-    }
-
-    /*
-     * error case, when Bundle-Classpath specified by deployer is invalid format
-     */
-    public void testBundleClasspathError002() throws Exception {
-        // specify install options
-        final Map<String, Object> options = new HashMap<String, Object>();
-        options.put(Constants.BUNDLE_CLASSPATH, CLASSPATH5);
-        options.put(WEB_CONTEXT_PATH, "/tw5");
-        // install the war file
-        log("install war file: tw5.war at context path /tw5");
-        // won't be able to installBundle correctly 
-        try {
-            this.b = installBundle(super.getWarURL("tw5.war", options), false);
-            fail("should be getting install BundleException as Bundle-Classpath format is invalid");
-        } catch (BundleException be) {
-            // expected
-        }
-        assertNull("Bundle b should be null", this.b);
-
-        // test unable to access /tw5 yet as it is not installed
-        assertFalse("should not be able to access /tw5", super
-                .ableAccessPath("/tw5/"));
-    }
-    
-    /*
-     * error case, when Bundle-Classpath specified by deployer contains a jar that is not in WEB-INF/lib dir
-     */
-    public void testBundleClasspathError003() throws Exception {
-        // specify install options
-        final Map<String, Object> options = new HashMap<String, Object>();
-        options.put(Constants.BUNDLE_CLASSPATH, CLASSPATH6);
-        options.put(WEB_CONTEXT_PATH, "/tw5");
-        // install the war file
-        log("install war file: wm3tw5.war at context path /tw5");
-        // won't be able to installBundle correctly 
-        try {
-            this.b = installBundle(super.getWarURL("wm3tw5.war", options), false);
-            fail("should be getting install BundleException as Bundle-Classpath contains a jar that is not in WEB-INF/lib dir");
-        } catch (Exception e) {
-            // expected - not sure what exception will come out of URL handler
-        }
-        assertNull("Bundle b should be null", this.b);
-
-        // test unable to access /tw5 yet as it is not installed
-        assertFalse("should not be able to access /tw5", super
-                .ableAccessPath("/tw5/"));
     }
 }
