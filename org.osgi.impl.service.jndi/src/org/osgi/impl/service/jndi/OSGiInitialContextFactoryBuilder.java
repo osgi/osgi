@@ -38,6 +38,7 @@ import javax.naming.RefAddr;
 import javax.naming.Reference;
 import javax.naming.Referenceable;
 import javax.naming.StringRefAddr;
+import javax.naming.directory.Attributes;
 import javax.naming.spi.DirObjectFactory;
 import javax.naming.spi.InitialContextFactory;
 import javax.naming.spi.InitialContextFactoryBuilder;
@@ -80,6 +81,7 @@ class OSGiInitialContextFactoryBuilder implements
 	private ServiceTracker		m_objectFactoryBuilderServiceTracker	= null;
 	private ServiceTracker		m_urlContextFactoryServiceTracker		= null;
 	private ServiceTracker      m_dirObjectFactoryServiceTracker        = null;
+	
 
 	public OSGiInitialContextFactoryBuilder(BundleContext bundleContext) {
 		m_bundleContext = bundleContext;
@@ -135,7 +137,7 @@ class OSGiInitialContextFactoryBuilder implements
 				(InitialContextFactory) m_contextFactoryServiceTracker.getService();
 
 			if (defaultContextFactory == null) {
-				throw new NoInitialContextException(NO_CONTEXT_FACTORIES_MSG);
+				return new InitialContextFactoryWrapper(new DefaultInitialContextFactory(), this);
 			}
 			else {
 				return new InitialContextFactoryWrapper(defaultContextFactory, this);
@@ -158,6 +160,14 @@ class OSGiInitialContextFactoryBuilder implements
 
 		return new ReturnReferenceInfoObjectFactory(createInnerObjectFactory(obj));
 	}
+	
+	public DirObjectFactory getDirObjectFactory(Object obj, Hashtable environment) throws NamingException {
+		if (m_dirObjectFactoryServiceTracker == null) {
+			throw new NamingException("No DirObjectFactories available");
+		}
+		
+		return new ReturnReferenceInfoDirObjectFactory(createInnerDirObjectFactory(obj)) ;
+	}
 
 	
 
@@ -175,10 +185,8 @@ class OSGiInitialContextFactoryBuilder implements
 			ServiceReference[] serviceReferences = ServiceUtils.sortServiceReferences(m_urlContextFactoryServiceTracker);
 			for (int i = 0; i < serviceReferences.length; i++) {
 				ServiceReference serviceReference = serviceReferences[i];
-				if (serviceReference.getProperty(JNDIConstants.JNDI_URLSCHEME)
-						.equals(urlScheme)) {
-					return (ObjectFactory) m_bundleContext
-							.getService(serviceReference);
+				if (serviceReference.getProperty(JNDIConstants.JNDI_URLSCHEME).equals(urlScheme)) {
+					return (ObjectFactory) m_bundleContext.getService(serviceReference);
 				}
 			}
 		}
@@ -186,20 +194,6 @@ class OSGiInitialContextFactoryBuilder implements
 	}
 	
 	
-
-	/**
-	 * Returns the bundle context associated with this Factory Manager. 
-	 * 
-	 * TODO, implement support for osgi URL context factory
-	 * TODO, implement support for static singleton usage
-	 * 
-	 * @return BundleContext associated with this builder/manager. 
-	 * 
-	 * @see org.osgi.impl.service.jndi.FactoryManager#getClientBundleContext()
-	 */
-	public BundleContext getBundleContext() {
-		return m_bundleContext;
-	}
 
 	/**
 	 * Simple close method to close the ServiceTracker objects currently in use
@@ -214,6 +208,7 @@ class OSGiInitialContextFactoryBuilder implements
 		m_dirObjectFactoryServiceTracker.close();
 	}
 
+	
 	private void createServiceTrackers(BundleContext bundleContext) {
 		// create trackers
 		m_contextFactoryServiceTracker = createServiceTracker(bundleContext,
@@ -439,6 +434,23 @@ class OSGiInitialContextFactoryBuilder implements
 	}
 	
 	
+	private DirObjectFactory createInnerDirObjectFactory(Object obj) throws NamingException {
+		final Object objToResolve = getObjectToResolve(obj);
+		if (objToResolve instanceof Reference) {
+			final Reference reference = (Reference) objToResolve;
+			if (reference.getFactoryClassName() != null) {
+				return new FactoryNameSpecifiedDirObjectFactory();
+			}
+			else {
+				return new NoFactoryNameSpecifiedDirObjectFactory();
+			}
+		}
+		else {
+			return new NoReferenceDirObjectFactory();
+		}
+	}
+	
+	
 	/**
 	 * Utility method for creating the set of environment properties from the 
 	 * following sources (in order of priority):
@@ -479,12 +491,25 @@ class OSGiInitialContextFactoryBuilder implements
 	private Object resolveObjectUsingBuilders(Object objectToResolve, Name name, Context context, 
 			                                  Hashtable environment)
 			throws Exception {
-		// search for InitialContextFactoryBuilder implementations that
-		// are published as OSGi services
 		ObjectFactory objectFactory = 
 			getObjectFactoryFromBuilder(environment, objectToResolve);
 		if(objectFactory != null) {
 			Object resolvedObject = objectFactory.getObjectInstance(objectToResolve, name, context, environment);
+			if(resolvedObject != null) {
+				return resolvedObject;
+			}
+		}
+		
+		return null;
+	}
+	
+	private Object resolveDirObjectUsingBuilders(Object objectToResolve, Name name, Context context, Hashtable environment, Attributes attributes) 
+			throws Exception {
+		ObjectFactory objectFactory = 
+			getObjectFactoryFromBuilder(environment, objectToResolve);
+		if((objectFactory != null) && (objectFactory instanceof DirObjectFactory)) {
+			DirObjectFactory dirObjectFactory = (DirObjectFactory)objectFactory;
+			Object resolvedObject = dirObjectFactory.getObjectInstance(objectToResolve, name, context, environment, attributes);
 			if(resolvedObject != null) {
 				return resolvedObject;
 			}
@@ -574,7 +599,7 @@ class OSGiInitialContextFactoryBuilder implements
 	 * 
 	 * @version $Revision$
 	 */
-	private static final class ReturnReferenceInfoObjectFactory implements ObjectFactory {
+	private static class ReturnReferenceInfoObjectFactory implements ObjectFactory {
 		private final ObjectFactory m_objectFactory;
 		
 		
@@ -598,6 +623,50 @@ class OSGiInitialContextFactoryBuilder implements
 			return refInfo;
 		}
 	}
+	
+	
+	
+	/**
+	 *  Query the inner DirObjectFactory instance to see if that factory
+	 *  can resolve the object.  
+	 *  
+	 *  If no matching DirObjectFactory services exist that can resolve the object,
+	 *  return a specialized ObjectFactory implementation that
+	 *  merely returns the reference passed in. This allows the Factory 
+	 *  Manager to more closely comply with the behavior specified in the 
+	 *  javadoc for DirectoryManger.getObjectInstance()
+	 *
+	 * 
+	 * @version $Revision$
+	 */
+	private static final class ReturnReferenceInfoDirObjectFactory extends ReturnReferenceInfoObjectFactory implements DirObjectFactory {
+		private final DirObjectFactory m_dirObjectFactory;
+		
+		
+		public ReturnReferenceInfoDirObjectFactory(DirObjectFactory dirObjectFactory) {
+			super(dirObjectFactory);
+			m_dirObjectFactory = dirObjectFactory;
+		}
+		
+
+		public Object getObjectInstance(Object refInfo, Name name, 
+				                        Context context, Hashtable environment, Attributes attributes) throws Exception {
+			if (m_dirObjectFactory != null) {
+				Object resolvedObject = 
+					m_dirObjectFactory.getObjectInstance(refInfo, name, 
+							                          context, environment, attributes);
+				if (resolvedObject != null) {
+					return resolvedObject;
+				}
+			}
+
+			// in all other cases return refInfo
+			return refInfo;
+		}
+	}
+	
+	
+	
 	
 
 	/**
@@ -632,6 +701,35 @@ class OSGiInitialContextFactoryBuilder implements
 				return resolveObjectUsingBuilders(objectToResolve, name, context, environment);
 			}
 
+			return null;
+		}
+		
+	}
+	
+	private final class NoFactoryNameSpecifiedDirObjectFactory implements DirObjectFactory {
+
+		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment, Attributes attributes) throws Exception {
+			if(refInfo == null) {
+				return null;
+			}
+			
+			Object objectToResolve = getObjectToResolve(refInfo);
+			if(objectToResolve instanceof Reference) {
+				Reference reference = (Reference)objectToResolve;
+				Object resolvedObjectFromURL = 
+					getObjectFromURLContextFactoryFromReference(reference, environment);
+				if (resolvedObjectFromURL != null) {
+					return resolvedObjectFromURL;
+				}
+				
+				return resolveDirObjectUsingBuilders(objectToResolve, name, context, environment, attributes);
+			}
+
+			return null;
+		}
+
+		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment) throws Exception {
+			// no-op for this DirObjectFactory
 			return null;
 		}
 		
@@ -680,6 +778,39 @@ class OSGiInitialContextFactoryBuilder implements
 		
 	}
 	
+	private final class FactoryNameSpecifiedDirObjectFactory implements DirObjectFactory {
+
+		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment, Attributes attributes) throws Exception {
+			Object objectToResolve = getObjectToResolve(refInfo);
+			if(objectToResolve instanceof Reference) {
+				// if a factory class name is specified, look through the list
+				// of known ObjectFactories, and try to find a service published
+				// that also supports the custom interface.
+				Reference reference = (Reference)objectToResolve;
+				Object factory = 
+					obtainFactoryService(reference.getFactoryClassName(), m_dirObjectFactoryServiceTracker);
+				if (factory != null) {
+					DirObjectFactory dirObjectFactory = (DirObjectFactory)factory;
+					Object resolvedObject = 
+						dirObjectFactory.getObjectInstance(objectToResolve, name, context, environment, attributes);
+					if(resolvedObject != null) {
+						return resolvedObject;
+					}
+				} else {
+					return resolveDirObjectUsingBuilders(objectToResolve, name, context, environment, attributes);					
+				}
+			}
+			
+			return null;
+		}
+
+		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment) throws Exception {
+			// always return null, since this DirObjectFactory is a wrapper type
+			return null;
+		}
+		
+	}
+	
 	
 	private class NoReferenceObjectFactory implements ObjectFactory {
 		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment) throws Exception {
@@ -688,6 +819,17 @@ class OSGiInitialContextFactoryBuilder implements
 		
 	}
 	
-	
+	private class NoReferenceDirObjectFactory implements DirObjectFactory {
+
+		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment, Attributes attributes) throws Exception {
+			return resolveDirObjectUsingBuilders(refInfo, name, context, environment, attributes);
+		}
+
+		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment) throws Exception {
+			// no-op for this DirObjectFactory
+			return null;
+		}
+		
+	}
 	
 }

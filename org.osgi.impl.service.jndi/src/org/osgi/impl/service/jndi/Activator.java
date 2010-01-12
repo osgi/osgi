@@ -67,8 +67,8 @@ public class Activator implements BundleActivator {
 
 		// register with the JNDI framework
 		m_logger.info("Installing Factory Manager as a JNDI Builder");
-		NamingManager.setInitialContextFactoryBuilder(m_builder);
-		NamingManager.setObjectFactoryBuilder(m_builder);
+		NamingManager.setInitialContextFactoryBuilder(new TraditionalInitialContextFactoryBuilder(context));
+		NamingManager.setObjectFactoryBuilder(new TraditionalObjectFactoryBuilder(context));
 
 		m_logger.info("Registering URL Context Factory for 'osgi' URL scheme");
 		registerOSGiURLContextFactory();
@@ -119,7 +119,7 @@ public class Activator implements BundleActivator {
 
 		ServiceRegistration serviceRegistration = 
 			m_bundleContext.registerService(ObjectFactory.class.getName(), 
-										    new OSGiURLContextFactory(m_bundleContext), 
+										    new OSGiURLContextFactoryServiceFactory(), 
 										    serviceProperties);
 		m_listOfServiceRegistrations.add(serviceRegistration);
 	}
@@ -150,12 +150,9 @@ public class Activator implements BundleActivator {
 	
 
 	private void registerJNDIProviderAdmin() {
-		String[] interfaces = 
- {JNDIProviderAdmin.class.getName()};
-		
 		ServiceRegistration serviceRegistration =  
-			m_bundleContext.registerService(interfaces,
-					                        new JNDIProviderAdminServiceFactoryImpl(m_builder),
+			m_bundleContext.registerService(JNDIProviderAdmin.class.getName(),
+					                        new JNDIProviderAdminServiceFactoryImpl(),
 					                        null);
 		m_listOfServiceRegistrations.add(serviceRegistration);
 	}

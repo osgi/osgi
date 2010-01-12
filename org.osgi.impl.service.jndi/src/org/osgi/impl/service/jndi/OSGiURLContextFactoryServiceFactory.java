@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Oracle Corporation
+ * Copyright 2010 Oracle Corporation
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,43 +13,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
+
 package org.osgi.impl.service.jndi;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 
-/**
- *
- * ServiceFactory for the JNDIProvider service.  The ServiceFactory is 
- * required in order to obtain the caller's BundleContext.  
- * 
- * @version $Revision$
- */
-class JNDIProviderAdminServiceFactoryImpl implements ServiceFactory {
+class OSGiURLContextFactoryServiceFactory implements ServiceFactory {
 
-	public JNDIProviderAdminServiceFactoryImpl() {
-	}
-	
-	/**
-	 * @param bundle
-	 * @param registration
-	 * @return
-	 * @see org.osgi.framework.ServiceFactory#getService(org.osgi.framework.Bundle, org.osgi.framework.ServiceRegistration)
-	 */
 	public Object getService(Bundle bundle, ServiceRegistration registration) {
-		return new JNDIProviderAdminImpl(bundle);
+		return new OSGiURLContextFactory(bundle.getBundleContext());
 	}
 
-	/**
-	 * @param bundle
-	 * @param registration
-	 * @param service
-	 * @see org.osgi.framework.ServiceFactory#ungetService(org.osgi.framework.Bundle, org.osgi.framework.ServiceRegistration, java.lang.Object)
-	 */
 	public void ungetService(Bundle bundle, ServiceRegistration registration,
 			Object service) {
-		// TODO, add cleanup code here
 	}
 
 }

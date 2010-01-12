@@ -17,7 +17,7 @@
 package org.osgi.service.jndi;
 
 /**
- * Constants for the JNDI Factory Manager implementation.
+ * Constants for the JNDI implementation.
  * 
  * @version $Revision$
  * @Immutable
@@ -35,6 +35,14 @@ public class JNDIConstants {
 	 * can be used to locate the service other than the service interface name.
 	 */
 	public static final String	JNDI_SERVICENAME	= "osgi.jndi.service.name";
+
+	/**
+	 * This JNDI environment property can be used by a JNDI client to indicate
+	 * the caller's BundleContext. This property can be set and passed to an
+	 * InitialContext constructor. This property is only useful in the
+	 * "traditional" mode of JNDI.
+	 */
+	public static final String	BUNDLE_CONTEXT		= "osgi.service.jndi.bundleContext";
 
 	private JNDIConstants() {
 		// non-instantiable

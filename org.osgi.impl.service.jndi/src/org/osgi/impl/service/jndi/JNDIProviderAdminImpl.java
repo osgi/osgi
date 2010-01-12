@@ -21,44 +21,62 @@ import java.util.Map;
 import javax.naming.Context;
 import javax.naming.Name;
 import javax.naming.NamingException;
-import javax.naming.OperationNotSupportedException;
 import javax.naming.directory.Attributes;
+import javax.naming.spi.DirObjectFactory;
 import javax.naming.spi.ObjectFactory;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.jndi.JNDIProviderAdmin;
 
 class JNDIProviderAdminImpl implements JNDIProviderAdmin {
 
-	private final OSGiInitialContextFactoryBuilder m_objectFactoryBuilder;
-	
-	public JNDIProviderAdminImpl(Bundle callingBundle, OSGiInitialContextFactoryBuilder builder) {
-		m_objectFactoryBuilder = builder;
+	private final OSGiInitialContextFactoryBuilder	m_objectFactoryBuilder;
+
+	public JNDIProviderAdminImpl(Bundle callingBundle) {
+		BundleContext callerBundleContext = callingBundle.getBundleContext();
+		m_objectFactoryBuilder = new OSGiInitialContextFactoryBuilder(
+				callerBundleContext);
 	}
-	
-	
-	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment) throws NamingException {
+
+	public Object getObjectInstance(Object refInfo, Name name, Context context,
+			Map environment) throws NamingException {
 		Hashtable jndiEnvironment = new Hashtable();
 		if (environment != null) {
-			//TODO, consider deep copy here? 
 			jndiEnvironment.putAll(environment);
 		}
-		ObjectFactory objectFactory = 
-			m_objectFactoryBuilder.createObjectFactory(refInfo, jndiEnvironment);
+		ObjectFactory objectFactory = m_objectFactoryBuilder
+				.createObjectFactory(refInfo, jndiEnvironment);
 		try {
-			return objectFactory.getObjectInstance(refInfo, name, context, jndiEnvironment);
+			return objectFactory.getObjectInstance(refInfo, name, context,
+					jndiEnvironment);
 		}
 		catch (Exception e) {
-			NamingException namingException = new NamingException("Error while attempting to resolve reference");
+			NamingException namingException = new NamingException(
+					"Error while attempting to resolve reference");
 			namingException.initCause(e);
 			throw namingException;
 		}
 	}
 
-	public Object getObjectInstance(Object refInfo, Name name, Context context,
-			Map environment, Attributes attributes)
-			throws NamingException {
-		throw new OperationNotSupportedException("Not Implemented yet");
+	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment, Attributes attributes) throws NamingException {
+		Hashtable jndiEnvironment = new Hashtable();
+		if (environment != null) {
+			jndiEnvironment.putAll(environment);
+		}
+
+		DirObjectFactory dirObjectFactory = 
+			m_objectFactoryBuilder.getDirObjectFactory(refInfo, jndiEnvironment);
+		
+		try {
+			return dirObjectFactory.getObjectInstance(refInfo, name, context, jndiEnvironment, attributes);
+		}
+		catch (Exception e) {
+			NamingException namingException = new NamingException(
+					"Error while attempting to resolve reference");
+			namingException.initCause(e);
+			throw namingException;
+		}
 	}
 
 }

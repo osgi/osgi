@@ -28,7 +28,6 @@ import javax.naming.OperationNotSupportedException;
 import javax.naming.spi.ObjectFactory;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleReference;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.jndi.JNDIConstants;
@@ -36,17 +35,20 @@ import org.osgi.service.jndi.JNDIConstants;
 /**
  * A URL context factory that supports lookups of OSGi services.
  * 
+ * 
  */
-public class OSGiURLContextFactory implements ObjectFactory {
+class OSGiURLContextFactory implements ObjectFactory {
 
+	//TODO, move this to a common interface/class
+	private static final String OSGI_BUNDLE_CONTEXT_LOOKUP = "osgi:framework/bundleContext";
+	
 	private final BundleContext	m_bundleContext;
 
 	public OSGiURLContextFactory(BundleContext bundleContext) {
 		m_bundleContext = bundleContext;
 	}
 
-	public Object getObjectInstance(Object obj, Name name, Context nameCtx,
-			Hashtable environment) throws Exception {
+	public Object getObjectInstance(Object obj, Name name, Context nameCtx, Hashtable environment) throws Exception {
 		return Proxy.newProxyInstance(this.getClass().getClassLoader(),
 				new Class[] {Context.class}, new OSGiContextInvocationHandler(
 						m_bundleContext));
@@ -74,6 +76,11 @@ public class OSGiURLContextFactory implements ObjectFactory {
 				if ((args.length == 1) && (args[0] instanceof String)) {
 					String osgiURL = (String) args[0];
 					try {
+						if(osgiURL.equals(OSGI_BUNDLE_CONTEXT_LOOKUP)) {
+							// return the caller's BundleContext
+							return m_bundleContext;
+						}
+						
 						Object requestedService = obtainService(osgiURL);
 						if (requestedService != null) {
 							// TODO, eventually add proxy code to track service
@@ -124,25 +131,6 @@ public class OSGiURLContextFactory implements ObjectFactory {
 				return null;
 			}
 
-			// obtain the thread context classloader
-			ClassLoader threadContextClassloader = Thread.currentThread()
-					.getContextClassLoader();
-			if ((threadContextClassloader != null)
-					&& (threadContextClassloader instanceof BundleReference)) {
-				// if the classloader supports BundleReference, this loader
-				// represents a client bundle
-				// making a request for an OSGi service. The client's bundle
-				// context must be used to
-				// obtain the OSGi service.
-				BundleReference bundleRef = (BundleReference) threadContextClassloader;
-				if (bundleRef.getBundle() != null) {
-					BundleContext clientBundleContext = 
-						bundleRef.getBundle().getBundleContext();
-					return getService(clientBundleContext, urlParser);
-				}
-			}
-
-			// default to Factory Manager's BundleContext
 			return getService(m_bundleContext, urlParser);
 		}
 
@@ -157,7 +145,7 @@ public class OSGiURLContextFactory implements ObjectFactory {
 					ServiceUtils.sortServiceReferences(serviceReferences);
 				if (urlParser.isServiceListURL()) {
 					// return a Context that can handle service.id lookups
-					return new OSGiServiceListContext(bundleContext, sortedServiceReferences);
+					return new OSGiServiceListContext(bundleContext, sortedServiceReferences, urlParser);
 				}
 				else {
 					return bundleContext.getService(sortedServiceReferences[0]);
