@@ -120,6 +120,57 @@ public class CompositeConstants {
 	public static final String COMPOSITE_SERVICE_EXPORT_POLICY = "Composite-ServiceExportPolicy";
 
 	/**
+	 * Manifest header directive identifying the symbolic name a peer composite 
+	 * must have that allows capabilities exported from that composite to match 
+	 * an import sharing policy specified by {@link #COMPOSITE_PACKAGE_IMPORT_POLICY 
+	 * Composite-PackageImportPolicy} or {@link #COMPOSITE_SERVICE_IMPORT_POLICY 
+	 * Composite-ServiceImportPolicy}.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the a manifest header like:
+	 * 
+	 * <pre>
+	 *     Composite-PackageImportPolicy: org.example.pkg; composite-symbolic-name=&quot;org.example.composite&quot;
+	 *     Composite-ServiceImportPolicy: &quot;(attr=somevalue)&quot;; composite-symbolic-name=&quot;org.example.composite&quot;
+	 * </pre>
+	 * 
+	 * @see #COMPOSITE_PACKAGE_IMPORT_POLICY
+	 * @see #COMPOSITE_SERVICE_IMPORT_POLICY
+	 */
+	public static final String COMPOSITE_SYMBOLICNAME_DIRECTIVE = "composite-symbolic-name";
+
+	/**
+	 * Manifest header directive identifying the version a peer composite 
+	 * must have that allows capabilities exported from that composite to match 
+	 * an import sharing policy specified by {@link #COMPOSITE_PACKAGE_IMPORT_POLICY 
+	 * Composite-PackageImportPolicy} or {@link #COMPOSITE_SERVICE_IMPORT_POLICY 
+	 * Composite-ServiceImportPolicy}.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the a manifest header like:
+	 * 
+	 * <pre>
+	 *     Composite-PackageImportPolicy: org.example.pkg; composite-version=&quot;[1.0,1.1)&quot;
+	 *     Composite-ServiceImportPolicy: &quot;(attr=somevalue)&quot;; composite-version=&quot;[1.0,1.1)&quot;
+	 * </pre>
+	 * 
+	 * <p>
+	 * In most cases a {@link #COMPOSITE_SYMBOLICNAME_DIRECTIVE composite-symbolic-name} 
+	 * directive should be specified along with the composite-version directive like:
+	 *
+	 * <pre>
+	 *     Composite-PackageImportPolicy: org.example.pkg;
+	 *      composite-symbolic-name=&quot;org.example.composite&quot;; composite-version=&quot;[1.0,1.1)&quot;
+	 *     Composite-ServiceImportPolicy: &quot;(attr=somevalue)&quot;;
+	 *      composite-symbolic-name=&quot;org.example.composite&quot;; composite-version=&quot;[1.0,1.1)&quot;
+	 * </pre>
+	 * 
+	 * @see #COMPOSITE_PACKAGE_IMPORT_POLICY
+	 * @see #COMPOSITE_SERVICE_IMPORT_POLICY
+	 */
+	public static final String COMPOSITE_VERSION_DIRECTIVE = "composite-version";
+
+	/**
 	 * A supported configuration parameter for a composite framework.
 	 * @see Constants#FRAMEWORK_BEGINNING_STARTLEVEL
 	 */
