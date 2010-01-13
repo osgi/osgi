@@ -19,6 +19,10 @@ package org.osgi.test.cases.scaconfigtype.common;
 
 //import static org.osgi.test.cases.scaconfigtype.common.DistributionProviderConstants.*;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,6 +32,7 @@ import java.util.StringTokenizer;
 
 import junit.framework.Assert;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
@@ -133,4 +138,81 @@ public class Utils {
 		return vals;
 	}
 
+    private static class InvocationHandlerImpl implements InvocationHandler {
+        private Object instance;
+
+        public InvocationHandlerImpl(Object instance) {
+            super();
+            this.instance = instance;
+        }
+
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            Method m = instance.getClass().getMethod(method.getName(), method.getParameterTypes());
+            try {
+                return m.invoke(instance, args);
+            } catch (InvocationTargetException e) {
+                throw e.getCause();
+            }
+        }
+
+    }
+
+    /**
+     * Returns a string representation of the given bundle.
+     *
+     * @param b
+     * @param verbose
+     * @return
+     */
+    public static String bundleStatus(Bundle bundle, boolean verbose) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(bundle.getBundleId()).append(" ").append(bundle.getSymbolicName());
+        int s = bundle.getState();
+        if ((s & Bundle.UNINSTALLED) != 0) {
+            sb.append(" UNINSTALLED");
+        }
+        if ((s & Bundle.INSTALLED) != 0) {
+            sb.append(" INSTALLED");
+        }
+        if ((s & Bundle.RESOLVED) != 0) {
+            sb.append(" RESOLVED");
+        }
+        if ((s & Bundle.STARTING) != 0) {
+            sb.append(" STARTING");
+        }
+        if ((s & Bundle.STOPPING) != 0) {
+            sb.append(" STOPPING");
+        }
+        if ((s & Bundle.ACTIVE) != 0) {
+            sb.append(" ACTIVE");
+        }
+
+        if (verbose) {
+            sb.append(" ").append(bundle.getLocation());
+            sb.append(" ").append(bundle.getHeaders());
+        }
+        return sb.toString();
+    }
+
+    /**
+     * A utility to cast the object to the given interface. If the class for the object
+     * is loaded by a different classloader, a proxy will be created.
+     *
+     * @param <T>
+     * @param obj
+     * @param cls
+     * @return
+     */
+    public static <T> T cast(Object obj, Class<T> cls) {
+        if (obj == null) {
+            return null;
+        }
+        if (cls.isInstance(obj)) {
+            return cls.cast(obj);
+        } else {
+            return cls.cast(Proxy.newProxyInstance(cls.getClassLoader(),
+                                                   new Class<?>[] {cls},
+                                                   new InvocationHandlerImpl(obj)));
+        }
+    }
 }
