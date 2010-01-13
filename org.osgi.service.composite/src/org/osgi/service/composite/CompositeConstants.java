@@ -26,10 +26,6 @@ import org.osgi.framework.Filter;
  * 
  * @ThreadSafe
  * @version $Revision$
- * @deprecated This is proposed API. As a result, this API may never be
- *             published or the final API may change substantially by the time
- *             of final publication. You are cautioned against relying upon this
- *             API.
  */
 public class CompositeConstants {
 	/**
@@ -120,7 +116,7 @@ public class CompositeConstants {
 	public static final String COMPOSITE_SERVICE_EXPORT_POLICY = "Composite-ServiceExportPolicy";
 
 	/**
-	 * Manifest header directive identifying the symbolic name a peer composite 
+	 * Manifest header directive identifying the symbolic name a sibling composite 
 	 * must have that allows capabilities exported from that composite to match 
 	 * an import sharing policy specified by {@link #COMPOSITE_PACKAGE_IMPORT_POLICY 
 	 * Composite-PackageImportPolicy} or {@link #COMPOSITE_SERVICE_IMPORT_POLICY 
@@ -140,7 +136,7 @@ public class CompositeConstants {
 	public static final String COMPOSITE_SYMBOLICNAME_DIRECTIVE = "composite-symbolic-name";
 
 	/**
-	 * Manifest header directive identifying the version a peer composite 
+	 * Manifest header directive identifying the version a sibling composite 
 	 * must have that allows capabilities exported from that composite to match 
 	 * an import sharing policy specified by {@link #COMPOSITE_PACKAGE_IMPORT_POLICY 
 	 * Composite-PackageImportPolicy} or {@link #COMPOSITE_SERVICE_IMPORT_POLICY 
