@@ -15,7 +15,7 @@ Include-Resource					= \
 	org.osgi.test.support;			version=project, \
 	org.osgi.jmx;					version=project	, \
 	osgi.core;						version=4.2		, \
-	osgi.cmpn;						version=4.2		, \
+	osgi.enterprise;				version=4.2		, \
 	${junit}	
 
 -runbundles						= \

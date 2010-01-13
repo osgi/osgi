@@ -38,11 +38,10 @@ Export-Package =\
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;			version=latest, \
     org.apache.geronimo.specs.geronimo-annotation_1.0_spec; version=latest, \
 	osgi.core;									version=4.2, \
-	osgi.cmpn;									version=4.2, \
+	osgi.enterprise; 									version=4.2, \
 	org.osgi.test.support;						version=project, \
 	${junit}, \
-	org.apache.commons-logging;version=1.0.4, \
-    org.osgi.service.jndi;					version=project
+	org.apache.commons-logging;version=1.0.4
 
 # Comments out -runbundles. For some reason bnd is upset by -runbundles refering to
 # non-existent repo entries during bndprepare ant task. I asked Peter to make a change to bnd.
