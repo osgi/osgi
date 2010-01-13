@@ -48,18 +48,6 @@ public class ServletContextRegistrationTest extends
 	    registerWarBundleTest(option, "tw1.war", true, this.b);
 	}
 
-	public void testSimpleServletContextReg002() throws Exception {
-		final Map<String, Object> option = createOptions("2.0", "ct-testwar2", "/tw2");
-		this.b = super.installWar(option, "tw2.war", false);
-		registerWarBundleTest(option, "tw2.war", false, this.b);
-	}
-
-	public void testSimpleServletContextReg003() throws Exception {
-		final Map<String, Object> option = createOptions("3.0", "ct-testwar3", "/tw3");
-		this.b = super.installWar(option, "tw3.war", true);
-		registerWarBundleTest(option, "tw3.war", true, this.b);
-	}
-
 	public void testSimpleServletContextReg004() throws Exception {
 		final Map<String, Object> option = createOptions("4.0", "ct-testwar4", "/tw4");
 		this.b = super.installWar(option, "tw4.war", false);
@@ -76,18 +64,6 @@ public class ServletContextRegistrationTest extends
 		final Map<String, Object> option = createOptions(null, null, "/tw1");
 		this.b = super.installWar(option, "tw1.war", false);
 		registerWarBundleTest(option, "tw1.war", false, this.b);
-	}
-
-	public void testSimpleServletContextReg007() throws Exception {
-		final Map<String, Object> option = createOptions("1.0", "ct-testwar7", null);
-		this.b = super.installWar(option, "tw2.war", false);
-		registerWarBundleTest(option, "tw2.war", false, this.b);
-	}
-
-	public void testSimpleServletContextReg008() throws Exception {
-		final Map<String, Object> option = createOptions(null, null, null);
-		this.b = super.installWar(option, "tw3.war", true);
-		registerWarBundleTest(option, "tw3.war", true, this.b);
 	}
 
 	public void testSimpleServletContextReg009() throws Exception {
@@ -161,19 +137,19 @@ public class ServletContextRegistrationTest extends
 		
 		Bundle[] bundles = new Bundle[4];
 		try {
-    		option = createOptions("1.0", "ct-testwar2", "/tw2");
-    		bundles[0] = super.installWar(option, "tw2.war", true);
-    		registerWarBundleTest(option, "tw2.war", true, bundles[0]);
+    		option = createOptions("1.0", "ct-wm-testwar1", "/wmtw1");
+    		bundles[0] = super.installWar(option, "wmtw1.war", true);
+    		registerWarBundleTest(option, "wmtw1.war", true, bundles[0]);
+    
+    		option = createOptions("1.0", "ct-testwar4", "/tw4");
+    		bundles[1] = super.installWar(option,  "tw4.war", true);
+    		registerWarBundleTest(option, "tw4.war", true, bundles[1]);
     		
-    		option = createOptions("1.0", "ct-testwar3", "/tw3");
-    		bundles[1] = super.installWar(option,  "tw3.war", true);
-    		registerWarBundleTest(option, "tw3.war", true, bundles[1]);
+    		option = createOptions("1.0", "ct-wm-testwar", "/wmtw4");
+    		bundles[2] = super.installWar(option,  "wmtw4.war", true);
+    		registerWarBundleTest(option, "wmtw4.war", true, bundles[2]);
     		
-    		option = createOptions("1.0", "ct-testwar4",
-    		"/tw4");
-    		bundles[2] = super.installWar(option,  "tw4.war", true);
-    		registerWarBundleTest(option, "tw4.war", true, bundles[2]);
-    		
+
     		option = createOptions("1.0", "ct-testwar5", "/tw5");
     		bundles[3] = super.installWar(option,  "tw5.war", true);
     		registerWarBundleTest(option, "tw5.war", true, bundles[3]);

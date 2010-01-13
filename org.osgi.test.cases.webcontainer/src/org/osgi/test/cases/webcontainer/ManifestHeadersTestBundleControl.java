@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
 

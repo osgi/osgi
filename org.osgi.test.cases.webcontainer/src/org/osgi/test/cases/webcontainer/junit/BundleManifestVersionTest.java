@@ -51,26 +51,6 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest
      * Bundle-ManifestVersion
      */
-    public void testBundleManifestVersion002() throws Exception {
-        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw2");
-        this.b = super.installWar(options, "tw2.war", false);
-        super.generalHeadersTest(options, "tw2.war", true, this.b);
-    }
-
-    /*
-     * verify valid deployOptions overwrite original manifest
-     * Bundle-ManifestVersion
-     */
-    public void testBundleManifestVersion003() throws Exception {
-        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw3");
-        this.b = super.installWar(options, "tw3.war", false);
-        super.generalHeadersTest(options, "tw3.war", true, this.b);
-    }
-
-    /*
-     * verify valid deployOptions overwrite original manifest
-     * Bundle-ManifestVersion
-     */
     public void testBundleManifestVersion004() throws Exception {
         final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw4");
         this.b = super.installWar(options, "tw4.war", false);
@@ -101,26 +81,6 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      * verify valid deployOptions overwrite original manifest
      * Bundle-ManifestVersion
      */
-    public void testBundleManifestVersion007() throws Exception {
-        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw2");
-        this.b = super.installWar(options, "wmtw2.war", true);
-        generalHeadersTest(options, "wmtw2.war", true, this.b);
-    }
-
-    /*
-     * verify valid deployOptions overwrite original manifest
-     * Bundle-ManifestVersion
-     */
-    public void testBundleManifestVersion008() throws Exception {
-        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw3");
-        this.b = super.installWar(options, "wmtw3.war", false);
-        generalHeadersTest(options, "wmtw3.war", true, this.b);
-    }
-
-    /*
-     * verify valid deployOptions overwrite original manifest
-     * Bundle-ManifestVersion
-     */
     public void testBundleManifestVersion009() throws Exception {
         final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw4");
         this.b = super.installWar(options, "wmtw4.war", false);
@@ -142,11 +102,11 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      */
     public void testBundleManifestVersionError001() throws Exception {
         // specify install options
-        final Map<String, Object> options = createOptions(MANIFESTVERSION2, "/tw2");
+        final Map<String, Object> options = createOptions(MANIFESTVERSION2, "/tw1");
         // install the war file
-        log("install war file: tw2.war at context path /tw2");
+        log("install war file: tw1.war at context path /tw1");
         try {
-            this.b = installBundle(super.getWarURL("tw2.war", options), false);
+            this.b = installBundle(super.getWarURL("tw1.war", options), false);
             fail("bundle install should fail: " + Constants.BUNDLE_VERSION
                     + " = " + MANIFESTVERSION2);
         } catch (BundleException be) {
@@ -158,8 +118,8 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
         assertNull("Bundle b should be null", this.b);
 
         // test unable to access /tw2 yet as it is not started
-        assertFalse("should not be able to access /tw2", super
-                .ableAccessPath("/tw2/"));
+        assertFalse("should not be able to access /tw1", super
+                .ableAccessPath("/tw1/"));
     }
 
     /*
@@ -167,11 +127,11 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      */
     public void testBundleManifestVersionError002() throws Exception {
         // specify install options
-        final Map<String, Object> options = createOptions(MANIFESTVERSION3, "/tw3");
+        final Map<String, Object> options = createOptions(MANIFESTVERSION3, "/tw4");
         // install the war file
-        log("install and start war file: tw3.war at context path /tw3");
+        log("install and start war file: tw4.war at context path /tw4");
         try {
-            this.b = installBundle(super.getWarURL("tw3.war", options), false);
+            this.b = installBundle(super.getWarURL("tw4.war", options), false);
             fail("bundle install should fail: " + Constants.BUNDLE_VERSION
                     + " = " + MANIFESTVERSION3);
         } catch (BundleException be) {
@@ -180,7 +140,7 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
         assertNull("Bundle b should be null", this.b);
 
         // test unable to access /tw3 yet as it is not started
-        assertFalse("should not be able to access /tw3", super
-                .ableAccessPath("/tw3/"));
+        assertFalse("should not be able to access /tw4", super
+                .ableAccessPath("/tw4/"));
     }
 }

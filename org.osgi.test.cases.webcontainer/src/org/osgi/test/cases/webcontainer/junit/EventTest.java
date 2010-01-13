@@ -180,11 +180,11 @@ public class EventTest extends WebContainerTestBundleControl {
       
         Map<String, Object> options = new HashMap<String, Object>();
         options.put(WEB_CONTEXT_PATH, "/tw1");
-        options.put(Constants.BUNDLE_SYMBOLICNAME, "org.osgi.test.cases.webcontainer.tw2");
+        options.put(Constants.BUNDLE_SYMBOLICNAME, "org.osgi.test.cases.webcontainer.tw4");
         
         // install the war file that uses the same WebContextPath
-        log("install war file: tw2.war at context path /tw1");
-        Bundle b2 = installBundle(super.getWarURL("tw2.war", options), false);
+        log("install war file: tw4.war at context path /tw1");
+        Bundle b2 = installBundle(super.getWarURL("tw4.war", options), false);
         
         b2.start();
         // emit the following events:
@@ -194,11 +194,11 @@ public class EventTest extends WebContainerTestBundleControl {
         // wait a few seconds to make sure events are delivered.
         count = 0;
         while(eventCurrent == null && count < WAITCOUNT) {
-        	eventCurrent = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw2", "org/osgi/service/web/FAILED");
+        	eventCurrent = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw4", "org/osgi/service/web/FAILED");
             Thread.sleep(1000);
             count++;
         }
-        eventPrevious = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw2", "org/osgi/service/web/DEPLOYING");
+        eventPrevious = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw4", "org/osgi/service/web/DEPLOYING");
         assertNotNull(eventPrevious);
         assertNotNull(eventCurrent);
         
@@ -206,7 +206,7 @@ public class EventTest extends WebContainerTestBundleControl {
         long failedTime = (Long)eventCurrent.getProperty(EventConstants.TIMESTAMP);
         
         assertEquals("org/osgi/service/web/DEPLOYING", eventPrevious.getTopic());
-        assertEquals("org.osgi.test.cases.webcontainer.tw2", (String)eventPrevious.getProperty(EventConstants.BUNDLE_SYMBOLICNAME));
+        assertEquals("org.osgi.test.cases.webcontainer.tw4", (String)eventPrevious.getProperty(EventConstants.BUNDLE_SYMBOLICNAME));
         assertEquals(b2.getBundleId(), eventPrevious.getProperty(EventConstants.BUNDLE_ID));
         assertEquals(b2, (Bundle)eventPrevious.getProperty(EventConstants.BUNDLE));
         assertEquals(b2.getVersion(), (Version)eventPrevious.getProperty(EventConstants.BUNDLE_VERSION));
@@ -218,7 +218,7 @@ public class EventTest extends WebContainerTestBundleControl {
         assertNotNull((Version)eventPrevious.getProperty(EXTENDER_BUNDLE_VERSION));
         
         assertEquals("org/osgi/service/web/FAILED", eventCurrent.getTopic());
-        assertEquals("org.osgi.test.cases.webcontainer.tw2", (String)eventCurrent.getProperty(EventConstants.BUNDLE_SYMBOLICNAME));
+        assertEquals("org.osgi.test.cases.webcontainer.tw4", (String)eventCurrent.getProperty(EventConstants.BUNDLE_SYMBOLICNAME));
         assertEquals(b2.getBundleId(), eventCurrent.getProperty(EventConstants.BUNDLE_ID));
         assertEquals(b2, (Bundle)eventCurrent.getProperty(EventConstants.BUNDLE));
         assertEquals(b2.getVersion(), (Version)eventCurrent.getProperty(EventConstants.BUNDLE_VERSION));

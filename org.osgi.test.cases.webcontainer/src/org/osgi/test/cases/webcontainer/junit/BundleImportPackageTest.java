@@ -50,24 +50,6 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
-    public void testBundleImportPackage002() throws Exception {
-        final Map<String, Object> options = createOptions(IMPORTS2, "/tw2");
-        this.b = super.installWar(options, "tw2.war", true);
-        super.generalHeadersTest(options, "tw2.war", true, this.b);
-    }
-    
-    /*
-     * verify valid deployOptions overwrite original manifest Import-Package
-     */
-    public void testBundleImportPackage003() throws Exception {
-        final Map<String, Object> options = createOptions(IMPORTS3, "/tw3");
-        this.b = super.installWar(options, "tw3.war", false);
-        super.generalHeadersTest(options, "tw3.war", false, this.b);
-    }
-    
-    /*
-     * verify valid deployOptions overwrite original manifest Import-Package
-     */
     public void testBundleImportPackage004() throws Exception {
         final Map<String, Object> options = createOptions(IMPORTS4, "/tw4");
         this.b = super.installWar(options, "tw4.war", true);
@@ -99,24 +81,6 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
         final Map<String, Object> options = createOptions(IMPORTS1, "/tw1");
         this.b = super.installWar(options, "wmtw1.war", false);
         super.generalHeadersTest(options, "wmtw1.war", false, this.b);
-    }
-    
-    /*
-     * verify valid deployOptions overwrite original manifest Import-Package
-     */
-    public void testBundleImportPackage008() throws Exception {
-        final Map<String, Object> options = createOptions(IMPORTS2, "/tw2");
-        this.b = super.installWar(options, "wmtw2.war", true);
-        super.generalHeadersTest(options, "wmtw2.war", true, this.b);
-    }
-    
-    /*
-     * verify valid deployOptions overwrite original manifest Import-Package
-     */
-    public void testBundleImportPackage009() throws Exception {
-        final Map<String, Object> options = createOptions(IMPORTS3, "/tw3");
-        this.b = super.installWar(options, "wmtw3.war", false);
-        super.generalHeadersTest(options, "wmtw3.war", false, this.b);
     }
     
     /*
@@ -226,7 +190,7 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
         }
         
         // test unable to access /tw4 yet as it is not installed
-        assertFalse("should not be able to access /tw4", super
-                .ableAccessPath("/tw4/"));
+        assertFalse("should not be able to access /tw5", super
+                .ableAccessPath("/tw5/"));
     }
 }

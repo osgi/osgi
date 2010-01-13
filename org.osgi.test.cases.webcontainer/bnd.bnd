@@ -13,13 +13,9 @@ Private-Package						= org.osgi.test.support.*, \
 
 Include-Resource					= \
 	${target}/tw1.war, \
-	${target}/tw2.war, \
-	${target}/tw3.war, \
 	${target}/tw4.war, \
 	${target}/tw5.war, \
 	${target}/wmtw1.war, \
-	${target}/wmtw2.war, \
-	${target}/wmtw3.war, \
 	${target}/wmtw4.war, \
 	${target}/wmtw5.war, \
 	${target}/wm2tw5.war, \
@@ -35,20 +31,22 @@ Import-Package = \
  	
 Export-Package =\
 	${p};version=1.0, \
-	${p}.util;version=1.0
+	${p}.util;version=1.0, \
+	${p}.validate;version=1.0
 	
 -buildpath							= ee.j2se; version=1.5, \
-    org.apache.geronimo.specs.geronimo-servlet_2.5_spec; version=latest, \
+    org.apache.geronimo.specs.geronimo-servlet_2.5_spec;			version=latest, \
     org.apache.geronimo.specs.geronimo-annotation_1.0_spec; version=latest, \
 	osgi.core;									version=4.2, \
 	osgi.cmpn;									version=4.2, \
 	org.osgi.test.support;						version=project, \
 	${junit}, \
-	org.apache.commons-logging;version=1.0.4
+	org.apache.commons-logging;version=1.0.4, \
+    org.osgi.service.jndi;					version=project
 
 # Comments out -runbundles. For some reason bnd is upset by -runbundles refering to
 # non-existent repo entries during bndprepare ant task. I asked Peter to make a change to bnd.
-XX-runbundles						= \
+-runbundles						= \
 	org.osgi.impl.service.log; 			version=latest, \
 	org.eclipse.equinox.event; 			version=latest, \
 	osgi.cmpn; 							version=latest, \
@@ -57,7 +55,6 @@ XX-runbundles						= \
     org.apache.geronimo.specs.geronimo-ejb_3.0_spec; version=latest, \
     org.apache.geronimo.specs.geronimo-el_1.0_spec; version=latest, \
     org.apache.geronimo.specs.geronimo-javamail_1.4_spec; version=latest, \
-    javax.persistence; version=2.0, \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec; version=latest, \
     org.apache.geronimo.specs.geronimo-jsp_2.1_spec; version=latest, \
     org.apache.geronimo.specs.geronimo-jta_1.1_spec; version=latest, \
@@ -91,7 +88,8 @@ XX-runbundles						= \
 	com.springsource.org.apache.juli.extras.springsource; version=6.0.20, \
 	com.springsource.osgi.webcontainer.core;version=1.0.0, \
 	com.springsource.osgi.webcontainer.extender;version=1.0.0, \
-	com.springsource.osgi.webcontainer.tomcat;version=1.0.0
+	com.springsource.osgi.webcontainer.tomcat;version=1.0.0, \
+	org.osgi.impl.service.jndi; version=project
 # TODO replace the above 40 springsource rfc 66 ri with one consolidated jar when it is avail
 # TODO add rfc142 impl bundle here if user wants to run some simple rfc 66 + rfc 142 tests
 	
@@ -100,4 +98,4 @@ XX-runbundles						= \
 	org.osgi.service.webcontainer.http.port=8080
 
 Test-Cases						= ${testcases}
-	
+

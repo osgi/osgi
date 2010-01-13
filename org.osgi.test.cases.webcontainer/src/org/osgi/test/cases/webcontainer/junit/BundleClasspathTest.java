@@ -50,15 +50,6 @@ public class BundleClasspathTest extends ManifestHeadersTestBundleControl {
     /*
      * verify valid deployOptions overwrite original manifest Bundle-Classpath
      */
-    public void testBundleClasspath002() throws Exception {
-        final Map<String, Object> options = createOptions(CLASSPATH3, "/tw2");
-        this.b = super.installWar(options, "tw2.war", false);
-        super.generalHeadersTest(options, "tw2.war", false, this.b);
-    }
-    
-    /*
-     * verify valid deployOptions overwrite original manifest Bundle-Classpath
-     */
     public void testBundleClasspath003() throws Exception {
         final Map<String, Object> options = createOptions(CLASSPATH1, "/tw5");
         this.b = super.installWar(options, "tw5.war", true);

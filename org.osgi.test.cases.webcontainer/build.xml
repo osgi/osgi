@@ -6,11 +6,11 @@
 		<mkdir dir="${target}" />
 	</target> 
 	
-	<target name="build-war" depends="build-war1, build-war2, build-war3, build-war4, build-war5">
+	<target name="build-war" depends="build-war1, build-war4, build-war5">
 		<echo>build test war files</echo>
 	</target>
 	
-	<target name="build-wmwar" depends="build-wmwar1, build-wmwar2, build-wmwar3, build-wmwar4, build-wmwar5, build-wm2war5, build-wm3war5">
+	<target name="build-wmwar" depends="build-wmwar1, build-wmwar4, build-wmwar5, build-wm2war5, build-wm3war5">
 		<echo>build test war files with pre-specified manifest</echo>
 	</target>
 	
@@ -20,29 +20,6 @@
 			<fileset dir="${project.dir}/resources/tw1/WebContent/"/>
 			<classes dir="${project.output}">
 				<include name="org/osgi/test/cases/webcontainer/tw1/**"/>
-				<include name="org/osgi/test/cases/webcontainer/util/**"/>
-			</classes>
-		</war>
-	</target>
-	
-	<target name="build-war2" depends="prewar">
-		<echo>Building tw2.war file</echo>
-		<war destfile="${target}/tw2.war" webxml="${project.dir}/resources/tw2/WebContent/WEB-INF/web.xml">
-			<fileset dir="${project.dir}/resources/tw2/WebContent/"/>
-			<classes dir="${project.output}">
-				<include name="org/osgi/test/cases/webcontainer/tw2/**"/>
-				<include name="org/osgi/test/cases/webcontainer/util/**"/>
-			</classes>
-		</war>
-	</target>
-	
-	<target name="build-war3" depends="prewar">
-		<echo>Building tw3.war file</echo>
-		<war destfile="${target}/tw3.war" webxml="${project.dir}/resources/tw3/WebContent/WEB-INF/web.xml">
-			<fileset dir="${project.dir}/resources/tw3/WebContent/"/>
-			<classes dir="${project.output}">
-				<!-- tw3 uses same class files as tw2 -->
-				<include name="org/osgi/test/cases/webcontainer/tw2/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
 		</war>
@@ -78,35 +55,11 @@
 	
 	<!-- same as tw1.war file but with pre-specified manifest - wmtw1.war -->
 	<target name="build-wmwar1" depends="prewar">
-		<echo>Building tw1.war file</echo>
+		<echo>Building wmtw1.war file</echo>
 		<war destfile="${target}/wmtw1.war" webxml="${project.dir}/resources/tw1/WebContent/WEB-INF/web.xml" manifest="${project.dir}/resources/tw1/WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="${project.dir}/resources/tw1/WebContent/"/>
 			<classes dir="${project.output}">
 				<include name="org/osgi/test/cases/webcontainer/tw1/**"/>
-				<include name="org/osgi/test/cases/webcontainer/util/**"/>
-			</classes>
-		</war>
-	</target>
-
-	<!-- same as tw2.war file but with pre-specified manifest - wmtw2.war -->
-	<target name="build-wmwar2" depends="prewar">
-		<echo>Building wmtw2.war file</echo>
-		<war destfile="${target}/wmtw2.war" webxml="${project.dir}/resources/tw2/WebContent/WEB-INF/web.xml" manifest="${project.dir}/resources/tw2/WebContent/META-INF/MANIFEST.MF">
-			<fileset dir="${project.dir}/resources/tw2/WebContent/"/>
-			<classes dir="${project.output}">
-				<include name="org/osgi/test/cases/webcontainer/tw2/**"/>
-				<include name="org/osgi/test/cases/webcontainer/util/**"/>
-			</classes>
-		</war>
-	</target>
-
-	<!-- same as tw3.war file but with pre-specified manifest - wmtw3.war -->
-	<target name="build-wmwar3" depends="prewar">
-		<echo>Building wmtw3.war file</echo>
-		<war destfile="${target}/wmtw3.war" webxml="${project.dir}/resources/tw3/WebContent/WEB-INF/web.xml" manifest="${project.dir}/resources/tw3/WebContent/META-INF/MANIFEST.MF">
-			<fileset dir="${project.dir}/resources/tw3/WebContent/"/>
-			<classes dir="${project.output}">
-				<include name="org/osgi/test/cases/webcontainer/tw3/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
 		</war>

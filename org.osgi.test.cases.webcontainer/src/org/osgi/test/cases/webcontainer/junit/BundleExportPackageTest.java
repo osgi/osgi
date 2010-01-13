@@ -45,25 +45,7 @@ public class BundleExportPackageTest extends ManifestHeadersTestBundleControl {
         this.b = super.installWar(options, "tw1.war", false);
         super.generalHeadersTest(options, "tw1.war", false, this.b);
     }
-    
-    /*
-     * verify valid deployOptions overwrite original manifest Export-Package
-     */
-    public void testBundleExportPackage002() throws Exception {
-        final Map<String, Object> options = createOptions(EXPORTS2, "/tw2");
-        this.b = super.installWar(options, "tw2.war", true);
-        super.generalHeadersTest(options, "tw2.war", true, this.b);
-    }
-    
-    /*
-     * verify valid deployOptions overwrite original manifest Export-Package
-     */
-    public void testBundleExportPackage003() throws Exception {
-        final Map<String, Object> options = createOptions(EXPORTS3, "/tw3");
-        this.b = super.installWar(options, "tw3.war", false);
-        super.generalHeadersTest(options, "tw3.war", false, this.b);
-    }
-    
+
     /*
      * verify valid deployOptions overwrite original manifest Export-Package
      */
@@ -89,24 +71,6 @@ public class BundleExportPackageTest extends ManifestHeadersTestBundleControl {
         final Map<String, Object> options = createOptions(EXPORTS1, "/tw1");
         this.b = super.installWar(options, "wmtw1.war", false);
         super.generalHeadersTest(options, "wmtw1.war", false, this.b);
-    }
-    
-    /*
-     * verify valid deployOptions overwrite original manifest Export-Package
-     */
-    public void testBundleExportPackage007() throws Exception {
-        final Map<String, Object> options = createOptions(EXPORTS2, "/tw2");
-        this.b = super.installWar(options, "wmtw2.war", true);
-        super.generalHeadersTest(options, "wmtw2.war", true, this.b);
-    }
-    
-    /*
-     * verify valid deployOptions overwrite original manifest Export-Package
-     */
-    public void testBundleExportPackage008() throws Exception {
-        final Map<String, Object> options = createOptions(EXPORTS3, "/tw3");
-        this.b = super.installWar(options, "wmtw3.war", false);
-        super.generalHeadersTest(options, "wmtw3.war", false, this.b);
     }
     
     /*
