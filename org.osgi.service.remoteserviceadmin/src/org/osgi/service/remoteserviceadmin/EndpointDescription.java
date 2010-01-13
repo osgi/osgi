@@ -580,6 +580,63 @@ public class EndpointDescription {
 	}
 
 	/**
+	 * Returns the string representation of this EndpointDescription.
+	 * 
+	 * @return String form of this EndpointDescription.
+	 */
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append('{');
+		Iterator<Map.Entry<String, Object>> iter = properties.entrySet()
+				.iterator();
+		boolean comma = false;
+		while (iter.hasNext()) {
+			Map.Entry<String, Object> entry = iter.next();
+			if (comma) {
+				sb.append(", ");
+			}
+			else {
+				comma = true;
+			}
+			sb.append(entry.getKey());
+			sb.append('=');
+			Object value = entry.getValue();
+			if (value != null) {
+				Class< ? > valueType = value.getClass();
+				if (Object[].class.isAssignableFrom(valueType)) {
+					append(sb, (Object[]) value);
+					continue;
+				}
+			}
+			sb.append(value);
+		}
+		sb.append('}');
+		return sb.toString();
+	}
+
+	/**
+	 * Append the specified Object array to the specified StringBuffer.
+	 * 
+	 * @param sb Receiving StringBuffer.
+	 * @param value Object array to append to the specified StringBuffer.
+	 */
+	private static void append(StringBuffer sb, Object[] value) {
+		sb.append('[');
+		boolean comma = false;
+		final int length = value.length;
+		for (int i = 0; i < length; i++) {
+			if (comma) {
+				sb.append(", ");
+			}
+			else {
+				comma = true;
+			}
+			sb.append(String.valueOf(value[i]));
+		}
+		sb.append(']');
+	}
+
+	/**
 	 * Unmodifiable Dictionary wrapper for a Map. This class is also used by
 	 * EndpointPermission.
 	 */
