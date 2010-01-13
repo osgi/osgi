@@ -525,6 +525,110 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		}
 	}
 
+	/**
+	 * 122.4.1 Exporting
+	 * 
+	 * Tests the export of a service with negative edge cases according to
+	 * the spec.
+	 * Register a service multiple times. Each registration is supposed to return
+	 * a new ExportRegistration
+	 */
+	public void testExportConfigurationType() throws Exception {
+		// create an register a service
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put("mykey", "will be overridden");
+		dictionary.put("myprop", "myvalue");
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
+
+		TestService service = new TestService();
+		
+		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+				                                                        service, dictionary);
+		assertNotNull(registration);
+
+		try {
+			//
+			// register a RemoteServiceAdminListener to receive the export
+			// notification
+			//
+			TestRemoteServiceAdminListener remoteServiceAdminListener = new TestRemoteServiceAdminListener();
+			registerService(RemoteServiceAdminListener.class.getName(), remoteServiceAdminListener, null);
+
+			//
+			// 122.4.1 export the service
+			//
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put("mykey", "has been overridden");
+			properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
+			properties.put("objectClass", "can.not.be.changed.Class");
+			properties.put("service.id", "can.not.be.changed.Id");
+
+			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
+			assertNotNull(exportRegistrations);
+
+			//
+			// 122.8 verify that export notification was sent to RemoteServiceAdminListeners
+			//
+			boolean exportFailed = false;
+			
+			RemoteServiceAdminEvent event = remoteServiceAdminListener.getNextEvent();
+			assertNotNull("no RemoteServiceAdminEvent received", event);
+			assertEquals(0, remoteServiceAdminListener.getEventCount());
+			assertNotNull("122.10.11: source must not be null", event.getSource());
+
+			ExportReference exportReference  = null;
+			
+			switch (event.getType()) {
+			case RemoteServiceAdminEvent.EXPORT_REGISTRATION:
+				assertNull(event.getException());
+				assertEquals("122.10.11: event type is wrong", RemoteServiceAdminEvent.EXPORT_REGISTRATION, event.getType());
+
+				exportReference = event.getExportReference();
+				assertNotNull("ExportReference expected in event", exportReference);
+
+				assertNotNull(exportReference.getExportedEndpoint());
+				break;
+			case RemoteServiceAdminEvent.EXPORT_ERROR:
+				exportFailed = true;
+				assertNotNull(event.getException());
+				try {
+					event.getExportReference();
+					fail("IllegalStateException expected");
+				} catch (IllegalStateException ie) {}
+				break;
+			default:
+				fail("wrong event type");
+			}
+
+			// extract configuration type
+			if (!exportFailed) {
+				EndpointDescription epd = exportReference.getExportedEndpoint();
+				List<String> configtypes = epd.getConfigurationTypes();
+				assertNotNull(configtypes);
+				for (Iterator<String> it = configtypes.iterator(); it.hasNext();) {
+					String configtype = it.next();
+					
+					// check for config type properties
+					assertNotNull(configtype);
+					assertFalse(configtype.trim().equals(""));
+					
+					boolean found = false;
+					for (Iterator<String> keys = epd.getProperties().keySet().iterator(); keys.hasNext() && !false; ) {
+						found = keys.next().startsWith(configtype + ".");
+					}
+					assertTrue("config type properties missing from EndpointDescription", found);
+				}
+			}
+
+			// ungetting the RSA service will also close the ExportRegistration and therefore
+			// emit an event
+			ungetService(remoteServiceAdmin);
+
+		} finally {
+			registration.unregister();
+		}
+	}
+
 	class TestService implements A, B, Serializable {
 		/**
 		 * 
