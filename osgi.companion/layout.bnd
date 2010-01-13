@@ -4,7 +4,7 @@
 specs 						= ${uniq; ${core.specs}, ${cmpn.specs}, ${mobile.specs}, ${enterprise.specs}, ${proposed.specs}}
 spec.packages		 		= ${uniq; ${core.packages}, ${cmpn.packages}, ${mobile.packages}, ${enterprise.packages}, ${proposed.packages}}
 spec.resources				= ${uniq; ${core.resources}, ${cmpn.resources}, ${mobile.resources}, ${enterprise.resources}, ${proposed.resources}}
-javadoc.packages		 	= ${uniq; ${core.packages}, ${cmpn.packages}, ${mobile.packages}}
+javadoc.packages		 	= ${uniq; ${core.packages}, ${cmpn.packages}, ${mobile.packages}, ${enterprise.packages}}
 
 ees 						= \
  ee.minimum, \
@@ -62,18 +62,30 @@ cmpn.resources = {legal/about.html}, \
 enterprise.specs = \
 	 org.osgi.jmx, \
 	 org.osgi.service.blueprint, \
+	 org.osgi.service.cm, \
+	 org.osgi.service.component, \
+	 org.osgi.service.event, \
+	 org.osgi.service.http, \
+     org.osgi.service.provisioning, \
      org.osgi.service.remoteserviceadmin, \
 	 org.osgi.service.jdbc, \
 	 org.osgi.service.jndi, \
-	 org.osgi.service.jpa
+	 org.osgi.service.jpa, \
+	 org.osgi.service.log, \
+	 org.osgi.service.metatype, \
+	 org.osgi.service.useradmin, \
+	 org.osgi.util.tracker, \
+	 org.osgi.util.xml
 
 enterprise.packages = ${replace;$(enterprise.specs);^.*$;$0.*}
 
 enterprise.resources = {legal/about.html}, \
   						legal/LICENSE, \
   						xmlns/blueprint=../xmlns/blueprint, \
+		  				xmlns/metatype=../xmlns/metatype, \
   						xmlns/rsa=../xmlns/rsa, \
-  						xmlns/scact=../xmlns/scact
+  						xmlns/scact=../xmlns/scact, \
+  						xmlns/scr=../xmlns/scr
 
 mobile.specs = \
 	 info.dmtree, \

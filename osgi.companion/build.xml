@@ -30,7 +30,8 @@
       			<pathelement location="${repo}/ee.foundation/ee.foundation-1.1.0.jar"/>
     		</bootclasspath>
 		    <classpath>
-      			<pathelement location="${licensed-repo}/org.osgi.impl.bundle.servlet/org.osgi.impl.bundle.servlet-2.1.0.jar"/>
+				<pathelement location="${licensed-repo}/org.apache.geronimo.specs.geronimo-servlet_2.5_spec/org.apache.geronimo.specs.geronimo-servlet_2.5_spec-1.2.jar" />
+				<pathelement location="${licensed-repo}/javax.persistence/javax.persistence-2.0.0.jar" />
     		</classpath>
 			<tag name="Immutable" scope="types" description="Immutable"/>
 			<tag name="ThreadSafe" scope="types" description="ThreadSafe"/>
@@ -56,7 +57,7 @@
 			<arg value="as" />
 			<arg value="${target}/japi/osgi.core-latest.japi" />
 			<arg value="packages" />
-			<arg value="${repo}/ee.minimum/ee.minimum-1.2.0.jar" />
+			<arg value="${repo}/ee.j2se/ee.j2se-1.5.0.jar" />
 			<arg value="${target}/osgi.core.jar" />
 			<arg line="${japi.osgi.core}" />
 		</java>
@@ -67,10 +68,11 @@
 			<arg value="as" />
 			<arg value="${target}/japi/osgi.cmpn-latest.japi" />
 			<arg value="packages" />
+			<arg value="${repo}/ee.j2se/ee.j2se-1.5.0.jar" />
 			<arg value="${repo}/ee.foundation/ee.foundation-1.1.0.jar" />
 			<arg value="${target}/osgi.core.jar" />
 			<arg value="${target}/osgi.cmpn.jar" />
-			<arg value="${licensed-repo}/org.osgi.impl.bundle.servlet/org.osgi.impl.bundle.servlet-2.1.0.jar" />
+			<arg value="${licensed-repo}/org.apache.geronimo.specs.geronimo-servlet_2.5_spec/org.apache.geronimo.specs.geronimo-servlet_2.5_spec-1.2.jar" />
 			<arg value="${licensed-repo}/com.icl.saxon/com.icl.saxon-6.5.1.jar" />
 			<arg line="${japi.osgi.cmpn}" />
 		</java>
@@ -81,6 +83,7 @@
 			<arg value="as" />
 			<arg value="${target}/japi/osgi.mobile-latest.japi" />
 			<arg value="packages" />
+			<arg value="${repo}/ee.j2se/ee.j2se-1.5.0.jar" />
 			<arg value="${repo}/ee.foundation/ee.foundation-1.1.0.jar" />
 			<arg value="${target}/osgi.core.jar" />
 			<arg value="${target}/osgi.mobile.jar" />
@@ -94,9 +97,11 @@
 			<arg value="as" />
 			<arg value="${target}/japi/osgi.enterprise-latest.japi" />
 			<arg value="packages" />
-			<arg value="${repo}/ee.j2se/ee.j2se-1.4.0.jar" />
+			<arg value="${repo}/ee.j2se/ee.j2se-1.5.0.jar" />
 			<arg value="${target}/osgi.core.jar" />
 			<arg value="${target}/osgi.enterprise.jar" />
+			<arg value="${licensed-repo}/org.apache.geronimo.specs.geronimo-servlet_2.5_spec/org.apache.geronimo.specs.geronimo-servlet_2.5_spec-1.2.jar" />
+			<arg value="${licensed-repo}/javax.persistence/javax.persistence-2.0.0.jar" />
 			<arg value="${licensed-repo}/com.icl.saxon/com.icl.saxon-6.5.1.jar" />
 			<arg line="${japi.osgi.enterprise}" />
 		</java>
@@ -107,7 +112,7 @@
 			<arg value="as" />
 			<arg value="${target}/japi/osgi.proposed-latest.japi" />
 			<arg value="packages" />
-			<arg value="${repo}/ee.foundation/ee.foundation-1.1.0.jar" />
+			<arg value="${repo}/ee.j2se/ee.j2se-1.5.0.jar" />
 			<arg value="${target}/osgi.core.jar" />
 			<arg value="${target}/osgi.proposed.jar" />
 			<arg value="${licensed-repo}/com.icl.saxon/com.icl.saxon-6.5.1.jar" />
