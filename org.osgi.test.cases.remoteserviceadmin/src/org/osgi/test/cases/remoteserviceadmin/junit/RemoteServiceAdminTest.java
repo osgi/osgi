@@ -360,6 +360,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 				fail("122.4.8: wrong event topic");
 			}
 		}
+		// Marc Schaaf: Make sure the service instance of the RSA can be closed by the RSA Service Factory
+		getContext().ungetService(rsaRef);
 	}
 
 	/**
