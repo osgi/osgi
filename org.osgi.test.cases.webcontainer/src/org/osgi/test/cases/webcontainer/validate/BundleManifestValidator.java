@@ -80,7 +80,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         validateSymbolicName();
         validateBundleVersion();
         validateBundleManifestVersion();
-        validateBundleClassPath();
+        //validateBundleClassPath();
         validateImportPackage();
         validateWebContextPath();
         validateOthersPreserved();
@@ -246,7 +246,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         
         // mImports - original manifest Import-Package String array
         Object mImports = this.manifest == null ? null : this.manifest.getMainAttributes().get(new Name(Constants.IMPORT_PACKAGE));
-        // dImports - deployer specified Import-Package String arrary
+        // dImports - deployer specified Import-Package String array
         Object dImports = this.deployOptions == null ? null : this.deployOptions.get(Constants.IMPORT_PACKAGE);
  
         // verify the existence of the servlet and jsp packages on Import-pacakage header
@@ -257,7 +257,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         
         // verify dImports are added to the actualImports
         if (dImports != null) {
-            String[] di = toArray((String)dImports);
+            String[] di = (String[])dImports;
             for (int i = 0; i < di.length ; i++) {
                 assertTrue(exist(di[i], actualImportsArray, true));
             }

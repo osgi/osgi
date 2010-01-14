@@ -51,7 +51,7 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleVersion004() throws Exception {
         final Map<String, Object> options = createOptions(VERSION3, "/tw4");
-        this.b = super.installWar(options, "tw4.war", false);
+        this.b = super.installWar(options, "tw4.war", true);
         super.generalHeadersTest(options, "tw4.war", true, this.b);
     }
 

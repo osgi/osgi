@@ -207,8 +207,8 @@ public class ServletContextRegistrationTest extends
 		validator.validate();
 
 		if (!start) {
-			assertEquals("Bundle status should be Resolved but not Active",
-					Bundle.RESOLVED, bundle.getState());
+			assertTrue("Bundle status should be Resolved or Installed",
+					Bundle.RESOLVED == bundle.getState() || Bundle.INSTALLED == bundle.getState());
 			if (cp != null) {
 				assertFalse(
 						"Bundle not started yet - should not be able to access "

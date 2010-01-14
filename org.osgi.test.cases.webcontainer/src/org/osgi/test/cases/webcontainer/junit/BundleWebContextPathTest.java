@@ -68,7 +68,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath006() throws Exception {
-        final Map<String, Object> options = createOptions(WEBCONTEXTPATH1);
+        final Map<String, Object> options = createOptions(null);
         this.b = super.installWar(options, "wmtw1.war", false);
         super.generalHeadersTest(options, "wmtw1.war", false, this.b);
     }
@@ -87,6 +87,15 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      */
     public void testWebContextPath010() throws Exception {
         final Map<String, Object> options = createOptions(WEBCONTEXTPATH5);
+        this.b = super.installWar(options, "wmtw5.war", false);
+        super.generalHeadersTest(options, "wmtw5.war", false, this.b);
+    }
+    
+    /*
+     * verify Web-ContextPath doesn't start w/ forward slash
+     */
+    public void testWebContextPath011() throws Exception {
+        final Map<String, Object> options = createOptions(WEBCONTEXTPATH5.substring(1));
         this.b = super.installWar(options, "wmtw5.war", false);
         super.generalHeadersTest(options, "wmtw5.war", false, this.b);
     }
@@ -113,28 +122,26 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      * verify Web-ContextPath has to be unique
      */
     public void testWebContextPathError001() throws Exception {
-        Map<String, Object> options = createOptions(WEBCONTEXTPATH3);
-        this.b = super.installWar(options, "tw3.war", true);
-        super.generalHeadersTest(options, "tw3.war", true, this.b);
+        Map<String, Object> options = createOptions(WEBCONTEXTPATH4);
+        this.b = super.installWar(options, "tw1.war", true);
+        super.generalHeadersTest(options, "tw1.war", true, this.b);
 
         // install the war file, reuse the same options as tw1
-        log("attempt to install war file: tw3.war at context path /tw3");
+        log("attempt to install war file: tw4.war at context path " + WEBCONTEXTPATH4);
         Bundle b2 = null;
-        options = createOptions(WEBCONTEXTPATH3);
-        try {
-            b2 = installBundle(super.getWarURL("tw3.war", options), false);
-            fail("bundle install should fail as "
-                    + WEB_CONTEXT_PATH + "is not unique: "
-                    + WEB_CONTEXT_PATH + " = " + WEBCONTEXTPATH3);
-        } catch (BundleException e) {
-            // expected
-        }
-        assertNull("Bundle b2 should be null as install failed", b2);
+        options = createOptions(WEBCONTEXTPATH4);
 
+        b2 = installBundle(super.getWarURL("tw4.war", options), true);
+        // should only able to access TW1 home page, as web extender should emit a FAILED event 
+        // when web context path is not unique for TW4
+        String response = super.getResponse(WEBCONTEXTPATH4);
+        super.checkTW1HomeResponse(response);
+        uninstallBundle(b2);
+        
         options = createOptions(null);
         try {
-            b2 = super.installWar(options, "tw3.war", true);
-            super.generalHeadersTest(options, "tw3.war", true, b2);       
+            b2 = super.installWar(options, "tw4.war", true);
+            super.generalHeadersTest(options, "tw4.war", true, b2);       
         } finally {
             if (b2 != null) {
                 uninstallBundle(b2);
@@ -161,15 +168,15 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
             super.generalHeadersTest(options, "tw5.war", false, bundles[1]);
             
             options = createOptions(LONGWEBCONTEXTPATH);
-            bundles[2] = super.installWar(options, "tw1.war", false);
-            super.generalHeadersTest(options, "tw1.war", false, bundles[2]);
+            bundles[2] = super.installWar(options, "wmtw1.war", false);
+            super.generalHeadersTest(options, "wmtw1.war", false, bundles[2]);
             
             options = createOptions(null);
-            bundles[3] = super.installWar(options, "tw4.war", false);
-            super.generalHeadersTest(options, "tw4.war", false, bundles[3]);
+            bundles[3] = super.installWar(options, "wmtw4.war", false);
+            super.generalHeadersTest(options, "wmtw4.war", false, bundles[3]);
             
-            bundles[4] = super.installWar(options, "tw5.war", true);
-            super.generalHeadersTest(options, "tw5.war", true, bundles[4]);
+            bundles[4] = super.installWar(options, "wmtw5.war", true);
+            super.generalHeadersTest(options, "wmtw5.war", true, bundles[4]);
         } finally {
             for (int i = 0; i < bundles.length; i++) {
                 if (bundles[i] != null) {

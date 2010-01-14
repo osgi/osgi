@@ -96,6 +96,15 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
         this.b = super.installWar(options, "wmtw5.war", false);
         generalHeadersTest(options, "wmtw5.war", false, this.b);
     }
+    
+    /*
+     * verify null bundle-manifestVersion
+     */
+    public void testBundleManifestVersion011() throws Exception {
+        final Map<String, Object> options = createOptions(null, "/tw5");
+        this.b = super.installWar(options, "wmtw5.war", false);
+        generalHeadersTest(options, "wmtw5.war", false, this.b);
+    }
 
     /*
      * verify invalid Bundle-ManifestVersion in deployOptions
@@ -106,7 +115,7 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
         // install the war file
         log("install war file: tw1.war at context path /tw1");
         try {
-            this.b = installBundle(super.getWarURL("tw1.war", options), false);
+            this.b = installBundle(super.getWarURL("tw1.war", options), true);
             fail("bundle install should fail: " + Constants.BUNDLE_VERSION
                     + " = " + MANIFESTVERSION2);
         } catch (BundleException be) {

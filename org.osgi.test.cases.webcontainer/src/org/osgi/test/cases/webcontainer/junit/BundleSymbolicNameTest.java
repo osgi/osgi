@@ -150,7 +150,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
             // test able to access /tw3
             try {
                 String response = super.getResponse("/tw4/");
-                super.checkTW3HomeResponse(response);
+                super.checkTW4HomeResponse(response);
             } catch (Exception e) {
                 fail("should not be getting an exception here " + e.getMessage());
             }
@@ -181,71 +181,18 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
             bundles[1] = super.installWar(options, "tw5.war", true);
             super.generalHeadersTest(options, "tw5.war", true, bundles[1]);
             
-            options = createOptions(null, null, "/tw1");
-            bundles[2] = super.installWar(options, "tw1.war", true);
-            super.generalHeadersTest(options, "tw1.war", true, bundles[2]);
-
-            options = createOptions(null, null, "/tw1");
-            bundles[3] = super.installWar(options, "tw4.war", true);
-            super.generalHeadersTest(options, "tw4.war", true, bundles[3]);
-            
-            
-            options = createOptions(null, null, "/tw1");
-            bundles[4] = super.installWar(options, "tw5.war", true);
-            super.generalHeadersTest(options, "tw5.war", true, bundles[4]);
-        } finally {
-            for (int i = 0; i < bundles.length; i++) {
-                if (bundles[i] != null) {
-                    uninstallBundle(bundles[i]);
-                }
-            }
-        }
-    }
-    
-    /*
-     * verify SymbolicName has to be unique with 9 bundles
-     */
-    public void testMultipleBundleSymbolicName002() throws Exception {
-        
-        Map<String, Object> options = createOptions(SYMBOLICNAME1, null, "/tw1");
-        this.b = super.installWar(options, "tw1.war", true);
-        super.generalHeadersTest(options, "tw1.war", true, this.b);
-        
-        Bundle[] bundles = new Bundle[8];
-        
-        try {
-            options = createOptions(SYMBOLICNAME4, null, "/tw4");
-            bundles[0] = super.installWar(options, "tw4.war", true);
-            super.generalHeadersTest(options, "tw4.war", true, bundles[0]);
-            
-            options = createOptions(SYMBOLICNAME5, null, "/tw5");
-            bundles[1] = super.installWar(options, "tw5.war", true);
-            super.generalHeadersTest(options, "tw5.war", true, bundles[1]);
-            
-            options = createOptions(null, null, "/tw1");
-            bundles[2] = super.installWar(options, "tw1.war", true);
-            super.generalHeadersTest(options, "tw1.war", true, bundles[2]);
-            
-            options = createOptions(null, null, "/tw4");
-            bundles[3] = super.installWar(options, "tw4.war", true);
-            super.generalHeadersTest(options, "tw4.war", true, bundles[3]);
-            
-            
-            options = createOptions(null, null, "/tw5");
-            bundles[4] = super.installWar(options, "tw5.war", true);
-            super.generalHeadersTest(options, "tw5.war", true, bundles[4]);
-            
             options = createOptions(null, null, "/wmtw1");
-            bundles[5] = super.installWar(options, "wmtw1.war", true);
-            super.generalHeadersTest(options, "wmtw1.war", true, bundles[5]);
-            
+            bundles[2] = super.installWar(options, "wmtw1.war", true);
+            super.generalHeadersTest(options, "wmtw1.war", true, bundles[2]);
+
             options = createOptions(null, null, "/wmtw4");
-            bundles[6] = super.installWar(options, "wmtw4.war", true);
-            super.generalHeadersTest(options, "wmtw4.war", true, bundles[6]);
+            bundles[3] = super.installWar(options, "wmtw4.war", true);
+            super.generalHeadersTest(options, "wmtw4.war", true, bundles[3]);
+            
             
             options = createOptions(null, null, "/wmtw5");
-            bundles[7] = super.installWar(options, "wmtw5.war", true);
-            super.generalHeadersTest(options, "wmtw5.war", true, bundles[7]);
+            bundles[4] = super.installWar(options, "wmtw5.war", true);
+            super.generalHeadersTest(options, "wmtw5.war", true, bundles[4]);
         } finally {
             for (int i = 0; i < bundles.length; i++) {
                 if (bundles[i] != null) {

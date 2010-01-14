@@ -49,6 +49,7 @@ public abstract class ManifestHeadersTestBundleControl extends
     protected static final String[] IMPORTS5 = {"org.osgi.service.log", "javax.servlet; version=2.4", "javax.servlet.http; version=2.4"};
     protected static final String[] IMPORTS9 = {"javax.servlet; version=2.6", "javax.servlet.http; version=2.6"};
     protected static final String[] IMPORTS10 = {"org.osgi.service.log;version=2.0"};
+
     
     protected static final String MANIFESTVERSION1 = "2";
     protected static final String MANIFESTVERSION2 = "4";
@@ -72,9 +73,9 @@ public abstract class ManifestHeadersTestBundleControl extends
     protected static final String WEBCONTEXTPATH3 = "/ct-testwar3";
     protected static final String WEBCONTEXTPATH4 = "/ct-testwar4";
     protected static final String WEBCONTEXTPATH5 = "/ct-testwar5";
-    protected static final String LONGWEBCONTEXTPATH = "/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxy";
-    protected static final String LONGWEBCONTEXTPATH2 = "/abcdefghijk/lmnopqrstuvwxyzabcdefgh/ijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrs";
-    protected static final String LONGWEBCONTEXTPATH3 = "/abcde/fghijklmnopqrstuvwxyzabcdefghijk/lmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghi/12345678901233543523423424242342342";
+    protected static final String LONGWEBCONTEXTPATH = "/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijkl";
+    protected static final String LONGWEBCONTEXTPATH2 = "/abcdefghijk/lmnopqrstuvwxyzabcdefgh/ijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghi";
+    protected static final String LONGWEBCONTEXTPATH3 = "/abcde/fghijklmnopqrstuvwxyzabcdefghijk/lmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghi/1234567890123354352342342";
 
     protected static final String JSPEXTRACTLOAC1 = "resources/tw1";
     protected static final String JSPEXTRACTLOAC2 = "resources/tw1/jspextract";
@@ -126,19 +127,22 @@ public abstract class ManifestHeadersTestBundleControl extends
 
         if (!start) {
             // test unable to access pathes yet as it is not started
-            assertEquals("Bundle status should be Resolved but not Active", b
-                    .getState(), Bundle.RESOLVED);
+            assertTrue("Bundle status should be Installed or Resolved but not Active", Bundle.RESOLVED == bundle.getState() 
+            		||  Bundle.INSTALLED == bundle.getState());
             assertFalse(
                     "Bundle not started yet - should not be able to access "
                             + cp, super.ableAccessPath(cp));
             bundle.start();
+            // sleep for a sec to allow the web extender to take actions
+            Thread.sleep(1000);
         }
+
+        assertEquals("Bundle status should be Active", Bundle.ACTIVE, bundle.getState());
+
         
         // rough test able to access the app
         assertTrue("should be able to access " + cp, super.ableAccessPath(cp));
 
-        assertEquals("Bundle status should be Active", bundle.getState(),
-                Bundle.ACTIVE);
         try {
             // validate able to get Response of the home page and some dynamic page 
             // correctly for the installed web app bundle
@@ -149,8 +153,8 @@ public abstract class ManifestHeadersTestBundleControl extends
 
         bundle.stop();
         // test unable to access pathes yet as it is not started
-        assertEquals("Bundle status should be Resolved but not Active", bundle
-                .getState(), Bundle.RESOLVED);
+        assertTrue("Bundle status should be Installed or Resolved but not Active", Bundle.RESOLVED == bundle.getState() 
+        		||  Bundle.INSTALLED == bundle.getState());
         assertFalse("Bundle not started yet - should not be able to access "
                 + cp, super.ableAccessPath(cp));
 
@@ -166,8 +170,8 @@ public abstract class ManifestHeadersTestBundleControl extends
         String cp = (String) b.getHeaders().get(WEB_CONTEXT_PATH);
         final String request = cp + "/ClasspathTestServlet";
         String response = super.getResponse(request);
-        assertEquals("checking response content", response,"<html><head><title>ClasspathTestServlet</title></head><body>" 
-                + ConstantsUtil.ABLEGETLOG + "<br/>" +  ConstantsUtil.ABLEGETSIMPLEHELLO + "<br/></body></html>");
+        assertEquals("checking response content", "<html><head><title>ClasspathTestServlet</title></head><body>" 
+                + ConstantsUtil.ABLEGETLOG + "<br/>" +  ConstantsUtil.ABLEGETSIMPLEHELLO + "<br/></body></html>", response);
     }
 
 }

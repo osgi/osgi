@@ -56,6 +56,7 @@ public abstract class WebContainerTestBundleControl extends
     protected static final String WARSCHEMA = "webbundle:";
     protected static final String WEB_CONTEXT_PATH = Validator.WEB_CONTEXT_PATH;
     protected static final String WEB_JSP_EXTRACT_LOCATION = Validator.WEB_JSP_EXTRACT_LOCATION;
+    protected static final String[] IMPORTS_OSGI_FRAMEWORK = {"org.osgi.framework", "org.osgi.service.log"};
 
     public void setUp() throws Exception {
         // TODO if war file already exists, let's remove it first.

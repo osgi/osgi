@@ -18,6 +18,7 @@ package org.osgi.test.cases.webcontainer.junit;
 import java.util.Enumeration;
 import java.util.jar.Manifest;
 
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
@@ -34,6 +35,7 @@ import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
  */
 public class AccessBundleContextTest extends WebContainerTestBundleControl {
     LogReaderService logReaderService;
+    private static final String TW5_SYMBOLIC_NAME = "tw5-accessbundle-test";
 
     @Override
     public void setUp() throws Exception {
@@ -42,6 +44,8 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
 
         // install + start the war file
         log("install war file: tw5.war at context path " + this.warContextPath);
+        this.options.put(Constants.IMPORT_PACKAGE, IMPORTS_OSGI_FRAMEWORK);
+        this.options.put(Constants.BUNDLE_SYMBOLICNAME, TW5_SYMBOLIC_NAME);
         String loc = super.getWarURL("tw5.war", this.options);
         if (this.debug) {
             log("bundleName to be passed into installBundle is " + loc);	
@@ -91,7 +95,7 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
             assertEquals(ConstantsUtil.TESTLOGMSG, logentry.getMessage());
-            assertEquals(this.b.getBundleContext(), logentry.getBundle());
+            assertEquals(TW5_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
             assertEquals(LogService.LOG_ERROR, logentry.getLevel());
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
@@ -116,7 +120,7 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
             assertEquals(ConstantsUtil.TESTLOGMSG2, logentry.getMessage());
-            assertEquals(this.b.getBundleContext(), logentry.getBundle());
+            assertEquals(TW5_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
             assertEquals(LogService.LOG_WARNING, logentry.getLevel());
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
@@ -142,7 +146,7 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
             assertEquals(ConstantsUtil.TESTLOGMSG3, logentry.getMessage());
-            assertEquals(this.b.getBundleContext(), logentry.getBundle());
+            assertEquals(TW5_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
             assertEquals(LogService.LOG_INFO, logentry.getLevel());
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
@@ -168,11 +172,11 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
             LogEntry logentry = (LogEntry) e.nextElement();
             log("get log message: " + logentry.getMessage());
             assertEquals(ConstantsUtil.TESTLOGMSG4, logentry.getMessage());
-            assertEquals(this.b.getBundleContext(), logentry.getBundle());
+            assertEquals(TW5_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
             assertEquals(LogService.LOG_DEBUG, logentry.getLevel());
             assertTrue(logentry.getTime() >= beforeLog);
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
-            assertEquals(logentry.getException(), new RuntimeException());
+            assertEquals(logentry.getException().toString(), new RuntimeException().toString());
             break;
         }
     }
