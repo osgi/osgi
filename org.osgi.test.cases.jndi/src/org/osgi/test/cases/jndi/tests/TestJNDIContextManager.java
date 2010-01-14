@@ -179,6 +179,34 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		}
 	}
 	
+	public void testLookupWithJndiPropertiesFile() throws Exception {
+		// install the required bundles
+		Bundle factoryBundle = installBundle("initialContextFactoryWithProperties.jar");
+		// Grab the jNDIContextManager service
+		JNDIContextManager ctxManager = (JNDIContextManager) getService (JNDIContextManager.class);
+		int invokeCountBefore = CTContext.getInvokeCount();
+		// Grab the contxext
+		Context ctx = ctxManager.newInitialContext();
+		try {
+			// Verify that we actually received the context
+			assertNotNull("The context should not be null", ctx);
+			ctx.bind("testObject", new Object());
+			int invokeCountAfter = CTContext.getInvokeCount();
+			if (!(invokeCountAfter > invokeCountBefore)) {
+				ctx.close();
+				fail("The correct Context object was not found");
+			}
+			Object testObject = ctx.lookup("testObject");
+			assertNotNull(testObject);
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			uninstallBundle(factoryBundle);
+			ungetService(ctxManager);
+		}
+	}
+	
 	public void testLookupWithNoMatchingContext() throws Exception {
 		// Grab the JNDIContextManager service
 		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
@@ -193,7 +221,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			assertNotNull("The context should not be null", ctx);
 			ctx.lookup("testObject");
 		} catch (javax.naming.NoInitialContextException ex) {
-			pass("javax.naming.NoInitialContextException caugh in testLookupWithNoMatchingContext: SUCCESS");
+			pass("javax.naming.NoInitialContextException caught in testLookupWithNoMatchingContext: SUCCESS");
 			return;
 		} finally {
 			// If we don't get the exception, then this test fails

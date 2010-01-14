@@ -150,7 +150,7 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 	
 	public void testInitialContextFactoryFromPropertiesFile() throws Exception {
 		// Install bundle containing the initialContextFactory we are configuring via the jndi.properties file
-		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
+		Bundle factoryBundle = installBundle("initialContextFactoryWithProperties.jar");
 		int invokeCountBefore = CTContext.getInvokeCount();
 		InitialContext ctx = new InitialContext();
 		try {
