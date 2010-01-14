@@ -22,7 +22,6 @@ import java.util.Hashtable;
 import javax.naming.Context;
 import javax.naming.Name;
 import javax.naming.RefAddr;
-import javax.naming.Referenceable;
 
 /**
  * @version $Revision$ $Date$

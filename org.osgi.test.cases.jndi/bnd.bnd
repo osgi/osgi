@@ -16,13 +16,13 @@ Include-Resource 					= \
 	initialContextFactory1.jar , \
 	initialContextFactory2.jar , \
 	initialContextFactoryBuilder1.jar , \
+	initialContextFactoryWithProperties.jar , \
 	objectFactory1.jar , \
 	objectFactory2.jar , \
 	objectFactoryBuilder1.jar , \
 	service1.jar , \
 	service2.jar , \
-	urlContext1.jar , \
-	jndi.properties=resources/jndi.properties
+	urlContext1.jar
 	
 Test-Cases							= ${testcases}
 

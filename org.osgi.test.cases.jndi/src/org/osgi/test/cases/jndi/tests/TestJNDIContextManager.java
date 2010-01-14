@@ -20,7 +20,6 @@ package org.osgi.test.cases.jndi.tests;
 import java.util.Hashtable;
 
 import javax.naming.Context;
-import javax.naming.NoInitialContextException;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.jndi.JNDIContextManager;

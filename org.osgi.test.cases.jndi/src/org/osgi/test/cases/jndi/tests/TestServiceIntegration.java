@@ -72,7 +72,7 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 			// Check that the services we were expecting were found
 			ServiceReference[] expectedServices = serviceBundle.getRegisteredServices();
 			for (int i=0; i < expectedServices.length; i++) {
-				ExampleService service = (ExampleService) serviceListContext.lookup("(service.id="+ ((Long)expectedServices[i].getProperty("service.id")).toString() + ")");
+				ExampleService service = (ExampleService) serviceListContext.lookup(((Long)expectedServices[i].getProperty("service.id")).toString());
 				// We should find a corresponding service for each registered service from the bundle
 				assertNotNull("Could not find one of the expected services in the returned context", service);
 			}
