@@ -52,7 +52,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 	private HashMap<String, Framework> frameworks = new HashMap<String, Framework>();
 	
 	private FrameworkFactory frameworkFactory;
-	private Map<String, Object> configuration;
+	private String storageRoot;
 
 	/**
 	 * @see junit.framework.TestCase#setUp()
@@ -72,9 +72,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 		if (!rootFile.isDirectory())
 			assertTrue("Could not create root directory: " + rootFile.getPath(), rootFile.mkdirs());
 		
-		configuration = getConfiguration();
-		
-		configuration.put(Constants.FRAMEWORK_STORAGE, rootFile.getAbsolutePath());		
+		storageRoot = rootFile.getAbsolutePath();
 	}
 
 
@@ -101,6 +99,8 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 	public synchronized Framework getFramework(String name) {
 		Framework f = frameworks.get(name);
 		if ( f == null ) {
+			HashMap configuration = new HashMap(getConfiguration());		
+			configuration.put(Constants.FRAMEWORK_STORAGE, storageRoot + File.separator + name);		
 			f = createFramework(configuration);
 			initFramework(f);
 			startFramework(f);
