@@ -34,15 +34,4 @@
 		<servlet-name>ClasspathTestServlet</servlet-name>
 		<url-pattern>/ClasspathTestServlet</url-pattern>
 	</servlet-mapping>
-	<servlet>
-		<description></description>
-		<display-name>JNDITestServlet</display-name>
-		<servlet-name>JNDITestServlet</servlet-name>
-		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw5.servlet.JNDITestServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>JNDITestServlet</servlet-name>
-		<url-pattern>/JNDITestServlet</url-pattern>
-	</servlet-mapping>
 </web-app>
