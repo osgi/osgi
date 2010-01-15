@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.osgi.test.cases.webcontainer.wmtw6
+Bundle-Name: org.osgi.test.cases.webcontainer.wmtw6
+Bundle-Description: OSGi Web Container RFC 66 Optional Compliance Test test war 6 with manifest somewhat pre-specified
+Web-ContextPath: /wmtw6
+
