@@ -3,14 +3,14 @@ javac.target 			= 1.5
 
 Bundle-Version				= 4.2.0.${project.build}
 Bundle-Activator			= ${p}.start.Activator
-Bundle-Description			= OSGi JPA Extender Reference Implementation by IBM Corporation.
+Bundle-Description			= OSGi JPA - Copyright Oracle Corporation
 
 Private-Package 			= ${p}.*
 
 Export-Package = \
-    org.osgi.service.jpa
+        org.osgi.service.jpa
 
--buildpath 					= ee.j2se; version=1.5, \
-	org.osgi.service.jpa;		version=project, \
-	osgi.core;					version=4.2, \
-	javax.persistence;		version=2.0
+-buildpath                              = ee.j2se; version=1.5, \
+        org.osgi.service.jpa;           version=project, \
+        osgi.core;                      version=4.2, \
+        javax.persistence;              version=2.0
