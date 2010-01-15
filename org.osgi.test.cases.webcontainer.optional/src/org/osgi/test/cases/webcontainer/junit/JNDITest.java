@@ -66,16 +66,31 @@ public class JNDITest extends WebContainerTestBundleControl {
 
     // simple JNDI lookup test with the need to have rfc 66 to 
     // make sure things works
-    public void testLookupLogService() throws Exception {
+    public void testLookupLogService1() throws Exception {
         ClassLoader cl = getClass().getClassLoader();
         assertTrue(
                 "Current ClassLoader should be implementing BundleReference",
                 cl instanceof BundleReference);
         Thread.currentThread().setContextClassLoader(cl);
         Context context = cm.newInitialContext();
-        //InitialContext context = new InitialContext();
         LogService logService = (LogService) context
-                .lookup("osgi:services/org.osgi.service.log");
+                .lookup("osgi:service/org.osgi.service.log.LogService");
+        assertNotNull(logService);
+        logService.log(LogService.LOG_INFO,
+                "able to obtain logService via JNDI lookup");
+    }
+    
+    // simple JNDI lookup test with the need to have rfc 66 to 
+    // make sure things works
+    public void testLookupLogService2() throws Exception {
+        ClassLoader cl = getClass().getClassLoader();
+        assertTrue(
+                "Current ClassLoader should be implementing BundleReference",
+                cl instanceof BundleReference);
+        Thread.currentThread().setContextClassLoader(cl);
+        InitialContext context = new InitialContext();
+        LogService logService = (LogService) context
+                .lookup("osgi:service/org.osgi.service.log.LogService");
         assertNotNull(logService);
         logService.log(LogService.LOG_INFO,
                 "able to obtain logService via JNDI lookup");
