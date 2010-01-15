@@ -1,7 +1,7 @@
 javac.source 			= 1.5
 javac.target 			= 1.5
 
-Bundle-Description: OSGi Web Container RFC 66 Optional Annotation Support Compliance Test
+Bundle-Description: OSGi Web Container RFC 66 Optional Annotation, JNDI Support Compliance Test
 Bundle-Version: 4.2.0.${project.build}
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
