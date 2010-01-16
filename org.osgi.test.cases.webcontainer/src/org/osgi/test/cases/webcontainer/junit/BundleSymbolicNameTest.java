@@ -22,8 +22,8 @@ import java.util.jar.Manifest;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
-import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
+import org.osgi.test.cases.webcontainer.util.ManifestHeadersTestBundleControl;
+import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
 
 /**
  * @version $Rev$ $Date$

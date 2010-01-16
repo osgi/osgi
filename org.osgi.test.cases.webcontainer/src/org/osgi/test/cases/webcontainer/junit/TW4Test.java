@@ -22,10 +22,10 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.jar.Manifest;
 
-import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
+import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
-import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
+import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
 
 /**
  * @version $Rev$ $Date$

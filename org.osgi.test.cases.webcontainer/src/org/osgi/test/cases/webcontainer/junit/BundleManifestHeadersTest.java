@@ -20,7 +20,7 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
-import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
+import org.osgi.test.cases.webcontainer.util.ManifestHeadersTestBundleControl;
 
 /**
  * @version $Rev$ $Date$

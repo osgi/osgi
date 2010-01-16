@@ -25,8 +25,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
-import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
+import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
+import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
 
 /**
  * @version $Rev$ $Date$

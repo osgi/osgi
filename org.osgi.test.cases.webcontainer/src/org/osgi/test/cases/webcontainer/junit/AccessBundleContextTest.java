@@ -23,9 +23,9 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
-import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
+import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
-import org.osgi.test.cases.webcontainer.validate.BundleManifestValidator;
+import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
 
 /**
  * @version $Rev$ $Date$
