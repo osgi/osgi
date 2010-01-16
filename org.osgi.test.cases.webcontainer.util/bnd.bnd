@@ -1,0 +1,25 @@
+javac.source 			= 1.5
+javac.target 			= 1.5
+
+Bundle-Description: OSGi Web Container RFC 66 Compliance Test
+Bundle-Version: 4.2.0.${project.build}
+Bundle-RequiredExecutionEnvironment = J2SE-1.5
+
+Private-Package						= org.osgi.test.support.*, \
+	${p}, \
+	${p}.validate.*
+
+Import-Package = \
+ 	*
+ 	
+Export-Package =\
+	${p};version=1.0, \
+	${p}.validate;version=1.0
+	
+-buildpath							= ee.j2se; version=1.5, \
+	osgi.core;									version=4.2, \
+	osgi.cmpn; 									version=4.2, \
+	org.osgi.test.support;						version=project, \
+	${junit}
+
+
