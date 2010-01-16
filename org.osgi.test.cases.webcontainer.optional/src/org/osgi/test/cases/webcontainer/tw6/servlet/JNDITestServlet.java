@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.webcontainer.tw5.servlet;
+package org.osgi.test.cases.webcontainer.tw6.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -54,7 +54,7 @@ public class JNDITestServlet extends HttpServlet {
         LogService logService = null;
         try {
             context = new InitialContext();
-            logService = (LogService)context.lookup("osgi:services/org.osgi.service.log");
+            logService = (LogService)context.lookup("osgi:service/org.osgi.service.log.LogService");
         } catch (NamingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

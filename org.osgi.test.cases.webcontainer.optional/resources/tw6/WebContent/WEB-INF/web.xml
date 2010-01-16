@@ -14,28 +14,6 @@
 	</welcome-file-list>
 	<servlet>
 		<description></description>
-		<display-name>BundleContextTestServlet</display-name>
-		<servlet-name>BundleContextTestServlet</servlet-name>
-		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw5.servlet.BundleContextTestServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>BundleContextTestServlet</servlet-name>
-		<url-pattern>/BundleContextTestServlet</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<description></description>
-		<display-name>ClasspathTestServlet</display-name>
-		<servlet-name>ClasspathTestServlet</servlet-name>
-		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw5.servlet.ClasspathTestServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>ClasspathTestServlet</servlet-name>
-		<url-pattern>/ClasspathTestServlet</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<description></description>
 		<display-name>JNDITestServlet</display-name>
 		<servlet-name>JNDITestServlet</servlet-name>
 		<servlet-class>

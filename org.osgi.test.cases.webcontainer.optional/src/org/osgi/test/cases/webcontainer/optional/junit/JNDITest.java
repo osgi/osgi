@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.webcontainer.junit;
+package org.osgi.test.cases.webcontainer.optional.junit;
 
 import java.util.Enumeration;
 
@@ -28,7 +28,7 @@ import org.osgi.service.jndi.JNDIContextManager;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
-import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
+import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 
 /**
@@ -42,11 +42,11 @@ public class JNDITest extends WebContainerTestBundleControl {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        super.prepare("/tw5");
+        super.prepare("/wmtw6");
 
         // install + start the war file
         log("install war file: tw5.war at context path " + this.warContextPath);
-        String loc = super.getWarURL("tw5.war", this.options);
+        String loc = super.getWarURL("wmtw6.war", this.options);
         if (this.debug) {
             log("bundleName to be passed into installBundle is " + loc);	
         }

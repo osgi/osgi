@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.webcontainer.annotation.validate.junit;
+package org.osgi.test.cases.webcontainer.optional.annotation.validate.junit;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.test.cases.webcontainer.ManifestHeadersTestBundleControl;
+import org.osgi.test.cases.webcontainer.util.ManifestHeadersTestBundleControl;
 
 /**
  * @version $Rev$ $Date$

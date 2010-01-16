@@ -7,73 +7,71 @@ Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
 Private-Package						= org.osgi.test.support.*, \
 	${p}.junit.*, \
-	${p}.validate.junit.*, \
-
+	${p}.annotation.junit.*, \
+	${p}.annotation.validate.junit.*
+	
 Include-Resource					= \
 	${target}/tw2.war, \
 	${target}/tw3.war, \
 	${target}/wmtw2.war, \
-	${target}/wmtw3.war
+	${target}/wmtw3.war, \
+	${target}/wmtw6.war
 	
 Import-Package = \
 	javax.servlet; version=2.5, \
 	javax.servlet.http; version=2.5, \
 	javax.annotation; version=1.0, \
-	org.osgi.test.cases.webcontainer; version=latest, \
-	org.osgi.test.cases.webcontainer.util; version=latest, \
-	org.osgi.test.cases.webcontainer.validate; version=latest, \
+	org.osgi.test.cases.webcontainer.util; version=1.0, \
+	org.osgi.test.cases.webcontainer.util.validate; version=1.0, \
  	*
  	
 Export-Package =\
-	${p};version=1.0, \
-	${p}.util;version=1.0
+	${p};version=1.0
 	
 -buildpath							= ee.j2se; version=1.5, \
         org.apache.geronimo.specs.geronimo-servlet_2.5_spec;			version=latest, \
         org.apache.geronimo.specs.geronimo-annotation_1.0_spec; version=latest, \
 	osgi.core;									version=4.2, \
 	osgi.enterprise;                            version=4.2, \
-	osgi.cmpn;									version=4.2, \
+	osgi.cmpn; 									version=4.2, \
 	org.osgi.test.support;						version=project, \
 	${junit}, \
-	org.apache.commons-logging;version=1.0.4, \
-    org.osgi.service.jndi;					version=project, \
-    org.osgi.test.cases.webcontainer; 		version = project
+    org.osgi.test.cases.webcontainer.util; 		version = project
 
 # Comments out -runbundles. For some reason bnd is upset by -runbundles refering to
 # non-existent repo entries during bndprepare ant task. I asked Peter to make a change to bnd.
-XX-runbundles						= \
-	org.osgi.impl.service.log; 			version=latest, \
+-runbundles						= \
 	org.eclipse.equinox.event; 			version=latest, \
 	osgi.cmpn; 							version=latest, \
-        com.springsource.javax.activation; version=1.1.0, \
-        com.springsource.javax.annotation; version=1.0.0, \
-        com.springsource.javax.ejb; version=3.0.0, \
-        com.springsource.javax.el; version=1.0.0, \
-        org.apache.geronimo.specs.geronimo-javamail_1.4_spec; version=latest, \
-        com.springsource.javax.persistence; version=1.0.0, \
-        com.springsource.javax.servlet; version=2.5.0, \
-        com.springsource.javax.servlet.jsp; version=2.1.0, \
-        com.springsource.javax.transaction; version=1.1.0, \
-        com.springsource.javax.xml.bind; version=2.1.7, \
-        com.springsource.javax.xml.rpc; version=1.1.0, \
-        com.springsource.javax.xml.soap; version=1.3.0, \
-        com.springsource.javax.xml.stream; version=1.0.1, \
-        com.springsource.javax.xml.ws; version=2.1.1, \
-        com.springsource.org.aopalliance; version=1.0.0, \
-        slf4j.api; version=1.5.10, \
-        slf4j.nop; version=1.5.10, \
-        com.springsource.util.common; version=2.0.0, \
-        com.springsource.util.io; version=2.0.0, \
-        com.springsource.util.math; version=2.0.0, \
-        com.springsource.util.osgi; version=2.0.0, \
-        com.springsource.util.parser.manifest; version=2.0.0, \
-        org.springframework.aop; version=2.5.6, \
-        org.springframework.beans; version=2.5.6, \
-        org.springframework.context; version=2.5.6, \
-        org.springframework.core; version=2.5.6, \
-        org.springframework.osgi.core; version=1.2.0, \
-        org.springframework.osgi.io; version=1.2.0, \
+	org.osgi.impl.service.log; 			version=latest, \
+    com.springsource.javax.activation; version=1.1.0, \
+    com.springsource.javax.annotation; version=1.0.0, \
+    com.springsource.javax.ejb; version=3.0.0, \
+    com.springsource.javax.el; version=1.0.0, \
+    org.apache.geronimo.specs.geronimo-javamail_1.4_spec; version=latest, \
+    com.springsource.javax.persistence; version=1.0.0, \
+    com.springsource.javax.servlet; version=2.5.0, \
+    com.springsource.javax.servlet.jsp; version=2.1.0, \
+    com.springsource.javax.transaction; version=1.1.0, \
+    com.springsource.javax.xml.bind; version=2.1.7, \
+    com.springsource.javax.xml.rpc; version=1.1.0, \
+    com.springsource.javax.xml.soap; version=1.3.0, \
+    com.springsource.javax.xml.stream; version=1.0.1, \
+    com.springsource.javax.xml.ws; version=2.1.1, \
+    com.springsource.org.aopalliance; version=1.0.0, \
+    slf4j.api; version=1.5.10, \
+    slf4j.nop; version=1.5.10, \
+    com.springsource.util.common; version=2.0.0, \
+    com.springsource.util.io; version=2.0.0, \
+    com.springsource.util.math; version=2.0.0, \
+    com.springsource.util.osgi; version=2.0.0, \
+    com.springsource.util.parser.manifest; version=2.0.0, \
+    org.springframework.aop; version=2.5.6, \
+    org.springframework.beans; version=2.5.6, \
+    org.springframework.context; version=2.5.6, \
+    org.springframework.core; version=2.5.6, \
+    org.springframework.osgi.core; version=1.2.0, \
+    org.springframework.osgi.io; version=1.2.0, \
 	com.springsource.org.apache.catalina.ha.springsource; version=6.0.20, \
 	com.springsource.org.apache.catalina.springsource; version=6.0.20, \
 	com.springsource.org.apache.catalina.tribes.springsource; version=6.0.20, \
@@ -86,6 +84,7 @@ XX-runbundles						= \
 	com.springsource.osgi.webcontainer.core;version=1.0.0, \
 	com.springsource.osgi.webcontainer.extender;version=1.0.0, \
 	com.springsource.osgi.webcontainer.tomcat;version=1.0.0, \
+	org.osgi.test.cases.webcontainer.util; 		version = project, \
 	org.osgi.impl.service.jndi; version=project
 # TODO replace the above 40 springsource rfc 66 ri with one consolidated jar when it is avail
 # TODO add rfc142 impl bundle here if user wants to run some simple rfc 66 + rfc 142 tests

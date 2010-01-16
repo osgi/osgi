@@ -10,7 +10,7 @@
 		<echo>build test war files</echo>
 	</target>
 	
-	<target name="build-wmwar" depends="build-wmwar2, build-wmwar3">
+	<target name="build-wmwar" depends="build-wmwar2, build-wmwar3, build-wmwar6">
 		<echo>build test war files with pre-specified manifest</echo>
 	</target>
 	
@@ -57,6 +57,16 @@
 			<classes dir="${project.output}">
 				<include name="org/osgi/test/cases/webcontainer/tw3/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
+			</classes>
+		</war>
+	</target>
+	
+	<target name="build-wmwar6" depends="prewar">
+		<echo>Building wmtw3.war file</echo>
+		<war destfile="${target}/wmtw6.war" webxml="${project.dir}/resources/tw6/WebContent/WEB-INF/web.xml" manifest="${project.dir}/resources/tw6/WebContent/META-INF/MANIFEST.MF">
+			<fileset dir="${project.dir}/resources/tw6/WebContent/"/>
+			<classes dir="${project.output}">
+				<include name="org/osgi/test/cases/webcontainer/tw6/**"/>
 			</classes>
 		</war>
 	</target>

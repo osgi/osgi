@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.annotation.junit;
+package org.osgi.test.cases.webcontainer.optional.annotation.junit;
 
-import org.osgi.test.cases.webcontainer.WebContainerTestBundleControl;
+import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 
 /**
