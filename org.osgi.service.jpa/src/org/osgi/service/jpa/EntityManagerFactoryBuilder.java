@@ -56,7 +56,7 @@ public interface EntityManagerFactoryBuilder {
 	 * @param props Properties to be used, in addition to those in the persistence descriptor,
      *              for configuring the EntityManagerFactory for the persistence unit.
      *
-	 * @return An EntityManagerFactory for the persistence unit associated with this service.
+	 * @return An EntityManagerFactory for the persistence unit associated with this service. Must not be null.
 	 */
 	EntityManagerFactory createEntityManagerFactory(Map<String, Object> props);
 }
