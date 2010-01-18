@@ -234,9 +234,6 @@ public interface UserAdminMBean {
 	 * @return <code>true</code> if the role was added to the group
 	 * @throws IOException if the operation fails
 	 * 
-	 * TODO Hal, please check, I am not clear who is the receiver and who is the
-	 * parameter. The ordering seems very confusing, because here the rolename
-	 * seems the parameter but in all other calls it is the dest?
 	 */
 	boolean addMember(String groupname, String rolename) throws IOException;
 
@@ -355,8 +352,6 @@ public interface UserAdminMBean {
 	/**
 	 * Answer the list of implied roles for a user
 	 * 
-	 * TODO I do not know how this maps to User Admin?
-	 * 
 	 * @param username The name of the user that has the implied roles
 	 * @return The list of role names
 	 * @throws IOException if the operation fails
@@ -403,8 +398,6 @@ public interface UserAdminMBean {
 	 * 
 	 * The returned Composite Data is typed by {@link #ROLE_TYPE}.
 	 * 
-	 * TODO Is this also all users and groups?
-	 * 
 	 * @param name The name of the role to get the data from
 	 * @return the Role, see {@link #ROLE_TYPE}
 	 * @throws IOException if the operation fails
@@ -413,8 +406,6 @@ public interface UserAdminMBean {
 
 	/**
 	 * Answer the list of role names in the User Admin database
-	 * 
-	 * TODO Is this also all users and groups?
 	 * 
 	 * @return The list of role names
 	 * @throws IOException if the operation fails
