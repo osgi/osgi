@@ -23,17 +23,17 @@ package org.osgi.service.remoteserviceadmin;
  * is interested in Endpoint Descriptions.
  * 
  * This white board service can be used in many different scenarios. However,
- * the primary use case is to allow a remote manager to be informed of End Point
+ * the primary use case is to allow a remote manager to be informed of Endpoint
  * Descriptions available in the network and inform the network about available
- * End Point Descriptions.
+ * Endpoint Descriptions.
  * 
  * Both the network bundle and the manager bundle register an Endpoint Listener
- * service. The manager informs the network bundle about End Points that it
+ * service. The manager informs the network bundle about Endpoints that it
  * creates. The network bundles then uses a protocol like SLP to announce these
  * local end-points to the network.
  * 
  * If the network bundle discovers a new Endpoint through its discovery
- * protocol, then it sends an End Point Description to all the End Point
+ * protocol, then it sends an Endpoint Description to all the Endpoint
  * Listener services that are registered (except its own) that have specified an
  * interest in that endpoint.
  * 

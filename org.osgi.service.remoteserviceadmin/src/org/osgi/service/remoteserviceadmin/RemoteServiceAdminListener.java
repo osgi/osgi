@@ -36,7 +36,7 @@ package org.osgi.service.remoteserviceadmin;
 public interface RemoteServiceAdminListener {
 	/**
 	 * Receive notification of any export or import registrations and
-	 * unregistrations.
+	 * unregistrations as well as errors and warnings.
 	 * 
 	 * @param event The {@link RemoteServiceAdminEvent} object.
 	 */
