@@ -53,5 +53,5 @@ public interface CollectionMetadata extends NonNullMetadata {
 	 * 
 	 * @return A List of Metadata for the values of the collection.
 	 */
-	List<? extends Metadata> getValues();
+	List<Metadata> getValues();
 }

@@ -54,5 +54,5 @@ public interface MapMetadata extends NonNullMetadata {
 	 *         the map. The List is empty if no entries are specified for the
 	 *         map.
 	 */
-	List /* <MapEntry> */getEntries();
+	List<MapEntry> getEntries();
 }
