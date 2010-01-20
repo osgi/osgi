@@ -295,7 +295,7 @@ Include-Resource					= \
  	www/ServiceOne_dependson_import.jar=ServiceOne_dependson_import.jar, \
  	www/ServiceOne_compid_import.jar=ServiceOne_compid_import.jar, \
  	www/ServiceOne_filtered_import.jar=ServiceOne_filtered_import.jar, \
-        www/ServiceOne_ranked_import.jar=ServiceOne_ranked_import.jar, \
+ 	www/ServiceOne_ranked_import.jar=ServiceOne_ranked_import.jar, \
  	www/ServiceOne_multiple_import.jar=ServiceOne_multiple_import.jar, \
  	www/Service_concrete_import.jar=Service_concrete_import.jar, \
  	www/Service_auto_interface_import.jar=Service_auto_interface_import.jar, \
@@ -396,8 +396,14 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.apache.felix.configadmin;  version=latest, \
 	org.eclipse.equinox.event; version=latest, \
-	osgi.cmpn; version=latest, \
     org.springframework.osgi.blueprint.uber; version=latest
+    
+-runproperties = report=true, \
+	osgi.compatibility.bootdelegation=false, \
+	osgi.resolverMode=strict, \
+	osgi.support.multipleHosts=true
+    

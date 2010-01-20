@@ -39,12 +39,12 @@ Test-Cases							= ${testcases}
     ${junit}
 
 -runbundles							= \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.apache.felix.configadmin;  version=latest, \
 	org.eclipse.equinox.event; version=latest, \
-	osgi.cmpn; version=latest, \
  	org.osgi.test.cases.blueprint;  version=project, \
-        org.springframework.osgi.blueprint.uber; version=latest
+    org.springframework.osgi.blueprint.uber; version=latest
 
 -runproperties = report=true, \
 	osgi.compatibility.bootdelegation=false, \
