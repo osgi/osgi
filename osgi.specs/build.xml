@@ -14,9 +14,6 @@
 		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="../org.osgi.tools/${bin}" encoding="utf-8" packagenames="${javadoc}">
 			<sourcepath>
 				<dirset dir="${project.workspace}">
-
-<include name="jmx/src"/>
-<exclude name="org.osgi.jmx/src"/>
 					<include name="org.osgi.*/src" />
 					<include name="info.dmtree.*/src"/>
 				</dirset>
