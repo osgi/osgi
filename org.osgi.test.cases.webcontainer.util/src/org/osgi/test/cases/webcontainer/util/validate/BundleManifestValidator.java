@@ -80,7 +80,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         validateSymbolicName();
         validateBundleVersion();
         validateBundleManifestVersion();
-        //validateBundleClassPath();
+        validateBundleClassPath();
         validateImportPackage();
         validateWebContextPath();
         validateOthersPreserved();
