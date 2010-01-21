@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,8 +89,8 @@ public interface BlueprintContainer {
 	 * {@link ServiceMetadata}. The collection will include all Component
 	 * Metadata objects of the requested type, including components that are
 	 * declared inline.
-	 * @param <T> The return sub class of Component Metadata
 	 * 
+	 * @param <T> Type of Component Metadata.
 	 * @param type The super type or type of the requested Component Metadata
 	 *        objects.
 	 * @return An immutable collection of Component Metadata objects of the
