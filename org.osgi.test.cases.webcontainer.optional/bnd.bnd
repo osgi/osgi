@@ -36,7 +36,7 @@ Export-Package =\
 	osgi.cmpn; 									version=4.2, \
 	org.osgi.test.support;						version=project, \
 	${junit}, \
-    org.osgi.test.cases.webcontainer.util; 		version = project
+    org.osgi.test.cases.webcontainer; 		version = project
 
 # Comments out -runbundles. For some reason bnd is upset by -runbundles refering to
 # non-existent repo entries during bndprepare ant task. I asked Peter to make a change to bnd.
@@ -84,7 +84,6 @@ Export-Package =\
 	com.springsource.osgi.webcontainer.core;version=1.0.0, \
 	com.springsource.osgi.webcontainer.extender;version=1.0.0, \
 	com.springsource.osgi.webcontainer.tomcat;version=1.0.0, \
-	org.osgi.test.cases.webcontainer.util; 		version = project, \
 	org.osgi.impl.service.jndi; version=project
 # TODO replace the above 40 springsource rfc 66 ri with one consolidated jar when it is avail
 # TODO add rfc142 impl bundle here if user wants to run some simple rfc 66 + rfc 142 tests
