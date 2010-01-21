@@ -23,8 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.osgi.test.cases.webcontainer.log.SimpleLog;
 import org.osgi.test.cases.webcontainer.simple.SimpleHello;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 
@@ -35,8 +34,7 @@ import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
  */
 public class ClasspathTestServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static final Log log = LogFactory
-            .getLog(ClasspathTestServlet.class);
+    private static final SimpleLog log = new SimpleLog();
     private static final SimpleHello simple = new SimpleHello();
 
     /**

@@ -35,11 +35,11 @@ public abstract class ManifestHeadersTestBundleControl extends
     protected static final String[] EXPORTS4 = {"org.osgi.test.cases.webcontainer.tw4;version=1.0"}; 
     protected static final String[] EXPORTS5 = {"org.osgi.test.cases.webcontainer.tw5;version=1.0;company=\"OSGi Alliance\";security=false;mandatory:=security"};  
     
-    protected static final String[] CLASSPATH1 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar"}; 
-    protected static final String[] CLASSPATH2 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar","WEB-INF/lib/org.osgi.test.cases.webcontainer.simple.jar"};
+    protected static final String[] CLASSPATH1 = {"WEB-INF/lib/org.osgi.test.cases.webcontainer.log.jar"}; 
+    protected static final String[] CLASSPATH2 = {"WEB-INF/lib/org.osgi.test.cases.webcontainer.log.jar","WEB-INF/lib/org.osgi.test.cases.webcontainer.simple.jar"};
     protected static final String[] CLASSPATH3 = {"WEB-INF/classes/"};
-    protected static final String[] CLASSPATH4 = {"WEB-INF/lib/org.apache.commons-logging.jar"};
-    protected static final String[] CLASSPATH5 = {"WEB-INF/lib/org.apache.commons-logging-1.0.4.jar", "libs/utiljar"};
+    protected static final String[] CLASSPATH4 = {"WEB-INF/lib/org.osgi.test.cases..log.jar"};
+    protected static final String[] CLASSPATH5 = {"WEB-INF/lib/org.osgi.test.cases.webcontainer.log.jar", "libs/utiljar"};
     protected static final String[] CLASSPATH6 = {"WEB-INF/lib2/org.osgi.test.cases.webcontainer.simple.jar"};
 
     protected static final String[] IMPORTS1 = {"javax.servlet; version=2.5", "javax.servlet.http; version=2.5"}; 

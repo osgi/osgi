@@ -36,7 +36,7 @@
 		</war>
 	</target>
 		
-	<target name="build-war5" depends="prewar,build-simplejar">
+	<target name="build-war5" depends="prewar,build-simplejar, build-logjar">
 		<echo>Building tw5.war file</echo>
 		<war destfile="${target}/tw5.war" webxml="${project.dir}/resources/tw5/WebContent/WEB-INF/web.xml">
 			<fileset dir="${project.dir}/resources/tw5/WebContent/"/>
@@ -44,10 +44,8 @@
 				<include name="org/osgi/test/cases/webcontainer/tw5/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
-			<lib dir="${licensed-repo}/org.apache.commons-logging">
-				<include name="org.apache.commons-logging-1.0.4.jar"/>
-			</lib>
 			<lib dir="${target}">
+				<include name="org.osgi.test.cases.webcontainer.log.jar"/>
 				<include name="org.osgi.test.cases.webcontainer.simple.jar"/>
 			</lib>
 		</war>
@@ -78,7 +76,7 @@
 	</target>
 	
 	<!-- same as tw5.war file but with pre-specified manifest - wmtw5.war -->
-	<target name="build-wmwar5" depends="prewar,build-simplejar">
+	<target name="build-wmwar5" depends="prewar,build-simplejar, build-logjar">
 		<echo>Building wmtw5.war file</echo>
 		<war destfile="${target}/wmtw5.war" webxml="${project.dir}/resources/tw5/WebContent/WEB-INF/web.xml" manifest="${project.dir}/resources/tw5/WebContent/META-INF/MANIFEST.MF">
 			<fileset dir="${project.dir}/resources/tw5/WebContent/"/>
@@ -86,17 +84,15 @@
 				<include name="org/osgi/test/cases/webcontainer/tw5/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
-			<lib dir="${licensed-repo}/org.apache.commons-logging">
-				<include name="org.apache.commons-logging-1.0.4.jar"/>
-			</lib>
 			<lib dir="${target}">
+				<include name="org.osgi.test.cases.webcontainer.log.jar"/>
 				<include name="org.osgi.test.cases.webcontainer.simple.jar"/>
 			</lib>
 		</war>
 	</target>
 	
 	<!-- same as tw5.war file but with pre-specified manifest - wm2tw5.war -->
-	<target name="build-wm2war5" depends="prewar,build-simplejar">
+	<target name="build-wm2war5" depends="prewar,build-simplejar, build-logjar">
 		<echo>Building wm2tw5.war file</echo>
 		<war destfile="${target}/wm2tw5.war" webxml="${project.dir}/resources/tw5/WebContent/WEB-INF/web.xml" manifest="${project.dir}/resources/tw5/manifest/MANIFEST2.MF">
 			<fileset dir="${project.dir}/resources/tw5/WebContent/"/>
@@ -104,10 +100,8 @@
 				<include name="org/osgi/test/cases/webcontainer/tw5/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
-			<lib dir="${licensed-repo}/org.apache.commons-logging">
-				<include name="org.apache.commons-logging-1.0.4.jar"/>
-			</lib>
 			<lib dir="${target}">
+				<include name="org.osgi.test.cases.webcontainer.log.jar"/>
 				<include name="org.osgi.test.cases.webcontainer.simple.jar"/>
 			</lib>
 		</war>
@@ -140,6 +134,15 @@
 	    <jar destfile="${target}/org.osgi.test.cases.webcontainer.simple.jar"
 		     basedir="${project.output}"
 		     includes="org/osgi/test/cases/webcontainer/simple/**">
+	    </jar>
+	</target>
+	
+	<!-- build the log jar to test Bundle-Classpath header -->
+	<target name="build-logjar" depends="prewar">
+	    <echo>Building org.osgi.test.cases.webcontainer.log.jar file</echo>
+	    <jar destfile="${target}/org.osgi.test.cases.webcontainer.log.jar"
+		     basedir="${project.output}"
+		     includes="org/osgi/test/cases/webcontainer/log/**">
 	    </jar>
 	</target>
 	
