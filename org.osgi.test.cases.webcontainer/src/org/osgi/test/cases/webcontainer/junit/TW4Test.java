@@ -200,10 +200,6 @@ public class TW4Test extends WebContainerTestBundleControl {
         try {
             assertEquals(200, conn.getResponseCode());
             assertEquals("image/jpeg", conn.getContentType());
-            String response = Dispatcher.dispatch(conn);
-            if (this.debug) {
-                log(response);
-            }
         } finally {
             conn.disconnect();
         }
