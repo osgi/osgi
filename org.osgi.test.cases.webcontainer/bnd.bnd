@@ -25,12 +25,12 @@ Include-Resource					= \
 Import-Package = \
 	javax.servlet; version=2.5, \
 	javax.servlet.http; version=2.5, \
-	org.osgi.test.cases.webcontainer.util;   	version=1.0, \
-	org.osgi.test.cases.webcontainer.util.validate; 	version=1.0, \
  	*
  	
 Export-Package =\
-	${p};version=1.0
+	${p};version=1.0, \
+	${p}.util;version=1.0, \
+	${p}.util.validate;version=1.0
 	
 -buildpath							= ee.j2se; version=1.5, \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;			version=latest, \
@@ -39,9 +39,7 @@ Export-Package =\
 	osgi.cmpn; 									version=4.2, \
 	org.osgi.test.support;						version=project, \
 	${junit}, \
-	org.apache.commons-logging;		version=1.0.4, \
-	org.osgi.test.cases.webcontainer.util; version=project
-
+	org.apache.commons-logging;		version=1.0.4
 # Comments out -runbundles. For some reason bnd is upset by -runbundles refering to
 # non-existent repo entries during bndprepare ant task. I asked Peter to make a change to bnd.
 -runbundles						= \
@@ -86,8 +84,7 @@ Export-Package =\
 	com.springsource.org.apache.juli.extras.springsource; version=6.0.20, \
 	com.springsource.osgi.webcontainer.core;version=1.0.0, \
 	com.springsource.osgi.webcontainer.extender;version=1.0.0, \
-	com.springsource.osgi.webcontainer.tomcat;version=1.0.0, \
-	org.osgi.test.cases.webcontainer.util;version=latest
+	com.springsource.osgi.webcontainer.tomcat;version=1.0.0
 # TODO replace the above 40 springsource rfc 66 ri with one consolidated jar when it is avail
 # TODO add rfc142 impl bundle here if user wants to run some simple rfc 66 + rfc 142 tests
 	
