@@ -303,17 +303,17 @@ public class Unit {
 	 * Create a type field from the base SI unit exponent values.
 	 *  
 	 */
-	private static long createType(int x, int rad, int cd, int mol, int A,
-			int K, int kg, int s, int m) {
-		return (((ZERO + m) & MASK) << m_SHIFT)
-				| (((ZERO + s) & MASK) << s_SHIFT)
-				| (((ZERO + kg) & MASK) << kg_SHIFT)
-				| (((ZERO + K) & MASK) << K_SHIFT)
-				| (((ZERO + A) & MASK) << A_SHIFT)
-				| (((ZERO + mol) & MASK) << mol_SHIFT)
-				| (((ZERO + cd) & MASK) << cd_SHIFT)
-				| (((ZERO + rad) & MASK) << rad_SHIFT)
-				| (((long) x) << x_SHIFT);
+	private static long createType(int _x, int _rad, int _cd, int _mol, int _A,
+			int _K, int _kg, int _s, int _m) {
+		return (((ZERO + _m) & MASK) << m_SHIFT)
+				| (((ZERO + _s) & MASK) << s_SHIFT)
+				| (((ZERO + _kg) & MASK) << kg_SHIFT)
+				| (((ZERO + _K) & MASK) << K_SHIFT)
+				| (((ZERO + _A) & MASK) << A_SHIFT)
+				| (((ZERO + _mol) & MASK) << mol_SHIFT)
+				| (((ZERO + _cd) & MASK) << cd_SHIFT)
+				| (((ZERO + _rad) & MASK) << rad_SHIFT)
+				| (((long) _x) << x_SHIFT);
 	}
 
 	/**
@@ -466,24 +466,24 @@ public class Unit {
 	}
 
 	private static String computeName(long type) {
-		int m = (int) (((type >> m_SHIFT) & MASK) - ZERO);
-		int s = (int) (((type >> s_SHIFT) & MASK) - ZERO);
-		int kg = (int) (((type >> kg_SHIFT) & MASK) - ZERO);
-		int K = (int) (((type >> K_SHIFT) & MASK) - ZERO);
-		int A = (int) (((type >> A_SHIFT) & MASK) - ZERO);
-		int mol = (int) (((type >> mol_SHIFT) & MASK) - ZERO);
-		int cd = (int) (((type >> cd_SHIFT) & MASK) - ZERO);
-		int rad = (int) (((type >> rad_SHIFT) & MASK) - ZERO);
+		int _m = (int) (((type >> m_SHIFT) & MASK) - ZERO);
+		int _s = (int) (((type >> s_SHIFT) & MASK) - ZERO);
+		int _kg = (int) (((type >> kg_SHIFT) & MASK) - ZERO);
+		int _K = (int) (((type >> K_SHIFT) & MASK) - ZERO);
+		int _A = (int) (((type >> A_SHIFT) & MASK) - ZERO);
+		int _mol = (int) (((type >> mol_SHIFT) & MASK) - ZERO);
+		int _cd = (int) (((type >> cd_SHIFT) & MASK) - ZERO);
+		int _rad = (int) (((type >> rad_SHIFT) & MASK) - ZERO);
 		StringBuffer numerator = new StringBuffer();
 		StringBuffer denominator = new StringBuffer();
-		addSIname(m, "m", numerator, denominator);
-		addSIname(s, "s", numerator, denominator);
-		addSIname(kg, "kg", numerator, denominator);
-		addSIname(K, "K", numerator, denominator);
-		addSIname(A, "A", numerator, denominator);
-		addSIname(mol, "mol", numerator, denominator);
-		addSIname(cd, "cd", numerator, denominator);
-		addSIname(rad, "rad", numerator, denominator);
+		addSIname(_m, "m", numerator, denominator);
+		addSIname(_s, "s", numerator, denominator);
+		addSIname(_kg, "kg", numerator, denominator);
+		addSIname(_K, "K", numerator, denominator);
+		addSIname(_A, "A", numerator, denominator);
+		addSIname(_mol, "mol", numerator, denominator);
+		addSIname(_cd, "cd", numerator, denominator);
+		addSIname(_rad, "rad", numerator, denominator);
 		if (denominator.length() > 0) {
 			if (numerator.length() == 0) {
 				numerator.append("1");
