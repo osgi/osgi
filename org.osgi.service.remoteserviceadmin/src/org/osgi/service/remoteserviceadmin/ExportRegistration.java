@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package org.osgi.service.remoteserviceadmin;
 
+import java.util.Map;
+
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -23,11 +25,10 @@ import org.osgi.framework.ServiceReference;
  * 
  * The Export Registration can be used to delete the endpoint associated with an
  * this registration. It is created with the
- * {@link RemoteServiceAdmin#exportService(ServiceReference,java.util.Map)}
- * method.
+ * {@link RemoteServiceAdmin#exportService(ServiceReference,Map)} method.
  * 
- * When this Export Registration has been unregistered, the methods must all
- * return <code>null</code>.
+ * When this Export Registration has been closed, all methods must return
+ * <code>null</code>.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -36,35 +37,33 @@ public interface ExportRegistration {
 	/**
 	 * Return the Export Reference for the exported service.
 	 * 
-	 * @return An Export Reference for this registration
-	 * @throws IllegalStateException Thrown when this object was not properly
-	 *         initialized, see {@link #getException()}
+	 * @return The Export Reference for this registration.
+	 * @throws IllegalStateException When this registration was not properly
+	 *         initialized. See {@link #getException()}.
 	 */
 	ExportReference getExportReference();
 
 	/**
 	 * Delete the local endpoint and disconnect any remote distribution
-	 * providers. After this method returns, all the methods must return
+	 * providers. After this method returns, all methods must return
 	 * <code>null</code>.
 	 * 
-	 * This method has no effect when the endpoint is already destroyed or being
-	 * destroyed.
+	 * This method has no effect when this registration has already been closed
+	 * or is being closed.
 	 */
 	void close();
 
 	/**
-	 * Exception for any error during the import process.
+	 * Return the exception for any error during the export process.
 	 * 
-	 * If the Remote Admin for some reasons is unable to create a registration,
-	 * then it must return a <code>Throwable</code> from this method. In this
-	 * case, all other methods must return on this interface must throw an
-	 * Illegal State Exception. If no error occurred, this method must return
-	 * <code>null</code>.
+	 * If the Remote Service Admin for some reasons is unable to properly
+	 * initialize this registration, then it must return an exception from this
+	 * method. If no error occurred, this method must return <code>null</code>.
 	 * 
-	 * The error must be set before this Import Registration is returned.
+	 * The error must be set before this Export Registration is returned.
 	 * Asynchronously occurring errors must be reported to the log.
 	 * 
-	 * @return The exception that occurred during the creation of the
+	 * @return The exception that occurred during the initialization of this
 	 *         registration or <code>null</code> if no exception occurred.
 	 */
 	Throwable getException();

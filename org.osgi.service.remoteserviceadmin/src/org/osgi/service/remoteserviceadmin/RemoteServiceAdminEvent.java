@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,14 @@ package org.osgi.service.remoteserviceadmin;
 import org.osgi.framework.Bundle;
 
 /**
- * Provides the event information for a Remote Admin event.
+ * Provides the event information for a Remote Service Admin event.
  * 
  * @Immutable
  * @version $Revision$
  */
 public class RemoteServiceAdminEvent {
 	/**
-	 * Add an import registration. The Remote Services Admin will call this
+	 * Add an import registration. The Remote Service Admin will call this
 	 * method when it imports a service. When this service is registered, the
 	 * Remote Service Admin must notify the listener of all existing Import
 	 * Registrations.
@@ -35,7 +35,7 @@ public class RemoteServiceAdminEvent {
 	public static final int			IMPORT_REGISTRATION		= 1;
 
 	/**
-	 * Add an export registration. The Remote Services Admin will call this
+	 * Add an export registration. The Remote Service Admin will call this
 	 * method when it exports a service. When this service is registered, the
 	 * Remote Service Admin must notify the listener of all existing Export
 	 * Registrations.
@@ -43,14 +43,14 @@ public class RemoteServiceAdminEvent {
 	public static final int			EXPORT_REGISTRATION		= 2;
 
 	/**
-	 * Remove an export registration. The Remote Services Admin will call this
+	 * Remove an export registration. The Remote Service Admin will call this
 	 * method when it removes the export of a service.
 	 * 
 	 */
 	public static final int			EXPORT_UNREGISTRATION	= 3;
 
 	/**
-	 * Remove an import registration. The Remote Services Admin will call this
+	 * Remove an import registration. The Remote Service Admin will call this
 	 * method when it removes the import of a service.
 	 * 
 	 */

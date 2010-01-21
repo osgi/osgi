@@ -259,7 +259,8 @@ public class EndpointDescription {
 	 * Verify and obtain a required String property.
 	 * 
 	 * @param propName The name of the property
-	 * @return The value of the property or null if the property is not set.
+	 * @return The value of the property or <code>null</code> if the property is
+	 *         not set.
 	 * @throws IllegalArgumentException when the property doesn't have the
 	 *         correct data type.
 	 */
@@ -426,8 +427,8 @@ public class EndpointDescription {
 
 	/**
 	 * Reads a 'String+' property from the properties map, which may be of type
-	 * String, String[] or Collection<String> and returns it as an unmodifiable
-	 * List.
+	 * String, String[] or Collection&lt;String&gt; and returns it as an
+	 * unmodifiable List.
 	 * 
 	 * @param key The property
 	 * @return An unmodifiable list
@@ -474,8 +475,8 @@ public class EndpointDescription {
 	 * The value of the remote framework uuid is stored in the
 	 * {@link RemoteConstants#ENDPOINT_FRAMEWORK_UUID} endpoint property.
 	 * 
-	 * @return Remote Framework UUID, or null if this endpoint is not associated
-	 *         with an OSGi framework having a framework uuid.
+	 * @return Remote Framework UUID, or <code>null</code> if this endpoint is
+	 *         not associated with an OSGi framework having a framework uuid.
 	 */
 	public String getFrameworkUUID() {
 		return frameworkUUID;

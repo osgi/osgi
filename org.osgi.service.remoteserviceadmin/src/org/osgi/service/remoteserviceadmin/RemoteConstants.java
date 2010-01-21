@@ -17,13 +17,15 @@
 package org.osgi.service.remoteserviceadmin;
 
 /**
- * Provide the definition of the constants used in the Remote Services API.
+ * Provide the definition of the constants used in the Remote Service Admin
+ * specification.
  * 
  * @Immutable
  * @version $Revision$
  */
 public class RemoteConstants {
 	private RemoteConstants() {
+		// non-instantiable
 	}
 
 	/**
@@ -166,7 +168,7 @@ public class RemoteConstants {
 	 */
 	public static final String	SERVICE_INTENTS					= "service.intents";
 
-	/* above are from Ch 13 Remote Service spec. */
+	/* The above are from Ch. 13 Remote Services specification. */
 
 	/**
 	 * Endpoint property identifying the id for this endpoint. This service
@@ -199,18 +201,18 @@ public class RemoteConstants {
 	/**
 	 * Prefix for an endpoint property identifying the interface Java package
 	 * version for an interface. For example, the property
-	 * endpoint.package.version.com.acme=1.3 describes the version of the
-	 * package for the com.acme.Foo interface. This endpoint property for an
-	 * interface package does not have to be set. If not set, the value must be
-	 * assumed to be 0.
+	 * <code>endpoint.package.version.com.acme=1.3</code> describes the version
+	 * of the package for the <code>com.acme.Foo</code> interface. This endpoint
+	 * property for an interface package does not have to be set. If not set,
+	 * the value must be assumed to be 0.
 	 * 
 	 * <p>
 	 * Since endpoint properties are stored in a case insensitive map, case
 	 * variants of a package name are folded together.
 	 * 
 	 * <p>
-	 * The value of this property must be of type <code>String</code>.
+	 * The value of properties having this prefix must be of type
+	 * <code>String</code>.
 	 */
 	public final static String	ENDPOINT_PACKAGE_VERSION_		= "endpoint.package.version.";
-
 }

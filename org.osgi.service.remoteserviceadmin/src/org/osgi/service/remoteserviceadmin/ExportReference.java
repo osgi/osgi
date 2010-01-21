@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import org.osgi.framework.ServiceReference;
  * An Export Reference associates a service with a local endpoint.
  * 
  * The Export Reference can be used to reference an exported service. When the
- * service is no longer exported, all methods must return <code>null</code>;
+ * service is no longer exported, all methods must return <code>null</code>.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -31,15 +31,16 @@ public interface ExportReference {
 	/**
 	 * Return the service being exported.
 	 * 
-	 * @return The service being exported, must be <code>null</code> when this
-	 *         registration is unregistered.
+	 * @return The service being exported. Must be <code>null</code> when the
+	 *         service is no longer exported.
 	 */
 	ServiceReference getExportedService();
 
 	/**
-	 * Return the Endpoint Description that is created for this registration.
+	 * Return the Endpoint Description for the local endpoint.
 	 * 
-	 * @return the local Endpoint Description
+	 * @return The Endpoint Description for the local endpoint. Must be
+	 *         <code>null</code> when the service is no longer exported.
 	 */
 	EndpointDescription getExportedEndpoint();
 }

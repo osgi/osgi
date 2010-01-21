@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,23 +22,25 @@ import org.osgi.framework.ServiceReference;
  * An Import Reference associates an active proxy service to a remote endpoint.
  * 
  * The Import Reference can be used to reference an imported service. When the
- * service is no longer imported, all methods must return <code>null</code>;
+ * service is no longer imported, all methods must return <code>null</code>.
  * 
  * @ThreadSafe
  * @version $Revision$
  */
 public interface ImportReference {
 	/**
-	 * Answer the associated Service Reference for the proxy to the endpoint.
+	 * Return the Service Reference for the proxy for the endpoint.
 	 * 
-	 * @return A Service Reference to the proxy for the endpoint.
+	 * @return The Service Reference to the proxy for the endpoint. Must be
+	 *         <code>null</code> when the service is no longer imported.
 	 */
 	ServiceReference getImportedService();
 
 	/**
-	 * Answer the associated remote Endpoint Description.
+	 * Return the Endpoint Description for the remote endpoint.
 	 * 
-	 * @return A Endpoint Description for the remote endpoint.
+	 * @return The Endpoint Description for the remote endpoint. Must be
+	 *         <code>null</code> when the service is no longer imported.
 	 */
 	EndpointDescription getImportedEndpoint();
 }

@@ -97,8 +97,8 @@ public final class EndpointPermission extends Permission {
 	private volatile String				actions				= null;
 
 	/**
-	 * The endpoint used by this EndpointPermission. Must be null if not
-	 * constructed with a endpoint.
+	 * The endpoint used by this EndpointPermission. Must be <code>null</code>
+	 * if not constructed with a endpoint.
 	 */
 	transient final EndpointDescription					endpoint;
 	
@@ -111,7 +111,7 @@ public final class EndpointPermission extends Permission {
 	/**
 	 * If this EndpointPermission was not constructed with an
 	 * EndpointDescription, this holds a Filter matching object used to evaluate
-	 * the filter in implies or null for wildcard.
+	 * the filter in implies or <code>null</code> for wildcard.
 	 */
 	transient Filter					filter;
 
@@ -454,7 +454,7 @@ public final class EndpointPermission extends Permission {
 	 * this <code>EndpointPermission</code>.
 	 * 
 	 * @param obj The object to test for equality.
-	 * @return true if obj is a <code>EndpointPermission</code>, and has the
+	 * @return true If obj is a <code>EndpointPermission</code>, and has the
 	 *         same name, actions and endpoint as this
 	 *         <code>EndpointPermission</code> object; <code>false</code>
 	 *         otherwise.
