@@ -29,20 +29,20 @@ Export-Package =\
 	${p};version=1.0
 	
 -buildpath							= ee.j2se; version=1.5, \
-        org.apache.geronimo.specs.geronimo-servlet_2.5_spec;			version=latest, \
-        org.apache.geronimo.specs.geronimo-annotation_1.0_spec; version=latest, \
+    org.osgi.test.cases.webcontainer; 		version = project, \
+    org.apache.geronimo.specs.geronimo-servlet_2.5_spec;			version=latest, \
+    org.apache.geronimo.specs.geronimo-annotation_1.0_spec; version=latest, \
 	osgi.core;									version=4.2, \
 	osgi.enterprise;                            version=4.2, \
-	osgi.cmpn; 									version=4.2, \
 	org.osgi.test.support;						version=project, \
-	${junit}, \
-    org.osgi.test.cases.webcontainer; 		version = project
+	${junit}
 
 # Comments out -runbundles. For some reason bnd is upset by -runbundles refering to
 # non-existent repo entries during bndprepare ant task. I asked Peter to make a change to bnd.
 -runbundles						= \
+    org.osgi.test.cases.webcontainer; 		version = project, \
 	org.eclipse.equinox.event; 			version=latest, \
-	osgi.cmpn; 							version=latest, \
+	osgi.enterprise; 							version=latest, \
 	org.osgi.impl.service.log; 			version=latest, \
     com.springsource.javax.activation; version=1.1.0, \
     com.springsource.javax.annotation; version=1.0.0, \
