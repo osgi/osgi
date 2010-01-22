@@ -57,7 +57,7 @@ public interface ImportRegistration {
 	 * initialize this registration, then it must return an exception from this
 	 * method. If no error occurred, this method must return <code>null</code>.
 	 * 
-	 * The error must be set before this Export Registration is returned.
+	 * The error must be set before this Import Registration is returned.
 	 * Asynchronously occurring errors must be reported to the log.
 	 * 
 	 * @return The exception that occurred during the initialization of this
