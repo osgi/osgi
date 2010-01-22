@@ -60,7 +60,7 @@ public interface JNDIProviderAdmin {
 	 * @param name the JNDI name associated with this reference
 	 * @param context the JNDI context associated with this reference
 	 * @param environment the JNDI environment associated with this JNDI context
-	 * @param attributes
+	 * @param attributes the naming attributes to use when resolving this object
 	 * @return an Object based on the reference passed in, or the original reference object
 	 * 	if the reference could not be resolved.
 	 * 
