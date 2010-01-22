@@ -221,7 +221,7 @@ public interface UserAdminMBean {
 	 * @throws IOException if the operation fails
 	 * @throws IllegalArgumentException if the username is not a User
 	 */
-	void addCredential(String key, String value, String username)
+	void addCredentialString(String key, String value, String username)
 			throws IOException;
 
 	/**
@@ -245,7 +245,7 @@ public interface UserAdminMBean {
 	 * @param rolename The role name
 	 * @throws IOException if the operation fails
 	 */
-	void addProperty(String key, String value, String rolename)
+	void addPropertyString(String key, String value, String rolename)
 			throws IOException;
 
 	/**
@@ -447,7 +447,7 @@ public interface UserAdminMBean {
 	 * @return The User
 	 * @throws IOException if the operation fails
 	 */
-	String getUser(String key, String value) throws IOException;
+	String getUserWithProperty(String key, String value) throws IOException;
 
 	/**
 	 * Answer the list of user names in the User Admin database

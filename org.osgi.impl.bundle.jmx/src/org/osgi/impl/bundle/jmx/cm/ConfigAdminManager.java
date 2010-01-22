@@ -19,13 +19,12 @@ package org.osgi.impl.bundle.jmx.cm;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.management.openmbean.TabularData;
 
-import org.osgi.framework.InvalidSyntaxException; 
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.jmx.service.cm.ConfigurationAdminMBean;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
@@ -47,76 +46,6 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.osgi.jmx.compendium.ConfigAdminManagerMBean#addProperty(java.lang
-	 * .String, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@SuppressWarnings("unchecked")
-	public void addProperty(String pid, String name, String value, String type)
-			throws IOException {
-		Configuration config = admin.getConfiguration(pid, null);
-		Dictionary properties = config.getProperties();
-		if (properties == null) {
-			properties = new Hashtable();
-		}
-		properties.put(name, parse(value, type));
-		config.update(properties);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.osgi.jmx.compendium.ConfigAdminManagerMBean#addProperty(java.lang
-	 * .String, java.lang.String, java.lang.String, java.lang.String,
-	 * java.lang.String)
-	 */
-	@SuppressWarnings("unchecked")
-	public void addProperty(String pid, String location, String name,
-			String value, String type) throws IOException {
-		Configuration config = admin.getConfiguration(pid, location);
-		Dictionary properties = config.getProperties();
-		if (properties == null) {
-			properties = new Hashtable();
-		}
-		properties.put(name, parse(value, type));
-		config.update(properties);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.osgi.jmx.compendium.ConfigAdminManagerMBean#addPropertyToConfigurations
-	 * (java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@SuppressWarnings("unchecked")
-	public void addPropertyToConfigurations(String filter, String name,
-			String value, String type) throws IOException {
-		Object v = parse(value, type);
-		Configuration[] confs;
-		try {
-			confs = admin.listConfigurations(filter);
-		} catch (InvalidSyntaxException e) {
-			log.log(Level.SEVERE, "Invalid filter argument: " + filter, e);
-			throw new IllegalArgumentException("Invalid filter: " + e);
-		}
-		if (confs != null) {
-			for (Configuration conf : confs) {
-				Dictionary dic = conf.getProperties();
-				if (dic == null) {
-					dic = new Hashtable();
-				}
-				dic.put(name, v);
-				conf.update(dic);
-			}
-		}
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * org.osgi.jmx.compendium.ConfigAdminManagerMBean#createFactoryConfiguration
 	 * (java.lang.String)
 	 */
@@ -132,7 +61,8 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 * org.osgi.jmx.compendium.ConfigAdminManagerMBean#createFactoryConfiguration
 	 * (java.lang.String, java.lang.String)
 	 */
-	public String createFactoryConfiguration(String factoryPid, String location)
+	public String createFactoryConfigurationForLocation(String factoryPid,
+			String location)
 			throws IOException {
 		return admin.createFactoryConfiguration(factoryPid, location).getPid();
 	}
@@ -154,7 +84,8 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 * org.osgi.jmx.compendium.ConfigAdminManagerMBean#delete(java.lang.String,
 	 * java.lang.String)
 	 */
-	public void delete(String pid, String location) throws IOException {
+	public void deleteForLocation(String pid, String location)
+			throws IOException {
 		admin.getConfiguration(pid, location).delete();
 	}
 
@@ -209,7 +140,8 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 * org.osgi.jmx.compendium.ConfigAdminManagerMBean#getFactoryPid(java.lang
 	 * .String, java.lang.String)
 	 */
-	public String getFactoryPid(String pid, String location) throws IOException {
+	public String getFactoryPidForLocation(String pid, String location)
+			throws IOException {
 		return admin.getConfiguration(pid, location).getFactoryPid();
 	}
 
@@ -235,7 +167,7 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 * .String, java.lang.String)
 	 */
 	@SuppressWarnings("unchecked")
-	public TabularData getProperties(String pid, String location)
+	public TabularData getPropertiesForLocation(String pid, String location)
 			throws IOException {
 		Dictionary properties = admin.getConfiguration(pid, location)
 				.getProperties();
@@ -297,7 +229,7 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 * org.osgi.jmx.compendium.ConfigAdminManagerMBean#update(java.lang.String,
 	 * java.lang.String, javax.management.openmbean.TabularData)
 	 */
-	public void update(String pid, String location, TabularData table)
+	public void updateForLocation(String pid, String location, TabularData table)
 			throws IOException {
 		admin.getConfiguration(pid, location).update(propertiesFrom(table));
 	}

@@ -1,8 +1,8 @@
 package org.osgi.test.cases.jmx.junit;
 
-import java.io.*;
+import java.io.IOException;
 
-import org.osgi.jmx.service.useradmin.*;
+import org.osgi.jmx.service.useradmin.UserAdminMBean;
 
 public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 	private UserAdminMBean userManagerMBean;
@@ -60,7 +60,7 @@ public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 		String username = "foo";
 		String illegalUsername = "gnobbelbra";
 		/*
-		 * FIXME: https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1407
+		 * TODO FIXME: https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1407
 		 */
 		
 		try {
@@ -74,7 +74,8 @@ public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 			//just catch and forget the provoced exception
 		}
 		userManagerMBean.createUser(username);
-		userManagerMBean.addCredential(UserAdminMBean.CREDENTIALS, "bar", username);
+		userManagerMBean.addCredentialString(UserAdminMBean.CREDENTIALS, "bar",
+				username);
 		assertTrue("failed to retrieve previously added credentials.", userManagerMBean.getCredentials(username).values().size() > 0);
 		
 		userManagerMBean.removeCredential(UserAdminMBean.CREDENTIALS, username);
@@ -99,7 +100,8 @@ public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 		String propertyKey = "Geruch";
 		String propertyValue = "fischig";
 		userManagerMBean.createUser(username);
-		userManagerMBean.addProperty(propertyKey, propertyValue, username);
+		userManagerMBean
+				.addPropertyString(propertyKey, propertyValue, username);
 
 		assertTrue("failed to retrieve previously stored property with key " +propertyKey+ " and value " + propertyValue + ".", userManagerMBean.getProperties(username).get(new String[]{propertyKey}).get("Key").equals(propertyKey));
 		assertTrue("failed to retrieve previously stored property with key " +propertyKey+ " and value " + propertyValue + ".", userManagerMBean.getProperties(username).get(new String[]{propertyKey}).get("Value").equals(propertyValue));

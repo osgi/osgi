@@ -15,8 +15,7 @@
  */
 package org.osgi.impl.bundle.jmx.provisioning;
 
-import static org.osgi.impl.bundle.jmx.codec.OSGiProperties.propertiesFrom;
-import static org.osgi.impl.bundle.jmx.codec.OSGiProperties.tableFrom;
+import static org.osgi.impl.bundle.jmx.codec.OSGiProperties.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,7 +44,7 @@ public class Provisioning implements ProvisioningServiceMBean {
 	 * org.osgi.jmx.compendium.ProvisioningMBean#addInformation(java.lang.String
 	 * )
 	 */
-	public void addInformation(String zipURL) throws IOException {
+	public void addInformationFromZip(String zipURL) throws IOException {
 		InputStream is = new URL(zipURL).openStream();
 		ZipInputStream zis = new ZipInputStream(is);
 		try {

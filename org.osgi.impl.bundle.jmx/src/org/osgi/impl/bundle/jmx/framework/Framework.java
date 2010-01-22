@@ -77,7 +77,8 @@ public class Framework implements FrameworkMBean {
 	 * @see org.osgi.jmx.core.FrameworkMBean#installBundle(java.lang.String,
 	 * java.lang.String)
 	 */
-	public long installBundle(String location, String url) throws IOException {
+	public long installBundleFromURL(String location, String url)
+			throws IOException {
 		InputStream is = null;
 		try {
 			is = new URL(url).openStream();
@@ -123,7 +124,7 @@ public class Framework implements FrameworkMBean {
 	 * @see org.osgi.jmx.core.FrameworkMBean#installBundles(java.lang.String[],
 	 * java.lang.String[])
 	 */
-	public CompositeData installBundles(String[] locations, String[] urls)
+	public CompositeData installBundlesFromURL(String[] locations, String[] urls)
 			throws IOException {
 		long ids[] = new long[locations.length];
 		for (int i = 0; i < locations.length; i++) {
@@ -156,7 +157,7 @@ public class Framework implements FrameworkMBean {
 	 * 
 	 * @see org.osgi.jmx.core.FrameworkMBean#refreshPackages(long)
 	 */
-	public void refreshPackages(long bundleIdentifier) throws IOException {
+	public void refreshBundle(long bundleIdentifier) throws IOException {
 		admin.refreshPackages(new Bundle[] { bundle(bundleIdentifier) });
 	}
 
@@ -165,7 +166,7 @@ public class Framework implements FrameworkMBean {
 	 * 
 	 * @see org.osgi.jmx.core.FrameworkMBean#refreshPackages(long[])
 	 */
-	public void refreshPackages(long[] bundleIdentifiers) throws IOException {
+	public void refreshBundles(long[] bundleIdentifiers) throws IOException {
 		Bundle[] bundles = new Bundle[bundleIdentifiers.length];
 		for (int i = 0; i < bundleIdentifiers.length; i++) {
 			try {
@@ -417,7 +418,7 @@ public class Framework implements FrameworkMBean {
 	 * @see org.osgi.jmx.core.FrameworkMBean#updateBundleFromUrl(long,
 	 * java.lang.String)
 	 */
-	public void updateBundle(long bundleIdentifier, String url)
+	public void updateBundleFromURL(long bundleIdentifier, String url)
 			throws IOException {
 		InputStream is = null;
 		try {
@@ -465,7 +466,8 @@ public class Framework implements FrameworkMBean {
 	 * @see org.osgi.jmx.core.FrameworkMBean#updateBundlesFromUrls(long[],
 	 * java.lang.String[])
 	 */
-	public CompositeData updateBundles(long[] bundleIdentifiers, String[] urls)
+	public CompositeData updateBundlesFromURL(long[] bundleIdentifiers,
+			String[] urls)
 			throws IOException {
 		for (int i = 0; i < bundleIdentifiers.length; i++) {
 			InputStream is = null;

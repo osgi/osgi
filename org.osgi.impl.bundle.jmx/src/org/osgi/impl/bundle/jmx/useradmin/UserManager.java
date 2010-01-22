@@ -73,7 +73,7 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * java.lang.String, java.lang.String)
 	 */
 	@SuppressWarnings("unchecked")
-	public void addCredential(String key, String value, String username)
+	public void addCredentialString(String key, String value, String username)
 			throws IOException {
 		User user;
 		try {
@@ -118,7 +118,7 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * java.lang.String, java.lang.String)
 	 */
 	@SuppressWarnings("unchecked")
-	public void addProperty(String key, String value, String rolename)
+	public void addPropertyString(String key, String value, String rolename)
 			throws IOException {
 		admin.getRole(rolename).getProperties().put(key, value);
 	}
@@ -429,7 +429,8 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * @see org.osgi.jmx.compendium.UserManagerMBean#getUser(java.lang.String,
 	 * java.lang.String)
 	 */
-	public String getUser(String key, String value) throws IOException {
+	public String getUserWithProperty(String key, String value)
+			throws IOException {
 		User user = admin.getUser(key, value);
 		return user == null ? null : user.getName();
 	}

@@ -87,7 +87,7 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 		assertNotNull(pMBean);
 		assertNotNull(pAdmin);
 		/*
-		 * FIXME: https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1385
+		 * TODO FIXME: https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1385
 		 */
 		pMBean.listPackages();
 	}

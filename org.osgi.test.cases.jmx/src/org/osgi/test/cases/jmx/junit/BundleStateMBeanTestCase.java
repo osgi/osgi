@@ -38,7 +38,7 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 			}
 		}
 		/*
-		 * FIXME: https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1388
+		 * TODO FIXME: https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1388
 		 */
 		assertTrue(
 				"testbundle1 depends on testbundle2. This dependency was not reflected "
@@ -51,7 +51,7 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 		assertNotNull(bsMBean);
 		assertTrue("listBundles() did not return any data.", bsMBean.listBundles().size()> 0);
 		/*
-		 * FIXME:  
+		 * TODO FIXME:  
 		 * https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1386
 		 */
 		//Hashtable<String, Object> props = OSGiProperties.propertiesFrom(bsMBean.listBundles());

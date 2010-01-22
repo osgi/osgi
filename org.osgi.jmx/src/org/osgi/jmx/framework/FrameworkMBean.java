@@ -129,7 +129,7 @@ public interface FrameworkMBean {
 
 	/**
 	 * The Composite Type for a batch action result.
-	 * {@link #refreshPackages(long)} and {@link #refreshPackages(long[])}.
+	 * {@link #refreshBundle(long)} and {@link #refreshBundles(long[])}.
 	 * Notice that a batch action result returns uses an id for the
 	 * {@link #BUNDLE_IN_ERROR} while the {@link #BATCH_INSTALL_RESULT_TYPE}
 	 * uses a location.
@@ -182,7 +182,7 @@ public interface FrameworkMBean {
 	/**
 	 * The Composite Type which represents the result of a batch install
 	 * operation. It is used in {@link #installBundles(String[])} and
-	 * {@link #installBundles(String[], String[])}.
+	 * {@link #installBundlesFromURL(String[], String[])}.
 	 * 
 	 * This Composite Type consists of the following items:
 	 * <ul>
@@ -238,7 +238,7 @@ public interface FrameworkMBean {
 	 * @return the bundle id the installed bundle
 	 * @throws IOException if the operation does not succeed
 	 */
-	long installBundle(String location, String url) throws IOException;
+	long installBundleFromURL(String location, String url) throws IOException;
 
 	/**
 	 * Batch install the bundles indicated by the list of bundleLocationUrls
@@ -265,17 +265,17 @@ public interface FrameworkMBean {
 	 * @return the resulting state from executing the operation
 	 * @throws IOException if the operation does not succeed
 	 */
-	CompositeData installBundles(String[] locations, String[] urls)
+	CompositeData installBundlesFromURL(String[] locations, String[] urls)
 			throws IOException;
 
 	/**
 	 * Force the update, replacement or removal of the packages identified by
-	 * the list of bundles
+	 * the specified bundle.
 	 * 
 	 * @param bundleIdentifier the bundle identifier
 	 * @throws IOException if the operation failed
 	 */
-	void refreshPackages(long bundleIdentifier) throws IOException;
+	void refreshBundle(long bundleIdentifier) throws IOException;
 
 	/**
 	 * Force the update, replacement or removal of the packages identified by
@@ -284,7 +284,7 @@ public interface FrameworkMBean {
 	 * @param bundleIdentifiers the array of bundle identifiers
 	 * @throws IOException if the operation failed
 	 */
-	void refreshPackages(long[] bundleIdentifiers) throws IOException;
+	void refreshBundles(long[] bundleIdentifiers) throws IOException;
 
 	/**
 	 * Resolve the bundle indicated by the unique symbolic name and version
@@ -442,7 +442,7 @@ public interface FrameworkMBean {
 	 * @throws IOException if the operation does not succeed
 	 * @throws IllegalArgumentException if the bundle indicated does not exist
 	 */
-	void updateBundle(long bundleIdentifier, String url) throws IOException;
+	void updateBundleFromURL(long bundleIdentifier, String url) throws IOException;
 
 	/**
 	 * Batch update the bundles indicated by the list of bundle identifier.
@@ -471,7 +471,7 @@ public interface FrameworkMBean {
 	 * @throws IOException if the operation does not succeed
 	 * @throws IllegalArgumentException if the bundle indicated does not exist
 	 */
-	CompositeData updateBundles(long[] bundleIdentifiers, String[] urls)
+	CompositeData updateBundlesFromURL(long[] bundleIdentifiers, String[] urls)
 			throws IOException;
 
 	/**

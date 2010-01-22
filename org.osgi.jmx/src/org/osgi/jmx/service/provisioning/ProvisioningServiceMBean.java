@@ -55,7 +55,7 @@ public interface ProvisioningServiceMBean {
 	 *         Provisioning Information dictionary and no bundles must be
 	 *         started or installed.
 	 */
-	public void addInformation(String zipURL) throws IOException;
+	public void addInformationFromZip(String zipURL) throws IOException;
 
 	/**
 	 * Adds the key/value pairs contained in <code>info</code> to the

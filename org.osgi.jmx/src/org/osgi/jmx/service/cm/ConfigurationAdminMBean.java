@@ -55,7 +55,7 @@ public interface ConfigurationAdminMBean {
 	 * @return the pid of the created configuation
 	 * @throws IOException if the operation failed
 	 */
-	String createFactoryConfiguration(String factoryPid, String location)
+	String createFactoryConfigurationForLocation(String factoryPid, String location)
 			throws IOException;
 
 	/**
@@ -73,7 +73,7 @@ public interface ConfigurationAdminMBean {
 	 * @param location the bundle location
 	 * @throws IOException if the operation fails
 	 */
-	void delete(String pid, String location) throws IOException;
+	void deleteForLocation(String pid, String location) throws IOException;
 
 	/**
 	 * Delete the configurations matching the filter specification.
@@ -113,7 +113,7 @@ public interface ConfigurationAdminMBean {
 	 * @return the factory PID
 	 * @throws IOException if the operation fails
 	 */
-	String getFactoryPid(String pid, String location) throws IOException;
+	String getFactoryPidForLocation(String pid, String location) throws IOException;
 
 	/**
 	 * Answer the contents of the configuration <p/>
@@ -137,7 +137,7 @@ public interface ConfigurationAdminMBean {
 	 * @return the table of contents
 	 * @throws IOException if the operation fails
 	 */
-	TabularData getProperties(String pid, String location) throws IOException;
+	TabularData getPropertiesForLocation(String pid, String location) throws IOException;
 
 	/**
 	 * Answer the list of PID/Location pairs of the configurations managed by
@@ -183,6 +183,6 @@ public interface ConfigurationAdminMBean {
 	 * @param properties the table of properties
 	 * @throws IOException if the operation fails
 	 */
-	void update(String pid, String location, TabularData properties)
+	void updateForLocation(String pid, String location, TabularData properties)
 			throws IOException;
 }
