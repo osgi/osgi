@@ -36,15 +36,17 @@ class TraditionalObjectFactoryBuilder implements ObjectFactoryBuilder {
 	private static final String JNDI_PROVIDER_ADMIN_INTERFACE = 
 		JNDIProviderAdmin.class.getName();
 	
-	/* BundleContext for the internal JNDI Implementation Bundle */
-	private final BundleContext m_internalBundleContext;
+	private static final String NAMING_MANAGER_CLASSNAME = 
+		NamingManager.class.getName();
 	
-	public TraditionalObjectFactoryBuilder(BundleContext internalBundleContext) {
-		m_internalBundleContext = internalBundleContext;
+	private static final String DIRECTORY_MANAGER_CLASSNAME = 
+		DirectoryManager.class.getName();
+	
+
+	public TraditionalObjectFactoryBuilder() {
 	}
 	
-	public ObjectFactory createObjectFactory(Object obj, Hashtable environment)
-			throws NamingException {
+	public ObjectFactory createObjectFactory(Object obj, Hashtable environment) throws NamingException {
 		return new TraditionalObjectFactory();
 	}
 	
@@ -53,14 +55,12 @@ class TraditionalObjectFactoryBuilder implements ObjectFactoryBuilder {
 		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment) throws Exception {
 			// if the call came from NamingManager
 			BundleContext clientBundleContext = 
-				BuilderUtils.getBundleContext(environment, m_internalBundleContext, 
-						                      NamingManager.class.getName());
+				BuilderUtils.getBundleContext(environment, NAMING_MANAGER_CLASSNAME);
 			
 			// if the call came from DirectoryManager
 			if(clientBundleContext == null) {
 				clientBundleContext = 
-					BuilderUtils.getBundleContext(environment, m_internalBundleContext, 
-		                      DirectoryManager.class.getName());
+					BuilderUtils.getBundleContext(environment, DIRECTORY_MANAGER_CLASSNAME);
 			}
 			
 			if(clientBundleContext == null) {

@@ -15,6 +15,8 @@
  */
 package org.osgi.impl.service.jndi;
 
+import javax.naming.Context;
+import javax.naming.spi.InitialContextFactoryBuilder;
 import javax.naming.spi.ObjectFactory;
 
 
@@ -25,7 +27,7 @@ import javax.naming.spi.ObjectFactory;
  * service access from certain portions of RFC 142.
  * 
  */
-public interface FactoryManager {
+public interface FactoryManager extends InitialContextFactoryBuilder {
 
 	/**
 	 * Returns a javax.naming.spi.ObjectFactory that is published in the OSGi
@@ -37,4 +39,23 @@ public interface FactoryManager {
 	 *         scheme
 	 */
 	public ObjectFactory getURLContextFactory(String urlScheme);
+	
+	/**
+	 * Associates a given OSGi JNDI Factory service to a Context that 
+	 * was created with the given service.  
+	 * 
+	 * @param factory the JNDI factory service used to create the Context
+	 * @param createdContext the Context created with this factory service  
+	 */
+	public void associateFactoryService(Object factory, Context createdContext);
+	
+	
+	/**
+	 * Checks to see if a given OSGi JNDI Factory Service is still active in 
+	 * the service registry.  
+	 * @param factory the JNDI Factory service
+	 * @return true if the service is still available
+	 *         false if the service is no longer available
+	 */
+	public boolean isFactoryServiceActive(Object factory);
 }

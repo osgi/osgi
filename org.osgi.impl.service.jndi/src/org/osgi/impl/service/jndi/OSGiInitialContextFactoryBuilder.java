@@ -23,9 +23,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,7 +51,6 @@ import javax.naming.spi.ObjectFactoryBuilder;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleReference;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.jndi.JNDIConstants;
@@ -81,6 +84,13 @@ class OSGiInitialContextFactoryBuilder implements
 	private ServiceTracker		m_objectFactoryBuilderServiceTracker	= null;
 	private ServiceTracker		m_urlContextFactoryServiceTracker		= null;
 	private ServiceTracker      m_dirObjectFactoryServiceTracker        = null;
+	
+	
+	/* 
+	 * Map of OSGi services to a List of Contexts created by that service.  
+	 * Each service services as a key to a list of Context implementations.  
+	 */
+	private final Map m_mapOfServicesToContexts = Collections.synchronizedMap(new HashMap()); 
 	
 
 	public OSGiInitialContextFactoryBuilder(BundleContext bundleContext) {
@@ -193,6 +203,24 @@ class OSGiInitialContextFactoryBuilder implements
 		return null;
 	}
 	
+	public void associateFactoryService(Object factory, Context createdContext) {
+		if(m_mapOfServicesToContexts.containsKey(factory)) {
+			List listOfContexts = 
+				(List) m_mapOfServicesToContexts.get(factory);
+			listOfContexts.add(createdContext);
+			m_mapOfServicesToContexts.put(factory, listOfContexts);
+		} else {
+			List listOfContexts = new LinkedList();
+			listOfContexts.add(createdContext);
+			m_mapOfServicesToContexts.put(factory, listOfContexts);
+		}
+		
+	}
+
+	public boolean isFactoryServiceActive(Object factory) {
+		return m_mapOfServicesToContexts.containsKey(factory);
+	}
+	
 	
 
 	/**
@@ -209,49 +237,25 @@ class OSGiInitialContextFactoryBuilder implements
 	}
 
 	
-	private void createServiceTrackers(BundleContext bundleContext) {
+	private final void createServiceTrackers(BundleContext bundleContext) {
 		// create trackers
-		m_contextFactoryServiceTracker = createServiceTracker(bundleContext,
-				InitialContextFactory.class.getName());
+		m_contextFactoryServiceTracker = 
+			new ContextFactoryServiceTracker(bundleContext, InitialContextFactory.class.getName());
 
-		m_contextFactoryBuilderServiceTracker = createServiceTracker(
-				bundleContext, InitialContextFactoryBuilder.class.getName());
-
-		m_objectFactoryServiceTracker = new ServiceTracker(bundleContext,
-				ObjectFactory.class.getName(), null) {
-			public Object addingService(ServiceReference serviceReference) {
-				if (serviceReference.getProperty(JNDIConstants.JNDI_URLSCHEME) == null) {
-					return super.addingService(serviceReference);
-				}
-
-				return null;
-			}
-		};
+		m_contextFactoryBuilderServiceTracker = 
+			new ContextFactoryServiceTracker(bundleContext, InitialContextFactoryBuilder.class.getName());
 		
-		m_dirObjectFactoryServiceTracker = new ServiceTracker(bundleContext,
-				DirObjectFactory.class.getName(), null) {
-			public Object addingService(ServiceReference serviceReference) {
-				if (serviceReference.getProperty(JNDIConstants.JNDI_URLSCHEME) == null) {
-					return super.addingService(serviceReference);
-				}
+		m_objectFactoryServiceTracker = 
+			new ObjectFactoryServiceTracker(bundleContext, ObjectFactory.class.getName());
+		
+		m_dirObjectFactoryServiceTracker = 
+			new ObjectFactoryServiceTracker(bundleContext, DirObjectFactory.class.getName());
+		
+		m_objectFactoryBuilderServiceTracker = 
+			createServiceTracker(bundleContext, ObjectFactoryBuilder.class.getName());
 
-				return null;
-			}
-		};
-
-		m_objectFactoryBuilderServiceTracker = createServiceTracker(
-				bundleContext, ObjectFactoryBuilder.class.getName());
-
-		m_urlContextFactoryServiceTracker = new ServiceTracker(bundleContext,
-				ObjectFactory.class.getName(), null) {
-			public Object addingService(ServiceReference serviceReference) {
-				if (serviceReference.getProperty(JNDIConstants.JNDI_URLSCHEME) != null) {
-					return super.addingService(serviceReference);
-				}
-
-				return null;
-			}
-		};
+		m_urlContextFactoryServiceTracker = 
+			new URLContextFactoryServiceTracker(bundleContext, ObjectFactory.class.getName());
 
 		// open trackers
 		m_contextFactoryServiceTracker.open();
@@ -306,7 +310,7 @@ class OSGiInitialContextFactoryBuilder implements
 					// given precedence as per Section 5.2.1.1 of RFC
 					// 142
 					if (contextFactory != null) {
-						return contextFactory;
+						return new DefaultBuilderSupportedInitialContextFactory(contextFactory, builder);
 					}
 				}
 				catch (NamingException namingException) {
@@ -469,7 +473,7 @@ class OSGiInitialContextFactoryBuilder implements
 		
 		// obtain environment properties defined in the calling bundle's archive
 		Properties fileDefinedEnvironment = 
-			getFileDefinedJndiProperties();
+			getFileDefinedJndiProperties(m_bundleContext);
 		if(fileDefinedEnvironment != null) {
 			Enumeration keyEnum = fileDefinedEnvironment.keys();
 			while(keyEnum.hasMoreElements()) {
@@ -519,49 +523,42 @@ class OSGiInitialContextFactoryBuilder implements
 	}
 
 	/**
-	 * Checks the thread context classloader in order to search for a 
+	 * Checks the calling Bundle in order to search for a 
 	 * jndi.properties file.  
-	 * 
-	 * If the classloader supports BundleReference, this loader
-	 * represents a client bundle.
 	 * 
 	 * Check the client's bundle for a jndi.properties file in the archive
 	 * 
 	 * @return a Properties instance that contains the properties defined in
 	 *         a jndi.properties file for the caller's archive, or null if none exists
 	 */
-	private static Properties getFileDefinedJndiProperties() {
-		ClassLoader threadContextClassloader = Thread.currentThread().getContextClassLoader();
-		if ((threadContextClassloader != null)
-				&& (threadContextClassloader instanceof BundleReference)) {
-			BundleReference bundleRef = (BundleReference) threadContextClassloader;
-			if (bundleRef.getBundle() != null) {
-				Bundle bundle = bundleRef.getBundle();
-				try {
-					URL propertiesURL = bundle.getResource(JNDI_PROPERTIES_FILE_NAME);
-					if (propertiesURL != null) {
-						File jndiPropertiesFile = (File) propertiesURL.getContent();
-						try {
-							FileInputStream userDefinedPropertiesStream = 
-								new FileInputStream(jndiPropertiesFile);
-							Properties fileDefinedJndiProperties = new Properties();
-							fileDefinedJndiProperties.load(userDefinedPropertiesStream);
-							return fileDefinedJndiProperties; 
-						}
-						catch (FileNotFoundException e) {
-							// this exception should never occur, since the File has
-							// already been tested to be available
-							m_logger.log(Level.FINEST, "Exception encountered while trying to locate a jndi.properties file.", e);
-						}
+	private static Properties getFileDefinedJndiProperties(BundleContext callerBundleContext) {
+		if (callerBundleContext.getBundle() != null) {
+			Bundle bundle = callerBundleContext.getBundle();
+			try {
+				URL propertiesURL = bundle.getResource(JNDI_PROPERTIES_FILE_NAME);
+				if (propertiesURL != null) {
+					File jndiPropertiesFile = (File) propertiesURL.getContent();
+					try {
+						FileInputStream userDefinedPropertiesStream = 
+							new FileInputStream(jndiPropertiesFile);
+						Properties fileDefinedJndiProperties = new Properties();
+						fileDefinedJndiProperties.load(userDefinedPropertiesStream);
+						return fileDefinedJndiProperties; 
+					}
+					catch (FileNotFoundException e) {
+						// this exception should never occur, since the File has
+						// already been tested to be available
+						m_logger.log(Level.FINEST, "Exception encountered while trying to locate a jndi.properties file.", e);
 					}
 				}
-				catch (IOException e) {
-					m_logger.log(Level.FINEST, 
-							     "Exception encounted while trying to load a jndi.properties file",
-							     e);
-				}
+			}
+			catch (IOException e) {
+				m_logger.log(Level.FINEST, 
+						"Exception encounted while trying to load a jndi.properties file",
+						e);
 			}
 		}
+		
 	
 		return null;
 	}
@@ -586,6 +583,51 @@ class OSGiInitialContextFactoryBuilder implements
 	}
 
 	
+	private static final class URLContextFactoryServiceTracker extends ServiceTracker {
+		private URLContextFactoryServiceTracker(BundleContext context, String clazz) {
+			super(context, clazz, null);
+		}
+
+		public Object addingService(ServiceReference serviceReference) {
+			if (serviceReference.getProperty(JNDIConstants.JNDI_URLSCHEME) != null) {
+				return super.addingService(serviceReference);
+			}
+
+			return null;
+		}
+	}
+
+
+
+	private static final class ObjectFactoryServiceTracker extends ServiceTracker {
+		private ObjectFactoryServiceTracker(BundleContext context, String clazz) {
+			super(context, clazz, null);
+		}
+
+		public Object addingService(ServiceReference serviceReference) {
+			if (serviceReference.getProperty(JNDIConstants.JNDI_URLSCHEME) == null) {
+				return super.addingService(serviceReference);
+			}
+
+			return null;
+		}
+	}
+
+
+
+	private final class ContextFactoryServiceTracker extends ServiceTracker {
+		private ContextFactoryServiceTracker(BundleContext context, String clazz) {
+			super(context, clazz, null);
+		}
+
+		public void removedService(ServiceReference reference, Object service) {
+			super.removedService(reference, service);
+			m_mapOfServicesToContexts.remove(service);
+		}
+	}
+
+
+
 	/**
 	 *  Query the inner ObjectFactory instance to see if that factory
 	 *  can resolve the object.  
@@ -831,5 +873,26 @@ class OSGiInitialContextFactoryBuilder implements
 		}
 		
 	}
+	
+	private static class DefaultBuilderSupportedInitialContextFactory implements BuilderSupportedInitialContextFactory {
+		
+		private final InitialContextFactory m_factory;
+		private final InitialContextFactoryBuilder m_builder;
+		
+		DefaultBuilderSupportedInitialContextFactory(InitialContextFactory factory, InitialContextFactoryBuilder builder) {
+			m_factory = factory;
+			m_builder = builder;
+		}
+
+		public InitialContextFactoryBuilder getBuilder() {
+			return m_builder;
+		}
+
+		public Context getInitialContext(Hashtable environment) throws NamingException {
+			return m_factory.getInitialContext(environment);
+		}
+	}
+
+	
 	
 }

@@ -59,7 +59,6 @@ abstract class ServiceBasedNamingEnumeration implements NamingEnumeration {
 	}
 
 	public void close() throws NamingException {
-		//TODO, consider closing any used service resources here
 		m_isOpen = false;
 	}
 

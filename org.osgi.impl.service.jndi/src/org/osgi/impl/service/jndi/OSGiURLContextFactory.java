@@ -15,16 +15,15 @@
  */
 package org.osgi.impl.service.jndi;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Hashtable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.Name;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
-import javax.naming.OperationNotSupportedException;
 import javax.naming.spi.ObjectFactory;
 
 import org.osgi.framework.BundleContext;
@@ -39,8 +38,9 @@ import org.osgi.service.jndi.JNDIConstants;
  */
 class OSGiURLContextFactory implements ObjectFactory {
 
-	//TODO, move this to a common interface/class
 	private static final String OSGI_BUNDLE_CONTEXT_LOOKUP = "osgi:framework/bundleContext";
+
+	private static final Logger logger = Logger.getLogger(OSGiURLContextFactory.class.getName());
 	
 	private final BundleContext	m_bundleContext;
 
@@ -49,62 +49,52 @@ class OSGiURLContextFactory implements ObjectFactory {
 	}
 
 	public Object getObjectInstance(Object obj, Name name, Context nameCtx, Hashtable environment) throws Exception {
-		return Proxy.newProxyInstance(this.getClass().getClassLoader(),
-				new Class[] {Context.class}, new OSGiContextInvocationHandler(
-						m_bundleContext));
+		return new OSGiURLContext(m_bundleContext);
 	}
 
 	/**
-	 * InvocationHandler representing the OSGi URL Context that is handed back
-	 * to the Factory Manager.
+	 * The OSGi URL Context that is handed back to the JNDI Implementation.
 	 * <p/>
-	 * Currently, this proxy only supports the Context.lookup(String) method.
+	 * This URL Context only supports the Context.lookup(String) method.
 	 * All other method invocations on this context will result in an
 	 * OperationNotSupportedException being thrown.
 	 */
-	private static class OSGiContextInvocationHandler implements InvocationHandler {
+	private static class OSGiURLContext extends NotSupportedContext {
 
 		private final BundleContext	m_bundleContext;
 
-		public OSGiContextInvocationHandler(BundleContext bundleContext) {
+		public OSGiURLContext(BundleContext bundleContext) {
+			super("This operation is not supported by the OSGi URL Context");
 			m_bundleContext = bundleContext;
 		}
+		
 
-		public Object invoke(Object proxy, Method method, Object[] args)
-				throws Throwable {
-			if (method.getName().equals("lookup")) {
-				if ((args.length == 1) && (args[0] instanceof String)) {
-					String osgiURL = (String) args[0];
-					try {
-						if(osgiURL.equals(OSGI_BUNDLE_CONTEXT_LOOKUP)) {
-							// return the caller's BundleContext
-							return m_bundleContext;
-						}
-						
-						Object requestedService = obtainService(osgiURL);
-						if (requestedService != null) {
-							// TODO, eventually add proxy code to track service
-							// usage
-							return requestedService;
-						}
-					}
-					catch (InvalidSyntaxException e) {
-						NamingException namingException = new NamingException(
-								"Error occurred while parsing the OSGi URL");
-						namingException.initCause(e);
-						throw namingException;
-					}
-
-					throw new NameNotFoundException(
-							"The OSGi service referred to by the URL = "
-									+ osgiURL
-									+ " could not be located in the OSGi Service Registry");
+		public Object lookup(String name) throws NamingException {
+			String osgiURL = name;
+			try {
+				if(osgiURL.equals(OSGI_BUNDLE_CONTEXT_LOOKUP)) {
+					// return the caller's BundleContext
+					return m_bundleContext;
+				}
+				
+				Object requestedService = obtainService(osgiURL);
+				if (requestedService != null) {
+					return requestedService;
 				}
 			}
+			catch (InvalidSyntaxException e) {
+				NamingException namingException = new NamingException(
+						"Error occurred while parsing the OSGi URL");
+				namingException.initCause(e);
+				throw namingException;
+			}
 
-			throw new OperationNotSupportedException(
-					"This operation is not supported by the OSGi URL Context");
+			throw new NameNotFoundException(
+					"The OSGi service referred to by the URL = "
+							+ osgiURL
+							+ " could not be located in the OSGi Service Registry");
 		}
+		
 
 		/**
 		 * Obtain the service requested in the "osgi" URL. Currently, this
@@ -123,8 +113,7 @@ class OSGiURLContextFactory implements ObjectFactory {
 				urlParser.parse();
 			}
 			catch (IllegalStateException stateException) {
-				// TODO, use a logger for this eventually
-				stateException.printStackTrace();
+				logger.log(Level.SEVERE, "An exception occurred while trying to parse this osgi URL", stateException);
 				return null;
 			}
 			if (urlParser.getServiceInterface() == null) {
@@ -134,12 +123,10 @@ class OSGiURLContextFactory implements ObjectFactory {
 			return getService(m_bundleContext, urlParser);
 		}
 
-		private static Object getService(BundleContext bundleContext,
-				OSGiURLParser urlParser) throws InvalidSyntaxException {
-			
+		private static Object getService(BundleContext bundleContext, OSGiURLParser urlParser) throws InvalidSyntaxException {
 			ServiceReference[] serviceReferences = 
-				bundleContext.getServiceReferences(urlParser.getServiceInterface(),
-							                       urlParser.getFilter());
+				bundleContext.getServiceReferences(urlParser.getServiceInterface(), 
+						                           urlParser.getFilter());
 			if (serviceReferences != null) {
 				final ServiceReference[] sortedServiceReferences = 
 					ServiceUtils.sortServiceReferences(serviceReferences);
@@ -148,7 +135,7 @@ class OSGiURLContextFactory implements ObjectFactory {
 					return new OSGiServiceListContext(bundleContext, sortedServiceReferences, urlParser);
 				}
 				else {
-					return bundleContext.getService(sortedServiceReferences[0]);
+					return getProxyForSingleService(bundleContext, urlParser, sortedServiceReferences[0]);
 				}
 			}
 			else {
@@ -158,17 +145,51 @@ class OSGiURLContextFactory implements ObjectFactory {
 				final String serviceNameFilter = "("
 						+ JNDIConstants.JNDI_SERVICENAME + "="
 						+ urlParser.getServiceInterface() + ")";
-				ServiceReference[] serviceReferencesByName = 
-					bundleContext.getServiceReferences(null, serviceNameFilter);
+				ServiceReference[] serviceReferencesByName = bundleContext
+						.getServiceReferences(null, serviceNameFilter);
 				if (serviceReferencesByName != null) {
-					final ServiceReference[] sortedServiceReferences = 
-						ServiceUtils.sortServiceReferences(serviceReferencesByName);
+					final ServiceReference[] sortedServiceReferences = ServiceUtils
+							.sortServiceReferences(serviceReferencesByName);
 					return bundleContext.getService(sortedServiceReferences[0]);
 				}
 			}
 
 			return null;
 		}
-	}
 
+		private static Object getProxyForSingleService(BundleContext bundleContext, OSGiURLParser urlParser, ServiceReference serviceReference) {
+			Object requestedService = 
+				bundleContext.getService(serviceReference);
+			ClassLoader tempLoader = 
+				requestedService.getClass().getClassLoader();
+			try {
+				Class clazz = Class.forName(urlParser.getServiceInterface(), true, tempLoader);
+				if (clazz.isInterface()) {
+					ServiceInvocationHandler handler = 
+						new ServiceInvocationHandler(bundleContext, serviceReference, 
+								                     urlParser, requestedService);
+					return Proxy.newProxyInstance(tempLoader, new Class[] {clazz}, handler);
+				}
+				else {
+					// TODO,revisit this 
+					return requestedService;
+				}
+			}
+			catch (ClassNotFoundException classNotFoundException) {
+				tempLoader = requestedService.getClass().getClassLoader();
+				final Class[] interfaces = requestedService.getClass().getInterfaces();
+				if (interfaces.length > 0) {
+					ServiceInvocationHandler handler = 
+						new ServiceInvocationHandler(bundleContext, serviceReference, 
+								                     urlParser, requestedService);
+					return Proxy.newProxyInstance(tempLoader, interfaces, handler);
+				}
+				else {
+					// TODO,revisit this
+					return requestedService;
+				}
+			}
+		}
+	}
+	
 }

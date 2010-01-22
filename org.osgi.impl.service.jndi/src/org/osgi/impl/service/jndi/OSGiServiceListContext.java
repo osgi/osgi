@@ -17,16 +17,16 @@
 
 package org.osgi.impl.service.jndi;
 
+import java.lang.reflect.Proxy;
 import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.naming.Binding;
-import javax.naming.Context;
-import javax.naming.Name;
 import javax.naming.NameClassPair;
 import javax.naming.NameNotFoundException;
-import javax.naming.NameParser;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.OperationNotSupportedException;
@@ -35,10 +35,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 
-class OSGiServiceListContext implements Context {
+class OSGiServiceListContext extends NotSupportedContext {
 
-	private static final String	SERVICE_ID_PREFIX	= "(service.id=";
-	
 	private final BundleContext m_bundleContext;
 	
 	private final ServiceReference[] m_serviceReferences;
@@ -49,6 +47,7 @@ class OSGiServiceListContext implements Context {
 	private final Map m_mapOfServices = new HashMap(); 
 	
 	OSGiServiceListContext(BundleContext bundleContext, ServiceReference[] serviceReferences, OSGiURLParser urlParser) {
+		super("This operation is not supported in an osgi:servicelist context");
 		m_bundleContext = bundleContext;
 		m_serviceReferences = serviceReferences;
 		m_urlParser = urlParser;
@@ -56,71 +55,10 @@ class OSGiServiceListContext implements Context {
 	}
 	
 
-	public Object addToEnvironment(String var0, Object var1)
-			throws NamingException {
-		operationNotSupported();
-		return null;
-	}
-
-	public void bind(String var0, Object var1) throws NamingException {
-		operationNotSupported();
-	}
-
-	public void bind(Name var0, Object var1) throws NamingException {
-		operationNotSupported();
-	}
-
 	public void close() throws NamingException {
 		// this operation is a no-op
 	}
 
-	public String composeName(String var0, String var1) throws NamingException {
-		operationNotSupported();
-		return null;
-	}
-
-	public Name composeName(Name var0, Name var1) throws NamingException {
-		operationNotSupported();
-		return null;
-	}
-
-	public Context createSubcontext(String var0) throws NamingException {
-		operationNotSupported();
-		return null;
-	}
-
-	public Context createSubcontext(Name var0) throws NamingException {
-		operationNotSupported();
-		return null;
-	}
-
-	public void destroySubcontext(String var0) throws NamingException {
-		operationNotSupported();
-	}
-
-	public void destroySubcontext(Name var0) throws NamingException {
-		operationNotSupported();
-	}
-
-	public Hashtable getEnvironment() throws NamingException {
-		operationNotSupported();
-		return null;
-	}
-
-	public String getNameInNamespace() throws NamingException {
-		operationNotSupported();
-		return null;
-	}
-
-	public NameParser getNameParser(String var0) throws NamingException {
-		operationNotSupported();
-		return null;
-	}
-
-	public NameParser getNameParser(Name var0) throws NamingException {
-		operationNotSupported();
-		return null;
-	}
 
 	public NamingEnumeration list(String name) throws NamingException {
 		if(name.equals("")) {
@@ -131,10 +69,6 @@ class OSGiServiceListContext implements Context {
 		throw new OperationNotSupportedException("This NamingEnumeration cannot support list() operations for anything other than the empty string");
 	}
 
-	public NamingEnumeration list(Name name) throws NamingException {
-		operationNotSupported();
-		return null;
-	}
 
 	public NamingEnumeration listBindings(String name) throws NamingException {
 		if(name.equals("")) {
@@ -145,13 +79,9 @@ class OSGiServiceListContext implements Context {
 		throw new OperationNotSupportedException("This NamingEnumeration cannot support list() operations for anything other than the empty string");
 	}
 
-	public NamingEnumeration listBindings(Name var0) throws NamingException {
-		operationNotSupported();
-		return null;
-	}
 
 	public Object lookup(String name) throws NamingException {
-		Long serviceId = getServiceIdFromLookupName(name);
+		Long serviceId = new Long(name);
 		if(serviceId == null) {
 			throw new NameNotFoundException("Service with the name = " + name + " does not exist in this context");
 		} else {
@@ -163,70 +93,7 @@ class OSGiServiceListContext implements Context {
 			}
 		}
 	}
-
-	public Object lookup(Name var0) throws NamingException {
-		operationNotSupported();
-		return null;
-	}
-
-	public Object lookupLink(String var0) throws NamingException {
-		operationNotSupported();
-		return null;
-	}
-
-	public Object lookupLink(Name var0) throws NamingException {
-		operationNotSupported();
-		return null;
-	}
-
-	public void rebind(String var0, Object var1) throws NamingException {
-		operationNotSupported();
-	}
-
-	public void rebind(Name var0, Object var1) throws NamingException {
-		operationNotSupported();
-	}
-
-	public Object removeFromEnvironment(String var0) throws NamingException {
-		operationNotSupported();
-		return null;
-	}
-
-	public void rename(String var0, String var1) throws NamingException {
-		operationNotSupported();
-	}
-
-	public void rename(Name var0, Name var1) throws NamingException {
-		operationNotSupported();
-	}
-
-	public void unbind(String var0) throws NamingException {
-		operationNotSupported();
-	}
-
-	public void unbind(Name var0) throws NamingException {
-		operationNotSupported();
-	}
 	
-	private void operationNotSupported() throws OperationNotSupportedException {
-		throw new OperationNotSupportedException("This operation is not supported in an osgi:servicelist context");
-	}
-	
-	private Long getServiceIdFromLookupName(String name) {
-		if(!name.startsWith(SERVICE_ID_PREFIX)) {
-			// lookup name is just the service ID in string form
-			return new Long(name);
-		} else {
-			int indexOfClosingParenthesis = name.indexOf(')');
-			if(indexOfClosingParenthesis >= 0) {
-				String id = name.substring(SERVICE_ID_PREFIX.length(), indexOfClosingParenthesis);
-				return new Long(id);
-			} else {
-				return null;
-			}
-			
-		}
-	}
 	
 	/**
 	 * Convenience method for building a lookup map of service id's to services.  
@@ -288,6 +155,9 @@ class OSGiServiceListContext implements Context {
 	 * @version $Revision$
 	 */
 	static class ListBindingsNamingEnumeration extends ServiceBasedNamingEnumeration {
+		
+		private final List m_listOfHandlers = new LinkedList();
+		
 		ListBindingsNamingEnumeration(BundleContext bundleContext, ServiceReference[] serviceReferences, String interfaceName) {
 			super(bundleContext, serviceReferences, interfaceName);
 			
@@ -297,10 +167,35 @@ class OSGiServiceListContext implements Context {
 				Long serviceId = (Long)m_serviceReferences[i].getProperty(Constants.SERVICE_ID);
 				Object serviceObject = 
 					m_bundleContext.getService(m_serviceReferences[i]);
+				
+				
+				ClassLoader tempLoader = serviceObject.getClass().getClassLoader();
+				Class serviceClass = null;
+				try {
+					serviceClass = Class.forName(interfaceName, true, tempLoader);
+				}
+				catch (ClassNotFoundException e) {
+					// possibly log here
+					serviceClass = null;
+				}
+				
+				Object bindingService = null;
+				if(serviceClass != null) {
+					NoRetryServiceInvocationHandler handler = 
+						new NoRetryServiceInvocationHandler(bundleContext, m_serviceReferences[i], 
+								                            null, serviceObject);
+					bindingService =  
+						Proxy.newProxyInstance(tempLoader, new Class[] {serviceClass}, handler);
+					m_listOfHandlers.add(handler);
+					
+				} else {
+					bindingService = serviceObject;
+				}
+				
 				m_nameClassPairs[i] = 
 					new Binding(serviceId.toString(), 
 							    m_interfaceName, 
-							    serviceObject);
+							    bindingService);
 			}
 		}
 
@@ -310,13 +205,28 @@ class OSGiServiceListContext implements Context {
 			for(int i = 0; i < m_serviceReferences.length; i++) {
 				m_bundleContext.ungetService(m_serviceReferences[i]);
 			}
-		}
+			
+			Iterator iterator = m_listOfHandlers.iterator();
+			while(iterator.hasNext()) {
+				NoRetryServiceInvocationHandler handler = 
+					(NoRetryServiceInvocationHandler)iterator.next();
+				handler.close();
+			}
+        }
 	}
 	
 	
-	
-	
-	
-	
+	private static class NoRetryServiceInvocationHandler extends ServiceInvocationHandler {
+		NoRetryServiceInvocationHandler(BundleContext callerBundleContext, ServiceReference serviceReference, OSGiURLParser urlParser, Object osgiService) {
+			super(callerBundleContext, serviceReference, urlParser, osgiService);
+		}
+
+
+		protected boolean obtainService() {
+			m_serviceTracker.close();
+			// always return false, since servicelist proxies must not rebind to a service
+			return false;
+		}
+	}
 
 }

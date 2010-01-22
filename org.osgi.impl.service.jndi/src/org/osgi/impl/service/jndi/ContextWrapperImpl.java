@@ -24,7 +24,7 @@ import java.util.Hashtable;
  * requests for URL context factory lookups.
  * 
  */
-class ContextWrapperImpl implements Context, ContextWrapper {
+class ContextWrapperImpl implements Context {
 
 	private final Context			m_context;
 	private final FactoryManager	m_factoryManager;
@@ -34,10 +34,6 @@ class ContextWrapperImpl implements Context, ContextWrapper {
 		m_factoryManager = factoryManager;
 	}
 
-	public Context getWrappedContext() {
-		return m_context;
-	}
-	
 
 	public Object lookup(Name name) throws NamingException {
 		return m_context.lookup(name);

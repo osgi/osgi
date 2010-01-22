@@ -30,27 +30,37 @@ class InitialContextFactoryWrapper implements InitialContextFactory {
 	private final InitialContextFactory	m_initialContextFactory;
 	private final FactoryManager		m_factoryManager;
 
-	public InitialContextFactoryWrapper(
-			InitialContextFactory initialContextFactory,
-			FactoryManager factoryManager) {
+	public InitialContextFactoryWrapper(InitialContextFactory initialContextFactory, FactoryManager factoryManager) {
 		m_initialContextFactory = initialContextFactory;
 		m_factoryManager = factoryManager;
 	}
 
-	public Context getInitialContext(Hashtable environment)
-			throws NamingException {
-		
+	public Context getInitialContext(Hashtable environment) throws NamingException {
 		final Context contextToReturn = 
 			m_initialContextFactory.getInitialContext(environment);
 
 		if(contextToReturn instanceof DirContext) {
-			// for now, just return the DirContext directly
-			// TODO, consider wrapping DirContext instances
-			return contextToReturn;
+			final DirContextWrapperImpl dirContextWrapper = new DirContextWrapperImpl((DirContext)contextToReturn, m_factoryManager);
+			setupFactoryAssociation(dirContextWrapper);
+			return ServiceAwareContextFactory.createServiceAwareDirContextWrapper(m_initialContextFactory, dirContextWrapper, m_factoryManager);
 		} else {
-			return new ContextWrapperImpl(contextToReturn, m_factoryManager);
+			final ContextWrapperImpl contextWrapper = new ContextWrapperImpl(contextToReturn, m_factoryManager);
+			setupFactoryAssociation(contextWrapper);
+			return ServiceAwareContextFactory.createServiceAwareContextWrapper(m_initialContextFactory, contextWrapper, m_factoryManager);
 		}
 		
 		
+	}
+
+	private void setupFactoryAssociation(final Context contextWrapper) {
+		if(m_initialContextFactory instanceof BuilderSupportedInitialContextFactory) {
+			BuilderSupportedInitialContextFactory builderFactory = 
+				(BuilderSupportedInitialContextFactory)m_initialContextFactory;
+			// this Context is backed by an InitialContextFactoryBuilder service
+			m_factoryManager.associateFactoryService(builderFactory.getBuilder(), contextWrapper);
+		} else {
+			// this Context is backed by an InitialContextFactory service
+			m_factoryManager.associateFactoryService(m_initialContextFactory, contextWrapper);
+		}
 	}
 }

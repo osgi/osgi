@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -34,6 +36,8 @@ import org.osgi.service.jndi.JNDIContextManager;
 
 class JNDIContextManagerImpl implements JNDIContextManager {
 
+	private static final Logger logger = Logger.getLogger(JNDIContextManagerImpl.class.getName());
+	
 	private final InitialContextFactoryBuilder	m_builder;
 	
 	/* list of Context implementations */
@@ -95,8 +99,7 @@ class JNDIContextManagerImpl implements JNDIContextManager {
 				context.close();
 			}
 			catch (NamingException e) {
-				//TODO, add logging here
-				e.printStackTrace();
+				logger.log(Level.INFO, "NamingException occurred while trying to close an existing JNDI Context", e);
 			}
 		}
 		

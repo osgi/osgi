@@ -48,7 +48,6 @@ public class Activator implements BundleActivator {
 	private static Logger m_logger = Logger.getLogger(Activator.class.getName());
 
 	private BundleContext						m_bundleContext					= null;
-	private OSGiInitialContextFactoryBuilder	m_builder						= null;
 	private final List                          m_listOfServiceRegistrations = new LinkedList();
 
 	/*
@@ -63,12 +62,11 @@ public class Activator implements BundleActivator {
 		m_logger.info("Initializing JNDI Factory Manager Bundle");
 		
 		m_bundleContext = context;
-		m_builder = new OSGiInitialContextFactoryBuilder(m_bundleContext);
 
-		// register with the JNDI framework
+		// register static singletons with the JNDI framework
 		m_logger.info("Installing Factory Manager as a JNDI Builder");
-		NamingManager.setInitialContextFactoryBuilder(new TraditionalInitialContextFactoryBuilder(context));
-		NamingManager.setObjectFactoryBuilder(new TraditionalObjectFactoryBuilder(context));
+		NamingManager.setInitialContextFactoryBuilder(new TraditionalInitialContextFactoryBuilder());
+		NamingManager.setObjectFactoryBuilder(new TraditionalObjectFactoryBuilder());
 
 		m_logger.info("Registering URL Context Factory for 'osgi' URL scheme");
 		registerOSGiURLContextFactory();
@@ -80,7 +78,7 @@ public class Activator implements BundleActivator {
 		// register the JNDIContextManager service once all Factory
 		// Manager initialization is complete
 		registerJNDIContextManager();
-		// register the JNDIContextAdmin interface, used by OSGi-aware
+		// register the JNDIProviderAdmin interface, used by OSGi-aware
 		// context implementations to resolve JNDI references
 		registerJNDIProviderAdmin();
 	}
@@ -96,9 +94,6 @@ public class Activator implements BundleActivator {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		m_logger.info("Shutting down JNDI Factory Manager Bundle");
-		if (m_builder != null) {
-			m_builder.close();
-		}
 		
 		Iterator iterator = m_listOfServiceRegistrations.iterator();
 		while(iterator.hasNext()) {
@@ -114,8 +109,7 @@ public class Activator implements BundleActivator {
 	 */
 	private void registerOSGiURLContextFactory() {
 		Hashtable serviceProperties = new Hashtable();
-		serviceProperties.put(JNDIConstants.JNDI_URLSCHEME,
-				              OSGI_URL_SCHEME);
+		serviceProperties.put(JNDIConstants.JNDI_URLSCHEME, OSGI_URL_SCHEME);
 
 		ServiceRegistration serviceRegistration = 
 			m_bundleContext.registerService(ObjectFactory.class.getName(), 

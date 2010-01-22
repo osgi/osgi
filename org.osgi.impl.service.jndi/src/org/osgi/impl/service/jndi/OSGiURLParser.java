@@ -46,7 +46,7 @@ class OSGiURLParser {
 			}
 			else {
 				throw new IllegalStateException(
-						"URL did not conform to the OSGi URL Syntax");
+						"URL '" + m_osgiURL + "'" +  "did not conform to the OSGi URL Syntax");
 			}
 
 		}
