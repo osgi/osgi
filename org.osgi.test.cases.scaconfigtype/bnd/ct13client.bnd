@@ -1,9 +1,9 @@
 Bundle-Name:                             ${p}.ct13client
 Bundle-Version:                          1.0
 Private-Package:                         ${p}.common.*
-Include-Resource					= \
-	OSGI-INF/remote-service/endpoints.xml=resources/OSGI-INF/remote-service/endpoints.xml, \
-	OSGI-INF/sca-config/bindings/binding.xml=resources/OSGI-INF/sca-config/bindings/binding.xml, \
+#Include-Resource					= \
+#	OSGI-INF/remote-service/endpoints.xml=resources/OSGI-INF/remote-service/endpoints.xml, \
+#	OSGI-INF/sca-config/bindings/binding.xml=resources/OSGI-INF/sca-config/bindings/binding.xml, \
 	
-SCA-Configuration: OSGI-INF/sca-config/bindings/binding.xml
-Remote-Service: OSGI-INF/remote-service/endpoints.xml
+#SCA-Configuration: OSGI-INF/sca-config/bindings/binding.xml
+#Remote-Service: OSGI-INF/remote-service/endpoints.xml

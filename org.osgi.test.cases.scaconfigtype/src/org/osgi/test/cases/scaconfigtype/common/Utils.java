@@ -96,8 +96,10 @@ public class Utils {
 			list.addAll(col);
 		} else { // assume String[]
 			String[] arr = (String[])configProperty;
-			for (int i=0; i<arr.length; i++) {
-				list.add(arr[i]);
+			if (arr != null) {
+				for (int i = 0; i < arr.length; i++) {
+					list.add(arr[i]);
+				}
 			}
 		}
 		

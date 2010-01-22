@@ -270,7 +270,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         // wait for test service to be registered in this framework
         ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
         tracker.open();
-        A serviceA = (A)tracker.waitForService(SERVICE_TIMEOUT);
+        A serviceA = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), A.class);
 
         assertNotNull("Missing test service", serviceA);
         ServiceReference[] refs = tracker.getServiceReferences();
@@ -288,7 +288,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         // assert this is not picked up by the RI
         tracker = new ServiceTracker(clientBundle.getBundleContext(), B.class.getName(), null);
         tracker.open();
-        B serviceB = (B)tracker.waitForService(SERVICE_TIMEOUT);
+        B serviceB = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), B.class);
         
         assertIsUnavailable(serviceB);
 
@@ -395,7 +395,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
                 fail("Unexpected test service A");
             } catch (ServiceException e) {
                 // Expected
-                assertEquals("REMOTE", e.getMessage());
+                assertEquals(ServiceException.REMOTE, e.getType());
             }
         }
     }
@@ -407,7 +407,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
                 fail("Unexpected test service B");
             } catch (ServiceException e) {
                 // Expected
-                assertEquals("REMOTE", e.getMessage());
+                assertEquals(ServiceException.REMOTE, e.getType());
             }
         }
 	}    

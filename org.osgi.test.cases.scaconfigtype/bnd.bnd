@@ -19,6 +19,7 @@ Include-Resource					= \
     org.osgi.test.support;                  version=project , \
 	osgi.core;								version=4.2		, \
 	osgi.enterprise;						version=4.2	, \
+	osgi.cmpn;                              version=4.2    , \
 	ee.j2se;								version=1.6.0	, \
 	${junit}
 
@@ -33,7 +34,7 @@ Include-Resource					= \
 	${p}.bundles=${repo;com.springsource.junit}|${repo;org.apache.tuscany.sca.bundle}|${repo;osgi.cmpn}|${repo;org.osgi.impl.service.log}, \
 	${p}.serverconfig="service.exported.configs,org.osgi.sca.domain.registry", \
 	service.exported.configs=org.osgi.sca, \
-	org.osgi.sca.domain.registry="tribes://228.0.0.100:50000?timeout\=6000"
+ 	org.osgi.sca.domain.registry="tribes://228.0.0.100:50000"
 
 Test-Cases							= ${testcases}
 
