@@ -60,9 +60,12 @@ public interface RemoteServiceAdmin {
 	 *        implemented by this Remote Service Admin. If this is
 	 *        <code>null</code>, the Endpoint will be determined by the
 	 *        properties on the service. The properties are the same as given
-	 *        for an exported service. They are overlaid over any properties the
-	 *        service defines (case insensitive). This parameter can be
-	 *        <code>null</code>, this should be treated as an empty map.
+	 *        for an exported service. They override any properties in the
+	 *        specified Service Reference (case insensitive). The properties
+	 *        <code>objectClass</code> and <code>service.id</code>, in any case
+	 *        variant, are ignored. Those properties in the Service Reference
+	 *        cannot be overridden. This parameter can be <code>null</code>,
+	 *        this should be treated as an empty map.
 	 * @return A <code>Collection</code> of {@link ExportRegistration}s for the
 	 *         specified Service Reference and properties. Multiple Export
 	 *         Registrations may be returned because a single service can be

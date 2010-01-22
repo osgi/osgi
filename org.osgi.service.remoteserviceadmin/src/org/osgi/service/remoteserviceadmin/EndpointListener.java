@@ -33,15 +33,15 @@ package org.osgi.service.remoteserviceadmin;
  * local end-points to the network.
  * 
  * If the network bundle discovers a new Endpoint through its discovery
- * protocol, then it sends an Endpoint Description to all the Endpoint
- * Listener services that are registered (except its own) that have specified an
- * interest in that endpoint.
+ * protocol, then it sends an Endpoint Description to all the Endpoint Listener
+ * services that are registered (except its own) that have specified an interest
+ * in that endpoint.
  * 
  * Endpoint Listener services can express their <i>scope</i> with the service
  * property {@link #ENDPOINT_LISTENER_SCOPE}. This service property is a list of
  * filters. An Endpoint Description should only be given to a Endpoint Listener
  * when there is at least one filter that matches the Endpoint Description
- * properties. given to it.
+ * properties.
  * 
  * This filter model is quite flexible. For example, a discovery bundle is only
  * interested in locally originating Endpoint Descriptions. The following filter
@@ -77,7 +77,6 @@ package org.osgi.service.remoteserviceadmin;
  * bundles should do their utmost to keep the listeners up to date, but
  * implementers should realize that many endpoints come through unreliable
  * discovery processes.
- * 
  * 
  * @ThreadSafe
  * @version $Revision$
