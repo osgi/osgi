@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,8 +74,7 @@ public class EndpointDescriptionTests extends TestCase {
 		ed = newEndpointDescription(props);
 		assertEquals("wrong remote id", someId, ed.getId());
 
-		assertEquals("remote service id should be zero", 0l, ed
-.getServiceId());
+		assertEquals("remote service id should be zero", 0l, ed.getServiceId());
 		assertNull("remote framework uuid should be null", ed
 				.getFrameworkUUID());
 
@@ -101,10 +100,10 @@ public class EndpointDescriptionTests extends TestCase {
 			// expected
 		}
 
-		Long someID = new Long(12l);
-		props.put(ENDPOINT_SERVICE_ID, someID);
+		Long someServiceId = new Long(12l);
+		props.put(ENDPOINT_SERVICE_ID, someServiceId);
 		ed = newEndpointDescription(props);
-		assertEquals("wrong id", someID.longValue(), ed.getServiceId());
+		assertEquals("wrong id", someServiceId.longValue(), ed.getServiceId());
 
 		props.put(OBJECTCLASS, "not a String[]");
 		try {
@@ -151,8 +150,7 @@ public class EndpointDescriptionTests extends TestCase {
 
 		Version someVersion = new Version(1, 2, 3, "somequalifier");
 		props.put(ENDPOINT_PACKAGE_VERSION_ + getPackageName(objectClass[0]),
-				someVersion
-				.toString());
+				someVersion.toString());
 		ed = newEndpointDescription(props);
 		assertEquals("package version wrong", someVersion, ed
 				.getPackageVersion(getPackageName(objectClass[0])));
@@ -171,8 +169,7 @@ public class EndpointDescriptionTests extends TestCase {
 		}
 
 		props.put(ENDPOINT_PACKAGE_VERSION_ + getPackageName(objectClass[1]),
-				someVersion
-				.toString());
+				someVersion.toString());
 		ed = newEndpointDescription(props);
 		assertEquals("package version wrong", someVersion, ed
 				.getPackageVersion(getPackageName(objectClass[1])));
@@ -298,13 +295,11 @@ public class EndpointDescriptionTests extends TestCase {
 			// expected
 		}
 
-
 		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
 		ed = newEndpointDescription(ref, null);
 		assertEquals("wrong remote id", someId, ed.getId());
 
-		assertEquals("remote service id should be zero", 0l, ed
-.getServiceId());
+		assertEquals("remote service id should be zero", 0l, ed.getServiceId());
 		assertEquals("wrong uuid", testUUID, ed.getFrameworkUUID());
 
 		props.put(ENDPOINT_FRAMEWORK_UUID, "newUUID");
@@ -331,11 +326,11 @@ public class EndpointDescriptionTests extends TestCase {
 			// expected
 		}
 
-		Long someID = new Long(12l);
+		Long someServiceId = new Long(12l);
 		props.remove(ENDPOINT_SERVICE_ID);
-		serviceProps.put(SERVICE_ID, someID);
+		serviceProps.put(SERVICE_ID, someServiceId);
 		ed = newEndpointDescription(ref, props);
-		assertEquals("wrong id", someID.longValue(), ed.getServiceId());
+		assertEquals("wrong id", someServiceId.longValue(), ed.getServiceId());
 
 		String[] objectClass = new String[] {"com.acme.Foo", "com.acme.FOO"};
 		props.put(OBJECTCLASS, objectClass);
@@ -367,8 +362,7 @@ public class EndpointDescriptionTests extends TestCase {
 				.getPackageVersion("xxx"));
 
 		serviceProps.put(ENDPOINT_PACKAGE_VERSION_
-				+ getPackageName(objectClass[0]),
-				"bad version");
+				+ getPackageName(objectClass[0]), "bad version");
 		try {
 			ed = newEndpointDescription(ref, props);
 			fail("invalid package version property");
@@ -379,15 +373,13 @@ public class EndpointDescriptionTests extends TestCase {
 
 		Version someVersion = new Version(1, 2, 3, "somequalifier");
 		serviceProps.put(ENDPOINT_PACKAGE_VERSION_
-				+ getPackageName(objectClass[0]),
-				someVersion.toString());
+				+ getPackageName(objectClass[0]), someVersion.toString());
 		ed = newEndpointDescription(ref, props);
 		assertEquals("package version wrong", someVersion, ed
 				.getPackageVersion(getPackageName(objectClass[0])));
 
 		serviceProps.put(ENDPOINT_PACKAGE_VERSION_
-				+ getPackageName(objectClass[1]),
-				"bad version");
+				+ getPackageName(objectClass[1]), "bad version");
 		try {
 			ed = newEndpointDescription(ref, props);
 			fail("invalid package version property");
@@ -643,7 +635,7 @@ public class EndpointDescriptionTests extends TestCase {
 	public void testHashcode() {
 		Map<String, Object> props = new HashMap<String, Object>();
 		String someId = "someId";
-		props.put(ENDPOINT_ID, someId);
+		props.put(ENDPOINT_ID, "  " + someId + "\t");
 		props.put(OBJECTCLASS, new String[] {"foo"});
 		props.put(SERVICE_IMPORTED_CONFIGS, "config");
 		String testUUID = "testUUID";
@@ -668,12 +660,13 @@ public class EndpointDescriptionTests extends TestCase {
 				.hashCode());
 		assertTrue("hashCode should not equal", ed2.hashCode() != ed3
 				.hashCode());
+		assertEquals("id not trimmed of whitespace", someId, ed1.getId());
 	}
 
 	public void testEquals() {
 		Map<String, Object> props = new HashMap<String, Object>();
 		String someId = "someId";
-		props.put(ENDPOINT_ID, someId);
+		props.put(ENDPOINT_ID, "  " + someId + "\t");
 		props.put(OBJECTCLASS, new String[] {"foo"});
 		props.put(SERVICE_IMPORTED_CONFIGS, "config");
 		String testUUID = "testUUID";
@@ -703,6 +696,7 @@ public class EndpointDescriptionTests extends TestCase {
 		assertTrue("should equal", ed2.equals(ed2));
 		assertTrue("should equal", ed3.equals(ed3));
 		assertFalse("should not equal", ed2.equals(this));
+		assertEquals("id not trimmed of whitespace", someId, ed1.getId());
 	}
 
 	public void testIsSame() {
@@ -788,6 +782,35 @@ public class EndpointDescriptionTests extends TestCase {
 		catch (IllegalArgumentException e) {
 			// expected
 		}
+	}
+
+	public void testStripServiceExported() {
+		Map<String, Object> props = new HashMap<String, Object>();
+		String someId = "someId";
+		props.put(ENDPOINT_ID, "  " + someId + "\t");
+		props.put(OBJECTCLASS, new String[] {"foo"});
+		props.put(SERVICE_IMPORTED_CONFIGS, "config");
+		props.put("SERVICE.EXPORTED.CONFIGS", "config");
+		String testUUID = "testUUID";
+		BundleContext testContext = newMockBundleContext(testUUID);
+		Bundle testBundle = newMockBundle(1, "testName", "testLocation",
+				testContext);
+		Map<String, Object> serviceProps = new TreeMap<String, Object>(
+				String.CASE_INSENSITIVE_ORDER);
+		serviceProps.put(ENDPOINT_ID, someId);
+		serviceProps.put(OBJECTCLASS, new String[] {"foo"});
+		serviceProps.put(SERVICE_IMPORTED_CONFIGS, "config");
+		serviceProps.put("Service.Exported.Configs", "config");
+		ServiceReference ref = newMockServiceReference(testBundle, serviceProps);
+		EndpointDescription ed1, ed2;
+
+		ed1 = newEndpointDescription(props);
+		ed2 = newEndpointDescription(ref, null);
+
+		assertFalse("service.exported.* property not removed", ed1
+				.getProperties().containsKey(SERVICE_EXPORTED_CONFIGS));
+		assertFalse("service.exported.* property not removed", ed2
+				.getProperties().containsKey(SERVICE_EXPORTED_CONFIGS));
 	}
 
 	private EndpointDescription newEndpointDescription(ServiceReference ref,

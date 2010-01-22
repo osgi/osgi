@@ -70,7 +70,9 @@ public interface RemoteServiceAdmin {
 	 *         specified Service Reference and properties. Multiple Export
 	 *         Registrations may be returned because a single service can be
 	 *         exported to multiple Endpoints depending on the available
-	 *         configuration type properties. Is never <code>null</code> .
+	 *         configuration type properties. The result is never
+	 *         <code>null</code> but may be empty if this Remove Service Admin
+	 *         does not recognize any of the configuration types.
 	 * @throws IllegalArgumentException If any of the properties has a value
 	 *         that is not syntactically correct or if the service properties
 	 *         and the overlaid properties do not contain a

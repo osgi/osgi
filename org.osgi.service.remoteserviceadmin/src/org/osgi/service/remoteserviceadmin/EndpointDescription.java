@@ -104,15 +104,13 @@ public class EndpointDescription {
 									.removeAll(properties.keySet()));
 		}
 
-		if (!props.containsKey(SERVICE_IMPORTED)) {
-			props.put(SERVICE_IMPORTED, Boolean.toString(true));
-		}
+		conditionProperties(props);
 		this.properties = Collections.unmodifiableMap(props);
 		/* properties must be initialized before calling the following methods */
 		interfaces = verifyObjectClassProperty();
 		serviceId = verifyLongProperty(ENDPOINT_SERVICE_ID);
 		frameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
-		id = verifyStringProperty(ENDPOINT_ID);
+		id = verifyStringProperty(ENDPOINT_ID).trim();
 		if (id == null) {
 			throw new IllegalArgumentException(ENDPOINT_ID
 					+ " property must be set");
@@ -198,15 +196,13 @@ public class EndpointDescription {
 				props.put(ENDPOINT_FRAMEWORK_UUID, uuid);
 			}
 		}
-		if (!props.containsKey(SERVICE_IMPORTED)) {
-			props.put(SERVICE_IMPORTED, Boolean.toString(true));
-		}
+		conditionProperties(props);
 		this.properties = Collections.unmodifiableMap(props);
 		/* properties must be initialized before calling the following methods */
 		interfaces = verifyObjectClassProperty();
 		serviceId = verifyLongProperty(ENDPOINT_SERVICE_ID);
 		frameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
-		id = verifyStringProperty(ENDPOINT_ID);
+		id = verifyStringProperty(ENDPOINT_ID).trim();
 		if (id == null) {
 			throw new IllegalArgumentException(ENDPOINT_ID
 					+ " property must be set");
@@ -214,6 +210,31 @@ public class EndpointDescription {
 		if (getConfigurationTypes().isEmpty()) {
 			throw new IllegalArgumentException(SERVICE_IMPORTED_CONFIGS
 					+ " property must be set and non-empty");
+		}
+	}
+
+	private static final String	SERVICE_EXPORTED_	= "service.exported.";
+	private static final int	SERVICE_EXPORTED_length	= SERVICE_EXPORTED_
+																.length();
+
+	/**
+	 * Condition the properties.
+	 * 
+	 * @param props Property map to condition.
+	 */
+	private void conditionProperties(Map<String, Object> props) {
+		// ensure service.imported is set
+		if (!props.containsKey(SERVICE_IMPORTED)) {
+			props.put(SERVICE_IMPORTED, Boolean.toString(true));
+		}
+
+		// remove service.exported.* properties
+		for (Iterator<String> iter = props.keySet().iterator(); iter.hasNext();) {
+			String key = iter.next();
+			if (SERVICE_EXPORTED_.regionMatches(true, 0, key, 0,
+					SERVICE_EXPORTED_length)) {
+				iter.remove();
+			}
 		}
 	}
 
@@ -308,10 +329,11 @@ public class EndpointDescription {
 	 * have the same id. Two Endpoint Descriptions with the same id must
 	 * represent the same endpoint.
 	 * 
-	 * The value of the id is stored in the
-	 * {@link RemoteConstants#ENDPOINT_ID} property.
+	 * The value of the id is stored in the {@link RemoteConstants#ENDPOINT_ID}
+	 * property.
 	 * 
-	 * @return The id of the endpoint, never <code>null</code>.
+	 * @return The id of the endpoint, never <code>null</code>. The returned
+	 *         value has leading and trailing whitespace removed.
 	 */
 	public String getId() {
 		return id;
