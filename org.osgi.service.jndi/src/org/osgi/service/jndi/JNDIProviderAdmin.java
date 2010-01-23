@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,51 +22,52 @@ import javax.naming.Context;
 import javax.naming.Name;
 import javax.naming.directory.Attributes;
 
-
 /**
-*
-* This interface defines the OSGi service interface for the JNDIProviderAdmin service.  
-* 
-* This service provides the ability to resolve JNDI References in a dynamic fashion that
-* does not require calls to NamingManager.getObjectInstance().  The methods of this service
-* provide similar reference resolution, but rely on the OSGi Service Registry in order to find
-* ObjectFactory instances that can convert a Reference to an Object.   
-* 
-* This service will typically be used by OSGi-aware JNDI Service Providers.  
-* 
-* @version $Revision$
-* @NotThreadSafe
-*/
+ * This interface defines the OSGi service interface for the JNDIProviderAdmin
+ * service.
+ * 
+ * This service provides the ability to resolve JNDI References in a dynamic
+ * fashion that does not require calls to
+ * <code>NamingManager.getObjectInstance()</code>. The methods of this service
+ * provide similar reference resolution, but rely on the OSGi Service Registry
+ * in order to find <code>ObjectFactory</code> instances that can convert a
+ * Reference to an Object.
+ * 
+ * This service will typically be used by OSGi-aware JNDI Service Providers.
+ * 
+ * @version $Revision$
+ * @NotThreadSafe
+ */
 public interface JNDIProviderAdmin {
 
 	/**
-	 * Resolve the object from the given reference.  
+	 * Resolve the object from the given reference.
 	 * 
 	 * @param refInfo Reference info
 	 * @param name the JNDI name associated with this reference
 	 * @param context the JNDI context associated with this reference
 	 * @param environment the JNDI environment associated with this JNDI context
-	 * 
-	 * @return an Object based on the reference passed in, or the original reference object
-	 * 	if the reference could not be resolved.  
-	 * 
-	 * @throws Exception in the event that an error occurs while attempting to resolve
-	 * the JNDI reference. 
+	 * @return an Object based on the reference passed in, or the original
+	 *         reference object if the reference could not be resolved.
+	 * @throws Exception in the event that an error occurs while attempting to
+	 *         resolve the JNDI reference.
 	 */
-	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment) throws Exception;
+	public Object getObjectInstance(Object refInfo, Name name, Context context,
+			Map environment) throws Exception;
 
 	/**
+	 * Resolve the object from the given reference.
+	 * 
 	 * @param refInfo Reference info
 	 * @param name the JNDI name associated with this reference
 	 * @param context the JNDI context associated with this reference
 	 * @param environment the JNDI environment associated with this JNDI context
 	 * @param attributes the naming attributes to use when resolving this object
-	 * @return an Object based on the reference passed in, or the original reference object
-	 * 	if the reference could not be resolved.
-	 * 
-	 * @throws Exception in the event that an error occurs while attempting to resolve
-	 * the JNDI reference. 
+	 * @return an Object based on the reference passed in, or the original
+	 *         reference object if the reference could not be resolved.
+	 * @throws Exception in the event that an error occurs while attempting to
+	 *         resolve the JNDI reference.
 	 */
-	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment, Attributes attributes) throws Exception;
-
+	public Object getObjectInstance(Object refInfo, Name name, Context context,
+			Map environment, Attributes attributes) throws Exception;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,10 @@ import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 
 /**
+ * This interface defines the OSGi service interface for the JNDIContextManager.
  * 
- * This interface defines the OSGi service interface for the JNDIContextManager.  
- * 
- * This service provides the ability to create new JNDI Context instances without
- * relying on the InitialContext constructor.  
+ * This service provides the ability to create new JNDI Context instances
+ * without relying on the InitialContext constructor.
  * 
  * @version $Revision$
  * @NotThreadSafe
@@ -53,8 +52,7 @@ public interface JNDIContextManager {
 	 * @throws NamingException upon any error that occurs during context
 	 *         creation
 	 */
-	public Context newInitialContext(Map environment)
-			throws NamingException;
+	public Context newInitialContext(Map environment) throws NamingException;
 
 	/**
 	 * Creates a new initial DirContext with the default JNDI environment
@@ -77,5 +75,4 @@ public interface JNDIContextManager {
 	 */
 	public DirContext newInitialDirContext(Map environment)
 			throws NamingException;
-
 }
