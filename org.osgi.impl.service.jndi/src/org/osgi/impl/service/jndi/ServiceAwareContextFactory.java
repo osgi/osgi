@@ -61,35 +61,46 @@ public class ServiceAwareContextFactory {
 		}
 		
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-			if(isFactoryServiceActive() || method.getName().equals("close")) {
-				return ReflectionUtils.invokeMethodOnContext(method, m_context, args);
-			} else {
-				// make copy of existing context's environment
-				Hashtable newContextEnvironment = new Hashtable();
-				if (m_context.getEnvironment() != null) {
-					newContextEnvironment.putAll(m_context.getEnvironment());
+			synchronized (m_manager) {
+				if (isFactoryServiceActive()
+						|| method.getName().equals("close")) {
+					return ReflectionUtils.invokeMethodOnContext(method,
+							m_context, args);
 				}
-				// attempt to recreate the required factory and context
-				try {
-					InitialContextFactory newFactory = 
-						m_manager.createInitialContextFactory(newContextEnvironment);
-					if(newFactory != null) {
-						m_factory = newFactory;
-						Context newInternalContext = m_factory.getInitialContext(newContextEnvironment);
-						if(newInternalContext != null) {
-							m_context = newInternalContext;
-							return ReflectionUtils.invokeMethodOnContext(method, m_context, args);
+				else {
+					// make copy of existing context's environment
+					Hashtable newContextEnvironment = new Hashtable();
+					if (m_context.getEnvironment() != null) {
+						newContextEnvironment
+								.putAll(m_context.getEnvironment());
+					}
+					// attempt to recreate the required factory and context
+					try {
+						InitialContextFactory newFactory = m_manager
+								.createInitialContextFactory(newContextEnvironment);
+						if (newFactory != null) {
+							m_factory = newFactory;
+							Context newInternalContext = m_factory
+									.getInitialContext(newContextEnvironment);
+							if (newInternalContext != null) {
+								m_context = newInternalContext;
+								return ReflectionUtils.invokeMethodOnContext(
+										method, m_context, args);
+							}
 						}
 					}
+					catch (NoInitialContextException noContextException) {
+						logger
+								.log(
+										Level.SEVERE,
+										"An exception occurred while attempting to rebind the JNDI Provider service for this Context",
+										noContextException);
+					}
+
+					// if no InitialContextFactory service can handle this request, throw exception
+					throw new NoInitialContextException(
+							"The service that created this JNDI Context is not available");
 				}
-				catch (NoInitialContextException noContextException) {
-					logger.log(Level.SEVERE, 
-							    "An exception occurred while attempting to rebind the JNDI Provider service for this Context",
-							    noContextException);
-				}
-				
-				// if no InitialContextFactory service can handle this request, throw exception
-				throw new NoInitialContextException("The service that created this JNDI Context is not available");
 			}
 		}
 		

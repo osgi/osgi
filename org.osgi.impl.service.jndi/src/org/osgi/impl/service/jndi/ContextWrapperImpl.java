@@ -43,8 +43,11 @@ class ContextWrapperImpl implements Context {
 		if (isURLRequest(name)) {
 			// attempt to find a URL Context Factory to satisfy this lookup
 			// request
-			ObjectFactory objectFactory = 
-				m_factoryManager.getURLContextFactory(getScheme(name));
+			ObjectFactory objectFactory;
+			
+			synchronized (m_factoryManager) {
+				objectFactory = m_factoryManager.getURLContextFactory(getScheme(name));
+			}
 			
 			if (objectFactory == null) {
 				throw new NameNotFoundException(

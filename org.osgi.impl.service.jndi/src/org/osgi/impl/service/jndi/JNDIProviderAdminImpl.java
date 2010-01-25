@@ -39,43 +39,45 @@ class JNDIProviderAdminImpl implements JNDIProviderAdmin {
 				callerBundleContext);
 	}
 
-	public Object getObjectInstance(Object refInfo, Name name, Context context,
-			Map environment) throws NamingException {
-		Hashtable jndiEnvironment = new Hashtable();
-		if (environment != null) {
-			jndiEnvironment.putAll(environment);
-		}
-		ObjectFactory objectFactory = m_objectFactoryBuilder
-				.createObjectFactory(refInfo, jndiEnvironment);
-		try {
-			return objectFactory.getObjectInstance(refInfo, name, context,
-					jndiEnvironment);
-		}
-		catch (Exception e) {
-			NamingException namingException = new NamingException(
-					"Error while attempting to resolve reference");
-			namingException.initCause(e);
-			throw namingException;
+	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment) throws NamingException {
+		synchronized (m_objectFactoryBuilder) {
+			Hashtable jndiEnvironment = new Hashtable();
+			if (environment != null) {
+				jndiEnvironment.putAll(environment);
+			}
+			ObjectFactory objectFactory = m_objectFactoryBuilder
+					.createObjectFactory(refInfo, jndiEnvironment);
+			try {
+				return objectFactory.getObjectInstance(refInfo, name, context,
+						jndiEnvironment);
+			}
+			catch (Exception e) {
+				NamingException namingException = new NamingException(
+						"Error while attempting to resolve reference");
+				namingException.initCause(e);
+				throw namingException;
+			}
 		}
 	}
 
 	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment, Attributes attributes) throws NamingException {
-		Hashtable jndiEnvironment = new Hashtable();
-		if (environment != null) {
-			jndiEnvironment.putAll(environment);
-		}
-
-		DirObjectFactory dirObjectFactory = 
-			m_objectFactoryBuilder.getDirObjectFactory(refInfo, jndiEnvironment);
-		
-		try {
-			return dirObjectFactory.getObjectInstance(refInfo, name, context, jndiEnvironment, attributes);
-		}
-		catch (Exception e) {
-			NamingException namingException = new NamingException(
-					"Error while attempting to resolve reference");
-			namingException.initCause(e);
-			throw namingException;
+		synchronized (m_objectFactoryBuilder) {
+			Hashtable jndiEnvironment = new Hashtable();
+			if (environment != null) {
+				jndiEnvironment.putAll(environment);
+			}
+			DirObjectFactory dirObjectFactory = m_objectFactoryBuilder
+					.getDirObjectFactory(refInfo, jndiEnvironment);
+			try {
+				return dirObjectFactory.getObjectInstance(refInfo, name,
+						context, jndiEnvironment, attributes);
+			}
+			catch (Exception e) {
+				NamingException namingException = new NamingException(
+						"Error while attempting to resolve reference");
+				namingException.initCause(e);
+				throw namingException;
+			}
 		}
 	}
 

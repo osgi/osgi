@@ -29,7 +29,7 @@ import javax.naming.directory.DirContext;
  * without relying on the InitialContext constructor.
  * 
  * @version $Revision$
- * @NotThreadSafe
+ * @ThreadSafe
  */
 public interface JNDIContextManager {
 

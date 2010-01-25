@@ -53,34 +53,41 @@ class JNDIContextManagerImpl implements JNDIContextManager {
 
 
 	public Context newInitialContext() throws NamingException {
-		final Context initialContext = createNewInitialContext(new Hashtable());
-		m_listOfContexts.add(initialContext);
-		return initialContext;
+		synchronized (m_builder) {
+			final Context initialContext = createNewInitialContext(new Hashtable());
+			m_listOfContexts.add(initialContext);
+			return initialContext;
+		}
 	}
 
 	public Context newInitialContext(Map environment)
 			throws NamingException {
-		final Context initialContext = createNewInitialContext(environment);
-		m_listOfContexts.add(initialContext);
-		return initialContext;
+		synchronized (m_builder) {
+			final Context initialContext = createNewInitialContext(environment);
+			m_listOfContexts.add(initialContext);
+			return initialContext;
+		}
 	}
 
 	public DirContext newInitialDirContext() throws NamingException {
-		Context contextToReturn = createNewInitialContext(new Hashtable());
-		if(contextToReturn instanceof DirContext) {
-			m_listOfContexts.add(contextToReturn);
-			return (DirContext)contextToReturn;
+		synchronized (m_builder) {
+			Context contextToReturn = createNewInitialContext(new Hashtable());
+			if (contextToReturn instanceof DirContext) {
+				m_listOfContexts.add(contextToReturn);
+				return (DirContext) contextToReturn;
+			}
 		}
 		
 		throw new NoInitialContextException("DirContext could not be created.  The matching InitialContextFactory did not create a matching type."); 
 	}
 
-	public DirContext newInitialDirContext(Map environment)
-			throws NamingException {
-		Context context = createNewInitialContext(environment);
-		if(context instanceof DirContext) {
-			m_listOfContexts.add(context);
-			return (DirContext)context;
+	public DirContext newInitialDirContext(Map environment) throws NamingException {
+		synchronized (m_builder) {
+			Context context = createNewInitialContext(environment);
+			if (context instanceof DirContext) {
+				m_listOfContexts.add(context);
+				return (DirContext) context;
+			}
 		}
 		
 		throw new NoInitialContextException("DirContext could not be created.  The matching InitialContextFactory did not create a matching type.");
