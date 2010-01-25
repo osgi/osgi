@@ -67,8 +67,8 @@ public interface PackageExport {
 	 * The result of this method can change if additional bundle wirings import
 	 * the package.
 	 * 
-	 * @return A <code>Collection</code> containing a snapshot of resolved
-	 *         <code>Bundle</code>s currently wired to this package, or an empty
+	 * @return A <code>Collection</code> containing a snapshot of bundle 
+	 *         wirings currently wired to this package, or an empty
 	 *         collection if no bundles are wired to this package. If the
 	 *         exporter's bundle wiring is not {@link BundleWiring#isInUse() in
 	 *         use}, <code>null</code> will be returned.

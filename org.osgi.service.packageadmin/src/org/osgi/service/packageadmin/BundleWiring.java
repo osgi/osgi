@@ -79,6 +79,11 @@ public interface BundleWiring extends BundleReference {
 
 	/**
 	 * Returns the package exports for packages imported by this bundle wiring.
+	 *
+	 * <p>
+	 * If this bundle wiring requires other bundle wirings then the package 
+	 * exports from the required bundle wirings are included in the result.
+	 * (See {@link BundleWiring#getRequired()}).
 	 * 
 	 * <p>
 	 * Since packages can be dynamically imported, the result of this method can
@@ -113,6 +118,10 @@ public interface BundleWiring extends BundleReference {
 
 	/**
 	 * Returns the bundle wirings that are required by this bundle wiring.
+	 * 
+	 * <p>
+	 * If a required bundle wiring requires and then re-exports another bundle
+	 * wiring, then the result will include the re-exported bundle wiring. 
 	 * 
 	 * <p>
 	 * The bundle wirings in the list are ordered as specified in the
