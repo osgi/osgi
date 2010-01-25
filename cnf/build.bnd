@@ -77,7 +77,8 @@ core.release.version		= ${version;==+=;${osgi.release.version}}
 # Increment micro version of cmpn since cmpn is complete and we need to leave 4.2.0 stable
 cmpn.release.version		= ${version;==+=;${osgi.release.version}}
 mobile.release.version		= ${osgi.release.version}
-enterprise.release.version	= ${osgi.release.version}
+# Increment micro version of enterprise since enterprise is complete and we need to leave 4.2.0 stable
+enterprise.release.version	= ${version;==+=;${osgi.release.version}}
 proposed.release.version	= ${osgi.release.version}
 
 

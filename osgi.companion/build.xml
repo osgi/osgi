@@ -200,6 +200,25 @@
 			<arg value="${target}/japi/osgi.mobile-latest.japi" />
 			<arg value="${project.dir}/japi-published/osgi.mobile-published.japi" />
 		</exec>
+		<echo>osgi.enterprise</echo>
+		<exec executable="perl" failifexecutionfails="false">
+			<arg value="${licensed}/japitools/bin/japicompat" />
+			<arg value="-h" />
+			<arg value="-v" />
+			<arg value="-o" />
+			<arg value="${target}/japi/osgi.enterprise-japicompat.html" />
+			<arg value="${project.dir}/japi-published/osgi.enterprise-published.japi" />
+			<arg value="${target}/japi/osgi.enterprise-latest.japi" />
+		</exec>
+		<exec executable="perl" failifexecutionfails="false">
+			<arg value="${licensed}/japitools/bin/japicompat" />
+			<arg value="-h" />
+			<arg value="-v" />
+			<arg value="-o" />
+			<arg value="${target}/japi/osgi.enterprise-changed-japicompat.html" />
+			<arg value="${target}/japi/osgi.enterprise-latest.japi" />
+			<arg value="${project.dir}/japi-published/osgi.enterprise-published.japi" />
+		</exec>
 		<echo>ee.minimum</echo>
 		<exec executable="perl" failifexecutionfails="false">
 			<arg value="${licensed}/japitools/bin/japicompat" />
