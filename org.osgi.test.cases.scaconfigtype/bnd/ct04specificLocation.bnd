@@ -1,0 +1,9 @@
+Bundle-Name:                             ${p}.ct04
+Bundle-Version:                          1.0
+Private-Package:                         ${p}.junit.ct04.*, \
+ ${p}.common.*
+Bundle-Activator:                        ${p}.junit.ct04.Activator
+Include-Resource                    = \
+    somerandomlocation/binding.xml=resources/OSGI-INF/sca-config/bindings/binding.xml
+    
+SCA-Configuration: somerandomlocation/binding.xml

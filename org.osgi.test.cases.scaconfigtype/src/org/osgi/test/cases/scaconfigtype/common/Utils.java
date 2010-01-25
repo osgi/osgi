@@ -17,8 +17,6 @@
  */
 package org.osgi.test.cases.scaconfigtype.common;
 
-//import static org.osgi.test.cases.scaconfigtype.common.DistributionProviderConstants.*;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

@@ -31,6 +31,8 @@ import static org.osgi.test.cases.scaconfigtype.common.TestConstants.SERVICE_TIM
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +69,8 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
      * CT.1
      * @throws Exception
      */
+    // [dsavage] not sure if this test is possible with RI as is 
+    // [dsavage] need version of tuscany that doesn't have discover enabled
     //	public void testEndpointLifecycle() throws Exception {		
     //		fail("TODO not yet implemented");
     //	}
@@ -75,11 +79,57 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
      * CT.4
      * @throws Exception
      */
-    //	public void testSCAConfigurationManifestHeader() throws Exception {
-    //		fail("TODO not yet implemented");
-    //	}
+    public void testSCAConfigurationManifestHeader() throws Exception {
+        // install test bundle in child framework
+        BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
+        BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
 
-    /**
+        // TODO don't technically need to start client bundle but this checks it's resolved
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct04client.jar");
+        
+        Bundle serverBundle;
+
+        // specific location
+        serverBundle = installAndStartBundle(serverContext, "/ct04specificLocation.jar");
+        
+        assertAAvailability(clientBundle, true);
+        
+        serverBundle.uninstall();
+        
+        assertAAvailability(clientBundle, false);
+
+        // wild card location
+        serverBundle = installAndStartBundle(serverContext, "/ct04wildcardLocation.jar");
+        
+        assertAAvailability(clientBundle, true);
+        
+        serverBundle.uninstall();
+
+        assertAAvailability(clientBundle, false);
+        
+        // [dsavage] do this test last as it's failing at the moment
+        // default location
+        serverBundle = installAndStartBundle(serverContext, "/ct04defaultLocation.jar");
+        
+        // [dsavage] dumping headers to check SCA-Configuration header is present
+        // [dsavage] replace this with assert
+        System.out.println( "*****************************" );
+        Dictionary h = serverBundle.getHeaders();
+        for ( Enumeration e = h.keys(); e.hasMoreElements(); ) {
+        	String k = (String) e.nextElement();
+        	String v = (String) h.get(k);
+        	System.out.println( k + "=" + v );
+        }
+        System.out.println( "*****************************" );
+        
+        assertAAvailability(clientBundle, true);
+
+        serverBundle.uninstall();
+
+        assertAAvailability(clientBundle, false);
+    }
+
+	/**
      * CT.6
      * @throws Exception
      */
@@ -116,15 +166,8 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         // TODO don't technically need to start client bundle but this checks it's resolved
         Bundle clientBundle = installAndStartBundle(clientContext, "/ct09client.jar");
 
-        // wait for test service to be registered in this framework
-        ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
-        tracker.open();
-        A serviceA = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), A.class);
-        
         // service should not be registered as ct9.jar does not include an SCA-Configuration header
-        assertIsUnavailable(serviceA);
-        
-        tracker.close();
+        assertAAvailability(clientBundle, false);
     }
 
     /**
@@ -388,18 +431,39 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         f.getBundleContext().ungetService(sr);
     }
    
-    private void assertIsUnavailable(A serviceA) {
-        if (serviceA != null) {
-            try {
-                serviceA.getA();
-                fail("Unexpected test service A");
-            } catch (ServiceException e) {
-                // Expected
-                assertEquals(ServiceException.REMOTE, e.getType());
+    private void assertAAvailability(Bundle clientBundle, boolean available) throws InterruptedException {
+    	if ( available ) {
+	        // wait for test service to be registered in this framework
+	        // [rfeng] We need to use the client bundle as it's the one that can load A.class
+	        ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
+	        tracker.open();
+	        A serviceA = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), A.class);
+	
+	        assertNotNull("Missing test service", serviceA);
+	        ServiceReference[] refs = tracker.getServiceReferences();
+	        assertEquals("Unexpected service reference length", 1, refs.length);
+	
+	        // check service is functional
+	        assertEquals("Invalid service response", A.A, serviceA.getA());
+    	}
+    	else {
+            // wait for test service to be registered in this framework
+            ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
+            tracker.open();
+            A serviceA = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), A.class);
+            if (serviceA != null) {
+                try {
+                    serviceA.getA();
+                    fail("Unexpected test service A");
+                } catch (ServiceException e) {
+                    // Expected
+                    assertEquals(ServiceException.REMOTE, e.getType());
+                }
             }
-        }
-    }
-    
+            tracker.close();
+    	}
+	}
+
     private void assertIsUnavailable(B serviceB) {
         if (serviceB != null) {
             try {

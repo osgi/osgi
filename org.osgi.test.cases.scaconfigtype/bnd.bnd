@@ -6,6 +6,10 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.*
 
 Include-Resource					= \
+	ct04defaultLocation.jar, \
+	ct04specificLocation.jar, \
+	ct04wildcardLocation.jar, \
+	ct04client.jar, \
 	ct09.jar, \
 	ct09client.jar, \
 	ct12.jar, \
@@ -34,7 +38,7 @@ Include-Resource					= \
 	${p}.bundles=${repo;com.springsource.junit}|${repo;org.apache.tuscany.sca.bundle}|${repo;osgi.cmpn}|${repo;org.osgi.impl.service.log}, \
 	${p}.serverconfig="service.exported.configs,org.osgi.sca.domain.registry", \
 	service.exported.configs=org.osgi.sca, \
- 	org.osgi.sca.domain.registry="tribes://228.0.0.100:50000"
+ 	org.osgi.sca.domain.registry="tribes://228.0.0.100:50000?timeout\=6000"
 
 Test-Cases							= ${testcases}
 
