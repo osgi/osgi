@@ -40,6 +40,7 @@ public class CTContext implements Context {
 	protected static Map storage = new HashMap();
 	private Map env 	= new HashMap();
 	private static int invokeCount = 0;
+	private boolean closed = false;
 	
 	private static final NameParser parser = new CTNameParser();
 
@@ -54,6 +55,9 @@ public class CTContext implements Context {
 
 	public Object addToEnvironment(String propName, Object propVal)
 			throws NamingException {
+		if (closed) {
+			throw new OperationNotSupportedException("This context has been closed.");
+		}
 		Object previousValue = env.get(propName);
 		env.put(propName, propVal);
 		return previousValue;
@@ -64,6 +68,9 @@ public class CTContext implements Context {
 	}
 
 	public void bind(Name name, Object obj) throws NamingException {
+		if (closed) {
+			throw new OperationNotSupportedException("This context has been closed.");
+		}
 		if (name == null) {
 			throw new NamingException("Unable to bind object to null name");
 		} else if (obj == null) {
@@ -81,6 +88,7 @@ public class CTContext implements Context {
 		storage.clear();
 		env.clear();
 		invokeCount--;
+		closed = true;
 	}
 
 	public String composeName(String first, String second) throws NamingException {
@@ -128,6 +136,9 @@ public class CTContext implements Context {
 	}
 
 	public NamingEnumeration list(Name name) throws NamingException {
+		if (closed) {
+			throw new OperationNotSupportedException("This context has been closed.");
+		}
 		CTNameClassPairEnumeration nameClassPairs = new CTNameClassPairEnumeration(CTContext.storage);
 		return nameClassPairs;
 	}
@@ -137,6 +148,9 @@ public class CTContext implements Context {
 	}
 
 	public NamingEnumeration listBindings(Name name) throws NamingException {
+		if (closed) {
+			throw new OperationNotSupportedException("This context has been closed.");
+		}
 		CTBindingEnumeration bindings = new CTBindingEnumeration(CTContext.storage);
 		return bindings;
 	}
@@ -146,6 +160,9 @@ public class CTContext implements Context {
 	}
 
 	public Object lookup(Name name) throws NamingException {
+		if (closed) {
+			throw new OperationNotSupportedException("This context has been closed.");
+		}
 		if (name.isEmpty()) {
 			return new CTContext();
 		}
@@ -182,6 +199,9 @@ public class CTContext implements Context {
 	}
 
 	public Object removeFromEnvironment(String propName) throws NamingException {
+		if (closed) {
+			throw new OperationNotSupportedException("This context has been closed.");
+		}
 		Object previousValue = env.get(propName);
 		env.remove(propName);
 		return previousValue;
@@ -192,6 +212,9 @@ public class CTContext implements Context {
 	}
 
 	public void rename(Name old, Name current) throws NamingException {
+		if (closed) {
+			throw new OperationNotSupportedException("This context has been closed.");
+		}
 		try {
 			Object value = storage.get(old.toString());
 			storage.put(current.toString(), value);
@@ -206,6 +229,9 @@ public class CTContext implements Context {
 	}
 
 	public void unbind(Name name) throws NamingException {
+		if (closed) {
+			throw new OperationNotSupportedException("This context has been closed.");
+		}
 		try {
 			storage.remove(name.toString());
 		} catch (Exception ex) {

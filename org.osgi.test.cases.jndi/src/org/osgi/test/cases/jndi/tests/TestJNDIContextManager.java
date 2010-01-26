@@ -20,6 +20,7 @@ package org.osgi.test.cases.jndi.tests;
 import java.util.Hashtable;
 
 import javax.naming.Context;
+import javax.naming.OperationNotSupportedException;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.jndi.JNDIContextManager;
@@ -304,7 +305,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			// Verify that we actually received the context
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
-			// Remove the bundle containing the prvoider.  The backing for the context should be removed as well.
+			// Remove the bundle containing the provider.  The backing for the context should be removed as well.
 			uninstallBundle(factoryBundle);
 			Object obj = ctx.lookup("testObject");
 		} catch (javax.naming.NoInitialContextException ex) {
@@ -322,6 +323,34 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			}
 			uninstallBundle(builderBundle);
 			ungetService(ctxManager);
+		}
+	}
+	
+	public void testUngetContextManager() throws Exception {
+		// Install a bundle for grabbing a context
+		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
+		// Grab the JNDIContextManager service
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		// Setup the environment
+		Hashtable env = new Hashtable();
+		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
+		// Grab a context
+		Context ctx = null;
+		try {
+			ctx = ctxManager.newInitialContext(env);
+			// Verify that we actually received the context
+			assertNotNull("The context should not be null", ctx);
+			ctx.bind("testObject", new Object());
+			ungetService(ctxManager);
+			Object obj = ctx.lookup("testObject");
+		} catch (OperationNotSupportedException ex) {
+			pass("javax.naming.OperationNotSupportedException caught in testUngetContextManager: SUCCESS");
+			return;
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			uninstallBundle(factoryBundle);
 		}
 	}
 }
