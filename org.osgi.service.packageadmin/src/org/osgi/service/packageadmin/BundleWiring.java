@@ -186,6 +186,8 @@ public interface BundleWiring extends BundleReference {
 	 * @return A <code>List</code> containing the {@link BundleInfo}s for all
 	 *         attached fragments attached of this bundle wiring, or an empty
 	 *         list if this bundle wiring does not have any attached fragments.
+	 *         If this bundle wiring is not {@link #isInUse() in use}, 
+	 *         <code>null</code> will be returned.
 	 */
 	List<BundleInfo> getFragmentInfos();
 }
