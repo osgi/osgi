@@ -507,6 +507,66 @@ class OSGiInitialContextFactoryBuilder implements
 		return null;
 	}
 	
+	private Object resolveObjectUsingObjectFactories(Object objectToResolve, Name name, Context context, Hashtable environment) throws NamingException {
+		if (m_objectFactoryServiceTracker.getServiceReferences() != null) {
+			final ServiceReference[] serviceReferences = ServiceUtils.sortServiceReferences(m_objectFactoryServiceTracker);
+			for (int i = 0; i < serviceReferences.length; i++) {
+				ServiceReference serviceReference = serviceReferences[i];
+				ObjectFactory factory = 
+					(ObjectFactory) m_bundleContext.getService(serviceReference);
+				try {
+					Object result = 
+						factory.getObjectInstance(objectToResolve, name, context, environment);
+		
+					if (result != null) {
+						//TODO, should the impl unget the service here? 
+						return result;
+					} else {
+						m_bundleContext.ungetService(serviceReference);
+					}
+				}
+				catch (Exception exception) {
+					NamingException namingException = new NamingException("Exception occurred while trying to resolve object using ObjectFactory search");
+					namingException.setRootCause(exception);
+					throw namingException;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	
+	private Object resolveObjectUsingDirObjectFactories(Object objectToResolve, Name name, Context context, Hashtable environment, Attributes attributes) throws NamingException {
+		if (m_dirObjectFactoryServiceTracker.getServiceReferences() != null) {
+			final ServiceReference[] serviceReferences = ServiceUtils.sortServiceReferences(m_dirObjectFactoryServiceTracker);
+			for (int i = 0; i < serviceReferences.length; i++) {
+				ServiceReference serviceReference = serviceReferences[i];
+				DirObjectFactory factory = 
+					(DirObjectFactory) m_bundleContext.getService(serviceReference);
+				try {
+					Object result = 
+						factory.getObjectInstance(objectToResolve, name, context, environment, attributes);
+		
+					if (result != null) {
+						//TODO, should the impl unget the service here? 
+						return result;
+					} else {
+						m_bundleContext.ungetService(serviceReference);
+					}
+				}
+				catch (Exception exception) {
+					NamingException namingException = new NamingException("Exception occurred while trying to resolve object using ObjectFactory search");
+					namingException.setRootCause(exception);
+					throw namingException;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	
 	private Object resolveDirObjectUsingBuilders(Object objectToResolve, Name name, Context context, Hashtable environment, Attributes attributes) 
 			throws Exception {
 		ObjectFactory objectFactory = 
@@ -734,13 +794,24 @@ class OSGiInitialContextFactoryBuilder implements
 			Object objectToResolve = getObjectToResolve(refInfo);
 			if(objectToResolve instanceof Reference) {
 				Reference reference = (Reference)objectToResolve;
-				Object resolvedObjectFromURL = 
+				Object resultFromURLContextFactories = 
 					getObjectFromURLContextFactoryFromReference(reference, environment);
-				if (resolvedObjectFromURL != null) {
-					return resolvedObjectFromURL;
+				if (resultFromURLContextFactories != null) {
+					return resultFromURLContextFactories;
 				}
 				
-				return resolveObjectUsingBuilders(objectToResolve, name, context, environment);
+				Object resultFromBuilders = resolveObjectUsingBuilders(objectToResolve, name, context, environment);
+				if(resultFromBuilders != null) {
+					return resultFromBuilders;
+				}
+				
+				Object resultFromObjectFactories = 
+					resolveObjectUsingObjectFactories(objectToResolve, name, context, environment);
+				
+				if(resultFromObjectFactories != null) {
+					return resultFromObjectFactories;
+				}
+				
 			}
 
 			return null;
@@ -758,13 +829,22 @@ class OSGiInitialContextFactoryBuilder implements
 			Object objectToResolve = getObjectToResolve(refInfo);
 			if(objectToResolve instanceof Reference) {
 				Reference reference = (Reference)objectToResolve;
-				Object resolvedObjectFromURL = 
+				Object resultFromURLContextFactories = 
 					getObjectFromURLContextFactoryFromReference(reference, environment);
-				if (resolvedObjectFromURL != null) {
-					return resolvedObjectFromURL;
+				if (resultFromURLContextFactories != null) {
+					return resultFromURLContextFactories;
 				}
 				
-				return resolveDirObjectUsingBuilders(objectToResolve, name, context, environment, attributes);
+				Object resultFromBuilders = resolveDirObjectUsingBuilders(objectToResolve, name, context, environment, attributes);
+				if(resultFromBuilders != null) {
+					return resultFromBuilders;
+				}
+				
+				Object resultFromDirObjectFactories = 
+					resolveObjectUsingDirObjectFactories(objectToResolve, name, context, environment, attributes);
+				if(resultFromDirObjectFactories != null) {
+					return resultFromDirObjectFactories;
+				}
 			}
 
 			return null;
@@ -856,7 +936,23 @@ class OSGiInitialContextFactoryBuilder implements
 	
 	private class NoReferenceObjectFactory implements ObjectFactory {
 		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment) throws Exception {
-			return resolveObjectUsingBuilders(refInfo, name, context, environment);
+			// first query all known ObjectFactoryBuilder services to resolve this reference
+			Object resultFromBuilders = 
+				resolveObjectUsingBuilders(refInfo, name, context, environment);
+			
+			if(resultFromBuilders != null) {
+				return resultFromBuilders;
+			}
+			
+			// as a last resort, query all known ObjectFactory services to attempt to resolve this reference
+			Object resultFromObjectFactories = 
+				resolveObjectUsingObjectFactories(refInfo, name, context, environment);
+			
+			if(resultFromObjectFactories != null) {
+				return resultFromObjectFactories;
+			}
+			
+			return null;
 		}
 		
 	}
@@ -864,7 +960,18 @@ class OSGiInitialContextFactoryBuilder implements
 	private class NoReferenceDirObjectFactory implements DirObjectFactory {
 
 		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment, Attributes attributes) throws Exception {
-			return resolveDirObjectUsingBuilders(refInfo, name, context, environment, attributes);
+			final Object resultFromBuilders = resolveDirObjectUsingBuilders(refInfo, name, context, environment, attributes);
+			if(resultFromBuilders != null) {
+				return resultFromBuilders;
+			}
+			
+			Object resultFromDirObjectFactories = 
+				resolveObjectUsingDirObjectFactories(refInfo, name, context, environment, attributes);
+			if(resultFromDirObjectFactories != null) {
+				return resultFromDirObjectFactories;
+			}
+			
+			return null;
 		}
 
 		public Object getObjectInstance(Object refInfo, Name name, Context context, Hashtable environment) throws Exception {

@@ -25,7 +25,6 @@ import javax.naming.directory.Attributes;
 import javax.naming.spi.DirObjectFactory;
 import javax.naming.spi.ObjectFactory;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.jndi.JNDIProviderAdmin;
 
@@ -33,10 +32,9 @@ class JNDIProviderAdminImpl implements JNDIProviderAdmin {
 
 	private final OSGiInitialContextFactoryBuilder	m_objectFactoryBuilder;
 
-	public JNDIProviderAdminImpl(Bundle callingBundle) {
-		BundleContext callerBundleContext = callingBundle.getBundleContext();
-		m_objectFactoryBuilder = new OSGiInitialContextFactoryBuilder(
-				callerBundleContext);
+	JNDIProviderAdminImpl(BundleContext bundleContext) {
+		m_objectFactoryBuilder = 
+			new OSGiInitialContextFactoryBuilder(bundleContext);
 	}
 
 	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment) throws NamingException {
@@ -45,11 +43,10 @@ class JNDIProviderAdminImpl implements JNDIProviderAdmin {
 			if (environment != null) {
 				jndiEnvironment.putAll(environment);
 			}
-			ObjectFactory objectFactory = m_objectFactoryBuilder
-					.createObjectFactory(refInfo, jndiEnvironment);
+			ObjectFactory objectFactory = 
+				m_objectFactoryBuilder.createObjectFactory(refInfo, jndiEnvironment);
 			try {
-				return objectFactory.getObjectInstance(refInfo, name, context,
-						jndiEnvironment);
+				return objectFactory.getObjectInstance(refInfo, name, context, jndiEnvironment);
 			}
 			catch (Exception e) {
 				NamingException namingException = new NamingException(
@@ -80,5 +77,10 @@ class JNDIProviderAdminImpl implements JNDIProviderAdmin {
 			}
 		}
 	}
-
+	
+	void close() {
+		synchronized (m_objectFactoryBuilder) {
+			m_objectFactoryBuilder.close();
+		}
+	}
 }

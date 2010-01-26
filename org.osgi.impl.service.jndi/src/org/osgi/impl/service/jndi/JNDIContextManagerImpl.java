@@ -29,7 +29,6 @@ import javax.naming.NamingException;
 import javax.naming.NoInitialContextException;
 import javax.naming.directory.DirContext;
 import javax.naming.spi.InitialContextFactory;
-import javax.naming.spi.InitialContextFactoryBuilder;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.jndi.JNDIContextManager;
@@ -38,7 +37,7 @@ class JNDIContextManagerImpl implements JNDIContextManager {
 
 	private static final Logger logger = Logger.getLogger(JNDIContextManagerImpl.class.getName());
 	
-	private final InitialContextFactoryBuilder	m_builder;
+	private final OSGiInitialContextFactoryBuilder	m_builder;
 	
 	/* list of Context implementations */
 	private final List m_listOfContexts = 
@@ -98,19 +97,29 @@ class JNDIContextManagerImpl implements JNDIContextManager {
 	 * been provided by this service.  
 	 */
 	void close() {
-		Iterator iterator = m_listOfContexts.iterator();
-		// call close() on all known contexts
-		while(iterator.hasNext()) {
-			Context context = (Context)iterator.next();
-			try {
-				context.close();
-			}
-			catch (NamingException e) {
-				logger.log(Level.INFO, "NamingException occurred while trying to close an existing JNDI Context", e);
+		// close known Context implementations
+		synchronized (m_listOfContexts) {
+			Iterator iterator = m_listOfContexts.iterator();
+			// call close() on all known contexts
+			while (iterator.hasNext()) {
+				Context context = (Context) iterator.next();
+				try {
+					context.close();
+				}
+				catch (NamingException e) {
+					logger.log(Level.INFO,
+							   "NamingException occurred while trying to close an existing JNDI Context",
+							    e);
+				}
 			}
 		}
 		
 		m_listOfContexts.clear();
+		
+		synchronized (m_builder) {
+			// close the Builder implementation
+			m_builder.close();
+		}
 	}
 
 	private Context createNewInitialContext(final Map environment)

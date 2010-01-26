@@ -50,6 +50,8 @@ public class Activator implements BundleActivator {
 	private BundleContext						m_bundleContext					= null;
 	private final List                          m_listOfServiceRegistrations = new LinkedList();
 
+	private JNDIProviderAdminImpl	m_jndiProviderAdminService;
+
 	/*
 	 * Create the Factory Manager's builder implementation, and register it with
 	 * the JNDI NamingManager.
@@ -95,6 +97,10 @@ public class Activator implements BundleActivator {
 	public void stop(BundleContext context) throws Exception {
 		m_logger.info("Shutting down JNDI Factory Manager Bundle");
 		
+		// close the JNDIProviderAdmin service
+		m_jndiProviderAdminService.close();
+
+		// unregister all the JNDI services registered by this Activator
 		Iterator iterator = m_listOfServiceRegistrations.iterator();
 		while(iterator.hasNext()) {
 			ServiceRegistration serviceRegistration = 
@@ -144,9 +150,10 @@ public class Activator implements BundleActivator {
 	
 
 	private void registerJNDIProviderAdmin() {
+		m_jndiProviderAdminService = new JNDIProviderAdminImpl(m_bundleContext);
 		ServiceRegistration serviceRegistration =  
 			m_bundleContext.registerService(JNDIProviderAdmin.class.getName(),
-					                        new JNDIProviderAdminServiceFactoryImpl(),
+					                        m_jndiProviderAdminService,
 					                        null);
 		m_listOfServiceRegistrations.add(serviceRegistration);
 	}
