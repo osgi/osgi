@@ -290,6 +290,39 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		
 		failException("testProviderUnregistration failed", javax.naming.NoInitialContextException.class);
 	}
+	
+	public void testProviderUnregistrationWithBuilder() throws Exception {
+		// Install a bundle for grabbing a context
+		Bundle factoryBundle = installBundle("initialContextFactoryBuilder1.jar");
+		// Grab the JNDIContextManager service
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		// Setup the environment
+		Hashtable env = new Hashtable();
+		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
+		// Grab the context
+		Context ctx = null;
+		try {
+			ctx = ctxManager.newInitialContext(env);
+			assertNotNull("The context should not be null", ctx);
+			ctx.bind("testObject", new Object());
+			// Remove the bundle containing the provider.  The backing for the context should be removed as well.
+			uninstallBundle(factoryBundle);
+			Object obj = ctx.lookup("testObject");
+		} catch (javax.naming.NoInitialContextException ex) {
+			// This is what we're expecting to receive.
+			pass("javax.naming.NoInitialContextException caught in testProviderRegistrationWithBuilder: SUCCESS");
+			return;	
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			if (factoryBundle.getState() == Bundle.INSTALLED) {
+				uninstallBundle(factoryBundle);
+			}
+			ungetService(ctxManager);
+		}
+	}
+	
 	public void testContextRebinding() throws Exception {
 		// Install a bundle for grabbing a context
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
