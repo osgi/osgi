@@ -46,7 +46,7 @@ public class BundleManifestValidator extends Assert implements Validator{
     Manifest manifest;
     Map deployOptions;
     private final String[] REQUIREDIMPORT = {"javax.servlet; version=2.5","javax.servlet.http; version=2.5", "javax.servlet.jsp; version=2.1", "javax.servlet.jsp.tagext; version=2.1"};
-    private static final String WEBINFCLASSES = "WEB-INF/classes/";
+    private static final String WEBINFCLASSES = "WEB-INF/classes";
     private static final String WEBINFLIB = "WEB-INF/lib";
     
     public BundleManifestValidator(Bundle b) {
@@ -203,8 +203,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         // dClasspath - deployer specified classpath String
         Object dClasspath = this.deployOptions == null ? null : this.deployOptions.get(Constants.BUNDLE_CLASSPATH);
 
-        //assertTrue("verify WEB-INF/classes/ exist in the actual classpath", exist(WEBINFCLASSES, actualClassPathArray, false));
-        assertEquals("verify WEB-INF/classes/ exist in the actual classpath and is the first entry", WEBINFCLASSES, actualClassPathArray[0]);
+        assertEquals("verify WEB-INF/classes exist in the actual classpath and is the first entry", WEBINFCLASSES, actualClassPathArray[0]);
         // verify WEB-INF/lib jars exist in the actual classpath
         Enumeration e = this.b.findEntries(WEBINFLIB, "*.jar", false);
         int count = 0;
