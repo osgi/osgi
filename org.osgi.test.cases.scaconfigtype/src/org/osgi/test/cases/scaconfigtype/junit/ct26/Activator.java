@@ -45,7 +45,7 @@ public class Activator implements BundleActivator, A, B {
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 		
-		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_NCNAME);
+		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_QNAME);
 		
 		// find supported intent 
 		List intents = Utils.getServiceAdvert(context, REMOTE_INTENTS_SUPPORTED);
@@ -59,7 +59,7 @@ public class Activator implements BundleActivator, A, B {
 		context.registerService(new String[]{A.class.getName()}, this, dictionary);
 
 		// create new attributes
-		dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_B_NCNAME);
+		dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_B_QNAME);
 		
 		// fabricate a new intent from existing intents
 		String fabricatedIntent = Utils.fabricateValue(intents);

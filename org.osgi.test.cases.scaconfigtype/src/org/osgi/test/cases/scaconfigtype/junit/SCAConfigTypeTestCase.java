@@ -242,6 +242,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
      * CT.14
      * @throws Exception
      */
+    // [dsavage] this is covered by other tests
     //	public void testQNameForm() throws Exception {
     //		fail("TODO not yet implemented");
     //	}
@@ -250,9 +251,17 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
      * CT.15
      * @throws Exception
      */
-    //	public void testNCNameForm() throws Exception {
-    //		fail("TODO not yet implemented");
-    //	}
+    public void testNCNameForm() throws Exception {
+        // install test bundle in child framework
+        BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
+        BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
+
+        installAndStartBundle(serverContext, "/ct15.jar");
+        // TODO don't technically need to start client bundle but this checks it's resolved
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct15client.jar");
+        
+        assertAAvailability(clientBundle, true);
+    }
 
     /**
      * CT.23

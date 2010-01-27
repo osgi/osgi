@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.scaconfigtype.junit.ct09;
+package org.osgi.test.cases.scaconfigtype.junit.ct15;
 
 import java.util.Hashtable;
 
@@ -35,7 +35,7 @@ public class Activator implements BundleActivator, A {
 	 */
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
-		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_QNAME);
+		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_NCNAME);
 		context.registerService(new String[]{A.class.getName()}, this, dictionary);
 	}
 

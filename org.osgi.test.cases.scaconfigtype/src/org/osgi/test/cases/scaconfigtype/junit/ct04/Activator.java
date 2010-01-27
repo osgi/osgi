@@ -35,7 +35,7 @@ public class Activator implements BundleActivator, A {
 	 */
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
-		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_NCNAME);
+		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_QNAME);
 		context.registerService(new String[]{A.class.getName()}, this, dictionary);
 	}
 

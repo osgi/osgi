@@ -42,10 +42,10 @@ public class Activator implements BundleActivator, A, B {
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 		
-		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_NCNAME);
+		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_QNAME);
 		context.registerService(new String[]{A.class.getName()}, this, dictionary);
 		
-		dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_B_NCNAME);
+		dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_B_QNAME);
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, fabricateConfigType());
 
 		context.registerService(new String[]{B.class.getName()}, this, dictionary);

@@ -44,10 +44,10 @@ public class Activator implements BundleActivator, A, B {
 		// register two services 
 		// A should be found as it's config is in directory
 		// B should be found as it's config is in sub directory
-		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_NCNAME);
+		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_QNAME);
 		context.registerService(new String[]{A.class.getName()}, this, dictionary);
 		
-		dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_B_NCNAME);
+		dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_B_QNAME);
 		
 		context.registerService(new String[]{B.class.getName()}, this, dictionary);
 	}

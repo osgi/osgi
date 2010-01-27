@@ -18,6 +18,8 @@ Include-Resource					= \
 	ct12client.jar, \
 	ct13.jar, \
 	ct13client.jar, \
+	ct15.jar, \
+	ct15client.jar, \
 	ct26.jar, \
 	ct26client.jar
 	
