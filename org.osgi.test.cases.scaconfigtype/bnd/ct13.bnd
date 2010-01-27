@@ -4,6 +4,6 @@ Private-Package:                         ${p}.junit.ct13.*, \
  ${p}.common.*
 Bundle-Activator:                        ${p}.junit.ct13.Activator
 Include-Resource					= \
-	OSGI-INF/sca-config/bindings/binding.xml=resources/OSGI-INF/sca-config/bindings/binding.xml, \
+	OSGI-INF/sca-config/bindings/binding.xml=resources/OSGI-INF/sca-config/bindings/bindingA.xml, \
 	
 SCA-Configuration: OSGI-INF/sca-config/bindings/binding.xml

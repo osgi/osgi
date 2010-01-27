@@ -1,0 +1,10 @@
+Bundle-Name:                             ${p}.ct06
+Bundle-Version:                          1.0
+Private-Package:                         ${p}.junit.ct06.*, \
+ ${p}.common.*
+Bundle-Activator:                        ${p}.junit.ct06.Activator
+Include-Resource                    = \
+    OSGI-INF/sca-config/bindingA.xml=resources/OSGI-INF/sca-config/bindings/bindingA.xml, \
+    OSGI-INF/sca-config/mustnotbefound/bindingB.xml=resources/OSGI-INF/sca-config/bindings/bindingB.xml
+    
+SCA-Configuration: OSGI-INF/sca-config/*.xml

@@ -133,9 +133,19 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
      * CT.6
      * @throws Exception
      */
-    //	public void testFindEntriesSCAConfigurationManifestHeader() throws Exception {
-    //		fail("TODO not yet implemented");
-    //	}
+    public void testFindEntriesSCAConfigurationManifestHeader() throws Exception {
+        // install test bundle in child framework
+        BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
+        BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
+
+        installAndStartBundle(serverContext, "/ct06.jar");
+        // TODO don't technically need to start client bundle but this checks it's resolved
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct06client.jar");
+
+        assertAAvailability(clientBundle, true);
+        
+        assertBAvailability(clientBundle, false);
+    }
 
     /**
      * CT.7
@@ -197,32 +207,15 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         // TODO don't technically need to start client bundle but this checks it's resolved
         Bundle clientBundle = installAndStartBundle(clientContext, "/ct12client.jar");
 
-        // wait for test service to be registered in this framework
-        // [rfeng] We need to use the client bundle as it's the one that can load A.class
-        ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
-        tracker.open();
-        A serviceA = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), A.class);
-
-        assertNotNull("Missing test service", serviceA);
-        ServiceReference[] refs = tracker.getServiceReferences();
-        assertEquals("Unexpected service reference length", 1, refs.length);
-
-        // check service is functional
-        assertEquals("Invalid service response", A.A, serviceA.getA());
-
+        ServiceReference[] refs = assertAAvailability(clientBundle, true);
+        
         // check service is registered with sca config type header
         Object config = refs[0].getProperty(SERVICE_IMPORTED_CONFIGS);
         assertTrue(Utils.propertyToList(config).contains(ORG_OSGI_SCA_CONFIG));
-        tracker.close();
 
         // search for b service which is registered with a fabricated config type
         // assert this is not picked up by the RI
-        tracker = new ServiceTracker(clientBundle.getBundleContext(), B.class.getName(), null);
-        tracker.open();
-        B serviceB = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), B.class);
-        assertIsUnavailable(serviceB);
-
-        tracker.close();
+        assertBAvailability(clientBundle, false);
     }
 
     /**
@@ -238,23 +231,11 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         // TODO don't technically need to start client bundle but this checks it's resolved
         Bundle clientBundle = installAndStartBundle(clientContext, "/ct13client.jar");
 
-        // wait for test service to be registered in this framework
-        ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
-        tracker.open();
-        A serviceA = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), A.class);
-
-        assertNotNull("Missing test service", serviceA);
-        ServiceReference[] refs = tracker.getServiceReferences();
-        assertEquals("Unexpected service reference length", 1, refs.length);
-
-        // check service is functional
-        assertEquals("Invalid service response", A.A, serviceA.getA());
-
+        ServiceReference[] refs = assertAAvailability(clientBundle, true);
+        
         // check service is registered with sca config type header
         Object config = refs[0].getProperty(SERVICE_IMPORTED_CONFIGS);
         assertTrue(Utils.propertyToList(config).contains(ORG_OSGI_SCA_CONFIG));
-
-        tracker.close();
     }
 
     /**
@@ -310,32 +291,14 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         // TODO don't technically need to start client bundle but this checks it's resolved
         Bundle clientBundle = installAndStartBundle(clientContext, "/ct26client.jar");
 
-        // wait for test service to be registered in this framework
-        ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
-        tracker.open();
-        A serviceA = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), A.class);
-
-        assertNotNull("Missing test service", serviceA);
-        ServiceReference[] refs = tracker.getServiceReferences();
-        assertEquals("Unexpected service reference length", 1, refs.length);
-
-        // check service is functional
-        assertEquals("Invalid service response", A.A, serviceA.getA());
-
+        ServiceReference[] refs = assertAAvailability(clientBundle, true);
         // check service is registered with the intents header
         Object intents = refs[0].getProperty(SERVICE_INTENTS);
         assertFalse(Utils.propertyToList(intents).isEmpty());
-        tracker.close();
 
         // search for b service which is registered with a fabricated intent type
         // assert this is not picked up by the RI
-        tracker = new ServiceTracker(clientBundle.getBundleContext(), B.class.getName(), null);
-        tracker.open();
-        B serviceB = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), B.class);
-        
-        assertIsUnavailable(serviceB);
-
-        tracker.close();
+        assertBAvailability(clientBundle, false);
     }
 
 	/**
@@ -431,26 +394,24 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         f.getBundleContext().ungetService(sr);
     }
    
-    private void assertAAvailability(Bundle clientBundle, boolean available) throws InterruptedException {
-    	if ( available ) {
-	        // wait for test service to be registered in this framework
-	        // [rfeng] We need to use the client bundle as it's the one that can load A.class
-	        ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
-	        tracker.open();
-	        A serviceA = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), A.class);
-	
+    private ServiceReference[] assertAAvailability(Bundle clientBundle, boolean available) throws InterruptedException {
+        ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
+        tracker.open();
+        // wait for test service to be registered in this framework
+        // [rfeng] We need to use the client bundle as it's the one that can load A.class
+        A serviceA = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), A.class);
+        
+        ServiceReference[] refs = tracker.getServiceReferences();
+        
+        if ( available ) {	
 	        assertNotNull("Missing test service", serviceA);
-	        ServiceReference[] refs = tracker.getServiceReferences();
+	        
 	        assertEquals("Unexpected service reference length", 1, refs.length);
 	
 	        // check service is functional
 	        assertEquals("Invalid service response", A.A, serviceA.getA());
     	}
     	else {
-            // wait for test service to be registered in this framework
-            ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
-            tracker.open();
-            A serviceA = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), A.class);
             if (serviceA != null) {
                 try {
                     serviceA.getA();
@@ -460,22 +421,43 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
                     assertEquals(ServiceException.REMOTE, e.getType());
                 }
             }
-            tracker.close();
     	}
+        
+        tracker.close();
+                
+        return refs;
 	}
 
-    private void assertIsUnavailable(B serviceB) {
-        if (serviceB != null) {
-            try {
-                serviceB.getB();
-                fail("Unexpected test service B");
-            } catch (ServiceException e) {
-                // Expected
-                assertEquals(ServiceException.REMOTE, e.getType());
-            }
-        }
-	}    
+    private void assertBAvailability(Bundle clientBundle, boolean available) throws InterruptedException {
+        // wait for test service to be registered in this framework
+        // [rfeng] We need to use the client bundle as it's the one that can load A.class
+        ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), B.class.getName(), null);
+        tracker.open();
+        B serviceB = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), B.class);
 
+    	if ( available ) {
+	        assertNotNull("Missing test service", serviceB);
+	        ServiceReference[] refs = tracker.getServiceReferences();
+	        assertEquals("Unexpected service reference length", 1, refs.length);
+	
+	        // check service is functional
+	        assertEquals("Invalid service response", B.B, serviceB.getB());
+    	}
+    	else {
+            if (serviceB != null) {
+                try {
+                    serviceB.getB();
+                    fail("Unexpected test service B");
+                } catch (ServiceException e) {
+                    // Expected
+                    assertEquals(ServiceException.REMOTE, e.getType());
+                }
+            }
+    	}
+    	
+        tracker.close();
+	}
+    
     public Map<String, String> getConfiguration() {
         Map<String, String> configuration = new HashMap<String, String>();
         configuration.put(FRAMEWORK_STORAGE_CLEAN, "true");

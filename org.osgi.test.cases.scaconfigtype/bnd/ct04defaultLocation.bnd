@@ -4,6 +4,6 @@ Private-Package:                         ${p}.junit.ct04.*, \
  ${p}.common.*
 Bundle-Activator:                        ${p}.junit.ct04.Activator
 Include-Resource                    = \
-    OSGI-INF/sca-config/binding.xml=resources/OSGI-INF/sca-config/bindings/binding.xml
+    OSGI-INF/sca-config/binding.xml=resources/OSGI-INF/sca-config/bindings/bindingA.xml
     
-SCA-Configuration:
+SCA-Configuration: <<EMPTY>>

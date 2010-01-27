@@ -3,7 +3,4 @@
     xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca/200912">
 
     <sca:binding.ws name="serviceA" uri="http://localhost:9000/A" />
-
-    <sca:binding.ws name="serviceB" uri="http://localhost:9000/B" />
-
 </scact:sca-config> 
