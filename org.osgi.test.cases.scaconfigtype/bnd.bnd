@@ -6,22 +6,16 @@ Private-Package						= org.osgi.test.support.*, \
 	${p}.*
 
 Include-Resource					= \
+	ct00.jar, \
+	ct00client.jar, \
 	ct04defaultLocation.jar, \
 	ct04specificLocation.jar, \
 	ct04wildcardLocation.jar, \
-	ct04client.jar, \
 	ct06.jar, \
-	ct06client.jar, \
 	ct09.jar, \
-	ct09client.jar, \
 	ct12.jar, \
-	ct12client.jar, \
-	ct13.jar, \
-	ct13client.jar, \
 	ct15.jar, \
-	ct15client.jar, \
 	ct26.jar, \
-	ct26client.jar
 	
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

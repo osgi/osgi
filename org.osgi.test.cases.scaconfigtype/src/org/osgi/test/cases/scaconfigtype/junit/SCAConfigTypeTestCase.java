@@ -34,8 +34,11 @@ import java.net.URL;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -43,11 +46,16 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventConstants;
+import org.osgi.service.event.EventHandler;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.scaconfigtype.common.A;
 import org.osgi.test.cases.scaconfigtype.common.B;
+import org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants;
 import org.osgi.test.cases.scaconfigtype.common.Utils;
+import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -69,8 +77,8 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
      * CT.1
      * @throws Exception
      */
-    // [dsavage] not sure if this test is possible with RI as is 
-    // [dsavage] need version of tuscany that doesn't have discover enabled
+    // TODO [dsavage] not sure if this test is possible with RI as is 
+    // TODO [dsavage] need version of tuscany that doesn't have discovery enabled
     //	public void testEndpointLifecycle() throws Exception {		
     //		fail("TODO not yet implemented");
     //	}
@@ -85,7 +93,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
 
         // TODO don't technically need to start client bundle but this checks it's resolved
-        Bundle clientBundle = installAndStartBundle(clientContext, "/ct04client.jar");
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
         
         Bundle serverBundle;
 
@@ -140,10 +148,11 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
         installAndStartBundle(serverContext, "/ct06.jar");
         // TODO don't technically need to start client bundle but this checks it's resolved
-        Bundle clientBundle = installAndStartBundle(clientContext, "/ct06client.jar");
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
 
         assertAAvailability(clientBundle, true);
         
+        // this bundle should not be found as the config document is in a nested subdirectory
         assertBAvailability(clientBundle, false);
     }
 
@@ -174,7 +183,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
         installAndStartBundle(serverContext, "/ct09.jar");
         // TODO don't technically need to start client bundle but this checks it's resolved
-        Bundle clientBundle = installAndStartBundle(clientContext, "/ct09client.jar");
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
 
         // service should not be registered as ct9.jar does not include an SCA-Configuration header
         assertAAvailability(clientBundle, false);
@@ -205,7 +214,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
         installAndStartBundle(serverContext, "/ct12.jar");
         // TODO don't technically need to start client bundle but this checks it's resolved
-        Bundle clientBundle = installAndStartBundle(clientContext, "/ct12client.jar");
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
 
         ServiceReference[] refs = assertAAvailability(clientBundle, true);
         
@@ -227,9 +236,9 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
         BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
 
-        installAndStartBundle(serverContext, "/ct13.jar");
+        installAndStartBundle(serverContext, "/ct00.jar");
         // TODO don't technically need to start client bundle but this checks it's resolved
-        Bundle clientBundle = installAndStartBundle(clientContext, "/ct13client.jar");
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
 
         ServiceReference[] refs = assertAAvailability(clientBundle, true);
         
@@ -258,33 +267,42 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
         installAndStartBundle(serverContext, "/ct15.jar");
         // TODO don't technically need to start client bundle but this checks it's resolved
-        Bundle clientBundle = installAndStartBundle(clientContext, "/ct15client.jar");
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
         
         assertAAvailability(clientBundle, true);
     }
 
     /**
      * CT.23
+     * Break xml with invalid characters or remove binding etc – number of possible tests
+     * Expected result: service not available
      * @throws Exception
      */
     //	public void testInvalidBindingXML() throws Exception {
-    //		fail("TODO not yet implemented");
+    //		fail("TODO this requires a way to mangle the binding files as part of the build");
     //	}
 
     /**
      * CT.24
+     * Create binding twice in same document
+	 * Create config bundles that contain:
+     *  bind A only
+     *  binding A and B
+     * Check that B is not exported as A is a duplicate
      * @throws Exception
      */
     //	public void testDuplicateBinding() throws Exception {
-    //		fail("TODO not yet implemented");
+    //    fail("TODO this requires a way to modify standard binding files as part of build");
     //	}
 
     /**
      * CT.25
+     * Create valid xml in but giberish test positive and negative cases of mustUnderstand attribute
+     * TODO [dsavage] In property value? 
      * @throws Exception
      */
     //	public void testUnknownBinding() throws Exception {
-    //		fail("TODO not yet implemented");
+    //		fail("TODO this requires a way to modify standard binding files as part of build");
     //	}
 
     /**
@@ -298,7 +316,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
         installAndStartBundle(serverContext, "/ct26.jar");
         // TODO don't technically need to start client bundle but this checks it's resolved
-        Bundle clientBundle = installAndStartBundle(clientContext, "/ct26client.jar");
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
 
         ServiceReference[] refs = assertAAvailability(clientBundle, true);
         // check service is registered with the intents header
@@ -314,9 +332,38 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
      * CT.30
      * @throws Exception
      */
-    //	public void testEndpointImported() throws Exception {
-    //		fail("TODO not yet implemented");
-    //	}
+    public void testEndpointImported() throws Exception {
+        // install test bundle in child framework
+        BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
+        BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
+
+    	Hashtable<String, Object> props = new Hashtable<String, Object>();
+    	props.put(EventConstants.EVENT_TOPIC, new String[]{
+				"org/osgi/service/remoteserviceadmin/IMPORT_REGISTRATION",
+				"org/osgi/service/remoteserviceadmin/IMPORT_UNREGISTRATION",
+				"org/osgi/service/remoteserviceadmin/IMPORT_ERROR"});
+		TestEventHandler eventHandler = new TestEventHandler();
+		
+		clientContext.registerService(EventHandler.class.getName(), eventHandler, props);
+		
+        installAndStartBundle(serverContext, "/ct00.jar");
+        // TODO don't technically need to start client bundle but this checks it's resolved
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
+        
+        // wait for A to be found
+        assertAAvailability(clientBundle, true);
+        
+        assertEquals( "Unexpected number of events", 1, eventHandler.getEventCount() );
+        
+        Event evt = eventHandler.getNextEvent();
+        
+        Object configs = evt.getProperty(SERVICE_IMPORTED_CONFIGS);
+        assertTrue( "Missing header " + SERVICE_IMPORTED_CONFIGS, configs != null );
+        assertTrue( Utils.propertyToList(configs).contains( SCAConfigConstants.ORG_OSGI_SCA_CONFIG ) );
+        
+        Object bindings = evt.getProperty(SCAConfigConstants.ORG_OSGI_SCA_BINDING);
+        assertTrue( "Missing header " + SCAConfigConstants.ORG_OSGI_SCA_BINDING, bindings != null );
+    }
 
     /**
      * CT.31
@@ -329,6 +376,9 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
     /**
      * CT.32
+     * Check that this attribute is published - [dsavage] is this a duplicate test?
+     * Check each binding type is supported? - TODO [dsavage] not sure this is possible in current test framework
+     * Check that bindings supplied by distribution provider for test are included in the list - TODO [dsavage] how to read binding out of xml - hard
      * @throws Exception
      */
     //	public void testBindingTypeTypesHeader() throws Exception {
@@ -481,4 +531,37 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         configuration.put(FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
         return configuration;
     }
+    
+	class TestEventHandler implements EventHandler {
+		private LinkedList<Event> eventlist = new LinkedList<Event>();
+		private Semaphore sem = new Semaphore(0);
+
+
+		/**
+		 * @see org.osgi.service.event.EventHandler#handleEvent(org.osgi.service.event.Event)
+		 */
+		public void handleEvent(Event event) {
+			eventlist.add(event);
+			sem.signal();
+		}
+		
+		Event getNextEvent() {
+			try {
+				sem.waitForSignal(60000); // wait max 1min for async notification
+			} catch (InterruptedException e1) {
+				return null;
+			}
+			
+			try {
+				return eventlist.removeFirst();
+			} catch (NoSuchElementException e) {
+				return null;
+			}
+		}
+		
+		int getEventCount() {
+			return eventlist.size();
+		}
+	}
+
 }
