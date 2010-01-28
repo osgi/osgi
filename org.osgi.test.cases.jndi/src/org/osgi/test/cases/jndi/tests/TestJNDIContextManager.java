@@ -321,6 +321,8 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			}
 			ungetService(ctxManager);
 		}
+		
+		failException("testProviderUnregistrationWithBuilder failed", javax.naming.NoInitialContextException.class);
 	}
 	
 	public void testContextRebinding() throws Exception {
@@ -385,5 +387,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			}
 			uninstallBundle(factoryBundle);
 		}
+		
+		failException("testUngetContextManager failed", javax.naming.OperationNotSupportedException.class);
 	}
 }
