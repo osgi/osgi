@@ -92,6 +92,9 @@ public class TestURLContextFactory extends DefaultTestBundleControl {
 			if (urlCtx != null) {
 				urlCtx.close();
 			}
+			if (ctx != null) {
+				ctx.close();
+			}
 			uninstallBundle(factoryBundle);
 		}
 		failException("testURLContextFactoryRemoval failed, ", javax.naming.NamingException.class);
