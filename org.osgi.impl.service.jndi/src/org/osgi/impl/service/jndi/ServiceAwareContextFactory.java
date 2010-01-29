@@ -53,53 +53,70 @@ public class ServiceAwareContextFactory {
 		private InitialContextFactory m_factory;
 		private Context m_context;
 		private final FactoryManager m_manager;
+		private boolean m_isOpen;
 		
 		DefaultServiceAwareInvocationHandler(InitialContextFactory factory, Context context, FactoryManager manager) {
 			m_factory = factory;
 			m_context = context;
 			m_manager = manager;
+			m_isOpen = true;
 		}
 		
 		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-			synchronized (m_manager) {
-				if (isFactoryServiceActive()
-						|| method.getName().equals("close")) {
-					return ReflectionUtils.invokeMethodOnContext(method,
-							m_context, args);
-				}
-				else {
-					// make copy of existing context's environment
-					Hashtable newContextEnvironment = new Hashtable();
-					if (m_context.getEnvironment() != null) {
-						newContextEnvironment
-								.putAll(m_context.getEnvironment());
-					}
-					// attempt to recreate the required factory and context
-					try {
-						InitialContextFactory newFactory = m_manager
-								.createInitialContextFactory(newContextEnvironment);
-						if (newFactory != null) {
-							m_factory = newFactory;
-							Context newInternalContext = m_factory
-									.getInitialContext(newContextEnvironment);
-							if (newInternalContext != null) {
-								m_context = newInternalContext;
-								return ReflectionUtils.invokeMethodOnContext(
-										method, m_context, args);
-							}
-						}
-					}
-					catch (NoInitialContextException noContextException) {
-						logger
-								.log(
-										Level.SEVERE,
-										"An exception occurred while attempting to rebind the JNDI Provider service for this Context",
-										noContextException);
-					}
+			synchronized (this) {
+				synchronized (m_manager) {
+					if (m_isOpen) {
+						if (isFactoryServiceActive()
+								|| method.getName().equals("close")) {
 
-					// if no InitialContextFactory service can handle this request, throw exception
-					throw new NoInitialContextException(
-							"The service that created this JNDI Context is not available");
+							if (method.getName().equals("close")) {
+								m_isOpen = false;
+							}
+
+							return ReflectionUtils.invokeMethodOnContext(
+									method, m_context, args);
+						}
+						else {
+							// make copy of existing context's environment
+							Hashtable newContextEnvironment = new Hashtable();
+							if (m_context.getEnvironment() != null) {
+								newContextEnvironment.putAll(m_context
+										.getEnvironment());
+							}
+							// attempt to recreate the required factory and context
+							try {
+								InitialContextFactory newFactory = m_manager
+										.createInitialContextFactory(newContextEnvironment);
+								if (newFactory != null) {
+									m_factory = newFactory;
+									Context newInternalContext = m_factory
+											.getInitialContext(newContextEnvironment);
+									if (newInternalContext != null) {
+										m_context = newInternalContext;
+										return ReflectionUtils
+												.invokeMethodOnContext(method,
+														m_context, args);
+									}
+								}
+							}
+							catch (NoInitialContextException noContextException) {
+								logger
+										.log(
+												Level.SEVERE,
+												"An exception occurred while attempting to rebind the JNDI Provider service for this Context",
+												noContextException);
+							}
+
+							// if no InitialContextFactory service can handle this request, throw exception
+							throw new NoInitialContextException(
+									"The service that created this JNDI Context is not available");
+						}
+					} else {
+						// if context is already closed, do not try to 
+						// rebind the backing service
+						// simply forward the call to the underlying context implementation
+						return ReflectionUtils.invokeMethodOnContext(method, m_context, args);
+					}
 				}
 			}
 		}

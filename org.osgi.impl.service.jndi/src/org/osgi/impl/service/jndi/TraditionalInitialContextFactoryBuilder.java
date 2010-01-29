@@ -82,10 +82,18 @@ class TraditionalInitialContextFactoryBuilder implements InitialContextFactoryBu
 						throw new NamingException("JNDIContextManager service not available yet, cannot create a new context");
 					} else {
 						// install a dynamic proxy to trap calls to Context.close()
-						final Context newInitialContext = contextManager.newInitialContext(environment);
-						TraditionalContextInvocationHandler handler = 
-							new TraditionalContextInvocationHandler(serviceRef, newInitialContext, clientBundleContext);
-						return (Context)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] {Context.class}, handler);
+						try {
+							final Context newInitialContext = contextManager.newInitialContext(environment);
+							TraditionalContextInvocationHandler handler = 
+								new TraditionalContextInvocationHandler(serviceRef, newInitialContext, clientBundleContext);
+							return (Context)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] {Context.class}, handler);
+						}
+						catch (NamingException namingException) {
+							// clean up reference to JNDIContextManager service
+							clientBundleContext.ungetService(serviceRef);
+							// re-throw exception
+							throw namingException;
+						}
 					}
 				}
 			}

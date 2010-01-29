@@ -15,8 +15,11 @@
  */
 package org.osgi.impl.service.jndi;
 
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,9 +30,9 @@ import javax.naming.NamingException;
 import javax.naming.spi.ObjectFactory;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.jndi.JNDIConstants;
 
 /**
  * A URL context factory that supports lookups of OSGi services.
@@ -142,20 +145,18 @@ class OSGiURLContextFactory implements ObjectFactory {
 				// service interface name may not map to a published name
 				// check the registry for a service that supports the
 				// osgi.jndi.serviceName property
-				final String serviceNameFilter = "("
-						+ JNDIConstants.JNDI_SERVICENAME + "="
-						+ urlParser.getServiceInterface() + ")";
-				ServiceReference[] serviceReferencesByName = bundleContext
-						.getServiceReferences(null, serviceNameFilter);
+				ServiceReference[] serviceReferencesByName = 
+					ServiceUtils.getServiceReferencesByServiceName(bundleContext, urlParser);
 				if (serviceReferencesByName != null) {
-					final ServiceReference[] sortedServiceReferences = ServiceUtils
-							.sortServiceReferences(serviceReferencesByName);
-					return bundleContext.getService(sortedServiceReferences[0]);
+					final ServiceReference[] sortedServiceReferences = 
+						ServiceUtils.sortServiceReferences(serviceReferencesByName);
+					return getProxyForSingleService(bundleContext, urlParser, sortedServiceReferences[0]);
 				}
 			}
 
 			return null;
 		}
+
 
 		private static Object getProxyForSingleService(BundleContext bundleContext, OSGiURLParser urlParser, ServiceReference serviceReference) {
 			Object requestedService = 
@@ -177,7 +178,7 @@ class OSGiURLContextFactory implements ObjectFactory {
 			}
 			catch (ClassNotFoundException classNotFoundException) {
 				tempLoader = requestedService.getClass().getClassLoader();
-				final Class[] interfaces = requestedService.getClass().getInterfaces();
+				final Class[] interfaces = getInterfaces(serviceReference, bundleContext, tempLoader);
 				if (interfaces.length > 0) {
 					ServiceInvocationHandler handler = 
 						new ServiceInvocationHandler(bundleContext, serviceReference, 
@@ -185,11 +186,58 @@ class OSGiURLContextFactory implements ObjectFactory {
 					return Proxy.newProxyInstance(tempLoader, interfaces, handler);
 				}
 				else {
-					// TODO,revisit this
+					// TODO,revisit this, should probably throw an IllegalArgumentException here (Section 126.6.1 of the JNDI spec)
 					return requestedService;
 				}
 			}
 		}
+	
+		private static Class[] getInterfaces(ServiceReference serviceReference, BundleContext bundleContext, ClassLoader classLoader) {
+			String[] objectClassValues = (String [])serviceReference.getProperty(Constants.OBJECTCLASS);
+			List listOfClasses = new LinkedList();
+			for(int i = 0; i < objectClassValues.length; i++) {
+				try {
+					Class clazz = 
+						Class.forName(objectClassValues[i], true, classLoader);
+					if(clazz.isInterface()) {
+						if (isInterfacePublic(clazz)) {
+							if (isAssignable(serviceReference, bundleContext, clazz)) {
+								listOfClasses.add(clazz);
+							}
+						} else {
+							logger.warning("Unable to generate proxy for non-public interface: " + 
+									       clazz.getName() + ".  This interface will not be available to clients");
+						}
+					}
+				}
+				catch (ClassNotFoundException e) {
+					// just continue
+				}
+				
+			}
+			
+			if(listOfClasses.isEmpty()) {
+				return new Class[0];
+			} else {
+				Class[] interfacesToReturn = new Class[listOfClasses.size()];
+				for(int i = 0; i < listOfClasses.size(); i++) {
+					interfacesToReturn[i] = (Class)listOfClasses.get(i);
+				}
+				
+				return interfacesToReturn;
+			}
+		}
+
+
+		private static boolean isAssignable(ServiceReference serviceReference, BundleContext bundleContext, Class clazz) {
+			return serviceReference.isAssignableTo(bundleContext.getBundle(), clazz.getName());
+		}
+
+
+		private static boolean isInterfacePublic(Class clazz) {
+			return Modifier.isPublic(clazz.getModifiers());
+		}
+	
 	}
 	
 }

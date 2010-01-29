@@ -20,7 +20,10 @@ package org.osgi.impl.service.jndi;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.jndi.JNDIConstants;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -79,6 +82,16 @@ class ServiceUtils {
 		});
 
 		return serviceReferences;
+	}
+
+	static ServiceReference[] getServiceReferencesByServiceName(BundleContext bundleContext, OSGiURLParser urlParser)
+			throws InvalidSyntaxException {
+		final String serviceNameFilter = "("
+				+ JNDIConstants.JNDI_SERVICENAME + "="
+				+ urlParser.getServiceInterface() + ")";
+		ServiceReference[] serviceReferencesByName = 
+			bundleContext.getServiceReferences(null, serviceNameFilter);
+		return serviceReferencesByName;
 	}
 	
 }

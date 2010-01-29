@@ -90,7 +90,7 @@ class ServiceInvocationHandler implements InvocationHandler {
 			m_callerBundleContext.ungetService(m_serviceReference);
 		}
 		catch (Throwable throwable) {
-			logger.log(Level.INFO, 
+			logger.log(Level.FINER, 
 					   "An Exception occurred while trying to unget the backing OSGi service",
 					   throwable);
 		}
@@ -120,15 +120,18 @@ class ServiceInvocationHandler implements InvocationHandler {
 					ServiceUtils.sortServiceReferences(serviceReferences);
 				
 				// reset the tracker
-				m_serviceTracker = 
-					new ServiceTracker(m_callerBundleContext, sortedServiceReferences[0], null);
-				m_serviceTracker.open();
-				
-				// reset the service
-				m_osgiService = m_serviceTracker.getService();
-				if(m_osgiService!= null) {
-					return true;
+				return resetBackingService(sortedServiceReferences[0]);
+			 } else {
+				 // attempt to locate service using service name property
+				 ServiceReference[] serviceReferencesByName = 
+					ServiceUtils.getServiceReferencesByServiceName(m_callerBundleContext, m_urlParser);
+				if (serviceReferencesByName != null) {
+					ServiceReference[] sortedServiceReferences = 
+						ServiceUtils.sortServiceReferences(serviceReferencesByName);
+					// reset the tracker
+					return resetBackingService(sortedServiceReferences[0]);
 				}
+				
 			 }
 		}
 		catch (InvalidSyntaxException invalidSyntaxException) {
@@ -139,5 +142,20 @@ class ServiceInvocationHandler implements InvocationHandler {
 		
 		return false;
    }
+
+
+	private boolean resetBackingService(ServiceReference serviceReference) {
+		m_serviceTracker = 
+			new ServiceTracker(m_callerBundleContext, serviceReference, null);
+		m_serviceTracker.open();
+		
+		// reset the service
+		m_osgiService = m_serviceTracker.getService();
+		if(m_osgiService!= null) {
+			return true;
+		}
+		
+		return false;
+	}
 
 }
