@@ -29,8 +29,6 @@ import static org.osgi.test.cases.scaconfigtype.common.TestConstants.ORG_OSGI_TE
 import static org.osgi.test.cases.scaconfigtype.common.TestConstants.SERVER_FRAMEWORK;
 import static org.osgi.test.cases.scaconfigtype.common.TestConstants.SERVICE_TIMEOUT;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -404,32 +402,6 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         return b;
     }
 
-    /**
-     * @param context
-     * @param bundle
-     * @return
-     */
-    private Bundle installBundle(BundleContext context, String bundle) {
-        Bundle b = null;
-
-        if (!bundle.startsWith(getWebServer())) {
-            bundle = getWebServer() + bundle;
-        }
-
-        try {
-            URL location = new URL(bundle);
-            InputStream inputStream = location.openStream();
-
-            b = context.installBundle(bundle, inputStream);
-        } catch (Exception e) {
-            fail("Failed to install bundle " + bundle, e);
-        }
-
-        assertNotNull(b);
-
-        return b;
-    }
-   
     private ServiceReference[] assertAAvailability(Bundle clientBundle, boolean available) throws InterruptedException {
         ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
         tracker.open();

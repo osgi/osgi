@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -50,7 +51,8 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
 	
-	private static HashMap<String, TempFramework> frameworks = new HashMap<String, TempFramework>();
+	private static HashMap<String, Framework> frameworks = new HashMap<String, Framework>();
+	private List<Bundle> tempBundles = Collections.synchronizedList(new LinkedList<Bundle>());	
 	
 	private FrameworkFactory frameworkFactory;
 	private String storageRoot;
@@ -81,14 +83,22 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
-		for ( Iterator i = frameworks.entrySet().iterator(); i.hasNext(); ) {
-			Map.Entry<String, TempFramework> e = (Entry<String, TempFramework>) i.next();
-			String name = e.getKey();
-			TempFramework f = e.getValue();
-			info("Resetting framework " + name );
-			f.reset();
+		info( "Resetting " + tempBundles.size() + " bundles " );
+		for (Iterator<Bundle> i = tempBundles.iterator(); i.hasNext(); ) {
+			Bundle b = i.next();
+			
+			log( "Found " + b.getSymbolicName() + " in state " + state( b.getState() ) );
+			if ( b.getState() != Bundle.UNINSTALLED ) {
+				try {
+					log( "uninstalling " + b.getSymbolicName() );
+					b.uninstall();
+				} catch (BundleException e) {
+					fail("Failed to reset temporary bundle context", e);
+				}
+			}
+			
+			i.remove();
 		}
-
 		super.tearDown();
 	}
 
@@ -106,7 +116,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 				initFramework(f);
 				startFramework(f);
 				installFramework(f);
-				frameworks.put(name, new TempFramework(f));
+				frameworks.put(name, f);
 			}
 			if (f == null || f.getState() != Bundle.ACTIVE) {
 				fail("Framework is not started yet");
@@ -115,37 +125,44 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 		}
 	}
 	
-	private void info(String message) {
+	private static void info(String message) {
 		log( "************************MultiFrameworkTestCase************************" );
 		log( message );
 		log( "**********************************************************************" );		
 	}
 	
+    /**
+     * @param context
+     * @param bundle
+     * @return
+     */
+    protected Bundle installBundle(BundleContext context, String bundle) {
+        Bundle b = null;
+
+        if (!bundle.startsWith(getWebServer())) {
+            bundle = getWebServer() + bundle;
+        }
+
+        try {
+            URL location = new URL(bundle);
+            InputStream inputStream = location.openStream();
+
+            b = context.installBundle(bundle, inputStream);
+            tempBundles.add(b);
+        } catch (Exception e) {
+            fail("Failed to install bundle " + bundle, e);
+        }
+
+        assertNotNull(b);
+
+        return b;
+    }
+   
 	/**
 	 * This method is implemented by subclasses, which contain the test cases
 	 * @return Map with framework properties.
 	 */
 	public abstract Map getConfiguration();
-
-	/**
-	 * Install a bundle into the framework.
-	 * @param bundle Bundle location to install
-	 * @return Bundle that was created by the framework and installed
-	 * @throws BundleException
-	 * @throws IOException
-	 */
-//	public Bundle installBundle(String bundle) throws BundleException, IOException {
-//		BundleContext fwkContext = getFramework().getBundleContext();
-//		assertNotNull("Framework context is null", fwkContext);
-//		URL input = getBundleInput(bundle);
-//		assertNotNull("Cannot find resource: " + bundle, input);
-//		return fwkContext.installBundle(bundle, input.openStream());
-//	}
-//	
-//	private URL getBundleInput(String bundle) {
-//		BundleContext context = getBundleContextWithoutFail();
-//	    return context == null ? this.getClass().getResource(bundle) : context.getBundle().getEntry(bundle);
-//	}
 
 	private String getFrameworkFactoryClassName() throws IOException {
 		BundleContext context = getBundleContextWithoutFail();
@@ -327,55 +344,15 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 		}
 	}
 	
-	private static class TempFramework extends FrameworkDelegate {
-
-		public TempFramework(Framework delegate) {
-			super(delegate, TempContext.class);
-		}
-
-		public void reset() {
-			TempContext temp = (TempContext) getBundleContext();
-			temp.reset();
-		}
-		
-	}
-	
-	private static class TempContext extends BundleContextDelegate {
-		private LinkedList<Bundle> testBundles = new LinkedList<Bundle>();
-		
-		public TempContext(BundleContext delegate) {
-			super(delegate);
-		}
-
-		@Override
-		public Bundle installBundle(String location, InputStream input)
-				throws BundleException {
-			Bundle b = super.installBundle(location, input);
-			testBundles.add(b);
-			return b;
-		}
-
-		@Override
-		public Bundle installBundle(String location) throws BundleException {
-			Bundle b = super.installBundle(location);
-			testBundles.add(b);
-			return b;
-		}
-		
-		public void reset() {
-			for (Iterator<Bundle> i = testBundles.iterator(); i.hasNext(); ) {
-				Bundle b = i.next();
-				
-				if ( b.getState() != Bundle.UNINSTALLED ) {
-					try {
-						b.uninstall();
-					} catch (BundleException e) {
-						fail("Failed to reset temporary bundle context", e);
-					}
-				}
-				
-				i.remove();
-			}
+	private static final String state(int state) {
+		switch(state) {
+		case Bundle.ACTIVE: return "active";
+		case Bundle.INSTALLED: return "installed";
+		case Bundle.RESOLVED: return "resolved";
+		case Bundle.STARTING: return "starting";
+		case Bundle.STOPPING: return "stopping";
+		case Bundle.UNINSTALLED: return "uninstalled";
+		default: return "wibble";
 		}
 	}
 }
