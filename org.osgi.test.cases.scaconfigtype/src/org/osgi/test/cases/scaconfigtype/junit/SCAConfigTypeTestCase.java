@@ -429,29 +429,6 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
         return b;
     }
-
-    /**
-     * Verifies the server side framework that it exports the test packages for the interface
-     * used by the test service.
-     * @throws Exception
-     */
-    private void verifyFramework(Framework f) throws Exception {
-        ServiceReference sr = f.getBundleContext().getServiceReference(PackageAdmin.class.getName());
-        assertNotNull("Framework is not supplying PackageAdmin service", sr);
-
-        PackageAdmin pkgAdmin = (PackageAdmin)f.getBundleContext().getService(sr);
-        ExportedPackage[] exportedPkgs = pkgAdmin.getExportedPackages(f.getBundleContext().getBundle());
-        assertNotNull(exportedPkgs);
-        f.getBundleContext().ungetService(sr);
-
-        boolean found = false;
-        for (int i = 0; i < exportedPkgs.length && !found; i++) {
-            found = ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON.equals(exportedPkgs[i].getName());
-        }
-        assertTrue("Framework System Bundle is not exporting package " + ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON,
-                   found);
-        f.getBundleContext().ungetService(sr);
-    }
    
     private ServiceReference[] assertAAvailability(Bundle clientBundle, boolean available) throws InterruptedException {
         ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
@@ -531,6 +508,30 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         configuration.put(FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
         return configuration;
     }
+    
+    /**
+     * Verifies the server side framework that it exports the test packages for the interface
+     * used by the test service.
+     * @throws Exception
+     */
+    private void verifyFramework(Framework f) throws Exception {
+        ServiceReference sr = f.getBundleContext().getServiceReference(PackageAdmin.class.getName());
+        assertNotNull("Framework is not supplying PackageAdmin service", sr);
+
+        PackageAdmin pkgAdmin = (PackageAdmin)f.getBundleContext().getService(sr);
+        ExportedPackage[] exportedPkgs = pkgAdmin.getExportedPackages(f.getBundleContext().getBundle());
+        assertNotNull(exportedPkgs);
+        f.getBundleContext().ungetService(sr);
+
+        boolean found = false;
+        for (int i = 0; i < exportedPkgs.length && !found; i++) {
+            found = ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON.equals(exportedPkgs[i].getName());
+        }
+        assertTrue("Framework System Bundle is not exporting package " + ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON,
+                   found);
+        f.getBundleContext().ungetService(sr);
+    }
+
     
 	class TestEventHandler implements EventHandler {
 		private LinkedList<Event> eventlist = new LinkedList<Event>();

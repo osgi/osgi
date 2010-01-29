@@ -31,6 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.Map.Entry;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -49,7 +50,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
 	
-	private HashMap<String, Framework> frameworks = new HashMap<String, Framework>();
+	private static HashMap<String, TempFramework> frameworks = new HashMap<String, TempFramework>();
 	
 	private FrameworkFactory frameworkFactory;
 	private String storageRoot;
@@ -80,14 +81,12 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
-		try {
-			for ( Iterator i = frameworks.values().iterator(); i.hasNext(); ) {
-				Framework f = (Framework) i.next();
-				stopFramework(f);
-			}
-		}
-		finally {
-			frameworks.clear();
+		for ( Iterator i = frameworks.entrySet().iterator(); i.hasNext(); ) {
+			Map.Entry<String, TempFramework> e = (Entry<String, TempFramework>) i.next();
+			String name = e.getKey();
+			TempFramework f = e.getValue();
+			info("Resetting framework " + name );
+			f.reset();
 		}
 
 		super.tearDown();
@@ -96,21 +95,30 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 	/**
 	 * @return started Framework instance
 	 */
-	public synchronized Framework getFramework(String name) {
-		Framework f = frameworks.get(name);
-		if ( f == null ) {
-			HashMap configuration = new HashMap(getConfiguration());		
-			configuration.put(Constants.FRAMEWORK_STORAGE, storageRoot + File.separator + name);		
-			f = createFramework(configuration);
-			initFramework(f);
-			startFramework(f);
-			installFramework(f);
-			frameworks.put(name, f);
+	public Framework getFramework(String name) {
+		synchronized( frameworks ) {
+			Framework f = frameworks.get(name);
+			if ( f == null ) {
+				info( "Creating framework " + name );
+				HashMap configuration = new HashMap(getConfiguration());		
+				configuration.put(Constants.FRAMEWORK_STORAGE, storageRoot + File.separator + name);		
+				f = createFramework(configuration);
+				initFramework(f);
+				startFramework(f);
+				installFramework(f);
+				frameworks.put(name, new TempFramework(f));
+			}
+			if (f == null || f.getState() != Bundle.ACTIVE) {
+				fail("Framework is not started yet");
+			}
+			return f;
 		}
-		if (f == null || f.getState() != Bundle.ACTIVE) {
-			fail("Framework is not started yet");
-		}
-		return f;
+	}
+	
+	private void info(String message) {
+		log( "************************MultiFrameworkTestCase************************" );
+		log( message );
+		log( "**********************************************************************" );		
 	}
 	
 	/**
@@ -315,6 +323,58 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 				} catch (BundleException e) {
 					fail("Failed to start bundle: " + b.getSymbolicName(), e);
 				}
+			}
+		}
+	}
+	
+	private static class TempFramework extends FrameworkDelegate {
+
+		public TempFramework(Framework delegate) {
+			super(delegate, TempContext.class);
+		}
+
+		public void reset() {
+			TempContext temp = (TempContext) getBundleContext();
+			temp.reset();
+		}
+		
+	}
+	
+	private static class TempContext extends BundleContextDelegate {
+		private LinkedList<Bundle> testBundles = new LinkedList<Bundle>();
+		
+		public TempContext(BundleContext delegate) {
+			super(delegate);
+		}
+
+		@Override
+		public Bundle installBundle(String location, InputStream input)
+				throws BundleException {
+			Bundle b = super.installBundle(location, input);
+			testBundles.add(b);
+			return b;
+		}
+
+		@Override
+		public Bundle installBundle(String location) throws BundleException {
+			Bundle b = super.installBundle(location);
+			testBundles.add(b);
+			return b;
+		}
+		
+		public void reset() {
+			for (Iterator<Bundle> i = testBundles.iterator(); i.hasNext(); ) {
+				Bundle b = i.next();
+				
+				if ( b.getState() != Bundle.UNINSTALLED ) {
+					try {
+						b.uninstall();
+					} catch (BundleException e) {
+						fail("Failed to reset temporary bundle context", e);
+					}
+				}
+				
+				i.remove();
 			}
 		}
 	}
