@@ -42,19 +42,22 @@ public class DeploymentPackageJarInputStream {
 	public static class Entry extends JarEntry {
 		private Attributes				attrs;
 		private ByteArrayOutputStream	buffer;
+		private boolean isL10N;
 
-		private Entry(JarEntry je, ByteArrayOutputStream buffer)
+		private Entry(JarEntry je, ByteArrayOutputStream buffer, String locPath)
 				throws IOException {
 			super(je);
 			if (null == buffer)
 				throw new IllegalArgumentException(
 						"The 'buffer' parameter cannot be null");
 			attrs = je.getAttributes();
+			isL10N = DeploymentPackageJarInputStream.isL10N(locPath, je.getName());
 			this.buffer = buffer;
 		}
 
-		private Entry(String name, Attributes attrs) {
+		private Entry(String name, Attributes attrs, String locPath) {
 			super(name);
+			isL10N = DeploymentPackageJarInputStream.isL10N(locPath, name);
 			this.attrs = attrs;
 		}
 
@@ -90,9 +93,13 @@ public class DeploymentPackageJarInputStream {
 		}
 
 		public boolean isResource() {
-			return !isBundle();
+			return !isBundle() && !isL10N();
 		}
 
+		public boolean isL10N() {
+			return isL10N;
+		}
+		
 		public boolean isMissing() {
 			return isMissing(attrs);
 		}
@@ -303,8 +310,8 @@ public class DeploymentPackageJarInputStream {
 			if (!missingBundleEntries.isEmpty()) {
 				// ... and there are missing entries
 				String name = (String) missingBundleEntries.removeFirst();
-				actEntry = new Entry(name, (Attributes) manifest.getEntries()
-						.remove(name));
+				actEntry = new Entry(name,
+						(Attributes) manifest.getEntries().remove(name), locPath);
 				return actEntry;
 			}
 		}
@@ -319,8 +326,8 @@ public class DeploymentPackageJarInputStream {
 							DeploymentException.CODE_ORDER_ERROR,
 							"There is no data in the stream for \"Name\"-section: "
 									+ name);
-				actEntry = new Entry(name, (Attributes) manifest.getEntries()
-						.get(name));
+				actEntry = new Entry(name,
+						(Attributes) manifest.getEntries().get(name), locPath);
 
 				// remove to ensure that the sequence of Entries ends
 				it.remove();
@@ -336,15 +343,15 @@ public class DeploymentPackageJarInputStream {
 			ByteArrayOutputStream bos = readIntoBuffer();
 			closeEntry();
 
-			if (actJarEntry.getName().startsWith(locPath))
-				dprb.addPropertyFile(actJarEntry.getName(), bos);
-
 			// We have opened a JarEntries so we have to close it
 			// when nextEntry() is called next time
-			actEntry = new Entry(actJarEntry, bos);
+			actEntry = new Entry(actJarEntry, bos, locPath);
 
+			if (actEntry.isL10N())
+				dprb.addPropertyFile(actEntry.getName(), bos);
+			
 			// remove to ensure that the sequence of Entries ends
-			manifest.getEntries().remove(actJarEntry.getName());
+			manifest.getEntries().remove(actEntry.getName());
 
 			actJarEntry = null;
 		}
@@ -398,7 +405,7 @@ public class DeploymentPackageJarInputStream {
 			if (name.startsWith("meta-inf/manifest.mf"))
 				return FT_MANIFEST;
 			else
-				if (name.startsWith(locPath) && name.endsWith(".properties"))
+				if (isL10N(locPath, je.getName()))
 					return FT_L10N;
 		if (Entry.isBundle(je.getAttributes()))
 			return FT_BUNDLE;
@@ -443,4 +450,8 @@ public class DeploymentPackageJarInputStream {
 		return dprb;
 	}
 
+	private static boolean isL10N(String locPath, String l10n) {
+		return l10n.startsWith(locPath) && l10n.toLowerCase().endsWith(".properties");
+	}
+	
 }

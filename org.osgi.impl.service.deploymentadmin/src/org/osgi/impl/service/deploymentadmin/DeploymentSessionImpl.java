@@ -293,10 +293,15 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         	// "true" since customizers also have to be stopped because they 
         	// may be updated during processBundles call
             stopBundles(true);
+            Vector wrProcs = processResources(
+            		wjis, //stream
+            		true);//processL10Ns
             processBundles(wjis);
             cpisForCusts = setFilePermissionForCustomizers();
             startCustomizers();
-            Vector wrProcs = processResources(wjis);
+            wrProcs.addAll(processResources(
+            		wjis,   //stream
+            		false));//processL10Ns
             Vector wrProcsD = dropResources();
             wrProcs.addAll(wrProcsD);
             prepareProcessors(wrProcs);
@@ -532,17 +537,22 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         transaction.addRecord(new TransactionRecord(Transaction.STOPBUNDLE, b));
     }
 
-    private Vector processResources(DeploymentPackageJarInputStream wjis) 
+    private Vector processResources(DeploymentPackageJarInputStream wjis, boolean processL10Ns) 
     		throws DeploymentException, IOException 
     {
     	Vector wrProcs = new Vector();
+    	if (processL10Ns) {
+    		actEntry = wjis.nextEntry(); //the localization files are first
+    		if ((null == actEntry) || !actEntry.isL10N())
+    			return wrProcs;
+    	}
         while (null != actEntry && !isCancelled()) {
             if (isCancelled())
             	break;
 
-            if (!actEntry.isResource())
+            if (!processL10Ns && !actEntry.isResource())
                 throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR, 
-                        "Bundles have to precede resources in the deployment package");
+                        "Bundles and localization files have to precede resources in the deployment package!");
             
             if (!actEntry.isMissing()) {
                 WrappedResourceProcessor wrProc = processResource(actEntry);
@@ -558,6 +568,8 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
             }
             wjis.closeEntry();
             actEntry = wjis.nextEntry();
+            if ((actEntry == null) || (processL10Ns && !actEntry.isL10N()))
+            	break; //go ahead, no more localization files
         }
         return wrProcs;
     }
@@ -868,7 +880,6 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
     private void processBundles(DeploymentPackageJarInputStream wjis) 
     		throws BundleException, IOException, DeploymentException 
     {
-    	actEntry = wjis.nextEntry();
     	int counter = 0;
         while (null != actEntry && actEntry.isBundle()) 
         {
