@@ -109,6 +109,7 @@ public abstract class WebContainerTestBundleControl extends
             if (debug) {
                 log("installWar failed: " + options + " warName: " + warName + "Exception: " + e.getCause());
             }
+            throw e;
         } 
         
         return b;
@@ -190,7 +191,7 @@ public abstract class WebContainerTestBundleControl extends
         final String response;
         try {
             assertEquals(200, conn.getResponseCode());
-            assertEquals("text/html", conn.getContentType());
+            checkContentType("text/html", conn.getContentType());
             response = Dispatcher.dispatch(conn);
             if (this.debug) {
                 log(response);
@@ -201,6 +202,11 @@ public abstract class WebContainerTestBundleControl extends
         return response;
     }
 
+    protected void checkContentType(String expected, String actual) {
+        assertTrue("Unexpected content-type: " + actual, 
+                  actual != null  && actual.startsWith(expected));
+    }
+    
     protected void checkPageContents(String contextPath, String warName) throws Exception {
         // check the correctness of the static home page
         String response = getResponse(contextPath);

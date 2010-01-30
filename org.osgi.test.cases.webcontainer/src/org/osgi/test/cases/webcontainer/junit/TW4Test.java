@@ -133,7 +133,7 @@ public class TW4Test extends WebContainerTestBundleControl {
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
             assertEquals(200, conn.getResponseCode());
-            assertEquals("text/plain", conn.getContentType());
+            checkContentType("text/plain", conn.getContentType());
             BufferedReader in = null;
             int bufsize = 0;
             int len = 0;
@@ -164,7 +164,7 @@ public class TW4Test extends WebContainerTestBundleControl {
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
             assertEquals(200, conn.getResponseCode());
-            assertEquals("text/plain", conn.getContentType());
+            checkContentType("text/plain", conn.getContentType());
             String response = Dispatcher.dispatch(conn);
             if (this.debug) {
                 log(response);
