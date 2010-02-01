@@ -32,7 +32,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.Map.Entry;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -83,17 +82,17 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
-		info( "Resetting " + tempBundles.size() + " bundles " );
+		log( "resetting " + tempBundles.size() + " bundles " );
 		for (Iterator<Bundle> i = tempBundles.iterator(); i.hasNext(); ) {
 			Bundle b = i.next();
 			
-			log( "Found " + b.getSymbolicName() + " in state " + state( b.getState() ) );
+			log( "found " + b.getSymbolicName() + " in state " + state( b.getState() ) );
 			if ( b.getState() != Bundle.UNINSTALLED ) {
 				try {
 					log( "uninstalling " + b.getSymbolicName() );
 					b.uninstall();
 				} catch (BundleException e) {
-					fail("Failed to reset temporary bundle context", e);
+					fail("Failed to reset test bundles", e);
 				}
 			}
 			
@@ -109,7 +108,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 		synchronized( frameworks ) {
 			Framework f = frameworks.get(name);
 			if ( f == null ) {
-				info( "Creating framework " + name );
+				log( "Creating framework " + name );
 				HashMap configuration = new HashMap(getConfiguration());		
 				configuration.put(Constants.FRAMEWORK_STORAGE, storageRoot + File.separator + name);		
 				f = createFramework(configuration);
@@ -123,12 +122,6 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 			}
 			return f;
 		}
-	}
-	
-	private static void info(String message) {
-		log( "************************MultiFrameworkTestCase************************" );
-		log( message );
-		log( "**********************************************************************" );		
 	}
 	
     /**

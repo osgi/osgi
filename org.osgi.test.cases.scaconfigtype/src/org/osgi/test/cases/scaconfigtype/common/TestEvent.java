@@ -1,7 +1,5 @@
 /*
- * $Header$
- * 
- * Copyright (c) OSGi Alliance (2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +19,8 @@ package org.osgi.test.cases.scaconfigtype.common;
  * @author <a href="mailto:david.savage@paremus.com">David Savage</a>
  *
  */
-public interface SCAConfigConstants {
-	static final String ORG_OSGI_SCA_CONFIG = "org.osgi.sca";
-	
-	static final String ORG_OSGI_SCA_BINDING = "org.osgi.sca.bindings";
+public interface TestEvent {
 
-	static final String SCA_CONFIGURATION_HEADER = "SCA-Configuration";
+	Object getProperty(String property);
+
 }

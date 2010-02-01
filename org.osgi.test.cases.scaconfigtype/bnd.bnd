@@ -16,6 +16,7 @@ Include-Resource					= \
 	ct12.jar, \
 	ct15.jar, \
 	ct26.jar, \
+	ct26client.jar, \
 	
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
@@ -33,7 +34,7 @@ Include-Resource					= \
 	osgi.compatibility.bootdelegation=false, \
 	osgi.resolverMode=strict, \
 	osgi.support.multipleHosts=true, \
-	${p}.bundles=${repo;com.springsource.junit}|${repo;org.apache.tuscany.sca.bundle}|${repo;osgi.cmpn}|${repo;org.osgi.impl.service.log}, \
+	${p}.bundles=${repo;org.eclipse.equinox.event}|\${repo;com.springsource.junit}|${repo;org.apache.tuscany.sca.bundle}|${repo;osgi.cmpn}|${repo;org.osgi.impl.service.log}, \
 	${p}.serverconfig="service.exported.configs,org.osgi.sca.domain.registry", \
 	service.exported.configs=org.osgi.sca, \
  	org.osgi.sca.domain.registry="tribes://228.0.0.100:50000?timeout\=6000"

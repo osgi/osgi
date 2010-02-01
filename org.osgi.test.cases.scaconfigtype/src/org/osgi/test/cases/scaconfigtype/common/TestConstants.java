@@ -31,7 +31,7 @@ public interface TestConstants {
 	
 	static final String SERVER_FRAMEWORK = "server";
 	static final String CLIENT_FRAMEWORK = "client";
-	static final long SERVICE_TIMEOUT = Long.getLong("org.osgi.test.cases.scaconfigtype.timeout", 5000L);
+	static final long SERVICE_TIMEOUT = Long.getLong("org.osgi.test.cases.scaconfigtype.timeout", 10000L);
 	
 	static final String BINDING_A_QNAME = "{http://acme.com/defintions}serviceA";
 	static final String BINDING_B_QNAME = "{http://acme.com/defintions}serviceB";

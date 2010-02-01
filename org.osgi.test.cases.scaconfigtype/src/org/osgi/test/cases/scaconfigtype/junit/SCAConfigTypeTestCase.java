@@ -29,14 +29,9 @@ import static org.osgi.test.cases.scaconfigtype.common.TestConstants.ORG_OSGI_TE
 import static org.osgi.test.cases.scaconfigtype.common.TestConstants.SERVER_FRAMEWORK;
 import static org.osgi.test.cases.scaconfigtype.common.TestConstants.SERVICE_TIMEOUT;
 
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -44,16 +39,14 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventConstants;
-import org.osgi.service.event.EventHandler;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.scaconfigtype.common.A;
 import org.osgi.test.cases.scaconfigtype.common.B;
 import org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants;
+import org.osgi.test.cases.scaconfigtype.common.TestEvent;
+import org.osgi.test.cases.scaconfigtype.common.TestEventHandler;
 import org.osgi.test.cases.scaconfigtype.common.Utils;
-import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -70,18 +63,19 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         // verify that the server framework is exporting the test packages
         verifyFramework(getFramework(SERVER_FRAMEWORK));
     }
+    
+    
 
     /**
      * CT.1
      * @throws Exception
      */
-    // TODO [dsavage] not sure if this test is possible with RI as is 
-    // TODO [dsavage] need version of tuscany that doesn't have discovery enabled
+    // TODO [dsavage] use endpoint and assert that two services are found vs one
     //	public void testEndpointLifecycle() throws Exception {		
     //		fail("TODO not yet implemented");
     //	}
 
-    /**
+	/**
      * CT.4
      * @throws Exception
      */
@@ -116,17 +110,9 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         // [dsavage] do this test last as it's failing at the moment
         // default location
         serverBundle = installAndStartBundle(serverContext, "/ct04defaultLocation.jar");
-        
-        // [dsavage] dumping headers to check SCA-Configuration header is present
-        // [dsavage] replace this with assert
-        System.out.println( "*****************************" );
-        Dictionary h = serverBundle.getHeaders();
-        for ( Enumeration e = h.keys(); e.hasMoreElements(); ) {
-        	String k = (String) e.nextElement();
-        	String v = (String) h.get(k);
-        	System.out.println( k + "=" + v );
-        }
-        System.out.println( "*****************************" );
+
+        // assert empty header used
+        assertEquals("", serverBundle.getHeaders().get(SCAConfigConstants.SCA_CONFIGURATION_HEADER));
         
         assertAAvailability(clientBundle, true);
 
@@ -335,28 +321,28 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
         BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
 
-    	Hashtable<String, Object> props = new Hashtable<String, Object>();
-    	props.put(EventConstants.EVENT_TOPIC, new String[]{
-				"org/osgi/service/remoteserviceadmin/IMPORT_REGISTRATION",
-				"org/osgi/service/remoteserviceadmin/IMPORT_UNREGISTRATION",
-				"org/osgi/service/remoteserviceadmin/IMPORT_ERROR"});
-		TestEventHandler eventHandler = new TestEventHandler();
-		
-		clientContext.registerService(EventHandler.class.getName(), eventHandler, props);
-		
         installAndStartBundle(serverContext, "/ct00.jar");
-        // TODO don't technically need to start client bundle but this checks it's resolved
-        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
+
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct26client.jar");
         
         // wait for A to be found
         assertAAvailability(clientBundle, true);
         
+        // [rfeng] We need to use the client bundle as it's the one that can load A.class
+        ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), TestEventHandler.class.getName(), null);
+        tracker.open();
+
+        TestEventHandler eventHandler = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), TestEventHandler.class);
+        
+        assertNotNull(eventHandler);
+        
         assertEquals( "Unexpected number of events", 1, eventHandler.getEventCount() );
         
-        Event evt = eventHandler.getNextEvent();
+        TestEvent evt = Utils.cast(eventHandler.getNextEvent(), TestEvent.class);
         
         Object configs = evt.getProperty(SERVICE_IMPORTED_CONFIGS);
         assertTrue( "Missing header " + SERVICE_IMPORTED_CONFIGS, configs != null );
+        
         assertTrue( Utils.propertyToList(configs).contains( SCAConfigConstants.ORG_OSGI_SCA_CONFIG ) );
         
         Object bindings = evt.getProperty(SCAConfigConstants.ORG_OSGI_SCA_BINDING);
@@ -503,38 +489,4 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
                    found);
         f.getBundleContext().ungetService(sr);
     }
-
-    
-	class TestEventHandler implements EventHandler {
-		private LinkedList<Event> eventlist = new LinkedList<Event>();
-		private Semaphore sem = new Semaphore(0);
-
-
-		/**
-		 * @see org.osgi.service.event.EventHandler#handleEvent(org.osgi.service.event.Event)
-		 */
-		public void handleEvent(Event event) {
-			eventlist.add(event);
-			sem.signal();
-		}
-		
-		Event getNextEvent() {
-			try {
-				sem.waitForSignal(60000); // wait max 1min for async notification
-			} catch (InterruptedException e1) {
-				return null;
-			}
-			
-			try {
-				return eventlist.removeFirst();
-			} catch (NoSuchElementException e) {
-				return null;
-			}
-		}
-		
-		int getEventCount() {
-			return eventlist.size();
-		}
-	}
-
 }

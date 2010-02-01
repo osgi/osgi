@@ -1,0 +1,7 @@
+Bundle-Name:                             ${p}.ct00client
+Bundle-Version:                          1.0
+Private-Package:                         ${p}.junit.ct26client.*, \
+                                         ${p}.common.*, \
+                                         org.osgi.test.support, \
+                                         org.osgi.test.support.compatibility
+Bundle-Activator:                        ${p}.junit.ct26client.Activator
