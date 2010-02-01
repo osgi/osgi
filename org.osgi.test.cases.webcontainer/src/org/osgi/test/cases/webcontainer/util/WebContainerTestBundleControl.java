@@ -16,7 +16,6 @@
 package org.osgi.test.cases.webcontainer.util;
 
 import java.io.File;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.JarURLConnection;
 import java.net.URL;
@@ -28,13 +27,12 @@ import java.util.jar.Manifest;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
-import org.osgi.test.cases.webcontainer.util.Dispatcher;
-import org.osgi.test.cases.webcontainer.util.Server;
-import org.osgi.test.cases.webcontainer.util.TimeUtil;
 import org.osgi.test.cases.webcontainer.util.validate.Validator;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @version $Rev$ $Date$
@@ -476,4 +474,36 @@ public abstract class WebContainerTestBundleControl extends
             throw e;
         }
     }
+    
+	/**
+	 * this method checks if the servlet context associated with the web context path 
+	 * is registered in the service registry.  This method will return false if unable
+	 * to find the registered servlet context within 10 seconds.
+	 * @param webContextPath
+	 * @return
+	 * @throws InterruptedException 
+	 * @throws InvalidSyntaxException 
+	 */
+	public boolean checkServiceRegistered(String webContextPath) throws InterruptedException, InvalidSyntaxException {
+		boolean toReturn = false;
+		// open a service tracker
+	    StringBuilder filterString = new StringBuilder();
+	    filterString.append("(" + Constants.OBJECTCLASS + "=javax.servlet.ServletContext)");
+        filterString.append(",(osgi.web.contextpath" + "=" + webContextPath + ")");
+	    Filter filter = getContext().createFilter(filterString.toString());
+	    ServiceTracker st = new ServiceTracker(getContext(), filter, null);
+	    st.open();
+	    
+	    Object obj = st.waitForService(10000);
+	    if (obj != null) {
+	    	toReturn = true;
+	    }
+	    
+	    // close the tracker
+	    if (st != null) {
+	    	st.close();
+	    }
+	    
+	    return toReturn;
+	}
 }

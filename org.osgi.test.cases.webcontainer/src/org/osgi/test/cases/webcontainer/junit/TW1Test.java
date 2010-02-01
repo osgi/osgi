@@ -43,6 +43,10 @@ public class TW1Test extends WebContainerTestBundleControl {
             log("bundleName to be passed into installBundle is " + loc);	
         }
         this.b = installBundle(loc, true);
+        
+        // make sure we don't run tests until the servletcontext is registered with service registry
+        boolean register = super.checkServiceRegistered(this.warContextPath);
+        assertTrue("the ServletContext should be registered", register);
     }
 
     /*

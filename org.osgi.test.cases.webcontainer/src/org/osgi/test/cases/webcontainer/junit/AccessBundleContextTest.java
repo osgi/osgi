@@ -56,6 +56,10 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
                 .getServiceReference(LogReaderService.class.getName());
         this.logReaderService = (LogReaderService) getContext().getService(
                 logReaderServiceReference);
+        
+        // make sure we don't run tests until the servletcontext is registered with service registry
+        boolean register = super.checkServiceRegistered(this.warContextPath);
+        assertTrue("the ServletContext should be registered", register);
     }
 
     /*

@@ -133,12 +133,14 @@ public abstract class ManifestHeadersTestBundleControl extends
                     "Bundle not started yet - should not be able to access "
                             + cp, super.ableAccessPath(cp));
             bundle.start();
-            // sleep for a sec to allow the web extender to take actions
-            Thread.sleep(1000);
+            
         }
 
         assertEquals("Bundle status should be Active", Bundle.ACTIVE, bundle.getState());
 
+        // make sure we don't run tests until the servletcontext is registered with service registry
+        boolean register = super.checkServiceRegistered(cp);
+        assertTrue("the ServletContext should be registered", register);
         
         // rough test able to access the app
         assertTrue("should be able to access " + cp, super.ableAccessPath(cp));
