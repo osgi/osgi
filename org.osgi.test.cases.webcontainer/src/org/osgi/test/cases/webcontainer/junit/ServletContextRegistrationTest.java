@@ -206,6 +206,13 @@ public class ServletContextRegistrationTest extends
 				originalManifest, options, this.debug);
 		validator.validate();
 
+	    String filter = "(" + OSGI_WEB_SYMBOLICNAME + "="
+          + (String) bundle.getHeaders().get(Constants.BUNDLE_SYMBOLICNAME)
+          + ")";
+	    if (debug) {
+	        log("filter is " + filter);
+	    }
+	    
 		if (!start) {
 			assertTrue("Bundle status should be Resolved or Installed",
 					Bundle.RESOLVED == bundle.getState() || Bundle.INSTALLED == bundle.getState());
@@ -214,25 +221,19 @@ public class ServletContextRegistrationTest extends
 						"Bundle not started yet - should not be able to access "
 								+ cp, super.ableAccessPath(cp));
 			}
-			sr = getContext().getServiceReference(
-					ServletContext.class.getName());
+		    ServiceReference[] srs = getContext().getServiceReferences(
+		                ServletContext.class.getName(), filter);
 			assertNull(
-					"sr should be null as the bundle has not been started yet",
-					sr);
+					"ServletContext service should not be present as the bundle has not been started yet",
+					srs);
 			bundle.start();
 
 		}
 
 		// get the service reference by Bundle-SymbolicName and Bundle-Version
-		String filter = "(" + OSGI_WEB_SYMBOLICNAME + "="
-				+ (String) bundle.getHeaders().get(Constants.BUNDLE_SYMBOLICNAME)
-				+ ")";
-		if (debug) {
-			log("filter is " + filter);
-		}
 		ServiceReference[] srs = getContext().getServiceReferences(
 				ServletContext.class.getName(), filter);
-		assertNotNull(srs);
+		assertNotNull("No ServletContext services", srs);
 		for (int i = 0; i < srs.length; i++) {
 			// bundle-version is optional
 			Object bv1 = bundle.getHeaders().get(Constants.BUNDLE_VERSION);

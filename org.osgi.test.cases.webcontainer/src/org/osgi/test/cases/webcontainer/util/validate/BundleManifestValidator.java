@@ -140,9 +140,11 @@ public class BundleManifestValidator extends Assert implements Validator{
 	        Object mVersion = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(Constants.BUNDLE_VERSION);
 	        // let's convert them to Version object so that we can treat version 1.0 and 1.0.0 the same value
 	        if (dVersion != null) {
-	            assertTrue(new Version((String)dVersion).compareTo(v) == 0);
+	            assertTrue("Expected " + version + " but got " + dVersion, 
+	                       new Version((String)dVersion).compareTo(v) == 0);
 	        } else if (mVersion !=null) {
-	            assertTrue(new Version((String)mVersion).compareTo(v) == 0);
+	            assertTrue("Expected " + version + " but got " + mVersion,
+	                       new Version((String)mVersion).compareTo(v) == 0);
 	        }  
         }
     }

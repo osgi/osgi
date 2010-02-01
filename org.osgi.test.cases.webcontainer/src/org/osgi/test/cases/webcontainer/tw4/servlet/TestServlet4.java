@@ -75,7 +75,7 @@ public class TestServlet4 extends HttpServlet {
             ServletOutputStream out = response.getOutputStream(); // binary
             // output
             InputStream in = getServletContext().getResourceAsStream(
-                    "images/osgi_mobile.jpg");
+                    "/images/osgi_mobile.jpg");
             byte buffer[] = new byte[4096];
             int read;
             while ((read = in.read(buffer, 0, buffer.length)) != -1) {
