@@ -16,10 +16,12 @@
 package org.osgi.test.cases.webcontainer.util.validate;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.jar.Attributes;
@@ -345,12 +347,8 @@ public class BundleManifestValidator extends Assert implements Validator{
     
     // convert a String to a String array
     private String[] toArray(String s) {
-        if (s.indexOf(",") > 0) {
-            return s.split(",");
-        } else {
-            String[] sArray = {s};
-            return sArray;
-        }
+        List<String> elements = split(s, ",");
+        return elements.toArray(new String [elements.size()]);
     }
     
     // check if a particular classpath exist in the classpath c String array
@@ -437,6 +435,62 @@ public class BundleManifestValidator extends Assert implements Validator{
             return s.trim();
         }
         
+    }
+    
+    /**
+    *
+    * Splits a delimiter separated string, tolerating presence of non separator commas
+    * within double quoted segments.
+    *
+    * Eg.
+    * test.package;version="[1.0.0, 1.0.0]" &
+    * test.package;version="1.0.0"
+    *  @param value          the value to be split
+    *  @param delimiter      the delimiter string such as ',' etc.
+    *  @return List<String>  the components of the split String in a list
+    */
+   public static List<String> split(String value, String delimiter)
+   {
+     List<String> result = new ArrayList<String>();
+     if (value != null) {
+       String[] packages = value.split(delimiter);
+
+       for (int i = 0; i < packages.length; ) {
+         String tmp = packages[i++].trim();
+         // if there is a odd number of " in a string, we need to append
+         while (count(tmp, "\"") % 2 != 0) {
+           // check to see if we need to append the next package[i++]
+             if (i<packages.length)
+               tmp = tmp + delimiter + packages[i++].trim();
+             else
+               // oops. The double quotes are not paired up. We have reached to the end of the string.
+               throw new IllegalArgumentException("Unable to split the string");
+         }
+
+         result.add(tmp);
+
+       }
+     }
+     return result;
+   }
+   
+   /**
+    * count the number of characters in a string
+    * @param parent The string to be searched
+    * @param subString The substring to be found
+    * @return the number of occurrence of the subString
+    */
+    private static int count(String parent, String subString) {
+
+      int count = 0 ;
+      int i = parent.indexOf(subString);
+      while (i > -1) {
+        if (parent.length() >= i+1)
+          parent = parent.substring(i+1);
+        count ++;
+        i = parent.indexOf(subString);
+      }
+      return count;
     }
 
 }
