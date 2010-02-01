@@ -48,6 +48,7 @@ public class ManifestPackage {
                 if (version.startsWith("\"") && version.endsWith("\"")) {
                     version = version.substring(1, version.length() - 1);
                 }
+                // TODO FIXME: version could be a versio range and this will fail!
                 this.packageVersion = Version.parseVersion(version);
             }
         }

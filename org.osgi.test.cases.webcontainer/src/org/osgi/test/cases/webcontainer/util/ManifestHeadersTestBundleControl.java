@@ -37,17 +37,17 @@ public abstract class ManifestHeadersTestBundleControl extends
     
     protected static final String[] CLASSPATH1 = {"WEB-INF/lib/org.osgi.test.cases.webcontainer.log.jar"}; 
     protected static final String[] CLASSPATH2 = {"WEB-INF/lib/org.osgi.test.cases.webcontainer.log.jar","WEB-INF/lib/org.osgi.test.cases.webcontainer.simple.jar"};
-    protected static final String[] CLASSPATH3 = {"WEB-INF/classes/"};
+    protected static final String[] CLASSPATH3 = {"WEB-INF/classes"};
     protected static final String[] CLASSPATH4 = {"WEB-INF/lib/org.osgi.test.cases..log.jar"};
     protected static final String[] CLASSPATH5 = {"WEB-INF/lib/org.osgi.test.cases.webcontainer.log.jar", "libs/utiljar"};
     protected static final String[] CLASSPATH6 = {"WEB-INF/lib2/org.osgi.test.cases.webcontainer.simple.jar"};
 
     protected static final String[] IMPORTS1 = {"javax.servlet; version=2.5", "javax.servlet.http; version=2.5"}; 
     protected static final String[] IMPORTS2 = {"javax.servlet;version=2.5", "javax.servlet.http;version=2.5", "javax.servlet.jsp; version=2.1", "javax.servlet.jsp.tagext; version=2.1"}; 
-    protected static final String[] IMPORTS3 = {"javax.servlet; version=(2.1, 2.5]", "javax.servlet.http; version=(2.1, 2.5]"};
-    protected static final String[] IMPORTS4 = {"javax.servlet.jsp; version=[2.0,2.1]", "javax.servlet.jsp.tagext; version=[2.0,2.1]"}; 
+    protected static final String[] IMPORTS3 = {"javax.servlet; version=\"(2.1, 2.5]\"", "javax.servlet.http; version=\"(2.1, 2.5]\""};
+    protected static final String[] IMPORTS4 = {"javax.servlet.jsp; version=\"[2.0,2.1]\"", "javax.servlet.jsp.tagext; version=\"[2.0,2.1]\""}; 
     protected static final String[] IMPORTS5 = {"org.osgi.service.log", "javax.servlet; version=2.4", "javax.servlet.http; version=2.4"};
-    protected static final String[] IMPORTS9 = {"javax.servlet; version=2.6", "javax.servlet.http; version=2.6"};
+    protected static final String[] IMPORTS9 = {"javax.servlet; version=3.6", "javax.servlet.http; version=3.6"};
     protected static final String[] IMPORTS10 = {"org.osgi.service.log;version=2.0"};
 
     
@@ -56,9 +56,9 @@ public abstract class ManifestHeadersTestBundleControl extends
     protected static final String MANIFESTVERSION3 = "1";
     
     protected static final String SYMBOLICNAME1 = "ct-testwar1";
-    protected static final String SYMBOLICNAME2 = "ct-testwar2asdacakjdlkjasldja;dk;k121pi2910-921-0lkajdlkajsdlsadjlaksdjskajdklsajdklasjdksakdjaksljdaksljd";
+    protected static final String SYMBOLICNAME2 = "ct-testwar2asdacakjdlkjasldjadkk121pi2910-921-0lkajdlkajsdlsadjlaksdjskajdklsajdklasjdksakdjaksljdaksljd";
     protected static final String SYMBOLICNAME3 = "ct-testwar3-----------aklsdmklajsdl kajskldjaldlasjdklajdlksa;djklajsdkljakldjskaljdkaljsdlksjadklsajdkasdj";
-    protected static final String SYMBOLICNAME4 = "ct-testwar4--//laksldkl;laksldk;askd;aslkd;laksdlksaldkl;laksdpqoeiewihrfrhbgsmndb123e32";
+    protected static final String SYMBOLICNAME4 = "ct-testwar4--//laksldkllaksldkaskdaslkd laksdlksaldkl laksdpqoeiewihrfrhbgsmndb123e32";
     protected static final String SYMBOLICNAME5 = "ct-testwar5";
     protected static final String VERSION10 = "1.0";
     
@@ -80,20 +80,6 @@ public abstract class ManifestHeadersTestBundleControl extends
     protected static final String JSPEXTRACTLOAC1 = "resources/tw1";
     protected static final String JSPEXTRACTLOAC2 = "resources/tw1/jspextract";
     
-    protected Bundle b;
-
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    public void tearDown() throws Exception {
-        if (this.b != null && this.b.getState() != Bundle.UNINSTALLED) {
-            this.b.uninstall();
-        }
-        this.b = null;
-    }
-    
-
     /*
      * generalHeadersTest to be used by non-error test
      */
@@ -112,11 +98,9 @@ public abstract class ManifestHeadersTestBundleControl extends
         try {
             validator.validate();
         } catch (IllegalArgumentException e) {
-            fail("version format is valid - should not be getting an IllegalArgumentException"
-                    + e.getCause());
+            fail("version format is valid - should not be getting an IllegalArgumentException", e);
         } catch (Exception e) {
-            fail("should not get any exception during validation "
-                    + e.getCause());
+            fail("should not get any exception during validation", e);
         }
 
         if (cp == null) {

@@ -99,19 +99,22 @@ public abstract class WebContainerTestBundleControl extends
             if (debug) {
                 log("bundleName to be passed into installBundle is " + loc);
             }
-            b = installBundle(loc);
+            Bundle bundle = installBundle(loc);
             if (start) {
-                b.start();
+                try {
+                    bundle.start();
+                } catch (BundleException e) {
+                    bundle.uninstall();
+                    throw e;
+                }
             }
+            return bundle;
         } catch (BundleException e) {
             if (debug) {
                 log("installWar failed: " + options + " warName: " + warName + "Exception: " + e.getCause());
             }
             throw e;
         } 
-        
-        return b;
-        
     }
 
     protected void prepare(String wcp) throws Exception {
@@ -443,11 +446,15 @@ public abstract class WebContainerTestBundleControl extends
                 bundleName = getWebServer() + bundleName;
             }
 
-            Bundle b = getContext().installBundle(bundleName);
+            Bundle bundle = getContext().installBundle(bundleName);
             if (start) {
-                b.start();
+                try {
+                    bundle.start();
+                } catch (BundleException e) {
+                    bundle.uninstall();
+                }
             }
-            return b;
+            return bundle;
         } catch (Exception e) {
             log("Not able to install testbundle " + bundleName);
             log("Nested " + e.getCause());
@@ -488,8 +495,8 @@ public abstract class WebContainerTestBundleControl extends
 		boolean toReturn = false;
 		// open a service tracker
 	    StringBuilder filterString = new StringBuilder();
-	    filterString.append("(" + Constants.OBJECTCLASS + "=javax.servlet.ServletContext)");
-        filterString.append(",(osgi.web.contextpath" + "=" + webContextPath + ")");
+	    filterString.append("(&(" + Constants.OBJECTCLASS + "=javax.servlet.ServletContext)");
+        filterString.append("(osgi.web.contextpath" + "=" + webContextPath + "))");
 	    Filter filter = getContext().createFilter(filterString.toString());
 	    ServiceTracker st = new ServiceTracker(getContext(), filter, null);
 	    st.open();

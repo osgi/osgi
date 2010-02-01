@@ -59,7 +59,7 @@ public class EventTest extends WebContainerTestBundleControl {
         // verify event admin service is installed
         log("verify event admin service is installed.  The tests in this class require event admin service being installed.");
         ServiceReference sr = getContext().getServiceReference(EventAdmin.class.getName());
-        assertNotNull(sr);
+        assertNotNull("EventAdmin service is not available", sr);
         assertNotNull((EventAdmin)getContext().getService(sr));     
         
         log("install & start the test event handler");
