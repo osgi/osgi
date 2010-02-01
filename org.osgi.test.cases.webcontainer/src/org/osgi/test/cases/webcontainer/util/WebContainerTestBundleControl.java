@@ -444,10 +444,8 @@ public abstract class WebContainerTestBundleControl extends
             if (bundleName.indexOf(getWebServer()) < 0) {
                 bundleName = getWebServer() + bundleName;
             }
-            URL url = new URL(bundleName);
-            InputStream in = url.openStream();
 
-            Bundle b = getContext().installBundle(bundleName, in);
+            Bundle b = getContext().installBundle(bundleName);
             if (start) {
                 b.start();
             }
@@ -467,10 +465,8 @@ public abstract class WebContainerTestBundleControl extends
             if (bundleName.indexOf(getWebServer()) < 0) {
                 bundleName = getWebServer() + bundleName;
             }
-            URL url = new URL(bundleName);
-            InputStream in = url.openStream();
-
-            Bundle b = getContext().installBundle(bundleName, in);
+            
+            Bundle b = getContext().installBundle(bundleName);
 
             return b;
         } catch (Exception e) {
