@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IBM Corporation (2009). All Rights Reserved.
+ * Copyright (c) IBM Corporation (2009, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import junit.framework.Assert;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
+import org.osgi.test.cases.webcontainer.util.Util;
 
 /**
  * @version $Rev$ $Date$
@@ -300,12 +301,15 @@ public class BundleManifestValidator extends Assert implements Validator{
         
         // dWebContextPath - deployer specified Web-ContextPath value
         Object dWebContextPath = this.deployOptions == null ? null : this.deployOptions.get(WEB_CONTEXT_PATH);
+        
+        // attach / at the beginning of web context path if missing
+        String correctWebContextPath = Util.attachSlash((String)dWebContextPath);
         // mWebContextPath - manifest Web-ContextPath value
         Object mWebContextPath = this.manifest == null ? null : this.manifest.getMainAttributes().getValue(new Name(WEB_CONTEXT_PATH));
         if (dWebContextPath != null) {
-            assertEquals((String) this.dictionary.get(WEB_CONTEXT_PATH), (String)dWebContextPath);
+            assertEquals("Expected web context path from URL params is " + correctWebContextPath, correctWebContextPath, (String) this.dictionary.get(WEB_CONTEXT_PATH));
         } else if (mWebContextPath !=null) {
-            assertEquals((String) this.dictionary.get(WEB_CONTEXT_PATH), (String)mWebContextPath);
+            assertEquals("Expected web context path from manifest is " + (String)mWebContextPath, (String)mWebContextPath, (String) this.dictionary.get(WEB_CONTEXT_PATH));
         }
         // TODO: verify Web-ContextPath is unique on the server
     }
@@ -492,5 +496,6 @@ public class BundleManifestValidator extends Assert implements Validator{
       }
       return count;
     }
+   
 
 }

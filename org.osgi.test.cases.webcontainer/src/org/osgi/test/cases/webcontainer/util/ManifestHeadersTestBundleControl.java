@@ -89,6 +89,10 @@ public abstract class ManifestHeadersTestBundleControl extends
         String cp = options.get(WEB_CONTEXT_PATH) == null ? null
                 : (String) options.get(WEB_CONTEXT_PATH);
         
+        if (cp != null) {
+            cp = Util.attachSlash(cp);
+        }
+        
         assertNotNull("Bundle bundle should not be null", bundle);
         Manifest originalManifest = super.getManifestFromWarName(warName);
 
