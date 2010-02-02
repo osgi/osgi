@@ -62,6 +62,11 @@ class ServiceInvocationHandler implements InvocationHandler {
 	
 	
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		return SecurityUtils.invokePrivilegedAction(new ServiceInvokeAction(method, args));
+	}
+
+
+	private Object handleMethodInvocation(Method method, Object[] args) throws Throwable {
 		if (isServiceAvailable()) {
 			return invokeMethodOnService(method, args);
 		} else {
@@ -156,6 +161,18 @@ class ServiceInvocationHandler implements InvocationHandler {
 		}
 		
 		return false;
+	}
+	
+
+	private class ServiceInvokeAction extends ReflectiveInvokeAction {
+
+		ServiceInvokeAction(Method method, Object[] args) {
+			super(method, args);
+		}
+
+		public Object invokeMethod(Method method, Object[] args) throws Throwable {
+			return handleMethodInvocation(method, args);
+		}
 	}
 
 }

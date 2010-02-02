@@ -50,7 +50,7 @@ public class Activator implements BundleActivator {
 	private BundleContext						m_bundleContext					= null;
 	private final List                          m_listOfServiceRegistrations = new LinkedList();
 
-	private JNDIProviderAdminImpl	m_jndiProviderAdminService;
+	private CloseableJNDIProviderAdmin	m_jndiProviderAdminService;
 
 	/*
 	 * Create the Factory Manager's builder implementation, and register it with
@@ -150,7 +150,10 @@ public class Activator implements BundleActivator {
 	
 
 	private void registerJNDIProviderAdmin() {
-		m_jndiProviderAdminService = new JNDIProviderAdminImpl(m_bundleContext);
+		m_jndiProviderAdminService = 
+			new SecurityAwareJNDIProviderAdminImpl(new JNDIProviderAdminImpl(m_bundleContext));
+		
+		
 		ServiceRegistration serviceRegistration =  
 			m_bundleContext.registerService(JNDIProviderAdmin.class.getName(),
 					                        m_jndiProviderAdminService,

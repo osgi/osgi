@@ -26,9 +26,8 @@ import javax.naming.spi.DirObjectFactory;
 import javax.naming.spi.ObjectFactory;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.service.jndi.JNDIProviderAdmin;
 
-class JNDIProviderAdminImpl implements JNDIProviderAdmin {
+class JNDIProviderAdminImpl implements CloseableJNDIProviderAdmin {
 
 	private final OSGiInitialContextFactoryBuilder	m_objectFactoryBuilder;
 
@@ -78,7 +77,7 @@ class JNDIProviderAdminImpl implements JNDIProviderAdmin {
 		}
 	}
 	
-	void close() {
+	public void close() {
 		synchronized (m_objectFactoryBuilder) {
 			m_objectFactoryBuilder.close();
 		}

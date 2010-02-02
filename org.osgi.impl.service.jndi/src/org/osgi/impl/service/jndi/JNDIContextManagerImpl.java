@@ -31,9 +31,8 @@ import javax.naming.directory.DirContext;
 import javax.naming.spi.InitialContextFactory;
 
 import org.osgi.framework.Bundle;
-import org.osgi.service.jndi.JNDIContextManager;
 
-class JNDIContextManagerImpl implements JNDIContextManager {
+class JNDIContextManagerImpl implements CloseableJNDIContextManager {
 
 	private static final Logger logger = Logger.getLogger(JNDIContextManagerImpl.class.getName());
 	
@@ -96,7 +95,7 @@ class JNDIContextManagerImpl implements JNDIContextManager {
 	 * Closes all the known context implementations that have 
 	 * been provided by this service.  
 	 */
-	void close() {
+	public void close() {
 		// close known Context implementations
 		synchronized (m_listOfContexts) {
 			Iterator iterator = m_listOfContexts.iterator();

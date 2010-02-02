@@ -27,7 +27,7 @@ import org.osgi.framework.SynchronousBundleListener;
 
 class JNDIContextManagerServiceFactoryImpl implements ServiceFactory {
 
-	// map of bundles to context managers
+	// map of bundles to context managers (CloseableJNDIContextManager)
 	private Map m_mapOfManagers = 
 		Collections.synchronizedMap(new HashMap());
 	
@@ -35,21 +35,24 @@ class JNDIContextManagerServiceFactoryImpl implements ServiceFactory {
 	}
 	
 	public Object getService(Bundle bundle, ServiceRegistration registration) {
-		final JNDIContextManagerImpl jndiContextManagerImpl = new JNDIContextManagerImpl(bundle);
-		m_mapOfManagers.put(bundle, jndiContextManagerImpl);
+		CloseableJNDIContextManager jndiContextManager = 
+			createJNDIContextManager(bundle);
+		m_mapOfManagers.put(bundle, jndiContextManager);
 		bundle.getBundleContext().addBundleListener(new ContextManagerBundleListener());
-		return jndiContextManagerImpl;
+		return jndiContextManager;
 	}
+
+	
 
 	public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
 		closeContextManager(bundle);
 	}
 
 	private void closeContextManager(Bundle bundle) {
-		JNDIContextManagerImpl jndiContextManagerImpl = 
-			(JNDIContextManagerImpl)m_mapOfManagers.get(bundle);
-		if(jndiContextManagerImpl != null) {
-			jndiContextManagerImpl.close();
+		CloseableJNDIContextManager jndiContextManager = 
+			(CloseableJNDIContextManager)m_mapOfManagers.get(bundle);
+		if(jndiContextManager != null) {
+			jndiContextManager.close();
 			m_mapOfManagers.remove(bundle);
 		}
 	}
@@ -65,5 +68,16 @@ class JNDIContextManagerServiceFactoryImpl implements ServiceFactory {
 		}
 		
 	}
-
+	
+	
+	/**
+	 * Convenience factory method for creating a CloseableJNDIContextManager
+	 * instance.  
+	 * @param bundle the Bundle associated with this context manager
+	 * @return a CloseableJNDIContextManager that will handle requests for 
+	 *         the given Bundle.  
+	 */
+	private static CloseableJNDIContextManager createJNDIContextManager(Bundle bundle) {
+		return new SecurityAwareJNDIContextManagerImpl(new JNDIContextManagerImpl(bundle));
+	}
 }
