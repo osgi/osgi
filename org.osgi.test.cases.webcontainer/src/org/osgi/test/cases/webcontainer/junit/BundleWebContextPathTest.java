@@ -137,8 +137,10 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         String response = super.getResponse(WEBCONTEXTPATH4);
         super.checkTW1HomeResponse(response);
         uninstallBundle(b2);
-        
-        options = createOptions(null);
+
+        b2 = null;
+        // give a unique web context path
+        options = createOptions(WEBCONTEXTPATH4 + "tw4.war");
         try {
             b2 = super.installWar(options, "tw4.war", true);
             super.generalHeadersTest(options, "tw4.war", true, b2);       
@@ -147,6 +149,43 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
                 uninstallBundle(b2);
             }
         }
+    }
+    
+    /*
+     * verify Web-ContextPath is available after when the war that uses the same Web-ContextPath is uninstalled
+     */
+    public void testWebContextPathError002() throws Exception {
+        Map<String, Object> options = createOptions(WEBCONTEXTPATH4);
+        this.b = super.installWar(options, "tw1.war", true);
+        super.generalHeadersTest(options, "tw1.war", true, this.b);
+
+        // install the war file, reuse the same options as tw1
+        log("attempt to install war file: tw4.war at context path " + WEBCONTEXTPATH4);
+        Bundle b2 = null;
+        options = createOptions(WEBCONTEXTPATH4);
+
+        b2 = installBundle(super.getWarURL("tw4.war", options), true);
+        // should only able to access TW1 home page, as web extender should emit a FAILED event 
+        // when web context path is not unique for TW4
+        String response = super.getResponse(WEBCONTEXTPATH4);
+        super.checkTW1HomeResponse(response);
+        uninstallBundle(this.b);
+        this.b = null;
+        
+        // try install tw4.war again after WEBCONTEXTPATH4 is avail
+        // and this should succeed.
+        try {
+            b2 = super.installWar(options, "tw4.war", true);
+            super.generalHeadersTest(options, "tw4.war", true, b2);       
+        } finally {
+            if (b2 != null) {
+                uninstallBundle(b2);
+            }
+        }
+        
+        // install bundle b back and should succeed
+        this.b = super.installWar(options, "tw1.war", true);
+        super.generalHeadersTest(options, "tw1.war", true, this.b);
     }
 
     /*
@@ -187,13 +226,13 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
     }
 
     /*
-     * verify install 100 web applications
+     * verify install 100 web applications  TODO: test is incorrect
      */
     public void testMultipleWebContextPath002() throws Exception {
         Bundle[] bundles = new Bundle[100];
-        final Map<String, Object> options = new HashMap<String, Object>();
         try {
             for (int i = 0; i < 100; i++) {
+                Map<String, Object> options = createOptions(WEBCONTEXTPATH1 + "_" + i);
                 bundles[i] = super.installWar(options, "tw1.war", true);
                 super.generalHeadersTest(options, "tw1.war", true, bundles[i]);
             }

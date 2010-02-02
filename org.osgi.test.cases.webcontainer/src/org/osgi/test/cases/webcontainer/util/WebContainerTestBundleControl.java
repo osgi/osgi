@@ -117,6 +117,7 @@ public abstract class WebContainerTestBundleControl extends
         } 
     }
 
+
     protected void prepare(String wcp) throws Exception {
         this.warContextPath = wcp;
         this.timeUtil = new TimeUtil(this.warContextPath);
