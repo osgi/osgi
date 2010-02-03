@@ -263,7 +263,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         if (dImports != null) {
             String[] di = (String[])dImports;
             for (int i = 0; i < di.length ; i++) {
-                assertTrue(exist(di[i], actualImportsArray, true));
+                assertTrue(existLoose(di[i], actualImportsArray));
             }
         }
         
