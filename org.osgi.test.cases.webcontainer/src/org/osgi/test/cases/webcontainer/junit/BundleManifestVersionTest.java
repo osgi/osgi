@@ -111,18 +111,18 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      */
     public void testBundleManifestVersionError001() throws Exception {
         // specify install options
-        final Map<String, Object> options = createOptions(MANIFESTVERSION2, "/tw1");
+        final Map<String, Object> options = createOptions(MANIFESTVERSION3, "/tw1");
         // install the war file
         log("install war file: tw1.war at context path /tw1");
         try {
             this.b = installBundle(super.getWarURL("tw1.war", options), true);
             fail("bundle install should fail: " + Constants.BUNDLE_VERSION
-                    + " = " + MANIFESTVERSION2);
+                    + " = " + MANIFESTVERSION3);
         } catch (BundleException be) {
             // expected unless the framework supports Bundle-ManifestVersion
             // greater than 2
             log("this is expected if the framework doesn't support the "
-                    + Constants.BUNDLE_VERSION + " = " + MANIFESTVERSION2);
+                    + Constants.BUNDLE_VERSION + " = " + MANIFESTVERSION3);
         }
         assertNull("Bundle b should be null", this.b);
 

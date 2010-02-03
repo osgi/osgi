@@ -241,23 +241,30 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         Bundle b2 = null;
         options = createOptions(WEBCONTEXTPATH4);
 
-        b2 = installBundle(super.getWarURL("tw4.war", options), true);
-        // should only able to access TW1 home page, as web extender should emit a FAILED event 
-        // when web context path is not unique for TW4
-        String response = super.getResponse(WEBCONTEXTPATH4);
-        super.checkTW1HomeResponse(response);
-        uninstallBundle(this.b);
-        this.b = null;
-        
-        // previously installed b2 should get started now after b is uninstalled
-        // as the particular web-contextpath is avail now
-        super.checkServiceRegistered(WEBCONTEXTPATH4);
-        Thread.sleep(5000);
-        response = super.getResponse(WEBCONTEXTPATH4);
-        super.checkTW4HomeResponse(response);
-
-        super.generalHeadersTest(options, "tw4.war", true, b2);       
-        uninstallBundle(b2);
+        try {
+            b2 = installBundle(super.getWarURL("tw4.war", options), true);
+            // should only able to access TW1 home page, as web extender should emit a FAILED event 
+            // when web context path is not unique for TW4
+            String response = super.getResponse(WEBCONTEXTPATH4);
+            super.checkTW1HomeResponse(response);
+            uninstallBundle(this.b);
+            this.b = null;
+            
+            // previously installed b2 should get started now after b is uninstalled
+            // as the particular web-contextpath is avail now
+            super.checkServiceRegistered(WEBCONTEXTPATH4);
+            Thread.sleep(5000);
+            response = super.getResponse(WEBCONTEXTPATH4);
+            super.checkTW4HomeResponse(response);
+    
+            super.generalHeadersTest(options, "tw4.war", true, b2);    
+        } catch (Exception e) {
+            fail("should install successfully and pick up the unused web contextpath " + WEBCONTEXTPATH4);
+        } finally {
+            if (b2 != null) {
+                uninstallBundle(b2);
+            }
+        }
         
         // install bundle b back and should succeed
         this.b = super.installWar(options, "tw1.war", true);
