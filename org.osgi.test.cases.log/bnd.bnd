@@ -12,7 +12,6 @@ Private-Package						= ${p}.junit, \
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.log
--testbundles						= ${p}
 
 -runbundles						= \
 	org.osgi.impl.service.log; version=project, \
