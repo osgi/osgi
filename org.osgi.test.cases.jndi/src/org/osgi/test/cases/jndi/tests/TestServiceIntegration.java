@@ -23,7 +23,9 @@ import javax.naming.NamingEnumeration;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.test.cases.jndi.service.ExampleServiceImpl;
 import org.osgi.test.cases.jndi.service.ExampleService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -48,6 +50,7 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 			ExampleService service = (ExampleService) ctx.lookup("osgi:service/org.osgi.test.cases.jndi.service.ExampleService");
 			// Verify that we actually got the service
 			assertNotNull(service);
+			service.testMethod();
 			// Cleanup after the test completes
 		} finally {
 			if (ctx != null) {
@@ -55,6 +58,80 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 			}
 			uninstallBundle(serviceBundle);
 		}
+	}
+	
+	public void testServiceLookupWithRebinding() throws Exception {
+		// Install the bundle needed for this test
+		Bundle serviceBundle = installBundle("service1.jar");
+		ExampleService service = null;
+		// Grab the default initialContext so we can access the service registry
+		Context ctx = new InitialContext();
+		try {
+			assertNotNull("The context should not be null", ctx);
+			// Lookup the example service
+			service = (ExampleService) ctx.lookup("osgi:service/org.osgi.test.cases.jndi.service.ExampleService");
+			// Verify that we actually got the service
+			assertNotNull(service);
+			service.testMethod();
+			// Remove the service from the registry
+			uninstallBundle(serviceBundle);
+			// Try to access the service.  This should throw an exception
+			service.testMethod();
+		} catch (ServiceException ex) {
+			// Ignore this for now.  It's expected.
+			System.out.println("Caught ServiceException in testServiceLookupWithRebinding and ignored it as it was an expected error.");
+		}
+		
+		// Reinstall a bundle containing the service used by the proxy class
+		installBundle("service1.jar");
+		// See if the rebinding occurs as it should.
+		try {
+			service.testMethod();
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			
+			if (serviceBundle.getState() == Bundle.INSTALLED) {
+				uninstallBundle(serviceBundle);
+			}
+		}
+	}
+	
+	public void testServiceLookupWithoutRebinding() throws Exception {
+		// Install the bunlde needed for this test
+		Bundle serviceBundle = installBundle("service1.jar");
+		// Grab the default initialContext so we can access the service registry
+		Context ctx = new InitialContext();
+		try {
+			assertNotNull("The context should not be null" , ctx);
+			// Lookup the example service
+			ExampleService service = (ExampleService) ctx.lookup("osgi:service/org.osgi.test.cases.jndi.service.ExampleService");
+			// Verify that we actually got the service
+			assertNotNull(service);
+			service.testMethod();
+			// Remove the service from the registry
+			uninstallBundle(serviceBundle);
+			// Try to access the service.  This should throw an exception.
+			service.testMethod();
+		} catch (ServiceException ex) {
+			if (ex.getType() != ServiceException.UNREGISTERED) {
+				fail("testServiceLookupWithoutRebinding failed with wrong ServiceException type.  ServiceException was not of type UNREGISTERED.");
+				return;
+			}
+			pass("org.osgi.framework.ServiceException caught in testServiceLookupWithoutRebinding: SUCCESS");
+			return;
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+
+			if (serviceBundle.getState() == Bundle.INSTALLED) {
+				uninstallBundle(serviceBundle);
+			}
+		}
+		
+		failException("testServiceLookupWithoutRebinding failed", org.osgi.framework.ServiceException.class);
 	}
 	
 	public void testMultipleServiceLookup() throws Exception {
@@ -87,9 +164,51 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 		}
 		
 	}
+	
+	public void testMultipleServiceLookupWithRebinding() throws Exception {
+		// Install the bundle needed for this test
+		Bundle serviceBundle = installBundle("service1.jar");
+		// Grab the default initialContext so we can access the service registry
+		Context ctx = new InitialContext();
+		Context serviceListContext = null;
+		try {
+			assertNotNull("The context should not be null", ctx);
+			// Lookup the matching services
+			serviceListContext = (Context) ctx.lookup("osgi:servicelist/org.osgi.test.cases.jndi.service.ExampleService");
+			// Verify we received the context
+			assertNotNull("The context should not be null", serviceListContext);
+			// Get the service.id for the registered service we expect to get from serviceListContext
+			ServiceReference[] expectedServices = serviceBundle.getRegisteredServices();
+			ServiceReference exampleServiceReference = expectedServices[0];
+			// Lookup the service in the returned serviceListContext
+			ExampleService service = (ExampleService) serviceListContext.lookup(((Long)exampleServiceReference.getProperty("service.id")).toString());
+			// Remove the service that is being proxied
+			uninstallBundle(serviceBundle);
+			// Try to call a method for this class
+			service.testMethod();	
+		} catch (ServiceException ex) {
+			if (ex.getType() != ServiceException.UNREGISTERED) {
+				fail("testMultipleServiceLookupWithRebinding failed with wrong ServiceException type.  ServiceException was not of type UNREGISTERED.");
+				return;
+			}
+			pass("org.osgi.framework.ServiceException caught in testMultipleServiceLookupWithRebinding: SUCCESS");
+			return;
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			if (serviceListContext != null) {
+				serviceListContext.close();
+			}
+			if (serviceBundle.getState() == Bundle.INSTALLED) {
+				uninstallBundle(serviceBundle);
+			}
+		}
+		
+		failException("testMultipleServiceLookupWithRebinding failed", org.osgi.framework.ServiceException.class);
+	}
 
 	public void testBundleContextLookup() throws Exception {
-		// Install the bundles needed for this test
 		// Grab the default initialContext so we can access the service registry
 		Context ctx = new InitialContext();
 		try {

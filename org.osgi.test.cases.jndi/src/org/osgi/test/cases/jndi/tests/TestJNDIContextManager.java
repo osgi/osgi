@@ -26,6 +26,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.service.jndi.JNDIContextManager;
 import org.osgi.test.cases.jndi.provider.CTContext;
 import org.osgi.test.cases.jndi.provider.CTInitialContextFactory;
+import org.osgi.test.cases.jndi.service.ExampleServiceImpl;
 import org.osgi.test.cases.jndi.service.ExampleService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 

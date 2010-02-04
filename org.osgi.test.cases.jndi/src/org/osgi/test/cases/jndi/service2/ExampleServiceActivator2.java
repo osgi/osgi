@@ -22,6 +22,7 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.test.cases.jndi.service.ExampleServiceImpl;
 import org.osgi.test.cases.jndi.service.ExampleService;
 
 /** 
@@ -36,19 +37,18 @@ public class ExampleServiceActivator2 implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		Hashtable props1 = new Hashtable();
 		props1.put("osgi.jndi.service.name", "ExampleService1");
-		props1.put("javaee.application.name", "applicationName");
-		props1.put("javaee.application.version", "applicationVersion");
 		
-		ExampleService service1 = new ExampleService();
+		String[] interfaces = {ExampleService.class.getName()};
+		ExampleServiceImpl service1 = new ExampleServiceImpl();
 		
-		sr1 = context.registerService(ExampleService.class.getName(), service1, props1);	
+		sr1 = context.registerService(interfaces, service1, props1);	
 		
 		Hashtable props2 = new Hashtable();
 		props2.put("osgi.jndi.service.name", "ExampleService2");
 		
-		ExampleService service2 = new ExampleService();
+		ExampleServiceImpl service2 = new ExampleServiceImpl();
 		
-		sr2 = context.registerService(ExampleService.class.getName(), service2, props2);
+		sr2 = context.registerService(interfaces, service2, props2);
 	}
 
 	public void stop(BundleContext context) throws Exception {
