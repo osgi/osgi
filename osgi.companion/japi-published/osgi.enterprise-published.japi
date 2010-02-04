@@ -93,7 +93,7 @@ org.osgi.jmx.framework,BundleStateMBean!#LAST_MODIFIED_ITEM Pcsfur Lorg/osgi/jmx
 org.osgi.jmx.framework,BundleStateMBean!#LOCATION Pcsfur Ljava/lang/String;:Location
 org.osgi.jmx.framework,BundleStateMBean!#LOCATION_ITEM Pcsfur Lorg/osgi/jmx/Item;
 org.osgi.jmx.framework,BundleStateMBean!#OBJECTNAME Pcsfur Ljava/lang/String;:osgi.core:type=bundleState,version=1.5
-org.osgi.jmx.framework,BundleStateMBean!#PERSISTENTLY_STARTED Pcsfur Ljava/lang/String;:PeristentlyStarted
+org.osgi.jmx.framework,BundleStateMBean!#PERSISTENTLY_STARTED Pcsfur Ljava/lang/String;:PersistentlyStarted
 org.osgi.jmx.framework,BundleStateMBean!#PERSISTENTLY_STARTED_ITEM Pcsfur Lorg/osgi/jmx/Item;
 org.osgi.jmx.framework,BundleStateMBean!#REGISTERED_SERVICES Pcsfur Ljava/lang/String;:RegisteredServices
 org.osgi.jmx.framework,BundleStateMBean!#REGISTERED_SERVICES_ITEM Pcsfur Lorg/osgi/jmx/Item;
