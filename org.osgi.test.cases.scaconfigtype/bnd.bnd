@@ -2,6 +2,8 @@ javac.source            = 1.5
 javac.target            = 1.5
 Bundle-Version: 4.2.0.${project.build}
 
+Import-Package = junit.framework;version="3.8.0",*
+
 Private-Package						= org.osgi.test.support.*, \
 	${p}.*
 
@@ -37,7 +39,7 @@ Include-Resource					= \
 	${p}.bundles=${repo;org.eclipse.equinox.event}|\${repo;com.springsource.junit}|${repo;org.apache.tuscany.sca.bundle}|${repo;osgi.cmpn}|${repo;org.osgi.impl.service.log}, \
 	${p}.serverconfig="service.exported.configs,org.osgi.sca.domain.registry", \
 	service.exported.configs=org.osgi.sca, \
- 	org.osgi.sca.domain.registry="tribes://228.0.0.100:50000?timeout\=6000"
+	org.osgi.sca.domain.registry="tribes://228.0.0.100:50000"
 
 Test-Cases							= ${testcases}
 

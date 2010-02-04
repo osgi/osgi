@@ -53,30 +53,36 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 	private static HashMap<String, Framework> frameworks = new HashMap<String, Framework>();
 	private List<Bundle> tempBundles = Collections.synchronizedList(new LinkedList<Bundle>());	
 	
-	private FrameworkFactory frameworkFactory;
-	private String storageRoot;
+	private static FrameworkFactory frameworkFactory;
+	private static String storageRoot;
 
-	/**
-	 * @see junit.framework.TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
-		super.setUp();
-		frameworkFactory = getFrameworkFactory();
+    /**
+     * @see junit.framework.TestCase#setUp()
+     */
+    protected void setUp() throws Exception {
+        super.setUp();
+        // [rfeng] Only initialize the frameworks for the 1st time
+        if (frameworkFactory == null) {
+            frameworkFactory = getFrameworkFactory();
 
-		String rootStorageArea = getStorageAreaRoot();
-		assertNotNull("No storage area root found", rootStorageArea);
-		
-		File rootFile = new File(rootStorageArea);
-		delete(rootFile);
-		
-		assertFalse("Root storage area is not a directory: " + rootFile.getPath(), rootFile.exists() && !rootFile.isDirectory());
-		
-		if (!rootFile.isDirectory())
-			assertTrue("Could not create root directory: " + rootFile.getPath(), rootFile.mkdirs());
-		
-		storageRoot = rootFile.getAbsolutePath();
-	}
+            String rootStorageArea = getStorageAreaRoot();
+            assertNotNull("No storage area root found", rootStorageArea);
 
+            File rootFile = new File(rootStorageArea);
+            
+            // [rfeng] We should NOT delete the storage directory for every tests as now
+            // we have server and client frameworks reused
+            delete(rootFile);
+
+            assertFalse("Root storage area is not a directory: " + rootFile.getPath(), rootFile.exists() && !rootFile
+                .isDirectory());
+
+            if (!rootFile.isDirectory())
+                assertTrue("Could not create root directory: " + rootFile.getPath(), rootFile.mkdirs());
+
+            storageRoot = rootFile.getAbsolutePath();
+        }
+    }
 
 	/**
 	 * @see junit.framework.TestCase#tearDown()

@@ -1,3 +1,4 @@
 Bundle-Name:                             ${p}.ct00client
 Bundle-Version:                          1.0
 Private-Package:                         ${p}.common.*
+Import-Package = junit.framework;version="3.8.0",*

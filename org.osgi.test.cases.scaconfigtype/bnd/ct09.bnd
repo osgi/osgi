@@ -5,3 +5,4 @@ Private-Package:                         ${p}.junit.ct09.*, \
 Bundle-Activator:                        ${p}.junit.ct09.Activator
 Include-Resource					= \
 	OSGI-INF/sca-config/bindings/binding.xml=resources/OSGI-INF/sca-config/bindings/bindingA.xml
+Import-Package = junit.framework;version="3.8.0",*
