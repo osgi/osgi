@@ -69,8 +69,11 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleVersion006() throws Exception {
         final Map<String, Object> options = createOptions(VERSION1, "/tw1");
-        this.b = super.installWar(options, "wmtw1.war", false);
-        super.generalHeadersTest(options, "wmtw1.war", false, this.b);
+        try {
+            this.b = super.installWar(options, "wmtw1.war", false);
+        } catch (BundleException be) {
+            // expected as Bundle-Version is specified as invalid url param for WAB
+        }
     }
 
     /*
