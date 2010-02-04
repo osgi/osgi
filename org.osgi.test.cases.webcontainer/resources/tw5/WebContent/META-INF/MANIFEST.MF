@@ -1,7 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.0
-Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.osgi.test.cases.webcontainer.wmtw5
 Bundle-Name: org.osgi.test.cases.webcontainer.wmtw5
 Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war 5 with manifest somewhat pre-specified

@@ -16,6 +16,7 @@
 package org.osgi.test.cases.webcontainer.junit;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -41,6 +42,8 @@ public class EventTest extends WebContainerTestBundleControl {
     private final String EXTENDER_BUNDLE_ID = "extender.bundle.id";
     private final String EXTENDER_BUNDLE_VERSION = "extender.bundle.version";
     private final String EXTENDER_BUNDLE_SYMBOLICNAME = "extender.bundle.symbolicName";
+    private final static String COLLISION = "collision";
+    private final static String COLLISION_BUNDLES = "collision.bundles";
 
     @Override
     public void setUp() throws Exception {
@@ -229,6 +232,10 @@ public class EventTest extends WebContainerTestBundleControl {
         assertNotNull((String)eventCurrent.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME));
         assertNotNull((Version)eventCurrent.getProperty(EXTENDER_BUNDLE_VERSION));
         assertNotNull((Throwable)eventCurrent.getProperty(EventConstants.EXCEPTION));
+        assertNotNull((String)eventCurrent.getProperty(COLLISION));
+        assertNotNull((List<Long>)eventCurrent.getProperty(COLLISION_BUNDLES));
+        assertTrue("check collision.bundles property contains " + b2.getBundleId(), contains((List<Long>)eventCurrent.getProperty(COLLISION_BUNDLES), b2.getBundleId()));
+        assertTrue("check collision.bundles property contains " + this.b.getBundleId(), contains((List<Long>)eventCurrent.getProperty(COLLISION_BUNDLES), this.b.getBundleId()));      
         
         // the extender information should be the same
         assertTrue(failedTime >= startingTime);
@@ -238,5 +245,20 @@ public class EventTest extends WebContainerTestBundleControl {
         assertEquals(eventPrevious.getProperty(EXTENDER_BUNDLE_VERSION), eventCurrent.getProperty(EXTENDER_BUNDLE_VERSION));
         
         b2.uninstall();
+    }
+    
+    /**
+     * check to see if a list contains the particular bundleId
+     * @param bundleIds
+     * @param bundlId
+     * @return
+     */
+    private boolean contains(List<Long> bundleIds, Long bundleId) {
+        for (Long id : bundleIds) {
+            if (id == bundleId) {
+                return true;
+            }
+        }
+        return false;
     }
 }
