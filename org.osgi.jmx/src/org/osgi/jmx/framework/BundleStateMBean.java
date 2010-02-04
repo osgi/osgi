@@ -198,7 +198,7 @@ public interface BundleStateMBean {
 	/**
 	 * The key PERSISTENTLY_STARTED, used in {@link #PERSISTENTLY_STARTED_ITEM}.
 	 */
-	String PERSISTENTLY_STARTED = "PeristentlyStarted";
+	String			PERSISTENTLY_STARTED		= "PersistentlyStarted";
 
 	/**
 	 * The item containing the indication of persistently started in
