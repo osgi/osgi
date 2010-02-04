@@ -231,8 +231,10 @@ public class EventTest extends WebContainerTestBundleControl {
         assertNotNull((Long)eventCurrent.getProperty(EXTENDER_BUNDLE_ID));
         assertNotNull((String)eventCurrent.getProperty(EXTENDER_BUNDLE_SYMBOLICNAME));
         assertNotNull((Version)eventCurrent.getProperty(EXTENDER_BUNDLE_VERSION));
-        assertNotNull((Throwable)eventCurrent.getProperty(EventConstants.EXCEPTION));
+        // remove this checking as spec doesn't mandate the exception property to be set.
+        //assertNotNull((Throwable)eventCurrent.getProperty(EventConstants.EXCEPTION));
         assertNotNull((String)eventCurrent.getProperty(COLLISION));
+        assertEquals("/tw1", (String)eventCurrent.getProperty(COLLISION));
         assertNotNull((List<Long>)eventCurrent.getProperty(COLLISION_BUNDLES));
         assertTrue("check collision.bundles property contains " + b2.getBundleId(), contains((List<Long>)eventCurrent.getProperty(COLLISION_BUNDLES), b2.getBundleId()));
         assertTrue("check collision.bundles property contains " + this.b.getBundleId(), contains((List<Long>)eventCurrent.getProperty(COLLISION_BUNDLES), this.b.getBundleId()));      
