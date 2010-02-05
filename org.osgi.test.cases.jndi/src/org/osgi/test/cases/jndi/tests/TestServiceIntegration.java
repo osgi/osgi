@@ -16,16 +16,13 @@
 
 package org.osgi.test.cases.jndi.tests;
 
-import javax.naming.Binding;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingEnumeration;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.test.cases.jndi.service.ExampleServiceImpl;
 import org.osgi.test.cases.jndi.service.ExampleService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -171,6 +168,7 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 		// Grab the default initialContext so we can access the service registry
 		Context ctx = new InitialContext();
 		Context serviceListContext = null;
+		ExampleService service = null;
 		try {
 			assertNotNull("The context should not be null", ctx);
 			// Lookup the matching services
@@ -181,11 +179,25 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 			ServiceReference[] expectedServices = serviceBundle.getRegisteredServices();
 			ServiceReference exampleServiceReference = expectedServices[0];
 			// Lookup the service in the returned serviceListContext
-			ExampleService service = (ExampleService) serviceListContext.lookup(((Long)exampleServiceReference.getProperty("service.id")).toString());
+			service = (ExampleService) serviceListContext.lookup(((Long)exampleServiceReference.getProperty("service.id")).toString());
 			// Remove the service that is being proxied
 			uninstallBundle(serviceBundle);
 			// Try to call a method for this class
 			service.testMethod();	
+		} catch (ServiceException ex) {
+			if (ex.getType() != ServiceException.UNREGISTERED) {
+				fail("testMultipleServiceLookupWithRebinding failed with wrong ServiceException type.  ServiceException was not of type UNREGISTERED.");
+				return;
+			}
+			// As long as we get the correct exception, do nothing else since there is still more testing.
+		} 
+		
+		// Reinstall the service bundle
+		installBundle("service1.jar");
+		
+		try {
+			// Try to use the proxied service again.  This service should not have been rebound so we should still get an exception
+			service.testMethod();
 		} catch (ServiceException ex) {
 			if (ex.getType() != ServiceException.UNREGISTERED) {
 				fail("testMultipleServiceLookupWithRebinding failed with wrong ServiceException type.  ServiceException was not of type UNREGISTERED.");

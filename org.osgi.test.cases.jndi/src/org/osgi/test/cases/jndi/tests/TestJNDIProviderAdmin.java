@@ -100,6 +100,25 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 	public void testGetObjectInstanceWithNoFactoryName() throws Exception {
 		// Install the required bundles
 		Bundle contextFactoryBundle = installBundle("initialContextFactory1.jar");
+		Bundle objectFactoryBundle = installBundle("objectFactory1.jar");
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		try {
+			// Create a reference object we can use for testing
+			CTReference ref = new CTReference(CTTestObject.class.getName());
+			// Resolve the reference
+			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref, null, null, null);
+			assertNotNull(testObject);
+		} finally {
+			uninstallBundle(objectFactoryBundle);
+			uninstallBundle(contextFactoryBundle);
+			ungetService(ctxAdmin);
+		}
+	}
+	
+	public void testGetObjectInstanceWithNoFactoryNameAndURL() throws Exception {
+		// Install the required bundles
+		Bundle contextFactoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle urlContextBundle = installBundle("urlContext1.jar");
 		Bundle objectFactoryBundle = installBundle("objectFactory1.jar");
 		// Grab the JNDIProviderAdmin service
