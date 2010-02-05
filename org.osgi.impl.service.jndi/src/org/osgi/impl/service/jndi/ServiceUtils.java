@@ -84,6 +84,16 @@ class ServiceUtils {
 		return serviceReferences;
 	}
 
+	
+	/**
+	 * Utility method to obtain the list of ServiceReferences that match 
+	 * a query using the JNDI "service name" service property.  
+	 * 
+	 * @param bundleContext the BundleContext to use to obtain services
+	 * @param urlParser the parser associated with this request
+	 * @return an array of ServiceReferences that match the given request
+	 * @throws InvalidSyntaxException on filter parsing error
+	 */
 	static ServiceReference[] getServiceReferencesByServiceName(BundleContext bundleContext, OSGiURLParser urlParser)
 			throws InvalidSyntaxException {
 		final String serviceNameFilter = "("

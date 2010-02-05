@@ -142,18 +142,29 @@ class OSGiInitialContextFactoryBuilder implements
 				return new InitialContextFactoryWrapper(contextFactory, this);
 			}
 
-			// return the first context factory if one exists
-			InitialContextFactory defaultContextFactory = 
-				(InitialContextFactory) m_contextFactoryServiceTracker.getService();
+			// return the first valid context factory if one exists
+			try {
+				InitialContextFactory defaultContextFactory = getDefaultInitialContextFactory(environment);
+				if (defaultContextFactory == null) {
+					// return a wrapper to support URL-based lookups only
+					return new InitialContextFactoryWrapper(new DefaultInitialContextFactory(), this);
+				}
+				else {
+					return new InitialContextFactoryWrapper(defaultContextFactory, this);
+				}
+			}
+			catch (NamingException namingException) {
+				NoInitialContextException noInitialContextException = 
+					new NoInitialContextException("Exception occured while iterating over the default InitialContextFactory services");
+				noInitialContextException.setRootCause(namingException);
+				throw noInitialContextException;
+			}
 
-			if (defaultContextFactory == null) {
-				return new InitialContextFactoryWrapper(new DefaultInitialContextFactory(), this);
-			}
-			else {
-				return new InitialContextFactoryWrapper(defaultContextFactory, this);
-			}
+			
 		}
 	}
+
+	
 
 	
 
@@ -295,17 +306,16 @@ class OSGiInitialContextFactoryBuilder implements
 	 * @return an InitialContextFactory instance that can support this request 
 	 *         or null if no match can be found. 
 	 */
-	private InitialContextFactory getContextFactoryFromBuilder(
-			Hashtable environment) {
+	private InitialContextFactory getContextFactoryFromBuilder(Hashtable environment) {
 		if (m_contextFactoryBuilderServiceTracker.getServiceReferences() != null) {
 			final ServiceReference[] serviceReferences = ServiceUtils.sortServiceReferences(m_contextFactoryBuilderServiceTracker);
 			for (int i = 0; i < serviceReferences.length; i++) {
 				ServiceReference serviceReference = serviceReferences[i];
-				InitialContextFactoryBuilder builder = (InitialContextFactoryBuilder) m_bundleContext
-						.getService(serviceReference);
+				InitialContextFactoryBuilder builder = 
+					(InitialContextFactoryBuilder) m_bundleContext.getService(serviceReference);
 				try {
-					InitialContextFactory contextFactory = builder
-							.createInitialContextFactory(environment);
+					InitialContextFactory contextFactory = 
+						builder.createInitialContextFactory(environment);
 					// the first builder to return a non-null result is
 					// given precedence as per Section 5.2.1.1 of RFC
 					// 142
@@ -320,6 +330,38 @@ class OSGiInitialContextFactoryBuilder implements
 
 		}
 
+		return null;
+	}
+	
+	
+	/**
+	 * Convenience method for obtaining the "default" InitialContextFactory.  
+	 * This method takes the list of known InitialContextFactory implementations, 
+	 * in service ranking order, and attempts to use each to create a JNDI Context
+	 * given the environment passed in.  The first service to return a non-null
+	 * result is returned.  
+	 * 
+	 * @param environment the JNDI environment to use when creating the Context
+	 * @return the first InitialContextFactory service that can support this environment, 
+	 *         or null if no matching service was found. 
+	 * @throws NamingException any NamingException thrown by an InitialContextFactory
+	 *         service is thrown back to the caller.  
+	 */
+	private InitialContextFactory getDefaultInitialContextFactory(Hashtable environment) throws NamingException {
+		if (m_contextFactoryServiceTracker.getServiceReferences() != null) {
+			ServiceReference[] serviceReferences = ServiceUtils.sortServiceReferences(m_contextFactoryServiceTracker);
+			for (int i = 0; i < serviceReferences.length; i++) {
+				ServiceReference serviceReference = serviceReferences[i];
+				InitialContextFactory factoryService = 
+					(InitialContextFactory) m_bundleContext.getService(serviceReference);
+				if(factoryService.getInitialContext(environment) != null) {
+					return factoryService;
+				} else {
+					m_bundleContext.ungetService(serviceReference);
+				}
+			}
+		}
+		
 		return null;
 	}
 	
@@ -517,13 +559,14 @@ class OSGiInitialContextFactoryBuilder implements
 				try {
 					Object result = 
 						factory.getObjectInstance(objectToResolve, name, context, environment);
-		
+
+					// release the service for this factory
+					m_bundleContext.ungetService(serviceReference);
+
 					if (result != null) {
-						//TODO, should the impl unget the service here? 
+						// return resolved object
 						return result;
-					} else {
-						m_bundleContext.ungetService(serviceReference);
-					}
+					} 
 				}
 				catch (Exception exception) {
 					NamingException namingException = new NamingException("Exception occurred while trying to resolve object using ObjectFactory search");
@@ -548,12 +591,13 @@ class OSGiInitialContextFactoryBuilder implements
 					Object result = 
 						factory.getObjectInstance(objectToResolve, name, context, environment, attributes);
 		
+					// release the service reference
+					m_bundleContext.ungetService(serviceReference);
+					
 					if (result != null) {
-						//TODO, should the impl unget the service here? 
+						// return the resolved object 
 						return result;
-					} else {
-						m_bundleContext.ungetService(serviceReference);
-					}
+					} 
 				}
 				catch (Exception exception) {
 					NamingException namingException = new NamingException("Exception occurred while trying to resolve object using ObjectFactory search");

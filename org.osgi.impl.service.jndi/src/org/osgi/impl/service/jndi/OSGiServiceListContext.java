@@ -17,12 +17,14 @@
 
 package org.osgi.impl.service.jndi;
 
-import java.lang.reflect.Proxy;
+import java.lang.reflect.InvocationHandler;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.naming.Binding;
 import javax.naming.NameClassPair;
@@ -37,6 +39,9 @@ import org.osgi.framework.ServiceReference;
 
 class OSGiServiceListContext extends NotSupportedContext {
 
+	private static Logger logger = 
+		Logger.getLogger(OSGiServiceListContext.class.getName());
+	
 	private final BundleContext m_bundleContext;
 	
 	private final ServiceReference[] m_serviceReferences;
@@ -73,7 +78,8 @@ class OSGiServiceListContext extends NotSupportedContext {
 	public NamingEnumeration listBindings(String name) throws NamingException {
 		if(name.equals("")) {
 			return new ListBindingsNamingEnumeration(m_bundleContext, 
-					                                     m_serviceReferences, m_urlParser.getServiceInterface());
+					                                 m_serviceReferences, 
+					                                 m_urlParser);
 		}
 		
 		throw new OperationNotSupportedException("This NamingEnumeration cannot support list() operations for anything other than the empty string");
@@ -87,7 +93,17 @@ class OSGiServiceListContext extends NotSupportedContext {
 		} else {
 			if(m_mapOfServices.containsKey(serviceId)) {
 				ServiceReference serviceReference = (ServiceReference)m_mapOfServices.get(serviceId);
-				return m_bundleContext.getService(serviceReference);
+				// create a proxy for this service, and return the proxy to handle
+				// service dynamics
+				ServiceProxyInfo proxyInfo = 
+					createNoRetryProxiedService(m_bundleContext, m_urlParser, serviceReference);
+				
+				if(!proxyInfo.isProxied()) {
+					logger.log(Level.WARNING, 
+							   "The service returned could not be proxied, OSGi lifecycle maintenance will not be handled by the Context Manager service");
+				}
+
+				return proxyInfo.getService();
 			} else {
 				throw new NameNotFoundException("Service with the name = " + name + " does not exist in this context");
 			}
@@ -95,6 +111,14 @@ class OSGiServiceListContext extends NotSupportedContext {
 	}
 	
 	
+	private static ServiceProxyInfo createNoRetryProxiedService(BundleContext bundleContext, OSGiURLParser urlParser, final ServiceReference serviceReference) {
+		return ReflectionUtils.getProxyForSingleService(bundleContext, 
+				                                        urlParser, 
+				                                        serviceReference,
+				                                        new NoRetryInvocationHandlerFactory());
+	}
+
+
 	/**
 	 * Convenience method for building a lookup map of service id's to services.  
 	 * @param mapOfServices
@@ -116,7 +140,7 @@ class OSGiServiceListContext extends NotSupportedContext {
 	 * 
 	 * @version $Revision$
 	 */
-	static class ListNamingEnumeration extends ServiceBasedNamingEnumeration {
+	private static class ListNamingEnumeration extends ServiceBasedNamingEnumeration {
 
 		ListNamingEnumeration(BundleContext bundleContext, ServiceReference[] serviceReferences, String interfaceName) {
 			super(bundleContext, serviceReferences, interfaceName);
@@ -154,48 +178,25 @@ class OSGiServiceListContext extends NotSupportedContext {
 	 * 
 	 * @version $Revision$
 	 */
-	static class ListBindingsNamingEnumeration extends ServiceBasedNamingEnumeration {
+	private static class ListBindingsNamingEnumeration extends ServiceBasedNamingEnumeration {
 		
 		private final List m_listOfHandlers = new LinkedList();
 		
-		ListBindingsNamingEnumeration(BundleContext bundleContext, ServiceReference[] serviceReferences, String interfaceName) {
-			super(bundleContext, serviceReferences, interfaceName);
+		ListBindingsNamingEnumeration(BundleContext bundleContext, ServiceReference[] serviceReferences, OSGiURLParser urlParser) {
+			super(bundleContext, serviceReferences, urlParser.getServiceInterface());
 			
 			// setup a Binding object for each ServiceReference
 			m_nameClassPairs = new Binding[m_serviceReferences.length];
 			for(int i = 0; i < m_serviceReferences.length; i++) {
 				Long serviceId = (Long)m_serviceReferences[i].getProperty(Constants.SERVICE_ID);
-				Object serviceObject = 
-					m_bundleContext.getService(m_serviceReferences[i]);
-				
-				
-				ClassLoader tempLoader = serviceObject.getClass().getClassLoader();
-				Class serviceClass = null;
-				try {
-					serviceClass = Class.forName(interfaceName, true, tempLoader);
-				}
-				catch (ClassNotFoundException e) {
-					// possibly log here
-					serviceClass = null;
-				}
-				
-				Object bindingService = null;
-				if(serviceClass != null) {
-					NoRetryServiceInvocationHandler handler = 
-						new NoRetryServiceInvocationHandler(bundleContext, m_serviceReferences[i], 
-								                            null, serviceObject);
-					bindingService =  
-						Proxy.newProxyInstance(tempLoader, new Class[] {serviceClass}, handler);
-					m_listOfHandlers.add(handler);
-					
-				} else {
-					bindingService = serviceObject;
-				}
-				
+				final ServiceReference serviceReference = m_serviceReferences[i];
+				ServiceProxyInfo proxyInfo = 
+					createNoRetryProxiedService(bundleContext, urlParser, serviceReference);
+				m_listOfHandlers.add(proxyInfo.getHandler());
 				m_nameClassPairs[i] = 
 					new Binding(serviceId.toString(), 
 							    m_interfaceName, 
-							    bindingService);
+							    proxyInfo.getService());
 			}
 		}
 
@@ -227,6 +228,13 @@ class OSGiServiceListContext extends NotSupportedContext {
 			// always return false, since servicelist proxies must not rebind to a service
 			return false;
 		}
+	}
+	
+	private static class NoRetryInvocationHandlerFactory implements InvocationHandlerFactory {
+		public InvocationHandler create(BundleContext bundleContext, ServiceReference serviceReference, OSGiURLParser urlParser, Object osgiService) {
+			return new NoRetryServiceInvocationHandler(bundleContext, serviceReference, urlParser, osgiService);
+		}
+		
 	}
 
 }
