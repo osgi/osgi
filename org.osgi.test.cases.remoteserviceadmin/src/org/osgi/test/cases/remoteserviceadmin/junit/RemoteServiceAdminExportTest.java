@@ -530,15 +530,24 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 * 
 	 * Tests the export of a service with negative edge cases according to
 	 * the spec.
-	 * Register a service multiple times. Each registration is supposed to return
-	 * a new ExportRegistration
+	 * Register a service. Read the configuration types from the EndpointDescription
+	 * and ensure that there is a property present that starts with the name of the
+	 * config type
 	 */
 	public void testExportConfigurationType() throws Exception {
-		// create an register a service
-		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		// read supported configuration types from the DistributionProvider
+		ServiceReference[] dprefs = getContext().getServiceReferences(null, "(remote.configs.supported=*)");
+		assertNotNull(dprefs);
+		ServiceReference dpref = dprefs[0];
+		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
+		assertTrue(supportedConfigTypes.length > 0);
+		
+		// create and register a service
+		Hashtable<String, Object> dictionary = new Hashtable<String, Object>();
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
+		dictionary.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, dpref.getProperty("remote.configs.supported"));
 
 		TestService service = new TestService();
 		
@@ -562,10 +571,12 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
+			properties.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, new String[]{supportedConfigTypes[0]});
 
 			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
 			assertNotNull(exportRegistrations);
-
+			assertFalse(exportRegistrations.isEmpty());
+			
 			//
 			// 122.8 verify that export notification was sent to RemoteServiceAdminListeners
 			//
@@ -600,7 +611,9 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				fail("wrong event type");
 			}
 
-			// extract configuration type
+			List<String> configproperties = new ArrayList<String>();
+			
+			// extract configuration type and configuration properties
 			if (!exportFailed) {
 				EndpointDescription epd = exportReference.getExportedEndpoint();
 				List<String> configtypes = epd.getConfigurationTypes();
@@ -610,13 +623,16 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 					
 					// check for config type properties
 					assertNotNull(configtype);
-					assertFalse(configtype.trim().equals(""));
+					assertEquals("service was exported with different config type than requested", supportedConfigTypes[0], configtype);
 					
-					boolean found = false;
-					for (Iterator<String> keys = epd.getProperties().keySet().iterator(); keys.hasNext() && !false; ) {
-						found = keys.next().startsWith(configtype + ".");
+					for (Iterator<String> keys = epd.getProperties().keySet().iterator(); keys.hasNext(); ) {
+						String key = keys.next();
+						
+						if (key.startsWith(configtype + ".")) {
+							configproperties.add(key);
+						}
 					}
-					assertTrue("config type properties missing from EndpointDescription", found);
+					assertFalse("122.4: config type properties missing from EndpointDescription", configproperties.isEmpty());
 				}
 			}
 
@@ -624,9 +640,201 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			// emit an event
 			ungetService(remoteServiceAdmin);
 
+			if (!exportFailed) {
+				event = remoteServiceAdminListener.getNextEvent();
+				assertNotNull("no RemoteServiceAdminEvent received", event);
+				assertNotNull("122.10.11: source must not be null", event.getSource());
+				assertNull(event.getException());
+				assertEquals("122.10.11: event type is wrong", RemoteServiceAdminEvent.EXPORT_UNREGISTRATION, event.getType());
+
+				exportReference = event.getExportReference();
+				assertNotNull("ExportReference expected in event", exportReference);
+
+				assertNull(exportReference.getExportedEndpoint());
+				assertEquals(0, remoteServiceAdminListener.getEventCount());
+			}
 		} finally {
 			registration.unregister();
 		}
+	}
+
+	/**
+	 * 122.4.1 Exporting
+	 * 
+	 * Tests the export of a service with negative edge cases according to
+	 * the spec.
+	 * Register a service. Read the configuration types from the EndpointDescription
+	 * and ensure that there is a property present that starts with the name of the
+	 * config type. Then modify the configuration properties and try to export the
+	 * service again. It should fail and generate events.
+	 */
+	public void testForceExportFailure() throws Exception {
+		// read supported configuration types from the DistributionProvider
+		ServiceReference[] dprefs = getContext().getServiceReferences(null, "(remote.configs.supported=*)");
+		assertNotNull(dprefs);
+		ServiceReference dpref = dprefs[0];
+		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
+		assertTrue(supportedConfigTypes.length > 0);
+		System.out.println("DSP supported config types:");
+		for (String c : supportedConfigTypes) {
+			System.out.println(" " + c);
+		}
+		
+		// create and register a service
+		Hashtable<String, Object> dictionary = new Hashtable<String, Object>();
+		dictionary.put("mykey", "will be overridden");
+		dictionary.put("myprop", "myvalue");
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
+		dictionary.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, dpref.getProperty("remote.configs.supported"));
+
+		TestService service = new TestService();
+		
+		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+				                                                        service, dictionary);
+		assertNotNull(registration);
+
+		try {
+			//
+			// register a RemoteServiceAdminListener to receive the export
+			// notification
+			//
+			TestRemoteServiceAdminListener remoteServiceAdminListener = new TestRemoteServiceAdminListener();
+			registerService(RemoteServiceAdminListener.class.getName(), remoteServiceAdminListener, null);
+
+			//
+			// 122.4.1 export the service
+			//
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put("mykey", "has been overridden");
+			properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
+			properties.put("objectClass", "can.not.be.changed.Class");
+			properties.put("service.id", "can.not.be.changed.Id");
+			properties.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, new String[]{supportedConfigTypes[0]});
+
+			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
+			assertNotNull(exportRegistrations);
+			assertEquals("only one export registration was expected since only one config type was requested", 1, exportRegistrations.size());
+			
+			//
+			// 122.8 verify that export notification was sent to RemoteServiceAdminListeners
+			//
+			RemoteServiceAdminEvent event = remoteServiceAdminListener.getNextEvent();
+			assertNotNull("no RemoteServiceAdminEvent received", event);
+			assertEquals(0, remoteServiceAdminListener.getEventCount());
+			assertNotNull("122.10.11: source must not be null", event.getSource());
+
+			ExportReference exportReference  = null;
+			
+			switch (event.getType()) {
+			case RemoteServiceAdminEvent.EXPORT_REGISTRATION:
+				assertNull(event.getException());
+				assertEquals("122.10.11: event type is wrong", RemoteServiceAdminEvent.EXPORT_REGISTRATION, event.getType());
+
+				exportReference = event.getExportReference();
+				assertNotNull("ExportReference expected in event", exportReference);
+
+				assertNotNull(exportReference.getExportedEndpoint());
+				break;
+			case RemoteServiceAdminEvent.EXPORT_ERROR:
+				assertNotNull(event.getException());
+				try {
+					event.getExportReference();
+					fail("IllegalStateException expected");
+				} catch (IllegalStateException ie) {}
+				return;
+			default:
+				fail("wrong event type");
+			}
+
+			
+			// extract configuration type and configuration properties
+			ArrayList<String> configproperties = new ArrayList<String>();
+
+			EndpointDescription epd = exportReference.getExportedEndpoint();
+			List<String> configtypes = epd.getConfigurationTypes();
+			assertNotNull(configtypes);
+			for (Iterator<String> it = configtypes.iterator(); it.hasNext();) {
+				String configtype = it.next();
+
+				// check for config type properties
+				assertNotNull(configtype);
+				assertEquals("service was exported with different config type than requested", supportedConfigTypes[0], configtype);
+
+				for (Iterator<String> keys = epd.getProperties().keySet().iterator(); keys.hasNext(); ) {
+					String key = keys.next();
+
+					if (key.startsWith(configtype + ".")) {
+						configproperties.add(key);
+					}
+				}
+				assertFalse("122.4: config type properties missing from EndpointDescription", configproperties.isEmpty());
+			}
+
+			// unexport the service
+			registration.unregister();
+
+			event = remoteServiceAdminListener.getNextEvent();
+			assertNotNull("no RemoteServiceAdminEvent received", event);
+			assertNotNull("122.10.11: source must not be null", event.getSource());
+			assertNull(event.getException());
+			assertEquals("122.10.11: event type is wrong", RemoteServiceAdminEvent.EXPORT_UNREGISTRATION, event.getType());
+
+			exportReference = event.getExportReference();
+			assertNotNull("ExportReference expected in event", exportReference);
+
+			assertNull(exportReference.getExportedEndpoint());
+			assertEquals(0, remoteServiceAdminListener.getEventCount());
+
+			// register the service again
+			dictionary.remove(RemoteConstants.SERVICE_EXPORTED_CONFIGS);
+			registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+					service, dictionary);
+
+			// manipulate the config property
+			// by putting garbage in them
+			for (Iterator<String> it = configproperties.iterator(); it.hasNext();) {
+				properties.put(it.next(), new TestService());
+			}
+
+			// export the service again
+			exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
+			assertNotNull(exportRegistrations);
+			assertEquals("only one export registration was expected since only one config type was requested", 1, exportRegistrations.size());
+
+			// expect ERROR event
+			event = remoteServiceAdminListener.getNextEvent();
+			assertNotNull("no RemoteServiceAdminEvent received", event);
+			assertEquals(0, remoteServiceAdminListener.getEventCount());
+			assertNotNull("122.10.11: source must not be null", event.getSource());
+			assertEquals(RemoteServiceAdminEvent.EXPORT_ERROR, event.getType());
+			assertNotNull(event.getException());
+			try {
+				event.getExportReference();
+				fail("IllegalStateException expected");
+			} catch (IllegalStateException ie) {}
+			
+
+			// ungetting the RSA service will also close the ExportRegistration and therefore
+			// emit an event
+			ungetService(remoteServiceAdmin);
+		} finally {
+			registration.unregister();
+		}
+	}
+
+	/**
+	 * @param property
+	 * @return
+	 */
+	private String[] getConfigTypes(Object property) {
+		if (property instanceof String) {
+			return new String[]{(String) property};
+		} else if (property instanceof String[]) {
+			return (String[]) property;
+		} else if (property instanceof Collection<?>) {
+			return ((Collection<String>)property).toArray(new String[]{});
+		}
+		return new String[]{};
 	}
 
 	class TestService implements A, B, Serializable {
