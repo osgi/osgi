@@ -48,6 +48,19 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
 
     /*
      * verify valid deployOptions overwrite original manifest Web-ContextPath
+     * test case insensitive
+     */
+    public void testWebContextPath001_1() throws Exception {
+        final Map<String, Object> options = new HashMap<String, Object>();
+        options.put("WEB-CONTEXTPATH", WEBCONTEXTPATH1);
+        this.b = super.installWar(options, "tw1.war", false);
+        options.remove("WEB-CONTEXTPATH");
+        options.put(WEB_CONTEXT_PATH, "/tw1");
+        super.generalHeadersTest(options, "tw1.war", false, this.b);
+    }
+
+    /*
+     * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath004() throws Exception {
         final Map<String, Object> options = createOptions(WEBCONTEXTPATH4);

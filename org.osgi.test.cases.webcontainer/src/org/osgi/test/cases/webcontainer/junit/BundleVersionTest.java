@@ -45,6 +45,21 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
         this.b = super.installWar(options, "tw1.war", false);
         super.generalHeadersTest(options, "tw1.war", false, this.b);
     }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Bundle-Version
+     * test case insensitive
+     */
+    public void testBundleVersion001_1() throws Exception {
+        final Map<String, Object> options = new HashMap<String, Object>();
+        options.put("bundle-version", VERSION1);
+        options.put(WEB_CONTEXT_PATH, "/tw1");
+        this.b = super.installWar(options, "tw1.war", false);
+        options.remove("bundle-version");
+        options.put(Constants.BUNDLE_VERSION, VERSION1);
+        super.generalHeadersTest(options, "tw1.war", false, this.b);
+    }
+
 
     /*
      * verify valid deployOptions overwrite original manifest Bundle-Version

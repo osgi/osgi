@@ -51,6 +51,22 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         this.b = super.installWar(options, "tw1.war", false);
         super.generalHeadersTest(options, "tw1.war", false, this.b);
     }
+    
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
+     * test case insensitive
+     */
+    public void testBundleSymbolicName001_1() throws Exception {
+        final Map<String, Object> options = new HashMap<String, Object>();
+        options.put("BUNDLE_SYMBOLICNAME", SYMBOLICNAME1);
+        options.put(WEB_CONTEXT_PATH, "/tw1");
+        this.b = super.installWar(options, "tw1.war", false);
+        options.remove("BUNDLE_SYMBOLICNAME");
+        options.put(Constants.BUNDLE_SYMBOLICNAME, SYMBOLICNAME1);
+        super.generalHeadersTest(options, "tw1.war", false, this.b);
+    }
+
 
     /*
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName

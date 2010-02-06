@@ -50,6 +50,34 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
     /*
      * verify valid deployOptions overwrite original manifest Import-Package
      */
+    public void testBundleImportPackage001_1() throws Exception {
+        final Map<String, Object> options = new HashMap<String, Object>();
+        options.put(Constants.IMPORT_PACKAGE, IMPORTS1);
+        options.put("web-contextPath", "/tw1");
+        this.b = super.installWar(options, "tw1.war", false);
+        options.remove("web-contextPath");
+        options.put(WEB_CONTEXT_PATH, "/tw1");
+        super.generalHeadersTest(options, "tw1.war", false, this.b);
+    }
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Import-Package
+     * test url param can be case insensitive
+     */
+    public void testBundleImportPackage001_2() throws Exception {
+        final Map<String, Object> options = new HashMap<String, Object>();
+        options.put("import-package", IMPORTS1);
+        options.put("Web-ContextPath", "/tw1");
+        this.b = super.installWar(options, "tw1.war", false);
+        options.remove("import-package");
+        options.put(Constants.IMPORT_PACKAGE, IMPORTS1);
+        super.generalHeadersTest(options, "tw1.war", false, this.b);
+    }
+    
+    
+    /*
+     * verify valid deployOptions overwrite original manifest Import-Package
+     */
     public void testBundleImportPackage004() throws Exception {
         final Map<String, Object> options = createOptions(IMPORTS4, "/tw4");
         this.b = super.installWar(options, "tw4.war", true);
@@ -79,8 +107,11 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleImportPackage007() throws Exception {
         final Map<String, Object> options = createOptions(IMPORTS1, "/tw1");
-        this.b = super.installWar(options, "wmtw1.war", false);
-        super.generalHeadersTest(options, "wmtw1.war", false, this.b);
+        try {
+            this.b = super.installWar(options, "wmtw1.war", false);
+        } catch (BundleException be) {
+            // expected since we don't allow import-package url param for wab
+        }
     }
     
     /*
