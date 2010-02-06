@@ -73,28 +73,11 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      */
     public void testBundleManifestVersion006() throws Exception {
         final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw1");
-        this.b = super.installWar(options, "wmtw1.war", false);
-        generalHeadersTest(options, "wmtw1.war", false, this.b);
-    }
-
-    /*
-     * verify valid deployOptions overwrite original manifest
-     * Bundle-ManifestVersion
-     */
-    public void testBundleManifestVersion009() throws Exception {
-        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw4");
-        this.b = super.installWar(options, "wmtw4.war", false);
-        generalHeadersTest(options, "wmtw4.war", false, this.b);
-    }
-
-    /*
-     * verify valid deployOptions overwrite original manifest
-     * Bundle-ManifestVersion
-     */
-    public void testBundleManifestVersion010() throws Exception {
-        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw5");
-        this.b = super.installWar(options, "wmtw5.war", false);
-        generalHeadersTest(options, "wmtw5.war", false, this.b);
+        try {
+            this.b = super.installWar(options, "wmtw1.war", false);
+        } catch (BundleException be) {
+            // expected as bundle-manifestversion is not a valid url param for a wab
+        }
     }
     
     /*

@@ -255,21 +255,21 @@ public class BundleManifestValidator extends Assert implements Validator{
  
         // verify the existence of the servlet and jsp packages on Import-pacakage header
         // we use loose check here to allow directives
-        for (int i = 0; i < this.REQUIREDIMPORT.length ; i++) {
-            assertTrue(existLoose(this.REQUIREDIMPORT[i], actualImportsArray));
-        }
+        //for (int i = 0; i < this.REQUIREDIMPORT.length ; i++) {
+        //    assertTrue(existLoose(this.REQUIREDIMPORT[i], actualImportsArray));
+        //}
         
         // verify dImports are added to the actualImports
         if (dImports != null) {
             String[] di = (String[])dImports;
             for (int i = 0; i < di.length ; i++) {
-                assertTrue(existLoose(di[i], actualImportsArray));
+                assertTrue("check Import-package url param value in actual import-package", existLoose(di[i], actualImportsArray));
             }
         }
         
         // verify package specified by mImports are on the actualImports
         // if there are conflicts with dImports, dImports should win
-        if (mImports != null) {
+        /*if (mImports != null) {
             String[] mi = toArray((String)mImports);
             for (int i = 0; i< mi.length; i++) {
                 boolean exist = existLoose(mi[i], actualImportsArray);
@@ -279,7 +279,7 @@ public class BundleManifestValidator extends Assert implements Validator{
                     assertTrue(existLoose(getPackage(mi[i]), actualImportsArray));
                 }              
             }
-        }
+        }*/
         
         // verify no dups on the Import-Package list
         assertTrue(!containDuplicate(actualImportsArray));
@@ -382,7 +382,7 @@ public class BundleManifestValidator extends Assert implements Validator{
             ManifestPackage p2 = new ManifestPackage(c[j]);
             if (p1.getPackageName().equalsIgnoreCase(p2.getPackageName())) {
                 // check if their version match
-                if (p1.getPackageVersion().compareTo(p2.getPackageVersion()) == 0) {
+                if (p1.getPackageVersionRange().equals(p2.getPackageVersionRange())) {
                     find = true;
                     break;
                 }

@@ -29,7 +29,7 @@ import org.osgi.framework.Version;
 public class ManifestPackage {
 
     private String packageName;
-    private Version packageVersion;
+    private VersionRange packageVersion;
     private static final String VERSIONATTRIBUTE = "version=";
     
     public ManifestPackage(String name) {
@@ -48,8 +48,15 @@ public class ManifestPackage {
                 if (version.startsWith("\"") && version.endsWith("\"")) {
                     version = version.substring(1, version.length() - 1);
                 }
-                // TODO FIXME: version could be a versio range and this will fail!
-                this.packageVersion = Version.parseVersion(version);
+
+                int value = version.indexOf(",");
+                Version minVersion;
+                Version maxVersion;
+                if (value > 0) {
+                    this.packageVersion = new VersionRange(version);   
+                } else {
+                    this.packageVersion = new VersionRange(version, true);
+                }
             }
         }
     }
@@ -58,9 +65,9 @@ public class ManifestPackage {
         return this.packageName;
     }
     
-    public Version getPackageVersion() {
+    public VersionRange getPackageVersionRange() {
         if (this.packageVersion == null) {
-            return new Version("0.0.0");
+            return new VersionRange("0.0.0");
         } else {
             return this.packageVersion;
         }

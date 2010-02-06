@@ -75,7 +75,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */
     public void testBundleSymbolicName006() throws Exception {
-        final Map<String, Object> options = createOptions(SYMBOLICNAME1, null, "/tw1");
+        final Map<String, Object> options = createOptions(null, null, "/tw1");
         this.b = super.installWar(options, "wmtw1.war", false);
         super.generalHeadersTest(options, "wmtw1.war", false, this.b);
     }

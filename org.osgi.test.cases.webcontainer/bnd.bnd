@@ -37,6 +37,7 @@ Export-Package =\
 	osgi.core;									version=4.2, \
 	osgi.enterprise; 							version=4.2, \
 	org.osgi.test.support;						version=project, \
+	org.eclipse.osgi;                           version=3.5.1,\
 	${junit}
 # Comments out -runbundles. For some reason bnd is upset by -runbundles refering to
 # non-existent repo entries during bndprepare ant task. I asked Peter to make a change to bnd.
