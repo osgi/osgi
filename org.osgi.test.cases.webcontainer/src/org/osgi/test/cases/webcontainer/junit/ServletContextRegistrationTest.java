@@ -122,11 +122,11 @@ public class ServletContextRegistrationTest extends
      */
     public void testMultiServletContextReg005() throws Exception {
         Bundle[] bundles = new Bundle[100];
-        final Map<String, Object> option = new HashMap<String, Object>();
         try {
             for (int i = 0; i < 100; i++) {
-                bundles[i] = super.installWar(option, "tw1.war", true);
-                registerWarBundleTest(option, "tw1.war", true, bundles[i]);
+                Map<String, Object> options = createOptions("1.0", "tw1_" + i + " test war", "/tw1_" + i);
+                bundles[i] = super.installWar(options, "tw1.war", true);
+                registerWarBundleTest(options, "tw1.war", true, bundles[i]);
             }
         } finally {
             for (int i = 0; i < 100; i++) {

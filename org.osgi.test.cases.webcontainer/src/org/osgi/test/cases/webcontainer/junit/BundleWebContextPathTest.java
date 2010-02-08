@@ -15,6 +15,10 @@
  */
 package org.osgi.test.cases.webcontainer.junit;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -330,7 +334,8 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         try {
             for (int i = 0; i < 100; i++) {
                 Map<String, Object> options = createOptions(WEBCONTEXTPATH1 + "_" + i);
-                bundles[i] = super.installWar(options, "tw1.war", true);
+                options.put(Constants.BUNDLE_SYMBOLICNAME, "tw1_" + i + "_test war");
+                bundles[i] = installWar(options, "tw1.war", true);
                 super.generalHeadersTest(options, "tw1.war", true, bundles[i]);
             }
         } finally {
