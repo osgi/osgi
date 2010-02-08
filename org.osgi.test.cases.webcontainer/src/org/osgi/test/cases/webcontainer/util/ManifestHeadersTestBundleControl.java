@@ -76,9 +76,6 @@ public abstract class ManifestHeadersTestBundleControl extends
     protected static final String LONGWEBCONTEXTPATH = "/abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijkl";
     protected static final String LONGWEBCONTEXTPATH2 = "/abcdefghijk/lmnopqrstuvwxyzabcdefgh/ijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghi";
     protected static final String LONGWEBCONTEXTPATH3 = "/abcde/fghijklmnopqrstuvwxyzabcdefghijk/lmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghi/1234567890123354352342342";
-
-    protected static final String JSPEXTRACTLOAC1 = "resources/tw1";
-    protected static final String JSPEXTRACTLOAC2 = "resources/tw1/jspextract";
     
     /*
      * generalHeadersTest to be used by non-error test
