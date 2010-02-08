@@ -80,11 +80,12 @@ public interface Condition {
 	boolean isMutable();
 
 	/**
-	 * Returns whether a the set of Condition objects are satisfied. Although
-	 * this method is not static, it must be implemented as if it were static.
-	 * All of the passed Condition objects will be of the same type and will
-	 * correspond to the class type of the object on which this method is
-	 * invoked.This method must be called inside a permission check only.
+	 * Returns whether the specified set of Condition objects are satisfied.
+	 * Although this method is not static, it must be implemented as if it
+	 * were static. All of the passed Condition objects will be of the same
+	 * type and will correspond to the class type of the object on which this
+	 * method is invoked. This method must be called inside a permission check
+	 * only.
 	 * 
 	 * @param conditions The array of Condition objects, which must all be of
 	 *        the same class and mutable. The receiver must be one of those
