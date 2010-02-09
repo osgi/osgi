@@ -59,7 +59,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         options.put("WEB-CONTEXTPATH", WEBCONTEXTPATH1);
         this.b = super.installWar(options, "tw1.war", false);
         options.remove("WEB-CONTEXTPATH");
-        options.put(WEB_CONTEXT_PATH, "/tw1");
+        options.put(WEB_CONTEXT_PATH, WEBCONTEXTPATH1);
         super.generalHeadersTest(options, "tw1.war", false, this.b);
     }
 

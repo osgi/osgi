@@ -21,6 +21,8 @@ import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
@@ -377,50 +379,70 @@ public abstract class WebContainerTestBundleControl extends
     }
 
     private String generateQuery(Map<String, Object> options) {
-        String symbolicName = options.get(Constants.BUNDLE_SYMBOLICNAME) == null ? null
-                : (String) options.get(Constants.BUNDLE_SYMBOLICNAME);
-        String version = options.get(Constants.BUNDLE_VERSION) == null ? null
-                : (String) options.get(Constants.BUNDLE_VERSION);
-        String manifestVersion = options.get(Constants.BUNDLE_MANIFESTVERSION) == null ? null
-                : (String) options.get(Constants.BUNDLE_MANIFESTVERSION);
-        String[] importPackage = options.get(Constants.IMPORT_PACKAGE) == null ? null
-                : (String[]) options.get(Constants.IMPORT_PACKAGE);
-        String[] exportPackage = options.get(Constants.EXPORT_PACKAGE) == null ? null
-                : (String[]) options.get(Constants.EXPORT_PACKAGE);
-        String[] classpath = options.get(Constants.BUNDLE_CLASSPATH) == null ? null
-                : (String[]) options.get(Constants.BUNDLE_CLASSPATH);
-        String contextPath = options.get(WEB_CONTEXT_PATH) == null ? null
-                : (String) options.get(WEB_CONTEXT_PATH);
-        String jspExtractLoc = options.get(WEB_JSP_EXTRACT_LOCATION) == null ? null
-                : (String) options.get(WEB_JSP_EXTRACT_LOCATION);
-        String query = "";
+        
+        // first options are case insensitive, so let's process them 
+        Map<String, Object> caseIgnoreOptions = new HashMap<String, Object>();
+        Set<Entry<String, Object>> optionSet = options.entrySet();
+        String symbolicNameParam = Constants.BUNDLE_SYMBOLICNAME, versionParam = Constants.BUNDLE_VERSION;
+        String manifestVersionParam = Constants.BUNDLE_MANIFESTVERSION, importPackageParam = Constants.IMPORT_PACKAGE, contextPathParam = WEB_CONTEXT_PATH;
 
+        for (Entry<String, Object> entry : optionSet) {
+            caseIgnoreOptions.put(entry.getKey().toLowerCase(), entry.getValue());           
+        }
+        
+        String symbolicName = caseIgnoreOptions.get(Constants.BUNDLE_SYMBOLICNAME.toLowerCase()) == null ? null
+                : (String) caseIgnoreOptions.get(Constants.BUNDLE_SYMBOLICNAME.toLowerCase());
+        String version = caseIgnoreOptions.get(Constants.BUNDLE_VERSION.toLowerCase()) == null ? null
+                : (String) caseIgnoreOptions.get(Constants.BUNDLE_VERSION.toLowerCase());
+        String manifestVersion = caseIgnoreOptions.get(Constants.BUNDLE_MANIFESTVERSION.toLowerCase()) == null ? null
+                : (String) caseIgnoreOptions.get(Constants.BUNDLE_MANIFESTVERSION.toLowerCase());
+        String[] importPackage = caseIgnoreOptions.get(Constants.IMPORT_PACKAGE.toLowerCase()) == null ? null
+                : (String[]) caseIgnoreOptions.get(Constants.IMPORT_PACKAGE.toLowerCase());
+        String contextPath = caseIgnoreOptions.get(WEB_CONTEXT_PATH.toLowerCase()) == null ? null
+                : (String) caseIgnoreOptions.get(WEB_CONTEXT_PATH.toLowerCase());
+        String query = "";
+        
+        for (Entry<String, Object> entry : optionSet) {
+            if (entry.getValue() == null) {
+                continue;
+            }
+            
+            if (entry.getValue().equals(symbolicName)) {
+                symbolicNameParam = entry.getKey();
+            }
+            
+            if (entry.getValue().equals(version)) {
+                versionParam = entry.getKey();
+            }
+            
+            if (entry.getValue().equals(manifestVersion)) {
+                manifestVersionParam = entry.getKey();
+            }
+            
+            if (entry.getValue().equals(importPackage)) {
+                importPackageParam = entry.getKey();
+            }
+            
+            if (entry.getValue().equals(contextPath)) {
+                contextPathParam = entry.getKey();
+            }
+        }
+        
         if (symbolicName != null) {
-            query += "&" + Constants.BUNDLE_SYMBOLICNAME + "=" + symbolicName;
+            query += "&" + symbolicNameParam + "=" + symbolicName;
         }
         if (version != null) {
-            query += "&" + Constants.BUNDLE_VERSION + "=" + version;
+            query += "&" + versionParam + "=" + version;
         }
         if (manifestVersion != null) {
-            query += "&" + Constants.BUNDLE_MANIFESTVERSION + "=" + manifestVersion;
+            query += "&" + manifestVersionParam + "=" + manifestVersion;
         }
         if (importPackage != null) {
-            query += "&" + Constants.IMPORT_PACKAGE + "="
+            query += "&" + importPackageParam + "="
                     + getStringValue(importPackage);
         }
-        if (exportPackage != null) {
-            query += "&" + Constants.EXPORT_PACKAGE + "="
-                    + getStringValue(exportPackage);
-        }
-        if (classpath != null) {
-            query += "&" + Constants.BUNDLE_CLASSPATH + "="
-                    + getStringValue(classpath);
-        }
         if (contextPath != null) {
-            query += "&" + WEB_CONTEXT_PATH + "=" + contextPath;
-        }
-        if (jspExtractLoc != null) {
-            query += "&" + WEB_JSP_EXTRACT_LOCATION + "=" + jspExtractLoc;
+            query += "&" + contextPathParam + "=" + contextPath;
         }
         if (query != null && query.startsWith("&")) {
             query = query.substring(1);
