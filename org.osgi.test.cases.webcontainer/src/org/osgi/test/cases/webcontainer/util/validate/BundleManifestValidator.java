@@ -263,7 +263,7 @@ public class BundleManifestValidator extends Assert implements Validator{
         if (dImports != null) {
             String[] di = (String[])dImports;
             for (int i = 0; i < di.length ; i++) {
-                assertTrue("check Import-package url param value in actual import-package", existLoose(di[i], actualImportsArray));
+                assertTrue("check Import-package url param value " + di[i] + " in actual import-package " + actualImports, existLoose(di[i], actualImportsArray));
             }
         }
         

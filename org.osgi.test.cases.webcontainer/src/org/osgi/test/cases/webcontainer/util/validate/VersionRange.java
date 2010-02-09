@@ -66,17 +66,38 @@ public class VersionRange {
         return this.version;
     }
 
+    // simply compare VersionRange.version won't work as version can be [2.0, 10.0) 
+    // and [2.0,10.0.0) and they should return true here
     public boolean equals(Object other) {
         if (other == this)
             return true;
         if (other == null)
             return false;
 
-        if (other instanceof VersionRange) {
-            return version.equals(((VersionRange) other).version);
+        if (!(other instanceof VersionRange)) {
+            return false;
         }
 
-        return false;
+        VersionRange otherVersion = (VersionRange) other;
+        if (minimumExclusive != otherVersion.minimumExclusive) {
+            return false;
+        }
+        if (!minimumVersion.equals(otherVersion.minimumVersion)) {
+            return false;
+        }
+        if (maximumExclusive != otherVersion.maximumExclusive) {
+            return false;
+        }
+        if (maximumVersion == null) {
+            return (otherVersion.maximumVersion == null);
+        } else {
+            if (otherVersion.maximumVersion == null) {
+                return false;
+            } else {
+                return maximumVersion.equals(otherVersion.maximumVersion);
+            }
+        }
+
     }
 
     public Version getExactVersion() {
