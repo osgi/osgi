@@ -44,10 +44,10 @@ public abstract class ManifestHeadersTestBundleControl extends
 
     protected static final String[] IMPORTS1 = {"javax.servlet; version=2.5", "javax.servlet.http; version=2.5"}; 
     protected static final String[] IMPORTS2 = {"javax.servlet;version=2.5", "javax.servlet.http;version=2.5", "javax.servlet.jsp; version=2.1", "javax.servlet.jsp.tagext; version=2.1"}; 
-    protected static final String[] IMPORTS3 = {"javax.servlet; version=\"(2.1, 2.5]\"", "javax.servlet.http; version=\"(2.1, 2.5]\""};
-    protected static final String[] IMPORTS4 = {"javax.servlet.jsp; version=\"[2.0,2.1]\"", "javax.servlet.jsp.tagext; version=\"[2.0,2.1]\""}; 
+    protected static final String[] IMPORTS3 = {"javax.servlet; version=\"(2.1, 1000.0]\"", "javax.servlet.http; version=\"(2.1, 1000.0]\""};
+    protected static final String[] IMPORTS4 = {"javax.servlet.jsp; version=\"[2.0,1000.0]\"", "javax.servlet.jsp.tagext; version=\"[2.0,1000.0]\""}; 
     protected static final String[] IMPORTS5 = {"org.osgi.service.log", "javax.servlet; version=2.4", "javax.servlet.http; version=2.4"};
-    protected static final String[] IMPORTS9 = {"javax.servlet; version=3.6", "javax.servlet.http; version=3.6"};
+    protected static final String[] IMPORTS9 = {"javax.servlet; version=\"(1.0, 1.1]\"", "javax.servlet.http; version=\"(1.0, 1.1]\""};
     protected static final String[] IMPORTS10 = {"org.osgi.service.log;version=2.0"};
 
     
