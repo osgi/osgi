@@ -258,7 +258,7 @@ public class EventTest extends WebContainerTestBundleControl {
      */
     private boolean contains(List<Long> bundleIds, Long bundleId) {
         for (Long id : bundleIds) {
-            if (id == bundleId) {
+            if (id.longValue() == bundleId.longValue()) {
                 return true;
             }
         }
