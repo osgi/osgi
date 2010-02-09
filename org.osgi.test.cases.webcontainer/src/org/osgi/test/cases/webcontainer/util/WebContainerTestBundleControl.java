@@ -19,9 +19,11 @@ import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.JarURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.Map.Entry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -380,16 +382,28 @@ public abstract class WebContainerTestBundleControl extends
 
     private String generateQuery(Map<String, Object> options) {
         
-        // first options are case insensitive, so let's process them 
-        Map<String, Object> caseIgnoreOptions = new HashMap<String, Object>();
+        Map<String, Object> caseIgnoreOptions = new TreeMap<String, Object>(
+                String.CASE_INSENSITIVE_ORDER);
+        try {
+            caseIgnoreOptions.putAll(options);
+        }
+        catch (ClassCastException e) {
+            IllegalArgumentException iae = new IllegalArgumentException(
+                    "non-String key in properties");
+            iae.initCause(e);
+            throw iae;
+        }
+        if (caseIgnoreOptions.size() < options.size()) {
+            throw new IllegalArgumentException(
+                    "duplicate keys with different cases in properties: "
+                            + new ArrayList<String>(caseIgnoreOptions.keySet())
+                                    .removeAll(options.keySet()));
+        }
+
         Set<Entry<String, Object>> optionSet = options.entrySet();
         String symbolicNameParam = Constants.BUNDLE_SYMBOLICNAME, versionParam = Constants.BUNDLE_VERSION;
         String manifestVersionParam = Constants.BUNDLE_MANIFESTVERSION, importPackageParam = Constants.IMPORT_PACKAGE, contextPathParam = WEB_CONTEXT_PATH;
 
-        for (Entry<String, Object> entry : optionSet) {
-            caseIgnoreOptions.put(entry.getKey().toLowerCase(), entry.getValue());           
-        }
-        
         String symbolicName = caseIgnoreOptions.get(Constants.BUNDLE_SYMBOLICNAME.toLowerCase()) == null ? null
                 : (String) caseIgnoreOptions.get(Constants.BUNDLE_SYMBOLICNAME.toLowerCase());
         String version = caseIgnoreOptions.get(Constants.BUNDLE_VERSION.toLowerCase()) == null ? null
@@ -403,27 +417,27 @@ public abstract class WebContainerTestBundleControl extends
         String query = "";
         
         for (Entry<String, Object> entry : optionSet) {
-            if (entry.getValue() == null) {
+            if (entry.getKey() == null) {
                 continue;
             }
             
-            if (entry.getValue().equals(symbolicName)) {
+            if (entry.getKey().equalsIgnoreCase((Constants.BUNDLE_SYMBOLICNAME))) {
                 symbolicNameParam = entry.getKey();
             }
             
-            if (entry.getValue().equals(version)) {
+            if (entry.getKey().equalsIgnoreCase((Constants.BUNDLE_VERSION))) {
                 versionParam = entry.getKey();
             }
             
-            if (entry.getValue().equals(manifestVersion)) {
+            if (entry.getKey().equalsIgnoreCase((Constants.BUNDLE_MANIFESTVERSION))) {
                 manifestVersionParam = entry.getKey();
             }
             
-            if (entry.getValue().equals(importPackage)) {
+            if (entry.getKey().equalsIgnoreCase((Constants.IMPORT_PACKAGE))) {
                 importPackageParam = entry.getKey();
             }
             
-            if (entry.getValue().equals(contextPath)) {
+            if (entry.getKey().equalsIgnoreCase((WEB_CONTEXT_PATH))) {
                 contextPathParam = entry.getKey();
             }
         }
