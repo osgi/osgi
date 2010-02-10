@@ -1,9 +1,17 @@
 package org.osgi.test.cases.jmx.junit;
 
-import java.io.*;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
-import org.osgi.framework.*;
-import org.osgi.jmx.framework.*;
+import javax.management.openmbean.CompositeData;
+import javax.management.openmbean.CompositeType;
+import javax.management.openmbean.TabularData;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
+import org.osgi.jmx.framework.ServiceStateMBean;
 
 public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 
@@ -98,10 +106,25 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 	public void testGetProperties() throws IOException {
 		assertNotNull(ssMBean);
 		long serviceId = getServiceId(expectedInterface);
-		
+		TabularData list = ssMBean.getProperties(serviceId);
 		assertTrue("did not get any properties for service "
 				+ expectedInterface,
-				ssMBean.getProperties(serviceId).size() > 0);
+				list.size() > 0);
+		assertTabularDataStructure(list, "PROPERTIES_TYPE", "Key", new String[] {"Key", "Value", "Type"});
+		Collection values = list.values();
+		Iterator iter = values.iterator();
+		boolean found = false;
+		while (iter.hasNext()) {
+			CompositeData item = (CompositeData) iter.next();
+			String key = (String) item.get("Key");
+			if (key.equals("service.id")) {
+				long foundServiceId = Long.parseLong((String)item.get("Value"));
+				assertTrue("service id returned in properties is wrong",serviceId == foundServiceId);
+				found = true;
+				break;
+			}
+		}
+		assertTrue("service id not found in returned properties", found);		
 	}
 
 	/**
@@ -127,9 +150,33 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 	 */
 	public void testGetServices() throws IOException {
 		assertNotNull(ssMBean);
+		long serviceId = getServiceId(expectedInterface);
+		
+		TabularData list = ssMBean.listServices();		
 		assertTrue("did not get any properties for service the " +
 				"service-state of the system ",
-				ssMBean.listServices().size() > 0);
+				list.size() > 0);
+		/*
+		 * Reported Bug 1576
+		 */
+		assertTabularDataStructure(list, "SERVICE_TYPE", "Identifier", new String[] {"Identifier", "BundleIdentifier", "objectClass", "Properties", "UsingBundles"});
+				
+		Collection values = list.values();
+		Iterator iter = values.iterator();
+		boolean found = false;
+		while (iter.hasNext()) {
+			CompositeData item = (CompositeData) iter.next();
+			long tempServiceId = ((Long) item.get("Identifier")).longValue();
+			if(tempServiceId == serviceId) {
+				found = true;
+				long bundleId = ((Long) item.get("BundleIdentifier")).longValue();
+				assertTrue("wrong bundle id is returned", bundleId == testBundle2.getBundleId());
+				Long[] usingBundles = (Long[]) item.get("UsingBundles");
+				assertTrue("wrong list with using bundles", ((usingBundles != null) && (usingBundles.length == 1) && 
+															 (usingBundles[0].longValue() == testBundle1.getBundleId())));
+			}
+		}
+		assertTrue("service id not found in returned properties", found);		
 	}
 
 	/**
@@ -153,7 +200,6 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 				break;
 			}
 		}
-		
 		assertTrue(
 				"tb1 uses interface " + expectedInterface
 				+ " from tb2. however, the getUsingBundles() " +
@@ -165,5 +211,29 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		super.waitForUnRegistering(createObjectName(ServiceStateMBean.OBJECTNAME));
+		if (testBundle1 != null) {
+			try {
+				super.uninstallBundle(testBundle1);
+			} catch (Exception io) {}
+		}
+		if (testBundle2 != null) {
+			try {
+				super.uninstallBundle(testBundle2);
+			} catch (Exception io) {}
+		}		
 	}
+	
+	private void assertTabularDataStructure(TabularData td, String type, String key, String[] compositeDataKeys) {
+		List<String> indexNames = td.getTabularType().getIndexNames();
+		assertNotNull(indexNames);
+		if (key != null) {
+			assertTrue("tabular data " + type + " has wrong key set", indexNames.size() == 1);
+			assertTrue("tabular data " + type + " doesn't contain key " + key, indexNames.iterator().next().equals(key));
+		}
+		CompositeType ct = td.getTabularType().getRowType();
+		for (int i = 0; i < compositeDataKeys.length; i++) {
+			assertTrue("tabular data row type " + type + " doesn't contain key " + compositeDataKeys[i], ct.containsKey(compositeDataKeys[i]));
+		}
+	}
+	
 }

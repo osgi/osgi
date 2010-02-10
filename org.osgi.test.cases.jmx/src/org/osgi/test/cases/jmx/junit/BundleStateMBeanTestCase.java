@@ -242,5 +242,15 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		super.waitForUnRegistering(createObjectName(PackageStateMBean.OBJECTNAME));
+		if (testBundle1 != null) {
+			try {
+				super.uninstallBundle(testBundle1);
+			} catch (Exception io) {}
+		}
+		if (testBundle2 != null) {
+			try {
+				super.uninstallBundle(testBundle2);
+			} catch (Exception io) {}
+		}
 	}
 }

@@ -73,6 +73,11 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		super.waitForUnRegistering(createObjectName(ConfigurationAdminMBean.OBJECTNAME));
+		if (testBundle != null) {
+			try {
+				super.uninstallBundle(testBundle);
+			} catch (Exception io) {}
+		}
 	}
 
 }

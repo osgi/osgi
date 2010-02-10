@@ -1,6 +1,14 @@
 package org.osgi.test.cases.jmx.junit;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.management.openmbean.CompositeData;
+import javax.management.openmbean.CompositeType;
+import javax.management.openmbean.TabularData;
 
 import org.osgi.framework.Bundle;
 import org.osgi.jmx.framework.PackageStateMBean;
@@ -86,10 +94,26 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 	public void testGetPackages() throws IOException {
 		assertNotNull(pMBean);
 		assertNotNull(pAdmin);
-		/*
-		 * TODO FIXME: https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1385
-		 */
-		pMBean.listPackages();
+		TabularData data = pMBean.listPackages();
+		assertTabularDataStructure(data, "PACKAGES_TYPE", new String [] {"Name", "Version", "ExportingBundles"}, 
+											 new String[] {"Name", "Version", "ExportingBundles", "ImportingBundles", "RemovalPending"});
+		Collection values = data.values();
+		Iterator iter = values.iterator();
+		boolean found = false;
+		while (iter.hasNext()) {
+			CompositeData item = (CompositeData) iter.next();
+			String name = (String) item.get("Name");
+			if (name.equals(EXPORTED_PACKAGE)) {
+				Long[] exportingBundles = (Long[]) item.get("ExportingBundles");
+				Long[] importingBundles = (Long[]) item.get("ImportingBundles");
+				assertTrue("package exporting bundles info is wrong", (exportingBundles != null) && (exportingBundles.length == 1) &&
+																		(exportingBundles[0] == testBundle2.getBundleId()));				
+				assertTrue("package importing bundles info is wrong", (importingBundles != null) && (importingBundles.length == 1) &&
+						(importingBundles[0] == testBundle1.getBundleId()));				
+				found = true;
+			}
+		}
+		assertTrue("package not found in returned packages", found);
 	}
 
 	public void testIsRemovalPending() throws IOException {
@@ -113,7 +137,38 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		super
-				.waitForUnRegistering(createObjectName(PackageStateMBean.OBJECTNAME));
+		super.waitForUnRegistering(createObjectName(PackageStateMBean.OBJECTNAME));
+		if (testBundle1 != null) {
+			try {
+				super.uninstallBundle(testBundle1);
+			} catch (Exception io) {}
+		}
+		if (testBundle2 != null) {
+			try {
+				super.uninstallBundle(testBundle2);
+			} catch (Exception io) {}
+		}
 	}
+	
+	private void assertTabularDataStructure(TabularData td, String type, String[] keys, String[] compositeDataKeys) {
+		List<String> indexNames = td.getTabularType().getIndexNames();
+		assertNotNull(indexNames);
+		if (keys != null) {
+			HashSet<String> keySet = new HashSet<String>();
+			for (int i = 0; i < keys.length; i++) {
+				keySet.add(keys[i]);
+			}			
+			assertTrue("tabular data " + type + " has wrong key set size of " + indexNames.size(), indexNames.size() == keys.length);
+			Iterator<String> iter = indexNames.iterator();
+			while (iter.hasNext()) {
+				String indexName = iter.next();
+				assertTrue("tabular data " + type + " contains wrong key " + indexName, keySet.contains(indexName));				
+			}
+		}
+		CompositeType ct = td.getTabularType().getRowType();
+		for (int i = 0; i < compositeDataKeys.length; i++) {
+			assertTrue("tabular data row type " + type + " doesn't contain key " + compositeDataKeys[i], ct.containsKey(compositeDataKeys[i]));
+		}
+	}
+	
 }

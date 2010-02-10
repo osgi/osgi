@@ -10,12 +10,13 @@ import org.osgi.service.permissionadmin.*;
 public class PermissionAdminMBeanTestCase extends MBeanGeneralTestCase {
 	private PermissionAdminMBean pMBean;
 	private PermissionAdmin pAdmin;
-
+	private Bundle testbundle;
+	
 	@Override
 	protected void setUp() throws Exception {
 		// TODO Auto-generated method stub
 		super.setUp();
-		Bundle testbundle = super.install("tb2.jar");
+		testbundle = super.install("tb2.jar");
 		testbundle.start();
 		
 		super.install("tb1.jar");
@@ -41,5 +42,10 @@ public class PermissionAdminMBeanTestCase extends MBeanGeneralTestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		super.waitForUnRegistering(createObjectName(PermissionAdminMBean.OBJECTNAME));
+		if (testbundle != null) {
+			try {
+				super.uninstallBundle(testbundle);
+			} catch (Exception io) {}
+		}
 	}
 }
