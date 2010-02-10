@@ -808,10 +808,13 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			assertNotNull("122.10.11: source must not be null", event.getSource());
 			assertEquals(RemoteServiceAdminEvent.EXPORT_ERROR, event.getType());
 			assertNotNull(event.getException());
-			try {
-				event.getExportReference();
-				fail("IllegalStateException expected");
-			} catch (IllegalStateException ie) {}
+			
+			//Marc: Based on the API the getReference should simply return null  
+			assertNull(event.getExportReference());
+//			try {
+//				event.getExportReference();
+//				fail("IllegalStateException expected");
+//			} catch (IllegalStateException ie) {}
 			
 
 			// ungetting the RSA service will also close the ExportRegistration and therefore
