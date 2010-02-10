@@ -76,9 +76,17 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
      * Bundle-ManifestVersion
      */
     public void testBundleManifestVersion005() throws Exception {
-        final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw5");
-        this.b = super.installWar(options, "wmtw5.war", false);
-        generalHeadersTest(options, "wmtw5.war", false, this.b);
+        final Map<String, Object> options = createOptions(MANIFESTVERSION1,
+                "/tw5");
+        try {
+            this.b = super.installWar(options, "wmtw5.war", false);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        
+        assertFalse("should not be able to access page", super.ableAccessPath("/tw5"));
+
     }
     
     /*
@@ -89,9 +97,13 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
         final Map<String, Object> options = createOptions(MANIFESTVERSION1, "/tw1");
         try {
             this.b = super.installWar(options, "wmtw1.war", false);
-        } catch (BundleException be) {
-            // expected as bundle-manifestversion is not a valid url param for a wab
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
         }
+        
+        assertFalse("should not be able to access page", super.ableAccessPath("/tw1"));
+
     }
     
     /*
@@ -100,7 +112,8 @@ public class BundleManifestVersionTest extends ManifestHeadersTestBundleControl 
     public void testBundleManifestVersion011() throws Exception {
         final Map<String, Object> options = createOptions(null, "/tw5");
         this.b = super.installWar(options, "wmtw5.war", false);
-        generalHeadersTest(options, "wmtw5.war", false, this.b);
+        
+        assertFalse("should not be able to access page", super.ableAccessPath("/tw5"));
     }
 
     /*

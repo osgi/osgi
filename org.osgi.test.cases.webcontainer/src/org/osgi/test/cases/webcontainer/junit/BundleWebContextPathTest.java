@@ -95,8 +95,8 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      */
     public void testWebContextPath006_2() throws Exception {
         // for a wab, we don't need to install it via web bundle URL
-        this.b = super.installBundle("wmtw1.war", false);
-        super.generalHeadersTest(createOptions(null), "wmtw1.war", false, this.b);
+        this.b = super.installBundle("wmtw1.war", true);
+        super.generalHeadersTest(createOptions(null), "wmtw1.war", true, this.b);
     }
     
     /*
@@ -133,7 +133,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath009() throws Exception {
-        final Map<String, Object> options = createOptions(WEBCONTEXTPATH4);
+        final Map<String, Object> options = createOptions(WEBCONTEXTPATH4.substring(1));
         this.b = super.installWar(options, "wmtw4.war", true);
         super.generalHeadersTest(options, "wmtw4.war", true, this.b);
     }
@@ -142,11 +142,16 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath009_2() throws Exception {
-        // since wmtw4.war is not a wab since it doesn't have Bundle-SymbolicName, we should be able to specify bundle-symbolic-name as a param
         final Map<String, Object> options = createOptions(WEBCONTEXTPATH4);
         options.put(Constants.BUNDLE_SYMBOLICNAME, "OSGi CT test wmtw4");
-        this.b = super.installWar(options, "wmtw4.war", true);
-        super.generalHeadersTest(options, "wmtw4.war", true, this.b);
+        try {
+            this.b = super.installWar(options, "wmtw4.war", true);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        assertFalse("should not be able to access page", super.ableAccessPath(WEBCONTEXTPATH4));
+
     }
     
     /*
@@ -156,7 +161,9 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         // wmtw5.war is not a wab since it doesn't have Import-Package
         final Map<String, Object> options = createOptions(WEBCONTEXTPATH5);
         this.b = super.installWar(options, "wmtw5.war", false);
-        super.generalHeadersTest(options, "wmtw5.war", false, this.b);
+        // install should succeed, but test won't work.
+        assertFalse("should not be able to access page", super.ableAccessPath(WEBCONTEXTPATH5));
+
     }
     
     /*
@@ -166,8 +173,14 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         // wmtw5.war is not a wab since it doesn't have Import-Package
         final Map<String, Object> options = createOptions(WEBCONTEXTPATH5);
         options.put(Constants.BUNDLE_SYMBOLICNAME, "OSGi CT test wmtw5");
-        this.b = super.installWar(options, "wmtw5.war", false);
-        super.generalHeadersTest(options, "wmtw5.war", false, this.b);
+        try {
+            this.b = super.installWar(options, "wmtw5.war", false);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        assertFalse("should not be able to access page", super.ableAccessPath(WEBCONTEXTPATH5));
+
     }
     
     /*
@@ -191,7 +204,9 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
     public void testWebContextPath011() throws Exception {
         final Map<String, Object> options = createOptions(WEBCONTEXTPATH5.substring(1));
         this.b = super.installWar(options, "wmtw5.war", false);
-        super.generalHeadersTest(options, "wmtw5.war", false, this.b);
+        // this won't work 
+        assertFalse("should not be able to access page", super.ableAccessPath(WEBCONTEXTPATH5));
+
     }
 
     /*

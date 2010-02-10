@@ -117,9 +117,6 @@
 				<include name="org/osgi/test/cases/webcontainer/tw5/**"/>
 				<include name="org/osgi/test/cases/webcontainer/util/**"/>
 			</classes>
-			<lib dir="${licensed-repo}/org.apache.commons-logging">
-				<include name="org.apache.commons-logging-1.0.4.jar"/>
-			</lib>
 			<lib dir="${target}">
 				<include name="org.osgi.test.cases.webcontainer.simple.jar"/>
 			</lib>

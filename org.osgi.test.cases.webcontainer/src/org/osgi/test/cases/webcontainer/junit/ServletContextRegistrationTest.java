@@ -99,7 +99,7 @@ public class ServletContextRegistrationTest extends
     		bundles[1] = super.installWar(option,  "tw4.war", true);
     		registerWarBundleTest(option, "tw4.war", true, bundles[1]);
     		
-    		option = createOptions("1.0", "ct-wm-testwar", "/wmtw4");
+    		option = createOptions(null, null, "/wmtw4");
     		bundles[2] = super.installWar(option,  "wmtw4.war", true);
     		registerWarBundleTest(option, "wmtw4.war", true, bundles[2]);
     		

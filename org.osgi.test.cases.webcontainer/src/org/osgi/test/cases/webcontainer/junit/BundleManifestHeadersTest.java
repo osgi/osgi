@@ -70,9 +70,13 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
                 CLASSPATH3, IMPORTS1, EXPORTS1, WEBCONTEXTPATH1);
         try {
             this.b = super.installWar(options, "wmtw1.war", false);
-        } catch (BundleException be) {
-            // expected as this is a wab
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
         }
+        
+        assertFalse("should not be able to access page", super.ableAccessPath(WEBCONTEXTPATH1));
+
     }
     
     /*
@@ -90,8 +94,15 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
     public void testManifestHeaders009() throws Exception {
         final Map<String, Object> options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME4,
                 CLASSPATH3, IMPORTS4, EXPORTS4, WEBCONTEXTPATH4);
-        this.b = super.installWar(options, "wmtw4.war", false);
-        super.generalHeadersTest(options, "wmtw4.war", false, this.b);
+        try {
+            this.b = super.installWar(options, "wmtw4.war", false);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        
+        assertFalse("should not be able to access page", super.ableAccessPath(WEBCONTEXTPATH4));
+
     }
 
     /*
@@ -100,9 +111,15 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
     public void testManifestHeaders010() throws Exception {
         final Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
                 CLASSPATH1, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5);
-        this.b = super.installWar(options, "wmtw5.war", true);
-        super.generalHeadersTest(options, "wmtw5.war", true, this.b);
-        classpassServletTest(this.b);
+        try {
+            this.b = super.installWar(options, "wmtw5.war", true);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        
+        assertFalse("should not be able to access page", super.ableAccessPath(WEBCONTEXTPATH5));
+
     }
 
     /*
@@ -111,9 +128,15 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
     public void testManifestHeaders011() throws Exception {
         final Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
                 CLASSPATH2, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5);
-        this.b = super.installWar(options, "wm2tw5.war", true);
-        super.generalHeadersTest(options, "wm2tw5.war", true, this.b);
-        classpassServletTest(this.b);
+        try {
+            this.b = super.installWar(options, "wm2tw5.war", true);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        
+        assertFalse("should not be able to access page", super.ableAccessPath(WEBCONTEXTPATH5));
+
     }
 
     /*
@@ -121,10 +144,11 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      */
     public void testManifestHeaders012() throws Exception {
         final Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
-                CLASSPATH3, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5);
+               null, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5);
         this.b = super.installWar(options, "wm3tw5.war", true);
-        super.generalHeadersTest(options, "wm3tw5.war", true, this.b);
-        classpassServletTest(this.b);
+        
+        assertTrue("should be able to access " + WEBCONTEXTPATH5, super.ableAccessPath(WEBCONTEXTPATH5));
+
     }
     
     /*
@@ -133,20 +157,14 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
     public void testManifestHeaders013() throws Exception {
         final Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, null,
                 null, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5);
-        this.b = super.installWar(options, "wm2tw5.war", true);
-        super.generalHeadersTest(options, "wm2tw5.war", true, this.b);
-        classpassServletTest(this.b);
-    }
+        try {
+            this.b = super.installWar(options, "wm2tw5.war", true);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        assertFalse("should not be able to access page", super.ableAccessPath(WEBCONTEXTPATH5));
 
-    /*
-     * verify valid deployOptions overwrite original manifest headers
-     */
-    public void testManifestHeaders014() throws Exception {
-        final Map<String, Object> options = createOptions(null, null, SYMBOLICNAME5,
-                CLASSPATH3, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5);
-        this.b = super.installWar(options, "wm3tw5.war", true);
-        super.generalHeadersTest(options, "wm3tw5.war", true, this.b);
-        classpassServletTest(this.b);
     }
     
     /*
@@ -155,25 +173,29 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
     public void testManifestHeaders015() throws Exception {
         final Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
                 CLASSPATH3, IMPORTS5, EXPORTS5, null);
-        this.b = super.installWar(options, "wm3tw5.war", true);
-        super.generalHeadersTest(options, "wm3tw5.war", true, this.b);
-        classpassServletTest(this.b);
+        try {
+            this.b = super.installWar(options, "wm3tw5.war", true);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        
     }
     
     /*
      * verify multiple WebApps manifest headers processing
      */
     public void testMultipleManifestHeaders001() throws Exception {
-        final Map<String, Object> options = createOptions(null, MANIFESTVERSION1, "wmtw1",
-                CLASSPATH3, IMPORTS1, EXPORTS1, "/wmtw1");
-        final Map<String, Object> options2 = createOptions(null, MANIFESTVERSION1, "wmtw1_1",
-                CLASSPATH3, IMPORTS1, EXPORTS1, "wmtw1_1");
+        final Map<String, Object> options = createOptions(null, MANIFESTVERSION1, "tw1",
+                CLASSPATH3, IMPORTS1, EXPORTS1, "/tw1");
+        final Map<String, Object> options2 = createOptions(null, MANIFESTVERSION1, "tw1_1",
+                CLASSPATH3, IMPORTS1, EXPORTS1, "tw1_1");
         Bundle b2 = null;
         try {
-            this.b = super.installWar(options, "wmtw1.war", true);
-            super.generalHeadersTest(options, "wmtw1.war", true, this.b);
-            b2 = super.installWar(options2, "wmtw1.war", true);
-            super.generalHeadersTest(options2, "wmtw1.war", true, b2);
+            this.b = super.installWar(options, "tw1.war", true);
+            super.generalHeadersTest(options, "tw1.war", true, this.b);
+            b2 = super.installWar(options2, "tw1.war", true);
+            super.generalHeadersTest(options2, "tw1.war", true, b2);
         } finally {
             if (b2 != null) {
                 uninstallBundle(b2);
@@ -188,15 +210,15 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
     public void testMultipleManifestHeaders002() throws Exception {
         final Map<String, Object> options = createOptions(null, MANIFESTVERSION1, "tw1",
                 CLASSPATH3, IMPORTS1, EXPORTS1, "/tw1");
-        final Map<String, Object> options2 = createOptions(null, MANIFESTVERSION1, "wmtw1",
-                CLASSPATH3, IMPORTS1, EXPORTS1, "/wmtw1");
+        final Map<String, Object> options2 = createOptions(null, null, null,
+                null, null, null, "/wmtw1");
         Bundle b2 = null;
         
         try {
             this.b = super.installWar(options, "tw1.war", true);
             super.generalHeadersTest(options, "tw1.war", true, this.b);
             b2 = super.installWar(options2, "wmtw1.war", true);
-            super.generalHeadersTest(options2, "wmtw1.war", true, this.b);
+            super.generalHeadersTest(options2, "wmtw1.war", true, b2);
         } finally {
             if (b2 != null) {
                 uninstallBundle(b2);
@@ -228,8 +250,8 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
             super.generalHeadersTest(options2, "wmtw1.war", true, b2);
             b3 = super.installWar(options3, "tw4.war", true);
             super.generalHeadersTest(options3, "tw4.war", true, b3);
-            b4 = super.installWar(options4, "wmtw4.war", true);
-            super.generalHeadersTest(options4, "wmtw4.war", true, b4);
+            b4 = super.installWar(options4, "tw4.war", true);
+            super.generalHeadersTest(options4, "tw4.war", true, b4);
             b5 = super.installWar(options5, "tw5.war", true);
             super.generalHeadersTest(options5, "tw5.war", true, b5);
             classpassServletTest(b5);
@@ -271,19 +293,19 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
         try {
             this.b = super.installWar(options, "tw1.war", true);
             super.generalHeadersTest(options, "tw1.war", true, this.b);
-            bundles[0] = super.installWar(options, "tw4.war", true);
+            bundles[0] = super.installWar(options4, "tw4.war", true);
             super.generalHeadersTest(options4, "tw4.war", true, bundles[0]);
-            bundles[1] = super.installWar(options, "tw5.war", true);
+            bundles[1] = super.installWar(options5, "tw5.war", true);
             super.generalHeadersTest(options5, "tw5.war", true, bundles[1]);
             classpassServletTest(bundles[1]);
     
             bundles[2] = super.installWar(options6, "wmtw1.war", true);
             super.generalHeadersTest(options6, "wmtw1.war", true, bundles[2]);
-            bundles[3] = super.installWar(options9, "wmtw4.war", true);
-            super.generalHeadersTest(options9, "wmtw4.war", true, bundles[3]);
-            bundles[4] = super.installWar(options10, "wmtw5.war", true);
-            super.generalHeadersTest(options10, "wmtw5.war", true, bundles[4]);
-            classpassServletTest(bundles[8]);
+            bundles[3] = super.installWar(options9, "tw4.war", true);
+            super.generalHeadersTest(options9, "tw4.war", true, bundles[3]);
+            bundles[4] = super.installWar(options10, "tw5.war", true);
+            super.generalHeadersTest(options10, "tw5.war", true, bundles[4]);
+            classpassServletTest(bundles[4]);
             assertFalse(this.b == bundles[2]);
             assertFalse(bundles[0] == bundles[3]);
             assertFalse(bundles[1] == bundles[4]);

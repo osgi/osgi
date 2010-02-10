@@ -91,7 +91,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */
     public void testBundleSymbolicName006() throws Exception {
-        final Map<String, Object> options = createOptions(null, null, "/tw1");
+        final Map<String, Object> options = createOptions(null, null, "/tw1-testsymbolicName006");
         this.b = super.installWar(options, "wmtw1.war", false);
         super.generalHeadersTest(options, "wmtw1.war", false, this.b);
     }
@@ -101,8 +101,15 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleSymbolicName009() throws Exception {
         final Map<String, Object> options = createOptions(SYMBOLICNAME4, null, "/tw4");
-        this.b = super.installWar(options, "wmtw4.war", false);
-        super.generalHeadersTest(options, "wmtw4.war", false, this.b);
+        try {
+            this.b = super.installWar(options, "wmtw4.war", false);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        
+        assertFalse("should not be able to access page", super.ableAccessPath("/tw4"));
+
     }
     
 
@@ -111,8 +118,15 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleSymbolicName010() throws Exception {
         final Map<String, Object> options = createOptions(SYMBOLICNAME5, null, "/tw5");
-        this.b = super.installWar(options, "wmtw5.war", false);
-        super.generalHeadersTest(options, "wmtw5.war", false, this.b);
+        try {
+            this.b = super.installWar(options, "wmtw5.war", false);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        
+        assertFalse("should not be able to access page", super.ableAccessPath("/tw5"));
+
     }
 
     /*

@@ -109,9 +109,18 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
         final Map<String, Object> options = createOptions(IMPORTS1, "/tw1");
         try {
             this.b = super.installWar(options, "wmtw1.war", false);
-        } catch (BundleException be) {
-            // expected since we don't allow import-package url param for wab
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
         }
+        
+        if (this.b != null) {
+            this.b.uninstall();
+        }
+        
+        // install bundle via regular install
+        this.b = super.installBundle("wmtw1.war", false);
+        super.generalHeadersTest(new HashMap<String, Object>(), "wmtw1.war", false, this.b);
     }
     
     /*
@@ -119,8 +128,15 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleImportPackage010() throws Exception {
         final Map<String, Object> options = createOptions(IMPORTS2, "/tw4");
-        this.b = super.installWar(options, "wmtw4.war", true);
-        super.generalHeadersTest(options, "wmtw4.war", true, this.b);
+        try {
+            this.b = super.installWar(options, "wmtw4.war", true);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        
+        assertFalse("should not be able to access page", super.ableAccessPath("/tw4"));
+
     }
     
     /*
@@ -128,8 +144,15 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleImportPackage011() throws Exception {
         final Map<String, Object> options = createOptions(IMPORTS4, "/tw5");
-        this.b = super.installWar(options, "wmtw5.war", false);
-        super.generalHeadersTest(options, "wmtw5.war", false, this.b);
+        try {
+            this.b = super.installWar(options, "wmtw5.war", false);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        
+        assertFalse("should not be able to access page", super.ableAccessPath("/tw5"));
+
     }
     
     /*
@@ -137,8 +160,15 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleImportPackage012() throws Exception {
         final Map<String, Object> options = createOptions(IMPORTS5, "/tw5");
-        this.b = super.installWar(options, "wmtw5.war", false);
-        super.generalHeadersTest(options, "wmtw5.war", false, this.b);
+        try {
+            this.b = super.installWar(options, "wmtw5.war", false);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        
+        assertFalse("should not be able to access page", super.ableAccessPath("/tw5"));
+
     }
     
     /*
@@ -146,8 +176,15 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleImportPackage013() throws Exception {
         final Map<String, Object> options = createOptions(IMPORTS1, "/tw5");
-        this.b = super.installWar(options, "wm2tw5.war", false);
-        super.generalHeadersTest(options, "wm2tw5.war", false, this.b);
+        try {
+            this.b = super.installWar(options, "wm2tw5.war", false);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        
+        assertFalse("should not be able to access page", super.ableAccessPath("/tw5"));
+
     }
     
     /*
@@ -155,8 +192,9 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleImportPackage014() throws Exception {
         final Map<String, Object> options = createOptions(IMPORTS3, "/tw5");
-        this.b = super.installWar(options, "wm3tw5.war", false);
-        super.generalHeadersTest(options, "wm3tw5.war", false, this.b);
+        this.b = super.installWar(options, "wm3tw5.war", true);
+        assertTrue("service should be registered", super.checkServiceRegistered("/tw5"));
+        assertTrue("should be able to access page", super.ableAccessPath("/tw5"));
     }
 
     /*

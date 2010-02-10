@@ -86,9 +86,12 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
         final Map<String, Object> options = createOptions(VERSION1, "/tw1");
         try {
             this.b = super.installWar(options, "wmtw1.war", false);
-        } catch (BundleException be) {
-            // expected as Bundle-Version is specified as invalid url param for WAB
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
         }
+        assertFalse("should not be able to access page", super.ableAccessPath("/tw1"));
+
     }
 
     /*
@@ -96,8 +99,14 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleVersion009() throws Exception {
         final Map<String, Object> options = createOptions(VERSION3, "/tw4");
-        this.b = super.installWar(options, "wmtw4.war", true);
-        super.generalHeadersTest(options, "wmtw4.war", true, this.b);
+        try {
+            this.b = super.installWar(options, "wmtw4.war", true);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        assertFalse("should not be able to access page", super.ableAccessPath("/tw4"));
+
     }
 
     /*
@@ -105,8 +114,14 @@ public class BundleVersionTest extends ManifestHeadersTestBundleControl {
      */
     public void testBundleVersion010() throws Exception {
         final Map<String, Object> options = createOptions(VERSION3, "/tw5");
-        this.b = super.installWar(options, "wmtw5.war", false);
-        super.generalHeadersTest(options, "wmtw5.war", false, this.b);
+        try {
+            this.b = super.installWar(options, "wmtw5.war", false);
+            fail("install bundle should fail");
+        } catch (BundleException e){
+            // expected since this is a bundle
+        }
+        assertFalse("should not be able to access page", super.ableAccessPath("/tw5"));
+
     }
     
     /*
