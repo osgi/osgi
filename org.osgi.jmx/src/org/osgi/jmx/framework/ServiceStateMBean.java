@@ -94,25 +94,12 @@ public interface ServiceStateMBean {
 			"The bundles using the service", JmxConstants.LONG_ARRAY_TYPE);
 
 	/**
-	 * The key PROPERTIES, used in {@link #PROPERTIES_ITEM}.
-	 */
-	String PROPERTIES = "Properties";
-
-	/**
-	 * The item containing service properties. The key is {@link #PROPERTIES}
-	 * and the type is {@link JmxConstants#PROPERTIES_TYPE}.
-	 */
-	Item PROPERTIES_ITEM = new Item(PROPERTIES, "The service properties",
-			JmxConstants.PROPERTIES_TYPE);
-
-	/**
 	 * The Composite Type for a CompositeData representing a service. This type
 	 * consists of:
 	 * <ul>
 	 * <li>{@link #BUNDLE_IDENTIFIER}</li>
 	 * <li>{@link #IDENTIFIER}</li>
 	 * <li>{@link #OBJECT_CLASS}</li>
-	 * <li>{@link #PROPERTIES}</li>
 	 * <li>{@link #USING_BUNDLES}</li>
 	 * </ul>
 	 */
