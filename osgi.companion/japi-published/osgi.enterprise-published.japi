@@ -1,4 +1,4 @@
-%%japi 0.9.7 creator=japize date=2010/01/25_05:03:38_EST
+%%japi 0.9.7 creator=japize date=2010/02/10_01:36:57_EST
 org.osgi.jmx,Item! Pcsnur class:java.lang.Object
 org.osgi.jmx,Item!(Ljava/lang/String;,Ljava/lang/String;,Ljavax/management/openmbean/OpenType;,[Ljava/lang/String;) Pcinur constructor
 org.osgi.jmx,Item!arrayType(I,Ljavax/management/openmbean/OpenType;) Pcsnur Ljavax/management/openmbean/ArrayType;
@@ -217,8 +217,6 @@ org.osgi.jmx.framework,ServiceStateMBean!#IDENTIFIER_ITEM Pcsfur Lorg/osgi/jmx/I
 org.osgi.jmx.framework,ServiceStateMBean!#OBJECTNAME Pcsfur Ljava/lang/String;:osgi.core:type=serviceState,version=1.5
 org.osgi.jmx.framework,ServiceStateMBean!#OBJECT_CLASS Pcsfur Ljava/lang/String;:objectClass
 org.osgi.jmx.framework,ServiceStateMBean!#OBJECT_CLASS_ITEM Pcsfur Lorg/osgi/jmx/Item;
-org.osgi.jmx.framework,ServiceStateMBean!#PROPERTIES Pcsfur Ljava/lang/String;:Properties
-org.osgi.jmx.framework,ServiceStateMBean!#PROPERTIES_ITEM Pcsfur Lorg/osgi/jmx/Item;
 org.osgi.jmx.framework,ServiceStateMBean!#SERVICES_TYPE Pcsfur Ljavax/management/openmbean/TabularType;
 org.osgi.jmx.framework,ServiceStateMBean!#SERVICE_EVENT_TYPE Pcsfur Ljavax/management/openmbean/CompositeType;
 org.osgi.jmx.framework,ServiceStateMBean!#SERVICE_TYPE Pcsfur Ljavax/management/openmbean/CompositeType;
