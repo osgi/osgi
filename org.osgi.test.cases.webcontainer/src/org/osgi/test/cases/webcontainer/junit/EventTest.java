@@ -15,6 +15,7 @@
  */
 package org.osgi.test.cases.webcontainer.junit;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +27,8 @@ import org.osgi.framework.Version;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventConstants;
-import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.EventFactory;
+import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 
 /**
  * @version $Rev$ $Date$
@@ -235,9 +236,9 @@ public class EventTest extends WebContainerTestBundleControl {
             //assertNotNull((Throwable)eventCurrent.getProperty(EventConstants.EXCEPTION));
             assertNotNull((String)eventCurrent.getProperty(COLLISION));
             assertEquals("/tw1", (String)eventCurrent.getProperty(COLLISION));
-            assertNotNull((List<Long>)eventCurrent.getProperty(COLLISION_BUNDLES));
-            assertTrue("check collision.bundles property contains " + b2.getBundleId(), contains((List<Long>)eventCurrent.getProperty(COLLISION_BUNDLES), b2.getBundleId()));
-            assertTrue("check collision.bundles property contains " + this.b.getBundleId(), contains((List<Long>)eventCurrent.getProperty(COLLISION_BUNDLES), this.b.getBundleId()));      
+            assertNotNull((Collection<Long>)eventCurrent.getProperty(COLLISION_BUNDLES));
+            assertTrue("check collision.bundles property contains " + b2.getBundleId(), contains((Collection<Long>)eventCurrent.getProperty(COLLISION_BUNDLES), b2.getBundleId()));
+            assertTrue("check collision.bundles property contains " + this.b.getBundleId(), contains((Collection<Long>)eventCurrent.getProperty(COLLISION_BUNDLES), this.b.getBundleId()));      
             
             // the extender information should be the same
             assertTrue(failedTime >= startingTime);
@@ -256,7 +257,7 @@ public class EventTest extends WebContainerTestBundleControl {
      * @param bundlId
      * @return
      */
-    private boolean contains(List<Long> bundleIds, Long bundleId) {
+    private boolean contains(Collection<Long> bundleIds, Long bundleId) {
         for (Long id : bundleIds) {
             if (id.longValue() == bundleId.longValue()) {
                 return true;
