@@ -17,6 +17,8 @@ Include-Resource 					= \
 	initialContextFactory2.jar , \
 	initialContextFactoryBuilder1.jar , \
 	initialContextFactoryWithProperties.jar , \
+	initialDirContextFactory1.jar , \
+	initialDirContextFactoryBuilder1.jar , \
 	objectFactory1.jar , \
 	objectFactory2.jar , \
 	objectFactoryBuilder1.jar , \

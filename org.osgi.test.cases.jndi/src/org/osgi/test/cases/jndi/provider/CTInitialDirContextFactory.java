@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IBM Corporation (2009). All Rights Reserved.
+ * Copyright (c) IBM Corporation (2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,28 +17,41 @@
 
 package org.osgi.test.cases.jndi.provider;
 
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.spi.InitialContextFactory;
 
-/** 
+/**
  * @version $Revision$ $Date$
  */
-public class CTInitialContextFactoryBuilder implements javax.naming.spi.InitialContextFactoryBuilder {
+public class CTInitialDirContextFactory implements InitialContextFactory {
 
-	public InitialContextFactory createInitialContextFactory(Hashtable env) throws NamingException {
-		String contextFactory =  (String) env.get(Context.INITIAL_CONTEXT_FACTORY);
-		if (contextFactory != null) {
-			if (contextFactory.equals(CTInitialContextFactory.class.getName())) {
-				return new CTInitialContextFactory();
-			} else {
-				return null;
-			}
-		} else {
-			return new CTInitialContextFactory();
+	private Hashtable env;
+	
+	public CTInitialDirContextFactory(Hashtable env) {
+		this.env = env;
+	}
+	
+	public CTInitialDirContextFactory() {
+		
+	}
+
+	public Context getInitialContext(Hashtable environment) throws NamingException {
+		Map envMap = new HashMap();
+		if (environment != null) {
+			envMap.putAll(environment);
 		}
+		
+		if (env != null) {
+			envMap.putAll(env);
+		}
+		
+		CTContext context = new CTDirContext(envMap);
+		return context;
 	}
 
 }

@@ -96,7 +96,7 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 	}
 	
 	public void testServiceLookupWithoutRebinding() throws Exception {
-		// Install the bunlde needed for this test
+		// Install the bundle needed for this test
 		Bundle serviceBundle = installBundle("service1.jar");
 		// Grab the default initialContext so we can access the service registry
 		Context ctx = new InitialContext();

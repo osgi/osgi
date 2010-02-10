@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IBM Corporation (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,23 +22,21 @@ import java.util.Hashtable;
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.spi.InitialContextFactory;
+import javax.naming.spi.InitialContextFactoryBuilder;
 
-/** 
- * @version $Revision$ $Date$
- */
-public class CTInitialContextFactoryBuilder implements javax.naming.spi.InitialContextFactoryBuilder {
+public class CTInitialDirContextFactoryBuilder implements
+		InitialContextFactoryBuilder {
 
 	public InitialContextFactory createInitialContextFactory(Hashtable env) throws NamingException {
 		String contextFactory =  (String) env.get(Context.INITIAL_CONTEXT_FACTORY);
 		if (contextFactory != null) {
-			if (contextFactory.equals(CTInitialContextFactory.class.getName())) {
-				return new CTInitialContextFactory();
+			if (contextFactory.equals(CTInitialDirContextFactory.class.getName())) {
+				return new CTInitialDirContextFactory();
 			} else {
 				return null;
 			}
 		} else {
-			return new CTInitialContextFactory();
+			return new CTInitialDirContextFactory();
 		}
 	}
-
 }

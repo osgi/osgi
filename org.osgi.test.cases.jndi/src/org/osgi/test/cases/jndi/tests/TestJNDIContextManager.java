@@ -21,12 +21,15 @@ import java.util.Hashtable;
 
 import javax.naming.Context;
 import javax.naming.OperationNotSupportedException;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.BasicAttributes;
+import javax.naming.directory.DirContext;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.jndi.JNDIContextManager;
 import org.osgi.test.cases.jndi.provider.CTContext;
 import org.osgi.test.cases.jndi.provider.CTInitialContextFactory;
-import org.osgi.test.cases.jndi.service.ExampleServiceImpl;
+import org.osgi.test.cases.jndi.provider.CTInitialDirContextFactory;
 import org.osgi.test.cases.jndi.service.ExampleService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -71,8 +74,9 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Grab the context
-		Context ctx = ctxManager.newInitialContext(env);
+		Context ctx = null;
 		try {
+			ctx = ctxManager.newInitialContext(env);
 			// Verify that we actually received the context
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
@@ -83,6 +87,41 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			}
 			Object testObject = ctx.lookup("testObject");
 			assertNotNull(testObject);
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			uninstallBundle(factoryBundle);
+			ungetService(ctxManager);
+		}
+	}
+	
+	public void testLookupWithSpecificInitialDirContextFactory() throws Exception {
+		// install provider bundle
+		Bundle factoryBundle = installBundle("initialDirContextFactory1.jar");
+		// Grab the JNDIContextManager service
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		int invokeCountBefore = CTContext.getInvokeCount();
+		Hashtable env = new Hashtable();
+		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialDirContextFactory.class.getName());
+		DirContext ctx = null;
+		try {
+			// Grab the context
+			ctx = ctxManager.newInitialDirContext(env);
+			// Verify that we actually received the context
+			assertNotNull("The context should not be null", ctx);
+			BasicAttributes attrs = new BasicAttributes();
+			attrs.put("testAttribute", new Object());
+			ctx.bind("testObject", new Object(), attrs);
+			int invokeCountAfter = CTContext.getInvokeCount();
+			if (!(invokeCountAfter > invokeCountBefore)) {
+				ctx.close();
+				fail("the correct Context object was not found");
+			}
+			Object testObject = ctx.lookup("testObject");
+			assertNotNull(testObject);
+			Attributes returnedAttrs = ctx.getAttributes("testObject");
+			assertEquals(attrs, returnedAttrs);
 		} finally {
 			if (ctx != null) {
 				ctx.close();
@@ -99,8 +138,9 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
 		// Grab the context
-		Context ctx = ctxManager.newInitialContext();
+		Context ctx = null;
 		try {
+			ctx = ctxManager.newInitialContext();
 			// Verify that we actually received the context
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
@@ -120,6 +160,39 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		}
 	}
 	
+	public void testDefaultLookupWithInitialDirContextFactory() throws Exception {
+		// install provider bundle
+		Bundle factoryBundle = installBundle("initialDirContextFactory1.jar");
+		// Grab the JNDIContextManager service
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		int invokeCountBefore = CTContext.getInvokeCount();
+		DirContext ctx = null;
+		try {
+			// Grab the context
+			ctx = ctxManager.newInitialDirContext();
+			// Verify that we actually received the context
+			assertNotNull("The context should not be null", ctx);
+			BasicAttributes attrs = new BasicAttributes();
+			attrs.put("testAttribute", new Object());
+			ctx.bind("testObject", new Object(), attrs);
+			int invokeCountAfter = CTContext.getInvokeCount();
+			if (!(invokeCountAfter > invokeCountBefore)) {
+				ctx.close();
+				fail("the correct Context object was not found");
+			}
+			Object testObject = ctx.lookup("testObject");
+			assertNotNull(testObject);
+			Attributes returnedAttrs = ctx.getAttributes("testObject");
+			assertEquals(attrs, returnedAttrs);
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			uninstallBundle(factoryBundle);
+			ungetService(ctxManager);
+		}
+	}
+
 	public void testLookupWithInitialContextFactoryBuilder() throws Exception {
 		// install provider bundle
 		Bundle factoryBuilderBundle = installBundle("initialContextFactoryBuilder1.jar");
@@ -129,8 +202,9 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		Hashtable env = new Hashtable();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
 		// Grab the context
-		Context ctx = ctxManager.newInitialContext(env);
+		Context ctx = null;
 		try {
+			ctx = ctxManager.newInitialContext(env);
 			// Verify that we actually received the context
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
@@ -150,16 +224,51 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		}
 	}
 	
+	public void testLookupWithInitialDirContextFactoryBuilder() throws Exception {
+		// install provider bundle
+		Bundle factoryBundle = installBundle("initialDirContextFactoryBuilder1.jar");
+		// Grab the JNDIContextManager service
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		int invokeCountBefore = CTContext.getInvokeCount();
+		Hashtable env = new Hashtable();
+		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialDirContextFactory.class.getName());
+		DirContext ctx = null;
+		try {
+			// Grab the context
+			ctx = ctxManager.newInitialDirContext(env);
+			// Verify that we actually received the context
+			assertNotNull("The context should not be null", ctx);
+			BasicAttributes attrs = new BasicAttributes();
+			attrs.put("testAttribute", new Object());
+			ctx.bind("testObject", new Object(), attrs);
+			int invokeCountAfter = CTContext.getInvokeCount();
+			if (!(invokeCountAfter > invokeCountBefore)) {
+				ctx.close();
+				fail("the correct Context object was not found");
+			}
+			Object testObject = ctx.lookup("testObject");
+			assertNotNull(testObject);
+			Attributes returnedAttrs = ctx.getAttributes("testObject");
+			assertEquals(attrs, returnedAttrs);
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			uninstallBundle(factoryBundle);
+			ungetService(ctxManager);
+		}
+	}
+	
 	public void testDefaultLookupWithInitialContextFactoryBuilder() throws Exception {
 		// install provider bundle
-		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle factoryBuilderBundle = installBundle("initialContextFactoryBuilder1.jar");
 		// Grab the JNDIContextManager service
 		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
 		// Grab the context
-		Context ctx = ctxManager.newInitialContext();
+		Context ctx = null;
 		try {
+			ctx = ctxManager.newInitialContext();
 			// Verify that we actually received the context
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
@@ -175,6 +284,38 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 				ctx.close();
 			}
 			uninstallBundle(factoryBuilderBundle);
+			ungetService(ctxManager);
+		}
+	}
+	
+	public void testDefaultLookupWithInitialDirContextFactoryBuilder() throws Exception {
+		// install provider bundle
+		Bundle factoryBundle = installBundle("initialDirContextFactoryBuilder1.jar");
+		// Grab the JNDIContextManager service
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		int invokeCountBefore = CTContext.getInvokeCount();
+		DirContext ctx = null;
+		try {
+			// Grab the context
+			ctx = ctxManager.newInitialDirContext();
+			// Verify that we actually received the context
+			assertNotNull("The context should not be null", ctx);
+			BasicAttributes attrs = new BasicAttributes();
+			attrs.put("testAttribute", new Object());
+			ctx.bind("testObject", new Object(), attrs);
+			int invokeCountAfter = CTContext.getInvokeCount();
+			if (!(invokeCountAfter > invokeCountBefore)) {
+				ctx.close();
+				fail("the correct Context object was not found");
+			}
+			Object testObject = ctx.lookup("testObject");
+			assertNotNull(testObject);
+			Attributes returnedAttrs = ctx.getAttributes("testObject");
+			assertEquals(attrs, returnedAttrs);
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
 			uninstallBundle(factoryBundle);
 			ungetService(ctxManager);
 		}
@@ -186,9 +327,10 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		// Grab the jNDIContextManager service
 		JNDIContextManager ctxManager = (JNDIContextManager) getService (JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
-		// Grab the contxext
-		Context ctx = ctxManager.newInitialContext();
+		// Grab the context
+		Context ctx = null;
 		try {
+			ctx = ctxManager.newInitialContext();
 			// Verify that we actually received the context
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());

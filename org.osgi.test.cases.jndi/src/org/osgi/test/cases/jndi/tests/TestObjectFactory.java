@@ -40,7 +40,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 public class TestObjectFactory extends DefaultTestBundleControl {
 
 	
-	public void testTraditionalReferenceableLookup() throws Exception {
+	public void testReferenceableLookup() throws Exception {
 		// Install the bundles required for this test
 		Bundle contextFactoryBundle = installBundle("initialContextFactory1.jar");
 		Bundle objectFactoryBundle = installBundle("objectFactory1.jar");
