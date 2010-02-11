@@ -156,10 +156,7 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 		assertTrue("did not get any properties for service the " +
 				"service-state of the system ",
 				list.size() > 0);
-		/*
-		 * Reported Bug 1576
-		 */
-		assertTabularDataStructure(list, "SERVICE_TYPE", "Identifier", new String[] {"Identifier", "BundleIdentifier", "objectClass", "Properties", "UsingBundles"});
+		assertTabularDataStructure(list, "SERVICE_TYPE", "Identifier", new String[] {"Identifier", "BundleIdentifier", "objectClass", "UsingBundles"});
 				
 		Collection values = list.values();
 		Iterator iter = values.iterator();
