@@ -1,0 +1,12 @@
+
+<summary date='20100210035418.065' ws='/Ws/osgi/osgi.ct/generated/tmp' errors='5'>
+  <report path='/Ws/osgi/osgi.ct/generated/tmp/org.osgi.test.cases.condpermadmin.bnd' title='org.osgi.test.cases.condpermadmin' id='org.osgi.test.cases.condpermadmin-4.2.0.jar' report='org.osgi.test.cases.condpermadmin.xml' duration='4'/>
+  <report path='/Ws/osgi/osgi.ct/generated/tmp/org.osgi.test.cases.framework.bnd' title='org.osgi.test.cases.framework' id='org.osgi.test.cases.framework-4.2.0.jar' report='org.osgi.test.cases.framework.xml' error='5' duration='72'/>
+  <report path='/Ws/osgi/osgi.ct/generated/tmp/org.osgi.test.cases.framework.launch.bnd' title='org.osgi.test.cases.framework.launch' id='org.osgi.test.cases.framework.launch-4.2.0.jar' report='org.osgi.test.cases.framework.launch.xml' duration='14'/>
+  <report path='/Ws/osgi/osgi.ct/generated/tmp/org.osgi.test.cases.framework.launch.secure.bnd' title='org.osgi.test.cases.framework.launch.secure' id='org.osgi.test.cases.framework.launch.secure-4.2.0.jar' report='org.osgi.test.cases.framework.launch.secure.xml' duration='3'/>
+  <report path='/Ws/osgi/osgi.ct/generated/tmp/org.osgi.test.cases.framework.secure.bnd' title='org.osgi.test.cases.framework.secure' id='org.osgi.test.cases.framework.secure-4.2.0.jar' report='org.osgi.test.cases.framework.secure.xml' duration='54'/>
+  <report path='/Ws/osgi/osgi.ct/generated/tmp/org.osgi.test.cases.packageadmin.bnd' title='org.osgi.test.cases.packageadmin' id='org.osgi.test.cases.packageadmin-4.2.0.jar' report='org.osgi.test.cases.packageadmin.xml' duration='22'/>
+  <report path='/Ws/osgi/osgi.ct/generated/tmp/org.osgi.test.cases.permissionadmin.bnd' title='org.osgi.test.cases.permissionadmin' id='org.osgi.test.cases.permissionadmin-4.2.0.jar' report='org.osgi.test.cases.permissionadmin.xml' duration='3'/>
+  <report path='/Ws/osgi/osgi.ct/generated/tmp/org.osgi.test.cases.startlevel.bnd' title='org.osgi.test.cases.startlevel' id='org.osgi.test.cases.startlevel-4.2.0.jar' report='org.osgi.test.cases.startlevel.xml' duration='8'/>
+  <report path='/Ws/osgi/osgi.ct/generated/tmp/org.osgi.test.cases.url.bnd' title='org.osgi.test.cases.url' id='org.osgi.test.cases.url-4.2.0.jar' report='org.osgi.test.cases.url.xml' duration='2'/>
+</summary>

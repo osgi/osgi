@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<html>
+  <head>
+    <title>Test</title>
+    <link rel="stylesheet" href="http://www.osgi.org/www/osgi.css" type="text/css"/>
+    <style type="text/css">
+					.error,.ok, .warning { background-position:center center; background-repeat:no-repeat; }
+                    .ok        { background-image:url("http://www.osgi.org/www/greenball.png"); }
+                    .warning   { background-image:url("http://www.osgi.org/www/orangeball.png"); }
+                    .error     { background-image:url("http://www.osgi.org/www/redball.png"); }
+					.class     { padding-top:20px; padding-bottom: 10px;}					
+				</style>
+  </head>
+  <body>
+    <h1>Testcases</h1>
+    <table>
+      <tr>
+        <th>Test</th>
+        <th>Failures</th>
+        <th>Error</th>
+      </tr>
+      <tr>
+        <td>
+          <a href="org.osgi.test.cases.log.junit.SignatureTestCase">testSignature</a>
+        </td>
+        <td>0<div id="failure"/></td>
+        <td>0<div id="error"/></td>
+      </tr>
+      <tr>
+        <td>
+          <a href="org.osgi.test.cases.log.junit.LogTestCase">testLog</a>
+        </td>
+        <td>1<div id="failure"><div title="&#10;&#10;junit.framework.AssertionFailedError&#10;&#9;at junit.framework.Assert.fail(Assert.java:47)&#10;&#9;at junit.framework.Assert.fail(Assert.java:53)&#10;&#9;at org.osgi.test.cases.log.junit.LogTestCase.testLog(LogTestCase.java:32)&#10;&#9;at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)&#10;&#9;at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)&#10;&#9;at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)&#10;&#9;at java.lang.reflect.Method.invoke(Method.java:592)&#10;&#9;at junit.framework.TestCase.runTest(TestCase.java:164)&#10;&#9;at junit.framework.TestCase.runBare(TestCase.java:130)&#10;&#9;at junit.framework.TestResult$1.protect(TestResult.java:106)&#10;&#9;at junit.framework.TestResult.runProtected(TestResult.java:124)&#10;&#9;at junit.framework.TestResult.run(TestResult.java:109)&#10;&#9;at junit.framework.TestCase.run(TestCase.java:120)&#10;&#9;at junit.framework.TestSuite.runTest(TestSuite.java:230)&#10;&#9;at junit.framework.TestSuite.run(TestSuite.java:225)&#10;&#9;at junit.framework.TestSuite.runTest(TestSuite.java:230)&#10;&#9;at junit.framework.TestSuite.run(TestSuite.java:225)&#10;&#9;at aQute.junit.runtime.Target.doTesting(Target.java:215)&#10;&#9;at aQute.junit.runtime.Target.run(Target.java:57)&#10;&#9;at aQute.junit.runtime.Target.main(Target.java:37)&#10;&#10; ">failure</div></div></td>
+        <td>0<div id="error"/></td>
+      </tr>
+      <tr>
+        <td>
+          <a href="org.osgi.test.cases.log.junit.LogTestCase">testMultipleListeners</a>
+        </td>
+        <td>0<div id="failure"/></td>
+        <td>0<div id="error"/></td>
+      </tr>
+    </table>
+    <br/>
+    <h1>Matrix</h1>
+    <table>
+      <tr>
+        <td colspan="3" class="class">
+          <a href="org.osgi.service.log.LogEntry">org.osgi.service.log.LogEntry</a>
+        </td>
+      </tr>
+      <tr>
+        <td width="20px" class="&#10;                                                ok&#10;                                            "/>
+        <td>org.osgi.framework.Bundle getBundle()</td>
+        <td>
+          <div title="org.osgi.service.log.LogEntryorg.osgi.framework.Bundle getBundle()org.osgi.framework.BundleContextorg.osgi.framework.Bundle getBundle()org.osgi.framework.BundleContextorg.osgi.framework.Bundle getBundle()org.osgi.framework.BundleEventorg.osgi.framework.Bundle getBundle()org.osgi.framework.FrameworkEventorg.osgi.framework.Bundle getBundle()org.osgi.framework.BundleContextorg.osgi.framework.Bundle getBundle()org.osgi.framework.BundleContextorg.osgi.framework.Bundle getBundle()org.osgi.framework.BundleContextorg.osgi.framework.Bundle getBundle()">8</div>
+        </td>
+      </tr>
+      <tr>
+        <td width="20px" class="&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;error&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;"/>
+        <td>java.lang.Throwable getException()</td>
+        <td>
+          <div title="org.osgi.service.log.LogEntryjava.lang.Throwable getException()">1</div>
+        </td>
+      </tr>
+      <tr>
+        <td width="20px" class="&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;error&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;"/>
+        <td>int getLevel()</td>
+        <td>
+          <div title="org.osgi.service.log.LogEntryint getLevel()">1</div>
+        </td>
+      </tr>
+      <tr>
+        <td width="20px" class="&#10;                                                ok&#10;                                            "/>
+        <td>java.lang.String getMessage()</td>
+        <td>
+          <div title="org.osgi.service.log.LogEntryjava.lang.String getMessage()org.osgi.service.log.LogEntryjava.lang.String getMessage()java.lang.Throwablejava.lang.String getMessage()java.lang.Throwablejava.lang.String getMessage()java.lang.Throwablejava.lang.String getMessage()java.lang.Throwablejava.lang.String getMessage()java.lang.Throwablejava.lang.String getMessage()">7</div>
+        </td>
+      </tr>
+      <tr>
+        <td width="20px" class="&#10;                                                warning&#10;                                            "/>
+        <td>org.osgi.framework.ServiceReference getServiceReference()</td>
+        <td>
+          <div title="org.osgi.service.log.LogEntryorg.osgi.framework.ServiceReference getServiceReference()org.osgi.framework.ServiceEventorg.osgi.framework.ServiceReference getServiceReference()">2</div>
+        </td>
+      </tr>
+      <tr>
+        <td width="20px" class="&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;error&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;"/>
+        <td>long getTime()</td>
+        <td>
+          <div title="org.osgi.service.log.LogEntrylong getTime()">1</div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3" class="class">
+          <a href="org.osgi.service.log.LogListener">org.osgi.service.log.LogListener</a>
+        </td>
+      </tr>
+      <tr>
+        <td width="20px" class="&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;error&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;"/>
+        <td>void logged(org.osgi.service.log.LogEntry)</td>
+        <td>
+          <div title="">0</div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3" class="class">
+          <a href="org.osgi.service.log.LogReaderService">org.osgi.service.log.LogReaderService</a>
+        </td>
+      </tr>
+      <tr>
+        <td width="20px" class="&#10;                                                warning&#10;                                            "/>
+        <td>void addLogListener(org.osgi.service.log.LogListener)</td>
+        <td>
+          <div title="org.osgi.service.log.LogReaderServicevoid addLogListener(org.osgi.service.log.LogListener)org.osgi.service.log.LogReaderServicevoid addLogListener(org.osgi.service.log.LogListener)">2</div>
+        </td>
+      </tr>
+      <tr>
+        <td width="20px" class="&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;error&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;"/>
+        <td>java.util.Enumeration getLog()</td>
+        <td>
+          <div title="">0</div>
+        </td>
+      </tr>
+      <tr>
+        <td width="20px" class="&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;error&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;"/>
+        <td>void removeLogListener(org.osgi.service.log.LogListener)</td>
+        <td>
+          <div title="org.osgi.service.log.LogReaderServicevoid removeLogListener(org.osgi.service.log.LogListener)">1</div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3" class="class">
+          <a href="org.osgi.service.log.LogService">org.osgi.service.log.LogService</a>
+        </td>
+      </tr>
+      <tr>
+        <td width="20px" class="&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;error&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;"/>
+        <td>void log(int,java.lang.String)</td>
+        <td>
+          <div title="org.osgi.service.log.LogServicevoid log(int,java.lang.String)">1</div>
+        </td>
+      </tr>
+      <tr>
+        <td width="20px" class="&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;error&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;"/>
+        <td>void log(int,java.lang.String,java.lang.Throwable)</td>
+        <td>
+          <div title="org.osgi.service.log.LogServicevoid log(int,java.lang.String,java.lang.Throwable)">1</div>
+        </td>
+      </tr>
+      <tr>
+        <td width="20px" class="&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;error&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;"/>
+        <td>void log(org.osgi.framework.ServiceReference,int,java.lang.String)</td>
+        <td>
+          <div title="org.osgi.service.log.LogServicevoid log(org.osgi.framework.ServiceReference,int,java.lang.String)">1</div>
+        </td>
+      </tr>
+      <tr>
+        <td width="20px" class="&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;error&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;"/>
+        <td>void log(org.osgi.framework.ServiceReference,int,java.lang.String,java.lang.Throwable)</td>
+        <td>
+          <div title="org.osgi.service.log.LogServicevoid log(org.osgi.framework.ServiceReference,int,java.lang.String,java.lang.Throwable)">1</div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

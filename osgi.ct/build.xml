@@ -11,27 +11,27 @@
 
 	<target name="osgi.core.tests" depends="init">
 		<antcall target="-runtest">
-			<param name="test-name" value="osgi.core.tests" />
+			<param name="test-name" value="osgi.core" />
 			<param name="jars" value="osgi.core.impls.jar" />
 		</antcall>
 	</target>
 
 	<target name="osgi.cmpn.tests" depends="init">
 		<antcall target="-runtest">
-			<param name="test-name" value="osgi.cmpn.tests" />
+			<param name="test-name" value="osgi.cmpn" />
 			<param name="jars" value="osgi.core.impls.jar,osgi.cmpn.impls.jar" />
 		</antcall>
 	</target>
 
 	<target name="osgi.enterprise.tests" depends="init">
 		<antcall target="-runtest">
-			<param name="test-name" value="osgi.enterprise.tests" />
+			<param name="test-name" value="osgi.enterprise" />
 			<param name="jars" value="osgi.core.impls.jar,osgi.enterprise.impls.jar" />
 		</antcall>
 	</target>
 
 	<target name="-runtest">
-		<property name="prefix" value="${target}/${test-name}" />
+		<property name="prefix" value="${target}/${test-name}.tests" />
 		<delete dir="${prefix}" />
 		<mkdir dir="${prefix}/jar" />
 		<unzip dest="${prefix}/jar">
@@ -45,5 +45,15 @@
 			<arg value="-title" />
 			<arg value="${test-name}" />
 		</java>
+	</target>
+		
+	<target name="testreport">
+        <java dir="${prefix}" jar="${build}/cnf/repo/org.osgi.tools.cross/org.osgi.tools.cross-1.0.0" fork="true">
+            <arg value="-pattern" />
+            <arg value="${-signaturetest}" />
+            <arg value="-target" />
+            <arg value="${build}/osgi.companion/${target-dir}/${test-name}.jar" />
+            <arg value="-target" />
+        </java>
 	</target>
 </project>
