@@ -348,7 +348,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
     }
 
     /*
-     * verify install 100 web applications  TODO: test is incorrect
+     * verify install 100 web applications  
      */
     public void testMultipleWebContextPath002() throws Exception {
         Bundle[] bundles = new Bundle[100];
@@ -361,6 +361,41 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
             }
         } finally {
             for (int i = 0; i < 100; i++) {
+                if (bundles[i] != null) {
+                    uninstallBundle(bundles[i]);
+                }
+            }
+        }
+    }
+    
+    /*
+     * verify install 10 web applications with same web-contextpath
+     * and the correct one are being deployed when the web-contextpath is available 
+     */
+    public void testMultipleWebContextPath003() throws Exception {
+        Bundle[] bundles = new Bundle[10];
+        try {
+            for (int i = 0; i < 10; i++) {
+                Map<String, Object> options = createOptions(WEBCONTEXTPATH1);
+                options.put(Constants.BUNDLE_SYMBOLICNAME, "tw1_" + i + "_test war");
+                bundles[i] = installWar(options, "tw1.war", true);
+            }
+            
+            // bundles[0] should be working fine
+            Map<String, Object> options = createOptions(WEBCONTEXTPATH1);
+            options.put(Constants.BUNDLE_SYMBOLICNAME, "tw1_0_test war");
+            super.generalHeadersQuickTest(options, "tw1.war", true, bundles[0]);
+
+            for (int i = 0; i < 9; i++) {
+                bundles[i].stop();
+                Thread.sleep(5000);
+                options = createOptions(WEBCONTEXTPATH1);
+                options.put(Constants.BUNDLE_SYMBOLICNAME, "tw1_" + (i + 1) + "_test war");
+                super.generalHeadersQuickTest(options, "tw1.war", true, bundles[i+1]);
+            }
+            
+        } finally {
+            for (int i = 0; i < 10; i++) {
                 if (bundles[i] != null) {
                     uninstallBundle(bundles[i]);
                 }

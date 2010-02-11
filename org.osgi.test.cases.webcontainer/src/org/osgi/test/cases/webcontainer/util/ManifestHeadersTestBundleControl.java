@@ -82,6 +82,26 @@ public abstract class ManifestHeadersTestBundleControl extends
      */
     protected void generalHeadersTest(Map<String, Object> options, String warName, boolean start, Bundle bundle)
             throws Exception {
+        String cp = generalHeadersQuickTest(options, warName, start, bundle);
+
+        bundle.stop();
+        // test unable to access pathes yet as it is not started
+        assertTrue("Bundle status should be Installed or Resolved but not Active", Bundle.RESOLVED == bundle.getState() 
+        		||  Bundle.INSTALLED == bundle.getState());
+        assertFalse("Bundle not started yet - should not be able to access "
+                + cp, super.ableAccessPath(cp));
+
+        if (start) {
+            bundle.start();
+        }
+    }
+    
+    
+    /*
+     * generalHeadersTest to be used by non-error test
+     */
+    protected String generalHeadersQuickTest(Map<String, Object> options, String warName, boolean start, Bundle bundle)
+            throws Exception {
         // specify install options
         String cp = options.get(WEB_CONTEXT_PATH) == null ? null
                 : (String) options.get(WEB_CONTEXT_PATH);
@@ -113,7 +133,7 @@ public abstract class ManifestHeadersTestBundleControl extends
         if (!start) {
             // test unable to access pathes yet as it is not started
             assertTrue("Bundle status should be Installed or Resolved but not Active", Bundle.RESOLVED == bundle.getState() 
-            		||  Bundle.INSTALLED == bundle.getState());
+                    ||  Bundle.INSTALLED == bundle.getState());
             assertFalse(
                     "Bundle not started yet - should not be able to access "
                             + cp, super.ableAccessPath(cp));
@@ -137,17 +157,8 @@ public abstract class ManifestHeadersTestBundleControl extends
         } catch (Exception e) {
             fail("should not be getting an exception here " + e.getMessage());
         }
-
-        bundle.stop();
-        // test unable to access pathes yet as it is not started
-        assertTrue("Bundle status should be Installed or Resolved but not Active", Bundle.RESOLVED == bundle.getState() 
-        		||  Bundle.INSTALLED == bundle.getState());
-        assertFalse("Bundle not started yet - should not be able to access "
-                + cp, super.ableAccessPath(cp));
-
-        if (start) {
-            bundle.start();
-        }
+        
+        return cp;
     }
     
     /*
