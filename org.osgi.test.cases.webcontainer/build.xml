@@ -132,7 +132,7 @@
 		     basedir="${project.output}"
 		     includes="org/osgi/test/cases/webcontainer/simple/**">
 	    	 <manifest>
-	    	     <attribute name="Class-Path" value="lib2/org.osgi.test.cases.webcontainer.log.jar"/>
+	    	     <attribute name="Class-Path" value="../lib2/org.osgi.test.cases.webcontainer.log.jar"/>
 	         </manifest>
 	    </jar>
 	</target>
