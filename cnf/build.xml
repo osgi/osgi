@@ -147,14 +147,6 @@
 		<echo>project.workspace:      ${project.workspace}</echo>
 		<echo>javac:                  ${javac}</echo>
 		<echo>p:                      ${p}</echo>
-		<echo>btool.manifestVersion:  ${btool.manifestVersion}</echo>
-		<echo>btool.analyse:          ${btool.analyse}</echo>
-		<echo>btool.showmanifest:     ${btool.showmanifest}</echo>
-		<echo>btool.noversion:     	  ${btool.noversion}</echo>
-		<echo>btool.sources:     	  ${btool.sources}</echo>
-		<echo>btool.noextraheaders:   ${btool.noextraheaders}</echo>
-		<echo>jars.compile.order:     ${jars.compile.order}</echo>
-		<echo>bin.includes:           ${bin.includes}</echo>
 		<echo>base.modfied:           ${base.modified} (${base.modified.readable})</echo>
 		<echo>target:                 ${target}</echo>
 		<echo>licensed repo:          ${licensed-repo}</echo>
