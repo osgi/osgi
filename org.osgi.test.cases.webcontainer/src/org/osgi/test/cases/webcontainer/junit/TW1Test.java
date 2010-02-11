@@ -146,4 +146,32 @@ public class TW1Test extends WebContainerTestBundleControl {
     public void testWelcomeJSP() throws Exception {
         super.checkWelcomeJSP(this.warContextPath);
     }
+    
+    // test unable to serve static page from WEB-INF dir
+    public void testUnableServePage001() throws Exception {
+        final String request = this.warContextPath + "/WEB-INF/non-serving.html";
+        log("verify not able to access the page");
+        assertFalse(super.ableAccessPath(request));
+    }
+    
+    // test unable to serve static page from META-INF dir
+    public void testUnableServePage002() throws Exception {
+        final String request = this.warContextPath + "/META-INF/non-serving.html";
+        log("verify not able to access the page");
+        assertFalse(super.ableAccessPath(request));
+    }
+    
+    // test unable to serve static page from OSGI-INF dir
+    public void testUnableServePage003() throws Exception {
+        final String request = this.warContextPath + "/OSGI-INF/non-serving.html";
+        log("verify not able to access the page");
+        assertFalse(super.ableAccessPath(request));
+    }
+    
+    // test unable to serve static page from OSGI-OPT dir
+    public void testUnableServePage004() throws Exception {
+        final String request = this.warContextPath + "/OSGI-OPT/non-serving.html";
+        log("verify not able to access the page");
+        assertFalse(super.ableAccessPath(request));
+    }
 }
