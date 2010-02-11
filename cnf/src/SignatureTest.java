@@ -1,22 +1,22 @@
-import java.util.Map;
+import java.util.*;
 
-import aQute.bnd.service.AnalyzerPlugin;
-import aQute.lib.osgi.Analyzer;
-import aQute.lib.osgi.Instruction;
-import aQute.lib.osgi.Jar;
-import aQute.lib.osgi.Resource;
+import aQute.bnd.make.coverage.*;
+import aQute.bnd.service.*;
+import aQute.lib.osgi.*;
 
 public class SignatureTest implements AnalyzerPlugin {
 
-    public boolean analyzeJar(Analyzer analyzer) throws Exception {
+	public boolean analyzeJar(Analyzer analyzer) throws Exception {
         String s = analyzer.getProperty("-signaturetest");
         Map<String, Map<String, String>> hdr = analyzer.parseHeader(s);
+		Set<Clazz> classes = new HashSet<Clazz>();
         for (String key : hdr.keySet()) {
             Instruction instr = Instruction.getPattern(key.replace('.', '/'));
             if (instr.isNegated())
                 analyzer.error("Can not use negatives for signature test: %s",
                         key);
 
+			
 			foreachclasspathentry:
             for (Jar cpe : analyzer.getClasspath()) {
 
@@ -34,6 +34,8 @@ public class SignatureTest implements AnalyzerPlugin {
                                 analyzer.getJar().putResource(
                                         "OSGI-INF/signature/" + path,
                                         r.getValue());
+                                
+                                classes.add(new Clazz(path,r.getValue()));
                             }
                         }
 						/*
@@ -45,7 +47,11 @@ public class SignatureTest implements AnalyzerPlugin {
                 }
             }
         }
+        if ( classes.size() > 0 ) {
+        	analyzer.setProperty("Bnd-AddXMLToTest", "OSGI-INF/coverage.xml");        	
+        	analyzer.getJar().putResource("OSGI-INF/coverage.xml",  new CoverageResource(analyzer.getClassspace().values(), classes));
+        }
         return false;
     }
-
+	
 }
