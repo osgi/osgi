@@ -191,10 +191,12 @@ public class BundleImportPackageTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Import-Package
      */
     public void testBundleImportPackage014() throws Exception {
-        final Map<String, Object> options = createOptions(IMPORTS3, "/tw5");
+        final Map<String, Object> options = createOptions(IMPORTS_OSGI_FRAMEWORK, "/tw5");
         this.b = super.installWar(options, "wm3tw5.war", true);
         assertTrue("service should be registered", super.checkServiceRegistered("/tw5"));
         assertTrue("should be able to access page", super.ableAccessPath("/tw5"));
+        assertTrue("should be able to access servlet page", super.ableAccessPath("/tw5/BundleContextTestServlet"));
+        assertTrue("should be able to access classpath servlet page", super.ableAccessPath("/tw5/ClasspathTestServlet"));
     }
 
     /*

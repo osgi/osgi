@@ -144,11 +144,13 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      */
     public void testManifestHeaders012() throws Exception {
         final Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
-               null, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5);
+               null, IMPORTS_OSGI_FRAMEWORK, EXPORTS5, WEBCONTEXTPATH5);
         this.b = super.installWar(options, "wm3tw5.war", true);
         
         assertTrue("should be able to access " + WEBCONTEXTPATH5, super.ableAccessPath(WEBCONTEXTPATH5));
-
+        assertTrue("service should be registered", super.checkServiceRegistered(WEBCONTEXTPATH5));
+        assertTrue("should be able to access servlet page", super.ableAccessPath(WEBCONTEXTPATH5 + "/BundleContextTestServlet"));
+        assertTrue("should be able to access classpath servlet page", super.ableAccessPath(WEBCONTEXTPATH5 + "/ClasspathTestServlet"));
     }
     
     /*

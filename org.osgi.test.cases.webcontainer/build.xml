@@ -110,7 +110,7 @@
 	<!-- same as tw5.war file but with pre-specified manifest - wm3tw5.war -->
 	<target name="build-wm3war5" depends="prewar,build-simplejar">
 		<mkdir dir="${target}/wm3tw5/lib2" />
-		<copy file="${target}/org.osgi.test.cases.webcontainer.simple.jar" todir="${target}/wm3tw5/lib2"/>
+		<copy file="${target}/org.osgi.test.cases.webcontainer.log.jar" todir="${target}/wm3tw5/lib2"/>
 		<war destfile="${target}/wm3tw5.war" webxml="${project.dir}/resources/tw5/WebContent/WEB-INF/web.xml" manifest="${project.dir}/resources/tw5/manifest/MANIFEST3.MF">
 			<fileset dir="${project.dir}/resources/tw5/WebContent/"/>
 			<classes dir="${project.output}">
@@ -131,6 +131,9 @@
 	    <jar destfile="${target}/org.osgi.test.cases.webcontainer.simple.jar"
 		     basedir="${project.output}"
 		     includes="org/osgi/test/cases/webcontainer/simple/**">
+	    	 <manifest>
+	    	     <attribute name="Class-Path" value="lib2/org.osgi.test.cases.webcontainer.log.jar"/>
+	         </manifest>
 	    </jar>
 	</target>
 	
