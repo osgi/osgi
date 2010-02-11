@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -164,6 +165,11 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         // install should succeed, but test won't work.
         assertFalse("should not be able to access page", super.ableAccessPath(WEBCONTEXTPATH5));
 
+        // also verify that no other headers are modified
+        Dictionary d = this.b.getHeaders();
+        Object classPath = d.get(Constants.BUNDLE_CLASSPATH);
+        String cp = classPath == null ? "" : (String)classPath;
+        assertTrue("Bundle-Classpath should be empty as it doesn't exist in the bundle before", cp.length() == 0);
     }
     
     /*
