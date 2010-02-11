@@ -38,16 +38,19 @@ javac.target 			= 1.2
 
 -plugin	            	= aQute.lib.deployer.FileRepo; \
                                 location=${repo}, \
-  						  aQute.lib.deployer.FileRepo; \
-  						        location=${licensed-repo}; \
-  						        readonly=true, \
+                          aQute.lib.deployer.FileRepo; \
+                                location=${licensed-repo}; \
+                                readonly=true, \
   						  aQute.bnd.signing.JartoolSigner; \
   						        keystore=${build}/keystore; \
   						        keypass=testtest; \
   						        storepass=testtest, \
                           Packaging; \
-                                path:=${build}/${bin}; \
+                                path:="${build}/${bin}";\
                                 command:=-pack, \
+                          Coverage; \
+                                path:="${build}/${bin},${workspace}/org.osgi.tools/${bin}"; \
+                                command:="-coverage", \
                           SignatureTest; \
                                 path:=${build}/${bin}; \
                                 command:="-signaturetest"
