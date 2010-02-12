@@ -209,10 +209,22 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      */
     public void testWebContextPath011() throws Exception {
         final Map<String, Object> options = createOptions(WEBCONTEXTPATH5.substring(1));
-        this.b = super.installWar(options, "wmtw5.war", false);
-        // this won't work 
-        assertFalse("should not be able to access page", super.ableAccessPath(WEBCONTEXTPATH5));
+        this.b = super.installWar(options, "wmtw5.war", true);
+        // this won't work  as wmtw5.war is not a valid wab
+        assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet"));
+        assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet"));    
 
+    }
+    
+    
+    /*
+     * verify Web-ContextPath doesn't start w/ forward slash still works
+     */
+    public void testWebContextPath011_2() throws Exception {
+        this.b = super.installBundle("wmtw5.war", true);
+        // this won't work 
+        assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet"));
+        assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet"));    
     }
 
     /*
@@ -337,7 +349,8 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
             
             options = createOptions(WEBCONTEXTPATH5 + "_wm");
             bundles[4] = super.installWar(options, "wmtw5.war", true);
-            assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm"));
+            assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet"));
+            assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet"));
         } finally {
             for (int i = 0; i < bundles.length; i++) {
                 if (bundles[i] != null) {

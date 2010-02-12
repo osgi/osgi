@@ -222,7 +222,8 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
             
             options = createOptions(null, null, "/wmtw5");
             bundles[4] = super.installWar(options, "wmtw5.war", true);
-            assertFalse("should not be able to access " + "/wmtw5", super.ableAccessPath("/wmtw5"));
+            assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet"));
+            assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet"));
         } finally {
             for (int i = 0; i < bundles.length; i++) {
                 if (bundles[i] != null) {
