@@ -27,6 +27,7 @@ import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.OSGiTestCaseProperties;
 
 public class ServiceExceptionTests extends OSGiTestCase {
 
@@ -230,6 +231,8 @@ public class ServiceExceptionTests extends OSGiTestCase {
 		}
 	}
 
+	static final long	waitTime	= 10000l * OSGiTestCaseProperties
+													.getScaling();
 	class ServiceExceptionFrameworkListener implements FrameworkListener {
 		private final Bundle registrationBundle;
 		private final Throwable exception;
@@ -260,16 +263,17 @@ public class ServiceExceptionTests extends OSGiTestCase {
 		}
 
 		public synchronized void waitForEvent(String failMessage) {
-			if (waitForEvent) {
+			long timeout = System.currentTimeMillis() + waitTime;
+			while (waitForEvent && (System.currentTimeMillis() < timeout)) {
 				try {
-					wait(10000);
+					wait(waitTime);
 				} catch (InterruptedException e) {
 					fail("unexpected interuption", e); //$NON-NLS-1$
 				}
-				// still waiting for event; we now fail
-				if (waitForEvent)
-					fail(failMessage);
 			}
+			// still waiting for event; we now fail
+			if (waitForEvent)
+				fail(failMessage);
 		}
 	}
 }
