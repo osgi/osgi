@@ -44,6 +44,7 @@ public class DynPkgImportTests extends DefaultTestBundleControl implements
 	}
 
 	protected void tearDown() throws Exception {
+		getContext().removeFrameworkListener(this);
 		pa.refreshPackages(null);
 		ungetService(pa);
 		Thread.sleep(2000);
