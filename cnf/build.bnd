@@ -92,7 +92,7 @@ Bundle-Vendor			= OSGi Alliance
 
 junit					= com.springsource.junit;version=3.8;export="junit.framework;version=3.8"
 -runpath							= \
-	org.eclipse.osgi;		version=3.5.1, \
+	org.eclipse.osgi;		version=3.5.2, \
 	${junit}
 
 # Use the following for 4.3 framework RI development	
