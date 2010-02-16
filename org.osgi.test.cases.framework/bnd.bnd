@@ -214,8 +214,7 @@ Include-Resource = \
 	${junit}
 
 Test-Cases							= ${testcases}
--testbundles						= ${p}
--signaturetest                      = org.osgi.framework, org.osgi.framework.launch, org.osgi.framework.hooks.service
+-signaturetest                      = org.osgi.framework, org.osgi.framework.hooks.service
 
 -runbundles							= \
 

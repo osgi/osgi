@@ -10,6 +10,7 @@ Include-Resource = \
     launch.tb3.jar
 	
 Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.framework.launch
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
