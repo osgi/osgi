@@ -167,14 +167,19 @@ public class Framework implements FrameworkMBean {
 	 * @see org.osgi.jmx.core.FrameworkMBean#refreshPackages(long[])
 	 */
 	public void refreshBundles(long[] bundleIdentifiers) throws IOException {
-		Bundle[] bundles = new Bundle[bundleIdentifiers.length];
-		for (int i = 0; i < bundleIdentifiers.length; i++) {
-			try {
-				bundles[i] = bundle(bundleIdentifiers[i]);
-			} catch (Throwable e) {
-				IOException iox = new IOException("Unable to refresh packages");
-				iox.initCause(e);
-				throw iox;
+		Bundle[] bundles = null;
+
+		if (bundleIdentifiers != null) {
+			bundles = new Bundle[bundleIdentifiers.length];
+			for (int i = 0; i < bundleIdentifiers.length; i++) {
+				try {
+					bundles[i] = bundle(bundleIdentifiers[i]);
+				} catch (Throwable e) {
+					IOException iox = new IOException(
+							"Unable to refresh packages");
+					iox.initCause(e);
+					throw iox;
+				}
 			}
 		}
 		try {
@@ -201,9 +206,12 @@ public class Framework implements FrameworkMBean {
 	 * @see org.osgi.jmx.core.FrameworkMBean#resolveBundles(long[])
 	 */
 	public boolean resolveBundles(long[] bundleIdentifiers) throws IOException {
-		Bundle[] bundles = new Bundle[bundleIdentifiers.length];
-		for (int i = 0; i < bundleIdentifiers.length; i++) {
-			bundles[i] = bundle(bundleIdentifiers[i]);
+		Bundle[] bundles = null;
+		if (bundleIdentifiers != null) {
+			bundles = new Bundle[bundleIdentifiers.length];
+			for (int i = 0; i < bundleIdentifiers.length; i++) {
+				bundles[i] = bundle(bundleIdentifiers[i]);
+			}
 		}
 		return admin.resolveBundles(bundles);
 	}
@@ -467,8 +475,7 @@ public class Framework implements FrameworkMBean {
 	 * java.lang.String[])
 	 */
 	public CompositeData updateBundlesFromURL(long[] bundleIdentifiers,
-			String[] urls)
-			throws IOException {
+			String[] urls) throws IOException {
 		for (int i = 0; i < bundleIdentifiers.length; i++) {
 			InputStream is = null;
 			try {
