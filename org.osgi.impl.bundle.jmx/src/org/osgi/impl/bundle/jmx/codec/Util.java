@@ -202,7 +202,7 @@ public class Util {
 	}
 
 	/**
-	 * Ansewr the ids of dependencies on a bundle
+	 * Answer the ids of dependencies on a bundle
 	 * 
 	 * @param bundle
 	 * @param admin
