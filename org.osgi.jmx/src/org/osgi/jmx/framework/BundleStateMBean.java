@@ -76,7 +76,9 @@ public interface BundleStateMBean {
 	 * {@link #KEY_ITEM}.
 	 */
 	TabularType HEADERS_TYPE = Item.tabularType("HEADERS",
-			"The table of bundle headers", HEADER_TYPE, new String[] { KEY });
+																"The table of bundle headers",
+																HEADER_TYPE,
+																KEY);
 
 	/**
 	 * The key LOCATION, used in {@link #LOCATION_ITEM}.
@@ -418,10 +420,11 @@ public interface BundleStateMBean {
 
 	/**
 	 * The Tabular Type for a list of bundles. The row type is
-	 * {@link #BUNDLE_TYPE}.
+	 * {@link #BUNDLE_TYPE} and the index is {@link #IDENTIFIER}.
 	 */
 	TabularType BUNDLES_TYPE = Item.tabularType("BUNDLES", "A list of bundles",
-			BUNDLE_TYPE, new String[] { IDENTIFIER });
+																BUNDLE_TYPE,
+																IDENTIFIER);
 
 	/**
 	 * Answer the list of identifiers of the bundles this bundle depends upon
