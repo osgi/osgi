@@ -17,13 +17,13 @@
 package org.osgi.impl.bundle.jmx.framework.codec;
 
 import static org.osgi.impl.bundle.jmx.codec.Util.LongArrayFrom;
-import static org.osgi.impl.bundle.jmx.codec.Util.getBundleDependencies;
 import static org.osgi.impl.bundle.jmx.codec.Util.getBundleExportedPackages;
 import static org.osgi.impl.bundle.jmx.codec.Util.getBundleFragments;
 import static org.osgi.impl.bundle.jmx.codec.Util.getBundleHeaders;
 import static org.osgi.impl.bundle.jmx.codec.Util.getBundleImportedPackages;
 import static org.osgi.impl.bundle.jmx.codec.Util.getBundleState;
 import static org.osgi.impl.bundle.jmx.codec.Util.getBundlesRequiring;
+import static org.osgi.impl.bundle.jmx.codec.Util.getDependencies;
 import static org.osgi.impl.bundle.jmx.codec.Util.isBundleFragment;
 import static org.osgi.impl.bundle.jmx.codec.Util.isBundlePersistentlyStarted;
 import static org.osgi.impl.bundle.jmx.codec.Util.isBundleRequired;
@@ -208,7 +208,7 @@ public class OSGiBundle {
 						.getServicesInUse()), getBundleHeaders(b),
 				getBundleExportedPackages(b, admin), getBundleImportedPackages(
 						b, bc, admin), getBundleFragments(b, admin), Util
-						.bundleIds(admin.getHosts(b)), getBundleDependencies(b,
+						.bundleIds(admin.getHosts(b)), getDependencies(b,
 						admin), getBundlesRequiring(b, bc, admin));
 	}
 

@@ -47,15 +47,6 @@ public class BundleState extends Monitor implements BundleStateMBean {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.osgi.jmx.core.BundleStateMBean#getBundleDependencies()
-	 */
-	public long[] listDependencies(long bundleIdentifier) throws IOException {
-		return Util.getBundleDependencies(bundle(bundleIdentifier), admin);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see org.osgi.jmx.core.BundleStateMBean#getBundles()
 	 */
 	public TabularData listBundles() throws IOException {
@@ -198,7 +189,7 @@ public class BundleState extends Monitor implements BundleStateMBean {
 	}
 
 	public long[] getRequiredBundles(long bundleIdentifier) throws IOException {
-		return Util.getBundleDependencies(bundle(bundleIdentifier), admin);
+		return Util.getDependencies(bundle(bundleIdentifier), admin);
 	}
 
 	/*

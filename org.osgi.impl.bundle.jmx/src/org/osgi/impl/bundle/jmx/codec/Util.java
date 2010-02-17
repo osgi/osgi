@@ -25,6 +25,8 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Set;
+import java.util.HashSet;
 
 import javax.management.openmbean.ArrayType;
 import javax.management.openmbean.OpenDataException;
@@ -78,8 +80,28 @@ public class Util {
 		return ids;
 	}
 
+	public static long[] getDependencies(Bundle b, PackageAdmin admin) {
+		Set<Long> dependencies = new HashSet<Long>();
+		for (ExportedPackage pkg : admin.getExportedPackages((Bundle) null)) {
+			if (!dependencies.contains(pkg.getExportingBundle().getBundleId())) {
+				Bundle[] importing = pkg.getImportingBundles();
+				if (importing != null) {
+					for (Bundle bundle : importing) {
+						if (bundle == b) {
+							dependencies.add(pkg.getExportingBundle()
+									.getBundleId());
+							break;
+						}
+					}
+				}
+			}
+		}
+		return longArrayFrom(dependencies
+				.toArray(new Long[dependencies.size()]));
+	}
+
 	/**
-	 * Answer the the bundle ids of the bundles requireing the given bundles
+	 * Answer the the bundle ids of the bundles requiring the given bundles
 	 * 
 	 * @param b
 	 * @param bc
@@ -89,21 +111,21 @@ public class Util {
 	public static long[] getBundlesRequiring(Bundle b, BundleContext bc,
 			PackageAdmin admin) {
 		Bundle[] all = bc.getBundles();
-		ArrayList<Long> required = new ArrayList<Long>();
+		ArrayList<Long> requiring = new ArrayList<Long>();
 		for (Bundle anAll : all) {
-			long[] requiring = getBundleDependencies(anAll, admin);
-			if (requiring == null) {
+			long[] dependencies = getDependencies(anAll, admin);
+			if (dependencies == null) {
 				continue;
 			}
-			for (long r : requiring) {
+			for (long r : dependencies) {
 				if (r == b.getBundleId()) {
-					required.add(anAll.getBundleId());
+					requiring.add(anAll.getBundleId());
 				}
 			}
 		}
-		long[] ids = new long[required.size()];
-		for (int i = 0; i < required.size(); i++) {
-			ids[i] = required.get(i);
+		long[] ids = new long[requiring.size()];
+		for (int i = 0; i < requiring.size(); i++) {
+			ids[i] = requiring.get(i);
 		}
 		return ids;
 	}
@@ -199,25 +221,6 @@ public class Util {
 			return imported.toArray(new String[imported.size()]);
 		}
 
-	}
-
-	/**
-	 * Answer the ids of dependencies on a bundle
-	 * 
-	 * @param bundle
-	 * @param admin
-	 * @return the ids of dependencies on a bundle
-	 */
-	public static long[] getBundleDependencies(Bundle bundle, PackageAdmin admin) {
-		String symbolicName = bundle.getSymbolicName();
-		if (symbolicName == null) {
-			return new long[0];
-		}
-		RequiredBundle[] required = admin.getRequiredBundles(symbolicName);
-		if (required == null || required.length == 0) {
-			return new long[0];
-		}
-		return bundleIds(required);
 	}
 
 	/**
