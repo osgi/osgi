@@ -27,23 +27,51 @@
 
 package org.osgi.test.cases.jmx.tb2;
 
+import java.util.Properties;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.cm.ManagedService;
+import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.test.cases.jmx.tb2.api.HelloSayer;
+import org.osgi.test.cases.jmx.tb2.impl.ConfiguratorImpl;
 import org.osgi.test.cases.jmx.tb2.impl.HelloSayerImpl;
 
 
 public class Activator implements BundleActivator {
-	private ServiceRegistration registration;
+	private ServiceRegistration helloRegistration;
+	private ServiceRegistration configRegistration;
+	private ServiceRegistration configFactoryRegistration;
 	
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Hello moon, I am started");
-		registration = context.registerService(HelloSayer.class.getCanonicalName(), new HelloSayerImpl(), null);
+		
+		//create configuration service
+		ConfiguratorImpl cfg = new ConfiguratorImpl();
+
+		//register as Managed Service
+		Properties props = new Properties();
+		props.setProperty("test_key", "test_value");
+		props.setProperty(Constants.SERVICE_PID, context.getBundle().getBundleId() + ".1");
+		
+		configRegistration = context.registerService(ManagedService.class.getName(), cfg, props);
+		
+		//register as Managed Service Factory		
+		Properties propsFactory = new Properties();
+		propsFactory.setProperty("test_key", "test_value");
+		propsFactory.setProperty(Constants.SERVICE_PID, context.getBundle().getBundleId() + ".factory");
+
+		configFactoryRegistration = context.registerService(ManagedServiceFactory.class.getName(), cfg, propsFactory);
+		
+		helloRegistration = context.registerService(HelloSayer.class.getCanonicalName(), new HelloSayerImpl(), null);
 	}
 
 	public void stop(BundleContext context) throws Exception {
 		System.out.println("stopped");
-		registration.unregister();
+		helloRegistration.unregister();
+		configRegistration.unregister();
+		configFactoryRegistration.unregister();
 	}
 }

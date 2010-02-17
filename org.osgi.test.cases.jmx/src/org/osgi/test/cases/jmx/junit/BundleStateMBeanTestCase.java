@@ -158,7 +158,7 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 					
 					assertTrue("wrong bundle location", location.equals(testBundle2.getLocation()));	
 					
-					assertTrue("wrong bundle registered services info", (registeredServices.length == 1));	
+					assertTrue("wrong bundle registered services info", (registeredServices.length == 3));	
 					
 					assertTrue("wrong bundle required started info for tb2", required);
 					
@@ -286,10 +286,16 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testGetRegisteredServices() throws IOException {
 		long[] serviceIdentifiers = bsMBean.getRegisteredServices(testBundle2.getBundleId());
-		assertTrue("testBundle2 defines one service", serviceIdentifiers.length == 1);
+		assertTrue("testBundle2 defines three services", serviceIdentifiers.length == 3);
 		ServiceReference ref = getContext().getServiceReference("org.osgi.test.cases.jmx.tb2.api.HelloSayer");
-		Long expectedserviceId = (Long)ref.getProperty("service.id"); 
-		assertTrue("testBundle2 service id is wrong", serviceIdentifiers[0] == expectedserviceId.longValue());
+		Long expectedserviceId = (Long)ref.getProperty("service.id");
+		boolean matched = false;
+		for (int i = 0; i < serviceIdentifiers.length; i++) {
+			if (serviceIdentifiers[i] == expectedserviceId.longValue()) {
+				matched = true;
+			}
+		}
+		assertTrue("testBundle2 service id is wrong", matched);
 		
 		serviceIdentifiers = bsMBean.getRegisteredServices(testBundle1.getBundleId());
 		assertTrue("testBundle2 defines no services", serviceIdentifiers.length == 0);		 
