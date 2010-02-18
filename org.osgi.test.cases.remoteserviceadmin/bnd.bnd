@@ -27,14 +27,11 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
 	osgi.enterprise;						version=latest	, \
-	org.eclipse.equinox.event;              version=latest, \
-	org.apache.cxf.dosgi.singlebundle;      version=latest, \
-	com.springsource.org.apache.log4j;		version=latest, \
-	org.apache.cxf.dosgi.discovery.zookeeper; version=latest, \
-	org.apache.cxf.dosgi.discovery.server; version=latest, \
-	org.apache.cxf.dosgi.discovery.server.config; version=latest, \
+	org.osgi.impl.service.event;              version=latest, \
+	org.osgi.impl.service.remoteserviceadmin;  version=latest, \
+	org.osgi.impl.bundle.remoteserviceadmin.discovery;  version=latest, \
+	org.osgi.impl.bundle.remoteserviceadmin.discovery.config;  version=latest, \
 	org.osgi.impl.service.log;				version=latest
-	
 
 -runproperties = report=true, \
 	osgi.compatibility.bootdelegation=false, \
@@ -42,7 +39,7 @@ Test-Cases							= ${testcases}
 	osgi.console=1111, \
 	osgi.support.multipleHosts=true, \
 	${p}.system.packages.extra="${junit.package}", \
-	${p}.bundles=${repo;osgi.enterprise}|${repo;org.osgi.impl.service.log}|${repo;org.apache.cxf.dosgi.singlebundle}|${repo;org.apache.cxf.dosgi.discovery.server.config}, \
+	${p}.bundles="${uniq;${repo;osgi.enterprise},${repo;org.osgi.impl.service.log},${repo;org.osgi.impl.service.remoteserviceadmin},${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}}", \
 	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.address", \
 	service.exported.configs=org.apache.cxf.ws, \
 	org.apache.cxf.ws.address=http://localhost:9090/test

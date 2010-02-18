@@ -9,6 +9,6 @@ Bundle-Category: 		osgi
 
 -buildpath = \
 	org.osgi.service.jdbc; 	version=project, \
-	com.springsource.org.apache.derby, \
+	org.osgi.impl.bundle.derby; version=latest, \
 	osgi.core;				version=4.0, \
 	ee.j2se;				version=1.4

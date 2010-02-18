@@ -61,8 +61,8 @@ Test-Cases							= ${testcases}
 -runbundles							= \
 	org.osgi.impl.service.deploymentadmin; 			version=project, \
 	org.osgi.impl.service.log; 						version=latest,\
-	org.eclipse.equinox.event;  					version=latest, \
-	org.apache.felix.configadmin;  					version=latest, \
+	org.osgi.impl.service.event;  					version=latest, \
+	org.osgi.impl.service.cm;  					version=latest, \
 	osgi.cmpn;	 									version=latest
 
 -buildpath=\

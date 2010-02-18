@@ -277,7 +277,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 		List bundles = new LinkedList();
 		
 		StringTokenizer st = new StringTokenizer(System.getProperty(
-				"org.osgi.test.cases.remoteserviceadmin.bundles", ""), "|");
+				"org.osgi.test.cases.remoteserviceadmin.bundles", ""), ",");
 		while (st.hasMoreTokens()) {
 			String bundle = st.nextToken();
 			

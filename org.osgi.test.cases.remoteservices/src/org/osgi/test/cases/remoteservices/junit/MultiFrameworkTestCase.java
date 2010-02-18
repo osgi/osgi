@@ -271,7 +271,7 @@ public abstract class MultiFrameworkTestCase extends OSGiTestCase {
 		List bundles = new LinkedList();
 		
 		StringTokenizer st = new StringTokenizer(System.getProperty(
-				"org.osgi.test.cases.remoteservices.bundles", ""), "|");
+				"org.osgi.test.cases.remoteservices.bundles", ""), ",");
 		while (st.hasMoreTokens()) {
 			String bundle = st.nextToken();
 			

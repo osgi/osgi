@@ -15,9 +15,7 @@
  */
 package org.osgi.test.cases.scaconfigtype.junit;
 
-import static org.osgi.test.cases.scaconfigtype.common.TestConstants.DEFAULT_STORAGEROOT;
-import static org.osgi.test.cases.scaconfigtype.common.TestConstants.ORG_OSGI_TEST_CASES_SCACONFIG_TYPE_BUNDLES;
-import static org.osgi.test.cases.scaconfigtype.common.TestConstants.STORAGEROOT;
+import static org.osgi.test.cases.scaconfigtype.common.TestConstants.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -310,7 +308,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl {
 		List bundles = new LinkedList();
 		
 		StringTokenizer st = new StringTokenizer(System.getProperty(
-				ORG_OSGI_TEST_CASES_SCACONFIG_TYPE_BUNDLES, ""), "|");
+				ORG_OSGI_TEST_CASES_SCACONFIG_TYPE_BUNDLES, ""), ",");
 		while (st.hasMoreTokens()) {
 			String bundle = st.nextToken();
 			

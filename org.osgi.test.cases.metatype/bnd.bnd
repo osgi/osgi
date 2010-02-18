@@ -21,7 +21,7 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest, \
-	org.eclipse.equinox.metatype; version=latest, \
+	org.osgi.impl.service.metatype; version=latest, \
 	osgi.cmpn; version=latest
 	
 -runproperties = report=true

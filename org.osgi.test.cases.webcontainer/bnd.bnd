@@ -38,52 +38,12 @@ Export-Package =\
 	osgi.enterprise; 							version=4.2, \
 	org.osgi.test.support;						version=project, \
 	${junit}
-# Comments out -runbundles. For some reason bnd is upset by -runbundles refering to
-# non-existent repo entries during bndprepare ant task. I asked Peter to make a change to bnd.
+	
 -runbundles						= \
 	org.osgi.impl.service.log; 			version=latest, \
-	org.eclipse.equinox.event; 			version=latest, \
+	org.osgi.impl.service.event; 			version=latest, \
 	osgi.enterprise; 							version=latest, \
-    org.apache.geronimo.specs.geronimo-activation_1.1_spec; version=latest, \
-    org.apache.geronimo.specs.geronimo-annotation_1.0_spec; version=latest, \
-    org.apache.geronimo.specs.geronimo-ejb_3.0_spec; version=latest, \
-    org.apache.geronimo.specs.geronimo-el_1.0_spec; version=latest, \
-    org.apache.geronimo.specs.geronimo-javamail_1.4_spec; version=latest, \
-    org.apache.geronimo.specs.geronimo-servlet_2.5_spec; version=latest, \
-    org.apache.geronimo.specs.geronimo-jsp_2.1_spec; version=latest, \
-    org.apache.geronimo.specs.geronimo-jta_1.1_spec; version=latest, \
-    org.apache.geronimo.specs.geronimo-jaxb_2.1_spec; version=latest, \
-    org.apache.geronimo.specs.geronimo-jaxrpc_1.1_spec; version=latest, \
-    org.apache.geronimo.specs.geronimo-saaj_1.3_spec; version=latest, \
-    org.apache.geronimo.specs.geronimo-stax-api_1.0_spec; version=latest, \
-    org.apache.geronimo.specs.geronimo-jaxws_2.1_spec; version=latest, \
-    com.springsource.org.aopalliance; version=latest, \
-    javax.persistence; version="[1.0,2.0)", \
-    slf4j.api; version=latest, \
-    slf4j.nop; version=latest, \
-    com.springsource.util.common; version=latest, \
-    com.springsource.util.io; version=latest, \
-    com.springsource.util.math; version=latest, \
-    com.springsource.util.osgi; version=latest, \
-    com.springsource.util.parser.manifest; version=latest, \
-    org.springframework.aop; version=latest, \
-    org.springframework.beans; version=latest, \
-    org.springframework.context; version=latest, \
-    org.springframework.core; version=latest, \
-    org.springframework.osgi.core; version=latest, \
-    org.springframework.osgi.io; version=latest, \
-	com.springsource.org.apache.catalina.ha.springsource; version=latest, \
-	com.springsource.org.apache.catalina.springsource; version=latest, \
-	com.springsource.org.apache.catalina.tribes.springsource; version=latest, \
-	com.springsource.org.apache.commons.logging; version=latest, \
-	com.springsource.org.apache.coyote.springsource; version=latest, \
-	com.springsource.org.apache.el.springsource; version=latest, \
-	com.springsource.org.apache.jasper.org.eclipse.jdt.springsource; version=latest, \
-	com.springsource.org.apache.jasper.springsource; version=latest, \
-	com.springsource.org.apache.juli.extras.springsource; version=latest, \
-	com.springsource.osgi.webcontainer.core;version=latest, \
-	com.springsource.osgi.webcontainer.extender;version=latest, \
-	com.springsource.osgi.webcontainer.tomcat;version=latest
+    org.osgi.impl.bundle.webcontainer; version=latest
 	
 -runproperties = report=true, \
 	org.osgi.service.webcontainer.hostname=127.0.0.1, \

@@ -38,14 +38,13 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest,\
-	org.eclipse.equinox.util;  version=latest, \
-	org.eclipse.equinox.ds;  version=latest, \
+	org.osgi.impl.service.component; version=latest, \
 	org.osgi.impl.bundle.jaxp;  version=latest, \
-	org.eclipse.equinox.metatype;  version=latest, \
-	org.eclipse.equinox.event;  version=latest, \
+	org.osgi.impl.service.metatype;  version=latest, \
+	org.osgi.impl.service.event;  version=latest, \
 	org.osgi.impl.bundle.autoconf; version=project, \
 	org.osgi.impl.service.deploymentadmin; version=project, \
-	org.apache.felix.configadmin;  version=latest, \
+	org.osgi.impl.service.cm;  version=latest, \
 	osgi.cmpn; version=latest
 
 -buildpath=\

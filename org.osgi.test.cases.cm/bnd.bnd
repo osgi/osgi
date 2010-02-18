@@ -32,7 +32,7 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest, \
-	org.apache.felix.configadmin; version=latest, \
+	org.osgi.impl.service.cm; version=latest, \
 	osgi.cmpn; version=4.2
 	
 -runproperties = report=true, \

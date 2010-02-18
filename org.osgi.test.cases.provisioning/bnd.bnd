@@ -46,8 +46,7 @@ Include-Resource: \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
 	org.osgi.impl.service.http; version=latest, \
-	org.eclipse.equinox.ip; version=latest, \
-	org.eclipse.equinox.util; version=latest, \
+	org.osgi.impl.service.provisioning; version=latest, \
 	org.osgi.impl.bundle.rsh;		version=project, \
 	osgi.cmpn; version=latest
 

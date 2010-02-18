@@ -398,9 +398,9 @@ Test-Cases							= ${testcases}
 -runbundles							= \
 	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
-	org.apache.felix.configadmin;  version=latest, \
-	org.eclipse.equinox.event; version=latest, \
-    org.springframework.osgi.blueprint.uber; version=latest
+	org.osgi.impl.service.cm;  version=latest, \
+	org.osgi.impl.service.event; version=latest, \
+    org.osgi.impl.service.blueprint; version=latest
     
 -runproperties = report=true, \
 	osgi.compatibility.bootdelegation=false, \

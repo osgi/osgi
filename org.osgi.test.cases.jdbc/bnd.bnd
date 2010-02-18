@@ -12,7 +12,7 @@ Private-Package						= ${p}.junit, \
 
 -runbundles						= \
 	org.osgi.impl.service.jdbc; version=project, \
-	com.springsource.org.apache.derby; version=latest
+	org.osgi.impl.bundle.derby; version=latest
 
 -runproperties					= report=true
 

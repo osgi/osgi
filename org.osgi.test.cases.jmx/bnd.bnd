@@ -22,9 +22,8 @@ Include-Resource					= \
 	org.osgi.impl.bundle.jmx; version=project, \
 	org.osgi.impl.service.useradmin; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
-	org.apache.felix.configadmin; version=latest, \
-	org.eclipse.equinox.ip; version=latest, \
-	org.eclipse.equinox.util; version=latest, \
+	org.osgi.impl.service.cm; version=latest, \
+	org.osgi.impl.service.provisioning; version=latest, \
 	osgi.enterprise;						version=latest		, \
 	org.osgi.impl.bundle.servlet;		version=2.1
 

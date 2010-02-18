@@ -26,7 +26,7 @@ Include-Resource				= \
 -runbundles							= \
 	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
-	org.apache.felix.configadmin; version=latest, \
+	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.wireadmin; version=project
 
 -runproperties = report=true, \

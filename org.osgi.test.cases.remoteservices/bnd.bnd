@@ -18,11 +18,9 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	org.apache.cxf.dosgi.singlebundle;      version=latest, \
-	com.springsource.org.apache.log4j;		version=latest, \
-	org.apache.cxf.dosgi.discovery.zookeeper; version=latest, \
-    org.apache.cxf.dosgi.discovery.server;	version=latest, \
-    org.apache.cxf.dosgi.discovery.server.config; version=latest, \
+	org.osgi.impl.service.remoteserviceadmin;  version=latest, \
+	org.osgi.impl.bundle.remoteserviceadmin.discovery;  version=latest, \
+	org.osgi.impl.bundle.remoteserviceadmin.discovery.config;  version=latest, \
 	osgi.enterprise;						version=latest	, \
 	org.osgi.impl.service.log;				version=latest
 	
@@ -31,7 +29,7 @@ Test-Cases							= ${testcases}
 	osgi.compatibility.bootdelegation=false, \
 	osgi.resolverMode=strict, \
 	osgi.support.multipleHosts=true, \
-	${p}.bundles=${repo;org.apache.cxf.dosgi.singlebundle}|${repo;osgi.enterprise}|${repo;org.osgi.impl.service.log}, \
+	${p}.bundles="${uniq;${repo;org.osgi.impl.service.remoteserviceadmin},${repo;osgi.enterprise},${repo;org.osgi.impl.service.log}}", \
 	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.address", \
 	service.exported.configs=org.apache.cxf.ws, \
 	org.apache.cxf.ws.address=http://localhost:9090/test

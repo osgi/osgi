@@ -24,8 +24,8 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	org.eclipse.equinox.event; version=latest, \
-    org.apache.felix.configadmin; version=latest, \
+	org.osgi.impl.service.event; version=latest, \
+    org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.dmt; version=project, \
 	org.osgi.impl.service.monitor; version=project, \
 	org.osgi.impl.service.log; version=latest, \

@@ -15,6 +15,6 @@ Test-Cases							= ${testcases}
 
 -runbundles						= \
 	org.osgi.impl.service.log; version=project, \
-	org.apache.felix.configadmin;  version=latest
+	org.osgi.impl.service.cm;  version=latest
 
 -runproperties					= report=true
