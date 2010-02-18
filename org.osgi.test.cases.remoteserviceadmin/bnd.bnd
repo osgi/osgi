@@ -41,6 +41,7 @@ Test-Cases							= ${testcases}
 	osgi.resolverMode=strict, \
 	osgi.console=1111, \
 	osgi.support.multipleHosts=true, \
+	${p}.system.packages.extra="${junit.package}", \
 	${p}.bundles=${repo;osgi.enterprise}|${repo;org.osgi.impl.service.log}|${repo;org.apache.cxf.dosgi.singlebundle}|${repo;org.apache.cxf.dosgi.discovery.server.config}, \
 	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.address", \
 	service.exported.configs=org.apache.cxf.ws, \

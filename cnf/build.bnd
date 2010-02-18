@@ -90,7 +90,9 @@ Bundle-Copyright       	= ${copyright}
 Bundle-Vendor			= OSGi Alliance
 -removeheaders			= Include-Resource, Private-Package
 
-junit					= com.springsource.junit;version=3.8;export="junit.framework;version=3.8"
+junit.package			= junit.framework;version=3.8
+junit					= com.springsource.junit;version=3.8;export="${junit.package}"
+
 -runpath							= \
 	org.eclipse.osgi;		version=3.5.2, \
 	${junit}

@@ -30,12 +30,12 @@ Include-Resource					= \
 -runbundles							= \
 	osgi.enterprise;						version=latest	
 	
-# TODO bundles contains ${repo;com.springsource.junit} factor out to ${junit} as above
 -runproperties = report=true, \
 	osgi.compatibility.bootdelegation=false, \
 	osgi.resolverMode=strict, \
 	osgi.support.multipleHosts=true, \
-	${p}.bundles=${repo;org.eclipse.equinox.event}|\${repo;com.springsource.junit}|${repo;org.apache.tuscany.sca.bundle}|${repo;osgi.cmpn}|${repo;org.osgi.impl.service.log}, \
+	${p}.system.packages.extra="${junit.package}", \
+	${p}.bundles=${repo;org.eclipse.equinox.event}|${repo;org.apache.tuscany.sca.bundle}|${repo;osgi.enterprise}|${repo;org.osgi.impl.service.log}, \
 	${p}.serverconfig="service.exported.configs,org.osgi.sca.domain.registry", \
 	service.exported.configs=org.osgi.sca, \
 	org.osgi.sca.domain.registry="tribes://228.0.0.100:50000"

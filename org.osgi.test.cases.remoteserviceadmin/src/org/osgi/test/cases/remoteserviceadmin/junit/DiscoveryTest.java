@@ -37,7 +37,7 @@ import org.osgi.test.support.compatibility.Semaphore;
  * @version 1.0.0
  */
 public class DiscoveryTest extends MultiFrameworkTestCase {
-	private static final String JUNIT_FRAMEWORK = "junit.framework;version=\"3.8.2\"";
+	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.remoteserviceadmin.system.packages.extra";
 
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#getConfiguration()
@@ -47,7 +47,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
 		
 		//make sure that the server framework System Bundle exports the interfaces
-        String systemPackagesXtra = JUNIT_FRAMEWORK;
+		String systemPackagesXtra = System.getProperty(SYSTEM_PACKAGES_EXTRA);
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
         configuration.put("osgi.console", "1112");
 		return configuration;

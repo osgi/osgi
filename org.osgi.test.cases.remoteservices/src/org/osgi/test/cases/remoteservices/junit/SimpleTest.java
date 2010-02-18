@@ -44,10 +44,6 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	/**
 	 * Package to be exported by the server side System Bundle
 	 */
-	private static final String ORG_OSGI_SERVICE_REMOTESERVICES = "org.osgi.service.remoteservices";
-	/**
-	 * Package to be exported by the server side System Bundle
-	 */
 	private static final String ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON = "org.osgi.test.cases.remoteservices.common";
 
 	/**
@@ -58,15 +54,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
 		
 		//make sure that the server framework System Bundle exports the interfaces
-        String systemPacakagesXtra = (String) configuration.get(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA);
-        if (systemPacakagesXtra == null) {
-            systemPacakagesXtra = ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON;
-        } else {
-            systemPacakagesXtra = systemPacakagesXtra
-                                  + ","
-                                  + ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON
-                                  + ORG_OSGI_SERVICE_REMOTESERVICES;
-        }
+		String systemPacakagesXtra = ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON;
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPacakagesXtra);
 		return configuration;
 	}

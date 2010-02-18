@@ -18,16 +18,11 @@
 
 package org.osgi.test.cases.scaconfigtype.junit;
 
-import static org.osgi.framework.Constants.FRAMEWORK_STORAGE_CLEAN;
-import static org.osgi.framework.Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA;
+import static org.osgi.framework.Constants.*;
 import static org.osgi.test.cases.scaconfigtype.common.DistributionProviderConstants.REMOTE_CONFIGS_SUPPORTED;
-import static org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants.SERVICE_IMPORTED_CONFIGS;
-import static org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants.SERVICE_INTENTS;
+import static org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants.*;
 import static org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants.ORG_OSGI_SCA_CONFIG;
-import static org.osgi.test.cases.scaconfigtype.common.TestConstants.CLIENT_FRAMEWORK;
-import static org.osgi.test.cases.scaconfigtype.common.TestConstants.ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON;
-import static org.osgi.test.cases.scaconfigtype.common.TestConstants.SERVER_FRAMEWORK;
-import static org.osgi.test.cases.scaconfigtype.common.TestConstants.SERVICE_TIMEOUT;
+import static org.osgi.test.cases.scaconfigtype.common.TestConstants.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -452,12 +447,13 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         tracker.close();
 	}
     
+	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.scaconfigtype.system.packages.extra";
     public Map<String, String> getConfiguration() {
         Map<String, String> configuration = new HashMap<String, String>();
         configuration.put(FRAMEWORK_STORAGE_CLEAN, "true");
 
         //make sure that the server framework System Bundle exports the interfaces
-        String systemPackagesXtra = (String)configuration.get(FRAMEWORK_SYSTEMPACKAGES_EXTRA);
+		String systemPackagesXtra = System.getProperty(SYSTEM_PACKAGES_EXTRA);
         if (systemPackagesXtra == null) {
             systemPackagesXtra = ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON;
         } else {
