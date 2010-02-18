@@ -68,7 +68,7 @@ import org.osgi.util.tracker.ServiceTracker;
 class OSGiInitialContextFactoryBuilder implements
 		InitialContextFactoryBuilder, ObjectFactoryBuilder, FactoryManager {
 
-	private static Logger m_logger = 
+	private static Logger logger = 
 		Logger.getLogger(OSGiInitialContextFactoryBuilder.class.getName());
 	
 
@@ -325,6 +325,9 @@ class OSGiInitialContextFactoryBuilder implements
 				}
 				catch (NamingException namingException) {
 					// catch exception, allow iteration to continue
+					logger.log(Level.FINE, 
+							     "NamingException occurred while invoking on an InitialContextFactoryBuilder",
+							     namingException);
 				}
 			}
 
@@ -395,6 +398,9 @@ class OSGiInitialContextFactoryBuilder implements
 				}
 				catch (NamingException namingException) {
 					// catch exception, allow iteration to continue
+					logger.log(Level.FINE, 
+						     "NamingException occurred while invoking on an ObjectFactoryBuilder",
+						     namingException);
 				}
 			}
 		}
@@ -432,13 +438,13 @@ class OSGiInitialContextFactoryBuilder implements
 					}
 				}
 				catch (URISyntaxException e) {
-					m_logger.log(Level.FINEST, 
+					logger.log(Level.FINEST, 
 							     "Exception thrown while parsing URL.  This URL reference address will be skipped.",
 							     e);
 	
 				}
 				catch (Exception e) {
-					m_logger.log(Level.FINEST, 
+					logger.log(Level.FINEST, 
 						     "Exception thrown while parsing URL.  This URL reference address will be skipped.",
 						     e);
 				}
@@ -652,12 +658,12 @@ class OSGiInitialContextFactoryBuilder implements
 					catch (FileNotFoundException e) {
 						// this exception should never occur, since the File has
 						// already been tested to be available
-						m_logger.log(Level.FINEST, "Exception encountered while trying to locate a jndi.properties file.", e);
+						logger.log(Level.FINEST, "Exception encountered while trying to locate a jndi.properties file.", e);
 					}
 				}
 			}
 			catch (IOException e) {
-				m_logger.log(Level.FINEST, 
+				logger.log(Level.FINEST, 
 						"Exception encounted while trying to load a jndi.properties file",
 						e);
 			}

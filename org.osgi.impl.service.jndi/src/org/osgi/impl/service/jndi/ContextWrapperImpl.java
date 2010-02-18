@@ -75,9 +75,9 @@ class ContextWrapperImpl implements Context {
 					throw (NamingException) e;
 				}
 
-				NamingException namingException = new NamingException(
-						"Exception occurred during URL Context Factory Resolution for name = "
-								+ name);
+				NamingException namingException = 
+					new NameNotFoundException("Exception occurred during URL Context Factory Resolution for name = "
+								              + name);
 				namingException.initCause(e);
 				throw namingException;
 			}

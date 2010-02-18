@@ -19,8 +19,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.naming.NamingException;
 import javax.naming.spi.InitialContextFactoryBuilder;
 import javax.naming.spi.NamingManager;
 import javax.naming.spi.ObjectFactory;
@@ -45,13 +47,14 @@ public class Activator implements BundleActivator {
 
 	private static final String					OSGI_URL_SCHEME					= "osgi";
 	
-	private static Logger m_logger = Logger.getLogger(Activator.class.getName());
+	private static Logger logger = Logger.getLogger(Activator.class.getName());
 
 	private BundleContext						m_bundleContext					= null;
 	private final List                          m_listOfServiceRegistrations = new LinkedList();
 
 	private CloseableJNDIProviderAdmin	m_jndiProviderAdminService;
-
+	private JNDIContextManagerServiceFactoryImpl m_jndiContextAdminServiceFactory;
+	
 	/*
 	 * Create the Factory Manager's builder implementation, and register it with
 	 * the JNDI NamingManager.
@@ -61,30 +64,31 @@ public class Activator implements BundleActivator {
 	 * )
 	 */
 	public void start(BundleContext context) throws Exception {
-		m_logger.info("Initializing JNDI Factory Manager Bundle");
+		logger.info("Initializing JNDI Factory Manager Bundle");
 		
 		m_bundleContext = context;
 
 		// register static singletons with the JNDI framework
-		m_logger.info("Installing Factory Manager as a JNDI Builder");
-		NamingManager.setInitialContextFactoryBuilder(new TraditionalInitialContextFactoryBuilder());
-		NamingManager.setObjectFactoryBuilder(new TraditionalObjectFactoryBuilder());
+		logger.info("Installing JNDI Static Singletons");
+		registerInitialContextFactoryBuilderSingleton();
+		registerObjectFactoryBuilderSingleton();
 
-		m_logger.info("Registering URL Context Factory for 'osgi' URL scheme");
+		logger.info("Registering URL Context Factory for 'osgi' URL scheme");
 		registerOSGiURLContextFactory();
 		
-		m_logger.info("Registering Default Runtime Builder for JRE-provided factories");
+		logger.info("Registering Default Runtime Builder for JRE-provided factories");
 		registerDefaultRuntimeBuilder();
 		
-		m_logger.info("Registering JNDIContextManager service");
+		logger.info("Registering JNDIContextManager service");
 		// register the JNDIContextManager service once all Factory
 		// Manager initialization is complete
 		registerJNDIContextManager();
+		
+		logger.info("Registering JNDIProviderAdmin service");
 		// register the JNDIProviderAdmin interface, used by OSGi-aware
 		// context implementations to resolve JNDI references
 		registerJNDIProviderAdmin();
 	}
-
 	
 
 	/*
@@ -95,7 +99,10 @@ public class Activator implements BundleActivator {
 	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		m_logger.info("Shutting down JNDI Factory Manager Bundle");
+		logger.info("Shutting down JNDI Factory Manager Bundle");
+		
+		// close all known Contexts associated with the JNDIContextManager service
+		m_jndiContextAdminServiceFactory.closeAll();
 		
 		// close the JNDIProviderAdmin service
 		m_jndiProviderAdminService.close();
@@ -109,6 +116,65 @@ public class Activator implements BundleActivator {
 		}
 	}
 
+
+	/**
+	 * Registers the InitialContextFactoryBuilder static singleton
+	 * @throws NamingException on any error that occurs during the setting
+	 *         of the builder.  
+	 */
+	private static void registerInitialContextFactoryBuilderSingleton() throws NamingException {
+		try {
+			NamingManager.setInitialContextFactoryBuilder(new TraditionalInitialContextFactoryBuilder());
+		}
+		catch (IllegalStateException illegalStateException) {
+			logger.log(Level.SEVERE, 
+			           "JNDI Implementation cannot set the InitialContextFactoryBuilder - another builder was already installed",
+			           illegalStateException);
+			NamingException namingException = 
+				new NamingException("Error occurred while attempting to set the IntialContextFactoryBuilder.");
+			namingException.setRootCause(illegalStateException);
+		} 
+		catch(SecurityException securityException) {
+			logger.log(Level.SEVERE, 
+					   "JNDI Implementation did not have the proper security permissions to install the InitialContextFactoryBuilder",
+					   securityException);
+			NamingException namingException = 
+				new NamingException("Error occurred while attempting to set the IntialContextFactoryBuilder.");
+			namingException.setRootCause(securityException);
+		}
+	}
+	
+	
+	/**
+	 * Registers the ObjectFactoryBuilder static singleton
+	 * @throws NamingException on any error that occurs during the setting
+	 *         of the builder.  
+	 */
+	private static void registerObjectFactoryBuilderSingleton() throws NamingException {
+		try {
+			NamingManager.setObjectFactoryBuilder(new TraditionalObjectFactoryBuilder());
+		}
+		catch (IllegalStateException illegalStateException) {
+			logger.log(Level.SEVERE, 
+			           "JNDI Implementation cannot set the ObjectFactoryBuilder - another builder was already installed",
+			           illegalStateException);
+			NamingException namingException = 
+				new NamingException("Error occurred while attempting to set the ObjectFactoryBuilder.");
+			namingException.setRootCause(illegalStateException);
+		} 
+		catch(SecurityException securityException) {
+			logger.log(Level.SEVERE, 
+					   "JNDI Implementation did not have the proper security permissions to install the ObjectFactoryBuilder",
+					   securityException);
+			NamingException namingException = 
+				new NamingException("Error occurred while attempting to set the ObjectFactoryBuilder.");
+			namingException.setRootCause(securityException);
+		}
+	}
+	
+	
+	
+	
 	/**
 	 * Registers the OSGi URL Context Factory.
 	 * 
@@ -141,9 +207,11 @@ public class Activator implements BundleActivator {
 	
 	
 	private void registerJNDIContextManager() {
+		m_jndiContextAdminServiceFactory = 
+			new JNDIContextManagerServiceFactoryImpl();
 		ServiceRegistration serviceRegistration = 
 			m_bundleContext.registerService(JNDIContextManager.class.getName(),
-					                        new JNDIContextManagerServiceFactoryImpl(),
+											m_jndiContextAdminServiceFactory,
 					                        null);
 		m_listOfServiceRegistrations.add(serviceRegistration);
 	}

@@ -148,8 +148,9 @@ class ReflectionUtils {
 				logger.log(Level.WARNING,
 						   "No compatible interfaces could be found for this OSGi service, type = " +
 						   requestedService.getClass().getName() + ".  The JNDI implementation cannot generate a proxy for this service.");
-				// TODO,revisit this, should probably throw an IllegalArgumentException here (Section 126.6.1 of the JNDI spec)
-				return new ServiceProxyInfo(requestedService, null, false);
+
+				throw new IllegalArgumentException("No compatible interfaces could be found for this OSGi service, type = " +
+						   urlParser.getServiceInterface() + " (probably a JNDI Service Name)" + ".  The JNDI implementation cannot generate a proxy for this service.");
 			}
 		}
 	}

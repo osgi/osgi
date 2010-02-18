@@ -38,7 +38,7 @@ import javax.naming.spi.InitialContextFactoryBuilder;
 class DefaultRuntimeInitialContextFactoryBuilder implements
 		InitialContextFactoryBuilder {
 
-	private static final Logger	m_logger	= 
+	private static final Logger	logger	= 
 		Logger.getLogger(DefaultRuntimeInitialContextFactoryBuilder.class.getName());
 
 	public InitialContextFactory createInitialContextFactory(Hashtable environment) throws NamingException {
@@ -54,7 +54,7 @@ class DefaultRuntimeInitialContextFactoryBuilder implements
 				return (InitialContextFactory) clazz.newInstance();
 			}
 			catch (Exception e) {
-				m_logger.log(Level.FINEST,
+				logger.log(Level.FINEST,
 							 "Error while trying to load system-level JNDI provider",
 							 e);
 			}

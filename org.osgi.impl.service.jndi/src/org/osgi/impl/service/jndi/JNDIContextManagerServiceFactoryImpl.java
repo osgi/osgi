@@ -17,6 +17,7 @@ package org.osgi.impl.service.jndi;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -46,6 +47,16 @@ class JNDIContextManagerServiceFactoryImpl implements ServiceFactory {
 
 	public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
 		closeContextManager(bundle);
+	}
+	
+	protected void closeAll() {
+		synchronized(m_mapOfManagers) {
+			Iterator iterator = m_mapOfManagers.keySet().iterator();
+			while(iterator.hasNext()) {
+				Bundle bundleKey = (Bundle)iterator.next();
+				closeContextManager(bundleKey);
+			}
+		}
 	}
 
 	private void closeContextManager(Bundle bundle) {
