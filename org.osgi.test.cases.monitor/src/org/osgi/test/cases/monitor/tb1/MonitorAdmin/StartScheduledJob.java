@@ -569,6 +569,8 @@ public class StartScheduledJob implements TestInterface {
 		} finally {
 			tbc.cleanUp(mj);
 			tbc.setTb1Permission(infos);
+			//Monitorable was changed, restore its state 
+			tbc.reinstallMonitorable1();
 		}
 	}
 

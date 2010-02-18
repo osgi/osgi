@@ -115,6 +115,8 @@ public class RemoteAlertSender {
 			} catch (DmtException e1) {
 				tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e1.getClass().getName());
 			}
+			//Monitorable was changed, restore its state 
+			tbc.reinstallMonitorable1();
 		}
     }
     
@@ -149,7 +151,7 @@ public class RemoteAlertSender {
 			tbc.assertEquals("Asserting the source value in the AlertItem object.", MonitorConstants.DMT_URI_MONITORABLE1_SV1, alerts[0].getSource());
 			tbc.assertEquals("Asserting the oma trap format in the AlertItem object.", MonitorConstants.MONITOR_XML_MONITORABLE1_SV1, alerts[0].getType());
 			tbc.assertNull("Asserting that null is returned when getMark is called in AlertItem object.", alerts[0].getMark());
-			tbc.assertEquals("Asserting if the value in AlertItem object is the expected.", "test1", alerts[0].getData().getString());			
+			tbc.assertEquals("Asserting if the value in AlertItem object is the expected.", "test", alerts[0].getData().getString());			
 			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
