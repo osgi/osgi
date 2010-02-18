@@ -9,5 +9,4 @@ Export-Package				= org.osgi.service.jndi;-split-package:=first
 	org.osgi.service.jndi;		version=project, \
 	osgi.core;					version=4.2, \
 	osgi.cmpn;					version=4.2, \
-	ee.minimum;					version=1.2, \
-	ee.j2se;				version=1.4
+	ee.j2se;					version=1.4
