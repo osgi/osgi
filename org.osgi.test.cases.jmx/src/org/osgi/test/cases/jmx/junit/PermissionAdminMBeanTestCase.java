@@ -1,6 +1,7 @@
 package org.osgi.test.cases.jmx.junit;
 
 import java.io.*;
+import java.security.AllPermission;
 import java.util.Arrays;
 
 import org.osgi.framework.*;
@@ -19,7 +20,6 @@ public class PermissionAdminMBeanTestCase extends MBeanGeneralTestCase {
 		testbundle = super.install("tb2.jar");
 		testbundle.start();
 		
-		super.install("tb1.jar");
 		super.waitForRegistering(createObjectName(PermissionAdminMBean.OBJECTNAME));
 		pMBean = getMBeanFromServer(PermissionAdminMBean.OBJECTNAME,
 				PermissionAdminMBean.class);
@@ -28,16 +28,74 @@ public class PermissionAdminMBeanTestCase extends MBeanGeneralTestCase {
 						PermissionAdmin.class.getName()));
 	}
 
-	public void testGetPermissions() throws IOException {
+	public void testListLocations() throws IOException {
 		assertNotNull(pMBean);
 
 		String[] serviceLocation = pAdmin.getLocations();
 		String[] mBeanLocations = pMBean.listLocations();
-		assertTrue(
-				"got different information from mbean and direct service-call.",
-				Arrays.equals(serviceLocation, mBeanLocations));
+		assertTrue("got different information from mbean and direct service-call.",
+					Arrays.equals(serviceLocation, mBeanLocations));
 	}
 
+	public void testListDefaultPermissions() throws IOException {
+		assertNotNull(pMBean);
+
+		PermissionInfo[] servicePermissions = pAdmin.getDefaultPermissions();
+		String[] encodedServicePermissions = null;
+		if (servicePermissions != null) {
+			encodedServicePermissions = new String[servicePermissions.length];
+			for (int i = 0; i < servicePermissions.length; i++) {
+				encodedServicePermissions[i] = servicePermissions[i].getEncoded();
+			}
+		}
+		String[] mBeanPermissions = pMBean.listDefaultPermissions();
+		assertTrue("got different information from mbean and direct service-call.",
+					Arrays.equals(encodedServicePermissions, mBeanPermissions));
+	}
+	
+	public void testGetPermissions() throws IOException {
+		assertNotNull(pMBean);
+
+		PermissionInfo[] servicePermissions = pAdmin.getPermissions(testbundle.getLocation());
+		String[] encodedServicePermissions = null;
+		if (servicePermissions != null) {
+			encodedServicePermissions = new String[servicePermissions.length];
+			for (int i = 0; i < servicePermissions.length; i++) {
+				encodedServicePermissions[i] = servicePermissions[i].getEncoded();
+			}
+		}
+		String[] mBeanPermissions = pMBean.getPermissions(testbundle.getLocation());
+		assertTrue("got different information from mbean and direct service-call.",
+					Arrays.equals(encodedServicePermissions, mBeanPermissions));
+	}
+	
+	public void testSetPermissions() throws IOException {
+		assertNotNull(pMBean);
+        String permissionInfo = (new PermissionInfo(AllPermission.class.getName(), "", "")).getEncoded();
+		pMBean.setPermissions(testbundle.getLocation(), new String[] {permissionInfo});
+		
+		String[] mBeanPermissions = pMBean.getPermissions(testbundle.getLocation());
+		boolean found = false;
+		if (mBeanPermissions != null) {
+			for (int i = 0; i < mBeanPermissions.length; i++) {
+				if (permissionInfo.equals(mBeanPermissions[i])) {
+					found = true;
+					break;
+				}
+			}
+		}
+		assertTrue("set permission didn't changed the mbean permissions", found);
+	}
+
+	public void testSetDefaultPermissions() throws IOException {
+		assertNotNull(pMBean);
+		String permissionInfo = (new PermissionInfo(AllPermission.class.getName(), "", "")).getEncoded();		
+		pMBean.setDefaultPermissions(new String[] {permissionInfo});
+		String[] mBeanPermissions = pMBean.listDefaultPermissions();
+		assertTrue("set default permissions doesn't work", (mBeanPermissions != null) && (mBeanPermissions.length == 1) &&
+															permissionInfo.equals(mBeanPermissions[0]));
+	}
+	
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();

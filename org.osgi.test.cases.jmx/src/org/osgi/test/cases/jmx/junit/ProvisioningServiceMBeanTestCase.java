@@ -49,6 +49,34 @@ public class ProvisioningServiceMBeanTestCase extends MBeanGeneralTestCase {
 		compareDictAndTable(dict, table);
 	}
 
+	public void testSetInformation() throws IOException {
+		assertNotNull(pMBean);
+		assertNotNull(pService);
+
+		Dictionary<String, String> dict = new Hashtable<String, String>();
+		dict.put("foo.info", "bar.value");
+		dict.put("one.key", "another.value");
+		pMBean.addInformation(OSGiProperties.tableFrom(dict));
+		Hashtable<String, Object> table = OSGiProperties.propertiesFrom(pMBean.listInformation());
+		compareDictAndTable(dict, table);
+
+		dict = new Hashtable<String, String>();
+		dict.put("one.key", "another.value.new");
+		pMBean.setInformation(OSGiProperties.tableFrom(dict));
+		table = OSGiProperties.propertiesFrom(pMBean.listInformation());
+		assertTrue("set information doesn't work", table.size() == 2);
+		compareDictAndTable(dict, table);		
+	}
+	
+	public void testAddInformationFromZip() throws IOException {
+		assertNotNull(pMBean);
+		assertNotNull(pService);
+
+		pMBean.addInformationFromZip(getContext().getBundle().getEntry("tb2.jar").toString());
+		Hashtable<String, Object> table = OSGiProperties.propertiesFrom(pMBean.listInformation());
+		assertTrue("add information from zip doesn't work", table.keySet().contains("org/osgi/test/cases/jmx/tb2/impl/ConfiguratorImpl.class"));
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void compareDictAndTable(Dictionary<String, String> dict,
 			Hashtable<String, Object> table) {
