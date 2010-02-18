@@ -30,6 +30,5 @@ Export-Package = \
 	osgi.core;version=4.2, \
 	org.apache.geronimo.transaction;version=2.1.2, \
 	slf4j.api;version=1.4.3, \
-	slf4j.simple;version=1.4.3, \
-	${junit}
+	slf4j.simple;version=1.4.3
 
