@@ -25,11 +25,15 @@ import javax.naming.Name;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.OperationNotSupportedException;
+import javax.naming.Reference;
+import javax.naming.Referenceable;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchControls;
+import javax.naming.spi.DirectoryManager;
+import javax.naming.spi.NamingManager;
 
 /**
  * @version $Revision$ $Date$
@@ -54,6 +58,33 @@ public class CTDirContext extends CTContext implements DirContext {
 		attributeMap.put(name.toString(), attrs);
 	}
 
+	public Object lookup(String name) throws NamingException {
+		return lookup(new CompositeName(name));
+	}
+
+	public Object lookup(Name name) throws NamingException {
+		if (closed) {
+			throw new OperationNotSupportedException("This context has been closed.");
+		}
+		if (name.isEmpty()) {
+			return new CTContext();
+		}
+		
+		Object obj = storage.get(name.toString());
+		
+		if (obj instanceof Reference || obj instanceof Referenceable) {		
+			try {
+				return DirectoryManager.getObjectInstance(obj, null, null, null, (Attributes) attributeMap.get(name.toString()));
+			} catch (Exception ex) {
+				throw new NamingException("Unable to retrieve reference");
+			}
+		} else if (obj != null) {
+			return obj;
+		} else {
+			throw new NamingException("Unable to find " + name.toString());
+		}	
+	}
+	
 	public DirContext createSubcontext(String name, Attributes attrs) throws NamingException {
 		return createSubcontext(new CompositeName(name), attrs);
 	}

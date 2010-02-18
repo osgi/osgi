@@ -13,6 +13,8 @@ Import-Package 						= \
 
 
 Include-Resource 					= \
+	dirObjectFactory1.jar	 , \
+	dirObjectFactoryBuilder1.jar , \
 	initialContextFactory1.jar , \
 	initialContextFactory2.jar , \
 	initialContextFactoryBuilder1.jar , \

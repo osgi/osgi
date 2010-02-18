@@ -21,10 +21,12 @@ import java.util.Hashtable;
 
 import javax.naming.Context;
 import javax.naming.StringRefAddr;
+import javax.naming.directory.BasicAttributes;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.jndi.JNDIContextManager;
 import org.osgi.service.jndi.JNDIProviderAdmin;
+import org.osgi.test.cases.jndi.provider.CTDirObjectFactory;
 import org.osgi.test.cases.jndi.provider.CTInitialContextFactory;
 import org.osgi.test.cases.jndi.provider.CTObjectFactory;
 import org.osgi.test.cases.jndi.provider.CTReference;
@@ -45,7 +47,7 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 	public void testGetObjectInstanceWithReferenceable() throws Exception {
 		// Install the required bundles
 		Bundle contextFactoryBundle = installBundle("initialContextFactory1.jar");
-		Bundle objectFactoryBundle = installBundle("objectFactory1.jar");
+		Bundle objectFactoryBundle = installBundle("objectFactoryBuilder1.jar");
 		// Grab the JNDIProviderAdmin service
 		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
 		try {
@@ -57,6 +59,28 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		} finally {
 			uninstallBundle(objectFactoryBundle);
 			uninstallBundle(contextFactoryBundle);
+			ungetService(ctxAdmin);
+		}
+	}
+
+	public void testGetObjectInstanceWithReferencableAndAttributes() throws Exception {
+		// Install the required bundles
+		Bundle dirContextFactoryBundle = installBundle("initialDirContextFactory1.jar");
+		Bundle dirObjectFactoryBundle = installBundle("dirObjectFactoryBuilder1.jar");
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		try {
+			// Create a referenceable object for testing
+			BasicAttributes attrs = new BasicAttributes();
+			attrs.put("testAttribute", new Object());
+			CTTestObject ref = new CTTestObject("pass");
+			// resolve the reference
+			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref,null,null,null,attrs);
+			assertEquals(testObject.getValue(), ref.getValue());
+			assertEquals(testObject.getAttributes(), attrs);
+		} finally {
+			uninstallBundle(dirObjectFactoryBundle);
+			uninstallBundle(dirContextFactoryBundle);
 			ungetService(ctxAdmin);
 		}
 	}
@@ -74,6 +98,25 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		} finally {
 			uninstallBundle(objectFactoryBuilderBundle);
 			uninstallBundle(contextFactoryBundle);
+			ungetService(ctxAdmin);
+		}
+	}
+	
+	public void testGetObjectInstanceWithNoReferenceAndAttributes() throws Exception {
+		// Install the required bundles
+		Bundle dirContextFactoryBundle = installBundle("initialDirContextFactory1.jar");
+		Bundle dirObjectFactoryBuilderBundle = installBundle("dirObjectFactoryBuilder1.jar");
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		try {
+			// Do a getObjectInstance call with only the object class as an option and the desired attributes
+			BasicAttributes attrs = new BasicAttributes();
+			attrs.put("testAttribute", new Object());
+			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(CTTestObject.class.getName(), null, null, null, attrs);
+			assertEquals(testObject.getAttributes(), attrs);
+		} finally {
+			uninstallBundle(dirObjectFactoryBuilderBundle);
+			uninstallBundle(dirContextFactoryBundle);
 			ungetService(ctxAdmin);
 		}
 	}
@@ -97,6 +140,27 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		}
 	}
 	
+	public void testGetObjectInstanceWithFactoryNameAndAttributes() throws Exception {
+		// Install the required bundles
+		Bundle dirContextFactoryBundle = installBundle("initialDirContextFactory1.jar");
+		Bundle dirObjectFactoryBundle = installBundle("dirObjectFactory1.jar");
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		try {
+			BasicAttributes attrs = new BasicAttributes();
+			attrs.put("testAttribute", new Object());
+			// Create a reference object we can use for testing
+			CTReference ref = new CTReference(CTTestObject.class.getName(), CTDirObjectFactory.class.getName());
+			// Resolve the reference
+			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref, null, null, null, attrs);
+			assertEquals(testObject.getAttributes(), attrs);
+		} finally {
+			uninstallBundle(dirObjectFactoryBundle);
+			uninstallBundle(dirContextFactoryBundle);
+			ungetService(ctxAdmin);
+		}
+	}
+	
 	public void testGetObjectInstanceWithNoFactoryName() throws Exception {
 		// Install the required bundles
 		Bundle contextFactoryBundle = installBundle("initialContextFactory1.jar");
@@ -112,6 +176,27 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		} finally {
 			uninstallBundle(objectFactoryBundle);
 			uninstallBundle(contextFactoryBundle);
+			ungetService(ctxAdmin);
+		}
+	}
+
+	public void testGetObjectInstanceWithNoFactoryNameAndAttributes() throws Exception {
+		// Install the required bundles
+		Bundle dirContextFactoryBundle = installBundle("initialDirContextFactory1.jar");
+		Bundle dirObjectFactoryBundle = installBundle("dirObjectFactory1.jar");
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		try { 
+			BasicAttributes attrs = new BasicAttributes();
+			attrs.put("testAttribute", new Object());
+			// Create a reference object we can use for testing
+			CTReference ref = new CTReference(CTTestObject.class.getName());
+			// Resolve the reference
+			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref, null, null, null, attrs);
+			assertEquals(testObject.getAttributes(), attrs);
+		} finally {
+			uninstallBundle(dirObjectFactoryBundle);
+			uninstallBundle(dirContextFactoryBundle);
 			ungetService(ctxAdmin);
 		}
 	}
@@ -166,6 +251,27 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 		}
 	}
 	
+	public void testGetObjectInstanceWithBuilderAndAttributes() throws Exception {
+		// Install the required bundles
+		Bundle dirContextFactoryBundle = installBundle("initialDirContextFactory1.jar");
+		Bundle dirObjectFactoryBuilderBundle = installBundle("dirObjectFactoryBuilder1.jar");
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		try {
+			BasicAttributes attrs = new BasicAttributes();
+			attrs.put("testAttributes", new Object());
+			// Create a reference object we can use for testing
+			CTReference ref = new CTReference(CTTestObject.class.getName(), CTDirObjectFactory.class.getName());
+			// Resolve the reference
+			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref, null, null, null, attrs);
+			assertEquals(testObject.getAttributes(), attrs);
+		} finally {
+			uninstallBundle(dirObjectFactoryBuilderBundle);
+			uninstallBundle(dirContextFactoryBundle);
+			ungetService(ctxAdmin);
+		}
+	}
+	
 	public void testGetObjectInstanceWithMissingFactory() throws Exception {
 		// Install the required bundles
 		Bundle contextFactoryBundle = installBundle("initialContextFactory1.jar");
@@ -179,6 +285,28 @@ public class TestJNDIProviderAdmin extends DefaultTestBundleControl {
 			CTReference returnedRef = (CTReference) ctxAdmin.getObjectInstance(ref, null, null, null);
 			if (!(returnedRef.equals(ref))) {
 				fail("The provided reference was not correctly returened");
+			}
+		} finally {
+			uninstallBundle(contextFactoryBundle);
+			ungetService(ctxAdmin);
+		}
+	}
+	
+	public void testGetObjectInstanceWithMissingFactoryAndAttributes() throws Exception {
+		// Install the required bundles
+		Bundle contextFactoryBundle = installBundle("initialDirContextFactory1.jar");
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		try {
+			BasicAttributes attrs = new BasicAttributes();
+			attrs.put("testAttributes", new Object());
+			// Create a reference object we can use for testing
+			CTReference ref = new CTReference(CTTestObject.class.getName(), CTDirObjectFactory.class.getName());
+			// Resolve the reference, we should get back the reference we provided since the necessary
+			// objectFactory isn't available
+			CTReference returnedRef = (CTReference) ctxAdmin.getObjectInstance(ref, null, null, null, attrs);
+			if (!(returnedRef.equals(ref))) {
+				fail("The provider reference was not correctly returned");
 			}
 		} finally {
 			uninstallBundle(contextFactoryBundle);

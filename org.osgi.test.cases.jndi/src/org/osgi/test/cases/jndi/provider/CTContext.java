@@ -40,7 +40,7 @@ public class CTContext implements Context {
 	protected static Map storage = new HashMap();
 	private Map env 	= new HashMap();
 	private static int invokeCount = 0;
-	private boolean closed = false;
+	protected boolean closed = false;
 	
 	private static final NameParser parser = new CTNameParser();
 

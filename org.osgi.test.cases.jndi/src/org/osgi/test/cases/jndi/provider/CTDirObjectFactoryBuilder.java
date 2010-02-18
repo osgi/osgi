@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IBM Corporation (2009). All Rights Reserved.
+ * Copyright (c) IBM Corporation (2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,25 +21,23 @@ import java.util.Hashtable;
 
 import javax.naming.NamingException;
 import javax.naming.spi.ObjectFactory;
-
-import org.osgi.test.cases.jndi.provider.CTObjectFactory;
+import javax.naming.spi.ObjectFactoryBuilder;
 
 /**
  * @version $Revision$ $Date$
  */
-public class CTObjectFactoryBuilder implements javax.naming.spi.ObjectFactoryBuilder {
-
+public class CTDirObjectFactoryBuilder implements ObjectFactoryBuilder {
+	
 	public ObjectFactory createObjectFactory(Object obj, Hashtable environment)
 			throws NamingException {
 		if (obj instanceof CTReference || obj instanceof String) {
 			if (environment != null) {
-				return new CTObjectFactory(environment);
+				return new CTDirObjectFactory(environment);
 			} else {
-				return new CTObjectFactory();
+				return new CTDirObjectFactory();
 			}
 		} else { 
 			return null;
 		}
 	}
-
 }

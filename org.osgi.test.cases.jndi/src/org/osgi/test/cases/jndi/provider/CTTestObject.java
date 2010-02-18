@@ -21,6 +21,7 @@ import javax.naming.NamingException;
 import javax.naming.Reference;
 import javax.naming.Referenceable;
 import javax.naming.StringRefAddr;
+import javax.naming.directory.Attributes;
 
 /**
  * Test Object that can be returned by an ObjectFactory
@@ -31,6 +32,7 @@ import javax.naming.StringRefAddr;
 public class CTTestObject implements Referenceable {
 	
 	private String value;
+	private Attributes attrs;
 	
 	public CTTestObject() {
 		
@@ -38,6 +40,11 @@ public class CTTestObject implements Referenceable {
 	
 	public CTTestObject(String value) {
 		this.value = value;
+	}
+	
+	public CTTestObject(String value, Attributes attrs) {
+		this.value = value;
+		this.attrs = attrs;
 	}
 	
 	public void setValue(String value) {
@@ -48,6 +55,14 @@ public class CTTestObject implements Referenceable {
 		return this.value;
 	}
 
+	public void setAttributes(Attributes attrs) {
+		this.attrs = attrs;
+	}
+	
+	public Attributes getAttributes() {
+		return this.attrs;
+	}
+	
 	public Reference getReference() throws NamingException {
 		Reference ref = null;
 		
