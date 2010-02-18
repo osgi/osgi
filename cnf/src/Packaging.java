@@ -1,12 +1,24 @@
-import java.io.*;
-import java.util.*;
-import java.util.jar.*;
+import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.jar.Manifest;
 
-import aQute.bnd.build.*;
-import aQute.bnd.service.*;
-import aQute.lib.osgi.*;
-import aQute.libg.header.*;
-import aQute.libg.version.*;
+import aQute.bnd.build.Container;
+import aQute.bnd.build.Project;
+import aQute.bnd.build.ProjectBuilder;
+import aQute.bnd.build.Workspace;
+import aQute.bnd.service.AnalyzerPlugin;
+import aQute.lib.osgi.Analyzer;
+import aQute.lib.osgi.Constants;
+import aQute.lib.osgi.EmbeddedResource;
+import aQute.lib.osgi.FileResource;
+import aQute.lib.osgi.Jar;
+import aQute.lib.osgi.Resource;
+import aQute.libg.header.OSGiHeader;
+import aQute.libg.version.Version;
 
 /**
  * This script runs after the bnd file stuff has been done, before analyzing any
@@ -50,7 +62,7 @@ public class Packaging implements AnalyzerPlugin {
 		StringBuilder sb = new StringBuilder();
 		sb.append("# Workspace information\n");
 		sb.append("-runpath = ");
-		flatten(analyzer, sb, jar, runpath, true);
+		flatten(analyzer, sb, jar, runpath, false);
 		sb.append('\n');
 		jar.putResource("shared.inc", new EmbeddedResource(sb.toString()
 				.getBytes("UTF-8"), 0));
