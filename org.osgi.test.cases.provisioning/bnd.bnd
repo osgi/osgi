@@ -1,3 +1,7 @@
+-make                   =  \
+  (*).(jar);                             type=bnd;  recipe="bnd/$1.bnd", \
+  (*).(ipa);                             type=bnd;  recipe="ipa/$1.bnd"
+
 Bundle-Version: 4.2.0.${project.build}
 Bundle-Activator: ${p}.junit.Activator
 Bundle-RequiredExecutionEnvironment = J2SE-1.4

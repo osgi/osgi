@@ -57,8 +57,7 @@ javac.target 			= 1.2
 
 
 -make                   =  \
-  (*).(jar);                             type=bnd;  recipe="bnd/$1.bnd", \
-  (*).(ipa);                             type=bnd;  recipe="ipa/$1.bnd"
+  (*).(jar);                             type=bnd;  recipe="bnd/$1.bnd"
 
 
 # Time options
