@@ -16,6 +16,7 @@
 package org.osgi.test.cases.webcontainer.util;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.JarURLConnection;
 import java.net.URL;
@@ -26,6 +27,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
@@ -58,6 +60,7 @@ public abstract class WebContainerTestBundleControl extends
     protected static final String WEB_JSP_EXTRACT_LOCATION = Validator.WEB_JSP_EXTRACT_LOCATION;
     protected static final String[] IMPORTS_OSGI_FRAMEWORK = {"org.osgi.framework", "org.osgi.service.log"};
     protected static final String[] IMPORTS_JNDI = {"javax.naming"};
+   
 
     public void setUp() throws Exception {
         // TODO if war file already exists, let's remove it first.
@@ -132,20 +135,10 @@ public abstract class WebContainerTestBundleControl extends
      * return original manifest from the test war path
      */
     protected Manifest getManifest(String warPath) throws Exception {
-        // test bundle manifest is constructed per user's deployment options
-        String location = System.getProperty("user.dir");
-        
-        if (!location.endsWith(File.separator)) {
-        	location += File.separator;
-        }
-        
-        location += "generated" + warPath;
-        log("jar:file:" + location + "!/");
-        URL url = new URL("jar:file:" + location + "!/");
-        JarURLConnection conn = (JarURLConnection) url.openConnection();
-        JarFile jarfile = conn.getJarFile();
-        Manifest originalManifest = jarfile.getManifest();
-        return originalManifest;
+        InputStream is = getClass().getClassLoader().getResourceAsStream(warPath);
+        JarInputStream jis = new JarInputStream(is);
+
+        return jis.getManifest();
     }
 
     /*
