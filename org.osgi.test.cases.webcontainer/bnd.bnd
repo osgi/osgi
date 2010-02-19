@@ -6,8 +6,7 @@ Bundle-Version: 4.2.0.${project.build}
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
 Private-Package						= org.osgi.test.support.*, \
-	${p}.*, \
-	${p}.junit.*
+	${p}.*
 
 Include-Resource					= \
 	${target}/tw1.war, \
@@ -27,7 +26,6 @@ Import-Package = \
  	*
  	
 Export-Package =\
-	${p};version=1.0, \
 	${p}.util;version=1.0, \
 	${p}.util.validate;version=1.0
 	
