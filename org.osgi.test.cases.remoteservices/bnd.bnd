@@ -21,7 +21,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.remoteserviceadmin;  version=latest, \
 	org.osgi.impl.bundle.remoteserviceadmin.discovery;  version=latest, \
 	org.osgi.impl.bundle.remoteserviceadmin.discovery.config;  version=latest, \
-	osgi.enterprise;						version=latest	, \
+	osgi.enterprise; version=${enterprise.published.version};strategy=lowest	, \
 	org.osgi.impl.service.log;				version=latest
 	
 
@@ -29,7 +29,7 @@ Test-Cases							= ${testcases}
 	osgi.compatibility.bootdelegation=false, \
 	osgi.resolverMode=strict, \
 	osgi.support.multipleHosts=true, \
-	${p}.bundles="${uniq;${repo;org.osgi.impl.service.remoteserviceadmin},${repo;osgi.enterprise},${repo;org.osgi.impl.service.log}}", \
+	${p}.bundles="${uniq;${repo;org.osgi.impl.service.remoteserviceadmin},${repo;osgi.enterprise;${enterprise.published.version};lowest},${repo;org.osgi.impl.service.log}}", \
 	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.address", \
 	service.exported.configs=org.apache.cxf.ws, \
 	org.apache.cxf.ws.address=http://localhost:9090/test

@@ -45,7 +45,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.bundle.autoconf; version=project, \
 	org.osgi.impl.service.deploymentadmin; version=project, \
 	org.osgi.impl.service.cm;  version=latest, \
-	osgi.cmpn; version=latest
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 
 -buildpath=\
     org.osgi.test.support; 				version=project , \

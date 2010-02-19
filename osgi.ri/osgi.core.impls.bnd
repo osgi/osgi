@@ -1,13 +1,14 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${core.release.version}} Version ${version;==;${core.release.version}}, \
+	OSGi Service Platform Release ${version;=;${core.build.version}} Version ${version;==;${core.build.version}}, \
 	Core Reference Implementation.
 
-Bundle-Version					: ${core.release.version}
+Bundle-Version					: ${core.build.version}
 
 Include-Resource				: \
 	  	\
-	  	${repo;org.eclipse.osgi}, \
-		${repo;osgi.core;${version;===;${core.release.version}}}, \
+	  	${uniq;\
+        ${jar.core.impls} \
+	 	},\
 	 	\
 		NOTICE=legal/NOTICE.txt, \
 		{about.html=legal/about.html}

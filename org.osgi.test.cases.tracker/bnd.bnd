@@ -11,7 +11,7 @@ Export-Package						= ${p}.service
 	${junit}
 	
 -runbundles							= \
-	osgi.cmpn; version=latest
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 
 -runproperties						= report=true
 
@@ -19,7 +19,7 @@ Export-Package						= ${p}.service
 # project instead of the one in Equinox.
 #-runpath							= \
 #	org.osgi.util.tracker;	version=project, \
-#	org.eclipse.osgi;		version=3.5.1, \
+#	org.osgi.impl.framework; version=latest, \
 #	${junit}
 	
 Test-Cases							= ${testcases}

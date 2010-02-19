@@ -74,15 +74,22 @@ osgi.release				= 4
 osgi.version				= 4.2
 -versionpolicy				= "[${version;==;${@}},${version;+;${@}})"
 
-osgi.release.version		= ${osgi.version}.0.${project.build}
-# Increment micro version of core since core is complete and we need to leave 4.2.0 stable
-core.release.version		= ${version;==+=;${osgi.release.version}}
-# Increment micro version of cmpn since cmpn is complete and we need to leave 4.2.0 stable
-cmpn.release.version		= ${version;==+=;${osgi.release.version}}
-mobile.release.version		= ${osgi.release.version}
-# Increment micro version of enterprise since enterprise is complete and we need to leave 4.2.0 stable
-enterprise.release.version	= ${version;==+=;${osgi.release.version}}
-proposed.release.version	= ${osgi.release.version}
+osgi.build.version			= ${osgi.version}.0.${project.build}
+
+core.published.version		= 4.2.0
+core.build.version			= ${version;==+=;${osgi.build.version}}
+
+cmpn.published.version		= 4.2.0
+cmpn.build.version			= ${version;==+=;${osgi.build.version}}
+
+mobile.published.version	= 4.0.0
+mobile.build.version		= ${version;====;${osgi.build.version}}
+
+enterprise.published.version = 4.2.0
+enterprise.build.version	= ${version;==+=;${osgi.build.version}}
+
+# Never released
+proposed.build.version		= ${version;====;${osgi.build.version}}
 
 
 # Documentation
@@ -94,7 +101,7 @@ junit.package			= junit.framework;version=3.8
 junit					= com.springsource.junit;version=3.8;export="${junit.package}"
 
 -runpath							= \
-	org.eclipse.osgi;		version=3.5.2, \
+	org.osgi.impl.framework;		version=latest, \
 	${junit}
 
 # Use the following for 4.3 framework RI development	

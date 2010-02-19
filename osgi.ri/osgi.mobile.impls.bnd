@@ -1,19 +1,15 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${mobile.release.version}} Version ${version;==;${mobile.release.version}}, \
+	OSGi Service Platform Release ${version;=;${mobile.build.version}} Version ${version;==;${mobile.build.version}}, \
 	Mobile Reference Implementations.
 
-Bundle-Version					: ${mobile.release.version}
+Bundle-Version					: ${mobile.build.version}
 
 Include-Resource				: \
-		${repo;${build.mobile.impls};0;HIGHEST}, \
 		\
-		${repo;org.apache.felix.configadmin}, \
-		${repo;org.eclipse.equinox.ds}, \
-		${repo;org.eclipse.equinox.event}, \
-		${repo;org.eclipse.equinox.metatype}, \
-		${repo;org.eclipse.equinox.util}, \
-		${repo;org.osgi.impl.bundle.servlet;2.1}, \
-		${repo;osgi.mobile;${version;===;${mobile.release.version}}}, \
+	  	${uniq;\
+        ${repo;${build.mobile.impls}}, \
+        ${jar.mobile.impls} \
+	 	},\
 		\
 		NOTICE=legal/NOTICE.txt, \
 		{about.html=legal/about.html}

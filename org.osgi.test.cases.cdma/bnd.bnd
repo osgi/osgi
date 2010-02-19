@@ -11,7 +11,7 @@ Private-Package						= org.osgi.test.support.*, \
 	${junit}
 
 -runbundles						= \
-	osgi.cmpn; version=4.2
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 
 -runproperties					= \
 

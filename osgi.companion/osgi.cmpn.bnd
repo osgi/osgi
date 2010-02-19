@@ -1,8 +1,8 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${cmpn.release.version}} Version ${version;==;${cmpn.release.version}}, \
+	OSGi Service Platform Release ${version;=;${cmpn.build.version}} Version ${version;==;${cmpn.build.version}}, \
 	Compendium Interfaces and Classes for use in compiling bundles.
 
-Bundle-Version					: ${cmpn.release.version}
+Bundle-Version					: ${cmpn.build.version}
 DynamicImport-Package			: *
 Import-Package					: *; resolution:=optional
 

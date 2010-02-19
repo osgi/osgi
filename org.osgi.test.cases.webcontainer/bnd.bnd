@@ -42,7 +42,7 @@ Export-Package =\
 -runbundles						= \
 	org.osgi.impl.service.log; 			version=latest, \
 	org.osgi.impl.service.event; 			version=latest, \
-	osgi.enterprise; 							version=latest, \
+	osgi.enterprise; version=${enterprise.published.version};strategy=lowest, \
     org.osgi.impl.bundle.webcontainer; version=latest
 	
 -runproperties = report=true, \

@@ -24,7 +24,7 @@ Include-Resource					= \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.provisioning; version=latest, \
-	osgi.enterprise;						version=latest		, \
+	osgi.enterprise; version=${enterprise.published.version};strategy=lowest		, \
 	org.osgi.impl.bundle.servlet;		version=2.1
 
 -runproperties					= report=true, \

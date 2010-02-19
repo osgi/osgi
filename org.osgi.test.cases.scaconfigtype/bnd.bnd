@@ -28,14 +28,14 @@ Include-Resource					= \
 	${junit}
 
 -runbundles							= \
-	osgi.enterprise;						version=latest	
+	osgi.enterprise; version=${enterprise.published.version};strategy=lowest	
 	
 -runproperties = report=true, \
 	osgi.compatibility.bootdelegation=false, \
 	osgi.resolverMode=strict, \
 	osgi.support.multipleHosts=true, \
 	${p}.system.packages.extra="${junit.package}", \
-	${p}.bundles="${uniq;${repo;org.osgi.impl.service.event},${repo;org.osgi.impl.bundle.sca},${repo;osgi.enterprise},${repo;org.osgi.impl.service.log}}", \
+	${p}.bundles="${uniq;${repo;org.osgi.impl.service.event},${repo;org.osgi.impl.bundle.sca},${repo;osgi.enterprise;${enterprise.published.version};lowest},${repo;org.osgi.impl.service.log}}", \
 	${p}.serverconfig="service.exported.configs,org.osgi.sca.domain.registry", \
 	service.exported.configs=org.osgi.sca, \
 	org.osgi.sca.domain.registry="tribes://228.0.0.100:50000"

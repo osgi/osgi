@@ -37,13 +37,11 @@ Export-Package =\
 	org.osgi.test.support;						version=project, \
 	${junit}
 
-# Comments out -runbundles. For some reason bnd is upset by -runbundles refering to
-# non-existent repo entries during bndprepare ant task. I asked Peter to make a change to bnd.
 -runbundles						= \
     org.osgi.test.cases.webcontainer; 		version = project, \
 	org.osgi.impl.service.log; 			version=latest, \
 	org.osgi.impl.service.event; 			version=latest, \
-	osgi.enterprise; 							version=latest, \
+	osgi.enterprise; version=${enterprise.published.version};strategy=lowest, \
     org.osgi.impl.bundle.webcontainer; version=latest, \
 	org.osgi.impl.service.jndi; version=project
 # TODO add rfc142 impl bundle here if user wants to run some simple rfc 66 + rfc 142 tests

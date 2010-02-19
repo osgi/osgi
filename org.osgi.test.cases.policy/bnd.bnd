@@ -27,7 +27,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.policy;     version=project, \
     org.osgi.impl.service.cm;     version=latest, \
 	org.osgi.impl.service.dmt;        version=latest, \
-	osgi.cmpn;	                      version=latest
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 
 
 -runproperties = report=true, \

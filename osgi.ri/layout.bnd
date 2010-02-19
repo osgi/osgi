@@ -1,5 +1,9 @@
 build.impls                 = ${uniq; ${build.cmpn.impls}, ${build.mobile.impls}, ${build.enterprise.impls}}
 
+jar.core.impls = \
+	${repo;osgi.core;${core.published.version};lowest}, \
+	${repo;org.osgi.impl.framework}
+
 build.cmpn.impls = \
 	org.osgi.impl.bundle.autoconf, \
 	org.osgi.impl.bundle.jaxp, \
@@ -20,6 +24,17 @@ build.cmpn.impls = \
 	org.osgi.impl.service.useradmin , \
 	org.osgi.impl.service.wireadmin 
 
+jar.cmpn.impls = \
+	${repo;osgi.cmpn;${cmpn.published.version};lowest}, \
+	${repo;org.osgi.impl.bundle.servlet;2.1}, \
+	${repo;org.osgi.impl.service.blueprint}, \
+	${repo;org.osgi.impl.service.cm}, \
+	${repo;org.osgi.impl.service.component}, \
+	${repo;org.osgi.impl.service.event}, \
+	${repo;org.osgi.impl.service.metatype}, \
+	${repo;org.osgi.impl.service.provisioning}, \
+	${repo;org.osgi.impl.service.remoteserviceadmin}
+
 build.mobile.impls = \
   	org.osgi.impl.bundle.autoconf , \
   	org.osgi.impl.bundle.jaxp , \
@@ -33,13 +48,41 @@ build.mobile.impls = \
   	org.osgi.impl.service.policy , \
   	org.osgi.impl.service.prefs
   	
+jar.mobile.impls = \
+	${repo;osgi.mobile;${mobile.published.version};lowest}, \
+	${repo;osgi.cmpn;${cmpn.published.version};lowest}, \
+	${repo;org.osgi.impl.bundle.servlet;2.1}, \
+	${repo;org.osgi.impl.service.cm}, \
+	${repo;org.osgi.impl.service.component}, \
+	${repo;org.osgi.impl.service.event}, \
+	${repo;org.osgi.impl.service.metatype}
+
+
 build.enterprise.impls = \
-	org.osgi.impl.bundle.transaction, \
-	org.osgi.impl.service.jdbc, \
 	org.osgi.impl.bundle.jmx, \
+	org.osgi.impl.bundle.transaction, \
+	org.osgi.impl.service.http , \
+	org.osgi.impl.service.jdbc, \
 	org.osgi.impl.service.jndi, \
-	org.osgi.impl.service.log, \
+	org.osgi.impl.service.log , \
 	org.osgi.impl.service.useradmin
 #Remove from build until it compiles again
 #	org.osgi.impl.service.jpa, \
 	
+jar.enterprise.impls = \
+	${repo;osgi.enterprise;${enterprise.published.version};lowest}, \
+	${repo;osgi.cmpn;${cmpn.published.version};lowest}, \
+	${repo;org.osgi.impl.bundle.derby}, \
+	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery}, \
+	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}, \
+	${repo;org.osgi.impl.bundle.sca}, \
+	${repo;org.osgi.impl.bundle.servlet;2.1}, \
+	${repo;org.osgi.impl.service.blueprint}, \
+	${repo;org.osgi.impl.service.cm}, \
+	${repo;org.osgi.impl.service.component}, \
+	${repo;org.osgi.impl.service.event}, \
+	${repo;org.osgi.impl.service.metatype}, \
+	${repo;org.osgi.impl.service.provisioning}, \
+	${repo;org.osgi.impl.service.remoteserviceadmin}, \
+	${repo;org.osgi.impl.bundle.webcontainer}
+

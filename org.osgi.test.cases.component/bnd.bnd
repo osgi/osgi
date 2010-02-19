@@ -39,7 +39,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.component; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
-	osgi.cmpn; version=latest
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 
 -runproperties = report=true, \
 	scr.bundle.name=org.eclipse.equinox.ds

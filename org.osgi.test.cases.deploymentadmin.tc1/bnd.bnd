@@ -63,7 +63,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.log; 						version=latest,\
 	org.osgi.impl.service.event;  					version=latest, \
 	org.osgi.impl.service.cm;  					version=latest, \
-	osgi.cmpn;	 									version=latest
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 
 -buildpath=\
 	org.osgi.service.deploymentadmin;	version=project, \

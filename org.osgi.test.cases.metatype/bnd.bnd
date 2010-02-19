@@ -22,6 +22,6 @@ Test-Cases							= ${testcases}
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.metatype; version=latest, \
-	osgi.cmpn; version=latest
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 	
 -runproperties = report=true

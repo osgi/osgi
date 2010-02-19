@@ -1,8 +1,8 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${cmpn.release.version}} version ${cmpn.release.version}, \
+	OSGi Service Platform Release ${version;=;${cmpn.build.version}} version ${cmpn.build.version}, \
 	Compendium Test Case Bundles.
 
-Bundle-Version					: ${cmpn.release.version}
+Bundle-Version					: ${cmpn.build.version}
 Include-Resource				: \
     NOTICE=legal/NOTICE.txt, \
  	{about.html=legal/about.html}

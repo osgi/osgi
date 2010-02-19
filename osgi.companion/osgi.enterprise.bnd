@@ -1,8 +1,8 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${enterprise.release.version}} Version ${version;==;${enterprise.release.version}}, \
+	OSGi Service Platform Release ${version;=;${enterprise.build.version}} Version ${version;==;${enterprise.build.version}}, \
 	Enterprise Interfaces and Classes for use in compiling bundles.
 
-Bundle-Version					: ${enterprise.release.version}
+Bundle-Version					: ${enterprise.build.version}
 DynamicImport-Package			: *
 Import-Package					: *; resolution:=optional
 

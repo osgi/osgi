@@ -13,7 +13,7 @@ Private-Package		= ${p}.*
     org.osgi.impl.service.cm;     version=latest, \
 	org.osgi.impl.service.dmt;	version=latest, \
 	org.osgi.impl.service.residentialmanagement;	version=project, \
-	osgi.cmpn;						version=latest
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 
 Test-Cases: ${testcases}
 

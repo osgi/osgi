@@ -31,7 +31,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.dmt;  version=latest, \
 	org.osgi.impl.bundle.jaxp; version=latest, \
 	org.osgi.impl.service.event; version=latest, \
-	osgi.cmpn; version=latest
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 
 -runproperties = report=true, \
 	org.osgi.framework.security=osgi, \

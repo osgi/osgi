@@ -26,7 +26,7 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.enterprise;						version=latest	, \
+	osgi.enterprise; version=${enterprise.published.version};strategy=lowest	, \
 	org.osgi.impl.service.event;              version=latest, \
 	org.osgi.impl.service.remoteserviceadmin;  version=latest, \
 	org.osgi.impl.bundle.remoteserviceadmin.discovery;  version=latest, \
@@ -39,7 +39,7 @@ Test-Cases							= ${testcases}
 	osgi.console=1111, \
 	osgi.support.multipleHosts=true, \
 	${p}.system.packages.extra="${junit.package}", \
-	${p}.bundles="${uniq;${repo;osgi.enterprise},${repo;org.osgi.impl.service.log},${repo;org.osgi.impl.service.remoteserviceadmin},${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}}", \
+	${p}.bundles="${uniq;${repo;osgi.enterprise;${enterprise.published.version};lowest},${repo;org.osgi.impl.service.log},${repo;org.osgi.impl.service.remoteserviceadmin},${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}}", \
 	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.address", \
 	service.exported.configs=org.apache.cxf.ws, \
 	org.apache.cxf.ws.address=http://localhost:9090/test

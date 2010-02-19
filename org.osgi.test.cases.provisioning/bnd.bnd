@@ -48,7 +48,7 @@ Include-Resource: \
 	org.osgi.impl.service.http; version=latest, \
 	org.osgi.impl.service.provisioning; version=latest, \
 	org.osgi.impl.bundle.rsh;		version=project, \
-	osgi.cmpn; version=latest
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 
 -runproperties = report=true, \
 	org.osgi.service.http.hostname=127.0.0.1, \

@@ -33,7 +33,7 @@ Test-Cases							= ${testcases}
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
-	osgi.cmpn; version=4.2
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 	
 -runproperties = report=true, \
 	org.osgi.framework.security=osgi, \
