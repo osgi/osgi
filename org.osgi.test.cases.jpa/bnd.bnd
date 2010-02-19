@@ -22,12 +22,12 @@ Include-Resource 					= \
 	org.osgi.service.jpa;			version=project	, \
 	org.osgi.service.jdbc;			version=project , \
 	osgi.core;						version=4.2		, \
-	javax.persistence;				version=2.0, \
+	org.eclipse.persistence.jpa;	version=2.0, \
 	${junit}
 	
 -runbundles						= \
 	org.osgi.impl.service.jpa;      version=project , \
-	javax.persistence;				version=2.0 , \
+	org.eclipse.persistence.jpa;	version=2.0 , \
 	
 -runproperties					= report=true
 
