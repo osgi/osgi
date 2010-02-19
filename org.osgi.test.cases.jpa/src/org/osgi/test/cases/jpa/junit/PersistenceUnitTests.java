@@ -118,7 +118,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 			ServiceReference unitRef = getContext().getServiceReference(EntityManagerFactoryBuilder.class.getName());
 			String unitName = (String) unitRef.getProperty("osgi.unit.name");
 			String unitVersion = (String) unitRef.getProperty("osgi.unit.version");
-			String providerName = (String) unitRef.getProperty("osgi.provider");
+			String providerName = (String) unitRef.getProperty("osgi.unit.provider");
 			
 			if (unitName == null) {
 				fail("The osgi.unit.name property is not set.");
@@ -134,9 +134,9 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 			
 			ServiceReference providerRef = (ServiceReference) getServiceReference(PersistenceProvider.class);
 			if (providerName == null) {
-				fail("The osgi.provider property is not set.");
+				fail("The osgi.unit.provider property is not set.");
 			} else if (!providerName.equals(providerRef.getProperty("javax.persistence.provider"))) {
-				fail("The osgi.provider property is not set correctly.  Received osgi.provider=" + providerName + " but expected osgi.provider=" + providerRef.getProperty("javax.persistence.provider"));
+				fail("The osgi.unit.provider property is not set correctly.  Received osgi.unit.provider=" + providerName + " but expected osgi.unit.provider=" + providerRef.getProperty("javax.persistence.provider"));
 			}
 		} catch (Exception ex) {
 			fail("Unable to verify PersistenctUnitInfoService service properties.", ex);
