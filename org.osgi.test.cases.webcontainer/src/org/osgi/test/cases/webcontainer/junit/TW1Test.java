@@ -20,9 +20,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.jar.Manifest;
 
-import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Dispatcher;
+import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
 
 /**
@@ -78,7 +78,7 @@ public class TW1Test extends WebContainerTestBundleControl {
     }
 
     public void testBasic003() throws Exception {
-        final String request = this.warContextPath + "/404.html";
+        final String request = this.warContextPath + "/error404.html";
         String response = super.getResponse(request);
         // check if content of response is correct
         log("verify content of response is correct");

@@ -51,13 +51,13 @@ public class ConstantsUtil {
     public static final String TESTLOGMSG3 = "test log INFO";
     public static final String TESTLOGMSG4 = "test log DEBUG";
     public static final String ABLEGETLOG = "able to get the log from LogFactory";
-    public static final String ABLEGETSIMPLEHELLO = "able to get the simple hello from org.osgi.test.cases.webcontainer.simple.jar";
+	public static final String	ABLEGETSIMPLEHELLO		= "able to get the simple hello from simple.jar";
     // tw1 related
     public static final String BASICTESTWAR1 = "<html><head><title>Basic Test War</title></head>"
             + "<body><h1>Basic Test War</h1></body></html>";
-    public static final String ERROR404HTML = "<HTML><HEAD><TITLE>404.html</TITLE></HEAD>"
+	public static final String	ERROR404HTML			= "<HTML><HEAD><TITLE>404.html</TITLE></HEAD>"
             + "<BODY><P>Error: 404</P><P>Customized Error Page Test - HTML page</P></BODY></HTML>";
-    public static final String ERROR404JSP = "<html><head><title>404.jsp</title></head><body>"
+	public static final String	ERROR404JSP				= "<html><head><title>404.jsp</title></head><body>"
             + "<P>Error: 404</P><P>Customized Error Page Test - JSP page</P>";
     public static final String IMAGEHTML = "<html><head><title>TestWar1 Image</title></head>"
             + "<body>This is the OSGi Alliance logo <img src=\"images/osgi.gif\" alt=\"OSGi Alliance\"/></html>";

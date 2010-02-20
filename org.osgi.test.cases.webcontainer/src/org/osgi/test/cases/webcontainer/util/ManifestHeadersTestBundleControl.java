@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
-import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
 
 /**
@@ -35,12 +34,14 @@ public abstract class ManifestHeadersTestBundleControl extends
     protected static final String[] EXPORTS4 = {"org.osgi.test.cases.webcontainer.tw4;version=1.0"}; 
     protected static final String[] EXPORTS5 = {"org.osgi.test.cases.webcontainer.tw5;version=1.0;company=\"OSGi Alliance\";security=false;mandatory:=security"};  
     
-    protected static final String[] CLASSPATH1 = {"WEB-INF/lib/org.osgi.test.cases.webcontainer.log.jar"}; 
-    protected static final String[] CLASSPATH2 = {"WEB-INF/lib/org.osgi.test.cases.webcontainer.log.jar","WEB-INF/lib/org.osgi.test.cases.webcontainer.simple.jar"};
+	protected static final String[]	CLASSPATH1			= {"WEB-INF/lib/log.jar"};
+	protected static final String[]	CLASSPATH2			= {
+			"WEB-INF/lib/log.jar", "WEB-INF/lib/simple.jar"};
     protected static final String[] CLASSPATH3 = {"WEB-INF/classes"};
     protected static final String[] CLASSPATH4 = {"WEB-INF/lib/org.osgi.test.cases..log.jar"};
-    protected static final String[] CLASSPATH5 = {"WEB-INF/lib/org.osgi.test.cases.webcontainer.log.jar", "libs/utiljar"};
-    protected static final String[] CLASSPATH6 = {"WEB-INF/lib2/org.osgi.test.cases.webcontainer.simple.jar"};
+	protected static final String[]	CLASSPATH5			= {
+			"WEB-INF/lib/log.jar", "libs/utiljar"		};
+	protected static final String[]	CLASSPATH6			= {"WEB-INF/lib2/simple.jar"};
 
     protected static final String[] IMPORTS1 = {"javax.servlet; version=2.5", "javax.servlet.http; version=2.5"}; 
     protected static final String[] IMPORTS2 = {"javax.servlet;version=2.5", "javax.servlet.http;version=2.5", "javax.servlet.jsp; version=2.1", "javax.servlet.jsp.tagext; version=2.1"}; 

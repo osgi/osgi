@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.webcontainer.tw5.servlet;
 
+import static org.osgi.test.cases.webcontainer.util.ConstantsUtil.*;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -25,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.test.cases.webcontainer.log.SimpleLog;
 import org.osgi.test.cases.webcontainer.simple.SimpleHello;
-import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 
 /**
  * @version $Rev$ $Date$
@@ -59,10 +60,10 @@ public class ClasspathTestServlet extends HttpServlet {
         out.println("</head>");
         out.println("<body>");
         if (log != null) {
-            out.println(ConstantsUtil.ABLEGETLOG + "<br/>");
+			out.println(ABLEGETLOG + "<br/>");
         }
         if (simple != null) {
-            out.println(ConstantsUtil.ABLEGETSIMPLEHELLO + "<br/>");
+			out.println(ABLEGETSIMPLEHELLO + "<br/>");
         }
         out.println("</body>");
         out.println("</html>");

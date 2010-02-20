@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.webcontainer.tw4.servlet;
 
+import static org.osgi.test.cases.webcontainer.util.ConstantsUtil.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -24,8 +26,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 
 /**
  * @version $Rev$ $Date$
@@ -57,7 +57,7 @@ public class TestServlet4 extends HttpServlet {
         if (type == null) {
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
-            out.println(ConstantsUtil.TW4BASIC);
+			out.println(TW4BASIC);
             out.println("<body>");
             out.println("no type is specified");
             out.println("</body>");
@@ -65,11 +65,11 @@ public class TestServlet4 extends HttpServlet {
         } else if (type.equals("plain")) {
             response.setContentType("text/plain");
             PrintWriter out = response.getWriter();
-            out.println(ConstantsUtil.PLAINRESPONSE);
+				out.println(PLAINRESPONSE);
         } else if (type.equals("html")) {
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
-            out.println(ConstantsUtil.HTMLRESPONSE);
+					out.println(HTMLRESPONSE);
         } else if (type.equals("jpg")) {
             response.setContentType("image/jpeg");
             ServletOutputStream out = response.getOutputStream(); // binary

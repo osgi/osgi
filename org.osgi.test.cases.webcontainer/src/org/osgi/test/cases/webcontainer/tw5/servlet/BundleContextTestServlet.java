@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.webcontainer.tw5.servlet;
 
+import static org.osgi.test.cases.webcontainer.util.ConstantsUtil.*;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -27,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
-import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 
 /**
  * @version $Rev$ $Date$
@@ -65,8 +66,7 @@ public class BundleContextTestServlet extends HttpServlet {
     private void printContext(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         ServletContext sc = getServletContext();
-        BundleContext bc = (BundleContext) sc
-                .getAttribute(ConstantsUtil.OSGIBUNDLECONTEXT);
+        BundleContext bc = (BundleContext) sc.getAttribute(OSGIBUNDLECONTEXT);
 
         // let's try use the osgi log service from the bundle context
         ServiceReference logServiceReference = bc
@@ -81,18 +81,18 @@ public class BundleContextTestServlet extends HttpServlet {
         out.println("<body>");
         String p = request.getParameter("log");
         if (p == null || p.equals("1")) {
-            logService.log(logService.LOG_ERROR, ConstantsUtil.TESTLOGMSG);
-            out.println(ConstantsUtil.TESTLOGMSG + "<br/>");
+			logService.log(logService.LOG_ERROR, TESTLOGMSG);
+			out.println(TESTLOGMSG + "<br/>");
         } else if (p.equals("2")) {
-            logService.log(logService.LOG_WARNING, ConstantsUtil.TESTLOGMSG2);
-            out.println(ConstantsUtil.TESTLOGMSG2 + "<br/>");
+				logService.log(logService.LOG_WARNING, TESTLOGMSG2);
+				out.println(TESTLOGMSG2 + "<br/>");
         } else if (p.equals("3")) {
-            logService.log(logService.LOG_INFO, ConstantsUtil.TESTLOGMSG3);
-            out.println(ConstantsUtil.TESTLOGMSG3 + "<br/>");
+					logService.log(logService.LOG_INFO, TESTLOGMSG3);
+					out.println(TESTLOGMSG3 + "<br/>");
         } else if (p.equals("4")) {
-            logService.log(logService.LOG_DEBUG, ConstantsUtil.TESTLOGMSG4,
+						logService.log(logService.LOG_DEBUG, TESTLOGMSG4,
                     new RuntimeException());
-            out.println(ConstantsUtil.TESTLOGMSG4 + "<br/>");
+						out.println(TESTLOGMSG4 + "<br/>");
         }
         out.println("</body>");
         out.println("</html>");

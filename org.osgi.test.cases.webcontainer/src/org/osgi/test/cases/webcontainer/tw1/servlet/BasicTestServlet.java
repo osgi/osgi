@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.webcontainer.tw1.servlet;
 
+import static org.osgi.test.cases.webcontainer.util.ConstantsUtil.BASICTESTWAR1;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -22,8 +24,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 
 /**
  * @version $Rev$ $Date$
@@ -63,7 +63,7 @@ public class BasicTestServlet extends HttpServlet {
             HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        out.println(ConstantsUtil.BASICTESTWAR1);
+		out.println(BASICTESTWAR1);
     }
 
 }

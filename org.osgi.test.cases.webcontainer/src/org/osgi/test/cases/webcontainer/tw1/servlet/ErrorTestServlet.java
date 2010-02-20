@@ -62,9 +62,9 @@ public class ErrorTestServlet extends HttpServlet {
         String forwardURL = "";
         String target = request.getParameter("target");
         if (target != null && target.equals("html")) {
-            forwardURL = "/404.html";
+			forwardURL = "/error404.html";
         } else {
-            forwardURL = "/404.jsp";
+			forwardURL = "/error404.jsp";
         }
 
         RequestDispatcher reqDisp = getServletContext().getRequestDispatcher(

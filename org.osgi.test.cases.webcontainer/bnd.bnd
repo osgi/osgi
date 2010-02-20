@@ -1,22 +1,27 @@
 javac.source 			= 1.5
 javac.target 			= 1.5
-
-Bundle-Description: OSGi Web Container RFC 66 Compliance Test
+-make                   =  \
+  (*).(jar);                             type=bnd;  recipe="bnd/$1.bnd", \
+  (*).(war);                             type=bnd;  recipe="bnd/$1.bnd"
+  
+Bundle-Description: OSGi Web Application Specification Compliance Test
 Bundle-Version: 4.2.0.${project.build}
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
 Private-Package						= org.osgi.test.support.*, \
-	${p}.*
+	${p}.handler.*, \
+	${p}.junit.*, \
+	${p}.util.*
 
 Include-Resource					= \
-	${target}/tw1.war, \
-	${target}/tw4.war, \
-	${target}/tw5.war, \
-	${target}/wmtw1.war, \
-	${target}/wmtw4.war, \
-	${target}/wmtw5.war, \
-	${target}/wm2tw5.war, \
-	${target}/wm3tw5.war, \
+	tw1.war, \
+	tw4.war, \
+	tw5.war, \
+	wmtw1.war, \
+	wmtw4.war, \
+	wmtw5.war, \
+	wm2tw5.war, \
+	wm3tw5.war, \
 	util.jar, \
 	eventHandler.jar
 	
