@@ -26,9 +26,8 @@ Include-Resource 					= \
 	${junit}
 	
 -runbundles						= \
-	org.eclipse.persistence.jpa_spec;	        version=2.0 , \
-	org.eclipse.gemini.dbaccess.derby.cs;	    version=1.0 , \
-	org.eclipse.gemini.jpa;	                    version=1.0 
+	osgi.enterprise; version=${enterprise.published.version};strategy=lowest, \
+	org.osgi.impl.service.jpa;	        version=latest 
 
 	
 -runproperties					= report=true

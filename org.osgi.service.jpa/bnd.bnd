@@ -6,5 +6,5 @@ nodeploy			= true
 
 -buildpath 			= ee.j2se; version=1.5, \
 	osgi.core;			version=4.2, \
-	org.eclipse.persistence.jpa;		version=2.0
+	org.eclipse.persistence.jpa_spec;	version=2.0
 	
