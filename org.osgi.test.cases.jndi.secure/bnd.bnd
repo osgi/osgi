@@ -38,4 +38,9 @@ Test-Cases							= ${testcases}
 	
 -runbundles = org.osgi.impl.service.jndi; version=project
 
--signaturetest 						= org.osgi.service.jndi
+-runproperties = report=true, \
+	osgi.compatibility.bootdelegation=false, \
+	osgi.resolverMode=strict, \
+	osgi.support.multipleHosts=true, \
+	org.osgi.framework.security=osgi, \
+	org.osgi.framework.trust.repositories=${build}/keystore
