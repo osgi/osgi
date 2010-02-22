@@ -1,0 +1,4 @@
+Bundle-Name:                             ${p}.service2
+Bundle-Version:                          4.2
+Private-Package =                        ${p}.service2
+Bundle-Activator:						 ${p}.service2.ExampleServiceActivator2
