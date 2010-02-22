@@ -26,6 +26,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.naming.NoInitialContextException;
+import javax.naming.directory.InitialDirContext;
 import javax.naming.spi.InitialContextFactory;
 import javax.naming.spi.InitialContextFactoryBuilder;
 
@@ -40,6 +41,9 @@ class TraditionalInitialContextFactoryBuilder implements InitialContextFactoryBu
 	
 	private static final String INITIAL_CONTEXT_CLASSNAME = 
 		InitialContext.class.getName();
+	
+	private static final String INITIAL_DIR_CONTEXT_CLASSNAME = 
+		InitialDirContext.class.getName();
 	
 	public TraditionalInitialContextFactoryBuilder() {
 	}
@@ -63,8 +67,16 @@ class TraditionalInitialContextFactoryBuilder implements InitialContextFactoryBu
 	private static class TraditionalInitialContextFactory implements InitialContextFactory {
 
 		public Context getInitialContext(Hashtable environment) throws NamingException {
+			// try to find BundleContext, assuming a call to the InitialContext constructor
 			BundleContext clientBundleContext = 
 				BuilderUtils.getBundleContext(environment, INITIAL_CONTEXT_CLASSNAME);
+
+			if(clientBundleContext == null) {
+				// try to find BundleContext, assuming a call to the InitialDirContext constructor
+				clientBundleContext = 
+					BuilderUtils.getBundleContext(environment, INITIAL_DIR_CONTEXT_CLASSNAME);
+			}
+			
 			
 			if(clientBundleContext == null) {
 				throw new NoInitialContextException("Client's BundleContext could not be located");
