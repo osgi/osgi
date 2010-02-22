@@ -66,8 +66,6 @@ build.enterprise.impls = \
 	org.osgi.impl.service.jndi, \
 	org.osgi.impl.service.log , \
 	org.osgi.impl.service.useradmin
-#Remove from build until it compiles again
-#	org.osgi.impl.service.jpa, \
 	
 jar.enterprise.impls = \
 	${repo;osgi.enterprise;${enterprise.published.version};lowest}, \
@@ -81,6 +79,7 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.cm}, \
 	${repo;org.osgi.impl.service.component}, \
 	${repo;org.osgi.impl.service.event}, \
+	${repo;org.osgi.impl.service.jpa}, \
 	${repo;org.osgi.impl.service.metatype}, \
 	${repo;org.osgi.impl.service.provisioning}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin}, \
