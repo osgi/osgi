@@ -24,16 +24,14 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
 	org.osgi.impl.service.event; version=latest, \
     org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.dmt; version=project, \
 	org.osgi.impl.service.monitor; version=project, \
-	org.osgi.impl.service.log; version=latest, \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
+	org.osgi.impl.service.log; version=latest
 
 
 
--runproperties = report=true, \
-	org.osgi.framework.security=osgi, \
-	org.osgi.framework.trust.repositories=${build}/keystore
+-runproperties = ${runsecureproperties}
 

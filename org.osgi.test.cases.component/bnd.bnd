@@ -36,10 +36,10 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
 	org.osgi.impl.service.component; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
-	org.osgi.impl.service.log; version=latest, \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
+	org.osgi.impl.service.log; version=latest
 
--runproperties = report=true, \
+-runproperties = ${runproperties}, \
 	scr.bundle.name=org.eclipse.equinox.ds

@@ -30,7 +30,7 @@ Include-Resource 					= \
 	org.osgi.impl.service.jpa;	        version=latest 
 
 	
--runproperties					= report=true
+-runproperties					= ${runproperties}
 
 Test-Cases							= ${testcases}
 

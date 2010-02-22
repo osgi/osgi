@@ -33,9 +33,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.bundle.remoteserviceadmin.discovery.config;  version=latest, \
 	org.osgi.impl.service.log;				version=latest
 
--runproperties = report=true, \
-	osgi.compatibility.bootdelegation=false, \
-	osgi.resolverMode=strict, \
+-runproperties = ${runproperties}, \
 	osgi.console=1111, \
 	osgi.support.multipleHosts=true, \
 	${p}.system.packages.extra="${junit.package}", \

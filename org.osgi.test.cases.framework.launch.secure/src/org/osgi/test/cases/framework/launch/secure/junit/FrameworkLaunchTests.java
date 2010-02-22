@@ -41,7 +41,7 @@ import org.osgi.framework.launch.FrameworkFactory;
 import org.osgi.test.support.OSGiTestCase;
 
 public class FrameworkLaunchTests extends OSGiTestCase {
-	private static final String STORAGEROOT = "org.osgi.test.cases.framework.launch.storageroot";
+	private static final String	STORAGEROOT			= "org.osgi.test.cases.framework.launch.secure.storageroot";
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
 	private static final String TEST_TRUST_REPO = "org.osgi.test.cases.framework.launch.secure.trust.repository";
 

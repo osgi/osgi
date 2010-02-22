@@ -13,7 +13,7 @@ Private-Package						= org.osgi.test.support.*, \
 -runbundles						= \
 	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 
--runproperties					= \
+-runproperties					= ${runproperties}
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.util.gsm

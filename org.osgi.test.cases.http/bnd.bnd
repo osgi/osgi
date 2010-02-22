@@ -19,11 +19,12 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
 	org.osgi.impl.service.http; version=project
 
 
--runproperties = report=true, \
+-runproperties = ${runproperties}, \
 	org.osgi.service.http.hostname=127.0.0.1, \
 	org.osgi.service.http.port=8080

@@ -37,6 +37,7 @@ Include-Resource					= \
 Test-Cases							= ${testcases}
 
 -runbundles							= \
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
 	org.osgi.impl.service.log; version=latest,\
 	org.osgi.impl.service.component; version=latest, \
 	org.osgi.impl.bundle.jaxp;  version=latest, \
@@ -44,8 +45,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.event;  version=latest, \
 	org.osgi.impl.bundle.autoconf; version=project, \
 	org.osgi.impl.service.deploymentadmin; version=project, \
-	org.osgi.impl.service.cm;  version=latest, \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
+	org.osgi.impl.service.cm;  version=latest
 
 -buildpath=\
     org.osgi.test.support; 				version=project , \
@@ -55,10 +55,7 @@ Test-Cases							= ${testcases}
 	ee.foundation; 						version=1.1, \
 	${junit}
 		
--runproperties= \
-	report=true, \
-	org.osgi.framework.security=osgi, \
-	org.osgi.framework.trust.repositories=${build}/keystore, \
+-runproperties = ${runsecureproperties}, \
 	org.osgi.test.cases.deploymentadmin.timeout=180000, \
 	org.osgi.test.cases.deploymentadmin.short_timeout=3500, \
 	org.osgi.impl.service.deploymentadmin.keystore.file=${build}/keystore, \
@@ -68,6 +65,6 @@ Test-Cases							= ${testcases}
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
 	info.dmtree.osgi.root=./OSGi/
 	
-	
--runsystempackages=javax.xml.parsers, org.xml.sax, org.xml.sax.helpers, javax.security.auth.x500		
+-runsystempackages=javax.xml.parsers, org.xml.sax, org.xml.sax.helpers, javax.security.auth.x500, \
+	org.eclipse.osgi.internal.provisional.verifier		
 				

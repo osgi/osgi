@@ -27,6 +27,4 @@ Test-Cases							= ${testcases}
 -runbundles							= \
 	
 
--runproperties = report=true, \
-	osgi.compatibility.bootdelegation=false, \
-	osgi.resolverMode=strict
+-runproperties = ${runproperties}

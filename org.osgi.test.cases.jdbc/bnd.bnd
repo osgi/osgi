@@ -11,10 +11,11 @@ Private-Package						= ${p}.junit, \
 	${junit}
 
 -runbundles						= \
+	osgi.enterprise; version=${enterprise.published.version};strategy=lowest		, \
 	org.osgi.impl.service.jdbc; version=project, \
 	org.osgi.impl.bundle.derby; version=latest
 
--runproperties					= report=true
+-runproperties					= ${runproperties}
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.jdbc

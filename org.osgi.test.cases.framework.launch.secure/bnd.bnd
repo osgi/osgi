@@ -20,10 +20,7 @@ Test-Cases							= ${testcases}
 -runbundles							= \
 	
 
--runproperties = report=true, \
-	osgi.compatibility.bootdelegation=false, \
-	osgi.resolverMode=strict, \
-	osgi.support.multipleHosts=true, \
-	org.osgi.test.cases.framework.launch.secure.trust.repository=${build}/keystore, \
+-runproperties = ${runproperties}, \
+	${p}.trust.repository=${build}/keystore, \
 	noframework=true, \
-	org.osgi.test.cases.framework.launch.storageroot=generated/testStorageRoot 
+	${p}.storageroot=${target-dir}/testStorageRoot 

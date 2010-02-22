@@ -51,18 +51,15 @@ Test-Cases							= ${testcases}
 	${junit}
 		
 -runbundles							= \
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm;  version=latest, \
 	org.osgi.impl.service.event;  version=latest, \
 	org.osgi.impl.bundle.jaxp;  version=latest, \
 	org.osgi.impl.service.deploymentadmin; version=project, \
-	org.osgi.impl.service.dmt; version=latest, \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
+	org.osgi.impl.service.dmt; version=latest
 
--runproperties= \
-	report=true, \
-	org.osgi.framework.security=osgi, \
-	org.osgi.framework.trust.repositories=${build}/keystore, \
+-runproperties = ${runsecureproperties}, \
 	org.osgi.test.cases.deploymentadmin.mo.timeout=7000, \
 	org.osgi.test.cases.deploymentadmin.mo.usercancel=false, \
 	org.osgi.test.cases.deploymentadmin.mo.status_node_progress=true, \
@@ -76,4 +73,5 @@ Test-Cases							= ${testcases}
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
 	info.dmtree.osgi.root=./OSGi/
 	
--runsystempackages=javax.xml.parsers, org.xml.sax, org.xml.sax.helpers, javax.security.auth.x500		
+-runsystempackages=javax.xml.parsers, org.xml.sax, org.xml.sax.helpers, javax.security.auth.x500, \
+	org.eclipse.osgi.internal.provisional.verifier		

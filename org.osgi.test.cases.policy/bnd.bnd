@@ -22,16 +22,16 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
 	org.osgi.impl.service.event;        version=latest, \
 	org.osgi.impl.service.component; version=latest, \
 	org.osgi.impl.service.policy;     version=project, \
     org.osgi.impl.service.cm;     version=latest, \
 	org.osgi.impl.service.dmt;        version=latest, \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 
 
--runproperties = report=true, \
-    org.osgi.test.cases.policy.automatic=true, \
+-runproperties = ${runproperties}, \
+    ${p}.automatic=true, \
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
 	info.dmtree.osgi.root=./OSGi/
     

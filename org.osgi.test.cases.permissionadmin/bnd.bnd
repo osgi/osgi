@@ -19,9 +19,7 @@ Private-Package						= ${p}.junit, \
 
 -runbundles						= 
 
--runproperties					= report=true, \
-	org.osgi.framework.security=osgi, \
-	org.osgi.framework.trust.repositories=${build}/keystore
+-runproperties					= ${runsecureproperties}
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.permissionadmin

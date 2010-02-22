@@ -48,7 +48,7 @@ import org.osgi.service.startlevel.StartLevel;
 import org.osgi.test.support.OSGiTestCase;
 
 public class CompositePersistenceTests extends OSGiTestCase {
-	private static final String STORAGEROOT = "org.osgi.test.cases.composite.launch";
+	private static final String	STORAGEROOT			= "org.osgi.test.cases.composite.launch.storageroot";
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
 
 	private String frameworkFactoryClassName;

@@ -59,11 +59,11 @@ Include-Resource					= \
 Test-Cases							= ${testcases}
 
 -runbundles							= \
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
 	org.osgi.impl.service.deploymentadmin; 			version=project, \
 	org.osgi.impl.service.log; 						version=latest,\
 	org.osgi.impl.service.event;  					version=latest, \
-	org.osgi.impl.service.cm;  					version=latest, \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
+	org.osgi.impl.service.cm;  					version=latest
 
 -buildpath=\
 	org.osgi.service.deploymentadmin;	version=project, \
@@ -73,10 +73,7 @@ Test-Cases							= ${testcases}
 	ee.foundation; 						version=1.1, \
 	${junit}
 
--runproperties= \
-	report=true, \
-	org.osgi.framework.security=osgi, \
-	org.osgi.framework.trust.repositories=${build}/keystore, \
+-runproperties = ${runsecureproperties}, \
 	org.osgi.test.cases.deploymentadmin.timeout=10000, \
 	org.osgi.test.cases.deploymentadmin.short_timeout=2000, \
 	org.osgi.impl.service.deploymentadmin.iconcachearea=${target-dir}/iconcache, \
@@ -88,5 +85,6 @@ Test-Cases							= ${testcases}
 	info.dmtree.osgi.root=./OSGi/
 	
 	
--runsystempackages=javax.xml.parsers, org.xml.sax, org.xml.sax.helpers, javax.security.auth.x500		
+-runsystempackages=javax.xml.parsers, org.xml.sax, org.xml.sax.helpers, javax.security.auth.x500, \
+	org.eclipse.osgi.internal.provisional.verifier		
 		

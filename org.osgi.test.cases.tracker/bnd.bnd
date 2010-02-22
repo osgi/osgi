@@ -13,7 +13,7 @@ Export-Package						= ${p}.service
 -runbundles							= \
 	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 
--runproperties						= report=true
+-runproperties						= ${runproperties}
 
 # Uncomment the following to test the tracker code in the org.osgi.util.tracker 
 # project instead of the one in Equinox.

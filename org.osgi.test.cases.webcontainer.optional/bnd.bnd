@@ -38,15 +38,15 @@ Export-Package =\
 	${junit}
 
 -runbundles						= \
+	osgi.enterprise; version=${enterprise.published.version};strategy=lowest, \
     org.osgi.test.cases.webcontainer; 		version = project, \
 	org.osgi.impl.service.log; 			version=latest, \
 	org.osgi.impl.service.event; 			version=latest, \
-	osgi.enterprise; version=${enterprise.published.version};strategy=lowest, \
     org.osgi.impl.bundle.webcontainer; version=latest, \
 	org.osgi.impl.service.jndi; version=project
 # TODO add rfc142 impl bundle here if user wants to run some simple rfc 66 + rfc 142 tests
 	
--runproperties = report=true, \
+-runproperties = ${runproperties}, \
 	org.osgi.service.webcontainer.hostname=127.0.0.1, \
 	org.osgi.service.webcontainer.http.port=8080
 

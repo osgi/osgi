@@ -20,9 +20,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.event; version=latest, \
 	org.osgi.impl.service.dmt;  version=project
 
--runproperties = report=true
-	org.osgi.framework.security=osgi, \
-	org.osgi.framework.trust.repositories=${build}/keystore
+-runproperties = ${runsecureproperties}, \
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
 	info.dmtree.osgi.root=./OSGi/
 	

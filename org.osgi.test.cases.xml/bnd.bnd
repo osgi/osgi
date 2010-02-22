@@ -25,7 +25,8 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
 	org.osgi.impl.bundle.jaxp; version=latest
 	
 
--runproperties = report=true
+-runproperties = ${runproperties}

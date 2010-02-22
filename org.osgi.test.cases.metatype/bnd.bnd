@@ -20,8 +20,8 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
 	org.osgi.impl.service.log; version=latest, \
-	org.osgi.impl.service.metatype; version=latest, \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
+	org.osgi.impl.service.metatype; version=latest
 	
--runproperties = report=true
+-runproperties = ${runproperties}

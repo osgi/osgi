@@ -18,4 +18,4 @@ Test-Cases							= ${testcases}
 	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 
 
--runproperties = report=true
+-runproperties = ${runproperties}

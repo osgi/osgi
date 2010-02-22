@@ -21,10 +21,11 @@ Import-Package = \
 	${junit}
 
 -runbundles						= \
+	osgi.enterprise; version=${enterprise.published.version};strategy=lowest, \
 	org.osgi.impl.bundle.transaction; version=project
 	
--runproperties					= report=true, \
-    org.osgi.test.cases.transaction.waittime=30
+-runproperties					= ${runproperties}, \
+    ${p}.waittime=30
 
 Test-Cases							= ${testcases}
 	

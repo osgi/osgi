@@ -118,6 +118,16 @@ junit					= com.springsource.junit;version=3.8;export="${junit.package}"
 #	org.eclipse.osgi.v43prototype;		version=3.6.0, \
 #	${junit}
 
+runproperties = report=true, \
+	osgi.compatibility.bootdelegation=false, \
+	osgi.resolverMode=strict, \
+	osgi.support.multipleHosts=true
+runsecureproperties = ${runproperties}, \
+	org.osgi.framework.security=osgi, \
+	org.osgi.framework.trust.repositories=${build}/keystore
+
+-runproperties = ${runproperties}
+
 testcases = ${classes;extending;junit.framework.TestCase|*DefaultTestBundleControl;concrete}
 
 

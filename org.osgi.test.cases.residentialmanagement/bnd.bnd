@@ -9,11 +9,11 @@ Private-Package		= ${p}.*
 	${junit}
 
 -runbundles			= \
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
 	org.osgi.impl.service.log;	version=latest, \
     org.osgi.impl.service.cm;     version=latest, \
 	org.osgi.impl.service.dmt;	version=latest, \
-	org.osgi.impl.service.residentialmanagement;	version=project, \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
+	org.osgi.impl.service.residentialmanagement;	version=project
 
 Test-Cases: ${testcases}
 

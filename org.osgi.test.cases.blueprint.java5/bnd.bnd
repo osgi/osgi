@@ -42,8 +42,5 @@ Test-Cases							= ${testcases}
  	org.osgi.test.cases.blueprint;  version=project, \
     org.osgi.impl.service.blueprint; version=latest
     
--runproperties = report=true, \
-	osgi.compatibility.bootdelegation=false, \
-	osgi.resolverMode=strict, \
-	osgi.support.multipleHosts=true
+-runproperties = ${runproperties}
     

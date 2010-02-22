@@ -14,7 +14,8 @@ Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.log
 
 -runbundles						= \
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
 	org.osgi.impl.service.log; version=project, \
 	org.osgi.impl.service.cm;  version=latest
 
--runproperties					= report=true
+-runproperties					= ${runproperties}
