@@ -29,4 +29,8 @@ japi.osgi.mobile 			= ${replace;$(mobile.specs);.+;+$0}
 japi.osgi.enterprise		= ${replace;$(enterprise.specs);.+;+$0}
 japi.osgi.proposed			= ${replace;$(proposed.specs);.+;+$0}
 
+api.servlet = ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}
+api.jaxp = ${repo;com.icl.saxon}
+api.jpa = ${repo;org.eclipse.persistence.jpa_spec}
+
 -include : layout.bnd
