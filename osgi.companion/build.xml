@@ -13,7 +13,7 @@
 			access="protected" 
 			windowtitle="OSGi Service Platform Release ${osgi.release} Version ${osgi.version}"
 			author="false" 
-			classpath="${project.buildpath}"
+			classpath="${project.output}"
 			sourcepath="${project.allsourcepath}"
 			destdir="${target}/javadoc" 
 			nodeprecated="false" 
