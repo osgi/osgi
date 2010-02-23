@@ -892,4 +892,26 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	public void setAlerts(AlertItem[] alerts) {
 		this.alerts = alerts;
 	}
+	
+	public void sleep0(long millisToSleep) {
+		long start = System.currentTimeMillis();
+		do {
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+			}
+		} while (System.currentTimeMillis() - start < millisToSleep);
+	}
+	
+	public synchronized void waitForStatusVariable() {
+		long start = System.currentTimeMillis();
+		try {
+			while (getStatusVariableName() == null && System.currentTimeMillis() - start < MonitorConstants.SHORT_TIMEOUT) {
+				wait(100);
+			}
+		} catch (InterruptedException e) {
+			//nothing to do
+		}
+	}
+
 }

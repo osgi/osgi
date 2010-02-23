@@ -397,7 +397,7 @@ public class StartScheduledJob implements TestInterface {
 	 * 
 	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
 	 */
-	private synchronized void testStartScheduledJob008() {
+	private void testStartScheduledJob008() {
 		tbc.log("#testStartScheduledJob008");
 		PermissionInfo[] infos = null;
 		MonitoringJob mj = null;
@@ -429,14 +429,14 @@ public class StartScheduledJob implements TestInterface {
 					MonitorConstants.SCHEDULE + 4,
 					MonitorConstants.COUNT + 1); // schedule for 5 seconds and count for 2 measurements 
 
-			wait(MonitorConstants.SHORT_TIMEOUT); // wait for 2 seconds
+			tbc.sleep0(MonitorConstants.SHORT_TIMEOUT); // wait for 2 seconds
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"variable of event modification", 0 + "" }), 0,
 					MonitorConstants.EVENT_COUNT); // assert that no events has been fired.
 
-			wait(MonitorConstants.SHORT_TIMEOUT*3); // wait for 6 seconds
+			tbc.sleep0(MonitorConstants.SHORT_TIMEOUT*3); // wait for 6 seconds
 			
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
@@ -499,7 +499,7 @@ public class StartScheduledJob implements TestInterface {
 					StatusVariable.CM_DER, "test1");
 			monitorable.setStatusVariable(sv); // update the second statusvariable value to test1, to check it later. 
 	
-			wait(MonitorConstants.SHORT_TIMEOUT * 2); // wait 4 seconds, after that will be 12 seconds in total.
+			tbc.sleep0(MonitorConstants.SHORT_TIMEOUT * 2); // wait 4 seconds, after that will be 12 seconds in total.
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
@@ -557,7 +557,7 @@ public class StartScheduledJob implements TestInterface {
 							MonitorConstants.INITIATOR }),
 					MonitorConstants.INITIATOR, tbc.getListenerId());
 
-			wait(MonitorConstants.SHORT_TIMEOUT * 3); // wait 6 seconds, after that will be 18 seconds.
+			tbc.sleep0(MonitorConstants.SHORT_TIMEOUT * 3); // wait 6 seconds, after that will be 18 seconds.
 
 			tbc.assertEquals("Asserting if the monitoringjob stops the reporting. So, we expect the same value.", 4,
 					MonitorConstants.EVENT_COUNT); // I have set only two measurements, so, the event count must be 4, if it is bigger than 4, then
@@ -719,7 +719,7 @@ public class StartScheduledJob implements TestInterface {
 	 * 
 	 * @spec MonitorAdmin.startScheduledJob(String,String[],int,int)
 	 */	
-	private synchronized void testStartScheduledJob013() {
+	private void testStartScheduledJob013() {
 		tbc.log("#testStartScheduledJob013");
 		PermissionInfo[] infos = null;
 		MonitoringJob mj = null;
@@ -750,7 +750,7 @@ public class StartScheduledJob implements TestInterface {
 					MonitorConstants.SCHEDULE + 3,
 					0); // to run indefinitely
 
-			wait(MonitorConstants.SHORT_TIMEOUT*5); // wait for 10 seconds
+			tbc.sleep0(MonitorConstants.SHORT_TIMEOUT*5); // wait for 10 seconds
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {

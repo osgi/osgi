@@ -433,11 +433,7 @@ public class StartJob implements TestInterface {
 					new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC, "test1"));
 			
-      synchronized (tbc) {
-        if (tbc.getStatusVariableName() == null) {
-          tbc.wait(MonitorConstants.SHORT_TIMEOUT);
-        }
-      } 
+			tbc.waitForStatusVariable();
 			
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
@@ -452,12 +448,7 @@ public class StartJob implements TestInterface {
 					new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC, "test1"));
 
-			
-			synchronized (tbc) {
-			  if (tbc.getStatusVariableName() == null) {
-			    tbc.wait(MonitorConstants.SHORT_TIMEOUT);
-			  }
-			}	
+			tbc.waitForStatusVariable();
 			
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {

@@ -127,7 +127,7 @@ public class RemoteAlertSender {
 	 * 
 	 * @spec 120.4.4 Monitoring Job
 	 */    
-    private synchronized void testRemoteAlertSender002() {
+    private void testRemoteAlertSender002() {
     	tbc.log("#testRemoteAlertSender002");
     	DmtSession session = null;
         try {
@@ -139,7 +139,7 @@ public class RemoteAlertSender {
 			session.setNodeValue(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[2], new DmtData(MonitorConstants.SCHEDULE));
 			session.setNodeValue(MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[3], new DmtData(true));
 							
-			wait(MonitorConstants.SHORT_TIMEOUT);			
+			tbc.sleep0(MonitorConstants.SHORT_TIMEOUT);			
 			
 			tbc.assertTrue("Asserting if our implementation of RemoteAlertSender was called.", tbc.isReceivedAlert());
 			tbc.assertEquals("Asserting if we receive the correct value of serverId.", MonitorConstants.REMOTE_SERVER, tbc.getServerId());

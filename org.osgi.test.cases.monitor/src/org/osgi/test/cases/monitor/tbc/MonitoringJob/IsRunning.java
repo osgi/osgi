@@ -100,7 +100,7 @@ public class IsRunning {
 	 *  
 	 * @spec MonitoringJob.isRunning()
 	 */   
-    private synchronized void testIsRunning002() {
+    private void testIsRunning002() {
     	tbc.log("#testIsRunning002");
     	MonitoringJob mj = null;
 		try {
@@ -115,7 +115,7 @@ public class IsRunning {
 			.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "a monitoring job returns true to isRunning()." }),
 					mj.isRunning());
 			
-			wait(MonitorConstants.SHORT_TIMEOUT*3);
+			tbc.sleep0(MonitorConstants.SHORT_TIMEOUT*3);
 			
 			tbc
 			.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "a monitoring job returns false to isRunning()." }),
