@@ -61,7 +61,8 @@ public class Packaging implements AnalyzerPlugin {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("# Workspace information\n");
-		sb.append("-runpath = ");
+		sb.append(Constants.RUNPATH);
+		sb.append(" = ");
 		flatten(analyzer, sb, jar, runpath, false);
 		sb.append('\n');
 		jar.putResource("shared.inc", new EmbeddedResource(sb.toString()
@@ -120,6 +121,8 @@ public class Packaging implements AnalyzerPlugin {
 		Collection<Container> runpath = project.getRunpath();
 		Collection<Container> runbundles = project.getRunbundles();
 		String runproperties = project.getProperty(Constants.RUNPROPERTIES);
+		String runsystempackages = project
+				.getProperty(Constants.RUNSYSTEMPACKAGES);
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("# bnd pack for project " + project + "\n");
@@ -134,17 +137,19 @@ public class Packaging implements AnalyzerPlugin {
 		if (!equals(runpath, sharedRunpath)) {
 			sb.append("\n");
 			sb.append("\n");
-			sb.append("-runpath = ");
+			sb.append(Constants.RUNPATH);
+			sb.append(" = ");
 			flatten(analyzer, sb, jar, runpath, false);
 		}
 		sb.append("\n\n");
-		sb.append("-runbundles = ");
+		sb.append(Constants.RUNBUNDLES);
+		sb.append(" = ");
 		flatten(analyzer, sb, jar, runbundles, false);
 
 		Map<String, String> properties = OSGiHeader
 				.parseProperties(runproperties);
 
-		String del = "\n\n" + Constants.RUNPROPERTIES + " = \\\n";
+		String del = "\n\n" + Constants.RUNPROPERTIES + " = \\\n    ";
 		properties.put("report", "true");
 		for (Map.Entry<String, String> entry : properties.entrySet()) {
 			sb.append(del);
@@ -169,8 +174,16 @@ public class Packaging implements AnalyzerPlugin {
 				sb.append(entry.getValue());
 				sb.append("\"");
 			}
-			del = ", \\\n";
+			del = ", \\\n    ";
 		}
+
+		if (runsystempackages != null) {
+			sb.append("\n\n");
+			sb.append(Constants.RUNSYSTEMPACKAGES);
+			sb.append(" = \\\n    ");
+			sb.append(runsystempackages);
+		}
+
 		sb.append("\n\n\n\n");
 
 		Resource r = new EmbeddedResource(sb.toString().getBytes("UTF-8"),
