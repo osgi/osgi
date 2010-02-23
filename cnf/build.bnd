@@ -10,17 +10,17 @@ project.workspace		= ${workspace}
 project.dir				= ${project}
 
 -verbose				= true
+verbose					= false
 src                     = src
 bin                     = bin
+target-dir				= generated
 target					= ${project}/${target-dir}
-release.target			= ${if;${def;top};${def;top};${target}}
 build					= ${workspace}/cnf
 licensed				= ${workspace}/licensed
 repo					= ${build}/repo
 licensed-repo			= ${licensed}/repo
-target-dir				= generated
-p                       = ${basename;${project}}
-project.name            = ${p}
+project.name            = ${basename;${project}}
+p			            = ${project.name}
 bin.includes			= ${project.name}.jar
 prebuild				= 
 
@@ -62,7 +62,7 @@ javac.target 			= 1.2
 
 # Time options
 # base.modified is used by bnd to not make when files are not changed
-base.modified			= ${fmodified;${build}/build.xml,${build}/build.bnd,${project}/build.properties,${project}/bnd.bnd,${project}/build.xml}
+base.modified			= ${fmodified;${build}/build.xml,${build}/build.bnd,${project}/bnd.bnd,${project}/build.xml}
 base.modified.readable	= ${long2date;${base.modified}}
 project.build			= ${tstamp;yyyyMMddhhmm}
 
