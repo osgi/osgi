@@ -98,11 +98,7 @@ public class CTDirContext extends CTContext implements DirContext {
 	}
 
 	public Attributes getAttributes(Name name) throws NamingException {
-		if (name != null) {
 			return (Attributes) attributeMap.get(name.toString());
-		} else {
-			return new BasicAttributes(); 
-		}
 	}
 
 	public Attributes getAttributes(String name, String[] attrIds) throws NamingException {
@@ -110,17 +106,16 @@ public class CTDirContext extends CTContext implements DirContext {
 	}
 
 	public Attributes getAttributes(Name name, String[] attrIds) throws NamingException {
-		if (name != null) {
-			Attributes retrievedAttributes = (Attributes) attributeMap.get(name.toString());
-			Attributes selectedAttributes = new BasicAttributes();
-			
+		Attributes retrievedAttributes = (Attributes) attributeMap.get(name.toString());
+		Attributes selectedAttributes = new BasicAttributes();
+		
+		if (attrIds != null) {
 			for (int i=0; i < attrIds.length; i++) {
 				selectedAttributes.put(retrievedAttributes.get(attrIds[i]));
 			}
-			
 			return selectedAttributes;
 		} else {
-			return new BasicAttributes();
+			return retrievedAttributes;
 		}
 	}
 
