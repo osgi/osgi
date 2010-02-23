@@ -19,11 +19,17 @@
 package org.osgi.test.cases.jmx.junit;
 
 import java.lang.management.ManagementFactory;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.management.MBeanServer;
 import javax.management.MBeanServerInvocationHandler;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
+import javax.management.openmbean.CompositeData;
+import javax.management.openmbean.CompositeType;
+import javax.management.openmbean.TabularData;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -127,4 +133,45 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 		}
 		return objectName;
 	}
+	
+	protected void assertCompositeDataKeys(CompositeData cd, String type, String[] keys) {
+		for (int i = 0; i < keys.length; i++) {
+			assertTrue("composite data from type " + type + " doesn't contain key " + keys[i], cd.containsKey(keys[i]));
+		}
+	}	
+	
+	protected void assertTabularDataStructure(TabularData td, String type, String key, String[] compositeDataKeys) {
+		List<String> indexNames = td.getTabularType().getIndexNames();
+		assertNotNull(indexNames);
+		if (key != null) {
+			assertTrue("tabular data " + type + " has wrong key set", indexNames.size() == 1);
+			assertTrue("tabular data " + type + " doesn't contain key " + key, indexNames.iterator().next().equals(key));
+		}
+		CompositeType ct = td.getTabularType().getRowType();
+		for (int i = 0; i < compositeDataKeys.length; i++) {
+			assertTrue("tabular data row type " + type + " doesn't contain key " + compositeDataKeys[i], ct.containsKey(compositeDataKeys[i]));
+		}
+	}	
+	
+	protected void assertTabularDataStructure(TabularData td, String type, String[] keys, String[] compositeDataKeys) {
+		List<String> indexNames = td.getTabularType().getIndexNames();
+		assertNotNull(indexNames);
+		if (keys != null) {
+			HashSet<String> keySet = new HashSet<String>();
+			for (int i = 0; i < keys.length; i++) {
+				keySet.add(keys[i]);
+			}			
+			assertTrue("tabular data " + type + " has wrong key set size of " + indexNames.size(), indexNames.size() == keys.length);
+			Iterator<String> iter = indexNames.iterator();
+			while (iter.hasNext()) {
+				String indexName = iter.next();
+				assertTrue("tabular data " + type + " contains wrong key " + indexName, keySet.contains(indexName));				
+			}
+		}
+		CompositeType ct = td.getTabularType().getRowType();
+		for (int i = 0; i < compositeDataKeys.length; i++) {
+			assertTrue("tabular data row type " + type + " doesn't contain key " + compositeDataKeys[i], ct.containsKey(compositeDataKeys[i]));
+		}
+	}
+	
 }

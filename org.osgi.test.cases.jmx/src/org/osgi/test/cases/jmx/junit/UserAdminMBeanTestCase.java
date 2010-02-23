@@ -417,24 +417,5 @@ public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		super.waitForUnRegistering(createObjectName(UserAdminMBean.OBJECTNAME));
-	}
-	
-	private void assertCompositeDataKeys(CompositeData cd, String type, String[] keys) {
-		for (int i = 0; i < keys.length; i++) {
-			assertTrue("composite data from type " + type + " doesn't contain key " + keys[i], cd.containsKey(keys[i]));
-		}
-	}
-	
-	private void assertTabularDataStructure(TabularData td, String type, String key, String[] compositeDataKeys) {
-		List<String> indexNames = td.getTabularType().getIndexNames();
-		assertNotNull(indexNames);
-		if (key != null) {
-			assertTrue("tabular data " + type + " has wrong key set", indexNames.size() == 1);
-			assertTrue("tabular data " + type + " doesn't contain key " + key, indexNames.iterator().next().equals(key));
-		}
-		CompositeType ct = td.getTabularType().getRowType();
-		for (int i = 0; i < compositeDataKeys.length; i++) {
-			assertTrue("tabular data row type " + type + " doesn't contain key " + compositeDataKeys[i], ct.containsKey(compositeDataKeys[i]));
-		}
 	}	
 }

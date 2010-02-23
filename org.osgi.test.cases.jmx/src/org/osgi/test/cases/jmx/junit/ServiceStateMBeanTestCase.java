@@ -218,19 +218,5 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 				super.uninstallBundle(testBundle2);
 			} catch (Exception io) {}
 		}		
-	}
-	
-	private void assertTabularDataStructure(TabularData td, String type, String key, String[] compositeDataKeys) {
-		List<String> indexNames = td.getTabularType().getIndexNames();
-		assertNotNull(indexNames);
-		if (key != null) {
-			assertTrue("tabular data " + type + " has wrong key set", indexNames.size() == 1);
-			assertTrue("tabular data " + type + " doesn't contain key " + key, indexNames.iterator().next().equals(key));
-		}
-		CompositeType ct = td.getTabularType().getRowType();
-		for (int i = 0; i < compositeDataKeys.length; i++) {
-			assertTrue("tabular data row type " + type + " doesn't contain key " + compositeDataKeys[i], ct.containsKey(compositeDataKeys[i]));
-		}
-	}
-	
+	}	
 }

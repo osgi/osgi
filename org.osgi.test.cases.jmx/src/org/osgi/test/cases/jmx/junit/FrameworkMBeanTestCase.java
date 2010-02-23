@@ -3,8 +3,13 @@ package org.osgi.test.cases.jmx.junit;
 import java.io.IOException;
 import java.net.URL;
 
+import javax.management.openmbean.ArrayType;
 import javax.management.openmbean.CompositeData;
+import javax.management.openmbean.CompositeType;
+import javax.management.openmbean.SimpleType;
+import javax.management.openmbean.TabularType;
 
+import org.osgi.jmx.Item;
 import org.osgi.jmx.framework.BundleStateMBean;
 import org.osgi.jmx.framework.FrameworkMBean;
 
@@ -433,6 +438,47 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 		}						
 	}
 	
+	public void testItem() {
+		Item item = new Item("Key", "The key of the property",SimpleType.STRING);
+		CompositeType type = Item.compositeType("Test type", "Test description", item);
+		assertTrue("item was not created with the right key", type.containsKey("Key"));
+	}
+	
+	public void testItemArrayType() {
+		ArrayType type = Item.arrayType(1, SimpleType.STRING);
+		assertTrue("type was not created with right dimentsion", type.getDimension() == 1);
+		assertTrue("type was not created as array", type.isArray());
+	}
+	
+	public void testItemCompositeType() {
+		Item item1 = new Item("Key", "The key of the property",SimpleType.STRING);
+		Item item2 = new Item("Value", "The value of the property",SimpleType.STRING);		
+		CompositeType type = Item.compositeType("Test type", "Test description", item1, item2);
+		assertTrue("composite type doesn't contain key item", type.containsKey("Key"));
+		assertTrue("composite type doesn't contain value item", type.containsKey("Value"));		
+	}
+	
+	public void testItemExtend() {
+		Item item1 = new Item("Key", "The key of the property",SimpleType.STRING);
+		Item item2 = new Item("Value", "The value of the property",SimpleType.STRING);		
+		CompositeType type1 = Item.compositeType("Test type", "Test description", item1, item2);
+		Item item3 = new Item("Type", "The type of the property",SimpleType.STRING);		
+		CompositeType type2 = Item.extend(type1, "Type2", "Type2 description", item3);
+		assertTrue("composite type doesn't contain key item", type2.containsKey("Key"));
+		assertTrue("composite type doesn't contain value item", type2.containsKey("Value"));
+		assertTrue("composite type doesn't contain type item", type2.containsKey("Type"));		
+	}
+	
+	public void testItemTabularType() {
+		Item item1 = new Item("Key", "The key of the property",SimpleType.STRING);
+		Item item2 = new Item("Value", "The value of the property",SimpleType.STRING);		
+		CompositeType type1 = Item.compositeType("Test type", "Test description", item1, item2);
+		TabularType tabularType = Item.tabularType("TypeName", "TypeDescription", type1, "Key");
+		assertTrue("tabular type doesn't contain key item", tabularType.getRowType().containsKey("Key"));
+		assertTrue("composite type doesn't contain value item", tabularType.getRowType().containsKey("Value"));
+		assertTrue("composite type doesn't have as a key the Key attribute", tabularType.getIndexNames().contains("Key"));		
+	}
+	
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
@@ -461,10 +507,5 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 		return equal;
 	}
 	
-	private void assertCompositeDataKeys(CompositeData cd, String type, String[] keys) {
-		for (int i = 0; i < keys.length; i++) {
-			assertTrue("composite data from type " + type + " doesn't contain key " + keys[i], cd.containsKey(keys[i]));
-		}
-	}
 	private final int waitTime = 20;
 }

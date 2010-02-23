@@ -148,27 +148,5 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 				super.uninstallBundle(testBundle2);
 			} catch (Exception io) {}
 		}
-	}
-	
-	private void assertTabularDataStructure(TabularData td, String type, String[] keys, String[] compositeDataKeys) {
-		List<String> indexNames = td.getTabularType().getIndexNames();
-		assertNotNull(indexNames);
-		if (keys != null) {
-			HashSet<String> keySet = new HashSet<String>();
-			for (int i = 0; i < keys.length; i++) {
-				keySet.add(keys[i]);
-			}			
-			assertTrue("tabular data " + type + " has wrong key set size of " + indexNames.size(), indexNames.size() == keys.length);
-			Iterator<String> iter = indexNames.iterator();
-			while (iter.hasNext()) {
-				String indexName = iter.next();
-				assertTrue("tabular data " + type + " contains wrong key " + indexName, keySet.contains(indexName));				
-			}
-		}
-		CompositeType ct = td.getTabularType().getRowType();
-		for (int i = 0; i < compositeDataKeys.length; i++) {
-			assertTrue("tabular data row type " + type + " doesn't contain key " + compositeDataKeys[i], ct.containsKey(compositeDataKeys[i]));
-		}
-	}
-	
+	}	
 }
