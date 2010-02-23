@@ -152,8 +152,6 @@
 		<echo>licensed repo:          ${licensed-repo}</echo>
 		<echo>repo:                   ${repo}</echo>
 		<echo>nodeploy:               ${nodeploy}</echo>
-		<echo>-dependson:             ${project.dependson}</echo>
-
 	</target>
 
 </project>
