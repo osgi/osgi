@@ -26,6 +26,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.naming.NoInitialContextException;
+import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.spi.InitialContextFactory;
 import javax.naming.spi.InitialContextFactoryBuilder;
@@ -96,9 +97,15 @@ class TraditionalInitialContextFactoryBuilder implements InitialContextFactoryBu
 						// install a dynamic proxy to trap calls to Context.close()
 						try {
 							final Context newInitialContext = contextManager.newInitialContext(environment);
-							TraditionalContextInvocationHandler handler = 
+							final TraditionalContextInvocationHandler handler = 
 								new TraditionalContextInvocationHandler(serviceRef, newInitialContext, clientBundleContext);
-							return (Context)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] {Context.class}, handler);
+							// create the correct proxy
+							if(newInitialContext instanceof DirContext) {
+								return (DirContext)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] {DirContext.class}, handler);
+							} else {
+								return (Context)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] {Context.class}, handler);
+							}
+							
 						}
 						catch (NamingException namingException) {
 							// clean up reference to JNDIContextManager service
