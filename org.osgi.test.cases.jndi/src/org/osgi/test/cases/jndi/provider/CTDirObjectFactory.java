@@ -44,20 +44,20 @@ public class CTDirObjectFactory implements DirObjectFactory {
 	
 
 	public Object getObjectInstance(Object obj, Name name, Context nameCtx, Hashtable environment) throws Exception {
-		throw new OperationNotSupportedException("getObjectInstance without attributes is unsupported.");
+		return getObjectInstance(obj, name, nameCtx, environment, null);
 	}
 	
 	public Object getObjectInstance(Object obj, Name name, Context nameCtx, Hashtable environment, Attributes attrs) throws Exception {
 		if (obj instanceof CTReference) {
 			RefAddr value = ((CTReference) obj).get("value"); 
 			if (value != null) {
-				return new CTTestObject(value.getContent().toString(), attrs);
+				return new CTTestObject(value.getContent().toString(), CTDirObjectFactory.class.getName(), attrs);
 			} else {
-				return new CTTestObject(null, attrs);
+				return new CTTestObject(null, CTDirObjectFactory.class.getName(), attrs);
 			}
 		} else if (obj instanceof String) {
 			if (((String)obj).equals(CTTestObject.class.getName())) {
-				return new CTTestObject(null, attrs);
+				return new CTTestObject(null, CTDirObjectFactory.class.getName(), attrs);
 			}
 		}
 		return null;
