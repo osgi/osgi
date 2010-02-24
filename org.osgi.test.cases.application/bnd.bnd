@@ -23,10 +23,13 @@ Test-Cases							= ${testcases}
 	ee.foundation; 							version=1.1	, \
 	${junit}
 
+# org.osgi.impl.service.application must be loaded before osgi.cmpn since the 
+# org.osgi.service.application classes must be able to load the 
+# org.osgi.vendor.application classes from org.osgi.impl.service.application.
 -runbundles							= \
+	org.osgi.impl.service.application; version=project, \
 	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
 	org.osgi.impl.bundle.midletcontainer; version=project, \
-	org.osgi.impl.service.application; version=project, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.dmt;  version=latest, \
