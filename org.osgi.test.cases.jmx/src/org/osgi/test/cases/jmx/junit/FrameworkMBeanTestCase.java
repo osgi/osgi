@@ -1,6 +1,9 @@
 package org.osgi.test.cases.jmx.junit;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 import javax.management.openmbean.ArrayType;
@@ -33,7 +36,7 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 	public void testFrameworkMBeanExists() {
 		assertNotNull(frameworkMBean);
 	}
-	
+
 	/* Test scenario: Install bundle. Start bundle. Set bundle start level bigger than the framework one. Check that bundle is stopped.
 	 * Change framework start level to be bigger than the bundle one. Check that bundle is started. Change framework start level to be 
 	 * smaller than the bundle one. Check that bundle is stopped. Un-install bundle.
@@ -479,6 +482,91 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 		assertTrue("composite type doesn't have as a key the Key attribute", tabularType.getIndexNames().contains("Key"));		
 	}
 	
+	public void testBundleInstallAndUpdate() {
+		long testBundle = -1;
+		try {
+			File destFile = getContext().getDataFile("/tb2.jar");
+			if (destFile == null) return;
+			createFile(destFile, getContext().getBundle().getEntry("tb2.jar").openStream());
+			testBundle = frameworkMBean.installBundle("file:" + destFile.getAbsolutePath());
+			long lastModifiedTime = bundleStateMBean.getLastModified(testBundle);
+			//wait some time
+			Thread.currentThread().sleep(10);
+			//update bundle
+			frameworkMBean.updateBundle(testBundle);
+			//get new last modification time
+			long newLastModifiedTime = bundleStateMBean.getLastModified(testBundle);
+			//check that newest last modification time is bigger than the previous one
+			assertTrue("after update bundle from url the bundle's last modified time is not changed", newLastModifiedTime > lastModifiedTime);
+		} catch(Exception io) {
+			io.printStackTrace();
+			assertTrue("Exception ocurred: " + io.toString(), false);
+		} finally {
+			if (testBundle >= 0) {
+				try {
+					frameworkMBean.uninstallBundle(testBundle);
+				} catch (IOException io) {
+					assertTrue("Exception ocurred: " + io.toString(), false);				
+				}
+			}
+			File destFile = getContext().getDataFile("/tb2.jar");
+			if (destFile.exists()) {
+				destFile.delete();
+			}
+		}
+	}
+
+	public void testBundlesInstallAndUpdate() {
+		long[] testBundles = new long[] {-1, -1};
+		try {
+			File destFile2 = getContext().getDataFile("/tb2.jar");
+			File destFile1 = getContext().getDataFile("/tb1.jar");
+			if ((destFile2 == null) || (destFile1 == null)) return;
+			createFile(destFile2, getContext().getBundle().getEntry("tb2.jar").openStream());
+			createFile(destFile1, getContext().getBundle().getEntry("tb1.jar").openStream());
+			
+			testBundles[0] = frameworkMBean.installBundle("file:" + destFile2.getAbsolutePath());
+			testBundles[1] = frameworkMBean.installBundle("file:" + destFile1.getAbsolutePath());
+			long lastModifiedTime2 = bundleStateMBean.getLastModified(testBundles[0]);
+			long lastModifiedTime1 = bundleStateMBean.getLastModified(testBundles[1]);
+			//wait some time
+			Thread.currentThread().sleep(10);
+			//update bundle
+			frameworkMBean.updateBundles(testBundles);
+			//get new last modification time
+			long newLastModifiedTime2 = bundleStateMBean.getLastModified(testBundles[0]);
+			long newLastModifiedTime1 = bundleStateMBean.getLastModified(testBundles[1]);
+			//check that newest last modification time is bigger than the previous one
+			assertTrue("after update bundles from url the bundles' last modified time is not changed", (newLastModifiedTime2 > lastModifiedTime2) && (newLastModifiedTime1 > lastModifiedTime1));
+		} catch(Exception io) {
+			io.printStackTrace();
+			assertTrue("Exception ocurred: " + io.toString(), false);
+		} finally {
+			if (testBundles[1] >= 0) {
+				try {
+					frameworkMBean.uninstallBundle(testBundles[1]);
+				} catch (IOException io) {
+					assertTrue("Exception ocurred: " + io.toString(), false);				
+				}
+			}
+			if (testBundles[0] >= 0) {
+				try {
+					frameworkMBean.uninstallBundle(testBundles[0]);
+				} catch (IOException io) {
+					assertTrue("Exception ocurred: " + io.toString(), false);				
+				}
+			}
+			File destFile = getContext().getDataFile("/tb2.jar");
+			if (destFile.exists()) {
+				destFile.delete();
+			}
+			destFile = getContext().getDataFile("/tb1.jar");
+			if (destFile.exists()) {
+				destFile.delete();
+			}
+		}
+	}
+	
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
@@ -505,6 +593,18 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			e.printStackTrace();		
 		}
 		return equal;
+	}
+
+	private void createFile(File destFile, InputStream in) throws IOException {
+		FileOutputStream fOut = new FileOutputStream(destFile);
+		byte[] array = new byte[1024];
+		int read = in.read(array);
+		while (read > 0) {
+			fOut.write(array, 0, read);
+			read = in.read(array);				
+		}
+		in.close();
+		fOut.close();
 	}
 	
 	private final int waitTime = 20;
