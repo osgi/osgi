@@ -24,6 +24,8 @@ import static org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants.*;
 import static org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants.ORG_OSGI_SCA_CONFIG;
 import static org.osgi.test.cases.scaconfigtype.common.TestConstants.*;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,9 +54,13 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
+	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.scaconfigtype.system.packages.extra";
+	
+	private static final String REQUIRED_PORTS = System.getProperty("org.osgi.test.cases.scaconfigtype.required.ports", "");
+	
     protected void setUp() throws Exception {
         super.setUp();
-
+        verifySockets();
         // verify that the server framework is exporting the test packages
         verifyFramework(getFramework(SERVER_FRAMEWORK));
     }
@@ -447,7 +453,6 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         tracker.close();
 	}
     
-	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.scaconfigtype.system.packages.extra";
     public Map<String, String> getConfiguration() {
         Map<String, String> configuration = new HashMap<String, String>();
         configuration.put(FRAMEWORK_STORAGE_CLEAN, "true");
@@ -463,7 +468,36 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         return configuration;
     }
     
-    /**
+    private void verifySockets() {
+    	for ( String p : REQUIRED_PORTS.split(",") ) {
+    		if ( p.trim().length() > 0 ) {
+    			int port = Integer.parseInt(p.trim());
+    			assertSocketAvailable(port);
+    		}
+    	}
+    }
+    
+    private void assertSocketAvailable(int port) {
+    	ServerSocket socket = null;
+    	try {
+			socket = new ServerSocket(port);
+		} catch (IOException e) {
+			fail( "Failed to open socket to port " + port, e);
+		}
+		finally {
+			if ( socket != null ) {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					fail( "Failed to close socket to port " + port, e);
+				}
+			}
+		}
+	}
+
+
+
+	/**
      * Verifies the server side framework that it exports the test packages for the interface
      * used by the test service.
      * @throws Exception
