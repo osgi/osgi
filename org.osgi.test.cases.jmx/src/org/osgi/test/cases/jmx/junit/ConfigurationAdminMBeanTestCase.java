@@ -125,6 +125,19 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 		result = configAdminMBean.getProperties(configurationPid);
 		assertNull(result);
 	}
+	
+	public void testDeleteConfigurationsFilter() throws Exception {
+		String configurationPid = testBundle2.getBundleId() + ".1";
+		Properties props = new Properties();
+		props.setProperty("test_key", "test_delete_for_filter");
+		configAdminMBean.updateForLocation(configurationPid, testBundle2.getLocation(), OSGiProperties.tableFrom(props));
+		TabularData result = configAdminMBean.getProperties(configurationPid);
+		assertNotNull(result);
+		configAdminMBean.deleteConfigurations("(&(test_key=test_delete_for_filter))");
+		result = configAdminMBean.getProperties(configurationPid);
+		assertNull(result);
+	}
+	
 
 	public void testGetFactoryPid() throws Exception {
 		String test2factory = testBundle2.getBundleId() + ".factory";		
@@ -148,6 +161,18 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
         assertTrue("get factory pid doesn't work", test2factory.equals(configAdminMBean.getFactoryPidForLocation(configuration.getPid(), testBundle2.getLocation())));
 	}
 
+	public void testGetConfigurationsFilter() throws Exception {
+		String configurationPid = testBundle2.getBundleId() + ".1";
+		Properties props = new Properties();
+		props.setProperty("test_key_filter", "test_get_cfg_filter");
+		configAdminMBean.updateForLocation(configurationPid, testBundle2.getLocation(), OSGiProperties.tableFrom(props));
+
+		String[][] result = configAdminMBean.getConfigurations("(&(test_key_filter=test_get_cfg_filter))");
+		assertTrue("wrong filtering of configurations", (result != null) && (result.length == 1) && 
+														(result[0].length == 2) && configurationPid.equals(result[0][0]) &&
+														testBundle2.getLocation().equals(result[0][1]));
+	}
+	
 	public void testCreateFactoryConfigurationForLocation() throws IOException {
 		String testFactoryId = testBundle2.getBundleId() + ".factory";
 		

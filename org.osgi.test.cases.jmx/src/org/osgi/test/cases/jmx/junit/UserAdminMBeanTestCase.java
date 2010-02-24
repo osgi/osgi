@@ -2,13 +2,13 @@ package org.osgi.test.cases.jmx.junit;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 
 import javax.management.openmbean.CompositeData;
-import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.TabularData;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.jmx.service.useradmin.UserAdminMBean;
+import org.osgi.service.useradmin.UserAdmin;
 
 public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 	private UserAdminMBean userManagerMBean;
@@ -351,6 +351,54 @@ public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 		 * Bug reported https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1592
 		 */
 		assertCompositeDataKeys(role, "ROLE_TYPE", new String[] {"Name", "Type", "Properties"});		
+	}
+	
+	public void testGetRoleFilter() throws Exception {
+		String username = "TestName";		
+		userManagerMBean.createUser(username);
+		userManagerMBean.addPropertyString("TestPropertyKey", "TestPropertyValue", username);
+		String[] roles = userManagerMBean.getRoles("(TestPropertyKey=TestPropertyValue)");
+		assertNotNull(roles);
+		boolean found = false;
+		for (int i = 0; i < roles.length; i++) {
+			if (username.equals(roles[i])) {
+				found = true;
+				break;
+			}
+		}
+		assertTrue("role didn't found by filtering", found);
+	}
+
+	public void testGetUserFilter() throws Exception {
+		String username = "TestName";		
+		userManagerMBean.createUser(username);
+		userManagerMBean.addPropertyString("TestPropertyKey", "TestPropertyValue", username);
+		String[] users = userManagerMBean.getUsers("(TestPropertyKey=TestPropertyValue)");
+		assertNotNull(users);
+		boolean found = false;
+		for (int i = 0; i < users.length; i++) {
+			if (username.equals(users[i])) {
+				found = true;
+				break;
+			}
+		}
+		assertTrue("user didn't found by filtering", found);
+	}
+
+	public void testGetGroupFilter() throws Exception {
+		String groupname = "TestGroup";		
+		userManagerMBean.createGroup(groupname);
+		userManagerMBean.addPropertyString("TestPropertyKey", "TestPropertyValue", groupname);
+		String[] groups = userManagerMBean.getGroups("(TestPropertyKey=TestPropertyValue)");
+		assertNotNull(groups);
+		boolean found = false;
+		for (int i = 0; i < groups.length; i++) {
+			if (groupname.equals(groups[i])) {
+				found = true;
+				break;
+			}
+		}
+		assertTrue("group didn't found by filtering", found);
 	}
 	
 	public void testGetUserWithProperty() throws IOException {

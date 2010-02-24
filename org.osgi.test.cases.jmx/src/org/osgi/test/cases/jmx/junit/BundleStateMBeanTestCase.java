@@ -3,22 +3,23 @@ package org.osgi.test.cases.jmx.junit;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 import javax.management.openmbean.CompositeData;
-import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.TabularData;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.jmx.framework.BundleStateMBean;
 import org.osgi.jmx.framework.PackageStateMBean;
+import org.osgi.service.packageadmin.PackageAdmin;
 
 public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 	private Bundle testBundle1;
 	private Bundle testBundle2;
 	private BundleStateMBean bsMBean;
+	private PackageAdmin packageAdmin;
+	private BundleContext bundleContext;
 	
 	private static String expectedInterface = "org.osgi.test.cases.jmx.tb2.api.HelloSayer";
 	private static final String EXPORTED_PACKAGE = "org.osgi.test.cases.jmx.tb2.api";
@@ -35,6 +36,8 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 		super.waitForRegistering(createObjectName(BundleStateMBean.OBJECTNAME));
 		bsMBean = getMBeanFromServer(BundleStateMBean.OBJECTNAME,
 				BundleStateMBean.class);	
+		bundleContext = super.getContext();
+		packageAdmin = (PackageAdmin) bundleContext.getService(bundleContext.getServiceReference(PackageAdmin.class.getName()));
 		
 	}
 	
@@ -411,6 +414,20 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 	public void testIsPersistentlyStarted() throws IOException {
 		boolean isPersistentlyStarted = bsMBean.isPersistentlyStarted(testBundle2.getBundleId());
 		assertTrue(isPersistentlyStarted);		
+	}
+	
+	public void testGetHosts() throws IOException {
+		TabularData bundleList = bsMBean.listBundles();
+		Collection values = bundleList.values();
+		Iterator iter = values.iterator();
+		while (iter.hasNext()) {
+			CompositeData item = (CompositeData) iter.next();
+			long tempBundleId = ((Long) item.get("Identifier")).longValue();
+			if (packageAdmin.getHosts(bundleContext.getBundle(tempBundleId)) != null) {
+				assertNotNull(bsMBean.getHosts(tempBundleId));
+				assertTrue("wrong hosts info returned for bundle with id" + tempBundleId, bsMBean.getHosts(tempBundleId).length == packageAdmin.getHosts(bundleContext.getBundle(tempBundleId)).length);
+			}
+		}			
 	}
 	
 	@Override
