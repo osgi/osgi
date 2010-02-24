@@ -87,7 +87,7 @@ public class DeliveredSubtree {
             session = tbc.getDmtAdmin().getSession(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DELIVERED,
                 DmtSession.LOCK_TYPE_EXCLUSIVE);
         } catch (DmtException e) {
-            tbc.fail("Failed to open the Testing Delivered Subtree session");
+			tbc.fail("Failed to open the Testing Delivered Subtree session", e);
         }
         return session;
     }
@@ -121,7 +121,8 @@ public class DeliveredSubtree {
             
             
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -154,7 +155,8 @@ public class DeliveredSubtree {
                     metaNode.can(MetaNode.CMD_GET));
 
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -188,7 +190,8 @@ public class DeliveredSubtree {
                     metaNode.can(MetaNode.CMD_GET));
             
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -225,7 +228,8 @@ public class DeliveredSubtree {
                 tbc.log("# " + DeploymentmoConstants.SIMPLE_DP_DELIVERED_DESCRIPTOR + " node does not exist. Metanode will not be tested.");
             }
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -258,7 +262,8 @@ public class DeliveredSubtree {
                     metaNode.can(MetaNode.CMD_GET));
             
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -295,7 +300,8 @@ public class DeliveredSubtree {
                     "Asserts if $/Deployment/Inventory/Delivered/[node_id]/Operations/Remove metanode has Execute Permission",
                     metaNode.can(MetaNode.CMD_EXECUTE));
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -332,7 +338,8 @@ public class DeliveredSubtree {
                     "Asserts if $/Deployment/Inventory/Delivered/[node_id]/Operations/InstallAndActivate metanode has Execute Permission",
                     metaNode.can(MetaNode.CMD_EXECUTE));
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -366,7 +373,8 @@ public class DeliveredSubtree {
                 tbc.log("# "+DeploymentmoConstants.SIMPLE_DP_DELIVERED_OPERATIONS_EXT+" node does not exist");
             }
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -399,7 +407,8 @@ public class DeliveredSubtree {
                     metaNode.can(MetaNode.CMD_GET));
             
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -432,7 +441,8 @@ public class DeliveredSubtree {
                 tbc.log("# "+DeploymentmoConstants.SIMPLE_DP_DELIVERED_EXT+" node does not exist. Metanode will not be tested.");
             }
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 }

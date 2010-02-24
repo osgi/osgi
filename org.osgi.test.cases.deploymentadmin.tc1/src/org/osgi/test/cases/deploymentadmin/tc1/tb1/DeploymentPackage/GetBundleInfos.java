@@ -76,7 +76,7 @@ public class GetBundleInfos implements TestInterface  {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
-            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage",e);
         }
     }
 	/**
@@ -107,7 +107,7 @@ public class GetBundleInfos implements TestInterface  {
 			}
 			tbc.assertEquals("The Deployment Package returned as many bundles/versions as exists in the testing deployment package", testBundle.length, count);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		} finally {
 			tbc.uninstall(dp);
 		}
@@ -132,7 +132,7 @@ public class GetBundleInfos implements TestInterface  {
 			BundleInfo[] symNameVersion = dp.getBundleInfos();
 			tbc.assertTrue("Asserts that it returns a zero dimensional array when there is no bundles.",symNameVersion.length == 0);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		} finally {
 			prepare();
 			tbc.uninstall(new DeploymentPackage[] { rp, dp });
@@ -158,7 +158,7 @@ public class GetBundleInfos implements TestInterface  {
         } catch (SecurityException e) {
 //            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));			
 		} catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }),e);
 		} finally {
 			prepare();
 			tbc.uninstall(dp);

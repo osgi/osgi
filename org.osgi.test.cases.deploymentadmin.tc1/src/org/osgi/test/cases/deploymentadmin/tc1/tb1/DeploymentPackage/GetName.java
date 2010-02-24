@@ -67,7 +67,7 @@ public class GetName implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
-            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage",e);
         }
     }
 	/**
@@ -87,7 +87,7 @@ public class GetName implements TestInterface {
 			String name = dp.getName();
 			tbc.assertEquals("The Deployment package name is correctly set:" , testDP.getName(), name);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		} finally {
 			prepare();
 			tbc.uninstall(dp);

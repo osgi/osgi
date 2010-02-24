@@ -73,8 +73,10 @@ public class Cancel implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+			tbc
+					.fail(
+							"Failed to set Permission necessary for testing #getDeploymentPackage",
+							e);
         }
     }
     /**
@@ -135,8 +137,9 @@ public class Cancel implements TestInterface {
    			
             
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
         	test.setRelease(true);
        	 	installThread.uninstallDP(false);
@@ -203,8 +206,9 @@ public class Cancel implements TestInterface {
             		installThread.getDepExceptionCodeUninstall() == DeploymentException.CODE_CANCELLED);
             
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
         	test.setRelease(true);
        	 	installThread.uninstallDP(true);
@@ -268,8 +272,9 @@ public class Cancel implements TestInterface {
         } catch (SecurityException e) {
 //        	tbc.pass("SecurityException correctly thrown");  
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
         	test.setRelease(true);
        	 	installThread.uninstallDP(false);
@@ -289,8 +294,9 @@ public class Cancel implements TestInterface {
 	    	 boolean canceled = tbc.getDeploymentAdmin().cancel();
 	         tbc.assertTrue("canceled is false when there is no active session", !canceled);
 	     } catch (Exception e) {
-        	e.printStackTrace();
-        	tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 	     }
 	 }
 }

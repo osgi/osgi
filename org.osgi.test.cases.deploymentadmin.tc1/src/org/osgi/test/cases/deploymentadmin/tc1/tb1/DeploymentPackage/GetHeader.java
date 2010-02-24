@@ -96,7 +96,7 @@ public class GetHeader implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
-            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage",e);
         }
     }
 	/**
@@ -110,7 +110,7 @@ public class GetHeader implements TestInterface {
 			testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
     
@@ -127,7 +127,7 @@ public class GetHeader implements TestInterface {
 		tbc.assertEquals("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-Version) from the main section",
             testDP.getVersion().toString(), header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	/**
@@ -141,7 +141,7 @@ public class GetHeader implements TestInterface {
 		String header = dp.getHeader(DeploymentConstants.DP_HEADER_VERSION.toUpperCase());
 		tbc.assertEquals("Asserts that header names are case insensitive (DEPLOYMENTPACKAGE-VERSION)",testDP.getVersionString(),header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}	
 	
@@ -157,7 +157,7 @@ public class GetHeader implements TestInterface {
 		tbc.assertEquals("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-Name) from the main section",
 					testDP.getName(),header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	
@@ -172,7 +172,7 @@ public class GetHeader implements TestInterface {
 		String header = dp.getHeader(DeploymentConstants.DP_HEADER_NAME.toUpperCase());
 		tbc.assertEquals("Asserts that header names are case insensitive (DEPLOYMENTPACKAGE-NAME)",testDP.getName(),header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	
@@ -187,7 +187,7 @@ public class GetHeader implements TestInterface {
 		String header = dp.getHeader(DeploymentConstants.INVALID_NAME);
 		tbc.assertNull("Asserts that it returns null when the header doesn't exist.",header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	
@@ -204,7 +204,7 @@ public class GetHeader implements TestInterface {
 		tbc.assertEquals("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-Copyright) from the main section",
 				DeploymentConstants.DP_MY_COPYRIGHT,header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	
@@ -220,7 +220,7 @@ public class GetHeader implements TestInterface {
 		tbc.assertEquals("Asserts that header names are case insensitive (deploymentpackage-copyright)",
 				DeploymentConstants.DP_MY_COPYRIGHT,header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	
@@ -237,7 +237,7 @@ public class GetHeader implements TestInterface {
 		tbc.assertEquals("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-ContactAdress) from the main section",
 				DeploymentConstants.DP_MY_CONTACT_ADRESS,header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	
@@ -253,7 +253,7 @@ public class GetHeader implements TestInterface {
 		tbc.assertEquals("Asserts that header names are case insensitive (deploymentpackage-contactadress)",
 				DeploymentConstants.DP_MY_CONTACT_ADRESS,header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}	
 	
@@ -270,7 +270,7 @@ public class GetHeader implements TestInterface {
 		tbc.assertEquals("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-Description) from the main section",
 				DeploymentConstants.DP_MY_DESCRIPTION,header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	
@@ -286,7 +286,7 @@ public class GetHeader implements TestInterface {
 		tbc.assertEquals("Asserts that header names are case insensitive (deploymentpackage-description)",
 				DeploymentConstants.DP_MY_DESCRIPTION,header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 
@@ -302,7 +302,7 @@ public class GetHeader implements TestInterface {
 		tbc.assertEquals("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-DocURL) from the main section",
 				DeploymentConstants.DP_MY_DOC_URL,header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	
@@ -318,7 +318,7 @@ public class GetHeader implements TestInterface {
 		tbc.assertEquals("Asserts that header names are case insensitive (DEPLOYMENTPACKAGE-DOCURL)",
 				DeploymentConstants.DP_MY_DOC_URL,header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 
@@ -334,7 +334,7 @@ public class GetHeader implements TestInterface {
 		tbc.assertEquals("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-Vendor) from the main section",
 				DeploymentConstants.DP_MY_VENDOR,header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	
@@ -350,7 +350,7 @@ public class GetHeader implements TestInterface {
 		tbc.assertEquals("Asserts that header names are case insensitive (deploymentpackage-vendor)",
 				DeploymentConstants.DP_MY_VENDOR,header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	
@@ -367,7 +367,7 @@ public class GetHeader implements TestInterface {
 		tbc.assertEquals("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-License) from the main section",
 				DeploymentConstants.DP_MY_LICENSE,header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	
@@ -383,7 +383,7 @@ public class GetHeader implements TestInterface {
 		tbc.assertEquals("Asserts that header names are case insensitive (deploymentpackage-license)",
 				DeploymentConstants.DP_MY_LICENSE,header);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
     
@@ -401,7 +401,7 @@ public class GetHeader implements TestInterface {
         tbc.assertEquals("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-FixPack) from the main section",
                 DeploymentConstants.DP_MY_FIXPACK, header);
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
         }
     }
     
@@ -417,7 +417,7 @@ public class GetHeader implements TestInterface {
         tbc.assertEquals("Asserts that header names are case insensitive (deploymentpackage-fixpack)",
                 DeploymentConstants.DP_MY_FIXPACK,header);
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
         }
     }
     
@@ -433,7 +433,7 @@ public class GetHeader implements TestInterface {
         String header = fixPackDP.getHeader(DeploymentConstants.DP_HEADER_LICENSE);
         tbc.assertNull("Asserts that it returns null as License.", header);
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
         }    
     }
     
@@ -449,7 +449,7 @@ public class GetHeader implements TestInterface {
         String header = fixPackDP.getHeader(DeploymentConstants.DP_HEADER_VENDOR);
         tbc.assertNull("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-Vendor) from the main section", header);
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
         }   
     }  
     
@@ -468,7 +468,7 @@ public class GetHeader implements TestInterface {
 	        String header = fixPackDP.getHeader(DeploymentConstants.DP_HEADER_CONTACT_ADRESS);
 	        tbc.assertNull("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-ContactAddress) from the main section", header);
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
         } finally {
         	prepare();
         }
@@ -497,7 +497,7 @@ public class GetHeader implements TestInterface {
             header = testDp.getHeader(DeploymentConstants.DP_HEADER_DESCRIPTION);
             tbc.assertEquals("Asserting the DeploymentPackage-Description value.", DeploymentConstants.DP_MY_DESCRIPTION, header);
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
         } finally {
             tbc.uninstall(testDp);
         }
@@ -518,7 +518,7 @@ public class GetHeader implements TestInterface {
         } catch (SecurityException e) {
 //            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));			
 		} catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }),e);
 		} finally {
 			prepare();
 		}

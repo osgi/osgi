@@ -68,7 +68,7 @@ public class GetVersion implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
-            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage",e);
         }
     }
 	/**
@@ -89,7 +89,7 @@ public class GetVersion implements TestInterface {
 			Version version = dp.getVersion();
 			tbc.assertEquals("The version of the deployment package was correctly set", testDP.getVersion(), version);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		} finally {
 			prepare();
 			tbc.uninstall(dp);

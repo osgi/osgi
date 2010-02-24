@@ -47,6 +47,10 @@ import java.io.IOException;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+import junit.framework.Assert;
+
+import org.osgi.test.support.OSGiTestCase;
+
 public class DeploymentmoConstants {
     public static String DLOTA_PATH;
     public static String DLOTA_RELATIVE_PATH;
@@ -66,7 +70,23 @@ public class DeploymentmoConstants {
     
     public static final String PRINCIPAL = "admin";
 
-    public static final File DELIVERED_AREA = new File(System.getProperty("org.osgi.impl.service.deploymentadmin.deliveredarea"));
+    public static final File DELIVERED_AREA;
+	static {
+		String prop = System
+				.getProperty("org.osgi.impl.service.deploymentadmin.deliveredarea");
+		Assert
+				.assertNotNull(
+						"Must set property: org.osgi.impl.service.deploymentadmin.deliveredarea",
+						prop);
+		DELIVERED_AREA = new File(prop);
+		Assert.assertFalse("deliveredarea is not a directory: "
+				+ DELIVERED_AREA.getPath(), DELIVERED_AREA.exists()
+				&& !DELIVERED_AREA.isDirectory());
+		if (!DELIVERED_AREA.isDirectory())
+			Assert.assertTrue("Could not create root directory: "
+					+ DELIVERED_AREA.getPath(), DELIVERED_AREA.mkdirs());
+	}
+
     public static File TEMP_DIR;
     
     //Specified values
@@ -197,7 +217,7 @@ public class DeploymentmoConstants {
     	try {
 			return new JarFile(new File(DELIVERED_AREA, MAP_CODE_TO_ARTIFACT[dpCode] + ((dpCode!=SIMPLE_BUNDLE)?".dp":"")));
 		} catch (IOException e) {
-			e.printStackTrace();
+			OSGiTestCase.fail(e.getMessage(), e);
 		}
 		return null;
     }
@@ -206,7 +226,7 @@ public class DeploymentmoConstants {
     	try {
 			return new JarFile(TEMP_DIR.getAbsolutePath() + File.separatorChar + name);
 		} catch (IOException e) {
-			e.printStackTrace();
+			OSGiTestCase.fail(e.getMessage(), e);
 		}
 		return null;
     }
@@ -240,13 +260,13 @@ public class DeploymentmoConstants {
       		SIMPLE_FIX_PACK_BUNDLE1_MANIFEST = tmpJarFile.getManifest();
           tmpJarFile.close();
       	} catch (Exception e) {
-      		e.printStackTrace();
+			OSGiTestCase.fail(e.getMessage(), e);
       	} finally {
           try{
             simpleDp.close();
             tmpJarFile.close();
           }catch(Exception ex){
-        	  ex.printStackTrace();
+				OSGiTestCase.fail(ex.getMessage(), ex);
           }
         }
     }

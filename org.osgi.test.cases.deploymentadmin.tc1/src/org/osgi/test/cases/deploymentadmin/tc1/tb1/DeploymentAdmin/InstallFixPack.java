@@ -91,8 +91,10 @@ public class InstallFixPack implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail("Failed to set Permission necessary for testing installDeploymentPackage");
+			tbc
+					.fail(
+							"Failed to set Permission necessary for testing installDeploymentPackage",
+							e);
         }
     }
 	
@@ -123,8 +125,9 @@ public class InstallFixPack implements TestInterface {
 			tbc.assertEquals("The symbolic name of the bundle is ", testFixDP.getBundles()[0].getName(), pairs[0].getSymbolicName());
 			tbc.assertEquals("The new version of the bundle is ", testFixDP.getBundles()[0].getVersion(), pairs[0].getVersion());
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(new DeploymentPackage[] { dp, fixDP });
 		}
@@ -165,8 +168,9 @@ public class InstallFixPack implements TestInterface {
 			
 			tbc.assertNull("The bundle "+b2Name+" have been removed", b2);
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(new DeploymentPackage[] { dp, fixDP });
 		}
@@ -212,8 +216,9 @@ public class InstallFixPack implements TestInterface {
 			// there are at least three bundles that match symbolic names with installed ones
 			tbc.assertTrue("There are three bundles that matches symbolic names", count==3);
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(new DeploymentPackage[] { dp, fixDP });
 		}
@@ -245,8 +250,9 @@ public class InstallFixPack implements TestInterface {
 			tbc.assertEquals("The symbolic name of the bundle is ", testFixDP.getBundles()[0].getName(), pairs[0].getSymbolicName());
 			tbc.assertEquals("The new version of the bundle is ", testFixDP.getBundles()[0].getVersion(), pairs[0].getVersion());
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(new DeploymentPackage[] { dp, fixDP });
 		}
@@ -279,8 +285,9 @@ public class InstallFixPack implements TestInterface {
 			tbc.assertEquals("The symbolic name of the bundle is ", testFixDP.getBundles()[0].getName(), pairs[0].getSymbolicName());
 			tbc.assertEquals("The new version of the bundle is ", testFixDP.getBundles()[0].getVersion(), pairs[0].getVersion());
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(new DeploymentPackage[] { dp, fixDP });
 		}
@@ -312,8 +319,9 @@ public class InstallFixPack implements TestInterface {
 			tbc.assertEquals("The symbolic name of the bundle is ", testFixDP.getBundles()[0].getName(), pairs[0].getSymbolicName());
 			tbc.assertEquals("The new version of the bundle is ", testFixDP.getBundles()[0].getVersion(), pairs[0].getVersion());
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(new DeploymentPackage[] { dp, fixDP });
 		}
@@ -340,8 +348,8 @@ public class InstallFixPack implements TestInterface {
 		} catch (DeploymentException e) {
 			tbc.assertEquals("Misssing Resource Deployment Exception thrown", DeploymentException.CODE_MISSING_FIXPACK_TARGET, e.getCode());
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail("Expected DeploymentException and got "+e.getClass().getName());
+			tbc.fail("Expected DeploymentException and got "
+					+ e.getClass().getName(), e);
 		} finally {
 			tbc.uninstall(new DeploymentPackage[] { dp, fixDP });
 		}
@@ -366,8 +374,8 @@ public class InstallFixPack implements TestInterface {
 		} catch (DeploymentException e) {
 			tbc.assertEquals("Misssing Resource Deployment Exception thrown", DeploymentException.CODE_MISSING_FIXPACK_TARGET, e.getCode());
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail("Expected DeploymentException and got "+e.getClass().getName());
+			tbc.fail("Expected DeploymentException and got "
+					+ e.getClass().getName(), e);
 		} finally {
 			tbc.uninstall(fixDP);
 		}
@@ -413,8 +421,9 @@ public class InstallFixPack implements TestInterface {
 			}
 			tbc.assertTrue("The resource was added to the deployment package", found);
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(new DeploymentPackage[] { rp, dp, fixDP });
 		}
@@ -454,8 +463,9 @@ public class InstallFixPack implements TestInterface {
 
 			tbc.assertTrue("The resource has been uninstalled", (after == before-1));
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(new DeploymentPackage[] { rp, dp, fixDP });
 		}
@@ -486,8 +496,8 @@ public class InstallFixPack implements TestInterface {
 		} catch (DeploymentException e) {
 			tbc.assertEquals("Misssing Resource Deployment Exception thrown", DeploymentException.CODE_MISSING_RESOURCE, e.getCode());
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail("Expected DeploymentException and got "+e.getClass().getName());
+			tbc.fail("Expected DeploymentException and got "
+					+ e.getClass().getName(), e);
 		} finally {
 			tbc.uninstall(new DeploymentPackage[] { rp, dp, fixDP });
 		}
@@ -518,8 +528,8 @@ public class InstallFixPack implements TestInterface {
 		} catch (DeploymentException e) {
 			tbc.assertEquals("Misssing Resource Deployment Exception thrown", DeploymentException.CODE_MISSING_BUNDLE, e.getCode());
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail("Expected DeploymentException and got "+e.getClass().getName());
+			tbc.fail("Expected DeploymentException and got "
+					+ e.getClass().getName(), e);
 		} finally {
 			tbc.uninstall(new DeploymentPackage[] { rp, dp, fixDP });
 		}
@@ -547,8 +557,8 @@ public class InstallFixPack implements TestInterface {
 		} catch (DeploymentException e) {
 			tbc.assertEquals("Misssing Resource Deployment Exception thrown", DeploymentException.CODE_MISSING_FIXPACK_TARGET, e.getCode());
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail("Expected DeploymentException and got "+e.getClass().getName());
+			tbc.fail("Expected DeploymentException and got "
+					+ e.getClass().getName(), e);
 		} finally {
 			tbc.uninstall(new DeploymentPackage[] { dp, fixDP });
 		}

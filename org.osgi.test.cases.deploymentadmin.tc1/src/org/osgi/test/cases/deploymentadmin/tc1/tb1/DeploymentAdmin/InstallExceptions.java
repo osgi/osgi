@@ -82,8 +82,10 @@ public class InstallExceptions implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail("Failed to set Permission necessary for testing installDeploymentPackage");
+			tbc
+					.fail(
+							"Failed to set Permission necessary for testing installDeploymentPackage",
+							e);
         }
     }
     
@@ -106,8 +108,9 @@ public class InstallExceptions implements TestInterface {
         } catch (DeploymentException e) {
             tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_BUNDLE_SHARING_VIOLATION, e.getCode());
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							"DeploymentException", e.getClass().getName()}), e);
         } finally {
             tbc.uninstall(new DeploymentPackage[] { dp, dp2 });
         }
@@ -135,8 +138,9 @@ public class InstallExceptions implements TestInterface {
         } catch (DeploymentException e) {
             tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_BUNDLE_SHARING_VIOLATION, e.getCode());
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							"DeploymentException", e.getClass().getName()}), e);
         } finally {
             tbc.uninstall(new DeploymentPackage[] { dp, dp2 });
         }
@@ -158,8 +162,9 @@ public class InstallExceptions implements TestInterface {
         } catch (DeploymentException e) {
             tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_MISSING_HEADER, e.getCode());
         } catch (Exception e) {
-        	e.printStackTrace();
-        	tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							"DeploymentException", e.getClass().getName()}), e);
         } finally {
             tbc.uninstall(dp);
         }
@@ -182,8 +187,9 @@ public class InstallExceptions implements TestInterface {
         } catch (DeploymentException e) {
             tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_MISSING_HEADER, e.getCode());
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							"DeploymentException", e.getClass().getName()}), e);
         } finally {
             tbc.uninstall(dp);
         }
@@ -206,8 +212,9 @@ public class InstallExceptions implements TestInterface {
         } catch (DeploymentException e) {
             tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_MISSING_HEADER, e.getCode());
         } catch (Exception e) {
-        	e.printStackTrace();
-        	tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							"DeploymentException", e.getClass().getName()}), e);
         } finally {
             tbc.uninstall(dp);
         }
@@ -231,8 +238,9 @@ public class InstallExceptions implements TestInterface {
         } catch (DeploymentException e) {
             tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_MISSING_HEADER, e.getCode());
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							"DeploymentException", e.getClass().getName()}), e);
         } finally {
             tbc.uninstall(dp);
         }
@@ -256,8 +264,9 @@ public class InstallExceptions implements TestInterface {
         } catch (DeploymentException e) {
             tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_MISSING_HEADER, e.getCode());
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							"DeploymentException", e.getClass().getName()}), e);
         } finally {
             tbc.uninstall(dp);
         }
@@ -280,8 +289,9 @@ public class InstallExceptions implements TestInterface {
         } catch (DeploymentException e) {
             tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_MISSING_HEADER, e.getCode());
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							"DeploymentException", e.getClass().getName()}), e);
         } finally {
             tbc.uninstall(dp);
         }
@@ -304,8 +314,9 @@ public class InstallExceptions implements TestInterface {
         } catch (DeploymentException e) {
             tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_BUNDLE_NAME_ERROR, e.getCode());
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							"DeploymentException", e.getClass().getName()}), e);
         } finally {
             tbc.uninstall(dp);
         }
@@ -327,8 +338,9 @@ public class InstallExceptions implements TestInterface {
         } catch (DeploymentException e) {
             tbc.assertEquals("DeploymentException thrown signing code error", DeploymentException.CODE_SIGNING_ERROR, e.getCode());
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							"DeploymentException", e.getClass().getName()}), e);
         } finally {
             tbc.uninstall(dp);
         }
@@ -351,8 +363,9 @@ public class InstallExceptions implements TestInterface {
         } catch (DeploymentException e) {
             tbc.assertEquals("DeploymentException thrown if the resource processor was not found.", DeploymentException.CODE_PROCESSOR_NOT_FOUND, e.getCode());
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							"DeploymentException", e.getClass().getName()}), e);
         } finally {
             tbc.uninstall(dp);
         }

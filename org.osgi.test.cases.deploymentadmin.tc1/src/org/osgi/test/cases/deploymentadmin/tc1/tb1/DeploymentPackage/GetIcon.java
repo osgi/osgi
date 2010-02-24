@@ -58,7 +58,7 @@ public class GetIcon implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
-            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage",e);
         }
     }
     
@@ -87,7 +87,7 @@ public class GetIcon implements TestInterface {
 			tbc.assertNotNull("The deployment package icon URL can be read ", is);
 			is.close();
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		} finally {
 			prepare();
 			tbc.uninstall(dp);
@@ -109,7 +109,7 @@ public class GetIcon implements TestInterface {
 			
 			tbc.assertNull("The deployment package must return null for icon URL", dp.getIcon());
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		} finally {
 			tbc.uninstall(dp);
 		}

@@ -78,7 +78,7 @@ public class Equals implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
-            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage",e);
         }
     }
 	/**
@@ -97,7 +97,7 @@ public class Equals implements TestInterface {
 			
 			tbc.assertTrue("Asserts that two deployment packages are equal when they have the same name and version", dp.equals(dp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		} finally {
 			prepare();
 			tbc.uninstall(dp);
@@ -121,7 +121,7 @@ public class Equals implements TestInterface {
 			
 			tbc.assertTrue("Asserts that two deployment packages are different when they have the same version and different names ", !dp.equals(dp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		} finally {
 			tbc.uninstall(dp);
 		}
@@ -149,7 +149,7 @@ public class Equals implements TestInterface {
 			tbc.assertTrue("Asserts that two deployment packages are different when they have different versions and names",
 							!dp.equals(dp2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		} finally {
 			prepare();
 			tbc.uninstall(new DeploymentPackage[] { rp, dp, dp2 });

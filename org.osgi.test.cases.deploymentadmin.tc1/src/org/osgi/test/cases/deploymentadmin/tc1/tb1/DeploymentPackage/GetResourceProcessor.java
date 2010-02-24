@@ -93,7 +93,7 @@ public class GetResourceProcessor implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
-            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage",e);
         }
     }
 	/**
@@ -108,7 +108,7 @@ public class GetResourceProcessor implements TestInterface {
 		try {
 			dpRP = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 
@@ -127,7 +127,7 @@ public class GetResourceProcessor implements TestInterface {
 							"Service reference bundle is the same as the deployment package bundle",
 							dpBundle, rp.getBundle());
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	/**
@@ -143,7 +143,7 @@ public class GetResourceProcessor implements TestInterface {
 			ServiceReference rp = dpRP.getResourceProcessor("UNEXISTENT_RESOURCE.rp");
 			tbc.assertNull("Asserts that it returns null when a resource is not part of the deployment package", rp);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		} finally {
 			prepare();
 		}
@@ -175,7 +175,7 @@ public class GetResourceProcessor implements TestInterface {
 							value, (String) rp.getProperty(DeploymentConstants.RESOURCE_PROCESSOR_PROPERTY_KEY));
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	/**
@@ -193,7 +193,7 @@ public class GetResourceProcessor implements TestInterface {
         } catch (SecurityException e) {
 //            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));			
 		} catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }),e);
 		} finally {
 			prepare();
 		}

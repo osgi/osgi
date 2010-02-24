@@ -69,7 +69,7 @@ public class GetResources implements TestInterface  {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
-            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage",e);
         }
     }
     /**
@@ -109,7 +109,8 @@ public class GetResources implements TestInterface  {
                     }
                 }
             } else {
-                tbc.fail("The number of resources received from DP is not #resources + #bundles");
+				tbc
+						.fail("The number of resources received from DP is not #resources + #bundles");
             }
             tbc.assertTrue("Asserts that it returns the requested resources.",
                 found == resourceLengthExpected);
@@ -142,7 +143,7 @@ public class GetResources implements TestInterface  {
             String[] resources = fixDP.getResources();
             tbc.assertTrue("Asserts that it returns the requested resources", resources.length == 0);
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}),e);
         } finally {
         	prepare();
             tbc.uninstall(new DeploymentPackage[]{dp, fixDP});
@@ -171,7 +172,7 @@ public class GetResources implements TestInterface  {
         } catch (SecurityException e) {
 //            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));			
 		} catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }),e);
 		} finally {
 			prepare();
 			tbc.uninstall(new DeploymentPackage[]{dp, fixDP});

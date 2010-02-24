@@ -83,7 +83,7 @@ public class GetResourceHeader implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
-            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage",e);
         }
     }
 	/**
@@ -96,7 +96,7 @@ public class GetResourceHeader implements TestInterface {
 			testBundle = testDP.getBundles()[0];
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());		
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	/**
@@ -111,7 +111,7 @@ public class GetResourceHeader implements TestInterface {
 		tbc.assertEquals("Asserts that it returns the value of the requested resource header (Bundle-SymbolicName)", 
 				testBundle.getName(), resourceHeader);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	/**
@@ -126,7 +126,7 @@ public class GetResourceHeader implements TestInterface {
 		tbc.assertEquals("Asserts that resource header names are case insensitive (BUNDLE-SYMBOLICNAME)",
 				testBundle.getName(),resourceHeader);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	/**
@@ -141,7 +141,7 @@ public class GetResourceHeader implements TestInterface {
 		tbc.assertEquals("Asserts that it returns the value of the requested resource header (Bundle-Version)", 
 				testBundle.getVersionString(), resourceHeader);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}
 	/**
@@ -156,7 +156,7 @@ public class GetResourceHeader implements TestInterface {
 		tbc.assertEquals("Asserts that resource header names are case insensitive (BUNDLE-VERSION)",
 				testBundle.getVersionString(),resourceHeader);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}
 	}	
 	/**
@@ -172,7 +172,7 @@ public class GetResourceHeader implements TestInterface {
 			String resourceHeader = dp.getResourceHeader(testBundle.getFilename(),DeploymentConstants.INVALID_NAME);
 			tbc.assertNull("Asserts that it returns null if the requested resource header doesn't exist.", resourceHeader);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }),e);
 		}finally {
 			prepare();
 		}
@@ -193,7 +193,7 @@ public class GetResourceHeader implements TestInterface {
         } catch (SecurityException e) {
 //            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));			
 		} catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }),e);
 		} finally {
 			prepare();
 		}

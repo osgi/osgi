@@ -182,7 +182,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
                   try{
                     copyArtifact(fileName, ""+DeploymentmoConstants.DELIVERED_AREA);
                   }catch(Exception ex){
-                    System.out.println(fileName+" not copied into delivered!");
+					fail(fileName + " not copied into delivered!", ex);
                   }
             }
           }
@@ -554,7 +554,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
 		try {
 			remoteAlertSender.stop(getContext());
 		} catch (Exception e) {
-			e.printStackTrace();
+			fail(e.getMessage(), e);
 		}
 	}
 	
@@ -568,9 +568,9 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
 				try {
 					session.close();
 				} catch (DmtException e) {
-					log("#Exception closing the session: "
+					fail("#Exception closing the session: "
 							+ e.getClass().getName() + "Message: ["
-							+ e.getMessage() + "]");
+							+ e.getMessage() + "]", e);
 				}
 			}
 		}
@@ -587,8 +587,8 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
 						    session.deleteNode(nodeUri[i]);
                         }
 					} catch (Throwable e) {
-						log("#Exception at cleanUp: " + e.getClass().getName()
-								+ " [Message: " + e.getMessage() + "]");
+						fail("#Exception at cleanUp: " + e.getClass().getName()
+								+ " [Message: " + e.getMessage() + "]", e);
 					}
 				}
                 closeSession(session);
@@ -675,7 +675,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
   		        fos.write(buffer, 0, count);
   		    }
           }catch (IOException e) {
-          	e.printStackTrace();
+			fail(e.getMessage(), e);
           } finally {
   	        try {
   				fos.close();
@@ -709,7 +709,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
     		
     		
     	}catch (IOException e) {
-        	e.printStackTrace();
+			fail(e.getMessage(), e);
     	}
 
     }
@@ -727,7 +727,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
 				fos.write(buffer, 0, count);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			fail(e.getMessage(), e);
 		} finally {
 			try {
 				fos.close();
@@ -758,9 +758,9 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
 			in = url.openStream();
 			return getDeploymentAdmin().installDeploymentPackage(in);
 		} catch (MalformedURLException e) {
-			fail("Failed to open the URL");
+			fail("Failed to open the URL", e);
 		} catch (IOException e) {
-			fail("Failed to open an InputStream");
+			fail("Failed to open an InputStream", e);
 		} finally {
 			if (in != null)
 				try {
@@ -779,7 +779,8 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
 				try {
                     dp.uninstallForced();
                 } catch (DeploymentException e1) {
-                    log("# Failed to uninstall deployment package: "+dp.getName());
+					fail("# Failed to uninstall deployment package: "
+							+ dp.getName(), e1);
                 }
 			} 
 		}
@@ -893,10 +894,11 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
                 String[] finalChildren = session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
                 
                 if (initialChildren.length<=finalChildren.length) {
-                    log("The Deployed node was not removed, further tests can be affected");
+					fail("The Deployed node was not removed, further tests can be affected");
                 }
             } catch (Exception e) {
-                log("Failed executing the node "+ removeNode +". Further tests can be affected");
+				fail("Failed executing the node " + removeNode
+						+ ". Further tests can be affected", e);
             }
         }
     }

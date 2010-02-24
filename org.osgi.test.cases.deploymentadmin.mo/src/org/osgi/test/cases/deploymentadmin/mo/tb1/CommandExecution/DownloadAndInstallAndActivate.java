@@ -135,7 +135,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     		DmtSession session = tbc.getDmtAdmin().getSession(DeploymentmoConstants.PRINCIPAL,DeploymentmoConstants.DEPLOYMENT, DmtSession.LOCK_TYPE_EXCLUSIVE);
     		return session;
 	    } catch (Exception e) {
-	        tbc.fail("Failed to open the session: " + e.getMessage());
+			tbc.fail("Failed to open the session: " + e.getMessage(), e);
 	    }
 	    return null;
     }
@@ -157,9 +157,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             }
             
         } catch (Exception e) {
-          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             cleanUp(session,null);
             
@@ -206,9 +206,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.log("Precondition for testDownloadAndInstallAndActivate002 not satisfied");
             }
         } catch (Exception e) {
-          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             cleanUp(session,dlota.getDlotaFile());
         }
@@ -270,9 +270,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 	                tbc.log("Precondition for testDownloadAndInstallAndActivate003 not satisfied");
 	            }
 	        } catch (Exception e) {
-          e.printStackTrace();
 	            tbc.fail(MessagesConstants.getMessage(
-	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+						MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+								.getClass().getName()}), e);
 	        } finally {
 	        	if (!nodeId.equals("")) {
 	        		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
@@ -341,9 +341,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 	                tbc.log("Precondition for testDownloadAndInstallAndActivate004 not satisfied");
 	            }
 	        } catch (Exception e) {
-          e.printStackTrace();
 	            tbc.fail(MessagesConstants.getMessage(
-	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+						MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+								.getClass().getName()}), e);
 	        } finally {
 	            cleanUp(session,dlota.getDlotaFile());
 	            
@@ -391,9 +391,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.log("Precondition for testDownloadAndInstallAndActivate005 not satisfied");
             }
         } catch (Exception e) {
-          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             cleanUp(session,dlota.getDlotaFile());
             
@@ -438,9 +438,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.log("Precondition for testDownloadAndInstallAndActivate006 not satisfied");
             }
         } catch (Exception e) {
-          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
         	if (!nodeId.equals("")) {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
@@ -477,7 +477,10 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         } catch (DmtException e) {
 //            tbc.pass("DmtException was thrown when $/Deployment/Download/[node_id]/EnvType was not \"OSGi.R4\"");
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[]{ DmtException.class.getName(),e.getClass().getName()}));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							DmtException.class.getName(),
+							e.getClass().getName()}), e);
         } finally {
             cleanUp(session,null);
         }
@@ -510,9 +513,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             		DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST, new DmtData(408));
                 
         } catch (Exception e) {
-          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.closeSession(session);
             
@@ -633,7 +636,6 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.log("Precondition for testDownloadAndInstallAndActivate009 not satisfied");
             }
         } catch (Exception e) {
-          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
 							.getClass().getName()}), e);
@@ -747,7 +749,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 				tbc.assertTrue("Asserting that there is only one bundle node in DMT",children.length==1);
             }
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName(), e);
 		} finally {
         	if (!nodeId.equals("")) {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
@@ -863,8 +865,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE,DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST,new DmtData(410));
             
         } catch (Exception e) {
-          e.printStackTrace();
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{ e.getClass().getName()}));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             cleanUp(session, null);
         }
@@ -1097,9 +1100,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             assertResultCode(session, DeploymentmoConstants.SIMPLE_DP, 465);
             
         } catch (Exception e) {
-          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
           listener.end();
             if (testBlockRP != null) {
@@ -1186,9 +1189,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.log("Precondition for testDownloadAndInstallAndActivate029 not satisfied");
             }
         } catch (Exception e) {
-          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
           if (jar != null) {
             try {
@@ -1282,9 +1285,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.log("Precondition for testDownloadAndInstallAndActivate030 not satisfied");
             }
         } catch (Exception e) {
-          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
           if (jar != null) {
             try {
@@ -1315,7 +1318,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             session.setNodeValue(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_URI, new DmtData(DeploymentmoConstants.DLOTA_PATH + dlotaFileName));
             session.setNodeValue(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_ENVTYPE, new DmtData(DeploymentmoConstants.ENVTYPE));
         } catch (DmtException e) {
-            tbc.log("# Failed to set download node values");
+			tbc.fail("# Failed to set download node values", e);
             return false;
         }
         return true;
@@ -1347,9 +1350,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.log("Precondition for this method was not satisfied");
             }
         } catch (Exception e) {
-          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             cleanUp(dlota.getDlotaFile());
             
@@ -1405,9 +1408,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             }
             
         } catch (Exception e) {
-          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
         	if (!nodeId.equals("")) {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
@@ -1432,9 +1435,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         	//The second DP should install successfully, so it is removed in the final of the method below
     		assertResultCode(session, secondDpCode, thirdDpCode, alertCode);
         } catch (Exception e) {
-          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
     	} finally {
         	if (!nodeId.equals("")) {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
@@ -1468,9 +1471,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             }
             
         } catch (Exception e) {
-          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
         }
         return nodeId;

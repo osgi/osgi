@@ -90,7 +90,10 @@ public class DownloadSubtree {
             session = tbc.getDmtAdmin().getSession(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD, DmtSession.LOCK_TYPE_EXCLUSIVE);
             session.createInteriorNode(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST);
         } catch (DmtException e) {
-            tbc.fail("Failed to prepare the "+DeploymentmoConstants.DEPLOYMENT_DOWNLOAD+" session");
+			tbc
+					.fail("Failed to prepare the "
+							+ DeploymentmoConstants.DEPLOYMENT_DOWNLOAD
+							+ " session", e);
         }
     }
 
@@ -132,7 +135,8 @@ public class DownloadSubtree {
                     metaNode.can(MetaNode.CMD_DELETE));
             
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -170,7 +174,8 @@ public class DownloadSubtree {
                     metaNode.can(MetaNode.CMD_REPLACE));
             
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -208,7 +213,8 @@ public class DownloadSubtree {
                     metaNode.can(MetaNode.CMD_REPLACE));
             
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -241,7 +247,8 @@ public class DownloadSubtree {
                     metaNode.can(MetaNode.CMD_GET));
             
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -277,7 +284,8 @@ public class DownloadSubtree {
                     "Asserts if $/Deployment/Download/[node_id]/Operations/DownloadAndInstallAndActivate metanode has Execute Permission",
                     metaNode.can(MetaNode.CMD_EXECUTE));
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -310,7 +318,8 @@ public class DownloadSubtree {
             	tbc.log("# "+DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_OPERATIONS_EXT + " node does not exist. Metanode will not be tested");
             }
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -347,7 +356,8 @@ public class DownloadSubtree {
                     metaNode.can(MetaNode.CMD_GET));
             
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -385,7 +395,8 @@ public class DownloadSubtree {
                     metaNode.can(MetaNode.CMD_REPLACE));
             
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 
@@ -422,7 +433,8 @@ public class DownloadSubtree {
             	tbc.log("# "+DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_EXT+" node does not exist. Metanode will not be tested");
             }
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
 }

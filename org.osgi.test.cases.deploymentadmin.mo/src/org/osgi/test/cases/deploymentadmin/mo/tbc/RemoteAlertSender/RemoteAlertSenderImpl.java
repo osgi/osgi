@@ -67,7 +67,8 @@ public class RemoteAlertSenderImpl implements RemoteAlertSender, BundleActivator
                 tbc.notifyAll();
             }
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         }
     }
     

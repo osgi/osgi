@@ -97,7 +97,8 @@ public class PermanentNodes {
 			tbc.assertTrue("Asserts if $/Deployment metanode has Get Permission", metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -132,7 +133,8 @@ public class PermanentNodes {
 			tbc.assertTrue("Asserts if $/Deployment/Download metanode has Get Permission", metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -167,7 +169,8 @@ public class PermanentNodes {
 			tbc.assertTrue("Asserts if $/Deployment/Inventory metanode has Get Permission", metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -203,7 +206,8 @@ public class PermanentNodes {
 
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -237,7 +241,8 @@ public class PermanentNodes {
 			tbc.assertTrue("Asserts if $/Deployment/Inventory/Deployed metanode has Get Permission", metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -274,7 +279,8 @@ public class PermanentNodes {
 			    tbc.log("# " +DeploymentmoConstants.DEPLOYMENT_EXT + " node does not exist. Metanode will not be tested.");
 			}
         } catch (Exception e) {
-            tbc.fail("Unexpected exception thrown: " + e.getClass().getName());
+			tbc.fail("Unexpected exception thrown: " + e.getClass().getName(),
+					e);
         } finally {
             tbc.closeSession(session);
         }

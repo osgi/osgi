@@ -106,7 +106,7 @@ public class InstallAndActivate implements TestInterface {
     		DmtSession session = tbc.getDmtAdmin().getSession(DeploymentmoConstants.PRINCIPAL,DeploymentmoConstants.DEPLOYMENT, DmtSession.LOCK_TYPE_EXCLUSIVE);
     		return session;
 	    } catch (Exception e) {
-	        tbc.fail("Failed to open the session: " + e.getMessage());
+			tbc.fail("Failed to open the session: " + e.getMessage(), e);
 	    }
 	    return null;
     }
@@ -152,7 +152,7 @@ public class InstallAndActivate implements TestInterface {
             assertSimpleDpSubtree(session,nodeId);
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName(), e);
 		} finally {
         	if (!nodeId.equals("")) {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
@@ -280,8 +280,7 @@ public class InstallAndActivate implements TestInterface {
 			tbc.assertTrue("Asserting that there is only one bundle node in DMT",children.length==1);
 
 		} catch (Exception e) {
-      e.printStackTrace();
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName(), e);
 		} finally {
         	if (!nodeId.equals("")) {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
@@ -324,9 +323,9 @@ public class InstallAndActivate implements TestInterface {
 
 			
 
-		} catch (Exception e) {
-		  e.printStackTrace();
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+		}
+		catch (Exception e) {
+			tbc.fail("Unexpected exception: " + e.getClass().getName(),e);
 		} finally {
         	if (!nodeId.equals("")) {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
@@ -368,7 +367,7 @@ public class InstallAndActivate implements TestInterface {
 			
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName(), e);
 		} finally {
         	if (!nodeId.equals("")) {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
@@ -628,9 +627,9 @@ public class InstallAndActivate implements TestInterface {
             
             assertResultCode(session, DeploymentmoConstants.SIMPLE_DP, 465);
         } catch (Exception e) {
-          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             if (listener != null) {
               listener.end();
@@ -673,8 +672,9 @@ public class InstallAndActivate implements TestInterface {
             assertSimpleDpSubtree(session, nodeId);
             
 			} catch (Exception e) {
-          e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(dp);
 			tbc.closeSession(session);
@@ -698,7 +698,7 @@ public class InstallAndActivate implements TestInterface {
 
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName(), e);
 		}
 	}
 	
@@ -736,7 +736,7 @@ public class InstallAndActivate implements TestInterface {
 
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName(), e);
 		} finally {
 			//The first node is successfully installed, so it needs to be cleaned
         	if (!nodeId.equals("")) {
@@ -770,7 +770,7 @@ public class InstallAndActivate implements TestInterface {
 
              assertResultCode(session,secondDpCode,thirdDpCode, resultCode);
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName(), e);
 		} finally {
         	if (!nodeId.equals("")) {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
@@ -857,7 +857,7 @@ public class InstallAndActivate implements TestInterface {
 			
 			tbc.assertTrue("Asserting that there is two bundle nodes in DMT",children.length==2);
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName(), e);
 		}
 	}
 }

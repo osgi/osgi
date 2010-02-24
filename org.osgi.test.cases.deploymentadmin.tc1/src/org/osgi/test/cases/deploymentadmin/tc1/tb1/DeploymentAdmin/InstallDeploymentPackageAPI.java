@@ -86,8 +86,10 @@ public class InstallDeploymentPackageAPI implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail("Failed to set Permission necessary for testing installDeploymentPackage");
+			tbc
+					.fail(
+							"Failed to set Permission necessary for testing installDeploymentPackage",
+							e);
         }
     }
 
@@ -114,8 +116,9 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 			tbc.assertEquals("Asserts the Deployment Package name ", testDP.getName(), dp.getName());
 			tbc.assertEquals("Asserts the Deployment Package version ", testDP.getVersion(), dp.getVersion());
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(dp);
 		}
@@ -157,8 +160,9 @@ public class InstallDeploymentPackageAPI implements TestInterface {
             String header = dp2.getHeader(DeploymentConstants.DP_HEADER_COPYRIGHT);
             tbc.assertEquals("Header also belongs to old DP", DeploymentConstants.DP_MY_COPYRIGHT, header);
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(dp1);
 		}
@@ -178,8 +182,9 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 		} catch (IllegalArgumentException e) {
 //			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { e.getClass().getName() }));
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		}
 	}
 	
@@ -209,8 +214,9 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 			tbc.assertEquals("The major version of the bundle was updated with a higher version", testDP2.getVersion().getMajor(), version.getMajor());
 			
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(dp2);
 		}
@@ -242,8 +248,9 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 			tbc.assertEquals("The major version of the bundle was updated with a lower version", testDP2.getVersion().getMajor(), version.getMajor());
 
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(dp2);
 
@@ -276,8 +283,9 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 			tbc.assertEquals("The micro version of the bundle was updated with a higher version", testDP2.getVersion().getMicro(), version.getMicro());
 
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(dp2);
 		}
@@ -307,8 +315,9 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 			Version version =  dp.getVersion();
 			tbc.assertEquals("The micro version of the bundle was updated with a lower version", testDP2.getVersion().getMicro(), version.getMicro());
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(dp2);
 
@@ -340,8 +349,9 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 			Version version =  dp.getVersion();
 			tbc.assertEquals("The minor version of the bundle was updated with a higher version", testDP2.getVersion().getMinor(), version.getMinor());
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(dp2);
 
@@ -372,8 +382,9 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 			Version version =  dp.getVersion();
 			tbc.assertEquals("The minor version of the bundle was updated with a lower version", testDP2.getVersion().getMinor(), version.getMinor());
 		} catch (Exception e) {
-        	e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(dp2);
 
@@ -398,8 +409,9 @@ public class InstallDeploymentPackageAPI implements TestInterface {
         } catch (SecurityException e) {
 //            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
         } catch (Exception e) {
-        	e.printStackTrace();
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							"SecurityException", e.getClass().getName()}), e);
         } finally {
             // it sets all permissions
             tbc.cleanUp(dp);

@@ -41,6 +41,7 @@ import java.net.URL;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.util.TestingDeploymentPackage;
+import org.osgi.test.support.OSGiTestCase;
 
 public class SessionWorker extends Thread {
         
@@ -59,7 +60,7 @@ public class SessionWorker extends Thread {
                 url = new URL(DeploymentmoConstants.SERVER + "www/" + testDP.getFilename());
                 dp = tbc.getDeploymentAdmin().installDeploymentPackage(url.openStream());
             } catch (Exception e) {
-                e.printStackTrace();
+			OSGiTestCase.fail(e.getMessage(), e);
             } finally {
                 try {
                     dp.uninstall();
@@ -67,7 +68,7 @@ public class SessionWorker extends Thread {
                     try {
 						dp.uninstallForced();
 					} catch (DeploymentException e) {
-						e.printStackTrace();
+					OSGiTestCase.fail(e.getMessage(), e);
 					}
                 }
             }

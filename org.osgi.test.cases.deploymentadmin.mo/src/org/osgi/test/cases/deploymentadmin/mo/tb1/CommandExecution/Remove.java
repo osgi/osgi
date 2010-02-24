@@ -120,8 +120,7 @@ public class Remove implements TestInterface {
 
 
 		} catch (Exception e) {
-      e.printStackTrace();
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName(), e);
 		} finally {
 			DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
 		    tbc.closeSession(session);
@@ -164,8 +163,7 @@ public class Remove implements TestInterface {
              
 
 		} catch (Exception e) {
-          e.printStackTrace();
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName(), e);
 		} finally {
 			DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
 		    tbc.closeSession(session);
@@ -227,8 +225,7 @@ public class Remove implements TestInterface {
 
 
 		} catch (Exception e) {
-      e.printStackTrace();
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName(), e);
 		} finally {
 			DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
 		    tbc.closeSession(session);
@@ -276,8 +273,7 @@ public class Remove implements TestInterface {
 
 
 		} catch (Exception e) {
-      e.printStackTrace();
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName(), e);
 		} finally {
 			DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
 		    tbc.closeSession(session);
