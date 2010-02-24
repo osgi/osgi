@@ -32,6 +32,7 @@ import javax.naming.directory.Attributes;
 public class CTTestObject implements Referenceable {
 	
 	private String value;
+	private String factoryClassName;
 	private Attributes attrs;
 	
 	public CTTestObject() {
@@ -42,11 +43,22 @@ public class CTTestObject implements Referenceable {
 		this.value = value;
 	}
 	
+	public CTTestObject(String value, String factoryClassName) {
+		this.value = value;
+		this.factoryClassName = factoryClassName;
+	}
+	
 	public CTTestObject(String value, Attributes attrs) {
 		this.value = value;
 		this.attrs = attrs;
 	}
 	
+	public CTTestObject(String value, String factoryClassName, Attributes attrs) {
+		this.value = value;
+		this.factoryClassName = factoryClassName;
+		this.attrs = attrs;
+	}
+
 	public void setValue(String value) {
 		this.value = value;
 	}
@@ -63,14 +75,22 @@ public class CTTestObject implements Referenceable {
 		return this.attrs;
 	}
 	
+	public void setFactoryClassName(String factoryClassName) {
+		this.factoryClassName = factoryClassName;
+	}
+	
+	public String getFactoryClassname() {
+		return this.factoryClassName;
+	}
+	
 	public Reference getReference() throws NamingException {
 		Reference ref = null;
 		
 		if (this.value != null) {
 			StringRefAddr storedValue = new StringRefAddr("value", this.value);
-			ref = new CTReference(CTTestObject.class.getName(), storedValue, CTObjectFactory.class.getName(), null);
+			ref = new CTReference(CTTestObject.class.getName(), storedValue, this.factoryClassName, null);
 		} else {
-			ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());
+			ref = new CTReference(CTTestObject.class.getName(), this.factoryClassName);
 		}
 		return ref;
 	}

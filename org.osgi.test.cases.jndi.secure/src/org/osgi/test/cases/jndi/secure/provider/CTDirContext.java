@@ -98,7 +98,7 @@ public class CTDirContext extends CTContext implements DirContext {
 	}
 
 	public Attributes getAttributes(Name name) throws NamingException {
-		return (Attributes) attributeMap.get(name.toString());
+			return (Attributes) attributeMap.get(name.toString());
 	}
 
 	public Attributes getAttributes(String name, String[] attrIds) throws NamingException {
@@ -109,11 +109,14 @@ public class CTDirContext extends CTContext implements DirContext {
 		Attributes retrievedAttributes = (Attributes) attributeMap.get(name.toString());
 		Attributes selectedAttributes = new BasicAttributes();
 		
-		for (int i=0; i < attrIds.length; i++) {
-			selectedAttributes.put(retrievedAttributes.get(attrIds[i]));
+		if (attrIds != null) {
+			for (int i=0; i < attrIds.length; i++) {
+				selectedAttributes.put(retrievedAttributes.get(attrIds[i]));
+			}
+			return selectedAttributes;
+		} else {
+			return retrievedAttributes;
 		}
-		
-		return selectedAttributes;
 	}
 
 	public DirContext getSchema(String name) throws NamingException {

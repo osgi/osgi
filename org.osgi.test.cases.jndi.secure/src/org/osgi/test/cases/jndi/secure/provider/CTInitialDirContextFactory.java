@@ -50,7 +50,7 @@ public class CTInitialDirContextFactory implements InitialContextFactory {
 			envMap.putAll(env);
 		}
 		
-		CTContext context = new CTDirContext(envMap);
+		CTDirContext context = new CTDirContext(envMap);
 		return context;
 	}
 

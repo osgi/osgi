@@ -388,8 +388,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		try {
 			ctx = ctxManager.newInitialContext();
 			assertNotNull("The context should not be null", ctx);
-			ExampleService service = (ExampleService) ctx
-					.lookup("osgi:service/org.osgi.test.cases.jndi.secure.service.ExampleService");
+			ExampleService service = (ExampleService) ctx.lookup("osgi:service/org.osgi.test.cases.jndi.secure.service.ExampleService");
 			assertNotNull(service);
 		} finally {
 			if (ctx != null) {
