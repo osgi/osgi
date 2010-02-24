@@ -19,6 +19,6 @@ Include-Resource = \
 
 -runproperties					= ${runproperties}, \
 	noframework=true, \
-	${p}.storageroot=${target-dir}/testStorageRoot
+	${p}.storageroot=${target-dir}/${p}.testStorageRoot
 
 Test-Cases							= ${testcases}

@@ -23,4 +23,4 @@ Test-Cases							= ${testcases}
 -runproperties = ${runproperties}, \
 	${p}.trust.repository=${build}/keystore, \
 	noframework=true, \
-	${p}.storageroot=${target-dir}/testStorageRoot 
+	${p}.storageroot=${target-dir}/${p}.testStorageRoot 
