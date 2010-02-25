@@ -153,28 +153,30 @@ public class Packaging implements AnalyzerPlugin {
 		properties.put("report", "true");
 		for (Map.Entry<String, String> entry : properties.entrySet()) {
 			sb.append(del);
+			del = ", \\\n    ";
 
-			sb.append(entry.getKey());
+			String key = entry.getKey();
+			String value = entry.getValue();
+			sb.append(key);
 			sb.append("=");
-			if (entry.getKey().equals("org.osgi.framework.trust.repositories")) {
-				sb.append("keystore");
+			if (key.endsWith(".trust.repositories")) {
+				String file = key + ".keystore";
+				sb.append(file);
 
 				// Copy the key store
-				File keystore = analyzer.getFile(entry.getValue());
+				File keystore = analyzer.getFile(value);
 				if (keystore.exists() && keystore.isFile()) {
-					jar.putResource("keystore", new FileResource(keystore));
+					jar.putResource(file, new FileResource(keystore));
 				}
 				else {
 					analyzer.error("The referred keystore %s is not a file",
-							entry.getValue());
+							value);
 				}
+				continue;
 			}
-			else {
-				sb.append("\"");
-				sb.append(entry.getValue());
-				sb.append("\"");
-			}
-			del = ", \\\n    ";
+			sb.append("\"");
+			sb.append(value);
+			sb.append("\"");
 		}
 
 		if (runsystempackages != null) {
