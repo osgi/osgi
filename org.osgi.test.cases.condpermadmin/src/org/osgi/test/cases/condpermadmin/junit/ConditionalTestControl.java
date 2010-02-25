@@ -38,7 +38,6 @@ import org.osgi.service.permissionadmin.*;
 import java.security.AccessControlException;
 import java.security.AllPermission;
 import java.security.Permission;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.PropertyPermission;
 import java.util.StringTokenizer;
