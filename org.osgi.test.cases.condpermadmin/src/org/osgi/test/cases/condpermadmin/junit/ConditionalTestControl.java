@@ -38,6 +38,8 @@ import org.osgi.service.permissionadmin.*;
 import java.security.AccessControlException;
 import java.security.AllPermission;
 import java.security.Permission;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PropertyPermission;
 import java.util.StringTokenizer;
 import java.util.Enumeration;
@@ -589,6 +591,10 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
         fail("Please use Target_tck95.launch for successful run of 'testMultipleBundlesOnStack' test case");
     }
 
+    // Using update to get the correct ordering of conditions
+    ConditionalPermissionUpdate update = conditionalAdmin.newConditionalPermissionUpdate();
+    List rows = update.getConditionalPermissionInfos();
+
     ConditionInfo blcA = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { testBundleLocation });
     ConditionInfo blcB = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { permBundleLocation });
     ConditionInfo blcC = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { domBundleLocation });
@@ -598,20 +604,20 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     AdminPermission permissionR = new AdminPermission("*", AdminPermission.RESOLVE);
     AdminPermission permissionS = new AdminPermission("*", AdminPermission.STARTLEVEL);
 
-    ConditionalPermissionInfo[][] cpi = new ConditionalPermissionInfo[3][4];
+
     PackagePermission pp = new PackagePermission("*", "import,export");
     ServicePermission sp = new ServicePermission("*", "get,register");
     ConditionInfo cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { testBundleLocation });
-    cpi[0][0] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo },
-        new Permission[] { pp, sp });
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { cInfo },
+        new Permission[] { pp, sp }));
 
     cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { permBundleLocation });
-    cpi[1][0] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo },
-        new Permission[] { pp, sp });
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { cInfo },
+        new Permission[] { pp, sp }));
 
     cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { domBundleLocation });
-    cpi[2][0] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo },
-        new Permission[] { pp, sp });
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { cInfo },
+        new Permission[] { pp, sp }));
 
     ConditionInfo ic  = utility.createTestCInfo(false, true, false, "TestCondition_100", testBundle.getBundleId()); // not postponed, satisfied, immutable
     ConditionInfo ic0 = utility.createTestCInfo(false, false, true, "TestCondition_101", testBundle.getBundleId()); // not postponed, not satisfied, mutable
@@ -620,12 +626,12 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     ConditionInfo pc1 = utility.createTestCInfo(true,  false, true, "TestCondition_104", testBundle.getBundleId()); // postponed, not satisfied, mutable
     ConditionInfo pc2 = utility.createTestCInfo(true,  true,  true, "TestCondition_105", testBundle.getBundleId()); // postponed, satisfied, mutable
 
-    cpi[0][1] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcA, ic1, pc1 },
-        new Permission[] { permissionP, permissionQ });
-    cpi[0][2] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcA, ic2 },
-        new Permission[] { permissionP, permissionR });
-    cpi[0][3] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcA, ic },
-        new Permission[] { permissionS });
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcA, ic1, pc1 },
+        new Permission[] { permissionP, permissionQ }));
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcA, ic2 },
+        new Permission[] { permissionP, permissionR }));
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcA, ic },
+        new Permission[] { permissionS }));
 
     ic  = utility.createTestCInfo(false, true, false, "TestCondition_100", permBundle.getBundleId()); // not postponed, satisfied, immutable
     ic0 = utility.createTestCInfo(false, false, true, "TestCondition_101", permBundle.getBundleId()); // not postponed, not satisfied, mutable
@@ -634,12 +640,12 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     pc1 = utility.createTestCInfo(true,  false, true, "TestCondition_104", permBundle.getBundleId()); // postponed, not satisfied, mutable
     pc2 = utility.createTestCInfo(true,  true,  true, "TestCondition_105", permBundle.getBundleId()); // postponed, satisfied, mutable
 
-    cpi[1][1] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcB, ic1, pc1, pc2 },
-        new Permission[] { permissionP, permissionR });
-    cpi[1][2] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcB, pc2 },
-        new Permission[] { permissionP, permissionR });
-    cpi[1][3] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcB, ic },
-        new Permission[] { permissionQ });
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcB, ic1, pc1, pc2 },
+        new Permission[] { permissionP, permissionR }));
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcB, pc2 },
+        new Permission[] { permissionP, permissionR }));
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcB, ic },
+        new Permission[] { permissionQ }));
 
     ic  = utility.createTestCInfo(false, true, false, "TestCondition_100", domBundle.getBundleId()); // not postponed, satisfied, immutable
     ic0 = utility.createTestCInfo(false, false, true, "TestCondition_101", domBundle.getBundleId()); // not postponed, not satisfied, mutable
@@ -648,12 +654,14 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     pc1 = utility.createTestCInfo(true,  false, true, "TestCondition_104", domBundle.getBundleId()); // postponed, not satisfied, mutable
     pc2 = utility.createTestCInfo(true,  true,  true, "TestCondition_105", domBundle.getBundleId()); // postponed, satisfied, mutable
 
-    cpi[2][1] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcC, ic },
-        new Permission[] { permissionQ });
-    cpi[2][2] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcC, ic0 },
-        new Permission[] { permissionP });
-    cpi[2][3] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcC, pc2 },
-        new Permission[] { permissionP });
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcC, ic },
+        new Permission[] { permissionQ }));
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcC, ic0 },
+        new Permission[] { permissionP }));
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcC, pc2 },
+        new Permission[] { permissionP }));
+
+    assertTrue("CPA update failed", update.commit());
 
     String message = "allowed " + utility.permToString(permissionP);
     try {
@@ -683,11 +691,8 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       utility.testEqualArrays(order, satisfOrder);
     }
 
-    for (int i = 0; i < cpi.length; i++) {
-      for (int j = 0; j < cpi[i].length; j++) {
-        cpi[i][j].delete();
-      }
-    }
+    // No need to delete CPinfos they get cleared in clearState()
+
     TestCondition.satisfOrder.removeAllElements();
   }
 

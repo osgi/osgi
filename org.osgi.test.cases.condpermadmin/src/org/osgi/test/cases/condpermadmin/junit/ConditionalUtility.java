@@ -221,17 +221,27 @@ public class ConditionalUtility {
 	}
 	
 	ConditionalPermissionInfo setPermissionsByCPermissionAdmin(ConditionInfo[] cInfos, Permission[] permissions) {
-    PermissionInfo[] permInfos = null;
-    if (permissions != null) {
-      permInfos = new PermissionInfo[permissions.length];
-      for (int i = 0; i < permissions.length; i++) {
-        Permission perm = permissions[i];
-        permInfos[i] = new PermissionInfo(perm.getClass().getName(), perm.getName(), perm.getActions());
-      }
-    }
+		PermissionInfo[] permInfos = createPermissionInfos(permissions);
 		return cpAdmin.addConditionalPermissionInfo(cInfos, permInfos);
 	}
-	
+
+	ConditionalPermissionInfo createConditionalPermissionInfo(ConditionInfo[] condInfos, Permission[] permissions) {
+		PermissionInfo[] permInfos = createPermissionInfos(permissions);
+		return cpAdmin.newConditionalPermissionInfo(null, condInfos, permInfos, ConditionalPermissionInfo.ALLOW);
+	}
+
+	PermissionInfo[] createPermissionInfos(Permission[] permissions) {
+	    PermissionInfo[] permInfos = null;
+	    if (permissions != null) {
+	      permInfos = new PermissionInfo[permissions.length];
+	      for (int i = 0; i < permissions.length; i++) {
+	        Permission perm = permissions[i];
+	        permInfos[i] = new PermissionInfo(perm.getClass().getName(), perm.getName(), perm.getActions());
+	      }
+	    }
+	    return permInfos;
+	}
+
 	void testPermissions(ConditionInfo[] conditions, Permission permission, AdminPermission[] allowedPermission, AdminPermission[] notAllowedPermission) {
     testPermissions(conditions, new Permission[]{permission}, allowedPermission, notAllowedPermission);
 	}
