@@ -78,7 +78,6 @@ Test-Cases							= ${testcases}
 	org.osgi.test.cases.deploymentadmin.short_timeout=2000, \
 	org.osgi.impl.service.deploymentadmin.iconcachearea=${target-dir}/${p}.iconcache, \
 	org.osgi.impl.service.deploymentadmin.deliveredarea=${target-dir}/${p}.delivered, \
-	org.osgi.impl.service.deploymentadmin.keystore.file=${build}/keystore, \
 	org.osgi.impl.service.deploymentadmin.userprompt=false, \
 	org.osgi.vendor.deploymentadmin=org.osgi.impl.service.deploymentadmin.perm, \
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
