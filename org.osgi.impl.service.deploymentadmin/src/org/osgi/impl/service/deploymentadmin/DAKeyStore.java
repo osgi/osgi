@@ -20,7 +20,6 @@ package org.osgi.impl.service.deploymentadmin;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URL;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.cert.Certificate;
@@ -63,9 +62,8 @@ public class DAKeyStore {
         
         String ksFile = System.getProperty(DAConstants.KEYSTORE_PATH);
         if (null == ksFile) {
-            String sUrl = System.getProperty(DAConstants.KEYSTORE_FW_URL);
-            if (null != sUrl) {
-                ksFile = new URL(sUrl).getFile();
+			ksFile = System.getProperty(DAConstants.KEYSTORE_FW_URL);
+			if (null != ksFile) {
                 logger.log(Logger.LOG_INFO, "Keystore location is not defined. Set the " + 
                         DAConstants.KEYSTORE_PATH + " system property! Framework keystore will " +
                         "be used (" + ksFile + ").");
