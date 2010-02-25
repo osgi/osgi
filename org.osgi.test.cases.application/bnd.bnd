@@ -36,9 +36,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.bundle.jaxp; version=latest, \
 	org.osgi.impl.service.event; version=latest
 
--runproperties = ${runproperties}, \
-	org.osgi.framework.security=osgi, \
-	org.osgi.framework.trust.repositories=${build}/keystore, \
+-runproperties = ${runsecureproperties}, \
 	org.osgi.test.testcase.timeout=60000, \
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
 	info.dmtree.osgi.root=./OSGi/, \
