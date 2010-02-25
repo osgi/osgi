@@ -84,6 +84,5 @@ Test-Cases							= ${testcases}
 	info.dmtree.osgi.root=./OSGi/
 	
 	
--runsystempackages=javax.xml.parsers, org.xml.sax, org.xml.sax.helpers, javax.security.auth.x500, \
-	org.eclipse.osgi.internal.provisional.verifier		
+-runsystempackages = org.eclipse.osgi.internal.provisional.verifier		
 		
