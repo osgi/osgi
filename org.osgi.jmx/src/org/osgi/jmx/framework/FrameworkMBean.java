@@ -281,7 +281,8 @@ public interface FrameworkMBean {
 	 * Force the update, replacement or removal of the packages identified by
 	 * the list of bundles.
 	 * 
-	 * @param bundleIdentifiers the array of bundle identifiers
+	 * @param bundleIdentifiers The identifiers of the bundles to refresh, or
+	 *        <code>null</code> for all bundles with packages pending removal.
 	 * @throws IOException if the operation failed
 	 */
 	void refreshBundles(long[] bundleIdentifiers) throws IOException;
@@ -299,7 +300,8 @@ public interface FrameworkMBean {
 	/**
 	 * Batch resolve the bundles indicated by the list of bundle identifiers
 	 * 
-	 * @param bundleIdentifiers = the identifiers of the bundles to resolve
+	 * @param bundleIdentifiers The identifiers of the bundles to resolve, or
+	 *        <code>null</code> to resolve all unresolved bundles.
 	 * @return <code>true</code> if the bundles were resolved, false otherwise
 	 * @throws IOException if the operation does not succeed
 	 */
