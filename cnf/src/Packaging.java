@@ -33,7 +33,7 @@ public class Packaging implements AnalyzerPlugin {
 			return false;
 
 		Map<String, String> filesToPath = Create.map();
-		
+
 		String pack = analyzer.getProperty(PACK);
 		ProjectBuilder pb = (ProjectBuilder) analyzer;
 		Workspace workspace = pb.getProject().getWorkspace();
@@ -54,7 +54,7 @@ public class Packaging implements AnalyzerPlugin {
 		sb.append("# Workspace information\n");
 		sb.append(Constants.RUNPATH);
 		sb.append(" = ");
-		flatten(analyzer, sb, jar, runpath, false);
+		flatten(analyzer, sb, jar, runpath, false, filesToPath);
 		sb.append('\n');
 		jar.putResource("shared.inc", new EmbeddedResource(sb.toString()
 				.getBytes("UTF-8"), 0));
@@ -86,7 +86,7 @@ public class Packaging implements AnalyzerPlugin {
 
 		List<Container> extra = pb.getProject().getBundles(
 				Constants.STRATEGY_HIGHEST, "com.springsource.junit");
-		flatten(analyzer, null, jar, extra, true);
+		flatten(analyzer, null, jar, extra, true, filesToPath);
 
 		StringBuilder script = new StringBuilder();
 		script.append("java -jar jar/bnd.jar runtests -title ");
@@ -108,7 +108,8 @@ public class Packaging implements AnalyzerPlugin {
 	 */
 	@SuppressWarnings("unchecked")
 	private void pack(Analyzer analyzer, Jar jar, Project project,
-			Collection<Container> sharedRunpath, Map<String,String> filesToPath) throws Exception {
+			Collection<Container> sharedRunpath, Map<String, String> filesToPath)
+			throws Exception {
 		Collection<Container> runpath = project.getRunpath();
 		Collection<Container> runbundles = project.getRunbundles();
 		String runproperties = project.getProperty(Constants.RUNPROPERTIES);
@@ -122,7 +123,8 @@ public class Packaging implements AnalyzerPlugin {
 		sb.append("build=.\n");
 		sb.append("\n");
 		sb.append("-target = ");
-		flatten(analyzer, sb, jar, project, Collections.EMPTY_MAP, true);
+		flatten(analyzer, sb, jar, project, Collections.EMPTY_MAP, true,
+				filesToPath);
 		sb.deleteCharAt(sb.length() - 1);
 
 		if (!equals(runpath, sharedRunpath)) {
@@ -130,12 +132,12 @@ public class Packaging implements AnalyzerPlugin {
 			sb.append("\n");
 			sb.append(Constants.RUNPATH);
 			sb.append(" = ");
-			flatten(analyzer, sb, jar, runpath, false);
+			flatten(analyzer, sb, jar, runpath, false, filesToPath);
 		}
 		sb.append("\n\n");
 		sb.append(Constants.RUNBUNDLES);
 		sb.append(" = ");
-		flatten(analyzer, sb, jar, runbundles, false);
+		flatten(analyzer, sb, jar, runbundles, false, filesToPath);
 
 		Map<String, String> properties = OSGiHeader
 				.parseProperties(runproperties);
@@ -153,7 +155,7 @@ public class Packaging implements AnalyzerPlugin {
 			sb.append("=");
 
 			value = replacePaths(analyzer, jar, filesToPath, value);
-			
+
 			sb.append("\"");
 			sb.append(value);
 			sb.append("\"");
@@ -177,7 +179,7 @@ public class Packaging implements AnalyzerPlugin {
 	private String replacePaths(Analyzer analyzer, Jar jar,
 			Map<String, String> filesToPath, String value) throws Exception {
 		Collection<String> paths = Processor.split(value);
-		List<String> result= Create.list();
+		List<String> result = Create.list();
 		for (String path : paths) {
 			File f = analyzer.getFile(path);
 			if (f.isAbsolute() && f.exists()
@@ -185,21 +187,27 @@ public class Packaging implements AnalyzerPlugin {
 				f = f.getCanonicalFile();
 				path = filesToPath.get(f.getAbsolutePath());
 				if (path == null) {
-					System.out.println("filesToPath " + filesToPath);
-					path = "property-resources/" + f.getName();
-					
-					// Ensure names are unique
-					int n = 1;
-					while ( jar.getResource(path)!= null )
-						path = "property-resources/" + f.getName() + "-" + n++;
+					path = "jar/" + f.getName();
+					if ( path.endsWith(".jar")) {
+						jar.putResource( path, new FileResource(f));						
+					} else {
+						System.out.println("filesToPath " + filesToPath);
+						path = "property-resources/" + f.getName();
 
-					filesToPath.put(f.getAbsolutePath(), path);
-					if (f.isFile()) {
-						jar.putResource(path, new FileResource(f));
-					}
-					else {
-						Jar j = new Jar(f);
-						jar.addAll(j, null, path);
+						// Ensure names are unique
+						int n = 1;
+						while (jar.getResource(path) != null)
+							path = "property-resources/" + f.getName() + "-"
+									+ n++;
+
+						filesToPath.put(f.getAbsolutePath(), path);
+						if (f.isFile()) {
+							jar.putResource(path, new FileResource(f));
+						}
+						else {
+							Jar j = new Jar(f);
+							jar.addAll(j, null, path);
+						}
 					}
 				}
 				result.add(path);
@@ -224,41 +232,44 @@ public class Packaging implements AnalyzerPlugin {
 	}
 
 	private void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
-			Collection<Container> path, boolean store) throws Exception {
+			Collection<Container> path, boolean store,
+			Map<String, String> fileToPath) throws Exception {
 		for (Container container : path) {
-			flatten(analyzer, sb, jar, container, store);
+			flatten(analyzer, sb, jar, container, store, fileToPath);
 		}
 		if (sb != null)
 			sb.deleteCharAt(sb.length() - 2);
 	}
 
 	private void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
-			Container container, boolean store) throws Exception {
+			Container container, boolean store, Map<String, String> fileToPath)
+			throws Exception {
 		switch (container.getType()) {
 			case LIBRARY :
-				flatten(analyzer, sb, jar, container.getMembers(), store);
+				flatten(analyzer, sb, jar, container.getMembers(), store,
+						fileToPath);
 				return;
 
 			case PROJECT :
 				flatten(analyzer, sb, jar, container.getProject(), container
-						.getAttributes(), store);
+						.getAttributes(), store, fileToPath);
 				break;
 
 			case EXTERNAL :
 				flatten(analyzer, sb, jar, container.getFile(), container
-						.getAttributes(), store);
+						.getAttributes(), store, fileToPath);
 				break;
 
 			case REPO :
 				flatten(analyzer, sb, jar, container.getFile(), container
-						.getAttributes(), store);
+						.getAttributes(), store, fileToPath);
 				break;
 		}
 	}
 
 	private void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
-			Project project, Map<String, String> map, boolean store)
-			throws Exception {
+			Project project, Map<String, String> map, boolean store,
+			Map<String, String> fileToPath) throws Exception {
 		File[] subs = project.getBuildFiles();
 		analyzer.getInfo(project);
 		if (subs == null) {
@@ -266,11 +277,12 @@ public class Packaging implements AnalyzerPlugin {
 		}
 		else
 			for (File sub : subs)
-				flatten(analyzer, sb, jar, sub, map, store);
+				flatten(analyzer, sb, jar, sub, map, store, fileToPath);
 	}
 
 	private void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
-			File sub, Map<String, String> map, boolean store) throws Exception {
+			File sub, Map<String, String> map, boolean store,
+			Map<String, String> fileToPath) throws Exception {
 		Jar s = new Jar(sub);
 		try {
 			Manifest m = s.getManifest();
@@ -296,8 +308,11 @@ public class Packaging implements AnalyzerPlugin {
 			String path = "jar/" + bsn + "-" + v.getMajor() + "."
 					+ v.getMinor() + "." + v.getMicro() + ".jar";
 
-			if (store)
+			if (store) {
+				System.out.println("Path " + path);
+				fileToPath.put(sub.getAbsolutePath(), path);
 				jar.putResource(path, new FileResource(sub));
+			}
 
 			if (sb != null) {
 				sb.append("\\\n    ");
@@ -320,5 +335,4 @@ public class Packaging implements AnalyzerPlugin {
 			s.close();
 		}
 	}
-
 }
