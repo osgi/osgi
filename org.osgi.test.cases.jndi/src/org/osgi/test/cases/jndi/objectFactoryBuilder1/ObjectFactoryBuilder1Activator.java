@@ -35,8 +35,7 @@ public class ObjectFactoryBuilder1Activator implements BundleActivator {
 	
 	public void start(BundleContext context) throws Exception {
 		Hashtable props = new Hashtable();
-		props.put("osgi.jndi.serviceName", "ObjectFactoryBuilder");
-		String[] interfaces = {CTObjectFactoryBuilder.class.getName(), ObjectFactoryBuilder.class.getName()};
+		String[] interfaces = {ObjectFactoryBuilder.class.getName()};
 		
 		CTObjectFactoryBuilder ofb = new CTObjectFactoryBuilder();
 		sr = context.registerService(interfaces, ofb, props);	

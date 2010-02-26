@@ -35,7 +35,6 @@ public class DirObjectFactory1Activator implements BundleActivator {
 	
 	public void start(BundleContext context) throws Exception {
 		Hashtable props = new Hashtable();
-		props.put("osgi.jndi.serviceName", "CTDirObjectFactory");
 		String[] interfaces = {CTDirObjectFactory.class.getName(), DirObjectFactory.class.getName()};
 		
 		CTDirObjectFactory of = new CTDirObjectFactory();

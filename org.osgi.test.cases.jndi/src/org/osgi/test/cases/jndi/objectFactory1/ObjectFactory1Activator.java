@@ -36,7 +36,6 @@ public class ObjectFactory1Activator implements BundleActivator {
 	
 	public void start(BundleContext context) throws Exception {
 		Hashtable props = new Hashtable();
-		props.put("osgi.jndi.serviceName", "CTObjectFactory");
 		String[] interfaces = {CTObjectFactory.class.getName(), ObjectFactory.class.getName()};
 		
 		CTObjectFactory of = new CTObjectFactory();

@@ -35,7 +35,6 @@ public class InitialDirContextFactory1Activator implements BundleActivator {
 	
 	public void start(BundleContext context) throws Exception {
 		Hashtable props = new Hashtable();
-		props.put("osgi.jndi.serviceName", "CTInitialDirContextFactory");
 		String[] interfaces ={CTInitialDirContextFactory.class.getName(), InitialContextFactory.class.getName()};
 		
 		CTInitialDirContextFactory ctf = new CTInitialDirContextFactory();

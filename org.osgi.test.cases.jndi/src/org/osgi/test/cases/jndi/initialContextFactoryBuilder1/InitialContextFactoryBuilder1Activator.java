@@ -35,8 +35,7 @@ public class InitialContextFactoryBuilder1Activator implements BundleActivator {
 	
 	public void start(BundleContext context) throws Exception {
 		Hashtable props = new Hashtable();
-		props.put("osgi.jndi.serviceName", "CTInitialContextFactoryBuilder");
-		String[] interfaces = {CTInitialContextFactoryBuilder.class.getName(), InitialContextFactoryBuilder.class.getName()};
+		String[] interfaces = {InitialContextFactoryBuilder.class.getName()};
 		
 		CTInitialContextFactoryBuilder ctfb = new CTInitialContextFactoryBuilder();
 		sr = context.registerService(interfaces, ctfb, props);		

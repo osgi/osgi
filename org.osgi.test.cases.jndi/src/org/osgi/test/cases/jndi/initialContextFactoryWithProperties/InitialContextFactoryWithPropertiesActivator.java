@@ -35,7 +35,6 @@ public class InitialContextFactoryWithPropertiesActivator implements BundleActiv
 	
 	public void start(BundleContext context) throws Exception {
 		Hashtable props = new Hashtable();
-		props.put("osgi.jndi.serviceName", "CTInitialContextFactory");
 		String[] interfaces ={CTInitialContextFactory.class.getName(), InitialContextFactory.class.getName()};
 		
 		CTInitialContextFactory ctf = new CTInitialContextFactory();

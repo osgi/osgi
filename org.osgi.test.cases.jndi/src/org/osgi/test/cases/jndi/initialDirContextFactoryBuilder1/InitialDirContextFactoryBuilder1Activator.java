@@ -36,8 +36,7 @@ public class InitialDirContextFactoryBuilder1Activator implements
 	
 	public void start(BundleContext context) throws Exception {
 		Hashtable props = new Hashtable();
-		props.put("osgi.jndi.serviceName", "CTInitialDirContextFactoryBuilder");
-		String[] interfaces = {CTInitialDirContextFactoryBuilder.class.getName(), InitialContextFactoryBuilder.class.getName()};
+		String[] interfaces = {InitialContextFactoryBuilder.class.getName()};
 		
 		CTInitialDirContextFactoryBuilder ctfb = new CTInitialDirContextFactoryBuilder();
 		sr = context.registerService(interfaces, ctfb, props);		
