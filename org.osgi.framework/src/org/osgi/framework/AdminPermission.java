@@ -344,10 +344,6 @@ public final class AdminPermission extends BasicPermission {
 	
 		int mask = ACTION_NONE;
 	
-		if (actions == null) {
-			return mask;
-		}
-	
 		char[] a = actions.toCharArray();
 	
 		int i = a.length - 1;
