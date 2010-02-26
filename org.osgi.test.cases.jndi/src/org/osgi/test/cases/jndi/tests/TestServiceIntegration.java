@@ -228,6 +228,7 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 			// Lookup the bundle context
 			BundleContext bundleCtx = (BundleContext) ctx.lookup("osgi:framework/bundleContext");
 			assertNotNull("The bundle context should not be null", bundleCtx);
+			assertEquals(bundleCtx, getContext());
 		} finally {
 			if (ctx != null) {
 				ctx.close();
