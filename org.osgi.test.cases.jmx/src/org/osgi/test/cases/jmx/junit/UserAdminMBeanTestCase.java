@@ -3,6 +3,7 @@ package org.osgi.test.cases.jmx.junit;
 import java.io.IOException;
 import java.util.Arrays;
 
+import javax.management.RuntimeMBeanException;
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularData;
 
@@ -460,6 +461,684 @@ public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 		result = userManagerMBean.getProperties(username);		
 		assertTrue("failed to remove previously stored property with key " +propertyKey+ " and value " + propertyValue + ".", result.get(new String[]{propertyKey}) == null);		
 	}	
+	
+	public void testExceptions() {
+		/*
+		 * Bug report for this method is https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1605
+		 */
+		assertNotNull(userManagerMBean);
+		
+		//test listGroups method
+		try {
+			userManagerMBean.listGroups();			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method listGroups throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		
+		//test listRoles method
+		try {
+			userManagerMBean.listRoles();			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method listRoles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+
+		//test listUsers method
+		try {
+			userManagerMBean.listUsers();			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method listUsers throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+
+		//test addCredential method
+		try {
+			userManagerMBean.addCredential(STRING_NULL, null, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			userManagerMBean.addCredential(STRING_EMPTY, new byte[] {}, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			userManagerMBean.addCredential(STRING_SPECIAL_SYMBOLS, new byte[] {}, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+
+		//test addCredentialString method
+		try {
+			userManagerMBean.addCredentialString(STRING_NULL, STRING_NULL, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			userManagerMBean.addCredentialString(STRING_EMPTY, STRING_EMPTY, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}		
+		try {
+			userManagerMBean.addCredentialString(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}		
+		
+		//test addMember method
+		try {
+			userManagerMBean.addMember(STRING_NULL, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addMember throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.addMember(STRING_EMPTY, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addMember throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.addMember(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addMember throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		
+		//test addProperty method
+		try {
+			userManagerMBean.addProperty(STRING_NULL, null, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.addProperty(STRING_EMPTY, new byte[] {}, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.addProperty(STRING_SPECIAL_SYMBOLS, new byte[] {}, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		
+		//test addPropertyString method		
+		try {
+			userManagerMBean.addPropertyString(STRING_NULL, STRING_NULL, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addPropertyString throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.addPropertyString(STRING_EMPTY, STRING_EMPTY, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addPropertyString throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.addPropertyString(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addPropertyString throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		
+		//test addRequiredMember method		
+		try {
+			userManagerMBean.addRequiredMember(STRING_NULL, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addRequiredMember throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.addRequiredMember(STRING_EMPTY, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addRequiredMember throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.addRequiredMember(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addRequiredMember throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		
+		//test createGroup method
+		try {
+			userManagerMBean.createGroup(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createGroup throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.createGroup(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createGroup throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.createGroup(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createGroup throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		
+		//test createRole method
+		try {
+			userManagerMBean.createRole(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.createRole(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.createRole(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		
+		//test createUser method
+		try {
+			userManagerMBean.createUser(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createUser throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.createUser(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createUser throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.createUser(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createUser throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		
+		//test getAuthorization method
+		try {
+			userManagerMBean.getAuthorization(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}		
+		try {
+			userManagerMBean.getAuthorization(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			userManagerMBean.getAuthorization(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}		
+		
+		//test getCredentials method		
+		try {
+			userManagerMBean.getCredentials(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			userManagerMBean.getCredentials(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			userManagerMBean.getCredentials(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		
+		//test getGroup method
+		try {
+			userManagerMBean.getGroup(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			userManagerMBean.getGroup(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}		
+		try {
+			userManagerMBean.getGroup(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}		
+		
+		//test getGroups method
+		try {
+			userManagerMBean.getGroups(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getGroups throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.getGroups(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getGroups throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}	
+		try {
+			userManagerMBean.getGroups(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getGroups throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}	
+
+		//test getImpliedRoles method
+		try {
+			userManagerMBean.getImpliedRoles(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			userManagerMBean.getImpliedRoles(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			userManagerMBean.getImpliedRoles(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		
+		//test getMembers method		
+		try {
+			userManagerMBean.getMembers(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			userManagerMBean.getMembers(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			userManagerMBean.getMembers(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		
+		//test getProperties method		
+		try {
+			userManagerMBean.getProperties(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getProperties throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.getProperties(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getProperties throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.getProperties(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getProperties throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		
+		//test getRequiredMembers method
+		try {
+			userManagerMBean.getRequiredMembers(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			userManagerMBean.getRequiredMembers(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}		
+		try {
+			userManagerMBean.getRequiredMembers(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}		
+		
+		//test getRole method
+		try {
+			userManagerMBean.getRole(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.getRole(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.getRole(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		
+		//test getRoles method
+		try {
+			userManagerMBean.getRoles(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getRoles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.getRoles(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getRoles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.getRoles(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getRoles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+
+		//test getUser method
+		try {
+			userManagerMBean.getUser(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}	
+		try {
+			userManagerMBean.getUser(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}	
+		try {
+			userManagerMBean.getUser(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}	
+		
+		//test getUserWithProperty method
+		try {
+			userManagerMBean.getUserWithProperty(STRING_NULL, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getUserWithProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.getUserWithProperty(STRING_EMPTY, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getUserWithProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.getUserWithProperty(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getUserWithProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+
+		//test getUsers method		
+		try {
+			userManagerMBean.getUsers(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getUsers throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.getUsers(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getUsers throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.getUsers(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getUsers throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+
+		//test removeCredential method		
+		try {
+			userManagerMBean.removeCredential(STRING_NULL, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}		
+		try {
+			userManagerMBean.removeCredential(STRING_EMPTY, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}		
+		try {
+			userManagerMBean.removeCredential(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}		
+		
+		//test removeGroup method
+		try {
+			userManagerMBean.removeGroup(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method removeGroup throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.removeGroup(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method removeGroup throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.removeGroup(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method removeGroup throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		
+		//test removeMember method
+		try {
+			userManagerMBean.removeMember(STRING_NULL, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			userManagerMBean.removeMember(STRING_EMPTY, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}			
+		try {
+			userManagerMBean.removeMember(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}			
+		
+		//test removeProperty method
+		try {
+			userManagerMBean.removeProperty(STRING_NULL, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method removeProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.removeProperty(STRING_EMPTY, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method removeProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.removeProperty(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method removeProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		
+		//test removeRole method
+		try {
+			userManagerMBean.removeRole(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method removeRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.removeRole(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method removeRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.removeRole(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method removeRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		
+		//test removeUser method
+		try {
+			userManagerMBean.removeUser(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method removeUser throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			userManagerMBean.removeUser(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method removeUser throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}		
+		try {
+			userManagerMBean.removeUser(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method removeUser throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}			
+	}
 	
 	@Override
 	protected void tearDown() throws Exception {

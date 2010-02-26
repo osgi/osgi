@@ -3,6 +3,8 @@ package org.osgi.test.cases.jmx.junit;
 import java.io.*;
 import java.util.*;
 
+import javax.management.RuntimeMBeanException;
+
 import org.osgi.jmx.service.provisioning.*;
 import org.osgi.service.provisioning.*;
 
@@ -77,6 +79,60 @@ public class ProvisioningServiceMBeanTestCase extends MBeanGeneralTestCase {
 		assertTrue("add information from zip doesn't work", table.keySet().contains("org/osgi/test/cases/jmx/tb2/impl/ConfiguratorImpl.class"));
 	}
 	
+	public void testExceptions() {
+		assertNotNull(pMBean);
+		
+		//test listInformation method
+		try {
+			pMBean.listInformation();			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method listInformation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		
+		//test addInformationFromZip method
+		try {
+			pMBean.addInformationFromZip(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addInformationFromZip throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			pMBean.addInformationFromZip(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addInformationFromZip throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			pMBean.addInformationFromZip(STRING_URL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addInformationFromZip throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+
+		//test addInformation method
+		try {
+			pMBean.addInformation(null);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method addInformation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+
+		//test setInformation method
+		try {
+			pMBean.setInformation(null);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method setInformation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void compareDictAndTable(Dictionary<String, String> dict,
 			Hashtable<String, Object> table) {
@@ -88,6 +144,7 @@ public class ProvisioningServiceMBeanTestCase extends MBeanGeneralTestCase {
 		}
 	}
 
+	
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();

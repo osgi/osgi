@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Properties;
 
+import javax.management.RuntimeMBeanException;
 import javax.management.openmbean.TabularData;
 
 import org.osgi.framework.Bundle;
@@ -217,6 +218,335 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
         assertTrue("test doesn't work using config admin mbean; wrong factory pid", testFactoryId.equals(configAdminMBean.getFactoryPid(test2factoryMBean)));
 	}
 	
+	public void testExceptions() {
+		/*
+		 * Bug report for this method is https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1605
+		 */
+		
+		assertNotNull(configAdminMBean);
+		
+		//test createFactoryConfiguration method
+		try {
+			configAdminMBean.createFactoryConfiguration(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createFactoryConfiguration throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.createFactoryConfiguration(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createFactoryConfiguration throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.createFactoryConfiguration(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createFactoryConfiguration throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+
+		//test createFactoryConfigurationForLocation method
+		try {
+			configAdminMBean.createFactoryConfigurationForLocation(STRING_NULL, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createFactoryConfigurationForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.createFactoryConfigurationForLocation(STRING_EMPTY, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createFactoryConfigurationForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.createFactoryConfigurationForLocation(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method createFactoryConfigurationForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+
+		//test delete method		
+		try {
+			configAdminMBean.delete(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method delete throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.delete(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method delete throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.delete(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method delete throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+
+		//test deleteConfigurations method		
+		try {
+			configAdminMBean.deleteConfigurations(STRING_NULL);			
+		} catch(IOException ioException) {
+		}  catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			configAdminMBean.deleteConfigurations(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			configAdminMBean.deleteConfigurations(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+
+		//test deleteForLocation method		
+		try {
+			configAdminMBean.deleteForLocation(STRING_NULL, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method deleteForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.deleteForLocation(STRING_EMPTY, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method deleteForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.deleteForLocation(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method deleteForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+
+		//test getBundleLocation method		
+		try {
+			configAdminMBean.getBundleLocation(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getBundleLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.getBundleLocation(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getBundleLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.getBundleLocation(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getBundleLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		
+		//test getConfigurations method
+		try {
+			configAdminMBean.getConfigurations(STRING_NULL);			
+		} catch(IOException ioException) {
+		}  catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			configAdminMBean.getConfigurations(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		}  catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			configAdminMBean.getConfigurations(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		}  catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		
+		//test getFactoryPid method
+		try {
+			configAdminMBean.getFactoryPid(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getFactoryPid throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.getFactoryPid(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getFactoryPid throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.getFactoryPid(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getFactoryPid throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		
+		//test getFactoryPidForLocation method
+		try {
+			configAdminMBean.getFactoryPidForLocation(STRING_NULL, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getFactoryPidForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.getFactoryPidForLocation(STRING_EMPTY, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getFactoryPidForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.getFactoryPidForLocation(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getFactoryPidForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		
+		//test getProperties method		
+		try {
+			configAdminMBean.getProperties(STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getProperties throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.getProperties(STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getProperties throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.getProperties(STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getProperties throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+
+		//test getPropertiesForLocation method
+		try {
+			configAdminMBean.getPropertiesForLocation(STRING_NULL, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getPropertiesForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.getPropertiesForLocation(STRING_EMPTY, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getPropertiesForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.getPropertiesForLocation(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method getPropertiesForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		
+		//test setBundleLocation method
+		try {
+			configAdminMBean.setBundleLocation(STRING_NULL, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method setBundleLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.setBundleLocation(STRING_EMPTY, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method setBundleLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.setBundleLocation(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method setBundleLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		
+		//test update method		
+		try {
+			configAdminMBean.update(STRING_NULL, null);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method update throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.update(STRING_EMPTY, null);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method update throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.update(STRING_SPECIAL_SYMBOLS, null);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method update throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+
+		//test updateForLocation method		
+		try {
+			configAdminMBean.updateForLocation(STRING_NULL, STRING_NULL, null);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method updateForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.updateForLocation(STRING_EMPTY, STRING_EMPTY, null);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method updateForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		try {
+			configAdminMBean.updateForLocation(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS, null);			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method updateForLocation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+	}	
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();

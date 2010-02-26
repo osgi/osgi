@@ -18,6 +18,7 @@
 
 package org.osgi.test.cases.jmx.junit;
 
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -27,6 +28,7 @@ import javax.management.MBeanServer;
 import javax.management.MBeanServerInvocationHandler;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
+import javax.management.RuntimeMBeanException;
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.TabularData;
@@ -42,6 +44,15 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 	private ServiceReference reference = null;
 	private ServiceRegistration registration;
 
+	protected final static String STRING_NULL = null;
+	protected final static String STRING_EMPTY = "";
+	protected final static String STRING_SPECIAL_SYMBOLS = "+})-=:;\"\\/?{(";
+	protected final static String STRING_URL = "file:.";	
+	protected final static long LONG_NEGATIVE = -2;
+	protected final static long LONG_BIG = 1000000;
+	protected final static int INT_NEGATIVE = -2;
+	protected final static int INT_BIG = 1000000;
+	
 //	public void setBundleContext(BundleContext context) {
 //		this.context = context;
 //	}
@@ -172,6 +183,19 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 		for (int i = 0; i < compositeDataKeys.length; i++) {
 			assertTrue("tabular data row type " + type + " doesn't contain key " + compositeDataKeys[i], ct.containsKey(compositeDataKeys[i]));
 		}
+	}
+	
+	protected void assertIOException(Exception e) {
+		assertTrue("", e instanceof IOException);
+	}
+
+	protected void assertIllegalArgumentException(RuntimeException e) {
+		assertTrue("exception " + e + " is not IllegalArgumentException", e instanceof IllegalArgumentException);
+	}
+	
+	protected void assertRootCauseIllegalArgumentException(RuntimeMBeanException mbeanException) {
+		RuntimeException re = mbeanException.getTargetException();
+		assertIllegalArgumentException(re);
 	}
 	
 }

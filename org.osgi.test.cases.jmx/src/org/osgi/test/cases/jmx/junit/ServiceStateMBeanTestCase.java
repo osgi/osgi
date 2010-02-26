@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.management.RuntimeMBeanException;
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.TabularData;
@@ -203,6 +204,84 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 						"call did not return the bundleId of tb1.",
 				found);
 	}
+	
+	public void testExceptions() {
+		assertNotNull(ssMBean);
+		
+		//test listServices method
+		try {
+			ssMBean.listServices();			
+		} catch(IOException ioException) {
+		}  catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		
+		//test getBundleIdentifier method
+		try {
+			ssMBean.getBundleIdentifier(LONG_NEGATIVE);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			ssMBean.getBundleIdentifier(LONG_BIG);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+
+		//test getObjectClass method
+		try {
+			ssMBean.getObjectClass(LONG_NEGATIVE);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			ssMBean.getObjectClass(LONG_BIG);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+
+		//test getProperties method
+		try {
+			ssMBean.getProperties(LONG_NEGATIVE);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			ssMBean.getProperties(LONG_BIG);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+
+		//test getUsingBundles method
+		try {
+			ssMBean.getUsingBundles(LONG_NEGATIVE);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			ssMBean.getUsingBundles(LONG_BIG);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		
+	}	
 	
 	@Override
 	protected void tearDown() throws Exception {

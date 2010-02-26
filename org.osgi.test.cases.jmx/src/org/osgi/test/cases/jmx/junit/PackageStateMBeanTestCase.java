@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.management.RuntimeMBeanException;
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.TabularData;
@@ -134,6 +135,77 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 
 	}
 
+	public void testExceptions() {
+		/*
+		 * Bug report for this method is https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1605
+		 */
+		assertNotNull(pMBean);
+		
+		//test listPackages method
+		try {
+			pMBean.listPackages();			
+		} catch(IOException ioException) {
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+			assertTrue("method listPackages throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		
+		//test getExportingBundles method
+		try {
+			pMBean.getExportingBundles(STRING_NULL, STRING_NULL);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			pMBean.getExportingBundles(STRING_EMPTY, STRING_EMPTY);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		} 
+		try {
+			pMBean.getExportingBundles(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		} 
+		
+		//test getImportingBundles method		
+		try {
+			pMBean.getImportingBundles(STRING_NULL, STRING_NULL, LONG_NEGATIVE);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			pMBean.getImportingBundles(STRING_EMPTY, STRING_SPECIAL_SYMBOLS, LONG_NEGATIVE);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+
+		//test isRemovalPending method
+		try {
+			pMBean.isRemovalPending(STRING_NULL, STRING_NULL, LONG_NEGATIVE);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+		try {
+			pMBean.isRemovalPending(STRING_EMPTY, STRING_SPECIAL_SYMBOLS, LONG_NEGATIVE);			
+		} catch(IOException ioException) {
+		} catch(RuntimeMBeanException e) {
+			//spec describes this method could throw IllegalArgumentException; let's check
+			assertRootCauseIllegalArgumentException(e);
+		}
+	}
+	
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
