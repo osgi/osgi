@@ -38,7 +38,7 @@ import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
  */
 public class JNDITest extends WebContainerTestBundleControl {
 
-    private JNDIContextManager cm;
+    /*private JNDIContextManager cm;
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -122,6 +122,6 @@ public class JNDITest extends WebContainerTestBundleControl {
             assertTrue(logentry.getTime() <= System.currentTimeMillis());
             break;
         }
-    }
+    }*/
 
 }

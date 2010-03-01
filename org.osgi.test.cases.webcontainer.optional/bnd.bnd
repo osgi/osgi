@@ -1,7 +1,7 @@
 javac.source 			= 1.5
 javac.target 			= 1.5
 
-Bundle-Description: OSGi Web Container RFC 66 Optional Annotation, JNDI Support Compliance Test
+Bundle-Description: OSGi Web Container RFC 66 Optional Annotation Compliance Test
 Bundle-Version: 4.2.0.${project.build}
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
@@ -42,8 +42,7 @@ Export-Package =\
     org.osgi.test.cases.webcontainer; 		version = project, \
 	org.osgi.impl.service.log; 			version=latest, \
 	org.osgi.impl.service.event; 			version=latest, \
-    org.osgi.impl.bundle.webcontainer; version=latest, \
-	org.osgi.impl.service.jndi; version=project
+    org.osgi.impl.bundle.webcontainer; version=latest
 # TODO add rfc142 impl bundle here if user wants to run some simple rfc 66 + rfc 142 tests
 	
 -runproperties = ${runproperties}, \
