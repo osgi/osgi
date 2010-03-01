@@ -1,21 +1,22 @@
 javac.source 			= 1.5
 javac.target 			= 1.5
+-make                   =  \
+  (*).(jar);                             type=bnd;  recipe="bnd/$1.bnd", \
+  (*).(war);                             type=bnd;  recipe="bnd/$1.bnd"
 
 Bundle-Description: OSGi Web Container RFC 66 Optional Annotation Compliance Test
 Bundle-Version: 4.2.0.${project.build}
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
 Private-Package						= org.osgi.test.support.*, \
-	${p}.junit.*, \
 	${p}.annotation.junit.*, \
 	${p}.annotation.validate.junit.*
 	
 Include-Resource					= \
-	${target}/tw2.war, \
-	${target}/tw3.war, \
-	${target}/wmtw2.war, \
-	${target}/wmtw3.war, \
-	${target}/wmtw6.war
+	tw2.war, \
+	tw3.war, \
+	wmtw2.war, \
+	wmtw3.war
 	
 Import-Package = \
 	javax.servlet; version=2.5, \

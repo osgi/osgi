@@ -35,7 +35,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      */
     public void testManifestHeaders002() throws Exception {
         final Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME2,
-                CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2, null);
+                CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2);
         this.b = super.installWar(options, "tw2.war", true);
         super.generalHeadersTest(options, "tw2.war", true, this.b);
     }
@@ -45,7 +45,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      */
     public void testManifestHeaders003() throws Exception {
         final Map<String, Object> options = createOptions(VERSION3, MANIFESTVERSION1, SYMBOLICNAME3,
-                CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3, null);
+                CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3);
         this.b = super.installWar(options, "tw3.war", true);
         super.generalHeadersTest(options, "tw3.war", true, this.b);
     }
@@ -55,7 +55,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      */
     public void testManifestHeaders007() throws Exception {
         final Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME2,
-                CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2, null);
+                CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2);
         this.b = super.installWar(options, "wmtw2.war", true);
         super.generalHeadersTest(options, "wmtw2.war", true, this.b);
     }
@@ -65,7 +65,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      */
     public void testManifestHeaders008() throws Exception {
         final Map<String, Object> options = createOptions(VERSION3, MANIFESTVERSION1, SYMBOLICNAME3,
-                CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3, null);
+                CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3);
         this.b = super.installWar(options, "wmtw3.war", true);
         super.generalHeadersTest(options, "wmtw3.war", true, this.b);
     }
@@ -111,16 +111,15 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      */
     public void testMultipleManifestHeaders005() throws Exception {
         final Map<String, Object> options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME1,
-                CLASSPATH3, IMPORTS1, EXPORTS1, WEBCONTEXTPATH1,
-                JSPEXTRACTLOAC1);
+                CLASSPATH3, IMPORTS1, EXPORTS1, WEBCONTEXTPATH1);
         final Map<String, Object> options2 = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME2,
-                CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2, null);
+                CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2);
         final Map<String, Object> options3 = createOptions(VERSION3, MANIFESTVERSION1, SYMBOLICNAME3,
-                CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3, null);
+                CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3);
         final Map<String, Object> options4 = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME4,
-                CLASSPATH3, IMPORTS4, EXPORTS4, WEBCONTEXTPATH4, null);
+                CLASSPATH3, IMPORTS4, EXPORTS4, WEBCONTEXTPATH4);
         final Map<String, Object> options5 = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
-                CLASSPATH1, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5, null);
+                CLASSPATH1, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5);
         
         Bundle b2 = null, b3 = null, b4 = null, b5 = null;
         
@@ -157,16 +156,15 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      */
     public void testMultipleManifestHeaders006() throws Exception {
         final Map<String, Object> options = createOptions(null, MANIFESTVERSION1, null,
-                CLASSPATH3, IMPORTS1, EXPORTS1, WEBCONTEXTPATH1,
-                JSPEXTRACTLOAC1);
+                CLASSPATH3, IMPORTS1, EXPORTS1, WEBCONTEXTPATH1);
         final Map<String, Object> options2 = createOptions(null, MANIFESTVERSION1, null,
-                CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2, null);
+                CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2);
         final Map<String, Object> options3 = createOptions(null, MANIFESTVERSION1, null,
-                CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3, null);
+                CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3);
         final Map<String, Object> options4 = createOptions(null, MANIFESTVERSION1, null,
-                CLASSPATH3, IMPORTS4, EXPORTS4, WEBCONTEXTPATH4, null);
+                CLASSPATH3, IMPORTS4, EXPORTS4, WEBCONTEXTPATH4);
         final Map<String, Object> options5 = createOptions(null, MANIFESTVERSION1, null,
-                CLASSPATH1, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5, null);
+                CLASSPATH1, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5);
         Bundle b2 = null, b3 = null, b4 = null, b5 = null;
 
         try {
@@ -202,28 +200,26 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
      */
     public void testMultipleManifestHeaders007() throws Exception {
         final Map<String, Object> options = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME1,
-                CLASSPATH3, IMPORTS1, EXPORTS1, WEBCONTEXTPATH1,
-                JSPEXTRACTLOAC1);
+                CLASSPATH3, IMPORTS1, EXPORTS1, WEBCONTEXTPATH1);
         final Map<String, Object> options2 = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME2,
-                CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2, null);
+                CLASSPATH3, IMPORTS2, EXPORTS2, WEBCONTEXTPATH2);
         final Map<String, Object> options3 = createOptions(VERSION3, MANIFESTVERSION1, SYMBOLICNAME3,
-                CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3, null);
+                CLASSPATH3, IMPORTS3, EXPORTS3, WEBCONTEXTPATH3);
         final Map<String, Object> options4 = createOptions(VERSION1, MANIFESTVERSION1, SYMBOLICNAME4,
-                CLASSPATH3, IMPORTS4, EXPORTS4, WEBCONTEXTPATH4, null);
+                CLASSPATH3, IMPORTS4, EXPORTS4, WEBCONTEXTPATH4);
         final Map<String, Object> options5 = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
-                CLASSPATH1, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5, null);
+                CLASSPATH1, IMPORTS5, EXPORTS5, WEBCONTEXTPATH5);
         
         final Map<String, Object> options6 = createOptions(null, MANIFESTVERSION1, null,
-                CLASSPATH3, IMPORTS1, EXPORTS1, null,
-                null);
+                CLASSPATH3, IMPORTS1, EXPORTS1, null);
         final Map<String, Object> options7 = createOptions(null, MANIFESTVERSION1, null,
-                CLASSPATH3, IMPORTS2, EXPORTS2, null, null);
+                CLASSPATH3, IMPORTS2, EXPORTS2, null);
         final Map<String, Object> options8 = createOptions(null, MANIFESTVERSION1, null,
-                CLASSPATH3, IMPORTS3, EXPORTS3, null, null);
+                CLASSPATH3, IMPORTS3, EXPORTS3, null);
         final Map<String, Object> options9 = createOptions(null, MANIFESTVERSION1, null,
-                CLASSPATH3, IMPORTS4, EXPORTS4, null, null);
+                CLASSPATH3, IMPORTS4, EXPORTS4, null);
         final Map<String, Object> options10 = createOptions(null, MANIFESTVERSION1, null,
-                CLASSPATH1, IMPORTS5, EXPORTS5, null, null);
+                CLASSPATH1, IMPORTS5, EXPORTS5, null);
         Bundle[] bundles = new Bundle[9];
 
         try {
@@ -267,8 +263,7 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
 
 
     private Map<String, Object> createOptions(String version, String mVersion, String sName,
-            String[] classpath, String[] imports, String[] exports, String cp,
-            String jspLoc) throws Exception {
+            String[] classpath, String[] imports, String[] exports, String cp) throws Exception {
         Map<String, Object> options = new HashMap<String, Object>();
         options.put(Constants.BUNDLE_VERSION, version);
         options.put(Constants.BUNDLE_MANIFESTVERSION, mVersion);
@@ -277,7 +272,6 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
         options.put(Constants.IMPORT_PACKAGE, imports);
         options.put(Constants.EXPORT_PACKAGE, exports);
         options.put(WEB_CONTEXT_PATH, cp);
-        options.put(WEB_JSP_EXTRACT_LOCATION, jspLoc);
         return options;
     }
 }
