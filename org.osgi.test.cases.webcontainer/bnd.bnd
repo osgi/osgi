@@ -17,6 +17,7 @@ Include-Resource					= \
 	tw1.war, \
 	tw4.war, \
 	tw5.war, \
+	tw6.war, \
 	wmtw1.war, \
 	wmtw4.war, \
 	wmtw5.war, \
@@ -56,4 +57,3 @@ Export-Package =\
 	org.osgi.service.webcontainer.http.port=8080
 
 Test-Cases						= ${testcases}
-

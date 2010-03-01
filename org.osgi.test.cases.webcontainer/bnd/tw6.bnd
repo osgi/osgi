@@ -1,3 +1,4 @@
+# this war file is same as tw1.war, except that it is signed
 # We don't want bnd to make the manifest
 -nomanifest=true
 # We have WAR layout and non-bundle manifest
@@ -10,3 +11,5 @@
 Include-Resource = \
 	resources/tw1, \
 	WEB-INF/classes/${replace;${p}.tw1;\\.;/}=${bin}/${replace;${p}.tw1;\\.;/}
+
+-sign: test

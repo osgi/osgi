@@ -135,10 +135,23 @@ public abstract class WebContainerTestBundleControl extends
      * return original manifest from the test war path
      */
     protected Manifest getManifest(String warPath) throws Exception {
-        InputStream is = getClass().getClassLoader().getResourceAsStream(warPath);
-        JarInputStream jis = new JarInputStream(is);
+        Manifest mf = null;
+        InputStream is = null;
+        JarInputStream jis = null;
+        try {
+            is = getClass().getClassLoader().getResourceAsStream(warPath);
+            jis = new JarInputStream(is);
+            mf = jis.getManifest();
+        } finally {
+            if (is != null) {
+                is.close();
+            }
+            if (jis != null) {
+                jis.close();
+            }
+        }
 
-        return jis.getManifest();
+        return mf;
     }
 
     /*
@@ -152,7 +165,7 @@ public abstract class WebContainerTestBundleControl extends
 	 * return the warPath based on the warName, for example tw1.war path is
 	 * /tw1.war
 	 */
-    private String getWarPath(String warName) throws Exception {
+    protected String getWarPath(String warName) throws Exception {
 		return "/" + warName;
     }
 
