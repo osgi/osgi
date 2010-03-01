@@ -50,7 +50,7 @@ public class TW6Test extends WebContainerTestBundleControl {
         
         // make sure we don't run tests until the servletcontext is registered with service registry
         boolean register = super.checkServiceRegistered(this.warContextPath);
-        //assertTrue("the ServletContext should be registered", register);
+        assertTrue("the ServletContext should be registered", register);
     }
 
     /*
@@ -75,7 +75,7 @@ public class TW6Test extends WebContainerTestBundleControl {
     }
     
     /**
-     * this test verified the removal of the manifest name sections that 
+     * this test verifies the removal of the manifest name sections that 
      * contain the resource’s check sums 
      * @throws Exception
      */
