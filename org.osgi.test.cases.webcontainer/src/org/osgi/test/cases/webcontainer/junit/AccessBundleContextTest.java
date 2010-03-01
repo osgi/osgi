@@ -87,6 +87,8 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
 
         final String request = this.warContextPath
                 + "/BundleContextTestServlet";
+        assertTrue("check the web context path " + this.warContextPath + " in service registry",
+                super.checkServiceRegistered(this.warContextPath));
         String response = super.getResponse(request);
         // check if content of response is correct
         log("verify content of response is correct");

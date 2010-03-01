@@ -261,6 +261,8 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         b2 = installBundle(super.getWarURL("tw4.war", options), true);
         // should only able to access TW1 home page, as web extender should emit a FAILED event 
         // when web context path is not unique for TW4
+        assertTrue("check the web context path " + WEBCONTEXTPATH4 + " in service registry", 
+                super.checkServiceRegistered(WEBCONTEXTPATH4));
         String response = super.getResponse(WEBCONTEXTPATH4);
         super.checkTW1HomeResponse(response);
         uninstallBundle(b2);
@@ -295,6 +297,8 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
             b2 = installBundle(super.getWarURL("tw4.war", options), true);
             // should only able to access TW1 home page, as web extender should emit a FAILED event 
             // when web context path is not unique for TW4
+            assertTrue("check the web context path " + WEBCONTEXTPATH4 + " in service registry", 
+                    super.checkServiceRegistered(WEBCONTEXTPATH4));
             String response = super.getResponse(WEBCONTEXTPATH4);
             super.checkTW1HomeResponse(response);
             uninstallBundle(this.b);
@@ -357,6 +361,9 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
                     uninstallBundle(bundles[i]);
                 }
             }
+            
+            // let's wait some time for the bundle to be uninstalled fully
+            Thread.sleep(10000);
         }
     }
 
@@ -378,6 +385,8 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
                     uninstallBundle(bundles[i]);
                 }
             }
+            // let's wait some time for the bundle to be uninstalled fully
+            Thread.sleep(10000);
         }
     }
     

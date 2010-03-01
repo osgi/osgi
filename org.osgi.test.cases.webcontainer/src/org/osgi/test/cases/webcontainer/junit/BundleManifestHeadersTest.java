@@ -146,7 +146,9 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
         final Map<String, Object> options = createOptions(VERSION2, MANIFESTVERSION1, SYMBOLICNAME5,
                null, IMPORTS_OSGI_FRAMEWORK, EXPORTS5, WEBCONTEXTPATH5);
         this.b = super.installWar(options, "wm3tw5.war", true);
-        
+        assertTrue("check the web context path " + WEBCONTEXTPATH5 + " in service registry", 
+                super.checkServiceRegistered(WEBCONTEXTPATH5));
+
         assertTrue("should be able to access " + WEBCONTEXTPATH5, super.ableAccessPath(WEBCONTEXTPATH5));
         assertTrue("service should be registered", super.checkServiceRegistered(WEBCONTEXTPATH5));
         assertTrue("should be able to access servlet page", super.ableAccessPath(WEBCONTEXTPATH5 + "/BundleContextTestServlet"));

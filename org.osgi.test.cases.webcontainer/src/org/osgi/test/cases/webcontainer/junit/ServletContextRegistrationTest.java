@@ -113,6 +113,8 @@ public class ServletContextRegistrationTest extends
                     uninstallBundle(bundles[i]);
                 }
             }
+            // let's wait some time for the bundle to be uninstalled fully
+            Thread.sleep(10000);
         }
 
 	}
@@ -134,6 +136,8 @@ public class ServletContextRegistrationTest extends
                     uninstallBundle(bundles[i]);
                 }
             }
+            // let's wait some time for the bundle to be uninstalled fully
+            Thread.sleep(10000);
         }
     }
 
@@ -184,6 +188,9 @@ public class ServletContextRegistrationTest extends
 
 		}
 
+		// make sure the servletcontext is registered with service registry
+		assertTrue("ServletContext associated with Web-ContextPath " + cp + " should be registered",
+		        super.checkServiceRegistered(cp));
 		// get the service reference by Bundle-SymbolicName and Bundle-Version
 		ServiceReference[] srs = getContext().getServiceReferences(
 				ServletContext.class.getName(), filter);

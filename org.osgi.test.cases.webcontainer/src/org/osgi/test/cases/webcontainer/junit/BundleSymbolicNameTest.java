@@ -177,8 +177,10 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
                         + e.getCause());
             }
     
-            // test able to access /tw3
+            // test able to access /tw4
             try {
+                assertTrue("check the web context path /tw4 in service registry",
+                        super.checkServiceRegistered("/tw4"));
                 String response = super.getResponse("/tw4/");
                 super.checkTW4HomeResponse(response);
             } catch (Exception e) {
@@ -230,6 +232,8 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
                     uninstallBundle(bundles[i]);
                 }
             }
+            // let's wait some time for the bundle to be uninstalled fully
+            Thread.sleep(10000);
         }
     }
 }

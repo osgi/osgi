@@ -167,6 +167,7 @@ public abstract class ManifestHeadersTestBundleControl extends
      */
     protected void classpassServletTest(Bundle b) throws Exception {
         String cp = (String) b.getHeaders().get(WEB_CONTEXT_PATH);
+        super.checkServiceRegistered(cp);
         final String request = cp + "/ClasspathTestServlet";
         String response = super.getResponse(request);
         assertEquals("checking response content", "<html><head><title>ClasspathTestServlet</title></head><body>" 
