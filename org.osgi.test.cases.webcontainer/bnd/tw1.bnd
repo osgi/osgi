@@ -10,3 +10,5 @@
 Include-Resource = \
 	resources/tw1, \
 	WEB-INF/classes/${replace;${p}.tw1;\\.;/}=${bin}/${replace;${p}.tw1;\\.;/}
+
+-sign: test
