@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Dictionary;
+import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
@@ -80,9 +81,20 @@ public class TW6Test extends WebContainerTestBundleControl {
      * @throws Exception
      */
     public void testRemovedSignedPortionInManifest() throws Exception {
-        Dictionary d = this.b.getHeaders();
-        Object value = d.get("SHA1-Digest");
-        assertNull("SHA1-Digest value should be null as it must be removed by url handler", value);
+        URL url = this.b.getEntry("/META-INF/MANIFEST.MF");
+        InputStream is = null;
+        
+        try {
+            is = url.openStream();
+            assertNotNull("is should not be null", is);
+            Manifest mf = new Manifest(is);
+            Attributes attrs = mf.getAttributes("SHA1-Digest");
+            assertTrue(attrs == null || attrs.isEmpty());         
+        } finally {
+            if (is != null) {
+                is.close();
+            }
+        }
     }
 
     /*
