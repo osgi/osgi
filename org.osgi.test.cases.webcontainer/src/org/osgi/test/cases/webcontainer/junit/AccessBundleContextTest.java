@@ -23,8 +23,8 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
-import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
+import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
 
 /**
@@ -87,8 +87,6 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
 
         final String request = this.warContextPath
                 + "/BundleContextTestServlet";
-        assertTrue("check the web context path " + this.warContextPath + " in service registry",
-                super.checkServiceRegistered(this.warContextPath));
         String response = super.getResponse(request);
         // check if content of response is correct
         log("verify content of response is correct");
@@ -97,16 +95,26 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         assertEquals(-1, response.indexOf("null"));
 
         Enumeration e = logReaderService.getLog();
+        
+        // let's check all the logs in case there is some other code writes to the log
+        boolean checked = false;
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
-            log("get log message: " + logentry.getMessage());
-            assertEquals(ConstantsUtil.TESTLOGMSG, logentry.getMessage());
-            assertEquals(TW5_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
-            assertEquals(LogService.LOG_ERROR, logentry.getLevel());
-            assertTrue(logentry.getTime() >= beforeLog);
-            assertTrue(logentry.getTime() <= System.currentTimeMillis());
-            break;
+            String message = logentry.getMessage();
+            log("get log message: " + message);
+
+            if (message.equals(ConstantsUtil.TESTLOGMSG)) {
+                assertEquals(TW5_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
+                assertEquals(LogService.LOG_ERROR, logentry.getLevel());
+                assertTrue(logentry.getTime() >= beforeLog);
+                assertTrue(logentry.getTime() <= System.currentTimeMillis());
+                checked = true;
+                break;
+            }
+
         }
+        
+        assertTrue("log entries are compared and checked", checked);
     }
 
     public void testLog002() throws Exception {
@@ -122,16 +130,24 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         assertEquals(-1, response.indexOf("null"));
 
         Enumeration e = logReaderService.getLog();
+        // let's check all the logs in case there is some other code writes to the log
+        boolean checked = false;
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
-            log("get log message: " + logentry.getMessage());
-            assertEquals(ConstantsUtil.TESTLOGMSG2, logentry.getMessage());
-            assertEquals(TW5_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
-            assertEquals(LogService.LOG_WARNING, logentry.getLevel());
-            assertTrue(logentry.getTime() >= beforeLog);
-            assertTrue(logentry.getTime() <= System.currentTimeMillis());
-            break;
+            String message = logentry.getMessage();
+            log("get log message: " + message);
+            if (message.equals(ConstantsUtil.TESTLOGMSG2)) {
+                assertEquals(TW5_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
+                assertEquals(LogService.LOG_WARNING, logentry.getLevel());
+                assertTrue(logentry.getTime() >= beforeLog);
+                assertTrue(logentry.getTime() <= System.currentTimeMillis());
+                checked = true;
+                break;
+            }
+
         }
+        
+        assertTrue("log entries are compared and checked", checked);
     }
 
     public void testLog003() throws Exception {
@@ -148,16 +164,23 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         assertEquals(-1, response.indexOf("null"));
 
         Enumeration e = logReaderService.getLog();
+        // let's check all the logs in case there is some other code writes to the log
+        boolean checked = false;
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
-            log("get log message: " + logentry.getMessage());
-            assertEquals(ConstantsUtil.TESTLOGMSG3, logentry.getMessage());
-            assertEquals(TW5_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
-            assertEquals(LogService.LOG_INFO, logentry.getLevel());
-            assertTrue(logentry.getTime() >= beforeLog);
-            assertTrue(logentry.getTime() <= System.currentTimeMillis());
-            break;
+            String message = logentry.getMessage();
+            log("get log message: " + message);
+            if (message.equals(ConstantsUtil.TESTLOGMSG3)) {
+                assertEquals(TW5_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
+                assertEquals(LogService.LOG_INFO, logentry.getLevel());
+                assertTrue(logentry.getTime() >= beforeLog);
+                assertTrue(logentry.getTime() <= System.currentTimeMillis());
+                checked = true;
+                break;
+            }
         }
+        
+        assertTrue("log entries are compared and checked", checked);
     }
 
     public void testLog004() throws Exception {
@@ -174,17 +197,24 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         assertEquals(-1, response.indexOf("null"));
 
         Enumeration e = logReaderService.getLog();
+        // let's check all the logs in case there is some other code writes to the log
+        boolean checked = false;
         while (e.hasMoreElements()) {
             LogEntry logentry = (LogEntry) e.nextElement();
-            log("get log message: " + logentry.getMessage());
-            assertEquals(ConstantsUtil.TESTLOGMSG4, logentry.getMessage());
-            assertEquals(TW5_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
-            assertEquals(LogService.LOG_DEBUG, logentry.getLevel());
-            assertTrue(logentry.getTime() >= beforeLog);
-            assertTrue(logentry.getTime() <= System.currentTimeMillis());
-            assertEquals(logentry.getException().toString(), new RuntimeException().toString());
-            break;
+            String message = logentry.getMessage();
+            log("get log message: " + message);
+            if (message.equals(ConstantsUtil.TESTLOGMSG4)) {
+                assertEquals(TW5_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
+                assertEquals(LogService.LOG_DEBUG, logentry.getLevel());
+                assertTrue(logentry.getTime() >= beforeLog);
+                assertTrue(logentry.getTime() <= System.currentTimeMillis());
+                assertEquals(logentry.getException().toString(), new RuntimeException().toString());
+                checked = true;
+                break;
+            }
         }
+        
+        assertTrue("log entries are compared and checked", checked);
     }
     
     /*
@@ -197,4 +227,5 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         assertEquals("checking response content", "<html><head><title>ClasspathTestServlet</title></head><body>" 
                 + ConstantsUtil.ABLEGETLOG + "<br/>" +  ConstantsUtil.ABLEGETSIMPLEHELLO + "<br/></body></html>", response);
     }
+    
 }
