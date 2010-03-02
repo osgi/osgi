@@ -378,7 +378,8 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 
 	public void testServiceRanking() throws Exception {
 		// Install the necessary bundles
-		Bundle testBundle = installBundle("initialContextFactory2.jar");
+		Bundle factoryBundle1 = installBundle("initialContextFactory2.jar");
+		Bundle factoryBundle2 = installBundle("initialContextFactory3.jar");
 		// Use the default context to grab one of the factories and make sure
 		// it's the right one
 		Context ctx = null;
@@ -395,8 +396,30 @@ public class TestInitialContextFactory extends DefaultTestBundleControl {
 			if (ctx != null) {
 				ctx.close();
 			}
-			uninstallBundle(testBundle);
+			uninstallBundle(factoryBundle1);
+			uninstallBundle(factoryBundle2);
 		}
 	}
 
+	public void testServiceRankingOnContextCreation() throws Exception {
+		//Install the necessary bundles
+		Bundle factoryBundle2 = installBundle("initialContextFactory3.jar");
+		Bundle factoryBundle1 = installBundle("initialContextFactory2.jar");
+		Context ctx = null;
+		try {
+			ctx = new InitialContext();
+			assertNotNull("The context should not be null", ctx);
+			ctx.bind("testObject", new Object());
+			Hashtable ctxEnv = ctx.getEnvironment();
+			if (!ctxEnv.containsKey("test1")) {
+				fail("The right context was not returned");
+			}
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			uninstallBundle(factoryBundle1);
+			uninstallBundle(factoryBundle2);
+		}
+	}
 }

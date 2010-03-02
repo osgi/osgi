@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IBM Corporation (2009). All Rights Reserved.
+ * Copyright (c) IBM Corporation (2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 
-package org.osgi.test.cases.jndi.objectFactory2;
+package org.osgi.test.cases.jndi.objectFactory3;
 
 import java.util.Hashtable;
 
@@ -27,10 +27,10 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.jndi.provider.CTObjectFactory;
 
-/**
+/** 
  * @version $Revision$ $Date$
  */
-public class ObjectFactory2Activator implements BundleActivator {
+public class ObjectFactory3Activator implements BundleActivator {
 
 	private ServiceRegistration sr;
 	
@@ -39,10 +39,10 @@ public class ObjectFactory2Activator implements BundleActivator {
 		String[] interfaces = {CTObjectFactory.class.getName(), ObjectFactory.class.getName()};		
 		
 		props.put("osgi.jndi.serviceName", "CTObjectFactory");
-		props.put(Constants.SERVICE_RANKING, new Integer(3));
+		props.put(Constants.SERVICE_RANKING, new Integer(2));
 		
 		Hashtable env = new Hashtable();
-		env.put("test1", "test1");
+		env.put("test2", "test2");
 		
 		CTObjectFactory of = new CTObjectFactory(env);
 		
@@ -52,4 +52,5 @@ public class ObjectFactory2Activator implements BundleActivator {
 	public void stop(BundleContext context) throws Exception {
 		sr.unregister();
 	}
+
 }

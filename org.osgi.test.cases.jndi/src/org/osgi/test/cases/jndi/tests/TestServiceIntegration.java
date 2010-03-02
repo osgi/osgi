@@ -16,8 +16,11 @@
 
 package org.osgi.test.cases.jndi.tests;
 
+import javax.naming.Binding;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NameClassPair;
+import javax.naming.NamingEnumeration;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -40,8 +43,9 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 		// Install the bundle needed for this test
 		Bundle serviceBundle = installBundle("service1.jar");
 		// Grab the default initialContext so we can access the service registry
-		Context ctx = new InitialContext();
+		Context ctx = null;
 		try {
+			ctx = new InitialContext();
 			assertNotNull("The context should not be null", ctx);
 			// Lookup the example service
 			ExampleService service = (ExampleService) ctx.lookup("osgi:service/org.osgi.test.cases.jndi.service.ExampleService");
@@ -62,8 +66,9 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 		Bundle serviceBundle = installBundle("service1.jar");
 		ExampleService service = null;
 		// Grab the default initialContext so we can access the service registry
-		Context ctx = new InitialContext();
+		Context ctx = null;
 		try {
+			ctx = new InitialContext();
 			assertNotNull("The context should not be null", ctx);
 			// Lookup the example service
 			service = (ExampleService) ctx.lookup("osgi:service/org.osgi.test.cases.jndi.service.ExampleService");
@@ -99,8 +104,9 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 		// Install the bundle needed for this test
 		Bundle serviceBundle = installBundle("service1.jar");
 		// Grab the default initialContext so we can access the service registry
-		Context ctx = new InitialContext();
+		Context ctx = null;
 		try {
+			ctx = new InitialContext();
 			assertNotNull("The context should not be null" , ctx);
 			// Lookup the example service
 			ExampleService service = (ExampleService) ctx.lookup("osgi:service/org.osgi.test.cases.jndi.service.ExampleService");
@@ -131,24 +137,34 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 		failException("testServiceLookupWithoutRebinding failed", org.osgi.framework.ServiceException.class);
 	}
 	
-	public void testMultipleServiceLookup() throws Exception {
+	public void testMultipleServiceLookupWithListBindings() throws Exception {
 		// Install the bundle needed for this test
 		Bundle serviceBundle = installBundle("service2.jar");
 		// Grab the default initialContext so we can access the service registry
-		Context ctx = new InitialContext();
+		Context ctx = null;
 		Context serviceListContext = null;
 		try {
+			ctx = new InitialContext();
 			assertNotNull("The context should not be null", ctx);
 			// Lookup the matching services
 			serviceListContext = (Context) ctx.lookup("osgi:servicelist/org.osgi.test.cases.jndi.service.ExampleService");
 			// Verify we received a context
 			assertNotNull("The context should not be null", serviceListContext);
-			// Check that the services we were expecting were found
+			// Check that the services we were expecting were found using the listBindings method
 			ServiceReference[] expectedServices = serviceBundle.getRegisteredServices();
 			for (int i=0; i < expectedServices.length; i++) {
-				ExampleService service = (ExampleService) serviceListContext.lookup(((Long)expectedServices[i].getProperty("service.id")).toString());
-				// We should find a corresponding service for each registered service from the bundle
-				assertNotNull("Could not find one of the expected services in the returned context", service);
+				NamingEnumeration retrievedServices = serviceListContext.listBindings("");
+				boolean found = false;
+				while (retrievedServices.hasMoreElements()) {
+					Binding serviceBinding = (Binding) retrievedServices.nextElement();
+					String bindingName = serviceBinding.getName();
+					if (bindingName.equals(expectedServices[i].getProperty("service.id").toString())) {
+						found = true;
+					}
+				}
+				if (!found) {
+					fail("We expected a service with service.id=" + expectedServices[i].getProperty("service.id").toString() + " but none was found.");
+				}
 			}
 		} finally {
 			if (ctx != null) {
@@ -162,14 +178,55 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 		
 	}
 	
+	public void testMultipleServiceLookupWithList() throws Exception {
+		// Install the bundle needed for this test
+		Bundle serviceBundle = installBundle("service2.jar");
+		// Grab the default initialContext so we can access the service registry
+		Context ctx = null;
+		Context serviceListContext = null;
+		try {
+			ctx = new InitialContext();
+			assertNotNull("The context should not be null", ctx);
+			// Lookup the matching services
+			serviceListContext = (Context) ctx.lookup("osgi:servicelist/org.osgi.test.cases.jndi.service.ExampleService");
+			// Verify we received the context
+			assertNotNull("The context should not be null", serviceListContext);
+			// Check that the service we were expecting were found using the list method
+			ServiceReference[] expectedServices = serviceBundle.getRegisteredServices();
+			for (int i=0; i < expectedServices.length; i++) {
+				NamingEnumeration retrievedServices = serviceListContext.list("");
+				boolean found = false;
+				while (retrievedServices.hasMoreElements()) {
+					NameClassPair servicePair = (NameClassPair) retrievedServices.nextElement();
+					String pairName = servicePair.getName();
+					if (pairName.equals(expectedServices[i].getProperty("service.id").toString())) {
+						found = true;
+					}
+				}
+				if (!found) {
+					fail("We expected a service with service.id=" + expectedServices[i].getProperty("service.id").toString() + " but none was found.");
+				}
+			}
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			if (serviceListContext != null) {
+				serviceListContext.close();
+			}
+			uninstallBundle(serviceBundle);
+		}
+	}
+	
 	public void testMultipleServiceLookupWithRebinding() throws Exception {
 		// Install the bundle needed for this test
 		Bundle serviceBundle = installBundle("service1.jar");
 		// Grab the default initialContext so we can access the service registry
-		Context ctx = new InitialContext();
+		Context ctx = null;
 		Context serviceListContext = null;
 		ExampleService service = null;
 		try {
+			ctx = new InitialContext();
 			assertNotNull("The context should not be null", ctx);
 			// Lookup the matching services
 			serviceListContext = (Context) ctx.lookup("osgi:servicelist/org.osgi.test.cases.jndi.service.ExampleService");
@@ -222,8 +279,9 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 
 	public void testBundleContextLookup() throws Exception {
 		// Grab the default initialContext so we can access the service registry
-		Context ctx = new InitialContext();
+		Context ctx = null;
 		try {
+			ctx = new InitialContext();
 			assertNotNull("The context should not be null", ctx);
 			// Lookup the bundle context
 			BundleContext bundleCtx = (BundleContext) ctx.lookup("osgi:framework/bundleContext");
@@ -240,8 +298,9 @@ public class TestServiceIntegration extends DefaultTestBundleControl {
 		// Install the bundles need for this test
 		Bundle serviceBundle = installBundle("service1.jar");
 		// Grab the default InitialContext so we can access the service registry
-		Context ctx = new InitialContext();
+		Context ctx = null;
 		try {
+			ctx = new InitialContext();
 			assertNotNull("The context should not be null", ctx);
 			// Lookup the example service using the service name
 			ExampleService service = (ExampleService) ctx.lookup("osgi:service/ExampleService");

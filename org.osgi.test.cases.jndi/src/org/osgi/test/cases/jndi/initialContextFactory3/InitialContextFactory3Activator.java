@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IBM Corporation (2009). All Rights Reserved.
+ * Copyright (c) IBM Corporation (2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,41 +15,43 @@
  */
 
 
-package org.osgi.test.cases.jndi.objectFactory2;
+package org.osgi.test.cases.jndi.initialContextFactory3;
 
 import java.util.Hashtable;
 
-import javax.naming.spi.ObjectFactory;
+import javax.naming.spi.InitialContextFactory;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.test.cases.jndi.provider.CTObjectFactory;
+import org.osgi.test.cases.jndi.provider.CTInitialContextFactory;
 
-/**
+/** 
  * @version $Revision$ $Date$
  */
-public class ObjectFactory2Activator implements BundleActivator {
-
-	private ServiceRegistration sr;
+public class InitialContextFactory3Activator implements BundleActivator {
+	private ServiceRegistration sr1;
 	
 	public void start(BundleContext context) throws Exception {
 		Hashtable props = new Hashtable();
-		String[] interfaces = {CTObjectFactory.class.getName(), ObjectFactory.class.getName()};		
 		
-		props.put("osgi.jndi.serviceName", "CTObjectFactory");
-		props.put(Constants.SERVICE_RANKING, new Integer(3));
+		String[] interfaces ={CTInitialContextFactory.class.getName(), InitialContextFactory.class.getName()};
+		
+		props.put("osgi.jndi.serviceName", "CTInitialContextFactory"); 
+		props.put(Constants.SERVICE_RANKING, new Integer(2));
 		
 		Hashtable env = new Hashtable();
-		env.put("test1", "test1");
 		
-		CTObjectFactory of = new CTObjectFactory(env);
+		env.put("test2", "test2");
 		
-		sr = context.registerService(interfaces, of, props);
+		CTInitialContextFactory ctf = new CTInitialContextFactory(env);
+		
+		sr1 = context.registerService(interfaces, ctf, props);
 	}
 
 	public void stop(BundleContext context) throws Exception {
-		sr.unregister();
+		sr1.unregister();
 	}
+
 }

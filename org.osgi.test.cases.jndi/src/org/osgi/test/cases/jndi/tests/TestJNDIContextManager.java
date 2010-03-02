@@ -20,6 +20,7 @@ package org.osgi.test.cases.jndi.tests;
 import java.util.Hashtable;
 
 import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.naming.OperationNotSupportedException;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
@@ -379,7 +380,6 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 	public void testDefaultLookupWithNoMatchingContext() throws Exception {
 		// Install a bundle that registers a service we know we can grab
 		Bundle serviceBundle = installBundle("service1.jar");
-		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
 		// Grab the JNDIContextManager service
 		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
 		// Try to grab a context.  There's none installed so we should get back one capable
@@ -394,8 +394,36 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			if (ctx != null) {
 				ctx.close();
 			}
-			uninstallBundle(factoryBundle);
 			uninstallBundle(serviceBundle);
+			ungetService(ctxManager);
+		}
+	}
+	
+	public void testInitialContextFactoryBuilderExceptionHandling() throws Exception {
+		// Install the test bundle
+		Bundle factoryBuilderBundle = installBundle("exceptionalInitialContextFactoryBuilder1.jar");
+		// Grab the JNDIContextmanager service
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		int invokeCountBefore = CTContext.getInvokeCount();
+		// Grab the context
+		Context ctx = null;
+		try {
+			ctx = ctxManager.newInitialContext();
+			// Verify that we actually received the context
+			assertNotNull("The context should not be null", ctx);
+			ctx.bind("testObject", new Object());
+			int invokeCountAfter = CTContext.getInvokeCount();
+			if (!(invokeCountAfter > invokeCountBefore)) {
+				ctx.close();
+				fail("The correct Context object was not found");
+			}
+			Object testObject = ctx.lookup("testObject");
+			assertNotNull(testObject);
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			uninstallBundle(factoryBuilderBundle);
 			ungetService(ctxManager);
 		}
 	}
@@ -532,5 +560,58 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		}
 		
 		failException("testUngetContextManager failed", javax.naming.OperationNotSupportedException.class);
+	}
+	
+	public void testServiceRanking() throws Exception {
+		// Install the necessary bundles
+		Bundle factoryBundle1 = installBundle("initialContextFactory2.jar");
+		Bundle factoryBundle2 = installBundle("initialContextFactory3.jar");
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		// Use the default context to grab one of the factories and make sure
+		// it's the right one
+		Context ctx = null;
+		try {
+			ctx = ctxManager.newInitialContext();
+			assertNotNull("The context should not be null", ctx);
+			CTInitialContextFactory ctf = (CTInitialContextFactory) ctx.lookup("osgi:service/org.osgi.test.cases.jndi.provider.CTInitialContextFactory");
+			// Let's grab a context instance and check the environment
+			Hashtable ctxEnv = ctf.getInitialContext(null).getEnvironment();
+			if (!ctxEnv.containsKey("test1")) {
+				fail("The right context was not returned");
+			}
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			uninstallBundle(factoryBundle1);
+			uninstallBundle(factoryBundle2);
+		}
+	}
+
+	public void testServiceRankingOnContextCreation() throws Exception {
+		//Install the necessary bundles
+		Bundle factoryBundle2 = installBundle("initialContextFactory3.jar");
+		Bundle factoryBundle1 = installBundle("initialContextFactory2.jar");
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		Context ctx = null;
+		try {
+			ctx = ctxManager.newInitialContext();
+			assertNotNull("The context should not be null", ctx);
+			ctx.bind("testObject", new Object());
+			Hashtable ctxEnv = ctx.getEnvironment();
+			if (!ctxEnv.containsKey("test1")) {
+				fail("The right context was not returned");
+			}
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			uninstallBundle(factoryBundle1);
+			uninstallBundle(factoryBundle2);
+		}
+	}
+	
+	public void testServiceRankingOnContextCreationWithBuilders() throws Exception {
+		
 	}
 }

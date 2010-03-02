@@ -15,14 +15,17 @@ Import-Package 						= \
 Include-Resource 					= \
 	dirObjectFactory1.jar	 , \
 	dirObjectFactoryBuilder1.jar , \
+	exceptionalInitialContextFactoryBuilder1.jar , \
 	initialContextFactory1.jar , \
 	initialContextFactory2.jar , \
+	initialContextFactory3.jar , \
 	initialContextFactoryBuilder1.jar , \
 	initialContextFactoryWithProperties.jar , \
 	initialDirContextFactory1.jar , \
 	initialDirContextFactoryBuilder1.jar , \
 	objectFactory1.jar , \
 	objectFactory2.jar , \
+	objectFactory3.jar , \
 	objectFactoryBuilder1.jar , \
 	service1.jar , \
 	service2.jar , \

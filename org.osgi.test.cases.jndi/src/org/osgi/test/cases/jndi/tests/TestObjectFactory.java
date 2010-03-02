@@ -359,29 +359,4 @@ public class TestObjectFactory extends DefaultTestBundleControl {
 			uninstallBundle(factoryBundle);
 		}
 	}
-
-	public void testServiceRanking() throws Exception {
-		// Install the necessary bundles
-		Bundle factoryBundle = installBundle("initialContextFactory1.jar");
-		Bundle testBundle = installBundle("objectFactory2.jar");
-		// Use the default context to grab one of the factories and make sure
-		// it's the right one
-		Context ctx = null;
-		try {
-			ctx = new InitialContext();
-			assertNotNull("The context should not be null", ctx);
-			CTObjectFactory of = (CTObjectFactory) ctx.lookup("osgi:service/org.osgi.test.cases.jndi.provider.CTObjectFactory");
-			Hashtable ofEnv = of.getEnvironment();
-			if (!ofEnv.containsKey("test1")) {
-				fail("The right context was not returned");
-			}
-		} finally {
-			if (ctx != null) {
-				ctx.close();
-			}
-			uninstallBundle(testBundle);
-			uninstallBundle(factoryBundle);
-		}
-	}
-
 }
