@@ -21,7 +21,7 @@
 		<description></description>
 		<display-name>TestFilter</display-name>
 		<filter-name>TestFilter</filter-name>
-		<filter-class>org.osgi.test.cases.webcontainer.tw2.TestFilter</filter-class>
+		<filter-class>org.osgi.test.cases.webcontainer.optional.tw2.TestFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>TestFilter</filter-name>
@@ -30,34 +30,34 @@
 
 	<listener>
 		<listener-class>
-			org.osgi.test.cases.webcontainer.tw2.TestServletContextListener</listener-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.TestServletContextListener</listener-class>
 	</listener>
 	<listener>
 		<listener-class>
-			org.osgi.test.cases.webcontainer.tw2.TestServletContextAttributeListener</listener-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.TestServletContextAttributeListener</listener-class>
 	</listener>
 	<listener>
 		<listener-class>
-			org.osgi.test.cases.webcontainer.tw2.TestServletRequestListener</listener-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.TestServletRequestListener</listener-class>
 	</listener>
 	<listener>
 		<listener-class>
-			org.osgi.test.cases.webcontainer.tw2.TestServletRequestAttributeListener</listener-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.TestServletRequestAttributeListener</listener-class>
 	</listener>
 	<listener>
 		<listener-class>
-			org.osgi.test.cases.webcontainer.tw2.TestHttpSessionListener</listener-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.TestHttpSessionListener</listener-class>
 	</listener>
 	<listener>
 		<listener-class>
-			org.osgi.test.cases.webcontainer.tw2.TestHttpSessionAttributeListener</listener-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.TestHttpSessionAttributeListener</listener-class>
 	</listener>
 	<servlet>
 		<description></description>
 		<display-name>PostConstructPreDestroyServlet1</display-name>
 		<servlet-name>PostConstructPreDestroyServlet1</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.PostConstructPreDestroyServlet1</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.PostConstructPreDestroyServlet1</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>PostConstructPreDestroyServlet1</servlet-name>
@@ -68,7 +68,7 @@
 		<display-name>PostConstructPreDestroyServlet2</display-name>
 		<servlet-name>PostConstructPreDestroyServlet2</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.PostConstructPreDestroyServlet2</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.PostConstructPreDestroyServlet2</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>PostConstructPreDestroyServlet2</servlet-name>
@@ -79,7 +79,7 @@
 		<display-name>PostConstructPreDestroyServlet3</display-name>
 		<servlet-name>PostConstructPreDestroyServlet3</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.PostConstructPreDestroyServlet3</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.PostConstructPreDestroyServlet3</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>PostConstructPreDestroyServlet3</servlet-name>
@@ -90,7 +90,7 @@
 		<display-name>ResourceServlet1</display-name>
 		<servlet-name>ResourceServlet1</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.ResourceServlet1</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.ResourceServlet1</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ResourceServlet1</servlet-name>
@@ -101,7 +101,7 @@
 		<display-name>ResourceServlet2</display-name>
 		<servlet-name>ResourceServlet2</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.ResourceServlet2</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.ResourceServlet2</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ResourceServlet2</servlet-name>
@@ -112,7 +112,7 @@
 		<display-name>ResourceServlet3</display-name>
 		<servlet-name>ResourceServlet3</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.ResourceServlet3</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.ResourceServlet3</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ResourceServlet3</servlet-name>
@@ -123,7 +123,7 @@
 		<display-name>ResourceServlet4</display-name>
 		<servlet-name>ResourceServlet4</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.ResourceServlet4</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.ResourceServlet4</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ResourceServlet4</servlet-name>
@@ -134,7 +134,7 @@
 		<display-name>PostConstructErrorServlet1</display-name>
 		<servlet-name>PostConstructErrorServlet1</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.PostConstructErrorServlet1</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.PostConstructErrorServlet1</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>PostConstructErrorServlet1</servlet-name>
@@ -145,7 +145,7 @@
 		<display-name>PostConstructErrorServlet2</display-name>
 		<servlet-name>PostConstructErrorServlet2</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.PostConstructErrorServlet2</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.PostConstructErrorServlet2</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>PostConstructErrorServlet2</servlet-name>
@@ -156,7 +156,7 @@
 		<display-name>PostConstructErrorServlet3</display-name>
 		<servlet-name>PostConstructErrorServlet3</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.PostConstructErrorServlet3</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.PostConstructErrorServlet3</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>PostConstructErrorServlet3</servlet-name>
@@ -167,7 +167,7 @@
 		<display-name>PreDestroyErrorServlet1</display-name>
 		<servlet-name>PreDestroyErrorServlet1</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.PreDestroyErrorServlet1</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.PreDestroyErrorServlet1</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>PreDestroyErrorServlet1</servlet-name>
@@ -178,7 +178,7 @@
 		<display-name>PreDestroyErrorServlet2</display-name>
 		<servlet-name>PreDestroyErrorServlet2</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.PreDestroyErrorServlet2</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.PreDestroyErrorServlet2</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>PreDestroyErrorServlet2</servlet-name>
@@ -189,7 +189,7 @@
 		<display-name>PreDestroyErrorServlet3</display-name>
 		<servlet-name>PreDestroyErrorServlet3</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.PreDestroyErrorServlet3</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.PreDestroyErrorServlet3</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>PreDestroyErrorServlet3</servlet-name>
@@ -235,7 +235,7 @@
 		<display-name>ServletContextListenerServlet</display-name>
 		<servlet-name>ServletContextListenerServlet</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.ServletContextListenerServlet</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.ServletContextListenerServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ServletContextListenerServlet</servlet-name>
@@ -246,7 +246,7 @@
 		<display-name>SecurityTestServlet</display-name>
 		<servlet-name>SecurityTestServlet</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.SecurityTestServlet</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.SecurityTestServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>SecurityTestServlet</servlet-name>
@@ -257,7 +257,7 @@
 		<display-name>RequestListenerServlet</display-name>
 		<servlet-name>RequestListenerServlet</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.RequestListenerServlet</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.RequestListenerServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>RequestListenerServlet</servlet-name>
@@ -268,7 +268,7 @@
 		<display-name>HTTPSessionListenerServlet</display-name>
 		<servlet-name>HTTPSessionListenerServlet</servlet-name>
 		<servlet-class>
-			org.osgi.test.cases.webcontainer.tw2.servlet.HTTPSessionListenerServlet</servlet-class>
+			org.osgi.test.cases.webcontainer.optional.tw2.servlet.HTTPSessionListenerServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>HTTPSessionListenerServlet</servlet-name>

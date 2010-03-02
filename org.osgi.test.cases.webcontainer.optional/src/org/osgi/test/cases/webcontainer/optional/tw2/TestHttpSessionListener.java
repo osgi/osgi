@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.tw2;
+package org.osgi.test.cases.webcontainer.optional.tw2;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
 
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Event;
@@ -30,7 +29,7 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
 /**
  * @version $Rev$ $Date$
  */
-public class TestServletContextListener implements ServletContextListener {
+public class TestHttpSessionListener implements HttpSessionListener {
 
     @Resource(name = "someString1")
     private String someString1;
@@ -62,33 +61,33 @@ public class TestServletContextListener implements ServletContextListener {
                 ConstantsUtil.PREDESTROY, ""));
     }
 
-    public void contextDestroyed(ServletContextEvent sce) {
-        EventLogger.logEvent(new Event(this.getClass().getName(),
-                "contextDestroyed", ""));
-    }
-
-    public void contextInitialized(ServletContextEvent sce) {
-        ServletContext context = sce.getServletContext();
-        String email = context.getInitParameter("Email");
-        context.setAttribute(ConstantsUtil.EMAIL, email);
+    public void sessionCreated(HttpSessionEvent se) {
         if (someInteger1 == null && someInteger2 == null
                 && someBoolean1 == null) {
-            context.setAttribute(ConstantsUtil.WELCOMESTATEMENT, null);
+            se.getSession().setAttribute(ConstantsUtil.WELCOMESTATEMENT, null);
         } else {
-            context
-                    .setAttribute(ConstantsUtil.WELCOMESTATEMENT, someInteger1
-                            + "+" + someInteger2 + "=" + someInteger3 + " is "
-                            + someBoolean1);
+            se.getSession().setAttribute(
+                    ConstantsUtil.WELCOMESTATEMENT,
+                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                            + " is " + someBoolean1);
         }
         if (someString1 == null && someString2 == null) {
-            context.setAttribute(ConstantsUtil.WELCOMESTRING, null);
+            se.getSession().setAttribute(ConstantsUtil.WELCOMESTRING, null);
         } else {
-            context.setAttribute(ConstantsUtil.WELCOMESTRING, someString1 + " "
-                    + someString2);
+            se.getSession().setAttribute(ConstantsUtil.WELCOMESTRING,
+                    someString1 + " " + someString2);
         }
+        EventLogger
+                .logEvent(new Event(this.getClass().getName(),
+                        "sessionCreated", ConstantsUtil.WELCOMESTRING
+                                + "-"
+                                + se.getSession().getAttribute(
+                                        ConstantsUtil.WELCOMESTRING)));
+    }
+
+    public void sessionDestroyed(HttpSessionEvent se) {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                "contextInitialized", ConstantsUtil.EMAIL + "-"
-                        + context.getInitParameter("Email")));
+                "sessionDestroyed", ""));
     }
 
 }

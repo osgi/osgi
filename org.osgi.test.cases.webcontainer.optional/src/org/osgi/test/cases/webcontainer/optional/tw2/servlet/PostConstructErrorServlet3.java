@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.tw2.servlet;
+package org.osgi.test.cases.webcontainer.optional.tw2.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
-import javax.annotation.PreDestroy;
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,21 +33,21 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
  * 
  *          Servlet implementation class BasicAnnotationServlet2
  */
-public class PreDestroyErrorServlet3 extends HttpServlet {
+public class PostConstructErrorServlet3 extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PreDestroyErrorServlet3() {
+    public PostConstructErrorServlet3() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-    @PreDestroy
-    public void cleanup() throws java.lang.Exception {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup",
-                ConstantsUtil.CLEANUPDESP));
+    @PostConstruct
+    public void postConstruct() throws java.lang.Exception {
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                ConstantsUtil.POSTCONSTRUCT, ConstantsUtil.POSTCONSTRUCTDESP));
     }
 
     /**
@@ -57,7 +56,7 @@ public class PreDestroyErrorServlet3 extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        printContext(request, response);
+        // TODO Auto-generated method stub
     }
 
     /**
@@ -66,22 +65,7 @@ public class PreDestroyErrorServlet3 extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        printContext(request, response);
-    }
-
-    private void printContext(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<title>PreDestroyErrorServlet3</title>");
-        out.println("</head>");
-        out.println("<body>");
-        out.println(EventLogger.printEvent(new Event(this.getClass().getName(),
-                "printContext", ConstantsUtil.PRINTCONTEXT)));
-        out.println("</body>");
-        out.println("</html>");
+        // TODO Auto-generated method stub
     }
 
 }

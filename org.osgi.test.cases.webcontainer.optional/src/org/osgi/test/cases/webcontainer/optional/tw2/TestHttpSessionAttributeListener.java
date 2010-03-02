@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.tw2;
+package org.osgi.test.cases.webcontainer.optional.tw2;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.tw2.servlet;
+package org.osgi.test.cases.webcontainer.optional.tw2.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -34,9 +34,9 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
 /**
  * @version $Rev$ $Date$
  * 
- *          Servlet implementation class RequestListenerServlet
+ *          Servlet implementation class ContextListenerServlet
  */
-public class RequestListenerServlet extends HttpServlet {
+public class HTTPSessionListenerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     @Resource(name = "someInteger1")
     private Integer someInteger1;
@@ -53,7 +53,7 @@ public class RequestListenerServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RequestListenerServlet() {
+    public HTTPSessionListenerServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -95,23 +95,26 @@ public class RequestListenerServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.println("<html>");
         out.println("<head>");
-        out.println("<title>RequestListenerServlet</title>");
+        out.println("<title>HTTPSessionListenerServlet</title>");
         out.println("</head>");
         out.println("<body>");
         out.println(ConstantsUtil.WELCOMESTRING + "-"
-                + request.getAttribute(ConstantsUtil.WELCOMESTRING) + "<br/>");
+                + request.getSession().getAttribute(ConstantsUtil.WELCOMESTRING)
+                + "<br/>");
         out.println(ConstantsUtil.WELCOMESTATEMENT + "-"
-                + request.getAttribute(ConstantsUtil.WELCOMESTATEMENT) + "<br/>");
-        request.removeAttribute(ConstantsUtil.WELCOMESTRING);
+                + request.getSession().getAttribute(ConstantsUtil.WELCOMESTATEMENT)
+                + "<br/>");
+        request.getSession().removeAttribute(ConstantsUtil.WELCOMESTRING);
         if (someInteger1 == null && someInteger2 == null
                 && someInteger3 == null && someBoolean2 == null) {
-            request.setAttribute(ConstantsUtil.WELCOMESTATEMENT, null);
+            request.getSession().setAttribute(ConstantsUtil.WELCOMESTATEMENT, null);
         } else {
-            request.setAttribute(ConstantsUtil.WELCOMESTATEMENT, someInteger1 + "+"
-                    + someInteger2 + "=" + someInteger3 + " is not "
-                    + someBoolean2);
+            request.getSession().setAttribute(
+                    ConstantsUtil.WELCOMESTATEMENT,
+                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                            + " is not " + someBoolean2);
+            out.println("</body>");
+            out.println("</html>");
         }
-        out.println("</body>");
-        out.println("</html>");
     }
 }

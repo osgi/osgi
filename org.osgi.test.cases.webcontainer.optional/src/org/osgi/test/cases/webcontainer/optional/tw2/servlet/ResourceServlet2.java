@@ -14,40 +14,49 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.tw2.servlet;
+package org.osgi.test.cases.webcontainer.optional.tw2.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
-import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
-import org.osgi.test.cases.webcontainer.util.Event;
-import org.osgi.test.cases.webcontainer.util.EventLogger;
-
 /**
  * @version $Rev$ $Date$
  * 
- *          Servlet implementation class BasicAnnotationServlet2
+ *          Servlet implementation class ResourceServlet2
  */
-public class PostConstructErrorServlet3 extends HttpServlet {
+public class ResourceServlet2 extends HttpServlet {
     private static final long serialVersionUID = 1L;
+
+    @Resource(name = "someString1")
+    private String someString1;
+
+    @Resource(name = "someString2")
+    private String someString2;
+
+    @Resource(name = "someInteger1")
+    private Integer someInteger1;
+
+    @Resource(name = "someInteger2")
+    private Integer someInteger2;
+
+    @Resource(name = "someInteger3")
+    private Integer someInteger3;
+
+    @Resource(name = "someBoolean1")
+    private Boolean someBoolean1;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PostConstructErrorServlet3() {
+    public ResourceServlet2() {
         super();
         // TODO Auto-generated constructor stub
-    }
-
-    @PostConstruct
-    public void postConstruct() throws java.lang.Exception {
-        EventLogger.logEvent(new Event(this.getClass().getName(),
-                ConstantsUtil.POSTCONSTRUCT, ConstantsUtil.POSTCONSTRUCTDESP));
     }
 
     /**
@@ -56,7 +65,7 @@ public class PostConstructErrorServlet3 extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
+        printContext(request, response);
     }
 
     /**
@@ -65,7 +74,23 @@ public class PostConstructErrorServlet3 extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
+        printContext(request, response);
+    }
+
+    private void printContext(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>ResourceServlet2</title>");
+        out.println("</head>");
+        out.println("<body>");
+        out.println(someString1 + " " + someString2 + "<br/>");
+        out.println(someInteger1 + " + " + someInteger2 + " = " + someInteger3
+                + " that is " + someBoolean1);
+        out.println("</body>");
+        out.println("</html>");
     }
 
 }

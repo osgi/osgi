@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.tw2;
+package org.osgi.test.cases.webcontainer.optional.tw2;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
-import javax.servlet.ServletRequestEvent;
-import javax.servlet.ServletRequestListener;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Event;
@@ -29,7 +30,7 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
 /**
  * @version $Rev$ $Date$
  */
-public class TestServletRequestListener implements ServletRequestListener {
+public class TestServletContextListener implements ServletContextListener {
 
     @Resource(name = "someString1")
     private String someString1;
@@ -61,32 +62,33 @@ public class TestServletRequestListener implements ServletRequestListener {
                 ConstantsUtil.PREDESTROY, ""));
     }
 
-    public void requestDestroyed(ServletRequestEvent sre) {
+    public void contextDestroyed(ServletContextEvent sce) {
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                "requestDestroyed", ""));
+                "contextDestroyed", ""));
     }
 
-    public void requestInitialized(ServletRequestEvent sre) {
+    public void contextInitialized(ServletContextEvent sce) {
+        ServletContext context = sce.getServletContext();
+        String email = context.getInitParameter("Email");
+        context.setAttribute(ConstantsUtil.EMAIL, email);
         if (someInteger1 == null && someInteger2 == null
                 && someBoolean1 == null) {
-            sre.getServletRequest().setAttribute(ConstantsUtil.WELCOMESTATEMENT,
-                    null);
+            context.setAttribute(ConstantsUtil.WELCOMESTATEMENT, null);
         } else {
-            sre.getServletRequest().setAttribute(
-                    ConstantsUtil.WELCOMESTATEMENT,
-                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
-                            + " is " + someBoolean1);
+            context
+                    .setAttribute(ConstantsUtil.WELCOMESTATEMENT, someInteger1
+                            + "+" + someInteger2 + "=" + someInteger3 + " is "
+                            + someBoolean1);
         }
         if (someString1 == null && someString2 == null) {
-            sre.getServletRequest().setAttribute(ConstantsUtil.WELCOMESTRING, null);
+            context.setAttribute(ConstantsUtil.WELCOMESTRING, null);
         } else {
-            sre.getServletRequest().setAttribute(ConstantsUtil.WELCOMESTRING,
-                    someString1 + " " + someString2);
+            context.setAttribute(ConstantsUtil.WELCOMESTRING, someString1 + " "
+                    + someString2);
         }
         EventLogger.logEvent(new Event(this.getClass().getName(),
-                "requestInitialized", ConstantsUtil.WELCOMESTRING
-                        + "-"
-                        + sre.getServletRequest().getAttribute(
-                                ConstantsUtil.WELCOMESTRING)));
+                "contextInitialized", ConstantsUtil.EMAIL + "-"
+                        + context.getInitParameter("Email")));
     }
+
 }

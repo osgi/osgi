@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.tw2.servlet;
+package org.osgi.test.cases.webcontainer.optional.tw2.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
-import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,23 +34,27 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
  * 
  *          Servlet implementation class BasicAnnotationServlet2
  */
-public class PostConstructErrorServlet2 extends HttpServlet {
+public class PreDestroyErrorServlet1 extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PostConstructErrorServlet2() {
+    public PreDestroyErrorServlet1() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-    @PostConstruct
-    public static void postConstruct() {
-        EventLogger
-                .logEvent(new Event(
-                        "org.osgi.test.cases.webcontainer.tw2.servlet.PostConstructErrorServlet2",
-                        ConstantsUtil.POSTCONSTRUCT, ConstantsUtil.POSTCONSTRUCTDESP));
+    @PreDestroy
+    public void cleanup1() {
+        EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup",
+                ConstantsUtil.CLEANUPDESP));
+    }
+
+    @PreDestroy
+    public void cleanup2() {
+        EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup2",
+                ConstantsUtil.CLEANUPDESP2));
     }
 
     /**
@@ -58,7 +63,7 @@ public class PostConstructErrorServlet2 extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
+        printContext(request, response);
     }
 
     /**
@@ -67,7 +72,22 @@ public class PostConstructErrorServlet2 extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
+        printContext(request, response);
+    }
+
+    private void printContext(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>PreDestroyErrorServlet1</title>");
+        out.println("</head>");
+        out.println("<body>");
+        out.println(EventLogger.printEvent(new Event(this.getClass().getName(),
+                "printContext", ConstantsUtil.PRINTCONTEXT)));
+        out.println("</body>");
+        out.println("</html>");
     }
 
 }

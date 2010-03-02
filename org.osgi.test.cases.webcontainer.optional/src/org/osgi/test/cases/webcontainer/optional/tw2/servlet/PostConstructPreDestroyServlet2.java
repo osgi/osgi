@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.tw2.servlet;
+package org.osgi.test.cases.webcontainer.optional.tw2.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,40 +33,17 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
 /**
  * @version $Rev$ $Date$
  * 
- *          Servlet implementation class ContextListenerServlet
+ *          Servlet implementation class BasicAnnotationServlet
  */
-public class HTTPSessionListenerServlet extends HttpServlet {
+public class PostConstructPreDestroyServlet2 extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    @Resource(name = "someInteger1")
-    private Integer someInteger1;
-
-    @Resource(name = "someInteger2")
-    private Integer someInteger2;
-
-    @Resource(name = "someInteger3")
-    private Integer someInteger3;
-
-    @Resource(name = "someBoolean2")
-    private Boolean someBoolean2;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public HTTPSessionListenerServlet() {
+    public PostConstructPreDestroyServlet2() {
         super();
         // TODO Auto-generated constructor stub
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        EventLogger.logEvent(new Event(this.getClass().getName(),
-                ConstantsUtil.POSTCONSTRUCT, ""));
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-        EventLogger.logEvent(new Event(this.getClass().getName(),
-                ConstantsUtil.PREDESTROY, ""));
     }
 
     /**
@@ -76,7 +52,6 @@ public class HTTPSessionListenerServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
         printContext(request, response);
     }
 
@@ -86,7 +61,19 @@ public class HTTPSessionListenerServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
+        printContext(request, response);
+    }
+
+    @PostConstruct
+    private void postConstruct() {
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                ConstantsUtil.POSTCONSTRUCT, ConstantsUtil.POSTCONSTRUCTDESP));
+    }
+
+    @PreDestroy
+    private void cleanup() {
+        EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup",
+                ConstantsUtil.CLEANUPDESP));
     }
 
     private void printContext(HttpServletRequest request,
@@ -95,26 +82,13 @@ public class HTTPSessionListenerServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.println("<html>");
         out.println("<head>");
-        out.println("<title>HTTPSessionListenerServlet</title>");
+        out.println("<title>PostConstructPreDestroyServlet2</title>");
         out.println("</head>");
         out.println("<body>");
-        out.println(ConstantsUtil.WELCOMESTRING + "-"
-                + request.getSession().getAttribute(ConstantsUtil.WELCOMESTRING)
-                + "<br/>");
-        out.println(ConstantsUtil.WELCOMESTATEMENT + "-"
-                + request.getSession().getAttribute(ConstantsUtil.WELCOMESTATEMENT)
-                + "<br/>");
-        request.getSession().removeAttribute(ConstantsUtil.WELCOMESTRING);
-        if (someInteger1 == null && someInteger2 == null
-                && someInteger3 == null && someBoolean2 == null) {
-            request.getSession().setAttribute(ConstantsUtil.WELCOMESTATEMENT, null);
-        } else {
-            request.getSession().setAttribute(
-                    ConstantsUtil.WELCOMESTATEMENT,
-                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
-                            + " is not " + someBoolean2);
-            out.println("</body>");
-            out.println("</html>");
-        }
+        out.println(EventLogger.printEvent(new Event(this.getClass().getName(),
+                "printContext", ConstantsUtil.PRINTCONTEXT)));
+        out.println("</body>");
+        out.println("</html>");
     }
+
 }

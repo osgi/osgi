@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.tw2.servlet;
+package org.osgi.test.cases.webcontainer.optional.tw2.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,13 +35,13 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
  * 
  *          Servlet implementation class BasicAnnotationServlet
  */
-public class PostConstructPreDestroyServlet2 extends HttpServlet {
+public class PostConstructPreDestroyServlet1 extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PostConstructPreDestroyServlet2() {
+    public PostConstructPreDestroyServlet1() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -65,13 +65,13 @@ public class PostConstructPreDestroyServlet2 extends HttpServlet {
     }
 
     @PostConstruct
-    private void postConstruct() {
+    public void postConstruct() {
         EventLogger.logEvent(new Event(this.getClass().getName(),
                 ConstantsUtil.POSTCONSTRUCT, ConstantsUtil.POSTCONSTRUCTDESP));
     }
 
     @PreDestroy
-    private void cleanup() {
+    public void cleanup() {
         EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup",
                 ConstantsUtil.CLEANUPDESP));
     }
@@ -82,7 +82,7 @@ public class PostConstructPreDestroyServlet2 extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.println("<html>");
         out.println("<head>");
-        out.println("<title>PostConstructPreDestroyServlet2</title>");
+        out.println("<title>PostConstructPreDestroyServlet1</title>");
         out.println("</head>");
         out.println("<body>");
         out.println(EventLogger.printEvent(new Event(this.getClass().getName(),

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.tw2.servlet;
+package org.osgi.test.cases.webcontainer.optional.tw2.servlet;
 
 import java.io.IOException;
 
@@ -33,27 +33,23 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
  * 
  *          Servlet implementation class BasicAnnotationServlet2
  */
-public class PostConstructErrorServlet1 extends HttpServlet {
+public class PostConstructErrorServlet2 extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PostConstructErrorServlet1() {
+    public PostConstructErrorServlet2() {
         super();
         // TODO Auto-generated constructor stub
     }
 
     @PostConstruct
-    public void postConstruct1() {
-        EventLogger.logEvent(new Event(this.getClass().getName(),
-                ConstantsUtil.POSTCONSTRUCT, ConstantsUtil.POSTCONSTRUCTDESP));
-    }
-
-    @PostConstruct
-    public void postConstruct2() {
-        EventLogger.logEvent(new Event(this.getClass().getName(),
-                ConstantsUtil.PREDESTROY, ConstantsUtil.POSTCONSTRUCTDESP2));
+    public static void postConstruct() {
+        EventLogger
+                .logEvent(new Event(
+                        "org.osgi.test.cases.webcontainer.tw2.servlet.PostConstructErrorServlet2",
+                        ConstantsUtil.POSTCONSTRUCT, ConstantsUtil.POSTCONSTRUCTDESP));
     }
 
     /**

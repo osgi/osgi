@@ -14,67 +14,60 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.tw2.servlet;
+package org.osgi.test.cases.webcontainer.optional.tw2.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
+import org.osgi.test.cases.webcontainer.util.Event;
+import org.osgi.test.cases.webcontainer.util.EventLogger;
+
 /**
  * @version $Rev$ $Date$
  * 
- *          Servlet implementation class ResourceServlet4
+ *          Servlet implementation class RequestListenerServlet
  */
-public class ResourceServlet4 extends HttpServlet {
+public class RequestListenerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private String myS1;
-    private String myS2;
-    private Integer myI1;
-    private Integer myI2;
-    private Integer myI3;
-    private Boolean myB1;
-
-    @Resource(name = "someString1")
-    private void setMyS1(String s1) {
-        this.myS1 = s1;
-    }
-
-    @Resource(name = "someString2")
-    private void setMyS2(String s2) {
-        this.myS2 = s2;
-    }
-
     @Resource(name = "someInteger1")
-    private void setMyI1(Integer i1) {
-        this.myI1 = i1;
-    }
+    private Integer someInteger1;
 
     @Resource(name = "someInteger2")
-    private void setMyI2(Integer i2) {
-        this.myI2 = i2;
-    }
+    private Integer someInteger2;
 
     @Resource(name = "someInteger3")
-    private void setMyI3(Integer i3) {
-        this.myI3 = i3;
-    }
+    private Integer someInteger3;
 
-    @Resource(name = "someBoolean1")
-    private void setMyB1(Boolean b1) {
-        this.myB1 = b1;
-    }
+    @Resource(name = "someBoolean2")
+    private Boolean someBoolean2;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ResourceServlet4() {
+    public RequestListenerServlet() {
         super();
         // TODO Auto-generated constructor stub
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                ConstantsUtil.POSTCONSTRUCT, ""));
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        EventLogger.logEvent(new Event(this.getClass().getName(),
+                ConstantsUtil.PREDESTROY, ""));
     }
 
     /**
@@ -83,6 +76,7 @@ public class ResourceServlet4 extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
+        // TODO Auto-generated method stub
         printContext(request, response);
     }
 
@@ -92,7 +86,7 @@ public class ResourceServlet4 extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        printContext(request, response);
+        // TODO Auto-generated method stub
     }
 
     private void printContext(HttpServletRequest request,
@@ -101,14 +95,23 @@ public class ResourceServlet4 extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.println("<html>");
         out.println("<head>");
-        out.println("<title>ResourceServlet4</title>");
+        out.println("<title>RequestListenerServlet</title>");
         out.println("</head>");
         out.println("<body>");
-        out.println(this.myS1 + " " + this.myS2 + "<br/>");
-        out.println(this.myI1 + " + " + this.myI2 + " = " + this.myI3
-                + " that is " + this.myB1);
+        out.println(ConstantsUtil.WELCOMESTRING + "-"
+                + request.getAttribute(ConstantsUtil.WELCOMESTRING) + "<br/>");
+        out.println(ConstantsUtil.WELCOMESTATEMENT + "-"
+                + request.getAttribute(ConstantsUtil.WELCOMESTATEMENT) + "<br/>");
+        request.removeAttribute(ConstantsUtil.WELCOMESTRING);
+        if (someInteger1 == null && someInteger2 == null
+                && someInteger3 == null && someBoolean2 == null) {
+            request.setAttribute(ConstantsUtil.WELCOMESTATEMENT, null);
+        } else {
+            request.setAttribute(ConstantsUtil.WELCOMESTATEMENT, someInteger1 + "+"
+                    + someInteger2 + "=" + someInteger3 + " is not "
+                    + someBoolean2);
+        }
         out.println("</body>");
         out.println("</html>");
     }
-
 }

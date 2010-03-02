@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.tw2.servlet;
+package org.osgi.test.cases.webcontainer.optional.tw2.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,17 +32,23 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
 /**
  * @version $Rev$ $Date$
  * 
- *          Servlet implementation class BasicAnnotationServlet
+ *          Servlet implementation class BasicAnnotationServlet2
  */
-public class PostConstructPreDestroyServlet1 extends HttpServlet {
+public class PreDestroyErrorServlet3 extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PostConstructPreDestroyServlet1() {
+    public PreDestroyErrorServlet3() {
         super();
         // TODO Auto-generated constructor stub
+    }
+
+    @PreDestroy
+    public void cleanup() throws java.lang.Exception {
+        EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup",
+                ConstantsUtil.CLEANUPDESP));
     }
 
     /**
@@ -64,25 +69,13 @@ public class PostConstructPreDestroyServlet1 extends HttpServlet {
         printContext(request, response);
     }
 
-    @PostConstruct
-    public void postConstruct() {
-        EventLogger.logEvent(new Event(this.getClass().getName(),
-                ConstantsUtil.POSTCONSTRUCT, ConstantsUtil.POSTCONSTRUCTDESP));
-    }
-
-    @PreDestroy
-    public void cleanup() {
-        EventLogger.logEvent(new Event(this.getClass().getName(), "cleanup",
-                ConstantsUtil.CLEANUPDESP));
-    }
-
     private void printContext(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         out.println("<html>");
         out.println("<head>");
-        out.println("<title>PostConstructPreDestroyServlet1</title>");
+        out.println("<title>PreDestroyErrorServlet3</title>");
         out.println("</head>");
         out.println("<body>");
         out.println(EventLogger.printEvent(new Event(this.getClass().getName(),

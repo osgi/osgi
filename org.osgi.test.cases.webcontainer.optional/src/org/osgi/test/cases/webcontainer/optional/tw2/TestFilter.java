@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.tw2;
+package org.osgi.test.cases.webcontainer.optional.tw2;
+
+import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.Event;
@@ -29,7 +35,7 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
 /**
  * @version $Rev$ $Date$
  */
-public class TestHttpSessionListener implements HttpSessionListener {
+public class TestFilter implements Filter {
 
     @Resource(name = "someString1")
     private String someString1;
@@ -61,33 +67,33 @@ public class TestHttpSessionListener implements HttpSessionListener {
                 ConstantsUtil.PREDESTROY, ""));
     }
 
-    public void sessionCreated(HttpSessionEvent se) {
-        if (someInteger1 == null && someInteger2 == null
-                && someBoolean1 == null) {
-            se.getSession().setAttribute(ConstantsUtil.WELCOMESTATEMENT, null);
-        } else {
-            se.getSession().setAttribute(
-                    ConstantsUtil.WELCOMESTATEMENT,
-                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
-                            + " is " + someBoolean1);
-        }
-        if (someString1 == null && someString2 == null) {
-            se.getSession().setAttribute(ConstantsUtil.WELCOMESTRING, null);
-        } else {
-            se.getSession().setAttribute(ConstantsUtil.WELCOMESTRING,
-                    someString1 + " " + someString2);
-        }
+    public void destroy() {
         EventLogger
-                .logEvent(new Event(this.getClass().getName(),
-                        "sessionCreated", ConstantsUtil.WELCOMESTRING
-                                + "-"
-                                + se.getSession().getAttribute(
-                                        ConstantsUtil.WELCOMESTRING)));
+                .logEvent(new Event(this.getClass().getName(), "destroy", ""));
     }
 
-    public void sessionDestroyed(HttpSessionEvent se) {
-        EventLogger.logEvent(new Event(this.getClass().getName(),
-                "sessionDestroyed", ""));
+    public void doFilter(ServletRequest request, ServletResponse response,
+            FilterChain chain) throws IOException, ServletException {
+        if (someString1 == null && someString2 == null) {
+            EventLogger.logEvent(new Event(this.getClass().getName(),
+                    "doFilter", "" + someString1));
+        } else {
+            EventLogger.logEvent(new Event(this.getClass().getName(),
+                    "doFilter", someString1 + " " + someString2));
+        }
+        chain.doFilter(request, response);
+    }
+
+    public void init(FilterConfig filterConfig) throws ServletException {
+        if (someInteger1 == null && someInteger2 == null
+                && someInteger3 == null && someBoolean1 == null) {
+            EventLogger.logEvent(new Event(this.getClass().getName(), "init",
+                    "" + someInteger1));
+        } else {
+            EventLogger.logEvent(new Event(this.getClass().getName(), "init",
+                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                            + " is " + someBoolean1));
+        }
     }
 
 }

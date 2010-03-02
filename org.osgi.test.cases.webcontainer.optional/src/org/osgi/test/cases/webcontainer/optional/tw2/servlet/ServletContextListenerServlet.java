@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.tw2.servlet;
+package org.osgi.test.cases.webcontainer.optional.tw2.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,7 +22,6 @@ import java.io.PrintWriter;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
-import javax.annotation.security.DeclareRoles;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,10 +34,9 @@ import org.osgi.test.cases.webcontainer.util.EventLogger;
 /**
  * @version $Rev$ $Date$
  * 
- *          Servlet implementation class SecurityTestServlet
+ *          Servlet implementation class ServletContextListenerServlet
  */
-@DeclareRoles("manager")
-public class SecurityTestServlet extends HttpServlet {
+public class ServletContextListenerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Resource(name = "someString1")
@@ -65,7 +63,7 @@ public class SecurityTestServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SecurityTestServlet() {
+    public ServletContextListenerServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -107,26 +105,38 @@ public class SecurityTestServlet extends HttpServlet {
         if (modify != null && modify.equalsIgnoreCase("true")) {
             // let's modify the attributes
             getServletContext().removeAttribute(ConstantsUtil.WELCOMESTRING);
-            getServletContext().setAttribute(
-                    ConstantsUtil.WELCOMESTATEMENT,
-                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
-                            + " is not " + someBoolean2);
+            if (someInteger1 == null && someInteger2 == null
+                    && someInteger3 == null && someBoolean2 == null) {
+                getServletContext().setAttribute(ConstantsUtil.WELCOMESTATEMENT,
+                        null);
+            } else {
+                getServletContext().setAttribute(
+                        ConstantsUtil.WELCOMESTATEMENT,
+                        someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                                + " is not " + someBoolean2);
+            }
 
         } else if (modify != null && modify.equalsIgnoreCase("reset")) {
             // let's set the attributes to their original value
             getServletContext().setAttribute(ConstantsUtil.WELCOMESTRING,
                     someString1 + " " + someString2);
-            getServletContext().setAttribute(
-                    ConstantsUtil.WELCOMESTATEMENT,
-                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
-                            + " is " + someBoolean1);
+            if (someInteger1 == null && someInteger2 == null
+                    && someInteger3 == null && someBoolean2 == null) {
+                getServletContext().setAttribute(ConstantsUtil.WELCOMESTATEMENT,
+                        null);
+            } else {
+                getServletContext().setAttribute(
+                        ConstantsUtil.WELCOMESTATEMENT,
+                        someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                                + " is not " + someBoolean2);
+            }
 
         }
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
         out.println("<html>");
         out.println("<head>");
-        out.println("<title>SecurityTestServlet</title>");
+        out.println("<title>ServletContextListenerServlet</title>");
         out.println("</head>");
         out.println("<body>");
         out.println(ConstantsUtil.EMAIL + "-"
