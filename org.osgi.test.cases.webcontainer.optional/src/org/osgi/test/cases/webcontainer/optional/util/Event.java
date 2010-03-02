@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.util;
+package org.osgi.test.cases.webcontainer.optional.util;
 
 /**
  * @version $Rev$ $Date$

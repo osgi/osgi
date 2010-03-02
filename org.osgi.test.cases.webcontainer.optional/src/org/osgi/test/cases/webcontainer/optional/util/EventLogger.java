@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.util;
+package org.osgi.test.cases.webcontainer.optional.util;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 
 /**
  * @version $Rev$ $Date$

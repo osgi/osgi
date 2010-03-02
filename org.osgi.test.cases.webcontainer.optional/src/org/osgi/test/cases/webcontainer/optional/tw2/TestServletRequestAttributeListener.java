@@ -22,8 +22,8 @@ import javax.servlet.ServletRequestAttributeEvent;
 import javax.servlet.ServletRequestAttributeListener;
 
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
-import org.osgi.test.cases.webcontainer.util.Event;
-import org.osgi.test.cases.webcontainer.util.EventLogger;
+import org.osgi.test.cases.webcontainer.optional.util.Event;
+import org.osgi.test.cases.webcontainer.optional.util.EventLogger;
 
 /**
  * @version $Rev$ $Date$

@@ -27,7 +27,8 @@ Import-Package = \
  	*
  	
 Export-Package =\
-	${p};version=1.0
+	${p};version=1.0, \
+	${p}.util;version=1.0
 	
 -buildpath							= ee.j2se; version=1.5, \
     org.osgi.test.cases.webcontainer; 		version = project, \

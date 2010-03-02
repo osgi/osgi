@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.webcontainer.util;
+package org.osgi.test.cases.webcontainer.optional.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
+
+import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 
 /**
  * @version $Rev$ $Date$
