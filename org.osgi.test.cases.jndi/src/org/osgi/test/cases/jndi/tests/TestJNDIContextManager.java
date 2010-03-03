@@ -585,6 +585,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			}
 			uninstallBundle(factoryBundle1);
 			uninstallBundle(factoryBundle2);
+			ungetService(ctxManager);
 		}
 	}
 
@@ -608,10 +609,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			}
 			uninstallBundle(factoryBundle1);
 			uninstallBundle(factoryBundle2);
+			ungetService(ctxManager);
 		}
-	}
-	
-	public void testServiceRankingOnContextCreationWithBuilders() throws Exception {
-		
 	}
 }
