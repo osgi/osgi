@@ -34,8 +34,8 @@ public class MCResourceAnnotationTest extends WebContainerOptionalTestBundleCont
         // install + start the war file
         log("install war file: tw3.war at context path " + this.warContextPath);
         this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
-        assertTrue("should be able to see the servlet context associated with /tw2 web contextpath",
-                super.checkServiceRegistered("/tw2"));
+        assertTrue("should be able to see the servlet context associated with /tw3 web contextpath",
+                super.checkServiceRegistered("/tw3"));
     }
 
     /*

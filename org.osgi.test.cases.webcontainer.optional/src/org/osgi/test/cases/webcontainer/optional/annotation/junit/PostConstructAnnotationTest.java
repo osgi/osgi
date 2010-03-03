@@ -36,7 +36,7 @@ public class PostConstructAnnotationTest extends WebContainerOptionalTestBundleC
 
         // install + start the war file
         log("install war file: tw2.war at context path " + this.warContextPath);
-        this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
+        this.b = installBundle(super.getWarURL("tw2.war", this.options), true);
         assertTrue("should be able to see the servlet context associated with /tw2 web contextpath",
                 super.checkServiceRegistered("/tw2"));
     }
