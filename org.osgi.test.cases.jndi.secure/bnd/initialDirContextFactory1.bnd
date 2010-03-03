@@ -1,4 +1,0 @@
-Bundle-Name:                             ${p}.initialDirContextFactory1
-Bundle-Version:                          4.2.0.${project.build}
-Bundle-Activator:						 ${p}.initialDirContextFactory1.InitialDirContextFactory1Activator
-Private-Package =						 ${p}.initialDirContextFactory1

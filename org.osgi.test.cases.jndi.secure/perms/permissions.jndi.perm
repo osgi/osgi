@@ -1,0 +1,7 @@
+(org.osgi.framework.PackagePermission "org.osgi.service.jndi" "import")
+(org.osgi.framework.PackagePermission "org.osgi.framework" "import")
+(org.osgi.framework.PackagePermission "junit.framework" "import")
+(org.osgi.framework.PackagePermission "javax.naming" "import")
+(org.osgi.framework.PackagePermission "javax.naming.*" "import")
+(org.osgi.framework.ServicePermission "org.osgi.service.jndi.JNDIContextManager" "get")
+(org.osgi.framework.ServicePermission "org.osgi.service.jndi.JNDIProviderAdmin" "get")

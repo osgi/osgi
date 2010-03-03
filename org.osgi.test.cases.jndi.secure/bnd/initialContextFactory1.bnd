@@ -1,5 +1,0 @@
-Bundle-Name:                             ${p}.initialContextFactory1
-Bundle-Version:                          4.2.0.${project.build}
-Bundle-Activator:						 ${p}.initialContextFactory1.InitialContextFactory1Activator
-Private-Package =						 ${p}.initialContextFactory1
-

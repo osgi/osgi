@@ -1,38 +1,21 @@
 Bundle-Version: 4.2.0.${project.build}
 
 Private-Package 					= org.osgi.test.support.* , \
-	${p}.*
+	org.osgi.test.cases.jndi.*
 	
-Export-Package						= \
-	${p}.provider, \
-	${p}.provider.ct, \
-	${p}.service
-
 Import-Package 						= \
 	* 
 
 
 Include-Resource 					= \
-	dirObjectFactory1.jar	 , \
-	dirObjectFactoryBuilder1.jar , \
-	initialContextFactory1.jar , \
-	initialContextFactory2.jar , \
-	initialContextFactoryBuilder1.jar , \
-	initialContextFactoryWithProperties.jar , \
-	initialDirContextFactory1.jar , \
-	initialDirContextFactoryBuilder1.jar , \
-	objectFactory1.jar , \
-	objectFactory2.jar , \
-	objectFactoryBuilder1.jar , \
-	service1.jar , \
-	service2.jar , \
-	urlContext1.jar
+	OSGI-INF/permissions.perm = perms/permissions.jndi.perm
 	
 Test-Cases							= ${testcases}
 
 -buildpath							= ee.j2se; version=1.5, \
 	org.osgi.service.jndi;					version=project, \
     org.osgi.test.support;                  version=project, \
+    org.osgi.test.cases.jndi;				version=project, \
 	osgi.core; 								version=4.2, \
 	${junit}
 	

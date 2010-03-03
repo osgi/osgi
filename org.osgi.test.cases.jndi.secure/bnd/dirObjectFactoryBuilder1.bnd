@@ -1,4 +1,0 @@
-Bundle-Name:                             ${p}.dirObjectFactoryBuilder1
-Bundle-Version:                          4.2.0.${project.build}
-Bundle-Activator:						 ${p}.dirObjectFactoryBuilder1.DirObjectFactoryBuilder1Activator
-Private-Package =						 ${p}.dirObjectFactoryBuilder1.*

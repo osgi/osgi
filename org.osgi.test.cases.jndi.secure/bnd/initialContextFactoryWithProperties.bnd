@@ -1,8 +1,0 @@
-Bundle-Name:                             ${p}.initialContextFactoryWithProperties
-Bundle-Version:                          4.2.0.${project.build}
-Bundle-Activator:						 ${p}.initialContextFactoryWithProperties.InitialContextFactoryWithPropertiesActivator
-Private-Package =						 ${p}.initialContextFactoryWithProperties
-
-Include-Resource = \
-	jndi.properties=resources/jndi.properties
-
