@@ -10,4 +10,5 @@
 Include-Resource = \
 	resources/tw3, \
 	resources/wmtw3, \
-	WEB-INF/classes/${replace;${p}.tw2;\\.;/}=${bin}/${replace;${p}.tw2;\\.;/}
+	WEB-INF/classes/${replace;${p}.tw2;\\.;/}=${bin}/${replace;${p}.tw2;\\.;/}, \
+	WEB-INF/classes/${replace;${p}.util;\\.;/}=${bin}/${replace;${p}.util;\\.;/}
