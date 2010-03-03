@@ -17,16 +17,14 @@
 package org.osgi.test.cases.webcontainer.optional.annotation.junit;
 
 import org.osgi.framework.Constants;
-import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
-import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
+import org.osgi.test.cases.webcontainer.optional.WebContainerOptionalTestBundleControl;
+import org.osgi.test.cases.webcontainer.optional.util.ConstantsUtil;
 
 /**
  * @version $Rev$ $Date$
  */
-public class ResourceAnnotationTest extends WebContainerTestBundleControl {
-
-    protected static final String[] IMPORTS_ANNOTATION = {"javax.annotation"};
-    
+public class ResourceAnnotationTest extends WebContainerOptionalTestBundleControl {
+  
     @Override
     public void setUp() throws Exception {
         super.setUp();

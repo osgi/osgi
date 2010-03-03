@@ -18,8 +18,9 @@ package org.osgi.test.cases.webcontainer.optional.annotation.junit;
 
 import java.util.jar.Manifest;
 
-import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
-import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
+import org.osgi.framework.Constants;
+import org.osgi.test.cases.webcontainer.optional.WebContainerOptionalTestBundleControl;
+import org.osgi.test.cases.webcontainer.optional.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
 
 /**
@@ -35,16 +36,20 @@ import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
  *          javax.servlet.http.HttpSessionListener
  *          javax.servlet.http.HttpSessionAttributeListener
  */
-public class OtherAnnotationTest extends WebContainerTestBundleControl {
+public class OtherAnnotationTest extends WebContainerOptionalTestBundleControl {
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
         super.prepare("/tw2");
+        this.options.put(Constants.IMPORT_PACKAGE, IMPORTS_ANNOTATION);
+
         super.cleanupPropertyFile();
         // install + start the war file
         log("install war file: tw2.war at context path " + this.warContextPath);
         this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
+        assertTrue("should be able to see the servlet context associated with /tw2 web contextpath",
+                super.checkServiceRegistered("/tw2"));
     }
 
     /*

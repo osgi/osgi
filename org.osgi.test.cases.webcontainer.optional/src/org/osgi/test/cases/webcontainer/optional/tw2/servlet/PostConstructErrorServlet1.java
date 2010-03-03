@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
+import org.osgi.test.cases.webcontainer.optional.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.optional.util.Event;
 import org.osgi.test.cases.webcontainer.optional.util.EventLogger;
 

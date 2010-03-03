@@ -16,22 +16,26 @@
 
 package org.osgi.test.cases.webcontainer.optional.annotation.junit;
 
-import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
-import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
+import org.osgi.framework.Constants;
+import org.osgi.test.cases.webcontainer.optional.WebContainerOptionalTestBundleControl;
+import org.osgi.test.cases.webcontainer.optional.util.ConstantsUtil;
 
 /**
  * @version $Rev$ $Date$
  */
-public class MCResourceAnnotationTest extends WebContainerTestBundleControl {
+public class MCResourceAnnotationTest extends WebContainerOptionalTestBundleControl {
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
         super.prepare("/tw3");
+        this.options.put(Constants.IMPORT_PACKAGE, IMPORTS_ANNOTATION);
 
         // install + start the war file
         log("install war file: tw3.war at context path " + this.warContextPath);
         this.b = installBundle(super.getWarURL("tw3.war", this.options), true);
+        assertTrue("should be able to see the servlet context associated with /tw2 web contextpath",
+                super.checkServiceRegistered("/tw2"));
     }
 
     /*

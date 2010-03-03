@@ -45,7 +45,6 @@ Export-Package =\
 	org.osgi.impl.service.log; 			version=latest, \
 	org.osgi.impl.service.event; 			version=latest, \
     org.osgi.impl.bundle.webcontainer; version=latest
-# TODO add rfc142 impl bundle here if user wants to run some simple rfc 66 + rfc 142 tests
 	
 -runproperties = ${runproperties}, \
 	org.osgi.service.webcontainer.hostname=127.0.0.1, \

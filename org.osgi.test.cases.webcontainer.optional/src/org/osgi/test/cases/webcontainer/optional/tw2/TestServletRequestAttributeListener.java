@@ -21,7 +21,7 @@ import javax.annotation.PreDestroy;
 import javax.servlet.ServletRequestAttributeEvent;
 import javax.servlet.ServletRequestAttributeListener;
 
-import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
+import org.osgi.test.cases.webcontainer.optional.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.optional.util.Event;
 import org.osgi.test.cases.webcontainer.optional.util.EventLogger;
 

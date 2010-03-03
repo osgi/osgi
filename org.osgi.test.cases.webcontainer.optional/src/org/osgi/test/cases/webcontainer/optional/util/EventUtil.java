@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
-import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
+import org.osgi.test.cases.webcontainer.optional.util.ConstantsUtil;
 
 /**
  * @version $Rev$ $Date$
