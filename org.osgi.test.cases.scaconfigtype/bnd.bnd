@@ -10,6 +10,7 @@ Private-Package						= org.osgi.test.support.*, \
 Include-Resource					= \
 	ct00.jar, \
 	ct00client.jar, \
+	ct01endpoint.jar, \
 	ct04defaultLocation.jar, \
 	ct04specificLocation.jar, \
 	ct04wildcardLocation.jar, \
@@ -31,7 +32,7 @@ Include-Resource					= \
 	osgi.enterprise; version=${enterprise.published.version};strategy=lowest	
 	
 -runproperties = ${runproperties}, \
-        ${p}.required.ports="9000,9001,9002,50000", \
+        ${p}.required.ports="9000,50000", \
         ${p}.system.packages.extra="${junit.package}", \
         ${p}.bundles="${uniq;${repo;org.osgi.impl.service.event},${repo;org.osgi.impl.bundle.sca},${repo;osgi.enterprise;${enterprise.published.version};lowest},${repo;org.osgi.impl.service.log}}", \
         ${p}.serverconfig="service.exported.configs,org.osgi.sca.domain.registry", \

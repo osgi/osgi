@@ -18,11 +18,16 @@
 
 package org.osgi.test.cases.scaconfigtype.junit;
 
-import static org.osgi.framework.Constants.*;
+import static org.osgi.framework.Constants.FRAMEWORK_STORAGE_CLEAN;
+import static org.osgi.framework.Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA;
 import static org.osgi.test.cases.scaconfigtype.common.DistributionProviderConstants.REMOTE_CONFIGS_SUPPORTED;
-import static org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants.*;
+import static org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants.SERVICE_IMPORTED_CONFIGS;
+import static org.osgi.test.cases.scaconfigtype.common.RemoteServiceConstants.SERVICE_INTENTS;
 import static org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants.ORG_OSGI_SCA_CONFIG;
-import static org.osgi.test.cases.scaconfigtype.common.TestConstants.*;
+import static org.osgi.test.cases.scaconfigtype.common.TestConstants.CLIENT_FRAMEWORK;
+import static org.osgi.test.cases.scaconfigtype.common.TestConstants.ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON;
+import static org.osgi.test.cases.scaconfigtype.common.TestConstants.SERVER_FRAMEWORK;
+import static org.osgi.test.cases.scaconfigtype.common.TestConstants.SERVICE_TIMEOUT;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -41,6 +46,7 @@ import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.scaconfigtype.common.A;
 import org.osgi.test.cases.scaconfigtype.common.B;
 import org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants;
+import org.osgi.test.cases.scaconfigtype.common.TestConstants;
 import org.osgi.test.cases.scaconfigtype.common.TestEvent;
 import org.osgi.test.cases.scaconfigtype.common.TestEventHandler;
 import org.osgi.test.cases.scaconfigtype.common.Utils;
@@ -69,12 +75,50 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
     /**
      * CT.1
+     * use endpoint and assert that two services are found vs one
      * @throws Exception
      */
-    // TODO [dsavage] use endpoint and assert that two services are found vs one
-    //	public void testEndpointLifecycle() throws Exception {		
-    //		fail("TODO not yet implemented");
-    //	}
+    public void testEndpointLifecycle() throws Exception {		
+        // install test bundle in child framework
+        BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
+        BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
+
+        installAndStartBundle(serverContext, "/ct00.jar");
+        // TODO don't technically need to start client bundle but this checks it's resolved
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
+
+        ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
+        // [rfeng] We need to keep the tracker open so that there is matching filter for the service listener
+        // when the endpoint bundle is installed
+        tracker.open();
+
+        ServiceReference[] refs = lookupA(tracker, true);
+        
+        assertEquals(1, refs.length);
+        
+        // install endpoint
+        Bundle endpointBundle = installAndStartBundle(clientContext, "/ct01endpoint.jar");
+
+        // Wait for 10 seconds so that 2nd service will be imported into the osgi registry
+        Thread.sleep(TestConstants.SERVICE_TIMEOUT);
+        
+        refs = lookupA(tracker, true);
+        
+        // assert two services found
+        assertEquals(2, refs.length);
+        
+        // uninstall endpoint
+        endpointBundle.uninstall();
+        
+        Thread.sleep(TestConstants.SERVICE_TIMEOUT);
+        
+        // assert one service found
+        refs = lookupA(tracker, true);
+        
+        assertEquals(1, refs.length);
+        
+        tracker.close();
+    }
 
 	/**
      * CT.4
@@ -392,6 +436,16 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
     private ServiceReference[] assertAAvailability(Bundle clientBundle, boolean available) throws InterruptedException {
         ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
         tracker.open();
+        ServiceReference[] refs = lookupA(tracker, available);
+        
+        tracker.close();
+                
+        return refs;
+	}
+
+
+
+    private ServiceReference[] lookupA(ServiceTracker tracker, boolean available) throws InterruptedException {
         // wait for test service to be registered in this framework
         // [rfeng] We need to use the client bundle as it's the one that can load A.class
         A serviceA = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), A.class);
@@ -401,7 +455,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         if ( available ) {	
 	        assertNotNull("Missing test service", serviceA);
 	        
-	        assertEquals("Unexpected service reference length", 1, refs.length);
+	        assertTrue("Unexpected service reference length", refs.length >= 1);
 	
 	        // check service is functional
 	        assertEquals("Invalid service response", A.A, serviceA.getA());
@@ -417,11 +471,8 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
                 }
             }
     	}
-        
-        tracker.close();
-                
         return refs;
-	}
+    }
 
     private void assertBAvailability(Bundle clientBundle, boolean available) throws InterruptedException {
         // wait for test service to be registered in this framework
