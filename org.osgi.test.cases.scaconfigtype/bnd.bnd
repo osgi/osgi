@@ -31,12 +31,12 @@ Include-Resource					= \
 	osgi.enterprise; version=${enterprise.published.version};strategy=lowest	
 	
 -runproperties = ${runproperties}, \
-	${p}.required.ports="9000,50000", \
-	${p}.system.packages.extra="${junit.package}", \
-	${p}.bundles="${uniq;${repo;org.osgi.impl.service.event},${repo;org.osgi.impl.bundle.sca},${repo;osgi.enterprise;${enterprise.published.version};lowest},${repo;org.osgi.impl.service.log}}", \
-	${p}.serverconfig="service.exported.configs,org.osgi.sca.domain.registry", \
-	service.exported.configs=org.osgi.sca, \
-	org.osgi.sca.domain.registry="tribes://228.0.0.100:50000"
+        ${p}.required.ports="9000,9001,9002,50000", \
+        ${p}.system.packages.extra="${junit.package}", \
+        ${p}.bundles="${uniq;${repo;org.osgi.impl.service.event},${repo;org.osgi.impl.bundle.sca},${repo;osgi.enterprise;${enterprise.published.version};lowest},${repo;org.osgi.impl.service.log}}", \
+        ${p}.serverconfig="service.exported.configs,org.osgi.sca.domain.registry", \
+        service.exported.configs=org.osgi.sca, \
+        org.osgi.sca.domain.registry="tribes://224.0.0.100:50000?receiverPort=9001&receiverAutoBind=2" 
 
 Test-Cases							= ${testcases}
 
