@@ -25,7 +25,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
+import org.osgi.test.cases.webcontainer.optional.WebContainerOptionalTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
 
 /**
@@ -36,7 +36,7 @@ import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
  *          web-contextpath information
  */
 public class ServletContextRegistrationTest extends
-		WebContainerTestBundleControl {
+		WebContainerOptionalTestBundleControl {
 
 	private final static String OSGI_WEB_SYMBOLICNAME = "osgi.web.symbolicname";
 	private final static String OSGI_WEB_VERSION = "osgi.web.version";
