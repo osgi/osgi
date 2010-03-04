@@ -3,6 +3,7 @@
 	<name>org.osgi.test.cases.jpa</name>
 	<comment></comment>
 	<projects>
+		<project>org.eclipse.gemini.jpa</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

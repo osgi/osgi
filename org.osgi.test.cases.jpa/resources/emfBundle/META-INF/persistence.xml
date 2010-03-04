@@ -6,7 +6,7 @@
 	<persistence-unit name="emfTestUnit">
 		<description>Persistence unit for testing EntityManagerFactory registration</description>
 		<properties>
-			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.Driver40"/>
+			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
 		</properties>
 	</persistence-unit>
 </persistence>

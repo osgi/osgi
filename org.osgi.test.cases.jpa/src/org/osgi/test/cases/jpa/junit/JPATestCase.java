@@ -94,6 +94,22 @@ public class JPATestCase extends DefaultTestBundleControl {
 		
 	}
 	
+	public void testEntityManagerFactoryWithIncompletePersistenceUnit() throws Exception {
+		// Install the bundles necessary for this test
+		Bundle persistenceBundle = installBundle("emfBuilderBundle.jar");
+		EntityManagerFactory emf = null;
+		try {
+			emf = (EntityManagerFactory) getService(EntityManagerFactory.class, "(osgi.unit.name=emfBuilderTestUnit)");
+			assertNull("There should be no EntityManagerFactory registered since this persistence unit is incomplete", emf);
+		} finally {
+			if (emf != null) {
+				emf.close();
+				ungetService(emf);
+			}
+			uninstallBundle(persistenceBundle);
+		}
+	}
+	
 	public void testEntityManagerFactoryBuilder() throws Exception {
 		// Install the bundles necessary for this test
 		Bundle persistenceBundle = installBundle("emfBuilderBundle.jar");

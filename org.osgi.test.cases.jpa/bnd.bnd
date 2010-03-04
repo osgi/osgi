@@ -1,5 +1,5 @@
-javac.source 			= 1.5
-javac.target 			= 1.5
+javac.source 			= 1.6
+javac.target 			= 1.6
 
 Bundle-Version: 4.2.0.${project.build}
 
@@ -11,6 +11,8 @@ Private-Package						= \
 	${p}.*
 
 Include-Resource 					= \
+	emfBundle.jar	, \
+	emfBuilderBundle.jar ,	\
 	defaultPersistenceLocation.jar , \
 	nonStandardPersistenceLocation.jar , \
 	multiplePersistenceLocations.jar , \
