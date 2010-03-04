@@ -291,11 +291,21 @@ public final class Acl {
      * 
      * @return hash code for this ACL
      */
-    public int hashcode() {
+	public int hashCode() {
         // Using the hash code of the canonical string representation, because
         // the principalPermissions set is not canonical (see above).
         return toString().hashCode();
     }
+
+	/**
+	 * Use {@link #hashCode()} instead.
+	 * 
+	 * @return Result of {@link #hashCode()}
+	 * @deprecated Use correct method {@link #hashCode()};
+	 */
+	public int hashcode() {
+		return hashCode();
+	}
 
     /**
      * Create a new <code>Acl</code> instance from this <code>Acl</code> with 

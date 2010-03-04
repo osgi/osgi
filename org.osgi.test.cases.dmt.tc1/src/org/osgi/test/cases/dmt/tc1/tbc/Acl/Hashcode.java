@@ -61,7 +61,7 @@ public class Hashcode extends DmtTestControl {
 			Acl Acl2 = new Acl(principals,permissions);
 			assertTrue(
 					"Asserts that two Acl have the same hashcode when they are equals",
-					Acl.hashcode()==Acl2.hashcode());
+					Acl.hashCode() == Acl2.hashCode());
 		} catch (Exception e) {
 			failUnexpectedException(e);
 		}

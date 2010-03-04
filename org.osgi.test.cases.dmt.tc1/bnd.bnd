@@ -14,10 +14,10 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
-	org.osgi.impl.service.dmt;  version=project
+	org.osgi.impl.service.dmt;  version=project, \
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
 
 -runproperties = ${runsecureproperties}, \
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
