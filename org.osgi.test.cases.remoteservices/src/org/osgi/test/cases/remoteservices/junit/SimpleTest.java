@@ -62,17 +62,78 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	/**
 	 * @throws Exception
 	 */
-	public void testSimpleRegistration() throws Exception {
+	public void testInvalidConfigurations() throws Exception {
 		// verify that the server framework is exporting the test packages
 		verifyFramework();
 		
-		// TODO not supported by RI yet
 		Set supportedConfigTypes = getSupportedConfigTypes();
 
 		// load the external properties file with the config types for the server side service
 		Hashtable properties = loadServerTCKProperties();
 
+		// add some properties for testing
+		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, "*");
+		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, this.getClass().getName());
+		properties.put("implementation", "1");
+		
+		// install server side test service in the sub-framework
+		TestServiceImpl impl = new TestServiceImpl();
+		
+		// register the service in the server side framework on behalf of the System Bundle
+		// the interface package is exported by the System Bundle
+		ServiceRegistration srTestService = getFramework().getBundleContext().registerService(
+				new String[]{A.class.getName()/*, B.class.getName() */}, impl, properties);
+		assertNotNull(srTestService);
+
+		System.out.println("registered test service A on server side with config " + this.getClass().getName());
+
 		// TODO not supported by RI yet
+//		// check for registration of ExportedEndpointDescription
+//		ServiceTracker eedTracker = new ServiceTracker(getFramework().getBundleContext(), ExportedEndpointDescription.class.getName(), null);
+//		eedTracker.open();
+//		Object eed = eedTracker.waitForService(20000L);
+//		assertNotNull("no ExportedEndpointDescription service found", eed);
+//		ServiceReference eedReference = eedTracker.getServiceReference();
+//		assertNotNull(eedReference);
+//		assertNotNull(eedReference.getProperty(ExportedEndpointDescription.PROVIDED_INTERFACES));
+		
+		// now check on the hosting framework for the service to become available
+		ServiceTracker clientTracker = new ServiceTracker(getContext(), A.class.getName(), null);
+		clientTracker.open();
+		
+		// the proxy should appear in this framework
+		A client = (A)clientTracker.waitForService(60000L);
+		assertNull("proxy for service A found!", client);
+
+		// make sure the proxy is removed when the service is removed
+		clientTracker.close();
+		
+		// davidb: this doesn't work without proper discovery, and I don't know how it could 
+		// possibly work...
+		/*
+		// unregister the server side service
+		srTestService.unregister();
+		
+		clientTracker.open();
+		client = (A)clientTracker.waitForService(10000L);
+		assertNull(client);
+		
+		clientTracker.close();
+		*/
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public void testSimpleRegistration() throws Exception {
+		// verify that the server framework is exporting the test packages
+		verifyFramework();
+		
+		Set supportedConfigTypes = getSupportedConfigTypes();
+
+		// load the external properties file with the config types for the server side service
+		Hashtable properties = loadServerTCKProperties();
+
 		// make sure the given config type is in the set of supported config types
 		String str = (String) properties.get(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS);
 		
