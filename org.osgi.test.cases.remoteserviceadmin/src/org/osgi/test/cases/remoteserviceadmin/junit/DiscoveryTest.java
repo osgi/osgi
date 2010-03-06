@@ -22,11 +22,14 @@ import java.util.Map;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
 import org.osgi.service.remoteserviceadmin.EndpointListener;
+import org.osgi.service.remoteserviceadmin.RemoteConstants;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
+import org.osgi.test.cases.remoteserviceadmin.impl.TestServiceImpl;
 import org.osgi.test.support.compatibility.Semaphore;
 
 /**
@@ -87,7 +90,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		// 122.6.1 Scope and Filters
 		// register an EndpointListener w/o a scope. If called, then fail
 		//
-		EndpointListenerImpl emptyEndpointListener = scope_and_filter_122_6_1();
+		EndpointListenerImpl emptyEndpointListener = scope_and_filter_122_6_1("");
 		
 		// start test bundle in child framework
 		// this will run the test in the child framework and fail
@@ -149,11 +152,86 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	}
 
 	/**
+	 * Test behavior of EndpointListeners
+	 * 
+	 * @throws Exception
+	 */
+	public void testEndpointListener() throws Exception {
+		ServiceReference[] refs = getContext().getServiceReferences(EndpointListener.class.getName(), null);
+		assertNotNull("no EndpointListeners registered", refs);
+		assertTrue("no EndpointListeners registered", refs.length > 0);
+		
+		// register my own listener
+		EndpointListenerImpl endpointListener = scope_and_filter_122_6_1("");
+		
+		TestServiceImpl serviceA = new TestServiceImpl();
+		ServiceRegistration reg = getContext().registerService(A.class.getName(), serviceA, null);
+		assertNotNull(reg);
+		
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put(RemoteConstants.ENDPOINT_ID, "myid");
+		properties.put(RemoteConstants.SERVICE_IMPORTED_CONFIGS, "myconfigtype");
+		
+		// create EndpointDescription
+		EndpointDescription description = new EndpointDescription(reg.getReference(), properties);
+		
+		EndpointListener elistener = (EndpointListener) getContext().getService(refs[0]);
+		assertNotNull(elistener);
+		
+		String filter = "(" + RemoteConstants.ENDPOINT_ID + "=myid)";
+
+		// test add part
+		elistener.endpointAdded(description, filter);
+
+		endpointListener.getSem().waitForSignal(10000);
+
+		assertSame(description, endpointListener.getAddedEndpoint());
+		assertEquals(filter, endpointListener.getMatchedFilter());
+
+		// add another listener to test replay
+		EndpointListenerImpl endpointListener2 = scope_and_filter_122_6_1("");
+		endpointListener2.getSem().waitForSignal(6000);
+
+		assertSame(description, endpointListener2.getAddedEndpoint());
+		assertEquals(filter, endpointListener2.getMatchedFilter());
+
+		// change the scope
+		
+		// test remove part
+		elistener.endpointRemoved(description, filter);
+
+		endpointListener.getSem().waitForSignal(6000);
+
+		assertSame(description, endpointListener.getRemovedEndpoint());
+		assertEquals(filter, endpointListener.getMatchedFilter());
+		
+		// add again
+		// test add part
+		elistener.endpointAdded(description, filter);
+
+		endpointListener.getSem().waitForSignal(6000);
+
+		assertSame(description, endpointListener.getAddedEndpoint());
+		assertEquals(filter, endpointListener.getMatchedFilter());
+		
+		// now remove client
+		for (int i = 0; i < refs.length; i++) {
+			getContext().ungetService(refs[i]);
+		}
+		
+		// check that endpoint got removed
+		endpointListener.getSem().waitForSignal(6000);
+
+		assertSame(description, endpointListener.getRemovedEndpoint());
+		assertEquals(filter, endpointListener.getMatchedFilter());
+	}
+	
+	/**
 	 * Test empty filter scope
 	 */
-	private EndpointListenerImpl scope_and_filter_122_6_1() throws Exception {
+	private EndpointListenerImpl scope_and_filter_122_6_1(String scope) throws Exception {
 		Hashtable<String, String> elp = new Hashtable<String, String>();
-		elp.put(EndpointListener.ENDPOINT_LISTENER_SCOPE, "");
+		elp.put(EndpointListener.ENDPOINT_LISTENER_SCOPE, scope);
 		
 		EndpointListenerImpl el = new EndpointListenerImpl();
 		ServiceRegistration elr = getContext().registerService(EndpointListener.class.getName(), el, elp);
