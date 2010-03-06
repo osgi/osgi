@@ -107,7 +107,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
 			// TODO this should be returning an empty collection and not null
-			assertNull("122.4.1: service must not be exported due to unsatisfied config type", exportRegistrations);
+			assertTrue("122.4.1: service must not be exported due to unsatisfied config type", exportRegistrations.isEmpty());
 			//		assertTrue("122.4.1: service must not be exported due to unsatisfied config type", exportRegistrations.isEmpty());
 		} finally {
 			registration.unregister();
@@ -149,8 +149,49 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			properties.put(RemoteConstants.SERVICE_EXPORTED_INTENTS, "guaranteed_not_supported_" + System.currentTimeMillis());
 
 			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
-			// TODO this should be returning an empty collection and not null
-			assertNull("122.4.1: service must not be exported due to unsatisfied service intent", exportRegistrations);
+			assertTrue("122.4.1: service must not be exported due to unsatisfied service intent", exportRegistrations.isEmpty());
+			//		assertTrue("122.4.1: service must not be exported due to unsatisfied config type", exportRegistrations.isEmpty());
+		} finally {
+			registration.unregister();
+		}
+	}
+
+	/**
+	 * 122.4.1 Exporting
+	 * 
+	 * Tests the export of a service with negative edge cases according to
+	 * the spec.
+	 */
+	public void testExportUnsupportedIntentExtra() throws Exception {
+		// create an register a service
+		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		dictionary.put("mykey", "will be overridden");
+		dictionary.put("myprop", "myvalue");
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
+
+		TestService service = new TestService();
+		
+		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+				                                                        service, dictionary);
+		assertNotNull(registration);
+
+		try {
+			//
+			// 122.4.1 export the service
+			//
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put("mykey", "has been overridden");
+			properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
+			properties.put("objectClass", "can.not.be.changed.Class");
+			properties.put("service.id", "can.not.be.changed.Id");
+
+			//
+			// negative test: give a service intent that is not supported by the RSA
+			// implementation. The exportService call has to be ignored then
+			properties.put(RemoteConstants.SERVICE_EXPORTED_INTENTS_EXTRA, "guaranteed_not_supported_" + System.currentTimeMillis());
+
+			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
+			assertTrue("122.4.1: service must not be exported due to unsatisfied service intent", exportRegistrations.isEmpty());
 			//		assertTrue("122.4.1: service must not be exported due to unsatisfied config type", exportRegistrations.isEmpty());
 		} finally {
 			registration.unregister();
@@ -189,9 +230,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			properties.put(RemoteConstants.SERVICE_EXPORTED_INTERFACES, "something.else.Interface");
 
 			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
-			// TODO this should be returning an empty collection and not null
-			assertNull("122.4.1: service must not be exported due to invalid interface", exportRegistrations);
-			//		assertTrue("122.4.1: service must not be exported due to unsatisfied config type", exportRegistrations.isEmpty());
+			assertTrue("122.4.1: service must not be exported due to unsatisfied config type", exportRegistrations.isEmpty());
 		} finally {
 			registration.unregister();
 		}
@@ -259,6 +298,18 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				assertNotNull("ExportReference expected in event", exportReference);
 
 				assertNotNull(exportReference.getExportedEndpoint());
+				
+				// validate EndpointDescription
+				
+				try {
+					new EndpointDescription(exportReference.getExportedEndpoint().getProperties());
+				} catch (IllegalArgumentException ie) {
+					fail("invalid EndpointDescription of successful export registration");
+				}
+				
+				for (Iterator<ExportRegistration> it = exportRegistrations.iterator(); it.hasNext(); ) {
+					assertNull("successful export must not throw Exception", it.next().getException());
+				}
 				break;
 			case RemoteServiceAdminEvent.EXPORT_ERROR:
 				exportFailed = true;
@@ -463,6 +514,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				// and endpoints are shared among the registrations
 				List<EndpointDescription> endpoints = new ArrayList<EndpointDescription>();
 				
+				Collection<ExportReference> exportrefs = rsa.getExportedServices();
+				assertNotNull(exportrefs);
+				assertEquals(exportRegistrations.size() + exportRegistrations2.size(), exportrefs.size());
+				
 				for (Iterator<ExportRegistration> it = exportRegistrations.iterator(); it.hasNext();) {
 					ExportRegistration er = it.next();
 					
@@ -474,9 +529,17 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 					endpoints.add(ed);
 					// 122.2.5: verify EndpointDescription object
 					for (Iterator<String> i = ed.getProperties().keySet().iterator(); i.hasNext();) {
-						Assert.assertFalse(i.next().startsWith("service.exports."));
+						assertFalse(i.next().startsWith("service.exports."));
 					}
-					Assert.assertNotNull(ed.getProperties().get("service.imported"));
+					assertNotNull(ed.getProperties().get("service.imported"));
+					assertNotNull(ed.getFrameworkUUID());
+					assertNotNull(ed.getId());
+					assertTrue(ed.getInterfaces().contains(A.class.getName()));
+					assertFalse(ed.getInterfaces().contains(B.class.getName()));
+					assertNotNull(ed.getConfigurationTypes());
+					assertNotNull(ed.getIntents());
+					
+					assertTrue("ExportReference does not show up in exported reference list of RSA service", exportrefs.contains(er));
 				}
 				
 				for (Iterator<ExportRegistration> it = exportRegistrations2.iterator(); it.hasNext();) {
@@ -487,16 +550,22 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 					
 					assertEquals(registration.getReference(), ref.getExportedService());
 					assertTrue(endpoints.contains(ref.getExportedEndpoint()));
+					
+					assertTrue("ExportReference does not show up in exported reference list of RSA service", exportrefs.contains(er));
 				}
 				
-				assertEquals(exportRegistrations.size() + exportRegistrations2.size(), rsa.getExportedServices().size());
-				
+								
 				// now close one of the registrations and ensure that service is still
 				// exported until all registrations are closed
 				for (Iterator<ExportRegistration> it = exportRegistrations2.iterator(); it.hasNext();) {
 					ExportRegistration er = it.next();
 					
 					er.close();
+					try {
+						er.close(); // must
+					} catch (Exception ex) {
+						fail("calling close() multiple times must not fail");
+					}
 					
 					assertNull("122.4.1: after closing ExportRegistration, ExportReference.getExportedEndpoint must return null",
 							er.getExportReference().getExportedEndpoint());
@@ -508,6 +577,11 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 					ExportRegistration er = it.next();
 					
 					er.close();
+					try {
+						er.close(); // must
+					} catch (Exception ex) {
+						fail("calling close() multiple times must not fail");
+					}
 					
 					assertNull("122.4.1: after closing ExportRegistration, ExportReference.getExportedEndpoint must return null",
 							er.getExportReference().getExportedEndpoint());
@@ -820,6 +894,121 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			// ungetting the RSA service will also close the ExportRegistration and therefore
 			// emit an event
 			ungetService(remoteServiceAdmin);
+		} finally {
+			registration.unregister();
+		}
+	}
+
+	/**
+	 * 122.4.1 Exporting
+	 * 
+	 * Tests the export of a service with negative edge cases according to
+	 * the spec.
+	 */
+	public void testExportConfigOverride() throws Exception {
+		// read supported configuration types from the DistributionProvider
+		ServiceReference[] dprefs = getContext().getServiceReferences(null, "(remote.configs.supported=*)");
+		assertNotNull(dprefs);
+		ServiceReference dpref = dprefs[0];
+		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
+		assertTrue(supportedConfigTypes.length > 0);
+		System.out.println("DSP supported config types:");
+		for (String c : supportedConfigTypes) {
+			System.out.println(" " + c);
+		}
+		
+		// create and register a service
+		Hashtable<String, Object> dictionary = new Hashtable<String, Object>();
+		dictionary.put("mykey", "will be overridden");
+		dictionary.put("myprop", "myvalue");
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, B.class.getName());
+		dictionary.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, dpref.getProperty("remote.configs.supported"));
+
+		TestService service = new TestService();
+		
+		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+				                                                        service, dictionary);
+		assertNotNull(registration);
+		
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put("MyKey", "has been overridden"); // 122.10.10.1: change the case of the key
+			properties.put("objectClass", "can.not.be.changed.Class");
+			properties.put("service.id", "can.not.be.changed.Id");
+			properties.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, new String[]{supportedConfigTypes[0]});
+			properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
+
+			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
+			assertNotNull(exportRegistrations);
+			assertFalse(exportRegistrations.isEmpty());
+			
+			ExportRegistration exportreg = exportRegistrations.iterator().next();
+			assertNull(exportreg.getException());
+			ExportReference exportref = exportreg.getExportReference();
+			assertNotNull(exportref);
+			ServiceReference serviceref = exportref.getExportedService();
+			assertNotNull(serviceref);
+			EndpointDescription endpointDescription = exportref.getExportedEndpoint();
+			assertNotNull(endpointDescription);
+			
+			// this will throw an exception if the EndpointDescription information is invalid or incomplete
+			new EndpointDescription(serviceref, endpointDescription.getProperties());
+			
+			assertFalse(endpointDescription.getInterfaces().contains(B.class.getName()));
+			assertEquals("has been overridden", endpointDescription.getProperties().get("mykey"));
+		} finally {
+			registration.unregister();
+		}
+	}
+
+	/**
+	 * 122.4.1 Exporting
+	 * 
+	 * Tests the export of a service with negative edge cases according to
+	 * the spec.
+	 */
+	public void testExportEmptyConfig() throws Exception {
+		// read supported configuration types from the DistributionProvider
+		ServiceReference[] dprefs = getContext().getServiceReferences(null, "(remote.configs.supported=*)");
+		assertNotNull(dprefs);
+		ServiceReference dpref = dprefs[0];
+		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
+		assertTrue(supportedConfigTypes.length > 0);
+		System.out.println("DSP supported config types:");
+		for (String c : supportedConfigTypes) {
+			System.out.println(" " + c);
+		}
+		
+		// create and register a service
+		Hashtable<String, Object> dictionary = new Hashtable<String, Object>();
+		dictionary.put("mykey", "will be overridden");
+		dictionary.put("myprop", "myvalue");
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
+
+		TestService service = new TestService();
+		
+		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()},
+				                                                        service, dictionary);
+		assertNotNull(registration);
+		
+		try {
+			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), null);
+			assertNotNull(exportRegistrations);
+			assertFalse(exportRegistrations.isEmpty());
+			
+			ExportRegistration exportreg = exportRegistrations.iterator().next();
+			assertNull(exportreg.getException());
+			ExportReference exportref = exportreg.getExportReference();
+			assertNotNull(exportref);
+			ServiceReference serviceref = exportref.getExportedService();
+			assertNotNull(serviceref);
+			EndpointDescription endpointDescription = exportref.getExportedEndpoint();
+			assertNotNull(endpointDescription);
+			
+			// this will throw an exception if the EndpointDescription information is invalid or incomplete
+			new EndpointDescription(serviceref, endpointDescription.getProperties());
+			
+			assertTrue(endpointDescription.getInterfaces().contains(A.class.getName()));
 		} finally {
 			registration.unregister();
 		}

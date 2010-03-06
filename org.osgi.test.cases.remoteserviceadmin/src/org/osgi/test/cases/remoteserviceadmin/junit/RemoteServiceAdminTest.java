@@ -34,6 +34,7 @@ import junit.framework.Assert;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
@@ -162,6 +163,19 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		assertNotNull("122.4.2: service reference has to have service.intents property set", intents);
 		assertTrue("122.4.2: imported service.intents has to include all service.intents of exported service", intents.containsAll(endpointIntents));
 		
+		// validate EndpointDescription
+		EndpointDescription description = importRef.getImportedEndpoint();
+		assertNotNull(description);
+		assertEquals("has been overridden", description.getProperties().get("mykey"));
+		try {
+			new EndpointDescription(sref, description.getProperties()); // this throws an exception if
+		} catch (IllegalArgumentException ie) {
+			fail("invalid endpoint description returned from imported service");
+		}
+		assertNotNull(description.getProperties().get(RemoteConstants.SERVICE_IMPORTED));
+		assertTrue(description.getInterfaces().size() == 1);
+		assertTrue(description.getInterfaces().contains(A.class.getName()));
+		
 		// check for event notifications
 		//
 		// 122.8 verify that import notification was sent to RemoteServiceAdminListeners
@@ -271,17 +285,35 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			fail("122.4.8: wrong event topic");
 		}
 		
+		// invoke service
 		A serviceA = null;
 		
 		//
 		// invoke the service
 		//
 		if (!errorImporting) {
+			// no version
 			serviceA = (A) getService(A.class);
-			assertNotNull(serviceA);
-			assertEquals("this is A", serviceA.getA());
-
-			ungetService(serviceA);
+			try {
+				assertNotNull(serviceA);
+				assertEquals("this is A", serviceA.getA());
+			} finally {
+				ungetService(serviceA);
+			}
+			
+			// not available version
+			Filter filter = getContext().createFilter("(version=3.0.0)");
+			ServiceReference[] refs = getContext().getServiceReferences(A.class.getName(), filter.toString());
+			try {
+				assertNull(refs);
+			} finally {
+				if (refs != null) {
+					for (int i = 0; i < refs.length; i++) {
+						getContext().ungetService(refs[i]);
+					}
+				}
+			}
+			
 		}
 		
 		//
@@ -298,8 +330,12 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		
 		if (!errorImporting) {
 			serviceA = (A) getService(A.class);
-			assertNotNull(serviceA);
-			ungetService(serviceA);
+			try {
+				assertNotNull(serviceA);
+				assertEquals("this is A", serviceA.getA());
+			} finally {
+				ungetService(serviceA);
+			}
 			
 			//
 			// 122.4.8 on close of the ImportRegistration expect another event
