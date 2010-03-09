@@ -1,6 +1,6 @@
 Bundle-Name:                             ${p}.emfBundle
 Bundle-Version:                          4.2.0.${project.build}
-Meta-Persistence: META-INF/persistence.xml
+Meta-Persistence: <<EMPTY>>
 
 Include-Resource = \
 	META-INF/persistence.xml = resources/emfBundle/META-INF/persistence.xml
