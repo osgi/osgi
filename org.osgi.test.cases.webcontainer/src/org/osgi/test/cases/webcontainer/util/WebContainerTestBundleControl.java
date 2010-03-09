@@ -15,10 +15,8 @@
  */
 package org.osgi.test.cases.webcontainer.util;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +24,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map.Entry;
-import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
@@ -495,6 +492,7 @@ public abstract class WebContainerTestBundleControl extends
                     bundle.start();
                 } catch (BundleException e) {
                     bundle.uninstall();
+					throw e;
                 }
             }
             return bundle;
@@ -509,20 +507,7 @@ public abstract class WebContainerTestBundleControl extends
     @Override
     public Bundle installBundle(String bundleName)
             throws Exception {
-        try {
-            if (bundleName.indexOf(getWebServer()) < 0) {
-                bundleName = getWebServer() + bundleName;
-            }
-            
-            Bundle b = getContext().installBundle(bundleName);
-
-            return b;
-        } catch (Exception e) {
-            log("Not able to install testbundle " + bundleName);
-            log("Nested " + e.getCause());
-            e.printStackTrace();
-            throw e;
-        }
+		return installBundle(bundleName, false);
     }
     
 	/**
