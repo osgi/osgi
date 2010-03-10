@@ -39,24 +39,6 @@ public class MCResourceAnnotationTest extends WebContainerOptionalTestBundleCont
     }
 
     /*
-     * Test single @Resource class-level and field based annotation/injection
-     * with data type javax.sql.DataSource, when the metadata-complete attribute
-     * is set to true.
-     */
-    public void testResource001() throws Exception {
-        final String request = this.warContextPath + "/ResourceServlet1";
-        String response = super.getResponse(request);
-
-        // check if content of response is correct
-        log("verify content of response is correct");
-        assertTrue(response.indexOf("ResourceServlet1") > 0);
-        assertTrue(response
-                .indexOf("Printing the injections in this ResourceServlet1 ...") > 0);
-        assertTrue(response
-                .indexOf("Error - unable to find name via @Resource") > 0);
-    }
-
-    /*
      * Test @Resource field based annotation/injection with data type Integer,
      * String, Boolean, when the metadata-complete attribute is set to true.
      */
@@ -66,26 +48,6 @@ public class MCResourceAnnotationTest extends WebContainerOptionalTestBundleCont
 
         // check if content of response is correct
         checkTW3ResourceServlet2Response(response);
-    }
-
-    /*
-     * Test @Resources class-level annotation/injection
-     * 
-     * @Resource field based annotation/injection with data type
-     * javax.sql.DataSource, when the metadata-complete attribute is set to
-     * true.
-     */
-    public void testResource003() throws Exception {
-        final String request = this.warContextPath + "/ResourceServlet3";
-        String response = super.getResponse(request);
-
-        // check if content of response is correct
-        log("verify content of response is correct");
-        assertTrue(response.indexOf("ResourceServlet3") > 0);
-        assertTrue(response
-                .indexOf("Printing the injections in this ResourceServlet3 ...") > 0);
-        assertTrue(response
-                .indexOf("Error - unable to find name via @Resource") > 0);
     }
 
     /*

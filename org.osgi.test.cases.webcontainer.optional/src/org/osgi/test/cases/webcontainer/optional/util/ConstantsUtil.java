@@ -31,13 +31,13 @@ public class ConstantsUtil {
     public static final String PRINTCONTEXT = "method is invoked";
 
     public static final String LOGFILE = "webcontainer-event.properties";
-
     public static final String EMAIL = "Email";
     public static final String WELCOMESTRING = "WelcomeString";
     public static final String WELCOMESTATEMENT = "WelcomeStatement";
 
     public static final String EMAILVALUE = "eeg@osgi.org";
     public static final String WELCOMESTRINGVALUE = "Welcome String from env-entry!";
+    
     public static final String WELCOMESTATEMENTVALUE = "5 + 5 = 10 that is true";
     public static final String WELCOMESTATEMENTVALUE2 = "5+5=10 is not false";
 
@@ -63,11 +63,11 @@ public class ConstantsUtil {
      */
     public static String getFullClassName(String warContextPath, String name) {
         if (warContextPath.equals("/tw2") || warContextPath.equals("/tw3")) {
-            return "org.osgi.test.cases.webcontainer.tw2."
+            return "org.osgi.test.cases.webcontainer.optional.tw2."
                     + (isServlet(name) == true ? "servlet." : "") + name;
         }
         if (warContextPath.startsWith("/")) {
-            return "org.osgi.test.cases.webcontainer."
+            return "org.osgi.test.cases.webcontainer.optional"
                     + warContextPath.substring(1) + "."
                     + (isServlet(name) == true ? "servlet." : "") + name;
         }

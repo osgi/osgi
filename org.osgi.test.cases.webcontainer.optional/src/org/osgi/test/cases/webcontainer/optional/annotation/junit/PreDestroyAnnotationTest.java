@@ -48,7 +48,6 @@ public class PreDestroyAnnotationTest extends WebContainerOptionalTestBundleCont
      */
     public void testPreDestroy001() throws Exception {
         super.tearDown();
-        // TODO do we need to wait till the war is uninstalled properly?
         log("verify annotated methods are invoked");
         assertTrue(this.timeUtil.getTimeFromLog(
                 "PostConstructPreDestroyServlet1", "cleanup") > beforeUninstall);

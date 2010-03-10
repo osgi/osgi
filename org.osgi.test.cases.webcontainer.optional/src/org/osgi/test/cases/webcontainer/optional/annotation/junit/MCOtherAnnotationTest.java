@@ -107,7 +107,8 @@ public class MCOtherAnnotationTest extends WebContainerOptionalTestBundleControl
                 ConstantsUtil.POSTCONSTRUCT), 0);
 
         log("verify non-annotated methods are still called");
-        assertTrue(this.timeUtil.getTimeFromLog("TestFilter", "init") > beforeInstall);
+        assertTrue(this.timeUtil.getTimeFromLog("TestFilter", "init") + " should occur earlier than " + beforeInstall, 
+                this.timeUtil.getTimeFromLog("TestFilter", "init") > beforeInstall);
         assertTrue(this.timeUtil.getTimeFromLog("TestFilter", "doFilter") > this.timeUtil
                 .getTimeFromLog("TestFilter", "init"));
         assertEquals(this.timeUtil.getDespFromLog("TestFilter", "doFilter"),
