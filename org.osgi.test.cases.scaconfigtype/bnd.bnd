@@ -37,7 +37,7 @@ Include-Resource					= \
         ${p}.bundles="${uniq;${repo;org.osgi.impl.service.event},${repo;org.osgi.impl.bundle.sca},${repo;osgi.enterprise;${enterprise.published.version};lowest},${repo;org.osgi.impl.service.log}}", \
         ${p}.serverconfig="service.exported.configs,org.osgi.sca.domain.registry", \
         service.exported.configs=org.osgi.sca, \
-        org.osgi.sca.domain.registry="tribes://224.0.0.100:50000?receiverPort=9001&receiverAutoBind=2" 
+        org.osgi.sca.domain.registry="tribes://224.0.0.100:50000?receiverPort=9001&receiverAutoBind=2&receiverAddress=localhost&bind=localhost" 
 
 Test-Cases							= ${testcases}
 
