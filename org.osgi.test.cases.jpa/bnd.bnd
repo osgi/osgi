@@ -34,8 +34,8 @@ Include-Resource 					= \
 	org.eclipse.gemini.dbaccess.derby.cs;	version=1.0.0 , \
     org.eclipse.persistence.asm;        version=2.0.1 , \
     org.eclipse.persistence.antlr;      version=2.0.1 , \
-    org.eclipse.persistence.incubator.geminijpa.core; version=2.0.2 , \ 
-    org.eclipse.persistence.incubator.geminijpa.jpa; version=2.0.2 , \ 
+    org.eclipse.persistence.incubator.geminijpa.core; version=2.0.2 , \
+    org.eclipse.persistence.incubator.geminijpa.jpa; version=2.0.2 , \
     org.eclipse.gemini.jpa;             version=1.0.0
 	
 -runproperties					= ${runproperties}
