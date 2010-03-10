@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -45,7 +46,10 @@ public class TW6Test extends WebContainerTestBundleControl {
             log("bundleName to be passed into installBundle is " + loc);	
         }
         this.b = installBundle(loc, true);
-        
+        /*URL url = new URL(loc);
+        URLConnection conn = url.openConnection();
+        InputStream is = conn.getInputStream();
+        this.b = getContext().installBundle(loc, is);*/
         // make sure we don't run tests until the servletcontext is registered with service registry
         boolean register = super.checkServiceRegistered(this.warContextPath);
         assertTrue("the ServletContext should be registered", register);

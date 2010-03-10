@@ -49,7 +49,6 @@ public abstract class WebContainerTestBundleControl extends
     protected long beforeInstall;
     protected Map<String, Object> options = new HashMap<String, Object>();
     protected String warContextPath;
-    protected TimeUtil timeUtil;
     protected int srSize;
     protected Bundle b;
     protected static final String WARSCHEMA = "webbundle:";
@@ -124,7 +123,6 @@ public abstract class WebContainerTestBundleControl extends
 
     protected void prepare(String wcp) throws Exception {
         this.warContextPath = wcp;
-        this.timeUtil = new TimeUtil(this.warContextPath);
         this.options.put(WEB_CONTEXT_PATH, this.warContextPath);
     }
 
@@ -164,16 +162,6 @@ public abstract class WebContainerTestBundleControl extends
 	 */
     protected String getWarPath(String warName) throws Exception {
 		return "/" + warName;
-    }
-
-    protected static void cleanupPropertyFile() {
-        // clean up the property file.
-        boolean success = ConstantsUtil.removeLogFile();
-        if (!success) {
-            log("Deleting File: " + ConstantsUtil.getLogFile() + " failed.");
-        } else {
-            log(ConstantsUtil.getLogFile() + " file is deleted.");
-        }
     }
 
     protected String getWarURL(String name, Map<String, Object> options) {
@@ -323,10 +311,6 @@ public abstract class WebContainerTestBundleControl extends
         log("verify content of one dynamic page response of each war file is correct");
         if (warName.indexOf("tw1.war") > -1) {
             checkTW1BasicTestServletResponse(response);
-        } else if (warName.indexOf("tw2.war") > -1) {
-            checkTW2ResourceServlet2Response(response);
-        } else if (warName.indexOf("tw3.war") > -1) {
-            checkTW3ResourceServlet2Response(response);
         } else if (warName.indexOf("tw4.war") > -1) {
             checkTW4TestServletResponse(response);
         } else if (warName.indexOf("tw5.war") > -1) {
@@ -340,32 +324,6 @@ public abstract class WebContainerTestBundleControl extends
     protected void checkTW1BasicTestServletResponse(String response) throws Exception {
         log("verify content of BasicTestServlet response from tw1 is correct");
         assertEquals(response, ConstantsUtil.BASICTESTWAR1);
-    }
-    
-    /*
-     * check the response of ResourceServlet2 of tw2
-     */
-    protected void checkTW2ResourceServlet2Response(String response) throws Exception {
-        // check if content of response is correct
-        log("verify content of ResourceServlet2 response from tw2 is correct");
-        assertTrue(response.indexOf("ResourceServlet2") > 0);
-        assertTrue(response.indexOf("Welcome String from env-entry!") > 0);
-        assertTrue(response.indexOf("5 + 5 = 10 that is true") > 0);
-        assertEquals(-1, response.indexOf("null"));    
-    }
-    
-    /*
-     * check the response of ResourceServlet2 of tw3
-     */
-    protected void checkTW3ResourceServlet2Response(String response) throws Exception {
-        // check if content of response is correct
-        log("verify content of ResourceServlet2 response from tw3 is correct");
-        assertTrue(response.indexOf("ResourceServlet2") > 0);
-        assertTrue(response.indexOf(ConstantsUtil.NULL + " "
-                + ConstantsUtil.NULL) > 0);
-        assertTrue(response.indexOf(ConstantsUtil.NULL + " + "
-                + ConstantsUtil.NULL + " = " + ConstantsUtil.NULL + " that is "
-                + ConstantsUtil.NULL) > 0); 
     }
     
     /*

@@ -23,27 +23,6 @@ import java.io.File;
  */
 public class ConstantsUtil {
     
-    // tw2 related
-    public static final String CLEANUPDESP = "PreDestroy annotated method cleanup is invoked";
-    public static final String CLEANUPDESP2 = "PreDestroy annotated method cleanup2 is invoked";
-    public static final String POSTCONSTRUCTDESP = "PostConstruct annotated method postConstruct is invoked";
-    public static final String POSTCONSTRUCTDESP2 = "PostConstruct annotated method postConstruct2 is invoked";
-    public static final String PRINTCONTEXT = "method is invoked";
-
-    public static final String LOGFILE = "webcontainer-event.properties";
-
-    public static final String EMAIL = "Email";
-    public static final String WELCOMESTRING = "WelcomeString";
-    public static final String WELCOMESTATEMENT = "WelcomeStatement";
-
-    public static final String EMAILVALUE = "eeg@osgi.org";
-    public static final String WELCOMESTRINGVALUE = "Welcome String from env-entry!";
-    public static final String WELCOMESTATEMENTVALUE = "5+5=10 is true";
-    public static final String WELCOMESTATEMENTVALUE2 = "5+5=10 is not false";
-
-    public static final String PREDESTROY = "preDestroy";
-    public static final String POSTCONSTRUCT = "postConstruct";
-
     // tw5 related
     public static final String OSGIBUNDLECONTEXT = "osgi-bundlecontext";
     public static final String TESTLOGMSG = "test log ERROR";
@@ -62,6 +41,13 @@ public class ConstantsUtil {
     public static final String IMAGEHTML = "<html><head><title>TestWar1 Image</title></head>"
             + "<body>This is the OSGi Alliance logo <img src=\"images/osgi.gif\" alt=\"OSGi Alliance\"/></html>";
 
+
+    public static final String EMAIL = "Email";
+    public static final String WELCOMESTRING = "WelcomeString";
+    public static final String WELCOMESTATEMENT = "WelcomeStatement";
+
+    public static final String EMAILVALUE = "eeg@osgi.org";
+    public static final String WELCOMESTRINGVALUE = "Welcome String from env-entry!";
     // tw4 related
     public static final String TW4BASIC = "<html><head><title>TestWar4-TestServlet</title></head>";
     public static final String PARAM2 = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz";
@@ -73,56 +59,4 @@ public class ConstantsUtil {
     public static final String PLAINRESPONSE = "TestWar4-TestServlet type: text";
     public static final String HTMLRESPONSE = TW4BASIC
             + "<body>type: html</body></html>";
-
-    // tw3 related
-    public static final String NULL = "null";
-    
-    public static String getBaseDir() {
-        // put it in user.home for now. TODO is there a better solution?
-        // please note that the baseDir is also needed for the test war files.
-        return System.getProperty("user.home");
-    }
-
-    public static File getLogFile() {
-        return new File(getBaseDir(), LOGFILE);
-    }
-
-    /*
-     * this method returns the full classname based on the warContextPath and
-     * class name
-     */
-    public static String getFullClassName(String warContextPath, String name) {
-        if (warContextPath.equals("/tw2") || warContextPath.equals("/tw3")) {
-            return "org.osgi.test.cases.webcontainer.tw2."
-                    + (isServlet(name) == true ? "servlet." : "") + name;
-        }
-        if (warContextPath.startsWith("/")) {
-            return "org.osgi.test.cases.webcontainer."
-                    + warContextPath.substring(1) + "."
-                    + (isServlet(name) == true ? "servlet." : "") + name;
-        }
-        return name;
-    }
-
-    /*
-     * check to see if we need to add "servlet." to the full class name.
-     */
-    private static boolean isServlet(String name) {
-        int i = name.lastIndexOf("Servlet");
-        if (i + "Servlet".length() == name.length()
-                || i + "Servlet".length() == name.length() - 1) {
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean removeLogFile() {
-        // clean up the property file.
-        boolean success = false;
-        if (ConstantsUtil.getLogFile().exists()) {
-            success = ConstantsUtil.getLogFile().delete();
-        }
-        return success;
-    }
-
 }
