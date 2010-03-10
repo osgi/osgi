@@ -18,24 +18,23 @@ package org.osgi.test.cases.webcontainer.optional.annotation.junit;
 
 import org.osgi.framework.Constants;
 import org.osgi.test.cases.webcontainer.optional.WebContainerOptionalTestBundleControl;
-import org.osgi.test.cases.webcontainer.optional.util.ConstantsUtil;
 
 /**
  * @version $Rev$ $Date$
  */
-public class ResourceAnnotationTest extends WebContainerOptionalTestBundleControl {
+public class TW7ResourceAnnotationTest extends WebContainerOptionalTestBundleControl {
   
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        super.prepare("/tw2");
+        super.prepare("/tw7");
         this.options.put(Constants.IMPORT_PACKAGE, IMPORTS_ANNOTATION);
 
         // install + start the war file
-        log("install war file: tw2.war at context path " + this.warContextPath);
-        this.b = installBundle(super.getWarURL("tw2.war", this.options), true);
-        assertTrue("should be able to see the servlet context associated with /tw2 web contextpath",
-                super.checkServiceRegistered("/tw2"));
+        log("install war file: tw7.war at context path " + this.warContextPath);
+        this.b = installBundle(super.getWarURL("tw7.war", this.options), true);
+        assertTrue("should be able to see the servlet context associated with /tw7 web contextpath",
+                super.checkServiceRegistered("/tw7"));
     }
 
     /*
@@ -57,17 +56,6 @@ public class ResourceAnnotationTest extends WebContainerOptionalTestBundleContro
     }
 
     /*
-     * Test @Resource field based annotation/injection with data type Integer,
-     * String, Boolean
-     */
-    public void testResource002() throws Exception {
-        final String request = this.warContextPath + "/ResourceServlet2";
-        String response = super.getResponse(request);
-        // check if content of response is correct
-        checkTW2ResourceServlet2Response(response);
-    }
-
-    /*
      * Test @Resources class-level annotation/injection
      * 
      * @Resource field based annotation/injection with data type
@@ -86,20 +74,4 @@ public class ResourceAnnotationTest extends WebContainerOptionalTestBundleContro
         assertEquals(response
                 .indexOf("Error - unable to find name via @Resource"), -1);
     }
-
-    /*
-     * Test @Resource setter based injection with data type Integer, String,
-     * Boolean
-     */
-    public void testResource004() throws Exception {
-        final String request = this.warContextPath + "/ResourceServlet4";
-        String response = super.getResponse(request);
-        // check if content of response is correct
-        log("verify content of response is correct");
-        assertTrue(response.indexOf("ResourceServlet4") > 0);
-        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRINGVALUE) > 0);
-        assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);
-        assertEquals(response.indexOf("null"), -1);
-    }
-
 }

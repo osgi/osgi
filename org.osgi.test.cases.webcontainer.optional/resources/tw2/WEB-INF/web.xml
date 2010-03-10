@@ -87,17 +87,6 @@
 	</servlet-mapping>
 	<servlet>
 		<description></description>
-		<display-name>ResourceServlet1</display-name>
-		<servlet-name>ResourceServlet1</servlet-name>
-		<servlet-class>
-			org.osgi.test.cases.webcontainer.optional.tw2.servlet.ResourceServlet1</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>ResourceServlet1</servlet-name>
-		<url-pattern>/ResourceServlet1</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<description></description>
 		<display-name>ResourceServlet2</display-name>
 		<servlet-name>ResourceServlet2</servlet-name>
 		<servlet-class>
@@ -106,17 +95,6 @@
 	<servlet-mapping>
 		<servlet-name>ResourceServlet2</servlet-name>
 		<url-pattern>/ResourceServlet2</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<description></description>
-		<display-name>ResourceServlet3</display-name>
-		<servlet-name>ResourceServlet3</servlet-name>
-		<servlet-class>
-			org.osgi.test.cases.webcontainer.optional.tw2.servlet.ResourceServlet3</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>ResourceServlet3</servlet-name>
-		<url-pattern>/ResourceServlet3</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<description></description>

@@ -16,7 +16,8 @@ Include-Resource					= \
 	tw2.war, \
 	tw3.war, \
 	wmtw2.war, \
-	wmtw3.war
+	wmtw3.war, \
+	tw7.war
 	
 Import-Package = \
 	javax.servlet; version=2.5, \
