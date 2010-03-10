@@ -4,4 +4,3 @@
 (org.osgi.framework.PackagePermission "javax.naming" "import")
 (org.osgi.framework.PackagePermission "javax.naming.*" "import")
 (org.osgi.framework.ServicePermission "org.osgi.service.jndi.JNDIContextManager" "get")
-(org.osgi.framework.ServicePermission "org.osgi.service.jndi.JNDIProviderAdmin" "get")

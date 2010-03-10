@@ -1,7 +1,7 @@
 Bundle-Version: 4.2.0.${project.build}
 
 Private-Package 					= org.osgi.test.support.* , \
-	org.osgi.test.cases.jndi.*
+	${p}.*
 	
 Import-Package 						= \
 	* 
@@ -15,7 +15,6 @@ Test-Cases							= ${testcases}
 -buildpath							= ee.j2se; version=1.5, \
 	org.osgi.service.jndi;					version=project, \
     org.osgi.test.support;                  version=project, \
-    org.osgi.test.cases.jndi;				version=project, \
 	osgi.core; 								version=4.2, \
 	${junit}
 	
