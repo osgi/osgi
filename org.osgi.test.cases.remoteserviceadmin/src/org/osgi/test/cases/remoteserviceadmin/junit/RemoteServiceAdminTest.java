@@ -316,10 +316,12 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			
 		}
 		
+		// Marc: I deactivated this as it will also cause the unexport of the service which 
+		// will then resuld in the automatic unimport of the imported service via the discovery. 
 		//
 		// test remove
 		//
-		tb2Bundle.stop();
+		//tb2Bundle.stop();
 		
 		//
 		// 122.4.2: Importing
