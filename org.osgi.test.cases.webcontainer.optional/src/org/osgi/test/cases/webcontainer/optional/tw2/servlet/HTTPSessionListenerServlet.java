@@ -111,7 +111,7 @@ public class HTTPSessionListenerServlet extends HttpServlet {
         } else {
             request.getSession().setAttribute(
                     ConstantsUtil.WELCOMESTATEMENT,
-                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                    someInteger1 + " + " + someInteger2 + " = " + someInteger3
                             + " is not " + someBoolean2);
             out.println("</body>");
             out.println("</html>");

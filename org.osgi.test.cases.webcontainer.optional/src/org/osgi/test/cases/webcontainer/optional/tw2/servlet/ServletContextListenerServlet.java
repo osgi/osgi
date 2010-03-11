@@ -127,7 +127,7 @@ public class ServletContextListenerServlet extends HttpServlet {
             } else {
                 getServletContext().setAttribute(
                         ConstantsUtil.WELCOMESTATEMENT,
-                        someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                        someInteger1 + " + " + someInteger2 + " = " + someInteger3
                                 + " is not " + someBoolean2);
             }
 

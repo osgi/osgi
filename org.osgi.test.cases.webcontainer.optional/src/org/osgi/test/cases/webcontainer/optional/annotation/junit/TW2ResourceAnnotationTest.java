@@ -58,6 +58,9 @@ public class TW2ResourceAnnotationTest extends WebContainerOptionalTestBundleCon
         String response = super.getResponse(request);
         // check if content of response is correct
         log("verify content of response is correct");
+        if (debug) {
+            log("response is " + response);
+        }
         assertTrue(response.indexOf("ResourceServlet4") > 0);
         assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRINGVALUE) > 0);
         assertTrue(response.indexOf(ConstantsUtil.WELCOMESTATEMENTVALUE) > 0);

@@ -39,7 +39,7 @@ public class ConstantsUtil {
     public static final String WELCOMESTRINGVALUE = "Welcome String from env-entry!";
     
     public static final String WELCOMESTATEMENTVALUE = "5 + 5 = 10 that is true";
-    public static final String WELCOMESTATEMENTVALUE2 = "5+5=10 is not false";
+    public static final String WELCOMESTATEMENTVALUE2 = "5 + 5 = 10 is not false";
 
     public static final String PREDESTROY = "preDestroy";
     public static final String POSTCONSTRUCT = "postConstruct";

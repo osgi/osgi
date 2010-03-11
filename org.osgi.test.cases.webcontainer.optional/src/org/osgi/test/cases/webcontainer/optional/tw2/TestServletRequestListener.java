@@ -74,7 +74,7 @@ public class TestServletRequestListener implements ServletRequestListener {
         } else {
             sre.getServletRequest().setAttribute(
                     ConstantsUtil.WELCOMESTATEMENT,
-                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                    someInteger1 + " + " + someInteger2 + " = " + someInteger3
                             + " is " + someBoolean1);
         }
         if (someString1 == null && someString2 == null) {

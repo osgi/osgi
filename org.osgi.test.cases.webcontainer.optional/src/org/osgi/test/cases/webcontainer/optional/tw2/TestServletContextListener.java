@@ -77,7 +77,7 @@ public class TestServletContextListener implements ServletContextListener {
         } else {
             context
                     .setAttribute(ConstantsUtil.WELCOMESTATEMENT, someInteger1
-                            + "+" + someInteger2 + "=" + someInteger3 + " is "
+                            + " + " + someInteger2 + " = " + someInteger3 + " is "
                             + someBoolean1);
         }
         if (someString1 == null && someString2 == null) {

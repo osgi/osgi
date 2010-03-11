@@ -20,6 +20,9 @@ public class WebContainerOptionalTestBundleControl extends WebContainerTestBundl
     protected void checkTW2ResourceServlet2Response(String response) throws Exception {
         // check if content of response is correct
         log("verify content of ResourceServlet2 response from tw2 is correct");
+        if (debug) {
+            log("response is " + response);
+        }
         assertTrue(response.indexOf("ResourceServlet2") > 0);
         assertTrue(response.indexOf("Welcome String from env-entry!") > 0);
         assertTrue(response.indexOf("5 + 5 = 10 that is true") > 0);

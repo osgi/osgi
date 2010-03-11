@@ -89,6 +89,9 @@ public class MCOtherAnnotationTest extends WebContainerOptionalTestBundleControl
 
         // check if content of response is correct
         log("verify content of response is correct");
+        if (debug) {
+            log("response is " + response);
+        }
         assertTrue(response.indexOf("PostConstructPreDestroyServlet1") > 0);
         assertTrue(response
                 .indexOf("PostConstructPreDestroyServlet1.printContext "
@@ -135,6 +138,9 @@ public class MCOtherAnnotationTest extends WebContainerOptionalTestBundleControl
 
         // check if content of response is correct
         log("verify content of response is correct");
+        if (debug) {
+            log("response is " + response);
+        }
         assertTrue(response.indexOf("ServletContextListenerServlet") > 0);
         assertTrue(response.indexOf(ConstantsUtil.EMAIL + "-"
                 + ConstantsUtil.EMAILVALUE) > 0);
@@ -174,6 +180,9 @@ public class MCOtherAnnotationTest extends WebContainerOptionalTestBundleControl
 
         // check if content of response is correct
         log("verify content of response is correct");
+        if (debug) {
+            log("response is " + response);
+        }
         assertTrue(response.indexOf("RequestListenerServlet") > 0);
         assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
                 + ConstantsUtil.NULL) > 0);
@@ -206,6 +215,9 @@ public class MCOtherAnnotationTest extends WebContainerOptionalTestBundleControl
 
         // check if content of response is correct
         log("verify content of response is correct");
+        if (debug) {
+            log("response is " + response);
+        }
         assertTrue(response.indexOf("HTTPSessionListenerServlet") > 0);
         assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
                 + ConstantsUtil.NULL) > 0);

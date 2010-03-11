@@ -46,6 +46,9 @@ public class TW7ResourceAnnotationTest extends WebContainerOptionalTestBundleCon
         String response = super.getResponse(request);
         // check if content of response is correct
         log("verify content of response is correct");
+        if (debug) {
+            log("response is " + response);
+        }
         assertTrue(response.indexOf("ResourceServlet1") > 0);
         assertTrue(response
                 .indexOf("Printing the injections in this ResourceServlet1 ...") > 0);
@@ -66,6 +69,9 @@ public class TW7ResourceAnnotationTest extends WebContainerOptionalTestBundleCon
         String response = super.getResponse(request);
         // check if content of response is correct
         log("verify content of response is correct");
+        if (debug) {
+            log("response is " + response);
+        }
         assertTrue(response.indexOf("ResourceServlet3") > 0);
         assertTrue(response
                 .indexOf("Printing the injections in this ResourceServlet3 ...") > 0);

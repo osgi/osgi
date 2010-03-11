@@ -86,6 +86,9 @@ public class PostConstructAnnotationTest extends WebContainerOptionalTestBundleC
         String response = super.getResponse(request);
         // check if content of response is correct
         log("verify content of response is correct");
+        if (debug) {
+            log("response is " + response);
+        }
         assertTrue(response.indexOf("PostConstructPreDestroyServlet2") > 0);
         assertTrue(response
                 .indexOf("PostConstructPreDestroyServlet2.printContext "
@@ -108,6 +111,9 @@ public class PostConstructAnnotationTest extends WebContainerOptionalTestBundleC
         String response = super.getResponse(request);
         // check if content of response is correct
         log("verify content of response is correct");
+        if (debug) {
+            log("response is " + response);
+        }
         assertTrue(response.indexOf("PostConstructPreDestroyServlet3") > 0);
         assertTrue(response
                 .indexOf("PostConstructPreDestroyServlet3.printContext "

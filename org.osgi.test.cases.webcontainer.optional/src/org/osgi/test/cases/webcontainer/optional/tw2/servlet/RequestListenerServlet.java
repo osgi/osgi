@@ -107,8 +107,8 @@ public class RequestListenerServlet extends HttpServlet {
                 && someInteger3 == null && someBoolean2 == null) {
             request.setAttribute(ConstantsUtil.WELCOMESTATEMENT, null);
         } else {
-            request.setAttribute(ConstantsUtil.WELCOMESTATEMENT, someInteger1 + "+"
-                    + someInteger2 + "=" + someInteger3 + " is not "
+            request.setAttribute(ConstantsUtil.WELCOMESTATEMENT, someInteger1 + " + "
+                    + someInteger2 + " = " + someInteger3 + " is not "
                     + someBoolean2);
         }
         out.println("</body>");

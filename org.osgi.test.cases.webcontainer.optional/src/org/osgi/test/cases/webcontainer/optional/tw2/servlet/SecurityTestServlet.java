@@ -109,7 +109,7 @@ public class SecurityTestServlet extends HttpServlet {
             getServletContext().removeAttribute(ConstantsUtil.WELCOMESTRING);
             getServletContext().setAttribute(
                     ConstantsUtil.WELCOMESTATEMENT,
-                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                    someInteger1 + " + " + someInteger2 + " = " + someInteger3
                             + " is not " + someBoolean2);
 
         } else if (modify != null && modify.equalsIgnoreCase("reset")) {
@@ -118,7 +118,7 @@ public class SecurityTestServlet extends HttpServlet {
                     someString1 + " " + someString2);
             getServletContext().setAttribute(
                     ConstantsUtil.WELCOMESTATEMENT,
-                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                    someInteger1 + " + " + someInteger2 + " = " + someInteger3
                             + " is " + someBoolean1);
 
         }

@@ -91,7 +91,7 @@ public class TestFilter implements Filter {
                     "" + someInteger1));
         } else {
             EventLogger.logEvent(new Event(this.getClass().getName(), "init",
-                    someInteger1 + "+" + someInteger2 + "=" + someInteger3
+                    someInteger1 + " + " + someInteger2 + " = " + someInteger3
                             + " is " + someBoolean1));
         }
     }

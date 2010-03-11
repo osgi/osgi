@@ -179,6 +179,9 @@ public class PostConstructPreDestroyErrorTest extends
         String response = super.getResponse(request);
         // check if content of response is correct
         log("verify content of response is correct");
+        if (debug) {
+            log("response is " + response);
+        }
         assertTrue(response.indexOf("PreDestroyErrorServlet3") > 0);
         assertTrue(response.indexOf("PreDestroyErrorServlet3.printContext "
                 + ConstantsUtil.PRINTCONTEXT) > 0);

@@ -60,6 +60,9 @@ public class MCResourceAnnotationTest extends WebContainerOptionalTestBundleCont
 
         // check if content of response is correct
         log("verify content of response is correct");
+        if (debug) {
+            log("response is " + response);
+        }
         assertTrue(response.indexOf("ResourceServlet4") > 0);
         assertTrue(response.indexOf(ConstantsUtil.NULL + " "
                 + ConstantsUtil.NULL) > 0);
