@@ -19,21 +19,22 @@
 	-->
 
 	<target name="init" unless="initialized">
-		<!-- The following two properties are local to this file to get bootstrapped. 
-		   The actual properties to be used should be project.dir, and project.workspace. These
-		properties are set by bnd -->
-		<dirname property="projectdir" file="${ant.file}" />
-		<dirname property="workspacedir" file="${projectdir}" />
+		<!-- The following three properties are local to this file to get bootstrapped. 
+		   The actual properties to be used should be project.dir, project.workspace and
+		   project.name. Those properties are set by bnd -->
+		<dirname property="-projectdir" file="${ant.file}" />
+		<dirname property="-workspacedir" file="${-projectdir}" />
+		<basename property="-projectname" file="${-projectdir}" />
+		<echo>Enter project ${-projectname} (${top})</echo>
 		
-		<taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="${workspacedir}/licensed/repo/biz.aQute.bnd/biz.aQute.bnd-latest.jar" />
+		<taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="${-workspacedir}/licensed/repo/biz.aQute.bnd/biz.aQute.bnd-latest.jar" />
 
-		<bndprepare basedir="${projectdir}" print="false" top="${top}"/>
+		<bndprepare basedir="${-projectdir}" print="false" top="${top}"/>
 		<!-- Now we have the same properties set as bnd 
 		-->
 			
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
-		<echo>Enter project ${project.name} (${top})</echo>
 	</target>
 
 	<!-- 
@@ -96,7 +97,7 @@
 	     Test
 	-->
 	<target name="test" depends="compile">
-		<bnd command="test" exceptions="true" basedir="${projectdir}"/>
+		<bnd command="test" exceptions="true" basedir="${project.dir}"/>
 	</target>
 
 	<!-- 
@@ -104,7 +105,7 @@
 	-->
 	<target name="jars" depends="compile">
 		<mkdir dir="${target}" />
-		<bndproject basedir="${projectdir}"/>
+		<bndproject basedir="${project.dir}"/>
 	</target>
 
 	<target name="deploy" depends="jars" unless="nodeploy">
@@ -136,6 +137,8 @@
 	-->
 	<target name="echo" depends="init">
 		<echo>verbose:                ${verbose}</echo>
+		<echo>project.workspace:      ${project.workspace}</echo>
+		<echo>project.dir:            ${project.dir}</echo>
 		<echo>project.name:           ${project.name}</echo>
 		<echo>project.output:         ${project.output}</echo>
 		<echo>project.sourcepath:     ${project.sourcepath}</echo>
@@ -144,9 +147,7 @@
 		<echo>project.testpath:       ${project.testpath}</echo>
 		<echo>project.dependson:      ${project.dependson}</echo>
 		<echo>project.bootclasspath:  ${project.bootclasspath}</echo>
-		<echo>project.workspace:      ${project.workspace}</echo>
 		<echo>javac:                  ${javac}</echo>
-		<echo>p:                      ${p}</echo>
 		<echo>base.modfied:           ${base.modified} (${base.modified.readable})</echo>
 		<echo>target:                 ${target}</echo>
 		<echo>licensed repo:          ${licensed-repo}</echo>
