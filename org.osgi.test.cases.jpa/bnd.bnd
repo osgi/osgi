@@ -23,22 +23,17 @@ Include-Resource 					= \
     org.osgi.test.support;              version=project , \
 	org.osgi.service.jpa;			    version=project	, \
 	org.osgi.service.jdbc;			    version=project , \
-	org.osgi.util.tracker;				version=project , \
 	osgi.core;						    version=4.2		, \
+	osgi.cmpn;						    version=4.2		, \
 	org.eclipse.persistence.jpa_spec;	version=2.0, \
 	${junit}
 	
+# If the bundles which make up the JPA impl change, DO NOT EDIT this runbundles.
+# Edit the cnf/repo/org.osgi.impl.service.jpa/org.osgi.impl.service.jpa-N.N.N.lib file!
 -runbundles						= \
 	osgi.enterprise; version=${enterprise.published.version};strategy=lowest, \
-	org.osgi.service.jdbc;			    version=project , \
-	org.eclipse.persistence.jpa_spec;	version=2.0 , \
-	org.eclipse.gemini.dbaccess.derby.cs;	version=1.0.0 , \
-    org.eclipse.persistence.asm;        version=2.0.1 , \
-    org.eclipse.persistence.antlr;      version=2.0.1 , \
-    org.eclipse.persistence.incubator.geminijpa.core; version=2.0.2 , \
-    org.eclipse.persistence.incubator.geminijpa.jpa; version=2.0.2 , \
-    com.oracle.gemini.jpa;             version=1.0.0
-	
+	org.osgi.impl.service.jpa;			version=latest
+		
 -runproperties					= ${runproperties}
 
 Test-Cases							= ${testcases}
