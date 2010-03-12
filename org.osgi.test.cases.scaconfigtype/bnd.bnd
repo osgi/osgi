@@ -2,8 +2,6 @@ javac.source            = 1.5
 javac.target            = 1.5
 Bundle-Version: 4.2.0.${project.build}
 
-Import-Package = junit.framework;version="3.8.0",*
-
 Private-Package						= org.osgi.test.support.*, \
 	${p}.*
 
