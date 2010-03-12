@@ -1,13 +1,21 @@
-# We don't want bnd to make the manifest
--nomanifest=true
-# We have WAR layout and non-bundle manifest
--failok=true
+Bundle-Vendor: OSGi Alliance
+Bundle-SymbolicName: ${p}.wmtw4
+Bundle-Name: ${p}.wmtw4
+Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war 4 with manifest pre-specified
 # We don't want bnd to put the source code in the jar
 -sources=false
-# We don't want bnd to try and figure out what classes to put in the jar
--resourceonly
 
-Include-Resource = \
-	resources/tw4, \
-	resources/wmtw4, \
-	WEB-INF/classes/${replace;${p}.tw4;\\.;/}=${bin}/${replace;${p}.tw4;\\.;/}
+Private-Package: ${p}.tw4.*
+-wab: resources/tw4
+-resourceonly=true
+-removeheaders: !Manifest-Version, \
+ !Bundle-Vendor, \
+ !Bundle-ManifestVersion, \
+ !Bundle-SymbolicName, \
+ !Bundle-Name, \
+ !Bundle-Description, \
+ !Import-Package, \
+ !Bundle-ClassPath, \
+ *
+
+	

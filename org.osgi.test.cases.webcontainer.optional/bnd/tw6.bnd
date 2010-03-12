@@ -1,0 +1,25 @@
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 1.0
+Bundle-SymbolicName: ${p}.wmtw6
+Bundle-Name: ${p}.wmtw6
+Bundle-Description: OSGi Web Container RFC 66 Optional Compliance Test test war 6 with manifest somewhat pre-specified
+Web-ContextPath: /wmtw6
+
+# We don't want bnd to put the source code in the jar
+-sources=false
+
+Private-Package: ${p}.tw6.*
+-wab: resources/tw6
+-resourceonly=true
+-removeheaders: !Manifest-Version, \
+ !Bundle-Vendor, \
+ !Bundle-Version, \
+ !Bundle-ManifestVersion, \
+ !Bundle-SymbolicName, \
+ !Bundle-Name, \
+ !Bundle-Description, \
+ !Web-ContextPath, \
+ *
+
+
+ 

@@ -1,15 +1,19 @@
-# We don't want bnd to make the manifest
--nomanifest=true
-# We have WAR layout and non-bundle manifest
--failok=true
-# We don't want bnd to put the source code in the jar
+Bundle-Vendor: OSGi Alliance
+Bundle-Name: ${p}.wm3tw5
+Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war 5 with manifest Bundle-Classpath pre-specified
+
 -sources=false
-# We don't want bnd to try and figure out what classes to put in the jar
--resourceonly
+
+Private-Package: ${p}.tw5.*
+-wab: resources/tw5
+-resourceonly=true
+-removeheaders: !Manifest-Version, \
+ !Bundle-Vendor, \
+ !Bundle-Name, \
+ !Bundle-Description, \
+ *
 
 Include-Resource = \
-	resources/tw5, \
-	resources/wm3tw5, \
-	WEB-INF/classes/${replace;${p}.tw5;\\.;/}=${bin}/${replace;${p}.tw5;\\.;/}, \
 	WEB-INF/lib2/log.jar=log.jar, \
 	WEB-INF/lib/simple.jar=simple.jar 
+

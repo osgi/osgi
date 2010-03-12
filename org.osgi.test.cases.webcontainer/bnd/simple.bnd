@@ -1,9 +1,7 @@
-# We don't want bnd to make the manifest
--nomanifest=true
 # We don't want bnd to put the source code in the jar
 -sources=false
-# We don't want bnd to try and figure out what classes to put in the jar
--resourceonly
 
 Private-Package: ${p}.simple.*
-Include-Resource = resources/simple
+-resourceonly=true
+-removeheaders: !Manifest-Version, !Class-Path, *
+Class-Path: ../lib2/log.jar

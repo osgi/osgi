@@ -1,5 +1,4 @@
 Bundle-Description: 					Web Container test handler bundle
-Bundle-ManifestVersion: 				2
 Bundle-SymbolicName: 					${p}.handler
 Bundle-Name:                            ${p}.handler
 Bundle-Version:                         4.2

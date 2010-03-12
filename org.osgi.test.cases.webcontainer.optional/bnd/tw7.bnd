@@ -1,12 +1,12 @@
-# We don't want bnd to make the manifest
--nomanifest=true
-# We have WAR layout and non-bundle manifest
--failok=true
+Bundle-Vendor: OSGi Alliance
+
 # We don't want bnd to put the source code in the jar
 -sources=false
-# We don't want bnd to try and figure out what classes to put in the jar
--resourceonly
 
-Include-Resource = \
-	resources/tw7, \
-	WEB-INF/classes/${replace;${p}.tw7;\\.;/}=${bin}/${replace;${p}.tw7;\\.;/}
+Private-Package: ${p}.tw7.*
+-wab: resources/tw7
+-resourceonly=true
+-removeheaders: !Manifest-Version, \
+ !Bundle-Vendor, \
+ *
+ 
