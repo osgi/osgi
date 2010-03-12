@@ -23,6 +23,7 @@ Include-Resource 					= \
     org.osgi.test.support;              version=project , \
 	org.osgi.service.jpa;			    version=project	, \
 	org.osgi.service.jdbc;			    version=project , \
+	org.osgi.util.tracker;				version=project , \
 	osgi.core;						    version=4.2		, \
 	org.eclipse.persistence.jpa_spec;	version=2.0, \
 	${junit}

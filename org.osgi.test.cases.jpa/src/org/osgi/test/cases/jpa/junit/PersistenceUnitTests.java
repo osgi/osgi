@@ -23,6 +23,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * 
@@ -34,10 +35,12 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class PersistenceUnitTests extends DefaultTestBundleControl {
 
+    public static final long SERVICE_WAIT_TIME = 5000;
+	
 	public void testDefaultPersistenceLocation() throws Exception {
 		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
 		EntityManagerFactoryBuilder persistenceUnit = null;
-		
+		waitForService(EntityManagerFactoryBuilder.class);
 		try {
 			persistenceUnit = (EntityManagerFactoryBuilder) getService (EntityManagerFactoryBuilder.class, "(osgi.unit.name=testUnit1)");
 			if (persistenceUnit == null) {
@@ -54,7 +57,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 	public void testNonStandardPersistenceLocation() throws Exception {
 		Bundle persistenceBundle = installBundle("nonStandardPersistenceLocation.jar");
 		EntityManagerFactoryBuilder persistenceUnit = null;
-		
+		waitForService(EntityManagerFactoryBuilder.class);
 		try {
 			persistenceUnit = (EntityManagerFactoryBuilder) getService (EntityManagerFactoryBuilder.class, "(osgi.unit.name=testUnit2)");
 			if (persistenceUnit == null) {
@@ -72,7 +75,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 		Bundle persistenceBundle = installBundle("multiplePersistenceLocations.jar");
 		EntityManagerFactoryBuilder persistenceUnit1 = null;
 		EntityManagerFactoryBuilder persistenceUnit2 = null;
-		
+		waitForService(EntityManagerFactoryBuilder.class);
 		try {
 			persistenceUnit1 = (EntityManagerFactoryBuilder) getService (EntityManagerFactoryBuilder.class, "(osgi.unit.name=testUnit3)");
 			if (persistenceUnit1 == null) {
@@ -97,7 +100,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 	public void testNestedJarPersistenceLocation() throws Exception {
 		Bundle persistenceBundle = installBundle("nestedJarPersistenceLocation.jar");
 		EntityManagerFactoryBuilder persistenceUnit = null;
-		
+		waitForService(EntityManagerFactoryBuilder.class);
 		try { 
 			persistenceUnit = (EntityManagerFactoryBuilder) getService (EntityManagerFactoryBuilder.class, "(osgi.unit.name=testUnit5)");
 			if (persistenceUnit == null) {
@@ -113,7 +116,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 	
 	public void testPesistenceUnitServiceProperties() throws Exception {
 		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
-		
+		waitForService(EntityManagerFactoryBuilder.class);
 		try {
 			ServiceReference unitRef = getContext().getServiceReference(EntityManagerFactoryBuilder.class.getName());
 			String unitName = (String) unitRef.getProperty("osgi.unit.name");
@@ -144,5 +147,19 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 			uninstallBundle(persistenceBundle);
 		}
 	}
+
+    public void waitForService(Class cls) {
+        ServiceTracker tracker = new ServiceTracker(getContext(), cls.getName(), null);
+        tracker.open();
+        Object service = null;
+        try { 
+        	service = tracker.waitForService(SERVICE_WAIT_TIME);
+        } catch (InterruptedException intEx) {
+        	// service will be null
+        }
+        tracker.close();
+        assertNotNull("Service for " + cls.getName() + " was not registered after waiting " +
+            SERVICE_WAIT_TIME + " milliseconds", service);
+    }
 	
 }
