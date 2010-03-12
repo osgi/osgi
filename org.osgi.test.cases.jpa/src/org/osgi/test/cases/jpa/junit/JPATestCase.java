@@ -257,11 +257,14 @@ public class JPATestCase extends DefaultTestBundleControl {
         ServiceTracker tracker = new ServiceTracker(getContext(), cls.getName(), null);
         tracker.open();
         Object service = null;
-        try { 
-        	service = tracker.waitForService(SERVICE_WAIT_TIME);
-        } catch (InterruptedException intEx) {
-        	// service will be null
-        }
+        long start = System.currentTimeMillis();
+        do {
+        	try { 
+        		service = tracker.waitForService(SERVICE_WAIT_TIME);
+        	} catch (InterruptedException intEx) {
+        		// service will be null
+        	}
+        } while (System.currentTimeMillis() - start < SERVICE_WAIT_TIME);
         tracker.close();
         assertNotNull("Service for " + cls.getName() + " was not registered after waiting " +
             SERVICE_WAIT_TIME + " milliseconds", service);
