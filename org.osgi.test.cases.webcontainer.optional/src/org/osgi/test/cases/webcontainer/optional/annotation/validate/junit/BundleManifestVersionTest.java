@@ -18,7 +18,6 @@ package org.osgi.test.cases.webcontainer.optional.annotation.validate.junit;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.test.cases.webcontainer.util.ManifestHeadersTestBundleControl;
 

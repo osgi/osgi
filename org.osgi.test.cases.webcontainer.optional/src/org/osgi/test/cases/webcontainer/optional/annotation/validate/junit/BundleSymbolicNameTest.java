@@ -22,7 +22,7 @@ import java.util.jar.Manifest;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.test.cases.webcontainer.util.ManifestHeadersTestBundleControl;
+import org.osgi.test.cases.webcontainer.optional.WebContainerOptionalTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
 
 /**
@@ -31,7 +31,7 @@ import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
  *          test Bundle-ManifestVersion manifest header processed correctly 
  *          with various scenarios
  */
-public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
+public class BundleSymbolicNameTest extends WebContainerOptionalTestBundleControl {
 
     private Map<String, Object> createOptions(String name, String version, String cp) {
         final Map<String, Object> options = new HashMap<String, Object>();
