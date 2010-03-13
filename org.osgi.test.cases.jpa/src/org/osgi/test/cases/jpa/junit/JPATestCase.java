@@ -233,8 +233,12 @@ public class JPATestCase extends DefaultTestBundleControl {
 			emf = (EntityManagerFactory) getService(EntityManagerFactory.class, "(osgi.unit.name=emfTestUnit)");
 			assertNotNull("Unable to retrieve the specified EntityManagerFactory", emf);
 			uninstallBundle(persistenceBundle);
-			if (emf.isOpen()) {
-				fail("The EntityManagerFactory should have been closed when the persistence bundle was uninstalled");
+			try {
+				if (emf.isOpen()) {
+					fail("The EntityManagerFactory should have been closed when the persistence bundle was uninstalled");
+				}
+			} catch (NullPointerException npe) {
+				// Do nothing.  An NPE is expected if the bundle performs all the appropriate steps when stopping.
 			}
 		} finally {
 			if (persistenceBundle.getState() != Bundle.UNINSTALLED) {
