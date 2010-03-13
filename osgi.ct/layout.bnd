@@ -77,6 +77,7 @@ build.enterprise.tests = \
 	org.osgi.test.cases.jdbc, \
     org.osgi.test.cases.jmx, \
 	org.osgi.test.cases.jndi, \
+    org.osgi.test.cases.jpa, \
     org.osgi.test.cases.log, \
     org.osgi.test.cases.metatype, \
     org.osgi.test.cases.provisioning, \
@@ -88,5 +89,4 @@ build.enterprise.tests = \
     org.osgi.test.cases.useradmin, \
     org.osgi.test.cases.webcontainer, \
    	org.osgi.test.cases.xml
-#    org.osgi.test.cases.jpa, \
 
