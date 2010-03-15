@@ -1,0 +1,6 @@
+Bundle-Name:                             ${p}.staticAccessWithMapBundle
+Bundle-Version:                          4.2.0.${project.build}
+Meta-Persistence: <<EMPTY>>
+
+Include-Resource = \
+	META-INF/persistence.xml = resources/staticAccessWithMapBundle/META-INF/persistence.xml

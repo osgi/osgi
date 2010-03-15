@@ -39,11 +39,11 @@ public class JPATestCase extends DefaultTestBundleControl {
     
 	public void testPersistenceClass() throws Exception {
 		// Install the bundles necessary for this test
-		Bundle persistenceBundle = installBundle("emfBundle.jar");
+		Bundle persistenceBundle = installBundle("staticAccessBundle.jar");
 		EntityManagerFactory emf = null;
 		waitForService(EntityManagerFactory.class);
 		try {
-			emf = Persistence.createEntityManagerFactory("emfTestUnit");
+			emf = Persistence.createEntityManagerFactory("staticAccessTestUnit");
 			assertNotNull("Unable to create the specified EntityManagerFactory", emf);
 		} finally {
 			if (emf != null) {
@@ -56,7 +56,7 @@ public class JPATestCase extends DefaultTestBundleControl {
 	
 	public void testPersistenceClassWithMap() throws Exception {
 		// Install the bundles necessary for this test
-		Bundle persistenceBundle = installBundle("emfBuilderBundle.jar");
+		Bundle persistenceBundle = installBundle("staticAccessWithMapBundle.jar");
 		EntityManagerFactory emf = null;
 		waitForService(EntityManagerFactoryBuilder.class);
 		try {
@@ -65,7 +65,7 @@ public class JPATestCase extends DefaultTestBundleControl {
 			assertNotNull("Unable to retrieve a reference for the DataSourceFactory service", dsfRef);
 			Map props = new HashMap();
 			props.put("javax.persistence.jdbc.driver", dsfRef.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_CLASS));
-			emf = Persistence.createEntityManagerFactory("emfBuilderTestUnit", props);
+			emf = Persistence.createEntityManagerFactory("staticAccessWithMapTestUnit", props);
 			assertNotNull("Unable to create the specified EntityManagerFactory", emf);
 		} finally {
 			if (emf != null) {
@@ -95,10 +95,10 @@ public class JPATestCase extends DefaultTestBundleControl {
 	
 	public void testEntityManagerFactoryWithIncompletePersistenceUnit() throws Exception {
 		// Install the bundles necessary for this test
-		Bundle persistenceBundle = installBundle("emfBuilderBundle.jar");
+		Bundle persistenceBundle = installBundle("incompletePersistenceUnitBundle.jar");
 		waitForService(EntityManagerFactoryBuilder.class);
 		try {
-			ServiceReference[] emfRefs = getContext().getServiceReferences(EntityManagerFactory.class.getName(), "(osgi.unit.name=emfBuilderTestUnit)");
+			ServiceReference[] emfRefs = getContext().getServiceReferences(EntityManagerFactory.class.getName(), "(osgi.unit.name=incompleteTestUnit)");
 			assertNull("There should be no EntityManagerFactory registered since this persistence unit is incomplete", emfRefs);
 		} finally {
 			uninstallBundle(persistenceBundle);
@@ -154,16 +154,16 @@ public class JPATestCase extends DefaultTestBundleControl {
 		}
 		failException("testEntityManagerFactoryRebinding failed", java.lang.IllegalArgumentException.class);
 	}
-	
+
 	public void testEntityManagerFactoryBuilderRebinding() throws Exception {
 		// Install the bundle necessary for this test
-		Bundle persistenceBundle = installBundle("emfBuilderBundle.jar");
+		Bundle persistenceBundle = installBundle("emfBuilderRebindingBundle.jar");
 		EntityManagerFactoryBuilder emfBuilder = null;
 		EntityManagerFactory emf1 = null;
 		EntityManagerFactory emf2 = null;
 		waitForService(EntityManagerFactoryBuilder.class);
 		try {
-			emfBuilder = (EntityManagerFactoryBuilder) getService(EntityManagerFactoryBuilder.class, "(osgi.unit.name=emfBuilderTestUnit)");
+			emfBuilder = (EntityManagerFactoryBuilder) getService(EntityManagerFactoryBuilder.class, "(osgi.unit.name=emfBuilderRebindingTestUnit)");
 			assertNotNull("Unable to retrieve the specified EntityManagerFactroyBuilder", emfBuilder);
 			DataSourceFactory dsf = (DataSourceFactory) getService(DataSourceFactory.class);
 			ServiceReference dsfRef = getServiceReference(dsf);
@@ -171,7 +171,6 @@ public class JPATestCase extends DefaultTestBundleControl {
 			Map props1 = new HashMap();
 			props1.put("javax.persistence.jdbc.driver", dsfRef.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_CLASS));
 			emf1 = emfBuilder.createEntityManagerFactory(props1);
-			EntityManager em = emf1.createEntityManager();
 			Map props2 = new HashMap();
 			props2.put("javax.persistence.jdbc.driver", "fake.driver.class");
 			emf2 = emfBuilder.createEntityManagerFactory(props2);
@@ -189,17 +188,16 @@ public class JPATestCase extends DefaultTestBundleControl {
 	
 	public void testEntityManagerFactoryRebindingWithBuilder() throws Exception {
 		// Install the bundle necessary for this test
-		Bundle persistenceBundle = installBundle("emfBundle.jar");
+		Bundle persistenceBundle = installBundle("emfRebindingWithBuilderBundle.jar");
 		EntityManagerFactoryBuilder emfBuilder = null;
 		EntityManagerFactory emf1 = null;
 		EntityManagerFactory emf2 = null;
 		waitForService(EntityManagerFactory.class);
 		waitForService(EntityManagerFactoryBuilder.class);
 		try {
-			emf1 = (EntityManagerFactory) getService(EntityManagerFactory.class, "(osgi.unit.name=emfTestUnit)");
+			emf1 = (EntityManagerFactory) getService(EntityManagerFactory.class, "(osgi.unit.name=emfRebindingWithBuilderTestUnit)");
 			assertNotNull("Unable to retrieve the specified EntityManagerFactory", emf1);
-			EntityManager em = emf1.createEntityManager();
-			emfBuilder = (EntityManagerFactoryBuilder) getService(EntityManagerFactoryBuilder.class, "(osgi.unit.name=emfTestUnit)");
+			emfBuilder = (EntityManagerFactoryBuilder) getService(EntityManagerFactoryBuilder.class, "(osgi.unit.name=emfRebindingWithBuilderTestUnit)");
 			Map props = new HashMap();
 			props.put("javax.persistence.jdbc.driver", "fake.driver.class");
 			emf2 = emfBuilder.createEntityManagerFactory(props);

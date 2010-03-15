@@ -16,7 +16,12 @@ Include-Resource 					= \
 	defaultPersistenceLocation.jar , \
 	nonStandardPersistenceLocation.jar , \
 	multiplePersistenceLocations.jar , \
-	nestedJarPersistenceLocation.jar
+	nestedJarPersistenceLocation.jar , \
+	incompletePersistenceUnitBundle.jar , \
+	emfRebindingWithBuilderBundle.jar , \
+	emfBuilderRebindingBundle.jar , \
+	staticAccessBundle.jar , \
+	staticAccessWithMapBundle.jar
 
 -buildpath							    = \
 	ee.j2se; 						    version=1.5, \
