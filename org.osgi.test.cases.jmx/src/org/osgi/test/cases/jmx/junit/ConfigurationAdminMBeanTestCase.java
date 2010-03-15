@@ -194,6 +194,10 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 		assertNotNull(test2factoryMBean);
         configAdminMBean.update(test2factoryMBean, OSGiProperties.tableFrom(properties));
         assertTrue("test doesn't work using config admin mbean; wrong factory pid", testFactoryId.equals(configAdminMBean.getFactoryPid(test2factoryMBean)));
+		/*
+		 * Bug report for this method is https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1527#c8
+		 * 
+		 */        
 	}
 
 	public void testCreateFactoryConfiguration() throws IOException {
@@ -216,6 +220,10 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 		assertNotNull(test2factoryMBean);
         configAdminMBean.update(test2factoryMBean, OSGiProperties.tableFrom(properties));
         assertTrue("test doesn't work using config admin mbean; wrong factory pid", testFactoryId.equals(configAdminMBean.getFactoryPid(test2factoryMBean)));
+		/*
+		 * Bug report for this method is https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1527#c8
+		 * 
+		 */                
 	}
 	
 	public void testExceptions() {

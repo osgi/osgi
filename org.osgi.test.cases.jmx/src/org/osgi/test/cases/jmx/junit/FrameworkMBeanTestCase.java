@@ -485,6 +485,20 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 		assertTrue("composite type doesn't have as a key the Key attribute", tabularType.getIndexNames().contains("Key"));		
 	}
 	
+	public void testItemComplex() {
+		ArrayType arrayType = Item.arrayType(2, SimpleType.STRING);
+		Item item1 = new Item("arr", "The array property",arrayType);
+		Item item2 = new Item("key", "The key property",SimpleType.STRING);
+		CompositeType type1 = Item.compositeType("Test type", "Test description", item1);
+		CompositeType type2 = Item.extend(type1, "Type2", "Type2 description", item2);
+		assertTrue("composite type doesn't contain key item", type2.containsKey("arr"));
+		assertTrue("composite type doesn't contain value item", type2.containsKey("key"));		
+		TabularType tabularType = Item.tabularType("TypeName", "TypeDescription", type2, "key");		
+		assertTrue("tabular type doesn't contain key item", tabularType.getRowType().containsKey("key"));
+		assertTrue("composite type doesn't contain arr item", tabularType.getRowType().containsKey("arr"));
+		assertTrue("composite type doesn't have as a key the key attribute", tabularType.getIndexNames().contains("key"));			
+	}
+	
 	public void testBundleInstallAndUpdate() {
 		long testBundle = -1;
 		try {

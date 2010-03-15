@@ -37,3 +37,9 @@ Test-Cases							= ${testcases}
 			org.osgi.jmx.service.permissionadmin, \
 			org.osgi.jmx.service.provisioning, \
 			org.osgi.jmx.service.useradmin
+			
+-runproperties = ${runproperties}, \
+	osgi.console=1111, \
+	osgi.support.multipleHosts=true	, \
+	${p}.system.packages.extra="${junit.package}", \
+	${p}.bundles="${uniq;${repo;osgi.enterprise;${enterprise.published.version};lowest},${repo;org.osgi.impl.bundle.jmx},${repo;org.osgi.test.cases.jmx}}"		
