@@ -18,6 +18,8 @@ Include-Resource					= \
 	tw4.war, \
 	tw5.war, \
 	tw6.war, \
+	tw8.war, \
+	fragment.tw8.jar, \
 	wmtw1.war, \
 	wmtw4.war, \
 	wmtw5.war, \
