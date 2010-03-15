@@ -2,8 +2,9 @@ Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.0
 Bundle-SymbolicName: ${p}.wmtw1
 Bundle-Name: ${p}.wmtw1
-Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war 1 with WAB manifest
+Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war 1 with valid WAB manifest
 Web-ContextPath: wmtw1
+Import-Package: javax.servlet;version="2.5",javax.servlet.http;version="2.5",javax.servlet.jsp;version="2.1",javax.servlet.jsp.tagext;version="2.1"
 
 -sources=false
 Private-Package: ${p}.tw1.*
