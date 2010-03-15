@@ -32,6 +32,7 @@ import org.osgi.framework.launch.Framework;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.remoteservices.common.A;
+import org.osgi.test.cases.remoteservices.common.B;
 import org.osgi.test.cases.remoteservices.impl.TestServiceImpl;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -82,7 +83,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		// register the service in the server side framework on behalf of the System Bundle
 		// the interface package is exported by the System Bundle
 		ServiceRegistration srTestService = getFramework().getBundleContext().registerService(
-				new String[]{A.class.getName()/*, B.class.getName() */}, impl, properties);
+				new String[]{B.class.getName()/*, B.class.getName() */}, impl, properties);
 		assertNotNull(srTestService);
 
 		System.out.println("registered test service A on server side with config " + this.getClass().getName());
@@ -98,12 +99,12 @@ public class SimpleTest extends MultiFrameworkTestCase {
 //		assertNotNull(eedReference.getProperty(ExportedEndpointDescription.PROVIDED_INTERFACES));
 		
 		// now check on the hosting framework for the service to become available
-		ServiceTracker clientTracker = new ServiceTracker(getContext(), A.class.getName(), null);
+		ServiceTracker clientTracker = new ServiceTracker(getContext(), B.class.getName(), null);
 		clientTracker.open();
 		
 		// the proxy should appear in this framework
-		A client = (A)clientTracker.waitForService(60000L);
-		assertNull("proxy for service A found!", client);
+		B client = (B)clientTracker.waitForService(60000L);
+		assertNull("proxy for service B found!", client);
 
 		// make sure the proxy is removed when the service is removed
 		clientTracker.close();
@@ -163,6 +164,9 @@ public class SimpleTest extends MultiFrameworkTestCase {
 
 		System.out.println("registered test service A and B on server side");
 
+		Thread.sleep(1000);
+		
+		
 		// TODO not supported by RI yet
 //		// check for registration of ExportedEndpointDescription
 //		ServiceTracker eedTracker = new ServiceTracker(getFramework().getBundleContext(), ExportedEndpointDescription.class.getName(), null);
