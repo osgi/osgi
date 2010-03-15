@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import junit.framework.Assert;
-
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.event.Event;
