@@ -9,6 +9,6 @@ Fragment-Host: ${p}.tw8
 -sources=false
 
 Include-Resource = \
-	resources/fragment
+	resources/fragment.tw8
 	
 	
