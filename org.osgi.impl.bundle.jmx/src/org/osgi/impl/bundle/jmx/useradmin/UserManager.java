@@ -56,11 +56,20 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	@SuppressWarnings("unchecked")
 	public void addCredential(String key, byte[] value, String username)
 			throws IOException {
+		if (username == null) {
+			throw new IOException("User name must not be null");
+		}
+		if (key == null) {
+			throw new IOException("Credential key must not be null");
+		}
 		User user;
 		try {
 			user = (User) admin.getRole(username);
 		} catch (ClassCastException e) {
-			throw new IllegalArgumentException("Not a User: " + username);
+			throw new IOException("Not a User: " + username);
+		}
+		if (user == null) {
+			throw new IOException("Not a User: " + username);
 		}
 		user.getCredentials().put(key, value);
 	}
@@ -75,11 +84,20 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	@SuppressWarnings("unchecked")
 	public void addCredentialString(String key, String value, String username)
 			throws IOException {
+		if (username == null) {
+			throw new IOException("User name must not be null");
+		}
+		if (key == null) {
+			throw new IOException("Credential key must not be null");
+		}
 		User user;
 		try {
 			user = (User) admin.getRole(username);
 		} catch (ClassCastException e) {
-			throw new IllegalArgumentException("Not a User: " + username);
+			throw new IOException("Not a User: " + username);
+		}
+		if (user == null) {
+			throw new IOException("Not a User: " + username);
 		}
 		user.getCredentials().put(key, value);
 	}
@@ -92,8 +110,20 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 */
 	public boolean addMember(String groupname, String rolename)
 			throws IOException {
+		if (groupname == null) {
+			throw new IOException("Group name must not be null");
+		}
+		if (rolename == null) {
+			throw new IOException("Role name must not be null");
+		}
 		Role group = admin.getRole(groupname);
+		if (group == null) {
+			throw new IOException("Group does not exist: " + groupname);
+		}
 		Role role = admin.getRole(rolename);
+		if (role == null) {
+			throw new IOException("Role does not exist: " + rolename);
+		}
 		return group.getType() == Role.GROUP && ((Group) group).addMember(role);
 	}
 
@@ -107,7 +137,17 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	@SuppressWarnings("unchecked")
 	public void addProperty(String key, byte[] value, String rolename)
 			throws IOException {
-		admin.getRole(rolename).getProperties().put(key, value);
+		if (rolename == null) {
+			throw new IOException("Role name must not be null");
+		}
+		if (key == null) {
+			throw new IOException("Credential key must not be null");
+		}
+		Role role = admin.getRole(rolename);
+		if (role == null) {
+			throw new IOException("Role does not exist: " + rolename);
+		}
+		role.getProperties().put(key, value);
 	}
 
 	/*
@@ -120,7 +160,17 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	@SuppressWarnings("unchecked")
 	public void addPropertyString(String key, String value, String rolename)
 			throws IOException {
-		admin.getRole(rolename).getProperties().put(key, value);
+		if (rolename == null) {
+			throw new IOException("Role name must not be null");
+		}
+		if (key == null) {
+			throw new IOException("Credential key must not be null");
+		}
+		Role role = admin.getRole(rolename);
+		if (role == null) {
+			throw new IOException("Role does not exist: " + rolename);
+		}
+		role.getProperties().put(key, value);
 	}
 
 	/*
@@ -132,8 +182,17 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 */
 	public boolean addRequiredMember(String groupname, String rolename)
 			throws IOException {
+		if (groupname == null) {
+			throw new IOException("Group name must not be null");
+		}
 		Role group = admin.getRole(groupname);
+		if (group == null) {
+			throw new IOException("Group does not exist: " + rolename);
+		}
 		Role role = admin.getRole(rolename);
+		if (role == null) {
+			throw new IOException("Role does not exist: " + rolename);
+		}
 		return group.getType() == Role.GROUP
 				&& ((Group) group).addRequiredMember(role);
 	}
@@ -145,6 +204,9 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * org.osgi.jmx.compendium.UserManagerMBean#createGroup(java.lang.String)
 	 */
 	public void createGroup(String name) throws IOException {
+		if (name == null) {
+			throw new IOException("Name must not be null");
+		}
 		admin.createRole(name, Role.GROUP);
 	}
 
@@ -155,6 +217,9 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * org.osgi.jmx.compendium.UserManagerMBean#createUser(java.lang.String)
 	 */
 	public void createUser(String name) throws IOException {
+		if (name == null) {
+			throw new IOException("Name must not be null");
+		}
 		admin.createRole(name, Role.USER);
 	}
 
@@ -165,6 +230,9 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * org.osgi.jmx.compendium.UserManagerMBean#createRole(java.lang.String)
 	 */
 	public void createRole(String name) throws IOException {
+		if (name == null) {
+			throw new IOException("Name must not be null");
+		}
 		admin.createRole(name, Role.ROLE);
 	}
 
@@ -176,11 +244,14 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * )
 	 */
 	public CompositeData getAuthorization(String u) throws IOException {
+		if (u == null) {
+			throw new IOException("User name must not be null");
+		}
 		User user;
 		try {
 			user = (User) admin.getRole(u);
 		} catch (ClassCastException e) {
-			throw new IllegalArgumentException("Not a user: " + u);
+			throw new IOException("Not a user: " + u);
 		}
 		try {
 			return new OSGiAuthorization(admin.getAuthorization(user))
@@ -197,14 +268,17 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * org.osgi.jmx.compendium.UserManagerMBean#getCredentials(java.lang.String)
 	 */
 	public TabularData getCredentials(String username) throws IOException {
+		if (username == null) {
+			throw new IOException("User name must not be null");
+		}
 		User user;
 		try {
 			user = (User) admin.getRole(username);
 		} catch (ClassCastException e) {
-			throw new IllegalArgumentException("Not a user: " + username);
-		}
+			throw new IOException("Not a user: " + username);
+		} 
 		if (user == null) {
-			throw new IllegalArgumentException("Not a user: " + username);
+			throw new IOException("Not a user: " + username);
 		}
 		return OSGiProperties.tableFrom(user.getCredentials());
 	}
@@ -215,11 +289,14 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * @see org.osgi.jmx.compendium.UserManagerMBean#getGroup(java.lang.String)
 	 */
 	public CompositeData getGroup(String groupname) throws IOException {
+		if (groupname == null) {
+			throw new IOException("Group name must not be null");
+		}
 		Group group;
 		try {
 			group = (Group) admin.getRole(groupname);
 		} catch (ClassCastException e) {
-			throw new IllegalArgumentException("Not a group: " + groupname);
+			throw new IOException("Not a group: " + groupname);
 		}
 		try {
 			return new OSGiGroup(group).asCompositeData();
@@ -260,8 +337,7 @@ public class UserManager extends Monitor implements UserAdminMBean {
 		try {
 			roles = admin.getRoles(filter);
 		} catch (InvalidSyntaxException e) {
-			throw new IllegalStateException(
-					"Cannot use null filter, apparently: " + e);
+			throw new IOException("Invalid filter: " + e);
 		}
 		ArrayList<String> groups = new ArrayList<String>();
 		for (Role role : roles) {
@@ -280,6 +356,9 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * )
 	 */
 	public String[] getImpliedRoles(String username) throws IOException {
+		if (username == null) {
+			throw new IOException("Name must not be null");
+		}
 		Role role = admin.getRole(username);
 		if (role.getType() == Role.USER && role instanceof User) {
 			return admin.getAuthorization((User) role).getRoles();
@@ -295,11 +374,14 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * org.osgi.jmx.compendium.UserManagerMBean#getMembers(java.lang.String)
 	 */
 	public String[] getMembers(String groupname) throws IOException {
+		if (groupname == null) {
+			throw new IOException("Name must not be null");
+		}
 		Group group;
 		try {
 			group = (Group) admin.getRole(groupname);
 		} catch (ClassCastException e) {
-			throw new IllegalArgumentException("Not a group: " + groupname);
+			throw new IOException("Not a group: " + groupname);
 		}
 		Role[] members = group.getMembers();
 		if (members == null) {
@@ -319,6 +401,9 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * org.osgi.jmx.compendium.UserManagerMBean#getProperties(java.lang.String)
 	 */
 	public TabularData getProperties(String rolename) throws IOException {
+		if (rolename == null) {
+			throw new IOException("Name must not be null");
+		}
 		Role role = admin.getRole(rolename);
 		if (role == null) {
 			return null;
@@ -334,11 +419,14 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * .String)
 	 */
 	public String[] getRequiredMembers(String groupname) throws IOException {
+		if (groupname == null) {
+			throw new IOException("Name must not be null");
+		}
 		Group group;
 		try {
 			group = (Group) admin.getRole(groupname);
 		} catch (ClassCastException e) {
-			throw new IllegalArgumentException("Not a group: " + groupname);
+			throw new IOException("Not a group: " + groupname);
 		}
 		Role[] members = group.getRequiredMembers();
 		if (members == null) {
@@ -357,6 +445,9 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * @see org.osgi.jmx.compendium.UserManagerMBean#getRole(java.lang.String)
 	 */
 	public CompositeData getRole(String name) throws IOException {
+		if (name == null) {
+			throw new IOException("Name must not be null");
+		}
 		Role role = admin.getRole(name);
 		try {
 			return role == null ? null : new OSGiRole(role).asCompositeData();
@@ -395,7 +486,7 @@ public class UserManager extends Monitor implements UserAdminMBean {
 		try {
 			roles = admin.getRoles(filter);
 		} catch (InvalidSyntaxException e) {
-			throw new IllegalStateException("Invalid filter: " + e);
+			throw new IOException("Invalid filter: " + e);
 		}
 		String[] result = new String[roles.length];
 		for (int i = 0; i < roles.length; i++) {
@@ -410,11 +501,14 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * @see org.osgi.jmx.compendium.UserManagerMBean#getUser(java.lang.String)
 	 */
 	public CompositeData getUser(String username) throws IOException {
+		if (username == null) {
+			throw new IOException("Name must not be null");
+		}
 		User user;
 		try {
 			user = (User) admin.getRole(username);
 		} catch (ClassCastException e) {
-			throw new IllegalArgumentException("Not a user: " + username);
+			throw new IOException("Not a user: " + username);
 		}
 		try {
 			return user == null ? null : new OSGiUser(user).asCompositeData();
@@ -431,6 +525,9 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 */
 	public String getUserWithProperty(String key, String value)
 			throws IOException {
+		if (key == null) {
+			throw new IOException("Name must not be null");
+		}
 		User user = admin.getUser(key, value);
 		return user == null ? null : user.getName();
 	}
@@ -467,8 +564,7 @@ public class UserManager extends Monitor implements UserAdminMBean {
 		try {
 			roles = admin.getRoles(filter);
 		} catch (InvalidSyntaxException e) {
-			throw new IllegalStateException(
-					"Cannot use null filter, apparently: " + e);
+			throw new IOException("Invalid filter: " + e);
 		}
 		ArrayList<String> groups = new ArrayList<String>();
 		for (Role role : roles) {
@@ -488,11 +584,17 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 */
 	public void removeCredential(String key, String username)
 			throws IOException {
+		if (username == null || username.length() == 0) {
+			throw new IOException("Name must not be null or empty");
+		}
+		if (key == null) {
+			throw new IOException("Credential key must not be null");
+		}
 		User user;
 		try {
 			user = (User) admin.getRole(username);
 		} catch (ClassCastException e) {
-			throw new IllegalArgumentException("Not a user: " + username);
+			throw new IOException("Not a user: " + username);
 		}
 		if (user == null) {
 			return;
@@ -509,11 +611,17 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 */
 	public boolean removeMember(String groupname, String rolename)
 			throws IOException {
+		if (groupname == null) {
+			throw new IOException("Group name must not be null");
+		}
+		if (rolename == null) {
+			throw new IOException("Role name must not be null");
+		}
 		Group group;
 		try {
 			group = (Group) admin.getRole(groupname);
 		} catch (ClassCastException e) {
-			throw new IllegalArgumentException("Not a group: " + groupname);
+			throw new IOException("Not a group: " + groupname);
 		}
 		if (group == null) {
 			return false;
@@ -533,6 +641,9 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * java.lang.String)
 	 */
 	public void removeProperty(String key, String rolename) throws IOException {
+		if (rolename == null) {
+			throw new IOException("Name must not be null");
+		}
 		Role role = admin.getRole(rolename);
 		if (role == null) {
 			return;
@@ -547,6 +658,9 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * org.osgi.jmx.compendium.UserManagerMBean#removeRole(java.lang.String)
 	 */
 	public boolean removeRole(String name) throws IOException {
+		if (name == null) {
+			throw new IOException("Name must not be null");
+		}
 		return admin.removeRole(name);
 	}
 
@@ -557,6 +671,9 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * org.osgi.jmx.compendium.UserManagerMBean#removeUser(java.lang.String)
 	 */
 	public boolean removeUser(String name) throws IOException {
+		if (name == null) {
+			throw new IOException("Name must not be null");
+		}
 		return admin.removeRole(name);
 	}
 
@@ -567,6 +684,9 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * org.osgi.jmx.compendium.UserManagerMBean#removeGroup(java.lang.String)
 	 */
 	public boolean removeGroup(String name) throws IOException {
+		if (name == null) {
+			throw new IOException("Name must not be null");
+		}
 		return admin.removeRole(name);
 	}
 

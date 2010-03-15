@@ -49,6 +49,9 @@ public class PermissionManager implements PermissionAdminMBean {
 	 * .String)
 	 */
 	public String[] getPermissions(String location) throws IOException {
+		if (location == null) {
+			throw new IOException("Locatin must not be null");
+		}
 		PermissionInfo[] permissions = admin.getPermissions(location);
 		if (permissions == null) {
 			return null;
@@ -70,10 +73,20 @@ public class PermissionManager implements PermissionAdminMBean {
 	 */
 	public void setDefaultPermissions(String[] encodedPermissions)
 			throws IOException {
+		if (encodedPermissions == null) {
+			throw new IOException("Encoded permissions must not be null");
+		}
 		PermissionInfo[] permissions = new PermissionInfo[encodedPermissions.length];
 		int i = 0;
 		for (String encodedPermission : encodedPermissions) {
-			permissions[i] = new PermissionInfo(encodedPermission);
+			try {
+				permissions[i] = new PermissionInfo(encodedPermission);
+			} catch (Throwable e) {
+				IOException iox = new IOException(
+						"Invalid encoded permission: " + encodedPermission);
+				iox.initCause(e);
+				throw iox;
+			}
 		}
 		admin.setDefaultPermissions(permissions);
 	}
@@ -106,10 +119,23 @@ public class PermissionManager implements PermissionAdminMBean {
 	 */
 	public void setPermissions(String location, String[] encodedPermissions)
 			throws IOException {
+		if (location == null) {
+			throw new IOException("Location must not be null");
+		}
+		if (encodedPermissions == null) {
+			throw new IOException("Encoded permissions must not be null");
+		}
 		PermissionInfo[] permissions = new PermissionInfo[encodedPermissions.length];
 		int i = 0;
 		for (String encodedPermission : encodedPermissions) {
-			permissions[i] = new PermissionInfo(encodedPermission);
+			try {
+				permissions[i] = new PermissionInfo(encodedPermission);
+			} catch (Throwable e) {
+				IOException iox = new IOException(
+						"Invalid encoded permission: " + encodedPermission);
+				iox.initCause(e);
+				throw iox;
+			}
 		}
 		admin.setPermissions(location, permissions);
 	}

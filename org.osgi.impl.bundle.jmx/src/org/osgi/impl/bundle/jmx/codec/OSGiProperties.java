@@ -97,9 +97,11 @@ public class OSGiProperties {
 	 */
 	public static TabularData tableFrom(Dictionary properties) {
 		TabularDataSupport table = new TabularDataSupport(PROPERTY_TABLE);
-		for (Enumeration keys = properties.keys(); keys.hasMoreElements();) {
-			String key = (String) keys.nextElement();
-			table.put(encode(key, properties.get(key)));
+		if (properties != null) {
+			for (Enumeration keys = properties.keys(); keys.hasMoreElements();) {
+				String key = (String) keys.nextElement();
+				table.put(encode(key, properties.get(key)));
+			}
 		}
 		return table;
 	}

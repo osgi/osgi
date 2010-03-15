@@ -18,6 +18,7 @@ package org.osgi.impl.bundle.jmx.framework.codec;
 
 import static org.osgi.impl.bundle.jmx.codec.Util.LongArrayFrom;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -124,9 +125,10 @@ public class BundleBatchInstallResult extends BundleBatchResult {
 	 * Answer the receiver encoded as CompositeData
 	 * 
 	 * @return the CompositeData encoding of the receiver.
+	 * @throws IOException
 	 */
 	@SuppressWarnings("boxing")
-	public CompositeData asCompositeData() {
+	public CompositeData asCompositeData() throws IOException {
 		Map<String, Object> items = new HashMap<String, Object>();
 		items.put(FrameworkMBean.SUCCESS, success);
 		items.put(FrameworkMBean.ERROR, errorMessage);
@@ -138,8 +140,10 @@ public class BundleBatchInstallResult extends BundleBatchResult {
 			return new CompositeDataSupport(
 					FrameworkMBean.BATCH_INSTALL_RESULT_TYPE, items);
 		} catch (OpenDataException e) {
-			throw new IllegalStateException(
-					"Cannot form batch result open data", e);
+			IOException iox = new IOException(
+					"Cannot form batch result open data");
+			iox.initCause(e);
+			throw iox;
 		}
 	}
 

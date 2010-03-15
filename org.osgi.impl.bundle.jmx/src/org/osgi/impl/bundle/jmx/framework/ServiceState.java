@@ -158,8 +158,7 @@ public class ServiceState extends Monitor implements ServiceStateMBean {
 		tracker.open();
 		ServiceReference serviceReference = tracker.getServiceReference();
 		if (serviceReference == null) {
-			throw new IllegalArgumentException("Service <" + serviceId
-					+ "> does not exist");
+			throw new IOException("Service <" + serviceId + "> does not exist");
 		}
 		tracker.close();
 		return serviceReference;

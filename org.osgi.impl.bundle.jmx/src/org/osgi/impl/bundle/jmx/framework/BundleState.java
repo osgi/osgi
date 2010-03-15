@@ -237,10 +237,10 @@ public class BundleState extends Monitor implements BundleStateMBean {
 		return Util.isBundleRequired(bundle(bundleId), bc, admin);
 	}
 
-	private Bundle bundle(long bundleId) {
+	private Bundle bundle(long bundleId) throws IOException {
 		Bundle b = bc.getBundle(bundleId);
 		if (b == null) {
-			throw new IllegalArgumentException("Bundle with id: " + bundleId
+			throw new IOException("Bundle with id: " + bundleId
 					+ " does not exist");
 		}
 		return b;

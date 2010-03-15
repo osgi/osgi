@@ -48,7 +48,17 @@ public class PackageState implements PackageStateMBean {
 	 */
 	public long[] getExportingBundles(String packageName, String version)
 			throws IOException {
-		Version v = Version.parseVersion(version);
+		if (packageName == null) {
+			throw new IOException("Package name cannot be null");
+		}
+		Version v = Version.emptyVersion;
+		if (version != null) {
+			try {
+				v = Version.parseVersion(version);
+			} catch (Throwable e) {
+				throw new IOException("Invalid package version: " + version);
+			}
+		}
 		ExportedPackage[] exportedPackages = admin
 				.getExportedPackages(packageName);
 		if (exportedPackages == null) {
@@ -77,7 +87,17 @@ public class PackageState implements PackageStateMBean {
 	 */
 	public long[] getImportingBundles(String packageName, String version,
 			long exportingBundle) throws IOException {
-		Version v = Version.parseVersion(version);
+		if (packageName == null) {
+			throw new IOException("Package name cannot be null");
+		}
+		Version v = Version.emptyVersion;
+		if (version != null) {
+			try {
+				v = Version.parseVersion(version);
+			} catch (Throwable e) {
+				throw new IOException("Invalid package version: " + version);
+			}
+		}
 		ExportedPackage[] exportedPackages = admin
 				.getExportedPackages(packageName);
 		if (exportedPackages == null) {
@@ -124,7 +144,17 @@ public class PackageState implements PackageStateMBean {
 	 */
 	public boolean isRemovalPending(String packageName, String version,
 			long exportingBundle) throws IOException {
-		Version v = Version.parseVersion(version);
+		if (packageName == null) {
+			throw new IOException("Package name cannot be null");
+		}
+		Version v = Version.emptyVersion;
+		if (version != null) {
+			try {
+				v = Version.parseVersion(version);
+			} catch (Throwable e) {
+				throw new IOException("Invalid package version: " + version);
+			}
+		}
 		ExportedPackage[] exportedPackages = admin
 				.getExportedPackages(packageName);
 		if (exportedPackages == null) {

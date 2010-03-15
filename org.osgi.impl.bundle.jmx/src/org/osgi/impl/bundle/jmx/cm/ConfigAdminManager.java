@@ -51,6 +51,9 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 */
 	public String createFactoryConfiguration(String factoryPid)
 			throws IOException {
+		if (factoryPid == null) {
+			throw new IOException("Factory PID must not be null");
+		}
 		return admin.createFactoryConfiguration(factoryPid, null).getPid();
 	}
 
@@ -64,6 +67,9 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	public String createFactoryConfigurationForLocation(String factoryPid,
 			String location)
 			throws IOException {
+		if (factoryPid == null) {
+			throw new IOException("Factory PID must not be null");
+		}
 		return admin.createFactoryConfiguration(factoryPid, location).getPid();
 	}
 
@@ -74,6 +80,9 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 * org.osgi.jmx.compendium.ConfigAdminManagerMBean#delete(java.lang.String)
 	 */
 	public void delete(String pid) throws IOException {
+		if (pid == null) {
+			throw new IOException("PID must not be null");
+		}
 		admin.getConfiguration(pid, null).delete();
 	}
 
@@ -86,6 +95,9 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 */
 	public void deleteForLocation(String pid, String location)
 			throws IOException {
+		if (pid == null) {
+			throw new IOException("PID must not be null");
+		}
 		admin.getConfiguration(pid, location).delete();
 	}
 
@@ -102,7 +114,7 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 			confs = admin.listConfigurations(filter);
 		} catch (InvalidSyntaxException e) {
 			log.log(Level.SEVERE, "Invalid filter argument: " + filter, e);
-			throw new IllegalArgumentException("Invalid filter: " + e);
+			throw new IOException("Invalid filter: " + e);
 		}
 		if (confs != null) {
 			for (Configuration conf : confs) {
@@ -119,6 +131,9 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 * .lang.String)
 	 */
 	public String getBundleLocation(String pid) throws IOException {
+		if (pid == null) {
+			throw new IOException("PID must not be null");
+		}
 		return admin.getConfiguration(pid, null).getBundleLocation();
 	}
 
@@ -130,6 +145,9 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 * .String)
 	 */
 	public String getFactoryPid(String pid) throws IOException {
+		if (pid == null) {
+			throw new IOException("PID must not be null");
+		}
 		return admin.getConfiguration(pid, null).getFactoryPid();
 	}
 
@@ -142,6 +160,9 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 */
 	public String getFactoryPidForLocation(String pid, String location)
 			throws IOException {
+		if (pid == null) {
+			throw new IOException("PID must not be null");
+		}
 		return admin.getConfiguration(pid, location).getFactoryPid();
 	}
 
@@ -154,6 +175,9 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 */
 	@SuppressWarnings("unchecked")
 	public TabularData getProperties(String pid) throws IOException {
+		if (pid == null) {
+			throw new IOException("PID must not be null");
+		}
 		Dictionary properties = admin.getConfiguration(pid, null)
 				.getProperties();
 		return properties == null ? null : tableFrom(properties);
@@ -169,6 +193,9 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	@SuppressWarnings("unchecked")
 	public TabularData getPropertiesForLocation(String pid, String location)
 			throws IOException {
+		if (pid == null) {
+			throw new IOException("PID must not be null");
+		}
 		Dictionary properties = admin.getConfiguration(pid, location)
 				.getProperties();
 		return properties == null ? null : tableFrom(properties);
@@ -188,7 +215,7 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 			configurations = admin.listConfigurations(filter);
 		} catch (InvalidSyntaxException e) {
 			log.log(Level.SEVERE, "Invalid filter argument: " + filter, e);
-			throw new IllegalArgumentException("Invalid filter: " + e);
+			throw new IOException("Invalid filter: " + e);
 		}
 		if (configurations != null) {
 			for (Configuration config : configurations) {
@@ -208,6 +235,9 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 */
 	public void setBundleLocation(String pid, String location)
 			throws IOException {
+		if (pid == null) {
+			throw new IOException("PID must not be null");
+		}
 		admin.getConfiguration(pid).setBundleLocation(location);
 	}
 
@@ -219,6 +249,9 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 * javax.management.openmbean.TabularData)
 	 */
 	public void update(String pid, TabularData table) throws IOException {
+		if (pid == null) {
+			throw new IOException("PID must not be null");
+		}
 		admin.getConfiguration(pid, null).update(propertiesFrom(table));
 	}
 
@@ -231,6 +264,9 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 	 */
 	public void updateForLocation(String pid, String location, TabularData table)
 			throws IOException {
+		if (pid == null) {
+			throw new IOException("PID must not be null");
+		}
 		admin.getConfiguration(pid, location).update(propertiesFrom(table));
 	}
 
