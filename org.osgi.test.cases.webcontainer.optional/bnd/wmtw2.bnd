@@ -1,7 +1,9 @@
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.0
 Bundle-SymbolicName: org.osgi.test.cases.webcontainer.wmtw2
-
+Bundle-Description: OSGi Web Container RFC 66 Optional Compliance Test test war 2 with manifest somewhat defined
+Web-ContextPath: wmtw2
+Import-Package: javax.annotation;version="1.0",javax.annotation.security;version="1.0",javax.servlet;version="[2.5,1000)",javax.servlet.http;version="[2.5,1000)"
 # We don't want bnd to put the source code in the jar
 -sources=false
 
@@ -14,6 +16,11 @@ Private-Package: ${p}.tw2.*, \
  !Bundle-Version, \
  !Bundle-ManifestVersion, \
  !Bundle-SymbolicName, \
+ !Bundle-ClassPath, \
+ !Bundle-Name, \
+ !Bundle-Description, \
+ !Import-Package, \
+ !Web-ContextPath, \
  *
 	
 	

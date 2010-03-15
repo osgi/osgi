@@ -1,4 +1,9 @@
 Bundle-Vendor: OSGi Alliance
+Bundle-Version: 1.0
+Bundle-SymbolicName: ${p}.wmtw3
+Bundle-Name: ${p}.wmtw3
+Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war3 with valid WAB manifest
+Web-ContextPath: wmtw3
 
 # We don't want bnd to put the source code in the jar
 -sources=false

@@ -1,6 +1,9 @@
 Bundle-Vendor: OSGi Alliance
 Bundle-Name: ${p}.wmtw3
-Bundle-Description: OSGi Web Container RFC 66 Optional Compliance Test test war 3 with manifest somewhat pre-specified
+Bundle-Description: OSGi Web Container RFC 66 Optional Compliance Test test war 3 with valid manifest
+Bundle-SymbolicName: ${p}.wmtw3
+Web-ContextPath: wmtw3
+Import-Package: javax.annotation;version="1.0",javax.annotation.security;version="1.0",javax.servlet;version="2.5",javax.servlet.http;version="2.5"
 
 # We don't want bnd to put the source code in the jar
 -sources=false
@@ -11,11 +14,13 @@ Private-Package: ${p}.tw2.*, \
 -resourceonly=true
 -removeheaders: !Manifest-Version, \
  !Bundle-Vendor, \
+ !Bundle-Version, \
+ !Bundle-ManifestVersion, \
+ !Bundle-SymbolicName, \
  !Bundle-ClassPath, \
  !Bundle-Name, \
  !Bundle-Description, \
  !Import-Package, \
  !Web-ContextPath, \
  *
-
 	

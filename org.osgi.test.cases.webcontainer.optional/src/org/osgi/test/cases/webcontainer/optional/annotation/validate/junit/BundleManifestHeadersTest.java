@@ -100,7 +100,7 @@ public class BundleManifestHeadersTest extends WebContainerOptionalTestBundleCon
     /*
      * verify deployOptions web-contextpath overwrite wab manifest
      */
-    public void testEmptyDeployOptions007() throws Exception {
+    public void testManifestHeaders011() throws Exception {
         final Map<String, Object> options = new HashMap<String, Object>();
         options.put(WEB_CONTEXT_PATH, WEBCONTEXTPATH4);
         this.b = super.installWar(options, "wmtw2.war", true);
@@ -110,7 +110,7 @@ public class BundleManifestHeadersTest extends WebContainerOptionalTestBundleCon
     /*
      * verify deployOptions web-contextpath overwrite wab manifest
      */
-    public void testEmptyDeployOptions008() throws Exception {
+    public void testManifestHeaders012() throws Exception {
         final Map<String, Object> options = new HashMap<String, Object>();
         options.put(WEB_CONTEXT_PATH, WEBCONTEXTPATH5);
         this.b = super.installWar(options, "wmtw3.war", true);

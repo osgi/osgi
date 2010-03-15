@@ -6,7 +6,7 @@ import org.osgi.test.cases.webcontainer.util.ManifestHeadersTestBundleControl;
 
 public class WebContainerOptionalTestBundleControl extends ManifestHeadersTestBundleControl {
 
-    public static final String[] IMPORTS_ANNOTATION = {"javax.annotation"};
+    public static final String[] IMPORTS_ANNOTATION = {"javax.annotation", "javax.annotation.security"};
     protected TimeUtil timeUtil;
     
     protected void prepare(String wcp) throws Exception {
