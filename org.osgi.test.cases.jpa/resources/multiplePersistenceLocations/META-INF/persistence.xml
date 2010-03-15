@@ -4,6 +4,6 @@
    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
    version="1.0">
 	<persistence-unit name="testUnit3">
-		<description>Persistence unit for testing persistence.xml discovery in META-INF folder of root of bundle</description>
+		<description>Persistence unit for testing discovery of multiple persistence descriptors in one bundle</description>
 	</persistence-unit>
 </persistence>
