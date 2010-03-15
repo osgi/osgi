@@ -15,9 +15,23 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.junit;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -26,9 +40,12 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
 import org.osgi.service.remoteserviceadmin.EndpointListener;
+import org.osgi.service.remoteserviceadmin.ExportRegistration;
 import org.osgi.service.remoteserviceadmin.RemoteConstants;
+import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
+import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
 import org.osgi.test.cases.remoteserviceadmin.impl.TestServiceImpl;
 import org.osgi.test.support.compatibility.Semaphore;
 
@@ -41,6 +58,16 @@ import org.osgi.test.support.compatibility.Semaphore;
  */
 public class DiscoveryTest extends MultiFrameworkTestCase {
 	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.remoteserviceadmin.system.packages.extra";
+
+	private final static List<Class> SUPPORTED_TYPES = Arrays.asList(new Class[] {String.class,
+		Long.TYPE, Long.class,
+		Integer.TYPE, Integer.class,
+		Byte.TYPE, Byte.class,
+		Character.TYPE, Character.class,
+		Double.TYPE, Double.class,
+		Float.TYPE, Float.class,
+		Boolean.TYPE, Boolean.class,
+		Short.TYPE, Short.class});
 
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#getConfiguration()
@@ -150,82 +177,269 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		assertEquals("the property of the service should have been overridden by the EndpointDescription", "has been overridden", ep.getProperties().get("mykey")); 
 		assertEquals("the property myprop is missing", "myvalue", ep.getProperties().get("myprop"));
 	}
-
+	
 	/**
-	 * Test behavior of EndpointListeners
+	 * 122.6 Discovery
 	 * 
-	 * @throws Exception
+	 * EndpointDescription via XML file
 	 */
-	public void testEndpointListener() throws Exception {
-		ServiceReference[] refs = getContext().getServiceReferences(EndpointListener.class.getName(), null);
-		assertNotNull("no EndpointListeners registered", refs);
-		assertTrue("no EndpointListeners registered", refs.length > 0);
+	public void testDiscovery122_6_8() throws Exception {
+		Set<String> set = new HashSet<String>();
+		set.add("one");
+		set.add("two");
+		List<String> list = new LinkedList<String>();
+		list.add("first");
+		list.add("second");
 		
-		// register my own listener
-		EndpointListenerImpl endpointListener = scope_and_filter_122_6_1("");
+		// register a service and get the exported EndpointDescription
+		Hashtable<String, Object> dictionary = new Hashtable<String, Object>();
+		dictionary.put("mykey", "will be overridden");
+		dictionary.put("myprop", "myvalue");
+		dictionary.put("good test", true);
+//		dictionary.put("myset", set);
+		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, "*");
+
+		TestServiceImpl service = new TestServiceImpl();
 		
-		TestServiceImpl serviceA = new TestServiceImpl();
-		ServiceRegistration reg = getContext().registerService(A.class.getName(), serviceA, null);
-		assertNotNull(reg);
+		ServiceRegistration registration = getContext().registerService(new String[]{A.class.getName(), B.class.getName()}, service, dictionary);
+
+		ServiceReference rsaRef = getContext().getServiceReference(RemoteServiceAdmin.class.getName());
+		assertNotNull(rsaRef);
+		RemoteServiceAdmin rsa = (RemoteServiceAdmin) getContext().getService(rsaRef);
+		assertNotNull(rsa);
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(RemoteConstants.ENDPOINT_ID, "myid");
-		properties.put(RemoteConstants.SERVICE_IMPORTED_CONFIGS, "myconfigtype");
+		properties.put("mykey", "has been overridden");
+//		properties.put("mylist", list);
+		properties.put("myfloat", (float)3.1415f);
+		properties.put("mychar", (char)'t');
+//		properties.put("myxml", "<myxml>test</myxml>");
+		properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 		
-		// create EndpointDescription
-		EndpointDescription description = new EndpointDescription(reg.getReference(), properties);
+		// export the service
+		Collection<ExportRegistration> exportRegistrations = rsa.exportService(registration.getReference(), properties);
+		assertNotNull(exportRegistrations);
+		assertFalse(exportRegistrations.isEmpty());
 		
-		EndpointListener elistener = (EndpointListener) getContext().getService(refs[0]);
-		assertNotNull(elistener);
+		EndpointDescription description = exportRegistrations.iterator().next().getExportReference().getExportedEndpoint();
+		assertNotNull(description);
 		
-		String filter = "(" + RemoteConstants.ENDPOINT_ID + "=myid)";
-
-		// test add part
-		elistener.endpointAdded(description, filter);
-
-		endpointListener.getSem().waitForSignal(10000);
-
-		assertSame(description, endpointListener.getAddedEndpoint());
-		assertEquals(filter, endpointListener.getMatchedFilter());
-
-		// add another listener to test replay
-		EndpointListenerImpl endpointListener2 = scope_and_filter_122_6_1("");
-		endpointListener2.getSem().waitForSignal(6000);
-
-		assertSame(description, endpointListener2.getAddedEndpoint());
-		assertEquals(filter, endpointListener2.getMatchedFilter());
-
-		// change the scope
+		// add a new property that only the XML description has
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.putAll(description.getProperties());
+		props.put("newkey", "newvalue");
+		props.remove(RemoteConstants.ENDPOINT_FRAMEWORK_UUID); // this points to the parent framework and needs to be removed
+		props.remove("service.id"); // this is specific to the parent framework
+		description = new EndpointDescription(props);
 		
-		// test remove part
-		elistener.endpointRemoved(description, filter);
-
-		endpointListener.getSem().waitForSignal(6000);
-
-		assertSame(description, endpointListener.getRemovedEndpoint());
-		assertEquals(filter, endpointListener.getMatchedFilter());
+		// create an XML file version of the description
+		String xmlStr = toXml(description);
+		System.out.println(xmlStr);
 		
-		// add again
-		// test add part
-		elistener.endpointAdded(description, filter);
-
-		endpointListener.getSem().waitForSignal(6000);
-
-		assertSame(description, endpointListener.getAddedEndpoint());
-		assertEquals(filter, endpointListener.getMatchedFilter());
+		// verify that the server framework is exporting the test packages
+		verifyFramework();
+		BundleContext childContext = getFramework().getBundleContext();
 		
-		// now remove client
-		for (int i = 0; i < refs.length; i++) {
-			getContext().ungetService(refs[i]);
+		// create a bundle and start the bundle in the child framework
+		String testbundleloc = createBundle(xmlStr);
+		
+		Bundle testbundle = childContext.installBundle(testbundleloc);
+		assertNotNull(testbundle);
+		
+		testbundle.start();
+		
+		//
+		// install test bundle in child framework
+		//
+		
+		Bundle tb3Bundle = installBundle(childContext,"/tb3.jar");
+		assertNotNull(tb3Bundle);
+		
+		tb3Bundle.start(); // throws Exception if test was not successful
+		
+		// remove the proxy
+		testbundle.stop();
+		
+		// now test removal of proxy
+		tb3Bundle.stop(); // throws Exception if test was not successful
+	}
+
+	/**
+	 * @param xmlStr
+	 * @return
+	 * @throws IOException 
+	 */
+	private String createBundle(String xmlStr) throws IOException {
+		File bundle = File.createTempFile("rsatck", ".jar");
+
+		Manifest manifest = new Manifest();
+		Attributes attrs = manifest.getMainAttributes();
+		attrs.put(Attributes.Name.MANIFEST_VERSION, "1.0");
+		attrs.put(new Attributes.Name(
+				org.osgi.framework.Constants.BUNDLE_NAME),
+				"RemoteServiceAdmin TCK");
+		attrs.put(new Attributes.Name(org.osgi.framework.Constants.BUNDLE_SYMBOLICNAME), "org.osgi.test.cases.remoteserviceadmin.testbundle");
+		attrs.put(new Attributes.Name(org.osgi.framework.Constants.BUNDLE_MANIFESTVERSION), "2");
+		attrs.put(new Attributes.Name(org.osgi.framework.Constants.BUNDLE_VERSION),	"1.0.0");
+		attrs.put(new Attributes.Name(org.osgi.framework.Constants.BUNDLE_VENDOR), "OSGi Alliance");
+		attrs.put(new Attributes.Name("Remote-Service"), "endpoint.xml");
+
+		JarOutputStream jos = new JarOutputStream(new FileOutputStream(bundle), manifest);
+
+		JarEntry je = new JarEntry("endpoint.xml");
+		jos.putNextEntry(je);
+
+		jos.write(xmlStr.getBytes());
+
+		jos.flush();
+		jos.closeEntry();
+		jos.close();
+		
+		return bundle.toURI().toString();
+	}
+
+	/**
+	 * @param description
+	 * @return
+	 */
+	private String toXml(EndpointDescription description) {
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>").append("\n");
+		sb.append("<endpoint-descriptions xmlns=\"http://www.osgi.org/xmlns/rsa/v1.0.0\">").append("\n");
+		sb.append("<endpoint-description>").append("\n");
+		
+		String str;
+		for (Iterator<Map.Entry<String, Object>> it = description.getProperties().entrySet().iterator(); it.hasNext(); ) {
+			Map.Entry<String, Object> entry = it.next();
+			Object value = entry.getValue();
+			Class<?> clazz = value.getClass();
+			str = null;
+
+			if (SUPPORTED_TYPES.contains(clazz)) {
+				String type = clazz.getName();
+				type = type.substring(type.lastIndexOf(".") != -1 ? type.lastIndexOf(".") + 1 : 0);
+				
+				if ("String".equals(type) && ((String)value).startsWith("<")) {
+					str = ">\n <xml>\n" + value.toString() + "\n </xml>";
+					
+				} else {
+					str = " value-type=\"" + type + "\" value=\"" + value.toString() + "\">";
+				}
+			} else if (value instanceof List<?>) {
+				str = asList((List<?>)value);
+			} else if (value instanceof Set<?>) {
+				str = asSet((Set<?>)value);
+			} else if ((str = isArray(value)) != null) {
+				
+			} else {
+				System.err.println("unsupported property type " + clazz.getName());
+				continue;
+			}
+			
+			sb.append(" <property name=\"").append(entry.getKey()).append("\"");
+			sb.append(str).append("\n");
+			sb.append(" </property>").append("\n");
 		}
 		
-		// check that endpoint got removed
-		endpointListener.getSem().waitForSignal(6000);
-
-		assertSame(description, endpointListener.getRemovedEndpoint());
-		assertEquals(filter, endpointListener.getMatchedFilter());
+		sb.append("</endpoint-description>").append("\n");
+		sb.append("</endpoint-descriptions>");
+		
+		return sb.toString();
 	}
 	
+	/**
+	 * @param value
+	 * @return
+	 */
+	private String isArray(Object value) {
+		if (!value.getClass().isArray()) {
+			return null;
+		}
+		
+		Class type = value.getClass().getComponentType();
+		if (!SUPPORTED_TYPES.contains(type)) {
+			System.err.println("unsupported array type " + type);
+		}
+		
+		String str = type.getName();
+		str = str.substring(str.lastIndexOf(".") != -1 ? str.lastIndexOf(".") + 1 : 0);
+
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append(" value-type=\"").append(str).append("\">\n");
+		sb.append("  <array>").append("\n");
+		
+		Object[] arr = (Object[]) value;
+		for (int i = 0; i < arr.length; i++) {
+			sb.append("   <value>").append(arr[i].toString()).append("</value>").append("\n");
+		}
+		
+		sb.append("  </array>");
+		return sb.toString();
+	}
+
+	/**
+	 * @param value
+	 * @return
+	 */
+	private String asList(List<?> value) {
+		StringBuffer sb = new StringBuffer();
+		
+		if (value.size() > 0) {
+			Class<?> type = value.iterator().next().getClass();
+			if (!SUPPORTED_TYPES.contains(type)) {
+				System.err.println("unsupported list type " + type);
+			}
+
+			String str = type.getName();
+			str = str.substring(str.lastIndexOf(".") != -1 ? str.lastIndexOf(".") + 1 : 0);
+
+			sb.append(" value-type=\"").append(str).append("\">\n");
+		} else {
+			sb.append("\">\n");
+		}
+		
+		
+		sb.append("  <list>").append("\n");
+		for (Iterator<?> it = value.iterator(); it.hasNext(); ) {
+			sb.append("   <value>").append(it.next().toString()).append("</value>").append("\n");
+		}
+		sb.append("  </list>");
+
+		return sb.toString();
+	}
+
+	/**
+	 * @param value
+	 * @return
+	 */
+	private String asSet(Set<?> value) {
+		StringBuffer sb = new StringBuffer();
+		
+		if (value.size() > 0) {
+			Class<?> type = value.iterator().next().getClass();
+			if (!SUPPORTED_TYPES.contains(type)) {
+				System.err.println("unsupported list type " + type);
+			}
+
+			String str = type.getName();
+			str = str.substring(str.lastIndexOf(".") != -1 ? str.lastIndexOf(".") + 1 : 0);
+
+			sb.append(" value-type=\"").append(str).append("\">\n");
+		} else {
+			sb.append("\">\n");
+		}
+		
+		sb.append("  <set>").append("\n");
+		for (Iterator<?> it = value.iterator(); it.hasNext(); ) {
+			sb.append("   <value>").append(it.next().toString()).append("</value>").append("\n");
+		}
+		sb.append("  </set>");
+
+		return sb.toString();
+	}
+
 	/**
 	 * Test empty filter scope
 	 */
