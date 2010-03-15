@@ -2,6 +2,8 @@
 -dependson          : osgi.ri, ${build.tests}
 -resourceonly       : true
 
+# do not include bundles listed in the following properties:
+-pack-not: org.osgi.test.cases.remoteserviceadmin.bundles,org.osgi.test.cases.scaconfigtype.bundles
+
 # Build the osgi spec files
 -sub       = osgi.*.tests.bnd
-
