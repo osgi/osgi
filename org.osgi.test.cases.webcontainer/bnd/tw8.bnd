@@ -1,0 +1,11 @@
+# We don't want bnd to put the source code in the jar
+-sources=false
+
+Private-Package: ${p}.tw5.*
+-wab: resources/tw8
+-resourceonly=true
+-removeheaders: !Manifest-Version, *
+
+Include-Resource = \
+	WEB-INF/lib/log.jar=log.jar, \
+	WEB-INF/lib/simple.jar=simple.jar 

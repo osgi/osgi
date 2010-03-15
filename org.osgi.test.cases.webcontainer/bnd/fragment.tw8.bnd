@@ -1,0 +1,14 @@
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 1.0
+Bundle-SymbolicName: ${p}.fragment.tw8
+Bundle-Name: ${p}.fragment.tw8
+Bundle-Description: OSGi Web Container RFC 66 Compliance Test test war 8's fragment
+ 
+Fragment-Host: ${p}.tw8
+
+-sources=false
+
+Include-Resource = \
+	resources/fragment
+	
+	
