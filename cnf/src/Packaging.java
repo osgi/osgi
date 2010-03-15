@@ -34,6 +34,11 @@ public class Packaging implements AnalyzerPlugin {
 
 		Map<String, String> filesToPath = Create.map();
 
+		// Make sure certain files are not copied. The
+		// packnot contains names of keys that should not be copied
+		Collection<String> packnot = analyzer.parseHeader(analyzer
+				.getProperty("-pack-not")).keySet();
+
 		String pack = analyzer.getProperty(PACK);
 		ProjectBuilder pb = (ProjectBuilder) analyzer;
 		Workspace workspace = pb.getProject().getWorkspace();
@@ -65,7 +70,7 @@ public class Packaging implements AnalyzerPlugin {
 				if (!project.isValid())
 					analyzer.error("Invalid project to pack: %s", project);
 				else
-					pack(analyzer, jar, project, runpath, filesToPath);
+					pack(analyzer, jar, project, runpath, filesToPath, packnot);
 			}
 			catch (Exception t) {
 				analyzer.error("While packaging %s got %s", entry.getKey(), t);
@@ -108,7 +113,8 @@ public class Packaging implements AnalyzerPlugin {
 	 */
 	@SuppressWarnings("unchecked")
 	private void pack(Analyzer analyzer, Jar jar, Project project,
-			Collection<Container> sharedRunpath, Map<String, String> filesToPath)
+			Collection<Container> sharedRunpath,
+			Map<String, String> filesToPath, Collection<String> packnot)
 			throws Exception {
 		Collection<Container> runpath = project.getRunpath();
 		Collection<Container> runbundles = project.getRunbundles();
@@ -154,7 +160,8 @@ public class Packaging implements AnalyzerPlugin {
 			sb.append(key);
 			sb.append("=");
 
-			value = replacePaths(analyzer, jar, filesToPath, value);
+			value = replacePaths(analyzer, jar, filesToPath, value, !packnot
+					.contains(key));
 
 			sb.append("\"");
 			sb.append(value);
@@ -177,9 +184,11 @@ public class Packaging implements AnalyzerPlugin {
 	}
 
 	private String replacePaths(Analyzer analyzer, Jar jar,
-			Map<String, String> filesToPath, String value) throws Exception {
+			Map<String, String> filesToPath, String value, boolean include)
+			throws Exception {
 		Collection<String> paths = Processor.split(value);
 		List<String> result = Create.list();
+
 		for (String path : paths) {
 			File f = analyzer.getFile(path);
 			if (f.isAbsolute() && f.exists()
@@ -188,10 +197,12 @@ public class Packaging implements AnalyzerPlugin {
 				path = filesToPath.get(f.getAbsolutePath());
 				if (path == null) {
 					path = "jar/" + f.getName();
-					if ( path.endsWith(".jar")) {
-						jar.putResource( path, new FileResource(f));						
-					} else {
-						System.out.println("filesToPath " + filesToPath);
+					if (path.endsWith(".jar")) {
+						if (include)
+							jar.putResource(path, new FileResource(f));
+						filesToPath.put(f.getAbsolutePath(), path);
+					}
+					else {
 						path = "property-resources/" + f.getName();
 
 						// Ensure names are unique
@@ -201,19 +212,21 @@ public class Packaging implements AnalyzerPlugin {
 									+ n++;
 
 						filesToPath.put(f.getAbsolutePath(), path);
-						if (f.isFile()) {
-							jar.putResource(path, new FileResource(f));
-						}
-						else {
-							Jar j = new Jar(f);
-							jar.addAll(j, null, path);
+						if (include) {
+							if (f.isFile()) {
+								jar.putResource(path, new FileResource(f));
+							}
+							else {
+								Jar j = new Jar(f);
+								jar.addAll(j, null, path);
+							}
 						}
 					}
 				}
 				result.add(path);
 			}
 			else
-				// If one entry does not match, we assume they're not paths
+				// If one entry is not a file not match, we assume they're not paths
 				return value;
 		}
 		return Processor.join(result);
