@@ -17,7 +17,10 @@
 
 package org.osgi.impl.service.jndi;
 
+import java.security.PrivilegedExceptionAction;
 import java.util.Hashtable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
@@ -30,6 +33,8 @@ import org.osgi.service.jndi.JNDIConstants;
  * @version $Revision$
  */
 class BuilderUtils {
+	
+	private static Logger logger = Logger.getLogger(BuilderUtils.class.getName());
 	
 	/* private constructor, static utility class */
 	private BuilderUtils() {}
@@ -129,8 +134,19 @@ class BuilderUtils {
 	 */
 	private static class ThreadContextStrategyImpl implements GetBundleContextStrategy {
 		public BundleContext getBundleContext(Hashtable environment, String namingClassType) {
-			ClassLoader threadContextClassloader = 
-				Thread.currentThread().getContextClassLoader();
+			ClassLoader threadContextClassloader = null;
+			try {
+				// this code must run in a doPrivileged() block
+				threadContextClassloader = (ClassLoader)SecurityUtils.invokePrivilegedAction(new PrivilegedExceptionAction() {
+						public Object run() throws Exception {
+							return Thread.currentThread().getContextClassLoader();
+						}
+						
+					});
+			} catch (Exception e) {
+				logger.log(Level.FINE, "Exception occurred while trying to obtain the ThreadContextClassloader.", e);
+			}
+				
 			if ((threadContextClassloader != null)
 					&& (threadContextClassloader instanceof BundleReference)) {
 				BundleContext result = getBundleContextFromClassLoader(threadContextClassloader);
@@ -150,8 +166,24 @@ class BuilderUtils {
 	 */
 	private static class CallStackStrategyImpl implements GetBundleContextStrategy {
 		public BundleContext getBundleContext(Hashtable environment, String namingClassType) {
-			Class[] callStack = new CallStackSecurityManager().getClientCallStack();
-			
+			Class[] callStack = null;
+			try {
+				// creation of SecurityManager must take place in a doPrivileged() block,
+				// since JNDI clients should not have to include this permission in 
+				// order to use JNDI services.  
+				callStack = (Class[])SecurityUtils.invokePrivilegedAction(new PrivilegedExceptionAction() {
+						public Object run() throws Exception {
+							return new CallStackSecurityManager().getClientCallStack();
+						}
+						
+					});
+			} catch (Exception e) {
+				logger.log(Level.FINE, "Exception occurred while attempting to traverse client call stack to find caller's BundleContext.", 
+				           e);
+			}
+				
+				
+				
 			int indexOfConstructor = -1;
 			for(int i = 0; i < callStack.length; i++) {
 				if(callStack[i].getName().equals(namingClassType)) {
@@ -162,8 +194,20 @@ class BuilderUtils {
 			// the next stack frame should include the caller of the InitialContext constructor
 			if ((indexOfConstructor >= 0)
 					&& ((indexOfConstructor + 1) < callStack.length)) {
-				Class clientClass = callStack[indexOfConstructor + 1];
-				ClassLoader clientClassLoader = clientClass.getClassLoader();
+				final Class clientClass = callStack[indexOfConstructor + 1];
+				ClassLoader clientClassLoader = null;
+				try {
+					clientClassLoader = 
+						(ClassLoader)SecurityUtils.invokePrivilegedAction(new PrivilegedExceptionAction() {
+							public Object run() throws Exception {
+								return clientClass.getClassLoader();
+							}
+						});
+				} catch (Exception e) {
+					logger.log(Level.FINE, "Exception occurred while trying to obtain the client classloader.",
+							   e);
+				}
+					
 				if(clientClassLoader instanceof BundleReference) {
 					return getBundleContextFromClassLoader(clientClassLoader);
 				}

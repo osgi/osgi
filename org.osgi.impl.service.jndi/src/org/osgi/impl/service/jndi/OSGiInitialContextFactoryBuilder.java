@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.PrivilegedExceptionAction;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -95,7 +96,22 @@ class OSGiInitialContextFactoryBuilder implements
 
 	public OSGiInitialContextFactoryBuilder(BundleContext bundleContext) {
 		m_bundleContext = bundleContext;
-		createServiceTrackers(m_bundleContext);
+		
+		try {
+			// create the service trackers inside a doPrivileged() block
+			// since this code is the only interaction with a client's bundle
+			// context not covered by the security-aware wrapper interfaces
+			SecurityUtils.invokePrivilegedActionNoReturn(new PrivilegedExceptionAction() {
+				public Object run() throws Exception {
+					createServiceTrackers(m_bundleContext);
+					return null;
+				}
+			});
+		} catch (Exception e) {
+			logger.log(Level.FINE, 
+					   "Exception occurred while creating ServiceTracker implementations for JNDI Provider Services",
+					   e);
+		}
 	}
 
 	/**
@@ -314,13 +330,17 @@ class OSGiInitialContextFactoryBuilder implements
 				InitialContextFactoryBuilder builder = 
 					(InitialContextFactoryBuilder) m_bundleContext.getService(serviceReference);
 				try {
-					InitialContextFactory contextFactory = 
-						builder.createInitialContextFactory(environment);
-					// the first builder to return a non-null result is
-					// given precedence as per Section 5.2.1.1 of RFC
-					// 142
-					if (contextFactory != null) {
-						return new DefaultBuilderSupportedInitialContextFactory(contextFactory, builder);
+					// if builder is null, then service is not available
+					if (builder != null) {
+						InitialContextFactory contextFactory = builder
+								.createInitialContextFactory(environment);
+						// the first builder to return a non-null result is
+						// given precedence as per Section 5.2.1.1 of RFC
+						// 142
+						if (contextFactory != null) {
+							return new DefaultBuilderSupportedInitialContextFactory(
+									contextFactory, builder);
+						}
 					}
 				}
 				catch (NamingException namingException) {
@@ -731,8 +751,20 @@ class OSGiInitialContextFactoryBuilder implements
 		}
 
 		public void removedService(ServiceReference reference, Object service) {
+			handleRemovedService(reference, service);
+		}
+
+		public Object addingService(ServiceReference reference) {
+			return handleAddingService(reference);
+		}
+
+		private void handleRemovedService(ServiceReference reference, Object service) {
 			super.removedService(reference, service);
 			m_mapOfServicesToContexts.remove(service);
+		}
+		
+		private Object handleAddingService(ServiceReference reference) {
+			return super.addingService(reference);
 		}
 	}
 

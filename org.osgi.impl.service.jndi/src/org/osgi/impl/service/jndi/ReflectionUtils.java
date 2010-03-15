@@ -22,6 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
+import java.security.PrivilegedExceptionAction;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -115,10 +116,21 @@ class ReflectionUtils {
 	 * @return a ServiceProxyInfo instance, which includes the proxy or underlying service.
 	 */
 	static ServiceProxyInfo getProxyForSingleService(BundleContext bundleContext, OSGiURLParser urlParser, ServiceReference serviceReference, InvocationHandlerFactory handlerFactory) {
-		Object requestedService = 
+		final Object requestedService = 
 			bundleContext.getService(serviceReference);
-		ClassLoader tempLoader = 
-			requestedService.getClass().getClassLoader();
+		ClassLoader tempLoader = null;
+		try {
+			tempLoader = (ClassLoader)SecurityUtils.invokePrivilegedAction(new PrivilegedExceptionAction() {
+				public Object run() throws Exception {
+					return requestedService.getClass().getClassLoader();
+				}
+			});
+		} catch (Exception e) {
+			logger.log(Level.FINE, 
+					   "Exception occurred while trying to obtain OSGi service's ClassLoader",
+					   e);
+		} 
+			
 		try {
 			Class clazz = Class.forName(urlParser.getServiceInterface(), true, tempLoader);
 			if (clazz.isInterface()) {

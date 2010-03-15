@@ -17,7 +17,11 @@ package org.osgi.impl.service.jndi;
 
 import javax.naming.*;
 import javax.naming.spi.ObjectFactory;
+
+import java.security.PrivilegedExceptionAction;
 import java.util.Hashtable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A Decorated Context class that will allow the JNDI Framework to handle
@@ -26,6 +30,8 @@ import java.util.Hashtable;
  */
 class ContextWrapperImpl implements Context {
 
+	private static Logger logger = Logger.getLogger(ContextWrapperImpl.class.getName());
+	
 	private final Context			m_context;
 	private final FactoryManager	m_factoryManager;
 	
@@ -43,10 +49,14 @@ class ContextWrapperImpl implements Context {
 		if (isURLRequest(name)) {
 			// attempt to find a URL Context Factory to satisfy this lookup
 			// request
-			ObjectFactory objectFactory;
-			
-			synchronized (m_factoryManager) {
-				objectFactory = m_factoryManager.getURLContextFactory(getScheme(name));
+			ObjectFactory objectFactory = null;
+			try {
+				// obtain URL Context Factory in a doPrivilieged() block
+				objectFactory = (ObjectFactory)SecurityUtils.invokePrivilegedAction(new GetObjectFactoryAction(m_factoryManager, name));
+			} catch (Exception e) {
+				logger.log(Level.FINE, 
+						   "Exception occurred while trying to obtain a reference to a URL Context Factory.",
+						   e);
 			}
 			
 			if (objectFactory == null) {
@@ -88,6 +98,9 @@ class ContextWrapperImpl implements Context {
 		}
 
 	}
+
+
+	
 
 	public void bind(Name name, Object obj) throws NamingException {
 		m_context.bind(name, obj);
@@ -211,5 +224,27 @@ class ContextWrapperImpl implements Context {
 		}
 
 		return null;
+	}
+	
+	private static class GetObjectFactoryAction implements PrivilegedExceptionAction {
+		private final FactoryManager m_factoryManager;
+		private final String m_name;
+		
+		GetObjectFactoryAction(FactoryManager factoryManager, String name) {
+			m_factoryManager = factoryManager;
+			m_name = name;
+		}
+
+		public Object run() throws Exception {
+			return obtainObjectFactory(m_name);
+		}
+		
+		private ObjectFactory obtainObjectFactory(String name) {
+			ObjectFactory objectFactory;
+			synchronized (m_factoryManager) {
+				objectFactory = m_factoryManager.getURLContextFactory(getScheme(name));
+			}
+			return objectFactory;
+		}
 	}
 }

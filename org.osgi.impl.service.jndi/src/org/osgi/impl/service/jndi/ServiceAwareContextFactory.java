@@ -20,6 +20,7 @@ package org.osgi.impl.service.jndi;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.security.PrivilegedExceptionAction;
 import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,7 +68,7 @@ public class ServiceAwareContextFactory {
 			synchronized (this) {
 				synchronized (m_manager) {
 					try {
-						return SecurityUtils.invokePrivilegedAction(new ContextInvokeAction(method, args));
+						return invokeContextMethod(method, args);
 					}
 					catch (Exception exception) {
 						if(exception instanceof NamingException) {
@@ -99,35 +100,7 @@ public class ServiceAwareContextFactory {
 					return ReflectionUtils.invokeMethodOnContext(method, m_context, args);
 				}
 				else {
-					// make copy of existing context's environment
-					Hashtable newContextEnvironment = new Hashtable();
-					if (m_context.getEnvironment() != null) {
-						newContextEnvironment.putAll(m_context
-								.getEnvironment());
-					}
-					// attempt to recreate the required factory and context
-					try {
-						InitialContextFactory newFactory = m_manager
-								.createInitialContextFactory(newContextEnvironment);
-						if (newFactory != null) {
-							m_factory = newFactory;
-							Context newInternalContext = m_factory
-									.getInitialContext(newContextEnvironment);
-							if (newInternalContext != null) {
-								m_context = newInternalContext;
-								return ReflectionUtils.invokeMethodOnContext(method, m_context, args);
-							}
-						}
-					}
-					catch (NoInitialContextException noContextException) {
-						logger.log(Level.SEVERE,
-								   "An exception occurred while attempting to rebind the JNDI Provider service for this Context",
-								   noContextException);
-					}
-
-					// if no InitialContextFactory service can handle this request, throw exception
-					throw new NoInitialContextException(
-							"The service that created this JNDI Context is not available");
+					return SecurityUtils.invokePrivilegedAction(new ObtainFactoryAndInvokeAction(method, args));
 				}
 			} else {
 				// if context is already closed, do not try to 
@@ -135,6 +108,38 @@ public class ServiceAwareContextFactory {
 				// simply forward the call to the underlying context implementation
 				return ReflectionUtils.invokeMethodOnContext(method, m_context, args);
 			}
+		}
+
+		private Object obtainNewFactoryAndInvoke(Method method, Object[] args) throws NamingException, Throwable, NoInitialContextException {
+			// make copy of existing context's environment
+			Hashtable newContextEnvironment = new Hashtable();
+			if (m_context.getEnvironment() != null) {
+				newContextEnvironment.putAll(m_context
+						.getEnvironment());
+			}
+			// attempt to recreate the required factory and context
+			try {
+				InitialContextFactory newFactory = m_manager
+						.createInitialContextFactory(newContextEnvironment);
+				if (newFactory != null) {
+					m_factory = newFactory;
+					Context newInternalContext = m_factory
+							.getInitialContext(newContextEnvironment);
+					if (newInternalContext != null) {
+						m_context = newInternalContext;
+						return ReflectionUtils.invokeMethodOnContext(method, m_context, args);
+					}
+				}
+			}
+			catch (NoInitialContextException noContextException) {
+				logger.log(Level.SEVERE,
+						   "An exception occurred while attempting to rebind the JNDI Provider service for this Context",
+						   noContextException);
+			}
+
+			// if no InitialContextFactory service can handle this request, throw exception
+			throw new NoInitialContextException(
+					"The service that created this JNDI Context is not available");
 		}
 		
 
@@ -152,17 +157,33 @@ public class ServiceAwareContextFactory {
 				return m_manager.isFactoryServiceActive(m_factory);
 			}
 		}
-		
-		private class ContextInvokeAction extends ReflectiveInvokeAction {
-			
-			ContextInvokeAction(Method method, Object[] args) {
-				super(method, args);
-			}
+	
+		private class ObtainFactoryAndInvokeAction implements PrivilegedExceptionAction {
 
-			public Object invokeMethod(Method method, Object[] args) throws Throwable {
-				return invokeContextMethod(method, args);
+			private final Method m_method;
+			private final Object[] m_args;
+			
+			ObtainFactoryAndInvokeAction(Method method, Object[] args) {
+				m_method = method;
+				m_args = args;
 			}
+			
+			public Object run() throws Exception {
+				try {
+					return obtainNewFactoryAndInvoke(m_method, m_args);
+				} catch (Throwable e) {
+					if(e instanceof NamingException) {
+						throw (NamingException)e;
+					}
+					
+					NamingException namingException = new NamingException("Error while attempting to obtain factory service on behalf of Context");
+					namingException.setRootCause(e);
+					throw namingException;
+				}
+			}
+			
 		}
+	
 	}
 }
 
