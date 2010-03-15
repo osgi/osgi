@@ -33,20 +33,28 @@ public class TestConditionRecursive extends TestCondition {
     service = serv;
   }
   
-  public boolean isSatisfied() {
-//    System.out.println("#isSatisfied method checked of " + info);
-    satisfOrder.addElement(name);
-    try {
-      Method method = service.getClass().getMethod("checkPermission", new Class[] { Permission.class });
-      method.invoke(service, new Object[] { permission });
-    } catch (InvocationTargetException ite) {
-      satisfOrder.addElement(ite.getTargetException().getClass().getName());
-    } catch (Throwable t) {
-      satisfOrder.addElement(t.toString());
-    }
+	public boolean isSatisfied() {
+		// System.out.println("#isSatisfied method checked of " + info);
+		satisfOrder.addElement(name);
+		try {
+			try {
+				Method method = service.getClass().getMethod("checkPermission",
+						new Class[] {Permission.class});
+				method.invoke(service, new Object[] {permission});
+			}
+			catch (InvocationTargetException ite) {
+				throw ite.getTargetException();
+			}
+		}
+		catch (SecurityException e) {
+			satisfOrder.addElement(SecurityException.class.getName());
+		}
+		catch (Throwable t) {
+			satisfOrder.addElement(t.toString());
+		}
 		return satisfied;
 	}
-  
+
   public boolean isSatisfied(Condition[] conds, Dictionary context) {
     for (int i = 0; i < conds.length; i++) {
       if (!conds[i].isSatisfied()) {

@@ -26,25 +26,32 @@
  */
 package org.osgi.test.cases.condpermadmin.junit;
 
-import org.osgi.test.cases.condpermadmin.testcond.TestCondition;
-import org.osgi.test.cases.condpermadmin.testcond.TestConditionRecursive;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-
-
-import org.osgi.framework.*;
-import org.osgi.service.condpermadmin.*;
-import org.osgi.service.permissionadmin.*;
-
 import java.security.AccessControlException;
 import java.security.AllPermission;
 import java.security.Permission;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.PropertyPermission;
 import java.util.StringTokenizer;
-import java.util.Enumeration;
 import java.util.Vector;
 
 import junit.framework.AssertionFailedError;
+
+import org.osgi.framework.AdminPermission;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.PackagePermission;
+import org.osgi.framework.ServicePermission;
+import org.osgi.service.condpermadmin.BundleLocationCondition;
+import org.osgi.service.condpermadmin.BundleSignerCondition;
+import org.osgi.service.condpermadmin.ConditionInfo;
+import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
+import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
+import org.osgi.service.condpermadmin.ConditionalPermissionUpdate;
+import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.condpermadmin.testcond.TestCondition;
+import org.osgi.test.cases.condpermadmin.testcond.TestConditionRecursive;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * Contains the test methods of the conditional permission test case.
@@ -366,11 +373,8 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     try {
       Class.forName(TestCondition.class.getName());
     } catch (Exception ex) {
-      pass(ex.getMessage());
-      //it doesn't work because loadClass method in RI works with the system class loader only
-      if (ex instanceof ClassNotFoundException)
-        fail("Please use Target_tck95.launch for successful run of 'testMoreConditions' test case");
-    }
+			fail("failed to load TestCondition class", ex);
+		}
 
     // implementation assumption:
     // TestCondition_0 and TestCondion_2 will be executed before TestCondition_1 because they are not postponed
@@ -584,11 +588,8 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     try {
         Class.forName(TestCondition.class.getName());
     } catch (Exception ex) {
-      pass(ex.getMessage());
-      //it doesn't work because loadClass method in RI works with the system class loader only
-      if (ex instanceof ClassNotFoundException)
-        fail("Please use Target_tck95.launch for successful run of 'testMultipleBundlesOnStack' test case");
-    }
+			fail("failed to load TestCondition class", ex);
+		}
 
     // Using update to get the correct ordering of conditions
     ConditionalPermissionUpdate update = conditionalAdmin.newConditionalPermissionUpdate();
@@ -703,10 +704,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     try {
         Class.forName(TestCondition.class.getName());
     } catch (Exception ex) {
-      pass(ex.getMessage());
-      //it doesn't work because loadClass method in RI works with the system class loader only
-      if (ex instanceof ClassNotFoundException)
-        fail("Please use Target_tck95.launch for successful run of 'testRecursionInChecks' test case");
+			fail("failed to load TestCondition class", ex);
     }
 
     ConditionInfo cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { domBundleLocation });
@@ -729,7 +727,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       domTBC.checkPermission(perm2);
       pass(message);
     } catch (Throwable e) {
-      fail(message + " but " + e.getClass().getName() + " was thrown");
+			fail(message + " but " + e.getClass().getName() + " was thrown", e);
     }
     utility.testEqualArrays(new String[] { "TestConditionR", "TestConditionNR" }, TestCondition.getSatisfOrder());
 
