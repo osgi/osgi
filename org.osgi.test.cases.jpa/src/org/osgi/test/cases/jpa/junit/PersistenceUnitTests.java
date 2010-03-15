@@ -135,7 +135,8 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 				fail("The osgi.unit.version property is not set correctly.  Received osgi.unit.version=" + unitVersion + " but expected osgi.unit.version=" + persistenceBundle.getVersion().toString());
 			}
 			
-			ServiceReference providerRef = (ServiceReference) getServiceReference(PersistenceProvider.class);
+			PersistenceProvider provider = (PersistenceProvider) getService(PersistenceProvider.class);
+			ServiceReference providerRef = (ServiceReference) getServiceReference(provider);
 			if (providerName == null) {
 				fail("The osgi.unit.provider property is not set.");
 			} else if (!providerName.equals(providerRef.getProperty("javax.persistence.provider"))) {

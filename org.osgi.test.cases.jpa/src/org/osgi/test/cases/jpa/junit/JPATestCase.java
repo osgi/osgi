@@ -58,9 +58,10 @@ public class JPATestCase extends DefaultTestBundleControl {
 		// Install the bundles necessary for this test
 		Bundle persistenceBundle = installBundle("emfBuilderBundle.jar");
 		EntityManagerFactory emf = null;
-		waitForService(EntityManagerFactory.class);
+		waitForService(EntityManagerFactoryBuilder.class);
 		try {
-			ServiceReference dsfRef = getServiceReference(DataSourceFactory.class.getName());
+			DataSourceFactory dsf = (DataSourceFactory) getService(DataSourceFactory.class);
+			ServiceReference dsfRef = getServiceReference(dsf);
 			assertNotNull("Unable to retrieve a reference for the DataSourceFactory service", dsfRef);
 			Map props = new HashMap();
 			props.put("javax.persistence.jdbc.driver", dsfRef.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_CLASS));
@@ -95,16 +96,11 @@ public class JPATestCase extends DefaultTestBundleControl {
 	public void testEntityManagerFactoryWithIncompletePersistenceUnit() throws Exception {
 		// Install the bundles necessary for this test
 		Bundle persistenceBundle = installBundle("emfBuilderBundle.jar");
-		EntityManagerFactory emf = null;
-		waitForService(EntityManagerFactory.class);
+		waitForService(EntityManagerFactoryBuilder.class);
 		try {
-			emf = (EntityManagerFactory) getService(EntityManagerFactory.class, "(osgi.unit.name=emfBuilderTestUnit)");
-			assertNull("There should be no EntityManagerFactory registered since this persistence unit is incomplete", emf);
+			ServiceReference[] emfRefs = getContext().getServiceReferences(EntityManagerFactory.class.getName(), "(osgi.unit.name=emfBuilderTestUnit)");
+			assertNull("There should be no EntityManagerFactory registered since this persistence unit is incomplete", emfRefs);
 		} finally {
-			if (emf != null) {
-				emf.close();
-				ungetService(emf);
-			}
 			uninstallBundle(persistenceBundle);
 		}
 	}
@@ -118,7 +114,8 @@ public class JPATestCase extends DefaultTestBundleControl {
 		try {
 			emfBuilder = (EntityManagerFactoryBuilder) getService(EntityManagerFactoryBuilder.class, "(osgi.unit.name=emfBuilderTestUnit)");
 			assertNotNull("Unable to retrieve the specified EntityManagerFactoryBuilder", emfBuilder);
-			ServiceReference dsfRef = getServiceReference(DataSourceFactory.class.getName());
+			DataSourceFactory dsf = (DataSourceFactory) getService(DataSourceFactory.class);
+			ServiceReference dsfRef = getServiceReference(dsf);
 			assertNotNull("Unable to retrieve a reference for the DataSourceFactory service", dsfRef);
 			Map props = new HashMap();
 			props.put("javax.persistence.jdbc.driver", dsfRef.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_CLASS));
@@ -139,7 +136,8 @@ public class JPATestCase extends DefaultTestBundleControl {
 		try {
 			emf = (EntityManagerFactory) getService(EntityManagerFactory.class, "(osgi.unit.name=emfTestUnit)");
 			assertNotNull("Unable to retrieve the specified EntityManagerFactory", emf);
-			ServiceReference dsfRef = getServiceReference(DataSourceFactory.class.getName());
+			DataSourceFactory dsf = (DataSourceFactory) getService(DataSourceFactory.class);
+			ServiceReference dsfRef = getServiceReference(dsf);
 			assertNotNull("Unable to retrieve a reference for the DataSourceFactory service", dsfRef);
 			Map props = new HashMap();
 			props.put("javax.persistence.jdbc.driver", dsfRef.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_CLASS));
@@ -167,7 +165,8 @@ public class JPATestCase extends DefaultTestBundleControl {
 		try {
 			emfBuilder = (EntityManagerFactoryBuilder) getService(EntityManagerFactoryBuilder.class, "(osgi.unit.name=emfBuilderTestUnit)");
 			assertNotNull("Unable to retrieve the specified EntityManagerFactroyBuilder", emfBuilder);
-			ServiceReference dsfRef = getServiceReference(DataSourceFactory.class.getName());
+			DataSourceFactory dsf = (DataSourceFactory) getService(DataSourceFactory.class);
+			ServiceReference dsfRef = getServiceReference(dsf);
 			assertNotNull("Unable to retrieve a reference for the DataSourceFactory service", dsfRef);
 			Map props1 = new HashMap();
 			props1.put("javax.persistence.jdbc.driver", dsfRef.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_CLASS));
