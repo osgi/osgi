@@ -136,6 +136,28 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 		}
 	}
 	
+	public void testPersistenceBundleWithProviderDependency() throws Exception {
+		Bundle persistenceBundle = installBundle("specificProviderBundle.jar");
+		// Wait for 5 seconds while the JPA provider processes the bundle.  We'd normally use the
+		// waitForService method for this, but no service should be registered and that would cause
+		// an exception.
+		long start = System.currentTimeMillis();
+		long waitTime = 5000;
+		do {
+			try {
+				Thread.sleep(50);
+			} catch(InterruptedException intEx) {
+				//
+			}
+		} while (System.currentTimeMillis() - start < waitTime);
+		try {
+			ServiceReference[] unitRef = getContext().getServiceReferences(EntityManagerFactoryBuilder.class.getName(), "(osgi.unit.name=absentProviderTestUnit)");
+			assertNull("There should be no services that match the filter (osgi.unit.name=absentProviderTestUnit)", unitRef);
+		} finally {
+			uninstallBundle(persistenceBundle);
+		}
+	}
+	
 	public void testPesistenceUnitServiceProperties() throws Exception {
 		Bundle persistenceBundle = installBundle("defaultPersistenceLocation.jar");
 		waitForService(EntityManagerFactoryBuilder.class);

@@ -16,18 +16,19 @@ Import-Package						= \
 	*
 	
 Include-Resource 					= \
-	emfBundle.jar	, \
-	emfBuilderBundle.jar ,	\
 	defaultPersistenceLocation.jar , \
-	nonStandardPersistenceLocation.jar , \
+	emfBuilderBundle.jar ,	\
+	emfBuilderRebindingBundle.jar , \
+	emfBundle.jar	, \
+	emfRebindingWithBuilderBundle.jar , \
+	incompletePersistenceUnitBundle.jar , \
 	multiplePersistenceLocations.jar , \
 	nestedJarPersistenceLocation.jar , \
-	incompletePersistenceUnitBundle.jar , \
-	emfRebindingWithBuilderBundle.jar , \
-	emfBuilderRebindingBundle.jar , \
+	nonStandardPersistenceLocation.jar , \
+	persistenceBundleWithNoHeader.jar , \
+	specificProviderBundle.jar , \
 	staticAccessBundle.jar , \
-	staticAccessWithMapBundle.jar , \
-	persistenceBundleWithNoHeader.jar
+	staticAccessWithMapBundle.jar
 
 -buildpath							    = \
 	ee.j2se; 						    version=1.5, \
