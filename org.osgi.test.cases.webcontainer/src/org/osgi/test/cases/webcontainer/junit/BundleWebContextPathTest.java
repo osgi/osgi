@@ -211,8 +211,8 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
         final Map<String, Object> options = createOptions(WEBCONTEXTPATH5.substring(1));
         this.b = super.installWar(options, "wmtw5.war", true);
         // this won't work  as wmtw5.war is not a valid wab
-        assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet"));
-        assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet"));    
+        assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "/BundleContextTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet"));
+        assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "/ClasspathTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet"));    
 
     }
     
@@ -223,7 +223,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
     public void testWebContextPath011_2() throws Exception {
         this.b = super.installBundle("wmtw5.war", true);
         // this won't work 
-        assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet"));
+        assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/BundleContextTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet"));
         assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet"));    
     }
 
@@ -353,7 +353,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
             
             options = createOptions(WEBCONTEXTPATH5 + "_wm");
             bundles[4] = super.installWar(options, "wmtw5.war", true);
-            assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet"));
+            assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/BundleContextTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet"));
             assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet"));
         } finally {
             for (int i = 0; i < bundles.length; i++) {
