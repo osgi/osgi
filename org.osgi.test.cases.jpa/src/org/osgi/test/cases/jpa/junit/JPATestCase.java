@@ -119,7 +119,10 @@ public class JPATestCase extends DefaultTestBundleControl {
 			assertNotNull("Unable to retrieve a reference for the DataSourceFactory service", dsfRef);
 			Map props = new HashMap();
 			props.put("javax.persistence.jdbc.driver", dsfRef.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_CLASS));
+			props.put("fake.property", "fake property value");
 			emf = emfBuilder.createEntityManagerFactory(props);
+		} catch (java.lang.IllegalArgumentException ex) {
+			fail("Unknown properties should be ignored and not result in an IllegalArgumentException.");
 		} finally {
 			if (emfBuilder != null) {
 				ungetService(emfBuilder);
