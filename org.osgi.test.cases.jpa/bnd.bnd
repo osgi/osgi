@@ -21,7 +21,8 @@ Include-Resource 					= \
 	emfRebindingWithBuilderBundle.jar , \
 	emfBuilderRebindingBundle.jar , \
 	staticAccessBundle.jar , \
-	staticAccessWithMapBundle.jar
+	staticAccessWithMapBundle.jar , \
+	persistenceBundleWithNoHeader.jar
 
 -buildpath							    = \
 	ee.j2se; 						    version=1.5, \
