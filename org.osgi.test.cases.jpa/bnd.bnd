@@ -9,7 +9,12 @@ Export-Package						= \
 Private-Package						= \
 	org.osgi.test.support.* , \
 	${p}.*
-
+	
+Import-Package						= \
+	javax.persistence;			version="[1.0,2.0)" , \
+	javax.persistence.spi;		version="[1.0,2.0)" , \
+	*
+	
 Include-Resource 					= \
 	emfBundle.jar	, \
 	emfBuilderBundle.jar ,	\
