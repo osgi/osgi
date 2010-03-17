@@ -38,6 +38,8 @@ public class TW8Test extends WebContainerTestBundleControl {
     LogReaderService logReaderService;
     private static final String TW8_SYMBOLIC_NAME = "org.osgi.test.cases.webcontainer.tw8";
 
+    private Bundle fragmentBundle;
+    
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -53,13 +55,11 @@ public class TW8Test extends WebContainerTestBundleControl {
         }
         this.b = installBundle(loc, false);
         
-
-        Bundle fragmentBundle = super.installBundle("fragment.tw8.jar", false);
+        fragmentBundle = super.installBundle("fragment.tw8.jar", false);
         
         // start the war file
         this.b.start();
         
-
         ServiceReference logReaderServiceReference = getContext()
                 .getServiceReference(LogReaderService.class.getName());
         this.logReaderService = (LogReaderService) getContext().getService(
@@ -70,6 +70,11 @@ public class TW8Test extends WebContainerTestBundleControl {
         assertTrue("the ServletContext should be registered", register);
     }
 
+    public void tearDown() throws Exception {
+        uninstallBundle(fragmentBundle);
+        super.tearDown();
+    }
+    
     /*
      * set deployOptions to null to rely on the web container service to
      * generate the manifest

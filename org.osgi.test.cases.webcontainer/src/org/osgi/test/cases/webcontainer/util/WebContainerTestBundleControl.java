@@ -70,18 +70,22 @@ public abstract class WebContainerTestBundleControl extends
     }
     
 	public void tearDown() throws Exception {
-		if (this.b != null && this.b.getState() != Bundle.UNINSTALLED) {
-			this.b.uninstall();
-			if (debug) {
-				log("uninstalled bundle " + this.b.getSymbolicName() + " "
-						+ this.b.getVersion().toString());
-			}
-		}
+	    uninstallBundle(this.b);
 
 		// make sure all war/wab are uninstalled
 		ServiceReference[] sr = getContext().getAllServiceReferences("javax.servlet.ServletContext", null);
 		assertEquals("service registry size should be the same", this.srSize, sr == null ? 0 : sr.length);
 		this.b = null;
+	}
+	
+	@Override
+    public void uninstallBundle(Bundle bundle) throws BundleException {
+	    if (bundle != null && bundle.getState() != Bundle.UNINSTALLED) {
+            bundle.uninstall();
+            if (debug) {
+                log("uninstalled bundle " + bundle.getSymbolicName() + " " + bundle.getVersion().toString());
+            }
+        }
 	}
 	
     /**
