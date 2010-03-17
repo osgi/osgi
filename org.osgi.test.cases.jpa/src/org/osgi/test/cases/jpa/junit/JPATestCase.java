@@ -130,33 +130,6 @@ public class JPATestCase extends DefaultTestBundleControl {
 			uninstallBundle(persistenceBundle);
 		}
 	}
-	
-	public void testEntityManagerFactoryRebinding() throws Exception {
-		// Install the bundles necessary for this test
-		Bundle persistenceBundle = installBundle("emfBundle.jar");
-		EntityManagerFactory emf = null;
-		waitForService(EntityManagerFactory.class);
-		try {
-			emf = (EntityManagerFactory) getService(EntityManagerFactory.class, "(osgi.unit.name=emfTestUnit)");
-			assertNotNull("Unable to retrieve the specified EntityManagerFactory", emf);
-			DataSourceFactory dsf = (DataSourceFactory) getService(DataSourceFactory.class);
-			ServiceReference dsfRef = getServiceReference(dsf);
-			assertNotNull("Unable to retrieve a reference for the DataSourceFactory service", dsfRef);
-			Map props = new HashMap();
-			props.put("javax.persistence.jdbc.driver", dsfRef.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_CLASS));
-			EntityManager em = emf.createEntityManager(props);
-		} catch (java.lang.IllegalArgumentException ex) {
-			pass("java.lang.IllegalArgumentException caught in testEntityManagerFactoryRebinding: SUCCESS");
-			return;
-		} finally {
-			if (emf != null) {
-				emf.close();
-				ungetService(emf);
-			}
-			uninstallBundle(persistenceBundle);
-		}
-		failException("testEntityManagerFactoryRebinding failed", java.lang.IllegalArgumentException.class);
-	}
 
 	public void testEntityManagerFactoryBuilderRebinding() throws Exception {
 		// Install the bundle necessary for this test
@@ -245,6 +218,17 @@ public class JPATestCase extends DefaultTestBundleControl {
 				uninstallBundle(persistenceBundle);
 			}
 		}
+		// Reinstall the bundle and go through the motions again to make sure nothing that conflicts was left behind
+		Bundle reinstalledBundle = installBundle("emfBundle.jar");
+		emf = null;
+		waitForService(EntityManagerFactory.class);
+		try {
+			emf = (EntityManagerFactory) getService(EntityManagerFactory.class, "(osgi.unit.name=emfTestUnit)");
+			assertNotNull("Unable to retrieve the specified EntityManagerFactory", emf);
+		} finally {
+			uninstallBundle(reinstalledBundle);
+		}
+		
 	}
 	
 	public void testPersistenceProviderRegistration() throws Exception {

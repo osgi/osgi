@@ -142,14 +142,13 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 		// waitForService method for this, but no service should be registered and that would cause
 		// an exception.
 		long start = System.currentTimeMillis();
-		long waitTime = 5000;
 		do {
 			try {
 				Thread.sleep(50);
 			} catch(InterruptedException intEx) {
 				//
 			}
-		} while (System.currentTimeMillis() - start < waitTime);
+		} while (System.currentTimeMillis() - start < SERVICE_WAIT_TIME);
 		try {
 			ServiceReference[] unitRef = getContext().getServiceReferences(EntityManagerFactoryBuilder.class.getName(), "(osgi.unit.name=absentProviderTestUnit)");
 			assertNull("There should be no services that match the filter (osgi.unit.name=absentProviderTestUnit)", unitRef);
