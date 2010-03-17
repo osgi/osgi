@@ -136,6 +136,21 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 		}
 	}
 	
+	public void testPersistenceWithUnavailableDatasource() throws Exception {
+		Bundle persistenceBundle = installBundle("unavailableDatasourceBundle.jar");
+		EntityManagerFactoryBuilder emfBuilder = null;
+		waitForService(EntityManagerFactoryBuilder.class);
+		try {
+			emfBuilder = (EntityManagerFactoryBuilder) getService(EntityManagerFactoryBuilder.class, "(osgi.unit.name=unavailableDSTestUnit)");
+			assertNotNull("The EntityManagerFactoryBuilder should be registered even if the datasource is unavailable", emfBuilder);
+		} finally {
+			if (emfBuilder != null) {
+				ungetService(emfBuilder);
+			}
+			uninstallBundle(persistenceBundle);
+		}
+	}
+	
 	public void testPersistenceBundleWithProviderDependency() throws Exception {
 		Bundle persistenceBundle = installBundle("specificProviderBundle.jar");
 		// Wait for 5 seconds while the JPA provider processes the bundle.  We'd normally use the

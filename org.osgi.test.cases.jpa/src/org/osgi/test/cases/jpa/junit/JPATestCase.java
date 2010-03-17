@@ -197,6 +197,33 @@ public class JPATestCase extends DefaultTestBundleControl {
 		
 	}
 	
+	public void testConfigPropertiesWithEntityManagerFactoryBuilder() throws Exception {
+		// Install the bundle necessary for this test
+		Bundle persistenceBundle = installBundle("configPropertiesBundle.jar");
+		EntityManagerFactoryBuilder emfBuilder = null;
+		EntityManagerFactory emf = null;
+		waitForService(EntityManagerFactoryBuilder.class);
+		try {
+			emfBuilder = (EntityManagerFactoryBuilder) getService(EntityManagerFactoryBuilder.class, "(osgi.unit.name=configPropertiesTestUnit)");
+			assertNotNull("Unable to retrieve the specified EntityManagerFactoryBuilder.", emfBuilder);
+			DataSourceFactory dsf = (DataSourceFactory) getService(DataSourceFactory.class);
+			ServiceReference dsfRef = getServiceReference(dsf);
+			assertNotNull("Unable to retrieve a reference for the DataSourceFactory service", dsfRef);
+			Map props = new HashMap();
+			props.put("javax.persistence.jdbc.driver", dsfRef.getProperty(DataSourceFactory.OSGI_JDBC_DRIVER_CLASS));		
+			props.put("javax.persistence.jdbc.password", "configPassword");
+			emf = emfBuilder.createEntityManagerFactory(props);
+		} finally {
+			if (emfBuilder != null) {
+				ungetService(emfBuilder);
+			}
+			if (emf != null) {
+				emf.close();
+			}
+			uninstallBundle(persistenceBundle);
+		}	
+	}
+	
 	public void testPersistenceBundleStopping() throws Exception {
 		// Install the bundles necessary for this test
 		Bundle persistenceBundle = installBundle("emfBundle.jar");

@@ -16,6 +16,7 @@ Import-Package						= \
 	*
 	
 Include-Resource 					= \
+	configPropertiesBundle.jar , \
 	defaultPersistenceLocation.jar , \
 	emfBuilderBundle.jar ,	\
 	emfBuilderRebindingBundle.jar , \
@@ -28,7 +29,8 @@ Include-Resource 					= \
 	persistenceBundleWithNoHeader.jar , \
 	specificProviderBundle.jar , \
 	staticAccessBundle.jar , \
-	staticAccessWithMapBundle.jar
+	staticAccessWithMapBundle.jar , \
+	unavailableDatasourceBundle.jar
 
 -buildpath							    = \
 	ee.j2se; 						    version=1.5, \
