@@ -1,4 +1,5 @@
 Bundle-Name:                             ${p}.tb3
+Bundle-SymbolicName:                     ${p}.tb3
 Bundle-Version:                          1.0
 Private-Package:                         org.osgi.test.support.*, \
  ${p}.tb3.*, \

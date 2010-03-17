@@ -70,6 +70,15 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		Short.TYPE, Short.class});
 
 	/**
+	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#tearDown()
+	 */
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		System.out.println("Sleep for 5s before ending");
+		Thread.sleep(5000);
+	}
+	
+	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#getConfiguration()
 	 */
 	public Map<String, String> getConfiguration() {
@@ -212,8 +221,9 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		properties.put("mykey", "has been overridden");
 //		properties.put("mylist", list);
 		properties.put("myfloat", (float)3.1415f);
+		properties.put("mydouble", (double)-3.1415d);
 		properties.put("mychar", (char)'t');
-//		properties.put("myxml", "<myxml>test</myxml>");
+		properties.put("myxml", "<myxml>test</myxml>");
 		properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 		
 		// export the service
@@ -257,15 +267,12 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		
 		tb3Bundle.start(); // throws Exception if test was not successful
 		
+		Thread.sleep(2000);
+		
 		// remove the proxy
 		testbundle.stop();
-		
-		/* David B: commenting out this line as there seems to be a problem with the async delivery of bundle events.
-		 * The BundleEvent.STOPPED of the testbundle.stop() call always arrives *after* the next call, which causes
-		 * the test to fail.  
-		// now test removal of proxy
+
 		tb3Bundle.stop(); // throws Exception if test was not successful
-		*/
 	}
 
 	/**

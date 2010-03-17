@@ -17,11 +17,18 @@ package org.osgi.test.cases.remoteserviceadmin.tb3;
 
 import junit.framework.Assert;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
 import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
+import org.osgi.test.support.compatibility.Semaphore;
+import org.osgi.util.tracker.BundleTracker;
+import org.osgi.util.tracker.BundleTrackerCustomizer;
 import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
@@ -30,6 +37,9 @@ import org.osgi.util.tracker.ServiceTracker;
 public class Activator implements BundleActivator {
 	BundleContext                  context;
 	ServiceTracker tracker;
+	BundleTracker  bundleTracker;
+	Semaphore sem = new Semaphore(0);
+	Semaphore servicesem = new Semaphore(0);
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
@@ -64,6 +74,43 @@ public class Activator implements BundleActivator {
 		Assert.assertEquals("A", service.getA());
 
 		tracker.close();
+
+		tracker = new ServiceTracker(context, filter, new ServiceTrackerCustomizer() {
+			
+			public void removedService(ServiceReference reference, Object service) {
+				System.out.println("service " + reference + " was removed");
+				
+				servicesem.signal();
+			}
+			
+			public void modifiedService(ServiceReference reference, Object service) {
+			}
+			
+			public Object addingService(ServiceReference reference) {
+				return reference;
+			}
+		});
+		tracker.open();
+
+		bundleTracker = new BundleTracker(context, Bundle.ACTIVE, new BundleTrackerCustomizer() {
+			
+			public void removedBundle(Bundle bundle, BundleEvent event, Object object) {
+				System.out.println("bundle " + bundle.getSymbolicName() + " was stopped");
+
+				sem.signal();
+			}
+			
+			public void modifiedBundle(Bundle bundle, BundleEvent event, Object object) {
+			}
+			
+			public Object addingBundle(Bundle bundle, BundleEvent event) {
+				if (bundle.getSymbolicName().equals("org.osgi.test.cases.remoteserviceadmin.testbundle")) {
+					return bundle;
+				}
+				return null;
+			}
+		});
+		bundleTracker.open();
 	}
 
 	/**
@@ -72,12 +119,13 @@ public class Activator implements BundleActivator {
 	 * @throws Exception
 	 */
 	private void teststop() throws Exception {
-		if (tracker == null) {
-			return;
+		try {
+			Assert.assertTrue("did not receive event that bundle stopped", sem.waitForSignal(60000));
+
+			Assert.assertTrue("did not receive event that service was removed", servicesem.waitForSignal(60000));
+		} finally {
+			bundleTracker.close();
+			tracker.close();
 		}
-		
-		tracker.open();
-		
-		Assert.assertNull("service A found, but was expected to be gone", tracker.waitForService(60000));
 	}
 }
