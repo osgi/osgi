@@ -133,7 +133,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		tb1Bundle.start();
 		
 		// verify callback in parent framework
-		endpointListenerImpl.getSem().waitForSignal(6000);
+		endpointListenerImpl.getSem().waitForSignal();
 		
 		// 122.6.2 callback has to return first matched filter
 		assertEquals("filter doesn't match the first filter", endpointListenerFilter, endpointListenerImpl.getMatchedFilter());
@@ -164,7 +164,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		tb1Bundle.stop();
 
 		// verify callback in parent framework
-		endpointListenerImpl.getSem().waitForSignal(6000);
+		endpointListenerImpl.getSem().waitForSignal();
 		
 		// 122.6.2 callback has to return first matched filter
 		assertEquals("filter doesn't match the first filter", endpointListenerFilter, endpointListenerImpl.getMatchedFilter());

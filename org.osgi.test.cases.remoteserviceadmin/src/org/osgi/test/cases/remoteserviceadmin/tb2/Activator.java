@@ -278,7 +278,7 @@ public class Activator implements BundleActivator, A, B {
 		
 		RemoteServiceAdminEvent getNextEvent() {
 			try {
-				sem.waitForSignal(60000); // wait max 1min for async notification
+				sem.waitForSignal();
 			} catch (InterruptedException e1) {
 				return null;
 			}

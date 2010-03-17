@@ -1070,7 +1070,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		
 		RemoteServiceAdminEvent getNextEvent() {
 			try {
-				sem.waitForSignal(60000); // wait max 1min for async notification
+				sem.waitForSignal();
 			} catch (InterruptedException e1) {
 				return null;
 			}
@@ -1102,7 +1102,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		
 		Event getNextEvent() {
 			try {
-				sem.waitForSignal(60000); // wait max 1min for async notification
+				sem.waitForSignal();
 			} catch (InterruptedException e1) {
 				return null;
 			}

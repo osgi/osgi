@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.tb3;
 
+import java.util.Date;
+
 import junit.framework.Assert;
 
 import org.osgi.framework.Bundle;
@@ -67,7 +69,7 @@ public class Activator implements BundleActivator {
 		tracker = new ServiceTracker(context, filter, null);
 		tracker.open();
 		
-		A service = (A) tracker.waitForService(60000);
+		A service = (A) tracker.waitForService(0);
 		Assert.assertNotNull("no service A found", service);
 		
 		// call the service
@@ -78,8 +80,6 @@ public class Activator implements BundleActivator {
 		tracker = new ServiceTracker(context, filter, new ServiceTrackerCustomizer() {
 			
 			public void removedService(ServiceReference reference, Object service) {
-				System.out.println("service " + reference + " was removed");
-				
 				servicesem.signal();
 			}
 			
@@ -120,9 +120,9 @@ public class Activator implements BundleActivator {
 	 */
 	private void teststop() throws Exception {
 		try {
-			Assert.assertTrue("did not receive event that bundle stopped", sem.waitForSignal(60000));
+			sem.waitForSignal();
 
-			Assert.assertTrue("did not receive event that service was removed", servicesem.waitForSignal(60000));
+			servicesem.waitForSignal();
 		} finally {
 			bundleTracker.close();
 			tracker.close();
