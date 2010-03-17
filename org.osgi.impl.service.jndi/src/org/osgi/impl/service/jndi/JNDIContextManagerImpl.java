@@ -31,6 +31,7 @@ import javax.naming.directory.DirContext;
 import javax.naming.spi.InitialContextFactory;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 class JNDIContextManagerImpl implements CloseableJNDIContextManager {
 
@@ -42,11 +43,11 @@ class JNDIContextManagerImpl implements CloseableJNDIContextManager {
 	private final List m_listOfContexts = 
 		Collections.synchronizedList(new LinkedList());
 
-	JNDIContextManagerImpl(Bundle callingBundle) {
+	JNDIContextManagerImpl(Bundle callingBundle, BundleContext implBundleContext) {
 		// create a new builder for each client bundle
 		// since the JNDI services (factories) should be accessed
 		// by the JNDIContextManager service on behalf of the calling bundle
-		m_builder = new OSGiInitialContextFactoryBuilder(callingBundle.getBundleContext());
+		m_builder = new OSGiInitialContextFactoryBuilder(callingBundle.getBundleContext(), implBundleContext);
 	}
 
 

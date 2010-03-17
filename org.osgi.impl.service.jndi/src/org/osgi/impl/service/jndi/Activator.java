@@ -208,7 +208,7 @@ public class Activator implements BundleActivator {
 	
 	private void registerJNDIContextManager() {
 		m_jndiContextAdminServiceFactory = 
-			new JNDIContextManagerServiceFactoryImpl();
+			new JNDIContextManagerServiceFactoryImpl(m_bundleContext);
 		ServiceRegistration serviceRegistration = 
 			m_bundleContext.registerService(JNDIContextManager.class.getName(),
 											m_jndiContextAdminServiceFactory,

@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceRegistration;
@@ -32,12 +33,16 @@ class JNDIContextManagerServiceFactoryImpl implements ServiceFactory {
 	private Map m_mapOfManagers = 
 		Collections.synchronizedMap(new HashMap());
 	
-	JNDIContextManagerServiceFactoryImpl() {
+	/* BundleContext for the JNDI Implementation Bundle */
+	private final BundleContext m_implBundleContext;
+	
+	JNDIContextManagerServiceFactoryImpl(BundleContext implBundleContext) {
+		m_implBundleContext = implBundleContext;
 	}
 	
 	public Object getService(Bundle bundle, ServiceRegistration registration) {
 		CloseableJNDIContextManager jndiContextManager = 
-			createJNDIContextManager(bundle);
+			createJNDIContextManager(bundle, m_implBundleContext);
 		m_mapOfManagers.put(bundle, jndiContextManager);
 		bundle.getBundleContext().addBundleListener(new ContextManagerBundleListener());
 		return jndiContextManager;
@@ -88,7 +93,7 @@ class JNDIContextManagerServiceFactoryImpl implements ServiceFactory {
 	 * @return a CloseableJNDIContextManager that will handle requests for 
 	 *         the given Bundle.  
 	 */
-	private static CloseableJNDIContextManager createJNDIContextManager(Bundle bundle) {
-		return new SecurityAwareJNDIContextManagerImpl(new JNDIContextManagerImpl(bundle));
+	private static CloseableJNDIContextManager createJNDIContextManager(Bundle bundle, BundleContext implBundleContext) {
+		return new SecurityAwareJNDIContextManagerImpl(new JNDIContextManagerImpl(bundle, implBundleContext));
 	}
 }

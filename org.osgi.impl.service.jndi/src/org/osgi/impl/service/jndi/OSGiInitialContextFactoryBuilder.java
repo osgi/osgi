@@ -77,7 +77,11 @@ class OSGiInitialContextFactoryBuilder implements
 
 	private final static String NO_CONTEXT_FACTORIES_MSG = "No JNDI implementations available";
 	
-	private final BundleContext	m_bundleContext;
+	/* calling JNDI Client's BundleContext */
+	private final BundleContext	m_callerBundleContext;
+	
+	/* JNDI implementation bundle's BundleContext */
+	private final BundleContext m_implBundleContext;
 
 	private ServiceTracker		m_contextFactoryServiceTracker			= null;
 	private ServiceTracker		m_contextFactoryBuilderServiceTracker	= null;
@@ -85,7 +89,7 @@ class OSGiInitialContextFactoryBuilder implements
 	private ServiceTracker		m_objectFactoryBuilderServiceTracker	= null;
 	private ServiceTracker		m_urlContextFactoryServiceTracker		= null;
 	private ServiceTracker      m_dirObjectFactoryServiceTracker        = null;
-	
+
 	
 	/* 
 	 * Map of OSGi services to a List of Contexts created by that service.  
@@ -94,16 +98,17 @@ class OSGiInitialContextFactoryBuilder implements
 	private final Map m_mapOfServicesToContexts = Collections.synchronizedMap(new HashMap()); 
 	
 
-	public OSGiInitialContextFactoryBuilder(BundleContext bundleContext) {
-		m_bundleContext = bundleContext;
+	public OSGiInitialContextFactoryBuilder(BundleContext callerBundleContext, BundleContext implBundleContext) {
+		m_callerBundleContext = callerBundleContext;
+		m_implBundleContext = implBundleContext;
 		
 		try {
 			// create the service trackers inside a doPrivileged() block
-			// since this code is the only interaction with a client's bundle
+			// since this code is the only interaction with a BundleContext
 			// context not covered by the security-aware wrapper interfaces
 			SecurityUtils.invokePrivilegedActionNoReturn(new PrivilegedExceptionAction() {
 				public Object run() throws Exception {
-					createServiceTrackers(m_bundleContext);
+					createServiceTrackers(m_implBundleContext);
 					return null;
 				}
 			});
@@ -118,8 +123,7 @@ class OSGiInitialContextFactoryBuilder implements
 	 * This builder implementation uses the OSGi service registry to find
 	 * matching JNDI service providers.
 	 */
-	public InitialContextFactory createInitialContextFactory(
-			Hashtable environment) throws NamingException {
+	public InitialContextFactory createInitialContextFactory(Hashtable environment) throws NamingException {
 		// check for valid tracker setup
 		if (m_contextFactoryServiceTracker == null) {
 			throw new NoInitialContextException(NO_CONTEXT_FACTORIES_MSG);
@@ -132,8 +136,8 @@ class OSGiInitialContextFactoryBuilder implements
 		if (environment.get(Context.INITIAL_CONTEXT_FACTORY) != null) {
 			final String initialContextFactoryName = 
 				(String) environment.get(Context.INITIAL_CONTEXT_FACTORY);
-			Object factory = obtainFactoryService(initialContextFactoryName,
-					m_contextFactoryServiceTracker);
+			Object factory = 
+				obtainFactoryService(initialContextFactoryName, m_contextFactoryServiceTracker);
 			if (factory != null) {
 				return new InitialContextFactoryWrapper(
 						(InitialContextFactory) factory, this);
@@ -180,10 +184,6 @@ class OSGiInitialContextFactoryBuilder implements
 		}
 	}
 
-	
-
-	
-
 
 	/**
 	 * This Builder implementation uses the OSGi Service registry to find
@@ -223,7 +223,7 @@ class OSGiInitialContextFactoryBuilder implements
 			for (int i = 0; i < serviceReferences.length; i++) {
 				ServiceReference serviceReference = serviceReferences[i];
 				if (serviceReference.getProperty(JNDIConstants.JNDI_URLSCHEME).equals(urlScheme)) {
-					return (ObjectFactory) m_bundleContext.getService(serviceReference);
+					return (ObjectFactory) m_callerBundleContext.getService(serviceReference);
 				}
 			}
 		}
@@ -261,6 +261,7 @@ class OSGiInitialContextFactoryBuilder implements
 		m_objectFactoryBuilderServiceTracker.close();
 		m_urlContextFactoryServiceTracker.close();
 		m_dirObjectFactoryServiceTracker.close();
+		
 	}
 
 	
@@ -284,14 +285,13 @@ class OSGiInitialContextFactoryBuilder implements
 		m_urlContextFactoryServiceTracker = 
 			new URLContextFactoryServiceTracker(bundleContext, ObjectFactory.class.getName());
 
+
 		// open trackers
 		m_contextFactoryServiceTracker.open();
 		m_contextFactoryBuilderServiceTracker.open();
-
 		m_objectFactoryServiceTracker.open();
 		m_objectFactoryBuilderServiceTracker.open();
 		m_dirObjectFactoryServiceTracker.open();
-
 		m_urlContextFactoryServiceTracker.open();
 	}
 
@@ -304,7 +304,7 @@ class OSGiInitialContextFactoryBuilder implements
 					.getProperty(Constants.OBJECTCLASS);
 			List interfaceList = Arrays.asList(serviceInterfaces);
 			if (interfaceList.contains(factoryServiceInterface)) {
-				return m_bundleContext.getService(serviceReference);
+				return m_callerBundleContext.getService(serviceReference);
 			}
 		}
 
@@ -328,7 +328,7 @@ class OSGiInitialContextFactoryBuilder implements
 			for (int i = 0; i < serviceReferences.length; i++) {
 				ServiceReference serviceReference = serviceReferences[i];
 				InitialContextFactoryBuilder builder = 
-					(InitialContextFactoryBuilder) m_bundleContext.getService(serviceReference);
+					(InitialContextFactoryBuilder) m_callerBundleContext.getService(serviceReference);
 				try {
 					// if builder is null, then service is not available
 					if (builder != null) {
@@ -376,11 +376,11 @@ class OSGiInitialContextFactoryBuilder implements
 			for (int i = 0; i < serviceReferences.length; i++) {
 				ServiceReference serviceReference = serviceReferences[i];
 				InitialContextFactory factoryService = 
-					(InitialContextFactory) m_bundleContext.getService(serviceReference);
+					(InitialContextFactory) m_callerBundleContext.getService(serviceReference);
 				if(factoryService.getInitialContext(environment) != null) {
 					return factoryService;
 				} else {
-					m_bundleContext.ungetService(serviceReference);
+					m_callerBundleContext.ungetService(serviceReference);
 				}
 			}
 		}
@@ -406,7 +406,7 @@ class OSGiInitialContextFactoryBuilder implements
 			final ServiceReference[] serviceReferences = ServiceUtils.sortServiceReferences(m_objectFactoryBuilderServiceTracker);
 			for (int i = 0; i < serviceReferences.length; i++) {
 				ServiceReference serviceReference = serviceReferences[i];
-				ObjectFactoryBuilder builder = (ObjectFactoryBuilder) m_bundleContext
+				ObjectFactoryBuilder builder = (ObjectFactoryBuilder) m_callerBundleContext
 						.getService(serviceReference);
 				try {
 					ObjectFactory factory = 
@@ -541,7 +541,7 @@ class OSGiInitialContextFactoryBuilder implements
 		
 		// obtain environment properties defined in the calling bundle's archive
 		Properties fileDefinedEnvironment = 
-			getFileDefinedJndiProperties(m_bundleContext);
+			getFileDefinedJndiProperties(m_callerBundleContext);
 		if(fileDefinedEnvironment != null) {
 			Enumeration keyEnum = fileDefinedEnvironment.keys();
 			while(keyEnum.hasMoreElements()) {
@@ -581,13 +581,13 @@ class OSGiInitialContextFactoryBuilder implements
 			for (int i = 0; i < serviceReferences.length; i++) {
 				ServiceReference serviceReference = serviceReferences[i];
 				ObjectFactory factory = 
-					(ObjectFactory) m_bundleContext.getService(serviceReference);
+					(ObjectFactory) m_callerBundleContext.getService(serviceReference);
 				try {
 					Object result = 
 						factory.getObjectInstance(objectToResolve, name, context, environment);
 
 					// release the service for this factory
-					m_bundleContext.ungetService(serviceReference);
+					m_callerBundleContext.ungetService(serviceReference);
 
 					if (result != null) {
 						// return resolved object
@@ -612,13 +612,13 @@ class OSGiInitialContextFactoryBuilder implements
 			for (int i = 0; i < serviceReferences.length; i++) {
 				ServiceReference serviceReference = serviceReferences[i];
 				DirObjectFactory factory = 
-					(DirObjectFactory) m_bundleContext.getService(serviceReference);
+					(DirObjectFactory) m_callerBundleContext.getService(serviceReference);
 				try {
 					Object result = 
 						factory.getObjectInstance(objectToResolve, name, context, environment, attributes);
 		
 					// release the service reference
-					m_bundleContext.ungetService(serviceReference);
+					m_callerBundleContext.ungetService(serviceReference);
 					
 					if (result != null) {
 						// return the resolved object 
@@ -707,8 +707,7 @@ class OSGiInitialContextFactoryBuilder implements
 	 * 
 	 * @return a ServiceTracker instance for the given interface
 	 */
-	private static ServiceTracker createServiceTracker(
-			BundleContext bundleContext, String serviceInterface) {
+	private static ServiceTracker createServiceTracker(BundleContext bundleContext, String serviceInterface) {
 		return new ServiceTracker(bundleContext, serviceInterface, null);
 	}
 

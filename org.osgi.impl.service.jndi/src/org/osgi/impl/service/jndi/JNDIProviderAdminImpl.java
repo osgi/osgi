@@ -33,7 +33,7 @@ class JNDIProviderAdminImpl implements CloseableJNDIProviderAdmin {
 
 	JNDIProviderAdminImpl(BundleContext bundleContext) {
 		m_objectFactoryBuilder = 
-			new OSGiInitialContextFactoryBuilder(bundleContext);
+			new OSGiInitialContextFactoryBuilder(bundleContext, bundleContext);
 	}
 
 	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment) throws NamingException {
