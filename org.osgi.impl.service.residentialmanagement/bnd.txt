@@ -1,0 +1,17 @@
+
+
+-runpath			= \
+	org.eclipse.osgi;			version=3.5;		framework=org.eclipse.osgi.launch.Equinox, \
+	com.springsource.junit;		version=3.8;		export="junit.framework;version=3.8", \
+	osgi.core;					version=4.2.1;		export="info.dmtree;version=1.0, \
+															info.dmtree.spi;version=1.0, \
+															info.dmtree.notification;version=1.0, \
+															info.dmtree.notification.spi;version=1.0, \
+															info.dmtree.registry;version=1.0, \
+															info.dmtree.security;version=1.0, \
+															org.osgi.service.event;version=1.1"
+
+-runbundles			= \
+	osgi.cmpn; version=4.2 \
+	org.osgi.impl.service.dmt;	version=project	
+	

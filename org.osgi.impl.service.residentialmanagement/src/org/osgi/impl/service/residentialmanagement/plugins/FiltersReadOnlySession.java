@@ -1,66 +1,99 @@
+/*
+ * Copyright (c) OSGi Alliance (2000-2009).
+ * All Rights Reserved.
+ *
+ * Implementation of certain elements of the OSGi
+ * Specification may be subject to third party intellectual property
+ * rights, including without limitation, patent rights (such a third party may
+ * or may not be a member of the OSGi Alliance). The OSGi Alliance is not responsible and shall not be
+ * held responsible in any manner for identifying or failing to identify any or
+ * all such third party intellectual property rights.
+ *
+ * This document and the information contained herein are provided on an "AS
+ * IS" basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL
+ * NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
+ * FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE OSGI ALLIANCE BE LIABLE FOR ANY
+ * LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF USE OF DATA, INTERRUPTION OF
+ * BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR EXEMPLARY, INCIDENTIAL,
+ * PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN CONNECTION WITH THIS
+ * DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ *
+ * All Company, brand and product names may be trademarks that are the sole
+ * property of their respective owners. All rights reserved.
+ */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Hashtable;
+import java.util.StringTokenizer;
 import java.util.Vector;
-import java.util.Dictionary;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceReference;
+
 import info.dmtree.DmtAdmin;
 import info.dmtree.DmtData;
 import info.dmtree.DmtException;
 import info.dmtree.DmtSession;
 import info.dmtree.MetaNode;
-import info.dmtree.DmtIllegalStateException;
 import info.dmtree.spi.ReadableDataSession;
 
+/**
+ * 
+ * @author Koya MORI NTT Corporation, Shigekuni KONDO
+ */
 public class FiltersReadOnlySession implements ReadableDataSession {
 	protected static final String FILTERS = "Filters";
 	protected static final String TARGETSUBTREE = "TargetSubtree";
 	protected static final String FILTER = "Filter";
 	protected static final String RESULT = "Result";
+	protected static final String DEVICE = "Device";
+	protected static final String SERVICES = "Services";
+	protected static final String OSGI = "OSGi";
+	protected static final String INSTANCE_ID = "1";
+	protected static final String PLUGIN_ROOT_URI = "./OSGi";
 
 	protected FiltersPlugin plugin;
 	protected BundleContext context;
-
 	protected Hashtable searches;
 	protected int searchid;
+	private DmtAdmin dmtAdmin;
+	private DmtSession session;
 
 	FiltersReadOnlySession(FiltersPlugin plugin, BundleContext context) {
 		this.plugin = plugin;
 		this.context = context;
-
 		searches = new Hashtable();
 		searchid = 1;
 	}
 
 	public void close() throws DmtException {
-		// TODO Auto-generated method stub
 
 	}
 
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
+		ServiceReference dmtServiceRef = context
+				.getServiceReference(DmtAdmin.class.getName());
+		dmtAdmin = (DmtAdmin) context.getService(dmtServiceRef);
 
 		if (path.length == 1) {
 			if (searches.size() == 0) {
-				return new String[0];
+				String[] children = new String[1];
+				children[0] = "";
+				return children;
 			}
-
 			String[] children = new String[searches.size() + 1];
-
 			Enumeration e = searches.keys();
 			int n = 0;
 			while (e.hasMoreElements()) {
 				children[n] = (String) e.nextElement();
 				n++;
 			}
-
 			return children;
 		}
 
@@ -70,45 +103,89 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 				children[0] = TARGETSUBTREE;
 				children[1] = FILTER;
 				children[2] = RESULT;
-
 				return children;
 			}
 		}
 
-		if (path.length >= 3) {
-			if (searches.get(path[1]) != null & path[2].equals(RESULT)) {
-				Vector subtrees = getFilteredSubtrees(path);
-
-				String cpath = ((Search) searches.get(path[1])).target;
-				if(cpath.indexOf("/*") != -1) cpath = cpath.substring(0, cpath.indexOf("/*")) + "/";
-				if (path.length >= 4) {
-					for (int i = 3; i < path.length; i++) {
-						cpath = cpath + path[i] + "/";
-					}
-				} else {
-					cpath = ".";
-				}
-
-				Vector results = new Vector();
-				Iterator i = subtrees.iterator();
-				while (i.hasNext()) {
-					Hashtable tree = (Hashtable) i.next();
-					if (tree.get(cpath) != null){
-						String[] res = (String[]) tree.get(cpath);
-						for(int t = 0; t < res.length; t++){
-							results.add(res[t]);
-						}
-					}
-				}
-				
-				String[] result = new String[results.size()];
-				results.toArray(result);
-				
-				return result;
+		if (path.length == 3) {
+			if (searches.get(path[1]) != null) {
+				String[] children = new String[1];
+				children[0] = DEVICE;
+				return children;
 			}
 		}
 
-		return new String[0];
+		if (path.length == 4) {
+			if (searches.get(path[1]) != null) {
+				String[] children = new String[1];
+				children[0] = SERVICES;
+				return children;
+			}
+		}
+
+		if (path.length == 5) {
+			if (searches.get(path[1]) != null) {
+				String[] children = new String[1];
+				children[0] = OSGI;
+				return children;
+			}
+		}
+
+		if (path.length == 6) {
+			if (searches.get(path[1]) != null) {
+				String[] children = new String[1];
+				children[0] = INSTANCE_ID;
+				return children;
+			}
+		}
+
+		if (path.length >= 7) {
+			Search search = (Search) searches.get(path[1]);
+			if (search == null)
+				return new String[0];
+			session = dmtAdmin.getSession(PLUGIN_ROOT_URI,
+					DmtSession.LOCK_TYPE_SHARED);
+			searchTree(search);
+			String reqPath = processNodepath(nodePath);
+			Enumeration enu = search.targetSubtreeList.keys();
+			while (enu.hasMoreElements()) {
+				String ts = (String) enu.nextElement();
+				if (ts.equals(reqPath)) {
+					String[] children = (String[]) search.targetSubtreeList
+							.get(ts);
+					session.close();
+					return children;
+				} else if (ts.startsWith(reqPath)) {
+					String[] children = new String[1];
+					String partialTs = this.replaceAll(ts, reqPath, "");
+					if (partialTs.indexOf("/", 1) == -1) {
+						children[0] = partialTs.substring(1);
+						session.close();
+						return children;
+					}
+					children[0] = partialTs.substring(1, partialTs.indexOf("/",
+							1));
+					session.close();
+					return children;
+				} else if (reqPath.startsWith(ts)) {
+					String[] filterdChildren = (String[]) search.targetSubtreeList
+							.get(ts);
+					for (int i = 0; i < filterdChildren.length; i++) {
+						String tsWithChildren = ts + "/" + filterdChildren[i];
+						if (tsWithChildren.startsWith(reqPath)) {
+							String[] children = session
+									.getChildNodeNames(reqPath);
+							session.close();
+							return children;
+						}
+					}
+				}
+			}
+		}
+		// other case
+		String[] children = new String[0];
+		session.close();
+		return children;
 	}
 
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
@@ -182,12 +259,14 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 	}
 
 	public String getNodeType(String[] nodePath) throws DmtException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
+		ServiceReference dmtServiceRef = context
+				.getServiceReference(DmtAdmin.class.getName());
+		dmtAdmin = (DmtAdmin) context.getService(dmtServiceRef);
 
 		if (path.length <= 2)
 			throw new DmtException(nodePath,
@@ -204,32 +283,53 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 				if (search != null)
 					return new DmtData(search.filter);
 			}
+			throw new DmtException(nodePath,
+					DmtException.FEATURE_NOT_SUPPORTED,
+					"The given path indicates an interior node.");
 		}
 
-		if (path.length >= 4 & path[2].equals(RESULT)) {
+		if (path.length == 4 || path.length == 5 || path.length == 6
+				|| path.length == 7) {
+			throw new DmtException(nodePath,
+					DmtException.FEATURE_NOT_SUPPORTED,
+					"The given path indicates an interior node.");
+		}
+
+		if (path.length >= 8 && path[2].equals(RESULT)) {
 			Search search = (Search) searches.get(path[1]);
-			if (search != null) {
-				Vector subtrees = getFilteredSubtrees(path);
-
-				String cpath = "";
-				for (int i = 0; i < path.length; i++) {
-					cpath = cpath + path[i] + "/";
-				}
-
-				Iterator i = subtrees.iterator();
-				while (i.hasNext()) {
-					Hashtable tree = (Hashtable) i.next();
-					try {
-						if (tree.get(cpath).getClass().getName().equals(
-								DmtData.class.getName()))
-							return (DmtData) tree.get(cpath);
-					} catch (Exception e) {
-
+			session = dmtAdmin.getSession(PLUGIN_ROOT_URI,
+					DmtSession.LOCK_TYPE_SHARED);
+			String reqPath = processNodepath(nodePath);
+			if (!session.isLeafNode(reqPath))
+				throw new DmtException(nodePath,
+						DmtException.FEATURE_NOT_SUPPORTED,
+						"The given path indicates an interior node.");
+			searchTree(search);
+			Enumeration enu = search.targetSubtreeList.keys();
+			while (enu.hasMoreElements()) {
+				String ts = (String) enu.nextElement();
+				if (ts.equals(reqPath) || ts.startsWith(reqPath)) {
+					DmtData value = session.getNodeValue(reqPath);
+					session.close();
+					return value;
+				} else if (reqPath.startsWith(ts)) {
+					String[] filterdChildren = (String[]) search.targetSubtreeList
+							.get(ts);
+					for (int i = 0; i < filterdChildren.length; i++) {
+						String tsWithChildren = ts + "/" + filterdChildren[i];
+						if (tsWithChildren.startsWith(reqPath)) {
+							DmtData value = session.getNodeValue(reqPath);
+							session.close();
+							return value;
+						}
 					}
 				}
+				session.close();
+				throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+						"The node indicated the given path is not found.");
 			}
+			session.close();
 		}
-
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 				"The specified key does not exist in the filters object.");
 	}
@@ -241,6 +341,9 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 
 	public boolean isLeafNode(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
+		ServiceReference dmtServiceRef = context
+				.getServiceReference(DmtAdmin.class.getName());
+		dmtAdmin = (DmtAdmin) context.getService(dmtServiceRef);
 
 		if (path.length <= 2)
 			return false;
@@ -258,69 +361,48 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 			return false;
 		}
 
-		if (path.length >= 4 & path[2].equals(RESULT)) {
-			Search search = (Search) searches.get(path[1]);
-			if (search != null) {
-				Vector subtrees;
-				try{
-					subtrees = getFilteredSubtrees(path);
-				}catch(Exception e){
-					return false;
-				}
-				
-				String cpath = ((Search) searches.get(path[1])).target;
-				if(cpath.indexOf("/*") != -1) cpath = cpath.substring(0, cpath.indexOf("/*")) + "/";
-				if (path.length >= 4) {
-					for (int i = 3; i < path.length; i++) {
-						cpath = cpath + path[i] + "/";
-					}
-				} else {
-					cpath = ".";
-				}
-
-				Iterator i = subtrees.iterator();
-				while (i.hasNext()) {
-					Hashtable tree = (Hashtable) i.next();
-					try {
-						if (tree.get(cpath).getClass().getName().equals(
-								DmtData.class.getName()))
-							return true;
-
-						return false;
-					} catch (Exception e) {
-
-					}
-				}
-
-				/*				Vector subtrees = getFilteredSubtrees(path);
-
-				String cpath = "";
-				for (int i = 0; i < path.length; i++) {
-					cpath = cpath + path[i] + "/";
-				}
-
-				Iterator i = subtrees.iterator();
-				while (i.hasNext()) {
-					Hashtable tree = (Hashtable) i.next();
-					try {
-						if (tree.get(cpath).getClass().getName().equals(
-								DmtData.class.getName()))
-							return true;
-
-						return false;
-					} catch (Exception e) {
-
-					}
-				}*/
-			}
+		if (path.length == 4 || path.length == 5 || path.length == 6
+				|| path.length == 7) {
+			return false;
 		}
 
+		if (path.length >= 8 & path[2].equals(RESULT)) {
+			Search search = (Search) searches.get(path[1]);
+			session = dmtAdmin.getSession(PLUGIN_ROOT_URI,
+					DmtSession.LOCK_TYPE_SHARED);
+			String reqPath = processNodepath(nodePath);
+			searchTree(search);
+			Enumeration enu = search.targetSubtreeList.keys();
+			while (enu.hasMoreElements()) {
+				String ts = (String) enu.nextElement();
+				if (ts.equals(reqPath) || ts.startsWith(reqPath)) {
+					boolean flag = session.isLeafNode(reqPath);
+					session.close();
+					return flag;
+				} else if (reqPath.startsWith(ts)) {
+					String[] filterdChildren = (String[]) search.targetSubtreeList
+							.get(ts);
+					for (int i = 0; i < filterdChildren.length; i++) {
+						String tsWithChildren = ts + "/" + filterdChildren[i];
+						if (tsWithChildren.startsWith(reqPath)) {
+							boolean flag = session.isLeafNode(reqPath);
+							session.close();
+							return flag;
+						}
+					}
+				}
+			}
+			session.close();
+		}
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-				"The specified key does not exist in the filters object.");
+				"The specified node does not exist in the filters object.");
 	}
 
 	public boolean isNodeUri(String[] nodePath) {
 		String[] path = shapedPath(nodePath);
+		ServiceReference dmtServiceRef = context
+				.getServiceReference(DmtAdmin.class.getName());
+		dmtAdmin = (DmtAdmin) context.getService(dmtServiceRef);
 
 		if (path.length == 1 && path[0].equals(FILTERS)) {
 			return true;
@@ -348,56 +430,47 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 			}
 		}
 
-		if (path.length >= 4 && path[2].equals(RESULT)) {
-			Search search = (Search) searches.get(path[1]);
-			if (search != null) {
-				Vector subtrees;
-				try{
-					subtrees = getFilteredSubtrees(path);
-				}catch(Exception e){
-					return false;
-				}
-				
-				String cpath = ((Search) searches.get(path[1])).target;
-				if(cpath.indexOf("/*") != -1) cpath = cpath.substring(0, cpath.indexOf("/*")) + "/";
-				if (path.length >= 4) {
-					for (int i = 3; i < path.length; i++) {
-						cpath = cpath + path[i] + "/";
-					}
-				} else {
-					cpath = ".";
-				}
+		if (path.length == 4 || path.length == 5 || path.length == 6
+				|| path.length == 7) {
+			return true;
+		}
 
-				Iterator i = subtrees.iterator();
-				while (i.hasNext()) {
-					Hashtable tree = (Hashtable) i.next();
-					if (tree.get(cpath) != null){
-						return true;
+		if (path.length >= 8 && path[2].equals(RESULT)) {
+			try {
+				Search search = (Search) searches.get(path[1]);
+				session = dmtAdmin.getSession(PLUGIN_ROOT_URI,
+						DmtSession.LOCK_TYPE_SHARED);
+				String reqPath = processNodepath(nodePath);
+				searchTree(search);
+				Enumeration enu = search.targetSubtreeList.keys();
+				while (enu.hasMoreElements()) {
+					String ts = (String) enu.nextElement();
+					if (ts.equals(reqPath) || ts.startsWith(reqPath)) {
+						boolean flag = session.isNodeUri(reqPath);
+						session.close();
+						return flag;
+					} else if (reqPath.startsWith(ts)) {
+						String[] filterdChildren = (String[]) search.targetSubtreeList
+								.get(ts);
+						for (int i = 0; i < filterdChildren.length; i++) {
+							String tsWithChildren = ts + "/"
+									+ filterdChildren[i];
+							if (tsWithChildren.startsWith(reqPath)) {
+								boolean flag = session.isNodeUri(reqPath);
+								session.close();
+								return flag;
+							}
+						}
 					}
 				}
-				
-/*				Vector subtrees;
+				session.close();
+			} catch (Exception e) {
 				try {
-					subtrees = getFilteredSubtrees(path);
-				} catch (Exception e) {
+					session.close();
+				} catch (DmtException e1) {
 					return false;
 				}
-
-				String cpath = "";
-				for (int i = 0; i < path.length; i++) {
-					cpath = cpath + path[i] + "/";
-				}
-
-				Iterator i = subtrees.iterator();
-				while (i.hasNext()) {
-					Hashtable tree = (Hashtable) i.next();
-					try {
-						if (tree.get(cpath) != null)
-							return true;
-					} catch (Exception e) {
-
-					}
-				}*/
+				return false;
 			}
 		}
 
@@ -409,178 +482,73 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 
 	}
 
-	protected String[] shapedPath(String[] nodePath) {
-		String[] newPath = new String[nodePath.length - 3];
-		for (int i = 0; i < nodePath.length - 3; i++) {
-			newPath[i] = nodePath[i + 3];
-		}
+	// ---------------Utility--------------------------------------------------------------------
 
+	private String replaceAll(String value, String old_str, String new_str) {
+		if (value == null || old_str == null || "".equals(old_str)) {
+			return value;
+		}
+		StringBuffer ret = new StringBuffer();
+		int old_len = old_str.length();
+		int from_index = 0;
+		int index = 0;
+		boolean loop_flg = true;
+		while (loop_flg) {
+			index = value.indexOf(old_str, from_index);
+			if (-1 < index) {
+				ret.append(value.substring(from_index, index));
+				ret.append(new_str);
+				from_index = index + old_len;
+			} else {
+				ret.append(value.substring(from_index));
+				loop_flg = false;
+			}
+		}
+		return ret.toString();
+	}
+
+	protected String[] shapedPath(String[] nodePath) {
+		int size = nodePath.length;
+		int srcPos = 3;
+		int destPos = 0;
+		int length = size - srcPos;
+		String[] newPath = new String[length];
+		System.arraycopy(nodePath, srcPos, newPath, destPos, length);
 		return newPath;
 	}
 
-	private Vector getFilteredSubtrees(String[] path) throws DmtException {
-		Search search = (Search) searches.get(path[1]);
-		Vector subtrees = new Vector();
-
-		ServiceReference ref = context.getServiceReference(DmtAdmin.class
-				.getName());
-		DmtAdmin dmtadmin = (DmtAdmin) context.getService(ref);
-
-		/*
-		 * String targets = search.target.substring(0,
-		 * search.target.lastIndexOf("/")); String[] candidates; if
-		 * (search.target.indexOf("*") != -1) { targets = search.target
-		 * .substring(0, search.target.indexOf("*") - 1);
-		 * 
-		 * DmtSession session = dmtadmin.getSession(targets,
-		 * DmtSession.LOCK_TYPE_SHARED);
-		 * 
-		 * candidates = session.getChildNodeNames(targets);
-		 * 
-		 * session.close(); } else { candidates = new String[] {
-		 * search.target.substring(search.target .lastIndexOf("/") + 1,
-		 * search.target.length()) }; }
-		 */
-
-		String targets = search.target;
-		if (targets.indexOf("/*") != -1) {
-			targets = targets.substring(0, targets.indexOf("/*"));
-		} else if (targets.endsWith("/")) {
-			targets = targets.substring(0, targets.lastIndexOf("/"));
+	private String processNodepath(String[] nodePath) {
+		int size = nodePath.length;
+		int srcPos = 8;
+		int destPos = 0;
+		int length = size - srcPos;
+		String[] newPath = new String[length];
+		System.arraycopy(nodePath, srcPos, newPath, destPos, length);
+		StringBuffer sb = new StringBuffer();
+		sb.append("./");
+		for (int i = 0; i < newPath.length; i++) {
+			sb.append(newPath[i]);
+			sb.append("/");
 		}
-
-		// for (int c = 0; c < candidates.length; c++) {
-		DmtSession session = dmtadmin.getSession(targets,
-				DmtSession.LOCK_TYPE_SHARED);
-
-		String[] children = session.getChildNodeNames(targets);
-
-		for (int i = 0; i < children.length; i++) {
-			Hashtable values = new Hashtable();
-			getChildNodeNamesAndValues(session, values, targets + "/"
-					+ children[i]);
-
-			if (filterSubtree(values, search.target, search.filter)) {
-				/*
-				 * String[] tmpchildren = (String[]) values.get("."); if
-				 * (tmpchildren != null) { String[] filteredChildren = new
-				 * String[tmpchildren.length + 1]; for (int x = 0; x <
-				 * tmpchildren.length; x++) { filteredChildren[x] =
-				 * tmpchildren[x]; } filteredChildren[tmpchildren.length] =
-				 * children[i]; values.put(".", filteredChildren); } else {
-				 */
-				values.put(".", new String[] { children[i] });
-				// }
-
-				subtrees.add(values);
-			}
-		}
-
-		session.close();
-		// }
-
-		return subtrees;
+		StringBuffer path = sb.deleteCharAt(sb.length() - 1);
+		return path.toString();
 	}
 
-	private void getChildNodeNamesAndValues(DmtSession session,
-			Hashtable values, String path) {
-		try {
-			if (!path.endsWith("/") && session.isLeafNode(path)) {
-				DmtData data = session.getNodeValue(path);
-				values.put(path, data);
-			} else {
-				if (path.endsWith("/")) {
-					String[] children = session.getChildNodeNames(path
-							.substring(0, path.length() - 1));
-					values.put(path, children);
-
-					for (int i = 0; i < children.length; i++) {
-						getChildNodeNamesAndValues(session, values, path
-								+ children[i]);
-					}
-				} else {
-					String[] children = session.getChildNodeNames(path);
-					values.put(path + "/", children);
-
-					for (int i = 0; i < children.length; i++) {
-						getChildNodeNamesAndValues(session, values, path + "/"
-								+ children[i]);
-					}
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+	private String[] processCommaSeparatedValue(String value) {
+		StringTokenizer st = new StringTokenizer(value, ",");
+		String[] arrayValue = new String[st.countTokens()];
+		for (int i = 0; st.hasMoreTokens(); i++) {
+			arrayValue[i] = st.nextToken();
 		}
-	}
-
-	private boolean filterSubtree(Hashtable subtree, String target, String query) {
-		Filter filter;
-
-		try {
-			filter = FrameworkUtil.createFilter(query);
-		} catch (InvalidSyntaxException ise) {
-			System.out.println("Create filter failed");
-			return false;
-		}
-
-		Dictionary nodes = new Hashtable();
-
-		Enumeration e = subtree.keys();
-		while (e.hasMoreElements()) {
-			String fullpath = (String) e.nextElement();
-
-			String path = fullpath;
-			for (int position = 0; position < target.length();) {
-				if (target.indexOf("/", position) != -1) {
-					position = target.indexOf("/", position) + 1;
-					path = path.substring(path.indexOf("/") + 1);
-				}
-			}
-
-			if (subtree.get(fullpath).getClass().getName().equals(
-					DmtData.class.getName())) {
-				try {
-					int format = ((DmtData) subtree.get(fullpath)).getFormat();
-
-					if (format == 1)
-						nodes.put(path, String.valueOf(((DmtData) subtree
-								.get(fullpath)).getInt()));
-					else if (format == 2)
-						nodes.put(path, String.valueOf(((DmtData) subtree
-								.get(fullpath)).getFloat()));
-					else if (format == 4)
-						nodes.put(path, ((DmtData) subtree.get(fullpath))
-								.getString());
-					else if (format == 8)
-						nodes.put(path, String.valueOf(((DmtData) subtree
-								.get(fullpath)).getBoolean()));
-					else if (format == 16)
-						nodes.put(path, ((DmtData) subtree.get(fullpath))
-								.getDate());
-					else if (format == 32)
-						nodes.put(path, ((DmtData) subtree.get(fullpath))
-								.getTime());
-					else if (format == 64)
-						nodes.put(path, String.valueOf(((DmtData) subtree
-								.get(fullpath)).getBinary()));
-					else if (format == 128)
-						nodes.put(path, String.valueOf(((DmtData) subtree
-								.get(fullpath)).getBase64()));
-				} catch (DmtIllegalStateException x) {
-					x.printStackTrace();
-				}
-			} else if (subtree.get(fullpath).getClass().getName().equals(
-					String[].class.getName())) {
-				nodes.put(path, (String[]) subtree.get(fullpath));
-			}
-		}
-
-		return filter.match(nodes);
+		if (arrayValue.length == 0)
+			return null;
+		return arrayValue;
 	}
 
 	protected class Search {
 		String target;
 		String filter;
+		Hashtable targetSubtreeList = new Hashtable();
 
 		Search(String target, String filter) {
 			this.target = target;
@@ -588,4 +556,200 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		}
 	}
 
+	// ------------------------------------------------------------------------------------------
+
+	private Hashtable findTergetSubtree(String path, String targetPath,
+			Hashtable targetSubtreeList) throws DmtException {
+		String[] children = session.getChildNodeNames(path);
+		try {
+			for (int i = 0; i < children.length; i++) {
+				if (children[i].equals("BundleResources")
+						|| children[i].equals("Log")
+						|| children[i].equals("Configuration")
+						|| children[i].equals("Policy")
+						|| children[i].equals("Filters")
+						|| children[i].equals("Application")
+						|| children[i].equals("Deployment")
+						|| children[i].equals("Monitor")
+						|| children[i].equals(""))
+					continue;
+				if (children[i].equals(targetPath)) {
+					targetSubtreeList.put(path + "/" + children[i], "");
+				} else if (!(children[i].equals(targetPath))
+						&& session.isLeafNode(path + "/" + children[i])) {
+				} else {
+					targetSubtreeList = findTergetSubtree(path + "/"
+							+ children[i], targetPath, targetSubtreeList);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return targetSubtreeList;
+	}
+
+	private Hashtable processFilter(String filter) {
+		Hashtable filterTable = new Hashtable();
+		ArrayList array = new ArrayList();
+		// Add ArrayList
+		while (filter.indexOf("=") != -1) {
+			String partOfFilter = filter.substring(filter.indexOf("(") + 1,
+					filter.indexOf("="));
+			if (partOfFilter.indexOf("(") == -1) {
+				filterTable.put(partOfFilter, array);
+
+			} else {
+				while (partOfFilter.indexOf("(") != -1) {
+					partOfFilter = partOfFilter.substring(partOfFilter
+							.indexOf("(") + 1);
+				}
+				filterTable.put(partOfFilter, array);
+			}
+			filter = filter.substring((filter.indexOf("=") + 1));
+		}
+		return filterTable;
+	}
+
+	// ------------------------------------------------------------------------------------------
+
+	private void searchTree(Search search) throws DmtException {
+		// create TS list
+		String targetSubtree = replaceAll(search.target, "/Device/Services/",
+				"./");
+
+		int star = targetSubtree.indexOf("/*/");
+		int bar = targetSubtree.indexOf("/-/");
+		if (star == -1 && bar == -1) {
+			if (targetSubtree.lastIndexOf("/") == targetSubtree.length() - 1) {
+				targetSubtree = targetSubtree.substring(0, targetSubtree
+						.lastIndexOf("/"));
+			}
+			search.targetSubtreeList.put(targetSubtree, "");
+		} else if (star != -1 || bar != -1) {
+			String startPath = targetSubtree.substring(0, targetSubtree
+					.indexOf("/*/"));
+			String targetPath = targetSubtree.substring(targetSubtree
+					.indexOf("/*/") + 3, targetSubtree.indexOf("/",
+					targetSubtree.indexOf("/*/") + 3));
+			Hashtable tsList = new Hashtable();
+			search.targetSubtreeList = findTergetSubtree(startPath, targetPath,
+					tsList);
+		}
+
+		// Filtering of TS (list)
+		boolean frag = false;
+		String sFilter = search.filter;
+		Filter filter = null;
+		try {
+			filter = context.createFilter(sFilter);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Hashtable filtersTable = processFilter(sFilter);
+		Enumeration e = search.targetSubtreeList.keys();
+		while (e.hasMoreElements()) {
+			Vector childrenVector = new Vector();
+			String ts = (String) e.nextElement();
+			String[] children = session.getChildNodeNames(ts);
+			for (int i = 0; i < children.length; i++) {
+				filtersTable = cheackFilter(ts + "/" + children[i],
+						filtersTable);
+				for (Enumeration keys = filtersTable.keys(); keys
+						.hasMoreElements();) {
+					String targetNodeName = (String) keys.nextElement();
+					Object obj = filtersTable.get(targetNodeName);
+					if (obj instanceof ArrayList) {
+						ArrayList array = (ArrayList) obj;
+						String[] values = new String[array.size()];
+						for (int j = 0; j < array.size(); j++) {
+							values[j] = (String) array.get(j);
+						}
+						filtersTable.put(targetNodeName, values);
+						frag = true;
+					}
+				}
+				if (frag) {
+					if (filter.match(filtersTable)) {
+						childrenVector.add(children[i]);
+					}
+				}
+				frag = false;
+			}
+			String[] childrenArray = new String[childrenVector.size()];
+			for (int v = 0; v < childrenVector.size(); v++) {
+				childrenArray[v] = (String) childrenVector.get(v);
+			}
+			search.targetSubtreeList.put(ts, childrenArray);
+		}
+	}
+
+	private Hashtable cheackFilter(String targetSubtree, Hashtable filtersTable)
+			throws DmtException {
+		String[] children = session.getChildNodeNames(targetSubtree);
+		for (int i = 0; i < children.length; i++) {
+			if (children[i].equals(""))
+				continue;
+			if (session.isLeafNode(targetSubtree + "/" + children[i])) {
+				for (Enumeration keys = filtersTable.keys(); keys
+						.hasMoreElements();) {
+					String targetNodeName = (String) keys.nextElement();
+					if (targetNodeName.startsWith("@")) {
+						String key = "Key";
+						if (children[i].equals(key)) {
+							String keyValue = session.getNodeValue(
+									targetSubtree + "/" + children[i])
+									.getString();
+							if (keyValue.equals(targetNodeName.substring(1))) {
+								String value = session.getNodeValue(
+										targetSubtree + "/Values").getString();
+								String[] valueOfArray = processCommaSeparatedValue(value);
+								Object obj = filtersTable.get(targetNodeName);
+								if (obj instanceof ArrayList) {
+									ArrayList array = (ArrayList) filtersTable
+											.get(targetNodeName);
+									for (int a = 0; a < valueOfArray.length; a++) {
+										array.add(valueOfArray[a]);
+									}
+									filtersTable.put(targetNodeName, array);
+								} else {
+									ArrayList array = new ArrayList();
+									for (int a = 0; a < valueOfArray.length; a++) {
+										array.add(valueOfArray[a]);
+									}
+									filtersTable.put(targetNodeName, array);
+								}
+							}
+						}
+					} else {
+						if (children[i].equals(targetNodeName)) {
+							String value = session.getNodeValue(
+									targetSubtree + "/" + children[i])
+									.getString();
+							String[] valueOfArray = processCommaSeparatedValue(value);
+							Object obj = filtersTable.get(targetNodeName);
+							if (obj instanceof ArrayList
+									&& valueOfArray != null) {
+								ArrayList array = (ArrayList) filtersTable
+										.get(targetNodeName);
+								for (int a = 0; a < valueOfArray.length; a++) {
+									array.add(valueOfArray[a]);
+								}
+								filtersTable.put(targetNodeName, array);
+							} else if (valueOfArray != null) {
+								ArrayList array = new ArrayList();
+								for (int a = 0; a < valueOfArray.length; a++) {
+									array.add(valueOfArray[a]);
+								}
+								filtersTable.put(targetNodeName, array);
+							}
+						}
+					}
+				}
+			} else {
+				filtersTable = cheackFilter(targetSubtree + "/" + children[i],
+						filtersTable);
+			}
+		}
+		return filtersTable;
+	}
 }
