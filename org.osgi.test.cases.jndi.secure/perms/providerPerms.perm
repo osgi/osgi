@@ -1,0 +1,7 @@
+(org.osgi.framework.PackagePermission	"javax.naming"	"import")
+(org.osgi.framework.PackagePermission	"javax.naming.*"	"import")
+(org.osgi.framework.PackagePermission	"org.osgi.framework"	"import")
+(org.osgi.framework.PackagePermission	"org.osgi.test.cases.jndi.secure.*"	"import")
+(org.osgi.framework.ServicePermission	"org.osgi.test.cases.jndi.secure.provider.*"	"register")
+(org.osgi.framework.ServicePermission	"javax.naming.spi.*"							"register")
+
