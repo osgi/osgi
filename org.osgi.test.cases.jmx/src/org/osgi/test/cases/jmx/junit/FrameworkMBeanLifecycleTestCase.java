@@ -55,6 +55,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	protected void setUp() throws Exception {
+		fail("This test class either needs to be fixed or removed before we ship Enterprise 4.2 CT");
 		super.setUp();
 		frameworkFactoryClassName = getFrameworkFactoryClassName();
 		assertNotNull("Could not find framework factory class", frameworkFactoryClassName);
@@ -100,155 +101,181 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 	}
 
 	public void testShutdown() throws Exception {
-		/*
 		BundleContext context = framework.getBundleContext();
 
 		MBeanServer hack = ManagementFactory.getPlatformMBeanServer();
-		
-		ServiceRegistration registration = context.registerService(MBeanServer.class.getCanonicalName(), hack, null);
+
+		ServiceRegistration registration = context.registerService(
+				MBeanServer.class.getCanonicalName(), hack, null);
 		String key = MBeanServer.class.getCanonicalName();
 		ServiceReference reference = context.getServiceReference(key);
 		assertNotNull(reference);
 		MBeanServer mBeanServer = (MBeanServer) context.getService(reference);
 		assertNotNull(mBeanServer);
-		
-		for (boolean registered = false;!registered; registered = hack.isRegistered(new ObjectName(FrameworkMBean.OBJECTNAME))) {
+
+		for (boolean registered = false; !registered; registered = hack
+				.isRegistered(new ObjectName(FrameworkMBean.OBJECTNAME))) {
 			Thread.sleep(1000);
 		}
-		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler.newProxyInstance(mBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME),
-				FrameworkMBean.class, false);
+		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler
+				.newProxyInstance(mBeanServer, new ObjectName(
+						FrameworkMBean.OBJECTNAME), FrameworkMBean.class, false);
 		mbean.shutdownFramework();
-		
+
 		FrameworkEvent event = framework.waitForStop(10000);
-		assertTrue("event indicated that framework was not moved to stopped state when shutdown was called", event.getType() == FrameworkEvent.STOPPED);
-		assertTrue("framework was not moved to stopped state when was shutdown", framework.getState() == Bundle.RESOLVED);
-	    */
+		assertTrue(
+				"event indicated that framework was not moved to stopped state when shutdown was called",
+				event.getType() == FrameworkEvent.STOPPED);
+		assertTrue(
+				"framework was not moved to stopped state when was shutdown",
+				framework.getState() == Bundle.RESOLVED);
 	}
 	
 	public void testRestart() throws Exception {
-		/*
 		BundleContext context = framework.getBundleContext();
 
 		MBeanServer hack = ManagementFactory.getPlatformMBeanServer();
-		
-		ServiceRegistration registration = context.registerService(MBeanServer.class.getCanonicalName(), hack, null);
+
+		ServiceRegistration registration = context.registerService(
+				MBeanServer.class.getCanonicalName(), hack, null);
 		String key = MBeanServer.class.getCanonicalName();
 		ServiceReference reference = context.getServiceReference(key);
 		assertNotNull(reference);
 		MBeanServer mBeanServer = (MBeanServer) context.getService(reference);
 		assertNotNull(mBeanServer);
-		
-		for (boolean registered = false;!registered; registered = hack.isRegistered(new ObjectName(FrameworkMBean.OBJECTNAME))) {
+
+		for (boolean registered = false; !registered; registered = hack
+				.isRegistered(new ObjectName(FrameworkMBean.OBJECTNAME))) {
 			Thread.sleep(1000);
 		}
-		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler.newProxyInstance(mBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME),
-				FrameworkMBean.class, false);
+		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler
+				.newProxyInstance(mBeanServer, new ObjectName(
+						FrameworkMBean.OBJECTNAME), FrameworkMBean.class, false);
 		mbean.restartFramework();
-		
+
 		FrameworkEvent event = framework.waitForStop(10000);
-		assertTrue("event indicated that framework was not moved to stopped state when shutdown was called", event.getType() == FrameworkEvent.STOPPED_UPDATE);
-		for (boolean started = false;!started; started = framework.getState() == Bundle.ACTIVE) {
+		assertTrue(
+				"event indicated that framework was not moved to stopped state when shutdown was called",
+				event.getType() == FrameworkEvent.STOPPED_UPDATE);
+		for (boolean started = false; !started; started = framework.getState() == Bundle.ACTIVE) {
 			Thread.sleep(1000);
 		}
 		stopFramework();
-		*/
 	}
 	
 	public void testUpdate() throws Exception {
-		/*
 		BundleContext context = framework.getBundleContext();
 
 		MBeanServer hack = ManagementFactory.getPlatformMBeanServer();
-		
-		ServiceRegistration registration = context.registerService(MBeanServer.class.getCanonicalName(), hack, null);
+
+		ServiceRegistration registration = context.registerService(
+				MBeanServer.class.getCanonicalName(), hack, null);
 		String key = MBeanServer.class.getCanonicalName();
 		ServiceReference reference = context.getServiceReference(key);
 		assertNotNull(reference);
 		MBeanServer mBeanServer = (MBeanServer) context.getService(reference);
 		assertNotNull(mBeanServer);
-		
-		for (boolean registered = false;!registered; registered = hack.isRegistered(new ObjectName(FrameworkMBean.OBJECTNAME))) {
+
+		for (boolean registered = false; !registered; registered = hack
+				.isRegistered(new ObjectName(FrameworkMBean.OBJECTNAME))) {
 			Thread.sleep(1000);
 		}
-		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler.newProxyInstance(mBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME),
-				FrameworkMBean.class, false);
+		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler
+				.newProxyInstance(mBeanServer, new ObjectName(
+						FrameworkMBean.OBJECTNAME), FrameworkMBean.class, false);
 		mbean.updateFramework();
-		
+
 		FrameworkEvent event = framework.waitForStop(10000);
-		assertTrue("event indicated that framework was not moved to stopped state when shutdown was called", event.getType() == FrameworkEvent.STOPPED_UPDATE);
-		for (boolean started = false;!started; started = framework.getState() == Bundle.ACTIVE) {
+		assertTrue(
+				"event indicated that framework was not moved to stopped state when shutdown was called",
+				event.getType() == FrameworkEvent.STOPPED_UPDATE);
+		for (boolean started = false; !started; started = framework.getState() == Bundle.ACTIVE) {
 			Thread.sleep(1000);
 		}
 		stopFramework();
-		*/
 	}
 	
 	public void testAll() throws Exception {
-		/*
 		BundleContext context = framework.getBundleContext();
 
 		MBeanServer hack = ManagementFactory.getPlatformMBeanServer();
-		
-		ServiceRegistration registration = context.registerService(MBeanServer.class.getCanonicalName(), hack, null);
+
+		ServiceRegistration registration = context.registerService(
+				MBeanServer.class.getCanonicalName(), hack, null);
 		String key = MBeanServer.class.getCanonicalName();
 		ServiceReference reference = context.getServiceReference(key);
 		assertNotNull(reference);
 		MBeanServer mBeanServer = (MBeanServer) context.getService(reference);
 		assertNotNull(mBeanServer);
-		
-		for (boolean registered = false;!registered; registered = hack.isRegistered(new ObjectName(FrameworkMBean.OBJECTNAME))) {
+
+		for (boolean registered = false; !registered; registered = hack
+				.isRegistered(new ObjectName(FrameworkMBean.OBJECTNAME))) {
 			Thread.sleep(1000);
 		}
-		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler.newProxyInstance(mBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME),
-				FrameworkMBean.class, false);
+		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler
+				.newProxyInstance(mBeanServer, new ObjectName(
+						FrameworkMBean.OBJECTNAME), FrameworkMBean.class, false);
 		mbean.restartFramework();
-		
+
 		FrameworkEvent event = framework.waitForStop(10000);
-		assertTrue("event indicated that framework was not moved to stopped state when shutdown was called", event.getType() == FrameworkEvent.STOPPED_UPDATE);
-		for (boolean started = false;!started; started = framework.getState() == Bundle.ACTIVE) {
+		assertTrue(
+				"event indicated that framework was not moved to stopped state when shutdown was called",
+				event.getType() == FrameworkEvent.STOPPED_UPDATE);
+		for (boolean started = false; !started; started = framework.getState() == Bundle.ACTIVE) {
 			Thread.sleep(1000);
 		}
-		
+
 		context = framework.getBundleContext();
 
-		registration = context.registerService(MBeanServer.class.getCanonicalName(), hack, null);
+		registration = context.registerService(MBeanServer.class
+				.getCanonicalName(), hack, null);
 		reference = context.getServiceReference(key);
 		assertNotNull(reference);
 		mBeanServer = (MBeanServer) context.getService(reference);
 		assertNotNull(mBeanServer);
-		
-		for (boolean registered = false;!registered; registered = hack.isRegistered(new ObjectName(FrameworkMBean.OBJECTNAME))) {
+
+		for (boolean registered = false; !registered; registered = hack
+				.isRegistered(new ObjectName(FrameworkMBean.OBJECTNAME))) {
 			Thread.sleep(1000);
 		}
-		mbean = (FrameworkMBean) MBeanServerInvocationHandler.newProxyInstance(mBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME),
+		mbean = (FrameworkMBean) MBeanServerInvocationHandler.newProxyInstance(
+				mBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME),
 				FrameworkMBean.class, false);
 		mbean.updateFramework();
-		
+
 		event = framework.waitForStop(10000);
-		assertTrue("event indicated that framework was not moved to stopped state when shutdown was called", event.getType() == FrameworkEvent.STOPPED_UPDATE);
-		for (boolean started = false;!started; started = framework.getState() == Bundle.ACTIVE) {
+		assertTrue(
+				"event indicated that framework was not moved to stopped state when shutdown was called",
+				event.getType() == FrameworkEvent.STOPPED_UPDATE);
+		for (boolean started = false; !started; started = framework.getState() == Bundle.ACTIVE) {
 			Thread.sleep(1000);
 		}
 
 		context = framework.getBundleContext();
 
-		registration = context.registerService(MBeanServer.class.getCanonicalName(), hack, null);
+		registration = context.registerService(MBeanServer.class
+				.getCanonicalName(), hack, null);
 		reference = context.getServiceReference(key);
 		assertNotNull(reference);
 		mBeanServer = (MBeanServer) context.getService(reference);
 		assertNotNull(mBeanServer);
-		
-		for (boolean registered = false;!registered; registered = hack.isRegistered(new ObjectName(FrameworkMBean.OBJECTNAME))) {
+
+		for (boolean registered = false; !registered; registered = hack
+				.isRegistered(new ObjectName(FrameworkMBean.OBJECTNAME))) {
 			Thread.sleep(1000);
 		}
-		mbean = (FrameworkMBean) MBeanServerInvocationHandler.newProxyInstance(mBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME),
+		mbean = (FrameworkMBean) MBeanServerInvocationHandler.newProxyInstance(
+				mBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME),
 				FrameworkMBean.class, false);
 		mbean.shutdownFramework();
-		
+
 		event = framework.waitForStop(10000);
-		assertTrue("event indicated that framework was not moved to stopped state when shutdown was called", event.getType() == FrameworkEvent.STOPPED);
-		assertTrue("framework was not moved to stopped state when was shutdown", framework.getState() == Bundle.RESOLVED);
-		*/
+		assertTrue(
+				"event indicated that framework was not moved to stopped state when shutdown was called",
+				event.getType() == FrameworkEvent.STOPPED);
+		assertTrue(
+				"framework was not moved to stopped state when was shutdown",
+				framework.getState() == Bundle.RESOLVED);
 	}
 	
 	protected void tearDown() throws Exception {
