@@ -122,7 +122,7 @@ public class Activator implements BundleActivator {
 		try {
 			sem.waitForSignal();
 
-			servicesem.waitForSignal();
+			servicesem.waitForSignal(60000);
 		} finally {
 			bundleTracker.close();
 			tracker.close();
