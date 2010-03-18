@@ -8,3 +8,6 @@ Bundle-ContactAddress:	info@mail.osgi.org
 Bundle-Category:		osgi, test
 
 Private-Package =		${p}.tb2
+	
+Import-Package	= \
+	org.osgi.framework;version=1.0.0, ${p}.sharedpackage;version="[1.0.0,1.1.1)", ${p}.syspkg;version=1.0.0

@@ -1,31 +1,57 @@
+/*
+ * Copyright (c) OSGi Alliance (2000-2009).
+ * All Rights Reserved.
+ *
+ * Implementation of certain elements of the OSGi
+ * Specification may be subject to third party intellectual property
+ * rights, including without limitation, patent rights (such a third party may
+ * or may not be a member of the OSGi Alliance). The OSGi Alliance is not responsible and shall not be
+ * held responsible in any manner for identifying or failing to identify any or
+ * all such third party intellectual property rights.
+ *
+ * This document and the information contained herein are provided on an "AS
+ * IS" basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL
+ * NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
+ * FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE OSGI ALLIANCE BE LIABLE FOR ANY
+ * LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF USE OF DATA, INTERRUPTION OF
+ * BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR EXEMPLARY, INCIDENTIAL,
+ * PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN CONNECTION WITH THIS
+ * DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ *
+ * All Company, brand and product names may be trademarks that are the sole
+ * property of their respective owners. All rights reserved.
+ */
 package org.osgi.test.cases.residentialmanagement;
-
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtIllegalStateException;
-import info.dmtree.DmtSession;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Hashtable;
-
 import junit.framework.TestCase;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.startlevel.StartLevel;
-
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtSession;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtIllegalStateException;
+/**
+ * 
+ * @author Koya MORI, Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
+ */
 public class FrameworkPluginTestCase extends TestCase {
 	static final String INSTANCE_ID = "1";
 	static final String PLUGIN_ROOT_URI = "./OSGi/1/Framework";
 
 	protected static final String STARTLEVEL = "StartLevel";
 	protected static final String INSTALLBUNDLE = "InstallBundle";
-	protected static final String LIFECYCLE = "Lifecycle";
+	protected static final String FRAMEWORKLIFECYCLE = "FrameworkLifecycle";
 	protected static final String EXT = "Ext";
+	protected static final String BUNDLECONTROL = "BundleControl";
 	protected static final String REQUESTEDSTARTLEVEL = "RequestedStartLevel";
 	protected static final String ACTIVESTARTLEVEL = "ActiveStartLevel";
 	protected static final String INITIALBUNDLESTARTLEVEL = "InitialBundleStartLevel";
@@ -36,8 +62,8 @@ public class FrameworkPluginTestCase extends TestCase {
 	protected static final String SHUTDOWN = "Shutdown";
 	protected static final String UPDATE = "Update";
 
-	private static String			TESTBUNDLE1				= "tb1.jar";
-	private static String			TESTBUNDLE2				= "tb2.jar";
+	private static String TESTBUNDLE1 = "org.osgi.test.cases.residentialmanagement.tb1.jar";
+	private static String TESTBUNDLE2 = "org.osgi.test.cases.residentialmanagement.tb2.jar";
 
 	private BundleContext context;
 	private ServiceReference ref;
@@ -86,7 +112,8 @@ public class FrameworkPluginTestCase extends TestCase {
 		expected = new Hashtable();
 		expected.put(STARTLEVEL, "");
 		expected.put(INSTALLBUNDLE, "");
-		expected.put(LIFECYCLE, "");
+		expected.put(FRAMEWORKLIFECYCLE, "");
+		expected.put(BUNDLECONTROL, "");
 		expected.put(EXT, "");
 
 		for (int i = 0; i < children.length; i++) {
@@ -112,7 +139,7 @@ public class FrameworkPluginTestCase extends TestCase {
 				expected.size());
 
 		// Lifecycle subtree
-		children = session.getChildNodeNames(PLUGIN_ROOT_URI + "/" + LIFECYCLE);
+		children = session.getChildNodeNames(PLUGIN_ROOT_URI + "/" + FRAMEWORKLIFECYCLE);
 		expected = new Hashtable();
 		expected.put(RESTART, "");
 		expected.put(SHUTDOWN, "");
@@ -174,15 +201,15 @@ public class FrameworkPluginTestCase extends TestCase {
 					+ "/" + INITIALBUNDLESTARTLEVEL);
 			data.getInt();
 
-			data = session.getNodeValue(PLUGIN_ROOT_URI + "/" + LIFECYCLE + "/"
+			data = session.getNodeValue(PLUGIN_ROOT_URI + "/" + FRAMEWORKLIFECYCLE + "/"
 					+ RESTART);
 			data.getBoolean();
 
-			data = session.getNodeValue(PLUGIN_ROOT_URI + "/" + LIFECYCLE + "/"
+			data = session.getNodeValue(PLUGIN_ROOT_URI + "/" + FRAMEWORKLIFECYCLE + "/"
 					+ SHUTDOWN);
 			data.getBoolean();
 
-			data = session.getNodeValue(PLUGIN_ROOT_URI + "/" + LIFECYCLE + "/"
+			data = session.getNodeValue(PLUGIN_ROOT_URI + "/" + FRAMEWORKLIFECYCLE + "/"
 					+ UPDATE);
 			data.getBoolean();
 		} catch (DmtIllegalStateException e) {
@@ -292,6 +319,7 @@ public class FrameworkPluginTestCase extends TestCase {
 
 		DmtData data = session.getNodeValue(PLUGIN_ROOT_URI + "/" + STARTLEVEL
 				+ "/" + INITIALBUNDLESTARTLEVEL);
+		
 		session.close();
 
 		ServiceReference ref = context
@@ -308,10 +336,10 @@ public class FrameworkPluginTestCase extends TestCase {
 	public void testChangeInitialBundleStartLevel() throws DmtException {
 		DmtSession session = dmtadmin.getSession(PLUGIN_ROOT_URI,
 				DmtSession.LOCK_TYPE_ATOMIC);
-
+		
 		DmtData data = session.getNodeValue(PLUGIN_ROOT_URI + "/" + STARTLEVEL
 				+ "/" + INITIALBUNDLESTARTLEVEL);
-
+		
 		session.setNodeValue(PLUGIN_ROOT_URI + "/" + STARTLEVEL + "/"
 				+ INITIALBUNDLESTARTLEVEL, new DmtData(data.getInt() + 1));
 
@@ -330,8 +358,10 @@ public class FrameworkPluginTestCase extends TestCase {
 	}
 
 	public void testCheckDataBeforeCommit() throws DmtException {
+			
 		DmtSession session = dmtadmin.getSession(PLUGIN_ROOT_URI,
 				DmtSession.LOCK_TYPE_ATOMIC);
+		
 
 		// Set data
 		session
@@ -347,7 +377,7 @@ public class FrameworkPluginTestCase extends TestCase {
 				+ LOCATION, new DmtData("testLocation"));
 		session.setNodeValue(PLUGIN_ROOT_URI + "/" + INSTALLBUNDLE + "/1/"
 				+ URL, new DmtData("testURL"));
-
+		
 		// Check data before commit
 		data = session.getNodeValue(PLUGIN_ROOT_URI + "/" + STARTLEVEL + "/"
 				+ REQUESTEDSTARTLEVEL);

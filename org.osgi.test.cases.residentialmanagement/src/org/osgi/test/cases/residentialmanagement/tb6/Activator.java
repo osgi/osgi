@@ -23,7 +23,7 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.residentialmanagement.tb2;
+package org.osgi.test.cases.residentialmanagement.tb6;
 
 /**
  * 
@@ -31,23 +31,18 @@ package org.osgi.test.cases.residentialmanagement.tb2;
  */
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.residentialmanagement.sharedpackage.SharedPackage;
 
 public class Activator implements BundleActivator {
 
 	public void start(BundleContext context) throws Exception {
-		System.out.println("Bundle using SharedPackage is going to start.");
-		ServiceReference reference = context
-				.getServiceReference(SharedPackage.class.getName());
-		SharedPackage sp = (SharedPackage) context.getService(reference);
-		sp.printVersion();
-		
+		System.out.println("Update bundle is going to start.");
+		Object service = new SPImpl();
+		String clazz = SharedPackage.class.getName();
+		context.registerService(clazz, service, null);
 	}
 
-	public void stop(BundleContext arg0) throws Exception {
-		System.out.println("Bundle using SharedPackage is going to stop.");
-
+	public void stop(BundleContext context) throws Exception {
+		System.out.println("Update bundle is going to stop.");
 	}
-
 }

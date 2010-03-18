@@ -1,0 +1,11 @@
+Bundle-SymbolicName:	${p}.tb8.jar
+Bundle-Name:			${p}.tb8
+Bundle-Description:		Regidential Plugin Test Bundle 8
+Bundle-Activator:		${p}.tb8.Activator
+Bundle-Vendor:			NTT
+Bundle-DocURL:			http://www.osgi.org/
+Bundle-ContactAddress:	info@mail.osgi.org
+Require-Bundle:			${p}.tb1.jar
+Bundle-Category:		osgi, test
+
+Private-Package =		${p}.tb8

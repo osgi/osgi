@@ -1,0 +1,10 @@
+Bundle-SymbolicName:	${p}.tb4.jar
+Bundle-Name:			${p}.tb4
+Bundle-Description:		Regidential Plugin Test Bundle 4
+Bundle-Activator:		${p}.tb4.Activator
+Bundle-Vendor:			NTT
+Bundle-DocURL:			http://www.osgi.org/
+Bundle-ContactAddress:	info@mail.osgi.org
+Bundle-Category:		osgi, test
+
+Private-Package =		${p}.tb4

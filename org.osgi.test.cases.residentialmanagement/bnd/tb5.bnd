@@ -1,0 +1,10 @@
+Bundle-SymbolicName:	${p}.tb5.jar
+Bundle-Name:			${p}.tb5
+Bundle-Description:		Regidential Plugin Test Bundle 5
+Bundle-Activator:		${p}.tb5.Activator
+Bundle-Vendor:			NTT
+Bundle-DocURL:			http://www.osgi.org/
+Bundle-ContactAddress:	info@mail.osgi.org
+Bundle-Category:		osgi, test
+
+Private-Package =		${p}.tb5

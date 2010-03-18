@@ -1,0 +1,17 @@
+Bundle-SymbolicName:	${p}.tb9.jar
+Bundle-Name:			${p}.tb9
+Bundle-Description:		Regidential Plugin Test Bundle 9
+Bundle-Activator:		${p}.tb9.Activator
+Bundle-Vendor:			NTT
+Bundle-DocURL:			http://www.osgi.org/
+Bundle-ContactAddress:	info@mail.osgi.org
+Bundle-Category:		osgi, test
+
+Private-Package: 		${p}.tb9
+Include-Resource: \
+ 		TestDir/TestFile1.txt = TestDir/TestFile1.txt,\
+ 		TestDir/TestFile2.txt = TestDir/TestFile2.txt,\
+ 		TestDir/TestFile3.txt = TestDir/TestFile3.txt
+ 		
+-signaturetest = org.osgi.service.component
+ 

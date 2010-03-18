@@ -7,4 +7,8 @@ Bundle-DocURL:			http://www.osgi.org/
 Bundle-ContactAddress:	info@mail.osgi.org
 Bundle-Category:		osgi, test
 
-Private-Package =		${p}.tb1
+Private-Package =		${p}.tb1	,\
+						${p}.sharedpackage
+
+Export-Package =		${p}.sharedpackage;version=1.0.0
+

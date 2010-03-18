@@ -1,0 +1,10 @@
+Bundle-SymbolicName:	${p}.tb7.jar
+Bundle-Name:			${p}.tb7
+Bundle-Description:		Regidential Plugin Test Bundle 7
+Bundle-Vendor:			NTT
+Bundle-DocURL:			http://www.osgi.org/
+Bundle-ContactAddress:	info@mail.osgi.org
+Fragment-Host:			${p}.tb1.jar
+Bundle-Category:		osgi, test
+
+Private-Package =		${p}.tb7

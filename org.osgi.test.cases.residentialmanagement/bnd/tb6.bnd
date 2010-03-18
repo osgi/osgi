@@ -1,0 +1,13 @@
+Bundle-SymbolicName:	${p}.tb6.jar
+Bundle-Name:			${p}.tb6
+Bundle-Description:		Regidential Plugin Test Bundle 6
+Bundle-Activator:		${p}.tb6.Activator
+Bundle-Vendor:			NTT
+Bundle-DocURL:			http://www.osgi.org/
+Bundle-ContactAddress:	info@mail.osgi.org
+Bundle-Category:		osgi, test
+
+Private-Package =		${p}.tb6	,\
+						${p}.sharedpackage
+
+Export-Package = 	${p}.sharedpackage;version=1.1.0
