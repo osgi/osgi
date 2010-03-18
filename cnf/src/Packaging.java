@@ -34,11 +34,6 @@ public class Packaging implements AnalyzerPlugin {
 
 		Map<String, String> filesToPath = Create.map();
 
-		// Make sure certain files are not copied. The
-		// packnot contains names of keys that should not be copied
-		Collection<String> packnot = analyzer.parseHeader(analyzer
-				.getProperty("-pack-not")).keySet();
-
 		String pack = analyzer.getProperty(PACK);
 		ProjectBuilder pb = (ProjectBuilder) analyzer;
 		Workspace workspace = pb.getProject().getWorkspace();
@@ -70,7 +65,7 @@ public class Packaging implements AnalyzerPlugin {
 				if (!project.isValid())
 					analyzer.error("Invalid project to pack: %s", project);
 				else
-					pack(analyzer, jar, project, runpath, filesToPath, packnot);
+					pack(analyzer, jar, project, runpath, filesToPath);
 			}
 			catch (Exception t) {
 				analyzer.error("While packaging %s got %s", entry.getKey(), t);
@@ -113,8 +108,7 @@ public class Packaging implements AnalyzerPlugin {
 	 */
 	@SuppressWarnings("unchecked")
 	private void pack(Analyzer analyzer, Jar jar, Project project,
-			Collection<Container> sharedRunpath,
-			Map<String, String> filesToPath, Collection<String> packnot)
+			Collection<Container> sharedRunpath, Map<String, String> filesToPath)
 			throws Exception {
 		Collection<Container> runpath = project.getRunpath();
 		Collection<Container> runbundles = project.getRunbundles();
@@ -187,7 +181,6 @@ public class Packaging implements AnalyzerPlugin {
 			throws Exception {
 		Collection<String> paths = Processor.split(value);
 		List<String> result = Create.list();
-
 		for (String path : paths) {
 			File f = analyzer.getFile(path);
 			if (f.isAbsolute() && f.exists()
@@ -196,9 +189,9 @@ public class Packaging implements AnalyzerPlugin {
 				path = filesToPath.get(f.getAbsolutePath());
 				if (path == null) {
 					path = "jar/" + f.getName();
-					if (path.endsWith(".jar")) {
+					if ( path.endsWith(".jar")) {
 						if (include)
-							jar.putResource(path, new FileResource(f));
+						jar.putResource( path, new FileResource(f));						
 						filesToPath.put(f.getAbsolutePath(), path);
 					}
 					else {
@@ -212,15 +205,15 @@ public class Packaging implements AnalyzerPlugin {
 
 						filesToPath.put(f.getAbsolutePath(), path);
 						if (include) {
-							if (f.isFile()) {
-								jar.putResource(path, new FileResource(f));
-							}
-							else {
-								Jar j = new Jar(f);
-								jar.addAll(j, null, path);
-							}
+						if (f.isFile()) {
+							jar.putResource(path, new FileResource(f));
+						}
+						else {
+							Jar j = new Jar(f);
+							jar.addAll(j, null, path);
 						}
 					}
+				}
 				}
 				result.add(path);
 			}
