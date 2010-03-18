@@ -15,6 +15,8 @@
  */
 package org.osgi.impl.service.jndi;
 
+import java.security.AccessControlException;
+import java.security.AccessController;
 import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +27,7 @@ import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 import javax.naming.spi.ObjectFactory;
 
+import org.osgi.framework.AdminPermission;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -72,7 +75,18 @@ class OSGiURLContextFactory implements ObjectFactory {
 			try {
 				if(osgiURL.equals(OSGI_BUNDLE_CONTEXT_LOOKUP)) {
 					// return the caller's BundleContext
-					return m_bundleContext;
+					AdminPermission adminPermission = 
+						new AdminPermission(m_bundleContext.getBundle(), AdminPermission.CONTEXT);
+					
+					try {
+						AccessController.checkPermission(adminPermission);
+						return m_bundleContext;
+					} catch (AccessControlException accessControlException) {
+						NamingException namingException = new NameNotFoundException("BundleContext not available, caller does not have the correct permission.");
+						namingException.setRootCause(accessControlException);
+						throw namingException;
+					}
+					
 				}
 				
 				Object requestedService = obtainService(osgiURL);
