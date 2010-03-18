@@ -118,8 +118,8 @@ public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 		userManagerMBean.createGroup(groupname);
 		CompositeData group = userManagerMBean.getGroup(groupname);
 		assertNotNull("failed to retrieve the previously created group " + groupname + ".", group);
-		assertCompositeDataKeys(group, "GROUP_TYPE", new String[] { "Members", "RequiredMembers", "Credentials", 
-														  "Name", "Type", "Properties" });
+		assertCompositeDataKeys(group, "GROUP_TYPE", new String[] { "Members", "RequiredMembers",
+														  "Name"});
 		/* 
 		 * See bug reported https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1592
 		 */		
@@ -132,7 +132,7 @@ public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 		userManagerMBean.createUser(username);
 		CompositeData auth = userManagerMBean.getAuthorization(username);
 		assertNotNull(userManagerMBean.getAuthorization(username));
-		assertCompositeDataKeys(auth, "AUTORIZATION_TYPE", new String[] { "Name", "Type" });
+		assertCompositeDataKeys(auth, "AUTORIZATION_TYPE", new String[] { "Name" });
 		
 		/* 
 		 * See bug reported https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1592
@@ -225,7 +225,7 @@ public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 		CompositeData user = userManagerMBean.getUser(username);
 		assertNotNull("failed to retrieve previously created user", user);
 		
-		assertCompositeDataKeys(user, "USER_TYPE", new String[] { "Credentials", "Name", "Type", "Properties" });
+		assertCompositeDataKeys(user, "USER_TYPE", new String[] {/* "Credentials", */ "Name", "Type" /*, "Properties" */ });
 		
 		/*
 		 * See reported bug https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1592
@@ -351,7 +351,7 @@ public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 		/*
 		 * Bug reported https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1592
 		 */
-		assertCompositeDataKeys(role, "ROLE_TYPE", new String[] {"Name", "Type", "Properties"});		
+		assertCompositeDataKeys(role, "ROLE_TYPE", new String[] {"Name", "Type" /* , "Properties" */});		
 	}
 	
 	public void testGetRoleFilter() throws Exception {
