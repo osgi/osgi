@@ -48,6 +48,13 @@ public class TW1Test extends WebContainerTestBundleControl {
         boolean register = super.checkServiceRegistered(this.warContextPath);
         assertTrue("the ServletContext should be registered", register);
     }
+    
+    public void tearDown() throws Exception {
+        super.tearDown();
+        
+        // verify tw1.war is cleaned uninstalled and page is not servable
+        assertFalse("should not be able to access /tw1", super.ableAccessPath("/tw1"));
+    }
 
     /*
      * set deployOptions to null to rely on the web container service to
