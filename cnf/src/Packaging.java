@@ -160,8 +160,7 @@ public class Packaging implements AnalyzerPlugin {
 			sb.append(key);
 			sb.append("=");
 
-			value = replacePaths(analyzer, jar, filesToPath, value, !packnot
-					.contains(key));
+			value = replacePaths(analyzer, jar, filesToPath, value, key.endsWith(".bundles")==false);
 
 			sb.append("\"");
 			sb.append(value);
