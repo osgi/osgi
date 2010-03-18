@@ -17,16 +17,35 @@
 
 package org.osgi.test.cases.jndi.secure.tests;
 
-import javax.naming.Context;
-import javax.naming.NameNotFoundException;
+import java.util.Hashtable;
 
+import javax.naming.Context;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.BasicAttributes;
+import javax.naming.directory.DirContext;
+
+import org.osgi.framework.Bundle;
 import org.osgi.service.jndi.JNDIContextManager;
+import org.osgi.service.jndi.JNDIProviderAdmin;
+import org.osgi.test.cases.jndi.secure.provider.CTObjectFactory;
+import org.osgi.test.cases.jndi.secure.provider.CTDirObjectFactory;
+import org.osgi.test.cases.jndi.secure.provider.CTReference;
+import org.osgi.test.cases.jndi.secure.provider.CTTestObject;
+import org.osgi.test.cases.jndi.secure.provider.CTInitialDirContextFactory;
+import org.osgi.test.cases.jndi.secure.provider.CTContext;
+import org.osgi.test.cases.jndi.secure.provider.CTInitialContextFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /** 
  * @version $Revision$ $Date$
  */
 public class TestJNDISecurity extends DefaultTestBundleControl {
+	
+	private Bundle providerBundle = null;
+	
+	public void setUp() throws Exception {
+		providerBundle = installBundle("providerBundle.jar");
+	}
 	
 	public void testLookupAccessRestrictions() throws Exception {
 		// Grab the context manager
@@ -49,5 +68,131 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 		}
 
 		failException("testLookupAccessRestrictions failed, ", javax.naming.NameNotFoundException.class);
+	}
+	
+	public void testBundleContextAccessRestrictions() throws Exception {
+		// Grab the context manager
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		Context ctx = null;
+		try {
+			// Grab a default context for looking up the bundle context
+			ctx = ctxManager.newInitialContext();
+			assertNotNull("The context should not be null", ctx);
+			//Try to grab the bundle context.  We don't have permissions for it so this should fail.
+			Object testObject = ctx.lookup("osgi:framework/bundleContext");
+		} catch (javax.naming.NameNotFoundException ex) {
+			pass("javax.naming.NameNotFoundException caught in testBundleContextAccessRestrictions: SUCCESS");
+			return;
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			ungetService(ctxManager);
+		}
+	}
+	
+	public void testSecureLookupWithSpecificInitialContextFactory() throws Exception {
+		// Grab the JNDIContextManager service
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		int invokeCountBefore = CTContext.getInvokeCount();
+		Hashtable env = new Hashtable();
+		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
+		// Grab the context
+		Context ctx = null;
+		try {
+			ctx = ctxManager.newInitialContext(env);
+			// Verify that we actually received the context
+			assertNotNull("The context should not be null", ctx);
+			ctx.bind("testObject", new Object());
+			int invokeCountAfter = CTContext.getInvokeCount();
+			if (!(invokeCountAfter > invokeCountBefore)) {
+				ctx.close();
+				fail("The correct Context object was not found");
+			}
+			Object testObject = ctx.lookup("testObject");
+			assertNotNull(testObject);
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			ungetService(ctxManager);
+		}
+	}
+	
+	public void testSecureLookupWithInitialContextFactoryBuilder() throws Exception {
+		// Grab the JNDIContextManager service
+		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
+		int invokeCountBefore = CTContext.getInvokeCount();
+		Hashtable env = new Hashtable();
+		env.put(Context.INITIAL_CONTEXT_FACTORY, CTInitialContextFactory.class.getName());
+		// Grab the context
+		Context ctx = null;
+		try {
+			ctx = ctxManager.newInitialContext(env);
+			// Verify that we actually received the context
+			assertNotNull("The context should not be null", ctx);
+			ctx.bind("testObject", new Object());
+			int invokeCountAfter = CTContext.getInvokeCount();
+			if (!(invokeCountAfter > invokeCountBefore)) {
+				ctx.close();
+				fail("The correct Context object was not found");
+			}
+			Object testObject = ctx.lookup("testObject");
+			assertNotNull(testObject);
+		} finally {
+			if (ctx != null) {
+				ctx.close();
+			}
+			ungetService(ctxManager);
+		}
+	}
+	
+	public void testSecureGetObjectInstanceWithFactoryName() throws Exception {
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		try {
+			// Create a reference object we can use for testing.
+			CTReference ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());
+			// Resolve the reference
+			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref, null, null, null);
+			assertNotNull(testObject);
+		} finally {
+			ungetService(ctxAdmin);
+		}
+	}
+	
+	public void testSecureGetObjectInstanceWithFactoryNameAndAttributes() throws Exception {
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		try {
+			BasicAttributes attrs = new BasicAttributes();
+			attrs.put("testAttribute", new Object());
+			// Create a reference object we can use for testing
+			CTReference ref = new CTReference(CTTestObject.class.getName(), CTDirObjectFactory.class.getName());
+			// Resolve the reference
+			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref, null, null, null, attrs);
+			assertEquals(testObject.getAttributes(), attrs);
+		} finally {
+			ungetService(ctxAdmin);
+		}
+	}
+	
+	public void testSecureGetObjectInstanceWithBuilder() throws Exception {
+		// Grab the JNDIProviderAdmin service
+		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
+		try {
+			// Create a reference object we can use for testing
+			CTReference ref = new CTReference(CTTestObject.class.getName(), CTObjectFactory.class.getName());
+			// Resolve the reference
+			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref, null, null, null);
+			assertNotNull(testObject);
+		} finally {
+			ungetService(ctxAdmin);
+		}
+	}
+	
+	
+	public void tearDown() throws Exception {
+		uninstallBundle(providerBundle);
 	}
 }

@@ -1,5 +1,9 @@
 Bundle-Version: 4.2.0.${project.build}
 
+Export-Package						= \
+	${p}.provider, \
+	${p}.provider.ct
+
 Private-Package 					= org.osgi.test.support.* , \
 	${p}.*
 	
@@ -8,7 +12,8 @@ Import-Package 						= \
 
 
 Include-Resource 					= \
-	OSGI-INF/permissions.perm = perms/permissions.jndi.perm
+	OSGI-INF/permissions.perm = perms/permissions.jndi.perm , \
+	providerBundle.jar
 	
 Test-Cases							= ${testcases}
 
