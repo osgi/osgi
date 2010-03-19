@@ -157,16 +157,16 @@ public interface FrameworkMBean {
 	/**
 	 * The item containing the bundle which caused the error during the batch
 	 * operation. This item describes the bundle in error as a location. The key
-	 * is {@link #BUNDLE_IN_ERROR} and the type is {@link SimpleType#LONG}. It
+	 * is {@link #BUNDLE_IN_ERROR} and the type is {@link SimpleType#STRING}. It
 	 * is used in {@link #BATCH_INSTALL_RESULT_TYPE}.
 	 * 
-	 * @see #BUNDLE_IN_ERROR_ID_ITEM for the item that has a location for the
-	 *      bundle in error.
+	 * @see #BUNDLE_IN_ERROR_ID_ITEM for the item that has the id for the bundle
+	 *      in error.
 	 */
 	Item			BUNDLE_IN_ERROR_LOCATION_ITEM	= new Item(
 															BUNDLE_IN_ERROR,
 															"The location of the bundle causing the error",
-															SimpleType.LONG);
+															SimpleType.STRING);
 
 	/**
 	 * The item containing the list of remaining bundles unprocessed by the
