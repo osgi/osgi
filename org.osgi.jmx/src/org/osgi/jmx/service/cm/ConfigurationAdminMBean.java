@@ -116,9 +116,10 @@ public interface ConfigurationAdminMBean {
 	String getFactoryPidForLocation(String pid, String location) throws IOException;
 
 	/**
-	 * Answer the contents of the configuration <p/>
+	 * Answer the contents of the configuration.
 	 * 
-	 * @see JmxConstants#PROPERTIES_TYPE for the details of the TabularType
+	 * @see JmxConstants#PROPERTIES_TYPE JmxConstants.PROPERTIES_TYPE for the
+	 *      details of the TabularType
 	 * 
 	 * @param pid the persistent identifier of the configuration
 	 * @return the table of contents
@@ -128,9 +129,10 @@ public interface ConfigurationAdminMBean {
 	TabularData getProperties(String pid) throws IOException;
 
 	/**
-	 * Answer the contents of the configuration <p/>
+	 * Answer the contents of the configuration.
 	 * 
-	 * @see JmxConstants#PROPERTIES_TYPE for the details of the TabularType
+	 * @see JmxConstants#PROPERTIES_TYPE JmxConstants.PROPERTIES_TYPE for the
+	 *      details of the TabularType
 	 * 
 	 * @param pid the persistent identifier of the configuration
 	 * @param location the bundle location
@@ -162,9 +164,10 @@ public interface ConfigurationAdminMBean {
 
 	/**
 	 * Update the configuration with the supplied properties For each property
-	 * entry, the following row is supplied <p/>
+	 * entry, the following row is supplied.
 	 * 
-	 * @see JmxConstants#PROPERTIES_TYPE for the details of the TabularType
+	 * @see JmxConstants#PROPERTIES_TYPE JmxConstants.PROPERTIES_TYPE for the
+	 *      details of the TabularType
 	 * 
 	 * @param pid the persistent identifier of the configuration
 	 * @param properties the table of properties
@@ -174,9 +177,10 @@ public interface ConfigurationAdminMBean {
 
 	/**
 	 * Update the configuration with the supplied properties For each property
-	 * entry, the following row is supplied <p/>
+	 * entry, the following row is supplied.
 	 * 
-	 * @see JmxConstants#PROPERTIES_TYPE for the details of the TabularType
+	 * @see JmxConstants#PROPERTIES_TYPE JmxConstants.PROPERTIES_TYPE for the
+	 *      details of the TabularType
 	 * 
 	 * @param pid the persistent identifier of the configuration
 	 * @param location the bundle location

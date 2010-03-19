@@ -199,30 +199,26 @@ public interface ServiceStateMBean {
 	/**
 	 * Answer the map of properties associated with this service
 	 * 
-	 * @see JmxConstants#PROPERTIES_TYPE for the details of the TabularType
+	 * @see JmxConstants#PROPERTIES_TYPE JmxConstants.PROPERTIES_TYPE for the
+	 *      details of the TabularType
 	 * 
-	 * @param serviceId
-	 *            the identifier of the service
+	 * @param serviceId the identifier of the service
 	 * @return the table of properties. These include the standard mandatory
 	 *         service.id and objectClass properties as defined in the
 	 *         <code>org.osgi.framework.Constants</code> interface
-	 * @throws IOException
-	 *             if the operation fails
-	 * @throws IllegalArgumentException
-	 *             if the service indicated does not exist
+	 * @throws IOException if the operation fails
+	 * @throws IllegalArgumentException if the service indicated does not exist
 	 */
 	TabularData getProperties(long serviceId) throws IOException;
 
 	/**
 	 * Answer the service state of the system in tabular form.
 	 * 
-	 * @see #SERVICES_TYPE for the details of the TabularType
+	 * @see #SERVICES_TYPE SERVICES_TYPE for the details of the TabularType
 	 * 
 	 * @return the tabular representation of the service state
-	 * @throws IOException
-	 *             If the operation fails
-	 * @throws IllegalArgumentException
-	 *             if the service indicated does not exist
+	 * @throws IOException If the operation fails
+	 * @throws IllegalArgumentException if the service indicated does not exist
 	 */
 	TabularData listServices() throws IOException;
 

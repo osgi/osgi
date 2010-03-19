@@ -62,7 +62,8 @@ public interface ProvisioningServiceMBean {
 	 * Provisioning Information dictionary. This method causes the
 	 * <code>PROVISIONING_UPDATE_COUNT</code> to be incremented.
 	 * 
-	 * @see JmxConstants#PROPERTIES_TYPE for details of the Tabular Data
+	 * @see JmxConstants#PROPERTIES_TYPE JmxConstants.PROPERTIES_TYPE for
+	 *      details of the Tabular Data
 	 * 
 	 * @param info the set of Provisioning Information key/value pairs to add to
 	 *        the Provisioning Information dictionary. Any keys are values that
@@ -74,7 +75,8 @@ public interface ProvisioningServiceMBean {
 	/**
 	 * Returns a table representing the Provisioning Information Dictionary.
 	 * 
-	 * @see JmxConstants#PROPERTIES_TYPE for details of the Tabular Data
+	 * @see JmxConstants#PROPERTIES_TYPE JmxConstants.PROPERTIES_TYPE for
+	 *      details of the Tabular Data
 	 * 
 	 * @throws IOException if the operation fails
 	 * @return The table representing the manager dictionary.
@@ -86,7 +88,8 @@ public interface ProvisioningServiceMBean {
 	 * supplied table. This method causes the
 	 * <code>PROVISIONING_UPDATE_COUNT</code> to be incremented.
 	 * 
-	 * @see JmxConstants#PROPERTIES_TYPE for details of the Tabular Data
+	 * @see JmxConstants#PROPERTIES_TYPE JmxConstants.PROPERTIES_TYPE for
+	 *      details of the Tabular Data
 	 * 
 	 * @param info the new set of Provisioning Information key/value pairs. Any
 	 *        keys are values that are of an invalid type will be silently

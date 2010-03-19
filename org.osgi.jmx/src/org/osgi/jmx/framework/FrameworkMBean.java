@@ -102,8 +102,8 @@ public interface FrameworkMBean {
 	 * {@link #BUNDLE_IN_ERROR} and the type is {@link SimpleType#LONG}. It is
 	 * used in {@link #BATCH_ACTION_RESULT_TYPE}.
 	 * 
-	 * @see #BUNDLE_IN_ERROR_LOCATION_ITEM for the item that has a location for
-	 *      the bundle in error.
+	 * @see #BUNDLE_IN_ERROR_LOCATION_ITEM BUNDLE_IN_ERROR_LOCATION_ITEM for the
+	 *      item that has a location for the bundle in error.
 	 */
 	Item			BUNDLE_IN_ERROR_ID_ITEM			= new Item(
 															BUNDLE_IN_ERROR,
@@ -160,8 +160,8 @@ public interface FrameworkMBean {
 	 * is {@link #BUNDLE_IN_ERROR} and the type is {@link SimpleType#STRING}. It
 	 * is used in {@link #BATCH_INSTALL_RESULT_TYPE}.
 	 * 
-	 * @see #BUNDLE_IN_ERROR_ID_ITEM for the item that has the id for the bundle
-	 *      in error.
+	 * @see #BUNDLE_IN_ERROR_ID_ITEM BUNDLE_IN_ERROR_ID_ITEM for the item that
+	 *      has the id for the bundle in error.
 	 */
 	Item			BUNDLE_IN_ERROR_LOCATION_ITEM	= new Item(
 															BUNDLE_IN_ERROR,
@@ -243,8 +243,9 @@ public interface FrameworkMBean {
 	/**
 	 * Batch install the bundles indicated by the list of bundleLocationUrls
 	 * 
-	 * @see #BATCH_INSTALL_RESULT_TYPE for the precise specification of the
-	 *      CompositeData type representing the returned result.
+	 * @see #BATCH_INSTALL_RESULT_TYPE BATCH_INSTALL_RESULT_TYPE for the precise
+	 *      specification of the CompositeData type representing the returned
+	 *      result.
 	 * 
 	 * @param locations the array of locations of the bundles to install
 	 * @return the resulting state from executing the operation
@@ -255,9 +256,9 @@ public interface FrameworkMBean {
 	/**
 	 * Batch install the bundles indicated by the list of bundleLocationUrls
 	 * 
-	 * @see #BATCH_INSTALL_RESULT_TYPE BatchBundleResult for the precise
-	 *      specification of the CompositeData type representing the returned
-	 *      result.
+	 * @see #BATCH_INSTALL_RESULT_TYPE BATCH_INSTALL_RESULT_TYPE
+	 *      BatchBundleResult for the precise specification of the CompositeData
+	 *      type representing the returned result.
 	 * 
 	 * @param locations the array of locations to assign to the installed
 	 *        bundles
@@ -327,8 +328,9 @@ public interface FrameworkMBean {
 	/**
 	 * Set the start levels for the list of bundles.
 	 * 
-	 * @see #BATCH_ACTION_RESULT_TYPE for the precise specification of the
-	 *      CompositeData type representing the returned result.
+	 * @see #BATCH_ACTION_RESULT_TYPE BATCH_ACTION_RESULT_TYPE for the precise
+	 *      specification of the CompositeData type representing the returned
+	 *      result.
 	 * 
 	 * @param bundleIdentifiers the array of bundle identifiers
 	 * @param newlevels the array of new start level for the bundles
@@ -373,9 +375,9 @@ public interface FrameworkMBean {
 	/**
 	 * Batch start the bundles indicated by the list of bundle identifier
 	 * 
-	 * 
-	 * @see #BATCH_ACTION_RESULT_TYPE for the precise specification of the
-	 *      CompositeData type representing the returned result.
+	 * @see #BATCH_ACTION_RESULT_TYPE BATCH_ACTION_RESULT_TYPE for the precise
+	 *      specification of the CompositeData type representing the returned
+	 *      result.
 	 * 
 	 * @param bundleIdentifiers the array of bundle identifiers
 	 * @return the resulting state from executing the operation
@@ -395,9 +397,9 @@ public interface FrameworkMBean {
 	/**
 	 * Batch stop the bundles indicated by the list of bundle identifier
 	 * 
-	 * 
-	 * @see #BATCH_ACTION_RESULT_TYPE for the precise specification of the
-	 *      CompositeData type representing the returned result.
+	 * @see #BATCH_ACTION_RESULT_TYPE BATCH_ACTION_RESULT_TYPE for the precise
+	 *      specification of the CompositeData type representing the returned
+	 *      result.
 	 * 
 	 * @param bundleIdentifiers the array of bundle identifiers
 	 * @return the resulting state from executing the operation
@@ -417,9 +419,9 @@ public interface FrameworkMBean {
 	/**
 	 * Batch uninstall the bundles indicated by the list of bundle identifiers
 	 * 
-	 * 
-	 * @see #BATCH_ACTION_RESULT_TYPE for the precise specification of the
-	 *      CompositeData type representing the returned result.
+	 * @see #BATCH_ACTION_RESULT_TYPE BATCH_ACTION_RESULT_TYPE for the precise
+	 *      specification of the CompositeData type representing the returned
+	 *      result.
 	 * 
 	 * @param bundleIdentifiers the array of bundle identifiers
 	 * @return the resulting state from executing the operation
@@ -449,9 +451,9 @@ public interface FrameworkMBean {
 	/**
 	 * Batch update the bundles indicated by the list of bundle identifier.
 	 * 
-	 * 
-	 * @see #BATCH_ACTION_RESULT_TYPE for the precise specification of the
-	 *      CompositeData type representing the returned result.
+	 * @see #BATCH_ACTION_RESULT_TYPE BATCH_ACTION_RESULT_TYPE for the precise
+	 *      specification of the CompositeData type representing the returned
+	 *      result.
 	 * 
 	 * @param bundleIdentifiers the array of bundle identifiers
 	 * @return the resulting state from executing the operation
@@ -463,9 +465,9 @@ public interface FrameworkMBean {
 	 * Update the bundle uniquely identified by the bundle symbolic name and
 	 * version using the contents of the supplied urls.
 	 * 
-	 * 
-	 * @see #BATCH_ACTION_RESULT_TYPE for the precise specification of the
-	 *      CompositeData type representing the returned result.
+	 * @see #BATCH_ACTION_RESULT_TYPE BATCH_ACTION_RESULT_TYPE for the precise
+	 *      specification of the CompositeData type representing the returned
+	 *      result.
 	 * 
 	 * @param bundleIdentifiers the array of bundle identifiers
 	 * @param urls the array of URLs to use to update the bundles
