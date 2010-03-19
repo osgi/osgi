@@ -121,49 +121,55 @@ public interface DataSourceFactory {
 
 	/**
 	 * The "initialPoolSize" property that ConnectionPoolDataSource and
-	 * XADataSource clients should supply a value for when calling
+	 * XADataSource clients may supply a value for when calling
 	 * {@link #createConnectionPoolDataSource(Properties)} or
-	 * {@link #createXADataSource(Properties)}.
+	 * {@link #createXADataSource(Properties)} on drivers that support
+	 * this property.
 	 */
 	public static final String	JDBC_INITIAL_POOL_SIZE		= "initialPoolSize";
 
 	/**
-	 * The "maxIdleTime" property that ConnectionPoolDataSource and XADataSource
-	 * clients should supply a value for when calling
+	 * The "maxIdleTime" property that ConnectionPoolDataSource and 
+	 * XADataSource clients may supply a value for when calling
 	 * {@link #createConnectionPoolDataSource(Properties)} or
-	 * {@link #createXADataSource(Properties)}.
+	 * {@link #createXADataSource(Properties)} on drivers that support
+	 * this property.
 	 */
 	public static final String	JDBC_MAX_IDLE_TIME			= "maxIdleTime";
 
 	/**
-	 * The "maxPoolSize" property that ConnectionPoolDataSource and XADataSource
-	 * clients should supply a value for when calling
+	 * The "maxPoolSize" property that ConnectionPoolDataSource and 
+	 * XADataSource clients may supply a value for when calling
 	 * {@link #createConnectionPoolDataSource(Properties)} or
-	 * {@link #createXADataSource(Properties)}.
+	 * {@link #createXADataSource(Properties)} on drivers that support
+	 * this property.
 	 */
 	public static final String	JDBC_MAX_POOL_SIZE			= "maxPoolSize";
 
 	/**
 	 * The "maxStatements" property that ConnectionPoolDataSource and
-	 * XADataSource clients should supply a value for when calling
+	 * XADataSource clients may supply a value for when calling
 	 * {@link #createConnectionPoolDataSource(Properties)} or
-	 * {@link #createXADataSource(Properties)}.
+	 * {@link #createXADataSource(Properties)} on drivers that support
+	 * this property.
 	 */
 	public static final String	JDBC_MAX_STATEMENTS			= "maxStatements";
 
 	/**
-	 * The "minPoolSize" property that ConnectionPoolDataSource and XADataSource
-	 * clients should supply a value for when calling
+	 * The "minPoolSize" property that ConnectionPoolDataSource and 
+	 * XADataSource clients may supply a value for when calling
 	 * {@link #createConnectionPoolDataSource(Properties)} or
-	 * {@link #createXADataSource(Properties)}.
+	 * {@link #createXADataSource(Properties)} on drivers that support
+	 * this property.
 	 */
 	public static final String	JDBC_MIN_POOL_SIZE			= "minPoolSize";
 
 	/**
 	 * The "propertyCycle" property that ConnectionPoolDataSource and
-	 * XADataSource clients should supply a value for when calling
+	 * XADataSource clients may supply a value for when calling
 	 * {@link #createConnectionPoolDataSource(Properties)} or
-	 * {@link #createXADataSource(Properties)}.
+	 * {@link #createXADataSource(Properties)} on drivers that support
+	 * this property.
 	 */
 	public static final String	JDBC_PROPERTY_CYCLE			= "propertyCycle";
 
