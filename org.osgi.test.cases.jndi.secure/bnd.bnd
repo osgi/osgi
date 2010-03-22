@@ -13,7 +13,8 @@ Import-Package 						= \
 
 Include-Resource 					= \
 	OSGI-INF/permissions.perm = perms/permissions.jndi.perm , \
-	providerBundle.jar
+	builderBundle.jar , \
+	factoryBundle.jar
 	
 Test-Cases							= ${testcases}
 

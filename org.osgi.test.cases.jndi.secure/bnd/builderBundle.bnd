@@ -1,0 +1,7 @@
+Bundle-Name:                             ${p}.builders
+Bundle-Version:                          4.2.0.${project.build}
+Bundle-Activator:						 ${p}.builders.BuilderBundleActivator
+Private-Package =						 ${p}.builders
+
+Include-Resource = \
+	OSGI-INF/permissions.perm = perms/builderBundlePerms.perm

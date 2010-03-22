@@ -1,7 +1,0 @@
-Bundle-Name:                             ${p}.providerBundle
-Bundle-Version:                          4.2.0.${project.build}
-Bundle-Activator:						 ${p}.providerBundle.ProviderBundleActivator
-Private-Package =						 ${p}.providerBundle
-
-Include-Resource = \
-	OSGI-INF/permissions.perm = perms/providerPerms.perm

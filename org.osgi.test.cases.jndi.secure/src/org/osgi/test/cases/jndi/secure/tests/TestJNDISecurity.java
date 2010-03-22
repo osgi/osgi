@@ -41,12 +41,6 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 public class TestJNDISecurity extends DefaultTestBundleControl {
 	
-	private Bundle providerBundle = null;
-	
-	public void setUp() throws Exception {
-		providerBundle = installBundle("providerBundle.jar");
-	}
-	
 	public void testLookupAccessRestrictions() throws Exception {
 		// Grab the context manager
 		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
@@ -92,6 +86,8 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 	}
 	
 	public void testSecureLookupWithSpecificInitialContextFactory() throws Exception {
+		// Install the bundle necessary for this test
+		Bundle factoryBundle = installBundle("factoryBundle.jar");
 		// Grab the JNDIContextManager service
 		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
@@ -115,11 +111,14 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 			if (ctx != null) {
 				ctx.close();
 			}
+			uninstallBundle(factoryBundle);
 			ungetService(ctxManager);
 		}
 	}
 	
 	public void testSecureLookupWithInitialContextFactoryBuilder() throws Exception {
+		// Install the bundle necessary for this test
+		Bundle builderBundle = installBundle("builderBundle.jar");
 		// Grab the JNDIContextManager service
 		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
 		int invokeCountBefore = CTContext.getInvokeCount();
@@ -128,7 +127,7 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 		// Grab the context
 		Context ctx = null;
 		try {
-			ctx = ctxManager.newInitialContext(env);
+			ctx = ctxManager.newInitialContext();
 			// Verify that we actually received the context
 			assertNotNull("The context should not be null", ctx);
 			ctx.bind("testObject", new Object());
@@ -143,11 +142,14 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 			if (ctx != null) {
 				ctx.close();
 			}
+			uninstallBundle(builderBundle);
 			ungetService(ctxManager);
 		}
 	}
 	
 	public void testSecureGetObjectInstanceWithFactoryName() throws Exception {
+		// Install the bundle necessary for this test
+		Bundle factoryBundle = installBundle("factoryBundle.jar");
 		// Grab the JNDIProviderAdmin service
 		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
 		try {
@@ -157,11 +159,14 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref, null, null, null);
 			assertNotNull(testObject);
 		} finally {
+			uninstallBundle(factoryBundle);
 			ungetService(ctxAdmin);
 		}
 	}
 	
 	public void testSecureGetObjectInstanceWithFactoryNameAndAttributes() throws Exception {
+		// Install the bundle necessary for this test
+		Bundle factoryBundle = installBundle("factoryBundle.jar");
 		// Grab the JNDIProviderAdmin service
 		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
 		try {
@@ -173,11 +178,14 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref, null, null, null, attrs);
 			assertEquals(testObject.getAttributes(), attrs);
 		} finally {
+			uninstallBundle(factoryBundle);
 			ungetService(ctxAdmin);
 		}
 	}
 	
 	public void testSecureGetObjectInstanceWithBuilder() throws Exception {
+		// Install the bundle necessary for this test
+		Bundle builderBundle = installBundle("builderBundle.jar");
 		// Grab the JNDIProviderAdmin service
 		JNDIProviderAdmin ctxAdmin = (JNDIProviderAdmin) getService(JNDIProviderAdmin.class);
 		try {
@@ -187,12 +195,8 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 			CTTestObject testObject = (CTTestObject) ctxAdmin.getObjectInstance(ref, null, null, null);
 			assertNotNull(testObject);
 		} finally {
+			uninstallBundle(builderBundle);
 			ungetService(ctxAdmin);
 		}
-	}
-	
-	
-	public void tearDown() throws Exception {
-		uninstallBundle(providerBundle);
 	}
 }

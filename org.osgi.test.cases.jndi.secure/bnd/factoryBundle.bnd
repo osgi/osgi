@@ -1,0 +1,7 @@
+Bundle-Name:                             ${p}.factories
+Bundle-Version:                          4.2.0.${project.build}
+Bundle-Activator:						 ${p}.factories.FactoryBundleActivator
+Private-Package =						 ${p}.factories
+
+Include-Resource = \
+	OSGI-INF/permissions.perm = perms/factoryBundlePerms.perm
