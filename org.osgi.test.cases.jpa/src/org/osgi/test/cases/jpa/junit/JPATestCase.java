@@ -221,6 +221,34 @@ public class JPATestCase extends DefaultTestBundleControl {
 		}	
 	}
 	
+	
+	public void testDataSourceFactoryUnregistration() throws Exception {
+		// Install the bundle needed for this test.
+		Bundle emfBundle = installBundle("dsfEMFBundle.jar");
+		Bundle dsfBundle = null;
+		EntityManagerFactoryBuilder emfBuilder = null;
+		waitForService(EntityManagerFactory.class);
+		try {
+			DataSourceFactory dsf = (DataSourceFactory) getService(DataSourceFactory.class);
+			ServiceReference dsfRef = getServiceReference(dsf);
+			ungetService(dsf);
+			dsfBundle = dsfRef.getBundle();
+			dsfBundle.stop();
+			// Make sure the entityManagerFactory is no longer available.
+			ServiceReference[] emfRef = getContext().getServiceReferences(EntityManagerFactory.class.getName(), "(osgi.unit.name=dsfEMFTestUnit)");
+			assertNull("There should be no entityManagerFactory service registered for this persistence unit", emfRef);
+			// The emfBuilder service should not have been unregistered as its lifecycle is supposed to be independent of the dsf
+			emfBuilder = (EntityManagerFactoryBuilder) getService(EntityManagerFactoryBuilder.class, "(osgi.unit.name=dsfEMFTestUnit)");
+			assertNotNull(emfBuilder);
+		} finally {
+			if (emfBuilder != null) {
+				ungetService(emfBuilder);
+			}
+			dsfBundle.start();
+			uninstallBundle(emfBundle);
+		}
+	}
+	
 	public void testPersistenceBundleStopping() throws Exception {
 		// Install the bundles necessary for this test
 		Bundle persistenceBundle = installBundle("emfBundle.jar");

@@ -1,0 +1,6 @@
+Bundle-Name:                             ${p}.dsfEMFBundle
+Bundle-Version:                          4.2.0.${project.build}
+Meta-Persistence: <<EMPTY>>
+
+Include-Resource = \
+	META-INF/persistence.xml = resources/dsfEMFBundle/META-INF/persistence.xml

@@ -18,6 +18,7 @@ Import-Package						= \
 Include-Resource 					= \
 	configPropertiesBundle.jar , \
 	defaultPersistenceLocation.jar , \
+	dsfEMFBundle.jar , \
 	emfBuilderBundle.jar ,	\
 	emfBuilderRebindingBundle.jar , \
 	emfBundle.jar	, \
