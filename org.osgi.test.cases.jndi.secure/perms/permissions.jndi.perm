@@ -7,6 +7,9 @@
 (org.osgi.framework.PackagePermission "org.osgi.test.cases.jndi.secure.provider.*" "exportonly")
 (org.osgi.framework.ServicePermission "org.osgi.service.jndi.JNDIContextManager" "get")
 (org.osgi.framework.ServicePermission "org.osgi.service.jndi.JNDIProviderAdmin" "get")
+(org.osgi.framework.ServicePermission "java.lang.Object"	"get")
 (org.osgi.framework.AdminPermission	  "(name=factoryBundle)" "*")
 (org.osgi.framework.AdminPermission   "(name=builderBundle)" "*")
+(org.osgi.framework.AdminPermission   "(name=inaccessibleBundleContext)" "lifecycle,execute,resolve")
 (org.osgi.framework.AdminPermission	  "(name=org.eclipse.*)" "*")
+

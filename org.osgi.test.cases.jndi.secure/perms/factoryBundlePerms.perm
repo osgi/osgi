@@ -4,3 +4,4 @@
 (org.osgi.framework.PackagePermission	"org.osgi.test.cases.jndi.secure.*"	"import")
 (org.osgi.framework.ServicePermission	"org.osgi.test.cases.jndi.secure.provider.*"	"register")
 (org.osgi.framework.ServicePermission	"javax.naming.spi.*"							"register")
+(org.osgi.framework.ServicePermission   "java.lang.Object"								"register")

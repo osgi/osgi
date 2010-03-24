@@ -1,0 +1,3 @@
+(org.osgi.framework.PackagePermission	"org.osgi.framework"	"import")
+(org.osgi.framework.PackagePermission	"org.osgi.test.cases.jndi.secure.*"	"import")
+(org.osgi.framework.ServicePermission   "java.lang.Object"				  "register")

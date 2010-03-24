@@ -17,21 +17,23 @@
 
 package org.osgi.test.cases.jndi.secure.tests;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 
 import javax.naming.Context;
-import javax.naming.directory.Attributes;
+import javax.naming.InitialContext;
 import javax.naming.directory.BasicAttributes;
-import javax.naming.directory.DirContext;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.jndi.JNDIConstants;
 import org.osgi.service.jndi.JNDIContextManager;
 import org.osgi.service.jndi.JNDIProviderAdmin;
+import org.osgi.test.cases.jndi.secure.factories.FactoryBundleActivator;
 import org.osgi.test.cases.jndi.secure.provider.CTObjectFactory;
 import org.osgi.test.cases.jndi.secure.provider.CTDirObjectFactory;
 import org.osgi.test.cases.jndi.secure.provider.CTReference;
 import org.osgi.test.cases.jndi.secure.provider.CTTestObject;
-import org.osgi.test.cases.jndi.secure.provider.CTInitialDirContextFactory;
 import org.osgi.test.cases.jndi.secure.provider.CTContext;
 import org.osgi.test.cases.jndi.secure.provider.CTInitialContextFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -65,12 +67,16 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 	}
 	
 	public void testBundleContextAccessRestrictions() throws Exception {
+		// Install the bundle necessary for this test
+		Bundle contextBundle = installBundle("inaccessibleBundleContext.jar");
 		// Grab the context manager
-		JNDIContextManager ctxManager = (JNDIContextManager) getService(JNDIContextManager.class);
 		Context ctx = null;
+		Hashtable env = new Hashtable();
+		BundleContext bundleCtx = (BundleContext) getService(Object.class);
+		env.put(JNDIConstants.BUNDLE_CONTEXT, bundleCtx);
 		try {
 			// Grab a default context for looking up the bundle context
-			ctx = ctxManager.newInitialContext();
+			ctx = new InitialContext(env);
 			assertNotNull("The context should not be null", ctx);
 			//Try to grab the bundle context.  We don't have permissions for it so this should fail.
 			Object testObject = ctx.lookup("osgi:framework/bundleContext");
@@ -81,8 +87,11 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 			if (ctx != null) {
 				ctx.close();
 			}
-			ungetService(ctxManager);
+			ungetService(bundleCtx);
+			uninstallBundle(contextBundle);
 		}
+		
+		failException("testBundleContextAccessRestrictions failed, ", javax.naming.NameNotFoundException.class);
 	}
 	
 	public void testSecureLookupWithSpecificInitialContextFactory() throws Exception {
