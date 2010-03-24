@@ -1,6 +1,0 @@
-
-
--buildpath = \
-	osgi.core; version=4.0, \
-	ee.minimum
-
