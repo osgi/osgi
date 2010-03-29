@@ -1,0 +1,10 @@
+Bundle-Name:                             ${p}.ct00
+Bundle-Version:                          1.0
+Private-Package:                         ${p}.junit.ct00.*, \
+ ${p}.common.*
+Bundle-Activator:                        ${p}.junit.ct00.Activator
+Include-Resource                    = \
+    OSGI-INF/sca-config/bindings/bindingA.xml=resources/OSGI-INF/sca-config/bindings/bindingABroken.xml, \
+    
+SCA-Configuration: OSGI-INF/sca-config/bindings/*.xml
+Import-Package = junit.framework;version="3.8.0",*

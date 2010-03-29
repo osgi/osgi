@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.scaconfigtype.junit.ct00;
+package org.osgi.test.cases.scaconfigtype.junit.ct08;
 
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.scaconfigtype.common.A;
+import org.osgi.test.cases.scaconfigtype.common.B;
 import org.osgi.test.cases.scaconfigtype.common.TestConstants;
 import org.osgi.test.cases.scaconfigtype.common.Utils;
 
@@ -27,7 +28,7 @@ import org.osgi.test.cases.scaconfigtype.common.Utils;
  * @author <a href="mailto:david.savage@paremus.com">David Savage</a>
  *
  */
-public class Activator implements BundleActivator, A {
+public class Activator implements BundleActivator, A, B {
 	BundleContext       context;
 
 	/**
@@ -37,7 +38,15 @@ public class Activator implements BundleActivator, A {
 		this.context = context;
 		
 		Hashtable dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_A_QNAME);
+		
+		// register service A
 		context.registerService(new String[]{A.class.getName()}, this, dictionary);
+
+		// create new attributes
+		dictionary = Utils.getBasicSCAAttributes(TestConstants.BINDING_B_QNAME);
+		
+		// register service B
+		context.registerService(new String[]{B.class.getName()}, this, dictionary);
 	}
 
 	/**
@@ -52,4 +61,8 @@ public class Activator implements BundleActivator, A {
 	public String getA() {
 		return A;
 	}
+
+	public String getB() {
+		return B;
+	}	
 }

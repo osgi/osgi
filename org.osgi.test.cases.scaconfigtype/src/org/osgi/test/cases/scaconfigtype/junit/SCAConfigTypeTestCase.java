@@ -72,7 +72,6 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
     }
     
     
-
     /**
      * CT.1
      * use endpoint and assert that two services are found vs one
@@ -187,6 +186,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
     /**
      * CT.7
+     * This test is already covered by other test scenarios
      * @throws Exception
      */
     //	public void testAbsolutePathSCAConfigurationManifestHeader() throws Exception {
@@ -195,11 +195,25 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
     /**
      * CT.8
+     * Relies on ability to generate broken xml which is stored in sub directory and 
+     * causes deployment to fail due to result associated with CT 23
      * @throws Exception
      */
-    //	public void testDirectorySCAConfigurationManifestHeader() throws Exception {
-    //		fail("TODO not yet implemented");
-    //	}
+    public void testDirectorySCAConfigurationManifestHeader() throws Exception {
+        // install test bundle in child framework
+        BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
+        BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
+
+        installAndStartBundle(serverContext, "/ct08.jar");
+        // TODO don't technically need to start client bundle but this checks it's resolved
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
+
+        // this service should not be visible as xml is broken
+        assertAAvailability(clientBundle, false);
+        
+        // this bundle should not be found as broken xml should prevent all registrations
+        assertBAvailability(clientBundle, false);
+    }
 
     /**
      * CT.9
@@ -307,9 +321,18 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
      * Expected result: service not available
      * @throws Exception
      */
-    //	public void testInvalidBindingXML() throws Exception {
-    //		fail("TODO this requires a way to mangle the binding files as part of the build");
-    //	}
+    public void testInvalidBindingXML() throws Exception {
+        // install test bundle in child framework
+        BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
+        BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
+
+        installAndStartBundle(serverContext, "/ct23.jar");
+        // TODO don't technically need to start client bundle but this checks it's resolved
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
+
+        // service should not be registered as ct23.jar includes a broken SCA-Configuration
+        assertAAvailability(clientBundle, false);
+    }
 
     /**
      * CT.24

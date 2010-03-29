@@ -13,9 +13,11 @@ Include-Resource					= \
 	ct04specificLocation.jar, \
 	ct04wildcardLocation.jar, \
 	ct06.jar, \
+	ct08.jar, \
 	ct09.jar, \
 	ct12.jar, \
 	ct15.jar, \
+	ct23.jar, \
 	ct26.jar, \
 	ct26client.jar, \
 	
