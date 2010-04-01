@@ -39,6 +39,7 @@ public class FactoryBundleActivator implements BundleActivator {
 	private ArrayList serviceRegistrations = new ArrayList();
 	
 	public void start(BundleContext context) throws Exception {
+		System.out.println("Starting: " + context.getBundle().getLocation());
 		Hashtable factoryProps = new Hashtable();
 		String[] factoryInterfaces ={CTInitialContextFactory.class.getName(), InitialContextFactory.class.getName()};
 		
@@ -59,6 +60,7 @@ public class FactoryBundleActivator implements BundleActivator {
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		System.out.println("Stopping: " + context.getBundle().getLocation());
 		for(int i=0; i < serviceRegistrations.size(); i++) {
 			ServiceRegistration sr = (ServiceRegistration) serviceRegistrations.get(i);
 			sr.unregister();

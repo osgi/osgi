@@ -37,6 +37,7 @@ public class BuilderBundleActivator implements BundleActivator {
 	private ArrayList serviceRegistrations = new ArrayList();
 	
 	public void start(BundleContext context) throws Exception {
+		System.out.println("Starting: " + context.getBundle().getLocation());
 		Hashtable builderProps = new Hashtable();
 		String[] builderInterfaces = {InitialContextFactoryBuilder.class.getName()};
 		
@@ -51,6 +52,7 @@ public class BuilderBundleActivator implements BundleActivator {
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		System.out.println("Stopping: " + context.getBundle().getLocation());
 		for(int i=0; i < serviceRegistrations.size(); i++) {
 			ServiceRegistration sr = (ServiceRegistration) serviceRegistrations.get(i);
 			sr.unregister();
