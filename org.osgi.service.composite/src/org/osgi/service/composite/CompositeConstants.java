@@ -98,6 +98,18 @@ public class CompositeConstants {
 	public static final String COMPOSITE_BUNDLE_REQUIRE_POLICY = "Composite-BundleRequirePolicy";
 
 	/**
+	 * Composite manifest header (named &quot;Composite-BundleProvidePolicy&quot;)
+	 * identifying a list of provide bundle constraints to provide out of a composite.
+	 * Any constituent bundle installed in the composite which satisfies one of the 
+	 * specified provide bundle constraints is available to satisfy Require-Bundle
+	 * constraints from bundles installed in the parent framework.
+	 * <p>
+	 * This header uses the same syntax as the {@linkplain Constants#REQUIRE_BUNDLE
+	 * Require-Bundle} header.
+	 */
+	public static final String COMPOSITE_BUNDLE_PROVIDE_POLICY = "Composite-BundleProvidePolicy";
+
+	/**
 	 * Composite manifest header (named &quot;Composite-ServiceImportPolicy&quot;)
 	 * identifying a service filter that controls the services to import into the
 	 * composite.  See {@link Filter} for a description of the filter syntax.  Any 
