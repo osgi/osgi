@@ -111,7 +111,7 @@ public class CompositeConstants {
 
 	/**
 	 * Composite manifest header (named &quot;Composite-ServiceImportPolicy&quot;)
-	 * identifying a service filter that controls the services to import into the
+	 * identifying a list of service filters that controls the services to import into the
 	 * composite.  See {@link Filter} for a description of the filter syntax.  Any 
 	 * services registered by bundles installed in the parent framework that match
 	 * the specified service filter is available to constituent bundles.
@@ -120,7 +120,7 @@ public class CompositeConstants {
 
 	/**
 	 * Composite manifest header (named &quot;Composite-ServiceExportPolicy&quot;)
-	 * identifying a service filter that controls the services to export out of the
+	 * identifying a list of service filters that controls the services to export out of the
 	 * composite.  See {@link Filter} for a description of the filter syntax.  Any 
 	 * services registered by constituent bundles that match the specified service 
 	 * filter is available to bundles installed in the parent framework.
