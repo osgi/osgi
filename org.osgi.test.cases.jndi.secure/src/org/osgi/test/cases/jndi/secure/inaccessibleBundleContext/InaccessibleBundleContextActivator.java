@@ -26,11 +26,13 @@ public class InaccessibleBundleContextActivator implements BundleActivator {
 	private ServiceRegistration sr;
 	
 	public void start(BundleContext context) throws Exception {
+		System.out.println("Starting: " + context.getBundle().getLocation());
 		sr = context.registerService(Object.class.getName(), context, null);
 
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr.unregister();
 	}
 
