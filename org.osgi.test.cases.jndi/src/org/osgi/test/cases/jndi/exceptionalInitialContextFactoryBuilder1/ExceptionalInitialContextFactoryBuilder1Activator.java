@@ -38,6 +38,7 @@ public class ExceptionalInitialContextFactoryBuilder1Activator implements
 	private ServiceRegistration sr2;
 	
 	public void start(BundleContext context) throws Exception {
+		System.out.println("Starting: " + context.getBundle().getLocation());
 		Hashtable props1 = new Hashtable();
 		Hashtable props2 = new Hashtable();
 		String[] interfaces ={InitialContextFactoryBuilder.class.getName()};
@@ -54,6 +55,7 @@ public class ExceptionalInitialContextFactoryBuilder1Activator implements
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr1.unregister();
 		sr2.unregister();
 	}

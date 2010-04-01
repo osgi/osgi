@@ -34,6 +34,7 @@ public class DirObjectFactory1Activator implements BundleActivator {
 	private ServiceRegistration sr;
 	
 	public void start(BundleContext context) throws Exception {
+		System.out.println("Starting: " + context.getBundle().getLocation());
 		Hashtable props = new Hashtable();
 		String[] interfaces = {CTDirObjectFactory.class.getName(), DirObjectFactory.class.getName()};
 		
@@ -43,6 +44,7 @@ public class DirObjectFactory1Activator implements BundleActivator {
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr.unregister();
 	}
 

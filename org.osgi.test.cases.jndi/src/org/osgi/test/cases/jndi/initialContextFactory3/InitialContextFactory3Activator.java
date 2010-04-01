@@ -34,6 +34,7 @@ public class InitialContextFactory3Activator implements BundleActivator {
 	private ServiceRegistration sr1;
 	
 	public void start(BundleContext context) throws Exception {
+		System.out.println("Starting: " + context.getBundle().getLocation());
 		Hashtable props = new Hashtable();
 		
 		String[] interfaces ={CTInitialContextFactory.class.getName(), InitialContextFactory.class.getName()};
@@ -51,6 +52,7 @@ public class InitialContextFactory3Activator implements BundleActivator {
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr1.unregister();
 	}
 

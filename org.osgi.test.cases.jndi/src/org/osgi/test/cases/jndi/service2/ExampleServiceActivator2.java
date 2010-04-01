@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IBM Corporation (2009). All Rights Reserved.
+ * Copyright (c) IBM Corporation (2009,2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ public class ExampleServiceActivator2 implements BundleActivator {
 	private ServiceRegistration sr2;
 
 	public void start(BundleContext context) throws Exception {
+		System.out.println("Starting: " + context.getBundle().getLocation());
 		Hashtable props1 = new Hashtable();
 		props1.put("osgi.jndi.service.name", "ExampleService1");
 		
@@ -52,6 +53,7 @@ public class ExampleServiceActivator2 implements BundleActivator {
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr1.unregister();
 		sr2.unregister();
 	}

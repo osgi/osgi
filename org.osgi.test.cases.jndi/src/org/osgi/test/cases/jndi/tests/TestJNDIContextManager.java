@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IBM Corporation (2009). All Rights Reserved.
+ * Copyright (c) IBM Corporation (2009,2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ package org.osgi.test.cases.jndi.tests;
 import java.util.Hashtable;
 
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.OperationNotSupportedException;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
@@ -66,6 +65,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 			ungetService(ctxManager);
 		}
 	}
+
 	public void testLookupWithSpecificInitialContextFactory() throws Exception {
 		// install provider bundle
 		Bundle factoryBundle = installBundle("initialContextFactory1.jar");

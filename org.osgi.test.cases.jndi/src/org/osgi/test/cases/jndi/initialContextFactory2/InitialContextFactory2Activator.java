@@ -1,5 +1,5 @@
 /*
- * Copyright (c) IBM Corporation (2009). All Rights Reserved.
+ * Copyright (c) IBM Corporation (2009,2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ public class InitialContextFactory2Activator implements BundleActivator {
 	private ServiceRegistration sr1;
 	
 	public void start(BundleContext context) throws Exception {
+		System.out.println("Starting: " + context.getBundle().getLocation());
 		Hashtable props = new Hashtable();
 		
 		String[] interfaces ={CTInitialContextFactory.class.getName(), InitialContextFactory.class.getName()};
@@ -52,6 +53,7 @@ public class InitialContextFactory2Activator implements BundleActivator {
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr1.unregister();
 	}
 

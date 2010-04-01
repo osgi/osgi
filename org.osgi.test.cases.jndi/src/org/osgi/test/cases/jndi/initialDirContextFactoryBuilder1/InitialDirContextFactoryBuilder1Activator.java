@@ -35,6 +35,7 @@ public class InitialDirContextFactoryBuilder1Activator implements
 	private ServiceRegistration sr;
 	
 	public void start(BundleContext context) throws Exception {
+		System.out.println("Starting: " + context.getBundle().getLocation());
 		Hashtable props = new Hashtable();
 		String[] interfaces = {InitialContextFactoryBuilder.class.getName()};
 		
@@ -45,6 +46,7 @@ public class InitialDirContextFactoryBuilder1Activator implements
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr.unregister();
 	}
 

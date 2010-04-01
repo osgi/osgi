@@ -33,6 +33,7 @@ public class DirObjectFactoryBuilder1Activator implements BundleActivator {
 	private ServiceRegistration sr;
 	
 	public void start(BundleContext context) throws Exception {
+		System.out.println("Starting: " + context.getBundle().getLocation());
 		Hashtable props = new Hashtable();
 		String[] interfaces = {ObjectFactoryBuilder.class.getName()};
 		
@@ -41,6 +42,7 @@ public class DirObjectFactoryBuilder1Activator implements BundleActivator {
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		System.out.println("Stopping: " + context.getBundle().getLocation());
 		sr.unregister();
 	}
 
