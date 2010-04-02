@@ -121,7 +121,6 @@ public class Activator implements BundleActivator, A, B {
 		//
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("mykey", "has been overridden");
-		properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 		properties.put("objectClass", "can.not.be.changed.Class");
 		properties.put("service.id", "can.not.be.changed.Id");
 		
@@ -153,7 +152,6 @@ public class Activator implements BundleActivator, A, B {
 			Assert.assertNotNull(ed.getId());
 			Assert.assertNotNull(ed.getConfigurationTypes());
 			Assert.assertFalse(ed.getConfigurationTypes().isEmpty());
-			Assert.assertTrue(ed.getIntents().contains("my_intent_is_for_this_to_work"));
 			Assert.assertEquals(context.getProperty("org.osgi.framework.uuid"),
 					ed.getFrameworkUUID());
 			Assert.assertNotNull(ed.getProperties().get("endpoint.service.id"));
@@ -183,7 +181,6 @@ public class Activator implements BundleActivator, A, B {
 		Assert.assertNotNull(ed.getId());
 		Assert.assertNotNull(ed.getConfigurationTypes());
 		Assert.assertFalse(ed.getConfigurationTypes().isEmpty());
-		Assert.assertTrue(ed.getIntents().contains("my_intent_is_for_this_to_work"));
 		Assert.assertEquals(context.getProperty("org.osgi.framework.uuid"), ed
 				.getFrameworkUUID());
 		

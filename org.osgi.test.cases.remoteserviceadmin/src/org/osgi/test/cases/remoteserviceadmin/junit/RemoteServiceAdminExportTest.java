@@ -100,7 +100,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put("mykey", "has been overridden");
-			properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
 
@@ -143,7 +142,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put("mykey", "has been overridden");
-			properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
 
@@ -185,7 +183,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put("mykey", "has been overridden");
-			properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
 
@@ -227,7 +224,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put("mykey", "has been overridden");
-			properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
 
@@ -245,8 +241,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 * 
 	 * Tests the export of a service with negative edge cases according to
 	 * the spec.
-	 * Register a service multiple times. Each registration is supposed to return
-	 * a new ExportRegistration
+	 * Register a service an make sure that an event is sent to a registered
+	 * RemoteServiceAdminListener
 	 */
 	public void testExportRSAListenerNotification() throws Exception {
 		// create an register a service
@@ -274,7 +270,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put("mykey", "has been overridden");
-			properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
 
@@ -362,8 +357,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 * 
 	 * Tests the export of a service with negative edge cases according to
 	 * the spec.
-	 * Register a service multiple times. Each registration is supposed to return
-	 * a new ExportRegistration
+	 * Register a service and make sure that an event is sent to a registered event handler
 	 */
 	public void testExportEventNotification() throws Exception {
 		// create an register a service
@@ -397,7 +391,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put("mykey", "has been overridden");
-			properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
 
@@ -500,7 +493,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				//
 				Map<String, Object> properties = new HashMap<String, Object>();
 				properties.put("mykey", "has been overridden");
-				properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 				properties.put("objectClass", "can.not.be.changed.Class");
 				properties.put("service.id", "can.not.be.changed.Id");
 
@@ -646,7 +638,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put("mykey", "has been overridden");
-			properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
 			properties.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, new String[]{supportedConfigTypes[0]});
@@ -784,7 +775,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			Map<String, Object> properties = new HashMap<String, Object>();
 			properties.put("mykey", "has been overridden");
-			properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
 			properties.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, new String[]{supportedConfigTypes[0]});

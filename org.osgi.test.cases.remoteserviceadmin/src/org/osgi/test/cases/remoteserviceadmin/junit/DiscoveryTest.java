@@ -162,7 +162,6 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 						getContext().getProperty("org.osgi.framework.uuid")));
 		assertTrue("discovered interfaces don't contain " + A.class.getName(), ep.getInterfaces().contains(A.class.getName()));
 		assertFalse("discovered interfaces must not contain " + B.class.getName(), ep.getInterfaces().contains(B.class.getName()));
-		assertTrue("intent list does not contain 'my_intent_is_for_this_to_work'", ep.getIntents().contains("my_intent_is_for_this_to_work"));
 		assertEquals("the property of the service should have been overridden by the EndpointDescription", "has been overridden", ep.getProperties().get("mykey")); 
 		assertEquals("the property myprop is missing", "myvalue", ep.getProperties().get("myprop"));
 		
@@ -193,7 +192,6 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 						getContext().getProperty("org.osgi.framework.uuid")));
 		assertTrue("discovered interfaces don't contain " + A.class.getName(), ep.getInterfaces().contains(A.class.getName()));
 		assertFalse("discovered interfaces must not contain " + B.class.getName(), ep.getInterfaces().contains(B.class.getName()));
-		assertTrue("intent list does not contain 'my_intent_is_for_this_to_work'", ep.getIntents().contains("my_intent_is_for_this_to_work"));
 		assertEquals("the property of the service should have been overridden by the EndpointDescription", "has been overridden", ep.getProperties().get("mykey")); 
 		assertEquals("the property myprop is missing", "myvalue", ep.getProperties().get("myprop"));
 	}
@@ -235,7 +233,6 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		properties.put("mydouble", (double)-3.1415d);
 		properties.put("mychar", (char)'t');
 		properties.put("myxml", "<myxml>test</myxml>");
-		properties.put(RemoteConstants.SERVICE_INTENTS, "my_intent_is_for_this_to_work");
 		
 		// export the service
 		Collection<ExportRegistration> exportRegistrations = rsa.exportService(registration.getReference(), properties);
