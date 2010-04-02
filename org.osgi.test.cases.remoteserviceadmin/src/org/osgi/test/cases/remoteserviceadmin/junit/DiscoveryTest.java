@@ -214,7 +214,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
 		dictionary.put("good test", true);
-//		dictionary.put("myset", set); // TODO enable again
+		dictionary.put("myset", set);
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, "*");
 
 		TestServiceImpl service = new TestServiceImpl();
@@ -228,7 +228,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("mykey", "has been overridden");
-//		properties.put("mylist", list); // TODO enable again
+		properties.put("mylist", list);
 		properties.put("myfloat", (float)3.1415f);
 		properties.put("mydouble", (double)-3.1415d);
 		properties.put("mychar", (char)'t');
