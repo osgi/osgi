@@ -1,3 +1,5 @@
+javac.source            = 1.5
+javac.target            = jsr14
 Bundle-Version						: 1.0.0.${project.build}
 Bundle-Description					: Remote Services test cases.
 
@@ -14,7 +16,7 @@ Test-Cases							= ${testcases}
     org.osgi.test.support;                  version=project , \
 	osgi.core;								version=4.2	, \
 	osgi.cmpn;								version=4.2	, \
-	ee.minimum; 							version=1.2	, \
+	ee.minimum; 							version=1.2.1, \
 	${junit}
 
 -runbundles							= \
@@ -26,6 +28,8 @@ Test-Cases							= ${testcases}
 	
 
 -runproperties = ${runproperties}, \
+	rsa.ct.timeout=300000,\
+	rsa.ct.timeout.factor=3,\
 	${p}.bundles="${uniq;${repo;org.osgi.impl.service.remoteserviceadmin},${repo;osgi.cmpn;${cmpn.published.version};lowest},${repo;org.osgi.impl.service.log}}", \
 	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.address", \
 	service.exported.configs=org.apache.cxf.ws, \

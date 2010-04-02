@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2009, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.remoteservices.common.A;
 import org.osgi.test.cases.remoteservices.common.B;
+import org.osgi.test.cases.remoteservices.common.C;
 import org.osgi.test.cases.remoteservices.impl.TestServiceImpl;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -47,6 +48,16 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	 */
 	private static final String ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON = "org.osgi.test.cases.remoteservices.common";
 
+	private long timeout;
+	
+	/**
+	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#setUp()
+	 */
+	protected void setUp() throws Exception {
+		super.setUp();
+		timeout = Long.getLong("rsa.ct.timeout", 300000L).longValue();
+	}
+	
 	/**
 	 * @see org.osgi.test.cases.remoteservices.junit.MultiFrameworkTestCase#getConfiguration()
 	 */
@@ -58,69 +69,6 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		String systemPacakagesXtra = ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON;
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPacakagesXtra);
 		return configuration;
-	}
-
-	/**
-	 * @throws Exception
-	 */
-	public void testInvalidConfigurations() throws Exception {
-		// verify that the server framework is exporting the test packages
-		verifyFramework();
-		
-		Set supportedConfigTypes = getSupportedConfigTypes();
-
-		// load the external properties file with the config types for the server side service
-		Hashtable properties = loadServerTCKProperties();
-
-		// add some properties for testing
-		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, "*");
-		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS, this.getClass().getName());
-		properties.put("implementation", "1");
-		
-		// install server side test service in the sub-framework
-		TestServiceImpl impl = new TestServiceImpl();
-		
-		// register the service in the server side framework on behalf of the System Bundle
-		// the interface package is exported by the System Bundle
-		ServiceRegistration srTestService = getFramework().getBundleContext().registerService(
-				new String[]{B.class.getName()/*, B.class.getName() */}, impl, properties);
-		assertNotNull(srTestService);
-
-		System.out.println("registered test service A on server side with config " + this.getClass().getName());
-
-		// TODO not supported by RI yet
-//		// check for registration of ExportedEndpointDescription
-//		ServiceTracker eedTracker = new ServiceTracker(getFramework().getBundleContext(), ExportedEndpointDescription.class.getName(), null);
-//		eedTracker.open();
-//		Object eed = eedTracker.waitForService(20000L);
-//		assertNotNull("no ExportedEndpointDescription service found", eed);
-//		ServiceReference eedReference = eedTracker.getServiceReference();
-//		assertNotNull(eedReference);
-//		assertNotNull(eedReference.getProperty(ExportedEndpointDescription.PROVIDED_INTERFACES));
-		
-		// now check on the hosting framework for the service to become available
-		ServiceTracker clientTracker = new ServiceTracker(getContext(), B.class.getName(), null);
-		clientTracker.open();
-		
-		// the proxy should appear in this framework
-		B client = (B)clientTracker.waitForService(60000L);
-		assertNull("proxy for service B found!", client);
-
-		// make sure the proxy is removed when the service is removed
-		clientTracker.close();
-		
-		// davidb: this doesn't work without proper discovery, and I don't know how it could 
-		// possibly work...
-		/*
-		// unregister the server side service
-		srTestService.unregister();
-		
-		clientTracker.open();
-		client = (A)clientTracker.waitForService(10000L);
-		assertNull(client);
-		
-		clientTracker.close();
-		*/
 	}
 
 	/**
@@ -152,6 +100,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		// add some properties for testing
 		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, "*");
 		properties.put("implementation", "1");
+		properties.put(".myprop", "must not be visible on client side");
 		
 		// install server side test service in the sub-framework
 		TestServiceImpl impl = new TestServiceImpl();
@@ -159,54 +108,74 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		// register the service in the server side framework on behalf of the System Bundle
 		// the interface package is exported by the System Bundle
 		ServiceRegistration srTestService = getFramework().getBundleContext().registerService(
-				new String[]{A.class.getName()/*, B.class.getName() */}, impl, properties);
+				new String[]{A.class.getName(), B.class.getName()}, impl, properties);
 		assertNotNull(srTestService);
 
 		System.out.println("registered test service A and B on server side");
 
 		Thread.sleep(1000);
-		
-		
-		// TODO not supported by RI yet
-//		// check for registration of ExportedEndpointDescription
-//		ServiceTracker eedTracker = new ServiceTracker(getFramework().getBundleContext(), ExportedEndpointDescription.class.getName(), null);
-//		eedTracker.open();
-//		Object eed = eedTracker.waitForService(20000L);
-//		assertNotNull("no ExportedEndpointDescription service found", eed);
-//		ServiceReference eedReference = eedTracker.getServiceReference();
-//		assertNotNull(eedReference);
-//		assertNotNull(eedReference.getProperty(ExportedEndpointDescription.PROVIDED_INTERFACES));
-		
-		// now check on the hosting framework for the service to become available
-		ServiceTracker clientTracker = new ServiceTracker(getContext(), A.class.getName(), null);
-		clientTracker.open();
-		
-		// the proxy should appear in this framework
-		A client = (A)clientTracker.waitForService(60000L);
-		assertNotNull("no proxy for service A found!", client);
-		
-		ServiceReference sr = clientTracker.getServiceReference();
-		assertNotNull(sr);
-		assertEquals("property implementation missing from proxy", "1", sr.getProperty("implementation"));
-		
-		// invoke the proxy
-		assertEquals("A", client.getA());
-		
-		// make sure the proxy is removed when the service is removed
-		clientTracker.close();
-		
-		// davidb: this doesn't work without proper discovery, and I don't know how it could 
-		// possibly work...
-		/*
-		// unregister the server side service
-		srTestService.unregister();
-		
-		clientTracker.open();
-		client = (A)clientTracker.waitForService(10000L);
-		assertNull(client);
-		
-		clientTracker.close();
-		*/
+
+		try {
+			// now check on the hosting framework for the service to become available
+			ServiceTracker clientTracker = new ServiceTracker(getContext(), A.class.getName(), null);
+			clientTracker.open();
+
+			// the proxy should appear in this framework
+			A client = (A)clientTracker.waitForService(timeout);
+			assertNotNull("no proxy for service A found!", client);
+
+			ServiceReference sr = clientTracker.getServiceReference();
+			System.out.println(sr);
+			assertNotNull(sr);
+			assertNotNull(sr.getProperty("service.imported"));
+			assertNotNull(sr.getProperty("service.id"));
+			assertNotNull(sr.getProperty("endpoint.id"));
+			assertNotNull(sr.getProperty("service.imported.configs"));
+			assertNull("private properties must not be exported", sr.getProperty(".myprop"));
+			assertEquals("property implementation missing from proxy", "1", sr.getProperty("implementation"));
+			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS));
+			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS_EXTRA));
+			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES));
+			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS));
+
+			// invoke the proxy
+			assertEquals("A", client.getA());
+
+			clientTracker.close();
+
+			// make sure C was not registered, since it wasn't exported
+			assertNull("service C should not have been found as it was not exported", getContext().getServiceReference(C.class.getName()));
+			
+			// check for service B
+			clientTracker = new ServiceTracker(getContext(), B.class.getName(), null);
+			clientTracker.open();
+
+			// the proxy should appear in this framework
+			B clientB = (B)clientTracker.waitForService(timeout);
+			assertNotNull("no proxy for service B found!", clientB);
+
+			sr = clientTracker.getServiceReference();
+			System.out.println(sr);
+			assertNotNull(sr);
+			assertNotNull(sr.getProperty("service.imported"));
+			assertNotNull(sr.getProperty("service.id"));
+			assertNotNull(sr.getProperty("endpoint.id"));
+			assertNotNull(sr.getProperty("service.imported.configs"));
+			assertNull("private properties must not be exported", sr.getProperty(".myprop"));
+			assertEquals("property implementation missing from proxy", "1", sr.getProperty("implementation"));
+			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS));
+			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_INTENTS_EXTRA));
+			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES));
+			assertNull(sr.getProperty(RemoteServiceConstants.SERVICE_EXPORTED_CONFIGS));
+
+			// invoke the proxy
+			assertEquals("B", clientB.getB());
+
+			clientTracker.close();
+			
+		} finally {
+			srTestService.unregister();
+		}
 	}
 
 	/**
@@ -240,10 +209,11 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		ServiceTracker dpTracker = new ServiceTracker(getFramework().getBundleContext(), filter, null);
 		dpTracker.open();
 		
-		Object dp = dpTracker.waitForService(10000L);
+		Object dp = dpTracker.waitForService(0);
 		assertNotNull("No DistributionProvider found", dp);
 		ServiceReference dpReference = dpTracker.getServiceReference();
 		assertNotNull(dpReference);
+		assertNotNull(dpReference.getProperty(DistributionProviderConstants.REMOTE_INTENTS_SUPPORTED));
 		
 		Set supportedConfigTypes = new HashSet(); // collect all supported config types
 		

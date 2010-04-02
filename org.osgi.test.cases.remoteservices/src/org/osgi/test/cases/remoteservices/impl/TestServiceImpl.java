@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2009, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +17,33 @@ package org.osgi.test.cases.remoteservices.impl;
 
 import org.osgi.test.cases.remoteservices.common.A;
 import org.osgi.test.cases.remoteservices.common.B;
+import org.osgi.test.cases.remoteservices.common.C;
 
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  *
  */
-public class TestServiceImpl implements A, B {
+public class TestServiceImpl implements A, B, C {
 
 	/**
-	 * @see org.osgi.test.cases.distribution.common.A#getA()
+	 * @see org.osgi.test.cases.remoteservices.common.A#getA()
 	 */
 	public String getA() {
 		return "A";
 	}
 
 	/**
-	 * @see org.osgi.test.cases.distribution.common.B#getB()
+	 * @see org.osgi.test.cases.remoteservices.common.B#getB()
 	 */
 	public String getB() {
 		return "B";
 	}
 
+	/**
+	 * @see org.osgi.test.cases.remoteservices.common.C#getC()
+	 */
+	public String getC() {
+		return "C";
+	}
 }
