@@ -53,11 +53,17 @@ import org.osgi.test.support.compatibility.Semaphore;
 public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	private RemoteServiceAdmin remoteServiceAdmin;
 
+	private long timeout;
+	private int  factor;
+	
 	/**
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#setUp()
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
+		
+		timeout = Long.getLong("rsa.ct.timeout", 300000L);
+		factor = Integer.getInteger("rsa.ct.timeout.factor", 3);
 		
 		remoteServiceAdmin = (RemoteServiceAdmin) getService(RemoteServiceAdmin.class);
 	}
@@ -1070,7 +1076,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		
 		RemoteServiceAdminEvent getNextEvent() {
 			try {
-				sem.waitForSignal();
+				sem.waitForSignal(timeout);
 			} catch (InterruptedException e1) {
 				return null;
 			}
@@ -1102,7 +1108,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		
 		Event getNextEvent() {
 			try {
-				sem.waitForSignal();
+				sem.waitForSignal(timeout);
 			} catch (InterruptedException e1) {
 				return null;
 			}

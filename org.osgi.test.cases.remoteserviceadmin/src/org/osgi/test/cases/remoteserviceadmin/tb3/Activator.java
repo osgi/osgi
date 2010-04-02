@@ -15,8 +15,6 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.tb3;
 
-import java.util.Date;
-
 import junit.framework.Assert;
 
 import org.osgi.framework.Bundle;
@@ -42,7 +40,14 @@ public class Activator implements BundleActivator {
 	BundleTracker  bundleTracker;
 	Semaphore sem = new Semaphore(0);
 	Semaphore servicesem = new Semaphore(0);
+	long timeout;
+	int  factor;
 
+	public Activator() {
+		timeout = Long.getLong("rsa.ct.timeout", 300000L);
+		factor = Integer.getInteger("rsa.ct.timeout.factor", 3);
+	}
+	
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
@@ -69,7 +74,7 @@ public class Activator implements BundleActivator {
 		tracker = new ServiceTracker(context, filter, null);
 		tracker.open();
 		
-		A service = (A) tracker.waitForService(0);
+		A service = (A) tracker.waitForService(timeout);
 		Assert.assertNotNull("no service A found", service);
 		
 		// call the service
@@ -120,9 +125,9 @@ public class Activator implements BundleActivator {
 	 */
 	private void teststop() throws Exception {
 		try {
-			sem.waitForSignal();
+			sem.waitForSignal(timeout * factor);
 
-			servicesem.waitForSignal(60000);
+			servicesem.waitForSignal(timeout * factor);
 		} finally {
 			bundleTracker.close();
 			tracker.close();

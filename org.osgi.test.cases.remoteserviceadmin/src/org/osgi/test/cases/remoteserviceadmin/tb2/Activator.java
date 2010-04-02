@@ -55,6 +55,13 @@ public class Activator implements BundleActivator, A, B {
 	RemoteServiceAdmin             rsa;
 	Collection<ExportRegistration> exportRegistrations;
 	TestRemoteServiceAdminListener remoteServiceAdminListener;
+	long timeout;
+	int  factor;
+
+	public Activator() {
+		timeout = Long.getLong("rsa.ct.timeout", 300000L);
+		factor = Integer.getInteger("rsa.ct.timeout.factor", 3);
+	}
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
@@ -278,7 +285,7 @@ public class Activator implements BundleActivator, A, B {
 		
 		RemoteServiceAdminEvent getNextEvent() {
 			try {
-				sem.waitForSignal();
+				sem.waitForSignal(timeout);
 			} catch (InterruptedException e1) {
 				return null;
 			}

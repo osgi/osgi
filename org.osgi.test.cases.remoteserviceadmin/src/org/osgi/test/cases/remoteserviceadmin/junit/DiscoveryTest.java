@@ -69,12 +69,23 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		Boolean.TYPE, Boolean.class,
 		Short.TYPE, Short.class});
 
+	private long timeout;
+	private int  factor;
+	
+	/**
+	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#setUp()
+	 */
+	protected void setUp() throws Exception {
+		super.setUp();
+		timeout = Long.getLong("rsa.ct.timeout", 300000L);
+		factor = Integer.getInteger("rsa.ct.timeout.factor", 3);
+	}
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		System.out.println("Sleep for 5s before ending");
+		System.out.println("Sleep for 5s before ending to allow for cleanup of ports before the next run.");
 		Thread.sleep(5000);
 	}
 	
@@ -88,7 +99,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		//make sure that the server framework System Bundle exports the interfaces
 		String systemPackagesXtra = System.getProperty(SYSTEM_PACKAGES_EXTRA);
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
-        configuration.put("osgi.console", "1112");
+        configuration.put("osgi.console", "" + (Integer.getInteger("osgi.console", 1111).intValue() + 1));
 		return configuration;
 	}
 	
@@ -133,7 +144,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		tb1Bundle.start();
 		
 		// verify callback in parent framework
-		endpointListenerImpl.getSem().waitForSignal();
+		endpointListenerImpl.getSem().waitForSignal(timeout);
 		
 		// 122.6.2 callback has to return first matched filter
 		assertEquals("filter doesn't match the first filter", endpointListenerFilter, endpointListenerImpl.getMatchedFilter());
@@ -164,7 +175,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		tb1Bundle.stop();
 
 		// verify callback in parent framework
-		endpointListenerImpl.getSem().waitForSignal();
+		endpointListenerImpl.getSem().waitForSignal(timeout);
 		
 		// 122.6.2 callback has to return first matched filter
 		assertEquals("filter doesn't match the first filter", endpointListenerFilter, endpointListenerImpl.getMatchedFilter());
@@ -205,7 +216,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
 		dictionary.put("good test", true);
-//		dictionary.put("myset", set);
+//		dictionary.put("myset", set); // TODO enable again
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, "*");
 
 		TestServiceImpl service = new TestServiceImpl();
@@ -219,7 +230,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("mykey", "has been overridden");
-//		properties.put("mylist", list);
+//		properties.put("mylist", list); // TODO enable again
 		properties.put("myfloat", (float)3.1415f);
 		properties.put("mydouble", (double)-3.1415d);
 		properties.put("mychar", (char)'t');
