@@ -1,0 +1,7 @@
+Bundle-Name:                             ${p}.tbimporter
+Bundle-Version:                          1.0
+Private-Package:                         org.osgi.test.support.*, \
+ ${p}.tb.importer*, \
+ ${p}.common 
+Export-Package:                          ${p}.common;version="1.0.0"
+Bundle-Activator: 						 ${p}.tb.importer.Activator
