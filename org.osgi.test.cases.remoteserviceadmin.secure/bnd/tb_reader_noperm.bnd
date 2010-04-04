@@ -1,0 +1,6 @@
+Bundle-Name:                             ${p}.tbreader.noperm
+Bundle-Version:                          1.0
+Private-Package:                         org.osgi.test.support.*, \
+ ${p}.tb.reader*
+Export-Package:                          ${p}.common;version="1.0.0"
+Bundle-Activator: 						 ${p}.tb.reader.Activator
