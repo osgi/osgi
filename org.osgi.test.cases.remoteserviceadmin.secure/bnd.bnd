@@ -19,7 +19,10 @@ Bundle-Category: osgi,test
 Include-Resource					= \
 	tb_exporter.jar=tb_exporter.jar, \
 	tb_importer.jar=tb_importer.jar, \
-	tb_reader.jar=tb_reader.jar
+	tb_reader.jar=tb_reader.jar, \
+	tb_exporter_noperm.jar=tb_exporter_noperm.jar, \
+	tb_importer_noperm.jar=tb_importer_noperm.jar, \
+	tb_reader_noperm.jar=tb_reader_noperm.jar
 	
 Test-Cases							= ${testcases}
 
@@ -38,7 +41,7 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.bundle.remoteserviceadmin.discovery.config;  version=latest, \
 	org.osgi.impl.service.log;				version=latest
 
--runproperties = ${runproperties}, \
+-runproperties = ${runsecureproperties}, \
 	osgi.console=1111, \
 	osgi.support.multipleHosts=true, \
 	rsa.ct.timeout=300000,\

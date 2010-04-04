@@ -53,7 +53,7 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 	 * framework. This manual step bypasses Discovery, which would normally do the transport
 	 * between the two frameworks.
 	 */
-	public void testExportImportManually() throws Exception {
+	public void testExportImportManuallyWithPermision() throws Exception {
 		verifyFramework();
 		
 		//
@@ -92,4 +92,53 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 		tbexporterBundle.stop();
 	}
 
+
+	/**
+	 * Sets up a child framework.
+	 * Install and try to start an exporter, an importer, and a reader without
+	 * the appropriate permissions.
+	 */
+	public void testNoPermissions() throws Exception {
+		verifyFramework();
+		
+		//
+		// install test bundle in child framework
+		//
+		BundleContext childContext = getFramework().getBundleContext();
+		
+		Bundle tbexporterBundle = installBundle(childContext, "/tb_exporter_noperm.jar");
+		assertNotNull(tbexporterBundle);
+		
+		// start test bundle in child framework
+		// this will run the test in the child framework and fail
+		try {
+			tbexporterBundle.start();
+			fail("SecurityException expected");
+		} catch (SecurityException se) {
+		}
+
+		// now install the importer in the parent (this) framework
+		Bundle tbimporterBundle = installBundle(getContext(), "/tb_importer_noperm.jar");
+		assertNotNull(tbimporterBundle);
+		
+		try {
+			tbimporterBundle.start();
+			fail("SecurityException expected");
+		} catch (SecurityException se) {
+		}
+		
+		// install the reader bundle to test the READ permission
+		Bundle preaderBundle = installBundle(getContext(), "/tb_reader.jar");
+		assertNotNull(preaderBundle);
+
+		try {
+			preaderBundle.start();
+			fail("SecurityException expected");
+		} catch (SecurityException se) {
+		}
+		
+		tbimporterBundle.stop();
+		
+		tbexporterBundle.stop();
+	}
 }
