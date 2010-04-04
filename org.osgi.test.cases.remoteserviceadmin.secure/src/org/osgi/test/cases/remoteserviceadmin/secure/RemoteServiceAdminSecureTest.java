@@ -15,38 +15,12 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.secure;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
-
-import junit.framework.Assert;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.osgi.framework.Filter;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventConstants;
-import org.osgi.service.event.EventHandler;
-import org.osgi.service.remoteserviceadmin.EndpointDescription;
-import org.osgi.service.remoteserviceadmin.ImportReference;
-import org.osgi.service.remoteserviceadmin.ImportRegistration;
-import org.osgi.service.remoteserviceadmin.RemoteConstants;
-import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
-import org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent;
-import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
-import org.osgi.test.support.compatibility.Semaphore;
 
 /**
  * Use RSA service to register a service in a child framework and then import
@@ -57,21 +31,10 @@ import org.osgi.test.support.compatibility.Semaphore;
  * @version 1.0.0
  */
 public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
-	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.remoteserviceadmin.system.packages.extra";
-
-	private long timeout;
-	private int  factor;
+	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.remoteserviceadmin.secure.system.packages.extra";
 	
 	/**
-	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
-		super.setUp();
-		timeout = Long.getLong("rsa.ct.timeout", 300000L);
-	}
-	
-	/**
-	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#getConfiguration()
+	 * @see org.osgi.test.cases.remoteserviceadmin.secure.MultiFrameworkTestCase#getConfiguration()
 	 */
 	public Map<String, String> getConfiguration() {
 		Map<String, String> configuration = new HashMap<String, String>();
@@ -112,6 +75,17 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 		tbimporterBundle.start();
 		
 		Thread.sleep(2000); // wait 2 s
+		
+		// install the reader bundle to test the READ permission
+		Bundle creaderBundle = installBundle(childContext, "/tb_reader.jar");
+		assertNotNull(creaderBundle);
+		Bundle preaderBundle = installBundle(getContext(), "/tb_reader.jar");
+		assertNotNull(preaderBundle);
+		
+		// start the reader bundles
+		creaderBundle.start();
+		
+		preaderBundle.start();
 		
 		tbimporterBundle.stop();
 		

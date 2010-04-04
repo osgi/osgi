@@ -18,7 +18,8 @@ Bundle-Category: osgi,test
 
 Include-Resource					= \
 	tb_exporter.jar=tb_exporter.jar, \
-	tb_importer.jar=tb_importer.jar
+	tb_importer.jar=tb_importer.jar, \
+	tb_reader.jar=tb_reader.jar
 	
 Test-Cases							= ${testcases}
 

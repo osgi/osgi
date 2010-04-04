@@ -197,11 +197,6 @@ public class Activator implements BundleActivator {
 			importReg.close();
 			importReg.close(); // calling this multiple times must not cause a problem
 
-			ref = context.getServiceReference(A.class.getName());
-			serviceA = (A) context.getService(ref);
-			Assert.assertNull("122.4.2: the last ImportRegistration has been closed, but proxy is still available", serviceA);
-			Assert.assertFalse("122.4.2: the last ImportRegistration has been closed, but RSA still lists it", rsa.getImportedEndpoints().contains(importRef));
-
 			//
 			// 122.4.8 on close of the ImportRegistration expect another event
 			//
