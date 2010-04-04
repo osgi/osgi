@@ -56,7 +56,7 @@ import org.osgi.test.support.compatibility.Semaphore;
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  * @version 1.0.0
  */
-public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
+public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.remoteserviceadmin.system.packages.extra";
 
 	private long timeout;

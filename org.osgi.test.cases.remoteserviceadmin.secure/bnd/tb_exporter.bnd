@@ -5,3 +5,4 @@ Private-Package:                         org.osgi.test.support.*, \
  ${p}.common 
 Export-Package:                          ${p}.common;version="1.0.0"
 Bundle-Activator: 						 ${p}.tb.exporter.Activator
+Include-Resource: {OSGI-INF/permissions.perm=perms/exporter.perm}
