@@ -1,8 +1,8 @@
-Bundle-Name:                             ${p}.ct00client
+Bundle-Name:                             ${p}.ct00event
 Bundle-Version:                          1.0
-Private-Package:                         ${p}.junit.ct26client.*, \
+Private-Package:                         ${p}.junit.ct00event.*, \
                                          ${p}.common.*, \
                                          org.osgi.test.support, \
                                          org.osgi.test.support.compatibility
-Bundle-Activator:                        ${p}.junit.ct26client.Activator
+Bundle-Activator:                        ${p}.junit.ct00event.Activator
 Import-Package = junit.framework;version="3.8.0",*

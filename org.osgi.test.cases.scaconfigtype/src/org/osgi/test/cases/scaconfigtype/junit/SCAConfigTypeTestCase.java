@@ -406,7 +406,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
         installAndStartBundle(serverContext, "/ct00.jar");
 
-        Bundle clientBundle = installAndStartBundle(clientContext, "/ct26client.jar");
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00event.jar");
         
         // wait for A to be found
         assertAAvailability(clientBundle, true);
@@ -456,9 +456,43 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
      * CT.35, CT.36, CT.37
      * @throws Exception
      */
-    //	public void testEndpointConfig() throws Exception {
-    //		fail("TODO not yet implemented");
-    //	}	
+    public void testEndpointConfig() throws Exception {
+        // install test bundle in child framework
+        BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
+        BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
+
+        installAndStartBundle(serverContext, "/ct00.jar");
+
+        // reuse 26 client
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00event.jar");
+        
+        // wait for A to be found
+        assertAAvailability(clientBundle, true);
+        
+        // [rfeng] We need to use the client bundle as it's the one that can load A.class
+        ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), TestEventHandler.class.getName(), null);
+        tracker.open();
+
+        TestEventHandler eventHandler = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), TestEventHandler.class);
+        
+        assertNotNull(eventHandler);
+        
+        assertEquals( "Unexpected number of events", 1, eventHandler.getEventCount() );
+        
+        TestEvent evt = Utils.cast(eventHandler.getNextEvent(), TestEvent.class);
+        
+        Object configs = evt.getProperty(SERVICE_IMPORTED_CONFIGS);
+        assertTrue( "Missing header " + SERVICE_IMPORTED_CONFIGS, configs != null );
+        
+        assertTrue( Utils.propertyToList(configs).contains( SCAConfigConstants.ORG_OSGI_SCA_CONFIG ) );
+        
+        Object config = evt.getProperty(SCAConfigConstants.ORG_OSGI_SCA_CONFIG_URL);
+        
+        if ( config == null )
+        	config = evt.getProperty(SCAConfigConstants.ORG_OSGI_SCA_CONFIG_XML);
+        
+        assertTrue( "Missing header " + SCAConfigConstants.ORG_OSGI_SCA_CONFIG_URL + " or " + SCAConfigConstants.ORG_OSGI_SCA_CONFIG_XML, config != null );
+    }	
 
     private Bundle installAndStartBundle(BundleContext context, String bundle) {
         Bundle b = installBundle(context, bundle);

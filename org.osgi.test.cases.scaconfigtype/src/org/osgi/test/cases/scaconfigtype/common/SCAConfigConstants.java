@@ -27,4 +27,8 @@ public interface SCAConfigConstants {
 	static final String ORG_OSGI_SCA_BINDING = "org.osgi.sca.bindings";
 
 	static final String SCA_CONFIGURATION_HEADER = "SCA-Configuration";
+
+	static final String ORG_OSGI_SCA_CONFIG_URL = "org.osgi.sca.config.url";
+
+	static final String ORG_OSGI_SCA_CONFIG_XML = "org.osgi.sca.config.xml";
 }
