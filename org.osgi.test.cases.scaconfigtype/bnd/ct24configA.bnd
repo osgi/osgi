@@ -1,0 +1,9 @@
+Bundle-Name:                             ${p}.ct24configA
+Bundle-Version:                          1.0
+Private-Package:                         ${p}.junit.ct24.*, \
+ ${p}.common.*
+Include-Resource                    = \
+    OSGI-INF/sca-config/bindings/bindingA.xml=resources/OSGI-INF/sca-config/bindings/bindingA.xml, \
+    
+SCA-Configuration: OSGI-INF/sca-config/bindings/*.xml
+Import-Package = junit.framework;version="3.8.0",*

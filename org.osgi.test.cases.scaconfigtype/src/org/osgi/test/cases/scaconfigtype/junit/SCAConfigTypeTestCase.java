@@ -343,9 +343,28 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
      * Check that B is not exported as A is a duplicate
      * @throws Exception
      */
-    //	public void testDuplicateBinding() throws Exception {
-    //    fail("TODO this requires a way to modify standard binding files as part of build");
-    //	}
+    public void testDuplicateBinding() throws Exception {
+        // install test bundle in child framework
+        BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
+        BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
+
+        installAndStartBundle(serverContext, "/ct24configA.jar");
+        installAndStartBundle(serverContext, "/ct24configAB.jar");
+        installAndStartBundle(serverContext, "/ct24service.jar");
+        
+        // TODO don't technically need to start client bundle but this checks it's resolved
+        Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
+
+        ServiceReference[] refs = assertAAvailability(clientBundle, true);
+        
+        // check service is registered with sca config type header
+        Object config = refs[0].getProperty(SERVICE_IMPORTED_CONFIGS);
+        assertTrue(Utils.propertyToList(config).contains(ORG_OSGI_SCA_CONFIG));
+
+        // search for b service which is registered in a bundle with a duplicated a config type
+        // assert this is not picked up by the RI
+        assertBAvailability(clientBundle, false);
+    }
 
     /**
      * CT.25

@@ -1,0 +1,6 @@
+Bundle-Name:                             ${p}.ct24
+Bundle-Version:                          1.0
+Private-Package:                         ${p}.junit.ct24.*, \
+ ${p}.common.*
+Bundle-Activator:                        ${p}.junit.ct24.Activator
+Import-Package = junit.framework;version="3.8.0",*

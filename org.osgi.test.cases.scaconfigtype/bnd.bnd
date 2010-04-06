@@ -18,6 +18,9 @@ Include-Resource					= \
 	ct12.jar, \
 	ct15.jar, \
 	ct23.jar, \
+	ct24service.jar, \
+	ct24configA.jar, \
+	ct24configAB.jar, \
 	ct26.jar, \
 	ct26client.jar, \
 	
