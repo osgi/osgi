@@ -357,10 +357,6 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
         ServiceReference[] refs = assertAAvailability(clientBundle, true);
         
-        // check service is registered with sca config type header
-        Object config = refs[0].getProperty(SERVICE_IMPORTED_CONFIGS);
-        assertTrue(Utils.propertyToList(config).contains(ORG_OSGI_SCA_CONFIG));
-
         // search for b service which is registered in a bundle with a duplicated a config type
         // assert this is not picked up by the RI
         assertBAvailability(clientBundle, false);
@@ -372,9 +368,9 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
      * TODO [dsavage] In property value? 
      * @throws Exception
      */
-    //	public void testUnknownBinding() throws Exception {
-    //		fail("TODO this requires a way to modify standard binding files as part of build");
-    //	}
+//    public void testUnknownBinding() throws Exception {
+//		fail("Not obvious what should be tested here");
+//    }
 
     /**
      * CT.26
