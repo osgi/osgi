@@ -30,8 +30,7 @@ Test-Cases							= ${testcases}
 -runproperties = ${runproperties}, \
 	rsa.ct.timeout=300000,\
 	rsa.ct.timeout.factor=3,\
-	${p}.bundles="${uniq;${repo;org.osgi.impl.service.remoteserviceadmin},${repo;osgi.cmpn;${cmpn.published.version};lowest},${repo;org.osgi.impl.service.log}}", \
-	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.address", \
-	service.exported.configs=org.apache.cxf.ws, \
-	org.apache.cxf.ws.address=http://localhost:9090/test
+	${p}.bundles="${uniq;${repo;org.osgi.impl.service.remoteserviceadmin},${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config},${repo;osgi.cmpn;${cmpn.published.version};lowest},${repo;org.osgi.impl.service.log}}", \
+	${p}.serverconfig="service.exported.configs", \
+	service.exported.configs=org.apache.cxf.ws
 	
