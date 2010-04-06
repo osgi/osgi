@@ -15,6 +15,8 @@
  */
 package org.osgi.test.cases.remoteservices.junit;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,6 +49,11 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	 * Package to be exported by the server side System Bundle
 	 */
 	private static final String ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON = "org.osgi.test.cases.remoteservices.common";
+
+	/** 
+	 * Magic value. Properties with this value will be replaced by a socket port number that is currently free. 
+	 */
+    private static final String FREE_PORT = "@@FREE_PORT@@";
 
 	private long timeout;
 	
@@ -101,6 +108,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, "*");
 		properties.put("implementation", "1");
 		properties.put(".myprop", "must not be visible on client side");
+		processFreePortProperties(properties);
 		
 		// install server side test service in the sub-framework
 		TestServiceImpl impl = new TestServiceImpl();
@@ -178,7 +186,27 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		}
 	}
 
-	/**
+    private void processFreePortProperties(Hashtable properties) {
+        String freePort = getFreePort();
+        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+            if (entry.getValue().toString().trim().equals(FREE_PORT)) {
+                entry.setValue(freePort);
+            }
+        }
+    }
+
+    private String getFreePort() {
+        try {
+            ServerSocket ss = new ServerSocket(0);
+            return "" + ss.getLocalPort();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
 	 * @return
 	 */
 	private Hashtable loadServerTCKProperties() {
