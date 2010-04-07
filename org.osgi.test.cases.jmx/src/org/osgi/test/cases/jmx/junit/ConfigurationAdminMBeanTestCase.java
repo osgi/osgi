@@ -153,7 +153,7 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testGetFactoryPidForLocation() throws Exception {
 		String test2factory = testBundle2.getBundleId() + ".factory";		
-        Configuration configuration = configAdminService.createFactoryConfiguration(test2factory, null);
+        Configuration configuration = configAdminService.createFactoryConfiguration(test2factory, testBundle2.getLocation());
         Dictionary properties = new Properties();
         properties.put("test_key", "test_factory_pid");
         properties.put(Constants.SERVICE_PID, test2factory);
@@ -193,7 +193,7 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 		String test2factoryMBean = configAdminMBean.createFactoryConfigurationForLocation(testFactoryId, testBundle2.getLocation());
 		assertNotNull(test2factoryMBean);
         configAdminMBean.update(test2factoryMBean, OSGiProperties.tableFrom(properties));
-        assertTrue("test doesn't work using config admin mbean; wrong factory pid", testFactoryId.equals(configAdminMBean.getFactoryPid(test2factoryMBean)));
+        assertTrue("test doesn't work using config admin mbean; wrong factory pid", testFactoryId.equals(configAdminMBean.getFactoryPidForLocation(test2factoryMBean, testBundle2.getLocation())));
 		/*
 		 * Bug report for this method is https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1527#c8
 		 * 
