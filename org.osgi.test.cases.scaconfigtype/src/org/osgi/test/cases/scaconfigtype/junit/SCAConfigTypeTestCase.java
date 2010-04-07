@@ -208,11 +208,13 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         // TODO don't technically need to start client bundle but this checks it's resolved
         Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
 
-        // this service should not be visible as xml is broken
+        // this service should not be visible as xml is broken AND it is in a directory
+	// that should not be scanned
         assertAAvailability(clientBundle, false);
         
-        // this bundle should not be found as broken xml should prevent all registrations
-        assertBAvailability(clientBundle, false);
+        // this service should be found as broken xml is in sub directory which 
+	// should not be scanned so overall bundle configuration is valid
+        assertBAvailability(clientBundle, true);
     }
 
     /**
