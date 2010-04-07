@@ -227,19 +227,6 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.osgi.jmx.compendium.UserManagerMBean#createRole(java.lang.String)
-	 */
-	public void createRole(String name) throws IOException {
-		if (name == null) {
-			throw new IOException("Name must not be null");
-		}
-		admin.createRole(name, Role.ROLE);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * org.osgi.jmx.compendium.UserManagerMBean#getAuthorization(java.lang.String
 	 * )
 	 */

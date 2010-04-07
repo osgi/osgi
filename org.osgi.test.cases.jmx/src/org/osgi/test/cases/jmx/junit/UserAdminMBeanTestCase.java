@@ -7,9 +7,7 @@ import javax.management.RuntimeMBeanException;
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularData;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.jmx.service.useradmin.UserAdminMBean;
-import org.osgi.service.useradmin.UserAdmin;
 
 public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 	private UserAdminMBean userManagerMBean;
@@ -42,20 +40,6 @@ public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 		String groupName = "board";
 		userManagerMBean.createGroup(groupName);
 		assertNotNull(userManagerMBean.getGroup(groupName));
-	}
-
-	public void testCreateRole() throws IOException {
-		try {
-			String roleName = "TestRole";
-			userManagerMBean.createRole(roleName);
-			assertNotNull(userManagerMBean.getRole(roleName));
-		} catch(RuntimeException rException) {
-			/*
-			 * Bug report https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1593
-			 */
-			rException.printStackTrace();
-			assertTrue("exception is thrown " + rException, false);
-		}
 	}
 	
 	public void testAddRequiredMember() throws IOException {
@@ -654,30 +638,7 @@ public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 		} catch(RuntimeException e) {
 			e.printStackTrace();
 			assertTrue("method createGroup throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
-		}		
-		
-		//test createRole method
-		try {
-			userManagerMBean.createRole(STRING_NULL);			
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method createRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
 		}
-		try {
-			userManagerMBean.createRole(STRING_EMPTY);			
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method createRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
-		}		
-		try {
-			userManagerMBean.createRole(STRING_SPECIAL_SYMBOLS);			
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method createRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
-		}		
 		
 		//test createUser method
 		try {

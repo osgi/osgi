@@ -287,14 +287,6 @@ public interface UserAdminMBean {
 	void createGroup(String name) throws IOException;
 
 	/**
-	 * Create a Role
-	 * 
-	 * @param name of the role to create
-	 * @throws IOException if the operation fails
-	 */
-	void createRole(String name) throws IOException;
-
-	/**
 	 * Answer the authorization for the user name.
 	 * 
 	 * The Composite Data is typed by {@link #AUTORIZATION_TYPE}.
