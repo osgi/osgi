@@ -54,7 +54,9 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 		if (factoryPid == null) {
 			throw new IOException("Factory PID must not be null");
 		}
-		return admin.createFactoryConfiguration(factoryPid, null).getPid();
+		Configuration c = admin.createFactoryConfiguration(factoryPid);
+		c.setBundleLocation(null);
+		return c.getPid();
 	}
 
 	/*
@@ -70,7 +72,9 @@ public class ConfigAdminManager implements ConfigurationAdminMBean {
 		if (factoryPid == null) {
 			throw new IOException("Factory PID must not be null");
 		}
-		return admin.createFactoryConfiguration(factoryPid, location).getPid();
+		Configuration c = admin.createFactoryConfiguration(factoryPid);
+		c.setBundleLocation(location);
+		return c.getPid();
 	}
 
 	/*
