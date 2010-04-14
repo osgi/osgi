@@ -102,7 +102,7 @@ public class FrameworkUtil {
 	 * wildcard can also replace the first list of RDNs of a DN. The first RDNs
 	 * are the least significant. Such lists of matched RDNs can be empty.
 	 * <p>
-	 * For example, a match pattern with a wildcard that matches all all DNs
+	 * For example, a match pattern with a wildcard that matches all DNs
 	 * that end with RDNs of o=ACME and c=US would look like this:
 	 * 
 	 * <pre>
