@@ -36,8 +36,8 @@ import java.util.Dictionary;
  * <li>Install new bundles in the Framework.
  * <li>Get the list of bundles installed in the Framework.
  * <li>Get the {@link Bundle} object for a bundle.
- * <li>Create <code>File</code> objects for files in a persistent storage
- * area provided for the bundle by the Framework.
+ * <li>Create <code>File</code> objects for files in a persistent storage area
+ * provided for the bundle by the Framework.
  * </ul>
  * 
  * <p>
@@ -58,10 +58,10 @@ import java.util.Dictionary;
  * The <code>BundleContext</code> object is only valid during the execution of
  * its context bundle; that is, during the period from when the context bundle
  * is in the <code>STARTING</code>, <code>STOPPING</code>, and
- * <code>ACTIVE</code> bundle states. If the <code>BundleContext</code>
- * object is used subsequently, an <code>IllegalStateException</code> must be
- * thrown. The <code>BundleContext</code> object must never be reused after
- * its context bundle is stopped.
+ * <code>ACTIVE</code> bundle states. If the <code>BundleContext</code> object
+ * is used subsequently, an <code>IllegalStateException</code> must be thrown.
+ * The <code>BundleContext</code> object must never be reused after its context
+ * bundle is stopped.
  * 
  * <p>
  * The Framework is the only entity that can create <code>BundleContext</code>
@@ -96,8 +96,7 @@ public interface BundleContext {
 	 * 
 	 * @return The <code>Bundle</code> object associated with this
 	 *         <code>BundleContext</code>.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
 	public Bundle getBundle();
 
@@ -145,7 +144,9 @@ public interface BundleContext {
 	 * </ul>
 	 * <b>Postconditions, when an exception is thrown </b>
 	 * <ul>
-	 * <li>Bundle is not installed and no trace of the bundle exists.
+	 * <li>Situation as before the installBundle call. That is if there was an
+	 * existing bundle for the given location then this bundle must still be in the
+	 * state it was prior the call. Otherwise, no bundle must be installed</li>
 	 * </ul>
 	 * 
 	 * @param location The location identifier of the bundle to install.
@@ -201,23 +202,23 @@ public interface BundleContext {
 	 * Framework is a very dynamic environment, bundles can be installed or
 	 * uninstalled at anytime.
 	 * 
-	 * @return An array of <code>Bundle</code> objects, one object per
-	 *         installed bundle.
+	 * @return An array of <code>Bundle</code> objects, one object per installed
+	 *         bundle.
 	 */
 	public Bundle[] getBundles();
 
 	/**
-	 * Adds the specified <code>ServiceListener</code> object with the
-	 * specified <code>filter</code> to the context bundle's list of
-	 * listeners. See {@link Filter} for a description of the filter syntax.
+	 * Adds the specified <code>ServiceListener</code> object with the specified
+	 * <code>filter</code> to the context bundle's list of listeners. See
+	 * {@link Filter} for a description of the filter syntax.
 	 * <code>ServiceListener</code> objects are notified when a service has a
 	 * lifecycle state change.
 	 * 
 	 * <p>
 	 * If the context bundle's list of listeners already contains a listener
-	 * <code>l</code> such that <code>(l==listener)</code>, then this
-	 * method replaces that listener's filter (which may be <code>null</code>)
-	 * with the specified one (which may be <code>null</code>).
+	 * <code>l</code> such that <code>(l==listener)</code>, then this method
+	 * replaces that listener's filter (which may be <code>null</code>) with the
+	 * specified one (which may be <code>null</code>).
 	 * 
 	 * <p>
 	 * The listener is called if the filter criteria is met. To filter based
@@ -227,17 +228,16 @@ public interface BundleContext {
 	 * 
 	 * <p>
 	 * When using a <code>filter</code>, it is possible that the
-	 * <code>ServiceEvent</code>s for the complete lifecycle of a service
-	 * will not be delivered to the listener. For example, if the
-	 * <code>filter</code> only matches when the property <code>x</code> has
-	 * the value <code>1</code>, the listener will not be called if the
-	 * service is registered with the property <code>x</code> not set to the
-	 * value <code>1</code>. Subsequently, when the service is modified
-	 * setting property <code>x</code> to the value <code>1</code>, the
-	 * filter will match and the listener will be called with a
-	 * <code>ServiceEvent</code> of type <code>MODIFIED</code>. Thus, the
-	 * listener will not be called with a <code>ServiceEvent</code> of type
-	 * <code>REGISTERED</code>.
+	 * <code>ServiceEvent</code>s for the complete lifecycle of a service will
+	 * not be delivered to the listener. For example, if the <code>filter</code>
+	 * only matches when the property <code>x</code> has the value
+	 * <code>1</code>, the listener will not be called if the service is
+	 * registered with the property <code>x</code> not set to the value
+	 * <code>1</code>. Subsequently, when the service is modified setting
+	 * property <code>x</code> to the value <code>1</code>, the filter will
+	 * match and the listener will be called with a <code>ServiceEvent</code> of
+	 * type <code>MODIFIED</code>. Thus, the listener will not be called with a
+	 * <code>ServiceEvent</code> of type <code>REGISTERED</code>.
 	 * 
 	 * <p>
 	 * If the Java Runtime Environment supports permissions, the
@@ -248,10 +248,9 @@ public interface BundleContext {
 	 * 
 	 * @param listener The <code>ServiceListener</code> object to be added.
 	 * @param filter The filter criteria.
-	 * @throws InvalidSyntaxException If <code>filter</code> contains an
-	 *         invalid filter string that cannot be parsed.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 * @throws InvalidSyntaxException If <code>filter</code> contains an invalid
+	 *         filter string that cannot be parsed.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see ServiceEvent
 	 * @see ServiceListener
 	 * @see ServicePermission
@@ -266,12 +265,10 @@ public interface BundleContext {
 	 * <p>
 	 * This method is the same as calling
 	 * <code>BundleContext.addServiceListener(ServiceListener listener,
-	 * String filter)</code>
-	 * with <code>filter</code> set to <code>null</code>.
+	 * String filter)</code> with <code>filter</code> set to <code>null</code>.
 	 * 
 	 * @param listener The <code>ServiceListener</code> object to be added.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see #addServiceListener(ServiceListener, String)
 	 */
 	public void addServiceListener(ServiceListener listener);
@@ -285,8 +282,7 @@ public interface BundleContext {
 	 * of listeners, this method does nothing.
 	 * 
 	 * @param listener The <code>ServiceListener</code> to be removed.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
 	public void removeServiceListener(ServiceListener listener);
 
@@ -297,12 +293,11 @@ public interface BundleContext {
 	 * 
 	 * <p>
 	 * If the context bundle's list of listeners already contains a listener
-	 * <code>l</code> such that <code>(l==listener)</code>, this method
-	 * does nothing.
+	 * <code>l</code> such that <code>(l==listener)</code>, this method does
+	 * nothing.
 	 * 
 	 * @param listener The <code>BundleListener</code> to be added.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @throws SecurityException If listener is a
 	 *         <code>SynchronousBundleListener</code> and the caller does not
 	 *         have the appropriate
@@ -314,16 +309,15 @@ public interface BundleContext {
 	public void addBundleListener(BundleListener listener);
 
 	/**
-	 * Removes the specified <code>BundleListener</code> object from the
-	 * context bundle's list of listeners.
+	 * Removes the specified <code>BundleListener</code> object from the context
+	 * bundle's list of listeners.
 	 * 
 	 * <p>
-	 * If <code>listener</code> is not contained in the context bundle's list
-	 * of listeners, this method does nothing.
+	 * If <code>listener</code> is not contained in the context bundle's list of
+	 * listeners, this method does nothing.
 	 * 
 	 * @param listener The <code>BundleListener</code> object to be removed.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @throws SecurityException If listener is a
 	 *         <code>SynchronousBundleListener</code> and the caller does not
 	 *         have the appropriate
@@ -339,12 +333,11 @@ public interface BundleContext {
 	 * 
 	 * <p>
 	 * If the context bundle's list of listeners already contains a listener
-	 * <code>l</code> such that <code>(l==listener)</code>, this method
-	 * does nothing.
+	 * <code>l</code> such that <code>(l==listener)</code>, this method does
+	 * nothing.
 	 * 
 	 * @param listener The <code>FrameworkListener</code> object to be added.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see FrameworkEvent
 	 * @see FrameworkListener
 	 */
@@ -355,13 +348,11 @@ public interface BundleContext {
 	 * context bundle's list of listeners.
 	 * 
 	 * <p>
-	 * If <code>listener</code> is not contained in the context bundle's list
-	 * of listeners, this method does nothing.
+	 * If <code>listener</code> is not contained in the context bundle's list of
+	 * listeners, this method does nothing.
 	 * 
-	 * @param listener The <code>FrameworkListener</code> object to be
-	 *        removed.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 * @param listener The <code>FrameworkListener</code> object to be removed.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
 	public void removeFrameworkListener(FrameworkListener listener);
 
@@ -657,8 +648,7 @@ public interface BundleContext {
 	 *         <code>ServicePermission</code> to get the service using at least
 	 *         one of the named classes the service was registered under and the
 	 *         Java Runtime Environment supports permissions.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @throws IllegalArgumentException If the specified
 	 *         <code>ServiceReference</code> was not created by the same
 	 *         framework instance as this <code>BundleContext</code>.
@@ -698,8 +688,7 @@ public interface BundleContext {
 	 * @return <code>false</code> if the context bundle's use count for the
 	 *         service is zero or if the service has been unregistered;
 	 *         <code>true</code> otherwise.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @throws IllegalArgumentException If the specified
 	 *         <code>ServiceReference</code> was not created by the same
 	 *         framework instance as this <code>BundleContext</code>.
@@ -722,16 +711,15 @@ public interface BundleContext {
 	 * <p>
 	 * If the Java Runtime Environment supports permissions, the Framework will
 	 * ensure that the bundle has the <code>java.io.FilePermission</code> with
-	 * actions <code>read</code>,<code>write</code>,<code>delete</code>
-	 * for all files (recursively) in the persistent storage area provided for
-	 * the context bundle.
+	 * actions <code>read</code>,<code>write</code>,<code>delete</code> for all
+	 * files (recursively) in the persistent storage area provided for the
+	 * context bundle.
 	 * 
 	 * @param filename A relative name to the file to be accessed.
-	 * @return A <code>File</code> object that represents the requested file
-	 *         or <code>null</code> if the platform does not have file system
+	 * @return A <code>File</code> object that represents the requested file or
+	 *         <code>null</code> if the platform does not have file system
 	 *         support.
-	 * @throws IllegalStateException If this BundleContext is no
-	 *         longer valid.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
 	public File getDataFile(String filename);
 
