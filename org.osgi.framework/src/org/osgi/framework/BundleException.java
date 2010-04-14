@@ -45,7 +45,7 @@ public class BundleException extends Exception {
 	private final int		type;
 
 	/**
-	 * No exception type is unspecified.
+	 * No exception type is specified.
 	 * 
 	 * @since 1.5
 	 */
