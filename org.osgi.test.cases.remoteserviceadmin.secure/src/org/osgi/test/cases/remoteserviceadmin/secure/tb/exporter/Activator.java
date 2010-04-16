@@ -18,6 +18,7 @@ package org.osgi.test.cases.remoteserviceadmin.secure.tb.exporter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -25,6 +26,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 import junit.framework.Assert;
 
@@ -48,6 +50,11 @@ import org.osgi.test.support.compatibility.Semaphore;
  * @version 1.0.0
  */
 public class Activator implements BundleActivator, A {
+	/** 
+	 * Magic value. Properties with this value will be replaced by a socket port number that is currently free. 
+	 */
+    private static final String FREE_PORT = "@@FREE_PORT@@";
+    
 	ServiceRegistration            registration;
 	BundleContext                  context;
 	RemoteServiceAdmin             rsa;
@@ -56,6 +63,9 @@ public class Activator implements BundleActivator, A {
 	long timeout;
 	int  factor;
 
+	/**
+	 * 
+	 */
 	public Activator() {
 		timeout = Long.getLong("rsa.ct.timeout", 300000L);
 	}
@@ -109,7 +119,7 @@ public class Activator implements BundleActivator, A {
 		//
 		// 122.4.1 export the service, positive tests
 		//
-		Map<String, Object> properties = new HashMap<String, Object>();
+		Map<String, Object> properties = loadCTProperties();
 		properties.put("mykey", "has been overridden");
 		properties.put("objectClass", "can.not.be.changed.Class");
 		properties.put("service.id", "can.not.be.changed.Id");
@@ -245,6 +255,61 @@ public class Activator implements BundleActivator, A {
 		
 		System.getProperties().put("RSA_TCK.EndpointDescription_" + registrationCounter++, out);
 		
+	}
+	
+    /**
+     * Substitute the free port placeholder for a free port
+     * 
+     * @param properties
+     */
+    private void processFreePortProperties(Map<String, Object> properties) {
+        String freePort = getFreePort();
+        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+            if (entry.getValue().toString().trim().equals(FREE_PORT)) {
+                entry.setValue(freePort);
+            }
+        }
+    }
+
+    /**
+     * @return a free socket port
+     */
+    private String getFreePort() {
+        try {
+            ServerSocket ss = new ServerSocket(0);
+            return "" + ss.getLocalPort();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Load the properties from the bnd.bnd file and substitute the free port placeholder.
+     * 
+	 * @return map of properties set in the "org.osgi.test.cases.remoteserviceadmin.serverconfig" property
+	 *         in the runoptions in bnd.bnd
+	 */
+	protected Map<String, Object> loadCTProperties() {
+		String serverconfig = System
+				.getProperty("org.osgi.test.cases.remoteserviceadmin.secure.serverconfig");
+		Assert.assertNotNull(
+				"did not find org.osgi.test.cases.remoteserviceadmin.secure.serverconfig system property",
+				serverconfig);
+		Map<String, Object> properties = new HashMap<String, Object>();
+		
+		for (StringTokenizer tok = new StringTokenizer(serverconfig, ","); tok
+				.hasMoreTokens();) {
+			String propertyName = tok.nextToken();
+			String value = System.getProperty(propertyName);
+			Assert.assertNotNull("system property not found: " + propertyName, value);
+			properties.put(propertyName, value);
+		}
+		
+		processFreePortProperties(properties);
+		
+		return properties;
 	}
 	
 	private int registrationCounter = 0;
