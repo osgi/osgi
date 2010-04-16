@@ -20,13 +20,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.ServerSocket;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+
+import junit.framework.Assert;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -45,6 +49,11 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  *
  */
 public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*OSGiTestCase*/ {
+	/** 
+	 * Magic value. Properties with this value will be replaced by a socket port number that is currently free. 
+	 */
+    private static final String FREE_PORT = "@@FREE_PORT@@";
+    
 	private static final String STORAGEROOT = "org.osgi.test.cases.remoteserviceadmin.storageroot";
 	private static final String DEFAULT_STORAGEROOT = "generated/testframeworkstorage";
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
@@ -359,4 +368,64 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 		}
 		return result;
 	}
+	
+    /**
+     * Substitute the free port placeholder for a free port
+     * 
+     * @param properties
+     */
+    private void processFreePortProperties(Map<String, Object> properties) {
+        String freePort = getFreePort();
+        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+            if (entry.getValue().toString().trim().equals(FREE_PORT)) {
+                entry.setValue(freePort);
+            }
+        }
+    }
+
+    /**
+     * @return a free socket port
+     */
+    private String getFreePort() {
+        try {
+            ServerSocket ss = new ServerSocket(0);
+            String port = "" + ss.getLocalPort();
+            
+            System.out.println("Found free port " + port);
+            
+            return port;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Load the properties from the bnd.bnd file and substitute the free port placeholder.
+     * 
+	 * @return map of properties set in the "org.osgi.test.cases.remoteserviceadmin.serverconfig" property
+	 *         in the runoptions in bnd.bnd
+	 */
+	protected Map<String, Object> loadCTProperties() {
+		String serverconfig = System
+				.getProperty("org.osgi.test.cases.remoteserviceadmin.serverconfig");
+		Assert.assertNotNull(
+				"did not find org.osgi.test.cases.remoteserviceadmin.serverconfig system property",
+				serverconfig);
+		Map<String, Object> properties = new HashMap<String, Object>();
+		
+		for (StringTokenizer tok = new StringTokenizer(serverconfig, ","); tok
+				.hasMoreTokens();) {
+			String propertyName = tok.nextToken();
+			String value = System.getProperty(propertyName);
+			Assert.assertNotNull("system property not found: " + propertyName, value);
+			properties.put(propertyName, value);
+		}
+		
+		processFreePortProperties(properties);
+		
+		return properties;
+	}
+
 }

@@ -22,19 +22,19 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.Filter;
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.util.tracker.BundleTracker;
 import org.osgi.util.tracker.BundleTrackerCustomizer;
 import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  *
  */
-public class Activator implements BundleActivator {
+public class Activator implements BundleActivator, ServiceListener {
 	BundleContext                  context;
 	ServiceTracker tracker;
 	BundleTracker  bundleTracker;
@@ -64,6 +64,17 @@ public class Activator implements BundleActivator {
 	}
 
 	/**
+	 * @see org.osgi.framework.ServiceListener#serviceChanged(org.osgi.framework.ServiceEvent)
+	 */
+	public void serviceChanged(ServiceEvent event) {
+		if (event.getType() == ServiceEvent.UNREGISTERING) {
+			System.out.println("service " + event.getServiceReference() + " is unregistered");
+			
+			servicesem.signal();
+		}
+	}
+
+	/**
 	 * Searches for a proxy for A, which was created from an endpoint description
 	 * added as file in a bundle.
 	 * 
@@ -71,6 +82,9 @@ public class Activator implements BundleActivator {
 	 */
 	public void test() throws Exception {
 		Filter filter = context.createFilter("(&(objectClass=" + A.class.getName() +")(newkey=newvalue))");
+		
+		context.addServiceListener(this, filter.toString());
+		
 		tracker = new ServiceTracker(context, filter, null);
 		tracker.open();
 		
@@ -81,21 +95,6 @@ public class Activator implements BundleActivator {
 		Assert.assertEquals("A", service.getA());
 
 		tracker.close();
-
-		tracker = new ServiceTracker(context, filter, new ServiceTrackerCustomizer() {
-			
-			public void removedService(ServiceReference reference, Object service) {
-				servicesem.signal();
-			}
-			
-			public void modifiedService(ServiceReference reference, Object service) {
-			}
-			
-			public Object addingService(ServiceReference reference) {
-				return reference;
-			}
-		});
-		tracker.open();
 
 		bundleTracker = new BundleTracker(context, Bundle.ACTIVE, new BundleTrackerCustomizer() {
 			
@@ -130,7 +129,6 @@ public class Activator implements BundleActivator {
 			servicesem.waitForSignal(timeout * factor);
 		} finally {
 			bundleTracker.close();
-			tracker.close();
 		}
 	}
 }

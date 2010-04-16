@@ -41,8 +41,8 @@ Test-Cases							= ${testcases}
 	rsa.ct.timeout.factor=3,\
 	${p}.system.packages.extra="${junit.package}", \
 	${p}.bundles="${uniq;${repo;osgi.enterprise;${enterprise.published.version};lowest},${repo;org.osgi.impl.service.log},${repo;org.osgi.impl.service.remoteserviceadmin},${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}}", \
-	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.address", \
+	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.port", \
 	service.exported.configs=org.apache.cxf.ws, \
-	org.apache.cxf.ws.address=http://localhost:9090/test
+	org.apache.cxf.ws.port=@@FREE_PORT@@
 	
 	

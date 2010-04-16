@@ -18,13 +18,18 @@ package org.osgi.test.cases.remoteserviceadmin.tb2;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import junit.framework.Assert;
 
@@ -35,7 +40,6 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
 import org.osgi.service.remoteserviceadmin.ExportReference;
 import org.osgi.service.remoteserviceadmin.ExportRegistration;
-import org.osgi.service.remoteserviceadmin.RemoteConstants;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
@@ -50,6 +54,11 @@ import org.osgi.test.support.compatibility.Semaphore;
  * @version 1.0.0
  */
 public class Activator implements BundleActivator, A, B {
+	/** 
+	 * Magic value. Properties with this value will be replaced by a socket port number that is currently free. 
+	 */
+    private static final String FREE_PORT = "@@FREE_PORT@@";
+    
 	ServiceRegistration            registration;
 	BundleContext                  context;
 	RemoteServiceAdmin             rsa;
@@ -69,9 +78,23 @@ public class Activator implements BundleActivator, A, B {
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
 		
-		Hashtable<String, String> dictionary = new Hashtable<String, String>();
+		Set<String> set = new HashSet<String>();
+		set.add("one");
+		set.add("two");
+		List<String> list = new LinkedList<String>();
+		list.add("first");
+		list.add("second");
+		
+		Hashtable<String, Object> dictionary = new Hashtable<String, Object>();
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
+		dictionary.put("myset", set);
+		dictionary.put("mylist", list);
+		dictionary.put("myfloat", (float)3.1415f);
+		dictionary.put("mydouble", (double)-3.1415d);
+		dictionary.put("mychar", (char)'t');
+		dictionary.put("myxml", "<myxml>test</myxml>");
+		dictionary.put(".do_not_forward", "private");
 		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 
 		registration = context.registerService(new String[]{A.class.getName()}, this, dictionary);
@@ -108,83 +131,89 @@ public class Activator implements BundleActivator, A, B {
 		rsa = (RemoteServiceAdmin) context.getService(rsaRef);
 		Assert.assertNotNull(rsa);
 		
-		//
-		// register a RemoteServiceAdminListener to receive the export
-		// notification
-		//
-		remoteServiceAdminListener = new TestRemoteServiceAdminListener();
-		ServiceRegistration sr = context.registerService(RemoteServiceAdminListener.class.getName(), remoteServiceAdminListener, null);
-		Assert.assertNotNull(sr);
- 
-		//
-		// 122.4.1 export the service, positive tests
-		//
-		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put("mykey", "has been overridden");
-		properties.put("objectClass", "can.not.be.changed.Class");
-		properties.put("service.id", "can.not.be.changed.Id");
-		
-		// export the service
-		exportRegistrations = rsa.exportService(registration.getReference(), properties);
-		Assert.assertNotNull(exportRegistrations);
-		Assert.assertFalse(exportRegistrations.isEmpty());
-		
-		for (Iterator<ExportRegistration> it = exportRegistrations.iterator(); it.hasNext();) {
-			ExportRegistration er = it.next();
-			
-			Assert.assertNull(er.getException());
-			ExportReference ref = er.getExportReference();
-			Assert.assertNotNull(ref);
-			
+		try {
+			//
+			// register a RemoteServiceAdminListener to receive the export
+			// notification
+			//
+			remoteServiceAdminListener = new TestRemoteServiceAdminListener();
+			ServiceRegistration sr = context.registerService(RemoteServiceAdminListener.class.getName(), remoteServiceAdminListener, null);
+			Assert.assertNotNull(sr);
+
+			//
+			// 122.4.1 export the service, positive tests
+			//
+			// load the external properties file with the config types for the server side service
+			Map<String, Object> properties = loadServerTCKProperties();
+			properties.put("mykey", "has been overridden");
+			properties.put("objectClass", "can.not.be.changed.Class");
+			properties.put("service.id", "can.not.be.changed.Id");
+			processFreePortProperties(properties);
+
+			// export the service
+			exportRegistrations = rsa.exportService(registration.getReference(), properties);
+			Assert.assertNotNull(exportRegistrations);
+			Assert.assertFalse(exportRegistrations.isEmpty());
+
+			for (Iterator<ExportRegistration> it = exportRegistrations.iterator(); it.hasNext();) {
+				ExportRegistration er = it.next();
+
+				Assert.assertNull(er.getException());
+				ExportReference ref = er.getExportReference();
+				Assert.assertNotNull(ref);
+
+				// 122.4.1 Exporting
+				Assert.assertEquals(registration.getReference(), ref.getExportedService());
+
+				Assert.assertEquals(DefaultTestBundleControl.arrayToString((Object[]) registration.getReference().getProperty("objectClass"), true),
+						DefaultTestBundleControl.arrayToString((Object[]) ref.getExportedService().getProperty("objectClass"), true));
+				Assert.assertEquals(registration.getReference().getProperty("service.id"), ref.getExportedService().getProperty("service.id"));
+
+				EndpointDescription ed = ref.getExportedEndpoint();
+				Assert.assertNotNull(ed);
+				Assert.assertNotNull(ed.getProperties().get("objectClass"));
+				Assert.assertTrue(ed.getInterfaces().contains(A.class.getName()));
+				Assert.assertFalse(ed.getInterfaces().contains(B.class.getName()));
+
+				Assert.assertNotNull(ed.getId());
+				Assert.assertNotNull(ed.getConfigurationTypes());
+				Assert.assertFalse(ed.getConfigurationTypes().isEmpty());
+				Assert.assertEquals(context.getProperty("org.osgi.framework.uuid"),
+						ed.getFrameworkUUID());
+				Assert.assertNotNull(ed.getProperties().get("endpoint.service.id"));
+
+				exportEndpointDescription(ed);
+			}
+
+			//
 			// 122.4.1 Exporting
-			Assert.assertEquals(registration.getReference(), ref.getExportedService());
-			
-			Assert.assertEquals(DefaultTestBundleControl.arrayToString((Object[]) registration.getReference().getProperty("objectClass"), true),
-					DefaultTestBundleControl.arrayToString((Object[]) ref.getExportedService().getProperty("objectClass"), true));
-			Assert.assertEquals(registration.getReference().getProperty("service.id"), ref.getExportedService().getProperty("service.id"));
-			
-			EndpointDescription ed = ref.getExportedEndpoint();
+			// 122.10.12 verify that export notification was sent to RemoteServiceAdminListeners
+			//
+			RemoteServiceAdminEvent event = remoteServiceAdminListener.getNextEvent();
+			Assert.assertNotNull("no RemoteServiceAdminEvent received", event);
+			Assert.assertNotNull("122.10.11: source must not be null", event.getSource());
+			Assert.assertNull(event.getException());
+			Assert.assertEquals("122.10.11: event type is wrong", RemoteServiceAdminEvent.EXPORT_REGISTRATION, event.getType());
+
+			ExportReference exportReference = event.getExportReference();
+			Assert.assertNotNull("ExportReference expected in event", exportReference);
+			Assert.assertEquals(registration.getReference(), exportReference.getExportedService());
+
+			EndpointDescription ed = exportReference.getExportedEndpoint();
 			Assert.assertNotNull(ed);
-			Assert.assertNotNull(ed.getProperties().get("objectClass"));
 			Assert.assertTrue(ed.getInterfaces().contains(A.class.getName()));
 			Assert.assertFalse(ed.getInterfaces().contains(B.class.getName()));
-			
+
 			Assert.assertNotNull(ed.getId());
 			Assert.assertNotNull(ed.getConfigurationTypes());
 			Assert.assertFalse(ed.getConfigurationTypes().isEmpty());
-			Assert.assertEquals(context.getProperty("org.osgi.framework.uuid"),
-					ed.getFrameworkUUID());
-			Assert.assertNotNull(ed.getProperties().get("endpoint.service.id"));
-			
-			exportEndpointDescription(ed);
-		}
-		
-		//
-		// 122.4.1 Exporting
-		// 122.10.12 verify that export notification was sent to RemoteServiceAdminListeners
-		//
-		RemoteServiceAdminEvent event = remoteServiceAdminListener.getNextEvent();
-		Assert.assertNotNull("no RemoteServiceAdminEvent received", event);
-		Assert.assertNotNull("122.10.11: source must not be null", event.getSource());
-		Assert.assertNull(event.getException());
-		Assert.assertEquals("122.10.11: event type is wrong", RemoteServiceAdminEvent.EXPORT_REGISTRATION, event.getType());
+			Assert.assertEquals(context.getProperty("org.osgi.framework.uuid"), ed
+					.getFrameworkUUID());
 
-		ExportReference exportReference = event.getExportReference();
-		Assert.assertNotNull("ExportReference expected in event", exportReference);
-		Assert.assertEquals(registration.getReference(), exportReference.getExportedService());
-		
-		EndpointDescription ed = exportReference.getExportedEndpoint();
-		Assert.assertNotNull(ed);
-		Assert.assertTrue(ed.getInterfaces().contains(A.class.getName()));
-		Assert.assertFalse(ed.getInterfaces().contains(B.class.getName()));
-		
-		Assert.assertNotNull(ed.getId());
-		Assert.assertNotNull(ed.getConfigurationTypes());
-		Assert.assertFalse(ed.getConfigurationTypes().isEmpty());
-		Assert.assertEquals(context.getProperty("org.osgi.framework.uuid"), ed
-				.getFrameworkUUID());
-		
-		Assert.assertEquals(0, remoteServiceAdminListener.getEventCount());
+			Assert.assertEquals(0, remoteServiceAdminListener.getEventCount());
+		} finally {
+			context.ungetService(rsaRef);
+		}
 	}
 
 	/**
@@ -221,6 +250,48 @@ public class Activator implements BundleActivator, A, B {
 		Assert.assertNull(exportReference.getExportedEndpoint());
 		
 		Assert.assertEquals(0, remoteServiceAdminListener.getEventCount());
+	}
+
+    private void processFreePortProperties(Map<String, Object> properties) {
+        String freePort = getFreePort();
+        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+            if (entry.getValue().toString().trim().equals(FREE_PORT)) {
+                entry.setValue(freePort);
+            }
+        }
+    }
+
+    private String getFreePort() {
+        try {
+            ServerSocket ss = new ServerSocket(0);
+            return "" + ss.getLocalPort();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+	 * @return
+	 */
+	private Map<String, Object> loadServerTCKProperties() {
+		String serverconfig = System
+				.getProperty("org.osgi.test.cases.remoteserviceadmin.serverconfig");
+		Assert.assertNotNull(
+				"did not find org.osgi.test.cases.remoteserviceadmin.serverconfig system property",
+				serverconfig);
+		Map<String, Object> properties = new HashMap<String, Object>();
+		
+		for (StringTokenizer tok = new StringTokenizer(serverconfig, ","); tok
+				.hasMoreTokens();) {
+			String propertyName = tok.nextToken();
+			String value = System.getProperty(propertyName);
+			Assert.assertNotNull("system property not found: " + propertyName, value);
+			properties.put(propertyName, value);
+		}
+		
+		return properties;
 	}
 
 	/**

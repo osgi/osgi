@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import junit.framework.Assert;
@@ -62,7 +63,6 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.remoteserviceadmin.system.packages.extra";
 
 	private long timeout;
-	private int  factor;
 	
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#setUp()
@@ -70,7 +70,6 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		timeout = Long.getLong("rsa.ct.timeout", 300000L);
-		factor = Integer.getInteger("rsa.ct.timeout.factor", 3);
 	}
 	
 	/**
@@ -105,7 +104,13 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		assertNotNull(tb2Bundle);
 		
 		// start test bundle in child framework
-		// this will run the test in the child framework and fail
+		// the bundle registers a service with interface A and then uses the RemoteServiceAdmin service
+		// to export the service. It registers a RemoteServiceAdminListener to receive confirmation
+		// of the export of the service.
+		// This method will throw an exception if any of the tests fail.
+		// The bundle also writes the EndpointDescription of the exported service into a system
+		// property that is then read in test to reconstruct the endpoint, this bypasses Discovery
+		// for the cases in which the implementation to test does not support the optional Discovery.
 		tb2Bundle.start();
 
 		//
@@ -167,9 +172,19 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 
 			ImportReference importRef = importReg.getImportReference();
 			assertNotNull(importRef);
+			
 			ServiceReference sref = importRef.getImportedService();
 			assertNotNull(sref);
 			assertEquals("has been overridden", sref.getProperty("mykey"));
+			assertEquals("myvalue", sref.getProperty("myprop"));
+			assertTrue(((List)sref.getProperty("mylist")).size() == 2);
+			assertTrue(((Set)sref.getProperty("myset")).size() == 2);
+			assertEquals((float)3.1415f, sref.getProperty("myfloat"));
+			assertEquals((double)-3.1415d, sref.getProperty("mydouble"));
+			assertEquals((char)'t', sref.getProperty("mychar"));
+			assertNull(sref.getProperty(".do_not_forward"));
+			assertEquals("<myxml>test</myxml>", sref.getProperty("myxml"));
+
 			assertNotNull("122.4.2: the service.imported property has to be set", sref.getProperty(RemoteConstants.SERVICE_IMPORTED));
 			assertNotNull(sref.getProperty(RemoteConstants.SERVICE_IMPORTED_CONFIGS));
 			List<String> intents = getPropertyAsList(sref.getProperty(RemoteConstants.SERVICE_INTENTS));

@@ -15,7 +15,9 @@
  */
 package org.osgi.test.cases.remoteserviceadmin.junit;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,6 +27,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
+
+import junit.framework.Assert;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -51,10 +56,14 @@ import org.osgi.test.support.compatibility.Semaphore;
  * @version 1.0.0
  */
 public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
+	/** 
+	 * Magic value. Properties with this value will be replaced by a socket port number that is currently free. 
+	 */
+    private static final String FREE_PORT = "@@FREE_PORT@@";
+    
 	private RemoteServiceAdmin remoteServiceAdmin;
 
 	private long timeout;
-	private int  factor;
 	
 	/**
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#setUp()
@@ -63,7 +72,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		super.setUp();
 		
 		timeout = Long.getLong("rsa.ct.timeout", 300000L);
-		factor = Integer.getInteger("rsa.ct.timeout.factor", 3);
 		
 		remoteServiceAdmin = (RemoteServiceAdmin) getService(RemoteServiceAdmin.class);
 	}
@@ -98,7 +106,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			// 122.4.1 export the service
 			//
-			Map<String, Object> properties = new HashMap<String, Object>();
+			Map<String, Object> properties = loadCTProperties();
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
@@ -140,7 +148,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			// 122.4.1 export the service
 			//
-			Map<String, Object> properties = new HashMap<String, Object>();
+			Map<String, Object> properties = loadCTProperties();
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
@@ -181,7 +189,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			// 122.4.1 export the service
 			//
-			Map<String, Object> properties = new HashMap<String, Object>();
+			Map<String, Object> properties = loadCTProperties();
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
@@ -222,7 +230,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			// 122.4.1 export the service
 			//
-			Map<String, Object> properties = new HashMap<String, Object>();
+			Map<String, Object> properties = loadCTProperties();
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
@@ -268,7 +276,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			// 122.4.1 export the service
 			//
-			Map<String, Object> properties = new HashMap<String, Object>();
+			Map<String, Object> properties = loadCTProperties();
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
@@ -389,7 +397,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			// 122.4.1 export the service
 			//
-			Map<String, Object> properties = new HashMap<String, Object>();
+			Map<String, Object> properties = loadCTProperties();
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
@@ -491,7 +499,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				//
 				// 122.4.1 export the service
 				//
-				Map<String, Object> properties = new HashMap<String, Object>();
+				Map<String, Object> properties = loadCTProperties();
 				properties.put("mykey", "has been overridden");
 				properties.put("objectClass", "can.not.be.changed.Class");
 				properties.put("service.id", "can.not.be.changed.Id");
@@ -636,7 +644,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			// 122.4.1 export the service
 			//
-			Map<String, Object> properties = new HashMap<String, Object>();
+			Map<String, Object> properties = loadCTProperties();
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
@@ -773,7 +781,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			// 122.4.1 export the service
 			//
-			Map<String, Object> properties = new HashMap<String, Object>();
+			Map<String, Object> properties = loadCTProperties();
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
@@ -925,7 +933,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		assertNotNull(registration);
 		
 		try {
-			Map<String, Object> properties = new HashMap<String, Object>();
+			Map<String, Object> properties = loadCTProperties();
 			properties.put("MyKey", "has been overridden"); // 122.10.10.1: change the case of the key
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
@@ -1021,6 +1029,65 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			return ((Collection<String>)property).toArray(new String[]{});
 		}
 		return new String[]{};
+	}
+	
+    /**
+     * Substitute the free port placeholder for a free port
+     * 
+     * @param properties
+     */
+    private void processFreePortProperties(Map<String, Object> properties) {
+        String freePort = getFreePort();
+        for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+            if (entry.getValue().toString().trim().equals(FREE_PORT)) {
+                entry.setValue(freePort);
+            }
+        }
+    }
+
+    /**
+     * @return a free socket port
+     */
+    private String getFreePort() {
+        try {
+            ServerSocket ss = new ServerSocket(0);
+            String port = "" + ss.getLocalPort();
+            
+            System.out.println("Found free port " + port);
+            
+            return port;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Load the properties from the bnd.bnd file and substitute the free port placeholder.
+     * 
+	 * @return map of properties set in the "org.osgi.test.cases.remoteserviceadmin.serverconfig" property
+	 *         in the runoptions in bnd.bnd
+	 */
+	private Map<String, Object> loadCTProperties() {
+		String serverconfig = System
+				.getProperty("org.osgi.test.cases.remoteserviceadmin.serverconfig");
+		Assert.assertNotNull(
+				"did not find org.osgi.test.cases.remoteserviceadmin.serverconfig system property",
+				serverconfig);
+		Map<String, Object> properties = new HashMap<String, Object>();
+		
+		for (StringTokenizer tok = new StringTokenizer(serverconfig, ","); tok
+				.hasMoreTokens();) {
+			String propertyName = tok.nextToken();
+			String value = System.getProperty(propertyName);
+			Assert.assertNotNull("system property not found: " + propertyName, value);
+			properties.put(propertyName, value);
+		}
+		
+		processFreePortProperties(properties);
+		
+		return properties;
 	}
 
 	class TestService implements A, B, Serializable {

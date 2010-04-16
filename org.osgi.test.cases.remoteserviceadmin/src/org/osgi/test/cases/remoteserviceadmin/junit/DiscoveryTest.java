@@ -70,7 +70,6 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		Short.TYPE, Short.class});
 
 	private long timeout;
-	private int  factor;
 	
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#setUp()
@@ -78,7 +77,6 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		timeout = Long.getLong("rsa.ct.timeout", 300000L);
-		factor = Integer.getInteger("rsa.ct.timeout.factor", 3);
 	}
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#tearDown()
@@ -123,8 +121,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		//
 		final EndpointListenerImpl endpointListenerImpl = new EndpointListenerImpl();
 		
-		// TODO: the current RI requires objectClass to be set in the filter, but that shouldn't be mandated
-		final String endpointListenerFilter = "(&(objectClass=" + A.class.getName() + ")(!(org.osgi.framework.uuid=" + getContext().getProperty("org.osgi.framework.uuid") + ")))";
+		final String endpointListenerFilter = "(!(org.osgi.framework.uuid=" + getContext().getProperty("org.osgi.framework.uuid") + "))";
 		String secondFilter = "(mykey=has been overridden)";
 		Hashtable<String, Object> endpointListenerProperties = new Hashtable<String, Object>();
 		endpointListenerProperties.put(EndpointListener.ENDPOINT_LISTENER_SCOPE, new String[]{endpointListenerFilter, secondFilter});
@@ -226,7 +223,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		RemoteServiceAdmin rsa = (RemoteServiceAdmin) getContext().getService(rsaRef);
 		assertNotNull(rsa);
 		
-		Map<String, Object> properties = new HashMap<String, Object>();
+		Map<String, Object> properties = loadCTProperties();
 		properties.put("mykey", "has been overridden");
 		properties.put("mylist", list);
 		properties.put("myfloat", (float)3.1415f);
