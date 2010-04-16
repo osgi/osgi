@@ -21,8 +21,8 @@ package org.osgi.framework;
  * properties, and Manifest header attribute keys.
  * 
  * <p>
- * The values associated with these keys are of type
- * <code>String</code>, unless otherwise indicated.
+ * The values associated with these keys are of type <code>String</code>, unless
+ * otherwise indicated.
  * 
  * @since 1.1
  * @version $Revision$
@@ -1047,6 +1047,18 @@ public interface Constants {
 	public final static String	FRAMEWORK_SECURITY						= "org.osgi.framework.security";
 
 	/**
+	 * Specifies that an returned URLs from bundle class loaders must be a jar:
+	 * or file: URL if set to any value. This property must be set in the
+	 * launching parameters of the framework. If a Framework cannot support this
+	 * property it must throw an Illegal Argument Exception during its
+	 * initialization. URLs obtained through the OSGi API do not have this
+	 * guarantee, these URLs must follow the existing rules for resource URLs.
+	 * 
+	 * @since 1.6
+	 */
+	public final static String	FRAMEWORK_JARURLS						= "org.osgi.framework.jarurls";
+
+	/**
 	 * Specifies that a security manager that supports all security aspects of
 	 * the OSGi core specification including postponed conditions must be
 	 * installed.
@@ -1095,7 +1107,7 @@ public interface Constants {
 	 * 
 	 * @since 1.5
 	 */
-	public final static String  FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT			= "onFirstInit";
+	public final static String	FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT		= "onFirstInit";
 
 	/**
 	 * Specifies a comma separated list of additional library file extensions
@@ -1174,7 +1186,7 @@ public interface Constants {
 	 * @see #FRAMEWORK_BUNDLE_PARENT_FRAMEWORK
 	 * @since 1.5
 	 */
-	public final static String FRAMEWORK_BUNDLE_PARENT 					= "org.osgi.framework.bundle.parent";
+	public final static String	FRAMEWORK_BUNDLE_PARENT					= "org.osgi.framework.bundle.parent";
 
 	/**
 	 * Specifies to use of the boot class loader as the parent class loader for
@@ -1196,8 +1208,8 @@ public interface Constants {
 
 	/**
 	 * Specifies to use the application class loader as the parent class loader
-	 * for all bundle class loaders.  Depending on how the framework is 
-	 * launched, this may refer to the same class loader as 
+	 * for all bundle class loaders. Depending on how the framework is launched,
+	 * this may refer to the same class loader as
 	 * {@link #FRAMEWORK_BUNDLE_PARENT_FRAMEWORK}.
 	 * 
 	 * @since 1.5
@@ -1208,8 +1220,8 @@ public interface Constants {
 	/**
 	 * Specifies to use the framework class loader as the parent class loader
 	 * for all bundle class loaders. The framework class loader is the class
-	 * loader used to load the framework implementation.  Depending on how the 
-	 * framework is launched, this may refer to the same class loader as 
+	 * loader used to load the framework implementation. Depending on how the
+	 * framework is launched, this may refer to the same class loader as
 	 * {@link #FRAMEWORK_BUNDLE_PARENT_APP}.
 	 * 
 	 * @since 1.5
@@ -1220,7 +1232,7 @@ public interface Constants {
 	/*
 	 * Service properties.
 	 */
-	
+
 	/**
 	 * Service property identifying all of the class names under which a service
 	 * was registered in the Framework. The value of this property must be of
@@ -1308,5 +1320,5 @@ public interface Constants {
 	 * This property may be supplied in the properties <code>Dictionary</code>
 	 * object passed to the <code>BundleContext.registerService</code> method.
 	 */
-	public static final String	SERVICE_DESCRIPTION						= "service.description"; 
+	public static final String	SERVICE_DESCRIPTION						= "service.description";
 }
