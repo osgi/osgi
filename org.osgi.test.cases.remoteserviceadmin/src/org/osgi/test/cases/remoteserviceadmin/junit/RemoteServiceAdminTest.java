@@ -123,8 +123,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		Assert.assertNotNull(rsa);
 
 		try {
-			// reconstruct the endpoint description
-			EndpointDescription endpoint = reconstructEndpoint();
+			// reconstruct the endpoint description in version 1.0.0
+			EndpointDescription endpoint = reconstructEndpoint("1.0.0");
 			// gather all the service and exporting intents
 			List<String> endpointIntents = endpoint.getIntents();
 			assertNotNull(endpointIntents);
@@ -309,13 +309,6 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 				}
 			}
 
-			// Marc: I deactivated this as it will also cause the unexport of the service which 
-			// will then resuld in the automatic unimport of the imported service via the discovery. 
-			//
-			// test remove
-			//
-			//tb2Bundle.stop();
-
 			//
 			// 122.4.2: Importing
 			// there are 2 ImportRegistrations now open. Ensure that the proxy
@@ -389,6 +382,93 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	}
 
 	/**
+	 * Sets up a child framework in which a service is exported. In the parent framework the
+	 * EndpointDescription is passed to the RSA service to import the service from the child
+	 * framework. This manual step bypasses Discovery, which would normally do the transport
+	 * between the two frameworks.
+	 * 
+	 * This test is similar to testExportImportManually, but exports the same interface in
+	 * multiple versions and imports them in multiple versions.
+	 */
+	public void testExportImportManuallyMultipleVersions() throws Exception {
+		verifyFramework();
+		
+		//
+		// install test bundle in child framework
+		//
+		BundleContext childContext = getFramework().getBundleContext();
+		
+		Bundle tb2Bundle = installBundle(childContext, "/tb2.jar");
+		assertNotNull(tb2Bundle);
+		
+		// start test bundle in child framework
+		// the bundle registers a service with interface A and then uses the RemoteServiceAdmin service
+		// to export the service. It registers a RemoteServiceAdminListener to receive confirmation
+		// of the export of the service.
+		// This method will throw an exception if any of the tests fail.
+		// The bundle also writes the EndpointDescription of the exported service into a system
+		// property that is then read in test to reconstruct the endpoint, this bypasses Discovery
+		// for the cases in which the implementation to test does not support the optional Discovery.
+		tb2Bundle.start();
+
+		// install another version of tb2, but this time it exports the
+		// interface in version 2.0.0
+		Bundle tb4Bundle = installBundle(childContext, "/tb4.jar");
+		assertNotNull(tb4Bundle);
+		tb4Bundle.start();
+		
+		// install a consumer bundle that tries to use service A in version 1.0.0
+		Bundle tb5Bundle = install("/tb5.jar");
+		assertNotNull(tb5Bundle);
+		
+		// and another one that tries to use service A in version 2.0.0
+		Bundle tb6Bundle = install("/tb6.jar");
+		assertNotNull(tb6Bundle);
+		
+		//
+		// find the RSA in the parent framework and import the
+		// service
+		//
+		ServiceReference rsaRef = getContext().getServiceReference(RemoteServiceAdmin.class.getName());
+		Assert.assertNotNull(rsaRef);
+		RemoteServiceAdmin rsa = (RemoteServiceAdmin) getContext().getService(rsaRef);
+		Assert.assertNotNull(rsa);
+
+		try {
+			// reconstruct the endpoint description in version 1.0.0
+			EndpointDescription endpoint = reconstructEndpoint("1.0.0");
+			assertNotNull(endpoint);
+
+			// import version 1.0.0
+			ImportRegistration importReg1 = rsa.importService(endpoint);
+			assertNotNull(importReg1);
+			assertNull(importReg1.getException());
+
+			// now import version 2.0.0
+			endpoint = reconstructEndpoint("2.0.0");
+			assertNotNull(endpoint);
+
+			ImportRegistration importReg2 = rsa.importService(endpoint);
+			assertNotNull(importReg2);
+			assertNull(importReg2.getException());
+
+			// start consumer bundles, will throw exceptions if not working
+			tb5Bundle.start();
+			tb6Bundle.start();
+			
+			// closing the import registrations is supposed to remove the services
+			importReg1.close();
+			importReg2.close();
+
+			tb5Bundle.stop();
+			tb6Bundle.stop();
+		} finally {
+			// Make sure the service instance of the RSA can be closed by the RSA Service Factory
+			getContext().ungetService(rsaRef);
+		}
+	}
+
+	/**
 	 * @param property Object
 	 * @return List<String> of content of the property
 	 */
@@ -414,8 +494,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	 *         by the exporting bundle in the child framework
 	 * @throws IOException 
 	 */
-	private EndpointDescription reconstructEndpoint() throws IOException {
-		String propstr = System.getProperty("RSA_TCK.EndpointDescription_0");
+	private EndpointDescription reconstructEndpoint(String version) throws IOException {
+		String propstr = System.getProperty("RSA_TCK.EndpointDescription_" + version + "_0");
 		
 		// see org.osgi.test.cases.remoteserviceadmin.tb2.Activator#exportEndpointDescription()
 		// decode byte[] from hex

@@ -66,6 +66,7 @@ public class Activator implements BundleActivator, A, B {
 	TestRemoteServiceAdminListener remoteServiceAdminListener;
 	long timeout;
 	int  factor;
+	String version;
 
 	public Activator() {
 		timeout = Long.getLong("rsa.ct.timeout", 300000L);
@@ -77,6 +78,10 @@ public class Activator implements BundleActivator, A, B {
 	 */
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
+		
+		// read my version from the bundle header
+		version = (String) context.getBundle().getHeaders().get("RSA-Version");
+		Assert.assertNotNull(version);
 		
 		Set<String> set = new HashSet<String>();
 		set.add("one");
@@ -302,7 +307,7 @@ public class Activator implements BundleActivator, A, B {
 	 * @throws IOException 
 	 */
 	private void exportEndpointDescription(EndpointDescription ed) throws IOException {
-		// Marc Schaaf: I switched to Java servialization to support String[] and lists as 
+		// Marc Schaaf: I switched to Java serialization to support String[] and lists as 
 		// EndpointDescription Properties. The Byte Array is encoded as a HEX string to save 
 		// it as a system property
 		
@@ -326,7 +331,7 @@ public class Activator implements BundleActivator, A, B {
 		}
 		
 		
-		System.getProperties().put("RSA_TCK.EndpointDescription_" + registrationCounter++, out);
+		System.getProperties().put("RSA_TCK.EndpointDescription_" + this.version + "_" + registrationCounter++, out);
 		
 	}
 	

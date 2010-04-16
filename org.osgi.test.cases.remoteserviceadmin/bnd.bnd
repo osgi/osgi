@@ -3,7 +3,7 @@ javac.target            = jsr14
 Bundle-Version						: 1.0.0.${project.build}
 Bundle-Description					: Remote Service Admin test cases.
 
-Export-Package 					= ${p}.common;version=1.0.0
+Export-Package 					= ${p}.common
 	
 Private-Package						= org.osgi.test.support.*, \
 	${p}.*
@@ -13,7 +13,10 @@ Bundle-Category: osgi,test
 Include-Resource					= \
 	tb1.jar=tb1.jar, \
 	tb2.jar=tb2.jar, \
-	tb3.jar=tb3.jar
+	tb3.jar=tb3.jar, \
+	tb4.jar=tb4.jar, \
+	tb5.jar=tb5.jar, \
+	tb6.jar=tb6.jar
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.remoteserviceadmin

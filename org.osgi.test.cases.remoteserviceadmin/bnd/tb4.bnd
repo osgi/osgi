@@ -1,8 +1,8 @@
-Bundle-Name:                             ${p}.tb2
+Bundle-Name:                             ${p}.tb4
 Bundle-Version:                          1.0
 Private-Package:                         org.osgi.test.support.*, \
  ${p}.tb2.*, \
  ${p}.common 
-Export-Package:                          ${p}.common;version="1.0.0"
+Export-Package:                          ${p}.common;version="2.0.0"
 Bundle-Activator: 						 ${p}.tb2.Activator
-RSA-Version:                             1.0.0
+RSA-Version:                             2.0.0
