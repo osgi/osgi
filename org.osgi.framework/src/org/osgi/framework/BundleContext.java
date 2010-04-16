@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -144,9 +144,9 @@ public interface BundleContext {
 	 * </ul>
 	 * <b>Postconditions, when an exception is thrown </b>
 	 * <ul>
-	 * <li>Situation as before the installBundle call. That is if there was an
-	 * existing bundle for the given location then this bundle must still be in the
-	 * state it was prior the call. Otherwise, no bundle must be installed</li>
+	 * <li>Bundle is not installed. If there was an existing bundle for the
+	 * specified location then that bundle must still be in the state it was
+	 * prior calling this method.</li>
 	 * </ul>
 	 * 
 	 * @param location The location identifier of the bundle to install.
