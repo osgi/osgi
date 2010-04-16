@@ -3,8 +3,18 @@ javac.target            = jsr14
 Bundle-Version						: 1.0.0.${project.build}
 Bundle-Description					: Remote Service Admin test cases.
 
-Export-Package 					= ${p}.common
-	
+Import-Package                          junit.framework;version="[3.8,4)",\
+ org.osgi.framework;version="[1.5,2)",\
+ org.osgi.framework.launch;version="[1.0,2)",\
+ org.osgi.service.event;version="[1.2,2)",\
+ org.osgi.service.packageadmin;version="[1.2,2)",\
+ org.osgi.service.remoteserviceadmin;version="[1.0,2)",\
+ org.osgi.test.cases.remoteserviceadmin.common;version="[1.0,3)",\
+ org.osgi.util.tracker;version="[1.4,2)"
+
+Export-Package 					= ${p}.common;version="1.0.0",\
+ ${p}.common;version="2.0.0"
+
 Private-Package						= org.osgi.test.support.*, \
 	${p}.*
 	
