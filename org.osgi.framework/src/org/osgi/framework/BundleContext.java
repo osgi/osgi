@@ -153,7 +153,9 @@ public interface BundleContext extends BundleReference {
 	 * </ul>
 	 * <b>Postconditions, when an exception is thrown </b>
 	 * <ul>
-	 * <li>Bundle is not installed and no trace of the bundle exists.
+	 * <li>Bundle is not installed. If there was an existing bundle for the
+	 * specified location then that bundle must still be in the state it was
+	 * prior calling this method.</li>
 	 * </ul>
 	 * 
 	 * @param location The location identifier of the bundle to install.

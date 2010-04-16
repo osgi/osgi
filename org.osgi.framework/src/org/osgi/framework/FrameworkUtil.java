@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,8 +102,8 @@ public class FrameworkUtil {
 	 * wildcard can also replace the first list of RDNs of a DN. The first RDNs
 	 * are the least significant. Such lists of matched RDNs can be empty.
 	 * <p>
-	 * For example, a match pattern with a wildcard that matches all all DNs
-	 * that end with RDNs of o=ACME and c=US would look like this:
+	 * For example, a match pattern with a wildcard that matches all DNs that
+	 * end with RDNs of o=ACME and c=US would look like this:
 	 * 
 	 * <pre>
 	 * *, o=ACME, c=US
