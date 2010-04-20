@@ -42,6 +42,8 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import info.dmtree.spi.DataPlugin;
+
+import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 
 /**
@@ -54,7 +56,7 @@ public class TestNonAtomicPluginActivator implements BundleActivator {
 	
 	private DmtTestControl tbc;
 
-	public static final String ROOT = "./OSGi/non_atomic_plugin";
+	public static final String ROOT = DmtConstants.OSGi_ROOT + "/non_atomic_plugin";
 	
 	public static final String INTERIOR_NODE = ROOT + "/interior";
 	

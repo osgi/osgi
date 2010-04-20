@@ -44,6 +44,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import info.dmtree.spi.DataPlugin;
 import info.dmtree.spi.ExecPlugin;
+
+import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 
 /**
@@ -56,7 +58,7 @@ public class TestExecPluginActivator implements BundleActivator {
 	
 	private DmtTestControl tbc;
 
-	public static final String ROOT = "./OSGi/exec_plugin";
+	public static final String ROOT = DmtConstants.OSGi_ROOT + "/exec_plugin";
 	
 	public static final String INTERIOR_NODE_EXCEPTION = ROOT + "/exception";
 

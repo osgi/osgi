@@ -42,6 +42,8 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import info.dmtree.spi.DataPlugin;
+
+import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 
 /**
@@ -54,9 +56,9 @@ public class TestDataPluginActivator implements BundleActivator {
 	
 	private DmtTestControl tbc;
 
-	public static final String ROOT = "./OSGi/data_plugin";
+	public static final String ROOT = DmtConstants.OSGi_ROOT + "/data_plugin";
 	
-	public static final String TEST_DATA_PLUGIN_ROOT2 = "./OSGi/data_plugin_2";
+	public static final String TEST_DATA_PLUGIN_ROOT2 = DmtConstants.OSGi_ROOT + "/data_plugin_2";
 	
 	public static final String INEXISTENT_NODE = ROOT +"/inexistent";
 	
