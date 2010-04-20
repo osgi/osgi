@@ -199,7 +199,10 @@ public class SimpleTest extends MultiFrameworkTestCase {
     private String getFreePort() {
         try {
             ServerSocket ss = new ServerSocket(0);
-            return "" + ss.getLocalPort();
+            String port = "" + ss.getLocalPort();
+            ss.close();
+            System.out.println("Found free port " + port);                        
+            return port;
         } catch (IOException e) {
             e.printStackTrace();
             return null;

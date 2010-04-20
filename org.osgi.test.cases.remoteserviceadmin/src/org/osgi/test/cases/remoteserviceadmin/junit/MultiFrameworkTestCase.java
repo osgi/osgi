@@ -391,9 +391,8 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
         try {
             ServerSocket ss = new ServerSocket(0);
             String port = "" + ss.getLocalPort();
-            
-            System.out.println("Found free port " + port);
-            
+            ss.close();
+            System.out.println("Found free port " + port);            
             return port;
         } catch (IOException e) {
             e.printStackTrace();
