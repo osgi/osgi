@@ -287,6 +287,17 @@ public interface UserAdminMBean {
 	void createGroup(String name) throws IOException;
 
 	/**
+	 * This method was specified in error and must not be used.
+	 * 
+	 * @param name Ignored.
+	 * @throws IOException This method will throw an exception if called.
+	 * @deprecated This method was specified in error. It does not function and
+	 *             must not be used. Use either {@link #createUser(String)} or
+	 *             {@link #createGroup(String)}.
+	 */
+	void createRole(String name) throws IOException;
+
+	/**
 	 * Answer the authorization for the user name.
 	 * 
 	 * The Composite Data is typed by {@link #AUTORIZATION_TYPE}.

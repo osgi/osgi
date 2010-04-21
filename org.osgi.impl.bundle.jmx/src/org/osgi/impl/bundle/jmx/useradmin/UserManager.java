@@ -227,6 +227,17 @@ public class UserManager extends Monitor implements UserAdminMBean {
 	 * (non-Javadoc)
 	 * 
 	 * @see
+	 * org.osgi.jmx.compendium.UserManagerMBean#createRole(java.lang.String)
+	 */
+	public void createRole(String name) throws IOException {
+		throw new UnsupportedOperationException(
+				"This method is deprecated and does not work");
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
 	 * org.osgi.jmx.compendium.UserManagerMBean#getAuthorization(java.lang.String
 	 * )
 	 */
