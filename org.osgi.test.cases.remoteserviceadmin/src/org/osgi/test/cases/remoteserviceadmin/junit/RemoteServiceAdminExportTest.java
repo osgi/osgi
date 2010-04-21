@@ -1055,6 +1055,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
             String port = "" + ss.getLocalPort();
             
             System.out.println("Found free port " + port);
+            ss.close();
             
             return port;
         } catch (IOException e) {
