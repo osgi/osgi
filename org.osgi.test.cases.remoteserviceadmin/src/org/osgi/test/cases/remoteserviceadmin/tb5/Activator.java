@@ -66,7 +66,11 @@ public class Activator implements BundleActivator {
 		Assert.assertNotNull("no service A found", service);
 		
 		// call the service
-		Assert.assertEquals("A", service.getA());
+		
+		// Marc: TB4 registers the implementation of A from tb2 
+		// t2 reimplements getA to return "this is A" not "A"
+		
+		Assert.assertEquals("this is A", service.getA());
 
 		tracker.close();
 	}

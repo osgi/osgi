@@ -67,7 +67,8 @@ public class Activator implements BundleActivator, A, B {
 	long timeout;
 	int  factor;
 	String version;
-
+	ServiceReference rsaRef;
+	
 	public Activator() {
 		timeout = Long.getLong("rsa.ct.timeout", 300000L);
 		factor = Integer.getInteger("rsa.ct.timeout.factor", 3);
@@ -131,7 +132,7 @@ public class Activator implements BundleActivator, A, B {
 	
 	public void test() throws Exception {
 		// lookup RemoteServiceAdmin service 
-		ServiceReference rsaRef = context.getServiceReference(RemoteServiceAdmin.class.getName());
+		rsaRef = context.getServiceReference(RemoteServiceAdmin.class.getName());
 		Assert.assertNotNull(rsaRef);
 		rsa = (RemoteServiceAdmin) context.getService(rsaRef);
 		Assert.assertNotNull(rsa);
@@ -145,6 +146,7 @@ public class Activator implements BundleActivator, A, B {
 			ServiceRegistration sr = context.registerService(RemoteServiceAdminListener.class.getName(), remoteServiceAdminListener, null);
 			Assert.assertNotNull(sr);
 
+			
 			//
 			// 122.4.1 export the service, positive tests
 			//
@@ -174,7 +176,7 @@ public class Activator implements BundleActivator, A, B {
 						DefaultTestBundleControl.arrayToString((Object[]) ref.getExportedService().getProperty("objectClass"), true));
 				Assert.assertEquals(registration.getReference().getProperty("service.id"), ref.getExportedService().getProperty("service.id"));
 
-				EndpointDescription ed = ref.getExportedEndpoint();
+				EndpointDescription ed = ref.getExportedEndpoint();				
 				Assert.assertNotNull(ed);
 				Assert.assertNotNull(ed.getProperties().get("objectClass"));
 				Assert.assertTrue(ed.getInterfaces().contains(A.class.getName()));
@@ -217,7 +219,9 @@ public class Activator implements BundleActivator, A, B {
 
 			Assert.assertEquals(0, remoteServiceAdminListener.getEventCount());
 		} finally {
-			context.ungetService(rsaRef);
+			// as the exported services are now required to be exported after this method returns 
+			// the rsaRef can't be released as this also causes the services to be unexported
+			//context.ungetService(rsaRef);
 		}
 	}
 
@@ -227,6 +231,7 @@ public class Activator implements BundleActivator, A, B {
 	 * to the RemoteServiceAdminListener that the service is no longer exported.
 	 */
 	private void teststop() throws Exception {
+		try{
 		Assert.assertNotNull(exportRegistrations);
 		Assert.assertFalse(exportRegistrations.isEmpty());
 		
@@ -255,6 +260,11 @@ public class Activator implements BundleActivator, A, B {
 		Assert.assertNull(exportReference.getExportedEndpoint());
 		
 		Assert.assertEquals(0, remoteServiceAdminListener.getEventCount());
+		} finally {
+			// the release of the rsa service will also trigger the unexport of the services of this bundle
+			if(rsaRef!=null)
+				context.ungetService(rsaRef);
+		}
 	}
 
     private void processFreePortProperties(Map<String, Object> properties) {
