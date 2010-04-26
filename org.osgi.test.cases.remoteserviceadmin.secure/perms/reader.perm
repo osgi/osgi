@@ -7,4 +7,15 @@
 # See org.osgi.service.permissionadmin.PermissionInfo
 
 ${permissions;packages}
+
 (org.osgi.service.remoteserviceadmin.EndpointPermission "*" "read")
+
+(java.util.PropertyPermission "*" "read")
+(java.util.PropertyPermission "*" "write")
+(org.osgi.framework.ServicePermission "org.osgi.test.cases.remoteserviceadmin.secure.common.A" "register")
+(org.osgi.framework.ServicePermission "org.osgi.service.*" "register")
+(org.osgi.framework.ServicePermission "*" "get")
+(org.osgi.framework.AdminPermission "*" "metadata")
+
+(java.net.SocketPermission "*" "listen")
+(java.lang.RuntimePermission "*")    

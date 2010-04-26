@@ -278,7 +278,9 @@ public class Activator implements BundleActivator, A {
     private String getFreePort() {
         try {
             ServerSocket ss = new ServerSocket(0);
-            return "" + ss.getLocalPort();
+            String port = "" + ss.getLocalPort();
+            ss.close();
+            return port;
         } catch (IOException e) {
             e.printStackTrace();
             return null;

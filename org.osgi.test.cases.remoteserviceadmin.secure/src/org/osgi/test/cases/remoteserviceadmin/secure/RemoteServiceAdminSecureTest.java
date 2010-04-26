@@ -114,9 +114,20 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 		try {
 			tbexporterBundle.start();
 			fail("SecurityException expected");
-		} catch (SecurityException se) {
+		} catch (Exception se) {
+			assertNotNull(se.getCause());
+			assertTrue(se.getCause() instanceof SecurityException);
 		}
 
+		tbexporterBundle.stop();
+		
+		
+		// now instal a buld that has the required permissions so that a service is exported that can later be imported
+		Bundle tbexporterPermBundle = installBundle(childContext, "/tb_exporter.jar");
+		assertNotNull(tbexporterPermBundle);
+		tbexporterPermBundle.start();
+		
+		
 		// now install the importer in the parent (this) framework
 		Bundle tbimporterBundle = installBundle(getContext(), "/tb_importer_noperm.jar");
 		assertNotNull(tbimporterBundle);
@@ -124,21 +135,26 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 		try {
 			tbimporterBundle.start();
 			fail("SecurityException expected");
-		} catch (SecurityException se) {
+		} catch (Exception se) {
+			assertNotNull(se.getCause());
+			assertTrue(se.getCause() instanceof SecurityException);
 		}
 		
 		// install the reader bundle to test the READ permission
-		Bundle preaderBundle = installBundle(getContext(), "/tb_reader.jar");
+		Bundle preaderBundle = installBundle(getContext(), "/tb_reader_noperm.jar");
 		assertNotNull(preaderBundle);
 
 		try {
 			preaderBundle.start();
 			fail("SecurityException expected");
-		} catch (SecurityException se) {
+		} catch (Exception se) {
+			assertNotNull(se.getCause());
+			assertTrue(se.getCause() instanceof SecurityException);
 		}
 		
+		tbexporterPermBundle.stop();
 		tbimporterBundle.stop();
 		
-		tbexporterBundle.stop();
+		
 	}
 }

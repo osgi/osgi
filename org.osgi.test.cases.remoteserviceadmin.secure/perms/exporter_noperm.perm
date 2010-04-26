@@ -1,0 +1,19 @@
+# Lines beginning with '#' or '//' are comments
+#
+# This file contains the permissions to be granted
+# to Filter test bundle.
+# The permissions are listed one per
+# line in PermissionInfo encoded format.
+# See org.osgi.service.permissionadmin.PermissionInfo
+
+${permissions;packages}
+
+(java.util.PropertyPermission "*" "read")
+(java.util.PropertyPermission "*" "write")
+(org.osgi.framework.ServicePermission "org.osgi.test.cases.remoteserviceadmin.secure.common.*" "register")
+(org.osgi.framework.ServicePermission "org.osgi.service.*" "register")
+(org.osgi.framework.ServicePermission "*" "get")
+(org.osgi.framework.AdminPermission "*" "metadata")
+
+(java.net.SocketPermission "*" "listen")
+(java.lang.RuntimePermission "*")    
