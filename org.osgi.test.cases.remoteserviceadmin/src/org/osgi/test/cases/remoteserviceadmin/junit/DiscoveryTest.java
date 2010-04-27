@@ -124,7 +124,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		final String endpointListenerFilter = "(!(org.osgi.framework.uuid=" + getContext().getProperty("org.osgi.framework.uuid") + "))";
 		String secondFilter = "(mykey=has been overridden)";
 		Hashtable<String, Object> endpointListenerProperties = new Hashtable<String, Object>();
-		endpointListenerProperties.put(EndpointListener.ENDPOINT_LISTENER_SCOPE, new String[]{endpointListenerFilter, secondFilter});
+		endpointListenerProperties.put(EndpointListener.ENDPOINT_LISTENER_SCOPE, new String[]{endpointListenerFilter,secondFilter});
 
 		ServiceRegistration endpointListenerRegistration = getContext().registerService(
 				EndpointListener.class.getName(), endpointListenerImpl, endpointListenerProperties);
@@ -140,8 +140,9 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		// this will run the test in the child framework and fail
 		tb1Bundle.start();
 		
+		System.out.println("************* wait for Signal 1 ********************");
 		// verify callback in parent framework
-		endpointListenerImpl.getSem().waitForSignal(timeout);
+		endpointListenerImpl.getSemAdded().waitForSignal(timeout);
 		
 		// 122.6.2 callback has to return first matched filter
 		assertEquals("filter doesn't match the first filter", endpointListenerFilter, endpointListenerImpl.getMatchedFilter());
@@ -165,13 +166,16 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		// verify 122.6.1
 		assertNull(emptyEndpointListener.getAddedEndpoint());
 		
+		System.out.println("************* Sleeping for 5s so that the discovery can settle ********************");
+		Thread.sleep(5000);
 		//
 		// remove the endpoint
 		//
 		tb1Bundle.stop();
 
+		System.out.println("************* wait for Signal 2 ********************");
 		// verify callback in parent framework
-		endpointListenerImpl.getSem().waitForSignal(timeout);
+		endpointListenerImpl.getSemRemoved().waitForSignal(timeout);
 		
 		// 122.6.2 callback has to return first matched filter
 		assertEquals("filter doesn't match the first filter", endpointListenerFilter, endpointListenerImpl.getMatchedFilter());
@@ -473,7 +477,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	
 
 	class EndpointListenerImpl implements EndpointListener {
-		private Semaphore sem = new Semaphore(0);
+		private Semaphore semAdded = new Semaphore(0);
+		private Semaphore semRemoved = new Semaphore(0);
 		private String matchedFilter;
 		private EndpointDescription addedEndpoint;
 		private EndpointDescription removedEndpoint;
@@ -483,9 +488,10 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		 */
 		public void endpointAdded(EndpointDescription endpoint,
 				String matchedFilter) {
+			
 			this.addedEndpoint = endpoint;
 			this.matchedFilter = matchedFilter;
-			sem.signal();
+			semAdded.signal();
 		}
 
 		/**
@@ -493,16 +499,24 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		 */
 		public void endpointRemoved(EndpointDescription endpoint,
 				String matchedFilter) {
+			
 			this.removedEndpoint = endpoint;
 			this.matchedFilter = matchedFilter;
-			sem.signal();
+			semRemoved.signal();
 		}
 		
 		/**
 		 * @return the sem
 		 */
-		public Semaphore getSem() {
-			return sem;
+		public Semaphore getSemAdded() {
+			return semAdded;
+		}
+		
+		/**
+		 * @return the sem
+		 */
+		public Semaphore getSemRemoved() {
+			return semRemoved;
 		}
 		
 		/**
