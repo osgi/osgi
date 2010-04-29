@@ -312,7 +312,7 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 	}
 
 	public void testUpdate02() {
-		// Test update a composite with a constituent which a parent bundle imports a package from.
+		// Test update a composite with a constituent which imports a package from a parent bundle.
 		Bundle tb3 = install("tb3v1.jar");
 
 		TestBundleListener testListener = null;
@@ -331,7 +331,7 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 			assertEquals("Resolution is incorrect.", Bundle.RESOLVED, tb3.getState());
 			assertEquals("Resolution is incorrect.", Bundle.INSTALLED, tb3client.getState());
 
-			// update the composite to export the necessary package for tb3client to resolve
+			// update the composite to import the necessary package for tb3client to resolve
 			Map manifest = new HashMap();
 			manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 			manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb3, org.osgi.test.cases.composite.tb3.params");
