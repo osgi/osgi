@@ -36,13 +36,13 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), null, null);
 		Bundle tb2v1 = installConstituent(composite, "tb2v1", "tb2v1.jar");
 		Bundle tb2v2 = installConstituent(composite, "tb2v2", "tb2v2.jar");
-		PackageAdmin pa = (PackageAdmin) getService(composite.getSystemBundleContext(), PackageAdmin.class.getName());
-		pa.resolveBundles(new Bundle[] {tb2v1, tb2v2});
+		PackageAdmin compositePA = (PackageAdmin) getService(composite.getSystemBundleContext(), PackageAdmin.class.getName());
+		compositePA.resolveBundles(new Bundle[] {tb2v1, tb2v2});
 		assertTrue("Resolution is incorrect.", tb2v1.getState() == Bundle.RESOLVED ^ tb2v2.getState() == Bundle.RESOLVED);
 		uninstallCompositeBundle(composite);
 	}
 
-	public void testSingletons02() {
+	public void testSingletons02a() {
 		// Test singletons in isolated composites
 		CompositeBundle composite1 = createCompositeBundle(compAdmin, getName() + ".A", null, null);
 		CompositeBundle composite2 = createCompositeBundle(compAdmin, getName() + ".B", null, null);
@@ -51,6 +51,24 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		pa1.resolveBundles(new Bundle[] {tb2v1});
 
 		Bundle tb2v2 = installConstituent(composite2, "tb2v2", "tb2v2.jar");
+		PackageAdmin pa2 = (PackageAdmin) getService(composite2.getSystemBundleContext(), PackageAdmin.class.getName());
+		pa2.resolveBundles(new Bundle[] {tb2v2});
+
+		assertTrue("Resolution is incorrect: " + tb2v1.getVersion(), tb2v1.getState() == Bundle.RESOLVED);
+		assertTrue("Resolution is incorrect: " + tb2v2.getVersion(), tb2v2.getState() == Bundle.RESOLVED);
+		uninstallCompositeBundle(composite1);
+		uninstallCompositeBundle(composite2);
+	}
+
+	public void testSingletons02b() {
+		// Test identical singletons in isolated composites
+		CompositeBundle composite1 = createCompositeBundle(compAdmin, getName() + ".A", null, null);
+		CompositeBundle composite2 = createCompositeBundle(compAdmin, getName() + ".B", null, null);
+		Bundle tb2v1 = installConstituent(composite1, "tb2v1Comp1", "tb2v1.jar");
+		PackageAdmin pa1 = (PackageAdmin) getService(composite1.getSystemBundleContext(), PackageAdmin.class.getName());
+		pa1.resolveBundles(new Bundle[] {tb2v1});
+
+		Bundle tb2v2 = installConstituent(composite2, "tb2v1Comp2", "tb2v1.jar");
 		PackageAdmin pa2 = (PackageAdmin) getService(composite2.getSystemBundleContext(), PackageAdmin.class.getName());
 		pa2.resolveBundles(new Bundle[] {tb2v2});
 
@@ -163,11 +181,11 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		Bundle tb1 = installConstituent(composite, "tb1", "tb1.jar");
 		Bundle tb1Frag1 = installConstituent(composite, "tb1Frag1", "tb1Frag1.jar");
 
-		PackageAdmin pa = (PackageAdmin) getService(composite.getSystemBundleContext(), PackageAdmin.class.getName());
-		pa.resolveBundles(new Bundle[] {tb1Frag1});
+		PackageAdmin compositePA = (PackageAdmin) getService(composite.getSystemBundleContext(), PackageAdmin.class.getName());
+		compositePA.resolveBundles(new Bundle[] {tb1Frag1});
 		assertTrue("Resolution is incorrect: " + tb1Frag1.getVersion(), tb1Frag1.getState() == Bundle.RESOLVED);
 		assertTrue("Resolution is incorrect: " + tb1.getVersion(), tb1.getState() == Bundle.RESOLVED);
-		Bundle[] hosts = pa.getHosts(tb1Frag1);
+		Bundle[] hosts = compositePA.getHosts(tb1Frag1);
 		assertNotNull("Hosts is null", hosts);
 		assertEquals("Wrong number of hosts", 1, hosts.length);
 		assertEquals("Wrong host found", tb1, hosts[0]);
