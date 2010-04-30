@@ -531,14 +531,14 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		 * @see org.osgi.test.cases.remoteserviceadmin.common.A#getA()
 		 */
 		public String getA() {
-			return "A";
+			return "this is A";
 		}
 
 		/**
 		 * @see org.osgi.test.cases.remoteserviceadmin.common.B#getB()
 		 */
 		public String getB() {
-			return "B";
+			return "this is B";
 		}
 		
 	}
