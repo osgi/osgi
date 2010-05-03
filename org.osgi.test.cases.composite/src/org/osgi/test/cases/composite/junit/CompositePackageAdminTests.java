@@ -346,7 +346,7 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 			} catch (BundleException e) {
 				fail("Failed to start test bundle", e);
 			}
-			// TODO need to decide if listeners on the system context should outlive stop/start of composite
+
 			composite.getSystemBundleContext().addBundleListener(testListener);
 			parentPA.refreshPackages(null);
 			BundleEvent[] expected = new BundleEvent[] {
@@ -378,7 +378,6 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 			} catch (BundleException e) {
 				// nothing
 			}
-			getContext().removeBundleListener(testListener);
 		}
 	}
 
