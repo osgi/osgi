@@ -348,7 +348,7 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 			}
 
 			composite.getSystemBundleContext().addBundleListener(testListener);
-			parentPA.refreshPackages(null);
+			parentPA.refreshPackages(new Bundle[] {composite});
 			BundleEvent[] expected = new BundleEvent[] {
 				new BundleEvent(BundleEvent.STOPPED, tb3client),
 				new BundleEvent(BundleEvent.UNRESOLVED, tb3client),
@@ -362,12 +362,10 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 			manifest.remove(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY);
 			updateCompositeBundle(composite, manifest);
 
-			parentPA.refreshPackages(null);
+			parentPA.refreshPackages(new Bundle[] {composite});
 			expected = new BundleEvent[] {
-					new BundleEvent(BundleEvent.STOPPED, tb3client), // STOPPED and STARTED are a result of the composite update
-					new BundleEvent(BundleEvent.STARTED, tb3client),
-					new BundleEvent(BundleEvent.STOPPED, tb3client), // Second stop is because of refreshing composite
-					new BundleEvent(BundleEvent.UNRESOLVED, tb3client) // Unresolved because composite refresh
+					new BundleEvent(BundleEvent.STOPPED, tb3client),
+					new BundleEvent(BundleEvent.UNRESOLVED, tb3client)
 			};
 			results = (BundleEvent[]) testListener.getResults(new BundleEvent[expected.length]);
 			compareEvents(expected, results);
@@ -378,6 +376,82 @@ public class CompositePackageAdminTests extends AbstractCompositeTestCase {
 			} catch (BundleException e) {
 				// nothing
 			}
+		}
+	}
+
+	public void testUpdate03() {
+		// Test update a composite with a constituent which a parent bundle imports a package from.
+		// Additional tests for state of constituents
+
+		Bundle tb3client = install("tb3client.jar");
+
+		TestBundleListener testListener = new TestBundleListener(tb3client, BundleEvent.STARTED | BundleEvent.STOPPED | BundleEvent.UNRESOLVED | BundleEvent.RESOLVED);
+		try {
+			// install composite with no exports
+			CompositeBundle composite = createCompositeBundle(compAdmin, getName(), null, null);
+			Bundle tb3 = installConstituent(composite, "tb3", "tb3v1.jar");
+	
+	
+			PackageAdmin compositePA = (PackageAdmin) getService(composite.getSystemBundleContext(), PackageAdmin.class.getName());
+			compositePA.resolveBundles(new Bundle[] {tb3});
+	
+			PackageAdmin parentPA = (PackageAdmin) getService(getContext(), PackageAdmin.class.getName());
+			parentPA.resolveBundles(new Bundle[] {tb3client});
+	
+			assertEquals("Resolution is incorrect.", Bundle.RESOLVED, tb3.getState());
+			assertEquals("Resolution is incorrect.", Bundle.INSTALLED, tb3client.getState());
+
+			// update the composite to export the necessary package for tb3client to resolve
+			Map manifest = new HashMap();
+			manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+			manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb3, org.osgi.test.cases.composite.tb3.params");
+
+			updateCompositeBundle(composite, manifest);
+			if (composite.getState() == Bundle.INSTALLED) {
+				// tb3 should not be resolved at this point
+				assertEquals("Resolution is incoorect.", Bundle.INSTALLED, tb3.getState());
+			}
+
+			parentPA.resolveBundles(new Bundle[] {tb3client});
+			// resolving client should allow the composite and its constituent to resolve
+			assertEquals("Resolution is incorrect.", Bundle.RESOLVED, tb3client.getState());
+			assertEquals("Resolution is incorrect.", Bundle.RESOLVED, composite.getState());
+			assertEquals("Resolution is incorrect.", Bundle.RESOLVED, tb3.getState());
+			try {
+				tb3client.start();
+			} catch (BundleException e) {
+				fail("Failed to start test bundle", e);
+			}
+			getContext().addBundleListener(testListener);
+			parentPA.refreshPackages(new Bundle[] {composite});
+			BundleEvent[] expected = new BundleEvent[] {
+				new BundleEvent(BundleEvent.STOPPED, tb3client),
+				new BundleEvent(BundleEvent.UNRESOLVED, tb3client),
+				new BundleEvent(BundleEvent.RESOLVED, tb3client),
+				new BundleEvent(BundleEvent.STARTED, tb3client)
+			};
+			BundleEvent[] results = (BundleEvent[]) testListener.getResults(new BundleEvent[expected.length]);
+			compareEvents(expected, results);
+
+			manifest.remove(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY);
+			updateCompositeBundle(composite, manifest);
+
+			parentPA.refreshPackages(null);
+			expected = new BundleEvent[] {
+					new BundleEvent(BundleEvent.STOPPED, tb3client),
+					new BundleEvent(BundleEvent.UNRESOLVED, tb3client)
+			};
+			results = (BundleEvent[]) testListener.getResults(new BundleEvent[expected.length]);
+			compareEvents(expected, results);
+			
+			uninstallCompositeBundle(composite);
+		} finally {
+			try {
+				tb3client.uninstall();
+			} catch (BundleException e) {
+				// nothing
+			}
+			getContext().removeBundleListener(testListener);
 		}
 	}
 

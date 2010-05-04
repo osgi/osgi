@@ -105,14 +105,6 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		return b;
 	}
 
-	protected CompositeBundle createCompositeBundle(CompositeBundle parent, String location, Map compositeManifest, Map configuration, String[] constituents) {
-		CompositeAdmin ca = (CompositeAdmin) (parent == null ? compAdmin : getService(parent.getSystemBundleContext(), CompositeAdmin.class.getName()));
-		CompositeBundle composite = createCompositeBundle(ca, location, compositeManifest, configuration);
-		for (int i = 0; i < constituents.length; i++)
-			installConstituent(composite, location + '.' + constituents[i], constituents[i]);
-		return composite;
-	}
-	
 	protected CompositeBundle createCompositeBundle(CompositeAdmin factory, String location, Map compositeManifest, Map configuration) {
 		return createCompositeBundle(factory, location, compositeManifest, configuration, false);
 	}
@@ -146,12 +138,16 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 	}
 
 	protected void startCompositeBundle(CompositeBundle composite) {
+		startCompositeBundle(composite, true);
+	}
+
+	protected void startCompositeBundle(CompositeBundle composite, boolean startLevelMet) {
 		try {
 			composite.start();
 		} catch (BundleException e) {
 			fail("Failed to start composite", e); //$NON-NLS-1$
 		}
-		assertEquals("Wrong state for SystemBundle", Bundle.ACTIVE, composite.getBundleContext().getBundle().getState()); //$NON-NLS-1$
+		assertEquals("Wrong state for SystemBundle", startLevelMet ? Bundle.ACTIVE : Bundle.STARTING, composite.getSystemBundleContext().getBundle().getState()); //$NON-NLS-1$
 	}
 
 	protected void stopCompositeBundle(CompositeBundle composite) {
@@ -183,7 +179,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		// Bundles must not be active
 		for (int i = 0; i < bundles.length; i++) {
 			if (bundles[i].getBundleId() != 0)
-				assertTrue("Bundle is in the wrong state: " + bundles[i].getLocation(), ((Bundle.STARTING | Bundle.ACTIVE | Bundle.STOPPING) & bundles[i].getState()) == 0);
+				assertEquals("Bundle is in the wrong state: " + bundles[i].getLocation(), Bundle.INSTALLED,bundles[i].getState());
 			else
 				assertEquals("System Bundle is in the wrong state", Bundle.STARTING, bundles[i].getState());
 		}
