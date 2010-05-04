@@ -1,0 +1,30 @@
+mobile.specs = \
+	 info.dmtree, \
+	 org.osgi.application, \
+	 org.osgi.service.application, \
+	 org.osgi.service.cm, \
+	 org.osgi.service.component, \
+	 org.osgi.service.deploymentadmin, \
+	 org.osgi.service.event, \
+	 org.osgi.service.io, \
+	 org.osgi.service.log, \
+	 org.osgi.service.metatype, \
+	 org.osgi.service.monitor, \
+	 org.osgi.service.prefs, \
+	 org.osgi.util.cdma, \
+	 org.osgi.util.gsm, \
+	 org.osgi.util.mobile, \
+	 org.osgi.util.tracker, \
+	 org.osgi.util.xml
+
+mobile.packages = ${replace;$(mobile.specs);^.*$;$0.*}
+
+mobile.legal = ${project.workspace}/osgi.companion/legal
+
+mobile.resources = {${mobile.legal}/about.html}, \
+  					${mobile.legal}/LICENSE, \
+  					xmlns/app=${project.workspace}/xmlns/app, \
+  					xmlns/dd=${project.workspace}/xmlns/dd, \
+  					xmlns/metatype=${project.workspace}/xmlns/metatype, \
+  					xmlns/scr=${project.workspace}/xmlns/scr, \
+  					ddf=${project.workspace}/ddf/mobile

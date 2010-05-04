@@ -1,0 +1,24 @@
+-reportnewer : true
+Bundle-License	= http://opensource.org/licenses/apache2.0.php; \
+	link="http://www.apache.org/licenses/LICENSE-2.0"; \
+	description="Apache License, Version 2.0"
+Bundle-Description			: \
+	OSGi Service Platform Release ${version;=;${core.build.version}} Version ${version;==;${core.build.version}}, \
+	Core Interfaces and Classes for use in compiling bundles.
+
+Bundle-Version					: ${core.build.version}
+DynamicImport-Package			: *
+Import-Package					: *; resolution:=optional
+
+Export-Package 					: ${core.packages}
+
+Include-Resource				: ${core.resources}
+
+-dependson 					=  \
+	${core.specs} 
+
+-buildpath 					= \
+	${replace;${core.specs};.+;$0\\;version=project}, \
+	ee.minimum;version=1.2
+
+-include : layout.bnd

@@ -1,0 +1,12 @@
+core.specs = org.osgi.framework, \
+ org.osgi.service.condpermadmin, \
+ org.osgi.service.packageadmin, \
+ org.osgi.service.permissionadmin, \
+ org.osgi.service.startlevel, \
+ org.osgi.service.url
+
+core.packages = ${replace;$(core.specs);^.*$;$0.*}
+
+core.legal = ${project.workspace}/osgi.companion/legal
+
+core.resources = {${core.legal}/about.html}, ${core.legal}/LICENSE

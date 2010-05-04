@@ -1,0 +1,11 @@
+proposed.specs = \
+	 org.osgi.multiplexer, \
+	 org.osgi.service.composite, \
+	 org.osgi.service.obr
+
+proposed.packages = ${replace;$(proposed.specs);^.*$;$0.*}
+
+proposed.legal = ${project.workspace}/osgi.companion/legal
+
+proposed.resources = {${proposed.legal}/about.html}, \
+  					${proposed.legal}/LICENSE
