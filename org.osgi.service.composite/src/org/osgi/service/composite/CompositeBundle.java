@@ -113,6 +113,9 @@ public interface CompositeBundle extends Bundle {
 	 * <li>The composite framework start-level is set to the beginning start-level.</li>
 	 * <li>The constituent bundles are started according to the start-level 
 	 * specification.
+	 * <li>The composite system bundle state is set to {@link Bundle#ACTIVE} and
+	 * the bundle event of type {@link BundleEvent#STARTED} is fired for the 
+	 * composite system bundle.
 	 * <li>The {@link FrameworkEvent#STARTED} event is fired for the
 	 * composite framework.</li>
 	 * <li>The composite bundle state is set to {@link Bundle#ACTIVE}</li>
@@ -151,9 +154,18 @@ public interface CompositeBundle extends Bundle {
 	 * the following steps are required to stop the constituents:
 	 * <ol>
 	 * <li>The composite framework start-level is set to the 0.</li>
+	 * <li>The bundle event of type {@link BundleEvent#STOPPING} is fired for the
+	 * composite system bundle.
 	 * <li>The constituent bundles are stopped according to the start-level 
 	 * specification.</li>
-	 * <li>The bundle event of type {@link BundleEvent#STARTED} is fired for the 
+	 * <li>The bundle event of type {@link BundleEvent#STOPPED} is fired for the 
+	 * composite system bundle.  Note that the composite system bundle context
+	 * must remain valid.
+	 * <li>The framework event of type {@link FrameworkEvent#STOPPED} is fired 
+	 * for the composite framework.
+	 * <li>The bundle event of type {@link BundleEvent#STARTING} is fired for the
+	 * composite system bundle. 
+	 * <li>The bundle event of type {@link BundleEvent#STOPPED} is fired for the 
 	 * composite.</li>
 	 * </ol>
 	 * @param options The options for stopping this bundle. See
@@ -223,15 +235,24 @@ public interface CompositeBundle extends Bundle {
 	 * 
 	 * <li>If this composite's state is <code>ACTIVE</code>, <code>STARTING</code>
 	 * or <code>STOPPING</code>, this bundle is stopped as described in the
-	 * <code>CompositeBundle.stop</code> method. If <code>CompositeBundle.stop</code>
-	 * throws an exception, the exception is rethrown terminating the update.
+	 * <code>CompositeBundle.stop</code> method except the framework event of type
+	 * {@link FrameworkEvent#STOPPED_UPDATE} is fired for the composite system
+	 * bundle. If <code>CompositeBundle.stop</code> throws an exception, the exception 
+	 * is rethrown terminating the update.
 	 * 
 	 * <li>The meta-data of this composite is updated from the <code>Map</code>.
+	 * 
+	 * <li>All constituent bundles must transition to the <code>INSTALLED</code>
+	 * state. Constituent bundles that have exported packages that are imported by another
+	 * bundle, these packages must remain exported until the
+	 * <code>PackageAdmin.refreshPackages</code> method has been has been called
+	 * or the Framework is relaunched.
+	 * 
 	 * 
 	 * <li>This composite's state is set to <code>INSTALLED</code>.
 	 * 
 	 * <li>If the updated version of this composite was successfully installed, a
-	 * bundle event of type {@link BundleEvent#UPDATED} is fired.
+	 * bundle event of type {@link BundleEvent#UPDATED} is fired for this composite.
 	 * 
 	 * <li>If this composite's state was originally <code>ACTIVE</code>, the
 	 * updated composite is started as described in the <code>CompositeBundle.start</code>
