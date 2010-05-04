@@ -70,22 +70,22 @@ copyright = Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reser
 copyright.html = Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 
 osgi.release				= 4
-osgi.version				= 4.2
+osgi.version				= 4.3
 -versionpolicy				= "[${version;==;${@}},${version;+;${@}})"
 
 osgi.build.version			= ${osgi.version}.0.${project.build}
 
 core.published.version		= 4.2.0
-core.build.version			= ${version;==+=;${osgi.build.version}}
+core.build.version			= ${version;====;${osgi.build.version}}
 
 cmpn.published.version		= 4.2.0
-cmpn.build.version			= ${version;==+=;${osgi.build.version}}
+cmpn.build.version			= ${version;====;${osgi.build.version}}
 
 mobile.published.version	= 4.0.0
 mobile.build.version		= ${version;====;${osgi.build.version}}
 
 enterprise.published.version = 4.2.0
-enterprise.build.version	= ${version;==+=;${osgi.build.version}}
+enterprise.build.version	= ${version;====;${osgi.build.version}}
 
 # Never released
 proposed.build.version		= ${version;====;${osgi.build.version}}
