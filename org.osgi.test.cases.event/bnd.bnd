@@ -1,10 +1,9 @@
-Bundle-Version						: 3.0.0.${project.build}
+Bundle-Version						: 3.1.0.${project.build}
 Bundle-Description					: A test case for the event generic mechanism implementation.
 
 Private-Package						= org.osgi.test.support.*, \
 	${p}.junit
 Export-Package						= \
-	org.osgi.service.event;-split-package:=merge-first, \
 	${p}.service
 
 Include-Resource					= \
@@ -17,7 +16,7 @@ Test-Cases							= ${testcases}
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.event;                 version=project , \
-	osgi.core;									version=4.0	, \
+	osgi.core;									version=4.2	, \
 	osgi.cmpn;									version=4.0	, \
 	ee.foundation											, \
 	${junit}

@@ -131,6 +131,8 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    * @see org.osgi.test.cases.event.service.TBCService#getLastReceivedEvents()
    */
   public synchronized Vector getLastReceivedEvents() {
+		if (lastEvents == null || lastEvents.size() < 1)
+			return null;
     Vector events = (Vector) lastEvents.clone();
     lastEvents.removeAllElements();
     return events;

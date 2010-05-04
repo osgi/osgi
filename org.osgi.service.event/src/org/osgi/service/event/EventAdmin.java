@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,9 @@ package org.osgi.service.event;
  */
 public interface EventAdmin {
 	/**
-	 * Initiate asynchronous delivery of an event. This method returns to the
-	 * caller before delivery of the event is completed.
+	 * Initiate asynchronous, ordered delivery of an event. This method returns
+	 * to the caller before delivery of the event is completed. Events are
+	 * delivered in the order that they are received by this method.
 	 * 
 	 * @param event The event to send to all listeners which subscribe to the
 	 *        topic of the event.
@@ -49,4 +50,19 @@ public interface EventAdmin {
 	 *         specified in the event.
 	 */
 	void sendEvent(Event event);
+
+	/**
+	 * Initiate asynchronous, unordered delivery of an event. This method
+	 * returns to the caller before delivery of the event is completed. Events
+	 * received by this method may be delivered in any order.
+	 * 
+	 * @param event The event to send to all listeners which subscribe to the
+	 *        topic of the event.
+	 * 
+	 * @throws SecurityException If the caller does not have
+	 *         <code>TopicPermission[topic,PUBLISH]</code> for the topic
+	 *         specified in the event.
+	 * @since 1.3
+	 */
+	void postEventUnordered(Event event);
 }

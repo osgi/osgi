@@ -251,7 +251,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * Tests the notification for events after sending (if they match of the
 	 * listeners).
 	 */
-	public void testSendEventNotification() { // TC4
+	public void testSendEvent() { // TC4
 		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
@@ -299,7 +299,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * Tests the notification for events after posting (if they match of the
 	 * listeners).
 	 */
-	public void testPostEventNotification() { // TC5
+	public void testPostEvent() { // TC5
 		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
@@ -323,7 +323,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		for (int i = 0; i < events.length; i++) {
 			eventAdmin.postEvent(events[i]);
 		}
-		// wait to ensure that events are recieved asynchronous
+		// wait to ensure that events are received asynchronous
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
@@ -362,10 +362,10 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Tests the notification for events after posting simultaneously in 10
-	 * threads (if they match of the listeners).
+	 * Tests the notification for events after posting (if they match of the
+	 * listeners).
 	 */
-	public void testMultiPostThreads() { // TC7
+	public void testPostEventUnordered() { // TC5
 		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
@@ -376,7 +376,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		trackerProvider2.open();
 		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
 
-		String[] topics = new String[] { "test/*" };
+		String[] topics = new String[] {"test/*"};
 		tbcService1.setTopics(topics);
 		tbcService2.setTopics(topics);
 
@@ -386,45 +386,14 @@ public class EventAdminTests extends DefaultTestBundleControl {
 					(Dictionary) new Hashtable());
 		}
 
-		MultiPostSendThread[] mpts = new MultiPostSendThread[events.length];
-
-		Object lock = new Object();
 		for (int i = 0; i < events.length; i++) {
-			mpts[i] = new MultiPostSendThread(events[i], lock,
-					"[MultiPostSendThread] - " + i, true);
-			mpts[i].start();
+			eventAdmin.postEventUnordered(events[i]);
 		}
-
-		// wait to ensure that all threads are started
-		boolean allAlive;
-		do {
-			allAlive = true;
-			for (int i = 0; i < mpts.length; i++) {
-				if (!mpts[i].isAlive()) {
-					allAlive = false;
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-					}
-					break;
-				}
-			}
-		} while (!allAlive);
-		// add small sleep to shure all threads go to wait on lock
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-		}
-		trace("All MultiPostSendThread started, notify all...");
-		// here notify all threads to start posting events simultaneously
-		synchronized (lock) {
-			lock.notifyAll();
-		}
-		trace("Wait all MultiPostSendThread to post events");
-		// wait to ensure that events are recieved asynchronous
+		// wait to ensure that events are received asynchronous
 		try {
 			Thread.sleep(5000);
-		} catch (InterruptedException e) {
+		}
+		catch (InterruptedException e) {
 		}
 
 		Vector tbc1Events = tbcService1.getLastReceivedEvents();
@@ -440,7 +409,8 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		for (int i = 0; i < events.length; i++) {
 			if (tbc1Events.contains(events[i])) {
 				pass("tbc1: Event with topic [test/Event" + i + "] recieved");
-			} else {
+			}
+			else {
 				fail("tbc1: Event with topic [test/Event" + i
 						+ "] not recieved");
 			}
@@ -448,7 +418,8 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		for (int i = 0; i < events.length; i++) {
 			if (tbc2Events.contains(events[i])) {
 				pass("tbc2: Event with topic [test/Event" + i + "] recieved");
-			} else {
+			}
+			else {
 				fail("tbc2: Event with topic [test/Event" + i
 						+ "] not recieved");
 			}
@@ -458,34 +429,61 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	}
 
 	/**
+	 * Tests the notification for events after posting simultaneously in 10
+	 * threads (if they match of the listeners).
+	 */
+	public void testMultiThreadsPostEvent() { // TC7
+		testMultiThreads(10, "postEvent");
+	}
+
+	/**
+	 * Tests the notification for events after posting simultaneously in 10
+	 * threads (if they match of the listeners).
+	 */
+	public void testMultiThreadsPostEventUnordered() { // TC7
+		testMultiThreads(10, "postEventUnordered");
+	}
+
+	/**
 	 * This is used to start posting or sending simultaneously.
 	 */
-	class MultiPostSendThread extends Thread {
+	class MultiThread extends Thread {
 		private final Event		event;
 		private final Object	lock;
-		private final boolean	post;
+		private final String	method;
 
-		MultiPostSendThread(Event event, Object lock, String name, boolean post) {
+		MultiThread(Event event, Object lock, String name, String method) {
 			super(name);
 			this.lock = lock;
 			this.event = event;
-			this.post = post;
+			this.method = method;
 		}
 
 		public void run() {
-			trace("MultiPostSendThread started on event: " + event);
+			trace("MultiThread started on event: " + event);
 			synchronized (lock) {
 				try {
 					lock.wait();
 				} catch (InterruptedException e) {
+					// ignored
 				}
 			}
-			if (post) {
+			if ("postEvent".equals(method)) {
 				eventAdmin.postEvent(event);
 			} else {
-				eventAdmin.sendEvent(event);
+				if ("sendEvent".equals(method)) {
+					eventAdmin.sendEvent(event);
+				}
+				else {
+					if ("postEventUnordered".equals(method)) {
+						eventAdmin.postEventUnordered(event);
+					}
+					else {
+						// unrecognized method
+					}
+				}
 			}
-			trace("MultiPostSendThread " + (post ? "post" : "send")
+			trace("MultiThread " + method
 					+ " event: " + event);
 		}
 	}
@@ -494,7 +492,15 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * Tests the notification for events after sending simultaneously in 10
 	 * threads (if they match of the listeners).
 	 */
-	public void testMultiSendThreads() { // TC6
+	public void testMultiThreadsSendEvent() { // TC6
+		testMultiThreads(10, "sendEvent");
+	}
+
+	/**
+	 * Tests the notification for events after firing simultaneously in count
+	 * threads (if they match of the listeners).
+	 */
+	private void testMultiThreads(final int count, final String method) {
 		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
 				"org.osgi.test.cases.event.tb1.Activator", null);
 		trackerProvider1.open();
@@ -505,23 +511,23 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		trackerProvider2.open();
 		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
 
-		String[] topics;
-		topics = new String[] { "test/*" };
+		String[] topics = new String[] {"test/*"};
 		tbcService1.setTopics(topics);
 		tbcService2.setTopics(topics);
 
-		Event[] events = new Event[10];
+		Event[] events = new Event[count];
 		for (int i = 0; i < events.length; i++) {
 			events[i] = new Event("test/Event" + i,
 					(Dictionary) new Hashtable());
 		}
 
-		MultiPostSendThread[] mpts = new MultiPostSendThread[events.length];
+		MultiThread[] mpts = new MultiThread[events.length];
 
 		Object lock = new Object();
 		for (int i = 0; i < events.length; i++) {
-			mpts[i] = new MultiPostSendThread(events[i], lock,
-					"[MultiPostSendThread] - " + i, false);
+			mpts[i] = new MultiThread(events[i], lock,
+ "[MultiThread] - " + i,
+					method);
 			mpts[i].start();
 		}
 
@@ -534,53 +540,61 @@ public class EventAdminTests extends DefaultTestBundleControl {
 					allAlive = false;
 					try {
 						Thread.sleep(100);
-					} catch (InterruptedException e) {
+					}
+					catch (InterruptedException e) {
+						// ignored
 					}
 					break;
 				}
 			}
 		} while (!allAlive);
-		// add small sleep to shure all threads go to wait on lock
+		// add small sleep to ensure all threads go to wait on lock
 		try {
 			Thread.sleep(3000);
-		} catch (InterruptedException e) {
 		}
-		trace("All MultiPostSendThread started, notify all...");
+		catch (InterruptedException e) {
+			// ignored
+		}
+		trace("All MultiThread started, notify all...");
 		// here notify all threads to start posting events simultaneously
 		synchronized (lock) {
 			lock.notifyAll();
 		}
-		trace("Wait all MultiPostSendThread to send events");
-		// wait to ensure that events are recieved asynchronous
+		trace("Wait all MultiThread to deliver events");
+		// wait to ensure that events are received asynchronous
 		try {
 			Thread.sleep(5000);
-		} catch (InterruptedException e) {
+		}
+		catch (InterruptedException e) {
+			// ignored
 		}
 
 		Vector tbc1Events = tbcService1.getLastReceivedEvents();
 		Vector tbc2Events = tbcService2.getLastReceivedEvents();
 
 		if (tbc1Events == null || tbc1Events.size() == 0) {
-			fail("tbc1: No events recived");
+			fail("tbc1: No events received");
 		}
 		if (tbc2Events == null || tbc2Events.size() == 0) {
-			fail("tbc2: No events recived");
+			fail("tbc2: No events received");
 		}
 
 		for (int i = 0; i < events.length; i++) {
 			if (tbc1Events.contains(events[i])) {
-				pass("tbc1: Event with topic [test/Event" + i + "] recieved");
-			} else {
+				pass("tbc1: Event with topic [test/Event" + i + "] received");
+			}
+			else {
 				fail("tbc1: Event with topic [test/Event" + i
-						+ "] not recieved");
+						+ "] not received");
 			}
 		}
 		for (int i = 0; i < events.length; i++) {
 			if (tbc2Events.contains(events[i])) {
-				pass("tbc2: Event with topic [test/Event" + i + "] recieved");
-			} else {
+				pass("tbc2: Event with topic [test/Event" + i + "] received");
+			}
+			else {
 				fail("tbc2: Event with topic [test/Event" + i
-						+ "] not recieved");
+						+ "] not received");
 			}
 		}
 		trackerProvider1.close();
@@ -590,10 +604,8 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	/**
 	 * Verify that the service with name is exported by the bundle b.
 	 * 
-	 * @param name
-	 *            fqn of the service, e.g. com.acme.foo.Foo
-	 * @param b
-	 *            the bundle to be asserted
+	 * @param name fqn of the service, e.g. com.acme.foo.Foo
+	 * @param b the bundle to be asserted
 	 */
 	private void assertBundle(String name, Bundle b) {
 		ServiceReference[] ref = null;

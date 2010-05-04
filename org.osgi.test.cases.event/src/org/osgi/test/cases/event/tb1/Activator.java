@@ -48,7 +48,7 @@ import org.osgi.test.cases.event.service.TBCService;
 public class Activator implements BundleActivator, TBCService, EventHandler {
   
   private BundleContext context;
-  private Vector lastEvents = null;
+	private Vector				lastEvents	= null;
   private ServiceRegistration serviceReg;
   private String[] topics;
   
@@ -110,7 +110,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    */
   public synchronized void handleEvent(Event event) {
     if (lastEvents == null) {
-      lastEvents = new Vector();
+			lastEvents = new Vector();
     }
     lastEvents.addElement(event);
   }
@@ -131,7 +131,9 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    * @see org.osgi.test.cases.event.service.TBCService#getLastReceivedEvents()
    */
   public synchronized Vector getLastReceivedEvents() {
-    Vector events = (Vector) lastEvents.clone();
+		if (lastEvents == null || lastEvents.size() < 1)
+			return null;
+		Vector events = (Vector) lastEvents.clone();
     lastEvents.removeAllElements();
     return events;
   }

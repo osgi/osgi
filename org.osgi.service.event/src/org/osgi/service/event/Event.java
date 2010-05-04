@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,14 @@
 
 package org.osgi.service.event;
 
+import static org.osgi.service.event.EventConstants.EVENT_TOPIC;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Filter;
@@ -43,7 +46,7 @@ public class Event {
 	 * The properties carried by this event. Keys are strings and values are
 	 * objects
 	 */
-	private final Map		/* <String,Object> */properties;
+	private final EventProperties	properties;
 
 	/**
 	 * Constructs an event.
@@ -55,22 +58,12 @@ public class Event {
 	 * @throws IllegalArgumentException If topic is not a valid topic name.
 	 * @since 1.2
 	 */
-	public Event(String topic, Map/* <String,Object> */properties) {
+	public Event(String topic, Map<String, Object> properties) {
 		validateTopicName(topic);
 		this.topic = topic;
-		int size = (properties == null) ? 1 : (properties.size() + 1);
-		Map p = new HashMap(size);
-		if (properties != null) {
-			for (Iterator iter = properties.keySet().iterator(); iter.hasNext();) {
-				Object key = iter.next();
-				if (key instanceof String) {
-					Object value = properties.get(key);
-					p.put(key, value);
-				}
-			}
-		}
-		p.put(EventConstants.EVENT_TOPIC, topic);
-		this.properties = p; // safely publish the map
+		// safely publish the event properties
+		this.properties = (properties instanceof EventProperties) ? (EventProperties) properties
+				: new EventProperties(properties);
 	}
 
 	/**
@@ -82,42 +75,56 @@ public class Event {
 	 *        ignored.
 	 * @throws IllegalArgumentException If topic is not a valid topic name.
 	 */
-	public Event(String topic, Dictionary/* <String,Object> */properties) {
+	public Event(String topic, Dictionary<String, Object> properties) {
 		validateTopicName(topic);
 		this.topic = topic;
-		int size = (properties == null) ? 1 : (properties.size() + 1);
-		Map p = new HashMap(size);
-		if (properties != null) {
-			for (Enumeration e = properties.keys(); e.hasMoreElements();) {
-				Object key = e.nextElement();
-				if (key instanceof String) {
-					Object value = properties.get(key);
-					p.put(key, value);
-				}
-			}
-		}
-		p.put(EventConstants.EVENT_TOPIC, topic);
-		this.properties = p; // safely publish the map
+		// safely publish the event properties
+		this.properties = new EventProperties(properties);
 	}
 
 	/**
-	 * Retrieves a property.
+	 * Retrieve the value of an event property. The event topic may be retrieved
+	 * with the property name &quot;event.topics&quot;.
 	 * 
-	 * @param name the name of the property to retrieve
+	 * @param name The name of the property to retrieve.
 	 * @return The value of the property, or <code>null</code> if not found.
 	 */
 	public final Object getProperty(String name) {
+		if (EVENT_TOPIC.equals(name)) {
+			return topic;
+		}
 		return properties.get(name);
 	}
 
 	/**
-	 * Returns a list of this event's property names.
+	 * Indicate the presence of an event property. The event topic is present
+	 * using the property name &quot;event.topics&quot;.
+	 * 
+	 * @param name The name of the property.
+	 * @return <code>true</code> if a property with the specified name is in the
+	 *         event. This property may have a <code>null</code> value.
+	 *         <code>false</code> otherwise.
+	 * @since 1.3
+	 */
+	public final boolean containsProperty(String name) {
+		if (EVENT_TOPIC.equals(name)) {
+			return true;
+		}
+		return properties.containsKey(name);
+	}
+
+	/**
+	 * Returns a list of this event's property names. The list will include the
+	 * event topic property name &quot;event.topics&quot;.
 	 * 
 	 * @return A non-empty array with one element per property.
 	 */
 	public final String[] getPropertyNames() {
-		return (String[]) properties.keySet().toArray(
-				new String[properties.size()]);
+		int size = properties.size();
+		String[] result = new String[size + 1];
+		properties.keySet().toArray(result);
+		result[size] = EVENT_TOPIC;
+		return result;
 	}
 
 	/**
@@ -138,7 +145,7 @@ public class Event {
 	 *         otherwise.
 	 */
 	public final boolean matches(Filter filter) {
-		return filter.matchCase(new UnmodifiableDictionary(properties));
+		return filter.matchCase(new FilterProperties(topic, properties));
 	}
 
 	/**
@@ -168,7 +175,7 @@ public class Event {
 	}
 
 	/**
-	 * Returns a hash code value for the object.
+	 * Returns a hash code value for this object.
 	 * 
 	 * @return An integer which is a hash code value for this object.
 	 */
@@ -231,32 +238,46 @@ public class Event {
 	}
 
 	/**
-	 * Unmodifiable wrapper for Dictionary.
+	 * Dictionary to use for Filter matching.
 	 */
-	private static class UnmodifiableDictionary extends Dictionary {
-		private final Map	wrapped;
+	private static class FilterProperties extends
+			Dictionary<String, Object> {
+		private final String			topic;
+		private final EventProperties	properties;
 
-		UnmodifiableDictionary(Map wrapped) {
-			this.wrapped = wrapped;
+		FilterProperties(String topic, EventProperties properties) {
+			this.topic = topic;
+			this.properties = properties;
 		}
 
-		public Enumeration elements() {
-			return Collections.enumeration(wrapped.values());
+		public Enumeration<Object> elements() {
+			Collection<Object> values = properties.values();
+			List<Object> result = new ArrayList<Object>(values.size() + 1);
+			result.add(topic);
+			result.addAll(values);
+			return Collections.enumeration(result);
 		}
 
 		public Object get(Object key) {
-			return wrapped.get(key);
+			if (EVENT_TOPIC.equals(key)) {
+				return topic;
+			}
+			return properties.get(key);
 		}
 
 		public boolean isEmpty() {
-			return wrapped.isEmpty();
+			return false;
 		}
 
-		public Enumeration keys() {
-			return Collections.enumeration(wrapped.keySet());
+		public Enumeration<String> keys() {
+			Collection<String> keys = properties.keySet();
+			List<String> result = new ArrayList<String>(keys.size() + 1);
+			result.add(EVENT_TOPIC);
+			result.addAll(keys);
+			return Collections.enumeration(result);
 		}
 
-		public Object put(Object key, Object value) {
+		public Object put(String key, Object value) {
 			throw new UnsupportedOperationException();
 		}
 
@@ -265,7 +286,7 @@ public class Event {
 		}
 
 		public int size() {
-			return wrapped.size();
+			return properties.size() + 1;
 		}
 	}
 }

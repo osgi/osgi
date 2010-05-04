@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,18 @@
 package org.osgi.service.event;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamField;
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A bundle's authority to publish or subscribe to event on a topic.
@@ -387,10 +395,9 @@ final class TopicPermissionCollection extends PermissionCollection {
 	/**
 	 * Table of permissions.
 	 * 
-	 * @serial
 	 * @GuardedBy this
 	 */
-	private final Hashtable	permissions;
+	private transient Map<String, TopicPermission>	permissions;
 	/**
 	 * Boolean saying if "*" is in the collection.
 	 * 
@@ -404,7 +411,7 @@ final class TopicPermissionCollection extends PermissionCollection {
 	 * 
 	 */
 	public TopicPermissionCollection() {
-		permissions = new Hashtable();
+		permissions = new HashMap<String, TopicPermission>();
 		all_allowed = false;
 	}
 
@@ -434,7 +441,7 @@ final class TopicPermissionCollection extends PermissionCollection {
 		final int newMask = tp.getActionsMask();
 
 		synchronized (this) {
-			final TopicPermission existing = (TopicPermission) permissions
+			final TopicPermission existing = permissions
 					.get(name);
 			if (existing != null) {
 				final int oldMask = existing.getActionsMask();
@@ -476,7 +483,7 @@ final class TopicPermissionCollection extends PermissionCollection {
 		// short circuit if the "*" Permission was added
 		synchronized (this) {
 			if (all_allowed) {
-				x = (TopicPermission) permissions.get("*");
+				x = permissions.get("*");
 				if (x != null) {
 					effective |= x.getActionsMask();
 					if ((effective & desired) == desired) {
@@ -484,7 +491,7 @@ final class TopicPermissionCollection extends PermissionCollection {
 					}
 				}
 			}
-			x = (TopicPermission) permissions.get(name);
+			x = permissions.get(name);
 		}
 		// strategy:
 		// Check for full match first. Then work our way up the
@@ -502,7 +509,7 @@ final class TopicPermissionCollection extends PermissionCollection {
 		while ((last = name.lastIndexOf("/", offset)) != -1) {
 			name = name.substring(0, last + 1) + "*";
 			synchronized (this) {
-				x = (TopicPermission) permissions.get(name);
+				x = permissions.get(name);
 			}
 			if (x != null) {
 				effective |= x.getActionsMask();
@@ -523,7 +530,32 @@ final class TopicPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>TopicPermission</code> objects.
 	 */
-	public Enumeration elements() {
-		return permissions.elements();
+	public synchronized Enumeration<Permission> elements() {
+		List<Permission> all = new ArrayList<Permission>(permissions.values());
+		return Collections.enumeration(all);
+	}
+
+	/* serialization logic */
+	private static final ObjectStreamField[]	serialPersistentFields	= {
+			new ObjectStreamField("permissions", Hashtable.class),
+			new ObjectStreamField("all_allowed", Boolean.TYPE)			};
+
+	private synchronized void writeObject(ObjectOutputStream out)
+			throws IOException {
+		Hashtable<String, TopicPermission> hashtable = new Hashtable<String, TopicPermission>(
+				permissions);
+		ObjectOutputStream.PutField pfields = out.putFields();
+		pfields.put("permissions", hashtable);
+		pfields.put("all_allowed", all_allowed);
+		out.writeFields();
+	}
+
+	private synchronized void readObject(java.io.ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+		ObjectInputStream.GetField gfields = in.readFields();
+		Hashtable<String, TopicPermission> hashtable = (Hashtable<String, TopicPermission>) gfields
+				.get("permissions", null);
+		permissions = new HashMap<String, TopicPermission>(hashtable);
+		all_allowed = gfields.get("all_allowed", false);
 	}
 }

@@ -1,5 +1,5 @@
 Bundle-Activator: $(p).tb2.Activator
-Bundle-Version: 4
+Bundle-Version: 4.1.0.${project.build}
 
 Private-Package	: $(p).tb2
 
