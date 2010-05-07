@@ -546,7 +546,7 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		session.close();
 	}
 
-	//FW‚ª’¼‚Á‚Ä‚È‚¢‚Ì‚ÅCTC‚©‚çŠO‚·D
+	//FWï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚È‚ï¿½ï¿½Ì‚ÅCTCï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½D
 	public void suspendedTestPackageStateNodeUpdate2() throws DmtException,
 			BundleException, IOException, InterruptedException {
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);

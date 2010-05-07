@@ -1,7 +1,0 @@
-Bundle-SymbolicName:                     ${p}.error_array_target_bad_element
-Bundle-Version:                          4.2
-Import-Package:                          ${p}.components.injection, ${p}.services
--resourceonly: true
-Include-Resource					= \
-	OSGI-INF/blueprint/config.xml=src/org/osgi/test/cases/blueprint/components/injection/error_array_target_bad_element.xml
-
