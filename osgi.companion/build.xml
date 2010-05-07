@@ -57,7 +57,7 @@
 	</target>
 
 	<target name="japitools.core" depends="init">
-		<echo>osgi.core ${target}/osgi.core.jar</echo>
+		<echo>osgi.core ${project.workspace}/osgi.core/${target-dir}/osgi.core.jar</echo>
 		<java classname="net.wuffies.japi.Japize">
 			<classpath path="${licensed}/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
@@ -65,13 +65,13 @@
 			<arg value="${target}/japi/osgi.core-latest.japi" />
 			<arg value="packages" />
 			<arg value="${repo}/ee.j2se/ee.j2se-1.5.0.jar" />
-			<arg value="${target}/osgi.core.jar" />
+			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
 			<arg line="${japi.osgi.core}" />
 		</java>
 	</target>
 
 	<target name="japitools.cmpn" depends="init">
-		<echo>osgi.cmpn ${target}/osgi.cmpn.jar</echo>
+		<echo>osgi.cmpn ${project.workspace}/osgi.cmpn/${target-dir}/osgi.cmpn.jar</echo>
 		<java classname="net.wuffies.japi.Japize">
 			<classpath path="${licensed}/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
@@ -80,8 +80,8 @@
 			<arg value="packages" />
 			<arg value="${repo}/ee.j2se/ee.j2se-1.5.0.jar" />
 			<arg value="${repo}/ee.foundation/ee.foundation-1.1.0.jar" />
-			<arg value="${target}/osgi.core.jar" />
-			<arg value="${target}/osgi.cmpn.jar" />
+			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
+			<arg value="${project.workspace}/osgi.cmpn/${target-dir}/osgi.cmpn.jar" />
 			<arg value="${api.servlet}" />
 			<arg value="${api.jaxp}" />
 			<arg line="${japi.osgi.cmpn}" />
@@ -89,7 +89,7 @@
 	</target>
 
 	<target name="japitools.mobile" depends="init">
-		<echo>osgi.mobile ${target}/osgi.mobile.jar</echo>
+		<echo>osgi.mobile ${project.workspace}/osgi.mobile/${target-dir}/osgi.mobile.jar</echo>
 		<java classname="net.wuffies.japi.Japize">
 			<classpath path="${licensed}/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
@@ -98,15 +98,15 @@
 			<arg value="packages" />
 			<arg value="${repo}/ee.j2se/ee.j2se-1.5.0.jar" />
 			<arg value="${repo}/ee.foundation/ee.foundation-1.1.0.jar" />
-			<arg value="${target}/osgi.core.jar" />
-			<arg value="${target}/osgi.mobile.jar" />
+			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
+			<arg value="${project.workspace}/osgi.mobile/${target-dir}/osgi.mobile.jar" />
 			<arg value="${api.jaxp}" />
 			<arg line="${japi.osgi.mobile}" />
 		</java>
 	</target>
 
 	<target name="japitools.enterprise" depends="init">
-		<echo>osgi.enterprise ${target}/osgi.enterprise.jar</echo>
+		<echo>osgi.enterprise ${project.workspace}/osgi.enterprise/${target-dir}/osgi.enterprise.jar</echo>
 		<java classname="net.wuffies.japi.Japize">
 			<classpath path="${licensed}/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
@@ -114,8 +114,8 @@
 			<arg value="${target}/japi/osgi.enterprise-latest.japi" />
 			<arg value="packages" />
 			<arg value="${repo}/ee.j2se/ee.j2se-1.5.0.jar" />
-			<arg value="${target}/osgi.core.jar" />
-			<arg value="${target}/osgi.enterprise.jar" />
+			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
+			<arg value="${project.workspace}/osgi.enterprise/${target-dir}/osgi.enterprise.jar" />
 			<arg value="${api.servlet}" />
 			<arg value="${api.jpa}" />
 			<arg value="${api.jaxp}" />
@@ -124,7 +124,7 @@
 	</target>
 
 	<target name="japitools.proposed" depends="init">
-		<echo>osgi.proposed ${target}/osgi.proposed.jar</echo>
+		<echo>osgi.proposed ${project.workspace}/osgi.proposed/${target-dir}/osgi.proposed.jar</echo>
 		<java classname="net.wuffies.japi.Japize">
 			<classpath path="${licensed}/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
@@ -132,8 +132,8 @@
 			<arg value="${target}/japi/osgi.proposed-latest.japi" />
 			<arg value="packages" />
 			<arg value="${repo}/ee.j2se/ee.j2se-1.5.0.jar" />
-			<arg value="${target}/osgi.core.jar" />
-			<arg value="${target}/osgi.proposed.jar" />
+			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
+			<arg value="${project.workspace}/osgi.proposed/${target-dir}/osgi.proposed.jar" />
 			<arg value="${api.jaxp}" />
 			<arg line="${japi.osgi.proposed}" />
 		</java>
@@ -308,6 +308,15 @@
 			<arg value="${target}/japi/ee.minimum-latest.japi" />
 			<arg value="${target}/japi/ee.foundation-latest.japi" />
 		</exec>
+	</target>
+
+	<target name="echo" depends="master.echo">
+		<echo>companions:             ${companions}</echo>
+		<echo>core.specs:             ${core.specs}</echo>
+		<echo>cmpn.specs:             ${cmpn.specs}</echo>
+		<echo>mobile.specs:           ${mobile.specs}</echo>
+		<echo>enterprise.specs:       ${enterprise.specs}</echo>
+		<echo>proposed.specs:         ${proposed.specs}</echo>
 	</target>
 
 	<import file="../cnf/build.xml" />

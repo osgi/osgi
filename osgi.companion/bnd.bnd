@@ -1,27 +1,12 @@
--reportnewer : true
-Bundle-License	= http://opensource.org/licenses/apache2.0.php; \
-	link="http://www.apache.org/licenses/LICENSE-2.0"; \
-	description="Apache License, Version 2.0"
-
-# Build the deliverables that are published in the repository
-# for use in all projects.
-
-bin.includes				= osgi.*.jar
-
+-nope							=true
+nodeploy						=true
 
 # The following line builds all these files and publishes them to 
 # the repository (if they are deployable)
 
 -dependson 					=  \
 	${ees}, \
-	${specs} 
-
--buildpath 					= \
-	${replace;${specs};.+;$0\\;version=project}, \
-	ee.foundation;version=1.1
-
-# Build the osgi spec files
--sub       = osgi.*.bnd
+	${companions} 
 
 japi.osgi.core 				= ${replace;$(core.specs);.+;+$0}
 japi.osgi.cmpn 				= ${replace;$(cmpn.specs);.+;+$0}
@@ -33,4 +18,24 @@ api.servlet = ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}
 api.jaxp = ${repo;com.icl.saxon}
 api.jpa = ${repo;org.eclipse.persistence.jpa_spec}
 
--include : layout.bnd
+javadoc.packages		 	= ${uniq; ${core.packages}, ${cmpn.packages}, ${mobile.packages}, ${enterprise.packages}}
+
+ees 						= \
+ ee.minimum, \
+ ee.foundation
+ 
+companions					= \
+ osgi.core, \
+ osgi.cmpn, \
+ osgi.mobile, \
+ osgi.enterprise, \
+ osgi.proposed
+
+# The following causes bnd to barf, so we have to expand it manually 
+#-include:  ${replace;${companions};.+;${project.workspace}/$0/layout.bnd}
+
+-include: ${project.workspace}/osgi.core/layout.bnd, \
+	${project.workspace}/osgi.cmpn/layout.bnd, \
+	${project.workspace}/osgi.mobile/layout.bnd, \
+	${project.workspace}/osgi.enterprise/layout.bnd, \
+	${project.workspace}/osgi.proposed/layout.bnd

@@ -15,15 +15,14 @@ cmpn.specs = \
 	 org.osgi.service.monitor, \
 	 org.osgi.service.prefs, \
      org.osgi.service.provisioning, \
-     org.osgi.service.remoteserviceadmin, \
 	 org.osgi.service.upnp, \
 	 org.osgi.service.useradmin, \
 	 org.osgi.service.wireadmin, \
-	 org.osgi.util.measurement, \
-	 org.osgi.util.position, \
 	 org.osgi.util.cdma, \
 	 org.osgi.util.gsm, \
+	 org.osgi.util.measurement, \
 	 org.osgi.util.mobile, \
+	 org.osgi.util.position, \
 	 org.osgi.util.tracker, \
 	 org.osgi.util.xml
 
