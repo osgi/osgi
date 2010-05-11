@@ -19,6 +19,7 @@ package org.osgi.framework.hooks.service;
 import java.util.Collection;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /**
  * OSGi Framework Service Find Hook Service.
@@ -58,6 +59,5 @@ public interface FindHook {
 	 *        synchronized.
 	 */
 	void find(BundleContext context, String name, String filter,
-			boolean allServices,
-			Collection/* <ServiceReference> */references);
+			boolean allServices, Collection<ServiceReference< ? >> references);
 }

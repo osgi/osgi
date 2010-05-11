@@ -17,7 +17,9 @@
 package org.osgi.test.cases.tracker.junit;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
@@ -28,7 +30,8 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
 public class BundleTrackerTests extends OSGiTestCase {
 
 	public void testOpenClose() {
-		BundleTracker bt = new BundleTracker(getContext(), Bundle.ACTIVE, null);
+		BundleTracker<Bundle> bt = new BundleTracker<Bundle>(getContext(),
+				Bundle.ACTIVE, null);
 		int size = bt.size();
 		assertEquals("size not zero", 0, size);
 		Bundle[] bundles = bt.getBundles();
@@ -46,6 +49,15 @@ public class BundleTrackerTests extends OSGiTestCase {
 				Object tracked = bt.getObject(bundle);
 				assertEquals("default tracked != bundle", bundle, tracked);
 			}
+			Map<Bundle, Bundle> map = bt.getTracked();
+			assertEquals("size() != map.size()", size, map.size());
+			for (Iterator<Map.Entry<Bundle, Bundle>> iter = map.entrySet()
+					.iterator(); iter.hasNext();) {
+				Map.Entry<Bundle, Bundle> e = iter.next();
+				Bundle bundle = e.getKey();
+				Object tracked = e.getValue();
+				assertEquals("default tracked != bundle", bundle, tracked);
+			}
 		}
 		finally {
 			bt.close();
@@ -54,6 +66,8 @@ public class BundleTrackerTests extends OSGiTestCase {
 		assertEquals("size not zero", 0, size);
 		bundles = bt.getBundles();
 		assertNull("getBundles() not null", bundles);
+		Map<Bundle, Bundle> map = bt.getTracked();
+		assertEquals("size() != map.size()", size, map.size());
 
 		bt.open();
 		try {
@@ -67,6 +81,15 @@ public class BundleTrackerTests extends OSGiTestCase {
 				Object tracked = bt.getObject(bundle);
 				assertEquals("default tracked != bundle", bundle, tracked);
 			}
+			map = bt.getTracked();
+			assertEquals("size() != map.size()", size, map.size());
+			for (Iterator<Map.Entry<Bundle, Bundle>> iter = map.entrySet()
+					.iterator(); iter.hasNext();) {
+				Map.Entry<Bundle, Bundle> e = iter.next();
+				Bundle bundle = e.getKey();
+				Object tracked = e.getValue();
+				assertEquals("default tracked != bundle", bundle, tracked);
+			}
 		}
 		finally {
 			bt.close();
@@ -75,14 +98,18 @@ public class BundleTrackerTests extends OSGiTestCase {
 		assertEquals("size not zero", 0, size);
 		bundles = bt.getBundles();
 		assertNull("getBundles() not null", bundles);
+		map = bt.getTracked();
+		assertEquals("size() != map.size()", size, map.size());
 	}
 
 	public void testCustomizer() throws Exception {
 		final boolean[] customizerCalled = new boolean[] {false, false, false};
-		BundleTracker bt = new BundleTracker(getContext(), Bundle.ACTIVE,
-				new BundleTrackerCustomizer() {
+		BundleTracker<BundleWrapper> bt = new BundleTracker<BundleWrapper>(
+				getContext(), Bundle.ACTIVE,
+				new BundleTrackerCustomizer<BundleWrapper>() {
 
-					public Object addingBundle(Bundle bundle, BundleEvent event) {
+					public BundleWrapper addingBundle(Bundle bundle,
+							BundleEvent event) {
 						synchronized (customizerCalled) {
 							customizerCalled[0] = true;
 						}
@@ -90,14 +117,14 @@ public class BundleTrackerTests extends OSGiTestCase {
 					}
 
 					public void modifiedBundle(Bundle bundle,
-							BundleEvent event, Object tracked) {
+							BundleEvent event, BundleWrapper tracked) {
 						synchronized (customizerCalled) {
 							customizerCalled[1] = true;
 						}
 					}
 
 					public void removedBundle(Bundle bundle, BundleEvent event,
-							Object tracked) {
+							BundleWrapper tracked) {
 						synchronized (customizerCalled) {
 							customizerCalled[2] = true;
 						}
@@ -109,9 +136,10 @@ public class BundleTrackerTests extends OSGiTestCase {
 
 	public void testSubclass() throws Exception {
 		final boolean[] customizerCalled = new boolean[] {false, false, false};
-		BundleTracker bt = new BundleTracker(getContext(), Bundle.ACTIVE, null) {
+		BundleTracker<BundleWrapper> bt = new BundleTracker<BundleWrapper>(
+				getContext(), Bundle.ACTIVE, null) {
 
-			public Object addingBundle(Bundle bundle, BundleEvent event) {
+			public BundleWrapper addingBundle(Bundle bundle, BundleEvent event) {
 				synchronized (customizerCalled) {
 					customizerCalled[0] = true;
 				}
@@ -119,14 +147,14 @@ public class BundleTrackerTests extends OSGiTestCase {
 			}
 
 			public void modifiedBundle(Bundle bundle, BundleEvent event,
-					Object tracked) {
+					BundleWrapper tracked) {
 				synchronized (customizerCalled) {
 					customizerCalled[1] = true;
 				}
 			}
 
 			public void removedBundle(Bundle bundle, BundleEvent event,
-					Object tracked) {
+					BundleWrapper tracked) {
 				synchronized (customizerCalled) {
 					customizerCalled[2] = true;
 				}
@@ -135,7 +163,7 @@ public class BundleTrackerTests extends OSGiTestCase {
 		testCustomizerInternal(bt, customizerCalled);
 	}
 
-	private void testCustomizerInternal(BundleTracker bt,
+	private void testCustomizerInternal(BundleTracker<BundleWrapper> bt,
 			boolean[] customizerCalled) throws Exception {
 		synchronized (customizerCalled) {
 			assertFalse("adding called", customizerCalled[0]);
@@ -150,8 +178,18 @@ public class BundleTrackerTests extends OSGiTestCase {
 			assertNotNull("getBundles() null", bundles);
 			for (int i = 0, l = bundles.length; i < l; i++) {
 				Bundle bundle = bundles[i];
-				BundleWrapper tracked = (BundleWrapper) bt.getObject(bundle);
+				BundleWrapper tracked = bt.getObject(bundle);
 				assertEquals("tracked.getBundle() != bundle", bundle, tracked
+						.getBundle());
+			}
+			Map<Bundle, BundleWrapper> map = bt.getTracked();
+			assertEquals("size() != map.size()", bt.size(), map.size());
+			for (Iterator<Map.Entry<Bundle, BundleWrapper>> iter = map
+					.entrySet().iterator(); iter.hasNext();) {
+				Map.Entry<Bundle, BundleWrapper> e = iter.next();
+				Bundle bundle = e.getKey();
+				BundleWrapper tracked = e.getValue();
+				assertEquals("default tracked != bundle", bundle, tracked
 						.getBundle());
 			}
 			synchronized (customizerCalled) {
@@ -179,8 +217,18 @@ public class BundleTrackerTests extends OSGiTestCase {
 			assertNotNull("getBundles() null", bundles);
 			for (int i = 0, l = bundles.length; i < l; i++) {
 				Bundle bundle = bundles[i];
-				BundleWrapper tracked = (BundleWrapper) bt.getObject(bundle);
+				BundleWrapper tracked = bt.getObject(bundle);
 				assertEquals("tracked.getBundle() != bundle", bundle, tracked
+						.getBundle());
+			}
+			Map<Bundle, BundleWrapper> map = bt.getTracked();
+			assertEquals("size() != map.size()", bt.size(), map.size());
+			for (Iterator<Map.Entry<Bundle, BundleWrapper>> iter = map
+					.entrySet().iterator(); iter.hasNext();) {
+				Map.Entry<Bundle, BundleWrapper> e = iter.next();
+				Bundle bundle = e.getKey();
+				BundleWrapper tracked = e.getValue();
+				assertEquals("default tracked != bundle", bundle, tracked
 						.getBundle());
 			}
 			synchronized (customizerCalled) {
@@ -244,7 +292,8 @@ public class BundleTrackerTests extends OSGiTestCase {
 	}
 
 	public void testTrackingCount() {
-		BundleTracker bt = new BundleTracker(getContext(), Bundle.ACTIVE, null);
+		BundleTracker<Bundle> bt = new BundleTracker<Bundle>(getContext(),
+				Bundle.ACTIVE, null);
 		assertEquals("size not zero", 0, bt.size());
 		assertEquals("tracking count not -1", -1, bt.getTrackingCount());
 		bt.open();
@@ -269,19 +318,18 @@ public class BundleTrackerTests extends OSGiTestCase {
 
 	public void testEvents() throws Exception {
 		Bundle[] bundles = getContext().getBundles();
-		final List extraneousBundles = new ArrayList(bundles.length);
-		for (int i = 0, l = bundles.length; i < l; i++) {
-			Bundle b = bundles[i];
+		final List<Bundle> extraneousBundles = new ArrayList<Bundle>(
+				bundles.length);
+		for (Bundle b : bundles) {
 			if ((b.getState() & (Bundle.INSTALLED | Bundle.RESOLVED)) != 0) {
 				extraneousBundles.add(b);
 			}
 		}
 		final BundleEvent[] events = new BundleEvent[] {null, null, null};
-		BundleTracker bt = new BundleTracker(getContext(), Bundle.INSTALLED
-				| Bundle.RESOLVED,
-				null) {
+		BundleTracker<Bundle> bt = new BundleTracker<Bundle>(getContext(),
+				Bundle.INSTALLED | Bundle.RESOLVED, null) {
 
-			public Object addingBundle(Bundle bundle, BundleEvent event) {
+			public Bundle addingBundle(Bundle bundle, BundleEvent event) {
 				if (extraneousBundles.contains(bundle)) {
 					return null;
 				}
@@ -292,14 +340,14 @@ public class BundleTrackerTests extends OSGiTestCase {
 			}
 
 			public void modifiedBundle(Bundle bundle, BundleEvent event,
-					Object tracked) {
+					Bundle tracked) {
 				synchronized (events) {
 					events[1] = event;
 				}
 			}
 
 			public void removedBundle(Bundle bundle, BundleEvent event,
-					Object tracked) {
+					Bundle tracked) {
 				synchronized (events) {
 					events[2] = event;
 				}
@@ -343,8 +391,7 @@ public class BundleTrackerTests extends OSGiTestCase {
 					events[1] = null;
 					assertNotNull("removed not called", events[2]);
 					assertEquals("event type not started",
-							BundleEvent.STARTING,
-							events[2].getType());
+							BundleEvent.STARTING, events[2].getType());
 					assertEquals("event bundle not tb1", tb1, events[2]
 							.getBundle());
 					events[2] = null;

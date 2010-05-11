@@ -43,11 +43,12 @@ import org.osgi.framework.BundleEvent;
  * <code>BundleTrackerCustomizer</code> implementations must also be
  * thread-safe.
  * 
+ * @param <T> The type of the tracked object.
  * @ThreadSafe
  * @version $Revision$
  * @since 1.4
  */
-public interface BundleTrackerCustomizer {
+public interface BundleTrackerCustomizer<T> {
 	/**
 	 * A bundle is being added to the <code>BundleTracker</code>.
 	 * 
@@ -68,7 +69,7 @@ public interface BundleTrackerCustomizer {
 	 *         object or <code>null</code> if the specified <code>Bundle</code>
 	 *         object should not be tracked.
 	 */
-	public Object addingBundle(Bundle bundle, BundleEvent event);
+	public T addingBundle(Bundle bundle, BundleEvent event);
 
 	/**
 	 * A bundle tracked by the <code>BundleTracker</code> has been modified.
@@ -84,7 +85,7 @@ public interface BundleTrackerCustomizer {
 	 * @param object The tracked object for the specified bundle.
 	 */
 	public void modifiedBundle(Bundle bundle, BundleEvent event,
-			Object object);
+			T object);
 
 	/**
 	 * A bundle tracked by the <code>BundleTracker</code> has been removed.
@@ -100,5 +101,5 @@ public interface BundleTrackerCustomizer {
 	 * @param object The tracked object for the specified bundle.
 	 */
 	public void removedBundle(Bundle bundle, BundleEvent event,
-			Object object);
+			T object);
 }

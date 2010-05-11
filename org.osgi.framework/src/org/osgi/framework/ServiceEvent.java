@@ -41,7 +41,7 @@ public class ServiceEvent extends EventObject {
 	/**
 	 * Reference to the service that had a change occur in its lifecycle.
 	 */
-	private final ServiceReference	reference;
+	private final ServiceReference< ? >	reference;
 
 	/**
 	 * Type of service lifecycle change.
@@ -108,7 +108,7 @@ public class ServiceEvent extends EventObject {
 	 * @param reference A <code>ServiceReference</code> object to the service
 	 * 	that had a lifecycle change.
 	 */
-	public ServiceEvent(int type, ServiceReference reference) {
+	public ServiceEvent(int type, ServiceReference< ? > reference) {
 		super(reference);
 		this.reference = reference;
 		this.type = type;
@@ -122,7 +122,7 @@ public class ServiceEvent extends EventObject {
 	 * 
 	 * @return Reference to the service that had a lifecycle change.
 	 */
-	public ServiceReference getServiceReference() {
+	public ServiceReference< ? > getServiceReference() {
 		return reference;
 	}
 

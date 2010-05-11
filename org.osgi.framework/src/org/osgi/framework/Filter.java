@@ -55,7 +55,7 @@ public interface Filter {
 	 * @return <code>true</code> if the service's properties match this
 	 *         <code>Filter</code>; <code>false</code> otherwise.
 	 */
-	public boolean match(ServiceReference reference);
+	public boolean match(ServiceReference< ? > reference);
 
 	/**
 	 * Filter using a <code>Dictionary</code>. This <code>Filter</code> is
@@ -69,7 +69,7 @@ public interface Filter {
 	 * @throws IllegalArgumentException If <code>dictionary</code> contains case
 	 *         variants of the same key name.
 	 */
-	public boolean match(Dictionary dictionary);
+	public boolean match(Dictionary<String, Object> dictionary);
 
 	/**
 	 * Returns this <code>Filter</code>'s filter string.
@@ -85,7 +85,7 @@ public interface Filter {
 	 * Compares this <code>Filter</code> to another <code>Filter</code>.
 	 * 
 	 * <p>
-	 * This method returns the result of calling
+	 * This implementation returns the result of calling
 	 * <code>this.toString().equals(obj.toString())</code>.
 	 * 
 	 * @param obj The object to compare against this <code>Filter</code>.
@@ -100,7 +100,7 @@ public interface Filter {
 	 * Returns the hashCode for this <code>Filter</code>.
 	 * 
 	 * <p>
-	 * This method returns the result of calling
+	 * This implementation returns the result of calling
 	 * <code>this.toString().hashCode()</code>.
 	 * 
 	 * @return The hashCode of this <code>Filter</code>.
@@ -119,5 +119,5 @@ public interface Filter {
 	 *         values match this filter; <code>false</code> otherwise.
 	 * @since 1.3
 	 */
-	public boolean matchCase(Dictionary dictionary);
+	public boolean matchCase(Dictionary<String, Object> dictionary);
 }

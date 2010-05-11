@@ -186,7 +186,7 @@ public class BundleException extends Exception {
 	 *         set.
 	 * @since 1.3
 	 */
-    public Throwable getCause() {
+	public Throwable getCause() {
 		return super.getCause();
 	}
 

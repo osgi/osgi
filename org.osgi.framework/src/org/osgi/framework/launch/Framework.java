@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package org.osgi.framework.launch;
 
 import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -305,4 +307,37 @@ public interface Framework extends Bundle {
 	 * @see Constants#SYSTEM_BUNDLE_SYMBOLICNAME
 	 */
 	String getSymbolicName();
+
+	/**
+	 * Returns <code>null</code> as a framework implementation does not have a
+	 * proper bundle from which to return entry paths.
+	 * 
+	 * @param path Ignored.
+	 * @return <code>null</code> as a framework implementation does not have a
+	 *         proper bundle from which to return entry paths.
+	 */
+	Enumeration<String> getEntryPaths(String path);
+
+	/**
+	 * Returns <code>null</code> as a framework implementation does not have a
+	 * proper bundle from which to return an entry.
+	 * 
+	 * @param path Ignored.
+	 * @return <code>null</code> as a framework implementation does not have a
+	 *         proper bundle from which to return an entry.
+	 */
+	URL getEntry(String path);
+
+	/**
+	 * Returns <code>null</code> as a framework implementation does not have a
+	 * proper bundle from which to return entries.
+	 * 
+	 * @param path Ignored.
+	 * @param filePattern Ignored.
+	 * @param recurse Ignored.
+	 * @return <code>null</code> as a framework implementation does not have a
+	 *         proper bundle from which to return entries.
+	 */
+	Enumeration<URL> findEntries(String path, String filePattern,
+			boolean recurse);
 }

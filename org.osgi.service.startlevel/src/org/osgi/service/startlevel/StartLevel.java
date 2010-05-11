@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.osgi.service.startlevel;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkListener;
 
 /**
  * The StartLevel service allows management agents to manage a start level
@@ -79,7 +80,7 @@ public interface StartLevel {
 	 * 
 	 * @return The active start level value of the Framework.
 	 */
-	public int getStartLevel();
+	int getStartLevel();
 
 	/**
 	 * Modify the active start level of the Framework.
@@ -143,7 +144,37 @@ public interface StartLevel {
 	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the
 	 *         Java runtime environment supports permissions.
 	 */
-	public void setStartLevel(int startlevel);
+	void setStartLevel(int startlevel);
+
+	/**
+	 * Modify the active start level of the Framework and notify when complete.
+	 * 
+	 * <p>
+	 * This method performs the same actions as {@link #setStartLevel(int)} and
+	 * notifies the specified <code>FrameworkListener</code>s, in the order
+	 * specified, when the start level change is complete. When the start level
+	 * change completes normally, each specified <code>FrameworkListener</code>
+	 * will be called with a Framework event of type
+	 * <code>FrameworkEvent.STARTLEVEL_CHANGED</code>. If the start level change
+	 * does not complete normally, each specified <code>FrameworkListener</code>
+	 * will be called with a Framework event of type
+	 * <code>FrameworkEvent.ERROR</code>.
+	 * 
+	 * @param startlevel The requested start level for the Framework.
+	 * @param listeners Zero or more listeners to be notified when the start
+	 *        level change has been completed. The specified listeners do not
+	 *        need to be otherwise registered with the framework. If a specified
+	 *        listener is already registered with the framework, it will be
+	 *        notified twice.
+	 * @throws IllegalArgumentException If the specified start level is less
+	 *         than or equal to zero.
+	 * @throws SecurityException If the caller does not have
+	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the
+	 *         Java runtime environment supports permissions.
+	 * @see #setStartLevel(int)
+	 * @since 1.2
+	 */
+	void setStartLevel(int startlevel, FrameworkListener... listeners);
 
 	/**
 	 * Return the assigned start level value for the specified Bundle.
@@ -154,8 +185,11 @@ public interface StartLevel {
 	 *         been uninstalled or if the specified bundle was not created by
 	 *         the same framework instance that registered this
 	 *         <code>StartLevel</code> service.
+	 * @deprecated As of 1.2. Replaced by
+	 *             {@link BundleStartLevel#getStartLevel()
+	 *             bundle.adapt(BundleStartLevel.class).getStartLevel()}
 	 */
-	public int getBundleStartLevel(Bundle bundle);
+	int getBundleStartLevel(Bundle bundle);
 
 	/**
 	 * Assign a start level value to the specified Bundle.
@@ -191,8 +225,11 @@ public interface StartLevel {
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AdminPermission[bundle,EXECUTE]</code> and the Java runtime
 	 *         environment supports permissions.
+	 * @deprecated As of 1.2. Replaced by
+	 *             {@link BundleStartLevel#setStartLevel(int)
+	 *             bundle.adapt(BundleStartLevel.class).setStartLevel(int)}
 	 */
-	public void setBundleStartLevel(Bundle bundle, int startlevel);
+	void setBundleStartLevel(Bundle bundle, int startlevel);
 
 	/**
 	 * Return the initial start level value that is assigned to a Bundle when it
@@ -201,7 +238,7 @@ public interface StartLevel {
 	 * @return The initial start level value for Bundles.
 	 * @see #setInitialBundleStartLevel
 	 */
-	public int getInitialBundleStartLevel();
+	int getInitialBundleStartLevel();
 
 	/**
 	 * Set the initial start level value that is assigned to a Bundle when it is
@@ -230,7 +267,7 @@ public interface StartLevel {
 	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the
 	 *         Java runtime environment supports permissions.
 	 */
-	public void setInitialBundleStartLevel(int startlevel);
+	void setInitialBundleStartLevel(int startlevel);
 
 	/**
 	 * Returns whether the specified bundle's autostart setting indicates the
@@ -248,8 +285,11 @@ public interface StartLevel {
 	 *         the same framework instance that registered this
 	 *         <code>StartLevel</code> service.
 	 * @see Bundle#START_TRANSIENT
+	 * @deprecated As of 1.2. Replaced by
+	 *             {@link BundleStartLevel#isPersistentlyStarted()
+	 *             bundle.adapt(BundleStartLevel.class).isPersistentlyStarted()}
 	 */
-	public boolean isBundlePersistentlyStarted(Bundle bundle);
+	boolean isBundlePersistentlyStarted(Bundle bundle);
 
 	/**
 	 * Returns whether the specified bundle's autostart setting indicates that
@@ -268,6 +308,9 @@ public interface StartLevel {
 	 *         <code>StartLevel</code> service.
 	 * @since 1.1
 	 * @see Bundle#START_ACTIVATION_POLICY
+	 * @deprecated As of 1.2. Replaced by
+	 *             {@link BundleStartLevel#isActivationPolicyUsed()
+	 *             bundle.adapt(BundleStartLevel.class).isActivationPolicyUsed()}
 	 */
-	public boolean isBundleActivationPolicyUsed(Bundle bundle);
+	boolean isBundleActivationPolicyUsed(Bundle bundle);
 }

@@ -46,7 +46,7 @@ public interface ListenerHook {
 	 *        result in an <code>UnsupportedOperationException</code>. The
 	 *        collection is not synchronized.
 	 */
-	void added(Collection/* <ListenerInfo> */listeners);
+	void added(Collection<ListenerInfo> listeners);
 
 	/**
 	 * Removed listeners hook method. This method is called to provide the hook
@@ -60,7 +60,7 @@ public interface ListenerHook {
 	 *        will result in an <code>UnsupportedOperationException</code>. The
 	 *        collection is not synchronized.
 	 */
-	void removed(Collection/* <ListenerInfo> */listeners);
+	void removed(Collection<ListenerInfo> listeners);
 
 	/**
 	 * Information about a Service Listener. This interface describes the bundle

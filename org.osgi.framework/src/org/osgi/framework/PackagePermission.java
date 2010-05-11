@@ -117,7 +117,7 @@ public final class PackagePermission extends BasicPermission {
 	 * filter in implies. This is not initialized until necessary, and then
 	 * cached in this object.
 	 */
-	private transient volatile Dictionary	properties;
+	private transient volatile Dictionary<String, Object>	properties;
 
 	/**
 	 * Creates a new <code>PackagePermission</code> object.
@@ -551,17 +551,17 @@ public final class PackagePermission extends BasicPermission {
 	 * 
 	 * @return a dictionary of properties for this permission.
 	 */
-	private Dictionary getProperties() {
-		Dictionary result = properties;
+	private Dictionary<String, Object> getProperties() {
+		Dictionary<String, Object> result = properties;
 		if (result != null) {
 			return result;
 		}
-		final Dictionary dict = new Hashtable(5);
+		final Dictionary<String, Object> dict = new Hashtable<String, Object>(5);
 		if (filter == null) {
 			dict.put("package.name", getName());
 		}
 		if (bundle != null) {
-			AccessController.doPrivileged(new PrivilegedAction() {
+			AccessController.doPrivileged(new PrivilegedAction<Object>() {
 				public Object run() {
 					dict.put("id", new Long(bundle.getBundleId()));
 					dict.put("location", bundle.getLocation());
@@ -596,7 +596,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * 
 	 * @GuardedBy this
 	 */
-	private transient Map	permissions;
+	private transient Map<String, PackagePermission>	permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
@@ -612,13 +612,13 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * @serial
 	 * @GuardedBy this
 	 */
-	private Map				filterPermissions;
+	private Map<String, PackagePermission>				filterPermissions;
 
 	/**
 	 * Create an empty PackagePermissions object.
 	 */
 	public PackagePermissionCollection() {
-		permissions = new HashMap();
+		permissions = new HashMap<String, PackagePermission>();
 		all_allowed = false;
 	}
 
@@ -653,18 +653,18 @@ final class PackagePermissionCollection extends PermissionCollection {
 		final Filter f = pp.filter;
 		synchronized (this) {
 			/* select the bucket for the permission */
-			Map pc;
+			Map<String, PackagePermission> pc;
 			if (f != null) {
 				pc = filterPermissions;
 				if (pc == null) {
-					filterPermissions = pc = new HashMap();
+					filterPermissions = pc = new HashMap<String, PackagePermission>();
 				}
 			}
 			else {
 				pc = permissions;
 			}
 			
-			final PackagePermission existing = (PackagePermission) pc.get(name);
+			final PackagePermission existing = pc.get(name);
 			if (existing != null) {
 				final int oldMask = existing.action_mask;
 				final int newMask = pp.action_mask;
@@ -709,13 +709,13 @@ final class PackagePermissionCollection extends PermissionCollection {
 		final int desired = requested.action_mask;
 		int effective = PackagePermission.ACTION_NONE;
 
-		Collection perms;
+		Collection<PackagePermission> perms;
 		synchronized (this) {
-			Map pc = permissions;
+			Map<String, PackagePermission> pc = permissions;
 			PackagePermission pp;
 			/* short circuit if the "*" Permission was added */
 			if (all_allowed) {
-				pp = (PackagePermission) pc.get("*");
+				pp = pc.get("*");
 				if (pp != null) {
 					effective |= pp.action_mask;
 					if ((effective & desired) == desired) {
@@ -727,7 +727,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 			 * strategy: Check for full match first. Then work our way up the
 			 * name looking for matches on a.b.*
 			 */
-			pp = (PackagePermission) pc.get(requestedName);
+			pp = pc.get(requestedName);
 			if (pp != null) {
 				/* we have a direct hit! */
 				effective |= pp.action_mask;
@@ -740,7 +740,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 			int offset = requestedName.length() - 1;
 			while ((last = requestedName.lastIndexOf(".", offset)) != -1) {
 				requestedName = requestedName.substring(0, last + 1) + "*";
-				pp = (PackagePermission) pc.get(requestedName);
+				pp = pc.get(requestedName);
 				if (pp != null) {
 					effective |= pp.action_mask;
 					if ((effective & desired) == desired) {
@@ -760,9 +760,9 @@ final class PackagePermissionCollection extends PermissionCollection {
 			perms = pc.values();
 		}
 		/* iterate one by one over filteredPermissions */
-		for (Iterator iter = perms.iterator(); iter.hasNext();) {
-			if (((PackagePermission) iter.next())
-					.implies0(requested, effective)) {
+		for (Iterator<PackagePermission> iter = perms.iterator(); iter
+				.hasNext();) {
+			if (iter.next().implies0(requested, effective)) {
 				return true;
 			}
 		}
@@ -775,9 +775,9 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>PackagePermission</code> objects.
 	 */
-	public synchronized Enumeration elements() {
-		List all = new ArrayList(permissions.values());
-		Map pc = filterPermissions;
+	public synchronized Enumeration<Permission> elements() {
+		List<Permission> all = new ArrayList<Permission>(permissions.values());
+		Map<String, PackagePermission> pc = filterPermissions;
 		if (pc != null) {
 			all.addAll(pc.values());
 		}
@@ -792,7 +792,8 @@ final class PackagePermissionCollection extends PermissionCollection {
 
 	private synchronized void writeObject(ObjectOutputStream out)
 			throws IOException {
-		Hashtable hashtable = new Hashtable(permissions);
+		Hashtable<String, PackagePermission> hashtable = new Hashtable<String, PackagePermission>(
+				permissions);
 		ObjectOutputStream.PutField pfields = out.putFields();
 		pfields.put("permissions", hashtable);
 		pfields.put("all_allowed", all_allowed);
@@ -803,9 +804,12 @@ final class PackagePermissionCollection extends PermissionCollection {
 	private synchronized void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
-		Hashtable hashtable = (Hashtable) gfields.get("permissions", null);
-		permissions = new HashMap(hashtable);
+		Hashtable<String, PackagePermission> hashtable = (Hashtable<String, PackagePermission>) gfields
+				.get("permissions", null);
+		permissions = new HashMap<String, PackagePermission>(hashtable);
 		all_allowed = gfields.get("all_allowed", false);
-		filterPermissions = (HashMap) gfields.get("filterPermissions", null);
+		HashMap<String, PackagePermission> fp = (HashMap<String, PackagePermission>) gfields
+				.get("filterPermissions", null);
+		filterPermissions = fp;
 	}
 }

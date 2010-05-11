@@ -44,10 +44,12 @@ import org.osgi.framework.ServiceReference;
  * <code>ServiceTrackerCustomizer</code> implementations must also be
  * thread-safe.
  * 
+ * @param <S> The type of the service being tracked.
+ * @param <T> The type of the tracked object.
  * @ThreadSafe
  * @version $Revision$
  */
-public interface ServiceTrackerCustomizer {
+public interface ServiceTrackerCustomizer<S, T> {
 	/**
 	 * A service is being added to the <code>ServiceTracker</code>.
 	 * 
@@ -66,7 +68,7 @@ public interface ServiceTrackerCustomizer {
 	 *         service or <code>null</code> if the specified referenced service
 	 *         should not be tracked.
 	 */
-	public Object addingService(ServiceReference reference);
+	public T addingService(ServiceReference<S> reference);
 
 	/**
 	 * A service tracked by the <code>ServiceTracker</code> has been modified.
@@ -78,7 +80,7 @@ public interface ServiceTrackerCustomizer {
 	 * @param reference The reference to the service that has been modified.
 	 * @param service The service object for the specified referenced service.
 	 */
-	public void modifiedService(ServiceReference reference, Object service);
+	public void modifiedService(ServiceReference<S> reference, T service);
 
 	/**
 	 * A service tracked by the <code>ServiceTracker</code> has been removed.
@@ -90,5 +92,5 @@ public interface ServiceTrackerCustomizer {
 	 * @param reference The reference to the service that has been removed.
 	 * @param service The service object for the specified referenced service.
 	 */
-	public void removedService(ServiceReference reference, Object service);
+	public void removedService(ServiceReference<S> reference, T service);
 }

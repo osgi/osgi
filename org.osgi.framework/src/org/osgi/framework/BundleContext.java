@@ -18,6 +18,7 @@ package org.osgi.framework;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Dictionary;
 
 /**
@@ -67,11 +68,18 @@ import java.util.Dictionary;
  * The Framework is the only entity that can create <code>BundleContext</code>
  * objects and they are only valid within the Framework that created them.
  * 
+ * <p>
+ * A {@link Bundle} can be {@link Bundle#adapt(Class) adapted} to its
+ * <code>BundleContext</code>. In order for this to succeed, the caller must
+ * have the appropriate <code>AdminPermission[bundle,CONTEXT]</code> if the Java
+ * Runtime Environment supports permissions.
+ * 
  * @ThreadSafe
  * @version $Revision$
  */
 
-public interface BundleContext {
+public interface BundleContext extends BundleReference {
+
 	/**
 	 * Returns the value of the specified property. If the key is not found in
 	 * the Framework properties, the system properties are then searched. The
@@ -88,7 +96,7 @@ public interface BundleContext {
 	 *         <code>PropertyPermission</code> to read the property, and the
 	 *         Java Runtime Environment supports permissions.
 	 */
-	public String getProperty(String key);
+	String getProperty(String key);
 
 	/**
 	 * Returns the <code>Bundle</code> object associated with this
@@ -96,9 +104,10 @@ public interface BundleContext {
 	 * 
 	 * @return The <code>Bundle</code> object associated with this
 	 *         <code>BundleContext</code>.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this BundleContext is no
+	 *         longer valid.
 	 */
-	public Bundle getBundle();
+	Bundle getBundle();
 
 	/**
 	 * Installs a bundle from the specified <code>InputStream</code> object.
@@ -145,8 +154,8 @@ public interface BundleContext {
 	 * <b>Postconditions, when an exception is thrown </b>
 	 * <ul>
 	 * <li>Bundle is not installed. If there was an existing bundle for the
-	 * specified location then that bundle must still be in the state it was
-	 * prior calling this method.</li>
+	 * specified location, then that bundle must still be in the state it was
+	 * prior to calling this method.</li>
 	 * </ul>
 	 * 
 	 * @param location The location identifier of the bundle to install.
@@ -163,7 +172,7 @@ public interface BundleContext {
 	 *         Java Runtime Environment supports permissions.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
-	public Bundle installBundle(String location, InputStream input)
+	Bundle installBundle(String location, InputStream input)
 			throws BundleException;
 
 	/**
@@ -183,7 +192,7 @@ public interface BundleContext {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see #installBundle(String, InputStream)
 	 */
-	public Bundle installBundle(String location) throws BundleException;
+	Bundle installBundle(String location) throws BundleException;
 
 	/**
 	 * Returns the bundle with the specified identifier.
@@ -192,7 +201,7 @@ public interface BundleContext {
 	 * @return A <code>Bundle</code> object or <code>null</code> if the
 	 *         identifier does not match any installed bundle.
 	 */
-	public Bundle getBundle(long id);
+	Bundle getBundle(long id);
 
 	/**
 	 * Returns a list of all installed bundles.
@@ -205,20 +214,20 @@ public interface BundleContext {
 	 * @return An array of <code>Bundle</code> objects, one object per installed
 	 *         bundle.
 	 */
-	public Bundle[] getBundles();
+	Bundle[] getBundles();
 
 	/**
-	 * Adds the specified <code>ServiceListener</code> object with the specified
-	 * <code>filter</code> to the context bundle's list of listeners. See
-	 * {@link Filter} for a description of the filter syntax.
+	 * Adds the specified <code>ServiceListener</code> object with the
+	 * specified <code>filter</code> to the context bundle's list of
+	 * listeners. See {@link Filter} for a description of the filter syntax.
 	 * <code>ServiceListener</code> objects are notified when a service has a
 	 * lifecycle state change.
 	 * 
 	 * <p>
 	 * If the context bundle's list of listeners already contains a listener
-	 * <code>l</code> such that <code>(l==listener)</code>, then this method
-	 * replaces that listener's filter (which may be <code>null</code>) with the
-	 * specified one (which may be <code>null</code>).
+	 * <code>l</code> such that <code>(l==listener)</code>, then this
+	 * method replaces that listener's filter (which may be <code>null</code>)
+	 * with the specified one (which may be <code>null</code>).
 	 * 
 	 * <p>
 	 * The listener is called if the filter criteria is met. To filter based
@@ -228,16 +237,17 @@ public interface BundleContext {
 	 * 
 	 * <p>
 	 * When using a <code>filter</code>, it is possible that the
-	 * <code>ServiceEvent</code>s for the complete lifecycle of a service will
-	 * not be delivered to the listener. For example, if the <code>filter</code>
-	 * only matches when the property <code>x</code> has the value
-	 * <code>1</code>, the listener will not be called if the service is
-	 * registered with the property <code>x</code> not set to the value
-	 * <code>1</code>. Subsequently, when the service is modified setting
-	 * property <code>x</code> to the value <code>1</code>, the filter will
-	 * match and the listener will be called with a <code>ServiceEvent</code> of
-	 * type <code>MODIFIED</code>. Thus, the listener will not be called with a
-	 * <code>ServiceEvent</code> of type <code>REGISTERED</code>.
+	 * <code>ServiceEvent</code>s for the complete lifecycle of a service
+	 * will not be delivered to the listener. For example, if the
+	 * <code>filter</code> only matches when the property <code>x</code> has
+	 * the value <code>1</code>, the listener will not be called if the
+	 * service is registered with the property <code>x</code> not set to the
+	 * value <code>1</code>. Subsequently, when the service is modified
+	 * setting property <code>x</code> to the value <code>1</code>, the
+	 * filter will match and the listener will be called with a
+	 * <code>ServiceEvent</code> of type <code>MODIFIED</code>. Thus, the
+	 * listener will not be called with a <code>ServiceEvent</code> of type
+	 * <code>REGISTERED</code>.
 	 * 
 	 * <p>
 	 * If the Java Runtime Environment supports permissions, the
@@ -248,14 +258,15 @@ public interface BundleContext {
 	 * 
 	 * @param listener The <code>ServiceListener</code> object to be added.
 	 * @param filter The filter criteria.
-	 * @throws InvalidSyntaxException If <code>filter</code> contains an invalid
-	 *         filter string that cannot be parsed.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws InvalidSyntaxException If <code>filter</code> contains an
+	 *         invalid filter string that cannot be parsed.
+	 * @throws IllegalStateException If this BundleContext is no
+	 *         longer valid.
 	 * @see ServiceEvent
 	 * @see ServiceListener
 	 * @see ServicePermission
 	 */
-	public void addServiceListener(ServiceListener listener, String filter)
+	void addServiceListener(ServiceListener listener, String filter)
 			throws InvalidSyntaxException;
 
 	/**
@@ -265,13 +276,15 @@ public interface BundleContext {
 	 * <p>
 	 * This method is the same as calling
 	 * <code>BundleContext.addServiceListener(ServiceListener listener,
-	 * String filter)</code> with <code>filter</code> set to <code>null</code>.
+	 * String filter)</code>
+	 * with <code>filter</code> set to <code>null</code>.
 	 * 
 	 * @param listener The <code>ServiceListener</code> object to be added.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this BundleContext is no
+	 *         longer valid.
 	 * @see #addServiceListener(ServiceListener, String)
 	 */
-	public void addServiceListener(ServiceListener listener);
+	void addServiceListener(ServiceListener listener);
 
 	/**
 	 * Removes the specified <code>ServiceListener</code> object from the
@@ -282,9 +295,10 @@ public interface BundleContext {
 	 * of listeners, this method does nothing.
 	 * 
 	 * @param listener The <code>ServiceListener</code> to be removed.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this BundleContext is no
+	 *         longer valid.
 	 */
-	public void removeServiceListener(ServiceListener listener);
+	void removeServiceListener(ServiceListener listener);
 
 	/**
 	 * Adds the specified <code>BundleListener</code> object to the context
@@ -293,11 +307,12 @@ public interface BundleContext {
 	 * 
 	 * <p>
 	 * If the context bundle's list of listeners already contains a listener
-	 * <code>l</code> such that <code>(l==listener)</code>, this method does
-	 * nothing.
+	 * <code>l</code> such that <code>(l==listener)</code>, this method
+	 * does nothing.
 	 * 
 	 * @param listener The <code>BundleListener</code> to be added.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this BundleContext is no
+	 *         longer valid.
 	 * @throws SecurityException If listener is a
 	 *         <code>SynchronousBundleListener</code> and the caller does not
 	 *         have the appropriate
@@ -306,25 +321,26 @@ public interface BundleContext {
 	 * @see BundleEvent
 	 * @see BundleListener
 	 */
-	public void addBundleListener(BundleListener listener);
+	void addBundleListener(BundleListener listener);
 
 	/**
-	 * Removes the specified <code>BundleListener</code> object from the context
-	 * bundle's list of listeners.
+	 * Removes the specified <code>BundleListener</code> object from the
+	 * context bundle's list of listeners.
 	 * 
 	 * <p>
-	 * If <code>listener</code> is not contained in the context bundle's list of
-	 * listeners, this method does nothing.
+	 * If <code>listener</code> is not contained in the context bundle's list
+	 * of listeners, this method does nothing.
 	 * 
 	 * @param listener The <code>BundleListener</code> object to be removed.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this BundleContext is no
+	 *         longer valid.
 	 * @throws SecurityException If listener is a
 	 *         <code>SynchronousBundleListener</code> and the caller does not
 	 *         have the appropriate
 	 *         <code>AdminPermission[context bundle,LISTENER]</code>, and the
 	 *         Java Runtime Environment supports permissions.
 	 */
-	public void removeBundleListener(BundleListener listener);
+	void removeBundleListener(BundleListener listener);
 
 	/**
 	 * Adds the specified <code>FrameworkListener</code> object to the context
@@ -333,28 +349,31 @@ public interface BundleContext {
 	 * 
 	 * <p>
 	 * If the context bundle's list of listeners already contains a listener
-	 * <code>l</code> such that <code>(l==listener)</code>, this method does
-	 * nothing.
+	 * <code>l</code> such that <code>(l==listener)</code>, this method
+	 * does nothing.
 	 * 
 	 * @param listener The <code>FrameworkListener</code> object to be added.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this BundleContext is no
+	 *         longer valid.
 	 * @see FrameworkEvent
 	 * @see FrameworkListener
 	 */
-	public void addFrameworkListener(FrameworkListener listener);
+	void addFrameworkListener(FrameworkListener listener);
 
 	/**
 	 * Removes the specified <code>FrameworkListener</code> object from the
 	 * context bundle's list of listeners.
 	 * 
 	 * <p>
-	 * If <code>listener</code> is not contained in the context bundle's list of
-	 * listeners, this method does nothing.
+	 * If <code>listener</code> is not contained in the context bundle's list
+	 * of listeners, this method does nothing.
 	 * 
-	 * @param listener The <code>FrameworkListener</code> object to be removed.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @param listener The <code>FrameworkListener</code> object to be
+	 *        removed.
+	 * @throws IllegalStateException If this BundleContext is no
+	 *         longer valid.
 	 */
-	public void removeFrameworkListener(FrameworkListener listener);
+	void removeFrameworkListener(FrameworkListener listener);
 
 	/**
 	 * Registers the specified service object with the specified properties
@@ -425,8 +444,8 @@ public interface BundleContext {
 	 * @see ServiceRegistration
 	 * @see ServiceFactory
 	 */
-	public ServiceRegistration registerService(String[] clazzes,
-			Object service, Dictionary properties);
+	ServiceRegistration< ? > registerService(String[] clazzes,
+			Object service, Dictionary<String, Object> properties);
 
 	/**
 	 * Registers the specified service object with the specified properties
@@ -450,8 +469,35 @@ public interface BundleContext {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see #registerService(String[], Object, Dictionary)
 	 */
-	public ServiceRegistration registerService(String clazz, Object service,
-			Dictionary properties);
+	ServiceRegistration< ? > registerService(String clazz,
+			Object service, Dictionary<String, Object> properties);
+
+	/**
+	 * Registers the specified service object with the specified properties
+	 * under the specified class name with the Framework.
+	 * 
+	 * <p>
+	 * This method is otherwise identical to
+	 * {@link #registerService(String[], Object, Dictionary)} and is provided as
+	 * a convenience when <code>service</code> will only be registered under a
+	 * single class name. Note that even in this case the value of the service's
+	 * {@link Constants#OBJECTCLASS} property will be an array of string, rather
+	 * than just a single string.
+	 * 
+	 * @param <S> Type of Service.
+	 * @param clazz The class name under which the service can be located.
+	 * @param service The service object or a <code>ServiceFactory</code>
+	 *        object.
+	 * @param properties The properties for this service.
+	 * @return A <code>ServiceRegistration</code> object for use by the bundle
+	 *         registering the service to update the service's properties or to
+	 *         unregister the service.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @see #registerService(String[], Object, Dictionary)
+	 * @since 1.6
+	 */
+	<S> ServiceRegistration<S> registerService(Class<S> clazz,
+			S service, Dictionary<String, Object> properties);
 
 	/**
 	 * Returns an array of <code>ServiceReference</code> objects. The returned
@@ -507,7 +553,7 @@ public interface BundleContext {
 	 *         contains an invalid filter expression that cannot be parsed.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
-	public ServiceReference[] getServiceReferences(String clazz, String filter)
+	ServiceReference< ? >[] getServiceReferences(String clazz, String filter)
 			throws InvalidSyntaxException;
 
 	/**
@@ -559,8 +605,8 @@ public interface BundleContext {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @since 1.3
 	 */
-	public ServiceReference[] getAllServiceReferences(String clazz,
-			String filter) throws InvalidSyntaxException;
+	ServiceReference< ? >[] getAllServiceReferences(String clazz, String filter)
+			throws InvalidSyntaxException;
 
 	/**
 	 * Returns a <code>ServiceReference</code> object for a service that
@@ -573,10 +619,10 @@ public interface BundleContext {
 	 * 
 	 * <p>
 	 * This method is the same as calling
-	 * {@link BundleContext#getServiceReferences(String, String)} with a
-	 * <code>null</code> filter expression and then finding the reference with
-	 * the highest priority. It is provided as a convenience for when the caller
-	 * is interested in any service that implements the specified class.
+	 * {@link #getServiceReferences(String, String)} with a <code>null</code>
+	 * filter expression and then finding the reference with
+	 * the highest priority. It is provided as a convenience for when the caller is
+	 * interested in any service that implements the specified class.
 	 * <p>
 	 * If multiple such services exist, the service with the highest priority is
 	 * selected. This priority is defined as the service reference with the
@@ -593,7 +639,97 @@ public interface BundleContext {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see #getServiceReferences(String, String)
 	 */
-	public ServiceReference getServiceReference(String clazz);
+	ServiceReference< ? > getServiceReference(String clazz);
+
+	/**
+	 * Returns a <code>ServiceReference</code> object for a service that
+	 * implements and was registered under the specified class.
+	 * 
+	 * <p>
+	 * The returned <code>ServiceReference</code> object is valid at the time of
+	 * the call to this method. However as the Framework is a very dynamic
+	 * environment, services can be modified or unregistered at any time.
+	 * 
+	 * <p>
+	 * This method is the same as calling
+	 * {@link #getServiceReferences(Class, String)} with a <code>null</code>
+	 * filter expression. It is provided as a convenience for when the caller is
+	 * interested in any service that implements the specified class.
+	 * <p>
+	 * If multiple such services exist, the service with the highest ranking (as
+	 * specified in its {@link Constants#SERVICE_RANKING} property) is returned.
+	 * <p>
+	 * If there is a tie in ranking, the service with the lowest service ID (as
+	 * specified in its {@link Constants#SERVICE_ID} property); that is, the
+	 * service that was registered first is returned.
+	 * 
+	 * @param <S> Type of Service.
+	 * @param clazz The class name with which the service was registered.
+	 * @return A <code>ServiceReference</code> object, or <code>null</code> if
+	 *         no services are registered which implement the named class.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @see #getServiceReferences(Class, String)
+	 * @since 1.6
+	 */
+	<S> ServiceReference<S> getServiceReference(Class<S> clazz);
+
+	/**
+	 * Returns a collection of <code>ServiceReference</code> objects. The
+	 * returned collection of <code>ServiceReference</code> objects contains
+	 * services that were registered under the specified class, match the
+	 * specified filter expression, and the packages for the class names under
+	 * which the services were registered match the context bundle's packages as
+	 * defined in {@link ServiceReference#isAssignableTo(Bundle, String)}.
+	 * 
+	 * <p>
+	 * The collection is valid at the time of the call to this method. However
+	 * since the Framework is a very dynamic environment, services can be
+	 * modified or unregistered at any time.
+	 * 
+	 * <p>
+	 * The specified <code>filter</code> expression is used to select the
+	 * registered services whose service properties contain keys and values
+	 * which satisfy the filter expression. See {@link Filter} for a description
+	 * of the filter syntax. If the specified <code>filter</code> is
+	 * <code>null</code>, all registered services are considered to match the
+	 * filter. If the specified <code>filter</code> expression cannot be parsed,
+	 * an {@link InvalidSyntaxException} will be thrown with a human readable
+	 * message where the filter became unparsable.
+	 * 
+	 * <p>
+	 * The result is a collection of <code>ServiceReference</code> objects for
+	 * all services that meet all of the following conditions:
+	 * <ul>
+	 * <li>If the specified class name, <code>clazz</code>, is not
+	 * <code>null</code>, the service must have been registered with the
+	 * specified class name. The complete list of class names with which a
+	 * service was registered is available from the service's
+	 * {@link Constants#OBJECTCLASS objectClass} property.
+	 * <li>If the specified <code>filter</code> is not <code>null</code>, the
+	 * filter expression must match the service.
+	 * <li>If the Java Runtime Environment supports permissions, the caller must
+	 * have <code>ServicePermission</code> with the <code>GET</code> action for
+	 * at least one of the class names under which the service was registered.
+	 * <li>For each class name with which the service was registered, calling
+	 * {@link ServiceReference#isAssignableTo(Bundle, String)} with the context
+	 * bundle and the class name on the service's <code>ServiceReference</code>
+	 * object must return <code>true</code>
+	 * </ul>
+	 * 
+	 * @param <S> Type of Service
+	 * @param clazz The class name with which the service was registered. Must
+	 *        not be <code>null</code>.
+	 * @param filter The filter expression or <code>null</code> for all
+	 *        services.
+	 * @return A collection of <code>ServiceReference</code> objects. May be
+	 *         empty if no services are registered which satisfy the search.
+	 * @throws InvalidSyntaxException If the specified <code>filter</code>
+	 *         contains an invalid filter expression that cannot be parsed.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @since 1.6
+	 */
+	<S> Collection<ServiceReference<S>> getServiceReferences(Class<S> clazz,
+			String filter) throws InvalidSyntaxException;
 
 	/**
 	 * Returns the service object referenced by the specified
@@ -637,6 +773,7 @@ public interface BundleContext {
 	 * <li>The service object for the service is returned.
 	 * </ol>
 	 * 
+	 * @param <S> Type of Service.
 	 * @param reference A reference to the service.
 	 * @return A service object for the service associated with
 	 *         <code>reference</code> or <code>null</code> if the service is not
@@ -655,7 +792,7 @@ public interface BundleContext {
 	 * @see #ungetService(ServiceReference)
 	 * @see ServiceFactory
 	 */
-	public Object getService(ServiceReference reference);
+	<S> S getService(ServiceReference<S> reference);
 
 	/**
 	 * Releases the service object referenced by the specified
@@ -688,14 +825,15 @@ public interface BundleContext {
 	 * @return <code>false</code> if the context bundle's use count for the
 	 *         service is zero or if the service has been unregistered;
 	 *         <code>true</code> otherwise.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this BundleContext is no
+	 *         longer valid.
 	 * @throws IllegalArgumentException If the specified
 	 *         <code>ServiceReference</code> was not created by the same
 	 *         framework instance as this <code>BundleContext</code>.
 	 * @see #getService
 	 * @see ServiceFactory
 	 */
-	public boolean ungetService(ServiceReference reference);
+	boolean ungetService(ServiceReference< ? > reference);
 
 	/**
 	 * Creates a <code>File</code> object for a file in the persistent storage
@@ -711,17 +849,18 @@ public interface BundleContext {
 	 * <p>
 	 * If the Java Runtime Environment supports permissions, the Framework will
 	 * ensure that the bundle has the <code>java.io.FilePermission</code> with
-	 * actions <code>read</code>,<code>write</code>,<code>delete</code> for all
-	 * files (recursively) in the persistent storage area provided for the
-	 * context bundle.
+	 * actions <code>read</code>,<code>write</code>,<code>delete</code>
+	 * for all files (recursively) in the persistent storage area provided for
+	 * the context bundle.
 	 * 
 	 * @param filename A relative name to the file to be accessed.
-	 * @return A <code>File</code> object that represents the requested file or
-	 *         <code>null</code> if the platform does not have file system
+	 * @return A <code>File</code> object that represents the requested file
+	 *         or <code>null</code> if the platform does not have file system
 	 *         support.
-	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalStateException If this BundleContext is no
+	 *         longer valid.
 	 */
-	public File getDataFile(String filename);
+	File getDataFile(String filename);
 
 	/**
 	 * Creates a <code>Filter</code> object. This <code>Filter</code> object may
@@ -742,5 +881,5 @@ public interface BundleContext {
 	 * @see FrameworkUtil#createFilter(String)
 	 * @since 1.1
 	 */
-	public Filter createFilter(String filter) throws InvalidSyntaxException;
+	Filter createFilter(String filter) throws InvalidSyntaxException;
 }

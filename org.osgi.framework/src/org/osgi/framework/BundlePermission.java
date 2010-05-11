@@ -23,10 +23,12 @@ import java.io.ObjectStreamField;
 import java.security.BasicPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -448,7 +450,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * 
 	 * @GuardedBy this
 	 */
-	private transient Map		permissions;
+	private transient Map<String, BundlePermission>	permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
@@ -463,7 +465,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * 
 	 */
 	public BundlePermissionCollection() {
-		permissions = new HashMap();
+		permissions = new HashMap<String, BundlePermission>();
 		all_allowed = false;
 	}
 
@@ -488,8 +490,8 @@ final class BundlePermissionCollection extends PermissionCollection {
 		final BundlePermission bp = (BundlePermission) permission;
 		final String name = bp.getName();
 		synchronized (this) {
-			Map pc = permissions;
-			BundlePermission existing = (BundlePermission) pc.get(name);
+			Map<String, BundlePermission> pc = permissions;
+			BundlePermission existing = pc.get(name);
 			if (existing != null) {
 				final int oldMask = existing.getActionsMask();
 				final int newMask = bp.getActionsMask();
@@ -530,10 +532,10 @@ final class BundlePermissionCollection extends PermissionCollection {
 		BundlePermission bp;
 
 		synchronized (this) {
-			Map pc = permissions;
+			Map<String, BundlePermission> pc = permissions;
 			/* short circuit if the "*" Permission was added */
 			if (all_allowed) {
-				bp = (BundlePermission) pc.get("*");
+				bp = pc.get("*");
 				if (bp != null) {
 					effective |= bp.getActionsMask();
 					if ((effective & desired) == desired) {
@@ -541,7 +543,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 					}
 				}
 			}
-			bp = (BundlePermission) pc.get(requestedName);
+			bp = pc.get(requestedName);
 			// strategy:
 			// Check for full match first. Then work our way up the
 			// name looking for matches on a.b.*
@@ -557,7 +559,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 			int offset = requestedName.length() - 1;
 			while ((last = requestedName.lastIndexOf(".", offset)) != -1) {
 				requestedName = requestedName.substring(0, last + 1) + "*";
-				bp = (BundlePermission) pc.get(requestedName);
+				bp = pc.get(requestedName);
 				if (bp != null) {
 					effective |= bp.getActionsMask();
 					if ((effective & desired) == desired) {
@@ -578,8 +580,9 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>BundlePermission</code> objects.
 	 */
-	public synchronized Enumeration elements() {
-		return Collections.enumeration(permissions.values());
+	public synchronized Enumeration<Permission> elements() {
+		List<Permission> all = new ArrayList<Permission>(permissions.values());
+		return Collections.enumeration(all);
 	}
 	
 	/* serialization logic */
@@ -589,7 +592,8 @@ final class BundlePermissionCollection extends PermissionCollection {
 
 	private synchronized void writeObject(ObjectOutputStream out)
 			throws IOException {
-		Hashtable hashtable = new Hashtable(permissions);
+		Hashtable<String, BundlePermission> hashtable = new Hashtable<String, BundlePermission>(
+				permissions);
 		ObjectOutputStream.PutField pfields = out.putFields();
 		pfields.put("permissions", hashtable);
 		pfields.put("all_allowed", all_allowed);
@@ -599,8 +603,9 @@ final class BundlePermissionCollection extends PermissionCollection {
 	private synchronized void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
-		Hashtable hashtable = (Hashtable) gfields.get("permissions", null);
-		permissions = new HashMap(hashtable);
+		Hashtable<String, BundlePermission> hashtable = (Hashtable<String, BundlePermission>) gfields
+				.get("permissions", null);
+		permissions = new HashMap<String, BundlePermission>(hashtable);
 		all_allowed = gfields.get("all_allowed", false);
 	}
 }

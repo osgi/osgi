@@ -24,7 +24,7 @@ public class TB1Activator implements BundleActivator {
 	 * Starts the bundle. Installs several services later filtered by the tbc
 	 */
 	public void start(BundleContext bc) {
-		Hashtable ts1Props = new Hashtable();
+		Hashtable<String, Object> ts1Props = new Hashtable<String, Object>();
 		ts1Props.put("name", "TestService1");
 		ts1Props.put("version", new Float(1.0));
 		ts1Props.put("compatible", new Float(1.0));

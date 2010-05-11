@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,10 +25,10 @@ import org.osgi.framework.Version;
  * Objects implementing this interface are created by the Package Admin service.
  * 
  * <p>
- * The term <i>required bundle</i> refers to a resolved bundle that has a
- * bundle symbolic name and is not a fragment. That is, a bundle that may be
- * required by other bundles. This bundle may or may not be currently required
- * by other bundles.
+ * The term <i>required bundle</i> refers to a resolved bundle that has a bundle
+ * symbolic name and is not a fragment. That is, a bundle that may be required
+ * by other bundles. This bundle may or may not be currently required by other
+ * bundles.
  * 
  * <p>
  * The information about a required bundle provided by this object may change. A
@@ -42,6 +42,7 @@ import org.osgi.framework.Version;
  * and <code>getRequiringBundles()</code> return <code>null</code>.
  * 
  * @since 1.2
+ * @deprecated As of 1.3. Replaced by {@link BundleWiring}.
  * @ThreadSafe
  * @version $Revision$
  */

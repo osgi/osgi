@@ -1,6 +1,10 @@
--nope							= true
+javac.source            = 1.5
+javac.target            = jsr14
+#-nope							= true
 nodeploy						= true
-
+Export-Package: ${p}.*
 -buildpath = \
 	org.osgi.framework;			version=project, \
-	ee.minimum;					version=1.0
+	ee.minimum;					version=1.2.1
+-runpath =
+	

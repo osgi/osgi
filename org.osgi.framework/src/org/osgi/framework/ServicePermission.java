@@ -87,7 +87,7 @@ public final class ServicePermission extends BasicPermission {
 	 * The service used by this ServicePermission. Must be null if not
 	 * constructed with a service.
 	 */
-	transient final ServiceReference		service;
+	transient final ServiceReference< ? >					service;
 
 	/**
 	 * The object classes for this ServicePermission. Must be null if not
@@ -106,7 +106,7 @@ public final class ServicePermission extends BasicPermission {
 	 * filter in implies. This is not initialized until necessary, and then
 	 * cached in this object.
 	 */
-	private transient volatile Dictionary	properties;
+	private transient volatile Dictionary<String, Object>	properties;
 
 	/**
 	 * True if constructed with a name and the name is "*" or ends with ".*".
@@ -192,7 +192,7 @@ public final class ServicePermission extends BasicPermission {
 	 *         <code>get</code> or reference is <code>null</code>.
 	 * @since 1.5
 	 */
-	public ServicePermission(ServiceReference reference, String actions) {
+	public ServicePermission(ServiceReference< ? > reference, String actions) {
 		super(createName(reference));
 		setTransients(null, parseActions(actions));
 		this.service = reference;
@@ -209,7 +209,7 @@ public final class ServicePermission extends BasicPermission {
 	 * @param reference ServiceReference to use to create permission name.
 	 * @return permission name.
 	 */
-	private static String createName(ServiceReference reference) {
+	private static String createName(ServiceReference< ? > reference) {
 		if (reference == null) {
 			throw new IllegalArgumentException("reference must not be null");
 		}
@@ -563,22 +563,22 @@ public final class ServicePermission extends BasicPermission {
 	 * 
 	 * @return a dictionary of properties for this permission.
 	 */
-	private Dictionary getProperties() {
-		Dictionary result = properties;
+	private Dictionary<String, Object> getProperties() {
+		Dictionary<String, Object> result = properties;
 		if (result != null) {
 			return result;
 		}
 		if (service == null) {
-			result = new Hashtable(1);
+			result = new Hashtable<String, Object>(1);
 			if (filter == null) {
 				result.put(Constants.OBJECTCLASS, new String[] {getName()});
 			}
 			return properties = result;
 		}
-		final Map props = new HashMap(4);
+		final Map<String, Object> props = new HashMap<String, Object>(4);
 		final Bundle bundle = service.getBundle();
 		if (bundle != null) {
-			AccessController.doPrivileged(new PrivilegedAction() {
+			AccessController.doPrivileged(new PrivilegedAction<Object>() {
 				public Object run() {
 					props.put("id", new Long(bundle.getBundleId()));
 					props.put("location", bundle.getLocation());
@@ -597,11 +597,11 @@ public final class ServicePermission extends BasicPermission {
 		return properties = new Properties(props, service);
 	}
 	
-	private static class Properties extends Dictionary {
-		private final Map				properties;
-		private final ServiceReference	service;
+	private static class Properties extends Dictionary<String, Object> {
+		private final Map<String, Object>	properties;
+		private final ServiceReference< ? >	service;
 
-		Properties(Map properties, ServiceReference service) {
+		Properties(Map<String, Object> properties, ServiceReference< ? > service) {
 			this.properties = properties;
 			this.service = service;
 		}
@@ -630,16 +630,16 @@ public final class ServicePermission extends BasicPermission {
 			return false;
 		}
 
-		public Enumeration keys() {
-			Collection pk = properties.keySet();
+		public Enumeration<String> keys() {
+			Collection<String> pk = properties.keySet();
 			String spk[] = service.getPropertyKeys();
-			List all = new ArrayList(pk.size() + spk.length);
+			List<String> all = new ArrayList<String>(pk.size() + spk.length);
 			all.addAll(pk);
 			add:
 			for (int i = 0, length = spk.length; i < length; i++) {
 				String key = spk[i];
-				for (Iterator iter = pk.iterator(); iter.hasNext();) {
-					if (key.equalsIgnoreCase((String) iter.next())) {
+				for (Iterator<String> iter = pk.iterator(); iter.hasNext();) {
+					if (key.equalsIgnoreCase(iter.next())) {
 						continue add;
 					}
 				}
@@ -648,16 +648,16 @@ public final class ServicePermission extends BasicPermission {
 			return Collections.enumeration(all);
 		}
 
-		public Enumeration elements() {
-			Collection pk = properties.keySet();
+		public Enumeration<Object> elements() {
+			Collection<String> pk = properties.keySet();
 			String spk[] = service.getPropertyKeys();
-			List all = new ArrayList(pk.size() + spk.length);
+			List<Object> all = new ArrayList<Object>(pk.size() + spk.length);
 			all.addAll(properties.values());
 			add:
 			for (int i = 0, length = spk.length; i < length; i++) {
 				String key = spk[i];
-				for (Iterator iter = pk.iterator(); iter.hasNext();) {
-					if (key.equalsIgnoreCase((String) iter.next())) {
+				for (Iterator<String> iter = pk.iterator(); iter.hasNext();) {
+					if (key.equalsIgnoreCase(iter.next())) {
 						continue add;
 					}
 				}
@@ -666,7 +666,7 @@ public final class ServicePermission extends BasicPermission {
 			return Collections.enumeration(all);
 		}
 
-		public Object put(Object key, Object value) {
+		public Object put(String key, Object value) {
 			throw new UnsupportedOperationException();
 		}
 
@@ -690,7 +690,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * 
 	 * @GuardedBy this
 	 */
-	private transient Map	permissions;
+	private transient Map<String, ServicePermission>	permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
@@ -706,13 +706,13 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * @serial
 	 * @GuardedBy this
 	 */
-	private Map				filterPermissions;
+	private Map<String, ServicePermission>				filterPermissions;
 
 	/**
 	 * Creates an empty ServicePermissions object.
 	 */
 	public ServicePermissionCollection() {
-		permissions = new HashMap();
+		permissions = new HashMap<String, ServicePermission>();
 		all_allowed = false;
 	}
 
@@ -746,17 +746,17 @@ final class ServicePermissionCollection extends PermissionCollection {
 		final Filter f = sp.filter;
 		synchronized (this) {
 			/* select the bucket for the permission */
-			Map pc;
+			Map<String, ServicePermission> pc;
 			if (f != null) {
 				pc = filterPermissions;
 				if (pc == null) {
-					filterPermissions = pc = new HashMap();
+					filterPermissions = pc = new HashMap<String, ServicePermission>();
 				}
 			}
 			else {
 				pc = permissions;
 			}
-			final ServicePermission existing = (ServicePermission) pc.get(name);
+			final ServicePermission existing = pc.get(name);
 			
 			if (existing != null) {
 				final int oldMask = existing.action_mask;
@@ -799,12 +799,12 @@ final class ServicePermissionCollection extends PermissionCollection {
 		}
 
 		int effective = ServicePermission.ACTION_NONE;
-		Collection perms;
+		Collection<ServicePermission> perms;
 		synchronized (this) {
 			final int desired = requested.action_mask;
 			/* short circuit if the "*" Permission was added */
 			if (all_allowed) {
-				ServicePermission sp = (ServicePermission) permissions.get("*");
+				ServicePermission sp = permissions.get("*");
 				if (sp != null) {
 					effective |= sp.action_mask;
 					if ((effective & desired) == desired) {
@@ -829,7 +829,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 					}
 				}
 			}
-			Map pc = filterPermissions;
+			Map<String, ServicePermission> pc = filterPermissions;
 			if (pc == null) {
 				return false;
 			}
@@ -837,9 +837,9 @@ final class ServicePermissionCollection extends PermissionCollection {
 		}
 		
 		/* iterate one by one over filteredPermissions */
-		for (Iterator iter = perms.iterator(); iter.hasNext();) {
-			if (((ServicePermission) iter.next())
-					.implies0(requested, effective)) {
+		for (Iterator<ServicePermission> iter = perms.iterator(); iter
+				.hasNext();) {
+			if (iter.next().implies0(requested, effective)) {
 				return true;
 			}
 		}
@@ -857,8 +857,8 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 */
 	private int effective(String requestedName, final int desired,
 			int effective) {
-		final Map pc = permissions;
-		ServicePermission sp = (ServicePermission) pc.get(requestedName);
+		final Map<String, ServicePermission> pc = permissions;
+		ServicePermission sp = pc.get(requestedName);
 		// strategy:
 		// Check for full match first. Then work our way up the
 		// name looking for matches on a.b.*
@@ -874,7 +874,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 		int offset = requestedName.length() - 1;
 		while ((last = requestedName.lastIndexOf(".", offset)) != -1) {
 			requestedName = requestedName.substring(0, last + 1) + "*";
-			sp = (ServicePermission) pc.get(requestedName);
+			sp = pc.get(requestedName);
 			if (sp != null) {
 				effective |= sp.action_mask;
 				if ((effective & desired) == desired) {
@@ -896,9 +896,9 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all the ServicePermission objects.
 	 */
-	public synchronized Enumeration elements() {
-		List all = new ArrayList(permissions.values());
-		Map pc = filterPermissions;
+	public synchronized Enumeration<Permission> elements() {
+		List<Permission> all = new ArrayList<Permission>(permissions.values());
+		Map<String, ServicePermission> pc = filterPermissions;
 		if (pc != null) {
 			all.addAll(pc.values());
 		}
@@ -913,7 +913,8 @@ final class ServicePermissionCollection extends PermissionCollection {
 
 	private synchronized void writeObject(ObjectOutputStream out)
 			throws IOException {
-		Hashtable hashtable = new Hashtable(permissions);
+		Hashtable<String, ServicePermission> hashtable = new Hashtable<String, ServicePermission>(
+				permissions);
 		ObjectOutputStream.PutField pfields = out.putFields();
 		pfields.put("permissions", hashtable);
 		pfields.put("all_allowed", all_allowed);
@@ -924,9 +925,12 @@ final class ServicePermissionCollection extends PermissionCollection {
 	private synchronized void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
-		Hashtable hashtable = (Hashtable) gfields.get("permissions", null);
-		permissions = new HashMap(hashtable);
+		Hashtable<String, ServicePermission> hashtable = (Hashtable<String, ServicePermission>) gfields
+				.get("permissions", null);
+		permissions = new HashMap<String, ServicePermission>(hashtable);
 		all_allowed = gfields.get("all_allowed", false);
-		filterPermissions = (HashMap) gfields.get("filterPermissions", null);
+		HashMap<String, ServicePermission> fp = (HashMap<String, ServicePermission>) gfields
+				.get("filterPermissions", null);
+		filterPermissions = fp;
 	}
 }

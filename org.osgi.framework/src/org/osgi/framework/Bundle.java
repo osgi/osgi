@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,10 @@ package org.osgi.framework;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.security.cert.X509Certificate;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,8 +56,8 @@ import java.util.Map;
  * 
  * <p>
  * A bundle should only execute code when its state is one of
- * <code>STARTING</code>,<code>ACTIVE</code>, or <code>STOPPING</code>.
- * An <code>UNINSTALLED</code> bundle can not be set to another state; it is a
+ * <code>STARTING</code>,<code>ACTIVE</code>, or <code>STOPPING</code>. An
+ * <code>UNINSTALLED</code> bundle can not be set to another state; it is a
  * zombie and can only be reached because references are kept somewhere.
  * 
  * <p>
@@ -63,10 +65,17 @@ import java.util.Map;
  * <code>Bundle</code> objects, and these objects are only valid within the
  * Framework that created them.
  * 
+ * <p>
+ * Bundles have a natural ordering such that if two <code>Bundle</code>s have
+ * the same {@link #getBundleId() bundle id} they are equal. A
+ * <code>Bundle</code> is less than another <code>Bundle</code> if it has a
+ * lower {@link #getBundleId() bundle id} and is greater if it has a higher
+ * bundle id.
+ * 
  * @ThreadSafe
  * @version $Revision$
  */
-public interface Bundle {
+public interface Bundle extends Comparable<Bundle> {
 	/**
 	 * The bundle is uninstalled and may not be used.
 	 * 
@@ -78,7 +87,7 @@ public interface Bundle {
 	 * <p>
 	 * The value of <code>UNINSTALLED</code> is 0x00000001.
 	 */
-	public static final int	UNINSTALLED				= 0x00000001;
+	int						UNINSTALLED				= 0x00000001;
 
 	/**
 	 * The bundle is installed but not yet resolved.
@@ -94,7 +103,7 @@ public interface Bundle {
 	 * <p>
 	 * The value of <code>INSTALLED</code> is 0x00000002.
 	 */
-	public static final int	INSTALLED				= 0x00000002;
+	int	INSTALLED				= 0x00000002;
 
 	/**
 	 * The bundle is resolved and is able to be started.
@@ -121,7 +130,7 @@ public interface Bundle {
 	 * <p>
 	 * The value of <code>RESOLVED</code> is 0x00000004.
 	 */
-	public static final int	RESOLVED				= 0x00000004;
+	int	RESOLVED				= 0x00000004;
 
 	/**
 	 * The bundle is in the process of starting.
@@ -141,7 +150,7 @@ public interface Bundle {
 	 * <p>
 	 * The value of <code>STARTING</code> is 0x00000008.
 	 */
-	public static final int	STARTING				= 0x00000008;
+	int	STARTING				= 0x00000008;
 
 	/**
 	 * The bundle is in the process of stopping.
@@ -155,7 +164,7 @@ public interface Bundle {
 	 * <p>
 	 * The value of <code>STOPPING</code> is 0x00000010.
 	 */
-	public static final int	STOPPING				= 0x00000010;
+	int	STOPPING				= 0x00000010;
 
 	/**
 	 * The bundle is now running.
@@ -166,7 +175,7 @@ public interface Bundle {
 	 * <p>
 	 * The value of <code>ACTIVE</code> is 0x00000020.
 	 */
-	public static final int	ACTIVE					= 0x00000020;
+	int	ACTIVE					= 0x00000020;
 
 	/**
 	 * The bundle start operation is transient and the persistent autostart
@@ -181,7 +190,7 @@ public interface Bundle {
 	 * @since 1.4
 	 * @see #start(int)
 	 */
-	public static final int	START_TRANSIENT			= 0x00000001;
+	int	START_TRANSIENT			= 0x00000001;
 
 	/**
 	 * The bundle start operation must activate the bundle according to the
@@ -197,7 +206,7 @@ public interface Bundle {
 	 * @see Constants#BUNDLE_ACTIVATIONPOLICY
 	 * @see #start(int)
 	 */
-	public static final int	START_ACTIVATION_POLICY	= 0x00000002;
+	int	START_ACTIVATION_POLICY	= 0x00000002;
 
 	/**
 	 * The bundle stop is transient and the persistent autostart setting of the
@@ -212,7 +221,7 @@ public interface Bundle {
 	 * @since 1.4
 	 * @see #stop(int)
 	 */
-	public static final int	STOP_TRANSIENT			= 0x00000001;
+	int	STOP_TRANSIENT			= 0x00000001;
 
 	/**
 	 * Request that all certificates used to sign the bundle be returned.
@@ -220,7 +229,7 @@ public interface Bundle {
 	 * @since 1.5
 	 * @see #getSignerCertificates(int)
 	 */
-	public final static int	SIGNERS_ALL				= 1;
+	int	SIGNERS_ALL				= 1;
 
 	/**
 	 * Request that only certificates used to sign the bundle that are trusted
@@ -229,7 +238,15 @@ public interface Bundle {
 	 * @since 1.5
 	 * @see #getSignerCertificates(int)
 	 */
-	public final static int	SIGNERS_TRUSTED			= 2;
+	int	SIGNERS_TRUSTED			= 2;
+
+	/**
+	 * Bundle type indicating the bundle is a fragment bundle.
+	 * 
+	 * @since 1.6
+	 * @see #getTypes()
+	 */
+	int	TYPE_FRAGMENT	= 0x00000001;
 
 	/**
 	 * Returns this bundle's current state.
@@ -241,7 +258,7 @@ public interface Bundle {
 	 *         <code>RESOLVED</code>,<code>STARTING</code>,
 	 *         <code>STOPPING</code>,<code>ACTIVE</code>.
 	 */
-	public int getState();
+	int getState();
 
 	/**
 	 * Starts this bundle.
@@ -365,7 +382,7 @@ public interface Bundle {
 	 *         Environment supports permissions.
 	 * @since 1.4
 	 */
-	public void start(int options) throws BundleException;
+	void start(int options) throws BundleException;
 
 	/**
 	 * Starts this bundle with no options.
@@ -384,7 +401,7 @@ public interface Bundle {
 	 *         Environment supports permissions.
 	 * @see #start(int)
 	 */
-	public void start() throws BundleException;
+	void start() throws BundleException;
 
 	/**
 	 * Stops this bundle.
@@ -463,7 +480,7 @@ public interface Bundle {
 	 *         Environment supports permissions.
 	 * @since 1.4
 	 */
-	public void stop(int options) throws BundleException;
+	void stop(int options) throws BundleException;
 
 	/**
 	 * Stops this bundle with no options.
@@ -480,7 +497,7 @@ public interface Bundle {
 	 *         Environment supports permissions.
 	 * @see #start(int)
 	 */
-	public void stop() throws BundleException;
+	void stop() throws BundleException;
 
 	/**
 	 * Updates this bundle from an <code>InputStream</code>.
@@ -568,7 +585,7 @@ public interface Bundle {
 	 * @see #stop()
 	 * @see #start()
 	 */
-	public void update(InputStream input) throws BundleException;
+	void update(InputStream input) throws BundleException;
 
 	/**
 	 * Updates this bundle.
@@ -586,7 +603,7 @@ public interface Bundle {
 	 *         supports permissions.
 	 * @see #update(InputStream)
 	 */
-	public void update() throws BundleException;
+	void update() throws BundleException;
 
 	/**
 	 * Uninstalls this bundle.
@@ -651,7 +668,7 @@ public interface Bundle {
 	 *         Runtime Environment supports permissions.
 	 * @see #stop()
 	 */
-	public void uninstall() throws BundleException;
+	void uninstall() throws BundleException;
 
 	/**
 	 * Returns this bundle's Manifest headers and values. This method returns
@@ -692,7 +709,7 @@ public interface Bundle {
 	 *         the Java Runtime Environment supports permissions.
 	 * @see Constants#BUNDLE_LOCALIZATION
 	 */
-	public Dictionary/* <String,String> */getHeaders();
+	Dictionary<String, String> getHeaders();
 
 	/**
 	 * Returns this bundle's unique identifier. This bundle is assigned a unique
@@ -716,7 +733,7 @@ public interface Bundle {
 	 * 
 	 * @return The unique identifier of this bundle.
 	 */
-	public long getBundleId();
+	long getBundleId();
 
 	/**
 	 * Returns this bundle's location identifier.
@@ -736,7 +753,7 @@ public interface Bundle {
 	 *         appropriate <code>AdminPermission[this,METADATA]</code>, and
 	 *         the Java Runtime Environment supports permissions.
 	 */
-	public String getLocation();
+	String getLocation();
 
 	/**
 	 * Returns this bundle's <code>ServiceReference</code> list for all
@@ -762,7 +779,7 @@ public interface Bundle {
 	 * @see ServiceReference
 	 * @see ServicePermission
 	 */
-	public ServiceReference[] getRegisteredServices();
+	ServiceReference< ? >[] getRegisteredServices();
 
 	/**
 	 * Returns this bundle's <code>ServiceReference</code> list for all
@@ -788,7 +805,7 @@ public interface Bundle {
 	 * @see ServiceReference
 	 * @see ServicePermission
 	 */
-	public ServiceReference[] getServicesInUse();
+	ServiceReference< ? >[] getServicesInUse();
 
 	/**
 	 * Determines if this bundle has the specified permissions.
@@ -817,7 +834,7 @@ public interface Bundle {
 	 * @throws IllegalStateException If this bundle has been
 	 *         uninstalled.
 	 */
-	public boolean hasPermission(Object permission);
+	boolean hasPermission(Object permission);
 
 	/**
 	 * Find the specified resource from this bundle's class loader.
@@ -847,7 +864,7 @@ public interface Bundle {
 	 * @see #findEntries
 	 * @since 1.1
 	 */
-	public URL getResource(String name);
+	URL getResource(String name);
 
 	/**
 	 * Returns this bundle's Manifest headers and values localized to the
@@ -909,7 +926,7 @@ public interface Bundle {
 	 * @see Constants#BUNDLE_LOCALIZATION
 	 * @since 1.3
 	 */
-	public Dictionary/* <String,String> */getHeaders(String locale);
+	Dictionary<String, String> getHeaders(String locale);
 
 	/**
 	 * Returns the symbolic name of this bundle as specified by its
@@ -926,7 +943,7 @@ public interface Bundle {
 	 *         bundle does not have a symbolic name.
 	 * @since 1.3
 	 */
-	public String getSymbolicName();
+	String getSymbolicName();
 
 	/**
 	 * Loads the specified class using this bundle's class loader.
@@ -960,7 +977,7 @@ public interface Bundle {
 	 *         uninstalled.
 	 * @since 1.3
 	 */
-	public Class loadClass(String name) throws ClassNotFoundException;
+	Class< ? > loadClass(String name) throws ClassNotFoundException;
 
 	/**
 	 * Find the specified resources from this bundle's class loader.
@@ -989,7 +1006,7 @@ public interface Bundle {
 	 * @throws IOException If there is an I/O error.
 	 * @since 1.3
 	 */
-	public Enumeration/* <URL> */getResources(String name) throws IOException;
+	Enumeration<URL> getResources(String name) throws IOException;
 
 	/**
 	 * Returns an Enumeration of all the paths (<code>String</code> objects)
@@ -1019,7 +1036,7 @@ public interface Bundle {
 	 *         uninstalled.
 	 * @since 1.3
 	 */
-	public Enumeration/* <String> */getEntryPaths(String path);
+	Enumeration<String> getEntryPaths(String path);
 
 	/**
 	 * Returns a URL to the entry at the specified path in this bundle. This
@@ -1043,7 +1060,7 @@ public interface Bundle {
 	 *         uninstalled.
 	 * @since 1.3
 	 */
-	public URL getEntry(String path);
+	URL getEntry(String path);
 
 	/**
 	 * Returns the time when this bundle was last modified. A bundle is
@@ -1056,7 +1073,7 @@ public interface Bundle {
 	 * @return The time when this bundle was last modified.
 	 * @since 1.3
 	 */
-	public long getLastModified();
+	long getLastModified();
 
 	/**
 	 * Returns entries in this bundle and its attached fragments. This bundle's
@@ -1124,7 +1141,7 @@ public interface Bundle {
 	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @since 1.3
 	 */
-	public Enumeration/* <URL> */findEntries(String path, String filePattern,
+	Enumeration<URL> findEntries(String path, String filePattern,
 			boolean recurse);
 
 	/**
@@ -1147,7 +1164,7 @@ public interface Bundle {
 	 *         the Java Runtime Environment supports permissions.
 	 * @since 1.4
 	 */
-	public BundleContext getBundleContext();
+	BundleContext getBundleContext();
 
 	/**
 	 * Return the certificates for the signers of this bundle and the
@@ -1174,7 +1191,7 @@ public interface Bundle {
 	 *         {@link #SIGNERS_TRUSTED}.
 	 * @since 1.5
 	 */
-	public Map/* <X509Certificate, List<X509Certificate>> */getSignerCertificates(
+	Map<X509Certificate, List<X509Certificate>> getSignerCertificates(
 			int signersType);
 	
 	/**
@@ -1189,5 +1206,43 @@ public interface Bundle {
 	 * @return The version of this bundle.
 	 * @since 1.5
 	 */
-	public Version getVersion();
+	Version getVersion();
+
+	/**
+	 * Adapt a bundle to the specifed type.
+	 * 
+	 * <p>
+	 * Adapting a bundle to the specified type may require certain checks,
+	 * including security checks, to succeed. If a check does not succeed, then
+	 * the bundle cannot be adapted and <code>null</code> is returned.
+	 * 
+	 * @param <A> The type to which the bundle is to be adapted.
+	 * @param type Class object for the type to which the bundle is to be
+	 *        adapted.
+	 * @return The object, of the specified type, to which the bundle has been
+	 *         adapted or <code>null</code> if the bundle cannot be adapted to
+	 *         the specifed type.
+	 * @since 1.6
+	 */
+	<A> A adapt(Class<A> type);
+
+	/**
+	 * Returns the special types of this bundle. The bundle type values are:
+	 * <ul>
+	 * <li>{@link #TYPE_FRAGMENT}
+	 * </ul>
+	 * 
+	 * A bundle may be more than one type at a time. A type code is used to
+	 * identify the bundle type for future extendability.
+	 * 
+	 * <p>
+	 * If this bundle is not one or more of the defined types then 0 is
+	 * returned.
+	 * 
+	 * @return The special types of this bundle. The type values are ORed
+	 *         together.
+	 * @since 1.6
+	 */
+	int getTypes();
+
 }
