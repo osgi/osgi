@@ -8,8 +8,6 @@ Export-Package 					= ${p}.common;version=1.0.0
 Private-Package						= org.osgi.test.support.*, \
 	${p}.*
 	
-Include-Resource					= resources
-	
 Test-Cases							= ${testcases}
 
 -buildpath							= \
@@ -34,4 +32,4 @@ Test-Cases							= ${testcases}
 	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.port", \
 	service.exported.configs=org.apache.cxf.ws, \
 	org.apache.cxf.ws.port=@@FREE_PORT@@
-	
+
