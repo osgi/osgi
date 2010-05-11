@@ -1,4 +1,5 @@
 bin
 generated
-/cnf/repo/*
+doc
+.DS_Store
 
