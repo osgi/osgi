@@ -93,15 +93,22 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 	}
 
 	public Bundle install(String bundle) {
+		return install(bundle, false);
+	}
+
+	public Bundle install(String bundle, boolean expectFail) {
 		URL entry = getContext().getBundle().getEntry(bundle);
 		assertNotNull("Can not find bundle: " + bundle, entry);
 		Bundle b = null;
 		try {
 			b = getContext().installBundle(entry.toExternalForm());
+			installedBundles.add(b);
+			if (expectFail)
+				fail("Expected install failure: " + entry);
 		} catch (BundleException e) {
-			fail("Unexpected install error: " + entry, e);
+			if (!expectFail)
+				fail("Unexpected install error: " + entry, e);
 		}
-		installedBundles.add(b);
 		return b;
 	}
 
@@ -165,17 +172,26 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		}
 
 	}
-
 	protected void updateCompositeBundle(CompositeBundle composite, Map manifest) {
+		updateCompositeBundle(composite, manifest, false);
+	}
+
+	protected void updateCompositeBundle(CompositeBundle composite, Map manifest, boolean expectFail) {
 		Bundle[] bundles = composite.getSystemBundleContext().getBundles();
 		int previousState = composite.getState();
 		try {
 			composite.update(manifest);
+			if (expectFail)
+				fail("Expected a failure to update a composite: " + composite.getSymbolicName());
 		} catch (BundleException e) {
-			fail("Unexpected error updating composite", e); //$NON-NLS-1$
+			if (!expectFail)
+				fail("Unexpected error updating composite", e); //$NON-NLS-1$
 		}
-		if (previousState == Bundle.ACTIVE)
+
+		if (previousState == Bundle.ACTIVE) {
+			assertEquals("Wrong state for the composite after update: " + composite.getSymbolicName(), previousState, composite.getState());
 			return;
+		}
 		// Bundles must not be active
 		for (int i = 0; i < bundles.length; i++) {
 			if (bundles[i].getBundleId() != 0)
@@ -183,7 +199,6 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 			else
 				assertEquals("System Bundle is in the wrong state", Bundle.STARTING, bundles[i].getState());
 		}
-
 	}
 
 	protected void uninstallCompositeBundle(CompositeBundle composite) {
@@ -209,7 +224,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 			URL content = getBundleContent(name);
 			String externalForm = content.toExternalForm();
 			if (location == null)
-				location = externalForm + "#" + name;
+				location = externalForm + "#" + composite.getLocation();
 			BundleContext context = composite.getSystemBundleContext();
 			Bundle result = (externalForm.equals(location)) ? context.installBundle(location) : context.installBundle(location, content.openStream());		
 			if (expectFail)
@@ -464,7 +479,7 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 			CompositeBundle composite2 = createCompositeBundle(compAdmin1, getName() + "_2", manifest2, null);
 			startCompositeBundle(composite2);
 			Bundle[] constituentBundles = installConstituents(composite2, importNames);
-			Bundle client = installConstituent(composite2, "tb3client", clientName);
+			Bundle client = installConstituent(composite2, null, clientName);
 
 			startConstituents(parentBundles);
 			startConstituents(constituentBundles);

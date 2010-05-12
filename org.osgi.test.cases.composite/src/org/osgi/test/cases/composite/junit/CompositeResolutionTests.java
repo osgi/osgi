@@ -25,6 +25,7 @@ import java.util.Map;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
+import org.osgi.service.composite.CompositeAdmin;
 import org.osgi.service.composite.CompositeBundle;
 import org.osgi.service.composite.CompositeConstants;
 import org.osgi.service.packageadmin.PackageAdmin;
@@ -784,6 +785,244 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 		doTestExportPolicy02(manifest1, manifest2, new String[] {"tb3v1.jar", "tb3v2.jar"}, null, "tb3v2requireClient.jar", false, null);
 	}
 
+	public void testCollisionProvideBundle01() {
+		// install a bundle into the parent
+		try {
+			install("tb3v1.jar").start();
+		} catch (BundleException e) {
+			fail("Unexpected exception installing bundle", e);
+		}
+		Map manifest = new HashMap();
+		String exportBSN = getName() + ".export";
+		String exportVersion = "2.0.0";
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, exportBSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(Constants.BUNDLE_VERSION, exportVersion);
+		manifest.put(CompositeConstants.COMPOSITE_BUNDLE_PROVIDE_POLICY, "org.osgi.test.cases.composite.tb3");
+		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
+		
+		// we expect this to fail because the provide bundle policy collides with the installation in the parent
+		installConstituent(composite, "expectedToFail", "tb3v1.jar", true);
+	}
+
+	public void testCollisionProvideBundle02() {
+		// install a bundle into the parent
+		try {
+			install("tb3v1.jar").start();
+		} catch (BundleException e) {
+			fail("Unexpected exception installing bundle", e);
+		}
+		Map manifest = new HashMap();
+		String exportBSN = getName() + ".export";
+		String exportVersion = "2.0.0";
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, exportBSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(Constants.BUNDLE_VERSION, exportVersion);
+
+		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
+		startCompositeBundle(composite);
+		// we expect this to succeed because the no provide bundle policy collides with an installation in the parent
+		Bundle tb3v1 = installConstituent(composite, "expectedToFail", "tb3v1.jar");
+		try {
+			tb3v1.start();
+		} catch (BundleException e) {
+			fail("Failed to start bundle: " + tb3v1.getSymbolicName(), e);
+		}
+		
+		manifest.put(CompositeConstants.COMPOSITE_BUNDLE_PROVIDE_POLICY, "org.osgi.test.cases.composite.tb3");
+		// We expect this to fail because the provide policy collides with the installation in the parent
+		updateCompositeBundle(composite, manifest, true);
+
+		assertEquals("Wrong state for test bundle: " + tb3v1.getSymbolicName(), Bundle.ACTIVE, tb3v1.getState());
+	}
+
+	public void testCollisionProvideBundle03() {
+		Map manifest = new HashMap();
+		String exportBSN = getName() + ".export";
+		String exportVersion = "2.0.0";
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, exportBSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(Constants.BUNDLE_VERSION, exportVersion);
+		manifest.put(CompositeConstants.COMPOSITE_BUNDLE_PROVIDE_POLICY, "org.osgi.test.cases.composite.tb3");
+		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
+		
+		// we expect this to pass
+		installConstituent(composite, null, "tb3v1.jar");
+		
+		// install a bundle into the parent is expected to fail because of a collision
+		install("tb3v1.jar", true);
+	}
+
+	public void testCollisionRequireBundle01() {
+		// install a bundle into the parent
+		try {
+			install("tb3v1.jar").start();
+		} catch (BundleException e) {
+			fail("Unexpected exception installing bundle", e);
+		}
+		Map manifest = new HashMap();
+		String exportBSN = getName() + ".export";
+		String exportVersion = "2.0.0";
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, exportBSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(Constants.BUNDLE_VERSION, exportVersion);
+		manifest.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3");
+		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
+		
+		// we expect this to fail because the require bundle policy collides with the installation in the parent
+		installConstituent(composite, "expectedToFail", "tb3v1.jar", true);
+	}
+
+	public void testCollisionRequireBundle02() {
+		// install a bundle into the parent
+		try {
+			install("tb3v1.jar").start();
+		} catch (BundleException e) {
+			fail("Unexpected exception installing bundle", e);
+		}
+		Map manifest = new HashMap();
+		String exportBSN = getName() + ".export";
+		String exportVersion = "2.0.0";
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, exportBSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(Constants.BUNDLE_VERSION, exportVersion);
+
+		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
+		startCompositeBundle(composite);
+		// we expect this to succeed because the no require bundle policy collides with an installation in the parent
+		Bundle tb3v1 = installConstituent(composite, null, "tb3v1.jar");
+		try {
+			tb3v1.start();
+		} catch (BundleException e) {
+			fail("Failed to start bundle: " + tb3v1.getSymbolicName(), e);
+		}
+		
+		manifest.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3");
+		// We expect this to fail because the provide policy collides with the installation in the parent
+		updateCompositeBundle(composite, manifest, true);
+
+		assertEquals("Wrong state for test bundle: " + tb3v1.getSymbolicName(), Bundle.ACTIVE, tb3v1.getState());
+	}
+
+	public void testCollisionRequireBundle04() {
+		// install a bundle into the parent
+		try {
+			install("tb3v1.jar").start();
+		} catch (BundleException e) {
+			fail("Unexpected exception installing bundle", e);
+		}
+		Map manifest1 = new HashMap();
+		String exportBSN1 = getName() + ".export1";
+		String exportVersion = "2.0.0";
+		manifest1.put(Constants.BUNDLE_SYMBOLICNAME, exportBSN1 + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest1.put(Constants.BUNDLE_VERSION, exportVersion);
+
+		CompositeBundle composite1 = createCompositeBundle(compAdmin, exportBSN1, manifest1, null);
+		startCompositeBundle(composite1);
+		CompositeAdmin compAdmin1 = (CompositeAdmin) getService(composite1.getSystemBundleContext(), CompositeAdmin.class.getName());
+
+		Map manifest2 = new HashMap();
+		String exportBSN2 = getName() + ".export2";
+		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, exportBSN2 + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest2.put(Constants.BUNDLE_VERSION, exportVersion);
+		manifest2.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3");
+		CompositeBundle composite2 = createCompositeBundle(compAdmin1, exportBSN2, manifest2, null);
+		startCompositeBundle(composite2);
+
+		// we expect this to succeed because the no require bundle policy collides with an installation in the parent
+		Bundle tb3v1 = installConstituent(composite2, null, "tb3v1.jar");
+		try {
+			tb3v1.start();
+		} catch (BundleException e) {
+			fail("Failed to start bundle: " + tb3v1.getSymbolicName(), e);
+		}
+		
+		manifest1.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3");
+		// We expect this to fail because the provide policy collides with the installation in the parent
+		updateCompositeBundle(composite1, manifest1, true);
+
+		assertEquals("Wrong state for test bundle: " + tb3v1.getSymbolicName(), Bundle.ACTIVE, tb3v1.getState());
+	}
+
+	public void testCollisionRequireBundle03() {
+		Map manifest = new HashMap();
+		String exportBSN = getName() + ".export";
+		String exportVersion = "2.0.0";
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, exportBSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(Constants.BUNDLE_VERSION, exportVersion);
+		manifest.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3");
+		CompositeBundle composite = createCompositeBundle(compAdmin, getName(), manifest, null);
+		
+		// we expect this to pass because the require bundle policy does not collide with the installation in the parent
+		installConstituent(composite, null, "tb3v1.jar");
+
+		// install a bundle into the parent should fail because
+		install("tb3v1.jar", true);
+	}
+
+	public void testCollisionProvideRequireBundle01() {
+		// test providing bundles out of a composite and requiring into a composite
+		Map provideManifest = new HashMap();
+		provideManifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		provideManifest.put(CompositeConstants.COMPOSITE_BUNDLE_PROVIDE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.0, 1.1)\"");
+		CompositeBundle provideComposite = createCompositeBundle(compAdmin, getName() + ".provide", provideManifest, null);
+
+		Map requireManifest = new HashMap();
+		requireManifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		requireManifest.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.0, 1.1)\"");
+		CompositeBundle requireComposite = createCompositeBundle(compAdmin, getName() + ".require", requireManifest, null);
+
+		Bundle tb3v1 = installConstituent(provideComposite, null, "tb3v1.jar");
+
+		// expected to fail because the provide/require policy collides with the installation in the provide composite
+		installConstituent(requireComposite, null, "tb3v1.jar", true);
+
+		// now uninstall the original
+		try {
+			tb3v1.uninstall();
+		} catch (BundleException e) {
+			fail("failed to uninstall test bundle.", e);
+		}
+
+		// should pass now
+		installConstituent(requireComposite, null, "tb3v1.jar");
+
+		// Should fail to install into provide composite now
+		// expected to fail because the provide/require policy collides with the installation in the require composite
+		installConstituent(provideComposite, null, "tb3v1.jar", true);
+	}
+
+	public void testCollisionProvideRequireBundle02() {
+		// test providing bundles out of a composite and requiring into a composite
+		Map provideManifest = new HashMap();
+		provideManifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		CompositeBundle provideComposite = createCompositeBundle(compAdmin, getName() + ".provide", provideManifest, null);
+
+		Map requireManifest = new HashMap();
+		requireManifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		CompositeBundle requireComposite = createCompositeBundle(compAdmin, getName() + ".require", requireManifest, null);
+
+		// install into provide
+		installConstituent(provideComposite, null, "tb3v1.jar");
+
+		// expected to pass because no provide/require policy collides with the installation in the require composite
+		installConstituent(requireComposite, null, "tb3v1.jar");
+
+		// update provide policy to include test bundle
+		provideManifest.put(CompositeConstants.COMPOSITE_BUNDLE_PROVIDE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.0, 1.1)\"");
+		updateCompositeBundle(provideComposite, provideManifest);
+
+		// update require policy to include test bundle; expected to fail
+		requireManifest.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.0, 1.1)\"");
+		updateCompositeBundle(requireComposite, requireManifest, true);
+
+		// remove provide policy
+		provideManifest.remove(CompositeConstants.COMPOSITE_BUNDLE_PROVIDE_POLICY);
+		updateCompositeBundle(provideComposite, provideManifest);
+
+		// now try updating requrie policy; should pass now
+		updateCompositeBundle(requireComposite, requireManifest);
+
+		// now update provide policy to include test bundle; should fail now.
+		provideManifest.put(CompositeConstants.COMPOSITE_BUNDLE_PROVIDE_POLICY, "org.osgi.test.cases.composite.tb3; bundle-version=\"[1.0, 1.1)\"");
+		updateCompositeBundle(provideComposite, provideManifest, true);
+	}
+
 	public void testPackageExportImport01a() {
 		Map manifestExport = new HashMap();
 		manifestExport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
@@ -1119,28 +1358,6 @@ public class CompositeResolutionTests extends AbstractCompositeTestCase {
 	}
 
 	public void testProvideRequireCompositePeer01c() {
-		Map manifestExport = new HashMap();
-		String exportBSN = getName() + ".export";
-		String exportVersion = "2.0.0";
-		manifestExport.put(Constants.BUNDLE_SYMBOLICNAME, exportBSN + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		manifestExport.put(Constants.BUNDLE_VERSION, exportVersion);
-		manifestExport.put(CompositeConstants.COMPOSITE_BUNDLE_PROVIDE_POLICY, "org.osgi.test.cases.composite.tb3");
-
-		Map manifestImport = new HashMap();
-		manifestImport.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
-		manifestImport.put(CompositeConstants.COMPOSITE_BUNDLE_REQUIRE_POLICY, 
-				"org.osgi.test.cases.composite.tb3; " +
-				CompositeConstants.COMPOSITE_SYMBOLICNAME_DIRECTIVE + ":=\"fail\"; " +
-				CompositeConstants.COMPOSITE_VERSION_DIRECTIVE + ":=\"[2.0.0, 2.1.0)\"");
-		doTestExportImportPolicy01(manifestExport, manifestImport, new String[] {"tb3v1.jar"}, null, "tb3v1requireClient.jar", true, null);
-	}
-
-	public void testProvideRequireCompositePeer01d() {
-		try {
-			install("tb3v1.jar").start();
-		} catch (BundleException e) {
-			fail("Unexpected exception installing bundle", e);
-		}
 		Map manifestExport = new HashMap();
 		String exportBSN = getName() + ".export";
 		String exportVersion = "2.0.0";
