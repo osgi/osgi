@@ -33,7 +33,7 @@ import info.dmtree.spi.TransactionalDataSession;
  *
  * dmt plugin base class for policy
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public abstract class AbstractPolicyPlugin implements TransactionalDataSession {
 	/**

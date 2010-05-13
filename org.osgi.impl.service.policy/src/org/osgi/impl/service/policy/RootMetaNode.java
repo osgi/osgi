@@ -24,7 +24,7 @@ import info.dmtree.MetaNode;
  *
  * Meta node for  tree root.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class RootMetaNode implements MetaNode {
 	private final String description;

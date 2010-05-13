@@ -28,7 +28,7 @@ import java.util.Dictionary;
  * providers and encapsulate all provider-specific details related to the
  * location and acquisition of driver bundles.
  * 
- * @version $Revision$
+ * @version $Id$
  * @see Driver
  * @ThreadSafe
  */

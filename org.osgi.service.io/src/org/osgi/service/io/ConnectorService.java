@@ -40,7 +40,7 @@ import javax.microedition.io.Connector;
  * first, is called. This is the same algorithm used by
  * <code>BundleContext.getServiceReference</code>.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface ConnectorService {
 	/**

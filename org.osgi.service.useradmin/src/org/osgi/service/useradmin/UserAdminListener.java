@@ -30,7 +30,7 @@ package org.osgi.service.useradmin;
  * @see UserAdmin
  * @see UserAdminEvent
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface UserAdminListener {
 	/**

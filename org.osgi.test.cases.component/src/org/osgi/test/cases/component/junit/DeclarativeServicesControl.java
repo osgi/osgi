@@ -58,7 +58,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * This is the bundle initially installed and started by the TestCase. It
  * performs the test methods of the declarative services test case.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class DeclarativeServicesControl extends DefaultTestBundleControl
 		implements LogListener {

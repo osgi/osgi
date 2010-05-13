@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
  * response. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Revision$
+ * @version $Id$
  */
 public final class RequestDispatcherImpl implements RequestDispatcher {
 	private AliasMatch	match;

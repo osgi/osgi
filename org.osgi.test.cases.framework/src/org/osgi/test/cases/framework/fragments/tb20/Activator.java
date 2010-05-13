@@ -37,7 +37,7 @@ import org.osgi.framework.BundleContext;
  * 
  * @author jorge.mascena@cesar.org.br
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class Activator implements BundleActivator {
 

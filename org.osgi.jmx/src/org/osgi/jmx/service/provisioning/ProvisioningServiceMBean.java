@@ -26,7 +26,7 @@ import org.osgi.jmx.JmxConstants;
  * This MBean represents the management interface to the OSGi Initial
  * Provisioning Service
  * 
- * @version $Revision$
+ * @version $Id$
  * @ThreadSafe
  */
 public interface ProvisioningServiceMBean {

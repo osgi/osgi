@@ -34,7 +34,7 @@ import org.osgi.service.metatype.AttributeDefinition;
  * specific MetaTypeProvider.
  *
  * @author left 
- * @version $Revision$
+ * @version $Id$
  */
 public class AttributeDefinitionImpl implements AttributeDefinition {
 

@@ -64,7 +64,7 @@ import java.util.Map;
  * Framework that created them.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface Bundle {
 	/**

@@ -36,7 +36,7 @@ import javax.naming.spi.DirectoryManager;
 import javax.naming.spi.NamingManager;
 
 /**
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 public class CTDirContext extends CTContext implements DirContext {
 	

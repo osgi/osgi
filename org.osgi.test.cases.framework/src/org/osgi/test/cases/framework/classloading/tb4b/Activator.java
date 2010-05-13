@@ -36,7 +36,7 @@ import org.osgi.framework.ServiceReference;
  * A bundle activator which execute some tests
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class Activator implements BundleActivator {
 

@@ -43,7 +43,7 @@ import org.osgi.framework.Version;
  * 
  * @since 1.2
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface RequiredBundle {
 	/**

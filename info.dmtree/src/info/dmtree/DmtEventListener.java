@@ -22,7 +22,7 @@ package info.dmtree;
  * {@link DmtSession} is opened in atomic mode, DMT events are only sent when
  * the session is committed, when the changes are actually performed.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface DmtEventListener {
 

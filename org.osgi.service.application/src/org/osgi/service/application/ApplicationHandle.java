@@ -30,7 +30,7 @@ import org.osgi.framework.Constants;
  * lifecycle state of the represented application instance. It defines constants
  * for the lifecycle states.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public abstract class ApplicationHandle {
 	/*

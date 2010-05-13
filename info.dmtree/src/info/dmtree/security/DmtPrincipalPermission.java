@@ -34,7 +34,7 @@ import java.util.Iterator;
  * principal name with the given prefix. The &quot;*&quot; target means the
  * adapter can create a session in the name of any principal.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class DmtPrincipalPermission extends Permission {
     private static final long serialVersionUID = 6388752177325038332L;

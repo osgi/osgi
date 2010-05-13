@@ -32,7 +32,7 @@ import java.util.Iterator;
  * the given prefix. The &quot;*&quot; target means that alerts can be sent to
  * any destination.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class AlertPermission extends Permission {
     private static final long serialVersionUID = -3206463101788245739L;

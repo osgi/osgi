@@ -25,7 +25,7 @@ import org.osgi.framework.Filter;
  * Defines standard names for composite constants.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public class CompositeConstants {
 	/**

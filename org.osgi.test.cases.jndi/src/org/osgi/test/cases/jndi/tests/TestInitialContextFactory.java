@@ -37,7 +37,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * A set of tests for the access and use of InitialContextFactory and
  * InitialContextFactoryBuilder instances
  * 
- * @version $Revision$ $Date: 2009-07-07 15:38:11 -0400 (Tue, 07 Jul
+ * @version $Id$Date: 2009-07-07 15:38:11 -0400 (Tue, 07 Jul
  *          2009) $
  */
 public class TestInitialContextFactory extends DefaultTestBundleControl {

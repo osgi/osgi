@@ -68,7 +68,7 @@ import java.util.Dictionary;
  * objects and they are only valid within the Framework that created them.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 
 public interface BundleContext {

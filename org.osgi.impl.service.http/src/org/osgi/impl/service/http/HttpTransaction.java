@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * HttpRequest and * HttpResponse classes. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Revision$ *
+ * @version $Id$ *
  * @see HttpServer *
  * @see HttpRequest *
  * @see HttpResponse

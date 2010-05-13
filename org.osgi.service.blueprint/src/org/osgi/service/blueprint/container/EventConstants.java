@@ -51,7 +51,7 @@ package org.osgi.service.blueprint.container;
  * </ul>
  * 
  * @Immutable
- * @version $Revision$
+ * @version $Id$
  */
 public class EventConstants {
 	private EventConstants() {

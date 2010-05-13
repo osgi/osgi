@@ -28,7 +28,7 @@ package org.osgi.service.remoteserviceadmin;
  * <code>null</code>.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface ImportRegistration {
 	/**

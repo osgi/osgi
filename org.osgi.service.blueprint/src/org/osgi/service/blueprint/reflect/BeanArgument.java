@@ -22,7 +22,7 @@ package org.osgi.service.blueprint.reflect;
  * This is specified by the <code>argument</code> elements of a bean.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface BeanArgument {
 

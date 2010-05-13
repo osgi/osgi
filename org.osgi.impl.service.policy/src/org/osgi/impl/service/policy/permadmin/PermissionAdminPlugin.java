@@ -42,7 +42,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  *
  * implements the ./OSGi/Policies/Java/Bundle subtree.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 	private PermissionAdmin	permissionAdmin;

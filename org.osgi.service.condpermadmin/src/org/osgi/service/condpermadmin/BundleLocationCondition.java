@@ -34,7 +34,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * Pattern matching is done according to the filter string matching rules.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public class BundleLocationCondition {
 	private static final String	CONDITION_TYPE	= "org.osgi.service.condpermadmin.BundleLocationCondition";

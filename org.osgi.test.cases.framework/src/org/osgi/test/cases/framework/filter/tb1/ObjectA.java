@@ -33,7 +33,7 @@ package org.osgi.test.cases.framework.filter.tb1;
  * implements comparable. The overriden method compareTo
  * always returns 0 irrespective of the object passed to it.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class ObjectA implements Comparable {
 	String _value;

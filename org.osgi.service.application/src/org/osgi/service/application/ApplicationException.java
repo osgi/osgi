@@ -44,7 +44,7 @@ package org.osgi.service.application;
  * startup arguments is invalid, for example its type is not permitted.
  * </ul>
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class ApplicationException extends Exception {
 	private static final long serialVersionUID = -7173190453622508207L;

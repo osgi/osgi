@@ -32,7 +32,7 @@ import java.util.Date;
  * characters [-_.a-zA-Z0-9] may be used. The length of the ID must not exceed
  * 32 bytes when UTF-8 encoded.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class StatusVariable {
     //----- Public constants -----//

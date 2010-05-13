@@ -22,7 +22,7 @@ import java.util.Collection;
  * {@link ReferenceListMetadata} and {@link ReferenceMetadata}.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface ServiceReferenceMetadata extends ComponentMetadata {
 

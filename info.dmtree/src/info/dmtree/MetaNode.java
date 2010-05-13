@@ -52,7 +52,7 @@ package info.dmtree;
  * of meta information is not defined for the node or providing this information
  * is not supported. Methods of this class do not throw exceptions.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface MetaNode {
 

@@ -39,7 +39,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  *
  * dmt plugin for exposing dmt principal data.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 	

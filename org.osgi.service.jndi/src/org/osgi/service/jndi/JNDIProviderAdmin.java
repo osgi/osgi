@@ -35,7 +35,7 @@ import javax.naming.directory.Attributes;
  * 
  * This service will typically be used by OSGi-aware JNDI Service Providers.
  * 
- * @version $Revision$
+ * @version $Id$
  * @ThreadSafe
  */
 public interface JNDIProviderAdmin {

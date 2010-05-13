@@ -19,7 +19,7 @@ package org.osgi.service.prefs;
  * Thrown to indicate that a preferences operation could not complete because of
  * a failure in the backing store, or a failure to contact the backing store.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class BackingStoreException extends Exception {
     static final long serialVersionUID = -1415637364122829574L;

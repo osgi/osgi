@@ -64,7 +64,7 @@ package org.osgi.service.wireadmin;
  * different types of objects (composite) to the Consumer service. The Producer
  * service should have <code>WirePermission</code> for each of these scope names.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface Producer {
 	/**

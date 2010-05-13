@@ -32,7 +32,7 @@ import java.util.Dictionary;
  * 
  * @see BundleContext#registerService(String[],Object,Dictionary)
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 
 public interface ServiceRegistration {

@@ -36,7 +36,7 @@ import org.osgi.test.cases.framework.secure.classloading.exports.service.SomeSer
  * This bundle activator is used to register some services
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class Activator implements BundleActivator {
 

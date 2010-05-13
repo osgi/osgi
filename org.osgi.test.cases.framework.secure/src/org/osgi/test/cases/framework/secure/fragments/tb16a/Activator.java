@@ -47,7 +47,7 @@ import org.osgi.framework.ServiceRegistration;
  * 
  * @author jorge.mascena@cesar.org.br
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class Activator implements BundleActivator{
 

@@ -48,7 +48,7 @@ package info.dmtree;
  * corresponding node.
  * </ul>
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface DmtEvent {
 

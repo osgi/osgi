@@ -32,7 +32,7 @@ package org.osgi.test.cases.framework.filter.tb1;
  * Class used for testing filters. It implements the dummy marker service 
  * <code>TestService</code>.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class ServiceD implements TestService {
 }

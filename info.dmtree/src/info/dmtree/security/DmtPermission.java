@@ -57,7 +57,7 @@ import java.util.StringTokenizer;
  * returned by {@link #getActions} uses the forms defined by the action
  * constants.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class DmtPermission extends Permission {
     private static final long serialVersionUID = -1910969921419407809L;

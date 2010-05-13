@@ -20,7 +20,7 @@ package org.osgi.service.upnp;
  * control point invokes actions to UPnPDevices.
  * 
  * @since 1.1
- * @version $Revision$
+ * @version $Id$
  */
 public class UPnPException extends Exception {
 	static final long		serialVersionUID		= -262013318122195146L;

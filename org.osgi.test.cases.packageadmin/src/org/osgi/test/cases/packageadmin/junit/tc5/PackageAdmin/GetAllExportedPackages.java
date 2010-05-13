@@ -38,7 +38,7 @@ import org.osgi.test.cases.packageadmin.junit.tc5.TestControl;
  * org.osgi.service.packageadmin.PackageAdmin.getAllExportedPackages().
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class GetAllExportedPackages {
 

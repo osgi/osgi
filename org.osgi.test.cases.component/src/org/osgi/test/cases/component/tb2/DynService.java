@@ -32,7 +32,7 @@ package org.osgi.test.cases.component.tb2;
  * This is a very simple service - it's purpose is to test that the SCR will
  * also register a service with a Class name instead of interface name.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class DynService {
 	// empty

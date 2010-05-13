@@ -28,7 +28,7 @@ package org.osgi.service.upnp;
  * 
  * @since 1.1
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface UPnPLocalStateVariable extends UPnPStateVariable {
 	/**

@@ -33,7 +33,7 @@ import org.osgi.framework.BundleContext;
 /**
  * This class is used to activate a bundle
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class Activator implements BundleActivator {
 

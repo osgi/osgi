@@ -22,7 +22,7 @@ import org.osgi.framework.Bundle;
  * Provides the event information for a Remote Service Admin event.
  * 
  * @Immutable
- * @version $Revision$
+ * @version $Id$
  */
 public class RemoteServiceAdminEvent {
 	/**

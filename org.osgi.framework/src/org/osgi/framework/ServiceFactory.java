@@ -46,7 +46,7 @@ package org.osgi.framework;
  * 
  * @see BundleContext#getService
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 
 public interface ServiceFactory {

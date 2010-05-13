@@ -33,7 +33,7 @@ import org.osgi.framework.*;
  * A bundle that registers a service with the marker interface
  * TBCService so it can be checked the exporter is correct.
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {

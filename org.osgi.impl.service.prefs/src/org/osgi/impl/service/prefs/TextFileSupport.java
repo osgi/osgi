@@ -17,7 +17,7 @@ import java.io.*;
 import org.osgi.service.prefs.*;
 
 /**
- * @version $Revision$
+ * @version $Id$
  */
 class TextFileSupport {
 	static void read(File preferencesFile, Preferences prefs) {

@@ -37,7 +37,7 @@ import org.osgi.service.io.*;
  * needs to be started or stopped.
  * 
  * @author OSGi Alliance
- * @version $Revision$
+ * @version $Id$
  */
 public class Activator implements BundleActivator {
 	private ServiceRegistration		reg;

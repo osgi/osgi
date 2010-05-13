@@ -37,7 +37,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  * Test the method org.osgi.service.packageadmin.PackageAdmin.resolveBundles().
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class ResolveBundles {
 

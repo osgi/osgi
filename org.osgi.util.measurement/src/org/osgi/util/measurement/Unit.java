@@ -29,7 +29,7 @@ import java.util.Hashtable;
  * result in a <code>Unit</code> object with undefined exponents.
  * 
  * @Immutable
- * @version $Revision$
+ * @version $Id$
  */
 /*
  * This local class maintains the information about units. It can calculate new

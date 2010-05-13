@@ -46,7 +46,7 @@ import info.dmtree.DmtSession;
  * characters appear escaped in the segments.
  * <p>
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface DataPlugin {
 

@@ -50,7 +50,7 @@ import java.util.List;
  * anywhere else but in the beginning of a URI.
  * </ul>
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class Uri {
 	/*

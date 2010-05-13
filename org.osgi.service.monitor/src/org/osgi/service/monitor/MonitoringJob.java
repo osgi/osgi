@@ -40,7 +40,7 @@ package org.osgi.service.monitor;
  * specific whether we still receive updates of the <code>StatusVariable</code>
  * changes or not.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface MonitoringJob {
     /**

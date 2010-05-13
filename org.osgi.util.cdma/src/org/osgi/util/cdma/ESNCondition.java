@@ -27,7 +27,7 @@ import org.osgi.service.condpermadmin.ConditionInfo;
  * value that is matched against the ESN of the device.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public class ESNCondition {
 	private static final String	ORG_OSGI_UTIL_CDMA_ESN	= "org.osgi.util.cdma.esn";

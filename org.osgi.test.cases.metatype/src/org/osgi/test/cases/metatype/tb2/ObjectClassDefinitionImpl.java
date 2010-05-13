@@ -38,7 +38,7 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * specific MetaTypeProvider.
  *
  * @author left 
- * @version $Revision$
+ * @version $Id$
  */
 public class ObjectClassDefinitionImpl implements ObjectClassDefinition {
 

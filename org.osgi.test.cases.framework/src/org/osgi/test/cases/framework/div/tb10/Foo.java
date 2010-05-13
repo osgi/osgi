@@ -31,7 +31,7 @@ package org.osgi.test.cases.framework.div.tb10;
  *
  * Class used by tests.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class Foo {
 	// empty

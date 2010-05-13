@@ -38,7 +38,7 @@ import org.osgi.test.cases.framework.classloading.exports.service.SomeService;
  * A bundle activator which execute some tests
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class Activator implements BundleActivator {
 

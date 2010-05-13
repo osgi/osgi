@@ -57,7 +57,7 @@ package org.osgi.service.monitor;
  * {@link StatusVariable}. If any of the restrictions are violated, the method
  * must throw an <code>IllegalArgumentException</code>.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface MonitorAdmin {
 

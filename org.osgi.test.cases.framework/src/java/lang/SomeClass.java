@@ -31,7 +31,7 @@ package java.lang;
  * Class used to test class loader delegation order 
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class SomeClass {
 

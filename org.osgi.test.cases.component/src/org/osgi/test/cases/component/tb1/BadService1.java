@@ -32,7 +32,7 @@ package org.osgi.test.cases.component.tb1;
  * because of the bad XML file, not the missing implementation
  *
  * @author Valentin Valchev
- * @version $Revision$
+ * @version $Id$
  */
 public class BadService1 {
 	// empty

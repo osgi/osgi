@@ -55,7 +55,7 @@ import java.util.Dictionary;
  * events.</li>
  * </ul>
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface UPnPEventListener {
 	/**

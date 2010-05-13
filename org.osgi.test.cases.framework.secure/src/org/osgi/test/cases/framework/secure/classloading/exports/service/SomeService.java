@@ -33,7 +33,7 @@ import org.osgi.framework.Bundle;
  * A simple service used in tests
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public interface SomeService {
 

@@ -24,7 +24,7 @@ import javax.naming.spi.InitialContextFactory;
 import javax.naming.spi.InitialContextFactoryBuilder;
 
 /** 
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 public class CTExceptionalInitialContextFactoryBuilder implements
 		InitialContextFactoryBuilder {

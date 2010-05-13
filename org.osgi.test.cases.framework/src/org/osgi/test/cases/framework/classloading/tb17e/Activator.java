@@ -34,7 +34,7 @@ import org.osgi.framework.BundleContext;
  * A bundle activator to execute some tests
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class Activator implements BundleActivator {
 

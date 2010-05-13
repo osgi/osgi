@@ -32,7 +32,7 @@ import javax.naming.directory.Attributes;
  * underlying JNDIProviderAdmin implementation in a doPrivileged() Action.
  *
  * 
- * @version $Revision$
+ * @version $Id$
  */
 class SecurityAwareJNDIProviderAdminImpl implements CloseableJNDIProviderAdmin {
 

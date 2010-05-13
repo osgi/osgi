@@ -26,7 +26,7 @@ import org.osgi.service.jdbc.DataSourceFactory;
 /**
  * Creates a {@link DerbyEmbeddedDataSourceFactory} for the Derby JDBC driver.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class Activator implements BundleActivator {
     private ServiceRegistration dataSourceServiceRegistration;

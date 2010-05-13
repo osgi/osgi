@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
  * <p>
  * This interface is implemented by users of the <code>HttpService</code>.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface HttpContext {
 	/**

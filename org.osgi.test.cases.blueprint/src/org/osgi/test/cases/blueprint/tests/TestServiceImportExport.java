@@ -37,7 +37,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * involve loading multiple bundles.  One bundle will export services,
  * the other will import them.
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class TestServiceImportExport extends DefaultTestBundleControl {
     /**

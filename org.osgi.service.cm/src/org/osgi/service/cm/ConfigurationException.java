@@ -19,7 +19,7 @@ package org.osgi.service.cm;
  * An <code>Exception</code> class to inform the Configuration Admin service
  * of problems with configuration data.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class ConfigurationException extends Exception {
 	static final long	serialVersionUID	= -1690090413441769377L;

@@ -23,7 +23,7 @@ import org.osgi.service.http.*;
  * HttpContect, which is supplied by the bundle making the registration. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Revision$
+ * @version $Id$
  */
 public final class ResourceRegistration extends AliasRegistration {
 	private String	name;

@@ -58,7 +58,7 @@ package org.osgi.service.useradmin;
  * <code>Authorization</code> object), the service explicitly checks that the
  * calling bundle has permission to make the call.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface Authorization {
 	/**

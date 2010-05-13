@@ -45,7 +45,7 @@ import org.osgi.framework.ServiceReference;
  * thread-safe.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface ServiceTrackerCustomizer {
 	/**

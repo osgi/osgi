@@ -32,7 +32,7 @@ import org.osgi.framework.FrameworkEvent;
  * instance.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface Framework extends Bundle {
 

@@ -30,7 +30,7 @@ import org.osgi.service.jndi.JNDIConstants;
  * Utility methods for the "traditional" JNDI builder implementations.  
  *
  * 
- * @version $Revision$
+ * @version $Id$
  */
 class BuilderUtils {
 	

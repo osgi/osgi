@@ -43,7 +43,7 @@ import java.util.Set;
  * 
  * @Immutable
  * @since 1.3
- * @version $Revision$
+ * @version $Id$
  */
 public class EventProperties implements Map<String, Object> {
 	/**

@@ -34,7 +34,7 @@ import javax.naming.OperationNotSupportedException;
  * method implementation for Context.  This allows subclasses to only override
  * the behavior that should be supported.  
  *
- * @version $Revision$
+ * @version $Id$
  */
 class NotSupportedContext implements Context {
 

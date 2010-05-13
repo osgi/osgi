@@ -53,7 +53,7 @@ import org.osgi.framework.Version;
  * thread-safe.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public class ServiceTracker implements ServiceTrackerCustomizer {
 	/* set this to true to compile in debug messages */

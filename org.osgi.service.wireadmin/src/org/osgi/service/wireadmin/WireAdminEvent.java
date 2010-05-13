@@ -54,7 +54,7 @@ import org.osgi.framework.ServiceReference;
  * 
  * @see WireAdminListener
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class WireAdminEvent {
 	/**

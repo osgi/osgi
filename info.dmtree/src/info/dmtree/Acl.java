@@ -35,7 +35,7 @@ import java.util.Vector;
  * <code>'='</code>, <code>'&amp;'</code>, <code>'*'</code>, <code>'+'</code> or white-space
  * characters.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class Acl {
 

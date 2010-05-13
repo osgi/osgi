@@ -25,7 +25,7 @@ import info.dmtree.MetaNode;
  *
  * Meta node for the /Default node
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class DefaultMetaNode implements MetaNode {
 	public static final String DEFAULT = "Default";

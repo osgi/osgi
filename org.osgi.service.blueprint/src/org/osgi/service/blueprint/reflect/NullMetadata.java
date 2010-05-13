@@ -20,7 +20,7 @@ package org.osgi.service.blueprint.reflect;
  * element.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface NullMetadata extends Metadata {
 

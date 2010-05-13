@@ -34,7 +34,7 @@ import org.osgi.service.event.Event;
 /**
  * Dummy service to check exporter
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface TBCService {
   

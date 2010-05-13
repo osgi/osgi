@@ -30,7 +30,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * This class tests actions performed on starting and stopping of the
  * extender bundle.
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class TestExtenderLifeCycle extends DefaultTestBundleControl {
     // the retrieved extender bundle

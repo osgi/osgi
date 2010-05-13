@@ -25,7 +25,7 @@ import info.dmtree.MetaNode;
  *
  * Meta node for Location.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class LocationMetaNode implements MetaNode {
 	public static final String LOCATION = "Location";

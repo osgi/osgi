@@ -25,7 +25,7 @@ import org.osgi.framework.ServiceReference;
  * highest for a particular <code>Device</code> object will be instructed by the
  * device manager to attach to the <code>Device</code> object.
  * 
- * @version $Revision$
+ * @version $Id$
  * @see Device
  * @see DriverLocator
  * @ThreadSafe

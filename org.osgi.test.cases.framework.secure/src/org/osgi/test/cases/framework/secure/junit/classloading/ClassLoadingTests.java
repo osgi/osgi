@@ -36,7 +36,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * This class contains tests related with the framework class loading policies.
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class ClassLoadingTests extends DefaultTestBundleControl {
 	private PackageAdmin	padmin;

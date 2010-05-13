@@ -38,7 +38,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * Test the method org.osgi.service.packageadmin.PackageAdmin.getFragments().
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class GetFragments {
 

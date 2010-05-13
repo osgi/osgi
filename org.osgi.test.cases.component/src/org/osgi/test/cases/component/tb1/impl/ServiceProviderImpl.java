@@ -33,7 +33,7 @@ import org.osgi.test.cases.component.service.ServiceProvider;
 import org.osgi.test.cases.component.service.TestObject;
 
 /**
- * @version $Revision$
+ * @version $Id$
  */
 public class ServiceProviderImpl implements ServiceProvider {
   

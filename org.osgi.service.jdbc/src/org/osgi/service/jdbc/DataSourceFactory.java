@@ -34,7 +34,7 @@ import javax.sql.XADataSource;
  * OSGi service with the JDBC driver class name in the
  * {@link #OSGI_JDBC_DRIVER_CLASS} property.
  * 
- * @version $Revision$
+ * @version $Id$
  * @ThreadSafe
  */
 public interface DataSourceFactory {

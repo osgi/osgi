@@ -26,7 +26,7 @@ import java.security.PrivilegedExceptionAction;
  * This class does not make the reflective call.  It provides
  * common exception-handling mechanisms for sub-classes to rely upon.  
  *
- * @version $Revision$
+ * @version $Id$
  */
 abstract class ReflectiveInvokeAction implements PrivilegedExceptionAction {
 

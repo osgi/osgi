@@ -30,7 +30,7 @@ package org.osgi.service.remoteserviceadmin;
  * 
  * @see RemoteServiceAdminEvent
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 
 public interface RemoteServiceAdminListener {

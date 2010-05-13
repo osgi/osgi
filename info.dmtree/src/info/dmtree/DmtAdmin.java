@@ -55,7 +55,7 @@ package info.dmtree;
  * environment, clients should register listeners through the Event Admin
  * service.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface DmtAdmin {
     /**

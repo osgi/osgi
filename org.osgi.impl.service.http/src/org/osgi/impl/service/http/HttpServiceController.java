@@ -35,7 +35,7 @@ import org.osgi.service.http.HttpService;
  * </ol>* *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Revision$ *
+ * @version $Id$ *
  * @see HttpServer
  */
 public class HttpServiceController implements BundleActivator, ServiceFactory {

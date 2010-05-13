@@ -27,7 +27,7 @@ import org.osgi.framework.ServiceReference;
  * <code>Exception</code>, the device manager uses the default selection
  * strategy.
  * 
- * @version $Revision$
+ * @version $Id$
  * @since 1.1
  * @ThreadSafe
  */

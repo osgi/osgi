@@ -53,7 +53,7 @@ import java.util.Dictionary;
  * is used in communication. The semantics of the names depend on the Producer
  * service and must not be interpreted by the Wire Admin service.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface Wire {
 	/**

@@ -21,7 +21,7 @@ import java.util.Properties;
  * and methods for getting configuration values and * properties. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Revision$
+ * @version $Id$
  */
 public final class HttpConfig {
 	private final static Properties	props				= new Properties();

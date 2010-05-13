@@ -67,7 +67,7 @@ import org.osgi.framework.Bundle;
  * start level of the framework.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface StartLevel {
 	/**

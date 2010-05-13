@@ -45,7 +45,7 @@ import java.util.Vector;
  * parameters, and the <code>printStackTrace(PrintWriter)</code> method is
  * extended to print the stack trace of all causing throwables as well.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class DmtException extends Exception {
     private static final long serialVersionUID = -63006267148118655L;

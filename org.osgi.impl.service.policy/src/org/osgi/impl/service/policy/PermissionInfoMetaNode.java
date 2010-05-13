@@ -25,7 +25,7 @@ import info.dmtree.MetaNode;
  *
  * Meta node for PermissionInfo.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class PermissionInfoMetaNode implements MetaNode {
 	public static final String PERMISSIONINFO = "PermissionInfo";

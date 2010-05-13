@@ -27,7 +27,7 @@ import org.osgi.service.condpermadmin.ConditionInfo;
  * string value that is matched against the IMEI of the device.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public class IMEICondition {
 	private static final String	ORG_OSGI_UTIL_GSM_IMEI	= "org.osgi.util.gsm.imei";

@@ -40,7 +40,7 @@ import java.net.URL;
  * For example, a bundle could request all its known fragments. The UI
  * associated with the repository could list these as optional downloads.</li>
  * 
- * @version $Revision$
+ * @version $Id$
  * @deprecated This is proposed API. As a result, this API may never be
  *             published or the final API may change substantially by the time
  *             of final publication. You are cautioned against relying upon this

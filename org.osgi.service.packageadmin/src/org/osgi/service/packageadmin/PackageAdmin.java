@@ -28,7 +28,7 @@ import org.osgi.framework.Bundle;
  * with the Framework.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  * @see org.osgi.service.packageadmin.ExportedPackage
  * @see org.osgi.service.packageadmin.RequiredBundle
  */

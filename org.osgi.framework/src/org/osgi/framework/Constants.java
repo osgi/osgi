@@ -25,7 +25,7 @@ package org.osgi.framework;
  * otherwise indicated.
  * 
  * @since 1.1
- * @version $Revision$
+ * @version $Id$
  */
 
 public interface Constants {

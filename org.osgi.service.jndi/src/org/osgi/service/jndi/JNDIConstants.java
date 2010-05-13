@@ -19,7 +19,7 @@ package org.osgi.service.jndi;
 /**
  * Constants for the JNDI implementation.
  * 
- * @version $Revision$
+ * @version $Id$
  * @Immutable
  */
 public class JNDIConstants {

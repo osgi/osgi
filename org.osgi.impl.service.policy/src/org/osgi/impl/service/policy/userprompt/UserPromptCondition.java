@@ -47,7 +47,7 @@ import org.osgi.service.condpermadmin.Condition;
  *
  * Basic console userprompt implementation.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class UserPromptCondition 
 		implements Condition, Serializable

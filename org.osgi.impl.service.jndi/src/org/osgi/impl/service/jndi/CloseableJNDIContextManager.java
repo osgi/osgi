@@ -24,7 +24,7 @@ import org.osgi.service.jndi.JNDIContextManager;
  * used internally by the JNDI implementation.    
  *
  * 
- * @version $Revision$
+ * @version $Id$
  */
 interface CloseableJNDIContextManager extends JNDIContextManager {
 	public void close();

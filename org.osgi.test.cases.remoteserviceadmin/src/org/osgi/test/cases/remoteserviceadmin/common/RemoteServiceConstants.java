@@ -20,7 +20,7 @@ package org.osgi.test.cases.remoteserviceadmin.common;
  * suitable for exporting remotely and/or on imported services.
  * 
  * @ThreadSafe
- * @version $Revision: 8085 $
+ * @version $Id$
  */
 public interface RemoteServiceConstants {
 	/**

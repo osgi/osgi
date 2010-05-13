@@ -32,7 +32,7 @@ package org.osgi.test.cases.framework.filter.tb1;
  * Test class to be used as the property object of a service. This class does
  * not implement <code>java.lang.Comparable</code> or any special constructor.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class ObjectC {
 

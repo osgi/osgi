@@ -37,7 +37,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * permission <code>schedule</code> implies the permission
  * <code>lifecycle</code>.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class ApplicationAdminPermission extends Permission {
 	private static final long serialVersionUID = 1L;

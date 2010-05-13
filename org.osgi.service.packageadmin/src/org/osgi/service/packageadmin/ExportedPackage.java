@@ -42,7 +42,7 @@ import org.osgi.framework.Version;
  * return <code>null</code>.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface ExportedPackage {
 	/**

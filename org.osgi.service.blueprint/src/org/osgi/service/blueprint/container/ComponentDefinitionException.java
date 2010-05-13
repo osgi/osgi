@@ -21,7 +21,7 @@ package org.osgi.service.blueprint.container;
  * This exception is thrown when a configuration-related error occurs during
  * creation of a Blueprint Container.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class ComponentDefinitionException extends RuntimeException {
 	private static final long	serialVersionUID	= 1L;

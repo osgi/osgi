@@ -38,7 +38,7 @@ import org.osgi.test.cases.framework.div.tb24b.SomeServiceBuilder;
  * 
  * @author left@cesar.org.br
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class Activator implements BundleActivator {
 

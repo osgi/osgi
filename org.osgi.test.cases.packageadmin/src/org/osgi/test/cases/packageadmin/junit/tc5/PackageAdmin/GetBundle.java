@@ -40,7 +40,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * Test the method org.osgi.service.packageadmin.PackageAdmin.getBundle().
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class GetBundle {
 

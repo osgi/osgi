@@ -24,7 +24,7 @@ import info.dmtree.MetaNode;
  *
  * Meta node for ConditionInfo.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class ConditionInfoMetaNode implements MetaNode {
 	public static final String CONDITIONINFO = "ConditionInfo";

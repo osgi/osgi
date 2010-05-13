@@ -20,7 +20,7 @@ import org.osgi.service.log.*;
  * LogEntry class.
  * 
  * @author BJ Hargrave (hargrave@us.ibm.com)
- * @version $Revision$
+ * @version $Id$
  */
 public class LogEntryImpl implements LogEntry {
 	protected int				level;

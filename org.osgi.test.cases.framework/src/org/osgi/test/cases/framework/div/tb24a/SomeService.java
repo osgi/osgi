@@ -31,7 +31,7 @@ package org.osgi.test.cases.framework.div.tb24a;
  * Service used on test cases
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class SomeService {
 

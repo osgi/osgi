@@ -23,7 +23,7 @@ import java.io.InputStream;
  * 
  * Each UPnP device can contain zero or more icons.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface UPnPIcon {
 	/**

@@ -35,7 +35,7 @@ import java.util.StringTokenizer;
  * monitoring commands are allowed on the designated target(s) by the owner of
  * the permission.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class MonitorPermission extends Permission {
 

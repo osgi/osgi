@@ -38,7 +38,7 @@ import org.osgi.framework.ServiceReference;
  * @see org.osgi.framework.ServiceEvent
  * @see ApplicationServiceListener
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class ApplicationServiceEvent extends ServiceEvent {
 

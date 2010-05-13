@@ -35,7 +35,7 @@ package org.osgi.service.cm;
  * require <code>ServicePermission[ConfigurationListener,REGISTER]</code> to
  * register a <code>ConfigurationListener</code> service.
  * 
- * @version $Revision$
+ * @version $Id$
  * @since 1.2
  */
 public interface ConfigurationListener {

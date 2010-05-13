@@ -23,7 +23,7 @@ import java.util.Dictionary;
  * Each UPnP service contains zero or more actions. Each action may have zero or
  * more UPnP state variables as arguments.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface UPnPAction {
 	/**

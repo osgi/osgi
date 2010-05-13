@@ -49,7 +49,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * TODO Add Javadoc comment for this type.
  * 
  * @testcase org.osgi.service.provisioning
- * @version $Revision$
+ * @version $Id$
  */
 public class Activator implements BundleActivator, HttpContext {
 	ServiceTracker	tracker;

@@ -46,7 +46,7 @@ import org.osgi.framework.ServiceReference;
  * 
  * @see ConfigurationListener
  * 
- * @version $Revision$
+ * @version $Id$
  * @since 1.2
  */
 public class ConfigurationEvent {

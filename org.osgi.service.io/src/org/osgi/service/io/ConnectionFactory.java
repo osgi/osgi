@@ -32,7 +32,7 @@ import javax.microedition.io.Connection;
  * Factory will then be called to create the actual <code>Connection</code>
  * object.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface ConnectionFactory {
 	/**

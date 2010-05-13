@@ -27,7 +27,7 @@ import org.osgi.service.condpermadmin.ConditionInfo;
  * string value that is matched against the IMSI of the subscriber.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public class IMSICondition {
 	private static final String	ORG_OSGI_UTIL_GSM_IMSI	= "org.osgi.util.gsm.imsi";

@@ -36,7 +36,7 @@ package org.osgi.service.device;
  * Specialized device implementations will extend this interface by adding
  * methods appropriate to their device category to it.
  * 
- * @version $Revision$
+ * @version $Id$
  * @see Driver
  * @ThreadSafe
  */

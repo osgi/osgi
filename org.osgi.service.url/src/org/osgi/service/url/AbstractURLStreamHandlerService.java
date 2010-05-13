@@ -28,7 +28,7 @@ import java.net.*;
  * methods.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public abstract class AbstractURLStreamHandlerService extends URLStreamHandler
 		implements URLStreamHandlerService {

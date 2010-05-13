@@ -25,7 +25,7 @@ import java.util.List;
  * commit will fail and this object should be discarded.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  * @since 1.1
  */
 public interface ConditionalPermissionUpdate {

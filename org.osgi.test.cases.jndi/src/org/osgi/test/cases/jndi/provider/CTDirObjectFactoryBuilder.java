@@ -24,7 +24,7 @@ import javax.naming.spi.ObjectFactory;
 import javax.naming.spi.ObjectFactoryBuilder;
 
 /**
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 public class CTDirObjectFactoryBuilder implements ObjectFactoryBuilder {
 	

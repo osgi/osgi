@@ -21,7 +21,7 @@ import javax.naming.RefAddr;
 import javax.naming.Reference;
 
 /**
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 public class CTReference extends Reference {
 

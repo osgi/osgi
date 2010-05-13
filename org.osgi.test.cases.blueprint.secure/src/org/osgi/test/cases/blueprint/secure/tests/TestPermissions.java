@@ -30,7 +30,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * This performs some basic permissoions test to ensure the extender bundle
  * doesn't extend its own permissions to the bundle
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class TestPermissions extends DefaultTestBundleControl {
     /**

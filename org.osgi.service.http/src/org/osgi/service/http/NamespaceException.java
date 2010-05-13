@@ -20,7 +20,7 @@ package org.osgi.service.http;
  * to register a servlet or resources into the URI namespace of the Http
  * Service. This exception indicates that the requested alias already is in use.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class NamespaceException extends Exception {
     static final long serialVersionUID = 7235606031147877747L;

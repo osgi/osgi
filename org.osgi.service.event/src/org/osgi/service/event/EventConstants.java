@@ -25,7 +25,7 @@ import org.osgi.framework.Version;
 /**
  * Defines standard names for <code>EventHandler</code> properties.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface EventConstants {
 

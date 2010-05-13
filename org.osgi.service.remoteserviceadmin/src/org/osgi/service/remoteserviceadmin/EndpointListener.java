@@ -79,7 +79,7 @@ package org.osgi.service.remoteserviceadmin;
  * discovery processes.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface EndpointListener {
 	/**
