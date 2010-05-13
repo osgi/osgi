@@ -74,7 +74,7 @@ import org.osgi.framework.ServiceReference;
  * Omitting the <code>cm.target</code> registration property means that the
  * plugin is called for all configuration updates.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface ConfigurationPlugin {
 	/**

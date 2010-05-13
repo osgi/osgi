@@ -44,7 +44,7 @@ import org.osgi.framework.Version;
  * @since 1.2
  * @deprecated As of 1.3. Replaced by {@link BundleWiring}.
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface RequiredBundle {
 	/**

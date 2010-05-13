@@ -21,7 +21,7 @@ import org.osgi.framework.Bundle;
  * A MetaType Information object is created by the MetaTypeService to return
  * meta type information for a specific bundle.
  * 
- * @version $Revision$
+ * @version $Id$
  * @since 1.1
  */
 public interface MetaTypeInformation extends MetaTypeProvider {

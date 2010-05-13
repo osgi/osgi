@@ -11,7 +11,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * This is NOT a declarative service because it tests the XML file of the
  * declarative services.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 
 public class SCRCmds implements BundleActivator, CommandProvider {

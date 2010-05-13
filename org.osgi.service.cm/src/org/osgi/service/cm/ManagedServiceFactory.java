@@ -92,7 +92,7 @@ import java.util.Dictionary;
  *   
  * </pre>
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface ManagedServiceFactory {
 	/**

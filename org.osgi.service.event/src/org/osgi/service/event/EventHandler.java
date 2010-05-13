@@ -56,7 +56,7 @@ package org.osgi.service.event;
  * @see Event
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface EventHandler {
 	/**

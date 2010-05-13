@@ -27,7 +27,7 @@ import info.dmtree.DmtSession;
  * <code>String</code> array in the <code>execRootURIs</code> registration
  * parameter.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface ExecPlugin {
 

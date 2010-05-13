@@ -37,7 +37,7 @@ import org.osgi.test.cases.framework.secure.classloading.exports.service.SomeSer
  * A simple service implementation used in tests
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class SomeServiceImpl implements SomeService {
 

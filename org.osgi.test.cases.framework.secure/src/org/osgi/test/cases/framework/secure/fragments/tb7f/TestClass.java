@@ -36,7 +36,7 @@ import org.osgi.framework.Bundle;
  *
  * Test class used for running test related to URL permissions.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class TestClass {
 	/**

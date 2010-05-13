@@ -121,7 +121,7 @@ class TraditionalObjectFactoryBuilder implements ObjectFactoryBuilder {
 	/**
 	 * Internal interface meant to represent a generic action on the JNDIProviderAdmin service.  
 	 *
-	 * @version $Revision$
+	 * @version $Id$
 	 */
 	private interface ProviderAdminAction {
 		Object runProviderAdminAction(JNDIProviderAdmin providerAdmin) throws Exception;
@@ -131,7 +131,7 @@ class TraditionalObjectFactoryBuilder implements ObjectFactoryBuilder {
 	 * A ProviderAdminAction implementation that follows the behavior of 
 	 * NamingManager.getObjectInstance().  
 	 *
-	 * @version $Revision$
+	 * @version $Id$
 	 */
 	private static class NamingManagerAction implements ProviderAdminAction {
 		protected final Object m_refInfo;
@@ -155,7 +155,7 @@ class TraditionalObjectFactoryBuilder implements ObjectFactoryBuilder {
 	 * A ProviderAdminAction implementation that follows the behavior of 
 	 * DirectoryManager.getObjectInstance().  
 	 *
-	 * @version $Revision$
+	 * @version $Id$
 	 */
 	private static class DirectoryManagerAction extends NamingManagerAction {
 		private final Attributes m_attributes;

@@ -99,7 +99,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * <code>ConfigurationAdmin</code> must use a
  * {@link org.osgi.framework.ServiceFactory} to support this concept.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface ConfigurationAdmin {
 	/**

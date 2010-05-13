@@ -40,7 +40,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * org.osgi.service.packageadmin.ExportedPackage.getImportingBundles().
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class GetImportingBundles {
 

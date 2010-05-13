@@ -31,7 +31,7 @@ import org.osgi.util.tracker.ServiceTracker;
  *
  * 
  * 
- * @version $Revision$
+ * @version $Id$
  */
 class ServiceUtils {
 	/* private constructor, static utility class */

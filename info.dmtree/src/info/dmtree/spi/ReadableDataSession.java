@@ -71,7 +71,7 @@ import java.util.Date;
  * fit into any other category, the {@link DmtException#COMMAND_FAILED} code
  * should be used.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface ReadableDataSession {
     /**

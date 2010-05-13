@@ -44,7 +44,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * This class contains primitive string to type injection convertions
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class TestGenericCollectionInjection extends DefaultTestBundleControl {
     private void addConstructorValidator(MetadataEventSet startEvents, String id, Object value, Class type) {

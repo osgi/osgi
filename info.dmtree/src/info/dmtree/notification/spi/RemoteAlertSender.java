@@ -40,7 +40,7 @@ import info.dmtree.notification.AlertItem;
  * choice is unambiguous for some other reason (for example if only one alert
  * sender is registered).
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface RemoteAlertSender {
     /**

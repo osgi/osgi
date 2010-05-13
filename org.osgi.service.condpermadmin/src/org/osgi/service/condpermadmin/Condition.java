@@ -24,7 +24,7 @@ import java.util.Dictionary;
  * Info can only be used if the associated Conditions are satisfied.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface Condition {
 	/**

@@ -28,7 +28,7 @@ package org.osgi.test.cases.remoteservices.junit;
  * and configuration types supported by the distribution provider.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface DistributionProviderConstants {
 	/**

@@ -51,7 +51,7 @@ import java.util.EventListener;
  * @see ServiceEvent
  * @see ServicePermission
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 
 public interface ServiceListener extends EventListener {

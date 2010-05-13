@@ -47,7 +47,7 @@ import org.osgi.framework.SynchronousBundleListener;
  * 
  * @param <T> The type of the tracked object.
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  * @since 1.4
  */
 public class BundleTracker<T> implements BundleTrackerCustomizer<T> {

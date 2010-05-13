@@ -24,7 +24,7 @@ import info.dmtree.MetaNode;
  *
  * Meta node for nodes right under DmtPrincipal
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class PrincipalPermissionMetaNode implements MetaNode {
 	public boolean can(int operation) { return (operation==CMD_DELETE)||(operation==CMD_ADD)||(operation==CMD_GET); }

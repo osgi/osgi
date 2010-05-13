@@ -28,7 +28,7 @@ package org.osgi.test.cases.scaconfigtype.common;
  * and configuration types supported by the distribution provider.
  * 
  * @ThreadSafe
- * @version $Revision: 8085 $
+ * @version $Id$
  */
 public interface DistributionProviderConstants {
 	/**

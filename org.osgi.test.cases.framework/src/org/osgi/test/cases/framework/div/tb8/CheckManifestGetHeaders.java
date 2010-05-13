@@ -36,7 +36,7 @@ import org.osgi.framework.BundleContext;
  * 
  * @author hmm@cesar.org.br
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class CheckManifestGetHeaders implements BundleActivator {
 

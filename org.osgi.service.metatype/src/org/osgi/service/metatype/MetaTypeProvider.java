@@ -18,7 +18,7 @@ package org.osgi.service.metatype;
 /**
  * Provides access to metatypes.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface MetaTypeProvider {
 	/**

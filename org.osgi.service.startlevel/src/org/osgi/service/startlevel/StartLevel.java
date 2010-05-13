@@ -68,7 +68,7 @@ import org.osgi.framework.FrameworkListener;
  * start level of the framework.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface StartLevel {
 	/**

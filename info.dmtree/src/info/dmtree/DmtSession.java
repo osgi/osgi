@@ -41,7 +41,7 @@ import java.util.Date;
  * invalidated (due to timeout, fatal exceptions, or unexpectedly unregistered
  * plugins).
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface DmtSession {
     /**

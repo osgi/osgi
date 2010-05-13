@@ -56,7 +56,7 @@ package org.osgi.service.permissionadmin;
  * and <code>getDefaultPermissions</code>.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface PermissionAdmin {
 	/**

@@ -19,7 +19,7 @@ package org.osgi.service.component;
 /**
  * Defines standard names for Service Component constants.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface ComponentConstants {
 	/**

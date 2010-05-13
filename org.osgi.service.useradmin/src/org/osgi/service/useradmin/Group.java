@@ -85,7 +85,7 @@ package org.osgi.service.useradmin;
  *  
  * </pre>
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface Group extends User {
 	/**

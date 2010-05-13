@@ -34,7 +34,7 @@ package org.osgi.test.cases.framework.filter.tb1;
  * that receives a single <code>java.lang.String</code> argument. It
  * also overrides the <code>equals</code> method.  
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class ObjectB {
 	String _value;

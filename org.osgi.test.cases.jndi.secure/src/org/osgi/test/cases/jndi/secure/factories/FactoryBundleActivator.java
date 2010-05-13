@@ -32,7 +32,7 @@ import org.osgi.test.cases.jndi.secure.provider.CTInitialContextFactory;
 import org.osgi.test.cases.jndi.secure.provider.CTObjectFactory;
 
 /**
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 public class FactoryBundleActivator implements BundleActivator {
 

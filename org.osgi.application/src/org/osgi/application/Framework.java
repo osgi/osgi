@@ -22,7 +22,7 @@ import java.util.Hashtable;
  * Using this class, OSGi-aware applications can obtain their
  * {@link ApplicationContext}.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class Framework {
 

@@ -30,7 +30,7 @@ package org.osgi.test.cases.framework.fragments.tb1e;
 /**
  * Some test resource.
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class TestClass {
 	

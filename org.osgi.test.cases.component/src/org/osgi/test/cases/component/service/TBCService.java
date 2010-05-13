@@ -32,7 +32,7 @@ import java.util.Dictionary;
 /**
  * Dummy service to check exporter
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface TBCService {
 

@@ -52,7 +52,7 @@ import org.osgi.framework.*;
  * objects is further filtered according to package sources as defined in
  * {@link ServiceReference#isAssignableTo(Bundle, String)}.
  * 
- * @version $Revision$
+ * @version $Id$
  * @see ApplicationServiceEvent
  * @see ServicePermission
  */

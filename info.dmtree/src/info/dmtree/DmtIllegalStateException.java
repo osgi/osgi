@@ -20,7 +20,7 @@ package info.dmtree;
  * Unchecked illegal state exception. This class is used in DMT because
  * java.lang.IllegalStateException does not exist in CLDC.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class DmtIllegalStateException extends RuntimeException {
     private static final long serialVersionUID = 2015244852018469700L;

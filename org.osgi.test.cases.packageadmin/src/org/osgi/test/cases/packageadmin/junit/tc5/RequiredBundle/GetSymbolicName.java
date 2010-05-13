@@ -39,7 +39,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * org.osgi.service.packageadmin.RequiredBundle.getSymbolicName().
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class GetSymbolicName {
 

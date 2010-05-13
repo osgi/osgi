@@ -26,7 +26,7 @@ import org.osgi.jmx.JmxConstants;
  * This MBean provides the management interface to the OSGi Configuration
  * Administration Service.
  * 
- * @version $Revision$
+ * @version $Id$
  * @ThreadSafe
  */
 public interface ConfigurationAdminMBean {

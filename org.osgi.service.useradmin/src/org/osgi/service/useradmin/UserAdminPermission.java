@@ -116,7 +116,7 @@ import java.util.Hashtable;
  * bundle is not allowed to change any properties or credentials.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public final class UserAdminPermission extends BasicPermission {
 	static final long			serialVersionUID			= -1179971692401603789L;

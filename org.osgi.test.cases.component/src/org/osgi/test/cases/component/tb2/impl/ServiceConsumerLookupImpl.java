@@ -35,7 +35,7 @@ import org.osgi.test.cases.component.service.TestObject;
 import org.osgi.test.cases.component.tb2.ServiceConsumerLookup;
 
 /**
- * @version $Revision$
+ * @version $Id$
  */
 public class ServiceConsumerLookupImpl implements ServiceConsumerLookup {
 

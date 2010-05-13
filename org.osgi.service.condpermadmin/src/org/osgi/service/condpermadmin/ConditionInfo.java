@@ -44,7 +44,7 @@ import java.util.ArrayList;
  * </ul>
  * 
  * @Immutable
- * @version $Revision$
+ * @version $Id$
  */
 public class ConditionInfo {
 	private final String	type;

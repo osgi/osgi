@@ -25,7 +25,7 @@ import org.osgi.service.prefs.*;
  * users of the <tt>Preferences</tt> facility should have no need to consult
  * this documentation. </strong>
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public abstract class AbstractPreferences implements Preferences {
 	/**

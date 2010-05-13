@@ -105,7 +105,7 @@ import java.util.Dictionary;
  * registration properties. This will allow the Configuration Admin service to
  * set properties on services which can then be used by other applications.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface ManagedService {
 	/**

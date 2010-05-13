@@ -21,7 +21,7 @@ package org.osgi.service.upnp;
  * Each UPnP device contains zero or more services. The UPnP description for a
  * service defines actions, their arguments, and event characteristics.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface UPnPService {
 	/**

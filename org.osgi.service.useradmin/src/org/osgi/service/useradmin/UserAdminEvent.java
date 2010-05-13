@@ -33,7 +33,7 @@ import org.osgi.framework.ServiceReference;
  * @see UserAdmin
  * @see UserAdminListener
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class UserAdminEvent {
 	private ServiceReference	ref;

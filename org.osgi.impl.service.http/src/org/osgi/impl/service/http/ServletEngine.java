@@ -21,7 +21,7 @@ import org.osgi.service.http.HttpContext;
  * * The servlet engine, i.e. sets up the environment for the servlets. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Revision$
+ * @version $Id$
  */
 public final class ServletEngine implements HttpSessionContext {
 	private HttpServer			httpServer;

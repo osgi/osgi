@@ -43,7 +43,7 @@ import org.osgi.framework.Version;
  * 
  * @deprecated As of 1.3. Replaced by {@link PackageExport}.
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface ExportedPackage {
 	/**

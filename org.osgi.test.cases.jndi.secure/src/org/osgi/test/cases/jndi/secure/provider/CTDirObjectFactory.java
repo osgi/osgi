@@ -26,7 +26,7 @@ import javax.naming.directory.Attributes;
 import javax.naming.spi.DirObjectFactory;
 
 /**
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 public class CTDirObjectFactory implements DirObjectFactory {
 

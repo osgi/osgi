@@ -28,7 +28,7 @@
 package org.osgi.test.cases.component.service;
 
 /**
- * @version $Revision$
+ * @version $Id$
  */
 public class TestObject {
   

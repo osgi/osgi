@@ -25,7 +25,7 @@ import java.lang.reflect.InvocationHandler;
  * was actually created.  
  *
  * 
- * @version $Revision$
+ * @version $Id$
  */
 class ServiceProxyInfo {
 	final Object m_service;

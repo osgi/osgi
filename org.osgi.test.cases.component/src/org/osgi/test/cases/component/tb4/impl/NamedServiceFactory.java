@@ -32,7 +32,7 @@ import org.osgi.test.cases.component.tb4.NamedService;
 
 /**
  * @author Valentin Valchev
- * @version $Revision$
+ * @version $Id$
  */
 public class NamedServiceFactory implements NamedService {
   private String name = "name not init";

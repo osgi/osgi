@@ -43,7 +43,7 @@ import org.osgi.service.metatype.MetaTypeProvider;
  * interface MetaTypeProvider
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class Activator implements BundleActivator {
 

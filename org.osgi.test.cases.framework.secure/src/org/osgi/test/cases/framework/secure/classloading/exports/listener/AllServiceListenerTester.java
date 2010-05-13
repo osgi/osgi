@@ -33,7 +33,7 @@ import org.osgi.framework.ServiceEvent;
 /**
  * Service used to test the interface AllServiceListener
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface AllServiceListenerTester extends AllServiceListener {
 	

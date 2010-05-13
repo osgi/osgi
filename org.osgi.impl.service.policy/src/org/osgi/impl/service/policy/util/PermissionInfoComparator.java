@@ -24,7 +24,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  *
  * compares two PermissionInfos by their string representation
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class PermissionInfoComparator implements Comparator {
 	public int compare(Object o1, Object o2) {

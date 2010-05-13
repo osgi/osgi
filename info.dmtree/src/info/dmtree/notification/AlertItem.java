@@ -37,7 +37,7 @@ import info.dmtree.Uri;
  * alert format. {@link NotificationService} implementations on other management
  * protocols should map these constructs to the underlying protocol.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class AlertItem {
 

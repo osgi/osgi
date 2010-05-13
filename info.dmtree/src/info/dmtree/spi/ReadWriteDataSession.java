@@ -64,7 +64,7 @@ import info.dmtree.MetaNode;
  * fit into any other category, the {@link DmtException#COMMAND_FAILED} code
  * should be used.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface ReadWriteDataSession extends ReadableDataSession {
 

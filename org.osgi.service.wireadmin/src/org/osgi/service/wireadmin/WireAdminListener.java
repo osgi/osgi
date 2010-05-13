@@ -56,7 +56,7 @@ package org.osgi.service.wireadmin;
  * 
  * @see WireAdminEvent
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface WireAdminListener {
 	/**

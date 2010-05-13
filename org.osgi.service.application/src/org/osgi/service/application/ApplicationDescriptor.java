@@ -31,7 +31,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * information about it. The application descriptor can be used for instance
  * creation.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 
 public abstract class ApplicationDescriptor {

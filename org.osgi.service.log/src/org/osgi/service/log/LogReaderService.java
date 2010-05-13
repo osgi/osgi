@@ -30,7 +30,7 @@ import java.util.Enumeration;
  * <code>LogEntry</code> objects in the log.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  * @see LogEntry
  * @see LogListener
  * @see LogListener#logged(LogEntry)

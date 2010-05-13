@@ -41,7 +41,7 @@ import org.xml.sax.XMLReader;
  *
  * Java class representing metadata read from the autoconf.xsd
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class MetaData  {
     public static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";

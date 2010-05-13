@@ -36,7 +36,7 @@ import java.util.Hashtable;
  * to the implementations of the <code>BasicPermission</code> class.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 final public class WirePermission extends BasicPermission {
 	static final long			serialVersionUID	= -5583709391516569321L;

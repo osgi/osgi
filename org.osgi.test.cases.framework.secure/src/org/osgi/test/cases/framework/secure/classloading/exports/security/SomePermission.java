@@ -32,7 +32,7 @@ import java.security.Permission;
 /**
  * A simple permission used in tests
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class SomePermission extends Permission {
 

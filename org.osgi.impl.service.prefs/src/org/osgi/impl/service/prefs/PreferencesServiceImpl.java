@@ -20,7 +20,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.prefs.*;
 
 /**
- * @version $Revision$
+ * @version $Id$
  */
 public class PreferencesServiceImpl implements PreferencesService {
 	private static final int	INIT_HASHTABLE_SIZE		= 3;

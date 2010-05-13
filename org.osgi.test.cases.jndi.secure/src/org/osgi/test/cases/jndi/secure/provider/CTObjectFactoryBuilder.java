@@ -25,7 +25,7 @@ import javax.naming.spi.ObjectFactory;
 import org.osgi.test.cases.jndi.secure.provider.CTObjectFactory;
 
 /**
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 public class CTObjectFactoryBuilder implements javax.naming.spi.ObjectFactoryBuilder {
 

@@ -30,7 +30,7 @@ package org.osgi.test.cases.packageadmin.junit.tc5;
 /**
  * Dummy service to check exporter
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface TBCService {
 }

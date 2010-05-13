@@ -31,7 +31,7 @@ package org.osgi.test.cases.framework.fragments.tb21;
  *
  * Dummy class to be added to the bundle's classpath
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class FooTB21 {
 

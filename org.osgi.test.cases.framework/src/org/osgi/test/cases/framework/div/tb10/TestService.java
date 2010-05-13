@@ -31,7 +31,7 @@ package org.osgi.test.cases.framework.div.tb10;
  *
  * Service used in tests 
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface TestService {
 

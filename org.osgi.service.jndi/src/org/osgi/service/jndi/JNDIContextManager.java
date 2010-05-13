@@ -28,7 +28,7 @@ import javax.naming.directory.DirContext;
  * This service provides the ability to create new JNDI Context instances
  * without relying on the InitialContext constructor.
  * 
- * @version $Revision$
+ * @version $Id$
  * @ThreadSafe
  */
 public interface JNDIContextManager {

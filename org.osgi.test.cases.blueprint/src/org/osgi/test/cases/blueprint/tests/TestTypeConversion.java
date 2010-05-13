@@ -40,7 +40,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * This class contains tests specificcally for testing defined builtin type conversion.
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class TestTypeConversion extends DefaultTestBundleControl {
     /*

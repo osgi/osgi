@@ -26,7 +26,7 @@ import org.osgi.test.cases.jndi.service.ExampleServiceImpl;
 import org.osgi.test.cases.jndi.service.ExampleService;
 
 /** 
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 
 public class ExampleServiceActivator2 implements BundleActivator {

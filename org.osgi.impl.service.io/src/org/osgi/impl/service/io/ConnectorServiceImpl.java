@@ -47,7 +47,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * ConnectorService implementation.
  * 
  * @author OSGi Alliance
- * @version $Revision$
+ * @version $Id$
  */
 class ConnectorServiceImpl implements ConnectorService {
 	private ServiceTracker	factoryTracker;

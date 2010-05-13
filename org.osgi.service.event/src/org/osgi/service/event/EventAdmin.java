@@ -21,7 +21,7 @@ package org.osgi.service.event;
  * Event Admin service and call one of the event delivery methods.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface EventAdmin {
 	/**

@@ -40,7 +40,7 @@ import java.util.Dictionary;
  * @since 1.1
  * @see "Core Specification, section 5.5, for a description of the filter string syntax."
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface Filter {
 	/**

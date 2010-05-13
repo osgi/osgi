@@ -24,7 +24,7 @@ import info.dmtree.MetaNode;
  *
  * Meta node for Principal.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class PrincipalMetaNode implements MetaNode {
 	public static final String PRINCIPAL = "Principal";

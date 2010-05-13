@@ -24,7 +24,7 @@ import info.dmtree.MetaNode;
  *
  * Meta node for nodes right under root
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class ConditionalPermissionMetaNode implements MetaNode {
 	public boolean can(int operation) { 

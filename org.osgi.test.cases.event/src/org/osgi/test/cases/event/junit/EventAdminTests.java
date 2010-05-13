@@ -48,7 +48,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * started by the EventTestCase when it is started. It performs the various
  * generic event mechanism tests and reports back to the EventTestCase.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class EventAdminTests extends DefaultTestBundleControl {
 

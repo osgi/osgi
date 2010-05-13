@@ -30,7 +30,7 @@ package org.osgi.test.cases.component.service;
 /**
  * Extended by ServiceConsumerLookup to break dependency of tbc on tb2.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface ComponentEnabler extends TBCService {
 

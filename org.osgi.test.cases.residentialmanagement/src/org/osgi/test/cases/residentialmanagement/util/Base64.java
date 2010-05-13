@@ -16,7 +16,7 @@ package org.osgi.test.cases.residentialmanagement.util;
  * Static methods for translating Base64 encoded strings to byte arrays and
  * vice-versa.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class Base64 {
 	/**

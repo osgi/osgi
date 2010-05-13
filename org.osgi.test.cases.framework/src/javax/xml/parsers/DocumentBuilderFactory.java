@@ -31,7 +31,7 @@ package javax.xml.parsers;
  * Class used to test class loading order
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class DocumentBuilderFactory {
 

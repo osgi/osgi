@@ -31,7 +31,7 @@ package org.osgi.test.cases.framework.fragments.tb3d;
  *
  * Class used for testing.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class SomeClass {
 

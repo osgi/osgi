@@ -21,7 +21,7 @@ package org.osgi.service.remoteserviceadmin;
  * specification.
  * 
  * @Immutable
- * @version $Revision$
+ * @version $Id$
  */
 public class RemoteConstants {
 	private RemoteConstants() {

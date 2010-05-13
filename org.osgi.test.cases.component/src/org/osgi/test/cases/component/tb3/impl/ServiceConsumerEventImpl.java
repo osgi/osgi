@@ -34,7 +34,7 @@ import org.osgi.test.cases.component.service.TestObject;
 import org.osgi.test.cases.component.tb3.ServiceConsumerEvent;
 
 /**
- * @version $Revision$
+ * @version $Id$
  */
 public class ServiceConsumerEventImpl extends DefaultBindImpl implements
 		ServiceConsumerEvent {

@@ -23,7 +23,7 @@ import javax.naming.NameParser;
 import javax.naming.NamingException;
 
 /**
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 public class CTNameParser implements NameParser {
 

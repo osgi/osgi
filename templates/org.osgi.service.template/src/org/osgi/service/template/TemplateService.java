@@ -20,7 +20,7 @@ package org.osgi.service.template;
  * Template for a service project.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface TemplateService {
 

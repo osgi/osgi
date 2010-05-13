@@ -24,7 +24,7 @@ package org.osgi.service.blueprint.reflect;
  * <code>null</code>.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface NonNullMetadata extends Metadata {
 	// marker interface

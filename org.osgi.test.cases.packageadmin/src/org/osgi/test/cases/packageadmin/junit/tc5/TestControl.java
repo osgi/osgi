@@ -55,7 +55,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * methods installTestBundles, uninstallTestBundles and refreshPackageAdmin to
  * work with the new bundle.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class TestControl extends DefaultTestBundleControl {
 

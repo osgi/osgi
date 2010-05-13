@@ -30,7 +30,7 @@ package org.osgi.test.cases.component.tb2;
 import org.osgi.test.cases.component.service.ComponentEnabler;
 
 /**
- * @version $Revision$
+ * @version $Id$
  */
 public interface ServiceConsumerLookup extends ComponentEnabler {
 	// empty

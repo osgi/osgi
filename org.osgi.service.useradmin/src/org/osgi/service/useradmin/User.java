@@ -37,7 +37,7 @@ import java.util.Dictionary;
  * Credentials are <code>Dictionary</code> objects and have semantics that are
  * similar to the properties in the <code>Role</code> class.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface User extends Role {
 	/**

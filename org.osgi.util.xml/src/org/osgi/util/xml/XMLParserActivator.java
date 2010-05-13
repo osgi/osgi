@@ -91,7 +91,7 @@ import org.osgi.framework.ServiceRegistration;
  * <code>setSAXProperties</code> and <code>setDOMProperties</code> methods.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	/** Context of this bundle */

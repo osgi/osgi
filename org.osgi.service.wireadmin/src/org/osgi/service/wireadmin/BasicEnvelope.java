@@ -19,7 +19,7 @@ package org.osgi.service.wireadmin;
  * <code>BasicEnvelope</code> is an implementation of the {@link Envelope}
  * interface
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class BasicEnvelope implements Envelope {
 	Object	value;

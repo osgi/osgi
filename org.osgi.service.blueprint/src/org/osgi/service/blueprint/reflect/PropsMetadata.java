@@ -28,7 +28,7 @@ import java.util.List;
  * This is specified by the <code>props</code> element.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface PropsMetadata extends NonNullMetadata {
 

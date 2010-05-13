@@ -25,7 +25,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * osgiref bundles, e.g device. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Revision$
+ * @version $Id$
  */
 public final class Log {
 	private static LogRef	logRef	= null;

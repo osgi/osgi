@@ -25,7 +25,7 @@ import javax.naming.Context;
 import javax.naming.NamingException;
 
 /**
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 public class CTInitialContextFactory implements
 		javax.naming.spi.InitialContextFactory {

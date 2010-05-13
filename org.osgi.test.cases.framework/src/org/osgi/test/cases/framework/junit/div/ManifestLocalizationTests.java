@@ -38,7 +38,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  * @author hmm@cesar.org.br
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class ManifestLocalizationTests extends DefaultTestBundleControl {
 	private static final String	basePkg										= DivTests.basePkg;

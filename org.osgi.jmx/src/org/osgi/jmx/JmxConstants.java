@@ -32,7 +32,7 @@ import javax.management.openmbean.TabularType;
  * different places in the specification. These are {@link #LONG_ARRAY_TYPE},
  * {@link #STRING_ARRAY_TYPE}, and {@link #PROPERTIES_TYPE}.
  * 
- * @version $Revision$
+ * @version $Id$
  * @Immutable
  */
 public class JmxConstants {

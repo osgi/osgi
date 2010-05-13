@@ -40,7 +40,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * A set of tests for the access and use of ObjectFactory and
  * ObjectFactoryBuilder instances
  * 
- * @version $Revision$ $Date: 2009-07-08 12:50:57 -0400 (Wed, 08 Jul
+ * @version $Id$Date: 2009-07-08 12:50:57 -0400 (Wed, 08 Jul
  *          2009) $
  */
 public class TestObjectFactory extends DefaultTestBundleControl {

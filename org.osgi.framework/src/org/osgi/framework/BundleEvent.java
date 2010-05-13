@@ -32,7 +32,7 @@ import java.util.EventObject;
  * @Immutable
  * @see BundleListener
  * @see SynchronousBundleListener
- * @version $Revision$
+ * @version $Id$
  */
 
 public class BundleEvent extends EventObject {

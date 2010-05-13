@@ -30,7 +30,7 @@ package org.osgi.test.cases.packageadmin.tc5.tb1;
 /**
  * This class is used in org.osgi.service.packageadmin.PackageAdmin tests.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class Dummy {
 

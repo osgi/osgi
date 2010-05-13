@@ -75,7 +75,7 @@ import java.util.Dictionary;
  * Runtime Environment supports permissions.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 
 public interface BundleContext extends BundleReference {

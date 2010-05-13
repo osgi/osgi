@@ -27,7 +27,7 @@ package org.osgi.service.upnp;
  * types from UPnP data types to Java data types is described with the field
  * definitions.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface UPnPStateVariable {
 	/**

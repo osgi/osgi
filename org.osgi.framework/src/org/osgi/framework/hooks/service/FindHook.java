@@ -29,7 +29,7 @@ import org.osgi.framework.ServiceReference;
  * (get service references) operations.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 
 public interface FindHook {

@@ -47,7 +47,7 @@ import java.util.Map;
  * <code>subscribe</code>.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public final class TopicPermission extends Permission {
 	static final long			serialVersionUID	= -5855563886961618300L;

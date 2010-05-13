@@ -31,7 +31,7 @@ package org.osgi.test.cases.framework.secure.classloading.tb16b;
  *
  * Class used for testing.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class TestClass {
 

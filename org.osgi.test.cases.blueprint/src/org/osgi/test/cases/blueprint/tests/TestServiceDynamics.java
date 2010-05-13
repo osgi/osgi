@@ -45,7 +45,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * services that have director or indirect dependencies on registered
  * services.
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class TestServiceDynamics extends DefaultTestBundleControl {
     /**

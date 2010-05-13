@@ -30,7 +30,7 @@ package org.osgi.test.cases.framework.secure.fragments.tb14;
 /**
  * Some test resource.
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class TestClass {
 	

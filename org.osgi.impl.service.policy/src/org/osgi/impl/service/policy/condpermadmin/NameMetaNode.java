@@ -24,7 +24,7 @@ import info.dmtree.MetaNode;
  *
  * Meta node for Name.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class NameMetaNode implements MetaNode {
 	public static final String NAME = "Name";

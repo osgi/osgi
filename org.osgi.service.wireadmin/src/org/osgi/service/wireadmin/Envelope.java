@@ -43,7 +43,7 @@ package org.osgi.service.wireadmin;
  * @see WirePermission
  * @see BasicEnvelope
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface Envelope {
 	/**

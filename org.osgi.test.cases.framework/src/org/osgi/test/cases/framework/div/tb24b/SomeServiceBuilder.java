@@ -34,7 +34,7 @@ import org.osgi.test.cases.framework.div.tb24a.SomeService;
  * Factory of service used in test cases
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class SomeServiceBuilder {
 

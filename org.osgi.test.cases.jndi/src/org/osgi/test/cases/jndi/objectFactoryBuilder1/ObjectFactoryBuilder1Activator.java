@@ -27,7 +27,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.jndi.provider.CTObjectFactoryBuilder;
 
 /**
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 public class ObjectFactoryBuilder1Activator implements BundleActivator {
 

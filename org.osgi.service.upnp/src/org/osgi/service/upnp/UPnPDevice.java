@@ -35,7 +35,7 @@ import java.util.Dictionary;
  * If an application wants to query for a set of localized property values, it
  * has to use the method <code>UPnPDevice.getDescriptions(String locale)</code>.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface UPnPDevice {
 	/*

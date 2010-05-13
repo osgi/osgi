@@ -22,7 +22,7 @@ import info.dmtree.DmtException;
  * Provides atomic read-write access to the part of the tree handled by the
  * plugin that created this session.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface TransactionalDataSession extends ReadWriteDataSession {
 

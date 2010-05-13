@@ -26,7 +26,6 @@ import org.osgi.service.template.TemplateService;
  * 
  * TODO Add Javadoc comment for this type.
  * 
- * @version $Revision$
  */
 public class Activator implements BundleActivator, TemplateService {
 	/**

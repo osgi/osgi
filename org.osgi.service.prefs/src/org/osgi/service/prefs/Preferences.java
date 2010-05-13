@@ -108,7 +108,7 @@ package org.osgi.service.prefs;
  * preference data.
  * 
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface Preferences {
 	/**

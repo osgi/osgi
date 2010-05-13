@@ -32,7 +32,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * This class tests import of services via reference collections.
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class TestReferenceCollection extends DefaultTestBundleControl {
     /**

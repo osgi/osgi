@@ -24,7 +24,7 @@
 			packagenames="${javadoc.packages}" 
 			source="1.5" 
 			splitindex="true" 
-			use="false" 
+			use="true"
 			version="false"
 			encoding="UTF-8"
 			docencoding="UTF-8"

@@ -31,7 +31,7 @@ import org.osgi.framework.Bundle;
  * retrieve meta type information for bundles which contain a meta type
  * documents or which provide their own <code>MetaTypeProvider</code> objects.
  * 
- * @version $Revision$
+ * @version $Id$
  * @since 1.1
  */
 public interface MetaTypeService {

@@ -33,7 +33,7 @@ import org.osgi.framework.FrameworkListener;
  * with the Framework.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  * @see BundlePackageAdmin
  */
 public interface PackageAdmin {

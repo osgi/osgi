@@ -34,7 +34,7 @@ import org.osgi.test.cases.jndi.provider.CTContext;
 import org.osgi.test.cases.jndi.provider.CTNameParser;
 
 /**
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 public class ctURLContext implements Context {
 	

@@ -41,7 +41,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * Get a Meta Type Service and do diverse tests.
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class TestControl extends DefaultTestBundleControl {
 

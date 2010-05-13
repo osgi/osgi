@@ -28,7 +28,7 @@ import org.osgi.framework.BundleException;
  * composite bundles.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface CompositeAdmin {
 	/**

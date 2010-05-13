@@ -24,7 +24,7 @@ import java.util.List;
  * TODO The javadoc in this class need a good scrub before release.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface Function {
 	/**

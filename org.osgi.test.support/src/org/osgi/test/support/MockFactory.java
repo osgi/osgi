@@ -28,7 +28,7 @@ import java.lang.reflect.Proxy;
  * object. The delegate object does NOT need to implement the interface and does
  * NOT need to implement all the methods on the interface.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class MockFactory {
 	private MockFactory() {

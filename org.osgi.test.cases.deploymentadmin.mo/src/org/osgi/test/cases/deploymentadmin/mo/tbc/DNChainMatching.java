@@ -24,7 +24,7 @@ import org.osgi.framework.FrameworkUtil;
 /**
  * 
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class DNChainMatching {
 	/**

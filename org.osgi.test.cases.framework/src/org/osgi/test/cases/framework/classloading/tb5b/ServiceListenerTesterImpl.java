@@ -33,7 +33,7 @@ import org.osgi.test.cases.framework.classloading.exports.listener.ServiceListen
 /**
  * Service used to test the interface ServiceListener
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class ServiceListenerTesterImpl implements ServiceListenerTester {
 

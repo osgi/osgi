@@ -19,7 +19,7 @@ package org.osgi.service.component;
 /**
  * Unchecked exception which may be thrown by the Service Component Runtime.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class ComponentException extends RuntimeException {
 	static final long	serialVersionUID	= -7438212656298726924L;

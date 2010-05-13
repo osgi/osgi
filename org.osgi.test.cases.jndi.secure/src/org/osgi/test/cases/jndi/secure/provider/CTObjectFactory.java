@@ -24,7 +24,7 @@ import javax.naming.Name;
 import javax.naming.RefAddr;
 
 /**
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 public class CTObjectFactory implements javax.naming.spi.ObjectFactory {
 	

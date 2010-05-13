@@ -35,7 +35,7 @@ import org.osgi.util.measurement.Unit;
  * objects. A <code>Position</code> object is immutable.
  * 
  * @Immutable
- * @version $Revision$
+ * @version $Id$
  */
 public class Position {
 	private final Measurement	altitude;

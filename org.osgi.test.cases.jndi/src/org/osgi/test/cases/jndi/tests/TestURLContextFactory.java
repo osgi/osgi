@@ -31,7 +31,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  * A set of tests for URL operations in jndi
  * 
- * @version $Revision$ $Date: 2009-07-08 13:20:41 -0400 (Wed, 08 Jul
+ * @version $Id$Date: 2009-07-08 13:20:41 -0400 (Wed, 08 Jul
  *          2009) $
  */
 public class TestURLContextFactory extends DefaultTestBundleControl {

@@ -44,7 +44,7 @@ package org.osgi.util.measurement;
  * {@link #compareTo}.
  * 
  * @Immutable
- * @version $Revision$
+ * @version $Id$
  */
 public class Measurement implements Comparable {
 	private final double				value;

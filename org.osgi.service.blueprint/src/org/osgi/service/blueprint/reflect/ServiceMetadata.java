@@ -26,7 +26,7 @@ import java.util.List;
  * This is specified by the <code>service</code> element.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface ServiceMetadata extends ComponentMetadata {
 

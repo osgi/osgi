@@ -23,7 +23,7 @@ import info.dmtree.DmtSession;
  * server. The implementation of <code>NotificationService</code> should
  * register itself in the OSGi service registry as a service.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface NotificationService {
 

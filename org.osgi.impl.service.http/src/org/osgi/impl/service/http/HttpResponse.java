@@ -27,7 +27,7 @@ import javax.servlet.http.*;
  * servlet. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Revision$
+ * @version $Id$
  */
 public final class HttpResponse implements HttpServletResponse {
 	private HttpServer				httpServer;

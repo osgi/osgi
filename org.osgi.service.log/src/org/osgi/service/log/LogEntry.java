@@ -28,7 +28,7 @@ import org.osgi.framework.ServiceReference;
  * <code>LogListener</code> object.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  * @see LogReaderService#getLog
  * @see LogListener
  */

@@ -31,7 +31,7 @@ import org.osgi.framework.ServiceReference;
  * These methods are not needed in an OSGi environment, clients should retrieve
  * the required service objects from the OSGi Service Registry.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class DmtServiceFactory {
     private static BundleContext context = null;

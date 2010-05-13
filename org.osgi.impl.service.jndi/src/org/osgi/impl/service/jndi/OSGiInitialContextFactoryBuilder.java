@@ -780,7 +780,7 @@ class OSGiInitialContextFactoryBuilder implements
 	 *  javadoc for NamingManger.getObjectInstance()
 	 *
 	 * 
-	 * @version $Revision$
+	 * @version $Id$
 	 */
 	private static class ReturnReferenceInfoObjectFactory implements ObjectFactory {
 		private final ObjectFactory m_objectFactory;
@@ -820,7 +820,7 @@ class OSGiInitialContextFactoryBuilder implements
 	 *  javadoc for DirectoryManger.getObjectInstance()
 	 *
 	 * 
-	 * @version $Revision$
+	 * @version $Id$
 	 */
 	private static final class ReturnReferenceInfoDirObjectFactory extends ReturnReferenceInfoObjectFactory implements DirObjectFactory {
 		private final DirObjectFactory m_dirObjectFactory;
@@ -863,7 +863,7 @@ class OSGiInitialContextFactoryBuilder implements
 	 * way to resolve the reference exists.  
 	 *
 	 * 
-	 * @version $Revision$
+	 * @version $Id$
 	 */
 	private final class NoFactoryNameSpecifiedObjectFactory implements ObjectFactory {
 
@@ -951,7 +951,7 @@ class OSGiInitialContextFactoryBuilder implements
 	 * exists.  
 	 *
 	 * 
-	 * @version $Revision$
+	 * @version $Id$
 	 */
 	private final class FactoryNameSpecifiedObjectFactory implements ObjectFactory {
 

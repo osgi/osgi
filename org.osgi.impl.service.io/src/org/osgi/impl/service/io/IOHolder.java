@@ -35,7 +35,7 @@ import org.osgi.service.io.ConnectionFactory;
  * scheme providers are stored.
  * 
  * @author OSGi Alliance
- * @version $Revision$
+ * @version $Id$
  */
 class IOHolder {
 	ConnectionFactory	provider;

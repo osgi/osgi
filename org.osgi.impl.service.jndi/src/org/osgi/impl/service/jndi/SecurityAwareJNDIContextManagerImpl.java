@@ -32,7 +32,7 @@ import javax.naming.directory.DirContext;
  * Decorator for the JNDIContextManager that can handle invoking methods on the 
  * underlying context manager implementation in a doPrivileged() Action. 
  * 
- * @version $Revision$
+ * @version $Id$
  */
 class SecurityAwareJNDIContextManagerImpl implements CloseableJNDIContextManager {
 

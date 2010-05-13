@@ -33,7 +33,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * Test the constants of org.osgi.service.packageadmin.PackageAdmin class.
  * 
  * @author left
- * @version $Revision$
+ * @version $Id$
  */
 public class Constants {
 

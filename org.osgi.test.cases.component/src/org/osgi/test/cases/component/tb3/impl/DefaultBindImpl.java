@@ -35,7 +35,7 @@ import org.osgi.test.cases.component.service.ServiceProvider;
  * classes if they are not found in top class containing the component
  * implementation.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class DefaultBindImpl {
 	protected ServiceProvider	serviceProvider;

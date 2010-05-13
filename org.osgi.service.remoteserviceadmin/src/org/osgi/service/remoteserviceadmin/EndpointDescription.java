@@ -59,7 +59,7 @@ import org.osgi.framework.Version;
  * property.
  * 
  * @Immutable
- * @version $Revision$
+ * @version $Id$
  */
 
 public class EndpointDescription {

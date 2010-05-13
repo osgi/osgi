@@ -23,7 +23,7 @@ package org.osgi.service.monitor;
  * OSGi Service Registry. This interface must (only) be implemented by the
  * Monitor Admin component.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface MonitorListener {
     /**

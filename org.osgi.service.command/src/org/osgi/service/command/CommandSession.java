@@ -28,7 +28,7 @@ import java.io.PrintStream;
  * TODO The javadoc in this class need a good scrub before release.
  * 
  * @NotThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface CommandSession {
 	/**

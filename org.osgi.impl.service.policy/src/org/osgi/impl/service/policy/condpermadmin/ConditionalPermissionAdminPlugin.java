@@ -46,7 +46,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  *
  * dmt plugin for exposing Conditional Permission Admin functionality
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	

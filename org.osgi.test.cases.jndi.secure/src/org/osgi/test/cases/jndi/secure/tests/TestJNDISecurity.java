@@ -39,7 +39,7 @@ import org.osgi.test.cases.jndi.secure.provider.CTInitialContextFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /** 
- * @version $Revision$ $Date$
+ * @version $Id$
  */
 public class TestJNDISecurity extends DefaultTestBundleControl {
 	

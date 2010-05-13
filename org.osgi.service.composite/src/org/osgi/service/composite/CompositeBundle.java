@@ -72,7 +72,7 @@ import org.osgi.framework.FrameworkEvent;
  * </p>
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public interface CompositeBundle extends Bundle {
 	/**

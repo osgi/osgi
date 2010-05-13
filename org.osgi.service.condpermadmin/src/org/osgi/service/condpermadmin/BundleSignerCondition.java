@@ -50,7 +50,7 @@ import org.osgi.framework.FrameworkUtil;
  * RDNs).
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  */
 public class BundleSignerCondition {
 	private static final String	CONDITION_TYPE	= "org.osgi.service.condpermadmin.BundleSignerCondition";

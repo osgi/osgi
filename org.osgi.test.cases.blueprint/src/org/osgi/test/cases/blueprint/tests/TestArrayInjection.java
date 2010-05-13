@@ -41,7 +41,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * This class contains primitive string to type injection convertions
  *
- * @version $Revision$
+ * @version $Id$
  */
 public class TestArrayInjection extends DefaultTestBundleControl {
     private void addPropertyValidator(MetadataEventSet startEvents, String compName, ValueDescriptor value) {

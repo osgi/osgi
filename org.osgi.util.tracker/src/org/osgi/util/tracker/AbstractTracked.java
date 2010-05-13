@@ -34,7 +34,7 @@ import java.util.Map;
  * @param <T> The value mapped to the tracked item.
  * @param <R> The reason the tracked item is being tracked or untracked.
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  * @since 1.4
  */
 abstract class AbstractTracked<S, T, R> {

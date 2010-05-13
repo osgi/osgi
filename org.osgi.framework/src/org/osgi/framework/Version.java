@@ -37,7 +37,7 @@ import java.util.StringTokenizer;
  * 
  * @since 1.3
  * @Immutable
- * @version $Revision$
+ * @version $Id$
  */
 
 public class Version implements Comparable<Version> {

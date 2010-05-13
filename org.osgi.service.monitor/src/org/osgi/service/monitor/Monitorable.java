@@ -42,7 +42,7 @@ package org.osgi.service.monitor;
  * queried, it is shown only if the <code>Monitorable</code> is authorized to
  * publish the given <code>StatusVariable</code>.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface Monitorable {
     /**

@@ -28,7 +28,7 @@ import java.util.NoSuchElementException;
  * This permission has only a single action: CONFIGURE.
  * 
  * @ThreadSafe
- * @version $Revision$
+ * @version $Id$
  * @since 1.2
  */
 

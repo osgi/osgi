@@ -35,7 +35,7 @@ import org.osgi.framework.Filter;
  * services which subscribe to the topic of the event.
  * 
  * @Immutable
- * @version $Revision$
+ * @version $Id$
  */
 public class Event {
 	/**

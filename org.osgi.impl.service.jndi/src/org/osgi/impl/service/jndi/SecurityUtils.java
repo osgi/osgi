@@ -24,7 +24,7 @@ import java.security.PrivilegedExceptionAction;
  * Utility class for security-related operations in the JNDI implementation.  
  *
  * 
- * @version $Revision$
+ * @version $Id$
  */
 class SecurityUtils {
 

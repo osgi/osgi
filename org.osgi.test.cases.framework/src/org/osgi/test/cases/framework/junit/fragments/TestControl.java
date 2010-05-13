@@ -46,7 +46,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * Test cases for testing fragment bundles and extension bundles.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public class TestControl extends DefaultTestBundleControl implements
 		BundleListener, FrameworkListener {

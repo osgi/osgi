@@ -41,7 +41,7 @@ import org.osgi.framework.ServiceRegistration;
  * 
  * @see org.osgi.application.Framework
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface ApplicationContext {
 

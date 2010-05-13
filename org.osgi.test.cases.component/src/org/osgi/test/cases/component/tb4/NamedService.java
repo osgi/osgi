@@ -29,7 +29,7 @@ package org.osgi.test.cases.component.tb4;
 
 /**
  * @author Valentin Valchev
- * @version $Revision$
+ * @version $Id$
  */
 public interface NamedService {
   public String getName();

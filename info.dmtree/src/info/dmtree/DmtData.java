@@ -37,7 +37,7 @@ import java.util.Hashtable;
  * specified as a <code>String</code>. The application is responsible for the
  * proper encoding of the data according to the specified format.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public final class DmtData {
 

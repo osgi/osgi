@@ -16,7 +16,7 @@ import java.util.*;
 import org.osgi.framework.*;
 
 /**
- * @version $Revision$
+ * @version $Id$
  */
 public class Activator implements BundleActivator, ServiceFactory {
 	private static final String	PREFERENCES_SERVICE	= "org.osgi.service.prefs.PreferencesService";

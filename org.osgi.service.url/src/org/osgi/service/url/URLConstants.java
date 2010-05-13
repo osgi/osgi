@@ -26,7 +26,7 @@ package org.osgi.service.url;
  * <code>java.lang.String[]</code> or <code>java.lang.String</code>, unless
  * otherwise indicated.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 public interface URLConstants {
 	/**
