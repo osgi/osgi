@@ -362,86 +362,11 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Tests the notification for events after posting (if they match of the
-	 * listeners).
-	 */
-	public void testPostEventUnordered() { // TC5
-		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
-				"org.osgi.test.cases.event.tb1.Activator", null);
-		trackerProvider1.open();
-		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
-
-		ServiceTracker trackerProvider2 = new ServiceTracker(getContext(),
-				"org.osgi.test.cases.event.tb2.Activator", null);
-		trackerProvider2.open();
-		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
-
-		String[] topics = new String[] {"test/*"};
-		tbcService1.setTopics(topics);
-		tbcService2.setTopics(topics);
-
-		Event[] events = new Event[10];
-		for (int i = 0; i < events.length; i++) {
-			events[i] = new Event("test/Event" + i,
-					(Dictionary) new Hashtable());
-		}
-
-		for (int i = 0; i < events.length; i++) {
-			eventAdmin.postEventUnordered(events[i]);
-		}
-		// wait to ensure that events are received asynchronous
-		try {
-			Thread.sleep(5000);
-		}
-		catch (InterruptedException e) {
-		}
-
-		Vector tbc1Events = tbcService1.getLastReceivedEvents();
-		Vector tbc2Events = tbcService2.getLastReceivedEvents();
-
-		if (tbc1Events == null || tbc1Events.size() == 0) {
-			fail("tbc1: No events recived");
-		}
-		if (tbc2Events == null || tbc2Events.size() == 0) {
-			fail("tbc2: No events recived");
-		}
-
-		for (int i = 0; i < events.length; i++) {
-			if (tbc1Events.contains(events[i])) {
-				pass("tbc1: Event with topic [test/Event" + i + "] recieved");
-			}
-			else {
-				fail("tbc1: Event with topic [test/Event" + i
-						+ "] not recieved");
-			}
-		}
-		for (int i = 0; i < events.length; i++) {
-			if (tbc2Events.contains(events[i])) {
-				pass("tbc2: Event with topic [test/Event" + i + "] recieved");
-			}
-			else {
-				fail("tbc2: Event with topic [test/Event" + i
-						+ "] not recieved");
-			}
-		}
-		trackerProvider1.close();
-		trackerProvider2.close();
-	}
-
-	/**
 	 * Tests the notification for events after posting simultaneously in 10
 	 * threads (if they match of the listeners).
 	 */
 	public void testMultiThreadsPostEvent() { // TC7
 		testMultiThreads(10, "postEvent");
-	}
-
-	/**
-	 * Tests the notification for events after posting simultaneously in 10
-	 * threads (if they match of the listeners).
-	 */
-	public void testMultiThreadsPostEventUnordered() { // TC7
-		testMultiThreads(10, "postEventUnordered");
 	}
 
 	/**
@@ -475,12 +400,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 					eventAdmin.sendEvent(event);
 				}
 				else {
-					if ("postEventUnordered".equals(method)) {
-						eventAdmin.postEventUnordered(event);
-					}
-					else {
-						// unrecognized method
-					}
+					// unrecognized method
 				}
 			}
 			trace("MultiThread " + method

@@ -30,30 +30,32 @@ import org.osgi.framework.Version;
 public interface EventConstants {
 
 	/**
-	 * Service registration property (named <code>event.topics</code>)
-	 * specifying the <code>Event</code> topics of interest to a Event Handler
-	 * service.
+	 * Service registration property specifying the <code>Event</code> topics of
+	 * interest to an Event Handler service.
 	 * <p>
-	 * Event handlers SHOULD be registered with this property. The value of the
-	 * property is a string or an array of strings that describe the topics in
-	 * which the handler is interested. An asterisk ('*') may be used as a
-	 * trailing wildcard. Event Handlers which do not have a value for this
-	 * property must not receive events. More precisely, the value of each
-	 * string must conform to the following grammar:
+	 * Event handlers SHOULD be registered with this property. Each value of
+	 * this property is a string that describe the topics in which the handler
+	 * is interested. An asterisk ('*') may be used as a trailing wildcard.
+	 * Event Handlers which do not have a value for this property must not
+	 * receive events. More precisely, the value of each string must conform to
+	 * the following grammar:
 	 * 
 	 * <pre>
 	 *  topic-description := '*' | topic ( '/*' )?
 	 *  topic := token ( '/' token )*
 	 * </pre>
 	 * 
+	 * <p>
+	 * The value of this property must be of type <code>String</code>,
+	 * <code>String[]</code>, or <code>Collection&lt;String&gt;</code>.
+	 * 
 	 * @see Event
 	 */
 	public static final String	EVENT_TOPIC			= "event.topics";
 
 	/**
-	 * Service Registration property (named <code>event.filter</code>)
-	 * specifying a filter to further select <code>Event</code> s of interest to
-	 * a Event Handler service.
+	 * Service Registration property specifying a filter to further select
+	 * <code>Event</code> s of interest to an Event Handler service.
 	 * <p>
 	 * Event handlers MAY be registered with this property. The value of this
 	 * property is a string containing an LDAP-style filter specification. Any
@@ -67,10 +69,40 @@ public interface EventConstants {
 	 * If the filter syntax is invalid, then the Event Handler must be ignored
 	 * and a warning should be logged.
 	 * 
+	 * <p>
+	 * The value of this property must be of type <code>String</code>.
+	 * 
 	 * @see Event
 	 * @see Filter
 	 */
 	public static final String	EVENT_FILTER		= "event.filter";
+
+	/**
+	 * Service Registration property specifying the intents of an Event Handler
+	 * service.
+	 * <p>
+	 * Event handlers MAY be registered with this property. Each value of this
+	 * property is a string specifying an intent of the Event handler.
+	 * 
+	 * <p>
+	 * The value of this property must be of type <code>String</code>,
+	 * <code>String[]</code>, or <code>Collection&lt;String&gt;</code>.
+	 * 
+	 * @see #EVENT_INTENT_UNORDERED
+	 * @since 1.3
+	 */
+	public static final String	EVENT_INTENTS		= "event.intents";
+
+	/**
+	 * Event Handler intent value specifying the Event Handler does not require
+	 * events be delivered in order. This may allow an Event Admin
+	 * implementation to optimize event delivery by relaxing ordering
+	 * requirements.
+	 * 
+	 * @see #EVENT_INTENTS
+	 * @since 1.3
+	 */
+	public static final String	EVENT_INTENT_UNORDERED	= "unordered";
 
 	/**
 	 * The Distinguished Names of the signers of the bundle relevant to the
