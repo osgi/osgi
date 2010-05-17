@@ -36,6 +36,7 @@ import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
+import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -265,11 +266,11 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		String[] topics;
 		topics = new String[] { "org/osgi/test/*", "org/osgi/newtest1/*",
 				"org/osgi1/*", "org/Event1" };
-		tbcService1.setTopics(topics);
+		tbcService1.setProperties(topics, null);
 
 		topics = new String[] { "org/osgi/test/*",
 				"org/osgi/newtest1/newtest2/*", "org/osgi2/*" };
-		tbcService2.setTopics(topics);
+		tbcService2.setProperties(topics, null);
 
 		String[] events = new String[] { "org/osgi/test/Event0", "org/Event1",
 				"org/osgi1/Event2", "org/osgi1/test/Event3",
@@ -311,8 +312,8 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
 
 		String[] topics = new String[] { "test/*" };
-		tbcService1.setTopics(topics);
-		tbcService2.setTopics(topics);
+		tbcService1.setProperties(topics, null);
+		tbcService2.setProperties(topics, null);
 
 		Event[] events = new Event[10];
 		for (int i = 0; i < events.length; i++) {
@@ -377,8 +378,9 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
 
 		String[] topics = new String[] {"test/*"};
-		tbcService1.setTopics(topics);
-		tbcService2.setTopics(topics);
+		String[] intents = new String[] {EventConstants.EVENT_INTENT_UNORDERED};
+		tbcService1.setProperties(topics, intents);
+		tbcService2.setProperties(topics, intents);
 
 		Event[] events = new Event[10];
 		for (int i = 0; i < events.length; i++) {
@@ -387,13 +389,14 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		}
 
 		for (int i = 0; i < events.length; i++) {
-			eventAdmin.postEventUnordered(events[i]);
+			eventAdmin.postEvent(events[i]);
 		}
 		// wait to ensure that events are received asynchronous
 		try {
 			Thread.sleep(5000);
 		}
 		catch (InterruptedException e) {
+			// ignored
 		}
 
 		Vector tbc1Events = tbcService1.getLastReceivedEvents();
@@ -437,14 +440,6 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Tests the notification for events after posting simultaneously in 10
-	 * threads (if they match of the listeners).
-	 */
-	public void testMultiThreadsPostEventUnordered() { // TC7
-		testMultiThreads(10, "postEventUnordered");
-	}
-
-	/**
 	 * This is used to start posting or sending simultaneously.
 	 */
 	class MultiThread extends Thread {
@@ -475,12 +470,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 					eventAdmin.sendEvent(event);
 				}
 				else {
-					if ("postEventUnordered".equals(method)) {
-						eventAdmin.postEventUnordered(event);
-					}
-					else {
-						// unrecognized method
-					}
+					// unrecognized method
 				}
 			}
 			trace("MultiThread " + method
@@ -512,8 +502,9 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
 
 		String[] topics = new String[] {"test/*"};
-		tbcService1.setTopics(topics);
-		tbcService2.setTopics(topics);
+		String[] intents = new String[] {EventConstants.EVENT_INTENT_UNORDERED};
+		tbcService1.setProperties(topics, null);
+		tbcService2.setProperties(topics, intents);
 
 		Event[] events = new Event[count];
 		for (int i = 0; i < events.length; i++) {

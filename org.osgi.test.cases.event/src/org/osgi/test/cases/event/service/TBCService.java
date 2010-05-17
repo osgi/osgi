@@ -37,12 +37,15 @@ import org.osgi.service.event.Event;
  * @version $Id$
  */
 public interface TBCService {
-  
-  /**
-   * Sets the array with event topics in which the event handler is interested.
-   * @param topics the array with event topics
-   */
-  public void setTopics(String[] topics);
+
+	/**
+	 * Sets the array with event topics in which the event handler is
+	 * interested.
+	 * 
+	 * @param topics the array with event topics
+	 * @param intents the array with event intents
+	 */
+	public void setProperties(String[] topics, String[] intents);
   
   /**
    * Returns the array with all set event topics in which the event handler is interested.
