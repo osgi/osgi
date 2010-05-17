@@ -36,6 +36,7 @@ import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
+import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -265,11 +266,11 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		String[] topics;
 		topics = new String[] { "org/osgi/test/*", "org/osgi/newtest1/*",
 				"org/osgi1/*", "org/Event1" };
-		tbcService1.setTopics(topics);
+		tbcService1.setProperties(topics, null);
 
 		topics = new String[] { "org/osgi/test/*",
 				"org/osgi/newtest1/newtest2/*", "org/osgi2/*" };
-		tbcService2.setTopics(topics);
+		tbcService2.setProperties(topics, null);
 
 		String[] events = new String[] { "org/osgi/test/Event0", "org/Event1",
 				"org/osgi1/Event2", "org/osgi1/test/Event3",
@@ -311,8 +312,8 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
 
 		String[] topics = new String[] { "test/*" };
-		tbcService1.setTopics(topics);
-		tbcService2.setTopics(topics);
+		tbcService1.setProperties(topics, null);
+		tbcService2.setProperties(topics, null);
 
 		Event[] events = new Event[10];
 		for (int i = 0; i < events.length; i++) {
@@ -356,6 +357,75 @@ public class EventAdminTests extends DefaultTestBundleControl {
 						+ "] not recieved");
 			}
 			assertEquals(message, "test/Event" + i, event.getTopic());
+		}
+		trackerProvider1.close();
+		trackerProvider2.close();
+	}
+
+	/**
+	 * Tests the notification for events after posting (if they match of the
+	 * listeners).
+	 */
+	public void testPostEventUnordered() { // TC5
+		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+				"org.osgi.test.cases.event.tb1.Activator", null);
+		trackerProvider1.open();
+		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+
+		ServiceTracker trackerProvider2 = new ServiceTracker(getContext(),
+				"org.osgi.test.cases.event.tb2.Activator", null);
+		trackerProvider2.open();
+		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
+
+		String[] topics = new String[] {"test/*"};
+		String[] intents = new String[] {EventConstants.EVENT_INTENT_UNORDERED};
+		tbcService1.setProperties(topics, intents);
+		tbcService2.setProperties(topics, intents);
+
+		Event[] events = new Event[10];
+		for (int i = 0; i < events.length; i++) {
+			events[i] = new Event("test/Event" + i,
+					(Dictionary) new Hashtable());
+		}
+
+		for (int i = 0; i < events.length; i++) {
+			eventAdmin.postEvent(events[i]);
+		}
+		// wait to ensure that events are received asynchronous
+		try {
+			Thread.sleep(5000);
+		}
+		catch (InterruptedException e) {
+			// ignored
+		}
+
+		Vector tbc1Events = tbcService1.getLastReceivedEvents();
+		Vector tbc2Events = tbcService2.getLastReceivedEvents();
+
+		if (tbc1Events == null || tbc1Events.size() == 0) {
+			fail("tbc1: No events recived");
+		}
+		if (tbc2Events == null || tbc2Events.size() == 0) {
+			fail("tbc2: No events recived");
+		}
+
+		for (int i = 0; i < events.length; i++) {
+			if (tbc1Events.contains(events[i])) {
+				pass("tbc1: Event with topic [test/Event" + i + "] recieved");
+			}
+			else {
+				fail("tbc1: Event with topic [test/Event" + i
+						+ "] not recieved");
+			}
+		}
+		for (int i = 0; i < events.length; i++) {
+			if (tbc2Events.contains(events[i])) {
+				pass("tbc2: Event with topic [test/Event" + i + "] recieved");
+			}
+			else {
+				fail("tbc2: Event with topic [test/Event" + i
+						+ "] not recieved");
+			}
 		}
 		trackerProvider1.close();
 		trackerProvider2.close();
@@ -432,8 +502,9 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
 
 		String[] topics = new String[] {"test/*"};
-		tbcService1.setTopics(topics);
-		tbcService2.setTopics(topics);
+		String[] intents = new String[] {EventConstants.EVENT_INTENT_UNORDERED};
+		tbcService1.setProperties(topics, null);
+		tbcService2.setProperties(topics, intents);
 
 		Event[] events = new Event[count];
 		for (int i = 0; i < events.length; i++) {
