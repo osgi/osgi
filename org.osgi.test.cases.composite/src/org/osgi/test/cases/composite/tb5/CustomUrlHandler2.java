@@ -1,5 +1,5 @@
 /*
- * $Id: CustomUrlHandler2.java 6744 2009-04-15 15:03:56Z hargrave@us.ibm.com $
+ * $Id$
  *
 
  *

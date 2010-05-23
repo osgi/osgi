@@ -1,5 +1,5 @@
 /*
- * $Id: CustomUrlConnection1.java 6749 2009-04-16 12:58:32Z hargrave@us.ibm.com $
+ * $Id$
  *
 
  *
