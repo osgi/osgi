@@ -79,7 +79,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    * Sets the array with event topics in which the event handler is interested.
    * @see org.osgi.test.cases.event.service.TBCService#setTopics(java.lang.String[])
    */
-	public void setProperties(String[] topics, String[] intents) {
+	public void setProperties(String[] topics, String[] delivery) {
     this.topics = topics;
     Hashtable ht = new Hashtable();
 	  if (topics.length == 1) {
@@ -88,12 +88,12 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
 	  else {
 		  ht.put(EventConstants.EVENT_TOPIC, topics);
 	  }
-		if (intents != null) {
-			if (intents.length == 1) {
-				ht.put(EventConstants.EVENT_INTENTS, intents[0]);
+		if (delivery != null) {
+			if (delivery.length == 1) {
+				ht.put(EventConstants.EVENT_DELIVERY, delivery[0]);
 			}
 			else {
-				ht.put(EventConstants.EVENT_INTENTS, intents);
+				ht.put(EventConstants.EVENT_DELIVERY, delivery);
 			}
 		}
     if (serviceReg == null) {

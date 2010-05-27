@@ -43,9 +43,9 @@ public interface TBCService {
 	 * interested.
 	 * 
 	 * @param topics the array with event topics
-	 * @param intents the array with event intents
+	 * @param delivery the array with event delivery qualities
 	 */
-	public void setProperties(String[] topics, String[] intents);
+	public void setProperties(String[] topics, String[] delivery);
   
   /**
    * Returns the array with all set event topics in which the event handler is interested.
