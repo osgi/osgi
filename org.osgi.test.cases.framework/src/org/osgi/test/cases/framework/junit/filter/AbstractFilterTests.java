@@ -328,6 +328,24 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				.match(newDictionaryServiceReference(hash))); 
 	}
 
+	public void testComparableException() {
+		Filter f1 = null;
+		Object compbad = new SampleComparable("exception");
+		Hashtable hash = new Hashtable();
+
+		try {
+			f1 = createFilter("(comparable=exception)");
+		}
+		catch (InvalidSyntaxException e) {
+			fail("invalid syntax", e);
+		}
+
+		hash.put("comparable", compbad);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1
+				.match(newDictionaryServiceReference(hash)));
+	}
+
 	public void testObject() {
 		Filter f1 = null;
 		Object obj42 = new SampleObject("42");
@@ -364,30 +382,80 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				.match(newDictionaryServiceReference(hash)));
 	}
 	
+	public void testObjectException() {
+		Filter f1 = null;
+		Object objbad = new SampleObject("exception");
+		Hashtable hash = new Hashtable();
+
+		try {
+			f1 = createFilter("(object=exception)");
+		}
+		catch (InvalidSyntaxException e) {
+			fail("invalid syntax", e);
+		}
+
+		hash.put("object", objbad);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1
+				.match(newDictionaryServiceReference(hash)));
+	}
+
 	public static class SampleComparable implements Comparable {
-		private int value = -1;
+		private final int				value;
+		private final RuntimeException	e;
 
 		public SampleComparable(String value) {
-			this.value = Integer.parseInt(value);
+			int v = -1;
+			RuntimeException r = null;
+			try {
+				v = Integer.parseInt(value);
+			}
+			catch (RuntimeException re) {
+				r = re;
+			}
+			this.value = v;
+			this.e = r;
 		}
 
 		public int compareTo(Object o) {
+			if (e != null) {
+				e.fillInStackTrace();
+				throw e;
+			}
 			return value - ((SampleComparable) o).value;
 		}
 
 		public String toString() {
+			if (e != null) {
+				e.fillInStackTrace();
+				return e.toString();
+			}
 			return String.valueOf(value);
 		}
 	}
 
 	public static class SampleObject {
-		private int	value	= -1;
+		private final int				value;
+		private final RuntimeException	e;
 
 		public SampleObject(String value) {
-			this.value = Integer.parseInt(value);
+			int v = -1;
+			RuntimeException r = null;
+			try {
+				v = Integer.parseInt(value);
+			}
+			catch (RuntimeException re) {
+				r = re;
+			}
+			this.value = v;
+			this.e = r;
 		}
 
 		public boolean equals(Object o) {
+			if (e != null) {
+				e.fillInStackTrace();
+				throw e;
+			}
 			if (o instanceof SampleObject) {
 				return value == ((SampleObject) o).value;
 			}
@@ -395,6 +463,10 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		}
 
 		public String toString() {
+			if (e != null) {
+				e.fillInStackTrace();
+				return e.toString();
+			}
 			return String.valueOf(value);
 		}
 	}
