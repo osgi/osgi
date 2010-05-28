@@ -11,7 +11,7 @@ Import-Service					= \
 Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
 Export-Package 					= ${p}.export,info.dmtree.*;-split-package:=first
-Private-Package					= ${p}, ${p}.plugins
+Private-Package					= ${p}.*
 
 -buildpath						= \
     info.dmtree;				version=project, \

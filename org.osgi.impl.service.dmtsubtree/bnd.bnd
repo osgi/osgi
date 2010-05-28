@@ -1,0 +1,13 @@
+Bundle-Vendor					= DTAG
+Bundle-Version					= 1.0.0.${project.build}
+Bundle-Activator				= $(p).Activator
+
+Bundle-RequiredExecutionEnvironment = J2SE-1.4
+
+Private-Package					= ${p}.*   
+
+-buildpath						= \
+    info.dmtree;				version=project, \
+	ee.j2se;					version=1.4, \
+	osgi.core;					version=4.0.1, \
+	osgi.cmpn;					version=4.0.1

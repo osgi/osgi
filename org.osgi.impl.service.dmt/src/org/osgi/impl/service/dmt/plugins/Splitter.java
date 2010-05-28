@@ -1,6 +1,7 @@
 /*
  * ============================================================================
  * (c) Copyright 2004 Nokia
+
  * This material, including documentation and any related computer programs,
  * is protected by copyright controlled by Nokia and its licensors. 
  * All rights are reserved.

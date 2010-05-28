@@ -1,0 +1,35 @@
+char c = '/';
+String s = "./igd/Steffen/test////also/1";
+int count = 0;
+		int p = -1;
+		while ( (p = s.indexOf( c, p+1 )) != -1) 
+			count++;
+System.out.println( "count: " + count );
+System.out.println( s.substring( 0, s.lastIndexOf( '/' )));
+
+// cut out the next segment of this path
+String myPath = "./igd/Steffen/test////also";
+int nextSegment = s.indexOf( '/', myPath.length() + 1 );
+if ( nextSegment == -1 )
+	nextSegment = s.length();
+String child = s.substring( myPath.length() + 1, nextSegment );
+System.out.println( "child: " + child );
+
+int pos = s.indexOf( '/', 2 );
+System.out.println( "root: " + s.substring(0, pos) );
+
+pos = s.lastIndexOf( '/' );
+if ( pos != -1 ) {
+	String suffix = s.substring( pos );
+	String prefix = s.substring(0, pos );
+	System.out.println( "prefix: " + prefix );
+	System.out.println( "suffix: " + suffix );
+}
+
+java.util.Vector v = new java.util.Vector();
+v.add( "1" );
+v.add( "2" );
+v.add( "3" );
+v.add( "4" );
+v.insertElementAt( "x", v.size() -1 );
+System.out.println( "v: " + v );
