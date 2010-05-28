@@ -42,6 +42,8 @@ public interface Framework extends Bundle {
 	 * Initialize this Framework. After calling this method, this Framework
 	 * must:
 	 * <ul>
+	 * <li>Have generated a new {@link Constants#FRAMEWORK_UUID framework UUID}.
+	 * </li>
 	 * <li>Be in the {@link #STARTING} state.</li>
 	 * <li>Have a valid Bundle Context.</li>
 	 * <li>Be at start level 0.</li>
