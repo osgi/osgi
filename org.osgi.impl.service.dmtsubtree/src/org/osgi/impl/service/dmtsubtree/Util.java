@@ -52,7 +52,13 @@ public class Util implements Constants {
 
 		tmp = pluginRef.getProperty( _CONF_MULTIPLES );
 		if ( ! (tmp instanceof Boolean[]) ) {
-			throw new RuntimeException( "the '" + _CONF_MULTIPLES + "' property is not a Boolean[]");
+			activator.logInfo( "the '" + _CONF_MULTIPLES + "' property is missing or not a Boolean[]");
+			// creating default multiples array
+			Boolean[] m = new Boolean[configPaths.length];
+			for (int i = 0; i < m.length; i++) {
+				m[i] = new Boolean(false);
+			}
+			tmp = m;
 		}
 		Boolean[] multiples = (Boolean[]) tmp;
 
@@ -71,8 +77,8 @@ public class Util implements Constants {
 			}
 		}
 
-		if (dataRootURIs != null && configPaths != null
-				&& dataRootURIs.length == configPaths.length) {
+		if (dataRootURIs != null && configPaths != null && multiples != null
+				&& dataRootURIs.length == configPaths.length && dataRootURIs.length == multiples.length) {
 			for (int i = 0; i < dataRootURIs.length; i++) {
 				String dataRootURI = dataRootURIs[i];
 				String configurationPath = configPaths[i];
@@ -96,7 +102,7 @@ public class Util implements Constants {
 		else {
 			activator
 					.logError(
-							"Invalid registration properties: the number of dataRootURI-Strings does not match the number of hgConfigurationPath-Strings --> ignoring this DataPlugin",
+							"Invalid registration properties: the sizes of the dataRootURIs, configurationPaths and configurationMultiples Arrays don't match --> ignoring this DataPlugin",
 							null);
 		}
 		return (VendorPluginInfo[]) pluginInfos

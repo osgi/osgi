@@ -311,6 +311,8 @@ public class ReadOnlyDataSession implements ReadableDataSession, Constants {
 					e.printStackTrace();
 				}
 			}
+			else 
+				value = false;
 		}
 		return value;
 	}
@@ -458,10 +460,12 @@ public class ReadOnlyDataSession implements ReadableDataSession, Constants {
 		String filter1 = "(" + _MAPPED_NODE_PATH + "=" + Uri.toUri( path ) + "/*)";
 		String filter2 = includeDirectMatch ? "(" + _MAPPED_NODE_PATH + "=" + Uri.toUri( path ) + ")" : "";
 		String filter = "(|" + filter1 + filter2 + ")";
+//		System.out.println( "++++++++++++ filter: " + filter );
 		
 		ServiceReference[] refs;
 		try {
 			refs = activator.context.getServiceReferences( MappedPath.class.getName(), filter );
+//			System.out.println( "++++++++++++ refs: " + refs );
 		} catch (InvalidSyntaxException e) {
 			e.printStackTrace();
 			activator.logError( "Error in filter syntax while looking up direct matches in the service registry.", e );
