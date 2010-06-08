@@ -35,6 +35,7 @@ Include-Resource					= \
 	tb4v1.jar, \
 	tb4v2.jar, \
 	tb4client.jar, \
+	tb4client2.jar, \
 	tb4v1client.jar, \
 	tb4v2client.jar, \
 	tb4Impl.jar, \

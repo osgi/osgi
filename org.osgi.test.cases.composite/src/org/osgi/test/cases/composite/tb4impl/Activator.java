@@ -22,16 +22,22 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.composite.tb4.SomeService;
+import org.osgi.test.cases.composite.tb4.SomeService2;
 
 public class Activator implements BundleActivator {
 	private static String TEST_HEADER = "Test-Property";
 	private static String TEST_KEY = "test.property";
 	public void start(BundleContext context) throws Exception {
 		String testPropValue = (String) context.getBundle().getHeaders("").get(TEST_HEADER);
+		context.registerService(SomeService.class.getName(), new SomeServiceImpl(), getServiceProps(testPropValue));
+		context.registerService(SomeService2.class.getName(), new SomeServiceImpl2(), getServiceProps(testPropValue));
+	}
+
+	private Hashtable getServiceProps(String testPropValue) {
 		Hashtable serviceProps = new Hashtable();
 		if (testPropValue != null)
 			serviceProps.put(TEST_KEY, testPropValue);
-		context.registerService(SomeService.class.getName(), new SomeServiceImpl(), serviceProps);
+		return serviceProps;
 	}
 
 	public void stop(BundleContext context) throws Exception {

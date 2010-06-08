@@ -38,7 +38,8 @@ public class CompositeServiceTests extends AbstractCompositeTestCase {
 	private static AbstractCompositeTestCase.SimpleTestHandler noService = new AbstractCompositeTestCase.SimpleTestHandler(TestException.NO_SERVICE);
 	private static AbstractCompositeTestCase.SimpleTestHandler noServiceRef = new AbstractCompositeTestCase.SimpleTestHandler(TestException.NO_SERVICE_REFERENCE);
 	private static AbstractCompositeTestCase.SimpleTestHandler wrongServiceProp = new AbstractCompositeTestCase.SimpleTestHandler(TestException.WRONG_SERVICE_PROPERTY);
-
+	private static String TEST_SERVICE2 = "test.service2";
+	
 	public void testServiceImport01a() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
@@ -97,6 +98,16 @@ public class CompositeServiceTests extends AbstractCompositeTestCase {
 		doTestImportPolicy01(manifest, new String[] {"tb4v1.jar", "tb4v2.jar", "tb4v1Impl.jar", "tb4v2Impl.jar"}, null, "tb4v1client.jar", false, 
 				new ServiceReferenceTestHandler("tb4v1Impl.jar", "org.osgi.test.cases.composite.tb4.SomeService", false));
 	}
+
+	public void testServiceImport01h() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params, org.osgi.test.cases.composite");
+		manifest.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService), (objectClass=org.osgi.test.cases.composite.tb4.SomeService2)");
+		
+		doTestImportPolicy01(manifest, new String[] {"tb4v1.jar", "tb4Impl.jar"}, null, "tb4client2.jar", false, null);
+	}
+
 
 	public void testServiceImport02a() {
 		Map manifest1 = new HashMap();
@@ -275,6 +286,16 @@ public class CompositeServiceTests extends AbstractCompositeTestCase {
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 
 		doTestExportPolicy02(manifest1, manifest2, new String[] {"tb4Impl.jar"}, new String[] {"tb4v1.jar"}, "tb4client.jar", false, null);
+	}
+
+	public void testServiceExport01h() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite");
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params");
+		manifest.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService), (objectClass=org.osgi.test.cases.composite.tb4.SomeService2)");
+
+		doTestExportPolicy01(manifest, new String[] {"tb4v1.jar", "tb4Impl.jar"}, null, "tb4client2.jar", false, null);
 	}
 
 	public void testServiceExportImport01a() {
