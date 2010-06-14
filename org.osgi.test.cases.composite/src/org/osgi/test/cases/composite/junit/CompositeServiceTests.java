@@ -139,7 +139,46 @@ public class CompositeServiceTests extends AbstractCompositeTestCase {
 		}
 		doTestServiceEvent(getContext(), tb1.getBundleContext());
 	}
-	
+
+	public void testServiceEventExport01() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, POLICY_FILTER);
+		CompositeBundle composite = createCompositeBundle(compAdmin, null, manifest, null);
+		startCompositeBundle(composite);
+		Bundle producer = installConstituent(composite, null, "tb1.jar");
+		try {
+			producer.start();
+		} catch (BundleException e) {
+			fail("Failed to start test bundle.", e);
+		}
+		doTestServiceEvent(producer.getBundleContext(), getContext());
+	}
+
+	public void testServiceEventExportImport01() {
+		Map exporter = new HashMap();
+		exporter.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		exporter.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, POLICY_FILTER);
+		CompositeBundle exportComposite = createCompositeBundle(compAdmin, getName() + ".export", exporter, null);
+		startCompositeBundle(exportComposite);
+
+		Map importer = new HashMap();
+		importer.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		importer.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, POLICY_FILTER);
+		CompositeBundle importComposite = createCompositeBundle(compAdmin, getName() + ".import", importer, null);
+		startCompositeBundle(importComposite);
+
+		Bundle producer = installConstituent(exportComposite, null, "tb1.jar");
+		Bundle consumer = installConstituent(importComposite, null, "tb1.jar");
+		try {
+			consumer.start();
+			producer.start();
+		} catch (BundleException e) {
+			fail("Failed to start test bundle.", e);
+		}
+		doTestServiceEvent(producer.getBundleContext(), consumer.getBundleContext());
+	}
+
 	private void doTestServiceEvent(BundleContext producer, BundleContext consumer) {
 		TestServiceListener testListener = new TestServiceListener();
 		try {
