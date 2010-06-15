@@ -466,8 +466,8 @@ public class FrameworkUtil {
 					sb.append('&');
 
 					FilterImpl[] filters = (FilterImpl[]) value;
-					for (int i = 0, size = filters.length; i < size; i++) {
-						sb.append(filters[i].normalize());
+					for (FilterImpl f : filters) {
+						sb.append(f.normalize());
 					}
 
 					break;
@@ -477,8 +477,8 @@ public class FrameworkUtil {
 					sb.append('|');
 
 					FilterImpl[] filters = (FilterImpl[]) value;
-					for (int i = 0, size = filters.length; i < size; i++) {
-						sb.append(filters[i].normalize());
+					for (FilterImpl f : filters) {
+						sb.append(f.normalize());
 					}
 
 					break;
@@ -498,9 +498,7 @@ public class FrameworkUtil {
 
 					String[] substrings = (String[]) value;
 
-					for (int i = 0, size = substrings.length; i < size; i++) {
-						String substr = substrings[i];
-
+					for (String substr : substrings) {
 						if (substr == null) /* * */{
 							sb.append('*');
 						}
@@ -603,8 +601,8 @@ public class FrameworkUtil {
 			switch (op) {
 				case AND : {
 					FilterImpl[] filters = (FilterImpl[]) value;
-					for (int i = 0, size = filters.length; i < size; i++) {
-						if (!filters[i].match0(properties)) {
+					for (FilterImpl f : filters) {
+						if (!f.match0(properties)) {
 							return false;
 						}
 					}
@@ -614,8 +612,8 @@ public class FrameworkUtil {
 
 				case OR : {
 					FilterImpl[] filters = (FilterImpl[]) value;
-					for (int i = 0, size = filters.length; i < size; i++) {
-						if (filters[i].match0(properties)) {
+					for (FilterImpl f : filters) {
+						if (f.match0(properties)) {
 							return true;
 						}
 					}
@@ -751,9 +749,8 @@ public class FrameworkUtil {
 
 		private boolean compare_Collection(int operation,
 				Collection< ? > collection, Object value2) {
-			for (Iterator< ? > iterator = collection.iterator(); iterator
-					.hasNext();) {
-				if (compare(operation, iterator.next(), value2)) {
+			for (Object value1 : collection) {
+				if (compare(operation, value1, value2)) {
 					return true;
 				}
 			}
@@ -762,8 +759,8 @@ public class FrameworkUtil {
 
 		private boolean compare_ObjectArray(int operation, Object[] array,
 				Object value2) {
-			for (int i = 0, size = array.length; i < size; i++) {
-				if (compare(operation, array[i], value2)) {
+			for (Object value1 : array) {
+				if (compare(operation, value1, value2)) {
 					return true;
 				}
 			}
@@ -774,8 +771,8 @@ public class FrameworkUtil {
 				Object primarray, Object value2) {
 			if (Integer.TYPE.isAssignableFrom(type)) {
 				int[] array = (int[]) primarray;
-				for (int i = 0, size = array.length; i < size; i++) {
-					if (compare_Integer(operation, array[i], value2)) {
+				for (int value1 : array) {
+					if (compare_Integer(operation, value1, value2)) {
 						return true;
 					}
 				}
@@ -783,8 +780,8 @@ public class FrameworkUtil {
 			}
 			if (Long.TYPE.isAssignableFrom(type)) {
 				long[] array = (long[]) primarray;
-				for (int i = 0, size = array.length; i < size; i++) {
-					if (compare_Long(operation, array[i], value2)) {
+				for (long value1 : array) {
+					if (compare_Long(operation, value1, value2)) {
 						return true;
 					}
 				}
@@ -792,8 +789,8 @@ public class FrameworkUtil {
 			}
 			if (Byte.TYPE.isAssignableFrom(type)) {
 				byte[] array = (byte[]) primarray;
-				for (int i = 0, size = array.length; i < size; i++) {
-					if (compare_Byte(operation, array[i], value2)) {
+				for (byte value1 : array) {
+					if (compare_Byte(operation, value1, value2)) {
 						return true;
 					}
 				}
@@ -801,8 +798,8 @@ public class FrameworkUtil {
 			}
 			if (Short.TYPE.isAssignableFrom(type)) {
 				short[] array = (short[]) primarray;
-				for (int i = 0, size = array.length; i < size; i++) {
-					if (compare_Short(operation, array[i], value2)) {
+				for (short value1 : array) {
+					if (compare_Short(operation, value1, value2)) {
 						return true;
 					}
 				}
@@ -810,8 +807,8 @@ public class FrameworkUtil {
 			}
 			if (Character.TYPE.isAssignableFrom(type)) {
 				char[] array = (char[]) primarray;
-				for (int i = 0, size = array.length; i < size; i++) {
-					if (compare_Character(operation, array[i], value2)) {
+				for (char value1 : array) {
+					if (compare_Character(operation, value1, value2)) {
 						return true;
 					}
 				}
@@ -819,8 +816,8 @@ public class FrameworkUtil {
 			}
 			if (Float.TYPE.isAssignableFrom(type)) {
 				float[] array = (float[]) primarray;
-				for (int i = 0, size = array.length; i < size; i++) {
-					if (compare_Float(operation, array[i], value2)) {
+				for (float value1 : array) {
+					if (compare_Float(operation, value1, value2)) {
 						return true;
 					}
 				}
@@ -828,8 +825,8 @@ public class FrameworkUtil {
 			}
 			if (Double.TYPE.isAssignableFrom(type)) {
 				double[] array = (double[]) primarray;
-				for (int i = 0, size = array.length; i < size; i++) {
-					if (compare_Double(operation, array[i], value2)) {
+				for (double value1 : array) {
+					if (compare_Double(operation, value1, value2)) {
 						return true;
 					}
 				}
@@ -837,8 +834,8 @@ public class FrameworkUtil {
 			}
 			if (Boolean.TYPE.isAssignableFrom(type)) {
 				boolean[] array = (boolean[]) primarray;
-				for (int i = 0, size = array.length; i < size; i++) {
-					if (compare_Boolean(operation, array[i], value2)) {
+				for (boolean value1 : array) {
+					if (compare_Boolean(operation, value1, value2)) {
 						return true;
 					}
 				}
@@ -1244,9 +1241,7 @@ public class FrameworkUtil {
 			boolean changed = false;
 			char[] output = input.toCharArray();
 			int cursor = 0;
-			for (int i = 0, length = output.length; i < length; i++) {
-				char c = output[i];
-
+			for (char c : output) {
 				if (Character.isWhitespace(c)) {
 					changed = true;
 					continue;
@@ -1282,7 +1277,7 @@ public class FrameworkUtil {
 				}
 				catch (ArrayIndexOutOfBoundsException e) {
 					throw new InvalidSyntaxException("Filter ended abruptly",
-							filterstring);
+							filterstring, e);
 				}
 
 				if (pos != filterChars.length) {
@@ -1626,8 +1621,8 @@ public class FrameworkUtil {
 				Object k = e.nextElement();
 				if (k instanceof String) {
 					String key = (String) k;
-					for (Iterator<String> i = keyList.iterator(); i.hasNext();) {
-						if (key.equalsIgnoreCase(i.next())) {
+					for (String i : keyList) {
+						if (key.equalsIgnoreCase(i)) {
 							throw new IllegalArgumentException();
 						}
 					}
@@ -1639,8 +1634,7 @@ public class FrameworkUtil {
 
 		public Object get(Object o) {
 			String k = (String) o;
-			for (int i = 0, length = keys.length; i < length; i++) {
-				String key = keys[i];
+			for (String key : keys) {
 				if (key.equalsIgnoreCase(k)) {
 					return dictionary.get(key);
 				}
