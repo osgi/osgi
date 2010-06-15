@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@ public interface ServiceRegistration<S> {
 	 * @throws IllegalArgumentException If <code>properties</code> contains
 	 *         case variants of the same key name.
 	 */
-	public void setProperties(Dictionary<String, Object> properties);
+	public void setProperties(Dictionary<String, ? > properties);
 
 	/**
 	 * Unregisters a service. Remove a <code>ServiceRegistration</code> object

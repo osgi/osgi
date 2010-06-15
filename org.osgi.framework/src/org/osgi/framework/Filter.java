@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ public interface Filter {
 	 * @throws IllegalArgumentException If <code>dictionary</code> contains case
 	 *         variants of the same key name.
 	 */
-	public boolean match(Dictionary<String, Object> dictionary);
+	public boolean match(Dictionary<String, ? > dictionary);
 
 	/**
 	 * Returns this <code>Filter</code>'s filter string.
@@ -119,5 +119,5 @@ public interface Filter {
 	 *         values match this filter; <code>false</code> otherwise.
 	 * @since 1.3
 	 */
-	public boolean matchCase(Dictionary<String, Object> dictionary);
+	public boolean matchCase(Dictionary<String, ? > dictionary);
 }

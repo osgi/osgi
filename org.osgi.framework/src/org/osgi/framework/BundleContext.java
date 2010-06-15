@@ -444,8 +444,8 @@ public interface BundleContext extends BundleReference {
 	 * @see ServiceRegistration
 	 * @see ServiceFactory
 	 */
-	ServiceRegistration< ? > registerService(String[] clazzes,
-			Object service, Dictionary<String, Object> properties);
+	ServiceRegistration< ? > registerService(String[] clazzes, Object service,
+			Dictionary<String, ? > properties);
 
 	/**
 	 * Registers the specified service object with the specified properties
@@ -469,8 +469,8 @@ public interface BundleContext extends BundleReference {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see #registerService(String[], Object, Dictionary)
 	 */
-	ServiceRegistration< ? > registerService(String clazz,
-			Object service, Dictionary<String, Object> properties);
+	ServiceRegistration< ? > registerService(String clazz, Object service,
+			Dictionary<String, ? > properties);
 
 	/**
 	 * Registers the specified service object with the specified properties
@@ -496,8 +496,8 @@ public interface BundleContext extends BundleReference {
 	 * @see #registerService(String[], Object, Dictionary)
 	 * @since 1.6
 	 */
-	<S> ServiceRegistration<S> registerService(Class<S> clazz,
-			S service, Dictionary<String, Object> properties);
+	<S> ServiceRegistration<S> registerService(Class<S> clazz, S service,
+			Dictionary<String, ? > properties);
 
 	/**
 	 * Returns an array of <code>ServiceReference</code> objects. The returned

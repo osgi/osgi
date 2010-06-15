@@ -413,7 +413,7 @@ public class FrameworkUtil {
 		 * @throws IllegalArgumentException If <code>dictionary</code> contains
 		 *         case variants of the same key name.
 		 */
-		public boolean match(Dictionary<String, Object> dictionary) {
+		public boolean match(Dictionary<String, ? > dictionary) {
 			return match0(new CaseInsensitiveDictionary(dictionary));
 		}
 
@@ -429,7 +429,7 @@ public class FrameworkUtil {
 		 *         values match this filter; <code>false</code> otherwise.
 		 * @since 1.3
 		 */
-		public boolean matchCase(Dictionary<String, Object> dictionary) {
+		public boolean matchCase(Dictionary<String, ? > dictionary) {
 			return match0(dictionary);
 		}
 
@@ -599,7 +599,7 @@ public class FrameworkUtil {
 		 * @return If the Dictionary's keys match the filter, return
 		 *         <code>true</code>. Otherwise, return <code>false</code>.
 		 */
-		private boolean match0(Dictionary<String, Object> properties) {
+		private boolean match0(Dictionary<String, ? > properties) {
 			switch (op) {
 				case AND : {
 					FilterImpl[] filters = (FilterImpl[]) value;
@@ -1604,7 +1604,7 @@ public class FrameworkUtil {
 	 */
 	private static class CaseInsensitiveDictionary extends
 			Dictionary<String, Object> {
-		private final Dictionary<String, Object>	dictionary;
+		private final Dictionary<String, ? >	dictionary;
 		private final String[]		keys;
 
 		/**
@@ -1614,7 +1614,7 @@ public class FrameworkUtil {
 		 * @throws IllegalArgumentException If <code>dictionary</code> contains
 		 *         case variants of the same key name.
 		 */
-		CaseInsensitiveDictionary(Dictionary<String, Object> dictionary) {
+		CaseInsensitiveDictionary(Dictionary<String, ? > dictionary) {
 			if (dictionary == null) {
 				this.dictionary = null;
 				this.keys = new String[0];
