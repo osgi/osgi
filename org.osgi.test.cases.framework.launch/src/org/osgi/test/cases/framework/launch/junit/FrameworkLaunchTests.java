@@ -72,11 +72,9 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 
 	private String getFrameworkFactoryClassName() throws IOException {
-		BundleContext context = getBundleContextWithoutFail();
-        URL factoryService = context == null ? this.getClass().getResource(FRAMEWORK_FACTORY) : context.getBundle(0).getEntry(FRAMEWORK_FACTORY);
+        URL factoryService = getClass().getResource(FRAMEWORK_FACTORY);
 		assertNotNull("Could not locate: " + FRAMEWORK_FACTORY, factoryService);
 		return getClassName(factoryService);
-
 	}
 
 	private String getClassName(URL factoryService) throws IOException {
@@ -105,29 +103,14 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	private String getStorageAreaRoot() {
-		BundleContext context = getBundleContextWithoutFail();
-		if (context == null) {
 			String storageroot = System.getProperty(STORAGEROOT);
 			assertNotNull("Must set property: " + STORAGEROOT, storageroot);
 			return storageroot;
-		}
-		return context.getDataFile("storageroot").getAbsolutePath();
 	}
 
 	private Class loadFrameworkClass(String className)
 			throws ClassNotFoundException {
-		BundleContext context = getBundleContextWithoutFail();
-        return context == null ? Class.forName(className) : getContext().getBundle(0).loadClass(className);
-	}
-
-	private BundleContext getBundleContextWithoutFail() {
-		try {
-			if ("true".equals(System.getProperty("noframework")))
-				return null;
-			return getContext();
-		} catch (Throwable t) {
-			return null; // don't fail
-		}
+        return getClass().getClassLoader().loadClass(className);
 	}
 
 	private FrameworkFactory getFrameworkFactory() {
@@ -198,8 +181,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	private URL getBundleInput(String bundle) {
-		BundleContext context = getBundleContextWithoutFail();
-		return context == null ? this.getClass().getResource(bundle) : context.getBundle().getEntry(bundle);
+		return getClass().getResource(bundle);
 	}
 
 

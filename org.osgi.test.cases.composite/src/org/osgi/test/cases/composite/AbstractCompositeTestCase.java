@@ -123,6 +123,9 @@ public abstract class AbstractCompositeTestCase extends OSGiTestCase {
 		if (compositeManifest == null)
 			compositeManifest = new HashMap();
 
+		if (location == null)
+			location = getName();
+
 		if (compositeManifest.get(Constants.BUNDLE_SYMBOLICNAME) == null)
 			compositeManifest.put(Constants.BUNDLE_SYMBOLICNAME, location + "; " + CompositeConstants.COMPOSITE_DIRECTIVE + ":=true");
 

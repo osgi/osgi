@@ -18,16 +18,22 @@
 package org.osgi.test.cases.composite.junit;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.composite.CompositeBundle;
 import org.osgi.service.composite.CompositeConstants;
 import org.osgi.test.cases.composite.AbstractCompositeTestCase;
 import org.osgi.test.cases.composite.TestException;
@@ -38,7 +44,8 @@ public class CompositeServiceTests extends AbstractCompositeTestCase {
 	private static AbstractCompositeTestCase.SimpleTestHandler noService = new AbstractCompositeTestCase.SimpleTestHandler(TestException.NO_SERVICE);
 	private static AbstractCompositeTestCase.SimpleTestHandler noServiceRef = new AbstractCompositeTestCase.SimpleTestHandler(TestException.NO_SERVICE_REFERENCE);
 	private static AbstractCompositeTestCase.SimpleTestHandler wrongServiceProp = new AbstractCompositeTestCase.SimpleTestHandler(TestException.WRONG_SERVICE_PROPERTY);
-
+	private static String TEST_SERVICE2 = "test.service2";
+	
 	public void testServiceImport01a() {
 		Map manifest = new HashMap();
 		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
@@ -98,6 +105,168 @@ public class CompositeServiceTests extends AbstractCompositeTestCase {
 				new ServiceReferenceTestHandler("tb4v1Impl.jar", "org.osgi.test.cases.composite.tb4.SomeService", false));
 	}
 
+	public void testServiceImport01h() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params, org.osgi.test.cases.composite");
+		manifest.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService), (objectClass=org.osgi.test.cases.composite.tb4.SomeService2)");
+		
+		doTestImportPolicy01(manifest, new String[] {"tb4v1.jar", "tb4Impl.jar"}, null, "tb4client2.jar", false, null);
+	}
+
+	private final static String KEY_POLICY_ONLY = "key1";
+	private final static String KEY_POLICY_AND_LISTENER = "key2";
+	private final static String KEY_LISTENER_ONLY = "key3";
+	private final static String KEY_NONE = "key4";
+
+	private final static String filter1 = "(key1=true)";
+	private final static String filter2 = "(key2=true)";
+	private final static String filter3 = "(key3=true)";
+	private final static String POLICY_FILTER = "(&" + filter1 + filter2 + ")";
+	private final static String LISTENER_FILTER = "(&" + filter2 + filter3 + ")";
+
+	public void testServiceEventImport01() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, POLICY_FILTER);
+		CompositeBundle composite = createCompositeBundle(compAdmin, null, manifest, null);
+		startCompositeBundle(composite);
+		Bundle tb1 = installConstituent(composite, null, "tb1.jar");
+		try {
+			tb1.start();
+		} catch (BundleException e) {
+			fail("Failed to start test bundle.", e);
+		}
+		doTestServiceEvent(getContext(), tb1.getBundleContext());
+	}
+
+	public void testServiceEventExport01() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, POLICY_FILTER);
+		CompositeBundle composite = createCompositeBundle(compAdmin, null, manifest, null);
+		startCompositeBundle(composite);
+		Bundle producer = installConstituent(composite, null, "tb1.jar");
+		try {
+			producer.start();
+		} catch (BundleException e) {
+			fail("Failed to start test bundle.", e);
+		}
+		doTestServiceEvent(producer.getBundleContext(), getContext());
+	}
+
+	public void testServiceEventExportImport01() {
+		Map exporter = new HashMap();
+		exporter.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".export;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		exporter.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, POLICY_FILTER);
+		CompositeBundle exportComposite = createCompositeBundle(compAdmin, getName() + ".export", exporter, null);
+		startCompositeBundle(exportComposite);
+
+		Map importer = new HashMap();
+		importer.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ".import;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		importer.put(CompositeConstants.COMPOSITE_SERVICE_IMPORT_POLICY, POLICY_FILTER);
+		CompositeBundle importComposite = createCompositeBundle(compAdmin, getName() + ".import", importer, null);
+		startCompositeBundle(importComposite);
+
+		Bundle producer = installConstituent(exportComposite, null, "tb1.jar");
+		Bundle consumer = installConstituent(importComposite, null, "tb1.jar");
+		try {
+			consumer.start();
+			producer.start();
+		} catch (BundleException e) {
+			fail("Failed to start test bundle.", e);
+		}
+		doTestServiceEvent(producer.getBundleContext(), consumer.getBundleContext());
+	}
+
+	private void doTestServiceEvent(BundleContext producer, BundleContext consumer) {
+		TestServiceListener testListener = new TestServiceListener();
+		try {
+			consumer.addServiceListener(testListener, LISTENER_FILTER);
+		} catch (InvalidSyntaxException e) {
+			fail("Failed to add test listener", e);
+		}
+
+		// register a service that should match both the policy and listener filters
+		Hashtable props = new Hashtable();
+		props.put(KEY_POLICY_ONLY, Boolean.TRUE);
+		props.put(KEY_POLICY_AND_LISTENER, Boolean.TRUE);
+		props.put(KEY_LISTENER_ONLY, Boolean.TRUE); //$NON-NLS-1$
+
+		List<ServiceEvent> expected = new ArrayList<ServiceEvent>();
+		// REGISTERED event
+		ServiceRegistration<Object> registration = producer.registerService(Object.class, new Object(), props);
+		ServiceReference<Object> reference = registration.getReference();
+		expected.add(new ServiceEvent(ServiceEvent.REGISTERED, reference));
+		try {
+
+			// MODIFIED event
+			props.put(KEY_NONE, Boolean.TRUE);
+			registration.setProperties(props);
+			expected.add(new ServiceEvent(ServiceEvent.MODIFIED, reference));
+
+			// MODIFIED_ENDMATCH event
+			props.put(KEY_LISTENER_ONLY, Boolean.FALSE);
+			registration.setProperties(props);
+			expected.add(new ServiceEvent(ServiceEvent.MODIFIED_ENDMATCH, reference));
+
+			// No event
+			props.put(KEY_NONE, Boolean.FALSE);
+			registration.setProperties(props);
+
+			// MODIFIED event
+			props.put(KEY_LISTENER_ONLY, Boolean.TRUE);
+			registration.setProperties(props);
+			expected.add(new ServiceEvent(ServiceEvent.MODIFIED, reference));
+
+			// MODIFIED_ENDMATCH event
+			props.put(KEY_POLICY_ONLY, Boolean.FALSE);
+			registration.setProperties(props);
+			expected.add(new ServiceEvent(ServiceEvent.MODIFIED_ENDMATCH, reference));
+
+			// No event
+			props.put(KEY_NONE, Boolean.TRUE);
+			registration.setProperties(props);
+
+			// MODIFIED event
+			props.put(KEY_POLICY_ONLY, Boolean.TRUE);
+			registration.setProperties(props);
+			expected.add(new ServiceEvent(ServiceEvent.MODIFIED, reference));
+
+			// MODIFIED_ENDMATCH event
+			props.put(KEY_POLICY_AND_LISTENER, Boolean.FALSE);
+			registration.setProperties(props);
+			expected.add(new ServiceEvent(ServiceEvent.MODIFIED_ENDMATCH, reference));
+
+			// MODIFIED event
+			props.put(KEY_POLICY_AND_LISTENER, Boolean.TRUE);
+			registration.setProperties(props);
+			expected.add(new ServiceEvent(ServiceEvent.MODIFIED, reference));
+
+			// UNREGISTERING
+			registration.unregister();
+			registration = null;
+			expected.add(new ServiceEvent(ServiceEvent.UNREGISTERING, reference));
+
+			ServiceEvent[] actual = (ServiceEvent[]) testListener.getResults(new ServiceEvent[expected.size()], false);
+			assertEquals(expected.toArray(new ServiceEvent[expected.size()]), actual);
+			
+		} finally {
+			if (registration != null)
+				registration.unregister();
+		}
+	}
+
+	private void assertEquals(ServiceEvent[] expected, ServiceEvent[] actual){
+		if (expected.length != actual.length)
+			fail("Wrong number of events: " + expected.length + " " + actual.length);
+		for (int i = 0; i < actual.length; i++) {
+			if (actual[i].getType() != expected[i].getType())
+				fail("Wrong event type for event #" + i + " " + expected[i].getType() + " " + actual[i].getType());
+			if (!expected[i].getServiceReference().equals(actual[i].getServiceReference()))
+				fail("Wrong service reference for event #" + i + " " + expected[i].getServiceReference() + " " + actual[i].getServiceReference());
+		}
+	}
 	public void testServiceImport02a() {
 		Map manifest1 = new HashMap();
 		manifest1.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_1 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
@@ -275,6 +444,16 @@ public class CompositeServiceTests extends AbstractCompositeTestCase {
 		manifest2.put(Constants.BUNDLE_SYMBOLICNAME, getName() + "_2 ;" + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
 
 		doTestExportPolicy02(manifest1, manifest2, new String[] {"tb4Impl.jar"}, new String[] {"tb4v1.jar"}, "tb4client.jar", false, null);
+	}
+
+	public void testServiceExport01h() {
+		Map manifest = new HashMap();
+		manifest.put(Constants.BUNDLE_SYMBOLICNAME, getName() + ';' + CompositeConstants.COMPOSITE_DIRECTIVE + ":=" + true);
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_IMPORT_POLICY, "org.osgi.test.cases.composite");
+		manifest.put(CompositeConstants.COMPOSITE_PACKAGE_EXPORT_POLICY, "org.osgi.test.cases.composite.tb4, org.osgi.test.cases.composite.tb4.params");
+		manifest.put(CompositeConstants.COMPOSITE_SERVICE_EXPORT_POLICY, "(objectClass=org.osgi.test.cases.composite.tb4.SomeService), (objectClass=org.osgi.test.cases.composite.tb4.SomeService2)");
+
+		doTestExportPolicy01(manifest, new String[] {"tb4v1.jar", "tb4Impl.jar"}, null, "tb4client2.jar", false, null);
 	}
 
 	public void testServiceExportImport01a() {

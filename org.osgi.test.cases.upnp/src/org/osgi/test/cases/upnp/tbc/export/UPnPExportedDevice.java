@@ -26,14 +26,7 @@ public class UPnPExportedDevice implements UPnPDevice {
 	public UPnPExportedDevice(UPnPService[] service) {
 		// put properties
 		this.props = new Hashtable(13);
-		String ip = "unknown ip";
-		try {
-			ip = java.net.InetAddress.getLocalHost().getHostName();
-		}
-		catch (Exception uhe) {
-			// ignored
-		}
-		props.put(UPnPDevice.UDN, "uuid:TesterType-" + ip);
+		props.put(UPnPDevice.UDN, "uuid:TesterType-" + UPnPConstants.LOCAL_HOST);
 		props.put(UPnPDevice.TYPE,
 				"urn:schemas-prosyst-com:device:UPnPTesterType:1");
 		props.put(UPnPDevice.FRIENDLY_NAME, "UPnP Tester");
