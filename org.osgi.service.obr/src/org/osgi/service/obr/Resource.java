@@ -26,9 +26,6 @@ import java.util.Map;
 /**
  * A resource is an abstraction of a downloadable thing, like a bundle.
  * 
- * Resources have capabilities and requirements. All a resource's requirements
- * must be satisfied before it can be installed.
- * 
  * @version $Id$
  * @deprecated This is proposed API. As a result, this API may never be
  *             published or the final API may change substantially by the time
@@ -36,30 +33,20 @@ import java.util.Map;
  *             API.
  */
 public interface Resource {
-	final String LICENSE_URL = "license";
 	final String DESCRIPTION = "description";
-	final String DOCUMENTATION_URL = "documentation";
-	final String COPYRIGHT = "copyright";
-	final String SOURCE_URL = "source";
-	final String SYMBOLIC_NAME = "symbolicname";
-	final String PRESENTATION_NAME = "presentationname";
 	final String ID = "id";
 	final String VERSION = "version";
 	final String URL = "url";
 	final String SIZE = "size";
+	final String CHECKSUM = "checksum";
+	final String CHECKSUM_ALGO = "checksumalgo";
 	
-	final static String [] KEYS = { DESCRIPTION, SIZE, ID, LICENSE_URL, DOCUMENTATION_URL, COPYRIGHT, SOURCE_URL, PRESENTATION_NAME, SYMBOLIC_NAME, VERSION, URL };
+	final static String [] KEYS = { DESCRIPTION, SIZE, ID, VERSION, URL, CHECKSUM, CHECKSUM_ALGO };
 	
-	// get readable name
-	
-	Map getProperties();
-	String getSymbolicName();
 	String getPresentationName();
 	String getVersion();
 	String getId();
+	Map getProperties();
 	URL getURL();
-	Requirement [] getRequirements();
-	Capability [] getCapabilities();
-	String [] getCategories();
-	Repository getRepository();
+	Part getPart();
 }

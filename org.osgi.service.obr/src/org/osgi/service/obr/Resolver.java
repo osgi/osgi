@@ -31,26 +31,16 @@ package org.osgi.service.obr;
  *             API.
  */
 public interface Resolver {
-
-	void add(Resource resource);
-
-	Requirement[] getUnsatisfiedRequirements();
-
-	Resource[] getOptionalResources();
-
-	Requirement[] getReason(Resource resource);
-	Resource [] getResources(Requirement requirement);
-
-	Resource[] getRequiredResources();
-
-	Resource[] getAddedResources();
-
-	boolean resolve();
-
+	
 	/**
-	 * Needs more description ... Should return some state so you can see what went wrong
+	 * Resolve a set of requirements. A bundle install can be modeled as a top level 
+	 * require bundle requirement.
 	 * 
-	 * @param start
+	 * @param requirements
+	 * 
+	 * @return
+	 * @throws InterruptedException if the thread that calls this resolve is interrupted.
 	 */
-	void deploy(boolean start);
+	Resolution resolve(Requirement[] requirements) throws InterruptedException;
+	Resolution resolve(Requirement[] requirements, ResolutionConfig config) throws InterruptedException;
 }

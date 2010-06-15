@@ -20,41 +20,15 @@
 
 package org.osgi.service.obr;
 
-import java.util.Map;
-
 /**
- * Represents a repository.
- * 
  * @version $Id$
  * @deprecated This is proposed API. As a result, this API may never be
  *             published or the final API may change substantially by the time
  *             of final publication. You are cautioned against relying upon this
  *             API.
  */
-public interface Repository {
-
-	public static final String URL = "url";
-	public static final String DESCRIPTION = "description";
-	public static final String OWNER = "owner";
-	public static final String VERSION = "version";
-	
-	/**
-	 * Return the parts for this repository.
-	 */
-	Part[] getParts();
-	
-	/**
-	 * Return the name of this repository.
-	 * 
-	 * @return a non-null id
-	 */
-	String getName();
-	
-	Map getProperties();
-
-	long getLastModified();
-	
-	void addRepositoryListener(RepositoryListener listener);
-	
-	void removeRepositoryListener(RepositoryListener listener);	
+public interface RepositoryListener {
+	void repositoryAdded(Repository repository);
+	void repositoryChanged(RepositoryChangeEvent event);
+	void repositoryRemoved(Repository repository);
 }

@@ -20,41 +20,44 @@
 
 package org.osgi.service.obr;
 
-import java.util.Map;
-
 /**
- * Represents a repository.
- * 
- * @version $Id$
  * @deprecated This is proposed API. As a result, this API may never be
  *             published or the final API may change substantially by the time
  *             of final publication. You are cautioned against relying upon this
  *             API.
  */
-public interface Repository {
-
-	public static final String URL = "url";
-	public static final String DESCRIPTION = "description";
-	public static final String OWNER = "owner";
-	public static final String VERSION = "version";
+public class RepositoryChangeEvent {
+	private final Part[] addedParts;
+	private final Part[] changedParts;
+	private final Part[] removedParts;
+	private final Repository repository;
 	
-	/**
-	 * Return the parts for this repository.
-	 */
-	Part[] getParts();
+	public RepositoryChangeEvent(Repository repository, Part[] addedParts, Part[] changedParts, Part[] removedParts) {
+		this.repository = repository;
+		this.addedParts = protect(addedParts);
+		this.changedParts = protect(changedParts);
+		this.removedParts = protect(removedParts);
+	}
 	
-	/**
-	 * Return the name of this repository.
-	 * 
-	 * @return a non-null id
-	 */
-	String getName();
+	public Part[] getAddedParts() {
+		return protect(addedParts);
+	}
 	
-	Map getProperties();
-
-	long getLastModified();
+	public Part[] getChangedParts() {
+		return protect(changedParts);
+	}
 	
-	void addRepositoryListener(RepositoryListener listener);
+	public Part[] getRemovedParts() {
+		return protect(removedParts);
+	}
 	
-	void removeRepositoryListener(RepositoryListener listener);	
+	public Repository getRepository() {
+		return repository;
+	}
+	
+	private static final Part[] protect(Part[] parts) {
+		Part[] p = new Part[parts.length];
+		System.arraycopy(parts, 0, p, 0, p.length);
+		return p;
+	}
 }
