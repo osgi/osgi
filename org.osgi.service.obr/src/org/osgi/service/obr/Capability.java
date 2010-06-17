@@ -33,17 +33,12 @@ import java.util.Map;
  *             API.
  */
 public interface Capability {
-	String getCategory();
 	/**
 	 * Return the name of the capability.
 	 * 
 	 * @return capability name
 	 */
 	String getName();
-	
-	String getVersion();
-	
-	Part getPart();
 	
 	/**
 	 * Return the set of properties.

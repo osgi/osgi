@@ -18,14 +18,14 @@
 // between bundle repositories. There is currently no commitment to 
 // turn this draft into an official specification.  
 
-package org.osgi.service.obr.admin;
+package org.osgi.service.obr;
 
-import org.osgi.service.obr.Part;
+import java.net.URL;
 
 /**
  * Provides centralized access to the distributed repository.
  * 
- * A repository contains a set of <i>parts</i>. A part contains a number
+ * A repository contains a set of <i>resources</i>. A resource contains a number
  * of fixed attributes (name, version, etc) and sets of:
  * <ol>
  * <li>Capabilities - Capabilities provide a named aspect: a bundle, a display,
@@ -34,23 +34,11 @@ import org.osgi.service.obr.Part;
  * one or more Capabilties with the given name. These capabilities can come from
  * other resources or from the platform. If multiple resources provide the
  * requested capability, one is selected. (### what algorithm? ###)</li>
- * <li>Resources - A physical artifact that can be downloaded via URL and installed
- * into a framework or other target</li>
- * </ol>
- * 
- * Parts are resolved by a {@link Resolver} relative to a repository path which are 
- * defined by an ordered list of repositories to search for capabilities that match 
- * requirements. If a solution can be found in an earlier repository then this will 
- * win over an equivalent part in a later repository.
- * 
- * A repository path consists of an ordered list of repository names with an 
- * optional wild card at the end to say search known repositories, for example:
- * 
- * repo-path= local,team,organisation,*
- * 
- * Implies search for a resolution in my local repository, followed by a shared 
- * team repository, followed by the corporate repository and finally look at any 
- * other configured repository with no implied preference.
+ * <li>Requests - Requests are like requirements, except that a request can be
+ * fullfilled by 0..n resources. This feature can be used to link to resources
+ * that are compatible with the given resource and provide extra functionality.
+ * For example, a bundle could request all its known fragments. The UI
+ * associated with the repository could list these as optional downloads.</li>
  * 
  * @version $Id$
  * @deprecated This is proposed API. As a result, this API may never be
@@ -59,10 +47,6 @@ import org.osgi.service.obr.Part;
  *             API.
  */
 public interface RepositoryAdmin {
-	public static final char PATH_SEP = ',';
-	
-	public static final char WILD_CARD = '*';
-	
 	/**
 	 * Discover any resources that match the given filter.
 	 * 
@@ -90,8 +74,29 @@ public interface RepositoryAdmin {
 	 * @return List of resources matching the filters.
 	 * @throws IllegalArgumentException If the filter expression is invalid.
 	 */
-	Part[] discoverParts(String filterExpr);
+	Resource[] discoverResources(String filterExpr);
+
+	/**
+	 * Create a resolver.
+	 * 
+	 * @param resource
+	 * @return
+	 */
+	Resolver resolver();
+
 	
+	/**
+	 * Add a new repository to the federation. 
+	 * 
+	 * The url must point to a repository XML file.
+	 * 
+	 * @param repository
+	 * @return
+	 * @throws Exception
+	 */
+	Repository addRepository(URL repository) throws Exception;
+	boolean removeRepository(URL repository);
+
 	/**
 	 * List all the repositories.
 	 * 
@@ -99,11 +104,5 @@ public interface RepositoryAdmin {
 	 */
 	Repository[] listRepositories();
 	
-	Part getPart(String partId);
-	
-	Part getPart(String partId, String repositoryPath);
-	
-	String getDefaultRepositoryPath();
-	
-	void setDefaultRepositoryPath(String repositoryPath);	
+	Resource getResource(String resourceId);
 }

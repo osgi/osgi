@@ -1,10 +1,6 @@
-javac.source            = 1.5
-javac.target            = 1.5
-
 -nope							= true
 nodeploy						= true
 
 -buildpath = \
-	osgi.core;					version=4.1, \
-	osgi.cmpn;					version=4.1, \
-	ee.j2se;					version=1.6
+	osgi.core;					version=4.0, \
+	ee.minimum;					version=1.0

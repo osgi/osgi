@@ -20,9 +20,6 @@
 
 package org.osgi.service.obr;
 
-import java.util.Map;
-
-
 /**
  * 
  * TODO Add Javadoc comment for this type.
@@ -34,39 +31,26 @@ import java.util.Map;
  *             API.
  */
 public interface Resolver {
-	// TODO simplify interface - these can be resolver specific configs
-	// vs osgi specced configs
-//	public static final int DEPTH_ZERO = 0;
-//	
-//	public static final int DEPTH_INFINITE = -1;
-//		
-//    /**
-//     * How many levels deep in the recursion graph to check. Values
-//     * other than {
-//     */
-//    public static final String DEPTH = "depth";
-//    
-//    public static final String CHECK_USES = "checkUses";
-    
-	// TODO is timeout per requirement or global?
-	public static final String TIMEOUT = "timeout";
-	
+
+	void add(Resource resource);
+
+	Requirement[] getUnsatisfiedRequirements();
+
+	Resource[] getOptionalResources();
+
+	Requirement[] getReason(Resource resource);
+	Resource [] getResources(Requirement requirement);
+
+	Resource[] getRequiredResources();
+
+	Resource[] getAddedResources();
+
+	boolean resolve();
+
 	/**
-	 * Whether to start deployed bundles
-	 * TODO should this be a speced config or a resolver specific config? 
+	 * Needs more description ... Should return some state so you can see what went wrong
+	 * 
+	 * @param start
 	 */
-	public static final String START = "start";
-    /**
-	 * Resolve a set of requirements. A bundle install can be modeled as a top level 
-	 * require bundle requirement.
-	 * 
-	 * The requirements in the array are resolved in order, there is no implied relationship.
-	 * 
-	 * @param requirements
-	 * 
-	 * @return
-	 * @throws InterruptedException if the thread that calls this resolve is interrupted.
-	 */
-	Resolution resolve(Requirement... requirements) throws InterruptedException;
-	Resolution resolve(Map properties, Requirement... requirements) throws InterruptedException;
+	void deploy(boolean start);
 }
