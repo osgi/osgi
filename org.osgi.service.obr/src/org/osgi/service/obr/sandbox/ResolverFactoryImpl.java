@@ -7,7 +7,7 @@ import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.util.ServiceTracker;
+import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.service.obr.CapabilityProvider;
 import org.osgi.service.obr.Part;
 import org.osgi.service.obr.Resolver;
@@ -22,7 +22,15 @@ public class ResolverFactoryImpl implements ResolverFactory {
 
 	public ResolverFactoryImpl(BundleContext bundleContext) {
 		this.bundleContext = bundleContext;
-		tracker = new ServiceTracker();
+		tracker = new ServiceTracker(bundleContext, CapabilityProvider.class.getName(), null);
+	}
+
+	void start() {
+		tracker.open();
+	}
+
+	void stop() {
+		tracker.close();
 	}
 	
 	public Resolver newResolver(Map properties) {

@@ -20,16 +20,11 @@
 
 package org.osgi.service.obr;
 
+import java.util.Iterator;
+
 /**
- * This service interface allows third parties to provide capabilities that are
- * present on the system but not encoded in the bundle's manifests. For example,
- * a capability provider could provide:
- * <ol>
- * <li>A Set of certificates</li>
- * <li>Dimensions of the screen</li>
- * <li>Amount of memory</li>
- * <li>...</li>
- * </ol>
+ * Interface that specifies how a set of capabilities can be provided to
+ * the {@link Resolver}
  * 
  * @version $Id$
  * @deprecated This is proposed API. As a result, this API may never be
@@ -38,14 +33,5 @@ package org.osgi.service.obr;
  *             API.
  */
 public interface CapabilityProvider {
-	/**
-	 * Return a set of capabilities. 
-	 * 
-	 * These capabilities are considered part of the platform. Bundles
-	 * can require these capabilities during selection. All capabilities 
-	 * from different providers are considered part of the platform.
-	 * 
-	 * @return Set of capabilities
-	 */
-	Capability[] getCapabilities();
+	Iterator<Capability> capabilities(Requirement filter);
 }

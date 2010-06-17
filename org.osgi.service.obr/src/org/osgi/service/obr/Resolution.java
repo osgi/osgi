@@ -20,6 +20,9 @@
 
 package org.osgi.service.obr;
 
+import java.util.Map;
+
+
 /**
  * 
  * TODO Add Javadoc comment for this type.
@@ -31,12 +34,20 @@ package org.osgi.service.obr;
  *             API.
  */
 public interface Resolution {
-	ResolutionConfig getInitialConfig();
+	Map getInitialConfig();
 	
 	Requirement[] getInitialRequirements();
 	
 	/**
+	 * Find the parts that will be deployed by this resolution
+	 * @return
+	 */
+	Part[] getParts();
+	
+	/**
 	 * Equivalent to testing: 
+	 *
+	 * TODO this check needs to be updated...
 	 * 
 	 * getInitialConfig().getDepth() == RepositoryConfig.DEPTH_INFINITE 
 	 *   && 
@@ -56,43 +67,6 @@ public interface Resolution {
 	 */
 	boolean isStale();
 	
-	Requirement[] getUnsatisfiedRequirements();
-
-	Part[] getRequiredParts();
-	
-	Part[] getOptionalParts();
-	
-	/**
-	 * Parts may need to be installed in certain orders to 
-	 * satisfy resolution constraints.
-	 * 
-	 * @return
-	 */
-	int getPartLoops();
-	
-	/**
-	 * Get the parts in the that they need to be installed to
-	 * satisfy resolution constraints
-	 * 
-	 * @return
-	 */
-	Part[] getPartLoop(int i);
-
-	/**
-	 * Find the requirements that brought in a given part.
-	 * 
-	 * @param part
-	 * @return
-	 */
-	Requirement[] getConsumers(Part part);
-	
-	/**
-	 * Find the parts that satisfy a given requirement.
-	 * 
-	 * @param requirement
-	 * @return
-	 */
-	Part[] getProviders(Requirement requirement);
 	
 	/**
 	 * Attempt to deploy the parts referenced by this resolution. If the 
@@ -110,6 +84,7 @@ public interface Resolution {
 	 * </ul>
 	 * 
 	 * @throws Exception if the deployment fails for any reason
+	 * TODO return state in case of failure
 	 */
 	void deploy() throws Exception;	
 }

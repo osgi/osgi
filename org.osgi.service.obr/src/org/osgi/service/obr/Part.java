@@ -20,7 +20,9 @@
 
 package org.osgi.service.obr;
 
+import java.util.List;
 import java.util.Map;
+
 
 /**
  * Parts have capabilities and requirements. All a part's requirements
@@ -35,7 +37,7 @@ import java.util.Map;
  *             of final publication. You are cautioned against relying upon this
  *             API.
  */
-public interface Part {
+public interface Part extends CapabilityProvider {
 	final String LICENSE_URL = "license";
 	final String DESCRIPTION = "description";
 	final String DOCUMENTATION_URL = "documentation";
@@ -80,23 +82,17 @@ public interface Part {
 	 * Zero or more resources associated with this part
 	 * @return
 	 */
-	Resource[] getResources();
+	List<Resource> getResources();
 	
 	/**
 	 * The capabilities provided by this part
 	 * @return
 	 */
-	Capability[] getCapabilities();
+	List<Capability> getCapabilities();
 	
 	/**
 	 * The requirements needed to satisfy this part
 	 * @return
 	 */
-	Requirement[] getRequirements();
-	
-	/**
-	 * The repository that provided this part
-	 * @return
-	 */
-	Repository getRepository();
+	List<Requirement> getRequirements();	
 }
