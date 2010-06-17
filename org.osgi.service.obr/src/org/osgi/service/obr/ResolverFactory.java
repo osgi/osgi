@@ -20,11 +20,11 @@
 
 package org.osgi.service.obr;
 
-import java.util.Iterator;
+import java.util.Map;
 
 /**
- * Interface that specifies how a set of capabilities can be provided to
- * the {@link Resolver}
+ * 
+ * Service that provides access to the {@link Resolver} capability.
  * 
  * @version $Id$
  * @deprecated This is proposed API. As a result, this API may never be
@@ -32,6 +32,32 @@ import java.util.Iterator;
  *             of final publication. You are cautioned against relying upon this
  *             API.
  */
-public interface CapabilityProvider {
-	Iterator<Capability> capabilities(Requirement filter);
+public interface ResolverFactory {
+	public static final String PATH = "resolutionPath";
+	
+	/**
+	 * Service attribute reverse domain name indicating unique provider of resolver
+	 */
+	public static final String PROVIDER = "provider";
+	
+	/**
+	 * Create a resolver that uses the BundleContext of the 
+	 * client to create a Part[].
+	 *  
+	 * @param properties
+	 * @return
+	 * @throws Exception if the properties are not understood by this factory
+	 */
+	Resolver newResolver(Map properties) throws Exception;
+	
+	/**
+	 * Create a resolver that uses the supplied capability providers
+	 * to form a resolution. The providers are consulted in order with
+	 * providers at the start of the array preferred over later providers.
+	 * 
+	 * @param properties
+	 * @param parts
+	 * @return
+	 */
+	Resolver newResolver(Map properties, CapabilityProvider... providers) throws Exception;
 }

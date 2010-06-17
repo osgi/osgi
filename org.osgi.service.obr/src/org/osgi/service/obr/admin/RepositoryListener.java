@@ -18,12 +18,12 @@
 // between bundle repositories. There is currently no commitment to 
 // turn this draft into an official specification.  
 
-package org.osgi.service.obr;
+package org.osgi.service.obr.admin;
 
-import java.security.BasicPermission;
 
 /**
- * TODO Implement
+ * Service interface published to the OSGi registry to be notified when
+ * repositories change.
  * 
  * @version $Id$
  * @deprecated This is proposed API. As a result, this API may never be
@@ -31,11 +31,6 @@ import java.security.BasicPermission;
  *             of final publication. You are cautioned against relying upon this
  *             API.
  */
-public class RepositoryPermission extends BasicPermission {
-
-	public RepositoryPermission(String name) {
-		super(name);
-		
-	}
-
+public interface RepositoryListener {
+	void repositoryChanged(RepositoryChangeEvent event);
 }

@@ -22,7 +22,7 @@ package org.osgi.service.obr;
 
 /**
  * A named requirement specifies the need for certain capabilities with the same
- * name.
+ * name and category.
  * 
  * @version $Id$
  * @deprecated This is proposed API. As a result, this API may never be
@@ -31,11 +31,16 @@ package org.osgi.service.obr;
  *             API.
  */
 public interface Requirement {
-
+	Part getPart();
+	
+	String getCategory();
+	
 	/**
 	 * Return the name of the requirement.
 	 */
 	String getName();
+	
+	String getVersionRange();
 
 	/**
 	 * Return the filter.

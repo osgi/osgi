@@ -18,9 +18,13 @@
 // between bundle repositories. There is currently no commitment to 
 // turn this draft into an official specification.  
 
-package org.osgi.service.obr;
+package org.osgi.service.obr.admin;
 
-import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.osgi.service.obr.Part;
+import org.osgi.service.obr.CapabilityProvider;
 
 /**
  * Represents a repository.
@@ -31,25 +35,26 @@ import java.net.URL;
  *             of final publication. You are cautioned against relying upon this
  *             API.
  */
-public interface Repository {
-	/**
-	 * Return the associated URL for the repository.
-	 * 
-	 */
-	URL	getURL();
+public interface Repository extends CapabilityProvider {
+
+	public static final String URL = "url";
+	public static final String DESCRIPTION = "description";
+	public static final String OWNER = "owner";
+	public static final String VERSION = "version";
 	
 	/**
-	 * Return the resources for this repository.
+	 * Return the parts for this repository.
 	 */
-	Resource[] getResources();
+	Iterator<Part> parts();
 	
 	/**
-	 * Return the name of this reposotory.
+	 * Return the name of this repository.
 	 * 
-	 * @return a non-null name
+	 * @return a non-null id
 	 */
 	String getName();
-
-	long getLastModified();
 	
+	Map getProperties();
+
+	long getLastModified();	
 }

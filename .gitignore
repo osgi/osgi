@@ -2,4 +2,7 @@ bin
 generated
 doc
 .DS_Store
+Thumbs.db
+cnf/cache
+.metadata
 

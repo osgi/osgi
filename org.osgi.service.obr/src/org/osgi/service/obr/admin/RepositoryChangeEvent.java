@@ -18,20 +18,48 @@
 // between bundle repositories. There is currently no commitment to 
 // turn this draft into an official specification.  
 
-package org.osgi.service.obr;
+package org.osgi.service.obr.admin;
 
-import java.util.Iterator;
+import org.osgi.service.obr.Part;
 
 /**
- * Interface that specifies how a set of capabilities can be provided to
- * the {@link Resolver}
- * 
- * @version $Id$
  * @deprecated This is proposed API. As a result, this API may never be
  *             published or the final API may change substantially by the time
  *             of final publication. You are cautioned against relying upon this
  *             API.
  */
-public interface CapabilityProvider {
-	Iterator<Capability> capabilities(Requirement filter);
+public class RepositoryChangeEvent {
+	private final Part[] addedParts;
+	private final Part[] changedParts;
+	private final Part[] removedParts;
+	private final Repository repository;
+	
+	public RepositoryChangeEvent(Repository repository, Part[] addedParts, Part[] changedParts, Part[] removedParts) {
+		this.repository = repository;
+		this.addedParts = protect(addedParts);
+		this.changedParts = protect(changedParts);
+		this.removedParts = protect(removedParts);
+	}
+	
+	public Part[] getAddedParts() {
+		return protect(addedParts);
+	}
+	
+	public Part[] getChangedParts() {
+		return protect(changedParts);
+	}
+	
+	public Part[] getRemovedParts() {
+		return protect(removedParts);
+	}
+	
+	public Repository getRepository() {
+		return repository;
+	}
+	
+	private static final Part[] protect(Part[] parts) {
+		Part[] p = new Part[parts.length];
+		System.arraycopy(parts, 0, p, 0, p.length);
+		return p;
+	}
 }

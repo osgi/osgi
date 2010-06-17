@@ -78,31 +78,54 @@ public interface EventConstants {
 	public static final String	EVENT_FILTER		= "event.filter";
 
 	/**
-	 * Service Registration property specifying the intents of an Event Handler
-	 * service.
+	 * Service Registration property specifying the delivery qualities requested
+	 * by an Event Handler service.
 	 * <p>
 	 * Event handlers MAY be registered with this property. Each value of this
-	 * property is a string specifying an intent of the Event handler.
+	 * property is a string specifying a delivery quality for the Event handler.
 	 * 
 	 * <p>
 	 * The value of this property must be of type <code>String</code>,
 	 * <code>String[]</code>, or <code>Collection&lt;String&gt;</code>.
 	 * 
-	 * @see #EVENT_INTENT_UNORDERED
+	 * @see #DELIVERY_ASYNC_ORDERED
+	 * @see #DELIVERY_ASYNC_UNORDERED
 	 * @since 1.3
 	 */
-	public static final String	EVENT_INTENTS		= "event.intents";
+	public static final String	EVENT_DELIVERY			= "event.delivery";
 
 	/**
-	 * Event Handler intent value specifying the Event Handler does not require
-	 * events be delivered in order. This may allow an Event Admin
-	 * implementation to optimize event delivery by relaxing ordering
-	 * requirements.
+	 * Event Handler delivery quality value specifying the Event Handler
+	 * requires asynchronously delivered events be delivered in order. Ordered
+	 * delivery is the default for asynchronously delivered events.
 	 * 
-	 * @see #EVENT_INTENTS
+	 * <p>
+	 * This delivery quality value is mutually exclusive with
+	 * {@link #DELIVERY_ASYNC_UNORDERED}. However, if both this value and
+	 * {@link #DELIVERY_ASYNC_UNORDERED} are specified for an event handler,
+	 * this value takes precedence.
+	 * 
+	 * @see #EVENT_DELIVERY
 	 * @since 1.3
 	 */
-	public static final String	EVENT_INTENT_UNORDERED	= "unordered";
+	public static final String	DELIVERY_ASYNC_ORDERED		= "async.ordered";
+
+	/**
+	 * Event Handler delivery quality value specifying the Event Handler does
+	 * not require asynchronously delivered events be delivered in order. This
+	 * may allow an Event Admin implementation to optimize asynchronous event
+	 * delivery by relaxing ordering requirements.
+	 * 
+	 * <p>
+	 * This delivery quality value is mutually exclusive with
+	 * {@link #DELIVERY_ASYNC_ORDERED}. However, if both this value and
+	 * {@link #DELIVERY_ASYNC_ORDERED} are specified for an event handler,
+	 * {@link #DELIVERY_ASYNC_ORDERED} takes precedence.
+	 * 
+	 * @see #EVENT_DELIVERY
+	 * @since 1.3
+	 */
+	public static final String	DELIVERY_ASYNC_UNORDERED	= "async.unordered";
 
 	/**
 	 * The Distinguished Names of the signers of the bundle relevant to the

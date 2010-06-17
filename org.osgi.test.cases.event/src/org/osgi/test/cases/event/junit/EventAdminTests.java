@@ -312,8 +312,9 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
 
 		String[] topics = new String[] { "test/*" };
+		String[] delivery = new String[] {EventConstants.DELIVERY_ASYNC_ORDERED};
 		tbcService1.setProperties(topics, null);
-		tbcService2.setProperties(topics, null);
+		tbcService2.setProperties(topics, delivery);
 
 		Event[] events = new Event[10];
 		for (int i = 0; i < events.length; i++) {
@@ -378,9 +379,9 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
 
 		String[] topics = new String[] {"test/*"};
-		String[] intents = new String[] {EventConstants.EVENT_INTENT_UNORDERED};
-		tbcService1.setProperties(topics, intents);
-		tbcService2.setProperties(topics, intents);
+		String[] delivery = new String[] {EventConstants.DELIVERY_ASYNC_UNORDERED};
+		tbcService1.setProperties(topics, delivery);
+		tbcService2.setProperties(topics, delivery);
 
 		Event[] events = new Event[10];
 		for (int i = 0; i < events.length; i++) {
@@ -502,9 +503,10 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		TBCService tbcService2 = (TBCService) trackerProvider2.getService();
 
 		String[] topics = new String[] {"test/*"};
-		String[] intents = new String[] {EventConstants.EVENT_INTENT_UNORDERED};
-		tbcService1.setProperties(topics, null);
-		tbcService2.setProperties(topics, intents);
+		tbcService1.setProperties(topics,
+				new String[] {EventConstants.DELIVERY_ASYNC_ORDERED});
+		tbcService2.setProperties(topics,
+				new String[] {EventConstants.DELIVERY_ASYNC_UNORDERED});
 
 		Event[] events = new Event[count];
 		for (int i = 0; i < events.length; i++) {

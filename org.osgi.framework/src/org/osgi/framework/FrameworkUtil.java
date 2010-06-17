@@ -1162,17 +1162,23 @@ public class FrameworkUtil {
 				return false;
 			}
 
-			switch (operation) {
-				case APPROX :
-				case EQUAL : {
-					return value1.compareTo(value2) == 0;
+			try {
+				switch (operation) {
+					case APPROX :
+					case EQUAL : {
+						return value1.compareTo(value2) == 0;
+					}
+					case GREATER : {
+						return value1.compareTo(value2) >= 0;
+					}
+					case LESS : {
+						return value1.compareTo(value2) <= 0;
+					}
 				}
-				case GREATER : {
-					return value1.compareTo(value2) >= 0;
-				}
-				case LESS : {
-					return value1.compareTo(value2) <= 0;
-				}
+			}
+			catch (Exception e) {
+				// if the compareTo method throws an exception; return false
+				return false;
 			}
 			return false;
 		}
@@ -1206,13 +1212,19 @@ public class FrameworkUtil {
 				return false;
 			}
 
-			switch (operation) {
-				case APPROX :
-				case EQUAL :
-				case GREATER :
-				case LESS : {
-					return value1.equals(value2);
+			try {
+				switch (operation) {
+					case APPROX :
+					case EQUAL :
+					case GREATER :
+					case LESS : {
+						return value1.equals(value2);
+					}
 				}
+			}
+			catch (Exception e) {
+				// if the equals method throws an exception; return false
+				return false;
 			}
 			return false;
 		}
