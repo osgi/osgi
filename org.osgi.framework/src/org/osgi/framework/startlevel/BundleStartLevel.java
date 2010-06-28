@@ -55,7 +55,7 @@ public interface BundleStartLevel extends BundleReference {
 	 * bundle as described in the {@link Bundle#start(int)} method using the
 	 * {@link Bundle#START_TRANSIENT} option. The
 	 * {@link Bundle#START_ACTIVATION_POLICY} option must also be used if
-	 * {@link #isActivationPolicyUsed()} returns <code>true</code>. The actual
+	 * {@link #isActivationPolicyUsed()} returns {@code true}. The actual
 	 * starting of the bundle must occur asynchronously.
 	 * <p>
 	 * If the new start level for the bundle is higher than the active start
@@ -69,7 +69,7 @@ public interface BundleStartLevel extends BundleReference {
 	 *         than or equal to zero, or if the bundle is the system bundle.
 	 * @throws IllegalStateException If the bundle has been uninstalled.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AdminPermission[bundle,EXECUTE]</code> and the Java runtime
+	 *         {@code AdminPermission[bundle,EXECUTE]} and the Java runtime
 	 *         environment supports permissions.
 	 */
 	void setStartLevel(int startlevel);
@@ -81,8 +81,8 @@ public interface BundleStartLevel extends BundleReference {
 	 * The autostart setting of a bundle indicates whether the bundle is to be
 	 * started when its start level is reached.
 	 * 
-	 * @return <code>true</code> if the autostart setting of the bundle
-	 *         indicates it is to be started. <code>false</code> otherwise.
+	 * @return {@code true} if the autostart setting of the bundle indicates it
+	 *         is to be started. {@code false} otherwise.
 	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @see Bundle#START_TRANSIENT
 	 */
@@ -95,9 +95,9 @@ public interface BundleStartLevel extends BundleReference {
 	 * The autostart setting of a bundle indicates whether the bundle's declared
 	 * activation policy is to be used when the bundle is started.
 	 * 
-	 * @return <code>true</code> if the bundle's autostart setting indicates the
+	 * @return {@code true} if the bundle's autostart setting indicates the
 	 *         activation policy declared in the manifest must be used.
-	 *         <code>false</code> if the bundle must be eagerly activated.
+	 *         {@code false} if the bundle must be eagerly activated.
 	 * @throws IllegalStateException If the bundle has been uninstalled.
 	 * @see Bundle#START_ACTIVATION_POLICY
 	 */

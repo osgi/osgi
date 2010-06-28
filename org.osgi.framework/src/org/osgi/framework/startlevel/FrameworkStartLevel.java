@@ -52,15 +52,13 @@ public interface FrameworkStartLevel extends BundleReference {
 	 * <p>
 	 * The Framework will move to the requested start level. This method will
 	 * return immediately to the caller and the start level change will occur
-	 * asynchronously on another thread. The specified
-	 * <code>FrameworkListener</code>s are notified, in the order specified,
-	 * when the start level change is complete. When the start level change
-	 * completes normally, each specified <code>FrameworkListener</code> will be
-	 * called with a Framework event of type
-	 * <code>FrameworkEvent.STARTLEVEL_CHANGED</code>. If the start level change
-	 * does not complete normally, each specified <code>FrameworkListener</code>
-	 * will be called with a Framework event of type
-	 * <code>FrameworkEvent.ERROR</code>.
+	 * asynchronously on another thread. The specified {@code FrameworkListener}
+	 * s are notified, in the order specified, when the start level change is
+	 * complete. When the start level change completes normally, each specified
+	 * {@code FrameworkListener} will be called with a Framework event of type
+	 * {@code FrameworkEvent.STARTLEVEL_CHANGED}. If the start level change does
+	 * not complete normally, each specified {@code FrameworkListener} will be
+	 * called with a Framework event of type {@code FrameworkEvent.ERROR}.
 	 * 
 	 * <p>
 	 * If the specified start level is higher than the active start level, the
@@ -76,12 +74,12 @@ public interface FrameworkStartLevel extends BundleReference {
 	 * {@link Bundle#start(int)} method using the {@link Bundle#START_TRANSIENT}
 	 * option. The {@link Bundle#START_ACTIVATION_POLICY} option must also be
 	 * used if {@link BundleStartLevel#isActivationPolicyUsed()} returns
-	 * <code>true</code> for the bundle.
+	 * {@code true} for the bundle.
 	 * </ol>
 	 * When this process completes after the specified start level is reached,
 	 * the Framework will fire a Framework event of type
-	 * <code>FrameworkEvent.STARTLEVEL_CHANGED</code> to announce it has moved
-	 * to the specified start level.
+	 * {@code FrameworkEvent.STARTLEVEL_CHANGED} to announce it has moved to the
+	 * specified start level.
 	 * 
 	 * <p>
 	 * If the specified start level is lower than the active start level, the
@@ -98,13 +96,13 @@ public interface FrameworkStartLevel extends BundleReference {
 	 * </ol>
 	 * When this process completes after the specified start level is reached,
 	 * the Framework will fire a Framework event of type
-	 * <code>FrameworkEvent.STARTLEVEL_CHANGED</code> to announce it has moved
-	 * to the specified start level.
+	 * {@code FrameworkEvent.STARTLEVEL_CHANGED} to announce it has moved to the
+	 * specified start level.
 	 * 
 	 * <p>
 	 * If the specified start level is equal to the active start level, then no
 	 * bundles are started or stopped, however, the Framework must fire a
-	 * Framework event of type <code>FrameworkEvent.STARTLEVEL_CHANGED</code> to
+	 * Framework event of type {@code FrameworkEvent.STARTLEVEL_CHANGED} to
 	 * announce it has finished moving to the specified start level. This event
 	 * may arrive before this method returns.
 	 * 
@@ -117,8 +115,8 @@ public interface FrameworkStartLevel extends BundleReference {
 	 * @throws IllegalArgumentException If the specified start level is less
 	 *         than or equal to zero.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the
-	 *         Java runtime environment supports permissions.
+	 *         {@code AdminPermission[System Bundle,STARTLEVEL]} and the Java
+	 *         runtime environment supports permissions.
 	 */
 	void setStartLevel(int startlevel, FrameworkListener... listeners);
 
@@ -141,8 +139,8 @@ public interface FrameworkStartLevel extends BundleReference {
 	 * Framework.
 	 * 
 	 * <p>
-	 * When a Bundle is installed via <code>BundleContext.installBundle</code>,
-	 * it is assigned the initial bundle start level value.
+	 * When a Bundle is installed via {@code BundleContext.installBundle}, it is
+	 * assigned the initial bundle start level value.
 	 * 
 	 * <p>
 	 * The default initial bundle start level value is 1 unless this method has
@@ -155,8 +153,8 @@ public interface FrameworkStartLevel extends BundleReference {
 	 * @throws IllegalArgumentException If the specified start level is less
 	 *         than or equal to zero.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the
-	 *         Java runtime environment supports permissions.
+	 *         {@code AdminPermission[System Bundle,STARTLEVEL]} and the Java
+	 *         runtime environment supports permissions.
 	 */
 	void setInitialBundleStartLevel(int startlevel);
 }

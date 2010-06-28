@@ -50,9 +50,9 @@ public class FrameworkUtil {
 	}
 
 	/**
-	 * Creates a <code>Filter</code> object. This <code>Filter</code> object may
-	 * be used to match a <code>ServiceReference</code> object or a
-	 * <code>Dictionary</code> object.
+	 * Creates a {@code Filter} object. This {@code Filter} object may
+	 * be used to match a {@code ServiceReference} object or a
+	 * {@code Dictionary} object.
 	 * 
 	 * <p>
 	 * If the filter cannot be parsed, an {@link InvalidSyntaxException} will be
@@ -64,10 +64,10 @@ public class FrameworkUtil {
 	 * by {@link BundleContext#createFilter(String)}.
 	 * 
 	 * @param filter The filter string.
-	 * @return A <code>Filter</code> object encapsulating the filter string.
-	 * @throws InvalidSyntaxException If <code>filter</code> contains an invalid
+	 * @return A {@code Filter} object encapsulating the filter string.
+	 * @throws InvalidSyntaxException If {@code filter} contains an invalid
 	 *         filter string that cannot be parsed.
-	 * @throws NullPointerException If <code>filter</code> is null.
+	 * @throws NullPointerException If {@code filter} is null.
 	 * 
 	 * @see Filter
 	 */
@@ -176,10 +176,10 @@ public class FrameworkUtil {
 	 * 
 	 * @param matchPattern The pattern against which to match the DN chain.
 	 * @param dnChain The DN chain to match against the specified pattern. Each
-	 *        element of the chain must be of type <code>String</code> and use
+	 *        element of the chain must be of type {@code String} and use
 	 *        the format defined in RFC 2253.
-	 * @return <code>true</code> If the pattern matches the DN chain; otherwise
-	 *         <code>false</code> is returned.
+	 * @return {@code true} If the pattern matches the DN chain; otherwise
+	 *         {@code false} is returned.
 	 * @throws IllegalArgumentException If the specified match pattern or DN
 	 *         chain is invalid.
 	 * @since 1.5
@@ -190,13 +190,13 @@ public class FrameworkUtil {
 	}
 
 	/**
-	 * Return a <code>Bundle</code> for the specified bundle class. The returned
-	 * <code>Bundle</code> is the bundle associated with the bundle class loader
+	 * Return a {@code Bundle} for the specified bundle class. The returned
+	 * {@code Bundle} is the bundle associated with the bundle class loader
 	 * which defined the specified class.
 	 * 
 	 * @param classFromBundle A class defined by a bundle class loader.
-	 * @return A <code>Bundle</code> for the specified bundle class or
-	 *         <code>null</code> if the specified class was not defined by a
+	 * @return A {@code Bundle} for the specified bundle class or
+	 *         {@code null} if the specified class was not defined by a
 	 *         bundle class loader.
 	 * @since 1.5
 	 */
@@ -257,16 +257,16 @@ public class FrameworkUtil {
 	 *   &lt;final&gt; ::= NULL | &lt;value&gt;
 	 * </pre>
 	 * 
-	 * <code>&lt;attr&gt;</code> is a string representing an attribute, or key,
+	 * {@code &lt;attr&gt;} is a string representing an attribute, or key,
 	 * in the properties objects of the registered services. Attribute names are
 	 * not case sensitive; that is cn and CN both refer to the same attribute.
-	 * <code>&lt;value&gt;</code> is a string representing the value, or part of
+	 * {@code &lt;value&gt;} is a string representing the value, or part of
 	 * one, of a key in the properties objects of the registered services. If a
-	 * <code>&lt;value&gt;</code> must contain one of the characters '
-	 * <code>*</code>' or '<code>(</code>' or '<code>)</code>', these characters
-	 * should be escaped by preceding them with the backslash '<code>\</code>'
-	 * character. Note that although both the <code>&lt;substring&gt;</code> and
-	 * <code>&lt;present&gt;</code> productions can produce the <code>'attr=*'</code>
+	 * {@code &lt;value&gt;} must contain one of the characters '
+	 * {@code *}' or '{@code (}' or '{@code )}', these characters
+	 * should be escaped by preceding them with the backslash '{@code \}'
+	 * character. Note that although both the {@code &lt;substring&gt;} and
+	 * {@code &lt;present&gt;} productions can produce the {@code 'attr=*'}
 	 * construct, this construct is used only to denote a presence filter.
 	 * 
 	 * <p>
@@ -280,7 +280,7 @@ public class FrameworkUtil {
 	 * </pre>
 	 * 
 	 * <p>
-	 * The approximate match (<code>~=</code>) is implementation specific but
+	 * The approximate match ({@code ~=}) is implementation specific but
 	 * should at least ignore case and white space differences. Optional are
 	 * codes like soundex or other smart "closeness" comparisons.
 	 * 
@@ -332,11 +332,11 @@ public class FrameworkUtil {
 	 * d.put(&quot;cn&quot;, new String[] {&quot;a&quot;, &quot;b&quot;, &quot;c&quot;});
 	 * </pre>
 	 * 
-	 * d will match <code>(cn=a)</code> and also <code>(cn=b)</code>
+	 * d will match {@code (cn=a)} and also {@code (cn=b)}
 	 * 
 	 * <p>
 	 * A filter component that references a key having an unrecognizable data
-	 * type will evaluate to <code>false</code> .
+	 * type will evaluate to {@code false} .
 	 */
 	private static class FilterImpl implements Filter {
 		/* filter operators */
@@ -387,30 +387,30 @@ public class FrameworkUtil {
 		/**
 		 * Filter using a service's properties.
 		 * <p>
-		 * This <code>Filter</code> is executed using the keys and values of the
+		 * This {@code Filter} is executed using the keys and values of the
 		 * referenced service's properties. The keys are case insensitively
-		 * matched with this <code>Filter</code>.
+		 * matched with this {@code Filter}.
 		 * 
 		 * @param reference The reference to the service whose properties are
 		 *        used in the match.
-		 * @return <code>true</code> if the service's properties match this
-		 *         <code>Filter</code>; <code>false</code> otherwise.
+		 * @return {@code true} if the service's properties match this
+		 *         {@code Filter}; {@code false} otherwise.
 		 */
 		public boolean match(ServiceReference< ? > reference) {
 			return match0(new ServiceReferenceDictionary(reference));
 		}
 
 		/**
-		 * Filter using a <code>Dictionary</code>. This <code>Filter</code> is
-		 * executed using the specified <code>Dictionary</code>'s keys and
+		 * Filter using a {@code Dictionary}. This {@code Filter} is
+		 * executed using the specified {@code Dictionary}'s keys and
 		 * values. The keys are case insensitively matched with this
-		 * <code>Filter</code>.
+		 * {@code Filter}.
 		 * 
-		 * @param dictionary The <code>Dictionary</code> whose keys are used in
+		 * @param dictionary The {@code Dictionary} whose keys are used in
 		 *        the match.
-		 * @return <code>true</code> if the <code>Dictionary</code>'s keys and
-		 *         values match this filter; <code>false</code> otherwise.
-		 * @throws IllegalArgumentException If <code>dictionary</code> contains
+		 * @return {@code true} if the {@code Dictionary}'s keys and
+		 *         values match this filter; {@code false} otherwise.
+		 * @throws IllegalArgumentException If {@code dictionary} contains
 		 *         case variants of the same key name.
 		 */
 		public boolean match(Dictionary<String, ? > dictionary) {
@@ -418,15 +418,15 @@ public class FrameworkUtil {
 		}
 
 		/**
-		 * Filter with case sensitivity using a <code>Dictionary</code>. This
-		 * <code>Filter</code> is executed using the specified
-		 * <code>Dictionary</code>'s keys and values. The keys are case
-		 * sensitively matched with this <code>Filter</code>.
+		 * Filter with case sensitivity using a {@code Dictionary}. This
+		 * {@code Filter} is executed using the specified
+		 * {@code Dictionary}'s keys and values. The keys are case
+		 * sensitively matched with this {@code Filter}.
 		 * 
-		 * @param dictionary The <code>Dictionary</code> whose keys are used in
+		 * @param dictionary The {@code Dictionary} whose keys are used in
 		 *        the match.
-		 * @return <code>true</code> if the <code>Dictionary</code>'s keys and
-		 *         values match this filter; <code>false</code> otherwise.
+		 * @return {@code true} if the {@code Dictionary}'s keys and
+		 *         values match this filter; {@code false} otherwise.
 		 * @since 1.3
 		 */
 		public boolean matchCase(Dictionary<String, ? > dictionary) {
@@ -434,12 +434,12 @@ public class FrameworkUtil {
 		}
 
 		/**
-		 * Returns this <code>Filter</code>'s filter string.
+		 * Returns this {@code Filter}'s filter string.
 		 * <p>
 		 * The filter string is normalized by removing whitespace which does not
 		 * affect the meaning of the filter.
 		 * 
-		 * @return This <code>Filter</code>'s filter string.
+		 * @return This {@code Filter}'s filter string.
 		 */
 		public String toString() {
 			String result = filterString;
@@ -450,12 +450,12 @@ public class FrameworkUtil {
 		}
 
 		/**
-		 * Returns this <code>Filter</code>'s normalized filter string.
+		 * Returns this {@code Filter}'s normalized filter string.
 		 * <p>
 		 * The filter string is normalized by removing whitespace which does not
 		 * affect the meaning of the filter.
 		 * 
-		 * @return This <code>Filter</code>'s filter string.
+		 * @return This {@code Filter}'s filter string.
 		 */
 		private String normalize() {
 			StringBuffer sb = new StringBuffer();
@@ -552,17 +552,17 @@ public class FrameworkUtil {
 		}
 
 		/**
-		 * Compares this <code>Filter</code> to another <code>Filter</code>.
+		 * Compares this {@code Filter} to another {@code Filter}.
 		 * 
 		 * <p>
 		 * This implementation returns the result of calling
-		 * <code>this.toString().equals(obj.toString()</code>.
+		 * {@code this.toString().equals(obj.toString()}.
 		 * 
-		 * @param obj The object to compare against this <code>Filter</code>.
-		 * @return If the other object is a <code>Filter</code> object, then
+		 * @param obj The object to compare against this {@code Filter}.
+		 * @return If the other object is a {@code Filter} object, then
 		 *         returns the result of calling
-		 *         <code>this.toString().equals(obj.toString()</code>;
-		 *         <code>false</code> otherwise.
+		 *         {@code this.toString().equals(obj.toString()};
+		 *         {@code false} otherwise.
 		 */
 		public boolean equals(Object obj) {
 			if (obj == this) {
@@ -577,13 +577,13 @@ public class FrameworkUtil {
 		}
 
 		/**
-		 * Returns the hashCode for this <code>Filter</code>.
+		 * Returns the hashCode for this {@code Filter}.
 		 * 
 		 * <p>
 		 * This implementation returns the result of calling
-		 * <code>this.toString().hashCode()</code>.
+		 * {@code this.toString().hashCode()}.
 		 * 
-		 * @return The hashCode of this <code>Filter</code>.
+		 * @return The hashCode of this {@code Filter}.
 		 */
 		public int hashCode() {
 			return this.toString().hashCode();
@@ -595,7 +595,7 @@ public class FrameworkUtil {
 		 * 
 		 * @param properties A dictionary whose keys are used in the match.
 		 * @return If the Dictionary's keys match the filter, return
-		 *         <code>true</code>. Otherwise, return <code>false</code>.
+		 *         {@code true}. Otherwise, return {@code false}.
 		 */
 		private boolean match0(Dictionary<String, ? > properties) {
 			switch (op) {
@@ -1606,7 +1606,7 @@ public class FrameworkUtil {
 		 * Create a case insensitive dictionary from the specified dictionary.
 		 * 
 		 * @param dictionary
-		 * @throws IllegalArgumentException If <code>dictionary</code> contains
+		 * @throws IllegalArgumentException If {@code dictionary} contains
 		 *         case variants of the same key name.
 		 */
 		CaseInsensitiveDictionary(Dictionary<String, ? > dictionary) {
@@ -1741,12 +1741,12 @@ public class FrameworkUtil {
 	 *   cn=ben+ou=research,o=ACME,c=us;ou=Super CA,c=CA
 	 * </pre>
 	 * 
-	 * is made up of two DNs: "<code>cn=ben+ou=research,o=ACME,c=us</code>
-	 * " and " <code>ou=Super CA,c=CA</code>
+	 * is made up of two DNs: "{@code cn=ben+ou=research,o=ACME,c=us}
+	 * " and " {@code ou=Super CA,c=CA}
 	 * ". The first DN is made of of three RDNs: "
-	 * <code>cn=ben+ou=research</code>" and "<code>o=ACME</code>" and "
-	 * <code>c=us</code>". The first RDN has two name value pairs: "
-	 * <code>cn=ben</code>" and "<code>ou=research</code>".
+	 * {@code cn=ben+ou=research}" and "{@code o=ACME}" and "
+	 * {@code c=us}". The first RDN has two name value pairs: "
+	 * {@code cn=ben}" and "{@code ou=research}".
 	 * <p>
 	 * A chain pattern makes use of wildcards ('*' or '-') to match against DNs,
 	 * and wildcards ('*') to match againts DN prefixes, and value. If a DN in a

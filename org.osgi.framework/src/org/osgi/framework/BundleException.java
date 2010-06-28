@@ -21,9 +21,9 @@ package org.osgi.framework;
  * occurred.
  * 
  * <p>
- * A <code>BundleException</code> object is created by the Framework to denote
+ * A {@code BundleException} object is created by the Framework to denote
  * an exception condition in the lifecycle of a bundle.
- * <code>BundleException</code>s should not be created by bundle developers.
+ * {@code BundleException}s should not be created by bundle developers.
  * A type code is used to identify the exception type for future extendability.
  * 
  * <p>
@@ -117,7 +117,7 @@ public class BundleException extends Exception {
 	public static final int	START_TRANSIENT_ERROR	= 10;
 
 	/**
-	 * Creates a <code>BundleException</code> with the specified message and
+	 * Creates a {@code BundleException} with the specified message and
 	 * exception cause.
 	 * 
 	 * @param msg The associated message.
@@ -128,7 +128,7 @@ public class BundleException extends Exception {
 	}
 
 	/**
-	 * Creates a <code>BundleException</code> with the specified message.
+	 * Creates a {@code BundleException} with the specified message.
 	 * 
 	 * @param msg The message.
 	 */
@@ -137,7 +137,7 @@ public class BundleException extends Exception {
 	}
 
 	/**
-	 * Creates a <code>BundleException</code> with the specified message, type
+	 * Creates a {@code BundleException} with the specified message, type
 	 * and exception cause.
 	 * 
 	 * @param msg The associated message.
@@ -151,7 +151,7 @@ public class BundleException extends Exception {
 	}
 
 	/**
-	 * Creates a <code>BundleException</code> with the specified message and
+	 * Creates a {@code BundleException} with the specified message and
 	 * type.
 	 * 
 	 * @param msg The message.
@@ -164,25 +164,25 @@ public class BundleException extends Exception {
 	}
 
 	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
+	 * Returns the cause of this exception or {@code null} if no cause was
 	 * specified when this exception was created.
 	 * 
 	 * <p>
 	 * This method predates the general purpose exception chaining mechanism.
-	 * The <code>getCause()</code> method is now the preferred means of
+	 * The {@code getCause()} method is now the preferred means of
 	 * obtaining this information.
 	 * 
-	 * @return The result of calling <code>getCause()</code>.
+	 * @return The result of calling {@code getCause()}.
 	 */
 	public Throwable getNestedException() {
 		return getCause();
 	}
 
 	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
+	 * Returns the cause of this exception or {@code null} if no cause was
 	 * set.
 	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause was
+	 * @return The cause of this exception or {@code null} if no cause was
 	 *         set.
 	 * @since 1.3
 	 */
@@ -206,7 +206,7 @@ public class BundleException extends Exception {
 	}
 
 	/**
-	 * Returns the type for this exception or <code>UNSPECIFIED</code> if the
+	 * Returns the type for this exception or {@code UNSPECIFIED} if the
 	 * type was unspecified or unknown.
 	 * 
 	 * @return The type of this exception.

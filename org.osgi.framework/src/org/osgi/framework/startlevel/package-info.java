@@ -31,7 +31,7 @@
  * is a higher start level than 1.
  * 
  * <p>
- * <code>AdminPermission</code> is required to modify start level information.
+ * {@code AdminPermission} is required to modify start level information.
  * 
  * <p>
  * Start Level support in the Framework includes the ability to modify the

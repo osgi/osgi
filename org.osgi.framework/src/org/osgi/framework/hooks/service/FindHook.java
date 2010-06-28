@@ -40,23 +40,22 @@ public interface FindHook {
 	 * 
 	 * @param context The bundle context of the bundle performing the find
 	 *        operation.
-	 * @param name The class name of the services to find or <code>null</code>
+	 * @param name The class name of the services to find or {@code null}
 	 *        to find all services.
 	 * @param filter The filter criteria of the services to find or
-	 *        <code>null</code> for no filter criteria.
-	 * @param allServices <code>true</code> if the find operation is the result
+	 *        {@code null} for no filter criteria.
+	 * @param allServices {@code true} if the find operation is the result
 	 *        of a call to
 	 *        {@link BundleContext#getAllServiceReferences(String, String)}
-	 * @param references A <code>Collection</code> of Service References to be
-	 *        returned as a result of the find operation. The implementation of
-	 *        this method may remove service references from the collection to
-	 *        prevent the references from being returned to the bundle
-	 *        performing the find operation. The collection supports all the
-	 *        optional <code>Collection</code> operations except
-	 *        <code>add</code> and <code>addAll</code>. Attempting to add to the
-	 *        collection will result in an
-	 *        <code>UnsupportedOperationException</code>. The collection is not
-	 *        synchronized.
+	 * @param references A collection of Service References to be returned as a
+	 *        result of the find operation. The implementation of this method
+	 *        may remove service references from the collection to prevent the
+	 *        references from being returned to the bundle performing the find
+	 *        operation. The collection supports all the optional
+	 *        {@code Collection} operations except {@code add} and
+	 *        {@code addAll}. Attempting to add to the collection will
+	 *        result in an {@code UnsupportedOperationException}. The
+	 *        collection is not synchronized.
 	 */
 	void find(BundleContext context, String name, String filter,
 			boolean allServices, Collection<ServiceReference< ? >> references);
