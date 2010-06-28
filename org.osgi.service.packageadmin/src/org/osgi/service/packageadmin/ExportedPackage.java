@@ -41,7 +41,6 @@ import org.osgi.framework.Version;
  * <code>getExportingBundle()</code> and <code>getImportingBundles()</code>
  * return <code>null</code>.
  * 
- * @deprecated As of 1.3. Replaced by {@link PackageExport}.
  * @ThreadSafe
  * @version $Id$
  */

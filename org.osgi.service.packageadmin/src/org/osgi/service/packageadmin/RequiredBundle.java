@@ -42,7 +42,6 @@ import org.osgi.framework.Version;
  * and <code>getRequiringBundles()</code> return <code>null</code>.
  * 
  * @since 1.2
- * @deprecated As of 1.3. Replaced by {@link BundleWiring}.
  * @ThreadSafe
  * @version $Id$
  */
