@@ -29,6 +29,10 @@ import org.osgi.framework.Bundle;
  * 
  * @ThreadSafe
  * @version $Id$
+ * @deprecated This service has been replaced by the
+ *             <code>org.osgi.framework.wiring</code> package.
+ * @see org.osgi.service.packageadmin.ExportedPackage
+ * @see org.osgi.service.packageadmin.RequiredBundle
  */
 public interface PackageAdmin {
 	/**
