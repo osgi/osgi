@@ -27,14 +27,14 @@ import java.security.PrivilegedAction;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 
 /**
- * The <code>DeploymentCustomizerPermission</code> permission gives the right to 
+ * The {@code DeploymentCustomizerPermission} permission gives the right to 
  * Resource Processors to access a bundle's (residing in a Deployment Package) private area.
  * The bundle and the Resource Processor (customizer) have to be in the same Deployment Package.<p>
  * 
  * The Resource Processor that has this permission is allowed to access the bundle's 
  * private area by calling the {@link DeploymentSession#getDataFile} method during the session 
  * (see {@link DeploymentSession}). After the session ends the FilePermissions are withdrawn.
- * The Resource Processor will have <code>FilePermission</code> with "read", "write" and "delete" 
+ * The Resource Processor will have {@code FilePermission} with "read", "write" and "delete" 
  * actions for the returned {@link java.io.File} that represents the the base directory of the 
  * persistent storage area and for its subdirectories.<p>
  * 
@@ -72,8 +72,8 @@ public class DeploymentCustomizerPermission extends Permission {
     }
 
     /**
-     * Creates a new <code>DeploymentCustomizerPermission</code> object for the given 
-     * <code>name</code> and <code>action</code>.<p>
+     * Creates a new {@code DeploymentCustomizerPermission} object for the given 
+     * {@code name} and {@code action}.<p>
      * 
      * The name parameter is a filter string. This filter has the same syntax as an OSGi filter 
      * but only the "name" attribute is allowed. The value of the attribute  
@@ -86,15 +86,15 @@ public class DeploymentCustomizerPermission extends Permission {
      * 
      * The Resource Processor that has this permission is allowed to access the bundle's 
      * private area by calling the {@link DeploymentSession#getDataFile} method. The 
-     * Resource Processor will have <code>FilePermission</code> with "read", "write" and "delete" 
+     * Resource Processor will have {@code FilePermission} with "read", "write" and "delete" 
      * actions for the returned {@link java.io.File} and its subdirectories during the deployment 
      * session.
      * 
-     * @param name Bundle Symbolic Name of the target bundle, must not be <code>null</code>.
+     * @param name Bundle Symbolic Name of the target bundle, must not be {@code null}.
      * @param actions action string (only the "privatearea" or "*" action is valid; "*" means all 
-     *        the possible actions), must not be <code>null</code>.
+     *        the possible actions), must not be {@code null}.
      * @throws IllegalArgumentException if the filter is invalid, the list of actions 
-     *         contains unknown operations or one of the parameters is <code>null</code>
+     *         contains unknown operations or one of the parameters is {@code null}
      */
     public DeploymentCustomizerPermission(String name, String actions) {
         super(name);

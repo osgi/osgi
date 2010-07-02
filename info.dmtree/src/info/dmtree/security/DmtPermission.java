@@ -48,8 +48,8 @@ import java.util.StringTokenizer;
  * 
  * This means that owner of this permission has Get access on every child node
  * of ./OSGi/bundles. The asterix does not necessarily have to follow a '/'
- * character. For example the <code>&quot;./OSGi/a*&quot;</code> target matches
- * the <code>./OSGi/applications</code> subtree.
+ * character. For example the {@code &quot;./OSGi/a*&quot;} target matches
+ * the {@code ./OSGi/applications} subtree.
  * <p>
  * If wildcard is present in the actions field, all legal OMA DM commands are
  * allowed on the designated nodes(s) by the owner of the permission. Action
@@ -122,21 +122,21 @@ public class DmtPermission extends Permission {
      * Creates a new DmtPermission object for the specified DMT URI with the
      * specified actions. The given URI can be:
      * <ul>
-     * <li> <code>"*"</code>, which matches all valid
+     * <li> {@code "*"}, which matches all valid
      * (see {@link Uri#isValidUri}) absolute URIs;
-     * <li> the prefix of an absolute URI followed by the <code>*</code> 
-     * character (for example <code>"./OSGi/L*"</code>), which matches all valid
+     * <li> the prefix of an absolute URI followed by the {@code *} 
+     * character (for example {@code "./OSGi/L*"}), which matches all valid
      * absolute URIs beginning with the given prefix;
      * <li> a valid absolute URI, which matches itself.
      * </ul>
      * <p>
-     * Since the <code>*</code> character is itself a valid URI character, it 
+     * Since the {@code *} character is itself a valid URI character, it 
      * can appear as the last character of a valid absolute URI. To distinguish
-     * this case from using <code>*</code> as a wildcard, the <code>*</code> 
-     * character at the end of the URI must be escaped with the <code>\</code> 
-     * charater. For example the URI <code>"./a*"</code> matches 
-     * <code>"./a"</code>, <code>"./aa"</code>, <code>"./a/b"</code> etc. while
-     * <code>"./a\*"</code> matches <code>"./a*"</code> only.
+     * this case from using {@code *} as a wildcard, the {@code *} 
+     * character at the end of the URI must be escaped with the {@code \} 
+     * charater. For example the URI {@code "./a*"} matches 
+     * {@code "./a"}, {@code "./aa"}, {@code "./a/b"} etc. while
+     * {@code "./a\*"} matches {@code "./a*"} only.
      * <p>
      * The actions string must either be "*" to allow all actions, or it must
      * contain a non-empty subset of the valid actions, defined as constants in
@@ -145,7 +145,7 @@ public class DmtPermission extends Permission {
      * @param dmtUri URI of the management object (or subtree)
      * @param actions OMA DM actions allowed
      * @throws NullPointerException if any of the parameters are
-     *         <code>null</code>
+     *         {@code null}
      * @throws IllegalArgumentException if any of the parameters are invalid
      */
     public DmtPermission(String dmtUri, String actions) {
@@ -209,7 +209,7 @@ public class DmtPermission extends Permission {
      * mask containing all actions.
      * 
      * @param obj the object to compare to this DmtPermission instance
-     * @return <code>true</code> if the parameter represents the same
+     * @return {@code true} if the parameter represents the same
      *         permissions as this instance
      */
     public boolean equals(Object obj) {
@@ -252,7 +252,7 @@ public class DmtPermission extends Permission {
 
     /**
      * Checks if this DmtPermission object &quot;implies&quot; the specified
-     * permission. This method returns <code>false</code> if and only if at
+     * permission. This method returns {@code false} if and only if at
      * least one of the following conditions are fulfilled for the specified
      * permission:
      * <ul>
@@ -434,7 +434,7 @@ final class DmtPermissionCollection extends PermissionCollection {
 
     /**
      * Returns an enumeration of all the DmtPermission objects in the container.
-     * The returned value cannot be <code>null</code>.
+     * The returned value cannot be {@code null}.
      * 
      * @return an enumeration of all the DmtPermission objects
      */

@@ -20,13 +20,13 @@ import java.util.Dictionary;
 /**
  * An RFC 1960-based Filter.
  * <p>
- * <code>Filter</code>s can be created by calling
+ * {@code Filter}s can be created by calling
  * {@link BundleContext#createFilter} or {@link FrameworkUtil#createFilter} with
  * a filter string.
  * <p>
- * A <code>Filter</code> can be used numerous times to determine if the match
+ * A {@code Filter} can be used numerous times to determine if the match
  * argument matches the filter string that was used to create the
- * <code>Filter</code>.
+ * {@code Filter}.
  * <p>
  * Some examples of LDAP filters are:
  * 
@@ -46,77 +46,77 @@ public interface Filter {
 	/**
 	 * Filter using a service's properties.
 	 * <p>
-	 * This <code>Filter</code> is executed using the keys and values of the
+	 * This {@code Filter} is executed using the keys and values of the
 	 * referenced service's properties. The keys are case insensitively matched
-	 * with this <code>Filter</code>.
+	 * with this {@code Filter}.
 	 * 
 	 * @param reference The reference to the service whose properties are used
 	 *        in the match.
-	 * @return <code>true</code> if the service's properties match this
-	 *         <code>Filter</code>; <code>false</code> otherwise.
+	 * @return {@code true} if the service's properties match this
+	 *         {@code Filter}; {@code false} otherwise.
 	 */
 	public boolean match(ServiceReference reference);
 
 	/**
-	 * Filter using a <code>Dictionary</code>. This <code>Filter</code> is
-	 * executed using the specified <code>Dictionary</code>'s keys and values.
-	 * The keys are case insensitively matched with this <code>Filter</code>.
+	 * Filter using a {@code Dictionary}. This {@code Filter} is
+	 * executed using the specified {@code Dictionary}'s keys and values.
+	 * The keys are case insensitively matched with this {@code Filter}.
 	 * 
-	 * @param dictionary The <code>Dictionary</code> whose keys are used in the
+	 * @param dictionary The {@code Dictionary} whose keys are used in the
 	 *        match.
-	 * @return <code>true</code> if the <code>Dictionary</code>'s keys and
-	 *         values match this filter; <code>false</code> otherwise.
-	 * @throws IllegalArgumentException If <code>dictionary</code> contains case
+	 * @return {@code true} if the {@code Dictionary}'s keys and
+	 *         values match this filter; {@code false} otherwise.
+	 * @throws IllegalArgumentException If {@code dictionary} contains case
 	 *         variants of the same key name.
 	 */
 	public boolean match(Dictionary dictionary);
 
 	/**
-	 * Returns this <code>Filter</code>'s filter string.
+	 * Returns this {@code Filter}'s filter string.
 	 * <p>
 	 * The filter string is normalized by removing whitespace which does not
 	 * affect the meaning of the filter.
 	 * 
-	 * @return This <code>Filter</code>'s filter string.
+	 * @return This {@code Filter}'s filter string.
 	 */
 	public String toString();
 
 	/**
-	 * Compares this <code>Filter</code> to another <code>Filter</code>.
+	 * Compares this {@code Filter} to another {@code Filter}.
 	 * 
 	 * <p>
 	 * This method returns the result of calling
-	 * <code>this.toString().equals(obj.toString())</code>.
+	 * {@code this.toString().equals(obj.toString())}.
 	 * 
-	 * @param obj The object to compare against this <code>Filter</code>.
-	 * @return If the other object is a <code>Filter</code> object, then returns
+	 * @param obj The object to compare against this {@code Filter}.
+	 * @return If the other object is a {@code Filter} object, then returns
 	 *         the result of calling
-	 *         <code>this.toString().equals(obj.toString())</code>;
-	 *         <code>false</code> otherwise.
+	 *         {@code this.toString().equals(obj.toString())};
+	 *         {@code false} otherwise.
 	 */
 	public boolean equals(Object obj);
 
 	/**
-	 * Returns the hashCode for this <code>Filter</code>.
+	 * Returns the hashCode for this {@code Filter}.
 	 * 
 	 * <p>
 	 * This method returns the result of calling
-	 * <code>this.toString().hashCode()</code>.
+	 * {@code this.toString().hashCode()}.
 	 * 
-	 * @return The hashCode of this <code>Filter</code>.
+	 * @return The hashCode of this {@code Filter}.
 	 */
 	public int hashCode();
 
 	/**
-	 * Filter with case sensitivity using a <code>Dictionary</code>. This
-	 * <code>Filter</code> is executed using the specified
-	 * <code>Dictionary</code>'s keys and values. The keys are case sensitively
-	 * matched with this <code>Filter</code>.
+	 * Filter with case sensitivity using a {@code Dictionary}. This
+	 * {@code Filter} is executed using the specified
+	 * {@code Dictionary}'s keys and values. The keys are case sensitively
+	 * matched with this {@code Filter}.
 	 * 
-	 * @param dictionary The <code>Dictionary</code> whose keys are used in the
+	 * @param dictionary The {@code Dictionary} whose keys are used in the
 	 *        match.
-	 * @return <code>true</code> if the <code>Dictionary</code>'s keys and
-	 *         values match this filter; <code>false</code> otherwise.
+	 * @return {@code true} if the {@code Dictionary}'s keys and
+	 *         values match this filter; {@code false} otherwise.
 	 * @since 1.3
 	 */
 	public boolean matchCase(Dictionary dictionary);

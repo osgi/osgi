@@ -21,7 +21,7 @@
  * This package contains the SPI (Service Provider Interface) of the Notification
  * service. These interfaces are implemented by Protocol Adapters capable of 
  * delivering notifications to management servers on a specific protocol.  Users of
- * the <code>NotificationService</code> interface do not interact directly with this 
+ * the {@code NotificationService} interface do not interact directly with this 
  * package.
  * 
  * <p>

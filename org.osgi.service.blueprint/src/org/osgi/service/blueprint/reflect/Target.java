@@ -17,8 +17,8 @@ package org.osgi.service.blueprint.reflect;
 
 /**
  * A common interface for managed components that can be used as a direct target
- * for method calls. These are <code>bean</code>, <code>reference</code>, and
- * <code>ref</code>, where the <code>ref</code> must refer to a bean or
+ * for method calls. These are {@code bean}, {@code reference}, and
+ * {@code ref}, where the {@code ref} must refer to a bean or
  * reference component.
  * 
  * @see BeanMetadata

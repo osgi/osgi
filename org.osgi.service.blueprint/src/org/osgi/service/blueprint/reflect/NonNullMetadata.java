@@ -16,12 +16,12 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Metadata for a value that cannot <code>null</code>. All Metadata subtypes
+ * Metadata for a value that cannot {@code null}. All Metadata subtypes
  * extend this type except for {@link NullMetadata}.
  * 
  * <p>
  * This Metadata type is used for keys in Maps because they cannot be
- * <code>null</code>.
+ * {@code null}.
  * 
  * @ThreadSafe
  * @version $Id$

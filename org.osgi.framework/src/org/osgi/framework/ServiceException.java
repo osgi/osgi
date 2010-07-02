@@ -20,13 +20,13 @@ package org.osgi.framework;
  * A service exception used to indicate that a service problem occurred.
  * 
  * <p>
- * A <code>ServiceException</code> object is created by the Framework or
+ * A {@code ServiceException} object is created by the Framework or
  * service implementation to denote an exception condition in the service. A
  * type code is used to identify the exception type for future extendability.
  * Service implementations may also create subclasses of
- * <code>ServiceException</code>. When subclassing, the subclass should set
+ * {@code ServiceException}. When subclassing, the subclass should set
  * the type to {@link #SUBCLASSED} to indicate that
- * <code>ServiceException</code> has been subclassed.
+ * {@code ServiceException} has been subclassed.
  * 
  * <p>
  * This exception conforms to the general purpose exception chaining mechanism.
@@ -70,7 +70,7 @@ public class ServiceException extends RuntimeException {
 	public static final int REMOTE 				= 5;
 
 	/**
-	 * Creates a <code>ServiceException</code> with the specified message and
+	 * Creates a {@code ServiceException} with the specified message and
 	 * exception cause.
 	 * 
 	 * @param msg The associated message.
@@ -81,7 +81,7 @@ public class ServiceException extends RuntimeException {
 	}
 
 	/**
-	 * Creates a <code>ServiceException</code> with the specified message.
+	 * Creates a {@code ServiceException} with the specified message.
 	 * 
 	 * @param msg The message.
 	 */
@@ -90,7 +90,7 @@ public class ServiceException extends RuntimeException {
 	}
 
 	/**
-	 * Creates a <code>ServiceException</code> with the specified message,
+	 * Creates a {@code ServiceException} with the specified message,
 	 * type and exception cause.
 	 * 
 	 * @param msg The associated message.
@@ -103,7 +103,7 @@ public class ServiceException extends RuntimeException {
 	}
 
 	/**
-	 * Creates a <code>ServiceException</code> with the specified message and
+	 * Creates a {@code ServiceException} with the specified message and
 	 * type.
 	 * 
 	 * @param msg The message.
@@ -115,7 +115,7 @@ public class ServiceException extends RuntimeException {
 	}
 
 	/**
-	 * Returns the type for this exception or <code>UNSPECIFIED</code> if the
+	 * Returns the type for this exception or {@code UNSPECIFIED} if the
 	 * type was unspecified or unknown.
 	 * 
 	 * @return The type of this exception.

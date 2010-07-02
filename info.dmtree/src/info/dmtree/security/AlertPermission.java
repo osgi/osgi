@@ -26,7 +26,7 @@ import java.util.Iterator;
  * Indicates the callers authority to send alerts to management servers,
  * identified by their principal names.
  * <p>
- * <code>AlertPermission</code> has a target string which controls the principal
+ * {@code AlertPermission} has a target string which controls the principal
  * names where alerts can be sent. A wildcard is allowed at the end of the
  * target string, to allow sending alerts to any principal with a name matching
  * the given prefix. The &quot;*&quot; target means that alerts can be sent to
@@ -44,13 +44,13 @@ public class AlertPermission extends Permission {
     private final String serverId;
 
     /**
-     * Creates a new <code>AlertPermission</code> object with its name set to
+     * Creates a new {@code AlertPermission} object with its name set to
      * the target string. Name must be non-null and non-empty.
      * 
-     * @param target the name of a principal, can end with <code>*</code> to
+     * @param target the name of a principal, can end with {@code *} to
      *        match any principal identifier with the given prefix
-     * @throws NullPointerException if <code>name</code> is <code>null</code>
-     * @throws IllegalArgumentException if <code>name</code> is empty
+     * @throws NullPointerException if {@code name} is {@code null}
+     * @throws IllegalArgumentException if {@code name} is empty
      */
     public AlertPermission(String target) {
         super(target);
@@ -71,18 +71,18 @@ public class AlertPermission extends Permission {
     }
 
     /**
-     * Creates a new <code>AlertPermission</code> object using the 'canonical'
+     * Creates a new {@code AlertPermission} object using the 'canonical'
      * two argument constructor. In this version this class does not define any
      * actions, the second argument of this constructor must be "*" so that this
      * class can later be extended in a backward compatible way.
      * 
-     * @param target the name of the server, can end with <code>*</code> to
+     * @param target the name of the server, can end with {@code *} to
      *        match any server identifier with the given prefix
      * @param actions no actions defined, must be "*" for forward compatibility
-     * @throws NullPointerException if <code>name</code> or
-     *         <code>actions</code> is <code>null</code>
-     * @throws IllegalArgumentException if <code>name</code> is empty or
-     *         <code>actions</code> is not "*"
+     * @throws NullPointerException if {@code name} or
+     *         {@code actions} is {@code null}
+     * @throws IllegalArgumentException if {@code name} is empty or
+     *         {@code actions} is not "*"
      */
     public AlertPermission(String target, String actions) {
         this(target);
@@ -102,7 +102,7 @@ public class AlertPermission extends Permission {
      * target string.
      * 
      * @param obj the object to compare to this AlertPermission instance
-     * @return <code>true</code> if the parameter represents the same
+     * @return {@code true} if the parameter represents the same
      *         permissions as this instance
      */
     public boolean equals(Object obj) {
@@ -118,7 +118,7 @@ public class AlertPermission extends Permission {
     }
 
     /**
-     * Returns the action list (always <code>*</code> in the current version).
+     * Returns the action list (always {@code *} in the current version).
      * 
      * @return the action string &quot;*&quot;
      */
@@ -253,7 +253,7 @@ final class DmtAlertPermissionCollection extends PermissionCollection {
 
     /**
      * Returns an enumeration of all the AlertPermission objects in the
-     * container. The returned value cannot be <code>null</code>.
+     * container. The returned value cannot be {@code null}.
      * 
      * @return an enumeration of all the AlertPermission objects
      */

@@ -20,10 +20,10 @@ package org.osgi.service.application;
  * This exception is used to indicate problems related to application lifecycle
  * management.
  * 
- * <code>ApplicationException</code> object is created by the Application Admin
+ * {@code ApplicationException} object is created by the Application Admin
  * to denote an exception condition in the lifecycle of an application.
- * <code>ApplicationException</code>s should not be created by developers. <br/>
- * <code>ApplicationException</code>s are associated with an error code. This
+ * {@code ApplicationException}s should not be created by developers. <br/>
+ * {@code ApplicationException}s are associated with an error code. This
  * code describes the type of problem reported in this exception. The possible
  * codes are:
  * <ul>
@@ -64,7 +64,7 @@ public class ApplicationException extends Exception {
 
 	/**
 	 * An exception was thrown by the application or the corresponding container
-	 * during launch. The exception is available from <code>getCause()</code>.
+	 * during launch. The exception is available from {@code getCause()}.
 	 */
 	public static final int APPLICATION_INTERNAL_ERROR = 0x03;
     
@@ -98,7 +98,7 @@ public class ApplicationException extends Exception {
     public static final int APPLICATION_INVALID_STARTUP_ARGUMENT = 0x07;
 
 	/**
-	 * Creates an <code>ApplicationException</code> with the specified error code.
+	 * Creates an {@code ApplicationException} with the specified error code.
 	 * @param errorCode The code of the error 
 	 */
 	public ApplicationException(int errorCode) {
@@ -107,7 +107,7 @@ public class ApplicationException extends Exception {
 	}
 	
 	/**
-	 * Creates a <code>ApplicationException</code> that wraps another exception.
+	 * Creates a {@code ApplicationException} that wraps another exception.
 	 * 
 	 * @param errorCode The code of the error 
 	 * @param cause The cause of this exception.
@@ -118,7 +118,7 @@ public class ApplicationException extends Exception {
 	}
 
 	/**
-	 * Creates an <code>ApplicationException</code> with the specified error code.
+	 * Creates an {@code ApplicationException} with the specified error code.
 	 * @param errorCode The code of the error 
 	 * @param message The associated message
 	 */
@@ -128,7 +128,7 @@ public class ApplicationException extends Exception {
 	}
 
 	/**
-	 * Creates a <code>ApplicationException</code> that wraps another exception.
+	 * Creates a {@code ApplicationException} that wraps another exception.
 	 * 
 	 * @param errorCode The code of the error 
 	 * @param message The associated message.
@@ -140,10 +140,10 @@ public class ApplicationException extends Exception {
 	}
 
 	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
+	 * Returns the cause of this exception or {@code null} if no cause was
 	 * set.
 	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause was
+	 * @return The cause of this exception or {@code null} if no cause was
 	 *         set.
 	 */
 	public Throwable getCause() {

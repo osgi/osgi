@@ -114,7 +114,7 @@ abstract class AbstractTracked {
 	 * This method must be called from Tracker's open method while synchronized
 	 * on this object in the same synchronized block as the add listener call.
 	 * 
-	 * @param list The initial list of items to be tracked. <code>null</code>
+	 * @param list The initial list of items to be tracked. {@code null}
 	 *        entries in the list are ignored.
 	 * @GuardedBy this
 	 */
@@ -401,7 +401,7 @@ abstract class AbstractTracked {
 	}
 
 	/**
-	 * Returns the tracking count for this <code>ServiceTracker</code> object.
+	 * Returns the tracking count for this {@code ServiceTracker} object.
 	 * 
 	 * The tracking count is initialized to 0 when this object is opened. Every
 	 * time an item is added, modified or removed from this object the tracking
@@ -420,7 +420,7 @@ abstract class AbstractTracked {
 	 * 
 	 * @param item Item to be tracked.
 	 * @param related Action related object.
-	 * @return Customized object for the tracked item or <code>null</code> if
+	 * @return Customized object for the tracked item or {@code null} if
 	 *         the item is not to be tracked.
 	 */
 	abstract Object customizerAdding(final Object item, final Object related);

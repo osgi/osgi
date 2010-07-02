@@ -24,7 +24,7 @@ import info.dmtree.MetaNode;
  * Provides non-atomic read-write access to the part of the tree handled by the
  * plugin that created this session.
  * <p>
- * The <code>nodePath</code> parameters appearing in this interface always
+ * The {@code nodePath} parameters appearing in this interface always
  * contain an array of path segments identifying a node in the subtree of this
  * plugin. This parameter contains an absolute path, so the first segment is
  * always &quot;.&quot;. Special characters appear escaped in the segments.
@@ -36,7 +36,7 @@ import info.dmtree.MetaNode;
  * caller before delegating the call to a plugin. Therefore plugins can take
  * certain circumstances for granted: that the path is valid and is within the
  * subtree of the plugin and the session, the command can be applied to the
- * given node (e.g. the target of <code>setNodeValue</code> is a leaf node),
+ * given node (e.g. the target of {@code setNodeValue} is a leaf node),
  * etc. All errors described by the error codes {@link DmtException#INVALID_URI}, {@link DmtException#URI_TOO_LONG}, {@link DmtException#PERMISSION_DENIED},
  * {@link DmtException#COMMAND_NOT_ALLOWED} and
  * {@link DmtException#TRANSACTION_ERROR} are fully filtered out before control
@@ -76,22 +76,22 @@ public interface ReadWriteDataSession extends ReadableDataSession {
      * @param nodePath an absolute path specifying the node or the root of a
      *        subtree to be copied
      * @param newNodePath the absolute path of the new node or root of a subtree
-     * @param recursive <code>false</code> if only a single node is copied,
-     *        <code>true</code> if the whole subtree is copied
+     * @param recursive {@code false} if only a single node is copied,
+     *        {@code true} if the whole subtree is copied
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
-     *         points to a non-existing node, or if <code>newNodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
+     *         points to a non-existing node, or if {@code newNodePath}
      *         points to a node that cannot exist in the tree
-     *         <li><code>NODE_ALREADY_EXISTS</code> if
-     *         <code>newNodePath</code> points to a node that already exists
-     *         <li><code>METADATA_MISMATCH</code> if the node could not be
+     *         <li>{@code NODE_ALREADY_EXISTS} if
+     *         {@code newNodePath} points to a node that already exists
+     *         <li>{@code METADATA_MISMATCH} if the node could not be
      *         copied because of meta-data restrictions
-     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the copy operation
+     *         <li>{@code FEATURE_NOT_SUPPORTED} if the copy operation
      *         is not supported by the plugin
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -106,19 +106,19 @@ public interface ReadWriteDataSession extends ReadableDataSession {
      * specified, is a URI identifying a DDF document.
      * 
      * @param nodePath the absolute path of the node to create
-     * @param type the type URI of the interior node, can be <code>null</code>
+     * @param type the type URI of the interior node, can be {@code null}
      *        if no node type is defined
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a node that cannot exist in the tree
-     *         <li><code>NODE_ALREADY_EXISTS</code> if <code>nodeUri</code>
+     *         <li>{@code NODE_ALREADY_EXISTS} if {@code nodeUri}
      *         points to a node that already exists
-     *         <li><code>METADATA_MISMATCH</code> if the node could not be
+     *         <li>{@code METADATA_MISMATCH} if the node could not be
      *         created because of meta-data restrictions
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -130,25 +130,25 @@ public interface ReadWriteDataSession extends ReadableDataSession {
 
     /**
      * Create a leaf node with a given value and MIME type. If the specified
-     * value or MIME type is <code>null</code>, their default values must be
+     * value or MIME type is {@code null}, their default values must be
      * taken.
      * 
      * @param nodePath the absolute path of the node to create
      * @param value the value to be given to the new node, can be
-     *        <code>null</code>
+     *        {@code null}
      * @param mimeType the MIME type to be given to the new node, can be
-     *        <code>null</code>
+     *        {@code null}
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a node that cannot exist in the tree
-     *         <li><code>NODE_ALREADY_EXISTS</code> if <code>nodePath</code>
+     *         <li>{@code NODE_ALREADY_EXISTS} if {@code nodePath}
      *         points to a node that already exists
-     *         <li><code>METADATA_MISMATCH</code> if the node could not be
+     *         <li>{@code METADATA_MISMATCH} if the node could not be
      *         created because of meta-data restrictions
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -167,13 +167,13 @@ public interface ReadWriteDataSession extends ReadableDataSession {
      * @param nodePath the absolute path of the node to delete
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a non-existing node
-     *         <li><code>METADATA_MISMATCH</code> if the node could not be
+     *         <li>{@code METADATA_MISMATCH} if the node could not be
      *         deleted because of meta-data restrictions
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -193,17 +193,17 @@ public interface ReadWriteDataSession extends ReadableDataSession {
      * @param newName the new name property of the node
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a non-existing node, or if the new node is not defined
      *         in the tree
-     *         <li><code>NODE_ALREADY_EXISTS</code> if there already exists a
-     *         sibling of <code>nodePath</code> with the name
-     *         <code>newName</code>
-     *         <li><code>METADATA_MISMATCH</code> if the node could not be
+     *         <li>{@code NODE_ALREADY_EXISTS} if there already exists a
+     *         sibling of {@code nodePath} with the name
+     *         {@code newName}
+     *         <li>{@code METADATA_MISMATCH} if the node could not be
      *         renamed because of meta-data restrictions
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -217,18 +217,18 @@ public interface ReadWriteDataSession extends ReadableDataSession {
      * not to exceed the limit of 255 bytes in UTF-8 encoding.
      * 
      * @param nodePath the absolute path of the node
-     * @param title the title text of the node, can be <code>null</code>
+     * @param title the title text of the node, can be {@code null}
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a non-existing node
-     *         <li><code>METADATA_MISMATCH</code> if the title could not be
+     *         <li>{@code METADATA_MISMATCH} if the title could not be
      *         set because of meta-data restrictions
-     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the Title property
+     *         <li>{@code FEATURE_NOT_SUPPORTED} if the Title property
      *         is not supported by the plugin
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -242,22 +242,22 @@ public interface ReadWriteDataSession extends ReadableDataSession {
      * data it contains. The type of an interior node is a URI identifying a DDF
      * document.
      * <p>
-     * For interior nodes, the <code>null</code> type should remove the
+     * For interior nodes, the {@code null} type should remove the
      * reference (if any) to a DDF document overriding the tree structure
      * defined by the ancestors. For leaf nodes, it requests that the default
      * MIME type is used for the given node.
      * 
      * @param nodePath the absolute path of the node
-     * @param type the type of the node, can be <code>null</code>
+     * @param type the type of the node, can be {@code null}
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a non-existing node
-     *         <li><code>METADATA_MISMATCH</code> if the type could not be
+     *         <li>{@code METADATA_MISMATCH} if the type could not be
      *         set because of meta-data restrictions
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -268,27 +268,27 @@ public interface ReadWriteDataSession extends ReadableDataSession {
 
     /**
      * Set the value of a leaf or interior node. The format of the node is
-     * contained in the <code>DmtData</code> object. For interior nodes, the
-     * format is <code>FORMAT_NODE</code>, while for leaf nodes this format is
+     * contained in the {@code DmtData} object. For interior nodes, the
+     * format is {@code FORMAT_NODE}, while for leaf nodes this format is
      * never used.
      * <p>
-     * If the specified value is <code>null</code>, the default value must be
-     * taken; if there is no default value, a <code>DmtException</code> with
-     * error code <code>METADATA_MISMATCH</code> must be thrown.
+     * If the specified value is {@code null}, the default value must be
+     * taken; if there is no default value, a {@code DmtException} with
+     * error code {@code METADATA_MISMATCH} must be thrown.
      * 
      * @param nodePath the absolute path of the node
-     * @param data the data to be set, can be <code>null</code>
+     * @param data the data to be set, can be {@code null}
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a non-existing node
-     *         <li><code>METADATA_MISMATCH</code> if the value could not be
+     *         <li>{@code METADATA_MISMATCH} if the value could not be
      *         set because of meta-data restrictions
-     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the specified node is
+     *         <li>{@code FEATURE_NOT_SUPPORTED} if the specified node is
      *         an interior node and does not support Java object values
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary

@@ -20,14 +20,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 /**
- * A <code>StatusVariable</code> object represents the value of a status
+ * A {@code StatusVariable} object represents the value of a status
  * variable taken with a certain collection method at a certain point of time.
- * The type of the <code>StatusVariable</code> can be <code>int</code>,
- * <code>float</code>, <code>boolean</code> or <code>String</code>.
+ * The type of the {@code StatusVariable} can be {@code int},
+ * {@code float}, {@code boolean} or {@code String}.
  * <p>
- * A <code>StatusVariable</code> is identified by an ID string that is unique
- * within the scope of a <code>Monitorable</code>. The ID must be a non-
- * <code>null</code>, non-empty string that conforms to the "symbolic-name"
+ * A {@code StatusVariable} is identified by an ID string that is unique
+ * within the scope of a {@code Monitorable}. The ID must be a non-
+ * {@code null}, non-empty string that conforms to the "symbolic-name"
  * definition in the OSGi core specification. This means that only the
  * characters [-_.a-zA-Z0-9] may be used. The length of the ID must not exceed
  * 32 bytes when UTF-8 encoded.
@@ -37,22 +37,22 @@ import java.util.Date;
 public final class StatusVariable {
     //----- Public constants -----//
     /**
-     * Constant for identifying <code>int</code> data type.
+     * Constant for identifying {@code int} data type.
      */
     public static final int    TYPE_INTEGER   = 0;
 
     /**
-     * Constant for identifying <code>float</code> data type.
+     * Constant for identifying {@code float} data type.
      */
     public static final int    TYPE_FLOAT = 1;
 
     /**
-     * Constant for identifying <code>String</code> data type.
+     * Constant for identifying {@code String} data type.
      */
     public static final int    TYPE_STRING = 2;
 
     /**
-     * Constant for identifying <code>boolean</code> data type.
+     * Constant for identifying {@code boolean} data type.
      */
    public static final int    TYPE_BOOLEAN = 3;
 
@@ -99,18 +99,18 @@ public final class StatusVariable {
 
     //----- Constructors -----//
     /**
-     * Constructor for a <code>StatusVariable</code> of <code>int</code>
+     * Constructor for a {@code StatusVariable} of {@code int}
      * type.
      * 
-     * @param id the identifier of the <code>StatusVariable</code>
-     * @param cm the collection method, one of the <code>CM_</code> constants
-     * @param data the <code>int</code> value of the
-     *        <code>StatusVariable</code>
-     * @throws java.lang.IllegalArgumentException if the given <code>id</code>
-     *         is not a valid <code>StatusVariable</code> name, or if 
-     *         <code>cm</code> is not one of the collection method constants
-     * @throws java.lang.NullPointerException if the <code>id</code>
-     *         parameter is <code>null</code>
+     * @param id the identifier of the {@code StatusVariable}
+     * @param cm the collection method, one of the {@code CM_} constants
+     * @param data the {@code int} value of the
+     *        {@code StatusVariable}
+     * @throws java.lang.IllegalArgumentException if the given {@code id}
+     *         is not a valid {@code StatusVariable} name, or if 
+     *         {@code cm} is not one of the collection method constants
+     * @throws java.lang.NullPointerException if the {@code id}
+     *         parameter is {@code null}
      */
     public StatusVariable(String id, int cm, int data) {
         setCommon(id, cm);
@@ -119,18 +119,18 @@ public final class StatusVariable {
     }
 
     /**
-     * Constructor for a <code>StatusVariable</code> of <code>float</code>
+     * Constructor for a {@code StatusVariable} of {@code float}
      * type.
      * 
-     * @param id the identifier of the <code>StatusVariable</code>
-     * @param cm the collection method, one of the <code>CM_</code> constants
-     * @param data the <code>float</code> value of the
-     *        <code>StatusVariable</code>
-     * @throws java.lang.IllegalArgumentException if the given <code>id</code>
-     *         is not a valid <code>StatusVariable</code> name, or if
-     *         <code>cm</code> is not one of the collection method constants
-     * @throws java.lang.NullPointerException if the <code>id</code> parameter
-     *         is <code>null</code>
+     * @param id the identifier of the {@code StatusVariable}
+     * @param cm the collection method, one of the {@code CM_} constants
+     * @param data the {@code float} value of the
+     *        {@code StatusVariable}
+     * @throws java.lang.IllegalArgumentException if the given {@code id}
+     *         is not a valid {@code StatusVariable} name, or if
+     *         {@code cm} is not one of the collection method constants
+     * @throws java.lang.NullPointerException if the {@code id} parameter
+     *         is {@code null}
      */
     public StatusVariable(String id, int cm, float data) {
         setCommon(id, cm);
@@ -139,18 +139,18 @@ public final class StatusVariable {
     }
 
     /**
-     * Constructor for a <code>StatusVariable</code> of <code>boolean</code>
+     * Constructor for a {@code StatusVariable} of {@code boolean}
      * type.
      * 
-     * @param id the identifier of the <code>StatusVariable</code>
-     * @param cm the collection method, one of the <code>CM_</code> constants
-     * @param data the <code>boolean</code> value of the
-     *        <code>StatusVariable</code>
-     * @throws java.lang.IllegalArgumentException if the given <code>id</code>
-     *         is not a valid <code>StatusVariable</code> name, or if 
-     *         <code>cm</code> is not one of the collection method constants
-     * @throws java.lang.NullPointerException if the <code>id</code> parameter
-     *         is <code>null</code>
+     * @param id the identifier of the {@code StatusVariable}
+     * @param cm the collection method, one of the {@code CM_} constants
+     * @param data the {@code boolean} value of the
+     *        {@code StatusVariable}
+     * @throws java.lang.IllegalArgumentException if the given {@code id}
+     *         is not a valid {@code StatusVariable} name, or if 
+     *         {@code cm} is not one of the collection method constants
+     * @throws java.lang.NullPointerException if the {@code id} parameter
+     *         is {@code null}
      */
     public StatusVariable(String id, int cm, boolean data) {
         setCommon(id, cm);
@@ -159,18 +159,18 @@ public final class StatusVariable {
     }
 
     /**
-     * Constructor for a <code>StatusVariable</code> of <code>String</code>
+     * Constructor for a {@code StatusVariable} of {@code String}
      * type.
      * 
-     * @param id the identifier of the <code>StatusVariable</code>
-     * @param cm the collection method, one of the <code>CM_</code> constants
-     * @param data the <code>String</code> value of the
-     *        <code>StatusVariable</code>, can be <code>null</code>
-     * @throws java.lang.IllegalArgumentException if the given <code>id</code>
-     *         is not a valid <code>StatusVariable</code> name, or if 
-     *         <code>cm</code> is not one of the collection method constants
-     * @throws java.lang.NullPointerException if the <code>id</code> parameter
-     *         is <code>null</code>
+     * @param id the identifier of the {@code StatusVariable}
+     * @param cm the collection method, one of the {@code CM_} constants
+     * @param data the {@code String} value of the
+     *        {@code StatusVariable}, can be {@code null}
+     * @throws java.lang.IllegalArgumentException if the given {@code id}
+     *         is not a valid {@code StatusVariable} name, or if 
+     *         {@code cm} is not one of the collection method constants
+     * @throws java.lang.NullPointerException if the {@code id} parameter
+     *         is {@code null}
      */
     public StatusVariable(String id, int cm, String data) {
         setCommon(id, cm);
@@ -181,33 +181,33 @@ public final class StatusVariable {
     
     // ----- Public methods -----//
     /**
-     * Returns the ID of this <code>StatusVariable</code>. The ID is unique 
-     * within the scope of a <code>Monitorable</code>.
+     * Returns the ID of this {@code StatusVariable}. The ID is unique 
+     * within the scope of a {@code Monitorable}.
      * 
-     * @return the ID of this <code>StatusVariable</code>
+     * @return the ID of this {@code StatusVariable}
      */
     public String getID() {
         return id;
     }
 
     /**
-     * Returns information on the data type of this <code>StatusVariable</code>.
+     * Returns information on the data type of this {@code StatusVariable}.
      * 
-     * @return one of the <code>TYPE_</code> constants indicating the type of
-     *         this <code>StatusVariable</code>
+     * @return one of the {@code TYPE_} constants indicating the type of
+     *         this {@code StatusVariable}
      */
     public int getType() {
         return type;
     }
 
     /**
-     * Returns the timestamp associated with the <code>StatusVariable</code>.
-     * The timestamp is stored when the <code>StatusVariable</code> instance is
+     * Returns the timestamp associated with the {@code StatusVariable}.
+     * The timestamp is stored when the {@code StatusVariable} instance is
      * created, generally during the {@link Monitorable#getStatusVariable} 
      * method call.
      * 
-     * @return the time when the <code>StatusVariable</code> value was
-     *         queried, cannot be <code>null</code>
+     * @return the time when the {@code StatusVariable} value was
+     *         queried, cannot be {@code null}
      * 
      */
     public Date getTimeStamp() {
@@ -215,12 +215,12 @@ public final class StatusVariable {
     }
 
     /**
-     * Returns the <code>StatusVariable</code> value if its type is
-     * <code>String</code>.
+     * Returns the {@code StatusVariable} value if its type is
+     * {@code String}.
      * 
-     * @return the <code>StatusVariable</code> value as a <code>String</code>
+     * @return the {@code StatusVariable} value as a {@code String}
      * @throws java.lang.IllegalStateException if the type of the 
-     * <code>StatusVariable</code> is not <code>String</code>
+     * {@code StatusVariable} is not {@code String}
      */
     public String getString() throws IllegalStateException {
         if (type != TYPE_STRING)
@@ -230,12 +230,12 @@ public final class StatusVariable {
     }
 
     /**
-     * Returns the <code>StatusVariable</code> value if its type is
-     * <code>int</code>.
+     * Returns the {@code StatusVariable} value if its type is
+     * {@code int}.
      * 
-     * @return the <code>StatusVariable</code> value as an <code>int</code>
+     * @return the {@code StatusVariable} value as an {@code int}
      * @throws java.lang.IllegalStateException if the type of this
-     *         <code>StatusVariable</code> is not <code>int</code>
+     *         {@code StatusVariable} is not {@code int}
      */
     public int getInteger() throws IllegalStateException {
         if (type != TYPE_INTEGER)
@@ -245,12 +245,12 @@ public final class StatusVariable {
     }
 
     /**
-     * Returns the <code>StatusVariable</code> value if its type is
-     * <code>float</code>.
+     * Returns the {@code StatusVariable} value if its type is
+     * {@code float}.
      * 
-     * @return the <code>StatusVariable</code> value as a <code>float</code>
+     * @return the {@code StatusVariable} value as a {@code float}
      * @throws java.lang.IllegalStateException if the type of this
-     *         <code>StatusVariable</code> is not <code>float</code>
+     *         {@code StatusVariable} is not {@code float}
      */
     public float getFloat() throws IllegalStateException {
         if (type != TYPE_FLOAT)
@@ -260,12 +260,12 @@ public final class StatusVariable {
     }
 
     /**
-     * Returns the <code>StatusVariable</code> value if its type is
-     * <code>boolean</code>.
+     * Returns the {@code StatusVariable} value if its type is
+     * {@code boolean}.
      * 
-     * @return the <code>StatusVariable</code> value as a <code>boolean</code>
+     * @return the {@code StatusVariable} value as a {@code boolean}
      * @throws java.lang.IllegalStateException if the type of this
-     *         <code>StatusVariable</code> is not <code>boolean</code>
+     *         {@code StatusVariable} is not {@code boolean}
      */
     public boolean getBoolean() throws IllegalStateException {
         if (type != TYPE_BOOLEAN)
@@ -275,24 +275,24 @@ public final class StatusVariable {
     }
     
     /**
-     * Returns the collection method of this <code>StatusVariable</code>. See
+     * Returns the collection method of this {@code StatusVariable}. See
      * section 3.3 b) in [ETSI TS 132 403]
      * 
-     * @return one of the <code>CM_</code> constants
+     * @return one of the {@code CM_} constants
      */
     public int getCollectionMethod() {
         return cm;
     }
 
     /**
-     * Compares the specified object with this <code>StatusVariable</code>.
-     * Two <code>StatusVariable</code> objects are considered equal if their
+     * Compares the specified object with this {@code StatusVariable}.
+     * Two {@code StatusVariable} objects are considered equal if their
      * full path, collection method and type are identical, and the data
      * (selected by their type) is equal.
      * 
-     * @param obj the object to compare with this <code>StatusVariable</code>
-     * @return <code>true</code> if the argument represents the same
-     *         <code>StatusVariable</code> as this object
+     * @param obj the object to compare with this {@code StatusVariable}
+     * @return {@code true} if the argument represents the same
+     *         {@code StatusVariable} as this object
      */
     public boolean equals(Object obj) {
         if (!(obj instanceof StatusVariable))
@@ -314,9 +314,9 @@ public final class StatusVariable {
     }
 
     /**
-     * Returns the hash code value for this <code>StatusVariable</code>. The
+     * Returns the hash code value for this {@code StatusVariable}. The
      * hash code is calculated based on the full path, collection method and
-     * value of the <code>StatusVariable</code>.
+     * value of the {@code StatusVariable}.
      * 
      * @return the hash code of this object
      */
@@ -335,20 +335,20 @@ public final class StatusVariable {
 
     //  String representation: StatusVariable(path, cm, time, type, value)
     /**
-     * Returns a <code>String</code> representation of this
-     * <code>StatusVariable</code>. The returned <code>String</code>
+     * Returns a {@code String} representation of this
+     * {@code StatusVariable}. The returned {@code String}
      * contains the full path, collection method, timestamp, type and value 
-     * parameters of the <code>StatusVariable</code> in the following format:
+     * parameters of the {@code StatusVariable} in the following format:
      * <pre>StatusVariable(&lt;path&gt;, &lt;cm&gt;, &lt;timestamp&gt;, &lt;type&gt;, &lt;value&gt;)</pre>
      * The collection method identifiers used in the string representation are
      * "CC", "DER", "GAUGE" and "SI" (without the quotes).  The format of the 
-     * timestamp is defined by the <code>Date.toString</code> method, while the 
+     * timestamp is defined by the {@code Date.toString} method, while the 
      * type is identified by one of the strings "INTEGER", "FLOAT", "STRING" and
      * "BOOLEAN".  The final field contains the string representation of the 
      * value of the status variable.   
      * 
-     * @return the <code>String</code> representation of this
-     *         <code>StatusVariable</code>
+     * @return the {@code String} representation of this
+     *         {@code StatusVariable}
      */
     public String toString() {
         String cmName = null;

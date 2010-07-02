@@ -18,14 +18,14 @@ package org.osgi.service.log;
 import java.util.EventListener;
 
 /**
- * Subscribes to <code>LogEntry</code> objects from the <code>LogReaderService</code>.
+ * Subscribes to {@code LogEntry} objects from the {@code LogReaderService}.
  * 
  * <p>
- * A <code>LogListener</code> object may be registered with the Log Reader Service
- * using the <code>LogReaderService.addLogListener</code> method. After the
- * listener is registered, the <code>logged</code> method will be called for each
- * <code>LogEntry</code> object created. The <code>LogListener</code> object may be
- * unregistered by calling the <code>LogReaderService.removeLogListener</code>
+ * A {@code LogListener} object may be registered with the Log Reader Service
+ * using the {@code LogReaderService.addLogListener} method. After the
+ * listener is registered, the {@code logged} method will be called for each
+ * {@code LogEntry} object created. The {@code LogListener} object may be
+ * unregistered by calling the {@code LogReaderService.removeLogListener}
  * method.
  * 
  * @ThreadSafe
@@ -43,7 +43,7 @@ public interface LogListener extends EventListener {
 	 * As with all event listeners, this method should return to its caller as
 	 * soon as possible.
 	 * 
-	 * @param entry A <code>LogEntry</code> object containing log information.
+	 * @param entry A {@code LogEntry} object containing log information.
 	 * @see LogEntry
 	 */
 	public void logged(LogEntry entry);

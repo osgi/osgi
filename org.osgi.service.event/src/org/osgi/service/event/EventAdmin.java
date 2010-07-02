@@ -33,7 +33,7 @@ public interface EventAdmin {
 	 *        topic of the event.
 	 * 
 	 * @throws SecurityException If the caller does not have
-	 *         <code>TopicPermission[topic,PUBLISH]</code> for the topic
+	 *         {@code TopicPermission[topic,PUBLISH]} for the topic
 	 *         specified in the event.
 	 */
 	void postEvent(Event event);
@@ -46,7 +46,7 @@ public interface EventAdmin {
 	 *        topic of the event.
 	 * 
 	 * @throws SecurityException If the caller does not have
-	 *         <code>TopicPermission[topic,PUBLISH]</code> for the topic
+	 *         {@code TopicPermission[topic,PUBLISH]} for the topic
 	 *         specified in the event.
 	 */
 	void sendEvent(Event event);

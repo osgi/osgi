@@ -20,7 +20,7 @@ import info.dmtree.Uri;
 
 /**
  * Immutable data structure carried in an alert (client initiated notification).
- * The <code>AlertItem</code> describes details of various notifications that
+ * The {@code AlertItem} describes details of various notifications that
  * can be sent by the client, for example as alerts in the OMA DM protocol. The
  * use cases include the client sending a session request to the server (alert
  * 1201), the client notifying the server of completion of a software update
@@ -30,10 +30,10 @@ import info.dmtree.Uri;
  * The data syntax and semantics varies widely between various alerts, so does
  * the optionality of particular parameters of an alert item. If an item, such
  * as source or type, is not defined, the corresponding getter method returns
- * <code>null</code>. For example, for alert 1201 (client-initiated session) all
- * elements will be <code>null</code>.
+ * {@code null}. For example, for alert 1201 (client-initiated session) all
+ * elements will be {@code null}.
  * <P>
- * The syntax used in <code>AlertItem</code> class corresponds to the OMA DM
+ * The syntax used in {@code AlertItem} class corresponds to the OMA DM
  * alert format. {@link NotificationService} implementations on other management
  * protocols should map these constructs to the underlying protocol.
  * 
@@ -52,16 +52,16 @@ public class AlertItem {
     /**
      * Create an instance of the alert item. The constructor takes all possible
      * data entries as parameters. Any of these parameters can be
-     * <code>null</code>. The semantics of the parameters may be refined by
+     * {@code null}. The semantics of the parameters may be refined by
      * the definition of a specific alert, identified by its alert code (see
      * {@link NotificationService#sendNotification}). In case of Generic Alerts
-     * for example (code 1226), the <code>mark</code> parameter contains a
+     * for example (code 1226), the {@code mark} parameter contains a
      * severity string.
      * 
      * @param source the URI of the node which is the source of the alert item
      * @param type a MIME type or a URN that identifies the type of the data in
      *        the alert item
-     * @param data a <code>DmtData</code> object that contains the format and
+     * @param data a {@code DmtData} object that contains the format and
      *        value of the data in the alert item
      * @param mark the mark parameter of the alert item
      */
@@ -75,17 +75,17 @@ public class AlertItem {
     /**
      * Create an instance of the alert item, specifying the source node URI as
      * an array of path segments. The constructor takes all possible data
-     * entries as parameters. Any of these parameters can be <code>null</code>.
+     * entries as parameters. Any of these parameters can be {@code null}.
      * The semantics of the parameters may be refined by the definition of a
      * specific alert, identified by its alert code (see
      * {@link NotificationService#sendNotification}). In case of Generic Alerts
-     * for example (code 1226), the <code>mark</code> parameter contains a
+     * for example (code 1226), the {@code mark} parameter contains a
      * severity string.
      * 
      * @param source the path of the node which is the source of the alert item
      * @param type a MIME type or a URN that identifies the type of the data in
      *        the alert item
-     * @param data a <code>DmtData</code> object that contains the format and
+     * @param data a {@code DmtData} object that contains the format and
      *        value of the data in the alert item
      * @param mark the mark parameter of the alert item
      */
@@ -105,7 +105,7 @@ public class AlertItem {
      * associated with the alert item.
      * 
      * @return the URI of the node which is the source of this alert, or
-     *         <code>null</code> if there is no source
+     *         {@code null} if there is no source
      */
     public String getSource() {
         return source;
@@ -118,7 +118,7 @@ public class AlertItem {
      * the alert item.
      * 
      * @return the type type associated with the alert item, or
-     *         <code>null</code> if there is no type
+     *         {@code null} if there is no type
      */
     public String getType() {
         return type;
@@ -130,7 +130,7 @@ public class AlertItem {
      * the alert code in {@link NotificationService#sendNotification}. There
      * might be no mark associated with the alert item.
      * 
-     * @return the mark associated with the alert item, or <code>null</code>
+     * @return the mark associated with the alert item, or {@code null}
      *         if there is no mark
      */
     public String getMark() {
@@ -139,11 +139,11 @@ public class AlertItem {
 
     /**
      * Get the data associated with the alert item. The returned
-     * <code>DmtData</code> object contains the format and the value of the
+     * {@code DmtData} object contains the format and the value of the
      * data in the alert item. There might be no data associated with the alert
      * item.
      * 
-     * @return the data associated with the alert item, or <code>null</code>
+     * @return the data associated with the alert item, or {@code null}
      *         if there is no data
      */
     public DmtData getData() {

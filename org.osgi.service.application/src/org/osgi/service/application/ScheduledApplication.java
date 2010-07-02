@@ -24,10 +24,10 @@ import java.util.Map;
  * specified event is fired a new instance must be launched. Note that launching
  * operation may fail because e.g. the application is locked.
  * <p>
- * Each <code>ScheduledApplication</code> instance has an identifier which is
+ * Each {@code ScheduledApplication} instance has an identifier which is
  * unique within the scope of the application being scheduled.
  * <p>
- * <code>ScheduledApplication</code> instances are registered as services. The
+ * {@code ScheduledApplication} instances are registered as services. The
  * {@link #APPLICATION_PID} service property contains the PID of the application
  * being scheduled, the {@link #SCHEDULE_ID} service property contains the
  * schedule identifier.

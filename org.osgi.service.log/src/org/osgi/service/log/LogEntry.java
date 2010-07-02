@@ -23,9 +23,9 @@ import org.osgi.framework.ServiceReference;
  * Service log entry.
  * 
  * <p>
- * A <code>LogEntry</code> object may be acquired from the
- * <code>LogReaderService.getLog</code> method or by registering a
- * <code>LogListener</code> object.
+ * A {@code LogEntry} object may be acquired from the
+ * {@code LogReaderService.getLog} method or by registering a
+ * {@code LogListener} object.
  * 
  * @ThreadSafe
  * @version $Id$
@@ -34,32 +34,32 @@ import org.osgi.framework.ServiceReference;
  */
 public interface LogEntry {
 	/**
-	 * Returns the bundle that created this <code>LogEntry</code> object.
+	 * Returns the bundle that created this {@code LogEntry} object.
 	 * 
-	 * @return The bundle that created this <code>LogEntry</code> object;
-	 *         <code>null</code> if no bundle is associated with this
-	 *         <code>LogEntry</code> object.
+	 * @return The bundle that created this {@code LogEntry} object;
+	 *         {@code null} if no bundle is associated with this
+	 *         {@code LogEntry} object.
 	 */
 	public Bundle getBundle();
 
 	/**
-	 * Returns the <code>ServiceReference</code> object for the service associated
-	 * with this <code>LogEntry</code> object.
+	 * Returns the {@code ServiceReference} object for the service associated
+	 * with this {@code LogEntry} object.
 	 * 
-	 * @return <code>ServiceReference</code> object for the service associated
-	 *         with this <code>LogEntry</code> object; <code>null</code> if no
-	 *         <code>ServiceReference</code> object was provided.
+	 * @return {@code ServiceReference} object for the service associated
+	 *         with this {@code LogEntry} object; {@code null} if no
+	 *         {@code ServiceReference} object was provided.
 	 */
 	public ServiceReference getServiceReference();
 
 	/**
-	 * Returns the severity level of this <code>LogEntry</code> object.
+	 * Returns the severity level of this {@code LogEntry} object.
 	 * 
 	 * <p>
-	 * This is one of the severity levels defined by the <code>LogService</code>
+	 * This is one of the severity levels defined by the {@code LogService}
 	 * interface.
 	 * 
-	 * @return Severity level of this <code>LogEntry</code> object.
+	 * @return Severity level of this {@code LogEntry} object.
 	 * 
 	 * @see LogService#LOG_ERROR
 	 * @see LogService#LOG_WARNING
@@ -69,16 +69,16 @@ public interface LogEntry {
 	public int getLevel();
 
 	/**
-	 * Returns the human readable message associated with this <code>LogEntry</code>
+	 * Returns the human readable message associated with this {@code LogEntry}
 	 * object.
 	 * 
-	 * @return <code>String</code> containing the message associated with this
-	 *         <code>LogEntry</code> object.
+	 * @return {@code String} containing the message associated with this
+	 *         {@code LogEntry} object.
 	 */
 	public String getMessage();
 
 	/**
-	 * Returns the exception object associated with this <code>LogEntry</code>
+	 * Returns the exception object associated with this {@code LogEntry}
 	 * object.
 	 * 
 	 * <p>
@@ -90,17 +90,17 @@ public interface LogEntry {
 	 * information as possible from the original exception object such as the
 	 * message and stack trace.
 	 * 
-	 * @return <code>Throwable</code> object of the exception associated with this
-	 *         <code>LogEntry</code>;<code>null</code> if no exception is
-	 *         associated with this <code>LogEntry</code> object.
+	 * @return {@code Throwable} object of the exception associated with this
+	 *         {@code LogEntry};{@code null} if no exception is
+	 *         associated with this {@code LogEntry} object.
 	 */
 	public Throwable getException();
 
 	/**
-	 * Returns the value of <code>currentTimeMillis()</code> at the time this
-	 * <code>LogEntry</code> object was created.
+	 * Returns the value of {@code currentTimeMillis()} at the time this
+	 * {@code LogEntry} object was created.
 	 * 
-	 * @return The system time in milliseconds when this <code>LogEntry</code>
+	 * @return The system time in milliseconds when this {@code LogEntry}
 	 *         object was created.
 	 * @see "System.currentTimeMillis()"
 	 */

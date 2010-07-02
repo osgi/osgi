@@ -56,13 +56,13 @@ public class IMEICondition {
 	 *        return a String array with one value: the IMEI string. The IMEI is
 	 *        15 digits without hyphens. Limited pattern matching is allowed:
 	 *        the string is 0 to 14 digits, followed by an asterisk (
-	 *        <code>*</code>).
+	 *        {@code *}).
 	 * @return A Condition object that indicates whether the specified IMEI
 	 *         number matches that of the device. If the number ends with an
-	 *         asterisk ( <code>*</code>), then the beginning of the IMEI is
+	 *         asterisk ( {@code *}), then the beginning of the IMEI is
 	 *         compared to the pattern.
 	 * @throws IllegalArgumentException If the IMEI is not a string of 15
-	 *         digits, or 0 to 14 digits with an <code>*</code> at the end.
+	 *         digits, or 0 to 14 digits with an {@code *} at the end.
 	 */
 	public static Condition getCondition(Bundle bundle,
 			ConditionInfo conditionInfo) {

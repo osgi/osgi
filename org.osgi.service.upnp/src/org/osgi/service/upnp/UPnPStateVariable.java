@@ -20,7 +20,7 @@ package org.osgi.service.upnp;
  * service state table (SST).
  * <p>
  * Method calls to interact with a device (e.g.
- * <code>UPnPAction.invoke(...);</code>) use this class to encapsulate meta
+ * {@code UPnPAction.invoke(...);}) use this class to encapsulate meta
  * information about the input and output arguments.
  * <p>
  * The actual values of the arguments are passed as Java objects. The mapping of
@@ -31,33 +31,33 @@ package org.osgi.service.upnp;
  */
 public interface UPnPStateVariable {
 	/**
-	 * Unsigned 1 <code>Byte</code> int.
+	 * Unsigned 1 {@code Byte} int.
 	 * <p>
-	 * Mapped to an <code>Integer</code> object.
+	 * Mapped to an {@code Integer} object.
 	 */
 	static final String	TYPE_UI1			= "ui1";
 	/**
 	 * Unsigned 2 Byte int.
 	 * <p>
-	 * Mapped to <code>Integer</code> object.
+	 * Mapped to {@code Integer} object.
 	 */
 	static final String	TYPE_UI2			= "ui2";
 	/**
 	 * Unsigned 4 Byte int.
 	 * <p>
-	 * Mapped to <code>Long</code> object.
+	 * Mapped to {@code Long} object.
 	 */
 	static final String	TYPE_UI4			= "ui4";
 	/**
 	 * 1 Byte int.
 	 * <p>
-	 * Mapped to <code>Integer</code> object.
+	 * Mapped to {@code Integer} object.
 	 */
 	static final String	TYPE_I1				= "i1";
 	/**
 	 * 2 Byte int.
 	 * <p>
-	 * Mapped to <code>Integer</code> object.
+	 * Mapped to {@code Integer} object.
 	 */
 	static final String	TYPE_I2				= "i2";
 	/**
@@ -65,13 +65,13 @@ public interface UPnPStateVariable {
 	 * <p>
 	 * Must be between -2147483648 and 2147483647
 	 * <p>
-	 * Mapped to <code>Integer</code> object.
+	 * Mapped to {@code Integer} object.
 	 */
 	static final String	TYPE_I4				= "i4";
 	/**
 	 * Integer number.
 	 * <p>
-	 * Mapped to <code>Integer</code> object.
+	 * Mapped to {@code Integer} object.
 	 */
 	static final String	TYPE_INT			= "int";
 	/**
@@ -79,7 +79,7 @@ public interface UPnPStateVariable {
 	 * <p>
 	 * Same format as float. Must be between 3.40282347E+38 to 1.17549435E-38.
 	 * <p>
-	 * Mapped to <code>Float</code> object.
+	 * Mapped to {@code Float} object.
 	 */
 	static final String	TYPE_R4				= "r4";
 	/**
@@ -90,20 +90,20 @@ public interface UPnPStateVariable {
 	 * 4.94065645841247E-324 and 1.79769313486232E308 for positive values, i.e.,
 	 * IEEE 64-bit (8-Byte) double.
 	 * <p>
-	 * Mapped to <code>Double</code> object.
+	 * Mapped to {@code Double} object.
 	 */
 	static final String	TYPE_R8				= "r8";
 	/**
 	 * Same as r8.
 	 * <p>
-	 * Mapped to <code>Double</code> object.
+	 * Mapped to {@code Double} object.
 	 */
 	static final String	TYPE_NUMBER			= "number";
 	/**
 	 * Same as r8 but no more than 14 digits to the left of the decimal point
 	 * and no more than 4 to the right.
 	 * <p>
-	 * Mapped to <code>Double</code> object.
+	 * Mapped to {@code Double} object.
 	 */
 	static final String	TYPE_FIXED_14_4		= "fixed.14.4";
 	/**
@@ -116,7 +116,7 @@ public interface UPnPStateVariable {
 	 * currency symbol.) (No grouping of digits in the mantissa, e.g., no
 	 * commas.)
 	 * <p>
-	 * Mapped to <code>Float</code> object.
+	 * Mapped to {@code Float} object.
 	 */
 	static final String	TYPE_FLOAT			= "float";
 	/**
@@ -124,7 +124,7 @@ public interface UPnPStateVariable {
 	 * <p>
 	 * One character long.
 	 * <p>
-	 * Mapped to <code>Character</code> object.
+	 * Mapped to {@code Character} object.
 	 */
 	static final String	TYPE_CHAR			= "char";
 	/**
@@ -132,7 +132,7 @@ public interface UPnPStateVariable {
 	 * <p>
 	 * No limit on length.
 	 * <p>
-	 * Mapped to <code>String</code> object.
+	 * Mapped to {@code String} object.
 	 */
 	static final String	TYPE_STRING			= "string";
 	/**
@@ -144,7 +144,7 @@ public interface UPnPStateVariable {
 	 * href="http://www.w3.org/TR/xmlschema-2/#date">http://www.w3.org/TR/xmlschema-2/#date
 	 * </a>.
 	 * <p>
-	 * Mapped to <code>java.util.Date</code> object. Always 00:00 hours.
+	 * Mapped to {@code java.util.Date} object. Always 00:00 hours.
 	 */
 	static final String	TYPE_DATE			= "date";
 	/**
@@ -156,7 +156,7 @@ public interface UPnPStateVariable {
 	 * href="http://www.w3.org/TR/xmlschema-2/#dateTime">http://www.w3.org/TR/xmlschema-2/#dateTime
 	 * </a>.
 	 * <p>
-	 * Mapped to <code>java.util.Date</code> object using default time zone.
+	 * Mapped to {@code java.util.Date} object using default time zone.
 	 */
 	static final String	TYPE_DATETIME		= "dateTime";
 	/**
@@ -168,7 +168,7 @@ public interface UPnPStateVariable {
 	 * href="http://www.w3.org/TR/xmlschema-2/#dateTime">http://www.w3.org/TR/xmlschema-2/#dateTime
 	 * </a>.
 	 * <p>
-	 * Mapped to <code>java.util.Date</code> object adjusted to default time zone.
+	 * Mapped to {@code java.util.Date} object adjusted to default time zone.
 	 */
 	static final String	TYPE_DATETIME_TZ	= "dateTime.tz";
 	/**
@@ -180,7 +180,7 @@ public interface UPnPStateVariable {
 	 * href="http://www.w3.org/TR/xmlschema-2/#dateTime">http://www.w3.org/TR/xmlschema-2/#time
 	 * </a>.
 	 * <p>
-	 * Mapped to <code>Long</code>. Converted to milliseconds since midnight.
+	 * Mapped to {@code Long}. Converted to milliseconds since midnight.
 	 */
 	static final String	TYPE_TIME			= "time";
 	/**
@@ -192,7 +192,7 @@ public interface UPnPStateVariable {
 	 * href="http://www.w3.org/TR/xmlschema-2/#dateTime">http://www.w3.org/TR/xmlschema-2/#time
 	 * </a>.
 	 * <p>
-	 * Mapped to <code>Long</code> object. Converted to milliseconds since
+	 * Mapped to {@code Long} object. Converted to milliseconds since
 	 * midnight and adjusted to default time zone, wrapping at 0 and
 	 * 24*60*60*1000.
 	 */
@@ -200,7 +200,7 @@ public interface UPnPStateVariable {
 	/**
 	 * True or false.
 	 * <p>
-	 * Mapped to <code>Boolean</code> object.
+	 * Mapped to {@code Boolean} object.
 	 */
 	static final String	TYPE_BOOLEAN		= "boolean";
 	/**
@@ -209,7 +209,7 @@ public interface UPnPStateVariable {
 	 * Takes 3 Bytes, splits them into 4 parts, and maps each 6 bit piece to an
 	 * octet. (3 octets are encoded as 4.) No limit on size.
 	 * <p>
-	 * Mapped to <code>byte[]</code> object. The Java byte array will hold the
+	 * Mapped to {@code byte[]} object. The Java byte array will hold the
 	 * decoded content of the BLOB.
 	 */
 	static final String	TYPE_BIN_BASE64		= "bin.base64";
@@ -219,14 +219,14 @@ public interface UPnPStateVariable {
 	 * Treats each nibble as a hex digit and encodes as a separate Byte. (1
 	 * octet is encoded as 2.) No limit on size.
 	 * <p>
-	 * Mapped to <code>byte[]</code> object. The Java byte array will hold the
+	 * Mapped to {@code byte[]} object. The Java byte array will hold the
 	 * decoded content of the BLOB.
 	 */
 	static final String	TYPE_BIN_HEX		= "bin.hex";
 	/**
 	 * Universal Resource Identifier.
 	 * <p>
-	 * Mapped to <code>String</code> object.
+	 * Mapped to {@code String} object.
 	 */
 	static final String	TYPE_URI			= "uri";
 	/**
@@ -235,7 +235,7 @@ public interface UPnPStateVariable {
 	 * Hexadecimal digits representing octets. Optional embedded hyphens are
 	 * ignored.
 	 * <p>
-	 * Mapped to <code>String</code> object.
+	 * Mapped to {@code String} object.
 	 */
 	static final String	TYPE_UUID			= "uuid";
 
@@ -244,9 +244,9 @@ public interface UPnPStateVariable {
 	 * 
 	 * <ul>
 	 * <li>All standard variables defined by a UPnP Forum working committee
-	 * must not begin with <code>X_</code> nor <code>A_</code>.</li>
+	 * must not begin with {@code X_} nor {@code A_}.</li>
 	 * <li>All non-standard variables specified by a UPnP vendor and added to a
-	 * standard service must begin with <code>X_</code>.</li>
+	 * standard service must begin with {@code X_}.</li>
 	 * </ul>
 	 * 
 	 * @return Name of state variable. Must not contain a hyphen character nor a
@@ -291,8 +291,8 @@ public interface UPnPStateVariable {
 	/**
 	 * Returns the default value, if defined.
 	 * 
-	 * @return The default value or <code>null</code> if not defined. The type of
-	 *         the returned object can be determined by <code>getJavaDataType</code>.
+	 * @return The default value or {@code null} if not defined. The type of
+	 *         the returned object can be determined by {@code getJavaDataType}.
 	 */
 	Object getDefaultValue();
 
@@ -300,7 +300,7 @@ public interface UPnPStateVariable {
 	 * Returns the allowed values, if defined. Allowed values can be defined
 	 * only for String types.
 	 * 
-	 * @return The allowed values or <code>null</code> if not defined. Should be
+	 * @return The allowed values or {@code null} if not defined. Should be
 	 *         less than 32 characters.
 	 */
 	String[] getAllowedValues();
@@ -309,7 +309,7 @@ public interface UPnPStateVariable {
 	 * Returns the minimum value, if defined. Minimum values can only be defined
 	 * for numeric types.
 	 * 
-	 * @return The minimum value or <code>null</code> if not defined.
+	 * @return The minimum value or {@code null} if not defined.
 	 */
 	Number getMinimum();
 
@@ -317,7 +317,7 @@ public interface UPnPStateVariable {
 	 * Returns the maximum value, if defined. Maximum values can only be defined
 	 * for numeric types.
 	 * 
-	 * @return The maximum value or <code>null</code> if not defined.
+	 * @return The maximum value or {@code null} if not defined.
 	 */
 	Number getMaximum();
 
@@ -335,8 +335,8 @@ public interface UPnPStateVariable {
 	 * If the StateVariable is eventable, an event listener service can be
 	 * registered to be notified when changes to the variable appear.
 	 * 
-	 * @return <code>true</code> if the <code>StateVariable</code> generates events,
-	 *         <code>false</code> otherwise.
+	 * @return {@code true} if the {@code StateVariable} generates events,
+	 *         {@code false} otherwise.
 	 */
 	boolean sendsEvents();
 }

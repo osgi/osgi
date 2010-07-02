@@ -26,7 +26,7 @@ public interface RefMetadata extends Target, NonNullMetadata {
 	/**
 	 * Return the id of the referenced component.
 	 * 
-	 * This is specified by the <code>component-id</code> attribute of a
+	 * This is specified by the {@code component-id} attribute of a
 	 * component.
 	 * 
 	 * @return The id of the referenced component.

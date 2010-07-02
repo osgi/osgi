@@ -32,8 +32,8 @@ import java.util.Set;
  * multiple events.
  * 
  * <p>
- * The keys are all of type <code>String</code>. The values are of type
- * <code>Object</code>. The key &quot;event.topics&quot; is ignored as event
+ * The keys are all of type {@code String}. The values are of type
+ * {@code Object}. The key &quot;event.topics&quot; is ignored as event
  * topics can only be set when an {@link Event} is constructed.
  * 
  * <p>
@@ -57,11 +57,11 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * <p>
 	 * The specified properties will be copied into this EventProperties.
-	 * Properties whose key is not of type <code>String</code> will be ignored.
+	 * Properties whose key is not of type {@code String} will be ignored.
 	 * A property with the key &quot;event.topics&quot; will be ignored.
 	 * 
 	 * @param properties The properties to use for this EventProperties object
-	 *        (may be <code>null</code>).
+	 *        (may be {@code null}).
 	 */
 	public EventProperties(Map<String, Object> properties) {
 		int size = (properties == null) ? 0 : properties.size();
@@ -83,11 +83,11 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * <p>
 	 * The specified properties will be copied into this EventProperties.
-	 * Properties whose key is not of type <code>String</code> will be ignored.
+	 * Properties whose key is not of type {@code String} will be ignored.
 	 * A property with the key &quot;event.topics&quot; will be ignored.
 	 * 
 	 * @param properties The properties to use for this EventProperties object
-	 *        (may be <code>null</code>).
+	 *        (may be {@code null}).
 	 */
 	EventProperties(Dictionary<String, Object> properties) {
 		int size = (properties == null) ? 0 : properties.size();
@@ -118,7 +118,7 @@ public class EventProperties implements Map<String, Object> {
 	 * Indicates if the specified property is present.
 	 * 
 	 * @param name The property name.
-	 * @return <code>true</code> If the property is present, <code>false</code>
+	 * @return {@code true} If the property is present, {@code false}
 	 *         otherwise.
 	 */
 	public boolean containsKey(Object name) {
@@ -129,7 +129,7 @@ public class EventProperties implements Map<String, Object> {
 	 * Indicates if the specified value is present.
 	 * 
 	 * @param value The property value.
-	 * @return <code>true</code> If the value is present, <code>false</code>
+	 * @return {@code true} If the value is present, {@code false}
 	 *         otherwise.
 	 */
 	public boolean containsValue(Object value) {
@@ -158,7 +158,7 @@ public class EventProperties implements Map<String, Object> {
 	/**
 	 * Indicate if this properties is empty.
 	 * 
-	 * @return <code>true</code> If this properties is empty, <code>false</code>
+	 * @return {@code true} If this properties is empty, {@code false}
 	 *         otherwise.
 	 */
 	public boolean isEmpty() {
@@ -220,16 +220,16 @@ public class EventProperties implements Map<String, Object> {
 	}
 
 	/**
-	 * Compares this <code>EventProperties</code> object to another object.
+	 * Compares this {@code EventProperties} object to another object.
 	 * 
 	 * <p>
-	 * The properties are compared using the <code>java.util.Map.equals()</code>
+	 * The properties are compared using the {@code java.util.Map.equals()}
 	 * rules which includes identity comparison for array values.
 	 * 
-	 * @param object The <code>EventProperties</code> object to be compared.
-	 * @return <code>true</code> if <code>object</code> is a
-	 *         <code>EventProperties</code> and is equal to this object;
-	 *         <code>false</code> otherwise.
+	 * @param object The {@code EventProperties} object to be compared.
+	 * @return {@code true} if {@code object} is a
+	 *         {@code EventProperties} and is equal to this object;
+	 *         {@code false} otherwise.
 	 */
 	public boolean equals(Object object) {
 		if (this == object) {

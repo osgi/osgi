@@ -25,11 +25,11 @@ package org.osgi.framework;
  */
 public interface BundleReference {
 	/**
-	 * Returns the <code>Bundle</code> object associated with this
-	 * <code>BundleReference</code>.
+	 * Returns the {@code Bundle} object associated with this
+	 * {@code BundleReference}.
 	 * 
-	 * @return The <code>Bundle</code> object associated with this
-	 *         <code>BundleReference</code>.
+	 * @return The {@code Bundle} object associated with this
+	 *         {@code BundleReference}.
 	 */
 	public Bundle getBundle();
 }

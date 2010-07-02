@@ -72,7 +72,7 @@ public abstract class ApplicationHandle {
 	
   /**
    * The application instance is being stopped. This is the state of the
-   * application instance during the execution of the <code>destroy()</code>
+   * application instance during the execution of the {@code destroy()}
    * method.
    */
 	public final static String STOPPING = "STOPPING";
@@ -86,13 +86,13 @@ public abstract class ApplicationHandle {
 	 * instance is created. The instance identifier must remain static for the 
 	 * lifetime of the instance, it must remain the same even across framework
 	 * restarts for the same application instance. This value must be the same
-	 * as the <code>service.pid</code> service property of this application
+	 * as the {@code service.pid} service property of this application
 	 * handle.
 	 * <p>
 	 * The instance identifier should follow the following scheme: 
 	 * &lt;<i>application descriptor PID</i>&gt;.&lt;<i>index</i>&gt;
 	 * where &lt;<i>application descriptor PID</i>&gt; is the PID of the 
-	 * corresponding <code>ApplicationDescriptor</code> and &lt;<i>index</i>&gt;
+	 * corresponding {@code ApplicationDescriptor} and &lt;<i>index</i>&gt;
 	 * is a unique integer index assigned by the application container. 
 	 * Even after destroying the application index the same index value should not
 	 * be reused in a reasonably long timeframe.
@@ -100,7 +100,7 @@ public abstract class ApplicationHandle {
 	 * @param instanceId the instance identifier of the represented application
 	 * instance. It must not be null.
 	 * 
-	 * @param descriptor the <code>ApplicationDescriptor</code> of the represented
+	 * @param descriptor the {@code ApplicationDescriptor} of the represented
 	 * application instance. It must not be null.
 	 * 
 	 * @throws NullPointerException if any of the arguments is null.
@@ -127,10 +127,10 @@ public abstract class ApplicationHandle {
 	}
 
 	/**
-	 * Retrieves the <code>ApplicationDescriptor</code> to which this 
-	 * <code>ApplicationHandle</code> belongs. 
+	 * Retrieves the {@code ApplicationDescriptor} to which this 
+	 * {@code ApplicationHandle} belongs. 
 	 * 
-	 * @return The corresponding <code>ApplicationDescriptor</code>
+	 * @return The corresponding {@code ApplicationDescriptor}
 	 */
 	public final ApplicationDescriptor getApplicationDescriptor() {
 		return descriptor;
@@ -152,18 +152,18 @@ public abstract class ApplicationHandle {
 	 * terminated. A negative, zero or positive value may be used.
 	 * <ul>
 	 * <li> negative - The method does not wait for termination. If the
-	 * application has not terminated then an <code>ApplicationException</code>
+	 * application has not terminated then an {@code ApplicationException}
 	 * is thrown.</li>
 	 * 
 	 * <li> zero - The method waits until the application terminates.</li>
 	 * 
 	 * <li> positive - The method waits until the application terminates or the
 	 * timeout expires. If the timeout expires and the application has not
-	 * terminated then an <code>ApplicationException</code> is thrown.</li>
+	 * terminated then an {@code ApplicationException} is thrown.</li>
 	 * </ul>
 	 * <p>
 	 * The default implementation throws an
-	 * <code>UnsupportedOperationException</code>. The application model should
+	 * {@code UnsupportedOperationException}. The application model should
 	 * override this method if exit values are supported.
 	 * </p>
 	 * 
@@ -207,9 +207,9 @@ public abstract class ApplicationHandle {
 	 * perform any application model specific steps for safe stopping of the
 	 * represented application instance.
 	 * <p>
-	 * At the end the <code>ApplicationHandle</code> must be unregistered. 
+	 * At the end the {@code ApplicationHandle} must be unregistered. 
 	 * This method should  free all the resources related to this 
-	 * <code>ApplicationHandle</code>.
+	 * {@code ApplicationHandle}.
 	 * <p>
 	 * When this method is completed the application instance has already made
 	 * its operations for safe stopping, the ApplicationHandle has been
@@ -219,7 +219,7 @@ public abstract class ApplicationHandle {
 	 * 
 	 * @throws SecurityException
 	 *             if the caller doesn't have "lifecycle"
-	 *             <code>ApplicationAdminPermission</code> for the corresponding application.
+	 *             {@code ApplicationAdminPermission} for the corresponding application.
 	 * 
 	 * @throws IllegalStateException
 	 *             if the application handle is unregistered

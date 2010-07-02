@@ -28,7 +28,7 @@ public class ComponentException extends RuntimeException {
 	 * Construct a new ComponentException with the specified message and cause.
 	 * 
 	 * @param message The message for the exception.
-	 * @param cause The cause of the exception. May be <code>null</code>.
+	 * @param cause The cause of the exception. May be {@code null}.
 	 */
 	public ComponentException(String message, Throwable cause) {
 		super(message, cause);
@@ -46,17 +46,17 @@ public class ComponentException extends RuntimeException {
 	/**
 	 * Construct a new ComponentException with the specified cause.
 	 * 
-	 * @param cause The cause of the exception. May be <code>null</code>.
+	 * @param cause The cause of the exception. May be {@code null}.
 	 */
 	public ComponentException(Throwable cause) {
 		super(cause);
 	}
 	
 	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
+	 * Returns the cause of this exception or {@code null} if no cause was
 	 * set.
 	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause was
+	 * @return The cause of this exception or {@code null} if no cause was
 	 *         set.
 	 */
 	public Throwable getCause() {

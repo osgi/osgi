@@ -21,8 +21,8 @@ import java.util.EventObject;
 /**
  * An event from the Framework describing a bundle lifecycle change.
  * <p>
- * <code>BundleEvent</code> objects are delivered to
- * <code>SynchronousBundleListener</code>s and <code>BundleListener</code>s
+ * {@code BundleEvent} objects are delivered to
+ * {@code SynchronousBundleListener}s and {@code BundleListener}s
  * when a change occurs in a bundle's lifecycle. A type code is used to identify
  * the event type for future extendability.
  * 
@@ -113,7 +113,7 @@ public class BundleEvent extends EventObject {
 	 * {@link BundleActivator#start(BundleContext) BundleActivator start} method
 	 * is about to be called if the bundle has a bundle activator class. This
 	 * event is only delivered to {@link SynchronousBundleListener}s. It is not
-	 * delivered to <code>BundleListener</code>s.
+	 * delivered to {@code BundleListener}s.
 	 * 
 	 * @see Bundle#start()
 	 * @since 1.3
@@ -127,7 +127,7 @@ public class BundleEvent extends EventObject {
 	 * {@link BundleActivator#stop(BundleContext) BundleActivator stop} method
 	 * is about to be called if the bundle has a bundle activator class. This
 	 * event is only delivered to {@link SynchronousBundleListener}s. It is not
-	 * delivered to <code>BundleListener</code>s.
+	 * delivered to {@code BundleListener}s.
 	 * 
 	 * @see Bundle#stop()
 	 * @since 1.3
@@ -140,9 +140,9 @@ public class BundleEvent extends EventObject {
 	 * The bundle has a {@link Constants#ACTIVATION_LAZY lazy activation policy}
 	 * and is waiting to be activated. It is now in the
 	 * {@link Bundle#STARTING STARTING} state and has a valid
-	 * <code>BundleContext</code>. This event is only delivered to
+	 * {@code BundleContext}. This event is only delivered to
 	 * {@link SynchronousBundleListener}s. It is not delivered to
-	 * <code>BundleListener</code>s.
+	 * {@code BundleListener}s.
 	 * 
 	 * @since 1.4
 	 */

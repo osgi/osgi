@@ -19,7 +19,7 @@ import java.io.InputStream;
 
 /**
  * Checked exception received when something fails during a call to a Resource 
- * Processor. A <code>ResourceProcessorException</code> always contains an error 
+ * Processor. A {@code ResourceProcessorException} always contains an error 
  * code (one of the constants specified in this class), and may optionally contain 
  * the textual description of the error condition and a nested cause exception.
  */
@@ -51,7 +51,7 @@ public class ResourceProcessorException extends Exception {
 	/**
 	 * Other error condition.<p>
 	 * 
-	 * All Resource Processor methods which throw <code>ResourceProcessorException</code> 
+	 * All Resource Processor methods which throw {@code ResourceProcessorException} 
 	 * is allowed throw an exception with this error code if the error condition cannot be 
 	 * categorized. 
 	 */
@@ -63,7 +63,7 @@ public class ResourceProcessorException extends Exception {
 	 * Create an instance of the exception.
 	 * 
 	 * @param code The error code of the failure. Code should be one of the
-	 *        predefined integer values (<code>CODE_X</code>).
+	 *        predefined integer values ({@code CODE_X}).
 	 * @param message Message associated with the exception
 	 * @param cause the originating exception
 	 */
@@ -77,7 +77,7 @@ public class ResourceProcessorException extends Exception {
 	 * null.
 	 * 
 	 * @param code The error code of the failure. Code should be one of the
-	 *        predefined integer values (<code>CODE_X</code>).
+	 *        predefined integer values ({@code CODE_X}).
 	 * @param message Message associated with the exception
 	 */
 	public ResourceProcessorException(int code, String message) {
@@ -90,7 +90,7 @@ public class ResourceProcessorException extends Exception {
 	 * implicitly set to null.
 	 * 
 	 * @param code The error code of the failure. Code should be one of the
-	 *        predefined integer values (<code>CODE_X</code>).
+	 *        predefined integer values ({@code CODE_X}).
 	 */
 	public ResourceProcessorException(int code) {
 		super();
@@ -98,10 +98,10 @@ public class ResourceProcessorException extends Exception {
 	}
 
 	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
+	 * Returns the cause of this exception or {@code null} if no cause was
 	 * set.
 	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause was
+	 * @return The cause of this exception or {@code null} if no cause was
 	 *         set.
 	 */
 	public Throwable getCause() {

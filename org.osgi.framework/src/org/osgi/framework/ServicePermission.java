@@ -40,15 +40,15 @@ import java.util.Map;
 /**
  * A bundle's authority to register or get a service.
  * <ul>
- * <li>The <code>register</code> action allows a bundle to register a service on
+ * <li>The {@code register} action allows a bundle to register a service on
  * the specified names.
- * <li>The <code>get</code> action allows a bundle to detect a service and get
+ * <li>The {@code get} action allows a bundle to detect a service and get
  * it.
  * </ul>
  * Permission to get a service is required in order to detect events regarding
  * the service. Untrusted bundles should not be able to detect the presence of
  * certain services unless they have the appropriate
- * <code>ServicePermission</code> to get the specific service.
+ * {@code ServicePermission} to get the specific service.
  * 
  * @ThreadSafe
  * @version $Id$
@@ -57,11 +57,11 @@ import java.util.Map;
 public final class ServicePermission extends BasicPermission {
 	static final long			serialVersionUID	= -7662148639076511574L;
 	/**
-	 * The action string <code>get</code>.
+	 * The action string {@code get}.
 	 */
 	public final static String	GET					= "get";
 	/**
-	 * The action string <code>register</code>.
+	 * The action string {@code register}.
 	 */
 	public final static String	REGISTER			= "register";
 
@@ -138,7 +138,7 @@ public final class ServicePermission extends BasicPermission {
 	 * *
 	 * </pre>
 	 * 
-	 * For the <code>get</code> action, the name can also be a filter
+	 * For the {@code get} action, the name can also be a filter
 	 * expression. The filter gives access to the service properties as well as
 	 * the following attributes:
 	 * <ul>
@@ -158,17 +158,17 @@ public final class ServicePermission extends BasicPermission {
 	 * Service properties names are case insensitive.
 	 * 
 	 * <p>
-	 * There are two possible actions: <code>get</code> and
-	 * <code>register</code>. The <code>get</code> permission allows the owner
+	 * There are two possible actions: {@code get} and
+	 * {@code register}. The {@code get} permission allows the owner
 	 * of this permission to obtain a service with this name. The
-	 * <code>register</code> permission allows the bundle to register a service
+	 * {@code register} permission allows the bundle to register a service
 	 * under that name.
 	 * 
 	 * @param name The service class name
-	 * @param actions <code>get</code>,<code>register</code> (canonical order)
+	 * @param actions {@code get},{@code register} (canonical order)
 	 * @throws IllegalArgumentException If the specified name is a filter
 	 *         expression and either the specified action is not
-	 *         <code>get</code> or the filter has an invalid syntax.
+	 *         {@code get} or the filter has an invalid syntax.
 	 */
 	public ServicePermission(String name, String actions) {
 		this(name, parseActions(actions));
@@ -180,16 +180,16 @@ public final class ServicePermission extends BasicPermission {
 	}
 
 	/**
-	 * Creates a new requested <code>ServicePermission</code> object to be used
-	 * by code that must perform <code>checkPermission</code> for the
-	 * <code>get</code> action. <code>ServicePermission</code> objects created
-	 * with this constructor cannot be added to a <code>ServicePermission</code>
+	 * Creates a new requested {@code ServicePermission} object to be used
+	 * by code that must perform {@code checkPermission} for the
+	 * {@code get} action. {@code ServicePermission} objects created
+	 * with this constructor cannot be added to a {@code ServicePermission}
 	 * permission collection.
 	 * 
 	 * @param reference The requested service.
-	 * @param actions The action <code>get</code>.
+	 * @param actions The action {@code get}.
 	 * @throws IllegalArgumentException If the specified action is not
-	 *         <code>get</code> or reference is <code>null</code>.
+	 *         {@code get} or reference is {@code null}.
 	 * @since 1.5
 	 */
 	public ServicePermission(ServiceReference reference, String actions) {
@@ -351,7 +351,7 @@ public final class ServicePermission extends BasicPermission {
 	 * 
 	 * @param filterString The filter string to parse.
 	 * @return a Filter for this bundle. If the specified filterString is not a
-	 *         filter expression, then <code>null</code> is returned.
+	 *         filter expression, then {@code null} is returned.
 	 * @throws IllegalArgumentException If the filter syntax is invalid.
 	 */
 	private static Filter parseFilter(String filterString) {
@@ -372,12 +372,12 @@ public final class ServicePermission extends BasicPermission {
 	}
 
 	/**
-	 * Determines if a <code>ServicePermission</code> object "implies" the
+	 * Determines if a {@code ServicePermission} object "implies" the
 	 * specified permission.
 	 * 
 	 * @param p The target permission to check.
-	 * @return <code>true</code> if the specified permission is implied by this
-	 *         object; <code>false</code> otherwise.
+	 * @return {@code true} if the specified permission is implied by this
+	 *         object; {@code false} otherwise.
 	 */
 	public boolean implies(Permission p) {
 		if (!(p instanceof ServicePermission)) {
@@ -402,8 +402,8 @@ public final class ServicePermission extends BasicPermission {
 	 *        validated as a proper argument. The requested ServicePermission
 	 *        must not have a filter expression.
 	 * @param effective The effective actions with which to start.
-	 * @return <code>true</code> if the specified permission is implied by this
-	 *         object; <code>false</code> otherwise.
+	 * @return {@code true} if the specified permission is implied by this
+	 *         object; {@code false} otherwise.
 	 */
 	boolean implies0(ServicePermission requested, int effective) {
 		/* check actions first - much faster */
@@ -450,8 +450,8 @@ public final class ServicePermission extends BasicPermission {
 
 	/**
 	 * Returns the canonical string representation of the actions. Always
-	 * returns present actions in the following order: <code>get</code>,
-	 * <code>register</code>.
+	 * returns present actions in the following order: {@code get},
+	 * {@code register}.
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
@@ -480,11 +480,11 @@ public final class ServicePermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns a new <code>PermissionCollection</code> object for storing
-	 * <code>ServicePermission<code> objects.
-	 *
-	 * @return A new <code>PermissionCollection</code> object suitable for storing
-	 * <code>ServicePermission</code> objects.
+	 * Returns a new {@code PermissionCollection} object for storing
+	 * {@code ServicePermission} objects.
+	 * 
+	 * @return A new {@code PermissionCollection} object suitable for storing
+	 *         {@code ServicePermission} objects.
 	 */
 	public PermissionCollection newPermissionCollection() {
 		return new ServicePermissionCollection();
@@ -494,12 +494,12 @@ public final class ServicePermission extends BasicPermission {
 	 * Determines the equality of two ServicePermission objects.
 	 * 
 	 * Checks that specified object has the same class name and action as this
-	 * <code>ServicePermission</code>.
+	 * {@code ServicePermission}.
 	 * 
 	 * @param obj The object to test for equality.
-	 * @return true if obj is a <code>ServicePermission</code>, and has the same
-	 *         class name and actions as this <code>ServicePermission</code>
-	 *         object; <code>false</code> otherwise.
+	 * @return true if obj is a {@code ServicePermission}, and has the same
+	 *         class name and actions as this {@code ServicePermission}
+	 *         object; {@code false} otherwise.
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
@@ -559,7 +559,7 @@ public final class ServicePermission extends BasicPermission {
 		setTransients(parseFilter(getName()), parseActions(actions));
 	}
 	/**
-	 * Called by <code><@link ServicePermission#implies(Permission)></code>.
+	 * Called by {@code <@link ServicePermission#implies(Permission)>}.
 	 * 
 	 * @return a dictionary of properties for this permission.
 	 */
@@ -723,7 +723,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * @throws IllegalArgumentException If the specified permission is not a
 	 *         ServicePermission object.
 	 * @throws SecurityException If this
-	 *         <code>ServicePermissionCollection</code> object has been marked
+	 *         {@code ServicePermissionCollection} object has been marked
 	 *         read-only.
 	 */
 	public void add(final Permission permission) {
@@ -781,11 +781,11 @@ final class ServicePermissionCollection extends PermissionCollection {
 
 	/**
 	 * Determines if a set of permissions implies the permissions expressed in
-	 * <code>permission</code>.
+	 * {@code permission}.
 	 * 
 	 * @param permission The Permission object to compare.
-	 * @return <code>true</code> if <code>permission</code> is a proper
-	 *         subset of a permission in the set; <code>false</code>
+	 * @return {@code true} if {@code permission} is a proper
+	 *         subset of a permission in the set; {@code false}
 	 *         otherwise.
 	 */
 	public boolean implies(final Permission permission) {
@@ -891,7 +891,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	}
 	
 	/**
-	 * Returns an enumeration of all the <code>ServicePermission</code>
+	 * Returns an enumeration of all the {@code ServicePermission}
 	 * objects in the container.
 	 * 
 	 * @return Enumeration of all the ServicePermission objects.

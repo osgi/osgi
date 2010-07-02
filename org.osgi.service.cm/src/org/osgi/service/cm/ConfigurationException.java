@@ -16,7 +16,7 @@
 package org.osgi.service.cm;
 
 /**
- * An <code>Exception</code> class to inform the Configuration Admin service
+ * An {@code Exception} class to inform the Configuration Admin service
  * of problems with configuration data.
  * 
  * @version $Id$
@@ -28,10 +28,10 @@ public class ConfigurationException extends Exception {
 	private final String		reason;
 
 	/**
-	 * Create a <code>ConfigurationException</code> object.
+	 * Create a {@code ConfigurationException} object.
 	 * 
 	 * @param property name of the property that caused the problem,
-	 *        <code>null</code> if no specific property was the cause
+	 *        {@code null} if no specific property was the cause
 	 * @param reason reason for failure
 	 */
 	public ConfigurationException(String property, String reason) {
@@ -41,10 +41,10 @@ public class ConfigurationException extends Exception {
 	}
 
 	/**
-	 * Create a <code>ConfigurationException</code> object.
+	 * Create a {@code ConfigurationException} object.
 	 * 
 	 * @param property name of the property that caused the problem,
-	 *        <code>null</code> if no specific property was the cause
+	 *        {@code null} if no specific property was the cause
 	 * @param reason reason for failure
 	 * @param cause The cause of this exception.
 	 * @since 1.2
@@ -76,10 +76,10 @@ public class ConfigurationException extends Exception {
 	}
 	
 	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
+	 * Returns the cause of this exception or {@code null} if no cause was
 	 * set.
 	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause was
+	 * @return The cause of this exception or {@code null} if no cause was
 	 *         set.
 	 * @since 1.2
 	 */

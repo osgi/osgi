@@ -21,7 +21,7 @@ package org.osgi.framework;
  * syntax.
  * 
  * <p>
- * An <code>InvalidSyntaxException</code> object indicates that a filter
+ * An {@code InvalidSyntaxException} object indicates that a filter
  * string parameter has an invalid syntax and cannot be parsed. See
  * {@link Filter} for a description of the filter string syntax.
  * 
@@ -39,10 +39,10 @@ public class InvalidSyntaxException extends Exception {
 	private final String	filter;
 
 	/**
-	 * Creates an exception of type <code>InvalidSyntaxException</code>.
+	 * Creates an exception of type {@code InvalidSyntaxException}.
 	 * 
 	 * <p>
-	 * This method creates an <code>InvalidSyntaxException</code> object with
+	 * This method creates an {@code InvalidSyntaxException} object with
 	 * the specified message and the filter string which generated the
 	 * exception.
 	 * 
@@ -55,10 +55,10 @@ public class InvalidSyntaxException extends Exception {
 	}
 
 	/**
-	 * Creates an exception of type <code>InvalidSyntaxException</code>.
+	 * Creates an exception of type {@code InvalidSyntaxException}.
 	 * 
 	 * <p>
-	 * This method creates an <code>InvalidSyntaxException</code> object with
+	 * This method creates an {@code InvalidSyntaxException} object with
 	 * the specified message and the filter string which generated the
 	 * exception.
 	 * 
@@ -74,7 +74,7 @@ public class InvalidSyntaxException extends Exception {
 
 	/**
 	 * Returns the filter string that generated the
-	 * <code>InvalidSyntaxException</code> object.
+	 * {@code InvalidSyntaxException} object.
 	 * 
 	 * @return The invalid filter string.
 	 * @see BundleContext#getServiceReferences
@@ -85,10 +85,10 @@ public class InvalidSyntaxException extends Exception {
 	}
 
 	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
+	 * Returns the cause of this exception or {@code null} if no cause was
 	 * set.
 	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause was
+	 * @return The cause of this exception or {@code null} if no cause was
 	 *         set.
 	 * @since 1.3
 	 */

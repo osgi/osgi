@@ -30,10 +30,10 @@ import org.osgi.framework.Bundle;
  * DeploymentAdminPermission controls access to the Deployment Admin service.<p>
  * 
  * The permission uses a filter string formatted similarly to the {@link org.osgi.framework.Filter}. 
- * The filter determines the target of the permission. The <code>DeploymentAdminPermission</code> uses the 
- * <code>name</code> and the <code>signer</code> filter attributes only. The value of the <code>signer</code> 
+ * The filter determines the target of the permission. The {@code DeploymentAdminPermission} uses the 
+ * {@code name} and the {@code signer} filter attributes only. The value of the {@code signer} 
  * attribute is matched against the signer chain (represented with its semicolon separated Distinguished Name chain) 
- * of the Deployment Package, and the value of the <code>name</code> attribute is matched against the value of the 
+ * of the Deployment Package, and the value of the {@code name} attribute is matched against the value of the 
  * "DeploymentPackage-Name" manifest header of the Deployment Package. Example: 
  * 
  * <ul>
@@ -198,10 +198,10 @@ public final class DeploymentAdminPermission extends Permission {
     }
     
     /**
-     * Creates a new <code>DeploymentAdminPermission</code> object for the given <code>name</code> and 
-     * <code>action</code>.<p>
-     * The <code>name</code> parameter identifies the target deployment package the permission 
-     * relates to. The <code>actions</code> parameter contains the comma separated list of allowed actions. 
+     * Creates a new {@code DeploymentAdminPermission} object for the given {@code name} and 
+     * {@code action}.<p>
+     * The {@code name} parameter identifies the target deployment package the permission 
+     * relates to. The {@code actions} parameter contains the comma separated list of allowed actions. 
      * 
      * @param name filter string, must not be null.
      * @param actions action string, must not be null. "*" means all the possible actions.
@@ -264,7 +264,7 @@ public final class DeploymentAdminPermission extends Permission {
     /**
      * Returns the String representation of the action list.<p>
      * The method always gives back the actions in the following (alphabetical) order: 
-     * <code>cancel, install, list, metadata, uninstall, uninstall_forced</code>
+     * {@code cancel, install, list, metadata, uninstall, uninstall_forced}
      * 
      * @return Action list of this permission instance. This is a comma-separated 
      *         list that reflects the action parameter of the constructor.
@@ -281,8 +281,8 @@ public final class DeploymentAdminPermission extends Permission {
      * by the {@link org.osgi.framework.Filter} rules and the "OSGi Service Platform, Core 
      * Specification Release 4, Chapter Certificate Matching".<p>
      * 
-     * The allowed attributes are: <code>name</code> (the symbolic name of the deployment 
-     * package) and <code>signer</code> (the signer of the deployment package). In both cases 
+     * The allowed attributes are: {@code name} (the symbolic name of the deployment 
+     * package) and {@code signer} (the signer of the deployment package). In both cases 
      * wildcards can be used.<p>
      * 
      * Examples:

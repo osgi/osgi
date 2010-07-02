@@ -39,7 +39,7 @@ public interface ComponentInstance {
 	/**
 	 * Returns the component instance of the activated component configuration.
 	 * 
-	 * @return The component instance or <code>null</code> if the component
+	 * @return The component instance or {@code null} if the component
 	 *         configuration has been deactivated.
 	 */
 	public Object getInstance();

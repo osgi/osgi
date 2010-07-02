@@ -24,29 +24,29 @@ import java.util.Dictionary;
  * <p>
  * A Managed Service is a service that needs configuration data. Such an object
  * should be registered with the Framework registry with the
- * <code>service.pid</code> property set to some unique identifier called a
+ * {@code service.pid} property set to some unique identifier called a
  * PID.
  * 
  * <p>
- * If the Configuration Admin service has a <code>Configuration</code> object
- * corresponding to this PID, it will callback the <code>updated()</code>
- * method of the <code>ManagedService</code> object, passing the properties of
- * that <code>Configuration</code> object.
+ * If the Configuration Admin service has a {@code Configuration} object
+ * corresponding to this PID, it will callback the {@code updated()}
+ * method of the {@code ManagedService} object, passing the properties of
+ * that {@code Configuration} object.
  * 
  * <p>
- * If it has no such <code>Configuration</code> object, then it calls back
- * with a <code>null</code> properties argument. Registering a Managed Service
- * will always result in a callback to the <code>updated()</code> method
+ * If it has no such {@code Configuration} object, then it calls back
+ * with a {@code null} properties argument. Registering a Managed Service
+ * will always result in a callback to the {@code updated()} method
  * provided the Configuration Admin service is, or becomes active. This callback
  * must always be done asynchronously.
  * 
  * <p>
- * Else, every time that either of the <code>updated()</code> methods is
- * called on that <code>Configuration</code> object, the
- * <code>ManagedService.updated()</code> method with the new properties is
- * called. If the <code>delete()</code> method is called on that
- * <code>Configuration</code> object, <code>ManagedService.updated()</code>
- * is called with a <code>null</code> for the properties parameter. All these
+ * Else, every time that either of the {@code updated()} methods is
+ * called on that {@code Configuration} object, the
+ * {@code ManagedService.updated()} method with the new properties is
+ * called. If the {@code delete()} method is called on that
+ * {@code Configuration} object, {@code ManagedService.updated()}
+ * is called with a {@code null} for the properties parameter. All these
  * callbacks must be done asynchronously.
  * 
  * <p>
@@ -84,9 +84,9 @@ import java.util.Dictionary;
  *     public synchronized void updated(
  *       Dictionary configuration  ) {
  *       if ( configuration == 
- * <code>
+ * {@code 
  * null
- * </code>
+ * }
  *   )
  *         registration.setProperties( getDefaults() );
  *       else {
@@ -112,14 +112,14 @@ public interface ManagedService {
 	 * Update the configuration for a Managed Service.
 	 * 
 	 * <p>
-	 * When the implementation of <code>updated(Dictionary)</code> detects any
+	 * When the implementation of {@code updated(Dictionary)} detects any
 	 * kind of error in the configuration properties, it should create a new
-	 * <code>ConfigurationException</code> which describes the problem. This
+	 * {@code ConfigurationException} which describes the problem. This
 	 * can allow a management system to provide useful information to a human
 	 * administrator.
 	 * 
 	 * <p>
-	 * If this method throws any other <code>Exception</code>, the
+	 * If this method throws any other {@code Exception}, the
 	 * Configuration Admin service must catch it and should log it.
 	 * <p>
 	 * The Configuration Admin service must call this method asynchronously
@@ -128,9 +128,9 @@ public interface ManagedService {
 	 * registration when they execute the registration in a synchronized method.
 	 * 
 	 * @param properties A copy of the Configuration properties, or
-	 *        <code>null</code>. This argument must not contain the
+	 *        {@code null}. This argument must not contain the
 	 *        "service.bundleLocation" property. The value of this property may
-	 *        be obtained from the <code>Configuration.getBundleLocation</code>
+	 *        be obtained from the {@code Configuration.getBundleLocation}
 	 *        method.
 	 * @throws ConfigurationException when the update fails
 	 */

@@ -29,20 +29,20 @@ public interface MapEntry {
 	/**
 	 * Return the Metadata for the key of the map entry.
 	 * 
-	 * This is specified by the <code>key</code> attribute or element.
+	 * This is specified by the {@code key} attribute or element.
 	 * 
 	 * @return The Metadata for the key of the map entry. This must not be
-	 *         <code>null</code>.
+	 *         {@code null}.
 	 */
 	NonNullMetadata getKey();
 
 	/**
 	 * Return the Metadata for the value of the map entry.
 	 * 
-	 * This is specified by the <code>value</code> attribute or element.
+	 * This is specified by the {@code value} attribute or element.
 	 * 
 	 * @return The Metadata for the value of the map entry. This must not be
-	 *         <code>null</code>.
+	 *         {@code null}.
 	 */
 	Metadata getValue();
 }

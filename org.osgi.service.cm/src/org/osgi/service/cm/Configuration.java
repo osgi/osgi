@@ -19,42 +19,42 @@ import java.io.IOException;
 import java.util.Dictionary;
 
 /**
- * The configuration information for a <code>ManagedService</code> or
- * <code>ManagedServiceFactory</code> object.
+ * The configuration information for a {@code ManagedService} or
+ * {@code ManagedServiceFactory} object.
  * 
  * The Configuration Admin service uses this interface to represent the
- * configuration information for a <code>ManagedService</code> or for a
- * service instance of a <code>ManagedServiceFactory</code>.
+ * configuration information for a {@code ManagedService} or for a
+ * service instance of a {@code ManagedServiceFactory}.
  * 
  * <p>
- * A <code>Configuration</code> object contains a configuration dictionary and
+ * A {@code Configuration} object contains a configuration dictionary and
  * allows the properties to be updated via this object. Bundles wishing to
  * receive configuration dictionaries do not need to use this class - they
- * register a <code>ManagedService</code> or
- * <code>ManagedServiceFactory</code>. Only administrative bundles, and
+ * register a {@code ManagedService} or
+ * {@code ManagedServiceFactory}. Only administrative bundles, and
  * bundles wishing to update their own configurations need to use this class.
  * 
  * <p>
  * The properties handled in this configuration have case insensitive
- * <code>String</code> objects as keys. However, case is preserved from the
+ * {@code String} objects as keys. However, case is preserved from the
  * last set key/value.
  * <p>
  * A configuration can be <i>bound </i> to a bundle location (
- * <code>Bundle.getLocation()</code>). The purpose of binding a
- * <code>Configuration</code> object to a location is to make it impossible
+ * {@code Bundle.getLocation()}). The purpose of binding a
+ * {@code Configuration} object to a location is to make it impossible
  * for another bundle to forge a PID that would match this configuration. When a
  * configuration is bound to a specific location, and a bundle with a different
- * location registers a corresponding <code>ManagedService</code> object or
- * <code>ManagedServiceFactory</code> object, then the configuration is not
+ * location registers a corresponding {@code ManagedService} object or
+ * {@code ManagedServiceFactory} object, then the configuration is not
  * passed to the updated method of that object.
  * 
  * <p>
- * If a configuration's location is <code>null</code>, it is not yet bound to
+ * If a configuration's location is {@code null}, it is not yet bound to
  * a location. It will become bound to the location of the first bundle that
- * registers a <code>ManagedService</code> or
- * <code>ManagedServiceFactory</code> object with the corresponding PID.
+ * registers a {@code ManagedService} or
+ * {@code ManagedServiceFactory} object with the corresponding PID.
  * <p>
- * The same <code>Configuration</code> object is used for configuring both a
+ * The same {@code Configuration} object is used for configuring both a
  * Managed Service Factory and a Managed Service. When it is important to
  * differentiate between these two the term "factory configuration" is used.
  * 
@@ -62,35 +62,35 @@ import java.util.Dictionary;
  */
 public interface Configuration {
 	/**
-	 * Get the PID for this <code>Configuration</code> object.
+	 * Get the PID for this {@code Configuration} object.
 	 * 
-	 * @return the PID for this <code>Configuration</code> object.
+	 * @return the PID for this {@code Configuration} object.
 	 * @throws IllegalStateException if this configuration has been deleted
 	 */
 	public String getPid();
 
 	/**
-	 * Return the properties of this <code>Configuration</code> object.
+	 * Return the properties of this {@code Configuration} object.
 	 * 
-	 * The <code>Dictionary</code> object returned is a private copy for the
+	 * The {@code Dictionary} object returned is a private copy for the
 	 * caller and may be changed without influencing the stored configuration.
 	 * The keys in the returned dictionary are case insensitive and are always
-	 * of type <code>String</code>.
+	 * of type {@code String}.
 	 * 
 	 * <p>
 	 * If called just after the configuration is created and before update has
-	 * been called, this method returns <code>null</code>.
+	 * been called, this method returns {@code null}.
 	 * 
 	 * @return A private copy of the properties for the caller or
-	 *         <code>null</code>. These properties must not contain the
+	 *         {@code null}. These properties must not contain the
 	 *         "service.bundleLocation" property. The value of this property may
-	 *         be obtained from the <code>getBundleLocation</code> method.
+	 *         be obtained from the {@code getBundleLocation} method.
 	 * @throws IllegalStateException if this configuration has been deleted
 	 */
 	public Dictionary getProperties();
 
 	/**
-	 * Update the properties of this <code>Configuration</code> object.
+	 * Update the properties of this {@code Configuration} object.
 	 * 
 	 * Stores the properties in persistent storage after adding or overwriting
 	 * the following properties:
@@ -99,7 +99,7 @@ public interface Configuration {
 	 * <li>"service.factoryPid" : if this is a factory configuration it is set
 	 * to the factory PID else it is not set.</li>
 	 * </ul>
-	 * These system properties are all of type <code>String</code>.
+	 * These system properties are all of type {@code String}.
 	 * 
 	 * <p>
 	 * If the corresponding Managed Service/Managed Service Factory is
@@ -108,12 +108,12 @@ public interface Configuration {
 	 * 
 	 * <p>
 	 * Also initiates an asynchronous call to all
-	 * <code>ConfigurationListener</code>s with a
-	 * <code>ConfigurationEvent.CM_UPDATED</code> event.
+	 * {@code ConfigurationListener}s with a
+	 * {@code ConfigurationEvent.CM_UPDATED} event.
 	 * 
 	 * @param properties the new set of properties for this configuration
 	 * @throws IOException if update cannot be made persistent
-	 * @throws IllegalArgumentException if the <code>Dictionary</code> object
+	 * @throws IllegalArgumentException if the {@code Dictionary} object
 	 *         contains invalid configuration types or contains case variants of
 	 *         the same key name.
 	 * @throws IllegalStateException if this configuration has been deleted
@@ -121,19 +121,19 @@ public interface Configuration {
 	public void update(Dictionary properties) throws IOException;
 
 	/**
-	 * Delete this <code>Configuration</code> object.
+	 * Delete this {@code Configuration} object.
 	 * 
 	 * Removes this configuration object from the persistent store. Notify
 	 * asynchronously the corresponding Managed Service or Managed Service
-	 * Factory. A <code>ManagedService</code> object is notified by a call to
-	 * its <code>updated</code> method with a <code>null</code> properties
-	 * argument. A <code>ManagedServiceFactory</code> object is notified by a
-	 * call to its <code>deleted</code> method.
+	 * Factory. A {@code ManagedService} object is notified by a call to
+	 * its {@code updated} method with a {@code null} properties
+	 * argument. A {@code ManagedServiceFactory} object is notified by a
+	 * call to its {@code deleted} method.
 	 * 
 	 * <p>
 	 * Also initiates an asynchronous call to all
-	 * <code>ConfigurationListener</code>s with a
-	 * <code>ConfigurationEvent.CM_DELETED</code> event.
+	 * {@code ConfigurationListener}s with a
+	 * {@code ConfigurationEvent.CM_DELETED} event.
 	 * 
 	 * @throws IOException If delete fails
 	 * @throws IllegalStateException if this configuration has been deleted
@@ -142,25 +142,25 @@ public interface Configuration {
 
 	/**
 	 * For a factory configuration return the PID of the corresponding Managed
-	 * Service Factory, else return <code>null</code>.
+	 * Service Factory, else return {@code null}.
 	 * 
-	 * @return factory PID or <code>null</code>
+	 * @return factory PID or {@code null}
 	 * @throws IllegalStateException if this configuration has been deleted
 	 */
 	public String getFactoryPid();
 
 	/**
-	 * Update the <code>Configuration</code> object with the current
+	 * Update the {@code Configuration} object with the current
 	 * properties.
 	 * 
-	 * Initiate the <code>updated</code> callback to the Managed Service or
+	 * Initiate the {@code updated} callback to the Managed Service or
 	 * Managed Service Factory with the current properties asynchronously.
 	 * 
 	 * <p>
 	 * This is the only way for a bundle that uses a Configuration Plugin
 	 * service to initiate a callback. For example, when that bundle detects a
 	 * change that requires an update of the Managed Service or Managed Service
-	 * Factory via its <code>ConfigurationPlugin</code> object.
+	 * Factory via its {@code ConfigurationPlugin} object.
 	 * 
 	 * @see ConfigurationPlugin
 	 * @throws IOException if update cannot access the properties in persistent
@@ -170,20 +170,20 @@ public interface Configuration {
 	public void update() throws IOException;
 
 	/**
-	 * Bind this <code>Configuration</code> object to the specified bundle
+	 * Bind this {@code Configuration} object to the specified bundle
 	 * location.
 	 * 
-	 * If the bundleLocation parameter is <code>null</code> then the
-	 * <code>Configuration</code> object will not be bound to a location. It
+	 * If the bundleLocation parameter is {@code null} then the
+	 * {@code Configuration} object will not be bound to a location. It
 	 * will be set to the bundle's location before the first time a Managed
-	 * Service/Managed Service Factory receives this <code>Configuration</code>
+	 * Service/Managed Service Factory receives this {@code Configuration}
 	 * object via the updated method and before any plugins are called. The
 	 * bundle location will be set persistently.
 	 * 
-	 * @param bundleLocation a bundle location or <code>null</code>
+	 * @param bundleLocation a bundle location or {@code null}
 	 * @throws IllegalStateException If this configuration has been deleted.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>ConfigurationPermission[*,CONFIGURE]</code>.
+	 *         {@code ConfigurationPermission[*,CONFIGURE]}.
 	 */
 	public void setBundleLocation(String bundleLocation);
 
@@ -191,14 +191,14 @@ public interface Configuration {
 	 * Get the bundle location.
 	 * 
 	 * Returns the bundle location to which this configuration is bound, or
-	 * <code>null</code> if it is not yet bound to a bundle location.
+	 * {@code null} if it is not yet bound to a bundle location.
 	 * 
 	 * @return location to which this configuration is bound, or
-	 *         <code>null</code>.
-	 * @throws IllegalStateException If this <code>Configuration</code> object
+	 *         {@code null}.
+	 * @throws IllegalStateException If this {@code Configuration} object
 	 *         has been deleted.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>ConfigurationPermission[*,CONFIGURE]</code>.
+	 *         {@code ConfigurationPermission[*,CONFIGURE]}.
 	 */
 	public String getBundleLocation();
 
@@ -207,9 +207,9 @@ public interface Configuration {
 	 * 
 	 * Two Configuration objects are equal when their PIDs are equal.
 	 * 
-	 * @param other <code>Configuration</code> object to compare against
-	 * @return <code>true</code> if equal, <code>false</code> if not a
-	 *         <code>Configuration</code> object or one with a different PID.
+	 * @param other {@code Configuration} object to compare against
+	 * @return {@code true} if equal, {@code false} if not a
+	 *         {@code Configuration} object or one with a different PID.
 	 */
 	public boolean equals(Object other);
 

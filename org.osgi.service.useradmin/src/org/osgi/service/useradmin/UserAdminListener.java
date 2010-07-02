@@ -19,12 +19,12 @@ package org.osgi.service.useradmin;
  * Listener for UserAdminEvents.
  * 
  * <p>
- * <code>UserAdminListener</code> objects are registered with the Framework
- * service registry and notified with a <code>UserAdminEvent</code> object when a
- * <code>Role</code> object has been created, removed, or modified.
+ * {@code UserAdminListener} objects are registered with the Framework
+ * service registry and notified with a {@code UserAdminEvent} object when a
+ * {@code Role} object has been created, removed, or modified.
  * <p>
- * <code>UserAdminListener</code> objects can further inspect the received
- * <code>UserAdminEvent</code> object to determine its type, the <code>Role</code>
+ * {@code UserAdminListener} objects can further inspect the received
+ * {@code UserAdminEvent} object to determine its type, the {@code Role}
  * object it occurred on, and the User Admin service that generated it.
  * 
  * @see UserAdmin
@@ -34,10 +34,10 @@ package org.osgi.service.useradmin;
  */
 public interface UserAdminListener {
 	/**
-	 * Receives notification that a <code>Role</code> object has been created,
+	 * Receives notification that a {@code Role} object has been created,
 	 * removed, or modified.
 	 * 
-	 * @param event The <code>UserAdminEvent</code> object.
+	 * @param event The {@code UserAdminEvent} object.
 	 */
 	public void roleChanged(UserAdminEvent event);
 }

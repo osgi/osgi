@@ -38,15 +38,15 @@ public interface EventHook {
 	 * This method can filter the bundles which receive the event.
 	 * 
 	 * @param event The service event to be delivered.
-	 * @param contexts A <code>Collection</code> of Bundle Contexts for bundles
+	 * @param contexts A {@code Collection} of Bundle Contexts for bundles
 	 *        which have listeners to which the specified event will be
 	 *        delivered. The implementation of this method may remove bundle
 	 *        contexts from the collection to prevent the event from being
 	 *        delivered to the associated bundles. The collection supports all
-	 *        the optional <code>Collection</code> operations except
-	 *        <code>add</code> and <code>addAll</code>. Attempting to add to the
+	 *        the optional {@code Collection} operations except
+	 *        {@code add} and {@code addAll}. Attempting to add to the
 	 *        collection will result in an
-	 *        <code>UnsupportedOperationException</code>. The collection is not
+	 *        {@code UnsupportedOperationException}. The collection is not
 	 *        synchronized.
 	 */
 	void event(ServiceEvent event,

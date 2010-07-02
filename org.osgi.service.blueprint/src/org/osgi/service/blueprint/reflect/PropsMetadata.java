@@ -18,14 +18,14 @@ package org.osgi.service.blueprint.reflect;
 import java.util.List;
 
 /**
- * Metadata for a <code>java.util.Properties</code> based value.
+ * Metadata for a {@code java.util.Properties} based value.
  * 
  * <p>
  * The {@link MapEntry} objects of properties are defined with keys and values
- * of type <code>String</code>.
+ * of type {@code String}.
  * 
  * <p>
- * This is specified by the <code>props</code> element.
+ * This is specified by the {@code props} element.
  * 
  * @ThreadSafe
  * @version $Id$

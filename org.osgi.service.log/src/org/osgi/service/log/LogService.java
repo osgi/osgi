@@ -21,8 +21,8 @@ import org.osgi.framework.ServiceReference;
  * Provides methods for bundles to write messages to the log.
  * 
  * <p>
- * <code>LogService</code> methods are provided to log messages; optionally with a
- * <code>ServiceReference</code> object or an exception.
+ * {@code LogService} methods are provided to log messages; optionally with a
+ * {@code ServiceReference} object or an exception.
  * 
  * <p>
  * Bundles must log messages in the OSGi environment with a severity level
@@ -74,14 +74,14 @@ public interface LogService {
 	 * Logs a message.
 	 * 
 	 * <p>
-	 * The <code>ServiceReference</code> field and the <code>Throwable</code> field
-	 * of the <code>LogEntry</code> object will be set to <code>null</code>.
+	 * The {@code ServiceReference} field and the {@code Throwable} field
+	 * of the {@code LogEntry} object will be set to {@code null}.
 	 * 
 	 * @param level The severity of the message. This should be one of the
 	 *        defined log levels but may be any integer that is interpreted in a
 	 *        user defined way.
 	 * @param message Human readable string describing the condition or
-	 *        <code>null</code>.
+	 *        {@code null}.
 	 * @see #LOG_ERROR
 	 * @see #LOG_WARNING
 	 * @see #LOG_INFO
@@ -93,16 +93,16 @@ public interface LogService {
 	 * Logs a message with an exception.
 	 * 
 	 * <p>
-	 * The <code>ServiceReference</code> field of the <code>LogEntry</code> object
-	 * will be set to <code>null</code>.
+	 * The {@code ServiceReference} field of the {@code LogEntry} object
+	 * will be set to {@code null}.
 	 * 
 	 * @param level The severity of the message. This should be one of the
 	 *        defined log levels but may be any integer that is interpreted in a
 	 *        user defined way.
 	 * @param message The human readable string describing the condition or
-	 *        <code>null</code>.
+	 *        {@code null}.
 	 * @param exception The exception that reflects the condition or
-	 *        <code>null</code>.
+	 *        {@code null}.
 	 * @see #LOG_ERROR
 	 * @see #LOG_WARNING
 	 * @see #LOG_INFO
@@ -111,20 +111,20 @@ public interface LogService {
 	public void log(int level, String message, Throwable exception);
 
 	/**
-	 * Logs a message associated with a specific <code>ServiceReference</code>
+	 * Logs a message associated with a specific {@code ServiceReference}
 	 * object.
 	 * 
 	 * <p>
-	 * The <code>Throwable</code> field of the <code>LogEntry</code> will be set to
-	 * <code>null</code>.
+	 * The {@code Throwable} field of the {@code LogEntry} will be set to
+	 * {@code null}.
 	 * 
-	 * @param sr The <code>ServiceReference</code> object of the service that this
-	 *        message is associated with or <code>null</code>.
+	 * @param sr The {@code ServiceReference} object of the service that this
+	 *        message is associated with or {@code null}.
 	 * @param level The severity of the message. This should be one of the
 	 *        defined log levels but may be any integer that is interpreted in a
 	 *        user defined way.
 	 * @param message Human readable string describing the condition or
-	 *        <code>null</code>.
+	 *        {@code null}.
 	 * @see #LOG_ERROR
 	 * @see #LOG_WARNING
 	 * @see #LOG_INFO
@@ -134,17 +134,17 @@ public interface LogService {
 
 	/**
 	 * Logs a message with an exception associated and a
-	 * <code>ServiceReference</code> object.
+	 * {@code ServiceReference} object.
 	 * 
-	 * @param sr The <code>ServiceReference</code> object of the service that this
+	 * @param sr The {@code ServiceReference} object of the service that this
 	 *        message is associated with.
 	 * @param level The severity of the message. This should be one of the
 	 *        defined log levels but may be any integer that is interpreted in a
 	 *        user defined way.
 	 * @param message Human readable string describing the condition or
-	 *        <code>null</code>.
+	 *        {@code null}.
 	 * @param exception The exception that reflects the condition or
-	 *        <code>null</code>.
+	 *        {@code null}.
 	 * @see #LOG_ERROR
 	 * @see #LOG_WARNING
 	 * @see #LOG_INFO

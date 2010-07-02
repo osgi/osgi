@@ -20,7 +20,7 @@ import java.io.InputStream;
 
 /**
  * Checked exception received when something fails during any deployment
- * processes. A <code>DeploymentException</code> always contains an error code 
+ * processes. A {@code DeploymentException} always contains an error code 
  * (one of the constants specified in this class), and may optionally contain 
  * the textual description of the error condition and a nested cause exception.
  */
@@ -146,7 +146,7 @@ public class DeploymentException extends Exception {
 	 * An artifact of any resource already exists.<p>
 	 * 
 	 * This exception is thrown when the called resource processor throws a 
-	 * <code>ResourceProcessorException</code> with the 
+	 * {@code ResourceProcessorException} with the 
 	 * {@link org.osgi.service.deploymentadmin.spi.ResourceProcessorException#CODE_RESOURCE_SHARING_VIOLATION} 
 	 * error code.<p>
 	 * 
@@ -157,7 +157,7 @@ public class DeploymentException extends Exception {
 
 	/**
 	 * Exception with this error code is thrown when one of the Resource Processors 
-	 * involved in the deployment session threw a <code>ResourceProcessorException</code> with the 
+	 * involved in the deployment session threw a {@code ResourceProcessorException} with the 
 	 * {@link org.osgi.service.deploymentadmin.spi.ResourceProcessorException#CODE_PREPARE} error 
 	 * code.<p>
 	 * 
@@ -169,7 +169,7 @@ public class DeploymentException extends Exception {
 	/**
 	 * Other error condition.<p>
 	 * 
-	 * All Deployment Admin methods which throw <code>DeploymentException</code> 
+	 * All Deployment Admin methods which throw {@code DeploymentException} 
 	 * can throw an exception with this error code if the error condition cannot be 
 	 * categorized. 
 	 */
@@ -177,7 +177,7 @@ public class DeploymentException extends Exception {
 
 	/**
 	 * The Resource Processor service with the given PID (see
-	 * <code>Resource-Processor</code> manifest header) is not found.<p>
+	 * {@code Resource-Processor} manifest header) is not found.<p>
 	 *  
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)},
 	 * {@link DeploymentPackage#uninstall()} and 
@@ -206,7 +206,7 @@ public class DeploymentException extends Exception {
 	 * Create an instance of the exception.
 	 * 
 	 * @param code The error code of the failure. Code should be one of the
-	 *        predefined integer values (<code>CODE_X</code>).
+	 *        predefined integer values ({@code CODE_X}).
 	 * @param message Message associated with the exception
 	 * @param cause the originating exception
 	 */
@@ -220,7 +220,7 @@ public class DeploymentException extends Exception {
 	 * null.
 	 * 
 	 * @param code The error code of the failure. Code should be one of the
-	 *        predefined integer values (<code>CODE_X</code>).
+	 *        predefined integer values ({@code CODE_X}).
 	 * @param message Message associated with the exception
 	 */
 	public DeploymentException(int code, String message) {
@@ -233,7 +233,7 @@ public class DeploymentException extends Exception {
 	 * implicitly set to null.
 	 * 
 	 * @param code The error code of the failure. Code should be one of the
-	 *        predefined integer values (<code>CODE_X</code>).
+	 *        predefined integer values ({@code CODE_X}).
 	 */
 	public DeploymentException(int code) {
 		super();
@@ -241,10 +241,10 @@ public class DeploymentException extends Exception {
 	}
 
 	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
+	 * Returns the cause of this exception or {@code null} if no cause was
 	 * set.
 	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause was
+	 * @return The cause of this exception or {@code null} if no cause was
 	 *         set.
 	 */
 	public Throwable getCause() {

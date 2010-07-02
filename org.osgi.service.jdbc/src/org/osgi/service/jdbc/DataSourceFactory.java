@@ -26,9 +26,9 @@ import javax.sql.XADataSource;
 
 /**
  * A factory for JDBC connection factories. There are 3 preferred connection
- * factories for getting JDBC connections: <code>javax.sql.DataSource</code>,
- * <code>javax.sql.ConnectionPoolDataSource</code>, and
- * <code>javax.sql.XADataSource</code>.
+ * factories for getting JDBC connections: {@code javax.sql.DataSource},
+ * {@code javax.sql.ConnectionPoolDataSource}, and
+ * {@code javax.sql.XADataSource}.
  * 
  * DataSource providers should implement this interface and register it as an
  * OSGi service with the JDBC driver class name in the
@@ -174,56 +174,56 @@ public interface DataSourceFactory {
 	public static final String	JDBC_PROPERTY_CYCLE			= "propertyCycle";
 
 	/**
-	 * Create a new <code>DataSource</code> using the given properties.
+	 * Create a new {@code DataSource} using the given properties.
 	 * 
-	 * @param props The properties used to configure the <code>DataSource</code>
-	 *        . <code>null</code> indicates no properties. If the property
-	 *        cannot be set on the <code>DataSource</code> being created then a
-	 *        <code>SQLException</code> must be thrown.
-	 * @return A configured <code>DataSource</code>.
-	 * @throws SQLException If the <code>DataSource</code> cannot be created.
+	 * @param props The properties used to configure the {@code DataSource}
+	 *        . {@code null} indicates no properties. If the property
+	 *        cannot be set on the {@code DataSource} being created then a
+	 *        {@code SQLException} must be thrown.
+	 * @return A configured {@code DataSource}.
+	 * @throws SQLException If the {@code DataSource} cannot be created.
 	 */
 	public DataSource createDataSource(Properties props) throws SQLException;
 
 	/**
-	 * Create a new <code>ConnectionPoolDataSource</code> using the given
+	 * Create a new {@code ConnectionPoolDataSource} using the given
 	 * properties.
 	 * 
 	 * @param props The properties used to configure the
-	 *        <code>ConnectionPoolDataSource</code>. <code>null</code> indicates
+	 *        {@code ConnectionPoolDataSource}. {@code null} indicates
 	 *        no properties. If the property cannot be set on the
-	 *        <code>ConnectionPoolDataSource</code> being created then a
-	 *        <code>SQLException</code> must be thrown.
-	 * @return A configured <code>ConnectionPoolDataSource</code>.
-	 * @throws SQLException If the <code>ConnectionPoolDataSource</code> cannot
+	 *        {@code ConnectionPoolDataSource} being created then a
+	 *        {@code SQLException} must be thrown.
+	 * @return A configured {@code ConnectionPoolDataSource}.
+	 * @throws SQLException If the {@code ConnectionPoolDataSource} cannot
 	 *         be created.
 	 */
 	public ConnectionPoolDataSource createConnectionPoolDataSource(
 			Properties props) throws SQLException;
 
 	/**
-	 * Create a new <code>XADataSource</code> using the given properties.
+	 * Create a new {@code XADataSource} using the given properties.
 	 * 
 	 * @param props The properties used to configure the
-	 *        <code>XADataSource</code>. <code>null</code> indicates no
+	 *        {@code XADataSource}. {@code null} indicates no
 	 *        properties. If the property cannot be set on the
-	 *        <code>XADataSource</code> being created then a
-	 *        <code>SQLException</code> must be thrown.
-	 * @return A configured <code>XADataSource</code>.
-	 * @throws SQLException If the <code>XADataSource</code> cannot be created.
+	 *        {@code XADataSource} being created then a
+	 *        {@code SQLException} must be thrown.
+	 * @return A configured {@code XADataSource}.
+	 * @throws SQLException If the {@code XADataSource} cannot be created.
 	 */
 	public XADataSource createXADataSource(Properties props)
 			throws SQLException;
 
 	/**
-	 * Create a new <code>Driver</code> using the given properties.
+	 * Create a new {@code Driver} using the given properties.
 	 * 
-	 * @param props The properties used to configure the <code>Driver</code>.
-	 *        <code>null</code> indicates no properties. If the property cannot
-	 *        be set on the <code>Driver</code> being created then a
-	 *        <code>SQLException</code> must be thrown.
-	 * @return A configured <code>Driver</code>.
-	 * @throws SQLException If the <code>Driver</code> cannot be created.
+	 * @param props The properties used to configure the {@code Driver}.
+	 *        {@code null} indicates no properties. If the property cannot
+	 *        be set on the {@code Driver} being created then a
+	 *        {@code SQLException} must be thrown.
+	 * @return A configured {@code Driver}.
+	 * @throws SQLException If the {@code Driver} cannot be created.
 	 */
 	public Driver createDriver(Properties props) throws SQLException;
 }

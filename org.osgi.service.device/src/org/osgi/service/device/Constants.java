@@ -20,7 +20,7 @@ package org.osgi.service.device;
  * {@link Device} and {@link Driver} services.
  * 
  * <p>
- * The values associated with these keys are of type <code>java.lang.String</code>,
+ * The values associated with these keys are of type {@code java.lang.String},
  * unless otherwise stated.
  * 
  * @version $Id$
@@ -33,8 +33,8 @@ public interface Constants {
 	 * Property (named &quot;DRIVER_ID&quot;) identifying a driver.
 	 * 
 	 * <p>
-	 * A <code>DRIVER_ID</code> should start with the reversed domain name of the
-	 * company that implemented the driver (e.g., <code>com.acme</code>), and
+	 * A {@code DRIVER_ID} should start with the reversed domain name of the
+	 * company that implemented the driver (e.g., {@code com.acme}), and
 	 * must meet the following requirements:
 	 * 
 	 * <ul>
@@ -46,14 +46,14 @@ public interface Constants {
 	 * </ul>
 	 * 
 	 * <p>
-	 * This property is mandatory, i.e., every <code>Driver</code> service must be
+	 * This property is mandatory, i.e., every {@code Driver} service must be
 	 * registered with it.
 	 */
 	public static final String	DRIVER_ID			= "DRIVER_ID";
 	/**
 	 * Property (named &quot;DEVICE_CATEGORY&quot;) containing a human readable
 	 * description of the device categories implemented by a device. This
-	 * property is of type <code>String[]</code>
+	 * property is of type {@code String[]}
 	 * 
 	 * <p>
 	 * Services registered with this property will be treated as devices and

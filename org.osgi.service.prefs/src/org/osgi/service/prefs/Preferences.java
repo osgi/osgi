@@ -40,16 +40,16 @@ package org.osgi.service.prefs;
  * and a path name <i>relative </i> to each ancestor including itself.
  * 
  * <p>
- * The root node has a node name of the empty <code>String</code> object ("").
+ * The root node has a node name of the empty {@code String} object ("").
  * Every other node has an arbitrary node name, specified at the time it is
  * created. The only restrictions on this name are that it cannot be the empty
  * string, and it cannot contain the slash character ('/').
  * 
  * <p>
- * The root node has an absolute path name of <code>"/"</code>. Children of the
- * root node have absolute path names of <code>"/" + </code> <i>&lt;node name&gt;
+ * The root node has an absolute path name of {@code "/"}. Children of the
+ * root node have absolute path names of {@code "/" + } <i>&lt;node name&gt;
  * </i>. All other nodes have absolute path names of <i>&lt;parent's absolute
- * path name&gt; </i> <code> + "/" + </code> <i>&lt;node name&gt; </i>. Note that
+ * path name&gt; </i> {@code  + "/" + } <i>&lt;node name&gt; </i>. Note that
  * all absolute path names begin with the slash character.
  * 
  * <p>
@@ -76,12 +76,12 @@ package org.osgi.service.prefs;
  * </ul>
  * 
  * <p>
- * Each <code>Preference</code> node has zero or more properties associated with
+ * Each {@code Preference} node has zero or more properties associated with
  * it, where a property consists of a name and a value. The bundle writer is
  * free to choose any appropriate names for properties. Their values can be of
- * type <code>String</code>,<code>long</code>,<code>int</code>,<code>boolean</code>,
- * <code>byte[]</code>,<code>float</code>, or <code>double</code> but they can
- * always be accessed as if they were <code>String</code> objects.
+ * type {@code String},{@code long},{@code int},{@code boolean},
+ * {@code byte[]},{@code float}, or {@code double} but they can
+ * always be accessed as if they were {@code String} objects.
  * 
  * <p>
  * All node name and property name comparisons are case-sensitive.
@@ -90,7 +90,7 @@ package org.osgi.service.prefs;
  * All of the methods that modify preference data are permitted to operate
  * asynchronously; they may return immediately, and changes will eventually
  * propagate to the persistent backing store, with an implementation-dependent
- * delay. The <code>flush</code> method may be used to synchronously force updates
+ * delay. The {@code flush} method may be used to synchronously force updates
  * to the backing store.
  * 
  * <p>
@@ -116,33 +116,33 @@ public interface Preferences {
 	 * 
 	 * @param key key with which the specified value is to be associated.
 	 * @param value value to be associated with the specified key.
-	 * @throws NullPointerException if <code>key</code> or <code>value</code> is
-	 *         <code>null</code>.
+	 * @throws NullPointerException if {@code key} or {@code value} is
+	 *         {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
 	 */
 	public void put(String key, String value);
 
 	/**
-	 * Returns the value associated with the specified <code>key</code> in this
+	 * Returns the value associated with the specified {@code key} in this
 	 * node. Returns the specified default if there is no value associated with
-	 * the <code>key</code>, or the backing store is inaccessible.
+	 * the {@code key}, or the backing store is inaccessible.
 	 * 
 	 * @param key key whose associated value is to be returned.
 	 * @param def the value to be returned in the event that this node has no
-	 *        value associated with <code>key</code> or the backing store is
+	 *        value associated with {@code key} or the backing store is
 	 *        inaccessible.
-	 * @return the value associated with <code>key</code>, or <code>def</code> if
-	 *         no value is associated with <code>key</code>.
+	 * @return the value associated with {@code key}, or {@code def} if
+	 *         no value is associated with {@code key}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
-	 * @throws NullPointerException if <code>key</code> is <code>null</code>. (A
-	 *         <code>null</code> default <i>is </i> permitted.)
+	 * @throws NullPointerException if {@code key} is {@code null}. (A
+	 *         {@code null} default <i>is </i> permitted.)
 	 */
 	public String get(String key, String def);
 
 	/**
-	 * Removes the value associated with the specified <code>key</code> in this
+	 * Removes the value associated with the specified {@code key} in this
 	 * node, if any.
 	 * 
 	 * @param key key whose mapping is to be removed from this node.
@@ -166,25 +166,25 @@ public interface Preferences {
 	public void clear() throws BackingStoreException;
 
 	/**
-	 * Associates a <code>String</code> object representing the specified
-	 * <code>int</code> value with the specified <code>key</code> in this node. The
-	 * associated string is the one that would be returned if the <code>int</code>
-	 * value were passed to <code>Integer.toString(int)</code>. This method is
+	 * Associates a {@code String} object representing the specified
+	 * {@code int} value with the specified {@code key} in this node. The
+	 * associated string is the one that would be returned if the {@code int}
+	 * value were passed to {@code Integer.toString(int)}. This method is
 	 * intended for use in conjunction with {@link #getInt} method.
 	 * 
 	 * <p>
 	 * Implementor's note: it is <i>not </i> necessary that the property value
-	 * be represented by a <code>String</code> object in the backing store. If the
+	 * be represented by a {@code String} object in the backing store. If the
 	 * backing store supports integer values, it is not unreasonable to use
 	 * them. This implementation detail is not visible through the
-	 * <code>Preferences</code> API, which allows the value to be read as an
-	 * <code>int</code> (with <code>getInt</code> or a <code>String</code> (with
-	 * <code>get</code>) type.
+	 * {@code Preferences} API, which allows the value to be read as an
+	 * {@code int} (with {@code getInt} or a {@code String} (with
+	 * {@code get}) type.
 	 * 
 	 * @param key key with which the string form of value is to be associated.
-	 * @param value <code>value</code> whose string form is to be associated with
-	 *        <code>key</code>.
-	 * @throws NullPointerException if <code>key</code> is <code>null</code>.
+	 * @param value {@code value} whose string form is to be associated with
+	 *        {@code key}.
+	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
 	 * @see #getInt(String,int)
@@ -192,27 +192,27 @@ public interface Preferences {
 	public void putInt(String key, int value);
 
 	/**
-	 * Returns the <code>int</code> value represented by the <code>String</code>
-	 * object associated with the specified <code>key</code> in this node. The
-	 * <code>String</code> object is converted to an <code>int</code> as by
-	 * <code>Integer.parseInt(String)</code>. Returns the specified default if
-	 * there is no value associated with the <code>key</code>, the backing store
-	 * is inaccessible, or if <code>Integer.parseInt(String)</code> would throw a
-	 * <code>NumberFormatException</code> if the associated <code>value</code> were
+	 * Returns the {@code int} value represented by the {@code String}
+	 * object associated with the specified {@code key} in this node. The
+	 * {@code String} object is converted to an {@code int} as by
+	 * {@code Integer.parseInt(String)}. Returns the specified default if
+	 * there is no value associated with the {@code key}, the backing store
+	 * is inaccessible, or if {@code Integer.parseInt(String)} would throw a
+	 * {@code NumberFormatException} if the associated {@code value} were
 	 * passed. This method is intended for use in conjunction with the
 	 * {@link #putInt} method.
 	 * 
 	 * @param key key whose associated value is to be returned as an
-	 *        <code>int</code>.
+	 *        {@code int}.
 	 * @param def the value to be returned in the event that this node has no
-	 *        value associated with <code>key</code> or the associated value
-	 *        cannot be interpreted as an <code>int</code> or the backing store is
+	 *        value associated with {@code key} or the associated value
+	 *        cannot be interpreted as an {@code int} or the backing store is
 	 *        inaccessible.
-	 * @return the <code>int</code> value represented by the <code>String</code>
-	 *         object associated with <code>key</code> in this node, or
-	 *         <code>def</code> if the associated value does not exist or cannot
-	 *         be interpreted as an <code>int</code> type.
-	 * @throws NullPointerException if <code>key</code> is <code>null</code>.
+	 * @return the {@code int} value represented by the {@code String}
+	 *         object associated with {@code key} in this node, or
+	 *         {@code def} if the associated value does not exist or cannot
+	 *         be interpreted as an {@code int} type.
+	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
 	 * @see #putInt(String,int)
@@ -221,27 +221,27 @@ public interface Preferences {
 	public int getInt(String key, int def);
 
 	/**
-	 * Associates a <code>String</code> object representing the specified
-	 * <code>long</code> value with the specified <code>key</code> in this node. The
-	 * associated <code>String</code> object is the one that would be returned if
-	 * the <code>long</code> value were passed to <code>Long.toString(long)</code>.
+	 * Associates a {@code String} object representing the specified
+	 * {@code long} value with the specified {@code key} in this node. The
+	 * associated {@code String} object is the one that would be returned if
+	 * the {@code long} value were passed to {@code Long.toString(long)}.
 	 * This method is intended for use in conjunction with the {@link #getLong}
 	 * method.
 	 * 
 	 * <p>
-	 * Implementor's note: it is <i>not </i> necessary that the <code>value</code>
-	 * be represented by a <code>String</code> type in the backing store. If the
-	 * backing store supports <code>long</code> values, it is not unreasonable to
-	 * use them. This implementation detail is not visible through the <code>
-	 * Preferences</code> API, which allows the value to be read as a
-	 * <code>long</code> (with <code>getLong</code> or a <code>String</code> (with
-	 * <code>get</code>) type.
+	 * Implementor's note: it is <i>not </i> necessary that the {@code value}
+	 * be represented by a {@code String} type in the backing store. If the
+	 * backing store supports {@code long} values, it is not unreasonable to
+	 * use them. This implementation detail is not visible through the {@code 
+	 * Preferences} API, which allows the value to be read as a
+	 * {@code long} (with {@code getLong} or a {@code String} (with
+	 * {@code get}) type.
 	 * 
-	 * @param key <code>key</code> with which the string form of <code>value</code>
+	 * @param key {@code key} with which the string form of {@code value}
 	 *        is to be associated.
-	 * @param value <code>value</code> whose string form is to be associated with
-	 *        <code>key</code>.
-	 * @throws NullPointerException if <code>key</code> is <code>null</code>.
+	 * @param value {@code value} whose string form is to be associated with
+	 *        {@code key}.
+	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
 	 * @see #getLong(String,long)
@@ -249,27 +249,27 @@ public interface Preferences {
 	public void putLong(String key, long value);
 
 	/**
-	 * Returns the <code>long</code> value represented by the <code>String</code>
-	 * object associated with the specified <code>key</code> in this node. The
-	 * <code>String</code> object is converted to a <code>long</code> as by
-	 * <code>Long.parseLong(String)</code>. Returns the specified default if
-	 * there is no value associated with the <code>key</code>, the backing store
-	 * is inaccessible, or if <code>Long.parseLong(String)</code> would throw a
-	 * <code>NumberFormatException</code> if the associated <code>value</code> were
+	 * Returns the {@code long} value represented by the {@code String}
+	 * object associated with the specified {@code key} in this node. The
+	 * {@code String} object is converted to a {@code long} as by
+	 * {@code Long.parseLong(String)}. Returns the specified default if
+	 * there is no value associated with the {@code key}, the backing store
+	 * is inaccessible, or if {@code Long.parseLong(String)} would throw a
+	 * {@code NumberFormatException} if the associated {@code value} were
 	 * passed. This method is intended for use in conjunction with the
 	 * {@link #putLong} method.
 	 * 
-	 * @param key <code>key</code> whose associated value is to be returned as a
-	 *        <code>long</code> value.
+	 * @param key {@code key} whose associated value is to be returned as a
+	 *        {@code long} value.
 	 * @param def the value to be returned in the event that this node has no
-	 *        value associated with <code>key</code> or the associated value
-	 *        cannot be interpreted as a <code>long</code> type or the backing
+	 *        value associated with {@code key} or the associated value
+	 *        cannot be interpreted as a {@code long} type or the backing
 	 *        store is inaccessible.
-	 * @return the <code>long</code> value represented by the <code>String</code>
-	 *         object associated with <code>key</code> in this node, or
-	 *         <code>def</code> if the associated value does not exist or cannot
-	 *         be interpreted as a <code>long</code> type.
-	 * @throws NullPointerException if <code>key</code> is <code>null</code>.
+	 * @return the {@code long} value represented by the {@code String}
+	 *         object associated with {@code key} in this node, or
+	 *         {@code def} if the associated value does not exist or cannot
+	 *         be interpreted as a {@code long} type.
+	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
 	 * @see #putLong(String,long)
@@ -278,26 +278,26 @@ public interface Preferences {
 	public long getLong(String key, long def);
 
 	/**
-	 * Associates a <code>String</code> object representing the specified
-	 * <code>boolean</code> value with the specified key in this node. The
-	 * associated string is "true" if the value is <code>true</code>, and "false"
-	 * if it is <code>false</code>. This method is intended for use in
+	 * Associates a {@code String} object representing the specified
+	 * {@code boolean} value with the specified key in this node. The
+	 * associated string is "true" if the value is {@code true}, and "false"
+	 * if it is {@code false}. This method is intended for use in
 	 * conjunction with the {@link #getBoolean} method.
 	 * 
 	 * <p>
 	 * Implementor's note: it is <i>not </i> necessary that the value be
 	 * represented by a string in the backing store. If the backing store
-	 * supports <code>boolean</code> values, it is not unreasonable to use them.
-	 * This implementation detail is not visible through the <code>Preferences
-	 * </code> API, which allows the value to be read as a <code>boolean</code>
-	 * (with <code>getBoolean</code>) or a <code>String</code> (with <code>get</code>)
+	 * supports {@code boolean} values, it is not unreasonable to use them.
+	 * This implementation detail is not visible through the {@code Preferences
+	 * } API, which allows the value to be read as a {@code boolean}
+	 * (with {@code getBoolean}) or a {@code String} (with {@code get})
 	 * type.
 	 * 
-	 * @param key <code>key</code> with which the string form of value is to be
+	 * @param key {@code key} with which the string form of value is to be
 	 *        associated.
 	 * @param value value whose string form is to be associated with
-	 *        <code>key</code>.
-	 * @throws NullPointerException if <code>key</code> is <code>null</code>.
+	 *        {@code key}.
+	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
 	 * @see #getBoolean(String,boolean)
@@ -306,29 +306,29 @@ public interface Preferences {
 	public void putBoolean(String key, boolean value);
 
 	/**
-	 * Returns the <code>boolean</code> value represented by the <code>String</code>
-	 * object associated with the specified <code>key</code> in this node. Valid
-	 * strings are "true", which represents <code>true</code>, and "false", which
-	 * represents <code>false</code>. Case is ignored, so, for example, "TRUE"
+	 * Returns the {@code boolean} value represented by the {@code String}
+	 * object associated with the specified {@code key} in this node. Valid
+	 * strings are "true", which represents {@code true}, and "false", which
+	 * represents {@code false}. Case is ignored, so, for example, "TRUE"
 	 * and "False" are also valid. This method is intended for use in
 	 * conjunction with the {@link #putBoolean} method.
 	 * 
 	 * <p>
 	 * Returns the specified default if there is no value associated with the
-	 * <code>key</code>, the backing store is inaccessible, or if the associated
+	 * {@code key}, the backing store is inaccessible, or if the associated
 	 * value is something other than "true" or "false", ignoring case.
 	 * 
-	 * @param key <code>key</code> whose associated value is to be returned as a
-	 *        <code>boolean</code>.
+	 * @param key {@code key} whose associated value is to be returned as a
+	 *        {@code boolean}.
 	 * @param def the value to be returned in the event that this node has no
-	 *        value associated with <code>key</code> or the associated value
-	 *        cannot be interpreted as a <code>boolean</code> or the backing store
+	 *        value associated with {@code key} or the associated value
+	 *        cannot be interpreted as a {@code boolean} or the backing store
 	 *        is inaccessible.
-	 * @return the <code>boolean</code> value represented by the <code>String</code>
-	 *         object associated with <code>key</code> in this node, or
-	 *         <code>null</code> if the associated value does not exist or cannot
-	 *         be interpreted as a <code>boolean</code>.
-	 * @throws NullPointerException if <code>key</code> is <code>null</code>.
+	 * @return the {@code boolean} value represented by the {@code String}
+	 *         object associated with {@code key} in this node, or
+	 *         {@code null} if the associated value does not exist or cannot
+	 *         be interpreted as a {@code boolean}.
+	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
 	 * @see #get(String,String)
@@ -337,26 +337,26 @@ public interface Preferences {
 	public boolean getBoolean(String key, boolean def);
 
 	/**
-	 * Associates a <code>String</code> object representing the specified
-	 * <code>float</code> value with the specified <code>key</code> in this node.
-	 * The associated <code>String</code> object is the one that would be returned
-	 * if the <code>float</code> value were passed to
-	 * <code>Float.toString(float)</code>. This method is intended for use in
+	 * Associates a {@code String} object representing the specified
+	 * {@code float} value with the specified {@code key} in this node.
+	 * The associated {@code String} object is the one that would be returned
+	 * if the {@code float} value were passed to
+	 * {@code Float.toString(float)}. This method is intended for use in
 	 * conjunction with the {@link #getFloat} method.
 	 * 
 	 * <p>
 	 * Implementor's note: it is <i>not </i> necessary that the value be
 	 * represented by a string in the backing store. If the backing store
-	 * supports <code>float</code> values, it is not unreasonable to use them.
-	 * This implementation detail is not visible through the <code>Preferences
-	 * </code> API, which allows the value to be read as a <code>float</code> (with
-	 * <code>getFloat</code>) or a <code>String</code> (with <code>get</code>) type.
+	 * supports {@code float} values, it is not unreasonable to use them.
+	 * This implementation detail is not visible through the {@code Preferences
+	 * } API, which allows the value to be read as a {@code float} (with
+	 * {@code getFloat}) or a {@code String} (with {@code get}) type.
 	 * 
-	 * @param key <code>key</code> with which the string form of value is to be
+	 * @param key {@code key} with which the string form of value is to be
 	 *        associated.
 	 * @param value value whose string form is to be associated with
-	 *        <code>key</code>.
-	 * @throws NullPointerException if <code>key</code> is <code>null</code>.
+	 *        {@code key}.
+	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
 	 * @see #getFloat(String,float)
@@ -364,56 +364,56 @@ public interface Preferences {
 	public void putFloat(String key, float value);
 
 	/**
-	 * Returns the float <code>value</code> represented by the <code>String</code>
-	 * object associated with the specified <code>key</code> in this node. The
-	 * <code>String</code> object is converted to a <code>float</code> value as by
-	 * <code>Float.parseFloat(String)</code>. Returns the specified default if
-	 * there is no value associated with the <code>key</code>, the backing store
-	 * is inaccessible, or if <code>Float.parseFloat(String)</code> would throw a
-	 * <code>NumberFormatException</code> if the associated value were passed.
+	 * Returns the float {@code value} represented by the {@code String}
+	 * object associated with the specified {@code key} in this node. The
+	 * {@code String} object is converted to a {@code float} value as by
+	 * {@code Float.parseFloat(String)}. Returns the specified default if
+	 * there is no value associated with the {@code key}, the backing store
+	 * is inaccessible, or if {@code Float.parseFloat(String)} would throw a
+	 * {@code NumberFormatException} if the associated value were passed.
 	 * This method is intended for use in conjunction with the {@link #putFloat}
 	 * method.
 	 * 
-	 * @param key <code>key</code> whose associated value is to be returned as a
-	 *        <code>float</code> value.
+	 * @param key {@code key} whose associated value is to be returned as a
+	 *        {@code float} value.
 	 * @param def the value to be returned in the event that this node has no
-	 *        value associated with <code>key</code> or the associated value
-	 *        cannot be interpreted as a <code>float</code> type or the backing
+	 *        value associated with {@code key} or the associated value
+	 *        cannot be interpreted as a {@code float} type or the backing
 	 *        store is inaccessible.
-	 * @return the <code>float</code> value represented by the string associated
-	 *         with <code>key</code> in this node, or <code>def</code> if the
+	 * @return the {@code float} value represented by the string associated
+	 *         with {@code key} in this node, or {@code def} if the
 	 *         associated value does not exist or cannot be interpreted as a
-	 *         <code>float</code> type.
+	 *         {@code float} type.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
-	 * @throws NullPointerException if <code>key</code> is <code>null</code>.
+	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @see #putFloat(String,float)
 	 * @see #get(String,String)
 	 */
 	public float getFloat(String key, float def);
 
 	/**
-	 * Associates a <code>String</code> object representing the specified
-	 * <code>double</code> value with the specified <code>key</code> in this node.
-	 * The associated <code>String</code> object is the one that would be returned
-	 * if the <code>double</code> value were passed to
-	 * <code>Double.toString(double)</code>. This method is intended for use in
+	 * Associates a {@code String} object representing the specified
+	 * {@code double} value with the specified {@code key} in this node.
+	 * The associated {@code String} object is the one that would be returned
+	 * if the {@code double} value were passed to
+	 * {@code Double.toString(double)}. This method is intended for use in
 	 * conjunction with the {@link #getDouble} method
 	 * 
 	 * <p>
 	 * Implementor's note: it is <i>not </i> necessary that the value be
 	 * represented by a string in the backing store. If the backing store
-	 * supports <code>double</code> values, it is not unreasonable to use them.
-	 * This implementation detail is not visible through the <code>Preferences
-	 * </code> API, which allows the value to be read as a <code>double</code> (with
-	 * <code>getDouble</code>) or a <code>String</code> (with <code>get</code>)
+	 * supports {@code double} values, it is not unreasonable to use them.
+	 * This implementation detail is not visible through the {@code Preferences
+	 * } API, which allows the value to be read as a {@code double} (with
+	 * {@code getDouble}) or a {@code String} (with {@code get})
 	 * type.
 	 * 
-	 * @param key <code>key</code> with which the string form of value is to be
+	 * @param key {@code key} with which the string form of value is to be
 	 *        associated.
 	 * @param value value whose string form is to be associated with
-	 *        <code>key</code>.
-	 * @throws NullPointerException if <code>key</code> is <code>null</code>.
+	 *        {@code key}.
+	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
 	 * @see #getDouble(String,double)
@@ -421,39 +421,39 @@ public interface Preferences {
 	public void putDouble(String key, double value);
 
 	/**
-	 * Returns the <code>double</code> value represented by the <code>String</code>
-	 * object associated with the specified <code>key</code> in this node. The
-	 * <code>String</code> object is converted to a <code>double</code> value as by
-	 * <code>Double.parseDouble(String)</code>. Returns the specified default if
-	 * there is no value associated with the <code>key</code>, the backing store
-	 * is inaccessible, or if <code>Double.parseDouble(String)</code> would throw
-	 * a <code>NumberFormatException</code> if the associated value were passed.
+	 * Returns the {@code double} value represented by the {@code String}
+	 * object associated with the specified {@code key} in this node. The
+	 * {@code String} object is converted to a {@code double} value as by
+	 * {@code Double.parseDouble(String)}. Returns the specified default if
+	 * there is no value associated with the {@code key}, the backing store
+	 * is inaccessible, or if {@code Double.parseDouble(String)} would throw
+	 * a {@code NumberFormatException} if the associated value were passed.
 	 * This method is intended for use in conjunction with the
 	 * {@link #putDouble} method.
 	 * 
-	 * @param key <code>key</code> whose associated value is to be returned as a
-	 *        <code>double</code> value.
+	 * @param key {@code key} whose associated value is to be returned as a
+	 *        {@code double} value.
 	 * @param def the value to be returned in the event that this node has no
-	 *        value associated with <code>key</code> or the associated value
-	 *        cannot be interpreted as a <code>double</code> type or the backing
+	 *        value associated with {@code key} or the associated value
+	 *        cannot be interpreted as a {@code double} type or the backing
 	 *        store is inaccessible.
-	 * @return the <code>double</code> value represented by the <code>String</code>
-	 *         object associated with <code>key</code> in this node, or
-	 *         <code>def</code> if the associated value does not exist or cannot
-	 *         be interpreted as a <code>double</code> type.
+	 * @return the {@code double} value represented by the {@code String}
+	 *         object associated with {@code key} in this node, or
+	 *         {@code def} if the associated value does not exist or cannot
+	 *         be interpreted as a {@code double} type.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the the {@link #removeNode()} method.
-	 * @throws NullPointerException if <code>key</code> is <code>null</code>.
+	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @see #putDouble(String,double)
 	 * @see #get(String,String)
 	 */
 	public double getDouble(String key, double def);
 
 	/**
-	 * Associates a <code>String</code> object representing the specified
-	 * <code>byte[]</code> with the specified <code>key</code> in this node. The
-	 * associated <code>String</code> object the <i>Base64 </i> encoding of the
-	 * <code>byte[]</code>, as defined in <a
+	 * Associates a {@code String} object representing the specified
+	 * {@code byte[]} with the specified {@code key} in this node. The
+	 * associated {@code String} object the <i>Base64 </i> encoding of the
+	 * {@code byte[]}, as defined in <a
 	 * href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045 </a>, Section 6.8,
 	 * with one minor change: the string will consist solely of characters from
 	 * the <i>Base64 Alphabet </i>; it will not contain any newline characters.
@@ -462,19 +462,19 @@ public interface Preferences {
 	 * 
 	 * <p>
 	 * Implementor's note: it is <i>not </i> necessary that the value be
-	 * represented by a <code>String</code> type in the backing store. If the
-	 * backing store supports <code>byte[]</code> values, it is not unreasonable
-	 * to use them. This implementation detail is not visible through the <code>
-	 * Preferences</code> API, which allows the value to be read as an a
-	 * <code>byte[]</code> object (with <code>getByteArray</code>) or a
-	 * <code>String</code> object (with <code>get</code>).
+	 * represented by a {@code String} type in the backing store. If the
+	 * backing store supports {@code byte[]} values, it is not unreasonable
+	 * to use them. This implementation detail is not visible through the {@code 
+	 * Preferences} API, which allows the value to be read as an a
+	 * {@code byte[]} object (with {@code getByteArray}) or a
+	 * {@code String} object (with {@code get}).
 	 * 
-	 * @param key <code>key</code> with which the string form of <code>value</code>
+	 * @param key {@code key} with which the string form of {@code value}
 	 *        is to be associated.
-	 * @param value <code>value</code> whose string form is to be associated with
-	 *        <code>key</code>.
-	 * @throws NullPointerException if <code>key</code> or <code>value</code> is
-	 *         <code>null</code>.
+	 * @param value {@code value} whose string form is to be associated with
+	 *        {@code key}.
+	 * @throws NullPointerException if {@code key} or {@code value} is
+	 *         {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
 	 * @see #getByteArray(String,byte[])
@@ -483,9 +483,9 @@ public interface Preferences {
 	public void putByteArray(String key, byte[] value);
 
 	/**
-	 * Returns the <code>byte[]</code> value represented by the <code>String</code>
-	 * object associated with the specified <code>key</code> in this node. Valid
-	 * <code>String</code> objects are <i>Base64 </i> encoded binary data, as
+	 * Returns the {@code byte[]} value represented by the {@code String}
+	 * object associated with the specified {@code key} in this node. Valid
+	 * {@code String} objects are <i>Base64 </i> encoded binary data, as
 	 * defined in <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045 </a>,
 	 * Section 6.8, with one minor change: the string must consist solely of
 	 * characters from the <i>Base64 Alphabet </i>; no newline characters or
@@ -494,21 +494,21 @@ public interface Preferences {
 	 * 
 	 * <p>
 	 * Returns the specified default if there is no value associated with the
-	 * <code>key</code>, the backing store is inaccessible, or if the associated
+	 * {@code key}, the backing store is inaccessible, or if the associated
 	 * value is not a valid Base64 encoded byte array (as defined above).
 	 * 
-	 * @param key <code>key</code> whose associated value is to be returned as a
-	 *        <code>byte[]</code> object.
+	 * @param key {@code key} whose associated value is to be returned as a
+	 *        {@code byte[]} object.
 	 * @param def the value to be returned in the event that this node has no
-	 *        value associated with <code>key</code> or the associated value
-	 *        cannot be interpreted as a <code>byte[]</code> type, or the backing
+	 *        value associated with {@code key} or the associated value
+	 *        cannot be interpreted as a {@code byte[]} type, or the backing
 	 *        store is inaccessible.
-	 * @return the <code>byte[]</code> value represented by the <code>String</code>
-	 *         object associated with <code>key</code> in this node, or
-	 *         <code>def</code> if the associated value does not exist or cannot
-	 *         be interpreted as a <code>byte[]</code>.
-	 * @throws NullPointerException if <code>key</code> is <code>null</code>. (A
-	 *         <code>null</code> value for <code>def</code> <i>is </i> permitted.)
+	 * @return the {@code byte[]} value represented by the {@code String}
+	 *         object associated with {@code key} in this node, or
+	 *         {@code def} if the associated value does not exist or cannot
+	 *         be interpreted as a {@code byte[]}.
+	 * @throws NullPointerException if {@code key} is {@code null}. (A
+	 *         {@code null} value for {@code def} <i>is </i> permitted.)
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
 	 * @see #get(String,String)
@@ -519,7 +519,7 @@ public interface Preferences {
 	/**
 	 * Returns all of the keys that have an associated value in this node. (The
 	 * returned array will be of size zero if this node has no preferences and
-	 * not <code>null</code>!)
+	 * not {@code null}!)
 	 * 
 	 * @return an array of the keys that have an associated value in this node.
 	 * @throws BackingStoreException if this operation cannot be completed due
@@ -532,7 +532,7 @@ public interface Preferences {
 
 	/**
 	 * Returns the names of the children of this node. (The returned array will
-	 * be of size zero if this node has no children and not <code>null</code>!)
+	 * be of size zero if this node has no children and not {@code null}!)
 	 * 
 	 * @return the names of the children of this node.
 	 * @throws BackingStoreException if this operation cannot be completed due
@@ -544,7 +544,7 @@ public interface Preferences {
 	public String[] childrenNames() throws BackingStoreException;
 
 	/**
-	 * Returns the parent of this node, or <code>null</code> if this is the root.
+	 * Returns the parent of this node, or {@code null} if this is the root.
 	 * 
 	 * @return the parent of this node.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
@@ -553,45 +553,45 @@ public interface Preferences {
 	public Preferences parent();
 
 	/**
-	 * Returns a named <code>Preferences</code> object (node), creating it and any
+	 * Returns a named {@code Preferences} object (node), creating it and any
 	 * of its ancestors if they do not already exist. Accepts a relative or
-	 * absolute pathname. Absolute pathnames (which begin with <code>'/'</code>)
+	 * absolute pathname. Absolute pathnames (which begin with {@code '/'})
 	 * are interpreted relative to the root of this node. Relative pathnames
-	 * (which begin with any character other than <code>'/'</code>) are
-	 * interpreted relative to this node itself. The empty string (<code>""</code>)
+	 * (which begin with any character other than {@code '/'}) are
+	 * interpreted relative to this node itself. The empty string ({@code ""})
 	 * is a valid relative pathname, referring to this node itself.
 	 * 
 	 * <p>
 	 * If the returned node did not exist prior to this call, this node and any
 	 * ancestors that were created by this call are not guaranteed to become
-	 * persistent until the <code>flush</code> method is called on the returned
+	 * persistent until the {@code flush} method is called on the returned
 	 * node (or one of its descendants).
 	 * 
-	 * @param pathName the path name of the <code>Preferences</code> object to
+	 * @param pathName the path name of the {@code Preferences} object to
 	 *        return.
-	 * @return the specified <code>Preferences</code> object.
+	 * @return the specified {@code Preferences} object.
 	 * @throws IllegalArgumentException if the path name is invalid.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
-	 * @throws NullPointerException if path name is <code>null</code>.
+	 * @throws NullPointerException if path name is {@code null}.
 	 * @see #flush()
 	 */
 	public Preferences node(String pathName);
 
 	/**
 	 * Returns true if the named node exists. Accepts a relative or absolute
-	 * pathname. Absolute pathnames (which begin with <code>'/'</code>) are
+	 * pathname. Absolute pathnames (which begin with {@code '/'}) are
 	 * interpreted relative to the root of this node. Relative pathnames (which
-	 * begin with any character other than <code>'/'</code>) are interpreted
-	 * relative to this node itself. The pathname <code>""</code> is valid, and
+	 * begin with any character other than {@code '/'}) are interpreted
+	 * relative to this node itself. The pathname {@code ""} is valid, and
 	 * refers to this node itself.
 	 * 
 	 * <p>
 	 * If this node (or an ancestor) has already been removed with the
 	 * {@link #removeNode()} method, it <i>is </i> legal to invoke this method,
-	 * but only with the pathname <code>""</code>; the invocation will return
-	 * <code>false</code>. Thus, the idiom <code>p.nodeExists("")</code> may be
-	 * used to test whether <code>p</code> has been removed.
+	 * but only with the pathname {@code ""}; the invocation will return
+	 * {@code false}. Thus, the idiom {@code p.nodeExists("")} may be
+	 * used to test whether {@code p} has been removed.
 	 * 
 	 * @param pathName the path name of the node whose existence is to be
 	 *        checked.
@@ -601,7 +601,7 @@ public interface Preferences {
 	 *         with it.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method and
-	 *         <code>pathname</code> is not the empty string (<code>""</code>).
+	 *         {@code pathname} is not the empty string ({@code ""}).
 	 * @throws IllegalArgumentException if the path name is invalid (i.e., it
 	 *         contains multiple consecutive slash characters, or ends with a
 	 *         slash character and is more than one character long).
@@ -612,14 +612,14 @@ public interface Preferences {
 	/**
 	 * Removes this node and all of its descendants, invalidating any properties
 	 * contained in the removed nodes. Once a node has been removed, attempting
-	 * any method other than <code>name()</code>,<code>absolutePath()</code> or
-	 * <code>nodeExists("")</code> on the corresponding <code>Preferences</code>
-	 * instance will fail with an <code>IllegalStateException</code>. (The
-	 * methods defined on <code>Object</code> can still be invoked on a node after
-	 * it has been removed; they will not throw <code>IllegalStateException</code>.)
+	 * any method other than {@code name()},{@code absolutePath()} or
+	 * {@code nodeExists("")} on the corresponding {@code Preferences}
+	 * instance will fail with an {@code IllegalStateException}. (The
+	 * methods defined on {@code Object} can still be invoked on a node after
+	 * it has been removed; they will not throw {@code IllegalStateException}.)
 	 * 
 	 * <p>
-	 * The removal is not guaranteed to be persistent until the <code>flush</code>
+	 * The removal is not guaranteed to be persistent until the {@code flush}
 	 * method is called on the parent of this node.
 	 * 
 	 * @throws IllegalStateException if this node (or an ancestor) has already
@@ -641,10 +641,10 @@ public interface Preferences {
 	/**
 	 * Returns this node's absolute path name. Note that:
 	 * <ul>
-	 * <li>Root node - The path name of the root node is <code>"/"</code>.
+	 * <li>Root node - The path name of the root node is {@code "/"}.
 	 * <li>Slash at end - Path names other than that of the root node may not
-	 * end in slash (<code>'/'</code>).
-	 * <li>Unusual names -<code>"."</code> and <code>".."</code> have <i>no </i>
+	 * end in slash ({@code '/'}).
+	 * <li>Unusual names -{@code "."} and {@code ".."} have <i>no </i>
 	 * special significance in path names.
 	 * <li>Illegal names - The only illegal path names are those that contain
 	 * multiple consecutive slashes, or that end in slash and are not the root.
@@ -685,9 +685,9 @@ public interface Preferences {
 	/**
 	 * Ensures that future reads from this node and its descendants reflect any
 	 * changes that were committed to the persistent store (from any VM) prior
-	 * to the <code>sync</code> invocation. As a side-effect, forces any changes
+	 * to the {@code sync} invocation. As a side-effect, forces any changes
 	 * in the contents of this node and its descendants to the persistent store,
-	 * as if the <code>flush</code> method had been invoked on this node.
+	 * as if the {@code flush} method had been invoked on this node.
 	 * 
 	 * @throws BackingStoreException if this operation cannot be completed due
 	 *         to a failure in the backing store, or inability to communicate

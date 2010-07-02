@@ -29,13 +29,13 @@ public interface UPnPAction {
 	/**
 	 * Returns the action name.
 	 * 
-	 * The action name corresponds to the <code>name</code> field in the
-	 * <code>actionList</code> of the service description.
+	 * The action name corresponds to the {@code name} field in the
+	 * {@code actionList} of the service description.
 	 * <ul>
 	 * <li>For standard actions defined by a UPnP Forum working committee,
-	 * action names must not begin with <code>X_ </code> nor <code> A_</code>.</li>
+	 * action names must not begin with {@code X_ } nor {@code  A_}.</li>
 	 * <li>For non-standard actions specified by a UPnP vendor and added to a
-	 * standard service, action names must begin with <code>X_</code>.</li>
+	 * standard service, action names must begin with {@code X_}.</li>
 	 * </ul>
 	 * 
 	 * @return Name of action, must not contain a hyphen character or a hash
@@ -49,7 +49,7 @@ public interface UPnPAction {
 	 * One of the output arguments can be flagged as a designated return
 	 * argument.
 	 * 
-	 * @return The name of the designated return argument or <code>null</code> if
+	 * @return The name of the designated return argument or {@code null} if
 	 *         none is marked.
 	 */
 	String getReturnArgumentName();
@@ -59,7 +59,7 @@ public interface UPnPAction {
 	 * <p>
 	 * Each action may have zero or more input arguments.
 	 * 
-	 * @return Array of input argument names or <code>null</code> if no input
+	 * @return Array of input argument names or {@code null} if no input
 	 *         arguments.
 	 * 
 	 * @see UPnPStateVariable
@@ -69,7 +69,7 @@ public interface UPnPAction {
 	/**
 	 * List all output arguments for this action.
 	 * 
-	 * @return Array of output argument names or <code>null</code> if there are no
+	 * @return Array of output argument names or {@code null} if there are no
 	 *         output arguments.
 	 * 
 	 * @see UPnPStateVariable
@@ -84,7 +84,7 @@ public interface UPnPAction {
 	 * 
 	 * @param argumentName The name of the UPnP action argument.
 	 * @return State variable associated with the named argument or
-	 *         <code>null</code> if there is no such argument.
+	 *         {@code null} if there is no such argument.
 	 * 
 	 * @see UPnPStateVariable
 	 */
@@ -93,23 +93,23 @@ public interface UPnPAction {
 	/**
 	 * Invokes the action.
 	 * 
-	 * The input and output arguments are both passed as <code>Dictionary</code>
-	 * objects. Each entry in the <code>Dictionary</code> object has a
-	 * <code>String</code> object as key representing the argument name and the
+	 * The input and output arguments are both passed as {@code Dictionary}
+	 * objects. Each entry in the {@code Dictionary} object has a
+	 * {@code String} object as key representing the argument name and the
 	 * value is the argument itself. The class of an argument value must be
 	 * assignable from the class of the associated UPnP state variable.
 	 * 
-	 * The input argument <code>Dictionary</code> object must contain exactly
-	 * those arguments listed by <code>getInputArguments</code> method. The output
-	 * argument <code>Dictionary</code> object will contain exactly those
-	 * arguments listed by <code>getOutputArguments</code> method.
+	 * The input argument {@code Dictionary} object must contain exactly
+	 * those arguments listed by {@code getInputArguments} method. The output
+	 * argument {@code Dictionary} object will contain exactly those
+	 * arguments listed by {@code getOutputArguments} method.
 	 *
-	 * @param args A <code>Dictionary</code> of arguments. Must contain the correct set and
-	 * type of arguments for this action. May be <code>null</code> if no
+	 * @param args A {@code Dictionary} of arguments. Must contain the correct set and
+	 * type of arguments for this action. May be {@code null} if no
 	 * input arguments exist.
 	 *
-	 * @return A <code>Dictionary</code> with the output arguments.
-	 *         <code>null</code> if the action has no output arguments.
+	 * @return A {@code Dictionary} with the output arguments.
+	 *         {@code null} if the action has no output arguments.
 	 *
 	 * @throws UPnPException  A UPnP error has occured.
 	 * @throws Exception The execution fails for some reason.

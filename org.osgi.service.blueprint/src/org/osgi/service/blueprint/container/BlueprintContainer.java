@@ -30,7 +30,7 @@ import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
  * 
  * A Blueprint Container provides access to all managed components. These are
  * the beans, services, and service references. Only bundles in the
- * <code>ACTIVE</code> state (and also the <code>STARTING</code> state for
+ * {@code ACTIVE} state (and also the {@code STARTING} state for
  * bundles awaiting lazy activation) can have an associated Blueprint Container.
  * A given Bundle Context has at most one associated Blueprint Container.
  * 

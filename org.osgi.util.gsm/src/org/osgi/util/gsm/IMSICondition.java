@@ -56,13 +56,13 @@ public class IMSICondition {
 	 *        should return a String array with one value: the IMSI string. The
 	 *        IMSI is 15 digits without hyphens. Limited pattern matching is
 	 *        allowed: the string is 0 to 14 digits, followed by an asterisk (
-	 *        <code>*</code>).
+	 *        {@code *}).
 	 * @return A Condition object that indicates whether the specified IMSI
 	 *         number matches that of the subscriber. If the number ends with an
-	 *         asterisk (<code>*</code>), then the beginning of the IMSI is
+	 *         asterisk ({@code *}), then the beginning of the IMSI is
 	 *         compared to the pattern.
 	 * @throws IllegalArgumentException If the IMSI is not a string of 15
-	 *         digits, or 0 to 14 digits with an <code>*</code> at the end.
+	 *         digits, or 0 to 14 digits with an {@code *} at the end.
 	 */
 	public static Condition getCondition(Bundle bundle,
 			ConditionInfo conditionInfo) {

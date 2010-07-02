@@ -16,7 +16,7 @@
 package org.osgi.service.blueprint.container;
 
 /**
- * A <code>BlueprintEvent</code> Listener.
+ * A {@code BlueprintEvent} Listener.
  * 
  * <p>
  * To receive Blueprint Events, a bundle must register a Blueprint Listener

@@ -47,10 +47,10 @@ public interface DeploymentAdmin {
 	 * with this new version even if it is older (downgrade). If the two versions are the same, then this 
 	 * method simply returns with the old (target) Deployment Package without any action.
 	 *  
-	 * @param  in the input stream the Deployment Package can be read from. It mustn't be <code>null</code>.
+	 * @param  in the input stream the Deployment Package can be read from. It mustn't be {@code null}.
 	 * @return A DeploymentPackage object representing the newly installed/updated Deployment Package. 
-	 *         It is never <code>null</code>. 
-	 * @throws IllegalArgumentException if the got InputStream parameter is <code>null</code>         
+	 *         It is never {@code null}. 
+	 * @throws IllegalArgumentException if the got InputStream parameter is {@code null}         
 	 * @throws DeploymentException if the installation was not successful. For detailed error code description 
 	 *         see {@link DeploymentException}.
 	 * @throws SecurityException if the caller doesn't have the appropriate
@@ -72,11 +72,11 @@ public interface DeploymentAdmin {
       * 
       * During an installation of an existing package (update) or during an uninstallation, 
       * the target must remain in this list until the installation (uninstallation) process 
-      * is completed, after which the source (or <code>null</code> in case of uninstall) 
+      * is completed, after which the source (or {@code null} in case of uninstall) 
       * replaces the target.
       * 
-      * @return the array of <code>DeploymentPackage</code> objects representing all the 
-      *         installed Deployment Packages. The return value cannot be <code>null</code>. 
+      * @return the array of {@code DeploymentPackage} objects representing all the 
+      *         installed Deployment Packages. The return value cannot be {@code null}. 
       *         In case of missing permissions it may give back an empty array.
       * @see DeploymentPackage
       * @see DeploymentAdminPermission
@@ -89,15 +89,15 @@ public interface DeploymentAdmin {
      * 
      * During an installation of an existing package (update) or during an uninstallation, 
      * the target Deployment Package must remain the return value until the installation 
-     * (uninstallation) process is completed, after which the source (or <code>null</code> 
+     * (uninstallation) process is completed, after which the source (or {@code null} 
      * in case of uninstall) is the return value.
      * 
      * @param  symbName the symbolic name of the Deployment Package to be retrieved. It mustn't be 
-     *         <code>null</code>.
-     * @return The <code>DeploymentPackage</code> for the given symbolic name. 
+     *         {@code null}.
+     * @return The {@code DeploymentPackage} for the given symbolic name. 
      *         If there is no Deployment Package with that symbolic name currently installed, 
-     *         <code>null</code> is returned.
-     * @throws IllegalArgumentException if the given <code>symbName</code> is <code>null</code>
+     *         {@code null} is returned.
+     * @throws IllegalArgumentException if the given {@code symbName} is {@code null}
      * @throws SecurityException if the caller doesn't have the appropriate 
      *         {@link DeploymentAdminPermission}("&lt;filter&gt;", "list") permission.
      * @see DeploymentPackage
@@ -112,9 +112,9 @@ public interface DeploymentAdmin {
      * Deployment Package by the Symbolic Name of the bundle.<p>
      * 
      * @param bundle the bundle whose owner is queried 
-     * @return the Deployment Package Object that owns the bundle or <code>null</code> if the bundle doesn't 
+     * @return the Deployment Package Object that owns the bundle or {@code null} if the bundle doesn't 
      *         belong to any Deployment Packages (standalone bundles)
-     * @throws IllegalArgumentException if the given <code>bundle</code> is <code>null</code>
+     * @throws IllegalArgumentException if the given {@code bundle} is {@code null}
      * @throws SecurityException if the caller doesn't have the appropriate 
      *         {@link DeploymentAdminPermission}("&lt;filter&gt;", "list") permission.
      * @see DeploymentPackage

@@ -24,7 +24,7 @@ import org.osgi.framework.ServiceReference;
  * there is a Driver Selector service registered with the Framework, the device
  * manager will ask it to make the selection. If there is no Driver Selector
  * service, or if it returns an invalid result, or throws an
- * <code>Exception</code>, the device manager uses the default selection
+ * {@code Exception}, the device manager uses the default selection
  * strategy.
  * 
  * @version $Id$
@@ -33,7 +33,7 @@ import org.osgi.framework.ServiceReference;
  */
 public interface DriverSelector {
 	/**
-	 * Return value from <code>DriverSelector.select</code>, if no Driver
+	 * Return value from {@code DriverSelector.select}, if no Driver
 	 * service should be attached to the Device service. The value is -1.
 	 */
 	public static final int	SELECT_NONE	= -1;
@@ -42,13 +42,13 @@ public interface DriverSelector {
 	 * Select one of the matching Driver services. The device manager calls this
 	 * method if there is at least one driver bidding for a device. Only Driver
 	 * services that have responded with nonzero (not {@link Device#MATCH_NONE})
-	 * <code></code> match values will be included in the list.
+	 * {@code } match values will be included in the list.
 	 * 
-	 * @param reference the <code>ServiceReference</code> object of the Device
+	 * @param reference the {@code ServiceReference} object of the Device
 	 *        service.
 	 * @param matches the array of all non-zero matches.
-	 * @return index into the array of <code>Match</code> objects, or
-	 *         <code>SELECT_NONE</code> if no Driver service should be attached
+	 * @return index into the array of {@code Match} objects, or
+	 *         {@code SELECT_NONE} if no Driver service should be attached
 	 */
 	public int select(ServiceReference reference, Match[] matches);
 }

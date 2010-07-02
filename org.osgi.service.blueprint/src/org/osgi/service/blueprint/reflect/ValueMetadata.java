@@ -16,7 +16,7 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Metadata for a simple <code>String</code> value that will be type-converted
+ * Metadata for a simple {@code String} value that will be type-converted
  * if necessary before injecting.
  * 
  * @ThreadSafe
@@ -26,8 +26,8 @@ public interface ValueMetadata extends NonNullMetadata {
 	/**
 	 * Return the unconverted string representation of the value.
 	 * 
-	 * This is specified by the <code>value</code> attribute or text part of the
-	 * <code>value</code> element.
+	 * This is specified by the {@code value} attribute or text part of the
+	 * {@code value} element.
 	 * 
 	 * @return The unconverted string representation of the value.
 	 */
@@ -36,10 +36,10 @@ public interface ValueMetadata extends NonNullMetadata {
 	/**
 	 * Return the name of the type to which the value should be converted.
 	 * 
-	 * This is specified by the <code>type</code> attribute.
+	 * This is specified by the {@code type} attribute.
 	 * 
 	 * @return The name of the type to which the value should be converted or
-	 *         <code>null</code> if no type is specified.
+	 *         {@code null} if no type is specified.
 	 */
 	String getType();
 }

@@ -23,7 +23,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 
 /**
- * The <code>DeploymentPackage</code> object represents a deployment package
+ * The {@code DeploymentPackage} object represents a deployment package
  * (already installed or being currently processed). A Deployment Package groups
  * resources as a unit of management. A deployment package is something that can
  * be installed, updated, and uninstalled as a unit. A deployment package is a
@@ -52,7 +52,7 @@ import org.osgi.framework.Version;
  * <p>
  * 
  * If a deployment package is being updated the old version is visible through
- * the <code>DeploymentPackage</code> interface until the update process ends.
+ * the {@code DeploymentPackage} interface until the update process ends.
  * After the package is updated the updated version is visible and the old one
  * is not accessible any more.
  */
@@ -111,8 +111,8 @@ public interface DeploymentPackage {
 	 * <li>{@link #uninstallForced()}</li>
 	 * </ul>
 	 * 
-	 * @return <code>true</code> if the deployment package is stale.
-	 *         <code>false</code> otherwise
+	 * @return {@code true} if the deployment package is stale.
+	 *         {@code false} otherwise
 	 * @see #uninstall
 	 * @see #uninstallForced
 	 */
@@ -129,11 +129,11 @@ public interface DeploymentPackage {
 	 * Returns the Deployment Package human readable name.
 	 * 
 	 * This method returns the localized human readable name as set with the
-	 * <code>DeploymentPackage-Name</code> manifest header using the default
-	 * locale. If no header is set, this method will return <code>null</code>.
+	 * {@code DeploymentPackage-Name} manifest header using the default
+	 * locale. If no header is set, this method will return {@code null}.
 	 * 
 	 * @return The human readable name of the deployment package or
-	 *         <code>null</code> if header is not set.
+	 *         {@code null} if header is not set.
 	 * @since 1.1
 	 */
 	String getDisplayName();
@@ -150,7 +150,7 @@ public interface DeploymentPackage {
 	 * specified in the manifest of this deployment package. Its size is equal
 	 * to the number of the bundles in the deployment package.
 	 * 
-	 * @return array of <code>BundleInfo</code> objects
+	 * @return array of {@code BundleInfo} objects
 	 * @throws SecurityException
 	 *             if the caller doesn't have the appropriate
 	 *             {@link DeploymentAdminPermission} with "metadata" action
@@ -161,15 +161,15 @@ public interface DeploymentPackage {
 	 * Returns a URL pointing to an image that represents the icon for this
 	 * Deployment Package.
 	 * 
-	 * The <code>DeploymentPackage-Icon</code> header can set an icon for the
+	 * The {@code DeploymentPackage-Icon} header can set an icon for the
 	 * the deployment package. This method returns an absolute URL that is
 	 * defined by this header. The Deployment Admin service must provide this
 	 * icon as a local resource. That is, the Deployment Admin must make a local
-	 * copy of the specified icon. The returned <code>URL</code>'s must point to
+	 * copy of the specified icon. The returned {@code URL}'s must point to
 	 * a local resource.
 	 * 
 	 * @return An absolute URL to a local (device resident) image resource or
-	 *         <code>null</code> if not found
+	 *         {@code null} if not found
 	 * @since 1.1
 	 */
 	URL getIcon();
@@ -177,7 +177,7 @@ public interface DeploymentPackage {
 	/**
 	 * Returns the bundle instance, which is part of this deployment package,
 	 * that corresponds to the bundle's symbolic name passed in the
-	 * <code>symbolicName</code> parameter. This method will return null for
+	 * {@code symbolicName} parameter. This method will return null for
 	 * request for bundles that are not part of this deployment package.
 	 * <p>
 	 * 
@@ -188,7 +188,7 @@ public interface DeploymentPackage {
 	 * 
 	 * @param symbolicName
 	 *            the symbolic name of the requested bundle
-	 * @return The <code>Bundle</code> instance for a given bundle symbolic
+	 * @return The {@code Bundle} instance for a given bundle symbolic
 	 *         name.
 	 * @throws SecurityException
 	 *             if the caller doesn't have the appropriate
@@ -242,7 +242,7 @@ public interface DeploymentPackage {
 	 * @param resource
 	 *            the name of the resource (it is the same as the value of the
 	 *            "Name" attribute in the deployment package's manifest)
-	 * @return resource processor for the resource or <code>null</code>.
+	 * @return resource processor for the resource or {@code null}.
 	 * @throws SecurityException if the caller doesn't have the appropriate {@link DeploymentAdminPermission} 
 	 *         with "metadata" action
 	 * @throws IllegalStateException if the package is stale
@@ -261,7 +261,7 @@ public interface DeploymentPackage {
 	 * 
 	 * @param header
 	 *            the requested header
-	 * @return the value of the header or <code>null</code> if the header does
+	 * @return the value of the header or {@code null} if the header does
 	 *         not exist
 	 * @throws SecurityException
 	 *             if the caller doesn't have the appropriate
@@ -284,7 +284,7 @@ public interface DeploymentPackage {
 	 *            "Name" attribute in the deployment package's manifest)
 	 * @param header
 	 *            the requested header
-	 * @return the value of the header or <code>null</code> if the resource or
+	 * @return the value of the header or {@code null} if the resource or
 	 *         the header doesn't exist
 	 * @throws SecurityException
 	 *             if the caller doesn't have the appropriate
@@ -295,7 +295,7 @@ public interface DeploymentPackage {
 	/**
 	 * Uninstalls the deployment package. After uninstallation, the deployment
 	 * package object becomes stale. This can be checked by using
-	 * {@link #isStale()}, which will return <code>true</code> when stale.
+	 * {@link #isStale()}, which will return {@code true} when stale.
 	 * <p>
 	 * 
 	 * @throws DeploymentException
@@ -316,7 +316,7 @@ public interface DeploymentPackage {
 	 * couldn't be uninstalled using traditional means ({@link #uninstall()})
 	 * due to exceptions. After uninstallation, the deployment package object
 	 * becomes stale. This can be checked by using {@link #isStale()}, which
-	 * will return <code>true</code> when stale.
+	 * will return {@code true} when stale.
 	 * <p>
 	 * 
 	 * The method forces removal of the Deployment Package from the repository
@@ -352,10 +352,9 @@ public interface DeploymentPackage {
 	 * deployment packages are equal if they have the same deployment package
 	 * symbolic name and version.
 	 * 
-	 * @param other
-	 *            the reference object with which to compare.
-	 * @return true if this object is the same as the <code>other<code> argument; false
-	 *         otherwise.
+	 * @param other the reference object with which to compare.
+	 * @return true if this object is the same as the {@code other} argument;
+	 *         false otherwise.
 	 */
 	boolean equals(Object other);
 

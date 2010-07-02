@@ -20,7 +20,7 @@
  * <p>
  * This package contains the public API of the Notification service. This service
  * enables the sending of asynchronous notifications to management servers.
- * Permission classes are provided by the <code>info.dmtree.security</code> package.
+ * Permission classes are provided by the {@code info.dmtree.security} package.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the

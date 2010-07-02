@@ -36,7 +36,7 @@ package info.dmtree;
  * necessarily sufficient: the plugin may carry out more thorough (more
  * expensive) checks when the node is actually created or set.
  * <p>
- * If a <code>MetaNode</code> is available for a node, the DmtAdmin must use the
+ * If a {@code MetaNode} is available for a node, the DmtAdmin must use the
  * information provided by it to filter out invalid requests on that node.
  * However, not all methods on this interface are actually used for this
  * purpose, as many of them (e.g. {@link #getFormat} or {@link #getValidNames})
@@ -48,7 +48,7 @@ package info.dmtree;
  * enforce the constraints defined by it - such methods are only for external
  * use, for example in user interfaces.
  * <p>
- * Most of the methods of this class return <code>null</code> if a certain piece
+ * Most of the methods of this class return {@code null} if a certain piece
  * of meta information is not defined for the node or providing this information
  * is not supported. Methods of this class do not throw exceptions.
  * 
@@ -58,7 +58,7 @@ public interface MetaNode {
 
     /**
      * Constant for the ADD access type. If {@link #can(int)} returns
-     * <code>true</code> for this operation, this node can potentially be
+     * {@code true} for this operation, this node can potentially be
      * added to its parent. Nodes with {@link #PERMANENT} or {@link #AUTOMATIC}
      * scope typically do not have this access type.
      */
@@ -66,28 +66,28 @@ public interface MetaNode {
 
     /**
      * Constant for the DELETE access type. If {@link #can(int)} returns
-     * <code>true</code> for this operation, the node can potentially be
+     * {@code true} for this operation, the node can potentially be
      * deleted.
      */
     int CMD_DELETE = 1;
 
     /**
      * Constant for the EXECUTE access type. If {@link #can(int)} returns
-     * <code>true</code> for this operation, the node can potentially be
+     * {@code true} for this operation, the node can potentially be
      * executed.
      */
     int CMD_EXECUTE = 2;
 
     /**
      * Constant for the REPLACE access type. If {@link #can(int)} returns
-     * <code>true</code> for this operation, the value and other properties of
+     * {@code true} for this operation, the value and other properties of
      * the node can potentially be modified.
      */
     int CMD_REPLACE = 3;
 
     /**
      * Constant for the GET access type. If {@link #can(int)} returns
-     * <code>true</code> for this operation, the value, the list of child nodes
+     * {@code true} for this operation, the value, the list of child nodes
      * (in case of interior nodes) and the properties of the node can
      * potentially be retrieved.
      */
@@ -126,8 +126,8 @@ public interface MetaNode {
      * Check whether the given operation is valid for this node. If no meta-data
      * is provided for a node, all operations are valid.
      * 
-     * @param operation One of the <code>MetaNode.CMD_...</code> constants.
-     * @return <code>false</code> if the operation is not valid for this node
+     * @param operation One of the {@code MetaNode.CMD_...} constants.
+     * @return {@code false} if the operation is not valid for this node
      *         or the operation code is not one of the allowed constants
      */
     boolean can(int operation);
@@ -135,7 +135,7 @@ public interface MetaNode {
     /**
      * Check whether the node is a leaf node or an internal one.
      * 
-     * @return <code>true</code> if the node is a leaf node
+     * @return {@code true} if the node is a leaf node
      */
     boolean isLeaf();
 
@@ -157,15 +157,15 @@ public interface MetaNode {
 
     /**
      * Get the explanation string associated with this node. Can be
-     * <code>null</code> if no description is provided for this node.
+     * {@code null} if no description is provided for this node.
      * 
-     * @return node description string or <code>null</code> for no description
+     * @return node description string or {@code null} for no description
      */
     String getDescription();
 
     /**
      * Get the number of maximum occurrences of this type of nodes on the same
-     * level in the DMT. Returns <code>Integer.MAX_VALUE</code> if there is no
+     * level in the DMT. Returns {@code Integer.MAX_VALUE} if there is no
      * upper limit. Note that if the occurrence is greater than 1 then this node
      * can not have siblings with different metadata. In other words, if
      * different types of nodes coexist on the same level, their occurrence can
@@ -180,14 +180,14 @@ public interface MetaNode {
      * Check whether zero occurrence of this node is valid. If no meta-data is
      * returned for a node, zero occurrences are allowed.
      * 
-     * @return <code>true</code> if zero occurrence of this node is valid
+     * @return {@code true} if zero occurrence of this node is valid
      */
     boolean isZeroOccurrenceAllowed();
 
     /**
      * Get the default value of this node if any.
      * 
-     * @return The default value or <code>null</code> if not defined
+     * @return The default value or {@code null} if not defined
      */
     DmtData getDefault();
 
@@ -196,15 +196,15 @@ public interface MetaNode {
      * returned list must be the default MIME type.
      * <p>
      * All MIME types are considered valid if no meta-data is provided for a
-     * node or if <code>null</code> is returned by this method. In this case
+     * node or if {@code null} is returned by this method. In this case
      * the default MIME type cannot be retrieved from the meta-data, but the
      * node may still have a default. This hidden default (if it exists) can be
-     * utilized by passing <code>null</code> as the type parameter of
+     * utilized by passing {@code null} as the type parameter of
      * {@link DmtSession#setNodeType(String, String)} or
      * {@link DmtSession#createLeafNode(String, DmtData, String)}.
      * 
      * @return the list of allowed MIME types for this node, starting with the
-     *         default MIME type, or <code>null</code> if all types are
+     *         default MIME type, or {@code null} if all types are
      *         allowed
      */
     String[] getMimeTypes();
@@ -213,7 +213,7 @@ public interface MetaNode {
      * Get the maximum allowed value associated with a node of numeric format.
      * If no meta-data is provided for a node, there is no upper limit to its
      * value. This method is only meaningful if the node has integer or float
-     * format. The returned limit has <code>double</code> type, as this can be
+     * format. The returned limit has {@code double} type, as this can be
      * used to denote both integer and float limits with full precision. The
      * actual maximum should be the largest integer or float number that does
      * not exceed the returned value.
@@ -223,7 +223,7 @@ public interface MetaNode {
      * calls {@link #isValidValue} for checking the value, its behaviour should
      * be consistent with this method.
      * 
-     * @return the allowed maximum, or <code>Double.MAX_VALUE</code> if there
+     * @return the allowed maximum, or {@code Double.MAX_VALUE} if there
      *         is no upper limit defined or the node's format is not integer or
      *         float
      */
@@ -233,7 +233,7 @@ public interface MetaNode {
      * Get the minimum allowed value associated with a node of numeric format.
      * If no meta-data is provided for a node, there is no lower limit to its
      * value. This method is only meaningful if the node has integer or float
-     * format. The returned limit has <code>double</code> type, as this can be
+     * format. The returned limit has {@code double} type, as this can be
      * used to denote both integer and float limits with full precision. The
      * actual minimum should be the smallest integer or float number that is
      * larger than the returned value.
@@ -243,7 +243,7 @@ public interface MetaNode {
      * calls {@link #isValidValue} for checking the value, its behaviour should
      * be consistent with this method.
      * 
-     * @return the allowed minimum, or <code>Double.MIN_VALUE</code> if there
+     * @return the allowed minimum, or {@code Double.MIN_VALUE} if there
      *         is no lower limit defined or the node's format is not integer or
      *         float
      */
@@ -251,7 +251,7 @@ public interface MetaNode {
 
     /**
      * Return an array of DmtData objects if valid values are defined for the
-     * node, or <code>null</code> otherwise. If no meta-data is provided for a
+     * node, or {@code null} otherwise. If no meta-data is provided for a
      * node, all values are considered valid.
      * <p>
      * The information returned by this method is not checked by DmtAdmin, it
@@ -259,7 +259,7 @@ public interface MetaNode {
      * calls {@link #isValidValue} for checking the value, its behaviour should
      * be consistent with this method.
      * 
-     * @return the valid values for this node, or <code>null</code> if not
+     * @return the valid values for this node, or {@code null} if not
      *         defined
      */
     DmtData[] getValidValues();
@@ -291,7 +291,7 @@ public interface MetaNode {
      * {@link #getFormat()} contains {@link DmtData#FORMAT_RAW_STRING} or
      * {@link DmtData#FORMAT_RAW_BINARY}: it specifies precisely which raw
      * format(s) are actually supported.  If the node cannot contain data in one
-     * of the raw types, this method must return <code>null</code>.
+     * of the raw types, this method must return {@code null}.
      * <p>
      * The format names returned by this method are not checked by DmtAdmin,
      * they are only for external use, for example in user interfaces. DmtAdmin
@@ -299,7 +299,7 @@ public interface MetaNode {
      * should be consistent with this method.
      * 
      * @return the allowed format name(s) of raw data stored by the node, or
-     *         <code>null</code> if raw formats are not supported
+     *         {@code null} if raw formats are not supported
      */
     String[] getRawFormatNames();
 
@@ -311,21 +311,21 @@ public interface MetaNode {
      * {@link #getMin} and {@link #getMax} methods (if applicable), as the Dmt
      * Admin only calls this method for value validation.
      * <p>
-     * This method may return <code>true</code> even if not all aspects of the
+     * This method may return {@code true} even if not all aspects of the
      * value have been checked, expensive operations (for example those that
      * require external resources) need not be performed here. The actual value
      * setting method may still indicate that the value is invalid.
      * 
      * @param value the value to check for validity
-     * @return <code>false</code> if the specified value is found to be
+     * @return {@code false} if the specified value is found to be
      *         invalid for the node described by this meta-node,
-     *         <code>true</code> otherwise
+     *         {@code true} otherwise
      */
     boolean isValidValue(DmtData value);
 
     /**
      * Return an array of Strings if valid names are defined for the node, or
-     * <code>null</code> if no valid name list is defined or if this piece of
+     * {@code null} if no valid name list is defined or if this piece of
      * meta info is not supported. If no meta-data is provided for a node, all
      * names are considered valid.
      * <p>
@@ -334,7 +334,7 @@ public interface MetaNode {
      * calls {@link #isValidName} for checking the name, its behaviour should be
      * consistent with this method.
      * 
-     * @return the valid values for this node name, or <code>null</code> if
+     * @return the valid values for this node name, or {@code null} if
      *         not defined
      */
     String[] getValidNames();
@@ -347,22 +347,22 @@ public interface MetaNode {
      * {@link #getValidNames} (if any), the DmtAdmin only calls this method for
      * name validation.
      * <p>
-     * This method may return <code>true</code> even if not all aspects of the
+     * This method may return {@code true} even if not all aspects of the
      * name have been checked, expensive operations (for example those that
      * require external resources) need not be performed here. The actual node
      * creation may still indicate that the node name is invalid.
      * 
      * @param name the node name to check for validity
-     * @return <code>false</code> if the specified name is found to be invalid
-     *         for the node described by this meta-node, <code>true</code>
+     * @return {@code false} if the specified name is found to be invalid
+     *         for the node described by this meta-node, {@code true}
      *         otherwise
      */
     boolean isValidName(String name);
 
     /**
      * Returns the list of extension property keys, if the provider of this
-     * <code>MetaNode</code> provides proprietary extensions to node meta
-     * data. The method returns <code>null</code> if the node doesn't provide
+     * {@code MetaNode} provides proprietary extensions to node meta
+     * data. The method returns {@code null} if the node doesn't provide
      * such extensions.
      * 
      * @return the array of supported extension property keys
@@ -371,13 +371,13 @@ public interface MetaNode {
 
     /**
      * Returns the value for the specified extension property key. This method
-     * only works if the provider of this <code>MetaNode</code> provides
+     * only works if the provider of this {@code MetaNode} provides
      * proprietary extensions to node meta data.
      * 
      * @param key the key for the extension property
-     * @return the value of the requested property, cannot be <code>null</code>
+     * @return the value of the requested property, cannot be {@code null}
      * @throws IllegalArgumentException if the specified key is not supported by
-     *         this <code>MetaNode</code>
+     *         this {@code MetaNode}
      */
     Object getExtensionProperty(String key);
 }

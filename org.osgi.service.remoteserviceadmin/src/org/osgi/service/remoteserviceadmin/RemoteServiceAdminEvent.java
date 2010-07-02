@@ -87,10 +87,10 @@ public class RemoteServiceAdminEvent {
 	 * Private constructor.
 	 * 
 	 * @param type The event type
-	 * @param source The source bundle, must not be <code>null</code>.
-	 * @param importReference The importReference, can be <code>null</code>.
-	 * @param exportReference The exportReference, can be <code>null</code>.
-	 * @param exception Any exceptions encountered, can be <code>null</code>
+	 * @param source The source bundle, must not be {@code null}.
+	 * @param importReference The importReference, can be {@code null}.
+	 * @param exportReference The exportReference, can be {@code null}.
+	 * @param exception Any exceptions encountered, can be {@code null}
 	 */
 	private RemoteServiceAdminEvent(int type, Bundle source,
 			ImportReference importReference, ExportReference exportReference,
@@ -109,9 +109,9 @@ public class RemoteServiceAdminEvent {
 	 * Create a Remote Service Admin Event for an export notification.
 	 * 
 	 * @param type The event type.
-	 * @param source The source bundle, must not be <code>null</code>.
-	 * @param exportReference The exportReference, can not be <code>null</code>.
-	 * @param exception Any exceptions encountered, can be <code>null</code>.
+	 * @param source The source bundle, must not be {@code null}.
+	 * @param exportReference The exportReference, can not be {@code null}.
+	 * @param exception Any exceptions encountered, can be {@code null}.
 	 */
 	public RemoteServiceAdminEvent(int type, Bundle source,
 			ExportReference exportReference, Throwable exception) {
@@ -122,9 +122,9 @@ public class RemoteServiceAdminEvent {
 	 * Create a Remote Service Admin Event for an import notification.
 	 * 
 	 * @param type The event type.
-	 * @param source The source bundle, must not be <code>null</code>.
-	 * @param importReference The importReference, can not be <code>null</code>.
-	 * @param exception Any exceptions encountered, can be <code>null</code>.
+	 * @param source The source bundle, must not be {@code null}.
+	 * @param importReference The importReference, can not be {@code null}.
+	 * @param exception Any exceptions encountered, can be {@code null}.
 	 */
 	public RemoteServiceAdminEvent(int type, Bundle source,
 			ImportReference importReference, Throwable exception) {
@@ -134,7 +134,7 @@ public class RemoteServiceAdminEvent {
 	/**
 	 * Return the Import Reference for this event.
 	 * 
-	 * @return The Import Reference or <code>null</code>.
+	 * @return The Import Reference or {@code null}.
 	 */
 	public ImportReference getImportReference() {
 		return importReference;
@@ -143,7 +143,7 @@ public class RemoteServiceAdminEvent {
 	/**
 	 * Return the Export Reference for this event.
 	 * 
-	 * @return The Export Reference or <code>null</code>.
+	 * @return The Export Reference or {@code null}.
 	 */
 	public ExportReference getExportReference() {
 		return exportReference;
@@ -152,7 +152,7 @@ public class RemoteServiceAdminEvent {
 	/**
 	 * Return the exception for this event.
 	 * 
-	 * @return The exception or <code>null</code>.
+	 * @return The exception or {@code null}.
 	 */
 	public Throwable getException() {
 		return exception;

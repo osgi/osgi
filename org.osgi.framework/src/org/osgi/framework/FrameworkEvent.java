@@ -22,8 +22,8 @@ import java.util.EventObject;
  * A general event from the Framework.
  * 
  * <p>
- * <code>FrameworkEvent</code> objects are delivered to
- * <code>FrameworkListener</code>s when a general event occurs within the OSGi
+ * {@code FrameworkEvent} objects are delivered to
+ * {@code FrameworkListener}s when a general event occurs within the OSGi
  * environment. A type code is used to identify the event type for future
  * extendability.
  * 
@@ -82,7 +82,7 @@ public class FrameworkEvent extends EventObject {
 	 * The source of this event is the System Bundle.
 	 * 
 	 * @since 1.2
-	 * @see "<code>PackageAdmin.refreshPackages</code>"
+	 * @see "{@code PackageAdmin.refreshPackages}"
 	 */
 	public final static int	PACKAGES_REFRESHED				= 0x00000004;
 
@@ -170,7 +170,7 @@ public class FrameworkEvent extends EventObject {
 	 * Creates a Framework event.
 	 * 
 	 * @param type The event type.
-	 * @param source The event source object. This may not be <code>null</code>.
+	 * @param source The event source object. This may not be {@code null}.
 	 * @deprecated As of 1.2. This constructor is deprecated in favor of using
 	 *             the other constructor with the System Bundle as the event
 	 *             source.
@@ -188,7 +188,7 @@ public class FrameworkEvent extends EventObject {
 	 * @param type The event type.
 	 * @param bundle The event source.
 	 * @param throwable The related exception. This argument may be
-	 *        <code>null</code> if there is no related exception.
+	 *        {@code null} if there is no related exception.
 	 */
 	public FrameworkEvent(int type, Bundle bundle, Throwable throwable) {
 		super(bundle);
@@ -200,7 +200,7 @@ public class FrameworkEvent extends EventObject {
 	/**
 	 * Returns the exception related to this event.
 	 * 
-	 * @return The related exception or <code>null</code> if none.
+	 * @return The related exception or {@code null} if none.
 	 */
 	public Throwable getThrowable() {
 		return throwable;

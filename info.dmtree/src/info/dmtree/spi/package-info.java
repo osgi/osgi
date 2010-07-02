@@ -20,7 +20,7 @@
  * <p>
  * This package contains the interface classes that compose the Device Management 
  * SPI (Service Provider Interface).  These interfaces are implemented by DMT plugins;
- * users of the <code>DmtAdmin</code> interface do not interact directly with these.
+ * users of the {@code DmtAdmin} interface do not interact directly with these.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the

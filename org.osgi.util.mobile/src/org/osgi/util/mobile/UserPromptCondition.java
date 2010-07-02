@@ -75,7 +75,7 @@ public class UserPromptCondition implements Condition {
 	 * </ol>
 	 * @return The requested UserPromptCondition.
 	 * @throws IllegalArgumentException if the parameters are malformed.
-	 * @throws NullPointerException if one of the parameters is <code>null</code>.
+	 * @throws NullPointerException if one of the parameters is {@code null}.
 	 */
 	public static Condition getCondition(Bundle bundle,ConditionInfo conditionInfo)
 	{

@@ -46,8 +46,8 @@ public interface Framework extends Bundle {
 	 * <li>Have event handling enabled.</li>
 	 * <li>Have reified Bundle objects for all installed bundles.</li>
 	 * <li>Have registered any framework services. For example,
-	 * <code>PackageAdmin</code>, <code>ConditionalPermissionAdmin</code>,
-	 * <code>StartLevel</code>.</li>
+	 * {@code PackageAdmin}, {@code ConditionalPermissionAdmin},
+	 * {@code StartLevel}.</li>
 	 * </ul>
 	 * 
 	 * <p>
@@ -61,7 +61,7 @@ public interface Framework extends Bundle {
 	 * @throws BundleException If this Framework could not be initialized.
 	 * @throws SecurityException If the Java Runtime Environment supports
 	 *         permissions and the caller does not have the appropriate
-	 *         <code>AdminPermission[this,EXECUTE]</code> or if there is a
+	 *         {@code AdminPermission[this,EXECUTE]} or if there is a
 	 *         security manager already installed and the
 	 *         {@link Constants#FRAMEWORK_SECURITY} configuration property is
 	 *         set.
@@ -70,8 +70,8 @@ public interface Framework extends Bundle {
 	void init() throws BundleException;
 
 	/**
-	 * Wait until this Framework has completely stopped. The <code>stop</code>
-	 * and <code>update</code> methods on a Framework performs an asynchronous
+	 * Wait until this Framework has completely stopped. The {@code stop}
+	 * and {@code update} methods on a Framework performs an asynchronous
 	 * stop of the Framework. This method can be used to wait until the
 	 * asynchronous stop of this Framework has completed. This method will only
 	 * wait if called when this Framework is in the {@link #STARTING},
@@ -84,7 +84,7 @@ public interface Framework extends Bundle {
 	 *        Framework has completely stopped. A value of zero will wait
 	 *        indefinitely.
 	 * @return A Framework Event indicating the reason this method returned. The
-	 *         following <code>FrameworkEvent</code> types may be returned by
+	 *         following {@code FrameworkEvent} types may be returned by
 	 *         this method.
 	 *         <ul>
 	 *         <li>{@link FrameworkEvent#STOPPED STOPPED} - This Framework has
@@ -144,7 +144,7 @@ public interface Framework extends Bundle {
 	 * 
 	 * @throws BundleException If this Framework could not be started.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>AdminPermission[this,EXECUTE]</code>, and the Java Runtime
+	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
 	 * @see "Start Level Service Specification"
 	 */
@@ -160,7 +160,7 @@ public interface Framework extends Bundle {
 	 * @param options Ignored. There are no start options for the Framework.
 	 * @throws BundleException If this Framework could not be started.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>AdminPermission[this,EXECUTE]</code>, and the Java Runtime
+	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
 	 * @see #start()
 	 */
@@ -196,7 +196,7 @@ public interface Framework extends Bundle {
 	 * @throws BundleException If stopping this Framework could not be
 	 *         initiated.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>AdminPermission[this,EXECUTE]</code>, and the Java Runtime
+	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
 	 * @see "Start Level Service Specification"
 	 */
@@ -213,7 +213,7 @@ public interface Framework extends Bundle {
 	 * @throws BundleException If stopping this Framework could not be
 	 *         initiated.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>AdminPermission[this,EXECUTE]</code>, and the Java Runtime
+	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
 	 * @see #stop()
 	 */
@@ -227,7 +227,7 @@ public interface Framework extends Bundle {
 	 * 
 	 * @throws BundleException This Framework cannot be uninstalled.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>AdminPermission[this,LIFECYCLE]</code>, and the Java
+	 *         {@code AdminPermission[this,LIFECYCLE]}, and the Java
 	 *         Runtime Environment supports permissions.
 	 */
 	void uninstall() throws BundleException;
@@ -248,7 +248,7 @@ public interface Framework extends Bundle {
 	 * @throws BundleException If stopping and restarting this Framework could
 	 *         not be initiated.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>AdminPermission[this,LIFECYCLE]</code>, and the Java
+	 *         {@code AdminPermission[this,LIFECYCLE]}, and the Java
 	 *         Runtime Environment supports permissions.
 	 */
 	void update() throws BundleException;
@@ -265,7 +265,7 @@ public interface Framework extends Bundle {
 	 * @throws BundleException If stopping and restarting this Framework could
 	 *         not be initiated.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>AdminPermission[this,LIFECYCLE]</code>, and the Java
+	 *         {@code AdminPermission[this,LIFECYCLE]}, and the Java
 	 *         Runtime Environment supports permissions.
 	 */
 	void update(InputStream in) throws BundleException;
@@ -281,12 +281,12 @@ public interface Framework extends Bundle {
 
 	/**
 	 * Returns the Framework location identifier. This Framework is assigned the
-	 * unique location &quot;<code>System Bundle</code>&quot; since this
+	 * unique location &quot;{@code System Bundle}&quot; since this
 	 * Framework is also a System Bundle.
 	 * 
-	 * @return The string &quot;<code>System Bundle</code>&quot;.
+	 * @return The string &quot;{@code System Bundle}&quot;.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>AdminPermission[this,METADATA]</code>, and the Java Runtime
+	 *         {@code AdminPermission[this,METADATA]}, and the Java Runtime
 	 *         Environment supports permissions.
 	 * @see Bundle#getLocation()
 	 * @see Constants#SYSTEM_BUNDLE_LOCATION
@@ -296,7 +296,7 @@ public interface Framework extends Bundle {
 	/**
 	 * Returns the symbolic name of this Framework. The symbolic name is unique
 	 * for the implementation of the framework. However, the symbolic name
-	 * &quot;<code>system.bundle</code>&quot; must be recognized as an alias to
+	 * &quot;{@code system.bundle}&quot; must be recognized as an alias to
 	 * the implementation-defined symbolic name since this Framework is also a
 	 * System Bundle.
 	 * 

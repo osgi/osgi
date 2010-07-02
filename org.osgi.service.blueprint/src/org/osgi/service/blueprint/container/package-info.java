@@ -19,7 +19,7 @@
  * 
  * <p>
  * This package defines the primary interface to a Blueprint Container,
- * <code>BlueprintContainer</code>. An instance of this type is available
+ * {@code BlueprintContainer}. An instance of this type is available
  * inside a Blueprint Container as an implicitly defined component with the name
  * &quot;blueprintContainer&quot;.
  *

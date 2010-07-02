@@ -41,7 +41,7 @@ public interface Condition {
 
 	/**
 	 * Returns whether the evaluation must be postponed until the end of the
-	 * permission check. If this method returns <code>false</code> (or this
+	 * permission check. If this method returns {@code false} (or this
 	 * Condition is immutable), then this Condition must be able to directly
 	 * answer the {@link #isSatisfied()} method. In other words, isSatisfied()
 	 * will return very quickly since no external sources, such as for example
@@ -49,8 +49,8 @@ public interface Condition {
 	 * This method must always return the same value whenever it is called so
 	 * that the Conditional Permission Admin can cache its result.
 	 * 
-	 * @return <code>true</code> to indicate the evaluation must be postponed.
-	 *         Otherwise, <code>false</code> if the evaluation can be performed
+	 * @return {@code true} to indicate the evaluation must be postponed.
+	 *         Otherwise, {@code false} if the evaluation can be performed
 	 *         immediately.
 	 */
 	boolean isPostponed();
@@ -63,18 +63,18 @@ public interface Condition {
 	 * {@link #isSatisfied(Condition[],Dictionary)} at the end of the permission
 	 * check.
 	 * 
-	 * @return <code>true</code> to indicate the Conditions is satisfied.
-	 *         Otherwise, <code>false</code> if the Condition is not satisfied.
+	 * @return {@code true} to indicate the Conditions is satisfied.
+	 *         Otherwise, {@code false} if the Condition is not satisfied.
 	 */
 	boolean isSatisfied();
 
 	/**
 	 * Returns whether the Condition is mutable. A Condition can go from mutable
-	 * (<code>true</code>) to immutable (<code>false</code>) over time but never
-	 * from immutable (<code>false</code>) to mutable (<code>true</code>).
+	 * ({@code true}) to immutable ({@code false}) over time but never
+	 * from immutable ({@code false}) to mutable ({@code true}).
 	 * 
-	 * @return <code>true</code> {@link #isSatisfied()} can change. Otherwise,
-	 *         <code>false</code> if the value returned by
+	 * @return {@code true} {@link #isSatisfied()} can change. Otherwise,
+	 *         {@code false} if the value returned by
 	 *         {@link #isSatisfied()} will not change for this condition.
 	 */
 	boolean isMutable();
@@ -96,8 +96,8 @@ public interface Condition {
 	 *        times. The SecurityManager treats this Dictionary as an opaque
 	 *        object and simply creates an empty dictionary and passes it to
 	 *        subsequent invocations if multiple invocations are needed.
-	 * @return <code>true</code> if all the Condition objects are satisfied.
-	 *         Otherwise, <code>false</code> if one of the Condition objects is
+	 * @return {@code true} if all the Condition objects are satisfied.
+	 *         Otherwise, {@code false} if one of the Condition objects is
 	 *         not satisfied.
 	 */
 	boolean isSatisfied(Condition conditions[], Dictionary context);

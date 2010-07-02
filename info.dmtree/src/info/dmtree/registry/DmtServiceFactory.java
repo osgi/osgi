@@ -42,7 +42,7 @@ public final class DmtServiceFactory {
     private DmtServiceFactory() {}
     
     /**
-     * This method is used to obtain access to <code>DmtAdmin</code>, which
+     * This method is used to obtain access to {@code DmtAdmin}, which
      * enables applications to manipulate the Device Management Tree.
      * 
      * @return a DmtAdmin service object
@@ -67,7 +67,7 @@ public final class DmtServiceFactory {
     }
 
     /**
-     * This method is used to obtain access to <code>NotificationService</code>,
+     * This method is used to obtain access to {@code NotificationService},
      * which enables applications to send asynchronous notifications to
      * management servers.
      * 

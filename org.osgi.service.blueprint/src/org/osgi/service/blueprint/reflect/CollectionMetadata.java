@@ -31,10 +31,10 @@ public interface CollectionMetadata extends NonNullMetadata {
 	/**
 	 * Return the type of the collection.
 	 * 
-	 * The possible types are: array (<code>Object[]</code>), <code>Set</code>,
-	 * and <code>List</code>. This information is specified in the element name.
+	 * The possible types are: array ({@code Object[]}), {@code Set},
+	 * and {@code List}. This information is specified in the element name.
 	 * 
-	 * @return The type of the collection. <code>Object[]</code> is returned to
+	 * @return The type of the collection. {@code Object[]} is returned to
 	 *         indicate an array.
 	 */
 	Class<?> getCollectionClass();
@@ -42,7 +42,7 @@ public interface CollectionMetadata extends NonNullMetadata {
 	/**
 	 * Return the type specified for the values of the collection.
 	 * 
-	 * The <code>value-type</code> attribute specified this information.
+	 * The {@code value-type} attribute specified this information.
 	 * 
 	 * @return The type specified for the values of the collection.
 	 */

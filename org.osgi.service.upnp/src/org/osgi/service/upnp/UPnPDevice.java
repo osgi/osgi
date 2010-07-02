@@ -21,11 +21,11 @@ import java.util.Dictionary;
  * Represents a UPnP device.
  * 
  * For each UPnP root and embedded device, an object is registered with the
- * framework under the <code>UPnPDevice</code> interface.
+ * framework under the {@code UPnPDevice} interface.
  * <p>
  * The relationship between a root device and its embedded devices can be
- * deduced using the <code>UPnPDevice.CHILDREN_UDN</code> and
- * <code>UPnPDevice.PARENT_UDN</code> service registration properties.
+ * deduced using the {@code UPnPDevice.CHILDREN_UDN} and
+ * {@code UPnPDevice.PARENT_UDN} service registration properties.
  * <p>
  * The values of the UPnP property names are defined by the UPnP Forum.
  * <p>
@@ -33,7 +33,7 @@ import java.util.Dictionary;
  * device's default locale.
  * <p>
  * If an application wants to query for a set of localized property values, it
- * has to use the method <code>UPnPDevice.getDescriptions(String locale)</code>.
+ * has to use the method {@code UPnPDevice.getDescriptions(String locale)}.
  * 
  * @version $Id$
  */
@@ -67,14 +67,14 @@ public interface UPnPDevice {
 	 */
 	int		MATCH_MANUFACTURER_MODEL_REVISION_SERIAL	= 31;
 	/**
-	 * Constant for the value of the service property <code>DEVICE_CATEGORY</code>
+	 * Constant for the value of the service property {@code DEVICE_CATEGORY}
 	 * used for all UPnP devices. Value is "UPnP".
 	 * 
-	 * @see "<code>org.osgi.service.device.Constants.DEVICE_CATEGORY</code>"
+	 * @see "{@code org.osgi.service.device.Constants.DEVICE_CATEGORY}"
 	 */
 	String	DEVICE_CATEGORY								= "UPnP";
 	/**
-	 * The <code>UPnP.export</code> service property is a hint that marks a device
+	 * The {@code UPnP.export} service property is a hint that marks a device
 	 * to be picked up and exported by the UPnP Service. Imported devices do not
 	 * have this property set. The registered property requires no value.
 	 * <p>
@@ -83,16 +83,16 @@ public interface UPnPDevice {
 	String	UPNP_EXPORT									= "UPnP.export";
 	/**
 	 * Property key for the Unique Device Name (UDN) property. It is the unique
-	 * identifier of an instance of a <code>UPnPDevice</code>. The value of the
-	 * property is a <code>String</code> object of the Device UDN. Value of the
+	 * identifier of an instance of a {@code UPnPDevice}. The value of the
+	 * property is a {@code String} object of the Device UDN. Value of the
 	 * key is "UPnP.device.UDN". This property must be set.
 	 */
 	String	UDN											= "UPnP.device.UDN";
 	/**
 	 * Property key for the Unique Device ID property. This property is an alias
-	 * to <code>UPnPDevice.UDN</code>. It is merely provided for reasons of
-	 * symmetry with the <code>UPnPService.ID</code> property. The value of the
-	 * property is a <code>String</code> object of the Device UDN. The value of
+	 * to {@code UPnPDevice.UDN}. It is merely provided for reasons of
+	 * symmetry with the {@code UPnPService.ID} property. The value of the
+	 * property is a {@code String} object of the Device UDN. The value of
 	 * the key is "UPnP.device.UDN".
 	 */
 	String	ID											= UDN;
@@ -106,18 +106,18 @@ public interface UPnPDevice {
 	 * consist of the following components in the given order separated by
 	 * colons:
 	 * <ul>
-	 * <li><code>urn</code></li>
+	 * <li>{@code urn}</li>
 	 * <li>schemas-upnp-org</li>
-	 * <li><code>device</code></li>
+	 * <li>{@code device}</li>
 	 * <li>a device type suffix</li>
 	 * <li>an integer device version</li>
 	 * </ul>
 	 * For non-standard devices specified by UPnP vendors following components
 	 * must be specified in the given order separated by colons:
 	 * <ul>
-	 * <li><code>urn</code></li>
+	 * <li>{@code urn}</li>
 	 * <li>an ICANN domain name owned by the vendor</li>
-	 * <li><code>device</code></li>
+	 * <li>{@code device}</li>
 	 * <li>a device type suffix</li>
 	 * <li>an integer device version</li>
 	 * </ul>
@@ -131,7 +131,7 @@ public interface UPnPDevice {
 	 * In the case of exporting a UPnPDevice, the highest available version must
 	 * be announced on the network.
 	 * <p>
-	 * Syntax Example: <code>urn:schemas-upnp-org:device:deviceType:v</code>
+	 * Syntax Example: {@code urn:schemas-upnp-org:device:deviceType:v}
 	 * <p>
 	 * The value is "UPnP.device.type".
 	 */
@@ -144,53 +144,53 @@ public interface UPnPDevice {
 	String	MANUFACTURER								= "UPnP.device.manufacturer";
 	/**
 	 * Mandatory property key for the device model name. The property value
-	 * holds a <code>String</code> object giving more information about the device
+	 * holds a {@code String} object giving more information about the device
 	 * model. Value is "UPnP.device.modelName".
 	 */
 	String	MODEL_NAME									= "UPnP.device.modelName";
 	/**
 	 * Mandatory property key for a short user friendly version of the device
-	 * name. The property value holds a <code>String</code> object with the user
+	 * name. The property value holds a {@code String} object with the user
 	 * friendly name of the device. Value is "UPnP.device.friendlyName".
 	 */
 	String	FRIENDLY_NAME								= "UPnP.device.friendlyName";
 	/**
 	 * Optional property key for a URL to the device manufacturers Web site. The
-	 * value of the property is a <code>String</code> object representing the URL.
+	 * value of the property is a {@code String} object representing the URL.
 	 * Value is "UPnP.device.manufacturerURL".
 	 */
 	String	MANUFACTURER_URL							= "UPnP.device.manufacturerURL";
 	/**
-	 * Optional (but recommended) property key for a <code>String</code> object
+	 * Optional (but recommended) property key for a {@code String} object
 	 * with a long description of the device for the end user. The value is
 	 * "UPnP.device.modelDescription".
 	 */
 	String	MODEL_DESCRIPTION							= "UPnP.device.modelDescription";
 	/**
-	 * Optional (but recommended) property key for a <code>String</code> class
+	 * Optional (but recommended) property key for a {@code String} class
 	 * typed property holding the model number of the device. Value is
 	 * "UPnP.device.modelNumber".
 	 */
 	String	MODEL_NUMBER								= "UPnP.device.modelNumber";
 	/**
-	 * Optional property key for a <code>String</code> typed property holding a
+	 * Optional property key for a {@code String} typed property holding a
 	 * string representing the URL to the Web site for this model. Value is
 	 * "UPnP.device.modelURL".
 	 */
 	String	MODEL_URL									= "UPnP.device.modelURL";
 	/**
-	 * Optional (but recommended) property key for a <code>String</code> typed
+	 * Optional (but recommended) property key for a {@code String} typed
 	 * property holding the serial number of the device. Value is
 	 * "UPnP.device.serialNumber".
 	 */
 	String	SERIAL_NUMBER								= "UPnP.device.serialNumber";
 	/**
-	 * Optional property key for a <code>String</code> typed property holding the
+	 * Optional property key for a {@code String} typed property holding the
 	 * Universal Product Code (UPC) of the device. Value is "UPnP.device.UPC".
 	 */
 	String	UPC											= "UPnP.device.UPC";
 	/**
-	 * Optional (but recommended) property key for a <code>String</code> typed
+	 * Optional (but recommended) property key for a {@code String} typed
 	 * property holding a string representing the URL to a device representation
 	 * Web page. Value is "UPnP.presentationURL".
 	 */
@@ -206,7 +206,7 @@ public interface UPnPDevice {
 	 * embedded devices.
 	 * <p>
 	 * The value is an array of UDNs for each of the device's children (
-	 * <code>String[]</code>). The array contains UDNs for the immediate
+	 * {@code String[]}). The array contains UDNs for the immediate
 	 * descendants only.
 	 * </p>
 	 * <p>
@@ -218,7 +218,7 @@ public interface UPnPDevice {
 	 * <p>
 	 * The property is not set if the device does not contain embedded devices.
 	 * <p>
-	 * The property is of type <code>String[]</code>. Value is
+	 * The property is of type {@code String[]}. Value is
 	 * "UPnP.device.childrenUDN"
 	 */
 	String	CHILDREN_UDN								= "UPnP.device.childrenUDN";
@@ -234,7 +234,7 @@ public interface UPnPDevice {
 	/**
 	 * Lists all services provided by this device.
 	 * 
-	 * @return Array of services or <code>null</code> if no services are
+	 * @return Array of services or {@code null} if no services are
 	 *         available.
 	 */
 	UPnPService[] getServices();
@@ -246,9 +246,9 @@ public interface UPnPDevice {
 	 * on the client's locale.
 	 * 
 	 * @param locale A language tag as defined by RFC 1766 and maintained by ISO
-	 *        639. Examples include "<code>de</code>", "<code>en</code>" or "
-	 *        <code>en-US</code>". The default locale of the device is specified
-	 *        by passing a <code>null</code> argument.
+	 *        639. Examples include "{@code de}", "{@code en}" or "
+	 *        {@code en-US}". The default locale of the device is specified
+	 *        by passing a {@code null} argument.
 	 * 
 	 * @return Array of icons or null if no icons are available.
 	 */
@@ -269,9 +269,9 @@ public interface UPnPDevice {
 	 * <p>
 	 * 
 	 * @param locale A language tag as defined by RFC 1766 and maintained by ISO
-	 *        639. Examples include "<code>de</code>", "<code>en</code>" or "
-	 *        <code>en-US</code>". The default locale of the device is specified
-	 *        by passing a <code>null</code> argument.
+	 *        639. Examples include "{@code de}", "{@code en}" or "
+	 *        {@code en-US}". The default locale of the device is specified
+	 *        by passing a {@code null} argument.
 	 * @return Dictionary mapping property name Strings to property value
 	 *         Strings
 	 *  

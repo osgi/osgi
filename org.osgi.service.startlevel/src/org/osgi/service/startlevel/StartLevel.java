@@ -31,7 +31,7 @@ import org.osgi.framework.Bundle;
  * higher start level than 1.
  * <p>
  * Access to the StartLevel service is protected by corresponding
- * <code>ServicePermission</code>. In addition <code>AdminPermission</code>
+ * {@code ServicePermission}. In addition {@code AdminPermission}
  * is required to actually modify start level information.
  * <p>
  * Start Level support in the Framework includes the ability to control the
@@ -48,17 +48,17 @@ import org.osgi.framework.Bundle;
  * When the Framework is launched, the Framework will enter start level one and
  * all bundles which are assigned to start level one and whose autostart setting
  * indicates the bundle should be started are started as described in the
- * <code>Bundle.start</code> method. The Framework will continue to increase
+ * {@code Bundle.start} method. The Framework will continue to increase
  * the start level, starting bundles at each start level, until the Framework
  * has reached a beginning start level. At this point the Framework has
  * completed starting bundles and will then fire a Framework event of type
- * <code>FrameworkEvent.STARTED</code> to announce it has completed its
+ * {@code FrameworkEvent.STARTED} to announce it has completed its
  * launch.
  * 
  * <p>
  * Within a start level, bundles may be started in an order defined by the
  * Framework implementation. This may be something like ascending
- * <code>Bundle.getBundleId</code> order or an order based upon dependencies
+ * {@code Bundle.getBundleId} order or an order based upon dependencies
  * between bundles. A similar but reversed order may be used when stopping
  * bundles within a start level.
  * 
@@ -103,12 +103,12 @@ public interface StartLevel {
 	 * the {@link Bundle#start(int)} method using the
 	 * {@link Bundle#START_TRANSIENT} option. The
 	 * {@link Bundle#START_ACTIVATION_POLICY} option must also be used if
-	 * {@link #isBundleActivationPolicyUsed(Bundle)} returns <code>true</code>
+	 * {@link #isBundleActivationPolicyUsed(Bundle)} returns {@code true}
 	 * for the bundle.
 	 * </ol>
 	 * When this process completes after the specified start level is reached,
 	 * the Framework will fire a Framework event of type
-	 * <code>FrameworkEvent.STARTLEVEL_CHANGED</code> to announce it has moved
+	 * {@code FrameworkEvent.STARTLEVEL_CHANGED} to announce it has moved
 	 * to the specified start level.
 	 * 
 	 * <p>
@@ -126,13 +126,13 @@ public interface StartLevel {
 	 * </ol>
 	 * When this process completes after the specified start level is reached,
 	 * the Framework will fire a Framework event of type
-	 * <code>FrameworkEvent.STARTLEVEL_CHANGED</code> to announce it has moved
+	 * {@code FrameworkEvent.STARTLEVEL_CHANGED} to announce it has moved
 	 * to the specified start level.
 	 * 
 	 * <p>
 	 * If the specified start level is equal to the active start level, then no
 	 * bundles are started or stopped, however, the Framework must fire a
-	 * Framework event of type <code>FrameworkEvent.STARTLEVEL_CHANGED</code>
+	 * Framework event of type {@code FrameworkEvent.STARTLEVEL_CHANGED}
 	 * to announce it has finished moving to the specified start level. This
 	 * event may arrive before this method return.
 	 * 
@@ -140,7 +140,7 @@ public interface StartLevel {
 	 * @throws IllegalArgumentException If the specified start level is less
 	 *         than or equal to zero.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the
+	 *         {@code AdminPermission[System Bundle,STARTLEVEL]} and the
 	 *         Java runtime environment supports permissions.
 	 */
 	public void setStartLevel(int startlevel);
@@ -153,7 +153,7 @@ public interface StartLevel {
 	 * @throws java.lang.IllegalArgumentException If the specified bundle has
 	 *         been uninstalled or if the specified bundle was not created by
 	 *         the same framework instance that registered this
-	 *         <code>StartLevel</code> service.
+	 *         {@code StartLevel} service.
 	 */
 	public int getBundleStartLevel(Bundle bundle);
 
@@ -171,7 +171,7 @@ public interface StartLevel {
 	 * specified bundle as described in the {@link Bundle#start(int)} method
 	 * using the {@link Bundle#START_TRANSIENT} option. The
 	 * {@link Bundle#START_ACTIVATION_POLICY} option must also be used if
-	 * {@link #isBundleActivationPolicyUsed(Bundle)} returns <code>true</code>
+	 * {@link #isBundleActivationPolicyUsed(Bundle)} returns {@code true}
 	 * for the bundle. The actual starting of this bundle must occur
 	 * asynchronously.
 	 * <p>
@@ -187,9 +187,9 @@ public interface StartLevel {
 	 *         uninstalled, or if the specified start level is less than or
 	 *         equal to zero, or if the specified bundle is the system bundle,
 	 *         or if the specified bundle was not created by the same framework
-	 *         instance that registered this <code>StartLevel</code> service.
+	 *         instance that registered this {@code StartLevel} service.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AdminPermission[bundle,EXECUTE]</code> and the Java runtime
+	 *         {@code AdminPermission[bundle,EXECUTE]} and the Java runtime
 	 *         environment supports permissions.
 	 */
 	public void setBundleStartLevel(Bundle bundle, int startlevel);
@@ -213,7 +213,7 @@ public interface StartLevel {
 	 * Framework.
 	 * 
 	 * <p>
-	 * When a Bundle is installed via <code>BundleContext.installBundle</code>,
+	 * When a Bundle is installed via {@code BundleContext.installBundle},
 	 * it is assigned the initial bundle start level value.
 	 * 
 	 * <p>
@@ -227,7 +227,7 @@ public interface StartLevel {
 	 * @throws IllegalArgumentException If the specified start level is less
 	 *         than or equal to zero.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the
+	 *         {@code AdminPermission[System Bundle,STARTLEVEL]} and the
 	 *         Java runtime environment supports permissions.
 	 */
 	public void setInitialBundleStartLevel(int startlevel);
@@ -240,13 +240,13 @@ public interface StartLevel {
 	 * started when its start level is reached.
 	 * 
 	 * @param bundle The bundle whose autostart setting is to be examined.
-	 * @return <code>true</code> if the autostart setting of the bundle
-	 *         indicates the bundle is to be started. <code>false</code>
+	 * @return {@code true} if the autostart setting of the bundle
+	 *         indicates the bundle is to be started. {@code false}
 	 *         otherwise.
 	 * @throws java.lang.IllegalArgumentException If the specified bundle has
 	 *         been uninstalled or if the specified bundle was not created by
 	 *         the same framework instance that registered this
-	 *         <code>StartLevel</code> service.
+	 *         {@code StartLevel} service.
 	 * @see Bundle#START_TRANSIENT
 	 */
 	public boolean isBundlePersistentlyStarted(Bundle bundle);
@@ -259,13 +259,13 @@ public interface StartLevel {
 	 * activation policy is to be used when the bundle is started.
 	 * 
 	 * @param bundle The bundle whose autostart setting is to be examined.
-	 * @return <code>true</code> if the bundle's autostart setting indicates the
+	 * @return {@code true} if the bundle's autostart setting indicates the
 	 *         activation policy declared in the manifest must be used.
-	 *         <code>false</code> if the bundle must be eagerly activated.
+	 *         {@code false} if the bundle must be eagerly activated.
 	 * @throws java.lang.IllegalArgumentException If the specified bundle has
 	 *         been uninstalled or if the specified bundle was not created by
 	 *         the same framework instance that registered this
-	 *         <code>StartLevel</code> service.
+	 *         {@code StartLevel} service.
 	 * @since 1.1
 	 * @see Bundle#START_ACTIVATION_POLICY
 	 */

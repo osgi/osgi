@@ -19,16 +19,16 @@ package org.osgi.framework;
 import java.util.EventListener;
 
 /**
- * A <code>BundleEvent</code> listener. <code>BundleListener</code> is a
+ * A {@code BundleEvent} listener. {@code BundleListener} is a
  * listener interface that may be implemented by a bundle developer. When a
- * <code>BundleEvent</code> is fired, it is asynchronously delivered to a
- * <code>BundleListener</code>. The Framework delivers
- * <code>BundleEvent</code> objects to a <code>BundleListener</code> in
- * order and must not concurrently call a <code>BundleListener</code>.
+ * {@code BundleEvent} is fired, it is asynchronously delivered to a
+ * {@code BundleListener}. The Framework delivers
+ * {@code BundleEvent} objects to a {@code BundleListener} in
+ * order and must not concurrently call a {@code BundleListener}.
  * <p>
- * A <code>BundleListener</code> object is registered with the Framework using
+ * A {@code BundleListener} object is registered with the Framework using
  * the {@link BundleContext#addBundleListener} method.
- * <code>BundleListener</code>s are called with a <code>BundleEvent</code>
+ * {@code BundleListener}s are called with a {@code BundleEvent}
  * object when a bundle has been installed, resolved, started, stopped, updated,
  * unresolved, or uninstalled.
  * 
@@ -41,7 +41,7 @@ public interface BundleListener extends EventListener {
 	/**
 	 * Receives notification that a bundle has had a lifecycle change.
 	 * 
-	 * @param event The <code>BundleEvent</code>.
+	 * @param event The {@code BundleEvent}.
 	 */
 	public void bundleChanged(BundleEvent event);
 }

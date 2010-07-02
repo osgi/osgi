@@ -20,8 +20,8 @@
  * <p>
  * This package contains the factory class providing access to the different
  * Device Management services for non-OSGi applications.  The 
- * <code>DmtServiceFactory</code> class contained in this package provides methods
- * for retrieving <code>NotificationService</code> and <code>DmtAdmin</code>
+ * {@code DmtServiceFactory} class contained in this package provides methods
+ * for retrieving {@code NotificationService} and {@code DmtAdmin}
  * service implementations.
  * 
  * <p>

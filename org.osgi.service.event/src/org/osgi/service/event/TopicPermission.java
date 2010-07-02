@@ -43,8 +43,8 @@ import java.util.Map;
  * </pre>
  * 
  * <p>
- * <code>TopicPermission</code> has two actions: <code>publish</code> and
- * <code>subscribe</code>.
+ * {@code TopicPermission} has two actions: {@code publish} and
+ * {@code subscribe}.
  * 
  * @ThreadSafe
  * @version $Id$
@@ -52,11 +52,11 @@ import java.util.Map;
 public final class TopicPermission extends Permission {
 	static final long			serialVersionUID	= -5855563886961618300L;
 	/**
-	 * The action string <code>publish</code>.
+	 * The action string {@code publish}.
 	 */
 	public final static String	PUBLISH				= "publish";
 	/**
-	 * The action string <code>subscribe</code>.
+	 * The action string {@code subscribe}.
 	 */
 	public final static String	SUBSCRIBE			= "subscribe";
 	private final static int	ACTION_PUBLISH		= 0x00000001;
@@ -96,13 +96,13 @@ public final class TopicPermission extends Permission {
 	 * 
 	 * <p>
 	 * A bundle that needs to publish events on a topic must have the
-	 * appropriate <code>TopicPermission</code> for that topic; similarly, a
+	 * appropriate {@code TopicPermission} for that topic; similarly, a
 	 * bundle that needs to subscribe to events on a topic must have the
-	 * appropriate <code>TopicPermssion</code> for that topic.
+	 * appropriate {@code TopicPermssion} for that topic.
 	 * <p>
 	 * 
 	 * @param name Topic name.
-	 * @param actions <code>publish</code>,<code>subscribe</code> (canonical
+	 * @param actions {@code publish},{@code subscribe} (canonical
 	 *        order).
 	 */
 	public TopicPermission(String name, String actions) {
@@ -248,9 +248,9 @@ public final class TopicPermission extends Permission {
 	 * 
 	 * <p>
 	 * This method checks that the topic name of the target is implied by the
-	 * topic name of this object. The list of <code>TopicPermission</code>
+	 * topic name of this object. The list of {@code TopicPermission}
 	 * actions must either match or allow for the list of the target object to
-	 * imply the target <code>TopicPermission</code> action.
+	 * imply the target {@code TopicPermission} action.
 	 * 
 	 * <pre>
 	 *    x/y/*,&quot;publish&quot; -&gt; x/y/z,&quot;publish&quot; is true
@@ -260,8 +260,8 @@ public final class TopicPermission extends Permission {
 	 * </pre>
 	 * 
 	 * @param p The target permission to interrogate.
-	 * @return <code>true</code> if the specified <code>TopicPermission</code>
-	 *         action is implied by this object; <code>false</code> otherwise.
+	 * @return {@code true} if the specified {@code TopicPermission}
+	 *         action is implied by this object; {@code false} otherwise.
 	 */
 	public boolean implies(Permission p) {
 		if (p instanceof TopicPermission) {
@@ -282,14 +282,14 @@ public final class TopicPermission extends Permission {
 
 	/**
 	 * Returns the canonical string representation of the
-	 * <code>TopicPermission</code> actions.
+	 * {@code TopicPermission} actions.
 	 * 
 	 * <p>
-	 * Always returns present <code>TopicPermission</code> actions in the
-	 * following order: <code>publish</code>,<code>subscribe</code>.
+	 * Always returns present {@code TopicPermission} actions in the
+	 * following order: {@code publish},{@code subscribe}.
 	 * 
 	 * @return Canonical string representation of the
-	 *         <code>TopicPermission</code> actions.
+	 *         {@code TopicPermission} actions.
 	 */
 	public String getActions() {
 		String result = actions;
@@ -312,27 +312,27 @@ public final class TopicPermission extends Permission {
 	}
 
 	/**
-	 * Returns a new <code>PermissionCollection</code> object suitable for
-	 * storing <code>TopicPermission</code> objects.
+	 * Returns a new {@code PermissionCollection} object suitable for
+	 * storing {@code TopicPermission} objects.
 	 * 
-	 * @return A new <code>PermissionCollection</code> object.
+	 * @return A new {@code PermissionCollection} object.
 	 */
 	public PermissionCollection newPermissionCollection() {
 		return new TopicPermissionCollection();
 	}
 
 	/**
-	 * Determines the equality of two <code>TopicPermission</code> objects.
+	 * Determines the equality of two {@code TopicPermission} objects.
 	 * 
-	 * This method checks that specified <code>TopicPermission</code> has the
-	 * same topic name and actions as this <code>TopicPermission</code> object.
+	 * This method checks that specified {@code TopicPermission} has the
+	 * same topic name and actions as this {@code TopicPermission} object.
 	 * 
 	 * @param obj The object to test for equality with this
-	 *        <code>TopicPermission</code> object.
-	 * @return <code>true</code> if <code>obj</code> is a
-	 *         <code>TopicPermission</code>, and has the same topic name and
-	 *         actions as this <code>TopicPermission</code> object;
-	 *         <code>false</code> otherwise.
+	 *        {@code TopicPermission} object.
+	 * @return {@code true} if {@code obj} is a
+	 *         {@code TopicPermission}, and has the same topic name and
+	 *         actions as this {@code TopicPermission} object;
+	 *         {@code false} otherwise.
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
@@ -384,7 +384,7 @@ public final class TopicPermission extends Permission {
 }
 
 /**
- * Stores a set of <code>TopicPermission</code> permissions.
+ * Stores a set of {@code TopicPermission} permissions.
  * 
  * @see java.security.Permission
  * @see java.security.Permissions
@@ -416,15 +416,15 @@ final class TopicPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Adds a permission to the <code>TopicPermission</code> objects. The key
+	 * Adds a permission to the {@code TopicPermission} objects. The key
 	 * for the hash is the name.
 	 * 
-	 * @param permission The <code>TopicPermission</code> object to add.
+	 * @param permission The {@code TopicPermission} object to add.
 	 * 
 	 * @throws IllegalArgumentException If the permission is not a
-	 *         <code>TopicPermission</code> instance.
+	 *         {@code TopicPermission} instance.
 	 * 
-	 * @throws SecurityException If this <code>TopicPermissionCollection</code>
+	 * @throws SecurityException If this {@code TopicPermissionCollection}
 	 *         object has been marked read-only.
 	 */
 	public void add(final Permission permission) {
@@ -462,13 +462,13 @@ final class TopicPermissionCollection extends PermissionCollection {
 
 	/**
 	 * Determines if the specified permissions implies the permissions expressed
-	 * in <code>permission</code>.
+	 * in {@code permission}.
 	 * 
 	 * @param permission The Permission object to compare with this
-	 *        <code>TopicPermission</code> object.
+	 *        {@code TopicPermission} object.
 	 * 
-	 * @return <code>true</code> if <code>permission</code> is a proper subset
-	 *         of a permission in the set; <code>false</code> otherwise.
+	 * @return {@code true} if {@code permission} is a proper subset
+	 *         of a permission in the set; {@code false} otherwise.
 	 */
 	public boolean implies(final Permission permission) {
 		if (!(permission instanceof TopicPermission)) {
@@ -525,10 +525,10 @@ final class TopicPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Returns an enumeration of all <code>TopicPermission</code> objects in the
+	 * Returns an enumeration of all {@code TopicPermission} objects in the
 	 * container.
 	 * 
-	 * @return Enumeration of all <code>TopicPermission</code> objects.
+	 * @return Enumeration of all {@code TopicPermission} objects.
 	 */
 	public synchronized Enumeration<Permission> elements() {
 		List<Permission> all = new ArrayList<Permission>(permissions.values());

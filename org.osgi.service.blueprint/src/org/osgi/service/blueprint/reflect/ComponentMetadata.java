@@ -45,7 +45,7 @@ public interface ComponentMetadata extends NonNullMetadata {
 	 * Return the id of the component.
 	 * 
 	 * @return The id of the component. The component id can be
-	 *         <code>null</code> if this is an anonymously defined and/or
+	 *         {@code null} if this is an anonymously defined and/or
 	 *         inlined component.
 	 */
 	String getId();
@@ -53,9 +53,9 @@ public interface ComponentMetadata extends NonNullMetadata {
 	/**
 	 * Return the activation strategy for the component.
 	 * 
-	 * This is specified by the <code>activation</code> attribute of a component
-	 * definition. If this is not set, then the <code>default-activation</code>
-	 * in the <code>blueprint</code> element is used. If that is also not set,
+	 * This is specified by the {@code activation} attribute of a component
+	 * definition. If this is not set, then the {@code default-activation}
+	 * in the {@code blueprint} element is used. If that is also not set,
 	 * then the activation strategy is {@link #ACTIVATION_EAGER}.
 	 * 
 	 * @return The activation strategy for the component.
@@ -65,7 +65,7 @@ public interface ComponentMetadata extends NonNullMetadata {
 	int getActivation();
 
 	/**
-	 * Return the ids of any components listed in a <code>depends-on</code>
+	 * Return the ids of any components listed in a {@code depends-on}
 	 * attribute for the component.
 	 * 
 	 * @return An immutable List of component ids that are explicitly declared

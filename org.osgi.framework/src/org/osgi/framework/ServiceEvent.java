@@ -22,8 +22,8 @@ import java.util.EventObject;
 /**
  * An event from the Framework describing a service lifecycle change.
  * <p>
- * <code>ServiceEvent</code> objects are delivered to
- * <code>ServiceListener</code>s and <code>AllServiceListener</code>s when a
+ * {@code ServiceEvent} objects are delivered to
+ * {@code ServiceListener}s and {@code AllServiceListener}s when a
  * change occurs in this service's lifecycle. A type code is used to identify
  * the event type for future extendability.
  * 
@@ -75,7 +75,7 @@ public class ServiceEvent extends EventObject {
 	 * has completed unregistering.
 	 * 
 	 * <p>
-	 * If a bundle is using a service that is <code>UNREGISTERING</code>, the
+	 * If a bundle is using a service that is {@code UNREGISTERING}, the
 	 * bundle should release its use of the service when it receives this event.
 	 * If the bundle does not release its use of the service when it receives
 	 * this event, the Framework will automatically release the bundle's use of
@@ -92,7 +92,7 @@ public class ServiceEvent extends EventObject {
 	 * <p>
 	 * This event is synchronously delivered <strong>after</strong> the service
 	 * properties have been modified. This event is only delivered to listeners
-	 * which were added with a non-<code>null</code> filter where the filter
+	 * which were added with a non-{@code null} filter where the filter
 	 * matched the service properties prior to the modification but the filter
 	 * does not match the modified service properties.
 	 * 
@@ -105,7 +105,7 @@ public class ServiceEvent extends EventObject {
 	 * Creates a new service event object.
 	 * 
 	 * @param type The event type.
-	 * @param reference A <code>ServiceReference</code> object to the service
+	 * @param reference A {@code ServiceReference} object to the service
 	 * 	that had a lifecycle change.
 	 */
 	public ServiceEvent(int type, ServiceReference reference) {

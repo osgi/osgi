@@ -24,7 +24,7 @@ import java.util.Dictionary;
  * interface.
  * <p>
  * The notification call from the UPnP Service to any
- * <code>UPnPEventListener</code> object must be done asynchronous with respect
+ * {@code UPnPEventListener} object must be done asynchronous with respect
  * to the originator (in a separate thread).
  * <p>
  * Upon registration of the UPnP Event Listener service with the Framework, the
@@ -37,21 +37,21 @@ import java.util.Dictionary;
  * when the listener service is registered.
  * <p>
  * The filter is specified in a property named "upnp.filter" and has as a value
- * an object of type <code>org.osgi.framework.Filter</code>.
+ * an object of type {@code org.osgi.framework.Filter}.
  * <p>
  * When the Filter is evaluated, the folowing keywords are recognized as defined
- * as literal constants in the <code>UPnPDevice</code> class.
+ * as literal constants in the {@code UPnPDevice} class.
  * <p>
  * The valid subset of properties for the registration of UPnP Event Listener
  * services are:
  * <ul>
- * <li><code>UPnPDevice.TYPE</code>-- Which type of device to listen for events.
+ * <li>{@code UPnPDevice.TYPE}-- Which type of device to listen for events.
  * </li>
- * <li><code>UPnPDevice.ID</code>-- The ID of a specific device to listen for
+ * <li>{@code UPnPDevice.ID}-- The ID of a specific device to listen for
  * events.</li>
- * <li><code>UPnPService.TYPE</code>-- The type of a specific service to listen
+ * <li>{@code UPnPService.TYPE}-- The type of a specific service to listen
  * for events.</li>
- * <li><code>UPnPService.ID</code>-- The ID of a specific service to listen for
+ * <li>{@code UPnPService.ID}-- The ID of a specific service to listen for
  * events.</li>
  * </ul>
  * 
@@ -60,7 +60,7 @@ import java.util.Dictionary;
 public interface UPnPEventListener {
 	/**
 	 * Key for a service property having a value that is an object of type
-	 * <code>org.osgi.framework.Filter</code> and that is used to limit received
+	 * {@code org.osgi.framework.Filter} and that is used to limit received
 	 * events.
 	 */
 	static final String	UPNP_FILTER	= "upnp.filter";
@@ -68,15 +68,15 @@ public interface UPnPEventListener {
 	/**
 	 * Callback method that is invoked for received events.
 	 * 
-	 * The events are collected in a <code>Dictionary</code> object. Each entry
-	 * has a <code>String</code> key representing the event name (= state variable
+	 * The events are collected in a {@code Dictionary} object. Each entry
+	 * has a {@code String} key representing the event name (= state variable
 	 * name) and the new value of the state variable. The class of the value
 	 * object must match the class specified by the UPnP State Variable
 	 * associated with the event. This method must be called asynchronously
 	 * 
 	 * @param deviceId ID of the device sending the events
 	 * @param serviceId ID of the service sending the events
-	 * @param events <code>Dictionary</code> object containing the new values for
+	 * @param events {@code Dictionary} object containing the new values for
 	 *        the state variables that have changed.
 	 * 
 	 *  

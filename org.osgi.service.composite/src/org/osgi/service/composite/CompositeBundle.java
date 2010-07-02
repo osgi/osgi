@@ -79,11 +79,11 @@ public interface CompositeBundle extends Bundle {
 	 * Returns the system bundle context for the composite framework.  This 
 	 * method must return a valid {@link BundleContext} as long as this 
 	 * composite bundle is installed.  Once a composite bundle is 
-	 * uninstalled this method must return <code>null</code>.  The composite system 
+	 * uninstalled this method must return {@code null}.  The composite system 
 	 * bundle context can be used to install and manage the constituent bundles.
 	 * @return the system bundle context for the composite framework
 	 * @throws SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[system.bundle,CONTEXT]</code>, and
+	 *         appropriate {@code AdminPermission[system.bundle,CONTEXT]}, and
 	 *         the Java Runtime Environment supports permissions.
 	 */
 	public BundleContext getSystemBundleContext();
@@ -92,12 +92,12 @@ public interface CompositeBundle extends Bundle {
 	 * Starts this composite with no options.
 	 * 
 	 * <p>
-	 * This method performs the same function as calling <code>start(0)</code>.
+	 * This method performs the same function as calling {@code start(0)}.
 	 * 
 	 * @throws BundleException If this composite could not be started.
 	 * @throws IllegalStateException If this composite has been uninstalled.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>AdminPermission[this,EXECUTE]</code>, and the Java Runtime
+	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
 	 * @see #start(int)
 	 */
@@ -128,7 +128,7 @@ public interface CompositeBundle extends Bundle {
 	 * @throws BundleException If this composite could not be started.
 	 * @throws IllegalStateException If this composite has been uninstalled.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>AdminPermission[this,EXECUTE]</code>, and the Java Runtime
+	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
 	 */
 	public void start(int options) throws BundleException;
@@ -137,12 +137,12 @@ public interface CompositeBundle extends Bundle {
 	 * Stops this composite with no options.
 	 * 
 	 * <p>
-	 * This method performs the same function as calling <code>stop(0)</code>.
+	 * This method performs the same function as calling {@code stop(0)}.
 	 * 
 	 * @throws BundleException If an error occurred while stopping this composite
 	 * @throws IllegalStateException If this composite has been uninstalled.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>AdminPermission[this,EXECUTE]</code>, and the Java Runtime
+	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
 	 * @see #start(int)
 	 */
@@ -174,7 +174,7 @@ public interface CompositeBundle extends Bundle {
 	 * @throws BundleException If an error occurred while stopping this composite
 	 * @throws IllegalStateException If this composite has been uninstalled.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>AdminPermission[this,EXECUTE]</code>, and the Java Runtime
+	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
 	 * @since 1.4
 	 */
@@ -195,7 +195,7 @@ public interface CompositeBundle extends Bundle {
 	public void uninstall() throws BundleException;
 	/**
 	 * This operation is not supported for composite bundles. A
-	 * <code>BundleException</code> of type
+	 * {@code BundleException} of type
 	 * {@link BundleException#INVALID_OPERATION invalid operation} must be
 	 * thrown.
 	 */
@@ -203,88 +203,88 @@ public interface CompositeBundle extends Bundle {
 
 	/**
 	 * This operation is not supported for composite bundles. A
-	 * <code>BundleException</code> of type
+	 * {@code BundleException} of type
 	 * {@link BundleException#INVALID_OPERATION invalid operation} must be
 	 * thrown.
 	 */
 	public void update(InputStream input) throws BundleException;
 
 	/**
-	 * Updates the meta-data for this composite from a <code>Map</code>.
+	 * Updates the meta-data for this composite from a {@code Map}.
 	 * 
 	 * <p>
-	 * The specified <code>Map</code> must not be <code>null</code>.
+	 * The specified {@code Map} must not be {@code null}.
 	 * 
 	 * <p>
-	 * If this composite's state is <code>ACTIVE</code>, it must be stopped before
+	 * If this composite's state is {@code ACTIVE}, it must be stopped before
 	 * the update and started after the update successfully completes.
 	 * 
 	 * <p>
 	 * If this composite has a sharing policy for packages, any packages that are 
 	 * imported by other bundles through the current sharing policy must remain exported 
-	 * for existing importers.  A call <code>PackageAdmin.refreshPackages</code> method 
+	 * for existing importers.  A call {@code PackageAdmin.refreshPackages} method 
 	 * will force all constituent bundles for this composite to be refreshed, causing the 
 	 * new package sharing policy to be used for all constituent bundles.
 	 * <p>
 	 * The following steps are required to update a composite:
 	 * <ol>
-	 * <li>If this composite's state is <code>UNINSTALLED</code> then an
-	 * <code>IllegalStateException</code> is thrown.
-	 * <li>The component manifest <code>Map</code> is verified.  If this fails, 
+	 * <li>If this composite's state is {@code UNINSTALLED} then an
+	 * {@code IllegalStateException} is thrown.
+	 * <li>The component manifest {@code Map} is verified.  If this fails, 
 	 * a {@linkplain BundleException} is thrown.
 	 * 
-	 * <li>If this composite's state is <code>ACTIVE</code>, <code>STARTING</code>
-	 * or <code>STOPPING</code>, this bundle is stopped as described in the
-	 * <code>CompositeBundle.stop</code> method except the framework event of type
+	 * <li>If this composite's state is {@code ACTIVE}, {@code STARTING}
+	 * or {@code STOPPING}, this bundle is stopped as described in the
+	 * {@code CompositeBundle.stop} method except the framework event of type
 	 * {@link FrameworkEvent#STOPPED_UPDATE} is fired for the composite system
-	 * bundle. If <code>CompositeBundle.stop</code> throws an exception, the exception 
+	 * bundle. If {@code CompositeBundle.stop} throws an exception, the exception 
 	 * is rethrown terminating the update.
 	 * 
-	 * <li>The meta-data of this composite is updated from the <code>Map</code>.
+	 * <li>The meta-data of this composite is updated from the {@code Map}.
 	 * 
-	 * <li>All constituent bundles must transition to the <code>INSTALLED</code>
+	 * <li>All constituent bundles must transition to the {@code INSTALLED}
 	 * state. Constituent bundles that have exported packages that are imported by another
 	 * bundle, these packages must remain exported until the
-	 * <code>PackageAdmin.refreshPackages</code> method has been has been called
+	 * {@code PackageAdmin.refreshPackages} method has been has been called
 	 * or the Framework is relaunched.
 	 * 
 	 * 
-	 * <li>This composite's state is set to <code>INSTALLED</code>.
+	 * <li>This composite's state is set to {@code INSTALLED}.
 	 * 
 	 * <li>If the updated version of this composite was successfully installed, a
 	 * bundle event of type {@link BundleEvent#UPDATED} is fired for this composite.
 	 * 
-	 * <li>If this composite's state was originally <code>ACTIVE</code>, the
-	 * updated composite is started as described in the <code>CompositeBundle.start</code>
-	 * method. If <code>CompositeBundle.start</code> throws an exception, a Framework
+	 * <li>If this composite's state was originally {@code ACTIVE}, the
+	 * updated composite is started as described in the {@code CompositeBundle.start}
+	 * method. If {@code CompositeBundle.start} throws an exception, a Framework
 	 * event of type {@link FrameworkEvent#ERROR} is fired containing the
 	 * exception.
 	 * </ol>
 	 * 
 	 * <b>Preconditions </b>
 	 * <ul>
-	 * <li><code>getState()</code> not in &#x007B; <code>UNINSTALLED</code>
+	 * <li>{@code getState()} not in &#x007B; {@code UNINSTALLED}
 	 * &#x007D;.
 	 * </ul>
 	 * <b>Postconditions, no exceptions thrown </b>
 	 * <ul>
-	 * <li><code>getState()</code> in &#x007B; <code>INSTALLED</code>,
-	 * <code>RESOLVED</code>, <code>ACTIVE</code> &#x007D;.
+	 * <li>{@code getState()} in &#x007B; {@code INSTALLED},
+	 * {@code RESOLVED}, {@code ACTIVE} &#x007D;.
 	 * <li>This composite has been updated.
 	 * </ul>
 	 * <b>Postconditions, when an exception is thrown </b>
 	 * <ul>
-	 * <li><code>getState()</code> in &#x007B; <code>INSTALLED</code>,
-	 * <code>RESOLVED</code>, <code>ACTIVE</code> &#x007D;.
+	 * <li>{@code getState()} in &#x007B; {@code INSTALLED},
+	 * {@code RESOLVED}, {@code ACTIVE} &#x007D;.
 	 * <li>Original composite is still used; no update occurred.
 	 * </ul>
 	 * 
-	 * @param compositeManifest The <code>Map</code> from which to read the new
-	 *        composite meta-data from.  Must not be <code>null</code>.
+	 * @param compositeManifest The {@code Map} from which to read the new
+	 *        composite meta-data from.  Must not be {@code null}.
 	 * @throws BundleException If the the update fails.
 	 * @throws IllegalStateException If this composite has been uninstalled.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AllPermission</code>.
+	 *         {@code AllPermission}.
 	 * @see #stop()
 	 * @see #start()
 	 */
@@ -299,32 +299,32 @@ public interface CompositeBundle extends Bundle {
 	public Class< ? > loadClass(String name) throws ClassNotFoundException;
 	/**
 	 * Composite bundles do not have content.  This method must return
-	 * <code>null</code>.
-	 * @return A <code>null</code> value is always returned for composites.
+	 * {@code null}.
+	 * @return A {@code null} value is always returned for composites.
 	 */
 	public URL getResource(String name);
 	/**
 	 * Composite bundles do not have content.  This method must return
-	 * <code>null</code>.
-	 * @return A <code>null</code> value is always returned for composites.
+	 * {@code null}.
+	 * @return A {@code null} value is always returned for composites.
 	 */
 	public Enumeration<URL> getResources(String name) throws IOException;
 	/**
 	 * Composite bundles do not have content.  This method must return
-	 * <code>null</code>.
-	 * @return A <code>null</code> value is always returned for composites.
+	 * {@code null}.
+	 * @return A {@code null} value is always returned for composites.
 	 */
 	public URL getEntry(String path);
 	/**
 	 * Composite bundles do not have content.  This method must return
-	 * <code>null</code>.
-	 * @return A <code>null</code> value is always returned for composites.
+	 * {@code null}.
+	 * @return A {@code null} value is always returned for composites.
 	 */
 	public Enumeration<String> getEntryPaths(String path);
 	/**
 	 * Composite bundles do not have content.  This method must return
-	 * <code>null</code>.
-	 * @return A <code>null</code> value is always returned for composites.
+	 * {@code null}.
+	 * @return A {@code null} value is always returned for composites.
 	 */
 	public Enumeration<URL> findEntries(String path, String filePattern,
 			boolean recurse);

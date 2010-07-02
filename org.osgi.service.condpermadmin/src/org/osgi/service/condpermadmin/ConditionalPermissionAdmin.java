@@ -45,17 +45,17 @@ public interface ConditionalPermissionAdmin {
 	 * this method can no longer be committed.
 	 * 
 	 * @param conditions The conditions that need to be satisfied to enable the
-	 *        specified permissions. This argument can be <code>null</code> or
+	 *        specified permissions. This argument can be {@code null} or
 	 *        an empty array indicating the specified permissions are not
 	 *        guarded by any conditions.
 	 * @param permissions The permissions that are enabled when the specified
 	 *        conditions, if any, are satisfied. This argument must not be
-	 *        <code>null</code> and must specify at least one permission.
+	 *        {@code null} and must specify at least one permission.
 	 * @return The ConditionalPermissionInfo for the specified Conditions and
 	 *         Permissions.
 	 * @throws IllegalArgumentException If no permissions are specified.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AllPermission</code>.
+	 *         {@code AllPermission}.
 	 * @deprecated Since 1.1. Use {@link #newConditionalPermissionUpdate()}
 	 *             instead.
 	 */
@@ -66,7 +66,7 @@ public interface ConditionalPermissionAdmin {
 	 * Set or create a Conditional Permission Info with a specified name in the
 	 * Conditional Permission Table.
 	 * <p>
-	 * If the specified name is <code>null</code>, a new Conditional Permission
+	 * If the specified name is {@code null}, a new Conditional Permission
 	 * Info must be created and will be given a unique, never reused name. If
 	 * there is currently no Conditional Permission Info with the specified
 	 * name, a new Conditional Permission Info must be created with the
@@ -81,19 +81,19 @@ public interface ConditionalPermissionAdmin {
 	 * this method can no longer be committed.
 	 * 
 	 * @param name The name of the Conditional Permission Info, or
-	 *        <code>null</code>.
+	 *        {@code null}.
 	 * @param conditions The conditions that need to be satisfied to enable the
-	 *        specified permissions. This argument can be <code>null</code> or
+	 *        specified permissions. This argument can be {@code null} or
 	 *        an empty array indicating the specified permissions are not
 	 *        guarded by any conditions.
 	 * @param permissions The permissions that are enabled when the specified
 	 *        conditions, if any, are satisfied. This argument must not be
-	 *        <code>null</code> and must specify at least one permission.
+	 *        {@code null} and must specify at least one permission.
 	 * @return The ConditionalPermissionInfo for the specified name, Conditions
 	 *         and Permissions.
 	 * @throws IllegalArgumentException If no permissions are specified.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AllPermission</code>.
+	 *         {@code AllPermission}.
 	 * @deprecated Since 1.1. Use {@link #newConditionalPermissionUpdate()}
 	 *             instead.
 	 */
@@ -124,7 +124,7 @@ public interface ConditionalPermissionAdmin {
 	 * 
 	 * @param name The name of the Conditional Permission Info to be returned.
 	 * @return The Conditional Permission Info with the specified name or
-	 *         <code>null</code> if no Conditional Permission Info with the
+	 *         {@code null} if no Conditional Permission Info with the
 	 *         specified name exists in the Conditional Permission Table.
 	 * @deprecated Since 1.1. Use {@link #newConditionalPermissionUpdate()}
 	 *             instead.
@@ -145,11 +145,11 @@ public interface ConditionalPermissionAdmin {
 	 * <li>It has no headers</li>
 	 * <li>It has the empty version (0.0.0)</li>
 	 * <li>Its last modified time=0</li>
-	 * <li>Many methods will throw <code>IllegalStateException</code> because the state is UNINSTALLED</li>
-	 * <li>All other methods return a <code>null</code></li>
+	 * <li>Many methods will throw {@code IllegalStateException} because the state is UNINSTALLED</li>
+	 * <li>All other methods return a {@code null}</li>
 	 * </ul> 
 	 * @param signers The signers for which to return an Access Control Context.
-	 * @return An <code>AccessControlContext</code> that has the Permissions
+	 * @return An {@code AccessControlContext} that has the Permissions
 	 *         associated with the signer.
 	 */
 	AccessControlContext getAccessControlContext(String[] signers);
@@ -171,22 +171,22 @@ public interface ConditionalPermissionAdmin {
 	/**
 	 * Creates a new ConditionalPermissionInfo with the specified fields
 	 * suitable for insertion into a {@link ConditionalPermissionUpdate}. The
-	 * <code>delete</code> method on <code>ConditionalPermissionInfo</code>
+	 * {@code delete} method on {@code ConditionalPermissionInfo}
 	 * objects created with this method must throw
 	 * UnsupportedOperationException.
 	 * 
 	 * @param name The name of the created
-	 *        <code>ConditionalPermissionInfo</code> or <code>null</code> to
+	 *        {@code ConditionalPermissionInfo} or {@code null} to
 	 *        have a unique name generated when the returned
-	 *        <code>ConditionalPermissionInfo</code> is committed in an update
+	 *        {@code ConditionalPermissionInfo} is committed in an update
 	 *        to the Conditional Permission Table.
 	 * @param conditions The conditions that need to be satisfied to enable the
-	 *        specified permissions. This argument can be <code>null</code> or
+	 *        specified permissions. This argument can be {@code null} or
 	 *        an empty array indicating the specified permissions are not
 	 *        guarded by any conditions.
 	 * @param permissions The permissions that are enabled when the specified
 	 *        conditions, if any, are satisfied. This argument must not be
-	 *        <code>null</code> and must specify at least one permission.
+	 *        {@code null} and must specify at least one permission.
 	 * @param access Access decision. Must be one of the following values:
 	 *        <ul>
 	 *        <li>{@link ConditionalPermissionInfo#ALLOW allow}</li>
@@ -194,7 +194,7 @@ public interface ConditionalPermissionAdmin {
 	 *        </ul>
 	 *        The specified access decision value must be evaluated case
 	 *        insensitively.
-	 * @return A <code>ConditionalPermissionInfo</code> object suitable for
+	 * @return A {@code ConditionalPermissionInfo} object suitable for
 	 *         insertion into a {@link ConditionalPermissionUpdate}.
 	 * @throws IllegalArgumentException If no permissions are specified or if
 	 *         the specified access decision is not a valid value.
@@ -205,28 +205,28 @@ public interface ConditionalPermissionAdmin {
 			String access);
 
 	/**
-	 * Creates a new <code>ConditionalPermissionInfo</code> from the specified
-	 * encoded <code>ConditionalPermissionInfo</code> string suitable for
+	 * Creates a new {@code ConditionalPermissionInfo} from the specified
+	 * encoded {@code ConditionalPermissionInfo} string suitable for
 	 * insertion into a {@link ConditionalPermissionUpdate}. The
-	 * <code>delete</code> method on <code>ConditionalPermissionInfo</code>
+	 * {@code delete} method on {@code ConditionalPermissionInfo}
 	 * objects created with this method must throw
 	 * UnsupportedOperationException.
 	 * 
 	 * @param encodedConditionalPermissionInfo The encoded
-	 *        <code>ConditionalPermissionInfo</code>. White space in the encoded
-	 *        <code>ConditionalPermissionInfo</code> is ignored. The access
+	 *        {@code ConditionalPermissionInfo}. White space in the encoded
+	 *        {@code ConditionalPermissionInfo} is ignored. The access
 	 *        decision value in the encoded
-	 *        <code>ConditionalPermissionInfo</code> must be evaluated case
+	 *        {@code ConditionalPermissionInfo} must be evaluated case
 	 *        insensitively. If the encoded
-	 *        <code>ConditionalPermissionInfo</code> does not contain the
-	 *        optional name, <code>null</code> must be used for the name and a
+	 *        {@code ConditionalPermissionInfo} does not contain the
+	 *        optional name, {@code null} must be used for the name and a
 	 *        unique name will be generated when the returned
-	 *        <code>ConditionalPermissionInfo</code> is committed in an update
+	 *        {@code ConditionalPermissionInfo} is committed in an update
 	 *        to the Conditional Permission Table.
-	 * @return A <code>ConditionalPermissionInfo</code> object suitable for
+	 * @return A {@code ConditionalPermissionInfo} object suitable for
 	 *         insertion into a {@link ConditionalPermissionUpdate}.
 	 * @throws IllegalArgumentException If the specified
-	 *         <code>encodedConditionalPermissionInfo</code> is not properly
+	 *         {@code encodedConditionalPermissionInfo} is not properly
 	 *         formatted.
 	 * @see ConditionalPermissionInfo#getEncoded
 	 * @since 1.1

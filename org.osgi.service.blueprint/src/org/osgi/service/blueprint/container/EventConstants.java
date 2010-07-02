@@ -23,7 +23,7 @@ package org.osgi.service.blueprint.container;
  * Each type of event is sent to a different topic:
  * 
  * <p>
- * <code>org/osgi/service/blueprint/container/</code><em>&lt;event-type&gt;</em>
+ * {@code org/osgi/service/blueprint/container/}<em>&lt;event-type&gt;</em>
  * 
  * <p>
  * where <em>&lt;event-type&gt;</em> can have the values
@@ -60,68 +60,68 @@ public class EventConstants {
 
 	/**
 	 * The type of the event that has been issued. This property is of type
-	 * <code>Integer</code> and can take one of the values defined in
+	 * {@code Integer} and can take one of the values defined in
 	 * {@link BlueprintEvent}.
 	 */
 	public static final String TYPE = "type";
 
 	/**
-	 * The <code>BlueprintEvent</code> object that caused this event. This
+	 * The {@code BlueprintEvent} object that caused this event. This
 	 * property is of type {@link BlueprintEvent}.
 	 */
 	public static final String EVENT = "event";
 
 	/**
 	 * The time the event was created. This property is of type
-	 * <code>Long</code>.
+	 * {@code Long}.
 	 */
 	public static final String TIMESTAMP = "timestamp";
 
 	/**
 	 * The Blueprint bundle associated with this event. This property is of type
-	 * <code>Bundle</code>.
+	 * {@code Bundle}.
 	 */
 	public static final String BUNDLE = "bundle";
 
 	/**
 	 * The bundle id of the Blueprint bundle associated with this event. This
-	 * property is of type <code>Long</code>.
+	 * property is of type {@code Long}.
 	 */
 	public static final String BUNDLE_ID = "bundle.id";
 
 	/**
 	 * The bundle symbolic name of the Blueprint bundle associated with this
-	 * event. This property is of type <code>String</code>.
+	 * event. This property is of type {@code String}.
 	 */
 	public static final String BUNDLE_SYMBOLICNAME = "bundle.symbolicName";
 
 	/**
 	 * The bundle version of the Blueprint bundle associated with this event.
-	 * This property is of type <code>Version</code>.
+	 * This property is of type {@code Version}.
 	 */
 	public static final String BUNDLE_VERSION = "bundle.version";
 
 	/**
 	 * The Blueprint extender bundle that is generating this event. This
-	 * property is of type <code>Bundle</code>.
+	 * property is of type {@code Bundle}.
 	 */
 	public static final String EXTENDER_BUNDLE = "extender.bundle";
 
 	/**
 	 * The bundle id of the Blueprint extender bundle that is generating this
-	 * event. This property is of type <code>Long</code>.
+	 * event. This property is of type {@code Long}.
 	 */
 	public static final String EXTENDER_BUNDLE_ID = "extender.bundle.id";
 
 	/**
 	 * The bundle symbolic of the Blueprint extender bundle that is generating
-	 * this event. This property is of type <code>String</code>.
+	 * this event. This property is of type {@code String}.
 	 */
 	public static final String EXTENDER_BUNDLE_SYMBOLICNAME = "extender.bundle.symbolicName";
 
 	/**
 	 * The bundle version of the Blueprint extender bundle that is generating
-	 * this event. This property is of type <code>Version</code>.
+	 * this event. This property is of type {@code Version}.
 	 */
 	public static final String EXTENDER_BUNDLE_VERSION = "extender.bundle.version";
 
@@ -130,13 +130,13 @@ public class EventConstants {
 	 * for a {@link BlueprintEvent#FAILURE FAILURE},
 	 * {@link BlueprintEvent#GRACE_PERIOD GRACE_PERIOD}, or
 	 * {@link BlueprintEvent#WAITING WAITING} event. This property type is an
-	 * array of <code>String</code>.
+	 * array of {@code String}.
 	 */
 	public static final String DEPENDENCIES = "dependencies";
 
 	/**
 	 * The cause for a {@link BlueprintEvent#FAILURE FAILURE} event. This
-	 * property is of type <code>Throwable</code>.
+	 * property is of type {@code Throwable}.
 	 */
 	public static final String CAUSE = "cause";
 

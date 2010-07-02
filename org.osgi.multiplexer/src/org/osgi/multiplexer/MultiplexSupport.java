@@ -28,7 +28,7 @@ package org.osgi.multiplexer;
  * invoked via reflection, rather than by casting or instanceof tests.
  * <p>
  * The presence and support of this interface (as determined by the
- * <code>supportsOSGiMultiplexing</code> method) implies support of the
+ * {@code supportsOSGiMultiplexing} method) implies support of the
  * following multiplexing algorithm for a given JVM singleton.
  * 
  * <h4>Initialization:</h4>

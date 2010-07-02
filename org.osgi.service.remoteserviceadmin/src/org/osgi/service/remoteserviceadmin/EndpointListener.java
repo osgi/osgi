@@ -85,7 +85,7 @@ public interface EndpointListener {
 	/**
 	 * Specifies the interest of this listener with filters. This listener is
 	 * only interested in Endpoint Descriptions where its properties match the
-	 * given filter. The type of this property must be <code>String+</code>.
+	 * given filter. The type of this property must be {@code String+}.
 	 */
 	String	ENDPOINT_LISTENER_SCOPE	= "endpoint.listener.scope";
 
@@ -94,14 +94,14 @@ public interface EndpointListener {
 	 * 
 	 * If the endpoint matches one of the filters registered with the
 	 * {@link #ENDPOINT_LISTENER_SCOPE} service property then this filter should
-	 * be given as the <code>matchedFilter</code> parameter.
+	 * be given as the {@code matchedFilter} parameter.
 	 * 
 	 * When this service is first registered or it is modified, it should
 	 * receive all known endpoints matching the filter.
 	 * 
 	 * @param endpoint The Endpoint Description to be published
 	 * @param matchedFilter The filter from the {@link #ENDPOINT_LISTENER_SCOPE}
-	 *        that matched the endpoint, must not be <code>null</code>.
+	 *        that matched the endpoint, must not be {@code null}.
 	 */
 	void endpointAdded(EndpointDescription endpoint, String matchedFilter);
 
@@ -119,7 +119,7 @@ public interface EndpointListener {
 	 * 
 	 * @param endpoint The Endpoint Description that is no longer valid.
 	 * @param matchedFilter The filter from the {@link #ENDPOINT_LISTENER_SCOPE}
-	 *        that matched the endpoint, must not be <code>null</code>.
+	 *        that matched the endpoint, must not be {@code null}.
 	 */
 	void endpointRemoved(EndpointDescription endpoint, String matchedFilter);
 }

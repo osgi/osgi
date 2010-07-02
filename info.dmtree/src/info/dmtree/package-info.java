@@ -19,10 +19,10 @@
  * 
  * <p>This package contains the public API for the Device Management Tree 
  * manipulations. Permission classes are provided by the 
- * <code>info.dmtree.security</code> package, and DMT plugin interfaces can be found in
- * the <code>info.dmtree.spi</code> package.  Asynchronous notifications to remote 
+ * {@code info.dmtree.security} package, and DMT plugin interfaces can be found in
+ * the {@code info.dmtree.spi} package.  Asynchronous notifications to remote 
  * management servers can be sent using the interfaces in the 
- * <code>info.dmtree.notification</code> package.
+ * {@code info.dmtree.notification} package.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the

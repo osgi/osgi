@@ -35,7 +35,7 @@ import java.util.NoSuchElementException;
 public final class ConfigurationPermission extends BasicPermission {
 	static final long			serialVersionUID	= 5716868734811965383L;
 	/**
-	 * The action string <code>configure</code>.
+	 * The action string {@code configure}.
 	 */
 	public final static String	CONFIGURE			= "configure";
 
@@ -43,7 +43,7 @@ public final class ConfigurationPermission extends BasicPermission {
 	 * Create a new ConfigurationPermission.
 	 * 
 	 * @param name Name must be &quot;*&quot;.
-	 * @param actions <code>configure</code> (canonical order).
+	 * @param actions {@code configure} (canonical order).
 	 */
 
 	public ConfigurationPermission(String name, String actions) {
@@ -59,12 +59,12 @@ public final class ConfigurationPermission extends BasicPermission {
 	}
 
 	/**
-	 * Determines if a <code>ConfigurationPermission</code> object "implies"
+	 * Determines if a {@code ConfigurationPermission} object "implies"
 	 * the specified permission.
 	 * 
 	 * @param p The target permission to check.
-	 * @return <code>true</code> if the specified permission is implied by
-	 *         this object; <code>false</code> otherwise.
+	 * @return {@code true} if the specified permission is implied by
+	 *         this object; {@code false} otherwise.
 	 */
 
 	public boolean implies(Permission p) {
@@ -72,14 +72,14 @@ public final class ConfigurationPermission extends BasicPermission {
 	}
 
 	/**
-	 * Determines the equality of two <code>ConfigurationPermission</code>
+	 * Determines the equality of two {@code ConfigurationPermission}
 	 * objects.
 	 * <p>
-	 * Two <code>ConfigurationPermission</code> objects are equal.
+	 * Two {@code ConfigurationPermission} objects are equal.
 	 * 
 	 * @param obj The object being compared for equality with this object.
-	 * @return <code>true</code> if <code>obj</code> is equivalent to this
-	 *         <code>ConfigurationPermission</code>; <code>false</code>
+	 * @return {@code true} if {@code obj} is equivalent to this
+	 *         {@code ConfigurationPermission}; {@code false}
 	 *         otherwise.
 	 */
 	public boolean equals(Object obj) {
@@ -100,24 +100,24 @@ public final class ConfigurationPermission extends BasicPermission {
 
 	/**
 	 * Returns the canonical string representation of the
-	 * <code>ConfigurationPermission</code> actions.
+	 * {@code ConfigurationPermission} actions.
 	 * 
 	 * <p>
-	 * Always returns present <code>ConfigurationPermission</code> actions in
-	 * the following order: <code>CONFIGURE</code>
+	 * Always returns present {@code ConfigurationPermission} actions in
+	 * the following order: {@code CONFIGURE}
 	 * 
 	 * @return Canonical string representation of the
-	 *         <code>ConfigurationPermission</code> actions.
+	 *         {@code ConfigurationPermission} actions.
 	 */
 	public String getActions() {
 		return CONFIGURE;
 	}
 
 	/**
-	 * Returns a new <code>PermissionCollection</code> object suitable for
-	 * storing <code>ConfigurationPermission</code>s.
+	 * Returns a new {@code PermissionCollection} object suitable for
+	 * storing {@code ConfigurationPermission}s.
 	 * 
-	 * @return A new <code>PermissionCollection</code> object.
+	 * @return A new {@code PermissionCollection} object.
 	 */
 	public PermissionCollection newPermissionCollection() {
 		return new ConfigurationPermissionCollection();
@@ -125,7 +125,7 @@ public final class ConfigurationPermission extends BasicPermission {
 }
 
 /**
- * Stores a set of <code>ConfigurationPermission</code> permissions.
+ * Stores a set of {@code ConfigurationPermission} permissions.
  * 
  * @see java.security.Permission
  * @see java.security.Permissions
@@ -141,7 +141,7 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	private volatile boolean	hasElement;
 
 	/**
-	 * Creates an empty <tt>ConfigurationPermissionCollection</tt> object.
+	 * Creates an empty {@code ConfigurationPermissionCollection} object.
 	 * 
 	 */
 	public ConfigurationPermissionCollection() {
@@ -150,13 +150,13 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 
 	/**
 	 * Adds the specified permission to the
-	 * <tt>ConfigurationPermissionCollection</tt>. The key for the hash is
+	 * {@code ConfigurationPermissionCollection}. The key for the hash is
 	 * the interface name of the service.
 	 * 
-	 * @param permission The <tt>Permission</tt> object to add.
+	 * @param permission The {@code Permission} object to add.
 	 * 
 	 * @exception IllegalArgumentException If the permission is not an
-	 *            <tt>ConfigurationPermission</tt>.
+	 *            {@code ConfigurationPermission}.
 	 * 
 	 * @exception SecurityException If this ConfigurationPermissionCollection
 	 *            object has been marked read-only.
@@ -177,7 +177,7 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 
 	/**
 	 * Determines if the specified set of permissions implies the permissions
-	 * expressed in the parameter <tt>permission</tt>.
+	 * expressed in the parameter {@code permission}.
 	 * 
 	 * @param p The Permission object to compare.
 	 * 
@@ -190,9 +190,9 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Returns an enumeration of an <tt>ConfigurationPermission</tt> object.
+	 * Returns an enumeration of an {@code ConfigurationPermission} object.
 	 * 
-	 * @return Enumeration of an <tt>ConfigurationPermission</tt> object.
+	 * @return Enumeration of an {@code ConfigurationPermission} object.
 	 */
 
 	public Enumeration elements() {

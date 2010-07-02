@@ -20,10 +20,10 @@ package org.osgi.framework;
  * Supports a configuration object.
  * 
  * <p>
- * <code>Configurable</code> is an interface that should be used by a bundle
+ * {@code Configurable} is an interface that should be used by a bundle
  * developer in support of a configurable service. Bundles that need to
  * configure a service may test to determine if the service object is an
- * <code>instanceof Configurable</code>.
+ * {@code instanceof Configurable}.
  * 
  * @deprecated As of 1.2. Please use Configuration Admin service.
  * @version $Id$
@@ -33,7 +33,7 @@ public interface Configurable {
 	 * Returns this service's configuration object.
 	 * 
 	 * <p>
-	 * Services implementing <code>Configurable</code> should take care when
+	 * Services implementing {@code Configurable} should take care when
 	 * returning a service configuration object since this object is probably
 	 * sensitive.
 	 * <p>

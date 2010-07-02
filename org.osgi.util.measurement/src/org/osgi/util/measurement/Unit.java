@@ -26,7 +26,7 @@ import java.util.Hashtable;
  * <p>
  * This class only support exponents for the base SI units in the range -64 to
  * +63. Any operation which produces an exponent outside of this range will
- * result in a <code>Unit</code> object with undefined exponents.
+ * result in a {@code Unit} object with undefined exponents.
  * 
  * @Immutable
  * @version $Id$
@@ -285,10 +285,10 @@ public class Unit {
 	private final long			type;
 
 	/**
-	 * Creates a new <code>Unit</code> instance.
+	 * Creates a new {@code Unit} instance.
 	 * 
-	 * @param name the name of the <code>Unit</code>
-	 * @param type the type of the <code>Unit</code>
+	 * @param name the name of the {@code Unit}
+	 * @param type the type of the {@code Unit}
 	 */
 	private Unit(String name, long type) {
 		if (name == null) {
@@ -317,14 +317,14 @@ public class Unit {
 	}
 
 	/**
-	 * Checks whether this <code>Unit</code> object is equal to the specified
-	 * <code>Unit</code> object. The <code>Unit</code> objects are considered equal
+	 * Checks whether this {@code Unit} object is equal to the specified
+	 * {@code Unit} object. The {@code Unit} objects are considered equal
 	 * if their exponents are equal.
 	 * 
-	 * @param obj the <code>Unit</code> object that should be checked for equality
+	 * @param obj the {@code Unit} object that should be checked for equality
 	 * 
-	 * @return true if the specified <code>Unit</code> object is equal to this
-	 *         <code>Unit</code> object.
+	 * @return true if the specified {@code Unit} object is equal to this
+	 *         {@code Unit} object.
 	 */
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -346,16 +346,16 @@ public class Unit {
 	}
 
 	/**
-	 * Returns a new <code>Unit</code> that is the multiplication of this
-	 * <code>Unit</code> and the <code>Unit</code> specified
+	 * Returns a new {@code Unit} that is the multiplication of this
+	 * {@code Unit} and the {@code Unit} specified
 	 * 
-	 * @param that the <code>Unit</code> that will be multiplied with this
-	 *        <code>Unit</code>
+	 * @param that the {@code Unit} that will be multiplied with this
+	 *        {@code Unit}
 	 * 
-	 * @return a new <code>Unit</code> that is the multiplication of this
-	 *         <code>Unit</code> and the <code>Unit</code> specified
+	 * @return a new {@code Unit} that is the multiplication of this
+	 *         {@code Unit} and the {@code Unit} specified
 	 * 
-	 * @throws RuntimeException if both <code>Unit</code> s are special
+	 * @throws RuntimeException if both {@code Unit} s are special
 	 * 
 	 * @see Unit#isSpecial
 	 */
@@ -368,15 +368,15 @@ public class Unit {
 	}
 
 	/**
-	 * Returns a new <code>Unit</code> that is the division of this <code>Unit</code>
-	 * and the <code>Unit</code> specified
+	 * Returns a new {@code Unit} that is the division of this {@code Unit}
+	 * and the {@code Unit} specified
 	 * 
-	 * @param that the <code>Unit</code> that this <code>Unit</code> will be divided
+	 * @param that the {@code Unit} that this {@code Unit} will be divided
 	 *        with
-	 * @return a new <code>Unit</code> that is the division of this <code>Unit</code>
-	 *         and the <code>Unit</code> specified
+	 * @return a new {@code Unit} that is the division of this {@code Unit}
+	 *         and the {@code Unit} specified
 	 * 
-	 * @throws RuntimeException if both <code>Unit</code> s are special
+	 * @throws RuntimeException if both {@code Unit} s are special
 	 * 
 	 * @see Unit#isSpecial
 	 */
@@ -392,16 +392,16 @@ public class Unit {
 	}
 
 	/**
-	 * Returns a new <code>Unit</code> that is the addition of this <code>Unit</code>
-	 * and the <code>Unit</code> specified.
+	 * Returns a new {@code Unit} that is the addition of this {@code Unit}
+	 * and the {@code Unit} specified.
 	 * 
-	 * @param that the <code>Unit</code> that should be added to this
-	 *        <code>Unit</code>
+	 * @param that the {@code Unit} that should be added to this
+	 *        {@code Unit}
 	 * 
-	 * @return a new <code>Unit</code> that is the addition of this <code>Unit</code>
-	 *         and the <code>Unit</code> specified.
+	 * @return a new {@code Unit} that is the addition of this {@code Unit}
+	 *         and the {@code Unit} specified.
 	 * 
-	 * @throws RuntimeException if the two <code>Unit</code> s are not the same
+	 * @throws RuntimeException if the two {@code Unit} s are not the same
 	 */
 	Unit add(Unit that) {
 		if (!this.equals(that)) {
@@ -411,16 +411,16 @@ public class Unit {
 	}
 
 	/**
-	 * Returns a new <code>Unit</code> that is the subtraction between this
-	 * <code>Unit</code> and the <code>Unit</code> specified.
+	 * Returns a new {@code Unit} that is the subtraction between this
+	 * {@code Unit} and the {@code Unit} specified.
 	 * 
-	 * @param that the <code>Unit</code> that will be subtracted from this
-	 *        <code>Unit</code>
-	 * @return a new <code>Unit</code> that is the subtraction between this
-	 *         <code>Unit</code> and the <code>Unit</code> specified.
+	 * @param that the {@code Unit} that will be subtracted from this
+	 *        {@code Unit}
+	 * @return a new {@code Unit} that is the subtraction between this
+	 *         {@code Unit} and the {@code Unit} specified.
 	 * 
-	 * @throws RuntimeException if the <code>Unit</code> specified is not the same
-	 *         as this <code>Unit</code>
+	 * @throws RuntimeException if the {@code Unit} specified is not the same
+	 *         as this {@code Unit}
 	 */
 	Unit sub(Unit that) {
 		if (!this.equals(that)) {
@@ -431,13 +431,13 @@ public class Unit {
 	}
 
 	/**
-	 * Finds a <code>Unit</code> based on a type. If the <code>Unit</code> is not
+	 * Finds a {@code Unit} based on a type. If the {@code Unit} is not
 	 * found, it will be created and added to the list of all units under a null
 	 * name.
 	 * 
-	 * @param type the type of the <code>Unit</code> to find
+	 * @param type the type of the {@code Unit} to find
 	 * 
-	 * @return the <code>Unit</code>
+	 * @return the {@code Unit}
 	 */
 	static synchronized Unit find(long type) {
 		if (base == null) {
@@ -457,9 +457,9 @@ public class Unit {
 	}
 
 	/**
-	 * Returns a <code>String</code> object representing the <code>Unit</code>
+	 * Returns a {@code String} object representing the {@code Unit}
 	 * 
-	 * @return A <code>String</code> object representing the <code>Unit</code>
+	 * @return A {@code String} object representing the {@code Unit}
 	 */
 	public String toString() {
 		return name;
