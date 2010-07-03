@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,15 +26,15 @@ import java.util.Hashtable;
  * An immutable data structure representing the contents of a leaf or interior
  * node. This structure represents only the value and the format property of the
  * node, all other properties (like MIME type) can be set and read using the
- * <code>DmtSession</code> interface.
+ * {@code DmtSession} interface.
  * <p>
  * Different constructors are available to create nodes with different formats.
- * Nodes of <code>null</code> format can be created using the static
+ * Nodes of {@code null} format can be created using the static
  * {@link #NULL_VALUE} constant instance of this class.
  * <p>
  * {@link #FORMAT_RAW_BINARY} and {@link #FORMAT_RAW_STRING} enable the support
  * of future data formats. When using these formats, the actual format name is
- * specified as a <code>String</code>. The application is responsible for the
+ * specified as a {@code String}. The application is responsible for the
  * proper encoding of the data according to the specified format.
  * 
  * @version $Id$
@@ -42,57 +42,57 @@ import java.util.Hashtable;
 public final class DmtData {
 
     /**
-     * The node holds an OMA DM <code>int</code> value.
+     * The node holds an OMA DM {@code int} value.
      */
     public static final int FORMAT_INTEGER = 0x0001;
 
     /**
-     * The node holds an OMA DM <code>float</code> value.
+     * The node holds an OMA DM {@code float} value.
      */
     public static final int FORMAT_FLOAT = 0x0002;
 
     /**
-     * The node holds an OMA DM <code>chr</code> value.
+     * The node holds an OMA DM {@code chr} value.
      */
     public static final int FORMAT_STRING = 0x0004;
 
     /**
-     * The node holds an OMA DM <code>bool</code> value.
+     * The node holds an OMA DM {@code bool} value.
      */
     public static final int FORMAT_BOOLEAN = 0x0008;
 
     /**
-     * The node holds an OMA DM <code>date</code> value.
+     * The node holds an OMA DM {@code date} value.
      */
     public static final int FORMAT_DATE = 0x0010;
 
     /**
-     * The node holds an OMA DM <code>time</code> value.
+     * The node holds an OMA DM {@code time} value.
      */
     public static final int FORMAT_TIME = 0x0020;
 
     /**
-     * The node holds an OMA DM <code>bin</code> value. The value of the node
-     * corresponds to the Java <code>byte[]</code> type.
+     * The node holds an OMA DM {@code bin} value. The value of the node
+     * corresponds to the Java {@code byte[]} type.
      */
     public static final int FORMAT_BINARY = 0x0040;
 
     /**
-     * The node holds an OMA DM <code>b64</code> value. Like
+     * The node holds an OMA DM {@code b64} value. Like
      * {@link #FORMAT_BINARY}, this format is also represented by the Java
-     * <code>byte[]</code> type, the difference is only in the corresponding
+     * {@code byte[]} type, the difference is only in the corresponding
      * OMA DM format.
      */
     public static final int FORMAT_BASE64 = 0x0080;
 
     /**
-     * The node holds an OMA DM <code>xml</code> value.
+     * The node holds an OMA DM {@code xml} value.
      */
     public static final int FORMAT_XML = 0x0100;
 
     /**
-     * The node holds an OMA DM <code>null</code> value. This corresponds to
-     * the Java <code>null</code> type.
+     * The node holds an OMA DM {@code null} value. This corresponds to
+     * the Java {@code null} type.
      */
     public static final int FORMAT_NULL = 0x0200;
 
@@ -107,7 +107,7 @@ public final class DmtData {
     public static final int FORMAT_NODE = 0x0400;
     
     /**
-     * The node holds raw protocol data encoded as <code>String</code>. The
+     * The node holds raw protocol data encoded as {@code String}. The
      * {@link #getFormatName()} method can be used to get the actual format
      * name.
      */
@@ -138,7 +138,7 @@ public final class DmtData {
     }
 
     /**
-     * Constant instance representing a leaf node of <code>null</code> format.
+     * Constant instance representing a leaf node of {@code null} format.
      */
     public static final DmtData NULL_VALUE = new DmtData();
         // FORMAT_NAMES must be initialized by the time the constr. is called 
@@ -160,7 +160,7 @@ public final class DmtData {
     private final Object complex;
 
     /**
-     * Create a <code>DmtData</code> instance of <code>null</code> format.
+     * Create a {@code DmtData} instance of {@code null} format.
      * This constructor is private and used only to create the public
      * {@link #NULL_VALUE} constant.
      */
@@ -177,8 +177,8 @@ public final class DmtData {
     }
 
     /**
-     * Create a <code>DmtData</code> instance of <code>chr</code> format
-     * with the given string value. The <code>null</code> string argument is
+     * Create a {@code DmtData} instance of {@code chr} format
+     * with the given string value. The {@code null} string argument is
      * valid.
      * 
      * @param str the string value to set
@@ -196,7 +196,7 @@ public final class DmtData {
     }
 
     /**
-     * Create a <code>DmtData</code> instance of <code>node</code> format
+     * Create a {@code DmtData} instance of {@code node} format
      * with the given object value. The value represents complex data associated
      * with an interior node.
      * <p>
@@ -204,7 +204,7 @@ public final class DmtData {
      * complex values, making it simpler to retrieve or update all leaf nodes in
      * a subtree.
      * <p>
-     * The given value must be a non-<code>null</code> immutable object.
+     * The given value must be a non-{@code null} immutable object.
      * 
      * @param complex the complex data object to set
      */
@@ -224,7 +224,7 @@ public final class DmtData {
     }
 
     /**
-     * Create a <code>DmtData</code> instance of the specified format and set
+     * Create a {@code DmtData} instance of the specified format and set
      * its value based on the given string. Only the following string-based
      * formats can be created using this constructor:
      * <ul>
@@ -233,23 +233,23 @@ public final class DmtData {
      *     validity is not checked by this constructor)
      * <li>{@link #FORMAT_DATE} - value must be parseable to an ISO 8601
      *     calendar date in complete representation, basic format (pattern
-     * <tt>CCYYMMDD</tt>)
+     * {@code CCYYMMDD})
      * <li>{@link #FORMAT_TIME} - value must be parseable to an ISO 8601 time
      *     of day in either local time, complete representation, basic format
-     *     (pattern <tt>hhmmss</tt>) or Coordinated Universal Time, basic format
-     *     (pattern <tt>hhmmssZ</tt>)
+     *     (pattern {@code hhmmss}) or Coordinated Universal Time, basic format
+     *     (pattern {@code hhmmssZ})
      * </ul>
-     * The <code>null</code> string argument is only valid if the format is
+     * The {@code null} string argument is only valid if the format is
      * string or XML.
      * 
      * @param value the string, XML, date or time value to set
-     * @param format the format of the <code>DmtData</code> instance to be
+     * @param format the format of the {@code DmtData} instance to be
      *        created, must be one of the formats specified above
-     * @throws IllegalArgumentException if <code>format</code> is not one of
-     *         the allowed formats, or <code>value</code> is not a valid
+     * @throws IllegalArgumentException if {@code format} is not one of
+     *         the allowed formats, or {@code value} is not a valid
      *         string for the given format
      * @throws NullPointerException if a date or time is constructed and
-     *         <code>value</code> is <code>null</code>
+     *         {@code value} is {@code null}
      */
     public DmtData(String value, int format) {
         switch (format) {
@@ -278,7 +278,7 @@ public final class DmtData {
     }
 
     /**
-     * Create a <code>DmtData</code> instance of <code>int</code> format and
+     * Create a {@code DmtData} instance of {@code int} format and
      * set its value.
      * 
      * @param integer the integer value to set
@@ -296,7 +296,7 @@ public final class DmtData {
     }
 
     /**
-     * Create a <code>DmtData</code> instance of <code>float</code> format
+     * Create a {@code DmtData} instance of {@code float} format
      * and set its value.
      * 
      * @param flt the float value to set
@@ -314,7 +314,7 @@ public final class DmtData {
     }
 
     /**
-     * Create a <code>DmtData</code> instance of <code>bool</code> format
+     * Create a {@code DmtData} instance of {@code bool} format
      * and set its value.
      * 
      * @param bool the boolean value to set
@@ -332,11 +332,11 @@ public final class DmtData {
     }
 
     /**
-     * Create a <code>DmtData</code> instance of <code>bin</code> format and
+     * Create a {@code DmtData} instance of {@code bin} format and
      * set its value.
      * 
-     * @param bytes the byte array to set, must not be <code>null</code>
-     * @throws NullPointerException if <code>bytes</code> is <code>null</code>
+     * @param bytes the byte array to set, must not be {@code null}
+     * @throws NullPointerException if {@code bytes} is {@code null}
      */
     public DmtData(byte[] bytes) {
         if (bytes == null)
@@ -354,15 +354,15 @@ public final class DmtData {
     }
 
     /**
-     * Create a <code>DmtData</code> instance of <code>bin</code> or
-     * <code>b64</code> format and set its value. The chosen format is
-     * specified by the <code>base64</code> parameter.
+     * Create a {@code DmtData} instance of {@code bin} or
+     * {@code b64} format and set its value. The chosen format is
+     * specified by the {@code base64} parameter.
      * 
-     * @param bytes the byte array to set, must not be <code>null</code>
-     * @param base64 if <code>true</code>, the new instance will have
-     *        <code>b64</code> format, if <code>false</code>, it will have
-     *        <code>bin</code> format
-     * @throws NullPointerException if <code>bytes</code> is <code>null</code>
+     * @param bytes the byte array to set, must not be {@code null}
+     * @param base64 if {@code true}, the new instance will have
+     *        {@code b64} format, if {@code false}, it will have
+     *        {@code bin} format
+     * @throws NullPointerException if {@code bytes} is {@code null}
      */
     public DmtData(byte[] bytes, boolean base64) {
         if (bytes == null)
@@ -380,16 +380,16 @@ public final class DmtData {
     }
 
     /**
-     * Create a <code>DmtData</code> instance in {@link #FORMAT_RAW_STRING}
-     * format. The data is provided encoded as a <code>String</code>. The
-     * actual data format is specified in <code>formatName</code>. The
-     * encoding used in <code>data</code> must conform to this format.
+     * Create a {@code DmtData} instance in {@link #FORMAT_RAW_STRING}
+     * format. The data is provided encoded as a {@code String}. The
+     * actual data format is specified in {@code formatName}. The
+     * encoding used in {@code data} must conform to this format.
      * 
-     * @param formatName the name of the format, must not be <code>null</code>
+     * @param formatName the name of the format, must not be {@code null}
      * @param data the data encoded according to the specified format, must not
-     *        be <code>null</code>
-     * @throws NullPointerException if <code>formatName</code> or
-     *         <code>data</code> is <code>null</code>
+     *        be {@code null}
+     * @throws NullPointerException if {@code formatName} or
+     *         {@code data} is {@code null}
      */
     public DmtData(String formatName, String data) {
         if(formatName == null)
@@ -409,16 +409,16 @@ public final class DmtData {
     }
     
     /**
-     * Create a <code>DmtData</code> instance in {@link #FORMAT_RAW_BINARY}
+     * Create a {@code DmtData} instance in {@link #FORMAT_RAW_BINARY}
      * format. The data is provided encoded as binary. The actual data format is
-     * specified in <code>formatName</code>. The encoding used in
-     * <code>data</code> must conform to this format.
+     * specified in {@code formatName}. The encoding used in
+     * {@code data} must conform to this format.
      * 
-     * @param formatName the name of the format, must not be <code>null</code>
+     * @param formatName the name of the format, must not be {@code null}
      * @param data the data encoded according to the specified format, must not
-     *        be <code>null</code>
-     * @throws NullPointerException if <code>formatName</code> or
-     *         <code>data</code> is <code>null</code>
+     *        be {@code null}
+     * @throws NullPointerException if {@code formatName} or
+     *         {@code data} is {@code null}
      */
     public DmtData(String formatName, byte[] data) {
         if(formatName == null)
@@ -438,7 +438,7 @@ public final class DmtData {
     }
     
     /**
-     * Gets the value of a node with string (<code>chr</code>) format.
+     * Gets the value of a node with string ({@code chr}) format.
      * 
      * @return the string value
      * @throws DmtIllegalStateException if the format of the node is not string
@@ -453,7 +453,7 @@ public final class DmtData {
     /**
      * Gets the value of a node with date format. The returned date string is
      * formatted according to the ISO 8601 definition of a calendar date in
-     * complete representation, basic format (pattern <tt>CCYYMMDD</tt>).
+     * complete representation, basic format (pattern {@code CCYYMMDD}).
      * 
      * @return the date value
      * @throws DmtIllegalStateException if the format of the node is not date
@@ -470,8 +470,8 @@ public final class DmtData {
      * formatted according to the ISO 8601 definition of the time of day. The
      * exact format depends on the value the object was initialized with: either
      * local time, complete representation, basic format (pattern
-     * <tt>hhmmss</tt>) or Coordinated Universal Time, basic format (pattern
-     * <tt>hhmmssZ</tt>).
+     * {@code hhmmss}) or Coordinated Universal Time, basic format (pattern
+     * {@code hhmmssZ}).
      * 
      * @return the time value
      * @throws DmtIllegalStateException if the format of the node is not time
@@ -484,11 +484,11 @@ public final class DmtData {
     }
 
     /**
-     * Gets the value of a node with <code>xml</code> format.
+     * Gets the value of a node with {@code xml} format.
      * 
      * @return the XML value
      * @throws DmtIllegalStateException if the format of the node is not
-     *         <code>xml</code>
+     *         {@code xml}
      */
     public String getXml() {
         if (format == FORMAT_XML)
@@ -498,7 +498,7 @@ public final class DmtData {
     }
 
     /**
-     * Gets the value of a node with integer (<code>int</code>) format.
+     * Gets the value of a node with integer ({@code int}) format.
      * 
      * @return the integer value
      * @throws DmtIllegalStateException if the format of the node is not integer
@@ -511,11 +511,11 @@ public final class DmtData {
     }
 
     /**
-     * Gets the value of a node with <code>float</code> format.
+     * Gets the value of a node with {@code float} format.
      * 
      * @return the float value
      * @throws DmtIllegalStateException if the format of the node is not
-     *         <code>float</code>
+     *         {@code float}
      */
     public float getFloat() {
         if (format == FORMAT_FLOAT)
@@ -525,7 +525,7 @@ public final class DmtData {
     }
 
     /**
-     * Gets the value of a node with boolean (<code>bool</code>) format.
+     * Gets the value of a node with boolean ({@code bool}) format.
      * 
      * @return the boolean value
      * @throws DmtIllegalStateException if the format of the node is not boolean
@@ -538,7 +538,7 @@ public final class DmtData {
     }
 
     /**
-     * Gets the value of a node with binary (<code>bin</code>) format.
+     * Gets the value of a node with binary ({@code bin}) format.
      * 
      * @return the binary value
      * @throws DmtIllegalStateException if the format of the node is not binary
@@ -571,12 +571,12 @@ public final class DmtData {
     }
 
     /**
-     * Gets the value of a node in raw <code>String</code>
+     * Gets the value of a node in raw {@code String}
      * ({@link #FORMAT_RAW_STRING}) format.
      * 
-     * @return the data value in raw <code>String</code> format
+     * @return the data value in raw {@code String} format
      * @throws DmtIllegalStateException if the format of the node is not raw
-     *     <code>String</code>
+     *     {@code String}
     */
     public String getRawString() {
         if (format == FORMAT_RAW_STRING)
@@ -587,7 +587,7 @@ public final class DmtData {
     }
 
     /**
-     * Gets the value of a node with base 64 (<code>b64</code>) format.
+     * Gets the value of a node with base 64 ({@code b64}) format.
      * 
      * @return the binary value
      * @throws DmtIllegalStateException if the format of the node is not base 64.
@@ -606,7 +606,7 @@ public final class DmtData {
     }
 
     /**
-     * Gets the complex data associated with an interior node (<code>node</code>
+     * Gets the complex data associated with an interior node ({@code node}
      * format).
      * <p>
      * Certain interior nodes can support access to their subtrees through
@@ -615,7 +615,7 @@ public final class DmtData {
      * 
      * @return the data object associated with an interior node
      * @throws DmtIllegalStateException if the format of the data is not 
-     *         <code>node</code>
+     *         {@code node}
      */
     public Object getNode() {
         if(format == FORMAT_NODE)
@@ -637,12 +637,12 @@ public final class DmtData {
     }
 
     /**
-     * Returns the format of this <code>DmtData</code> as <code>String</code>.
+     * Returns the format of this {@code DmtData} as {@code String}.
      * For the predefined data formats this is the OMA DM defined name of the
      * format. For {@link #FORMAT_RAW_STRING} and {@link #FORMAT_RAW_BINARY}
      * this is the format specified when the object was created.
      * 
-     * @return the format name as <code>String</code>
+     * @return the format name as {@code String}
      */
     public String getFormatName() {
         return formatName;
@@ -655,7 +655,7 @@ public final class DmtData {
      * <li>{@link #FORMAT_STRING}, {@link #FORMAT_XML}, {@link #FORMAT_BINARY},
      *     {@link #FORMAT_BASE64}, {@link #FORMAT_RAW_STRING}, and
      *     {@link #FORMAT_RAW_BINARY}: the length of the stored data, or 0 if
-     *     the data is <code>null</code>
+     *     the data is {@code null}
      * <li>{@link #FORMAT_INTEGER} and {@link #FORMAT_FLOAT}: 4
      * <li>{@link #FORMAT_DATE} and {@link #FORMAT_TIME}: the length of the
      *     date or time in its string representation
@@ -693,7 +693,7 @@ public final class DmtData {
     }
 
     /**
-     * Gets the string representation of the <code>DmtData</code>. This
+     * Gets the string representation of the {@code DmtData}. This
      * method works for all formats.
      * <p>
      * For string format data - including {@link #FORMAT_RAW_STRING} - the
@@ -702,10 +702,10 @@ public final class DmtData {
      * Binary - including {@link #FORMAT_RAW_BINARY} - and base64 data is
      * represented by two-digit hexadecimal numbers for each byte separated by
      * spaces. The {@link #NULL_VALUE} data has the string form of
-     * "<code>null</code>". Data of string or XML format containing the Java
-     * <code>null</code> value is represented by an empty string.
+     * "{@code null}". Data of string or XML format containing the Java
+     * {@code null} value is represented by an empty string.
      * 
-     * @return the string representation of this <code>DmtData</code> instance
+     * @return the string representation of this {@code DmtData} instance
      */
     public String toString() {
         switch (format) {
@@ -735,16 +735,16 @@ public final class DmtData {
     }
 
     /**
-     * Compares the specified object with this <code>DmtData</code> instance.
-     * Two <code>DmtData</code> objects are considered equal if their format
+     * Compares the specified object with this {@code DmtData} instance.
+     * Two {@code DmtData} objects are considered equal if their format
      * is the same, and their data (selected by the format) is equal.
      * <p>
      * In case of {@link #FORMAT_RAW_BINARY} and {@link #FORMAT_RAW_STRING}
      * the textual name of the data format - as returned by
      * {@link #getFormatName()} - must be equal as well.
      * 
-     * @param obj the object to compare with this <code>DmtData</code>
-     * @return true if the argument represents the same <code>DmtData</code>
+     * @param obj the object to compare with this {@code DmtData}
+     * @return true if the argument represents the same {@code DmtData}
      *         as this object
      */
     public boolean equals(Object obj) {
@@ -787,7 +787,7 @@ public final class DmtData {
     }
 
     /**
-     * Returns the hash code value for this <code>DmtData</code> instance. The
+     * Returns the hash code value for this {@code DmtData} instance. The
      * hash code is calculated based on the data (selected by the format) of
      * this object.
      * 

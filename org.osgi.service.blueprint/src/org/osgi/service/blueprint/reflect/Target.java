@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@ package org.osgi.service.blueprint.reflect;
 
 /**
  * A common interface for managed components that can be used as a direct target
- * for method calls. These are <code>bean</code>, <code>reference</code>, and
- * <code>ref</code>, where the <code>ref</code> must refer to a bean or
+ * for method calls. These are {@code bean}, {@code reference}, and
+ * {@code ref}, where the {@code ref} must refer to a bean or
  * reference component.
  * 
  * @see BeanMetadata

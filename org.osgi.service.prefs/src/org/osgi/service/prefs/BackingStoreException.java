@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ public class BackingStoreException extends Exception {
     static final long serialVersionUID = -1415637364122829574L;
 
 	/**
-	 * Constructs a <code>BackingStoreException</code> with the specified detail
+	 * Constructs a {@code BackingStoreException} with the specified detail
 	 * message.
 	 * 
 	 * @param message The detail message.
@@ -35,11 +35,11 @@ public class BackingStoreException extends Exception {
 	}
 	
 	/**
-	 * Constructs a <code>BackingStoreException</code> with the specified detail
+	 * Constructs a {@code BackingStoreException} with the specified detail
 	 * message.
 	 * 
 	 * @param message The detail message.
-	 * @param cause The cause of the exception. May be <code>null</code>.
+	 * @param cause The cause of the exception. May be {@code null}.
 	 * @since 1.1 
 	 */
 	public BackingStoreException(String message, Throwable cause) {
@@ -47,10 +47,10 @@ public class BackingStoreException extends Exception {
 	}
 
 	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
+	 * Returns the cause of this exception or {@code null} if no cause was
 	 * set.
 	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause was
+	 * @return The cause of this exception or {@code null} if no cause was
 	 *         set.
 	 * @since 1.1
 	 */

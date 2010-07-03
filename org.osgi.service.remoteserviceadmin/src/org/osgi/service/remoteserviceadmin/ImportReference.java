@@ -22,7 +22,7 @@ import org.osgi.framework.ServiceReference;
  * An Import Reference associates an active proxy service to a remote endpoint.
  * 
  * The Import Reference can be used to reference an imported service. When the
- * service is no longer imported, all methods must return <code>null</code>.
+ * service is no longer imported, all methods must return {@code null}.
  * 
  * @ThreadSafe
  * @version $Id$
@@ -32,7 +32,7 @@ public interface ImportReference {
 	 * Return the Service Reference for the proxy for the endpoint.
 	 * 
 	 * @return The Service Reference to the proxy for the endpoint. Must be
-	 *         <code>null</code> when the service is no longer imported.
+	 *         {@code null} when the service is no longer imported.
 	 */
 	ServiceReference getImportedService();
 
@@ -40,7 +40,7 @@ public interface ImportReference {
 	 * Return the Endpoint Description for the remote endpoint.
 	 * 
 	 * @return The Endpoint Description for the remote endpoint. Must be
-	 *         <code>null</code> when the service is no longer imported.
+	 *         {@code null} when the service is no longer imported.
 	 */
 	EndpointDescription getImportedEndpoint();
 }

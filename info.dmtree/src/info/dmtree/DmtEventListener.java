@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,11 @@ package info.dmtree;
 public interface DmtEventListener {
 
     /**
-     * <code>DmtAdmin</code> uses this method to notify the registered
+     * {@code DmtAdmin} uses this method to notify the registered
      * listeners about the change. This method is called asynchronously from the
      * actual event occurrence.
      * 
-     * @param event the <code>DmtEvent</code> describing the change in detail
+     * @param event the {@code DmtEvent} describing the change in detail
      */
     void changeOccurred(DmtEvent event);
 }

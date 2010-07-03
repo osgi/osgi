@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,7 +80,7 @@ public interface ConditionalPermissionInfo {
 	 *         {@link ConditionalPermissionAdmin} methods deprecated in version
 	 *         1.1.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AllPermission</code>.
+	 *         {@code AllPermission}.
 	 * @deprecated Since 1.1. Use
 	 *             {@link ConditionalPermissionAdmin#newConditionalPermissionUpdate()}
 	 *             instead to manage the Conditional Permissions.
@@ -91,7 +91,7 @@ public interface ConditionalPermissionInfo {
 	 * Returns the name of this Conditional Permission Info.
 	 * 
 	 * @return The name of this Conditional Permission Info. This can be
-	 *         <code>null</code> if this Conditional Permission Info was created
+	 *         {@code null} if this Conditional Permission Info was created
 	 *         without a name.
 	 */
 	String getName();
@@ -111,9 +111,8 @@ public interface ConditionalPermissionInfo {
 	String getAccessDecision();
 
 	/**
-	 * Returns the string encoding of this
-	 * <code>ConditionalPermissionInfo</code> in a form suitable for restoring
-	 * this <code>ConditionalPermissionInfo</code>.
+	 * Returns the string encoding of this {@code ConditionalPermissionInfo} in
+	 * a form suitable for restoring this {@code ConditionalPermissionInfo}.
 	 * 
 	 * <p>
 	 * The encoded format is:
@@ -126,15 +125,15 @@ public interface ConditionalPermissionInfo {
 	 * more {@link ConditionInfo#getEncoded() encoded conditions},
 	 * <i>permissions</i> is one or more {@link PermissionInfo#getEncoded()
 	 * encoded permissions} and <i>name</i> is the name of the
-	 * <code>ConditionalPermissionInfo</code>.
+	 * {@code ConditionalPermissionInfo}.
 	 * 
 	 * <p>
 	 * <i>name</i> is optional. If <i>name</i> is present in the encoded string,
-	 * it must quoted, beginning and ending with <code>&quot;</code>. The
-	 * <i>name</i> value must be encoded for proper parsing. Specifically, the
-	 * <code>&quot;</code>, <code>\</code>, carriage return, and line feed
-	 * characters must be escaped using <code>\&quot;</code>, <code>\\</code>,
-	 * <code>\r</code>, and <code>\n</code>, respectively.
+	 * it must quoted, beginning and ending with {@code &quot;}. The <i>name</i>
+	 * value must be encoded for proper parsing. Specifically, the
+	 * {@code &quot;}, {@code \}, carriage return, and line feed characters must
+	 * be escaped using {@code \&quot;}, {@code \\}, {@code \r}, and {@code \n},
+	 * respectively.
 	 * 
 	 * <p>
 	 * The encoded string contains no leading or trailing whitespace characters.
@@ -143,38 +142,37 @@ public interface ConditionalPermissionInfo {
 	 * All encoded conditions and permissions are separated by a single space
 	 * character.
 	 * 
-	 * @return The string encoding of this
-	 *         <code>ConditionalPermissionInfo</code>.
+	 * @return The string encoding of this {@code ConditionalPermissionInfo}.
 	 * @since 1.1
 	 */
 	String getEncoded();
 
 	/**
 	 * Returns the string representation of this
-	 * <code>ConditionalPermissionInfo</code>. The string is created by calling
-	 * the <code>getEncoded</code> method on this
-	 * <code>ConditionalPermissionInfo</code>.
+	 * {@code ConditionalPermissionInfo}. The string is created by calling
+	 * the {@code getEncoded} method on this
+	 * {@code ConditionalPermissionInfo}.
 	 * 
 	 * @return The string representation of this
-	 *         <code>ConditionalPermissionInfo</code>.
+	 *         {@code ConditionalPermissionInfo}.
 	 * @since 1.1
 	 */
 	String toString();
 
 	/**
-	 * Determines the equality of two <code>ConditionalPermissionInfo</code>
+	 * Determines the equality of two {@code ConditionalPermissionInfo}
 	 * objects.
 	 * 
 	 * This method checks that specified object has the same access decision,
 	 * conditions, permissions and name as this
-	 * <code>ConditionalPermissionInfo</code> object.
+	 * {@code ConditionalPermissionInfo} object.
 	 * 
 	 * @param obj The object to test for equality with this
-	 *        <code>ConditionalPermissionInfo</code> object.
-	 * @return <code>true</code> if <code>obj</code> is a
-	 *         <code>ConditionalPermissionInfo</code>, and has the same access
+	 *        {@code ConditionalPermissionInfo} object.
+	 * @return {@code true} if {@code obj} is a
+	 *         {@code ConditionalPermissionInfo}, and has the same access
 	 *         decision, conditions, permissions and name as this
-	 *         <code>ConditionalPermissionInfo</code> object; <code>false</code>
+	 *         {@code ConditionalPermissionInfo} object; {@code false}
 	 *         otherwise.
 	 * @since 1.1
 	 */

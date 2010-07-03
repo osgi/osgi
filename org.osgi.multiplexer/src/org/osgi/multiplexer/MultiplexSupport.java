@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ package org.osgi.multiplexer;
  * invoked via reflection, rather than by casting or instanceof tests.
  * <p>
  * The presence and support of this interface (as determined by the
- * <code>supportsOSGiMultiplexing</code> method) implies support of the
+ * {@code supportsOSGiMultiplexing} method) implies support of the
  * following multiplexing algorithm for a given JVM singleton.
  * 
  * <h4>Initialization:</h4>

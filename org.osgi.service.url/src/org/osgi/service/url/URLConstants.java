@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package org.osgi.service.url;
 
 /**
  * Defines standard names for property keys associated with
- * {@link URLStreamHandlerService} and <code>java.net.ContentHandler</code>
+ * {@link URLStreamHandlerService} and {@code java.net.ContentHandler}
  * services.
  * 
  * <p>
  * The values associated with these keys are of type
- * <code>java.lang.String[]</code> or <code>java.lang.String</code>, unless
+ * {@code java.lang.String[]} or {@code java.lang.String}, unless
  * otherwise indicated.
  * 
  * @version $Id$

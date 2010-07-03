@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,14 +48,14 @@ public interface CompositeAdmin {
 	 * <li>The composite framework is initialized and its start-level is set to 0.
 	 * At this point no constituent bundles are installed in the composite framework.</li>
 	 * <li>A bundle event of type {@linkplain BundleEvent#INSTALLED} is fired.</li>
-	 * <li>The <code>CompositeBundle</code> object for the newly installed composite is 
+	 * <li>The {@code CompositeBundle} object for the newly installed composite is 
 	 * returned</li>
 	 * </ol>
 	 *
 	 * <b>Postconditions, no exceptions thrown </b>
 	 * <ul>
-	 * <li><code>getState()</code> in &#x007B; <code>INSTALLED</code>,
-	 * <code>RESOLVED</code> &#x007D;.</li>
+	 * <li>{@code getState()} in &#x007B; {@code INSTALLED},
+	 * {@code RESOLVED} &#x007D;.</li>
 	 * <li>Composite has a unique ID.</li>
 	 * <li>The composite framework is initialized, in the {@linkplain Bundle#STARTING} 
 	 * state and its start-level is set to 0.</li>
@@ -72,7 +72,7 @@ public interface CompositeAdmin {
 	 * @return the installed composite bundle.
 	 * @throws BundleException if the installation failed.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AllPermission</code>.
+	 *         {@code AllPermission}.
 	 * @throws IllegalStateException If this composite admin service is no longer valid.  
 	 *         For example, if the framework has shutdown.
 	 */
@@ -84,8 +84,8 @@ public interface CompositeAdmin {
 	/**
 	 * Returns the parent composite bundle associated with the framework with which 
 	 * this composite admin service is registered.  The composite admin service
-	 * registered in the root framework must return <code>null</code>.
-	 * @return The parent composite bundle or <code>null</code>.
+	 * registered in the root framework must return {@code null}.
+	 * @return The parent composite bundle or {@code null}.
 	 */
 	CompositeBundle getParentCompositeBundle();
 }

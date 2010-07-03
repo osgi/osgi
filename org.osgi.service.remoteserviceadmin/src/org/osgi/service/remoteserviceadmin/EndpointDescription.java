@@ -50,10 +50,10 @@ import org.osgi.framework.Version;
  * An Endpoint Description reflects the perspective of an <i>importer</i>. That
  * is, the property keys have been chosen to match filters that are created by
  * client bundles that need a service. Therefore the map must not contain any
- * <code>service.exported.*</code> property and must contain the corresponding
- * <code>service.imported.*</code> ones.
+ * {@code service.exported.*} property and must contain the corresponding
+ * {@code service.imported.*} ones.
  * 
- * The <code>service.intents</code> property must contain the intents provided
+ * The {@code service.intents} property must contain the intents provided
  * by the service itself combined with the intents added by the exporting
  * distribution provider. Qualified intents appear fully expanded on this
  * property.
@@ -75,10 +75,10 @@ public class EndpointDescription {
 	 * <p>
 	 * The {@link RemoteConstants#ENDPOINT_ID endpoint.id},
 	 * {@link RemoteConstants#SERVICE_IMPORTED_CONFIGS service.imported.configs}
-	 * and <code>objectClass</code> properties must be set.
+	 * and {@code objectClass} properties must be set.
 	 * 
 	 * @param properties The map from which to create the Endpoint Description.
-	 *        The keys in the map must be type <code>String</code> and, since
+	 *        The keys in the map must be type {@code String} and, since
 	 *        the keys are case insensitive, there must be no duplicates with
 	 *        case variation.
 	 * @throws IllegalArgumentException When the properties are not proper for
@@ -136,12 +136,12 @@ public class EndpointDescription {
 	 * <p>
 	 * The {@link RemoteConstants#ENDPOINT_ID endpoint.id},
 	 * {@link RemoteConstants#SERVICE_IMPORTED_CONFIGS service.imported.configs}
-	 * and <code>objectClass</code> properties must be set.
+	 * and {@code objectClass} properties must be set.
 	 * 
 	 * @param reference A service reference that can be exported.
 	 * @param properties Map of properties. This argument can be
-	 *        <code>null</code>. The keys in the map must be type
-	 *        <code>String</code> and, since the keys are case insensitive,
+	 *        {@code null}. The keys in the map must be type
+	 *        {@code String} and, since the keys are case insensitive,
 	 *        there must be no duplicates with case variation.
 	 * @throws IllegalArgumentException When the properties are not proper for
 	 *         an Endpoint Description
@@ -280,7 +280,7 @@ public class EndpointDescription {
 	 * Verify and obtain a required String property.
 	 * 
 	 * @param propName The name of the property
-	 * @return The value of the property or <code>null</code> if the property is
+	 * @return The value of the property or {@code null} if the property is
 	 *         not set.
 	 * @throws IllegalArgumentException when the property doesn't have the
 	 *         correct data type.
@@ -332,7 +332,7 @@ public class EndpointDescription {
 	 * The value of the id is stored in the {@link RemoteConstants#ENDPOINT_ID}
 	 * property.
 	 * 
-	 * @return The id of the endpoint, never <code>null</code>. The returned
+	 * @return The id of the endpoint, never {@code null}. The returned
 	 *         value has leading and trailing whitespace removed.
 	 */
 	public String getId() {
@@ -342,7 +342,7 @@ public class EndpointDescription {
 	/**
 	 * Provide the list of interfaces implemented by the exported service.
 	 * 
-	 * The value of the interfaces is derived from the <code>objectClass</code>
+	 * The value of the interfaces is derived from the {@code objectClass}
 	 * property.
 	 * 
 	 * @return An unmodifiable list of Java interface names implemented by this
@@ -365,12 +365,12 @@ public class EndpointDescription {
 	 * </pre>
 	 * 
 	 * The value of this property is in String format and will be converted to a
-	 * <code>Version</code> object by this method.
+	 * {@code Version} object by this method.
 	 * 
 	 * @param packageName The name of the package for which a version is
 	 *        requested.
 	 * @return The version of the specified package or
-	 *         <code>Version.emptyVersion</code> if the package has no version
+	 *         {@code Version.emptyVersion} if the package has no version
 	 *         in this Endpoint Description.
 	 * @throws IllegalArgumentException If the version property value is not
 	 *         String.
@@ -497,7 +497,7 @@ public class EndpointDescription {
 	 * The value of the remote framework uuid is stored in the
 	 * {@link RemoteConstants#ENDPOINT_FRAMEWORK_UUID} endpoint property.
 	 * 
-	 * @return Remote Framework UUID, or <code>null</code> if this endpoint is
+	 * @return Remote Framework UUID, or {@code null} if this endpoint is
 	 *         not associated with an OSGi framework having a framework uuid.
 	 */
 	public String getFrameworkUUID() {
@@ -549,16 +549,16 @@ public class EndpointDescription {
 	}
 
 	/**
-	 * Compares this <code>EndpointDescription</code> object to another object.
+	 * Compares this {@code EndpointDescription} object to another object.
 	 * 
 	 * <p>
 	 * An Endpoint Description is considered to be <b>equal to</b> another
 	 * Endpoint Description if their ids are equal.
 	 * 
-	 * @param other The <code>EndpointDescription</code> object to be compared.
-	 * @return <code>true</code> if <code>object</code> is a
-	 *         <code>EndpointDescription</code> and is equal to this object;
-	 *         <code>false</code> otherwise.
+	 * @param other The {@code EndpointDescription} object to be compared.
+	 * @return {@code true} if {@code object} is a
+	 *         {@code EndpointDescription} and is equal to this object;
+	 *         {@code false} otherwise.
 	 */
 	public boolean equals(Object other) {
 		if (this == other) {
@@ -572,14 +572,14 @@ public class EndpointDescription {
 	}
 
 	/**
-	 * Tests the properties of this <code>EndpointDescription</code> against
+	 * Tests the properties of this {@code EndpointDescription} against
 	 * the given filter using a case insensitive match.
 	 * 
 	 * @param filter The filter to test.
-	 * @return <code>true</code> If the properties of this
-	 *         <code>EndpointDescription</code> match the filter,
-	 *         <code>false</code> otherwise.
-	 * @throws IllegalArgumentException If <code>filter</code> contains an
+	 * @return {@code true} If the properties of this
+	 *         {@code EndpointDescription} match the filter,
+	 *         {@code false} otherwise.
+	 * @throws IllegalArgumentException If {@code filter} contains an
 	 *         invalid filter string that cannot be parsed.
 	 */
 	public boolean matches(String filter) {

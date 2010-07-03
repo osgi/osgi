@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,8 @@ import org.osgi.service.deploymentadmin.DeploymentPackage;
  *     <li>it has no resources
  *     		(see {@link DeploymentPackage#getResources()})</li>
  *     <li>it has no headers except <br/>
- *     		<code>DeploymentPackage-SymbolicName</code> and <br/>
- *     		<code>DeploymentPackage-Version</code> <br/>
+ *     		{@code DeploymentPackage-SymbolicName} and <br/>
+ *     		{@code DeploymentPackage-Version} <br/>
  *     		(see {@link DeploymentPackage#getHeader(String)})</li>
  *     <li>it has no resource headers (see 
  *     		{@link DeploymentPackage#getResourceHeader(String, String)})</li>
@@ -52,7 +52,7 @@ public interface DeploymentSession {
     
     /**
      * If the deployment action is an update or an uninstall, this call returns
-     * the <code>DeploymentPackage</code> instance for the installed deployment package. If the 
+     * the {@code DeploymentPackage} instance for the installed deployment package. If the 
      * deployment action is an install, this call returns the empty deployment package (see
      * {@link DeploymentPackage}).
      * 
@@ -63,7 +63,7 @@ public interface DeploymentSession {
     
     /**
      * If the deployment action is an install or an update, this call returns
-     * the <code>DeploymentPackage</code> instance that corresponds to the deployment package
+     * the {@code DeploymentPackage} instance that corresponds to the deployment package
      * being streamed in for this session. If the deployment action is an uninstall, this call 
      * returns the empty deployment package (see {@link DeploymentPackage}).
      * 

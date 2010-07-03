@@ -56,8 +56,8 @@ import java.util.Map;
  * 
  * <p>
  * A bundle should only execute code when its state is one of
- * {@code STARTING},{@code ACTIVE}, or {@code STOPPING}. An
- * {@code UNINSTALLED} bundle can not be set to another state; it is a
+ * {@code STARTING},{@code ACTIVE}, or {@code STOPPING}.
+ * An {@code UNINSTALLED} bundle can not be set to another state; it is a
  * zombie and can only be reached because references are kept somewhere.
  * 
  * <p>

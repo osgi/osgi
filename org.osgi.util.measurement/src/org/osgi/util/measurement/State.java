@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ package org.osgi.util.measurement;
  * milliseconds since midnight, January 1, 1970 UTC.
  * 
  * <p>
- * A <code>State</code> object is immutable so that it may be easily shared.
+ * A {@code State} object is immutable so that it may be easily shared.
  * 
  * @Immutable
  * @version $Id$
@@ -34,7 +34,7 @@ public class State {
 	private final String	name;
 
 	/**
-	 * Create a new <code>State</code> object.
+	 * Create a new {@code State} object.
 	 * 
 	 * @param value The value of the state.
 	 * @param name The name of the state.
@@ -48,7 +48,7 @@ public class State {
 	}
 
 	/**
-	 * Create a new <code>State</code> object with a time of 0.
+	 * Create a new {@code State} object with a time of 0.
 	 * 
 	 * @param value The value of the state.
 	 * @param name The name of the state.
@@ -58,18 +58,18 @@ public class State {
 	}
 
 	/**
-	 * Returns the value of this <code>State</code>.
+	 * Returns the value of this {@code State}.
 	 * 
-	 * @return The value of this <code>State</code> object.
+	 * @return The value of this {@code State} object.
 	 */
 	public final int getValue() {
 		return value;
 	}
 
 	/**
-	 * Returns the time with which this <code>State</code> was created.
+	 * Returns the time with which this {@code State} was created.
 	 * 
-	 * @return The time with which this <code>State</code> was created. The time
+	 * @return The time with which this {@code State} was created. The time
 	 *         is measured in milliseconds since midnight, January 1, 1970 UTC.
 	 */
 	public final long getTime() {
@@ -77,18 +77,18 @@ public class State {
 	}
 
 	/**
-	 * Returns the name of this <code>State</code>.
+	 * Returns the name of this {@code State}.
 	 * 
-	 * @return The name of this <code>State</code> object.
+	 * @return The name of this {@code State} object.
 	 */
 	public final String getName() {
 		return name;
 	}
 
 	/**
-	 * Returns a <code>String</code> object representing this object.
+	 * Returns a {@code String} object representing this object.
 	 * 
-	 * @return a <code>String</code> object representing this object.
+	 * @return a {@code String} object representing this object.
 	 */
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
@@ -116,11 +116,11 @@ public class State {
 
 	/**
 	 * Return whether the specified object is equal to this object. Two
-	 * <code>State</code> objects are equal if they have same value and name.
+	 * {@code State} objects are equal if they have same value and name.
 	 * 
 	 * @param obj The object to compare with this object.
-	 * @return <code>true</code> if this object is equal to the specified object;
-	 *         <code>false</code> otherwise.
+	 * @return {@code true} if this object is equal to the specified object;
+	 *         {@code false} otherwise.
 	 */
 	public boolean equals(Object obj) {
 		if (this == obj) {

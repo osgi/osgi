@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package info.dmtree;
 
 /**
  * Event class storing the details of a change in the tree.
- * <code>DmtEvent</code> is used by <code>DmtAdmin</code> to notify registered
+ * {@code DmtEvent} is used by {@code DmtAdmin} to notify registered
  * {@link DmtEventListener EventListeners} about important changes. Events are
  * generated after every successful DMT change, and also when sessions are
  * opened or closed. If a {@link DmtSession} is opened in atomic mode, DMT
@@ -28,13 +28,13 @@ package info.dmtree;
  * renamed or copied, in this order. Events are also generated when sessions are
  * opened and closed.
  * <p>
- * The <code>type</code> of the event describes the change that triggered the
+ * The {@code type} of the event describes the change that triggered the
  * event delivery. Each event carries the unique identifier of the session in
  * which the described change happened. The events describing changes in the DMT
  * carry the list of affected nodes. In case of {@link #COPIED} or
  * {@link #RENAMED} events, the event carries the list of new nodes as well.
  * <p>
- * When a <code>DmtEvent</code> is delivered to a listener, the event contains
+ * When a {@code DmtEvent} is delivered to a listener, the event contains
  * only those node URIs that the listener has access to. This access control
  * decision is based on the principal specified when the listener was
  * registered:
@@ -106,7 +106,7 @@ public interface DmtEvent {
 
     /**
      * This method can be used to query the subject nodes of this event. The
-     * method returns <code>null</code> for {@link #SESSION_OPENED} and
+     * method returns {@code null} for {@link #SESSION_OPENED} and
      * {@link #SESSION_CLOSED}.
      * <p>
      * The method returns only those affected nodes that the caller has the GET
@@ -123,7 +123,7 @@ public interface DmtEvent {
     /**
      * This method can be used to query the new nodes, when the type of the
      * event is {@link #COPIED} or {@link #RENAMED}. For all other event types
-     * this method returns <code>null</code>.
+     * this method returns {@code null}.
      * <p>
      * The array returned by this method runs parallel to the array returned by
      * {@link #getNodes}, the elements in the two arrays contain the source and

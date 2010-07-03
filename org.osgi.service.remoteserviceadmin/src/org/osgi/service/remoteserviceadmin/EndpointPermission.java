@@ -43,17 +43,17 @@ import org.osgi.framework.InvalidSyntaxException;
 /**
  * A bundle's authority to export, import or read an Endpoint.
  * <ul>
- * <li>The <code>export</code> action allows a bundle to export a service as an
+ * <li>The {@code export} action allows a bundle to export a service as an
  * Endpoint.</li>
- * <li>The <code>import</code> action allows a bundle to import a service from
+ * <li>The {@code import} action allows a bundle to import a service from
  * an Endpoint.</li>
- * <li>The <code>read</code> action allows a bundle to read references to an
+ * <li>The {@code read} action allows a bundle to read references to an
  * Endpoint.</li>
  * </ul>
  * Permission to read an Endpoint is required in order to detect events
  * regarding an Endpoint. Untrusted bundles should not be able to detect the
  * presence of certain Endpoints unless they have the appropriate
- * <code>EndpointPermission</code> to read the specific service.
+ * {@code EndpointPermission} to read the specific service.
  * 
  * @ThreadSafe
  * @version $Id$
@@ -62,17 +62,17 @@ import org.osgi.framework.InvalidSyntaxException;
 public final class EndpointPermission extends Permission {
 	static final long					serialVersionUID	= -7662148639076511574L;
 	/**
-	 * The action string <code>read</code>.
+	 * The action string {@code read}.
 	 */
 	public final static String			READ				= "read";
 	/**
-	 * The action string <code>import</code>. The <code>import</code> action
-	 * implies the <code>read</code> action.
+	 * The action string {@code import}. The {@code import} action
+	 * implies the {@code read} action.
 	 */
 	public final static String			IMPORT				= "import";
 	/**
-	 * The action string <code>export</code>. The <code>export</code> action
-	 * implies the <code>read</code> action.
+	 * The action string {@code export}. The {@code export} action
+	 * implies the {@code read} action.
 	 */
 	public final static String			EXPORT				= "export";
 
@@ -97,7 +97,7 @@ public final class EndpointPermission extends Permission {
 	private volatile String				actions				= null;
 
 	/**
-	 * The endpoint used by this EndpointPermission. Must be <code>null</code>
+	 * The endpoint used by this EndpointPermission. Must be {@code null}
 	 * if not constructed with a endpoint.
 	 */
 	transient final EndpointDescription					endpoint;
@@ -111,7 +111,7 @@ public final class EndpointPermission extends Permission {
 	/**
 	 * If this EndpointPermission was not constructed with an
 	 * EndpointDescription, this holds a Filter matching object used to evaluate
-	 * the filter in implies or <code>null</code> for wildcard.
+	 * the filter in implies or {@code null} for wildcard.
 	 */
 	transient Filter					filter;
 
@@ -123,17 +123,17 @@ public final class EndpointPermission extends Permission {
 	 * requested EndpointPermission.
 	 * 
 	 * <p>
-	 * There are three possible actions: <code>read</code>, <code>import</code>
-	 * and <code>export</code>. The <code>read</code> action allows the owner of
+	 * There are three possible actions: {@code read}, {@code import}
+	 * and {@code export}. The {@code read} action allows the owner of
 	 * this permission to see the presence of distributed services. The
-	 * <code>import</code> action allows the owner of this permission to import
-	 * an endpoint. The <code>export</code> action allows the owner of this
+	 * {@code import} action allows the owner of this permission to import
+	 * an endpoint. The {@code export} action allows the owner of this
 	 * permission to export a service.
 	 * 
 	 * @param filterString The filter string or &quot;*&quot; to match all
 	 *        endpoints.
-	 * @param actions The actions <code>read</code>, <code>import</code>, or
-	 *        <code>export</code>.
+	 * @param actions The actions {@code read}, {@code import}, or
+	 *        {@code export}.
 	 * @throws IllegalArgumentException If the filter has an invalid syntax or
 	 *         the actions are not valid.
 	 */
@@ -142,10 +142,10 @@ public final class EndpointPermission extends Permission {
 	}
 
 	/**
-	 * Creates a new requested <code>EndpointPermission</code> object to be used
-	 * by code that must perform <code>checkPermission</code>.
-	 * <code>EndpointPermission</code> objects created with this constructor
-	 * cannot be added to an <code>EndpointPermission</code> permission
+	 * Creates a new requested {@code EndpointPermission} object to be used
+	 * by code that must perform {@code checkPermission}.
+	 * {@code EndpointPermission} objects created with this constructor
+	 * cannot be added to an {@code EndpointPermission} permission
 	 * collection.
 	 * 
 	 * @param endpoint The requested endpoint.
@@ -153,10 +153,10 @@ public final class EndpointPermission extends Permission {
 	 *        to support matching the
 	 *        {@link RemoteConstants#ENDPOINT_FRAMEWORK_UUID
 	 *        endpoint.framework.uuid} endpoint property to the
-	 *        <code>&lt;&lt;LOCAL&gt;&gt;</code> value in the filter expression.
-	 * @param actions The actions <code>read</code>, <code>import</code>, or
-	 *        <code>export</code>.
-	 * @throws IllegalArgumentException If the endpoint is <code>null</code> or
+	 *        {@code &lt;&lt;LOCAL&gt;&gt;} value in the filter expression.
+	 * @param actions The actions {@code read}, {@code import}, or
+	 *        {@code export}.
+	 * @throws IllegalArgumentException If the endpoint is {@code null} or
 	 *         the actions are not valid.
 	 */
 	public EndpointPermission(EndpointDescription endpoint,
@@ -350,12 +350,12 @@ public final class EndpointPermission extends Permission {
 	}
 
 	/**
-	 * Determines if a <code>EndpointPermission</code> object "implies" the
+	 * Determines if a {@code EndpointPermission} object "implies" the
 	 * specified permission.
 	 * 
 	 * @param p The target permission to check.
-	 * @return <code>true</code> if the specified permission is implied by this
-	 *         object; <code>false</code> otherwise.
+	 * @return {@code true} if the specified permission is implied by this
+	 *         object; {@code false} otherwise.
 	 */
 	public boolean implies(Permission p) {
 		if (!(p instanceof EndpointPermission)) {
@@ -380,8 +380,8 @@ public final class EndpointPermission extends Permission {
 	 *        validated as a proper argument. The requested EndpointPermission
 	 *        must not have a filter expression.
 	 * @param effective The effective actions with which to start.
-	 * @return <code>true</code> if the specified permission is implied by this
-	 *         object; <code>false</code> otherwise.
+	 * @return {@code true} if the specified permission is implied by this
+	 *         object; {@code false} otherwise.
 	 */
 	boolean implies0(EndpointPermission requested, int effective) {
 		/* check actions first - much faster */
@@ -402,7 +402,7 @@ public final class EndpointPermission extends Permission {
 	/**
 	 * Returns the canonical string representation of the actions. Always
 	 * returns present actions in the following canonical order:
-	 * <code>read</code>, <code>import</code>, <code>export</code>.
+	 * {@code read}, {@code import}, {@code export}.
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
@@ -437,11 +437,11 @@ public final class EndpointPermission extends Permission {
 	}
 
 	/**
-	 * Returns a new <code>PermissionCollection</code> object for storing
-	 * <code>EndpointPermission<code> objects.
+	 * Returns a new {@code PermissionCollection} object for storing
+	 * {@code EndpointPermission} objects.
 	 * 
-	 * @return A new <code>PermissionCollection</code> object suitable for
-	 *         storing <code>EndpointPermission</code> objects.
+	 * @return A new {@code PermissionCollection} object suitable for storing
+	 *         {@code EndpointPermission} objects.
 	 */
 	public PermissionCollection newPermissionCollection() {
 		return new EndpointPermissionCollection();
@@ -451,12 +451,12 @@ public final class EndpointPermission extends Permission {
 	 * Determines the equality of two EndpointPermission objects.
 	 * 
 	 * Checks that specified object has the same name, actions and endpoint as
-	 * this <code>EndpointPermission</code>.
+	 * this {@code EndpointPermission}.
 	 * 
 	 * @param obj The object to test for equality.
-	 * @return true If obj is a <code>EndpointPermission</code>, and has the
+	 * @return true If obj is a {@code EndpointPermission}, and has the
 	 *         same name, actions and endpoint as this
-	 *         <code>EndpointPermission</code> object; <code>false</code>
+	 *         {@code EndpointPermission} object; {@code false}
 	 *         otherwise.
 	 */
 	public boolean equals(Object obj) {
@@ -520,7 +520,7 @@ public final class EndpointPermission extends Permission {
 	}
 
 	/**
-	 * Called by <code><@link EndpointPermission#implies(Permission)></code>.
+	 * Called by {@code <@link EndpointPermission#implies(Permission)>}.
 	 * 
 	 * @return a dictionary of properties for this permission.
 	 */
@@ -569,7 +569,7 @@ final class EndpointPermissionCollection extends PermissionCollection {
 	 * @throws IllegalArgumentException If the specified permission is not a
 	 *         EndpointPermission object.
 	 * @throws SecurityException If this
-	 *         <code>EndpointPermissionCollection</code> object has been marked
+	 *         {@code EndpointPermissionCollection} object has been marked
 	 *         read-only.
 	 */
 	public void add(final Permission permission) {
@@ -617,11 +617,11 @@ final class EndpointPermissionCollection extends PermissionCollection {
 
 	/**
 	 * Determines if a set of permissions implies the permissions expressed in
-	 * <code>permission</code>.
+	 * {@code permission}.
 	 * 
 	 * @param permission The Permission object to compare.
-	 * @return <code>true</code> if <code>permission</code> is a proper subset
-	 *         of a permission in the set; <code>false</code> otherwise.
+	 * @return {@code true} if {@code permission} is a proper subset
+	 *         of a permission in the set; {@code false} otherwise.
 	 */
 	public boolean implies(final Permission permission) {
 		if (!(permission instanceof EndpointPermission)) {
@@ -660,7 +660,7 @@ final class EndpointPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Returns an enumeration of all the <code>EndpointPermission</code> objects
+	 * Returns an enumeration of all the {@code EndpointPermission} objects
 	 * in the container.
 	 * 
 	 * @return Enumeration of all the EndpointPermission objects.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,17 +22,17 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 /**
- * <code>Acl</code> is an immutable class representing structured access to DMT
+ * {@code Acl} is an immutable class representing structured access to DMT
  * ACLs. Under OMA DM the ACLs are defined as strings with an internal syntax.
  * <p>
  * The methods of this class taking a principal as parameter accept remote
  * server IDs (as passed to {@link DmtAdmin#getSession(String, String, int)
- * DmtAdmin.getSession}), as well as &quot; <code>*</code> &quot; indicating any
+ * DmtAdmin.getSession}), as well as &quot; {@code *} &quot; indicating any
  * principal.
  * <p>
  * The syntax for valid remote server IDs:<br>
  * &lt;<i>server-identifier</i>&gt; ::= All printable characters except
- * <code>'='</code>, <code>'&amp;'</code>, <code>'*'</code>, <code>'+'</code> or white-space
+ * {@code '='}, {@code '&amp;'}, {@code '*'}, {@code '+'} or white-space
  * characters.
  * 
  * @version $Id$
@@ -103,7 +103,7 @@ public final class Acl {
      * Create an instance of the ACL from its canonic string representation.
      * 
      * @param acl The string representation of the ACL as defined in OMA DM. If
-     *        <code>null</code> or empty then it represents an empty list of
+     *        {@code null} or empty then it represents an empty list of
      *        principals with no permissions.
      * @throws IllegalArgumentException if acl is not a valid OMA DM ACL string
      */
@@ -159,7 +159,7 @@ public final class Acl {
     /**
      * Creates an instance with a specified list of principals and the
      * permissions they hold. The two arrays run in parallel, that is
-     * <code>principals[i]</code> will hold <code>permissions[i]</code> in
+     * {@code principals[i]} will hold {@code permissions[i]} in
      * the ACL.
      * <p>
      * A principal name may not appear multiple times in the 'principals'
@@ -171,7 +171,7 @@ public final class Acl {
      * @param permissions The array of permissions
      * @throws IllegalArgumentException if the length of the two arrays are not
      *         the same, if any array element is invalid, or if a principal
-     *         appears multiple times in the <code>principals</code> array
+     *         appears multiple times in the {@code principals} array
      */
     public Acl(String[] principals, int[] permissions) {
         if (principals.length != permissions.length)
@@ -207,19 +207,19 @@ public final class Acl {
     // ----- Private constructors -----//
 
     /**
-     * Creates an instance identical to the <code>base</code> ACL except for
-     * the permissions of the given <code>principal</code>, which are
-     * overwritten with the given <code>permissions</code>.
+     * Creates an instance identical to the {@code base} ACL except for
+     * the permissions of the given {@code principal}, which are
+     * overwritten with the given {@code permissions}.
      * <p>
      * Assumes that the permissions parameter has been checked. All
-     * modifications of an <code>Acl</code> (add, delete, set) are done
+     * modifications of an {@code Acl} (add, delete, set) are done
      * through this method.
      * 
      * @param base The ACL that provides all permissions except for permissions
      *        of the given principal.
      * @param principal The entity to which permission should be granted.
      * @param permissions The set of permissions to be given. The parameter can
-     *        be a logical <code>or</code> of the permission constants defined
+     *        be a logical {@code or} of the permission constants defined
      *        in this class.
      */
     private Acl(Acl base, String principal, int permissions) {
@@ -254,12 +254,12 @@ public final class Acl {
     // ----- Public methods -----//
 
     /**
-     * Checks whether the given object is equal to this <code>Acl</code>
-     * instance. Two <code>Acl</code> instances are equal if they allow the
+     * Checks whether the given object is equal to this {@code Acl}
+     * instance. Two {@code Acl} instances are equal if they allow the
      * same set of permissions for the same set of principals.
      * 
-     * @param obj the object to compare with this <code>Acl</code> instance
-     * @return <code>true</code> if the parameter represents the same ACL as
+     * @param obj the object to compare with this {@code Acl} instance
+     * @return {@code true} if the parameter represents the same ACL as
      *         this instance
      */
     public boolean equals(Object obj) {
@@ -285,7 +285,7 @@ public final class Acl {
     }
 
     /**
-     * Returns the hash code for this ACL instance. If two <code>Acl</code>
+     * Returns the hash code for this ACL instance. If two {@code Acl}
      * instances are equal according to the {@link #equals} method, then calling
      * this method on each of them must produce the same integer result.
      * 
@@ -308,18 +308,18 @@ public final class Acl {
 	}
 
     /**
-     * Create a new <code>Acl</code> instance from this <code>Acl</code> with 
+     * Create a new {@code Acl} instance from this {@code Acl} with 
      * the given permission added for the given principal. The already existing
      * permissions of the principal are not affected.
      * 
      * @param principal The entity to which permissions should be granted, or
      *        &quot;*&quot; to grant permissions to all principals.
      * @param permissions The permissions to be given. The parameter can be a
-     *        logical <code>or</code> of more permission constants defined in
+     *        logical {@code or} of more permission constants defined in
      *        this class.
-     * @return a new <code>Acl</code> instance
-     * @throws IllegalArgumentException if <code>principal</code> is not a
-     *         valid principal name or if <code>permissions</code> is not a
+     * @return a new {@code Acl} instance
+     * @throws IllegalArgumentException if {@code principal} is not a
+     *         valid principal name or if {@code permissions} is not a
      *         valid combination of the permission constants defined in this
      *         class
      */
@@ -331,7 +331,7 @@ public final class Acl {
     }
 
     /**
-     * Create a new <code>Acl</code> instance from this <code>Acl</code> with 
+     * Create a new {@code Acl} instance from this {@code Acl} with 
      * the given permission revoked from the given principal. Other permissions 
      * of the principal are not affected.
      * <p>
@@ -341,11 +341,11 @@ public final class Acl {
      * @param principal The entity from which permissions should be revoked, or
      *        &quot;*&quot; to revoke permissions from all principals.
      * @param permissions The permissions to be revoked. The parameter can be a
-     *        logical <code>or</code> of more permission constants defined in
+     *        logical {@code or} of more permission constants defined in
      *        this class.
-     * @return a new <code>Acl</code> instance
-     * @throws IllegalArgumentException if <code>principal</code> is not a
-     *         valid principal name, if <code>permissions</code> is not a
+     * @return a new {@code Acl} instance
+     * @throws IllegalArgumentException if {@code principal} is not a
+     *         valid principal name, if {@code permissions} is not a
      *         valid combination of the permission constants defined in this
      *         class, or if a globally granted permission would have been
      *         revoked from a specific principal
@@ -364,9 +364,9 @@ public final class Acl {
      *        to query the permissions that are granted globally, to all
      *        principals
      * @return The permissions of the given principal. The returned
-     *         <code>int</code> is a bitmask of the permission constants defined
+     *         {@code int} is a bitmask of the permission constants defined
      *         in this class
-     * @throws IllegalArgumentException if <code>principal</code> is not a
+     * @throws IllegalArgumentException if {@code principal} is not a
      *         valid principal name
      */
     public synchronized int getPermissions(String principal) {
@@ -385,14 +385,14 @@ public final class Acl {
     /**
      * Check whether the given permissions are granted to a certain principal.
      * The requested permissions are specified as a bitfield, for example
-     * <code>(Acl.ADD | Acl.DELETE | Acl.GET)</code>.
+     * {@code (Acl.ADD | Acl.DELETE | Acl.GET)}.
      * 
      * @param principal The entity to check, or &quot;*&quot; to check whether
      *        the given permissions are granted to all principals globally
      * @param permissions The permissions to check
-     * @return <code>true</code> if the principal holds all the given permissions
-     * @throws IllegalArgumentException if <code>principal</code> is not a
-     *         valid principal name or if <code>permissions</code> is not a
+     * @return {@code true} if the principal holds all the given permissions
+     * @throws IllegalArgumentException if {@code principal} is not a
+     *         valid principal name or if {@code permissions} is not a
      *         valid combination of the permission constants defined in this
      *         class
      */
@@ -404,7 +404,7 @@ public final class Acl {
     }
 
     /**
-     * Create a new <code>Acl</code> instance from this <code>Acl</code> where 
+     * Create a new {@code Acl} instance from this {@code Acl} where 
      * all permissions for the given principal are overwritten with the given 
      * permissions.
      * <p>
@@ -416,9 +416,9 @@ public final class Acl {
      *        &quot;*&quot; to globally grant permissions to all principals.
      * @param permissions The set of permissions to be given. The parameter is
      *        a bitmask of the permission constants defined in this class.
-     * @return a new <code>Acl</code> instance
-     * @throws IllegalArgumentException if <code>principal</code> is not a
-     *         valid principal name, if <code>permissions</code> is not a
+     * @return a new {@code Acl} instance
+     * @throws IllegalArgumentException if {@code principal} is not a
+     *         valid principal name, if {@code permissions} is not a
      *         valid combination of the permission constants defined in this
      *         class, or if a globally granted permission would have been
      *         revoked from a specific principal

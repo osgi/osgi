@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,14 @@ package org.osgi.service.blueprint.reflect;
 import java.util.List;
 
 /**
- * Metadata for a <code>java.util.Properties</code> based value.
+ * Metadata for a {@code java.util.Properties} based value.
  * 
  * <p>
  * The {@link MapEntry} objects of properties are defined with keys and values
- * of type <code>String</code>.
+ * of type {@code String}.
  * 
  * <p>
- * This is specified by the <code>props</code> element.
+ * This is specified by the {@code props} element.
  * 
  * @ThreadSafe
  * @version $Id$

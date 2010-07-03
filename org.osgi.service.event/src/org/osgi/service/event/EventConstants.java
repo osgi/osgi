@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,14 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 
 /**
- * Defines standard names for <code>EventHandler</code> properties.
+ * Defines standard names for {@code EventHandler} properties.
  * 
  * @version $Id$
  */
 public interface EventConstants {
 
 	/**
-	 * Service registration property specifying the <code>Event</code> topics of
+	 * Service registration property specifying the {@code Event} topics of
 	 * interest to an Event Handler service.
 	 * <p>
 	 * Event handlers SHOULD be registered with this property. Each value of
@@ -46,8 +46,8 @@ public interface EventConstants {
 	 * </pre>
 	 * 
 	 * <p>
-	 * The value of this property must be of type <code>String</code>,
-	 * <code>String[]</code>, or <code>Collection&lt;String&gt;</code>.
+	 * The value of this property must be of type {@code String},
+	 * {@code String[]}, or {@code Collection&lt;String&gt;}.
 	 * 
 	 * @see Event
 	 */
@@ -55,7 +55,7 @@ public interface EventConstants {
 
 	/**
 	 * Service Registration property specifying a filter to further select
-	 * <code>Event</code> s of interest to an Event Handler service.
+	 * {@code Event} s of interest to an Event Handler service.
 	 * <p>
 	 * Event handlers MAY be registered with this property. The value of this
 	 * property is a string containing an LDAP-style filter specification. Any
@@ -70,7 +70,7 @@ public interface EventConstants {
 	 * and a warning should be logged.
 	 * 
 	 * <p>
-	 * The value of this property must be of type <code>String</code>.
+	 * The value of this property must be of type {@code String}.
 	 * 
 	 * @see Event
 	 * @see Filter
@@ -85,8 +85,8 @@ public interface EventConstants {
 	 * property is a string specifying a delivery quality for the Event handler.
 	 * 
 	 * <p>
-	 * The value of this property must be of type <code>String</code>,
-	 * <code>String[]</code>, or <code>Collection&lt;String&gt;</code>.
+	 * The value of this property must be of type {@code String},
+	 * {@code String[]}, or {@code Collection&lt;String&gt;}.
 	 * 
 	 * @see #DELIVERY_ASYNC_ORDERED
 	 * @see #DELIVERY_ASYNC_UNORDERED
@@ -130,19 +130,19 @@ public interface EventConstants {
 	/**
 	 * The Distinguished Names of the signers of the bundle relevant to the
 	 * event. The type of the value for this event property is
-	 * <code>String</code> or <code>Collection</code> of <code>String</code>.
+	 * {@code String} or {@code Collection} of {@code String}.
 	 */
 	public static final String	BUNDLE_SIGNER		= "bundle.signer";
 
 	/**
 	 * The Bundle Symbolic Name of the bundle relevant to the event. The type of
-	 * the value for this event property is <code>String</code>.
+	 * the value for this event property is {@code String}.
 	 */
 	public static final String	BUNDLE_SYMBOLICNAME	= "bundle.symbolicName";
 
 	/**
 	 * The Bundle id of the bundle relevant to the event. The type of the value
-	 * for this event property is <code>Long</code>.
+	 * for this event property is {@code Long}.
 	 * 
 	 * @since 1.1
 	 */
@@ -167,20 +167,20 @@ public interface EventConstants {
 	/**
 	 * The forwarded event object. Used when rebroadcasting an event that was
 	 * sent via some other event mechanism. The type of the value for this event
-	 * property is <code>Object</code>.
+	 * property is {@code Object}.
 	 */
 	public static final String	EVENT				= "event";
 
 	/**
 	 * An exception or error. The type of the value for this event property is
-	 * <code>Throwable</code>.
+	 * {@code Throwable}.
 	 */
 	public static final String	EXCEPTION			= "exception";
 
 	/**
 	 * The name of the exception type. Must be equal to the name of the class of
 	 * the exception in the event property {@link #EXCEPTION}. The type of the
-	 * value for this event property is <code>String</code>.
+	 * value for this event property is {@code String}.
 	 * 
 	 * @since 1.1
 	 */
@@ -188,15 +188,15 @@ public interface EventConstants {
 
 	/**
 	 * The exception message. Must be equal to the result of calling
-	 * <code>getMessage()</code> on the exception in the event property
+	 * {@code getMessage()} on the exception in the event property
 	 * {@link #EXCEPTION}. The type of the value for this event property is
-	 * <code>String</code>.
+	 * {@code String}.
 	 */
 	public static final String	EXCEPTION_MESSAGE	= "exception.message";
 
 	/**
 	 * A human-readable message that is usually not localized. The type of the
-	 * value for this event property is <code>String</code>.
+	 * value for this event property is {@code String}.
 	 */
 	public static final String	MESSAGE				= "message";
 
@@ -208,26 +208,26 @@ public interface EventConstants {
 
 	/**
 	 * A service's id. The type of the value for this event property is
-	 * <code>Long</code>.
+	 * {@code Long}.
 	 */
 	public static final String	SERVICE_ID			= Constants.SERVICE_ID;
 
 	/**
 	 * A service's objectClass. The type of the value for this event property is
-	 * <code>String[]</code>.
+	 * {@code String[]}.
 	 */
 	public static final String	SERVICE_OBJECTCLASS	= "service.objectClass";
 
 	/**
 	 * A service's persistent identity. The type of the value for this event
-	 * property is <code>String</code>.
+	 * property is {@code String}.
 	 */
 	public static final String	SERVICE_PID			= Constants.SERVICE_PID;
 
 	/**
 	 * The time when the event occurred, as reported by
-	 * <code>System.currentTimeMillis()</code>. The type of the value for this
-	 * event property is <code>Long</code>.
+	 * {@code System.currentTimeMillis()}. The type of the value for this
+	 * event property is {@code Long}.
 	 */
 	public static final String	TIMESTAMP			= "timestamp";
 

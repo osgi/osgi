@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,20 +29,20 @@ public interface MapEntry {
 	/**
 	 * Return the Metadata for the key of the map entry.
 	 * 
-	 * This is specified by the <code>key</code> attribute or element.
+	 * This is specified by the {@code key} attribute or element.
 	 * 
 	 * @return The Metadata for the key of the map entry. This must not be
-	 *         <code>null</code>.
+	 *         {@code null}.
 	 */
 	NonNullMetadata getKey();
 
 	/**
 	 * Return the Metadata for the value of the map entry.
 	 * 
-	 * This is specified by the <code>value</code> attribute or element.
+	 * This is specified by the {@code value} attribute or element.
 	 * 
 	 * @return The Metadata for the value of the map entry. This must not be
-	 *         <code>null</code>.
+	 *         {@code null}.
 	 */
 	Metadata getValue();
 }

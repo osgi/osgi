@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -343,7 +343,7 @@ public final class AdminPermission extends BasicPermission {
 		boolean seencomma = false;
 	
 		int mask = ACTION_NONE;
-	
+
 		char[] a = actions.toCharArray();
 	
 		int i = a.length - 1;

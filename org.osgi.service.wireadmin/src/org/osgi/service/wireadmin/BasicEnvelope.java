@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package org.osgi.service.wireadmin;
 
 /**
- * <code>BasicEnvelope</code> is an implementation of the {@link Envelope}
+ * {@code BasicEnvelope} is an implementation of the {@link Envelope}
  * interface
  * 
  * @version $Id$
@@ -29,10 +29,10 @@ public class BasicEnvelope implements Envelope {
 	/**
 	 * Constructor.
 	 * 
-	 * @param value Content of this envelope, may be <code>null</code>.
-	 * @param identification Identifying object for this <code>Envelope</code>
-	 *        object, must not be <code>null</code>
-	 * @param scope Scope name for this object, must not be <code>null</code>
+	 * @param value Content of this envelope, may be {@code null}.
+	 * @param identification Identifying object for this {@code Envelope}
+	 *        object, must not be {@code null}
+	 * @param scope Scope name for this object, must not be {@code null}
 	 * @see Envelope
 	 */
 	public BasicEnvelope(Object value, Object identification, String scope) {

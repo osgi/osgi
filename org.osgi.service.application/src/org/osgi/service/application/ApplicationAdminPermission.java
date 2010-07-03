@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,9 +33,9 @@ import org.osgi.framework.InvalidSyntaxException;
  * specified filter.
  * <P>
  * ApplicationAdminPermission may be granted for different actions:
- * <code>lifecycle</code>, <code>schedule</code> and <code>lock</code>. The
- * permission <code>schedule</code> implies the permission
- * <code>lifecycle</code>.
+ * {@code lifecycle}, {@code schedule} and {@code lock}. The
+ * permission {@code schedule} implies the permission
+ * {@code lifecycle}.
  * 
  * @version $Id$
  */
@@ -50,8 +50,8 @@ public class ApplicationAdminPermission extends Permission {
 	/**
 	 * Allows scheduling of the target applications. The permission to
 	 * schedule an application implies that the scheduler can also 
-	 * manage the lifecycle of that application i.e. <code>schedule</code>
-	 * implies <code>lifecycle</code>
+	 * manage the lifecycle of that application i.e. {@code schedule}
+	 * implies {@code lifecycle}
 	 */
 	public static final String SCHEDULE_ACTION = "schedule";
 
@@ -63,35 +63,35 @@ public class ApplicationAdminPermission extends Permission {
 	private ApplicationDescriptor	applicationDescriptor;
 
 	/**
-	 * Constructs an ApplicationAdminPermission. The <code>filter</code>
-	 * specifies the target application. The <code>filter</code> is an
-	 * LDAP-style filter, the recognized properties are <code>signer</code>
-	 * and <code>pid</code>. The pattern specified in the <code>signer</code>
+	 * Constructs an ApplicationAdminPermission. The {@code filter}
+	 * specifies the target application. The {@code filter} is an
+	 * LDAP-style filter, the recognized properties are {@code signer}
+	 * and {@code pid}. The pattern specified in the {@code signer}
 	 * is matched with the Distinguished Name chain used to sign the application. 
 	 * Wildcards in a DN are not matched according to the filter string rules, 
 	 * but according to the rules defined for a DN chain. The attribute 
-	 * <code>pid</code> is matched with the PID of the application according to
+	 * {@code pid} is matched with the PID of the application according to
 	 * the filter string rules. 
 	 * <p>
-	 * If the <code>filter</code> is <code>null</code> then it matches 
-	 * <code>"*"</code>. If
-	 * <code>actions</code> is <code>"*"</code> then it identifies all the
+	 * If the {@code filter} is {@code null} then it matches 
+	 * {@code "*"}. If
+	 * {@code actions} is {@code "*"} then it identifies all the
 	 * possible actions.
 	 * 
 	 * @param filter
-	 *            filter to identify application. The value <code>null</code>
-	 *            is equivalent to <code>"*"</code> and it indicates "all application".
+	 *            filter to identify application. The value {@code null}
+	 *            is equivalent to {@code "*"} and it indicates "all application".
 	 * @param actions
 	 *            comma-separated list of the desired actions granted on the
 	 *            applications or "*" means all the actions. It must not be
-	 *            <code>null</code>. The order of the actions in the list is
+	 *            {@code null}. The order of the actions in the list is
 	 *            not significant.
 	 * @throws InvalidSyntaxException 
-	 *            is thrown if the specified <code>filter</code> is not syntactically
+	 *            is thrown if the specified {@code filter} is not syntactically
 	 *            correct.
 	 * 
 	 * @exception NullPointerException
-	 *                is thrown if the actions parameter is <code>null</code>
+	 *                is thrown if the actions parameter is {@code null}
 	 * 
 	 * @see ApplicationDescriptor
 	 * @see org.osgi.framework.AdminPermission
@@ -115,10 +115,10 @@ public class ApplicationAdminPermission extends Permission {
 	}
 	
 	/**
-	 * This contructor should be used when creating <code>ApplicationAdminPermission</code>
-	 * instance for <code>checkPermission</code> call. 
-	 * @param application the tareget of the operation, it must not be <code>null</code>
-	 * @param actions the required operation. it must not be <code>null</code>
+	 * This contructor should be used when creating {@code ApplicationAdminPermission}
+	 * instance for {@code checkPermission} call. 
+	 * @param application the tareget of the operation, it must not be {@code null}
+	 * @param actions the required operation. it must not be {@code null}
 	 * @throws NullPointerException if any of the arguments is null. 
 	 */
 	public ApplicationAdminPermission(ApplicationDescriptor application, String actions) {
@@ -136,10 +136,10 @@ public class ApplicationAdminPermission extends Permission {
 	
 	/**
 	 * This method can be used in the {@link java.security.ProtectionDomain}
-	 * implementation in the <code>implies</code> method to insert the
+	 * implementation in the {@code implies} method to insert the
 	 * application ID of the current application into the permission being
 	 * checked. This enables the evaluation of the 
-	 * <code>&lt;&lt;SELF&gt;&gt;</code> pseudo targets.
+	 * {@code &lt;&lt;SELF&gt;&gt;} pseudo targets.
 	 * @param applicationId the ID of the current application.
 	 * @return the permission updated with the ID of the current application
 	 */
@@ -162,23 +162,23 @@ public class ApplicationAdminPermission extends Permission {
 	}
 
 	/**
-	 * Checks if the specified <code>permission</code> is implied by this permission.
+	 * Checks if the specified {@code permission} is implied by this permission.
 	 * The method returns true under the following conditions:
 	 * <UL>
 	 * <LI> This permission was created by specifying a filter (see {@link #ApplicationAdminPermission(String, String)})
-	 * <LI> The implied <code>otherPermission</code> was created for a particular {@link ApplicationDescriptor}
+	 * <LI> The implied {@code otherPermission} was created for a particular {@link ApplicationDescriptor}
 	 *      (see {@link #ApplicationAdminPermission(ApplicationDescriptor, String)})
-	 * <LI> The <code>filter</code> of this permission mathes the <code>ApplicationDescriptor</code> specified
-	 *      in the <code>otherPermission</code>. If the filter in this permission is the 
-	 *      <code>&lt;&lt;SELF&gt;&gt;</code> pseudo target, then the currentApplicationId set in the 
-	 *      <code>otherPermission</code> is compared to the application Id of the target 
-	 *      <code>ApplicationDescriptor</code>.
+	 * <LI> The {@code filter} of this permission mathes the {@code ApplicationDescriptor} specified
+	 *      in the {@code otherPermission}. If the filter in this permission is the 
+	 *      {@code &lt;&lt;SELF&gt;&gt;} pseudo target, then the currentApplicationId set in the 
+	 *      {@code otherPermission} is compared to the application Id of the target 
+	 *      {@code ApplicationDescriptor}.
 	 * <LI> The list of permitted actions in this permission contains all actions required in the 
-	 *      <code>otherPermission</code>  
+	 *      {@code otherPermission}  
 	 * </UL> 
 	 * Otherwise the method returns false.
 	 * @param otherPermission the implied permission
-	 * @return true if this permission implies the <code>otherPermission</code>, false otherwise.
+	 * @return true if this permission implies the {@code otherPermission}, false otherwise.
 	 */
   public boolean implies(Permission otherPermission) {
   	  if( otherPermission == null )

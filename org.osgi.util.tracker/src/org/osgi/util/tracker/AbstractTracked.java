@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2007, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2007, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,7 +117,7 @@ abstract class AbstractTracked<S, T, R> {
 	 * This method must be called from Tracker's open method while synchronized
 	 * on this object in the same synchronized block as the add listener call.
 	 * 
-	 * @param list The initial list of items to be tracked. <code>null</code>
+	 * @param list The initial list of items to be tracked. {@code null}
 	 *        entries in the list are ignored.
 	 * @GuardedBy this
 	 */
@@ -402,7 +402,7 @@ abstract class AbstractTracked<S, T, R> {
 	}
 
 	/**
-	 * Returns the tracking count for this <code>ServiceTracker</code> object.
+	 * Returns the tracking count for this {@code ServiceTracker} object.
 	 * 
 	 * The tracking count is initialized to 0 when this object is opened. Every
 	 * time an item is added, modified or removed from this object the tracking
@@ -418,7 +418,7 @@ abstract class AbstractTracked<S, T, R> {
 	/**
 	 * Copy the tracked items and associated values into the specified map.
 	 * 
-	 * @param <M> Type of <code>Map</code> to hold the tracked items and
+	 * @param <M> Type of {@code Map} to hold the tracked items and
 	 *        associated values.
 	 * @param map The map into which to copy the tracked items and associated
 	 *        values. This map must not be a user provided map so that user code
@@ -438,7 +438,7 @@ abstract class AbstractTracked<S, T, R> {
 	 * 
 	 * @param item Item to be tracked.
 	 * @param related Action related object.
-	 * @return Customized object for the tracked item or <code>null</code> if
+	 * @return Customized object for the tracked item or {@code null} if
 	 *         the item is not to be tracked.
 	 */
 	abstract T customizerAdding(final S item, final R related);

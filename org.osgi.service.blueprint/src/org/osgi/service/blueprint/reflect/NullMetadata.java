@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Metadata for a value specified to be <code>null</code> via the &lt;null&gt;
+ * Metadata for a value specified to be {@code null} via the &lt;null&gt;
  * element.
  * 
  * @ThreadSafe
@@ -25,7 +25,7 @@ package org.osgi.service.blueprint.reflect;
 public interface NullMetadata extends Metadata {
 
 	/**
-	 * Singleton instance of <code>NullMetadata</code>.
+	 * Singleton instance of {@code NullMetadata}.
 	 */
 	static final NullMetadata	NULL	= new NullMetadata() {
 											// empty body

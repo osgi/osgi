@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.osgi.framework.Bundle;
  * A Blueprint Event.
  * 
  * <p>
- * <code>BlueprintEvent</code> objects are delivered to all registered
+ * {@code BlueprintEvent} objects are delivered to all registered
  * {@link BlueprintListener} services. Blueprint Events must be asynchronously
  * delivered in chronological order with respect to each listener.
  * 
@@ -90,7 +90,7 @@ public class BlueprintEvent {
 	 * is sent after a timeout in the Grace Period, the
 	 * {@link #getDependencies()} method must return an array of missing
 	 * mandatory dependencies. The event must also contain the cause of the
-	 * failure as a <code>Throwable</code> through the {@link #getCause()}
+	 * failure as a {@code Throwable} through the {@link #getCause()}
 	 * method.
 	 */
 	public static final int	FAILURE			= 5;
@@ -136,7 +136,7 @@ public class BlueprintEvent {
 	private final Bundle	extenderBundle;
 	/**
 	 * An array containing filters identifying the missing dependencies. Must
-	 * not be <code>null</code> when the event type requires it.
+	 * not be {@code null} when the event type requires it.
 	 * 
 	 * @see #getDependencies()
 	 */
@@ -155,32 +155,32 @@ public class BlueprintEvent {
 	private final boolean	replay;
 
 	/**
-	 * Create a simple <code>BlueprintEvent</code> object.
+	 * Create a simple {@code BlueprintEvent} object.
 	 * 
 	 * @param type The type of this event.
 	 * @param bundle The Blueprint bundle associated with this event. This
-	 *        parameter must not be <code>null</code>.
+	 *        parameter must not be {@code null}.
 	 * @param extenderBundle The Blueprint extender bundle that is generating
-	 *        this event. This parameter must not be <code>null</code>.
+	 *        this event. This parameter must not be {@code null}.
 	 */
 	public BlueprintEvent(int type, Bundle bundle, Bundle extenderBundle) {
 		this(type, bundle, extenderBundle, null, null);
 	}
 
 	/**
-	 * Create a <code>BlueprintEvent</code> object associated with a set of
+	 * Create a {@code BlueprintEvent} object associated with a set of
 	 * dependencies.
 	 * 
 	 * @param type The type of this event.
 	 * @param bundle The Blueprint bundle associated with this event. This
-	 *        parameter must not be <code>null</code>.
+	 *        parameter must not be {@code null}.
 	 * @param extenderBundle The Blueprint extender bundle that is generating
-	 *        this event. This parameter must not be <code>null</code>.
-	 * @param dependencies An array of <code>String</code> filters for each
+	 *        this event. This parameter must not be {@code null}.
+	 * @param dependencies An array of {@code String} filters for each
 	 *        dependency associated with this event. Must be a non-empty array
 	 *        for event types {@link #GRACE_PERIOD} and {@link #WAITING}. It is
 	 *        optional for event type {@link #FAILURE}. Must be
-	 *        <code>null</code> for other event types.
+	 *        {@code null} for other event types.
 	 */
 	public BlueprintEvent(int type, Bundle bundle, Bundle extenderBundle,
 			String[] dependencies) {
@@ -188,16 +188,16 @@ public class BlueprintEvent {
 	}
 
 	/**
-	 * Create a <code>BlueprintEvent</code> object associated with a failure
+	 * Create a {@code BlueprintEvent} object associated with a failure
 	 * cause.
 	 * 
 	 * @param type The type of this event.
 	 * @param bundle The Blueprint bundle associated with this event. This
-	 *        parameter must not be <code>null</code>.
+	 *        parameter must not be {@code null}.
 	 * @param extenderBundle The Blueprint extender bundle that is generating
-	 *        this event. This parameter must not be <code>null</code>.
-	 * @param cause A <code>Throwable</code> object describing the root cause of
-	 *        the event. May be <code>null</code>.
+	 *        this event. This parameter must not be {@code null}.
+	 * @param cause A {@code Throwable} object describing the root cause of
+	 *        the event. May be {@code null}.
 	 */
 	public BlueprintEvent(int type, Bundle bundle, Bundle extenderBundle,
 			Throwable cause) {
@@ -205,21 +205,21 @@ public class BlueprintEvent {
 	}
 
 	/**
-	 * Create a <code>BlueprintEvent</code> object associated with a failure
+	 * Create a {@code BlueprintEvent} object associated with a failure
 	 * cause and a set of dependencies.
 	 * 
 	 * @param type The type of this event.
 	 * @param bundle The Blueprint bundle associated with this event. This
-	 *        parameter must not be <code>null</code>.
+	 *        parameter must not be {@code null}.
 	 * @param extenderBundle The Blueprint extender bundle that is generating
-	 *        this event. This parameter must not be <code>null</code>.
-	 * @param dependencies An array of <code>String</code> filters for each
+	 *        this event. This parameter must not be {@code null}.
+	 * @param dependencies An array of {@code String} filters for each
 	 *        dependency associated with this event. Must be a non-empty array
 	 *        for event types {@link #GRACE_PERIOD} and {@link #WAITING}. It is
 	 *        optional for event type {@link #FAILURE}. Must be
-	 *        <code>null</code> for other event types.
-	 * @param cause A <code>Throwable</code> object describing the root cause of
-	 *        this event. May be <code>null</code>.
+	 *        {@code null} for other event types.
+	 * @param cause A {@code Throwable} object describing the root cause of
+	 *        this event. May be {@code null}.
 	 */
 	public BlueprintEvent(int type, Bundle bundle, Bundle extenderBundle,
 			String[] dependencies, Throwable cause) {
@@ -264,14 +264,14 @@ public class BlueprintEvent {
 	}
 
 	/**
-	 * Create a new <code>BlueprintEvent</code> from the specified
-	 * <code>BlueprintEvent</code>. The <code>timestamp</code> property will be
+	 * Create a new {@code BlueprintEvent} from the specified
+	 * {@code BlueprintEvent}. The {@code timestamp} property will be
 	 * copied from the original event and only the replay property will be
 	 * overridden with the given value.
 	 * 
-	 * @param event The original <code>BlueprintEvent</code> to copy. Must not
-	 *        be <code>null</code>.
-	 * @param replay <code>true</code> if this event should be used as a replay
+	 * @param event The original {@code BlueprintEvent} to copy. Must not
+	 *        be {@code null}.
+	 * @param replay {@code true} if this event should be used as a replay
 	 *        event.
 	 */
 	public BlueprintEvent(BlueprintEvent event, boolean replay) {
@@ -337,7 +337,7 @@ public class BlueprintEvent {
 	 * 
 	 * @return The filters identifying the missing dependencies that caused this
 	 *         event if the event type is one of {@link #WAITING},
-	 *         {@link #GRACE_PERIOD} or {@link #FAILURE} or <code>null</code>
+	 *         {@link #GRACE_PERIOD} or {@link #FAILURE} or {@code null}
 	 *         for the other event types.
 	 */
 	public String[] getDependencies() {
@@ -347,7 +347,7 @@ public class BlueprintEvent {
 	/**
 	 * Return the cause for this {@link #FAILURE} event.
 	 * 
-	 * @return The cause of the failure for this event. May be <code>null</code>
+	 * @return The cause of the failure for this event. May be {@code null}
 	 *         .
 	 */
 	public Throwable getCause() {
@@ -357,8 +357,8 @@ public class BlueprintEvent {
 	/**
 	 * Return whether this event is a replay event.
 	 * 
-	 * @return <code>true</code> if this event is a replay event and
-	 *         <code>false</code> otherwise.
+	 * @return {@code true} if this event is a replay event and
+	 *         {@code false} otherwise.
 	 */
 	public boolean isReplay() {
 		return replay;

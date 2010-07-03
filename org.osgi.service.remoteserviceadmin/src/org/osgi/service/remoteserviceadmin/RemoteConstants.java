@@ -33,8 +33,8 @@ public class RemoteConstants {
 	 * distribution provider. Registered by the distribution provider on one of
 	 * its services to indicate the supported configuration types.
 	 * <p>
-	 * The value of this property must be of type <code>String</code>,
-	 * <code>String[]</code>, or <code>Collection&lt;String&gt;</code>.
+	 * The value of this property must be of type {@code String},
+	 * {@code String[]}, or {@code Collection&lt;String&gt;}.
 	 */
 	public static final String	REMOTE_CONFIGS_SUPPORTED		= "remote.configs.supported";
 
@@ -44,8 +44,8 @@ public class RemoteConstants {
 	 * to indicate the vocabulary of implemented intents.
 	 * 
 	 * <p>
-	 * The value of this property must be of type <code>String</code>,
-	 * <code>String[]</code>, or <code>Collection&lt;String&gt;</code>.
+	 * The value of this property must be of type {@code String},
+	 * {@code String[]}, or {@code Collection&lt;String&gt;}.
 	 */
 	public static final String	REMOTE_INTENTS_SUPPORTED		= "remote.intents.supported";
 
@@ -56,11 +56,11 @@ public class RemoteConstants {
 	 * create an endpoint for each configuration type that it supports.
 	 * 
 	 * <p>
-	 * This property may be supplied in the <code>properties</code>
-	 * <code>Dictionary</code> object passed to the
-	 * <code>BundleContext.registerService</code> method. The value of this
-	 * property must be of type <code>String</code>, <code>String[]</code>, or
-	 * <code>Collection&lt;String&gt;</code>.
+	 * This property may be supplied in the {@code properties}
+	 * {@code Dictionary} object passed to the
+	 * {@code BundleContext.registerService} method. The value of this
+	 * property must be of type {@code String}, {@code String[]}, or
+	 * {@code Collection&lt;String&gt;}.
 	 */
 	public static final String	SERVICE_EXPORTED_CONFIGS		= "service.exported.configs";
 
@@ -72,18 +72,18 @@ public class RemoteConstants {
 	 * configurable.
 	 * 
 	 * <p>
-	 * This property may be supplied in the <code>properties</code>
-	 * <code>Dictionary</code> object passed to the
-	 * <code>BundleContext.registerService</code> method. The value of this
-	 * property must be of type <code>String</code>, <code>String[]</code>, or
-	 * <code>Collection&lt;String&gt;</code>.
+	 * This property may be supplied in the {@code properties}
+	 * {@code Dictionary} object passed to the
+	 * {@code BundleContext.registerService} method. The value of this
+	 * property must be of type {@code String}, {@code String[]}, or
+	 * {@code Collection&lt;String&gt;}.
 	 */
 	public static final String	SERVICE_EXPORTED_INTENTS		= "service.exported.intents";
 
 	/**
 	 * Service property identifying the extra intents that the distribution
 	 * provider must implement to distribute the service. This property is
-	 * merged with the <code>service.exported.intents</code> property before the
+	 * merged with the {@code service.exported.intents} property before the
 	 * distribution provider interprets the listed intents; it has therefore the
 	 * same semantics but the property should be configurable so the
 	 * administrator can choose the intents based on the topology. Bundles
@@ -91,11 +91,11 @@ public class RemoteConstants {
 	 * Configuration Admin service.
 	 * 
 	 * <p>
-	 * This property may be supplied in the <code>properties</code>
-	 * <code>Dictionary</code> object passed to the
-	 * <code>BundleContext.registerService</code> method. The value of this
-	 * property must be of type <code>String</code>, <code>String[]</code>, or
-	 * <code>Collection&lt;String&gt;</code>.
+	 * This property may be supplied in the {@code properties}
+	 * {@code Dictionary} object passed to the
+	 * {@code BundleContext.registerService} method. The value of this
+	 * property must be of type {@code String}, {@code String[]}, or
+	 * {@code Collection&lt;String&gt;}.
 	 */
 	public static final String	SERVICE_EXPORTED_INTENTS_EXTRA	= "service.exported.intents.extra";
 
@@ -110,11 +110,11 @@ public class RemoteConstants {
 	 * for some type of concrete classes.
 	 * 
 	 * <p>
-	 * This property may be supplied in the <code>properties</code>
-	 * <code>Dictionary</code> object passed to the
-	 * <code>BundleContext.registerService</code> method. The value of this
-	 * property must be of type <code>String</code>, <code>String[]</code>, or
-	 * <code>Collection&lt;String&gt;</code>.
+	 * This property may be supplied in the {@code properties}
+	 * {@code Dictionary} object passed to the
+	 * {@code BundleContext.registerService} method. The value of this
+	 * property must be of type {@code String}, {@code String[]}, or
+	 * {@code Collection&lt;String&gt;}.
 	 */
 	public static final String	SERVICE_EXPORTED_INTERFACES		= "service.exported.interfaces";
 
@@ -139,8 +139,8 @@ public class RemoteConstants {
 	 * used to export this service.
 	 * 
 	 * <p>
-	 * The value of this property must be of type <code>String</code>,
-	 * <code>String[]</code>, or <code>Collection&lt;String&gt;</code>.
+	 * The value of this property must be of type {@code String},
+	 * {@code String[]}, or {@code Collection&lt;String&gt;}.
 	 * 
 	 * @see #SERVICE_EXPORTED_CONFIGS
 	 */
@@ -163,8 +163,8 @@ public class RemoteConstants {
 	 * recognize all intents before a service can be distributed.
 	 * 
 	 * <p>
-	 * The value of this property must be of type <code>String</code>,
-	 * <code>String[]</code>, or <code>Collection&lt;String&gt;</code>.
+	 * The value of this property must be of type {@code String},
+	 * {@code String[]}, or {@code Collection&lt;String&gt;}.
 	 */
 	public static final String	SERVICE_INTENTS					= "service.intents";
 
@@ -175,7 +175,7 @@ public class RemoteConstants {
 	 * property must always be set.
 	 * 
 	 * <p>
-	 * The value of this property must be of type <code>String</code>.
+	 * The value of this property must be of type {@code String}.
 	 */
 	public final static String	ENDPOINT_ID						= "endpoint.id";
 
@@ -184,7 +184,7 @@ public class RemoteConstants {
 	 * be absent or 0 if the corresponding endpoint is not for an OSGi service.
 	 * 
 	 * <p>
-	 * The value of this property must be of type <code>Long</code>.
+	 * The value of this property must be of type {@code Long}.
 	 */
 	public final static String	ENDPOINT_SERVICE_ID				= "endpoint.service.id";
 
@@ -194,15 +194,15 @@ public class RemoteConstants {
 	 * service.
 	 * 
 	 * <p>
-	 * The value of this property must be of type <code>String</code>.
+	 * The value of this property must be of type {@code String}.
 	 */
 	public final static String	ENDPOINT_FRAMEWORK_UUID			= "endpoint.framework.uuid";
 
 	/**
 	 * Prefix for an endpoint property identifying the interface Java package
 	 * version for an interface. For example, the property
-	 * <code>endpoint.package.version.com.acme=1.3</code> describes the version
-	 * of the package for the <code>com.acme.Foo</code> interface. This endpoint
+	 * {@code endpoint.package.version.com.acme=1.3} describes the version
+	 * of the package for the {@code com.acme.Foo} interface. This endpoint
 	 * property for an interface package does not have to be set. If not set,
 	 * the value must be assumed to be 0.
 	 * 
@@ -212,7 +212,7 @@ public class RemoteConstants {
 	 * 
 	 * <p>
 	 * The value of properties having this prefix must be of type
-	 * <code>String</code>.
+	 * {@code String}.
 	 */
 	public final static String	ENDPOINT_PACKAGE_VERSION_		= "endpoint.package.version.";
 }

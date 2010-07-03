@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import java.io.InputStream;
   * in deployment packages. Resource Processors expose their services as standard OSGi services.
   * Bundles exporting the service may arrive in the deployment package (customizers) or may be 
   * preregistered (they are installed previously). Resource processors has to define the 
-  * <code>service.pid</code> standard OSGi service property which should be a unique string.<p>
+  * {@code service.pid} standard OSGi service property which should be a unique string.<p>
   * 
   * The order of the method calls on a particular Resource Processor in case of install/update 
   * session is the following:<p>
@@ -98,10 +98,10 @@ public interface ResourceProcessor {
   
     /**
      * This method is called on the Resource Processor immediately before calling the 
-     * <code>commit</code> method. The Resource Processor has to check whether it is able 
-     * to commit the operations since the last <code>begin</code> method call. If it determines 
+     * {@code commit} method. The Resource Processor has to check whether it is able 
+     * to commit the operations since the last {@code begin} method call. If it determines 
      * that it is not able to commit the changes, it has to raise a 
-     * <code>ResourceProcessorException</code> with the {@link ResourceProcessorException#CODE_PREPARE} 
+     * {@code ResourceProcessorException} with the {@link ResourceProcessorException#CODE_PREPARE} 
      * error code.
      * 
      * @throws ResourceProcessorException if the resource processor is able to determine it is 
@@ -127,10 +127,10 @@ public interface ResourceProcessor {
     
     /**
      * Processing of a resource passed to the resource processor may take long. 
-     * The <code>cancel()</code> method notifies the resource processor that it should 
+     * The {@code cancel()} method notifies the resource processor that it should 
      * interrupt the processing of the current resource. This method is called by the 
-     * <code>DeploymentAdmin</code> implementation after the
-     * <code>DeploymentAdmin.cancel()</code> method is called.
+     * {@code DeploymentAdmin} implementation after the
+     * {@code DeploymentAdmin.cancel()} method is called.
      */
     void cancel();
 

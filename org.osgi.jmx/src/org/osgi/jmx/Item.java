@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -145,7 +145,7 @@ public class Item {
 	 * the parent type.
 	 * 
 	 * @param parent
-	 *            The parent type, can be <code>null</code>
+	 *            The parent type, can be {@code null}
 	 * @param name
 	 *            The name of the type
 	 * @param description

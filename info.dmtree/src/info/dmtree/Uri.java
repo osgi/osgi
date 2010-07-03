@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,9 @@ import java.util.List;
  * <p>
  * Syntax of valid DMT URIs:
  * <ul>
- * <li>A slash (<code>'/'</code> &#92;u002F) is the separator of the node names.
+ * <li>A slash ({@code '/'} &#92;u002F) is the separator of the node names.
  * Slashes used in node name must therefore be escaped using a backslash slash (
- * <code>"\/"</code>). The backslash must be escaped with a double backslash sequence. A
+ * {@code "\/"}). The backslash must be escaped with a double backslash sequence. A
  * backslash found must be ignored when it is not followed by a slash or
  * backslash.
  * <li>The node name can be constructed using full Unicode character set (except
@@ -39,14 +39,14 @@ import java.util.List;
  * full Unicode character set for node names is discouraged because the encoding
  * in the underlying storage as well as the encoding needed in communications
  * can create significant performance and memory usage overhead. Names that are
- * restricted to the URI set <code>[-a-zA-Z0-9_.!~*'()]</code> are most efficient.
+ * restricted to the URI set {@code [-a-zA-Z0-9_.!~*'()]} are most efficient.
  * <li>URIs used in the DMT must be treated and interpreted as case sensitive.
- * <li>No End Slash: URI must not end with the delimiter slash (<code>'/'</code>
+ * <li>No End Slash: URI must not end with the delimiter slash ({@code '/'}
  * &#92;u002F). This implies that the root node must be denoted as
- * <code>"."</code> and not <code>"./"</code>.
+ * {@code "."} and not {@code "./"}.
  * <li>No parent denotation: URI must not be constructed using the character
- * sequence <code>"../"</code> to traverse the tree upwards.
- * <li>Single Root: The character sequence <code>"./"</code> must not be used
+ * sequence {@code "../"} to traverse the tree upwards.
+ * <li>Single Root: The character sequence {@code "./"} must not be used
  * anywhere else but in the beginning of a URI.
  * </ul>
  * 
@@ -170,7 +170,7 @@ public final class Uri {
      * Returns a node name that is valid for the tree operation methods, based
      * on the given node name. This transformation is not idempotent, so it must
      * not be called with a parameter that is the result of a previous
-     * <code>mangle</code> method call.
+     * {@code mangle} method call.
      * <p>
      * Node name mangling is needed in the following cases:
      * <ul>
@@ -184,7 +184,7 @@ public final class Uri {
      * skip the mangling if the node name is known to be valid (though it is
      * always safe to call this method).
      * <p>
-     * The method returns the normalized <code>nodeName</code> as described
+     * The method returns the normalized {@code nodeName} as described
      * below. Invalid node names are normalized in different ways, depending on
      * the cause. If the length of the name does not exceed the limit, but the
      * name contains '/' or '\' characters, then these are simply escaped by
@@ -199,11 +199,11 @@ public final class Uri {
      * </ul>
      * 
      * @param nodeName the node name to be mangled (if necessary), must not be
-     *        <code>null</code> or empty
+     *        {@code null} or empty
      * @return the normalized node name that is valid for tree operations
-     * @throws NullPointerException if <code>nodeName</code> is
-     *         <code>null</code>
-     * @throws IllegalArgumentException if <code>nodeName</code> is empty
+     * @throws NullPointerException if {@code nodeName} is
+     *         {@code null}
+     * @throws IllegalArgumentException if {@code nodeName} is empty
      */
     public static String mangle(String nodeName) {
         return mangle(nodeName, getMaxSegmentNameLength());
@@ -214,13 +214,13 @@ public final class Uri {
      * already be mangled.
      * <p>
      * If the specified path is an empty array then an empty URI 
-     * (<code>""</code>) is returned.
+     * ({@code ""}) is returned.
      * 
      * @param path a possibly empty array of URI segments, must not be 
-     *        <code>null</code>
+     *        {@code null}
      * @return the URI created from the specified segments
      * @throws NullPointerException if the specified path or any of its
-     *         segments are <code>null</code>
+     *         segments are {@code null}
      * @throws IllegalArgumentException if the specified path contains too many
      *         or malformed segments or the resulting URI is too long
      */
@@ -265,7 +265,7 @@ public final class Uri {
      * @param segment the URI segment
      * @return URI segment length
      * @throws NullPointerException if the specified segment is 
-     *         <code>null</code>
+     *         {@code null}
      * @throws IllegalArgumentException if the specified URI segment is
      *         malformed
      */
@@ -307,9 +307,9 @@ public final class Uri {
      * an array of URI segments. Special characters in the returned segments are
      * escaped. The returned array may be empty if the specifed URI was empty.
      * 
-     * @param uri the URI to be split, must not be <code>null</code>
+     * @param uri the URI to be split, must not be {@code null}
      * @return an array of URI segments created by splitting the specified URI
-     * @throws NullPointerException if the specified URI is <code>null</code>
+     * @throws NullPointerException if the specified URI is {@code null}
      * @throws IllegalArgumentException if the specified URI is malformed
      */
     public static String[] toPath(String uri) {
@@ -353,7 +353,7 @@ public final class Uri {
      * Returns the maximum allowed number of URI segments. The returned value is
      * implementation specific.
      * <p>
-     * The return value of <code>Integer.MAX_VALUE</code> indicates that there
+     * The return value of {@code Integer.MAX_VALUE} indicates that there
      * is no upper limit on the number of URI segments.
      * 
      * @return maximum number of URI segments supported by the implementation
@@ -367,7 +367,7 @@ public final class Uri {
      * specific. The length of the URI is defined as the number of bytes in the
      * unescaped, UTF-8 encoded represenation of the URI.
      * <p>
-     * The return value of <code>Integer.MAX_VALUE</code> indicates that there
+     * The return value of {@code Integer.MAX_VALUE} indicates that there
      * is no upper limit on the length of URIs.
      * 
      * @return maximum URI length supported by the implementation
@@ -382,7 +382,7 @@ public final class Uri {
      * number of bytes in the unescaped, UTF-8 encoded represenation of the
      * segment.
      * <p>
-     * The return value of <code>Integer.MAX_VALUE</code> indicates that there
+     * The return value of {@code Integer.MAX_VALUE} indicates that there
      * is no upper limit on the length of segment names.
      * 
      * @return maximum URI segment length supported by the implementation
@@ -396,10 +396,10 @@ public final class Uri {
      * contains the complete path to a node in the DMT starting from the DMT
      * root (".").
      * 
-     * @param uri the URI to be checked, must not be <code>null</code> and must 
+     * @param uri the URI to be checked, must not be {@code null} and must 
      *        contain a valid URI
      * @return whether the specified URI is absolute
-     * @throws NullPointerException if the specified URI is <code>null</code>
+     * @throws NullPointerException if the specified URI is {@code null}
      * @throws IllegalArgumentException if the specified URI is malformed
      */
     public static boolean isAbsoluteUri(String uri) {
@@ -416,7 +416,7 @@ public final class Uri {
      * Checks whether the specified URI is valid. A URI is considered valid if
      * it meets the following constraints:
      * <ul>
-     * <li>the URI is not <code>null</code>;
+     * <li>the URI is not {@code null};
      * <li>the URI follows the syntax defined for valid DMT URIs;
      * <li>the length of the URI is not more than {@link #getMaxUriLength()};
      * <li>the URI doesn't contain more than {@link #getMaxUriSegments()}
@@ -425,8 +425,8 @@ public final class Uri {
      * {@link #getMaxSegmentNameLength()}.
      * </ul>
      * The exact definition of the length of a URI and its segments is
-     * given in the descriptions of the <code>getMaxUriLength()</code> and
-     * <code>getMaxSegmentNameLength()</code> methods.  
+     * given in the descriptions of the {@code getMaxUriLength()} and
+     * {@code getMaxSegmentNameLength()} methods.  
      * 
      * @param uri the URI to be validated
      * @return whether the specified URI is valid

@@ -25,7 +25,7 @@ package org.osgi.service.remoteserviceadmin;
  * {@link RemoteServiceAdmin#importService(EndpointDescription)} method.
  * 
  * When this Import Registration has been closed, all methods must return
- * <code>null</code>.
+ * {@code null}.
  * 
  * @ThreadSafe
  * @version $Id$
@@ -43,7 +43,7 @@ public interface ImportRegistration {
 	/**
 	 * Close this Import Registration. This must close the connection to the
 	 * endpoint and unregister the proxy. After this method returns, all other
-	 * methods must return <code>null</code>.
+	 * methods must return {@code null}.
 	 * 
 	 * This method has no effect when this registration has already been closed
 	 * or is being closed.
@@ -55,13 +55,13 @@ public interface ImportRegistration {
 	 * 
 	 * If the Remote Service Admin for some reasons is unable to properly
 	 * initialize this registration, then it must return an exception from this
-	 * method. If no error occurred, this method must return <code>null</code>.
+	 * method. If no error occurred, this method must return {@code null}.
 	 * 
 	 * The error must be set before this Import Registration is returned.
 	 * Asynchronously occurring errors must be reported to the log.
 	 * 
 	 * @return The exception that occurred during the initialization of this
-	 *         registration or <code>null</code> if no exception occurred.
+	 *         registration or {@code null} if no exception occurred.
 	 */
 	Throwable getException();
 }

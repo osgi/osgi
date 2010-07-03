@@ -227,11 +227,11 @@ public interface UserAdminMBean {
 	/**
 	 * Add a member to the group.
 	 * 
-	 * @param groupname The group name that receives the <code>rolename</code>
+	 * @param groupname The group name that receives the {@code rolename}
 	 *        as member.
-	 * @param rolename The <code>rolename</code> (User or Group) that must be
+	 * @param rolename The {@code rolename} (User or Group) that must be
 	 *        added.
-	 * @return <code>true</code> if the role was added to the group
+	 * @return {@code true} if the role was added to the group
 	 * @throws IOException if the operation fails
 	 * 
 	 */
@@ -241,7 +241,7 @@ public interface UserAdminMBean {
 	 * Add or update a property on a role
 	 * 
 	 * @param key The key of the property to add
-	 * @param value The value of the property to add (<code>String</code>)
+	 * @param value The value of the property to add ({@code String})
 	 * @param rolename The role name
 	 * @throws IOException if the operation fails
 	 */
@@ -368,7 +368,7 @@ public interface UserAdminMBean {
 	 * @param groupname The name of the group to get the members from
 	 * @return The list of user names
 	 * @throws IOException if the operation fails
-	 * @throws IllegalArgumentException if the <code>groupname</code> is not a
+	 * @throws IllegalArgumentException if the {@code groupname} is not a
 	 *         group
 	 */
 	String[] getMembers(String groupname) throws IOException;
@@ -419,8 +419,8 @@ public interface UserAdminMBean {
 	 * Answer the list of role names which match the supplied filter
 	 * 
 	 * @param filter The string representation of the
-	 *        <code>org.osgi.framework.Filter</code> that is used to filter
-	 *        the roles by applying to the properties, if <code>null</code>
+	 *        {@code org.osgi.framework.Filter} that is used to filter
+	 *        the roles by applying to the properties, if {@code null}
 	 *        all roles are returned.
 	 * 
 	 * @return The list the role names
@@ -436,7 +436,7 @@ public interface UserAdminMBean {
 	 * @param username The name of the requested user
 	 * @return The User, see {@link #USER_TYPE}
 	 * @throws IOException if the operation fails
-	 * @throws IllegalArgumentException if the <code>username</code> is not a
+	 * @throws IllegalArgumentException if the {@code username} is not a
 	 *         User
 	 */
 	CompositeData getUser(String username) throws IOException;

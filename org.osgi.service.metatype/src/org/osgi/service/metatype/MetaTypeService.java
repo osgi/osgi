@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,16 @@ import org.osgi.framework.Bundle;
 /**
  * The MetaType Service can be used to obtain meta type information for a
  * bundle. The MetaType Service will examine the specified bundle for meta type
- * documents to create the returned <code>MetaTypeInformation</code> object.
+ * documents to create the returned {@code MetaTypeInformation} object.
  * 
  * <p>
  * If the specified bundle does not contain any meta type documents, then a
- * <code>MetaTypeInformation</code> object will be returned that wrappers any
- * <code>ManagedService</code> or <code>ManagedServiceFactory</code>
+ * {@code MetaTypeInformation} object will be returned that wrappers any
+ * {@code ManagedService} or {@code ManagedServiceFactory}
  * services registered by the specified bundle that implement
- * <code>MetaTypeProvider</code>. Thus the MetaType Service can be used to
+ * {@code MetaTypeProvider}. Thus the MetaType Service can be used to
  * retrieve meta type information for bundles which contain a meta type
- * documents or which provide their own <code>MetaTypeProvider</code> objects.
+ * documents or which provide their own {@code MetaTypeProvider} objects.
  * 
  * @version $Id$
  * @since 1.1

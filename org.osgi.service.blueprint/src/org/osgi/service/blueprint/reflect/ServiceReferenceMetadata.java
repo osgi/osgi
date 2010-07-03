@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	/**
 	 * Return whether or not a matching service is required at all times.
 	 * 
-	 * This is specified in the <code>availability</code> attribute of the
+	 * This is specified in the {@code availability} attribute of the
 	 * service reference.
 	 * 
 	 * @return Whether or not a matching service is required at all times.
@@ -56,23 +56,23 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	 * Return the name of the interface type that a matching service must
 	 * support.
 	 * 
-	 * This is specified in the <code>interface</code> attribute of the service
+	 * This is specified in the {@code interface} attribute of the service
 	 * reference.
 	 * 
 	 * @return The name of the interface type that a matching service must
-	 *         support or <code>null</code> when no interface name is specified.
+	 *         support or {@code null} when no interface name is specified.
 	 */
 	String getInterface();
 
 	/**
-	 * Return the value of the <code>component-name</code> attribute of the
+	 * Return the value of the {@code component-name} attribute of the
 	 * service reference. This specifies the id of a component that is
 	 * registered in the service registry. This will create an automatic filter,
 	 * appended with the filter if set, to select this component based on its
-	 * automatic <code>id</code> attribute.
+	 * automatic {@code id} attribute.
 	 * 
-	 * @return The value of the <code>component-name</code> attribute of the
-	 *         service reference or <code>null</code> if the attribute is not
+	 * @return The value of the {@code component-name} attribute of the
+	 *         service reference or {@code null} if the attribute is not
 	 *         specified.
 	 */
 	String getComponentName();
@@ -80,18 +80,18 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	/**
 	 * Return the filter expression that a matching service must match.
 	 * 
-	 * This is specified by the <code>filter</code> attribute of the service
+	 * This is specified by the {@code filter} attribute of the service
 	 * reference.
 	 * 
 	 * @return The filter expression that a matching service must match or
-	 *         <code>null</code> if a filter is not specified.
+	 *         {@code null} if a filter is not specified.
 	 */
 	String getFilter();
 
 	/**
 	 * Return the reference listeners to receive bind and unbind events.
 	 * 
-	 * This is specified by the <code>reference-listener</code> elements of the
+	 * This is specified by the {@code reference-listener} elements of the
 	 * service reference.
 	 * 
 	 * @return An immutable Collection of {@link ReferenceListener} objects to

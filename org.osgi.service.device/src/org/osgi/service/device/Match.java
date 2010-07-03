@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package org.osgi.service.device;
 import org.osgi.framework.ServiceReference;
 
 /**
- * Instances of <code>Match</code> are used in the {@link DriverSelector#select}
+ * Instances of {@code Match} are used in the {@link DriverSelector#select}
  * method to identify Driver services matching a Device service.
  * 
  * @version $Id$
@@ -30,7 +30,7 @@ public interface Match {
 	/**
 	 * Return the reference to a Driver service.
 	 * 
-	 * @return <code>ServiceReference</code> object to a Driver service.
+	 * @return {@code ServiceReference} object to a Driver service.
 	 */
 	public ServiceReference getDriver();
 

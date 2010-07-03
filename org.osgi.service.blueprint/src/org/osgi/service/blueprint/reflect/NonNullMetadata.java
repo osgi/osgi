@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 package org.osgi.service.blueprint.reflect;
 
 /**
- * Metadata for a value that cannot <code>null</code>. All Metadata subtypes
+ * Metadata for a value that cannot {@code null}. All Metadata subtypes
  * extend this type except for {@link NullMetadata}.
  * 
  * <p>
  * This Metadata type is used for keys in Maps because they cannot be
- * <code>null</code>.
+ * {@code null}.
  * 
  * @ThreadSafe
  * @version $Id$

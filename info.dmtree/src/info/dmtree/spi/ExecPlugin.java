@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import info.dmtree.DmtSession;
  * <p>
  * In an OSGi environment such implementations should be registered at the OSGi
  * service registry specifying the list of root node URIs in a
- * <code>String</code> array in the <code>execRootURIs</code> registration
+ * {@code String} array in the {@code execRootURIs} registration
  * parameter.
  * 
  * @version $Id$
@@ -39,31 +39,31 @@ public interface ExecPlugin {
      * depends on the definition of the managed object on which the command is
      * issued. Session information is given as it is needed for sending alerts
      * back from the plugin. If a correlation ID is specified, it should be used
-     * as the <code>correlator</code> parameter for alerts sent in response to
+     * as the {@code correlator} parameter for alerts sent in response to
      * this execute operation.
      * <p>
-     * The <code>nodePath</code> parameter contains an array of path segments
+     * The {@code nodePath} parameter contains an array of path segments
      * identifying the node to be executed in the subtree of this plugin. This
      * is an absolute path, so the first segment is always &quot;.&quot;.
      * Special characters appear escaped in the segments.
      * 
      * @param session a reference to the session in which the operation was
-     *        issued, must not be <code>null</code>
+     *        issued, must not be {@code null}
      * @param nodePath the absolute path of the node to be executed, must not be
-     *        <code>null</code>
+     *        {@code null}
      * @param correlator an identifier to associate this operation with any
-     *        alerts sent in response to it, can be <code>null</code>
+     *        alerts sent in response to it, can be {@code null}
      * @param data the parameter of the execute operation, can be
-     *        <code>null</code>
+     *        {@code null}
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if the node does not exist and
+     *         <li>{@code NODE_NOT_FOUND} if the node does not exist and
      *         the plugin does not allow executing unexisting nodes
-     *         <li><code>METADATA_MISMATCH</code> if the command failed
+     *         <li>{@code METADATA_MISMATCH} if the command failed
      *         because of meta-data restrictions
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @see DmtSession#execute(String, String)

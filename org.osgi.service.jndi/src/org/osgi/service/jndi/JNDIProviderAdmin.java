@@ -28,9 +28,9 @@ import javax.naming.directory.Attributes;
  * 
  * This service provides the ability to resolve JNDI References in a dynamic
  * fashion that does not require calls to
- * <code>NamingManager.getObjectInstance()</code>. The methods of this service
+ * {@code NamingManager.getObjectInstance()}. The methods of this service
  * provide similar reference resolution, but rely on the OSGi Service Registry
- * in order to find <code>ObjectFactory</code> instances that can convert a
+ * in order to find {@code ObjectFactory} instances that can convert a
  * Reference to an Object.
  * 
  * This service will typically be used by OSGi-aware JNDI Service Providers.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,24 +23,24 @@ import java.util.ArrayList;
  * 
  * <p>
  * This class encapsulates two pieces of information: a Condition <i>type</i>
- * (class name), which must implement <code>Condition</code>, and the
+ * (class name), which must implement {@code Condition}, and the
  * arguments passed to its constructor.
  * 
  * <p>
- * In order for a Condition represented by a <code>ConditionInfo</code> to be
+ * In order for a Condition represented by a {@code ConditionInfo} to be
  * instantiated and considered during a permission check, its Condition class
  * must be available from the system classpath.
  * 
  * <p>
  * The Condition class must either:
  * <ul>
- * <li>Declare a public static <code>getCondition</code> method that takes a
- * <code>Bundle</code> object and a <code>ConditionInfo</code> object as
+ * <li>Declare a public static {@code getCondition} method that takes a
+ * {@code Bundle} object and a {@code ConditionInfo} object as
  * arguments. That method must return an object that implements the
- * <code>Condition</code> interface.</li>
- * <li>Implement the <code>Condition</code> interface and define a public
- * constructor that takes a <code>Bundle</code> object and a
- * <code>ConditionInfo</code> object as arguments.
+ * {@code Condition} interface.</li>
+ * <li>Implement the {@code Condition} interface and define a public
+ * constructor that takes a {@code Bundle} object and a
+ * {@code ConditionInfo} object as arguments.
  * </ul>
  * 
  * @Immutable
@@ -51,14 +51,14 @@ public class ConditionInfo {
 	private final String[]	args;
 
 	/**
-	 * Constructs a <code>ConditionInfo</code> from the specified type and args.
+	 * Constructs a {@code ConditionInfo} from the specified type and args.
 	 * 
 	 * @param type The fully qualified class name of the Condition represented
-	 *        by this <code>ConditionInfo</code>.
+	 *        by this {@code ConditionInfo}.
 	 * @param args The arguments for the Condition. These arguments are
 	 *        available to the newly created Condition by calling the
 	 *        {@link #getArgs()} method.
-	 * @throws NullPointerException If <code>type</code> is <code>null</code>.
+	 * @throws NullPointerException If {@code type} is {@code null}.
 	 */
 	public ConditionInfo(String type, String[] args) {
 		this.type = type;
@@ -69,14 +69,14 @@ public class ConditionInfo {
 	}
 
 	/**
-	 * Constructs a <code>ConditionInfo</code> object from the specified encoded
-	 * <code>ConditionInfo</code> string. White space in the encoded
-	 * <code>ConditionInfo</code> string is ignored.
+	 * Constructs a {@code ConditionInfo} object from the specified encoded
+	 * {@code ConditionInfo} string. White space in the encoded
+	 * {@code ConditionInfo} string is ignored.
 	 * 
-	 * @param encodedCondition The encoded <code>ConditionInfo</code>.
+	 * @param encodedCondition The encoded {@code ConditionInfo}.
 	 * @see #getEncoded
 	 * @throws IllegalArgumentException If the specified
-	 *         <code>encodedCondition</code> is not properly formatted.
+	 *         {@code encodedCondition} is not properly formatted.
 	 */
 	public ConditionInfo(String encodedCondition) {
 		if (encodedCondition == null) {
@@ -162,8 +162,8 @@ public class ConditionInfo {
 	}
 
 	/**
-	 * Returns the string encoding of this <code>ConditionInfo</code> in a form
-	 * suitable for restoring this <code>ConditionInfo</code>.
+	 * Returns the string encoding of this {@code ConditionInfo} in a form
+	 * suitable for restoring this {@code ConditionInfo}.
 	 * 
 	 * <p>
 	 * The encoded format is:
@@ -173,16 +173,16 @@ public class ConditionInfo {
 	 * </pre>
 	 * 
 	 * where <i>argN</i> are strings that must be encoded for proper parsing.
-	 * Specifically, the <code>&quot;</code>, <code>\</code>, carriage return,
-	 * and line feed characters must be escaped using <code>\&quot;</code>,
-	 * <code>\\</code>, <code>\r</code>, and <code>\n</code>, respectively.
+	 * Specifically, the {@code &quot;}, {@code \}, carriage return,
+	 * and line feed characters must be escaped using {@code \&quot;},
+	 * {@code \\}, {@code \r}, and {@code \n}, respectively.
 	 * 
 	 * <p>
 	 * The encoded string contains no leading or trailing whitespace characters.
 	 * A single space character is used between type and &quot;<i>arg0</i>&quot;
 	 * and between the arguments.
 	 * 
-	 * @return The string encoding of this <code>ConditionInfo</code>.
+	 * @return The string encoding of this {@code ConditionInfo}.
 	 */
 	public final String getEncoded() {
 		StringBuffer output = new StringBuffer();
@@ -201,11 +201,11 @@ public class ConditionInfo {
 	}
 
 	/**
-	 * Returns the string representation of this <code>ConditionInfo</code>.
-	 * The string is created by calling the <code>getEncoded</code> method on
-	 * this <code>ConditionInfo</code>.
+	 * Returns the string representation of this {@code ConditionInfo}.
+	 * The string is created by calling the {@code getEncoded} method on
+	 * this {@code ConditionInfo}.
 	 * 
-	 * @return The string representation of this <code>ConditionInfo</code>.
+	 * @return The string representation of this {@code ConditionInfo}.
 	 */
 	public String toString() {
 		return getEncoded();
@@ -213,20 +213,20 @@ public class ConditionInfo {
 
 	/**
 	 * Returns the fully qualified class name of the condition represented by
-	 * this <code>ConditionInfo</code>.
+	 * this {@code ConditionInfo}.
 	 * 
 	 * @return The fully qualified class name of the condition represented by
-	 *         this <code>ConditionInfo</code>.
+	 *         this {@code ConditionInfo}.
 	 */
 	public final String getType() {
 		return type;
 	}
 
 	/**
-	 * Returns arguments of this <code>ConditionInfo</code>.
+	 * Returns arguments of this {@code ConditionInfo}.
 	 * 
-	 * @return The arguments of this <code>ConditionInfo</code>. An empty
-	 *         array is returned if the <code>ConditionInfo</code> has no
+	 * @return The arguments of this {@code ConditionInfo}. An empty
+	 *         array is returned if the {@code ConditionInfo} has no
 	 *         arguments.
 	 */
 	public final String[] getArgs() {
@@ -234,16 +234,16 @@ public class ConditionInfo {
 	}
 
 	/**
-	 * Determines the equality of two <code>ConditionInfo</code> objects.
+	 * Determines the equality of two {@code ConditionInfo} objects.
 	 * 
 	 * This method checks that specified object has the same type and args as
-	 * this <code>ConditionInfo</code> object.
+	 * this {@code ConditionInfo} object.
 	 * 
 	 * @param obj The object to test for equality with this
-	 *        <code>ConditionInfo</code> object.
-	 * @return <code>true</code> if <code>obj</code> is a
-	 *         <code>ConditionInfo</code>, and has the same type and args as
-	 *         this <code>ConditionInfo</code> object; <code>false</code>
+	 *        {@code ConditionInfo} object.
+	 * @return {@code true} if {@code obj} is a
+	 *         {@code ConditionInfo}, and has the same type and args as
+	 *         this {@code ConditionInfo} object; {@code false}
 	 *         otherwise.
 	 */
 	public boolean equals(Object obj) {

@@ -129,42 +129,42 @@ public class JmxConstants {
 	public static final String			BIGINTEGER			= "BigInteger";
 	/**
 	 * Value for {@link #PROPERTY_TYPE} value in the case of
-	 * the <code>double</code> primitive type.
+	 * the {@code double} primitive type.
 	 */
 	public static final String			P_DOUBLE			= "double";
 	/**
 	 * Value for {@link #PROPERTY_TYPE} value in the case of
-	 * the <code>float</code> primitive type.
+	 * the {@code float} primitive type.
 	 */
 	public static final String			P_FLOAT				= "float";
 	/**
 	 * Value for {@link #PROPERTY_TYPE} value in the case of
-	 * the <code>long</code> primitive type.
+	 * the {@code long} primitive type.
 	 */
 	public static final String			P_LONG				= "long";
 	/**
 	 * Value for {@link #PROPERTY_TYPE} value in the case of
-	 * the <code>int</code> primitive type.
+	 * the {@code int} primitive type.
 	 */
 	public static final String			P_INT				= "int";
 	/**
 	 * Value for {@link #PROPERTY_TYPE} value in the case of
-	 * the <code>short</code> primitive type.
+	 * the {@code short} primitive type.
 	 */
 	public static final String			P_SHORT				= "short";
 	/**
 	 * Value for {@link #PROPERTY_TYPE} value in the case of
-	 * the <code>byte</code> primitive type.
+	 * the {@code byte} primitive type.
 	 */
 	public static final String			P_BYTE				= "byte";
 	/**
 	 * Value for {@link #PROPERTY_TYPE} value in the case of
-	 * the <code>char</code> primitive type.
+	 * the {@code char} primitive type.
 	 */
 	public static final String			P_CHAR				= "char";
 	/**
 	 * Value for {@link #PROPERTY_TYPE} value in the case of
-	 * the <code>boolean</code> primitive type.
+	 * the {@code boolean} primitive type.
 	 */
 	public static final String			P_BOOLEAN			= "boolean";
 

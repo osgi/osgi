@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class CompositeConstants {
 
 	/**
 	 * Manifest header directive identifying whether a bundle is a composite.
-	 * The default value is <code>false</code>.
+	 * The default value is {@code false}.
 	 * 
 	 * <p>
 	 * The directive value is encoded in the Bundle-SymbolicName manifest header
@@ -48,13 +48,13 @@ public class CompositeConstants {
 	 * </pre>
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the <code>Dictionary</code>
-	 * object returned by the <code>Bundle.getHeaders</code> method.
+	 * The attribute value may be retrieved from the {@code Dictionary}
+	 * object returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * <p>
 	 * A valid manifest for a composite bundle must have this directive set
-	 * to <code>true</code>.  Any attempt to install a composite which does 
-	 * not have this directive set to <code>true</code> must result in a
+	 * to {@code true}.  Any attempt to install a composite which does 
+	 * not have this directive set to {@code true} must result in a
 	 * {@linkplain BundleException}.
 	 * 
 	 * @see Constants#BUNDLE_SYMBOLICNAME
