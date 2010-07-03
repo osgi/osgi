@@ -18,8 +18,9 @@
  * Package Admin Package Version 1.2.
  * 
  * <p>
- * This package is deprecated and has been replaced by the
- * {@code org.osgi.framework.wiring} package.
+ * <b>Deprecated.</b>
+ * <i>This package is deprecated and has been replaced by the
+ * {@code org.osgi.framework.wiring} package.</i>
  *
  * <p>
  * Bundles wishing to use this package must list the package in the
@@ -30,8 +31,6 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.packageadmin; version="[1.2,2.0)"}
  * 
- * @deprecated  This package is deprecated and has been replaced by the
- * 				{@code org.osgi.framework.wiring} package.
  * @version $Id$
  */
 
