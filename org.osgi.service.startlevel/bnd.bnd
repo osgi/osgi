@@ -5,5 +5,5 @@ javac.target 			= jsr14
 nodeploy						= true
 
 -buildpath = \
-	org.osgi.framework;			version=project, \
-	ee.minimum;					version=1.0
+	ee.minimum;					version=1.0, \
+	osgi.core;					version=4.2
