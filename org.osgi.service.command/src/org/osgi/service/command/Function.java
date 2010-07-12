@@ -21,7 +21,16 @@ import java.util.List;
  * A Function is a a block of code that can be executed with a set of arguments,
  * it returns the result object of executing the script.
  * 
- * TODO The javadoc in this class need a good scrub before release.
+ * The purpose of the Function is to be injected in commands. Many commands
+ * require the possibility to execute closures or other commands. For example,
+ * a {@code foreach} command requires a block for execution:
+ * <pre>
+ *   void foreach( Iterable<?> collection, Function block ) {
+ *       for ( Object o : collection ) block.execute( Arrays.asList(o));
+ * </pre>
+ * 
+ * Though the majority of application is when functions are closures, functions
+ * can also be used as a target type for conversion.
  * 
  * @ThreadSafe
  * @version $Id$
@@ -30,12 +39,12 @@ public interface Function {
 	/**
 	 * Execute this function and return the result.
 	 * 
-	 * @param session ###
-	 * @param arguments ###
+	 * @param session The session in which to execute this function
+	 * @param arguments The list of arguments. This list will not be modified.
 	 * 
 	 * @return the result from the execution.
 	 * 
-	 * @throws Exception if anything goes terribly wrong
+	 * @throws Exception if anything goes wrong
 	 */
-	Object execute(CommandSession session, List arguments) throws Exception;
+	Object execute(CommandSession session, List<?> arguments) throws Exception;
 }
