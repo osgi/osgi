@@ -4,3 +4,6 @@ nodeploy						= true
 -buildpath = \
 	osgi.core;					version=4.2, \
 	ee.minimum;				version=1.2.1
+
+javac.source            = 1.5
+javac.target            = jsr14
