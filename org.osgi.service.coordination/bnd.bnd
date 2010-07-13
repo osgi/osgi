@@ -1,7 +1,12 @@
 -nobundles							= true
 nodeploy						= true
 
+
 -buildpath = \
 	org.osgi.jmx;					version=project, \
 	osgi.core;					version=4.0.1, \
 	ee.j2se;					version=1.5
+
+	
+javac.source            = 1.5
+javac.target            = jsr14
