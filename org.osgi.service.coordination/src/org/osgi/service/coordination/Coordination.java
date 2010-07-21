@@ -142,22 +142,6 @@ public interface Coordination {
 	Collection<Participant> getParticipants();
 
 	/**
-	 * (Re)set the timeout for this Coordination.
-	 * 
-	 * If this timeout expires, then the Coordination will fail and the
-	 * initiating thread will be interrupted. This method must only be called on
-	 * an active Coordination, that is, before {@link #end()} or
-	 * {@link #fail(String)} is called.
-	 * 
-	 * @param timeOutInMs Number of ms to wait, zero means forever.
-	 * @throws SecurityException This method requires the
-	 *         {@link CoordinationPermission.ADMIN} or
-	 *         {@link CoordinationPermission.INITIATE} action for the
-	 *         {@link CoordinationPermission}.
-	 */
-	void setTimeout(long timeOutInMs);
-
-	/**
 	 * Return <code>true</code> if this Coordination has failed,
 	 * <code>false</code> otherwise.
 	 */

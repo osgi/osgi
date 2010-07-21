@@ -58,9 +58,12 @@ import java.util.*;
  * 	throw e;
  * }
  * finally {
- * 	c.terminate();
+ * 	getCoordinator().terminate(c);
  * }
  * </pre>
+ * 
+ * The {@link #begin(String)} method can return null if there is already a
+ * Coordination going on. The #t
  * 
  * A potential participant can join a Coordination as follows:
  * 
@@ -167,13 +170,12 @@ public interface Coordinator {
 
 	/**
 	 * Begin a new Coordination on the current thread when the thread is
-	 * currently not associated with a Coordination.
+	 * currently not associated with a Coordination. Otherwise, return
+	 * null and implicitly join the current Coordination.
 	 * 
 	 * @param name The name of this coordination, a name does not have to be
 	 *        unique.
-	 * @throws IllegalStateException When the current thread is already
-	 *         associated with a Coordination
-	 * @return The new Coordination object
+	 * @return The new Coordination object or {@code null}
 	 * 
 	 * @throws SecurityException This method requires the
 	 *         {@link CoordinationPermission.INITIATE} action, no bundle check
@@ -261,7 +263,7 @@ public interface Coordinator {
 	 * Coordination.
 	 * 
 	 * @param ifActive
-	 * @return <code>null</code> if there is an active Coordination otherwise a
+	 * @return{@code null} if there is an active Coordination otherwise a
 	 *         newly initiated Coordination.
 	 * @throws SecurityException This method requires the
 	 *         {@link CoordinationPermission.PARTICIPATE} action for the current
@@ -277,7 +279,7 @@ public interface Coordinator {
 	 * Must fail an active Coordination and return <code>true</code> or return
 	 * <code>false</code> if there is no active Coordination.
 	 * 
-	 * @param reason The reason why it must always fail or <code>null</code>.
+	 * @param reason The reason why it must always fail or {@code null}.
 	 * @return <code>true</code> if a Coordination was active and
 	 *         <code>false</code> if not.
 	 */
@@ -322,4 +324,52 @@ public interface Coordinator {
 	 *         {@link CoordinationPermission.ADMIN}.
 	 */
 	Collection<Coordination> getCoordinations();
+
+	/**
+	 * Ensure that the Coordination c has ended or otherwise fail it.
+	 * 
+	 * The terminate() method is a parachute making it easy to ensure that
+	 * coordination initiators properly close coordinations they initiated. The
+	 * method can be called with {@code null} or the Coordination object
+	 * returned from the {@link #begin(String)} method. As the
+	 * {@link #begin(String)} method. This allows the following pattern:
+	 * 
+	 * <pre>
+	 *    Coordination c = coordinator.begin(); // can return null!
+	 *    try {
+	 *        ...
+	 *    } finally {
+	 *       coordinator.terminate(c);
+	 *    }
+	 * </pre>
+	 * <ol>
+	 * <li>If c is {@code null}, this method will not do anything.</li>
+	 * <li>If c is an active Coordination, it will be failed.</li>
+	 * <li>Otherwise c is ignored</li>
+	 * </ol>
+	 * 
+	 * @param c {@code null} or a Coordination object
+	 */
+	void terminate(Coordination c);
+
+	/**
+	 * Add a minimum timeout for this Coordination.
+	 * 
+	 * If this timeout expires, then the Coordination will fail and the
+	 * initiating thread will be interrupted. This method must only be called on
+	 * an active Coordination, that is, before {@link #end()} or
+	 * {@link #fail(String)} is called.
+	 * 
+	 * If the current deadline is arriving later than the given timeout
+	 * then the timeout is ignored.
+	 * 
+	 * @param timeOutInMs Number of ms to wait, zero means forever.
+	 * @throws SecurityException This method requires the
+	 *         {@link CoordinationPermission.ADMIN} or
+	 *         {@link CoordinationPermission.INITIATE} action for the
+	 *         {@link CoordinationPermission}.
+	 */
+	void addTimeout(long timeOutInMs);
+
+
 }
