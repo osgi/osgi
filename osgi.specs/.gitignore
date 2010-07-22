@@ -5,4 +5,5 @@ mif
 *.recover.fm
 *.log
 xml/
+javadoc.xml
 
