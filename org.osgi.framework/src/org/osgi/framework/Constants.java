@@ -527,7 +527,7 @@ public interface Constants {
 	 * manifest header like:
 	 * 
 	 * <pre>
-	 *     Import-Package: org.osgi.framework; version=&quot;1.1&quot;
+	 *     Export-Package: org.osgi.framework; version=&quot;1.1&quot;
 	 * </pre>
 	 * 
 	 * @see #EXPORT_PACKAGE
