@@ -1,4 +1,4 @@
--include : ../osgi.companion/layout.bnd
+-include : ../osgi.companion/bnd.bnd
 
 minimum-latest 			= 1.2.0
 minimum-previous		= 1.1.3
