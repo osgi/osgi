@@ -16,7 +16,7 @@
 
 package org.osgi.framework.wiring;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
@@ -42,27 +42,27 @@ public interface BundleWirings extends BundleReference {
 	 * 
 	 * <p>
 	 * If the referenced bundle is a non-fragment bundle, then the result is a
-	 * {@code List} of in use bundle wirings where the list is ordered in
-	 * reverse chronological order such that the first bundle wiring is the
+	 * list of in use bundle wirings. The list is ordered in reverse
+	 * chronological order such that the first bundle wiring is the
 	 * {@link BundleWiring#isCurrent() current} bundle wiring and last wiring is
 	 * the oldest in use bundle wiring.
 	 * 
 	 * <p>
-	 * If the referenced bundle is a fragment bundle, then the result is a
-	 * {@code Collection} of in use bundle wirings to which the referenced
-	 * fragment bundle is attached. If the fragment bundle is not attached to
-	 * any bundle wiring, then the returned collection will be empty.
+	 * If the referenced bundle is a fragment bundle, then the result is a list
+	 * of in use bundle wirings to which the referenced fragment bundle is
+	 * attached. The ordering of the list is unspecified. If the fragment bundle
+	 * is not attached to any bundle wiring, then the returned list will be
+	 * empty.
 	 * 
 	 * <p>
-	 * The collection must only contain in use bundle wirings. Generally the
-	 * collection will have at least one bundle wiring for the bundle: the
-	 * current bundle wiring. However, for an uninstalled bundle with no in use
-	 * bundle wirings or a newly installed bundle which has not been resolved,
-	 * the collection will be empty.
+	 * The list must only contain in use bundle wirings. Generally the list will
+	 * have at least one bundle wiring for the bundle: the current bundle
+	 * wiring. However, for an uninstalled bundle with no in use bundle wirings
+	 * or a newly installed bundle which has not been resolved, the list will be
+	 * empty.
 	 * 
-	 * @return A collection containing a snapshot of the {@link BundleWiring}s
-	 *         for the referenced bundle. If the referenced bundle is a
-	 *         non-fragment bundle, then the result is a {@code List}.
+	 * @return A list containing a snapshot of the {@link BundleWiring}s for the
+	 *         referenced bundle.
 	 */
-	Collection<BundleWiring> getWirings();
+	List<BundleWiring> getWirings();
 }

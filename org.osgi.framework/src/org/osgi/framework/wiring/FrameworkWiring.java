@@ -38,7 +38,8 @@ import org.osgi.framework.FrameworkListener;
  */
 public interface FrameworkWiring extends BundleReference {
 	/**
-	 * Returns a list of exported package with the specified package name.
+	 * Returns a list of package capabilities for exported packages with the
+	 * specified package name.
 	 * 
 	 * <p>
 	 * The exported packages in the list are ordered in descending version such
@@ -48,10 +49,11 @@ public interface FrameworkWiring extends BundleReference {
 	 * 
 	 * @param name The package name of the exported packages to be returned or
 	 *        {@code null} to return all exported packages.
-	 * @return A list containing a snapshot of {@link ExportedPackage}s, or an
-	 *         empty list if no exported packages with the specified name exist.
+	 * @return A list containing a snapshot of {@link Capability}s, or
+	 *         an empty list if no exported packages with the specified name
+	 *         exist.
 	 */
-	List<ExportedPackage> getExportedPackages(String name);
+	List<Capability> getExportedPackages(String name);
 
 	/**
 	 * Refreshes the specified bundles. This forces the update (replacement) or
