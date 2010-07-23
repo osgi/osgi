@@ -21,36 +21,59 @@ import java.io.PrintStream;
 /**
  * Enable multiplexing of the standard IO streams for input, output, and error.
  * 
- * This service guards the central resource of IO streams. The standard streams
- * are singletons. This service replaces the singletons with special versions
- * that can find a unique stream for each thread. If no stream is associated
- * with a thread, it will use the standard input/output that was originally set.
+ * This service provides access the System I/O streams on a per thread basis.
+ * The standard streams are singletons, this service replaces the singletons
+ * with a service that has a per-thread stack of streams. If no streams are
+ * pushed output is directed to the original streams that were set before this
+ * service was started.
  * 
- * TODO The javadoc in this class need a good scrub before release.
+ * Users can push a triplet of streams. After this push, all standard IO is
+ * redirected through the given streams for that thread only. When the user is
+ * ready, he can pop the streams and the previous situation is restored.
  * 
  * @ThreadSafe
+ * @ProvideInterface
  * @version $Id$
  */
 public interface ThreadIO {
+	interface Entry {
+		void close();
+	}
+	
 	/**
-	 * Associate this streams with the current thread.
+	 * Associate these streams with the current thread.
 	 * 
-	 * Ensure that when output is performed on System.in, System.out, System.err it
-	 * will happen on the given streams. 
+	 * Ensure that when output is performed on System.in, System.out, System.err
+	 * it will happen on the given streams. If a {@code null} is given for any
+	 * of the parameters the stream must not be replaced.
 	 * 
-	 * The streams will automatically be canceled when the bundle that has gotten
-	 * this service is stopped or returns this service.
+	 * This method can be called multiple times on the same thread. A Thread IO
+	 * implementation must stack these calls. It is paramount that users of this
+	 * service ensure they follow the bracketing. The following code snippet
+	 * provides such a model:
 	 * 
-	 * @param in InputStream to use for the current thread when System.in is used
-	 * @param out PrintStream to use for the current thread when System.out is used
-	 * @param err PrintStream to use for the current thread when System.err is used
+	 * <pre>
+	 *   threadio.pushStreams(in, out, err);
+	 *   try {
+	 *       ... do real work
+	 *   } finally {
+	 *      threadio.pop();
+	 *   }
+	 * </pre>
+	 * 
+	 * The streams will automatically be canceled when the bundle that has
+	 * gotten this service is stopped or returns this service. If the ThreadIO
+	 * service holds the only reference to a stream, it must remove this stream
+	 * from the stack of streams.
+	 * 
+	 * @param in InputStream to use for the current thread when System.in is
+	 *        used. If {@code null} then ignore.
+	 * @param out PrintStream to use for the current thread when System.out is
+	 *        used. If {@code null} then ignore.
+	 * @param err PrintStream to use for the current thread when System.err is
+	 *        used. If {@code null} then ignore.
+	 * @return 
 	 */
-	void setStreams(InputStream in, PrintStream out, PrintStream err);
+	Entry pushStreams(InputStream in, PrintStream out, PrintStream err);
 
-	/**
-	 * Cancel the streams associated with the current thread.
-	 * 
-	 * This method will not do anything when no streams are associated.
-	 */
-	void close();
 }

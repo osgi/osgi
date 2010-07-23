@@ -26,11 +26,11 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.metatype; version="[1.1,2.0)"}
+ * {@code  Import-Package: org.osgi.service.metatype; version="[1.2,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.metatype; version="[1.1,1.2)"}
+ * {@code  Import-Package: org.osgi.service.metatype; version="[1.2,1.3)"}
  * 
  * @version $Id$
  */

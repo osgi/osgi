@@ -19,37 +19,40 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 /**
- * A Command Processor is a service that is registered by a script engine that
- * can execute commands.
+ * A Command Processor is a service that is registered by a TSH script engine
+ * that can execute commands.
  * 
  * A Command Processor is a factory for Command Session objects. The Command
  * Session maintains execution state and holds the console and keyboard streams.
  * A Command Processor must track any services that are registered with the
- * COMMAND_SCOPE and COMMAND_FUNCTION properties. The functions listed in the
- * COMMAND_FUNCTION property must be made available as functions in the script
- * language.
- * 
- * TODO The javadoc in this class need a good scrub before release.
+ * {@link #COMMAND_SCOPE} and {@link #COMMAND_FUNCTION} properties. The
+ * functions listed in the {@link #COMMAND_FUNCTION} property must be made
+ * available as functions in the TSH script language.
  * 
  * @ThreadSafe
  * @version $Id$
  */
 public interface CommandProcessor {
 	/**
-	 * The scope of commands provided by this service. This name can be used to distinguish
-	 * between different command providers with the same function names.
+	 * The scope of commands provided by this service. This name can be used to
+	 * distinguish between different command providers with the same function
+	 * names. Commands can be executed as &lt;scope&gt;:&lt;function&gt;.
 	 */
 	String	COMMAND_SCOPE		= "osgi.command.scope";
 
 	/**
-	 * A String, array, or list of method names that may be called for this command provider. A
-	 * name may end with a *, this will then be calculated from all declared public
-	 * methods in this service.
+	 * A <code>String+</code> of function names that may be called for this
+	 * command provider. A name may end with a *, this will then be calculated
+	 * from all declared public methods in this service. TODO verify the * is
+	 * true?
 	 * 
-	 * Help information for the command may be supplied with a space as
-	 * separation.
 	 */
 	String	COMMAND_FUNCTION	= "osgi.command.function";
+
+	/**
+	 * A description of the command scope.
+	 */
+	String	COMMAND_DESCRIPTION	= "osgi.command.description";
 
 	/**
 	 * Create a new command session associated with IO streams.
@@ -58,17 +61,30 @@ public interface CommandProcessor {
 	 * service. The session will be automatically closed when this bundle is
 	 * stopped or the service is returned.
 	 * 
-	 * The shell will provide any available commands to this session and
-	 * can set additional variables.
+	 * The shell will provide any available commands to this session and can set
+	 * additional variables that will be local to this session.
 	 * 
-	 * @param in
-	 *            The value used for System.in
-	 * @param out
-	 *            The stream used for System.out
-	 * @param err
-	 *            The stream used for System.err
+	 * @param in The value used for System.in. If {@code null} is passed, the
+	 *        implementation must create a valid Input Stream that always
+	 *        returns end of file.
+	 * @param out The stream used for System.out, must not be {@code null}
+	 * @param err The stream used for System.err, must not be {@code null}
 	 * @return A new session.
 	 */
 	CommandSession createSession(InputStream in, PrintStream out,
 			PrintStream err);
+
+	/**
+	 * Create a new Command Session that is associated with a {@link Terminal}.
+	 * 
+	 * A Terminal provides the common streams but adds extra capabilities for
+	 * commands to control the screen. A session maintains this Terminal under
+	 * the variable .terminal and can automatically inject a Terminal if needed
+	 * in a method call.
+	 * 
+	 * @param terminal The terminal to use in this session
+	 * @return A new sessions
+	 */
+	CommandSession createSession(Terminal terminal);
+
 }

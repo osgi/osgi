@@ -19,8 +19,8 @@ package org.osgi.service.metatype;
  * An interface to describe an attribute.
  * 
  * <p>
- * An {@code AttributeDefinition} object defines a description of the data
- * type of a property/attribute.
+ * An {@code AttributeDefinition} object defines a description of the data type
+ * of a property/attribute.
  * 
  * @version $Id$
  */
@@ -29,122 +29,133 @@ public interface AttributeDefinition {
 	 * The {@code STRING} (1) type.
 	 * 
 	 * <p>
-	 * Attributes of this type should be stored as {@code String},
-	 * {@code Vector} with {@code String} or {@code String[]} objects,
-	 * depending on the {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code String}, {@code
+	 * Vector} with {@code String} or {@code String[]} objects, depending on the
+	 * {@code getCardinality()} value.
 	 */
-	public static final int	STRING		= 1;
+	int	STRING		= 1;
 	/**
 	 * The {@code LONG} (2) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Long},
-	 * {@code Vector} with {@code Long} or {@code long[]} objects,
-	 * depending on the {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code Long}, {@code Vector}
+	 * with {@code Long} or {@code long[]} objects, depending on the {@code
+	 * getCardinality()} value.
 	 */
-	public static final int	LONG		= 2;
+	int	LONG		= 2;
 	/**
 	 * The {@code INTEGER} (3) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Integer},
-	 * {@code Vector} with {@code Integer} or {@code int[]} objects,
-	 * depending on the {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code Integer}, {@code
+	 * Vector} with {@code Integer} or {@code int[]} objects, depending on the
+	 * {@code getCardinality()} value.
 	 */
-	public static final int	INTEGER		= 3;
+	int	INTEGER		= 3;
 	/**
 	 * The {@code SHORT} (4) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Short},
-	 * {@code Vector} with {@code Short} or {@code short[]} objects,
-	 * depending on the {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code Short}, {@code Vector}
+	 * with {@code Short} or {@code short[]} objects, depending on the {@code
+	 * getCardinality()} value.
 	 */
-	public static final int	SHORT		= 4;
+	int	SHORT		= 4;
 	/**
 	 * The {@code CHARACTER} (5) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Character},
-	 * {@code Vector} with {@code Character} or {@code char[]} objects,
-	 * depending on the {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code Character}, {@code
+	 * Vector} with {@code Character} or {@code char[]} objects, depending on
+	 * the {@code getCardinality()} value.
 	 */
-	public static final int	CHARACTER	= 5;
+	int	CHARACTER	= 5;
 	/**
 	 * The {@code BYTE} (6) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Byte},
-	 * {@code Vector} with {@code Byte} or {@code byte[]} objects,
-	 * depending on the {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code Byte}, {@code Vector}
+	 * with {@code Byte} or {@code byte[]} objects, depending on the {@code
+	 * getCardinality()} value.
 	 */
-	public static final int	BYTE		= 6;
+	int	BYTE		= 6;
 	/**
 	 * The {@code DOUBLE} (7) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Double},
-	 * {@code Vector} with {@code Double} or {@code double[]} objects,
-	 * depending on the {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code Double}, {@code
+	 * Vector} with {@code Double} or {@code double[]} objects, depending on the
+	 * {@code getCardinality()} value.
 	 */
-	public static final int	DOUBLE		= 7;
+	int	DOUBLE		= 7;
 	/**
 	 * The {@code FLOAT} (8) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Float},
-	 * {@code Vector} with {@code Float} or {@code float[]} objects,
-	 * depending on the {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code Float}, {@code Vector}
+	 * with {@code Float} or {@code float[]} objects, depending on the {@code
+	 * getCardinality()} value.
 	 */
-	public static final int	FLOAT		= 8;
+	int	FLOAT		= 8;
 	/**
 	 * The {@code BIGINTEGER} (9) type.
 	 * 
-	 * Attributes of this type should be stored as {@code BigInteger},
-	 * {@code Vector} with {@code BigInteger} or {@code BigInteger[]}
-	 * objects, depending on the {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code BigInteger}, {@code
+	 * Vector} with {@code BigInteger} or {@code BigInteger[]} objects,
+	 * depending on the {@code getCardinality()} value.
 	 * 
 	 * @deprecated As of 1.1.
 	 */
-	public static final int	BIGINTEGER	= 9;
+	int	BIGINTEGER	= 9;
 	/**
 	 * The {@code BIGDECIMAL} (10) type.
 	 * 
-	 * Attributes of this type should be stored as {@code BigDecimal},
-	 * {@code Vector} with {@code BigDecimal} or {@code BigDecimal[]}
-	 * objects depending on {@code getCardinality()}.
+	 * Attributes of this type should be stored as {@code BigDecimal}, {@code
+	 * Vector} with {@code BigDecimal} or {@code BigDecimal[]} objects depending
+	 * on {@code getCardinality()}.
 	 * 
 	 * @deprecated As of 1.1.
 	 */
-	public static final int	BIGDECIMAL	= 10;
+	int	BIGDECIMAL	= 10;
 	/**
 	 * The {@code BOOLEAN} (11) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Boolean},
-	 * {@code Vector} with {@code Boolean} or {@code boolean[]} objects
-	 * depending on {@code getCardinality()}.
+	 * Attributes of this type should be stored as {@code Boolean}, {@code
+	 * Vector} with {@code Boolean} or {@code boolean[]} objects depending on
+	 * {@code getCardinality()}.
 	 */
-	public static final int	BOOLEAN		= 11;
+	int	BOOLEAN		= 11;
+
+	/**
+	 * The {@code PASSWORD} (12) type.
+	 * 
+	 * Attributes of this type must be stored as @code String},{@code Vector}
+	 * with {@code Boolean} or {@code boolean[]} objects depending on {link
+	 * getCardinality()}. A {@code PASSWORD} must be treated as a string but the type
+	 * can be used to disguise the information when displayed to a user to
+	 * prevent others from seeing it.
+	 */
+	int	PASSWORD	= 12;
 
 	/**
 	 * Get the name of the attribute. This name may be localized.
 	 * 
 	 * @return The localized name of the definition.
 	 */
-	public String getName();
+	String getName();
 
 	/**
 	 * Unique identity for this attribute.
 	 * 
 	 * Attributes share a global namespace in the registry. E.g. an attribute
-	 * {@code cn} or {@code commonName} must always be a {@code String}
-	 * and the semantics are always a name of some object. They share this
-	 * aspect with LDAP/X.500 attributes. In these standards the OSI Object
-	 * Identifier (OID) is used to uniquely identify an attribute. If such an
-	 * OID exists, (which can be requested at several standard organisations and
-	 * many companies already have a node in the tree) it can be returned here.
-	 * Otherwise, a unique id should be returned which can be a Java class name
-	 * (reverse domain name) or generated with a GUID algorithm. Note that all
-	 * LDAP defined attributes already have an OID. It is strongly advised to
-	 * define the attributes from existing LDAP schemes which will give the OID.
-	 * Many such schemes exist ranging from postal addresses to DHCP parameters.
+	 * {@code cn} or {@code commonName} must always be a {@code String} and the
+	 * semantics are always a name of some object. They share this aspect with
+	 * LDAP/X.500 attributes. In these standards the OSI Object Identifier (OID)
+	 * is used to uniquely identify an attribute. If such an OID exists, (which
+	 * can be requested at several standard organisations and many companies
+	 * already have a node in the tree) it can be returned here. Otherwise, a
+	 * unique id should be returned which can be a Java class name (reverse
+	 * domain name) or generated with a GUID algorithm. Note that all LDAP
+	 * defined attributes already have an OID. It is strongly advised to define
+	 * the attributes from existing LDAP schemes which will give the OID. Many
+	 * such schemes exist ranging from postal addresses to DHCP parameters.
 	 * 
 	 * @return The id or oid
 	 */
-	public String getID();
+	String getID();
 
 	/**
 	 * Return a description of this attribute.
@@ -154,7 +165,7 @@ public interface AttributeDefinition {
 	 * 
 	 * @return The localized description of the definition.
 	 */
-	public String getDescription();
+	String getDescription();
 
 	/**
 	 * Return the cardinality of this attribute.
@@ -169,25 +180,24 @@ public interface AttributeDefinition {
 	 *    x &gt; 0                     x = max occurrences, store in array []
 	 *    x = Integer.MAX_VALUE    no limit, but use array []
 	 *    x = 0                     1 occurrence required
-	 *  
+	 * 
 	 * </pre>
 	 * 
-	 * @return The cardinality of this attribute. 
+	 * @return The cardinality of this attribute.
 	 */
-	public int getCardinality();
+	int getCardinality();
 
 	/**
 	 * Return the type for this attribute.
 	 * 
 	 * <p>
 	 * Defined in the following constants which map to the appropriate Java
-	 * type. {@code STRING},{@code LONG},{@code INTEGER},
-	 * {@code CHAR},{@code BYTE},{@code DOUBLE},{@code FLOAT},
-	 * {@code BOOLEAN}.
-	 *
+	 * type. {@code STRING},{@code LONG},{@code INTEGER}, {@code CHAR},{@code
+	 * BYTE},{@code DOUBLE},{@code FLOAT}, {@code BOOLEAN}.
+	 * 
 	 * @return The type for this attribute.
 	 */
-	public int getType();
+	int getType();
 
 	/**
 	 * Return a list of option values that this attribute can take.
@@ -203,8 +213,8 @@ public interface AttributeDefinition {
 	 * 
 	 * <p>
 	 * This list must be in the same sequence as {@code getOptionLabels()}. I.e.
-	 * for each index i in {@code getOptionValues}, i in
-	 * {@code getOptionLabels()} should be the label.
+	 * for each index i in {@code getOptionValues}, i in {@code
+	 * getOptionLabels()} should be the label.
 	 * 
 	 * <p>
 	 * For example, if an attribute can have the value male, female, unknown,
@@ -213,7 +223,7 @@ public interface AttributeDefinition {
 	 * 
 	 * @return A list values
 	 */
-	public String[] getOptionValues();
+	String[] getOptionValues();
 
 	/**
 	 * Return a list of labels of option values.
@@ -228,8 +238,8 @@ public interface AttributeDefinition {
 	 * available.
 	 * <p>
 	 * This list must be in the same sequence as the {@code getOptionValues()}
-	 * method. I.e. for each index i in {@code getOptionLabels}, i in
-	 * {@code getOptionValues()} should be the associated value.
+	 * method. I.e. for each index i in {@code getOptionLabels}, i in {@code
+	 * getOptionValues()} should be the associated value.
 	 * 
 	 * <p>
 	 * For example, if an attribute can have the value male, female, unknown,
@@ -238,7 +248,7 @@ public interface AttributeDefinition {
 	 * 
 	 * @return A list values
 	 */
-	public String[] getOptionLabels();
+	String[] getOptionLabels();
 
 	/**
 	 * Validate an attribute in {@code String} form.
@@ -256,7 +266,7 @@ public interface AttributeDefinition {
 	 * @param value The value before turning it into the basic data type
 	 * @return {@code null}, "", or another string
 	 */
-	public String validate(String value);
+	String validate(String value);
 
 	/**
 	 * Return a default for this attribute.
@@ -273,5 +283,5 @@ public interface AttributeDefinition {
 	 * 
 	 * @return Return a default value or {@code null} if no default exists.
 	 */
-	public String[] getDefaultValue();
+	String[] getDefaultValue();
 }

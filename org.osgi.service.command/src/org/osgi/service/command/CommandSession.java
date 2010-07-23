@@ -15,17 +15,14 @@
  */
 package org.osgi.service.command;
 
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.util.*;
 
 /**
- * A Command Session holds the executable state of a script engine as well as
- * the keyboard and console streams.
+ * A Command Session holds the executable state of a script engine as well as a
+ * {@link Terminal} that is connected to that session.
  * 
  * A Command Session is not thread safe and should not be used from different
  * threads at the same time.
- * 
- * TODO The javadoc in this class need a good scrub before release.
  * 
  * @NotThreadSafe
  * @version $Id$
@@ -34,29 +31,16 @@ public interface CommandSession {
 	/**
 	 * Execute a program in this session.
 	 * 
-	 * @param commandline ###
+	 * @param commandline A Command line according to the TSH syntax.
 	 * @return the result of the execution
-	 * @throws Exception ###
+	 * @throws ParsingException If the text contained a syntax error
+	 * @throws Exception if something fails
 	 */
-	Object execute(CharSequence commandline) throws Exception;
+	Object execute(CharSequence commandline) throws Exception, ParsingException;
 
-	/**
-	 * Execute a program in this session but override the different streams for
-	 * this call only.
-	 * 
-	 * @param commandline
-	 * @param in ###
-	 * @param out ###
-	 * @param err ###
-	 * @return the result of the execution
-	 * @throws Exception ###
-	 */
-	Object execute(CharSequence commandline, InputStream in, PrintStream out, PrintStream err) throws Exception;
-	
 	/**
 	 * Close this command session. After the session is closed, it will throw
 	 * IllegalStateException when it is used.
-	 * 
 	 */
 	void close();
 
@@ -66,58 +50,38 @@ public interface CommandSession {
 	 * a "less" or "more" command needs direct input from the keyboard to
 	 * control the paging.
 	 * 
-	 * @return InpuStream used closest to the user or null if input is from a
-	 *         file.
+	 * @return InputStream used closest to the user or (@code null} if input is
+	 *         from a file.
 	 */
-	InputStream getKeyboard();
+	Terminal getTerminal();
 
 	/**
-	 * Return the PrintStream for the console. This must always be the stream
-	 * "closest" to the user. This stream can be used to post messages that
-	 * bypass the piping. If the output is piped to a file, then the object
-	 * returned must be null.
+	 * Return the map used to store the session variables.
 	 * 
-	 * @return ###
+	 * The returned map can be modified to add/remove new variables.
+	 * 
+	 * @return the map with all the variables
 	 */
-	PrintStream getConsole();
+	Map<String, Object> getSessionVariables();
 
 	/**
-	 * Get the value of a variable.
+	 * Return the map used to store the global variables.
 	 * 
-	 * @param name ###
-	 * @return ###
+	 * The returned map can be modified to add/remove new variables.
+	 * 
+	 * @return the map with all the variables
 	 */
-	Object get(String name);
+	Map<String, Object> getGlobalVariables();
 
 	/**
-	 * Set the value of a variable.
+	 * Return the current list of scopes. A scope represents a command and its
+	 * sub-commands. The purpose of this information is to simplify command
+	 * completion and providing extensive help about commands. If an implementation
+	 * supports annotations it can use the annotations to provide extra information.
 	 * 
-	 * @param name
-	 *            Name of the variable.
-	 * @param value
-	 *            Value of the variable
+	 * @return A unmodifiable collection of {@link MetaScope} objects. 
 	 */
-	void put(String name, Object value);
 
-	/**
-	 * Convert an object to string form (CharSequence). The level is defined in
-	 * the Converter interface, it can be one of INSPECT, LINE, PART. This
-	 * function always returns a non null value. As a last resort, toString is
-	 * called on the Object.
-	 * 
-	 * @param target
-	 * @param level
-	 * @return ###
-	 */
-	CharSequence format(Object target, int level);
+	Collection<MetaScope> getMetaScopes();
 
-	/**
-	 * Convert an object to another type.
-	 * 
-	 * @param type ###
-	 * @param instance ###
-	 * @return ###
-	 */
-	
-	Object convert(Class type, Object instance);
 }

@@ -4,4 +4,6 @@ mif
 *.lck
 *.recover.fm
 *.log
+xml/
+javadoc.xml
 

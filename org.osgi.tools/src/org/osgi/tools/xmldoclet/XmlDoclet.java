@@ -56,7 +56,7 @@ public class XmlDoclet extends Doclet {
 				if (!p.name().equals("java.lang") && ht.get(p) == null) {
 					Tag version[] = p.tags("@version");
 					String v = toString(version).trim();
-					ht.put(p.name(), v);
+					ht.put(p.name(), "");
 				}
 			}
 		}
@@ -64,7 +64,6 @@ public class XmlDoclet extends Doclet {
 			String key = e.nextElement();
 			String version = ht.get(key);
 			pw.println("<import name='" + key
-					+ (version.length() == 0 ? "" : "' version='" + version)
 					+ "'/>");
 		}
 		ClassDoc classes[] = pack.allClasses();

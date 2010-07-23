@@ -4,14 +4,13 @@
 
 
 	<target name="javadoc" depends="init">
-        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspacedir}/licensed/ant/lib/ant-contrib-0.6.jar" />        
-		<echo>${javadoc}</echo>
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="../licensed/ant/lib/ant-contrib-0.6.jar" />        
+		<echo>${javadoc.packages}</echo>
 		<mkdir dir="mif" />
 		<delete>
 			<fileset dir="xml" includes="*.xml" />
 		</delete>
-		<echo>${javadoc}</echo>
-		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="../org.osgi.tools/${bin}" encoding="utf-8" packagenames="${javadoc}">
+		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="../org.osgi.tools/${bin}" encoding="utf-8" packagenames="${javadoc.packages}">
 			<sourcepath>
 				<dirset dir="${project.workspace}">
 					<include name="org.osgi.*/src" />
