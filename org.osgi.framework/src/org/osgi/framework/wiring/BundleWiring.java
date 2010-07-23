@@ -17,9 +17,7 @@
 package org.osgi.framework.wiring;
 
 import java.net.URL;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
@@ -32,13 +30,13 @@ import org.osgi.framework.BundleReference;
  * <p>
  * The bundle wiring for a bundle is the {@link #isCurrent() current} bundle
  * wiring if the bundle is resolved and the bundle wiring is the most recent
- * bundle wiring. All bundle wirings for a bundle except the current bundle
- * wiring are considered removal pending. A bundle wiring is {@link #isInUse()
- * in use} if it is the current wiring or if some other in use bundle wiring is
- * dependent upon it. For example, wired to a package exported by the bundle
- * wiring or requires the bundle wiring. An in use bundle wiring has a class
- * loader. Once a bundle wiring is no longer in use, it is considered stale and
- * is discarded by the framework.
+ * bundle wiring. All bundles with non-current, in use bundle wirings are
+ * considered removal pending. A bundle wiring is {@link #isInUse() in use} if
+ * it is the current wiring or if some other in use bundle wiring is dependent
+ * upon it. For example, wired to a package exported by the bundle wiring or
+ * requires the bundle wiring. An in use bundle wiring has a class loader. Once
+ * a bundle wiring is no longer in use, it is considered stale and is discarded
+ * by the framework.
  * 
  * <p>
  * A list of all in use bundle wirings for a bundle can be obtained by calling
@@ -61,8 +59,8 @@ public interface BundleWiring extends BundleReference {
 	 * Returns {@code true} if this bundle wiring is the current bundle wiring.
 	 * The bundle wiring for a bundle is the current bundle wiring if the bundle
 	 * is resolved and the bundle wiring is the most recent bundle wiring. All
-	 * bundle wirings for a bundle except the current bundle wiring are
-	 * considered removal pending.
+	 * bundles with non-current, in use bundle wirings are considered
+	 * {@link FrameworkWiring#getRemovalPendingBundles() removal pending}.
 	 * 
 	 * @return {@code true} if this bundle wiring is the current bundle wiring;
 	 *         {@code false} otherwise.
@@ -93,8 +91,7 @@ public interface BundleWiring extends BundleReference {
 	 *         list contains the provided capabilities in the order they are
 	 *         specified in the manifest.
 	 */
-	List<Capability> getProvidedCapabilities(
-			String capabilityNamespace);
+	List<Capability> getProvidedCapabilities(String capabilityNamespace);
 
 	/**
 	 * Returns the required capabilities used by this bundle wiring.
@@ -113,42 +110,41 @@ public interface BundleWiring extends BundleReference {
 	 *         will be returned. The list contains the required capabilities in
 	 *         the order they are specified in the manifest.
 	 */
-	List<Capability> getRequiredCapabilities(
-			String capabilityNamespace);
+	List<Capability> getRequiredCapabilities(String capabilityNamespace);
 
 	/**
-	 * Returns the bundle information for the bundle in this bundle wiring.
-	 * Since a bundle update can change some information of a bundle, different
-	 * bundle wirings for the same bundle can have different bundle information.
+	 * Returns the bundle revision for the bundle in this bundle wiring. Since a
+	 * bundle update can change the entries in a bundle, different bundle
+	 * wirings for the same bundle can have different bundle revisions.
 	 * 
 	 * <p>
 	 * The bundle object {@link BundleReference#getBundle() referenced} by the
-	 * returned {@code BundleInfo} may return different information than the
-	 * returned {@code BundleInfo} since the returned {@code BundleInfo} may
-	 * refer to an older revision of the bundle.
+	 * returned {@code BundleRevision} may return different information than the
+	 * returned {@code BundleRevision} since the returned {@code BundleRevision}
+	 * may refer to an older revision of the bundle.
 	 * 
-	 * @return The bundle information for this bundle wiring.
+	 * @return The bundle revision for this bundle wiring.
 	 */
-	BundleInfo getBundleInfo();
+	BundleRevision getBundleRevision();
 
 	/**
-	 * Returns the bundle information for all attached fragments of this bundle
-	 * wiring. Since a bundle update can change some information of a bundle,
+	 * Returns the bundle revisions for all attached fragments of this bundle
+	 * wiring. Since a bundle update can change the entries in a fragment,
 	 * different bundle wirings for the same bundle can have different bundle
-	 * information.
+	 * revisions.
 	 * 
 	 * <p>
-	 * The bundle infos in the list are ordered in fragment attachment order
-	 * such that the first info in the list is the first attached fragment and
-	 * the last info in the list is the last attached fragment.
+	 * The bundle revisions in the list are ordered in fragment attachment order
+	 * such that the first revision in the list is the first attached fragment
+	 * and the last revision in the list is the last attached fragment.
 	 * 
-	 * @return A list containing a snapshot of the {@link BundleInfo}s for all
-	 *         attached fragments attached of this bundle wiring, or an empty
-	 *         list if this bundle wiring does not have any attached fragments.
-	 *         If this bundle wiring is not {@link #isInUse() in use},
-	 *         {@code null} will be returned.
+	 * @return A list containing a snapshot of the {@link BundleRevision}s for
+	 *         all attached fragments attached of this bundle wiring, or an
+	 *         empty list if this bundle wiring does not have any attached
+	 *         fragments. If this bundle wiring is not {@link #isInUse() in use}
+	 *         , {@code null} will be returned.
 	 */
-	List<BundleInfo> getFragmentInfos();
+	List<BundleRevision> getFragmentRevisions();
 
 	/**
 	 * Returns the class loader for this bundle wiring. Since a bundle refresh
@@ -162,57 +158,6 @@ public interface BundleWiring extends BundleReference {
 	 *         Environment supports permissions.
 	 */
 	ClassLoader getClassLoader();
-
-	/**
-	 * Returns a URL to the entry at the specified path in this bundle wiring.
-	 * This bundle wiring's class loader is not used to search for the entry.
-	 * Only the contents of this bundle wiring are searched for the entry.
-	 * <p>
-	 * The specified path is always relative to the root of this bundle wiring
-	 * and may begin with &quot;/&quot;. A path value of &quot;/&quot; indicates
-	 * the root of this bundle wiring.
-	 * <p>
-	 * Note: Jar and zip files are not required to include directory entries.
-	 * URLs to directory entries will not be returned if the bundle wiring
-	 * contents do not contain directory entries.
-	 * 
-	 * @param path The path name of the entry.
-	 * @return A URL to the entry, or {@code null} if no entry could be found,
-	 *         if this bundle wiring is not {@link #isInUse() in use} or if the
-	 *         caller does not have the appropriate
-	 *         {@code AdminPermission[bundle,RESOURCE]} and the Java Runtime
-	 *         Environment supports permissions.
-	 * @see Bundle#getEntry(String)
-	 */
-	URL getEntry(String path);
-
-	/**
-	 * Returns a collection of all the paths ({@code String} objects) to entries
-	 * within this bundle wiring whose longest sub-path matches the specified
-	 * path. This bundle wiring's class loader is not used to search for
-	 * entries. Only the contents of this bundle wiring are searched.
-	 * <p>
-	 * The specified path is always relative to the root of this bundle wiring
-	 * and may begin with a &quot;/&quot;. A path value of &quot;/&quot;
-	 * indicates the root of this bundle wiring.
-	 * <p>
-	 * Returned paths indicating subdirectory paths end with a &quot;/&quot;.
-	 * The returned paths are all relative to the root of this bundle wiring and
-	 * must not begin with &quot;/&quot;.
-	 * <p>
-	 * Note: Jar and zip files are not required to include directory entries.
-	 * Paths to directory entries will not be returned if the bundle wiring
-	 * contents do not contain directory entries.
-	 * 
-	 * @param path The path name for which to return entry paths.
-	 * @return A collection of the entry paths ({@code String} objects) or
-	 *         {@code null} if no entry could be found, if this bundle wiring is
-	 *         not {@link #isInUse() in use} or if the caller does not have the
-	 *         appropriate {@code AdminPermission[bundle,RESOURCE]} and the Java
-	 *         Runtime Environment supports permissions.
-	 * @see Bundle#getEntryPaths(String)
-	 */
-	Collection<String> getEntryPaths(String path);
 
 	/**
 	 * Returns entries in this bundle wiring and its attached fragments. This
@@ -259,28 +204,5 @@ public interface BundleWiring extends BundleReference {
 	 *         bundle id order.
 	 * @see Bundle#findEntries(String, String, boolean)
 	 */
-	List<URL> findEntries(String path, String filePattern,
-			boolean recurse);
-
-	/**
-	 * Returns this bundle wiring's manifest headers and values. This method
-	 * returns all the manifest headers and values from the main section of this
-	 * bundle wiring's manifest file; that is, all lines prior to the first
-	 * blank line.
-	 * 
-	 * <p>
-	 * Manifest header names are case-insensitive. The methods of the returned
-	 * map must operate on header names in a case-insensitive manner. This
-	 * method will return the raw (unlocalized) manifest headers including any
-	 * leading {@literal "%"}.
-	 * 
-	 * @return A map containing this bundle's Manifest headers and values. If
-	 *         this bundle wiring is not {@link #isInUse() in use}, {@code null}
-	 *         will be returned.
-	 * @throws SecurityException If the caller does not have the appropriate
-	 *         {@code AdminPermission[bundle,METADATA]}, and the Java Runtime
-	 *         Environment supports permissions.
-	 * @see Bundle#getHeaders(String)
-	 */
-	Map<String, String> getHeaders();
+	List<URL> findEntries(String path, String filePattern, boolean recurse);
 }

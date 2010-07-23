@@ -22,27 +22,28 @@ import org.osgi.framework.BundleReference;
 import org.osgi.framework.Version;
 
 /**
- * Bundle Information. Since a bundle update can change some information of a
- * bundle, different bundle wirings for the same bundle can have different
- * bundle information.
+ * Bundle Revision. Since a bundle update can change the entries in a bundle,
+ * different bundle wirings for the same bundle can be associated with different
+ * bundle revisions.
  * 
  * @ThreadSafe
  * @version $Id$
  */
-public interface BundleInfo extends BundleReference {
+public interface BundleRevision extends BundleReference {
 	/**
-	 * Returns the symbolic name for this bundle info.
+	 * Returns the symbolic name for this bundle revision.
 	 * 
-	 * @return The symbolic name for this bundle info.
+	 * @return The symbolic name for this bundle revision.
 	 * @see Bundle#getSymbolicName()
 	 */
 	String getSymbolicName();
 
 	/**
-	 * Returns the version for this bundle info.
+	 * Returns the version for this bundle revision.
 	 * 
-	 * @return The version for this bundle info, or {@link Version#emptyVersion}
-	 *         if this bundle info has no version information.
+	 * @return The version for this bundle revision, or
+	 *         {@link Version#emptyVersion} if this bundle revision has no
+	 *         version information.
 	 * @see Bundle#getVersion()
 	 */
 	Version getVersion();
