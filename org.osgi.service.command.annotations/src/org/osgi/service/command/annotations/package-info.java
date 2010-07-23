@@ -15,7 +15,7 @@
  */
 
 /**
- * Command Annotations Version 1.0.
+ * Command Annotations Package Version 1.0.
  * 
  * <p>
  * The purpose of this package is to provide access to the annotations for the command shell.  
