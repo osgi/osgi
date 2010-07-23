@@ -45,5 +45,5 @@ package org.osgi.service.formatter;
  * @ProviderInterface
  */
 public interface AggregateFormatter extends Formatter {
-
+	// Marker sub interface.
 }

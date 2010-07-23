@@ -50,5 +50,5 @@ package org.osgi.service.converter;
  * @version $Id$
  */
 public interface AggregateConverter extends Converter {
-
+	// Marker sub interface.
 }
