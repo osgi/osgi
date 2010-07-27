@@ -139,11 +139,10 @@ public interface FrameworkWiring extends BundleReference {
 	boolean resolveBundles(Collection<Bundle> bundles);
 
 	/**
-	 * Returns the bundles that have is {@link BundleWiring#isCurrent()
-	 * non-current}, {@link BundleWiring#isInUse() in use} {@link BundleWiring}
-	 * s. This is typically the bundles which have been updated or uninstalled
-	 * since the last call to
-	 * {@link #refreshBundles(Collection, FrameworkListener...)}.
+	 * Returns the bundles that have {@link BundleWiring#isCurrent()
+	 * non-current}, {@link BundleWiring#isInUse() in use} bundle wirings. This
+	 * is typically the bundles which have been updated or uninstalled since the
+	 * last call to {@link #refreshBundles(Collection, FrameworkListener...)}.
 	 * 
 	 * @return A collection containing a snapshot of the {@code Bundle}s which
 	 *         have non-current, in use {@code BundleWiring}s, or an empty
