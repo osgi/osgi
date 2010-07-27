@@ -40,7 +40,7 @@ public interface Capability {
 	 * space. The other directives and attributes of the package, from the
 	 * {@link Constants#EXPORT_PACKAGE Export-Package} manifest header, can be
 	 * found in the cabability's {@link #getDirectives() directives} and
-	 * {@link #getAttibutes() attributes}. The
+	 * {@link #getAttributes() attributes}. The
 	 * {@link Constants#VERSION_ATTRIBUTE version} capability attribute must
 	 * contain the {@link Version} of the package if one is specified.
 	 * 
@@ -67,7 +67,7 @@ public interface Capability {
 	 * this name space. The other directives and attributes of the bundle, from
 	 * the {@link Constants#BUNDLE_SYMBOLICNAME Bundle-SymbolicName} manifest
 	 * header, can be found in the cabability's {@link #getDirectives()
-	 * directives} and {@link #getAttibutes() attributes}. The
+	 * directives} and {@link #getAttributes() attributes}. The
 	 * {@link Constants#BUNDLE_VERSION_ATTRIBUTE bundle-version} capability
 	 * attribute must contain the {@link Version} of the bundle, from the
 	 * {@link Constants#BUNDLE_VERSION Bundle-Version} manifest header.
@@ -107,7 +107,7 @@ public interface Capability {
 	 * @return A map of attribute names to attribute values for this capability,
 	 *         or an empty map if this capability has no attributes.
 	 */
-	Map<String, Object> getAttibutes();
+	Map<String, Object> getAttributes();
 
 	/**
 	 * Returns the bundle wiring providing this capability.
