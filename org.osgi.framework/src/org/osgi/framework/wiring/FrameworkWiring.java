@@ -17,7 +17,6 @@
 package org.osgi.framework.wiring;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
@@ -37,24 +36,6 @@ import org.osgi.framework.FrameworkListener;
  * @version $Id$
  */
 public interface FrameworkWiring extends BundleReference {
-	/**
-	 * Returns a list of package capabilities for exported packages with the
-	 * specified package name.
-	 * 
-	 * <p>
-	 * The exported packages in the list are ordered in descending version such
-	 * that the first exported package has the highest version and last exported
-	 * package has the lowest version. The list will only contain exported
-	 * packages of {@link BundleWiring#isCurrent() current} bundle wirings.
-	 * 
-	 * @param name The package name of the exported packages to be returned or
-	 *        {@code null} to return all exported packages.
-	 * @return A list containing a snapshot of {@link Capability}s, or
-	 *         an empty list if no exported packages with the specified name
-	 *         exist.
-	 */
-	List<Capability> getExportedPackages(String name);
-
 	/**
 	 * Refreshes the specified bundles. This forces the update (replacement) or
 	 * removal of packages exported by the specified bundles.
@@ -192,24 +173,4 @@ public interface FrameworkWiring extends BundleReference {
 	 *         FrameworkWiring.
 	 */
 	Collection<Bundle> getDependencyClosure(Collection<Bundle> bundles);
-
-	/**
-	 * Returns the bundles with the specified symbolic name whose bundle version
-	 * is within the specified version range. If no bundles are installed that
-	 * have the specified symbolic name, then an empty list is returned. If a
-	 * version range is specified, then only the bundles that have the specified
-	 * symbolic name and whose bundle versions belong to the specified version
-	 * range are returned. The returned bundles are ordered by version in
-	 * descending version order so that the first element of the array contains
-	 * the bundle with the highest version.
-	 * 
-	 * @see org.osgi.framework.Constants#BUNDLE_VERSION_ATTRIBUTE
-	 * @param symbolicName The symbolic name of the desired bundles.
-	 * @param versionRange The version range of the desired bundles, or
-	 *        {@code null} if all versions are desired.
-	 * @return A list of bundles with the specified name belonging to the
-	 *         specified version range ordered in descending version order, or
-	 *         an empty list if no bundles are found.
-	 */
-	List<Bundle> getBundles(String symbolicName, String versionRange);
 }
