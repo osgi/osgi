@@ -160,20 +160,21 @@ public interface BundleWiring extends BundleReference {
 	ClassLoader getClassLoader();
 
 	/**
-	 * Returns entries in this bundle wiring and its attached fragments. This
-	 * bundle wiring's class loader is not used to search for entries. Only the
-	 * contents of this bundle wiring and its attached fragments are searched
-	 * for the specified entries.
+	 * Returns entries in this bundle wiring's {@link #getBundleRevision()
+	 * bundle revision} and its attached {@link #getFragmentRevisions() fragment
+	 * revisions}. This bundle wiring's class loader is not used to search for
+	 * entries. Only the contents of this bundle wiring's bundle revision and
+	 * its attached fragment revisions are searched for the specified entries.
 	 * 
 	 * <p>
 	 * This method takes into account that the &quot;contents&quot; of this
-	 * bundle wiring can include attached fragments. This &quot;bundle
-	 * space&quot; is not a namespace with unique members; the same entry name
-	 * can be present multiple times. This method therefore returns a list of
-	 * URL objects. These URLs can come from different JARs but have the same
-	 * path name. This method can either return only entries in the specified
-	 * path or recurse into subdirectories returning entries in the directory
-	 * tree beginning at the specified path.
+	 * bundle wiring can have attached fragments. This &quot;bundle space&quot;
+	 * is not a namespace with unique members; the same entry name can be
+	 * present multiple times. This method therefore returns a list of URL
+	 * objects. These URLs can come from different JARs but have the same path
+	 * name. This method can either return only entries in the specified path or
+	 * recurse into subdirectories returning entries in the directory tree
+	 * beginning at the specified path.
 	 * 
 	 * <p>
 	 * Note: Jar and zip files are not required to include directory entries.
@@ -192,17 +193,100 @@ public interface BundleWiring extends BundleReference {
 	 *        using the wildcard character (&quot;*&quot;). If {@code null} is
 	 *        specified, this is equivalent to &quot;*&quot; and matches all
 	 *        files.
-	 * @param recurse If {@code true}, recurse into subdirectories. Otherwise
-	 *        only return entries from the specified path.
-	 * @return A list of URL objects for each matching entry, or {@code null} if
-	 *         an entry could not be found, if this bundle wiring is not
-	 *         {@link #isInUse() in use} or if the caller does not have the
-	 *         appropriate {@code AdminPermission[bundle,RESOURCE]}, and the
-	 *         Java Runtime Environment supports permissions. The list is
-	 *         ordered such that entries from this bundle are returned first
-	 *         followed by the entries from attached fragments in ascending
-	 *         bundle id order.
+	 * @param options The options for listing resource names. See
+	 *        {@link #FINDENTIRES_RECURSE}. The method must ignore unrecognized
+	 *        options.
+	 * @return An unmodifiable list of URL objects for each matching entry, or
+	 *         an empty list if no matching entry could not be found or if the
+	 *         caller does not have the appropriate
+	 *         {@code AdminPermission[bundle,RESOURCE]} and the Java Runtime
+	 *         Environment supports permissions. The list is ordered such that
+	 *         entries from the {@link #getBundleRevision() bundle revision} are
+	 *         returned first followed by the entries from
+	 *         {@link #getFragmentRevisions() attached fragment revisions} in
+	 *         attachment order. If this bundle wiring is not {@link #isInUse()
+	 *         in use}, {@code null} will be returned.
 	 * @see Bundle#findEntries(String, String, boolean)
 	 */
-	List<URL> findEntries(String path, String filePattern, boolean recurse);
+	List<URL> findEntries(String path, String filePattern, int options);
+
+	/**
+	 * The find entries operation must recurse into subdirectories.
+	 * 
+	 * <p>
+	 * This bit may be set when calling
+	 * {@link #findEntries(String, String, int)} to specify the result must
+	 * include the matching entries from the specified path and its
+	 * subdirectories. If this bit is not set, then the result must only include
+	 * matching entries from the specified path.
+	 * 
+	 * @see #findEntries(String, String, int)
+	 */
+	int	FINDENTIRES_RECURSE	= 0x00000001;
+
+	/**
+	 * Returns the names of resources visible to this bundle wiring's
+	 * {@link #getClassLoader() class loader}. The returned names can be used to
+	 * access the resources via this bundle wiring's class loader.
+	 * 
+	 * @param path The path name in which to look. The path is always relative
+	 *        to the root of this bundle wiring's class loader and may begin
+	 *        with &quot;/&quot;. A path value of &quot;/&quot; indicates the
+	 *        root of this bundle wiring's class loader.
+	 * @param filePattern The file name pattern for selecting resource names in
+	 *        the specified path. The pattern is only matched against the last
+	 *        element of the resource path. If the resource is a directory then
+	 *        the trailing &quot;/&quot; is not used for pattern matching.
+	 *        Substring matching is supported, as specified in the Filter
+	 *        specification, using the wildcard character (&quot;*&quot;). If
+	 *        {@code null} is specified, this is equivalent to &quot;*&quot; and
+	 *        matches all files.
+	 * @param options The options for listing resource names. See
+	 *        {@link #LISTRESOURCES_LOCAL} and {@link #LISTRESOURCES_RECURSE}.
+	 *        The method must ignore unrecognized options.
+	 * @return An unmodifiable list of resource names for each matching
+	 *         resource, or an empty list if no matching resource could not be
+	 *         found or if the caller does not have the appropriate
+	 *         {@code AdminPermission[bundle,RESOURCE]} and the Java Runtime
+	 *         Environment supports permissions. The list is ordered such that
+	 *         resource names from this bundle are returned in the order they
+	 *         are visible in this bundle wiring's class loader. If this bundle
+	 *         wiring is not {@link #isInUse() in use}, {@code null} will be
+	 *         returned.
+	 */
+	List<String> listResources(String path, String filePattern, int options);
+
+	/**
+	 * The list resource names operation must recurse into subdirectories.
+	 * 
+	 * <p>
+	 * This bit may be set when calling
+	 * {@link #listResources(String, String, int)} to specify the result must
+	 * include the names of matching resources from the specified path and its
+	 * subdirectories. If this bit is not set, then the result must only include
+	 * names of matching resources from the specified path.
+	 * 
+	 * @see #listResources(String, String, int)
+	 */
+	int	LISTRESOURCES_RECURSE	= 0x00000001;
+
+	/**
+	 * The list resource names operation must limit the result to the names of
+	 * matching resources contained in this bundle wiring's
+	 * {@link #getBundleRevision() bundle revision} and its attached
+	 * {@link #getFragmentRevisions() fragment revisions}.
+	 * 
+	 * <p>
+	 * This bit may be set when calling
+	 * {@link #listResources(String, String, int)} to specify the result must
+	 * only include the names of matching resources contained in this bundle
+	 * wiring's bundle revision and its attached fragment revisions. If this bit
+	 * is not set, then the result must include the names of matching resources
+	 * reachable from this bundle wiring's class loader which may include the
+	 * names of matching resources contained in imported packages and required
+	 * bundles.
+	 * 
+	 * @see #listResources(String, String, int)
+	 */
+	int	LISTRESOURCES_LOCAL	= 0x00000002;
 }
