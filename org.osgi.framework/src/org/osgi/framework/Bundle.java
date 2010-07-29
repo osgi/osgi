@@ -16,6 +16,7 @@
 
 package org.osgi.framework;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -1245,4 +1246,27 @@ public interface Bundle extends Comparable<Bundle> {
 	 */
 	int getTypes();
 
+	/**
+	 * Creates a {@code File} object for a file in the persistent storage area
+	 * provided for this bundle by the Framework. This method will return
+	 * {@code null} if the platform does not have file system support.
+	 * 
+	 * <p>
+	 * A {@code File} object for the base directory of the persistent storage
+	 * area provided for this bundle by the Framework can be obtained by calling
+	 * this method with an empty string as {@code filename}.
+	 * 
+	 * <p>
+	 * If the Java Runtime Environment supports permissions, the Framework will
+	 * ensure that this bundle has the {@code java.io.FilePermission} with
+	 * actions {@code read},{@code write},{@code delete} for all files
+	 * (recursively) in the persistent storage area provided for this bundle.
+	 * 
+	 * @param filename A relative name to the file to be accessed.
+	 * @return A {@code File} object that represents the requested file or
+	 *         {@code null} if the platform does not have file system support.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
+	 * @since 1.6
+	 */
+	File getDataFile(String filename);
 }
