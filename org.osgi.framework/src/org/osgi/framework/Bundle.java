@@ -1080,8 +1080,8 @@ public interface Bundle extends Comparable<Bundle> {
 	 * class loader is not used to search for entries. Only the contents of this
 	 * bundle and its attached fragments are searched for the specified entries.
 	 * 
-	 * If this bundle's state is {@code INSTALLED}, this method must
-	 * attempt to resolve this bundle before attempting to find entries.
+	 * If this bundle's state is {@code INSTALLED}, this method must attempt to
+	 * resolve this bundle before attempting to find entries.
 	 * 
 	 * <p>
 	 * This method is intended to be used to obtain configuration, setup,
@@ -1127,17 +1127,17 @@ public interface Bundle extends Comparable<Bundle> {
 	 *        using the wildcard character (&quot;*&quot;). If null is
 	 *        specified, this is equivalent to &quot;*&quot; and matches all
 	 *        files.
-	 * @param recurse If {@code true}, recurse into subdirectories.
-	 *        Otherwise only return entries from the specified path.
+	 * @param recurse If {@code true}, recurse into subdirectories. Otherwise
+	 *        only return entries from the specified path.
 	 * @return An enumeration of URL objects for each matching entry, or
-	 *         {@code null} if an entry could not be found or if the caller
-	 *         does not have the appropriate
+	 *         {@code null} if no matching entry could not be found or if the
+	 *         caller does not have the appropriate
 	 *         {@code AdminPermission[this,RESOURCE]}, and the Java Runtime
 	 *         Environment supports permissions. The URLs are sorted such that
 	 *         entries from this bundle are returned first followed by the
-	 *         entries from attached fragments in ascending bundle id order. If
-	 *         this bundle is a fragment, then only matching entries in this
-	 *         fragment are returned.
+	 *         entries from attached fragments in attachment order. If this
+	 *         bundle is a fragment, then only matching entries in this fragment
+	 *         are returned.
 	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @since 1.3
 	 */
