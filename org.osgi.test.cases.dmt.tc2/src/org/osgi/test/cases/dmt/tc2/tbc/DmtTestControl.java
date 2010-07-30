@@ -74,6 +74,7 @@ import org.osgi.test.cases.dmt.tc2.tbc.Activators.RemoteAlertSenderActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Constraints.AclConstraints;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.tc2.tbc.Plugin.LogPlugin.LogPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.IsAbsoluteUri;
@@ -92,6 +93,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	private static TestNonAtomicPluginActivator	testNonAtomicPluginActivator;
 
 	private static TestReadOnlyPluginActivator	testReadOnlyPluginActivator;
+
+	private static LogPluginActivator	logPluginActivator;
 
 	private static RemoteAlertSenderActivator	remoteAlertSenderActivator;
 
@@ -201,6 +204,9 @@ public class DmtTestControl extends DefaultTestBundleControl {
 
 			testReadOnlyPluginActivator = new TestReadOnlyPluginActivator(this);
 			testReadOnlyPluginActivator.start(getContext());
+		
+			logPluginActivator = new LogPluginActivator();
+			logPluginActivator.start(getContext());
 		}
 		catch (Exception e) {
 			log("#TestControl: Failed starting plugins");

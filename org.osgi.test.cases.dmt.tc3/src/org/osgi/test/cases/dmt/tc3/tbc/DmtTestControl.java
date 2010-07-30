@@ -51,8 +51,10 @@ import info.dmtree.DmtException;
 import info.dmtree.DmtSession;
 import info.dmtree.Uri;
 
+import org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin.ConfigPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.tc3.tbc.LogPlugin.LogPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.Can;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.DmtMetaNodeConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetDefault;
@@ -114,6 +116,10 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	private static FatalExceptionDataPluginActivator		fatalExceptionDataPluginActivator;
 
 	private static TestPluginMetaDataActivator				testPluginMetaDataActivator;
+	
+	private static LogPluginActivator						logPluginActivator;
+
+	private static ConfigPluginActivator					configPluginActivator;
 
 	public void setUp() {
 		if (!inited) {
@@ -176,6 +182,12 @@ public class DmtTestControl extends DefaultTestBundleControl {
 
 			newDataPluginActivator = new NewDataPluginActivator(this);
 			newDataPluginActivator.start(getContext());
+			
+			logPluginActivator = new LogPluginActivator();
+			logPluginActivator.start(getContext());
+			
+			configPluginActivator = new ConfigPluginActivator();
+			configPluginActivator.start(getContext());
 
 		}
 		catch (Exception e) {

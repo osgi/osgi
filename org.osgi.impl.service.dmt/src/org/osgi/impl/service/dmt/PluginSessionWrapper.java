@@ -18,8 +18,6 @@
 
 package org.osgi.impl.service.dmt;
 
-import java.security.*;
-import java.util.Date;
 import info.dmtree.DmtData;
 import info.dmtree.DmtException;
 import info.dmtree.DmtSession;
@@ -27,6 +25,15 @@ import info.dmtree.MetaNode;
 import info.dmtree.spi.ReadWriteDataSession;
 import info.dmtree.spi.ReadableDataSession;
 import info.dmtree.spi.TransactionalDataSession;
+
+import java.security.AccessControlContext;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.Date;
+
+import org.osgi.framework.ServiceReference;
 
 
 /**
@@ -49,7 +56,12 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     
     // the registration object for the plugin providing the session, used for
     // checking that the plugin has not been unregistered
-    private final PluginRegistration pluginRegistration;
+    
+//    private final PluginRegistration pluginRegistration;
+    // SD: pluginRegistration is just for checking that registration is still valid
+    // this can be done also via a ServiceRegistration directly 
+    private final ServiceReference pluginReference;
+    
     
     // redundant information, could be calculated from session variables
     private final int sessionType;
@@ -58,7 +70,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     private String infoString;
     
     // Note, that the session type reflects the kind of 
-    public PluginSessionWrapper(PluginRegistration pluginRegistration, 
+    public PluginSessionWrapper(ServiceReference pluginReference, 
             ReadableDataSession session, int sessionType, Node sessionRoot, 
             AccessControlContext securityContext) {
         readableDataSession = session;
@@ -70,7 +82,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
         this.sessionType = sessionType;
         this.sessionRoot = sessionRoot;
-        this.pluginRegistration = pluginRegistration;
+        this.pluginReference = pluginReference;
         this.securityContext = securityContext;
         
         infoString = null;
@@ -565,7 +577,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
     
     private void checkRegistration(String[] path) {
-        if(!pluginRegistration.isRegistered())
+    	// SD: got rid of PluginRegistration class
+    	if ( pluginReference == null || pluginReference.getBundle() == null )
             throw new PluginUnregisteredException(path);
     }
 }

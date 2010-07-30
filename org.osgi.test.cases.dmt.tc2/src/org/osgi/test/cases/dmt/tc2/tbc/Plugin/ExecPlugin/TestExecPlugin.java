@@ -50,7 +50,7 @@ import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
  * DmtSession calls to a subtree handled by Plugin.
  * 
  */
-public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalDataSession {
+public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalDataSession, MountPlugin {
 
 	private DmtTestControl tbc;
 	
@@ -262,6 +262,14 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 
 	public static String[] getNewInteriorNodeName() {
 		return newInteriorNodeName;
+	}
+
+
+	public void setMountPoints(MountPoint[] mountPoints) {
+		System.out.println( "setMountPoints invoked with mountPoints:" );
+		for (int i = 0; i < mountPoints.length; i++) {
+			System.out.println( Uri.toUri(mountPoints[i].getMountPath()) );
+		}
 	}
     
 }

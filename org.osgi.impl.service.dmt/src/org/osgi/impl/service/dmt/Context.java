@@ -18,10 +18,16 @@
 
 package org.osgi.impl.service.dmt;
 
+import info.dmtree.spi.DataPlugin;
+
 import java.util.Hashtable;
 import java.util.Iterator;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.impl.service.dmt.dispatcher.Dispatcher;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
@@ -30,13 +36,28 @@ public class Context {
     private BundleContext bc;
     private Hashtable trackers;
     
-    private PluginDispatcher pluginDispatcher = null;
-    private ServiceTracker pluginTracker = null;
+//    private PluginDispatcher pluginDispatcher = null;
+    private Dispatcher dispatcher = null;
+//    private ServiceTracker pluginTracker = null;
 
     Context(BundleContext bc) {
         this.bc = bc;
         trackers = new Hashtable();
+
+        // make the root plugin known to the dispatcher
+        getPluginDispatcher().addingService( registerRootPlugin() );
+        
+        // start tracking 
+        getPluginDispatcher().open();
     }
+    
+    private ServiceReference registerRootPlugin() {
+    	Hashtable<String, String[]> props = new Hashtable<String, String[]>();
+    	props.put( "dataRootURIs", new String[] { "." });
+    	ServiceRegistration reg = bc.registerService(DataPlugin.class.getName(), new RootPlugin(getPluginDispatcher()), props);
+    	return reg.getReference();
+    }
+    
     
     BundleContext getBundleContext() {
         return bc;
@@ -50,23 +71,25 @@ public class Context {
         return tracker;
     }
     
-    synchronized PluginDispatcher getPluginDispatcher() {
-        if(pluginDispatcher == null) { // create plugin tracker if it DNE yet
-            pluginDispatcher = new PluginDispatcher(this);
-            String filter = "(|(objectClass=info.dmtree.spi.DataPlugin)" +
-                              "(objectClass=info.dmtree.spi.ExecPlugin))";
+    /**
+     * SD: Bundlefest: replaced it by recursive dispatcher that supports mount-points
+     * @return
+     */
+    synchronized Dispatcher getPluginDispatcher() {
+        if(dispatcher == null) { // create plugin tracker if it DNE yet
             try {
-                pluginTracker = new ServiceTracker(bc, bc.createFilter(filter),
-                        pluginDispatcher);
+	            String filter = "(|(objectClass=info.dmtree.spi.DataPlugin)" +
+	            					"(objectClass=info.dmtree.spi.ExecPlugin))";
+	            dispatcher = new Dispatcher(this.bc, bc.createFilter(filter));
             } catch (InvalidSyntaxException e) {
                 // cannot happen
                 System.err.println("Internal error, invalid filter string. ");
                 e.printStackTrace();
             }
-            pluginTracker.open();
+//            pluginTracker.open();
         }
             
-        return pluginDispatcher;
+        return dispatcher;
     }
     
     void close() {
@@ -74,8 +97,8 @@ public class Context {
         while (i.hasNext())
             ((ServiceTracker) i.next()).close();
         
-        if(pluginTracker != null) // pluginTracker is special, not in trackers 
-            pluginTracker.close();
+//        if(pluginTracker != null) // pluginTracker is special, not in trackers 
+//            pluginTracker.close();
     }
 
     // Find a better place for this method...

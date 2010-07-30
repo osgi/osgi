@@ -20,12 +20,12 @@ package org.osgi.impl.service.dmt;
 import info.dmtree.DmtData;
 import info.dmtree.MetaNode;
 
-public class RootPluginMetaNode implements MetaNode {
+public class StructureMetaNode implements MetaNode {
     private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 
         "org.osgi.impl.service.dmt.interior-node-value-support";
 
     public boolean can(int operation) {
-        return operation == CMD_GET || operation == CMD_REPLACE;
+        return operation == CMD_GET;
     }
     
     public boolean isLeaf() {

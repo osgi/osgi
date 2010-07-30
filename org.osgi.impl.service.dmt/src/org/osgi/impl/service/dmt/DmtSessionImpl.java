@@ -17,16 +17,47 @@
  */
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.*;
+import info.dmtree.Acl;
+import info.dmtree.DmtData;
+import info.dmtree.DmtEvent;
+import info.dmtree.DmtException;
+import info.dmtree.DmtIllegalStateException;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
+import info.dmtree.Uri;
 import info.dmtree.security.DmtPermission;
 import info.dmtree.security.DmtPrincipalPermission;
-import info.dmtree.spi.*;
+import info.dmtree.spi.DataPlugin;
+import info.dmtree.spi.ExecPlugin;
+import info.dmtree.spi.ReadWriteDataSession;
+import info.dmtree.spi.ReadableDataSession;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
-import java.security.*;
-import java.util.*;
+import java.security.AccessControlContext;
+import java.security.AccessController;
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.security.Permissions;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.security.ProtectionDomain;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.Vector;
 
+import org.osgi.impl.service.dmt.dispatcher.Plugin;
+import org.osgi.impl.service.dmt.dispatcher.Segment;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.log.LogService;
@@ -335,19 +366,22 @@ public class DmtSessionImpl implements DmtSession {
     // same as execute/3 but can be called internally, because it is not wrapped
     private void internalExecute(String nodeUri, final String correlator,
             final String data) throws DmtException {
+    	// TODO: Bundlefest simplification
         checkWriteSession("execute");
         // not allowing to execute non-existent nodes, all Management Objects
         // defined in the spec have data plugins backing them
 		final Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
         checkOperation(node, Acl.EXEC, MetaNode.CMD_EXECUTE);
         
-        final ExecPlugin plugin = 
-            context.getPluginDispatcher().getExecPlugin(node);
-        final DmtSession session = this;
-		
-        if (plugin == null)
+        Plugin dispatcherPlugin = context.getPluginDispatcher().getExecPluginFor(node.getPath());
+        if (dispatcherPlugin == null)
 			throw new DmtException(node.getUri(), DmtException.COMMAND_FAILED,
 					"No exec plugin registered for given node.");
+
+        final ExecPlugin plugin = 
+            (ExecPlugin) context.getBundleContext().getService(dispatcherPlugin.getReference());
+        final DmtSession session = this;
+		
         
         try {
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
@@ -361,26 +395,58 @@ public class DmtSessionImpl implements DmtSession {
         }
     }
 
+    
+    private boolean isPureStructuralNode( String uri ) throws DmtException {
+    	return isPureStructuralNode( makeAbsoluteUri(uri) );
+    }
+    /**
+     * checks if the given path points to a node that is just implicitely defined by the mountpoint 
+     * of a DataPlugin
+     * @param path
+     * @return
+     */
+    private boolean isPureStructuralNode( Node nodePath ) {
+        // we have to merge the node-names from the plugin with the defined mountpoints  
+		Plugin plugin = context.getPluginDispatcher().getDataPluginFor(nodePath.getPath());
+		for( Segment segment : (List<Segment>) plugin.getOwns() )
+			// directly matched in plugins dataRootURI, i.e. no structural node
+			if ( nodePath.getUri().equals( segment.getUri().toString() ))
+				return false;
+		
+		if ( plugin.getMountPoints().contains(nodePath.getUri()))
+			// direct match in the mountPoints, but no directly matching plugin found before, i.e. a structural node
+			return true;
+		
+		for( String mountPoint : (Set<String>) plugin.getMountPoints() ) {
+			// check for scaffold node
+			if ( mountPoint.startsWith( nodePath.getUri() ))
+				return true;
+		}
+		return false;
+    }
+
     // requires DmtPermission with GET action, no ACL check done because there
     // are no ACLs stored for non-existing nodes (in theory)
 	public synchronized boolean isNodeUri(String nodeUri) {
         checkSession();
-        
         try {
             Node node = makeAbsoluteUri(nodeUri);
+        	if ( isPureStructuralNode(node)) 
+        		return true;
             checkLocalPermission(node, writeAclCommands(Acl.GET));
             checkNode(node, SHOULD_EXIST);
             // not checking meta-data for the GET capability, the plugin must be 
-            // prepared to answer isNodeUri() even if the node is not "gettable" 
+            // prepared to answer isNodeUri() even if the node is not "gettable"
 		} catch (DmtException e) {
 			return false; // invalid node URI or error opening plugin
 		}
-        
 		return true;
 	}
 
 	public synchronized boolean isLeafNode(String nodeUri) throws DmtException {
         checkSession();
+        if ( isPureStructuralNode(nodeUri))
+        	return false;
 		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
         checkOperation(node, Acl.GET, MetaNode.CMD_GET);
 		return isLeafNodeNoCheck(node);
@@ -446,14 +512,20 @@ public class DmtSessionImpl implements DmtSession {
         checkNodePermission(node, Acl.GET);
         // not checking meta-data for the GET capability, meta-data should
         // always be publicly available
-        return getMetaNodeNoCheck(node);
+        if ( isPureStructuralNode(nodeUri))
+        	return new StructureMetaNode();
+        else
+        	return getMetaNodeNoCheck(node);
     }
 
 	public synchronized DmtData getNodeValue(String nodeUri)
             throws DmtException {
         checkSession();
         Node node = makeAbsoluteUri(nodeUri);
-        return internalGetNodeValue(node);
+        if ( isPureStructuralNode(nodeUri))
+        	return null;
+        else 
+        	return internalGetNodeValue(node);
     }
     
     // also used by copy() to pass an already validated Node instead of a URI
@@ -497,17 +569,95 @@ public class DmtSessionImpl implements DmtSession {
         return internalGetChildNodeNames(node);
     }
     
+	
+//	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
+//		
+//		String[] directNodeNames = null;
+//
+//		// do we have a responsible vendorPlugin ?
+//		ServiceReference vendorPluginRef = getResponsibleVendorPlugin( nodePath );
+//		if ( vendorPluginRef != null ) {
+//			VendorPluginInfo pluginInfo = (VendorPluginInfo) vendorPluginRef.getProperty( _PLUGIN_INFO );
+//			DmtSession session = getSession(pluginInfo);
+//			// and pass the request through
+//			directNodeNames = session.getChildNodeNames(toVendorPath(nodePath,
+//					pluginInfo));
+//		}
+//		
+//		// we also have to get all structure nodes created for configured root-nodes and 
+//		// the mapped configurationPathes of other registered VendorPlugins
+//		
+//		// find all registered instances of MappedPath with this path prefix
+//		String myPath = Uri.toUri( nodePath );
+//		String filter = "(" + _MAPPED_NODE_PATH + "=" + Uri.toUri( nodePath ) + "/*)";
+//		ServiceReference[] refs;
+//		try {
+//			refs = activator.context.getServiceReferences( MappedPath.class.getName(), filter );
+//		} catch (InvalidSyntaxException e) {
+//			e.printStackTrace();
+//			throw new DmtException( myPath, DmtException.COMMAND_FAILED, "Error in Filter syntax while looking up child names in the registry" );
+//		}
+//		// TreeSet used to filter out duplicates
+//		TreeSet children = new TreeSet();
+//		if ( refs != null ) {
+//			for (int i = 0; i < refs.length; i++) {
+//				String mappedPath = (String) refs[i].getProperty( _MAPPED_NODE_PATH );
+//				// cut out the next segment of this path
+//				int nextSegment = mappedPath.indexOf( '/', myPath.length() + 1 );
+//				if ( nextSegment == -1 )
+//					nextSegment = mappedPath.length();
+//				String child = mappedPath.substring( myPath.length() + 1, nextSegment );
+//				children.add( child );
+//			}
+//		}
+//
+//		Collection direct = directNodeNames != null ? Arrays.asList( directNodeNames ) : new Vector();
+//		children.addAll( direct );
+//		
+//		return (String[]) children.toArray( new String[children.size()]);
+//	}
+	
     // also used by copy() to pass an already validated Node instead of a URI
     private String[] internalGetChildNodeNames(Node node) throws DmtException {
-        checkNode(node, SHOULD_BE_INTERIOR);
-        checkOperation(node, Acl.GET, MetaNode.CMD_GET);
-        String[] pluginChildNodes = 
-            getReadableDataSession(node).getChildNodeNames(node.getPath());
-        
-        List processedChildNodes = normalizeChildNodeNames(pluginChildNodes);
+
+        String[] pluginChildNodes = new String[0];
+    	if ( ! isPureStructuralNode( node )) {
+	    	checkNode(node, SHOULD_BE_INTERIOR);
+	        checkOperation(node, Acl.GET, MetaNode.CMD_GET);
+	        pluginChildNodes = getReadableDataSession(node).getChildNodeNames(node.getPath());
+    	}
+
+//		Segment segment = context.getPluginDispatcher().root.getSegmentFor(node.getPath(), 1);
+		Vector<String> v = new Vector<String>();
+		Segment segment = context.getPluginDispatcher().findSegment(node.getPath());
+		if ( segment != null ) {
+			List<Segment> childSegments = segment.getChildren();
+			for ( Segment child : childSegments )
+				v.add(child.getName());
+		}
+		String[] structuralChildNodes = (String[]) v.toArray( new String[v.size()] );
+    	
+//        // we have to merge the node-names from the plugin with the defined mountpoints  
+//		Plugin plugin = context.getPluginDispatcher().root.getPluginFor(node.getPath(), 1);
+//		Vector v = new Vector();
+//		Set<String> mountPoints = plugin.mountPoints;
+//		String nodeUri = node.getUri();
+//		for ( String mountPoint : mountPoints ) {
+//			if ( mountPoint.startsWith(nodeUri) && mountPoint.length() > nodeUri.length()) {
+//				// get the next segment name from the mountpoint
+//				String[] mp = Uri.toPath( mountPoint );
+//				v.add(mp[node.getPath().length]);
+//			}
+//		}
+//		String[] structuralChildNodes = (String[]) v.toArray( new String[v.size()] );
+
+		
+        TreeSet<String> children = new TreeSet<String>();
+		children.addAll(normalizeChildNodeNames(pluginChildNodes));
+		children.addAll(normalizeChildNodeNames(structuralChildNodes));
         
         String[] processedChildNodeArray = (String[]) 
-            processedChildNodes.toArray(new String[processedChildNodes.size()]);
+            children.toArray(new String[children.size()]);
         // ordering is not a requirement, but allows easier testing of plugins
         Arrays.sort(processedChildNodeArray);
         return processedChildNodeArray;
@@ -517,7 +667,10 @@ public class DmtSessionImpl implements DmtSession {
     public synchronized String getNodeTitle(String nodeUri) throws DmtException {
         checkSession();
         Node node = makeAbsoluteUri(nodeUri);
-        return internalGetNodeTitle(node);
+        if ( isPureStructuralNode(nodeUri))
+        	return null;
+        else 
+        	return internalGetNodeTitle(node);
     }
     
     // also used by copy() to pass an already validated Node instead of a URI
@@ -532,7 +685,10 @@ public class DmtSessionImpl implements DmtSession {
         checkSession();
         Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
         checkOperation(node, Acl.GET, MetaNode.CMD_GET);
-        return getReadableDataSession(node).getNodeVersion(node.getPath());
+        if ( isPureStructuralNode(nodeUri))
+        	return 0;
+        else 
+        	return getReadableDataSession(node).getNodeVersion(node.getPath());
     }
 
 	// GET property op
@@ -541,6 +697,11 @@ public class DmtSessionImpl implements DmtSession {
         checkSession();
         Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
         checkOperation(node, Acl.GET, MetaNode.CMD_GET);
+        if ( isPureStructuralNode(node)) 
+			throw new DmtException(node.getPath(),
+					DmtException.FEATURE_NOT_SUPPORTED,
+					"Timestamp is not available for this node from the DMTSubtree.");
+
         return getReadableDataSession(node).getNodeTimestamp(node.getPath());
     }
 
@@ -549,14 +710,20 @@ public class DmtSessionImpl implements DmtSession {
 		checkSession();
         Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_LEAF);
         checkOperation(node, Acl.GET, MetaNode.CMD_GET);
-		return getReadableDataSession(node).getNodeSize(node.getPath());
+        if ( isPureStructuralNode(nodeUri))
+        	return 0;
+        else 
+        	return getReadableDataSession(node).getNodeSize(node.getPath());
 	}
 
 	// GET property op
     public synchronized String getNodeType(String nodeUri) throws DmtException {
         checkSession();
         Node node = makeAbsoluteUri(nodeUri);
-        return internalGetNodeType(node);
+        if ( isPureStructuralNode(nodeUri))
+        	return null;
+        else 
+        	return internalGetNodeType(node);
     }
     
     // also used by copy() to pass an already validated Node instead of a URI
@@ -571,6 +738,12 @@ public class DmtSessionImpl implements DmtSession {
             throws DmtException {
         checkWriteSession();
         Node node = makeAbsoluteUri(nodeUri);
+
+        if ( isPureStructuralNode(nodeUri))
+	        throw new DmtException(node.getPath(), DmtException.PERMISSION_DENIED,
+					"setting of the node title is not allowed for node: "
+							+ node.getPath());
+
         internalSetNodeTitle(node, title, true); // send event if successful
     }
     
@@ -598,6 +771,12 @@ public class DmtSessionImpl implements DmtSession {
 
     public synchronized void setNodeValue(String nodeUri, DmtData data)
             throws DmtException {
+        if ( isPureStructuralNode(nodeUri)) {
+            Node node = makeAbsoluteUri(nodeUri);
+	        throw new DmtException(node.getPath(), DmtException.PERMISSION_DENIED,
+					"setting of the node value is not allowed for node: "
+							+ node.getPath());
+        }
         commonSetNodeValue(nodeUri, data);
     }
     
@@ -649,6 +828,13 @@ public class DmtSessionImpl implements DmtSession {
     public synchronized void setNodeType(String nodeUri, String type)
             throws DmtException {
         checkWriteSession();
+        if ( isPureStructuralNode(nodeUri)) {
+            Node node = makeAbsoluteUri(nodeUri);
+	        throw new DmtException(node.getPath(), DmtException.PERMISSION_DENIED,
+					"setting of the node type is not allowed for node: "
+							+ node.getPath());
+        }
+
         Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
         checkOperation(node, Acl.REPLACE, MetaNode.CMD_REPLACE);
         
@@ -670,6 +856,13 @@ public class DmtSessionImpl implements DmtSession {
 
 	public synchronized void deleteNode(String nodeUri) throws DmtException {
 		checkWriteSession();
+        if ( isPureStructuralNode(nodeUri)) {
+            Node node = makeAbsoluteUri(nodeUri);
+	        throw new DmtException(node.getPath(), DmtException.PERMISSION_DENIED,
+					"deleting is not allowed for node: "
+							+ node.getPath());
+        }
+
         Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
         
         // sub-case of the next check, but gives a more specific error
@@ -721,6 +914,7 @@ public class DmtSessionImpl implements DmtSession {
             throws DmtException {
         checkWriteSession();
         Node node = makeAbsoluteUri(nodeUri);
+
         commonCreateInteriorNode(node, null, true, false);
     }
 
@@ -738,7 +932,13 @@ public class DmtSessionImpl implements DmtSession {
     //   skipping automatically created nodes
     private void commonCreateInteriorNode(Node node, String type,
             boolean sendEvent, boolean skipAutomatic) throws DmtException {
-        checkNode(node, SHOULD_NOT_EXIST);
+        if ( isPureStructuralNode(node)) {
+	        throw new DmtException(node.getPath(), DmtException.PERMISSION_DENIED,
+					"creation of interior nodes is not allowed for node: "
+							+ node.getPath());
+        }
+
+    	checkNode(node, SHOULD_NOT_EXIST);
         
         Node parent = node.getParent();
         if(parent == null) // this should never happen, root must always exist
@@ -809,6 +1009,12 @@ public class DmtSessionImpl implements DmtSession {
     //   and to create leaf nodes without triggering an event
     private void commonCreateLeafNode(Node node, DmtData value,
             String mimeType, boolean sendEvent) throws DmtException {
+        if ( isPureStructuralNode(node)) {
+	        throw new DmtException(node.getPath(), DmtException.PERMISSION_DENIED,
+					"creation of leaf nodes is not allowed for node: "
+							+ node.getPath());
+        }
+
         checkNode(node, SHOULD_NOT_EXIST);
         
         Node parent = node.getParent();
@@ -847,7 +1053,15 @@ public class DmtSessionImpl implements DmtSession {
 	public synchronized void copy(String nodeUri, String newNodeUri, 
             boolean recursive) throws DmtException {
 		checkWriteSession();
-        
+        if ( isPureStructuralNode(nodeUri)) {
+            Node node = makeAbsoluteUri(nodeUri);
+	        throw new DmtException(node.getPath(), DmtException.PERMISSION_DENIED,
+					"copy actions are not allowed for node: "
+							+ node.getPath());
+        }
+
+		// TODO: Bundlefest simplification
+		
 		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
 		Node newNode = makeAbsoluteUriAndCheck(newNodeUri, SHOULD_NOT_EXIST);
 		if (node.isAncestorOf(newNode))
@@ -855,8 +1069,15 @@ public class DmtSessionImpl implements DmtSession {
                     DmtException.COMMAND_NOT_ALLOWED,
 					"Cannot copy node to its descendant, '" + newNode + "'.");
 
-        if (context.getPluginDispatcher()
-                .handledBySameDataPlugin(node, newNode)) {
+		// SD: This check is not valid anymore in the new implementation, 
+		// because different parts of a nodes subtree can be handled by different plugins
+		// rather check for existing mountpoints below this node
+		
+		
+//        if (context.getPluginDispatcher()
+//                .handledBySameDataPlugin(node, newNode)) {
+		Plugin plugin = context.getPluginDispatcher().getDataPluginFor(Uri.toPath(nodeUri)); 
+        if ( (plugin.getMountPoints() == null || plugin.getMountPoints().size() == 0) ) {
             
 		    Node newParentNode = newNode.getParent();
 		    // newParentNode cannot be null, because newNode is a valid absolute
@@ -904,9 +1125,14 @@ public class DmtSessionImpl implements DmtSession {
 	public synchronized void renameNode(String nodeUri, String newNodeName) 
             throws DmtException {
 		checkWriteSession();
+        if ( isPureStructuralNode(nodeUri)) {
+            Node node = makeAbsoluteUri(nodeUri);
+	        throw new DmtException(node.getPath(), DmtException.PERMISSION_DENIED,
+					"renaming actions are not allowed for node: "
+							+ node.getPath());
+        }
+		
 		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
-        checkOperation(node, Acl.REPLACE, MetaNode.CMD_REPLACE);
-
         Node parent = node.getParent();
 
         // sub-case of the next check, but gives a more specific error
@@ -914,7 +1140,10 @@ public class DmtSessionImpl implements DmtSession {
 			throw new DmtException(node.getUri(), 
                     DmtException.COMMAND_NOT_ALLOWED,
                     "Cannot rename root node.");
-        
+
+		// SD: reordered a bit
+        checkOperation(node, Acl.REPLACE, MetaNode.CMD_REPLACE);
+
         if(node.equals(subtreeNode))
             throw new DmtException(node.getUri(), 
                     DmtException.COMMAND_NOT_ALLOWED, 
@@ -1250,6 +1479,7 @@ public class DmtSessionImpl implements DmtSession {
     private synchronized PluginSessionWrapper getPluginSession(Node node, 
             boolean writeOperation) throws DmtException {
 
+    	
         PluginSessionWrapper wrappedPlugin = null;
         Node wrappedPluginRoot = null;
         
@@ -1266,11 +1496,15 @@ public class DmtSessionImpl implements DmtSession {
             }
         }
 
-        // Find the plugin that would/will handle the given node, and the root
-        // of the (potential) session opened on it. 
-        PluginRegistration pluginRegistration = 
-            context.getPluginDispatcher().getDataPlugin(node);
-        Node root = getRootForPlugin(pluginRegistration, node);
+//        // Find the plugin that would/will handle the given node, and the root
+//        // of the (potential) session opened on it. 
+//        PluginRegistration pluginRegistration = 
+//            context.getPluginDispatcher().getDataPlugin(node);
+
+        // SD: path must be absolute
+    	// get the reference of the responsible plugin from the new dispatcher
+		Plugin dispatcherPlugin = context.getPluginDispatcher().getDataPluginFor(node.getPath());
+        Node root = getLongestRootForPlugin(dispatcherPlugin, node);
         
         // If we found a plugin session handling the node, and the potential
         // new plugin session root (defined by 'root') is not in its subtree,
@@ -1286,10 +1520,10 @@ public class DmtSessionImpl implements DmtSession {
             return wrappedPlugin;
         }
 
-        // No previously opened session found, attempting to open session with
+        // No previously opened session found or another plugin that matches with a longer path, attempting to open session with
         // correct lock type.
 
-        DataPlugin plugin = pluginRegistration.getDataPlugin();
+        DataPlugin plugin = (DataPlugin) context.getBundleContext().getService(dispatcherPlugin.getReference());
         ReadableDataSession pluginSession = null;
         int pluginSessionType = lockMode;
             
@@ -1307,23 +1541,33 @@ public class DmtSessionImpl implements DmtSession {
             pluginSession = openPluginSession(plugin, root, pluginSessionType);
         }
 
-        wrappedPlugin = new PluginSessionWrapper(pluginRegistration,
+        wrappedPlugin = new PluginSessionWrapper(dispatcherPlugin.getReference(),
                 pluginSession, pluginSessionType, root, securityContext);
             
         // this requires synchronized access
         dataPlugins.add(wrappedPlugin);
-        
+
+//        TODO: is this OK, while having the plugin "open" and "wrapped"
+//        context.getBundleContext().ungetService(dispatcherPlugin.getReference());
         return wrappedPlugin;
     }
     
-    private Node getRootForPlugin(PluginRegistration plugin, Node node) {
-        Node[] roots = plugin.getDataRoots();
+    // SD: changed to return the longest root, instead of the first one found
+    private Node getLongestRootForPlugin(Plugin plugin, Node node) {
+//        Node[] roots = plugin.getDataRoots();
+    	List<Segment> segments = plugin.getOwns();
         
-        for(int i = 0; i < roots.length; i++)
-            if(roots[i].isAncestorOf(node))
-                return roots[i].isAncestorOf(subtreeNode) 
-                    ? subtreeNode : roots[i];
-        
+    	Node longestRoot = null;
+    	for( Segment segment : segments) {
+        	Node root = new Node( Uri.toPath(segment.getUri().toString()));
+            if(root.isAncestorOf(node)) {
+                Node n = root.isAncestorOf(subtreeNode) ? subtreeNode : root;
+                if ( n.getUri().length() > ((longestRoot != null) ? longestRoot.getUri().length() : 0) ) 
+                	longestRoot = n;
+            }
+        }
+        if ( longestRoot != null )
+        	return longestRoot;
         throw new IllegalStateException("Internal error, plugin root not " +
                 "found for a URI handled by the plugin.");
     }
@@ -1864,4 +2108,5 @@ class EventStore {
             }
         });
     }
+    
 }

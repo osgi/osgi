@@ -17,50 +17,37 @@
  */
 package org.osgi.impl.service.dmt;
 
-import java.util.Date;
-import java.util.Set;
 import info.dmtree.DmtData;
 import info.dmtree.DmtException;
 import info.dmtree.DmtSession;
 import info.dmtree.MetaNode;
-import info.dmtree.spi.*;
+import info.dmtree.spi.DataPlugin;
+import info.dmtree.spi.ReadWriteDataSession;
+import info.dmtree.spi.ReadableDataSession;
+import info.dmtree.spi.TransactionalDataSession;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
+
+import org.osgi.impl.service.dmt.dispatcher.Dispatcher;
+import org.osgi.impl.service.dmt.dispatcher.Segment;
+
 
 public class RootPlugin implements DataPlugin, ReadableDataSession {
-    private static final Node osgi =
-        new Node("OSGi", new Node[] {
-                new Node("Application", null),
-                new Node("Configuration", null), 
-                new Node("Deployment", new Node[] {
-                        new Node("Inventory", new Node[] {
-                                new Node("Deployed", null),
-                                new Node("Delivered", null)
-                        }),
-                        new Node("Download", null)
-                }),
-                new Node("Log", null), 
-                new Node("Monitor", null),
-                new Node("Policy", new Node[] {
-                        new Node("Java", new Node[] { 
-                                new Node("LocationPermission", null),
-                                new Node("DmtPrincipalPermission", null),
-                                new Node("ConditionalPermission", null)
-                        })
-                })
-        });
-    
-    private static final Node root = new Node(".", new Node[] { osgi });
-    
-    private PluginDispatcher dispatcher;
 
-    RootPlugin(PluginDispatcher dispatcher) {
+    
+    private Dispatcher dispatcher;
+
+    public RootPlugin(Dispatcher dispatcher) {
         this.dispatcher = dispatcher;
     }
     
-    // precondition: path must be absolute
-    static boolean isValidDataPluginRoot(String[] path) {
-        return root.findNode(path, 1, false) != null ||
-            root.findNode(path, 1, true) != null;
-    }
+//    // precondition: path must be absolute
+//    static boolean isValidDataPluginRoot(String[] path) {
+//        return root.findNode(path, 1, false) != null ||
+//            root.findNode(path, 1, true) != null;
+//    }
 
 	//----- DmtReadOnlyDataPlugin methods -----//
     public ReadableDataSession openReadOnlySession(String[] sessionRoot,
@@ -83,25 +70,20 @@ public class RootPlugin implements DataPlugin, ReadableDataSession {
 
 	public MetaNode getMetaNode(String[] nodePath)
 			throws DmtException {
-		findNode(nodePath); // check that the node exists
-		return new RootPluginMetaNode();
+		return new StructureMetaNode();
 	}
 
 	//----- DmtReadOnly methods -----//
 	public void close() throws DmtException {}
 
 	public boolean isNodeUri(String[] nodePath) {
-		try {
-			findNode(nodePath);
-			return true;
-		}
-		catch (DmtException e) {
-			return false;
-		}
+		Segment segment = dispatcher.findSegment(nodePath);
+//		System.out.println( "isNodeUri: segment is: " + segment.getUri());
+		return segment != null;
 	}
     
     public boolean isLeafNode(String[] nodePath) throws DmtException {
-        findNode(nodePath); // check that the node exists
+//        findNode(nodePath); // check that the node exists
         return false; // currently all nodes are internal
     }
 
@@ -116,8 +98,6 @@ public class RootPlugin implements DataPlugin, ReadableDataSession {
 	}
 
 	public String getNodeType(String[] nodePath) throws DmtException {
-        if(findNode(nodePath).equals(osgi))
-            return "org.osgi/1.0/OSGiMobileManagementObject";
 		return null;
 	}
 
@@ -137,56 +117,14 @@ public class RootPlugin implements DataPlugin, ReadableDataSession {
 	}
 
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
-        Set children = dispatcher.getChildPluginNames(nodePath);
-        
-		Node[] childNodes = findNode(nodePath).getChildren();
-		for (int i = 0; i < childNodes.length; i++)
-			children.add(childNodes[i].getName());
-
-        return (String[]) children.toArray(new String[] {});
+		Segment segment = dispatcher.findSegment(nodePath);
+		if ( segment == null ) 
+			return null;
+		Vector<String> childNodeNames = new Vector<String>();
+		List<Segment> children = segment.getChildren();
+		for ( Segment child : children )
+			childNodeNames.add( child.getName() );
+		return (String[]) childNodeNames.toArray( new String[childNodeNames.size()] );
 	}
     
-    private Node findNode(String[] path) throws DmtException {
-        Node node = root.findNode(path, 1, false);
-        if(node == null)
-            throw new DmtException(path, DmtException.NODE_NOT_FOUND,
-                    "Specified URI not found in tree.");
-        return node;
-    }
-
-    static class Node {
-        String	name;
-        Node[]	children;
-        
-        Node(String name, Node[] children) {
-            this.name = name;
-            if (children != null)
-                this.children = children;
-            else
-                this.children = new Node[] {};
-        }
-        
-        Node findNode(String[] path, int start, boolean findParent) {
-            if(path.length < start)
-                return null; // does not happen (path would have to be empty array)
-            
-            if (start == path.length ||
-                    (findParent && start == path.length-1))
-                return this;
-            
-            for(int i = 0; i < children.length; i++)
-                if(path[start].equals(children[i].name))
-                    return children[i].findNode(path, start+1, findParent);
-                
-            return null;
-        }
-        
-        String getName() {
-            return name;
-        }
-        
-        Node[] getChildren() {
-            return children;
-        }
-    }
 }

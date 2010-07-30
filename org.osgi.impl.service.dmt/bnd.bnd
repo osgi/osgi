@@ -13,8 +13,11 @@ Bundle-RequiredExecutionEnvironment = J2SE-1.4
 Export-Package 					= ${p}.export,info.dmtree.*;-split-package:=first
 Private-Package					= ${p}.*
 
+javac.source					= 1.5
+javac.target					= jsr14
+
 -buildpath						= \
     info.dmtree;				version=project, \
-	ee.j2se;					version=1.4, \
+	ee.j2se;					version=1.5, \
 	osgi.core;					version=4.0.1, \
 	osgi.cmpn;					version=4.0.1

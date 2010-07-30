@@ -39,6 +39,7 @@ package org.osgi.test.cases.dmt.tc3.tbc.TreeStructure;
 import info.dmtree.DmtData;
 import info.dmtree.DmtSession;
 import info.dmtree.MetaNode;
+
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 

@@ -15,30 +15,33 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.impl.service.dmt;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.impl.service.dmt.plugins.ConfigPluginActivator;
-import org.osgi.impl.service.dmt.plugins.LogPluginActivator;
+package org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin;
+
+import info.dmtree.DmtException;
 
 /**
- * Merges Dmt Admin, Log Plugin and Configuration Plugin activators.
+ * Thrown by different components of the confiugration plugin implementation,
+ * to indicate DMT errors without knowing all the parameters. 
  */
-public class Activator implements BundleActivator {
-	DmtAdminActivator dmtAdminActivator = new DmtAdminActivator();
-	LogPluginActivator logPluginActivator = new LogPluginActivator();
-	ConfigPluginActivator configurationPluginActivator = new ConfigPluginActivator();
-	
-	public void start(BundleContext context) throws Exception {
-		dmtAdminActivator.start(context);
-//		logPluginActivator.start(context);
-//		configurationPluginActivator.start(context);
-	}
+class ConfigPluginException extends Exception {
+    private int code;
 
-	public void stop(BundleContext context) throws Exception {
-//		configurationPluginActivator.stop(context);
-//		logPluginActivator.stop(context);
-		dmtAdminActivator.stop(context);
-	}
+    /**
+     * Creates a new ConfigPluginException with the given error code and detail
+     * message. 
+     */
+    ConfigPluginException(int code, String message) {
+        super(message);
+        
+        this.code = code;
+    }
+    
+    int getCode() {
+        return code;
+    }
+    
+    DmtException getDmtException(String[] path) {
+        return new DmtException(path, code, getMessage());
+    }
 }
