@@ -16,15 +16,13 @@
 
 package org.osgi.framework.wiring;
 
-import java.util.Collection;
 import java.util.Map;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 
 /**
- * A capability that has been provided from a {@link BundleWiring bundle wiring}
- * . This capability may or may not be required by any bundle wiring.
+ * A capability that has been declared from a {@link BundleRevision bundle revision}.
  * 
  * <p>
  * The framework defines capabilities for {@link #PACKAGE_CAPABILITY packages}
@@ -52,10 +50,13 @@ public interface Capability {
 	 * well as any other package exported by the framework implementation.
 	 * 
 	 * <p>
+	 * A bundle revision {@link BundleRevision#getDeclaredCapabilities(String)
+	 * declares} zero or more package capabilities (this is, exported packages).
+	 * <p> 
 	 * A bundle wiring {@link BundleWiring#getProvidedCapabilities(String)
-	 * provides} zero or more package capabilities (that is, exported packages)
+	 * provides} zero or more resolved package capabilities (that is, exported packages)
 	 * and {@link BundleWiring#getRequiredCapabilities(String) requires} zero or
-	 * more package capabilities (that is, imported packages). The number of
+	 * more resolved package capabilities (that is, imported packages). The number of
 	 * package capabilities required by a bundle wiring may change as the bundle
 	 * wiring may dynamically import additional packages.
 	 */
@@ -110,26 +111,9 @@ public interface Capability {
 	Map<String, Object> getAttributes();
 
 	/**
-	 * Returns the bundle wiring providing this capability.
+	 * Returns the bundle revision declaring this capability.
 	 * 
-	 * @return The bundle wiring providing this capability. If the bundle wiring
-	 *         providing this capability is not {@link BundleWiring#isInUse() in
-	 *         use}, {@code null} will be returned.
+	 * @return The bundle revision declaring this capability.
 	 */
-	BundleWiring getProviderWiring();
-
-	/**
-	 * Returns the bundle wirings that require this capability.
-	 * 
-	 * <p>
-	 * The result of this method can change if this capability becomes required
-	 * by additional bundle wirings.
-	 * 
-	 * @return A collection containing a snapshot of the bundle wirings
-	 *         currently requiring this capability, or an empty collection if no
-	 *         bundle wirings require this capability. If the bundle wiring
-	 *         providing this capability is not {@link BundleWiring#isInUse() in
-	 *         use}, {@code null} will be returned.
-	 */
-	Collection<BundleWiring> getRequirerWirings();
+	BundleRevision getProviderRevision();
 }

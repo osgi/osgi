@@ -30,7 +30,7 @@ public interface ResolverHook {
 	 * @param requirer the bundle revision which contains a requirement
 	 * @param candidates a list of candidates that match a requirement of the requirer
 	 */
-	void filterCandidates(BundleRevision requirer, List<CapabilitySpecification> candidates);
+	void filterCandidates(BundleRevision requirer, List<Capability> candidates);
 
 	/**
 	 * Filter singleton collisions hook method. This method is called during the resolve process
@@ -45,13 +45,12 @@ public interface ResolverHook {
 	 * @param singleton the singleton involved in a resolve operation
 	 * @param collisionCandidates a list of singleton collision candidates
 	 */
-	void filterSingletonCollisions(List<CapabilitySpecification> singleton, List<CapabilitySpecification> collisionCandidates);
+	void filterSingletonCollisions(List<Capability> singleton, List<Capability> collisionCandidates);
 
 
 	/**
 	 * Filter resolvable candidates hook method.  This method is called during
-	 * the resolve process.  The list of candidates all have a name space 
-	 * of {@link Capability#BUNDLE_CAPABILITY osgi.bundle}.
+	 * the resolve process.
 	 * This method can filter the list of candidates by removing 
 	 * potential candidates.  Removing a candidate will prevent the candidate
 	 * from resolving during the current resolve process. 
@@ -59,5 +58,5 @@ public interface ResolverHook {
 	 * @param candidates the list of resolvable candidates available during
 	 * a resolve process. 
 	 */
-	void filterResolvable(List<CapabilitySpecification> candidates);
+	void filterResolvable(List<BundleRevision> candidates);
 }

@@ -17,6 +17,8 @@
 
 package org.osgi.framework.wiring;
 
+import java.util.List;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.Version;
@@ -47,4 +49,17 @@ public interface BundleRevision extends BundleReference {
 	 * @see Bundle#getVersion()
 	 */
 	Version getVersion();
+
+	/**
+	 * Returns the capabilities declared by this bundle revision.
+	 * 
+	 * @param namespace The name space of the declared capabilities to
+	 *        return or {@code null} to return the provided capabilities from
+	 *        all name spaces.
+	 * @return A list containing a snapshot of the declared {@link Capability}s,
+	 *         or an empty list if this bundle revision declares no capabilities
+	 *         in the specified name space.  The list contains the provided 
+	 *         capabilities in the order they are specified in the manifest.
+	 */
+	List<Capability> getDeclaredCapabilities(String namespace);
 }
