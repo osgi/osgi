@@ -45,7 +45,7 @@ public interface ResolverHook {
 	 * @param singleton the singleton involved in a resolve operation
 	 * @param collisionCandidates a list of singleton collision candidates
 	 */
-	void filterSingletonCollisions(List<Capability> singleton, List<Capability> collisionCandidates);
+	void filterSingletonCollisions(Capability singleton, List<Capability> collisionCandidates);
 
 
 	/**
