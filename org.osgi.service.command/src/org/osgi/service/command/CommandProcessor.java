@@ -41,10 +41,11 @@ public interface CommandProcessor {
 	String	COMMAND_SCOPE		= "osgi.command.scope";
 
 	/**
-	 * A <code>String+</code> of function names that may be called for this
-	 * command provider. A name may end with a *, this will then be calculated
-	 * from all declared public methods in this service. TODO verify the * is
-	 * true?
+	 * A {@code String+} of function names that may be called for this command
+	 * provider. A name may end with a *, this will then be calculated from all
+	 * declared public methods in this service.
+	 * 
+	 * TODO verify the * is true?
 	 * 
 	 */
 	String	COMMAND_FUNCTION	= "osgi.command.function";

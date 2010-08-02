@@ -44,11 +44,11 @@ public class CoordinationPermission extends BasicPermission {
 	 */
 	public final static String	INITIATE			= "initiate";
 	/**
-	 * The action string <code>get</code>.
+	 * The action string {@code get}.
 	 */
 	public final static String	ADMIN				= "admin";
 	/**
-	 * The action string <code>get</code>.
+	 * The action string {@code get}.
 	 */
 	public final static String	PARTICIPATE			= "participate";
 
@@ -72,7 +72,7 @@ public class CoordinationPermission extends BasicPermission {
 	 * 
 	 * @param bundle The bundle that will be the target of the filter
 	 *        expression.
-	 * @param coordinationName The name of the coordination or <code>null</code>
+	 * @param coordinationName The name of the coordination or {@code null}
 	 * @param actions The set of actions required, which is a combination of
 	 *        {@link #INITIATE}, {@link #ADMIN}, {@link #PARTICIPATE}.
 	 */
