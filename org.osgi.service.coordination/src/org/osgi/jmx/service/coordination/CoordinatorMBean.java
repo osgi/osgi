@@ -116,8 +116,8 @@ public interface CoordinatorMBean {
 	 * Fail a Coordination.
 	 * 
 	 * @param id The id of the coordination to be failed.
-	 * @return <code>true</code> if the coordination was failed by this call,
-	 *         otherwise <code>false</code>.
+	 * @return {@code true} if the coordination was failed by this call,
+	 *         otherwise {@code false}.
 	 */
 	boolean fail(long id, String reason) throws IOException;
 

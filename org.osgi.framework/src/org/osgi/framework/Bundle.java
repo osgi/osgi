@@ -16,6 +16,7 @@
 
 package org.osgi.framework;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -1080,8 +1081,8 @@ public interface Bundle extends Comparable<Bundle> {
 	 * class loader is not used to search for entries. Only the contents of this
 	 * bundle and its attached fragments are searched for the specified entries.
 	 * 
-	 * If this bundle's state is {@code INSTALLED}, this method must
-	 * attempt to resolve this bundle before attempting to find entries.
+	 * If this bundle's state is {@code INSTALLED}, this method must attempt to
+	 * resolve this bundle before attempting to find entries.
 	 * 
 	 * <p>
 	 * This method is intended to be used to obtain configuration, setup,
@@ -1127,17 +1128,17 @@ public interface Bundle extends Comparable<Bundle> {
 	 *        using the wildcard character (&quot;*&quot;). If null is
 	 *        specified, this is equivalent to &quot;*&quot; and matches all
 	 *        files.
-	 * @param recurse If {@code true}, recurse into subdirectories.
-	 *        Otherwise only return entries from the specified path.
+	 * @param recurse If {@code true}, recurse into subdirectories. Otherwise
+	 *        only return entries from the specified path.
 	 * @return An enumeration of URL objects for each matching entry, or
-	 *         {@code null} if an entry could not be found or if the caller
-	 *         does not have the appropriate
+	 *         {@code null} if no matching entry could not be found or if the
+	 *         caller does not have the appropriate
 	 *         {@code AdminPermission[this,RESOURCE]}, and the Java Runtime
 	 *         Environment supports permissions. The URLs are sorted such that
 	 *         entries from this bundle are returned first followed by the
-	 *         entries from attached fragments in ascending bundle id order. If
-	 *         this bundle is a fragment, then only matching entries in this
-	 *         fragment are returned.
+	 *         entries from attached fragments in attachment order. If this
+	 *         bundle is a fragment, then only matching entries in this fragment
+	 *         are returned.
 	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @since 1.3
 	 */
@@ -1245,4 +1246,27 @@ public interface Bundle extends Comparable<Bundle> {
 	 */
 	int getTypes();
 
+	/**
+	 * Creates a {@code File} object for a file in the persistent storage area
+	 * provided for this bundle by the Framework. This method will return
+	 * {@code null} if the platform does not have file system support.
+	 * 
+	 * <p>
+	 * A {@code File} object for the base directory of the persistent storage
+	 * area provided for this bundle by the Framework can be obtained by calling
+	 * this method with an empty string as {@code filename}.
+	 * 
+	 * <p>
+	 * If the Java Runtime Environment supports permissions, the Framework will
+	 * ensure that this bundle has the {@code java.io.FilePermission} with
+	 * actions {@code read},{@code write},{@code delete} for all files
+	 * (recursively) in the persistent storage area provided for this bundle.
+	 * 
+	 * @param filename A relative name to the file to be accessed.
+	 * @return A {@code File} object that represents the requested file or
+	 *         {@code null} if the platform does not have file system support.
+	 * @throws IllegalStateException If this bundle has been uninstalled.
+	 * @since 1.6
+	 */
+	File getDataFile(String filename);
 }

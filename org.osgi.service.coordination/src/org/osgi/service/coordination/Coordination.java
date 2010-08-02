@@ -89,9 +89,9 @@ public interface Coordination {
 	 * The terminate method must be called on the initiating thread, from
 	 * another thread {@link #fail(String)} must be called.
 	 * 
-	 * @return <code>true</code> if this method actually terminated the
+	 * @return {@code true} if this method actually terminated the
 	 *         coordination (that is, it was not properly ended).
-	 *         <code>false</code> if the Coordination was already properly
+	 *         {@code false} if the Coordination was already properly
 	 *         terminate by an {@link #end()} or {@link #fail(String)} method.
 	 */
 	boolean terminate();
@@ -142,8 +142,8 @@ public interface Coordination {
 	Collection<Participant> getParticipants();
 
 	/**
-	 * Return <code>true</code> if this Coordination has failed,
-	 * <code>false</code> otherwise.
+	 * Return {@code true} if this Coordination has failed,
+	 * {@code false} otherwise.
 	 */
 	boolean isFailed();
 

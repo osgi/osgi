@@ -187,9 +187,9 @@ public interface Coordinator {
 	 * Participate in the current Coordination or return false if there is none.
 	 * 
 	 * A Participant that wants to participate in an active Coordination can
-	 * call this method. If this method returns <code>true</code> then there was
+	 * call this method. If this method returns {@code true} then there was
 	 * an active Coordination and the participant has successfully joined it. If
-	 * there was no active Coordination then <code>false</code> is returned.
+	 * there was no active Coordination then {@code false} is returned.
 	 * 
 	 * Once a Participant is participating it is guaranteed to receive a
 	 * callback on either the {@link Participant#ended()} or
@@ -217,9 +217,9 @@ public interface Coordinator {
 	 * {@link Coordination#setTimeout(long)} method.
 	 * 
 	 * @param participant The participant of the Coordination
-	 * @return <code>true</code> if there was an active Coordination on the
+	 * @return {@code true} if there was an active Coordination on the
 	 *         current thread that could be successfully used to participate,
-	 *         otherwise <code>false</code>.
+	 *         otherwise {@code false}.
 	 * @throws CoordinationException This exception should normally not be
 	 *         caught by the caller but allowed to bubble up to the initiator of
 	 *         the coordination, it is therefore a {@link RuntimeException}. It
@@ -276,33 +276,33 @@ public interface Coordinator {
 	/**
 	 * Always fail an active Coordination.
 	 * 
-	 * Must fail an active Coordination and return <code>true</code> or return
-	 * <code>false</code> if there is no active Coordination.
+	 * Must fail an active Coordination and return {@code true} or return
+	 * {@code false} if there is no active Coordination.
 	 * 
 	 * @param reason The reason why it must always fail or {@code null}.
-	 * @return <code>true</code> if a Coordination was active and
-	 *         <code>false</code> if not.
+	 * @return {@code true} if a Coordination was active and
+	 *         {@code false} if not.
 	 */
 	boolean alwaysFail(String reason);
 
 	/**
 	 * Test if the current thread is associated with an active Coordination.
-	 * Return <code>true</code> if there is an active Coordination otherwise
-	 * <code>false</code>.
+	 * Return {@code true} if there is an active Coordination otherwise
+	 * {@code false}.
 	 * 
-	 * @return <code>true</code> if there is an active Coordination otherwise
-	 *         <code>false</code>
+	 * @return {@code true} if there is an active Coordination otherwise
+	 *         {@code false}
 	 */
 	boolean isActive();
 
 	/**
 	 * Test if there is an active Coordination and if so it has failed. This
-	 * method returns <code>true</code> if there is an active Coordination and
+	 * method returns {@code true} if there is an active Coordination and
 	 * that Coordination has been set to fail. In all other cases, including
 	 * when there is no active Coordination, this method must return
-	 * <code>false</code>
+	 * {@code false}
 	 * 
-	 * @return <code>true</code> when the active Coordination is set to failed,
+	 * @return {@code true} when the active Coordination is set to failed,
 	 *         otherwise false.
 	 */
 	boolean isFailed();
