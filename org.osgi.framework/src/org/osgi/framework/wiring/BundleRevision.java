@@ -26,6 +26,10 @@ import org.osgi.framework.Version;
  * different bundle wirings for the same bundle can be associated with different
  * bundle revisions.
  * 
+ * <p>
+ * The current bundle revision for a bundle can be obtained by calling
+ * {@link Bundle#adapt(Class) bundle.adapt}(BundleRevision.class).
+ * 
  * @ThreadSafe
  * @version $Id$
  */
@@ -47,4 +51,30 @@ public interface BundleRevision extends BundleReference {
 	 * @see Bundle#getVersion()
 	 */
 	Version getVersion();
+
+	/**
+	 * Returns the special types of this bundle revision. The bundle revision
+	 * type values are:
+	 * <ul>
+	 * <li>{@link #TYPE_FRAGMENT}
+	 * </ul>
+	 * 
+	 * A bundle revision may be more than one type at a time. A type code is
+	 * used to identify the bundle revision type for future extendability.
+	 * 
+	 * <p>
+	 * If this bundle revision is not one or more of the defined types then 0 is
+	 * returned.
+	 * 
+	 * @return The special types of this bundle revision. The type values are
+	 *         ORed together.
+	 */
+	int getTypes();
+
+	/**
+	 * Bundle revision type indicating the bundle revision is a fragment.
+	 * 
+	 * @see #getTypes()
+	 */
+	int	TYPE_FRAGMENT	= 0x00000001;
 }
