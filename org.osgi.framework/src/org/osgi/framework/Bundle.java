@@ -242,14 +242,6 @@ public interface Bundle extends Comparable<Bundle> {
 	int	SIGNERS_TRUSTED			= 2;
 
 	/**
-	 * Bundle type indicating the bundle is a fragment bundle.
-	 * 
-	 * @since 1.6
-	 * @see #getTypes()
-	 */
-	int	TYPE_FRAGMENT	= 0x00000001;
-
-	/**
 	 * Returns this bundle's current state.
 	 * 
 	 * <p>
@@ -1226,25 +1218,6 @@ public interface Bundle extends Comparable<Bundle> {
 	 * @since 1.6
 	 */
 	<A> A adapt(Class<A> type);
-
-	/**
-	 * Returns the special types of this bundle. The bundle type values are:
-	 * <ul>
-	 * <li>{@link #TYPE_FRAGMENT}
-	 * </ul>
-	 * 
-	 * A bundle may be more than one type at a time. A type code is used to
-	 * identify the bundle type for future extendability.
-	 * 
-	 * <p>
-	 * If this bundle is not one or more of the defined types then 0 is
-	 * returned.
-	 * 
-	 * @return The special types of this bundle. The type values are ORed
-	 *         together.
-	 * @since 1.6
-	 */
-	int getTypes();
 
 	/**
 	 * Creates a {@code File} object for a file in the persistent storage area
