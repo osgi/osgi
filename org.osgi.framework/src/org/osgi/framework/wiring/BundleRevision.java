@@ -67,7 +67,7 @@ public interface BundleRevision extends BundleReference {
 	 */
 	List<Capability> getDeclaredCapabilities(String namespace);
 
-	/*
+	/**
 	 * Returns the special types of this bundle revision. The bundle revision
 	 * type values are:
 	 * <ul>
