@@ -410,9 +410,8 @@ public interface BundleContext extends BundleReference {
 	 *         unregister the service.
 	 * @throws IllegalArgumentException If one of the following is true:
 	 *         <ul>
-	 *         <li>{@code service} is {@code null}. <li>{@code service
-	 *         } is not
-	 *         a {@code ServiceFactory} object and is not an instance of all the
+	 *         <li>{@code service} is {@code null}. <li>{@code service} is not a
+	 *         {@code ServiceFactory} object and is not an instance of all the
 	 *         named classes in {@code clazzes}. <li> {@code properties}
 	 *         contains case variants of the same key name.
 	 *         </ul>
