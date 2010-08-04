@@ -22,9 +22,9 @@
  * Import-Package header of the bundle's manifest.
  * 
  * <p>
- * Example import for consumers using the API in this package:
+ * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.framework.hooks.service; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.framework.hooks.service; version="[1.0,1.1)"}
  * 
  * @version $Id$
  */
