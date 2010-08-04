@@ -1222,7 +1222,8 @@ public interface Bundle extends Comparable<Bundle> {
 	/**
 	 * Creates a {@code File} object for a file in the persistent storage area
 	 * provided for this bundle by the Framework. This method will return
-	 * {@code null} if the platform does not have file system support.
+	 * {@code null} if the platform does not have file system support or this
+	 * bundle is a fragment bundle.
 	 * 
 	 * <p>
 	 * A {@code File} object for the base directory of the persistent storage
@@ -1237,7 +1238,8 @@ public interface Bundle extends Comparable<Bundle> {
 	 * 
 	 * @param filename A relative name to the file to be accessed.
 	 * @return A {@code File} object that represents the requested file or
-	 *         {@code null} if the platform does not have file system support.
+	 *         {@code null} if the platform does not have file system support or
+	 *         this bundle is a fragment bundle.
 	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @since 1.6
 	 */
