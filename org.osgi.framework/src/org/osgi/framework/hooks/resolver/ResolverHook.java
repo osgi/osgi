@@ -1,7 +1,6 @@
 package org.osgi.framework.hooks.resolver;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.Capability;
@@ -59,5 +58,5 @@ public interface ResolverHook {
 	 * @param candidates the collection of resolvable candidates available during
 	 * a resolve process. 
 	 */
-	void filterResolvable(List<BundleRevision> candidates);
+	void filterResolvable(Collection<BundleRevision> candidates);
 }
