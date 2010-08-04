@@ -33,7 +33,6 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -635,11 +634,9 @@ public final class ServicePermission extends BasicPermission {
 			String spk[] = service.getPropertyKeys();
 			List<String> all = new ArrayList<String>(pk.size() + spk.length);
 			all.addAll(pk);
-			add:
-			for (int i = 0, length = spk.length; i < length; i++) {
-				String key = spk[i];
-				for (Iterator<String> iter = pk.iterator(); iter.hasNext();) {
-					if (key.equalsIgnoreCase(iter.next())) {
+			add: for (String key : spk) {
+				for (String k : pk) {
+					if (key.equalsIgnoreCase(k)) {
 						continue add;
 					}
 				}
@@ -653,11 +650,9 @@ public final class ServicePermission extends BasicPermission {
 			String spk[] = service.getPropertyKeys();
 			List<Object> all = new ArrayList<Object>(pk.size() + spk.length);
 			all.addAll(properties.values());
-			add:
-			for (int i = 0, length = spk.length; i < length; i++) {
-				String key = spk[i];
-				for (Iterator<String> iter = pk.iterator(); iter.hasNext();) {
-					if (key.equalsIgnoreCase(iter.next())) {
+			add: for (String key : spk) {
+				for (String k : pk) {
+					if (key.equalsIgnoreCase(k)) {
 						continue add;
 					}
 				}
@@ -837,9 +832,8 @@ final class ServicePermissionCollection extends PermissionCollection {
 		}
 		
 		/* iterate one by one over filteredPermissions */
-		for (Iterator<ServicePermission> iter = perms.iterator(); iter
-				.hasNext();) {
-			if (iter.next().implies0(requested, effective)) {
+		for (ServicePermission perm : perms) {
+			if (perm.implies0(requested, effective)) {
 				return true;
 			}
 		}

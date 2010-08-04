@@ -33,7 +33,6 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -760,9 +759,8 @@ final class PackagePermissionCollection extends PermissionCollection {
 			perms = pc.values();
 		}
 		/* iterate one by one over filteredPermissions */
-		for (Iterator<PackagePermission> iter = perms.iterator(); iter
-				.hasNext();) {
-			if (iter.next().implies0(requested, effective)) {
+		for (PackagePermission perm : perms) {
+			if (perm.implies0(requested, effective)) {
 				return true;
 			}
 		}
