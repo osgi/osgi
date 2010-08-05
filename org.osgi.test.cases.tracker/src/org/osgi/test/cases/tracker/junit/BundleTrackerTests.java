@@ -17,7 +17,6 @@
 package org.osgi.test.cases.tracker.junit;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -51,9 +50,7 @@ public class BundleTrackerTests extends OSGiTestCase {
 			}
 			Map<Bundle, Bundle> map = bt.getTracked();
 			assertEquals("size() != map.size()", size, map.size());
-			for (Iterator<Map.Entry<Bundle, Bundle>> iter = map.entrySet()
-					.iterator(); iter.hasNext();) {
-				Map.Entry<Bundle, Bundle> e = iter.next();
+			for (Map.Entry<Bundle, Bundle> e : map.entrySet()) {
 				Bundle bundle = e.getKey();
 				Object tracked = e.getValue();
 				assertEquals("default tracked != bundle", bundle, tracked);
@@ -83,9 +80,7 @@ public class BundleTrackerTests extends OSGiTestCase {
 			}
 			map = bt.getTracked();
 			assertEquals("size() != map.size()", size, map.size());
-			for (Iterator<Map.Entry<Bundle, Bundle>> iter = map.entrySet()
-					.iterator(); iter.hasNext();) {
-				Map.Entry<Bundle, Bundle> e = iter.next();
+			for (Map.Entry<Bundle, Bundle> e : map.entrySet()) {
 				Bundle bundle = e.getKey();
 				Object tracked = e.getValue();
 				assertEquals("default tracked != bundle", bundle, tracked);
@@ -184,9 +179,7 @@ public class BundleTrackerTests extends OSGiTestCase {
 			}
 			Map<Bundle, BundleWrapper> map = bt.getTracked();
 			assertEquals("size() != map.size()", bt.size(), map.size());
-			for (Iterator<Map.Entry<Bundle, BundleWrapper>> iter = map
-					.entrySet().iterator(); iter.hasNext();) {
-				Map.Entry<Bundle, BundleWrapper> e = iter.next();
+			for (Map.Entry<Bundle, BundleWrapper> e : map.entrySet()) {
 				Bundle bundle = e.getKey();
 				BundleWrapper tracked = e.getValue();
 				assertEquals("default tracked != bundle", bundle, tracked
@@ -223,9 +216,7 @@ public class BundleTrackerTests extends OSGiTestCase {
 			}
 			Map<Bundle, BundleWrapper> map = bt.getTracked();
 			assertEquals("size() != map.size()", bt.size(), map.size());
-			for (Iterator<Map.Entry<Bundle, BundleWrapper>> iter = map
-					.entrySet().iterator(); iter.hasNext();) {
-				Map.Entry<Bundle, BundleWrapper> e = iter.next();
+			for (Map.Entry<Bundle, BundleWrapper> e : map.entrySet()) {
 				Bundle bundle = e.getKey();
 				BundleWrapper tracked = e.getValue();
 				assertEquals("default tracked != bundle", bundle, tracked

@@ -60,7 +60,7 @@ public interface Capability {
 	 * package capabilities required by a bundle wiring may change as the bundle
 	 * wiring may dynamically import additional packages.
 	 */
-	static final String	PACKAGE_CAPABILITY	= "osgi.package";
+	String	PACKAGE_CAPABILITY	= "osgi.package";
 
 	/**
 	 * Capability name space for bundle capabilities. The bundle symbolic name
@@ -85,7 +85,7 @@ public interface Capability {
 	 * {@link Constants#BUNDLE_MANIFESTVERSION Bundle-ManifestVersion}
 	 * {@literal <} 2) must not provide a bundle capability.
 	 */
-	static final String	BUNDLE_CAPABILITY	= "osgi.bundle";
+	String	BUNDLE_CAPABILITY	= "osgi.bundle";
 
 	/**
 	 * Returns the name space of this capability.

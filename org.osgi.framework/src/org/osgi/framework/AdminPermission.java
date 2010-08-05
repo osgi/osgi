@@ -33,7 +33,6 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -989,8 +988,8 @@ final class AdminPermissionCollection extends PermissionCollection {
 		}
 
 		// just iterate one by one
-		for (Iterator<AdminPermission> iter = perms.iterator(); iter.hasNext();) {
-			if (iter.next().implies0(requested, effective)) {
+		for (AdminPermission perm : perms) {
+			if (perm.implies0(requested, effective)) {
 				return true;
 			}
 		}

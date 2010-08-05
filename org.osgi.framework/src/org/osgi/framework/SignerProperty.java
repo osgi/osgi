@@ -18,7 +18,6 @@ package org.osgi.framework;
 
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -73,14 +72,10 @@ class SignerProperty {
 		String matchPattern = bundle != null ? other.pattern : pattern;
 		Map<X509Certificate, List<X509Certificate>> signers = matchBundle
 				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
-		for (Iterator<List<X509Certificate>> iSigners = signers.values()
-				.iterator(); iSigners.hasNext();) {
-			List<X509Certificate> signerCerts = iSigners.next();
+		for (List<X509Certificate> signerCerts : signers.values()) {
 			List<String> dnChain = new ArrayList<String>(signerCerts.size());
-			for (Iterator<X509Certificate> iCerts = signerCerts.iterator(); iCerts
-					.hasNext();) {
-				dnChain.add(iCerts.next().getSubjectDN()
-						.getName());
+			for (X509Certificate signerCert : signerCerts) {
+				dnChain.add(signerCert.getSubjectDN().getName());
 			}
 			try {
 				if (FrameworkUtil.matchDistinguishedNameChain(matchPattern,
