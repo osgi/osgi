@@ -236,13 +236,10 @@ public class AdminPermissionTests extends PermissionTestCase {
 
 	public void testInvalidDN() {
 		AdminPermission ap = new AdminPermission("(signer=;`´$.,@)", "*");
-		try {
-			assertFalse("Implies must return false on invalid DN.", ap.implies(new AdminPermission(newMockBundle(1, "test.bsn",
-					"test.location", "cn=Bugs Bunny, o=ACME, c=US"), "*")));
-		}
-		catch (IllegalArgumentException e) {
-			fail("Unexpected exception.", e);
-		}
+		assertNotImplies(
+				ap,
+				new AdminPermission(newMockBundle(1, "test.bsn",
+						"test.location", "cn=Bugs Bunny, o=ACME, c=US"), "*"));
 	}
 	
 	public void testActionImplications() {
