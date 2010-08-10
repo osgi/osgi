@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -661,7 +662,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		props.put("cmprop", "setFromCM");
 		// the line below will create the configuration if it doesn't exists!
 		// see CM api for details
-		Configuration config = cm.getConfiguration(LOOKUP_CLASS);
+		Configuration config = cm.getConfiguration(LOOKUP_CLASS, null);
 		config.update(props);
 
 		// let SCR & CM to complete it's job
@@ -794,7 +795,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				0, getBaseConfigData(COMP_NOTSET_100));
 		// component notsetNS100 - property set by Configuration Admin; XML NS
 		// 1.0.0
-		Configuration config = cm.getConfiguration(COMP_NOTSET_100);
+		Configuration config = cm.getConfiguration(COMP_NOTSET_100, null);
 		config.update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals(
@@ -809,7 +810,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				0, getBaseConfigData(COMP_NOTSET_110));
 		// component notsetNS110 - property set by Configuration Admin; XML NS
 		// 1.1.0
-		config = cm.getConfiguration(COMP_NOTSET_110);
+		config = cm.getConfiguration(COMP_NOTSET_110, null);
 		config.update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals(
@@ -823,7 +824,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				getBaseConfigData(COMP_OPTIONAL_100));
 		// component optionalNS100 - property set by Configuration Admin; XML NS
 		// 1.0.0 - INVALID COMPONENT
-		config = cm.getConfiguration(COMP_OPTIONAL_100);
+		config = cm.getConfiguration(COMP_OPTIONAL_100, null);
 		config.update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Component optionalNS100 should not be activated", -1,
@@ -837,7 +838,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				0, getBaseConfigData(COMP_OPTIONAL_110));
 		// component optionalNS110 - property set by Configuration Admin; XML NS
 		// 1.1.0
-		config = cm.getConfiguration(COMP_OPTIONAL_110);
+		config = cm.getConfiguration(COMP_OPTIONAL_110, null);
 		config.update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals(
@@ -851,7 +852,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				getBaseConfigData(COMP_REQUIRE_100));
 		// component requireNS100 - property set by Configuration Admin; XML NS
 		// 1.0.0 - INVALID COMPONENT
-		config = cm.getConfiguration(COMP_REQUIRE_100);
+		config = cm.getConfiguration(COMP_REQUIRE_100, null);
 		config.update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Component requireNS100 should not be activated", -1,
@@ -865,7 +866,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				-1, getBaseConfigData(COMP_REQUIRE_110));
 		// component requireNS110 - property set by Configuration Admin; XML NS
 		// 1.1.0
-		config = cm.getConfiguration(COMP_REQUIRE_110);
+		config = cm.getConfiguration(COMP_REQUIRE_110, null);
 		config.update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals(
@@ -880,7 +881,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// component ignoreNS100 - property set by Configuration Admin; XML NS
 		// 1.0.0
 		// - INVALID COMPONENT
-		config = cm.getConfiguration(COMP_IGNORE_100);
+		config = cm.getConfiguration(COMP_IGNORE_100, null);
 		config.update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Component ignoreNS100 should not be activated", -1,
@@ -894,7 +895,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				0, getBaseConfigData(COMP_IGNORE_110));
 		// component ignoreNS110 - property set by Configuration Admin; XML NS
 		// 1.1.0
-		config = cm.getConfiguration(COMP_IGNORE_110);
+		config = cm.getConfiguration(COMP_IGNORE_110, null);
 		config.update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals(
@@ -1186,7 +1187,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertNotNull("bs should not be null", bs);
 		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
-		Configuration config = cm.getConfiguration(CC_BC_MAP_INT_NS110);
+		Configuration config = cm.getConfiguration(CC_BC_MAP_INT_NS110, null);
 		Dictionary properties = config.getProperties();
 		if (properties == null) {
 			properties = new Hashtable();
@@ -1203,7 +1204,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		bs = getBaseService(CC_BC_MAP_INT_NS110);
 		assertNotNull("bs should not be null", bs);
-		config = cm.getConfiguration(CC_BC_MAP_INT_NS110);
+		config = cm.getConfiguration(CC_BC_MAP_INT_NS110, null);
 		config.delete();
 		Thread.sleep(SLEEP * 3);
 		assertEquals(
@@ -1455,12 +1456,12 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		Hashtable props = new Hashtable(10);
 		props.put("config.dummy.data", new Integer(1));
-		cm.getConfiguration(MOD_NOTSET_NS100).update(props);
-		cm.getConfiguration(MOD_NOARGS_NS100).update(props);
-		cm.getConfiguration(MOD_CC_NS100).update(props);
-		cm.getConfiguration(MOD_BC_NS100).update(props);
-		cm.getConfiguration(MOD_MAP_NS100).update(props);
-		cm.getConfiguration(MOD_CC_BC_MAP_NS100).update(props);
+		cm.getConfiguration(MOD_NOTSET_NS100, null).update(props);
+		cm.getConfiguration(MOD_NOARGS_NS100, null).update(props);
+		cm.getConfiguration(MOD_CC_NS100, null).update(props);
+		cm.getConfiguration(MOD_BC_NS100, null).update(props);
+		cm.getConfiguration(MOD_MAP_NS100, null).update(props);
+		cm.getConfiguration(MOD_CC_BC_MAP_NS100, null).update(props);
 
 		Thread.sleep(SLEEP * 3);
 
@@ -1475,14 +1476,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		BaseService bs = getBaseService(MOD_NOTSET_NS100);
 		assertNotNull(bs);
-		cm.getConfiguration(MOD_NOTSET_NS100).update(props);
+		cm.getConfiguration(MOD_NOTSET_NS100, null).update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_NOTSET_NS100
 				+ " should not be called", 0, (1 << 0) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_NOTSET_NS100
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
 		bs = getBaseService(MOD_NOTSET_NS100);
-		cm.getConfiguration(MOD_NOTSET_NS100).update(unsatisfyingProps);
+		cm.getConfiguration(MOD_NOTSET_NS100, null).update(unsatisfyingProps);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_NOTSET_NS100
 				+ " should not be called", 0, (1 << 0) & getBaseConfigData(bs));
@@ -1518,12 +1519,12 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		Hashtable props = new Hashtable(10);
 		props.put("config.dummy.data", new Integer(1));
-		cm.getConfiguration(MOD_NOTSET_NS110).update(props);
-		cm.getConfiguration(MOD_NOARGS_NS110).update(props);
-		cm.getConfiguration(MOD_CC_NS110).update(props);
-		cm.getConfiguration(MOD_BC_NS110).update(props);
-		cm.getConfiguration(MOD_MAP_NS110).update(props);
-		cm.getConfiguration(MOD_CC_BC_MAP_NS110).update(props);
+		cm.getConfiguration(MOD_NOTSET_NS110, null).update(props);
+		cm.getConfiguration(MOD_NOARGS_NS110, null).update(props);
+		cm.getConfiguration(MOD_CC_NS110, null).update(props);
+		cm.getConfiguration(MOD_BC_NS110, null).update(props);
+		cm.getConfiguration(MOD_MAP_NS110, null).update(props);
+		cm.getConfiguration(MOD_CC_BC_MAP_NS110, null).update(props);
 
 		Thread.sleep(SLEEP * 3);
 
@@ -1537,14 +1538,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 						"(component.name=org.osgi.test.cases.component.tb13.unexisting.provider)");
 
 		BaseService bs = getBaseService(MOD_NOTSET_NS110);
-		cm.getConfiguration(MOD_NOTSET_NS110).update(props);
+		cm.getConfiguration(MOD_NOTSET_NS110, null).update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_NOTSET_NS110
 				+ " should not be called", 0, (1 << 0) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_NOTSET_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
 		bs = getBaseService(MOD_NOTSET_NS110);
-		cm.getConfiguration(MOD_NOTSET_NS110).update(unsatisfyingProps);
+		cm.getConfiguration(MOD_NOTSET_NS110, null).update(unsatisfyingProps);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_NOTSET_NS110
 				+ " should not be called", 0, (1 << 0) & getBaseConfigData(bs));
@@ -1556,13 +1557,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				+ " should be called", 1 << 6, (1 << 6) & getBaseConfigData(bs));
 
 		bs = getBaseService(MOD_NOARGS_NS110);
-		cm.getConfiguration(MOD_NOARGS_NS110).update(props);
+		cm.getConfiguration(MOD_NOARGS_NS110, null).update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_NOARGS_NS110
 				+ " should be called", 1 << 1, (1 << 1) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_NOARGS_NS110
 				+ " should not be called", 0, (1 << 7) & getBaseConfigData(bs));
-		cm.getConfiguration(MOD_NOARGS_NS110).update(unsatisfyingProps);
+		cm.getConfiguration(MOD_NOARGS_NS110, null).update(unsatisfyingProps);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_NOARGS_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
@@ -1572,14 +1573,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				+ " should be called", 1 << 6, (1 << 6) & getBaseConfigData(bs));
 
 		bs = getBaseService(MOD_CC_NS110);
-		cm.getConfiguration(MOD_CC_NS110).update(props);
+		cm.getConfiguration(MOD_CC_NS110, null).update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals(
 				"Modified method of " + MOD_CC_NS110 + " should be called",
 				1 << 2, (1 << 2) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_CC_NS110
 				+ " should not be called", 0, (1 << 7) & getBaseConfigData(bs));
-		cm.getConfiguration(MOD_CC_NS110).update(unsatisfyingProps);
+		cm.getConfiguration(MOD_CC_NS110, null).update(unsatisfyingProps);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_CC_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
@@ -1590,14 +1591,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				1 << 6, (1 << 6) & getBaseConfigData(bs));
 
 		bs = getBaseService(MOD_BC_NS110);
-		cm.getConfiguration(MOD_BC_NS110).update(props);
+		cm.getConfiguration(MOD_BC_NS110, null).update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals(
 				"Modified method of " + MOD_BC_NS110 + " should be called",
 				1 << 3, (1 << 3) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_BC_NS110
 				+ " should not be called", 0, (1 << 7) & getBaseConfigData(bs));
-		cm.getConfiguration(MOD_BC_NS110).update(unsatisfyingProps);
+		cm.getConfiguration(MOD_BC_NS110, null).update(unsatisfyingProps);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_BC_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
@@ -1608,13 +1609,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				1 << 6, (1 << 6) & getBaseConfigData(bs));
 
 		bs = getBaseService(MOD_MAP_NS110);
-		cm.getConfiguration(MOD_MAP_NS110).update(props);
+		cm.getConfiguration(MOD_MAP_NS110, null).update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_MAP_NS110
 				+ " should be called", 1 << 4, (1 << 4) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_MAP_NS110
 				+ " should not be called", 0, (1 << 7) & getBaseConfigData(bs));
-		cm.getConfiguration(MOD_MAP_NS110).update(unsatisfyingProps);
+		cm.getConfiguration(MOD_MAP_NS110, null).update(unsatisfyingProps);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_MAP_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
@@ -1624,13 +1625,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				+ " should be called", 1 << 6, (1 << 6) & getBaseConfigData(bs));
 
 		bs = getBaseService(MOD_CC_BC_MAP_NS110);
-		cm.getConfiguration(MOD_CC_BC_MAP_NS110).update(props);
+		cm.getConfiguration(MOD_CC_BC_MAP_NS110, null).update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_CC_BC_MAP_NS110
 				+ " should be called", 1 << 5, (1 << 5) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_CC_BC_MAP_NS110
 				+ " should not be called", 0, (1 << 7) & getBaseConfigData(bs));
-		cm.getConfiguration(MOD_CC_BC_MAP_NS110).update(unsatisfyingProps);
+		cm.getConfiguration(MOD_CC_BC_MAP_NS110, null)
+				.update(unsatisfyingProps);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_CC_BC_MAP_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
@@ -1651,10 +1653,10 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		Hashtable props = new Hashtable(10);
 		props.put("config.dummy.data", new Integer(1));
-		cm.getConfiguration(MOD_CC_NS110).update(props);
-		cm.getConfiguration(MOD_NOT_EXIST_NS110).update(props);
-		cm.getConfiguration(MOD_THROW_EX_NS110).update(props);
-		cm.getConfiguration(MOD_BC_NS110).update(props);
+		cm.getConfiguration(MOD_CC_NS110, null).update(props);
+		cm.getConfiguration(MOD_NOT_EXIST_NS110, null).update(props);
+		cm.getConfiguration(MOD_THROW_EX_NS110, null).update(props);
+		cm.getConfiguration(MOD_BC_NS110, null).update(props);
 		Thread.sleep(SLEEP * 3);
 
 		tb13a.start();
@@ -1663,7 +1665,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// Verifying correctness of updated component properties
 		BaseService bs = getBaseService(MOD_CC_NS110);
 		props.put("config.dummy.data", new Integer(2));
-		cm.getConfiguration(MOD_CC_NS110).update(props);
+		cm.getConfiguration(MOD_CC_NS110, null).update(props);
 		Thread.sleep(SLEEP * 3);
 		Object val = ((ComponentContextExposer) bs).getComponentContext()
 				.getProperties().get("config.dummy.data");
@@ -1677,7 +1679,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// called
 		// instead of modified
 		bs = getBaseService(MOD_NOT_EXIST_NS110);
-		cm.getConfiguration(MOD_NOT_EXIST_NS110).update(props);
+		cm.getConfiguration(MOD_NOT_EXIST_NS110, null).update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_NOT_EXIST_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
@@ -1689,14 +1691,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// Specified modified method throws exception. Normal workflow should
 		// continue, deactivate() should not be called
 		bs = getBaseService(MOD_THROW_EX_NS110);
-		cm.getConfiguration(MOD_THROW_EX_NS110).update(props);
+		cm.getConfiguration(MOD_THROW_EX_NS110, null).update(props);
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_THROW_EX_NS110
 				+ " should not be called", 0, (1 << 7) & getBaseConfigData(bs));
 
 		// Deleting component configuration
 		bs = getBaseService(MOD_BC_NS110);
-		cm.getConfiguration(MOD_BC_NS110).delete();
+		cm.getConfiguration(MOD_BC_NS110, null).delete();
 		Thread.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_BC_NS110
 				+ " should not be called", 0, (1 << 5) & getBaseConfigData(bs));
