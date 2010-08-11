@@ -26,51 +26,60 @@ import org.osgi.framework.wiring.Capability;
  * 
  * <p>
  * Services registered with this service interface will be called by the framework during bundle resolve
- * operations.  The resolver hook may influence the outcome of a resolve operation by removing entries
- * from shrinkable collections that are passed to the hook during a resolve operation.  A shrinkable 
+ * process.  The framework must at most have one resolve process running at any given point 
+ * in time.    The resolver hook may influence the outcome of a resolve operation by removing entries
+ * from shrinkable collections that are passed to the hook during a resolve process.  A shrinkable 
  * collection is a {@code Collection} that supports all remove operations.  Any other attempts to modify
  * the a shrinkable collection will result in an {@code UnsupportedOperationException} being thrown.
  * <p>
  * The following steps outline the rules a framework must follow during a bundle resolve
  * operation and the order in which the hooks are called.
  * <ol>
+ *  <li> For each registered hook call the {@link #begin()} method to inform the hooks about a resolve 
+ *       process beginning.</li>
  *  <li> Determine the collection of unresolved bundle revisions that may be considered for resolution during
- *       the current resolution process and place each of the bundle revisions in a shrinkable collection {@code R}.
- *       <ol>
+ *       the current resolution process and place each of the bundle revisions in a shrinkable collection
+ *       {@code R}.
+ *       <ol type="a">
  *         <li> For each registered hook call the {@link #filterResolvable(Collection)} method with the 
- *              shrinkable collection {@code R}.
+ *              shrinkable collection {@code R}.</li>
  *       </ol>
+ *  </li>
  *  <li> The shrinkable collection {@code R} now contains all the unresolved bundle revisions that may end up
  *       as resolved at the end of the current resolve process.  Any other bundle revisions that 
  *       got removed from the shrinkable collection {@code R} must not end up as resolved at the end
- *       of the current resolve operation.
+ *       of the current resolve operation.</li>
  *  <li> For each bundle revision {@code B} left in the shrinkable collection {@code R} that represents a 
  *       singleton bundle do the following:
- *       <ol>
+ *       <ol type="a">
  *         <li> Determine the collection of available capabilities that have a name space of 
  *              {@link Capability#BUNDLE_CAPABILITY osgi.bundle}, are singletons, and have the same
  *              symbolic name as the singleton bundle revision {@code B} and place each of the matching
- *              capabilities into a shrinkable collection {@code S}.
+ *              capabilities into a shrinkable collection {@code S}.</li>
  *         <li> Remove the {@link Capability#BUNDLE_CAPABILITY osgi.bundle} capability provided by
- *              bundle revision {@code B}.  A singleton bundle cannot collide with itself.
- *         <li> For each registered hook call the {@link #filterSingletonCollisions(BundleRevision, Collection)}
- *              with the singleton bundle revision {@code B} and the shrinkable collection {@code S}
+ *              bundle revision {@code B}.  A singleton bundle cannot collide with itself.</li>
+ *         <li> For each registered hook call the {@link #filterSingletonCollisions(Capability, Collection)}
+ *              with the singleton bundle revision {@code B} and the shrinkable collection {@code S}</li>
  *         <li> The shrinkable collection {@code S} now contains all singleton {@link Capability#BUNDLE_CAPABILITY 
- *              osgi.bundle} capabilities that can influence the the ability of bundle revision {@code B} to resolve. 
+ *              osgi.bundle} capabilities that can influence the the ability of bundle revision {@code B} to resolve.</li>
  *       </ol>
+ *  </li>
  *  <li> During a resolve process a framework is free to attempt to resolve any or all bundles contained in
  *       shrinkable collection {@code R}.  For each bundle revision {@code B} left in the shrinkable collection 
  *       {@code R} which the framework attempts to resolve the following steps must be followed:
- *       <ol>
+ *       <ol type="a">
  *         <li> For each requirement {@code T} specified by bundle revision {@code B} determine the collection of 
  *              capabilities that satisfy (or match) the constraint and place each matching capability into
- *              a shrinkable collection {@code C}.
- *         <li> For each registered hook call the {@link #filterCandidates(BundleRevision, Collection)} with the
- *              bundle revision {@code B} and the shrinkable collection {@code C}.
+ *              a shrinkable collection {@code C}.</li>
+ *         <li> For each registered hook call the {@link #filterMatchingCapabilities(BundleRevision, Collection)} with the
+ *              bundle revision {@code B} and the shrinkable collection {@code C}.</li>
  *         <li> The shrinkable collection {@code C} now contains all the capabilities that may be used to 
  *              satisfy the requirement {@code T}.  Any other capabilities that got removed from the 
- *              shrinkable collection {@code C} must not be used to satisfy requirement {@code T}.
+ *              shrinkable collection {@code C} must not be used to satisfy requirement {@code T}.</li>
  *       </ol>
+ *  </li>
+ *  <li> For each registered hook call the {@link #end()} method to inform the hooks about a resolve 
+ *       process ending.</li>
  * </ol>
  * In all cases, the order in which the resolver hooks are called is the reverse compareTo ordering of 
  * their Service References.  That is, the service with the highest ranking number must be called first.
@@ -80,9 +89,16 @@ import org.osgi.framework.wiring.Capability;
  * @version $Id$
  */
 public interface ResolverHook {
+
 	/**
-	 * Filter resolvable candidates hook method.  This method is called once during
-	 * a single resolve operation.
+	 * This method is called once at the beginning of the resolve process
+	 * before any other methods are called on this hook.
+	 */
+	void begin();
+
+	/**
+	 * Filter resolvable candidates hook method.  This method may be called
+	 * multiple times during a single resolve operation.
 	 * This method can filter the collection of candidates by removing 
 	 * potential candidates.  Removing a candidate will prevent the candidate
 	 * from resolving during the current resolve process. 
@@ -94,10 +110,20 @@ public interface ResolverHook {
 
 	/**
 	 * Filter singleton collisions hook method. This method is called during the resolve process
-	 * for the specified bundle revision.  The specified bundle revision represents a singleton bundle
-	 * and the collection of collision candidates will have a name space of 
-	 * {@link Capability#BUNDLE_CAPABILITY osgi.bundle}, are singletons, and have the same
-	 * symbolic name as the specified bundle revision.
+	 * for the specified singleton.  The specified singleton represents a singleton capability
+	 * and the collection of collision candidates which are also singletons.  The 
+	 * singleton capability and the collection of collision candidates must all use the
+	 * same name space.
+	 * <p>
+	 * Currently only capabilities with the name space of {@link Capability#BUNDLE_CAPABILITY 
+	 * osgi.bundle} can be singletons.  In that case all the collision candidates
+	 * have the name space of {@link Capability#BUNDLE_CAPABILITY osgi.bundle}, are singletons, 
+	 * and have the same symbolic name as the specified singleton capability.
+	 * <p>
+	 * In the future, capabilities in other name spaces may support the singleton concept.
+	 * Hook implementations should be prepared to receive calls to this method for 
+	 * capabilities in name spaces other than {@link Capability#BUNDLE_CAPABILITY 
+	 * osgi.bundle}.  
 	 * <p>
 	 * This method can filter the list of collision candidates by removing potential collisions.
 	 * Removing a collision candidate will allow the specified singleton to resolve regardless of 
@@ -106,14 +132,14 @@ public interface ResolverHook {
 	 * @param singleton the singleton involved in a resolve operation
 	 * @param collisionCandidates a collection of singleton collision candidates
 	 */
-	void filterSingletonCollisions(BundleRevision singleton, Collection<Capability> collisionCandidates);
+	void filterSingletonCollisions(Capability singleton, Collection<Capability> collisionCandidates);
 
 	/**
-	 * Filter candidates hook method. This method is called during the resolve process
+	 * Filter matching capabilities hook method. This method is called during the resolve process
 	 * for the specified requirer.  The collection of candidates match a single
 	 * requirement for the requirer.  This method can filter the collection of 
-	 * candidates by removing potential candidates.  Removing a candidate will
-	 * prevent the resolve operation from choosing the candidate to satisfy
+	 * matching candidates by removing candidates from the collection.  Removing a candidate 
+	 * will prevent the resolve operation from choosing the removed candidate to satisfy
 	 * a requirement for the requirer.
 	 * <p>
 	 * All of the candidates will have the same name space and will 
@@ -121,5 +147,14 @@ public interface ResolverHook {
 	 * @param requirer the bundle revision which contains a requirement
 	 * @param candidates a collection of candidates that match a requirement of the requirer
 	 */
-	void filterCandidates(BundleRevision requirer, Collection<Capability> candidates);
+	void filterMatchingCapabilities(BundleRevision requirer, Collection<Capability> candidates);
+
+	/**
+	 * This method is called once at the end of the resolve process.
+	 * After the end method is called the resolve process has ended.
+	 * No methods will be called on this hook except after the
+	 * {@link #begin() begin} method is called to indicate
+	 * a new resolve process is beginning.
+	 */
+	void end();
 }
