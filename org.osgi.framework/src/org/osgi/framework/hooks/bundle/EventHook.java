@@ -18,7 +18,7 @@ package org.osgi.framework.hooks.bundle;
 
 import java.util.Collection;
 
-import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 
 /** 
@@ -44,16 +44,16 @@ public interface EventHook {
 	 * once for all bundles with at least one {@code BundleListener} registered.
 	 * <p>
 	 * @param event The bundle event to be delivered
-	 * @param bundles A collection of bundles which have listeners to which the
-	 *        specified event will be delivered.  The implementation of this
-	 *        method may remove bundles from the collection to prevent the 
-	 *        event from being delivered to the associated bundles.  The
-	 *        collection supports all the optional {@code Collection}
-	 *        operations except {@code add} and {@code addAll}.  Attempting
-	 *        to add to the collection will result in an {@code 
-	 *        UnsupportedOperationException}.  The collection is not 
-	 *        synchronized.
+	 * @param contexts A collection of Bundle Contexts for bundles which have
+	 *        listeners to which the specified event will be delivered. The
+	 *        implementation of this method may remove bundle contexts from the
+	 *        collection to prevent the event from being delivered to the
+	 *        associated bundles. The collection supports all the optional
+	 *        {@code Collection} operations except {@code add} and
+	 *        {@code addAll}. Attempting to add to the collection will
+	 *        result in an {@code UnsupportedOperationException}. The
+	 *        collection is not synchronized.
 	 */
 	// TODO probably should somehow prevent a hook from hiding a bundle from itself.
-	void event(BundleEvent event, Collection<Bundle> bundles);
+	void event(BundleEvent event, Collection<BundleContext> contexts);
 }
