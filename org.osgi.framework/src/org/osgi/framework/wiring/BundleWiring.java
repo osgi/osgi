@@ -84,14 +84,14 @@ public interface BundleWiring extends BundleReference {
 	 * @param capabilityNamespace The name space of the provided capabilities to
 	 *        return or {@code null} to return the provided capabilities from
 	 *        all name spaces.
-	 * @return A list containing a snapshot of the {@link ResolvedCapability}s,
+	 * @return A list containing a snapshot of the {@link WiredCapability}s,
 	 *         or an empty list if this bundle wiring provides no capabilities
 	 *         in the specified name space. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. The
 	 *         list contains the provided capabilities in the order they are
 	 *         specified in the manifest.
 	 */
-	List<ResolvedCapability> getProvidedCapabilities(String capabilityNamespace);
+	List<WiredCapability> getProvidedCapabilities(String capabilityNamespace);
 
 	/**
 	 * Returns the required capabilities used by this bundle wiring.
@@ -103,14 +103,14 @@ public interface BundleWiring extends BundleReference {
 	 * @param capabilityNamespace The name space of the required capabilities to
 	 *        return or {@code null} to return the required capabilities from
 	 *        all name spaces.
-	 * @return A list containing a snapshot of the {@link ResolvedCapability}s
+	 * @return A list containing a snapshot of the {@link WiredCapability}s
 	 *         used by this bundle wiring, or an empty list if this bundle
 	 *         wiring requires no capabilities in the specified name space. If
 	 *         this bundle wiring is not {@link #isInUse() in use}, {@code null}
 	 *         will be returned. The list contains the required capabilities in
 	 *         the order they are specified in the manifest.
 	 */
-	List<ResolvedCapability> getRequiredCapabilities(String capabilityNamespace);
+	List<WiredCapability> getRequiredCapabilities(String capabilityNamespace);
 
 	/**
 	 * Returns the bundle revision for the bundle in this bundle wiring. Since a
