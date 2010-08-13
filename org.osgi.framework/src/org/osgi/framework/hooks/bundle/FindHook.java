@@ -49,6 +49,5 @@ public interface FindHook {
 	 *        result in an {@code UnsupportedOperationException}. The
 	 *        collection is not synchronized.
 	 */
-	// TODO probably should somehow prevent a hook from hiding a bundle from itself.
 	void find(BundleContext context, Collection<Bundle> bundles);
 }

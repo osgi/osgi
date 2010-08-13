@@ -28,14 +28,14 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * 
  * <p>
  * Services registered with this service interface will be called by the framework during a resolve
- * process.  The framework must at most have one resolve process running at any given point 
+ * process.  The framework must, at most, have one resolve process running at any given point 
  * in time.  A resolver hook may influence the outcome of a resolve process by removing entries
  * from shrinkable collections that are passed to the hook during a resolve process.  A shrinkable 
  * collection is a {@code Collection} that supports all remove operations.  Any other attempts to modify
- * the a shrinkable collection will result in an {@code UnsupportedOperationException} being thrown.
+ * a shrinkable collection will result in an {@code UnsupportedOperationException} being thrown.
  * <p>
- * The following steps outline the rules a framework must follow during a bundle resolve
- * process and the order in which the hooks are called.
+ * The following steps outline the way a framework uses the resolver hooks during a resolve
+ * process.
  * <ol>
  *  <li> Collect a snapshot of registered resolver hooks that will be called during the
  *       current resolve process.  Any hooks registered after the snapshot is taken must not be called
@@ -70,15 +70,15 @@ import org.osgi.framework.wiring.FrameworkWiring;
  *              with the {@link Capability#BUNDLE_CAPABILITY osgi.bundle} capability provided by bundle revision 
  *              <b>{@code B}</b> and the shrinkable collection <b>{@code S}</b></li>
  *         <li> The shrinkable collection <b>{@code S}</b> now contains all singleton {@link Capability#BUNDLE_CAPABILITY 
- *              osgi.bundle} capabilities that can influence the the ability of bundle revision <b>{@code B}</b> to resolve.</li>
+ *              osgi.bundle} capabilities that can influence the ability of bundle revision <b>{@code B}</b> to resolve.</li>
  *       </ol>
  *  </li>
  *  <li> During a resolve process a framework is free to attempt to resolve any or all bundles contained in
  *       shrinkable collection <b>{@code R}</b>.  For each bundle revision <b>{@code B}</b> left in the shrinkable collection 
  *       <b>{@code R}</b> which the framework attempts to resolve the following steps must be followed:
  *       <ol type="a">
- *         <li> For each requirement <b>{@code R}</b> specified by bundle revision <b>{@code B}</b> determine the 
- *              collection of capabilities that satisfy (or match) the constraint and place each matching capability into
+ *         <li> For each requirement <b>{@code T}</b> specified by bundle revision <b>{@code B}</b> determine the 
+ *              collection of capabilities that satisfy (or match) the requirement and place each matching capability into
  *              a shrinkable collection <b>{@code C}</b>.</li>
  *         <li> For each registered hook call the {@link #filterMatches(BundleRevision, Collection)} with the
  *              bundle revision <b>{@code B}</b> and the shrinkable collection <b>{@code C}</b>.</li>

@@ -38,10 +38,12 @@ public interface EventHook {
 	 * delivery when a bundle is installed, resolved, started, stopped, unresolved, or
 	 * uninstalled.  This method can filter the bundles which receive the event.
 	 * <p>
-	 * Note that this method may be called multiple times with the same bundle event.
-	 * For example, it is acceptable to a framework implementation to call this 
-	 * once for all bundles with at least one {@code SynchronousBundleListener} and 
-	 * once for all bundles with at least one {@code BundleListener} registered.
+	 * Note that this method may be called, at most, two times with the same bundle event.
+	 * For example, it is acceptable for a framework implementation to call this 
+	 * once for all bundle contexts with at least one {@code SynchronousBundleListener} registered 
+	 * and once for all bundle contexts with at least one {@code BundleListener} registered.
+	 * In all cases this event method must be called on the same thread that is performing
+	 * the action which generated the specified event.
 	 * <p>
 	 * @param event The bundle event to be delivered
 	 * @param contexts A collection of Bundle Contexts for bundles which have
@@ -54,6 +56,5 @@ public interface EventHook {
 	 *        result in an {@code UnsupportedOperationException}. The
 	 *        collection is not synchronized.
 	 */
-	// TODO probably should somehow prevent a hook from hiding a bundle from itself.
 	void event(BundleEvent event, Collection<BundleContext> contexts);
 }
