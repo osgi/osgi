@@ -207,6 +207,11 @@ Include-Resource = \
 	lifecycle.tb9.jar, \
 	resources.tb1.jar, \
 	resources.tb2.jar, \
+	startlevel.tb1.jar, \
+	startlevel.tb2.jar, \
+	startlevel.tb3.jar, \
+	startlevel.tb4.jar, \
+	startlevel.tb5.jar, \
 	syncbundlelistener.tb3.jar
 	
 -buildpath							= \

@@ -31,7 +31,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
-import org.osgi.service.startlevel.StartLevel;
+import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.startlevel.BundleStartLevel;
+import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 
@@ -213,7 +215,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * Tests the lazy activation policy in relation to the start-level service.
 	 */
 	public void testActivationPolicy04() throws Exception {
-		StartLevel startLevel = (StartLevel) getService(StartLevel.class);
+		FrameworkStartLevel startLevel = (FrameworkStartLevel) getContext().getBundle(0).adapt(FrameworkStartLevel.class);
 		int initialSL = startLevel.getStartLevel();
 		int initialBSL = startLevel.getInitialBundleStartLevel();
 		startLevel.setInitialBundleStartLevel(initialSL + 10);
@@ -228,13 +230,13 @@ public class TestControl extends DefaultTestBundleControl {
 		getContext().addFrameworkListener(startlevelListener);
 		try {
 			// crank up the framework start-level.  This should result in no STARTED event
-			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() + 15, (FrameworkListener[]) null);
 			Object[] expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			Object[] actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 		
-			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() - 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -255,13 +257,13 @@ public class TestControl extends DefaultTestBundleControl {
 			actualEvents = resultsListener.getResults(0);
 			compareEvents(expectedEvents, actualEvents);
 
-			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() + 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
-			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() - 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -293,7 +295,7 @@ public class TestControl extends DefaultTestBundleControl {
                 compareEvents(expectedEvents, actualEvents);
 
                 // now load a class while start-level is met.
-                startLevel.setStartLevel(startLevel.getStartLevel() + 15);
+                startLevel.setStartLevel(startLevel.getStartLevel() + 15, (FrameworkListener[]) null);
                 expectedFrameworkEvents = new Object[1];
                 expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
                 actualFrameworkEvents = startlevelListener.getResults(1);
@@ -301,7 +303,7 @@ public class TestControl extends DefaultTestBundleControl {
 
                 tblazy2.loadClass("org.osgi.test.cases.framework.activationpolicy.tblazy2.ATest");
 
-                startLevel.setStartLevel(startLevel.getStartLevel() - 15);
+                startLevel.setStartLevel(startLevel.getStartLevel() - 15, (FrameworkListener[]) null);
                 expectedFrameworkEvents = new Object[1];
                 expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
                 actualFrameworkEvents = startlevelListener.getResults(1);
@@ -322,7 +324,7 @@ public class TestControl extends DefaultTestBundleControl {
 			uninstallBundle(tblazy2);
 			startlevelListener = new EventListenerTestResults(FrameworkEvent.STARTLEVEL_CHANGED);
 			getContext().addFrameworkListener(startlevelListener);
-			startLevel.setStartLevel(initialSL);
+			startLevel.setStartLevel(initialSL, (FrameworkListener[]) null);
 			startlevelListener.getResults(1);
 			startLevel.setInitialBundleStartLevel(initialBSL);
 			getContext().removeFrameworkListener(startlevelListener);
@@ -333,7 +335,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * Tests Bundle.start(START_ACTIVATION_POLICY) in relation to the start-level service
 	 */
 	public void testActivationPolicy05() throws Exception {
-		StartLevel startLevel = (StartLevel) getService(StartLevel.class);
+		FrameworkStartLevel startLevel = (FrameworkStartLevel) getContext().getBundle(0).adapt(FrameworkStartLevel.class);
 		int initialSL = startLevel.getStartLevel();
 		int initialBSL = startLevel.getInitialBundleStartLevel();
 		startLevel.setInitialBundleStartLevel(initialSL + 10);
@@ -342,8 +344,9 @@ public class TestControl extends DefaultTestBundleControl {
 		// make this a persistent start and ignore the activation policy;
 		// this should not activate the bundle because the start-level is not met.
 		tblazy2.start(0);
-		assertTrue("bundle is persistently started.", startLevel.isBundlePersistentlyStarted(tblazy2));
-		assertTrue("bundle is not using activation policy.", !startLevel.isBundleActivationPolicyUsed(tblazy2));
+		BundleStartLevel tblazy2StartLevel = (BundleStartLevel) tblazy2.adapt(BundleStartLevel.class);
+		assertTrue("bundle is persistently started.", tblazy2StartLevel.isPersistentlyStarted());
+		assertTrue("bundle is not using activation policy.", !tblazy2StartLevel.isActivationPolicyUsed());
 		// listen for STARTING, STARTED, STOPPING, STOPPED and LAZY_ACTIVATION events
 		// we *should* get LAZY_ACTIVATION events because this *is* a synchronous listener.
 		EventListenerTestResults resultsListener = new SyncEventListenerTestResults(BundleEvent.STARTED | BundleEvent.LAZY_ACTIVATION | BundleEvent.STARTING | BundleEvent.STOPPING | BundleEvent.STOPPED);
@@ -352,13 +355,13 @@ public class TestControl extends DefaultTestBundleControl {
 		getContext().addFrameworkListener(startlevelListener);
 		try {
 			// crank up the framework start-level.  This should result in a STARTED event because we are ingoring the activation policy
-			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() + 15, (FrameworkListener[]) null);
 			Object[] expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			Object[] actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 		
-			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() - 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -376,15 +379,15 @@ public class TestControl extends DefaultTestBundleControl {
 
 			// now mark the bundle to use the activation policy
 			tblazy2.start(Bundle.START_ACTIVATION_POLICY);
-			assertTrue("bundle is using activation policy.", startLevel.isBundleActivationPolicyUsed(tblazy2));
+			assertTrue("bundle is using activation policy.", tblazy2StartLevel.isActivationPolicyUsed());
 
-			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() + 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
-			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() - 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -407,7 +410,7 @@ public class TestControl extends DefaultTestBundleControl {
 			compareEvents(expectedEvents, actualEvents);
 			
 			// now call start(START_TRANSIENT | START_ACTIVATION_POLICY) while start-level is met.
-			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() + 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -421,7 +424,7 @@ public class TestControl extends DefaultTestBundleControl {
 			actualEvents = resultsListener.getResults(1);
 			compareEvents(expectedEvents, actualEvents);
 
-			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() - 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -434,14 +437,14 @@ public class TestControl extends DefaultTestBundleControl {
 			compareEvents(expectedEvents, actualEvents);
 
 			// make sure the bundle is not persistently started and is not using its activation policy
-			assertTrue("bundle is not persistently started.", !startLevel.isBundlePersistentlyStarted(tblazy2));
-			assertTrue("bundle is not using activation policy.", !startLevel.isBundleActivationPolicyUsed(tblazy2));
+			assertTrue("bundle is not persistently started.", !tblazy2StartLevel.isPersistentlyStarted());
+			assertTrue("bundle is not using activation policy.", !tblazy2StartLevel.isActivationPolicyUsed());
 		} finally {
 			getContext().removeBundleListener(resultsListener);
 			uninstallBundle(tblazy2);
 			startlevelListener = new EventListenerTestResults(FrameworkEvent.STARTLEVEL_CHANGED);
 			getContext().addFrameworkListener(startlevelListener);
-			startLevel.setStartLevel(initialSL);
+			startLevel.setStartLevel(initialSL, (FrameworkListener[]) null);
 			startlevelListener.getResults(1);
 			startLevel.setInitialBundleStartLevel(initialBSL);
 			getContext().removeFrameworkListener(startlevelListener);
@@ -452,7 +455,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * Tests Bundle.start(START_TRANSIENT) in relation to the start-level service
 	 */
 	public void testStartTransient01() throws Exception {
-		StartLevel startLevel = (StartLevel) getService(StartLevel.class);
+		FrameworkStartLevel startLevel = (FrameworkStartLevel) getContext().getBundle(0).adapt(FrameworkStartLevel.class);
 		int initialSL = startLevel.getStartLevel();
 		int initialBSL = startLevel.getInitialBundleStartLevel();
 		startLevel.setInitialBundleStartLevel(initialSL + 10);
@@ -467,13 +470,13 @@ public class TestControl extends DefaultTestBundleControl {
 		getContext().addFrameworkListener(startlevelListener);
 		try {
 			// crank up the framework start-level.  This should result in no STARTED event
-			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() + 15, (FrameworkListener[]) null);
 			Object[] expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			Object[] actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 		
-			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() - 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -499,13 +502,13 @@ public class TestControl extends DefaultTestBundleControl {
 			actualEvents = resultsListener.getResults(0);
 			compareEvents(expectedEvents, actualEvents);
 
-			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() + 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
-			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() - 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -521,7 +524,7 @@ public class TestControl extends DefaultTestBundleControl {
 			compareEvents(expectedEvents, actualEvents);
 
 			// now call start(START_TRANSIENT) while start-level is met.
-			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() + 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -537,7 +540,7 @@ public class TestControl extends DefaultTestBundleControl {
 			actualEvents = resultsListener.getResults(3);
 			compareEvents(expectedEvents, actualEvents);
 
-			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() - 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -553,7 +556,7 @@ public class TestControl extends DefaultTestBundleControl {
 			uninstallBundle(tblazy2);
 			startlevelListener = new EventListenerTestResults(FrameworkEvent.STARTLEVEL_CHANGED);
 			getContext().addFrameworkListener(startlevelListener);
-			startLevel.setStartLevel(initialSL);
+			startLevel.setStartLevel(initialSL, (FrameworkListener[]) null);
 			startlevelListener.getResults(1);
 			startLevel.setInitialBundleStartLevel(initialBSL);
 			getContext().removeFrameworkListener(startlevelListener);
@@ -564,7 +567,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * Tests Bundle.stop(STOP_TRANSIENT) in relation to the start-level service
 	 */
 	public void testStopTransient01() throws Exception {
-		StartLevel startLevel = (StartLevel) getService(StartLevel.class);
+		FrameworkStartLevel startLevel = (FrameworkStartLevel) getContext().getBundle(0).adapt(FrameworkStartLevel.class);
 		int initialSL = startLevel.getStartLevel();
 		int initialBSL = startLevel.getInitialBundleStartLevel();
 		startLevel.setInitialBundleStartLevel(initialSL + 10);
@@ -579,16 +582,17 @@ public class TestControl extends DefaultTestBundleControl {
 		try {
 			// persistently start the bundle
 			tblazy2.start();
-			assertTrue("bundle is persistently started.", startLevel.isBundlePersistentlyStarted(tblazy2));
+			BundleStartLevel tblazy2StartLevel = (BundleStartLevel) tblazy2.adapt(BundleStartLevel.class);
+			assertTrue("bundle is persistently started.", tblazy2StartLevel.isPersistentlyStarted());
 
 			// test transient start Bundle.stop(START_TRANSIENT)
-			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() + 15, (FrameworkListener[]) null);
 			Object[] expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			Object[] actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 		
-			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() - 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -605,7 +609,7 @@ public class TestControl extends DefaultTestBundleControl {
 			compareEvents(expectedEvents, actualEvents);
 
 			// now call stop(STOP_TRANSIENT) while the start-level is met.
-			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() + 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -620,7 +624,7 @@ public class TestControl extends DefaultTestBundleControl {
 			compareEvents(expectedEvents, actualEvents);
 
 			tblazy2.stop(Bundle.STOP_TRANSIENT);
-			assertTrue("Bundle is persistently started.", startLevel.isBundlePersistentlyStarted(tblazy2));
+			assertTrue("Bundle is persistently started.", tblazy2StartLevel.isPersistentlyStarted());
 
 			// we expect a STOPPING, STOPPED event to be sent here because we met the start-level
 			expectedEvents = new Object[2];
@@ -629,7 +633,7 @@ public class TestControl extends DefaultTestBundleControl {
 			actualEvents = resultsListener.getResults(2);
 			compareEvents(expectedEvents, actualEvents);
 
-			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() - 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -637,7 +641,7 @@ public class TestControl extends DefaultTestBundleControl {
 
 
 			// now set the start-level back up and check that the bundle is started again because it is persistently started.
-			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() + 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -649,7 +653,7 @@ public class TestControl extends DefaultTestBundleControl {
 			actualEvents = resultsListener.getResults(2);
 			compareEvents(expectedEvents, actualEvents);
 
-			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
+			startLevel.setStartLevel(startLevel.getStartLevel() - 15, (FrameworkListener[]) null);
 			expectedFrameworkEvents = new Object[1];
 			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
@@ -665,7 +669,7 @@ public class TestControl extends DefaultTestBundleControl {
 			uninstallBundle(tblazy2);
 			startlevelListener = new EventListenerTestResults(FrameworkEvent.STARTLEVEL_CHANGED);
 			getContext().addFrameworkListener(startlevelListener);
-			startLevel.setStartLevel(initialSL);
+			startLevel.setStartLevel(initialSL, (FrameworkListener[]) null);
 			startlevelListener.getResults(1);
 			startLevel.setInitialBundleStartLevel(initialBSL);
 			getContext().removeFrameworkListener(startlevelListener);
