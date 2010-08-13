@@ -19,14 +19,14 @@ package org.osgi.framework.wiring;
 import java.util.Collection;
 
 /**
- * A resolved capability that has been provided from a {@link BundleWiring bundle wiring}.
+ * A wired capability that has been provided from a {@link BundleWiring bundle wiring}.
  * This capability may or may not be required by any bundle wiring.
  * <p>
- * A resolved capability represents a capability from a resolved bundle wiring.
+ * A wired capability represents a capability from a resolved bundle wiring.
  * @ThreadSafe
  * @version $Id$
  */
-public interface ResolvedCapability extends Capability {
+public interface WiredCapability extends Capability {
 	/**
 	 * Returns the bundle wiring providing this capability.
 	 * 
