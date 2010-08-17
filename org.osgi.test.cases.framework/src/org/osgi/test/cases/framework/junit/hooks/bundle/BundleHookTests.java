@@ -479,8 +479,7 @@ public class BundleHookTests extends OSGiTestCase {
 							Collection contexts) {
 						try {
 							synchronized (hookCalled) {
-								if (hookCalled.size() == 0 || hookCalled.getLast() != hookIDs[0])
-									hookCalled.add(hookIDs[0]);
+								hookCalled.add(hookIDs[0]);
 							}
 
 							if (filterEvent[0])
@@ -524,8 +523,7 @@ public class BundleHookTests extends OSGiTestCase {
 							Collection contexts) {
 						try {
 							synchronized (hookCalled) {
-								if (hookCalled.size() == 0 || hookCalled.getLast() != hookIDs[1])
-									hookCalled.add(hookIDs[1]);
+								hookCalled.add(hookIDs[1]);
 							}
 							synchronized (filterEvent) {
 								if (filterEvent[0])
@@ -548,8 +546,7 @@ public class BundleHookTests extends OSGiTestCase {
 							Collection contexts) {
 						try {
 							synchronized (hookCalled) {
-								if (hookCalled.size() == 0 || hookCalled.getLast() != hookIDs[2])
-									hookCalled.add(hookIDs[2]);
+								hookCalled.add(hookIDs[2]);
 							}
 						}
 						catch (AssertionFailedError a) {
@@ -571,8 +568,7 @@ public class BundleHookTests extends OSGiTestCase {
 							Collection contexts) {
 						try {
 							synchronized (hookCalled) {
-								if (hookCalled.size() == 0 || hookCalled.getLast() != hookIDs[3])
-									hookCalled.add(hookIDs[3]);
+								hookCalled.add(hookIDs[3]);
 							}
 						}
 						catch (AssertionFailedError a) {
