@@ -40,7 +40,14 @@ public interface Capability {
 	 * found in the cabability's {@link #getDirectives() directives} and
 	 * {@link #getAttributes() attributes}. The
 	 * {@link Constants#VERSION_ATTRIBUTE version} capability attribute must
-	 * contain the {@link Version} of the package if one is specified.
+	 * contain the {@link Version} of the package if one is specified.  The
+	 * {@link Constants#BUNDLE_SYMBOLICNAME_ATTRIBUTE bundle-symbolic-name}
+	 * capability attribute must contain the {@link 
+	 * BundleRevision#getSymbolicName() symbolic name} of the provider if one
+	 * is specified.
+	 * The {@link Constants#BUNDLE_VERSION_ATTRIBUTE bundle-version} capability 
+	 * attribute must contain the {@link BundleRevision#getVersion() version}
+	 * of the provider if one is specified.
 	 * 
 	 * <p>
 	 * The package capabilities provided by the system bundle, that is the
@@ -97,16 +104,16 @@ public interface Capability {
 	/**
 	 * Returns the directives of this capability.
 	 * 
-	 * @return A map of directive names to directive values for this capability,
-	 *         or an empty map if this capability has no directives.
+	 * @return An unmodifiable map of directive names to directive values for this 
+	 *         capability, or an empty map if this capability has no directives.
 	 */
 	Map<String, String> getDirectives();
 
 	/**
 	 * Returns the attributes of this capability.
 	 * 
-	 * @return A map of attribute names to attribute values for this capability,
-	 *         or an empty map if this capability has no attributes.
+	 * @return An unmodifiable map of attribute names to attribute values for this
+	 *         capability, or an empty map if this capability has no attributes.
 	 */
 	Map<String, Object> getAttributes();
 
