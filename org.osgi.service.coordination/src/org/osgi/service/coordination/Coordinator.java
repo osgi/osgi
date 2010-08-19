@@ -45,6 +45,14 @@ import java.util.*;
  * 
  * The usage of the Coordinator service is normally as follows:
  * 
+ * 
+ * getCoordindator().work( new Work() {
+ *      public void begin(Coordination c) { ... }
+ *      public void work() { ... }
+ *      public void ended(Coordination c) { ... }
+ *      public void failed(Coordination c) { ... }
+ *  } );
+ *  
  * <pre>
  * Coordination c = getCoordinator().begin(&quot;test-coordination&quot;);
  * try {
@@ -144,6 +152,9 @@ import java.util.*;
  * @ThreadSafe
  */
 public interface Coordinator {
+
+	
+	
 	/**
 	 * Return value of {@link Coordination#end()}. The Coordination ended
 	 * normally, no participant threw an exception.
@@ -181,7 +192,7 @@ public interface Coordinator {
 	 *         {@link CoordinationPermission.INITIATE} action, no bundle check
 	 *         is done.
 	 */
-	Coordination begin(String name) throws IllegalStateException;
+	Coordination getCoordination(String name, int constraint );
 
 	/**
 	 * Participate in the current Coordination or return false if there is none.
@@ -192,7 +203,7 @@ public interface Coordinator {
 	 * there was no active Coordination then <code>false</code> is returned.
 	 * 
 	 * Once a Participant is participating it is guaranteed to receive a
-	 * callback on either the {@link Participant#ended()} or
+	 * call back on either the {@link Participant#ended()} or
 	 * {@link Participant#failed()} method when the Coordination is terminated
 	 * on the same thread as where it participates.
 	 * 
@@ -207,7 +218,7 @@ public interface Coordinator {
 	 * A participant can be added to the Coordination multiple times but it must
 	 * only be called back once when the Coordination is terminated.
 	 * 
-	 * The ordering of the callbacks must follow the order of participation. If
+	 * The ordering of the call-backs must follow the order of participation. If
 	 * participant is participating multiple times the first time it
 	 * participates defines this order.
 	 * 
@@ -237,75 +248,10 @@ public interface Coordinator {
 	boolean participate(Participant participant) throws CoordinationException;
 
 	/**
-	 * Participate if there is an active Coordination otherwise initiate a new
-	 * Coordination.
 	 * 
-	 * If a method requires a Coordination to be active and is willing to begin
-	 * one if not then this method is a convenience method representing the
-	 * following code:
-	 * 
-	 * <pre>
-	 * if (coordinator.isActive()) {
-	 * 	coordinator.participate(participant);
-	 * 	return null;
-	 * }
-	 * else {
-	 * 	return coordinator.begin(&quot;...&quot;);
-	 * }
-	 * </pre>
-	 * 
-	 * This method makes it simple to start a new Coordination or to participate
-	 * in an existing Coordination. See {@link #begin(String, long)} and
-	 * {@link #participate(Participant)} for the details of those methods.
-	 * 
-	 * If a new Coordination is begun, the participant must <em>not</em> be
-	 * added to the Coordination, it is only added to a prior active
-	 * Coordination.
-	 * 
-	 * @param ifActive
-	 * @return{@code null} if there is an active Coordination otherwise a
-	 *         newly initiated Coordination.
-	 * @throws SecurityException This method requires the
-	 *         {@link CoordinationPermission.PARTICIPATE} action for the current
-	 *         Coordination, if any. Otherwise it requires
-	 *         {@link CoordinationPermission.INITIATE} to create a new
-	 *         coordination.
+	 * @return return the current Coordination or {@code null}.
 	 */
-	Coordination participateOrBegin(Participant ifActive);
-
-	/**
-	 * Always fail an active Coordination.
-	 * 
-	 * Must fail an active Coordination and return <code>true</code> or return
-	 * <code>false</code> if there is no active Coordination.
-	 * 
-	 * @param reason The reason why it must always fail or {@code null}.
-	 * @return <code>true</code> if a Coordination was active and
-	 *         <code>false</code> if not.
-	 */
-	boolean alwaysFail(String reason);
-
-	/**
-	 * Test if the current thread is associated with an active Coordination.
-	 * Return <code>true</code> if there is an active Coordination otherwise
-	 * <code>false</code>.
-	 * 
-	 * @return <code>true</code> if there is an active Coordination otherwise
-	 *         <code>false</code>
-	 */
-	boolean isActive();
-
-	/**
-	 * Test if there is an active Coordination and if so it has failed. This
-	 * method returns <code>true</code> if there is an active Coordination and
-	 * that Coordination has been set to fail. In all other cases, including
-	 * when there is no active Coordination, this method must return
-	 * <code>false</code>
-	 * 
-	 * @return <code>true</code> when the active Coordination is set to failed,
-	 *         otherwise false.
-	 */
-	boolean isFailed();
+	Coordination getCurrentCoordination();
 
 	/**
 	 * Provide a list of Coordination objects.
@@ -324,52 +270,4 @@ public interface Coordinator {
 	 *         {@link CoordinationPermission.ADMIN}.
 	 */
 	Collection<Coordination> getCoordinations();
-
-	/**
-	 * Ensure that the Coordination c has ended or otherwise fail it.
-	 * 
-	 * The terminate() method is a parachute making it easy to ensure that
-	 * coordination initiators properly close coordinations they initiated. The
-	 * method can be called with {@code null} or the Coordination object
-	 * returned from the {@link #begin(String)} method. As the
-	 * {@link #begin(String)} method. This allows the following pattern:
-	 * 
-	 * <pre>
-	 *    Coordination c = coordinator.begin(); // can return null!
-	 *    try {
-	 *        ...
-	 *    } finally {
-	 *       coordinator.terminate(c);
-	 *    }
-	 * </pre>
-	 * <ol>
-	 * <li>If c is {@code null}, this method will not do anything.</li>
-	 * <li>If c is an active Coordination, it will be failed.</li>
-	 * <li>Otherwise c is ignored</li>
-	 * </ol>
-	 * 
-	 * @param c {@code null} or a Coordination object
-	 */
-	void terminate(Coordination c);
-
-	/**
-	 * Add a minimum timeout for this Coordination.
-	 * 
-	 * If this timeout expires, then the Coordination will fail and the
-	 * initiating thread will be interrupted. This method must only be called on
-	 * an active Coordination, that is, before {@link #end()} or
-	 * {@link #fail(String)} is called.
-	 * 
-	 * If the current deadline is arriving later than the given timeout
-	 * then the timeout is ignored.
-	 * 
-	 * @param timeOutInMs Number of ms to wait, zero means forever.
-	 * @throws SecurityException This method requires the
-	 *         {@link CoordinationPermission.ADMIN} or
-	 *         {@link CoordinationPermission.INITIATE} action for the
-	 *         {@link CoordinationPermission}.
-	 */
-	void addTimeout(long timeOutInMs);
-
-
 }

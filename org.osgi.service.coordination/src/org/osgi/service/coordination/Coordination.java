@@ -32,6 +32,11 @@ import java.util.Collection;
  */
 
 public interface Coordination {
+	
+	Coordination push();
+	Coordination pop();
+	
+	
 	/**
 	 * Return the name of this Coordination.
 	 * 
@@ -62,39 +67,6 @@ public interface Coordination {
 	 * recovered.
 	 */
 	boolean fail(String reason);
-
-	/**
-	 * Terminate this coordination of not already terminated. If this
-	 * Coordination is already terminated then ignore this method. If not, the
-	 * Coordination is set to fail. This method enables the following fail-safe
-	 * pattern to ensure Coordinations are properly terminated.
-	 * 
-	 * <pre>
-	 *   Coordination c = coordinator.begin("show_fail");
-	 *   try {
-	 *     work1();
-	 *     work2();
-	 *     if ( end() != OK )
-	 *        log("...");
-	 *   } catch( SomeException e) {
-	 *      ...
-	 *   } finally {
-	 *      c.terminate();
-	 *   }
-	 * </pre>
-	 * 
-	 * With this pattern, it is easy to ensure that the coordination is always
-	 * terminated.
-	 * 
-	 * The terminate method must be called on the initiating thread, from
-	 * another thread {@link #fail(String)} must be called.
-	 * 
-	 * @return <code>true</code> if this method actually terminated the
-	 *         coordination (that is, it was not properly ended).
-	 *         <code>false</code> if the Coordination was already properly
-	 *         terminate by an {@link #end()} or {@link #fail(String)} method.
-	 */
-	boolean terminate();
 
 	/**
 	 * End the current Coordination.
@@ -146,5 +118,25 @@ public interface Coordination {
 	 * <code>false</code> otherwise.
 	 */
 	boolean isFailed();
+
+	/**
+	 * Add a minimum timeout for this Coordination.
+	 * 
+	 * If this timeout expires, then the Coordination will fail and the
+	 * initiating thread will be interrupted. This method must only be called on
+	 * an active Coordination, that is, before {@link #end()} or
+	 * {@link #fail(String)} is called.
+	 * 
+	 * If the current deadline is arriving later than the given timeout
+	 * then the timeout is ignored.
+	 * 
+	 * @param timeOutInMs Number of ms to wait, zero means forever.
+	 * @throws SecurityException This method requires the
+	 *         {@link CoordinationPermission.ADMIN} or
+	 *         {@link CoordinationPermission.INITIATE} action for the
+	 *         {@link CoordinationPermission}.
+	 */
+	void addTimeout(long timeOutInMs);
+
 
 }
