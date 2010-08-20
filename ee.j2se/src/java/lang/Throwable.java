@@ -20,7 +20,7 @@ public class Throwable implements java.io.Serializable {
 	public Throwable(java.lang.String var0) { } 
 	public Throwable(java.lang.String var0, java.lang.Throwable var1) { } 
 	public Throwable(java.lang.Throwable var0) { } 
-	public native java.lang.Throwable fillInStackTrace();
+	public java.lang.Throwable fillInStackTrace() { return null; }
 	public java.lang.Throwable getCause() { return null; }
 	public java.lang.String getLocalizedMessage() { return null; }
 	public java.lang.String getMessage() { return null; }

@@ -22,6 +22,6 @@ public class FileInputStream extends java.io.InputStream {
 	protected void finalize() throws java.io.IOException { }
 	public java.nio.channels.FileChannel getChannel() { return null; }
 	public final java.io.FileDescriptor getFD() throws java.io.IOException { return null; }
-	public native int read() throws java.io.IOException;
+	public int read() throws java.io.IOException { return 0; }
 }
 

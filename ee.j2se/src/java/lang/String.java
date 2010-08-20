@@ -60,7 +60,7 @@ public final class String implements java.io.Serializable, java.lang.CharSequenc
 	public int indexOf(int var0, int var1) { return 0; }
 	public int indexOf(java.lang.String var0) { return 0; }
 	public int indexOf(java.lang.String var0, int var1) { return 0; }
-	public native java.lang.String intern();
+	public java.lang.String intern() { return null; }
 	public int lastIndexOf(int var0) { return 0; }
 	public int lastIndexOf(int var0, int var1) { return 0; }
 	public int lastIndexOf(java.lang.String var0) { return 0; }

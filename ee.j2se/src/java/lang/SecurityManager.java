@@ -55,7 +55,7 @@ public class SecurityManager {
 	public void checkWrite(java.lang.String var0) { }
 	/** @deprecated */
 	@java.lang.Deprecated
-	protected native int classDepth(java.lang.String var0);
+	protected int classDepth(java.lang.String var0) { return 0; }
 	/** @deprecated */
 	@java.lang.Deprecated
 	protected int classLoaderDepth() { return 0; }
@@ -65,7 +65,7 @@ public class SecurityManager {
 	/** @deprecated */
 	@java.lang.Deprecated
 	protected java.lang.Class<?> currentLoadedClass() { return null; }
-	protected native java.lang.Class[] getClassContext();
+	protected java.lang.Class[] getClassContext() { return null; }
 	/** @deprecated */
 	@java.lang.Deprecated
 	public boolean getInCheck() { return false; }
