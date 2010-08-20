@@ -58,7 +58,7 @@ public class Event {
 	 * @throws IllegalArgumentException If topic is not a valid topic name.
 	 * @since 1.2
 	 */
-	public Event(String topic, Map<String, Object> properties) {
+	public Event(String topic, Map<String, ? > properties) {
 		validateTopicName(topic);
 		this.topic = topic;
 		// safely publish the event properties
@@ -75,7 +75,7 @@ public class Event {
 	 *        ignored.
 	 * @throws IllegalArgumentException If topic is not a valid topic name.
 	 */
-	public Event(String topic, Dictionary<String, Object> properties) {
+	public Event(String topic, Dictionary<String, ? > properties) {
 		validateTopicName(topic);
 		this.topic = topic;
 		// safely publish the event properties

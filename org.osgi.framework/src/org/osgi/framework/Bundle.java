@@ -695,7 +695,7 @@ public interface Bundle extends Comparable<Bundle> {
 	 * This method must continue to return Manifest header information while
 	 * this bundle is in the {@code UNINSTALLED} state.
 	 * 
-	 * @return A {@code Dictionary} object containing this bundle's
+	 * @return An unmodifiable {@code Dictionary} object containing this bundle's
 	 *         Manifest headers and values.
 	 * @throws SecurityException If the caller does not have the
 	 *         appropriate {@code AdminPermission[this,METADATA]}, and
@@ -910,7 +910,7 @@ public interface Bundle extends Comparable<Bundle> {
 	 *        used. If the specified locale is the empty string, this method
 	 *        will return the raw (unlocalized) manifest headers including any
 	 *        leading &quot;%&quot;.
-	 * @return A {@code Dictionary} object containing this bundle's
+	 * @return An unmodifiable {@code Dictionary} object containing this bundle's
 	 *         Manifest headers and values.
 	 * @throws SecurityException If the caller does not have the
 	 *         appropriate {@code AdminPermission[this,METADATA]}, and
