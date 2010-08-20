@@ -1,0 +1,9 @@
+Bundle-Name:                             ${p}.resolver.tb1
+Bundle-SymbolicName:                     ${p}.resolver.tb1
+Bundle-Version:                          1.0.0
+Private-Package:                         ${p}.resolver.tb1
+Eclipse-GenericCapability:               OSGi/Minimum:test.ee; version="1.0"
+
+Export-Package: ${p}.resolver.tb1;version="1.0.0";-noimport:=true
+Include-Resource: \
+	/ = resources/resolver.tb1.v100/

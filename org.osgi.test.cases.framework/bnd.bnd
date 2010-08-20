@@ -9,7 +9,7 @@ Export-Package						= \
 	${p}.dynpkgimport.exported, \
 	${p}.lifecycle.servicereferencegetter
 	
-Import-Package	= org.osgi.framework, org.osgi.framework.launch, org.osgi.framework.hooks.service, org.osgi.framework.startlevel;resolution:=optional, *
+Import-Package	= org.osgi.framework.hooks.bundle; resolution:=optional, org.osgi.framework.hooks.resolver; resolution:=optional, org.osgi.framework.startlevel;resolution:=optional, *
 
 Bundle-ClassPath: .,div.tb6.jar
 
@@ -207,6 +207,16 @@ Include-Resource = \
 	lifecycle.tb9.jar, \
 	resources.tb1.jar, \
 	resources.tb2.jar, \
+	resolver.tb1.v100.jar, \
+	resolver.tb1.v110.jar, \
+	resolver.tb2.jar, \
+	resolver.tb3.jar, \
+	resolver.tb4.jar, \
+	resolver.tb5.jar, \
+	resolver.tb6.v100.jar, \
+	resolver.tb6.v200.jar, \
+	resolver.tb6.v300.jar, \
+	resolver.tb6.v400.jar, \
 	startlevel.tb1.jar, \
 	startlevel.tb2.jar, \
 	startlevel.tb3.jar, \

@@ -1,0 +1,3 @@
+Bundle-Name:                             ${p}.resolver.tb6
+Bundle-SymbolicName:                     ${p}.resolver.tb6; singleton:=true
+Bundle-Version:                          3.0.0
