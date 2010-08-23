@@ -458,7 +458,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		assertEquals("Wrong state for tb5", Bundle.RESOLVED, tb5.getState());
 	}
 
-	public void testFilterSingletonCollisions() {
+	public void testFilterSingletonCollisions01() {
 		// ensure no resolution while we setup the tests
 		PreventResolution preventHook = new PreventResolution();
 		ServiceRegistration preventReg = registerHook(preventHook, 0);
@@ -500,6 +500,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		preventReg = registerHook(preventHook, 0);
 		refreshBundles(bundles);
 
+		// isolate version 1 and 2 from version 3 and 4
 		Map isolate12From34 = new HashMap();
 		isolate12From34.put(tb6v100, Arrays.asList(new Bundle[] {tb6v300, tb6v400}));
 		isolate12From34.put(tb6v200, Arrays.asList(new Bundle[] {tb6v300, tb6v400}));
@@ -533,6 +534,36 @@ public class ResolverHookTests extends OSGiTestCase {
 				(tb6v200.getState() == Bundle.RESOLVED) ^
 				(tb6v300.getState() == Bundle.RESOLVED) ^
 				(tb6v400.getState() == Bundle.RESOLVED));
+
+		// prevent resolution again
+		preventReg = registerHook(preventHook, 0);
+		refreshBundles(bundles);
+		
+		// make all singletons isolated again
+		allIsolatedReg = registerHook(allIsolatedHook, 0);
+		// Filter version 2 and 4 from resolving; this is to force version 1 and 3 only to resolve
+		TestFilterResolvable resolveTwoSingletons = new TestFilterResolvable(Arrays.asList(new Bundle[] {tb6v200, tb6v400}));
+		ServiceRegistration resolveTwoReg = registerHook(resolveTwoSingletons, 0);
+		// allow resolution again.
+		preventReg.unregister();
+
+		assertFalse("Should not be able to resolve all the bundles", frameworkWiring.resolveBundles(bundles));
+		assertEquals("Wrong state of bundle tb6v100", Bundle.RESOLVED, tb6v100.getState());
+		assertEquals("Wrong state of bundle tb6v200", Bundle.INSTALLED, tb6v200.getState());
+		assertEquals("Wrong state of bundle tb6v300", Bundle.RESOLVED, tb6v300.getState());
+		assertEquals("Wrong state of bundle tb6v400", Bundle.INSTALLED, tb6v400.getState());
+
+		// again isolate version 1 and 2 from version 3 and 4
+		allIsolatedReg.unregister();
+		isolate12From34Reg = registerHook(isolate12From34Hook, 0);
+
+		// make sure we cannot resolve 2 and 4 now since 1 and 3 are already resolved
+		resolveTwoReg.unregister();
+		assertFalse("Should not be able to resolve all the bundles", frameworkWiring.resolveBundles(bundles));
+		assertEquals("Wrong state of bundle tb6v100", Bundle.RESOLVED, tb6v100.getState());
+		assertEquals("Wrong state of bundle tb6v200", Bundle.INSTALLED, tb6v200.getState());
+		assertEquals("Wrong state of bundle tb6v300", Bundle.RESOLVED, tb6v300.getState());
+		assertEquals("Wrong state of bundle tb6v400", Bundle.INSTALLED, tb6v400.getState());
 	}
 
 	public void testNestedResolveOperations() {
@@ -708,7 +739,7 @@ public class ResolverHookTests extends OSGiTestCase {
 				if (unresolvable != null)
 					for(Iterator resolvable = arg0.iterator(); resolvable.hasNext();) {
 						BundleRevision revision = (BundleRevision) resolvable.next();
-						if (unresolvable.contains(revision.getSymbolicName())) {
+						if (unresolvable.contains(revision.getBundle())) {
 							arg0.remove(revision);
 							try {
 								arg0.add(revision);
@@ -781,6 +812,27 @@ public class ResolverHookTests extends OSGiTestCase {
 		}
 		public void filterSingletonCollisions(Capability arg0,
 				Collection arg1) {
+		}
+	}
+
+	static class TestFilterResolvable implements ResolverHook {
+		private final Collection/*<Bundle>*/ unresolvable;
+		public TestFilterResolvable(Collection unresolvable) {
+			this.unresolvable = unresolvable;
+		}
+		public void begin() {
+		}
+		public void end() {
+		}
+		public void filterMatches(BundleRevision arg0, Collection arg1) {
+		}
+		public void filterResolvable(Collection arg0) {
+			for(Iterator revisions = arg0.iterator(); revisions.hasNext();) {
+				if (unresolvable.contains(((BundleRevision) revisions.next()).getBundle()))
+					revisions.remove();				
+			}
+		}
+		public void filterSingletonCollisions(Capability arg0, Collection arg1) {
 		}
 	}
 
