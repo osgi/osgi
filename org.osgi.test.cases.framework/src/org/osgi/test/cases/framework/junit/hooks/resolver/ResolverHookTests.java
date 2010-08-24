@@ -566,6 +566,78 @@ public class ResolverHookTests extends OSGiTestCase {
 		assertEquals("Wrong state of bundle tb6v400", Bundle.INSTALLED, tb6v400.getState());
 	}
 
+	public void testFilterMatchesCandidates() {
+		// this test ensures that the candidates passed really match 
+		// a constraint before being passed to the hook
+		PreventResolution preventHook = new PreventResolution();
+		ServiceRegistration preventReg = registerHook(preventHook, 0);
+
+		final Bundle tb1v100 = install("resolver.tb1.v100.jar");
+		final Bundle tb1v110 = install("resolver.tb1.v110.jar");
+		final Bundle tb2 = install("resolver.tb2.specific.jar");
+		final Bundle tb3 = install("resolver.tb3.specific.jar");
+		final Bundle tb4 = install("resolver.tb4.jar");
+		final Bundle tb5 = install("resolver.tb5.jar");
+
+		Collection testBundles = Arrays.asList(new Bundle[]{tb1v100, tb1v110, tb2, tb3, tb4, tb5});
+		final Filter testCapabilities = createFilter(
+				"(|" + 
+				  "(osgi.package=org.osgi.test.cases.framework.resolver.tb1)" +
+				  "(osgi.bundle=org.osgi.test.cases.framework.resolver.tb1)" +
+				  "(test.ee=OSGi/Minimum)" +
+				")");
+
+		final boolean[] called = new boolean[] {false, false, false, false};
+		final AssertionFailedError[] errors = new AssertionFailedError[5];
+		registerHook(new ResolverHook() {
+			
+			public void filterSingletonCollisions(Capability arg0, Collection arg1) {
+			}
+			public void filterResolvable(Collection arg0) {
+			}
+			public void filterMatches(BundleRevision arg0, Collection arg1) {
+				for (Iterator capabilities = arg1.iterator(); capabilities.hasNext();) {
+					Capability capability = (Capability) capabilities.next();
+					if (!testCapabilities.matchCase(new UnmodifiableDictionary(capability.getAttributes())))
+						break;
+					synchronized (called) {
+						int index = 4;
+						if (arg0.getBundle() == tb2)
+							index = 0;
+						else if (arg0.getBundle() == tb3)
+							index = 1;
+						else if (arg0.getBundle() == tb4)
+							index = 2;
+						else if (arg0.getBundle() == tb5)
+							index = 3;
+						try {
+							if (index == 4)
+								fail("Wrong bundle as requirer: " + arg0.getBundle());
+							called[index] = true;
+							assertEquals("Wrong number of capabilities", 1, arg1.size());
+							assertEquals("Wrong provider of capability", tb1v110, capability.getProviderRevision().getBundle());
+							break;
+						} catch (AssertionFailedError e) {
+							errors[index] = e;
+						}
+					}
+				}
+			}
+			public void end() {
+			}
+			public void begin() {
+			}
+		}, 0);
+	
+		preventReg.unregister();
+		assertTrue("Could not resolve test bundles.", frameworkWiring.resolveBundles(testBundles));
+		for (int i = 0; i < called.length; i++)
+			assertTrue("Not called for: " + i, called[i]);
+		for (int i = 0; i < errors.length; i++)
+			if (errors[i] != null)
+				throw errors[i];
+	}
+
 	public void testNestedResolveOperations() {
 		// ensure no resolution while we setup the tests
 		PreventResolution preventHook = new PreventResolution();
