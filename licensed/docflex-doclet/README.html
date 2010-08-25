@@ -1,0 +1,1396 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>DocFlex/Doclet, Version 1.5.6 - Release Notes</title>
+
+<style type="text/css">
+
+body {
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+code {
+  white-space:nowrap;
+}
+
+.mrg0 {
+  margin-top:0;
+  margin-bottom:0;
+}
+
+.tbl {
+  font-family:Verdana, sans-serif;
+  font-size:80%
+}
+
+.brdr1 { border-left: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; border-right: 1px solid #999999; border-bottom: 1px solid #999999; }
+.brdr2 { border-left: 1px solid #999999; border-top: 1px solid #999999; border-right: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; padding: 5px 6px 5px 6px }
+.brdr3 { border-left: 1px solid #999999; border-top: 1px solid #999999; border-right: 1px solid #CCCCCC; padding: 5px 6px 0px 6px }
+.brdr4 { border-left: 1px solid #999999; border-right: 1px solid #CCCCCC; padding: 0px 6px 0px 6px }
+.brdr5 { border-left: 1px solid #999999; border-right: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; padding: 0px 6px 5px 6px }
+.row1 { background-color:#F5F5F5;}
+.row2 { background-color:#FFFFFF;}
+
+</style>
+</head>
+
+<body>
+
+<center>
+  <h1>DocFlex/Doclet, Version 1.5.6</h1>
+  <h2>Release Notes</h2>
+</center>
+
+<hr>
+
+<h2>Table Of Contents</h2>
+<ul>
+  <li><a href="#contents">Package Contents</a></li>
+  <li><a href="#requirements">Technical Requirements</a></li>
+  <li><a href="#java1.4_and_5_support">Simultaneous Support of Java 1.4 and Java 5</a></li>
+  <li><a href="#limitations">Limitations of Freeware Edition</a>
+  <li><a href="#installation">Installation</a>
+    <ul>
+      <li><a href="#windows_installation">Windows Installation</a></li>
+      <li><a href="#linux_installation">Linux Installation</a></li>
+    </ul>
+  </li>
+  <li><a href="#running_maven_demo">Running Maven Demo</a></li>
+  <li><a href="#getting_help">Getting Help</a></li>
+  <li><a href="#change_log">Change Log</a></li>
+</ul>
+
+<hr>
+
+<h2>
+  <a name="contents"></a>
+  Package Contents
+</h2>
+
+<table cellspacing="0" cellpadding="0" border="0" class="brdr1">
+
+<!-- LICENSE -->
+
+<tr class="row1">
+  <td class="brdr2">
+    <code>LICENSE.html</code>
+  </td>
+  <td class="brdr2">
+    <a href="LICENSE.html">DocFlex Freeware Edition License</a>
+  </td>
+</tr>
+
+<!-- README -->
+
+<tr class="row2">
+  <td class="brdr2">
+    <code>README.html</code>
+  </td>
+  <td class="brdr2">
+    this file
+  </td>
+</tr>
+
+<!-- DOCS -->
+
+<tr class="row1">
+  <td class="brdr2">
+    <code>doc/</code>
+  </td>
+  <td class="brdr2">
+    <a href="doc/index.html">documentation</a>
+  </td>
+</tr>
+
+<!-- *.BAT -->
+
+<tr class="row2" valign="top">
+  <td class="brdr3">
+    <code>*.bat</code>
+  </td>
+  <td class="brdr3">
+    Files prepared for <a href="#windows_installation">Windows&nbsp;Installation</a>:
+  </td>
+</tr>
+
+<tr class="row2" valign="top">
+  <td class="brdr4">
+    <code>generator.bat</code>
+  </td>
+  <td class="brdr4">
+    <ul class="mrg0">
+      <li>starts Javadoc with DocFlex Doclet to generate a demo documentation (Java&nbsp;5 / Java&nbsp;6)</li>
+    </ul>
+  </td>
+</tr>
+
+<tr class="row2" valign="top">
+  <td class="brdr5">
+    <code>generator-1.4.bat</code>
+  </td>
+  <td class="brdr5">
+    <ul class="mrg0">
+      <li>the same for Java&nbsp;1.4</li>
+    </ul>
+  </td>
+</tr>
+
+<!-- LINUX -->
+
+<tr class="row1" valign="top">
+  <td class="brdr3">
+    <code>linux/</code>
+  </td>
+  <td class="brdr3">
+    Files prepared for <a href="#linux_installation">Linux&nbsp;Installation</a>:
+  </td>  
+</tr>
+
+<tr class="row1" valign="top">
+  <td class="brdr4">
+    <code>linux/generator.sh</code>
+  </td>
+  <td class="brdr4">
+    <ul class="mrg0">
+      <li>shell script to start Javadoc with the DocFlex Doclet and generate a demo (Java&nbsp;5 / Java&nbsp;6)</li>
+    </ul>
+  </td>
+</tr>
+
+<tr class="row1" valign="top">
+  <td class="brdr4">
+    <code>linux/generator-1.4.sh</code>
+  </td>
+  <td class="brdr4">
+    <ul class="mrg0">
+      <li>the same for Java&nbsp;1.4</li>
+    </ul>
+  </td>
+</tr>
+
+<tr class="row1" valign="top">
+  <td class="brdr5">
+    <code>linux/docflex.config</code>
+  </td>
+  <td class="brdr5">
+    <ul class="mrg0">
+      <li>DocFlex main configuration file prepared for Linux</li>
+    </ul>
+  </td>
+</tr>
+
+<!-- LIB -->
+
+<tr class="row2" valign="top">
+  <td class="brdr3">
+    <code>lib/</code>
+  </td>
+  <td class="brdr3">
+    DocFlex/Doclet Runtime Environment:
+  </td>  
+</tr>
+
+<tr class="row2" valign="top">
+  <td class="brdr4">
+    <code>lib/docflex-doclet.jar</code>
+  </td>
+  <td class="brdr4">
+    <ul class="mrg0">
+      <li>Java library compiled for Java&nbsp;5 / Java&nbsp;6 (the templates are embedded in this file as resources)</li>
+    </ul>
+  </td>
+</tr>
+
+<tr class="row2" valign="top">
+  <td class="brdr4">
+    <code>lib/docflex-doclet-1.4.jar</code>
+  </td>
+  <td class="brdr4">
+    <ul class="mrg0">
+      <li>Java library compiled for Java&nbsp;1.4</li>
+    </ul>
+  </td>
+</tr>
+
+<tr class="row2" valign="top">
+  <td class="brdr5">
+    <code>lib/docflex.config</code>
+  </td>
+  <td class="brdr5">
+    <ul class="mrg0">
+      <li>
+        DocFlex main configuration file prepared for Windows
+        (contains locations of other config files and various important settings)
+      </li>
+    </ul>
+  </td>
+</tr>
+
+<!-- CONFIG -->
+
+<tr class="row1" valign="top">
+  <td class="brdr3">
+    <code>config/</code>
+  </td>
+  <td class="brdr3">
+    Configuration files (created and updated dynamically):
+  </td>  
+</tr>
+
+<tr class="row1" valign="top">
+  <td class="brdr5">
+    <code>config/generator.config</code>
+  </td>
+  <td class="brdr5">
+    <ul class="mrg0">
+      <li>the Generator configuration file</li>
+    </ul>
+  </td>
+</tr>
+
+<!-- DEMO -->
+
+<tr class="row2" valign="top">
+  <td class="brdr3">
+    <code>demo/</code>
+  </td>
+  <td class="brdr3">
+    Java files for demo generation:
+  </td>  
+</tr>
+
+<tr class="row2" valign="top">
+  <td class="brdr4">
+    <code>demo/java4/</code>
+  </td>
+  <td class="brdr4">
+    <ul class="mrg0">
+      <li>Java 1.4 demo project</li>
+    </ul>
+  </td>
+</tr>
+
+<tr class="row2" valign="top">
+  <td class="brdr5">
+    <code>demo/java5/</code>
+  </td>
+  <td class="brdr5">
+    <ul class="mrg0">
+      <li>Java 5.0 demo project</li>
+    </ul>
+  </td>
+</tr>
+
+<!-- ANT -->
+
+<tr class="row1" valign="top">
+  <a name="ant_example"></a>
+  <td class="brdr3">
+    <code>ant/</code>
+  </td>
+  <td class="brdr3">
+    Ant example files:
+  </td>  
+</tr>
+
+<tr class="row1" valign="top">
+  <td class="brdr4">
+    <code>ant/build.xml</code>
+  </td>
+  <td class="brdr4">
+    <ul class="mrg0">
+      <li>
+        a simple ANT buildfile to demonstrate integration of DocFlex Doclet 
+        with <a href="http://ant.apache.org/" target="_blank">Apache&nbsp;Ant</a>
+      </li>
+    </ul>
+  </td>  
+</tr>
+
+<tr class="row1" valign="top">
+  <td class="brdr4">
+    <code>ant/make.bat</code>
+  </td>
+  <td class="brdr4">
+    <ul class="mrg0">
+      <li>the Windows command file to run Ant</li>
+    </ul>
+  </td>  
+</tr>
+
+<tr class="row1" valign="top">
+  <td class="brdr5">
+    <code>ant/make.sh</code>
+  </td>
+  <td class="brdr5">
+    <ul class="mrg0">
+      <li>the Linux shell script to run Ant</li>
+    </ul>
+  </td>  
+</tr>
+
+<!-- MAVEN -->
+
+<tr class="row2" valign="top">
+  <a name="maven_example"></a>
+  <td class="brdr3">
+    <code>maven/</code>
+  </td>
+  <td class="brdr3">
+    Maven 2 installation/example files
+    (see also <a href="#running_maven_demo">Running Maven Demo</a>):
+  </td>  
+</tr>
+
+<tr class="row2" valign="top">
+  <td class="brdr4">
+    <code>maven/install.bat</code>
+  </td>
+  <td class="brdr4">
+    <ul class="mrg0">
+      <li>
+        The Windows command file to install DocFlex Doclet into the 
+        <a href="http://maven.apache.org/" target="_blank">Apache&nbsp;Maven</a>
+        repository.
+      </li>
+    </ul>
+  </td>  
+</tr>
+
+<tr class="row2" valign="top">
+  <td class="brdr4">
+    <code>maven/install.sh</code>
+  </td>
+  <td class="brdr4">
+    <ul class="mrg0">
+      <li>The same prepared for Linux</li>
+    </ul>
+  </td>  
+</tr>
+
+<tr class="row2" valign="top">
+  <td class="brdr4">
+    <code>maven/pom.xml</code>
+  </td>
+  <td class="brdr4">
+    <ul class="mrg0">
+      <li>
+        A sample Maven project file configured to generate with Maven
+        a demo JavaDoc using DocFlex Doclet.
+        (This file is used by <code>site.bat</code> and <code>site.sh</code>)
+      </li>
+    </ul>
+  </td>  
+</tr>
+
+<tr class="row2" valign="top">
+  <td class="brdr4">
+    <code>maven/site.bat</code>
+  </td>
+  <td class="brdr4">
+    <ul class="mrg0">
+      <li>
+        The Windows command file to generated a project site 
+        including a demo JavaDoc generated with DocFlex Doclet.
+      </li>
+    </ul>
+  </td>  
+</tr>
+
+<tr class="row2" valign="top">
+  <td class="brdr5">
+    <code>maven/site.sh</code>
+  </td>
+  <td class="brdr5">
+    <ul class="mrg0">
+      <li>The same prepared for Linux</li>
+    </ul>
+  </td>  
+</tr>
+
+</table>
+
+<h2>
+  <a name="requirements"></a>
+  Technical Requirements
+</h2>
+
+DocFlex/Doclet requires the Javadoc Tool delivered with one of the following
+Java Development Kits:
+<ul class="mrg8">
+  <li><a href="http://java.sun.com/javase/6/" target="_blank">JDK 6</a></li>
+  <li><a href="http://java.sun.com/j2se/1.5/" target="_blank">JDK 5.0</a></li>
+  <li><a href="http://java.sun.com/j2se/1.4/" target="_blank">Java2 SDK 1.4</a></li>
+</ul>
+(JDK 6 may be preferable as it works considerably faster.)
+<p>
+Since DocFlex/Doclet is a pure Java application,
+it is supposed to work on any operating system with the installed JDK.
+<p>
+Specifically, the software includes both <b>MS Windows</b> BAT files and <b>Linux</b> 
+shell script files to run DocFlex/Doclet immediately on those operating systems.
+See <a href="#windows_installation">Windows Installation</a> and 
+<a href="#linux_installation">Linux Installation</a> respectively.
+<p>
+We were also reported that DocFlex/Doclet worked successfully 
+under <b>Mac OS X</b>.
+
+<h2>
+  <a name="java1.4_and_5_support"></a>
+  Simultaneous Support of Java 1.4 and Java 5
+</h2>
+
+As you know, since JDK 5.0, the
+<a href="http://java.sun.com/javase/6/docs/jdk/api/javadoc/doclet/" target="_blank">Doclet API</a>
+has been extended to reflect the new language features introduced in Java 5.
+Because of this, a doclet developed for Java 5 won't work under Java 1.4
+(otherwise is possible, of course).
+<p>
+However, as Java 1.4 may be still in use,
+we have decided in DocFlex/Javadoc <b>v1.5.x</b> to support both Java versions (i.e. the new
+<a href="http://java.sun.com/javase/6/docs/jdk/api/javadoc/doclet/" target="_blank">Doclet API 1.5</a>
+and the old
+<a href="http://java.sun.com/j2se/1.4.2/docs/tooldocs/javadoc/doclet/" target="_blank">Doclet API 1.4</a>).
+<p>
+Since the binaries compiled for Java 5 are not compatible with Java 1.4, now, DocFlex/Javadoc v1.5.x
+(both editions) includes two Java libraries: the one compiled for Java 5+ and another one compiled for Java 1.4.
+<p>
+The <b>Doclet DSM</b>, on which any DocFlex/Javadoc templates are based, is always the same.
+That is, the Java 5 functionality (i.e. the mapping of entire
+<a href="http://java.sun.com/javase/6/docs/jdk/api/javadoc/doclet/" target="_blank">Doclet API 1.5</a>
+on a virtual XML document model) is present in both libraries.
+However, in the version compiled for Java 1.4, everything concerned Java 5 is emulated
+by the <b>Doclet DSM Driver</b> itself.
+<p>
+As a result, any templates designed for either Java version will work fine under 
+both Java 5+ and Java 1.4 as well. The templates simply won't "notice" the difference!
+
+<h2>
+  <a name="limitations"></a>
+  Limitations of Freeware Edition
+</h2>
+
+The <i>"DocFlex/Doclet"</i> is a freeware edition of 
+<a href="http://www.filigris.com/products/docflex_javadoc/" target="_blank">DocFlex/Javadoc</a>
+and subject to the following limitations:
+
+<ol>
+  <li>
+    The freeware edition has no specific limitations on the size or content of the processed 
+    Java projects neither on the output it generates. 
+    (It just makes all the DocFlex Technology is up to.)
+    <p>
+  </li>
+  <li>
+    The <a href="http://www.filigris.com/products/docflex/about.php#template_designer" target="_blank">Template Designer</a>
+    is not included in the freeware edition. You can neither create new templates nor modify the existing ones.
+    <p>
+  </li>
+  <li>
+    All necessary templates provided with the freeware edition are built into the doclet Java library file. 
+    <p>
+    However, the freeware edition allows to execute any other DocFlex templates created 
+    with a properly licensed copy of the full version of 
+    <a href="http://www.filigris.com/products/docflex_javadoc/" target="_blank">DocFlex/Javadoc</a>. 
+    <p>
+    If you purchase a commercial license, you can create your own templates and distribute 
+    them wherever you like, so other people can use your templates with the freeware DocFlex/Doclet edition
+    without additional charge.
+  </li>
+</ol>
+
+<h2>
+  <a name="installation"></a>
+  Installation
+</h2>
+
+<h3>
+  <a name="windows_installation"></a>
+  Windows Installation
+</h3>
+
+To install DocFlex/Doclet on Windows, please follow these steps:
+
+<ol>
+  <li>
+    Unzip the downloaded archive.
+  </li>
+  <li>
+    Edit the <b><code>generator.bat</code></b> file in DocFlex/Doclet root directory 
+    to specify the <b><code>JDK</code></b> variable according to the location 
+    of JDK1.5 or JDK1.6 installed on your system.
+  </li>
+  <li>
+    If you want to run this file from a different location, 
+    set also the <b><code>DFH</code></b> variable to the <b>absolute</b> pathname
+    of the DocFlex/Doclet installation directory (e.g. <code>set&nbsp;DFH=C:\docflex-doclet-1.5.6</code>).
+  </li>
+</ol>
+
+Now, everything must be ready.
+Just run <code>generator.bat</code> !
+
+<h3>
+  <a name="linux_installation"></a>
+  Linux Installation
+</h3>
+
+To install DocFlex/Doclet on Linux, please follow these steps:
+
+<ol>
+  <li>
+    Unzip the downloaded archive.
+  </li>
+  <li>
+    Edit the <b><code>generator.sh</code></b> shell script file in <b><code>linux</code></b>
+    subdirectory to specify the <b><code>JDK</code></b> variable according to the location 
+    of JDK1.5 or JDK1.6 installed on your system.
+    Change "Permission" properties of this file to allow it to be executed by Linux.
+  </li>
+</ol>
+
+Now, everything must be ready.
+Just run <code>generator.sh</code> !
+
+<h2>
+  <a name="running_maven_demo"></a>
+  Running Maven Demo
+</h2>
+
+First, of course, you need to have Maven 2 installed on your system.
+<p>
+If you do not have Maven yet, download it from the Apache Maven web-site: 
+<a href="http://maven.apache.org/" target="_blank">http://maven.apache.org/</a>.
+The download archive will contain exactly the Maven home directory, which you may 
+unpack at any location (e.g. <code>C:\apache-maven-2.0.9</code>).
+<p>
+Further, please follow these steps (Windows platform):
+<ol>
+<li>
+  Edit <code>{docflex-doclet}\maven\install.bat</code> to specify <code>'JAVA_HOME'</code> and
+  <code>'M2_HOME'</code> variables according to the locations of Java and Maven 2
+  installed on your system. For example:
+  <blockquote>
+  <code>
+  set JAVA_HOME=C:\jdk1.6</br>
+  set M2_HOME=C:\apache-maven-2.0.9
+  </code>
+  </blockquote>
+</li>
+<li>
+  Switch the current directory to <code>{docflex-doclet}\maven</code> 
+  and run <code>install.bat</code>. This will install DocFlex Doclet 
+  (i.e. <code>docflex-doclet.jar</code> containing its executable code)
+  into the Maven repository.
+</li>
+<li>
+  Run <code>site.bat</code> to generate the project web-site.
+  After Maven ends you will see a new <code>'target'</code> subdirectory.
+</li>
+<li>
+  Open <code>target\site\index.html</code> file.
+  Then, go to "Project Reports" and click "DocFlex Doclet Demo".
+  You will see the demo JavaDoc generated by DocFlex Doclet.
+</li>
+</ol>
+
+<p>
+Under Linux, everything is the same except that instead of *.bat you should use 
+*.sh command files.
+<p>
+<i><b>Note:</b> To pass those steps, Maven may need to download from Internet and install
+lots of plugins. (In fact, Maven is all made of various plugins, which it downloads from 
+Internet dynamically as needed.) So, you must be connected to Internet during this.</i>
+
+
+<h2>
+  <a name="getting_help"></a>
+  Getting Help
+</h2>
+
+We are happy to hear any questions, suggestions, comments, etc. 
+about this product.<br> 
+Please, e-mail us to: <a href="mailto:support@docflex.com">support@docflex.com</a>
+<p>
+Check the latest releases and documentation updates at:
+<a href="http://www.filigris.com" target="_blank">www.filigris.com</a>.
+
+<h2>
+  <a name="change_log"></a>
+  Change Log
+</h2>
+
+<h3>
+  Version 1.5.6
+</h3>
+
+<ul>
+
+<li><b>Template interpreter / output generator</b>
+  <p>
+  <ul>
+    <li><b><i>Performance improvement</i></b>
+      <p>
+      Thanks to some new optimizations, all output generators work 15-20% faster now.
+      </p><p>
+      The following is the result of the generation of framed HTML documentation
+      by all Java sources of <code>java.*</code>, <code>javax.*</code>, <code>org.*</code> packages 
+      (including all their subpackages), which constitute the entire 
+      <a href="http://java.sun.com/javase/6/docs/api/" target="_blank">Java SE 6 API Specification</a>
+      currently provided by Sun:
+      </p><p>
+      <table cellpadding="4" cellspacing="1" border="1">
+      <tr>
+      <td bgcolor="#F5F5F5">
+        <table cellpadding="0" cellspacing="0">
+        <tr>
+          <td class="tbl">Number of Java classes:&nbsp;&nbsp;</td>
+          <td class="tbl">3821</font></td>
+        </tr>
+        <tr>
+          <td class="tbl">Total source code size:&nbsp;&nbsp;</td>
+          <td class="tbl">40.4 Mb (all files)</font></td>
+        </tr>
+        <tr>
+          <td class="tbl">Generation time:&nbsp;&nbsp;</td>
+          <td class="tbl"><b>323 sec</b></td>
+        </tr>
+        <tr>
+          <td class="tbl">Result HTML documentation:&nbsp;&nbsp;</td>
+          <td class="tbl">39.7 Mb</td>
+        </tr>
+        <tr>
+          <td class="tbl">Number of generated files:&nbsp;&nbsp;</td>
+          <td class="tbl">4216</td>
+        </tr>
+        <tr>
+          <td class="tbl">Computer platform:&nbsp;&nbsp;</td>
+          <td class="tbl">Intel Core 2 Duo E6600 based system / Windows XP</td>
+        </tr>
+        <tr>
+          <td class="tbl">JDK version:&nbsp;&nbsp;</td>
+          <td class="tbl">1.6.0_10</td>
+        </tr>
+        </table>
+      </td>
+      </tr>
+      </table>
+      </p><p>
+      For comparison, the same test run with the previous v1.5.5 took 393 sec.
+      </p>
+    </li>
+
+    <li><b><i>Very long nonbreaking string in RTF</i></b>
+      <p>
+      The automatic wrapping of very long nonbreaking strings within table cells has been improved.
+      <p>
+      Until this version, such a wrapping was done correctly when the string was generated by the same control.
+      When the entire nonbreaking string was produced by different controls (possibly using different fonts),
+      it was not recognized as a single string and, therefore, was not broken as needed.
+      That caused some summary tables in RTF JavaDoc to expand beyond the page width.
+      <p>
+      Now, this is fixed!
+      <p>
+      For more details about that problem with long nonbreaking strings in RTF, see Doclet GUI | 
+      RTF Options | Tables | Long string wrapping factor.
+      </p>
+    </li>
+  </ul>
+  </p>
+</li>
+
+<li><b>Multivalued (List) Parameters</b>
+  <p>
+  Since this version, DocFlex/Javadoc supports multi-valued template parameters
+  (called also <i>list</i> parameters, for short).
+  </p><p>
+  Such parameters allow you to pass into template the whole vector of different values 
+  associated with the same parameter name. This provides a universal mechanism for implementing 
+  a user control over how a set of templates processes a certain type of data (or situations) 
+  that may come in unlimited number of variations.
+  A list parameter can be specified both in the Parameter Inspector dialog of the doclet GUI
+  and on Javadoc command (using one or many <code>-P</code> options).
+  </p><p>
+  List parameters have been immediately used in standard templates
+  to re-implement all <i><a href="#exclude.byTags">"Exclude By Tags"</a></i> and 
+  <i><a href="#exclude.byAnns">"Exclude By Annotations"</a></i> parameters
+  and to support a new functionality of 
+  <i><a href="#include.tag.custom">"Include Custom Tags"</a></i> parameter (see below).
+  </p>
+</li>
+
+<li><b><a name="include.tag.custom"></a>Standard Templates | Documenting of custom tags</b>
+  <p>
+  The <i>"Include | Tags | Custom Tags"</i> (<code>include.tag.custom</code>) parameter,
+  which was present in the standard templates previously, has been completely redefined to support a functionality
+  similar to that of 
+  <code><a href="http://java.sun.com/javase/6/docs/technotes/tools/windows/javadoc.html#tag" target="_blank">-tag</a></code>
+  option provided by the
+  <a href="http://java.sun.com/javase/6/docs/technotes/guides/javadoc/standard-doclet.html" target="_blank">Standard Doclet</a>.
+  </p><p>
+  In particular, using this parameter, now you can selectively include in the generated output 
+  the documentation of your custom tags, specify the tag headings as well as their ordering. 
+  You will be able also to redefine the headings and ordering of the standard tags (such as @param, @see, @author etc). 
+  </p>
+</li>
+
+</ul>
+
+<h3>
+  Version 1.5.5
+</h3>
+
+<ul>
+
+<li><b>Doclet GUI</b>
+  <p>
+  The processing of mouse-click events has been reworked so as to show popup menus
+  correctly on different platforms.
+  Until this version, the popup menus actually didn't work on Apple Mac (with its one-button mouse).
+  Now, it is fixed!
+  <p>
+</li>
+
+<li><b>Output Generators</b>
+  <p>
+  The EMF image format has been supported. Now, the EMF images can be inserted both in 
+  the generated HTML and RTF documents.
+  All supported (and tested) image formats now include: GIF, PNG, JPG, WMF, EMF, BMP.
+  <p>
+</li>
+
+<li><b>Maven Example</b>
+  <p>
+  A <a href="#maven_example">Maven sample</a> project has been added to demonstrate how to integrate 
+  DocFlex Doclet with <a href="http://maven.apache.org/" target="_blank">Apache Maven 2</a>.
+</li>
+
+</ul>
+
+
+<h3>
+  Version 1.5.4
+</h3>
+
+<ul>
+
+<li><b>Template interpreter / output generator</b>
+   <p>
+   The format of -P and -O command-line options 
+   (which specify a value of a template parameter or output format option) has been changed slightly
+   so as to pass the value as a separate command-line argument.
+   <p>
+   That was needed for better compatibility with <a href="#ant_example">Apache Ant</a>
+   (particularly, in some situations when the value string contains spaces). 
+   <p>
+</li>
+
+<li><b>Standard Template Set</b>
+   <p>
+   The processing of <code>{@inheritDoc}</code> tags has been slightly changed so as not
+   to reprint them back in the documentation when no actual inherited comments have been found.
+   <p>
+</li>
+
+</ul>
+
+<h3>
+  Version 1.5.3
+</h3>
+
+<ul>
+
+<li><b>Generator GUI | Template Parameter Inspector</b>
+   <p>
+   As the number of template parameters (controlling what is generated) will ever grow, 
+   the Template Parameter Inspector in its previous form became increasingly cumbersome and difficult to navigate. 
+   <p>
+   We have addressed that problem by introducing a possibility to collapse/expand the parameter group nodes dynamically 
+   (some of which can be preset in the templates to appear initially in the collapsed form; 
+   further, the current collapse/expand state of particular group nodes is saved in the 
+   <code>generator.config</code> and restored next time). This improvement should make the whole parameter tree 
+   a lot more compact and easy to use.
+   <p>
+   The same feature has been extended to all other property inspectors (e.g. in the Output Format Option dialogs
+   and the Template Designer).
+</li>
+
+</ul>
+
+<h3>
+  Version 1.5.2
+</h3>
+
+<ul>
+
+<li><b>New template parameters</b>
+  <p>
+  <a name="exclude.byAnns"></a>
+  In addition to <a href="#exclude.byTags"><i>"Exclude By Tags"</i></a>, a similar group of parameters 
+  <i>"Exclude By Annotations"</i> has been added:
+  <p>
+  <ol>
+    <li>
+      <i>Exclude By Annotations | classes & members</i>
+      <p>
+      Specify annotation types by which both classes and class members 
+      (i.e. fields, constructors and methods) are completely excluded from 
+      the generated documentation.
+      <p>
+    </li>
+    <li>
+      <i>Exclude By Annotations | classes</i>
+      <p>
+      Allows to hide completely from the generated documentation 
+      some intermediate classes of your internal implementation, however, 
+      to preserve documenting of some their fields and methods (inherited by other classes), 
+      which are supposed to be part of an open API.
+      <p>
+    </li>
+    <li>
+      <i>Exclude By Annotations | members</i>
+      <p>
+      Specify annotation types by which only class members 
+      (i.e. fields, constructors and methods) are selectively excluded 
+      from the generated documentation.
+    </li>
+  </ol> 
+  <p>
+  The reason why tags are not enough is that they are not retained in the compiled binary classes. 
+  <p>
+  Suppose that before generating JavaDoc, a part of your project is present already in a precompiled 
+  binary form (e.g. in a jar-file) and you want to exclude those classes from mentioning
+  in the documentation (even though they are declared <code>public</code> for your internal use). 
+  You will not be able to achieve this simply by marking such classes 
+  with tags and trying to exclude by them! Those tags won't get into the binary classes and, hence,
+  the Doclet API won't know anything about them. 
+  Annotations, on the contrary, can be retained in binary form and here is where they can help!
+</li>
+
+</ul>
+
+
+<h3>
+  Version 1.5.1
+</h3>
+
+<ul>
+
+<li><b>New template parameters</b>
+  <p>
+  <a name="exclude.byTags"></a>
+  The old <i>"Exclude by tags"</i> template parameter has been replaced with the whole three parameters:
+  <p>
+  <ol>
+    <li>
+      <i>Exclude By Tags | classes & members</i>
+      <p>
+      Specify tags by which both classes and everything defined within them (i.e. members and inner classes)
+      will be completely excluded from the documentation. Before this revision, the public/protected members 
+      of the excluded classes might still appear in the documentation 
+      (e.g. in such places like inherited member lists).
+      <p>
+    </li>
+    <li>
+      <i>Exclude By Tags | classes</i>
+      <p>
+      Allows to hide completely from the generated documentation some intermediate public classes 
+      of your internal implementation while preserving documenting their public/protected 
+      fields and methods supposed to be part of an open API.
+      <p>
+      The effect will be that each visible inheritable member of the excluded class will appear in every 
+      direct descendant of that class being documented (as if that member was defined directly there).
+      <p>
+      This may be particularly helpful when you will need next time to change your implementation 
+      while keeping intact what you have declared in your open API.
+      <p>
+    </li>
+    <li>
+      <i>Exclude By Tags | members</i>
+      <p>
+      Specify tags by which only class members are selectively excluded from the generated documentation.
+    </li>
+  </ol> 
+  <p>
+</li>
+
+<li><b>Template interpreter / output generator</b>
+  <p>
+  <ul>
+    <li>
+      Reworked scaling of images in HTML.
+      <p>
+      In templates, the new image size must be specified in device-independent units (like points).
+      Before that, it was an HTML browser who converted points into pixels, which might be
+      responsible for producing images with unpredictable sizes.
+      <p>
+      Now, when generating HTML, the DocFlex generator itself converts point size into pixel size according 
+      to the DPI value specified in the formatting properties of the given templates.
+      So, in HTML, the new image size will always be specified in pixels.
+      <p>
+    </li>
+  </ul>
+  <ul>
+    <li>
+      Support of images in BMP format.
+      <p>
+      Now, all supported image formats include: GIF, PNG, JPG, WMF, BMP
+    </li>
+  </ul>
+</li>
+
+</ul>
+
+<h3>
+  Version 1.5.0
+</h3>
+
+<ul>
+
+<li><b>Full support of Java 5 language features</b>
+  <p>
+  The version 1.5.0 is a milestone of DocFlex/Javadoc development. Since that version, 
+  DocFlex/Javadoc fully supports all new language features introduced in Java 5.
+  In particular, this includes two major innovations:
+  <p>
+  <ol>
+    <li>
+      The extension of the Doclet DSM (which maps the whole Doclet API into a DOM-like representation
+      used in DocFlex templates) to fully cover the new 
+      <a href="http://java.sun.com/j2se/1.5.0/docs/guide/javadoc/doclet/spec/index.html" target="_blank">Doclet API</a>
+      introduced since <a href="http://java.sun.com/j2se/1.5/" target="_blank">JDK 5.0</a>.
+      <p>
+    </li>
+    <li>
+      The new basic template set to generate documentation with the full support 
+      of the new language features introduced in Java 5:
+      <ul>
+        <li><i>Generic Types</i></li>
+        <li><i>Enumerated Types</i></li>
+        <li><i>Annotations</i></li>
+      </ul>
+    </li>
+  </ol>
+  <p>
+</li>
+
+<li><b>Performance improvement</b>
+  <p>
+  The following are two tests that have been run on Java SE 6 JDK Source Code (downloaded from:
+  <a href="http://download.java.net/jdk6/" target="_blank">http://download.java.net/jdk6/</a>)
+  using basic templates and default generator settings.
+  <p>
+  This is the result of the generation of a <b>framed HTML</b> documentation by the Java sources of 
+  all <code>java.*</code> packages and all their subpackages (i.e. the entire Java core class library):
+  <p>
+  <table cellpadding="4" cellspacing="1" border="1">
+  <tr>
+  <td bgcolor="#F5F5F5">
+    <table cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="tbl">Number of Java classes:&nbsp;&nbsp;</td>
+      <td class="tbl">1363</font></td>
+    </tr>
+    <tr>
+      <td class="tbl">Total source code size:&nbsp;&nbsp;</td>
+      <td class="tbl">18.1 Mb (all files)</font></td>
+    </tr>
+    <tr>
+      <td class="tbl">Generation time:&nbsp;&nbsp;</td>
+      <td class="tbl"><b>194 sec</b></td>
+    </tr>
+    <tr>
+      <td class="tbl">Result HTML documentation:&nbsp;&nbsp;</td>
+      <td class="tbl">39.7 Mb</td>
+    </tr>
+    <tr>
+      <td class="tbl">Number of generated files:&nbsp;&nbsp;</td>
+      <td class="tbl">1476</td>
+    </tr>
+    <tr>
+      <td class="tbl">Computer platform:&nbsp;&nbsp;</td>
+      <td class="tbl">AMD Athlon64 3000+ based system / Windows XP</td>
+    </tr>
+    <tr>
+      <td class="tbl">JDK version:&nbsp;&nbsp;</td>
+      <td class="tbl">1.6.0</td>
+    </tr>
+    </table>
+  </td>
+  </tr>
+  </table>
+
+  <p>
+  This is the result of the generation of a single-file <b>RTF</b> documentation by the Java sources
+  of <code>javax.swing</code> package and subpackages:
+  <p>
+  <table cellpadding="4" cellspacing="1" border="1">
+  <tr>
+  <td bgcolor="#F5F5F5">
+    <table cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="tbl">Number of Java classes:&nbsp;&nbsp;</td>
+      <td class="tbl">872</td>
+    </tr>
+    <tr>
+      <td class="tbl">Total source code size:&nbsp;&nbsp;</td>
+      <td class="tbl">10.7 Mb (all files)</td>
+    </tr>
+    <tr>
+      <td class="tbl">Generation time:&nbsp;&nbsp;</td>
+      <td class="tbl"><b>189 sec</b></td>
+    </tr>
+    <tr>
+      <td class="tbl">Result RTF document:&nbsp;&nbsp;</td>
+      <td class="tbl">22.4 Mb (with images)</td>
+    </tr>
+    <tr>
+      <td class="tbl">Number of pages (A4):&nbsp;&nbsp;</td>
+      <td class="tbl">3981</td>
+    </tr>
+    <tr>
+      <td class="tbl">Computer platform:&nbsp;&nbsp;</td>
+      <td class="tbl">AMD Athlon64 3000+ based system / Windows XP</td>
+    </tr>
+    <tr>
+      <td class="tbl">JDK version:&nbsp;&nbsp;</td>
+      <td class="tbl">1.6.0</td>
+    </tr>
+    </table>
+  </td>
+  </tr>
+  </table>
+
+</li>
+</ul>
+
+<h3>
+  Version 1.4.11
+</h3>
+
+<ul>
+
+<li>
+  Better support for image formatting. 
+  Now, an image can be aligned both to the left or right of a text and wrapped by it.
+  This is supported both in HTML and RTF output.
+  An image can be aligned directly in a template (e.g. by specifying properties of an Image Control) 
+  or using <b><code>align</code></b> attribute of an <b><code>&lt;img&gt;</code></b> tag in 
+  a description preformatted with HTML markup.
+</li>
+</li>
+
+</ul>
+
+<h3>
+  Version 1.4.10
+</h3>
+
+<ul>
+
+<li>
+  Now, the generator consumes considerably less memory and works up to 10% faster!
+</li>
+<li>
+  The error reporting, when the generator works without GUI, is directed now to the 
+  <code>stderr</code> (by default) or in a separate <code>'docflex_error.log'</code> file 
+  (when it is specified with the newly introduced <b><code>-errlog</code></b> option).
+</li>
+
+</ul>
+
+<h3>
+  Version 1.4
+</h3>
+
+<ul>
+
+<li><b>DocFlex/Doclet now supports Linux</b>
+  <p>
+  DocFlex/Doclet has been tuned to support Linux (as well as Mac OS X):
+  <p>
+  <ul>
+    <li>Some early bugs have been fixed, which prevented it working properly under Linux.</li>
+    <li>A special RTF option was introduced to generate OpenOffice.org friendly RTF (see below)</li>
+    <li>Improved support for external document viewers (see below)</li>
+  </ul>
+  <p>
+</li>
+
+<li><b>New RTF option</b>
+  <p>
+  A new RTF output option <i>"Tune output for MS Word"</i> has been introduced.
+  This option, actually, allows switching off that very tuning (which until now was the default mode)
+  to produce an RTF friendlier to open with other non MS Word applications,
+  e.g. OpenOffice.org Writer under Linux.
+  <p>
+  For more details, see <i>Documentation | Using DocFlex Doclet | Tips | Generating RTF for OpenOffice.org</i>
+  <p>
+</li>
+
+<li><b>Improved support for external document viewers</b>
+  <p>
+  The <i>"openURL"</i> setting, which is contained in <code>docflex.config</code> 
+  (the main DocFlex configuration file located in <code>lib</code> directory 
+  near <code>docflex-doclet.jar</code>)
+  and specifies an external application launched automatically by the generator to view 
+  the generated documentation, now allows to assign different such applications for each 
+  particular document/URL type.
+  <p>
+  For example, using this setting under Linux, you can assign directly for all RTF documents 
+  to be open with OpenOffice.org Writer and other documents -- with Firefox web browser.
+  <p>
+  To find out how to do this, please see the instruction contained in <code>docflex.config</code> itself.
+  <p>
+</li>
+
+</ul>
+
+<h3>
+  Version 1.3
+</h3>
+
+<ul>
+
+<li><b>Performance improvement</b>
+  <p>
+  Thanks to implementing of a new algorithm handling cascading formatting properties of
+  template components, the general performance of all output generators has been improved up to 30%!
+  <p>
+  The following is the result of a single file RTF documentation generation for Java sources 
+  contained in <code>javax.swing</code> package and its subpackages supplied with JDK 1.4:
+  <p>
+  <table cellpadding="4" cellspacing="1" border="1">
+  <tr>
+  <td bgcolor="#F5F5F5">
+    <table cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="tbl">Number of Java classes:&nbsp;&nbsp;</td>
+      <td class="tbl">540</td>
+    </tr>
+    <tr>
+      <td class="tbl">Total source code size:&nbsp;&nbsp;</td>
+      <td class="tbl">8.2 Mb</td>
+    </tr>
+    <tr>
+      <td class="tbl">Generation time:&nbsp;&nbsp;</td>
+      <td class="tbl"><b>199 sec</b></td>
+    </tr>
+    <tr>
+      <td class="tbl">Result RTF document:&nbsp;&nbsp;</td>
+      <td class="tbl">20.5 Mb</td>
+    </tr>
+    <tr>
+      <td class="tbl">Number of pages (A4):&nbsp;&nbsp;</td>
+      <td class="tbl">3012</td>
+    </tr>
+    <tr>
+      <td class="tbl">Computer platform:&nbsp;&nbsp;</td>
+      <td class="tbl">AMD Athlon64 3000+ based system / Windows XP</td>
+    </tr>
+    </table>
+  </td>
+  </tr>
+  </table>
+  </p>
+</li>
+
+<li><b>New template parameter</b>
+  <p>
+  A new template parameter <i>"Exclude by tags"</i> has been introduced in basic templates. 
+  This parameter allows to exclude from the generated documentation classes, fields and methods 
+  with specified tags.
+  <p>
+</li>
+
+<li><b>More command line option support</b>
+  <p>
+  <ul> 
+    <li>
+      For any boolean command line option recognized by DocFlex/Doclet,
+      now, its explicit <code>true/false</code> value can be specified directly
+      on the command line. 
+      As it was before, when the option value is not specified,
+      it is assumed as <code>true</code>.
+      <p>
+      <dl>
+        <dt>For example:</dt>
+        <dd>
+          <dl>
+            <dt><b><code>-launchviewer</code></b></dt>
+            <dd>Do launch viewer</dd>
+          </dl>
+          <dl>
+            <dt><b><code>-launchviewer=false</code></b></dt>
+            <dd>Do not launch viewer, no matter what's specified in the <code>generator.config</code></dd>
+          </dl>
+        </dd>   
+      </dl>
+      <p>
+    </li>
+    <li>
+      DocFlex/Doclet now supports the <code>-quiet</code> command line option.
+      Setting this option suppresses most of non-error generator messages.
+    </li>
+  </ul>
+  <p>
+</li>
+
+<li><b>New HTML option</b>
+  <p>
+  A new HTML output option <i>"Add Mark of the Web"</i> has been introduced. 
+  <p>
+  Setting this option will avoid the security alert messages 
+  popping up by Microsoft Internet Explorer under Windows XP SP2 when viewing 
+  the HTML documentation generated by DocFlex.
+  <p>
+  The new option is an alternative to using the old <i>"HTML pattern file"</i> option
+  which also allows to solve this problem however in a more cumbersome way.
+  <p>
+</li>
+
+</ul>
+
+<h3>
+  Version 1.2
+</h3>
+
+<ul>
+<li><b>Full support of table tags in embedded HTML</b>
+  <p>
+  When a non-HTML output (such as RTF) is generated, all HTML tags embedded in Java source comments
+  need to be parsed and interpreted with the appropriate formatting available in the destination output format.
+  This is implemented in some universal way for all possible non-HTML formats supported by DocFlex core.
+  (At the moment, this includes only RTF, but other formats coming.)
+  <p>
+  Now, almost all HTML tags (and their attributes) practically usable in doc-comments are supported.
+  Here's the list of all supported HTML tags:
+  <p>
+  <table border="1" cellspacing="1" cellpadding="5">
+  <tr valign="top">
+    <td><b>Text</b></td>
+    <td>
+      &lt;b&gt;, &lt;strong&gt;, &lt;i&gt;, &lt;em&gt;, &lt;code&gt;, &lt;tt&gt;, &lt;u&gt;, 
+      &lt;s&gt;, &lt;strike&gt;, &lt;sub&gt;, &lt;sup&gt;, &lt;font&gt;, &lt;br&gt; 
+    </td>
+  </tr>
+  <tr valign="top">
+    <td><b>Paragraphs</b></td>
+    <td>
+      &lt;p&gt;, &lt;center&gt;, &lt;div&gt;, &lt;pre&gt;, &lt;h1&gt;, &lt;h2&gt;, &lt;h3&gt;, 
+      &lt;h4&gt;, &lt;h5&gt;, &lt;h6&gt;, &lt;blockquote&gt;
+    </td>
+  </tr>
+  <tr valign="top">
+    <td><b>Lists</b></td>
+    <td>
+      &lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;, &lt;dl&gt;, &lt;dt&gt;, &lt;dd&gt;
+    </td>
+  </tr>
+  <tr valign="top">
+    <td><b>Table</b></td>
+    <td>
+      &lt;table&gt;, &lt;tr&gt;, &lt;td&gt;, &lt;th&gt;
+    </td>
+  </tr>
+  <tr valign="top">
+    <td><b>Other</b></td>
+    <td>
+      &lt;hr&gt;, &lt;img&gt;, &lt;a&gt;...&lt;/a&gt;
+    </td>
+  </tr>
+</table>
+</p>
+</li>
+
+<li><b>New template parameters</b>
+  <p>
+  New template parameters have been introduced for better control of the content and
+  formatting of the printable documentation generated by <code>PlainDoc.tpl</code>
+  basic template:
+  <p>
+  <ul>
+    <li>
+      <i>Include/exclude details of inner classes</i><br>
+      Controls whether inner classes should be included into the generation scope.
+      <p>
+    </li>
+    <li>
+      <i>Include initial values of fields</i><br>
+      Specify whether the initial values of fields should be shown in the documentation.
+      <p>
+    </li>
+    <li>
+      <i>Omit inherited member lists for packages</i><br>
+      Suppresses generation of lists of the inner classes, fields or methods 
+      inherited from those classes/interfaces, which belong to the packages specified 
+      with this parameter.
+      <p>
+    </li>
+    <li>
+      <i>Omit all inherited member lists</i><br>
+      Suppresses generation of all inherited member lists.
+      <p>
+    </li>
+    <li>
+      <i>Start package from new page</i><br>
+      Forces each package documentation to start from a new page.
+      <p>
+    </li>
+    <li>
+      <i>Start class from new page</i><br>
+      Forces each class documentation to start from a new page.
+    </li>
+  </ul>
+</li>
+
+</ul>
+
+<h3>
+  Version 1.1
+</h3>
+
+<ul>
+<li><b>Upgrade with the latest DocFlex core</b>
+  <p>
+  <ul>
+    <li>Lots of old bugs fixed</li>
+    <li>Performance of the generator improved -- some tests show the generator is working now about 15% faster.</li>
+  </ul>
+  </p>
+</li>
+
+<li><b>Improvements in templates</b>
+  <p>
+  <ul>
+    <li>
+      Some inaccuracies in templates corrected
+    </li>
+    <li>
+      Two new template parameters introduced to control omitting of package qualifiers 
+      in the generated documentation (e.g. in method parameters, result and field types, etc.)
+    </li>
+  </ul>
+  </p>
+</li>
+</ul>
+
+<h3>
+  Version 1.0
+</h3>
+
+<dl>
+<dd>The story starts here!</dd>
+</dl>
+
+<hr>
+<span style="font-family: Verdana, helvetica;font-size: 13px;">
+Copyright&copy; 2008 Filigris Works, Leonid Rudy Softwareprodukte. All rights reserved.<br>
+To contact us, please visit
+<a href="http://www.filigris.com" target="_blank">www.filigris.com</a> or
+e-mail to: <a href="mailto:contact@filigris.com">contact@filigris.com</a>
+</span>
+
+</body>
+</html>

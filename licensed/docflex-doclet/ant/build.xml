@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<!-- This is a simple ANT buildfile to demonstrate -->
+<!-- integration of DocFlex Doclet with Apache Ant -->
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<project name="DocFlex Ant Demo" basedir=".">
+
+  <!-- the location of DocFlex/Doclet home directory -->
+  <property name="DFH" value=".."/>
+
+  <target name="demo">
+    <!-- 
+      Specifying Javadoc task.
+      The 'maxmemory' attribute sets the maximum heap size 
+      available to the Java VM running Javadoc.
+    -->
+    <javadoc maxmemory="512m" destdir="${DFH}/out" sourcepath="${DFH}/demo">
+
+      <!-- Specifying the doclet -->
+      <doclet name="com.docflex.javadoc.Doclet" path="${DFH}/lib/docflex-doclet.jar">
+
+        <!-- Specifying the doclet command-line parameters -->
+
+        <!-- the main template -->
+        <param name="-template" value="res:templates/FramedDoc.tpl"/>
+
+        <!-- template parameters -->
+        <param name="-p:windowTitle=DocFlex/Doclet Demo"/>
+        <param name="-p:docTitle=DocFlex Ant Demo"/>
+        <param name="-p:include.tag.custom" value="todo:a:To Do:"/>
+        <param name="-p:include.tag.custom" value="prj\:type:opt:Project Type:"/>
+
+        <!-- the output format -->
+        <param name="-format" value="HTML"/>
+
+        <!-- supress showing up the doclet GUI -->
+        <param name="-nodialog"/>
+
+        <!-- do not launch documentation viewer -->
+        <param name="-launchviewer=false"/>
+      </doclet>
+
+      <!-- Specifying the Java source package to document -->
+      <package name="java5.*"/>
+
+    </javadoc>
+  </target>
+
+</project>
