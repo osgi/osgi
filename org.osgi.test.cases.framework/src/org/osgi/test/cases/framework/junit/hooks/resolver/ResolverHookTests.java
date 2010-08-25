@@ -425,13 +425,13 @@ public class ResolverHookTests extends OSGiTestCase {
 	public void testFilterGenericRequire01() {
 		Filter filterCapabilities1 = createFilter(
 				"(&" + 
-				  "(test.ee=OSGi/Minimum)" +
-				  "(version>=1.1)(!(version>=1.2))" + 
+				  "(test=aName)" +
+				  "(version>=1.1.0)(!(version>=1.2.0))" + 
 				")");
 		Filter filterCapabilities2 = createFilter(
 				"(&" + 
-				  "(test.ee=OSGi/Minimum)" +
-				  "(version>=1.0)(!(version>=1.1))" + 
+				  "(test=aName)" +
+				  "(version>=1.0.0)(!(version>=1.1.0))" + 
 				")");
 		TestFilterCapabilityHook hook1 = new TestFilterCapabilityHook(filterCapabilities1);
 		ServiceRegistration reg = registerHook(hook1, 0);
@@ -452,7 +452,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		TestFilterCapabilityHook hook2 = new TestFilterCapabilityHook(filterCapabilities2);
 		registerHook(hook2, 0);
 		refreshBundles(Arrays.asList(new Bundle[] {tb5}));
-		assertTrue("Should resolve fragment tb5", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[]{tb5})));
+		assertTrue("Should resolve tb5", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[]{tb5})));
 		if (hook2.getError() != null)
 			throw hook2.getError();
 		assertEquals("Wrong state for tb5", Bundle.RESOLVED, tb5.getState());
@@ -584,7 +584,7 @@ public class ResolverHookTests extends OSGiTestCase {
 				"(|" + 
 				  "(osgi.package=org.osgi.test.cases.framework.resolver.tb1)" +
 				  "(osgi.bundle=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(test.ee=OSGi/Minimum)" +
+				  "(test=aName)" +
 				")");
 
 		final boolean[] called = new boolean[] {false, false, false, false};

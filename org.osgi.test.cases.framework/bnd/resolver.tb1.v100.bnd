@@ -2,7 +2,7 @@ Bundle-Name:                             ${p}.resolver.tb1
 Bundle-SymbolicName:                     ${p}.resolver.tb1
 Bundle-Version:                          1.0.0
 Private-Package:                         ${p}.resolver.tb1
-Eclipse-GenericCapability:               OSGi/Minimum:test.ee; version="1.0"
+Provide-Capability:                      test; test="aName"; version:Version="1.0"; long:Long="100"; double:Double="1.001"; string:String="aString"
 
 Export-Package: ${p}.resolver.tb1;version="1.0.0";-noimport:=true
 Include-Resource: \
