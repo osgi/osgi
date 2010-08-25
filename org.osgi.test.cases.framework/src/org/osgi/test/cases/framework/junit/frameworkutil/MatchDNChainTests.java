@@ -103,9 +103,9 @@ public class MatchDNChainTests extends TestCase {
 		assertInvalidMatch(pattern, "");
 		assertInvalidMatch(pattern, "*bob");
 		assertInvalidMatch(pattern, ";`´$.,@");
-		assertInvalidMatch(pattern, "*, c=US\\");
-		assertInvalidMatch(pattern, "*, c=\"US");
-		assertInvalidMatch(pattern, "*, cn=Bugs Bunny, o=ACME,");
+		assertInvalidMatch(pattern, "c=US\\");
+		assertInvalidMatch(pattern, "c=\"US");
+		assertInvalidMatch(pattern, "cn=Bugs Bunny, o=ACME,");
 		assertInvalidMatch(pattern, "*, o=ACME, c=US");
 		assertInvalidMatch(pattern, "-, o=ACME, c=US");
 		assertInvalidMatch(pattern, "*");
