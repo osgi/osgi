@@ -25,20 +25,19 @@ package org.osgi.service.coordination;
  * Coordination is terminated.
  * 
  * If a Coordination ends with the {@link Coordination#end()} method, then all
- * the participants are called back on their {@link #ended()} method. If the
+ * the participants are called back on their {@link #ended(Coordination)} method. If the
  * initiator decides to fail the Coordination (or another party has called
- * {@link Coordinator#alwaysFail(String)}) then the {@link #failed()} method is
+ * {@link Coordinator#alwaysFail(String)}) then the {@link #failed(Coordination)} method is
  * called back.
  * 
- * Participants are not required to be thread safe for the {@link #ended()}
- * method though the {@link #failed()} can originate from another thread.
+ * Participants are required to be thread safe for the {@link #ended(Coordination)} method
+ * and the {@link #failed(Coordination)} method. Both methods can be called on another
+ * thread.
  * 
  * A Coordinator service must block a Participant when it tries to participate
- * in multiple Coordinations. Only one Coordination can be active on a thread so
- * a Participant can only be active on a single thread between the return of the
- * {@link Coordinator#participate(Participant)} call and the {@link #ended()} or
- * {@link #failed()} call. 
+ * in multiple Coordinations.
  * 
+ * @ThreadSafe
  */
 public interface Participant {
 	/**
@@ -47,23 +46,22 @@ public interface Participant {
 	 * A participant should properly discard any work it has done during the
 	 * active coordination.
 	 * 
-	 * This method is in all most all cases called on the thread associated with
-	 * the coordination. However, it is possible that this method is called on
-	 * another thread when the coordination times out or is killed.
+	 * @param c The Coordination that does the callback
 	 * 
-	 * @throws Exception
-	 *             Any exception thrown should be logged but is further ignored
-	 *             and does not influence the outcome of the Coordination.
+	 * @throws Exception Any exception thrown should be logged but is further
+	 *         ignored and does not influence the outcome of the Coordination.
 	 */
-	void failed() throws Exception;
+	void failed(Coordination c) throws Exception;
 
 	/**
-	 * The Coordination is being ended. This method must always be called on the
-	 * coordinator thread.
+	 * The Coordination is being ended.
 	 * 
-	 * throws Exception If an exception is thrown it should be logged and the
-	 * return of the {@link Coordination#end()} method must be
-	 * {@link Coordinator#PARTIALLY_ENDED}.
+	 * @param c The Coordination that does the callback
+	 * 
+	 * @throws Exception If an exception is thrown it should be logged and the
+	 *         return of the {@link Coordination#end()} method must be
+	 *         {@link Coordination#PARTIALLY_ENDED}.
+	 * 
 	 */
-	void ended() throws Exception;
+	void ended(Coordination c) throws Exception;
 }

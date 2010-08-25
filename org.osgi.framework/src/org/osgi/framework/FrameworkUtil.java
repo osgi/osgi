@@ -1847,7 +1847,7 @@ public class FrameworkUtil {
 				throw new IllegalArgumentException(
 						"The DN chain must not be null.");
 			}
-			List<String> parsed = new ArrayList<String>();
+			List<Object> parsed = new ArrayList<Object>();
 			int startIndex = 0;
 			startIndex = skipSpaces(dnChain, startIndex);
 			while (startIndex < dnChain.length()) {
@@ -1875,18 +1875,11 @@ public class FrameworkUtil {
 				startIndex = endIndex + 1;
 				startIndex = skipSpaces(dnChain, startIndex);
 			}
-			return parseDNchain(parsed);
-		}
 
-		private static List<Object> parseDNchain(List<String> chain) {
-			if (chain == null) {
-				throw new IllegalArgumentException("DN chain must not be null.");
-			}
-			List<Object> result = new ArrayList<Object>(chain);
 			// Now we parse is a list of strings, lets make List of rdn out
 			// of them
-			for (int i = 0; i < result.size(); i++) {
-				String dn = (String) result.get(i);
+			for (int i = 0; i < parsed.size(); i++) {
+				String dn = (String) parsed.get(i);
 				if (dn.equals(STAR_WILDCARD) || dn.equals(MINUS_WILDCARD)) {
 					continue;
 				}
@@ -1905,7 +1898,27 @@ public class FrameworkUtil {
 				}
 				// Now dn is a nice CANONICAL DN
 				parseDN(dn, rdns);
-				result.set(i, rdns);
+				parsed.set(i, rdns);
+			}
+			if (parsed.size() == 0) {
+				throw new IllegalArgumentException("empty DN chain");
+			}
+			return parsed;
+		}
+
+		private static List<Object> parseDNchain(List<String> chain) {
+			if (chain == null) {
+				throw new IllegalArgumentException("DN chain must not be null.");
+			}
+			List<Object> result = new ArrayList<Object>(chain.size());
+			// Now we parse is a list of strings, lets make List of rdn out
+			// of them
+			for (String dn : chain) {
+				dn = new X500Principal(dn).getName(X500Principal.CANONICAL);
+				// Now dn is a nice CANONICAL DN
+				List<Object> rdns = new ArrayList<Object>();
+				parseDN(dn, rdns);
+				result.add(rdns);
 			}
 			if (result.size() == 0) {
 				throw new IllegalArgumentException("empty DN chain");

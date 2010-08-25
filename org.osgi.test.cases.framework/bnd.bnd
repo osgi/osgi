@@ -184,7 +184,8 @@ Include-Resource = \
 	fragments.tb8b.jar, \
 	fragments.tb8c.jar, \
 	fragments.tb8d.jar, \
-	fragments.tb20.jar, \
+	fragments.tb20a.jar, \
+	fragments.tb20b.jar, \
 	fragments.tb4.jar, \
 	fragments.tb5.jar, \
 	fragments.tb6.jar, \
