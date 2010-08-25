@@ -116,8 +116,10 @@ public interface CoordinatorMBean {
 	 * Fail a Coordination.
 	 * 
 	 * @param id The id of the coordination to be failed.
+	 * @param reason
 	 * @return {@code true} if the coordination was failed by this call,
 	 *         otherwise {@code false}.
+	 * @throws IOException
 	 */
 	boolean fail(long id, String reason) throws IOException;
 
@@ -126,7 +128,8 @@ public interface CoordinatorMBean {
 	 * 
 	 * @param id The id of the Coordination
 	 * @param timeout The nr of milliseconds for the next timeout.
+	 * @throws IOException
 	 */
-	void setTimeout(long id, long timeout) throws IOException;
+	void addTimeout(long id, long timeout) throws IOException;
 
 }

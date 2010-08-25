@@ -15,34 +15,50 @@
  */
 package org.osgi.service.coordination;
 
-import java.util.Collection;
+import java.util.*;
 
 /**
- * A Coordination represents an ongoing coordination associated with a Thread.
- * It is created by a {@link Coordinator} service. A Coordination is
- * <em>not</em> a Thread safe object, it is only valid on the thread it was
- * created on, it is an error to call a method on this object outside the
- * initiating thread.
- * 
- * The Coordination object is a capability. This means that most methods are not
- * checked. Coordination initiators should normally not share the Coordination
- * object.
+ * A Coordination object is used to coordinate a number of independent
+ * participants. Once a Coordination is created, it can be used to add
+ * Participant objects. When the Coordination is ended, the participants are
+ * called back. A Coordination can also fail for various reasons, in that case
+ * the participants are informed of this failure.
  * 
  * @ThreadSafe
  */
 
 public interface Coordination {
-	
-	Coordination push();
-	Coordination pop();
-	
-	
+	/**
+	 * Return value of {@link Coordination#end()}. The Coordination ended
+	 * normally, no participant threw an exception.
+	 */
+	int	OK				= 0;
+
+	/**
+	 * Return value of {@link Coordination#end()}. The Coordination did not end
+	 * normally, a participant threw an exception making the outcome unclear.
+	 */
+	int	PARTIALLY_ENDED	= 1;
+
+	/**
+	 * Return value of {@link Coordination#end()}. The Coordination was set to
+	 * always fail ({@link #fail(String)}).
+	 */
+	int	FAILED			= 2;
+
+	/**
+	 * Return value of {@link Coordination#end()}. The Coordination failed
+	 * because it had timed out.
+	 */
+	int	TIMEOUT			= 3;
+
 	/**
 	 * Return the name of this Coordination.
 	 * 
-	 * The name is given in the {@link Coordinator#begin(String)} method.
+	 * The name is given in the {@link Coordinator#begin(String)} or
+	 * {@link Coordinator#create(String)} method.
 	 * 
-	 * @return the name of this modification
+	 * @return the name of this Coordination
 	 * 
 	 */
 	String getName();
@@ -55,26 +71,23 @@ public interface Coordination {
 	 * discard and cleanup any work that was processed during this Coordination.
 	 * 
 	 * The fail method must terminate the current Coordination before any of the
-	 * failed methods is called. That is, the {@link Participant#failed()}
+	 * failed methods are called. That is, the {@link Participant#failed()}
 	 * methods must be running outside the current coordination, no participants
 	 * can be added during the termination phase.
 	 * 
-	 * A fail method must return silently when the coordination is already
-	 * finished. This enables the following pattern.
+	 * A fail method must return silently when the Coordination has already
+	 * finished.
 	 * 
-	 * This method can be called on another thread than the coordination thread
-	 * in case that something went wrong and the participants need to be
-	 * recovered.
+	 * @param reason The reason of the failure for documentation
+	 * @return {@code true} if the Coordination was still active, otherwise
+	 *         {@code false}
 	 */
 	boolean fail(String reason);
 
 	/**
-<<<<<<< HEAD
-=======
-	 * Terminate this coordination of not already terminated. If this
-	 * Coordination is already terminated then ignore this method. If not, the
-	 * Coordination is set to fail. This method enables the following fail-safe
-	 * pattern to ensure Coordinations are properly terminated.
+	 * If the Coordination is terminated then return, otherwise set the
+	 * Coordination to fail. This method enables the following fail-safe pattern
+	 * to ensure Coordinations are properly terminated.
 	 * 
 	 * <pre>
 	 *   Coordination c = coordinator.begin("show_fail");
@@ -93,18 +106,14 @@ public interface Coordination {
 	 * With this pattern, it is easy to ensure that the coordination is always
 	 * terminated.
 	 * 
-	 * The terminate method must be called on the initiating thread, from
-	 * another thread {@link #fail(String)} must be called.
-	 * 
-	 * @return {@code true} if this method actually terminated the
-	 *         coordination (that is, it was not properly ended).
-	 *         {@code false} if the Coordination was already properly
-	 *         terminate by an {@link #end()} or {@link #fail(String)} method.
+	 * @return {@code true} if this method actually terminated the coordination
+	 *         (that is, it was not properly ended). {@code false} if the
+	 *         Coordination was already properly terminate by an {@link #end()}
+	 *         or {@link #fail(String)} method.
 	 */
 	boolean terminate();
 
 	/**
->>>>>>> 7ca54e8231920bb7135297b8f694599e17bfe05e
 	 * End the current Coordination.
 	 * 
 	 * Any participants will be called on their {@link Participant#ended()}
@@ -118,18 +127,13 @@ public interface Coordination {
 	 * 
 	 * This method returns the outcome of the Coordination:
 	 * <ol>
-	 * <li>{@link Coordinator#OK} - Correct outcome, no exceptions thrown</li>
-	 * <li>{@link Coordinator#PARTIALLY_ENDED} - One of the participants threw
-	 * an exception</li>
-	 * <li>{@link Coordinator#FAILED} - The Coordination was set to always fail</li>
+	 * <li>{@link #OK} - Correct outcome, no exceptions thrown</li>
+	 * <li>{@link #PARTIALLY_ENDED} - One of the participants threw an exception
+	 * </li>
+	 * <li>{@link #FAILED} - The Coordination was set to always fail</li>
 	 * </ol>
 	 * 
-	 * The end() method must be called on the initiating thread, it is not
-	 * possible to end a Coordination from another thread, it is only possible
-	 * to fail it.
-	 * 
-	 * @return {@link Coordinator#OK}, {@link Coordinator#PARTIALLY_ENDED},
-	 *         {@link Coordinator#FAILED}
+	 * @return {@link #OK}, {@link #PARTIALLY_ENDED}, {@link #FAILED}
 	 * @throws IllegalStateException when the Coordination is already
 	 *         terminated.
 	 */
@@ -150,8 +154,9 @@ public interface Coordination {
 	Collection<Participant> getParticipants();
 
 	/**
-	 * Return {@code true} if this Coordination has failed,
-	 * {@code false} otherwise.
+	 * @return {@code true} if this Coordination has failed, {@code false}
+	 *         otherwise.
+	 * 
 	 */
 	boolean isFailed();
 
@@ -163,8 +168,8 @@ public interface Coordination {
 	 * an active Coordination, that is, before {@link #end()} or
 	 * {@link #fail(String)} is called.
 	 * 
-	 * If the current deadline is arriving later than the given timeout
-	 * then the timeout is ignored.
+	 * If the current deadline is arriving later than the given timeout then the
+	 * timeout is ignored.
 	 * 
 	 * @param timeOutInMs Number of ms to wait, zero means forever.
 	 * @throws SecurityException This method requires the
@@ -174,5 +179,56 @@ public interface Coordination {
 	 */
 	void addTimeout(long timeOutInMs);
 
+	/**
+	 * Add a Participant to this Coordination.
+	 * 
+	 * If this method returns {@code true} then there was a current Coordination
+	 * and the participant has successfully joined it. If there was no current
+	 * Coordination then {@code false} is returned.
+	 * 
+	 * Once a Participant is participating it is guaranteed to receive a call
+	 * back on either the {@link Participant#ended()} or
+	 * {@link Participant#failed()} method when the Coordination is terminated.
+	 * 
+	 * A participant can be added to the Coordination multiple times but it must
+	 * only be called back once when the Coordination is terminated. A
+	 * Participant can only participate at a single Coordination, if it attempts
+	 * to block at another Coordination, then it will block until prior
+	 * Coordinations are finished. Notice that in edge cases the call back can
+	 * happen before this method returns.
+	 * 
+	 * The ordering of the call-backs must follow the order of participation. If
+	 * participant is participating multiple times the first time it
+	 * participates defines this order.
+	 * 
+	 * @param participant The participant of the Coordination
+	 * @return {@code true} if the Coordination was active, otherwise {@code
+	 *         false}.
+	 * @throws CoordinationException This exception should normally not be
+	 *         caught by the caller but allowed to bubble up to the initiator of
+	 *         the coordination, it is therefore a {@link RuntimeException}. It
+	 *         signals that this participant could not participate the current
+	 *         coordination. This can be cause by the following reasons:
+	 *         <ol>
+	 *         <li>{@link CoordinationException#DEADLOCK_DETECTED}</li>
+	 *         <li>{@link CoordinationException#TIMEOUT}</li>
+	 *         <li>{@link CoordinationException#UNKNOWN}</li>
+	 *         </ol>
+	 * @throws SecurityException This method requires the
+	 *         {@link CoordinationPermission.INITIATE} action for the current
+	 *         Coordination, if any.
+	 */
+	boolean participate(Participant p);
 
+	/**
+	 * A utility map associated with the current Coordination.
+	 * 
+	 * Each coordination carries a map that can be used for communicating
+	 * between different participants. To namespace of the map is a class,
+	 * allowing for private date to be stored in the map by using implementation
+	 * classes or shared data by interfaces.
+	 * 
+	 * @return The map
+	 */
+	Map<Class< ? >, ? > getVariables();
 }

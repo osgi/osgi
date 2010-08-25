@@ -34,6 +34,7 @@ import org.osgi.framework.*;
  * 
  */
 public class CoordinationPermission extends BasicPermission {
+
 	private static final long	serialVersionUID	= 1L;
 
 	final Bundle				bundle;
@@ -44,11 +45,11 @@ public class CoordinationPermission extends BasicPermission {
 	 */
 	public final static String	INITIATE			= "initiate";
 	/**
-	 * The action string {@code get}.
+	 * The action string {@code admin}.
 	 */
 	public final static String	ADMIN				= "admin";
 	/**
-	 * The action string {@code get}.
+	 * The action string {@code participate}.
 	 */
 	public final static String	PARTICIPATE			= "participate";
 

@@ -20,42 +20,53 @@ package org.osgi.service.coordination;
  * cannot solve. The name of the current coordination is given as argument.
  */
 public class CoordinationException extends RuntimeException {
-	private static final long	serialVersionUID			= 1L;
+	private static final long	serialVersionUID	= 1L;
 
-	public final static int		UNKNOWN						= 0;
-	public final static int		DEADLOCK_DETECTED			= 1;
-	public final static int		TIMEOUT						= 2;
-	public final static int		NOT_ON_INITIATING_THREAD	= 3;
+	/**
+	 * Unknown reason fot this exception.
+	 */
+	public final static int		UNKNOWN				= 0;
+	/**
+	 * Adding a participant caused a deadlock.
+	 */
+	public final static int		DEADLOCK_DETECTED	= 1;
+	/**
+	 * The Coordination took too long to finish.
+	 */
+	public final static int		TIMEOUT				= 2;
 
 	final String				name;
 	final int					reason;
 
+	/**
+	 * Create a new Coordination Exception.
+	 * 
+	 * @param message The message
+	 * @param name The name of the Coordination
+	 * @param reason The reason for the exception.
+	 */
 	public CoordinationException(String message, String name, int reason) {
 		super(message);
 		this.name = name;
 		this.reason = reason;
 	}
 
+	/**
+	 * Answer the name of the Coordination associated with this exception.
+	 * 
+	 * @return the Coordination name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Answer the reason.
+	 * 
+	 * @return the reason
+	 */
 	public int getReason() {
 		return reason;
 	}
 
-	public static String translateReason(int n) {
-		switch (n) {
-			case DEADLOCK_DETECTED :
-				return "deadlock detected";
-			case TIMEOUT :
-				return "lock timed out";
-			case UNKNOWN :
-				return "unknown";
-			case NOT_ON_INITIATING_THREAD :
-				return "Must be called on the same thread as the initiator";
-			default :
-				return "unknown";
-		}
-	}
 }
