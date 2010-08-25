@@ -18,6 +18,11 @@
  * Package Admin Package Version 1.2.
  * 
  * <p>
+ * <b>Deprecated.</b>
+ * <i>This package is deprecated and has been replaced by the
+ * {@code org.osgi.framework.wiring} package.</i>
+ *
+ * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest.
  * 

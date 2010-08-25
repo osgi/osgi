@@ -19,6 +19,7 @@ package org.osgi.framework.hooks.service;
 import java.util.Collection;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /**
  * OSGi Framework Service Find Hook Service.
@@ -46,18 +47,16 @@ public interface FindHook {
 	 * @param allServices {@code true} if the find operation is the result
 	 *        of a call to
 	 *        {@link BundleContext#getAllServiceReferences(String, String)}
-	 * @param references A {@code Collection} of Service References to be
-	 *        returned as a result of the find operation. The implementation of
-	 *        this method may remove service references from the collection to
-	 *        prevent the references from being returned to the bundle
-	 *        performing the find operation. The collection supports all the
-	 *        optional {@code Collection} operations except
-	 *        {@code add} and {@code addAll}. Attempting to add to the
-	 *        collection will result in an
-	 *        {@code UnsupportedOperationException}. The collection is not
-	 *        synchronized.
+	 * @param references A collection of Service References to be returned as a
+	 *        result of the find operation. The implementation of this method
+	 *        may remove service references from the collection to prevent the
+	 *        references from being returned to the bundle performing the find
+	 *        operation. The collection supports all the optional
+	 *        {@code Collection} operations except {@code add} and
+	 *        {@code addAll}. Attempting to add to the collection will
+	 *        result in an {@code UnsupportedOperationException}. The
+	 *        collection is not synchronized.
 	 */
 	void find(BundleContext context, String name, String filter,
-			boolean allServices,
-			Collection/* <ServiceReference> */references);
+			boolean allServices, Collection<ServiceReference< ? >> references);
 }

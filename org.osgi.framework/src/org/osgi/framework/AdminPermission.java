@@ -26,13 +26,14 @@ import java.security.BasicPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
 import java.security.PrivilegedAction;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -210,13 +211,13 @@ public final class AdminPermission extends BasicPermission {
 	 * filter in implies. This is not initialized until necessary, and then
 	 * cached in this object.
 	 */
-	private transient volatile Dictionary	properties;
+	private transient volatile Dictionary<String, Object>	properties;
 
 	/**
 	 * ThreadLocal used to determine if we have recursively called
 	 * getProperties.
 	 */
-	private static final ThreadLocal		recurse						= new ThreadLocal();
+	private static final ThreadLocal<Bundle>	recurse						= new ThreadLocal<Bundle>();
 
 	/**
 	 * Creates a new {@code AdminPermission} object that matches all
@@ -649,7 +650,8 @@ public final class AdminPermission extends BasicPermission {
 		if (requested.bundle == null) {
 			return false;
 		}
-		Dictionary requestedProperties = requested.getProperties();
+		Dictionary<String, Object> requestedProperties = requested
+				.getProperties();
 		if (requestedProperties == null) {
 			/*
 			 * If the requested properties are null, then we have detected a
@@ -830,8 +832,8 @@ public final class AdminPermission extends BasicPermission {
 	 * 
 	 * @return a dictionary of properties for this bundle
 	 */
-	private Dictionary getProperties() {
-		Dictionary result = properties;
+	private Dictionary<String, Object> getProperties() {
+		Dictionary<String, Object> result = properties;
 		if (result != null) {
 			return result;
 		}
@@ -846,8 +848,9 @@ public final class AdminPermission extends BasicPermission {
 		}
 		recurse.set(bundle);
 		try {
-			final Dictionary dict = new Hashtable(4);
-			AccessController.doPrivileged(new PrivilegedAction() {
+			final Dictionary<String, Object> dict = new Hashtable<String, Object>(
+					4);
+			AccessController.doPrivileged(new PrivilegedAction<Object>() {
 				public Object run() {
 					dict.put("id", new Long(bundle.getBundleId()));
 					dict.put("location", bundle.getLocation());
@@ -880,7 +883,7 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * 
 	 * @GuardedBy this
 	 */
-	private transient Map		permissions;
+	private transient Map<String, AdminPermission>	permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
@@ -895,7 +898,7 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * 
 	 */
 	public AdminPermissionCollection() {
-		permissions = new HashMap();
+		permissions = new HashMap<String, AdminPermission>();
 	}
 
 	/**
@@ -924,8 +927,8 @@ final class AdminPermissionCollection extends PermissionCollection {
 		}
 		final String name = ap.getName();
 		synchronized (this) {
-			Map pc = permissions;
-			AdminPermission existing = (AdminPermission) pc.get(name);
+			Map<String, AdminPermission> pc = permissions;
+			AdminPermission existing = pc.get(name);
 			if (existing != null) {
 				int oldMask = existing.action_mask;
 				int newMask = ap.action_mask;
@@ -967,12 +970,12 @@ final class AdminPermissionCollection extends PermissionCollection {
 			return false;
 		}
 		int effective = AdminPermission.ACTION_NONE;
-		Collection perms;
+		Collection<AdminPermission> perms;
 		synchronized (this) {
-			Map pc = permissions;
+			Map<String, AdminPermission> pc = permissions;
 			// short circuit if the "*" Permission was added
 			if (all_allowed) {
-				AdminPermission ap = (AdminPermission) pc.get("*");
+				AdminPermission ap = pc.get("*");
 				if (ap != null) {
 					effective |= ap.action_mask;
 					final int desired = requested.action_mask;
@@ -985,8 +988,8 @@ final class AdminPermissionCollection extends PermissionCollection {
 		}
 
 		// just iterate one by one
-		for (Iterator iter = perms.iterator(); iter.hasNext();) {
-			if (((AdminPermission) iter.next()).implies0(requested, effective)) {
+		for (AdminPermission perm : perms) {
+			if (perm.implies0(requested, effective)) {
 				return true;
 			}
 		}
@@ -999,8 +1002,9 @@ final class AdminPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all {@code AdminPermission} objects.
 	 */
-	public synchronized Enumeration elements() {
-		return Collections.enumeration(permissions.values());
+	public synchronized Enumeration<Permission> elements() {
+		List<Permission> all = new ArrayList<Permission>(permissions.values());
+		return Collections.enumeration(all);
 	}
 	
 	/* serialization logic */
@@ -1010,19 +1014,21 @@ final class AdminPermissionCollection extends PermissionCollection {
     
     private synchronized void writeObject(ObjectOutputStream out)
 			throws IOException {
-		Hashtable hashtable = new Hashtable(permissions);
+		Hashtable<String, AdminPermission> hashtable = new Hashtable<String, AdminPermission>(
+				permissions);
 		ObjectOutputStream.PutField pfields = out.putFields();
 		pfields.put("permissions", hashtable);
 		pfields.put("all_allowed", all_allowed);
 		out.writeFields();
 	}
     
-    private synchronized void readObject(java.io.ObjectInputStream in)
+	private synchronized void readObject(java.io.ObjectInputStream in)
 			throws IOException,
 			ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
-		Hashtable hashtable = (Hashtable) gfields.get("permissions", null);
-		permissions = new HashMap(hashtable);
+		Hashtable<String, AdminPermission> hashtable = (Hashtable<String, AdminPermission>) gfields
+				.get("permissions", null);
+		permissions = new HashMap<String, AdminPermission>(hashtable);
 		all_allowed = gfields.get("all_allowed", false);
 	}
 }

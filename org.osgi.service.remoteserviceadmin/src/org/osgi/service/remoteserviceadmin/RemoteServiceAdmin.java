@@ -82,7 +82,7 @@ public interface RemoteServiceAdmin {
 	 *         provider.
 	 */
 	Collection<ExportRegistration> exportService(ServiceReference reference,
-			Map<String, Object> properties);
+			Map<String, ? > properties);
 
 	/**
 	 * Import a service from an Endpoint. The Remote Service Admin must use the

@@ -21,20 +21,20 @@ package org.osgi.service.converter;
  * 
  * Java 5 and later support generic types. These types consist of a <em>raw</em>
  * class with type parameters, e.g. {@code T<P1,...,Pn>}. This class models such
- * a <code>Type</code> class but ensures that the type is <em>reified</em>.
+ * a {@code Type} class but ensures that the type is <em>reified</em>.
  * Reification means that the Type graph associated with a Java 5
- * <code>Type</code> instance is traversed until the type becomes a concrete
+ * {@code Type} instance is traversed until the type becomes a concrete
  * class. This class is available with the {@link #getRawClass()} method. The
  * optional type parameters are recursively represented as Reified Types.
  * 
  * In Java 1.4, a class has by definition no type parameters. This class
  * implementation provides the Reified Type for Java 1.4 by making the raw class
- * the Java 1.4 class and using a Reified Type based on the <code>Object</code>
+ * the Java 1.4 class and using a Reified Type based on the {@code Object}
  * class for any requested type parameter.
  * 
  * Implementations can subclass this class and provide access to the generic
  * type parameter graph for conversion. Such a subclass must <em>reify</em> the
- * different Java 5 <code>Type</code> instances into the reified form. That is,
+ * different Java 5 {@code Type} instances into the reified form. That is,
  * a form where the raw Class is available with its optional type parameters as
  * Reified Types.
  * 
@@ -90,7 +90,7 @@ public class ReifiedType<T> {
 	 * Return a type parameter for this type.
 	 * 
 	 * The type parameter refers to a parameter in a generic type declaration
-	 * given by the zero-based index <code>i</code>.
+	 * given by the zero-based index {@code i}.
 	 * 
 	 * For example, in the following example:
 	 * 
@@ -98,11 +98,11 @@ public class ReifiedType<T> {
 	 * Map&lt;String, ? extends Metadata&gt;
 	 * </pre>
 	 * 
-	 * type parameter 0 is <code>String</code>, and type parameter 1 is
-	 * <code>Metadata</code>.
+	 * type parameter 0 is {@code String}, and type parameter 1 is
+	 * {@code Metadata}.
 	 * 
 	 * <p>
-	 * This implementation returns a Reified Type that has <code>Object</code>
+	 * This implementation returns a Reified Type that has {@code Object}
 	 * as class. Any object is assignable to Object and therefore no conversion
 	 * is then necessary. This is compatible with versions of Java language
 	 * prior to Java 5.
@@ -111,7 +111,7 @@ public class ReifiedType<T> {
 	 * the generic type parameter information for Java 5 and later.
 	 * 
 	 * @param i The zero-based index of the requested type parameter.
-	 * @return The <code>ReifiedType</code> for the generic type parameter at
+	 * @return The {@code ReifiedType} for the generic type parameter at
 	 *         the specified index.
 	 */
 	public ReifiedType< ? > getActualTypeArgument(int i) {
@@ -122,7 +122,7 @@ public class ReifiedType<T> {
 	 * Return the number of type parameters for this type.
 	 * 
 	 * <p>
-	 * This implementation returns <code>0</code>. This method should be
+	 * This implementation returns {@code 0}. This method should be
 	 * overridden by a subclass that provides access to the generic type
 	 * parameter information for Java 5 and later.
 	 * 

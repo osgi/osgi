@@ -17,6 +17,8 @@
 package org.osgi.framework.launch;
 
 import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -40,6 +42,8 @@ public interface Framework extends Bundle {
 	 * Initialize this Framework. After calling this method, this Framework
 	 * must:
 	 * <ul>
+	 * <li>Have generated a new {@link Constants#FRAMEWORK_UUID framework UUID}.
+	 * </li>
 	 * <li>Be in the {@link #STARTING} state.</li>
 	 * <li>Have a valid Bundle Context.</li>
 	 * <li>Be at start level 0.</li>
@@ -305,4 +309,37 @@ public interface Framework extends Bundle {
 	 * @see Constants#SYSTEM_BUNDLE_SYMBOLICNAME
 	 */
 	String getSymbolicName();
+
+	/**
+	 * Returns {@code null} as a framework implementation does not have a
+	 * proper bundle from which to return entry paths.
+	 * 
+	 * @param path Ignored.
+	 * @return {@code null} as a framework implementation does not have a
+	 *         proper bundle from which to return entry paths.
+	 */
+	Enumeration<String> getEntryPaths(String path);
+
+	/**
+	 * Returns {@code null} as a framework implementation does not have a
+	 * proper bundle from which to return an entry.
+	 * 
+	 * @param path Ignored.
+	 * @return {@code null} as a framework implementation does not have a
+	 *         proper bundle from which to return an entry.
+	 */
+	URL getEntry(String path);
+
+	/**
+	 * Returns {@code null} as a framework implementation does not have a
+	 * proper bundle from which to return entries.
+	 * 
+	 * @param path Ignored.
+	 * @param filePattern Ignored.
+	 * @param recurse Ignored.
+	 * @return {@code null} as a framework implementation does not have a
+	 *         proper bundle from which to return entries.
+	 */
+	Enumeration<URL> findEntries(String path, String filePattern,
+			boolean recurse);
 }

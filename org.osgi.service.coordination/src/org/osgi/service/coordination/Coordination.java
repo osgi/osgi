@@ -69,6 +69,42 @@ public interface Coordination {
 	boolean fail(String reason);
 
 	/**
+<<<<<<< HEAD
+=======
+	 * Terminate this coordination of not already terminated. If this
+	 * Coordination is already terminated then ignore this method. If not, the
+	 * Coordination is set to fail. This method enables the following fail-safe
+	 * pattern to ensure Coordinations are properly terminated.
+	 * 
+	 * <pre>
+	 *   Coordination c = coordinator.begin("show_fail");
+	 *   try {
+	 *     work1();
+	 *     work2();
+	 *     if ( end() != OK )
+	 *        log("...");
+	 *   } catch( SomeException e) {
+	 *      ...
+	 *   } finally {
+	 *      c.terminate();
+	 *   }
+	 * </pre>
+	 * 
+	 * With this pattern, it is easy to ensure that the coordination is always
+	 * terminated.
+	 * 
+	 * The terminate method must be called on the initiating thread, from
+	 * another thread {@link #fail(String)} must be called.
+	 * 
+	 * @return {@code true} if this method actually terminated the
+	 *         coordination (that is, it was not properly ended).
+	 *         {@code false} if the Coordination was already properly
+	 *         terminate by an {@link #end()} or {@link #fail(String)} method.
+	 */
+	boolean terminate();
+
+	/**
+>>>>>>> 7ca54e8231920bb7135297b8f694599e17bfe05e
 	 * End the current Coordination.
 	 * 
 	 * Any participants will be called on their {@link Participant#ended()}
@@ -114,8 +150,8 @@ public interface Coordination {
 	Collection<Participant> getParticipants();
 
 	/**
-	 * Return <code>true</code> if this Coordination has failed,
-	 * <code>false</code> otherwise.
+	 * Return {@code true} if this Coordination has failed,
+	 * {@code false} otherwise.
 	 */
 	boolean isFailed();
 

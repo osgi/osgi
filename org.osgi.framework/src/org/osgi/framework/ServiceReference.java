@@ -26,8 +26,8 @@ import java.util.Dictionary;
  * {@code BundleContext.getServiceReference} and
  * {@code BundleContext.getServiceReferences} methods.
  * <p>
- * A {@code ServiceReference} object may be shared between bundles and
- * can be used to examine the properties of the service and to get the service
+ * A {@code ServiceReference} object may be shared between bundles and can
+ * be used to examine the properties of the service and to get the service
  * object.
  * <p>
  * Every service registered in the Framework has a unique
@@ -42,6 +42,7 @@ import java.util.Dictionary;
  * {@code ServiceReference} objects associated with different
  * {@code ServiceRegistration} objects are not equal.
  * 
+ * @param <S> Type of Service.
  * @see BundleContext#getServiceReference
  * @see BundleContext#getServiceReferences
  * @see BundleContext#getService
@@ -49,7 +50,7 @@ import java.util.Dictionary;
  * @version $Id$
  */
 
-public interface ServiceReference extends Comparable {
+public interface ServiceReference<S> extends Comparable<Object> {
 	/**
 	 * Returns the property value to which the specified property key is mapped
 	 * in the properties {@code Dictionary} object of the service

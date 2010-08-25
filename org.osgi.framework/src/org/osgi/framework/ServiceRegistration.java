@@ -30,12 +30,13 @@ import java.util.Dictionary;
  * The {@code ServiceRegistration} object may be used to update the
  * properties of the service or to unregister the service.
  * 
+ * @param <S> Type of Service.
  * @see BundleContext#registerService(String[],Object,Dictionary)
  * @ThreadSafe
  * @version $Id$
  */
 
-public interface ServiceRegistration {
+public interface ServiceRegistration<S> {
 	/**
 	 * Returns a {@code ServiceReference} object for a service being
 	 * registered.
@@ -48,7 +49,7 @@ public interface ServiceRegistration {
 	 *         unregistered.
 	 * @return {@code ServiceReference} object.
 	 */
-	public ServiceReference getReference();
+	public ServiceReference<S> getReference();
 
 	/**
 	 * Updates the properties associated with a service.
@@ -75,7 +76,7 @@ public interface ServiceRegistration {
 	 * @throws IllegalArgumentException If {@code properties} contains
 	 *         case variants of the same key name.
 	 */
-	public void setProperties(Dictionary properties);
+	public void setProperties(Dictionary<String, ? > properties);
 
 	/**
 	 * Unregisters a service. Remove a {@code ServiceRegistration} object

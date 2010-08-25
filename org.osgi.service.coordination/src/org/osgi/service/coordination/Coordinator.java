@@ -198,9 +198,9 @@ public interface Coordinator {
 	 * Participate in the current Coordination or return false if there is none.
 	 * 
 	 * A Participant that wants to participate in an active Coordination can
-	 * call this method. If this method returns <code>true</code> then there was
+	 * call this method. If this method returns {@code true} then there was
 	 * an active Coordination and the participant has successfully joined it. If
-	 * there was no active Coordination then <code>false</code> is returned.
+	 * there was no active Coordination then {@code false} is returned.
 	 * 
 	 * Once a Participant is participating it is guaranteed to receive a
 	 * call back on either the {@link Participant#ended()} or
@@ -228,9 +228,9 @@ public interface Coordinator {
 	 * {@link Coordination#setTimeout(long)} method.
 	 * 
 	 * @param participant The participant of the Coordination
-	 * @return <code>true</code> if there was an active Coordination on the
+	 * @return {@code true} if there was an active Coordination on the
 	 *         current thread that could be successfully used to participate,
-	 *         otherwise <code>false</code>.
+	 *         otherwise {@code false}.
 	 * @throws CoordinationException This exception should normally not be
 	 *         caught by the caller but allowed to bubble up to the initiator of
 	 *         the coordination, it is therefore a {@link RuntimeException}. It
@@ -248,8 +248,78 @@ public interface Coordinator {
 	boolean participate(Participant participant) throws CoordinationException;
 
 	/**
+<<<<<<< HEAD
 	 * 
 	 * @return return the current Coordination or {@code null}.
+=======
+	 * Participate if there is an active Coordination otherwise initiate a new
+	 * Coordination.
+	 * 
+	 * If a method requires a Coordination to be active and is willing to begin
+	 * one if not then this method is a convenience method representing the
+	 * following code:
+	 * 
+	 * <pre>
+	 * if (coordinator.isActive()) {
+	 * 	coordinator.participate(participant);
+	 * 	return null;
+	 * }
+	 * else {
+	 * 	return coordinator.begin(&quot;...&quot;);
+	 * }
+	 * </pre>
+	 * 
+	 * This method makes it simple to start a new Coordination or to participate
+	 * in an existing Coordination. See {@link #begin(String, long)} and
+	 * {@link #participate(Participant)} for the details of those methods.
+	 * 
+	 * If a new Coordination is begun, the participant must <em>not</em> be
+	 * added to the Coordination, it is only added to a prior active
+	 * Coordination.
+	 * 
+	 * @param ifActive
+	 * @return{@code null} if there is an active Coordination otherwise a
+	 *         newly initiated Coordination.
+	 * @throws SecurityException This method requires the
+	 *         {@link CoordinationPermission.PARTICIPATE} action for the current
+	 *         Coordination, if any. Otherwise it requires
+	 *         {@link CoordinationPermission.INITIATE} to create a new
+	 *         coordination.
+	 */
+	Coordination participateOrBegin(Participant ifActive);
+
+	/**
+	 * Always fail an active Coordination.
+	 * 
+	 * Must fail an active Coordination and return {@code true} or return
+	 * {@code false} if there is no active Coordination.
+	 * 
+	 * @param reason The reason why it must always fail or {@code null}.
+	 * @return {@code true} if a Coordination was active and
+	 *         {@code false} if not.
+	 */
+	boolean alwaysFail(String reason);
+
+	/**
+	 * Test if the current thread is associated with an active Coordination.
+	 * Return {@code true} if there is an active Coordination otherwise
+	 * {@code false}.
+	 * 
+	 * @return {@code true} if there is an active Coordination otherwise
+	 *         {@code false}
+	 */
+	boolean isActive();
+
+	/**
+	 * Test if there is an active Coordination and if so it has failed. This
+	 * method returns {@code true} if there is an active Coordination and
+	 * that Coordination has been set to fail. In all other cases, including
+	 * when there is no active Coordination, this method must return
+	 * {@code false}
+	 * 
+	 * @return {@code true} when the active Coordination is set to failed,
+	 *         otherwise false.
+>>>>>>> 7ca54e8231920bb7135297b8f694599e17bfe05e
 	 */
 	Coordination getCurrentCoordination();
 

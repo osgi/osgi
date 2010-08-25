@@ -85,7 +85,7 @@ public class EndpointDescription {
 	 *         an Endpoint Description.
 	 */
 
-	public EndpointDescription(Map<String, Object> properties) {
+	public EndpointDescription(Map<String, ? > properties) {
 		Map<String, Object> props = new TreeMap<String, Object>(
 				String.CASE_INSENSITIVE_ORDER);
 		try {
@@ -147,7 +147,7 @@ public class EndpointDescription {
 	 *         an Endpoint Description
 	 */
 	public EndpointDescription(final ServiceReference reference,
-			final Map<String, Object> properties) {
+			final Map<String, ? > properties) {
 		Map<String, Object> props = new TreeMap<String, Object>(
 				String.CASE_INSENSITIVE_ORDER);
 

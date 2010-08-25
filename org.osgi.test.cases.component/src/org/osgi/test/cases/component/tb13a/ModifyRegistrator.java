@@ -16,14 +16,16 @@
 package org.osgi.test.cases.component.tb13a;
 
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Map;
+import java.util.Properties;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.test.cases.component.service.ComponentContextExposer;
 
 public class ModifyRegistrator implements ComponentContextExposer {
-	private Dictionary properties;
+	private Dictionary			properties		= new Properties();
 	private ComponentContext ctxt;
 	private static final int MODIFIED = 1 << 0;
 	private static final int MOD = 1 << 1;
@@ -36,7 +38,12 @@ public class ModifyRegistrator implements ComponentContextExposer {
 
 	protected void activate(ComponentContext ctxt) {
 		this.ctxt = ctxt;
-		properties = ctxt.getProperties();
+		Dictionary props = ctxt.getProperties();
+		Enumeration en = props.keys();
+		while (en.hasMoreElements()) {
+			Object key = en.nextElement();
+			properties.put(key, props.get(key));
+		}
 		setDataBits(ACTIVATE);
 	}
 

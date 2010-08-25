@@ -18,6 +18,11 @@
  * Start Level Package Version 1.1.
  * 
  * <p>
+ * <b>Deprecated.</b>
+ * <i>This package is deprecated and has been replaced by the
+ * {@code org.osgi.framework.startlevel} package.</i>
+ *
+ * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest.
  * 

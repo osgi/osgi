@@ -27,6 +27,8 @@
 package org.osgi.test.cases.tracker.junit;
 
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.SortedMap;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -53,9 +55,10 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		Bundle tb = installBundle("tb1.jar");
 
 		// Creates ServiceTracker object with ServiceReference to testservice1
-		ServiceReference sr = getContext().getServiceReference(
-				TestService1.NAME);
-		ServiceTracker st = new ServiceTracker(getContext(), sr, null);
+		ServiceReference<TestService1> sr = (ServiceReference<TestService1>) getContext()
+				.getServiceReference(TestService1.NAME);
+		ServiceTracker<TestService1, TestService1> st = new ServiceTracker<TestService1, TestService1>(
+				getContext(), sr, null);
 		st.open();
 
 		try {
@@ -66,7 +69,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 					1, st.size());
 
 			// Call ServiceTracker.getServiceReferences()
-			ServiceReference[] srs = st.getServiceReferences();
+			ServiceReference<TestService1>[] srs = st.getServiceReferences();
 			assertNotNull(
 					"ServiceReference for the tracked service can be reached at this time: true",
 					srs);
@@ -74,11 +77,11 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 					"ServiceReference for the tracked service can be reached at this time: 1",
 					1, srs.length);
 			// Call ServiceTracker.getService()
-			Object ss = st.getService();
+			TestService1 ss = st.getService();
 			// Call ServiceTracker.getServices()
 			Object[] sss = st.getServices();
 			// Call ServiceTracker.getService(ServiceReference)
-			Object ssr = st.getService(sr);
+			TestService1 ssr = st.getService(sr);
 			// All should be equal and testservice1
 			assertSame(
 					"Tracked services can be reached at this time and are equal in the different methods",
@@ -179,18 +182,18 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 		// Creates ServiceTracker1 object with testservice1
 		// Call ServiceTracker.open()
-		ServiceTracker st1 = new ServiceTracker(context, TestService1.NAME,
-				null);
+		ServiceTracker<TestService1, TestService1> st1 = new ServiceTracker<TestService1, TestService1>(
+				context, TestService1.NAME, null);
 		st1.open();
 		// Creates ServiceTracker2 object with testservice2
 		// Call ServiceTracker.open()
-		ServiceTracker st2 = new ServiceTracker(context, TestService2.NAME,
-				null);
+		ServiceTracker<TestService2, TestService2> st2 = new ServiceTracker<TestService2, TestService2>(
+				context, TestService2.NAME, null);
 		st2.open();
 		// Creates ServiceTracker3 object with testservice3
 		// Call ServiceTracker.open()
-		ServiceTracker st3 = new ServiceTracker(context, TestService3.NAME,
-				null);
+		ServiceTracker<TestService3, TestService3> st3 = new ServiceTracker<TestService3, TestService3>(
+				context, TestService3.NAME, null);
 		st3.open();
 
 		try {
@@ -211,7 +214,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			BundleStarter t1 = new BundleStarter(b1, s1);
 			t1.start();
 			s1.signal();
-			Object tt1 = st1.waitForService(0);
+			TestService1 tt1 = st1.waitForService(0);
 			assertNotNull("Returned an object in ServiceTracker 1?:  true", tt1);
 			assertEquals(
 					"The number of Services being tracked by ServiceTracker 1 is: 1",
@@ -226,7 +229,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			Semaphore s2 = new Semaphore();
 			BundleStarter t2 = new BundleStarter(b2, s2);
 			t2.start();
-			Object tt2 = st2.waitForService(1000);
+			TestService2 tt2 = st2.waitForService(1000);
 			assertNull("Returned an object in ServiceTracker 2?: false", tt2);
 			assertEquals(
 					"The number of Services being tracked by ServiceTracker 1 is: 1",
@@ -300,32 +303,36 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		// Create ServiceTracker object with testservice1
 		// Call ServiceTracker.open()
 		final boolean[] customizerCalled = new boolean[] {false, false, false};
-		ServiceTracker st = new ServiceTracker(context, TestService1.class
-				.getName(), new ServiceTrackerCustomizer() {
-			public java.lang.Object addingService(ServiceReference reference) {
-				synchronized (customizerCalled) {
-					customizerCalled[0] = true;
-				}
-				Object obj = getContext().getService(reference);
-				return obj;
+		ServiceTracker<TestService1, TestService1> st = new ServiceTracker<TestService1, TestService1>(
+				context, TestService1.class.getName(),
+				new ServiceTrackerCustomizer<TestService1, TestService1>() {
+					public TestService1 addingService(
+							ServiceReference<TestService1> reference) {
+						synchronized (customizerCalled) {
+							customizerCalled[0] = true;
+						}
+						TestService1 obj = getContext().getService(reference);
+						return obj;
 
-			}
+					}
 
-			public void modifiedService(ServiceReference reference,
-					java.lang.Object service) {
-				synchronized (customizerCalled) {
-					customizerCalled[1] = true;
-				}
-			}
+					public void modifiedService(
+							ServiceReference<TestService1> reference,
+							TestService1 service) {
+						synchronized (customizerCalled) {
+							customizerCalled[1] = true;
+						}
+					}
 
-			public void removedService(ServiceReference reference,
-					java.lang.Object service) {
-				synchronized (customizerCalled) {
-					customizerCalled[2] = true;
-				}
-				getContext().ungetService(reference);
-			}
-		});
+					public void removedService(
+							ServiceReference<TestService1> reference,
+							TestService1 service) {
+						synchronized (customizerCalled) {
+							customizerCalled[2] = true;
+						}
+						getContext().ungetService(reference);
+					}
+				});
 		st.open();
 		try {
 			// Call ServiceTracker.size()
@@ -371,7 +378,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		// Creates ServiceTracker object with classname testservice1
 		// Call ServiceTracker.open()
 		Filter f = context.createFilter("(name=TestService1)");
-		ServiceTracker st = new ServiceTracker(context, f, null);
+		ServiceTracker<TestService1, TestService1> st = new ServiceTracker<TestService1, TestService1>(
+				context, f, null);
 		st.open();
 
 		// Install tb1, tb2, tb3 and tb4
@@ -382,7 +390,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 		try {
 			// Call ServiceTracker.getServiceReferences()
-			ServiceReference[] srs = st.getServiceReferences();
+			ServiceReference<TestService1>[] srs = st.getServiceReferences();
 			assertNotNull("one bundle registered TestService1", srs);
 			assertEquals("one bundle registered TestService1", 1, srs.length);
 			assertEquals("tb1 registered TestService1", tb1.getBundleId(),
@@ -398,7 +406,7 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 					"The number of Services being tracked by ServiceTracker 1 is: 1",
 					1, st.size());
 
-			ServiceReference sr = context
+			ServiceReference<TestService1> sr = (ServiceReference<TestService1>) context
 					.getServiceReference(TestService1.NAME);
 			st.remove(sr);
 			// Call ServiceTracker.getServiceReferences()
@@ -435,7 +443,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 		Filter f = context.createFilter("(name=TestService1)");
 		// Creates ServiceTracker object with Filter
-		ServiceTracker st = new ServiceTracker(context, f, null);
+		ServiceTracker<TestService1, TestService1> st = new ServiceTracker<TestService1, TestService1>(
+				context, f, null);
 		// Call ServiceTracker.open()
 		st.open();
 		try {
@@ -456,7 +465,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 				// Should find all
 				// Call ServiceTracker.getServiceReferences()
 				// Should find tb1, tb3
-				ServiceReference[] srs = st.getServiceReferences();
+				ServiceReference<TestService1>[] srs = st
+						.getServiceReferences();
 
 				assertNotNull(
 						"There were no ServiceReferences in this ServiceTracker.",
@@ -472,14 +482,14 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 				// The only way to change property is to have the
 				// ServiceRegistration,
 				// i.e. reg a new TestService1
-				Hashtable ts1Props = new Hashtable();
+				Hashtable<String, Object> ts1Props = new Hashtable<String, Object>();
 				ts1Props.put("name", "TestService1");
 				ts1Props.put("version", new Float(1.0));
 				ts1Props.put("compatible", new Float(1.0));
 				ts1Props.put("description", "TestService 1 in tbc");
 
-				ServiceRegistration tsr1 = context.registerService(
-						TestService1.NAME, new TestService1() {
+				ServiceRegistration<TestService1> tsr1 = (ServiceRegistration<TestService1>) context
+						.registerService(TestService1.NAME, new TestService1() {
 							// empty
 						}, ts1Props);
 
@@ -517,7 +527,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 	public void testTrackingCount() throws Exception {
 		BundleContext context = getContext();
-		ServiceTracker st = new ServiceTracker(context, TestService3.NAME, null);
+		ServiceTracker<TestService3, TestService3> st = new ServiceTracker<TestService3, TestService3>(
+				context, TestService3.NAME, null);
 		assertEquals("ServiceTracker.getTrackingCount() == -1", -1, st
 				.getTrackingCount());
 		st.open();
@@ -526,8 +537,8 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			assertEquals("ServiceTracker.getTrackingCount() == 0", 0, st
 					.getTrackingCount());
 
-			ServiceRegistration sr = context.registerService(TestService3.NAME,
-					new TestService3() {
+			ServiceRegistration<TestService3> sr = (ServiceRegistration<TestService3>) context
+					.registerService(TestService3.NAME, new TestService3() {
 						// empty
 					}, null);
 			// Should be 1
@@ -548,38 +559,40 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 	public void testServiceTracker01() {
 		// simple ServiceTracker test
-		Runnable runIt = new Runnable() {
-			public void run() {
-				// nothing
-			}
-		};
-		Hashtable props = new Hashtable();
+		Runnable runIt = new Service();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.TRUE);
-		ServiceRegistration reg = getContext().registerService(
-				Runnable.class.getName(), runIt, props);
-		ServiceTracker testTracker = null;
+		ServiceRegistration<Runnable> reg = (ServiceRegistration<Runnable>) getContext()
+				.registerService(Runnable.class.getName(), runIt, props);
+		ServiceTracker<Runnable, ServiceReference<Runnable>> testTracker = null;
 		try {
 			final boolean[] results = new boolean[] {false, false, false};
-			ServiceTrackerCustomizer testCustomizer = new ServiceTrackerCustomizer() {
-				public Object addingService(ServiceReference reference) {
+			ServiceTrackerCustomizer<Runnable, ServiceReference<Runnable>> testCustomizer = new ServiceTrackerCustomizer<Runnable, ServiceReference<Runnable>>() {
+				public ServiceReference<Runnable> addingService(
+						ServiceReference<Runnable> reference) {
 					results[0] = true;
 					return reference;
 				}
 
-				public void modifiedService(ServiceReference reference,
-						Object service) {
+				public void modifiedService(
+						ServiceReference<Runnable> reference,
+						ServiceReference<Runnable> service) {
 					results[1] = true;
 				}
 
-				public void removedService(ServiceReference reference,
-						Object service) {
+				public void removedService(
+						ServiceReference<Runnable> reference,
+						ServiceReference<Runnable> service) {
 					results[2] = true;
 				}
 			};
 			try {
-				testTracker = new ServiceTracker(getContext(), FrameworkUtil
-						.createFilter("(&(objectClass=java.lang.Runnable)("
-								+ getName() + "=true))"), testCustomizer);
+				testTracker = new ServiceTracker<Runnable, ServiceReference<Runnable>>(
+						getContext(),
+						FrameworkUtil
+								.createFilter("(&(objectClass=java.lang.Runnable)("
+										+ getName() + "=true))"),
+						testCustomizer);
 			}
 			catch (InvalidSyntaxException e) {
 				fail("filter error", e);
@@ -633,38 +646,40 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 	public void testServiceTracker02() {
 		// simple ServiceTracker test
-		Runnable runIt = new Runnable() {
-			public void run() {
-				// nothing
-			}
-		};
-		Hashtable props = new Hashtable();
+		Runnable runIt = new Service();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.FALSE);
-		ServiceRegistration reg = getContext().registerService(
-				Runnable.class.getName(), runIt, props);
-		ServiceTracker testTracker = null;
+		ServiceRegistration<Runnable> reg = (ServiceRegistration<Runnable>) getContext()
+				.registerService(Runnable.class.getName(), runIt, props);
+		ServiceTracker<Runnable, ServiceReference<Runnable>> testTracker = null;
 		try {
 			final boolean[] results = new boolean[] {false, false, false};
-			ServiceTrackerCustomizer testCustomizer = new ServiceTrackerCustomizer() {
-				public Object addingService(ServiceReference reference) {
+			ServiceTrackerCustomizer<Runnable, ServiceReference<Runnable>> testCustomizer = new ServiceTrackerCustomizer<Runnable, ServiceReference<Runnable>>() {
+				public ServiceReference<Runnable> addingService(
+						ServiceReference<Runnable> reference) {
 					results[0] = true;
 					return reference;
 				}
 
-				public void modifiedService(ServiceReference reference,
-						Object service) {
+				public void modifiedService(
+						ServiceReference<Runnable> reference,
+						ServiceReference<Runnable> service) {
 					results[1] = true;
 				}
 
-				public void removedService(ServiceReference reference,
-						Object service) {
+				public void removedService(
+						ServiceReference<Runnable> reference,
+						ServiceReference<Runnable> service) {
 					results[2] = true;
 				}
 			};
 			try {
-				testTracker = new ServiceTracker(getContext(), FrameworkUtil
-						.createFilter("(&(objectClass=java.lang.Runnable)("
-								+ getName() + "=true))"), testCustomizer);
+				testTracker = new ServiceTracker<Runnable, ServiceReference<Runnable>>(
+						getContext(),
+						FrameworkUtil
+								.createFilter("(&(objectClass=java.lang.Runnable)("
+										+ getName() + "=true))"),
+						testCustomizer);
 			}
 			catch (InvalidSyntaxException e) {
 				fail("filter error", e);
@@ -718,36 +733,38 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 
 	public void testServiceTracker03() {
 		// simple ServiceTracker test
-		Runnable runIt = new Runnable() {
-			public void run() {
-				// nothing
-			}
-		};
-		Hashtable props = new Hashtable();
+		Runnable runIt = new Service();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.TRUE);
-		ServiceRegistration reg = getContext().registerService(
+		ServiceRegistration<Runnable> reg = (ServiceRegistration<Runnable>) getContext()
+				.registerService(
 				Runnable.class.getName(), runIt, props);
-		ServiceTracker testTracker = null;
+		ServiceTracker<Runnable, ServiceReference<Runnable>> testTracker = null;
 		try {
 			final boolean[] results = new boolean[] {false, false, false};
-			ServiceTrackerCustomizer testCustomizer = new ServiceTrackerCustomizer() {
-				public Object addingService(ServiceReference reference) {
+			ServiceTrackerCustomizer<Runnable, ServiceReference<Runnable>> testCustomizer = new ServiceTrackerCustomizer<Runnable, ServiceReference<Runnable>>() {
+				public ServiceReference<Runnable> addingService(
+						ServiceReference<Runnable> reference) {
 					results[0] = true;
 					return reference;
 				}
 
-				public void modifiedService(ServiceReference reference,
-						Object service) {
+				public void modifiedService(
+						ServiceReference<Runnable> reference,
+						ServiceReference<Runnable> service) {
 					results[1] = true;
 				}
 
-				public void removedService(ServiceReference reference,
-						Object service) {
+				public void removedService(
+						ServiceReference<Runnable> reference,
+						ServiceReference<Runnable> service) {
 					results[2] = true;
 				}
 			};
 			try {
-				testTracker = new ServiceTracker(getContext(), FrameworkUtil
+				testTracker = new ServiceTracker<Runnable, ServiceReference<Runnable>>(
+						getContext(),
+						FrameworkUtil
 						.createFilter("(&(objectclass=java.lang.Runnable)("
 								+ getName().toLowerCase() + "=true))"),
 						testCustomizer);
@@ -794,23 +811,23 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 	}
 
 	public void testModifiedRanking() {
-		Runnable runIt = new Runnable() {
-			public void run() {
-				// nothing
-			}
-		};
-		Hashtable props = new Hashtable();
+		Runnable runIt = new Service();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put(getName(), Boolean.TRUE);
 		props.put(Constants.SERVICE_RANKING, new Integer(15));
-		ServiceRegistration reg1 = getContext().registerService(
+		ServiceRegistration<Runnable> reg1 = (ServiceRegistration<Runnable>) getContext()
+				.registerService(
 				Runnable.class.getName(), runIt, props);
 		props.put(Constants.SERVICE_RANKING, new Integer(10));
-		ServiceRegistration reg2 = getContext().registerService(
+		ServiceRegistration<Runnable> reg2 = (ServiceRegistration<Runnable>) getContext()
+				.registerService(
 				Runnable.class.getName(), runIt, props);
-		ServiceTracker testTracker = null;
+		ServiceTracker<Runnable, Runnable> testTracker = null;
 		try {
 			try {
-				testTracker = new ServiceTracker(getContext(), FrameworkUtil
+				testTracker = new ServiceTracker<Runnable, Runnable>(
+						getContext(),
+						FrameworkUtil
 						.createFilter("(&(objectclass=java.lang.Runnable)("
 								+ getName().toLowerCase() + "=true))"), null);
 			}
@@ -836,9 +853,61 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		}
 	}
 
+	public void testMap() {
+		Service runIt = new Service();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
+		props.put(getName(), Boolean.TRUE);
+		props.put(Constants.SERVICE_RANKING, new Integer(15));
+		ServiceRegistration<Service> reg1 = getContext().registerService(
+				Service.class, runIt, props);
+		props.put(Constants.SERVICE_RANKING, new Integer(10));
+		ServiceRegistration<Service> reg2 = getContext().registerService(
+				Service.class, runIt, props);
+		ServiceTracker<Service, Service> testTracker = null;
+		try {
+			testTracker = new ServiceTracker<Service, Service>(getContext(),
+					Service.class, null);
+			Map<ServiceReference<Service>, Service> map = testTracker
+					.getTracked();
+			assertEquals("wrong size", testTracker.size(), map.size());
+			testTracker.open();
+
+			SortedMap<ServiceReference<Service>, Service> sortedMap = testTracker
+					.getTracked();
+			assertEquals("wrong service reference", reg1.getReference(),
+					sortedMap.firstKey());
+			assertEquals("wrong service reference", reg2.getReference(),
+					sortedMap.lastKey());
+			assertEquals("wrong size", testTracker.size(), sortedMap.size());
+
+			props.put(Constants.SERVICE_RANKING, new Integer(20));
+			reg2.setProperties(props);
+
+			sortedMap = testTracker.getTracked();
+			assertEquals("wrong service reference", reg2.getReference(),
+					sortedMap.firstKey());
+			assertEquals("wrong service reference", reg1.getReference(),
+					sortedMap.lastKey());
+			assertEquals("wrong size", testTracker.size(), sortedMap.size());
+		}
+		finally {
+			if (reg1 != null)
+				reg1.unregister();
+			if (reg2 != null)
+				reg2.unregister();
+			if (testTracker != null)
+				testTracker.close();
+		}
+	}
+
 	private void clearResults(boolean[] results) {
 		for (int i = 0; i < results.length; i++)
 			results[i] = false;
 	}
 
+	static class Service implements Runnable {
+		public void run() {
+			// nothing
+		}
+	};
 }

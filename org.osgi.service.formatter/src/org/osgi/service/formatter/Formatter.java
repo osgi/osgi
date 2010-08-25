@@ -52,7 +52,7 @@ import java.util.*;
  */
 public interface Formatter {
 	/**
-	 * This property is <code>String+</code>. A string, or array/collection of
+	 * This property is {@code String+}. A string, or array/collection of
 	 * strings, and specifies the names of the classes and/or interfaces that
 	 * this Formatter service recognizes.
 	 * 
@@ -94,13 +94,13 @@ public interface Formatter {
 	 * format can be {@link #INSPECT}, {@link #LINE}, or {@link #PART}. Other
 	 * values must throw IllegalArgumentException.
 	 * 
-	 * @param target The object to be converted to a <code>CharSequence</code>
+	 * @param target The object to be converted to a {@code CharSequence}
 	 *        object
 	 * @param level One of {@link #INSPECT}, {@link #LINE}, or {@link #PART}.
 	 * @param locales A list of locales in order of preference. If no locales
 	 *        are specified, use the default locale and then english.
 	 * @return A printed object of potentially multiple lines, must never be
-	 *         <code>null</code>. The return is a CharSequence because this is
+	 *         {@code null}. The return is a CharSequence because this is
 	 *         usually more efficient.
 	 * @throws Exception If something fails during the formatting
 	 */

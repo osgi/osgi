@@ -43,7 +43,7 @@ package org.osgi.service.converter;
 public interface Converter {
 	/**
 	 * Names of classes/interfaces that this Converter service has conversions
-	 * for. It is a service property that is a String+</code>. That is, a
+	 * for. It is a service property that is a {@code String+}. That is, a
 	 * string, or an array/collection of strings.
 	 */
 	String	OSGI_CONVERTER_TYPE	= "osgi.converter.type";
@@ -54,11 +54,11 @@ public interface Converter {
 	 * 
 	 * @param <T> The raw type
 	 * 
-	 * @param sourceObject The source object <code>s</code> to convert.
-	 * @param targetType The target type <code>T</code>.
+	 * @param sourceObject The source object {@code s} to convert.
+	 * @param targetType The target type {@code T}.
 	 * 
-	 * @return <code>true</code> if the conversion is possible,
-	 *         <code>false</code> otherwise.
+	 * @return {@code true} if the conversion is possible,
+	 *         {@code false} otherwise.
 	 */
 	<T> boolean canConvert(Object sourceObject, ReifiedType<T> targetType);
 
@@ -72,7 +72,7 @@ public interface Converter {
 	 * @param targetType The type that the returned object can be assigned to
 	 * @param sourceObject The object that must be converted
 	 * @return An object that can be assigned to the desired type or
-	 *         <code>null</code> if it could not be converted.
+	 *         {@code null} if it could not be converted.
 	 */
 	<T> T convert(Object sourceObject, ReifiedType<T> targetType);
 }

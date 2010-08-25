@@ -40,13 +40,13 @@ public interface ListenerHook {
 	 * method will be called to provide the current collection of service
 	 * listeners which had been added prior to the hook being registered.
 	 * 
-	 * @param listeners A {@code Collection} of {@link ListenerInfo}s for
-	 *        newly added service listeners which are now listening to service
-	 *        events. Attempting to add to or remove from the collection will
-	 *        result in an {@code UnsupportedOperationException}. The
-	 *        collection is not synchronized.
+	 * @param listeners A collection of {@link ListenerInfo}s for newly added
+	 *        service listeners which are now listening to service events.
+	 *        Attempting to add to or remove from the collection will result in
+	 *        an {@code UnsupportedOperationException}. The collection is
+	 *        not synchronized.
 	 */
-	void added(Collection/* <ListenerInfo> */listeners);
+	void added(Collection<ListenerInfo> listeners);
 
 	/**
 	 * Removed listeners hook method. This method is called to provide the hook
@@ -54,13 +54,13 @@ public interface ListenerHook {
 	 * method will be called as service listeners are removed while this hook is
 	 * registered.
 	 * 
-	 * @param listeners A {@code Collection} of {@link ListenerInfo}s for
-	 *        newly removed service listeners which are no longer listening to
-	 *        service events. Attempting to add to or remove from the collection
-	 *        will result in an {@code UnsupportedOperationException}. The
-	 *        collection is not synchronized.
+	 * @param listeners A collection of {@link ListenerInfo}s for newly removed
+	 *        service listeners which are no longer listening to service events.
+	 *        Attempting to add to or remove from the collection will result in
+	 *        an {@code UnsupportedOperationException}. The collection is
+	 *        not synchronized.
 	 */
-	void removed(Collection/* <ListenerInfo> */listeners);
+	void removed(Collection<ListenerInfo> listeners);
 
 	/**
 	 * Information about a Service Listener. This interface describes the bundle

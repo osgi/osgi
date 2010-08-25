@@ -1,0 +1,7 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.fragments.tb20a
+Bundle-SymbolicName: ${p}.fragments.tb20a
+Bundle-Version: 1.0
+Fragment-Host: ${p}.fragments.tb20b
+Private-Package: ${p}.fragments.tb20
+

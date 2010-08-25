@@ -40,7 +40,7 @@ import java.util.StringTokenizer;
  * @version $Id$
  */
 
-public class Version implements Comparable {
+public class Version implements Comparable<Version> {
 	private final int			major;
 	private final int			minor;
 	private final int			micro;
@@ -334,19 +334,17 @@ public class Version implements Comparable {
 	 * major, minor and micro components are equal and the qualifier component
 	 * is equal (using {@code String.compareTo}).
 	 * 
-	 * @param object The {@code Version} object to be compared.
+	 * @param other The {@code Version} object to be compared.
 	 * @return A negative integer, zero, or a positive integer if this object is
 	 *         less than, equal to, or greater than the specified
 	 *         {@code Version} object.
 	 * @throws ClassCastException If the specified object is not a
 	 *         {@code Version}.
 	 */
-	public int compareTo(Object object) {
-		if (object == this) { // quicktest
+	public int compareTo(Version other) {
+		if (other == this) { // quicktest
 			return 0;
 		}
-
-		Version other = (Version) object;
 
 		int result = major - other.major;
 		if (result != 0) {

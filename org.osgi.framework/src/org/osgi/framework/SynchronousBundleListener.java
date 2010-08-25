@@ -19,12 +19,25 @@ package org.osgi.framework;
 /**
  * A synchronous {@code BundleEvent} listener.
  * {@code SynchronousBundleListener} is a listener interface that may be
- * implemented by a bundle developer. When a {@code BundleEvent} is
- * fired, it is synchronously delivered to a
- * {@code SynchronousBundleListener}. The Framework may deliver
- * {@code BundleEvent} objects to a
- * {@code SynchronousBundleListener} out of order and may concurrently
- * call and/or reenter a {@code SynchronousBundleListener}.
+ * implemented by a bundle developer. When a {@code BundleEvent} is fired,
+ * it is synchronously delivered to a {@code SynchronousBundleListener}.
+ * The Framework may deliver {@code BundleEvent} objects to a
+ * {@code SynchronousBundleListener} out of order and may concurrently call
+ * and/or reenter a {@code SynchronousBundleListener}.
+ * 
+ * <p>
+ * For {@code BundleEvent} types {@link BundleEvent#STARTED STARTED} and
+ * {@link BundleEvent#LAZY_ACTIVATION LAZY_ACTIVATION}, the Framework must not
+ * hold the referenced bundle's &quot;state change&quot; lock when the
+ * {@code BundleEvent} is delivered to a
+ * {@code SynchronousBundleListener}. For the other
+ * {@code BundleEvent} types, the Framework must hold the referenced
+ * bundle's &quot;state change&quot; lock when the {@code BundleEvent} is
+ * delivered to a {@code SynchronousBundleListener}. A
+ * {@code SynchronousBundleListener} cannot directly call life cycle
+ * methods on the referenced bundle when the Framework is holding the referenced
+ * bundle's &quot;state change&quot; lock.
+ * 
  * <p>
  * A {@code SynchronousBundleListener} object is registered with the
  * Framework using the {@link BundleContext#addBundleListener} method.
@@ -39,8 +52,8 @@ package org.osgi.framework;
  * {@code SynchronousBundleListener} objects will be called prior to
  * {@code BundleListener} objects.
  * <p>
- * {@code AdminPermission[bundle,LISTENER]} is required to add or remove
- * a {@code SynchronousBundleListener} object.
+ * {@code AdminPermission[bundle,LISTENER]} is required to add or remove a
+ * {@code SynchronousBundleListener} object.
  * 
  * @since 1.1
  * @see BundleEvent

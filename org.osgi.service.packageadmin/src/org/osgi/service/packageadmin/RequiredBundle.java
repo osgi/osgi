@@ -25,10 +25,10 @@ import org.osgi.framework.Version;
  * Objects implementing this interface are created by the Package Admin service.
  * 
  * <p>
- * The term <i>required bundle</i> refers to a resolved bundle that has a
- * bundle symbolic name and is not a fragment. That is, a bundle that may be
- * required by other bundles. This bundle may or may not be currently required
- * by other bundles.
+ * The term <i>required bundle</i> refers to a resolved bundle that has a bundle
+ * symbolic name and is not a fragment. That is, a bundle that may be required
+ * by other bundles. This bundle may or may not be currently required by other
+ * bundles.
  * 
  * <p>
  * The information about a required bundle provided by this object may change. A
@@ -43,6 +43,8 @@ import org.osgi.framework.Version;
  * 
  * @since 1.2
  * @ThreadSafe
+ * @deprecated The PackageAdmin service has been replaced by the
+ *             <code>org.osgi.framework.wiring</code> package.
  * @version $Id$
  */
 public interface RequiredBundle {

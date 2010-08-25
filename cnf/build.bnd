@@ -105,11 +105,6 @@ junit					= com.springsource.junit;version=3.8;export="${junit.package}"
 
 # Use the following for 4.3 framework RI development	
 #-runpath							= \
-#	org.osgi.framework;						version=project, \
-#	org.osgi.service.composite;				version=project, \
-#	org.osgi.service.packageadmin;			version=project, \
-#	org.osgi.service.startlevel;			version=project, \
-#	org.osgi.util.tracker;					version=project, \
 #	org.eclipse.osgi;		version=project, \
 #	${junit}
 
