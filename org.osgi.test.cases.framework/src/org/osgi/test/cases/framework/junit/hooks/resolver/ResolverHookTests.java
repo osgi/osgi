@@ -340,6 +340,50 @@ public class ResolverHookTests extends OSGiTestCase {
 			throw hook2.getError();
 	}
 
+	public void testFilterDyanmicImportPackage01() {
+		Filter filterCapabilities1 = createFilter(
+				"(&" + 
+				  "(osgi.package=org.osgi.test.cases.framework.resolver.tb1)" +
+				  "(version>=1.1)(!(version>=1.2))" +
+				")");
+		Filter filterCapabilities2 = createFilter(
+				"(&" + 
+				  "(osgi.package=org.osgi.test.cases.framework.resolver.tb1)" +
+				  "(version>=1.0)(!(version>=1.1))" +
+				")");
+		TestFilterCapabilityHook hook1 = new TestFilterCapabilityHook(filterCapabilities1);
+		ServiceRegistration reg = registerHook(hook1, 0);
+
+		Bundle tb1v110 = install("resolver.tb1.v110.jar");
+		Bundle tb1v100 = install("resolver.tb1.v100.jar");
+		assertTrue("Could not resolve tb1 bundles", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb1v100, tb1v110})));
+
+		System.setProperty(tb1v100.getSymbolicName(), "v110");
+		Bundle tb7 = install("resolver.tb7.jar");
+		try {
+			tb7.start();
+			fail("Should have failed to start tb7.");
+		} catch (BundleException e) {
+			// expected
+			assertEquals("Wrong exception type.", BundleException.ACTIVATOR_ERROR, e.getType());
+		}
+		if (hook1.getError() != null)
+			throw hook1.getError();
+		assertEquals("Wrong state for tb7", Bundle.RESOLVED, tb7.getState());
+		// unregister the hook; and register one that gives us the other package
+		//  bundles should start fine after refreshing
+		reg.unregister();
+		TestFilterCapabilityHook hook2 = new TestFilterCapabilityHook(filterCapabilities2);
+		registerHook(hook2, 0);
+		refreshBundles(Arrays.asList(new Bundle[] {tb7}));
+		try {
+			tb7.start();
+		} catch (BundleException e) {
+			fail("Unexpected failed to start.", e);
+		}
+		if (hook2.getError() != null)
+			throw hook2.getError();
+	}
 
 	public void testFilterRequireBundle01() {
 		Filter filterCapabilities1 = createFilter(
@@ -421,7 +465,6 @@ public class ResolverHookTests extends OSGiTestCase {
 		assertEquals("Wrong state for tb4", Bundle.RESOLVED, tb4.getState());
 	}
 
-	// TODO need to update the test bundles with RFC 154 syntax
 	public void testFilterGenericRequire01() {
 		Filter filterCapabilities1 = createFilter(
 				"(&" + 

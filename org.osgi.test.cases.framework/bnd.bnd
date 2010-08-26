@@ -220,6 +220,7 @@ Include-Resource = \
 	resolver.tb6.v200.jar, \
 	resolver.tb6.v300.jar, \
 	resolver.tb6.v400.jar, \
+	resolver.tb7.jar, \
 	startlevel.tb1.jar, \
 	startlevel.tb2.jar, \
 	startlevel.tb3.jar, \
