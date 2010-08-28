@@ -26,15 +26,17 @@ import java.security.BasicPermission;
 import java.security.Permission;
 import java.security.PermissionCollection;
 import java.security.PrivilegedAction;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A bundle's authority to register or get a service.
@@ -105,7 +107,7 @@ public final class ServicePermission extends BasicPermission {
 	 * filter in implies. This is not initialized until necessary, and then
 	 * cached in this object.
 	 */
-	private transient volatile Dictionary<String, Object>	properties;
+	private transient volatile Map<String, Object>	properties;
 
 	/**
 	 * True if constructed with a name and the name is "*" or ends with ".*".
@@ -418,7 +420,7 @@ public final class ServicePermission extends BasicPermission {
 		/* if we have a filter */
 		Filter f = filter;
 		if (f != null) {
-			return f.matchCase(requested.getProperties());
+			return f.matches(requested.getProperties());
 		}
 		/* if requested permission not created with ServiceReference */
 		String[] requestedNames = requested.objectClass;
@@ -562,13 +564,13 @@ public final class ServicePermission extends BasicPermission {
 	 * 
 	 * @return a dictionary of properties for this permission.
 	 */
-	private Dictionary<String, Object> getProperties() {
-		Dictionary<String, Object> result = properties;
+	private Map<String, Object> getProperties() {
+		Map<String, Object> result = properties;
 		if (result != null) {
 			return result;
 		}
 		if (service == null) {
-			result = new Hashtable<String, Object>(1);
+			result = new HashMap<String, Object>(1);
 			if (filter == null) {
 				result.put(Constants.OBJECTCLASS, new String[] {getName()});
 			}
@@ -596,13 +598,15 @@ public final class ServicePermission extends BasicPermission {
 		return properties = new Properties(props, service);
 	}
 	
-	private static class Properties extends Dictionary<String, Object> {
+	private static class Properties extends AbstractMap<String, Object> {
 		private final Map<String, Object>	properties;
 		private final ServiceReference< ? >	service;
+		private transient volatile Set<Map.Entry<String, Object>>	entries;
 
 		Properties(Map<String, Object> properties, ServiceReference< ? > service) {
 			this.properties = properties;
 			this.service = service;
+			entries = null;
 		}
 
 		public Object get(Object k) {
@@ -620,53 +624,64 @@ public final class ServicePermission extends BasicPermission {
 			return service.getProperty(key);
 		}
 
-		public int size() {
-			return properties.size() + service.getPropertyKeys().length;
-		}
-
-		public boolean isEmpty() {
-			// we can return false because this must never be empty
-			return false;
-		}
-
-		public Enumeration<String> keys() {
-			Collection<String> pk = properties.keySet();
-			String spk[] = service.getPropertyKeys();
-			List<String> all = new ArrayList<String>(pk.size() + spk.length);
-			all.addAll(pk);
-			add: for (String key : spk) {
-				for (String k : pk) {
+		public Set<Map.Entry<String, Object>> entrySet() {
+			if (entries != null) {
+				return entries;
+			}
+			Set<Map.Entry<String, Object>> all = new HashSet<Map.Entry<String, Object>>(
+					properties.entrySet());
+			add: for (String key : service.getPropertyKeys()) {
+				for (String k : properties.keySet()) {
 					if (key.equalsIgnoreCase(k)) {
 						continue add;
 					}
 				}
-				all.add(key);
+				all.add(new Entry(key, service.getProperty(key)));
 			}
-			return Collections.enumeration(all);
+			return entries = Collections.unmodifiableSet(all);
 		}
+		
+		private static class Entry implements Map.Entry<String, Object> {
+			private final String	k;
+			private final Object	v;
 
-		public Enumeration<Object> elements() {
-			Collection<String> pk = properties.keySet();
-			String spk[] = service.getPropertyKeys();
-			List<Object> all = new ArrayList<Object>(pk.size() + spk.length);
-			all.addAll(properties.values());
-			add: for (String key : spk) {
-				for (String k : pk) {
-					if (key.equalsIgnoreCase(k)) {
-						continue add;
+			Entry(String key, Object value) {
+				this.k = key;
+				this.v = value;
+			}
+			public String getKey() {
+				return k;
+			}
+			public Object getValue() {
+				return v;
+			}
+			public Object setValue(Object value) {
+				throw new UnsupportedOperationException();
+			}
+			public String toString() {
+				return k + "=" + v;
+			}
+			public int hashCode() {
+				return ((k == null) ? 0 : k.hashCode())
+						^ ((v == null) ? 0 : v.hashCode());
+			}
+			public boolean equals(Object obj) {
+				if (obj == this) {
+					return true;
+				}
+				if (!(obj instanceof Map.Entry)) {
+					return false;
+				}
+				Map.Entry< ? , ? > e = (Map.Entry< ? , ? >) obj;
+				final Object key = e.getKey();
+				if ((k == key) || ((k != null) && k.equals(key))) {
+					final Object value = e.getValue();
+					if ((v == value) || ((v != null) && v.equals(value))) {
+						return true;
 					}
 				}
-				all.add(service.getProperty(key));
+				return false;
 			}
-			return Collections.enumeration(all);
-		}
-
-		public Object put(String key, Object value) {
-			throw new UnsupportedOperationException();
-		}
-
-		public Object remove(Object key) {
-			throw new UnsupportedOperationException();
 		}
 	}
 }
