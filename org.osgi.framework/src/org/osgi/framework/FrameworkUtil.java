@@ -432,7 +432,107 @@ public class FrameworkUtil {
 		 * @since 1.3
 		 */
 		public boolean matchCase(Dictionary<String, ? > dictionary) {
-			return matches(new WrapperMap(dictionary));
+			switch (op) {
+				case AND : {
+					FilterImpl[] filters = (FilterImpl[]) value;
+					for (FilterImpl f : filters) {
+						if (!f.matchCase(dictionary)) {
+							return false;
+						}
+					}
+					return true;
+				}
+
+				case OR : {
+					FilterImpl[] filters = (FilterImpl[]) value;
+					for (FilterImpl f : filters) {
+						if (f.matchCase(dictionary)) {
+							return true;
+						}
+					}
+					return false;
+				}
+
+				case NOT : {
+					FilterImpl filter = (FilterImpl) value;
+					return !filter.matchCase(dictionary);
+				}
+
+				case SUBSTRING :
+				case EQUAL :
+				case GREATER :
+				case LESS :
+				case APPROX : {
+					Object prop = (dictionary == null) ? null : dictionary
+							.get(attr);
+					return compare(op, prop, value);
+				}
+
+				case PRESENT : {
+					Object prop = (dictionary == null) ? null : dictionary
+							.get(attr);
+					return prop != null;
+				}
+			}
+
+			return false;
+		}
+
+		/**
+		 * Filter using a {@code Map}. This {@code Filter} is executed using the
+		 * specified {@code Map}'s keys and values. The keys are looked up in a
+		 * normal manner respecting case.
+		 * 
+		 * @param map The {@code Map} whose key/value pairs are used in the
+		 *        match. Maps with {@code null} key or values are not supported.
+		 *        A {@code null} value is considered not present to the filter.
+		 * @return {@code true} if the {@code Map}'s values match this filter;
+		 *         {@code false} otherwise.
+		 * @since 1.6
+		 */
+		public boolean matches(Map<String, ? > map) {
+			switch (op) {
+				case AND : {
+					FilterImpl[] filters = (FilterImpl[]) value;
+					for (FilterImpl f : filters) {
+						if (!f.matches(map)) {
+							return false;
+						}
+					}
+					return true;
+				}
+		
+				case OR : {
+					FilterImpl[] filters = (FilterImpl[]) value;
+					for (FilterImpl f : filters) {
+						if (f.matches(map)) {
+							return true;
+						}
+					}
+					return false;
+				}
+		
+				case NOT : {
+					FilterImpl filter = (FilterImpl) value;
+					return !filter.matches(map);
+				}
+		
+				case SUBSTRING :
+				case EQUAL :
+				case GREATER :
+				case LESS :
+				case APPROX : {
+					Object prop = (map == null) ? null : map.get(attr);
+					return compare(op, prop, value);
+				}
+		
+				case PRESENT : {
+					Object prop = (map == null) ? null : map.get(attr);
+					return prop != null;
+				}
+			}
+		
+			return false;
 		}
 
 		/**
@@ -589,63 +689,6 @@ public class FrameworkUtil {
 		 */
 		public int hashCode() {
 			return this.toString().hashCode();
-		}
-
-		/**
-		 * Filter using a {@code Map}. This {@code Filter} is executed using the
-		 * specified {@code Map}'s keys and values. The keys are looked up in a
-		 * normal manner respecting case.
-		 * 
-		 * @param map The {@code Map} whose key/value pairs are used in the
-		 *        match. Maps with {@code null} key or values are not supported.
-		 *        A {@code null} value is considered not present to the filter.
-		 * @return {@code true} if the {@code Map}'s values match this filter;
-		 *         {@code false} otherwise.
-		 * @since 1.6
-		 */
-		public boolean matches(Map<String, ? > map) {
-			switch (op) {
-				case AND : {
-					FilterImpl[] filters = (FilterImpl[]) value;
-					for (FilterImpl f : filters) {
-						if (!f.matches(map)) {
-							return false;
-						}
-					}
-					return true;
-				}
-
-				case OR : {
-					FilterImpl[] filters = (FilterImpl[]) value;
-					for (FilterImpl f : filters) {
-						if (f.matches(map)) {
-							return true;
-						}
-					}
-					return false;
-				}
-
-				case NOT : {
-					FilterImpl filter = (FilterImpl) value;
-					return !filter.matches(map);
-				}
-
-				case SUBSTRING :
-				case EQUAL :
-				case GREATER :
-				case LESS :
-				case APPROX : {
-					Object prop = (map == null) ? null : map.get(attr);
-					return compare(op, prop, value);
-				}
-
-				case PRESENT : {
-					Object prop = (map == null) ? null : map.get(attr);
-					return prop != null;
-				}
-			}
-
-			return false;
 		}
 
 		/**
@@ -1665,32 +1708,6 @@ public class FrameworkUtil {
 				return null;
 			}
 			return reference.getProperty((String) key);
-		}
-
-		public Set<java.util.Map.Entry<String, Object>> entrySet() {
-			throw new UnsupportedOperationException();
-		}
-	}
-
-	/**
-	 * This Map is used for key lookup from a Dictionary during filter
-	 * evaluation. This Map implementation only supports the get operation using
-	 * a String key as no other operations are used by the Filter
-	 * implementation.
-	 */
-	private static class WrapperMap extends AbstractMap<String, Object>
-			implements Map<String, Object> {
-		private final Dictionary<String, ? >	dictionary;
-
-		WrapperMap(Dictionary<String, ? > dictionary) {
-			this.dictionary = dictionary;
-		}
-
-		public Object get(Object key) {
-			if (dictionary == null) {
-				return null;
-			}
-			return dictionary.get(key);
 		}
 
 		public Set<java.util.Map.Entry<String, Object>> entrySet() {
