@@ -555,20 +555,22 @@ public interface Constants {
 
 	/**
 	 * Manifest header directive identifying the resolution type in the
-	 * Import-Package or Require-Bundle manifest header. The default value is
-	 * {@link #RESOLUTION_MANDATORY mandatory}.
+	 * Import-Package, Require-Bundle or Require-Capability manifest header. The
+	 * default value is {@link #RESOLUTION_MANDATORY mandatory}.
 	 * 
 	 * <p>
-	 * The directive value is encoded in the Import-Package or Require-Bundle
-	 * manifest header like:
+	 * The directive value is encoded in the Import-Package, Require-Bundle or
+	 * Require-Capability manifest header like:
 	 * 
 	 * <pre>
 	 *     Import-Package: org.osgi.framework; resolution:=&quot;optional&quot;
 	 *     Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
+	 *     Require-Capability: com.acme.capability; resolution:=&quot;optional&quot;
 	 * </pre>
 	 * 
 	 * @see #IMPORT_PACKAGE
 	 * @see #REQUIRE_BUNDLE
+	 * @see #REQUIRE_CAPABILITY
 	 * @see #RESOLUTION_MANDATORY
 	 * @see #RESOLUTION_OPTIONAL
 	 * @since 1.3
@@ -577,17 +579,19 @@ public interface Constants {
 
 	/**
 	 * Manifest header directive value identifying a mandatory resolution type.
-	 * A mandatory resolution type indicates that the import package or require
-	 * bundle must be resolved when the bundle is resolved. If such an import or
-	 * require bundle cannot be resolved, the module fails to resolve.
+	 * A mandatory resolution type indicates that the import package, require
+	 * bundle or require capability must be resolved when the bundle is
+	 * resolved. If such an import, require bundle or require capability cannot
+	 * be resolved, the module fails to resolve.
 	 * 
 	 * <p>
-	 * The directive value is encoded in the Import-Package or Require-Bundle
-	 * manifest header like:
+	 * The directive value is encoded in the Import-Package, Require-Bundle or
+	 * Require-Capability manifest header like:
 	 * 
 	 * <pre>
-	 *     Import-Package: org.osgi.framework; resolution:=&quot;manditory&quot;
-	 *     Require-Bundle: com.acme.module.test; resolution:=&quot;manditory&quot;
+	 *     Import-Package: org.osgi.framework; resolution:=&quot;mandatory&quot;
+	 *     Require-Bundle: com.acme.module.test; resolution:=&quot;mandatory&quot;
+	 *     Require-Capability: com.acme.capability; resolution:=&quot;mandatory&quot;
 	 * </pre>
 	 * 
 	 * @see #RESOLUTION_DIRECTIVE
@@ -597,19 +601,21 @@ public interface Constants {
 
 	/**
 	 * Manifest header directive value identifying an optional resolution type.
-	 * An optional resolution type indicates that the import or require bundle
-	 * is optional and the bundle may be resolved without the import or require
-	 * bundle being resolved. If the import or require bundle is not resolved
-	 * when the bundle is resolved, the import or require bundle may not be
-	 * resolved before the bundle is refreshed.
+	 * An optional resolution type indicates that the import, require bundle or
+	 * require capability is optional and the bundle may be resolved without the
+	 * import, require bundle or require capability being resolved. If the
+	 * import, require bundle or require capability is not resolved when the
+	 * bundle is resolved, the import, require bundle or require capability may
+	 * not be resolved until the bundle is refreshed.
 	 * 
 	 * <p>
-	 * The directive value is encoded in the Import-Package or Require-Bundle
-	 * manifest header like:
+	 * The directive value is encoded in the Import-Package, Require-Bundle or
+	 * Require-Capability manifest header like:
 	 * 
 	 * <pre>
 	 *     Import-Package: org.osgi.framework; resolution:=&quot;optional&quot;
 	 *     Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
+	 *     Require-Capability: com.acme.capability; resolution:=&quot;optional&quot;
 	 * </pre>
 	 * 
 	 * @see #RESOLUTION_DIRECTIVE
@@ -619,17 +625,19 @@ public interface Constants {
 
 	/**
 	 * Manifest header directive identifying a list of packages that an exported
-	 * package uses.
+	 * package or provided capability uses.
 	 * 
 	 * <p>
-	 * The directive value is encoded in the Export-Package manifest header
-	 * like:
+	 * The directive value is encoded in the Export-Package or
+	 * Provide-Capability manifest header like:
 	 * 
 	 * <pre>
 	 *     Export-Package: org.osgi.util.tracker; uses:=&quot;org.osgi.framework&quot;
+	 *     Provide-Capability: com.acme.capability; uses:=&quot;com.acme.service&quot;
 	 * </pre>
 	 * 
 	 * @see #EXPORT_PACKAGE
+	 * @see #PROVIDE_CAPABILITY
 	 * @since 1.3
 	 */
 	String	USES_DIRECTIVE							= "uses";
@@ -1515,6 +1523,101 @@ public interface Constants {
 	 * @see "Remote Services Specification"
 	 */
 	String	SERVICE_INTENTS							= "service.intents";
+
+	/**
+	 * Manifest header identifying the capabilities that the bundle offers to
+	 * provide to other bundles.
+	 * 
+	 * <p>
+	 * The header value may be retrieved from the {@code Dictionary} object
+	 * returned by the {@code Bundle.getHeaders} method.
+	 * 
+	 * @since 1.6
+	 */
+	String	PROVIDE_CAPABILITY						= "Provide-Capability";
+
+	/**
+	 * Manifest header identifying the capabilities on which the bundle depends.
+	 * 
+	 * <p>
+	 * The header value may be retrieved from the {@code Dictionary} object
+	 * returned by the {@code Bundle.getHeaders} method.
+	 * 
+	 * @since 1.6
+	 */
+	String	REQUIRE_CAPABILITY						= "Require-Capability";
+
+	/**
+	 * Manifest header directive identifying the effective time of the provided
+	 * capability. The default value is {@link #EFFECTIVE_RESOLVE resolve}.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Provide-Capability manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *     Provide-Capability: com.acme.capability; effective:=&quot;resolve&quot;
+	 * </pre>
+	 * 
+	 * @see #PROVIDE_CAPABILITY
+	 * @see #EFFECTIVE_RESOLVE
+	 * @see #EFFECTIVE_ACTIVE
+	 * @since 1.6
+	 */
+	String	EFFECTIVE_DIRECTIVE						= "effective";
+
+	/**
+	 * Manifest header directive value identifying a capability that is
+	 * effective at resolve time. Capabilities with an effective time of resolve
+	 * are the only capabilities which are processed by the resolver.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Provide-Capability manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *     Provide-Capability: com.acme.capability; effective:=&quot;resolve&quot;
+	 * </pre>
+	 * 
+	 * @see #EFFECTIVE_DIRECTIVE
+	 * @since 1.6
+	 */
+	String	EFFECTIVE_RESOLVE						= "resolve";
+
+	/**
+	 * Manifest header directive value identifying a capability that is
+	 * effective at active time. Capabilities with an effective time of active
+	 * are ignored by the resolver.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Provide-Capability manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *     Provide-Capability: com.acme.capability; effective:=&quot;active&quot;
+	 * </pre>
+	 * 
+	 * @see #EFFECTIVE_DIRECTIVE
+	 * @since 1.6
+	 */
+	String	EFFECTIVE_ACTIVE						= "active";
+
+	/**
+	 * Manifest header attribute identifying the capability filter specified in
+	 * the Require-Capability manifest header.
+	 * 
+	 * <p>
+	 * The attribute value is encoded in the Require-Capability manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *     Require-Capability: com.acme.capability; filter=&quot;(someattr=somevalue)&quot;
+	 * </pre>
+	 * 
+	 * @see #REQUIRE_CAPABILITY
+	 * @since 1.6
+	 */
+	String	FILTER_ATTRIBUTE						= "filter";
 
 	/**
 	 * Framework environment property identifying capabilities which the system
