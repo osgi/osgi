@@ -302,6 +302,7 @@ public interface Constants {
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.2
+	 * @deprecated As of 1.6. Replaced by the {@code osgi.ee} capability.
 	 */
 	String	BUNDLE_REQUIREDEXECUTIONENVIRONMENT		= "Bundle-RequiredExecutionEnvironment";
 
@@ -925,6 +926,7 @@ public interface Constants {
 	 * {@code BundleContext.getProperty} method.
 	 * 
 	 * @since 1.2
+	 * @deprecated As of 1.6. Replaced by the {@code osgi.ee} capability.
 	 */
 	String	FRAMEWORK_EXECUTIONENVIRONMENT			= "org.osgi.framework.executionenvironment";
 
