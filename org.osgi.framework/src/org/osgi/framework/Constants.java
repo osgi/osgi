@@ -48,7 +48,7 @@ public interface Constants {
 	/**
 	 * Manifest header identifying the bundle's category.
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_CATEGORY							= "Bundle-Category";
@@ -58,7 +58,7 @@ public interface Constants {
 	 * which are bundle resources used to extend the bundle's classpath.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_CLASSPATH						= "Bundle-ClassPath";
@@ -66,7 +66,7 @@ public interface Constants {
 	/**
 	 * Manifest header identifying the bundle's copyright information.
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_COPYRIGHT						= "Bundle-Copyright";
@@ -75,7 +75,7 @@ public interface Constants {
 	 * Manifest header containing a brief description of the bundle's
 	 * functionality.
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_DESCRIPTION						= "Bundle-Description";
@@ -83,7 +83,7 @@ public interface Constants {
 	/**
 	 * Manifest header identifying the bundle's name.
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_NAME								= "Bundle-Name";
@@ -94,7 +94,7 @@ public interface Constants {
 	 * these environments.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_NATIVECODE						= "Bundle-NativeCode";
@@ -104,7 +104,7 @@ public interface Constants {
 	 * Framework for export.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	EXPORT_PACKAGE							= "Export-Package";
@@ -115,7 +115,7 @@ public interface Constants {
 	 * only).
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @deprecated As of 1.2.
@@ -126,7 +126,7 @@ public interface Constants {
 	 * Manifest header identifying the packages on which the bundle depends.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	IMPORT_PACKAGE							= "Import-Package";
@@ -136,7 +136,7 @@ public interface Constants {
 	 * import during execution.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.2
@@ -148,7 +148,7 @@ public interface Constants {
 	 * services that the bundle requires (used for informational purposes only).
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @deprecated As of 1.2.
@@ -159,7 +159,7 @@ public interface Constants {
 	 * Manifest header identifying the bundle's vendor.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_VENDOR							= "Bundle-Vendor";
@@ -168,7 +168,7 @@ public interface Constants {
 	 * Manifest header identifying the bundle's version.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_VERSION							= "Bundle-Version";
@@ -178,7 +178,7 @@ public interface Constants {
 	 * further information about the bundle may be obtained.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_DOCURL							= "Bundle-DocURL";
@@ -188,7 +188,7 @@ public interface Constants {
 	 * bundle may be reported; for example, an email address.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_CONTACTADDRESS					= "Bundle-ContactAddress";
@@ -203,7 +203,7 @@ public interface Constants {
 	 * the bundle is started and stopped, respectively.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_ACTIVATOR						= "Bundle-Activator";
@@ -213,7 +213,7 @@ public interface Constants {
 	 * is obtained during a bundle update operation.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_UPDATELOCATION					= "Bundle-UpdateLocation";
@@ -298,7 +298,7 @@ public interface Constants {
 	 * environments it implements.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.2
@@ -310,7 +310,7 @@ public interface Constants {
 	 * Manifest header identifying the bundle's symbolic name.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.3
@@ -328,10 +328,6 @@ public interface Constants {
 	 * <pre>
 	 *     Bundle-SymbolicName: com.acme.module.test; singleton:=true
 	 * </pre>
-	 * 
-	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
-	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @see #BUNDLE_SYMBOLICNAME
 	 * @since 1.3
@@ -420,7 +416,7 @@ public interface Constants {
 	 * entries.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @see #BUNDLE_LOCALIZATION_DEFAULT_BASENAME
@@ -441,7 +437,7 @@ public interface Constants {
 	 * by the bundle.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.3
@@ -478,7 +474,7 @@ public interface Constants {
 	 * that the bundle is a fragment.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.3
@@ -511,7 +507,7 @@ public interface Constants {
 	 * specifically, by version 1.3 of the OSGi Core Specification is "2".
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.3
@@ -832,7 +828,7 @@ public interface Constants {
 	/**
 	 * Manifest header identifying the bundle's activation policy.
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.4
