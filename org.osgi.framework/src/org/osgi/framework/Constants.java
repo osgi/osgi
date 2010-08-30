@@ -1513,4 +1513,37 @@ public interface Constants {
 	 * @see "Remote Services Specification"
 	 */
 	String	SERVICE_INTENTS							= "service.intents";
+
+	/**
+	 * Framework environment property identifying capabilities which the system
+	 * bundle must provide.
+	 * 
+	 * <p>
+	 * If this property is not specified then the framework must calculate a
+	 * reasonable default value for the current execution environment.
+	 * 
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * {@code BundleContext.getProperty} method.
+	 * 
+	 * @since 1.6
+	 */
+	String	FRAMEWORK_SYSTEMCAPABILITIES			= "org.osgi.framework.system.capabilities";
+
+	/**
+	 * Framework environment property identifying extra capabilities which the
+	 * system bundle must additionally provide.
+	 * 
+	 * <p>
+	 * This property is useful for configuring extra system capabilities in
+	 * addition to the system capabilities calculated by the framework.
+	 * 
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * {@code BundleContext.getProperty} method.
+	 * 
+	 * @see #FRAMEWORK_SYSTEMCAPABILITIES
+	 * @since 1.6
+	 */
+	String	FRAMEWORK_SYSTEMCAPABILITIES_EXTRA		= "org.osgi.framework.system.capabilities.extra";
 }
