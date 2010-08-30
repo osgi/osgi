@@ -29,7 +29,6 @@ import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -116,7 +115,7 @@ public final class PackagePermission extends BasicPermission {
 	 * filter in implies. This is not initialized until necessary, and then
 	 * cached in this object.
 	 */
-	private transient volatile Dictionary<String, Object>	properties;
+	private transient volatile Map<String, Object>	properties;
 
 	/**
 	 * Creates a new {@code PackagePermission} object.
@@ -425,7 +424,7 @@ public final class PackagePermission extends BasicPermission {
 		if (f == null) {
 			return super.implies(requested);
 		}
-		return f.matchCase(requested.getProperties());
+		return f.matches(requested.getProperties());
 	}
 
 	/**
@@ -550,33 +549,33 @@ public final class PackagePermission extends BasicPermission {
 	 * 
 	 * @return a dictionary of properties for this permission.
 	 */
-	private Dictionary<String, Object> getProperties() {
-		Dictionary<String, Object> result = properties;
+	private Map<String, Object> getProperties() {
+		Map<String, Object> result = properties;
 		if (result != null) {
 			return result;
 		}
-		final Dictionary<String, Object> dict = new Hashtable<String, Object>(5);
+		final Map<String, Object> map = new HashMap<String, Object>(5);
 		if (filter == null) {
-			dict.put("package.name", getName());
+			map.put("package.name", getName());
 		}
 		if (bundle != null) {
 			AccessController.doPrivileged(new PrivilegedAction<Object>() {
 				public Object run() {
-					dict.put("id", new Long(bundle.getBundleId()));
-					dict.put("location", bundle.getLocation());
+					map.put("id", new Long(bundle.getBundleId()));
+					map.put("location", bundle.getLocation());
 					String name = bundle.getSymbolicName();
 					if (name != null) {
-						dict.put("name", name);
+						map.put("name", name);
 					}
 					SignerProperty signer = new SignerProperty(bundle);
 					if (signer.isBundleSigned()) {
-						dict.put("signer", signer);
+						map.put("signer", signer);
 					}
 					return null;
 				}
 			});
 		}
-		return properties = dict;
+		return properties = map;
 	}
 }
 

@@ -16,6 +16,7 @@
 package org.osgi.framework;
 
 import java.util.Dictionary;
+import java.util.Map;
 
 /**
  * An RFC 1960-based Filter.
@@ -47,29 +48,29 @@ public interface Filter {
 	 * Filter using a service's properties.
 	 * <p>
 	 * This {@code Filter} is executed using the keys and values of the
-	 * referenced service's properties. The keys are case insensitively matched
-	 * with this {@code Filter}.
+	 * referenced service's properties. The keys are looked up in a case
+	 * insensitive manner.
 	 * 
 	 * @param reference The reference to the service whose properties are used
 	 *        in the match.
 	 * @return {@code true} if the service's properties match this
 	 *         {@code Filter}; {@code false} otherwise.
 	 */
-	public boolean match(ServiceReference< ? > reference);
+	boolean match(ServiceReference< ? > reference);
 
 	/**
-	 * Filter using a {@code Dictionary}. This {@code Filter} is
-	 * executed using the specified {@code Dictionary}'s keys and values.
-	 * The keys are case insensitively matched with this {@code Filter}.
+	 * Filter using a {@code Dictionary} with case insensitive key lookup. This
+	 * {@code Filter} is executed using the specified {@code Dictionary}'s keys
+	 * and values. The keys are looked up in a case insensitive manner.
 	 * 
-	 * @param dictionary The {@code Dictionary} whose keys are used in the
-	 *        match.
-	 * @return {@code true} if the {@code Dictionary}'s keys and
-	 *         values match this filter; {@code false} otherwise.
+	 * @param dictionary The {@code Dictionary} whose key/value pairs are used
+	 *        in the match.
+	 * @return {@code true} if the {@code Dictionary}'s values match this
+	 *         filter; {@code false} otherwise.
 	 * @throws IllegalArgumentException If {@code dictionary} contains case
 	 *         variants of the same key name.
 	 */
-	public boolean match(Dictionary<String, ? > dictionary);
+	boolean match(Dictionary<String, ? > dictionary);
 
 	/**
 	 * Returns this {@code Filter}'s filter string.
@@ -79,7 +80,7 @@ public interface Filter {
 	 * 
 	 * @return This {@code Filter}'s filter string.
 	 */
-	public String toString();
+	String toString();
 
 	/**
 	 * Compares this {@code Filter} to another {@code Filter}.
@@ -94,7 +95,7 @@ public interface Filter {
 	 *         {@code this.toString().equals(obj.toString())};
 	 *         {@code false} otherwise.
 	 */
-	public boolean equals(Object obj);
+	boolean equals(Object obj);
 
 	/**
 	 * Returns the hashCode for this {@code Filter}.
@@ -105,19 +106,32 @@ public interface Filter {
 	 * 
 	 * @return The hashCode of this {@code Filter}.
 	 */
-	public int hashCode();
+	int hashCode();
 
 	/**
-	 * Filter with case sensitivity using a {@code Dictionary}. This
-	 * {@code Filter} is executed using the specified
-	 * {@code Dictionary}'s keys and values. The keys are case sensitively
-	 * matched with this {@code Filter}.
+	 * Filter using a {@code Dictionary}. This {@code Filter} is executed using
+	 * the specified {@code Dictionary}'s keys and values. The keys are looked
+	 * up in a normal manner respecting case.
 	 * 
-	 * @param dictionary The {@code Dictionary} whose keys are used in the
-	 *        match.
-	 * @return {@code true} if the {@code Dictionary}'s keys and
-	 *         values match this filter; {@code false} otherwise.
+	 * @param dictionary The {@code Dictionary} whose key/value pairs are used
+	 *        in the match.
+	 * @return {@code true} if the {@code Dictionary}'s values match this
+	 *         filter; {@code false} otherwise.
 	 * @since 1.3
 	 */
-	public boolean matchCase(Dictionary<String, ? > dictionary);
+	boolean matchCase(Dictionary<String, ? > dictionary);
+
+	/**
+	 * Filter using a {@code Map}. This {@code Filter} is executed using the
+	 * specified {@code Map}'s keys and values. The keys are looked up in a
+	 * normal manner respecting case.
+	 * 
+	 * @param map The {@code Map} whose key/value pairs are used in the match.
+	 *        Maps with {@code null} key or values are not supported. A
+	 *        {@code null} value is considered not present to the filter.
+	 * @return {@code true} if the {@code Map}'s values match this filter;
+	 *         {@code false} otherwise.
+	 * @since 1.6
+	 */
+	boolean matches(Map<String, ? > map);
 }
