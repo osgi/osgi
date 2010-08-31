@@ -36,106 +36,121 @@ import java.io.*;
  * do not wrap. Text typed that is longer than the window will not be visible,
  * it is the responsibility of the sender to ensure this does not happen.
  * 
- * A screen is considered to be {@link #height()} lines that each have
- * {@link #width()} characters. For cursor positioning, the screen is assumed to
- * be starting at 0,0 and increases its position from left to right and from top
- * to bottom. Positioning outside the screen bounds is undefined.
+ * A screen is considered to be {@link #getHeight()} lines that each have
+ * {@link #getWidth()} characters. For cursor positioning, the screen is assumed
+ * to be starting at 0,0 and increases its position from left to right and from
+ * top to bottom. Positioning outside the screen bounds is undefined.
  */
 public interface Terminal {
 	/**
+	 * Start point of control characters.
+	 */
+	int	CONTROL_START	= 0x10000;
+
+	/**
 	 * Cursor up key
 	 */
-	int	CURSOR_UP		= 1000;
+	int	CURSOR_UP		= CONTROL_START + 0;
 	/**
 	 * Cursor down key.
 	 */
-	int	CURSOR_DOWN		= 1001;
+	int	CURSOR_DOWN		= CONTROL_START + 1;
 	/**
 	 * Cursors forward key. Usually right.
 	 */
-	int	CURSOR_FORWARD	= 1002;
+	int	CURSOR_FORWARD	= CONTROL_START + 2;
 
 	/**
 	 * Cursors backward key. Usually left.
 	 */
-	int	CURSOR_BACKWARD	= 1003;
+	int	CURSOR_BACKWARD	= CONTROL_START + 3;
 
 	/**
 	 * Page up key
 	 */
-	int	PAGE_UP			= 1004;
+	int	PAGE_UP			= CONTROL_START + 4;
 	/**
 	 * Page down key
 	 */
-	int	PAGE_DOWN		= 1005;
+	int	PAGE_DOWN		= CONTROL_START + 5;
 	/**
 	 * Home key
 	 */
-	int	HOME			= 1006;
+	int	HOME			= CONTROL_START + 6;
 	/**
 	 * End key
 	 */
-	int	END				= 1007;
+	int	END				= CONTROL_START + 7;
 	/**
 	 * Insert key
 	 */
-	int	INSERT			= 1008;
+	int	INSERT			= CONTROL_START + 8;
 	/**
 	 * Delete key
 	 */
-	int	DELETE			= 1009;
+	int	DELETE			= CONTROL_START + 9;
 	/**
 	 * Break key
 	 */
-	int	BREAK			= 1009;
+	int	BREAK			= CONTROL_START + 10;
+
+	/**
+	 * The window size has changed.
+	 */
+	int	SIZE_CHANGE		= CONTROL_START + 11;
+
+	/**
+	 * Helper
+	 */
+	int	FUNCTION_START	= CONTROL_START + 0x100;
 	/**
 	 * Function key 1
 	 */
-	int	F1				= 1101;
+	int	F1				= FUNCTION_START + 1;
 	/**
 	 * Function key 2
 	 */
-	int	F2				= 1102;
+	int	F2				= FUNCTION_START + 2;
 	/**
 	 * Function key 3
 	 */
-	int	F3				= 1103;
+	int	F3				= FUNCTION_START + 3;
 	/**
 	 * Function key 4
 	 */
-	int	F4				= 1104;
+	int	F4				= FUNCTION_START + 4;
 	/**
 	 * Function key 5
 	 */
-	int	F5				= 1105;
+	int	F5				= FUNCTION_START + 5;
 	/**
 	 * Function key 6
 	 */
-	int	F6				= 1106;
+	int	F6				= FUNCTION_START + 6;
 	/**
 	 * Function key 7
 	 */
-	int	F7				= 1107;
+	int	F7				= FUNCTION_START + 7;
 	/**
 	 * Function key 8
 	 */
-	int	F8				= 1108;
+	int	F8				= FUNCTION_START + 8;
 	/**
 	 * Function key 9
 	 */
-	int	F9				= 1109;
+	int	F9				= FUNCTION_START + 9;
 	/**
 	 * Function key 10
 	 */
-	int	F10				= 1110;
+	int	F10				= FUNCTION_START + 10;
 	/**
 	 * Function key 11
 	 */
-	int	F11				= 1111;
+	int	F11				= FUNCTION_START + 11;
 	/**
 	 * Function key 12
 	 */
-	int	F12				= 1112;
+	int	F12				= FUNCTION_START + 12;
 
 	/**
 	 * An inner class to provide an enum for the attributes
@@ -152,108 +167,128 @@ public interface Terminal {
 		}
 
 		/**
-		 * Blink the text.
-		 */
-		public Attribute	BLINK			= new Attribute("BLINK");
-		/**
 		 * Underline the text.
 		 */
 		public Attribute	UNDERLINE		= new Attribute("UNDERLINE");
-		/**
-		 * Strike Through the text.
-		 */
-		public Attribute	STRIKE_THROUGH	= new Attribute("STRIKE THROUGH");
 		/**
 		 * Bolden the text.
 		 */
 		public Attribute	BOLD			= new Attribute("BOLD");
 		/**
-		 * Dim the text.
-		 */
-		public Attribute	DIM				= new Attribute("DIM");
-		/**
 		 * Reverse the text.
 		 */
 		public Attribute	REVERSED		= new Attribute("REVERSED");
-	}
-
-	/**
-	 * An inner class to be used as enum for the basic colors.
-	 * 
-	 */
-	public static class Color {
-		private String	name;
-
-		private Color(String name) {
-			this.name = name;
-		}
-
-		public String toString() {
-			return name;
-		}
-
 		/**
 		 * No Color, transparent.
 		 */
-		public Color	NONE	= new Color("NONE");
+		public Attribute	FORE_NONE		= new Attribute("FORE_NONE");
 		/**
 		 * Black
 		 */
-		public Color	BLACK	= new Color("BLACK");
+		public Attribute	FORE_BLACK		= new Attribute("FORE_BLACK");
 		/**
 		 * Green
 		 */
-		public Color	GREEN	= new Color("GREEN");
+		public Attribute	FORE_GREEN		= new Attribute("FORE_GREEN");
 		/**
 		 * Yellow
 		 */
-		public Color	YELLOW	= new Color("YELLOW");
+		public Attribute	FORE_YELLOW		= new Attribute("FORE_YELLOW");
 
 		/**
 		 * Magenta
 		 */
-		public Color	MAGENTA	= new Color("MAGENTA");
+		public Attribute	FORE_MAGENTA	= new Attribute("FORE_MAGENTA");
 
 		/**
 		 * Cyan
 		 */
-		public Color	CYAN	= new Color("CYAN");
+		public Attribute	FORE_CYAN		= new Attribute("FORE_CYAN");
 		/**
 		 * Blue
 		 */
-		public Color	BLUE	= new Color("BLUE");
+		public Attribute	FORE_BLUE		= new Attribute("FORE_BLUE");
 		/**
 		 * Red
 		 */
-		public Color	RED		= new Color("RED");
+		public Attribute	FORE_RED		= new Attribute("FORE_RED");
 		/**
 		 * White
 		 */
-		public Color	WHITE	= new Color("WHITE");
+		public Attribute	FORE_WHITE		= new Attribute("FORE_WHITE");
+		/**
+		 * No Color, transparent.
+		 */
+		public Attribute	BACK_NONE		= new Attribute("BACK_NONE");
+		/**
+		 * Black
+		 */
+		public Attribute	BACK_BLACK		= new Attribute("BACK_BLACK");
+		/**
+		 * Green
+		 */
+		public Attribute	BACK_GREEN		= new Attribute("BACK_GREEN");
+		/**
+		 * Yellow
+		 */
+		public Attribute	BACK_YELLOW		= new Attribute("BACK_YELLOW");
+
+		/**
+		 * Magenta
+		 */
+		public Attribute	BACK_MAGENTA	= new Attribute("BACK_MAGENTA");
+
+		/**
+		 * Cyan
+		 */
+		public Attribute	BACK_CYAN		= new Attribute("BACK_CYAN");
+		/**
+		 * Blue
+		 */
+		public Attribute	BACK_BLUE		= new Attribute("BACK_BLUE");
+		/**
+		 * Red
+		 */
+		public Attribute	BACK_RED		= new Attribute("BACK_RED");
+		/**
+		 * White
+		 */
+		public Attribute	BACK_WHITE		= new Attribute("BACK_WHITE");
 	}
 
 	/**
-	 * Return the associated Input Stream that represents the keyboard. Note
-	 * that this InputStream can return values > 256, these characters are
-	 * defined in this interface as special keys.
+	 * Get a character from the input. Characters less than 0x10000 are Unicode
+	 * characters, if more it is a control code defined by the constants in this
+	 * class.
 	 * 
 	 * @return the current Input Stream.
+	 * @throws Exception When character cannot be read
 	 */
-	InputStream getInputStream();
+	int getIn() throws Exception;
+
+	/**
+	 * Read a complete line from the input. The result will not contain any
+	 * command codes, just text. Implementers can allow line editing and history
+	 * handling. The string must not contain the LF or CR at the end.
+	 * 
+	 * @return a new line
+	 * @throws Exception
+	 */
+	String readLine() throws Exception;
 
 	/**
 	 * Return the associated standard output stream.
 	 * 
 	 * @return the associated standard output stream
 	 */
-	OutputStream getOutputStream();
+	PrintWriter getOut();
 
 	/**
 	 * Return the associated standard error stream.
 	 * 
 	 * @return the associated standard error stream
 	 */
-	OutputStream getErrorStream();
+	PrintWriter getErr();
 
 	/**
 	 * Clear the complete screen and position the cursor at 0,0.
@@ -303,24 +338,28 @@ public interface Terminal {
 	/**
 	 * Return the actual width of the screen. Some screens can change their size
 	 * and this method must return the actual width if possible. If the width
-	 * cannot be established a -1 must be returned.
+	 * cannot be established a -1 must be returned. If the size changes and the
+	 * terminal supports reporting these events a {@link #SIZE_CHANGE} key must
+	 * be returned.
 	 * 
 	 * @return the width of the screen or -1.
 	 * 
 	 * @throws Exception when the method fails
 	 */
-	int width() throws Exception;
+	int getWidth() throws Exception;
 
 	/**
 	 * Return the actual height of the screen. Some screens can change their
-	 * size and this method must return the actual height if possible. If the width
-	 * cannot be established a -1 must be returned.
+	 * size and this method must return the actual height if possible. If the
+	 * width cannot be established a -1 must be returned. If the size changes
+	 * and the terminal supports reporting these events a {@link #SIZE_CHANGE}
+	 * key must be returned.
 	 * 
 	 * @return the height of the screen or -1.
 	 * 
 	 * @throws Exception when the method fails
 	 */
-	int height() throws Exception;
+	int getHeight() throws Exception;
 
 	/**
 	 * Return the current cursor position.
@@ -338,9 +377,9 @@ public interface Terminal {
 
 	/**
 	 * Position the cursor on the screen. Positioning starts at 0,0 and the
-	 * maximum value is given by {@link #width()}, {@link #height()}. The visible
-	 * cursor is moved to this position and text insertion will continue from
-	 * that position.
+	 * maximum value is given by {@link #getWidth()}, {@link #getHeight()}. The
+	 * visible cursor is moved to this position and text insertion will continue
+	 * from that position.
 	 * 
 	 * @param x The x position, must be from 0-width
 	 * @param y The y position, must be from 0-height
@@ -352,18 +391,82 @@ public interface Terminal {
 	boolean position(int x, int y) throws IllegalArgumentException, Exception;
 
 	/**
-	 * Set the attributes of the text to outputed. This method must reset all
-	 * current attributes. That is, attributes are not inherited from the
-	 * current position.
+	 * Set the attributes of the text to outputed next. The method returns the
+	 * current settings, which can be used to restore the display to the
+	 * previous state. These current settings are stream based and not
+	 * associated with the position of the cursor.
 	 * 
-	 * @param foreground The foreground color
-	 * @param background The background color (around the character)
-	 * @param attr A number of attributes.
-	 * @return {@code true} if the attributes could be set, otherwise {@code
-	 *         false}
+	 * Attributes must be completely specified, they do not inherit from the
+	 * current display. If attributes are specified multiple times, the last one
+	 * wins.
+	 * 
+	 * @param attr A number of attributes describing the output
+	 * @return The previous state of attributes or null if attributes are not
+	 *         supported.
 	 * @throws Exception when this method fails
 	 */
-	boolean attributes(Color foreground, Color background, Attribute... attr)
-			throws Exception;
+	Attribute[] attributes(Attribute... attr) throws Exception;
+
+	/**
+	 * Value for {@link #getCapabilities()}, if set this Terminal can report the
+	 * cursor position. See {@link #position(int, int)}
+	 */
+	long	REPORTS_CURSOR_POS				= 0x00000000001;
+	/**
+	 * Value for {@link #getCapabilities()}, if set this Terminal sends a
+	 * control code when the terminal changes size. See {@link #SIZE_CHANGE}.
+	 */
+	long	REPORTS_SIZE_CHANGES			= 0x00000000002;
+
+	/**
+	 * Value for {@link #getCapabilities()}, if set this Terminal can report the
+	 * current size, see {@link #getHeight()} and {@link #getWidth()}.
+	 */
+	long	REPORTS_SIZE					= 0x00000000004;
+
+	/**
+	 * Value for {@link #getCapabilities()}, if set this Terminal will handle
+	 * bidirectional scripts. If supported, text and cursor movements must be
+	 * automatically reordered to match the visualization. This will allow users
+	 * to just send Unicode strings where text is in increasing memory order.
+	 * Any reordering is only done on the display.
+	 */
+	long	SUPPORTS_BIDIRECTIONAL_SCRIPTS	= 0x00000000100;
+
+	/**
+	 * Value for {@link #getCapabilities()}, if set this Terminal supports
+	 * attributes. If not set, {@link #attributes(Attribute...)} will always
+	 * return {@code null}.
+	 */
+	long	SUPPORTS_ATTRIBUTES				= 0x00000000400;
+
+	/**
+	 * Value for {@link #getCapabilities()}, if set this Terminal supports
+	 * setting the cursor position. If not set, {@link #position(int, int)} will
+	 * always return false and not set the cursor.
+	 */
+	long	SUPPORTS_CURSOR_POS				= 0x00000004000;
+	/**
+	 * Value for {@link #getCapabilities()}, if set this Terminal supports the
+	 * LATIN_1 supplement. These are the UNICODE 80-FF codes. A Terminal must
+	 * minimally support US-ASCII.
+	 */
+	long	SUPPORTS_LATIN_1_SUPPLEMENT		= 0x00000010000;
+
+	/**
+	 * Value for {@link #getCapabilities()}, if set this Terminal supports the
+	 * full UNICODE set. This does not imply Bidirectional script handling. A
+	 * Terminal must minimally support US-ASCII.
+	 */
+	long	SUPPORTS_UNICODE				= 0x00000020000;
+
+	/**
+	 * Answer the capabilities of this terminal. The following capabilities can
+	 * be returned:
+	 * 
+	 * 
+	 * @return the bitmap of capabilities
+	 */
+	long getCapabilities();
 
 }

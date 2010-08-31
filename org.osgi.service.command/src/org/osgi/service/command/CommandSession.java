@@ -15,6 +15,7 @@
  */
 package org.osgi.service.command;
 
+import java.net.*;
 import java.util.*;
 
 /**
@@ -76,12 +77,24 @@ public interface CommandSession {
 	/**
 	 * Return the current list of scopes. A scope represents a command and its
 	 * sub-commands. The purpose of this information is to simplify command
-	 * completion and providing extensive help about commands. If an implementation
-	 * supports annotations it can use the annotations to provide extra information.
+	 * completion and providing extensive help about commands. If an
+	 * implementation supports annotations it can use the annotations to provide
+	 * extra information.
 	 * 
-	 * @return A unmodifiable collection of {@link MetaScope} objects. 
+	 * @return A unmodifiable collection of {@link MetaScope} objects.
 	 */
 
 	Collection<MetaScope> getMetaScopes();
+
+	/**
+	 * Resolve a local name to a URI to the current working directory. If the
+	 * name is absolute, an absolute URI is returned.
+	 * 
+	 * @param path A relative or absolute URI
+	 * @return a URI that is the original when it was absolute and resolved
+	 *         against the $cwd variable if relative.
+	 */
+
+	URI resolve(String path);
 
 }

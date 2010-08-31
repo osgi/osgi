@@ -17,6 +17,7 @@ package org.osgi.service.command;
 
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.security.spec.*;
 
 /**
  * A Command Processor is a service that is registered by a TSH script engine
@@ -70,18 +71,17 @@ public interface CommandProcessor {
 	 *        returns end of file.
 	 * @param out The stream used for System.out, must not be {@code null}
 	 * @param err The stream used for System.err, must not be {@code null}
+	 * @param encoding The character encoding to use
 	 * @return A new session.
 	 */
 	CommandSession createSession(InputStream in, PrintStream out,
-			PrintStream err);
+			PrintStream err, String encoding);
 
 	/**
 	 * Create a new Command Session that is associated with a {@link Terminal}.
 	 * 
 	 * A Terminal provides the common streams but adds extra capabilities for
-	 * commands to control the screen. A session maintains this Terminal under
-	 * the variable .terminal and can automatically inject a Terminal if needed
-	 * in a method call.
+	 * commands to control the screen. A session maintains this Terminal.
 	 * 
 	 * @param terminal The terminal to use in this session
 	 * @return A new sessions
