@@ -48,7 +48,7 @@ public interface Constants {
 	/**
 	 * Manifest header identifying the bundle's category.
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_CATEGORY							= "Bundle-Category";
@@ -58,7 +58,7 @@ public interface Constants {
 	 * which are bundle resources used to extend the bundle's classpath.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_CLASSPATH						= "Bundle-ClassPath";
@@ -66,7 +66,7 @@ public interface Constants {
 	/**
 	 * Manifest header identifying the bundle's copyright information.
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_COPYRIGHT						= "Bundle-Copyright";
@@ -75,7 +75,7 @@ public interface Constants {
 	 * Manifest header containing a brief description of the bundle's
 	 * functionality.
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_DESCRIPTION						= "Bundle-Description";
@@ -83,7 +83,7 @@ public interface Constants {
 	/**
 	 * Manifest header identifying the bundle's name.
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_NAME								= "Bundle-Name";
@@ -94,7 +94,7 @@ public interface Constants {
 	 * these environments.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_NATIVECODE						= "Bundle-NativeCode";
@@ -104,7 +104,7 @@ public interface Constants {
 	 * Framework for export.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	EXPORT_PACKAGE							= "Export-Package";
@@ -115,7 +115,7 @@ public interface Constants {
 	 * only).
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @deprecated As of 1.2.
@@ -126,7 +126,7 @@ public interface Constants {
 	 * Manifest header identifying the packages on which the bundle depends.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	IMPORT_PACKAGE							= "Import-Package";
@@ -136,7 +136,7 @@ public interface Constants {
 	 * import during execution.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.2
@@ -148,7 +148,7 @@ public interface Constants {
 	 * services that the bundle requires (used for informational purposes only).
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @deprecated As of 1.2.
@@ -159,7 +159,7 @@ public interface Constants {
 	 * Manifest header identifying the bundle's vendor.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_VENDOR							= "Bundle-Vendor";
@@ -168,7 +168,7 @@ public interface Constants {
 	 * Manifest header identifying the bundle's version.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_VERSION							= "Bundle-Version";
@@ -178,7 +178,7 @@ public interface Constants {
 	 * further information about the bundle may be obtained.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_DOCURL							= "Bundle-DocURL";
@@ -188,7 +188,7 @@ public interface Constants {
 	 * bundle may be reported; for example, an email address.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_CONTACTADDRESS					= "Bundle-ContactAddress";
@@ -203,7 +203,7 @@ public interface Constants {
 	 * the bundle is started and stopped, respectively.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_ACTIVATOR						= "Bundle-Activator";
@@ -213,7 +213,7 @@ public interface Constants {
 	 * is obtained during a bundle update operation.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_UPDATELOCATION					= "Bundle-UpdateLocation";
@@ -298,10 +298,11 @@ public interface Constants {
 	 * environments it implements.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.2
+	 * @deprecated As of 1.6. Replaced by the {@code osgi.ee} capability.
 	 */
 	String	BUNDLE_REQUIREDEXECUTIONENVIRONMENT		= "Bundle-RequiredExecutionEnvironment";
 
@@ -309,7 +310,7 @@ public interface Constants {
 	 * Manifest header identifying the bundle's symbolic name.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.3
@@ -327,10 +328,6 @@ public interface Constants {
 	 * <pre>
 	 *     Bundle-SymbolicName: com.acme.module.test; singleton:=true
 	 * </pre>
-	 * 
-	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
-	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @see #BUNDLE_SYMBOLICNAME
 	 * @since 1.3
@@ -419,7 +416,7 @@ public interface Constants {
 	 * entries.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @see #BUNDLE_LOCALIZATION_DEFAULT_BASENAME
@@ -440,7 +437,7 @@ public interface Constants {
 	 * by the bundle.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.3
@@ -477,7 +474,7 @@ public interface Constants {
 	 * that the bundle is a fragment.
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.3
@@ -510,7 +507,7 @@ public interface Constants {
 	 * specifically, by version 1.3 of the OSGi Core Specification is "2".
 	 * 
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.3
@@ -554,20 +551,22 @@ public interface Constants {
 
 	/**
 	 * Manifest header directive identifying the resolution type in the
-	 * Import-Package or Require-Bundle manifest header. The default value is
-	 * {@link #RESOLUTION_MANDATORY mandatory}.
+	 * Import-Package, Require-Bundle or Require-Capability manifest header. The
+	 * default value is {@link #RESOLUTION_MANDATORY mandatory}.
 	 * 
 	 * <p>
-	 * The directive value is encoded in the Import-Package or Require-Bundle
-	 * manifest header like:
+	 * The directive value is encoded in the Import-Package, Require-Bundle or
+	 * Require-Capability manifest header like:
 	 * 
 	 * <pre>
 	 *     Import-Package: org.osgi.framework; resolution:=&quot;optional&quot;
 	 *     Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
+	 *     Require-Capability: com.acme.capability; resolution:=&quot;optional&quot;
 	 * </pre>
 	 * 
 	 * @see #IMPORT_PACKAGE
 	 * @see #REQUIRE_BUNDLE
+	 * @see #REQUIRE_CAPABILITY
 	 * @see #RESOLUTION_MANDATORY
 	 * @see #RESOLUTION_OPTIONAL
 	 * @since 1.3
@@ -576,17 +575,19 @@ public interface Constants {
 
 	/**
 	 * Manifest header directive value identifying a mandatory resolution type.
-	 * A mandatory resolution type indicates that the import package or require
-	 * bundle must be resolved when the bundle is resolved. If such an import or
-	 * require bundle cannot be resolved, the module fails to resolve.
+	 * A mandatory resolution type indicates that the import package, require
+	 * bundle or require capability must be resolved when the bundle is
+	 * resolved. If such an import, require bundle or require capability cannot
+	 * be resolved, the module fails to resolve.
 	 * 
 	 * <p>
-	 * The directive value is encoded in the Import-Package or Require-Bundle
-	 * manifest header like:
+	 * The directive value is encoded in the Import-Package, Require-Bundle or
+	 * Require-Capability manifest header like:
 	 * 
 	 * <pre>
-	 *     Import-Package: org.osgi.framework; resolution:=&quot;manditory&quot;
-	 *     Require-Bundle: com.acme.module.test; resolution:=&quot;manditory&quot;
+	 *     Import-Package: org.osgi.framework; resolution:=&quot;mandatory&quot;
+	 *     Require-Bundle: com.acme.module.test; resolution:=&quot;mandatory&quot;
+	 *     Require-Capability: com.acme.capability; resolution:=&quot;mandatory&quot;
 	 * </pre>
 	 * 
 	 * @see #RESOLUTION_DIRECTIVE
@@ -596,19 +597,21 @@ public interface Constants {
 
 	/**
 	 * Manifest header directive value identifying an optional resolution type.
-	 * An optional resolution type indicates that the import or require bundle
-	 * is optional and the bundle may be resolved without the import or require
-	 * bundle being resolved. If the import or require bundle is not resolved
-	 * when the bundle is resolved, the import or require bundle may not be
-	 * resolved before the bundle is refreshed.
+	 * An optional resolution type indicates that the import, require bundle or
+	 * require capability is optional and the bundle may be resolved without the
+	 * import, require bundle or require capability being resolved. If the
+	 * import, require bundle or require capability is not resolved when the
+	 * bundle is resolved, the import, require bundle or require capability may
+	 * not be resolved until the bundle is refreshed.
 	 * 
 	 * <p>
-	 * The directive value is encoded in the Import-Package or Require-Bundle
-	 * manifest header like:
+	 * The directive value is encoded in the Import-Package, Require-Bundle or
+	 * Require-Capability manifest header like:
 	 * 
 	 * <pre>
 	 *     Import-Package: org.osgi.framework; resolution:=&quot;optional&quot;
 	 *     Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
+	 *     Require-Capability: com.acme.capability; resolution:=&quot;optional&quot;
 	 * </pre>
 	 * 
 	 * @see #RESOLUTION_DIRECTIVE
@@ -618,17 +621,19 @@ public interface Constants {
 
 	/**
 	 * Manifest header directive identifying a list of packages that an exported
-	 * package uses.
+	 * package or provided capability uses.
 	 * 
 	 * <p>
-	 * The directive value is encoded in the Export-Package manifest header
-	 * like:
+	 * The directive value is encoded in the Export-Package or
+	 * Provide-Capability manifest header like:
 	 * 
 	 * <pre>
 	 *     Export-Package: org.osgi.util.tracker; uses:=&quot;org.osgi.framework&quot;
+	 *     Provide-Capability: com.acme.capability; uses:=&quot;com.acme.service&quot;
 	 * </pre>
 	 * 
 	 * @see #EXPORT_PACKAGE
+	 * @see #PROVIDE_CAPABILITY
 	 * @since 1.3
 	 */
 	String	USES_DIRECTIVE							= "uses";
@@ -823,7 +828,7 @@ public interface Constants {
 	/**
 	 * Manifest header identifying the bundle's activation policy.
 	 * <p>
-	 * The attribute value may be retrieved from the {@code Dictionary} object
+	 * The header value may be retrieved from the {@code Dictionary} object
 	 * returned by the {@code Bundle.getHeaders} method.
 	 * 
 	 * @since 1.4
@@ -925,6 +930,7 @@ public interface Constants {
 	 * {@code BundleContext.getProperty} method.
 	 * 
 	 * @since 1.2
+	 * @deprecated As of 1.6. Replaced by the {@code osgi.ee} capability.
 	 */
 	String	FRAMEWORK_EXECUTIONENVIRONMENT			= "org.osgi.framework.executionenvironment";
 
@@ -1513,4 +1519,132 @@ public interface Constants {
 	 * @see "Remote Services Specification"
 	 */
 	String	SERVICE_INTENTS							= "service.intents";
+
+	/**
+	 * Manifest header identifying the capabilities that the bundle offers to
+	 * provide to other bundles.
+	 * 
+	 * <p>
+	 * The header value may be retrieved from the {@code Dictionary} object
+	 * returned by the {@code Bundle.getHeaders} method.
+	 * 
+	 * @since 1.6
+	 */
+	String	PROVIDE_CAPABILITY						= "Provide-Capability";
+
+	/**
+	 * Manifest header identifying the capabilities on which the bundle depends.
+	 * 
+	 * <p>
+	 * The header value may be retrieved from the {@code Dictionary} object
+	 * returned by the {@code Bundle.getHeaders} method.
+	 * 
+	 * @since 1.6
+	 */
+	String	REQUIRE_CAPABILITY						= "Require-Capability";
+
+	/**
+	 * Manifest header directive identifying the effective time of the provided
+	 * capability. The default value is {@link #EFFECTIVE_RESOLVE resolve}.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Provide-Capability manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *     Provide-Capability: com.acme.capability; effective:=&quot;resolve&quot;
+	 * </pre>
+	 * 
+	 * @see #PROVIDE_CAPABILITY
+	 * @see #EFFECTIVE_RESOLVE
+	 * @see #EFFECTIVE_ACTIVE
+	 * @since 1.6
+	 */
+	String	EFFECTIVE_DIRECTIVE						= "effective";
+
+	/**
+	 * Manifest header directive value identifying a capability that is
+	 * effective at resolve time. Capabilities with an effective time of resolve
+	 * are the only capabilities which are processed by the resolver.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Provide-Capability manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *     Provide-Capability: com.acme.capability; effective:=&quot;resolve&quot;
+	 * </pre>
+	 * 
+	 * @see #EFFECTIVE_DIRECTIVE
+	 * @since 1.6
+	 */
+	String	EFFECTIVE_RESOLVE						= "resolve";
+
+	/**
+	 * Manifest header directive value identifying a capability that is
+	 * effective at active time. Capabilities with an effective time of active
+	 * are ignored by the resolver.
+	 * 
+	 * <p>
+	 * The directive value is encoded in the Provide-Capability manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *     Provide-Capability: com.acme.capability; effective:=&quot;active&quot;
+	 * </pre>
+	 * 
+	 * @see #EFFECTIVE_DIRECTIVE
+	 * @since 1.6
+	 */
+	String	EFFECTIVE_ACTIVE						= "active";
+
+	/**
+	 * Manifest header attribute identifying the capability filter specified in
+	 * the Require-Capability manifest header.
+	 * 
+	 * <p>
+	 * The attribute value is encoded in the Require-Capability manifest header
+	 * like:
+	 * 
+	 * <pre>
+	 *     Require-Capability: com.acme.capability; filter=&quot;(someattr=somevalue)&quot;
+	 * </pre>
+	 * 
+	 * @see #REQUIRE_CAPABILITY
+	 * @since 1.6
+	 */
+	String	FILTER_ATTRIBUTE						= "filter";
+
+	/**
+	 * Framework environment property identifying capabilities which the system
+	 * bundle must provide.
+	 * 
+	 * <p>
+	 * If this property is not specified then the framework must calculate a
+	 * reasonable default value for the current execution environment.
+	 * 
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * {@code BundleContext.getProperty} method.
+	 * 
+	 * @since 1.6
+	 */
+	String	FRAMEWORK_SYSTEMCAPABILITIES			= "org.osgi.framework.system.capabilities";
+
+	/**
+	 * Framework environment property identifying extra capabilities which the
+	 * system bundle must additionally provide.
+	 * 
+	 * <p>
+	 * This property is useful for configuring extra system capabilities in
+	 * addition to the system capabilities calculated by the framework.
+	 * 
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * {@code BundleContext.getProperty} method.
+	 * 
+	 * @see #FRAMEWORK_SYSTEMCAPABILITIES
+	 * @since 1.6
+	 */
+	String	FRAMEWORK_SYSTEMCAPABILITIES_EXTRA		= "org.osgi.framework.system.capabilities.extra";
 }

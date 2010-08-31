@@ -39,37 +39,34 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A bundle's authority to register or get a service.
+ * A bundle's authority to provide or require a capability.
  * <ul>
- * <li>The {@code register} action allows a bundle to register a service on
- * the specified names.
- * <li>The {@code get} action allows a bundle to detect a service and get
- * it.
+ * <li>The {@code provide} action allows a bundle to provide a capability
+ * matching the specified filter.
+ * <li>The {@code require} action allows a bundle to require a capability
+ * matching the specified filter.
  * </ul>
- * Permission to get a service is required in order to detect events regarding
- * the service. Untrusted bundles should not be able to detect the presence of
- * certain services unless they have the appropriate
- * {@code ServicePermission} to get the specific service.
  * 
  * @ThreadSafe
  * @version $Id$
+ * @since 1.6
  */
 
-public final class ServicePermission extends BasicPermission {
+public final class CapabilityPermission extends BasicPermission {
 	static final long			serialVersionUID	= -7662148639076511574L;
 	/**
-	 * The action string {@code get}.
+	 * The action string {@code require}.
 	 */
-	public final static String	GET					= "get";
+	public final static String						REQUIRE				= "require";
 	/**
-	 * The action string {@code register}.
+	 * The action string {@code provide}.
 	 */
-	public final static String	REGISTER			= "register";
+	public final static String						PROVIDE				= "provide";
 
-	private final static int	ACTION_GET			= 0x00000001;
-	private final static int	ACTION_REGISTER		= 0x00000002;
-	private final static int	ACTION_ALL			= ACTION_GET
-															| ACTION_REGISTER;
+	private final static int	ACTION_REQUIRE			= 0x00000001;
+	private final static int	ACTION_PROVIDE		= 0x00000002;
+	private final static int	ACTION_ALL			= ACTION_REQUIRE
+															| ACTION_PROVIDE;
 	final static int						ACTION_NONE			= 0;
 
 	/**
@@ -121,85 +118,87 @@ public final class ServicePermission extends BasicPermission {
 	private transient String				prefix;
 
 	/**
-	 * Create a new ServicePermission.
+	 * Create a new CapabilityPermission.
 	 * 
 	 * <p>
-	 * The name of the service is specified as a fully qualified class name.
-	 * Wildcards may be used.
+	 * The name is specified as a dot-separated string. Wildcards may be used.
 	 * 
 	 * <pre>
-	 * name ::= &lt;class name&gt; | &lt;class name ending in &quot;.*&quot;&gt; | *
+	 * name ::= &lt;namespace&gt; | &lt;namespace ending in &quot;.*&quot;&gt; | *
 	 * </pre>
 	 * 
 	 * Examples:
 	 * 
 	 * <pre>
-	 * org.osgi.service.http.HttpService
-	 * org.osgi.service.http.*
+	 * com.acme.capability.*
+	 * org.foo.capability
 	 * *
 	 * </pre>
 	 * 
-	 * For the {@code get} action, the name can also be a filter
-	 * expression. The filter gives access to the service properties as well as
-	 * the following attributes:
+	 * For the {@code require} action, the name can also be a filter expression.
+	 * The filter gives access to the capability attributes as well as the
+	 * following attributes:
 	 * <ul>
-	 * <li>signer - A Distinguished Name chain used to sign the bundle
-	 * publishing the service. Wildcards in a DN are not matched according to
-	 * the filter string rules, but according to the rules defined for a DN
-	 * chain.</li>
-	 * <li>location - The location of the bundle publishing the service.</li>
-	 * <li>id - The bundle ID of the bundle publishing the service.</li>
-	 * <li>name - The symbolic name of the bundle publishing the service.</li>
+	 * <li>signer - A Distinguished Name chain used to sign the bundle providing
+	 * the capability. Wildcards in a DN are not matched according to the filter
+	 * string rules, but according to the rules defined for a DN chain.</li>
+	 * <li>location - The location of the bundle providing the capability.</li>
+	 * <li>id - The bundle ID of the bundle providing the capability.</li>
+	 * <li>name - The symbolic name of the bundle providing the capability.</li>
+	 * <li>capability.namespace - The namespace of the required capability.</li>
 	 * </ul>
-	 * Since the above attribute names may conflict with service property names
-	 * used by a service, you can prefix an attribute name with '@' in the
-	 * filter expression to match against the service property and not one of
-	 * the above attributes. Filter attribute names are processed in a case
-	 * sensitive manner unless the attribute references a service property.
-	 * Service properties names are case insensitive.
+	 * Since the above attribute names may conflict with attribute names of a
+	 * capability, you can prefix an attribute name with '@' in the filter
+	 * expression to match against the capability attributes and not one of the
+	 * above attributes. Filter attribute names are processed in a case
+	 * sensitive manner.
 	 * 
 	 * <p>
-	 * There are two possible actions: {@code get} and
-	 * {@code register}. The {@code get} permission allows the owner
-	 * of this permission to obtain a service with this name. The
-	 * {@code register} permission allows the bundle to register a service
-	 * under that name.
+	 * There are two possible actions: {@code require} and {@code provide}. The
+	 * {@code require} permission allows the owner of this permission to require
+	 * a capability matching the attributes. The {@code provide} permission
+	 * allows the bundle to provide a capability in the specified capability
+	 * namespace.
 	 * 
-	 * @param name The service class name
-	 * @param actions {@code get},{@code register} (canonical order)
+	 * @param name The capability namespace or a filter over the attributes.
+	 * @param actions {@code require},{@code provide} (canonical order)
 	 * @throws IllegalArgumentException If the specified name is a filter
-	 *         expression and either the specified action is not
-	 *         {@code get} or the filter has an invalid syntax.
+	 *         expression and either the specified action is not {@code require}
+	 *         or the filter has an invalid syntax.
 	 */
-	public ServicePermission(String name, String actions) {
+	public CapabilityPermission(String name, String actions) {
 		this(name, parseActions(actions));
-		if ((filter != null)
-				&& ((action_mask & ACTION_ALL) != ACTION_GET)) {
+		if ((this.filter != null)
+				&& ((action_mask & ACTION_ALL) != ACTION_REQUIRE)) {
 			throw new IllegalArgumentException(
 					"invalid action string for filter expression");
 		}
 	}
 
 	/**
-	 * Creates a new requested {@code ServicePermission} object to be used
-	 * by code that must perform {@code checkPermission} for the
-	 * {@code get} action. {@code ServicePermission} objects created
-	 * with this constructor cannot be added to a {@code ServicePermission}
-	 * permission collection.
+	 * Creates a new requested {@code CapabilityPermission} object to be used by
+	 * code that must perform {@code checkPermission} for the {@code require}
+	 * action. {@code CapabilityPermission} objects created with this
+	 * constructor cannot be added to a {@code CapabilityPermission} permission
+	 * collection.
 	 * 
-	 * @param reference The requested service.
-	 * @param actions The action {@code get}.
+	 * @param namespace The requested capability namespace.
+	 * @param attributes The requested capability attributes.
+	 * @param providingBundle The bundle providing the requested capability.
+	 * @param actions The action {@code require}.
 	 * @throws IllegalArgumentException If the specified action is not
-	 *         {@code get} or reference is {@code null}.
-	 * @since 1.5
+	 *         {@code require} or any parameters are {@code null}.
 	 */
-	public ServicePermission(ServiceReference< ? > reference, String actions) {
-		super(createName(reference));
-		setTransients(null, parseActions(actions));
-		this.service = reference;
-		this.objectClass = (String[]) reference
-				.getProperty(Constants.OBJECTCLASS);
-		if ((action_mask & ACTION_ALL) != ACTION_GET) {
+	public CapabilityPermission(String namespace, Map<String, ? > attributes,
+			Bundle providingBundle, String actions) {
+		super(namespace);
+		this.objectClass = null;
+		this.service = null;
+		// setTransients(null, parseActions(actions));
+		// this.service = reference;
+		// this.objectClass = (String[]) reference
+		// .getProperty(Constants.OBJECTCLASS);
+		if ((action_mask & ACTION_ALL) != ACTION_REQUIRE) {
 			throw new IllegalArgumentException("invalid action string");
 		}
 	}
@@ -226,7 +225,7 @@ public final class ServicePermission extends BasicPermission {
 	 * @param name class name
 	 * @param mask action mask
 	 */
-	ServicePermission(String name, int mask) {
+	CapabilityPermission(String name, int mask) {
 		super(name);
 		setTransients(parseFilter(name), mask);
 		this.service = null;
@@ -293,7 +292,7 @@ public final class ServicePermission extends BasicPermission {
 					&& (a[i - 1] == 'e' || a[i - 1] == 'E')
 					&& (a[i] == 't' || a[i] == 'T')) {
 				matchlen = 3;
-				mask |= ACTION_GET;
+				mask |= ACTION_REQUIRE;
 
 			}
 			else
@@ -306,7 +305,7 @@ public final class ServicePermission extends BasicPermission {
 						&& (a[i - 1] == 'e' || a[i - 1] == 'E')
 						&& (a[i] == 'r' || a[i] == 'R')) {
 					matchlen = 8;
-					mask |= ACTION_REGISTER;
+					mask |= ACTION_PROVIDE;
 
 				}
 				else {
@@ -373,7 +372,7 @@ public final class ServicePermission extends BasicPermission {
 	}
 
 	/**
-	 * Determines if a {@code ServicePermission} object "implies" the
+	 * Determines if a {@code CapabilityPermission} object "implies" the
 	 * specified permission.
 	 * 
 	 * @param p The target permission to check.
@@ -381,10 +380,10 @@ public final class ServicePermission extends BasicPermission {
 	 *         object; {@code false} otherwise.
 	 */
 	public boolean implies(Permission p) {
-		if (!(p instanceof ServicePermission)) {
+		if (!(p instanceof CapabilityPermission)) {
 			return false;
 		}
-		ServicePermission requested = (ServicePermission) p;
+		CapabilityPermission requested = (CapabilityPermission) p;
 		if (service != null) {
 			return false;
 		}
@@ -406,7 +405,7 @@ public final class ServicePermission extends BasicPermission {
 	 * @return {@code true} if the specified permission is implied by this
 	 *         object; {@code false} otherwise.
 	 */
-	boolean implies0(ServicePermission requested, int effective) {
+	boolean implies0(CapabilityPermission requested, int effective) {
 		/* check actions first - much faster */
 		effective |= action_mask;
 		final int desired = requested.action_mask;
@@ -451,8 +450,8 @@ public final class ServicePermission extends BasicPermission {
 
 	/**
 	 * Returns the canonical string representation of the actions. Always
-	 * returns present actions in the following order: {@code get},
-	 * {@code register}.
+	 * returns present actions in the following order: {@code require},
+	 * {@code provide}.
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
@@ -463,15 +462,15 @@ public final class ServicePermission extends BasicPermission {
 			boolean comma = false;
 
 			int mask = action_mask;
-			if ((mask & ACTION_GET) == ACTION_GET) {
-				sb.append(GET);
+			if ((mask & ACTION_REQUIRE) == ACTION_REQUIRE) {
+				sb.append(REQUIRE);
 				comma = true;
 			}
 
-			if ((mask & ACTION_REGISTER) == ACTION_REGISTER) {
+			if ((mask & ACTION_PROVIDE) == ACTION_PROVIDE) {
 				if (comma)
 					sb.append(',');
-				sb.append(REGISTER);
+				sb.append(PROVIDE);
 			}
 
 			actions = result = sb.toString();
@@ -482,36 +481,36 @@ public final class ServicePermission extends BasicPermission {
 
 	/**
 	 * Returns a new {@code PermissionCollection} object for storing
-	 * {@code ServicePermission} objects.
+	 * {@code CapabilityPermission} objects.
 	 * 
 	 * @return A new {@code PermissionCollection} object suitable for storing
-	 *         {@code ServicePermission} objects.
+	 *         {@code CapabilityPermission} objects.
 	 */
 	public PermissionCollection newPermissionCollection() {
-		return new ServicePermissionCollection();
+		return new CapabilityPermissionCollection();
 	}
 
 	/**
-	 * Determines the equality of two ServicePermission objects.
+	 * Determines the equality of two CapabilityPermission objects.
 	 * 
-	 * Checks that specified object has the same class name and action as this
-	 * {@code ServicePermission}.
+	 * Checks that specified object has the same name and action as this
+	 * {@code CapabilityPermission}.
 	 * 
 	 * @param obj The object to test for equality.
-	 * @return true if obj is a {@code ServicePermission}, and has the same
-	 *         class name and actions as this {@code ServicePermission}
-	 *         object; {@code false} otherwise.
+	 * @return true if obj is a {@code CapabilityPermission}, and has the same
+	 *         name and actions as this {@code CapabilityPermission} object;
+	 *         {@code false} otherwise.
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
 		}
 
-		if (!(obj instanceof ServicePermission)) {
+		if (!(obj instanceof CapabilityPermission)) {
 			return false;
 		}
 
-		ServicePermission sp = (ServicePermission) obj;
+		CapabilityPermission sp = (CapabilityPermission) obj;
 
 		return (action_mask == sp.action_mask)
 				&& getName().equals(sp.getName())
@@ -693,14 +692,14 @@ public final class ServicePermission extends BasicPermission {
  * @see java.security.Permissions
  * @see java.security.PermissionCollection
  */
-final class ServicePermissionCollection extends PermissionCollection {
+final class CapabilityPermissionCollection extends PermissionCollection {
 	static final long	serialVersionUID	= 662615640374640621L;
 	/**
 	 * Table of permissions.
 	 * 
 	 * @GuardedBy this
 	 */
-	private transient Map<String, ServicePermission>	permissions;
+	private transient Map<String, CapabilityPermission>	permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
@@ -716,13 +715,13 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * @serial
 	 * @GuardedBy this
 	 */
-	private Map<String, ServicePermission>				filterPermissions;
+	private Map<String, CapabilityPermission>				filterPermissions;
 
 	/**
-	 * Creates an empty ServicePermissions object.
+	 * Creates an empty CapabilityPermissionCollection object.
 	 */
-	public ServicePermissionCollection() {
-		permissions = new HashMap<String, ServicePermission>();
+	public CapabilityPermissionCollection() {
+		permissions = new HashMap<String, CapabilityPermission>();
 		all_allowed = false;
 	}
 
@@ -737,7 +736,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 *         read-only.
 	 */
 	public void add(final Permission permission) {
-		if (!(permission instanceof ServicePermission)) {
+		if (!(permission instanceof CapabilityPermission)) {
 			throw new IllegalArgumentException("invalid permission: "
 					+ permission);
 		}
@@ -746,7 +745,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 					+ "readonly PermissionCollection");
 		}
 
-		final ServicePermission sp = (ServicePermission) permission;
+		final CapabilityPermission sp = (CapabilityPermission) permission;
 		if (sp.service != null) {
 			throw new IllegalArgumentException("cannot add to collection: "
 					+ sp);
@@ -756,24 +755,24 @@ final class ServicePermissionCollection extends PermissionCollection {
 		final Filter f = sp.filter;
 		synchronized (this) {
 			/* select the bucket for the permission */
-			Map<String, ServicePermission> pc;
+			Map<String, CapabilityPermission> pc;
 			if (f != null) {
 				pc = filterPermissions;
 				if (pc == null) {
-					filterPermissions = pc = new HashMap<String, ServicePermission>();
+					filterPermissions = pc = new HashMap<String, CapabilityPermission>();
 				}
 			}
 			else {
 				pc = permissions;
 			}
-			final ServicePermission existing = pc.get(name);
+			final CapabilityPermission existing = pc.get(name);
 			
 			if (existing != null) {
 				final int oldMask = existing.action_mask;
 				final int newMask = sp.action_mask;
 				if (oldMask != newMask) {
 					pc
-							.put(name, new ServicePermission(name, oldMask
+							.put(name, new CapabilityPermission(name, oldMask
 							| newMask));
 				}
 			}
@@ -799,22 +798,22 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 *         otherwise.
 	 */
 	public boolean implies(final Permission permission) {
-		if (!(permission instanceof ServicePermission)) {
+		if (!(permission instanceof CapabilityPermission)) {
 			return false;
 		}
-		final ServicePermission requested = (ServicePermission) permission;
+		final CapabilityPermission requested = (CapabilityPermission) permission;
 		/* if requested permission has a filter, then it is an invalid argument */
 		if (requested.filter != null) {
 			return false;
 		}
 
-		int effective = ServicePermission.ACTION_NONE;
-		Collection<ServicePermission> perms;
+		int effective = CapabilityPermission.ACTION_NONE;
+		Collection<CapabilityPermission> perms;
 		synchronized (this) {
 			final int desired = requested.action_mask;
 			/* short circuit if the "*" Permission was added */
 			if (all_allowed) {
-				ServicePermission sp = permissions.get("*");
+				CapabilityPermission sp = permissions.get("*");
 				if (sp != null) {
 					effective |= sp.action_mask;
 					if ((effective & desired) == desired) {
@@ -839,7 +838,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 					}
 				}
 			}
-			Map<String, ServicePermission> pc = filterPermissions;
+			Map<String, CapabilityPermission> pc = filterPermissions;
 			if (pc == null) {
 				return false;
 			}
@@ -847,7 +846,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 		}
 		
 		/* iterate one by one over filteredPermissions */
-		for (ServicePermission perm : perms) {
+		for (CapabilityPermission perm : perms) {
 			if (perm.implies0(requested, effective)) {
 				return true;
 			}
@@ -866,8 +865,8 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 */
 	private int effective(String requestedName, final int desired,
 			int effective) {
-		final Map<String, ServicePermission> pc = permissions;
-		ServicePermission sp = pc.get(requestedName);
+		final Map<String, CapabilityPermission> pc = permissions;
+		CapabilityPermission sp = pc.get(requestedName);
 		// strategy:
 		// Check for full match first. Then work our way up the
 		// name looking for matches on a.b.*
@@ -907,7 +906,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 */
 	public synchronized Enumeration<Permission> elements() {
 		List<Permission> all = new ArrayList<Permission>(permissions.values());
-		Map<String, ServicePermission> pc = filterPermissions;
+		Map<String, CapabilityPermission> pc = filterPermissions;
 		if (pc != null) {
 			all.addAll(pc.values());
 		}
@@ -922,7 +921,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 
 	private synchronized void writeObject(ObjectOutputStream out)
 			throws IOException {
-		Hashtable<String, ServicePermission> hashtable = new Hashtable<String, ServicePermission>(
+		Hashtable<String, CapabilityPermission> hashtable = new Hashtable<String, CapabilityPermission>(
 				permissions);
 		ObjectOutputStream.PutField pfields = out.putFields();
 		pfields.put("permissions", hashtable);
@@ -934,11 +933,11 @@ final class ServicePermissionCollection extends PermissionCollection {
 	private synchronized void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
-		Hashtable<String, ServicePermission> hashtable = (Hashtable<String, ServicePermission>) gfields
+		Hashtable<String, CapabilityPermission> hashtable = (Hashtable<String, CapabilityPermission>) gfields
 				.get("permissions", null);
-		permissions = new HashMap<String, ServicePermission>(hashtable);
+		permissions = new HashMap<String, CapabilityPermission>(hashtable);
 		all_allowed = gfields.get("all_allowed", false);
-		HashMap<String, ServicePermission> fp = (HashMap<String, ServicePermission>) gfields
+		HashMap<String, CapabilityPermission> fp = (HashMap<String, CapabilityPermission>) gfields
 				.get("filterPermissions", null);
 		filterPermissions = fp;
 	}

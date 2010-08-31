@@ -29,7 +29,6 @@ import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -211,7 +210,7 @@ public final class AdminPermission extends BasicPermission {
 	 * filter in implies. This is not initialized until necessary, and then
 	 * cached in this object.
 	 */
-	private transient volatile Dictionary<String, Object>	properties;
+	private transient volatile Map<String, Object>	properties;
 
 	/**
 	 * ThreadLocal used to determine if we have recursively called
@@ -650,7 +649,7 @@ public final class AdminPermission extends BasicPermission {
 		if (requested.bundle == null) {
 			return false;
 		}
-		Dictionary<String, Object> requestedProperties = requested
+		Map<String, Object> requestedProperties = requested
 				.getProperties();
 		if (requestedProperties == null) {
 			/*
@@ -661,7 +660,7 @@ public final class AdminPermission extends BasicPermission {
 			 */
 			return true;
 		}
-		return f.matchCase(requestedProperties);
+		return f.matches(requestedProperties);
 	}
 
 	/**
@@ -832,8 +831,8 @@ public final class AdminPermission extends BasicPermission {
 	 * 
 	 * @return a dictionary of properties for this bundle
 	 */
-	private Dictionary<String, Object> getProperties() {
-		Dictionary<String, Object> result = properties;
+	private Map<String, Object> getProperties() {
+		Map<String, Object> result = properties;
 		if (result != null) {
 			return result;
 		}
@@ -848,24 +847,24 @@ public final class AdminPermission extends BasicPermission {
 		}
 		recurse.set(bundle);
 		try {
-			final Dictionary<String, Object> dict = new Hashtable<String, Object>(
+			final Map<String, Object> map = new HashMap<String, Object>(
 					4);
 			AccessController.doPrivileged(new PrivilegedAction<Object>() {
 				public Object run() {
-					dict.put("id", new Long(bundle.getBundleId()));
-					dict.put("location", bundle.getLocation());
+					map.put("id", new Long(bundle.getBundleId()));
+					map.put("location", bundle.getLocation());
 					String name = bundle.getSymbolicName();
 					if (name != null) {
-						dict.put("name", name);
+						map.put("name", name);
 					}
 					SignerProperty signer = new SignerProperty(bundle);
 					if (signer.isBundleSigned()) {
-						dict.put("signer", signer);
+						map.put("signer", signer);
 					}
 					return null;
 				}
 			});
-			return properties = dict;
+			return properties = map;
 		}
 		finally {
 			recurse.set(null);

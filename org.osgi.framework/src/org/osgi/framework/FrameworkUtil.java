@@ -21,12 +21,15 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.security.auth.x500.X500Principal;
 
@@ -388,8 +391,8 @@ public class FrameworkUtil {
 		 * Filter using a service's properties.
 		 * <p>
 		 * This {@code Filter} is executed using the keys and values of the
-		 * referenced service's properties. The keys are case insensitively
-		 * matched with this {@code Filter}.
+		 * referenced service's properties. The keys are looked up in a case
+		 * insensitive manner.
 		 * 
 		 * @param reference The reference to the service whose properties are
 		 *        used in the match.
@@ -397,40 +400,139 @@ public class FrameworkUtil {
 		 *         {@code Filter}; {@code false} otherwise.
 		 */
 		public boolean match(ServiceReference< ? > reference) {
-			return match0(new ServiceReferenceDictionary(reference));
+			return matches(new ServiceReferenceMap(reference));
 		}
 
 		/**
-		 * Filter using a {@code Dictionary}. This {@code Filter} is
-		 * executed using the specified {@code Dictionary}'s keys and
-		 * values. The keys are case insensitively matched with this
-		 * {@code Filter}.
+		 * Filter using a {@code Dictionary} with case insensitive key lookup.
+		 * This {@code Filter} is executed using the specified
+		 * {@code Dictionary}'s keys and values. The keys are looked up in a
+		 * case insensitive manner.
 		 * 
-		 * @param dictionary The {@code Dictionary} whose keys are used in
-		 *        the match.
-		 * @return {@code true} if the {@code Dictionary}'s keys and
-		 *         values match this filter; {@code false} otherwise.
-		 * @throws IllegalArgumentException If {@code dictionary} contains
-		 *         case variants of the same key name.
+		 * @param dictionary The {@code Dictionary} whose key/value pairs are
+		 *        used in the match.
+		 * @return {@code true} if the {@code Dictionary}'s values match this
+		 *         filter; {@code false} otherwise.
+		 * @throws IllegalArgumentException If {@code dictionary} contains case
+		 *         variants of the same key name.
 		 */
 		public boolean match(Dictionary<String, ? > dictionary) {
-			return match0(new CaseInsensitiveDictionary(dictionary));
+			return matches(new CaseInsensitiveMap(dictionary));
 		}
 
 		/**
-		 * Filter with case sensitivity using a {@code Dictionary}. This
-		 * {@code Filter} is executed using the specified
-		 * {@code Dictionary}'s keys and values. The keys are case
-		 * sensitively matched with this {@code Filter}.
+		 * Filter using a {@code Dictionary}. This {@code Filter} is executed
+		 * using the specified {@code Dictionary}'s keys and values. The keys
+		 * are looked up in a normal manner respecting case.
 		 * 
-		 * @param dictionary The {@code Dictionary} whose keys are used in
-		 *        the match.
-		 * @return {@code true} if the {@code Dictionary}'s keys and
-		 *         values match this filter; {@code false} otherwise.
+		 * @param dictionary The {@code Dictionary} whose key/value pairs are
+		 *        used in the match.
+		 * @return {@code true} if the {@code Dictionary}'s values match this
+		 *         filter; {@code false} otherwise.
 		 * @since 1.3
 		 */
 		public boolean matchCase(Dictionary<String, ? > dictionary) {
-			return match0(dictionary);
+			switch (op) {
+				case AND : {
+					FilterImpl[] filters = (FilterImpl[]) value;
+					for (FilterImpl f : filters) {
+						if (!f.matchCase(dictionary)) {
+							return false;
+						}
+					}
+					return true;
+				}
+
+				case OR : {
+					FilterImpl[] filters = (FilterImpl[]) value;
+					for (FilterImpl f : filters) {
+						if (f.matchCase(dictionary)) {
+							return true;
+						}
+					}
+					return false;
+				}
+
+				case NOT : {
+					FilterImpl filter = (FilterImpl) value;
+					return !filter.matchCase(dictionary);
+				}
+
+				case SUBSTRING :
+				case EQUAL :
+				case GREATER :
+				case LESS :
+				case APPROX : {
+					Object prop = (dictionary == null) ? null : dictionary
+							.get(attr);
+					return compare(op, prop, value);
+				}
+
+				case PRESENT : {
+					Object prop = (dictionary == null) ? null : dictionary
+							.get(attr);
+					return prop != null;
+				}
+			}
+
+			return false;
+		}
+
+		/**
+		 * Filter using a {@code Map}. This {@code Filter} is executed using the
+		 * specified {@code Map}'s keys and values. The keys are looked up in a
+		 * normal manner respecting case.
+		 * 
+		 * @param map The {@code Map} whose key/value pairs are used in the
+		 *        match. Maps with {@code null} key or values are not supported.
+		 *        A {@code null} value is considered not present to the filter.
+		 * @return {@code true} if the {@code Map}'s values match this filter;
+		 *         {@code false} otherwise.
+		 * @since 1.6
+		 */
+		public boolean matches(Map<String, ? > map) {
+			switch (op) {
+				case AND : {
+					FilterImpl[] filters = (FilterImpl[]) value;
+					for (FilterImpl f : filters) {
+						if (!f.matches(map)) {
+							return false;
+						}
+					}
+					return true;
+				}
+		
+				case OR : {
+					FilterImpl[] filters = (FilterImpl[]) value;
+					for (FilterImpl f : filters) {
+						if (f.matches(map)) {
+							return true;
+						}
+					}
+					return false;
+				}
+		
+				case NOT : {
+					FilterImpl filter = (FilterImpl) value;
+					return !filter.matches(map);
+				}
+		
+				case SUBSTRING :
+				case EQUAL :
+				case GREATER :
+				case LESS :
+				case APPROX : {
+					Object prop = (map == null) ? null : map.get(attr);
+					return compare(op, prop, value);
+				}
+		
+				case PRESENT : {
+					Object prop = (map == null) ? null : map.get(attr);
+					return prop != null;
+				}
+			}
+		
+			return false;
 		}
 
 		/**
@@ -587,66 +689,6 @@ public class FrameworkUtil {
 		 */
 		public int hashCode() {
 			return this.toString().hashCode();
-		}
-
-		/**
-		 * Internal match routine. Dictionary parameter must support
-		 * case-insensitive get.
-		 * 
-		 * @param properties A dictionary whose keys are used in the match.
-		 * @return If the Dictionary's keys match the filter, return
-		 *         {@code true}. Otherwise, return {@code false}.
-		 */
-		private boolean match0(Dictionary<String, ? > properties) {
-			switch (op) {
-				case AND : {
-					FilterImpl[] filters = (FilterImpl[]) value;
-					for (FilterImpl f : filters) {
-						if (!f.match0(properties)) {
-							return false;
-						}
-					}
-
-					return true;
-				}
-
-				case OR : {
-					FilterImpl[] filters = (FilterImpl[]) value;
-					for (FilterImpl f : filters) {
-						if (f.match0(properties)) {
-							return true;
-						}
-					}
-
-					return false;
-				}
-
-				case NOT : {
-					FilterImpl filter = (FilterImpl) value;
-
-					return !filter.match0(properties);
-				}
-
-				case SUBSTRING :
-				case EQUAL :
-				case GREATER :
-				case LESS :
-				case APPROX : {
-					Object prop = (properties == null) ? null : properties
-							.get(attr);
-
-					return compare(op, prop, value);
-				}
-
-				case PRESENT : {
-					Object prop = (properties == null) ? null : properties
-							.get(attr);
-
-					return prop != null;
-				}
-			}
-
-			return false;
 		}
 
 		/**
@@ -1592,24 +1634,24 @@ public class FrameworkUtil {
 	}
 
 	/**
-	 * This Dictionary is used for case-insensitive key lookup during filter
-	 * evaluation. This Dictionary implementation only supports the get
-	 * operation using a String key as no other operations are used by the
-	 * Filter implementation.
+	 * This Map is used for case-insensitive key lookup during filter
+	 * evaluation. This Map implementation only supports the get operation using
+	 * a String key as no other operations are used by the Filter
+	 * implementation.
 	 */
-	private static class CaseInsensitiveDictionary extends
-			Dictionary<String, Object> {
+	private static class CaseInsensitiveMap extends AbstractMap<String, Object>
+			implements Map<String, Object> {
 		private final Dictionary<String, ? >	dictionary;
 		private final String[]		keys;
 
 		/**
-		 * Create a case insensitive dictionary from the specified dictionary.
+		 * Create a case insensitive map from the specified dictionary.
 		 * 
 		 * @param dictionary
-		 * @throws IllegalArgumentException If {@code dictionary} contains
-		 *         case variants of the same key name.
+		 * @throws IllegalArgumentException If {@code dictionary} contains case
+		 *         variants of the same key name.
 		 */
-		CaseInsensitiveDictionary(Dictionary<String, ? > dictionary) {
+		CaseInsensitiveMap(Dictionary<String, ? > dictionary) {
 			if (dictionary == null) {
 				this.dictionary = null;
 				this.keys = new String[0];
@@ -1642,42 +1684,22 @@ public class FrameworkUtil {
 			return null;
 		}
 
-		public boolean isEmpty() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Enumeration<String> keys() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Enumeration<Object> elements() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Object put(String key, Object value) {
-			throw new UnsupportedOperationException();
-		}
-
-		public Object remove(Object key) {
-			throw new UnsupportedOperationException();
-		}
-
-		public int size() {
+		public Set<java.util.Map.Entry<String, Object>> entrySet() {
 			throw new UnsupportedOperationException();
 		}
 	}
 
 	/**
-	 * This Dictionary is used for key lookup from a ServiceReference during
-	 * filter evaluation. This Dictionary implementation only supports the get
-	 * operation using a String key as no other operations are used by the
-	 * Filter implementation.
+	 * This Map is used for key lookup from a ServiceReference during filter
+	 * evaluation. This Map implementation only supports the get operation using
+	 * a String key as no other operations are used by the Filter
+	 * implementation.
 	 */
-	private static class ServiceReferenceDictionary extends
-			Dictionary<String, Object> {
+	private static class ServiceReferenceMap extends
+			AbstractMap<String, Object> implements Map<String, Object> {
 		private final ServiceReference< ? >	reference;
 
-		ServiceReferenceDictionary(ServiceReference< ? > reference) {
+		ServiceReferenceMap(ServiceReference< ? > reference) {
 			this.reference = reference;
 		}
 
@@ -1688,27 +1710,7 @@ public class FrameworkUtil {
 			return reference.getProperty((String) key);
 		}
 
-		public boolean isEmpty() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Enumeration<String> keys() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Enumeration<Object> elements() {
-			throw new UnsupportedOperationException();
-		}
-
-		public Object put(String key, Object value) {
-			throw new UnsupportedOperationException();
-		}
-
-		public Object remove(Object key) {
-			throw new UnsupportedOperationException();
-		}
-
-		public int size() {
+		public Set<java.util.Map.Entry<String, Object>> entrySet() {
 			throw new UnsupportedOperationException();
 		}
 	}
