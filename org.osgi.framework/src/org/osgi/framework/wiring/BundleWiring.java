@@ -194,7 +194,7 @@ public interface BundleWiring extends BundleReference {
 	 *        specified, this is equivalent to &quot;*&quot; and matches all
 	 *        files.
 	 * @param options The options for listing resource names. See
-	 *        {@link #FINDENTIRES_RECURSE}. The method must ignore unrecognized
+	 *        {@link #FINDENTRIES_RECURSE}. The method must ignore unrecognized
 	 *        options.
 	 * @return An unmodifiable list of URL objects for each matching entry, or
 	 *         an empty list if no matching entry could not be found or if the
@@ -222,7 +222,7 @@ public interface BundleWiring extends BundleReference {
 	 * 
 	 * @see #findEntries(String, String, int)
 	 */
-	int	FINDENTIRES_RECURSE	= 0x00000001;
+	int	FINDENTRIES_RECURSE	= 0x00000001;
 
 	/**
 	 * Returns the names of resources visible to this bundle wiring's
