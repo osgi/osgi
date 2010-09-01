@@ -210,6 +210,8 @@ Include-Resource = \
 	resources.tb2.jar, \
 	resolver.tb1.v100.jar, \
 	resolver.tb1.v110.jar, \
+	resolver.tb1.v120.jar, \
+	resolver.tb1.v130.jar, \
 	resolver.tb2.jar, \
 	resolver.tb2.specific.jar, \
 	resolver.tb3.jar, \
@@ -221,6 +223,8 @@ Include-Resource = \
 	resolver.tb6.v300.jar, \
 	resolver.tb6.v400.jar, \
 	resolver.tb7.jar, \
+	resolver.tb8.jar, \
+	resolver.tb9.jar, \
 	startlevel.tb1.jar, \
 	startlevel.tb2.jar, \
 	startlevel.tb3.jar, \
