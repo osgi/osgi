@@ -82,7 +82,7 @@ public interface Coordination {
 	 * @return {@code true} if the Coordination was still active, otherwise
 	 *         {@code false}
 	 */
-	boolean fail(String reason);
+	boolean fail(Throwable reason);
 
 	/**
 	 * If the Coordination is terminated then return, otherwise set the

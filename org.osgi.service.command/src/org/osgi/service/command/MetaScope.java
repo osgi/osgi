@@ -168,7 +168,7 @@ public interface MetaScope {
 			 * 
 			 * @return the refied type that describes the parameter's type.
 			 */
-			ReifiedType< ? > getType();
+			ReifiedType getType();
 
 			/**
 			 * The value to use when none of the parameter aliases are used in
