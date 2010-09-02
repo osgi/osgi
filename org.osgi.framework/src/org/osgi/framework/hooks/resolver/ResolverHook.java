@@ -158,6 +158,10 @@ public interface ResolverHook {
 	 * <p>
 	 * All of the candidates will have the same name space and will 
 	 * match a requirement of the requirer.
+	 * <p>
+	 * If the Java Runtime Environment supports permissions then the collection of 
+	 * candidates will only contain candidates for which the requirer has permission to
+	 * access.
 	 * @param requirer the bundle revision which contains a requirement
 	 * @param candidates a collection of candidates that match a requirement of the requirer
 	 */
