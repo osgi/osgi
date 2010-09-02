@@ -203,12 +203,12 @@ public final class AdminPermission extends BasicPermission {
 	/**
 	 * The bundle governed by this AdminPermission - only used if filter == null
 	 */
-	transient final Bundle					bundle; 
+	transient final Bundle					bundle;
 
 	/**
-	 * This dictionary holds the properties of the permission, used to match a
-	 * filter in implies. This is not initialized until necessary, and then
-	 * cached in this object.
+	 * This map holds the properties of the permission, used to match a filter
+	 * in implies. This is not initialized until necessary, and then cached in
+	 * this object.
 	 */
 	private transient volatile Map<String, Object>	properties;
 
@@ -821,15 +821,15 @@ public final class AdminPermission extends BasicPermission {
 	}
 
 	/**
-	 * Called by {@code implies0} on an AdminPermission which was
-	 * constructed with a Bundle. This method loads a dictionary with the
-	 * filter-matchable properties of this bundle. The dictionary is cached so
-	 * this lookup only happens once.
+	 * Called by {@code implies0} on an AdminPermission which was constructed
+	 * with a Bundle. This method loads a map with the filter-matchable
+	 * properties of this bundle. The map is cached so this lookup only happens
+	 * once.
 	 * 
 	 * This method should only be called on an AdminPermission which was
 	 * constructed with a bundle
 	 * 
-	 * @return a dictionary of properties for this bundle
+	 * @return a map of properties for this bundle
 	 */
 	private Map<String, Object> getProperties() {
 		Map<String, Object> result = properties;
