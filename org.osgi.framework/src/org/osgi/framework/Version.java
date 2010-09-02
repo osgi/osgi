@@ -45,7 +45,8 @@ public class Version implements Comparable<Version> {
 	private final int			minor;
 	private final int			micro;
 	private final String		qualifier;
-	private static final String	SEPARATOR		= ".";					//$NON-NLS-1$
+	private static final String	SEPARATOR		= ".";
+	private transient String	versionString	= null;
 
 	/**
 	 * The empty version "0.0.0".
@@ -82,7 +83,7 @@ public class Version implements Comparable<Version> {
 	 */
 	public Version(int major, int minor, int micro, String qualifier) {
 		if (qualifier == null) {
-			qualifier = ""; //$NON-NLS-1$
+			qualifier = "";
 		}
 
 		this.major = major;
@@ -118,7 +119,7 @@ public class Version implements Comparable<Version> {
 		int maj = 0;
 		int min = 0;
 		int mic = 0;
-		String qual = ""; //$NON-NLS-1$
+		String qual = "";
 
 		try {
 			StringTokenizer st = new StringTokenizer(version, SEPARATOR, true);
@@ -137,14 +138,17 @@ public class Version implements Comparable<Version> {
 						qual = st.nextToken();
 
 						if (st.hasMoreTokens()) {
-							throw new IllegalArgumentException("invalid format"); //$NON-NLS-1$
+							throw new IllegalArgumentException("invalid format");
 						}
 					}
 				}
 			}
 		}
 		catch (NoSuchElementException e) {
-			throw new IllegalArgumentException("invalid format"); //$NON-NLS-1$
+			IllegalArgumentException iae = new IllegalArgumentException(
+					"invalid format");
+			iae.initCause(e);
+			throw iae;
 		}
 
 		major = maj;
@@ -162,13 +166,13 @@ public class Version implements Comparable<Version> {
 	 */
 	private void validate() {
 		if (major < 0) {
-			throw new IllegalArgumentException("negative major"); //$NON-NLS-1$
+			throw new IllegalArgumentException("negative major");
 		}
 		if (minor < 0) {
-			throw new IllegalArgumentException("negative minor"); //$NON-NLS-1$
+			throw new IllegalArgumentException("negative minor");
 		}
 		if (micro < 0) {
-			throw new IllegalArgumentException("negative micro"); //$NON-NLS-1$
+			throw new IllegalArgumentException("negative micro");
 		}
 		char[] chars = qualifier.toCharArray();
 		for (int i = 0, length = chars.length; i < length; i++) {
@@ -185,8 +189,8 @@ public class Version implements Comparable<Version> {
 			if ((ch == '_') || (ch == '-')) {
 				continue;
 			}
-			throw new IllegalArgumentException(
-					"invalid qualifier: " + qualifier); //$NON-NLS-1$
+			throw new IllegalArgumentException("invalid qualifier: "
+					+ qualifier);
 		}
 	}
 
@@ -265,6 +269,9 @@ public class Version implements Comparable<Version> {
 	 * @return The string representation of this version identifier.
 	 */
 	public String toString() {
+		if (versionString != null) {
+			return versionString;
+		}
 		int q = qualifier.length();
 		StringBuffer result = new StringBuffer(20 + q);
 		result.append(major);
@@ -276,7 +283,7 @@ public class Version implements Comparable<Version> {
 			result.append(SEPARATOR);
 			result.append(qualifier);
 		}
-		return result.toString();
+		return versionString = result.toString();
 	}
 
 	/**
