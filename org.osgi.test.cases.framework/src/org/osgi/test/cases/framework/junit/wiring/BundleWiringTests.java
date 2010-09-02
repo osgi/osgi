@@ -452,6 +452,38 @@ public class BundleWiringTests extends OSGiTestCase {
 		}
 	}
 
+	public void testOSGiEE() {
+		// First bundle tests that the framework sets reasonable defaults for J2SE 1.5
+		Bundle tb10v100 = install("resolver.tb10.v100.jar");
+		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb10v100})));
+		// Second bundle requires an osgi.ee that should not be able to resolve
+		Bundle tb10v110 = install("resolver.tb10.v110.jar");
+		assertFalse(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb10v110})));
+		// Third bundle requires an osgi.ee that is specified by the system.capabilities.extra property
+		Bundle tb10v120 = install("resolver.tb10.v120.jar");
+		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb10v120})));
+
+		// Test that the ees come from the system bundle
+		BundleWiring tb10v100Wiring = (BundleWiring) tb10v100.adapt(BundleWiring.class);
+		assertNotNull("Wiring is null for: " + tb10v100, tb10v100Wiring);
+		List v100RequiredEEs = tb10v100Wiring.getRequiredCapabilities("osgi.ee");
+		assertEquals("Wrong number of required osgi.ees", 7, v100RequiredEEs.size());
+		Bundle systemBundle = getContext().getBundle(0);
+		assertNotNull("SystemBundle is null", systemBundle);
+		for (Iterator ees = v100RequiredEEs.iterator(); ees.hasNext();) {
+			assertEquals("Wrong provider for osgi.ee", systemBundle, ((WiredCapability) ees.next()).getProviderRevision().getBundle());
+		}
+
+		BundleWiring tb10v120Wiring = (BundleWiring) tb10v120.adapt(BundleWiring.class);
+		assertNotNull("Wiring is null for: " + tb10v120, tb10v120Wiring);
+		List v120RequiredEEs = tb10v120Wiring.getRequiredCapabilities("osgi.ee");
+		assertEquals("Wrong number of required osgi.ees", 1, v120RequiredEEs.size());
+		assertNotNull("SystemBundle is null", systemBundle);
+		for (Iterator ees = v120RequiredEEs.iterator(); ees.hasNext();) {
+			assertEquals("Wrong provider for osgi.ee", systemBundle, ((WiredCapability) ees.next()).getProviderRevision().getBundle());
+		}
+	}
+
 	public void testFindEntries() {
 		fail("Need to write a findEntries test.");
 	}

@@ -225,6 +225,9 @@ Include-Resource = \
 	resolver.tb7.jar, \
 	resolver.tb8.jar, \
 	resolver.tb9.jar, \
+	resolver.tb10.v100.jar, \
+	resolver.tb10.v110.jar, \
+	resolver.tb10.v120.jar, \
 	startlevel.tb1.jar, \
 	startlevel.tb2.jar, \
 	startlevel.tb3.jar, \
@@ -249,5 +252,6 @@ Test-Cases							= ${testcases}
 	org.osgi.framework.executionenvironment = "div/tb7a,OSGi/Minimum-1.0,OSGi/Minimum-1.1,OSGi/Minimum-1.2,JRE-1.1,J2SE-1.2,J2SE-1.3,J2SE-1.4,J2SE-1.5", \
 	${p}.div.tb12=abc, \
 	${p}.div.tb15=abc, \
-	${p}.div.tb16=xyz
-	
+	${p}.div.tb16=xyz, \
+	org.osgi.framework.system.capabilities.extra = "osgi.ee; osgi.ee=\"testOSGiEE\""
+
