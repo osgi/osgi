@@ -484,6 +484,29 @@ public class BundleWiringTests extends OSGiTestCase {
 		}
 	}
 
+	public void testOptionalRequireCapability() {
+		Bundle tb11 = install("resolver.tb11.jar");
+		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb11})));
+
+		BundleWiring tb11Wiring = (BundleWiring) tb11.adapt(BundleWiring.class);
+		assertNotNull("Wiring is null", tb11Wiring);
+		List capabilities = tb11Wiring.getRequiredCapabilities(null);
+		assertNotNull("Capabilities is null", capabilities);
+		assertEquals("Wrong number of capabilities", 0, capabilities.size());
+
+		Bundle tb12 = install("resolver.tb12.jar");
+		refreshBundles(Arrays.asList(new Bundle[] {tb11}));
+
+		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb11, tb12})));
+		tb11Wiring = (BundleWiring) tb11.adapt(BundleWiring.class);
+		assertNotNull("Wiring is null", tb11Wiring);
+		capabilities = tb11Wiring.getRequiredCapabilities(null);
+		assertNotNull("Capabilities is null", capabilities);
+		assertEquals("Wrong number of capabilities", 1, capabilities.size());
+		Capability capability = (Capability) capabilities.get(0);
+		assertEquals("Wrong provider", tb12, capability.getProviderRevision().getBundle());
+	}
+
 	public void testFindEntries() {
 		fail("Need to write a findEntries test.");
 	}

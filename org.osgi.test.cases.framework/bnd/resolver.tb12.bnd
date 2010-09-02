@@ -1,0 +1,5 @@
+Bundle-Name:                             ${p}.resolver.tb12
+Bundle-SymbolicName:                     ${p}.resolver.tb12
+Bundle-Version:                          1.0.0
+Provide-Capability: \
+ test.optional; test.optional="extra"; version:Version="1.0"
