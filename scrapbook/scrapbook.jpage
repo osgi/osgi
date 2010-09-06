@@ -1,3 +1,0 @@
-
-Bidi bidi = new Bidi("Hello world");
-System.out.println(bidi.
