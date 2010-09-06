@@ -9,6 +9,14 @@
 
 	<target name="javadoc" depends="init">
 		<delete dir="${target}/javadoc"/>
+		<echo>
+			Project output: ${project.output}
+			Sourcepath    : ${project.allsourcepath}
+			Destdir       : ${target}/javadoc
+		    Packages      : ${javadoc.packages}
+			Bootcp        : ${repo}/ee.j2se/ee.j2se-1.5.0.jar, ${repo}/ee.foundation/ee.foundation-1.1.0.jar
+			Classpath     : ${api.servlet}, ${api.jpa}, ${api.jaxp}
+		</echo>
         <javadoc 
 			access="protected" 
 			windowtitle="OSGi Service Platform Release ${osgi.release} Version ${osgi.version}"

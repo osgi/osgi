@@ -5,7 +5,7 @@ nodeploy						=true
 # the repository (if they are deployable)
 
 -dependson 					=  \
-	${ees}, \
+   ${ees}, \
    osgi.ct
 
 japi.osgi.core 				= ${replace;$(core.specs);.+;+$0}
