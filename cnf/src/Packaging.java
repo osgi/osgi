@@ -122,6 +122,10 @@ public class Packaging implements AnalyzerPlugin {
 		 * We assume here that the project is build ahead of time.
 		 */
 		File [] files = project.getBuildFiles();
+		if ( files ==null) {
+			System.out.println("Project has no build files " + project);
+			return;
+		}
 		for ( File sub : files ) {
 			Container c = new Container(sub);
 			runbundles.add(c);
@@ -147,7 +151,6 @@ public class Packaging implements AnalyzerPlugin {
 		sb.append("\n\n");
 		sb.append(Constants.RUNBUNDLES);
 		sb.append(" = ");
-		System.out.println("Run bundles " + runbundles );
 		flatten(analyzer, sb, jar, runbundles, false, filesToPath);
 
 		Map<String, String> properties = OSGiHeader
@@ -325,7 +328,6 @@ public class Packaging implements AnalyzerPlugin {
 					+ v.getMinor() + "." + v.getMicro() + ".jar";
 
 			if (store) {
-				System.out.println("Path " + path);
 				fileToPath.put(sub.getAbsolutePath(), path);
 				jar.putResource(path, new FileResource(sub));
 			}
