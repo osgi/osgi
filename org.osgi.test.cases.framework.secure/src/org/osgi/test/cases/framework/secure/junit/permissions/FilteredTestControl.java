@@ -38,6 +38,8 @@ import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
@@ -1576,11 +1578,40 @@ public class FilteredTestControl extends OSGiTestCase {
 		fail("Fail to export package. It MUST succeed.");
 	}
 
-	private void refreshPackagesAndResolveBundles(Bundle[] bundles) {
-		pkgAdmin.refreshPackages(bundles);
-		pkgAdmin.resolveBundles(bundles);
-		sleep();
-	}
+    private void refreshPackagesAndResolveBundles(Bundle[] bundles) {
+        RefreshGate refreshGate = new RefreshGate();
+        getContext().addFrameworkListener(refreshGate);
+        pkgAdmin.refreshPackages(bundles);
+        refreshGate.run();
+        getContext().removeFrameworkListener(refreshGate);
+        pkgAdmin.resolveBundles(bundles);
+    }
+
+    private static final class RefreshGate implements FrameworkListener, Runnable {
+        private boolean refreshed = false;
+
+        public void frameworkEvent(FrameworkEvent event) {
+            if (event.getType() ==  FrameworkEvent.PACKAGES_REFRESHED) {
+                synchronized (this) {
+                    refreshed = true;
+                    notifyAll();
+                }
+            }
+        }
+
+        public void run() {
+            synchronized (this) {
+                while (!refreshed) {
+                    try {
+                        wait();
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
+                }
+            }
+        }
+    }
 
 	private void printoutHeader(Bundle bundle) {
 		Dictionary headers = bundle.getHeaders();
