@@ -1,0 +1,34 @@
+-nope							=true
+nodeploy						=true
+
+# The following line builds all these files and publishes them to 
+# the repository (if they are deployable)
+
+-dependson 					=  \
+   ${ees}, \
+   osgi.ct
+
+japi.osgi.core 				= ${replace;$(core.specs);.+;+$0}
+japi.osgi.cmpn 				= ${replace;$(cmpn.specs);.+;+$0}
+japi.osgi.mobile 			= ${replace;$(mobile.specs);.+;+$0}
+japi.osgi.enterprise		= ${replace;$(enterprise.specs);.+;+$0}
+japi.osgi.proposed			= ${replace;$(proposed.specs);.+;+$0}
+
+api.servlet = ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}
+api.jaxp = ${repo;com.icl.saxon}
+api.jpa = ${repo;org.eclipse.persistence.jpa_spec}
+
+javadoc.packages		 	= ${uniq; ${core.packages}, ${cmpn.packages}, ${mobile.packages}, ${enterprise.packages}}
+
+ees 						= \
+ ee.minimum, \
+ ee.foundation
+
+# The following causes bnd to barf, so we have to expand it manually 
+#-include:  ${replace;${companions};.+;${project.workspace}/$0/layout.bnd}
+
+-include: ${project.workspace}/osgi.core/layout.bnd, \
+	${project.workspace}/osgi.cmpn/layout.bnd, \
+	${project.workspace}/osgi.mobile/layout.bnd, \
+	${project.workspace}/osgi.enterprise/layout.bnd, \
+	${project.workspace}/osgi.proposed/layout.bnd

@@ -9,14 +9,14 @@
 	</description>
 
 	<target name="build-clean">
-		<ant dir="osgi.ct" />
+		<ant dir="osgi.build" />
 	</target>
 
 	<target name="build-libs">
-		<ant dir="osgi.companion" />
+		<ant dir="osgi.build" />
 	</target>
 
-	<target name="runtests">
+	<target name="runtests"> 
 		<ant dir="osgi.ct" target="runtests" />
 	</target>
 </project>

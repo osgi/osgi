@@ -1,8 +1,8 @@
 -include			: layout.bnd
--dependson			: osgi.companion, ${build.impls}
+-dependson			: ${build.impls}
 -reportnewer		: true
 -resourceonly		: true
 
 # Build the osgi spec files
--sub       = osgi.*.impls.bnd
+-sub       = *.bnd
 

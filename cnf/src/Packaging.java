@@ -117,6 +117,20 @@ public class Packaging implements AnalyzerPlugin {
 				.getProperty(Constants.RUNSYSTEMPACKAGES);
 		StringBuilder sb = new StringBuilder();
 
+		/**
+		 * Add all sub bundles to the -runbundles so they are installed
+		 * We assume here that the project is build ahead of time.
+		 */
+		File [] files = project.getBuildFiles();
+		if ( files ==null) {
+			System.out.println("Project has no build files " + project);
+			return;
+		}
+		for ( File sub : files ) {
+			Container c = new Container(sub);
+			runbundles.add(c);
+		}
+		
 		sb.append("# bnd pack for project " + project + "\n");
 		sb.append("# " + new Date() + "\n");
 		sb.append("-include= ~shared.inc\n");
@@ -314,7 +328,6 @@ public class Packaging implements AnalyzerPlugin {
 					+ v.getMinor() + "." + v.getMicro() + ".jar";
 
 			if (store) {
-				System.out.println("Path " + path);
 				fileToPath.put(sub.getAbsolutePath(), path);
 				jar.putResource(path, new FileResource(sub));
 			}

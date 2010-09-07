@@ -1,0 +1,9 @@
+Bundle-Description				: \
+	OSGi Service Platform Release ${version;=;${mobile.build.version}} version ${mobile.build.version}, \
+	Mobile Test Case Bundles.
+Bundle-Version					: ${mobile.build.version}
+Include-Resource				: \
+    NOTICE=legal/NOTICE.txt, \
+ 	{about.html=legal/about.html}
+
+-pack: ${build.mobile.tests}
