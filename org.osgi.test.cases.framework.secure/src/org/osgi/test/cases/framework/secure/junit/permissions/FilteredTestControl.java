@@ -1587,8 +1587,8 @@ public class FilteredTestControl extends OSGiTestCase {
         pkgAdmin.resolveBundles(bundles);
     }
 
-    private static final class RefreshGate implements FrameworkListener, Runnable {
-        private boolean refreshed = false;
+	static final class RefreshGate implements FrameworkListener, Runnable {
+		private volatile boolean	refreshed	= false;
 
         public void frameworkEvent(FrameworkEvent event) {
             if (event.getType() ==  FrameworkEvent.PACKAGES_REFRESHED) {
