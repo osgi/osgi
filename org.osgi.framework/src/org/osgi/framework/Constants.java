@@ -1652,4 +1652,47 @@ public interface Constants {
 	 * @since 1.6
 	 */
 	String	FRAMEWORK_SYSTEMCAPABILITIES_EXTRA		= "org.osgi.framework.system.capabilities.extra";
+
+	/**
+	 * Framework launching property specifying whether multiple bundles having
+	 * the same {@link #BUNDLE_SYMBOLICNAME symbolic name} and
+	 * {@link #BUNDLE_VERSION version} may be installed.
+	 * 
+	 * <p>
+	 * Default value is {@link #FRAMEWORK_BSNVERSION_SINGLE single} in this
+	 * release of the specification. This default may change to
+	 * {@link #FRAMEWORK_BSNVERSION_MULTIPLE multiple} in a future specification
+	 * release. Therefore, code must not assume the default behavior is
+	 * {@code single} and should interrogate the value of this property to
+	 * determine the behavior.
+	 * 
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * {@code BundleContext.getProperty} method.
+	 * 
+	 * @see #FRAMEWORK_BSNVERSION_MULTIPLE
+	 * @see #FRAMEWORK_BSNVERSION_SINGLE
+	 * @since 1.6
+	 */
+	String	FRAMEWORK_BSNVERSION					= "org.osgi.framework.bsnversion";
+
+	/**
+	 * Specifies the framework will allow multiple bundles to be installed
+	 * having the same symbolic name and version.
+	 * 
+	 * @since 1.5
+	 * @see #FRAMEWORK_BSNVERSION
+	 */
+	String	FRAMEWORK_BSNVERSION_MULTIPLE			= "multiple";
+
+	/**
+	 * Specifies the framework will only allow a single bundle to be installed
+	 * for a given symbolic name and version. It will be an error to install a
+	 * bundle or update a bundle to have the same symbolic name and version as
+	 * another installed bundle.
+	 * 
+	 * @since 1.5
+	 * @see #FRAMEWORK_BSNVERSION
+	 */
+	String	FRAMEWORK_BSNVERSION_SINGLE				= "single";
 }
