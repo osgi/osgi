@@ -3,7 +3,7 @@ Bundle-SymbolicName:                     ${p}.resolver.tb1
 Bundle-Version:                          1.0.0
 Private-Package:                         ${p}.resolver.tb1
 Provide-Capability: \
- test; \
+ test; effective:="resolve"; \
   test ="aName"; \
   version : Version="1.0"; \
   long :Long="100"; \
