@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.CapabilityPermission;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
@@ -95,6 +96,27 @@ public class PermissionRecursionTests extends PermissionTestCase {
 		assertImplies(pc, new PackagePermission("com.foo", b1, "import"));
 		assertNotImplies(pc, new PackagePermission("com.bar", b2, "import"));
 		assertNotImplies(pc, new PackagePermission("*", "import"));
+	}
+
+	public void testCapabilityPermission() {
+		CapabilityPermission p1 = new CapabilityPermission("(location=test.*)",
+				"require");
+		PermissionCollection pc = new Permissions();
+
+		checkEnumeration(pc.elements(), true);
+
+		assertAddPermission(pc, p1);
+		assertAddPermission(pc, new AdminPermission("(location=*.location)",
+				"*"));
+
+		Bundle b1 = newMockBundle(1, "test.bsn", "test.location", pc);
+		Bundle b2 = newMockBundle(2, "test.bsn", "test2.location", pc);
+
+		assertImplies(pc, new CapabilityPermission("com.foo",
+				Collections.EMPTY_MAP, b1, "require"));
+		assertNotImplies(pc, new CapabilityPermission("com.bar",
+				Collections.EMPTY_MAP, b2, "require"));
+		assertNotImplies(pc, new CapabilityPermission("*", "require"));
 	}
 
 	public static Bundle newMockBundle(long id, String name, String location,

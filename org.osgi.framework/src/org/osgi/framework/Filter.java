@@ -21,13 +21,11 @@ import java.util.Map;
 /**
  * An RFC 1960-based Filter.
  * <p>
- * {@code Filter}s can be created by calling
- * {@link BundleContext#createFilter} or {@link FrameworkUtil#createFilter} with
- * a filter string.
+ * {@code Filter}s can be created by calling {@link BundleContext#createFilter}
+ * or {@link FrameworkUtil#createFilter} with a filter string.
  * <p>
  * A {@code Filter} can be used numerous times to determine if the match
- * argument matches the filter string that was used to create the
- * {@code Filter}.
+ * argument matches the filter string that was used to create the {@code Filter}.
  * <p>
  * Some examples of LDAP filters are:
  * 
@@ -39,7 +37,7 @@ import java.util.Map;
  * </pre>
  * 
  * @since 1.1
- * @see "Core Specification, section 5.5, for a description of the filter string syntax."
+ * @see "Core Specification, Filters, for a description of the filter string syntax."
  * @ThreadSafe
  * @version $Id$
  */

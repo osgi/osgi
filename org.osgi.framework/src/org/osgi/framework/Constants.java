@@ -882,7 +882,7 @@ public interface Constants {
 	String	FRAMEWORK_VENDOR						= "org.osgi.framework.vendor";
 
 	/**
-	 * Framework environment property identifying the Framework implementation
+	 * Framework launching property identifying the Framework implementation
 	 * language (see ISO 639 for possible values).
 	 * 
 	 * <p>
@@ -892,7 +892,7 @@ public interface Constants {
 	String	FRAMEWORK_LANGUAGE						= "org.osgi.framework.language";
 
 	/**
-	 * Framework environment property identifying the Framework host-computer's
+	 * Framework launching property identifying the Framework host-computer's
 	 * operating system.
 	 * 
 	 * <p>
@@ -902,7 +902,7 @@ public interface Constants {
 	String	FRAMEWORK_OS_NAME						= "org.osgi.framework.os.name";
 
 	/**
-	 * Framework environment property identifying the Framework host-computer's
+	 * Framework launching property identifying the Framework host-computer's
 	 * operating system version number.
 	 * 
 	 * <p>
@@ -912,7 +912,7 @@ public interface Constants {
 	String	FRAMEWORK_OS_VERSION					= "org.osgi.framework.os.version";
 
 	/**
-	 * Framework environment property identifying the Framework host-computer's
+	 * Framework launching property identifying the Framework host-computer's
 	 * processor name.
 	 * 
 	 * <p>
@@ -922,8 +922,8 @@ public interface Constants {
 	String	FRAMEWORK_PROCESSOR						= "org.osgi.framework.processor";
 
 	/**
-	 * Framework environment property identifying execution environments
-	 * provided by the Framework.
+	 * Framework launching property identifying execution environments provided
+	 * by the Framework.
 	 * 
 	 * <p>
 	 * The value of this property may be retrieved by calling the
@@ -935,9 +935,8 @@ public interface Constants {
 	String	FRAMEWORK_EXECUTIONENVIRONMENT			= "org.osgi.framework.executionenvironment";
 
 	/**
-	 * Framework environment property identifying packages for which the
-	 * Framework must delegate class loading to the parent class loader of the
-	 * bundle.
+	 * Framework launching property identifying packages for which the Framework
+	 * must delegate class loading to the parent class loader of the bundle.
 	 * 
 	 * <p>
 	 * The value of this property may be retrieved by calling the
@@ -949,8 +948,8 @@ public interface Constants {
 	String	FRAMEWORK_BOOTDELEGATION				= "org.osgi.framework.bootdelegation";
 
 	/**
-	 * Framework environment property identifying packages which the system
-	 * bundle must export.
+	 * Framework launching property identifying packages which the system bundle
+	 * must export.
 	 * 
 	 * <p>
 	 * If this property is not specified then the framework must calculate a
@@ -965,8 +964,8 @@ public interface Constants {
 	String	FRAMEWORK_SYSTEMPACKAGES				= "org.osgi.framework.system.packages";
 
 	/**
-	 * Framework environment property identifying extra packages which the
-	 * system bundle must export from the current execution environment.
+	 * Framework launching property identifying extra packages which the system
+	 * bundle must export from the current execution environment.
 	 * 
 	 * <p>
 	 * This property is useful for configuring extra system packages in addition
@@ -1044,8 +1043,9 @@ public interface Constants {
 	String	SUPPORTS_FRAMEWORK_REQUIREBUNDLE		= "org.osgi.supports.framework.requirebundle";
 
 	/**
-	 * Specifies the type of security manager the framework must use. If not
-	 * specified then the framework will not set the VM security manager.
+	 * Framework launching property specifying the type of security manager the
+	 * framework must use. If not specified then the framework will not set the
+	 * VM security manager.
 	 * 
 	 * @see #FRAMEWORK_SECURITY_OSGI
 	 * @since 1.5
@@ -1068,13 +1068,14 @@ public interface Constants {
 	String	FRAMEWORK_SECURITY_OSGI					= "osgi";
 
 	/**
-	 * Specified the persistent storage area used by the framework. The value of
-	 * this property must be a valid file path in the file system to a
-	 * directory. If the specified directory does not exist then the framework
-	 * will create the directory. If the specified path exists but is not a
-	 * directory or if the framework fails to create the storage directory, then
-	 * framework initialization must fail. The framework is free to use this
-	 * directory as it sees fit. This area can not be shared with anything else.
+	 * Framework launching property specifying the persistent storage area used
+	 * by the framework. The value of this property must be a valid file path in
+	 * the file system to a directory. If the specified directory does not exist
+	 * then the framework will create the directory. If the specified path
+	 * exists but is not a directory or if the framework fails to create the
+	 * storage directory, then framework initialization must fail. The framework
+	 * is free to use this directory as it sees fit. This area can not be shared
+	 * with anything else.
 	 * <p>
 	 * If this property is not set, the framework should use a reasonable
 	 * platform default for the persistent storage area.
@@ -1084,9 +1085,9 @@ public interface Constants {
 	String	FRAMEWORK_STORAGE						= "org.osgi.framework.storage";
 
 	/**
-	 * Specifies if and when the persistent storage area for the framework
-	 * should be cleaned. If this property is not set, then the framework
-	 * storage area must not be cleaned.
+	 * Framework launching property specifying if and when the persistent
+	 * storage area for the framework should be cleaned. If this property is not
+	 * set, then the framework storage area must not be cleaned.
 	 * 
 	 * @see #FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT
 	 * @since 1.5
@@ -1104,25 +1105,26 @@ public interface Constants {
 	String	FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT		= "onFirstInit";
 
 	/**
-	 * Specifies a comma separated list of additional library file extensions
-	 * that must be used when a bundle's class loader is searching for native
-	 * libraries. If this property is not set, then only the library name
-	 * returned by {@code System.mapLibraryName(String)} will be used to search.
-	 * This is needed for certain operating systems which allow more than one
-	 * extension for a library. For example, AIX allows library extensions of
-	 * {@code .a} and {@code .so}, but {@code System.mapLibraryName(String)}
-	 * will only return names with the {@code .a} extension.
+	 * Framework launching property specifying a comma separated list of
+	 * additional library file extensions that must be used when a bundle's
+	 * class loader is searching for native libraries. If this property is not
+	 * set, then only the library name returned by
+	 * {@code System.mapLibraryName(String)} will be used to search. This is
+	 * needed for certain operating systems which allow more than one extension
+	 * for a library. For example, AIX allows library extensions of {@code .a}
+	 * and {@code .so}, but {@code System.mapLibraryName(String)} will only
+	 * return names with the {@code .a} extension.
 	 * 
 	 * @since 1.5
 	 */
 	String	FRAMEWORK_LIBRARY_EXTENSIONS			= "org.osgi.framework.library.extensions";
 
 	/**
-	 * Specifies an optional OS specific command to set file permissions on
-	 * extracted native code. On some operating systems, it is required that
-	 * native libraries be set to executable. This optional property allows you
-	 * to specify the command. For example, on a UNIX style OS, this property
-	 * could have the following value.
+	 * Framework launching property specifying an optional OS specific command
+	 * to set file permissions on extracted native code. On some operating
+	 * systems, it is required that native libraries be set to executable. This
+	 * optional property allows you to specify the command. For example, on a
+	 * UNIX style OS, this property could have the following value.
 	 * 
 	 * <pre>
 	 * chmod +rx ${abspath}
@@ -1144,13 +1146,13 @@ public interface Constants {
 	String	FRAMEWORK_COMMAND_ABSPATH				= "abspath";
 
 	/**
-	 * Specifies the trust repositories used by the framework. The value is a
-	 * {@code java.io.File.pathSeparator} separated list of valid file paths to
-	 * files that contain key stores of type {@code JKS}. The framework will use
-	 * the key stores as trust repositories to authenticate certificates of
-	 * trusted signers. The key stores are only used as read-only trust
-	 * repositories to access public keys. No passwords are required to access
-	 * the key stores' public keys.
+	 * Framework launching property specifying the trust repositories used by
+	 * the framework. The value is a {@code java.io.File.pathSeparator}
+	 * separated list of valid file paths to files that contain key stores of
+	 * type {@code JKS}. The framework will use the key stores as trust
+	 * repositories to authenticate certificates of trusted signers. The key
+	 * stores are only used as read-only trust repositories to access public
+	 * keys. No passwords are required to access the key stores' public keys.
 	 * <p>
 	 * Note that framework implementations are allowed to use other trust
 	 * repositories in addition to the trust repositories specified by this
@@ -1162,24 +1164,26 @@ public interface Constants {
 	String	FRAMEWORK_TRUST_REPOSITORIES			= "org.osgi.framework.trust.repositories";
 
 	/**
-	 * Specifies the current windowing system. The framework should provide a
-	 * reasonable default if this is not set.
+	 * Framework launching property specifying the current windowing system. The
+	 * framework should provide a reasonable default if this is not set.
 	 * 
 	 * @since 1.5
 	 */
 	String	FRAMEWORK_WINDOWSYSTEM					= "org.osgi.framework.windowsystem";
 
 	/**
-	 * Specifies the beginning start level of the framework.
+	 * Framework launching property specifying the beginning start level of the
+	 * framework.
 	 * 
-	 * @see "Core Specification, section 8.2.3."
+	 * @see "Core Specification, Starting the Framework."
 	 * @since 1.5
 	 */
 	String	FRAMEWORK_BEGINNING_STARTLEVEL			= "org.osgi.framework.startlevel.beginning";
 
 	/**
-	 * Specifies the parent class loader type for all bundle class loaders.
-	 * Default value is {@link #FRAMEWORK_BUNDLE_PARENT_BOOT boot}.
+	 * Framework launching property specifying the parent class loader type for
+	 * all bundle class loaders. Default value is
+	 * {@link #FRAMEWORK_BUNDLE_PARENT_BOOT boot}.
 	 * 
 	 * @see #FRAMEWORK_BUNDLE_PARENT_BOOT
 	 * @see #FRAMEWORK_BUNDLE_PARENT_EXT
@@ -1338,12 +1342,13 @@ public interface Constants {
 	String	FRAMEWORK_UUID							= "org.osgi.framework.uuid";
 
 	/**
-	 * Specifies that an returned URLs from bundle class loaders must be a jar:
-	 * or file: URL if set to any value. This property must be set in the
-	 * launching parameters of the framework. If a Framework cannot support this
-	 * property it must throw an Illegal Argument Exception during its
-	 * initialization. URLs obtained through the OSGi API do not have this
-	 * guarantee, these URLs must follow the existing rules for resource URLs.
+	 * Framework launching property specifying that an returned URLs from bundle
+	 * class loaders must be a jar: or file: URL if set to any value. This
+	 * property must be set in the launching parameters of the framework. If a
+	 * Framework cannot support this property it must throw an Illegal Argument
+	 * Exception during its initialization. URLs obtained through the OSGi API
+	 * do not have this guarantee, these URLs must follow the existing rules for
+	 * resource URLs.
 	 * 
 	 * @since 1.6
 	 */
@@ -1616,7 +1621,7 @@ public interface Constants {
 	String	FILTER_ATTRIBUTE						= "filter";
 
 	/**
-	 * Framework environment property identifying capabilities which the system
+	 * Framework launching property identifying capabilities which the system
 	 * bundle must provide.
 	 * 
 	 * <p>
@@ -1632,7 +1637,7 @@ public interface Constants {
 	String	FRAMEWORK_SYSTEMCAPABILITIES			= "org.osgi.framework.system.capabilities";
 
 	/**
-	 * Framework environment property identifying extra capabilities which the
+	 * Framework launching property identifying extra capabilities which the
 	 * system bundle must additionally provide.
 	 * 
 	 * <p>
@@ -1647,4 +1652,47 @@ public interface Constants {
 	 * @since 1.6
 	 */
 	String	FRAMEWORK_SYSTEMCAPABILITIES_EXTRA		= "org.osgi.framework.system.capabilities.extra";
+
+	/**
+	 * Framework launching property specifying whether multiple bundles having
+	 * the same {@link #BUNDLE_SYMBOLICNAME symbolic name} and
+	 * {@link #BUNDLE_VERSION version} may be installed.
+	 * 
+	 * <p>
+	 * Default value is {@link #FRAMEWORK_BSNVERSION_SINGLE single} in this
+	 * release of the specification. This default may change to
+	 * {@link #FRAMEWORK_BSNVERSION_MULTIPLE multiple} in a future specification
+	 * release. Therefore, code must not assume the default behavior is
+	 * {@code single} and should interrogate the value of this property to
+	 * determine the behavior.
+	 * 
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * {@code BundleContext.getProperty} method.
+	 * 
+	 * @see #FRAMEWORK_BSNVERSION_MULTIPLE
+	 * @see #FRAMEWORK_BSNVERSION_SINGLE
+	 * @since 1.6
+	 */
+	String	FRAMEWORK_BSNVERSION					= "org.osgi.framework.bsnversion";
+
+	/**
+	 * Specifies the framework will allow multiple bundles to be installed
+	 * having the same symbolic name and version.
+	 * 
+	 * @since 1.5
+	 * @see #FRAMEWORK_BSNVERSION
+	 */
+	String	FRAMEWORK_BSNVERSION_MULTIPLE			= "multiple";
+
+	/**
+	 * Specifies the framework will only allow a single bundle to be installed
+	 * for a given symbolic name and version. It will be an error to install a
+	 * bundle or update a bundle to have the same symbolic name and version as
+	 * another installed bundle.
+	 * 
+	 * @since 1.5
+	 * @see #FRAMEWORK_BSNVERSION
+	 */
+	String	FRAMEWORK_BSNVERSION_SINGLE				= "single";
 }

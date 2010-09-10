@@ -1,0 +1,10 @@
+Bundle-Description				: \
+	OSGi Service Platform Release ${version;=;${enterprise.build.version}} version ${enterprise.build.version}, \
+	Enterprise Test Case Bundles.
+
+Bundle-Version					: ${enterprise.build.version}
+Include-Resource				: \
+    NOTICE=legal/NOTICE.txt, \
+ 	{about.html=legal/about.html}
+
+-pack: ${build.enterprise.tests}

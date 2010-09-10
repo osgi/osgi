@@ -6,32 +6,32 @@
 		<property name="osgi.ri" value="${project.workspace}/osgi.ri/${target-dir}" />
 	</target>
 
-	<target name="runtests" depends="osgi.core.tests,osgi.cmpn.tests,osgi.enterprise.tests">
+	<target name="runtests" depends="osgi.ct.core,osgi.ct.cmpn,osgi.ct.enterprise">
 	</target>
 
-	<target name="osgi.core.tests" depends="init">
+	<target name="osgi.ct.core" depends="init">
 		<antcall target="-runtest">
-			<param name="test-name" value="osgi.core" />
-			<param name="jars" value="osgi.core.impls.jar" />
+			<param name="test-name" value="osgi.ct.core" />
+			<param name="jars" value="osgi.ri.core.jar" />
 		</antcall>
 	</target>
 
-	<target name="osgi.cmpn.tests" depends="init">
+	<target name="osgi.ct.cmpn" depends="init">
 		<antcall target="-runtest">
-			<param name="test-name" value="osgi.cmpn" />
-			<param name="jars" value="osgi.core.impls.jar,osgi.cmpn.impls.jar" />
+			<param name="test-name" value="osgi.ct.cmpn" />
+			<param name="jars" value="osgi.ri.core.jar,osgi.ri.cmpn.jar" />
 		</antcall>
 	</target>
 
-	<target name="osgi.enterprise.tests" depends="init">
+	<target name="osgi.ct.enterprise" depends="init">
 		<antcall target="-runtest">
-			<param name="test-name" value="osgi.enterprise" />
-			<param name="jars" value="osgi.core.impls.jar,osgi.enterprise.impls.jar" />
+			<param name="test-name" value="osgi.ct.enterprise" />
+			<param name="jars" value="osgi.ri.core.jar,osgi.ri.enterprise.jar" />
 		</antcall>
 	</target>
 
 	<target name="-runtest">
-		<property name="prefix" value="${target}/${test-name}.tests" />
+		<property name="prefix" value="${target}/${test-name}" />
 		<delete dir="${prefix}" />
 		<mkdir dir="${prefix}/jar" />
 		<unzip dest="${prefix}/jar">

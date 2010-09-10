@@ -4,5 +4,5 @@
 -resourceonly		: true
 
 # Build the osgi spec files
--sub       = osgi.*.impls.bnd
+-sub       = *.bnd
 
