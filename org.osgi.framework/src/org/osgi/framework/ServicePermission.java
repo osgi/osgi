@@ -103,9 +103,9 @@ public final class ServicePermission extends BasicPermission {
 	transient Filter						filter;
 
 	/**
-	 * This dictionary holds the properties of the permission, used to match a
-	 * filter in implies. This is not initialized until necessary, and then
-	 * cached in this object.
+	 * This map holds the properties of the permission, used to match a filter
+	 * in implies. This is not initialized until necessary, and then cached in
+	 * this object.
 	 */
 	private transient volatile Map<String, Object>	properties;
 
@@ -559,10 +559,13 @@ public final class ServicePermission extends BasicPermission {
 		s.defaultReadObject();
 		setTransients(parseFilter(getName()), parseActions(actions));
 	}
+
 	/**
-	 * Called by {@code <@link ServicePermission#implies(Permission)>}.
+	 * Called by {@code <@link ServicePermission#implies(Permission)>}. This
+	 * method is only called on a requested permission which cannot have a
+	 * filter set.
 	 * 
-	 * @return a dictionary of properties for this permission.
+	 * @return a map of properties for this permission.
 	 */
 	private Map<String, Object> getProperties() {
 		Map<String, Object> result = properties;
@@ -571,9 +574,7 @@ public final class ServicePermission extends BasicPermission {
 		}
 		if (service == null) {
 			result = new HashMap<String, Object>(1);
-			if (filter == null) {
-				result.put(Constants.OBJECTCLASS, new String[] {getName()});
-			}
+			result.put(Constants.OBJECTCLASS, new String[] {getName()});
 			return properties = result;
 		}
 		final Map<String, Object> props = new HashMap<String, Object>(4);

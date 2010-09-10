@@ -923,17 +923,16 @@ public interface Bundle extends Comparable<Bundle> {
 
 	/**
 	 * Returns the symbolic name of this bundle as specified by its
-	 * {@code Bundle-SymbolicName} manifest header. The bundle symbolic
-	 * name together with a version must identify a unique bundle. The bundle
-	 * symbolic name should be based on the reverse domain name naming
-	 * convention like that used for java packages.
+	 * {@code Bundle-SymbolicName} manifest header. The bundle symbolic name
+	 * should be based on the reverse domain name naming convention like that
+	 * used for java packages.
 	 * 
 	 * <p>
 	 * This method must continue to return this bundle's symbolic name while
 	 * this bundle is in the {@code UNINSTALLED} state.
 	 * 
-	 * @return The symbolic name of this bundle or {@code null} if this
-	 *         bundle does not have a symbolic name.
+	 * @return The symbolic name of this bundle or {@code null} if this bundle
+	 *         does not have a symbolic name.
 	 * @since 1.3
 	 */
 	String getSymbolicName();
