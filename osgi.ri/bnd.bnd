@@ -1,5 +1,5 @@
 -include			: layout.bnd
--dependson			: ${build.impls}
+-dependson			: osgi.companion, ${build.impls}
 -reportnewer		: true
 -resourceonly		: true
 
