@@ -228,6 +228,8 @@ Include-Resource = \
 	resolver.tb10.v100.jar, \
 	resolver.tb10.v110.jar, \
 	resolver.tb10.v120.jar, \
+	resolver.tb10.v130.jar, \
+	resolver.tb10.v140.jar, \
 	resolver.tb11.jar, \
 	resolver.tb12.jar, \
 	startlevel.tb1.jar, \

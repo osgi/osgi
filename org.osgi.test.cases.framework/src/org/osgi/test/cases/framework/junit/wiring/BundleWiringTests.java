@@ -450,8 +450,9 @@ public class BundleWiringTests extends OSGiTestCase {
 		}
 	}
 
+	// Note that this test assumes the tests are run on a JavaSE 1.5 vm or higher
 	public void testOSGiEE() {
-		// First bundle tests that the framework sets reasonable defaults for J2SE 1.5
+		// First bundle tests that the framework sets reasonable defaults for JavaSE 1.5
 		Bundle tb10v100 = install("resolver.tb10.v100.jar");
 		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb10v100})));
 		// Second bundle requires an osgi.ee that should not be able to resolve
@@ -460,6 +461,13 @@ public class BundleWiringTests extends OSGiTestCase {
 		// Third bundle requires an osgi.ee that is specified by the system.capabilities.extra property
 		Bundle tb10v120 = install("resolver.tb10.v120.jar");
 		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb10v120})));
+		// forth bundle requires JavaSE [1.3, 1.4)
+		Bundle tb10v130 = install("resolver.tb10.v130.jar");
+		assertFalse(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb10v130})));
+		// fifth bundle requires JavaSE [1.3, 2.0)
+		Bundle tb10v140 = install("resolver.tb10.v140.jar");
+		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb10v140})));
+
 
 		// Test that the ees come from the system bundle
 		BundleWiring tb10v100Wiring = (BundleWiring) tb10v100.adapt(BundleWiring.class);
