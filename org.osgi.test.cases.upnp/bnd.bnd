@@ -24,7 +24,7 @@ Include-Resource:
 
 -runproperties = ${runproperties}, \
 	org.osgi.service.http.hostname=127.0.0.1, \
-	org.osgi.service.http.port=8080
+	org.osgi.service.http.port=8082
 
 
 Test-Cases							= ${testcases}
