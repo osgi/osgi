@@ -178,6 +178,12 @@ public interface Terminal {
 		 * Reverse the text.
 		 */
 		public Attribute	REVERSED		= new Attribute("REVERSED");
+		
+		/**
+		 * Default foreground color.
+		 */
+		public Attribute	FORE_DEFAULT		= new Attribute("FORE_DEFAULT");
+		
 		/**
 		 * No Color, transparent.
 		 */
@@ -216,6 +222,10 @@ public interface Terminal {
 		 * White
 		 */
 		public Attribute	FORE_WHITE		= new Attribute("FORE_WHITE");
+		/**
+		 * Default background color.
+		 */
+		public Attribute	BACK_DEFAULT		= new Attribute("BACK_DEFAULT");
 		/**
 		 * No Color, transparent.
 		 */
@@ -389,6 +399,18 @@ public interface Terminal {
 	 * @throws Exception when this method fails
 	 */
 	boolean position(int x, int y) throws IllegalArgumentException, Exception;
+
+	/**
+	 * Position the cursor x position on the screen. Is the same as position(x,y),
+	 * where y represents the current line on the screen.
+	 * 
+	 * @param x The x position, must be from 0-width
+	 * @return {@code true} if the position could be set, otherwise {@code
+	 *         false}
+	 * @throws IllegalArgumentException when x or y is not in range
+	 * @throws Exception when this method fails
+	 */
+	boolean position(int x) throws IllegalArgumentException, Exception;
 
 	/**
 	 * Set the attributes of the text to outputed next. The method returns the
