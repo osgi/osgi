@@ -122,10 +122,10 @@ public interface ResolverHook {
 	 * resolveBundles}.  In such cases the framework may decide to have a single resolve
 	 * process or a sequential series of resolve processes.  In the case of a single 
 	 * resolve process the collection of triggers would contain bundle revisions for all
-	 * of the bundles being passed.  In the case of a sequential series of resolve processes
-	 * the collection will contain one or more of the bundles be resolved for the sequential
-	 * resolve process.
-	 * @param triggers the collection of bundles which triggered the resolve process.
+	 * of the bundles being passed to the resolve method.  In the case of a sequential series 
+	 * of resolve processes the collection will contain one or more of the bundles be resolved 
+	 * for the sequential resolve process.
+	 * @param triggers an unmodifiable collection of bundles which triggered the resolve process.
 	 * This collection may be empty if the collection of trigger bundles cannot be
 	 * determined.
 	 */
