@@ -108,8 +108,28 @@ public interface ResolverHook {
 	/**
 	 * This method is called once at the beginning of the resolve process
 	 * before any other methods are called on this hook.
+	 * <p>
+	 * The trigger bundles represent a collection of bundles which triggered
+	 * the resolve process.  This collection may be empty if the collection of
+	 * trigger bundles cannot be determined.  In most cases the collection of trigger 
+	 * bundles can easily be determined.  For example, if you are trying to call certain
+	 * methods on a bundle in the {@link Bundle#INSTALLED INSTALLED} state the framework
+	 * will attempt to resolve the bundle (e.g. {@link Bundle#start() start},
+	 * {@link Bundle#loadClass(String) loadClass}, {@link Bundle#findEntries(String, String, boolean)}
+	 * etc.).  In such cases the collection will contain the single bundle which the
+	 * framework is trying to resolve.  Other cases may cause multiple bundles to be
+	 * included in the trigger bundles.  For example, {@link FrameworkWiring#resolveBundles(Collection)}
+	 * resolveBundles}.  In such cases the framework may decide to have a single resolve
+	 * process or a sequential series of resolve processes.  In the case of a single 
+	 * resolve process the collection of triggers would contain bundle revisions for all
+	 * of the bundles being passed.  In the case of a sequential series of resolve processes
+	 * the collection will contain one or more of the bundles be resolved for the sequential
+	 * resolve process.
+	 * @param triggers the collection of bundles which triggered the resolve process.
+	 * This collection may be empty if the collection of trigger bundles cannot be
+	 * determined.
 	 */
-	void begin();
+	void begin(Collection<BundleRevision> triggers);
 
 	/**
 	 * Filter resolvable candidates hook method.  This method may be called
