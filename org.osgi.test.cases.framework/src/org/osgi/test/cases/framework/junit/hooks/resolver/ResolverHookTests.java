@@ -17,6 +17,7 @@
 package org.osgi.test.cases.framework.junit.hooks.resolver;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,11 +25,13 @@ import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import junit.framework.AssertionFailedError;
 
@@ -169,7 +172,109 @@ public class ResolverHookTests extends OSGiTestCase {
 	}
 
 	public void testBeginTriggers() {
-		fail("Need to test triggers.");
+		// test the begin triggers
+		PreventResolution preventHook = new PreventResolution();
+		ServiceRegistration preventReg = registerHook(preventHook, 0);
+
+		Bundle tb1v100 = install("resolver.tb1.v100.jar");
+		Bundle tb1v110 = install("resolver.tb1.v110.jar");
+		Bundle tb2 = install("resolver.tb2.specific.jar");
+		Bundle tb3 = install("resolver.tb3.specific.jar");
+		Bundle tb4 = install("resolver.tb4.jar");
+		Bundle tb5 = install("resolver.tb5.jar");
+		Bundle tb7 = install("resolver.tb7.jar");
+
+		BundleRevision tb1v100Revision = (BundleRevision) tb1v100.adapt(BundleRevision.class);
+		BundleRevision tb1v110Revision = (BundleRevision) tb1v110.adapt(BundleRevision.class);
+		BundleRevision tb2Revision = (BundleRevision) tb2.adapt(BundleRevision.class);
+		BundleRevision tb3Revision = (BundleRevision) tb3.adapt(BundleRevision.class);
+		BundleRevision tb4Revision = (BundleRevision) tb4.adapt(BundleRevision.class);
+		BundleRevision tb5Revision = (BundleRevision) tb5.adapt(BundleRevision.class);
+		BundleRevision tb7Revision = (BundleRevision) tb7.adapt(BundleRevision.class);
+
+		List testBundles = Arrays.asList(new Bundle[]{tb1v100, tb1v110, tb2, tb3, tb4, tb5, tb7});
+		List testRevisions = Arrays.asList(new BundleRevision[] {tb1v100Revision, tb1v110Revision, tb2Revision, tb3Revision, tb4Revision, tb5Revision, tb7Revision});
+
+		LinkedList beginOrder = new LinkedList();
+		LinkedList endOrder = new LinkedList();
+		TestResolverHook testHook = new TestResolverHook(new Long(1), null, beginOrder, endOrder);
+		ServiceRegistration testReg = registerHook(testHook, 0);
+
+		preventReg.unregister();
+		try {
+			tb2.start();
+		} catch (BundleException e) {
+			fail("failed to start bundle: " + tb2, e);
+		}
+		assertNotNull("revision is null!", tb2Revision);
+		Set triggers = testHook.getAllTriggers();
+		assertEquals("Wrong number of triggers", 1, triggers.size());
+		assertTrue("Wrong bundle included in triggers", triggers.contains(tb2Revision));
+
+		preventReg = registerHook(preventHook, 0);
+		refreshBundles(testBundles);
+		preventReg.unregister();
+		testHook.clear();
+
+		URL resoureTest = tb3.getResource("justAtest");
+		assertNull("URL is not null!", resoureTest);
+		triggers = testHook.getAllTriggers();
+		assertEquals("Wrong number of triggers", 1, triggers.size());
+		assertTrue("Wrong bundle included in triggers", triggers.contains(tb3Revision));
+
+		preventReg = registerHook(preventHook, 0);
+		refreshBundles(testBundles);
+		preventReg.unregister();
+		testHook.clear();
+
+		Enumeration resouresTest = null;
+		try {
+			resouresTest = tb5.getResources("justAtest");
+		} catch (IOException e) {
+			fail("Failed to getResources", e);
+		}
+		assertNull("resources is not null!", resouresTest);
+		triggers = testHook.getAllTriggers();
+		assertEquals("Wrong number of triggers", 1, triggers.size());
+		assertTrue("Wrong bundle included in triggers", triggers.contains(tb5Revision));
+
+		preventReg = registerHook(preventHook, 0);
+		refreshBundles(testBundles);
+		preventReg.unregister();
+		testHook.clear();
+
+		Enumeration findTest = tb3.findEntries("justAtest", "path", false);
+		assertNull("Enumeration is not null!", findTest);
+		triggers = testHook.getAllTriggers();
+		assertEquals("Wrong number of triggers", 1, triggers.size());
+		assertTrue("Wrong bundle included in triggers", triggers.contains(tb3Revision));
+
+		preventReg = registerHook(preventHook, 0);
+		refreshBundles(testBundles);
+		preventReg.unregister();
+		testHook.clear();
+
+		assertTrue("Failed to resolve test bundles", frameworkWiring.resolveBundles(testBundles));
+		triggers = testHook.getAllTriggers();
+		assertEquals("Wrong number of triggers", 7, triggers.size());
+		assertTrue("Wrong bundle included in triggers", triggers.containsAll(testRevisions));
+
+		preventReg = registerHook(preventHook, 0);
+		refreshBundles(testBundles);
+		preventReg.unregister();
+		assertTrue("Failed to resolve test bundles", frameworkWiring.resolveBundles(testBundles));
+		testHook.clear();
+
+		// test dynamic import
+		System.getProperties().remove(tb1v100.getSymbolicName());
+		try {
+			tb7.start();
+		} catch (BundleException e) {
+			fail("Failed to start bundle: " + tb7, e);
+		}
+		triggers = testHook.getAllTriggers();
+		assertEquals("Wrong number of triggers", 1, triggers.size());
+		assertTrue("Wrong bundle included in triggers", triggers.contains(tb7Revision));
 	}
 
 	public void testFilterResolvable01() {
@@ -800,13 +905,13 @@ public class ResolverHookTests extends OSGiTestCase {
 		private int beginCalls = 0;
 		private int endCalls = 0;
 		private AssertionFailedError error = null;
+		private final Set allTriggers = new HashSet();
 		private final RuntimeException throwException;
 		private final List callOrderBegin;
 		private final List callOrderEnd;
 		private final Long id;
 		private final Collection unresolvable;
 
-		
 		public TestResolverHook(Long id, RuntimeException throwException, List callOrderBegin, List callOrderEnd) {
 			this(id, throwException, callOrderBegin, callOrderEnd, null);
 		}
@@ -820,6 +925,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		}
 		public void begin(Collection triggers) {
 			beginCalls++;
+			allTriggers.addAll(triggers);
 			callOrderBegin.add(id);
 			try {
 				assertEquals("Begin called too many times.", 1, beginCalls - endCalls);
@@ -895,6 +1001,7 @@ public class ResolverHookTests extends OSGiTestCase {
 			beginCalls = 0;
 			endCalls = 0;
 			error = null;
+			allTriggers.clear();
 		}
 
 		private void throwException() {
@@ -916,6 +1023,9 @@ public class ResolverHookTests extends OSGiTestCase {
 
 		public Long getID() {
 			return id;
+		}
+		public Set getAllTriggers() {
+			return allTriggers;
 		}
 	}
 

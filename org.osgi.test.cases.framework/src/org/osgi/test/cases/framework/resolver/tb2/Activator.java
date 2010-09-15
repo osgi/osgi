@@ -23,9 +23,9 @@ public class Activator implements BundleActivator {
 
 	public void start(BundleContext context) throws Exception {
 		String expectedValue = System.getProperty(Test.TEST_KEY);
+		String testValue = new Test().getValue();
 		if (expectedValue == null)
 			return; // not testing package package version
-		String testValue = new Test().getValue();
 		if (!testValue.equals(expectedValue))
 			throw new RuntimeException("Wrong test value: expected: " + expectedValue + " but was: " + testValue);
 	}
