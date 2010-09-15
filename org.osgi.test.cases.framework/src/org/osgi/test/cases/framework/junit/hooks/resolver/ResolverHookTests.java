@@ -168,10 +168,14 @@ public class ResolverHookTests extends OSGiTestCase {
 			throw hook3.getError();
 	}
 
+	public void testBeginTriggers() {
+		fail("Need to test triggers.");
+	}
+
 	public void testFilterResolvable01() {
 		final AssertionFailedError[] error = new AssertionFailedError[1];
 		ResolverHook hook1 = new ResolverHook(){
-			public void begin() {
+			public void begin(Collection triggers) {
 			}
 			public void end() {
 			}
@@ -232,7 +236,7 @@ public class ResolverHookTests extends OSGiTestCase {
 	public void testFilterImportPackage01() {
 		final AssertionFailedError[] error = new AssertionFailedError[1];
 		ResolverHook hook1 = new ResolverHook(){
-			public void begin() {
+			public void begin(Collection triggers) {
 			}
 			public void end() {
 			}
@@ -668,7 +672,7 @@ public class ResolverHookTests extends OSGiTestCase {
 			}
 			public void end() {
 			}
-			public void begin() {
+			public void begin(Collection triggers) {
 			}
 		}, 0);
 	
@@ -713,7 +717,7 @@ public class ResolverHookTests extends OSGiTestCase {
 						error[0] = e;
 				}
 			}
-			public void begin() {
+			public void begin(Collection triggers) {
 				doTest();
 			}
 			public void end() {
@@ -760,7 +764,7 @@ public class ResolverHookTests extends OSGiTestCase {
 
 		registerHook(new ResolverHook(){
 			private boolean called = false;
-			public void begin() {
+			public void begin(Collection triggers) {
 				if (called)
 					return;
 				called = true;
@@ -814,7 +818,7 @@ public class ResolverHookTests extends OSGiTestCase {
 			this.callOrderEnd = callOrderEnd;
 			this.unresolvable = unresolvable;
 		}
-		public void begin() {
+		public void begin(Collection triggers) {
 			beginCalls++;
 			callOrderBegin.add(id);
 			try {
@@ -916,7 +920,7 @@ public class ResolverHookTests extends OSGiTestCase {
 	}
 
 	static class PreventResolution implements ResolverHook {
-		public void begin() {
+		public void begin(Collection triggers) {
 		}
 		public void end() {
 		}
@@ -935,7 +939,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		public TestFilterResolvable(Collection unresolvable) {
 			this.unresolvable = unresolvable;
 		}
-		public void begin() {
+		public void begin(Collection triggers) {
 		}
 		public void end() {
 		}
@@ -958,7 +962,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		public TestFilterCapabilityHook(Filter filter) {
 			this.filter = filter;
 		}
-		public void begin() {
+		public void begin(Collection triggers) {
 		}
 		public void end() {
 		}
@@ -1008,7 +1012,7 @@ public class ResolverHookTests extends OSGiTestCase {
 			this.collisions = collisions;
 		}
 
-		public void begin() {
+		public void begin(Collection triggers) {
 		}
 
 		public void end() {
