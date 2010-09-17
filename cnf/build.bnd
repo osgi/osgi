@@ -105,7 +105,7 @@ junit					= com.springsource.junit;version=3.8;export="${junit.package}"
 
 # Use the following for 4.3 framework RI development	
 #-runpath							= \
-#	org.eclipse.osgi;		version=project, \
+#	org.eclipse.osgi;		version=snapshot, \
 #	${junit}
 
 # Use the following for the binary 4.3 prototype from the repo
@@ -113,6 +113,7 @@ junit					= com.springsource.junit;version=3.8;export="${junit.package}"
 #	org.eclipse.osgi.v43prototype;		version=3.7.0, \
 #	${junit}
 
+-runtrace=true
 runproperties = report=true, \
 	osgi.compatibility.bootdelegation=false, \
 	osgi.resolverMode=strict, \
