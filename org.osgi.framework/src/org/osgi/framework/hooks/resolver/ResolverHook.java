@@ -42,7 +42,7 @@ import org.osgi.framework.wiring.FrameworkWiring;
  *       during the current resolve process.  A resolver hook contained in the snapshot may become
  *       unregistered during the resolve process.  The framework should handle this and stop calling
  *       the unregistered hook for the remainder of the resolve process.</li>
- *  <li> For each registered hook call the {@link #begin()} method to inform the hooks about a resolve 
+ *  <li> For each registered hook call the {@link #begin(Collection)} method to inform the hooks about a resolve 
  *       process beginning.</li>
  *  <li> Determine the collection of unresolved bundle revisions that may be considered for resolution during
  *       the current resolution process and place each of the bundle revisions in a shrinkable collection
@@ -191,7 +191,7 @@ public interface ResolverHook {
 	 * This method is called once at the end of the resolve process.
 	 * After the end method is called the resolve process has ended.
 	 * No methods will be called on this hook except after the
-	 * {@link #begin() begin} method is called again to indicate
+	 * {@link #begin(Collection) begin} method is called again to indicate
 	 * a new resolve process is beginning.
 	 */
 	void end();
