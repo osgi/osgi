@@ -1680,7 +1680,7 @@ public interface Constants {
 	 * Specifies the framework will allow multiple bundles to be installed
 	 * having the same symbolic name and version.
 	 * 
-	 * @since 1.5
+	 * @since 1.6
 	 * @see #FRAMEWORK_BSNVERSION
 	 */
 	String	FRAMEWORK_BSNVERSION_MULTIPLE			= "multiple";
@@ -1691,7 +1691,7 @@ public interface Constants {
 	 * bundle or update a bundle to have the same symbolic name and version as
 	 * another installed bundle.
 	 * 
-	 * @since 1.5
+	 * @since 1.6
 	 * @see #FRAMEWORK_BSNVERSION
 	 */
 	String	FRAMEWORK_BSNVERSION_SINGLE				= "single";
