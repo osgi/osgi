@@ -55,7 +55,7 @@ public interface ResolverHookFactory {
 	 *   <li>{@link Bundle#loadClass(String) loadClass}</li>
 	 *   <li>{@link Bundle#findEntries(String, String, boolean) findEntries}</li>
 	 *   <li>{@link Bundle#getResource(String) getResource}</li>
-	 *   <li>{@link Bundle#getResources(String) getResources}</li>. 
+	 *   <li>{@link Bundle#getResources(String) getResources}</li>
 	 * </ul> 
 	 * In such cases the collection will contain the single bundle which the
 	 * framework is trying to resolve.  Other cases will cause multiple bundles to be

@@ -15,7 +15,7 @@
  */
 
 /**
- * Framework Wiring Hooks Package Version 1.0.
+ * Framework Resolver Hooks Package Version 1.0.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the
@@ -24,7 +24,7 @@
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.framework.hooks.wiring; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.framework.hooks.resolver; version="[1.0,1.1)"}
  * 
  * @version $Id$
  */
