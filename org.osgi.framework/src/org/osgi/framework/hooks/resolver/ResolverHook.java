@@ -24,12 +24,12 @@ import org.osgi.framework.wiring.Capability;
 import org.osgi.framework.wiring.FrameworkWiring;
 
 /**
- * OSGi Framework Resolver Hook Service.
+ * OSGi Framework Resolver Hook instances are obtained from the OSGi {@link ResolverHookFactory
+ * Framework Resolver Hook Factory} service.  
  * 
  * <p>
- * Services registered with this service interface will be called by the framework during a resolve
- * process.  The framework must, at most, have one resolve process running at any given point 
- * in time.  A resolver hook may influence the outcome of a resolve process by removing entries
+ * A Resolver Hook instance is called by the framework during a resolve
+ * process.  A resolver hook may influence the outcome of a resolve process by removing entries
  * from shrinkable collections that are passed to the hook during a resolve process.  A shrinkable 
  * collection is a {@code Collection} that supports all remove operations.  Any other attempts to modify
  * a shrinkable collection will result in an {@code UnsupportedOperationException} being thrown.
@@ -37,18 +37,19 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * The following steps outline the way a framework uses the resolver hooks during a resolve
  * process.
  * <ol>
- *  <li> Collect a snapshot of registered resolver hooks that will be called during the
- *       current resolve process.  Any hooks registered after the snapshot is taken must not be called
- *       during the current resolve process.  A resolver hook contained in the snapshot may become
+ *  <li> Collect a snapshot of registered resolver hook factories that will be called during the
+ *       current resolve process.  Any hook factories registered after the snapshot is taken must not be called
+ *       during the current resolve process.  A resolver hook factory contained in the snapshot may become
  *       unregistered during the resolve process.  The framework should handle this and stop calling
- *       the unregistered hook for the remainder of the resolve process.</li>
- *  <li> For each registered hook call the {@link #begin(Collection)} method to inform the hooks about a resolve 
- *       process beginning.</li>
+ *       the resolver hook instance provided by the unregistered hook factory for the remainder of the resolve process.</li>
+ *  <li> For each registered hook factory call the {@link ResolverHookFactory#begin(Collection)} method to inform the 
+ *       hooks about a resolve process beginning and to obtain a Resolver Hook instance that will be used for the duration
+ *       of the resolve process.</li>
  *  <li> Determine the collection of unresolved bundle revisions that may be considered for resolution during
  *       the current resolution process and place each of the bundle revisions in a shrinkable collection
  *       <b>{@code R}</b>.
  *       <ol type="a">
- *         <li> For each registered hook call the {@link #filterResolvable(Collection)} method with the 
+ *         <li> For each resolver hook call the {@link #filterResolvable(Collection)} method with the 
  *              shrinkable collection <b>{@code R}</b>.</li>
  *       </ol>
  *  </li>
@@ -66,7 +67,7 @@ import org.osgi.framework.wiring.FrameworkWiring;
  *         <li> Remove the {@link Capability#BUNDLE_CAPABILITY osgi.bundle} capability provided by
  *              bundle revision <b>{@code B}</b> from shrinkable collection <b>{@code S}</b>.  A singleton bundle 
  *              cannot collide with itself.</li>
- *         <li> For each registered hook call the {@link #filterSingletonCollisions(Capability, Collection)}
+ *         <li> For each resovler hook call the {@link #filterSingletonCollisions(Capability, Collection)}
  *              with the {@link Capability#BUNDLE_CAPABILITY osgi.bundle} capability provided by bundle revision 
  *              <b>{@code B}</b> and the shrinkable collection <b>{@code S}</b></li>
  *         <li> The shrinkable collection <b>{@code S}</b> now contains all singleton {@link Capability#BUNDLE_CAPABILITY 
@@ -79,15 +80,17 @@ import org.osgi.framework.wiring.FrameworkWiring;
  *       <ol type="a">
  *         <li> For each requirement <b>{@code T}</b> specified by bundle revision <b>{@code B}</b> determine the 
  *              collection of capabilities that satisfy (or match) the requirement and place each matching capability into
- *              a shrinkable collection <b>{@code C}</b>.</li>
- *         <li> For each registered hook call the {@link #filterMatches(BundleRevision, Collection)} with the
+ *              a shrinkable collection <b>{@code C}</b>.  A capability is considered to match a particular requirement
+ *              if its attributes satisfy a specified requirement and the requirer bundle has permission to access the
+ *              capability.</li>
+ *         <li> For each resolver hook call the {@link #filterMatches(BundleRevision, Collection)} with the
  *              bundle revision <b>{@code B}</b> and the shrinkable collection <b>{@code C}</b>.</li>
  *         <li> The shrinkable collection <b>{@code C}</b> now contains all the capabilities that may be used to 
  *              satisfy the requirement <b>{@code T}</b>.  Any other capabilities that got removed from the 
  *              shrinkable collection <b>{@code C}</b> must not be used to satisfy requirement <b>{@code T}</b>.</li>
  *       </ol>
  *  </li>
- *  <li> For each registered hook call the {@link #end()} method to inform the hooks about a resolve 
+ *  <li> For each resolver hook call the {@link #end()} method to inform the hooks about a resolve 
  *       process ending.</li>
  * </ol>
  * In all cases, the order in which the resolver hooks are called is the reverse compareTo ordering of 
@@ -100,37 +103,11 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * resolve process (e.g. by calling {@link Bundle#start()} or {@link FrameworkWiring#resolveBundles(Collection)}).  
  * The framework must detect this and throw an {@link IllegalStateException}.
  * 
+ * @see ResolverHookFactory
  * @ThreadSafe
  * @version $Id$
  */
 public interface ResolverHook {
-
-	/**
-	 * This method is called once at the beginning of the resolve process
-	 * before any other methods are called on this hook.
-	 * <p>
-	 * The trigger bundles represent a collection of bundles which triggered
-	 * the resolve process.  This collection may be empty if the collection of
-	 * trigger bundles cannot be determined.  In most cases the collection of trigger 
-	 * bundles can easily be determined.  For example, if you are trying to call certain
-	 * methods on a bundle in the {@link Bundle#INSTALLED INSTALLED} state the framework
-	 * will attempt to resolve the bundle (e.g. {@link Bundle#start() start},
-	 * {@link Bundle#loadClass(String) loadClass}, {@link Bundle#findEntries(String, String, boolean)}
-	 * etc.).  In such cases the collection will contain the single bundle which the
-	 * framework is trying to resolve.  Other cases may cause multiple bundles to be
-	 * included in the trigger bundles.  For example, {@link FrameworkWiring#resolveBundles(Collection)}
-	 * resolveBundles}.  In such cases the framework may decide to have a single resolve
-	 * process or a sequential series of resolve processes.  In the case of a single 
-	 * resolve process the collection of triggers would contain bundle revisions for all
-	 * of the bundles being passed to the resolve method.  In the case of a sequential series 
-	 * of resolve processes the collection will contain one or more of the bundles be resolved 
-	 * for the sequential resolve process.
-	 * @param triggers an unmodifiable collection of bundles which triggered the resolve process.
-	 * This collection may be empty if the collection of trigger bundles cannot be
-	 * determined.
-	 */
-	void begin(Collection<BundleRevision> triggers);
-
 	/**
 	 * Filter resolvable candidates hook method.  This method may be called
 	 * multiple times during a single resolve process.
@@ -190,9 +167,8 @@ public interface ResolverHook {
 	/**
 	 * This method is called once at the end of the resolve process.
 	 * After the end method is called the resolve process has ended.
-	 * No methods will be called on this hook except after the
-	 * {@link #begin(Collection) begin} method is called again to indicate
-	 * a new resolve process is beginning.
+	 * The framework must not hold onto this resolver hook instance
+	 * after end has been called.
 	 */
 	void end();
 }
