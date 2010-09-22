@@ -78,6 +78,8 @@ public interface ResolverHookFactory {
 	 * This collection may be empty if the collection of trigger bundles cannot be
 	 * determined.
 	 * @return a resolver hook instance to be used for the duration of the resolve process.
+	 * A {@code null} value may be returned which indicates this resolver hook factory abstains from
+	 * the resolve process.
 	 */
 	ResolverHook begin(Collection<BundleRevision> triggers);
 }
