@@ -43,10 +43,10 @@ public interface ResolverHookFactory {
 	 * the framework and the framework must not hold any references of the resolver 
 	 * hook instance.
 	 * <p>
-	 * The collection of triggers represent the bundles which triggered
+	 * The triggers represent the collection of bundles which triggered
 	 * the resolve process.  This collection may be empty if the triggers
-	 * cannot be determined by the framework.  In most cases the trigger 
-	 * bundles can easily be determined.  Calling certain methods on 
+	 * cannot be determined by the framework.  In most cases the triggers 
+	 * can easily be determined.  Calling certain methods on 
 	 * {@link Bundle bundle} when a bundle is in the {@link Bundle#INSTALLED INSTALLED} 
 	 * state will cause the framework to begin a resolve process in order to resolve the 
 	 * bundle.  The following methods will start a resolve process in this case:
@@ -61,7 +61,7 @@ public interface ResolverHookFactory {
 	 * framework is trying to resolve.  Other cases will cause multiple bundles to be
 	 * included in the trigger bundles collection.  When {@link FrameworkWiring#resolveBundles(Collection)
 	 * resolveBundles} is called the collection of triggers must include all the current bundle 
-	 * revisions for bundles passed to resolveBundles have not been uninstalled.
+	 * revisions for bundles passed to resolveBundles which have not been uninstalled.
 	 * <p>
 	 * When {@link FrameworkWiring#refreshBundles(Collection, org.osgi.framework.FrameworkListener...)}
 	 * is called the collection of triggers is determined with the following steps:
