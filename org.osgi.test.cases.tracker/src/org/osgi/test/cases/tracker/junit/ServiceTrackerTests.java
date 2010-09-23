@@ -167,6 +167,182 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 		}
 	}
 
+	// add testing for isEmpty and getServices(T[])
+	public void testOpenClose2() throws Exception {
+		TestService1 dummy = new TestService1() {};
+		// 2.23.1 Testcase1 (tc1), tracking a service
+		// Tb1 contains service: testservice1
+		// Install tb1
+		Bundle tb = installBundle("tb1.jar");
+
+		// Creates ServiceTracker object with ServiceReference to testservice1
+		ServiceReference<TestService1> sr = (ServiceReference<TestService1>) getContext()
+				.getServiceReference(TestService1.NAME);
+		ServiceTracker<TestService1, TestService1> st = new ServiceTracker<TestService1, TestService1>(
+				getContext(), sr, null);
+		st.open();
+
+		try {
+			// Call ServiceTracker.size()
+			// Should reply 1
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker is: 1",
+					1, st.size());
+			// Call ServiceTracker.isEmpty()
+			// Should reply false
+			assertFalse("The ServiceTracker is empty", st.isEmpty());
+
+			// Call ServiceTracker.getServiceReferences()
+			ServiceReference<TestService1>[] srs = st.getServiceReferences();
+			assertNotNull(
+					"ServiceReference for the tracked service can be reached at this time: true",
+					srs);
+			assertEquals(
+					"ServiceReference for the tracked service can be reached at this time: 1",
+					1, srs.length);
+			// Call ServiceTracker.getService()
+			TestService1 ss = st.getService();
+			assertNotNull(ss);
+			// Call ServiceTracker.getServices()
+			Object[] sss = st.getServices();
+			assertNotNull(sss);
+			// Call ServiceTracker.getServices(T[])
+			TestService1[] ssst = new TestService1[st.size()];
+			TestService1[] ssstr = st.getServices(ssst);
+			assertSame("different array returned",ssst, ssstr);
+			ssst = new TestService1[0];
+			ssstr = st.getServices(ssst);
+			assertNotSame("same array returned", ssst, ssstr);
+			assertEquals("wrong size array", st.size(), ssstr.length);
+			ssst = new TestService1[st.size() + 10];
+			ssst[st.size()] = dummy;
+			ssstr = st.getServices(ssst);
+			assertSame("different array returned", ssst, ssstr);
+			assertNull("no null after last element", ssstr[st.size()]);
+			// Call ServiceTracker.getService(ServiceReference)
+			TestService1 ssr = st.getService(sr);
+			// All should be equal and testservice1
+			assertSame(
+					"Tracked services can be reached at this time and are equal in the different methods",
+					ss, sss[0]);
+			assertSame(
+					"Tracked services can be reached at this time and are equal in the different methods",
+					ss, ssstr[0]);
+			assertSame(
+					"Tracked services can be reached at this time and are equal in the different methods",
+					ss, ssr);
+
+			// Call ServiceTracker.close()
+			st.close();
+
+			// Call ServiceTracker.getServiceReferences()
+			srs = st.getServiceReferences();
+			assertNull(
+					"No ServiceReferences for tracked services can be reached at this time",
+					srs);
+			// Call ServiceTracker.getService()
+			ss = st.getService();
+			assertNull(
+					"No Services for tracked services can be reached at this time: true",
+					ss);
+			// Call ServiceTracker.getServices()
+			sss = st.getServices();
+			assertNull(
+					"No Services for tracked services can be reached at this time: true",
+					sss);
+			// Call ServiceTracker.getServices(T[])
+			ssst = new TestService1[st.size() + 10];
+			ssst[st.size()] = dummy;
+			ssstr = st.getServices(ssst);
+			assertSame("different array returned", ssst, ssstr);
+			assertNull("no null after last element", ssstr[st.size()]);
+			ssst = new TestService1[st.size()];
+			ssstr = st.getServices(ssst);
+			assertSame("different array returned", ssst, ssstr);
+			assertEquals(
+					"No Services for tracked services can be reached at this time: true",
+					0, ssstr.length);
+			// Call ServiceTracker.getService(ServiceReference)
+			ssr = st.getService(sr);
+			// All should be null
+			assertNull(
+					"No Services for tracked services can be reached at this time: true",
+					ssr);
+
+			// Call ServiceTracker.size()
+			// Should reply 0
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker is: 0 ",
+					0, st.size());
+			// Should reply true
+			assertTrue(
+					"The number of Services being tracked by ServiceTracker is: 0 ",
+					st.isEmpty());
+
+			st.open();
+
+			// Call ServiceTracker.size()
+			// Should reply 1
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker is: 1",
+					1, st.size());
+			// Call ServiceTracker.isEmpty()
+			// Should reply false
+			assertFalse("The ServiceTracker is empty", st.isEmpty());
+
+			uninstallBundle(tb);
+			tb = null;
+			// Call ServiceTracker.getServiceReferences()
+			srs = st.getServiceReferences();
+			assertNull(
+					"No ServiceReferences for tracked services can be reached at this time: true",
+					srs);
+			// Call ServiceTracker.getService()
+			ss = st.getService();
+			assertNull(
+					"No Services for tracked services can be reached at this time: true",
+					ss);
+			// Call ServiceTracker.getServices()
+			sss = st.getServices();
+			assertNull(
+					"No Services for tracked services can be reached at this time: true",
+					sss);
+			// Call ServiceTracker.getServices(T[])
+			ssst = new TestService1[st.size() + 10];
+			ssst[st.size()] = dummy;
+			ssstr = st.getServices(ssst);
+			assertSame("different array returned", ssst, ssstr);
+			assertNull("no null after last element", ssstr[st.size()]);
+			ssst = new TestService1[st.size()];
+			ssstr = st.getServices(ssst);
+			assertSame("different array returned", ssst, ssstr);
+			assertEquals(
+					"No Services for tracked services can be reached at this time: true",
+					0, ssstr.length);
+			// Call ServiceTracker.getService(ServiceReference)
+			ssr = st.getService(sr);
+			assertNull(
+					"No Services for tracked services can be reached at this time: true",
+					ssr);
+
+			// Call ServiceTracker.size()
+			// Should reply 0
+			assertEquals(
+					"The number of Services being tracked by ServiceTracker is: 0 ",
+					0, st.size());
+			// Should reply true
+			assertTrue(
+					"The number of Services being tracked by ServiceTracker is: 0 ",
+					st.isEmpty());
+		}
+		finally {
+			st.close();
+			if (tb != null) {
+				uninstallBundle(tb);
+			}
+		}
+	}
+
 	public void testWaitForService() throws Exception {
 
 		BundleContext context = getContext();

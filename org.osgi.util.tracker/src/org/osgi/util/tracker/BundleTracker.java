@@ -351,21 +351,20 @@ public class BundleTracker<T> implements BundleTrackerCustomizer<T> {
 	/**
 	 * Returns the tracking count for this {@code BundleTracker}.
 	 * 
-	 * The tracking count is initialized to 0 when this
-	 * {@code BundleTracker} is opened. Every time a bundle is added,
-	 * modified or removed from this {@code BundleTracker} the tracking
-	 * count is incremented.
+	 * The tracking count is initialized to 0 when this {@code BundleTracker} is
+	 * opened. Every time a bundle is added, modified or removed from this
+	 * {@code BundleTracker} the tracking count is incremented.
 	 * 
 	 * <p>
-	 * The tracking count can be used to determine if this
-	 * {@code BundleTracker} has added, modified or removed a bundle by
-	 * comparing a tracking count value previously collected with the current
-	 * tracking count value. If the value has not changed, then no bundle has
-	 * been added, modified or removed from this {@code BundleTracker}
-	 * since the previous tracking count was collected.
+	 * The tracking count can be used to determine if this {@code BundleTracker}
+	 * has added, modified or removed a bundle by comparing a tracking count
+	 * value previously collected with the current tracking count value. If the
+	 * value has not changed, then no bundle has been added, modified or removed
+	 * from this {@code BundleTracker} since the previous tracking count was
+	 * collected.
 	 * 
-	 * @return The tracking count for this {@code BundleTracker} or -1 if
-	 *         this {@code BundleTracker} is not open.
+	 * @return The tracking count for this {@code BundleTracker} or -1 if this
+	 *         {@code BundleTracker} is not open.
 	 */
 	public int getTrackingCount() {
 		final Tracked t = tracked();
@@ -395,6 +394,23 @@ public class BundleTracker<T> implements BundleTrackerCustomizer<T> {
 		}
 		synchronized (t) {
 			return t.copyEntries(map);
+		}
+	}
+
+	/**
+	 * Return if this {@code BundleTracker} is empty.
+	 * 
+	 * @return {@code true} if this {@code BundleTracker} is not tracking any
+	 *         bundles.
+	 * @since 1.5
+	 */
+	public boolean isEmpty() {
+		final Tracked t = tracked();
+		if (t == null) { /* if BundleTracker is not open */
+			return true;
+		}
+		synchronized (t) {
+			return t.isEmpty();
 		}
 	}
 

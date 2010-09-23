@@ -97,6 +97,80 @@ public class BundleTrackerTests extends OSGiTestCase {
 		assertEquals("size() != map.size()", size, map.size());
 	}
 
+	// add testing for isEmpty
+	public void testOpenClose2() {
+		BundleTracker<Bundle> bt = new BundleTracker<Bundle>(getContext(),
+				Bundle.ACTIVE, null);
+		int size = bt.size();
+		assertEquals("size not zero", 0, size);
+		assertTrue("not empty", bt.isEmpty());
+		Bundle[] bundles = bt.getBundles();
+		assertNull("getBundles() not null", bundles);
+
+		bt.open();
+		try {
+			size = bt.size();
+			assertTrue("size zero", 0 < size);
+			assertFalse("empty", bt.isEmpty());
+			bundles = bt.getBundles();
+			assertNotNull("getBundles() null", bundles);
+			assertEquals("size() != getBundles().length", size, bundles.length);
+			for (int i = 0, l = bundles.length; i < l; i++) {
+				Bundle bundle = bundles[i];
+				Object tracked = bt.getObject(bundle);
+				assertEquals("default tracked != bundle", bundle, tracked);
+			}
+			Map<Bundle, Bundle> map = bt.getTracked();
+			assertEquals("size() != map.size()", size, map.size());
+			for (Map.Entry<Bundle, Bundle> e : map.entrySet()) {
+				Bundle bundle = e.getKey();
+				Object tracked = e.getValue();
+				assertEquals("default tracked != bundle", bundle, tracked);
+			}
+		}
+		finally {
+			bt.close();
+		}
+		size = bt.size();
+		assertEquals("size not zero", 0, size);
+		assertTrue("not empty", bt.isEmpty());
+		bundles = bt.getBundles();
+		assertNull("getBundles() not null", bundles);
+		Map<Bundle, Bundle> map = bt.getTracked();
+		assertEquals("size() != map.size()", size, map.size());
+
+		bt.open();
+		try {
+			size = bt.size();
+			assertTrue("size zero", 0 < size);
+			assertFalse("empty", bt.isEmpty());
+			bundles = bt.getBundles();
+			assertNotNull("getBundles() null", bundles);
+			assertEquals("size() != getBundles().length", size, bundles.length);
+			for (int i = 0, l = bundles.length; i < l; i++) {
+				Bundle bundle = bundles[i];
+				Object tracked = bt.getObject(bundle);
+				assertEquals("default tracked != bundle", bundle, tracked);
+			}
+			map = bt.getTracked();
+			assertEquals("size() != map.size()", size, map.size());
+			for (Map.Entry<Bundle, Bundle> e : map.entrySet()) {
+				Bundle bundle = e.getKey();
+				Object tracked = e.getValue();
+				assertEquals("default tracked != bundle", bundle, tracked);
+			}
+		}
+		finally {
+			bt.close();
+		}
+		size = bt.size();
+		assertEquals("size not zero", 0, size);
+		bundles = bt.getBundles();
+		assertNull("getBundles() not null", bundles);
+		map = bt.getTracked();
+		assertEquals("size() != map.size()", size, map.size());
+	}
+
 	public void testCustomizer() throws Exception {
 		final boolean[] customizerCalled = new boolean[] {false, false, false};
 		BundleTracker<BundleWrapper> bt = new BundleTracker<BundleWrapper>(

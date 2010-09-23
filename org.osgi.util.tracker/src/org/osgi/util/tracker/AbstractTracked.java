@@ -368,6 +368,18 @@ abstract class AbstractTracked<S, T, R> {
 	}
 
 	/**
+	 * Returns if the tracker is empty.
+	 * 
+	 * @return Whether the tracker is empty.
+	 * 
+	 * @GuardedBy this
+	 * @since 1.5
+	 */
+	boolean isEmpty() {
+		return tracked.isEmpty();
+	}
+
+	/**
 	 * Return the customized object for the specified item
 	 * 
 	 * @param item The item to lookup in the map
