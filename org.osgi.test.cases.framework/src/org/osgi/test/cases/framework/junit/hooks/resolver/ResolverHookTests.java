@@ -86,12 +86,15 @@ public class ResolverHookTests extends OSGiTestCase {
 				// probably unregistered during test
 			}
 		registrations.clear();
-		for (Iterator iBundles = bundles.iterator(); iBundles.hasNext();)
+		for (Iterator iBundles = bundles.iterator(); iBundles.hasNext();) {
+			Bundle bundle = (Bundle) iBundles.next();
 			try {
-				((Bundle) iBundles.next()).uninstall();
+				if (!(bundle.getState() == Bundle.UNINSTALLED))
+					bundle.uninstall();
 			} catch (BundleException e) {
 				// nothing
 			}
+		}
 		refreshBundles(bundles);
 		bundles.clear();
 	}
@@ -212,8 +215,9 @@ public class ResolverHookTests extends OSGiTestCase {
 		LinkedList endOrder = new LinkedList();
 		TestResolverHook testHook = new TestResolverHook(new Long(1), null, beginOrder, endOrder);
 		registerHook(testHook, 0);
-
 		preventReg.unregister();
+
+		// test start
 		try {
 			tb2.start();
 		} catch (BundleException e) {
@@ -229,6 +233,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		preventReg.unregister();
 		testHook.clear();
 
+		// test getResource
 		URL resoureTest = tb3.getResource("justAtest");
 		assertNull("URL is not null!", resoureTest);
 		triggers = testHook.getAllTriggers();
@@ -240,6 +245,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		preventReg.unregister();
 		testHook.clear();
 
+		// test getResources
 		Enumeration resouresTest = null;
 		try {
 			resouresTest = tb5.getResources("justAtest");
@@ -256,6 +262,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		preventReg.unregister();
 		testHook.clear();
 
+		// test findEntries
 		Enumeration findTest = tb3.findEntries("justAtest", "path", false);
 		assertNull("Enumeration is not null!", findTest);
 		triggers = testHook.getAllTriggers();
@@ -267,6 +274,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		preventReg.unregister();
 		testHook.clear();
 
+		// test resolveBundles
 		assertTrue("Failed to resolve test bundles", frameworkWiring.resolveBundles(testBundles));
 		triggers = testHook.getAllTriggers();
 		assertEquals("Wrong number of triggers", 7, triggers.size());
@@ -288,6 +296,37 @@ public class ResolverHookTests extends OSGiTestCase {
 		triggers = testHook.getAllTriggers();
 		assertEquals("Wrong number of triggers", 1, triggers.size());
 		assertTrue("Wrong bundle included in triggers", triggers.contains(tb7Revision));
+
+		// test refresh
+		try {
+			// start tb2 to get a second bundle started
+			tb2.start();
+		} catch (BundleException e) {
+			fail("failed to start bundle: " + tb2, e);
+		}
+		testHook.clear();
+		refreshBundles(testBundles);
+		// triggers should only contain tb7 and tb2 because they are the only ones active
+		triggers = testHook.getAllTriggers();
+		assertEquals("Wrong number of triggers", 2, triggers.size());
+		assertTrue("Wrong bundle included in triggers", triggers.contains(tb2Revision));
+		assertTrue("Wrong bundle included in triggers", triggers.contains(tb7Revision));
+
+		// test resolveBundles with an uninstall bundle in the list
+		try {
+			tb5.uninstall();
+		} catch (BundleException e) {
+			fail("Failed to uninstall bundle: " + tb5);
+		}
+		preventReg = registerHook(preventHook, 0);
+		refreshBundles(testBundles);
+		preventReg.unregister();
+		testHook.clear();
+
+		assertFalse("Should fail to resolve test bundles", frameworkWiring.resolveBundles(testBundles));
+		triggers = testHook.getAllTriggers();
+		assertEquals("Wrong number of triggers", 6, triggers.size());
+		assertTrue("Uninstalled bundle is included: " + tb5Revision, !triggers.contains(tb5Revision));
 	}
 
 	public void testFilterResolvable01() {
