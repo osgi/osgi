@@ -1,0 +1,7 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.wiring.base
+Bundle-SymbolicName: ${p}.wiring.base
+Bundle-Version: 1.0
+Export-Package: root.B; version=1.0.1
+
+Include-Resource: resources/wiring/base/

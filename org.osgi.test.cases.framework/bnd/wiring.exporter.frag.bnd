@@ -1,0 +1,7 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.wiring.exporter.frag
+Bundle-SymbolicName: ${p}.wiring.exporter.frag
+Bundle-Version: 1.0
+Fragment-Host: ${p}.wiring.exporter
+
+Include-Resource: resources/wiring/fragment/

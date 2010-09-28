@@ -23,8 +23,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.test.support.OSGiTestCase;
 
 
@@ -136,8 +139,12 @@ public class GetEntryResourceTests extends OSGiTestCase {
 		assertEquals("Unexpected number of entries", expected.length, numFound);
 	}
 
-	private void assertFindEntries(Bundle bundle, String string, String wildCard, boolean recurse, int expectedNum) {
-		Enumeration entries = bundle.findEntries("resources", wildCard, recurse);
+	private void assertFindEntries(Bundle bundle, String path, String wildCard, boolean recurse, int expectedNum) {
+		assertBundleFindEntries(bundle, path, wildCard, recurse, expectedNum);
+		assertWiringFindEntries(bundle, path, wildCard, recurse, expectedNum);
+	}
+	private void assertBundleFindEntries(Bundle bundle, String path, String wildCard, boolean recurse, int expectedNum) {
+		Enumeration entries = bundle.findEntries(path, wildCard, recurse);
 		if (expectedNum > 0)
 			assertNotNull(entries);
 		else {
@@ -148,6 +155,20 @@ public class GetEntryResourceTests extends OSGiTestCase {
 		int numFound = 0;
 		while (entries.hasMoreElements()) {
 			assertURL((URL) entries.nextElement());
+			numFound++;
+		}
+		assertEquals("Unexpected number of entries", expectedNum, numFound);
+	}
+
+	private void assertWiringFindEntries(Bundle bundle, String path, String wildCard, boolean recurse, int expectedNum) {
+		BundleWiring wiring = (BundleWiring) bundle.adapt(BundleWiring.class);
+		List entries = wiring.findEntries(path, wildCard, recurse ? BundleWiring.FINDENTRIES_RECURSE : 0);
+		assertNotNull("Entries should not be null.", entries);
+
+		Iterator iEntries = entries.iterator();
+		int numFound = 0;
+		while (iEntries.hasNext()) {
+			assertURL((URL) iEntries.next());
 			numFound++;
 		}
 		assertEquals("Unexpected number of entries", expectedNum, numFound);

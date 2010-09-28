@@ -513,11 +513,321 @@ public class BundleWiringTests extends OSGiTestCase {
 		assertEquals("Wrong provider", tb12, capability.getProviderRevision().getBundle());
 	}
 
-	public void testFindEntries() {
-		fail("Need to write a findEntries test.");
-	}
+	// Note that this test is done in GetEntryResourceTest
+	//	public void testFindEntries() {
+	//		fail("Need to write a findEntries test.");
+	//	}
 
 	public void testListResources() {
-		fail("Need to write a listResources test.");
+		install("wiring.base.jar");
+		// force base to resolve first
+		assertTrue("Could not resolve test bundles", frameworkWiring.resolveBundles(bundles));
+
+		Bundle exporter = install("wiring.exporter.jar");
+		Bundle importer = install("wiring.importer.jar");
+		Bundle requirer = install("wiring.requirer.jar");
+		install("wiring.reexport.jar");
+
+		assertTrue("Could not resolve test bundles", frameworkWiring.resolveBundles(bundles));
+
+		BundleWiring exporterWiring = (BundleWiring) exporter.adapt(BundleWiring.class);
+		BundleWiring importerWiring = (BundleWiring) importer.adapt(BundleWiring.class);
+		BundleWiring requirerWiring = (BundleWiring) requirer.adapt(BundleWiring.class);
+
+		// test exporter resources
+		List rootResources = exporterWiring.listResources("/root", "*.txt", 0);
+		assertEquals("Wrong number of resources", 1, rootResources.size());
+		assertEquals("Wrong resource", "root/root.export.txt", rootResources.get(0));
+		checkResoruces(exporterWiring.getClassLoader(), rootResources);
+
+		// note that root.B package has been substituted
+		List expected = Arrays.asList(new String[] {
+				   "root/A/a/a.export.txt", 
+				   "root/A/b/b.export.txt", 
+				  "root/A/A.export.txt",
+				  "root/A/A.reexport.txt",
+				   "root/B/a/a.export.txt",
+				   "root/B/b/b.export.txt",
+				  "root/B/B.base.txt", // this has been substituted
+				  "root/C/C.reexport.txt",
+				"root/root.export.txt"});
+		rootResources = exporterWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(exporterWiring.getClassLoader(), rootResources);
+
+		// test local resources of exporter; note that root.B resources are not available
+		expected = Arrays.asList(new String[] {
+				   "root/A/a/a.export.txt", 
+				   "root/A/b/b.export.txt", 
+				  "root/A/A.export.txt", 
+				   "root/B/a/a.export.txt",
+				   "root/B/b/b.export.txt",
+				"root/root.export.txt"});
+		rootResources = exporterWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE | BundleWiring.LISTRESOURCES_LOCAL);
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(exporterWiring.getClassLoader(), rootResources);
+
+		// test importer resources
+		rootResources = importerWiring.listResources("/root", "*.txt", 0);
+		assertEquals("Wrong number of resources", 1, rootResources.size());
+		assertEquals("Wrong resource", "root/root.local.txt", rootResources.get(0));
+		checkResoruces(importerWiring.getClassLoader(), rootResources);
+
+		// note that root.B package has been substituted
+		rootResources = importerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
+		expected = Arrays.asList(new String[] {
+				   "root/A/a/a.local.txt", 
+				   "root/A/b/b.local.txt", 
+				  "root/A/A.local.txt", 
+				   "root/B/a/a.export.txt",
+				   "root/B/b/b.export.txt",
+				  "root/B/B.base.txt", // this has been substituted
+				"root/root.local.txt"
+		});
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(importerWiring.getClassLoader(), rootResources);
+
+		// test local resources, anything shadowed by an import must not be included
+		rootResources = importerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE | BundleWiring.LISTRESOURCES_LOCAL);
+		expected = Arrays.asList(new String[] {
+				   "root/A/a/a.local.txt", 
+				   "root/A/b/b.local.txt", 
+				  "root/A/A.local.txt", 
+				"root/root.local.txt"
+		});
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(importerWiring.getClassLoader(), rootResources);
+
+		// test the require bundle case
+		rootResources = requirerWiring.listResources("/root", "*.txt", 0);
+		expected = Arrays.asList(new String[] {
+				"root/root.export.txt",
+				"root/root.local.txt"
+		});
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(requirerWiring.getClassLoader(), rootResources);
+
+		// test require case; no shadowing of local resources; still have root.B substituted
+		rootResources = requirerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
+		expected = Arrays.asList(new String[] {
+				   "root/A/a/a.export.txt", 
+				   "root/A/a/a.local.txt", 
+				   "root/A/b/b.export.txt", 
+				   "root/A/b/b.local.txt", 
+				  "root/A/A.export.txt",
+				  "root/A/A.reexport.txt",
+				  "root/A/A.local.txt",
+				   "root/B/a/a.export.txt",
+				   "root/B/a/a.local.txt",
+				   "root/B/b/b.export.txt",
+				   "root/B/b/b.local.txt",
+				  "root/B/B.base.txt", // this has been substituted
+				  "root/B/B.local.txt",
+				  "root/C/C.reexport.txt",
+				  "root/root.export.txt",
+				"root/root.local.txt"
+		});
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(requirerWiring.getClassLoader(), rootResources);
+
+		// test require local resources; not there is no shadowing so we get all local resources
+		rootResources = requirerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE | BundleWiring.LISTRESOURCES_LOCAL);
+		expected = Arrays.asList(new String[] {
+				   "root/A/a/a.local.txt", 
+				   "root/A/b/b.local.txt", 
+				  "root/A/A.local.txt",
+				   "root/B/a/a.local.txt",
+				   "root/B/b/b.local.txt",
+				  "root/B/B.local.txt",
+				"root/root.local.txt"
+		});
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(requirerWiring.getClassLoader(), rootResources);
+
+		// install fragments to test
+		install("wiring.exporter.frag.jar");
+		install("wiring.importer.frag.jar");
+		install("wiring.requirer.frag.jar");
+
+		refreshBundles(bundles);
+		assertTrue("failed to resolve test fragments", frameworkWiring.resolveBundles(bundles));
+
+		// test that old wirings return null
+		rootResources = exporterWiring.listResources("/root", "*.txt", 0);
+		assertNull("Old wiring still accesses resources", rootResources);
+		rootResources = importerWiring.listResources("/root", "*.txt", 0);
+		assertNull("Old wiring still accesses resources", rootResources);
+		rootResources = requirerWiring.listResources("/root", "*.txt", 0);
+		assertNull("Old wiring still accesses resources", rootResources);
+
+		// get the latest wiring
+		exporterWiring = (BundleWiring) exporter.adapt(BundleWiring.class);
+		importerWiring = (BundleWiring) importer.adapt(BundleWiring.class);
+		requirerWiring = (BundleWiring) requirer.adapt(BundleWiring.class);
+
+		// test exporter resources
+		expected = Arrays.asList(new String[] {
+				"root/root.export.txt",
+				"root/root.frag.txt"});
+		rootResources = exporterWiring.listResources("/root", "*.txt", 0);
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(exporterWiring.getClassLoader(), rootResources);
+
+		// note that root.B package has been substituted
+		expected = Arrays.asList(new String[] {
+				   "root/A/a/a.export.txt",
+				   "root/A/a/a.frag.txt",
+				   "root/A/b/b.export.txt",
+				   "root/A/b/b.frag.txt", 
+				  "root/A/A.export.txt", 
+				  "root/A/A.frag.txt",
+				  "root/A/A.reexport.txt",
+				   "root/B/a/a.export.txt",
+				   "root/B/a/a.frag.txt",
+				   "root/B/b/b.export.txt",
+				   "root/B/b/b.frag.txt",
+				  "root/B/B.base.txt", // this has been substituted
+				  "root/C/C.reexport.txt",
+			    "root/root.export.txt",
+				"root/root.frag.txt"});
+		rootResources = exporterWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(exporterWiring.getClassLoader(), rootResources);
+
+		// test local resources of exporter; note that root.B resources are not available
+		expected = Arrays.asList(new String[] {
+				   "root/A/a/a.export.txt",
+				   "root/A/a/a.frag.txt",
+				   "root/A/b/b.export.txt",
+				   "root/A/b/b.frag.txt", 
+				  "root/A/A.export.txt", 
+				  "root/A/A.frag.txt",
+				   "root/B/a/a.export.txt",
+				   "root/B/a/a.frag.txt",
+				   "root/B/b/b.export.txt",
+				   "root/B/b/b.frag.txt",
+				"root/root.export.txt",
+				"root/root.frag.txt"});
+		rootResources = exporterWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE | BundleWiring.LISTRESOURCES_LOCAL);
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(exporterWiring.getClassLoader(), rootResources);
+
+		// test importer resources
+		expected = Arrays.asList(new String[] {
+				"root/root.local.txt",
+				"root/root.frag.txt"});
+		rootResources = importerWiring.listResources("/root", "*.txt", 0);
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(importerWiring.getClassLoader(), rootResources);
+
+		// note that root.B package has been substituted
+		rootResources = importerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
+		expected = Arrays.asList(new String[] {
+				   "root/A/a/a.local.txt",
+				   "root/A/a/a.frag.txt",
+				   "root/A/b/b.local.txt",
+				   "root/A/b/b.frag.txt",
+				  "root/A/A.local.txt",
+				  "root/A/A.frag.txt", 
+				   "root/B/a/a.export.txt", 
+				   "root/B/a/a.frag.txt",
+				   "root/B/b/b.export.txt",
+				   "root/B/b/b.frag.txt",
+				  "root/B/B.base.txt", // this has been substituted
+				"root/root.local.txt",
+				"root/root.frag.txt"
+		});
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(importerWiring.getClassLoader(), rootResources);
+
+		// test local resources, anything shadowed by an import must not be included
+		rootResources = importerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE | BundleWiring.LISTRESOURCES_LOCAL);
+		expected = Arrays.asList(new String[] {
+				   "root/A/a/a.local.txt",
+				   "root/A/a/a.frag.txt",
+				   "root/A/b/b.local.txt",
+				   "root/A/b/b.frag.txt",
+				  "root/A/A.local.txt",
+				  "root/A/A.frag.txt", 
+				"root/root.local.txt",
+				"root/root.frag.txt"
+		});
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(importerWiring.getClassLoader(), rootResources);
+
+		// test the require bundle case
+		rootResources = requirerWiring.listResources("/root", "*.txt", 0);
+		expected = Arrays.asList(new String[] {
+				"root/root.export.txt",
+				"root/root.local.txt",
+				"root/root.frag.txt"
+		});
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(requirerWiring.getClassLoader(), rootResources);
+
+		// test require case; no shadowing of local resources; still have root.B substituted
+		rootResources = requirerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
+		expected = Arrays.asList(new String[] {
+				   "root/A/a/a.export.txt", 
+				   "root/A/a/a.local.txt",
+				   "root/A/a/a.frag.txt",
+				   "root/A/b/b.export.txt", 
+				   "root/A/b/b.local.txt",
+				   "root/A/b/b.frag.txt",
+				  "root/A/A.export.txt",
+				  "root/A/A.reexport.txt",
+				  "root/A/A.local.txt",
+				  "root/A/A.frag.txt",
+				   "root/B/a/a.export.txt",
+				   "root/B/a/a.local.txt",
+				   "root/B/a/a.frag.txt",
+				   "root/B/b/b.export.txt",
+				   "root/B/b/b.local.txt",
+				   "root/B/b/b.frag.txt",
+				  "root/B/B.base.txt", // this has been substituted
+				  "root/B/B.local.txt",
+				  "root/B/B.frag.txt",
+				  "root/C/C.reexport.txt",
+				"root/root.export.txt",
+				"root/root.local.txt",
+				"root/root.frag.txt"
+		});
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(requirerWiring.getClassLoader(), rootResources);
+
+		// test require local resources; not there is no shadowing so we get all local resources
+		rootResources = requirerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE | BundleWiring.LISTRESOURCES_LOCAL);
+		expected = Arrays.asList(new String[] {
+				   "root/A/a/a.local.txt",
+				   "root/A/a/a.frag.txt",
+				   "root/A/b/b.local.txt",
+				   "root/A/b/b.frag.txt",
+				  "root/A/A.local.txt",
+				  "root/A/A.frag.txt",
+				   "root/B/a/a.local.txt",
+				   "root/B/a/a.frag.txt",
+				   "root/B/b/b.local.txt",
+				   "root/B/b/b.frag.txt",
+				  "root/B/B.local.txt",
+				  "root/B/B.frag.txt",
+				"root/root.local.txt",
+				"root/root.frag.txt"
+		});
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(requirerWiring.getClassLoader(), rootResources);
+	}
+
+	private void assertEquals(String message, List expected, List actual) {
+		if (expected.size() != actual.size())
+			fail(message + ": Lists are not the same size: " + expected + ":  " + actual);
+		assertTrue(message + ": Lists do not contain the same content: " + expected + ":  " + actual, actual.containsAll(expected));
+	}
+
+	private void checkResoruces(ClassLoader cl, List resources) {
+		for(Iterator iResources = resources.iterator(); iResources.hasNext();) {
+			String path = (String) iResources.next();
+			URL resource = cl.getResource(path);
+			assertNotNull("Could not find resource: " + path, resource);
+		}
 	}
 }

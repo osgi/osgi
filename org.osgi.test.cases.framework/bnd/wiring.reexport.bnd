@@ -1,0 +1,7 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.wiring.reexport
+Bundle-SymbolicName: ${p}.wiring.reexport
+Bundle-Version: 1.0
+Export-Package: root.A, root.C
+
+Include-Resource: resources/wiring/reexport/
