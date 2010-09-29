@@ -534,6 +534,17 @@ public class BundleWiringTests extends OSGiTestCase {
 		BundleWiring importerWiring = (BundleWiring) importer.adapt(BundleWiring.class);
 		BundleWiring requirerWiring = (BundleWiring) requirer.adapt(BundleWiring.class);
 
+		// test that empty lists are returned when no resources are found
+		List empty = exporterWiring.listResources("", "*.notfound", BundleWiring.LISTRESOURCES_RECURSE);
+		assertNotNull("Should return empty list", empty);
+		assertEquals("Should have 0 resources", 0, empty.size());
+		empty = importerWiring.listResources("", "*.notfound", BundleWiring.LISTRESOURCES_RECURSE);
+		assertNotNull("Should return empty list", empty);
+		assertEquals("Should have 0 resources", 0, empty.size());
+		empty = requirerWiring.listResources("", "*.notfound", BundleWiring.LISTRESOURCES_RECURSE);
+		assertNotNull("Should return empty list", empty);
+		assertEquals("Should have 0 resources", 0, empty.size());
+
 		// test exporter resources
 		List rootResources = exporterWiring.listResources("/root", "*.txt", 0);
 		assertEquals("Wrong number of resources", 1, rootResources.size());
@@ -815,6 +826,57 @@ public class BundleWiringTests extends OSGiTestCase {
 		});
 		assertEquals("Wrong resources", expected, rootResources);
 		checkResoruces(requirerWiring.getClassLoader(), rootResources);
+
+		// test update case
+		URL updateContent = getContext().getBundle().getEntry("wiring.exporter.v2.jar");
+		assertNotNull("Could not find update content", updateContent);
+		try {
+			exporter.update(updateContent.openStream());
+		} catch (Exception e) {
+			fail("Failed to update bundle", e);
+		}
+		assertTrue("Failed to resolve bundle", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {exporter})));
+		BundleWiring oldExporterWiring = exporterWiring;
+		BundleWiring newExporterWiring = (BundleWiring) exporter.adapt(BundleWiring.class);
+
+		// Do a sanity check to make sure the old wiring still works
+		// note that root.B package has been substituted
+		// note that the fragment should still be providing content to the old wiring
+		expected = Arrays.asList(new String[] {
+				   "root/A/a/a.export.txt",
+				   "root/A/a/a.frag.txt",
+				   "root/A/b/b.export.txt",
+				   "root/A/b/b.frag.txt", 
+				  "root/A/A.export.txt", 
+				  "root/A/A.frag.txt",
+				  "root/A/A.reexport.txt",
+				   "root/B/a/a.export.txt",
+				   "root/B/a/a.frag.txt",
+				   "root/B/b/b.export.txt",
+				   "root/B/b/b.frag.txt",
+				  "root/B/B.base.txt", // this has been substituted
+				  "root/C/C.reexport.txt",
+			    "root/root.export.txt",
+				"root/root.frag.txt"});
+		rootResources = oldExporterWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(oldExporterWiring.getClassLoader(), rootResources);
+
+		// check the new wiring; no fragment attached
+		// note that root.B package has been substituted
+		expected = Arrays.asList(new String[] {
+				   "root/A/a/a.export.txt", 
+				   "root/A/b/b.export.txt", 
+				  "root/A/A.export.txt",
+				  "root/A/A.reexport.txt",
+				   "root/B/a/a.export.txt",
+				   "root/B/b/b.export.txt",
+				  "root/B/B.base.txt", // this has been substituted
+				  "root/C/C.reexport.txt",
+				"root/root.export.txt"});
+		rootResources = newExporterWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
+		assertEquals("Wrong resources", expected, rootResources);
+		checkResoruces(newExporterWiring.getClassLoader(), rootResources);
 	}
 
 	private void assertEquals(String message, List expected, List actual) {

@@ -241,6 +241,7 @@ Include-Resource = \
 	wiring.base.jar, \
 	wiring.exporter.jar, \
 	wiring.exporter.frag.jar, \
+	wiring.exporter.v2.jar, \
 	wiring.importer.jar, \
 	wiring.importer.frag.jar, \
 	wiring.requirer.jar, \
