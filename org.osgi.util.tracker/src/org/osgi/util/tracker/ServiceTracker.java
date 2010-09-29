@@ -16,6 +16,7 @@
 
 package org.osgi.util.tracker;
 
+import java.lang.reflect.Array;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -759,22 +760,21 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Returns the tracking count for this {@code ServiceTracker}.
 	 * 
-	 * The tracking count is initialized to 0 when this
-	 * {@code ServiceTracker} is opened. Every time a service is added,
-	 * modified or removed from this {@code ServiceTracker}, the tracking
-	 * count is incremented.
+	 * The tracking count is initialized to 0 when this {@code ServiceTracker}
+	 * is opened. Every time a service is added, modified or removed from this
+	 * {@code ServiceTracker}, the tracking count is incremented.
 	 * 
 	 * <p>
 	 * The tracking count can be used to determine if this
 	 * {@code ServiceTracker} has added, modified or removed a service by
 	 * comparing a tracking count value previously collected with the current
 	 * tracking count value. If the value has not changed, then no service has
-	 * been added, modified or removed from this {@code ServiceTracker}
-	 * since the previous tracking count was collected.
+	 * been added, modified or removed from this {@code ServiceTracker} since
+	 * the previous tracking count was collected.
 	 * 
 	 * @since 1.2
-	 * @return The tracking count for this {@code ServiceTracker} or -1 if
-	 *         this {@code ServiceTracker} is not open.
+	 * @return The tracking count for this {@code ServiceTracker} or -1 if this
+	 *         {@code ServiceTracker} is not open.
 	 */
 	public int getTrackingCount() {
 		final Tracked t = tracked();
@@ -825,6 +825,75 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		}
 		synchronized (t) {
 			return t.copyEntries(map);
+		}
+	}
+
+	/**
+	 * Return if this {@code ServiceTracker} is empty.
+	 * 
+	 * @return {@code true} if this {@code ServiceTracker} is not tracking any
+	 *         services.
+	 * @since 1.5
+	 */
+	public boolean isEmpty() {
+		final Tracked t = tracked();
+		if (t == null) { /* if ServiceTracker is not open */
+			return true;
+		}
+		synchronized (t) {
+			return t.isEmpty();
+		}
+	}
+
+	/**
+	 * Return an array of service objects for all services being tracked by this
+	 * {@code ServiceTracker}. The runtime type of the returned array is that of
+	 * the specified array.
+	 * 
+	 * <p>
+	 * This implementation calls {@link #getServiceReferences()} to get the list
+	 * of references for the tracked services and then calls
+	 * {@link #getService(ServiceReference)} for each reference to get the
+	 * tracked service object.
+	 * 
+	 * @param array An array into which the tracked service objects will be
+	 *        stored, if the array is large enough.
+	 * @return An array of service objects being tracked. If the specified array
+	 *         is large enough to hold the result, then the specified array is
+	 *         returned. If the specified array is longer then necessary to hold
+	 *         the result, the array element after the last service object is
+	 *         set to {@code null}. If the specified array is not large enough
+	 *         to hold the result, a new array is created and returned.
+	 * @since 1.5
+	 */
+	public T[] getServices(T[] array) {
+		final Tracked t = tracked();
+		if (t == null) { /* if ServiceTracker is not open */
+			if (array.length > 0) {
+				array[0] = null;
+			}
+			return array;
+		}
+		synchronized (t) {
+			ServiceReference<S>[] references = getServiceReferences();
+			int length = (references == null) ? 0 : references.length;
+			if (length == 0) {
+				if (array.length > 0) {
+					array[0] = null;
+				}
+				return array;
+			}
+			if (length > array.length) {
+				array = (T[]) Array.newInstance(array.getClass()
+						.getComponentType(), length);
+			}
+			for (int i = 0; i < length; i++) {
+				array[i] = getService(references[i]);
+			}
+			if (array.length > length) {
+				array[length] = null;
+			}
+			return array;
 		}
 	}
 
