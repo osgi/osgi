@@ -75,9 +75,6 @@ public interface WeavingHook {
    * @param classData - The {@link WovenClass} instance that represents the
    *                    data that will be used to define the class.
    * 
-   * @return A new WovenClass containing the replacement class bytecode and
-   *         any necessary package changes, or null if the input bytes may be
-   *         used unchanged.
    * @throws ClassFormatError If the {@link WeavingHook} detects a problem with
    *                          the class or bundle that means it cannot perform
    *                          its transformations but it does not wish the
