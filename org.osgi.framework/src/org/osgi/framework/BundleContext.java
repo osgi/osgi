@@ -848,4 +848,14 @@ public interface BundleContext extends BundleReference {
 	 * @since 1.1
 	 */
 	Filter createFilter(String filter) throws InvalidSyntaxException;
+
+	/**
+	 * Returns the bundle with the specified location.
+	 * 
+	 * @param location The location of the bundle to retrieve.
+	 * @return A {@code Bundle} object or {@code null} if the location does not
+	 *         match any installed bundle.
+	 * @since 1.6
+	 */
+	Bundle getBundle(String location);
 }
