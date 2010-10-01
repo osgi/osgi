@@ -20,6 +20,8 @@ import java.security.ProtectionDomain;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.osgi.framework.wiring.BundleWiring;
+
 
 /**
  * This class represents the current progress of a {@link WeavingHook} chain.
