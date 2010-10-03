@@ -43,6 +43,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * {@code Role} objects, in which each {@code Role} object has a unique
  * name.
  * 
+ * @noimplement
  * @version $Id$
  */
 public interface UserAdmin {

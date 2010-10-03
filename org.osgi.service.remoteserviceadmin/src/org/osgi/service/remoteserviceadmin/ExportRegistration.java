@@ -31,6 +31,7 @@ import org.osgi.framework.ServiceReference;
  * {@code null}.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface ExportRegistration {

@@ -52,6 +52,7 @@ import org.osgi.framework.ServiceReference;
  * component instance's deactivation.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface ComponentContext {

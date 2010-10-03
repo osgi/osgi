@@ -47,6 +47,7 @@ import java.util.Dictionary;
  * @see BundleContext#getServiceReferences
  * @see BundleContext#getService
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 

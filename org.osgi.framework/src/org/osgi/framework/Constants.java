@@ -27,6 +27,7 @@ import org.osgi.framework.launch.Framework;
  * otherwise indicated.
  * 
  * @since 1.1
+ * @noimplement
  * @version $Id$
  */
 

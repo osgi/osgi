@@ -31,6 +31,7 @@ import org.osgi.framework.ServiceReference;
  * and find out about the current imports and exports.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface RemoteServiceAdmin {

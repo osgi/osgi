@@ -29,6 +29,7 @@ import org.osgi.framework.Version;
  * and {@link #BUNDLE_CAPABILITY bundles}.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface Capability {

@@ -33,6 +33,7 @@ import java.util.Dictionary;
  * @param <S> Type of Service.
  * @see BundleContext#registerService(String[],Object,Dictionary)
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 

@@ -25,6 +25,7 @@ import javax.servlet.ServletException;
  * register resources and servlets into the URI namespace of Http Service. A
  * bundle may later unregister its resources or servlets.
  * 
+ * @noimplement
  * @version $Id$
  * @see HttpContext
  */

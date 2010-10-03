@@ -28,6 +28,7 @@ import org.osgi.framework.Bundle;
  * with the Framework.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  * @deprecated This service has been replaced by the
  *             <code>org.osgi.framework.wiring</code> package.

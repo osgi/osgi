@@ -23,6 +23,7 @@ package org.osgi.service.device;
  * The values associated with these keys are of type {@code java.lang.String},
  * unless otherwise stated.
  * 
+ * @noimplement
  * @version $Id$
  * @since 1.1
  * @see Device

@@ -39,6 +39,7 @@ import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
  * registered as a service and its managed components can be queried.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface BlueprintContainer {

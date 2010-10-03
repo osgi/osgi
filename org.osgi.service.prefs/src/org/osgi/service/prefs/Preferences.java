@@ -107,7 +107,7 @@ package org.osgi.service.prefs;
  * corrupted, but no other guarantees are made concerning the consistency of the
  * preference data.
  * 
- * 
+ * @noimplement
  * @version $Id$
  */
 public interface Preferences {

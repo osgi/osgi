@@ -72,6 +72,7 @@ import java.util.Dictionary;
  * Environment supports permissions.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 

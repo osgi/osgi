@@ -57,6 +57,7 @@ import java.util.zip.ZipInputStream;
  * modify the provisioning information, so care must be taken not to leak the
  * Provisioning Dictionary received from {@code getInformation} method.
  * 
+ * @noimplement
  * @version $Id$
  */
 public interface ProvisioningService {

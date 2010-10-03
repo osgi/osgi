@@ -24,6 +24,7 @@ import java.util.Collection;
  * <p>
  * A wired capability represents a capability from a resolved bundle wiring.
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface WiredCapability extends Capability {

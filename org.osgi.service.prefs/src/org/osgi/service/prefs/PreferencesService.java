@@ -28,6 +28,8 @@ package org.osgi.service.prefs;
  * bundle to access its preferences, it should pass its
  * {@code PreferencesService} object to that bundle.
  *  
+ * @noimplement
+ * @version $Id$
  */
 public interface PreferencesService {
 	/**

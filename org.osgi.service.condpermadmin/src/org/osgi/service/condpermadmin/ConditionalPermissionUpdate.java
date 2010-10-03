@@ -25,6 +25,7 @@ import java.util.List;
  * commit will fail and this object should be discarded.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  * @since 1.1
  */

@@ -50,6 +50,7 @@
 			<tag name="ThreadSafe" scope="types" description="ThreadSafe"/>
 			<tag name="NotThreadSafe" scope="types" description="NotThreadSafe"/>
 			<tag name="GuardedBy" scope="methods,fields" description="Guarded By:"/>
+			<tag name="noimplement" scope="types" description="Consumers of this API must not implement this interface"/>
 			<header><![CDATA[<b>OSGi&trade; Service Platform</b><br/><font  size=-1>Release ${osgi.release} Version ${osgi.version}</font>]]></header>
 			<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 1.0</a></font>]]></bottom>
 			<doctitle><![CDATA[OSGi&trade; Service Platform Release ${osgi.release} Version ${osgi.version}]]></doctitle>

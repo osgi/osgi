@@ -36,6 +36,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * {@code ServicePermission[WireAdmin,GET]} to get the Wire Admin service to
  * create, modify, find, and delete {@code Wire} objects.
  * 
+ * @noimplement
  * @version $Id$
  */
 public interface WireAdmin {

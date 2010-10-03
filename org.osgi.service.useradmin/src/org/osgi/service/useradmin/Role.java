@@ -45,6 +45,7 @@ import java.util.Dictionary;
  * {@code UserAdminPermission} in the same way that properties for other
  * {@code Role} objects are.
  * 
+ * @noimplement
  * @version $Id$
  */
 public interface Role {

@@ -58,6 +58,7 @@ import java.util.Dictionary;
  * Managed Service Factory and a Managed Service. When it is important to
  * differentiate between these two the term "factory configuration" is used.
  * 
+ * @noimplement
  * @version $Id$
  */
 public interface Configuration {

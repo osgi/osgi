@@ -21,10 +21,11 @@ import org.osgi.framework.ServiceReference;
  * Instances of {@code Match} are used in the {@link DriverSelector#select}
  * method to identify Driver services matching a Device service.
  * 
+ * @ThreadSafe
+ * @noimplement
  * @version $Id$
  * @since 1.1
  * @see DriverSelector
- * @ThreadSafe
  */
 public interface Match {
 	/**

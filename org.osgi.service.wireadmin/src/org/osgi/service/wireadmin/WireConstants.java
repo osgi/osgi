@@ -19,6 +19,7 @@ package org.osgi.service.wireadmin;
  * Defines standard names for {@code Wire} properties, wire filter
  * attributes, Consumer and Producer service properties.
  * 
+ * @noimplement
  * @version $Id$
  */
 public interface WireConstants {

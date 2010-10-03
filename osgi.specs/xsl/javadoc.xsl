@@ -254,6 +254,14 @@
 				</xsl:if>
 			</p>
 		</xsl:if>
+		<xsl:if test="noimplement">
+			<p class="parameter">
+				<tab/>
+				<em class="key">No Implement</em>
+				<tab/>
+				Consumers of this API must not implement this interface<xsl:text> </xsl:text>
+			</p>
+		</xsl:if>
 	</xsl:template>
 	
 	

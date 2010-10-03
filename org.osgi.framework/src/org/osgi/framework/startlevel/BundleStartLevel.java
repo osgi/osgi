@@ -29,6 +29,7 @@ import org.osgi.framework.BundleReference;
  * calling {@link BundleReference#getBundle()}.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface BundleStartLevel extends BundleReference {

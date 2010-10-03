@@ -33,6 +33,7 @@ import org.osgi.framework.Version;
  * {@link Bundle#adapt(Class) bundle.adapt}(BundleRevision.class).
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface BundleRevision extends BundleReference {

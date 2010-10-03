@@ -32,6 +32,7 @@ import org.osgi.framework.FrameworkListener;
  * obtained by calling {@link BundleReference#getBundle()}.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface FrameworkStartLevel extends BundleReference {

@@ -26,6 +26,7 @@ import java.util.Dictionary;
  * component configuration as necessary.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface ComponentFactory {

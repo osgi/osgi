@@ -33,6 +33,7 @@ import org.osgi.framework.BundleReference;
  * {@link BundleWirings#getWirings() getWirings()}.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface BundleWirings extends BundleReference {
