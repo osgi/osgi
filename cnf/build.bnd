@@ -108,11 +108,6 @@ junit					= com.springsource.junit;version=3.8;export="${junit.package}"
 #	org.eclipse.osgi;		version=snapshot, \
 #	${junit}
 
-# Use the following for the binary 4.3 prototype from the repo
-#-runpath							= \
-#	org.eclipse.osgi.v43prototype;		version=3.7.0, \
-#	${junit}
-
 -runtrace=true
 runproperties = report=true, \
 	osgi.compatibility.bootdelegation=false, \
