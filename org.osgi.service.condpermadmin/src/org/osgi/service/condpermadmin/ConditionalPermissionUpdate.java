@@ -50,7 +50,7 @@ public interface ConditionalPermissionUpdate {
 	 *         list may be empty if the Conditional Permission Table was empty
 	 *         when this update was created.
 	 */
-	List /* <ConditionalPermissionInfo> */getConditionalPermissionInfos();
+	List<ConditionalPermissionInfo> getConditionalPermissionInfos();
 
 	/**
 	 * Commit this update. If no changes have been made to the Conditional

@@ -117,7 +117,7 @@ public interface ConditionalPermissionAdmin {
 	 * @deprecated Since 1.1. Use {@link #newConditionalPermissionUpdate()}
 	 *             instead.
 	 */
-	Enumeration/* <ConditionalPermissionInfo> */getConditionalPermissionInfos();
+	Enumeration<ConditionalPermissionInfo> getConditionalPermissionInfos();
 
 	/**
 	 * Return the Conditional Permission Info with the specified name.

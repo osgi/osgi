@@ -17,6 +17,7 @@
 package org.osgi.service.condpermadmin;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Condition representation used by the Conditional Permission Admin service.
@@ -62,7 +63,7 @@ public class ConditionInfo {
 	 */
 	public ConditionInfo(String type, String[] args) {
 		this.type = type;
-		this.args = (args != null) ? (String[]) args.clone() : new String[0];
+		this.args = (args != null) ? args.clone() : new String[0];
 		if (type == null) {
 			throw new NullPointerException("type is null");
 		}
@@ -123,7 +124,7 @@ public class ConditionInfo {
 			}
 
 			/* type may be followed by args which are quoted and encoded */
-			ArrayList argsList = new ArrayList();
+			List<String> argsList = new ArrayList<String>();
 			while (encoded[pos] == '"') {
 				pos++;
 				begin = pos;
@@ -143,8 +144,7 @@ public class ConditionInfo {
 					}
 				}
 			}
-			this.args = (String[]) argsList
-					.toArray(new String[argsList.size()]);
+			this.args = argsList.toArray(new String[argsList.size()]);
 
 			/* the final character must be ']' */
 			char c = encoded[pos];
@@ -230,7 +230,7 @@ public class ConditionInfo {
 	 *         arguments.
 	 */
 	public final String[] getArgs() {
-		return (String[]) args.clone();
+		return args.clone();
 	}
 
 	/**

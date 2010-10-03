@@ -100,7 +100,8 @@ public interface Condition {
 	 *         Otherwise, {@code false} if one of the Condition objects is
 	 *         not satisfied.
 	 */
-	boolean isSatisfied(Condition conditions[], Dictionary context);
+	boolean isSatisfied(Condition conditions[],
+			Dictionary<Object, Object> context);
 }
 
 /**
@@ -128,7 +129,8 @@ final class BooleanCondition implements Condition {
 		return false;
 	}
 
-	public boolean isSatisfied(Condition[] conds, Dictionary context) {
+	public boolean isSatisfied(Condition[] conds,
+			Dictionary<Object, Object> context) {
 		for (int i = 0, length = conds.length; i < length; i++) {
 			if (!conds[i].isSatisfied())
 				return false;
