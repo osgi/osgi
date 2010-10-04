@@ -32,6 +32,7 @@ import org.osgi.framework.wiring.BundleWiring;
  * modified by a {@link WeavingHook} within the invocation of that method.
  *
  * @NotThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface WovenClass {
