@@ -101,6 +101,7 @@ public class GetEntryResourceTests extends OSGiTestCase {
 		assertFindEntries(testBundle, "resources", "*.xml", false, 1 * factor);
 		assertFindEntries(testBundle, "resources", "data*.xml", false, 1 * factor);
 		assertFindEntries(testBundle, "resources", "data.txt", false, 1 * factor);
+		assertFindEntries(testBundle, "", "data.txt", true, 1 * factor);
 		assertFindEntries(testBundle, "resources", "data*", true, 10 * factor);
 		assertFindEntries(testBundle, "resources", "*d*ta*.*", true, 10 * factor);
 		assertFindEntries(testBundle, "resources", "doesNotExist", true, 0 * factor);
