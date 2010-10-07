@@ -23,10 +23,10 @@
  * </p>
  * 
  * <p>
- * Example import for providers implementing the API in this package:
+ * Example import for consumers using the API in this package:
  * </p>
  * <p>
- * {@code  Import-Package: org.osgi.framework.hooks.weaving; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.framework.hooks.weaving; version="[1.0,2.0)"}
  * </p>
  * @version $Id$
  */

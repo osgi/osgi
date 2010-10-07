@@ -30,9 +30,9 @@ import java.util.Map;
  * An installed bundle in the Framework.
  * 
  * <p>
- * A {@code Bundle} object is the access point to define the lifecycle of
- * an installed bundle. Each bundle installed in the OSGi environment must have
- * an associated {@code Bundle} object.
+ * A {@code Bundle} object is the access point to define the lifecycle of an
+ * installed bundle. Each bundle installed in the OSGi environment must have an
+ * associated {@code Bundle} object.
  * 
  * <p>
  * A bundle must have a unique identity, a {@code long}, chosen by the
@@ -56,22 +56,21 @@ import java.util.Map;
  * the valid states.
  * 
  * <p>
- * A bundle should only execute code when its state is one of
- * {@code STARTING},{@code ACTIVE}, or {@code STOPPING}.
- * An {@code UNINSTALLED} bundle can not be set to another state; it is a
- * zombie and can only be reached because references are kept somewhere.
+ * A bundle should only have active threads of execution when its state is one
+ * of {@code STARTING},{@code ACTIVE}, or {@code STOPPING}. An
+ * {@code UNINSTALLED} bundle can not be set to another state; it is a zombie
+ * and can only be reached because references are kept somewhere.
  * 
  * <p>
- * The Framework is the only entity that is allowed to create
- * {@code Bundle} objects, and these objects are only valid within the
- * Framework that created them.
+ * The Framework is the only entity that is allowed to create {@code Bundle}
+ * objects, and these objects are only valid within the Framework that created
+ * them.
  * 
  * <p>
- * Bundles have a natural ordering such that if two {@code Bundle}s have
- * the same {@link #getBundleId() bundle id} they are equal. A
- * {@code Bundle} is less than another {@code Bundle} if it has a
- * lower {@link #getBundleId() bundle id} and is greater if it has a higher
- * bundle id.
+ * Bundles have a natural ordering such that if two {@code Bundle}s have the
+ * same {@link #getBundleId() bundle id} they are equal. A {@code Bundle} is
+ * less than another {@code Bundle} if it has a lower {@link #getBundleId()
+ * bundle id} and is greater if it has a higher bundle id.
  * 
  * @ThreadSafe
  * @noimplement
