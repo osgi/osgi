@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.framework.resolver.tb1;
+package org.osgi.test.cases.framework.weaving.pkg1;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,9 +21,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 public class Test {
-	public static final String TEST_KEY = "org.osgi.test.cases.framework.resolver.tb1";
-
-	public String getValue() {
+	public String toString() {
 		URL test = Test.class.getResource("test");
 		if (test == null)
 			return null;
