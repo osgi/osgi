@@ -61,7 +61,8 @@ public interface ResolverHookFactory {
 	 * framework is trying to resolve.  Other cases will cause multiple bundles to be
 	 * included in the trigger bundles collection.  When {@link FrameworkWiring#resolveBundles(Collection)
 	 * resolveBundles} is called the collection of triggers must include all the current bundle 
-	 * revisions for bundles passed to resolveBundles which have not been uninstalled.
+	 * revisions for bundles passed to resolveBundles which are in the {@link Bundle#INSTALLED INSTALLED}
+	 * state.
 	 * <p>
 	 * When {@link FrameworkWiring#refreshBundles(Collection, org.osgi.framework.FrameworkListener...)}
 	 * is called the collection of triggers is determined with the following steps:
