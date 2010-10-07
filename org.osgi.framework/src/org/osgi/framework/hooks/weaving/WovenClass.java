@@ -102,18 +102,15 @@ public interface WovenClass {
   public ProtectionDomain getProtectionDomain();
   
   /**
-   * <p>
-   * This method is provided for future use when weaving classes that have
-   * already been defined. 
-   * </p>
-   * <p>
-   * If the class referred to by this {@link WovenClass} has already been loaded
-   * then this method will return the existing {@link Class} object that
-   * represents the loaded class. Otherwise this method will return null.
-   * </p>
+   * Returns the class associated with this woven class object.
+   * When loading a class for the first time this method will return
+   * {@code null} until {@link #isWeavingComplete()} returns true.
+   * When {@link #isWeavingComplete()} returns true this method will 
+   * return a class object if the class definition succeeded; otherwise
+   * {@code null} is returned.
    * 
-   * @return The previous results from loading the class, or null if this is 
-   *         the first time the class is being defined.
+   * @return The results from defining the class, or {@code null} if 
+   *         weaving is not complete or if class definition failed.
    */
-  public Class<?> getPreviousClassDefinition();
+  public Class<?> getDefinedClass();
 }
