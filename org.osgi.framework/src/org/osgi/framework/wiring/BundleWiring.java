@@ -207,7 +207,7 @@ public interface BundleWiring extends BundleReference {
 	 *         returned first followed by the entries from
 	 *         {@link #getFragmentRevisions() attached fragment revisions} in
 	 *         attachment order. If this bundle wiring is not {@link #isInUse()
-	 *         in use}, {@code null} will be returned.
+	 *         in use}, {@code null} must be returned.
 	 * @see Bundle#findEntries(String, String, boolean)
 	 */
 	List<URL> findEntries(String path, String filePattern, int options);
@@ -231,9 +231,14 @@ public interface BundleWiring extends BundleReference {
 	 * {@link #getClassLoader() class loader}. The returned names can be used to
 	 * access the resources via this bundle wiring's class loader.
 	 * 
-	 * <p>
-	 * Only established wires will be examined for resource names. This method
-	 * will not result in creating new wires for dynamic imports.
+	 * <ul>
+	 * <li>Only the resource names for resources in bundle wirings will be
+	 * returned. The names of resources visible to a bundle wiring's parent
+	 * class loader, such as the bootstrap class loader, must not be included in
+	 * the result.
+	 * <li>Only established wires will be examined for resources. This method
+	 * must not cause new wires for dynamic imports to be established.
+	 * </ul>
 	 * 
 	 * @param path The path name in which to look. The path is always relative
 	 *        to the root of this bundle wiring's class loader and may begin
@@ -249,14 +254,14 @@ public interface BundleWiring extends BundleReference {
 	 *        matches all files.
 	 * @param options The options for listing resource names. See
 	 *        {@link #LISTRESOURCES_LOCAL} and {@link #LISTRESOURCES_RECURSE}.
-	 *        The method must ignore unrecognized options.
+	 *        This method must ignore unrecognized options.
 	 * @return An unmodifiable collection of resource names for each matching
 	 *         resource, or an empty collection if no matching resource could
 	 *         not be found or if the caller does not have the appropriate
 	 *         {@code AdminPermission[bundle,RESOURCE]} and the Java Runtime
 	 *         Environment supports permissions. The collection is unordered and
-	 *         contains no duplicate resource names. If this bundle wiring is
-	 *         not {@link #isInUse() in use}, {@code null} will be returned.
+	 *         must contain no duplicate resource names. If this bundle wiring
+	 *         is not {@link #isInUse() in use}, {@code null} must be returned.
 	 */
 	Collection<String> listResources(String path, String filePattern,
 			int options);
