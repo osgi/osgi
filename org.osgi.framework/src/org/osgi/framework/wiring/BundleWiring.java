@@ -231,6 +231,10 @@ public interface BundleWiring extends BundleReference {
 	 * {@link #getClassLoader() class loader}. The returned names can be used to
 	 * access the resources via this bundle wiring's class loader.
 	 * 
+	 * <p>
+	 * Only established wires will be examined for resource names. This method
+	 * will not result in creating new wires for dynamic imports.
+	 * 
 	 * @param path The path name in which to look. The path is always relative
 	 *        to the root of this bundle wiring's class loader and may begin
 	 *        with &quot;/&quot;. A path value of &quot;/&quot; indicates the
