@@ -535,7 +535,8 @@ public class BundleWiringTests extends OSGiTestCase {
 		BundleWiring requirerWiring = (BundleWiring) requirer.adapt(BundleWiring.class);
 
 		// test that empty lists are returned when no resources are found
-		List empty = exporterWiring.listResources("", "*.notfound", BundleWiring.LISTRESOURCES_RECURSE);
+		Collection empty = exporterWiring.listResources("", "*.notfound",
+				BundleWiring.LISTRESOURCES_RECURSE);
 		assertNotNull("Should return empty list", empty);
 		assertEquals("Should have 0 resources", 0, empty.size());
 		empty = importerWiring.listResources("", "*.notfound", BundleWiring.LISTRESOURCES_RECURSE);
@@ -546,9 +547,11 @@ public class BundleWiringTests extends OSGiTestCase {
 		assertEquals("Should have 0 resources", 0, empty.size());
 
 		// test exporter resources
-		List rootResources = exporterWiring.listResources("/root", "*.txt", 0);
+		Collection rootResources = exporterWiring.listResources("/root",
+				"*.txt", 0);
 		assertEquals("Wrong number of resources", 1, rootResources.size());
-		assertEquals("Wrong resource", "root/root.export.txt", rootResources.get(0));
+		assertEquals("Wrong resource", "root/root.export.txt", rootResources
+				.iterator().next());
 		checkResoruces(exporterWiring.getClassLoader(), rootResources);
 
 		// note that root.B package has been substituted
@@ -581,7 +584,8 @@ public class BundleWiringTests extends OSGiTestCase {
 		// test importer resources
 		rootResources = importerWiring.listResources("/root", "*.txt", 0);
 		assertEquals("Wrong number of resources", 1, rootResources.size());
-		assertEquals("Wrong resource", "root/root.local.txt", rootResources.get(0));
+		assertEquals("Wrong resource", "root/root.local.txt", rootResources
+				.iterator().next());
 		checkResoruces(importerWiring.getClassLoader(), rootResources);
 
 		// note that root.B package has been substituted
@@ -885,7 +889,7 @@ public class BundleWiringTests extends OSGiTestCase {
 		assertTrue(message + ": Lists do not contain the same content: " + expected + ":  " + actual, actual.containsAll(expected));
 	}
 
-	private void checkResoruces(ClassLoader cl, List resources) {
+	private void checkResoruces(ClassLoader cl, Collection resources) {
 		for(Iterator iResources = resources.iterator(); iResources.hasNext();) {
 			String path = (String) iResources.next();
 			URL resource = cl.getResource(path);

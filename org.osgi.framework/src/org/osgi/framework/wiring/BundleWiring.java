@@ -17,6 +17,7 @@
 package org.osgi.framework.wiring;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 
 import org.osgi.framework.Bundle;
@@ -85,9 +86,9 @@ public interface BundleWiring extends BundleReference {
 	 * @param capabilityNamespace The name space of the provided capabilities to
 	 *        return or {@code null} to return the provided capabilities from
 	 *        all name spaces.
-	 * @return A list containing a snapshot of the {@link WiredCapability}s,
-	 *         or an empty list if this bundle wiring provides no capabilities
-	 *         in the specified name space. If this bundle wiring is not
+	 * @return A list containing a snapshot of the {@link WiredCapability}s, or
+	 *         an empty list if this bundle wiring provides no capabilities in
+	 *         the specified name space. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. The
 	 *         list contains the provided capabilities in the order they are
 	 *         specified in the manifest.
@@ -104,12 +105,12 @@ public interface BundleWiring extends BundleReference {
 	 * @param capabilityNamespace The name space of the required capabilities to
 	 *        return or {@code null} to return the required capabilities from
 	 *        all name spaces.
-	 * @return A list containing a snapshot of the {@link WiredCapability}s
-	 *         used by this bundle wiring, or an empty list if this bundle
-	 *         wiring requires no capabilities in the specified name space. If
-	 *         this bundle wiring is not {@link #isInUse() in use}, {@code null}
-	 *         will be returned. The list contains the required capabilities in
-	 *         the order they are specified in the manifest.
+	 * @return A list containing a snapshot of the {@link WiredCapability}s used
+	 *         by this bundle wiring, or an empty list if this bundle wiring
+	 *         requires no capabilities in the specified name space. If this
+	 *         bundle wiring is not {@link #isInUse() in use}, {@code null} will
+	 *         be returned. The list contains the required capabilities in the
+	 *         order they are specified in the manifest.
 	 */
 	List<WiredCapability> getRequiredCapabilities(String capabilityNamespace);
 
@@ -245,17 +246,16 @@ public interface BundleWiring extends BundleReference {
 	 * @param options The options for listing resource names. See
 	 *        {@link #LISTRESOURCES_LOCAL} and {@link #LISTRESOURCES_RECURSE}.
 	 *        The method must ignore unrecognized options.
-	 * @return An unmodifiable list of resource names for each matching
-	 *         resource, or an empty list if no matching resource could not be
-	 *         found or if the caller does not have the appropriate
+	 * @return An unmodifiable collection of resource names for each matching
+	 *         resource, or an empty collection if no matching resource could
+	 *         not be found or if the caller does not have the appropriate
 	 *         {@code AdminPermission[bundle,RESOURCE]} and the Java Runtime
-	 *         Environment supports permissions. The list is ordered such that
-	 *         resource names from this bundle are returned in the order they
-	 *         are visible in this bundle wiring's class loader. If this bundle
-	 *         wiring is not {@link #isInUse() in use}, {@code null} will be
-	 *         returned.
+	 *         Environment supports permissions. The collection is unordered and
+	 *         contains no duplicate resource names. If this bundle wiring is
+	 *         not {@link #isInUse() in use}, {@code null} will be returned.
 	 */
-	List<String> listResources(String path, String filePattern, int options);
+	Collection<String> listResources(String path, String filePattern,
+			int options);
 
 	/**
 	 * The list resource names operation must recurse into subdirectories.
@@ -289,5 +289,5 @@ public interface BundleWiring extends BundleReference {
 	 * 
 	 * @see #listResources(String, String, int)
 	 */
-	int	LISTRESOURCES_LOCAL	= 0x00000002;
+	int	LISTRESOURCES_LOCAL		= 0x00000002;
 }
