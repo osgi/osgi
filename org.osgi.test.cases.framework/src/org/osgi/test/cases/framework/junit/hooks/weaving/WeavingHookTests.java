@@ -36,6 +36,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.hooks.weaving.WeavingException;
 import org.osgi.framework.hooks.weaving.WeavingHook;
 import org.osgi.framework.hooks.weaving.WovenClass;
 import org.osgi.framework.wiring.BundleWiring;
@@ -135,24 +136,24 @@ public class WeavingHookTests extends OSGiTestCase {
 		final Bundle tb1 = install("weaving.tb1.jar");
 		final AssertionFailedError[] error = new AssertionFailedError[1];
 		final int[] called = new int[] {0, 0, 0};
-		final WovenClass[] wovenClass = new WovenClass[1];
+		final WovenClass[] woven = new WovenClass[1];
 		registerHook(new WeavingHook() {
-			public void weave(BundleWiring wiring, WovenClass classData) {
-				if (wiring.getBundle() != tb1)
+			public void weave(WovenClass wovenClass) {
+				if (wovenClass.getBundleWiring().getBundle() != tb1)
 					return;
 				called[0]++;
-				wovenClass[0] = classData;
+				woven[0] = wovenClass;
 				try {
 					try {
-						classData.setBytes(null);
+						wovenClass.setBytes(null);
 						fail("Expected null pointer exception on setBytes");
 					} catch (NullPointerException npe) {
 						// expected
 					}
-					assertNull("Class definition is not null.", classData.getDefinedClass());
-					assertEquals("Wrong class name", "org.osgi.test.cases.framework.weaving.tbx.Activator", classData.getClassName());
-					assertFalse("Weaving is complete", classData.isWeavingComplete());
-					Collection dynamicImports = classData.getDynamicImports();
+					assertNull("Class definition is not null.", wovenClass.getDefinedClass());
+					assertEquals("Wrong class name", "org.osgi.test.cases.framework.weaving.tbx.Activator", wovenClass.getClassName());
+					assertFalse("Weaving is complete", wovenClass.isWeavingComplete());
+					List dynamicImports = wovenClass.getDynamicImports();
 					assertNotNull("dynamic imports is null.", dynamicImports);
 					assertTrue("Failed to add dynamic import", dynamicImports.add("test.addition"));
 					assertTrue("Failed to remove dynamic import", dynamicImports.remove("test.addition"));
@@ -166,20 +167,24 @@ public class WeavingHookTests extends OSGiTestCase {
 			}
 		}, 2);
 		// should always be called
+		final boolean[] blackListException = new boolean[] {true};
 		WeavingHook badHook = new WeavingHook() {
-			public void weave(BundleWiring wiring, WovenClass classData) {
-				if (wiring.getBundle() != tb1)
+			public void weave(WovenClass wovenClass) {
+				if (wovenClass.getBundleWiring().getBundle() != tb1)
 					return;
 				called[1]++;
-				throw new RuntimeException("Test exception");
+				if (blackListException[0])
+					throw new RuntimeException("Test blacklist exception");
+				else
+					throw new WeavingException("Test weaving exception");
 			}
 		};
 		ServiceRegistration badReg = registerHook(badHook, 1);
 		// should never be called, chain is abandoned because of runtime exception above
 		registerHook(new WeavingHook() {
-			public void weave(BundleWiring wiring, WovenClass classData)
+			public void weave(WovenClass wovenClass)
 					throws ClassFormatError {
-				if (wiring.getBundle() != tb1)
+				if (wovenClass.getBundleWiring().getBundle() != tb1)
 					return;
 				// should not get called
 				called[2]++;
@@ -193,15 +198,15 @@ public class WeavingHookTests extends OSGiTestCase {
 		assertEquals("Wrong number of weaving calls", 1, called[1]);
 		assertEquals("Wrong number of weaving calls", 0, called[2]);
 
-		assertTrue("Weaving is not complete", wovenClass[0].isWeavingComplete());
-		assertNull("Class definition is not null", wovenClass[0].getDefinedClass());
+		assertTrue("Weaving is not complete", woven[0].isWeavingComplete());
+		assertNull("Class definition is not null", woven[0].getDefinedClass());
 		try {
-			wovenClass[0].setBytes(new byte[] {1});
+			woven[0].setBytes(new byte[] {1});
 			fail("Expected a exception after weaving is complete.");
 		} catch (IllegalStateException e) {
 			// expected;
 		}
-		Collection dynamicImports = wovenClass[0].getDynamicImports();
+		List dynamicImports = woven[0].getDynamicImports();
 		assertNotNull("dynamic imports is null", dynamicImports);
 		try {
 			dynamicImports.add("test.addition");
@@ -217,28 +222,64 @@ public class WeavingHookTests extends OSGiTestCase {
 		assertEquals("Wrong number of weaving calls", 1, called[1]);
 		assertEquals("Wrong number of weaving calls", 1, called[2]);
 
-		assertTrue("Weaving is not complete", wovenClass[0].isWeavingComplete());
-		Class clazz = wovenClass[0].getDefinedClass();
-		assertNotNull("Defined class is null.", clazz);
+		assertTrue("Weaving is not complete", woven[0].isWeavingComplete());
+		Class wovenClazz1 = woven[0].getDefinedClass();
+		assertNotNull("Defined class is null.", wovenClazz1);
+		try {
+			Class bundleClazz = tb1.loadClass(wovenClazz1.getName());
+			assertEquals("Wrong class", wovenClazz1, bundleClazz);
+		} catch (ClassNotFoundException e) {
+			fail("Failed to load class", e);
+		}
 
 		try {
 			tb1.stop();
 		} catch (BundleException e) {
 			fail("Failed to stop test bundle.", e);
 		}
-		// register the hook to get off the black list
+		// unregister the hook to get off the black list
 		badReg.unregister();
+		// make bad hook throw weaving exception now
+		blackListException[0] = false;
 		registerHook(badHook, 1);
 		refreshBundles(Arrays.asList(new Bundle[] {tb1}));
 
-		// start again, the bad hook should be off black list
+		// start again, the bad hook should be off black list and throws a weaving exception
 		startBundle(tb1, error, true);
 
 		assertEquals("Wrong number of weaving calls", 3, called[0]);
 		assertEquals("Wrong number of weaving calls", 2, called[1]);
 		assertEquals("Wrong number of weaving calls", 1, called[2]);
-		assertTrue("Weaving is not complete", wovenClass[0].isWeavingComplete());
-		assertNull("Class definition is not null", wovenClass[0].getDefinedClass());
+		assertTrue("Weaving is not complete", woven[0].isWeavingComplete());
+		assertNull("Class definition is not null", woven[0].getDefinedClass());
+
+		// start again, the bad hook should not be on black list and throws a black list exception
+		blackListException[0] = true;
+		startBundle(tb1, error, true);
+
+		assertEquals("Wrong number of weaving calls", 4, called[0]);
+		assertEquals("Wrong number of weaving calls", 3, called[1]);
+		assertEquals("Wrong number of weaving calls", 1, called[2]);
+		assertTrue("Weaving is not complete", woven[0].isWeavingComplete());
+		assertNull("Class definition is not null", woven[0].getDefinedClass());
+
+		// start again, the bad hook should be black listed
+		startBundle(tb1, error, false);
+
+		assertEquals("Wrong number of weaving calls", 5, called[0]);
+		assertEquals("Wrong number of weaving calls", 3, called[1]);
+		assertEquals("Wrong number of weaving calls", 2, called[2]);
+
+		assertTrue("Weaving is not complete", woven[0].isWeavingComplete());
+		Class wovenClazz2 = woven[0].getDefinedClass();
+		assertNotNull("Defined class is null.", wovenClazz2);
+		assertNotSame("Woven classes are the same", wovenClazz1, wovenClazz2);
+		try {
+			Class bundleClazz = tb1.loadClass(wovenClazz2.getName());
+			assertEquals("Wrong class", wovenClazz2, bundleClazz);
+		} catch (ClassNotFoundException e) {
+			fail("Failed to load class", e);
+		}
 	}
 
 	public void testWeaving() {
@@ -246,19 +287,19 @@ public class WeavingHookTests extends OSGiTestCase {
 		final Bundle weaving = install(TEST_WEAVING_SOURCE);
 		final String testName = TEST_PACKAGE_NAME + "TestWeaving";
 		final AssertionFailedError[] error = new AssertionFailedError[1];
-		final WovenClass[] wovenClass = new WovenClass[1];
+		final WovenClass[] woven = new WovenClass[1];
 		System.setProperty(TEST_NAME, testName);
 		System.setProperty(TEST_RESULT, "WOVEN");
 		registerHook(new WeavingHook() {
-			public void weave(BundleWiring wiring, WovenClass classData)
+			public void weave(WovenClass wovenClass)
 					throws ClassFormatError {
-				if (wiring.getBundle() != tb1)
+				if (wovenClass.getBundleWiring().getBundle() != tb1)
 					return;
-				if (!classData.getClassName().equals(testName))
+				if (!wovenClass.getClassName().equals(testName))
 					return;
-				wovenClass[0] = classData;
+				woven[0] = wovenClass;
 				try {
-					classData.setBytes(getBytes(weaving, testName));
+					wovenClass.setBytes(getBytes(weaving, testName));
 				} catch (AssertionFailedError e) {
 					error[0] = e;
 				}
@@ -266,22 +307,23 @@ public class WeavingHookTests extends OSGiTestCase {
 		}, 1);
 
 		startBundle(tb1, error, false);
-		Class clazz = wovenClass[0].getDefinedClass();
+		Class clazz = woven[0].getDefinedClass();
 		assertNotNull("Defined class is null.", clazz);
 		assertEquals("Wrong class", testName, clazz.getName());
 	}
 
 	public void testDynamicWeaving() {
 		final Bundle tb1 = install("weaving.tb1.jar");
-		install("weaving.pkg1.v100.jar");
-		install("weaving.pkg1.v110.jar");
+		Bundle pkg1V100 = install("weaving.pkg1.v100.jar");
+		Bundle pkg1V110 = install("weaving.pkg1.v110.jar");
 		final Bundle weaving = install(TEST_WEAVING_SOURCE);
 		assertTrue("Could not resolve test bundles", frameworkWiring.resolveBundles(bundles));
 
-		final String dynamicPackage = "org.osgi.test.cases.framework.weaving.pkg1";
+		String dynamicPackage = "org.osgi.test.cases.framework.weaving.pkg1";
 		final String testName = TEST_PACKAGE_NAME + "TestDynamicImport";
 		final AssertionFailedError[] error = new AssertionFailedError[1];
-		final String[] dyanmicPackageVersion = new String[] {"; version=\"[1.0, 1.1)\""};
+		final String[] addDynamicPackage = new String[] {dynamicPackage};
+		final String[] dyanmicPackageAttributes = new String[] {"; version=\"[1.0, 1.1)\""};
 
 		BundleWiring tb1Wiring = (BundleWiring) tb1.adapt(BundleWiring.class);
 		List imports = tb1Wiring.getRequiredCapabilities(Capability.PACKAGE_CAPABILITY);
@@ -295,19 +337,19 @@ public class WeavingHookTests extends OSGiTestCase {
 		System.setProperty(TEST_DYNAMIC_NAME, dynamicPackage + ".Test");
 		System.setProperty(TEST_RESULT, "v100");
 		registerHook(new WeavingHook() {
-			public void weave(BundleWiring wiring, WovenClass classData)
+			public void weave(WovenClass wovenClass)
 					throws ClassFormatError {
-				if (wiring.getBundle() != tb1)
+				if (wovenClass.getBundleWiring().getBundle() != tb1)
 					return;
-				if (!classData.getClassName().equals(testName))
+				if (!wovenClass.getClassName().equals(testName))
 					return;
 				try {
-					classData.setBytes(getBytes(weaving, testName));
+					wovenClass.setBytes(getBytes(weaving, testName));
 				} catch (AssertionFailedError e) {
 					error[0] = e;
 				}
-				Collection dynamicImports = classData.getDynamicImports();
-				dynamicImports.add(dynamicPackage + dyanmicPackageVersion[0]);
+				List dynamicImports = wovenClass.getDynamicImports();
+				dynamicImports.add(addDynamicPackage[0] + dyanmicPackageAttributes[0]);
 			}
 		}, 1);
 
@@ -329,7 +371,7 @@ public class WeavingHookTests extends OSGiTestCase {
 		}
 
 		// force the dynamic wire to a different version
-		dyanmicPackageVersion[0] = "; version=\"[1.1, 1.2)\"";
+		dyanmicPackageAttributes[0] = "; version=\"[1.1, 1.2)\"";
 		System.setProperty(TEST_RESULT, "v110");
 		refreshBundles(Arrays.asList(new Bundle[] {tb1}));
 		assertTrue("Could not resolve test bundle", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb1})));
@@ -344,6 +386,31 @@ public class WeavingHookTests extends OSGiTestCase {
 		}
 		startBundle(tb1, error, false);
 
+		imports = tb1Wiring.getRequiredCapabilities(Capability.PACKAGE_CAPABILITY);
+		found = false;
+		for (Iterator iImports = imports.iterator(); iImports.hasNext() && !found;) {
+			Capability importPackage = (Capability) iImports.next();
+			Object pkgName = (String) importPackage.getAttributes().get(Capability.PACKAGE_CAPABILITY);
+			found = dynamicPackage.equals(pkgName);
+		}
+		assertTrue("Did not get wired to dynamic import: " + dynamicPackage, found);
+
+		try {
+			tb1.stop();
+		} catch (BundleException e) {
+			fail("Failed to stop bundle: " + tb1, e);
+		}
+
+		// Use wildcards
+		addDynamicPackage[0] = "*";
+		dyanmicPackageAttributes[0] = "; bundle-symbolic-name=\"" + pkg1V100.getSymbolicName() + "\"" + 
+		                              "; bundle-version=\"[1.0, 1.1)\"";
+		System.setProperty(TEST_RESULT, "v100");
+		refreshBundles(Arrays.asList(new Bundle[] {tb1}));
+
+		startBundle(tb1, error, false);
+
+		tb1Wiring = (BundleWiring) tb1.adapt(BundleWiring.class);
 		imports = tb1Wiring.getRequiredCapabilities(Capability.PACKAGE_CAPABILITY);
 		found = false;
 		for (Iterator iImports = imports.iterator(); iImports.hasNext() && !found;) {
