@@ -279,7 +279,10 @@ public interface BundleWiring extends BundleReference {
 	 * The list resource names operation must limit the result to the names of
 	 * matching resources contained in this bundle wiring's
 	 * {@link #getBundleRevision() bundle revision} and its attached
-	 * {@link #getFragmentRevisions() fragment revisions}.
+	 * {@link #getFragmentRevisions() fragment revisions}. The result must not
+	 * include resource names for resources in
+	 * {@link Capability#PACKAGE_CAPABILITY package} names which are
+	 * {@link #getRequiredCapabilities(String) imported} by this wiring.
 	 * 
 	 * <p>
 	 * This bit may be set when calling
