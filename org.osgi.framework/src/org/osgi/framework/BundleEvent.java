@@ -149,16 +149,46 @@ public class BundleEvent extends EventObject {
 	public final static int	LAZY_ACTIVATION		= 0x00000200;
 
 	/**
+	 * Bundle that was the origin of the event. For install event type, this is
+	 * the bundle whose context was used to install the bundle. Otherwise it is
+	 * the bundle itself.
+	 * 
+	 * @since 1.6
+	 */
+	private final Bundle	origin;
+
+	/**
 	 * Creates a bundle event of the specified type.
 	 * 
 	 * @param type The event type.
 	 * @param bundle The bundle which had a lifecycle change.
+	 * @param origin The bundle which is the origin of the event. For the event
+	 *        type {@link #INSTALLED}, this is the bundle whose context was used
+	 *        to install the bundle. Otherwise it is the bundle itself.
+	 * @since 1.6
 	 */
+	public BundleEvent(int type, Bundle bundle, Bundle origin) {
+		super(bundle);
+		if (origin == null) {
+			throw new IllegalArgumentException("null origin");
+		}
+		this.bundle = bundle;
+		this.type = type;
+		this.origin = origin;
+	}
 
+	/**
+	 * Creates a bundle event of the specified type.
+	 * 
+	 * @param type The event type.
+	 * @param bundle The bundle which had a lifecycle change. This bundle is
+	 *        used as the origin of the event.
+	 */
 	public BundleEvent(int type, Bundle bundle) {
 		super(bundle);
 		this.bundle = bundle;
 		this.type = type;
+		this.origin = bundle;
 	}
 
 	/**
@@ -188,8 +218,21 @@ public class BundleEvent extends EventObject {
 	 * 
 	 * @return The type of lifecycle event.
 	 */
-
 	public int getType() {
 		return type;
+	}
+
+	/**
+	 * Returns the bundle that was the origin of the event.
+	 * 
+	 * <p>
+	 * For the event type {@link #INSTALLED}, this is the bundle whose context
+	 * was used to install the bundle. Otherwise it is the bundle itself.
+	 * 
+	 * @return The bundle that was the origin of the event.
+	 * @since 1.6
+	 */
+	public Bundle getOrigin() {
+		return origin;
 	}
 }
