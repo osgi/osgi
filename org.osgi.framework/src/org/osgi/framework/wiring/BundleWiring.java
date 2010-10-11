@@ -17,6 +17,7 @@
 package org.osgi.framework.wiring;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 
 import org.osgi.framework.Bundle;
@@ -85,9 +86,9 @@ public interface BundleWiring extends BundleReference {
 	 * @param capabilityNamespace The name space of the provided capabilities to
 	 *        return or {@code null} to return the provided capabilities from
 	 *        all name spaces.
-	 * @return A list containing a snapshot of the {@link WiredCapability}s,
-	 *         or an empty list if this bundle wiring provides no capabilities
-	 *         in the specified name space. If this bundle wiring is not
+	 * @return A list containing a snapshot of the {@link WiredCapability}s, or
+	 *         an empty list if this bundle wiring provides no capabilities in
+	 *         the specified name space. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. The
 	 *         list contains the provided capabilities in the order they are
 	 *         specified in the manifest.
@@ -104,12 +105,12 @@ public interface BundleWiring extends BundleReference {
 	 * @param capabilityNamespace The name space of the required capabilities to
 	 *        return or {@code null} to return the required capabilities from
 	 *        all name spaces.
-	 * @return A list containing a snapshot of the {@link WiredCapability}s
-	 *         used by this bundle wiring, or an empty list if this bundle
-	 *         wiring requires no capabilities in the specified name space. If
-	 *         this bundle wiring is not {@link #isInUse() in use}, {@code null}
-	 *         will be returned. The list contains the required capabilities in
-	 *         the order they are specified in the manifest.
+	 * @return A list containing a snapshot of the {@link WiredCapability}s used
+	 *         by this bundle wiring, or an empty list if this bundle wiring
+	 *         requires no capabilities in the specified name space. If this
+	 *         bundle wiring is not {@link #isInUse() in use}, {@code null} will
+	 *         be returned. The list contains the required capabilities in the
+	 *         order they are specified in the manifest.
 	 */
 	List<WiredCapability> getRequiredCapabilities(String capabilityNamespace);
 
@@ -206,7 +207,7 @@ public interface BundleWiring extends BundleReference {
 	 *         returned first followed by the entries from
 	 *         {@link #getFragmentRevisions() attached fragment revisions} in
 	 *         attachment order. If this bundle wiring is not {@link #isInUse()
-	 *         in use}, {@code null} will be returned.
+	 *         in use}, {@code null} must be returned.
 	 * @see Bundle#findEntries(String, String, boolean)
 	 */
 	List<URL> findEntries(String path, String filePattern, int options);
@@ -230,6 +231,15 @@ public interface BundleWiring extends BundleReference {
 	 * {@link #getClassLoader() class loader}. The returned names can be used to
 	 * access the resources via this bundle wiring's class loader.
 	 * 
+	 * <ul>
+	 * <li>Only the resource names for resources in bundle wirings will be
+	 * returned. The names of resources visible to a bundle wiring's parent
+	 * class loader, such as the bootstrap class loader, must not be included in
+	 * the result.
+	 * <li>Only established wires will be examined for resources. This method
+	 * must not cause new wires for dynamic imports to be established.
+	 * </ul>
+	 * 
 	 * @param path The path name in which to look. The path is always relative
 	 *        to the root of this bundle wiring's class loader and may begin
 	 *        with &quot;/&quot;. A path value of &quot;/&quot; indicates the
@@ -244,18 +254,17 @@ public interface BundleWiring extends BundleReference {
 	 *        matches all files.
 	 * @param options The options for listing resource names. See
 	 *        {@link #LISTRESOURCES_LOCAL} and {@link #LISTRESOURCES_RECURSE}.
-	 *        The method must ignore unrecognized options.
-	 * @return An unmodifiable list of resource names for each matching
-	 *         resource, or an empty list if no matching resource could not be
-	 *         found or if the caller does not have the appropriate
+	 *        This method must ignore unrecognized options.
+	 * @return An unmodifiable collection of resource names for each matching
+	 *         resource, or an empty collection if no matching resource could
+	 *         not be found or if the caller does not have the appropriate
 	 *         {@code AdminPermission[bundle,RESOURCE]} and the Java Runtime
-	 *         Environment supports permissions. The list is ordered such that
-	 *         resource names from this bundle are returned in the order they
-	 *         are visible in this bundle wiring's class loader. If this bundle
-	 *         wiring is not {@link #isInUse() in use}, {@code null} will be
-	 *         returned.
+	 *         Environment supports permissions. The collection is unordered and
+	 *         must contain no duplicate resource names. If this bundle wiring
+	 *         is not {@link #isInUse() in use}, {@code null} must be returned.
 	 */
-	List<String> listResources(String path, String filePattern, int options);
+	Collection<String> listResources(String path, String filePattern,
+			int options);
 
 	/**
 	 * The list resource names operation must recurse into subdirectories.
@@ -275,7 +284,10 @@ public interface BundleWiring extends BundleReference {
 	 * The list resource names operation must limit the result to the names of
 	 * matching resources contained in this bundle wiring's
 	 * {@link #getBundleRevision() bundle revision} and its attached
-	 * {@link #getFragmentRevisions() fragment revisions}.
+	 * {@link #getFragmentRevisions() fragment revisions}. The result must not
+	 * include resource names for resources in
+	 * {@link Capability#PACKAGE_CAPABILITY package} names which are
+	 * {@link #getRequiredCapabilities(String) imported} by this wiring.
 	 * 
 	 * <p>
 	 * This bit may be set when calling
@@ -289,5 +301,5 @@ public interface BundleWiring extends BundleReference {
 	 * 
 	 * @see #listResources(String, String, int)
 	 */
-	int	LISTRESOURCES_LOCAL	= 0x00000002;
+	int	LISTRESOURCES_LOCAL		= 0x00000002;
 }

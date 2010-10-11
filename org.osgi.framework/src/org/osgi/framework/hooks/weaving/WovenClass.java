@@ -17,103 +17,131 @@
 package org.osgi.framework.hooks.weaving;
 
 import java.security.ProtectionDomain;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 import org.osgi.framework.wiring.BundleWiring;
 
-
 /**
- * This class represents the current progress of a {@link WeavingHook} chain.
- * It allows access to the most recently transformed class bytes, and to any 
- * additional packages that should be added to the bundle as dynamic imports.
- * Instances of this interface will be passed by the framework to 
- * {@link WeavingHook#weave(BundleWiring, WovenClass)}, and should only be 
- * modified by a {@link WeavingHook} within the invocation of that method.
- *
+ * A class being woven.
+ * 
+ * This object represents a class being woven and is passed to each
+ * {@link WeavingHook} for possible modification. It allows access to the most
+ * recently transformed class file bytes and to any additional packages that
+ * should be added to the bundle as dynamic imports.
+ * 
+ * <p>
+ * After weaving is {@link #isWeavingComplete() complete}, this object becomes
+ * effectively immutable.
+ * 
  * @NotThreadSafe
  * @noimplement
  * @version $Id$
  */
 public interface WovenClass {
-  
-  /**
-   * Returns a copy of the bytes most recently provided to 
-   * {@link #setBytes(byte[])} or the raw, untransformed class bytes if no 
-   * {@link WeavingHook} has provided new bytes.
-   * 
-   * @return A copy of the bytes that will be used to define this class.
-   */
-  public byte[] getBytes();
-  
-  /**
-   * Replace the bytes that this class will be defined with. This method should
-   * not be called outside invocations of 
-   * {@link WeavingHook#weave(BundleWiring, WovenClass)}, and once 
-   * {@link #isWeavingComplete()} returns true calling this method will result
-   * in an {@link IllegalStateException}.
-   * 
-   * @param newBytes The new transformed bytecode that should be used to define
-   *                 class.
-   * @throws NullPointerException If newBytes is null.
-   * @throws IllegalStateException If {@link #isWeavingComplete()} is true
-   */
-  public void setBytes(byte[] newBytes) throws NullPointerException, 
-                                               IllegalStateException;
 
-  /**
-   * Retrieve the collection of packages to add as dynamic imports. This 
-   * Collection will not be a copy, and any additions or deletions made by a 
-   * {@link WeavingHook} will be reflected in future calls to this method.
-   * 
-   * @return A {@link Collection} to which Import-Package syntax Strings can
-   *         be added. This Collection will throw IllegalArgumentException if
-   *         any Strings added to it are not well-formed according to the OSGi
-   *         Import-Package syntax. This Collection should not be modified
-   *         outside an invocation of {@link WeavingHook#weave(BundleWiring, 
-   *         WovenClass)}. Once {@link #isWeavingComplete()} returns true the 
-   *         Collection returned by this method will be unmodifiable, as per 
-   *         {@link Collections#unmodifiableCollection(Collection)}.
-   */
-  public Collection<String> getDynamicImports();
-  
-  /**
-   * This method can be used to determine whether a Weaving chain has finished
-   * operating.
-   * 
-   * @return <code>true</code> if no more weavers are left to be called, 
-   *         <code>false</code> otherwise.
-   */
-  public boolean isWeavingComplete();
-  
-  /**
-   * Allows access to the name of the class being woven
-   * 
-   * @return The name of the class.
-   */
-  public String getClassName();
+	/**
+	 * Returns the class file bytes to be used to define the
+	 * {@link WovenClass#getClassName() named} class.
+	 * 
+	 * <p>
+	 * While weaving is not {@link #isWeavingComplete() complete}, this method
+	 * returns a reference to the class files byte array contained in this
+	 * object. After weaving is {@link #isWeavingComplete() complete}, this
+	 * object becomes effectively immutable and a copy of the class file byte
+	 * array is returned.
+	 * 
+	 * @return The bytes to be used to define the
+	 *         {@link WovenClass#getClassName() named} class.
+	 */
+	public byte[] getBytes();
 
-  /**
-   * This method can be used to access the protection domain in which
-   * this class will be defined.
-   * @return The Protection domain that will be used to define this class,
-   *         which may be null if no {@link ProtectionDomain} will be used.
-   */
-  public ProtectionDomain getProtectionDomain();
-  
-  /**
-   * <p>
-   * This method is provided for future use when weaving classes that have
-   * already been defined. 
-   * </p>
-   * <p>
-   * If the class referred to by this {@link WovenClass} has already been loaded
-   * then this method will return the existing {@link Class} object that
-   * represents the loaded class. Otherwise this method will return null.
-   * </p>
-   * 
-   * @return The previous results from loading the class, or null if this is 
-   *         the first time the class is being defined.
-   */
-  public Class<?> getPreviousClassDefinition();
+	/**
+	 * Set the class file bytes to be used to define the
+	 * {@link WovenClass#getClassName() named} class. This method must not be
+	 * called outside invocations of the {@link WeavingHook#weave(WovenClass)
+	 * weave} method by the framework.
+	 * 
+	 * <p>
+	 * While weaving is not {@link #isWeavingComplete() complete}, this method
+	 * replaces the reference to the array contained in this object with the
+	 * specified array. After weaving is {@link #isWeavingComplete() complete},
+	 * this object becomes effectively immutable and this method will throw an
+	 * {@link IllegalStateException}.
+	 * 
+	 * @param newBytes The new classfile that will be used to define the
+	 *        {@link WovenClass#getClassName() named} class. The specified array
+	 *        is retained by this object and the caller must not modify the
+	 *        specified array.
+	 * @throws NullPointerException If newBytes is {@code null}.
+	 * @throws IllegalStateException If weaving is {@link #isWeavingComplete()
+	 *         complete}.
+	 */
+	public void setBytes(byte[] newBytes);
+
+	/**
+	 * Returns the list of dynamic import package descriptions to add to the
+	 * {@link #getBundleWiring() bundle wiring} for this woven class. Changes
+	 * made to the returned list will be visible to later {@link WeavingHook
+	 * weaving hooks} called with this object. The returned list must not be
+	 * modified outside invocations of the {@link WeavingHook#weave(WovenClass)
+	 * weave} method by the framework.
+	 * 
+	 * <p>
+	 * After weaving is {@link #isWeavingComplete() complete}, this object
+	 * becomes effectively immutable and the returned list will be unmodifiable.
+	 * 
+	 * @return A list containing zero or more dynamic import package
+	 *         descriptions to add to the bundle wiring for this woven class.
+	 *         This list must throw {@code IllegalArgumentException} if a
+	 *         malformed dynamic import package description is added.
+	 * @see "Core Specification, Dynamic Import Package, for the syntax of a dynamic import package description."
+	 */
+	public List<String> getDynamicImports();
+
+	/**
+	 * Returns whether weaving is complete in this woven class. Weaving is
+	 * complete after the last {@link WeavingHook weaving hook} is called and
+	 * the class is defined.
+	 * 
+	 * <p>
+	 * After weaving is complete, this object becomes effectively immutable.
+	 * 
+	 * @return {@code true} weaving is complete, {@code false} otherwise.
+	 */
+	public boolean isWeavingComplete();
+
+	/**
+	 * Returns the fully qualified name of the class being woven.
+	 * 
+	 * @return The fully qualified name of the class being woven.
+	 */
+	public String getClassName();
+
+	/**
+	 * Returns the protection domain to which the woven class will be assigned
+	 * when it is defined.
+	 * 
+	 * @return The protection domain to which the woven class will be assigned
+	 *         when it is defined, or {@code null} if no protection domain will
+	 *         be assigned.
+	 */
+	public ProtectionDomain getProtectionDomain();
+
+	/**
+	 * Returns the class associated with this woven class. When loading a class
+	 * for the first time this method will return {@code null} until weaving is
+	 * {@link #isWeavingComplete() complete}. Once weaving is complete, this
+	 * method will return the class object.
+	 * 
+	 * @return The class associated with this woven class, or {@code null} if
+	 *         weaving is not complete or the class definition failed.
+	 */
+	public Class< ? > getDefinedClass();
+
+	/**
+	 * Returns the bundle wiring whose class loader will define the woven class.
+	 * 
+	 * @return The bundle wiring whose class loader will define the woven class.
+	 */
+	public BundleWiring getBundleWiring();
 }
