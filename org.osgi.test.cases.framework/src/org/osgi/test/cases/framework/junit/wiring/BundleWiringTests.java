@@ -552,7 +552,7 @@ public class BundleWiringTests extends OSGiTestCase {
 		assertEquals("Wrong number of resources", 1, rootResources.size());
 		assertEquals("Wrong resource", "root/root.export.txt", rootResources
 				.iterator().next());
-		checkResoruces(exporterWiring.getClassLoader(), rootResources);
+		checkResources(exporterWiring.getClassLoader(), rootResources);
 
 		// note that root.B package has been substituted
 		List expected = Arrays.asList(new String[] {
@@ -566,8 +566,8 @@ public class BundleWiringTests extends OSGiTestCase {
 				  "root/C/C.reexport.txt",
 				"root/root.export.txt"});
 		rootResources = exporterWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(exporterWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(exporterWiring.getClassLoader(), rootResources);
 
 		// test local resources of exporter; note that root.B resources are not available
 		expected = Arrays.asList(new String[] {
@@ -578,15 +578,15 @@ public class BundleWiringTests extends OSGiTestCase {
 				   "root/B/b/b.export.txt",
 				"root/root.export.txt"});
 		rootResources = exporterWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE | BundleWiring.LISTRESOURCES_LOCAL);
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(exporterWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(exporterWiring.getClassLoader(), rootResources);
 
 		// test importer resources
 		rootResources = importerWiring.listResources("/root", "*.txt", 0);
 		assertEquals("Wrong number of resources", 1, rootResources.size());
 		assertEquals("Wrong resource", "root/root.local.txt", rootResources
 				.iterator().next());
-		checkResoruces(importerWiring.getClassLoader(), rootResources);
+		checkResources(importerWiring.getClassLoader(), rootResources);
 
 		// note that root.B package has been substituted
 		rootResources = importerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
@@ -599,8 +599,8 @@ public class BundleWiringTests extends OSGiTestCase {
 				  "root/B/B.base.txt", // this has been substituted
 				"root/root.local.txt"
 		});
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(importerWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(importerWiring.getClassLoader(), rootResources);
 
 		// test local resources, anything shadowed by an import must not be included
 		rootResources = importerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE | BundleWiring.LISTRESOURCES_LOCAL);
@@ -610,8 +610,8 @@ public class BundleWiringTests extends OSGiTestCase {
 				  "root/A/A.local.txt", 
 				"root/root.local.txt"
 		});
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(importerWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(importerWiring.getClassLoader(), rootResources);
 
 		// test the require bundle case
 		rootResources = requirerWiring.listResources("/root", "*.txt", 0);
@@ -619,8 +619,8 @@ public class BundleWiringTests extends OSGiTestCase {
 				"root/root.export.txt",
 				"root/root.local.txt"
 		});
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(requirerWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(requirerWiring.getClassLoader(), rootResources);
 
 		// test require case; no shadowing of local resources; still have root.B substituted
 		rootResources = requirerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
@@ -642,8 +642,8 @@ public class BundleWiringTests extends OSGiTestCase {
 				  "root/root.export.txt",
 				"root/root.local.txt"
 		});
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(requirerWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(requirerWiring.getClassLoader(), rootResources);
 
 		// test require local resources; not there is no shadowing so we get all local resources
 		rootResources = requirerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE | BundleWiring.LISTRESOURCES_LOCAL);
@@ -656,8 +656,8 @@ public class BundleWiringTests extends OSGiTestCase {
 				  "root/B/B.local.txt",
 				"root/root.local.txt"
 		});
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(requirerWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(requirerWiring.getClassLoader(), rootResources);
 
 		// install fragments to test
 		install("wiring.exporter.frag.jar");
@@ -685,8 +685,8 @@ public class BundleWiringTests extends OSGiTestCase {
 				"root/root.export.txt",
 				"root/root.frag.txt"});
 		rootResources = exporterWiring.listResources("/root", "*.txt", 0);
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(exporterWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(exporterWiring.getClassLoader(), rootResources);
 
 		// note that root.B package has been substituted
 		expected = Arrays.asList(new String[] {
@@ -706,8 +706,8 @@ public class BundleWiringTests extends OSGiTestCase {
 			    "root/root.export.txt",
 				"root/root.frag.txt"});
 		rootResources = exporterWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(exporterWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(exporterWiring.getClassLoader(), rootResources);
 
 		// test local resources of exporter; note that root.B resources are not available
 		expected = Arrays.asList(new String[] {
@@ -724,16 +724,16 @@ public class BundleWiringTests extends OSGiTestCase {
 				"root/root.export.txt",
 				"root/root.frag.txt"});
 		rootResources = exporterWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE | BundleWiring.LISTRESOURCES_LOCAL);
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(exporterWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(exporterWiring.getClassLoader(), rootResources);
 
 		// test importer resources
 		expected = Arrays.asList(new String[] {
 				"root/root.local.txt",
 				"root/root.frag.txt"});
 		rootResources = importerWiring.listResources("/root", "*.txt", 0);
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(importerWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(importerWiring.getClassLoader(), rootResources);
 
 		// note that root.B package has been substituted
 		rootResources = importerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
@@ -752,8 +752,8 @@ public class BundleWiringTests extends OSGiTestCase {
 				"root/root.local.txt",
 				"root/root.frag.txt"
 		});
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(importerWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(importerWiring.getClassLoader(), rootResources);
 
 		// test local resources, anything shadowed by an import must not be included
 		rootResources = importerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE | BundleWiring.LISTRESOURCES_LOCAL);
@@ -767,8 +767,8 @@ public class BundleWiringTests extends OSGiTestCase {
 				"root/root.local.txt",
 				"root/root.frag.txt"
 		});
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(importerWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(importerWiring.getClassLoader(), rootResources);
 
 		// test the require bundle case
 		rootResources = requirerWiring.listResources("/root", "*.txt", 0);
@@ -777,8 +777,8 @@ public class BundleWiringTests extends OSGiTestCase {
 				"root/root.local.txt",
 				"root/root.frag.txt"
 		});
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(requirerWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(requirerWiring.getClassLoader(), rootResources);
 
 		// test require case; no shadowing of local resources; still have root.B substituted
 		rootResources = requirerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
@@ -807,8 +807,8 @@ public class BundleWiringTests extends OSGiTestCase {
 				"root/root.local.txt",
 				"root/root.frag.txt"
 		});
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(requirerWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(requirerWiring.getClassLoader(), rootResources);
 
 		// test require local resources; not there is no shadowing so we get all local resources
 		rootResources = requirerWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE | BundleWiring.LISTRESOURCES_LOCAL);
@@ -828,8 +828,8 @@ public class BundleWiringTests extends OSGiTestCase {
 				"root/root.local.txt",
 				"root/root.frag.txt"
 		});
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(requirerWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(requirerWiring.getClassLoader(), rootResources);
 
 		// test update case
 		URL updateContent = getContext().getBundle().getEntry("wiring.exporter.v2.jar");
@@ -863,8 +863,8 @@ public class BundleWiringTests extends OSGiTestCase {
 			    "root/root.export.txt",
 				"root/root.frag.txt"});
 		rootResources = oldExporterWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(oldExporterWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(oldExporterWiring.getClassLoader(), rootResources);
 
 		// check the new wiring; no fragment attached
 		// note that root.B package has been substituted
@@ -879,17 +879,17 @@ public class BundleWiringTests extends OSGiTestCase {
 				  "root/C/C.reexport.txt",
 				"root/root.export.txt"});
 		rootResources = newExporterWiring.listResources("/root", "*.txt", BundleWiring.LISTRESOURCES_RECURSE);
-		assertEquals("Wrong resources", expected, rootResources);
-		checkResoruces(newExporterWiring.getClassLoader(), rootResources);
+		assertResourcesEquals("Wrong resources", expected, rootResources);
+		checkResources(newExporterWiring.getClassLoader(), rootResources);
 	}
 
-	private void assertEquals(String message, List expected, List actual) {
+	private void assertResourcesEquals(String message, Collection expected, Collection actual) {
 		if (expected.size() != actual.size())
-			fail(message + ": Lists are not the same size: " + expected + ":  " + actual);
-		assertTrue(message + ": Lists do not contain the same content: " + expected + ":  " + actual, actual.containsAll(expected));
+			fail(message + ": Collections are not the same size: " + expected + ":  " + actual);
+		assertTrue(message + ": Colections do not contain the same content: " + expected + ":  " + actual, actual.containsAll(expected));
 	}
 
-	private void checkResoruces(ClassLoader cl, Collection resources) {
+	private void checkResources(ClassLoader cl, Collection resources) {
 		for(Iterator iResources = resources.iterator(); iResources.hasNext();) {
 			String path = (String) iResources.next();
 			URL resource = cl.getResource(path);
