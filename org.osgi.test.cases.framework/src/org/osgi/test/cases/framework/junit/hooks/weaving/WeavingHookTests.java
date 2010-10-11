@@ -315,7 +315,7 @@ public class WeavingHookTests extends OSGiTestCase {
 	public void testDynamicWeaving() {
 		final Bundle tb1 = install("weaving.tb1.jar");
 		Bundle pkg1V100 = install("weaving.pkg1.v100.jar");
-		Bundle pkg1V110 = install("weaving.pkg1.v110.jar");
+		install("weaving.pkg1.v110.jar");
 		final Bundle weaving = install(TEST_WEAVING_SOURCE);
 		assertTrue("Could not resolve test bundles", frameworkWiring.resolveBundles(bundles));
 
@@ -339,6 +339,10 @@ public class WeavingHookTests extends OSGiTestCase {
 		registerHook(new WeavingHook() {
 			public void weave(WovenClass wovenClass)
 					throws ClassFormatError {
+				List dynamicImports = wovenClass.getDynamicImports();
+				// test adding meaningless packages to imports for all bundles
+				dynamicImports.add("n.f.a.*; n.f.b.*; n.f.c.d; n.f.e.*; n.f.*; a=\"1\"; b=\"2\"; version=\"[1.0,2.0)\"");
+			    dynamicImports.add("n.f.a.*; n.f.b.*; n.f.c.d; n.f.e.*; n.f.*; a=\"3\"; b=\"4\"; version=\"[1.0,2.0)\"");
 				if (wovenClass.getBundleWiring().getBundle() != tb1)
 					return;
 				if (!wovenClass.getClassName().equals(testName))
@@ -348,7 +352,6 @@ public class WeavingHookTests extends OSGiTestCase {
 				} catch (AssertionFailedError e) {
 					error[0] = e;
 				}
-				List dynamicImports = wovenClass.getDynamicImports();
 				dynamicImports.add(addDynamicPackage[0] + dyanmicPackageAttributes[0]);
 			}
 		}, 1);
