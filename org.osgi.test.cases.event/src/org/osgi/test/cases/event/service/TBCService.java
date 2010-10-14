@@ -27,6 +27,7 @@
 
 package org.osgi.test.cases.event.service;
 
+import java.util.Dictionary;
 import java.util.Vector;
 
 import org.osgi.service.event.Event;
@@ -46,6 +47,14 @@ public interface TBCService {
 	 * @param delivery the array with event delivery qualities
 	 */
 	public void setProperties(String[] topics, String[] delivery);
+	
+	/**
+	 * Sets the service properties.
+	 * 
+	 * @param properties The service properties to register.
+	 * @see org.osgi.service.event.EventConstants#EVENT_TOPIC
+	 */
+	public void setProperties(Dictionary properties);
   
   /**
    * Returns the array with all set event topics in which the event handler is interested.
