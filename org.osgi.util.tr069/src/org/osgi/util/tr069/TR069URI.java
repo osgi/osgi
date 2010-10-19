@@ -22,7 +22,8 @@ public class TR069URI {
 	 * Get the URI in DMT corresponding to the specified path in TR-069.
 	 * 
 	 * The specified TR-069 path should be valid. This method will not validate
-	 * it. Partial path
+	 * it. Even if the specified path ends with a period ".", the returned URI
+	 * will not end with a slash "/".
 	 * 
 	 * @param tr069Path
 	 *            TR-069 path
@@ -41,7 +42,9 @@ public class TR069URI {
 		// 1. substring gets as an argument the begin index
 		// 2. result should be used in the return
 		if (result.endsWith(STRING_PERIOD))
-			result = result.substring(result.length() - 2);
+			// XXX:Ikuo:20101018: It was a bug. Fixed.
+			// result = result.substring(result.length() - 2);
+			result = result.substring(0, result.length() - 2);
 		// XXX:Ikuo:20101001: It was a bug. Fixed.
 		// return STRING_HEADER + tr069Path.replace(CHAR_PERIOD, CHAR_SLASH);
 		return STRING_HEADER + result.replace(CHAR_PERIOD, CHAR_SLASH);

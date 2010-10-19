@@ -14,23 +14,23 @@ import java.util.StringTokenizer;
  * 
  */
 public class TR069ParameterValue {
-	public static String TR069DATATYPE_INT = "int";
+	public static String TR069_TYPE_INT = "int";
 
-	public static String TR069DATATYPE_UNSIGNED_INT = "unsignedInt";
+	public static String TR069_TYPE_UNSIGNED_INT = "unsignedInt";
 
-	public static String TR069DATATYPE_LONG = "long";
+	public static String TR069_TYPE_LONG = "long";
 
-	public static String TR069DATATYPE_UNSIGNED_LONG = "unsignedLong";
+	public static String TR069_TYPE_UNSIGNED_LONG = "unsignedLong";
 
-	public static String TR069DATATYPE_STRING = "string";
+	public static String TR069_TYPE_STRING = "string";
 
-	public static String TR069DATATYPE_BOOLEAN = "boolean";
+	public static String TR069_TYPE_BOOLEAN = "boolean";
 
-	public static String TR069DATATYPE_BASE64 = "base64";
+	public static String TR069_TYPE_BASE64 = "base64";
 
-	public static String TR069DATATYPE_HEXBINARY = "hexBinary";
+	public static String TR069_TYPE_HEXBINARY = "hexBinary";
 
-	public static String TR069DATATYPE_DATETIME = "dateTime";
+	public static String TR069_TYPE_DATETIME = "dateTime";
 
 	/**
 	 * This Constants will be defined in DMT package.
@@ -98,7 +98,7 @@ public class TR069ParameterValue {
 
 		final int format = metaNode.getFormat();
 		DmtData data = null;
-		if (tr069Type.equals(TR069DATATYPE_BASE64)) {
+		if (tr069Type.equals(TR069_TYPE_BASE64)) {
 			if ((format & DmtData.FORMAT_BASE64) != 0) {
 				byte[] bytes = Base64.base64ToByteArray(value);
 				data = new DmtData(bytes, true);
@@ -130,7 +130,7 @@ public class TR069ParameterValue {
 				errorInSetParameterValues("Despite of TR069 dataType="
 						+ tr069Type
 						+ ", FORMAT is neither FORMAT_BASE64 nor FORMAT_RAW_BINARY.");
-		} else if (tr069Type.equals(TR069DATATYPE_BOOLEAN)) {
+		} else if (tr069Type.equals(TR069_TYPE_BOOLEAN)) {
 			if ((format & DmtData.FORMAT_BOOLEAN) != 0) {
 				if ("0".equals(value))
 					data = new DmtData(Boolean.FALSE.booleanValue());
@@ -143,7 +143,7 @@ public class TR069ParameterValue {
 			} else
 				errorInSetParameterValues("Despite of TR069 dataType="
 						+ tr069Type + ", FORMAT is not FORMAT_BOOLEAN.");
-		} else if (tr069Type.equals(TR069DATATYPE_INT)) {
+		} else if (tr069Type.equals(TR069_TYPE_INT)) {
 			if ((format & DmtData.FORMAT_INTEGER) != 0) {
 				try {
 					int valueInt = Integer.parseInt(value);
@@ -156,7 +156,7 @@ public class TR069ParameterValue {
 			} else
 				errorInSetParameterValues("Despite of TR069 dataType="
 						+ tr069Type + ", FORMAT is not FORMAT_INTEGER.");
-		} else if (tr069Type.equals(TR069DATATYPE_STRING)) {
+		} else if (tr069Type.equals(TR069_TYPE_STRING)) {
 			StringBuffer sb = new StringBuffer();
 			// if ((value == null || value.equals(""))
 			if ((value == null || value.length() == 0)
@@ -236,7 +236,7 @@ public class TR069ParameterValue {
 						+ tr069Type
 						+ ", proper FORMAT is not supported by the node. "
 						+ sb.toString());
-		} else if (tr069Type.equals(TR069DATATYPE_UNSIGNED_INT)) {
+		} else if (tr069Type.equals(TR069_TYPE_UNSIGNED_INT)) {
 			if ((format & DmtData.FORMAT_UNSIGNED_INTEGER) != 0) {
 				try {
 					data = new DmtData(value, DmtData.FORMAT_UNSIGNED_INTEGER);
@@ -250,7 +250,7 @@ public class TR069ParameterValue {
 				errorInSetParameterValues("Despite of TR069 dataType="
 						+ tr069Type
 						+ ", FORMAT is not FORMAT_UNSIGNED_INTEGER.");
-		} else if (tr069Type.equals(TR069DATATYPE_LONG)) {
+		} else if (tr069Type.equals(TR069_TYPE_LONG)) {
 			if ((format & DmtData.FORMAT_LONG) != 0) {
 				try {
 					long valueLong = Long.parseLong(value);
@@ -263,7 +263,7 @@ public class TR069ParameterValue {
 			} else
 				errorInSetParameterValues("Despite of TR069 dataType="
 						+ tr069Type + ", FORMAT is not FORMAT_LONG.");
-		} else if (tr069Type.equals(TR069DATATYPE_UNSIGNED_LONG)) {
+		} else if (tr069Type.equals(TR069_TYPE_UNSIGNED_LONG)) {
 			if ((format & DmtData.FORMAT_UNSIGNED_LONG) != 0) {
 				try {
 					data = new DmtData(value, DmtData.FORMAT_UNSIGNED_LONG);
@@ -276,7 +276,7 @@ public class TR069ParameterValue {
 				errorInSetParameterValues("Despite of TR069 dataType="
 						+ tr069Type
 						+ ", FORMAT is not FORMAT_UNSIGNED_INTEGER.");
-		} else if (tr069Type.equals(TR069DATATYPE_DATETIME)) {
+		} else if (tr069Type.equals(TR069_TYPE_DATETIME)) {
 			if ((format & DmtData.FORMAT_DATETIME) != 0) {
 				try {
 					data = new DmtData(value, DmtData.FORMAT_DATETIME);
@@ -288,7 +288,7 @@ public class TR069ParameterValue {
 			} else
 				errorInSetParameterValues("Despite of TR069 dataType="
 						+ tr069Type + ", FORMAT is not FORMAT_DATETIME.");
-		} else if (tr069Type.equals(TR069DATATYPE_HEXBINARY)) {
+		} else if (tr069Type.equals(TR069_TYPE_HEXBINARY)) {
 			StringBuffer sb = new StringBuffer();
 			if (data == null && (format & DmtData.FORMAT_HEXBINARY) != 0) {
 				try {
@@ -406,7 +406,7 @@ public class TR069ParameterValue {
 	 */
 
 	// XXX:Ikuo:20101001: valueCharsetName is added.
-	public static DmtData[] getDmtDatasForList(String value, String tr069Type,
+	public static DmtData[] getDmtDataForList(String value, String tr069Type,
 			String valueCharsetName, String nodeUri, MetaNode metaNode)
 			throws TR069MappingException, IllegalArgumentException,
 			UnsupportedEncodingException {
@@ -437,19 +437,19 @@ public class TR069ParameterValue {
 	 *         RPC.
 	 */
 	public static TR069ParameterValue getTR069ParameterValueForList(
-			DmtData[] datas) {
+			DmtData[] data) {
 		StringBuffer sb = null;
-		for (int i = 0; i < datas.length; i++) {
+		for (int i = 0; i < data.length; i++) {
 			if (sb == null)
 				sb = new StringBuffer();
 
 			if (i != 0)
 				sb.append(",");
-			sb.append(escapeEncode(datas[i].toString()));
+			sb.append(escapeEncode(data[i].toString()));
 		}
 
 		return new TR069ParameterValue((sb == null) ? "" : sb.toString(),
-				TR069DATATYPE_STRING);
+				TR069_TYPE_STRING);
 	}
 
 	/**
@@ -466,20 +466,20 @@ public class TR069ParameterValue {
 		switch (format) {
 		case DmtData.FORMAT_BASE64:
 			value = Base64.byteArrayToBase64(data.getBase64());
-			return new TR069ParameterValue(value, TR069DATATYPE_BASE64);
+			return new TR069ParameterValue(value, TR069_TYPE_BASE64);
 		case DmtData.FORMAT_BINARY:
 			// XXX I'm not sure if it is proper operation. How to get the
 			// byte array ? Please check it.
 			// value = byteArrayToBinString(data.getBinary());
 			// ???? should convert hexBinary ????
 			// XXX:Evgeni:return new TR069ParameterValue(data.toString(),
-			// TR069DATATYPE_HEXBINARY);
+			// TR069_TYPE_HEXBINARY);
 			// XXX:Ikuo:20100928: Fixed.
 			value = data.toString();
-			return new TR069ParameterValue(value, TR069DATATYPE_HEXBINARY);
+			return new TR069ParameterValue(value, TR069_TYPE_HEXBINARY);
 		case DmtData.FORMAT_BOOLEAN:
 			value = (data.getBoolean() ? "1" : "0");
-			return new TR069ParameterValue(value, TR069DATATYPE_BOOLEAN);
+			return new TR069ParameterValue(value, TR069_TYPE_BOOLEAN);
 		case DmtData.FORMAT_DATE:
 		case DmtData.FORMAT_FLOAT:
 		case DmtData.FORMAT_NULL:
@@ -488,24 +488,24 @@ public class TR069ParameterValue {
 		case DmtData.FORMAT_TIME:
 		case DmtData.FORMAT_XML:
 			return new TR069ParameterValue(data.toString(),
-					TR069DATATYPE_STRING);
+					TR069_TYPE_STRING);
 		case DmtData.FORMAT_INTEGER:
-			return new TR069ParameterValue(data.toString(), TR069DATATYPE_INT);
+			return new TR069ParameterValue(data.toString(), TR069_TYPE_INT);
 		case DmtData.FORMAT_NODE:
 			throw new IllegalArgumentException("The format is FORMAT_NODE.");
 		case DmtData.FORMAT_RAW_BINARY:
 			// XXX I'm not sure if it is proper operation. How to get value
 			// string ? Please check it.
 			value = Base64.byteArrayToBase64(data.getRawBinary());
-			return new TR069ParameterValue(value, TR069DATATYPE_BASE64);
+			return new TR069ParameterValue(value, TR069_TYPE_BASE64);
 		case DmtData.FORMAT_UNSIGNED_INTEGER:
 			return new TR069ParameterValue(data.toString(),
-					TR069DATATYPE_UNSIGNED_INT);
+					TR069_TYPE_UNSIGNED_INT);
 		case DmtData.FORMAT_LONG:
-			return new TR069ParameterValue(data.toString(), TR069DATATYPE_LONG);
+			return new TR069ParameterValue(data.toString(), TR069_TYPE_LONG);
 		case DmtData.FORMAT_UNSIGNED_LONG:
 			return new TR069ParameterValue(data.toString(),
-					TR069DATATYPE_UNSIGNED_LONG);
+					TR069_TYPE_UNSIGNED_LONG);
 		case DmtData.FORMAT_HEXBINARY:
 			// XXX Please implement HexBinary.byteArrayToHexBinary() !
 			// XXX:Evgeni: See the comment in byteArrayToHexBinary. We can reuse
@@ -513,10 +513,10 @@ public class TR069ParameterValue {
 			// XXX:Ikuo:20100928: Fixed.
 			value = data.toString();
 			// value = HexBinary.byteArrayToHexBinary(data.getHexBinary());
-			return new TR069ParameterValue(value, TR069DATATYPE_HEXBINARY);
+			return new TR069ParameterValue(value, TR069_TYPE_HEXBINARY);
 		case DmtData.FORMAT_NODE_URI:
 			value = TR069URI.getTR069Path(data.toString());
-			return new TR069ParameterValue(value, TR069DATATYPE_STRING);
+			return new TR069ParameterValue(value, TR069_TYPE_STRING);
 		default:
 			break;
 		}
