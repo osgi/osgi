@@ -428,6 +428,40 @@ public class TestControl extends DefaultTestBundleControl {
 		tb2.stop();
 		tb2.uninstall();
 	}
+	
+	/**
+	 * Test MetaTypeService when the bundle has an own implementation of MetaTypeProvider
+	 * 
+	 * @spec MetaTypeInformation.getPids()
+	 * @spec MetaTypeInformation.getObjectClassDefinition(String,String)
+	 */
+	public void testBundleMetaTypeProviderWithoutManagedServiceOrFactory() throws Exception {
+		Bundle tb3;
+		MetaTypeInformation mti;
+		ObjectClassDefinition ocd;
+		ServiceReference sr;
+
+		tb3 = installBundle("tb3.jar");
+		tb3.start();
+
+		// Check if the service is registered
+		sr = getContext().getServiceReference(
+				"org.osgi.service.metatype.MetaTypeProvider");
+		assertNotNull("Checking if the service is registered", sr);
+
+		// Get an object for tests
+		mti = mts.getMetaTypeInformation(tb3);
+		assertEquals("Checking the number of PIDs", 1, mti.getPids().length);
+
+		ocd = mti.getObjectClassDefinition("org.osgi.test.cases.metatype.ocd1",
+				"pt_BR");
+		assertEquals("Checking the implementation class",
+				"org.osgi.test.cases.metatype.tb3.ObjectClassDefinitionImpl", ocd
+						.getClass().getName());
+
+		tb3.stop();
+		tb3.uninstall();
+	}
 
 	/**
 	 * Compare two arrays in an elements order independent manner.
