@@ -1,7 +1,7 @@
 /*
  * $Id$
  * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -25,54 +25,64 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.event.service;
+package org.osgi.test.cases.metatype.tb3;
 
-import java.util.Dictionary;
-import java.util.Vector;
+import java.util.Hashtable;
 
-import org.osgi.service.event.Event;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.metatype.MetaTypeProvider;
 
 /**
- * Dummy service to check exporter
  * 
+ * This bundle activator will register a managed service that implements the
+ * interface MetaTypeProvider
+ * 
+ * @author left
  * @version $Id$
  */
-public interface TBCService {
+public class Activator implements BundleActivator {
+
+	private ServiceRegistration	sr;
 
 	/**
-	 * Sets the array with event topics in which the event handler is
-	 * interested.
-	 * 
-	 * @param topics the array with event topics
-	 * @param delivery the array with event delivery qualities
+	 * Creates a new instance of Activator
 	 */
-	public void setProperties(String[] topics, String[] delivery);
-	
+	public Activator() {
+		// empty
+	}
+
 	/**
-	 * Sets the service properties.
+	 * Start the bundle registering a service that implements the interface
+	 * MetaTypeProvider
 	 * 
-	 * @param properties The service properties to register.
-	 * @see org.osgi.service.event.EventConstants#EVENT_TOPIC
+	 * @param context The execution context of the bundle being started.
+	 * @see Bundle#start
 	 */
-	public void setProperties(Dictionary properties);
-  
-  /**
-   * Returns the array with all set event topics in which the event handler is interested.
-   * 
-   * @return the array with all set event topics
-   */
-  public String[] getTopics();
-    
-  /**
-   * Returns the last received event and then the last event is set to null.
-   *
-   * @return last received event
-   */
-  public Event getLastReceivedEvent();
-  
-  /**
-   * Returns the last received events and then elements in the vector with last events are removed.
-   * @see org.osgi.test.cases.event.service.TBCService#getLastReceivedEvents()
-   */
-  public Vector getLastReceivedEvents();
+	public void start(BundleContext context) {
+		Hashtable properties;
+
+		properties = new Hashtable();
+		properties.put(MetaTypeProvider.METATYPE_PID,
+				"org.osgi.test.cases.metatype.ocd1");
+
+		sr = context.registerService(MetaTypeProvider.class.getName(), 
+				new MetaTypeProviderImpl(),
+				properties);
+	}
+
+	/**
+	 * Unregister the service
+	 * 
+	 * @param context The execution context of the bundle being stopped.
+	 * @see Bundle#stop
+	 */
+	public void stop(BundleContext context) {
+		sr.unregister();
+
+		sr = null;
+	}
+
 }

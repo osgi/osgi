@@ -26,8 +26,11 @@
  */
 package org.osgi.test.cases.event.junit;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Vector;
 
 import org.osgi.framework.Bundle;
@@ -657,5 +660,72 @@ public class EventAdminTests extends DefaultTestBundleControl {
 			newPerm[oldLen + defLen + j] = toAdd[j];
 		}
 		permissionAdmin.setPermissions(bundle.getLocation(), newPerm);
+	}
+	
+	/**
+	 * Tests support for type String as EventConstants.EVENT_TOPIC property value.
+	 * An implementation passes this test if an event is received on the topic.
+	 */
+	public void testEventTopicsPropertyString() {
+		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+				"org.osgi.test.cases.event.tb1.Activator", null);
+		trackerProvider1.open();
+		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+		String topic = "org/osgi/test/Event";
+		Dictionary properties = new Hashtable();
+		properties.put(EventConstants.EVENT_TOPIC, topic);
+		tbcService1.setProperties(properties);
+		Event event = new Event(topic, (Dictionary)null);
+		eventAdmin.sendEvent(event);
+		assertEvent(event, tb1, tbcService1, true);
+		trackerProvider1.close();
+	}
+	
+	/**
+	 * Tests support for type String[] as EventConstants.EVENT_TOPIC property value.
+	 * An implementation passes this test if an event is received on each topic.
+	 */
+	public void testEventTopicsPropertyStringArray() {
+		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+				"org.osgi.test.cases.event.tb1.Activator", null);
+		trackerProvider1.open();
+		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+		String[] topics = new String[] {
+				"org/osgi/test/Event1",
+				"org/osgi/test/Event2"
+		};
+		Dictionary properties = new Hashtable();
+		properties.put(EventConstants.EVENT_TOPIC, topics);
+		tbcService1.setProperties(properties);
+		for (int i = 0; i < topics.length; i++) {
+			Event event = new Event(topics[i], (Dictionary)null);
+			eventAdmin.sendEvent(event);
+			assertEvent(event, tb1, tbcService1, true);
+		}
+		trackerProvider1.close();
+	}
+	
+	/**
+	 * Tests support for type Collection<String> as EventConstants.EVENT_TOPIC property value.
+	 * An implementation passes this test if an event is received on each topic.
+	 */
+	public void testEventTopicsPropertyStringCollection() {
+		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+				"org.osgi.test.cases.event.tb1.Activator", null);
+		trackerProvider1.open();
+		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+		Collection topics = new ArrayList(3);
+		topics.add("org/osgi/test/Event1");
+		topics.add("org/osgi/test/Event2");
+		topics.add("org/osgi/test/Event3");
+		Dictionary properties = new Hashtable();
+		properties.put(EventConstants.EVENT_TOPIC, topics);
+		tbcService1.setProperties(properties);
+		for (Iterator i = topics.iterator(); i.hasNext();) {
+			Event event = new Event((String)i.next(), (Dictionary)null);
+			eventAdmin.sendEvent(event);
+			assertEvent(event, tb1, tbcService1, true);
+		}
+		trackerProvider1.close();
 	}
 }
