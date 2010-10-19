@@ -19,7 +19,7 @@ Include-Resource					= \
 	${junit}	
 
 -runbundles						= \
-	osgi.enterprise; version=${enterprise.published.version};strategy=lowest		, \
+	osgi.enterprise; version=latest		, \
 	org.osgi.impl.bundle.jmx; version=project, \
 	org.osgi.impl.service.useradmin; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
@@ -42,4 +42,4 @@ Test-Cases							= ${testcases}
 	osgi.console=1111, \
 	osgi.support.multipleHosts=true	, \
 	${p}.system.packages.extra="${junit.package}", \
-	${p}.bundles="${uniq;${repo;osgi.enterprise;${enterprise.published.version};lowest},${repo;org.osgi.impl.bundle.jmx}}"		
+	${p}.bundles="${uniq;${repo;osgi.enterprise},${repo;org.osgi.impl.bundle.jmx}}"		
