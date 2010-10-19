@@ -1,7 +1,7 @@
 # Build the companion JARs before the impls/tests so they all use a fresh
 # copy to build against.
 
--nope							=true
+-nobundles							=true
 nodeploy						=true
 
 # The following line builds all these files and publishes them to 

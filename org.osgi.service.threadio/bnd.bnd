@@ -1,4 +1,4 @@
--nope							= true
+-nobundles							= true
 nodeploy						= true
 
 -buildpath = \
