@@ -46,7 +46,7 @@ public class CoordinationImpl implements Coordination {
 		}
 
 		boolean partiallyFailed = false;
-		
+
 		for (Participant p : participants) {
 			try {
 				p.ended(this);
@@ -61,7 +61,8 @@ public class CoordinationImpl implements Coordination {
 			}
 		}
 		if (partiallyFailed)
-			throw new CoordinationException("Participants failed, see log", this, CoordinationException.PARTIALLY_ENDED);
+			throw new CoordinationException("Participants failed, see log",
+					this, CoordinationException.PARTIALLY_ENDED);
 	}
 
 	public long extendTimeout(int timeInMillis) {
@@ -80,7 +81,7 @@ public class CoordinationImpl implements Coordination {
 	private synchronized boolean wasTerminated(Throwable failure) {
 		if (terminated)
 			return true;
-		
+
 		this.failure = failure;
 		timeouter.cancel();
 		coordinator.clear(this);
@@ -93,7 +94,7 @@ public class CoordinationImpl implements Coordination {
 			return false;
 
 		Thread thread = stackThread;
-		
+
 		for (Participant p : participants) {
 			try {
 				p.failed(this);
@@ -106,10 +107,10 @@ public class CoordinationImpl implements Coordination {
 				unlock(p);
 			}
 		}
-		
-		if ( thread != Thread.currentThread())
+
+		if (thread != Thread.currentThread())
 			thread.interrupt();
-		
+
 		return true;
 	}
 
@@ -147,12 +148,17 @@ public class CoordinationImpl implements Coordination {
 	private boolean lock(Participant p) {
 		synchronized (coordinator.locks) {
 			while (true) {
-				Coordination other = coordinator.locks.get(p);
+				CoordinationImpl other = coordinator.locks.get(p);
 				if (other == null)
 					break;
 
 				if (other == this)
 					return false;
+
+				if (other.stackThread == Thread.currentThread())
+					throw new CoordinationException(
+							"Trying to use the same participant on multiple coordinations in the same thread",
+							this, CoordinationException.DEADLOCK_DETECTED);
 
 				try {
 					coordinator.locks.wait(coordinator.timeout);
@@ -178,7 +184,6 @@ public class CoordinationImpl implements Coordination {
 	public synchronized boolean isTerminated() {
 		return terminated;
 	}
-
 
 	public String toString() {
 		return name + ":" + id;
