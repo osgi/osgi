@@ -1,4 +1,4 @@
--nope							=true
+-nobundles							=true
 nodeploy						=true
 
 # The following line builds all these files and publishes them to 

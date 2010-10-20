@@ -1,7 +1,7 @@
 javac.source 			= 1.5
 javac.target 			= jsr14
 
--nope							= true
+-nobundles							= true
 nodeploy						= true
 
 -buildpath = \

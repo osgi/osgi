@@ -46,7 +46,7 @@ Export-Package =\
 	${junit}
 	
 -runbundles						= \
-	osgi.enterprise; version=${enterprise.published.version};strategy=lowest, \
+	osgi.enterprise; version=latest, \
 	org.osgi.impl.service.log; 			version=latest, \
 	org.osgi.impl.service.event; 			version=latest, \
     org.osgi.impl.bundle.webcontainer; version=latest

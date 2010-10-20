@@ -73,23 +73,11 @@ osgi.release				= 4
 osgi.version				= 4.3
 -versionpolicy				= "[${version;==;${@}},${version;+;${@}})"
 
-osgi.build.version			= ${osgi.version}.0.${project.build}
-
-core.published.version		= 4.2.0
-core.build.version			= ${version;====;${osgi.build.version}}
-
-cmpn.published.version		= 4.2.0
-cmpn.build.version			= ${version;====;${osgi.build.version}}
-
-mobile.published.version	= 4.0.0
-mobile.build.version		= ${version;====;${osgi.build.version}}
-
-enterprise.published.version = 4.2.0
-enterprise.build.version	= ${version;====;${osgi.build.version}}
-
-# Never released
-proposed.build.version		= ${version;====;${osgi.build.version}}
-
+core.build.version			= ${osgi.version}.0.${project.build}
+cmpn.build.version			= ${osgi.version}.0.${project.build}
+mobile.build.version		= ${osgi.version}.0.${project.build}
+enterprise.build.version	= ${osgi.version}.0.${project.build}
+proposed.build.version		= ${osgi.version}.0.${project.build}
 
 # Documentation
 Bundle-Copyright       	= ${copyright}
@@ -103,7 +91,7 @@ junit					= com.springsource.junit;version=3.8;export="${junit.package}"
 	org.osgi.impl.framework;		version=latest, \
 	${junit}
 
-# Use the following for 4.3 framework RI development	
+# Use the following for framework RI development	
 #-runpath							= \
 #	org.eclipse.osgi;		version=snapshot, \
 #	${junit}

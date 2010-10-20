@@ -15,13 +15,13 @@ Test-Cases							= ${testcases}
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.metatype;              version=project , \
-	osgi.core;								version=4.3	, \
-	osgi.cmpn;								version=4.3	, \
+	osgi.core;								version=4.0	, \
+	osgi.cmpn;								version=4.0	, \
 	ee.minimum;								version=1.2		, \
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=project;strategy=lowest, \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.metatype; version=latest
 	

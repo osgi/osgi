@@ -28,7 +28,7 @@ Test-Cases							= ${testcases}
 # org.osgi.vendor.application classes from org.osgi.impl.service.application.
 -runbundles							= \
 	org.osgi.impl.service.application; version=project, \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.bundle.midletcontainer; version=project, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \

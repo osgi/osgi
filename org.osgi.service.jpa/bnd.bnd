@@ -1,7 +1,7 @@
 javac.source 			= 1.5
 javac.target 			= 1.5
 
--nope				= true
+-nobundles				= true
 nodeploy			= true
 
 -buildpath 			= ee.j2se; version=1.5, \

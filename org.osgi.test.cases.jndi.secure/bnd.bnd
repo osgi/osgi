@@ -26,7 +26,7 @@ Test-Cases							= ${testcases}
 	${junit}
 	
 -runbundles = \
-	osgi.enterprise; version=${enterprise.published.version};strategy=lowest		, \
+	osgi.enterprise; version=latest		, \
 	org.osgi.impl.service.jndi; version=project
 
 -runproperties = ${runsecureproperties}, \
