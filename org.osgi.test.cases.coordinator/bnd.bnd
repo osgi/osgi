@@ -1,0 +1,27 @@
+Bundle-Version: 3.0.0.${project.build}
+
+Private-Package						= ${p}.junit, \
+	org.osgi.test.support.*
+
+-buildpath							= \
+	org.osgi.test.support; 	version=project, \
+    biz.aQute.bnd, \
+    org.osgi.service.coordinator;           version=project , \
+    osgi.core;                              version=4.2     , \
+    osgi.cmpn;                              version=4.2     , \
+	ee.j2se;								version=1.5		, \
+	${junit}
+
+Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.coordinator
+
+-runbundles						= \
+	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
+    org.osgi.impl.service.coordinator; version=latest, \
+    org.osgi.impl.service.log; version=latest, \
+    org.apache.felix.scr,\
+    org.apache.felix.http.jetty, \
+    org.apache.felix.configadmin, \
+    org.apache.felix.webconsole
+
+-runproperties					= ${runproperties}, org.osgi.service.http.port=9091
