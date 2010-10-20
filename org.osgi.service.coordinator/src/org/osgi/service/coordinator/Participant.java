@@ -19,23 +19,19 @@ package org.osgi.service.coordinator;
  * A Participant participates in a Coordination.
  * 
  * A Participant can participate in a Coordination by calling
- * {@link Coordinator#addparticipant(Participant)} or
- * {@link Coordinator#participateOrBegin(Participant)}. After successfully
+ * {@link Coordinator#addParticipant(Participant)}. After successfully
  * initiating the participation, the Participant is called back when the
  * Coordination is terminated.
  * 
  * If a Coordination ends with the {@link Coordination#end()} method, then all
- * the participants are called back on their {@link #ended(Coordination)} method. If the
- * initiator decides to fail the Coordination (or another party has called
- * {@link Coordinator#alwaysFail(String)}) then the {@link #failed(Coordination)} method is
- * called back.
+ * the participants are called back on their {@link #ended(Coordination)}
+ * method. If the Coordination is failed (someone has called
+ * {@link Coordination#fail(Throwable)} then the {@link #failed(Coordination)}
+ * method is called back.
  * 
- * Participants are required to be thread safe for the {@link #ended(Coordination)} method
- * and the {@link #failed(Coordination)} method. Both methods can be called on another
- * thread.
- * 
- * A Coordinator service must block a Participant when it tries to participate
- * in multiple Coordinations.
+ * Participants are required to be thread safe for the
+ * {@link #ended(Coordination)} method and the {@link #failed(Coordination)}
+ * method. Both methods can be called on another thread.
  * 
  * @ThreadSafe
  */
@@ -59,8 +55,8 @@ public interface Participant {
 	 * @param c The Coordination that does the callback
 	 * 
 	 * @throws Exception If an exception is thrown it should be logged and the
-	 *         return of the {@link Coordination#end()} method must be
-	 *         {@link Coordination#PARTIALLY_ENDED}.
+	 *         return of the {@link Coordination#end()} method must throw
+	 *         {@link CoordinationException#PARTIALLY_ENDED}.
 	 * 
 	 */
 	void ended(Coordination c) throws Exception;

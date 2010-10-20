@@ -126,19 +126,16 @@ public interface Coordination {
 	 * the current coordination, no participants can be added during the
 	 * termination phase.
 	 * 
+	 * If the Coordination is on a thread local stack then it must be removed
+	 * from this stack during termination.
+	 * 
 	 * @throws CoordinationException when the Coordination has (partially)
 	 *         failed or timed out.
 	 *         <ol>
-	 *         <li>
-	 *         {@link CoordinationException#TIMEDOUT}</li>
-	 *         <li>
-	 *         {@link CoordinationException#FAILED}</li>
-	 *         <li>
-	 *         {@link CoordinationException#PARTIALLY_ENDED}</li>
-	 *         <li>
-	 *         {@link CoordinationException#ALREADY_ENDED}</li>
-	 *         <li>
-	 *         {@link CoordinationException#UNKNOWN}</li>
+	 *         <li>{@link CoordinationException#PARTIALLY_ENDED}</li>
+	 *         <li>{@link CoordinationException#ALREADY_ENDED}</li>
+	 *         <li>{@link CoordinationException#FAILED}</li>
+	 *         <li>{@link CoordinationException#UNKNOWN}</li>
 	 *         </ol>
 	 */
 	void end() throws CoordinationException;
@@ -200,8 +197,8 @@ public interface Coordination {
 	 *         coordination. This can be cause by the following reasons:
 	 *         <ol>
 	 *         <li>{@link CoordinationException#DEADLOCK_DETECTED}</li>
+	 *         <li>{@link CoordinationException#LOCK_INTERRUPTED}</li>
 	 *         <li>{@link CoordinationException#ALREADY_ENDED}</li>
-	 *         <li>{@link CoordinationException#TIMEDOUT}</li>
 	 *         <li>{@link CoordinationException#FAILED}</li>
 	 *         <li>{@link CoordinationException#UNKNOWN}</li>
 	 *         </ol>
@@ -209,7 +206,7 @@ public interface Coordination {
 	 *         {@link CoordinationPermission#INITIATE} action for the current
 	 *         Coordination, if any.
 	 */
-	void addParticipant(Participant participant);
+	void addParticipant(Participant participant) throws CoordinationException;
 
 	/**
 	 * A utility map associated with the current Coordination.
@@ -235,9 +232,15 @@ public interface Coordination {
 	 *        timeout was 0, no extension takes place.
 	 * @return the new deadline in the format of
 	 *         {@link System#currentTimeMillis()} or 0 if no timeout was set.
+	 * @throws CoordinationException Can throw
+	 *         <ol>
+	 *         <li>{@link CoordinationException#ALREADY_ENDED}</li>
+	 *         <li>{@link CoordinationException#FAILED}</li>
+	 *         <li>{@link CoordinationException#UNKNOWN}</li>
+	 *         </ol>
 	 */
 
-	long extendTimeout(int timeInMillis);
+	long extendTimeout(int timeInMillis) throws CoordinationException;
 
 	/**
 	 * @return true if this Coordination is terminated otherwise false

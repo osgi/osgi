@@ -30,10 +30,6 @@ public class CoordinationException extends RuntimeException {
 	 * Adding a participant caused a deadlock.
 	 */
 	public final static int		DEADLOCK_DETECTED	= 1;
-	/**
-	 * The Coordination took too long to finish.
-	 */
-	public final static int		TIMEDOUT				= 2;
 
 	/**
 	 * The Coordination was failed with {@link Coordination#fail(Throwable)}.

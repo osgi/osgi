@@ -161,8 +161,13 @@ public interface Coordinator {
 	 * 
 	 * @param c The Coordination to push
 	 * @return c (for the builder pattern purpose)
+	 * @throws CoordinationException Can throw the
+	 *         <ol>
+	 *         <li>{@link CoordinationException#ALREADY_PUSHED}</li>
+	 *         <li>{@link CoordinationException#UNKNOWN}</li>
+	 *         </ol>
 	 */
-	Coordination push(Coordination c);
+	Coordination push(Coordination c) throws CoordinationException;
 
 	/**
 	 * Pop the top of the thread local stack of Coordinations.
@@ -190,10 +195,10 @@ public interface Coordinator {
 	 *         signals that this participant could not participate the current
 	 *         coordination. This can be cause by the following reasons:
 	 *         <ol>
+	 *         <li>{@link CoordinationException#DEADLOCK_DETECTED}</li>
 	 *         <li>{@link CoordinationException#ALREADY_ENDED}</li>
 	 *         <li>{@link CoordinationException#LOCK_INTERRUPTED}</li>
 	 *         <li>{@link CoordinationException#FAILED}</li>
-	 *         <li>{@link CoordinationException#TIMEDOUT}</li>
 	 *         <li>{@link CoordinationException#UNKNOWN}</li>
 	 *         </ol>
 	 * @throws SecurityException This method requires the

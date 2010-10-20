@@ -67,14 +67,14 @@ public interface CoordinatorMBean {
 	/**
 	 * The key TIMEOUT, used in {@link #TIMEOUT_ITEM}.
 	 */
-	String			TIMEOUT				= "Id";
+	String			TIMEOUT				= "Timeout";
 
 	/**
 	 * The item for the id of an Coordination object. The key is {@link #ID} and
 	 * the type is {@link SimpleType#LONG}.
 	 */
 	Item			TIMEOUT_ITEM		= new Item(
-												ID,
+												TIMEOUT,
 												"The timeout of a Coordination",
 												SimpleType.LONG);
 
@@ -88,7 +88,7 @@ public interface CoordinatorMBean {
 	/**
 	 * Defines a list of {@link #COORDINATION_TYPE}
 	 */
-	ArrayType		COORDINATIONS_TYPE	= Item.arrayType(1, COORDINATION_TYPE);
+	TabularType		COORDINATIONS_TYPE	= Item.tabularType("COORDINATIONS", "A list of Coordinations", COORDINATION_TYPE);
 
 	/**
 	 * List the current coordinations.
