@@ -12,6 +12,7 @@ public class HtmlCleaner {
 	int line =0;
 	String tokens[] = new String[16];
 	int rover;
+	String file;
 	
 	int 		type = 0;
 	String		tag = null;
@@ -70,7 +71,8 @@ public class HtmlCleaner {
 	
 	StringBuffer result = new StringBuffer();
 	
-	public HtmlCleaner( String s  ) {
+	public HtmlCleaner( String file, String s  ) {
+		this.file = file;
 		source = s;
 		in = new StringTokenizer(s, "<>", true );
 	}
@@ -82,6 +84,7 @@ public class HtmlCleaner {
 				next();
 				element( -1);
 				if ( !eof ) {
+					// wrong!
 					StringBuffer sb = new StringBuffer();
 					for ( int i= 0; i<tokens.length; i++ ) {
 						sb.append(" ");
@@ -91,7 +94,7 @@ public class HtmlCleaner {
 					}
 					next();
 					sb.append(token);
-					error( "Invalid tag on top level " + sb  );
+					error( "Invalid tag on top level: " + tokens[rover%tokens.length]);
 				}
 			}
 			return result.toString();
@@ -174,7 +177,7 @@ public class HtmlCleaner {
 				break;
 				
 			default:
-				error( "Unexpected element "  );
+				error( "Unexpected element "  + current );
 				return;
 			}
 			next();
@@ -297,7 +300,7 @@ public class HtmlCleaner {
 	
 	void error( String msg ) {
 		//System.out.println( msg );
-		result.append( "\n<formattingerror msg='" + msg + "' line='" + line + "' cnt='" + cnt + "' token='" + escape(token) 
+		result.append( "\n<formattingerror msg='" + escape(msg) + "' line='" + line + "' file='"+file+"' cnt='" + cnt + "' token='" + escape(token) 
 			+ "'><![CDATA[" +  source + "]]></formattingerror>\n" );
 	}
 	
@@ -405,7 +408,7 @@ public class HtmlCleaner {
 			sb.append( args[i] );
 			sb.append( " " );
 		}
-		System.out.println( new HtmlCleaner( sb.toString() ).clean() );
+		System.out.println( new HtmlCleaner( "<>", sb.toString() ).clean() );
 	}
 	
 	
