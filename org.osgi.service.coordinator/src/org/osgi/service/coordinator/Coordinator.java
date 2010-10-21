@@ -99,7 +99,7 @@ public interface Coordinator {
 	Coordination create(String name, int timeout);
 
 	/**
-	 * Provide an immutable snapshot collection of all Coordination objects
+	 * Provide a immutable snapshot collection of all Coordination objects
 	 * currently active.
 	 * 
 	 * Coordinations in this list can have terminated before this list is
@@ -207,4 +207,15 @@ public interface Coordinator {
 	 */
 	boolean addParticipant(Participant participant)
 			throws CoordinationException;
+
+	/**
+	 * Answer the coordination associated with the given id.
+	 * 
+	 * @param id The id of the requested Coordination
+	 * @return a Coordination with the given ID or {@code null} when
+	 *         Coordination cannot be found.
+	 */
+
+	Coordination getCoordination(long id);
+
 }

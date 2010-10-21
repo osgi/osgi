@@ -11,13 +11,13 @@ import aQute.bnd.annotation.component.*;
 
 @Component(servicefactory = true)
 public class CoordinatorImpl implements Coordinator {
-	static List<CoordinatorImpl>						coordinators	= new CopyOnWriteArrayList<CoordinatorImpl>();
-	final List<CoordinationImpl>						coordinations	= new CopyOnWriteArrayList<CoordinationImpl>();
-	final WeakHashMap<Thread, List<CoordinationImpl>>	stacks			= new WeakHashMap<Thread, List<CoordinationImpl>>();
-	final Timer												timer = new Timer();
-	LogService											log;
-	final WeakHashMap<Participant, CoordinationImpl>	locks			= new WeakHashMap<Participant, CoordinationImpl>();
-	long												timeout;
+	static List<CoordinatorImpl>							coordinators	= new CopyOnWriteArrayList<CoordinatorImpl>();
+	final List<CoordinationImpl>							coordinations	= new CopyOnWriteArrayList<CoordinationImpl>();
+	final WeakHashMap<Thread, List<CoordinationImpl>>		stacks			= new WeakHashMap<Thread, List<CoordinationImpl>>();
+	final Timer												timer			= new Timer();
+	LogService												log;
+	final IdentityHashMap<Participant, CoordinationImpl>	locks			= new IdentityHashMap<Participant, CoordinationImpl>();
+	long													timeout;
 
 	@Activate
 	protected void activate() {
@@ -27,8 +27,9 @@ public class CoordinatorImpl implements Coordinator {
 	@Deactivate
 	protected void deactivate() {
 		coordinators.remove(this);
-		for ( Coordination c : coordinations) {
-			c.fail(new ServiceException("Service is unregistered", ServiceException.UNREGISTERED));
+		for (Coordination c : coordinations) {
+			c.fail(new ServiceException("Service is unregistered",
+					ServiceException.UNREGISTERED));
 		}
 	}
 
@@ -49,7 +50,7 @@ public class CoordinatorImpl implements Coordinator {
 		for (CoordinatorImpl coordinator : coordinators) {
 			l.addAll(coordinator.coordinations);
 		}
-		return l;
+		return Collections.unmodifiableList(l);
 	}
 
 	@Reference
@@ -71,7 +72,7 @@ public class CoordinatorImpl implements Coordinator {
 		Coordination c = getCurrentCoordination();
 		if (c == null)
 			return false;
-		
+
 		c.fail(reason);
 		return false;
 	}
@@ -79,9 +80,13 @@ public class CoordinatorImpl implements Coordinator {
 	public Coordination getCurrentCoordination() {
 		synchronized (stacks) {
 			List<CoordinationImpl> stack = stacks.get(Thread.currentThread());
-			int n = stack.size() - 1;
-			if (n >= 0)
+			if (stack == null)
 				return null;
+
+			int n = stack.size() - 1;
+			if (n < 0)
+				return null;
+
 			return stack.get(n);
 		}
 	}
@@ -128,16 +133,17 @@ public class CoordinatorImpl implements Coordinator {
 	}
 
 	private void error(CoordinationImpl cc, String message, int reason) {
-		CoordinationException e = new CoordinationException(message, cc,
-				reason);
+		CoordinationException e = new CoordinationException(message, cc, reason);
 		log.log(LogService.LOG_ERROR, message, e);
 	}
 
 	/**
 	 * Remove the coordination from the stack, if any.
+	 * 
 	 * @param c the coordination to remove
 	 */
 	void clear(final CoordinationImpl c) {
+		coordinations.remove(c);
 		synchronized (stacks) {
 			if (c.stackThread == null)
 				return;
@@ -152,4 +158,14 @@ public class CoordinatorImpl implements Coordinator {
 				stacks.remove(stack);
 		}
 	}
+
+	public Coordination getCoordination(long id) {
+		for ( Coordination c : getCoordinations()) {
+			if ( c.getId() == id )
+				return c;
+		}
+		return null;
+	}
+
+
 }

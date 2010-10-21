@@ -22,8 +22,9 @@ package org.osgi.service.coordinator;
 public class CoordinationException extends RuntimeException {
 	private static final long	serialVersionUID	= 1L;
 
+	
 	/**
-	 * Unknown reason fot this exception.
+	 * Unknown reason for this exception.
 	 */
 	public final static int		UNKNOWN				= 0;
 	/**
@@ -58,6 +59,7 @@ public class CoordinationException extends RuntimeException {
 	 */
 	public final static int		LOCK_INTERRUPTED	= 7;
 
+	
 	final String				name;
 	final int					reason;
 	final Throwable				failure;

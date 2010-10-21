@@ -40,6 +40,12 @@ import java.util.*;
 public interface Coordination {
 
 	/**
+	 * The TIMEOUT exception is a singleton exception that will the reason for
+	 * the failure when the Coordination times out.
+	 */
+	public Exception	TIMEOUT	= new Exception("Singleton Timeout Exception");
+
+	/**
 	 * A system assigned ID unique for a registered Coordinator. This id must
 	 * not be reused as long as the Coordinator is registered and must be
 	 * monotonically increasing.
@@ -143,9 +149,8 @@ public interface Coordination {
 	/**
 	 * Return an iterable list of the participants that joined the Coordination.
 	 * This list is only valid as long as the Coordination has not been
-	 * terminated. New participants can enter this list. That is, after
-	 * {@link #end()} or {@link #fail(Throwable)} is called this method will
-	 * return an empty list.
+	 * terminated. New participants can enter this list up until termination.
+	 * The list must remain after termination for post-mortem debugging.
 	 * 
 	 * @return list of participants.
 	 * 
@@ -153,7 +158,7 @@ public interface Coordination {
 	 *         {@link CoordinationPermission#ADMIN} action for the
 	 *         {@link CoordinationPermission}.
 	 */
-	Collection< ? extends Participant> getParticipants();
+	List< ? extends Participant> getParticipants();
 
 	/**
 	 * If the coordination has failed because {@link #fail(Throwable)} was
@@ -168,10 +173,6 @@ public interface Coordination {
 
 	/**
 	 * Add a Participant to this Coordination.
-	 * 
-	 * If this method returns {@code true} then there was a current Coordination
-	 * and the participant has successfully joined it. If there was no current
-	 * Coordination then {@code false} is returned.
 	 * 
 	 * Once a Participant is participating it is guaranteed to receive a call
 	 * back on either the {@link Participant#ended(Coordination)} or
@@ -196,10 +197,10 @@ public interface Coordination {
 	 *         signals that this participant could not participate the current
 	 *         coordination. This can be cause by the following reasons:
 	 *         <ol>
-	 *         <li>{@link CoordinationException#DEADLOCK_DETECTED}</li>
-	 *         <li>{@link CoordinationException#LOCK_INTERRUPTED}</li>
-	 *         <li>{@link CoordinationException#ALREADY_ENDED}</li>
-	 *         <li>{@link CoordinationException#FAILED}</li>
+	 *         <li>{@link CoordinationException#DEADLOCK_DETECTED} - Tried to lock the participant but it was already locked on another Configuration on the same thread</li>
+	 *         <li>{@link CoordinationException#LOCK_INTERRUPTED} - Received an interrupt while waiting for the lock to release</li>
+	 *         <li>{@link CoordinationException#ALREADY_ENDED} - The Coordination has already ended</li>
+	 *         <li>{@link CoordinationException#FAILED} - The Coordination has failed</li>
 	 *         <li>{@link CoordinationException#UNKNOWN}</li>
 	 *         </ol>
 	 * @throws SecurityException This method requires the
@@ -214,9 +215,10 @@ public interface Coordination {
 	 * Each coordination carries a map that can be used for communicating
 	 * between different participants. To namespace of the map is a class,
 	 * allowing for private date to be stored in the map by using implementation
-	 * classes or shared data by interfaces.
+	 * classes or shared data by interfaces. The returned map must be thread
+	 * safe.
 	 * 
-	 * @return The map
+	 * @return The thread safe map
 	 */
 	Map<Class< ? >, ? > getVariables();
 
@@ -246,4 +248,11 @@ public interface Coordination {
 	 * @return true if this Coordination is terminated otherwise false
 	 */
 	boolean isTerminated();
+
+	/**
+	 * Answer the associated thread or {@code null}.
+	 * 
+	 * @return Associated thread or {@code null}
+	 */
+	Thread getThread();
 }

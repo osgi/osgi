@@ -16,7 +16,6 @@ Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.coordinator
 
 -runbundles						= \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
     org.osgi.impl.service.coordinator; version=latest, \
     org.osgi.impl.service.log; version=latest, \
     org.apache.felix.scr,\
@@ -25,3 +24,6 @@ Test-Cases							= ${testcases}
     org.apache.felix.webconsole
 
 -runproperties					= ${runproperties}, org.osgi.service.http.port=9091
+
+javac.source            = 1.5
+javac.target            = jsr14

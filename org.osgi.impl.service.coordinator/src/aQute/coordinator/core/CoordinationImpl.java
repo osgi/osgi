@@ -1,6 +1,7 @@
 package aQute.coordinator.core;
 
 import java.util.*;
+import java.util.Map.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
@@ -16,7 +17,7 @@ public class CoordinationImpl implements Coordination {
 	final Map<Class< ? >, Object>	variables		= new ConcurrentHashMap<Class< ? >, Object>();
 	final TimerTask					timeouter		= new TimerTask() {
 														public void run() {
-															fail(new TimeoutException());
+															fail(Coordination.TIMEOUT);
 														}
 													};
 	volatile long					deadline		= 0;
@@ -44,7 +45,6 @@ public class CoordinationImpl implements Coordination {
 				throw new CoordinationException("Coordination already ended",
 						this, CoordinationException.ALREADY_ENDED);
 		}
-
 		boolean partiallyFailed = false;
 
 		for (Participant p : participants) {
@@ -60,6 +60,9 @@ public class CoordinationImpl implements Coordination {
 				unlock(p);
 			}
 		}
+
+		unlockAll();
+
 		if (partiallyFailed)
 			throw new CoordinationException("Participants failed, see log",
 					this, CoordinationException.PARTIALLY_ENDED);
@@ -90,10 +93,9 @@ public class CoordinationImpl implements Coordination {
 	}
 
 	public boolean fail(Throwable failure) {
+		Thread thread = stackThread;
 		if (wasTerminated(failure))
 			return false;
-
-		Thread thread = stackThread;
 
 		for (Participant p : participants) {
 			try {
@@ -108,7 +110,8 @@ public class CoordinationImpl implements Coordination {
 			}
 		}
 
-		if (thread != Thread.currentThread())
+		unlockAll();
+		if (thread != null && thread != Thread.currentThread())
 			thread.interrupt();
 
 		return true;
@@ -126,7 +129,7 @@ public class CoordinationImpl implements Coordination {
 		return name;
 	}
 
-	public Collection< ? extends Participant> getParticipants() {
+	public List< ? extends Participant> getParticipants() {
 		return new ArrayList<Participant>(participants);
 	}
 
@@ -135,19 +138,21 @@ public class CoordinationImpl implements Coordination {
 	}
 
 	public void addParticipant(Participant p) {
-		synchronized (this) {
-			if (terminated)
-				throw new CoordinationException("Coordination already ended",
-						this, CoordinationException.ALREADY_ENDED);
-
-			if (lock(p))
-				participants.add(p); // Only adds once
-		}
+		if (lock(p))
+			participants.add(p); // Only adds once
 	}
 
 	private boolean lock(Participant p) {
 		synchronized (coordinator.locks) {
 			while (true) {
+				if (isTerminated())
+					if (failure != null)
+						throw new CoordinationException("Already ended", this,
+								CoordinationException.FAILED, failure);
+					else
+						throw new CoordinationException("Already ended", this,
+								CoordinationException.ALREADY_ENDED, failure);
+
 				CoordinationImpl other = coordinator.locks.get(p);
 				if (other == null)
 					break;
@@ -181,12 +186,29 @@ public class CoordinationImpl implements Coordination {
 		}
 	}
 
+	private void unlockAll() {
+		synchronized (coordinator.locks) {
+			Iterator<Map.Entry<Participant, CoordinationImpl>> i = coordinator.locks
+					.entrySet().iterator();
+			while (i.hasNext()) {
+				Entry<Participant, CoordinationImpl> next = i.next();
+				if (next.getValue() == this)
+					i.remove();
+			}
+			coordinator.locks.notifyAll();
+		}
+	}
+
 	public synchronized boolean isTerminated() {
 		return terminated;
 	}
 
 	public String toString() {
 		return name + ":" + id;
+	}
+
+	public Thread getThread() {
+		return stackThread;
 	}
 
 }

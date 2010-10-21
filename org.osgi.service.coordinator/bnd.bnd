@@ -5,7 +5,7 @@ nodeploy						= true
 -buildpath = \
 	org.osgi.jmx;					version=project, \
 	osgi.core;					version=4.0.1, \
-	ee.j2se;					version=1.5
+	ee.minimum; version=1.2.1
 
 	
 javac.source            = 1.5
