@@ -220,7 +220,7 @@ public interface Coordination {
 	 * 
 	 * @return The thread safe map
 	 */
-	Map<Class< ? >, ? > getVariables();
+	Map<Class< ? >, Object> getVariables();
 
 	/**
 	 * Extend the time out. Allows participants to extend the timeout of the
@@ -255,4 +255,12 @@ public interface Coordination {
 	 * @return Associated thread or {@code null}
 	 */
 	Thread getThread();
+	
+	/**
+	 * Wait until the Coordination is completely finished.
+	 * @param timeoutInMillis Maximum time to wait, 0 is forever
+	 * @throws InterruptedException If the wait is interrupted
+	 */
+	
+	void join(long timeoutInMillis) throws InterruptedException;
 }

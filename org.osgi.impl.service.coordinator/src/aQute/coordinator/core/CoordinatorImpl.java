@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.osgi.framework.*;
+import org.osgi.service.component.*;
 import org.osgi.service.coordinator.*;
 import org.osgi.service.log.*;
 
@@ -14,18 +15,19 @@ public class CoordinatorImpl implements Coordinator {
 	static List<CoordinatorImpl>							coordinators	= new CopyOnWriteArrayList<CoordinatorImpl>();
 	final List<CoordinationImpl>							coordinations	= new CopyOnWriteArrayList<CoordinationImpl>();
 	final WeakHashMap<Thread, List<CoordinationImpl>>		stacks			= new WeakHashMap<Thread, List<CoordinationImpl>>();
-	final Timer												timer			= new Timer();
 	LogService												log;
 	final IdentityHashMap<Participant, CoordinationImpl>	locks			= new IdentityHashMap<Participant, CoordinationImpl>();
 	long													timeout;
+	volatile boolean										gone;
 
 	@Activate
-	protected void activate() {
+	protected void activate(ComponentContext context) {
 		coordinators.add(this);
 	}
 
 	@Deactivate
-	protected void deactivate() {
+	protected void deactivate(ComponentContext context) {
+		gone = true;
 		coordinators.remove(this);
 		for (Coordination c : coordinations) {
 			c.fail(new ServiceException("Service is unregistered",
@@ -34,18 +36,21 @@ public class CoordinatorImpl implements Coordinator {
 	}
 
 	public CoordinationImpl create(String name, int timeout) {
+		check();
 		CoordinationImpl c = new CoordinationImpl(this, name, timeout);
 		coordinations.add(c);
 		return c;
 	}
 
 	public Coordination begin(String name, int timeoutInMillis) {
+		check();
 		CoordinationImpl c = create(name, timeoutInMillis);
 		push(c);
 		return c;
 	}
 
 	public List< ? extends Coordination> getCoordinations() {
+		check();
 		List<CoordinationImpl> l = new ArrayList<CoordinationImpl>();
 		for (CoordinatorImpl coordinator : coordinators) {
 			l.addAll(coordinator.coordinations);
@@ -55,11 +60,13 @@ public class CoordinatorImpl implements Coordinator {
 
 	@Reference
 	protected void setLog(LogService log) {
+		check();
 		this.log = log;
 	}
 
 	public boolean addParticipant(Participant participant)
 			throws CoordinationException {
+		check();
 		Coordination c = getCurrentCoordination();
 		if (c == null)
 			return false;
@@ -69,6 +76,7 @@ public class CoordinatorImpl implements Coordinator {
 	}
 
 	public boolean failed(Throwable reason) {
+		check();
 		Coordination c = getCurrentCoordination();
 		if (c == null)
 			return false;
@@ -78,6 +86,7 @@ public class CoordinatorImpl implements Coordinator {
 	}
 
 	public Coordination getCurrentCoordination() {
+		check();
 		synchronized (stacks) {
 			List<CoordinationImpl> stack = stacks.get(Thread.currentThread());
 			if (stack == null)
@@ -92,21 +101,24 @@ public class CoordinatorImpl implements Coordinator {
 	}
 
 	public Coordination pop() {
+		check();
 		return pop(Thread.currentThread());
 	}
 
 	private CoordinationImpl pop(Thread thread) {
+		check();
 		synchronized (stacks) {
 			List<CoordinationImpl> stack = stacks.get(thread);
 			if (stack == null)
 				return null;
 
-			assert stack.size() > 0; // we remove empty stacks
-
 			int n = stack.size() - 1;
 
-			CoordinationImpl coordination = stack.remove(n);
-			coordination.stackThread = null;
+			CoordinationImpl coordination = null;
+			if (n >= 0) {
+				coordination = stack.remove(n);
+				coordination.stackThread = null;
+			}
 			if (stack.isEmpty())
 				stacks.remove(stack);
 
@@ -115,8 +127,13 @@ public class CoordinatorImpl implements Coordinator {
 	}
 
 	public Coordination push(Coordination c) {
+		check();
 		synchronized (stacks) {
 			CoordinationImpl cc = (CoordinationImpl) c;
+			if (cc.terminated)
+				error(cc, "Coordination is already terminated",
+						CoordinationException.ALREADY_ENDED);
+
 			if (cc.stackThread != null)
 				error(cc, "Coordination already on stack",
 						CoordinationException.ALREADY_PUSHED);
@@ -132,9 +149,16 @@ public class CoordinatorImpl implements Coordinator {
 		}
 	}
 
+	private void check() {
+		if (gone)
+			throw new ServiceException("Coordinator is ungotten",
+					ServiceException.UNREGISTERED);
+	}
+
 	private void error(CoordinationImpl cc, String message, int reason) {
 		CoordinationException e = new CoordinationException(message, cc, reason);
 		log.log(LogService.LOG_ERROR, message, e);
+		throw e;
 	}
 
 	/**
@@ -160,12 +184,11 @@ public class CoordinatorImpl implements Coordinator {
 	}
 
 	public Coordination getCoordination(long id) {
-		for ( Coordination c : getCoordinations()) {
-			if ( c.getId() == id )
+		for (Coordination c : getCoordinations()) {
+			if (c.getId() == id)
 				return c;
 		}
 		return null;
 	}
-
 
 }

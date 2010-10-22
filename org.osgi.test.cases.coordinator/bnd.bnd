@@ -1,5 +1,7 @@
 Bundle-Version: 3.0.0.${project.build}
 
+Include-Resource: dummy.jar
+
 Private-Package						= ${p}.junit, \
 	org.osgi.test.support.*
 

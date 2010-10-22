@@ -1,5 +1,6 @@
 package org.osgi.test.cases.coordinator.junit;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -8,11 +9,291 @@ import junit.framework.*;
 
 import org.osgi.framework.*;
 import org.osgi.service.coordinator.*;
+import org.osgi.test.support.*;
 import org.osgi.util.tracker.*;
 
-public class CoordinatorBasicTest extends TestCase {
+public class CoordinatorBasicTest extends OSGiTestCase {
 
-	
+	/**
+	 * Timeout Fixed exception Extending timeout
+	 */
+
+	public void testOverallTimeout() throws Exception {
+		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		assertNotNull("Expect the service to be there", c);
+		clear(c);
+
+		{
+			Coordination cc = c.begin("timeout-1", 0);
+			cc.extendTimeout(100);
+			Thread.sleep(500);
+			assertFalse(
+					"must not have timed out because it did not have a timeout to begin with",
+					cc.isTerminated());
+			assertEquals(null, cc.getFailure());
+		}
+
+		{
+			Coordination cc = c.begin("timeout-2", 100);
+			cc.join(0);
+			assertTrue(cc.isTerminated());
+		}
+		Thread.interrupted(); // clear flag
+		{
+			int granularity = 100;
+			Coordination cc = c.begin("timeout-3", 2 * granularity);
+			cc.extendTimeout(2 * granularity); // expires before primary
+			Thread.sleep(granularity);
+			assertFalse("must not have timed out yet", cc.isTerminated());
+			Thread.sleep(2 * granularity); // expires after primary but before
+											// extended
+			assertFalse("must not have timed out yet because we extended", cc
+					.isTerminated());
+			try {
+				Thread.sleep(10 * granularity); // must be interrupted after
+												// extended
+				fail("must be interrupted before");
+			}
+			catch (InterruptedException ie) {
+				// ok
+			}
+			assertTrue("now it must be terminated", cc.isTerminated());
+			assertEquals(Coordination.TIMEOUT, cc.getFailure());
+		}
+
+	}
+
+	/**
+	 * Variables Map must remain available Not shared
+	 * 
+	 */
+
+	class VariableParticipant extends TestParticipant {
+		Object	value;
+
+		public void ended(Coordination c) throws Exception {
+			super.ended(c);
+			value = c.getVariables().get(VariableParticipant.class);
+		}
+
+		public void failed(Coordination c) throws Exception {
+			super.failed(c);
+			value = c.getVariables().get(VariableParticipant.class);
+		}
+	}
+
+	public void testVariables() throws Exception {
+		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		assertNotNull("Expect the service to be there", c);
+		clear(c);
+
+		Coordination cc1 = c.create("variable-1", 0);
+		Map<Class< ? >, Object> map1 = cc1.getVariables();
+		map1.put(VariableParticipant.class, "hello");
+		VariableParticipant vp = new VariableParticipant();
+		cc1.addParticipant(vp);
+		cc1.end();
+
+		assertEquals(vp.value, "hello");
+		assertEquals(1, vp.ended.get());
+		assertEquals(0, vp.failed.get());
+		assertEquals(cc1.getVariables().get(VariableParticipant.class), "hello");
+
+		Coordination cc2 = c.create("variable-2", 0);
+		Map<Class< ? >, Object> map2 = cc2.getVariables();
+		map2.put(VariableParticipant.class, "goodbye");
+		vp = new VariableParticipant();
+		cc2.addParticipant(vp);
+		cc2.fail(new Exception());
+
+		assertEquals(vp.value, "goodbye");
+		assertEquals(0, vp.ended.get());
+		assertEquals(1, vp.failed.get());
+		assertEquals(cc1.getVariables().get(VariableParticipant.class), "hello");
+		assertEquals(cc2.getVariables().get(VariableParticipant.class),
+				"goodbye");
+
+		assertTrue(cc1.getVariables() != cc2.getVariables());
+	}
+
+	/**
+	 * Stack A Coordination can be pushed at most one. Terminated Coordinations
+	 * must be removed from the stack begin == create + push
+	 */
+
+	public void testStack() throws Exception {
+		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		assertNotNull("Expect the service to be there", c);
+		clear(c);
+
+		Coordination cc = c.create("stack-1", 0);
+		assertEquals(cc, c.push(cc));
+
+		try {
+			c.push(cc);
+			fail("expected an error because we're already pushed");
+		}
+		catch (CoordinationException ce) {
+			assertEquals("Must be already pushed error",
+					CoordinationException.ALREADY_PUSHED, ce.getReason());
+		}
+
+		assertEquals(cc, c.pop());
+		assertEquals(cc, c.push(cc));
+
+		cc.end(); // terminate it
+
+		assertTrue(cc.isTerminated());
+		assertNull("nothing on stack anymore", c.pop());
+
+		Coordination c1 = c.begin("stack-1", 0);
+		Coordination c2 = c.begin("stack-2", 0);
+		Coordination c3 = c.begin("stack-3", 0);
+		Coordination c4 = c.begin("stack-4", 0);
+
+		c2.fail(new Exception());
+
+		assertEquals(c4, c.pop());
+		assertEquals(c3, c.pop());
+		assertEquals(c1, c.pop());
+
+		try {
+			c.push(c2);
+			fail("must throw an exception");
+		}
+		catch (CoordinationException e) {
+			assertEquals(CoordinationException.ALREADY_ENDED, e.getReason());
+		}
+
+		cc = c.begin("pushed", 0);
+		assertEquals(cc, c.pop());
+	}
+
+	/**
+	 * Termination.
+	 * 
+	 * Participants must see terminated Coordinations in their callback
+	 * Termination must be atomic
+	 */
+
+	class Checking extends TestParticipant {
+		boolean	terminated;
+		boolean	result;
+
+		public void ended(Coordination c) throws Exception {
+			super.ended(c);
+			terminated = c.isTerminated();
+			result = c.fail(new Exception());
+		}
+
+		public void failed(Coordination c) throws Exception {
+			super.failed(c);
+			terminated = c.isTerminated();
+			result = c.fail(new Exception());
+		}
+	}
+
+	public void testTerminatedInCallbacks() throws Exception {
+		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		assertNotNull("Expect the service to be there", c);
+		clear(c);
+
+		Coordination cc = c.create("termination-1", 0);
+		Checking bp = new Checking();
+		cc.addParticipant(bp);
+		assertFalse("initialized to false ", bp.terminated);
+		cc.end();
+		assertTrue("must  be terminated in callback ", bp.terminated);
+		assertFalse(
+				"result of failure is expected to be false because it was already terminated ",
+				bp.result);
+		assertEquals("ended called ", 1, bp.ended.get());
+		assertEquals("failed called ", 0, bp.failed.get());
+
+		cc = c.create("termination-2", 0);
+		bp = new Checking();
+		cc.addParticipant(bp);
+		assertFalse("initialized to false ", bp.terminated);
+		cc.fail(new IllegalStateException());
+		assertTrue("must  be terminated in callback ", bp.terminated);
+		assertFalse(
+				"result of failure is expected to be false because it was already terminated ",
+				bp.result);
+		assertEquals("ended called ", 0, bp.ended.get());
+		assertEquals("failed called ", 1, bp.failed.get());
+
+	}
+
+	/**
+	 * Life cycle
+	 * 
+	 * Test if coordinations are terminated when the service is ungotten
+	 * 
+	 * @throws IOException
+	 * @throws BundleException
+	 */
+
+	public void testUngotten() throws BundleException, IOException {
+		BundleContext context = getContext();
+
+		// Ensure no outstanding references
+		ServiceReference ref = context.getServiceReference(Coordinator.class
+				.getName());
+		while (context.ungetService(ref));
+
+		// Get another Bundle Context
+		Bundle other = install("dummy.jar");
+		other.start();
+
+		BundleContext otherContext = other.getBundleContext();
+		// Ensure no outstanding references
+		while (context.ungetService(ref));
+
+		// Get the different Coordinators
+		Coordinator cUs = (Coordinator) context.getService(ref);
+		Coordinator cThem = (Coordinator) otherContext.getService(ref);
+		assertTrue(
+				"Because they're registered with a service factory they must differ",
+				cUs != cThem);
+
+		// Create a bunch of Coordinations
+		Coordination ccUs1 = cUs.create("lifecyle-us-1", 0);
+		Coordination ccUs2 = cUs.create("lifecyle-us-2", 0);
+
+		Coordination ccThem1 = cThem.create("lifecyle-them-1", 0);
+		Coordination ccThem2 = cThem.create("lifecyle-them-2", 0);
+
+		// Check if we have the same view and all are visible
+		assertEquals("Must have 4 coordinations now from us", 4, cUs
+				.getCoordinations().size());
+		assertEquals("Must have 4 coordinations now from them", 4, cThem
+				.getCoordinations().size());
+
+		// Unget their service
+		while (otherContext.ungetService(ref));
+
+		assertEquals("Must have 2 coordinations now after they are gone", 2,
+				cUs.getCoordinations().size());
+
+		// Check their coordinations are properly terminated
+		assertTrue(ccThem1.isTerminated());
+		ServiceException se = (ServiceException) ccThem1.getFailure();
+		assertTrue(se.getType() == ServiceException.UNREGISTERED);
+
+		assertTrue(ccThem2.isTerminated());
+
+		// And that should not have affected us
+		assertFalse(ccUs1.isTerminated());
+		assertFalse(ccUs2.isTerminated());
+
+		// Unget our service
+		while (context.ungetService(ref));
+
+		// now ours should also be gone
+		assertTrue(ccUs1.isTerminated());
+		assertTrue(ccUs2.isTerminated());
+	}
+
 	/**
 	 * Timeout
 	 */
@@ -20,7 +301,7 @@ public class CoordinatorBasicTest extends TestCase {
 		final Coordinator c = (Coordinator) getService(Coordinator.class);
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
-		
+
 		Coordination cc = c.begin("table-timeout-active", 100);
 		try {
 			Thread.sleep(200);
@@ -29,11 +310,9 @@ public class CoordinatorBasicTest extends TestCase {
 		catch (InterruptedException e) {
 			// good!
 		}
-		assertTrue( cc.isTerminated());
-	}	
-	
-	
-	
+		assertTrue(cc.isTerminated());
+	}
+
 	/**
 	 * Test the fail method according to the table
 	 */
@@ -48,7 +327,7 @@ public class CoordinatorBasicTest extends TestCase {
 			Coordination cc = c.create("table-addParticipant-no-exception", 0);
 			assertTrue(cc.fail(new Exception()));
 		}
-		
+
 		// END, must return false no exception
 		{
 			Coordination cc = c.create("table-addParticipant-no-exception", 0);
@@ -701,8 +980,7 @@ public class CoordinatorBasicTest extends TestCase {
 		t1.start();
 		t1.join();
 		assertNotNull(exception.get());
-		assertEquals(CoordinationException.FAILED, exception.get()
-				.getReason());
+		assertEquals(CoordinationException.FAILED, exception.get().getReason());
 		assertEquals(Coordination.TIMEOUT, exception.get().getFailure());
 
 		// Check if we block correctly

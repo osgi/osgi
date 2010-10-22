@@ -9,21 +9,25 @@ import org.osgi.service.coordinator.*;
 import org.osgi.service.log.*;
 
 public class CoordinationImpl implements Coordination {
+	final static Timer				timer			= new Timer();
 	static final AtomicInteger		counter			= new AtomicInteger(1000);
 	final long						id;
 	final List<Participant>			participants	= new CopyOnWriteArrayList<Participant>();
-	final CoordinatorImpl			coordinator;
+	CoordinatorImpl					coordinator;
 	final String					name;
 	final Map<Class< ? >, Object>	variables		= new ConcurrentHashMap<Class< ? >, Object>();
-	final TimerTask					timeouter		= new TimerTask() {
-														public void run() {
-															fail(Coordination.TIMEOUT);
-														}
-													};
-	volatile long					deadline		= 0;
-	volatile Throwable				failure;
-	boolean							terminated		= false;
-	Thread							stackThread;
+
+	class FailTimer extends TimerTask {
+		public void run() {
+			fail(Coordination.TIMEOUT);
+		}
+	}
+
+	TimerTask			timeouter	= new FailTimer();
+	volatile long		deadline	= 0;
+	volatile Throwable	failure;
+	boolean				terminated	= false;
+	Thread				stackThread;
 
 	CoordinationImpl(CoordinatorImpl coordinator, String name, int timeout) {
 		this.coordinator = coordinator;
@@ -32,19 +36,14 @@ public class CoordinationImpl implements Coordination {
 
 		if (timeout > 0) {
 			deadline = System.currentTimeMillis() + timeout;
-			coordinator.timer.schedule(timeouter, new Date(deadline));
+			timer.schedule(timeouter, new Date(deadline));
 		}
 	}
 
 	public void end() throws CoordinationException {
-		if (wasTerminated(null)) {
-			if (failure != null)
-				throw new CoordinationException(
-						"Coordination had ended in a failure", this, failure);
-			else
-				throw new CoordinationException("Coordination already ended",
-						this, CoordinationException.ALREADY_ENDED);
-		}
+		if (wasTerminated(null))
+			alreadyEnded();
+
 		boolean partiallyFailed = false;
 
 		for (Participant p : participants) {
@@ -62,7 +61,11 @@ public class CoordinationImpl implements Coordination {
 		}
 
 		unlockAll();
+		coordinator = null;
 
+		synchronized(this) {
+			notifyAll();
+		}
 		if (partiallyFailed)
 			throw new CoordinationException("Participants failed, see log",
 					this, CoordinationException.PARTIALLY_ENDED);
@@ -75,8 +78,11 @@ public class CoordinationImpl implements Coordination {
 		timeouter.cancel();
 		deadline = deadline + timeInMillis;
 		synchronized (this) {
-			if (!terminated)
-				coordinator.timer.schedule(timeouter, new Date(deadline));
+			if (!terminated) {
+				timeouter.cancel();
+				timeouter = new FailTimer();
+				timer.schedule(timeouter, new Date(deadline));
+			}
 		}
 		return deadline;
 	}
@@ -89,6 +95,7 @@ public class CoordinationImpl implements Coordination {
 		timeouter.cancel();
 		coordinator.clear(this);
 		terminated = true;
+
 		return false;
 	}
 
@@ -111,9 +118,15 @@ public class CoordinationImpl implements Coordination {
 		}
 
 		unlockAll();
+		coordinator = null;
+		
+		synchronized(this) {
+			notifyAll();
+		}
 		if (thread != null && thread != Thread.currentThread())
 			thread.interrupt();
 
+		
 		return true;
 	}
 
@@ -143,15 +156,13 @@ public class CoordinationImpl implements Coordination {
 	}
 
 	private boolean lock(Participant p) {
+		if (coordinator == null)
+			alreadyEnded();
+
 		synchronized (coordinator.locks) {
 			while (true) {
 				if (isTerminated())
-					if (failure != null)
-						throw new CoordinationException("Already ended", this,
-								CoordinationException.FAILED, failure);
-					else
-						throw new CoordinationException("Already ended", this,
-								CoordinationException.ALREADY_ENDED, failure);
+					alreadyEnded();
 
 				CoordinationImpl other = coordinator.locks.get(p);
 				if (other == null)
@@ -176,6 +187,15 @@ public class CoordinationImpl implements Coordination {
 			coordinator.locks.put(p, this);
 			return true;
 		}
+	}
+
+	private void alreadyEnded() {
+		if (failure != null)
+			throw new CoordinationException("Already ended", this,
+					CoordinationException.FAILED, failure);
+		else
+			throw new CoordinationException("Already ended", this,
+					CoordinationException.ALREADY_ENDED, failure);
 	}
 
 	private void unlock(Participant p) {
@@ -211,4 +231,8 @@ public class CoordinationImpl implements Coordination {
 		return stackThread;
 	}
 
+	public synchronized void join(long timeoutInMillis) throws InterruptedException {
+		while ( ! terminated )
+			wait(timeoutInMillis);
+	}
 }
