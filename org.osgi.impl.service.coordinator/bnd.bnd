@@ -2,7 +2,7 @@ Bundle-Version				= 1.0.0.${project.build}
 Bundle-Description			= Coordinator service implementation
 
 Private-Package 			= aQute.coordinator.core
-Export-Package				= org.osgi.service.coordinator
+Export-Package				= org.osgi.service.coordinator; provide:=true
 
 Service-Component: *
 
