@@ -1083,7 +1083,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 
 		public void doWork() {
 			coordinator.addParticipant(this);
-			coordinator.failed(failure);
+			coordinator.fail(failure);
 		}
 
 		public void ended(Coordination c) throws Exception {

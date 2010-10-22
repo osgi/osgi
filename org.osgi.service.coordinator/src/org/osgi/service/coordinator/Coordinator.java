@@ -124,7 +124,7 @@ public interface Coordinator {
 	 * @return {@code true} if there was a current Coordination and {@code
 	 *         false} if not.
 	 */
-	boolean failed(Throwable reason);
+	boolean fail(Throwable reason);
 
 	/**
 	 * Return the current Coordination or {@code null}.

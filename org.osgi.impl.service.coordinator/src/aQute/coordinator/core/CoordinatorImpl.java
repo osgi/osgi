@@ -19,10 +19,14 @@ public class CoordinatorImpl implements Coordinator {
 	final IdentityHashMap<Participant, CoordinationImpl>	locks			= new IdentityHashMap<Participant, CoordinationImpl>();
 	long													timeout;
 	volatile boolean										gone;
+	SecurityManager											sm				= System
+																					.getSecurityManager();
+	Bundle													bundle;
 
 	@Activate
 	protected void activate(ComponentContext context) {
 		coordinators.add(this);
+		bundle = context.getUsingBundle();
 	}
 
 	@Deactivate
@@ -36,21 +40,20 @@ public class CoordinatorImpl implements Coordinator {
 	}
 
 	public CoordinationImpl create(String name, int timeout) {
-		check();
+		check(CoordinationPermission.INITIATE);
 		CoordinationImpl c = new CoordinationImpl(this, name, timeout);
 		coordinations.add(c);
 		return c;
 	}
 
 	public Coordination begin(String name, int timeoutInMillis) {
-		check();
 		CoordinationImpl c = create(name, timeoutInMillis);
 		push(c);
 		return c;
 	}
 
 	public List< ? extends Coordination> getCoordinations() {
-		check();
+		check(CoordinationPermission.ADMIN);
 		List<CoordinationImpl> l = new ArrayList<CoordinationImpl>();
 		for (CoordinatorImpl coordinator : coordinators) {
 			l.addAll(coordinator.coordinations);
@@ -60,13 +63,12 @@ public class CoordinatorImpl implements Coordinator {
 
 	@Reference
 	protected void setLog(LogService log) {
-		check();
 		this.log = log;
 	}
 
 	public boolean addParticipant(Participant participant)
 			throws CoordinationException {
-		check();
+		check(CoordinationPermission.PARTICIPATE);
 		Coordination c = getCurrentCoordination();
 		if (c == null)
 			return false;
@@ -75,8 +77,8 @@ public class CoordinatorImpl implements Coordinator {
 		return true;
 	}
 
-	public boolean failed(Throwable reason) {
-		check();
+	public boolean fail(Throwable reason) {
+		check(CoordinationPermission.PARTICIPATE);
 		Coordination c = getCurrentCoordination();
 		if (c == null)
 			return false;
@@ -86,7 +88,7 @@ public class CoordinatorImpl implements Coordinator {
 	}
 
 	public Coordination getCurrentCoordination() {
-		check();
+		check(CoordinationPermission.PARTICIPATE);
 		synchronized (stacks) {
 			List<CoordinationImpl> stack = stacks.get(Thread.currentThread());
 			if (stack == null)
@@ -101,12 +103,21 @@ public class CoordinatorImpl implements Coordinator {
 	}
 
 	public Coordination pop() {
-		check();
+		check(CoordinationPermission.INITIATE);
 		return pop(Thread.currentThread());
 	}
 
+	public Coordination getCoordination(long id) {
+		check(CoordinationPermission.ADMIN);
+		for (Coordination c : getCoordinations()) {
+			if (c.getId() == id)
+				return c;
+		}
+		return null;
+	}
+
 	private CoordinationImpl pop(Thread thread) {
-		check();
+		check(CoordinationPermission.INITIATE);
 		synchronized (stacks) {
 			List<CoordinationImpl> stack = stacks.get(thread);
 			if (stack == null)
@@ -127,7 +138,7 @@ public class CoordinatorImpl implements Coordinator {
 	}
 
 	public Coordination push(Coordination c) {
-		check();
+		check(CoordinationPermission.INITIATE);
 		synchronized (stacks) {
 			CoordinationImpl cc = (CoordinationImpl) c;
 			if (cc.terminated)
@@ -149,10 +160,18 @@ public class CoordinatorImpl implements Coordinator {
 		}
 	}
 
-	private void check() {
+	private void check(String action)
+			throws CoordinationException {
 		if (gone)
 			throw new ServiceException("Coordinator is ungotten",
 					ServiceException.UNREGISTERED);
+
+		if (action == null || sm == null)
+			return;
+
+		CoordinationPermission cp = new CoordinationPermission(bundle, null,
+				action);
+		sm.checkPermission(cp);
 	}
 
 	private void error(CoordinationImpl cc, String message, int reason) {
@@ -181,14 +200,6 @@ public class CoordinatorImpl implements Coordinator {
 			if (stack.isEmpty())
 				stacks.remove(stack);
 		}
-	}
-
-	public Coordination getCoordination(long id) {
-		for (Coordination c : getCoordinations()) {
-			if (c.getId() == id)
-				return c;
-		}
-		return null;
 	}
 
 }

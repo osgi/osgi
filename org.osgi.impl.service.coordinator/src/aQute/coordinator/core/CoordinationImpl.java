@@ -5,6 +5,7 @@ import java.util.Map.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
+import org.osgi.framework.*;
 import org.osgi.service.coordinator.*;
 import org.osgi.service.log.*;
 
@@ -41,6 +42,8 @@ public class CoordinationImpl implements Coordination {
 	}
 
 	public void end() throws CoordinationException {
+		check(CoordinationPermission.INITIATE);
+
 		if (wasTerminated(null))
 			alreadyEnded();
 
@@ -63,7 +66,7 @@ public class CoordinationImpl implements Coordination {
 		unlockAll();
 		coordinator = null;
 
-		synchronized(this) {
+		synchronized (this) {
 			notifyAll();
 		}
 		if (partiallyFailed)
@@ -72,6 +75,8 @@ public class CoordinationImpl implements Coordination {
 	}
 
 	public long extendTimeout(int timeInMillis) {
+		check(CoordinationPermission.INITIATE);
+
 		if (deadline == 0 || timeInMillis == 0)
 			return deadline;
 
@@ -119,14 +124,13 @@ public class CoordinationImpl implements Coordination {
 
 		unlockAll();
 		coordinator = null;
-		
-		synchronized(this) {
+
+		synchronized (this) {
 			notifyAll();
 		}
 		if (thread != null && thread != Thread.currentThread())
 			thread.interrupt();
 
-		
 		return true;
 	}
 
@@ -143,16 +147,39 @@ public class CoordinationImpl implements Coordination {
 	}
 
 	public List< ? extends Participant> getParticipants() {
+		check(CoordinationPermission.INITIATE);
 		return new ArrayList<Participant>(participants);
 	}
 
 	public Map<Class< ? >, Object> getVariables() {
+//		check(CoordinationPermission.PARTICIPATE);
 		return variables;
 	}
 
 	public void addParticipant(Participant p) {
+		check(CoordinationPermission.PARTICIPATE);
 		if (lock(p))
 			participants.add(p); // Only adds once
+	}
+
+	public synchronized boolean isTerminated() {
+		return terminated;
+	}
+
+	public String toString() {
+		return name + ":" + id;
+	}
+
+	public synchronized void join(long timeoutInMillis)
+			throws InterruptedException {
+		check(CoordinationPermission.PARTICIPATE);
+		while (!terminated)
+			wait(timeoutInMillis);
+	}
+
+	public Thread getThread() {
+		check(CoordinationPermission.ADMIN);
+		return stackThread;
 	}
 
 	private boolean lock(Participant p) {
@@ -219,20 +246,23 @@ public class CoordinationImpl implements Coordination {
 		}
 	}
 
-	public synchronized boolean isTerminated() {
-		return terminated;
+	private void check(String admin) {
+		synchronized (this) {
+			if (terminated)
+				alreadyEnded();
+		}
+
+		CoordinatorImpl c = coordinator;
+		if (c == null)
+			throw new ServiceException("No longer active service",
+					ServiceException.UNREGISTERED);
+
+		if (c.sm == null)
+			return;
+
+		CoordinationPermission cp = new CoordinationPermission(c.bundle, name,
+				admin);
+		c.sm.checkPermission(cp);
 	}
 
-	public String toString() {
-		return name + ":" + id;
-	}
-
-	public Thread getThread() {
-		return stackThread;
-	}
-
-	public synchronized void join(long timeoutInMillis) throws InterruptedException {
-		while ( ! terminated )
-			wait(timeoutInMillis);
-	}
 }
