@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,8 @@
  */
 package org.osgi.service.coordinator;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A Coordination object is used to coordinate a number of independent

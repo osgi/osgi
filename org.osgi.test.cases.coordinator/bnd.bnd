@@ -1,4 +1,4 @@
-Bundle-Version: 3.0.0.${project.build}
+Bundle-Version: 1.0.0.${project.build}
 
 Include-Resource: dummy.jar
 
@@ -7,7 +7,6 @@ Private-Package						= ${p}.junit, \
 
 -buildpath							= \
 	org.osgi.test.support; 	version=project, \
-    biz.aQute.bnd, \
     org.osgi.service.coordinator;           version=project , \
     osgi.core;                              version=4.2     , \
     osgi.cmpn;                              version=4.2     , \
@@ -18,12 +17,11 @@ Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.coordinator
 
 -runbundles						= \
+	osgi.cmpn; version=latest, \
     org.osgi.impl.service.coordinator; version=latest, \
     org.osgi.impl.service.log; version=latest, \
-    org.apache.felix.scr,\
-    org.apache.felix.http.jetty, \
-    org.apache.felix.configadmin, \
-    org.apache.felix.webconsole
+	org.osgi.impl.service.cm; version=latest, \
+	org.osgi.impl.service.component; version=latest
 
 -runproperties					= ${runproperties}, org.osgi.service.http.port=9091
 

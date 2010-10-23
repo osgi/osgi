@@ -1,27 +1,54 @@
-package aQute.coordinator.core;
+/*
+ * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.osgi.impl.service.coordinator;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.WeakHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.osgi.framework.*;
-import org.osgi.service.component.*;
-import org.osgi.service.coordinator.*;
-import org.osgi.service.log.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceException;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.coordinator.Coordination;
+import org.osgi.service.coordinator.CoordinationException;
+import org.osgi.service.coordinator.CoordinationPermission;
+import org.osgi.service.coordinator.Coordinator;
+import org.osgi.service.coordinator.Participant;
+import org.osgi.service.log.LogService;
 
-import aQute.bnd.annotation.component.*;
+import aQute.bnd.annotation.component.Activate;
+import aQute.bnd.annotation.component.Component;
+import aQute.bnd.annotation.component.Deactivate;
+import aQute.bnd.annotation.component.Reference;
 
 @Component(servicefactory = true)
 public class CoordinatorImpl implements Coordinator {
-	static List<CoordinatorImpl>							coordinators	= new CopyOnWriteArrayList<CoordinatorImpl>();
-	final List<CoordinationImpl>							coordinations	= new CopyOnWriteArrayList<CoordinationImpl>();
-	final WeakHashMap<Thread, List<CoordinationImpl>>		stacks			= new WeakHashMap<Thread, List<CoordinationImpl>>();
-	LogService												log;
-	final IdentityHashMap<Participant, CoordinationImpl>	locks			= new IdentityHashMap<Participant, CoordinationImpl>();
-	long													timeout;
-	volatile boolean										gone;
-	SecurityManager											sm				= System
+	private final static List<CoordinatorImpl>				coordinators	= new CopyOnWriteArrayList<CoordinatorImpl>();
+	private final List<CoordinationImpl>					coordinations	= new CopyOnWriteArrayList<CoordinationImpl>();
+	private final WeakHashMap<Thread, List<CoordinationImpl>>	stacks			= new WeakHashMap<Thread, List<CoordinationImpl>>();
+	volatile LogService											log;
+	final IdentityHashMap<Participant, CoordinationImpl>		locks			= new IdentityHashMap<Participant, CoordinationImpl>();
+	volatile long												timeout;
+	private volatile boolean									gone;
+	final SecurityManager										sm				= System
 																					.getSecurityManager();
-	Bundle													bundle;
+	volatile Bundle												bundle;
 
 	@Activate
 	protected void activate(ComponentContext context) {
@@ -39,9 +66,9 @@ public class CoordinatorImpl implements Coordinator {
 		}
 	}
 
-	public CoordinationImpl create(String name, int timeout) {
+	public CoordinationImpl create(String name, int t) {
 		check(CoordinationPermission.INITIATE);
-		CoordinationImpl c = new CoordinationImpl(this, name, timeout);
+		CoordinationImpl c = new CoordinationImpl(this, name, t);
 		coordinations.add(c);
 		return c;
 	}

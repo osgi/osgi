@@ -1,22 +1,48 @@
-package aQute.coordinator.core;
+/*
+ * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.osgi.impl.service.coordinator;
 
-import java.util.*;
-import java.util.Map.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import org.osgi.framework.*;
-import org.osgi.service.coordinator.*;
-import org.osgi.service.log.*;
+import org.osgi.framework.ServiceException;
+import org.osgi.service.coordinator.Coordination;
+import org.osgi.service.coordinator.CoordinationException;
+import org.osgi.service.coordinator.CoordinationPermission;
+import org.osgi.service.coordinator.Participant;
+import org.osgi.service.log.LogService;
 
 public class CoordinationImpl implements Coordination {
-	final static Timer				timer			= new Timer();
-	static final AtomicInteger		counter			= new AtomicInteger(1000);
-	final long						id;
-	final List<Participant>			participants	= new CopyOnWriteArrayList<Participant>();
-	CoordinatorImpl					coordinator;
-	final String					name;
-	final Map<Class< ? >, Object>	variables		= new ConcurrentHashMap<Class< ? >, Object>();
+	private final static Timer		timer			= new Timer();
+	private static final AtomicInteger	counter			= new AtomicInteger(
+																1000);
+	private final long					id;
+	private final List<Participant>		participants	= new CopyOnWriteArrayList<Participant>();
+	private CoordinatorImpl				coordinator;
+	private final String				name;
+	private final Map<Class< ? >, Object>	variables		= new ConcurrentHashMap<Class< ? >, Object>();
 
 	class FailTimer extends TimerTask {
 		public void run() {
@@ -24,11 +50,11 @@ public class CoordinationImpl implements Coordination {
 		}
 	}
 
-	TimerTask			timeouter	= new FailTimer();
-	volatile long		deadline	= 0;
-	volatile Throwable	failure;
-	boolean				terminated	= false;
-	Thread				stackThread;
+	private TimerTask	timeouter	= new FailTimer();
+	private volatile long		deadline	= 0;
+	private volatile Throwable	failure;
+	volatile boolean			terminated	= false;
+	volatile Thread				stackThread;
 
 	CoordinationImpl(CoordinatorImpl coordinator, String name, int timeout) {
 		this.coordinator = coordinator;
@@ -92,11 +118,11 @@ public class CoordinationImpl implements Coordination {
 		return deadline;
 	}
 
-	private synchronized boolean wasTerminated(Throwable failure) {
+	private synchronized boolean wasTerminated(Throwable f) {
 		if (terminated)
 			return true;
 
-		this.failure = failure;
+		this.failure = f;
 		timeouter.cancel();
 		coordinator.clear(this);
 		terminated = true;
@@ -104,9 +130,9 @@ public class CoordinationImpl implements Coordination {
 		return false;
 	}
 
-	public boolean fail(Throwable failure) {
+	public boolean fail(Throwable f) {
 		Thread thread = stackThread;
-		if (wasTerminated(failure))
+		if (wasTerminated(f))
 			return false;
 
 		for (Participant p : participants) {

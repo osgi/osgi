@@ -1,8 +1,23 @@
+/*
+ * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.osgi.service.coordinator;
 
-import java.security.*;
+import java.security.BasicPermission;
 
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
 
 /**
  * The name parameter of the Permission is a filter expression. It asserts the
@@ -32,6 +47,7 @@ import org.osgi.framework.*;
  *     terminate()                                                           +
  * </pre>
  * 
+ * ### Need to complete the implementation!
  */
 public class CoordinationPermission extends BasicPermission {
 
@@ -83,7 +99,7 @@ public class CoordinationPermission extends BasicPermission {
 	}
 
 
-	// For BJ to have lots of fun!
+	// TODO For BJ to have lots of fun!
 
 
 }
