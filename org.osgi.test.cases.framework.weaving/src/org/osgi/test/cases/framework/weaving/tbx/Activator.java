@@ -20,6 +20,9 @@ import junit.framework.Assert;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
+/**
+*
+*/
 public class Activator implements BundleActivator {
 	private final static String PACKAGE_NAME = "org.osgi.test.cases.framework.weaving.tbx.";
 	private final static String TEST_NAME = "weaving.name";
@@ -34,6 +37,7 @@ public class Activator implements BundleActivator {
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		// empty
 	}
 
 }

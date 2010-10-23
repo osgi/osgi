@@ -15,7 +15,9 @@
  */
 package org.osgi.test.cases.framework.weaving.tbx;
 
-
+/**
+ *
+ */
 public class TestWeaving {
 
 	public String toString() {
