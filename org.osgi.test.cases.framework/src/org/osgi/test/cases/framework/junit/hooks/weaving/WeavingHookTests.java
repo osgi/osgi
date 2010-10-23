@@ -48,7 +48,7 @@ public class WeavingHookTests extends OSGiTestCase {
 	private final static String TEST_DYNAMIC_NAME = "weaving.dynamic.name";
 	private final static String TEST_RESULT = "weaving.result";
 	private final static String TEST_PACKAGE_NAME = "org.osgi.test.cases.framework.weaving.tbx.";
-	private final static String TEST_WEAVING_SOURCE = "org.osgi.test.cases.framework.weaving.jar";
+	private final static String	TEST_WEAVING_SOURCE	= "weaving.tbx.jar";
 	private final List bundles = new ArrayList();
 	private final List registrations = new ArrayList();
 	FrameworkWiring frameworkWiring;

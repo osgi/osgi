@@ -9,8 +9,6 @@ Export-Package						= \
 	${p}.dynpkgimport.exported, \
 	${p}.lifecycle.servicereferencegetter
 	
-Import-Package	= org.osgi.framework.hooks.weaving; resolution:=optional, *
-
 Bundle-ClassPath: .,div.tb6.jar
 
 Include-Resource = \
@@ -241,6 +239,7 @@ Include-Resource = \
 	weaving.pkg1.v100.jar, \
 	weaving.pkg1.v110.jar, \
 	weaving.tb1.jar, \
+	weaving.tbx.jar=${repo;${p}.weaving}, \
 	wiring.base.jar, \
 	wiring.exporter.jar, \
 	wiring.exporter.frag.jar, \
@@ -249,11 +248,10 @@ Include-Resource = \
 	wiring.importer.frag.jar, \
 	wiring.requirer.jar, \
 	wiring.requirer.frag.jar, \
-	wiring.reexport.jar, \
-	${project.workspace}/org.osgi.test.cases.framework.weaving/${target-dir}/org.osgi.test.cases.framework.weaving.jar
+	wiring.reexport.jar
 
 -dependson 					=  \
-    org.osgi.test.cases.framework.weaving
+    ${p}.weaving
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
