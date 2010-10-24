@@ -1,4 +1,3 @@
-Bundle-Version: 4.2.0.${project.build}
 Private-Package:                         ${p}.tbx
 -buildpath							= \
 	osgi.core;									version=4.2		, \
