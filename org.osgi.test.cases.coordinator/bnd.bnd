@@ -1,5 +1,3 @@
-Bundle-Version: 1.0.0.${project.build}
-
 Include-Resource: dummy.jar
 
 Private-Package						= ${p}.junit, \
