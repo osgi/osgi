@@ -1,5 +1,4 @@
 proposed.specs = \
-	 org.osgi.service.coordination, \
 	 org.osgi.multiplexer, \
 	 org.osgi.service.obr
 
