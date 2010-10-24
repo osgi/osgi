@@ -1,6 +1,6 @@
 javac.source            = 1.5
 javac.target            = jsr14
-Bundle-Version						= 4.0.0.${project.build}
+
 Private-Package						= ${p}.junit, \
 	org.osgi.test.support.*
 Export-Package						= ${p}.service

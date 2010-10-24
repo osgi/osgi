@@ -5,7 +5,7 @@ javac.target 			= 1.5
   (*).(war);                             type=bnd;  recipe="bnd/$1.bnd"
 
 Bundle-Description: OSGi Web Container RFC 66 Optional Annotation Compliance Test
-Bundle-Version: 4.2.0.${project.build}
+
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
 Private-Package						= org.osgi.test.support.*, \

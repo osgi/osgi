@@ -1,4 +1,4 @@
-Bundle-Version						: 4.2.0.${project.build}
+
 Bundle-Description: Conditional Permission Admin Test R42
 Bundle-Vendor: OSGi Alliance
 Bundle-DocURL: http://www.osgi.org/

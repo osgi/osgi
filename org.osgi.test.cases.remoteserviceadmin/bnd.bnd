@@ -1,6 +1,6 @@
 javac.source            = 1.5
 javac.target            = jsr14
-Bundle-Version						: 1.0.0.${project.build}
+
 Bundle-Description					: Remote Service Admin test cases.
 
 Export-Package 					= ${p}.common;version="1.0.0",-noimport:=true,\

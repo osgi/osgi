@@ -1,7 +1,7 @@
 javac.source 			= 1.6
 javac.target 			= 1.6
 
-Bundle-Version: 4.2.0.${project.build}
+
 
 Export-Package						= \
 	org.osgi.service.jpa

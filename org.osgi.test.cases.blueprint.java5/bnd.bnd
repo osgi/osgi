@@ -2,14 +2,14 @@ javac.source 			= 1.5
 javac.target 			= 1.5
 
 Private-Package						= org.osgi.test.support.*
-Bundle-Version: 4.2.0.${project.build}
+
 Export-Package						= ${p}.*
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
 Bundle-Vendor: IBM
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
-Bundle-Copyright: ${copyright}
+
 
 Include-Resource					= \
 	www/generic_collection_injection.jar=generic_collection_injection.jar , \

@@ -73,15 +73,17 @@ osgi.release				= 4
 osgi.version				= 4.3
 -versionpolicy				= "[${version;==;${@}},${version;+;${@}})"
 
-core.build.version			= ${osgi.version}.0.${project.build}
-cmpn.build.version			= ${osgi.version}.0.${project.build}
-mobile.build.version		= ${osgi.version}.0.${project.build}
-enterprise.build.version	= ${osgi.version}.0.${project.build}
-proposed.build.version		= ${osgi.version}.0.${project.build}
+build.version				= ${osgi.version}.0.${project.build}
+core.build.version			= ${build.version}
+cmpn.build.version			= ${build.version}
+mobile.build.version		= ${build.version}
+enterprise.build.version	= ${build.version}
+proposed.build.version		= ${build.version}
 
 # Documentation
 Bundle-Copyright       	= ${copyright}
 Bundle-Vendor			= OSGi Alliance
+Bundle-Version			= ${build.version}
 -removeheaders			= Include-Resource, Private-Package
 
 junit.package			= junit.framework;version=3.8

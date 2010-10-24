@@ -1,5 +1,5 @@
 Bundle-Description: Test Bundle for Preference Service tests
-Bundle-Version: 4.2.0.${project.build}
+
 
 Private-Package						= org.osgi.test.support.*, \
 	${p}.junit.*

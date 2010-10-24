@@ -1,13 +1,13 @@
 javac.source            = 1.5
 javac.target            = jsr14
 
-Bundle-Version						: 1.0.0.${project.build}
+
 Bundle-Description					: Remote Service Admin secure test cases.
 Bundle-Vendor: TIBCO Software Inc.
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
-Bundle-Copyright: ${copyright}
+
 
 Export-Package 					= ${p}.common;version=1.0.0
 	

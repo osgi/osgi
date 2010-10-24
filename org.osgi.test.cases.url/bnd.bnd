@@ -1,5 +1,5 @@
 Bundle-Description: Tests the URL service control bundle
-Bundle-Version						: 4.2.0.${project.build}
+
 
 Private-Package						= org.osgi.test.support.*, \
 	${p}.junit.*
