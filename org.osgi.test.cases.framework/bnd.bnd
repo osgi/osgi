@@ -1,3 +1,4 @@
+-dependson :    ${p}.weaving
 
 Bundle-Description					: Framework test cases.
 
@@ -249,9 +250,6 @@ Include-Resource = \
 	wiring.requirer.jar, \
 	wiring.requirer.frag.jar, \
 	wiring.reexport.jar
-
--dependson 					=  \
-    ${p}.weaving
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
