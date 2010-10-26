@@ -883,6 +883,62 @@ public class BundleWiringTests extends OSGiTestCase {
 		checkResources(newExporterWiring.getClassLoader(), rootResources);
 	}
 
+	public void testBSNMatchingAttributes() {
+		Bundle tb13a = install("resolver.tb13a.jar");
+		Bundle tb13b = install("resolver.tb13b.jar");
+		Bundle tb13Client1 = install("resolver.tb13.client1.jar");
+		Bundle tb13Client2 = install("resolver.tb13.client2.jar");
+		Bundle tb13Client3 = install("resolver.tb13.client3.jar");
+		Bundle tb13Client4 = install("resolver.tb13.client4.jar");
+		Bundle tb13Frag1 = install("resolver.tb13.frag1.jar");
+		Bundle tb13Frag2 = install("resolver.tb13.frag2.jar");
+		Bundle tb13Frag3 = install("resolver.tb13.frag3.jar");
+		Bundle tb13Frag4 = install("resolver.tb13.frag4.jar");
+
+		assertFalse(frameworkWiring.resolveBundles(bundles));
+
+		assertEquals("Unexpected state for: " + tb13a.getSymbolicName(), Bundle.RESOLVED, tb13a.getState());
+		assertEquals("Unexpected state for: " + tb13b.getSymbolicName(), Bundle.RESOLVED, tb13b.getState());
+		assertEquals("Unexpected state for: " + tb13Client1.getSymbolicName(), Bundle.INSTALLED, tb13Client1.getState());
+		assertEquals("Unexpected state for: " + tb13Client2.getSymbolicName(), Bundle.RESOLVED, tb13Client2.getState());
+		assertEquals("Unexpected state for: " + tb13Client3.getSymbolicName(), Bundle.INSTALLED, tb13Client3.getState());
+		assertEquals("Unexpected state for: " + tb13Client4.getSymbolicName(), Bundle.RESOLVED, tb13Client4.getState());
+		assertEquals("Unexpected state for: " + tb13Frag1.getSymbolicName(), Bundle.INSTALLED, tb13Frag1.getState());
+		assertEquals("Unexpected state for: " + tb13Frag2.getSymbolicName(), Bundle.RESOLVED, tb13Frag2.getState());
+		assertEquals("Unexpected state for: " + tb13Frag3.getSymbolicName(), Bundle.INSTALLED, tb13Frag3.getState());
+		assertEquals("Unexpected state for: " + tb13Frag4.getSymbolicName(), Bundle.RESOLVED, tb13Frag4.getState());
+
+		BundleWiring tb13Client1Wiring = (BundleWiring) tb13Client1.adapt(BundleWiring.class);
+		assertNull("Expected null Wiring: " + tb13Client1.getSymbolicName(), tb13Client1Wiring);
+		BundleWiring tb13Client3Wiring = (BundleWiring) tb13Client3.adapt(BundleWiring.class);
+		assertNull("Expected null Wiring: " + tb13Client3.getSymbolicName(), tb13Client3Wiring);
+
+		BundleWiring tb13aWiring = (BundleWiring) tb13a.adapt(BundleWiring.class);
+		assertNotNull("Expected non-null wiring: " + tb13a.getSymbolicName(), tb13aWiring);
+		BundleWiring tb13bWiring = (BundleWiring) tb13b.adapt(BundleWiring.class);
+		assertNotNull("Expected non-null wiring: " + tb13b.getSymbolicName(), tb13bWiring);
+		BundleWiring tb13Client2Wiring = (BundleWiring) tb13Client2.adapt(BundleWiring.class);
+		assertNotNull("Expected non-null wiring: " + tb13Client2.getSymbolicName(), tb13Client2Wiring);
+		BundleWiring tb13Client4Wiring = (BundleWiring) tb13Client4.adapt(BundleWiring.class);
+		assertNotNull("Expected non-null wiring: " + tb13Client4.getSymbolicName(), tb13Client4Wiring);
+
+		List client2Required = tb13Client2Wiring.getRequiredCapabilities(Capability.BUNDLE_CAPABILITY);
+		assertEquals("Unexpected number of capabilities", 1, client2Required.size());
+		assertEquals("Wrong provider", tb13a, ((Capability) client2Required.get(0)).getProviderRevision().getBundle());
+
+		List client4Required = tb13Client4Wiring.getRequiredCapabilities(Capability.BUNDLE_CAPABILITY);
+		assertEquals("Unexpected number of capabilities", 1, client4Required.size());
+		assertEquals("Wrong provider", tb13b, ((Capability) client4Required.get(0)).getProviderRevision().getBundle());
+
+		List aFragments = tb13aWiring.getFragmentRevisions();
+		assertEquals("Wrong number of fragments", 1, aFragments.size());
+		assertEquals("Wrong fragment attached", tb13Frag2, ((BundleRevision) aFragments.get(0)).getBundle());
+
+		List bFragments = tb13bWiring.getFragmentRevisions();
+		assertEquals("Wrong number of fragments", 1, bFragments.size());
+		assertEquals("Wrong fragment attached", tb13Frag4, ((BundleRevision) bFragments.get(0)).getBundle());
+	}
+
 	private void assertResourcesEquals(String message, Collection expected, Collection actual) {
 		if (expected.size() != actual.size())
 			fail(message + ": Collections are not the same size: " + expected + ":  " + actual);

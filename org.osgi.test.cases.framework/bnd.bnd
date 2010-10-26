@@ -231,6 +231,16 @@ Include-Resource = \
 	resolver.tb10.v140.jar, \
 	resolver.tb11.jar, \
 	resolver.tb12.jar, \
+	resolver.tb13.client1.jar, \
+	resolver.tb13.client2.jar, \
+	resolver.tb13.client3.jar, \
+	resolver.tb13.client4.jar, \
+	resolver.tb13.frag1.jar, \
+	resolver.tb13.frag2.jar, \
+	resolver.tb13.frag3.jar, \
+	resolver.tb13.frag4.jar, \
+	resolver.tb13a.jar, \
+	resolver.tb13b.jar, \
 	startlevel.tb1.jar, \
 	startlevel.tb2.jar, \
 	startlevel.tb3.jar, \
