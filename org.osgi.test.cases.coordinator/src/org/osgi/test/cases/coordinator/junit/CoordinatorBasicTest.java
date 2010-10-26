@@ -15,38 +15,26 @@
  */
 package org.osgi.test.cases.coordinator.junit;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.UUID;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
+import java.io.*;
+import java.math.*;
+import java.util.*;
 
-import junit.framework.AssertionFailedError;
+import junit.framework.*;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceException;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.coordinator.Coordination;
-import org.osgi.service.coordinator.CoordinationException;
-import org.osgi.service.coordinator.Coordinator;
-import org.osgi.service.coordinator.Participant;
-import org.osgi.test.support.OSGiTestCase;
-import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.framework.*;
+import org.osgi.service.coordinator.*;
+import org.osgi.test.support.*;
+import org.osgi.test.support.compatibility.*;
+import org.osgi.util.tracker.*;
 
+/**
+ * Basic Coordindator test case.
+ */
 public class CoordinatorBasicTest extends OSGiTestCase {
 
 	/**
 	 * Timeout Fixed exception Extending timeout
+	 * @throws Exception 
 	 */
 
 	public void testOverallTimeout() throws Exception {
@@ -113,6 +101,9 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 		}
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public void testVariables() throws Exception {
 		final Coordinator c = (Coordinator) getService(Coordinator.class);
 		assertNotNull("Expect the service to be there", c);
@@ -150,6 +141,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 	/**
 	 * Stack A Coordination can be pushed at most one. Terminated Coordinations
 	 * must be removed from the stack begin == create + push
+	 * @throws Exception 
 	 */
 
 	public void testStack() throws Exception {
@@ -224,6 +216,9 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 		}
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public void testTerminatedInCallbacks() throws Exception {
 		final Coordinator c = (Coordinator) getService(Coordinator.class);
 		assertNotNull("Expect the service to be there", c);
@@ -327,6 +322,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 
 	/**
 	 * Timeout
+	 * @throws Exception 
 	 */
 	public void testTableTimeout() throws Exception {
 		final Coordinator c = (Coordinator) getService(Coordinator.class);
@@ -346,6 +342,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 
 	/**
 	 * Test the fail method according to the table
+	 * @throws Exception 
 	 */
 
 	public void testTableFail() throws Exception {
@@ -377,6 +374,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 
 	/**
 	 * Table showing exceptions for the addParticipant method.
+	 * @throws Exception 
 	 */
 	public void testTableAddParticipant() throws Exception {
 		final Coordinator c = (Coordinator) getService(Coordinator.class);
@@ -460,21 +458,22 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 
 		// FAILED in FAILED state
 		cc = c.begin("table-addParticipant-failed", 0);
-		Exception failure = new Exception();
+		Exception localFailure = new Exception();
 		try {
 
-			cc.fail(failure);
+			cc.fail(localFailure);
 			cc.addParticipant(new TestParticipant());
 		}
 		catch (CoordinationException e) {
 			assertEquals(CoordinationException.FAILED, e.getReason());
-			assertEquals(failure, e.getFailure());
+			assertEquals(localFailure, e.getFailure());
 		}
 
 	}
 
 	/**
 	 * Table showing exceptions for the end method.
+	 * @throws Exception 
 	 */
 
 	public void testTableEnd() throws Exception {
@@ -490,12 +489,12 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 		cc = c.create("table-end-partially-ended", 0);
 		cc.addParticipant(new Participant() {
 
-			public void ended(Coordination c) throws Exception {
+			public void ended(Coordination local) throws Exception {
 				throw new Exception();
 			}
 
-			public void failed(Coordination c) throws Exception {
-
+			public void failed(Coordination local) throws Exception {
+				// ignore
 			}
 
 		});
@@ -527,13 +526,14 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 
 	/**
 	 * CO0021 – All coordinations can be passed as parameters in method call
+	 * @throws Exception 
 	 */
 	public void testPassAsArgument() throws Exception {
 		final Coordinator c = (Coordinator) getService(Coordinator.class);
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
-		Queue<UUID> queue = new LinkedBlockingQueue<UUID>();
+		Vector<BigInteger> queue = new Vector<BigInteger>();
 		Coordination cc = c.create("CO0021", 0);
 		try {
 			for (int i = 0; i < 10; i++)
@@ -556,11 +556,13 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 		}
 	}
 
-	void foo(Coordination c, final int count, final Queue<UUID> queue) {
+	void foo(Coordination c, final int count, final Vector<BigInteger> queue) {
+		final Random r = new Random();
 		ThreadParticipant t = new ThreadParticipant() {
 			public void run() {
 				for (int i = 0; i < count; i++) {
-					queue.add(UUID.randomUUID());
+					BigInteger big = new BigInteger(2048, r);
+					queue.add(big);
 				}
 			}
 		};
@@ -572,6 +574,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 	 * CO0017 – Allow parties that make the coordination fail to provide
 	 * information why it failed, the rationale for this requirement is that it
 	 * is for trouble shooting
+	 * @throws Exception 
 	 */
 	public void testFailInfo() throws Exception {
 		final Coordinator c = (Coordinator) getService(Coordinator.class);
@@ -601,6 +604,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 	 * 
 	 * CO0018 – A Coordination must have a unique identification for management
 	 * purposes
+	 * @throws Exception 
 	 */
 	public void testId() throws Exception {
 		final Coordinator c = (Coordinator) getService(Coordinator.class);
@@ -643,6 +647,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 	 * CO0014 – It must be possible to fail a coordination from outside of the
 	 * initiating/active thread and ensure that the associated thread (and
 	 * thereby the coordinated task) is interrupted.
+	 * @throws Exception 
 	 */
 
 	public void testInterrupt() throws Exception {
@@ -689,6 +694,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 
 	/**
 	 * CO0013 – It must be possible to enumerate the active coordinations
+	 * @throws Exception 
 	 */
 
 	public void testEnumerateCoordinations() throws Exception {
@@ -748,6 +754,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 	/**
 	 * CO0012 – The initiator must be informed if one of the participants throws
 	 * an exception in the termination method for an ok outcome.
+	 * @throws Exception 
 	 */
 
 	public void testPartiallyEnded() throws Exception {
@@ -755,8 +762,8 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 		assertNotNull("Expect the service to be there", c);
 		TestParticipant tp1 = new TestParticipant();
 		TestParticipant tp2 = new TestParticipant() {
-			public void ended(Coordination c) throws Exception {
-				super.ended(c);
+			public void ended(Coordination x) throws Exception {
+				super.ended(x);
 				throw new RuntimeException();
 			}
 		};
@@ -789,6 +796,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 	 * coordination is independent of the outer coordinations.
 	 * 
 	 * This is the OK case
+	 * @throws Exception 
 	 */
 	public void testNestingOk() throws Exception {
 		final Coordinator c = (Coordinator) getService(Coordinator.class);
@@ -847,6 +855,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 	 * coordination is independent of the outer coordinations.
 	 * 
 	 * This is the FAILURE case
+	 * @throws Exception 
 	 */
 	public void testNestingInnerFails() throws Exception {
 		final Coordinator c = (Coordinator) getService(Coordinator.class);
@@ -928,6 +937,9 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 		}
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public void testPreventBlocking() throws Exception {
 		final Coordinator c = (Coordinator) getService(Coordinator.class);
 		assertNotNull("Expect the service to be there", c);
@@ -969,6 +981,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 	 * participate on multiple coordinations in different threads. Participating
 	 * in two coordinations on the same thread with the same participant is an
 	 * error.
+	 * @throws Exception 
 	 */
 
 	public void testNoParticipationOnTwoCoordinationsInTheSameThread()
@@ -1045,6 +1058,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 
 	/**
 	 * CO0008 – It must be possible to enumerate the participants
+	 * @throws Exception 
 	 */
 	public void testEnumerateParticipants() throws Exception {
 		Coordinator c = (Coordinator) getService(Coordinator.class);
@@ -1123,6 +1137,9 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public void testParticipantFailure() throws Exception {
 		Coordinator c = (Coordinator) getService(Coordinator.class);
 		assertNotNull("Expect the service to be there", c);
@@ -1163,17 +1180,18 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 	 * 
 	 * CO0005 – Participants must know that the coordination succeeded or failed
 	 * at termination
+	 * @throws Exception 
 	 */
 	public void testControlOutcome() throws Exception {
 		Coordinator c = (Coordinator) getService(Coordinator.class);
 		assertNotNull("Expect the service to be there", c);
 		TestParticipant tp1 = new TestParticipant();
 
-		Exception failure = new Exception("failed");
+		Exception failure1 = new Exception("failed");
 		Coordination cc = c.create("co0002", 0);
 		try {
 			cc.addParticipant(tp1);
-			cc.fail(failure);
+			cc.fail(failure1);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -1182,7 +1200,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 		finally {
 			try {
 				assertTrue("must be terminated", cc.isTerminated());
-				assertEquals("failure", failure, cc.getFailure());
+				assertEquals("failure", failure1, cc.getFailure());
 				assertEquals("Ended must be 0", 0, tp1.ended.get());
 				assertEquals("Failed must be 1", 1, tp1.failed.get());
 				cc.end();
@@ -1193,7 +1211,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 				assertEquals(cc.getId(), e.getId());
 				assertEquals("Must be FAILED", e.getReason(),
 						CoordinationException.FAILED);
-				assertEquals("And our original failure", failure, e
+				assertEquals("And our original failure", failure1, e
 						.getFailure());
 			}
 		}
@@ -1203,6 +1221,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 	/**
 	 * CO0001 – Provide a solution to allow multiple parties that collaborate to
 	 * coordinate the outcome of a task initiated by an initiator.
+	 * @throws Exception 
 	 */
 
 	public void testCollaboration() throws Exception {
@@ -1311,7 +1330,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 		assertEquals("Failed must be 0", 0, tp.failed.get());
 	}
 
-	private Object getService(Class< ? > c) throws InterruptedException {
+	Object getService(Class< ? > c) throws InterruptedException {
 		BundleContext context = FrameworkUtil.getBundle(
 				CoordinatorBasicTest.class).getBundleContext();
 		ServiceTracker t = new ServiceTracker(context, c.getName(), null) {
