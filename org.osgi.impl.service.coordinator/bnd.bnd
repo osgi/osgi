@@ -12,3 +12,6 @@ Service-Component: *
 	biz.aQute.bnd, \
 	osgi.core;					version=4.2, \
 	osgi.cmpn;					version=4.2
+
+javac.source = 1.5
+javac.target = 1.5

@@ -8,7 +8,7 @@ Private-Package						= ${p}.junit, \
     org.osgi.service.coordinator;           version=project , \
     osgi.core;                              version=4.2     , \
     osgi.cmpn;                              version=4.2     , \
-	ee.j2se;								version=1.5		, \
+	ee.minimum;								version=1.2.2		, \
 	${junit}
 
 Test-Cases							= ${testcases}
@@ -23,5 +23,3 @@ Test-Cases							= ${testcases}
 
 -runproperties					= ${runproperties}, org.osgi.service.http.port=9091
 
-javac.source            = 1.5
-javac.target            = jsr14
