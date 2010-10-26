@@ -83,14 +83,21 @@ public class MetaTypeProviderImpl implements MetaTypeProvider {
 	 */
 	public ObjectClassDefinition getObjectClassDefinition(String id,
 			String locale) {
-		ObjectClassDefinition result;
+		ObjectClassDefinition result = null;
 
-		if (id.equals("org.osgi.test.cases.metatype.ocd1")
-        && (locale == null || locale.equals("pt_BR")) ) {
-			result = new ObjectClassDefinitionImpl();
-		}
-		else {
-			result = null;
+		if (locale == null || locale.equals("pt_BR")) {
+			if (id.equals("org.osgi.test.cases.metatype.ocd1")) {
+				result = new ObjectClassDefinitionImpl1();
+			}
+			else if (id.equals("org.osgi.test.cases.metatype.ocd2")) {
+				result = new ObjectClassDefinitionImpl2();
+			}
+			else if (id.equals("org.osgi.test.cases.metatype.ocd3")) {
+				result = new ObjectClassDefinitionImpl3();
+			}
+			else if (id.equals("org.osgi.test.cases.metatype.ocd4")) {
+				result = new ObjectClassDefinitionImpl4();
+			}
 		}
 
 		return result;

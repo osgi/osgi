@@ -7,7 +7,7 @@ package org.osgi.test.support.compatibility;
  */
 public class Semaphore {
 
-	int count = 0;
+	private int	count	= 0;
 
 	/**
 	 * Creates a new Semaphore with 0 as a start value.
@@ -22,8 +22,9 @@ public class Semaphore {
 	 * @throws IllegalArgumentException if the startValue is negative
 	 */
 	public Semaphore(int startValue) throws IllegalArgumentException {
-		if(startValue < 0) {
-			throw new IllegalArgumentException("startValue can't be lower than 0");
+		if (startValue < 0) {
+			throw new IllegalArgumentException(
+					"startValue can't be lower than 0");
 		}
 		synchronized (this) {
 			count = startValue;

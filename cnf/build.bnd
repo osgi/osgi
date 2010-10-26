@@ -69,9 +69,13 @@ project.build			= ${tstamp;yyyyMMddHHmm}
 copyright = Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 copyright.html = Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 
+# deprecated -versionpolicy             = ${range;[==,+)}
+# default version policies
+#   -provider-policy =  ${range;[==,=+)}
+#   -consumer-policy =  ${range;[==,+)}
+
 osgi.release				= 4
 osgi.version				= 4.3
--versionpolicy				= "[${version;==;${@}},${version;+;${@}})"
 
 build.version				= ${osgi.version}.0.${project.build}
 core.build.version			= ${build.version}
