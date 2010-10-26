@@ -40,12 +40,12 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * @author left 
  * @version $Id$
  */
-public class ObjectClassDefinitionImpl implements ObjectClassDefinition {
+public class ObjectClassDefinitionImpl1 implements ObjectClassDefinition {
 
 	/**
 	 * Creates a new instance of ObjectClassDefinitionImpl
 	 */
-	public ObjectClassDefinitionImpl() {
+	public ObjectClassDefinitionImpl1() {
 		// empty
 	}
 	
@@ -88,7 +88,7 @@ public class ObjectClassDefinitionImpl implements ObjectClassDefinition {
 	 * @see org.osgi.service.metatype.ObjectClassDefinition#getID()
 	 */
 	public String getID() {
-		return "org.osgi.test.cases.metatype.ocd";
+		return "org.osgi.test.cases.metatype.ocd1";
 	}
 
 	/**

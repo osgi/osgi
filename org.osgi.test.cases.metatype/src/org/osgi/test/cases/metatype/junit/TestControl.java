@@ -430,16 +430,28 @@ public class TestControl extends DefaultTestBundleControl {
 	}
 	
 	/**
-	 * Test MetaTypeService when the bundle has an own implementation of MetaTypeProvider
+	 * Tests a MetaTypeService when a bundle has provided its own implementation
+	 * of a MetaTypeProvider that is registered as a service and is neither a 
+	 * ManagedService nor ManagedServiceFactory.
 	 * 
+	 * @spec MetaTypeService.getMetaTypeInformation(Bundle)
 	 * @spec MetaTypeInformation.getPids()
-	 * @spec MetaTypeInformation.getObjectClassDefinition(String,String)
+	 * @spec MetaTypeInformation.getFactoryPids()
 	 */
 	public void testBundleMetaTypeProviderWithoutManagedServiceOrFactory() throws Exception {
 		Bundle tb3;
 		MetaTypeInformation mti;
 		ObjectClassDefinition ocd;
 		ServiceReference sr;
+		
+		String[] pids = new String[] {
+				"org.osgi.test.cases.metatype.ocd1",
+				"org.osgi.test.cases.metatype.ocd2"
+		};
+		String[] factoryPids = new String[] {
+				"org.osgi.test.cases.metatype.ocd3",
+				"org.osgi.test.cases.metatype.ocd4"
+		};
 
 		tb3 = installBundle("tb3.jar");
 		tb3.start();
@@ -451,12 +463,33 @@ public class TestControl extends DefaultTestBundleControl {
 
 		// Get an object for tests
 		mti = mts.getMetaTypeInformation(tb3);
-		assertEquals("Checking the number of PIDs", 1, mti.getPids().length);
+		assertNotNull("The returned MetaTypeInformation was null", mti);
+		assertTrue("The pids returned by MetaTypeInformation did not match the METATYPE_PID property",
+				isArrayEquals(pids, mti.getPids()));
+		assertTrue("The factory pids returned by MetaTypeInformation did not match the METATYPE_FACTORY_PID property",
+				isArrayEquals(factoryPids, mti.getFactoryPids()));
+		assertEquals("Checking the number of PIDs", pids.length, mti.getPids().length);
+		assertEquals("Checking the number of factory PIDs", factoryPids.length, mti.getFactoryPids().length);
 
 		ocd = mti.getObjectClassDefinition("org.osgi.test.cases.metatype.ocd1",
 				"pt_BR");
 		assertEquals("Checking the implementation class",
-				"org.osgi.test.cases.metatype.tb3.ObjectClassDefinitionImpl", ocd
+				"org.osgi.test.cases.metatype.tb3.ObjectClassDefinitionImpl1", ocd
+						.getClass().getName());
+		ocd = mti.getObjectClassDefinition("org.osgi.test.cases.metatype.ocd2",
+				"pt_BR");
+		assertEquals("Checking the implementation class",
+				"org.osgi.test.cases.metatype.tb3.ObjectClassDefinitionImpl2", ocd
+						.getClass().getName());
+		ocd = mti.getObjectClassDefinition("org.osgi.test.cases.metatype.ocd3",
+				"pt_BR");
+		assertEquals("Checking the implementation class",
+				"org.osgi.test.cases.metatype.tb3.ObjectClassDefinitionImpl3", ocd
+						.getClass().getName());
+		ocd = mti.getObjectClassDefinition("org.osgi.test.cases.metatype.ocd4",
+				"pt_BR");
+		assertEquals("Checking the implementation class",
+				"org.osgi.test.cases.metatype.tb3.ObjectClassDefinitionImpl4", ocd
 						.getClass().getName());
 
 		tb3.stop();

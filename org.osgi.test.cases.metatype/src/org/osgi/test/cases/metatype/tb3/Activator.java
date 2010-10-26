@@ -65,8 +65,14 @@ public class Activator implements BundleActivator {
 		Hashtable properties;
 
 		properties = new Hashtable();
-		properties.put(MetaTypeProvider.METATYPE_PID,
-				"org.osgi.test.cases.metatype.ocd1");
+		properties.put(MetaTypeProvider.METATYPE_PID, new String[] {
+				"org.osgi.test.cases.metatype.ocd1",
+				"org.osgi.test.cases.metatype.ocd2"
+		});
+		properties.put(MetaTypeProvider.METATYPE_FACTORY_PID, new String[] {
+				"org.osgi.test.cases.metatype.ocd3",
+				"org.osgi.test.cases.metatype.ocd4"
+		});
 
 		sr = context.registerService(MetaTypeProvider.class.getName(), 
 				new MetaTypeProviderImpl(),
