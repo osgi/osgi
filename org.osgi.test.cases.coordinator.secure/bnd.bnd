@@ -1,8 +1,6 @@
 javac.source            = 1.5
 javac.target            = jsr14
 
-Include-Resource: dummy.jar
-
 Private-Package						= ${p}.junit, \
 	org.osgi.test.support.*
 
@@ -15,7 +13,6 @@ Private-Package						= ${p}.junit, \
 	${junit}
 
 Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.service.coordinator
 
 -runbundles						= \
 	osgi.cmpn; version=latest, \
@@ -24,3 +21,4 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.component; version=latest
 
+-runproperties = ${runsecureproperties}

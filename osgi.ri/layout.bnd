@@ -10,6 +10,7 @@ build.cmpn.impls = \
   	org.osgi.impl.bundle.midletcontainer, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.service.application, \
+	org.osgi.impl.service.coordinator , \
 	org.osgi.impl.service.deploymentadmin , \
 	org.osgi.impl.service.device.manager , \
 	org.osgi.impl.service.dmt , \

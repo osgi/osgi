@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,11 @@ package org.osgi.jmx.service.coordinator;
 
 import java.io.IOException;
 
-import javax.management.openmbean.*;
+import javax.management.openmbean.CompositeData;
+import javax.management.openmbean.CompositeType;
+import javax.management.openmbean.SimpleType;
+import javax.management.openmbean.TabularData;
+import javax.management.openmbean.TabularType;
 
 import org.osgi.jmx.Item;
 import org.osgi.jmx.JmxConstants;

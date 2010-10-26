@@ -15,22 +15,38 @@
  */
 package org.osgi.test.cases.coordinator.junit;
 
-import java.io.*;
-import java.math.*;
-import java.util.*;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Vector;
 
-import junit.framework.*;
+import junit.framework.AssertionFailedError;
 
-import org.osgi.framework.*;
-import org.osgi.service.coordinator.*;
-import org.osgi.test.support.*;
-import org.osgi.test.support.compatibility.*;
-import org.osgi.util.tracker.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.coordinator.Coordination;
+import org.osgi.service.coordinator.CoordinationException;
+import org.osgi.service.coordinator.Coordinator;
+import org.osgi.service.coordinator.Participant;
+import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.concurrent.AtomicInteger;
+import org.osgi.test.support.concurrent.AtomicReference;
+import org.osgi.test.support.concurrent.Semaphore;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * Basic Coordindator test case.
+ * Basic Coordinator test case.
  */
-public class CoordinatorBasicTest extends OSGiTestCase {
+public class CoordinatorBasicTests extends OSGiTestCase {
 
 	/**
 	 * Timeout Fixed exception Extending timeout
@@ -1332,7 +1348,7 @@ public class CoordinatorBasicTest extends OSGiTestCase {
 
 	Object getService(Class< ? > c) throws InterruptedException {
 		BundleContext context = FrameworkUtil.getBundle(
-				CoordinatorBasicTest.class).getBundleContext();
+				CoordinatorBasicTests.class).getBundleContext();
 		ServiceTracker t = new ServiceTracker(context, c.getName(), null) {
 			public Object addingService(ServiceReference ref) {
 				Object o = super.addingService(ref);
