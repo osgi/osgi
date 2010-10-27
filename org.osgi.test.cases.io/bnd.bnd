@@ -1,5 +1,7 @@
-Bundle-Description: Tests the IO Service
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
+Bundle-Description: Tests the IO Service
 
 Private-Package						= org.osgi.test.support.*, \
 	${p}.junit.*, \

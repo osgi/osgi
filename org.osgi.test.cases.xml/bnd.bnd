@@ -1,5 +1,7 @@
-Bundle-Description: Tests the XML service
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
+Bundle-Description: Tests the XML service
 
 Private-Package						= org.osgi.test.support.*, \
 	${p}.junit.*

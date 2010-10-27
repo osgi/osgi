@@ -1,3 +1,5 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Description					: Policy Test Case.
 Bundle-DocUrl                       : http://www.osgi.org/testcases/4/test.cases.template

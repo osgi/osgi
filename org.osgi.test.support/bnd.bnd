@@ -1,3 +1,6 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Bundle-Description: 			General Support for OSGi JUnit based testing
 Bundle-Version: 				1.0.0
 Export-Package:  				org.osgi.test.*
@@ -7,6 +10,3 @@ Export-Package:  				org.osgi.test.*
  	ee.minimum;						version=1.2, \
  	${junit}
  	
- 	
-javac.source = 1.5
-javac.target = jsr14

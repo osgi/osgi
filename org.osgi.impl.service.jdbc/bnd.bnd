@@ -1,3 +1,6 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Bundle-Activator: 		${p}.Activator
 Export-Package: 		org.osgi.service.jdbc;-split-package:=first
 #Import-Package: 		org.apache.derby.jdbc, javax.sql, org.osgi.framework

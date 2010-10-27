@@ -1,3 +1,6 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Bundle-Activator: org.osgi.impl.service.useradmin.Activator
 Bundle-Description: OSGi UserAdmin Service Reference Implementation by Gatespace AB.
 Bundle-Version: 1.0.0.${project.build}

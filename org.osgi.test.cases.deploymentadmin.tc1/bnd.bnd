@@ -1,3 +1,5 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Private-Package						= org.osgi.test.support.*
 Export-Package						= ${p}.tbc.*	
