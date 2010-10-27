@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.management.ManagementFactory;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.management.InstanceNotFoundException;
 import javax.management.MBeanServer;
 import javax.management.MBeanServerFactory;
 import javax.management.MBeanServerInvocationHandler;
@@ -30,14 +28,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
-import org.osgi.jmx.framework.BundleStateMBean;
 import org.osgi.jmx.framework.FrameworkMBean;
-import org.osgi.jmx.framework.PackageStateMBean;
-import org.osgi.jmx.framework.ServiceStateMBean;
-import org.osgi.jmx.service.cm.ConfigurationAdminMBean;
-import org.osgi.jmx.service.permissionadmin.PermissionAdminMBean;
-import org.osgi.jmx.service.provisioning.ProvisioningServiceMBean;
-import org.osgi.jmx.service.useradmin.UserAdminMBean;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 
@@ -481,7 +472,9 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		//make sure that the server framework System Bundle exports the interfaces
 		String systemPackagesXtra = System.getProperty(SYSTEM_PACKAGES_EXTRA);
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
-        configuration.put("osgi.console", "" + consoleId++);
+		if (consoleId != 0) {
+			configuration.put("osgi.console", "" + consoleId++);
+		}
         return configuration;
 	}
 
@@ -562,6 +555,9 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		return registered;
 	}
 	
-	static int consoleId = 1112;
+	static int	consoleId;
+	{
+		consoleId = Integer.getInteger("osgi.console", 0).intValue();
+	}
 	
 }
