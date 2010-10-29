@@ -20,7 +20,7 @@ package org.osgi.impl.service.dmt;
 import info.dmtree.DmtData;
 import info.dmtree.MetaNode;
 
-public class StructureMetaNode implements MetaNode {
+public class ScaffoldMetaNode implements MetaNode {
     private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 
         "org.osgi.impl.service.dmt.interior-node-value-support";
 
@@ -45,7 +45,7 @@ public class StructureMetaNode implements MetaNode {
     }
 
     public boolean isZeroOccurrenceAllowed() {
-        return false;
+        return true;
     }
 
     public DmtData getDefault() {

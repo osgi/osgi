@@ -129,7 +129,7 @@ public class Plugin {
 	}
 
 
-	boolean isRoot() {
+	public boolean isRoot() {
 		for (Segment segment : owns ) {
 			if ( ".".equals(segment.getUri().toString()) )
 				return true;

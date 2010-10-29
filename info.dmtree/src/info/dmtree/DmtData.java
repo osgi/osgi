@@ -1,5 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@
  */
 package info.dmtree;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Hashtable;
 
@@ -113,12 +115,51 @@ public final class DmtData {
      */
     public static final int FORMAT_RAW_STRING = 0x0800;
 
+    
     /**
      * The node holds raw protocol data encoded in binary format. The
      * {@link #getFormatName()} method can be used to get the actual format
      * name.
      */
     public static final int FORMAT_RAW_BINARY = 0x1000;
+
+
+    //******** new formats from RFC0141 ************
+    /**
+     * The node holds a long value. 
+     * The {@link #getFormatName()} method can be used to get the actual format
+     * name.
+     */
+    public static final int FORMAT_LONG = 0x1001;
+
+    /**
+     * The node holds an unsigned long value. 
+     * name.
+     */
+    public static final int FORMAT_UNSIGNED_LONG = 0x1002;
+
+    /**
+     * The node holds a String object that is interpreted as a dateTime type defined in ISO 8601.
+     */
+    public static final int FORMAT_DATETIME = 0x1004;
+    
+    /**
+     * The node holds an unsigned int value. 
+     * name.
+     */
+    public static final int FORMAT_UNSIGNED_INTEGER = 0x1008;
+    
+    /**
+     * The node holds a string value. This data type should be mapped as String. 
+     * name.
+     */
+    public static final int FORMAT_NODE_URI = 0x1010;
+
+    /**
+     * The node holds an hex binary <code>hexbin</code> value. The value of the node
+     * corresponds to the Java <code>byte[]</code> type.
+     */
+    public static final int FORMAT_HEXBINARY = 0x1020;
 
     
     private static final Hashtable FORMAT_NAMES = new Hashtable();
@@ -135,6 +176,13 @@ public final class DmtData {
         FORMAT_NAMES.put(new Integer(FORMAT_STRING),    "chr");
         FORMAT_NAMES.put(new Integer(FORMAT_TIME),      "time");
         FORMAT_NAMES.put(new Integer(FORMAT_XML),       "xml");
+        
+        FORMAT_NAMES.put(new Integer(FORMAT_LONG),      "long");
+        FORMAT_NAMES.put(new Integer(FORMAT_UNSIGNED_LONG),     "ulong");
+        FORMAT_NAMES.put(new Integer(FORMAT_UNSIGNED_INTEGER),      "uint");
+        FORMAT_NAMES.put(new Integer(FORMAT_DATETIME),  "datetime");
+        FORMAT_NAMES.put(new Integer(FORMAT_NODE_URI),  "nodeuri");
+        FORMAT_NAMES.put(new Integer(FORMAT_HEXBINARY),  "hexbin");
     }
 
     /**
@@ -158,6 +206,9 @@ public final class DmtData {
     private final String formatName;
 
     private final Object complex;
+    
+    private final long lng;
+    
 
     /**
      * Create a <code>DmtData</code> instance of <code>null</code> format.
@@ -174,6 +225,8 @@ public final class DmtData {
         this.bool = false;
         this.bytes = null;
         this.complex = null;
+        
+        this.lng = 0;
     }
 
     /**
@@ -193,6 +246,8 @@ public final class DmtData {
         this.bool = false;
         this.bytes = null;
         this.complex = null;
+        
+        this.lng = 0;
     }
 
     /**
@@ -221,6 +276,8 @@ public final class DmtData {
         this.flt     = 0;
         this.bool    = false;
         this.bytes   = null;
+        
+        this.lng = 0;
     }
 
     /**
@@ -238,6 +295,7 @@ public final class DmtData {
      *     of day in either local time, complete representation, basic format
      *     (pattern <tt>hhmmss</tt>) or Coordinated Universal Time, basic format
      *     (pattern <tt>hhmmssZ</tt>)
+     * <li>{@link #FORMAT_UNSIGNED_LONG} - value must contain a string that is parsable as unsigned long
      * </ul>
      * The <code>null</code> string argument is only valid if the format is
      * string or XML.
@@ -252,6 +310,7 @@ public final class DmtData {
      *         <code>value</code> is <code>null</code>
      */
     public DmtData(String value, int format) {
+
         switch (format) {
         case FORMAT_DATE:
             checkDateFormat(value);
@@ -259,7 +318,17 @@ public final class DmtData {
         case FORMAT_TIME:
             checkTimeFormat(value);
             break;
+        case FORMAT_DATETIME:
+        	checkDateTimeFormat(value);
+        	break;
+        case FORMAT_UNSIGNED_LONG:
+        	checkUnsignedLong(value);
+        	break;
+        case FORMAT_UNSIGNED_INTEGER:
+        	checkUnsignedInt(value);
+        	break;
         case FORMAT_STRING:
+        case FORMAT_NODE_URI:
         case FORMAT_XML:
             break; // nothing to do, all string values are accepted
         default:
@@ -275,8 +344,10 @@ public final class DmtData {
         this.bool = false;
         this.bytes = null;
         this.complex = null;
+        
+        this.lng = 0;
     }
-
+    
     /**
      * Create a <code>DmtData</code> instance of <code>int</code> format and
      * set its value.
@@ -293,6 +364,8 @@ public final class DmtData {
         this.bool = false;
         this.bytes = null;
         this.complex = null;
+        
+        this.lng = 0;
     }
 
     /**
@@ -311,6 +384,28 @@ public final class DmtData {
         this.bool = false;
         this.bytes = null;
         this.complex = null;
+        
+        this.lng = 0;
+    }
+
+    /**
+     * Create a <code>DmtData</code> instance of <code>long</code> format
+     * and set its value.
+     * 
+     * @param lng the long value to set
+     */
+    public DmtData(long lng) {
+        format = FORMAT_LONG;
+        formatName = getFormatName(format);
+        this.lng = lng;
+
+        this.flt = 0;
+        this.str = null;
+        this.integer = 0;
+        this.bool = false;
+        this.bytes = null;
+        this.complex = null;
+        
     }
 
     /**
@@ -329,6 +424,8 @@ public final class DmtData {
         this.flt = 0;
         this.bytes = null;
         this.complex = null;
+        
+        this.lng = 0;
     }
 
     /**
@@ -351,8 +448,10 @@ public final class DmtData {
         this.flt = 0;
         this.bool = false;
         this.complex = null;
+        
+        this.lng = 0;
     }
-
+ 
     /**
      * Create a <code>DmtData</code> instance of <code>bin</code> or
      * <code>b64</code> format and set its value. The chosen format is
@@ -377,6 +476,47 @@ public final class DmtData {
         this.flt = 0;
         this.bool = false;
         this.complex = null;
+        
+        this.lng = 0;
+    }
+
+    /**
+     * Create a <code>DmtData</code> instance of the specified format and set its value 
+	 * based on the given <code>byte[]</code>. Only the following <code>byte[]</code> based 
+	 * formats can be created using this constructor: 
+	 * FORMAT_BINARY
+	 * FORMAT_BASE64
+	 * FORMAT_HEXBINARY
+     * 
+     * @param bytes the byte array to set, must not be <code>null</code>
+     * @param format the format of the DmtData instance to be created, must be one of the formats specified above
+     * @throws NullPointerException if <code>bytes</code> is <code>null</code>
+     */
+    public DmtData(byte[] bytes, int format) {
+        if (bytes == null)
+            throw new NullPointerException("Binary data argument is null.");
+        
+        switch (format) {
+        case FORMAT_BINARY:
+        case FORMAT_BASE64:
+        case FORMAT_HEXBINARY:
+            break;
+        default:
+            throw new IllegalArgumentException(
+                    "Invalid format in byte[] constructor: " + format);
+        }
+
+        this.format = format;
+        formatName = getFormatName(format);
+        this.bytes = bytes;
+
+        this.str = null;
+        this.integer = 0;
+        this.flt = 0;
+        this.bool = false;
+        this.complex = null;
+        
+        this.lng = 0;
     }
 
     /**
@@ -406,6 +546,8 @@ public final class DmtData {
         this.flt = 0;
         this.bool = false;
         this.complex = null;
+        
+        this.lng = 0;
     }
     
     /**
@@ -435,6 +577,8 @@ public final class DmtData {
         this.flt = 0;
         this.bool = false;
         this.complex = null;
+        
+        this.lng = 0;
     }
     
     /**
@@ -484,6 +628,24 @@ public final class DmtData {
     }
 
     /**
+     * Gets the value of a node with DateTime format. The returned dateTime string is
+     * formatted according to the ISO 8601 definition of a calendar date-time in complete representation. 
+     * The exact format depends on the value the object was initialized with: either
+     * local time, complete representation, basic format (pattern
+     * <tt>CCYYMMDDThhmmss</tt>) or Coordinated Universal Time, basic format (pattern
+     * <tt>CCYYMMDDThhmmssZ</tt>).
+     * 
+     * @return the time value
+     * @throws DmtIllegalStateException if the format of the node is not time
+     */
+    public String getDateTime() {
+        if (format == FORMAT_DATETIME)
+            return str;
+
+        throw new DmtIllegalStateException("DmtData value is not DateTime.");
+    }
+
+    /**
      * Gets the value of a node with <code>xml</code> format.
      * 
      * @return the XML value
@@ -510,6 +672,46 @@ public final class DmtData {
         throw new DmtIllegalStateException("DmtData value is not integer.");
     }
 
+    /**
+     * Gets the value of a node with unsigned integer (<code>uint</code>) format.
+     * 
+     * @return the unsigned integer value
+     * @throws DmtIllegalStateException if the format of the node is not integer
+     */
+    public String getUnsignedInteger() {
+        if (format == FORMAT_UNSIGNED_INTEGER)
+            return str;
+
+        throw new DmtIllegalStateException("DmtData value is not unsigned integer.");
+    }
+
+    /**
+     * Gets the value of a node with long (<code>long</code>) format.
+     * 
+     * @return the long value
+     * @throws DmtIllegalStateException if the format of the node is not long
+     */
+    public long getLong() {
+        if (format == FORMAT_LONG)
+            return lng;
+
+        throw new DmtIllegalStateException("DmtData value is not long.");
+    }
+
+    /**
+     * Gets the value of a node with unsigned long (<code>ulong</code>) format.
+     * The value is returned as a String because the range of a long is not sufficient to hold the maximum possible unsigned value.
+     * 
+     * @return the unsigned long value 
+     * @throws DmtIllegalStateException if the format of the node is not long
+     */
+    public String getUnsignedLong() {
+    	if ( format == FORMAT_UNSIGNED_LONG )
+    		return str;
+    	
+    	throw new IllegalStateException("DmtData value is not unsigned long");
+    }
+    
     /**
      * Gets the value of a node with <code>float</code> format.
      * 
@@ -555,6 +757,24 @@ public final class DmtData {
         throw new DmtIllegalStateException("DmtData value is not a byte array.");
     }
     
+    /**
+     * Gets the value of a node with hex binary (<code>hexbin</code>) format.
+     * 
+     * @return the hex binary value
+     * @throws DmtIllegalStateException if the format of the node is not hex binary
+     */
+    public byte[] getHexBinary() {
+        if (format == FORMAT_HEXBINARY) {
+            byte[] bytesCopy = new byte[bytes.length];
+            for (int i = 0; i < bytes.length; i++)
+                bytesCopy[i] = bytes[i];
+
+            return bytesCopy;
+        }
+
+        throw new DmtIllegalStateException("DmtData value is not in hex binary format.");
+    }
+
     /**
      * Gets the value of a node in raw binary ({@link #FORMAT_RAW_BINARY})
      * format.
@@ -626,6 +846,21 @@ public final class DmtData {
     }
 
     /**
+     * Gets the value of a node uri ({@link #FORMAT_NODE_URI})
+     * format.
+     * 
+     * @return the data value in node uri format
+     * @throws DmtIllegalStateException if the format of the node is not node uri
+     */
+    public String getNodeUri() {
+        if (format == FORMAT_NODE_URI)
+            return str;
+        
+        throw new DmtIllegalStateException(
+                "DmtData value is not in node uri format.");
+    }
+
+    /**
      * Get the node's format, expressed in terms of type constants defined in
      * this class. Note that the 'format' term is a legacy from OMA DM, it is
      * more customary to think of this as 'type'.
@@ -672,11 +907,16 @@ public final class DmtData {
         case FORMAT_XML:
         case FORMAT_DATE:
         case FORMAT_TIME:
+        case FORMAT_DATETIME:
         case FORMAT_RAW_STRING:
+        case FORMAT_UNSIGNED_INTEGER:
+        case FORMAT_UNSIGNED_LONG:
+        case FORMAT_NODE_URI:
             return str == null ? 0 : str.length();
         case FORMAT_BINARY:
         case FORMAT_BASE64:
         case FORMAT_RAW_BINARY:
+        case FORMAT_HEXBINARY:
             return bytes.length;
         case FORMAT_INTEGER:
         case FORMAT_FLOAT:
@@ -685,6 +925,8 @@ public final class DmtData {
             return 1;
         case FORMAT_NODE:
             return -1;
+        case FORMAT_LONG:
+        	return 8;
         case FORMAT_NULL:
             return 0;
         }
@@ -713,10 +955,16 @@ public final class DmtData {
         case FORMAT_XML:
         case FORMAT_DATE:
         case FORMAT_TIME:
+        case FORMAT_DATETIME:
         case FORMAT_RAW_STRING:
+        case FORMAT_NODE_URI:
+        case FORMAT_UNSIGNED_INTEGER:
+        case FORMAT_UNSIGNED_LONG:
             return str == null ? "" : str;
         case FORMAT_INTEGER:
             return String.valueOf(integer);
+        case FORMAT_LONG:
+            return String.valueOf(lng);
         case FORMAT_FLOAT:
             return String.valueOf(flt);
         case FORMAT_BOOLEAN:
@@ -724,6 +972,7 @@ public final class DmtData {
         case FORMAT_BINARY:
         case FORMAT_BASE64:
         case FORMAT_RAW_BINARY:
+        case FORMAT_HEXBINARY:
             return getHexDump(bytes);
         case FORMAT_NODE:
             return complex.toString();
@@ -761,15 +1010,22 @@ public final class DmtData {
         case FORMAT_XML:
         case FORMAT_DATE:
         case FORMAT_TIME:
+        case FORMAT_UNSIGNED_INTEGER:
+        case FORMAT_UNSIGNED_LONG:
+        case FORMAT_DATETIME:
+        case FORMAT_NODE_URI:
             return str == null ? other.str == null : str.equals(other.str);
         case FORMAT_INTEGER:
             return integer == other.integer;
+        case FORMAT_LONG:
+            return lng == other.lng;
         case FORMAT_FLOAT:
             return flt == other.flt;
         case FORMAT_BOOLEAN:
             return bool == other.bool;
         case FORMAT_BINARY:
         case FORMAT_BASE64:
+        case FORMAT_HEXBINARY:
             return Arrays.equals(bytes, other.bytes);
         case FORMAT_NODE:
             return complex.equals(other.complex);
@@ -799,10 +1055,16 @@ public final class DmtData {
         case FORMAT_XML:
         case FORMAT_DATE:
         case FORMAT_TIME:
+        case FORMAT_DATETIME:
+        case FORMAT_UNSIGNED_INTEGER:
+        case FORMAT_UNSIGNED_LONG:
+        case FORMAT_NODE_URI:
         case FORMAT_RAW_STRING:
             return str == null ? 0 : str.hashCode();
         case FORMAT_INTEGER:
             return new Integer(integer).hashCode();
+        case FORMAT_LONG:
+        	return new Long(lng).hashCode();
         case FORMAT_FLOAT:
             return new Float(flt).hashCode();
         case FORMAT_BOOLEAN:
@@ -810,6 +1072,7 @@ public final class DmtData {
         case FORMAT_BINARY:
         case FORMAT_BASE64:
         case FORMAT_RAW_BINARY:
+        case FORMAT_HEXBINARY:
             return new String(bytes).hashCode();
         case FORMAT_NODE:
             return complex.hashCode();
@@ -864,6 +1127,54 @@ public final class DmtData {
         	throw new IllegalArgumentException("Time string is out of range.");
     }
     
+    private static void checkDateTimeFormat( String value ) {
+    	if ( value.length() < "yyyyMMddTHHmmss".length() )
+            throw new IllegalArgumentException("DateTime string '" + value +
+            "' is to short for format 'yyyyMMddThhmmss' or 'yyyyMMddThhmmssZ'.");
+    	
+    	// check for char 'T' at position 8
+    	if (value.length() > 8 && value.charAt(8) != 'T' )
+            throw new IllegalArgumentException("DateTime string '" + value +
+            "' does not follow the format 'yyyyMMddThhmmss' or 'yyyyMMddThhmmssZ'.");
+    	
+    	checkDateFormat(value.substring(0, 8));
+    	checkTimeFormat(value.substring(9, 15));
+    }
+
+    
+    private static void checkUnsignedLong( String value ) {
+    	if ( value == null )
+    		throw new IllegalArgumentException( "The unsigned long string is null.");
+
+    	for (int i = 0; i < value.length(); i++) {
+			if ( ! Character.isDigit(value.charAt(i)))
+				throw new IllegalArgumentException( "The unsigned long string contains invalid characters.");
+		}
+    	String mask = "00000000000000000000";
+        String z = mask.substring(0 , mask.length() - value.length()) + value;
+
+    	if ( z.compareTo( "18446744073709551614") > 0 ) {
+    		throw new IllegalArgumentException("The unsigned long string " + value +
+                    " is out of range.");
+    	}
+    }
+
+    private static void checkUnsignedInt( String value ) {
+    	if ( value == null )
+    		throw new IllegalArgumentException( "The unsigned int string is null.");
+
+    	for (int i = 0; i < value.length(); i++) {
+			if ( ! Character.isDigit(value.charAt(i)))
+				throw new IllegalArgumentException( "The unsigned int string contains invalid characters.");
+		}
+    	String mask = "0000000000";
+        String z = mask.substring(0 , mask.length() - value.length()) + value;
+    	if ( z.compareTo( "4294967294") > 0 ) {
+    		throw new IllegalArgumentException("The unsigned long string " + value +
+                    " is out of range.");
+    	}
+    }
+
     private static int checkNumber(String value, String name, int from,
             int length, int min, int max) {
         String part = value.substring(from, from+length);
@@ -880,6 +1191,7 @@ public final class DmtData {
         
         return number;
     }
+    
 
     // character array of hexadecimal digits, used for printing binary data
     private static char[] hex = "0123456789ABCDEF".toCharArray();

@@ -31,6 +31,11 @@ import info.dmtree.DmtSession;
  */
 public interface ExecPlugin {
 
+	/**
+	 * The string to be used as key for the “execRootURIs” property when an ExecPlugin is registered
+	 */
+	static final String EXEC_ROOT_URIS = "execRootURIs";
+
     /**
      * Execute the given node with the given data. This operation corresponds to
      * the EXEC command in OMA DM.

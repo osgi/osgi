@@ -28,6 +28,7 @@ import info.dmtree.Uri;
 import info.dmtree.security.DmtPermission;
 import info.dmtree.security.DmtPrincipalPermission;
 import info.dmtree.spi.DataPlugin;
+import info.dmtree.spi.DmtConstants;
 import info.dmtree.spi.ExecPlugin;
 import info.dmtree.spi.ReadWriteDataSession;
 import info.dmtree.spi.ReadableDataSession;
@@ -422,6 +423,10 @@ public class DmtSessionImpl implements DmtSession {
 			if ( mountPoint.startsWith( nodePath.getUri() ))
 				return true;
 		}
+		
+		// if root plugin is responsible and nodepath is below root, then nodePath must be a scaffold node
+		if ( plugin.isRoot() && ! nodePath.isRoot() )
+			return true;
 		return false;
     }
 
@@ -513,7 +518,7 @@ public class DmtSessionImpl implements DmtSession {
         // not checking meta-data for the GET capability, meta-data should
         // always be publicly available
         if ( isPureStructuralNode(nodeUri))
-        	return new StructureMetaNode();
+        	return new ScaffoldMetaNode();
         else
         	return getMetaNodeNoCheck(node);
     }
@@ -721,7 +726,7 @@ public class DmtSessionImpl implements DmtSession {
         checkSession();
         Node node = makeAbsoluteUri(nodeUri);
         if ( isPureStructuralNode(nodeUri))
-        	return null;
+        	return DmtConstants.DDF_SCAFFOLD;
         else 
         	return internalGetNodeType(node);
     }
@@ -803,10 +808,13 @@ public class DmtSessionImpl implements DmtSession {
         // check data against meta-data
         checkValue(node, data);
 
-        MetaNode metaNode = getMetaNodeNoCheck(node);
-        if (metaNode != null && metaNode.getScope() == MetaNode.PERMANENT)
-            throw new DmtException(node.getUri(), DmtException.METADATA_MISMATCH,
-                    "Cannot set the value of a permanent node.");
+        // SD: 22.10.2010: according to the discussions on BUG 1658, 
+        // setting a value on PERMANENT nodes must be permitted, 
+        // if the operation checks (above) where successful
+//        MetaNode metaNode = getMetaNodeNoCheck(node);
+//        if (metaNode != null && metaNode.getScope() == MetaNode.PERMANENT)
+//            throw new DmtException(node.getUri(), DmtException.METADATA_MISMATCH,
+//                    "Cannot set the value of a permanent node.");
         
         getReadWriteDataSession(node).setNodeValue(node.getPath(), data);
 
@@ -1603,6 +1611,9 @@ public class DmtSessionImpl implements DmtSession {
     
     // precondition: path must be absolute
     private void checkNode(Node node, int check) throws DmtException {
+    	// 25.10.2010: added for Bug 1746
+    	node.checkUriAndSegmentLength();
+    	
 		boolean shouldExist = (check != SHOULD_NOT_EXIST);
 		if (getReadableDataSession(node).isNodeUri(node.getPath()) != shouldExist)
 			throw new DmtException(node.getUri(),
@@ -1621,6 +1632,7 @@ public class DmtSessionImpl implements DmtSession {
 							+ (shouldBeLeaf ? "a leaf" : "an internal")
 							+ " node to perform the requested operation.");
 	}
+    
     
     // precondition: checkNode() must have been called for the given uri
     private void checkNodeCapability(Node node, int capability)

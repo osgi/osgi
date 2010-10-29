@@ -49,7 +49,12 @@ import info.dmtree.DmtSession;
  * @version $Id$
  */
 public interface DataPlugin {
-
+	
+	/**
+	 * The string to be used as key for the “dataRootURIs” property when an DataPlugin is registered
+	 */
+	static final String DATA_ROOT_URIS = "dataRootURIs";
+	
     /**
      * This method is called to signal the start of a read-only session when the
      * first reference is made within a <code>DmtSession</code> to a node

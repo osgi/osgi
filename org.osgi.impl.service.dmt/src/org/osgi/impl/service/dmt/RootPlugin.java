@@ -70,7 +70,7 @@ public class RootPlugin implements DataPlugin, ReadableDataSession {
 
 	public MetaNode getMetaNode(String[] nodePath)
 			throws DmtException {
-		return new StructureMetaNode();
+		return new ScaffoldMetaNode();
 	}
 
 	//----- DmtReadOnly methods -----//

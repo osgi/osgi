@@ -1,0 +1,23 @@
+java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat( "yyyyMMdd'T'HHmmss" );
+java.util.Date date = null;
+try {
+	sdf.setLenient(false);
+	date = sdf.parse( "20101031T102030" );
+	System.out.println( "20101031T102030".substring(0,7) ); 
+	System.out.println( "20101031T102030".substring(9,15) ); 
+}
+catch (Exception x ) {
+	System.err.println( x.getMessage() );
+}
+System.out.println( "fertig: date = " + sdf.format(date) );
+System.out.println( "max-long: " + (Long.MAX_VALUE ));
+System.out.println( "compare: " + "2".compareTo("1"));
+
+System.out.println( "max-int: " + (2l * Integer.MAX_VALUE ));
+System.out.println( "compare: " + "23422".compareTo("" + Integer.MAX_VALUE));
+
+String mask = "0000000000000000000";
+String value = "9223372036854775808";
+String z = mask.substring(0 , mask.length() - value.length()) + value;
+System.out.println( "value with zeros: " + z );
+System.out.println( "compare: " + z.compareTo("9223372036854775807"));

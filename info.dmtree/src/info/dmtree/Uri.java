@@ -15,6 +15,8 @@
  */
 package info.dmtree;
 
+import info.dmtree.spi.DmtConstants;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -53,6 +55,26 @@ import java.util.List;
  * @version $Id$
  */
 public final class Uri {
+	
+	/**
+	 * This property specifies the maximum allowed length of a URI segment. 
+	 * The value can be requested at runtime via Uri.getMaxSegmentNameLength().
+	 */
+	public static final String MAX_SEGMENT_NAME_LENGTH = "org.osgi.dmtree.max.segment.name.length";
+	
+	/**
+	 * This property specifies the maximum allowed length of a URI. 
+	 * The value can be requested at runtime via  Uri.getMaxUriLength().
+	 */
+	public static final String MAX_URI_LENGTH = "org.osgi.dmtree.max.uri.length";
+
+	/**
+	 *  This property specifies the maximum allowed number of Uri segments. 
+	 *  The value can be requested at runtime via Uri.getMaxUriSegments().
+	 */
+	public static final String MAX_URI_SEGMENTS = "org.osgi.dmtree.max.uri.segments";
+
+	
 	/*
 	 * NOTE: An implementor may also choose to replace this class in
 	 * their distribution with a class that directly interfaces with the
@@ -109,7 +131,6 @@ public final class Uri {
 			catch (NoSuchMethodException e) {
 				throw new NoSuchMethodError(e.toString());
 			}
-			
 			if (!Modifier.isStatic(result.getModifiers())) {
 				throw new NoSuchMethodError(
 				"digest method must be static");
@@ -120,33 +141,45 @@ public final class Uri {
 	}
 
 
-    // the name of the system property containing the URI segment length limit 
-    private static final String SEGMENT_LENGTH_LIMIT_PROPERTY = 
-        "org.osgi.impl.service.dmt.uri.limits.segmentlength";
+//    // the name of the system property containing the URI segment length limit 
+//    private static final String SEGMENT_LENGTH_LIMIT_PROPERTY = 
+//        "org.osgi.impl.service.dmt.uri.limits.segmentlength";
     
     // the smallest valid value for the URI segment length limit
     private static final int MINIMAL_SEGMENT_LENGTH_LIMIT = 32;
 
-    // contains the maximum length of node names
-    private static final int segmentLengthLimit;
+    // the smallest valid value for the URI length limit
+    private static final int MINIMAL_URI_LENGTH_LIMIT = 128;
 
-    static {
-    	segmentLengthLimit = ((Integer) AccessController
-    	.doPrivileged(new PrivilegedAction() {
-    		public Object run() {
-    			String limitString = System.getProperty(SEGMENT_LENGTH_LIMIT_PROPERTY);
-    			int limit = MINIMAL_SEGMENT_LENGTH_LIMIT; // min. used as default
-    			
-    			try {
-    				int limitInt = Integer.parseInt(limitString);
-    				if(limitInt >= MINIMAL_SEGMENT_LENGTH_LIMIT)
-    					limit = limitInt;
-    			} catch(NumberFormatException e) {}
-    			
-    			return new Integer(limit);
-    		}
-    	})).intValue();
-    }
+    // the smallest valid value for the number of Uri segments
+    private static final int MINIMAL_URI_SEGMENT_NUMBER_LIMIT = 20;
+
+    // contains the maximum length of node names
+    private static int segmentLengthLimit = -1;
+
+    // contains the maximum length of node uris
+    private static int maxURILength = -1;
+
+    // contains the maximum number of uris segments
+    private static int maxURISegments = -1;
+
+//    static {
+//    	segmentLengthLimit = ((Integer) AccessController
+//    	.doPrivileged(new PrivilegedAction() {
+//    		public Object run() {
+//    			String limitString = System.getProperty(SEGMENT_LENGTH_LIMIT_PROPERTY);
+//    			int limit = MINIMAL_SEGMENT_LENGTH_LIMIT; // min. used as default
+//    			
+//    			try {
+//    				int limitInt = Integer.parseInt(limitString);
+//    				if(limitInt >= MINIMAL_SEGMENT_LENGTH_LIMIT)
+//    					limit = limitInt;
+//    			} catch(NumberFormatException e) {}
+//    			
+//    			return new Integer(limit);
+//    		}
+//    	})).intValue();
+//    }
     
     // base64 encoding table, modified for use in node name mangling 
     private static final char BASE_64_TABLE[] = {
@@ -359,7 +392,24 @@ public final class Uri {
      * @return maximum number of URI segments supported by the implementation
      */
     public static int getMaxUriSegments() {
-        return Integer.MAX_VALUE;
+    	if ( maxURISegments == -1 ) {
+    		maxURISegments = ((Integer) AccessController
+	    	    	.doPrivileged(new PrivilegedAction() {
+	    	    		public Object run() {
+	    	    			String limitString = System.getProperty(MAX_URI_SEGMENTS);
+	    	    			int limit = MINIMAL_URI_SEGMENT_NUMBER_LIMIT; // min. used as default
+	    	    			
+	    	    			try {
+	    	    				int limitInt = Integer.parseInt(limitString);
+	    	    				if(limitInt >= MINIMAL_URI_SEGMENT_NUMBER_LIMIT)
+	    	    					limit = limitInt;
+	    	    			} catch(NumberFormatException e) {}
+	    	    			
+	    	    			return new Integer(limit);
+	    	    		}
+	    	    	})).intValue();
+    	}
+        return maxURISegments;
     }
 
     /**
@@ -373,7 +423,24 @@ public final class Uri {
      * @return maximum URI length supported by the implementation
      */
     public static int getMaxUriLength() {
-        return Integer.MAX_VALUE;
+    	if ( maxURILength == -1 ) {
+    		maxURILength = ((Integer) AccessController
+	    	    	.doPrivileged(new PrivilegedAction() {
+	    	    		public Object run() {
+	    	    			String limitString = System.getProperty(MAX_URI_LENGTH);
+	    	    			int limit = MINIMAL_URI_LENGTH_LIMIT; // min. used as default
+	    	    			
+	    	    			try {
+	    	    				int limitInt = Integer.parseInt(limitString);
+	    	    				if(limitInt >= MINIMAL_URI_LENGTH_LIMIT)
+	    	    					limit = limitInt;
+	    	    			} catch(NumberFormatException e) {}
+	    	    			
+	    	    			return new Integer(limit);
+	    	    		}
+	    	    	})).intValue();
+    	}
+        return maxURILength;
     }
 
     /**
@@ -388,6 +455,24 @@ public final class Uri {
      * @return maximum URI segment length supported by the implementation
      */
     public static int getMaxSegmentNameLength() {
+    	
+    	if ( segmentLengthLimit == -1 ) {
+	    	segmentLengthLimit = ((Integer) AccessController
+	    	    	.doPrivileged(new PrivilegedAction() {
+	    	    		public Object run() {
+	    	    			String limitString = System.getProperty(MAX_SEGMENT_NAME_LENGTH);
+	    	    			int limit = MINIMAL_SEGMENT_LENGTH_LIMIT; // min. used as default
+	    	    			
+	    	    			try {
+	    	    				int limitInt = Integer.parseInt(limitString);
+	    	    				if(limitInt >= MINIMAL_SEGMENT_LENGTH_LIMIT)
+	    	    					limit = limitInt;
+	    	    			} catch(NumberFormatException e) {}
+	    	    			
+	    	    			return new Integer(limit);
+	    	    		}
+	    	    	})).intValue();
+    	}
         return segmentLengthLimit;
     }
 

@@ -8,7 +8,7 @@ System.out.println( "count: " + count );
 System.out.println( s.substring( 0, s.lastIndexOf( '/' )));
 
 // cut out the next segment of this path
-String myPath = "./igd/Steffen/test////also";
+String myPath = "./igd/Steffen/tests";
 int nextSegment = s.indexOf( '/', myPath.length() + 1 );
 if ( nextSegment == -1 )
 	nextSegment = s.length();

@@ -1,0 +1,3 @@
+String s = "Steffen";
+System.out.println( s.getClass() );
+System.out.println( "" + String.class.equals( s.getClass() ));

@@ -211,7 +211,7 @@ public class DmtException extends Exception {
      * following situations:
      * <ul>
      * <li>creating, deleting or renaming a permanent node, or modifying its
-     * type or value
+     * type
      * <li>creating an interior node where the meta-node defines it as a leaf,
      * or vice versa
      * <li>any operation on a node which does not have the required access type

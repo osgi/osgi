@@ -1,8 +1,8 @@
 package org.osgi.impl.service.dmt.dispatcher;
 
 
-import info.dmtree.MountPlugin;
 import info.dmtree.MountPoint;
+import info.dmtree.spi.MountPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,7 +91,7 @@ public class Dispatcher extends ServiceTracker {
 			Segment s = (Segment) i.next();
 			mps.add( new MountPointImpl(s.getPath(), eaTracker ));
 		}
-		mp.setMountPoints( mps.toArray( new MountPoint[p.getOwns().size()]) );
+		mp.mountPointsAdded( mps.toArray( new MountPoint[p.getOwns().size()]) );
 	}
 
 	

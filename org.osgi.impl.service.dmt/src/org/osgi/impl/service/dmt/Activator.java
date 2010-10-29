@@ -27,8 +27,8 @@ import org.osgi.impl.service.dmt.plugins.LogPluginActivator;
  */
 public class Activator implements BundleActivator {
 	DmtAdminActivator dmtAdminActivator = new DmtAdminActivator();
-	LogPluginActivator logPluginActivator = new LogPluginActivator();
-	ConfigPluginActivator configurationPluginActivator = new ConfigPluginActivator();
+//	LogPluginActivator logPluginActivator = new LogPluginActivator();
+//	ConfigPluginActivator configurationPluginActivator = new ConfigPluginActivator();
 	
 	public void start(BundleContext context) throws Exception {
 		dmtAdminActivator.start(context);

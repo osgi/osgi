@@ -1,0 +1,59 @@
+package org.osgi.test.cases.dmt.tc4.rfc141;
+
+import info.dmtree.DmtAdmin;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.test.support.OSGiTestCase;
+
+/**
+ * This testcase tests that there is no blocking dependency from 
+ * ConfigurationAdmin at startup of the ConfigurationAdmin. 
+ * 
+ * It corresponds to the bug report No. 1657 at Bugzilla
+ * see: https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1657
+ * @author steffen
+ *
+ */
+public class TestBug1657_CMDependency extends OSGiTestCase{
+	
+	Bundle configAdminBundle;
+	Bundle dmtAdminBundle;
+
+	protected void setUp() throws Exception {
+		super.setUp();
+		System.out.println("setting up");
+		
+		// stopping the configuration admin service
+		ServiceReference ref = getContext().getServiceReference(ConfigurationAdmin.class.getName());
+		if (ref != null ) {
+			configAdminBundle = ref.getBundle();
+			configAdminBundle.stop();
+			System.out.println( "stopped configuration-admin bundle" );
+			Thread.sleep(200);
+		}
+		ref = getContext().getServiceReference(DmtAdmin.class.getName());
+		if (ref != null ) {
+			dmtAdminBundle = ref.getBundle();
+			dmtAdminBundle.stop();
+			System.out.println( "stopped dmt-admin bundle" );
+			Thread.sleep(200);
+		}
+	}
+
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		System.out.println( "tearing down");
+	}
+	
+	
+	/**
+	 * tests existence of specified constants for data formats in info.dmtree.DmtData
+	 */
+	public void testDmtAdminStartWithoutCM() throws Exception {
+		dmtAdminBundle.start();
+		configAdminBundle.start();
+	}
+	
+}

@@ -18,6 +18,7 @@
 package org.osgi.impl.service.dmt;
 
 import info.dmtree.DmtAdmin;
+
 import info.dmtree.notification.NotificationService;
 import info.dmtree.registry.DmtServiceFactory;
 
