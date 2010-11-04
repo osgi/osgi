@@ -9,7 +9,8 @@ Private-Package						= org.osgi.test.support.*, \
 Include-Resource = \
     launch.tb1.jar, \
     launch.tb2.jar, \
-    launch.tb3.jar
+    launch.tb3.jar, \
+    launch.tb4.jar
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.framework.launch

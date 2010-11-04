@@ -173,11 +173,15 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	private Bundle installBundle(Framework framework, String bundle) throws BundleException, IOException {
+		return installBundle(framework, bundle, bundle);
+	}
+
+	private Bundle installBundle(Framework framework, String bundle, String location) throws BundleException, IOException {
 		BundleContext fwkContext = framework.getBundleContext();
 		assertNotNull("Framework context is null", fwkContext);
 		URL input = getBundleInput(bundle);
 		assertNotNull("Cannot find resource: " + bundle, input);
-		return fwkContext.installBundle(bundle, input.openStream());
+		return fwkContext.installBundle(location, input.openStream());
 	}
 
 	private URL getBundleInput(String bundle) {
@@ -588,5 +592,44 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		testBundle.start();
 		stopFramework(framework);
 		assertTrue("File does not exist: " + testOutputFile.getAbsolutePath(), testOutputFile.exists());
+	}
+
+	public void testMultipBSNVersion() throws IOException, BundleException{
+		// explicitly set bsnversion to multiple
+		Map configurationMulti = getConfiguration(getName() + ".multiple");
+		configurationMulti.put(Constants.FRAMEWORK_BSNVERSION, Constants.FRAMEWORK_BSNVERSION_MULTIPLE);
+		Framework frameworkMultiBSN = createFramework(configurationMulti);
+		startFramework(frameworkMultiBSN);
+
+		installBundle(frameworkMultiBSN, "/launch.tb4.jar", "launch.tb4.a");
+		installBundle(frameworkMultiBSN, "/launch.tb4.jar", "launch.tb4.b");
+		stopFramework(frameworkMultiBSN);
+
+		// don't set to anything; test default is single
+		Map configurationSingle1 = getConfiguration(getName() + ".single1");
+		Framework frameworkSingleBSN1 = createFramework(configurationSingle1);
+		startFramework(frameworkSingleBSN1);
+		installBundle(frameworkSingleBSN1, "/launch.tb4.jar", "launch.tb4.a");
+		try {
+			installBundle(frameworkSingleBSN1, "/launch.tb4.jar", "launch.tb4.b");
+			fail("Should fail installing duplicate bundle.");
+		} catch (BundleException e) {
+			assertEquals("Wrong exception type.", BundleException.DUPLICATE_BUNDLE_ERROR, e.getType());
+			// expected
+		}
+
+		// explicitly set bsnversion to single
+		Map configurationSingle2 = getConfiguration(getName() + ".single2");
+		configurationSingle2.put(Constants.FRAMEWORK_BSNVERSION, Constants.FRAMEWORK_BSNVERSION_SINGLE);
+		Framework frameworkSingleBSN2 = createFramework(configurationSingle2);
+		startFramework(frameworkSingleBSN2);
+		installBundle(frameworkSingleBSN2, "/launch.tb4.jar", "launch.tb4.a");
+		try {
+			installBundle(frameworkSingleBSN2, "/launch.tb4.jar", "launch.tb4.b");
+			fail("Should fail installing duplicate bundle.");
+		} catch (BundleException e) {
+			assertEquals("Wrong exception type.", BundleException.DUPLICATE_BUNDLE_ERROR, e.getType());
+			// expected
+		}
 	}
 }
