@@ -179,8 +179,9 @@ public class FrameworkUtil {
 	 * 
 	 * @param matchPattern The pattern against which to match the DN chain.
 	 * @param dnChain The DN chain to match against the specified pattern. Each
-	 *        element of the chain must be of type {@code String} and use
-	 *        the format defined in RFC 2253.
+	 *        element of the chain must be of type {@code String} and use the
+	 *        format defined in <a
+	 *        href="http://www.ietf.org/rfc/rfc2253.txt">RFC 2253</a>.
 	 * @return {@code true} If the pattern matches the DN chain; otherwise
 	 *         {@code false} is returned.
 	 * @throws IllegalArgumentException If the specified match pattern or DN
