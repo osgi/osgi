@@ -19,7 +19,7 @@ import java.util.Dictionary;
 import java.util.Map;
 
 /**
- * An RFC 1960-based Filter.
+ * An <a href="http://www.ietf.org/rfc/rfc1960.txt">RFC 1960</a>-based Filter.
  * <p>
  * {@code Filter}s can be created by calling {@link BundleContext#createFilter}
  * or {@link FrameworkUtil#createFilter} with a filter string.
