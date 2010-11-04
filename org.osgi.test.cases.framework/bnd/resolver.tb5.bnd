@@ -9,5 +9,5 @@ Require-Capability:                      test; filter="(&(test=aName)(version>=1
  test; filter="(&(version>=1.1)(long.list=1)(long.list=2)(long.list=3)(long.list=4))", \
  test; filter="(&(version>=1.1)(double.list=1.001)(double.list=1.002)(double.list=1.003)(double.list<=1.3))", \
  test; filter="(&(version>=1.1)(string.list~=astring)(string.list~=bstring)(string.list=cString))", \
- test; filter="(&(version>=1.1)(string.list2=a\\"quote)(string.list2=a\\,comma)(string.list2= aSpace )(string.list2=\\"start)(string.list2=\\,start)(string.list2=end\\")(string.list2=end\\,))"
+ test; filter="(&(version>=1.1)(string.list2=a\\"quote)(string.list2=a\\,comma)(string.list2= aSpace )(string.list2=\\"start)(string.list2=\\,start)(string.list2=end\\")(string.list2=end\\,))", \
  test.effective; effective:="active"; filter="(willResolve=false)"
