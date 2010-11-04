@@ -726,23 +726,23 @@ public interface BundleContext extends BundleReference {
 	 * The following steps are required to get the service object:
 	 * <ol>
 	 * <li>If the service has been unregistered, {@code null} is returned.
-	 * <li>The context bundle's use count for this service is incremented by
-	 * one.
-	 * <li>If the context bundle's use count for the service is currently one
+	 * <li>If the context bundle's use count for the service is currently zero
 	 * and the service was registered with an object implementing the
 	 * {@code ServiceFactory} interface, the
 	 * {@link ServiceFactory#getService(Bundle, ServiceRegistration)} method is
-	 * called to create a service object for the context bundle. This service
-	 * object is cached by the Framework. While the context bundle's use count
-	 * for the service is greater than zero, subsequent calls to get the
-	 * services's service object for the context bundle will return the cached
-	 * service object. <br>
-	 * If the service object returned by the {@code ServiceFactory} object is
-	 * not an {@code instanceof} all the classes named when the service was
+	 * called to create a service object for the context bundle. If the service
+	 * object returned by the {@code ServiceFactory} object is {@code null}, not
+	 * an {@code instanceof} all the classes named when the service was
 	 * registered or the {@code ServiceFactory} object throws an exception,
 	 * {@code null} is returned and a Framework event of type
 	 * {@link FrameworkEvent#ERROR} containing a {@link ServiceException}
-	 * describing the error is fired.
+	 * describing the error is fired. <br>
+	 * This service object is cached by the Framework. While the context
+	 * bundle's use count for the service is greater than zero, subsequent calls
+	 * to get the services's service object for the context bundle will return
+	 * the cached service object.
+	 * <li>The context bundle's use count for this service is incremented by
+	 * one.
 	 * <li>The service object for the service is returned.
 	 * </ol>
 	 * 

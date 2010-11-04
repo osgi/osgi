@@ -26,22 +26,21 @@ package org.osgi.framework;
  * the specific service object granted to a bundle that is using the service.
  * 
  * <p>
- * When this happens, the
- * {@code BundleContext.getService(ServiceReference)} method calls the
- * {@code ServiceFactory.getService} method to create a service object
- * specifically for the requesting bundle. The service object returned by the
- * {@code ServiceFactory} is cached by the Framework until the bundle
+ * When this happens, the {@code BundleContext.getService(ServiceReference)}
+ * method calls the {@code ServiceFactory.getService} method to create a service
+ * object specifically for the requesting bundle. The service object returned by
+ * the {@code ServiceFactory} is cached by the Framework until the bundle
  * releases its use of the service.
  * 
  * <p>
- * When the bundle's use count for the service equals zero (including the bundle
- * stopping or the service being unregistered), the
+ * When the bundle's use count for the service is decremented to zero (including
+ * the bundle stopping or the service being unregistered), the
  * {@code ServiceFactory.ungetService} method is called.
  * 
  * <p>
- * {@code ServiceFactory} objects are only used by the Framework and are
- * not made available to other bundles in the OSGi environment. The Framework
- * may concurrently call a {@code ServiceFactory}.
+ * {@code ServiceFactory} objects are only used by the Framework and are not
+ * made available to other bundles in the OSGi environment. The Framework may
+ * concurrently call a {@code ServiceFactory}.
  * 
  * @param <S> Type of Service
  * @see BundleContext#getService
@@ -56,21 +55,21 @@ public interface ServiceFactory<S> {
 	 * <p>
 	 * The Framework invokes this method the first time the specified
 	 * {@code bundle} requests a service object using the
-	 * {@code BundleContext.getService(ServiceReference)} method. The
-	 * service factory can then return a specific service object for each
-	 * bundle.
+	 * {@code BundleContext.getService(ServiceReference)} method. The service
+	 * factory can then return a specific service object for each bundle.
 	 * 
 	 * <p>
-	 * The Framework caches the value returned (unless it is {@code null}),
-	 * and will return the same service object on any future call to
-	 * {@code BundleContext.getService} for the same bundle. This means the
-	 * Framework must not allow this method to be concurrently called for the
-	 * same bundle.
+	 * The Framework must check that the returned service object is valid. It
+	 * must not be {@code null} and it must be an {@code instanceof} all the
+	 * classes named when the service was registered. If this method throws an
+	 * exception or the returned service object is not valid, then {@code null}
+	 * is returned to the bundle.
 	 * 
 	 * <p>
-	 * The Framework will check if the returned service object is an instance of
-	 * all the classes named when the service was registered. If not, then
-	 * {@code null} is returned to the bundle.
+	 * The Framework caches the valid service object and will return the same
+	 * service object on any future call to {@code BundleContext.getService} for
+	 * the same bundle. This means the Framework must not allow this method to
+	 * be concurrently called for the specified bundle.
 	 * 
 	 * @param bundle The bundle using the service.
 	 * @param registration The {@code ServiceRegistration} object for the
