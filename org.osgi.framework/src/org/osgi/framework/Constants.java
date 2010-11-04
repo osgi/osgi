@@ -1343,19 +1343,6 @@ public interface Constants {
 	String	FRAMEWORK_UUID							= "org.osgi.framework.uuid";
 
 	/**
-	 * Framework launching property specifying that an returned URLs from bundle
-	 * class loaders must be a jar: or file: URL if set to any value. This
-	 * property must be set in the launching parameters of the framework. If a
-	 * Framework cannot support this property it must throw an Illegal Argument
-	 * Exception during its initialization. URLs obtained through the OSGi API
-	 * do not have this guarantee, these URLs must follow the existing rules for
-	 * resource URLs.
-	 * 
-	 * @since 1.6
-	 */
-	String	FRAMEWORK_JARURLS						= "org.osgi.framework.jarurls";
-
-	/**
 	 * Service property identifying the configuration types supported by a
 	 * distribution provider. Registered by the distribution provider on one of
 	 * its services to indicate the supported configuration types.
