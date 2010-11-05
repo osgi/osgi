@@ -82,10 +82,10 @@ public class TestBug1658_PermanentNode extends DefaultTestBundleControl{
 	
 
 	private void preparePlugin( boolean withMetadata ) throws Exception {
-		Node root = new Node(null, ".", "root" );
-		Node n2 = new Node(root, "A", "node A");
+		String mountRoot = "./A";
+		Node n2 = new Node(null, "A", "node A");
 		Node n3 = new Node(n2, "B", "node B");
-		dataPlugin = new GenericDataPlugin("P1", root);
+		dataPlugin = new GenericDataPlugin("P1", mountRoot, n2 );
 		
 		if ( withMetadata ) {
 			int[] ops = { MetaNode.CMD_GET, MetaNode.CMD_REPLACE };
@@ -94,7 +94,7 @@ public class TestBug1658_PermanentNode extends DefaultTestBundleControl{
 		}
 		
 		Dictionary props = new Hashtable();
-		props.put(DataPlugin.DATA_ROOT_URIS, new String[] {"./A" });
+		props.put(DataPlugin.DATA_ROOT_URIS, new String[] {mountRoot});
 		registerService(DataPlugin.class.getName(), dataPlugin, props );
 	}
 }

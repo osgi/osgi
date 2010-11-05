@@ -27,8 +27,19 @@ public class Segment {
 		this.parent = parent;
 	}
 
-	synchronized void release() throws DmtException {
-		plugin = null;
+	/**
+	 * iterates the parents up until it finds one with a plugin assigned
+	 * up this way all segments are released and removed from the parents children list 
+	 * @param child
+	 * @throws DmtException
+	 */
+	synchronized void release( Segment child ) throws DmtException {
+		if ( child != null )
+			getChildren().remove(child);
+		else
+			plugin = null;
+		if ( parent != null && plugin == null )
+			parent.release( this );
 	}
 
 	protected Segment getSegmentFor(String[] path, int i, boolean add) {
@@ -43,7 +54,7 @@ public class Segment {
 		if ( !add )
 			return null;
 		Segment child = new Segment(this, name);
-		// SD: don't add children with name "#"
+		// SD: don't add mount points "#"
 		if ( ! "#".equals(name ))
 			children.add(child);
 		return child.getSegmentFor(path, i + 1, add);

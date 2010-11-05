@@ -25,12 +25,12 @@ public class TestBug1670_NewDmtDataTypes extends OSGiTestCase{
 	 * tests existence of specified constants for data formats in info.dmtree.DmtData
 	 */
 	public void testNewFormatConstants() throws Exception {
-		checkStringConstant(DmtData.class, "FORMAT_LONG" );
-		checkStringConstant(DmtData.class, "FORMAT_UNSIGNED_INTEGER" );
-		checkStringConstant(DmtData.class, "FORMAT_UNSIGNED_LONG" );
-		checkStringConstant(DmtData.class, "FORMAT_DATETIME" );
-		checkStringConstant(DmtData.class, "FORMAT_HEXBINARY" );
-		checkStringConstant(DmtData.class, "FORMAT_NODE_URI" );
+		checkIntConstant(DmtData.class, "FORMAT_LONG", 0x2000 );
+		checkIntConstant(DmtData.class, "FORMAT_UNSIGNED_LONG",0x4000  );
+		checkIntConstant(DmtData.class, "FORMAT_DATETIME", 0x8000 );
+		checkIntConstant(DmtData.class, "FORMAT_UNSIGNED_INTEGER", 0x10000 );
+		checkIntConstant(DmtData.class, "FORMAT_NODE_URI", 0x20000 );
+		checkIntConstant(DmtData.class, "FORMAT_HEXBINARY", 0x40000 );
 	}
 	
 	/**
@@ -237,26 +237,25 @@ public class TestBug1670_NewDmtDataTypes extends OSGiTestCase{
 	
 	
 	/**
-	 * helper method to check a given class for existence and correct type and modifiers of a given field name
-	 * @param testClass ... the class to be checked
-	 * @param name ... the name of the field
+	 * helper method to check a given class for existence and correct type, modifiers and value of a given field name
+	 * @param fieldClass the class to be checked
+	 * @param fieldName the name of the field
+	 * @param value the expected value of the field
 	 */
-	private void checkStringConstant( Class testClass, String name ) {
-		Field field = null;
+	private void checkIntConstant( Class fieldClass, String fieldName, int value ) {
+		
 		try {
-			field = testClass.getDeclaredField( name );
-		} catch (NoSuchFieldException e) {
-			fail( "Class '" + testClass.getName() + "' does not define a field of name " + name );
-			return;
+			Field f = fieldClass.getField(fieldName);
+			assertTrue(Modifier.isPublic(f.getModifiers()));
+			assertTrue(Modifier.isStatic(f.getModifiers()));
+			assertTrue(Modifier.isFinal(f.getModifiers()));
+			assertEquals(fieldName, value, f.getInt(null));
 		}
-		int mod = field.getModifiers();
-		if ( ! Modifier.isFinal(mod) || ! Modifier.isPublic(mod) || ! Modifier.isStatic(mod) ) {
-			fail( "Field '" + testClass.getName() + "." + name + "' is not 'public final static'" );
+		catch (NoSuchFieldException e) {
+			fail("missing field: " + fieldName, e);
 		}
-		if ( ! "int".equals( field.getType().getName() )) {
-			fail( "Field '" + testClass.getName() + "." + name + "' is not of type int" );
-			return;
+		catch (IllegalAccessException e) {
+			fail("bad field: " + fieldName, e);
 		}
-
 	}
 }

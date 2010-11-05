@@ -26,75 +26,41 @@ public class TestBug1731_StringConstants extends OSGiTestCase{
 	 * tests existence of specified constants for String literals in info.dmtree.spi.DataPlugin
 	 */
 	public void testDataPluginConstants() throws Exception {
-		checkStringConstant(DataPlugin.class, "DATA_ROOT_URIS", "dataRootURIs" );
+		assertConstant("dataRootURIs", "DATA_ROOT_URIS", DataPlugin.class );
 	}
 	
 	/**
 	 * tests existence of specified constants for String literals in info.dmtree.spi.ExecPlugin
 	 */
 	public void testExecPluginConstants() throws Exception {
-		checkStringConstant(ExecPlugin.class, "EXEC_ROOT_URIS", "execRootURIs" );
+		assertConstant( "execRootURIs", "EXEC_ROOT_URIS", ExecPlugin.class);
 	}
 	
 	/**
 	 * tests existence of specified constants for String literals in info.dmtree.spi.MountPlugin
 	 */
 	public void testMountPluginConstants() throws Exception {
-		checkStringConstant(MountPlugin.class, "MOUNT_POINTS", "mountPoints" );
+		assertConstant( "mountPoints", "MOUNT_POINTS", MountPlugin.class );
 	}
 
 	/**
 	 * tests existence of specified constants for String literals in info.dmtree.spi.DMTConstants
 	 */
 	public void testDMTConstants() throws Exception {
-		checkStringConstant(DmtConstants.class, "DDF_LIST_SUBTREE", "org.osgi/1.0/ListSubtree" );
-		checkStringConstant(DmtConstants.class, "DDF_SCAFFOLD", "org.osgi/1.0/ScaffoldNode" );
+		assertConstant( "org.osgi/1.0/ListSubtree", "DDF_LIST_SUBTREE", DmtConstants.class );
+		assertConstant( "org.osgi/1.0/ScaffoldNode", "DDF_SCAFFOLD", DmtConstants.class );
 
-		checkStringConstant(DmtConstants.class, "EVENT_TOPIC_ADDED", "info/dmtree/DmtEvent/ADDED" );
-		checkStringConstant(DmtConstants.class, "EVENT_TOPIC_DELETED", "info/dmtree/DmtEvent/DELETED" );
-		checkStringConstant(DmtConstants.class, "EVENT_TOPIC_REPLACED", "info/dmtree/DmtEvent/REPLACED" );
-		checkStringConstant(DmtConstants.class, "EVENT_TOPIC_RENAMED", "info/dmtree/DmtEvent/RENAMED" );
-		checkStringConstant(DmtConstants.class, "EVENT_TOPIC_COPIED", "info/dmtree/DmtEvent/COPIED" );
+		assertConstant( "info/dmtree/DmtEvent/ADDED", "EVENT_TOPIC_ADDED", DmtConstants.class );
+		assertConstant( "info/dmtree/DmtEvent/DELETED", "EVENT_TOPIC_DELETED", DmtConstants.class );
+		assertConstant( "info/dmtree/DmtEvent/REPLACED", "EVENT_TOPIC_REPLACED", DmtConstants.class );
+		assertConstant( "info/dmtree/DmtEvent/RENAMED", "EVENT_TOPIC_RENAMED", DmtConstants.class );
+		assertConstant( "info/dmtree/DmtEvent/COPIED", "EVENT_TOPIC_COPIED", DmtConstants.class );
 		
-		checkStringConstant(DmtConstants.class, "EVENT_PROPERTY_SESSION_ID", "session.id" );
-		checkStringConstant(DmtConstants.class, "EVENT_PROPERTY_NODES", "nodes" );
-		checkStringConstant(DmtConstants.class, "EVENT_PROPERTY_NEW_NODES", "newnodes" );
-		checkStringConstant(DmtConstants.class, "EVENT_PROPERTY_LIST_NODES", "list.nodes" );
-		checkStringConstant(DmtConstants.class, "EVENT_PROPERTY_LIST_UPCOMING_EVENT", "list.upcoming.event" );
+		assertConstant( "session.id", "EVENT_PROPERTY_SESSION_ID", DmtConstants.class );
+		assertConstant( "nodes", "EVENT_PROPERTY_NODES", DmtConstants.class );
+		assertConstant( "newnodes", "EVENT_PROPERTY_NEW_NODES", DmtConstants.class );
+		assertConstant( "list.nodes", "EVENT_PROPERTY_LIST_NODES", DmtConstants.class );
+		assertConstant( "list.upcoming.event", "EVENT_PROPERTY_LIST_UPCOMING_EVENT", DmtConstants.class );
 		
-	}
-
-	
-	/**
-	 * helper method to check a given class for existence and correct type, modifiers and value of a given field name
-	 * @param testClass ... the class to be checked
-	 * @param name ... the name of the field
-	 * @param value ... the value that the field should have
-	 */
-	private void checkStringConstant( Class testClass, String name, String value ) {
-		Field field = null;
-		try {
-			field = testClass.getDeclaredField( name );
-		} catch (NoSuchFieldException e) {
-			fail( "Class '" + testClass.getName() + "' does not define a field of name " + name );
-			return;
-		}
-		if ( ! String.class.equals( field.getType() )) {
-			fail( "Field '" + testClass.getName() + "." + name + "' is not of type String" );
-			return;
-		}
-		int mod = field.getModifiers();
-		if ( ! Modifier.isFinal(mod) || ! Modifier.isPublic(mod) || ! Modifier.isStatic(mod) ) {
-			fail( "Field '" + testClass.getName() + "." + name + "' is not 'public final static'" );
-		}
-		try {
-			if ( ! value.equals( field.get(null))) {
-				fail( "Field '" + testClass.getName() + "." + name + "' doesn't have the value '" + value + "'" );
-				return;
-			}
-		} catch (IllegalAccessException e) {
-			fail( "IllegalAccessException while checking value of field '" + name + "'" );
-		}
-
 	}
 }

@@ -130,36 +130,36 @@ public final class DmtData {
      * The {@link #getFormatName()} method can be used to get the actual format
      * name.
      */
-    public static final int FORMAT_LONG = 0x1001;
+    public static final int FORMAT_LONG = 0x2000;
 
     /**
      * The node holds an unsigned long value. 
      * name.
      */
-    public static final int FORMAT_UNSIGNED_LONG = 0x1002;
+    public static final int FORMAT_UNSIGNED_LONG = 0x4000;
 
     /**
      * The node holds a String object that is interpreted as a dateTime type defined in ISO 8601.
      */
-    public static final int FORMAT_DATETIME = 0x1004;
+    public static final int FORMAT_DATETIME = 0x8000;
     
     /**
      * The node holds an unsigned int value. 
      * name.
      */
-    public static final int FORMAT_UNSIGNED_INTEGER = 0x1008;
+    public static final int FORMAT_UNSIGNED_INTEGER = 0x10000;
     
     /**
      * The node holds a string value. This data type should be mapped as String. 
      * name.
      */
-    public static final int FORMAT_NODE_URI = 0x1010;
+    public static final int FORMAT_NODE_URI = 0x20000;
 
     /**
      * The node holds an hex binary <code>hexbin</code> value. The value of the node
      * corresponds to the Java <code>byte[]</code> type.
      */
-    public static final int FORMAT_HEXBINARY = 0x1020;
+    public static final int FORMAT_HEXBINARY = 0x40000;
 
     
     private static final Hashtable FORMAT_NAMES = new Hashtable();

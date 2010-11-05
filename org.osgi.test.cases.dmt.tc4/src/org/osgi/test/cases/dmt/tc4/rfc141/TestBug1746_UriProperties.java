@@ -46,12 +46,9 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 	 * info.dmtree.Uri
 	 */
 	public void testNewUriConstants() throws Exception {
-		checkStringConstant(Uri.class, "MAX_SEGMENT_NAME_LENGTH",
-				"org.osgi.dmtree.max.segment.name.length");
-		checkStringConstant(Uri.class, "MAX_URI_LENGTH",
-				"org.osgi.dmtree.max.uri.length");
-		checkStringConstant(Uri.class, "MAX_URI_SEGMENTS",
-				"org.osgi.dmtree.max.uri.segments");
+		assertConstant("org.osgi.dmtree.max.segment.name.length", "MAX_SEGMENT_NAME_LENGTH", Uri.class);
+		assertConstant("org.osgi.dmtree.max.uri.length", "MAX_URI_LENGTH", Uri.class);
+		assertConstant("org.osgi.dmtree.max.uri.segments", "MAX_URI_SEGMENTS", Uri.class);
 	}
 
 	/**
@@ -231,40 +228,42 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 	
 	private void registerLongSegmentPlugin(String rootSegment, String segment1)
 			throws Exception {
-		Node root = new Node(null, ".", "root");
-		Node n2 = new Node(root, rootSegment, "rootSegment");
+		String mountRoot = "./" + rootSegment;
+		Node n2 = new Node(null, rootSegment, "rootSegment");
 		Node n3 = new Node(n2, segment1, "segment1");
-		dataPlugin = new GenericDataPlugin("P1", root);
+		dataPlugin = new GenericDataPlugin("P1", mountRoot, n2);
 
 		Dictionary props = new Hashtable();
 		props.put(DataPlugin.DATA_ROOT_URIS,
-				new String[] { "./" + rootSegment });
+				new String[] {mountRoot});
 
 		registerService(DataPlugin.class.getName(), dataPlugin, props);
 	}
 
 	private void registerLongUriPlugin(String rootSegment, String segment)
 			throws Exception {
-		Node root = new Node(null, ".", "root");
-		Node n2 = new Node(root, rootSegment, "rootSegment");
+		String mountRoot = "./" + rootSegment;
+		Node n2 = new Node(null, rootSegment, "rootSegment");
 		Node n3 = new Node(n2, segment, "segment1");
 		Node n4 = new Node(n3, segment, "segment2");
 		Node n5 = new Node(n4, segment, "segment3");
 		Node n6 = new Node(n5, segment, "segment4");
 		Node n7 = new Node(n6, segment, "segment5");
-		dataPlugin = new GenericDataPlugin("P1", root);
+		dataPlugin = new GenericDataPlugin("P1", mountRoot, n2);
 
 		Dictionary props = new Hashtable();
 		props.put(DataPlugin.DATA_ROOT_URIS,
-				new String[] { "./" + rootSegment });
+				new String[] { mountRoot });
 
 		registerService(DataPlugin.class.getName(), dataPlugin, props);
 	}
 
 	private String registerMaxSegmentPlugin(String segmentName, int maxSegments, int rootLevel)
 			throws Exception {
-		Node root = new Node(null, ".", "root");
-		Node parent = root;
+		String mountRoot = "./" + segmentName;
+		
+		Node first = new Node(null, segmentName, "node0" );
+		Node parent = first;
 		String pluginRoot = ".";
 		String wholeUri = pluginRoot;
 		for (int i = 0; i < maxSegments; i++) {
@@ -274,7 +273,7 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 			if ( i < rootLevel )
 				pluginRoot+= "/" + segmentName;
 		}
-		dataPlugin = new GenericDataPlugin("P1", root);
+		dataPlugin = new GenericDataPlugin("P1", mountRoot, first);
 
 		Dictionary props = new Hashtable();
 		props.put(DataPlugin.DATA_ROOT_URIS,
@@ -282,50 +281,6 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 
 		registerService(DataPlugin.class.getName(), dataPlugin, props);
 		return wholeUri;
-	}
-
-	/**
-	 * helper method to check a given class for existence and correct type,
-	 * modifiers and value of a given field name
-	 * 
-	 * @param testClass
-	 *            ... the class to be checked
-	 * @param name
-	 *            ... the name of the field
-	 * @param value
-	 *            ... the value that the field should have
-	 */
-	private void checkStringConstant(Class testClass, String name, String value) {
-		Field field = null;
-		try {
-			field = testClass.getDeclaredField(name);
-		} catch (NoSuchFieldException e) {
-			fail("Class '" + testClass.getName()
-					+ "' does not define a field of name " + name);
-			return;
-		}
-		if (!String.class.equals(field.getType())) {
-			fail("Field '" + testClass.getName() + "." + name
-					+ "' is not of type String");
-			return;
-		}
-		int mod = field.getModifiers();
-		if (!Modifier.isFinal(mod) || !Modifier.isPublic(mod)
-				|| !Modifier.isStatic(mod)) {
-			fail("Field '" + testClass.getName() + "." + name
-					+ "' is not 'public final static'");
-		}
-		try {
-			if (!value.equals(field.get(null))) {
-				fail("Field '" + testClass.getName() + "." + name
-						+ "' doesn't have the value '" + value + "'");
-				return;
-			}
-		} catch (IllegalAccessException e) {
-			fail("IllegalAccessException while checking value of field '"
-					+ name + "'");
-		}
-
 	}
 
 }

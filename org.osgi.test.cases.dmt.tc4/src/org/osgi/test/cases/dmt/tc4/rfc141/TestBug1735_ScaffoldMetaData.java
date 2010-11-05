@@ -6,6 +6,7 @@ import info.dmtree.DmtSession;
 import info.dmtree.MetaNode;
 import info.dmtree.spi.DataPlugin;
 import info.dmtree.spi.DmtConstants;
+import info.dmtree.spi.MountPlugin;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -100,17 +101,15 @@ public class TestBug1735_ScaffoldMetaData extends DefaultTestBundleControl{
 		
 	}
 	
-
-	
 	private void preparePlugin() throws Exception {
-		Node root = new Node(null, ".", "root" );
-		Node n2 = new Node(root, "A", "node A");
-		Node n3 = new Node(n2, "B", "node B");
+		String mountRoot = "./A/B";
+
+		Node n3 = new Node(null, "B", "node B");
 		Node n4 = new Node(n3, "C", "node C");
-		dataPlugin = new GenericDataPlugin("P1", root);
+		dataPlugin = new GenericDataPlugin("P1", mountRoot, n3);
 		
 		Dictionary props = new Hashtable();
-		props.put(DataPlugin.DATA_ROOT_URIS, new String[] {"./A/B" });
+		props.put(DataPlugin.DATA_ROOT_URIS, new String[] {mountRoot});
 		
 		registerService(DataPlugin.class.getName(), dataPlugin, props );
 
