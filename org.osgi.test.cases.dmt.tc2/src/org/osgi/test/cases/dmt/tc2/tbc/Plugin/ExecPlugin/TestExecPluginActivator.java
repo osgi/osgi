@@ -36,9 +36,10 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin;
 
-import info.dmtree.MountPlugin;
+
 import info.dmtree.spi.DataPlugin;
 import info.dmtree.spi.ExecPlugin;
+import info.dmtree.spi.MountPlugin;
 
 import java.util.Hashtable;
 
