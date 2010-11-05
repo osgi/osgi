@@ -1,0 +1,18 @@
+Bundle-Name:                             ${p}.resolver.tb1
+Bundle-SymbolicName:                     ${p}.resolver.tb1
+Bundle-Version:                          1.0.0
+Provide-Capability: \
+ test; \
+  test ="aName"; \
+  name = "test.conflict"; \
+  version : Version="1.0"; \
+  long :Long="100"; \
+  double: Double="1.001"; \
+  string:String ="aString"; \
+  version.list:List < Version > = "1.0, 1.1, 1.2"; \
+  long.list : List  <Long  >="1, 2, 3, 4"; \
+  double.list: List<  Double>= "1.001, 1.002, 1.003"; \
+  string.list :List<String  >= "aString,bString,cString"; \
+  string.list2:List="a\\"quote,a\\,comma, aSpace ,\\"start,\\,start,end\\",end\\,"
+
+-sign: test
