@@ -46,6 +46,7 @@ Include-Resource = \
 	permissions.registerPlural.jar, \
 	permissions.setPermission.jar, \
 	resolver.tb1.jar, \
+	resolver.tb2.jar, \
 	resolver.tb5.jar, \
 	syncbundlelistener.tb1a.jar, \
 	syncbundlelistener.tb1b.jar

@@ -28,6 +28,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.CapabilityPermission;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.framework.wiring.FrameworkWiring;
@@ -128,6 +129,25 @@ public class CapabilityPermissionTests extends OSGiTestCase {
 			if (!done[0])
 				fail("Timed out waiting for refresh bundles to finish.");
 		}
+	}
+
+	public void testImpliedCapabilityPermission() {
+		// install bundle with osgi.ee requirement
+		Bundle requirer = install("resolver.tb2.jar");
+		List bundles = Arrays.asList(new Bundle[] {requirer});
+		assertTrue(frameworkWiring.resolveBundles(bundles));
+
+		// set no capability permission
+		setPermissions(requirer.getLocation(), new PermissionInfo(ServicePermission.class.getName(), "*", ServicePermission.GET));
+		refreshBundles(bundles);
+		// should still resolve
+		assertTrue(frameworkWiring.resolveBundles(bundles));
+
+		// set to wrong capability
+		setPermissions(requirer.getLocation(), new PermissionInfo(CapabilityPermission.class.getName(), "wrong.namespace", CapabilityPermission.REQUIRE));
+		refreshBundles(bundles);
+		// should still resolve
+		assertTrue(frameworkWiring.resolveBundles(bundles));
 	}
 
 	public void testCapabilityPermission() {
