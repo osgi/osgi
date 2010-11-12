@@ -62,18 +62,19 @@ public interface ServiceFactory<S> {
 	 * The Framework must check that the returned service object is valid. It
 	 * must not be {@code null} and it must be an {@code instanceof} all the
 	 * classes named when the service was registered. If this method throws an
-	 * exception or the returned service object is not valid, then {@code null}
-	 * is returned to the bundle.
+	 * exception or will be recursively called for the specified bundle or if
+	 * the returned service object is not valid, then {@code null} is returned
+	 * to the bundle.
 	 * 
 	 * <p>
 	 * The Framework caches the valid service object and will return the same
 	 * service object on any future call to {@code BundleContext.getService} for
-	 * the same bundle. This means the Framework must not allow this method to
-	 * be concurrently called for the specified bundle.
+	 * the specified bundle. This means the Framework must not allow this method
+	 * to be concurrently called for the specified bundle.
 	 * 
-	 * @param bundle The bundle using the service.
+	 * @param bundle The bundle requesting the service.
 	 * @param registration The {@code ServiceRegistration} object for the
-	 *        service.
+	 *        requested service.
 	 * @return A service object that <strong>must</strong> be an instance of all
 	 *         the classes named when the service was registered.
 	 * @see BundleContext#getService
@@ -89,9 +90,10 @@ public interface ServiceFactory<S> {
 	 * 
 	 * @param bundle The bundle releasing the service.
 	 * @param registration The {@code ServiceRegistration} object for the
-	 *        service.
+	 *        service being released.
 	 * @param service The service object returned by a previous call to the
-	 *        {@code ServiceFactory.getService} method.
+	 *        {@link #getService(Bundle, ServiceRegistration) getService}
+	 *        method.
 	 * @see BundleContext#ungetService
 	 */
 	public void ungetService(Bundle bundle, ServiceRegistration<S> registration,
