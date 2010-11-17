@@ -20,22 +20,23 @@ public class FilteredProducerImpl implements Producer {
 			this.wire = wires[0];
 	}
 
-	void updateWire(int delta, boolean wait) {
-		long processTime = 0;
+	void updateWire(int delta) {
 		for (int i = 0; i < 10; i += delta) {
-			if (wait) {
-				try {
-					if (100 * i - processTime > 0) {
-						Thread.sleep((100 * i) - processTime);
-					}
-				}
-				catch (Exception e) {
-					// ignored
-				}
-			}
-			processTime = System.currentTimeMillis();
+			wire.update(new Integer(i));
+		}
+	}
+
+	void updateWireDelayed(int delta, long delay) {
+		for (int i = 0; i < 10; i += delta) {
+			long processTime = System.currentTimeMillis();
 			wire.update(new Integer(i));
 			processTime = System.currentTimeMillis() - processTime;
+			try {
+				Thread.sleep(delay - processTime);
+			}
+			catch (InterruptedException e) {
+				// ignore
+			}
 		}
 	}
 
