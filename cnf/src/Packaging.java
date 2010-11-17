@@ -148,7 +148,6 @@ public class Packaging implements AnalyzerPlugin {
 		sb.append("# bnd pack for project " + project + "\n");
 		sb.append("# " + new Date() + "\n");
 		sb.append("-include= ~shared.inc\n");
-		sb.append("build=.\n");
 		sb.append("\n");
 		sb.append("-target = ");
 		flatten(analyzer, sb, jar, project, Collections.EMPTY_MAP, true,
