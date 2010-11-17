@@ -68,7 +68,7 @@ public class Packaging implements AnalyzerPlugin {
 		sb.append(Constants.RUNPATH);
 		sb.append(" = ");
 		flatten(analyzer, sb, jar, runpath, false, filesToPath);
-		sb.append('\n');
+		sb.append("\n\n-runtrace = true\n");
 		jar.putResource("shared.inc", new EmbeddedResource(sb.toString()
 				.getBytes("UTF-8"), 0));
 
