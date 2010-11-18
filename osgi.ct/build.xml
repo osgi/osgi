@@ -2,57 +2,36 @@
 <project name="project" default="publish">
 	<import file="../cnf/build.xml" />
 
-	<target name="init" depends="master.init">
-		<property name="osgi.ri" value="${project.workspace}/osgi.ri/${target-dir}" />
-	</target>
-
 	<target name="runtests" depends="osgi.ct.core,osgi.ct.cmpn,osgi.ct.enterprise">
 	</target>
 
 	<target name="osgi.ct.core" depends="init">
 		<antcall target="-runtest">
 			<param name="test-name" value="osgi.ct.core" />
-			<param name="jars" value="osgi.ri.core.jar" />
+			<param name="ri-jars" value="osgi.ri.core.jar" />
 		</antcall>
 	</target>
 
 	<target name="osgi.ct.cmpn" depends="init">
 		<antcall target="-runtest">
 			<param name="test-name" value="osgi.ct.cmpn" />
-			<param name="jars" value="osgi.ri.core.jar,osgi.ri.cmpn.jar" />
+			<param name="ri-jars" value="osgi.ri.core.jar,osgi.ri.cmpn.jar" />
 		</antcall>
 	</target>
 
 	<target name="osgi.ct.enterprise" depends="init">
 		<antcall target="-runtest">
 			<param name="test-name" value="osgi.ct.enterprise" />
-			<param name="jars" value="osgi.ri.core.jar,osgi.ri.enterprise.jar" />
+			<param name="ri-jars" value="osgi.ri.core.jar,osgi.ri.enterprise.jar" />
 		</antcall>
 	</target>
 
 	<target name="-runtest">
-		<property name="prefix" value="${target}/${test-name}" />
-		<delete dir="${prefix}" />
-		<unzip dest="${prefix}">
-			<fileset dir="${osgi.ri}" includes="${jars}" />
-			<patternset includes="**/*.jar"/>
-		</unzip>
-		<unzip dest="${prefix}" src="${prefix}.jar" />
-		<java dir="${prefix}" jar="${prefix}/jar/bnd.jar" fork="true">
-			<arg value="-exceptions" />
-			<arg value="runtests" />
-			<arg value="-title" />
-			<arg value="${test-name}" />
-		</java>
-	</target>
-		
-	<target name="testreport">
-        <java dir="${prefix}" jar="${build}/cnf/repo/org.osgi.tools.cross/org.osgi.tools.cross-1.0.0" fork="true">
-            <arg value="-pattern" />
-            <arg value="${-signaturetest}" />
-            <arg value="-target" />
-            <arg value="${build}/osgi.companion/${target-dir}/${test-name}.jar" />
-            <arg value="-target" />
-        </java>
+		<subant antfile="test.xml" target="test" inheritAll="false" buildpath="${project.dir}">
+			<property name="project.workspace" value="${project.workspace}" />
+			<property name="target-dir" value="${target-dir}" />
+			<property name="test-name" value="${test-name}" />
+			<property name="ri-jars" value="${ri-jars}" />
+		</subant>
 	</target>
 </project>
