@@ -13,7 +13,7 @@ Import-Package 						= \
 
 
 Include-Resource 					= \
-	OSGI-INF/permissions.perm = perms/permissions.jndi.perm , \
+	{OSGI-INF/permissions.perm = perms/permissions.jndi.perm} , \
 	builderBundle.jar , \
 	factoryBundle.jar , \
 	inaccessibleBundleContext.jar

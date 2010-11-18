@@ -24,6 +24,7 @@
 		<AD id="long" name="%Long" type="Long" default="1"/>
 		<AD id="short" name="%Short" type="Short" default="1"/>
 		<AD id="string" name="%String" type="String" default="test"/>
+		<AD id="password" name="%Password" type="Password" default="password"/>
 	</OCD>
 	
 	<Designate pid="com.acme.foo">

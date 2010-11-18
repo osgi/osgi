@@ -325,6 +325,10 @@ public class TestControl extends DefaultTestBundleControl {
 		// Get other object for tests
 		ocd = mti.getObjectClassDefinition("com.acme.bar", "du");
 		attributes = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
+		
+		// Make sure the implementation provides all of the attribute definitions 
+		// specified within the metadata XML (testfile.xml - ocd2).
+		assertEquals("Missing one or more attribute definitions", 10, attributes.length);
 
 		// Execute attribute type tests
 		count = 0;
@@ -400,6 +404,14 @@ public class TestControl extends DefaultTestBundleControl {
 														AttributeDefinition.STRING,
 														attributes[i].getType());
 											}
+											else
+												if (attributes[i].getID().equals("password")) {
+													count++;
+													assertEquals(
+															"A password attribute must be of type AttributeDefinition.PASSWORD",
+															AttributeDefinition.PASSWORD,
+															attributes[i].getType());
+												}
 		}
 
 		assertEquals("All types must be tested", attributes.length, count);

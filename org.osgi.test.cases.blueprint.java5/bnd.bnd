@@ -3,7 +3,8 @@
 
 Private-Package						= org.osgi.test.support.*
 
-Export-Package						= ${p}.*
+Export-Package						= ${p}.*, \
+	org.osgi.test.cases.blueprint.*
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
 Bundle-Vendor: IBM
 Bundle-DocURL: http://www.osgi.org/
@@ -25,6 +26,7 @@ Include-Resource					= \
 	www/reference_list_service_import.jar=reference_list_service_import.jar , \
 	www/pattern_injection.jar=pattern_injection.jar
 
+testcases = ${classes;named;${p}.*;extends;junit.framework.TestCase;concrete}
 Test-Cases							= ${testcases}
 
 -buildpath							= ee.j2se; version=1.5, \
@@ -39,7 +41,6 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm;  version=latest, \
 	org.osgi.impl.service.event; version=latest, \
- 	org.osgi.test.cases.blueprint;  version=project, \
     org.osgi.impl.service.blueprint; version=latest
     
 -runproperties = ${runproperties}

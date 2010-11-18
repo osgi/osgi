@@ -733,10 +733,10 @@ public interface BundleContext extends BundleReference {
 	 * called to create a service object for the context bundle. If the service
 	 * object returned by the {@code ServiceFactory} object is {@code null}, not
 	 * an {@code instanceof} all the classes named when the service was
-	 * registered or the {@code ServiceFactory} object throws an exception,
-	 * {@code null} is returned and a Framework event of type
-	 * {@link FrameworkEvent#ERROR} containing a {@link ServiceException}
-	 * describing the error is fired. <br>
+	 * registered or the {@code ServiceFactory} object throws an exception or
+	 * will be recursively called for the context bundle, {@code null} is
+	 * returned and a Framework event of type {@link FrameworkEvent#ERROR}
+	 * containing a {@link ServiceException} describing the error is fired. <br>
 	 * This service object is cached by the Framework. While the context
 	 * bundle's use count for the service is greater than zero, subsequent calls
 	 * to get the services's service object for the context bundle will return

@@ -461,7 +461,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		}
         
         String[] classes = new String[] {Marker1.class.getName(),
-				Marker2.class.getName(),};
+				Marker2.class.getName()};
         Hashtable properties = new Hashtable();
 		properties.put("test", "yes");
         
@@ -497,7 +497,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 	
 	public void testBasicRegistration() throws Exception {
 		String[] classes = new String[] {Marker1.class.getName(),
-				Marker2.class.getName(),};
+				Marker2.class.getName()};
 		Hashtable properties = new Hashtable();
 		properties.put("test", "yes");
 		ServiceRegistration registration = getContext().registerService(
@@ -509,7 +509,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 
 	public void testBasicFactory() {
 		String[] classes = new String[] {Marker1.class.getName(),
-				Marker2.class.getName(),};
+				Marker2.class.getName()};
 		Hashtable properties = new Hashtable();
 		properties.put("test", "yes");
 		ServiceRegistration registration = getContext().registerService(
@@ -573,7 +573,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 
 	public void testFactoryGetException() {
 		String[] classes = new String[] {Marker1.class.getName(),
-				Marker2.class.getName(),};
+				Marker2.class.getName()};
 		Hashtable properties = new Hashtable();
 		properties.put("test", "yes");
 
@@ -591,19 +591,22 @@ public class ServiceRegistryTests extends OSGiTestCase {
 					}
 				}, properties);
 
-		ServiceReference reference = getContext().getServiceReference(
-				Marker1.class.getName());
-		assertNotNull(reference);
-		
-		Object service = getContext().getService(reference);
-		assertNull(service);
+		try {
+			ServiceReference reference = getContext().getServiceReference(
+					Marker1.class.getName());
+			assertNotNull(reference);
 
-		registration.unregister();
+			Object service = getContext().getService(reference);
+			assertNull(service);
+		}
+		finally {
+			registration.unregister();
+		}
 	}
 
 	public void testFactoryUngetException() {
 		String[] classes = new String[] {Marker1.class.getName(),
-				Marker2.class.getName(),};
+				Marker2.class.getName()};
 		Hashtable properties = new Hashtable();
 		properties.put("test", "yes");
 
@@ -621,22 +624,62 @@ public class ServiceRegistryTests extends OSGiTestCase {
 					}
 				}, properties);
 
-		ServiceReference reference = getContext().getServiceReference(
-				Marker1.class.getName());
-		assertNotNull(reference);
+		try {
+			ServiceReference reference = getContext().getServiceReference(
+					Marker1.class.getName());
+			assertNotNull(reference);
 
-		Marker1 service = (Marker1) getContext().getService(reference);
-		assertNotNull(service);
-		assertEquals(10, service.getValue());
+			Marker1 service = (Marker1) getContext().getService(reference);
+			assertNotNull(service);
+			assertEquals(10, service.getValue());
 
-		getContext().ungetService(reference);
-
-		registration.unregister();
+			getContext().ungetService(reference);
+		}
+		finally {
+			registration.unregister();
+		}
 	}
 	
+	public void testFactoryRecursion() {
+		String[] classes = new String[] {Marker1.class.getName()};
+		Hashtable properties = new Hashtable();
+		properties.put("test", "yes");
+
+		ServiceRegistration registration = getContext().registerService(
+				classes, new ServiceFactory() {
+					int	depth	= 0;
+
+					public Object getService(Bundle bundle,
+							ServiceRegistration reg) {
+						depth++;
+						if (depth > 1) {
+							return new ConcreteMarker(1);
+						}
+						return getContext().getService(reg.getReference());
+					}
+
+					public void ungetService(Bundle bundle,
+							ServiceRegistration reg, Object service) {
+						// empty
+					}
+				}, properties);
+
+		try {
+			ServiceReference reference = getContext().getServiceReference(
+					Marker1.class.getName());
+			assertNotNull(reference);
+
+			Object service = getContext().getService(reference);
+			assertNull(service);
+		}
+		finally {
+			registration.unregister();
+		}
+	}
+
 	public void testWrongClass() {
 		String[] classes = new String[] {Marker1.class.getName(),
-				Marker2.class.getName(),};
+				Marker2.class.getName()};
 		Hashtable properties = new Hashtable();
 		properties.put("test", "yes");
 		try {
@@ -652,7 +695,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 
 	public void testNullService() {
 		String[] classes = new String[] {Marker1.class.getName(),
-				Marker2.class.getName(),};
+				Marker2.class.getName()};
 		Hashtable properties = new Hashtable();
 		properties.put("test", "yes");
 		try {
@@ -668,7 +711,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 
 	public void testManyRegistrations() throws Exception {
 		String[] classes = new String[] {Marker1.class.getName(),
-				Marker2.class.getName(),};
+				Marker2.class.getName()};
 		Hashtable properties = new Hashtable();
 		properties.put("test", "yes");
 		ServiceRegistration[] registrations = new ServiceRegistration[1000];

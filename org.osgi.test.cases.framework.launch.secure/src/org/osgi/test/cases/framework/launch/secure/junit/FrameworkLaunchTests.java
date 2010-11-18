@@ -98,13 +98,9 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	private String getStorageAreaRoot() {
-		BundleContext context = getBundleContextWithoutFail();
-		if (context == null) {
-			String storageroot = System.getProperty(STORAGEROOT);
-			assertNotNull("Must set property: " + STORAGEROOT, storageroot);
-			return storageroot;
-		}
-		return context.getDataFile("storageroot").getAbsolutePath();
+		String storageroot = System.getProperty(STORAGEROOT);
+		assertNotNull("Must set property: " + STORAGEROOT, storageroot);
+		return storageroot;
 	}
 
 	private Class loadFrameworkClass(String className)

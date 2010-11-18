@@ -122,11 +122,13 @@ public interface AttributeDefinition {
 	/**
 	 * The {@code PASSWORD} (12) type.
 	 * 
-	 * Attributes of this type must be stored as @code String},{@code Vector}
-	 * with {@code Boolean} or {@code boolean[]} objects depending on {link
-	 * getCardinality()}. A {@code PASSWORD} must be treated as a string but the type
-	 * can be used to disguise the information when displayed to a user to
+	 * Attributes of this type must be stored as {@code String}, {@code Vector}
+	 * with {@code String} or {@code String[]} objects depending on {link
+	 * getCardinality()}. A {@code PASSWORD} must be treated as a string but the
+	 * type can be used to disguise the information when displayed to a user to
 	 * prevent others from seeing it.
+	 * 
+	 * @since 1.2
 	 */
 	int	PASSWORD	= 12;
 

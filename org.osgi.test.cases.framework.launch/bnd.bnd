@@ -25,7 +25,7 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
 	
+-runframework = none
 
 -runproperties = ${runproperties}, \
-	noframework=true, \
 	${p}.storageroot=${target-dir}/${p}.testStorageRoot 

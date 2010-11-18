@@ -31,6 +31,8 @@ public interface MetaTypeProvider {
 	 * Service property to signal that this service has
 	 * {@link ObjectClassDefinition} objects for the given PIDs. The type of
 	 * this service property is {@code String+}.
+	 * 
+	 * @since 1.2
 	 */
 	String	METATYPE_PID			= "metatype.pid";
 
@@ -38,6 +40,8 @@ public interface MetaTypeProvider {
 	 * Service property to signal that this service has
 	 * {@link ObjectClassDefinition} objects for the given factory PIDs. The
 	 * type of this service property is {@code String+}.
+	 * 
+	 * @since 1.2
 	 */
 	String	METATYPE_FACTORY_PID	= "metatype.factory.pid";
 

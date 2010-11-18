@@ -728,4 +728,43 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		}
 		trackerProvider1.close();
 	}
+	
+	/**
+	 * Ensures EventAdmin does not deliver an event published on topic "a/b/c" 
+	 * to an EventHandler listening to topic a/b/c/*.
+	 */
+	public void testEventDeliveryForWildcardTopic1() {
+		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+				"org.osgi.test.cases.event.tb1.Activator", null);
+		trackerProvider1.open();
+		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+		Dictionary properties = new Hashtable();
+		properties.put(EventConstants.EVENT_TOPIC, "a/b/c/*");
+		tbcService1.setProperties(properties);
+		Event event = new Event("a/b/c", (Dictionary) null);
+		eventAdmin.sendEvent(event);
+		assertEvent(event, tb1, tbcService1, false);
+		trackerProvider1.close();
+	}
+	
+	/**
+	 * Ensures EventAdmin delivers an event published to topic "a/b/c" or 
+	 * "a/b/c/d" to an EventHandler listening to topics "a/b/c" and "a/b/c/*".
+	 */
+	public void testEventDeliveryForWildcardTopic2() {
+		ServiceTracker trackerProvider1 = new ServiceTracker(getContext(),
+				"org.osgi.test.cases.event.tb1.Activator", null);
+		trackerProvider1.open();
+		TBCService tbcService1 = (TBCService) trackerProvider1.getService();
+		Dictionary properties = new Hashtable();
+		properties.put(EventConstants.EVENT_TOPIC, new String[] {"a/b/c", "a/b/c/*"});
+		tbcService1.setProperties(properties);
+		Event event = new Event("a/b/c", (Dictionary) null);
+		eventAdmin.sendEvent(event);
+		assertEvent(event, tb1, tbcService1, true);
+		event = new Event("a/b/c/d", (Dictionary) null);
+		eventAdmin.sendEvent(event);
+		assertEvent(event, tb1, tbcService1, true);
+		trackerProvider1.close();
+	}
 }

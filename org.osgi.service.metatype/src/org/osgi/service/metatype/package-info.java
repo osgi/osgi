@@ -15,7 +15,7 @@
  */
 
 /**
- * Metatype Package Version 1.1.
+ * Metatype Package Version 1.2.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the

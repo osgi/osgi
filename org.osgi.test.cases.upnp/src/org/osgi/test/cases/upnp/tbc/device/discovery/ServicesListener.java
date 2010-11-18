@@ -19,6 +19,7 @@ public class ServicesListener extends ServiceTracker {
 	private final Semaphore	waiter;
 	private final int		desiredCount;
 	private UPnPDevice	last;
+	private int				size;
 
 	public ServicesListener(BundleContext bc, int count)
 			throws InvalidSyntaxException {
@@ -29,6 +30,32 @@ public class ServicesListener extends ServiceTracker {
 				null);
 		waiter = new Semaphore();
 		desiredCount = count;
+		size = 0;
+	}
+
+	public void open() {
+		super.open();
+		synchronized (this) {
+			size = super.size();
+		}
+	}
+
+	public void open(boolean trackAllServices) {
+		super.open(trackAllServices);
+		synchronized (this) {
+			size = super.size();
+		}
+	}
+
+	public void close() {
+		super.close();
+		synchronized (this) {
+			size = super.size();
+		}
+	}
+
+	public synchronized int size() {
+		return size;
 	}
 
 	public Object addingService(ServiceReference ref) {
@@ -36,19 +63,24 @@ public class ServicesListener extends ServiceTracker {
 
 		DefaultTestBundleControl.log("adding UPnP Device " + device);
 		synchronized (this) {
+			size++;
 			last = device;
+			if (size != desiredCount) {
+				return device;
+			}
 		}
-		if (size() + 1 == desiredCount) {
-			DefaultTestBundleControl.log(desiredCount
-					+ " UPnP Devices arrived, signaling waiter");
-			waiter.signal();
-		}
+		DefaultTestBundleControl.log(desiredCount
+				+ " UPnP Devices arrived, signaling waiter");
+		waiter.signal();
 		return device;
 	}
 
 	public void removedService(ServiceReference reference, Object service) {
 		DefaultTestBundleControl.log("removing UPnP Device " + service);
 		super.removedService(reference, service);
+		synchronized (this) {
+			size--;
+		}
 	}
 
 	public synchronized UPnPDevice getUPnPDevice() {
