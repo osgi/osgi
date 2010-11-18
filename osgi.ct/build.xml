@@ -33,8 +33,7 @@
 	<target name="-runtest">
 		<property name="prefix" value="${target}/${test-name}" />
 		<delete dir="${prefix}" />
-		<mkdir dir="${prefix}/jar" />
-		<unzip dest="${prefix}/jar">
+		<unzip dest="${prefix}">
 			<fileset dir="${osgi.ri}" includes="${jars}" />
 			<patternset includes="**/*.jar"/>
 		</unzip>
