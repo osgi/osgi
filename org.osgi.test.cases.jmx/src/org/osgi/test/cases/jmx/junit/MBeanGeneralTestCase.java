@@ -76,6 +76,11 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 		mBeanServer = (MBeanServer) getContext().getService(reference);
 		assertNotNull(mBeanServer);
 
+		// The following delay makes the test case run consistently.
+		// I expect that the MBean server was not happy being deleted
+		// and created all the time. This gives it time to settle.
+		// pkriens.
+		Thread.sleep(2000);
 	}
 	
 	/*
