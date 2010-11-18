@@ -1,11 +1,11 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Private-Package						= ${p}.tbc.*;-split-package:=merge-first, \
-	org.osgi.test.support.*;-split-package:=merge-first
+Private-Package						= ${p}.tbc.*;-split-package:=merge-first
 
 Export-Package						= ${p}.tbc;-split-package:=merge-first, \
-	${p}.tbc.util;-split-package:=merge-first
+	${p}.tbc.util;-split-package:=merge-first, \
+    org.osgi.test.support.*;-split-package:=merge-first
 	
 Bundle-Category: osgi,test
 
