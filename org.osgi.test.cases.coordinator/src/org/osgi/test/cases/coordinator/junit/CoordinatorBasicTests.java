@@ -75,7 +75,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		}
 		Thread.interrupted(); // clear flag
 		{
-			int granularity = 100;
+			int granularity = 1000;
 			Coordination cc = c.begin("timeout-3", 2 * granularity);
 			cc.extendTimeout(2 * granularity); // expires before primary
 			Thread.sleep(granularity);
