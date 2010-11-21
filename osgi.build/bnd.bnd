@@ -13,10 +13,14 @@ japi.osgi.cmpn 				= ${replace;$(cmpn.specs);.+;+$0}
 japi.osgi.mobile 			= ${replace;$(mobile.specs);.+;+$0}
 japi.osgi.enterprise		= ${replace;$(enterprise.specs);.+;+$0}
 japi.osgi.proposed			= ${replace;$(proposed.specs);.+;+$0}
+japi.ee.minimum				= +java, +javax
+japi.ee.foundation			= +java, +javax
 
-api.servlet = ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}
-api.jaxp = ${repo;com.icl.saxon}
-api.jpa = ${repo;org.eclipse.persistence.jpa_spec}
+repo.javase = ${repo;ee.j2se}
+repo.foundation = ${repo;ee.foundation}
+repo.servlet = ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}
+repo.jaxp = ${repo;com.icl.saxon}
+repo.jpa = ${repo;org.eclipse.persistence.jpa_spec}
 
 javadoc.packages		 	= ${uniq; ${core.packages}, ${cmpn.packages}, ${mobile.packages}, ${enterprise.packages}}
 
