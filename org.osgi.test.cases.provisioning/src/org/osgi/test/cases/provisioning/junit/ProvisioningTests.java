@@ -177,7 +177,9 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 
 		byte r [] = collect( in, 0 );
 		if ( debug ) {
-			FileOutputStream tout = new FileOutputStream( "target-test.zip");
+			FileOutputStream tout = new FileOutputStream("generated"
+					+ File.separator
+					+ "org.osgi.test.cases.provisioning.target-test.zip");
 			tout.write( r );
 			tout.close();
 		}
