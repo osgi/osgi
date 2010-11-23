@@ -64,7 +64,7 @@ public class CoordinationException extends RuntimeException {
 	public static final int		TIMEOUT				= 9;
 
 	final String				name;
-	final int					reason;
+	final int					type;
 	final Throwable				failure;
 	final long					id;
 
@@ -74,12 +74,12 @@ public class CoordinationException extends RuntimeException {
 	 * @param message The message
 	 * @param coordination The coordination that failed
 	 * @param exception The exception
-	 * @param reason The reason for the exception.
+	 * @param type The reason for the exception.
 	 */
 	public CoordinationException(String message, Coordination coordination,
-			int reason, Throwable exception) {
+			int type, Throwable exception) {
 		super(message);
-		this.reason = reason;
+		this.type = type;
 		this.failure = exception;
 		this.id = coordination != null ? coordination.getId() : -1;
 		this.name = coordination != null ? coordination.getName() : "<>";
@@ -97,19 +97,6 @@ public class CoordinationException extends RuntimeException {
 		this(message, coordination, reason, null);
 	}
 
-	/**
-	 * Constructor when the coordination has failed and there is a failure
-	 * reason.
-	 * 
-	 * @param message The message
-	 * @param coordination The involved coordination
-	 * @param reason The reason of the failure as given in
-	 *        {@link Coordination#fail(Throwable)}.
-	 */
-	public CoordinationException(String message, Coordination coordination,
-			Throwable reason) {
-		this(message, coordination, FAILED, reason);
-	}
 
 	/**
 	 * Answer the name of the Coordination associated with this exception.
@@ -125,8 +112,8 @@ public class CoordinationException extends RuntimeException {
 	 * 
 	 * @return the reason
 	 */
-	public int getReason() {
-		return reason;
+	public int getType() {
+		return type;
 	}
 
 	/**

@@ -42,7 +42,7 @@ import java.util.Collection;
  * The typical usage of the Coordinator service is as follows:
  * 
  * <pre>
- * Coordination coordination = coordinator.begin(&quot;mycoordination&quot;);
+ * Coordination coordination = coordinator.begin(&quot;mycoordination&quot;,0);
  * try {
  * 	doWork();
  * }
@@ -91,7 +91,7 @@ public interface Coordinator {
 	 *        e.g. com.example.coordination.
 	 * @param timeout Timeout in milliseconds, less or equal than 0 means no
 	 *        timeout
-	 * @return The new Coordination object or {@code null}
+	 * @return The new Coordination object, never {@code null}
 	 * @throws SecurityException This method requires the
 	 *         {@link CoordinationPermission#INITIATE} action, no bundle check
 	 *         is done.
