@@ -22,9 +22,9 @@ import java.util.Collection;
  * 
  * The Coordinator can create Coordination objects. Once a Coordination object
  * is created, it can be pushed on a thread local stack
- * {@link #push(Coordination)} as an implicit parameter for calls to other
+ * {@link Coordination#push()} as an implicit parameter for calls to other
  * parties, or it can be passed as an argument. The current top of the thread
- * local stack can be obtained with {@link #getCurrentCoordination()}.
+ * local stack can be obtained with {@link #peek()}.
  * 
  * The {@link #addParticipant(Participant)} method on this service or the
  * {@link Coordination#addParticipant(Participant)} method can be used to
@@ -95,12 +95,13 @@ public interface Coordinator {
 	 * @throws SecurityException This method requires the
 	 *         {@link CoordinationPermission#INITIATE} action, no bundle check
 	 *         is done.
+	 * @throws IllegalArgumentException when the name does not match the Bundle Symbolic Name pattern
 	 */
 	Coordination create(String name, int timeout);
 
 	/**
-	 * Provide a immutable snapshot collection of all Coordination objects
-	 * currently active.
+	 * Provide a mutable snapshot collection of all Coordination objects
+	 * currently not terminated.
 	 * 
 	 * Coordinations in this list can have terminated before this list is
 	 * returned or any time thereafter.
@@ -112,17 +113,25 @@ public interface Coordinator {
 	 * @return a list of Coordination objects filter by
 	 *         {@link CoordinationPermission#ADMIN}.
 	 */
-	Collection< ? extends Coordination> getCoordinations();
+	Collection<Coordination> getCoordinations();
 
 	/**
 	 * Always fail the current Coordination, if it exists.
 	 * 
-	 * Must fail the current Coordination and return {@code true} or return
-	 * {@code false} if there is no current Coordination.
+	 * If this is no current Coordination return {@code false}. Otherwise return
+	 * the result of {@link Coordination#fail(Throwable)}, which is {@code true}
+	 * in the case this call terminates the Coordination and {@code false}
+	 * otherwise.
+	 * 
+	 * <pre>
+	 *    false      - No current Coordination
+	 *    false      - Current Coordination was already terminated
+	 *    true       - Current Coordination got terminated due to this call
+	 * </pre>
 	 * 
 	 * @param reason The reason for failure, must not be {@code null}.
-	 * @return {@code true} if there was a current Coordination and {@code
-	 *         false} if not.
+	 * @return {@code true} if there was a current Coordination and it was
+	 *         terminated, otherwise {@code false}.
 	 */
 	boolean fail(Throwable reason);
 
@@ -135,14 +144,15 @@ public interface Coordinator {
 	 * @return {@code null} when the thread local stack is empty, otherwise the
 	 *         top of the thread local stack of Coordinations.
 	 */
-	Coordination getCurrentCoordination();
+	Coordination peek();
 
 	/**
 	 * Begin a new Coordination and push it on the thread local stack with
-	 * {@link #push(Coordination)}.
+	 * {@link Coordination#push()}.
 	 * 
 	 * @param name The name of this coordination, a name does not have to be
-	 *        unique.
+	 *        unique. The name must follow the bundle symbolic name pattern,
+	 *        e.g. com.example.coordination.
 	 * @param timeoutInMillis Timeout in milliseconds, less or equal than 0
 	 *        means no timeout
 	 * @return A new Coordination object
@@ -150,24 +160,9 @@ public interface Coordinator {
 	 * @throws SecurityException This method requires the
 	 *         {@link CoordinationPermission#INITIATE} action, no bundle check
 	 *         is done.
+	 * @throws IllegalArgumentException when the name does not match the Bundle Symbolic Name pattern
 	 */
 	Coordination begin(String name, int timeoutInMillis);
-
-	/**
-	 * Associate the given Coordination object with a thread local stack. The
-	 * top of the thread local stack is returned with the
-	 * {@link #getCurrentCoordination()} method. To remove the Coordination from
-	 * the top call {@link #pop()}.
-	 * 
-	 * @param c The Coordination to push
-	 * @return c (for the builder pattern purpose)
-	 * @throws CoordinationException Can throw the
-	 *         <ol>
-	 *         <li>{@link CoordinationException#ALREADY_PUSHED}</li>
-	 *         <li>{@link CoordinationException#UNKNOWN}</li>
-	 *         </ol>
-	 */
-	Coordination push(Coordination c) throws CoordinationException;
 
 	/**
 	 * Pop the top of the thread local stack of Coordinations.
@@ -182,8 +177,8 @@ public interface Coordinator {
 	 * Participate in the current Coordination and return {@code true} or return
 	 * {@code false} if there is none.
 	 * 
-	 * This method calls {@link #getCurrentCoordination()}, if it is {@code
-	 * null}, it will return false. Otherwise it will call
+	 * This method calls {@link #peek()}, if it is {@code null}, it will return
+	 * false. Otherwise it will call
 	 * {@link Coordination#addParticipant(Participant)}.
 	 * 
 	 * @param participant The participant of the Coordination
@@ -197,7 +192,6 @@ public interface Coordinator {
 	 *         <ol>
 	 *         <li>{@link CoordinationException#DEADLOCK_DETECTED}</li>
 	 *         <li>{@link CoordinationException#ALREADY_ENDED}</li>
-	 *         <li>{@link CoordinationException#LOCK_INTERRUPTED}</li>
 	 *         <li>{@link CoordinationException#FAILED}</li>
 	 *         <li>{@link CoordinationException#UNKNOWN}</li>
 	 *         </ol>
@@ -209,11 +203,16 @@ public interface Coordinator {
 			throws CoordinationException;
 
 	/**
-	 * Answer the coordination associated with the given id.
+	 * Answer the coordination associated with the given id if it exists.
 	 * 
 	 * @param id The id of the requested Coordination
 	 * @return a Coordination with the given ID or {@code null} when
-	 *         Coordination cannot be found.
+	 *         Coordination cannot be found because it never existed or had
+	 *         terminated before this call.
+	 * 
+	 * @throws SecurityException if the caller has no
+	 *         {@link CoordinationPermission#ADMIN} for the requested
+	 *         Coordination.
 	 */
 
 	Coordination getCoordination(long id);

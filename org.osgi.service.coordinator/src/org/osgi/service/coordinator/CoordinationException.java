@@ -22,7 +22,6 @@ package org.osgi.service.coordinator;
 public class CoordinationException extends RuntimeException {
 	private static final long	serialVersionUID	= 1L;
 
-	
 	/**
 	 * Unknown reason for this exception.
 	 */
@@ -59,7 +58,11 @@ public class CoordinationException extends RuntimeException {
 	 */
 	public final static int		LOCK_INTERRUPTED	= 7;
 
-	
+	/**
+	 * The Coordination timed out.
+	 */
+	public static final int		TIMEOUT				= 9;
+
 	final String				name;
 	final int					reason;
 	final Throwable				failure;
@@ -74,14 +77,14 @@ public class CoordinationException extends RuntimeException {
 	 * @param reason The reason for the exception.
 	 */
 	public CoordinationException(String message, Coordination coordination,
-			int reason, Throwable exception ) {
+			int reason, Throwable exception) {
 		super(message);
 		this.reason = reason;
 		this.failure = exception;
 		this.id = coordination != null ? coordination.getId() : -1;
-		this.name = coordination != null ? coordination.getName() : "<>";		
+		this.name = coordination != null ? coordination.getName() : "<>";
 	}
-	
+
 	/**
 	 * Create a new Coordination Exception.
 	 * 
@@ -103,8 +106,9 @@ public class CoordinationException extends RuntimeException {
 	 * @param reason The reason of the failure as given in
 	 *        {@link Coordination#fail(Throwable)}.
 	 */
-	public CoordinationException(String message, Coordination coordination, Throwable reason) {
-		this(message,coordination, FAILED, reason);
+	public CoordinationException(String message, Coordination coordination,
+			Throwable reason) {
+		this(message, coordination, FAILED, reason);
 	}
 
 	/**
@@ -137,7 +141,7 @@ public class CoordinationException extends RuntimeException {
 	/**
 	 * @return Answer the id
 	 */
-	
+
 	public long getId() {
 		return id;
 	}

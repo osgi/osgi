@@ -15,55 +15,68 @@
  */
 package org.osgi.impl.service.coordinator;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.WeakHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*;
+import java.util.concurrent.*;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.ServiceException;
-import org.osgi.service.component.ComponentContext;
-import org.osgi.service.coordinator.Coordination;
-import org.osgi.service.coordinator.CoordinationException;
-import org.osgi.service.coordinator.CoordinationPermission;
-import org.osgi.service.coordinator.Coordinator;
-import org.osgi.service.coordinator.Participant;
-import org.osgi.service.log.LogService;
+import org.osgi.framework.*;
+import org.osgi.service.component.*;
+import org.osgi.service.coordinator.*;
+import org.osgi.service.log.*;
 
-import aQute.bnd.annotation.component.Activate;
-import aQute.bnd.annotation.component.Component;
-import aQute.bnd.annotation.component.Deactivate;
-import aQute.bnd.annotation.component.Reference;
+import aQute.bnd.annotation.component.*;
 
+/**
+ *
+ */
 @Component(servicefactory = true)
 public class CoordinatorImpl implements Coordinator {
-	private final static List<CoordinatorImpl>				coordinators	= new CopyOnWriteArrayList<CoordinatorImpl>();
-	private final List<CoordinationImpl>					coordinations	= new CopyOnWriteArrayList<CoordinationImpl>();
-	private final WeakHashMap<Thread, List<CoordinationImpl>>	stacks			= new WeakHashMap<Thread, List<CoordinationImpl>>();
-	volatile LogService											log;
-	final IdentityHashMap<Participant, CoordinationImpl>		locks			= new IdentityHashMap<Participant, CoordinationImpl>();
-	volatile long												timeout;
-	private volatile boolean									gone;
-	final SecurityManager										sm				= System
+	static List<CoordinatorImpl>							coordinators	= new CopyOnWriteArrayList<CoordinatorImpl>();
+	static WeakHashMap<Thread, List<CoordinationImpl>>		stacks			= new WeakHashMap<Thread, List<CoordinationImpl>>();
+	static IdentityHashMap<Participant, CoordinationImpl>	locks			= new IdentityHashMap<Participant, CoordinationImpl>();
+	static SecurityManager									sm				= System
 																					.getSecurityManager();
-	volatile Bundle												bundle;
+	final List<CoordinationImpl>							coordinations	= new CopyOnWriteArrayList<CoordinationImpl>();
+	volatile Bundle											bundle;
+	volatile LogService										log;
+	volatile long											timeout;
+	volatile boolean										gone;
 
-	@Activate
+	/**
+	 * @param context
+	 */
+	final @Activate
 	protected void activate(ComponentContext context) {
 		coordinators.add(this);
 		bundle = context.getUsingBundle();
 	}
 
+	/**
+	 * @param context
+	 */
 	@Deactivate
 	protected void deactivate(ComponentContext context) {
 		gone = true;
 		coordinators.remove(this);
+
 		for (Coordination c : coordinations) {
 			c.fail(new ServiceException("Service is unregistered",
 					ServiceException.UNREGISTERED));
 		}
+
+		for (CoordinatorImpl impl : coordinators) {
+			assert impl != this;
+			impl.killDependentCoordinations(this);
+		}
+	}
+
+	void killDependentCoordinations(CoordinatorImpl impl) {
+		// TODO
+		// assert impl != this;
+		// for (CoordinationImpl c : coordinations) {
+		// if ( c.participantDependency.contains(this))
+		// c.fail( new CoordinationException("", c,
+		// CoordinationException.PARTICIPANT_ENDED));
+		// }
 	}
 
 	public CoordinationImpl create(String name, int t) {
@@ -79,15 +92,24 @@ public class CoordinatorImpl implements Coordinator {
 		return c;
 	}
 
-	public List< ? extends Coordination> getCoordinations() {
+	public List<Coordination> getCoordinations() {
 		check(CoordinationPermission.ADMIN);
-		List<CoordinationImpl> l = new ArrayList<CoordinationImpl>();
+		List<Coordination> l = new ArrayList<Coordination>();
 		for (CoordinatorImpl coordinator : coordinators) {
-			l.addAll(coordinator.coordinations);
+			if (coordinator == this)
+				l.addAll(coordinator.coordinations);
+			else {
+				for (CoordinationImpl impl : coordinator.coordinations) {
+					l.add(new CoordinationFaçade(this, impl));
+				}
+			}
 		}
 		return Collections.unmodifiableList(l);
 	}
 
+	/**
+	 * @param log
+	 */
 	@Reference
 	protected void setLog(LogService log) {
 		this.log = log;
@@ -96,7 +118,7 @@ public class CoordinatorImpl implements Coordinator {
 	public boolean addParticipant(Participant participant)
 			throws CoordinationException {
 		check(CoordinationPermission.PARTICIPATE);
-		Coordination c = getCurrentCoordination();
+		Coordination c = peek();
 		if (c == null)
 			return false;
 
@@ -106,7 +128,7 @@ public class CoordinatorImpl implements Coordinator {
 
 	public boolean fail(Throwable reason) {
 		check(CoordinationPermission.PARTICIPATE);
-		Coordination c = getCurrentCoordination();
+		Coordination c = peek();
 		if (c == null)
 			return false;
 
@@ -114,7 +136,7 @@ public class CoordinatorImpl implements Coordinator {
 		return false;
 	}
 
-	public Coordination getCurrentCoordination() {
+	public Coordination peek() {
 		check(CoordinationPermission.PARTICIPATE);
 		synchronized (stacks) {
 			List<CoordinationImpl> stack = stacks.get(Thread.currentThread());
@@ -164,7 +186,7 @@ public class CoordinatorImpl implements Coordinator {
 		}
 	}
 
-	public Coordination push(Coordination c) {
+	Coordination push(Coordination c) {
 		check(CoordinationPermission.INITIATE);
 		synchronized (stacks) {
 			CoordinationImpl cc = (CoordinationImpl) c;
@@ -187,8 +209,7 @@ public class CoordinatorImpl implements Coordinator {
 		}
 	}
 
-	private void check(String action)
-			throws CoordinationException {
+	private void check(String action) throws CoordinationException {
 		if (gone)
 			throw new ServiceException("Coordinator is ungotten",
 					ServiceException.UNREGISTERED);

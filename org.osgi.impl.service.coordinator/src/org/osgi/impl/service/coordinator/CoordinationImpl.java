@@ -15,34 +15,28 @@
  */
 package org.osgi.impl.service.coordinator;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.*;
+import java.util.Map.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
-import org.osgi.framework.ServiceException;
-import org.osgi.service.coordinator.Coordination;
-import org.osgi.service.coordinator.CoordinationException;
-import org.osgi.service.coordinator.CoordinationPermission;
-import org.osgi.service.coordinator.Participant;
-import org.osgi.service.log.LogService;
+import org.osgi.framework.*;
+import org.osgi.service.coordinator.*;
+import org.osgi.service.log.*;
 
+/**
+ *
+ */
 public class CoordinationImpl implements Coordination {
-	private final static Timer		timer			= new Timer();
-	private static final AtomicInteger	counter			= new AtomicInteger(
-																1000);
-	private final long					id;
-	private final List<Participant>		participants	= new CopyOnWriteArrayList<Participant>();
-	private CoordinatorImpl				coordinator;
-	private final String				name;
-	private final Map<Class< ? >, Object>	variables		= new ConcurrentHashMap<Class< ? >, Object>();
+	final static Timer				timer					= new Timer();
+	static final AtomicInteger		counter					= new AtomicInteger(
+																	1000);
+	final long						id;
+	final List<Participant>			participants			= new CopyOnWriteArrayList<Participant>();
+	final List<CoordinatorImpl>		participantDependency	= new CopyOnWriteArrayList<CoordinatorImpl>();
+	CoordinatorImpl					coordinator;
+	final String					name;
+	final Map<Class< ? >, Object>	variables				= new ConcurrentHashMap<Class< ? >, Object>();
 
 	class FailTimer extends TimerTask {
 		public void run() {
@@ -50,11 +44,11 @@ public class CoordinationImpl implements Coordination {
 		}
 	}
 
-	private TimerTask	timeouter	= new FailTimer();
-	private volatile long		deadline	= 0;
-	private volatile Throwable	failure;
-	volatile boolean			terminated	= false;
-	volatile Thread				stackThread;
+	TimerTask			timeouter	= new FailTimer();
+	volatile long		deadline	= 0;
+	volatile Throwable	failure;
+	volatile boolean	terminated	= false;
+	volatile Thread		stackThread;
 
 	CoordinationImpl(CoordinatorImpl coordinator, String name, int timeout) {
 		this.coordinator = coordinator;
@@ -100,7 +94,7 @@ public class CoordinationImpl implements Coordination {
 					this, CoordinationException.PARTIALLY_ENDED);
 	}
 
-	public long extendTimeout(int timeInMillis) {
+	public long extendTimeout(long timeInMillis) {
 		check(CoordinationPermission.INITIATE);
 
 		if (deadline == 0 || timeInMillis == 0)
@@ -172,13 +166,13 @@ public class CoordinationImpl implements Coordination {
 		return name;
 	}
 
-	public List< ? extends Participant> getParticipants() {
+	public List<Participant> getParticipants() {
 		check(CoordinationPermission.INITIATE);
 		return new ArrayList<Participant>(participants);
 	}
 
 	public Map<Class< ? >, Object> getVariables() {
-//		check(CoordinationPermission.PARTICIPATE);
+		// check(CoordinationPermission.PARTICIPATE);
 		return variables;
 	}
 
@@ -212,12 +206,12 @@ public class CoordinationImpl implements Coordination {
 		if (coordinator == null)
 			alreadyEnded();
 
-		synchronized (coordinator.locks) {
+		synchronized (CoordinatorImpl.locks) {
 			while (true) {
 				if (isTerminated())
 					alreadyEnded();
 
-				CoordinationImpl other = coordinator.locks.get(p);
+				CoordinationImpl other = CoordinatorImpl.locks.get(p);
 				if (other == null)
 					break;
 
@@ -230,14 +224,14 @@ public class CoordinationImpl implements Coordination {
 							this, CoordinationException.DEADLOCK_DETECTED);
 
 				try {
-					coordinator.locks.wait(coordinator.timeout);
+					CoordinatorImpl.locks.wait(coordinator.timeout);
 				}
 				catch (InterruptedException e) {
 					throw new CoordinationException("Interrupted", this,
 							CoordinationException.LOCK_INTERRUPTED);
 				}
 			}
-			coordinator.locks.put(p, this);
+			CoordinatorImpl.locks.put(p, this);
 			return true;
 		}
 	}
@@ -252,23 +246,23 @@ public class CoordinationImpl implements Coordination {
 	}
 
 	private void unlock(Participant p) {
-		synchronized (coordinator.locks) {
-			CoordinationImpl c = coordinator.locks.remove(p);
+		synchronized (CoordinatorImpl.locks) {
+			CoordinationImpl c = CoordinatorImpl.locks.remove(p);
 			assert c == this;
-			coordinator.locks.notifyAll();
+			CoordinatorImpl.locks.notifyAll();
 		}
 	}
 
 	private void unlockAll() {
-		synchronized (coordinator.locks) {
-			Iterator<Map.Entry<Participant, CoordinationImpl>> i = coordinator.locks
+		synchronized (CoordinatorImpl.locks) {
+			Iterator<Map.Entry<Participant, CoordinationImpl>> i = CoordinatorImpl.locks
 					.entrySet().iterator();
 			while (i.hasNext()) {
 				Entry<Participant, CoordinationImpl> next = i.next();
 				if (next.getValue() == this)
 					i.remove();
 			}
-			coordinator.locks.notifyAll();
+			CoordinatorImpl.locks.notifyAll();
 		}
 	}
 
@@ -283,12 +277,21 @@ public class CoordinationImpl implements Coordination {
 			throw new ServiceException("No longer active service",
 					ServiceException.UNREGISTERED);
 
-		if (c.sm == null)
+		if (CoordinatorImpl.sm == null)
 			return;
 
 		CoordinationPermission cp = new CoordinationPermission(c.bundle, name,
 				admin);
-		c.sm.checkPermission(cp);
+		CoordinatorImpl.sm.checkPermission(cp);
+	}
+
+	synchronized void addDependency(CoordinatorImpl impl) {
+		participantDependency.add(impl);
+	}
+
+	public Coordination push() throws CoordinationException {
+		coordinator.push(this);
+		return this;
 	}
 
 }

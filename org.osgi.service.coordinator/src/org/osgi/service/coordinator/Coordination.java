@@ -15,8 +15,7 @@
  */
 package org.osgi.service.coordinator;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A Coordination object is used to coordinate a number of independent
@@ -44,12 +43,13 @@ public interface Coordination {
 	 * The TIMEOUT exception is a singleton exception that will the reason for
 	 * the failure when the Coordination times out.
 	 */
-	public Exception	TIMEOUT	= new Exception("Singleton Timeout Exception");
+	Exception	TIMEOUT	= new Exception(
+								"COORDINATION SINGLETON TIMEOUT EXCEPTION");
 
 	/**
-	 * A system assigned ID unique for a registered Coordinator. This id must
-	 * not be reused as long as the Coordinator is registered and must be
-	 * monotonically increasing.
+	 * A system assigned ID unique for a specific registered Coordinator. This
+	 * id must not be reused as long as the Coordinator is registered and must
+	 * be monotonically increasing for each Coordination and always be positive.
 	 * 
 	 * @return an id
 	 */
@@ -87,8 +87,7 @@ public interface Coordination {
 	 * cause a Configuration Exception to be thrown.
 	 * 
 	 * If the Coordination is pushed on the Coordinator stack it is associated
-	 * with a specific thread. If this is another thread than the current thread
-	 * it must be interrupted.
+	 * with a specific thread.
 	 * 
 	 * @param reason The reason of the failure, must not be {@code null}
 	 * @return {@code true} if the Coordination was active and this coordination
@@ -148,10 +147,9 @@ public interface Coordination {
 	void end() throws CoordinationException;
 
 	/**
-	 * Return an iterable list of the participants that joined the Coordination.
-	 * This list is only valid as long as the Coordination has not been
-	 * terminated. New participants can enter this list up until termination.
-	 * The list must remain after termination for post-mortem debugging.
+	 * Return a mutable snapshot of the participants that joined the Coordination. Each
+	 * unique Participant object as defined by its identity occurs only once in
+	 * this list.
 	 * 
 	 * @return list of participants.
 	 * 
@@ -159,7 +157,7 @@ public interface Coordination {
 	 *         {@link CoordinationPermission#ADMIN} action for the
 	 *         {@link CoordinationPermission}.
 	 */
-	List< ? extends Participant> getParticipants();
+	List<Participant> getParticipants();
 
 	/**
 	 * If the coordination has failed because {@link #fail(Throwable)} was
@@ -198,14 +196,19 @@ public interface Coordination {
 	 *         signals that this participant could not participate the current
 	 *         coordination. This can be cause by the following reasons:
 	 *         <ol>
-	 *         <li>{@link CoordinationException#DEADLOCK_DETECTED} - Tried to lock the participant but it was already locked on another Configuration on the same thread</li>
-	 *         <li>{@link CoordinationException#LOCK_INTERRUPTED} - Received an interrupt while waiting for the lock to release</li>
-	 *         <li>{@link CoordinationException#ALREADY_ENDED} - The Coordination has already ended</li>
-	 *         <li>{@link CoordinationException#FAILED} - The Coordination has failed</li>
+	 *         <li>{@link CoordinationException#DEADLOCK_DETECTED} - Tried to
+	 *         lock the participant but it was already locked on another
+	 *         Configuration on the same thread</li>
+	 *         <li>{@link CoordinationException#ALREADY_ENDED} - The
+	 *         Coordination has already ended</li>
+	 *         <li>{@link CoordinationException#LOCK_INTERRUPTED} - The
+	 *         current thread was interrupted while waiting for the lock</li>
+	 *         <li>{@link CoordinationException#FAILED} - The Coordination has
+	 *         failed</li>
 	 *         <li>{@link CoordinationException#UNKNOWN}</li>
 	 *         </ol>
 	 * @throws SecurityException This method requires the
-	 *         {@link CoordinationPermission#INITIATE} action for the current
+	 *         {@link CoordinationPermission#PARTICIPATE} action for the current
 	 *         Coordination, if any.
 	 */
 	void addParticipant(Participant participant) throws CoordinationException;
@@ -216,10 +219,12 @@ public interface Coordination {
 	 * Each coordination carries a map that can be used for communicating
 	 * between different participants. To namespace of the map is a class,
 	 * allowing for private date to be stored in the map by using implementation
-	 * classes or shared data by interfaces. The returned map must be thread
-	 * safe.
+	 * classes or shared data by interfaces. 
 	 * 
-	 * @return The thread safe map
+	 * The returned map is does not have to not synchronized. Users of this
+	 * map must synchronize on the Map object while making changes.
+	 * 
+	 * @return The potentially unsynchronized map
 	 */
 	Map<Class< ? >, Object> getVariables();
 
@@ -232,7 +237,8 @@ public interface Coordination {
 	 * deadline.
 	 * 
 	 * @param timeInMillis Add this timeout to the current timeout. If the
-	 *        timeout was 0, no extension takes place.
+	 *        current timeout was set to 0, no extension must take place. A zero
+	 *        or negative value must have no effect.
 	 * @return the new deadline in the format of
 	 *         {@link System#currentTimeMillis()} or 0 if no timeout was set.
 	 * @throws CoordinationException Can throw
@@ -243,7 +249,7 @@ public interface Coordination {
 	 *         </ol>
 	 */
 
-	long extendTimeout(int timeInMillis) throws CoordinationException;
+	long extendTimeout(long timeInMillis) throws CoordinationException;
 
 	/**
 	 * @return true if this Coordination is terminated otherwise false
@@ -256,12 +262,29 @@ public interface Coordination {
 	 * @return Associated thread or {@code null}
 	 */
 	Thread getThread();
-	
+
 	/**
-	 * Wait until the Coordination is completely finished.
+	 * Wait until the Coordination is terminated and all Participant objects
+	 * have been called.
+	 * 
 	 * @param timeoutInMillis Maximum time to wait, 0 is forever
 	 * @throws InterruptedException If the wait is interrupted
 	 */
-	
+
 	void join(long timeoutInMillis) throws InterruptedException;
+
+	/**
+	 * Associate the given Coordination object with a thread local stack of its
+	 * Coordinator. The top of the thread local stack is returned with the
+	 * {@link Coordinator#peek()} method. To remove the Coordination from the
+	 * top call {@link Coordinator#pop()}.
+	 * 
+	 * @return this (for the builder pattern purpose)
+	 * @throws CoordinationException Can throw the
+	 *         <ol>
+	 *         <li>{@link CoordinationException#ALREADY_PUSHED}</li>
+	 *         <li>{@link CoordinationException#UNKNOWN}</li>
+	 *         </ol>
+	 */
+	Coordination push() throws CoordinationException;
 }
