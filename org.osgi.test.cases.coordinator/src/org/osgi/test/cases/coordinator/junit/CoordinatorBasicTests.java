@@ -166,19 +166,19 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		clear(c);
 
 		Coordination cc = c.create("stack-1", 0);
-		assertEquals(cc, c.push(cc));
+		assertEquals(cc, cc.push());
 
 		try {
-			c.push(cc);
+			cc.push();
 			fail("expected an error because we're already pushed");
 		}
 		catch (CoordinationException ce) {
 			assertEquals("Must be already pushed error",
-					CoordinationException.ALREADY_PUSHED, ce.getReason());
+					CoordinationException.ALREADY_PUSHED, ce.getType());
 		}
 
 		assertEquals(cc, c.pop());
-		assertEquals(cc, c.push(cc));
+		assertEquals(cc, cc.push());
 
 		cc.end(); // terminate it
 
@@ -197,11 +197,11 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		assertEquals(c1, c.pop());
 
 		try {
-			c.push(c2);
+			c2.push();
 			fail("must throw an exception");
 		}
 		catch (CoordinationException e) {
-			assertEquals(CoordinationException.ALREADY_ENDED, e.getReason());
+			assertEquals(CoordinationException.ALREADY_ENDED, e.getType());
 		}
 
 		cc = c.begin("pushed", 0);
@@ -414,7 +414,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			}
 			catch (CoordinationException e) {
 				assertEquals(CoordinationException.DEADLOCK_DETECTED, e
-						.getReason());
+						.getType());
 			}
 		}
 		// LOCK_INTERRUPTED
@@ -455,7 +455,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			}
 			catch (CoordinationException e) {
 				assertEquals(CoordinationException.LOCK_INTERRUPTED, e
-						.getReason());
+						.getType());
 			}
 
 			t1.join();
@@ -469,7 +469,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			fail("Must throw ALREADY_ENDED");
 		}
 		catch (CoordinationException e) {
-			assertEquals(CoordinationException.ALREADY_ENDED, e.getReason());
+			assertEquals(CoordinationException.ALREADY_ENDED, e.getType());
 		}
 
 		// FAILED in FAILED state
@@ -481,7 +481,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			cc.addParticipant(new TestParticipant());
 		}
 		catch (CoordinationException e) {
-			assertEquals(CoordinationException.FAILED, e.getReason());
+			assertEquals(CoordinationException.FAILED, e.getType());
 			assertEquals(localFailure, e.getFailure());
 		}
 
@@ -518,7 +518,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			cc.end();
 		}
 		catch (CoordinationException ce) {
-			assertEquals(CoordinationException.PARTIALLY_ENDED, ce.getReason());
+			assertEquals(CoordinationException.PARTIALLY_ENDED, ce.getType());
 		}
 
 		cc = c.create("table-end-already-ended", 0);
@@ -527,7 +527,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			cc.end();
 		}
 		catch (CoordinationException ce) {
-			assertEquals(CoordinationException.ALREADY_ENDED, ce.getReason());
+			assertEquals(CoordinationException.ALREADY_ENDED, ce.getType());
 		}
 
 		cc = c.create("table-end-failed", 0);
@@ -536,7 +536,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			cc.end();
 		}
 		catch (CoordinationException ce) {
-			assertEquals(CoordinationException.FAILED, ce.getReason());
+			assertEquals(CoordinationException.FAILED, ce.getType());
 		}
 	}
 
@@ -609,7 +609,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 				c1.end(); // throws an exception
 			}
 			catch (CoordinationException e) {
-				assertEquals(CoordinationException.FAILED, e.getReason());
+				assertEquals(CoordinationException.FAILED, e.getType());
 				assertTrue(e.getFailure().getClass() == IllegalArgumentException.class);
 			}
 		}
@@ -723,7 +723,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		Coordination c3 = c.create("co0012-3", 0);
 		Coordination c4 = c.create("co0012-4", 0);
 
-		assertEquals(c2, c.getCurrentCoordination());
+		assertEquals(c2, c.peek());
 
 		List<Coordination> cl = new ArrayList<Coordination>(Arrays.asList(c1,
 				c2, c3, c4));
@@ -785,7 +785,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		};
 
 		Coordination c1 = c.begin("co0012", 0);
-		assertEquals(c1, c.getCurrentCoordination());
+		assertEquals(c1, c.peek());
 		try {
 			c1.addParticipant(tp1);
 			c1.addParticipant(tp2);
@@ -797,7 +797,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			}
 			catch (CoordinationException e) {
 				assertEquals(CoordinationException.PARTIALLY_ENDED, e
-						.getReason());
+						.getType());
 				assertEquals(1, tp1.ended.get());
 				assertEquals(0, tp1.failed.get());
 				assertEquals(1, tp2.ended.get());
@@ -822,19 +822,19 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		Coordination c1 = c.begin("co0011-1", 0);
 		try {
 			c1.addParticipant(tp1);
-			assertEquals(c1, c.getCurrentCoordination());
+			assertEquals(c1, c.peek());
 
 			Coordination c2 = c.begin("co0011-2", 0);
-			assertEquals(c2, c.getCurrentCoordination());
+			assertEquals(c2, c.peek());
 			assertFalse(c1.isTerminated());
 			assertFalse(c2.isTerminated());
 			assertEquals(0, tp1.ended.get());
 			assertEquals(0, tp1.failed.get());
 
 			assertEquals(c2, c.pop());
-			assertEquals(c1, c.getCurrentCoordination());
-			c.push(c2);
-			assertEquals(c2, c.getCurrentCoordination());
+			assertEquals(c1, c.peek());
+			c2.push();
+			assertEquals(c2, c.peek());
 
 			try {
 				c2.addParticipant(tp2);
@@ -881,19 +881,19 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		Coordination c1 = c.begin("co0011-1", 0);
 		try {
 			c1.addParticipant(tp1);
-			assertEquals(c1, c.getCurrentCoordination());
+			assertEquals(c1, c.peek());
 
 			Coordination c2 = c.begin("co0011-2", 0);
-			assertEquals(c2, c.getCurrentCoordination());
+			assertEquals(c2, c.peek());
 			assertFalse(c1.isTerminated());
 			assertFalse(c2.isTerminated());
 			assertEquals(0, tp1.ended.get());
 			assertEquals(0, tp1.failed.get());
 
 			assertEquals(c2, c.pop());
-			assertEquals(c1, c.getCurrentCoordination());
-			c.push(c2);
-			assertEquals(c2, c.getCurrentCoordination());
+			assertEquals(c1, c.peek());
+			c2.push();
+			assertEquals(c2, c.peek());
 
 			try {
 				c2.addParticipant(tp2);
@@ -911,7 +911,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 					fail("expected c2 to throw an exception!");
 				}
 				catch (CoordinationException e) {
-					assertEquals(CoordinationException.FAILED, e.getReason());
+					assertEquals(CoordinationException.FAILED, e.getType());
 					assertFalse(c1.isTerminated());
 					assertTrue(c2.isTerminated());
 					assertEquals(0, tp1.ended.get());
@@ -1018,10 +1018,10 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			fail("Excepted deadlock excepton");
 		}
 		catch (CoordinationException e) {
-			assertEquals(CoordinationException.DEADLOCK_DETECTED, e.getReason());
+			assertEquals(CoordinationException.DEADLOCK_DETECTED, e.getType());
 			assertTrue(c2.getParticipants().isEmpty());
 			c2.end();
-			assertEquals(c1, c.getCurrentCoordination());
+			assertEquals(c1, c.peek());
 		}
 
 		// Check if a timeout cancels the block
@@ -1040,7 +1040,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		t1.start();
 		t1.join();
 		assertNotNull(exception.get());
-		assertEquals(CoordinationException.FAILED, exception.get().getReason());
+		assertEquals(CoordinationException.FAILED, exception.get().getType());
 		assertEquals(Coordination.TIMEOUT, exception.get().getFailure());
 
 		// Check if we block correctly
@@ -1115,7 +1115,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			}
 			catch (CoordinationException e) {
 				assertEquals("Should not accept any more coordinatins",
-						CoordinationException.ALREADY_ENDED, e.getReason());
+						CoordinationException.ALREADY_ENDED, e.getType());
 				assertEquals("Should not have sneaked in there", participants,
 						other);
 			}
@@ -1179,7 +1179,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 				fail("End should throw a ConfigurationException FAILED");
 			}
 			catch (CoordinationException e) {
-				assertEquals("Must be FAILED", e.getReason(),
+				assertEquals("Must be FAILED", e.getType(),
 						CoordinationException.FAILED);
 				assertEquals("And our original failure", failure, e
 						.getFailure());
@@ -1225,7 +1225,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			catch (CoordinationException e) {
 				assertEquals(e.getName(), "co0002");
 				assertEquals(cc.getId(), e.getId());
-				assertEquals("Must be FAILED", e.getReason(),
+				assertEquals("Must be FAILED", e.getType(),
 						CoordinationException.FAILED);
 				assertEquals("And our original failure", failure1, e
 						.getFailure());
@@ -1311,7 +1311,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			}
 			catch (CoordinationException ce) {
 				assertEquals("except a failed ", CoordinationException.FAILED,
-						ce.getReason());
+						ce.getType());
 				assertEquals("except a timeout exception ",
 						Coordination.TIMEOUT, ce.getFailure());
 			}
