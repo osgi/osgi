@@ -96,13 +96,7 @@ public class CoordinatorImpl implements Coordinator {
 		check(CoordinationPermission.ADMIN);
 		List<Coordination> l = new ArrayList<Coordination>();
 		for (CoordinatorImpl coordinator : coordinators) {
-			if (coordinator == this)
-				l.addAll(coordinator.coordinations);
-			else {
-				for (CoordinationImpl impl : coordinator.coordinations) {
-					l.add(new CoordinationFaçade(this, impl));
-				}
-			}
+			l.addAll(coordinator.coordinations);
 		}
 		return Collections.unmodifiableList(l);
 	}
