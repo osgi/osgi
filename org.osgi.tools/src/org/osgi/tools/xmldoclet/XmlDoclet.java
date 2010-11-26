@@ -501,7 +501,7 @@ public class XmlDoclet extends Doclet {
 			switch (signature.charAt(i)) {
 				case '<' :
 					parts.add(signature.substring(begin, i));
-					i = skip(signature, i + 1);
+					i = skipGenericParameters(signature, i + 1);
 					begin = i + 1;
 					break;
 
@@ -536,12 +536,13 @@ public class XmlDoclet extends Doclet {
 		return sb.toString();
 	}
 
-	int skip(String s, int n) {
+	int skipGenericParameters(String s, int n) {
 		while (n < s.length() && s.charAt(n) != '>') {
-			if (s.charAt(n) == '<')
-				n = skip(s, n + 1);
-			else
-				n++;
+			if (s.charAt(n) == '<') {
+				n = skipGenericParameters(s, n + 1);
+				// n -> closing '>', so next incr. is necessary
+			}
+			n++;
 		}
 		return n;
 	}

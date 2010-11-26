@@ -3,6 +3,8 @@ package test.xmldoclet.sample;
 import java.io.*;
 import java.util.*;
 
+import org.osgi.framework.*;
+
 /**
  * 
  * 
@@ -12,6 +14,13 @@ import java.util.*;
 public class Sample<T, K extends Serializable> implements Collection<String> {
 	public <X extends Collection<X>> Collection<Integer> foo(X x, String ...strings ) { return null; }
 
+	
+	public interface X<S> extends Comparable<Object> {}
+
+	
+	public void find( Collection<X< ? >> refs) {}
+	
+	
 	public <X>  int xyz(){ return 0; }
 	
 	/**
