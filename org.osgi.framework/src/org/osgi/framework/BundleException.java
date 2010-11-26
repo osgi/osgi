@@ -51,7 +51,8 @@ public class BundleException extends Exception {
 	 */
 	public static final int	UNSPECIFIED				= 0;
 	/**
-	 * The operation was unsupported.
+	 * The operation was unsupported. This type can be used anywhere a 
+	 * BundleException can be thrown.
 	 * 
 	 * @since 1.5
 	 */
@@ -112,6 +113,13 @@ public class BundleException extends Exception {
 	 */
 	public static final int	DUPLICATE_BUNDLE_ERROR	= 9;
 	
+    /**
+	 * The framework received an error while reading the input stream for a bundle.
+	 *  
+	 * @since 1.6
+	 */
+	public static final int	READ_ERROR	= 10;
+
     /**
 	 * The start transient operation failed because the start level of the
 	 * bundle is greater than the current framework start level
