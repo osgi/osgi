@@ -48,17 +48,9 @@ import org.osgi.util.tracker.ServiceTracker;
  * @version $Id$
  */
 public class ClassLoadingTests extends DefaultTestBundleControl {
-	private PackageAdmin	padmin;
 	
 	protected void tearDown() {
-		if ( padmin == null ) {
-			ServiceReference ref = getContext().getServiceReference( PackageAdmin.class.getName());
-			if ( ref == null )
-				return;
-			
-			padmin = (PackageAdmin) getContext().getService(ref);
-		}
-		padmin.refreshPackages(null);
+		synchronousRefreshBundles(null);
 	}
 
 	// Service Registry --------------------------
