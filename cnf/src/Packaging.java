@@ -129,6 +129,7 @@ public class Packaging implements AnalyzerPlugin {
 		String runsystempackages = project
 				.getProperty(Constants.RUNSYSTEMPACKAGES);
 		String runframework = project.getProperty(Constants.RUNFRAMEWORK);
+		String runvm = project.getProperty(Constants.RUNVM);
 		StringBuilder sb = new StringBuilder();
 
 		/**
@@ -200,6 +201,13 @@ public class Packaging implements AnalyzerPlugin {
 			sb.append(Constants.RUNFRAMEWORK);
 			sb.append(" = \\\n    ");
 			sb.append(runframework);
+		}
+
+		if (runvm != null) {
+			sb.append("\n\n");
+			sb.append(Constants.RUNVM);
+			sb.append(" = \\\n    ");
+			sb.append(runvm);
 		}
 
 		sb.append("\n\n\n\n");
