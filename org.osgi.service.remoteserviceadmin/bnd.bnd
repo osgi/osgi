@@ -6,5 +6,5 @@ nodeploy						= true
 
 -buildpath = \
 	ee.minimum;						version=1.2.1, \
-	osgi.core;						version=4.2
+	osgi.core;						version=4.3
 	

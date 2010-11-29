@@ -16,6 +16,8 @@
 
 package org.osgi.service.remoteserviceadmin;
 
+import org.osgi.framework.Constants;
+
 /**
  * Provide the definition of the constants used in the Remote Service Admin
  * specification.
@@ -32,11 +34,14 @@ public class RemoteConstants {
 	 * Service property identifying the configuration types supported by a
 	 * distribution provider. Registered by the distribution provider on one of
 	 * its services to indicate the supported configuration types.
+	 * 
 	 * <p>
 	 * The value of this property must be of type {@code String},
-	 * {@code String[]}, or {@code Collection&lt;String&gt;}.
+	 * {@code String[]}, or {@code Collection} of {@code String}.
+	 * 
+	 * @see "Remote Services Specification"
 	 */
-	public static final String	REMOTE_CONFIGS_SUPPORTED		= "remote.configs.supported";
+	public static final String	REMOTE_CONFIGS_SUPPORTED		= Constants.REMOTE_CONFIGS_SUPPORTED;
 
 	/**
 	 * Service property identifying the intents supported by a distribution
@@ -45,9 +50,11 @@ public class RemoteConstants {
 	 * 
 	 * <p>
 	 * The value of this property must be of type {@code String},
-	 * {@code String[]}, or {@code Collection&lt;String&gt;}.
+	 * {@code String[]}, or {@code Collection} of {@code String}.
+	 * 
+	 * @see "Remote Services Specification"
 	 */
-	public static final String	REMOTE_INTENTS_SUPPORTED		= "remote.intents.supported";
+	public static final String	REMOTE_INTENTS_SUPPORTED		= Constants.REMOTE_INTENTS_SUPPORTED;
 
 	/**
 	 * Service property identifying the configuration types that should be used
@@ -58,11 +65,13 @@ public class RemoteConstants {
 	 * <p>
 	 * This property may be supplied in the {@code properties}
 	 * {@code Dictionary} object passed to the
-	 * {@code BundleContext.registerService} method. The value of this
-	 * property must be of type {@code String}, {@code String[]}, or
-	 * {@code Collection&lt;String&gt;}.
+	 * {@code BundleContext.registerService} method. The value of this property
+	 * must be of type {@code String}, {@code String[]}, or {@code Collection}
+	 * of {@code String}.
+	 * 
+	 * @see "Remote Services Specification"
 	 */
-	public static final String	SERVICE_EXPORTED_CONFIGS		= "service.exported.configs";
+	public static final String	SERVICE_EXPORTED_CONFIGS		= Constants.SERVICE_EXPORTED_CONFIGS;
 
 	/**
 	 * Service property identifying the intents that the distribution provider
@@ -74,11 +83,13 @@ public class RemoteConstants {
 	 * <p>
 	 * This property may be supplied in the {@code properties}
 	 * {@code Dictionary} object passed to the
-	 * {@code BundleContext.registerService} method. The value of this
-	 * property must be of type {@code String}, {@code String[]}, or
-	 * {@code Collection&lt;String&gt;}.
+	 * {@code BundleContext.registerService} method. The value of this property
+	 * must be of type {@code String}, {@code String[]}, or {@code Collection}
+	 * of {@code String}.
+	 * 
+	 * @see "Remote Services Specification"
 	 */
-	public static final String	SERVICE_EXPORTED_INTENTS		= "service.exported.intents";
+	public static final String	SERVICE_EXPORTED_INTENTS		= Constants.SERVICE_EXPORTED_INTENTS;
 
 	/**
 	 * Service property identifying the extra intents that the distribution
@@ -93,11 +104,13 @@ public class RemoteConstants {
 	 * <p>
 	 * This property may be supplied in the {@code properties}
 	 * {@code Dictionary} object passed to the
-	 * {@code BundleContext.registerService} method. The value of this
-	 * property must be of type {@code String}, {@code String[]}, or
-	 * {@code Collection&lt;String&gt;}.
+	 * {@code BundleContext.registerService} method. The value of this property
+	 * must be of type {@code String}, {@code String[]}, or {@code Collection}
+	 * of {@code String}.
+	 * 
+	 * @see "Remote Services Specification"
 	 */
-	public static final String	SERVICE_EXPORTED_INTENTS_EXTRA	= "service.exported.intents.extra";
+	public static final String	SERVICE_EXPORTED_INTENTS_EXTRA	= Constants.SERVICE_EXPORTED_INTENTS_EXTRA;
 
 	/**
 	 * Service property marking the service for export. It defines the
@@ -112,11 +125,13 @@ public class RemoteConstants {
 	 * <p>
 	 * This property may be supplied in the {@code properties}
 	 * {@code Dictionary} object passed to the
-	 * {@code BundleContext.registerService} method. The value of this
-	 * property must be of type {@code String}, {@code String[]}, or
-	 * {@code Collection&lt;String&gt;}.
+	 * {@code BundleContext.registerService} method. The value of this property
+	 * must be of type {@code String}, {@code String[]}, or {@code Collection}
+	 * of {@code String}.
+	 * 
+	 * @see "Remote Services Specification"
 	 */
-	public static final String	SERVICE_EXPORTED_INTERFACES		= "service.exported.interfaces";
+	public static final String	SERVICE_EXPORTED_INTERFACES		= Constants.SERVICE_EXPORTED_INTERFACES;
 
 	/**
 	 * Service property identifying the service as imported. This service
@@ -126,8 +141,10 @@ public class RemoteConstants {
 	 * 
 	 * <p>
 	 * The value of this property may be of any type.
+	 * 
+	 * @see "Remote Services Specification"
 	 */
-	public static final String	SERVICE_IMPORTED				= "service.imported";
+	public static final String	SERVICE_IMPORTED				= Constants.SERVICE_IMPORTED;
 
 	/**
 	 * Service property identifying the configuration types used to import the
@@ -140,11 +157,12 @@ public class RemoteConstants {
 	 * 
 	 * <p>
 	 * The value of this property must be of type {@code String},
-	 * {@code String[]}, or {@code Collection&lt;String&gt;}.
+	 * {@code String[]}, or {@code Collection} of {@code String}.
 	 * 
+	 * @see "Remote Services Specification"
 	 * @see #SERVICE_EXPORTED_CONFIGS
 	 */
-	public static final String	SERVICE_IMPORTED_CONFIGS		= "service.imported.configs";
+	public static final String	SERVICE_IMPORTED_CONFIGS		= Constants.SERVICE_IMPORTED_CONFIGS;
 
 	/**
 	 * Service property identifying the intents that this service implement.
@@ -154,19 +172,21 @@ public class RemoteConstants {
 	 * provider that these intents are already implemented by the exported
 	 * service object.</li>
 	 * <li>A distribution provider must use this property to convey the combined
-	 * intents of: The exporting service, and, the intents that the exporting
+	 * intents of: The exporting service, and the intents that the exporting
 	 * distribution provider adds, and the intents that the importing
 	 * distribution provider adds.</li>
 	 * </ul>
+	 * 
 	 * To export a service, a distribution provider must expand any qualified
 	 * intents. Both the exporting and importing distribution providers must
 	 * recognize all intents before a service can be distributed.
 	 * 
-	 * <p>
 	 * The value of this property must be of type {@code String},
-	 * {@code String[]}, or {@code Collection&lt;String&gt;}.
+	 * {@code String[]}, or {@code Collection} of {@code String}.
+	 * 
+	 * @see "Remote Services Specification"
 	 */
-	public static final String	SERVICE_INTENTS					= "service.intents";
+	public static final String	SERVICE_INTENTS					= Constants.SERVICE_INTENTS;
 
 	/* The above are from Ch. 13 Remote Services specification. */
 
