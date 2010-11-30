@@ -43,24 +43,24 @@ import org.osgi.test.support.OSGiTestCase;
  */
 public abstract class SignatureTestCase extends OSGiTestCase implements
 		ParserCallback {
-	private Class	clazz;
-	private Map	/* <String,Method> */methods;
-	private Map	/* <String,Constructor> */constructors;
-	private Map	/* <String,Field> */fields;
-	private Set		found;
-	private Set		missing;
+	private Class< ? >					clazz;
+	private Map<String, Method>			methods;
+	private Map<String, Constructor< ? >>	constructors;
+	private Map<String, Field>			fields;
+	private Set<String>						found;
+	private Set<String>						missing;
 
 	public void testSignature() {
 		Bundle bundle = getContext().getBundle();
 		String path = "OSGI-INF/signature";
-		found = new HashSet();
-		missing = new HashSet();
-		Enumeration e = bundle.findEntries(path, null, true);
+		found = new HashSet<String>();
+		missing = new HashSet<String>();
+		Enumeration<URL> e = bundle.findEntries(path, null, true);
 		if (e == null)
 			fail("No Signature Files found in " + path);
 
 		while (e.hasMoreElements()) {
-			URL url = (URL) e.nextElement();
+			URL url = e.nextElement();
 			if (!url.toString().endsWith("/")) {
 				try {
 					InputStream in = url.openStream();
@@ -149,8 +149,8 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		return false;
 	}
 
-	private Map getFields(Class c) {
-		Map result = new HashMap();
+	private Map<String, Field> getFields(Class< ? > c) {
+		Map<String, Field> result = new HashMap<String, Field>();
 		while (c != null) {
 			Field[] f = c.getDeclaredFields();
 			for (int i = 0, l = f.length; i < l; i++) {
@@ -168,8 +168,8 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		return result;
 	}
 
-	private Map getMethods(Class c) {
-		Map result = new HashMap();
+	private Map<String, Method> getMethods(Class< ? > c) {
+		Map<String, Method> result = new HashMap<String, Method>();
 		while (c != null) {
 			Method[] m = c.getDeclaredMethods();
 			for (int i = 0, l = m.length; i < l; i++) {
@@ -187,9 +187,9 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		return result;
 	}
 
-	private Map getConstructors(Class c) {
-		Map result = new HashMap();
-		Constructor[] m = c.getDeclaredConstructors();
+	private Map<String, Constructor< ? >> getConstructors(Class< ? > c) {
+		Map<String, Constructor< ? >> result = new HashMap<String, Constructor< ? >>();
+		Constructor< ? >[] m = c.getDeclaredConstructors();
 		for (int i = 0, l = m.length; i < l; i++) {
 			if (!isVisible(m[i].getModifiers())) {
 				continue;
@@ -219,7 +219,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		log("#visit " + getClassName(clazz) + "." + name + " "
 				+ desiredDescriptor);
 
-		Field f = (Field) fields.remove(name);
+		Field f = fields.remove(name);
 		if (f == null) {
 			// Field not found!
 			fail("Could not find field: " + getClassName(clazz) + "." + name);
@@ -229,7 +229,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED
 				| ACC_STATIC | ACC_FINAL);
 
-		Class type = f.getType();
+		Class< ? > type = f.getType();
 		StringBuffer sb = new StringBuffer();
 		createTypeDescriptor(sb, type);
 		assertEquals("Field " + getClassName(clazz) + "." + name,
@@ -272,7 +272,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 	private void checkConstructor(int access, String name,
 			String desiredDescriptor, String[] exceptions) {
 		String key = desiredDescriptor;
-		Constructor m = (Constructor) constructors.remove(key);
+		Constructor< ? > m = constructors.remove(key);
 		if (m == null) {
 			// Method not found!
 			fail("Could not find constructor: " + getClassName(clazz) + "."
@@ -285,12 +285,13 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		checkExceptions(exceptions, m.getExceptionTypes());
 	}
 
-	private void checkExceptions(String[] exceptions, Class[] exceptionTypes) {
+	private void checkExceptions(String[] exceptions,
+			Class< ? >[] exceptionTypes) {
 		if (exceptions == null
 				&& (exceptionTypes == null || exceptionTypes.length == 0))
 			return;
 
-		Set set = new TreeSet(Arrays.asList(exceptions));
+		Set<String> set = new TreeSet<String>(Arrays.asList(exceptions));
 		for (int i = 0; exceptionTypes != null && i < exceptionTypes.length; i++) {
 			String name = exceptionTypes[i].getName().replace('.', '/');
 			if (!set.remove(name))
@@ -300,8 +301,8 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 			fail("Missing declared exceptions: " + set);
 	}
 
-	private void checkInterfaces(Class c, String[] interfaces) {
-		Class implemented[] = c.getInterfaces();
+	private void checkInterfaces(Class< ? > c, String[] interfaces) {
+		Class< ? > implemented[] = c.getInterfaces();
 		outer: for (int i = 0; i < interfaces.length; i++) {
 			String ifname = interfaces[i].replace('/', '.');
 			for (int j = 0; j < implemented.length; j++) {
@@ -319,7 +320,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 	private void checkMethod(int access, String name, String desiredDescriptor,
 			String[] exceptions) {
 		String key = name + desiredDescriptor;
-		Method m = (Method) methods.remove(key);
+		Method m = methods.remove(key);
 		if (m == null) {
 			// Method not found!
 			fail("Could not find method: " + getClassName(clazz) + "." + name);
@@ -336,13 +337,13 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		assertEquals("Relevant access modifiers", access, cMods);
 	}
 
-	private void checkSuperClass(Class c, String superClassName) {
-		Class superClass = c.getSuperclass();
+	private void checkSuperClass(Class< ? > c, String superClassName) {
+		Class< ? > superClass = c.getSuperclass();
 		if (superClass != null)
 			assertEquals("Super class", superClassName, superClass.getName());
 	}
 
-	private void createTypeDescriptor(StringBuffer sb, Class type) {
+	private void createTypeDescriptor(StringBuffer sb, Class< ? > type) {
 		if (type.isArray()) {
 			sb.append("[");
 			createTypeDescriptor(sb, type.getComponentType());
@@ -388,13 +389,13 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		}
 	}
 
-	private String getClassName(Class c) {
+	private String getClassName(Class< ? > c) {
 		if (c.isArray())
 			return getClassName(c.getComponentType()) + "[]";
 		return c.getName();
 	}
 
-	private void getDescriptor(StringBuffer sb, Class[] parameters) {
+	private void getDescriptor(StringBuffer sb, Class< ? >[] parameters) {
 		for (int i = 0; i < parameters.length; i++) {
 			createTypeDescriptor(sb, parameters[i]);
 		}

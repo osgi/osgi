@@ -77,7 +77,7 @@ public abstract class OSGiTestCase extends TestCase {
 	 * @param fieldClass Class containing constant.
 	 */
 	public static void assertConstant(Object expected, String fieldName,
-			Class fieldClass) {
+			Class< ? > fieldClass) {
 		try {
 			Field f = fieldClass.getField(fieldName);
 			assertTrue(Modifier.isPublic(f.getModifiers()));
@@ -93,8 +93,8 @@ public abstract class OSGiTestCase extends TestCase {
 		}
 	}
 	
-	public static void assertEquals(String message, Comparator comparator,
-			List expected, List actual) {
+	public static <T> void assertEquals(String message,
+			Comparator<T> comparator, List<T> expected, List<T> actual) {
 		if (expected.size() != actual.size()) {
 			failNotEquals(message, expected, actual);
 		}
@@ -104,8 +104,8 @@ public abstract class OSGiTestCase extends TestCase {
 		}
 	}
 
-	public static void assertEquals(String message, Comparator comparator,
-			Object expected, Object actual) {
+	public static <T> void assertEquals(String message,
+			Comparator<T> comparator, T expected, T actual) {
 		if (comparator.compare(expected, actual) == 0) {
 			return;
 		}
@@ -130,7 +130,7 @@ public abstract class OSGiTestCase extends TestCase {
 	 * @param bundles The bundles to be refreshed, or {@code null} to refresh
 	 *        the removal pending bundles.
 	 */
-	public void synchronousRefreshBundles(Collection bundles) {
+	public void synchronousRefreshBundles(Collection<Bundle> bundles) {
 		FrameworkWiring fwkWiring = getContext().getBundle(0).adapt(FrameworkWiring.class);
 		assertNotNull("Framework wiring is null.", fwkWiring);
 		final boolean[] done = new boolean[] {false};
@@ -144,11 +144,12 @@ public abstract class OSGiTestCase extends TestCase {
 				}
 			}
 		};
-		fwkWiring.refreshBundles(bundles, new FrameworkListener[] {listener});
+		fwkWiring.refreshBundles(bundles, listener);
 		synchronized (done) {
 			if (!done[0])
 				try {
-					done.wait(5000);
+					done.wait(OSGiTestCaseProperties.getTimeout()
+							* OSGiTestCaseProperties.getScaling());
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 					fail("Unexepected interruption.", e);

@@ -31,7 +31,8 @@ import java.util.Comparator;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 
-public class FrameworkEventCollector extends EventCollector implements
+public class FrameworkEventCollector extends EventCollector<FrameworkEvent>
+		implements
 		FrameworkListener {
 	private final int	mask;
 
@@ -44,11 +45,9 @@ public class FrameworkEventCollector extends EventCollector implements
 			addEvent(event);
 	}
 
-	public Comparator getComparator() {
-		return new Comparator() {
-			public int compare(Object o1, Object o2) {
-				FrameworkEvent event1 = (FrameworkEvent)o1;
-				FrameworkEvent event2 = (FrameworkEvent)o2;
+	public Comparator<FrameworkEvent> getComparator() {
+		return new Comparator<FrameworkEvent>() {
+			public int compare(FrameworkEvent event1, FrameworkEvent event2) {
 				 
 				long lresult = event1.getBundle().getBundleId() - event2.getBundle().getBundleId();
 				if (lresult < 0) {

@@ -32,7 +32,8 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 
-public class ServiceEventCollector extends EventCollector implements
+public class ServiceEventCollector extends EventCollector<ServiceEvent>
+		implements
 		ServiceListener {
 	private final int	mask;
 
@@ -45,11 +46,9 @@ public class ServiceEventCollector extends EventCollector implements
 			addEvent(event);
 	}
 
-	public Comparator getComparator() {
-		return new Comparator() {
-			public int compare(Object o1, Object o2) {
-				ServiceEvent event1 = (ServiceEvent) o1;
-				ServiceEvent event2 = (ServiceEvent) o2;
+	public Comparator<ServiceEvent> getComparator() {
+		return new Comparator<ServiceEvent>() {
+			public int compare(ServiceEvent event1, ServiceEvent event2) {
 
 				Long id1 = (Long) event1.getServiceReference().getProperty(Constants.SERVICE_ID);
 				Long id2 = (Long) event2.getServiceReference().getProperty(Constants.SERVICE_ID);

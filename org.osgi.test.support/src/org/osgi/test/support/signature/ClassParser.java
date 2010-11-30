@@ -27,8 +27,11 @@
 
 package org.osgi.test.support.signature;
 
-import java.io.*;
-import java.util.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ClassParser {
 	DataInputStream			in;
@@ -87,7 +90,7 @@ public class ClassParser {
 			String name = getUtf8();
 			String descriptor = getUtf8();
 
-			Map map = doAttributes(cb);
+			Map<String, Object> map = doAttributes(cb);
 			cb.doMethod(access, name, descriptor, (String[]) map
 					.get("Exceptions"));
 		}
@@ -99,7 +102,7 @@ public class ClassParser {
 			int access = in.readUnsignedShort();
 			String fieldName = getUtf8();
 			String fieldDescriptor = getUtf8();
-			Map map = doAttributes(cb);
+			Map<String, Object> map = doAttributes(cb);
 			cb.doField(access, fieldName, fieldDescriptor, map
 					.get("ConstantValue"));
 		}
@@ -135,8 +138,9 @@ public class ClassParser {
 		return constPool[in.readUnsignedShort()].getValue();
 	}
 
-	private Map doAttributes(ParserCallback cb) throws IOException {
-		Map map = new HashMap();
+	private Map<String, Object> doAttributes(ParserCallback cb)
+			throws IOException {
+		Map<String, Object> map = new HashMap<String, Object>();
 		int attributesCount = in.readUnsignedShort();
 		for (int j = 0; j < attributesCount; j++) {
 			String attributeName = getUtf8();

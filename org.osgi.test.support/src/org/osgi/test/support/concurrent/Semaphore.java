@@ -54,22 +54,22 @@ public class Semaphore {
 		notifyAll();
 	}
 
-	public synchronized void acquire(int count)
+	public synchronized void acquire(int c)
 			throws java.lang.InterruptedException {
-		while (this.count < count) {
+		while (this.count < c) {
 			wait();
 		}
-		this.count -= count;
+		this.count -= c;
 	}
 
 	public void acquireUninterruptibly() {
 		acquireUninterruptibly(1);
 	}
 
-	public void acquireUninterruptibly(int count) {
+	public void acquireUninterruptibly(int c) {
 		while (true)
 			try {
-				acquire(count);
+				acquire(c);
 				return;
 			}
 			catch (InterruptedException ie) {
@@ -95,9 +95,9 @@ public class Semaphore {
 		return tryAcquire(1);
 	}
 
-	public synchronized boolean tryAcquire(int count) {
-		if ( this.count <= count) {
-			this.count -= count;
+	public synchronized boolean tryAcquire(int c) {
+		if ( this.count <= c) {
+			this.count -= c;
 			return true;
 		}
 		return false;

@@ -31,10 +31,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class EventCollector {
-	private final ArrayList	events	= new ArrayList();
+public abstract class EventCollector<T> {
+	private final List<T>	events	= new ArrayList<T>();
 
-	synchronized protected void addEvent(Object event) {
+	synchronized protected void addEvent(T event) {
 		events.add(event);
 		notifyAll();
 	}
@@ -43,7 +43,7 @@ public abstract class EventCollector {
 		events.clear();
 	}
 
-	synchronized public List getList(int expectedCount, long timeout) {
+	synchronized public List<T> getList(int expectedCount, long timeout) {
 		while (events.size() < expectedCount) {
 			int currentSize = events.size();
 			try {
@@ -55,16 +55,16 @@ public abstract class EventCollector {
 			if (currentSize == events.size())
 				break; // no new events occurred; break out
 		}
-		List result = new ArrayList(events);
+		List<T> result = new ArrayList<T>(events);
 		clear();
 		return result;
 	}
 
-	public List getListSorted(int expectedCount, long timeout) {
-		List result = getList(expectedCount, timeout);
+	public List<T> getListSorted(int expectedCount, long timeout) {
+		List<T> result = getList(expectedCount, timeout);
 		Collections.sort(result, getComparator());
 		return result;
 	}
 
-	public abstract Comparator getComparator();
+	public abstract Comparator<T> getComparator();
 }

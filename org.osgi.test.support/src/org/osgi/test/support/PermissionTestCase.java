@@ -38,7 +38,6 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -49,7 +48,7 @@ import org.osgi.framework.ServiceReference;
 
 public abstract class PermissionTestCase extends OSGiTestCase {
 
-	public static void checkEnumeration(Enumeration en, boolean isEmpty) {
+	public static void checkEnumeration(Enumeration< ? > en, boolean isEmpty) {
 		assertEquals(en + " empty state is invalid", !isEmpty, en
 				.hasMoreElements()); 
 		try {
@@ -138,8 +137,8 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 		}
 	}
 
-	private static Set enumerationAsSet(Enumeration e) {
-		Set result = new HashSet();
+	private static <T> Set<T> enumerationAsSet(Enumeration<T> e) {
+		Set<T> result = new HashSet<T>();
 		while (e.hasMoreElements()) {
 			result.add(e.nextElement());
 		}
@@ -186,15 +185,15 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 
 	public static Bundle newMockBundle(long id, String name, String location,
 			String dn) {
-		Map /* <X509Certificate, List<X509Certificate>> */testMap = new HashMap();
+		Map<X509Certificate, List<X509Certificate>> testMap = new HashMap<X509Certificate, List<X509Certificate>>();
 		if (dn != null) {
 			Principal principal = new MockPrincipal(dn);
 			X509Certificate cert = new MockX509Certificate(principal);
-			List /* <X509Certificate> */testList = new ArrayList();
+			List<X509Certificate> testList = new ArrayList<X509Certificate>();
 			testList.add(cert);
 			testMap.put(cert, testList);
 		}
-		return (Bundle) MockFactory.newMock(Bundle.class, new MockBundle(id,
+		return MockFactory.newMock(Bundle.class, new MockBundle(id,
 				name, location, testMap));
 	}
 
@@ -202,9 +201,10 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 		private final long		id;
 		private final String	name;
 		private final String	location;
-		private final Map		signers;
+		private final Map<X509Certificate, List<X509Certificate>>	signers;
 
-		MockBundle(long id, String name, String location, Map signers) {
+		MockBundle(long id, String name, String location,
+				Map<X509Certificate, List<X509Certificate>> signers) {
 			this.id = id;
 			this.name = name;
 			this.location = location;
@@ -219,8 +219,9 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			return location;
 		}
 
-		public Map getSignerCertificates(int type) {
-			return new HashMap(signers);
+		public Map<X509Certificate, List<X509Certificate>> getSignerCertificates(
+				int type) {
+			return new HashMap<X509Certificate, List<X509Certificate>>(signers);
 		}
 
 		public String getSymbolicName() {
@@ -348,7 +349,7 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			throw new UnsupportedOperationException();
 		}
 
-		public Set getCriticalExtensionOIDs() {
+		public Set<String> getCriticalExtensionOIDs() {
 			throw new UnsupportedOperationException();
 		}
 
@@ -356,7 +357,7 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			throw new UnsupportedOperationException();
 		}
 
-		public Set getNonCriticalExtensionOIDs() {
+		public Set<String> getNonCriticalExtensionOIDs() {
 			throw new UnsupportedOperationException();
 		}
 
@@ -395,17 +396,18 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 		}
 	}
 	
-	public static ServiceReference newMockServiceReference(Bundle bundle,
-			Map properties) {
-		return (ServiceReference) MockFactory.newMock(ServiceReference.class,
+	public static ServiceReference< ? > newMockServiceReference(Bundle bundle,
+			Map<String, ? > properties) {
+		return MockFactory.newMock(
+				ServiceReference.class,
 				new MockServiceReference(bundle, properties));
 	}
 
 	private static class MockServiceReference {
 		private final Bundle	bundle;
-		private final Map		properties;
+		private final Map<String, ? >	properties;
 
-		MockServiceReference(Bundle bundle, Map properties) {
+		MockServiceReference(Bundle bundle, Map<String, ? > properties) {
 			this.bundle = bundle;
 			this.properties = properties;
 		}
@@ -419,8 +421,7 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			if (result != null) {
 				return result;
 			}
-			for (Iterator iter = properties.keySet().iterator(); iter.hasNext();) {
-				String k = (String) iter.next();
+			for (String k : properties.keySet()) {
 				if (k.equalsIgnoreCase(key)) {
 					return properties.get(k);
 				}
