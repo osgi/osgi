@@ -112,7 +112,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	 * @param want the exception that is specified to be thrown
 	 * @param got the exception that was thrown
 	 */
-	public static void assertException(String message, Class<Throwable> want,
+	public static void assertException(String message, Class<? extends Throwable> want,
 			Throwable got) {
 		String formatted = "";
 
