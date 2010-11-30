@@ -614,7 +614,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 */
 	public void testExportConfigurationType() throws Exception {
 		// read supported configuration types from the DistributionProvider
-		ServiceReference[] dprefs = getContext().getServiceReferences(null, "(remote.configs.supported=*)");
+		ServiceReference[] dprefs = getContext().getServiceReferences(
+				(String) null, "(remote.configs.supported=*)");
 		assertNotNull(dprefs);
 		ServiceReference dpref = dprefs[0];
 		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
@@ -747,7 +748,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 */
 	public void testForceExportFailure() throws Exception {
 		// read supported configuration types from the DistributionProvider
-		ServiceReference[] dprefs = getContext().getServiceReferences(null, "(remote.configs.supported=*)");
+		ServiceReference[] dprefs = getContext().getServiceReferences(
+				(String) null, "(remote.configs.supported=*)");
 		assertNotNull(dprefs);
 		ServiceReference dpref = dprefs[0];
 		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
@@ -909,7 +911,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 */
 	public void testExportConfigOverride() throws Exception {
 		// read supported configuration types from the DistributionProvider
-		ServiceReference[] dprefs = getContext().getServiceReferences(null, "(remote.configs.supported=*)");
+		ServiceReference[] dprefs = getContext().getServiceReferences(
+				(String) null, "(remote.configs.supported=*)");
 		assertNotNull(dprefs);
 		ServiceReference dpref = dprefs[0];
 		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
@@ -971,7 +974,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 */
 	public void testExportEmptyConfig() throws Exception {
 		// read supported configuration types from the DistributionProvider
-		ServiceReference[] dprefs = getContext().getServiceReferences(null, "(remote.configs.supported=*)");
+		ServiceReference[] dprefs = getContext().getServiceReferences(
+				(String) null, "(remote.configs.supported=*)");
 		assertNotNull(dprefs);
 		ServiceReference dpref = dprefs[0];
 		String[] supportedConfigTypes = getConfigTypes(dpref.getProperty("remote.configs.supported"));
