@@ -191,13 +191,16 @@ public class FrameworkWiringTests extends OSGiTestCase {
 		Collection testBundles = Arrays.asList(new Bundle[]{tb1, tb2, tb3, tb4, tb5});
 		assertTrue(frameworkWiring.resolveBundles(testBundles));
 
+		// Need to make sure there are no removal pendings already present.
+		Collection<Bundle> removals = frameworkWiring.getRemovalPendingBundles();
+		assertEquals("Removal pendings are left over: " + removals.toString(), 0, removals.size());
 		try {
 			tb1.uninstall();
 		} catch (BundleException e) {
 			fail("Failed to uninstall bundle", e);
 		}
 
-		Collection removals = frameworkWiring.getRemovalPendingBundles();
+		removals = frameworkWiring.getRemovalPendingBundles();
 		assertEquals("Wrong number of removals", 1, removals.size());
 		assertTrue("Wrong bundle in removals", removals.contains(tb1));
 
