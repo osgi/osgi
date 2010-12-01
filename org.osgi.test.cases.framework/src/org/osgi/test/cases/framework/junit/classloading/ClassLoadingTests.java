@@ -404,10 +404,10 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 							"org.osgi.test.cases.framework.classloading.exports.listener.ServiceListenerTester");
 			service = getContext().getService(serviceReference);
 			method = service.getClass().getMethod("getServiceEventDelivered",
-					null);
+					(Class[]) null);
 			assertNull(
 					"Checking if an event is delivered for a bundle which imports a non-assignable service interface",
-					method.invoke(service, null));
+					method.invoke(service, (Object[]) null));
 
 			getContext().ungetService(serviceReference);
 
@@ -471,10 +471,10 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 							"org.osgi.test.cases.framework.classloading.exports.listener.ServiceListenerTester");
 			service = getContext().getService(serviceReference);
 			method = service.getClass().getMethod("getServiceEventDelivered",
-					null);
+					(Class[]) null);
 			assertNotNull(
 					"Checking if an event is delivered for a bundle which imports an assignable service interface",
-					method.invoke(service, null));
+					method.invoke(service, (Object[]) null));
 
 			getContext().ungetService(serviceReference);
 
@@ -545,10 +545,10 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 							"org.osgi.test.cases.framework.classloading.exports.listener.AllServiceListenerTester");
 			service = getContext().getService(serviceReference);
 			method = service.getClass().getMethod("getServiceEventDelivered",
-					null);
+					(Class[]) null);
 			assertNotNull(
 					"Checking if an event is delivered for a bundle which imports a assignable service interface",
-					method.invoke(service, null));
+					method.invoke(service, (Object[]) null));
 
 			getContext().ungetService(serviceReference);
 
@@ -570,10 +570,10 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 							"org.osgi.test.cases.framework.classloading.exports.listener.AllServiceListenerTester");
 			service = getContext().getService(serviceReference);
 			method = service.getClass().getMethod("getServiceEventDelivered",
-					null);
+					(Class[]) null);
 			assertNotNull(
 					"Checking if an event is delivered for a bundle which imports a non-assignable service interface",
-					method.invoke(service, null));
+					method.invoke(service, (Object[]) null));
 
 			getContext().ungetService(serviceReference);
 

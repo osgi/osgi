@@ -344,15 +344,15 @@ public class StartLevelControl extends DefaultTestBundleControl {
 		}
 	}
 
-	private void checkFrameworkEvents(List expectedFrameworkEvents, List[] callerFrameworkEvents) {
-		assertEquals("Received start level changed event", (Comparator) fec.getComparator(),
+	private void checkFrameworkEvents(List<FrameworkEvent> expectedFrameworkEvents, List<FrameworkEvent>[] callerFrameworkEvents) {
+		assertEquals("Received start level changed event", fec.getComparator(),
 				expectedFrameworkEvents, fec.getList(expectedFrameworkEvents
 						.size(), TIMEOUT));
 		if (callerFrameworkEvents != null) {
 			for (int i = 0; i < callerFrameworkEvents.length; i++) {
 				assertEquals("Wrong events for caller listeners " + i,
-						(Comparator) fec.getComparator(), expectedFrameworkEvents,
-						Arrays.asList(callerFrameworkEvents[i].toArray()));
+						fec.getComparator(), expectedFrameworkEvents,
+						Arrays.asList(callerFrameworkEvents[i].toArray(new FrameworkEvent[0])));
 				callerFrameworkEvents[i].clear();
 			}
 		}

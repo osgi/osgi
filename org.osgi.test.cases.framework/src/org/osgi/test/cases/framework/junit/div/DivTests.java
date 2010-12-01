@@ -774,7 +774,7 @@ public class DivTests extends DefaultTestBundleControl {
 
 			Object service = getContext().getService(sr);
 			ClassLoader classLoader = (ClassLoader) service.getClass()
-					.getMethod("getClassLoader", null).invoke(service, null);
+					.getMethod("getClassLoader", (Class[]) null).invoke(service, (Object[]) null);
 			assertEquals(
 					"Expecting the ClassLoader of the class and the bundle to be the same",
 					clazz.getClassLoader(), classLoader);
