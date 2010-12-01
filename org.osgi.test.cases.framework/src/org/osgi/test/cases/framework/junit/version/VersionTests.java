@@ -321,9 +321,9 @@ public class VersionTests extends TestCase {
 
 		incorrect = "";
 		version = new Version(1, 1, 1);
-
+		Comparable testVersion = version;
 		try {
-			version.compareTo(incorrect);
+			testVersion.compareTo(incorrect);
 			fail("Testing the method compareTo() with an incorrect object");
 		}
 		catch (ClassCastException ex) {

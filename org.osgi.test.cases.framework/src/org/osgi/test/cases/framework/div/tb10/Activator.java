@@ -6,8 +6,6 @@
  */
 package org.osgi.test.cases.framework.div.tb10;
 
-import java.util.Properties;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -28,7 +26,7 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext bc) {
 		service = new TestServiceImpl();
 		serviceRegistration = bc
-				.registerService(TestService.class.getName(), service, new Properties());
+				.registerService(TestService.class.getName(), service, null);
 	}
 
 	/**

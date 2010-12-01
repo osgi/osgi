@@ -6,6 +6,7 @@
  */
 package org.osgi.test.cases.framework.filter.tb1;
 
+import java.util.Dictionary;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -21,25 +22,25 @@ import org.osgi.framework.ServiceRegistration;
  */
 public class InstallServices implements BundleActivator {
 	ServiceA			_sa1;
-	Properties			_sa1Props;
+	Dictionary			_sa1Props;
 	ServiceRegistration	_sra1;
 	ServiceB			_sb1;
-	Properties			_sb1Props;
+	Dictionary			_sb1Props;
 	ServiceRegistration	_srb1;
 	ServiceB			_sb2;
-	Properties			_sb2Props;
+	Dictionary			_sb2Props;
 	ServiceRegistration	_srb2;
 	ServiceC			_sc1;
-	Properties			_sc1Props;
+	Dictionary			_sc1Props;
 	ServiceRegistration	_src1;
 	ServiceC			_sc2;
-	Properties			_sc2Props;
+	Dictionary			_sc2Props;
 	ServiceRegistration	_src2;
 	ServiceC			_sc3;
-	Properties			_sc3Props;
+	Dictionary			_sc3Props;
 	ServiceRegistration	_src3;
 	ServiceD			_sd1;
-	Properties			_sd1Props;
+	Dictionary			_sd1Props;
 	ServiceRegistration	_srd1;
 
 	/**

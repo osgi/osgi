@@ -29,6 +29,7 @@ package org.osgi.test.cases.framework.junit.startlevel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.osgi.framework.Bundle;
@@ -344,13 +345,13 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	}
 
 	private void checkFrameworkEvents(List expectedFrameworkEvents, List[] callerFrameworkEvents) {
-		assertEquals("Received start level changed event", fec.getComparator(),
+		assertEquals("Received start level changed event", (Comparator) fec.getComparator(),
 				expectedFrameworkEvents, fec.getList(expectedFrameworkEvents
 						.size(), TIMEOUT));
 		if (callerFrameworkEvents != null) {
 			for (int i = 0; i < callerFrameworkEvents.length; i++) {
 				assertEquals("Wrong events for caller listeners " + i,
-						fec.getComparator(), expectedFrameworkEvents,
+						(Comparator) fec.getComparator(), expectedFrameworkEvents,
 						Arrays.asList(callerFrameworkEvents[i].toArray()));
 				callerFrameworkEvents[i].clear();
 			}

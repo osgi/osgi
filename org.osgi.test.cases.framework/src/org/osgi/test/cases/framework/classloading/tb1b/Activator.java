@@ -27,6 +27,7 @@
 
 package org.osgi.test.cases.framework.classloading.tb1b;
 
+import java.util.Dictionary;
 import java.util.Properties;
 
 import org.osgi.framework.BundleActivator;
@@ -59,7 +60,7 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-		Properties props;
+		Dictionary props;
 
 		props = new Properties();
 		props.put("version", "1.0.0");
