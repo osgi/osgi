@@ -41,17 +41,18 @@ import java.util.Dictionary;
  * </ul>
  * 
  * <p>
- * A {@code BundleContext} object will be created and provided to the bundle
- * associated with this context when it is started using the
- * {@link BundleActivator#start} method. The same {@code BundleContext} object
- * will be passed to the bundle associated with this context when it is stopped
- * using the {@link BundleActivator#stop} method. A {@code BundleContext} object
- * is generally for the private use of its associated bundle and is not meant to
- * be shared with other bundles in the OSGi environment.
+ * A {@code BundleContext} object will be created for a bundle when the bundle
+ * is started. The {@code Bundle} object associated with a {@code BundleContext}
+ * object is called the <em>context bundle</em>.
  * 
  * <p>
- * The {@code Bundle} object associated with a {@code BundleContext} object is
- * called the <em>context bundle</em>.
+ * The {@code BundleContext} object will be passed to the
+ * {@link BundleActivator#start} method during activation of the context bundle.
+ * The same {@code BundleContext} object will be passed to the
+ * {@link BundleActivator#stop} method when the context bundle is stopped. A
+ * {@code BundleContext} object is generally for the private use of its
+ * associated bundle and is not meant to be shared with other bundles in the
+ * OSGi environment.
  * 
  * <p>
  * The {@code BundleContext} object is only valid during the execution of its
@@ -62,8 +63,10 @@ import java.util.Dictionary;
  * object must never be reused after its context bundle is stopped.
  * 
  * <p>
- * The Framework is the only entity that can create {@code BundleContext}
- * objects and they are only valid within the Framework that created them.
+ * Two {@code BundleContext} objects are equal if they both refer to the same
+ * execution context of a bundle. The Framework is the only entity that can
+ * create {@code BundleContext} objects and they are only valid within the
+ * Framework that created them.
  * 
  * <p>
  * A {@link Bundle} can be {@link Bundle#adapt(Class) adapted} to its
