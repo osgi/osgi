@@ -756,17 +756,18 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 
 		try {
 			initial.add(null);
-			fail("Must be immutable");
+			assertEquals("Must be mutable", 5, initial.size());
 		}
 		catch (Exception e) {
-			// pass
+			fail("Must be mutable");
 		}
 		try {
-			initial.remove(0);
-			fail("Must be immutable");
+			initial.remove(null);
+			assertEquals("Must be mutable", 4, initial.size());
+			
 		}
 		catch (Exception e) {
-			// pass
+			fail("Must be mutable");
 		}
 	}
 
