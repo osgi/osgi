@@ -203,7 +203,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			fail("must throw an exception");
 		}
 		catch (CoordinationException e) {
-			assertEquals(CoordinationException.ALREADY_ENDED, e.getType());
+			assertEquals(CoordinationException.FAILED, e.getType());
 		}
 
 		cc = c.begin("pushed", 0);
