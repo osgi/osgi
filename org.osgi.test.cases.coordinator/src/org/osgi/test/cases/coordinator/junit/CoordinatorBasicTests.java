@@ -85,12 +85,14 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			assertFalse("must not have timed out yet because we extended", cc
 					.isTerminated());
 			try {
-				Thread.sleep(10 * granularity); // must be interrupted after
-												// extended
-				fail("must be interrupted before");
+				cc.join(10 * granularity);
 			}
 			catch (InterruptedException ie) {
-				// ok
+				// The spec no longer requires an implementation to 
+				// interrupt the thread a coordination is associated with 
+				// if other than the one that called the fail() method. 
+				// However, it doesn't prohibit it either, so ignore the 
+				// exception.
 			}
 			assertTrue("now it must be terminated", cc.isTerminated());
 			assertEquals(Coordination.TIMEOUT, cc.getFailure());
@@ -347,11 +349,14 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 
 		Coordination cc = c.begin("table-timeout-active", 100);
 		try {
-			Thread.sleep(200);
-			fail("Should have been interrupted");
+			cc.join(200);
 		}
 		catch (InterruptedException e) {
-			// good!
+			// The spec no longer requires an implementation to 
+			// interrupt the thread a coordination is associated with 
+			// if other than the one that called the fail() method. 
+			// However, it doesn't prohibit it either, so ignore the 
+			// exception.
 		}
 		assertTrue(cc.isTerminated());
 	}
