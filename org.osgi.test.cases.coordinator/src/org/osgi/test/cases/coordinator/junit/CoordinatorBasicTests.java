@@ -661,17 +661,15 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 
 	/**
 	 * CO0014 – It must be possible to fail a coordination from outside of the
-	 * initiating/active thread and ensure that the associated thread (and
-	 * thereby the coordinated task) is interrupted.
+	 * initiating/active thread.
 	 * @throws Exception 
 	 */
 
-	public void testInterrupt() throws Exception {
+	public void testFailCoordinationFromNoninitiatingThread() throws Exception {
 		final Coordinator c = (Coordinator) getService(Coordinator.class);
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
-		final AtomicReference<Throwable> exception = new AtomicReference<Throwable>();
 		final Semaphore s = new Semaphore(0);
 		final AtomicReference<Coordination> coord = new AtomicReference<Coordination>();
 
@@ -681,23 +679,28 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 				coord.set(c1);
 				s.release(1);
 				try {
-					while (true) {
-						Thread.sleep(100);
-						System.out.print(".");
-					}
+					c1.join(0);
 				}
 				catch (InterruptedException e) {
-					exception.set(e);
+					// The spec no longer requires an implementation to 
+					// interrupt the thread a coordination is associated with 
+					// if other than the one that called the fail() method. 
+					// However, it doesn't prohibit it either, so ignore the 
+					// exception.
+				}
+				finally {
+					s.release(1);
 				}
 			}
 		};
 		t1.start();
 		s.acquire(1);
-		coord.get().fail(new Exception());
-		t1.join();
-
-		assertFalse(t1.isAlive());
-		assertTrue(exception.get().getClass() == InterruptedException.class);
+		Exception e = new Exception();
+		coord.get().fail(e);
+		s.acquire(1);
+		
+		assertTrue(coord.get().isTerminated());
+		assertTrue(coord.get().getFailure() == e);
 	}
 
 	void clear(Coordinator c) {
