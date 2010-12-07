@@ -22,7 +22,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -630,6 +634,83 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		} catch (BundleException e) {
 			assertEquals("Wrong exception type.", BundleException.DUPLICATE_BUNDLE_ERROR, e.getType());
 			// expected
+		}
+	}
+
+	public void testUUID() {
+		// Test UUID values
+		Map config1 = getConfiguration(getName() + ".1");
+		Framework framework1 = createFramework(config1);
+		// get the UUID after first init
+		initFramework(framework1);
+		String uuid = framework1.getBundleContext().getProperty(Constants.FRAMEWORK_UUID);
+		verifyUUID(uuid);
+		stopFramework(framework1);
+		// Keep a set of previously used uuids
+		Set uuids = new HashSet();
+		uuids.add(uuid);
+		// Now try to re-init and start the framework and each init/shutdown cycle gives a unique uuid
+		for (int i = 0; i < 20; i++) {
+			initFramework(framework1);
+			String uuid1 = framework1.getBundleContext().getProperty(Constants.FRAMEWORK_UUID);
+			verifyUUID(uuid1);
+			assertFalse("Duplicate UUID", uuids.contains(uuid1));
+			uuids.add(uuid1);
+			startFramework(framework1);
+			// after start the uuid should be the same as after init
+			String uuid2 = framework1.getBundleContext().getProperty(Constants.FRAMEWORK_UUID);
+			verifyUUID(uuid2);
+			assertEquals("UUID changed after start", uuid1, uuid2);
+			stopFramework(framework1);
+		}
+	}
+
+	private void verifyUUID(String uuid) {
+		assertNotNull("Null uuid.", uuid);
+		StringTokenizer st = new StringTokenizer(uuid, "-");
+		String[] uuidSections = new String[5];
+		// All UUIDs must have 5 sections
+		for (int i = 0; i < uuidSections.length; i++) {
+			try {
+				uuidSections[i] = "0x" + st.nextToken();
+			} catch (NoSuchElementException e) {
+				fail("Wrong number of uuid sections: " + uuid, e);
+			}
+		}
+		// make sure there is not an extra section.
+		try {
+			st.nextToken();
+			fail("Too many sections in uuid: " + uuid);
+		} catch (NoSuchElementException e) {
+			// expected
+		}
+		// now verify each section of the UUID can be decoded as a hex string and is the correct size
+		for (int i = 0; i < uuidSections.length; i++) {
+			int limit = 0;
+			switch (i) {
+				case 0: {
+					limit = 10; // "0x" + 4*<hexOctet> == 10 len
+					break;
+				}
+				case 1:
+				case 2:
+				case 3:{
+					limit = 6; // "0x" + 2*<hexOctet> == 6 len
+					break;
+				}
+				case 4:{
+					limit = 14; // "0x" + 6*<hexOctet> == 14 len
+					break;
+				}
+				default:
+					break;
+			}
+			assertTrue("UUISection is too big: " + uuidSections[i], uuidSections[i].length() <= limit); 
+			try {
+				Long.decode(uuidSections[i]);
+			} catch (NumberFormatException e) {
+				fail("Invalid section: " + uuidSections[i], e);
+			}
 		}
 	}
 }
