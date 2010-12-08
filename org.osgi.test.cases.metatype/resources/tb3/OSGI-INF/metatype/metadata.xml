@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MetaData 
+		xmlns="http://www.org.osgi/xmlns/metatype/v1.2.0" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="http://www.org.osgi/xmlns/metatype/v1.2.0 metatype.xsd">
+	<OCD id="minOnly" name="minOnly">
+		<AD cardinality="1" id="string" min="4" type="String"/>
+		<AD cardinality="1" id="long" min="1000" type="Long"/>
+		<AD cardinality="1" id="double" min="3.141592653589" type="Double"/>
+		<AD cardinality="1" id="float" min="3.1415" type="Float"/>
+		<AD cardinality="1" id="integer" min="100" type="Integer"/>
+		<AD cardinality="1" id="byte" min="1" type="Byte"/>
+		<AD cardinality="1" id="char" min="P" type="Char"/>
+		<AD cardinality="1" id="short" min="10" type="Short"/>
+		<AD cardinality="1" id="password" min="8" type="Password"/>
+	</OCD>
+	<OCD id="maxOnly" name="maxOnly">
+		<AD cardinality="1" id="string" max="4" type="String"/>
+		<AD cardinality="1" id="long" max="1000" type="Long"/>
+		<AD cardinality="1" id="double" max="3.141592653589" type="Double"/>
+		<AD cardinality="1" id="float" max="3.1415" type="Float"/>
+		<AD cardinality="1" id="integer" max="100" type="Integer"/>
+		<AD cardinality="1" id="byte" max="1" type="Byte"/>
+		<AD cardinality="1" id="char" max="P" type="Char"/>
+		<AD cardinality="1" id="short" max="10" type="Short"/>
+		<AD cardinality="1" id="password" max="8" type="Password"/>
+	</OCD>
+	<OCD id="minMax" name="minMax">
+		<AD cardinality="1" id="string" max="8" min="4" type="String"/>
+		<AD cardinality="1" id="long" max="2000" min="1000" type="Long"/>
+		<AD cardinality="1" id="double" max="6.283185307178" min="3.141592653589" type="Double"/>
+		<AD cardinality="1" id="float" max="6.283" min="3.1415" type="Float"/>
+		<AD cardinality="1" id="integer" max="200" min="100" type="Integer"/>
+		<AD cardinality="1" id="byte" max="10" min="1" type="Byte"/>
+		<AD cardinality="1" id="char" max="p" min="P" type="Char"/>
+		<AD cardinality="1" id="short" max="20" min="10" type="Short"/>
+		<AD cardinality="1" id="password" max="12" min="8" type="Password"/>
+	</OCD>
+	<Designate pid="minOnly">
+		<Object ocdref="minOnly"/>
+	</Designate>
+	<Designate pid="maxOnly">
+		<Object ocdref="maxOnly"/>
+	</Designate>
+	<Designate pid="minMax">
+		<Object ocdref="minMax"/>
+	</Designate>
+</MetaData>
