@@ -653,7 +653,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		if (hook1.getError() != null)
 			throw hook1.getError();
 		assertEquals("Wrong state for tb5", Bundle.INSTALLED, tb5.getState());
-		// unregister the hook; and register one that allows the correct host
+		// unregister the hook; and register one that allows the correct provider
 		// bundles should resolve now
 		reg.unregister();
 		TestFilterCapabilityHook hook2 = new TestFilterCapabilityHook(filterCapabilities2);
