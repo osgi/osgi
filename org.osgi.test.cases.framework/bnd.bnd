@@ -246,6 +246,7 @@ Include-Resource = \
 	resolver.tb13.frag4.jar, \
 	resolver.tb13a.jar, \
 	resolver.tb13b.jar, \
+	resolver.tb14.jar, \
 	startlevel.tb1.jar, \
 	startlevel.tb2.jar, \
 	startlevel.tb3.jar, \
