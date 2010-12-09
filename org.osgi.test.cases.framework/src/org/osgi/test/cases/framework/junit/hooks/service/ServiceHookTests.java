@@ -1529,8 +1529,7 @@ public class ServiceHookTests extends OSGiTestCase {
 		};
 		final BundleContext testContext = getContext();
 
-		final int[] hookCalled = new int[] {0, 0, 0};
-		final AssertionFailedError[] hookError = new AssertionFailedError[] {null};
+		final int[] hookCalled = new int[] {0, 0, 0, 0, 0};
 
 		final ServiceListener sl = new ServiceListener() {
 			public void serviceChanged(ServiceEvent event) {
@@ -1558,8 +1557,8 @@ public class ServiceHookTests extends OSGiTestCase {
 				}
 			}
 		};
-		EventListenerHook hook2 = new EventListenerHook() {
-			public void event(ServiceEvent event, Map listeners) {
+		EventHook hook2 = new EventHook() {
+			public void event(ServiceEvent event, Collection contexts) {
 				if (!filter.match(event.getServiceReference())) {
 					return;
 				}
@@ -1568,41 +1567,77 @@ public class ServiceHookTests extends OSGiTestCase {
 				}
 			}
 		};
+		EventListenerHook hook3 = new EventListenerHook() {
+			public void event(ServiceEvent event, Map listeners) {
+				if (!filter.match(event.getServiceReference())) {
+					return;
+				}
+				synchronized (hookCalled) {
+					hookCalled[++hookCalled[0]] = 3;
+				}
+			}
+		};
+
+		EventListenerHook hook4 = new EventListenerHook() {
+			public void event(ServiceEvent event, Map listeners) {
+				if (!filter.match(event.getServiceReference())) {
+					return;
+				}
+				synchronized (hookCalled) {
+					hookCalled[++hookCalled[0]] = 4;
+				}
+			}
+		};
 
 		Hashtable props = new Hashtable();
 		props.put("name", getName());
+		// register event hook 4
+		props.put(Constants.SERVICE_DESCRIPTION, "event hook 4");
+		ServiceRegistration regHook4 = testContext.registerService(
+				EventListenerHook.class.getName(), hook4, props);
+
 		// register event hook 2
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 2");
 		ServiceRegistration regHook2 = testContext.registerService(
-				EventListenerHook.class.getName(), hook2, props);
+				EventHook.class.getName(), hook2, props);
+
+		// register event hook 3
+		props.put(Constants.SERVICE_DESCRIPTION, "event hook 3");
+		props.put(Constants.SERVICE_RANKING, new Integer(20));
+		ServiceRegistration regHook3 = testContext.registerService(
+				EventListenerHook.class.getName(), hook3, props);
 
 		// register event hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1");
+		props.put(Constants.SERVICE_RANKING, new Integer(10));
 		ServiceRegistration regHook1 = testContext.registerService(
 				EventHook.class.getName(), hook1, props);
+
 
 		ServiceRegistration reg1 = null;
 		try {
 			props.put(Constants.SERVICE_DESCRIPTION, "service 1");
+			props.remove(Constants.SERVICE_RANKING);
 			reg1 = testContext.registerService(Runnable.class.getName(), runIt,
 					props);
 			synchronized (hookCalled) {
-				assertEquals("all hooks not called", 2, hookCalled[0]);
+				assertEquals("all hooks not called", 4, hookCalled[0]);
 				assertEquals("hook 1 not called first", 1, hookCalled[1]);
 				assertEquals("hook 2 not called second", 2, hookCalled[2]);
-			}
-			synchronized (hookError) {
-				for (int i = 0; i < hookError.length; i++) {
-					if (hookError[i] != null) {
-						throw hookError[i];
-					}
-				}
+				assertEquals("hook 3 not called third", 3, hookCalled[3]);
+				assertEquals("hook 4 not called fourth", 4, hookCalled[4]);
 			}
 		}
 		finally {
 			// unregister hook and services
 			if (regHook1 != null)
 				regHook1.unregister();
+			if (regHook2 != null)
+				regHook2.unregister();
+			if (regHook3 != null)
+				regHook3.unregister();
+			if (regHook4 != null)
+				regHook4.unregister();
 			if (reg1 != null)
 				reg1.unregister();
 			if (sl != null)
