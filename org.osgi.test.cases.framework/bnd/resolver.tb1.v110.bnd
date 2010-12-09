@@ -17,7 +17,8 @@ Provide-Capability: \
   string.list3 :List<String>= " aString , bString , cString ", \
  test.multiple; attr="value1", \
  test.multiple; attr="value2", \
- test.effective; effective:="active"; willResolve="false"
+ test.effective; effective:="active"; willResolve="false", \
+ test.no.attrs
 
 Export-Package: ${p}.resolver.tb1;version="1.1.0";-noimport:=true
 Include-Resource: \
