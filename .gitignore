@@ -6,3 +6,7 @@ Thumbs.db
 cnf/cache
 .metadata
 
+osgi.specs/ee.html
+osgi.specs/ee.tmp
+osgi.specs/ee.xml
+org.osgi.tools/javadoc.xml
