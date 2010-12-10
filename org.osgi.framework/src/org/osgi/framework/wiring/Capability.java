@@ -22,11 +22,16 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 
 /**
- * A capability that has been declared from a {@link BundleRevision bundle revision}.
+ * A capability that has been declared from a {@link BundleRevision bundle
+ * revision}.
  * 
  * <p>
- * The framework defines capabilities for {@link #PACKAGE_CAPABILITY packages}
- * and {@link #BUNDLE_CAPABILITY bundles}.
+ * The framework defines capabilities for {@link #PACKAGE_CAPABILITY packages},
+ * {@link #BUNDLE_CAPABILITY bundles} and {@link #HOST_CAPABILITY hosts}. These
+ * capabilities are defined only to express wiring information by the framework.
+ * They must not be used in {@link Constants#PROVIDE_CAPABILITY
+ * Provide-Capability} and {@link Constants#REQUIRE_CAPABILITY
+ * Require-Capability} manifest headers.
  * 
  * @ThreadSafe
  * @noimplement
@@ -94,6 +99,31 @@ public interface Capability {
 	 * {@literal <} 2) must not provide a bundle capability.
 	 */
 	String	BUNDLE_CAPABILITY	= "osgi.bundle";
+
+	/**
+	 * Capability name space for host capabilities. The bundle symbolic name of
+	 * the bundle is stored in the capability attribute of the same name as this
+	 * name space. The other directives and attributes of the bundle, from the
+	 * {@link Constants#BUNDLE_SYMBOLICNAME Bundle-SymbolicName} manifest
+	 * header, can be found in the cabability's {@link #getDirectives()
+	 * directives} and {@link #getAttributes() attributes}. The
+	 * {@link Constants#BUNDLE_VERSION_ATTRIBUTE bundle-version} capability
+	 * attribute must contain the {@link Version} of the bundle, from the
+	 * {@link Constants#BUNDLE_VERSION Bundle-Version} manifest header.
+	 * 
+	 * <p>
+	 * A bundle wiring {@link BundleWiring#getProvidedCapabilities(String)
+	 * provides} zero or one<sup>&#8224;</sup> host capability if the bundle
+	 * {@link Constants#FRAGMENT_ATTACHMENT_DIRECTIVE allows fragments to be
+	 * attached} and {@link BundleWiring#getRequiredCapabilities(String)
+	 * requires} zero or one host capability if their are attached fragments.
+	 * 
+	 * <p>
+	 * &#8224; A bundle with no bundle symbolic name (that is, a bundle with
+	 * {@link Constants#BUNDLE_MANIFESTVERSION Bundle-ManifestVersion}
+	 * {@literal <} 2) must not provide a host capability.
+	 */
+	String	HOST_CAPABILITY		= "osgi.host";
 
 	/**
 	 * Returns the name space of this capability.
