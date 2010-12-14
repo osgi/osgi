@@ -548,7 +548,7 @@ public class FrameworkUtil {
 		public String toString() {
 			String result = filterString;
 			if (result == null) {
-				filterString = result = normalize();
+				filterString = result = normalize().toString();
 			}
 			return result;
 		}
@@ -561,7 +561,7 @@ public class FrameworkUtil {
 		 * 
 		 * @return This {@code Filter}'s filter string.
 		 */
-		private String normalize() {
+		private StringBuffer normalize() {
 			StringBuffer sb = new StringBuffer();
 			sb.append('(');
 
@@ -652,7 +652,7 @@ public class FrameworkUtil {
 
 			sb.append(')');
 
-			return sb.toString();
+			return sb;
 		}
 
 		/**
