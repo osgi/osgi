@@ -417,7 +417,7 @@ public class ResolverHookTests extends OSGiTestCase {
 								//expected 
 							}
 							try {
-								List testAdd = Arrays.asList(pkg);
+								List<Capability> testAdd = Arrays.asList(pkg);
 								arg1.addAll(testAdd);
 								fail("Expected failure on addAll.");
 							} catch (UnsupportedOperationException e) {
