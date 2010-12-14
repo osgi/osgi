@@ -6,7 +6,8 @@ Bundle-Description					: Remote Service Admin test cases.
 Export-Package 					= ${p}.common;version="1.0.0",-noimport:=true,\
  ${p}.common;version="2.0.0";-noimport:=true
 
-Private-Package						= org.osgi.test.support.*, \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.*
 	
 Bundle-Category: osgi,test

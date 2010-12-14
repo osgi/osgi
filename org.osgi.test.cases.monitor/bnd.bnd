@@ -3,8 +3,10 @@
 
 Bundle-Description					: A test case for the event generic mechanism implementation.
 
+Conditional-Package					= org.osgi.test.support.*
 Export-Package						= \
-    org.osgi.test.support.*        , \
+    org.osgi.test.support       , \
+    org.osgi.test.support.compatibility        , \
 	${p}.tbc.*
 
 Include-Resource					= \

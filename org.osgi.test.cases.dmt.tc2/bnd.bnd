@@ -2,8 +2,8 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Description: Dmt Test Case 002
-Export-Package						= ${p}.tbc.*, \
-	org.osgi.test.support.*
+Conditional-Package					= org.osgi.test.support.*
+Export-Package						= ${p}.tbc.*
 	
 Include-Resource					= \
 	tb1.jar

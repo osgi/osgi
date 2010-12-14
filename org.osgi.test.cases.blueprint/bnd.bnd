@@ -9,7 +9,7 @@ Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
 
 
-Private-Package						= org.osgi.test.support.*
+Conditional-Package					= org.osgi.test.support.*
 
 Include-Resource					= \
 	www/blueprint_version_two.jar=blueprint_version_two.jar, \

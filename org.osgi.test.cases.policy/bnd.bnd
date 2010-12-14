@@ -4,8 +4,8 @@
 Bundle-Description					: Policy Test Case.
 Bundle-DocUrl                       : http://www.osgi.org/testcases/4/test.cases.template
 
+Conditional-Package					= org.osgi.test.support.*
 Export-Package						= \
-    org.osgi.test.support.*        , \
 	${p}.tbc.*
 
 Include-Resource					= \
