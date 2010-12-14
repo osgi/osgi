@@ -903,7 +903,8 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * 
 	 * @ThreadSafe
 	 */
-	class Tracked extends AbstractTracked<ServiceReference<S>, T, ServiceEvent>
+	private class Tracked extends
+			AbstractTracked<ServiceReference<S>, T, ServiceEvent>
 			implements ServiceListener {
 		/**
 		 * Tracked constructor.
@@ -919,7 +920,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * 
 		 * @param event {@code ServiceEvent} object from the framework.
 		 */
-		public void serviceChanged(final ServiceEvent event) {
+		final public void serviceChanged(final ServiceEvent event) {
 			/*
 			 * Check if we had a delayed call (which could happen when we
 			 * close).
@@ -960,7 +961,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * 
 		 * @GuardedBy this
 		 */
-		void modified() {
+		final void modified() {
 			super.modified(); /* increment the modification count */
 			ServiceTracker.this.modified();
 		}
@@ -974,7 +975,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * @return Customized object for the tracked item or {@code null}
 		 *         if the item is not to be tracked.
 		 */
-		T customizerAdding(final ServiceReference<S> item,
+		final T customizerAdding(final ServiceReference<S> item,
 				final ServiceEvent related) {
 			return customizer.addingService(item);
 		}
@@ -987,7 +988,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
 		 */
-		void customizerModified(final ServiceReference<S> item,
+		final void customizerModified(final ServiceReference<S> item,
 				final ServiceEvent related, final T object) {
 			customizer.modifiedService(item, object);
 		}
@@ -1000,7 +1001,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
 		 */
-		void customizerRemoved(final ServiceReference<S> item,
+		final void customizerRemoved(final ServiceReference<S> item,
 				final ServiceEvent related, final T object) {
 			customizer.removedService(item, object);
 		}
@@ -1013,7 +1014,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * @since 1.3
 	 * @ThreadSafe
 	 */
-	class AllTracked extends Tracked implements AllServiceListener {
+	private class AllTracked extends Tracked implements AllServiceListener {
 		/**
 		 * AllTracked constructor.
 		 */

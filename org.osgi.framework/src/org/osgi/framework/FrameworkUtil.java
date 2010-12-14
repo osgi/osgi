@@ -342,7 +342,7 @@ public class FrameworkUtil {
 	 * A filter component that references a key having an unrecognizable data
 	 * type will evaluate to {@code false} .
 	 */
-	private static class FilterImpl implements Filter {
+	static private final class FilterImpl implements Filter {
 		/* filter operators */
 		private static final int	EQUAL		= 1;
 		private static final int	APPROX		= 2;
@@ -1303,7 +1303,7 @@ public class FrameworkUtil {
 		 * filter string and builds a tree of Filter objects rooted at the
 		 * parent.
 		 */
-		private static class Parser {
+		static private final class Parser {
 			private final String	filterstring;
 			private final char[]	filterChars;
 			private int				pos;
@@ -1641,7 +1641,8 @@ public class FrameworkUtil {
 	 * a String key as no other operations are used by the Filter
 	 * implementation.
 	 */
-	private static class CaseInsensitiveMap extends AbstractMap<String, Object>
+	static private final class CaseInsensitiveMap extends
+			AbstractMap<String, Object>
 			implements Map<String, Object> {
 		private final Dictionary<String, ? >	dictionary;
 		private final String[]		keys;
@@ -1697,7 +1698,7 @@ public class FrameworkUtil {
 	 * a String key as no other operations are used by the Filter
 	 * implementation.
 	 */
-	private static class ServiceReferenceMap extends
+	static private final class ServiceReferenceMap extends
 			AbstractMap<String, Object> implements Map<String, Object> {
 		private final ServiceReference< ? >	reference;
 
@@ -1717,7 +1718,7 @@ public class FrameworkUtil {
 		}
 	}
 
-	private static class SetAccessibleAction implements
+	static private final class SetAccessibleAction implements
 			PrivilegedAction<Object> {
 		private final AccessibleObject	accessible;
 
@@ -1762,7 +1763,7 @@ public class FrameworkUtil {
 	 * removed). If a value of a name/value pair is a wildcard ("*"), the value
 	 * will match any value for that name.
 	 */
-	private static class DNChainMatching {
+	static private final class DNChainMatching {
 		private static final String	MINUS_WILDCARD	= "-";
 		private static final String	STAR_WILDCARD	= "*";
 
