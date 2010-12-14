@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -30,9 +29,6 @@ import junit.framework.TestCase;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.FrameworkListener;
-import org.osgi.framework.wiring.FrameworkWiring;
 
 public abstract class OSGiTestCase extends TestCase {
 	private volatile BundleContext	context;
@@ -125,37 +121,4 @@ public abstract class OSGiTestCase extends TestCase {
 		return getContext().installBundle(bundle, entry.openStream());
 	}
 
-	/**
-	 * Refreshes the collection of bundle synchronously.
-	 * @param bundles The bundles to be refreshed, or {@code null} to refresh
-	 *        the removal pending bundles.
-	 */
-	public void synchronousRefreshBundles(Collection<Bundle> bundles) {
-		FrameworkWiring fwkWiring = getContext().getBundle(0).adapt(FrameworkWiring.class);
-		assertNotNull("Framework wiring is null.", fwkWiring);
-		final boolean[] done = new boolean[] {false};
-		FrameworkListener listener = new FrameworkListener() {
-			public void frameworkEvent(FrameworkEvent event) {
-				synchronized (done) {
-					if (event.getType() == FrameworkEvent.PACKAGES_REFRESHED) {
-						done[0] = true;
-						done.notify();
-					}
-				}
-			}
-		};
-		fwkWiring.refreshBundles(bundles, listener);
-		synchronized (done) {
-			if (!done[0])
-				try {
-					done.wait(OSGiTestCaseProperties.getTimeout()
-							* OSGiTestCaseProperties.getScaling());
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-					fail("Unexepected interruption.", e);
-				}
-			if (!done[0])
-				fail("Timed out waiting for refresh bundles to finish.");
-		}
-	}
 }

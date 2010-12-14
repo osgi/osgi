@@ -170,8 +170,8 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 		// until ...
 		if ((be.getType() & (BundleEvent.RESOLVED | BundleEvent.UNRESOLVED)) != 0)
 			return;
-		System.out.println("In " + _eventQueue.size() + " event : "
-				+ event(be.getType()));
+		// System.out.println("In " + _eventQueue.size() + " event : "
+		// + event(be.getType()));
 		_eventQueue.add(be);
 		notify();
 	}
