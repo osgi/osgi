@@ -344,25 +344,25 @@ public class FrameworkUtil {
 	 */
 	private static class FilterImpl implements Filter {
 		/* filter operators */
-		private static final int			EQUAL		= 1;
-		private static final int			APPROX		= 2;
-		private static final int			GREATER		= 3;
-		private static final int			LESS		= 4;
-		private static final int			PRESENT		= 5;
-		private static final int			SUBSTRING	= 6;
-		private static final int			AND			= 7;
-		private static final int			OR			= 8;
-		private static final int			NOT			= 9;
+		private static final int	EQUAL		= 1;
+		private static final int	APPROX		= 2;
+		private static final int	GREATER		= 3;
+		private static final int	LESS		= 4;
+		private static final int	PRESENT		= 5;
+		private static final int	SUBSTRING	= 6;
+		private static final int	AND			= 7;
+		private static final int	OR			= 8;
+		private static final int	NOT			= 9;
 
 		/** filter operation */
-		private final int					op;
+		private final int			op;
 		/** filter attribute or null if operation AND, OR or NOT */
-		private final String				attr;
+		private final String		attr;
 		/** filter operands */
-		private final Object				value;
+		private final Object		value;
 
 		/* normalized filter string for Filter object */
-		private transient volatile String	filterString;
+		private transient String	filterString;
 
 		/**
 		 * Constructs a {@link FilterImpl} object. This filter object may be
@@ -386,6 +386,7 @@ public class FrameworkUtil {
 			this.op = operation;
 			this.attr = attr;
 			this.value = value;
+			filterString = null;
 		}
 
 		/**

@@ -47,12 +47,12 @@ package org.osgi.util.measurement;
  * @version $Id$
  */
 public class Measurement implements Comparable {
-	private final double				value;
-	private final double				error;
-	private final long					time;
-	private final Unit					unit;
-	private transient volatile String	name;
-	private transient volatile int		hashCode;
+	private final double		value;
+	private final double		error;
+	private final long			time;
+	private final Unit			unit;
+	private transient String	name;
+	private transient int		hashCode;
 
 	/**
 	 * Create a new {@code Measurement} object.
@@ -70,6 +70,8 @@ public class Measurement implements Comparable {
 		this.error = Math.abs(error);
 		this.unit = (unit != null) ? unit : Unit.unity;
 		this.time = time;
+		name = null;
+		hashCode = 0;
 	}
 
 	/**
