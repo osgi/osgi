@@ -4,7 +4,8 @@
 Bundle-Description: Declarative Services Test Case
 -debug: true
 
-Private-Package						= org.osgi.test.support.*, \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.junit
 Export-Package						= \
 	${p}.service

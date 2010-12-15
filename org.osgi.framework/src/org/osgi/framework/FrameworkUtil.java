@@ -342,27 +342,27 @@ public class FrameworkUtil {
 	 * A filter component that references a key having an unrecognizable data
 	 * type will evaluate to {@code false} .
 	 */
-	private static class FilterImpl implements Filter {
+	static private final class FilterImpl implements Filter {
 		/* filter operators */
-		private static final int			EQUAL		= 1;
-		private static final int			APPROX		= 2;
-		private static final int			GREATER		= 3;
-		private static final int			LESS		= 4;
-		private static final int			PRESENT		= 5;
-		private static final int			SUBSTRING	= 6;
-		private static final int			AND			= 7;
-		private static final int			OR			= 8;
-		private static final int			NOT			= 9;
+		private static final int	EQUAL		= 1;
+		private static final int	APPROX		= 2;
+		private static final int	GREATER		= 3;
+		private static final int	LESS		= 4;
+		private static final int	PRESENT		= 5;
+		private static final int	SUBSTRING	= 6;
+		private static final int	AND			= 7;
+		private static final int	OR			= 8;
+		private static final int	NOT			= 9;
 
 		/** filter operation */
-		private final int					op;
+		private final int			op;
 		/** filter attribute or null if operation AND, OR or NOT */
-		private final String				attr;
+		private final String		attr;
 		/** filter operands */
-		private final Object				value;
+		private final Object		value;
 
 		/* normalized filter string for Filter object */
-		private transient volatile String	filterString;
+		private transient String	filterString;
 
 		/**
 		 * Constructs a {@link FilterImpl} object. This filter object may be
@@ -386,6 +386,7 @@ public class FrameworkUtil {
 			this.op = operation;
 			this.attr = attr;
 			this.value = value;
+			filterString = null;
 		}
 
 		/**
@@ -547,7 +548,7 @@ public class FrameworkUtil {
 		public String toString() {
 			String result = filterString;
 			if (result == null) {
-				filterString = result = normalize();
+				filterString = result = normalize().toString();
 			}
 			return result;
 		}
@@ -560,7 +561,7 @@ public class FrameworkUtil {
 		 * 
 		 * @return This {@code Filter}'s filter string.
 		 */
-		private String normalize() {
+		private StringBuffer normalize() {
 			StringBuffer sb = new StringBuffer();
 			sb.append('(');
 
@@ -651,7 +652,7 @@ public class FrameworkUtil {
 
 			sb.append(')');
 
-			return sb.toString();
+			return sb;
 		}
 
 		/**
@@ -1302,7 +1303,7 @@ public class FrameworkUtil {
 		 * filter string and builds a tree of Filter objects rooted at the
 		 * parent.
 		 */
-		private static class Parser {
+		static private final class Parser {
 			private final String	filterstring;
 			private final char[]	filterChars;
 			private int				pos;
@@ -1640,7 +1641,8 @@ public class FrameworkUtil {
 	 * a String key as no other operations are used by the Filter
 	 * implementation.
 	 */
-	private static class CaseInsensitiveMap extends AbstractMap<String, Object>
+	static private final class CaseInsensitiveMap extends
+			AbstractMap<String, Object>
 			implements Map<String, Object> {
 		private final Dictionary<String, ? >	dictionary;
 		private final String[]		keys;
@@ -1696,7 +1698,7 @@ public class FrameworkUtil {
 	 * a String key as no other operations are used by the Filter
 	 * implementation.
 	 */
-	private static class ServiceReferenceMap extends
+	static private final class ServiceReferenceMap extends
 			AbstractMap<String, Object> implements Map<String, Object> {
 		private final ServiceReference< ? >	reference;
 
@@ -1716,7 +1718,7 @@ public class FrameworkUtil {
 		}
 	}
 
-	private static class SetAccessibleAction implements
+	static private final class SetAccessibleAction implements
 			PrivilegedAction<Object> {
 		private final AccessibleObject	accessible;
 
@@ -1761,7 +1763,7 @@ public class FrameworkUtil {
 	 * removed). If a value of a name/value pair is a wildcard ("*"), the value
 	 * will match any value for that name.
 	 */
-	private static class DNChainMatching {
+	static private final class DNChainMatching {
 		private static final String	MINUS_WILDCARD	= "-";
 		private static final String	STAR_WILDCARD	= "*";
 

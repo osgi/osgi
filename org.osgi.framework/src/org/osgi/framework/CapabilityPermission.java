@@ -538,7 +538,7 @@ public final class CapabilityPermission extends BasicPermission {
 		return properties = new Properties(props, attributes);
 	}
 
-	private static class Properties extends AbstractMap<String, Object> {
+	static private final class Properties extends AbstractMap<String, Object> {
 		private final Map<String, Object>							properties;
 		private final Map<String, Object>							attributes;
 		private transient volatile Set<Map.Entry<String, Object>>	entries;

@@ -31,6 +31,7 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.wiring.Wiring;
 
 public class FrameworkWiringTests extends OSGiTestCase {
 	private final List<Bundle> bundles = new ArrayList<Bundle>();
@@ -65,7 +66,7 @@ public class FrameworkWiringTests extends OSGiTestCase {
 			} catch (IllegalStateException e) {
 				// happens if the test uninstalls the bundle itself
 			}
-		synchronousRefreshBundles(bundles);
+		Wiring.synchronousRefreshBundles(getContext(), bundles);
 		bundles.clear();
 	}
 
@@ -169,7 +170,7 @@ public class FrameworkWiringTests extends OSGiTestCase {
 
 		// TODO should investigate why other tests are not cleaning up their uninstalled bundles
 		// for now doing a refresh of all removal pending to ensure a clean state
-		synchronousRefreshBundles(null);
+		Wiring.synchronousRefreshBundles(getContext(), null);
 		// Need to make sure there are no removal pendings already present.
 		Collection<Bundle> removals = frameworkWiring.getRemovalPendingBundles();
 		assertEquals("Removal pendings are left over: " + removals.toString(), 0, removals.size());

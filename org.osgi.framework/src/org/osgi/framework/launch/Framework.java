@@ -103,7 +103,7 @@ public interface Framework extends Bundle {
 	 *         STOPPED_BOOTCLASSPATH_MODIFIED} - This Framework has been stopped
 	 *         and a bootclasspath extension bundle has been installed or
 	 *         updated. The VM must be restarted in order for the changed boot
-	 *         class path to take affect. </li>
+	 *         class path to take effect. </li>
 	 * 
 	 *         <li>{@link FrameworkEvent#ERROR ERROR} - The Framework
 	 *         encountered an error while shutting down or an error has occurred

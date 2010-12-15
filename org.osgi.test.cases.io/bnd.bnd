@@ -3,7 +3,8 @@
 
 Bundle-Description: Tests the IO Service
 
-Private-Package						= org.osgi.test.support.*, \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.junit.*, \
 	javax.microedition.io, \
 	javax.microedition.pki, \

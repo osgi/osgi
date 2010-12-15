@@ -6,4 +6,7 @@ mif
 *.log
 xml/
 javadoc.xml
+ee.html
+ee.tmp
+ee.xml
 

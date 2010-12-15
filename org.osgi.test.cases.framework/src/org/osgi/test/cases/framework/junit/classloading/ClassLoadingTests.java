@@ -39,6 +39,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.wiring.Wiring;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -50,7 +51,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class ClassLoadingTests extends DefaultTestBundleControl {
 	
 	protected void tearDown() {
-		synchronousRefreshBundles(null);
+		Wiring.synchronousRefreshBundles(getContext(), null);
 	}
 
 	// Service Registry --------------------------

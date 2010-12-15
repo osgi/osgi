@@ -3,7 +3,8 @@
 
 Bundle-Description: Test Bundle for Http Service tests
 
-Private-Package						= org.osgi.test.support.*, \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.junit.*
 	
 Include-Resource					= \

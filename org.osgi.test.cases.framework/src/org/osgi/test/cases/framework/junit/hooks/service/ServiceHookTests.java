@@ -943,6 +943,21 @@ public class ServiceHookTests extends OSGiTestCase {
 							listeners.containsKey(testContext));
 					Collection c = (Collection) listeners.get(testContext);
 					assertNotNull("listener collection is null", c);
+					for (Iterator i = c.iterator(); i.hasNext();) {
+						ListenerInfo info = (ListenerInfo) i.next();
+						assertFalse("isRemoved true", info.isRemoved());
+						BundleContext context = info.getBundleContext();
+						assertNotNull("info context is null", context);
+						String f = info.getFilter();
+						if (f.indexOf(getName()) >= 0) {
+							assertEquals("wrong info context", testContext,
+									context);
+							assertTrue(
+									"info filter does not match event",
+									testContext.createFilter(f).match(
+											event.getServiceReference()));
+						}
+					}
 					try {
 						c.add(new ListenerInfo() {
 							public BundleContext getBundleContext() {
@@ -1695,7 +1710,7 @@ public class ServiceHookTests extends OSGiTestCase {
 				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
-				if ((c == testContext) && (filterString1.equals(f))) {
+				if ((testContext.equals(c)) && (filterString1.equals(f))) {
 					if (found) {
 						fail("found more than once");
 					}
@@ -1724,13 +1739,13 @@ public class ServiceHookTests extends OSGiTestCase {
 				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
-				if ((c == testContext) && (filterString2.equals(f))) {
+				if ((testContext.equals(c)) && (filterString2.equals(f))) {
 					if (found) {
 						fail("found more than once");
 					}
 					found = true;
 				}
-				if ((c == testContext) && (filterString1.equals(f))) {
+				if ((testContext.equals(c)) && (filterString1.equals(f))) {
 					fail("first listener not removed");
 				}
 			}
@@ -1753,7 +1768,7 @@ public class ServiceHookTests extends OSGiTestCase {
 				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
-				if ((c == testContext) && (filterString2.equals(f))) {
+				if ((testContext.equals(c)) && (filterString2.equals(f))) {
 					fail("second listener not removed");
 				}
 			}
@@ -1830,7 +1845,7 @@ public class ServiceHookTests extends OSGiTestCase {
 				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
-				if ((c == testContext) && (filterString1.equals(f))) {
+				if ((testContext.equals(c)) && (filterString1.equals(f))) {
 					if (found) {
 						fail("found more than once");
 					}
@@ -1859,13 +1874,13 @@ public class ServiceHookTests extends OSGiTestCase {
 				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
-				if ((c == testContext) && (f == filterString2)) {
+				if ((testContext.equals(c)) && (f == filterString2)) {
 					if (found) {
 						fail("found more than once");
 					}
 					found = true;
 				}
-				if ((c == testContext) && (filterString1.equals(f))) {
+				if ((testContext.equals(c)) && (filterString1.equals(f))) {
 					fail("first listener not removed");
 				}
 			}
@@ -1888,7 +1903,7 @@ public class ServiceHookTests extends OSGiTestCase {
 				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
-				if ((c == testContext) && (f == filterString2)) {
+				if ((testContext.equals(c)) && (f == filterString2)) {
 					fail("second listener not removed");
 				}
 			}

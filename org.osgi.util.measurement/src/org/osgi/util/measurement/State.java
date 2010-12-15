@@ -98,7 +98,7 @@ public class State {
 			sb.append(name);
 			sb.append("\"");
 		}
-		return (sb.toString());
+		return sb.toString();
 	}
 
 	/**

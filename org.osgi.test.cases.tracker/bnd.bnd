@@ -1,8 +1,9 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Private-Package						= ${p}.junit, \
-	org.osgi.test.support.*
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit
 Export-Package						= ${p}.service
 
 -buildpath							= \
@@ -10,7 +11,6 @@ Export-Package						= ${p}.service
 	org.osgi.framework;						version=project, \
 	org.osgi.util.tracker;					version=project, \
 	org.osgi.test.support;					version=project, \
-	osgi.core;								version=4.0		, \
 	${junit}
 	
 -runbundles							= \
@@ -21,7 +21,7 @@ Export-Package						= ${p}.service
 # Uncomment the following to test the tracker code in the org.osgi.util.tracker 
 # project instead of the one in Equinox.
 #-runpath							= \
-#	org.osgi.util.tracker;	version=project, \
+#	org.osgi.util.tracker;	version=snapshot, \
 #	org.osgi.impl.framework; version=latest, \
 #	${junit}
 	

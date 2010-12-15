@@ -28,7 +28,7 @@ import java.util.Map;
  * @Immutable
  * @version $Id$
  */
-class SignerProperty {
+final class SignerProperty {
 	private final Bundle	bundle;
 	private final String	pattern;
 

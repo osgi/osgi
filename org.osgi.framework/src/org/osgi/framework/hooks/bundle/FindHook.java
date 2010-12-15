@@ -33,21 +33,20 @@ import org.osgi.framework.BundleContext;
 public interface FindHook {
 	/**
 	 * Find hook method. This method is called during the bundle find operation
-	 * (for example, {@link BundleContext#getBundle(long) getBundle} and
-	 * {@link BundleContext#getBundles()} methods). This method can filter the 
+	 * (for example, {@link BundleContext#getBundle(long)} and
+	 * {@link BundleContext#getBundles()} methods). This method can filter the
 	 * result of the find operation.
 	 * 
 	 * @param context The bundle context of the bundle performing the find
 	 *        operation.
-	 * @param bundles A collection of Bundles to be returned as a
-	 *        result of the find operation. The implementation of this method
-	 *        may remove bundles from the collection to prevent the
-	 *        bundles from being returned to the bundle performing the find
-	 *        operation. The collection supports all the optional
-	 *        {@code Collection} operations except {@code add} and
-	 *        {@code addAll}. Attempting to add to the collection will
-	 *        result in an {@code UnsupportedOperationException}. The
-	 *        collection is not synchronized.
+	 * @param bundles A collection of Bundles to be returned as a result of the
+	 *        find operation. The implementation of this method may remove
+	 *        bundles from the collection to prevent the bundles from being
+	 *        returned to the bundle performing the find operation. The
+	 *        collection supports all the optional {@code Collection} operations
+	 *        except {@code add} and {@code addAll}. Attempting to add to the
+	 *        collection will result in an {@code UnsupportedOperationException}
+	 *        . The collection is not synchronized.
 	 */
 	void find(BundleContext context, Collection<Bundle> bundles);
 }

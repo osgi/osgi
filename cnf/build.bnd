@@ -88,7 +88,7 @@ proposed.build.version		= ${build.version}
 Bundle-Copyright       	= ${copyright}
 Bundle-Vendor			= OSGi Alliance
 Bundle-Version			= ${build.version}
--removeheaders			= Include-Resource, Private-Package
+-removeheaders			= Include-Resource, Private-Package, Conditional-Package
 
 junit.package			= junit.framework;version=3.8
 junit					= com.springsource.junit;version=3.8;export="${junit.package}"

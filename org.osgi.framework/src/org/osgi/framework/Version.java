@@ -46,7 +46,7 @@ public class Version implements Comparable<Version> {
 	private final int			micro;
 	private final String		qualifier;
 	private static final String	SEPARATOR		= ".";
-	private transient String	versionString	= null;
+	private transient String	versionString;
 
 	/**
 	 * The empty version "0.0.0".
@@ -90,6 +90,7 @@ public class Version implements Comparable<Version> {
 		this.minor = minor;
 		this.micro = micro;
 		this.qualifier = qualifier;
+		versionString = null;
 		validate();
 	}
 
@@ -155,6 +156,7 @@ public class Version implements Comparable<Version> {
 		minor = min;
 		micro = mic;
 		qualifier = qual;
+		versionString = null;
 		validate();
 	}
 

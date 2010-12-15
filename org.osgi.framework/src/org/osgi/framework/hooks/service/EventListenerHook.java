@@ -39,12 +39,12 @@ public interface EventListenerHook {
 	/**
 	 * Event listener hook method. This method is called prior to service event
 	 * delivery when a publishing bundle registers, modifies or unregisters a
-	 * service. This method can filter the bundles which receive the event.
+	 * service. This method can filter the listeners which receive the event.
 	 * 
 	 * @param event The service event to be delivered.
 	 * @param listeners A map of Bundle Contexts to a collection of Listener
-	 *        Infos for listeners to which the specified event will be
-	 *        delivered. The implementation of this method may remove bundle
+	 *        Infos for the bundle's listeners to which the specified event will
+	 *        be delivered. The implementation of this method may remove bundle
 	 *        contexts from the map and listener infos from the collection
 	 *        values to prevent the event from being delivered to the associated
 	 *        listeners. The map supports all the optional {@code Map}
@@ -52,7 +52,7 @@ public interface EventListenerHook {
 	 *        add to the map will result in an
 	 *        {@code UnsupportedOperationException}. The collection values in
 	 *        the map supports all the optional {@code Collection} operations
-	 *        except {@code add} and {@code addAll}. Attempting to add to the
+	 *        except {@code add} and {@code addAll}. Attempting to add to a
 	 *        collection will result in an {@code UnsupportedOperationException}
 	 *        . The map and the collections are not synchronized.
 	 */

@@ -1,8 +1,9 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Private-Package						= ${p}.junit, \
-	org.osgi.test.support.*
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit
 
 -buildpath							= \
 	org.osgi.test.support; 	version=project, \

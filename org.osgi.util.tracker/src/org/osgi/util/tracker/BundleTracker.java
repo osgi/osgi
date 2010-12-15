@@ -421,7 +421,8 @@ public class BundleTracker<T> implements BundleTrackerCustomizer<T> {
 	 * @ThreadSafe
 	 * @since 1.4
 	 */
-	class Tracked extends AbstractTracked<Bundle, T, BundleEvent> implements
+	private final class Tracked extends AbstractTracked<Bundle, T, BundleEvent>
+			implements
 			SynchronousBundleListener {
 		/**
 		 * Tracked constructor.
