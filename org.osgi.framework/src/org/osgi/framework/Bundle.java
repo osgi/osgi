@@ -1246,19 +1246,19 @@ public interface Bundle extends Comparable<Bundle> {
 	Version getVersion();
 
 	/**
-	 * Adapt a bundle to the specifed type.
+	 * Adapt this bundle to the specified type.
 	 * 
 	 * <p>
-	 * Adapting a bundle to the specified type may require certain checks,
+	 * Adapting this bundle to the specified type may require certain checks,
 	 * including security checks, to succeed. If a check does not succeed, then
-	 * the bundle cannot be adapted and {@code null} is returned.
+	 * this bundle cannot be adapted and {@code null} is returned.
 	 * 
-	 * @param <A> The type to which the bundle is to be adapted.
-	 * @param type Class object for the type to which the bundle is to be
+	 * @param <A> The type to which this bundle is to be adapted.
+	 * @param type Class object for the type to which this bundle is to be
 	 *        adapted.
-	 * @return The object, of the specified type, to which the bundle has been
-	 *         adapted or {@code null} if the bundle cannot be adapted to the
-	 *         specifed type.
+	 * @return The object, of the specified type, to which this bundle has been
+	 *         adapted or {@code null} if this bundle cannot be adapted to the
+	 *         specified type.
 	 * @since 1.6
 	 */
 	<A> A adapt(Class<A> type);

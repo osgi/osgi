@@ -53,6 +53,8 @@ public interface Framework extends Bundle {
 	 * <li>Have registered any framework services. For example,
 	 * {@code PackageAdmin}, {@code ConditionalPermissionAdmin},
 	 * {@code StartLevel}.</li>
+	 * <li>Be {@link #adapt(Class) adaptable} to the OSGi defined types to which
+	 * a system bundle can be adapted.</li>
 	 * </ul>
 	 * 
 	 * <p>
@@ -66,8 +68,8 @@ public interface Framework extends Bundle {
 	 * @throws BundleException If this Framework could not be initialized.
 	 * @throws SecurityException If the Java Runtime Environment supports
 	 *         permissions and the caller does not have the appropriate
-	 *         {@code AdminPermission[this,EXECUTE]} or if there is a
-	 *         security manager already installed and the
+	 *         {@code AdminPermission[this,EXECUTE]} or if there is a security
+	 *         manager already installed and the
 	 *         {@link Constants#FRAMEWORK_SECURITY} configuration property is
 	 *         set.
 	 * 
@@ -332,15 +334,34 @@ public interface Framework extends Bundle {
 	URL getEntry(String path);
 
 	/**
-	 * Returns {@code null} as a framework implementation does not have a
-	 * proper bundle from which to return entries.
+	 * Returns {@code null} as a framework implementation does not have a proper
+	 * bundle from which to return entries.
 	 * 
 	 * @param path Ignored.
 	 * @param filePattern Ignored.
 	 * @param recurse Ignored.
-	 * @return {@code null} as a framework implementation does not have a
-	 *         proper bundle from which to return entries.
+	 * @return {@code null} as a framework implementation does not have a proper
+	 *         bundle from which to return entries.
 	 */
 	Enumeration<URL> findEntries(String path, String filePattern,
 			boolean recurse);
+
+	/**
+	 * Adapt this Framework to the specified type.
+	 * 
+	 * <p>
+	 * Adapting this Framework to the specified type may require certain checks,
+	 * including security checks, to succeed. If a check does not succeed, then
+	 * this Framework cannot be adapted and {@code null} is returned. If this
+	 * Framework is not {@link #init() initialized}, then {@code null} is
+	 * returned if the specified type is one of the OSGi defined types to which
+	 * a system bundle can be adapted.
+	 * 
+	 * @param <A> The type to which this Framework is to be adapted.
+	 * @param type Class object for the type to which this Framework is to be
+	 *        adapted.
+	 * @return The object, of the specified type, to which this Framework has
+	 *         been adapted or {@code null} if this Framework cannot be adapted
+	 */
+	<A> A adapt(Class<A> type);
 }
