@@ -33,67 +33,10 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * from shrinkable collections that are passed to the hook during a resolve process.  A shrinkable 
  * collection is a {@code Collection} that supports all remove operations.  Any other attempts to modify
  * a shrinkable collection will result in an {@code UnsupportedOperationException} being thrown.
+ * 
+ * ### removed the nested LIs, will be describedin the spec
  * <p>
- * The following steps outline the way a framework uses the resolver hooks during a resolve
- * process.
- * <ol>
- *  <li> Collect a snapshot of registered resolver hook factories that will be called during the
- *       current resolve process.  Any hook factories registered after the snapshot is taken must not be called
- *       during the current resolve process.  A resolver hook factory contained in the snapshot may become
- *       unregistered during the resolve process.  The framework should handle this and stop calling
- *       the resolver hook instance provided by the unregistered hook factory for the remainder of the resolve process.</li>
- *  <li> For each registered hook factory call the {@link ResolverHookFactory#begin(Collection)} method to inform the 
- *       hooks about a resolve process beginning and to obtain a Resolver Hook instance that will be used for the duration
- *       of the resolve process.</li>
- *  <li> Determine the collection of unresolved bundle revisions that may be considered for resolution during
- *       the current resolution process and place each of the bundle revisions in a shrinkable collection
- *       <b>{@code R}</b>.
- *       <ol type="a">
- *         <li> For each resolver hook call the {@link #filterResolvable(Collection)} method with the 
- *              shrinkable collection <b>{@code R}</b>.</li>
- *       </ol>
- *  </li>
- *  <li> The shrinkable collection <b>{@code R}</b> now contains all the unresolved bundle revisions that may end up
- *       as resolved at the end of the current resolve process.  Any other bundle revisions that 
- *       got removed from the shrinkable collection <b>{@code R}</b> must not end up as resolved at the end
- *       of the current resolve process.</li>
- *  <li> For each bundle revision {@code B} left in the shrinkable collection <b>{@code R}</b> that represents a 
- *       singleton bundle do the following:
- *       <ol type="a">
- *         <li> Determine the collection of available capabilities that have a name space of 
- *              {@link Capability#BUNDLE_CAPABILITY osgi.bundle}, are singletons, and have the same
- *              symbolic name as the singleton bundle revision <b>{@code B}</b> and place each of the matching
- *              capabilities into a shrinkable collection <b>{@code S}</b>.</li>
- *         <li> Remove the {@link Capability#BUNDLE_CAPABILITY osgi.bundle} capability provided by
- *              bundle revision <b>{@code B}</b> from shrinkable collection <b>{@code S}</b>.  A singleton bundle 
- *              cannot collide with itself.</li>
- *         <li> For each resovler hook call the {@link #filterSingletonCollisions(Capability, Collection)}
- *              with the {@link Capability#BUNDLE_CAPABILITY osgi.bundle} capability provided by bundle revision 
- *              <b>{@code B}</b> and the shrinkable collection <b>{@code S}</b></li>
- *         <li> The shrinkable collection <b>{@code S}</b> now contains all singleton {@link Capability#BUNDLE_CAPABILITY 
- *              osgi.bundle} capabilities that can influence the ability of bundle revision <b>{@code B}</b> to resolve.</li>
- *       </ol>
- *  </li>
- *  <li> During a resolve process a framework is free to attempt to resolve any or all bundles contained in
- *       shrinkable collection <b>{@code R}</b>.  For each bundle revision <b>{@code B}</b> left in the shrinkable collection 
- *       <b>{@code R}</b> which the framework attempts to resolve the following steps must be followed:
- *       <ol type="a">
- *         <li> For each requirement <b>{@code T}</b> specified by bundle revision <b>{@code B}</b> determine the 
- *              collection of capabilities that satisfy (or match) the requirement and place each matching capability into
- *              a shrinkable collection <b>{@code C}</b>.  A capability is considered to match a particular requirement
- *              if its attributes satisfy a specified requirement and the requirer bundle has permission to access the
- *              capability.</li>
- *         <li> For each resolver hook call the {@link #filterMatches(BundleRevision, Collection)} with the
- *              bundle revision <b>{@code B}</b> and the shrinkable collection <b>{@code C}</b>.</li>
- *         <li> The shrinkable collection <b>{@code C}</b> now contains all the capabilities that may be used to 
- *              satisfy the requirement <b>{@code T}</b>.  Any other capabilities that got removed from the 
- *              shrinkable collection <b>{@code C}</b> must not be used to satisfy requirement <b>{@code T}</b>.</li>
- *       </ol>
- *  </li>
- *  <li> For each resolver hook call the {@link #end()} method to inform the hooks about a resolve 
- *       process ending.</li>
- * </ol>
- * In all cases, the order in which the resolver hooks are called is the reverse compareTo ordering of 
+ * The order in which the resolver hooks are called is the reverse compareTo ordering of 
  * their Service References.  That is, the service with the highest ranking number must be called first.
  * In cases where a shrinkable collection becomes empty the framework is required to call the
  * remaining registered hooks.
