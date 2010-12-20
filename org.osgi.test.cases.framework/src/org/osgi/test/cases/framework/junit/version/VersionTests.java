@@ -29,17 +29,21 @@ public class VersionTests extends TestCase {
 	 * @spec Version.<init>(int,int,int)
 	 */
 	public void testVersionConstructors() {
-		new Version(0, 0, 0);
-
-		new Version(0, 0, 0, "a");
-
 		/**
 		 * Test the Version constructor with legal parameters
 		 * 
 		 * @spec Version.<init>(int,int,int)
 		 */
+		new Version(0, 0, 0);
+
+		new Version(0, 0, 0,
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-0123456789");
 
 		new Version("0.0.0");
+		Version.parseVersion("0.0.0");
+		new Version(
+				"0.0.0.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-0123456789");
+		Version.parseVersion("0.0.0.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-0123456789");
 
 		/**
 		 * Test the Version constructor with illegal parameters
@@ -47,18 +51,34 @@ public class VersionTests extends TestCase {
 		 * @spec Version.<init>(int,int,int)
 		 */
 		try {
-			new Version(-1, -1, -1);
+			new Version(-1, 2, 3);
+			fail("Version created with illegal constructors");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+		try {
+			new Version(1, -2, 3);
+			fail("Version created with illegal constructors");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+		try {
+			new Version(1, 2, -3);
+			fail("Version created with illegal constructors");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+		try {
+			new Version(1, 2, 3, "4.5");
 			fail("Version created with illegal constructors");
 		}
 		catch (IllegalArgumentException ex) {
 			// This is an expected exception and may be ignored
 		}
 
-		/**
-		 * Test the Version constructor with legal parameters
-		 * 
-		 * @spec Version.<init>(int,int,int)
-		 */
 		try {
 			new Version(null);
 			fail("Version created with illegal constructors");
@@ -67,11 +87,6 @@ public class VersionTests extends TestCase {
 			// This is an expected exception and may be ignored
 		}
 
-		/**
-		 * Test the Version constructor with legal parameters
-		 * 
-		 * @spec Version.<init>(int,int,int)
-		 */
 		try {
 			new Version("");
 			fail("Version created with illegal constructors");
@@ -80,10 +95,21 @@ public class VersionTests extends TestCase {
 			// This is an expected exception and may be ignored
 		}
 
-		assertSame("not emptyVersion", Version.parseVersion(null),
-				Version.emptyVersion);
-		assertSame("not emptyVersion", Version.parseVersion(""),
-				Version.emptyVersion);
+		try {
+			new Version("1.2.3.4.5");
+			fail("Version created with illegal qualifier");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+		try {
+			Version.parseVersion("1.2.3.4.5");
+			fail("Version created with illegal qualifier");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+
 	}
 
 	public void testVersionEquals() {
@@ -172,6 +198,12 @@ public class VersionTests extends TestCase {
 		if (version1.equals(version2)) {
 			fail("Testing the method equals() with different versions");
 		}
+
+		version1 = new Version("0.0.0.a");
+		version2 = Version.parseVersion(" 0.0.0.a  ");
+		assertEquals("Testing the method equals() with the same versions",
+				version1, version2);
+
 	}
 
 	/**
@@ -183,12 +215,13 @@ public class VersionTests extends TestCase {
 		Version version1;
 		Version version2;
 
-		version1 = new Version(0, 0, 0);
-		version2 = new Version(0, 0, 0);
+		version1 = new Version(0, 0, 0, "a");
+		version2 = new Version(0, 0, 0, "a");
 
 		assertEquals(
 				"The method hashCode() has different return values when the method equals() returns true for two Version instances",
 				version1.hashCode(), version2.hashCode());
+
 		version1 = new Version(0, 0, 0);
 		version2 = new Version(1, 0, 0);
 
@@ -260,11 +293,23 @@ public class VersionTests extends TestCase {
 				"Testing the method getQualifier() using the constructor Version(int,int,int,String)",
 				"a", version.getQualifier());
 
+		version = new Version(1, 1, 1, null);
+
+		assertEquals(
+				"Testing the method getQualifier() using the constructor Version(int,int,int,String)",
+				"", version.getQualifier());
+
 		version = new Version("1.1.1.a");
 
 		assertEquals(
 				"Testing the method getQualifier using the constructor Version(String)",
 				"a", version.getQualifier());
+
+		version = new Version("1.1.1");
+
+		assertEquals(
+				"Testing the method getQualifier using the constructor Version(String)",
+				"", version.getQualifier());
 	}
 
 	public void testVersionCompareTo() {
@@ -283,6 +328,9 @@ public class VersionTests extends TestCase {
 		if (version1.compareTo(version2) >= 0) {
 			fail("Testing the method compareTo() with first version number less than second version number");
 		}
+		if (version2.compareTo(version1) <= 0) {
+			fail("Testing the method compareTo() with first version number less than second version number");
+		}
 
 		/**
 		 * Test the method compareTo() with first version number greater than
@@ -295,6 +343,9 @@ public class VersionTests extends TestCase {
 		version2 = new Version(1, 1, 1);
 
 		if (version1.compareTo(version2) <= 0) {
+			fail("Testing the method compareTo() with first version number greater than second version number");
+		}
+		if (version2.compareTo(version1) >= 0) {
 			fail("Testing the method compareTo() with first version number greater than second version number");
 		}
 
@@ -310,18 +361,18 @@ public class VersionTests extends TestCase {
 		if (version1.compareTo(version2) != 0) {
 			fail("Testing the method compareTo() with same version numbers");
 		}
+		if (version2.compareTo(version1) != 0) {
+			fail("Testing the method compareTo() with same version numbers");
+		}
 
 		/**
 		 * Test the method compareTo() with an incorrect object
 		 * 
 		 * @spec Version.compareTo(Version);
 		 */
-		String incorrect;
-		Version version;
-
-		incorrect = "";
-		version = new Version(1, 1, 1);
-		Comparable testVersion = version;
+		Object incorrect = "";
+		version1 = new Version(1, 1, 1);
+		Comparable testVersion = version1;
 		try {
 			testVersion.compareTo(incorrect);
 			fail("Testing the method compareTo() with an incorrect object");
@@ -333,6 +384,13 @@ public class VersionTests extends TestCase {
 
 	public void testVersionConstantsValues() {
 		assertEquals("emptyVersion not equal to 0.0.0", new Version(0, 0, 0),
+				Version.emptyVersion);
+		assertEquals("emptyVersion has different hashCode than 0.0.0",
+				new Version(0, 0, 0).hashCode(),
+				Version.emptyVersion.hashCode());
+		assertSame("not emptyVersion", Version.parseVersion(null),
+				Version.emptyVersion);
+		assertSame("not emptyVersion", Version.parseVersion(""),
 				Version.emptyVersion);
 	}
 }

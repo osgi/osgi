@@ -126,20 +126,21 @@ public class Version implements Comparable<Version> {
 			StringTokenizer st = new StringTokenizer(version, SEPARATOR, true);
 			maj = Integer.parseInt(st.nextToken());
 
-			if (st.hasMoreTokens()) {
+			if (st.hasMoreTokens()) { // minor
 				st.nextToken(); // consume delimiter
 				min = Integer.parseInt(st.nextToken());
 
-				if (st.hasMoreTokens()) {
+				if (st.hasMoreTokens()) { // micro
 					st.nextToken(); // consume delimiter
 					mic = Integer.parseInt(st.nextToken());
 
-					if (st.hasMoreTokens()) {
+					if (st.hasMoreTokens()) { // qualifier
 						st.nextToken(); // consume delimiter
-						qual = st.nextToken();
+						qual = st.nextToken(""); // remaining string
 
-						if (st.hasMoreTokens()) {
-							throw new IllegalArgumentException("invalid format");
+						if (st.hasMoreTokens()) { // fail safe
+							throw new IllegalArgumentException(
+									"invalid format: " + version);
 						}
 					}
 				}
@@ -147,7 +148,7 @@ public class Version implements Comparable<Version> {
 		}
 		catch (NoSuchElementException e) {
 			IllegalArgumentException iae = new IllegalArgumentException(
-					"invalid format");
+					"invalid format: " + version);
 			iae.initCause(e);
 			throw iae;
 		}
@@ -326,7 +327,7 @@ public class Version implements Comparable<Version> {
 	}
 
 	/**
-	 * Compares this {@code Version} object to another object.
+	 * Compares this {@code Version} object to another {@code Version}.
 	 * 
 	 * <p>
 	 * A version is considered to be <b>less than </b> another version if its
@@ -344,11 +345,11 @@ public class Version implements Comparable<Version> {
 	 * is equal (using {@code String.compareTo}).
 	 * 
 	 * @param other The {@code Version} object to be compared.
-	 * @return A negative integer, zero, or a positive integer if this object is
-	 *         less than, equal to, or greater than the specified
+	 * @return A negative integer, zero, or a positive integer if this version
+	 *         is less than, equal to, or greater than the specified
 	 *         {@code Version} object.
 	 * @throws ClassCastException If the specified object is not a
-	 *         {@code Version}.
+	 *         {@code Version} object.
 	 */
 	public int compareTo(Version other) {
 		if (other == this) { // quicktest
