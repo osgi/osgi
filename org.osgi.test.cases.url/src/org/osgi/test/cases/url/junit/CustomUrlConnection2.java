@@ -1,8 +1,4 @@
 /*
- * $Id$
- *
-
- *
  * (c) Copyright 2002 Atinav Inc.
  *
  * This source code is owned by Atinav Inc. and is being distributed to OSGi

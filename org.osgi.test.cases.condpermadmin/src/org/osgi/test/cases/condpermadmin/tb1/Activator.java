@@ -1,6 +1,4 @@
 /*
- * $Id$
- * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
