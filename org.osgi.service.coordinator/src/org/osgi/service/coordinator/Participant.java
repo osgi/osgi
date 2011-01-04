@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,46 +18,71 @@ package org.osgi.service.coordinator;
 /**
  * A Participant participates in a Coordination.
  * 
- * A Participant can participate in a Coordination by calling
- * {@link Coordinator#addParticipant(Participant)}. After successfully
- * initiating the participation, the Participant is called back when the
- * Coordination is terminated.
+ * <p>
+ * A Participant can participate in a Coordination by
+ * {@link Coordination#addParticipant(Participant) registering} itself with the
+ * Coordination. After successfully registering itself, the Participant is
+ * notified when the Coordination is terminated.
  * 
- * If a Coordination ends with the {@link Coordination#end()} method, then all
- * the participants are called back on their {@link #ended(Coordination)}
- * method. If the Coordination is failed (someone has called
- * {@link Coordination#fail(Throwable)} then the {@link #failed(Coordination)}
- * method is called back.
+ * <p>
+ * If a Coordination terminates {@link Coordination#end() normally}, then all
+ * registered Participants are notified on their {@link #ended(Coordination)}
+ * method. If the Coordination terminates as a
+ * {@link Coordination#fail(Throwable) failure}, then all registered
+ * Participants are notified on their {@link #failed(Coordination)} method.
  * 
- * Participants are required to be thread safe for the
- * {@link #ended(Coordination)} method and the {@link #failed(Coordination)}
- * method. Both methods can be called on another thread.
+ * <p>
+ * Participants are required to be thread safe as notification can be made on
+ * any thread.
+ * 
+ * <p>
+ * A Participant can only be registered with a single active Coordination at a
+ * time. If a Participant is already registered with an active Coordination,
+ * attempts to register the Participation with another active Coordination will
+ * block until the Coordination the Participant is registered with terminates.
+ * Notice that in edge cases the notification to the Participant that the
+ * Coordination has terminated can happen before the registration method
+ * returns.
+ * 
  * 
  * @ThreadSafe
+ * @version $Id$
  */
 public interface Participant {
 	/**
-	 * The Coordination has failed and the participant is informed.
+	 * Notification that a Coordination has terminated
+	 * {@link Coordination#end() normally}.
 	 * 
-	 * A participant should properly discard any work it has done during the
-	 * active coordination.
+	 * <p>
+	 * This Participant should finalize any work associated with the specified
+	 * Coordination.
 	 * 
-	 * @param c The Coordination that does the callback
-	 * 
-	 * @throws Exception Any exception thrown should be logged but is further
-	 *         ignored and does not influence the outcome of the Coordination.
+	 * @param coordination The Coordination that has terminated normally.
+	 * @throws Exception If this Participant throws an exception, the
+	 *         {@link Coordinator} service should log the exception. The
+	 *         {@link Coordination#end()} method which is notifying this
+	 *         Participant must continue notification of other registered
+	 *         Participants. When this is completed, the
+	 *         {@link Coordination#end()} method must throw a
+	 *         CoordinationException of type
+	 *         {@link CoordinationException#PARTIALLY_ENDED}.
 	 */
-	void failed(Coordination c) throws Exception;
+	void ended(Coordination coordination) throws Exception;
 
 	/**
-	 * The Coordination is being ended.
+	 * Notification that a Coordination has terminated as a
+	 * {@link Coordination#fail(Throwable) failure}.
 	 * 
-	 * @param c The Coordination that does the callback
+	 * <p>
+	 * This Participant should discard any work associated with the specified
+	 * Coordination.
 	 * 
-	 * @throws Exception If an exception is thrown it should be logged and the
-	 *         return of the {@link Coordination#end()} method must throw
-	 *         {@link CoordinationException#PARTIALLY_ENDED}.
-	 * 
+	 * @param coordination The Coordination that has terminated as a failure.
+	 * @throws Exception If this Participant throws an exception, the
+	 *         {@link Coordinator} service should log the exception. The
+	 *         {@link Coordination#fail(Throwable)} method which is notifying
+	 *         this Participant must continue notification of other registered
+	 *         Participants.
 	 */
-	void ended(Coordination c) throws Exception;
+	void failed(Coordination coordination) throws Exception;
 }

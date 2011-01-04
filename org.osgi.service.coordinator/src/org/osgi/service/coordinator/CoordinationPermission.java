@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,8 @@ import org.osgi.framework.Bundle;
  * </pre>
  * 
  * ### Need to complete the implementation!
+ * 
+ * @version $Id$
  */
 public class CoordinationPermission extends BasicPermission {
 

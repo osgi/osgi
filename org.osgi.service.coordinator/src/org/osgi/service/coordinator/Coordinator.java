@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,43 +20,49 @@ import java.util.Collection;
 /**
  * A Coordinator service coordinates activities between different parties.
  * 
- * The Coordinator can create Coordination objects. Once a Coordination object
- * is created, it can be pushed on a thread local stack
- * {@link Coordination#push()} as an implicit parameter for calls to other
- * parties, or it can be passed as an argument. The current top of the thread
- * local stack can be obtained with {@link #peek()}.
+ * <p>
+ * A bundle can use the Coordinator service to create {@link Coordination}
+ * objects. Once a Coordination object is created, it can be
+ * {@link Coordination#push() pushed} on the thread local Coordination stack to
+ * be an implicit parameter as the current Coordination for calls to other
+ * parties, or it can be passed directly to other parties as an argument. The
+ * current Coordination, which is on the top of the current thread's thread
+ * local Coordination stack, can be obtained with {@link #peek()}.
  * 
- * The {@link #addParticipant(Participant)} method on this service or the
- * {@link Coordination#addParticipant(Participant)} method can be used to
- * participate in a Coordination. Participants participate only in a single
- * Coordination, if a Participant object is added to a second Coordination the
- * {@link Coordination#addParticipant(Participant)} method is blocked until the
- * first Coordination is terminated.
+ * <p>
+ * Any active Coordinations created by a bundle must be terminated when the
+ * bundle releases the Coordinator service. The Coordinator service must
+ * {@link Coordination#fail(Throwable) fail} these Coordinations with the
+ * {@link Coordination#RELEASED RELEASED} exception.
  * 
- * A Coordination ends correctly when the {@link Coordination#end} method is
- * called before termination or when the Coordination fails due to a timeout or
- * a failure. If the Coordination ends correctly, all its participants are
- * called on the {@link Participant#ended(Coordination)} method, in all other
- * cases the {@link Participant#failed(Coordination)} is called.
+ * <p>
+ * A {@link Participant} can {@link Coordination#addParticipant(Participant)
+ * register} to participate in a Coordination and receive notification of the
+ * termination of the Coordination.
  * 
- * The typical usage of the Coordinator service is as follows:
+ * <p>
+ * The following example code shows a typical usage of the Coordinator service.
  * 
  * <pre>
- * Coordination coordination = coordinator.begin(&quot;mycoordination&quot;,0);
- * try {
- * 	doWork();
- * }
- * finally {
- * 	coordination.end();
+ * void foo() {
+ * 	Coordination c = coordinator.begin(&quot;work&quot;, 0);
+ * 	try {
+ * 		doWork();
+ * 	}
+ * 	catch (Exception e) {
+ * 		c.fail(e);
+ * 	}
+ * 	finally {
+ * 		c.end();
+ * 	}
  * }
  * </pre>
  * 
- * In the doWork() method, code can be called that requires a callback at the
- * end of the Coordination. The doWork method can then add a Participant to the
- * coordination. This code is for a Participant.
+ * In the {@code doWork} method, code can be called that requires notification
+ * of the termination of the Coordination. The {@code doWork} method can then
+ * register a Participant with the Coordination.
  * 
  * <pre>
- * 
  * void doWork() {
  * 	if (coordinator.addParticipant(this)) {
  * 		beginWork();
@@ -67,154 +73,183 @@ import java.util.Collection;
  * 	}
  * }
  * 
- * void ended() {
+ * void ended(Coordination c) {
  * 	finishWork();
  * }
  * 
- * void failed() {
+ * void failed(Coordination c) {
  * 	undoWork();
  * }
  * </pre>
  * 
- * Life cycle. All Coordinations that are begun through this service must
- * automatically fail before this service is ungotten.
- * 
  * @ThreadSafe
+ * @noimplement
+ * @version $Id$
  */
 public interface Coordinator {
 
 	/**
-	 * Create a new Coordination that is not associated with the current thread.
+	 * Create a new Coordination.
 	 * 
-	 * @param name The name of this coordination, a name does not have to be
-	 *        unique. The name must follow the bundle symbolic name pattern,
-	 *        e.g. com.example.coordination.
-	 * @param timeout Timeout in milliseconds, less or equal than 0 means no
-	 *        timeout
-	 * @return The new Coordination object, never {@code null}
+	 * @param name The name of this coordination. The name does not have to be
+	 *        unique but must follow the {@code symbolic-name} syntax from the
+	 *        Core specification.
+	 * @param timeMillis Timeout in milliseconds. A value of 0 means no timeout.
+	 *        If the Coordination is not terminated within the timeout, the
+	 *        Coordinator service will {@link Coordination#fail(Throwable) fail}
+	 *        the Coordination with a {@link Coordination#TIMEOUT TIMEOUT}
+	 *        exception.
+	 * @return The new Coordination object.
+	 * @throws IllegalArgumentException If the specified name does not follow
+	 *         the {@code symbolic-name} syntax or the specified time is
+	 *         negative.
 	 * @throws SecurityException This method requires the
 	 *         {@link CoordinationPermission#INITIATE} action, no bundle check
 	 *         is done.
-	 * @throws IllegalArgumentException when the name does not match the Bundle Symbolic Name pattern
 	 */
-	Coordination create(String name, int timeout);
+	Coordination create(String name, long timeMillis);
 
 	/**
-	 * Provide a mutable snapshot collection of all Coordination objects
-	 * currently not terminated.
+	 * Create a new Coordination and make it the {@link #peek() current
+	 * Coordination}.
 	 * 
-	 * Coordinations in this list can have terminated before this list is
-	 * returned or any time thereafter.
+	 * <p>
+	 * This method does that same thing as calling {@link #create(String, long)
+	 * create(name, timeMillis)}.{@link Coordination#push() push()}
 	 * 
-	 * The returned collection must only contain the Coordinations for which the
-	 * caller has {@link CoordinationPermission#ADMIN}, without this permission
-	 * an empty list must be returned.
-	 * 
-	 * @return a list of Coordination objects filter by
-	 *         {@link CoordinationPermission#ADMIN}.
+	 * @param name The name of this coordination. The name does not have to be
+	 *        unique but must follow the {@code symbolic-name} syntax from the
+	 *        Core specification.
+	 * @param timeMillis Timeout in milliseconds. A value of 0 means no timeout.
+	 *        If the Coordination is not terminated within the timeout, the
+	 *        Coordinator service will {@link Coordination#fail(Throwable) fail}
+	 *        the Coordination with a {@link Coordination#TIMEOUT TIMEOUT}
+	 *        exception.
+	 * @return A new Coordination object
+	 * @throws IllegalArgumentException If the specified name does not follow
+	 *         the {@code symbolic-name} syntax or the specified time is
+	 *         negative.
+	 * @throws SecurityException This method requires the
+	 *         {@link CoordinationPermission#INITIATE} action, no bundle check
+	 *         is done.
 	 */
-	Collection<Coordination> getCoordinations();
+	Coordination begin(String name, long timeMillis);
 
 	/**
-	 * Always fail the current Coordination, if it exists.
+	 * Returns the current Coordination.
 	 * 
-	 * If this is no current Coordination return {@code false}. Otherwise return
-	 * the result of {@link Coordination#fail(Throwable)}, which is {@code true}
-	 * in the case this call terminates the Coordination and {@code false}
-	 * otherwise.
+	 * <p>
+	 * The current Coordination is the Coordination at the top of the thread
+	 * local Coordination stack. If the thread local Coordination stack is
+	 * empty, there is no current Coordination. Each Coordinator service
+	 * maintains thread local Coordination stacks.
 	 * 
-	 * <pre>
-	 *    false      - No current Coordination
-	 *    false      - Current Coordination was already terminated
-	 *    true       - Current Coordination got terminated due to this call
-	 * </pre>
+	 * <p>
+	 * This method does not alter the thread local Coordination stack.
 	 * 
-	 * @param reason The reason for failure, must not be {@code null}.
-	 * @return {@code true} if there was a current Coordination and it was
-	 *         terminated, otherwise {@code false}.
-	 */
-	boolean fail(Throwable reason);
-
-	/**
-	 * Return the current Coordination or {@code null}.
-	 * 
-	 * The current Coordination is the top of the thread local stack of
-	 * Coordinations. If the stack is empty, there is no current Coordination.
-	 * 
-	 * @return {@code null} when the thread local stack is empty, otherwise the
-	 *         top of the thread local stack of Coordinations.
+	 * @return The current Coordination or {@code null} if the thread local
+	 *         Coordination stack is empty.
 	 */
 	Coordination peek();
 
 	/**
-	 * Begin a new Coordination and push it on the thread local stack with
-	 * {@link Coordination#push()}.
+	 * Remove the current Coordination from the thread local Coordination stack.
 	 * 
-	 * @param name The name of this coordination, a name does not have to be
-	 *        unique. The name must follow the bundle symbolic name pattern,
-	 *        e.g. com.example.coordination.
-	 * @param timeoutInMillis Timeout in milliseconds, less or equal than 0
-	 *        means no timeout
-	 * @return A new Coordination object
+	 * <p>
+	 * The current Coordination is the Coordination at the top of the thread
+	 * local Coordination stack. If the thread local Coordination stack is
+	 * empty, there is no current Coordination. Each Coordinator service
+	 * maintains thread local Coordination stacks.
 	 * 
-	 * @throws SecurityException This method requires the
-	 *         {@link CoordinationPermission#INITIATE} action, no bundle check
-	 *         is done.
-	 * @throws IllegalArgumentException when the name does not match the Bundle Symbolic Name pattern
-	 */
-	Coordination begin(String name, int timeoutInMillis);
-
-	/**
-	 * Pop the top of the thread local stack of Coordinations.
+	 * <p>
+	 * This method alters the thread local Coordination stack, if it is not
+	 * empty, by removing the Coordination at the top of the thread local
+	 * Coordination stack.
 	 * 
-	 * If no current Coordination is present, return {@code null}.
-	 * 
-	 * @return The top of the stack or {@code null}
+	 * @return The Coordination that was the current Coordination or
+	 *         {@code null} if the thread local Coordination stack is empty.
 	 */
 	Coordination pop();
 
 	/**
-	 * Participate in the current Coordination and return {@code true} or return
-	 * {@code false} if there is none.
+	 * Terminate the {@link #peek() current Coordination} as a failure with the
+	 * specified failure cause.
 	 * 
-	 * This method calls {@link #peek()}, if it is {@code null}, it will return
-	 * false. Otherwise it will call
-	 * {@link Coordination#addParticipant(Participant)}.
+	 * <p>
+	 * If there is no current Coordination, this method does nothing and returns
+	 * {@code false}.
 	 * 
-	 * @param participant The participant of the Coordination
-	 * @return {@code true} if there was a current Coordination that could be
-	 *         successfully used to participate, otherwise return {@code false}.
-	 * @throws CoordinationException This exception should normally not be
-	 *         caught by the caller but allowed to bubble up to the initiator of
-	 *         the coordination, it is therefore a {@link RuntimeException}. It
-	 *         signals that this participant could not participate the current
-	 *         coordination. This can be cause by the following reasons:
-	 *         <ol>
-	 *         <li>{@link CoordinationException#DEADLOCK_DETECTED}</li>
-	 *         <li>{@link CoordinationException#ALREADY_ENDED}</li>
-	 *         <li>{@link CoordinationException#FAILED}</li>
-	 *         <li>{@link CoordinationException#UNKNOWN}</li>
-	 *         </ol>
+	 * <p>
+	 * Otherwise, this method returns the result from calling
+	 * {@link Coordination#fail(Throwable)} with the specified failure cause on
+	 * the current Coordination.
+	 * 
+	 * @param cause The failure cause. The failure cause must not be
+	 *        {@code null} .
+	 * @return {@code false} if there was no current Coordination, otherwise
+	 *         returns the result from calling
+	 *         {@link Coordination#fail(Throwable)} on the current Coordination.
+	 * @throws NullPointerException If cause is {@code null}.
+	 * @see Coordination#fail(Throwable)
+	 */
+	boolean fail(Throwable cause);
+
+	/**
+	 * Register a Participant with the {@link #peek() current Coordination}.
+	 * 
+	 * <p>
+	 * If there is no current Coordination, this method does nothing and returns
+	 * {@code false}.
+	 * 
+	 * <p>
+	 * Otherwise, this method calls
+	 * {@link Coordination#addParticipant(Participant)} with the specified
+	 * Participant on the current Coordination and returns {@code true}.
+	 * 
+	 * @param participant The Participant to register with the current
+	 *        Coordination.
+	 * @return {@code false} if there was no current Coordination, otherwise
+	 *         returns {@code true}.
+	 * @throws CoordinationException If the Participant could not be registered
+	 *         with the current Coordination. This exception should normally not
+	 *         be caught by the caller but allowed to be caught by the initiator
+	 *         of this Coordination.
 	 * @throws SecurityException This method requires the
 	 *         {@link CoordinationPermission#PARTICIPATE} action for the current
 	 *         Coordination, if any.
+	 * @see Coordination#addParticipant(Participant)
 	 */
-	boolean addParticipant(Participant participant)
-			throws CoordinationException;
+	boolean addParticipant(Participant participant);
 
 	/**
-	 * Answer the coordination associated with the given id if it exists.
+	 * Returns a snapshot of all active Coordinations.
 	 * 
-	 * @param id The id of the requested Coordination
-	 * @return a Coordination with the given ID or {@code null} when
-	 *         Coordination cannot be found because it never existed or had
-	 *         terminated before this call.
+	 * <p>
+	 * Since Coordinations can be terminated at any time, Coordinations in the
+	 * returned collection can be terminated before the caller examines the
+	 * collection.
 	 * 
+	 * <p>
+	 * The returned collection must only contain the Coordinations for which the
+	 * caller has {@link CoordinationPermission#ADMIN}.
+	 * 
+	 * @return A snapshot of all active Coordinations. If there are no active
+	 *         Coordinations, the returned list will be empty. The returned
+	 *         collection is the property of the caller and can be modified by
+	 *         the caller.
+	 */
+	Collection<Coordination> getCoordinations();
+
+	/**
+	 * Returns the Coordination with the specified id.
+	 * 
+	 * @param id The id of the requested Coordination.
+	 * @return A Coordination having with specified id or {@code null} if no
+	 *         Coordination with the specified id exists or the Coordination
+	 *         with the specified id was terminated before this call.
 	 * @throws SecurityException if the caller has no
 	 *         {@link CoordinationPermission#ADMIN} for the requested
 	 *         Coordination.
 	 */
-
 	Coordination getCoordination(long id);
-
 }

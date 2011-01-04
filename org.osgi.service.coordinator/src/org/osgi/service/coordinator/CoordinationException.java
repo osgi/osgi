@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 package org.osgi.service.coordinator;
 
 /**
- * Thrown when an implementation detects a potential deadlock situation that it
- * cannot solve. The name of the current coordination is given as argument.
+ * Unchecked exception which may be thrown by a Coordinator implementation.
+ * 
+ * @version $Id$
  */
 public class CoordinationException extends RuntimeException {
 	private static final long	serialVersionUID	= 1L;
@@ -25,108 +26,125 @@ public class CoordinationException extends RuntimeException {
 	/**
 	 * Unknown reason for this exception.
 	 */
+
 	public final static int		UNKNOWN				= 0;
 	/**
-	 * Adding a participant caused a deadlock.
+	 * Registering a Participant with a Coordination would have resulted in a
+	 * deadlock.
 	 */
 	public final static int		DEADLOCK_DETECTED	= 1;
 
 	/**
-	 * The Coordination was failed with {@link Coordination#fail(Throwable)}.
-	 * When this exception type is used, the {@link #getFailure()} method must
-	 * return a non-null value.
+	 * The Coordination has terminated as a failure with
+	 * {@link Coordination#fail(Throwable)}. When this exception type is used,
+	 * the {@link #getCause()} method must return a non-null value.
 	 */
-	public final static int		FAILED				= 3;
+	public final static int		FAILED				= 2;
 
 	/**
-	 * The Coordination was partially ended.
+	 * The Coordination has partially ended.
 	 */
-	public final static int		PARTIALLY_ENDED		= 4;
+	public final static int		PARTIALLY_ENDED		= 3;
 
 	/**
-	 * The Coordination was already ended.
+	 * The Coordination has already terminated normally.
 	 */
-	public final static int		ALREADY_ENDED		= 5;
+	public final static int		ALREADY_ENDED		= 4;
 
 	/**
-	 * A Coordination was pushed on the stack that was already pushed.
+	 * The Coordination was already on a thread's thread local Coordination
+	 * stack.
 	 */
-	public final static int		ALREADY_PUSHED		= 6;
+	public final static int		ALREADY_PUSHED		= 5;
 
 	/**
-	 * Interrupted while trying to lock the participant.
+	 * The current thread was interrupted while waiting to register a
+	 * Participant with a Coordination.
 	 */
-	public final static int		LOCK_INTERRUPTED	= 7;
+	public final static int		LOCK_INTERRUPTED	= 6;
+
+	private final String		name;
+	private final int			type;
+	private final long			id;
 
 	/**
-	 * The Coordination timed out.
+	 * Create a new Coordination Exception with a cause.
+	 * 
+	 * @param message The detail message for this exception.
+	 * @param coordination The Coordination associated with this exception.
+	 * @param cause The cause associated with this exception.
+	 * @param type The type of this exception.
 	 */
-	public static final int		TIMEOUT				= 9;
-
-	final String				name;
-	final int					type;
-	final Throwable				failure;
-	final long					id;
+	public CoordinationException(String message, Coordination coordination,
+			int type, Throwable cause) {
+		super(message, cause);
+		this.type = type;
+		if (coordination == null) {
+			this.id = -1L;
+			this.name = "<>";
+		}
+		else {
+			this.id = coordination.getId();
+			this.name = coordination.getName();
+		}
+		if ((type == FAILED) && (cause == null)) {
+			throw new IllegalArgumentException(
+					"A cause must be specified for type FAILED");
+		}
+	}
 
 	/**
 	 * Create a new Coordination Exception.
 	 * 
-	 * @param message The message
-	 * @param coordination The coordination that failed
-	 * @param exception The exception
-	 * @param type The reason for the exception.
+	 * @param message The detail message for this exception.
+	 * @param coordination The Coordination associated with this exception.
+	 * @param type The type of this exception.
 	 */
 	public CoordinationException(String message, Coordination coordination,
-			int type, Throwable exception) {
+			int type) {
 		super(message);
 		this.type = type;
-		this.failure = exception;
-		this.id = coordination != null ? coordination.getId() : -1;
-		this.name = coordination != null ? coordination.getName() : "<>";
+		if (coordination == null) {
+			this.id = -1L;
+			this.name = "<>";
+		}
+		else {
+			this.id = coordination.getId();
+			this.name = coordination.getName();
+		}
+		if (type == FAILED) {
+			throw new IllegalArgumentException(
+					"A cause must be specified for type FAILED");
+		}
 	}
 
 	/**
-	 * Create a new Coordination Exception.
+	 * Returns the name of the {@link Coordination} associated with this
+	 * exception.
 	 * 
-	 * @param message The message
-	 * @param coordination The coordination that failed
-	 * @param reason The reason for the exception.
-	 */
-	public CoordinationException(String message, Coordination coordination,
-			int reason) {
-		this(message, coordination, reason, null);
-	}
-
-
-	/**
-	 * Answer the name of the Coordination associated with this exception.
-	 * 
-	 * @return the Coordination name
+	 * @return The name of the Coordination associated with this exception or
+	 *         {@code "<>"} if no Coordination is associated with this
+	 *         exception.
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * Answer the reason.
+	 * Returns the type for this exception.
 	 * 
-	 * @return the reason
+	 * @return The type of this exception.
 	 */
 	public int getType() {
 		return type;
 	}
 
 	/**
-	 * Must be set of the exception type is {@link #FAILED}.
+	 * Returns the id of the {@link Coordination} associated with this
+	 * exception.
 	 * 
-	 * @return If exception type is {@link #FAILED} a Throwable
-	 */
-	public Throwable getFailure() {
-		return failure;
-	}
-
-	/**
-	 * @return Answer the id
+	 * @return The id of the Coordination associated with this exception or
+	 *         {@code -1} if no Coordination is associated with this exception.
 	 */
 
 	public long getId() {

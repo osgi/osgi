@@ -487,7 +487,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		}
 		catch (CoordinationException e) {
 			assertEquals(CoordinationException.FAILED, e.getType());
-			assertEquals(localFailure, e.getFailure());
+			assertEquals(localFailure, e.getCause());
 		}
 
 	}
@@ -615,7 +615,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			}
 			catch (CoordinationException e) {
 				assertEquals(CoordinationException.FAILED, e.getType());
-				assertTrue(e.getFailure().getClass() == IllegalArgumentException.class);
+				assertTrue(e.getCause().getClass() == IllegalArgumentException.class);
 			}
 		}
 	}
@@ -1050,7 +1050,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		t1.join();
 		assertNotNull(exception.get());
 		assertEquals(CoordinationException.FAILED, exception.get().getType());
-		assertEquals(Coordination.TIMEOUT, exception.get().getFailure());
+		assertEquals(Coordination.TIMEOUT, exception.get().getCause());
 
 		// Check if we block correctly
 		final AtomicReference<Throwable> throwable = new AtomicReference<Throwable>();
@@ -1190,8 +1190,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			catch (CoordinationException e) {
 				assertEquals("Must be FAILED", e.getType(),
 						CoordinationException.FAILED);
-				assertEquals("And our original failure", failure, e
-						.getFailure());
+				assertEquals("And our original failure", failure, e.getCause());
 			}
 		}
 	}
@@ -1236,8 +1235,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 				assertEquals(cc.getId(), e.getId());
 				assertEquals("Must be FAILED", e.getType(),
 						CoordinationException.FAILED);
-				assertEquals("And our original failure", failure1, e
-						.getFailure());
+				assertEquals("And our original failure", failure1, e.getCause());
 			}
 		}
 
@@ -1322,7 +1320,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 				assertEquals("except a failed ", CoordinationException.FAILED,
 						ce.getType());
 				assertEquals("except a timeout exception ",
-						Coordination.TIMEOUT, ce.getFailure());
+						Coordination.TIMEOUT, ce.getCause());
 			}
 		}
 

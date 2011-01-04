@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,24 @@
  */
 package org.osgi.impl.service.coordinator;
 
-import java.util.*;
-import java.util.Map.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import org.osgi.framework.*;
-import org.osgi.service.coordinator.*;
-import org.osgi.service.log.*;
+import org.osgi.framework.ServiceException;
+import org.osgi.service.coordinator.Coordination;
+import org.osgi.service.coordinator.CoordinationException;
+import org.osgi.service.coordinator.CoordinationPermission;
+import org.osgi.service.coordinator.Participant;
+import org.osgi.service.log.LogService;
 
 /**
  *
@@ -50,7 +60,7 @@ public class CoordinationImpl implements Coordination {
 	volatile boolean	terminated	= false;
 	volatile Thread		stackThread;
 
-	CoordinationImpl(CoordinatorImpl coordinator, String name, int timeout) {
+	CoordinationImpl(CoordinatorImpl coordinator, String name, long timeout) {
 		this.coordinator = coordinator;
 		this.name = name;
 		this.id = counter.incrementAndGet();

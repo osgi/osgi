@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,27 @@
  */
 package org.osgi.impl.service.coordinator;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.WeakHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.osgi.framework.*;
-import org.osgi.service.component.*;
-import org.osgi.service.coordinator.*;
-import org.osgi.service.log.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceException;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.coordinator.Coordination;
+import org.osgi.service.coordinator.CoordinationException;
+import org.osgi.service.coordinator.CoordinationPermission;
+import org.osgi.service.coordinator.Coordinator;
+import org.osgi.service.coordinator.Participant;
+import org.osgi.service.log.LogService;
 
-import aQute.bnd.annotation.component.*;
+import aQute.bnd.annotation.component.Activate;
+import aQute.bnd.annotation.component.Component;
+import aQute.bnd.annotation.component.Deactivate;
+import aQute.bnd.annotation.component.Reference;
 
 /**
  *
@@ -79,14 +91,14 @@ public class CoordinatorImpl implements Coordinator {
 		// }
 	}
 
-	public CoordinationImpl create(String name, int t) {
+	public CoordinationImpl create(String name, long t) {
 		check(CoordinationPermission.INITIATE);
 		CoordinationImpl c = new CoordinationImpl(this, name, t);
 		coordinations.add(c);
 		return c;
 	}
 
-	public Coordination begin(String name, int timeoutInMillis) {
+	public Coordination begin(String name, long timeoutInMillis) {
 		CoordinationImpl c = create(name, timeoutInMillis);
 		push(c);
 		return c;

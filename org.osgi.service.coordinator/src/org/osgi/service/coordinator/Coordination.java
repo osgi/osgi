@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,144 +15,235 @@
  */
 package org.osgi.service.coordinator;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A Coordination object is used to coordinate a number of independent
- * participants. Once a Coordination is created (through
- * {@link Coordinator#begin(String, int)} or
- * {@link Coordinator#create(String, int)}, it can be used to add Participant
- * objects. When the Coordination is ended, the participants are called back on
- * the {@link Participant#ended(Coordination)} method. A Coordination can also
- * fail for various reasons, in that case the participants are informed of this
- * failure by calling their {@link Participant#failed(Coordination)} method.
+ * Participants.
  * 
- * A Coordination is in two states, either ACTIVE or TERMINATED. The transition
- * between this state must be atomic, ensuring that a participant can be
- * guaranteed of a callback or exception when registering.
+ * <p>
+ * Once a Coordination is {@link Coordinator#create(String, long) created}, it
+ * can be used to add {@link Participant} objects. When the Coordination is
+ * ended, the participants are {@link Participant#ended(Coordination) notified}.
+ * A Coordination can also fail for various reasons. When this occurs, the
+ * participants are {@link Participant#failed(Coordination) notified} of the
+ * failure.
  * 
+ * <p>
+ * A Coordination must be in one of two states, either ACTIVE or TERMINATED. The
+ * transition between ACTIVE and TERMINATED must be atomic, ensuring that a
+ * Participant can be guaranteed of either receiving an exception when adding
+ * itself to a Coordination or of receiving notification the Coordination has
+ * terminated.
+ * 
+ * <p>
  * A Coordination object is thread safe and can be passed as a parameter to
  * other parties regardless of the threads these parties use.
  * 
+ * <p>
+ * The following example code shows how a Coordination can be used.
+ * 
+ * <pre>
+ * void foo() {
+ * 	Coordination c = coordinator.create(&quot;work&quot;, 0);
+ * 	try {
+ * 		doWork(c);
+ * 	}
+ * 	catch (Exception e) {
+ * 		c.fail(e);
+ * 	}
+ * 	finally {
+ * 		c.end();
+ * 	}
+ * }
+ * </pre>
+ * 
  * @ThreadSafe
+ * @noimplement
+ * @version $Id$
  */
 
 public interface Coordination {
 
 	/**
-	 * The TIMEOUT exception is a singleton exception that will the reason for
-	 * the failure when the Coordination times out.
+	 * A singleton exception that will be the failure cause when a Coordination
+	 * times out.
 	 */
-	Exception	TIMEOUT	= new Exception(
-								"COORDINATION SINGLETON TIMEOUT EXCEPTION");
+	Exception	TIMEOUT	= new Exception("TIMEOUT");
 
 	/**
-	 * A system assigned ID unique for a specific registered Coordinator. This
-	 * id must not be reused as long as the Coordinator is registered and must
-	 * be monotonically increasing for each Coordination and always be positive.
+	 * A singleton exception that will be the failure cause when the
+	 * Coordinations created by a bundle are terminated because the bundle
+	 * released the Coordinator service.
+	 */
+	Exception	RELEASED	= new Exception("RELEASED");
+
+	/**
+	 * Returns the id assigned to this Coordination.
 	 * 
-	 * @return an id
+	 * The id is assigned by the {@link Coordinator} service which created this
+	 * Coordination and is unique among all the Coordinations created by the
+	 * Coordinator service and must not be reused as long as the Coordinator
+	 * service remains registered. The id must be positive and monotonically
+	 * increases for each Coordination created by the Coordinator service.
+	 * 
+	 * @return The id assigned to this Coordination.
 	 */
 	long getId();
 
 	/**
-	 * Return the name of this Coordination.
+	 * Returns the name of this Coordination.
 	 * 
-	 * The name is given in the {@link Coordinator#begin(String,int)} or
-	 * {@link Coordinator#create(String,int)} method. The name should follow the
-	 * same naming pattern as a Bundle Symbolc Name.
+	 * The name is specified when this Coordination was created.
 	 * 
-	 * @return the name of this Coordination
+	 * @return The name of this Coordination.
 	 * 
 	 */
 	String getName();
 
 	/**
-	 * Fail this Coordination.
+	 * Terminate this Coordination normally.
 	 * 
-	 * If this Coordination is not terminated, fail it and call the
-	 * {@link Participant#failed(Coordination)} method on all participant on the
-	 * current thread. Participants must assume that the Coordination failed and
-	 * should discard and cleanup any work that was processed during this
-	 * Coordination. The {@link #fail(Throwable)} method will return {@code
-	 * true} if it caused the termination.
+	 * <p>
+	 * If this Coordination is already terminated, a CoordinationException is
+	 * thrown. If this Coordination was terminated as a failure, the
+	 * {@link #getFailure() failure cause} will be the cause of the thrown
+	 * CoordinationException.
 	 * 
-	 * A fail method must return silently when the Coordination has already
-	 * finished and return {@code false}.
+	 * <p>
+	 * Otherwise, this Coordination is terminated normally. If this Coordination
+	 * has been {@link #push() pushed} on a thread local Coordination stack then
+	 * it must be removed from that stack during termination.
 	 * 
-	 * The fail method must terminate the current Coordination before any of the
-	 * failed methods are called. That is, the
-	 * {@link Participant#failed(Coordination)} methods must be running outside
-	 * the current coordination, adding participants during this phase will
-	 * cause a Configuration Exception to be thrown.
+	 * <p>
+	 * After this Coordination is terminated, all registered
+	 * {@link #getParticipants() Participants} are
+	 * {@link Participant#ended(Coordination) notified} using the current
+	 * thread. Participants should finalize any work associated with this
+	 * Coordination. The successful return of this method indicates that the
+	 * Coordination has terminated normally and all registered Participants have
+	 * been notified of the normal termination.
 	 * 
-	 * If the Coordination is pushed on the Coordinator stack it is associated
-	 * with a specific thread.
+	 * <p>
+	 * It is possible that one of the Participants throws an exception during
+	 * notification. If this happens, this Coordination is considered to have
+	 * partially failed and this method must throw a CoordinationException of
+	 * type {@link CoordinationException#PARTIALLY_ENDED} after all the
+	 * registered Participants have been notified.
 	 * 
-	 * @param reason The reason of the failure, must not be {@code null}
-	 * @return {@code true} if the Coordination was active and this coordination
-	 *         was terminated due to this call, otherwise {@code false}
+	 * @throws CoordinationException If this Coordination has failed, including
+	 *         timed out, or partially failed.
 	 */
-	boolean fail(Throwable reason);
+	void end();
 
 	/**
-	 * End the current Coordination.
+	 * Terminate this Coordination as a failure with the specified failure
+	 * cause.
 	 * 
-	 * <pre>
-	 * void foo() throws CoordinationException {
-	 * 	Coordination c = coordinator.begin(&quot;work&quot;, 0);
-	 * 	try {
-	 * 		doWork();
-	 * 	}
-	 * 	catch (Exception e) {
-	 * 		c.fail(e);
-	 * 	}
-	 * 	finally {
-	 * 		c.end();
-	 * 	}
-	 * }
-	 * </pre>
+	 * <p>
+	 * If this Coordination is already {@link #isTerminated() terminated}, this
+	 * method does nothing and returns {@code false}.
 	 * 
-	 * If the coordination was terminated this method throws a Configuration
-	 * Exception.
+	 * <p>
+	 * Otherwise, this Coordination is terminated as a failure with the
+	 * specified failure cause. If this Coordination has been {@link #push()
+	 * pushed} on a thread local Coordination stack then it must be removed from
+	 * that stack during termination.
 	 * 
-	 * Otherwise, any participants will be called on their
-	 * {@link Participant#ended(Coordination)} method. A successful return of
-	 * this {@link #end()} method indicates that the Coordination has properly
-	 * terminated and any participants have been informed of the positive
-	 * outcome.
+	 * <p>
+	 * After this Coordination is terminated, all registered
+	 * {@link #getParticipants() Participants} are
+	 * {@link Participant#failed(Coordination) notified} using the current
+	 * thread. Participants should discard any work associated with this
+	 * Coordination. This method will return {@code true}.
 	 * 
-	 * It is possible that one of the participants throws an exception during
-	 * the callback. If this happens, the coordination fails partially and this
-	 * is reported with an exception.
-	 * 
-	 * This method must terminate the current Coordination before any of the
-	 * {@link Participant#ended(Coordination)} methods are called. That is, the
-	 * {@link Participant#ended(Coordination)} methods must be running outside
-	 * the current coordination, no participants can be added during the
-	 * termination phase.
-	 * 
-	 * If the Coordination is on a thread local stack then it must be removed
-	 * from this stack during termination.
-	 * 
-	 * @throws CoordinationException when the Coordination has (partially)
-	 *         failed or timed out.
-	 *         <ol>
-	 *         <li>{@link CoordinationException#PARTIALLY_ENDED}</li>
-	 *         <li>{@link CoordinationException#ALREADY_ENDED}</li>
-	 *         <li>{@link CoordinationException#FAILED}</li>
-	 *         <li>{@link CoordinationException#UNKNOWN}</li>
-	 *         </ol>
+	 * @param cause The failure cause. The failure cause must not be
+	 *        {@code null} .
+	 * @return {@code true} if this Coordination was active and was terminated
+	 *         by this method, otherwise {@code false}.
+	 * @throws NullPointerException If cause is {@code null}.
 	 */
-	void end() throws CoordinationException;
+	boolean fail(Throwable cause);
 
 	/**
-	 * Return a mutable snapshot of the participants that joined the Coordination. Each
-	 * unique Participant object as defined by its identity occurs only once in
-	 * this list.
+	 * Returns the failure cause of this Coordination.
 	 * 
-	 * @return list of participants.
+	 * <p>
+	 * If this Coordination is {@link #isTerminated() terminated} with a
+	 * {@link #fail(Throwable) failure cause}, this method will return the
+	 * failure cause.
 	 * 
+	 * <p>
+	 * If this Coordination timed out, this method will return {@link #TIMEOUT}
+	 * as the failure cause.
+	 * 
+	 * @return The failure cause of this Coordination or {@code null} if this
+	 *         Coordination has not terminated as a failure.
+	 */
+	Throwable getFailure();
+
+	/**
+	 * Returns whether this Coordination is terminated.
+	 * 
+	 * @return {@code true} if this Coordination is terminated, otherwise
+	 *         {@code false} if this Coordination is active.
+	 */
+	boolean isTerminated();
+
+	/**
+	 * Register a Participant with this Coordination.
+	 * 
+	 * <p>
+	 * Once a Participant is registered with this Coordination, it is guaranteed
+	 * to receive a notification for either
+	 * {@link Participant#ended(Coordination) normal} or
+	 * {@link Participant#failed(Coordination) failure} termination when this
+	 * Coordination is terminated.
+	 * 
+	 * <p>
+	 * Participants are registered using their object identity. Once a
+	 * Participant is registered with this Coordination, subsequent attempts to
+	 * register the Participant again with this Coordination are ignored and the
+	 * Participant is only notified once when this Coordination is terminated.
+	 * 
+	 * <p>
+	 * A Participant can only be registered with a single active Coordination at
+	 * a time. If a Participant is already registered with an active
+	 * Coordination, attempts to register the Participation with another active
+	 * Coordination will block until the Coordination the Participant is
+	 * registered with terminates. Notice that in edge cases the notification to
+	 * the Participant that this Coordination has terminated can happen before
+	 * this method returns.
+	 * 
+	 * <p>
+	 * Attempting to register a Participant with a {@link #isTerminated()
+	 * terminated} Coordination will result in a CoordinationException being
+	 * thrown.
+	 * 
+	 * <p>
+	 * The ordering of notifying Participants must follow the order in which the
+	 * Participants were registered.
+	 * 
+	 * @param participant The Participant to register with this Coordination.
+	 * @throws CoordinationException If the Participant could not be registered
+	 *         with this Coordination. This exception should normally not be
+	 *         caught by the caller but allowed to be caught by the initiator of
+	 *         this Coordination.
+	 * @throws SecurityException This method requires the
+	 *         {@link CoordinationPermission#PARTICIPATE} action for the current
+	 *         Coordination, if any.
+	 */
+	void addParticipant(Participant participant);
+
+	/**
+	 * Returns a snapshot of the Participants registered with this Coordination.
+	 * 
+	 * @return A snapshot of the Participants registered with this Coordination.
+	 *         If no Participants are registered with this Coordination, the
+	 *         returned list will be empty. The list is ordered in the order the
+	 *         Participants were registered. The returned list is the property
+	 *         of the caller and can be modified by the caller.
 	 * @throws SecurityException This method requires the
 	 *         {@link CoordinationPermission#ADMIN} action for the
 	 *         {@link CoordinationPermission}.
@@ -160,131 +251,72 @@ public interface Coordination {
 	List<Participant> getParticipants();
 
 	/**
-	 * If the coordination has failed because {@link #fail(Throwable)} was
-	 * called then this method can provide the Throwable that was given as
-	 * argument to the {@link #fail(Throwable)} method. A timeout on this
-	 * Coordination will set the failure to a TimeoutException.
+	 * Returns the variable map associated with this Coordination.
 	 * 
-	 * @return a Throwable if this Coordination has failed, otherwise {code
-	 *         null} if no failure occurred.
-	 */
-	Throwable getFailure();
-
-	/**
-	 * Add a Participant to this Coordination.
+	 * Each Coordination has a map that can be used for communicating between
+	 * different Participants. The key of the map is a class, allowing for
+	 * private data to be stored in the map by using implementation classes or
+	 * shared data by using shared interfaces.
 	 * 
-	 * Once a Participant is participating it is guaranteed to receive a call
-	 * back on either the {@link Participant#ended(Coordination)} or
-	 * {@link Participant#failed(Coordination)} method when the Coordination is
-	 * terminated.
+	 * The returned map is not synchronized. Users of the map must synchronize
+	 * on the Map object while making changes.
 	 * 
-	 * A participant can be added to the Coordination multiple times but it must
-	 * only be called back once when the Coordination is terminated. A
-	 * Participant can only participate at a single Coordination, if it attempts
-	 * to block at another Coordination, then it will block until prior
-	 * Coordinations are finished. Notice that in edge cases the call back can
-	 * happen before this method returns.
-	 * 
-	 * The ordering of the call-backs must follow the order of participation. If
-	 * participant is participating multiple times the first time it
-	 * participates defines this order.
-	 * 
-	 * @param participant The participant of the Coordination
-	 * @throws CoordinationException This exception should normally not be
-	 *         caught by the caller but allowed to bubble up to the initiator of
-	 *         the coordination, it is therefore a {@link RuntimeException}. It
-	 *         signals that this participant could not participate the current
-	 *         coordination. This can be cause by the following reasons:
-	 *         <ol>
-	 *         <li>{@link CoordinationException#DEADLOCK_DETECTED} - Tried to
-	 *         lock the participant but it was already locked on another
-	 *         Configuration on the same thread</li>
-	 *         <li>{@link CoordinationException#ALREADY_ENDED} - The
-	 *         Coordination has already ended</li>
-	 *         <li>{@link CoordinationException#LOCK_INTERRUPTED} - The
-	 *         current thread was interrupted while waiting for the lock</li>
-	 *         <li>{@link CoordinationException#FAILED} - The Coordination has
-	 *         failed</li>
-	 *         <li>{@link CoordinationException#UNKNOWN}</li>
-	 *         </ol>
-	 * @throws SecurityException This method requires the
-	 *         {@link CoordinationPermission#PARTICIPATE} action for the current
-	 *         Coordination, if any.
-	 */
-	void addParticipant(Participant participant) throws CoordinationException;
-
-	/**
-	 * A utility map associated with the current Coordination.
-	 * 
-	 * Each coordination carries a map that can be used for communicating
-	 * between different participants. To namespace of the map is a class,
-	 * allowing for private date to be stored in the map by using implementation
-	 * classes or shared data by interfaces. 
-	 * 
-	 * The returned map is does not have to not synchronized. Users of this
-	 * map must synchronize on the Map object while making changes.
-	 * 
-	 * @return The potentially unsynchronized map
+	 * @return The variable map associated with this Coordination.
 	 */
 	Map<Class< ? >, Object> getVariables();
 
 	/**
-	 * Extend the time out. Allows participants to extend the timeout of the
-	 * coordination with at least the given amount. This can be done by
-	 * participants when they know a task will take more than normal time.
+	 * Extend the time out of this Coordination.
 	 * 
-	 * This method returns the new deadline. Passing 0 will return the existing
-	 * deadline.
+	 * <p>
+	 * Participants can call this method to extend the timeout of this
+	 * Coordination with at least the specified time. This can be done by
+	 * Participants when they know a task will take more than normal time.
 	 * 
-	 * @param timeInMillis Add this timeout to the current timeout. If the
-	 *        current timeout was set to 0, no extension must take place. A zero
-	 *        or negative value must have no effect.
-	 * @return the new deadline in the format of
-	 *         {@link System#currentTimeMillis()} or 0 if no timeout was set.
-	 * @throws CoordinationException Can throw
-	 *         <ol>
-	 *         <li>{@link CoordinationException#ALREADY_ENDED}</li>
-	 *         <li>{@link CoordinationException#FAILED}</li>
-	 *         <li>{@link CoordinationException#UNKNOWN}</li>
-	 *         </ol>
+	 * This method returns the new deadline. Specifying a timeout extension of 0
+	 * will return the existing deadline.
+	 * 
+	 * @param timeMillis The time in milliseconds to extend the current timeout.
+	 *        If the initial timeout was specified as 0, no extension must take
+	 *        place. A zero must have no effect.
+	 * @return The new deadline in the format of
+	 *         {@code System.currentTimeMillis()} or 0 if the initial timeout
+	 *         was specified as 0.
+	 * @throws CoordinationException If this Coordination
+	 *         {@link #isTerminated() is terminated}.
+	 * @throws IllegalArgumentException If the specified time is negative.
 	 */
-
-	long extendTimeout(long timeInMillis) throws CoordinationException;
+	long extendTimeout(long timeMillis);
 
 	/**
-	 * @return true if this Coordination is terminated otherwise false
+	 * Wait until this Coordination is terminated and all registered
+	 * Participants have been notified.
+	 * 
+	 * @param timeMillis Maximum time in milliseconds to wait. Specifying a time
+	 *        of 0 will wait until this Coordination is terminated.
+	 * @throws InterruptedException If the wait is interrupted.
+	 * @throws IllegalArgumentException If the specified time is negative.
 	 */
-	boolean isTerminated();
+
+	void join(long timeMillis) throws InterruptedException;
 
 	/**
-	 * Answer the associated thread or {@code null}.
+	 * Push this Coordination object onto the thread local Coordination stack to
+	 * make it the {@link Coordinator#peek() current Coordination}.
 	 * 
-	 * @return Associated thread or {@code null}
+	 * @return This Coordination.
+	 * @throws CoordinationException If this Coordination is already on the any
+	 *         thread's thread local Coordination stack.
+	 */
+	Coordination push();
+
+	/**
+	 * Returns the thread in whose thread local Coordination stack this
+	 * Coordination has been pushed.
+	 * 
+	 * @return The thread in whose thread local Coordination stack this
+	 *         Coordination has been pushed or {@code null} if this Coordination
+	 *         is not in any thread's thread local Coordination stack.
 	 */
 	Thread getThread();
-
-	/**
-	 * Wait until the Coordination is terminated and all Participant objects
-	 * have been called.
-	 * 
-	 * @param timeoutInMillis Maximum time to wait, 0 is forever
-	 * @throws InterruptedException If the wait is interrupted
-	 */
-
-	void join(long timeoutInMillis) throws InterruptedException;
-
-	/**
-	 * Associate the given Coordination object with a thread local stack of its
-	 * Coordinator. The top of the thread local stack is returned with the
-	 * {@link Coordinator#peek()} method. To remove the Coordination from the
-	 * top call {@link Coordinator#pop()}.
-	 * 
-	 * @return this (for the builder pattern purpose)
-	 * @throws CoordinationException Can throw the
-	 *         <ol>
-	 *         <li>{@link CoordinationException#ALREADY_PUSHED}</li>
-	 *         <li>{@link CoordinationException#UNKNOWN}</li>
-	 *         </ol>
-	 */
-	Coordination push() throws CoordinationException;
 }
