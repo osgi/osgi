@@ -2,6 +2,7 @@ package org.osgi.test.cases.coordinator.junit;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.coordinator.Coordination;
+import org.osgi.service.coordinator.CoordinationException;
 import org.osgi.service.coordinator.Coordinator;
 import org.osgi.test.support.OSGiTestCase;
 
@@ -56,6 +57,32 @@ public class IAENegativeTimeoutTest extends OSGiTestCase {
 		}
 		finally {
 			c.end();
+		}
+		assertIllegalArgumentException(iae);
+	}
+	
+	/**
+	 * Joining a coordination.
+	 */
+	public void testCoordinationJoin() {
+		IllegalArgumentException iae = null;
+		Coordination c = coordinator.create("c", 2000);
+		try {
+			c.join(-100);
+		}
+		catch (IllegalArgumentException e) {
+			iae = e;
+		}
+		catch (InterruptedException e) {
+			// Fail.
+		}
+		finally {
+			try {
+				c.end();
+			}
+			catch (CoordinationException e) {
+				// Will occur if no IAE is thrown and coordination timed out. Fail.
+			}
 		}
 		assertIllegalArgumentException(iae);
 	}
