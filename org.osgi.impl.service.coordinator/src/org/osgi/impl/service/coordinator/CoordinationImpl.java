@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceException;
 import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.CoordinationException;
@@ -302,6 +303,10 @@ public class CoordinationImpl implements Coordination {
 	public Coordination push() throws CoordinationException {
 		coordinator.push(this);
 		return this;
+	}
+
+	public Bundle getBundle() {
+		return coordinator.bundle;
 	}
 
 }
