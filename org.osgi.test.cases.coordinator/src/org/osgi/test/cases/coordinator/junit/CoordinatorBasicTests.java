@@ -31,7 +31,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.CoordinationException;
@@ -321,8 +320,11 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 
 		// Check their coordinations are properly terminated
 		assertTrue(ccThem1.isTerminated());
-		ServiceException se = (ServiceException) ccThem1.getFailure();
-		assertTrue(se.getType() == ServiceException.UNREGISTERED);
+		// Coordinations that are failed due to a bundle releasing the
+		// Coordinator service must have Coordination.RELEASED as the failure
+		// cause.
+		Exception e = (Exception)ccThem1.getFailure();
+		assertTrue("The failure cause should have been Coordination.RELEASED", e == Coordination.RELEASED);
 
 		assertTrue(ccThem2.isTerminated());
 
