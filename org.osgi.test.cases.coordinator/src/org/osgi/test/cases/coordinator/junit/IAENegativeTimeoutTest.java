@@ -63,8 +63,10 @@ public class IAENegativeTimeoutTest extends OSGiTestCase {
 	
 	/**
 	 * Joining a coordination.
+	 * 
+	 * @throws InterruptedException
 	 */
-	public void testCoordinationJoin() {
+	public void testCoordinationJoin() throws InterruptedException {
 		IllegalArgumentException iae = null;
 		Coordination c = coordinator.create("c", 2000);
 		try {
@@ -73,16 +75,8 @@ public class IAENegativeTimeoutTest extends OSGiTestCase {
 		catch (IllegalArgumentException e) {
 			iae = e;
 		}
-		catch (InterruptedException e) {
-			// Fail.
-		}
 		finally {
-			try {
-				c.end();
-			}
-			catch (CoordinationException e) {
-				// Will occur if no IAE is thrown and coordination timed out. Fail.
-			}
+			c.fail(new Exception());
 		}
 		assertIllegalArgumentException(iae);
 	}
