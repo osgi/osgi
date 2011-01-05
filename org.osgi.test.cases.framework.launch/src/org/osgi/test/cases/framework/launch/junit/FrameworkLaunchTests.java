@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -405,19 +405,23 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	public void testStorageArea() throws BundleException, IOException {
-		String testBundleLocation = "/launch.tb1.jar";
+		String testBundleLocation = "/launch.tb4.jar";
 		// install a bundle into a framework
 		Framework framework = createFramework(getConfiguration(getName()));
 		initFramework(framework);
-		long id = installBundle(framework, testBundleLocation).getBundleId();
+		Bundle testBundle = installBundle(framework, testBundleLocation);
+		long id = testBundle.getBundleId();
+		testBundle.start();
 		stopFramework(framework);
 
-		// create another framework with same storage area; make sure bundle is still installed
+		// create another framework with same storage area; make sure bundle is still installed and active
 		framework = createFramework(getConfiguration(getName(), false));
 		initFramework(framework);
-		Bundle testBundle = framework.getBundleContext().getBundle(id);
+		testBundle = framework.getBundleContext().getBundle(id);
 		assertNotNull("Missing installed bundle", testBundle);
 		assertEquals("Wrong bundle", testBundleLocation, testBundle.getLocation());
+		startFramework(framework);
+		assertEquals("Wrong state for test bundle.", Bundle.ACTIVE, testBundle.getState());
 		stopFramework(framework);
 
 		// create another framework with same storage area using clean ONFIRSTINIT; make sure bundle is not there
@@ -428,7 +432,9 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		Bundle[] bundles = framework.getBundleContext().getBundles();
 		assertNotNull("No bundles", bundles);
 		assertEquals("Wrong number of bundles", 1, bundles.length);
-		id = installBundle(framework, testBundleLocation).getBundleId();
+		testBundle = installBundle(framework, testBundleLocation);
+		id = testBundle.getBundleId();
+		testBundle.start();
 		stopFramework(framework);
 		
 		// test that second init does not clean
@@ -436,6 +442,15 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		testBundle = framework.getBundleContext().getBundle(id);
 		assertNotNull("Missing installed bundle", testBundle);
 		assertEquals("Wrong bundle", testBundleLocation, testBundle.getLocation());
+		startFramework(framework);
+		assertEquals("Wrong state for test bundle.", Bundle.ACTIVE, testBundle.getState());
+
+		// update the framework and make sure the bundle is still installed and active
+		updateFramework(framework);
+		testBundle = framework.getBundleContext().getBundle(id);
+		assertNotNull("Missing installed bundle", testBundle);
+		assertEquals("Wrong bundle", testBundleLocation, testBundle.getLocation());
+		assertEquals("Wrong state for test bundle.", Bundle.ACTIVE, testBundle.getState());
 		stopFramework(framework);
 	}
 
