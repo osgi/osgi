@@ -207,13 +207,14 @@ public interface Coordinator {
 	 * Participant on the current Coordination and returns {@code true}.
 	 * 
 	 * @param participant The Participant to register with the current
-	 *        Coordination.
+	 *        Coordination. The participant must not be {@code null}.
 	 * @return {@code false} if there was no current Coordination, otherwise
 	 *         returns {@code true}.
 	 * @throws CoordinationException If the Participant could not be registered
 	 *         with the current Coordination. This exception should normally not
 	 *         be caught by the caller but allowed to be caught by the initiator
 	 *         of this Coordination.
+	 * @throws NullPointerException If participant is {@code null}.
 	 * @throws SecurityException This method requires the
 	 *         {@link CoordinationPermission#PARTICIPATE} action for the current
 	 *         Coordination, if any.

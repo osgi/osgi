@@ -159,7 +159,7 @@ public interface Coordination {
 	 * Coordination. This method will return {@code true}.
 	 * 
 	 * @param cause The failure cause. The failure cause must not be
-	 *        {@code null} .
+	 *        {@code null}.
 	 * @return {@code true} if this Coordination was active and was terminated
 	 *         by this method, otherwise {@code false}.
 	 * @throws NullPointerException If cause is {@code null}.
@@ -176,7 +176,9 @@ public interface Coordination {
 	 * 
 	 * <p>
 	 * If this Coordination timed out, this method will return {@link #TIMEOUT}
-	 * as the failure cause.
+	 * as the failure cause. If this Coordination was active when the bundle
+	 * that created it released the {@link Coordinator} service, this method
+	 * will return {@link #RELEASED} as the failure cause.
 	 * 
 	 * @return The failure cause of this Coordination or {@code null} if this
 	 *         Coordination has not terminated as a failure.
@@ -226,10 +228,12 @@ public interface Coordination {
 	 * Participants were registered.
 	 * 
 	 * @param participant The Participant to register with this Coordination.
+	 *        The participant must not be {@code null}.
 	 * @throws CoordinationException If the Participant could not be registered
 	 *         with this Coordination. This exception should normally not be
 	 *         caught by the caller but allowed to be caught by the initiator of
 	 *         this Coordination.
+	 * @throws NullPointerException If participant is {@code null}.
 	 * @throws SecurityException This method requires the
 	 *         {@link CoordinationPermission#PARTICIPATE} action for the current
 	 *         Coordination, if any.
@@ -279,9 +283,10 @@ public interface Coordination {
 	 * @param timeMillis The time in milliseconds to extend the current timeout.
 	 *        If the initial timeout was specified as 0, no extension must take
 	 *        place. A zero must have no effect.
-	 * @return The new deadline in the format of
-	 *         {@code System.currentTimeMillis()} or 0 if the initial timeout
-	 *         was specified as 0.
+	 * @return The new deadline in milliseconds. If the specified time is 0, the
+	 *         existing deadline is returned. If this Coordination was created
+	 *         with an initial timeout of 0, no timeout is set and 0 is
+	 *         returned.
 	 * @throws CoordinationException If this Coordination
 	 *         {@link #isTerminated() is terminated}.
 	 * @throws IllegalArgumentException If the specified time is negative.
@@ -312,7 +317,7 @@ public interface Coordination {
 
 	/**
 	 * Returns the thread in whose thread local Coordination stack this
-	 * Coordination has been pushed.
+	 * Coordination has been {@link #push() pushed}.
 	 * 
 	 * @return The thread in whose thread local Coordination stack this
 	 *         Coordination has been pushed or {@code null} if this Coordination

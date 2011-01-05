@@ -26,8 +26,8 @@ public class CoordinationException extends RuntimeException {
 	/**
 	 * Unknown reason for this exception.
 	 */
-
 	public final static int		UNKNOWN				= 0;
+
 	/**
 	 * Registering a Participant with a Coordination would have resulted in a
 	 * deadlock.
