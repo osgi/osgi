@@ -44,7 +44,6 @@ package org.osgi.service.coordinator;
  * Coordination has terminated can happen before the registration method
  * returns.
  * 
- * 
  * @ThreadSafe
  * @version $Id$
  */

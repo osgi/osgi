@@ -18,6 +18,8 @@ package org.osgi.service.coordinator;
 import java.util.List;
 import java.util.Map;
 
+import org.osgi.framework.Bundle;
+
 /**
  * A Coordination object is used to coordinate a number of independent
  * Participants.
@@ -42,7 +44,7 @@ import java.util.Map;
  * other parties regardless of the threads these parties use.
  * 
  * <p>
- * The following example code shows how a Coordination can be used.
+ * The following example code shows how a Coordination should be used.
  * 
  * <pre>
  * void foo() {
@@ -106,24 +108,46 @@ public interface Coordination {
 	 * Terminate this Coordination normally.
 	 * 
 	 * <p>
+	 * If this Coordination has been {@link #push() pushed} on the thread local
+	 * Coordination stack of another thread, this method does nothing except
+	 * throw a CoordinationException of type
+	 * {@link CoordinationException#WRONG_THREAD}.
+	 * 
+	 * <p>
+	 * If this Coordination has been {@link #push() pushed} on the thread local
+	 * Coordination stack of this thread but is not the
+	 * {@link Coordinator#peek() current Coordination}, then the Coordinations
+	 * on the thread local Coordination stack above this Coordination must be
+	 * terminated and removed from the thread local Coordination stack before
+	 * this Coordination is terminated. Each of these Coordinations, starting
+	 * with the current Coordination, will be {@link #end() terminated normally}
+	 * . If the termination throws a {@link CoordinationException}, then the
+	 * next Coordination on the thread local Coordination stack will be
+	 * {@link #fail(Throwable) terminated as a failure} with a failure cause of
+	 * the thrown CoordinatorException. At the end of this process, this
+	 * Coordination will be the current Coordination and will have been
+	 * terminated as a failure if any of the terminated Coordinations threw a
+	 * CoordinationException
+	 * 
+	 * <p>
+	 * If this Coordination is the {@link Coordinator#peek() current
+	 * Coordination}, then it will be {@link Coordinator#pop() removed} from the
+	 * thread local Coordination stack.
+	 * 
+	 * <p>
 	 * If this Coordination is already terminated, a CoordinationException is
 	 * thrown. If this Coordination was terminated as a failure, the
 	 * {@link #getFailure() failure cause} will be the cause of the thrown
 	 * CoordinationException.
 	 * 
 	 * <p>
-	 * Otherwise, this Coordination is terminated normally. If this Coordination
-	 * has been {@link #push() pushed} on a thread local Coordination stack then
-	 * it must be removed from that stack during termination.
-	 * 
-	 * <p>
-	 * After this Coordination is terminated, all registered
-	 * {@link #getParticipants() Participants} are
-	 * {@link Participant#ended(Coordination) notified} using the current
-	 * thread. Participants should finalize any work associated with this
-	 * Coordination. The successful return of this method indicates that the
-	 * Coordination has terminated normally and all registered Participants have
-	 * been notified of the normal termination.
+	 * Otherwise, this Coordination is terminated normally and then all
+	 * registered {@link #getParticipants() Participants} are
+	 * {@link Participant#ended(Coordination) notified}. Participants should
+	 * finalize any work associated with this Coordination. The successful
+	 * return of this method indicates that the Coordination has terminated
+	 * normally and all registered Participants have been notified of the normal
+	 * termination.
 	 * 
 	 * <p>
 	 * It is possible that one of the Participants throws an exception during
@@ -133,7 +157,8 @@ public interface Coordination {
 	 * registered Participants have been notified.
 	 * 
 	 * @throws CoordinationException If this Coordination has failed, including
-	 *         timed out, or partially failed.
+	 *         timed out, or partially failed or this Coordination is on the
+	 *         thread local Coordination stack of another thread.
 	 */
 	void end();
 
@@ -147,16 +172,11 @@ public interface Coordination {
 	 * 
 	 * <p>
 	 * Otherwise, this Coordination is terminated as a failure with the
-	 * specified failure cause. If this Coordination has been {@link #push()
-	 * pushed} on a thread local Coordination stack then it must be removed from
-	 * that stack during termination.
-	 * 
-	 * <p>
-	 * After this Coordination is terminated, all registered
+	 * specified failure cause and then all registered
 	 * {@link #getParticipants() Participants} are
-	 * {@link Participant#failed(Coordination) notified} using the current
-	 * thread. Participants should discard any work associated with this
-	 * Coordination. This method will return {@code true}.
+	 * {@link Participant#failed(Coordination) notified}. Participants should
+	 * discard any work associated with this Coordination. This method will
+	 * return {@code true}.
 	 * 
 	 * @param cause The failure cause. The failure cause must not be
 	 *        {@code null}.
@@ -311,7 +331,8 @@ public interface Coordination {
 	 * 
 	 * @return This Coordination.
 	 * @throws CoordinationException If this Coordination is already on the any
-	 *         thread's thread local Coordination stack.
+	 *         thread's thread local Coordination stack or this Coordination
+	 *         {@link #isTerminated() is terminated}.
 	 */
 	Coordination push();
 
@@ -321,7 +342,16 @@ public interface Coordination {
 	 * 
 	 * @return The thread in whose thread local Coordination stack this
 	 *         Coordination has been pushed or {@code null} if this Coordination
-	 *         is not in any thread's thread local Coordination stack.
+	 *         is not in any thread local Coordination stack.
 	 */
 	Thread getThread();
+
+	/**
+	 * Returns the bundle that created this Coordination. This is the bundle
+	 * that obtained the {@link Coordinator} service that was used to create
+	 * this Coordination.
+	 * 
+	 * @return The bundle that created this Coordination.
+	 */
+	Bundle getBundle();
 }

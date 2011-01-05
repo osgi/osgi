@@ -63,6 +63,12 @@ public class CoordinationException extends RuntimeException {
 	 */
 	public final static int		LOCK_INTERRUPTED	= 6;
 
+	/**
+	 * The Coordination cannot be ended by the calling thread since the
+	 * Coordination is on the thread local Coordination stack of another thread.
+	 */
+	public final static int		WRONG_THREAD		= 7;
+
 	private final String		name;
 	private final int			type;
 	private final long			id;

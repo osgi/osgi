@@ -41,7 +41,7 @@ import java.util.Collection;
  * termination of the Coordination.
  * 
  * <p>
- * The following example code shows a typical usage of the Coordinator service.
+ * The following example code shows a example usage of the Coordinator service.
  * 
  * <pre>
  * void foo() {
@@ -159,7 +159,7 @@ public interface Coordinator {
 	 * The current Coordination is the Coordination at the top of the thread
 	 * local Coordination stack. If the thread local Coordination stack is
 	 * empty, there is no current Coordination. Each Coordinator service
-	 * maintains thread local Coordination stacks.
+	 * maintains its own thread local Coordination stacks.
 	 * 
 	 * <p>
 	 * This method alters the thread local Coordination stack, if it is not
@@ -228,7 +228,7 @@ public interface Coordinator {
 	 * <p>
 	 * Since Coordinations can be terminated at any time, Coordinations in the
 	 * returned collection can be terminated before the caller examines the
-	 * collection.
+	 * returned collection.
 	 * 
 	 * <p>
 	 * The returned collection must only contain the Coordinations for which the
@@ -247,7 +247,8 @@ public interface Coordinator {
 	 * @param id The id of the requested Coordination.
 	 * @return A Coordination having with specified id or {@code null} if no
 	 *         Coordination with the specified id exists or the Coordination
-	 *         with the specified id was terminated before this call.
+	 *         with the specified id is {@link Coordination#isTerminated()
+	 *         terminated}.
 	 * @throws SecurityException if the caller has no
 	 *         {@link CoordinationPermission#ADMIN} for the requested
 	 *         Coordination.
