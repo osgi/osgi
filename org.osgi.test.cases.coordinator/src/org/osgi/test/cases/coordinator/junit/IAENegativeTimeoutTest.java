@@ -2,7 +2,6 @@ package org.osgi.test.cases.coordinator.junit;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.coordinator.Coordination;
-import org.osgi.service.coordinator.CoordinationException;
 import org.osgi.service.coordinator.Coordinator;
 import org.osgi.test.support.OSGiTestCase;
 
