@@ -634,6 +634,45 @@ public class BundleHookTests extends OSGiTestCase {
 		}
 	}
 
+	public void testFindHookInstall() {
+		final BundleContext testContext = getContext();
+		Bundle testBundle = null;
+		try {
+			testBundle = install("hooks.tb1.jar");
+		} catch (Exception e) {
+			fail("Failed to install bundle.", e);
+		}
+		assertEquals("Wrong bundle found", testBundles[0], testBundle);
+
+		// register services
+		Hashtable<String, String> props = new Hashtable<String, String>();
+		props.put("name", getName());
+		// register find hook 1
+		ServiceRegistration<FindHook> regHook1 = testContext.registerService(
+				FindHook.class, new FindHook() {
+					public void find(BundleContext context,
+							Collection<Bundle> bundles) {
+						bundles.removeAll(Arrays.asList(testBundles));
+					}
+				}, props);
+		try {
+			try {
+				install("hooks.tb1.jar");
+				fail("expected to fail bundle install.");
+			} catch (BundleException e) {
+				// expected; check for correct type
+				assertEquals("Wrong exception type", BundleException.REJECTED_BY_HOOK, e.getType());
+			} catch (IOException e) {
+				fail("Failed to install bundle.", e);
+			}
+		} finally {
+			// unregister hooks
+			if (regHook1 != null)
+				regHook1.unregister();
+
+		}
+	}
+
 	public void testEventHook01() {
 		final BundleContext testContext = getContext();
 
