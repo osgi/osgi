@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,7 +89,7 @@ import org.osgi.framework.wiring.FrameworkWiring;
  *
  *         The shrinkable collection <b>{@code C}</b> now contains all the capabilities that may be used to 
  *         satisfy the requirement <b>{@code T}</b>.  Any other capabilities that got removed from the 
- *         shrinkable collection <b>{@code C}</b> must not be used to satisfy requirement <b>{@code T}</b>.</li>
+ *         shrinkable collection <b>{@code C}</b> must not be used to satisfy requirement <b>{@code T}</b>.
  *       </p>
  *  </li>
  *  <li> For each resolver hook call the {@link #end()} method to inform the hooks about a resolve 
