@@ -165,15 +165,11 @@ public interface BundleContext extends BundleReference {
 	 *        stream must always be closed when this method completes, even if
 	 *        an exception is thrown.
 	 * @return The {@code Bundle} object of the installed bundle.
-	 * @throws BundleException If the input stream cannot be read or the
-	 *         installation failed.
-	 *         <ul>
-	 *         <li>{@link BundleException#READ_ERROR} - The install or update operation failed because another already installed bundle has the same symbolic name and version. This exception type will only occur if the framework is configured to only allow a single bundle to be installed for a given symbolic name and version.</li>
-	 *         <li>{@link BundleException#DUPLICATE_BUNDLE_ERROR} - The install or update operation failed because another already installed bundle has the same symbolic name and version. This exception type will only occur if the framework is configured to only allow a single bundle to be installed for a given symbolic name and version.</li>
-	 *         <li>{@link BundleException#MANIFEST_ERROR} - The manifest was not valid</li>
-	 *         <li>{@link BundleException#SECURITY_ERROR} - The operation failed due to insufficient permissions.</li>
-	 *         <li>{@link BundleException#UNSPECIFIED} - Unspecified error</li>
-	 *         </ul>
+	 * @throws BundleException If the installation failed. BundleException types
+	 *         thrown by this method include: {@link BundleException#READ_ERROR}
+	 *         , {@link BundleException#DUPLICATE_BUNDLE_ERROR},
+	 *         {@link BundleException#MANIFEST_ERROR}, and
+	 *         {@link BundleException#REJECTED_BY_HOOK}.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[installed bundle,LIFECYCLE]}, and the Java
 	 *         Runtime Environment supports permissions.
@@ -192,14 +188,11 @@ public interface BundleContext extends BundleReference {
 	 * 
 	 * @param location The location identifier of the bundle to install.
 	 * @return The {@code Bundle} object of the installed bundle.
-	 * @throws BundleException If the installation failed.
-	 *         <ul>
-	 *         <li>{@link BundleException#READ_ERROR} - The install or update operation failed because another already installed bundle has the same symbolic name and version. This exception type will only occur if the framework is configured to only allow a single bundle to be installed for a given symbolic name and version.</li>
-	 *         <li>{@link BundleException#DUPLICATE_BUNDLE_ERROR} - The install or update operation failed because another already installed bundle has the same symbolic name and version. This exception type will only occur if the framework is configured to only allow a single bundle to be installed for a given symbolic name and version.</li>
-	 *         <li>{@link BundleException#MANIFEST_ERROR} - The manifest was not valid</li>
-	 *         <li>{@link BundleException#SECURITY_ERROR} - The operation failed due to insufficient permissions.</li>
-	 *         <li>{@link BundleException#UNSPECIFIED} - Unspecified error</li>
-	 *         </ul>
+	 * @throws BundleException If the installation failed. BundleException types
+	 *         thrown by this method include: {@link BundleException#READ_ERROR}
+	 *         , {@link BundleException#DUPLICATE_BUNDLE_ERROR},
+	 *         {@link BundleException#MANIFEST_ERROR}, and
+	 *         {@link BundleException#REJECTED_BY_HOOK}.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[installed bundle,LIFECYCLE]}, and the Java
 	 *         Runtime Environment supports permissions.

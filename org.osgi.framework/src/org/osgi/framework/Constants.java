@@ -1493,7 +1493,7 @@ public interface Constants {
 	 * provider that these intents are already implemented by the exported
 	 * service object.</li>
 	 * <li>A distribution provider must use this property to convey the combined
-	 * intents of: The exporting service, and the intents that the exporting
+	 * intents of: the exporting service, the intents that the exporting
 	 * distribution provider adds, and the intents that the importing
 	 * distribution provider adds.</li>
 	 * </ul>
@@ -1502,6 +1502,7 @@ public interface Constants {
 	 * intents. Both the exporting and importing distribution providers must
 	 * recognize all intents before a service can be distributed.
 	 * 
+	 * <p>
 	 * The value of this property must be of type {@code String},
 	 * {@code String[]}, or {@code Collection} of {@code String}.
 	 * 

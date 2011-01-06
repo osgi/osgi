@@ -244,8 +244,9 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <p>
 	 * A bundle can be in only one state at any time.
 	 * 
-	 * @return An element of {@code UNINSTALLED},{@code INSTALLED}, {@code
-	 *         RESOLVED},{@code STARTING}, {@code STOPPING},{@code ACTIVE}.
+	 * @return An element of {@code UNINSTALLED},{@code INSTALLED},
+	 *         {@code RESOLVED}, {@code STARTING}, {@code STOPPING},
+	 *         {@code ACTIVE}.
 	 */
 	int getState();
 
@@ -253,15 +254,15 @@ public interface Bundle extends Comparable<Bundle> {
 	 * Starts this bundle.
 	 * 
 	 * <p>
-	 * If this bundle's state is {@code UNINSTALLED} then an {@code
-	 * IllegalStateException} is thrown.
+	 * If this bundle's state is {@code UNINSTALLED} then an
+	 * {@code IllegalStateException} is thrown.
 	 * <p>
 	 * If the Framework implements the optional Start Level service and the
 	 * current start level is less than this bundle's start level:
 	 * <ul>
-	 * <li>If the {@link #START_TRANSIENT} option is set, then a {@code
-	 * BundleException} is thrown indicating this bundle cannot be started due
-	 * to the Framework's current start level.
+	 * <li>If the {@link #START_TRANSIENT} option is set, then a
+	 * {@code BundleException} is thrown indicating this bundle cannot be
+	 * started due to the Framework's current start level.
 	 * 
 	 * <li>Otherwise, the Framework must set this bundle's persistent autostart
 	 * setting to <em>Started with declared activation</em> if the
@@ -276,9 +277,9 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <ol>
 	 * <li>If this bundle is in the process of being activated or deactivated
 	 * then this method must wait for activation or deactivation to complete
-	 * before continuing. If this does not occur in a reasonable time, a {@code
-	 * BundleException} is thrown to indicate this bundle was unable to be
-	 * started.
+	 * before continuing. If this does not occur in a reasonable time, a
+	 * {@code BundleException} is thrown to indicate this bundle was unable to
+	 * be started.
 	 * 
 	 * <li>If this bundle's state is {@code ACTIVE} then this method returns
 	 * immediately.
@@ -310,9 +311,9 @@ public interface Bundle extends Comparable<Bundle> {
 	 * 
 	 * <li>A bundle event of type {@link BundleEvent#STARTING} is fired.
 	 * 
-	 * <li>The {@link BundleActivator#start} method of this bundle's {@code
-	 * BundleActivator}, if one is specified, is called. If the {@code
-	 * BundleActivator} is invalid or throws an exception then:
+	 * <li>The {@link BundleActivator#start} method of this bundle's
+	 * {@code BundleActivator}, if one is specified, is called. If the
+	 * {@code BundleActivator} is invalid or throws an exception then:
 	 * <ul>
 	 * <li>This bundle's state is set to {@code STOPPING}.
 	 * <li>A bundle event of type {@link BundleEvent#STOPPING} is fired.
@@ -336,8 +337,8 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <b>Preconditions </b>
 	 * <ul>
 	 * <li>{@code getState()} in &#x007B; {@code INSTALLED}, {@code RESOLVED}
-	 * &#x007D; or &#x007B; {@code INSTALLED}, {@code RESOLVED}, {@code
-	 * STARTING} &#x007D; if this bundle has a lazy activation policy.
+	 * &#x007D; or &#x007B; {@code INSTALLED}, {@code RESOLVED},
+	 * {@code STARTING} &#x007D; if this bundle has a lazy activation policy.
 	 * </ul>
 	 * <b>Postconditions, no exceptions thrown </b>
 	 * <ul>
@@ -359,26 +360,13 @@ public interface Bundle extends Comparable<Bundle> {
 	 * @param options The options for starting this bundle. See
 	 *        {@link #START_TRANSIENT} and {@link #START_ACTIVATION_POLICY}. The
 	 *        Framework must ignore unrecognized options.
-	 * @throws BundleException If this bundle could not be started, the
-	 *         following exception types can happen:
-	 *         <ol>
-	 *         <li>{@link BundleException#START_TRANSIENT_ERROR} - The start
-	 *         transient operation failed because the start level of the bundle
-	 *         is greater than the current framework start level</li> <li>
-	 *         {@link BundleException#UNSUPPORTED_OPERATION} - This type of
-	 *         bundle cannot be started, for example a fragment</li> <li>
-	 *         {@link BundleException#MANIFEST_ERROR} - The manifest was not
-	 *         valid</li> <li>{@link BundleException#NATIVECODE_ERROR} - Native
-	 *         code in the bundle could not be resolved</li> <li>
-	 *         {@link BundleException#RESOLVE_ERROR} - The bundle could not be
-	 *         resolved</li> <li>{@link BundleException#STATECHANGE_ERROR} - The
-	 *         bundle could not be moved to the ACTIVE state because this would
-	 *         cause an invalid transition</li> <li>
-	 *         {@link BundleException#ACTIVATOR_ERROR} - The activator failed to
-	 *         activate</li> <li>{@link BundleException#SECURITY_ERROR} - The
-	 *         operation failed due to insufficient permissions.</li> <li>
-	 *         {@link BundleException#UNSPECIFIED} - Unspecified error</li>
-	 *         </ol>
+	 * @throws BundleException If this bundle could not be started.
+	 *         BundleException types thrown by this method include:
+	 *         {@link BundleException#START_TRANSIENT_ERROR},
+	 *         {@link BundleException#NATIVECODE_ERROR},
+	 *         {@link BundleException#RESOLVE_ERROR},
+	 *         {@link BundleException#STATECHANGE_ERROR}, and
+	 *         {@link BundleException#ACTIVATOR_ERROR}.
 	 * @throws IllegalStateException If this bundle has been uninstalled or this
 	 *         bundle tries to change its own state.
 	 * @throws SecurityException If the caller does not have the appropriate
@@ -394,23 +382,12 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <p>
 	 * This method performs the same function as calling {@code start(0)}.
 	 * 
-	 * @throws BundleException If this bundle could not be started, the
-	 *         following exception types can happen:
-	 *         <ul>
-	 *         <li>{@link BundleException#UNSUPPORTED_OPERATION} - This type of
-	 *         bundle cannot be started, for example a fragment</li> <li>
-	 *         {@link BundleException#MANIFEST_ERROR} - The manifest was not
-	 *         valid</li> <li>{@link BundleException#NATIVECODE_ERROR} - Native
-	 *         code in the bundle could not be resolved</li> <li>
-	 *         {@link BundleException#RESOLVE_ERROR} - The bundle could not be
-	 *         resolved</li> <li>{@link BundleException#STATECHANGE_ERROR} - The
-	 *         bundle could not be moved to the ACTIVE state because this would
-	 *         cause an invalid transition</li> <li>
-	 *         {@link BundleException#ACTIVATOR_ERROR} - The activator failed to
-	 *         activate</li> <li>{@link BundleException#SECURITY_ERROR} - The
-	 *         operation failed due to insufficient permissions.</li> <li>
-	 *         {@link BundleException#UNSPECIFIED} - Unspecified error</li>
-	 *         </ul>
+	 * @throws BundleException If this bundle could not be started.
+	 *         BundleException types thrown by this method include:
+	 *         {@link BundleException#NATIVECODE_ERROR},
+	 *         {@link BundleException#RESOLVE_ERROR},
+	 *         {@link BundleException#STATECHANGE_ERROR}, and
+	 *         {@link BundleException#ACTIVATOR_ERROR}.
 	 * @throws IllegalStateException If this bundle has been uninstalled or this
 	 *         bundle tries to change its own state.
 	 * @throws SecurityException If the caller does not have the appropriate
@@ -426,14 +403,14 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <p>
 	 * The following steps are required to stop a bundle:
 	 * <ol>
-	 * <li>If this bundle's state is {@code UNINSTALLED} then an {@code
-	 * IllegalStateException} is thrown.
+	 * <li>If this bundle's state is {@code UNINSTALLED} then an
+	 * {@code IllegalStateException} is thrown.
 	 * 
 	 * <li>If this bundle is in the process of being activated or deactivated
 	 * then this method must wait for activation or deactivation to complete
-	 * before continuing. If this does not occur in a reasonable time, a {@code
-	 * BundleException} is thrown to indicate this bundle was unable to be
-	 * stopped.
+	 * before continuing. If this does not occur in a reasonable time, a
+	 * {@code BundleException} is thrown to indicate this bundle was unable to
+	 * be stopped.
 	 * <li>If the {@link #STOP_TRANSIENT} option is not set then then set this
 	 * bundle's persistent autostart setting to to <em>Stopped</em>. When the
 	 * Framework is restarted and this bundle's autostart setting is
@@ -488,18 +465,9 @@ public interface Bundle extends Comparable<Bundle> {
 	 * @param options The options for stopping this bundle. See
 	 *        {@link #STOP_TRANSIENT}. The Framework must ignore unrecognized
 	 *        options.
-	 * @throws BundleException The following types are defined:
-	 *         <ul>
-	 *         <li>{@link BundleException#UNSUPPORTED_OPERATION} - This type of
-	 *         bundle cannot be stopped, for example a fragment</li> <li>
-	 *         {@link BundleException#STATECHANGE_ERROR} - The bundle could not
-	 *         be moved to the ACTIVE state because this would cause an invalid
-	 *         transition</li> <li>{@link BundleException#ACTIVATOR_ERROR} - The
-	 *         activator failed to deactivate</li> <li>
-	 *         {@link BundleException#SECURITY_ERROR} - The operation failed due
-	 *         to insufficient permissions.</li> <li>
-	 *         {@link BundleException#UNSPECIFIED} - Unspecified error</li>
-	 *         </ul>
+	 * @throws BundleException BundleException types thrown by this method
+	 *         include: {@link BundleException#STATECHANGE_ERROR} and
+	 *         {@link BundleException#ACTIVATOR_ERROR}.
 	 * @throws IllegalStateException If this bundle has been uninstalled or this
 	 *         bundle tries to change its own state.
 	 * @throws SecurityException If the caller does not have the appropriate
@@ -515,18 +483,9 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <p>
 	 * This method performs the same function as calling {@code stop(0)}.
 	 * 
-	 * @throws BundleException The following types are defined:
-	 *         <ul>
-	 *         <li>{@link BundleException#UNSUPPORTED_OPERATION} - This type of
-	 *         bundle cannot be stopped, for example a fragment</li> <li>
-	 *         {@link BundleException#STATECHANGE_ERROR} - The bundle could not
-	 *         be moved to the ACTIVE state because this would cause an invalid
-	 *         transition</li> <li>{@link BundleException#ACTIVATOR_ERROR} - The
-	 *         activator failed to deactivate</li> <li>
-	 *         {@link BundleException#SECURITY_ERROR} - The operation failed due
-	 *         to insufficient permissions.</li> <li>
-	 *         {@link BundleException#UNSPECIFIED} - Unspecified error</li>
-	 *         </ul>
+	 * @throws BundleException BundleException types thrown by this method
+	 *         include: {@link BundleException#STATECHANGE_ERROR} and
+	 *         {@link BundleException#ACTIVATOR_ERROR}.
 	 * @throws IllegalStateException If this bundle has been uninstalled or this
 	 *         bundle tries to change its own state.
 	 * @throws SecurityException If the caller does not have the appropriate
@@ -552,20 +511,20 @@ public interface Bundle extends Comparable<Bundle> {
 	 * 
 	 * <p>
 	 * If this bundle has exported any packages that are imported by another
-	 * bundle, these packages must remain exported until the {@code
-	 * PackageAdmin.refreshPackages} method has been has been called or the
-	 * Framework is relaunched.
+	 * bundle, these packages must remain exported until the
+	 * {@code PackageAdmin.refreshPackages} method has been has been called or
+	 * the Framework is relaunched.
 	 * 
 	 * <p>
 	 * The following steps are required to update a bundle:
 	 * <ol>
-	 * <li>If this bundle's state is {@code UNINSTALLED} then an {@code
-	 * IllegalStateException} is thrown.
+	 * <li>If this bundle's state is {@code UNINSTALLED} then an
+	 * {@code IllegalStateException} is thrown.
 	 * 
-	 * <li>If this bundle's state is {@code ACTIVE}, {@code STARTING} or {@code
-	 * STOPPING}, this bundle is stopped as described in the {@code Bundle.stop}
-	 * method. If {@code Bundle.stop} throws an exception, the exception is
-	 * rethrown terminating the update.
+	 * <li>If this bundle's state is {@code ACTIVE}, {@code STARTING} or
+	 * {@code STOPPING}, this bundle is stopped as described in the
+	 * {@code Bundle.stop} method. If {@code Bundle.stop} throws an exception,
+	 * the exception is rethrown terminating the update.
 	 * 
 	 * <li>The updated version of this bundle is read from the input stream and
 	 * installed. If the Framework is unable to install the updated version of
@@ -607,8 +566,15 @@ public interface Bundle extends Comparable<Bundle> {
 	 *        Bundle-UpdateLocation} Manifest header, if present, or this
 	 *        bundle's original location. The input stream must always be closed
 	 *        when this method completes, even if an exception is thrown.
-	 * @throws BundleException If the input stream cannot be read or the update
-	 *         fails.
+	 * @throws BundleException If this bundle could not be updated.
+	 *         BundleException types thrown by this method include:
+	 *         {@link BundleException#READ_ERROR},
+	 *         {@link BundleException#DUPLICATE_BUNDLE_ERROR},
+	 *         {@link BundleException#MANIFEST_ERROR},
+	 *         {@link BundleException#NATIVECODE_ERROR},
+	 *         {@link BundleException#RESOLVE_ERROR},
+	 *         {@link BundleException#STATECHANGE_ERROR}, and
+	 *         {@link BundleException#ACTIVATOR_ERROR}.
 	 * @throws IllegalStateException If this bundle has been uninstalled or this
 	 *         bundle tries to change its own state.
 	 * @throws SecurityException If the caller does not have the appropriate
@@ -627,31 +593,15 @@ public interface Bundle extends Comparable<Bundle> {
 	 * This method performs the same function as calling
 	 * {@link #update(InputStream)} with a {@code null} InputStream.
 	 * 
-	 * @throws BundleException If this bundle could not be updated, the
-	 *         following exception types can happen:
-	 *         <ul>
-	 *         <li>{@link BundleException#UNSUPPORTED_OPERATION} - This type of
-	 *         bundle cannot be started, for example a fragment<li>
-	 *         {@link BundleException#DUPLICATE_BUNDLE_ERROR} - The install or
-	 *         update operation failed because another already installed bundle
-	 *         has the same symbolic name and version. This exception type will
-	 *         only occur if the framework is configured to only allow a single
-	 *         bundle to be installed for a given symbolic name and version. 
-	 *         <li>{@link BundleException#START_TRANSIENT_ERROR} - The start
-	 *         transient operation failed because the start level of the bundle
-	 *         is greater than the current framework start level<li>
-	 *         {@link BundleException#MANIFEST_ERROR} - The manifest was not
-	 *         valid<li>{@link BundleException#NATIVECODE_ERROR} - Native code
-	 *         in the bundle could not be resolved</li> <li>
-	 *         {@link BundleException#RESOLVE_ERROR} - The bundle could not be
-	 *         resolved</li> <li>{@link BundleException#STATECHANGE_ERROR} - The
-	 *         bundle could not be moved to the ACTIVE state because this would
-	 *         cause an invalid transition</li> <li>
-	 *         {@link BundleException#ACTIVATOR_ERROR} - The activator failed to
-	 *         activate</li> <li>{@link BundleException#SECURITY_ERROR} - The
-	 *         operation failed due to insufficient permissions.</li> <li>
-	 *         {@link BundleException#UNSPECIFIED} - Unspecified error</li>
-	 *         </ul>
+	 * @throws BundleException If this bundle could not be updated.
+	 *         BundleException types thrown by this method include:
+	 *         {@link BundleException#READ_ERROR},
+	 *         {@link BundleException#DUPLICATE_BUNDLE_ERROR},
+	 *         {@link BundleException#MANIFEST_ERROR},
+	 *         {@link BundleException#NATIVECODE_ERROR},
+	 *         {@link BundleException#RESOLVE_ERROR},
+	 *         {@link BundleException#STATECHANGE_ERROR}, and
+	 *         {@link BundleException#ACTIVATOR_ERROR}.
 	 * @throws IllegalStateException If this bundle has been uninstalled or this
 	 *         bundle tries to change its own state.
 	 * @throws SecurityException If the caller does not have the appropriate
@@ -667,9 +617,9 @@ public interface Bundle extends Comparable<Bundle> {
 	 * 
 	 * <p>
 	 * This method causes the Framework to notify other bundles that this bundle
-	 * is being uninstalled, and then puts this bundle into the {@code
-	 * UNINSTALLED} state. The Framework must remove any resources related to
-	 * this bundle that it is able to remove.
+	 * is being uninstalled, and then puts this bundle into the
+	 * {@code UNINSTALLED} state. The Framework must remove any resources
+	 * related to this bundle that it is able to remove.
 	 * 
 	 * <p>
 	 * If this bundle has exported any packages, the Framework must continue to
@@ -680,13 +630,14 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <p>
 	 * The following steps are required to uninstall a bundle:
 	 * <ol>
-	 * <li>If this bundle's state is {@code UNINSTALLED} then an {@code
-	 * IllegalStateException} is thrown.
+	 * <li>If this bundle's state is {@code UNINSTALLED} then an
+	 * {@code IllegalStateException} is thrown.
 	 * 
-	 * <li>If this bundle's state is {@code ACTIVE}, {@code STARTING} or {@code
-	 * STOPPING}, this bundle is stopped as described in the {@code Bundle.stop}
-	 * method. If {@code Bundle.stop} throws an exception, a Framework event of
-	 * type {@link FrameworkEvent#ERROR} is fired containing the exception.
+	 * <li>If this bundle's state is {@code ACTIVE}, {@code STARTING} or
+	 * {@code STOPPING}, this bundle is stopped as described in the
+	 * {@code Bundle.stop} method. If {@code Bundle.stop} throws an exception, a
+	 * Framework event of type {@link FrameworkEvent#ERROR} is fired containing
+	 * the exception.
 	 * 
 	 * <li>This bundle's state is set to {@code UNINSTALLED}.
 	 * 
@@ -713,15 +664,9 @@ public interface Bundle extends Comparable<Bundle> {
 	 * 
 	 * @throws BundleException If the uninstall failed. This can occur if
 	 *         another thread is attempting to change this bundle's state and
-	 *         does not complete in a timely manner.
-	 *         <ul>
-	 *         <li>{@link BundleException#STATECHANGE_ERROR} - The bundle could
-	 *         not be moved to the ACTIVE state because this would cause an
-	 *         invalid transition</li> <li>
-	 *         {@link BundleException#SECURITY_ERROR} - The operation failed due
-	 *         to insufficient permissions.</li> <li>
-	 *         {@link BundleException#UNSPECIFIED} - Unspecified error</li>
-	 *         </ul>
+	 *         does not complete in a timely manner. BundleException types
+	 *         thrown by this method include:
+	 *         {@link BundleException#STATECHANGE_ERROR}
 	 * @throws IllegalStateException If this bundle has been uninstalled or this
 	 *         bundle tries to change its own state.
 	 * @throws SecurityException If the caller does not have the appropriate
