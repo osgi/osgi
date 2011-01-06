@@ -192,9 +192,9 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		Coordination c4 = c.begin("stack-4", 0);
 
 		c2.end();
-
-		assertEquals(c4, c.pop());
-		assertEquals(c3, c.pop());
+		assertTrue(c3.isTerminated());
+		assertTrue(c4.isTerminated());
+		
 		assertEquals(c1, c.pop());
 
 		try {
@@ -751,8 +751,8 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		cl.removeAll(c.getCoordinations());
 		assertTrue(cl.isEmpty());
 
-		c1.end();
 		c2.end();
+		c1.end();
 		c4.end();
 		assertEquals(0, c.getCoordinations().size());
 		assertEquals(4, initial.size());

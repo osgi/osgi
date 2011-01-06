@@ -50,6 +50,19 @@ public abstract class CoordinatorTest extends OSGiTestCase {
 	}
 	
 	/**
+	 * Ensures the provided Coordination ends normally.
+	 * @param c The Coordination to end.
+	 */
+	protected void assertEnd(Coordination c) {
+		try {
+			c.end();
+		}
+		catch (CoordinationException e) {
+			fail("A CoordinationException should not have occurred.");
+		}
+	}
+	
+	/**
 	 * Ensures the provided Coordination does not end successfully and that the
 	 * resulting CoordinationException is of the expected type and has the
 	 * expected cause.
@@ -78,11 +91,29 @@ public abstract class CoordinatorTest extends OSGiTestCase {
 	}
 	
 	/**
+	 * Ensures the provided Coordination is not terminated.
+	 * @param c The Coordination that should not be terminated.
+	 */
+	protected void assertNotTerminated(Coordination c) {
+		assertFalse("The coordination should not be terminated.", c.isTerminated());
+	}
+	
+	
+	/**
 	 * Ensures the provided Coordination is terminated.
 	 * @param c The Coordination that should be terminated.
 	 */
 	protected void assertTerminated(Coordination c) {
 		assertTrue("The coordination must be terminated.", c.isTerminated());
+	}
+	
+	/**
+	 * Ensures the provided Coordination terminated normally.
+	 * @param c The Coordination to inspect.
+	 */
+	protected void assertTerminatedNormally(Coordination c) {
+		assertTerminated(c);
+		assertFailure(c, null);
 	}
 	
 	protected void setUp() throws Exception {
