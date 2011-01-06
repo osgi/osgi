@@ -130,6 +130,13 @@ public class BundleException extends Exception {
 	public static final int	READ_ERROR				= 11;
 
 	/**
+	 * A framework hook rejected the operation.
+	 * 
+	 * @since 1.6
+	 */
+	public static final int	REJECTED_BY_HOOK		= 12;
+
+	/**
 	 * Creates a {@code BundleException} with the specified message and
 	 * exception cause.
 	 * 
