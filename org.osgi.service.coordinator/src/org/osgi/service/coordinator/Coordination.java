@@ -124,7 +124,7 @@ public interface Coordination {
 	 * . If the termination throws a {@link CoordinationException}, then the
 	 * next Coordination on the thread local Coordination stack will be
 	 * {@link #fail(Throwable) terminated as a failure} with a failure cause of
-	 * the thrown CoordinatorException. At the end of this process, this
+	 * the thrown CoordinationException. At the end of this process, this
 	 * Coordination will be the current Coordination and will have been
 	 * terminated as a failure if any of the terminated Coordinations threw a
 	 * CoordinationException
