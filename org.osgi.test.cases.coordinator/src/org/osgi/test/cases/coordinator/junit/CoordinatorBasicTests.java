@@ -191,7 +191,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		Coordination c3 = c.begin("stack-3", 0);
 		Coordination c4 = c.begin("stack-4", 0);
 
-		c2.fail(new Exception());
+		c2.end();
 
 		assertEquals(c4, c.pop());
 		assertEquals(c3, c.pop());
@@ -202,7 +202,7 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 			fail("must throw an exception");
 		}
 		catch (CoordinationException e) {
-			assertEquals(CoordinationException.FAILED, e.getType());
+			assertEquals(CoordinationException.ALREADY_ENDED, e.getType());
 		}
 
 		cc = c.begin("pushed", 0);
@@ -1366,6 +1366,14 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		};
 		t.open();
 		return t.waitForService(1000);
+	}
+	
+	protected void setUp() throws Exception {
+		// Clean up any coordinations that may be lingering on the thread local
+		// stack from previous tests.
+		Bundle bundle = getContext().getServiceReference(Coordinator.class.getName()).getBundle();
+		bundle.stop();
+		bundle.start();
 	}
 }
 
