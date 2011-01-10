@@ -1,6 +1,5 @@
 package org.osgi.test.cases.coordinator.junit;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.CoordinationException;
@@ -19,6 +18,8 @@ public abstract class CoordinatorTest extends OSGiTestCase {
 	 * The Coordinator service reference.
 	 */
 	protected ServiceReference coordinatorReference;
+	
+	private Coordination peeked;
 	
 	/**
 	 * Ensures the provided Coordination is at the top of the current thread's
@@ -214,16 +215,15 @@ public abstract class CoordinatorTest extends OSGiTestCase {
 	}
 	
 	protected void setUp() throws Exception {
-		// Clean up any coordinations that may be lingering on the thread local
-		// stack from previous tests.
-		Bundle bundle = getContext().getServiceReference(Coordinator.class.getName()).getBundle();
-		bundle.stop();
-		bundle.start();
 		coordinatorReference = getContext().getServiceReference(Coordinator.class.getName());
 		coordinator = (Coordinator)getContext().getService(coordinatorReference);
+		peeked = coordinator.peek();
 	}
 	
 	protected void tearDown() throws Exception {
+		// Clean up any coordinations that might be lingering on the thread 
+		// local stack from previous tests.
+		for (Coordination c = coordinator.pop(); c != null && c != peeked; c = coordinator.pop());
 		getContext().ungetService(coordinatorReference);
 	}
 }
