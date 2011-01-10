@@ -222,8 +222,9 @@ public abstract class CoordinatorTest extends OSGiTestCase {
 	
 	protected void tearDown() throws Exception {
 		// Clean up any coordinations that might be lingering on the thread 
-		// local stack from previous tests.
-		for (Coordination c = coordinator.pop(); c != null && c != peeked; c = coordinator.pop());
+		// local stack.
+		while (coordinator.peek() != null && coordinator.peek() != peeked)
+			coordinator.pop();
 		getContext().ungetService(coordinatorReference);
 	}
 }
