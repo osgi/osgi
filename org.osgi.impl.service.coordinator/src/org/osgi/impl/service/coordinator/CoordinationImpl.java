@@ -309,4 +309,9 @@ public class CoordinationImpl implements Coordination {
 		return coordinator.bundle;
 	}
 
+	public Coordination getParentCoordination(){
+		// TODO I think we just can save the current coordination because we now
+		// always remove the previous ones anyway. John?
+		return null;
+	}
 }
