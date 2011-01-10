@@ -72,7 +72,7 @@ public interface Coordination {
 	 * A singleton exception that will be the failure cause when a Coordination
 	 * times out.
 	 */
-	Exception	TIMEOUT	= new Exception("TIMEOUT");
+	Exception	TIMEOUT		= new Exception("TIMEOUT");
 
 	/**
 	 * A singleton exception that will be the failure cause when the
@@ -178,8 +178,8 @@ public interface Coordination {
 	 * discard any work associated with this Coordination. This method will
 	 * return {@code true}.
 	 * 
-	 * @param cause The failure cause. The failure cause must not be
-	 *        {@code null}.
+	 * @param cause The failure cause. The failure cause must not be {@code
+	 *        null}.
 	 * @return {@code true} if this Coordination was active and was terminated
 	 *         by this method, otherwise {@code false}.
 	 * @throws NullPointerException If cause is {@code null}.
@@ -354,4 +354,12 @@ public interface Coordination {
 	 * @return The bundle that created this Coordination.
 	 */
 	Bundle getBundle();
+
+	/**
+	 * Returns the Coordination this Coordination is nested in or {@code null}
+	 * when it is the top Coordination.
+	 * @return The parent coordination.
+	 */
+	
+	Coordination getParentCoordination();
 }
