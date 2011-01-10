@@ -30,16 +30,52 @@ public abstract class CoordinatorTest extends OSGiTestCase {
 	}
 	
 	/**
+	 * Ensures a CoordinationException occurred.
+	 * @param t The CoordinationException that occurred.
+	 */
+	protected void assertCoordinationException(Throwable t) {
+		assertTrue("Not a CoordinationException.", t instanceof CoordinationException);
+	}
+	
+	/**
+	 * Ensures a CoordinationException occurred and has the expected cause.
+	 * @param e The CoordinationException that occurred.
+	 * @param expectedCause The expected cause of the CoordinationException.
+	 */
+	protected void assertCoordinationExceptionCause(CoordinationException e, Throwable expectedCause) {
+		assertEquals("The CoordinationException cause was incorrect", expectedCause, e.getCause());
+	}
+	
+	/**
+	 * Ensures a CoordinationException occurred and is of the expected type.
+	 * @param e The CoordinationException that occurred.
+	 * @param expectedType The expected type of CoordinationException.
+	 */
+	protected void assertCoordinationExceptionType(CoordinationException e, int expectedType) {
+		assertEquals("The CoordinationException type was incorrect.", expectedType, e.getType());
+	}
+	
+	/**
 	 * Ensures a CoordinationException occurred, is of the expected type, and
 	 * has the expected cause.
-	 * @param e The CoordinationException, if any, that occurred.
+	 * @param t The CoordinationException that occurred.
 	 * @param expectedType The expected type of CoordinationException.
 	 * @param expectedCause The expected cause of the CoordinationException.
 	 */
-	protected void assertCoordinationException(CoordinationException e, int expectedType, Throwable expectedCause) {
-		assertNotNull("A CoordinationException did not occur", e);
-		assertEquals("The CoordinationException type was incorrect.", expectedType, e.getType());
-		assertEquals("The CoordinationException cause was incorrect", expectedCause, e.getCause());
+	protected void assertCoordinationException(Throwable t, int expectedType, Throwable expectedCause) {
+		assertCoordinationException(t);
+		assertCoordinationExceptionType((CoordinationException)t, expectedType);
+		assertCoordinationExceptionCause((CoordinationException)t, expectedCause);
+	}
+	
+	/**
+	 * Ensures a CoordinationException occurred and is of the expected type.
+	 * @param t The CoordinationException that occurred.
+	 * @param expectedType The expected type of CoordinationException.
+	 */
+	protected void assertCoordinationException(Throwable t, int expectedType) {
+		assertCoordinationException(t);
+		assertCoordinationExceptionType((CoordinationException)t, expectedType);
 	}
 	
 	/**
@@ -63,21 +99,48 @@ public abstract class CoordinatorTest extends OSGiTestCase {
 	}
 	
 	/**
-	 * Ensures the provided Coordination does not end successfully and that the
-	 * resulting CoordinationException is of the expected type and has the
-	 * expected cause.
+	 * Ensures the provided Coordination does not end successfully.
 	 * @param c The Coordination to end.
-	 * @param expectedType The ecpected type of the CoordinationException.
-	 * @param expectedCause The expected cause of the CoordinationException.
+	 * @return The CoordinationException that occurred.
 	 */
-	protected void assertEndFailed(Coordination c, int expectedType, Throwable expectedCause) {
+	protected CoordinationException assertEndFailed(Coordination c) {
+		CoordinationException result = null;
 		try {
 			c.end();
 			fail("Ending the coordination must result in a CoordinationException.");
 		}
 		catch (CoordinationException e) {
-			assertCoordinationException(e, expectedType, expectedCause);
+			result = e;
 		}
+		return result;
+	}
+	
+	/**
+	 * Ensures the provided Coordination does not end successfully and that the
+	 * resulting CoordinationException is of the expected type.
+	 * @param c The Coordination to end.
+	 * @param expectedType The expected type of the CoordinationException.
+	 */
+	protected void assertEndFailed(Coordination c, int expectedType) {
+		try {
+			c.end();
+			fail("Ending the coordination must result in a CoordinationException.");
+		}
+		catch (CoordinationException e) {
+			assertEquals("The CoordinationException type was incorrect.", expectedType, e.getType());
+		}
+	}
+	
+	/**
+	 * Ensures the provided Coordination does not end successfully and that the
+	 * resulting CoordinationException is of the expected type and has the
+	 * expected cause.
+	 * @param c The Coordination to end.
+	 * @param expectedType The expected type of the CoordinationException.
+	 * @param expectedCause The expected cause of the CoordinationException.
+	 */
+	protected void assertEndFailed(Coordination c, int expectedType, Throwable expectedCause) {
+		assertCoordinationException(assertEndFailed(c), expectedType, expectedCause);
 	}
 	
 	/**
@@ -98,6 +161,14 @@ public abstract class CoordinatorTest extends OSGiTestCase {
 		assertFalse("The coordination should not be terminated.", c.isTerminated());
 	}
 	
+	/**
+	 * Ensures the Coordination's parent matches the provided one.
+	 * @param c The Coordination whose parent will be inspected.
+	 * @param expectedParent The expected parent coordination.
+	 */
+	protected void assertParentCoordination(Coordination c, Coordination expectedParent) {
+		assertEquals("The parent coordination was incorrect.", expectedParent, c.getParentCoordination());
+	}
 	
 	/**
 	 * Ensures the provided Coordination is terminated.
@@ -114,6 +185,28 @@ public abstract class CoordinatorTest extends OSGiTestCase {
 	protected void assertTerminatedNormally(Coordination c) {
 		assertTerminated(c);
 		assertFailure(c, null);
+	}
+	
+	/**
+	 * Ensures the provided Coordination is terminated and has the expected
+	 * failure.
+	 * @param c The Coordination to inspect.
+	 * @param expectedFailure The expected failure.
+	 */
+	protected void assertTerminatedFailed(Coordination c, Throwable expectedFailure) {
+		assertTerminated(c);
+		assertFailure(c, expectedFailure);
+	}
+	
+	/**
+	 * Ensures the provided Coordination is terminated and has a
+	 * CoordinationException as the failure of the expected type.
+	 * @param c The Coordination to inspect.
+	 * @param expectedType The expected type of CoordinationException.
+	 */
+	protected void assertTerminatedFailed(Coordination c, int expectedType) {
+		assertTerminated(c);
+		assertCoordinationException(c.getFailure(), expectedType);
 	}
 	
 	protected void setUp() throws Exception {
