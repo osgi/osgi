@@ -356,10 +356,21 @@ public interface Coordination {
 	Bundle getBundle();
 
 	/**
-	 * Returns the Coordination this Coordination is nested in or {@code null}
-	 * when it is the top Coordination.
-	 * @return The parent coordination.
+	 * Returns the Coordination enclosing this Coordination if this Coordination
+	 * is on the thread local Coordination stack.
+	 * 
+	 * <p>
+	 * When a Coordination is {@link #push() pushed} onto the thread local
+	 * Coordination stack, the former {@link Coordinator#peek() current
+	 * Coordination}, if any, is the enclosing Coordination of this
+	 * Coordination. When this Coordination is {@link Coordinator#pop() removed}
+	 * from the thread local Coordination stack, this Coordination no longer has
+	 * an enclosing Coordination.
+	 * 
+	 * @return The Coordination enclosing this Coordination if this Coordination
+	 *         is on the thread local Coordination stack or {@code null} if this
+	 *         Coordination is not on the thread local Coordination stack or has
+	 *         no enclosing Coordination.
 	 */
-	
-	Coordination getParentCoordination();
+	Coordination getEnclosingCoordination();
 }

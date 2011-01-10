@@ -160,14 +160,18 @@ public abstract class CoordinatorTest extends OSGiTestCase {
 	protected void assertNotTerminated(Coordination c) {
 		assertFalse("The coordination should not be terminated.", c.isTerminated());
 	}
-	
+
 	/**
-	 * Ensures the Coordination's parent matches the provided one.
-	 * @param c The Coordination whose parent will be inspected.
-	 * @param expectedParent The expected parent coordination.
+	 * Ensures the Coordination's enclosing coordination matches the provided
+	 * one.
+	 * 
+	 * @param c The Coordination whose enclosing coordination will be inspected.
+	 * @param expectedEnclosing The expected enclosing coordination.
 	 */
-	protected void assertParentCoordination(Coordination c, Coordination expectedParent) {
-		assertEquals("The parent coordination was incorrect.", expectedParent, c.getParentCoordination());
+	protected void assertEnclosingCoordination(Coordination c,
+			Coordination expectedEnclosing) {
+		assertEquals("The parent coordination was incorrect.",
+				expectedEnclosing, c.getEnclosingCoordination());
 	}
 	
 	/**

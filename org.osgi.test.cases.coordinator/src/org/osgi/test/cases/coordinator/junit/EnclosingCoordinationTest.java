@@ -23,32 +23,32 @@ import org.osgi.service.coordinator.CoordinationException;
  * applicable. A coordination's parent is the one immediately below it, if any,
  * on the thread local stack.
  */
-public class ParentCoordinationTest extends CoordinatorTest {
+public class EnclosingCoordinationTest extends CoordinatorTest {
 	/**
 	 * The basic test.
 	 */
 	public void testBasic() {
 		Coordination c1 = coordinator.begin("c1", 0);
 		// c1 is at the bottom of the stack.
-		assertParentCoordination(c1, null);
+		assertEnclosingCoordination(c1, null);
 		Coordination c2 = coordinator.begin("c2", 0);
 		// c2 is now on top of c1.
-		assertParentCoordination(c2, c1);
+		assertEnclosingCoordination(c2, c1);
 		Coordination c3 = coordinator.create("c3", 0);
 		// c3 is not on the stack.
-		assertParentCoordination(c3, null);
+		assertEnclosingCoordination(c3, null);
 		c3.push();
 		// c3 is now on top of c2 on the stack.
-		assertParentCoordination(c3, c2);
+		assertEnclosingCoordination(c3, c2);
 		coordinator.pop();
 		// c3 is now off the stack.
-		assertParentCoordination(c3, null);
+		assertEnclosingCoordination(c3, null);
 		c2.fail(new Exception());
 		// c2 is failed but still on the stack.
-		assertParentCoordination(c2, c1);
+		assertEnclosingCoordination(c2, c1);
 		assertEndFailed(c2, CoordinationException.FAILED);
 		// c2 is ended and off the stack.
-		assertParentCoordination(c2, null);
+		assertEnclosingCoordination(c2, null);
 		c1.end();
 	}
 }
