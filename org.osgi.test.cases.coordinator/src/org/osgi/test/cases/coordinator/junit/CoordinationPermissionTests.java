@@ -79,7 +79,7 @@ public class CoordinationPermissionTests extends PermissionTestCase {
 				"(coordination.name=com.foo.coord1)",
 				"PARTICIPATE  ,   initiate");
 		CoordinationPermission p13 = new CoordinationPermission(
-				"(coordination.name=com.foo.coord1)", "adMIN   ");
+				"(coordination.name=com.foo.coord1)", "ADMIN   ");
 		CoordinationPermission p14 = new CoordinationPermission(
 				"(coordination.name=com.foo.coord1)", "    Initiate    ");
 		CoordinationPermission p15 = new CoordinationPermission(
