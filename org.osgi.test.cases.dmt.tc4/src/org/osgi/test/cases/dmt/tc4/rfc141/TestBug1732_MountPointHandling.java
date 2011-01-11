@@ -146,7 +146,7 @@ public class TestBug1732_MountPointHandling extends
 	public void testPluginWithMoreDataRootURIs() throws Exception {
 		// register the mounting plugin with an additional dataRootURI
 		String additionalDataRootURI = "./X";
-		GenericDataPlugin mountingPlugin = prepareMountingPlugin( new String[]{ "B" }, false, "./X" );
+		GenericDataPlugin mountingPlugin = prepareMountingPlugin( new String[]{ "B" }, false, additionalDataRootURI );
 		
 		// check that for none of the dataRootURIs a session can be opened
 		String uri = mountingPlugin.getRootUri();

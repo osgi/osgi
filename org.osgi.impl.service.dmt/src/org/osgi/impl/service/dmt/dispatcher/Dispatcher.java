@@ -44,13 +44,15 @@ public class Dispatcher extends ServiceTracker {
 				p.init( dataRootURIs, idManager);
 				System.out.println( ">>>>>>>>>> plugin added: " + p.getOwns());
 				dumpSegments(dataPluginRoot);
+				if ( p!= null && p.getOwns() != null )
+					mapPotentialDependingDataPlugins(ref, true);
 			}
 			if ( execRootURIs != null ) {
 				p = new Plugin( ref, execPluginRoot, eaTracker, context );
 				p.init(execRootURIs, idManager);
+				if ( p!= null && p.getOwns() != null )
+					mapPotentialDependingDataPlugins(ref, false);
 			}
-			if ( p!= null && p.getOwns() != null )
-				mapPotentialDependingDataPlugins(ref);
 			return p;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -62,16 +64,23 @@ public class Dispatcher extends ServiceTracker {
 	 * checks whether there are un-mapped plugins that can be mapped to any of the newly mapped mountPoints
 	 * @param ref
 	 */
-	private synchronized void mapPotentialDependingDataPlugins( ServiceReference ref ) throws InvalidSyntaxException {
+	private synchronized void mapPotentialDependingDataPlugins( ServiceReference ref, boolean forDataPlugin) throws InvalidSyntaxException {
 		Collection<String> mountPoints = toCollection(ref.getProperty(MountPlugin.MOUNT_POINTS));
 		if ( mountPoints == null || mountPoints.size() == 0 )
 			return;
-		List<ServiceReference> mappedRefs = getMappedPluginReferences(dataPluginRoot);
+		List<ServiceReference> mappedRefs = null;
+		String filterName = DataPlugin.DATA_ROOT_URIS;
+		if ( forDataPlugin ) 
+			mappedRefs = getMappedPluginReferences(dataPluginRoot);
+		else {
+			mappedRefs = getMappedPluginReferences(execPluginRoot);
+			filterName = ExecPlugin.EXEC_ROOT_URIS;
+		}
 		
-		String dataRootUri = ((String[]) ref.getProperty(DataPlugin.DATA_ROOT_URIS))[0];
+		String rootUri = ((String[]) ref.getProperty(filterName))[0];
 		for (String mountPoint : mountPoints) {
 			// find plugins that are registered for this dataRootUri
-			String filter = "(" + DataPlugin.DATA_ROOT_URIS + "=" + dataRootUri + "/" + mountPoint + ")";
+			String filter = "(" + filterName + "=" + rootUri + "/" + mountPoint + ")";
 			ServiceReference[] refs = context.getServiceReferences(DataPlugin.class.getName(), filter);
 
 			for (int i = 0; refs != null && i < refs.length; i++) {

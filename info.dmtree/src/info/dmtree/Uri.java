@@ -58,21 +58,24 @@ public final class Uri {
 	
 	/**
 	 * This property specifies the maximum allowed length of a URI segment. 
-	 * The value can be requested at runtime via Uri.getMaxSegmentNameLength().
+	 * The corresponding string literal is "org.osgi.dmtree.max.segment.name.length".
+	 * The configured value can be requested at runtime via Uri.getMaxSegmentNameLength().
 	 */
-	public static final String MAX_SEGMENT_NAME_LENGTH = "org.osgi.dmtree.max.segment.name.length";
+	static final String MAX_SEGMENT_NAME_LENGTH = "org.osgi.dmtree.max.segment.name.length";
 	
 	/**
 	 * This property specifies the maximum allowed length of a URI. 
-	 * The value can be requested at runtime via  Uri.getMaxUriLength().
+	 * The corresponding string literal is "org.osgi.dmtree.max.uri.length".
+	 * The configured value can be requested at runtime via  Uri.getMaxUriLength().
 	 */
-	public static final String MAX_URI_LENGTH = "org.osgi.dmtree.max.uri.length";
+	static final String MAX_URI_LENGTH = "org.osgi.dmtree.max.uri.length";
 
 	/**
 	 *  This property specifies the maximum allowed number of Uri segments. 
-	 *  The value can be requested at runtime via Uri.getMaxUriSegments().
+	 * The corresponding string literal is "org.osgi.dmtree.max.uri.segments".
+	 *  The configured value can be requested at runtime via Uri.getMaxUriSegments().
 	 */
-	public static final String MAX_URI_SEGMENTS = "org.osgi.dmtree.max.uri.segments";
+	static final String MAX_URI_SEGMENTS = "org.osgi.dmtree.max.uri.segments";
 
 	
 	/*

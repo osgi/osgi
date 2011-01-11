@@ -20,8 +20,8 @@ public interface MountPlugin {
 	static final String MOUNT_POINTS = "mountPoints";
 
 	/**
-	 * Provides the <code>MountPoint</code> objects describing the path where the plugin is
-	 * mapped to the overall DMT.
+	 * Provides the <code>MountPoint</code> objects describing the path where
+	 * the plugin is mapped to the overall DMT.
 	 * 
 	 * @param mountPoints
 	 *            the newly mapped mount points
@@ -29,15 +29,16 @@ public interface MountPlugin {
 	void mountPointsAdded(MountPoint[] mountPoints);
 
 	/**
-	 * Informs the plugin that the provided <code>MountPoint</code> objects have been removed from
-	 * the mapping.
-	 * <p> 
-	 * NOTE: attempts to invoke one of the <code>postEvents</code> on the
-	 * provided <code>MountPoint</code> will be ignored.
+	 * Informs the plugin that the provided <code>MountPoint</code> objects have
+	 * been removed from the mapping.
+	 * <p>
+	 * NOTE: attempts to invoke the <code>postEvent</code> or
+	 * <code>sendEvent</code> on the provided <code>MountPoint</code> will be
+	 * ignored.
 	 * 
 	 * @param mountPoints
-	 *            array of <code>MountPoint</code> objects that have been removed from
-	 *            the mapping
+	 *            array of <code>MountPoint</code> objects that have been
+	 *            removed from the mapping
 	 */
 	void mountPointsRemoved(MountPoint[] mountPoints);
 }

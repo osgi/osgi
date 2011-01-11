@@ -162,7 +162,10 @@ public class DmtSessionImpl implements DmtSession {
         
 		// after everything is initialized, check with the plugins whether the
 		// given node really exists
-		checkNode(subtreeNode, SHOULD_EXIST);
+
+//        // session might be opened on scaffold node
+//        if ( ! isPureStructuralNode(subtreeNode))
+        	checkNode(subtreeNode, SHOULD_EXIST);
         eventStore.dispatchSessionLifecycleEvent(DmtEvent.SESSION_OPENED);
     }
     

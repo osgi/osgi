@@ -6,17 +6,23 @@ import info.dmtree.DmtSession;
 import info.dmtree.Uri;
 import info.dmtree.spi.DataPlugin;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.GenericDataPlugin;
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.Node;
-import org.osgi.test.support.OSGiTestCase;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
+/**
+ * This class tests ... TODO
+ * @author steffen
+ *
+ */
 public class TestBug1746_UriProperties extends DefaultTestBundleControl {
+
+	static final String PROP_MAX_SEGMENT_NAME_LENGTH = "org.osgi.dmtree.max.segment.name.length";
+	static final String PROP_MAX_URI_LENGTH = "org.osgi.dmtree.max.uri.length";
+	static final String PROP_MAX_URI_SEGMENTS = "org.osgi.dmtree.max.uri.segments";
 
 	static final int MAX_SEGMENT_LENGTH = 33;
 	static final int MAX_URI_LENGTH = 129;
@@ -41,15 +47,6 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 		ungetAllServices();
 	}
 
-	/**
-	 * tests existence of specified constants for String literals in
-	 * info.dmtree.Uri
-	 */
-	public void testNewUriConstants() throws Exception {
-		assertConstant("org.osgi.dmtree.max.segment.name.length", "MAX_SEGMENT_NAME_LENGTH", Uri.class);
-		assertConstant("org.osgi.dmtree.max.uri.length", "MAX_URI_LENGTH", Uri.class);
-		assertConstant("org.osgi.dmtree.max.uri.segments", "MAX_URI_SEGMENTS", Uri.class);
-	}
 
 	/**
 	 * tests whether the property values are read correctly from the system
@@ -57,19 +54,24 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 	 */
 	public void testPropertyValues() throws Exception {
 		// properties have been set via bnd-file
-		assertEquals(Uri.getMaxSegmentNameLength(), 33);
-		assertEquals(Uri.getMaxUriLength(), 129);
-		assertEquals(Uri.getMaxUriSegments(), 21);
+		assertEquals(Uri.getMaxSegmentNameLength(), MAX_SEGMENT_LENGTH);
+		assertEquals(Uri.getMaxUriLength(), MAX_URI_LENGTH);
+		assertEquals(Uri.getMaxUriSegments(), MAX_URI_SEGMENTS);
 	}
 
 	/**
 	 * tests the correct handling of the system property
 	 * "org.osgi.dmtree.max.segment.name.length"
 	 * 
+	 * It performs following checks:
+	 * - attempts to open a session with a URI that contains a too long segment
+	 * - attempts to invoke isLeafNode on a wrong URI in an already opened session  
+	 * 
 	 * @throws Exception
 	 */
 	public void testMaxSegmentNameLength() throws Exception {
 		String rootSegment = "A";
+		// define a segment that is longer than MAX_SEGMENT_LENGTH
 		String segment1 = "A123456789012345678901234567890123456";
 		String longUri = "./" + rootSegment + "/" + segment1;
 
@@ -81,18 +83,18 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 
 			fail("DmtAdmin must not accept URI's with segment names "
 					+ "longer than length defined in system property: "
-					+ Uri.MAX_SEGMENT_NAME_LENGTH);
+					+ PROP_MAX_SEGMENT_NAME_LENGTH);
 		} catch (DmtException e) {
 			assertEquals(
 					"DmtAdmin does not accept URI's with segment names longer than "
 							+ "length defined in system property: "
-							+ Uri.MAX_SEGMENT_NAME_LENGTH,
+							+ PROP_MAX_SEGMENT_NAME_LENGTH,
 					DmtException.URI_TOO_LONG, e.getCode());
 		}
 
-		log("testing long segment name in already opened session");
+		log("testing long segment name in opened session");
 		try {
-			registerLongSegmentPlugin(rootSegment, segment1);
+//			registerLongSegmentPlugin(rootSegment, segment1);
 			session = dmtAdmin.getSession("./" + rootSegment,
 					DmtSession.LOCK_TYPE_SHARED);
 			assertEquals(false, session.isNodeUri(longUri));
@@ -101,12 +103,12 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 
 			fail("DmtAdmin must not accept URI's with segment names "
 					+ "longer than length defined in system property: "
-					+ Uri.MAX_SEGMENT_NAME_LENGTH);
+					+ PROP_MAX_SEGMENT_NAME_LENGTH);
 		} catch (DmtException e) {
 			assertEquals(
 					"DmtAdmin does not accept URI's with segment names longer than "
 							+ "length defined in system property: "
-							+ Uri.MAX_SEGMENT_NAME_LENGTH,
+							+ PROP_MAX_SEGMENT_NAME_LENGTH,
 					DmtException.URI_TOO_LONG, e.getCode());
 		}
 	}
@@ -131,18 +133,18 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 
 			fail("DmtAdmin must not accept URI's which are "
 					+ "longer than length defined in system property: "
-					+ Uri.MAX_URI_LENGTH);
+					+ PROP_MAX_URI_LENGTH);
 		} catch (DmtException e) {
 			e.printStackTrace();
 			assertEquals(
 					"DmtAdmin does not accept URI's which are longer than the "
 							+ "length defined in system property: "
-							+ Uri.MAX_URI_LENGTH, DmtException.URI_TOO_LONG,
+							+ PROP_MAX_URI_LENGTH, DmtException.URI_TOO_LONG,
 					e.getCode());
 		} catch (IllegalArgumentException e) {
 			pass("DmtAdmin does not accept URI's with segment names longer than "
 					+ "length defined in system property: "
-					+ Uri.MAX_SEGMENT_NAME_LENGTH);
+					+ PROP_MAX_SEGMENT_NAME_LENGTH);
 		}
 
 		log("testing long uri in already openend session");
@@ -153,17 +155,17 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 
 			fail("DmtAdmin must not accept URI's which are "
 					+ "longer than length defined in system property: "
-					+ Uri.MAX_URI_LENGTH);
+					+ PROP_MAX_URI_LENGTH);
 		} catch (DmtException e) {
 			assertEquals(
 					"DmtAdmin does not accept URI's which are longer than the "
 							+ "length defined in system property: "
-							+ Uri.MAX_URI_LENGTH, DmtException.URI_TOO_LONG,
+							+ PROP_MAX_URI_LENGTH, DmtException.URI_TOO_LONG,
 					e.getCode());
 		} catch (IllegalArgumentException e) {
 			pass("DmtAdmin does not accept URI's with segment names longer than "
 					+ "length defined in system property: "
-					+ Uri.MAX_SEGMENT_NAME_LENGTH);
+					+ PROP_MAX_SEGMENT_NAME_LENGTH);
 		}
 	}
 
@@ -185,18 +187,18 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 
 			fail("DmtAdmin must not accept URI's with a number of segments "
 					+ "higher than defined in system property: "
-					+ Uri.MAX_URI_SEGMENTS);
+					+ PROP_MAX_URI_SEGMENTS);
 		} catch (DmtException e) {
 			e.printStackTrace();
 			assertEquals(
 					"DmtAdmin does not accept URI's which a number of segments higher than "
 							+ "defined in system property: "
-							+ Uri.MAX_URI_SEGMENTS, DmtException.URI_TOO_LONG,
+							+ PROP_MAX_URI_SEGMENTS, DmtException.URI_TOO_LONG,
 					e.getCode());
 		} catch (IllegalArgumentException e) {
 			pass("DmtAdmin does not accept URI's with a number of segments "
 					+ "higher than defined in system property: "
-					+ Uri.MAX_URI_SEGMENTS);
+					+ PROP_MAX_URI_SEGMENTS);
 		}
 
 		
@@ -210,18 +212,18 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 
 			fail("DmtAdmin must not accept URI's with a number of segments "
 					+ "higher than defined in system property: "
-					+ Uri.MAX_URI_SEGMENTS);
+					+ PROP_MAX_URI_SEGMENTS);
 		} catch (DmtException e) {
 			e.printStackTrace();
 			assertEquals(
 					"DmtAdmin does not accept URI's which a number of segments higher than "
 							+ "defined in system property: "
-							+ Uri.MAX_URI_SEGMENTS, DmtException.URI_TOO_LONG,
+							+ PROP_MAX_URI_SEGMENTS, DmtException.URI_TOO_LONG,
 					e.getCode());
 		} catch (IllegalArgumentException e) {
 			pass("DmtAdmin does not accept URI's with a number of segments "
 					+ "higher than defined in system property: "
-					+ Uri.MAX_URI_SEGMENTS);
+					+ PROP_MAX_URI_SEGMENTS);
 		}
 	}
 

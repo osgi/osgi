@@ -5,6 +5,7 @@ import info.dmtree.DmtIllegalStateException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.math.BigInteger;
 
 import org.osgi.test.support.OSGiTestCase;
 
@@ -112,11 +113,12 @@ public class TestBug1670_NewDmtDataTypes extends OSGiTestCase{
 		} catch (IllegalArgumentException e) {}
 		
 		// test maximum limit
-		String max = "18446744073709551614"; // = 2* Long.MAX_VALUE
-		ulong = "18446744073709551615";
+		BigInteger bdMax = new BigInteger("" + Long.MAX_VALUE).multiply( new BigInteger( "2" ) );
+		BigInteger bdMaxPlus1 = bdMax.add(new BigInteger("1"));
+
 		try {
-			data = new DmtData( ulong, DmtData.FORMAT_UNSIGNED_LONG );
-			fail( "DmtData must not accept values bigger than " + max + " for FORMAT_UNSIGNED_LONG" );
+			data = new DmtData( bdMaxPlus1.toString(), DmtData.FORMAT_UNSIGNED_LONG );
+			fail( "DmtData must not accept values bigger than " + bdMax + " for FORMAT_UNSIGNED_LONG" );
 		} catch (IllegalArgumentException e) {}
 		
 		ulong = "2701";

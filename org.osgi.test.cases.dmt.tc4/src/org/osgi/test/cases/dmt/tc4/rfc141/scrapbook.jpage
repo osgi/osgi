@@ -1,3 +1,6 @@
 String s = "Steffen";
 System.out.println( s.getClass() );
 System.out.println( "" + String.class.equals( s.getClass() ));
+
+s = "./A/B/C";
+System.out.println( s.substring(0, s.lastIndexOf("/") + 1));

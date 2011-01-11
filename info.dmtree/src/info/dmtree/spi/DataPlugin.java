@@ -25,8 +25,8 @@ import info.dmtree.DmtSession;
  * <p>
  * In an OSGi environment such implementations should be registered at the OSGi
  * service registry specifying the list of root node URIs in a
- * <code>String</code> array in the <code>dataRootURIs</code> registration
- * parameter.
+ * <code>String</code> array or in case of a single value as <code>String</code>
+ * in the <code>dataRootURIs</code> registration parameter.
  * <p>
  * When the first reference in a session is made to a node handled by this
  * plugin, the DmtAdmin calls one of the <code>open...</code> methods to
@@ -49,94 +49,107 @@ import info.dmtree.DmtSession;
  * @version $Id$
  */
 public interface DataPlugin {
-	
+
 	/**
-	 * The string to be used as key for the “dataRootURIs” property when an DataPlugin is registered
+	 * The string to be used as key for the “dataRootURIs” property when an
+	 * DataPlugin is registered
 	 */
 	static final String DATA_ROOT_URIS = "dataRootURIs";
-	
-    /**
-     * This method is called to signal the start of a read-only session when the
-     * first reference is made within a <code>DmtSession</code> to a node
-     * which is handled by this plugin. Session information is given as it is
-     * needed for sending alerts back from the plugin.
-     * <p>
-     * The plugin can assume that there are no writing sessions open on any
-     * subtree that has any overlap with the subtree of this session.
-     * 
-     * @param sessionRoot the path to the subtree which is accessed in the
-     *        current session, must not be <code>null</code>
-     * @param session the session from which this plugin instance is accessed,
-     *        must not be <code>null</code>
-     * @return a plugin session capable of executing read operations
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>sessionRoot</code>
-     *         points to a non-existing node
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws SecurityException if some underlying operation failed because of
-     *         lack of permissions
-     */
-    ReadableDataSession openReadOnlySession(String[] sessionRoot,
-            DmtSession session) throws DmtException;
 
-    /**
-     * This method is called to signal the start of a non-atomic read-write
-     * session when the first reference is made within a <code>DmtSession</code>
-     * to a node which is handled by this plugin. Session information is given
-     * as it is needed for sending alerts back from the plugin.
-     * <p>
-     * The plugin can assume that there are no other sessions open on any
-     * subtree that has any overlap with the subtree of this session.
-     * 
-     * @param sessionRoot the path to the subtree which is locked in the current
-     *        session, must not be <code>null</code>
-     * @param session the session from which this plugin instance is accessed,
-     *        must not be <code>null</code>
-     * @return a plugin session capable of executing read-write operations, or
-     *         <code>null</code> if the plugin does not support non-atomic
-     *         read-write sessions
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>sessionRoot</code>
-     *         points to a non-existing node
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws SecurityException if some underlying operation failed because of
-     *         lack of permissions
-     */
-    ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
-            DmtSession session) throws DmtException;
+	/**
+	 * This method is called to signal the start of a read-only session when the
+	 * first reference is made within a <code>DmtSession</code> to a node which
+	 * is handled by this plugin. Session information is given as it is needed
+	 * for sending alerts back from the plugin.
+	 * <p>
+	 * The plugin can assume that there are no writing sessions open on any
+	 * subtree that has any overlap with the subtree of this session.
+	 * 
+	 * @param sessionRoot
+	 *            the path to the subtree which is accessed in the current
+	 *            session, must not be <code>null</code>
+	 * @param session
+	 *            the session from which this plugin instance is accessed, must
+	 *            not be <code>null</code>
+	 * @return a plugin session capable of executing read operations
+	 * @throws DmtException
+	 *             with the following possible error codes:
+	 *             <ul>
+	 *             <li><code>NODE_NOT_FOUND</code> if <code>sessionRoot</code>
+	 *             points to a non-existing node <li><code>COMMAND_FAILED</code>
+	 *             if some unspecified error is encountered while attempting to
+	 *             complete the command
+	 *             </ul>
+	 * @throws SecurityException
+	 *             if some underlying operation failed because of lack of
+	 *             permissions
+	 */
+	ReadableDataSession openReadOnlySession(String[] sessionRoot,
+			DmtSession session) throws DmtException;
 
-    /**
-     * This method is called to signal the start of an atomic read-write session
-     * when the first reference is made within a <code>DmtSession</code> to a
-     * node which is handled by this plugin. Session information is given as it
-     * is needed for sending alerts back from the plugin.
-     * <p>
-     * The plugin can assume that there are no other sessions open on any
-     * subtree that has any overlap with the subtree of this session.
-     * 
-     * @param sessionRoot the path to the subtree which is locked in the current
-     *        session, must not be <code>null</code>
-     * @param session the session from which this plugin instance is accessed,
-     *        must not be <code>null</code>
-     * @return a plugin session capable of executing read-write operations in an
-     *         atomic block, or <code>null</code> if the plugin does not
-     *         support atomic read-write sessions
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>sessionRoot</code>
-     *         points to a non-existing node
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws SecurityException if some underlying operation failed because of
-     *         lack of permissions
-     */
-    TransactionalDataSession openAtomicSession(String[] sessionRoot,
-            DmtSession session) throws DmtException;
+	/**
+	 * This method is called to signal the start of a non-atomic read-write
+	 * session when the first reference is made within a <code>DmtSession</code>
+	 * to a node which is handled by this plugin. Session information is given
+	 * as it is needed for sending alerts back from the plugin.
+	 * <p>
+	 * The plugin can assume that there are no other sessions open on any
+	 * subtree that has any overlap with the subtree of this session.
+	 * 
+	 * @param sessionRoot
+	 *            the path to the subtree which is locked in the current
+	 *            session, must not be <code>null</code>
+	 * @param session
+	 *            the session from which this plugin instance is accessed, must
+	 *            not be <code>null</code>
+	 * @return a plugin session capable of executing read-write operations, or
+	 *         <code>null</code> if the plugin does not support non-atomic
+	 *         read-write sessions
+	 * @throws DmtException
+	 *             with the following possible error codes:
+	 *             <ul>
+	 *             <li><code>NODE_NOT_FOUND</code> if <code>sessionRoot</code>
+	 *             points to a non-existing node <li><code>COMMAND_FAILED</code>
+	 *             if some unspecified error is encountered while attempting to
+	 *             complete the command
+	 *             </ul>
+	 * @throws SecurityException
+	 *             if some underlying operation failed because of lack of
+	 *             permissions
+	 */
+	ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
+			DmtSession session) throws DmtException;
+
+	/**
+	 * This method is called to signal the start of an atomic read-write session
+	 * when the first reference is made within a <code>DmtSession</code> to a
+	 * node which is handled by this plugin. Session information is given as it
+	 * is needed for sending alerts back from the plugin.
+	 * <p>
+	 * The plugin can assume that there are no other sessions open on any
+	 * subtree that has any overlap with the subtree of this session.
+	 * 
+	 * @param sessionRoot
+	 *            the path to the subtree which is locked in the current
+	 *            session, must not be <code>null</code>
+	 * @param session
+	 *            the session from which this plugin instance is accessed, must
+	 *            not be <code>null</code>
+	 * @return a plugin session capable of executing read-write operations in an
+	 *         atomic block, or <code>null</code> if the plugin does not support
+	 *         atomic read-write sessions
+	 * @throws DmtException
+	 *             with the following possible error codes:
+	 *             <ul>
+	 *             <li><code>NODE_NOT_FOUND</code> if <code>sessionRoot</code>
+	 *             points to a non-existing node <li><code>COMMAND_FAILED</code>
+	 *             if some unspecified error is encountered while attempting to
+	 *             complete the command
+	 *             </ul>
+	 * @throws SecurityException
+	 *             if some underlying operation failed because of lack of
+	 *             permissions
+	 */
+	TransactionalDataSession openAtomicSession(String[] sessionRoot,
+			DmtSession session) throws DmtException;
 }

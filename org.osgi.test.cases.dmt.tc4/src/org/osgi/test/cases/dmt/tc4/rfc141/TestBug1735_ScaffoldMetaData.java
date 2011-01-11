@@ -1,43 +1,24 @@
 package org.osgi.test.cases.dmt.tc4.rfc141;
 
-import info.dmtree.DmtAdmin;
 import info.dmtree.DmtData;
 import info.dmtree.DmtSession;
 import info.dmtree.MetaNode;
 import info.dmtree.spi.DataPlugin;
 import info.dmtree.spi.DmtConstants;
-import info.dmtree.spi.MountPlugin;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.GenericDataPlugin;
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.Node;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
-public class TestBug1735_ScaffoldMetaData extends DefaultTestBundleControl{
+public class TestBug1735_ScaffoldMetaData extends ScaffoldNodeHelper {
 	
-	DmtAdmin dmtAdmin;
-	DmtSession session;
-	GenericDataPlugin dataPlugin;
-	
-	protected void setUp() throws Exception {
-		super.setUp();
-		System.out.println("setting up");
-		dmtAdmin = (DmtAdmin) getService(DmtAdmin.class);
-	}
-
-
-	protected void tearDown() throws Exception {
-		super.tearDown();
-		System.out.println( "tearing down");
-		if ( session != null && session.getState() == DmtSession.STATE_OPEN )
-			session.close();
-		unregisterAllServices();
-		ungetAllServices();
-	}
 	
 	/**
+	 * 
+	 * Checks metadata of a Scaffold node as described in RFC141
+	 * (RFC141, section 6.3.1)
 	 */
 	public void testScaffoldMetaData() throws Exception {
 
@@ -53,6 +34,22 @@ public class TestBug1735_ScaffoldMetaData extends DefaultTestBundleControl{
 
 		assertEquals( "The type of a scaffold node must be: " + DmtConstants.DDF_SCAFFOLD, DmtConstants.DDF_SCAFFOLD, session.getNodeType(uri));
 	}
+
+	/**
+	 * Checks for correct node type of scaffold nodes.
+	 * (RFC141, section 6.3.2)
+	 * 
+	 * @throws Exception
+	 */
+	public void testScaffoldNodeType() throws Exception {
+		preparePlugin();
+
+		log( "testing node type of scaffold nodes ...");
+		String uri = "./A";
+		session = dmtAdmin.getSession( uri, DmtSession.LOCK_TYPE_SHARED);
+		assertEquals( "Scaffold nodes must have node type: '" + DmtConstants.DDF_SCAFFOLD + "'!", session.getNodeType(uri), DmtConstants.DDF_SCAFFOLD );
+	}
+
 	
 	//	- can():  CMD_GET
 	//	- isLeaf(): false

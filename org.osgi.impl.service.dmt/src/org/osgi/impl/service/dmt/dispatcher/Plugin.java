@@ -160,7 +160,14 @@ public class Plugin {
 			// SD: makes mountpoint checks easier later on, because it still
 			// holds the version with the '#'
 			s.mountedOn = uri;
+			// if we reached this point then the segment is OK
 			return s;
+		}
+		try {
+			s.release(null);
+		} catch (DmtException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return null;
 	}
