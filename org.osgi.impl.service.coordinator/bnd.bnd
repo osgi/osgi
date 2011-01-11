@@ -13,5 +13,5 @@ Service-Component: *
 	org.osgi.service.coordinator;		version=project, \
 	ee.j2se;					version=1.5, \
 	biz.aQute.bnd, \
-	osgi.core;					version=4.2, \
+	osgi.core;					version=4.3, \
 	osgi.cmpn;					version=4.2

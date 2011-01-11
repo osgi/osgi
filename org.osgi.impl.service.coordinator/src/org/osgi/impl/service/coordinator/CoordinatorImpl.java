@@ -16,7 +16,6 @@
 package org.osgi.impl.service.coordinator;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.WeakHashMap;
@@ -92,8 +91,8 @@ public class CoordinatorImpl implements Coordinator {
 	}
 
 	public CoordinationImpl create(String name, long t) {
-		check(CoordinationPermission.INITIATE);
 		CoordinationImpl c = new CoordinationImpl(this, name, t);
+		check(c, CoordinationPermission.INITIATE);
 		coordinations.add(c);
 		return c;
 	}
@@ -105,12 +104,29 @@ public class CoordinatorImpl implements Coordinator {
 	}
 
 	public List<Coordination> getCoordinations() {
-		check(CoordinationPermission.ADMIN);
 		List<Coordination> l = new ArrayList<Coordination>();
 		for (CoordinatorImpl coordinator : coordinators) {
-			l.addAll(coordinator.coordinations);
+			for (Coordination c : coordinator.coordinations) {
+				try {
+					check(c, CoordinationPermission.ADMIN);
+					l.add(c);
+				}
+				catch (SecurityException e) {
+					// don't add this one
+				}
+			}
 		}
-		return Collections.unmodifiableList(l);
+		return l;
+	}
+
+	public Coordination getCoordination(long id) {
+		for (Coordination c : getCoordinations()) {
+			if (c.getId() == id) {
+				check(c, CoordinationPermission.ADMIN);
+				return c;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -123,27 +139,26 @@ public class CoordinatorImpl implements Coordinator {
 
 	public boolean addParticipant(Participant participant)
 			throws CoordinationException {
-		check(CoordinationPermission.PARTICIPATE);
 		Coordination c = peek();
 		if (c == null)
 			return false;
+		check(c, CoordinationPermission.PARTICIPATE);
 
 		c.addParticipant(participant);
 		return true;
 	}
 
 	public boolean fail(Throwable reason) {
-		check(CoordinationPermission.PARTICIPATE);
 		Coordination c = peek();
 		if (c == null)
 			return false;
+		check(c, CoordinationPermission.PARTICIPATE);
 
 		c.fail(reason);
 		return false;
 	}
 
 	public Coordination peek() {
-		check(CoordinationPermission.PARTICIPATE);
 		synchronized (stacks) {
 			List<CoordinationImpl> stack = stacks.get(Thread.currentThread());
 			if (stack == null)
@@ -153,28 +168,15 @@ public class CoordinatorImpl implements Coordinator {
 			if (n < 0)
 				return null;
 
-			return stack.get(n);
+			Coordination c = stack.get(n);
+			check(c, CoordinationPermission.PARTICIPATE);
+			return c;
 		}
 	}
 
 	public Coordination pop() {
-		check(CoordinationPermission.INITIATE);
-		return pop(Thread.currentThread());
-	}
-
-	public Coordination getCoordination(long id) {
-		check(CoordinationPermission.ADMIN);
-		for (Coordination c : getCoordinations()) {
-			if (c.getId() == id)
-				return c;
-		}
-		return null;
-	}
-
-	private CoordinationImpl pop(Thread thread) {
-		check(CoordinationPermission.INITIATE);
 		synchronized (stacks) {
-			List<CoordinationImpl> stack = stacks.get(thread);
+			List<CoordinationImpl> stack = stacks.get(Thread.currentThread());
 			if (stack == null)
 				return null;
 
@@ -182,6 +184,7 @@ public class CoordinatorImpl implements Coordinator {
 
 			CoordinationImpl coordination = null;
 			if (n >= 0) {
+				check(stack.get(n), CoordinationPermission.INITIATE);
 				coordination = stack.remove(n);
 				coordination.stackThread = null;
 			}
@@ -193,7 +196,7 @@ public class CoordinatorImpl implements Coordinator {
 	}
 
 	Coordination push(Coordination c) {
-		check(CoordinationPermission.INITIATE);
+		check(c, CoordinationPermission.INITIATE);
 		synchronized (stacks) {
 			CoordinationImpl cc = (CoordinationImpl) c;
 			if (cc.terminated)
@@ -215,7 +218,8 @@ public class CoordinatorImpl implements Coordinator {
 		}
 	}
 
-	private void check(String action) throws CoordinationException {
+	private void check(Coordination c, String action)
+			throws CoordinationException {
 		if (gone)
 			throw new ServiceException("Coordinator is ungotten",
 					ServiceException.UNREGISTERED);
@@ -223,7 +227,8 @@ public class CoordinatorImpl implements Coordinator {
 		if (action == null || sm == null)
 			return;
 
-		CoordinationPermission cp = new CoordinationPermission(bundle, null,
+		CoordinationPermission cp = new CoordinationPermission(c.getName(),
+				c.getBundle(),
 				action);
 		sm.checkPermission(cp);
 	}
