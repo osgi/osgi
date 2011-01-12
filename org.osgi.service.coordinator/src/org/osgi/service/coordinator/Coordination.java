@@ -48,16 +48,16 @@ import org.osgi.framework.Bundle;
  * 
  * <pre>
  * void foo() {
- * 	Coordination c = coordinator.create(&quot;work&quot;, 0);
- * 	try {
- * 		doWork(c);
- * 	}
- * 	catch (Exception e) {
- * 		c.fail(e);
- * 	}
- * 	finally {
- * 		c.end();
- * 	}
+ *   Coordination c = coordinator.create(&quot;work&quot;, 0);
+ * 	 try {
+ * 	   doWork(c);
+ * 	 }
+ * 	 catch (Exception e) {
+ *     c.fail(e);
+ * 	 }
+ * 	 finally {
+ * 	   c.end();
+ * 	 }
  * }
  * </pre>
  * 
