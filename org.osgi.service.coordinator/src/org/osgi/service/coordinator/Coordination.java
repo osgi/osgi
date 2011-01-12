@@ -192,9 +192,8 @@ public interface Coordination {
 	 * @return {@code true} if this Coordination was active and was terminated
 	 *         by this method, otherwise {@code false}.
 	 * @throws NullPointerException If cause is {@code null}.
-	 * @throws SecurityException If the caller does not have
-	 *         {@code CoordinationPermission[PARTICIPATE]} for this
-	 *         Coordination.
+	 * @throws SecurityException If the caller does not have {@code
+	 *         CoordinationPermission[PARTICIPATE]} for this Coordination.
 	 */
 	boolean fail(Throwable cause);
 
