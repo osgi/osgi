@@ -36,7 +36,6 @@ import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.CoordinationException;
 import org.osgi.service.coordinator.Coordinator;
 import org.osgi.service.coordinator.Participant;
-import org.osgi.test.support.OSGiTestCase;
 import org.osgi.test.support.concurrent.AtomicInteger;
 import org.osgi.test.support.concurrent.AtomicReference;
 import org.osgi.test.support.concurrent.Semaphore;
@@ -45,7 +44,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Basic Coordinator test case.
  */
-public class CoordinatorBasicTests extends OSGiTestCase {
+public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * Timeout Fixed exception Extending timeout
@@ -1366,14 +1365,6 @@ public class CoordinatorBasicTests extends OSGiTestCase {
 		};
 		t.open();
 		return t.waitForService(1000);
-	}
-	
-	protected void setUp() throws Exception {
-		// Clean up any coordinations that may be lingering on the thread local
-		// stack from previous tests.
-		Bundle bundle = getContext().getServiceReference(Coordinator.class.getName()).getBundle();
-		bundle.stop();
-		bundle.start();
 	}
 }
 
