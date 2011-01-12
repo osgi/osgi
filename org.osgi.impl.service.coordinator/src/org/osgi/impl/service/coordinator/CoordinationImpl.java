@@ -291,7 +291,7 @@ public class CoordinationImpl implements Coordination {
 		if (CoordinatorImpl.sm == null)
 			return;
 
-		CoordinationPermission cp = new CoordinationPermission(c.bundle, name,
+		CoordinationPermission cp = new CoordinationPermission(name, c.bundle,
 				admin);
 		CoordinatorImpl.sm.checkPermission(cp);
 	}

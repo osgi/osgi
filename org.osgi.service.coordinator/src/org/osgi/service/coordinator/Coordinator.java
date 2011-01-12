@@ -103,9 +103,9 @@ public interface Coordinator {
 	 * @throws IllegalArgumentException If the specified name does not follow
 	 *         the {@code symbolic-name} syntax or the specified time is
 	 *         negative.
-	 * @throws SecurityException This method requires the
-	 *         {@link CoordinationPermission#INITIATE} action, no bundle check
-	 *         is done.
+	 * @throws SecurityException If the caller does not have
+	 *         {@code CoordinationPermission[INITIATE]} for the specified name
+	 *         and creating bundle.
 	 */
 	Coordination create(String name, long timeMillis);
 
@@ -129,9 +129,9 @@ public interface Coordinator {
 	 * @throws IllegalArgumentException If the specified name does not follow
 	 *         the {@code symbolic-name} syntax or the specified time is
 	 *         negative.
-	 * @throws SecurityException This method requires the
-	 *         {@link CoordinationPermission#INITIATE} action, no bundle check
-	 *         is done.
+	 * @throws SecurityException If the caller does not have
+	 *         {@code CoordinationPermission[INITIATE]} for the specified name
+	 *         and creating bundle.
 	 */
 	Coordination begin(String name, long timeMillis);
 
@@ -168,6 +168,9 @@ public interface Coordinator {
 	 * 
 	 * @return The Coordination that was the current Coordination or
 	 *         {@code null} if the thread local Coordination stack is empty.
+	 * @throws SecurityException If the caller does not have
+	 *         {@code CoordinationPermission[INITIATE]} for the current
+	 *         Coordination.
 	 */
 	Coordination pop();
 
@@ -190,6 +193,9 @@ public interface Coordinator {
 	 *         returns the result from calling
 	 *         {@link Coordination#fail(Throwable)} on the current Coordination.
 	 * @throws NullPointerException If cause is {@code null}.
+	 * @throws SecurityException If the caller does not have
+	 *         {@code CoordinationPermission[PARTICIPATE]} for the current
+	 *         Coordination.
 	 * @see Coordination#fail(Throwable)
 	 */
 	boolean fail(Throwable cause);
@@ -215,9 +221,9 @@ public interface Coordinator {
 	 *         be caught by the caller but allowed to be caught by the initiator
 	 *         of this Coordination.
 	 * @throws NullPointerException If participant is {@code null}.
-	 * @throws SecurityException This method requires the
-	 *         {@link CoordinationPermission#PARTICIPATE} action for the current
-	 *         Coordination, if any.
+	 * @throws SecurityException If the caller does not have
+	 *         {@code CoordinationPermission[PARTICIPATE]} for the current
+	 *         Coordination.
 	 * @see Coordination#addParticipant(Participant)
 	 */
 	boolean addParticipant(Participant participant);
@@ -232,7 +238,7 @@ public interface Coordinator {
 	 * 
 	 * <p>
 	 * The returned collection must only contain the Coordinations for which the
-	 * caller has {@link CoordinationPermission#ADMIN}.
+	 * caller has {@code CoordinationPermission[ADMIN]}.
 	 * 
 	 * @return A snapshot of all active Coordinations. If there are no active
 	 *         Coordinations, the returned list will be empty. The returned
@@ -246,12 +252,11 @@ public interface Coordinator {
 	 * 
 	 * @param id The id of the requested Coordination.
 	 * @return A Coordination having with specified id or {@code null} if no
-	 *         Coordination with the specified id exists or the Coordination
-	 *         with the specified id is {@link Coordination#isTerminated()
-	 *         terminated}.
-	 * @throws SecurityException if the caller has no
-	 *         {@link CoordinationPermission#ADMIN} for the requested
-	 *         Coordination.
+	 *         Coordination with the specified id exists, the Coordination with
+	 *         the specified id is {@link Coordination#isTerminated()
+	 *         terminated} or the caller does not have
+	 *         {@code CoordinationPermission[ADMIN]} for the Coordination with
+	 *         the specified id.
 	 */
 	Coordination getCoordination(long id);
 }
