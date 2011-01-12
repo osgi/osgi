@@ -159,8 +159,8 @@ public interface Coordination {
 	 * @throws CoordinationException If this Coordination has failed, including
 	 *         timed out, or partially failed or this Coordination is on the
 	 *         thread local Coordination stack of another thread.
-	 * @throws SecurityException If the caller does not have
-	 *         {@code CoordinationPermission[INITIATE]} for this Coordination.
+	 * @throws SecurityException If the caller does not have {@code
+	 *         CoordinationPermission[INITIATE]} for this Coordination.
 	 */
 	void end();
 
@@ -180,14 +180,18 @@ public interface Coordination {
 	 * discard any work associated with this Coordination. This method will
 	 * return {@code true}.
 	 * 
-	 * @param cause The failure cause. The failure cause must not be
-	 *        {@code null}.
+	 * <p>
+	 * If the Coordination is implicit, then the Coordination is not removed
+	 * from the stack. The initiator must still call end on an implicit
+	 * Coordination to remove this Coordination from the thread local stack.
+	 * 
+	 * @param cause The failure cause. The failure cause must not be {@code
+	 *        null}.
 	 * @return {@code true} if this Coordination was active and was terminated
 	 *         by this method, otherwise {@code false}.
 	 * @throws NullPointerException If cause is {@code null}.
-	 * @throws SecurityException If the caller does not have
-	 *         {@code CoordinationPermission[PARTICIPATE]} for this
-	 *         Coordination.
+	 * @throws SecurityException If the caller does not have {@code
+	 *         CoordinationPermission[PARTICIPATE]} for this Coordination.
 	 */
 	boolean fail(Throwable cause);
 
@@ -195,9 +199,8 @@ public interface Coordination {
 	 * Returns the failure cause of this Coordination.
 	 * 
 	 * <p>
-	 * If this Coordination is {@link #isTerminated() terminated} with a
-	 * {@link #fail(Throwable) failure cause}, this method will return the
-	 * failure cause.
+	 * If this Coordination has {@link #fail(Throwable) failed}, then this
+	 * method will return the failure cause.
 	 * 
 	 * <p>
 	 * If this Coordination timed out, this method will return {@link #TIMEOUT}
@@ -207,8 +210,8 @@ public interface Coordination {
 	 * 
 	 * @return The failure cause of this Coordination or {@code null} if this
 	 *         Coordination has not terminated as a failure.
-	 * @throws SecurityException If the caller does not have
-	 *         {@code CoordinationPermission[INITIATE]} for this Coordination.
+	 * @throws SecurityException If the caller does not have {@code
+	 *         CoordinationPermission[INITIATE]} for this Coordination.
 	 */
 	Throwable getFailure();
 
@@ -261,9 +264,8 @@ public interface Coordination {
 	 *         caught by the caller but allowed to be caught by the initiator of
 	 *         this Coordination.
 	 * @throws NullPointerException If participant is {@code null}.
-	 * @throws SecurityException If the caller does not have
-	 *         {@code CoordinationPermission[PARTICIPATE]} for this
-	 *         Coordination.
+	 * @throws SecurityException If the caller does not have {@code
+	 *         CoordinationPermission[PARTICIPATE]} for this Coordination.
 	 */
 	void addParticipant(Participant participant);
 
@@ -275,8 +277,8 @@ public interface Coordination {
 	 *         returned list will be empty. The list is ordered in the order the
 	 *         Participants were registered. The returned list is the property
 	 *         of the caller and can be modified by the caller.
-	 * @throws SecurityException If the caller does not have
-	 *         {@code CoordinationPermission[INITIATE]} for this Coordination.
+	 * @throws SecurityException If the caller does not have {@code
+	 *         CoordinationPermission[INITIATE]} for this Coordination.
 	 */
 	List<Participant> getParticipants();
 
@@ -292,9 +294,8 @@ public interface Coordination {
 	 * on the Map object while making changes.
 	 * 
 	 * @return The variable map associated with this Coordination.
-	 * @throws SecurityException If the caller does not have
-	 *         {@code CoordinationPermission[PARTICIPANT]} for this
-	 *         Coordination.
+	 * @throws SecurityException If the caller does not have {@code
+	 *         CoordinationPermission[PARTICIPANT]} for this Coordination.
 	 */
 	Map<Class< ? >, Object> getVariables();
 
@@ -319,9 +320,8 @@ public interface Coordination {
 	 * @throws CoordinationException If this Coordination
 	 *         {@link #isTerminated() is terminated}.
 	 * @throws IllegalArgumentException If the specified time is negative.
-	 * @throws SecurityException If the caller does not have
-	 *         {@code CoordinationPermission[PARTICIPATE]} for this
-	 *         Coordination.
+	 * @throws SecurityException If the caller does not have {@code
+	 *         CoordinationPermission[PARTICIPATE]} for this Coordination.
 	 */
 	long extendTimeout(long timeMillis);
 
@@ -333,9 +333,8 @@ public interface Coordination {
 	 *        of 0 will wait until this Coordination is terminated.
 	 * @throws InterruptedException If the wait is interrupted.
 	 * @throws IllegalArgumentException If the specified time is negative.
-	 * @throws SecurityException If the caller does not have
-	 *         {@code CoordinationPermission[PARTICIPATE]} for this
-	 *         Coordination.
+	 * @throws SecurityException If the caller does not have {@code
+	 *         CoordinationPermission[PARTICIPATE]} for this Coordination.
 	 */
 
 	void join(long timeMillis) throws InterruptedException;
@@ -348,8 +347,8 @@ public interface Coordination {
 	 * @throws CoordinationException If this Coordination is already on the any
 	 *         thread's thread local Coordination stack or this Coordination
 	 *         {@link #isTerminated() is terminated}.
-	 * @throws SecurityException If the caller does not have
-	 *         {@code CoordinationPermission[INITIATE]} for this Coordination.
+	 * @throws SecurityException If the caller does not have {@code
+	 *         CoordinationPermission[INITIATE]} for this Coordination.
 	 */
 	Coordination push();
 
@@ -360,8 +359,8 @@ public interface Coordination {
 	 * @return The thread in whose thread local Coordination stack this
 	 *         Coordination has been pushed or {@code null} if this Coordination
 	 *         is not in any thread local Coordination stack.
-	 * @throws SecurityException If the caller does not have
-	 *         {@code CoordinationPermission[ADMIN]} for this Coordination.
+	 * @throws SecurityException If the caller does not have {@code
+	 *         CoordinationPermission[ADMIN]} for this Coordination.
 	 */
 	Thread getThread();
 
@@ -371,8 +370,8 @@ public interface Coordination {
 	 * this Coordination.
 	 * 
 	 * @return The bundle that created this Coordination.
-	 * @throws SecurityException If the caller does not have
-	 *         {@code CoordinationPermission[ADMIN]} for this Coordination.
+	 * @throws SecurityException If the caller does not have {@code
+	 *         CoordinationPermission[ADMIN]} for this Coordination.
 	 */
 	Bundle getBundle();
 
@@ -392,8 +391,8 @@ public interface Coordination {
 	 *         is on the thread local Coordination stack or {@code null} if this
 	 *         Coordination is not on the thread local Coordination stack or has
 	 *         no enclosing Coordination.
-	 * @throws SecurityException If the caller does not have
-	 *         {@code CoordinationPermission[ADMIN]} for this Coordination.
+	 * @throws SecurityException If the caller does not have {@code
+	 *         CoordinationPermission[ADMIN]} for this Coordination.
 	 */
 	Coordination getEnclosingCoordination();
 }
