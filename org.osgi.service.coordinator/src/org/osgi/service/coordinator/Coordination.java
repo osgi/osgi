@@ -181,17 +181,20 @@ public interface Coordination {
 	 * return {@code true}.
 	 * 
 	 * <p>
-	 * If the Coordination is implicit, then the Coordination is not removed
-	 * from the stack. The initiator must still call end on an implicit
-	 * Coordination to remove this Coordination from the thread local stack.
+	 * If this Coordination has been {@link #push() pushed} onto a thread local
+	 * Coordination stack, this Coordination is not removed from the stack. The
+	 * creator of this Coordination must still call {@link #end()} on this
+	 * Coordination to cause it to be removed from the thread local Coordination
+	 * stack.
 	 * 
-	 * @param cause The failure cause. The failure cause must not be {@code
-	 *        null}.
+	 * @param cause The failure cause. The failure cause must not be
+	 *        {@code null}.
 	 * @return {@code true} if this Coordination was active and was terminated
 	 *         by this method, otherwise {@code false}.
 	 * @throws NullPointerException If cause is {@code null}.
-	 * @throws SecurityException If the caller does not have {@code
-	 *         CoordinationPermission[PARTICIPATE]} for this Coordination.
+	 * @throws SecurityException If the caller does not have
+	 *         {@code CoordinationPermission[PARTICIPATE]} for this
+	 *         Coordination.
 	 */
 	boolean fail(Throwable cause);
 
