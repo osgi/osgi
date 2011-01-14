@@ -45,7 +45,7 @@ import java.util.Map;
  *  class                Bundle.loadClass
  *  execute              Bundle.start
  *                       Bundle.stop
- *                       StartLevel.setBundleStartLevel
+ *                       BundleStartLevel.setStartLevel
  *  extensionLifecycle   BundleContext.installBundle for extension bundles
  *                       Bundle.update for extension bundles
  *                       Bundle.uninstall for extension bundles
@@ -56,23 +56,23 @@ import java.util.Map;
  *                       BundleContext.removeBundleListener for SynchronousBundleListener
  *  metadata             Bundle.getHeaders
  *                       Bundle.getLocation
- *  resolve              PackageAdmin.refreshPackages
- *                       PackageAdmin.resolveBundles
+ *  resolve              FrameworkWiring.refreshBundles
+ *                       FrameworkWiring.resolveBundles
  *  resource             Bundle.getResource
  *                       Bundle.getResources
  *                       Bundle.getEntry
  *                       Bundle.getEntryPaths
  *                       Bundle.findEntries
  *                       Bundle resource/entry URL creation
- *  startlevel           StartLevel.setStartLevel
- *                       StartLevel.setInitialBundleStartLevel 
+ *  startlevel           FrameworkStartLevel.setStartLevel
+ *                       FrameworkStartLevel.setInitialBundleStartLevel 
  *  context              Bundle.getBundleContext
  * </pre>
  * 
  * <p>
  * The special action &quot;*&quot; will represent all actions. The
- * {@code resolve} action is implied by the {@code class},
- * {@code execute} and {@code resource} actions.
+ * {@code resolve} action is implied by the {@code class}, {@code execute} and
+ * {@code resource} actions.
  * <p>
  * The name of this permission is a filter expression. The filter gives access
  * to the following attributes:

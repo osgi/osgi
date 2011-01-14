@@ -51,8 +51,7 @@ public interface Framework extends Bundle {
 	 * <li>Have event handling enabled.</li>
 	 * <li>Have reified Bundle objects for all installed bundles.</li>
 	 * <li>Have registered any framework services. For example,
-	 * {@code PackageAdmin}, {@code ConditionalPermissionAdmin},
-	 * {@code StartLevel}.</li>
+	 * {@code ConditionalPermissionAdmin}.</li>
 	 * <li>Be {@link #adapt(Class) adaptable} to the OSGi defined types to which
 	 * a system bundle can be adapted.</li>
 	 * </ul>
@@ -134,12 +133,10 @@ public interface Framework extends Bundle {
 	 * <li>All installed bundles must be started in accordance with each
 	 * bundle's persistent <i>autostart setting</i>. This means some bundles
 	 * will not be started, some will be started with <i>eager activation</i>
-	 * and some will be started with their <i>declared activation</i> policy. If
-	 * this Framework implements the optional <i>Start Level Service
-	 * Specification</i>, then the start level of this Framework is moved to the
-	 * start level specified by the
-	 * {@link Constants#FRAMEWORK_BEGINNING_STARTLEVEL beginning start level}
-	 * framework property, as described in the <i>Start Level Service
+	 * and some will be started with their <i>declared activation</i> policy.
+	 * The start level of this Framework is moved to the start level specified
+	 * by the {@link Constants#FRAMEWORK_BEGINNING_STARTLEVEL beginning start
+	 * level} framework property, as described in the <i>Start Level
 	 * Specification</i>. If this framework property is not specified, then the
 	 * start level of this Framework is moved to start level one (1). Any
 	 * exceptions that occur during bundle starting must be wrapped in a
@@ -153,7 +150,7 @@ public interface Framework extends Bundle {
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
-	 * @see "Start Level Service Specification"
+	 * @see "Start Level Specification"
 	 */
 	void start() throws BundleException;
 
@@ -182,12 +179,11 @@ public interface Framework extends Bundle {
 	 * <ol>
 	 * <li>This Framework's state is set to {@link #STOPPING}.</li>
 	 * <li>All installed bundles must be stopped without changing each bundle's
-	 * persistent <i>autostart setting</i>. If this Framework implements the
-	 * optional <i>Start Level Service Specification</i>, then the start level
-	 * of this Framework is moved to start level zero (0), as described in the
-	 * <i>Start Level Service Specification</i>. Any exceptions that occur
-	 * during bundle stopping must be wrapped in a {@link BundleException} and
-	 * then published as a framework event of type {@link FrameworkEvent#ERROR}</li>
+	 * persistent <i>autostart setting</i>. The start level of this Framework is
+	 * moved to start level zero (0), as described in the <i>Start Level
+	 * Specification</i>. Any exceptions that occur during bundle stopping must
+	 * be wrapped in a {@link BundleException} and then published as a framework
+	 * event of type {@link FrameworkEvent#ERROR}</li>
 	 * <li>Unregister all services registered by this Framework.</li>
 	 * <li>Event handling is disabled.</li>
 	 * <li>This Framework's state is set to {@link #RESOLVED}.</li>
@@ -205,7 +201,7 @@ public interface Framework extends Bundle {
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
-	 * @see "Start Level Service Specification"
+	 * @see "Start Level Specification"
 	 */
 	void stop() throws BundleException;
 

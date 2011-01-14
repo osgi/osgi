@@ -26,6 +26,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
+import org.osgi.framework.wiring.FrameworkWiring;
+
 /**
  * An installed bundle in the Framework.
  * 
@@ -257,8 +259,7 @@ public interface Bundle extends Comparable<Bundle> {
 	 * If this bundle's state is {@code UNINSTALLED} then an
 	 * {@code IllegalStateException} is thrown.
 	 * <p>
-	 * If the Framework implements the optional Start Level service and the
-	 * current start level is less than this bundle's start level:
+	 * If the current start level is less than this bundle's start level:
 	 * <ul>
 	 * <li>If the {@link #START_TRANSIENT} option is set, then a
 	 * {@code BundleException} is thrown indicating this bundle cannot be
@@ -512,8 +513,9 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <p>
 	 * If this bundle has exported any packages that are imported by another
 	 * bundle, these packages must remain exported until the
-	 * {@code PackageAdmin.refreshPackages} method has been has been called or
-	 * the Framework is relaunched.
+	 * {@link FrameworkWiring#refreshBundles(java.util.Collection, FrameworkListener...)
+	 * FrameworkWiring.refreshBundles} method has been has been called or the
+	 * Framework is relaunched.
 	 * 
 	 * <p>
 	 * The following steps are required to update a bundle:
@@ -624,8 +626,9 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <p>
 	 * If this bundle has exported any packages, the Framework must continue to
 	 * make these packages available to their importing bundles until the
-	 * {@code PackageAdmin.refreshPackages} method has been called or the
-	 * Framework is relaunched.
+	 * {@link FrameworkWiring#refreshBundles(java.util.Collection, FrameworkListener...)
+	 * FrameworkWiring.refreshBundles} method has been called or the Framework
+	 * is relaunched.
 	 * 
 	 * <p>
 	 * The following steps are required to uninstall a bundle:
