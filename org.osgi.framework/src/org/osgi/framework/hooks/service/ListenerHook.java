@@ -67,6 +67,7 @@ public interface ListenerHook {
 	 * which added the Service Listener and the filter with which it was added.
 	 * 
 	 * @ThreadSafe
+	 * @noimplement
 	 */
 	public interface ListenerInfo {
 		/**
