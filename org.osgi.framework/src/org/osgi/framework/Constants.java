@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1590,21 +1590,21 @@ public interface Constants {
 	String	EFFECTIVE_ACTIVE						= "active";
 
 	/**
-	 * Manifest header attribute identifying the capability filter specified in
+	 * Manifest header directive identifying the capability filter specified in
 	 * the Require-Capability manifest header.
 	 * 
 	 * <p>
-	 * The attribute value is encoded in the Require-Capability manifest header
+	 * The directive value is encoded in the Require-Capability manifest header
 	 * like:
 	 * 
 	 * <pre>
-	 *     Require-Capability: com.acme.capability; filter=&quot;(someattr=somevalue)&quot;
+	 *     Require-Capability: com.acme.capability; filter:=&quot;(someattr=somevalue)&quot;
 	 * </pre>
 	 * 
 	 * @see #REQUIRE_CAPABILITY
 	 * @since 1.6
 	 */
-	String	FILTER_ATTRIBUTE						= "filter";
+	String	FILTER_DIRECTIVE						= "filter";
 
 	/**
 	 * Framework launching property identifying capabilities which the system
