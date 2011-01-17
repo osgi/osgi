@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,12 @@ import org.osgi.framework.BundleReference;
  * 
  * <p>
  * The in use bundle wirings for a bundle can be obtained by calling
- * {@link Bundle#adapt(Class) bundle.adapt}({@link BundleWirings}.class).
- * {@link BundleWirings#getWirings() getWirings()}.
+ * {@link Bundle#adapt(Class) bundle.adapt}({@link BundleWirings}.class) on the
+ * bundle. {@link BundleWirings#getWirings() getWirings()}. A fragment does not
+ * itself have bundle wirings. So calling {@link Bundle#adapt(Class)
+ * bundle.adapt}({@link BundleWirings}.class) on a fragment must return
+ * {@code null}. See {@link FragmentWirings} for the bundle wirings in which a
+ * fragment participates.
  * 
  * @ThreadSafe
  * @noimplement
@@ -42,18 +46,10 @@ public interface BundleWirings extends BundleReference {
 	 * {@link BundleReference#getBundle() referenced} bundle.
 	 * 
 	 * <p>
-	 * If the referenced bundle is a non-fragment bundle, then the result is a
-	 * list of in use bundle wirings. The list is ordered in reverse
-	 * chronological order such that the first bundle wiring is the
+	 * The result is a list of in use bundle wirings. The list is ordered in
+	 * reverse chronological order such that the first bundle wiring is the
 	 * {@link BundleWiring#isCurrent() current} bundle wiring and last wiring is
 	 * the oldest in use bundle wiring.
-	 * 
-	 * <p>
-	 * If the referenced bundle is a fragment bundle, then the result is a list
-	 * of in use bundle wirings to which the referenced fragment bundle is
-	 * attached. The ordering of the list is unspecified. If the fragment bundle
-	 * is not attached to any bundle wiring, then the returned list will be
-	 * empty.
 	 * 
 	 * <p>
 	 * The list must only contain in use bundle wirings. Generally the list will
