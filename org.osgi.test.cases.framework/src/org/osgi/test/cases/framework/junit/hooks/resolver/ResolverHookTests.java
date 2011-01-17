@@ -456,20 +456,18 @@ public class ResolverHookTests extends OSGiTestCase {
 	}
 
 	public void testFilterImportPackage02() {
-		Filter filterCapabilities1 = createFilter(
-				"(&" + 
-				  "(osgi.package=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(bundle-symbolic-name=org.osgi.test.cases.framework.resolver.tb1)" + 
-				  "(bundle-version>=1.1)(!(bundle-version>=1.2))" + 
-				  "(version>=1.1)(!(version>=1.2))" +
-				")");
-		Filter filterCapabilities2 = createFilter(
-				"(&" + 
-				  "(osgi.package=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(bundle-symbolic-name=org.osgi.test.cases.framework.resolver.tb1)" + 
-				  "(bundle-version>=1.0)(!(bundle-version>=1.1))" +
-				  "(version>=1.0)(!(version>=1.1))" +
-				")");
+		Filter filterCapabilities1 = createFilter("(&"
+				+ "(osgi.wiring.package=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-symbolic-name=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-version>=1.1)(!(bundle-version>=1.2))"
+				+ "(version>=1.1)(!(version>=1.2))" 
+				+ ")");
+		Filter filterCapabilities2 = createFilter("(&"
+				+ "(osgi.wiring.package=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-symbolic-name=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-version>=1.0)(!(bundle-version>=1.1))"
+				+ "(version>=1.0)(!(version>=1.1))"
+				+ ")");
 		TestFilterCapabilityHook hook1 = new TestFilterCapabilityHook(filterCapabilities1);
 		ServiceRegistration<ResolverHookFactory> reg = registerHook(hook1, 0);
 
@@ -505,16 +503,14 @@ public class ResolverHookTests extends OSGiTestCase {
 	}
 
 	public void testFilterDyanmicImportPackage01() {
-		Filter filterCapabilities1 = createFilter(
-				"(&" + 
-				  "(osgi.package=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(version>=1.1)(!(version>=1.2))" +
-				")");
-		Filter filterCapabilities2 = createFilter(
-				"(&" + 
-				  "(osgi.package=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(version>=1.0)(!(version>=1.1))" +
-				")");
+		Filter filterCapabilities1 = createFilter("(&"
+				+ "(osgi.wiring.package=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(version>=1.1)(!(version>=1.2))" 
+				+ ")");
+		Filter filterCapabilities2 = createFilter("(&"
+				+ "(osgi.wiring.package=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(version>=1.0)(!(version>=1.1))" 
+				+ ")");
 		TestFilterCapabilityHook hook1 = new TestFilterCapabilityHook(filterCapabilities1);
 		ServiceRegistration<ResolverHookFactory> reg = registerHook(hook1, 0);
 
@@ -550,16 +546,14 @@ public class ResolverHookTests extends OSGiTestCase {
 	}
 
 	public void testFilterRequireBundle01() {
-		Filter filterCapabilities1 = createFilter(
-				"(&" + 
-				  "(osgi.bundle=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(bundle-version>=1.1)(!(bundle-version>=1.2))" + 
-				")");
-		Filter filterCapabilities2 = createFilter(
-				"(&" + 
-				  "(osgi.bundle=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(bundle-version>=1.0)(!(bundle-version>=1.1))" +
-				")");
+		Filter filterCapabilities1 = createFilter("(&"
+				+ "(osgi.wiring.bundle=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-version>=1.1)(!(bundle-version>=1.2))" 
+				+ ")");
+		Filter filterCapabilities2 = createFilter("(&"
+				+ "(osgi.wiring.bundle=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-version>=1.0)(!(bundle-version>=1.1))" 
+				+ ")");
 		TestFilterCapabilityHook hook1 = new TestFilterCapabilityHook(filterCapabilities1);
 		ServiceRegistration<ResolverHookFactory> reg = registerHook(hook1, 0);
 
@@ -595,16 +589,14 @@ public class ResolverHookTests extends OSGiTestCase {
 	}
 
 	public void testFilterHost01() {
-		Filter filterCapabilities1 = createFilter(
-				"(&" + 
-				  "(osgi.host=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(bundle-version>=1.1)(!(bundle-version>=1.2))" + 
-				")");
-		Filter filterCapabilities2 = createFilter(
-				"(&" + 
-				  "(osgi.host=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(bundle-version>=1.0)(!(bundle-version>=1.1))" +
-				")");
+		Filter filterCapabilities1 = createFilter("(&"
+				+ "(osgi.wiring.host=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-version>=1.1)(!(bundle-version>=1.2))" 
+				+ ")");
+		Filter filterCapabilities2 = createFilter("(&"
+				+ "(osgi.wiring.host=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-version>=1.0)(!(bundle-version>=1.1))" 
+				+ ")");
 		TestFilterCapabilityHook hook1 = new TestFilterCapabilityHook(filterCapabilities1);
 		ServiceRegistration<ResolverHookFactory> reg = registerHook(hook1, 0);
 
@@ -798,13 +790,12 @@ public class ResolverHookTests extends OSGiTestCase {
 		final Bundle tb5 = install("resolver.tb5.jar");
 
 		Collection<Bundle> testBundles = Arrays.asList(tb1v100, tb1v110, tb2, tb3, tb4, tb5);
-		final Filter testCapabilities = createFilter(
-				"(|" + 
-				  "(osgi.package=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(osgi.bundle=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(osgi.host=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(test=aName)" +
-				")");
+		final Filter testCapabilities = createFilter("(|"
+				+ "(osgi.wiring.package=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(osgi.wiring.bundle=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(osgi.wiring.host=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(test=aName)" 
+				+ ")");
 
 		final boolean[] called = new boolean[] {false, false, false, false};
 		final AssertionFailedError[] errors = new AssertionFailedError[5];

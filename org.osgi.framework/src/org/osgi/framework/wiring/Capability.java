@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@ public interface Capability {
 	 * package capabilities required by a bundle wiring may change as the bundle
 	 * wiring may dynamically import additional packages.
 	 */
-	String	PACKAGE_CAPABILITY	= "osgi.package";
+	String	PACKAGE_CAPABILITY	= "osgi.wiring.package";
 
 	/**
 	 * Capability name space for bundle capabilities. The bundle symbolic name
@@ -98,7 +98,7 @@ public interface Capability {
 	 * {@link Constants#BUNDLE_MANIFESTVERSION Bundle-ManifestVersion}
 	 * {@literal <} 2) must not provide a bundle capability.
 	 */
-	String	BUNDLE_CAPABILITY	= "osgi.bundle";
+	String	BUNDLE_CAPABILITY	= "osgi.wiring.bundle";
 
 	/**
 	 * Capability name space for host capabilities. The bundle symbolic name of
@@ -123,7 +123,7 @@ public interface Capability {
 	 * {@link Constants#BUNDLE_MANIFESTVERSION Bundle-ManifestVersion}
 	 * {@literal <} 2) must not provide a host capability.
 	 */
-	String	HOST_CAPABILITY		= "osgi.host";
+	String	HOST_CAPABILITY		= "osgi.wiring.host";
 
 	/**
 	 * Returns the name space of this capability.

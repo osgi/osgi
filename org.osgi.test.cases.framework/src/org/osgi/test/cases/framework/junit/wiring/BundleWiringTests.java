@@ -131,14 +131,15 @@ public class BundleWiringTests extends OSGiTestCase {
 		List<Capability> tb4TestFragmentCapabilities = tb4Revision.getDeclaredCapabilities("test.fragment");
 		checkCapabilities(tb4TestFragmentCapabilities, tb4AllCapabilities, "test.fragment", 1, tb4Revision);
 
-		// test osgi.host for fragment-attachment:="never"
+		// test osgi.wiring.host for fragment-attachment:="never"
 		BundleRevision tb2Revision = testRevisions.get(1);
 		List<Capability> tb2AllCapabilities = tb2Revision.getDeclaredCapabilities(null);
 		assertEquals("Wrong number of capabilities", 1, tb2AllCapabilities.size());
 		List<Capability> tb2BundleCapabilities = tb2Revision.getDeclaredCapabilities(Capability.BUNDLE_CAPABILITY);
 		checkCapabilities(tb2BundleCapabilities, tb2AllCapabilities, Capability.BUNDLE_CAPABILITY, 1, tb2Revision);
 		List<Capability> tb2HostCapabilities = tb2Revision.getDeclaredCapabilities(Capability.HOST_CAPABILITY);
-		assertEquals("Expected no osgi.host capability", 0, tb2HostCapabilities.size());
+		assertEquals("Expected no osgi.wiring.host capability", 0,
+				tb2HostCapabilities.size());
 	}
 
 	void checkCapabilities(List<Capability> toCheck, List<Capability> all, String namespace, int expectedNum, BundleRevision provider) {
@@ -192,9 +193,11 @@ public class BundleWiringTests extends OSGiTestCase {
 		List<WiredCapability> genTestNoAttrsTb1Capabilities = tb1Wiring.getProvidedCapabilities("test.no.attrs");
 		List<WiredCapability> genTestFragmentTb1Capabilities = tb1Wiring.getProvidedCapabilities("test.fragment");
 
-		// check for osgi.host capability from wiring with fragment-attachment:="false"
+		// check for osgi.wiring.host capability from wiring with
+		// fragment-attachment:="false"
 		List<WiredCapability> osgiHostTb2Capabilities = tb2Wiring.getProvidedCapabilities(Capability.HOST_CAPABILITY);
-		assertEquals("Expecting no osgi.host capability", 0, osgiHostTb2Capabilities.size());
+		assertEquals("Expecting no osgi.wiring.host capability", 0,
+				osgiHostTb2Capabilities.size());
 
 		WiredCapability[] capabilities = checkWiredCapabilities(tb1Wiring, tb2Wiring, tb3Wiring, tb5Wiring, tb14Wiring, tb4, allTb1Capabilities, osgiBundleTb1Capabilities, osgiHostTb1Capabilities, osgiPackageTb1Capabilities, genTestTb1Capabilities, genTestMultipleTb1Capabilities, genTestFragmentTb1Capabilities, genTestNoAttrsTb1Capabilities);
 
@@ -369,11 +372,14 @@ public class BundleWiringTests extends OSGiTestCase {
 			Bundle tb4, 
 			List<WiredCapability> allTb1Capabilities, List<WiredCapability> osgiBundleTb1Capabilities, List<WiredCapability> osgiHostTb1Capabilities, List<WiredCapability> osgiPackageTb1Capabilities, List<WiredCapability> genTestTb1Capabilities, List<WiredCapability> genTestMultipleTb1Capabilities, List<WiredCapability> genTestFragmentTb1Capabilities, List<WiredCapability> genTestNoAttrsTb1Capabilities) {
 		assertEquals("Wrong number of capabilities", 8, allTb1Capabilities.size());
-		assertEquals("Wrong number of osgi.bundle capabilities", 1, osgiBundleTb1Capabilities.size());
+		assertEquals("Wrong number of osgi.wiring.bundle capabilities", 1,
+				osgiBundleTb1Capabilities.size());
 		assertTrue("All capabilities is missing : " + osgiBundleTb1Capabilities, allTb1Capabilities.containsAll(osgiBundleTb1Capabilities));
-		assertEquals("Wrong number of osgi.host capabilities", 1, osgiHostTb1Capabilities.size());
+		assertEquals("Wrong number of osgi.wiring.host capabilities", 1,
+				osgiHostTb1Capabilities.size());
 		assertTrue("All capabilities is missing : " + osgiHostTb1Capabilities, allTb1Capabilities.containsAll(osgiHostTb1Capabilities));
-		assertEquals("Wrong number of osgi.package capabilities", 1, osgiPackageTb1Capabilities.size());
+		assertEquals("Wrong number of osgi.wiring.package capabilities", 1,
+				osgiPackageTb1Capabilities.size());
 		assertTrue("All capabilities is missing : " + osgiPackageTb1Capabilities, allTb1Capabilities.containsAll(osgiPackageTb1Capabilities));
 		assertEquals("Wrong number of generic test capabilities", 1, genTestTb1Capabilities.size());
 		assertTrue("All capabilities is missing : " + genTestTb1Capabilities, allTb1Capabilities.containsAll(genTestTb1Capabilities));
