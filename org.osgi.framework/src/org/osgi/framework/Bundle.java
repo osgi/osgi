@@ -1207,6 +1207,9 @@ public interface Bundle extends Comparable<Bundle> {
 	 * @return The object, of the specified type, to which this bundle has been
 	 *         adapted or {@code null} if this bundle cannot be adapted to the
 	 *         specified type.
+	 * @throws SecurityException If the caller does not have the appropriate
+	 *         {@code AdaptPermission[type,this,ADAPT]}, and the Java Runtime
+	 *         Environment supports permissions.
 	 * @since 1.6
 	 */
 	<A> A adapt(Class<A> type);
