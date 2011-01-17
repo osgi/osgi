@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,6 +75,9 @@ public interface WovenClass {
 	 * @throws NullPointerException If newBytes is {@code null}.
 	 * @throws IllegalStateException If weaving is {@link #isWeavingComplete()
 	 *         complete}.
+	 * @throws SecurityException If the caller does not have
+	 *         {@code AdminPermission[bundle,WEAVE]} and the Java runtime
+	 *         environment supports permissions.
 	 */
 	public void setBytes(byte[] newBytes);
 
@@ -89,6 +92,10 @@ public interface WovenClass {
 	 * <p>
 	 * After weaving is {@link #isWeavingComplete() complete}, this object
 	 * becomes effectively immutable and the returned list will be unmodifiable.
+	 * 
+	 * <p>
+	 * If the Java runtime environment supports permissions, the caller must
+	 * have {@code AdminPermission[bundle,WEAVE]} to modify the returned list.
 	 * 
 	 * @return A list containing zero or more dynamic import package
 	 *         descriptions to add to the bundle wiring for this woven class.
