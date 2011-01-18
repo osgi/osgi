@@ -46,7 +46,10 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * process. A resolver hook factory contained in the snapshot may become
  * unregistered during the resolve process. The framework should handle this and
  * stop calling the resolver hook instance provided by the unregistered hook
- * factory for the remainder of the resolve process.</li>
+ * factory and the current resolve process must fail. If possible, an exception
+ * must be thrown to the caller of the API which triggered the resolve process.
+ * In cases where the the caller is not available a framework event of type
+ * error should be fired.</li>
  * <li>For each registered hook factory call the
  * {@link ResolverHookFactory#begin(Collection)} method to inform the hooks
  * about a resolve process beginning and to obtain a Resolver Hook instance that
