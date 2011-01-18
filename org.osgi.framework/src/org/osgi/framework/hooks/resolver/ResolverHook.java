@@ -120,7 +120,7 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * ). The framework must detect this and throw an {@link IllegalStateException}.
  * 
  * @see ResolverHookFactory
- * @ThreadSafe
+ * @NotThreadSafe
  * @version $Id$
  */
 public interface ResolverHook {
