@@ -1,0 +1,4 @@
+Bundle-Name:                             ${p}.testclasses
+Bundle-Version:                          4.2.0.${project.build}
+Export-Package:	                         ${p}.testclasses
+Include-Resource: org/osgi/test/cases/framework/weaving/testclasses/TestClass.class=bin/org/osgi/test/cases/framework/weaving/testclasses/TestClass.class
