@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,12 +38,6 @@ import org.osgi.framework.BundleReference;
  * requires the bundle wiring. An in use bundle wiring has a class loader. Once
  * a bundle wiring is no longer in use, it is considered stale and is discarded
  * by the framework.
- * 
- * <p>
- * A list of all in use bundle wirings for a bundle can be obtained by calling
- * {@link Bundle#adapt(Class) bundle.adapt}({@link BundleWirings}.class).
- * {@link BundleWirings#getWirings() getWirings()}. For non-fragment bundles,
- * the first item in the returned list is the current bundle wiring.
  * 
  * <p>
  * The current bundle wiring for a non-fragment bundle can be obtained by
@@ -126,6 +120,7 @@ public interface BundleWiring extends BundleReference {
 	 * may refer to an older revision of the bundle.
 	 * 
 	 * @return The bundle revision for this bundle wiring.
+	 * @see BundleRevision#getBundleWiring()
 	 */
 	BundleRevision getBundleRevision();
 
@@ -145,6 +140,7 @@ public interface BundleWiring extends BundleReference {
 	 *         empty list if this bundle wiring does not have any attached
 	 *         fragments. If this bundle wiring is not {@link #isInUse() in use}
 	 *         , {@code null} will be returned.
+	 * @see BundleRevision#getHostWirings()
 	 */
 	List<BundleRevision> getFragmentRevisions();
 

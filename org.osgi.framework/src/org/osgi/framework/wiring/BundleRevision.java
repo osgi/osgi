@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 
 package org.osgi.framework.wiring;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.osgi.framework.Bundle;
@@ -24,12 +25,14 @@ import org.osgi.framework.BundleReference;
 import org.osgi.framework.Version;
 
 /**
- * Bundle Revision. Since a bundle update can change the entries in a bundle,
- * different bundle wirings for the same bundle can be associated with different
- * bundle revisions.
+ * Bundle Revision. When a bundle is installed and each time a bundle is
+ * updated, a new bundle revision of the bundle is created. Since a bundle
+ * update can change the entries in a bundle, different bundle wirings for the
+ * same bundle can be associated with different bundle revisions.
  * 
  * <p>
- * The current bundle revision for a bundle can be obtained by calling
+ * The current bundle revision is the most recent bundle revision. The current
+ * bundle revision for a bundle can be obtained by calling
  * {@link Bundle#adapt(Class) bundle.adapt}(BundleRevision.class).
  * 
  * @ThreadSafe
@@ -93,4 +96,25 @@ public interface BundleRevision extends BundleReference {
 	 * @see #getTypes()
 	 */
 	int	TYPE_FRAGMENT	= 0x00000001;
+
+	/**
+	 * Returns the bundle wiring which is using this bundle revision.
+	 * 
+	 * @return The bundle wiring which is using this bundle revision or
+	 *         {@code null} if this bundle revision is a {@link #TYPE_FRAGMENT
+	 *         fragment} or no bundle wiring is using this bundle revision.
+	 * @see BundleWiring#getBundleRevision()
+	 */
+	BundleWiring getBundleWiring();
+
+	/**
+	 * Returns the bundle wirings to which this fragment revision is attached.
+	 * 
+	 * @return The bundle wirings to which this fragment revision is attached.
+	 *         The returned collection will be empty if this bundle revision is
+	 *         not a {@link #TYPE_FRAGMENT fragment} or this fragment revision
+	 *         is not attached to any bundle wirings.
+	 * @see BundleWiring#getFragmentRevisions()
+	 */
+	Collection<BundleWiring> getHostWirings();
 }
