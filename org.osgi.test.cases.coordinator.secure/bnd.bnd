@@ -59,7 +59,9 @@ Include-Resource = \
 	tb31.jar,\
 	tb32.jar,\
 	tb33.jar,\
-	tb34.jar
+	tb34.jar,\
+	tb35.jar,\
+	tb36.jar
 
 Export-Package = org.osgi.test.cases.coordinator.secure
 
