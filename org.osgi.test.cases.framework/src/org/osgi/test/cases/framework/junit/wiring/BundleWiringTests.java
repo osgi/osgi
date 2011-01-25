@@ -160,6 +160,16 @@ public class BundleWiringTests extends OSGiTestCase {
 			assertEquals("Wrong bundle", bundle, revision.getBundle());
 			assertEquals("Wrong version", bundle.getVersion(), revision.getVersion());
 			assertEquals("Wrong type", bundle.getHeaders("").get(Constants.FRAGMENT_HOST) == null ? 0 : BundleRevision.TYPE_FRAGMENT, revision.getTypes());
+
+			Collection<BundleWiring> hostWirings = revision.getHostWirings();
+			assertNotNull("Host wirings must never be null.", hostWirings);
+			if ((revision.getTypes() & BundleRevision.TYPE_FRAGMENT) != 0) {
+				// we assume the fragment resolved to one host
+				assertEquals("Wrong number of host wirings found", 1, hostWirings.size());
+			} else {
+				// regular bundles must have empty host wirnings
+				assertEquals("Must have empty wirings for regular bundles", 0, hostWirings.size());
+			}
 		}
 		return result;
 	}
@@ -416,35 +426,30 @@ public class BundleWiringTests extends OSGiTestCase {
 	private void checkWiredCapability(WiredCapability capability,
 			BundleWiring provider, BundleWiring requirer) {
 		assertEquals("Wrong provider", provider, capability.getProviderWiring());
-		Collection requirers = capability.getRequirerWirings();
+		Collection<BundleWiring> requirers = capability.getRequirerWirings();
 		assertTrue("Requirer not included", requirers.contains(requirer));
 		assertEquals("Wrong number of requirers", 1, requirers.size());
 
-		List required = requirer.getRequiredCapabilities(capability.getNamespace());
+		List<WiredCapability> required = requirer.getRequiredCapabilities(capability.getNamespace());
 		assertNotNull("Required capabilities is null", required);
 		assertTrue("Expected capability is not is list of required: " + capability, required.contains(capability));
 	}
 
-	public void testGetWirings() {
+	public void testGetRevisions() {
 		Bundle tb1 = install("resolver.tb1.v110.jar");
 		Bundle tb2 = install("resolver.tb2.jar");
 		Bundle tb3 = install("resolver.tb3.jar");
 		Bundle tb4 = install("resolver.tb4.jar");
 		Bundle tb5 = install("resolver.tb5.jar");
-		List testBundles = Arrays.asList(new Bundle[]{tb1, tb2, tb3, tb4, tb5});
+		List<Bundle> testBundles = Arrays.asList(new Bundle[]{tb1, tb2, tb3, tb4, tb5});
 
 		assertTrue(frameworkWiring.resolveBundles(testBundles));
 
-		BundleRevisions tb1Revisions = (BundleRevisions) tb1
-				.adapt(BundleRevisions.class);
-		BundleRevisions tb2Revisions = (BundleRevisions) tb2
-				.adapt(BundleRevisions.class);
-		BundleRevisions tb3Revisions = (BundleRevisions) tb3
-				.adapt(BundleRevisions.class);
-		BundleRevisions tb4Revisions = (BundleRevisions) tb4
-				.adapt(BundleRevisions.class);
-		BundleRevisions tb5Revisions = (BundleRevisions) tb5
-				.adapt(BundleRevisions.class);
+		BundleRevisions tb1Revisions = tb1.adapt(BundleRevisions.class);
+		BundleRevisions tb2Revisions = tb2.adapt(BundleRevisions.class);
+		BundleRevisions tb3Revisions = tb3.adapt(BundleRevisions.class);
+		BundleRevisions tb4Revisions = tb4.adapt(BundleRevisions.class);
+		BundleRevisions tb5Revisions = tb5.adapt(BundleRevisions.class);
 		BundleRevisions[] revisions = new BundleRevisions[] {tb1Revisions,
 				tb2Revisions, tb3Revisions, tb4Revisions, tb5Revisions};
 
@@ -509,9 +514,9 @@ public class BundleWiringTests extends OSGiTestCase {
 			fail("Unexpected error on uninstall", e);
 		}
 
-		// regetting tb1 wiring to test that we can still get it after uninstall
-		// this wirings will only have 1 wiring and it is not current
-		tb1Revisions = (BundleRevisions) tb1.adapt(BundleRevisions.class);
+		// regetting tb1 revisions to test that we can still get it after uninstall
+		// this revision will only have 1 revision and it is not current
+		tb1Revisions = tb1.adapt(BundleRevisions.class);
 		checkWirings(new Bundle[] {tb1}, new BundleRevisions[] {tb1Revisions},
 				1,
 				false);
@@ -524,11 +529,11 @@ public class BundleWiringTests extends OSGiTestCase {
 
 	private void checkRevisions(BundleRevisions revisions,
 			BundleRevision[] bundleRevisions) {
-		List revisionList = revisions.getRevisions();
+		List<BundleRevision> revisionList = revisions.getRevisions();
 		assertEquals("Wrong number of revisions", bundleRevisions.length, revisionList.size());
 		int i = 0;
-		for (Iterator iWirings = revisionList.iterator(); iWirings.hasNext(); i++)
-			assertEquals("Wrong revision found", bundleRevisions[i], ((BundleWiring) iWirings.next()).getBundleRevision());
+		for (Iterator<BundleRevision> iRevisions = revisionList.iterator(); iRevisions.hasNext(); i++)
+			assertEquals("Wrong revision found", bundleRevisions[i], iRevisions.next());
 	}
 
 	private void checkWirings(Bundle[] bundles,
@@ -548,17 +553,17 @@ public class BundleWiringTests extends OSGiTestCase {
 					bundleRevisions);
 			assertEquals("Wrong bundle for revisions", bundle,
 					bundleRevisions.getBundle());
-			List revisions = bundleRevisions.getRevisions();
+			List<BundleRevision> revisions = bundleRevisions.getRevisions();
 			assertEquals("Wrong revision for bundle", revision,
 					revisions.get(0));
 			assertEquals("Wrong number of in use revisions",
 					expectedNumRevisions, revisions.size());
 
 			int index = 0;
-			for (Iterator iter = revisions.iterator(); iter.hasNext(); index++) {
+			for (Iterator<BundleRevision> iter = revisions.iterator(); iter.hasNext(); index++) {
 				revision = (BundleRevision) iter.next();
 				BundleWiring wiring = revision.getBundleWiring();
-				Collection hostWirings = revision.getHostWirings();
+				Collection<BundleWiring> hostWirings = revision.getHostWirings();
 
 				if ((revision.getTypes() & BundleRevision.TYPE_FRAGMENT) != 0) {
 					assertNotNull("Hosts wirings is null", hostWirings);
@@ -567,14 +572,15 @@ public class BundleWiringTests extends OSGiTestCase {
 							hostWirings.size());
 					BundleWiring hostWiring = (BundleWiring) hostWirings
 							.iterator().next();
-					List fragments = hostWiring.getFragmentRevisions();
+					List<BundleRevision> fragments = hostWiring.getFragmentRevisions();
 					assertNotNull("Fragments is null", fragments);
 					assertTrue("Fragment is not found: " + bundle,
 							fragments.contains(revision));
 					continue;
 				}
 
-				assertNull("Hosts wirings is not null", hostWirings);
+				assertNotNull("Hosts wirings is not null", hostWirings);
+				assertEquals("Must not have host wirings if not a fragment", 0, hostWirings.size());
 				assertNotNull("bundle wiring is null", wiring);
 				if (index == 0 && hasCurrent)
 					assertTrue("Wiring is not current for: " + bundle, wiring.isCurrent());
