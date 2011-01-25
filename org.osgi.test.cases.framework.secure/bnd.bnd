@@ -50,7 +50,8 @@ Include-Resource = \
 	resolver.tb2.jar, \
 	resolver.tb5.jar, \
 	syncbundlelistener.tb1a.jar, \
-	syncbundlelistener.tb1b.jar
+	syncbundlelistener.tb1b.jar, \
+	weaving.tb1.jar
 	
 Test-Cases							= ${testcases}
 

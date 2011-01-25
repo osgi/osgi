@@ -1,0 +1,7 @@
+Bundle-Name:                             ${p}.weaving.tb1
+Bundle-SymbolicName:                     ${p}.weaving.tb1
+Bundle-Version:                          1.0.0
+Private-Package:                         ${p}.weaving.tbx
+Bundle-Activator:                        ${p}.weaving.tbx.Activator
+
+Include-Resource =	{OSGI-INF/permissions.perm=perms/weaving.tb1.perm}
