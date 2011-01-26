@@ -26,13 +26,21 @@
 package org.osgi.test.cases.coordinator.secure.tb28;
 
 import org.osgi.test.cases.coordinator.secure.AbstractActivator;
+import org.osgi.test.cases.coordinator.secure.Interrupter;
 
 /**
  * Joins a coordination with permission.
  */
 public class Activator extends AbstractActivator {
 	protected void doStart() throws Exception {
-		coordinator.peek().join(1000);
+		Interrupter i = new Interrupter(Thread.currentThread(), 3000);
+		i.start();
+		try {
+			coordinator.peek().join(1000);
+		}
+		finally {
+			i.interrupt();
+		}
 	}
 	
 	protected boolean hasPermission() {
