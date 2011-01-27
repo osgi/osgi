@@ -13,18 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.framework.weaving.testclasses;
+package org.osgi.test.cases.framework.weaving.imports;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 /**
- * This class is used as a basic weavable entity. The
- * CT changes the value of the constant returned by
- * {@link #toString()}.
+ * This class is used to identify the bundle from which it
+ * was loaded. This allows the CT to verify that various
+ * constrained Dynamic-Import additions are followed correctly
  * 
  * @author IBM
  */
-public class TestClass {
-
-	public String toString() {
-		return "DEFAULT";
-	}
+public class SymbolicNameVersion {
+	/**
+	 * Return the symbolic name and version of 
+	 * the bundle that loaded this class
+	 */
+    public String toString() {
+    	Bundle b = FrameworkUtil.getBundle(this.getClass());
+    	return b.getSymbolicName() + "_" + b.getVersion();
+    }
 }

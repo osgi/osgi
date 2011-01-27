@@ -11,14 +11,21 @@ Import-Package						= \
 	*
 
 Include-Resource 					= \
-	testclasses.jar , \
-	org.objectweb.asm-3.2.0.jar
+	testClasses.jar , \
+	testAlternativeImport.jar , \
+	testImport_1.0.0.jar , \
+	testImport_1.1.0.jar , \
+	testImport_1.6.0.jar
 
 -buildpath							= \
 	osgi.core;									version=4.3		, \
 	ee.minimum;									version=1.2		, \
 	org.osgi.test.support;              		version=project , \
+	org.apache.servicemix.bundles.bcel;         version=5.2     , \
 	${junit}
+
+-runbundles						= \
+	org.apache.servicemix.bundles.bcel;         version=5.2 
 
 -runproperties					= report=true
 

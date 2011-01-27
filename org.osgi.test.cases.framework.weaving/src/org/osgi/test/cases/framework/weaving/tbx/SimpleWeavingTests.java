@@ -20,13 +20,19 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
-*
-*/
+ * This class tests that Basic weaving works properly
+ * 
+ * @author IBM
+ */
 public class SimpleWeavingTests extends DefaultTestBundleControl {
 	
+	/**
+	 * Perform a basic weave, and show the loaded class is changed
+	 * @throws Exception
+	 */
 	public void testBasicWeaving() throws Exception {
 		// Install the bundles necessary for this test
-		Bundle weavingClasses = installBundle("testclasses.jar");
+		Bundle weavingClasses = installBundle(TestConstants.TESTCLASSES_JAR);
 		ServiceRegistration reg = null;
 		try {
 			reg = new ConfigurableWeavingHook().register(getContext(), 0);
@@ -39,14 +45,50 @@ public class SimpleWeavingTests extends DefaultTestBundleControl {
 		}
 	}
 	
+	/**
+	 * Perform a basic weave that adds an import, and show the loaded class fails if
+	 * the hook does not add the import
+	 * @throws Exception
+	 */
+	public void testBasicWeavingNoDynamicImport() throws Exception {
+		// Install the bundles necessary for this test
+		Bundle weavingClasses = installBundle(TestConstants.TESTCLASSES_JAR);
+		ServiceRegistration reg = null;
+		ConfigurableWeavingHook hook = new ConfigurableWeavingHook();
+		hook.setChangeTo("org.osgi.framework.Bundle");
+		try {
+			reg = hook.register(getContext(), 0);
+			Class clazz = weavingClasses.loadClass(TestConstants.DYNAMIC_IMPORT_TEST_CLASS_NAME);
+			clazz.newInstance().toString();
+			fail("Should fail to load the Bundle class");
+		} catch (RuntimeException cnfe) {
+			assertEquals("Wrong exception", 
+					"java.lang.ClassNotFoundException: org.osgi.framework.Bundle", 
+					cnfe.getCause().toString());
+		} finally {
+			if (reg != null)
+				reg.unregister();
+			uninstallBundle(weavingClasses);
+		}
+	}
+	
+	/**
+	 * Perform a basic weave that adds an import, and show the loaded class works if
+	 * the hook adds the import
+	 * @throws Exception
+	 */
 	public void testBasicWeavingDynamicImport() throws Exception {
 		// Install the bundles necessary for this test
-		Bundle weavingClasses = installBundle("testclasses.jar");
+		Bundle weavingClasses = installBundle(TestConstants.TESTCLASSES_JAR);
 		ServiceRegistration reg = null;
+		ConfigurableWeavingHook hook = new ConfigurableWeavingHook();
+		hook.addImport("org.osgi.framework");
+		hook.setChangeTo("org.osgi.framework.Bundle");
 		try {
-			reg = new ConfigurableWeavingHook().register(getContext(), 0);
-			Class clazz = weavingClasses.loadClass(TestConstants.TEST_CLASS_NAME);
-			assertEquals("Weaving was unsuccessful", "WOVEN", clazz.newInstance().toString());
+			reg = hook.register(getContext(), 0);
+			Class clazz = weavingClasses.loadClass(TestConstants.DYNAMIC_IMPORT_TEST_CLASS_NAME);
+			assertEquals("Weaving was unsuccessful", "interface org.osgi.framework.Bundle", 
+					clazz.newInstance().toString());
 		} finally {
 			if (reg != null)
 				reg.unregister();

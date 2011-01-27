@@ -16,6 +16,11 @@
 
 package org.osgi.test.cases.framework.weaving.tbx;
 
+/**
+ * This class tests the API signatures
+ * 
+ * @author IBM
+ */
 public class SignatureTestCase extends
 		org.osgi.test.support.signature.SignatureTestCase {
 	// concrete subclass
