@@ -26,12 +26,12 @@ import org.osgi.framework.Version;
  * revision}.
  * 
  * <p>
- * The framework defines capabilities for {@link #PACKAGE_CAPABILITY packages},
- * {@link #BUNDLE_CAPABILITY bundles} and {@link #HOST_CAPABILITY hosts}. These
- * capabilities are defined only to express wiring information by the framework.
- * They must not be used in {@link Constants#PROVIDE_CAPABILITY
- * Provide-Capability} and {@link Constants#REQUIRE_CAPABILITY
- * Require-Capability} manifest headers.
+ * The framework defines capability name spaces for {@link #PACKAGE_CAPABILITY
+ * packages}, {@link #BUNDLE_CAPABILITY bundles} and {@link #HOST_CAPABILITY
+ * hosts}. These capability name spaces are defined only to express wiring
+ * information by the framework. They must not be used in
+ * {@link Constants#PROVIDE_CAPABILITY Provide-Capability} and
+ * {@link Constants#REQUIRE_CAPABILITY Require-Capability} manifest headers.
  * 
  * @ThreadSafe
  * @noimplement

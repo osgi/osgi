@@ -75,11 +75,45 @@ public interface BundleWiring extends BundleReference {
 	boolean isInUse();
 
 	/**
+	 * Returns the {@link Wire}s for the {@link Capability capabilities} of this
+	 * bundle wiring.
+	 * 
+	 * @param namespace The name space of the capabilities to return or
+	 *        {@code null} to return the capabilities in all name spaces.
+	 * @return A collection containing a snapshot of the {@link Wire}s for the
+	 *         {@link Capability capabilities} of this bundle wiring, or an
+	 *         empty collection if this bundle wiring has no capabilities in the
+	 *         specified name space. If this bundle wiring is not
+	 *         {@link #isInUse() in use}, {@code null} will be returned.
+	 * @since 1.1
+	 */
+	Collection<Wire> getCapabilityWires(String namespace);
+
+	/**
+	 * Returns the {@link Wire}s for the {@link Requirement requirements} of
+	 * this bundle wiring.
+	 * 
+	 * <p>
+	 * This method may return different results if this bundle wiring adds more
+	 * requirements. For example, dynamically importing a package.
+	 * 
+	 * @param namespace The name space of the requirements to return or
+	 *        {@code null} to return the requirements in all name spaces.
+	 * @return A collection containing a snapshot of the {@link Wire}s for the
+	 *         {@link Requirement requirements} of this bundle wiring, or an
+	 *         empty collection if this bundle wiring has no requirements in the
+	 *         specified name space. If this bundle wiring is not
+	 *         {@link #isInUse() in use}, {@code null} will be returned.
+	 * @since 1.1
+	 */
+	Collection<Wire> getRequirementWires(String namespace);
+
+	/**
 	 * Returns the capabilities provided by this bundle wiring.
 	 * 
-	 * @param capabilityNamespace The name space of the provided capabilities to
-	 *        return or {@code null} to return the provided capabilities from
-	 *        all name spaces.
+	 * @param namespace The name space of the provided capabilities to return or
+	 *        {@code null} to return the provided capabilities from all name
+	 *        spaces.
 	 * @return A list containing a snapshot of the {@link WiredCapability}s, or
 	 *         an empty list if this bundle wiring provides no capabilities in
 	 *         the specified name space. If this bundle wiring is not
@@ -87,7 +121,7 @@ public interface BundleWiring extends BundleReference {
 	 *         list contains the provided capabilities in the order they are
 	 *         specified in the manifest.
 	 */
-	List<WiredCapability> getProvidedCapabilities(String capabilityNamespace);
+	List<WiredCapability> getProvidedCapabilities(String namespace);
 
 	/**
 	 * Returns the required capabilities used by this bundle wiring.
@@ -96,9 +130,9 @@ public interface BundleWiring extends BundleReference {
 	 * The result of this method can change if this bundle wiring requires
 	 * additional capabilities.
 	 * 
-	 * @param capabilityNamespace The name space of the required capabilities to
-	 *        return or {@code null} to return the required capabilities from
-	 *        all name spaces.
+	 * @param namespace The name space of the required capabilities to return or
+	 *        {@code null} to return the required capabilities from all name
+	 *        spaces.
 	 * @return A list containing a snapshot of the {@link WiredCapability}s used
 	 *         by this bundle wiring, or an empty list if this bundle wiring
 	 *         requires no capabilities in the specified name space. If this
@@ -106,7 +140,7 @@ public interface BundleWiring extends BundleReference {
 	 *         be returned. The list contains the required capabilities in the
 	 *         order they are specified in the manifest.
 	 */
-	List<WiredCapability> getRequiredCapabilities(String capabilityNamespace);
+	List<WiredCapability> getRequiredCapabilities(String namespace);
 
 	/**
 	 * Returns the bundle revision for the bundle in this bundle wiring. Since a

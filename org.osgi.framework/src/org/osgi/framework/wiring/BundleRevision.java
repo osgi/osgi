@@ -61,15 +61,30 @@ public interface BundleRevision extends BundleReference {
 	/**
 	 * Returns the capabilities declared by this bundle revision.
 	 * 
-	 * @param namespace The name space of the declared capabilities to
-	 *        return or {@code null} to return the provided capabilities from
-	 *        all name spaces.
+	 * @param namespace The name space of the declared capabilities to return or
+	 *        {@code null} to return the declared capabilities from all name
+	 *        spaces.
 	 * @return A list containing a snapshot of the declared {@link Capability}s,
 	 *         or an empty list if this bundle revision declares no capabilities
-	 *         in the specified name space.  The list contains the provided 
+	 *         in the specified name space. The list contains the declared
 	 *         capabilities in the order they are specified in the manifest.
 	 */
 	List<Capability> getDeclaredCapabilities(String namespace);
+
+	/**
+	 * Returns the requirements declared by this bundle revision.
+	 * 
+	 * @param namespace The name space of the declared requirements to return or
+	 *        {@code null} to return the declared requirements from all name
+	 *        spaces.
+	 * @return A list containing a snapshot of the declared {@link Requirement}
+	 *         s, or an empty list if this bundle revision declares no
+	 *         requirements in the specified name space. The list contains the
+	 *         declared requirements in the order they are specified in the
+	 *         manifest.
+	 * @since 1.1
+	 */
+	List<Requirement> getDeclaredRequirements(String namespace);
 
 	/**
 	 * Returns the special types of this bundle revision. The bundle revision
