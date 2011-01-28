@@ -78,16 +78,23 @@ public interface BundleWiring extends BundleReference {
 	 * Returns the {@link Wire}s for the {@link Capability capabilities} of this
 	 * bundle wiring.
 	 * 
-	 * @param namespace The name space of the capabilities to return or
-	 *        {@code null} to return the capabilities in all name spaces.
-	 * @return A collection containing a snapshot of the {@link Wire}s for the
+	 * @param namespace The name space of the capabilities for which to return
+	 *        wires or {@code null} to return the wires for the capabilities in
+	 *        all name spaces.
+	 * @return A list containing a snapshot of the {@link Wire}s for the
 	 *         {@link Capability capabilities} of this bundle wiring, or an
-	 *         empty collection if this bundle wiring has no capabilities in the
+	 *         empty list if this bundle wiring has no capabilities in the
 	 *         specified name space. If this bundle wiring is not
-	 *         {@link #isInUse() in use}, {@code null} will be returned.
+	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
+	 *         given name space, the list contains the wires in the order the
+	 *         capabilities were specified in the manifests of the
+	 *         {@link #getBundleRevision() bundle revision} and the
+	 *         {@link #getFragmentRevisions() attached fragments} of this bundle
+	 *         wiring. There is no ordering defined between capabilities in
+	 *         different name spaces.
 	 * @since 1.1
 	 */
-	Collection<Wire> getCapabilityWires(String namespace);
+	List<Wire> getCapabilityWires(String namespace);
 
 	/**
 	 * Returns the {@link Wire}s for the {@link Requirement requirements} of
@@ -97,16 +104,23 @@ public interface BundleWiring extends BundleReference {
 	 * This method may return different results if this bundle wiring adds more
 	 * requirements. For example, dynamically importing a package.
 	 * 
-	 * @param namespace The name space of the requirements to return or
-	 *        {@code null} to return the requirements in all name spaces.
-	 * @return A collection containing a snapshot of the {@link Wire}s for the
+	 * @param namespace The name space of the requirements for which to return
+	 *        wires or {@code null} to return the wires for the requirements in
+	 *        all name spaces.
+	 * @return A list containing a snapshot of the {@link Wire}s for the
 	 *         {@link Requirement requirements} of this bundle wiring, or an
-	 *         empty collection if this bundle wiring has no requirements in the
+	 *         empty list if this bundle wiring has no requirements in the
 	 *         specified name space. If this bundle wiring is not
-	 *         {@link #isInUse() in use}, {@code null} will be returned.
+	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
+	 *         given name space, the list contains the wires in the order the
+	 *         requirements were specified in the manifests of the
+	 *         {@link #getBundleRevision() bundle revision} and the
+	 *         {@link #getFragmentRevisions() attached fragments} of this bundle
+	 *         wiring. There is no ordering defined between requirements in
+	 *         different name spaces.
 	 * @since 1.1
 	 */
-	Collection<Wire> getRequirementWires(String namespace);
+	List<Wire> getRequirementWires(String namespace);
 
 	/**
 	 * Returns the capabilities provided by this bundle wiring.
