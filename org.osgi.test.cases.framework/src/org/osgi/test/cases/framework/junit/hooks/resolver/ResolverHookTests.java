@@ -342,7 +342,7 @@ public class ResolverHookTests extends OSGiTestCase {
 								for(Iterator<BundleRevision> resolvable = arg0.iterator(); resolvable.hasNext();) {
 									BundleRevision revision = resolvable.next();
 									if ("org.osgi.test.cases.framework.resolver.tb1".equals(revision.getSymbolicName())) {
-										arg0.remove(revision);
+										resolvable.remove();
 										try {
 											arg0.add(revision);
 											fail("Expected failure on add.");
