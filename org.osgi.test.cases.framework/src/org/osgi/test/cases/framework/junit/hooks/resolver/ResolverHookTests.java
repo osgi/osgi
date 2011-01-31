@@ -145,10 +145,10 @@ public class ResolverHookTests extends OSGiTestCase {
 		LinkedList<Long> beginOrder = new LinkedList<Long>();
 		LinkedList<Long> endOrder = new LinkedList<Long>();
 		TestResolverHook hook1 = new TestResolverHook(new Long(1), null, beginOrder, endOrder);
-		TestResolverHook hook2 = new TestResolverHook(new Long(2), new RuntimeException("Test hook error"), beginOrder, endOrder);
+		TestResolverHook hook2 = new TestResolverHook(new Long(2), null, beginOrder, endOrder);
 		TestResolverHook hook3 = new TestResolverHook(new Long(3), null, beginOrder, endOrder);
 		TestResolverHook hook4 = new TestResolverHook(new Long(4), null, beginOrder, endOrder, null, true, null);
-		TestResolverHook hook5 = new TestResolverHook(new Long(5), null, beginOrder, endOrder, null, false, new RuntimeException("Test factory error"));
+		TestResolverHook hook5 = new TestResolverHook(new Long(5), null, beginOrder, endOrder);
 		registerHook(hook1, 0);
 		registerHook(hook2, Integer.MAX_VALUE);
 		registerHook(hook3, Integer.MAX_VALUE);
@@ -162,17 +162,18 @@ public class ResolverHookTests extends OSGiTestCase {
 			fail("failed to start tb2.", e);
 		}
 
-		assertEquals("Wrong number of start called", 5, beginOrder.size());
+		assertEquals("Wrong number of begin called", 5, beginOrder.size());
 		assertEquals("Wrong hook.begin called first", hook2.getID(), beginOrder.removeFirst());
 		assertEquals("Wrong hook.begin called second", hook3.getID(), beginOrder.removeFirst());
-		assertEquals("Wrong hook.begin called second", hook4.getID(), beginOrder.removeFirst());
-		assertEquals("Wrong hook.begin called second", hook5.getID(), beginOrder.removeFirst());
-		assertEquals("Wrong hook.begin called third", hook1.getID(), beginOrder.removeFirst());
+		assertEquals("Wrong hook.begin called thrid", hook4.getID(), beginOrder.removeFirst());
+		assertEquals("Wrong hook.begin called forth", hook5.getID(), beginOrder.removeFirst());
+		assertEquals("Wrong hook.begin called fifth", hook1.getID(), beginOrder.removeFirst());
 
-		assertEquals("Wrong number of end called", 3, endOrder.size());
+		assertEquals("Wrong number of end called", 4, endOrder.size());
 		assertEquals("Wrong hook.end called first", hook2.getID(), endOrder.removeFirst());
 		assertEquals("Wrong hook.end called second", hook3.getID(), endOrder.removeFirst());
-		assertEquals("Wrong hook.end called third", hook1.getID(), endOrder.removeFirst());
+		assertEquals("Wrong hook.end called third", hook5.getID(), endOrder.removeFirst());
+		assertEquals("Wrong hook.end called forth", hook1.getID(), endOrder.removeFirst());
 
 		if (hook1.getError() != null)
 			throw hook1.getError();
@@ -184,6 +185,124 @@ public class ResolverHookTests extends OSGiTestCase {
 			throw hook4.getError();
 		if (hook5.getError() != null)
 			throw hook5.getError();
+	}
+
+	public void testHookErrors01() {
+		// install and start bundle first to test refresh properly
+		install("resolver.tb1.v100.jar");
+		Bundle tb2 = install("resolver.tb2.jar");
+		try {
+			tb2.start();
+		} catch (BundleException e) {
+			fail("Failed to start bundle.", e);
+		}
+		RuntimeException error1 = new RuntimeException("Test hook error 1");
+		LinkedList<Long> beginOrder = new LinkedList<Long>();
+		LinkedList<Long> endOrder = new LinkedList<Long>();
+		TestResolverHook hook1 = new TestResolverHook(new Long(1), null, beginOrder, endOrder);
+		TestResolverHook hook2 = new TestResolverHook(new Long(2), error1, beginOrder, endOrder);
+		TestResolverHook hook3 = new TestResolverHook(new Long(3), null, beginOrder, endOrder);
+		registerHook(hook1, 30);
+		registerHook(hook2, 20);
+		registerHook(hook3, 10);
+
+		refreshBundles(Arrays.asList(tb2));
+		checkTestResolverHookError(tb2, beginOrder, endOrder, hook1, hook2, hook3);
+
+		try {
+			tb2.start();
+			fail("Expected a failure.");
+		} catch (BundleException e) {
+			assertEquals("Wrong BundleException type found.", BundleException.REJECTED_BY_HOOK, e.getType());
+			boolean found = false;
+			for (Throwable t = e.getCause(); t != null; t = t.getCause()) {
+				if (t == error1) {
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				fail("Did not find the expected cause.", e);
+		}
+
+		checkTestResolverHookError(tb2, beginOrder, endOrder, hook1, hook2, hook3);
+
+		tb2.getResource("justAtest");
+		checkTestResolverHookError(tb2, beginOrder, endOrder, hook1, hook2, hook3);
+		try {
+			tb2.getResources("justAtest");
+		} catch (IOException e) {
+			fail("Unexpected exception calling getResources", e);
+		}
+		checkTestResolverHookError(tb2, beginOrder, endOrder, hook1, hook2, hook3);
+
+		try {
+			tb2.loadClass(tb2.getHeaders("").get(Constants.BUNDLE_ACTIVATOR));
+			fail("Expected class not found.");
+		} catch (ClassNotFoundException e1) {
+			// expected;
+		}
+		checkTestResolverHookError(tb2, beginOrder, endOrder, hook1, hook2, hook3);
+
+		tb2.findEntries("justAtest", "file", false);
+		checkTestResolverHookError(tb2, beginOrder, endOrder, hook1, hook2, hook3);
+
+		assertFalse("Should not resolve", frameworkWiring.resolveBundles(Arrays.asList(tb2)));
+		checkTestResolverHookError(tb2, beginOrder, endOrder, hook1, hook2, hook3);
+
+		// insert a hook that throws an error on begin()
+		RuntimeException error2 = new RuntimeException("Test factory error 2");
+		TestResolverHook hook4 = new TestResolverHook(new Long(5), null, beginOrder, endOrder, null, false, error2);
+		registerHook(hook4, 25);
+
+		try {
+			tb2.start();
+			fail("Expected a failure.");
+		} catch (BundleException e) {
+			assertEquals("Wrong BundleException type found.", BundleException.REJECTED_BY_HOOK, e.getType());
+			boolean found = false;
+			for (Throwable t = e.getCause(); t != null; t = t.getCause()) {
+				if (t == error2) {
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				fail("Did not find the expected cause.", e);
+		}
+
+		assertEquals("Wrong number of begin called", 2, beginOrder.size());
+		assertEquals("Wrong hook.begin called first", hook1.getID(), beginOrder.removeFirst());
+		assertEquals("Wrong hook.begin called second", hook4.getID(), beginOrder.removeFirst());
+
+		assertEquals("Wrong number of end called", 0, endOrder.size());
+
+		if (hook1.getError() != null)
+			throw hook1.getError();
+		if (hook2.getError() != null)
+			throw hook2.getError();
+		if (hook3.getError() != null)
+			throw hook3.getError();
+		if (hook4.getError() != null)
+			throw hook4.getError();
+
+	}
+
+	private void checkTestResolverHookError(Bundle testBundle, LinkedList<Long> beginOrder, LinkedList<Long> endOrder, TestResolverHook hook1, TestResolverHook hook2, TestResolverHook hook3) {
+		assertEquals("Wrong state for test bundle.", Bundle.INSTALLED, testBundle.getState());
+		assertEquals("Wrong number of begin called", 3, beginOrder.size());
+		assertEquals("Wrong hook.begin called first", hook1.getID(), beginOrder.removeFirst());
+		assertEquals("Wrong hook.begin called second", hook2.getID(), beginOrder.removeFirst());
+		assertEquals("Wrong hook.begin called third", hook3.getID(), beginOrder.removeFirst());
+
+		assertEquals("Wrong number of end called", 0, endOrder.size());
+
+		if (hook1.getError() != null)
+			throw hook1.getError();
+		if (hook2.getError() != null)
+			throw hook2.getError();
+		if (hook3.getError() != null)
+			throw hook3.getError();
 	}
 
 	public void testBeginTriggers() {
@@ -232,6 +351,21 @@ public class ResolverHookTests extends OSGiTestCase {
 		preventReg.unregister();
 		testHook.clear();
 
+		// test loadClass
+		try {
+			tb2.loadClass(tb2.getHeaders("").get(Constants.BUNDLE_ACTIVATOR));
+		} catch (ClassNotFoundException e1) {
+			fail("failed to find activator");
+		}
+		triggers = testHook.getAllTriggers();
+		assertEquals("Wrong number of triggers", 1, triggers.size());
+		assertTrue("Wrong bundle included in triggers", triggers.contains(tb2Revision));
+
+		preventReg = registerHook(preventHook, 0);
+		refreshBundles(testBundles);
+		preventReg.unregister();
+		testHook.clear();
+		
 		// test getResource
 		URL resoureTest = tb3.getResource("justAtest");
 		assertNull("URL is not null!", resoureTest);
@@ -962,17 +1096,17 @@ public class ResolverHookTests extends OSGiTestCase {
 		LinkedList<Long> callOrderEnd = new LinkedList<Long>();
 		TestResolverHook hook1 = new TestResolverHook(new Long(1), null, callOrderBegin, callOrderEnd);
 		TestResolverHook hook2 = new TestResolverHook(new Long(2), null, callOrderBegin, callOrderEnd);
-		final TestResolverHook hook3 = new TestResolverHook(new Long(3), null, callOrderBegin, callOrderEnd);
+		TestResolverHook hook3 = new TestResolverHook(new Long(3), null, callOrderBegin, callOrderEnd);
 		TestResolverHook hook4 = new TestResolverHook(new Long(4), null, callOrderBegin, callOrderEnd);
 		registerHook(hook1, -1);
-		final ServiceRegistration<ResolverHookFactory> hook2Reg = registerHook(hook2, -2);
-		final ServiceRegistration<ResolverHookFactory> hook4Reg = registerHook(hook4, -2);
+		ServiceRegistration<ResolverHookFactory> hook2Reg = registerHook(hook2, -2);
+		ServiceRegistration<ResolverHookFactory> hook4Reg = registerHook(hook4, -2);
 		registerHook(new TestAddRemoveHook(hook2Reg, hook4Reg, hook3), 0);
 
 		// OK now allow resolution for the test
 		preventReg.unregister();
 		// start a resolve process
-		frameworkWiring.resolveBundles(bundles);
+		assertFalse(frameworkWiring.resolveBundles(bundles));
 
 		// we expect hook2 to never get called because it is unregistered by hook1.begin before we call hook2.begin
 		// we expect hook3 to never get called because it is registered after the resolve process has already started
@@ -980,9 +1114,8 @@ public class ResolverHookTests extends OSGiTestCase {
 		assertEquals("Wrong hook.begin called first", hook1.getID(), callOrderBegin.removeFirst());
 		assertEquals("Wrong hook.begin called second", hook4.getID(), callOrderBegin.removeFirst());
 
-		// we expect to never call hook4.end because it got unregistered by hook1 in filterResolvable
-		assertEquals("Wrong number of end called", 1, callOrderEnd.size());
-		assertEquals("Wrong hook.end called first", hook1.getID(), callOrderEnd.removeFirst());
+		// we expect to never call end because hook4 got unregistered by hook1 in filterResolvable which results in an error
+		assertEquals("Wrong number of end called", 0, callOrderEnd.size());
 	}
 
 	static class TestResolverHook implements ResolverHookFactory {
@@ -1040,7 +1173,6 @@ public class ResolverHookTests extends OSGiTestCase {
 					if (error != null)
 						error = e;
 				}
-				throwException();
 			}
 	
 			public void filterMatches(BundleRevision arg0, Collection<Capability> arg1) {
