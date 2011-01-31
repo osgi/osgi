@@ -18,24 +18,12 @@ package org.osgi.framework.wiring;
 
 import java.util.Map;
 
-import org.osgi.framework.Constants;
-
 /**
  * A requirement that has been declared from a {@link BundleRevision bundle
  * revision}.
  * 
- * <p>
- * The framework defines capability name spaces for
- * {@link Capability#PACKAGE_CAPABILITY packages},
- * {@link Capability#BUNDLE_CAPABILITY bundles} and
- * {@link Capability#HOST_CAPABILITY hosts}. These capability name spaces are
- * defined only to express wiring information by the framework. They must not be
- * used in {@link Constants#PROVIDE_CAPABILITY Provide-Capability} and
- * {@link Constants#REQUIRE_CAPABILITY Require-Capability} manifest headers.
- * 
  * @ThreadSafe
  * @noimplement
- * @since 1.1
  * @version $Id$
  */
 public interface Requirement {
@@ -69,5 +57,17 @@ public interface Requirement {
 	 * 
 	 * @return The bundle revision declaring this requirement.
 	 */
-	BundleRevision getDeclaringRevision();
+	BundleRevision getBundleRevision();
+
+	/**
+	 * Returns whether the specified capability matches this requirement.
+	 * 
+	 * @param capability The capability to match to this requirement.
+	 * @return {@code true} if the specified capability has the same
+	 *         {@link #getNamespace() name space} as this requirement and the
+	 *         filter for this requirement matches the
+	 *         {@link Capability#getAttributes() attributes of the specified
+	 *         capability}; {@code false} otherwise.
+	 */
+	boolean matches(Capability capability);
 }

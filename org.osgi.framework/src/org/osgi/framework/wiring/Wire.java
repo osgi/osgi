@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ package org.osgi.framework.wiring;
  * 
  * @ThreadSafe
  * @noimplement
- * @since 1.1
  * @version $Id$
  */
 public interface Wire {
@@ -40,7 +39,12 @@ public interface Wire {
 	Requirement getRequirement();
 
 	/**
-	 * Returns the bundle wiring providing the {@link #getCapability()
+	 * Returns the bundle wiring {@link BundleWiring#getCapabilityWires(String)
+	 * providing} the {@link #getCapability() capability}.
+	 * 
+	 * <p>
+	 * The bundle revision referenced by the returned bundle wiring may differ
+	 * from the bundle revision reference by the {@link #getCapability()
 	 * capability}.
 	 * 
 	 * @return The bundle wiring providing the capability. If the bundle wiring
@@ -50,8 +54,14 @@ public interface Wire {
 	BundleWiring getCapabilityWiring();
 
 	/**
-	 * Returns the bundle wiring whose {@link #getRequirement() requirement} is
-	 * wired to the {@link #getCapability() capability}.
+	 * Returns the bundle wiring who
+	 * {@link BundleWiring#getRequirementWires(String) requires} the
+	 * {@link #getCapability() capability}.
+	 * 
+	 * <p>
+	 * The bundle revision referenced by the returned bundle wiring may differ
+	 * from the bundle revision reference by the {@link #getRequirement()
+	 * requirement}.
 	 * 
 	 * @return The bundle wiring whose requirement is wired to the capability.
 	 *         If the bundle wiring requiring the capability is not

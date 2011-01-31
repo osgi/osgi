@@ -67,23 +67,23 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * <li>For each bundle revision {@code B} left in the shrinkable collection
  * {@code R} that represents a singleton bundle do the following:<br/>
  * Determine the collection of available capabilities that have a name space of
- * {@link Capability#BUNDLE_CAPABILITY osgi.wiring.bundle}, are singletons, and
- * have the same symbolic name as the singleton bundle revision {@code B} and
- * place each of the matching capabilities into a shrinkable collection
+ * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle}, are singletons,
+ * and have the same symbolic name as the singleton bundle revision {@code B}
+ * and place each of the matching capabilities into a shrinkable collection
  * {@code S}.
  * 
- * Remove the {@link Capability#BUNDLE_CAPABILITY osgi.wiring.bundle} capability
- * provided by bundle revision {@code B} from shrinkable collection {@code S}. A
- * singleton bundle cannot collide with itself.
+ * Remove the {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle}
+ * capability provided by bundle revision {@code B} from shrinkable collection
+ * {@code S}. A singleton bundle cannot collide with itself.
  * 
  * For each resolver hook call the
  * {@link #filterSingletonCollisions(Capability, Collection)} with the
- * {@link Capability#BUNDLE_CAPABILITY osgi.wiring.bundle} capability provided
- * by bundle revision {@code B} and the shrinkable collection {@code S}
+ * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle} capability
+ * provided by bundle revision {@code B} and the shrinkable collection {@code S}
  * 
  * The shrinkable collection {@code S} now contains all singleton
- * {@link Capability#BUNDLE_CAPABILITY osgi.wiring.bundle} capabilities that can
- * influence the ability of bundle revision {@code B} to resolve.</li>
+ * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle} capabilities that
+ * can influence the ability of bundle revision {@code B} to resolve.</li>
  * <li>During a resolve process a framework is free to attempt to resolve any or
  * all bundles contained in shrinkable collection {@code R}. For each bundle
  * revision {@code B} left in the shrinkable collection {@code R} which the
@@ -148,16 +148,16 @@ public interface ResolverHook {
 	 * candidates must all use the same name space.
 	 * <p>
 	 * Currently only capabilities with the name space of
-	 * {@link Capability#BUNDLE_CAPABILITY osgi.wiring.bundle} can be
+	 * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle} can be
 	 * singletons. In that case all the collision candidates have the name space
-	 * of {@link Capability#BUNDLE_CAPABILITY osgi.wiring.bundle}, are
+	 * of {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle}, are
 	 * singletons, and have the same symbolic name as the specified singleton
 	 * capability.
 	 * <p>
 	 * In the future, capabilities in other name spaces may support the
 	 * singleton concept. Hook implementations should be prepared to receive
 	 * calls to this method for capabilities in name spaces other than
-	 * {@link Capability#BUNDLE_CAPABILITY osgi.wiring.bundle}.
+	 * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle}.
 	 * <p>
 	 * This method can filter the list of collision candidates by removing
 	 * potential collisions. Removing a collision candidate will allow the
