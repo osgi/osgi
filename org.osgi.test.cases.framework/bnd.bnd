@@ -1,8 +1,6 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd	
 
--dependson :    ${p}.weaving
-
 Bundle-Description					: Framework test cases.
 
 Conditional-Package					= org.osgi.test.support.*
@@ -254,10 +252,11 @@ Include-Resource = \
 	startlevel.tb4.jar, \
 	startlevel.tb5.jar, \
 	syncbundlelistener.tb3.jar, \
-	weaving.pkg1.v100.jar, \
-	weaving.pkg1.v110.jar, \
-	weaving.tb1.jar, \
-	weaving.tbx.jar=${repo;${p}.weaving}, \
+	weaving.testClasses.jar, \
+	weaving.testAlternativeImport.jar, \
+	weaving.testImport_1.0.0.jar, \
+	weaving.testImport_1.1.0.jar, \
+	weaving.testImport_1.6.0.jar, \
 	wiring.base.jar, \
 	wiring.exporter.jar, \
 	wiring.exporter.frag.jar, \
@@ -274,12 +273,14 @@ Include-Resource = \
 	osgi.core;								version=4.2	, \
 	osgi.cmpn;								version=4.0	, \
 	ee.minimum; 							version=1.2.1, \
+	org.apache.servicemix.bundles.bcel;     version=5.2 , \
 	${junit}
 
 Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.framework, org.osgi.framework.hooks.service
+-signaturetest                      = org.osgi.framework, org.osgi.framework.hooks.service, org.osgi.framework.hooks.weaving
 
--runbundles							= \
+-runbundles						= \
+	org.apache.servicemix.bundles.bcel;         version=5.2 
 
 -runproperties = ${runproperties}, \
 	org.osgi.framework.executionenvironment = "div/tb7a,OSGi/Minimum-1.0,OSGi/Minimum-1.1,OSGi/Minimum-1.2,JRE-1.1,J2SE-1.2,J2SE-1.3,J2SE-1.4,J2SE-1.5", \

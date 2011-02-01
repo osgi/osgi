@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.framework.weaving.tbx;
+package org.osgi.test.cases.framework.weaving.tb1;
 
-
-public class TestWeaving {
+/**
+ * This class is used as a basic weavable entity. The
+ * CT changes the value of the constant returned by
+ * {@link #toString()}.
+ * 
+ * @author IBM
+ */
+public class TestClass {
 
 	public String toString() {
-		return "ORIGINAL";
+		return "DEFAULT";
 	}
 }

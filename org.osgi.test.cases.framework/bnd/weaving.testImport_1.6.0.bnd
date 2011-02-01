@@ -1,0 +1,3 @@
+Bundle-SymbolicName:                     ${p}.weaving.test.import
+Bundle-Version:                          1.6.0
+Export-Package:	                         ${p}.weaving.tb2;version=1.6;prop=val;mandatory:="prop"

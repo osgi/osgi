@@ -1,6 +1,0 @@
-Bundle-Name:                             ${p}.weaving.pkg1
-Bundle-SymbolicName:                     ${p}.weaving.pkg1
-Bundle-Version:                          1.0.0
-Export-Package:                         ${p}.weaving.pkg1; version="1.0.0";-noimport:=true
-Include-Resource: \
-	/ = resources/weaving.pkg1.v100/
