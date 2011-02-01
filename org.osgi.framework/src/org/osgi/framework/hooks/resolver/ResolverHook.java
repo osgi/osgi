@@ -22,6 +22,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.Capability;
 import org.osgi.framework.wiring.FrameworkWiring;
+import org.osgi.framework.wiring.Requirement;
 
 /**
  * OSGi Framework Resolver Hook instances are obtained from the OSGi
@@ -171,21 +172,21 @@ public interface ResolverHook {
 
 	/**
 	 * Filter matches hook method. This method is called during the resolve process for the 
-	 * specified requirer.  The collection of candidates match a requirement for the requirer.
+	 * specified requirement.  The collection of candidates match the specified requirement.
 	 * This method can filter the collection of matching candidates by removing candidates from 
 	 * the collection.  Removing a candidate will prevent the resolve process from choosing the 
-	 * removed candidate to satisfy a requirement for the requirer.
+	 * removed candidate to satisfy the requirement.
 	 * <p>
 	 * All of the candidates will have the same name space and will 
-	 * match a requirement of the requirer.
+	 * match the specified requirement.
 	 * <p>
 	 * If the Java Runtime Environment supports permissions then the collection of 
 	 * candidates will only contain candidates for which the requirer has permission to
 	 * access.
-	 * @param requirer the bundle revision which contains a requirement
-	 * @param candidates a collection of candidates that match a requirement of the requirer
+	 * @param requirement the requirement to filter candidates for
+	 * @param candidates a collection of candidates that match the requirement
 	 */
-	void filterMatches(BundleRevision requirer, Collection<Capability> candidates);
+	void filterMatches(Requirement requirement, Collection<Capability> candidates);
 
 	/**
 	 * This method is called once at the end of the resolve process.
