@@ -1,34 +1,10 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Conditional-Package					= org.osgi.test.support.*
-
-Private-Package:                         ${p}.*
-
-Import-Package						= \
-	org.osgi.framework;						version="[1.6,2.0)" , \
-	org.osgi.framework.hooks.weaving;		version="[1.0,2.0)" , \
-	*
-
-Include-Resource 					= \
-	testClasses.jar , \
-	testAlternativeImport.jar , \
-	testImport_1.0.0.jar , \
-	testImport_1.1.0.jar , \
-	testImport_1.6.0.jar
-
+Private-Package:                         ${p}.tbx
 -buildpath							= \
-	osgi.core;									version=4.3		, \
+	osgi.core;									version=4.2		, \
 	ee.minimum;									version=1.2		, \
-	org.osgi.test.support;              		version=project , \
-	org.apache.servicemix.bundles.bcel;         version=5.2     , \
 	${junit}
 
--runbundles						= \
-	org.apache.servicemix.bundles.bcel;         version=5.2 
-
 -runproperties					= report=true
-
-Test-Cases							= ${testcases}
-
--signaturetest                      = org.osgi.framework.hooks.weaving

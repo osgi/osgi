@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.osgi.test.cases.framework.weaving.tbx;
 
 /**
- * This class tests the API signatures
- * 
- * @author IBM
+ *
  */
-public class SignatureTestCase extends
-		org.osgi.test.support.signature.SignatureTestCase {
-	// concrete subclass
+public class TestWeaving {
+
+	public String toString() {
+		return "WOVEN";
+	}
 }

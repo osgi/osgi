@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.framework.weaving.testclasses;
+package org.osgi.test.cases.framework.weaving.tbx;
 
 /**
- * This class is used as a basic weavable entity. The
- * CT changes the value of the constant returned by
- * {@link #toString()}.
- * 
- * @author IBM
- */
-public class TestClass {
+*
+*/
+public class TestDynamicImport {
 
 	public String toString() {
-		return "DEFAULT";
+		return doDynamicImport();
+	}
+
+	private String doDynamicImport() {
+		String dynamicTestName = System.getProperty("weaving.dynamic.name");
+		try {
+			return Class.forName(dynamicTestName).newInstance().toString();
+		} catch (Throwable t) {
+			throw new RuntimeException("Unexpected error", t);
+		}
 	}
 }

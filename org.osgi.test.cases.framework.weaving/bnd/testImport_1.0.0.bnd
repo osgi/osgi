@@ -1,3 +1,0 @@
-Bundle-SymbolicName:                     ${p}.test.import
-Bundle-Version:                          1.0.0
-Export-Package:	                         ${p}.imports;version=1.0;foo=bar
