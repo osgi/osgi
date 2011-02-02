@@ -57,7 +57,7 @@ public interface Requirement {
 	 * 
 	 * @return The bundle revision declaring this requirement.
 	 */
-	BundleRevision getBundleRevision();
+	BundleRevision getRevision();
 
 	/**
 	 * Returns whether the specified capability matches this requirement.

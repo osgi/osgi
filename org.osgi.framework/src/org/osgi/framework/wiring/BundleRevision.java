@@ -246,7 +246,7 @@ public interface BundleRevision extends BundleReference {
 	 * 
 	 * @return The bundle wiring which is using this bundle revision or
 	 *         {@code null} if no bundle wiring is using this bundle revision.
-	 * @see BundleWiring#getBundleRevision()
+	 * @see BundleWiring#getRevision()
 	 */
-	BundleWiring getBundleWiring();
+	BundleWiring getWiring();
 }

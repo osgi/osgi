@@ -55,5 +55,5 @@ public interface Capability {
 	 * 
 	 * @return The bundle revision declaring this capability.
 	 */
-	BundleRevision getBundleRevision();
+	BundleRevision getRevision();
 }

@@ -95,7 +95,7 @@ public interface BundleWiring extends BundleReference {
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
 	 *         given name space, the list contains the wires in the order the
 	 *         capabilities were specified in the manifests of the
-	 *         {@link #getBundleRevision() bundle revision} and the attached
+	 *         {@link #getRevision() bundle revision} and the attached
 	 *         fragments of this bundle wiring. There is no ordering defined
 	 *         between capabilities in different name spaces.
 	 */
@@ -121,7 +121,7 @@ public interface BundleWiring extends BundleReference {
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
 	 *         given name space, the list contains the wires in the order the
 	 *         capabilities were specified in the manifests of the
-	 *         {@link #getBundleRevision() bundle revision} and the attached
+	 *         {@link #getRevision() bundle revision} and the attached
 	 *         fragments of this bundle wiring. There is no ordering defined
 	 *         between capabilities in different name spaces.
 	 */
@@ -146,7 +146,7 @@ public interface BundleWiring extends BundleReference {
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
 	 *         given name space, the list contains the wires in the order the
 	 *         requirements were specified in the manifests of the
-	 *         {@link #getBundleRevision() bundle revision} and the attached
+	 *         {@link #getRevision() bundle revision} and the attached
 	 *         fragments of this bundle wiring. There is no ordering defined
 	 *         between requirements in different name spaces.
 	 */
@@ -164,9 +164,9 @@ public interface BundleWiring extends BundleReference {
 	 * may refer to an older revision of the bundle.
 	 * 
 	 * @return The bundle revision for this bundle wiring.
-	 * @see BundleRevision#getBundleWiring()
+	 * @see BundleRevision#getWiring()
 	 */
-	BundleRevision getBundleRevision();
+	BundleRevision getRevision();
 
 	/**
 	 * Returns the class loader for this bundle wiring. Since a bundle refresh
@@ -183,7 +183,7 @@ public interface BundleWiring extends BundleReference {
 	ClassLoader getClassLoader();
 
 	/**
-	 * Returns entries in this bundle wiring's {@link #getBundleRevision()
+	 * Returns entries in this bundle wiring's {@link #getRevision()
 	 * bundle revision} and its attached fragment revisions. This bundle
 	 * wiring's class loader is not used to search for entries. Only the
 	 * contents of this bundle wiring's bundle revision and its attached
@@ -225,7 +225,7 @@ public interface BundleWiring extends BundleReference {
 	 *         not have the appropriate {@code AdminPermission[bundle,RESOURCE]}
 	 *         and the Java Runtime Environment supports permissions. The list
 	 *         is ordered such that entries from the
-	 *         {@link #getBundleRevision() bundle revision} are returned first
+	 *         {@link #getRevision() bundle revision} are returned first
 	 *         followed by the entries from attached fragment revisions in
 	 *         attachment order. If this bundle wiring is not {@link #isInUse()
 	 *         in use}, {@code null} must be returned.
@@ -305,7 +305,7 @@ public interface BundleWiring extends BundleReference {
 	/**
 	 * The list resource names operation must limit the result to the names of
 	 * matching resources contained in this bundle wiring's
-	 * {@link #getBundleRevision() bundle revision} and its attached fragment
+	 * {@link #getRevision() bundle revision} and its attached fragment
 	 * revisions. The result must not include resource names for resources in
 	 * {@link BundleRevision#PACKAGE_NAMESPACE package} names which are
 	 * {@link #getRequiredWires(String) imported} by this wiring.
