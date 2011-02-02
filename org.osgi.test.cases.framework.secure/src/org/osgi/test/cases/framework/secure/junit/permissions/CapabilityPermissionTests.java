@@ -171,7 +171,7 @@ public class CapabilityPermissionTests extends OSGiTestCase {
 		assertEquals("Wrong state for requirer", Bundle.INSTALLED, requirer.getState());
 		// make sure the wiring does not indicate the capability is provided.
 		BundleWiring providerWiring = (BundleWiring) provider.adapt(BundleWiring.class);
-		List capabilities = providerWiring.getProvidedCapabilities("test");
+		List capabilities = providerWiring.getCapabilities("test");
 		assertEquals("Wrong number of capabilities", 0, capabilities.size());
 
 		// now grant permission to provide all
@@ -188,7 +188,7 @@ public class CapabilityPermissionTests extends OSGiTestCase {
 		assertEquals("Wrong state for requirer", Bundle.INSTALLED, requirer.getState());
 		// make sure the capability is provided.
 		providerWiring = (BundleWiring) provider.adapt(BundleWiring.class);
-		capabilities = providerWiring.getProvidedCapabilities("test");
+		capabilities = providerWiring.getCapabilities("test");
 		assertEquals("Wrong number of capabilities", 1, capabilities.size());
 
 		// grant permission to require all

@@ -29,12 +29,12 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleRevisions;
 import org.osgi.framework.wiring.BundleWiring;
-import org.osgi.framework.wiring.Capability;
 import org.osgi.framework.wiring.FrameworkWiring;
-import org.osgi.framework.wiring.WiredCapability;
 import org.osgi.test.support.OSGiTestCase;
 
 public class BundleWiringTests extends OSGiTestCase {
@@ -115,39 +115,39 @@ public class BundleWiringTests extends OSGiTestCase {
 
 		BundleRevision tb1Revision = testRevisions.get(0);
 		BundleRevision tb4Revision = testRevisions.get(3);
-		List<Capability> tb1AllCapabilities = tb1Revision.getDeclaredCapabilities(null);
-		List<Capability> tb1BundleCapabilities = tb1Revision.getDeclaredCapabilities(Capability.BUNDLE_CAPABILITY);
-		List<Capability> tb1HostCapabilities = tb1Revision.getDeclaredCapabilities(Capability.HOST_CAPABILITY);
-		List<Capability> tb1PackageCapabilities = tb1Revision.getDeclaredCapabilities(Capability.PACKAGE_CAPABILITY);
-		List<Capability> tb1TestCapabilities = tb1Revision.getDeclaredCapabilities("test");
-		List<Capability> tb1TestMultipleCapabilities = tb1Revision.getDeclaredCapabilities("test.multiple");
-		checkCapabilities(tb1BundleCapabilities, tb1AllCapabilities, Capability.BUNDLE_CAPABILITY, 1, tb1Revision);
-		checkCapabilities(tb1HostCapabilities, tb1AllCapabilities, Capability.HOST_CAPABILITY, 1, tb1Revision);
-		checkCapabilities(tb1PackageCapabilities, tb1AllCapabilities, Capability.PACKAGE_CAPABILITY, 1, tb1Revision);
+		List<BundleCapability> tb1AllCapabilities = tb1Revision.getDeclaredCapabilities(null);
+		List<BundleCapability> tb1BundleCapabilities = tb1Revision.getDeclaredCapabilities(BundleRevision.BUNDLE_NAMESPACE);
+		List<BundleCapability> tb1HostCapabilities = tb1Revision.getDeclaredCapabilities(BundleRevision.HOST_NAMESPACE);
+		List<BundleCapability> tb1PackageCapabilities = tb1Revision.getDeclaredCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		List<BundleCapability> tb1TestCapabilities = tb1Revision.getDeclaredCapabilities("test");
+		List<BundleCapability> tb1TestMultipleCapabilities = tb1Revision.getDeclaredCapabilities("test.multiple");
+		checkCapabilities(tb1BundleCapabilities, tb1AllCapabilities, BundleRevision.BUNDLE_NAMESPACE, 1, tb1Revision);
+		checkCapabilities(tb1HostCapabilities, tb1AllCapabilities, BundleRevision.HOST_NAMESPACE, 1, tb1Revision);
+		checkCapabilities(tb1PackageCapabilities, tb1AllCapabilities, BundleRevision.PACKAGE_NAMESPACE, 1, tb1Revision);
 		checkCapabilities(tb1TestCapabilities, tb1AllCapabilities, "test", 1, tb1Revision);
 		checkCapabilities(tb1TestMultipleCapabilities, tb1AllCapabilities, "test.multiple", 2, tb1Revision);
 
-		List<Capability> tb4AllCapabilities = tb4Revision.getDeclaredCapabilities(null);
-		List<Capability> tb4TestFragmentCapabilities = tb4Revision.getDeclaredCapabilities("test.fragment");
+		List<BundleCapability> tb4AllCapabilities = tb4Revision.getDeclaredCapabilities(null);
+		List<BundleCapability> tb4TestFragmentCapabilities = tb4Revision.getDeclaredCapabilities("test.fragment");
 		checkCapabilities(tb4TestFragmentCapabilities, tb4AllCapabilities, "test.fragment", 1, tb4Revision);
 
 		// test osgi.wiring.host for fragment-attachment:="never"
 		BundleRevision tb2Revision = testRevisions.get(1);
-		List<Capability> tb2AllCapabilities = tb2Revision.getDeclaredCapabilities(null);
+		List<BundleCapability> tb2AllCapabilities = tb2Revision.getDeclaredCapabilities(null);
 		assertEquals("Wrong number of capabilities", 1, tb2AllCapabilities.size());
-		List<Capability> tb2BundleCapabilities = tb2Revision.getDeclaredCapabilities(Capability.BUNDLE_CAPABILITY);
-		checkCapabilities(tb2BundleCapabilities, tb2AllCapabilities, Capability.BUNDLE_CAPABILITY, 1, tb2Revision);
-		List<Capability> tb2HostCapabilities = tb2Revision.getDeclaredCapabilities(Capability.HOST_CAPABILITY);
+		List<BundleCapability> tb2BundleCapabilities = tb2Revision.getDeclaredCapabilities(BundleRevision.BUNDLE_NAMESPACE);
+		checkCapabilities(tb2BundleCapabilities, tb2AllCapabilities, BundleRevision.BUNDLE_NAMESPACE, 1, tb2Revision);
+		List<BundleCapability> tb2HostCapabilities = tb2Revision.getDeclaredCapabilities(BundleRevision.HOST_NAMESPACE);
 		assertEquals("Expected no osgi.wiring.host capability", 0,
 				tb2HostCapabilities.size());
 	}
 
-	void checkCapabilities(List<Capability> toCheck, List<Capability> all, String namespace, int expectedNum, BundleRevision provider) {
+	void checkCapabilities(List<BundleCapability> toCheck, List<BundleCapability> all, String namespace, int expectedNum, BundleRevision provider) {
 		assertEquals("Wrong number of capabilities for " + namespace + " from " + provider, expectedNum, toCheck.size());
-		for (Capability capability : toCheck) {
+		for (BundleCapability capability : toCheck) {
 			assertTrue("Capability is not in all capabilities for revision", all.contains(capability));
 			assertEquals("Wrong namespace", namespace, capability.getNamespace());
-			assertEquals("Wrong provider", provider, capability.getProviderRevision());
+			assertEquals("Wrong provider", provider, capability.getRevision());
 		}
 	}
 
@@ -161,15 +161,16 @@ public class BundleWiringTests extends OSGiTestCase {
 			assertEquals("Wrong version", bundle.getVersion(), revision.getVersion());
 			assertEquals("Wrong type", bundle.getHeaders("").get(Constants.FRAGMENT_HOST) == null ? 0 : BundleRevision.TYPE_FRAGMENT, revision.getTypes());
 
-			Collection<BundleWiring> hostWirings = revision.getHostWirings();
-			assertNotNull("Host wirings must never be null.", hostWirings);
-			if ((revision.getTypes() & BundleRevision.TYPE_FRAGMENT) != 0) {
-				// we assume the fragment resolved to one host
-				assertEquals("Wrong number of host wirings found", 1, hostWirings.size());
-			} else {
-				// regular bundles must have empty host wirnings
-				assertEquals("Must have empty wirings for regular bundles", 0, hostWirings.size());
-			}
+			/* The BundleRevision.getHostWirings() method has been removed. */
+//			Collection<BundleWiring> hostWirings = revision.getHostWirings();
+//			assertNotNull("Host wirings must never be null.", hostWirings);
+//			if ((revision.getTypes() & BundleRevision.TYPE_FRAGMENT) != 0) {
+//				// we assume the fragment resolved to one host
+//				assertEquals("Wrong number of host wirings found", 1, hostWirings.size());
+//			} else {
+//				// regular bundles must have empty host wirings
+//				assertEquals("Must have empty wirings for regular bundles", 0, hostWirings.size());
+//			}
 		}
 		return result;
 	}
@@ -194,22 +195,22 @@ public class BundleWiringTests extends OSGiTestCase {
 		BundleWiring[] wirings = new BundleWiring[] {tb1Wiring, tb2Wiring, tb3Wiring, tb4Wiring, tb5Wiring, tb14Wiring};
 		checkBundleWiring(testBundles.toArray(new Bundle[6]), wirings);
 
-		List<WiredCapability> allTb1Capabilities = tb1Wiring.getProvidedCapabilities(null);
-		List<WiredCapability> osgiBundleTb1Capabilities = tb1Wiring.getProvidedCapabilities(Capability.BUNDLE_CAPABILITY);
-		List<WiredCapability> osgiHostTb1Capabilities = tb1Wiring.getProvidedCapabilities(Capability.HOST_CAPABILITY);
-		List<WiredCapability> osgiPackageTb1Capabilities = tb1Wiring.getProvidedCapabilities(Capability.PACKAGE_CAPABILITY);
-		List<WiredCapability> genTestTb1Capabilities = tb1Wiring.getProvidedCapabilities("test");
-		List<WiredCapability> genTestMultipleTb1Capabilities = tb1Wiring.getProvidedCapabilities("test.multiple");
-		List<WiredCapability> genTestNoAttrsTb1Capabilities = tb1Wiring.getProvidedCapabilities("test.no.attrs");
-		List<WiredCapability> genTestFragmentTb1Capabilities = tb1Wiring.getProvidedCapabilities("test.fragment");
+		List<BundleCapability> allTb1Capabilities = tb1Wiring.getCapabilities(null);
+		List<BundleCapability> osgiBundleTb1Capabilities = tb1Wiring.getCapabilities(BundleRevision.BUNDLE_NAMESPACE);
+		List<BundleCapability> osgiHostTb1Capabilities = tb1Wiring.getCapabilities(BundleRevision.HOST_NAMESPACE);
+		List<BundleCapability> osgiPackageTb1Capabilities = tb1Wiring.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		List<BundleCapability> genTestTb1Capabilities = tb1Wiring.getCapabilities("test");
+		List<BundleCapability> genTestMultipleTb1Capabilities = tb1Wiring.getCapabilities("test.multiple");
+		List<BundleCapability> genTestNoAttrsTb1Capabilities = tb1Wiring.getCapabilities("test.no.attrs");
+		List<BundleCapability> genTestFragmentTb1Capabilities = tb1Wiring.getCapabilities("test.fragment");
 
 		// check for osgi.wiring.host capability from wiring with
 		// fragment-attachment:="false"
-		List<WiredCapability> osgiHostTb2Capabilities = tb2Wiring.getProvidedCapabilities(Capability.HOST_CAPABILITY);
+		List<BundleCapability> osgiHostTb2Capabilities = tb2Wiring.getCapabilities(BundleRevision.HOST_NAMESPACE);
 		assertEquals("Expecting no osgi.wiring.host capability", 0,
 				osgiHostTb2Capabilities.size());
 
-		WiredCapability[] capabilities = checkWiredCapabilities(tb1Wiring, tb2Wiring, tb3Wiring, tb5Wiring, tb14Wiring, tb4, allTb1Capabilities, osgiBundleTb1Capabilities, osgiHostTb1Capabilities, osgiPackageTb1Capabilities, genTestTb1Capabilities, genTestMultipleTb1Capabilities, genTestFragmentTb1Capabilities, genTestNoAttrsTb1Capabilities);
+		BundleCapability[] capabilities = checkWiredCapabilities(tb1Wiring, tb2Wiring, tb3Wiring, tb5Wiring, tb14Wiring, tb4, allTb1Capabilities, osgiBundleTb1Capabilities, osgiHostTb1Capabilities, osgiPackageTb1Capabilities, genTestTb1Capabilities, genTestMultipleTb1Capabilities, genTestFragmentTb1Capabilities, genTestNoAttrsTb1Capabilities);
 
 		// test the refresh case
 		refreshBundles(Arrays.asList(new Bundle[]{tb1}));
@@ -228,13 +229,13 @@ public class BundleWiringTests extends OSGiTestCase {
 		checkBundleWiring(testBundles.toArray(new Bundle[6]), wirings);
 
 		// get wired capabilities before update
-		osgiBundleTb1Capabilities = tb1Wiring.getProvidedCapabilities(Capability.BUNDLE_CAPABILITY);
-		osgiHostTb1Capabilities = tb1Wiring.getProvidedCapabilities(Capability.HOST_CAPABILITY);
-		osgiPackageTb1Capabilities = tb1Wiring.getProvidedCapabilities(Capability.PACKAGE_CAPABILITY);
-		genTestTb1Capabilities = tb1Wiring.getProvidedCapabilities("test");
-		genTestMultipleTb1Capabilities = tb1Wiring.getProvidedCapabilities("test.multiple");
-		genTestNoAttrsTb1Capabilities = tb1Wiring.getProvidedCapabilities("test.no.attrs");
-		genTestFragmentTb1Capabilities = tb1Wiring.getProvidedCapabilities("test.fragment");
+		osgiBundleTb1Capabilities = tb1Wiring.getCapabilities(BundleRevision.BUNDLE_NAMESPACE);
+		osgiHostTb1Capabilities = tb1Wiring.getCapabilities(BundleRevision.HOST_NAMESPACE);
+		osgiPackageTb1Capabilities = tb1Wiring.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		genTestTb1Capabilities = tb1Wiring.getCapabilities("test");
+		genTestMultipleTb1Capabilities = tb1Wiring.getCapabilities("test.multiple");
+		genTestNoAttrsTb1Capabilities = tb1Wiring.getCapabilities("test.no.attrs");
+		genTestFragmentTb1Capabilities = tb1Wiring.getCapabilities("test.fragment");
 
 		// test the update case
 		URL content = getContext().getBundle().getEntry("resolver.tb1.v110.jar");
@@ -252,19 +253,20 @@ public class BundleWiringTests extends OSGiTestCase {
 		// check that the updated wiring has no requirers
 		BundleWiring updatedWiring = (BundleWiring) tb1.adapt(BundleWiring.class);
 		checkBundleWiring(new Bundle[] {tb1}, new BundleWiring[] {updatedWiring});
-		List<WiredCapability> updatedCapabilities = updatedWiring.getProvidedCapabilities(null);
-		for(Iterator<WiredCapability> iCapabilities = updatedCapabilities.iterator(); iCapabilities.hasNext();) {
-			WiredCapability capability = iCapabilities.next();
-			Collection<BundleWiring> requirers = capability.getRequirerWirings();
-			assertNotNull("Requirers is null", requirers);
-			assertEquals("Wrong number of requirers for : " + capability, 0, requirers.size());
-		}
+		List<BundleCapability> updatedCapabilities = updatedWiring.getCapabilities(null);
+		/* WiredCapability gone. getRequirerWirings() gone. */
+//		for(Iterator<BundleCapability> iCapabilities = updatedCapabilities.iterator(); iCapabilities.hasNext();) {
+//			BundleCapability capability = iCapabilities.next();
+//			Collection<BundleWiring> requirers = capability.getRequirerWirings();
+//			assertNotNull("Requirers is null", requirers);
+//			assertEquals("Wrong number of requirers for : " + capability, 0, requirers.size());
+//		}
 
 		assertTrue("Wiring is not in use for: " + tb1, tb1Wiring.isInUse());
 		assertFalse("Wiring is current for: " + tb1, tb1Wiring.isCurrent());
 
 		// Check that old wiring for tb1 is still correct
-		allTb1Capabilities = tb1Wiring.getProvidedCapabilities(null);
+		allTb1Capabilities = tb1Wiring.getCapabilities(null);
 		capabilities = checkWiredCapabilities(tb1Wiring, tb2Wiring, tb3Wiring, tb5Wiring, tb14Wiring, tb4, allTb1Capabilities, osgiBundleTb1Capabilities, osgiHostTb1Capabilities, osgiPackageTb1Capabilities, genTestTb1Capabilities, genTestMultipleTb1Capabilities, genTestFragmentTb1Capabilities, genTestNoAttrsTb1Capabilities);
 
 		// test the refresh case
@@ -272,7 +274,7 @@ public class BundleWiringTests extends OSGiTestCase {
 		assertTrue(frameworkWiring.resolveBundles(testBundles));
 
 		checkNotInUseWirings(wirings, capabilities);
-		checkNotInUseWirings(new BundleWiring[] {updatedWiring}, new WiredCapability[0]);
+		checkNotInUseWirings(new BundleWiring[] {updatedWiring}, new BundleCapability[0]);
 
 		tb1Wiring = tb1.adapt(BundleWiring.class);
 		tb2Wiring = tb2.adapt(BundleWiring.class);
@@ -303,14 +305,14 @@ public class BundleWiringTests extends OSGiTestCase {
 		assertTrue("Wiring is not in use for: " + tb1, tb1Wiring.isInUse());
 		assertFalse("Wring is current for: " + tb1, tb1Wiring.isCurrent());
 
-		allTb1Capabilities = tb1Wiring.getProvidedCapabilities(null);
-		osgiBundleTb1Capabilities = tb1Wiring.getProvidedCapabilities(Capability.BUNDLE_CAPABILITY);
-		osgiHostTb1Capabilities = tb1Wiring.getProvidedCapabilities(Capability.HOST_CAPABILITY);
-		osgiPackageTb1Capabilities = tb1Wiring.getProvidedCapabilities(Capability.PACKAGE_CAPABILITY);
-		genTestTb1Capabilities = tb1Wiring.getProvidedCapabilities("test");
-		genTestMultipleTb1Capabilities = tb1Wiring.getProvidedCapabilities("test.multiple");
-		genTestNoAttrsTb1Capabilities = tb1Wiring.getProvidedCapabilities("test.no.attrs");
-		genTestFragmentTb1Capabilities = tb1Wiring.getProvidedCapabilities("test.fragment");
+		allTb1Capabilities = tb1Wiring.getCapabilities(null);
+		osgiBundleTb1Capabilities = tb1Wiring.getCapabilities(BundleRevision.BUNDLE_NAMESPACE);
+		osgiHostTb1Capabilities = tb1Wiring.getCapabilities(BundleRevision.HOST_NAMESPACE);
+		osgiPackageTb1Capabilities = tb1Wiring.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		genTestTb1Capabilities = tb1Wiring.getCapabilities("test");
+		genTestMultipleTb1Capabilities = tb1Wiring.getCapabilities("test.multiple");
+		genTestNoAttrsTb1Capabilities = tb1Wiring.getCapabilities("test.no.attrs");
+		genTestFragmentTb1Capabilities = tb1Wiring.getCapabilities("test.fragment");
 		
 		capabilities = checkWiredCapabilities(tb1Wiring, tb2Wiring, tb3Wiring, tb5Wiring, tb14Wiring, tb4, allTb1Capabilities, osgiBundleTb1Capabilities, osgiHostTb1Capabilities, osgiPackageTb1Capabilities, genTestTb1Capabilities, genTestMultipleTb1Capabilities, genTestFragmentTb1Capabilities, genTestNoAttrsTb1Capabilities);
 
@@ -346,7 +348,7 @@ public class BundleWiringTests extends OSGiTestCase {
 			assertNotNull("BundleWiring is null for bundle: " + bundle, wiring);
 			assertEquals("Wrong bundle for wiring: " + bundle, bundle, wiring.getBundle());
 
-			BundleRevision wiringRevision = wiring.getBundleRevision();
+			BundleRevision wiringRevision = wiring.getRevision();
 			assertNotNull("Wiring revision is null for bundle: " + bundle, wiringRevision);
 			assertEquals("Wrong BSN", bundle.getSymbolicName(), wiringRevision.getSymbolicName());
 			assertEquals("Wrong version", bundle.getVersion(), wiringRevision.getVersion());
@@ -356,31 +358,33 @@ public class BundleWiringTests extends OSGiTestCase {
 		}
 	}
 
-	private void checkNotInUseWirings(BundleWiring[] wirings, WiredCapability[] capabilities) {
+	private void checkNotInUseWirings(BundleWiring[] wirings, BundleCapability[] capabilities) {
 		for (int i = 0; i < wirings.length; i++) {
 			BundleWiring wiring = wirings[i];
 			if (wiring == null)
 				continue; // fragment case
 			assertFalse("Wiring is current for: " + wiring.getBundle(), wiring.isCurrent());
 			assertFalse("Wiring is in use for: " + wiring.getBundle(), wiring.isInUse());
-			assertNull("Wiring fragments must be null: " + wiring.getBundle(), wiring.getFragmentRevisions());
-			assertNull("Wiring capabilities must be null: " + wiring.getBundle(), wiring.getProvidedCapabilities(null));
-			assertNull("Wiring required must be null: " + wiring.getBundle(), wiring.getRequiredCapabilities(null));
+//			assertNull("Wiring fragments must be null: " + wiring.getBundle(), wiring.getFragmentRevisions());
+			assertNull("Wiring capabilities must be null: " + wiring.getBundle(), wiring.getCapabilities(null));
+			assertNull("Wiring required must be null: " + wiring.getBundle(), wiring.getRequirements(null));
 			assertNull("Wiring class loader must be null: " + wiring.getBundle(), wiring.getClassLoader());
 			assertNull("Wiring findEntries must be null: " + wiring.getBundle(), wiring.findEntries("/", "*", 0));
 			assertNull("Wiring listResources must be null: " + wiring.getBundle(), wiring.listResources("/", "*", 0));
+			assertNull("Wiring providedWires must be null: " + wiring.getBundle(), wiring.getProvidedWires(null));
+			assertNull("Wiring requiredWires must be null: " + wiring.getBundle(), wiring.getRequiredWires(null));
 		}
-		for (int i = 0; i < capabilities.length; i++) {
-			WiredCapability capability = capabilities[i];
-			assertNull("Provider is not null: " + capability, capability.getProviderWiring());
-			assertNull("Requirers is not null: " + capability, capability.getRequirerWirings());
-		}
+//		for (int i = 0; i < capabilities.length; i++) {
+//			BundleCapability capability = capabilities[i];
+//			assertNull("Provider is not null: " + capability, capability.getProviderWiring());
+//			assertNull("Requirers is not null: " + capability, capability.getRequirerWirings());
+//		}
 	}
 
-	private WiredCapability[] checkWiredCapabilities(
+	private BundleCapability[] checkWiredCapabilities(
 			BundleWiring tb1Wiring, BundleWiring tb2Wiring, BundleWiring tb3Wiring, BundleWiring tb5Wiring, BundleWiring tb14Wiring, 
 			Bundle tb4, 
-			List<WiredCapability> allTb1Capabilities, List<WiredCapability> osgiBundleTb1Capabilities, List<WiredCapability> osgiHostTb1Capabilities, List<WiredCapability> osgiPackageTb1Capabilities, List<WiredCapability> genTestTb1Capabilities, List<WiredCapability> genTestMultipleTb1Capabilities, List<WiredCapability> genTestFragmentTb1Capabilities, List<WiredCapability> genTestNoAttrsTb1Capabilities) {
+			List<BundleCapability> allTb1Capabilities, List<BundleCapability> osgiBundleTb1Capabilities, List<BundleCapability> osgiHostTb1Capabilities, List<BundleCapability> osgiPackageTb1Capabilities, List<BundleCapability> genTestTb1Capabilities, List<BundleCapability> genTestMultipleTb1Capabilities, List<BundleCapability> genTestFragmentTb1Capabilities, List<BundleCapability> genTestNoAttrsTb1Capabilities) {
 		assertEquals("Wrong number of capabilities", 8, allTb1Capabilities.size());
 		assertEquals("Wrong number of osgi.wiring.bundle capabilities", 1,
 				osgiBundleTb1Capabilities.size());
@@ -400,13 +404,13 @@ public class BundleWiringTests extends OSGiTestCase {
 		assertEquals("Wrong number of generic test.no.attrs capabilities", 1, genTestNoAttrsTb1Capabilities.size());
 		assertTrue("All capabilities is missing : " + genTestNoAttrsTb1Capabilities, allTb1Capabilities.containsAll(genTestNoAttrsTb1Capabilities));
 
-		WiredCapability osgiBundleTb1 = osgiBundleTb1Capabilities.get(0);
-		WiredCapability osgiHostTb1 = osgiHostTb1Capabilities.get(0);
-		WiredCapability osgiPackageTb1 = osgiPackageTb1Capabilities.get(0);
-		WiredCapability genTestTb1 = genTestTb1Capabilities.get(0);
-		WiredCapability genTestFragmentTb1 = genTestFragmentTb1Capabilities.get(0);
-		WiredCapability genTestNoAttrsTb1 = genTestNoAttrsTb1Capabilities.get(0);
-		WiredCapability[] capabilities = new WiredCapability[] {osgiBundleTb1, osgiHostTb1, osgiPackageTb1, genTestTb1, genTestFragmentTb1, genTestNoAttrsTb1};
+		BundleCapability osgiBundleTb1 = osgiBundleTb1Capabilities.get(0);
+		BundleCapability osgiHostTb1 = osgiHostTb1Capabilities.get(0);
+		BundleCapability osgiPackageTb1 = osgiPackageTb1Capabilities.get(0);
+		BundleCapability genTestTb1 = genTestTb1Capabilities.get(0);
+		BundleCapability genTestFragmentTb1 = genTestFragmentTb1Capabilities.get(0);
+		BundleCapability genTestNoAttrsTb1 = genTestNoAttrsTb1Capabilities.get(0);
+		BundleCapability[] capabilities = new BundleCapability[] {osgiBundleTb1, osgiHostTb1, osgiPackageTb1, genTestTb1, genTestFragmentTb1, genTestNoAttrsTb1};
 
 		checkWiredCapability(osgiPackageTb1, tb1Wiring, tb2Wiring);
 		checkWiredCapability(osgiHostTb1, tb1Wiring, tb1Wiring);
@@ -415,22 +419,22 @@ public class BundleWiringTests extends OSGiTestCase {
 		checkWiredCapability(genTestNoAttrsTb1, tb1Wiring, tb5Wiring);
 		checkWiredCapability(genTestFragmentTb1, tb1Wiring, tb14Wiring);
 
-		List<BundleRevision> fragments = tb1Wiring.getFragmentRevisions();
-		assertEquals("Wrong number of fragments", 1, fragments.size());
-		BundleRevision tb4Revision = fragments.get(0);
-		assertEquals("Wrong fragment", tb4, tb4Revision.getBundle());
+//		List<BundleRevision> fragments = tb1Wiring.getFragmentRevisions();
+//		assertEquals("Wrong number of fragments", 1, fragments.size());
+//		BundleRevision tb4Revision = fragments.get(0);
+//		assertEquals("Wrong fragment", tb4, tb4Revision.getBundle());
 
 		return capabilities;
 	}
 
-	private void checkWiredCapability(WiredCapability capability,
+	private void checkWiredCapability(BundleCapability capability,
 			BundleWiring provider, BundleWiring requirer) {
-		assertEquals("Wrong provider", provider, capability.getProviderWiring());
-		Collection<BundleWiring> requirers = capability.getRequirerWirings();
-		assertTrue("Requirer not included", requirers.contains(requirer));
-		assertEquals("Wrong number of requirers", 1, requirers.size());
+		assertEquals("Wrong provider", provider, capability.getRevision().getWiring());
+//		Collection<BundleWiring> requirers = capability.getRequirerWirings();
+//		assertTrue("Requirer not included", requirers.contains(requirer));
+//		assertEquals("Wrong number of requirers", 1, requirers.size());
 
-		List<WiredCapability> required = requirer.getRequiredCapabilities(capability.getNamespace());
+		List<BundleRequirement> required = requirer.getRequirements(capability.getNamespace());
 		assertNotNull("Required capabilities is null", required);
 		assertTrue("Expected capability is not is list of required: " + capability, required.contains(capability));
 	}
@@ -562,25 +566,25 @@ public class BundleWiringTests extends OSGiTestCase {
 			int index = 0;
 			for (Iterator<BundleRevision> iter = revisions.iterator(); iter.hasNext(); index++) {
 				revision = (BundleRevision) iter.next();
-				BundleWiring wiring = revision.getBundleWiring();
-				Collection<BundleWiring> hostWirings = revision.getHostWirings();
+				BundleWiring wiring = revision.getWiring();
+//				Collection<BundleWiring> hostWirings = revision.getHostWirings();
 
 				if ((revision.getTypes() & BundleRevision.TYPE_FRAGMENT) != 0) {
-					assertNotNull("Hosts wirings is null", hostWirings);
+//					assertNotNull("Hosts wirings is null", hostWirings);
 					assertNull("bundle wiring is not null", wiring);
-					assertEquals("Wrong number of host wirings", 1,
-							hostWirings.size());
-					BundleWiring hostWiring = (BundleWiring) hostWirings
-							.iterator().next();
-					List<BundleRevision> fragments = hostWiring.getFragmentRevisions();
-					assertNotNull("Fragments is null", fragments);
-					assertTrue("Fragment is not found: " + bundle,
-							fragments.contains(revision));
+//					assertEquals("Wrong number of host wirings", 1,
+//							hostWirings.size());
+//					BundleWiring hostWiring = (BundleWiring) hostWirings
+//							.iterator().next();
+//					List<BundleRevision> fragments = hostWiring.getFragmentRevisions();
+//					assertNotNull("Fragments is null", fragments);
+//					assertTrue("Fragment is not found: " + bundle,
+//							fragments.contains(revision));
 					continue;
 				}
 
-				assertNotNull("Hosts wirings is not null", hostWirings);
-				assertEquals("Must not have host wirings if not a fragment", 0, hostWirings.size());
+//				assertNotNull("Hosts wirings is not null", hostWirings);
+//				assertEquals("Must not have host wirings if not a fragment", 0, hostWirings.size());
 				assertNotNull("bundle wiring is null", wiring);
 				if (index == 0 && hasCurrent)
 					assertTrue("Wiring is not current for: " + bundle, wiring.isCurrent());
@@ -613,21 +617,21 @@ public class BundleWiringTests extends OSGiTestCase {
 		// Test that the ees come from the system bundle
 		BundleWiring tb10v100Wiring = (BundleWiring) tb10v100.adapt(BundleWiring.class);
 		assertNotNull("Wiring is null for: " + tb10v100, tb10v100Wiring);
-		List v100RequiredEEs = tb10v100Wiring.getRequiredCapabilities("osgi.ee");
+		List v100RequiredEEs = tb10v100Wiring.getRequirements("osgi.ee");
 		assertEquals("Wrong number of required osgi.ees", 7, v100RequiredEEs.size());
 		Bundle systemBundle = getContext().getBundle(0);
 		assertNotNull("SystemBundle is null", systemBundle);
 		for (Iterator ees = v100RequiredEEs.iterator(); ees.hasNext();) {
-			assertEquals("Wrong provider for osgi.ee", systemBundle, ((WiredCapability) ees.next()).getProviderRevision().getBundle());
+			assertEquals("Wrong provider for osgi.ee", systemBundle, ((BundleCapability) ees.next()).getRevision().getBundle());
 		}
 
 		BundleWiring tb10v120Wiring = (BundleWiring) tb10v120.adapt(BundleWiring.class);
 		assertNotNull("Wiring is null for: " + tb10v120, tb10v120Wiring);
-		List v120RequiredEEs = tb10v120Wiring.getRequiredCapabilities("osgi.ee");
+		List v120RequiredEEs = tb10v120Wiring.getRequirements("osgi.ee");
 		assertEquals("Wrong number of required osgi.ees", 1, v120RequiredEEs.size());
 		assertNotNull("SystemBundle is null", systemBundle);
 		for (Iterator ees = v120RequiredEEs.iterator(); ees.hasNext();) {
-			assertEquals("Wrong provider for osgi.ee", systemBundle, ((WiredCapability) ees.next()).getProviderRevision().getBundle());
+			assertEquals("Wrong provider for osgi.ee", systemBundle, ((BundleCapability) ees.next()).getRevision().getBundle());
 		}
 	}
 
@@ -637,7 +641,7 @@ public class BundleWiringTests extends OSGiTestCase {
 
 		BundleWiring tb11Wiring = (BundleWiring) tb11.adapt(BundleWiring.class);
 		assertNotNull("Wiring is null", tb11Wiring);
-		List capabilities = tb11Wiring.getRequiredCapabilities(null);
+		List capabilities = tb11Wiring.getRequirements(null);
 		assertNotNull("Capabilities is null", capabilities);
 		assertEquals("Wrong number of capabilities", 0, capabilities.size());
 
@@ -647,11 +651,11 @@ public class BundleWiringTests extends OSGiTestCase {
 		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb11, tb12})));
 		tb11Wiring = (BundleWiring) tb11.adapt(BundleWiring.class);
 		assertNotNull("Wiring is null", tb11Wiring);
-		capabilities = tb11Wiring.getRequiredCapabilities(null);
+		capabilities = tb11Wiring.getRequirements(null);
 		assertNotNull("Capabilities is null", capabilities);
 		assertEquals("Wrong number of capabilities", 1, capabilities.size());
-		Capability capability = (Capability) capabilities.get(0);
-		assertEquals("Wrong provider", tb12, capability.getProviderRevision().getBundle());
+		BundleCapability capability = (BundleCapability) capabilities.get(0);
+		assertEquals("Wrong provider", tb12, capability.getRevision().getBundle());
 	}
 
 	// Note that this test is done in GetEntryResourceTest
@@ -1063,21 +1067,21 @@ public class BundleWiringTests extends OSGiTestCase {
 		BundleWiring tb13Client4Wiring = (BundleWiring) tb13Client4.adapt(BundleWiring.class);
 		assertNotNull("Expected non-null wiring: " + tb13Client4.getSymbolicName(), tb13Client4Wiring);
 
-		List client2Required = tb13Client2Wiring.getRequiredCapabilities(Capability.BUNDLE_CAPABILITY);
+		List client2Required = tb13Client2Wiring.getRequirements(BundleRevision.BUNDLE_NAMESPACE);
 		assertEquals("Unexpected number of capabilities", 1, client2Required.size());
-		assertEquals("Wrong provider", tb13a, ((Capability) client2Required.get(0)).getProviderRevision().getBundle());
+		assertEquals("Wrong provider", tb13a, ((BundleCapability) client2Required.get(0)).getRevision().getBundle());
 
-		List client4Required = tb13Client4Wiring.getRequiredCapabilities(Capability.BUNDLE_CAPABILITY);
+		List client4Required = tb13Client4Wiring.getRequirements(BundleRevision.BUNDLE_NAMESPACE);
 		assertEquals("Unexpected number of capabilities", 1, client4Required.size());
-		assertEquals("Wrong provider", tb13b, ((Capability) client4Required.get(0)).getProviderRevision().getBundle());
+		assertEquals("Wrong provider", tb13b, ((BundleCapability) client4Required.get(0)).getRevision().getBundle());
 
-		List aFragments = tb13aWiring.getFragmentRevisions();
-		assertEquals("Wrong number of fragments", 1, aFragments.size());
-		assertEquals("Wrong fragment attached", tb13Frag2, ((BundleRevision) aFragments.get(0)).getBundle());
+//		List aFragments = tb13aWiring.getFragmentRevisions();
+//		assertEquals("Wrong number of fragments", 1, aFragments.size());
+//		assertEquals("Wrong fragment attached", tb13Frag2, ((BundleRevision) aFragments.get(0)).getBundle());
 
-		List bFragments = tb13bWiring.getFragmentRevisions();
-		assertEquals("Wrong number of fragments", 1, bFragments.size());
-		assertEquals("Wrong fragment attached", tb13Frag4, ((BundleRevision) bFragments.get(0)).getBundle());
+//		List bFragments = tb13bWiring.getFragmentRevisions();
+//		assertEquals("Wrong number of fragments", 1, bFragments.size());
+//		assertEquals("Wrong fragment attached", tb13Frag4, ((BundleRevision) bFragments.get(0)).getBundle());
 	}
 
 	private void assertResourcesEquals(String message, Collection expected, Collection actual) {

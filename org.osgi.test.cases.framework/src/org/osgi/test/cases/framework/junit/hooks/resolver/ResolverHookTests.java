@@ -44,8 +44,9 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.hooks.resolver.ResolverHook;
 import org.osgi.framework.hooks.resolver.ResolverHookFactory;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
-import org.osgi.framework.wiring.Capability;
 import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.test.support.OSGiTestCase;
 
@@ -469,7 +470,7 @@ public class ResolverHookTests extends OSGiTestCase {
 				return new ResolverHook() {
 					public void end() {
 					}
-					public void filterMatches(BundleRevision arg0, Collection<Capability> arg1) {
+					public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 					}
 					public void filterResolvable(Collection<BundleRevision> arg0) {
 						try {
@@ -496,8 +497,8 @@ public class ResolverHookTests extends OSGiTestCase {
 								error[0] = e;
 						}
 					}
-					public void filterSingletonCollisions(Capability arg0,
-							Collection<Capability> arg1) {
+					public void filterSingletonCollisions(BundleCapability arg0,
+							Collection<BundleCapability> arg1) {
 					}
 					
 				};
@@ -532,15 +533,15 @@ public class ResolverHookTests extends OSGiTestCase {
 				return new ResolverHook() {
 					public void end() {
 					}
-					public void filterMatches(BundleRevision arg0, Collection<Capability> arg1) {
+					public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 						String symbolicName = "org.osgi.test.cases.framework.resolver.tb2";
 						String packageName = "org.osgi.test.cases.framework.resolver.tb1";
-						if (!symbolicName.equals(arg0.getSymbolicName()))
+						if (!symbolicName.equals(arg0.getRevision().getSymbolicName()))
 							return;
-						for (Iterator<Capability> packages = arg1.iterator(); packages.hasNext();) {
-							Capability pkg = packages.next();
-							if (!Capability.PACKAGE_CAPABILITY.equals(pkg.getNamespace()) ||
-									!packageName.equals(pkg.getAttributes().get(Capability.PACKAGE_CAPABILITY)))
+						for (Iterator<BundleCapability> packages = arg1.iterator(); packages.hasNext();) {
+							BundleCapability pkg = packages.next();
+							if (!BundleRevision.PACKAGE_NAMESPACE.equals(pkg.getNamespace()) ||
+									!packageName.equals(pkg.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE)))
 								return;
 
 							packages.remove();
@@ -551,7 +552,7 @@ public class ResolverHookTests extends OSGiTestCase {
 								//expected 
 							}
 							try {
-								List<Capability> testAdd = Arrays.asList(pkg);
+								List<BundleCapability> testAdd = Arrays.asList(pkg);
 								arg1.addAll(testAdd);
 								fail("Expected failure on addAll.");
 							} catch (UnsupportedOperationException e) {
@@ -561,8 +562,8 @@ public class ResolverHookTests extends OSGiTestCase {
 					}
 					public void filterResolvable(Collection<BundleRevision> arg0) {
 					}
-					public void filterSingletonCollisions(Capability arg0,
-							Collection<Capability> arg1) {
+					public void filterSingletonCollisions(BundleCapability arg0,
+							Collection<BundleCapability> arg1) {
 					}
 				};
 			}
@@ -936,31 +937,31 @@ public class ResolverHookTests extends OSGiTestCase {
 		registerHook(new ResolverHookFactory() {
 			public ResolverHook begin(Collection<BundleRevision> triggers) {
 				return new ResolverHook() {
-					public void filterSingletonCollisions(Capability arg0, Collection<Capability> arg1) {
+					public void filterSingletonCollisions(BundleCapability arg0, Collection<BundleCapability> arg1) {
 					}
 					public void filterResolvable(Collection<BundleRevision> arg0) {
 					}
-					public void filterMatches(BundleRevision arg0, Collection<Capability> arg1) {
-						for (Iterator<Capability> capabilities = arg1.iterator(); capabilities.hasNext();) {
-							Capability capability = capabilities.next();
+					public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
+						for (Iterator<BundleCapability> capabilities = arg1.iterator(); capabilities.hasNext();) {
+							BundleCapability capability = capabilities.next();
 							if (!testCapabilities.matches(capability.getAttributes()))
 								break;
 							synchronized (called) {
 								int index = 4;
-								if (arg0.getBundle() == tb2)
+								if (arg0.getRevision().getBundle() == tb2)
 									index = 0;
-								else if (arg0.getBundle() == tb3)
+								else if (arg0.getRevision().getBundle() == tb3)
 									index = 1;
-								else if (arg0.getBundle() == tb4)
+								else if (arg0.getRevision().getBundle() == tb4)
 									index = 2;
-								else if (arg0.getBundle() == tb5)
+								else if (arg0.getRevision().getBundle() == tb5)
 									index = 3;
 								try {
 									if (index == 4)
-										fail("Wrong bundle as requirer: " + arg0.getBundle());
+										fail("Wrong bundle as requirer: " + arg0.getRevision().getBundle());
 									called[index] = true;
 									assertEquals("Wrong number of capabilities", 1, arg1.size());
-									assertEquals("Wrong provider of capability", tb1v110, capability.getProviderRevision().getBundle());
+									assertEquals("Wrong provider of capability", tb1v110, capability.getRevision().getBundle());
 									break;
 								} catch (AssertionFailedError e) {
 									errors[index] = e;
@@ -1015,14 +1016,14 @@ public class ResolverHookTests extends OSGiTestCase {
 		public void end() {
 			doTest();
 		}
-		public void filterMatches(BundleRevision arg0, Collection<Capability> arg1) {
+		public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 			doTest();
 		}
 		public void filterResolvable(Collection<BundleRevision> arg0) {
 			doTest();
 		}
-		public void filterSingletonCollisions(Capability arg0,
-				Collection<Capability> arg1) {
+		public void filterSingletonCollisions(BundleCapability arg0,
+				Collection<BundleCapability> arg1) {
 			doTest();
 		}
 		public AssertionFailedError getError() {
@@ -1072,13 +1073,13 @@ public class ResolverHookTests extends OSGiTestCase {
 		}
 		public void end() {
 		}
-		public void filterMatches(BundleRevision arg0, Collection<Capability> arg1) {
+		public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 		}
 		public void filterResolvable(Collection<BundleRevision> arg0) {
 			filterHookToUnregister.unregister();
 		}
-		public void filterSingletonCollisions(Capability arg0,
-				Collection<Capability> arg1) {
+		public void filterSingletonCollisions(BundleCapability arg0,
+				Collection<BundleCapability> arg1) {
 			
 		}
 	}
@@ -1175,7 +1176,7 @@ public class ResolverHookTests extends OSGiTestCase {
 				}
 			}
 	
-			public void filterMatches(BundleRevision arg0, Collection<Capability> arg1) {
+			public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 				try {
 					assertEquals("Begin was not called.", 1, beginCalls - endCalls);
 				} catch (AssertionFailedError e) {
@@ -1215,7 +1216,7 @@ public class ResolverHookTests extends OSGiTestCase {
 				throwException();
 			}
 	
-			public void filterSingletonCollisions(Capability arg0, Collection<Capability> arg1) {
+			public void filterSingletonCollisions(BundleCapability arg0, Collection<BundleCapability> arg1) {
 				try {
 					assertEquals("Begin was not called.", 1, beginCalls - endCalls);
 				} catch (AssertionFailedError e) {
@@ -1264,13 +1265,13 @@ public class ResolverHookTests extends OSGiTestCase {
 		}
 		public void end() {
 		}
-		public void filterMatches(BundleRevision arg0, Collection<Capability> arg1) {
+		public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 		}
 		public void filterResolvable(Collection<BundleRevision> arg0) {
 			arg0.clear();  // never allow a bundle to resolve
 		}
-		public void filterSingletonCollisions(Capability arg0,
-				Collection<Capability> arg1) {
+		public void filterSingletonCollisions(BundleCapability arg0,
+				Collection<BundleCapability> arg1) {
 		}
 	}
 
@@ -1284,7 +1285,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		}
 		public void end() {
 		}
-		public void filterMatches(BundleRevision arg0, Collection<Capability> arg1) {
+		public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 		}
 		public void filterResolvable(Collection<BundleRevision> arg0) {
 			for(Iterator<BundleRevision> revisions = arg0.iterator(); revisions.hasNext();) {
@@ -1292,7 +1293,7 @@ public class ResolverHookTests extends OSGiTestCase {
 					revisions.remove();				
 			}
 		}
-		public void filterSingletonCollisions(Capability arg0, Collection<Capability> arg1) {
+		public void filterSingletonCollisions(BundleCapability arg0, Collection<BundleCapability> arg1) {
 		}
 	}
 
@@ -1309,9 +1310,9 @@ public class ResolverHookTests extends OSGiTestCase {
 		public void end() {
 		}
 
-		public void filterMatches(BundleRevision arg0, Collection<Capability> arg1) {
-			for (Iterator<Capability> capabilities = arg1.iterator(); capabilities.hasNext();) {
-				Capability capability = capabilities.next();
+		public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
+			for (Iterator<BundleCapability> capabilities = arg1.iterator(); capabilities.hasNext();) {
+				BundleCapability capability = capabilities.next();
 				if (!filter.matches(capability.getAttributes()))
 					continue;
 				capabilities.remove();
@@ -1323,7 +1324,7 @@ public class ResolverHookTests extends OSGiTestCase {
 						//expected 
 					}
 					try {
-						List<Capability> testAdd = Arrays.asList(capability);
+						List<BundleCapability> testAdd = Arrays.asList(capability);
 						arg1.addAll(testAdd);
 						fail("Expected failure on addAll.");
 					} catch (UnsupportedOperationException e) {
@@ -1338,8 +1339,8 @@ public class ResolverHookTests extends OSGiTestCase {
 
 		public void filterResolvable(Collection<BundleRevision> arg0) {
 		}
-		public void filterSingletonCollisions(Capability arg0,
-				Collection<Capability> arg1) {
+		public void filterSingletonCollisions(BundleCapability arg0,
+				Collection<BundleCapability> arg1) {
 		}
 
 		public AssertionFailedError getError() {
@@ -1362,20 +1363,20 @@ public class ResolverHookTests extends OSGiTestCase {
 		public void end() {
 		}
 
-		public void filterMatches(BundleRevision arg0, Collection<Capability> arg1) {
+		public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 		}
 
 		public void filterResolvable(Collection<BundleRevision> arg0) {
 		}
 
-		public void filterSingletonCollisions(Capability arg0, Collection<Capability> arg1) {
-			List<Bundle> issolatedFromBundle = collisions.get(arg0.getProviderRevision().getBundle());
+		public void filterSingletonCollisions(BundleCapability arg0, Collection<BundleCapability> arg1) {
+			List<Bundle> issolatedFromBundle = collisions.get(arg0.getRevision().getBundle());
 			if (issolatedFromBundle == null)
 				return;
 			try {
-				for (Iterator<Capability> iCollisions = arg1.iterator(); iCollisions.hasNext();) {
-					Capability collision = iCollisions.next();
-					if (issolatedFromBundle.contains(collision.getProviderRevision().getBundle())) {
+				for (Iterator<BundleCapability> iCollisions = arg1.iterator(); iCollisions.hasNext();) {
+					BundleCapability collision = iCollisions.next();
+					if (issolatedFromBundle.contains(collision.getRevision().getBundle())) {
 						iCollisions.remove();
 						try {
 							arg1.add(collision);
@@ -1384,7 +1385,7 @@ public class ResolverHookTests extends OSGiTestCase {
 							//expected 
 						}
 						try {
-							Collection<Capability> addTest = Arrays.asList(collision);
+							Collection<BundleCapability> addTest = Arrays.asList(collision);
 							arg1.addAll(addTest);
 							fail("Expected failure on addAll.");
 						} catch (UnsupportedOperationException e) {
