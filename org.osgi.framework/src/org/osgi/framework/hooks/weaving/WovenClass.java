@@ -52,6 +52,9 @@ public interface WovenClass {
 	 * 
 	 * @return The bytes to be used to define the
 	 *         {@link WovenClass#getClassName() named} class.
+	 * @throws SecurityException If the caller does not have
+	 *         {@code AdminPermission[bundle,WEAVE]} and the Java runtime
+	 *         environment supports permissions.
 	 */
 	public byte[] getBytes();
 
