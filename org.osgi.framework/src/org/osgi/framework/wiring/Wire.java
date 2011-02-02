@@ -39,7 +39,7 @@ public interface Wire {
 	Requirement getRequirement();
 
 	/**
-	 * Returns the bundle wiring {@link BundleWiring#getCapabilityWires(String)
+	 * Returns the bundle wiring {@link BundleWiring#getProvidedWires(String)
 	 * providing} the {@link #getCapability() capability}.
 	 * 
 	 * <p>
@@ -51,11 +51,11 @@ public interface Wire {
 	 *         providing the capability is not {@link BundleWiring#isInUse() in
 	 *         use}, {@code null} will be returned.
 	 */
-	BundleWiring getCapabilityWiring();
+	BundleWiring getProviderWiring();
 
 	/**
 	 * Returns the bundle wiring who
-	 * {@link BundleWiring#getRequirementWires(String) requires} the
+	 * {@link BundleWiring#getRequiredWires(String) requires} the
 	 * {@link #getCapability() capability}.
 	 * 
 	 * <p>
@@ -68,5 +68,5 @@ public interface Wire {
 	 *         {@link BundleWiring#isInUse() in use}, {@code null} will be
 	 *         returned.
 	 */
-	BundleWiring getRequirementWiring();
+	BundleWiring getRequirerWiring();
 }

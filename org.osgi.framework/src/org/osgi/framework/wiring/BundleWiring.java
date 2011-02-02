@@ -76,7 +76,7 @@ public interface BundleWiring extends BundleReference {
 	 * 
 	 * <p>
 	 * A provided capability may not be required by any bundle wiring and thus
-	 * there may be no {@link #getCapabilityWires(String) wires} for the
+	 * there may be no {@link #getProvidedWires(String) wires} for the
 	 * capability.
 	 * 
 	 * <p>
@@ -102,6 +102,12 @@ public interface BundleWiring extends BundleReference {
 	List<Capability> getCapabilities(String namespace);
 
 	/**
+	 * @param namespace
+	 * @return
+	 */
+	List<Requirement> getRequirements(String namespace);
+
+	/**
 	 * Returns the {@link Wire}s to the {@link Capability capabilities} of this
 	 * bundle wiring.
 	 * 
@@ -119,7 +125,7 @@ public interface BundleWiring extends BundleReference {
 	 *         fragments of this bundle wiring. There is no ordering defined
 	 *         between capabilities in different name spaces.
 	 */
-	List<Wire> getCapabilityWires(String namespace);
+	List<Wire> getProvidedWires(String namespace);
 
 	/**
 	 * Returns the {@link Wire}s to the {@link Requirement requirements} of this
@@ -144,7 +150,7 @@ public interface BundleWiring extends BundleReference {
 	 *         fragments of this bundle wiring. There is no ordering defined
 	 *         between requirements in different name spaces.
 	 */
-	List<Wire> getRequirementWires(String namespace);
+	List<Wire> getRequiredWires(String namespace);
 
 	/**
 	 * Returns the bundle revision for the bundle in this bundle wiring. Since a
@@ -302,7 +308,7 @@ public interface BundleWiring extends BundleReference {
 	 * {@link #getBundleRevision() bundle revision} and its attached fragment
 	 * revisions. The result must not include resource names for resources in
 	 * {@link BundleRevision#PACKAGE_NAMESPACE package} names which are
-	 * {@link #getRequirementWires(String) imported} by this wiring.
+	 * {@link #getRequiredWires(String) imported} by this wiring.
 	 * 
 	 * <p>
 	 * This bit may be set when calling

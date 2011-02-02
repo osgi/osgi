@@ -129,7 +129,7 @@ public interface BundleRevision extends BundleReference {
 	 * <p>
 	 * A bundle wiring {@link BundleWiring#getCapabilities(String) provides}
 	 * zero or more resolved package capabilities (that is, exported packages)
-	 * and {@link BundleWiring#getRequirementWires(String) requires} zero or
+	 * and {@link BundleWiring#getRequiredWires(String) requires} zero or
 	 * more resolved package requirements (that is, imported packages). The
 	 * number of package wires required by a bundle wiring may change as the
 	 * bundle wiring may dynamically import additional packages.
@@ -164,7 +164,7 @@ public interface BundleRevision extends BundleReference {
 	 * {@link BundleWiring#getCapabilities(String) provides} exactly
 	 * one<sup>&#8224;</sup> bundle capability (that is, the bundle can be
 	 * required by another bundle) and
-	 * {@link BundleWiring#getRequirementWires(String) requires} zero or more
+	 * {@link BundleWiring#getRequiredWires(String) requires} zero or more
 	 * bundle capabilities (that is, requires other bundles).
 	 * 
 	 * <p>
@@ -205,7 +205,7 @@ public interface BundleRevision extends BundleReference {
 	 * one<sup>&#8224;</sup> host capability if the bundle
 	 * {@link Constants#FRAGMENT_ATTACHMENT_DIRECTIVE allows fragments to be
 	 * attached}. A bundle wiring for a fragment revision
-	 * {@link BundleWiring#getRequirementWires(String) requires} a host
+	 * {@link BundleWiring#getRequiredWires(String) requires} a host
 	 * capability for each host to which it is attached.
 	 * 
 	 * <p>
