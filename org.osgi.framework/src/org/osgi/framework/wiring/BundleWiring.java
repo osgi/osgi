@@ -75,12 +75,10 @@ public interface BundleWiring extends BundleReference {
 	 * Returns the capabilities provided by this bundle wiring.
 	 * 
 	 * <p>
-	 * A provided capability may not be required by any bundle wiring and thus
-	 * there may be no {@link #getProvidedWires(String) wires} for the
-	 * capability.
+	 * A capability may not be required by any bundle wiring and thus there may
+	 * be no {@link #getProvidedWires(String) wires} for the capability.
 	 * 
 	 * <p>
-	 * A bundle wiring for a fragment revision never provides any capabilities.
 	 * A bundle wiring for a non-fragment revision provides a subset of the
 	 * declared capabilities from the bundle revision and all attached fragment
 	 * revisions. Not all declared capabilities may be provided since since some
@@ -89,66 +87,84 @@ public interface BundleWiring extends BundleReference {
 	 * 
 	 * @param namespace The name space of the capabilities to return or
 	 *        {@code null} to return the capabilities from all name spaces.
-	 * @return A list containing a snapshot of the {@link BundleCapability}s, or an
-	 *         empty list if this bundle wiring provides no capabilities in the
-	 *         specified name space. If this bundle wiring is not
+	 * @return A list containing a snapshot of the {@link BundleCapability}s, or
+	 *         an empty list if this bundle wiring provides no capabilities in
+	 *         the specified name space. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
 	 *         given name space, the list contains the wires in the order the
 	 *         capabilities were specified in the manifests of the
-	 *         {@link #getRevision() bundle revision} and the attached
-	 *         fragments of this bundle wiring. There is no ordering defined
-	 *         between capabilities in different name spaces.
+	 *         {@link #getRevision() bundle revision} and the attached fragments
+	 *         of this bundle wiring. There is no ordering defined between
+	 *         capabilities in different name spaces.
 	 */
 	List<BundleCapability> getCapabilities(String namespace);
 
 	/**
-	 * @param namespace
-	 * @return
+	 * Returns the requirements of this bundle wiring.
+	 * 
+	 * <p>
+	 * A bundle wiring for a non-fragment revision has a subset of the declared
+	 * requirements from the bundle revision and all attached fragment
+	 * revisions. Not all declared requirements may be present since since some
+	 * may be discarded. For example, if a package is declared to be optionally
+	 * imported, the requirement may be discarded.
+	 * 
+	 * @param namespace The name space of the requirements to return or
+	 *        {@code null} to return the requirements from all name spaces.
+	 * @return A list containing a snapshot of the {@link BundleRequirement}s,
+	 *         or an empty list if this bundle wiring uses no requirements in
+	 *         the specified name space. If this bundle wiring is not
+	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
+	 *         given name space, the list contains the wires in the order the
+	 *         requirements were specified in the manifests of the
+	 *         {@link #getRevision() bundle revision} and the attached fragments
+	 *         of this bundle wiring. There is no ordering defined between
+	 *         requirements in different name spaces.
 	 */
 	List<BundleRequirement> getRequirements(String namespace);
 
 	/**
-	 * Returns the {@link BundleWire}s to the {@link BundleCapability capabilities} of this
-	 * bundle wiring.
+	 * Returns the {@link BundleWire}s to the provided {@link BundleCapability
+	 * capabilities} of this bundle wiring.
 	 * 
 	 * @param namespace The name space of the capabilities for which to return
 	 *        wires or {@code null} to return the wires for the capabilities in
 	 *        all name spaces.
 	 * @return A list containing a snapshot of the {@link BundleWire}s for the
-	 *         {@link BundleCapability capabilities} of this bundle wiring, or an
-	 *         empty list if this bundle wiring has no capabilities in the
+	 *         {@link BundleCapability capabilities} of this bundle wiring, or
+	 *         an empty list if this bundle wiring has no capabilities in the
 	 *         specified name space. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
 	 *         given name space, the list contains the wires in the order the
 	 *         capabilities were specified in the manifests of the
-	 *         {@link #getRevision() bundle revision} and the attached
-	 *         fragments of this bundle wiring. There is no ordering defined
-	 *         between capabilities in different name spaces.
+	 *         {@link #getRevision() bundle revision} and the attached fragments
+	 *         of this bundle wiring. There is no ordering defined between
+	 *         capabilities in different name spaces.
 	 */
 	List<BundleWire> getProvidedWires(String namespace);
 
 	/**
-	 * Returns the {@link BundleWire}s to the {@link BundleRequirement requirements} of this
-	 * bundle wiring.
+	 * Returns the {@link BundleWire}s to the {@link BundleRequirement
+	 * requirements} in use by this bundle wiring.
 	 * 
 	 * <p>
-	 * This method may return different results if this bundle wiring adds more
-	 * requirement wires. For example, dynamically importing a package will
+	 * This method may return different results if this bundle wiring adds wires
+	 * to more requirements. For example, dynamically importing a package will
 	 * establish a new wire to the dynamically imported package.
 	 * 
 	 * @param namespace The name space of the requirements for which to return
 	 *        wires or {@code null} to return the wires for the requirements in
 	 *        all name spaces.
 	 * @return A list containing a snapshot of the {@link BundleWire}s for the
-	 *         {@link BundleRequirement requirements} of this bundle wiring, or an
-	 *         empty list if this bundle wiring has no requirements in the
+	 *         {@link BundleRequirement requirements} of this bundle wiring, or
+	 *         an empty list if this bundle wiring has no requirements in the
 	 *         specified name space. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
 	 *         given name space, the list contains the wires in the order the
 	 *         requirements were specified in the manifests of the
-	 *         {@link #getRevision() bundle revision} and the attached
-	 *         fragments of this bundle wiring. There is no ordering defined
-	 *         between requirements in different name spaces.
+	 *         {@link #getRevision() bundle revision} and the attached fragments
+	 *         of this bundle wiring. There is no ordering defined between
+	 *         requirements in different name spaces.
 	 */
 	List<BundleWire> getRequiredWires(String namespace);
 
