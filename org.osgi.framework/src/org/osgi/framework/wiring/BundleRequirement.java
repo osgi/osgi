@@ -26,7 +26,7 @@ import java.util.Map;
  * @noimplement
  * @version $Id$
  */
-public interface Requirement {
+public interface BundleRequirement {
 	/**
 	 * Returns the name space of this requirement.
 	 * 
@@ -66,8 +66,8 @@ public interface Requirement {
 	 * @return {@code true} if the specified capability has the same
 	 *         {@link #getNamespace() name space} as this requirement and the
 	 *         filter for this requirement matches the
-	 *         {@link Capability#getAttributes() attributes of the specified
+	 *         {@link BundleCapability#getAttributes() attributes of the specified
 	 *         capability}; {@code false} otherwise.
 	 */
-	boolean matches(Capability capability);
+	boolean matches(BundleCapability capability);
 }

@@ -72,12 +72,12 @@ public interface BundleRevision extends BundleReference {
 	 * @param namespace The name space of the declared capabilities to return or
 	 *        {@code null} to return the declared capabilities from all name
 	 *        spaces.
-	 * @return A list containing a snapshot of the declared {@link Capability}s,
+	 * @return A list containing a snapshot of the declared {@link BundleCapability}s,
 	 *         or an empty list if this bundle revision declares no capabilities
 	 *         in the specified name space. The list contains the declared
 	 *         capabilities in the order they are specified in the manifest.
 	 */
-	List<Capability> getDeclaredCapabilities(String namespace);
+	List<BundleCapability> getDeclaredCapabilities(String namespace);
 
 	/**
 	 * Returns the requirements declared by this bundle revision.
@@ -85,13 +85,13 @@ public interface BundleRevision extends BundleReference {
 	 * @param namespace The name space of the declared requirements to return or
 	 *        {@code null} to return the declared requirements from all name
 	 *        spaces.
-	 * @return A list containing a snapshot of the declared {@link Requirement}
+	 * @return A list containing a snapshot of the declared {@link BundleRequirement}
 	 *         s, or an empty list if this bundle revision declares no
 	 *         requirements in the specified name space. The list contains the
 	 *         declared requirements in the order they are specified in the
 	 *         manifest.
 	 */
-	List<Requirement> getDeclaredRequirements(String namespace);
+	List<BundleRequirement> getDeclaredRequirements(String namespace);
 
 	/**
 	 * Name space for package capabilities and requirements.
@@ -101,8 +101,8 @@ public interface BundleRevision extends BundleReference {
 	 * name as this name space ({@value #PACKAGE_NAMESPACE}). The other
 	 * directives and attributes of the package, from the
 	 * {@link Constants#EXPORT_PACKAGE Export-Package} manifest header, can be
-	 * found in the cabability's {@link Capability#getDirectives() directives}
-	 * and {@link Capability#getAttributes() attributes}. The
+	 * found in the cabability's {@link BundleCapability#getDirectives() directives}
+	 * and {@link BundleCapability#getAttributes() attributes}. The
 	 * {@link Constants#VERSION_ATTRIBUTE version} capability attribute must
 	 * contain the {@link Version} of the package if one is specified or
 	 * {@link Version#emptyVersion} if not specified. The
@@ -145,8 +145,8 @@ public interface BundleRevision extends BundleReference {
 	 * ). The other directives and attributes of the bundle, from the
 	 * {@link Constants#BUNDLE_SYMBOLICNAME Bundle-SymbolicName} manifest
 	 * header, can be found in the cabability's
-	 * {@link Capability#getDirectives() directives} and
-	 * {@link Capability#getAttributes() attributes}. The
+	 * {@link BundleCapability#getDirectives() directives} and
+	 * {@link BundleCapability#getAttributes() attributes}. The
 	 * {@link Constants#BUNDLE_VERSION_ATTRIBUTE bundle-version} capability
 	 * attribute must contain the {@link Version} of the bundle from the
 	 * {@link Constants#BUNDLE_VERSION Bundle-Version} manifest header if one is
@@ -183,8 +183,8 @@ public interface BundleRevision extends BundleReference {
 	 * The other directives and attributes of the bundle, from the
 	 * {@link Constants#BUNDLE_SYMBOLICNAME Bundle-SymbolicName} manifest
 	 * header, can be found in the cabability's
-	 * {@link Capability#getDirectives() directives} and
-	 * {@link Capability#getAttributes() attributes}. The
+	 * {@link BundleCapability#getDirectives() directives} and
+	 * {@link BundleCapability#getAttributes() attributes}. The
 	 * {@link Constants#BUNDLE_VERSION_ATTRIBUTE bundle-version} capability
 	 * attribute must contain the {@link Version} of the bundle from the
 	 * {@link Constants#BUNDLE_VERSION Bundle-Version} manifest header if one is

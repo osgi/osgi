@@ -89,7 +89,7 @@ public interface BundleWiring extends BundleReference {
 	 * 
 	 * @param namespace The name space of the capabilities to return or
 	 *        {@code null} to return the capabilities from all name spaces.
-	 * @return A list containing a snapshot of the {@link Capability}s, or an
+	 * @return A list containing a snapshot of the {@link BundleCapability}s, or an
 	 *         empty list if this bundle wiring provides no capabilities in the
 	 *         specified name space. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
@@ -99,23 +99,23 @@ public interface BundleWiring extends BundleReference {
 	 *         fragments of this bundle wiring. There is no ordering defined
 	 *         between capabilities in different name spaces.
 	 */
-	List<Capability> getCapabilities(String namespace);
+	List<BundleCapability> getCapabilities(String namespace);
 
 	/**
 	 * @param namespace
 	 * @return
 	 */
-	List<Requirement> getRequirements(String namespace);
+	List<BundleRequirement> getRequirements(String namespace);
 
 	/**
-	 * Returns the {@link Wire}s to the {@link Capability capabilities} of this
+	 * Returns the {@link BundleWire}s to the {@link BundleCapability capabilities} of this
 	 * bundle wiring.
 	 * 
 	 * @param namespace The name space of the capabilities for which to return
 	 *        wires or {@code null} to return the wires for the capabilities in
 	 *        all name spaces.
-	 * @return A list containing a snapshot of the {@link Wire}s for the
-	 *         {@link Capability capabilities} of this bundle wiring, or an
+	 * @return A list containing a snapshot of the {@link BundleWire}s for the
+	 *         {@link BundleCapability capabilities} of this bundle wiring, or an
 	 *         empty list if this bundle wiring has no capabilities in the
 	 *         specified name space. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
@@ -125,10 +125,10 @@ public interface BundleWiring extends BundleReference {
 	 *         fragments of this bundle wiring. There is no ordering defined
 	 *         between capabilities in different name spaces.
 	 */
-	List<Wire> getProvidedWires(String namespace);
+	List<BundleWire> getProvidedWires(String namespace);
 
 	/**
-	 * Returns the {@link Wire}s to the {@link Requirement requirements} of this
+	 * Returns the {@link BundleWire}s to the {@link BundleRequirement requirements} of this
 	 * bundle wiring.
 	 * 
 	 * <p>
@@ -139,8 +139,8 @@ public interface BundleWiring extends BundleReference {
 	 * @param namespace The name space of the requirements for which to return
 	 *        wires or {@code null} to return the wires for the requirements in
 	 *        all name spaces.
-	 * @return A list containing a snapshot of the {@link Wire}s for the
-	 *         {@link Requirement requirements} of this bundle wiring, or an
+	 * @return A list containing a snapshot of the {@link BundleWire}s for the
+	 *         {@link BundleRequirement requirements} of this bundle wiring, or an
 	 *         empty list if this bundle wiring has no requirements in the
 	 *         specified name space. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
@@ -150,7 +150,7 @@ public interface BundleWiring extends BundleReference {
 	 *         fragments of this bundle wiring. There is no ordering defined
 	 *         between requirements in different name spaces.
 	 */
-	List<Wire> getRequiredWires(String namespace);
+	List<BundleWire> getRequiredWires(String namespace);
 
 	/**
 	 * Returns the bundle revision for the bundle in this bundle wiring. Since a

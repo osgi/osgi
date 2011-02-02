@@ -17,26 +17,26 @@
 package org.osgi.framework.wiring;
 
 /**
- * A wire connecting a {@link Capability} to a {@link Requirement}.
+ * A wire connecting a {@link BundleCapability} to a {@link BundleRequirement}.
  * 
  * @ThreadSafe
  * @noimplement
  * @version $Id$
  */
-public interface Wire {
+public interface BundleWire {
 	/**
-	 * Returns the {@link Capability} for this wire.
+	 * Returns the {@link BundleCapability} for this wire.
 	 * 
-	 * @return The {@link Capability} for this wire.
+	 * @return The {@link BundleCapability} for this wire.
 	 */
-	Capability getCapability();
+	BundleCapability getCapability();
 
 	/**
-	 * Return the {@link Requirement} for this wire.
+	 * Return the {@link BundleRequirement} for this wire.
 	 * 
-	 * @return The {@link Requirement} for this wire.
+	 * @return The {@link BundleRequirement} for this wire.
 	 */
-	Requirement getRequirement();
+	BundleRequirement getRequirement();
 
 	/**
 	 * Returns the bundle wiring {@link BundleWiring#getProvidedWires(String)

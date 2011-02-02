@@ -26,7 +26,7 @@ import java.util.Map;
  * @noimplement
  * @version $Id$
  */
-public interface Capability {
+public interface BundleCapability {
 	/**
 	 * Returns the name space of this capability.
 	 * 

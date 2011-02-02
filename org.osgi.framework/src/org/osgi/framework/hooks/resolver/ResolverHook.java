@@ -20,9 +20,9 @@ import java.util.Collection;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.wiring.BundleRevision;
-import org.osgi.framework.wiring.Capability;
+import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.FrameworkWiring;
-import org.osgi.framework.wiring.Requirement;
+import org.osgi.framework.wiring.BundleRequirement;
 
 /**
  * OSGi Framework Resolver Hook instances are obtained from the OSGi
@@ -78,7 +78,7 @@ import org.osgi.framework.wiring.Requirement;
  * {@code S}. A singleton bundle cannot collide with itself.
  * 
  * For each resolver hook call the
- * {@link #filterSingletonCollisions(Capability, Collection)} with the
+ * {@link #filterSingletonCollisions(BundleCapability, Collection)} with the
  * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle} capability
  * provided by bundle revision {@code B} and the shrinkable collection {@code S}
  * 
@@ -168,7 +168,7 @@ public interface ResolverHook {
 	 * @param singleton the singleton involved in a resolve process
 	 * @param collisionCandidates a collection of singleton collision candidates
 	 */
-	void filterSingletonCollisions(Capability singleton, Collection<Capability> collisionCandidates);
+	void filterSingletonCollisions(BundleCapability singleton, Collection<BundleCapability> collisionCandidates);
 
 	/**
 	 * Filter matches hook method. This method is called during the resolve process for the 
@@ -186,7 +186,7 @@ public interface ResolverHook {
 	 * @param requirement the requirement to filter candidates for
 	 * @param candidates a collection of candidates that match the requirement
 	 */
-	void filterMatches(Requirement requirement, Collection<Capability> candidates);
+	void filterMatches(BundleRequirement requirement, Collection<BundleCapability> candidates);
 
 	/**
 	 * This method is called once at the end of the resolve process.
