@@ -66,8 +66,8 @@ public interface BundleRequirement {
 	 * @return {@code true} if the specified capability has the same
 	 *         {@link #getNamespace() name space} as this requirement and the
 	 *         filter for this requirement matches the
-	 *         {@link BundleCapability#getAttributes() attributes of the specified
-	 *         capability}; {@code false} otherwise.
+	 *         {@link BundleCapability#getAttributes() attributes of the
+	 *         specified capability}; {@code false} otherwise.
 	 */
 	boolean matches(BundleCapability capability);
 }

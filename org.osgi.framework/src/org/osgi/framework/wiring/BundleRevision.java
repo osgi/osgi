@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.framework.wiring;
 
 import java.util.List;
@@ -72,10 +71,11 @@ public interface BundleRevision extends BundleReference {
 	 * @param namespace The name space of the declared capabilities to return or
 	 *        {@code null} to return the declared capabilities from all name
 	 *        spaces.
-	 * @return A list containing a snapshot of the declared {@link BundleCapability}s,
-	 *         or an empty list if this bundle revision declares no capabilities
-	 *         in the specified name space. The list contains the declared
-	 *         capabilities in the order they are specified in the manifest.
+	 * @return A list containing a snapshot of the declared
+	 *         {@link BundleCapability}s, or an empty list if this bundle
+	 *         revision declares no capabilities in the specified name space.
+	 *         The list contains the declared capabilities in the order they are
+	 *         specified in the manifest.
 	 */
 	List<BundleCapability> getDeclaredCapabilities(String namespace);
 
@@ -85,11 +85,11 @@ public interface BundleRevision extends BundleReference {
 	 * @param namespace The name space of the declared requirements to return or
 	 *        {@code null} to return the declared requirements from all name
 	 *        spaces.
-	 * @return A list containing a snapshot of the declared {@link BundleRequirement}
-	 *         s, or an empty list if this bundle revision declares no
-	 *         requirements in the specified name space. The list contains the
-	 *         declared requirements in the order they are specified in the
-	 *         manifest.
+	 * @return A list containing a snapshot of the declared
+	 *         {@link BundleRequirement}s, or an empty list if this bundle
+	 *         revision declares no requirements in the specified name space.
+	 *         The list contains the declared requirements in the order they are
+	 *         specified in the manifest.
 	 */
 	List<BundleRequirement> getDeclaredRequirements(String namespace);
 
@@ -101,8 +101,8 @@ public interface BundleRevision extends BundleReference {
 	 * name as this name space ({@value #PACKAGE_NAMESPACE}). The other
 	 * directives and attributes of the package, from the
 	 * {@link Constants#EXPORT_PACKAGE Export-Package} manifest header, can be
-	 * found in the cabability's {@link BundleCapability#getDirectives() directives}
-	 * and {@link BundleCapability#getAttributes() attributes}. The
+	 * found in the cabability's {@link BundleCapability#getDirectives()
+	 * directives} and {@link BundleCapability#getAttributes() attributes}. The
 	 * {@link Constants#VERSION_ATTRIBUTE version} capability attribute must
 	 * contain the {@link Version} of the package if one is specified or
 	 * {@link Version#emptyVersion} if not specified. The
@@ -129,10 +129,10 @@ public interface BundleRevision extends BundleReference {
 	 * <p>
 	 * A bundle wiring {@link BundleWiring#getCapabilities(String) provides}
 	 * zero or more resolved package capabilities (that is, exported packages)
-	 * and {@link BundleWiring#getRequiredWires(String) requires} zero or
-	 * more resolved package requirements (that is, imported packages). The
-	 * number of package wires required by a bundle wiring may change as the
-	 * bundle wiring may dynamically import additional packages.
+	 * and {@link BundleWiring#getRequiredWires(String) requires} zero or more
+	 * resolved package requirements (that is, imported packages). The number of
+	 * package wires required by a bundle wiring may change as the bundle wiring
+	 * may dynamically import additional packages.
 	 */
 	String	PACKAGE_NAMESPACE	= "osgi.wiring.package";
 
@@ -205,8 +205,8 @@ public interface BundleRevision extends BundleReference {
 	 * one<sup>&#8224;</sup> host capability if the bundle
 	 * {@link Constants#FRAGMENT_ATTACHMENT_DIRECTIVE allows fragments to be
 	 * attached}. A bundle wiring for a fragment revision
-	 * {@link BundleWiring#getRequiredWires(String) requires} a host
-	 * capability for each host to which it is attached.
+	 * {@link BundleWiring#getRequiredWires(String) requires} a host capability
+	 * for each host to which it is attached.
 	 * 
 	 * <p>
 	 * &#8224; A bundle with no bundle symbolic name (that is, a bundle with

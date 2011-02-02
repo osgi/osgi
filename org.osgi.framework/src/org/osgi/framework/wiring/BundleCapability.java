@@ -37,16 +37,18 @@ public interface BundleCapability {
 	/**
 	 * Returns the directives of this capability.
 	 * 
-	 * @return An unmodifiable map of directive names to directive values for this 
-	 *         capability, or an empty map if this capability has no directives.
+	 * @return An unmodifiable map of directive names to directive values for
+	 *         this capability, or an empty map if this capability has no
+	 *         directives.
 	 */
 	Map<String, String> getDirectives();
 
 	/**
 	 * Returns the attributes of this capability.
 	 * 
-	 * @return An unmodifiable map of attribute names to attribute values for this
-	 *         capability, or an empty map if this capability has no attributes.
+	 * @return An unmodifiable map of attribute names to attribute values for
+	 *         this capability, or an empty map if this capability has no
+	 *         attributes.
 	 */
 	Map<String, Object> getAttributes();
 

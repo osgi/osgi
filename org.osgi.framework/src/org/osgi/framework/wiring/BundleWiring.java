@@ -81,9 +81,9 @@ public interface BundleWiring extends BundleReference {
 	 * <p>
 	 * A bundle wiring for a non-fragment revision provides a subset of the
 	 * declared capabilities from the bundle revision and all attached fragment
-	 * revisions. Not all declared capabilities may be provided since since some
-	 * may be discarded. For example, if a package is declared to be exported
-	 * and import, only one is selected and the other is discarded.
+	 * revisions. Not all declared capabilities may be provided since some may
+	 * be discarded. For example, if a package is declared to be exported and
+	 * import, only one is selected and the other is discarded.
 	 * 
 	 * @param namespace The name space of the capabilities to return or
 	 *        {@code null} to return the capabilities from all name spaces.
@@ -105,8 +105,8 @@ public interface BundleWiring extends BundleReference {
 	 * <p>
 	 * A bundle wiring for a non-fragment revision has a subset of the declared
 	 * requirements from the bundle revision and all attached fragment
-	 * revisions. Not all declared requirements may be present since since some
-	 * may be discarded. For example, if a package is declared to be optionally
+	 * revisions. Not all declared requirements may be present since some may be
+	 * discarded. For example, if a package is declared to be optionally
 	 * imported, the requirement may be discarded.
 	 * 
 	 * @param namespace The name space of the requirements to return or
@@ -199,11 +199,11 @@ public interface BundleWiring extends BundleReference {
 	ClassLoader getClassLoader();
 
 	/**
-	 * Returns entries in this bundle wiring's {@link #getRevision()
-	 * bundle revision} and its attached fragment revisions. This bundle
-	 * wiring's class loader is not used to search for entries. Only the
-	 * contents of this bundle wiring's bundle revision and its attached
-	 * fragment revisions are searched for the specified entries.
+	 * Returns entries in this bundle wiring's {@link #getRevision() bundle
+	 * revision} and its attached fragment revisions. This bundle wiring's class
+	 * loader is not used to search for entries. Only the contents of this
+	 * bundle wiring's bundle revision and its attached fragment revisions are
+	 * searched for the specified entries.
 	 * 
 	 * <p>
 	 * This method takes into account that the &quot;contents&quot; of this
@@ -240,11 +240,11 @@ public interface BundleWiring extends BundleReference {
 	 *         bundle wiring is for a fragment revision or if the caller does
 	 *         not have the appropriate {@code AdminPermission[bundle,RESOURCE]}
 	 *         and the Java Runtime Environment supports permissions. The list
-	 *         is ordered such that entries from the
-	 *         {@link #getRevision() bundle revision} are returned first
-	 *         followed by the entries from attached fragment revisions in
-	 *         attachment order. If this bundle wiring is not {@link #isInUse()
-	 *         in use}, {@code null} must be returned.
+	 *         is ordered such that entries from the {@link #getRevision()
+	 *         bundle revision} are returned first followed by the entries from
+	 *         attached fragment revisions in attachment order. If this bundle
+	 *         wiring is not {@link #isInUse() in use}, {@code null} must be
+	 *         returned.
 	 * @see Bundle#findEntries(String, String, boolean)
 	 */
 	List<URL> findEntries(String path, String filePattern, int options);
