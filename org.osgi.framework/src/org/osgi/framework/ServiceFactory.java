@@ -59,12 +59,20 @@ public interface ServiceFactory<S> {
 	 * factory can then return a specific service object for each bundle.
 	 * 
 	 * <p>
-	 * The Framework must check that the returned service object is valid. It
-	 * must not be {@code null} and it must be an {@code instanceof} all the
-	 * classes named when the service was registered. If this method throws an
-	 * exception or will be recursively called for the specified bundle or if
-	 * the returned service object is not valid, then {@code null} is returned
-	 * to the bundle.
+	 * The Framework must check that the returned service object is valid. If
+	 * the returned service object is {@code null} or is not an
+	 * {@code instanceof} all the classes named when the service was registered,
+	 * a framework event of type {@link FrameworkEvent#ERROR} is fired
+	 * containing a service exception of type
+	 * {@link ServiceException#FACTORY_ERROR} and {@code null} is returned to
+	 * the bundle. If this method throws an exception, a framework event of type
+	 * {@link FrameworkEvent#ERROR} is fired containing a service exception of
+	 * type {@link ServiceException#FACTORY_EXCEPTION} with the thrown exception
+	 * as the cause and {@code null} is returned to the bundle. If this method
+	 * is recursively called for the specified bundle, a framework event of type
+	 * {@link FrameworkEvent#ERROR} is fired containing a service exception of
+	 * type {@link ServiceException#FACTORY_RECURSION} and {@code null} is
+	 * returned to the bundle.
 	 * 
 	 * <p>
 	 * The Framework caches the valid service object and will return the same
@@ -87,6 +95,12 @@ public interface ServiceFactory<S> {
 	 * <p>
 	 * The Framework invokes this method when a service has been released by a
 	 * bundle. The service object may then be destroyed.
+	 * 
+	 * <p>
+	 * If this method throws an exception, a framework event of type
+	 * {@link FrameworkEvent#ERROR} is fired containing a service exception of
+	 * type {@link ServiceException#FACTORY_EXCEPTION} with the thrown exception
+	 * as the cause.
 	 * 
 	 * @param bundle The bundle releasing the service.
 	 * @param registration The {@code ServiceRegistration} object for the
