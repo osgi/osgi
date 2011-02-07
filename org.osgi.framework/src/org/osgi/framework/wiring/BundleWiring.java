@@ -107,7 +107,7 @@ public interface BundleWiring extends BundleReference {
 	 * requirements from the bundle revision and all attached fragment
 	 * revisions. Not all declared requirements may be present since some may be
 	 * discarded. For example, if a package is declared to be optionally
-	 * imported, the requirement may be discarded.
+	 * imported and is not actually imported, the requirement must be discarded.
 	 * 
 	 * @param namespace The name space of the requirements to return or
 	 *        {@code null} to return the requirements from all name spaces.
