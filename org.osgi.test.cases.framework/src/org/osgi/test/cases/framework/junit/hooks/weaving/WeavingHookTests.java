@@ -255,13 +255,10 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 		 * Receieve and validate the framework event
 		 */
 		public synchronized void frameworkEvent(FrameworkEvent event) {
-			if(events.isEmpty()) {
-				validated = (event.getType() == FrameworkEvent.ERROR &&
+			if(!validated) {
+			   validated = (event.getType() == FrameworkEvent.ERROR &&
 						event.getThrowable() == cause &&
 						event.getBundle() == source);
-			} else {
-				//There should only be one event sent
-				validated = false;
 			}
 			events.add(event);
 		}
@@ -522,6 +519,9 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 				weavingClasses.loadClass(TEST_CLASS_NAME);
 				fail("Class should fail to Load");
 			} catch (ClassFormatError cfe) {
+				
+				waitForListener(listener);
+				
 				getContext().removeFrameworkListener(listener);
 				assertTrue("Wrong event was sent " + listener, listener.wasValidEventSent());
 			
@@ -555,6 +555,23 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 		}
 	}
 	
+	private void waitForListener(ClassLoadErrorListener listener) {
+		long t = System.currentTimeMillis();
+		
+		while(System.currentTimeMillis() - t < 10000) {
+			if(listener.wasValidEventSent())
+				break;
+			else {
+				try {
+					Thread.sleep(250);
+				} catch (InterruptedException e) {
+					break;
+				}
+			}
+		}
+		
+	}
+
 	/**
 	 * Test that a WeavingException does not result in blacklisting
 	 * @throws Exception
@@ -589,6 +606,9 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 				weavingClasses.loadClass(TEST_CLASS_NAME);
 				fail("Class should fail to Load");
 			} catch (ClassFormatError cfe) {
+				
+				waitForListener(listener);
+				
 				getContext().removeFrameworkListener(listener);
 				assertTrue("Wrong event was sent " + listener, listener.wasValidEventSent());
 				
@@ -653,6 +673,9 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 				weavingClasses.loadClass(TEST_CLASS_NAME);
 				fail("Class should fail to Load");
 			} catch (ClassFormatError cfe) {
+				
+				waitForListener(listener);
+				
 				getContext().removeFrameworkListener(listener);
 			    assertTrue("Wrong event was sent " + listener, listener.wasValidEventSent());
 				
