@@ -1,10 +1,15 @@
 Bundle-Description			: \
-	OSGi Service Platform Release ${version;=;${core.build.version}} version ${core.build.version}, \
+	OSGi Service Platform Release ${version;=;${core.build.version}} Version ${version;==;${core.build.version}}, \
 	Core Test Case Bundles.
 
 Bundle-Version				: ${core.build.version}
 Include-Resource				: \
+  	\
+    ${replace;${uniq;\
+    ${jar.core.tests} \
+    };.+;jar/=$0},\
+    \
     NOTICE=legal/NOTICE.txt, \
- 	{about.html=legal/about.html}
+    {about.html=legal/about.html}
 
 -pack: ${build.core.tests}

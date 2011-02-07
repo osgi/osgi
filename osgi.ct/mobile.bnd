@@ -1,9 +1,15 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${mobile.build.version}} version ${mobile.build.version}, \
+	OSGi Service Platform Release ${version;=;${mobile.build.version}} Version ${version;==;${mobile.build.version}}, \
 	Mobile Test Case Bundles.
+
 Bundle-Version					: ${mobile.build.version}
 Include-Resource				: \
+  	\
+    ${replace;${uniq;\
+    ${jar.mobile.tests} \
+    };.+;jar/=$0},\
+    \
     NOTICE=legal/NOTICE.txt, \
- 	{about.html=legal/about.html}
+    {about.html=legal/about.html}
 
 -pack: ${build.mobile.tests}

@@ -1,5 +1,8 @@
 build.tests                 = ${uniq; ${build.core.tests}, ${build.cmpn.tests}, ${build.mobile.tests}, ${build.enterprise.tests}}
 
+jar.core.tests = \
+	${repo;org.apache.servicemix.bundles.bcel}
+	
 build.core.tests = \
     org.osgi.test.cases.framework, \
     org.osgi.test.cases.framework.secure, \
@@ -10,6 +13,8 @@ build.core.tests = \
     org.osgi.test.cases.permissionadmin, \
     org.osgi.test.cases.startlevel, \
     org.osgi.test.cases.url
+
+jar.cmpn.tests =
 
 build.cmpn.tests = \
     org.osgi.test.cases.application, \
@@ -46,6 +51,8 @@ build.cmpn.tests = \
     org.osgi.test.cases.wireadmin, \
     org.osgi.test.cases.xml
 
+jar.mobile.tests =
+
 build.mobile.tests = \
 	org.osgi.test.cases.application, \
 	org.osgi.test.cases.cdma, \
@@ -67,6 +74,8 @@ build.mobile.tests = \
 	org.osgi.test.cases.prefs, \
 	org.osgi.test.cases.tracker, \
 	org.osgi.test.cases.xml
+
+jar.enterprise.tests =
 
 build.enterprise.tests = \
     org.osgi.test.cases.blueprint, \
