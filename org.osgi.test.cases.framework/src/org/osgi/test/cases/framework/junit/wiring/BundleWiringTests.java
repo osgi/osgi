@@ -666,61 +666,61 @@ public class BundleWiringTests extends OSGiTestCase {
 				tb1Wiring.getCapabilities(BundleRevision.HOST_NAMESPACE).get(0),
 				tb4.adapt(BundleWiring.class).getRequirements(BundleRevision.HOST_NAMESPACE).get(0));
 		checkBundleWire(
-				genTestTb1ProvidedWires.get(0), 
+				tb5Wiring.getRequiredWires("test").get(0),
 				tb1Wiring, 
 				tb5Wiring, 
 				tb1Wiring.getCapabilities("test").get(0),
 				tb5Wiring.getRequirements("test").get(0));
 		checkBundleWire(
-				genTestTb1ProvidedWires.get(1), 
+				tb5Wiring.getRequiredWires("test").get(1),
 				tb1Wiring, 
 				tb5Wiring, 
 				tb1Wiring.getCapabilities("test").get(0),
 				tb5Wiring.getRequirements("test").get(1));
 		checkBundleWire(
-				genTestTb1ProvidedWires.get(2), 
+				tb5Wiring.getRequiredWires("test").get(2),
 				tb1Wiring, 
 				tb5Wiring, 
 				tb1Wiring.getCapabilities("test").get(0),
 				tb5Wiring.getRequirements("test").get(2));
 		checkBundleWire(
-				genTestTb1ProvidedWires.get(3), 
+				tb5Wiring.getRequiredWires("test").get(3),
 				tb1Wiring, 
 				tb5Wiring, 
 				tb1Wiring.getCapabilities("test").get(0),
 				tb5Wiring.getRequirements("test").get(3));
 		checkBundleWire(
-				genTestTb1ProvidedWires.get(4), 
+				tb5Wiring.getRequiredWires("test").get(4),
 				tb1Wiring, 
 				tb5Wiring, 
 				tb1Wiring.getCapabilities("test").get(0),
 				tb5Wiring.getRequirements("test").get(4));
 		checkBundleWire(
-				genTestTb1ProvidedWires.get(5), 
+				tb5Wiring.getRequiredWires("test").get(5),
 				tb1Wiring, 
 				tb5Wiring, 
 				tb1Wiring.getCapabilities("test").get(0),
 				tb5Wiring.getRequirements("test").get(5));
 		checkBundleWire(
-				genTestTb1ProvidedWires.get(6), 
+				tb5Wiring.getRequiredWires("test").get(6),
 				tb1Wiring, 
 				tb5Wiring, 
 				tb1Wiring.getCapabilities("test").get(0),
 				tb5Wiring.getRequirements("test").get(6));
 		checkBundleWire(
-				genTestTb1ProvidedWires.get(7), 
+				tb5Wiring.getRequiredWires("test").get(7),
 				tb1Wiring, 
 				tb5Wiring, 
 				tb1Wiring.getCapabilities("test").get(0),
 				tb5Wiring.getRequirements("test").get(7));
 		checkBundleWire(
-				genTestTb1ProvidedWires.get(8), 
+				tb5Wiring.getRequiredWires("test").get(8),
 				tb1Wiring, 
 				tb5Wiring, 
 				tb1Wiring.getCapabilities("test").get(0),
 				tb5Wiring.getRequirements("test").get(8));
 		checkBundleWire(
-				genTestTb1ProvidedWires.get(9), 
+				tb5Wiring.getRequiredWires("test").get(9),
 				tb1Wiring, 
 				tb5Wiring, 
 				tb1Wiring.getCapabilities("test").get(0),
@@ -1431,5 +1431,45 @@ public class BundleWiringTests extends OSGiTestCase {
 			URL resource = cl.getResource(path);
 			assertNotNull("Could not find resource: " + path, resource);
 		}
+	}
+	
+	/**
+	 * Ensures an implementation delivers a bundle wiring's provided wires in
+	 * the proper order. The ordering rules are as follows.
+	 * 
+	 * (1) For a given name space, the list contains the wires in the order the
+	 * capabilities were specified in the manifests of the bundle revision and
+	 * the attached fragments of this bundle wiring.
+	 * 
+	 * (2) There is no ordering defined between wires in different namespaces.
+	 * 
+	 * (3) There is no ordering defined between multiple wires for the same
+	 * capability, but the wires must be contiguous, and the group must be
+	 * ordered as in (1).
+	 */
+	public void testProvidedWiresOrdering() {
+		Bundle tb1 = install("wiring.tb1.jar");
+		Bundle tb2 = install("wiring.tb2.jar");
+		Bundle tb3 = install("wiring.tb3.jar");
+		Bundle tb4 = install("wiring.tb4.jar");
+		frameworkWiring.resolveBundles(Arrays.asList(new Bundle[]{tb1,tb2,tb3,tb4}));
+		BundleWiring tb1Wiring = tb1.adapt(BundleWiring.class);
+		BundleWiring tb2Wiring = tb1.adapt(BundleWiring.class);
+		BundleWiring tb3Wiring = tb1.adapt(BundleWiring.class);
+		BundleWiring tb4Wiring = tb1.adapt(BundleWiring.class);
+		List<BundleWire> tb1Wires = tb1Wiring.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+		assertEquals("Wrong number of wires", 6, tb1Wires.size());
+		assertEquals("Wrong order", "package.a", tb1Wires.get(0).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb2Wiring || tb1Wires.get(0).getRequirerWiring() == tb3Wiring);
+		assertEquals("Wrong order", "package.a", tb1Wires.get(1).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb2Wiring || tb1Wires.get(0).getRequirerWiring() == tb3Wiring);
+		assertEquals("Wrong order", "package.b", tb1Wires.get(2).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb2Wiring || tb1Wires.get(0).getRequirerWiring() == tb4Wiring);
+		assertEquals("Wrong order", "package.b", tb1Wires.get(3).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb2Wiring || tb1Wires.get(0).getRequirerWiring() == tb4Wiring);
+		assertEquals("Wrong order", "package.c", tb1Wires.get(4).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb3Wiring || tb1Wires.get(0).getRequirerWiring() == tb4Wiring);
+		assertEquals("Wrong order", "package.c", tb1Wires.get(5).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb3Wiring || tb1Wires.get(0).getRequirerWiring() == tb4Wiring);
 	}
 }

@@ -1,0 +1,6 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.wiring.tb1
+Bundle-SymbolicName: ${p}.wiring.tb1
+Bundle-Version: 1.0
+Export-Package: package.a, package.b, package.c
+
