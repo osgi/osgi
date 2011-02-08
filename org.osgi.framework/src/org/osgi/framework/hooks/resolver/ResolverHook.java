@@ -99,8 +99,8 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * 
  * <p/>
  * For each resolver hook call the
- * {@link #filterMatches(BundleRequirement, Collection)} with the bundle
- * revision {@code B} and the shrinkable collection {@code C}.
+ * {@link #filterMatches(BundleRequirement, Collection)} with the requirement
+ * {@code T} and the shrinkable collection {@code C}.
  * 
  * <p/>
  * The shrinkable collection {@code C} now contains all the capabilities that
