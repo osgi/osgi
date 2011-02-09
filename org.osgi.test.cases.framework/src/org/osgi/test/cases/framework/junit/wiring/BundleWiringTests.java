@@ -115,7 +115,12 @@ public class BundleWiringTests extends OSGiTestCase {
 		List<BundleRevision> testRevisions = getRevisions(testBundles);
 
 		BundleRevision tb1Revision = testRevisions.get(0);
+		BundleRevision tb2Revision = testRevisions.get(1);
+		BundleRevision tb3Revision = testRevisions.get(2);
 		BundleRevision tb4Revision = testRevisions.get(3);
+		BundleRevision tb5Revision = testRevisions.get(4);
+		BundleRevision tb14Revision = testRevisions.get(5);
+		
 		List<BundleCapability> tb1AllCapabilities = tb1Revision.getDeclaredCapabilities(null);
 		List<BundleCapability> tb1BundleCapabilities = tb1Revision.getDeclaredCapabilities(BundleRevision.BUNDLE_NAMESPACE);
 		List<BundleCapability> tb1HostCapabilities = tb1Revision.getDeclaredCapabilities(BundleRevision.HOST_NAMESPACE);
@@ -128,7 +133,7 @@ public class BundleWiringTests extends OSGiTestCase {
 		checkCapabilities(tb1PackageCapabilities, tb1AllCapabilities, BundleRevision.PACKAGE_NAMESPACE, 1, tb1Revision);
 		checkCapabilities(tb1TestCapabilities, tb1AllCapabilities, "test", 1, tb1Revision);
 		checkCapabilities(tb1TestMultipleCapabilities, tb1AllCapabilities, "test.multiple", 2, tb1Revision);
-		checkCapabilities(tb1TestFragmentCapabilities, tb1AllCapabilities, "test.fragment", 1, tb4Revision);
+		checkCapabilities(tb1TestFragmentCapabilities, tb1AllCapabilities, "test.fragment", 0, tb1Revision);
 		
 		List<BundleRequirement> tb1AllRequirements = tb1Revision.getDeclaredRequirements(null);
 		List<BundleRequirement> tb1BundleRequirements = tb1Revision.getDeclaredRequirements(BundleRevision.BUNDLE_NAMESPACE);
@@ -137,6 +142,38 @@ public class BundleWiringTests extends OSGiTestCase {
 		checkRequirements(tb1BundleRequirements, tb1AllRequirements, BundleRevision.BUNDLE_NAMESPACE, 0, tb1Revision);
 		checkRequirements(tb1HostRequirements, tb1AllRequirements, BundleRevision.HOST_NAMESPACE, 0, tb1Revision);
 		checkRequirements(tb1PackageRequirements, tb1AllRequirements, BundleRevision.PACKAGE_NAMESPACE, 0, tb1Revision);
+		
+		List<BundleCapability> tb2AllCapabilities = tb2Revision.getDeclaredCapabilities(null);
+		List<BundleCapability> tb2BundleCapabilities = tb2Revision.getDeclaredCapabilities(BundleRevision.BUNDLE_NAMESPACE);
+		List<BundleCapability> tb2HostCapabilities = tb2Revision.getDeclaredCapabilities(BundleRevision.HOST_NAMESPACE);
+		List<BundleCapability> tb2PackageCapabilities = tb2Revision.getDeclaredCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		checkCapabilities(tb2BundleCapabilities, tb2AllCapabilities, BundleRevision.BUNDLE_NAMESPACE, 1, tb2Revision);
+		checkCapabilities(tb2HostCapabilities, tb2AllCapabilities, BundleRevision.HOST_NAMESPACE, 0, tb2Revision);
+		checkCapabilities(tb2PackageCapabilities, tb2AllCapabilities, BundleRevision.PACKAGE_NAMESPACE, 0, tb2Revision);
+		
+		List<BundleRequirement> tb2AllRequirements = tb2Revision.getDeclaredRequirements(null);
+		List<BundleRequirement> tb2BundleRequirements = tb2Revision.getDeclaredRequirements(BundleRevision.BUNDLE_NAMESPACE);
+		List<BundleRequirement> tb2HostRequirements = tb2Revision.getDeclaredRequirements(BundleRevision.HOST_NAMESPACE);
+		List<BundleRequirement> tb2PackageRequirements = tb2Revision.getDeclaredRequirements(BundleRevision.PACKAGE_NAMESPACE);
+		checkRequirements(tb2BundleRequirements, tb2AllRequirements, BundleRevision.BUNDLE_NAMESPACE, 0, tb2Revision);
+		checkRequirements(tb2HostRequirements, tb2AllRequirements, BundleRevision.HOST_NAMESPACE, 0, tb2Revision);
+		checkRequirements(tb2PackageRequirements, tb2AllRequirements, BundleRevision.PACKAGE_NAMESPACE, 0, tb2Revision);
+		
+		List<BundleCapability> tb3AllCapabilities = tb3Revision.getDeclaredCapabilities(null);
+		List<BundleCapability> tb3BundleCapabilities = tb3Revision.getDeclaredCapabilities(BundleRevision.BUNDLE_NAMESPACE);
+		List<BundleCapability> tb3HostCapabilities = tb3Revision.getDeclaredCapabilities(BundleRevision.HOST_NAMESPACE);
+		List<BundleCapability> tb3PackageCapabilities = tb3Revision.getDeclaredCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		checkCapabilities(tb3BundleCapabilities, tb3AllCapabilities, BundleRevision.BUNDLE_NAMESPACE, 1, tb3Revision);
+		checkCapabilities(tb3HostCapabilities, tb3AllCapabilities, BundleRevision.HOST_NAMESPACE, 1, tb3Revision);
+		checkCapabilities(tb3PackageCapabilities, tb3AllCapabilities, BundleRevision.PACKAGE_NAMESPACE, 0, tb3Revision);
+		
+		List<BundleRequirement> tb3AllRequirements = tb3Revision.getDeclaredRequirements(null);
+		List<BundleRequirement> tb3BundleRequirements = tb3Revision.getDeclaredRequirements(BundleRevision.BUNDLE_NAMESPACE);
+		List<BundleRequirement> tb3HostRequirements = tb3Revision.getDeclaredRequirements(BundleRevision.HOST_NAMESPACE);
+		List<BundleRequirement> tb3PackageRequirements = tb3Revision.getDeclaredRequirements(BundleRevision.PACKAGE_NAMESPACE);
+		checkRequirements(tb3BundleRequirements, tb3AllRequirements, BundleRevision.BUNDLE_NAMESPACE, 1, tb3Revision);
+		checkRequirements(tb3HostRequirements, tb3AllRequirements, BundleRevision.HOST_NAMESPACE, 0, tb3Revision);
+		checkRequirements(tb3PackageRequirements, tb3AllRequirements, BundleRevision.PACKAGE_NAMESPACE, 1, tb3Revision);
 
 		List<BundleCapability> tb4AllCapabilities = tb4Revision.getDeclaredCapabilities(null);
 		List<BundleCapability> tb4BundleCapabilities = tb4Revision.getDeclaredCapabilities(BundleRevision.BUNDLE_NAMESPACE);
@@ -146,7 +183,7 @@ public class BundleWiringTests extends OSGiTestCase {
 		checkCapabilities(tb4BundleCapabilities, tb4AllCapabilities, BundleRevision.BUNDLE_NAMESPACE, 0, tb4Revision);
 		checkCapabilities(tb4HostCapabilities, tb4AllCapabilities, BundleRevision.HOST_NAMESPACE, 0, tb4Revision);
 		checkCapabilities(tb4PackageCapabilities, tb4AllCapabilities, BundleRevision.PACKAGE_NAMESPACE, 0, tb4Revision);
-		checkCapabilities(tb4TestFragmentCapabilities, tb4AllCapabilities, "test.fragment", 0, tb4Revision);
+		checkCapabilities(tb4TestFragmentCapabilities, tb4AllCapabilities, "test.fragment", 1, tb4Revision);
 		
 		List<BundleRequirement> tb4AllRequirements = tb4Revision.getDeclaredRequirements(null);
 		List<BundleRequirement> tb4BundleRequirements = tb4Revision.getDeclaredRequirements(BundleRevision.BUNDLE_NAMESPACE);
@@ -155,22 +192,50 @@ public class BundleWiringTests extends OSGiTestCase {
 		checkRequirements(tb4BundleRequirements, tb4AllRequirements, BundleRevision.BUNDLE_NAMESPACE, 0, tb4Revision);
 		checkRequirements(tb4HostRequirements, tb4AllRequirements, BundleRevision.HOST_NAMESPACE, 1, tb4Revision);
 		checkRequirements(tb4PackageRequirements, tb4AllRequirements, BundleRevision.PACKAGE_NAMESPACE, 0, tb4Revision);
-
-		// test osgi.wiring.host for fragment-attachment:="never"
-		BundleRevision tb2Revision = testRevisions.get(1);
-		List<BundleCapability> tb2AllCapabilities = tb2Revision.getDeclaredCapabilities(null);
-		assertEquals("Wrong number of capabilities", 1, tb2AllCapabilities.size());
-		List<BundleCapability> tb2BundleCapabilities = tb2Revision.getDeclaredCapabilities(BundleRevision.BUNDLE_NAMESPACE);
-		checkCapabilities(tb2BundleCapabilities, tb2AllCapabilities, BundleRevision.BUNDLE_NAMESPACE, 1, tb2Revision);
-		List<BundleCapability> tb2HostCapabilities = tb2Revision.getDeclaredCapabilities(BundleRevision.HOST_NAMESPACE);
-		assertEquals("Expected no osgi.wiring.host capability", 0,
-				tb2HostCapabilities.size());
+		
+		List<BundleCapability> tb5AllCapabilities = tb5Revision.getDeclaredCapabilities(null);
+		List<BundleCapability> tb5BundleCapabilities = tb5Revision.getDeclaredCapabilities(BundleRevision.BUNDLE_NAMESPACE);
+		List<BundleCapability> tb5HostCapabilities = tb5Revision.getDeclaredCapabilities(BundleRevision.HOST_NAMESPACE);
+		List<BundleCapability> tb5PackageCapabilities = tb5Revision.getDeclaredCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		checkCapabilities(tb5BundleCapabilities, tb5AllCapabilities, BundleRevision.BUNDLE_NAMESPACE, 1, tb5Revision);
+		checkCapabilities(tb5HostCapabilities, tb5AllCapabilities, BundleRevision.HOST_NAMESPACE, 1, tb5Revision);
+		checkCapabilities(tb5PackageCapabilities, tb5AllCapabilities, BundleRevision.PACKAGE_NAMESPACE, 0, tb5Revision);
+		
+		List<BundleRequirement> tb5AllRequirements = tb5Revision.getDeclaredRequirements(null);
+		List<BundleRequirement> tb5BundleRequirements = tb5Revision.getDeclaredRequirements(BundleRevision.BUNDLE_NAMESPACE);
+		List<BundleRequirement> tb5HostRequirements = tb5Revision.getDeclaredRequirements(BundleRevision.HOST_NAMESPACE);
+		List<BundleRequirement> tb5PackageRequirements = tb5Revision.getDeclaredRequirements(BundleRevision.PACKAGE_NAMESPACE);
+		List<BundleRequirement> tb5TestRequirements = tb5Revision.getDeclaredRequirements("test");
+		List<BundleRequirement> tb5TestNoAttrsRequirements = tb5Revision.getDeclaredRequirements("test.no.attrs");
+		checkRequirements(tb5BundleRequirements, tb5AllRequirements, BundleRevision.BUNDLE_NAMESPACE, 0, tb5Revision);
+		checkRequirements(tb5HostRequirements, tb5AllRequirements, BundleRevision.HOST_NAMESPACE, 0, tb5Revision);
+		checkRequirements(tb5PackageRequirements, tb5AllRequirements, BundleRevision.PACKAGE_NAMESPACE, 0, tb5Revision);
+		checkRequirements(tb5TestRequirements, tb5AllRequirements, "test", 10, tb5Revision);
+		checkRequirements(tb5TestNoAttrsRequirements, tb5AllRequirements, "test.no.attrs", 1, tb5Revision);
+		
+		List<BundleCapability> tb14AllCapabilities = tb14Revision.getDeclaredCapabilities(null);
+		List<BundleCapability> tb14BundleCapabilities = tb14Revision.getDeclaredCapabilities(BundleRevision.BUNDLE_NAMESPACE);
+		List<BundleCapability> tb14HostCapabilities = tb14Revision.getDeclaredCapabilities(BundleRevision.HOST_NAMESPACE);
+		List<BundleCapability> tb14PackageCapabilities = tb14Revision.getDeclaredCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		checkCapabilities(tb14BundleCapabilities, tb14AllCapabilities, BundleRevision.BUNDLE_NAMESPACE, 1, tb14Revision);
+		checkCapabilities(tb14HostCapabilities, tb14AllCapabilities, BundleRevision.HOST_NAMESPACE, 1, tb14Revision);
+		checkCapabilities(tb14PackageCapabilities, tb14AllCapabilities, BundleRevision.PACKAGE_NAMESPACE, 0, tb14Revision);
+		
+		List<BundleRequirement> tb14AllRequirements = tb14Revision.getDeclaredRequirements(null);
+		List<BundleRequirement> tb14BundleRequirements = tb14Revision.getDeclaredRequirements(BundleRevision.BUNDLE_NAMESPACE);
+		List<BundleRequirement> tb14HostRequirements = tb14Revision.getDeclaredRequirements(BundleRevision.HOST_NAMESPACE);
+		List<BundleRequirement> tb14PackageRequirements = tb14Revision.getDeclaredRequirements(BundleRevision.PACKAGE_NAMESPACE);
+		List<BundleRequirement> tb14TestFragmentRequirements = tb14Revision.getDeclaredRequirements("test.fragment");
+		checkRequirements(tb14BundleRequirements, tb14AllRequirements, BundleRevision.BUNDLE_NAMESPACE, 0, tb14Revision);
+		checkRequirements(tb14HostRequirements, tb14AllRequirements, BundleRevision.HOST_NAMESPACE, 0, tb14Revision);
+		checkRequirements(tb14PackageRequirements, tb14AllRequirements, BundleRevision.PACKAGE_NAMESPACE, 0, tb14Revision);
+		checkRequirements(tb14TestFragmentRequirements, tb14AllRequirements, "test.fragment", 10, tb14Revision);
 	}
 
 	void checkCapabilities(List<BundleCapability> toCheck, List<BundleCapability> all, String namespace, int expectedNum, BundleRevision provider) {
 		assertEquals("Wrong number of capabilities for " + namespace + " from " + provider, expectedNum, toCheck.size());
 		for (BundleCapability capability : toCheck) {
-			assertTrue("Capability is not in all capabilities for revision", all.contains(capability));
+			assertTrue("Capability is not in all capabilities", all.contains(capability));
 			assertEquals("Wrong namespace", namespace, capability.getNamespace());
 			assertEquals("Wrong provider", provider, capability.getRevision());
 		}
@@ -179,9 +244,9 @@ public class BundleWiringTests extends OSGiTestCase {
 	void checkRequirements(List<BundleRequirement> toCheck, List<BundleRequirement> all, String namespace, int expectedNum, BundleRevision requirer) {
 		assertEquals("Wrong number of requirements for " + namespace + " from " + requirer, expectedNum, toCheck.size());
 		for (BundleRequirement requirement : toCheck) {
-			assertTrue("Capability is not in all capabilities for revision", all.contains(requirement));
+			assertTrue("Capability is not in all capabilities", all.contains(requirement));
 			assertEquals("Wrong namespace", namespace, requirement.getNamespace());
-			assertEquals("Wrong provider", requirer, requirement.getRevision());
+			assertEquals("Wrong requirer", requirer, requirement.getRevision());
 		}
 	}
 	
