@@ -157,7 +157,7 @@ public class BundleWiringTests extends OSGiTestCase {
 		List<BundleRequirement> tb2PackageRequirements = tb2Revision.getDeclaredRequirements(BundleRevision.PACKAGE_NAMESPACE);
 		checkRequirements(tb2BundleRequirements, tb2AllRequirements, BundleRevision.BUNDLE_NAMESPACE, 0, tb2Revision);
 		checkRequirements(tb2HostRequirements, tb2AllRequirements, BundleRevision.HOST_NAMESPACE, 0, tb2Revision);
-		checkRequirements(tb2PackageRequirements, tb2AllRequirements, BundleRevision.PACKAGE_NAMESPACE, 0, tb2Revision);
+		checkRequirements(tb2PackageRequirements, tb2AllRequirements, BundleRevision.PACKAGE_NAMESPACE, 2, tb2Revision);
 		
 		List<BundleCapability> tb3AllCapabilities = tb3Revision.getDeclaredCapabilities(null);
 		List<BundleCapability> tb3BundleCapabilities = tb3Revision.getDeclaredCapabilities(BundleRevision.BUNDLE_NAMESPACE);
@@ -229,7 +229,7 @@ public class BundleWiringTests extends OSGiTestCase {
 		checkRequirements(tb14BundleRequirements, tb14AllRequirements, BundleRevision.BUNDLE_NAMESPACE, 0, tb14Revision);
 		checkRequirements(tb14HostRequirements, tb14AllRequirements, BundleRevision.HOST_NAMESPACE, 0, tb14Revision);
 		checkRequirements(tb14PackageRequirements, tb14AllRequirements, BundleRevision.PACKAGE_NAMESPACE, 0, tb14Revision);
-		checkRequirements(tb14TestFragmentRequirements, tb14AllRequirements, "test.fragment", 10, tb14Revision);
+		checkRequirements(tb14TestFragmentRequirements, tb14AllRequirements, "test.fragment", 1, tb14Revision);
 	}
 
 	void checkCapabilities(List<BundleCapability> toCheck, List<BundleCapability> all, String namespace, int expectedNum, BundleRevision provider) {
@@ -612,7 +612,13 @@ public class BundleWiringTests extends OSGiTestCase {
 	}
 	
 	private void checkRequirementsTb2(BundleWiring tb2Wiring) {
-		assertEquals("Wrong number of requirements", 0, tb2Wiring.getRequirements(null).size());
+		assertEquals("Wrong number of requirements", 2, tb2Wiring.getRequirements(null).size());
+		checkRequirements(
+				tb2Wiring.getRequirements(BundleRevision.PACKAGE_NAMESPACE), 
+				tb2Wiring.getRequirements(null), 
+				BundleRevision.PACKAGE_NAMESPACE, 
+				2, 
+				tb2Wiring.getRevision());
 	}
 	
 	private void checkRequirementsTb3(BundleWiring tb3Wiring) {
@@ -696,10 +702,10 @@ public class BundleWiringTests extends OSGiTestCase {
 			List<BundleWire> genTestMultipleTb1ProvidedWires, 
 			List<BundleWire> genTestFragmentTb1ProvidedWires, 
 			List<BundleWire> genTestNoAttrsTb1ProvidedWires) {
-		assertEquals("Wrong number of wires", 14, allTb1ProvidedWires.size());
+		assertEquals("Wrong number of wires", 15, allTb1ProvidedWires.size());
 		checkWires(osgiBundleTb1ProvidedWires, allTb1ProvidedWires, BundleRevision.BUNDLE_NAMESPACE, 1);
 		checkWires(osgiHostTb1ProvidedWires, allTb1ProvidedWires, BundleRevision.HOST_NAMESPACE, 1);
-		checkWires(osgiPackageTb1ProvidedWires, allTb1ProvidedWires, BundleRevision.PACKAGE_NAMESPACE, 0);
+		checkWires(osgiPackageTb1ProvidedWires, allTb1ProvidedWires, BundleRevision.PACKAGE_NAMESPACE, 1);
 		checkWires(genTestTb1ProvidedWires, allTb1ProvidedWires, "test", 10);
 		checkWires(genTestMultipleTb1ProvidedWires, allTb1ProvidedWires, "test.multiple", 0);
 		checkWires(genTestFragmentTb1ProvidedWires, allTb1ProvidedWires, "test.fragment", 1);
@@ -730,6 +736,12 @@ public class BundleWiringTests extends OSGiTestCase {
 				tb4.adapt(BundleWiring.class), 
 				tb1Wiring.getCapabilities(BundleRevision.HOST_NAMESPACE).get(0),
 				tb4.adapt(BundleWiring.class).getRequirements(BundleRevision.HOST_NAMESPACE).get(0));
+		checkBundleWire(
+				osgiPackageTb1ProvidedWires.get(0), 
+				tb1Wiring, 
+				tb2Wiring, 
+				tb1Wiring.getCapabilities(BundleRevision.PACKAGE_NAMESPACE).get(0),
+				tb2Wiring.getRequirements(BundleRevision.PACKAGE_NAMESPACE).get(1));
 		checkBundleWire(
 				tb5Wiring.getRequiredWires("test").get(0),
 				tb1Wiring, 
