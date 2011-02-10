@@ -44,7 +44,7 @@ public interface BundleRequirement {
 	Map<String, String> getDirectives();
 
 	/**
-	 * Returns the requirement of this capability.
+	 * Returns the attributes of this requirement.
 	 * 
 	 * @return An unmodifiable map of attribute names to attribute values for
 	 *         this requirement, or an empty map if this requirement has no
