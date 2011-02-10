@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
+ * Copyright (c) IBM Corporation (2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.osgi.test.support.OSGiTestCase;
 public class WiringSecureTests extends OSGiTestCase {
 	/**
 	 * Bundle.adapt(BundleRevision.class) must not throw a security exception if 
-	 * the caller has AdminPermission[System Bundle,RESOLVE].
+	 * the caller has AdaptPermission[BundleRevision,ADAPT].
 	 * @throws Exception
 	 */
 	public void testAdaptBundleRevisionWithPermission() throws Exception {
@@ -36,7 +36,7 @@ public class WiringSecureTests extends OSGiTestCase {
 	
 	/**
 	 * Bundle.adapt(BundleRevision.class) must throw a security exception if the 
-	 * caller does not have AdminPermission[System Bundle,RESOLVE].
+	 * caller does not have AdaptPermission[BundleRevision,ADAPT].
 	 * @throws Exception
 	 */
 	public void testAdaptBundleRevisionWithoutPermission() throws Exception {
@@ -45,7 +45,7 @@ public class WiringSecureTests extends OSGiTestCase {
 	
 	/**
 	 * Bundle.adapt(BundleRevisions.class) must not throw a security exception
-	 * if the caller has AdminPermission[System Bundle,RESOLVE].
+	 * if the caller has AdaptPermission[BundleRevisions,ADAPT].
 	 * @throws Exception
 	 */
 	public void testAdaptBundleRevisionsWithPermission() throws Exception {
@@ -54,7 +54,7 @@ public class WiringSecureTests extends OSGiTestCase {
 	
 	/**
 	 * Bundle.adapt(BundleRevisions.class) must throw a security exception if
-	 * the caller does not have AdminPermission[System Bundle,RESOLVE].
+	 * the caller does not have AdaptPermission[BundleRevisions,ADAPT].
 	 * @throws Exception
 	 */
 	public void testAdaptBundleRevisionsWithoutPermission() throws Exception {
@@ -63,7 +63,7 @@ public class WiringSecureTests extends OSGiTestCase {
 	
 	/**
 	 * Bundle.adapt(BundleWiring.class) must not throw a security exception if 
-	 * the caller has AdminPermission[System Bundle,RESOLVE].
+	 * the caller has AdaptPermission[BundleWiring,ADAPT].
 	 * @throws Exception
 	 */
 	public void testAdaptBundleWiringWithPermission() throws Exception {
@@ -72,7 +72,7 @@ public class WiringSecureTests extends OSGiTestCase {
 	
 	/**
 	 * Bundle.adapt(BundleWiring.class) must throw a security exception if the 
-	 * caller does not have AdminPermission[System Bundle,RESOLVE].
+	 * caller does not have AdaptPermission[BundleWiring,ADAPT].
 	 * @throws Exception
 	 */
 	public void testAdaptBundleWiringWithoutPermission() throws Exception {
@@ -81,7 +81,7 @@ public class WiringSecureTests extends OSGiTestCase {
 	
 	/**
 	 * Bundle.adapt(FrameworkWiring.class) must not throw a security exception
-	 * if the caller has AdminPermission[System Bundle,RESOLVE].
+	 * if the caller has AdaptPermission[FrameworkWiring,ADAPT].
 	 * @throws Exception
 	 */
 	public void testAdaptFrameworkWiringWithPermission() throws Exception {
@@ -90,7 +90,7 @@ public class WiringSecureTests extends OSGiTestCase {
 	
 	/**
 	 * Bundle.adapt(FrameworkWiring.class) must throw a security exception if
-	 * the caller does not have AdminPermission[System Bundle,RESOLVE].
+	 * the caller does not have AdaptPermission[FrameworkWiring,ADAPT].
 	 * @throws Exception
 	 */
 	public void testAdaptFrameworkWiringWithoutPermission() throws Exception {
