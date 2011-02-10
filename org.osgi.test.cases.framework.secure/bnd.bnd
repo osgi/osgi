@@ -51,7 +51,19 @@ Include-Resource = \
 	resolver.tb5.jar, \
 	syncbundlelistener.tb1a.jar, \
 	syncbundlelistener.tb1b.jar, \
-	weaving.tb1.jar
+	weaving.tb1.jar,\
+	wiring.tb1.jar,\
+	wiring.tb2.jar,\
+	wiring.tb3.jar,\
+	wiring.tb4.jar,\
+	wiring.tb5.jar,\
+	wiring.tb6.jar,\
+	wiring.tb7.jar,\
+	wiring.tb8.jar,\
+	wiring.tb9.jar,\
+	wiring.tb10.jar,\
+	wiring.tb11.jar,\
+	wiring.tb12.jar
 	
 Test-Cases							= ${testcases}
 
