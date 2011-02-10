@@ -269,7 +269,8 @@ Include-Resource = \
 	wiring.tb1.jar,\
 	wiring.tb2.jar,\
 	wiring.tb3.jar,\
-	wiring.tb4.jar
+	wiring.tb4.jar,\
+	wiring.tb5.jar
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \

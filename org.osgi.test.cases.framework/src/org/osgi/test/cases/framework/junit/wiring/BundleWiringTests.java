@@ -1548,4 +1548,85 @@ public class BundleWiringTests extends OSGiTestCase {
 		assertEquals("Wrong order", "org.osgi.test.cases.framework.wiring.tb1c", tb1Wires.get(5).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
 		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb3Wiring || tb1Wires.get(0).getRequirerWiring() == tb4Wiring);
 	}
+	
+	/**
+	 * Basic test for support of the DynamicImport-Package requirement.
+	 */
+	public void testDynamicImportPackage() throws Exception {
+		Bundle tb1 = install("resolver.tb1.v110.jar");
+		Bundle tb2 = install("wiring.tb1.jar");
+		Bundle tb3 = install("wiring.tb5.jar");
+		
+		assertTrue("The bundles should have resolved", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[]{tb1,tb2,tb3})));
+
+		BundleRevision tb3Revision = (BundleRevision)tb3.adapt(BundleRevision.class);
+		
+		BundleWiring tb1Wiring = (BundleWiring)tb1.adapt(BundleWiring.class);
+		BundleWiring tb2Wiring = (BundleWiring)tb2.adapt(BundleWiring.class);
+		BundleWiring tb3Wiring = (BundleWiring)tb3.adapt(BundleWiring.class);
+		
+		checkRequirements(
+				tb3Revision.getDeclaredRequirements(BundleRevision.PACKAGE_NAMESPACE), 
+				tb3Revision.getDeclaredRequirements(null), 
+				BundleRevision.PACKAGE_NAMESPACE, 
+				1, 
+				tb3Revision);
+		checkRequirements(
+				tb3Wiring.getRequirements(BundleRevision.PACKAGE_NAMESPACE), 
+				tb3Wiring.getRequirements(null), 
+				BundleRevision.PACKAGE_NAMESPACE, 
+				1, 
+				tb3Wiring.getRevision());
+		checkWires(
+				tb3Wiring.getRequiredWires(BundleRevision.PACKAGE_NAMESPACE), 
+				tb3Wiring.getRequiredWires(null), 
+				BundleRevision.PACKAGE_NAMESPACE, 
+				0);
+		
+		tb3.loadClass("org.osgi.test.cases.framework.resolver.tb1.Test");
+		checkWires(
+				tb3Wiring.getRequiredWires(BundleRevision.PACKAGE_NAMESPACE), 
+				tb3Wiring.getRequiredWires(null), 
+				BundleRevision.PACKAGE_NAMESPACE, 
+				1);
+		checkBundleWire(
+				tb3Wiring.getRequiredWires(BundleRevision.PACKAGE_NAMESPACE).get(0),
+				tb1Wiring,
+				tb3Wiring,
+				tb1Wiring.getCapabilities(BundleRevision.PACKAGE_NAMESPACE).get(0),
+				tb3Wiring.getRequirements(BundleRevision.PACKAGE_NAMESPACE).get(0));
+		
+		tb3.loadClass("org.osgi.test.cases.framework.wiring.tb1a.PlaceHolder");
+		checkWires(
+				tb3Wiring.getRequiredWires(BundleRevision.PACKAGE_NAMESPACE), 
+				tb3Wiring.getRequiredWires(null), 
+				BundleRevision.PACKAGE_NAMESPACE, 
+				2);
+		BundleCapability bc = tb2Wiring.getCapabilities(BundleRevision.PACKAGE_NAMESPACE).get(0);
+		assertEquals("Wrong attribute", "org.osgi.test.cases.framework.wiring.tb1a", bc.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+		checkBundleWire(
+				tb3Wiring.getRequiredWires(BundleRevision.PACKAGE_NAMESPACE).get(1),
+				tb2Wiring,
+				tb3Wiring,
+				bc,
+				tb3Wiring.getRequirements(BundleRevision.PACKAGE_NAMESPACE).get(0));
+		
+		tb3.loadClass("org.osgi.test.cases.framework.wiring.tb1b.PlaceHolder");
+		checkWires(
+				tb3Wiring.getRequiredWires(BundleRevision.PACKAGE_NAMESPACE), 
+				tb3Wiring.getRequiredWires(null), 
+				BundleRevision.PACKAGE_NAMESPACE, 
+				3);
+		bc = tb2Wiring.getCapabilities(BundleRevision.PACKAGE_NAMESPACE).get(1);
+		assertEquals("Wrong attribute", "org.osgi.test.cases.framework.wiring.tb1b", bc.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+		checkBundleWire(
+				tb3Wiring.getRequiredWires(BundleRevision.PACKAGE_NAMESPACE).get(2),
+				tb2Wiring,
+				tb3Wiring,
+				bc,
+				tb3Wiring.getRequirements(BundleRevision.PACKAGE_NAMESPACE).get(0));
+		
+		
+		
+	}
 }
