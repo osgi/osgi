@@ -2,5 +2,5 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ${p}.wiring.tb3
 Bundle-SymbolicName: ${p}.wiring.tb3
 Bundle-Version: 1.0
-Import-Package: package.a, package.c
+Import-Package: org.osgi.test.cases.framework.wiring.tb1a, org.osgi.test.cases.framework.wiring.tb1c
 

@@ -2,5 +2,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ${p}.wiring.tb1
 Bundle-SymbolicName: ${p}.wiring.tb1
 Bundle-Version: 1.0
-Export-Package: package.a, package.b, package.c
+Export-Package: org.osgi.test.cases.framework.wiring.tb1a,\
+  org.osgi.test.cases.framework.wiring.tb1b,\
+  org.osgi.test.cases.framework.wiring.tb1c
 

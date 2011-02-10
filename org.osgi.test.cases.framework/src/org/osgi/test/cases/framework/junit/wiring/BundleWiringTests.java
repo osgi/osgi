@@ -686,7 +686,7 @@ public class BundleWiringTests extends OSGiTestCase {
 		checkRequirements(
 				tb14Wiring.getRequirements("test.fragment"), 
 				tb14Wiring.getRequirements(null), 
-				BundleRevision.BUNDLE_NAMESPACE, 
+				"test.fragment", 
 				1, 
 				tb14Wiring.getRevision());
 	}
@@ -973,7 +973,6 @@ public class BundleWiringTests extends OSGiTestCase {
 					assertTrue("Fragment wire not found", fragmentWire.getProviderWiring().getProvidedWires(BundleRevision.HOST_NAMESPACE).contains(fragmentWire));
 					continue;
 				}
-				assertEquals("Wrong number of host wires", 1, hostWires.size());
 				assertEquals("Wrong number of fragment wires", 0, fragmentWires.size());
 				if (index == 0 && hasCurrent)
 					assertTrue("Wiring is not current for: " + bundle, wiring.isCurrent());
@@ -1529,11 +1528,11 @@ public class BundleWiringTests extends OSGiTestCase {
 		Bundle tb2 = install("wiring.tb2.jar");
 		Bundle tb3 = install("wiring.tb3.jar");
 		Bundle tb4 = install("wiring.tb4.jar");
-		frameworkWiring.resolveBundles(Arrays.asList(new Bundle[]{tb1,tb2,tb3,tb4}));
+		assertTrue("Bundles should have resolved", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[]{tb1,tb2,tb3,tb4})));
 		BundleWiring tb1Wiring = tb1.adapt(BundleWiring.class);
-		BundleWiring tb2Wiring = tb1.adapt(BundleWiring.class);
-		BundleWiring tb3Wiring = tb1.adapt(BundleWiring.class);
-		BundleWiring tb4Wiring = tb1.adapt(BundleWiring.class);
+		BundleWiring tb2Wiring = tb2.adapt(BundleWiring.class);
+		BundleWiring tb3Wiring = tb3.adapt(BundleWiring.class);
+		BundleWiring tb4Wiring = tb4.adapt(BundleWiring.class);
 		List<BundleWire> tb1Wires = tb1Wiring.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
 		assertEquals("Wrong number of wires", 6, tb1Wires.size());
 		assertEquals("Wrong order", "package.a", tb1Wires.get(0).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
