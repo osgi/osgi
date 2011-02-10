@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1078,7 +1078,7 @@ public interface Bundle extends Comparable<Bundle> {
 	 * This method is intended to be used to obtain configuration, setup,
 	 * localization and other information from this bundle. This method takes
 	 * into account that the &quot;contents&quot; of this bundle can be extended
-	 * with fragments. This &quot;bundle space&quot; is not a namespace with
+	 * with fragments. This &quot;bundle space&quot; is not a name space with
 	 * unique members; the same entry name can be present multiple times. This
 	 * method therefore returns an enumeration of URL objects. These URLs can
 	 * come from different JARs but have the same path name. This method can
@@ -1120,15 +1120,15 @@ public interface Bundle extends Comparable<Bundle> {
 	 *        files.
 	 * @param recurse If {@code true}, recurse into subdirectories. Otherwise
 	 *        only return entries from the specified path.
-	 * @return An enumeration of URL objects for each matching entry, or {@code
-	 *         null} if no matching entry could not be found or if the caller
-	 *         does not have the appropriate {@code
-	 *         AdminPermission[this,RESOURCE]}, and the Java Runtime Environment
-	 *         supports permissions. The URLs are sorted such that entries from
-	 *         this bundle are returned first followed by the entries from
-	 *         attached fragments in attachment order. If this bundle is a
-	 *         fragment, then only matching entries in this fragment are
-	 *         returned.
+	 * @return An enumeration of URL objects for each matching entry, or
+	 *         {@code null} if no matching entry could not be found or if the
+	 *         caller does not have the appropriate
+	 *         {@code AdminPermission[this,RESOURCE]}, and the Java Runtime
+	 *         Environment supports permissions. The URLs are sorted such that
+	 *         entries from this bundle are returned first followed by the
+	 *         entries from attached fragments in attachment order. If this
+	 *         bundle is a fragment, then only matching entries in this fragment
+	 *         are returned.
 	 * @throws IllegalStateException If this bundle has been uninstalled.
 	 * @since 1.3
 	 */
