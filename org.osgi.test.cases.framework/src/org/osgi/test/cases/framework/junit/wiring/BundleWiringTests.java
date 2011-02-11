@@ -1536,17 +1536,17 @@ public class BundleWiringTests extends OSGiTestCase {
 		List<BundleWire> tb1Wires = tb1Wiring.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
 		assertEquals("Wrong number of wires", 6, tb1Wires.size());
 		assertEquals("Wrong order", "org.osgi.test.cases.framework.wiring.tb1a", tb1Wires.get(0).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
-		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb2Wiring || tb1Wires.get(0).getRequirerWiring() == tb3Wiring);
+		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring().equals(tb2Wiring) || tb1Wires.get(0).getRequirerWiring().equals(tb3Wiring));
 		assertEquals("Wrong order", "org.osgi.test.cases.framework.wiring.tb1a", tb1Wires.get(1).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
-		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb2Wiring || tb1Wires.get(0).getRequirerWiring() == tb3Wiring);
+		assertTrue("Wrong requirer", tb1Wires.get(1).getRequirerWiring().equals(tb2Wiring) || tb1Wires.get(1).getRequirerWiring().equals(tb3Wiring));
 		assertEquals("Wrong order", "org.osgi.test.cases.framework.wiring.tb1b", tb1Wires.get(2).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
-		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb2Wiring || tb1Wires.get(0).getRequirerWiring() == tb4Wiring);
+		assertTrue("Wrong requirer", tb1Wires.get(2).getRequirerWiring().equals(tb2Wiring) || tb1Wires.get(2).getRequirerWiring().equals(tb4Wiring));
 		assertEquals("Wrong order", "org.osgi.test.cases.framework.wiring.tb1b", tb1Wires.get(3).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
-		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb2Wiring || tb1Wires.get(0).getRequirerWiring() == tb4Wiring);
+		assertTrue("Wrong requirer", tb1Wires.get(3).getRequirerWiring().equals(tb2Wiring) || tb1Wires.get(3).getRequirerWiring().equals(tb4Wiring));
 		assertEquals("Wrong order", "org.osgi.test.cases.framework.wiring.tb1c", tb1Wires.get(4).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
-		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb3Wiring || tb1Wires.get(0).getRequirerWiring() == tb4Wiring);
+		assertTrue("Wrong requirer", tb1Wires.get(4).getRequirerWiring().equals(tb3Wiring) || tb1Wires.get(4).getRequirerWiring().equals(tb4Wiring));
 		assertEquals("Wrong order", "org.osgi.test.cases.framework.wiring.tb1c", tb1Wires.get(5).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
-		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb3Wiring || tb1Wires.get(0).getRequirerWiring() == tb4Wiring);
+		assertTrue("Wrong requirer", tb1Wires.get(5).getRequirerWiring().equals(tb3Wiring) || tb1Wires.get(5).getRequirerWiring().equals(tb4Wiring));
 	}
 	
 	/**
