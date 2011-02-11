@@ -24,10 +24,12 @@ import org.osgi.framework.BundleReference;
 /**
  * The {@link BundleRevision bundle revisions} of a bundle. When a bundle is
  * installed and each time a bundle is updated, a new bundle revision of the
- * bundle is created. The current bundle revision is the most recent bundle
- * revision. An in use bundle revision is associated with an
- * {@link BundleWiring#isInUse() in use} {@link BundleWiring}. Only the current
- * bundle revision and all in use bundle revisions are returned.
+ * bundle is created. For a bundle that has not been uninstalled, the most
+ * recent bundle revision is defined to be the current bundle revision. A bundle
+ * in the UNINSTALLED state does not have a current revision. An in use bundle
+ * revision is associated with an {@link BundleWiring#isInUse() in use}
+ * {@link BundleWiring}. The current bundle revision, if there is one, and all
+ * in use bundle revisions are returned.
  * 
  * <p>
  * The bundle revisions for a bundle can be obtained by calling
@@ -44,15 +46,19 @@ public interface BundleRevisions extends BundleReference {
 	 * referenced} bundle.
 	 * 
 	 * <p>
-	 * The result is a list of the current bundle revision and the in use bundle
-	 * revisions. The list is ordered in reverse chronological order such that
-	 * the first item is the current bundle revision and last item is the oldest
-	 * in use bundle revision.
+	 * The result is a list containing the current bundle revision, if there is
+	 * one, and all in use bundle revisions. The list may also contain
+	 * intermediate bundle revisions which are not in use.
+	 * 
+	 * <p>
+	 * The list is ordered in reverse chronological order such that the first
+	 * item is the most recent bundle revision and last item is the oldest
+	 * bundle revision.
 	 * 
 	 * <p>
 	 * Generally the list will have at least one bundle revision for the bundle:
 	 * the current bundle revision. However, for an uninstalled bundle with no
-	 * in use bundle revisions, the list will be empty.
+	 * in use bundle revisions, the list may be empty.
 	 * 
 	 * @return A list containing a snapshot of the {@link BundleRevision}s for
 	 *         the referenced bundle.
