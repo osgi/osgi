@@ -25,23 +25,25 @@ import org.osgi.framework.BundleReference;
 
 /**
  * A wiring for a bundle. Each time a bundle is resolved, a new bundle wiring
- * for the bundle is created. A bundle wiring consists of a bundle revision and
- * represents the dependencies with other bundle wirings.
+ * for the bundle is created. A bundle wiring is associated with a bundle
+ * revision and represents the dependencies with other bundle wirings.
  * 
  * <p>
  * The bundle wiring for a bundle is the {@link #isCurrent() current} bundle
- * wiring if the bundle is resolved and the bundle wiring is the most recent
- * bundle wiring. All bundles with non-current, in use bundle wirings are
- * considered removal pending. A bundle wiring is {@link #isInUse() in use} if
- * it is the current wiring or if some other in use bundle wiring is dependent
- * upon it. For example, wired to a package exported by the bundle wiring or
- * requires the bundle wiring. An in use bundle wiring for a non-fragment bundle
- * has a class loader. Once a bundle wiring is no longer in use, it is
- * considered stale and is discarded by the framework.
+ * wiring if it is the most recent bundle wiring for the current bundle
+ * revision. A bundle wiring is {@link #isInUse() in use} if it is the current
+ * bundle wiring or if some other in use bundle wiring is dependent upon it. For
+ * example, another bundle wiring is wired to a capability provided by the
+ * bundle wiring. An in use bundle wiring for a non-fragment bundle has a class
+ * loader. All bundles with non-current, in use bundle wirings are considered
+ * removal pending. Once a bundle wiring is no longer in use, it is considered
+ * stale and is discarded by the framework.
  * 
  * <p>
  * The current bundle wiring for a bundle can be obtained by calling
- * {@link Bundle#adapt(Class) bundle.adapt}(BundleWiring.class).
+ * {@link Bundle#adapt(Class) bundle.adapt}(BundleWiring.class). A bundle in the
+ * INSTALLED or UNINSTALLED state does not have a current wiring, adapting such
+ * a bundle returns {@code null}.
  * 
  * @ThreadSafe
  * @noimplement
@@ -50,9 +52,9 @@ import org.osgi.framework.BundleReference;
 public interface BundleWiring extends BundleReference {
 	/**
 	 * Returns {@code true} if this bundle wiring is the current bundle wiring.
-	 * The bundle wiring for a bundle is the current bundle wiring if the bundle
-	 * is resolved and the bundle wiring is the most recent bundle wiring. All
-	 * bundles with non-current, in use bundle wirings are considered
+	 * The bundle wiring for a bundle is the current bundle wiring if it is the
+	 * most recent bundle wiring for the current bundle revision. All bundles
+	 * with non-current, in use bundle wirings are considered
 	 * {@link FrameworkWiring#getRemovalPendingBundles() removal pending}.
 	 * 
 	 * @return {@code true} if this bundle wiring is the current bundle wiring;

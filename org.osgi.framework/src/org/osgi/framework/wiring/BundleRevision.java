@@ -30,9 +30,12 @@ import org.osgi.framework.Version;
  * same bundle can be associated with different bundle revisions.
  * 
  * <p>
- * The current bundle revision is the most recent bundle revision. The current
- * bundle revision for a bundle can be obtained by calling
- * {@link Bundle#adapt(Class) bundle.adapt}(BundleRevision.class).
+ * For a bundle that has not been uninstalled, the most recent bundle revision
+ * is defined to be the current bundle revision. A bundle in the UNINSTALLED
+ * state does not have a current revision. The current bundle revision for a
+ * bundle can be obtained by calling {@link Bundle#adapt(Class) bundle.adapt}
+ * (BundleRevision.class). Since a bundle in the UNINSTALLED state does not have
+ * a current revision, adapting such a bundle returns {@code null}.
  * 
  * <p>
  * The framework defines name spaces for {@link #PACKAGE_NAMESPACE package},
