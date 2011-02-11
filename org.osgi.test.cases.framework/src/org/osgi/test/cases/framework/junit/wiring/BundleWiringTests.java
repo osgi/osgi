@@ -941,25 +941,28 @@ public class BundleWiringTests extends OSGiTestCase {
 				bundlesRevisions.length);
 		for (int i = 0; i < bundlesRevisions.length; i++) {
 			Bundle bundle = bundles[i];
-			BundleRevision revision = (BundleRevision) bundle.adapt(BundleRevision.class);
-			assertNotNull("BundleRevision is null for: " + bundle, revision);
-			assertEquals("Wrong BSN", bundle.getSymbolicName(), revision.getSymbolicName());
-			assertEquals("Wrong version", bundle.getVersion(), revision.getVersion());
-
+			BundleRevision current = (BundleRevision) bundle.adapt(BundleRevision.class);
+			if (hasCurrent) {
+				assertNotNull("BundleRevision is null for: " + bundle, current);
+				assertEquals("Wrong BSN", bundle.getSymbolicName(), current.getSymbolicName());
+				assertEquals("Wrong version", bundle.getVersion(), current.getVersion());
+			} else {
+				assertNull("BundleRevision must be null for: " + bundle, current);
+			}
 			BundleRevisions bundleRevisions = (BundleRevisions) bundlesRevisions[i];
 			assertNotNull("BundleRevisions is null for bundle: " + bundle,
 					bundleRevisions);
 			assertEquals("Wrong bundle for revisions", bundle,
 					bundleRevisions.getBundle());
 			List<BundleRevision> revisions = bundleRevisions.getRevisions();
-			assertEquals("Wrong revision for bundle", revision,
-					revisions.get(0));
+			if (hasCurrent)
+				assertEquals("Wrong current revision for bundle", current, revisions.get(0));
 			assertEquals("Wrong number of in use revisions",
 					expectedNumRevisions, revisions.size());
 
 			int index = 0;
 			for (Iterator<BundleRevision> iter = revisions.iterator(); iter.hasNext(); index++) {
-				revision = (BundleRevision) iter.next();
+				BundleRevision revision = (BundleRevision) iter.next();
 				BundleWiring wiring = revision.getWiring();
 				assertNotNull("bundle wiring is null", wiring);
 				Collection<BundleWire> hostWires = wiring.getProvidedWires(BundleRevision.HOST_NAMESPACE);
@@ -1536,17 +1539,17 @@ public class BundleWiringTests extends OSGiTestCase {
 		List<BundleWire> tb1Wires = tb1Wiring.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
 		assertEquals("Wrong number of wires", 6, tb1Wires.size());
 		assertEquals("Wrong order", "org.osgi.test.cases.framework.wiring.tb1a", tb1Wires.get(0).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
-		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb2Wiring || tb1Wires.get(0).getRequirerWiring() == tb3Wiring);
+		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring().equals(tb2Wiring) || tb1Wires.get(0).getRequirerWiring().equals(tb3Wiring));
 		assertEquals("Wrong order", "org.osgi.test.cases.framework.wiring.tb1a", tb1Wires.get(1).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
-		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb2Wiring || tb1Wires.get(0).getRequirerWiring() == tb3Wiring);
+		assertTrue("Wrong requirer", tb1Wires.get(1).getRequirerWiring().equals(tb2Wiring) || tb1Wires.get(1).getRequirerWiring().equals(tb3Wiring));
 		assertEquals("Wrong order", "org.osgi.test.cases.framework.wiring.tb1b", tb1Wires.get(2).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
-		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb2Wiring || tb1Wires.get(0).getRequirerWiring() == tb4Wiring);
+		assertTrue("Wrong requirer", tb1Wires.get(2).getRequirerWiring().equals(tb2Wiring) || tb1Wires.get(2).getRequirerWiring().equals(tb4Wiring));
 		assertEquals("Wrong order", "org.osgi.test.cases.framework.wiring.tb1b", tb1Wires.get(3).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
-		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb2Wiring || tb1Wires.get(0).getRequirerWiring() == tb4Wiring);
+		assertTrue("Wrong requirer", tb1Wires.get(3).getRequirerWiring().equals(tb2Wiring) || tb1Wires.get(3).getRequirerWiring().equals(tb4Wiring));
 		assertEquals("Wrong order", "org.osgi.test.cases.framework.wiring.tb1c", tb1Wires.get(4).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
-		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb3Wiring || tb1Wires.get(0).getRequirerWiring() == tb4Wiring);
+		assertTrue("Wrong requirer", tb1Wires.get(4).getRequirerWiring().equals(tb3Wiring) || tb1Wires.get(4).getRequirerWiring().equals(tb4Wiring));
 		assertEquals("Wrong order", "org.osgi.test.cases.framework.wiring.tb1c", tb1Wires.get(5).getCapability().getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
-		assertTrue("Wrong requirer", tb1Wires.get(0).getRequirerWiring() == tb3Wiring || tb1Wires.get(0).getRequirerWiring() == tb4Wiring);
+		assertTrue("Wrong requirer", tb1Wires.get(5).getRequirerWiring().equals(tb3Wiring) || tb1Wires.get(5).getRequirerWiring().equals(tb4Wiring));
 	}
 	
 	/**
