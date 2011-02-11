@@ -941,25 +941,28 @@ public class BundleWiringTests extends OSGiTestCase {
 				bundlesRevisions.length);
 		for (int i = 0; i < bundlesRevisions.length; i++) {
 			Bundle bundle = bundles[i];
-			BundleRevision revision = (BundleRevision) bundle.adapt(BundleRevision.class);
-			assertNotNull("BundleRevision is null for: " + bundle, revision);
-			assertEquals("Wrong BSN", bundle.getSymbolicName(), revision.getSymbolicName());
-			assertEquals("Wrong version", bundle.getVersion(), revision.getVersion());
-
+			BundleRevision current = (BundleRevision) bundle.adapt(BundleRevision.class);
+			if (hasCurrent) {
+				assertNotNull("BundleRevision is null for: " + bundle, current);
+				assertEquals("Wrong BSN", bundle.getSymbolicName(), current.getSymbolicName());
+				assertEquals("Wrong version", bundle.getVersion(), current.getVersion());
+			} else {
+				assertNull("BundleRevision must be null for: " + bundle, current);
+			}
 			BundleRevisions bundleRevisions = (BundleRevisions) bundlesRevisions[i];
 			assertNotNull("BundleRevisions is null for bundle: " + bundle,
 					bundleRevisions);
 			assertEquals("Wrong bundle for revisions", bundle,
 					bundleRevisions.getBundle());
 			List<BundleRevision> revisions = bundleRevisions.getRevisions();
-			assertEquals("Wrong revision for bundle", revision,
-					revisions.get(0));
+			if (hasCurrent)
+				assertEquals("Wrong current revision for bundle", current, revisions.get(0));
 			assertEquals("Wrong number of in use revisions",
 					expectedNumRevisions, revisions.size());
 
 			int index = 0;
 			for (Iterator<BundleRevision> iter = revisions.iterator(); iter.hasNext(); index++) {
-				revision = (BundleRevision) iter.next();
+				BundleRevision revision = (BundleRevision) iter.next();
 				BundleWiring wiring = revision.getWiring();
 				assertNotNull("bundle wiring is null", wiring);
 				Collection<BundleWire> hostWires = wiring.getProvidedWires(BundleRevision.HOST_NAMESPACE);
