@@ -238,12 +238,12 @@ public interface BundleWiring extends BundleReference {
 	 *        {@link #FINDENTRIES_RECURSE}. The method must ignore unrecognized
 	 *        options.
 	 * @return An unmodifiable list of URL objects for each matching entry, or
-	 *         an empty list if no matching entry could not be found, if this
-	 *         bundle wiring is for a fragment revision or if the caller does
-	 *         not have the appropriate {@code AdminPermission[bundle,RESOURCE]}
-	 *         and the Java Runtime Environment supports permissions. The list
-	 *         is ordered such that entries from the {@link #getRevision()
-	 *         bundle revision} are returned first followed by the entries from
+	 *         an empty list if no matching entry could be found, if this bundle
+	 *         wiring is for a fragment revision or if the caller does not have
+	 *         the appropriate {@code AdminPermission[bundle,RESOURCE]} and the
+	 *         Java Runtime Environment supports permissions. The list is
+	 *         ordered such that entries from the {@link #getRevision() bundle
+	 *         revision} are returned first followed by the entries from
 	 *         attached fragment revisions in attachment order. If this bundle
 	 *         wiring is not {@link #isInUse() in use}, {@code null} must be
 	 *         returned.
@@ -295,9 +295,9 @@ public interface BundleWiring extends BundleReference {
 	 *        {@link #LISTRESOURCES_LOCAL} and {@link #LISTRESOURCES_RECURSE}.
 	 *        This method must ignore unrecognized options.
 	 * @return An unmodifiable collection of resource names for each matching
-	 *         resource, or an empty collection if no matching resource could
-	 *         not be found, if this bundle wiring is for a fragment revision or
-	 *         if the caller does not have the appropriate
+	 *         resource, or an empty collection if no matching resource could be
+	 *         found, if this bundle wiring is for a fragment revision or if the
+	 *         caller does not have the appropriate
 	 *         {@code AdminPermission[bundle,RESOURCE]} and the Java Runtime
 	 *         Environment supports permissions. The collection is unordered and
 	 *         must contain no duplicate resource names. If this bundle wiring
