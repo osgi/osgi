@@ -143,6 +143,7 @@ public class DivTests extends DefaultTestBundleControl {
 		try {
 			String originalLocation = tb.getLocation();
 			long originalLastModified = tb.getLastModified();
+			Thread.sleep(100);
 			tb.update();
 			assertEquals("bundle location changed after update.",
 					originalLocation, tb.getLocation());

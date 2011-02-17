@@ -30,7 +30,7 @@ public class Activator implements BundleActivator {
 		Bundle b = context.getBundle(0);
 		FrameworkWiring fw = (FrameworkWiring)b.adapt(FrameworkWiring.class);
 		try {
-			fw.refreshBundles(Arrays.asList(context.getBundles()), null);
+			fw.refreshBundles(null, null);
 			Assert.fail("A security exception should have been thrown");
 		}
 		catch (SecurityException e) {

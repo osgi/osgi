@@ -10,7 +10,6 @@ build.cmpn.impls = \
   	org.osgi.impl.bundle.midletcontainer, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.service.application, \
-	org.osgi.impl.service.coordinator , \
 	org.osgi.impl.service.deploymentadmin , \
 	org.osgi.impl.service.device.manager , \
 	org.osgi.impl.service.dmt , \
@@ -31,6 +30,7 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.blueprint}, \
 	${repo;org.osgi.impl.service.cm}, \
 	${repo;org.osgi.impl.service.component}, \
+	${repo;org.osgi.impl.service.coordinator}, \
 	${repo;org.osgi.impl.service.event}, \
 	${repo;org.osgi.impl.service.metatype}, \
 	${repo;org.osgi.impl.service.provisioning}
