@@ -101,7 +101,7 @@ public interface BundleRevision extends BundleReference {
 	 * 
 	 * <p>
 	 * The name of the package is stored in the capability attribute of the same
-	 * name as this name space ({@value #PACKAGE_NAMESPACE}). The other
+	 * name as this name space (osgi.wiring.package). The other
 	 * directives and attributes of the package, from the
 	 * {@link Constants#EXPORT_PACKAGE Export-Package} manifest header, can be
 	 * found in the cabability's {@link BundleCapability#getDirectives()
@@ -144,8 +144,8 @@ public interface BundleRevision extends BundleReference {
 	 * 
 	 * <p>
 	 * The bundle symbolic name of the bundle is stored in the capability
-	 * attribute of the same name as this name space ({@value #BUNDLE_NAMESPACE}
-	 * ). The other directives and attributes of the bundle, from the
+	 * attribute of the same name as this name space (osgi.wiring.bundle).
+	 * The other directives and attributes of the bundle, from the
 	 * {@link Constants#BUNDLE_SYMBOLICNAME Bundle-SymbolicName} manifest
 	 * header, can be found in the cabability's
 	 * {@link BundleCapability#getDirectives() directives} and
@@ -182,7 +182,7 @@ public interface BundleRevision extends BundleReference {
 	 * 
 	 * <p>
 	 * The bundle symbolic name of the bundle is stored in the capability
-	 * attribute of the same name as this name space ({@value #HOST_NAMESPACE}).
+	 * attribute of the same name as this name space (osgi.wiring.host).
 	 * The other directives and attributes of the bundle, from the
 	 * {@link Constants#BUNDLE_SYMBOLICNAME Bundle-SymbolicName} manifest
 	 * header, can be found in the cabability's
