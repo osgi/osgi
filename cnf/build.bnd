@@ -78,7 +78,7 @@ osgi.release				= 4
 osgi.version				= 4.3
 
 build.version				= ${osgi.version}.0.${project.build}
-core.build.version			= ${build.version}
+core.build.version			= 4.4.0.${project.build}
 cmpn.build.version			= ${build.version}
 mobile.build.version		= ${build.version}
 enterprise.build.version	= ${build.version}
