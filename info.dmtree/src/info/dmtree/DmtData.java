@@ -297,15 +297,15 @@ public final class DmtData {
 	 * validity is not checked by this constructor)
 	 * <li>{@link #FORMAT_DATE} - value must be parseable to an ISO 8601
 	 * calendar date in complete representation, basic format (pattern
-	 * <tt>CCYYMMDD</tt>)
+	 * {@code CCYYMMDD})
 	 * <li>{@link #FORMAT_TIME} - value must be parseable to an ISO 8601 time of
 	 * day in either local time, complete representation, basic format (pattern
-	 * <tt>hhmmss</tt>) or Coordinated Universal Time, basic format (pattern
-	 * <tt>hhmmssZ</tt>)
+	 * {@code hhmmss}) or Coordinated Universal Time, basic format (pattern
+	 * {@code hhmmssZ})
 	 * <li>{@link #FORMAT_DATETIME} - value must be parseable to an ISO 8601
 	 * definition of a calendar date-time in complete representation, basic
-	 * format (pattern <tt>CCYYMMDDThhmmss</tt>) or Coordinated Universal Time,
-	 * basic format (pattern <tt>CCYYMMDDThhmmssZ</tt>)
+	 * format (pattern {@code CCYYMMDDThhmmss}) or Coordinated Universal Time,
+	 * basic format (pattern {@code CCYYMMDDThhmmssZ})
 	 * <li>{@link #FORMAT_UNSIGNED_LONG} - value must contain a string that is
 	 * parsable as unsigned long
 	 * <li>{@link #FORMAT_UNSIGNED_INTEGER} - value must contain a string that
@@ -621,7 +621,7 @@ public final class DmtData {
 	/**
 	 * Gets the value of a node with date format. The returned date string is
 	 * formatted according to the ISO 8601 definition of a calendar date in
-	 * complete representation, basic format (pattern <tt>CCYYMMDD</tt>).
+	 * complete representation, basic format (pattern {@code CCYYMMDD}).
 	 * 
 	 * @return the date value
 	 * @throws DmtIllegalStateException if the format of the node is not date
@@ -637,9 +637,8 @@ public final class DmtData {
 	 * Gets the value of a node with time format. The returned time string is
 	 * formatted according to the ISO 8601 definition of the time of day. The
 	 * exact format depends on the value the object was initialized with: either
-	 * local time, complete representation, basic format (pattern
-	 * <tt>hhmmss</tt>) or Coordinated Universal Time, basic format (pattern
-	 * <tt>hhmmssZ</tt>).
+	 * local time, complete representation, basic format (pattern {@code hhmmss}
+	 * ) or Coordinated Universal Time, basic format (pattern {@code hhmmssZ}).
 	 * 
 	 * @return the time value
 	 * @throws DmtIllegalStateException if the format of the node is not time
@@ -656,9 +655,9 @@ public final class DmtData {
 	 * string is formatted according to the ISO 8601 definition of a calendar
 	 * date-time in complete representation. The exact format depends on the
 	 * value the object was initialized with: either local time, complete
-	 * representation, basic format (pattern <tt>CCYYMMDDThhmmss</tt>) or
+	 * representation, basic format (pattern {@code CCYYMMDDThhmmss}) or
 	 * Coordinated Universal Time, basic format (pattern
-	 * <tt>CCYYMMDDThhmmssZ</tt>).
+	 * {@code CCYYMMDDThhmmssZ}).
 	 * 
 	 * @return the time value
 	 * @throws DmtIllegalStateException if the format of the node is not time
