@@ -17,13 +17,13 @@
  */
 package org.osgi.impl.service.dmt;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-
 import info.dmtree.Acl;
 import info.dmtree.DmtEvent;
 import info.dmtree.security.DmtPermission;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 /*
  * Wrapper class to DmtEventCore that implements the DmtEvent interface and
@@ -104,4 +104,14 @@ public class DmtEventImpl implements DmtEvent {
         
         return (String[]) filteredNodes.toArray(new String[] {});
     }
+
+	public String[] getPropertyNames() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("method not yet implemented");
+	}
+
+	public Object getProperty(String key) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("method not yet implemented");
+	}
 }

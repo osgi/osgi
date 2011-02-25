@@ -82,4 +82,10 @@ public class MountPointImpl implements MountPoint {
 		return newUris;
 	}
 
+	public void sendEvent(String topic, String[] relativeURIs,
+			Dictionary properties) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("method not yet implemented");
+	}
+
 }
