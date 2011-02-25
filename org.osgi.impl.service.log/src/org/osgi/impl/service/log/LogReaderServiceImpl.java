@@ -1,9 +1,5 @@
 /*
- * $Id$
- *
  * OSGi Log Service Reference Implementation.
- *
-
  *
  * (C) Copyright IBM Corporation 2000-2001.
  *

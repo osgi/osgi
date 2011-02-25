@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ import java.util.Map;
  *  class                Bundle.loadClass
  *  execute              Bundle.start
  *                       Bundle.stop
- *                       StartLevel.setBundleStartLevel
+ *                       BundleStartLevel.setStartLevel
  *  extensionLifecycle   BundleContext.installBundle for extension bundles
  *                       Bundle.update for extension bundles
  *                       Bundle.uninstall for extension bundles
@@ -56,23 +56,25 @@ import java.util.Map;
  *                       BundleContext.removeBundleListener for SynchronousBundleListener
  *  metadata             Bundle.getHeaders
  *                       Bundle.getLocation
- *  resolve              PackageAdmin.refreshPackages
- *                       PackageAdmin.resolveBundles
+ *  resolve              FrameworkWiring.refreshBundles
+ *                       FrameworkWiring.resolveBundles
  *  resource             Bundle.getResource
  *                       Bundle.getResources
  *                       Bundle.getEntry
  *                       Bundle.getEntryPaths
  *                       Bundle.findEntries
  *                       Bundle resource/entry URL creation
- *  startlevel           StartLevel.setStartLevel
- *                       StartLevel.setInitialBundleStartLevel 
+ *  startlevel           FrameworkStartLevel.setStartLevel
+ *                       FrameworkStartLevel.setInitialBundleStartLevel 
  *  context              Bundle.getBundleContext
+ *  weave                WovenClass.setBytes
+ *                       WovenClass.getDynamicImports for modification
  * </pre>
  * 
  * <p>
  * The special action &quot;*&quot; will represent all actions. The
- * {@code resolve} action is implied by the {@code class},
- * {@code execute} and {@code resource} actions.
+ * {@code resolve} action is implied by the {@code class}, {@code execute} and
+ * {@code resource} actions.
  * <p>
  * The name of this permission is a filter expression. The filter gives access
  * to the following attributes:
@@ -160,6 +162,13 @@ public final class AdminPermission extends BasicPermission {
 	 */
 	public final static String	CONTEXT						= "context";
 
+	/**
+	 * The action string {@code weave}.
+	 * 
+	 * @since 1.6
+	 */
+	public final static String						WEAVE						= "weave";
+
 	private final static int	ACTION_CLASS				= 0x00000001;
 	private final static int	ACTION_EXECUTE				= 0x00000002;
 	private final static int	ACTION_LIFECYCLE			= 0x00000004;
@@ -170,6 +179,7 @@ public final class AdminPermission extends BasicPermission {
 	private final static int	ACTION_STARTLEVEL			= 0x00000100;
 	private final static int	ACTION_EXTENSIONLIFECYCLE	= 0x00000200;
 	private final static int	ACTION_CONTEXT				= 0x00000400;
+	private final static int						ACTION_WEAVE				= 0x00000800;
 	private final static int	ACTION_ALL					= ACTION_CLASS
 																	| ACTION_EXECUTE
 																	| ACTION_LIFECYCLE
@@ -179,7 +189,8 @@ public final class AdminPermission extends BasicPermission {
 																	| ACTION_RESOURCE
 																	| ACTION_STARTLEVEL
 																	| ACTION_EXTENSIONLIFECYCLE
-																	| ACTION_CONTEXT;
+																						| ACTION_CONTEXT
+																						| ACTION_WEAVE;
 	final static int						ACTION_NONE					= 0;
 
 	/**
@@ -247,14 +258,13 @@ public final class AdminPermission extends BasicPermission {
 	 * Null arguments are equivalent to "*".
 	 * 
 	 * @param filter A filter expression that can use signer, location, id, and
-	 *        name keys. A value of &quot;*&quot; or {@code null} matches
-	 *        all bundle. Filter attribute names are processed in a case
-	 *        sensitive manner.
-	 * @param actions {@code class}, {@code execute},
-	 *        {@code extensionLifecycle}, {@code lifecycle},
-	 *        {@code listener}, {@code metadata}, {@code resolve}
-	 *        , {@code resource}, {@code startlevel} or
-	 *        {@code context}. A value of "*" or {@code null}
+	 *        name keys. A value of &quot;*&quot; or {@code null} matches all
+	 *        bundle. Filter attribute names are processed in a case sensitive
+	 *        manner.
+	 * @param actions {@code class}, {@code execute}, {@code extensionLifecycle}
+	 *        , {@code lifecycle}, {@code listener}, {@code metadata},
+	 *        {@code resolve} , {@code resource}, {@code startlevel},
+	 *        {@code context} or {@code weave}. A value of "*" or {@code null}
 	 *        indicates all actions.
 	 * @throws IllegalArgumentException If the filter has an invalid syntax.
 	 */
@@ -265,17 +275,16 @@ public final class AdminPermission extends BasicPermission {
 	}
 
 	/**
-	 * Creates a new requested {@code AdminPermission} object to be used by
-	 * the code that must perform {@code checkPermission}.
-	 * {@code AdminPermission} objects created with this constructor cannot
-	 * be added to an {@code AdminPermission} permission collection.
+	 * Creates a new requested {@code AdminPermission} object to be used by the
+	 * code that must perform {@code checkPermission}. {@code AdminPermission}
+	 * objects created with this constructor cannot be added to an
+	 * {@code AdminPermission} permission collection.
 	 * 
 	 * @param bundle A bundle.
-	 * @param actions {@code class}, {@code execute},
-	 *        {@code extensionLifecycle}, {@code lifecycle},
-	 *        {@code listener}, {@code metadata}, {@code resolve}
-	 *        , {@code resource}, {@code startlevel},
-	 *        {@code context}. A value of "*" or {@code null}
+	 * @param actions {@code class}, {@code execute}, {@code extensionLifecycle}
+	 *        , {@code lifecycle}, {@code listener}, {@code metadata},
+	 *        {@code resolve} , {@code resource}, {@code startlevel},
+	 *        {@code context}, {@code weave}. A value of "*" or {@code null}
 	 *        indicates all actions.
 	 * @since 1.3
 	 */
@@ -503,19 +512,29 @@ public final class AdminPermission extends BasicPermission {
 	
 												}
 												else
-													if (i >= 0 &&
-	
-													(a[i] == '*')) {
-														matchlen = 1;
-														mask |= ACTION_ALL;
-	
+													if (i >= 4
+															&& (a[i - 4] == 'w' || a[i - 4] == 'W')
+															&& (a[i - 3] == 'e' || a[i - 3] == 'E')
+															&& (a[i - 2] == 'a' || a[i - 2] == 'A')
+															&& (a[i - 1] == 'v' || a[i - 1] == 'V')
+															&& (a[i] == 'e' || a[i] == 'E')) {
+														matchlen = 5;
+														mask |= ACTION_WEAVE;
+
 													}
-													else {
-														// parse error
-														throw new IllegalArgumentException(
-																"invalid permission: "
-																		+ actions); 
-													}
+													else
+														if (i >= 0
+																&& (a[i] == '*')) {
+															matchlen = 1;
+															mask |= ACTION_ALL;
+
+														}
+														else {
+															// parse error
+															throw new IllegalArgumentException(
+																	"invalid permission: "
+																			+ actions);
+														}
 	
 			// make sure we didn't just match the tail of a word
 			// like "ackbarfstartlevel". Also, skip to the comma.
@@ -668,14 +687,13 @@ public final class AdminPermission extends BasicPermission {
 	 * {@code AdminPermission} actions.
 	 * 
 	 * <p>
-	 * Always returns present {@code AdminPermission} actions in the
-	 * following order: {@code class}, {@code execute},
-	 * {@code extensionLifecycle}, {@code lifecycle},
-	 * {@code listener}, {@code metadata}, {@code resolve},
-	 * {@code resource}, {@code startlevel}, {@code context}.
+	 * Always returns present {@code AdminPermission} actions in the following
+	 * order: {@code class}, {@code execute}, {@code extensionLifecycle},
+	 * {@code lifecycle}, {@code listener}, {@code metadata}, {@code resolve},
+	 * {@code resource}, {@code startlevel}, {@code context}, {@code weave}.
 	 * 
-	 * @return Canonical string representation of the
-	 *         {@code AdminPermission} actions.
+	 * @return Canonical string representation of the {@code AdminPermission}
+	 *         actions.
 	 */
 	public String getActions() {
 		String result = actions;
@@ -730,6 +748,11 @@ public final class AdminPermission extends BasicPermission {
 	
 			if ((mask & ACTION_CONTEXT) == ACTION_CONTEXT) {
 				sb.append(CONTEXT);
+				sb.append(',');
+			}
+
+			if ((mask & ACTION_WEAVE) == ACTION_WEAVE) {
+				sb.append(WEAVE);
 				sb.append(',');
 			}
 	

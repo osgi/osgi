@@ -13,9 +13,11 @@ Provide-Capability: \
   long.list : List  <Long  >="1, 2, 3, 4"; \
   double.list: List<  Double>= "1.001, 1.002, 1.003"; \
   string.list :List<String  >= "aString,bString,cString"; \
-  string.list2:List="a\\"quote,a\\,comma, aSpace ,\\"start,\\,start,end\\",end\\,", \
+  string.list2:List="a\\"quote,a\\,comma, aSpace ,\\"start,\\,start,end\\",end\\,"; \
+  string.list3 :List<String>= " aString , bString , cString ", \
  test.multiple; attr="value1", \
- test.multiple; attr="value2"
+ test.multiple; attr="value2", \
+ test.no.attrs
 
 Export-Package: ${p}.resolver.tb1;version="1.0.0";-noimport:=true
 Include-Resource: \

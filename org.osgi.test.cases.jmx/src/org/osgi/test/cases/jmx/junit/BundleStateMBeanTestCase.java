@@ -388,7 +388,8 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 	public void testGetSymbolicName() throws IOException {
 		assertNotNull(bsMBean);
 		String symbolicName = bsMBean.getSymbolicName(testBundle1.getBundleId());
-		assertTrue("tb1 has wrong symbolic name", "tb1".equals(symbolicName));
+		assertEquals("tb1 has wrong symbolic name",
+				testBundle1.getSymbolicName(), symbolicName);
 	}
 	
 	public void testGetVersion() throws IOException {

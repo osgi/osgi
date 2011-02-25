@@ -1,5 +1,5 @@
 /*
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -39,6 +39,7 @@ package org.osgi.test.cases.dmt.tc3.tbc.TreeStructure;
 import info.dmtree.DmtData;
 import info.dmtree.DmtSession;
 import info.dmtree.MetaNode;
+
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 

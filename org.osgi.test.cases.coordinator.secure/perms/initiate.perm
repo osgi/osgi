@@ -1,0 +1,19 @@
+# Lines beginning with '#' or '//' are comments
+#
+# This file contains the permissions to be granted
+# to fragments (extension) bundles test bundle.
+# The permissions are listed one per
+# line in PermissionInfo encoded format.
+# See org.osgi.service.permissionadmin.PermissionInfo
+
+(org.osgi.framework.PackagePermission "junit.framework" "import")
+(org.osgi.framework.PackagePermission "org.osgi.framework" "import")
+(org.osgi.framework.PackagePermission "org.osgi.service.coordinator" "import")
+(org.osgi.framework.PackagePermission "org.osgi.test.cases.coordinator.secure" "import")
+
+(org.osgi.framework.ServicePermission "org.osgi.service.coordinator.Coordination" "get")
+(org.osgi.framework.ServicePermission "org.osgi.service.coordinator.Coordinator" "get")
+(org.osgi.framework.ServicePermission "org.osgi.test.cases.coordinator.secure.TestClassResult" "register")
+
+(org.osgi.service.coordinator.CoordinationPermission "*" "initiate")
+

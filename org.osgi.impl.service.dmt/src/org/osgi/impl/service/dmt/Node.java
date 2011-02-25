@@ -139,6 +139,8 @@ public class Node {
         return new Node(sb.toString());
     }
 
+    
+    
     private static void appendName(StringBuffer sb, String uri, 
             int start, int end) throws DmtException {
         String segment = uri.substring(start, end);
@@ -344,5 +346,36 @@ public class Node {
         segments.add(segment.toString());
     
         return (String[]) segments.toArray(new String[segments.size()]);
+    }
+    
+    /*
+     * provides Uri checks against the configured system properties for segment name 
+     * length, uri length and number of segments
+     */
+    public void checkUriAndSegmentLength() throws DmtException {
+
+    	// SD: 25.10.2010 added checks for maximum URI length and number of segments
+    	// check overall uri length
+        if ( getUri().length() > Uri.getMaxUriLength() ){
+            throw new DmtException(getUri(), DmtException.URI_TOO_LONG,
+                    "The URI length exceeds maximum allowed length limit " +
+                    "of " + Uri.getMaxUriLength() + " characters.");
+        }
+        
+        // check number of uri segments
+        if ( getPath().length > Uri.getMaxUriSegments() ) {
+            throw new DmtException(getUri(), DmtException.URI_TOO_LONG,
+                    "The URI length exceeds maximum allowed number " +
+                    "of " + Uri.getMaxUriSegments() + " segments.");
+        }
+        
+        // check length of each uri segment
+        for (String segment : getPath()) {
+            if ( segment.length() > Uri.getMaxSegmentNameLength() ) {
+                throw new DmtException(getUri(), DmtException.URI_TOO_LONG,
+                        "The segment length exceeds maximum segment length limit " +
+                        "of " + Uri.getMaxSegmentNameLength() + " characters.");
+            }
+		}
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,10 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.wiring.Wiring;
 
 public class FrameworkWiringTests extends OSGiTestCase {
-	private final List bundles = new ArrayList();
+	private final List<Bundle> bundles = new ArrayList<Bundle>();
 	FrameworkWiring frameworkWiring;
 	
 	
@@ -57,43 +58,19 @@ public class FrameworkWiringTests extends OSGiTestCase {
 	}
 
 	protected void tearDown() throws Exception {
-		for (Iterator iBundles = bundles.iterator(); iBundles.hasNext();)
+		for (Iterator<Bundle> iBundles = bundles.iterator(); iBundles.hasNext();)
 			try {
-				((Bundle) iBundles.next()).uninstall();
+				iBundles.next().uninstall();
 			} catch (BundleException e) {
 				// nothing
 			} catch (IllegalStateException e) {
 				// happens if the test uninstalls the bundle itself
 			}
-		refreshBundles(bundles);
+		Wiring.synchronousRefreshBundles(getContext(), bundles);
 		bundles.clear();
 	}
 
-	private void refreshBundles(List bundles) {
-		final boolean[] done = new boolean[] {false};
-		FrameworkListener listener = new FrameworkListener() {
-			public void frameworkEvent(FrameworkEvent event) {
-				synchronized (done) {
-					if (event.getType() == FrameworkEvent.PACKAGES_REFRESHED) {
-						done[0] = true;
-						done.notify();
-					}
-				}
-			}
-		};
-		frameworkWiring.refreshBundles(bundles, new FrameworkListener[] {listener});
-		synchronized (done) {
-			if (!done[0])
-				try {
-					done.wait(5000);
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-					fail("Unexepected interruption.", e);
-				}
-			if (!done[0])
-				fail("Timed out waiting for refresh bundles to finish.");
-		}
-	}
+
 
 	public void testRefreshListeners() {
 		Bundle tb1 = install("resolver.tb1.v110.jar");
@@ -102,7 +79,7 @@ public class FrameworkWiringTests extends OSGiTestCase {
 		Bundle tb4 = install("resolver.tb4.jar");
 		Bundle tb5 = install("resolver.tb5.jar");
 
-		Collection testBundles = Arrays.asList(new Bundle[]{tb1, tb2, tb3, tb4, tb5});
+		Collection<Bundle> testBundles = Arrays.asList(new Bundle[]{tb1, tb2, tb3, tb4, tb5});
 
 		final boolean[] called = new boolean[] {false};
 		final AssertionFailedError error[] = new AssertionFailedError[1];
@@ -145,7 +122,7 @@ public class FrameworkWiringTests extends OSGiTestCase {
 		Bundle tb4 = install("resolver.tb4.jar");
 		Bundle tb5 = install("resolver.tb5.jar");
 
-		Collection testBundles = Arrays.asList(new Bundle[]{tb1, tb2, tb3, tb4, tb5});
+		Collection<Bundle> testBundles = Arrays.asList(new Bundle[]{tb1, tb2, tb3, tb4, tb5});
 		assertTrue(frameworkWiring.resolveBundles(testBundles));
 
 		assertEquals("Wrong state for bundle: " + tb1, Bundle.RESOLVED, tb1.getState());
@@ -162,10 +139,10 @@ public class FrameworkWiringTests extends OSGiTestCase {
 		Bundle tb4 = install("resolver.tb4.jar");
 		Bundle tb5 = install("resolver.tb5.jar");
 
-		Collection testBundles = Arrays.asList(new Bundle[]{tb1, tb2, tb3, tb4, tb5});
+		Collection<Bundle> testBundles = Arrays.asList(new Bundle[]{tb1, tb2, tb3, tb4, tb5});
 		assertTrue(frameworkWiring.resolveBundles(testBundles));
 
-		Collection closure = frameworkWiring.getDependencyClosure(Arrays.asList(new Bundle[]{tb1}));
+		Collection<Bundle> closure = frameworkWiring.getDependencyClosure(Arrays.asList(new Bundle[]{tb1}));
 		assertEquals("Wrong number in closure", 5, closure.size());
 		assertTrue("Wrong bundles in closure: " + closure, closure.containsAll(testBundles));
 		assertTrue("Wrong bundles in closure: " + closure, testBundles.containsAll(closure));
@@ -188,20 +165,26 @@ public class FrameworkWiringTests extends OSGiTestCase {
 		Bundle tb4 = install("resolver.tb4.jar");
 		Bundle tb5 = install("resolver.tb5.jar");
 
-		Collection testBundles = Arrays.asList(new Bundle[]{tb1, tb2, tb3, tb4, tb5});
+		Collection<Bundle> testBundles = Arrays.asList(new Bundle[]{tb1, tb2, tb3, tb4, tb5});
 		assertTrue(frameworkWiring.resolveBundles(testBundles));
 
+		// TODO should investigate why other tests are not cleaning up their uninstalled bundles
+		// for now doing a refresh of all removal pending to ensure a clean state
+		Wiring.synchronousRefreshBundles(getContext(), null);
+		// Need to make sure there are no removal pendings already present.
+		Collection<Bundle> removals = frameworkWiring.getRemovalPendingBundles();
+		assertEquals("Removal pendings are left over: " + removals.toString(), 0, removals.size());
 		try {
 			tb1.uninstall();
 		} catch (BundleException e) {
 			fail("Failed to uninstall bundle", e);
 		}
 
-		Collection removals = frameworkWiring.getRemovalPendingBundles();
+		removals = frameworkWiring.getRemovalPendingBundles();
 		assertEquals("Wrong number of removals", 1, removals.size());
 		assertTrue("Wrong bundle in removals", removals.contains(tb1));
 
-		Collection closure = frameworkWiring.getDependencyClosure(removals);
+		Collection<Bundle> closure = frameworkWiring.getDependencyClosure(removals);
 		assertEquals("Wrong number in closure", 5, closure.size());
 		assertTrue("Wrong bundles in closure: " + closure, closure.containsAll(testBundles));
 		assertTrue("Wrong bundles in closure: " + closure, testBundles.containsAll(closure));

@@ -16,7 +16,13 @@
 
 package org.osgi.service.remoteserviceadmin;
 
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.*;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_FRAMEWORK_UUID;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_ID;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_PACKAGE_VERSION_;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_SERVICE_ID;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED_CONFIGS;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_INTENTS;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -663,7 +669,7 @@ public class EndpointDescription {
 	 * Unmodifiable Dictionary wrapper for a Map. This class is also used by
 	 * EndpointPermission.
 	 */
-	static class UnmodifiableDictionary<K, V> extends Dictionary<K, V> {
+	static final class UnmodifiableDictionary<K, V> extends Dictionary<K, V> {
 		private final Map<K, V>	wrapped;
 
 		UnmodifiableDictionary(Map<K, V> wrapped) {

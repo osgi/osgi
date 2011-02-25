@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@ public abstract class OSGiTestCase extends TestCase {
 	 * @param fieldClass Class containing constant.
 	 */
 	public static void assertConstant(Object expected, String fieldName,
-			Class fieldClass) {
+			Class< ? > fieldClass) {
 		try {
 			Field f = fieldClass.getField(fieldName);
 			assertTrue(Modifier.isPublic(f.getModifiers()));
@@ -89,8 +89,8 @@ public abstract class OSGiTestCase extends TestCase {
 		}
 	}
 	
-	public static void assertEquals(String message, Comparator comparator,
-			List expected, List actual) {
+	public static <T> void assertEquals(String message,
+			Comparator<T> comparator, List<T> expected, List<T> actual) {
 		if (expected.size() != actual.size()) {
 			failNotEquals(message, expected, actual);
 		}
@@ -100,8 +100,8 @@ public abstract class OSGiTestCase extends TestCase {
 		}
 	}
 
-	public static void assertEquals(String message, Comparator comparator,
-			Object expected, Object actual) {
+	public static <T> void assertEquals(String message,
+			Comparator<T> comparator, T expected, T actual) {
 		if (comparator.compare(expected, actual) == 0) {
 			return;
 		}
@@ -120,4 +120,5 @@ public abstract class OSGiTestCase extends TestCase {
 		assertNotNull("Can not find bundle: " + bundle, entry);
 		return getContext().installBundle(bundle, entry.openStream());
 	}
+
 }

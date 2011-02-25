@@ -21,7 +21,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -45,14 +44,15 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.hooks.resolver.ResolverHook;
 import org.osgi.framework.hooks.resolver.ResolverHookFactory;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
-import org.osgi.framework.wiring.Capability;
 import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.test.support.OSGiTestCase;
 
 public class ResolverHookTests extends OSGiTestCase {
-	private final List bundles = new ArrayList();
-	private final List registrations = new ArrayList();
+	private final List<Bundle> bundles = new ArrayList<Bundle>();
+	private final List<ServiceRegistration<?>> registrations = new ArrayList<ServiceRegistration<?>>();
 	FrameworkWiring frameworkWiring;
 	
 	
@@ -79,15 +79,15 @@ public class ResolverHookTests extends OSGiTestCase {
 	}
 
 	protected void tearDown() throws Exception {
-		for (Iterator iRegistrations = registrations.iterator(); iRegistrations.hasNext();)
+		for (Iterator<ServiceRegistration<?>> iRegistrations = registrations.iterator(); iRegistrations.hasNext();)
 			try {
-				((ServiceRegistration) iRegistrations.next()).unregister();
+				iRegistrations.next().unregister();
 			} catch (IllegalStateException e) {
 				// probably unregistered during test
 			}
 		registrations.clear();
-		for (Iterator iBundles = bundles.iterator(); iBundles.hasNext();) {
-			Bundle bundle = (Bundle) iBundles.next();
+		for (Iterator<Bundle> iBundles = bundles.iterator(); iBundles.hasNext();) {
+			Bundle bundle = iBundles.next();
 			try {
 				if (!(bundle.getState() == Bundle.UNINSTALLED))
 					bundle.uninstall();
@@ -99,7 +99,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		bundles.clear();
 	}
 
-	private void refreshBundles(List bundles) {
+	private void refreshBundles(List<Bundle> bundles) {
 		final boolean[] done = new boolean[] {false};
 		FrameworkListener listener = new FrameworkListener() {
 			public void frameworkEvent(FrameworkEvent event) {
@@ -125,10 +125,10 @@ public class ResolverHookTests extends OSGiTestCase {
 		}
 	}
 
-	private ServiceRegistration registerHook(ResolverHookFactory hook, int ranking) {
-		Dictionary props = new Hashtable();
+	private ServiceRegistration<ResolverHookFactory> registerHook(ResolverHookFactory hook, int ranking) {
+		Dictionary<String, Object> props = new Hashtable<String, Object>();
 		props.put(Constants.SERVICE_RANKING, new Integer(ranking));
-		ServiceRegistration reg = getContext().registerService(ResolverHookFactory.class, hook, props);
+		ServiceRegistration<ResolverHookFactory> reg = getContext().registerService(ResolverHookFactory.class, hook, props);
 		registrations.add(reg);
 		return reg;
 	}
@@ -143,13 +143,13 @@ public class ResolverHookTests extends OSGiTestCase {
 	}
 
 	public void testBeginEnd01() {
-		LinkedList beginOrder = new LinkedList();
-		LinkedList endOrder = new LinkedList();
+		LinkedList<Long> beginOrder = new LinkedList<Long>();
+		LinkedList<Long> endOrder = new LinkedList<Long>();
 		TestResolverHook hook1 = new TestResolverHook(new Long(1), null, beginOrder, endOrder);
-		TestResolverHook hook2 = new TestResolverHook(new Long(2), new RuntimeException("Test hook error"), beginOrder, endOrder);
+		TestResolverHook hook2 = new TestResolverHook(new Long(2), null, beginOrder, endOrder);
 		TestResolverHook hook3 = new TestResolverHook(new Long(3), null, beginOrder, endOrder);
 		TestResolverHook hook4 = new TestResolverHook(new Long(4), null, beginOrder, endOrder, null, true, null);
-		TestResolverHook hook5 = new TestResolverHook(new Long(5), null, beginOrder, endOrder, null, false, new RuntimeException("Test factory error"));
+		TestResolverHook hook5 = new TestResolverHook(new Long(5), null, beginOrder, endOrder);
 		registerHook(hook1, 0);
 		registerHook(hook2, Integer.MAX_VALUE);
 		registerHook(hook3, Integer.MAX_VALUE);
@@ -163,17 +163,18 @@ public class ResolverHookTests extends OSGiTestCase {
 			fail("failed to start tb2.", e);
 		}
 
-		assertEquals("Wrong number of start called", 5, beginOrder.size());
+		assertEquals("Wrong number of begin called", 5, beginOrder.size());
 		assertEquals("Wrong hook.begin called first", hook2.getID(), beginOrder.removeFirst());
 		assertEquals("Wrong hook.begin called second", hook3.getID(), beginOrder.removeFirst());
-		assertEquals("Wrong hook.begin called second", hook4.getID(), beginOrder.removeFirst());
-		assertEquals("Wrong hook.begin called second", hook5.getID(), beginOrder.removeFirst());
-		assertEquals("Wrong hook.begin called third", hook1.getID(), beginOrder.removeFirst());
+		assertEquals("Wrong hook.begin called thrid", hook4.getID(), beginOrder.removeFirst());
+		assertEquals("Wrong hook.begin called forth", hook5.getID(), beginOrder.removeFirst());
+		assertEquals("Wrong hook.begin called fifth", hook1.getID(), beginOrder.removeFirst());
 
-		assertEquals("Wrong number of end called", 3, endOrder.size());
+		assertEquals("Wrong number of end called", 4, endOrder.size());
 		assertEquals("Wrong hook.end called first", hook2.getID(), endOrder.removeFirst());
 		assertEquals("Wrong hook.end called second", hook3.getID(), endOrder.removeFirst());
-		assertEquals("Wrong hook.end called third", hook1.getID(), endOrder.removeFirst());
+		assertEquals("Wrong hook.end called third", hook5.getID(), endOrder.removeFirst());
+		assertEquals("Wrong hook.end called forth", hook1.getID(), endOrder.removeFirst());
 
 		if (hook1.getError() != null)
 			throw hook1.getError();
@@ -187,10 +188,128 @@ public class ResolverHookTests extends OSGiTestCase {
 			throw hook5.getError();
 	}
 
+	public void testHookErrors01() {
+		// install and start bundle first to test refresh properly
+		install("resolver.tb1.v100.jar");
+		Bundle tb2 = install("resolver.tb2.jar");
+		try {
+			tb2.start();
+		} catch (BundleException e) {
+			fail("Failed to start bundle.", e);
+		}
+		RuntimeException error1 = new RuntimeException("Test hook error 1");
+		LinkedList<Long> beginOrder = new LinkedList<Long>();
+		LinkedList<Long> endOrder = new LinkedList<Long>();
+		TestResolverHook hook1 = new TestResolverHook(new Long(1), null, beginOrder, endOrder);
+		TestResolverHook hook2 = new TestResolverHook(new Long(2), error1, beginOrder, endOrder);
+		TestResolverHook hook3 = new TestResolverHook(new Long(3), null, beginOrder, endOrder);
+		registerHook(hook1, 30);
+		registerHook(hook2, 20);
+		registerHook(hook3, 10);
+
+		refreshBundles(Arrays.asList(tb2));
+		checkTestResolverHookError(tb2, beginOrder, endOrder, hook1, hook2, hook3);
+
+		try {
+			tb2.start();
+			fail("Expected a failure.");
+		} catch (BundleException e) {
+			assertEquals("Wrong BundleException type found.", BundleException.REJECTED_BY_HOOK, e.getType());
+			boolean found = false;
+			for (Throwable t = e.getCause(); t != null; t = t.getCause()) {
+				if (t == error1) {
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				fail("Did not find the expected cause.", e);
+		}
+
+		checkTestResolverHookError(tb2, beginOrder, endOrder, hook1, hook2, hook3);
+
+		tb2.getResource("justAtest");
+		checkTestResolverHookError(tb2, beginOrder, endOrder, hook1, hook2, hook3);
+		try {
+			tb2.getResources("justAtest");
+		} catch (IOException e) {
+			fail("Unexpected exception calling getResources", e);
+		}
+		checkTestResolverHookError(tb2, beginOrder, endOrder, hook1, hook2, hook3);
+
+		try {
+			tb2.loadClass(tb2.getHeaders("").get(Constants.BUNDLE_ACTIVATOR));
+			fail("Expected class not found.");
+		} catch (ClassNotFoundException e1) {
+			// expected;
+		}
+		checkTestResolverHookError(tb2, beginOrder, endOrder, hook1, hook2, hook3);
+
+		tb2.findEntries("justAtest", "file", false);
+		checkTestResolverHookError(tb2, beginOrder, endOrder, hook1, hook2, hook3);
+
+		assertFalse("Should not resolve", frameworkWiring.resolveBundles(Arrays.asList(tb2)));
+		checkTestResolverHookError(tb2, beginOrder, endOrder, hook1, hook2, hook3);
+
+		// insert a hook that throws an error on begin()
+		RuntimeException error2 = new RuntimeException("Test factory error 2");
+		TestResolverHook hook4 = new TestResolverHook(new Long(5), null, beginOrder, endOrder, null, false, error2);
+		registerHook(hook4, 25);
+
+		try {
+			tb2.start();
+			fail("Expected a failure.");
+		} catch (BundleException e) {
+			assertEquals("Wrong BundleException type found.", BundleException.REJECTED_BY_HOOK, e.getType());
+			boolean found = false;
+			for (Throwable t = e.getCause(); t != null; t = t.getCause()) {
+				if (t == error2) {
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				fail("Did not find the expected cause.", e);
+		}
+
+		assertEquals("Wrong number of begin called", 2, beginOrder.size());
+		assertEquals("Wrong hook.begin called first", hook1.getID(), beginOrder.removeFirst());
+		assertEquals("Wrong hook.begin called second", hook4.getID(), beginOrder.removeFirst());
+
+		assertEquals("Wrong number of end called", 0, endOrder.size());
+
+		if (hook1.getError() != null)
+			throw hook1.getError();
+		if (hook2.getError() != null)
+			throw hook2.getError();
+		if (hook3.getError() != null)
+			throw hook3.getError();
+		if (hook4.getError() != null)
+			throw hook4.getError();
+
+	}
+
+	private void checkTestResolverHookError(Bundle testBundle, LinkedList<Long> beginOrder, LinkedList<Long> endOrder, TestResolverHook hook1, TestResolverHook hook2, TestResolverHook hook3) {
+		assertEquals("Wrong state for test bundle.", Bundle.INSTALLED, testBundle.getState());
+		assertEquals("Wrong number of begin called", 3, beginOrder.size());
+		assertEquals("Wrong hook.begin called first", hook1.getID(), beginOrder.removeFirst());
+		assertEquals("Wrong hook.begin called second", hook2.getID(), beginOrder.removeFirst());
+		assertEquals("Wrong hook.begin called third", hook3.getID(), beginOrder.removeFirst());
+
+		assertEquals("Wrong number of end called", 0, endOrder.size());
+
+		if (hook1.getError() != null)
+			throw hook1.getError();
+		if (hook2.getError() != null)
+			throw hook2.getError();
+		if (hook3.getError() != null)
+			throw hook3.getError();
+	}
+
 	public void testBeginTriggers() {
 		// test the begin triggers
 		PreventResolution preventHook = new PreventResolution();
-		ServiceRegistration preventReg = registerHook(preventHook, 0);
+		ServiceRegistration<ResolverHookFactory> preventReg = registerHook(preventHook, 0);
 
 		Bundle tb1v100 = install("resolver.tb1.v100.jar");
 		Bundle tb1v110 = install("resolver.tb1.v110.jar");
@@ -208,11 +327,11 @@ public class ResolverHookTests extends OSGiTestCase {
 		BundleRevision tb5Revision = (BundleRevision) tb5.adapt(BundleRevision.class);
 		BundleRevision tb7Revision = (BundleRevision) tb7.adapt(BundleRevision.class);
 
-		List testBundles = Arrays.asList(new Bundle[]{tb1v100, tb1v110, tb2, tb3, tb4, tb5, tb7});
-		List testRevisions = Arrays.asList(new BundleRevision[] {tb1v100Revision, tb1v110Revision, tb2Revision, tb3Revision, tb4Revision, tb5Revision, tb7Revision});
+		List<Bundle> testBundles = Arrays.asList(tb1v100, tb1v110, tb2, tb3, tb4, tb5, tb7);
+		List<BundleRevision> testRevisions = Arrays.asList(tb1v100Revision, tb1v110Revision, tb2Revision, tb3Revision, tb4Revision, tb5Revision, tb7Revision);
 
-		LinkedList beginOrder = new LinkedList();
-		LinkedList endOrder = new LinkedList();
+		LinkedList<Long> beginOrder = new LinkedList<Long>();
+		LinkedList<Long> endOrder = new LinkedList<Long>();
 		TestResolverHook testHook = new TestResolverHook(new Long(1), null, beginOrder, endOrder);
 		registerHook(testHook, 0);
 		preventReg.unregister();
@@ -224,7 +343,7 @@ public class ResolverHookTests extends OSGiTestCase {
 			fail("failed to start bundle: " + tb2, e);
 		}
 		assertNotNull("revision is null!", tb2Revision);
-		Set triggers = testHook.getAllTriggers();
+		Set<BundleRevision> triggers = testHook.getAllTriggers();
 		assertEquals("Wrong number of triggers", 1, triggers.size());
 		assertTrue("Wrong bundle included in triggers", triggers.contains(tb2Revision));
 
@@ -233,6 +352,21 @@ public class ResolverHookTests extends OSGiTestCase {
 		preventReg.unregister();
 		testHook.clear();
 
+		// test loadClass
+		try {
+			tb2.loadClass(tb2.getHeaders("").get(Constants.BUNDLE_ACTIVATOR));
+		} catch (ClassNotFoundException e1) {
+			fail("failed to find activator");
+		}
+		triggers = testHook.getAllTriggers();
+		assertEquals("Wrong number of triggers", 1, triggers.size());
+		assertTrue("Wrong bundle included in triggers", triggers.contains(tb2Revision));
+
+		preventReg = registerHook(preventHook, 0);
+		refreshBundles(testBundles);
+		preventReg.unregister();
+		testHook.clear();
+		
 		// test getResource
 		URL resoureTest = tb3.getResource("justAtest");
 		assertNull("URL is not null!", resoureTest);
@@ -246,7 +380,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		testHook.clear();
 
 		// test getResources
-		Enumeration resouresTest = null;
+		Enumeration<URL> resouresTest = null;
 		try {
 			resouresTest = tb5.getResources("justAtest");
 		} catch (IOException e) {
@@ -263,7 +397,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		testHook.clear();
 
 		// test findEntries
-		Enumeration findTest = tb3.findEntries("justAtest", "path", false);
+		Enumeration<URL> findTest = tb3.findEntries("justAtest", "path", false);
 		assertNull("Enumeration is not null!", findTest);
 		triggers = testHook.getAllTriggers();
 		assertEquals("Wrong number of triggers", 1, triggers.size());
@@ -332,18 +466,18 @@ public class ResolverHookTests extends OSGiTestCase {
 	public void testFilterResolvable01() {
 		final AssertionFailedError[] error = new AssertionFailedError[1];
 		ResolverHookFactory hook1 = new ResolverHookFactory(){
-			public ResolverHook begin(Collection triggers) {
+			public ResolverHook begin(Collection<BundleRevision> triggers) {
 				return new ResolverHook() {
 					public void end() {
 					}
-					public void filterMatches(BundleRevision arg0, Collection arg1) {
+					public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 					}
-					public void filterResolvable(Collection arg0) {
+					public void filterResolvable(Collection<BundleRevision> arg0) {
 						try {
-								for(Iterator resolvable = arg0.iterator(); resolvable.hasNext();) {
-									BundleRevision revision = (BundleRevision) resolvable.next();
+								for(Iterator<BundleRevision> resolvable = arg0.iterator(); resolvable.hasNext();) {
+									BundleRevision revision = resolvable.next();
 									if ("org.osgi.test.cases.framework.resolver.tb1".equals(revision.getSymbolicName())) {
-										arg0.remove(revision);
+										resolvable.remove();
 										try {
 											arg0.add(revision);
 											fail("Expected failure on add.");
@@ -351,7 +485,7 @@ public class ResolverHookTests extends OSGiTestCase {
 											//expected 
 										}
 										try {
-											arg0.addAll(Arrays.asList(new Object[]{revision}));
+											arg0.addAll(Arrays.asList(revision));
 											fail("Expected failure on addAll.");
 										} catch (UnsupportedOperationException e) {
 											// expected
@@ -363,14 +497,14 @@ public class ResolverHookTests extends OSGiTestCase {
 								error[0] = e;
 						}
 					}
-					public void filterSingletonCollisions(Capability arg0,
-							Collection arg1) {
+					public void filterSingletonCollisions(BundleCapability arg0,
+							Collection<BundleCapability> arg1) {
 					}
 					
 				};
 			}
 		};
-		ServiceRegistration reg = registerHook(hook1, 0);
+		ServiceRegistration<ResolverHookFactory> reg = registerHook(hook1, 0);
 		Bundle tb1 = install("resolver.tb1.v100.jar");
 		Bundle tb2 = install("resolver.tb2.jar");
 		try {
@@ -395,19 +529,19 @@ public class ResolverHookTests extends OSGiTestCase {
 	public void testFilterImportPackage01() {
 		final AssertionFailedError[] error = new AssertionFailedError[1];
 		ResolverHookFactory hook1 = new ResolverHookFactory(){
-			public ResolverHook begin(Collection triggers) {
+			public ResolverHook begin(Collection<BundleRevision> triggers) {
 				return new ResolverHook() {
 					public void end() {
 					}
-					public void filterMatches(BundleRevision arg0, Collection arg1) {
+					public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 						String symbolicName = "org.osgi.test.cases.framework.resolver.tb2";
 						String packageName = "org.osgi.test.cases.framework.resolver.tb1";
-						if (!symbolicName.equals(arg0.getSymbolicName()))
+						if (!symbolicName.equals(arg0.getRevision().getSymbolicName()))
 							return;
-						for (Iterator packages = arg1.iterator(); packages.hasNext();) {
-							Capability pkg = (Capability) packages.next();
-							if (!Capability.PACKAGE_CAPABILITY.equals(pkg.getNamespace()) ||
-									!packageName.equals(pkg.getAttributes().get(Capability.PACKAGE_CAPABILITY)))
+						for (Iterator<BundleCapability> packages = arg1.iterator(); packages.hasNext();) {
+							BundleCapability pkg = packages.next();
+							if (!BundleRevision.PACKAGE_NAMESPACE.equals(pkg.getNamespace()) ||
+									!packageName.equals(pkg.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE)))
 								return;
 
 							packages.remove();
@@ -418,22 +552,23 @@ public class ResolverHookTests extends OSGiTestCase {
 								//expected 
 							}
 							try {
-								arg1.addAll(Arrays.asList(new Object[]{pkg}));
+								List<BundleCapability> testAdd = Arrays.asList(pkg);
+								arg1.addAll(testAdd);
 								fail("Expected failure on addAll.");
 							} catch (UnsupportedOperationException e) {
 								// expected
 							}
 						}
 					}
-					public void filterResolvable(Collection arg0) {
+					public void filterResolvable(Collection<BundleRevision> arg0) {
 					}
-					public void filterSingletonCollisions(Capability arg0,
-							Collection arg1) {
+					public void filterSingletonCollisions(BundleCapability arg0,
+							Collection<BundleCapability> arg1) {
 					}
 				};
 			}
 		};
-		ServiceRegistration reg = registerHook(hook1, 0);
+		ServiceRegistration<ResolverHookFactory> reg = registerHook(hook1, 0);
 		install("resolver.tb1.v100.jar");
 		Bundle tb2 = install("resolver.tb2.jar");
 		try {
@@ -456,22 +591,20 @@ public class ResolverHookTests extends OSGiTestCase {
 	}
 
 	public void testFilterImportPackage02() {
-		Filter filterCapabilities1 = createFilter(
-				"(&" + 
-				  "(osgi.package=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(bundle-symbolic-name=org.osgi.test.cases.framework.resolver.tb1)" + 
-				  "(bundle-version>=1.1)(!(bundle-version>=1.2))" + 
-				  "(version>=1.1)(!(version>=1.2))" +
-				")");
-		Filter filterCapabilities2 = createFilter(
-				"(&" + 
-				  "(osgi.package=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(bundle-symbolic-name=org.osgi.test.cases.framework.resolver.tb1)" + 
-				  "(bundle-version>=1.0)(!(bundle-version>=1.1))" +
-				  "(version>=1.0)(!(version>=1.1))" +
-				")");
+		Filter filterCapabilities1 = createFilter("(&"
+				+ "(osgi.wiring.package=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-symbolic-name=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-version>=1.1)(!(bundle-version>=1.2))"
+				+ "(version>=1.1)(!(version>=1.2))" 
+				+ ")");
+		Filter filterCapabilities2 = createFilter("(&"
+				+ "(osgi.wiring.package=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-symbolic-name=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-version>=1.0)(!(bundle-version>=1.1))"
+				+ "(version>=1.0)(!(version>=1.1))"
+				+ ")");
 		TestFilterCapabilityHook hook1 = new TestFilterCapabilityHook(filterCapabilities1);
-		ServiceRegistration reg = registerHook(hook1, 0);
+		ServiceRegistration<ResolverHookFactory> reg = registerHook(hook1, 0);
 
 		Bundle tb1v110 = install("resolver.tb1.v110.jar");
 		Bundle tb1v100 = install("resolver.tb1.v100.jar");
@@ -505,18 +638,16 @@ public class ResolverHookTests extends OSGiTestCase {
 	}
 
 	public void testFilterDyanmicImportPackage01() {
-		Filter filterCapabilities1 = createFilter(
-				"(&" + 
-				  "(osgi.package=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(version>=1.1)(!(version>=1.2))" +
-				")");
-		Filter filterCapabilities2 = createFilter(
-				"(&" + 
-				  "(osgi.package=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(version>=1.0)(!(version>=1.1))" +
-				")");
+		Filter filterCapabilities1 = createFilter("(&"
+				+ "(osgi.wiring.package=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(version>=1.1)(!(version>=1.2))" 
+				+ ")");
+		Filter filterCapabilities2 = createFilter("(&"
+				+ "(osgi.wiring.package=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(version>=1.0)(!(version>=1.1))" 
+				+ ")");
 		TestFilterCapabilityHook hook1 = new TestFilterCapabilityHook(filterCapabilities1);
-		ServiceRegistration reg = registerHook(hook1, 0);
+		ServiceRegistration<ResolverHookFactory> reg = registerHook(hook1, 0);
 
 		Bundle tb1v110 = install("resolver.tb1.v110.jar");
 		Bundle tb1v100 = install("resolver.tb1.v100.jar");
@@ -550,18 +681,16 @@ public class ResolverHookTests extends OSGiTestCase {
 	}
 
 	public void testFilterRequireBundle01() {
-		Filter filterCapabilities1 = createFilter(
-				"(&" + 
-				  "(osgi.bundle=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(bundle-version>=1.1)(!(bundle-version>=1.2))" + 
-				")");
-		Filter filterCapabilities2 = createFilter(
-				"(&" + 
-				  "(osgi.bundle=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(bundle-version>=1.0)(!(bundle-version>=1.1))" +
-				")");
+		Filter filterCapabilities1 = createFilter("(&"
+				+ "(osgi.wiring.bundle=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-version>=1.1)(!(bundle-version>=1.2))" 
+				+ ")");
+		Filter filterCapabilities2 = createFilter("(&"
+				+ "(osgi.wiring.bundle=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-version>=1.0)(!(bundle-version>=1.1))" 
+				+ ")");
 		TestFilterCapabilityHook hook1 = new TestFilterCapabilityHook(filterCapabilities1);
-		ServiceRegistration reg = registerHook(hook1, 0);
+		ServiceRegistration<ResolverHookFactory> reg = registerHook(hook1, 0);
 
 		Bundle tb1v110 = install("resolver.tb1.v110.jar");
 		Bundle tb1v100 = install("resolver.tb1.v100.jar");
@@ -595,18 +724,16 @@ public class ResolverHookTests extends OSGiTestCase {
 	}
 
 	public void testFilterHost01() {
-		Filter filterCapabilities1 = createFilter(
-				"(&" + 
-				  "(osgi.bundle=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(bundle-version>=1.1)(!(bundle-version>=1.2))" + 
-				")");
-		Filter filterCapabilities2 = createFilter(
-				"(&" + 
-				  "(osgi.bundle=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(bundle-version>=1.0)(!(bundle-version>=1.1))" +
-				")");
+		Filter filterCapabilities1 = createFilter("(&"
+				+ "(osgi.wiring.host=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-version>=1.1)(!(bundle-version>=1.2))" 
+				+ ")");
+		Filter filterCapabilities2 = createFilter("(&"
+				+ "(osgi.wiring.host=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(bundle-version>=1.0)(!(bundle-version>=1.1))" 
+				+ ")");
 		TestFilterCapabilityHook hook1 = new TestFilterCapabilityHook(filterCapabilities1);
-		ServiceRegistration reg = registerHook(hook1, 0);
+		ServiceRegistration<ResolverHookFactory> reg = registerHook(hook1, 0);
 
 		Bundle tb1v110 = install("resolver.tb1.v110.jar");
 		Bundle tb1v100 = install("resolver.tb1.v100.jar");
@@ -641,7 +768,7 @@ public class ResolverHookTests extends OSGiTestCase {
 				  "(version>=1.0.0)(!(version>=1.1.0))" + 
 				")");
 		TestFilterCapabilityHook hook1 = new TestFilterCapabilityHook(filterCapabilities1);
-		ServiceRegistration reg = registerHook(hook1, 0);
+		ServiceRegistration<ResolverHookFactory> reg = registerHook(hook1, 0);
 
 		Bundle tb1v110 = install("resolver.tb1.v110.jar");
 		Bundle tb1v100 = install("resolver.tb1.v100.jar");
@@ -653,7 +780,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		if (hook1.getError() != null)
 			throw hook1.getError();
 		assertEquals("Wrong state for tb5", Bundle.INSTALLED, tb5.getState());
-		// unregister the hook; and register one that allows the correct host
+		// unregister the hook; and register one that allows the correct provider
 		// bundles should resolve now
 		reg.unregister();
 		TestFilterCapabilityHook hook2 = new TestFilterCapabilityHook(filterCapabilities2);
@@ -668,12 +795,12 @@ public class ResolverHookTests extends OSGiTestCase {
 	public void testFilterSingletonCollisions01() {
 		// ensure no resolution while we setup the tests
 		PreventResolution preventHook = new PreventResolution();
-		ServiceRegistration preventReg = registerHook(preventHook, 0);
+		ServiceRegistration<ResolverHookFactory> preventReg = registerHook(preventHook, 0);
 		Bundle tb6v100 = install("resolver.tb6.v100.jar");
 		Bundle tb6v200 = install("resolver.tb6.v200.jar");
 		Bundle tb6v300 = install("resolver.tb6.v300.jar");
 		Bundle tb6v400 = install("resolver.tb6.v400.jar");
-		List bundles = Arrays.asList(new Bundle[] {tb6v100, tb6v200, tb6v300, tb6v400});
+		List<Bundle> bundles = Arrays.asList(tb6v100, tb6v200, tb6v300, tb6v400);
 
 		// confirm we cannot resolve any of the bundles
 		assertFalse("Should not be able to resolve the bundles", frameworkWiring.resolveBundles(bundles));
@@ -683,13 +810,13 @@ public class ResolverHookTests extends OSGiTestCase {
 		assertEquals("Wrong state of bundle tb6v400", Bundle.INSTALLED, tb6v400.getState());
 
 		// create a hook that isolates all test singletons
-		Map allIsolated = new HashMap();
+		Map<Bundle, List<Bundle>> allIsolated = new HashMap<Bundle, List<Bundle>>();
 		allIsolated.put(tb6v100, Arrays.asList(new Bundle[]{tb6v200, tb6v300, tb6v400}));
 		allIsolated.put(tb6v200, Arrays.asList(new Bundle[]{tb6v100, tb6v300, tb6v400}));
 		allIsolated.put(tb6v300, Arrays.asList(new Bundle[]{tb6v100, tb6v200, tb6v400}));
 		allIsolated.put(tb6v400, Arrays.asList(new Bundle[]{tb6v100, tb6v200, tb6v300}));
 		TestFilterSingletonCollisions allIsolatedHook = new TestFilterSingletonCollisions(allIsolated);
-		ServiceRegistration allIsolatedReg = registerHook(allIsolatedHook, 0);
+		ServiceRegistration<ResolverHookFactory> allIsolatedReg = registerHook(allIsolatedHook, 0);
 		// OK, now allow resolution
 		preventReg.unregister();
 
@@ -708,13 +835,13 @@ public class ResolverHookTests extends OSGiTestCase {
 		refreshBundles(bundles);
 
 		// isolate version 1 and 2 from version 3 and 4
-		Map isolate12From34 = new HashMap();
+		Map<Bundle, List<Bundle>> isolate12From34 = new HashMap<Bundle, List<Bundle>>();
 		isolate12From34.put(tb6v100, Arrays.asList(new Bundle[] {tb6v300, tb6v400}));
 		isolate12From34.put(tb6v200, Arrays.asList(new Bundle[] {tb6v300, tb6v400}));
 		isolate12From34.put(tb6v300, Arrays.asList(new Bundle[] {tb6v100, tb6v200}));
 		isolate12From34.put(tb6v400, Arrays.asList(new Bundle[] {tb6v100, tb6v200}));
 		TestFilterSingletonCollisions isolate12From34Hook = new TestFilterSingletonCollisions(isolate12From34);
-		ServiceRegistration isolate12From34Reg = registerHook(isolate12From34Hook, 0);
+		ServiceRegistration<ResolverHookFactory> isolate12From34Reg = registerHook(isolate12From34Hook, 0);
 		// allow resolution again
 		preventReg.unregister();
 
@@ -750,7 +877,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		allIsolatedReg = registerHook(allIsolatedHook, 0);
 		// Filter version 2 and 4 from resolving; this is to force version 1 and 3 only to resolve
 		TestFilterResolvable resolveTwoSingletons = new TestFilterResolvable(Arrays.asList(new Bundle[] {tb6v200, tb6v400}));
-		ServiceRegistration resolveTwoReg = registerHook(resolveTwoSingletons, 0);
+		ServiceRegistration<ResolverHookFactory> resolveTwoReg = registerHook(resolveTwoSingletons, 0);
 		// allow resolution again.
 		preventReg.unregister();
 
@@ -771,13 +898,24 @@ public class ResolverHookTests extends OSGiTestCase {
 		assertEquals("Wrong state of bundle tb6v200", Bundle.INSTALLED, tb6v200.getState());
 		assertEquals("Wrong state of bundle tb6v300", Bundle.RESOLVED, tb6v300.getState());
 		assertEquals("Wrong state of bundle tb6v400", Bundle.INSTALLED, tb6v400.getState());
+
+		// make all singletons isolated again
+		allIsolatedReg = registerHook(allIsolatedHook, 0);
+		isolate12From34Reg.unregister();
+
+		// confirm we can resolve all of the singleton bundles, note that 1 and 3 are already resolved
+		assertTrue("Should be able to resolve the bundles", frameworkWiring.resolveBundles(bundles));
+		assertEquals("Wrong state of bundle tb6v100", Bundle.RESOLVED, tb6v100.getState());
+		assertEquals("Wrong state of bundle tb6v200", Bundle.RESOLVED, tb6v200.getState());
+		assertEquals("Wrong state of bundle tb6v300", Bundle.RESOLVED, tb6v300.getState());
+		assertEquals("Wrong state of bundle tb6v400", Bundle.RESOLVED, tb6v400.getState());
 	}
 
 	public void testFilterMatchesCandidates() {
 		// this test ensures that the candidates passed really match 
 		// a constraint before being passed to the hook
 		PreventResolution preventHook = new PreventResolution();
-		ServiceRegistration preventReg = registerHook(preventHook, 0);
+		ServiceRegistration<ResolverHookFactory> preventReg = registerHook(preventHook, 0);
 
 		final Bundle tb1v100 = install("resolver.tb1.v100.jar");
 		final Bundle tb1v110 = install("resolver.tb1.v110.jar");
@@ -786,44 +924,44 @@ public class ResolverHookTests extends OSGiTestCase {
 		final Bundle tb4 = install("resolver.tb4.jar");
 		final Bundle tb5 = install("resolver.tb5.jar");
 
-		Collection testBundles = Arrays.asList(new Bundle[]{tb1v100, tb1v110, tb2, tb3, tb4, tb5});
-		final Filter testCapabilities = createFilter(
-				"(|" + 
-				  "(osgi.package=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(osgi.bundle=org.osgi.test.cases.framework.resolver.tb1)" +
-				  "(test=aName)" +
-				")");
+		Collection<Bundle> testBundles = Arrays.asList(tb1v100, tb1v110, tb2, tb3, tb4, tb5);
+		final Filter testCapabilities = createFilter("(|"
+				+ "(osgi.wiring.package=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(osgi.wiring.bundle=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(osgi.wiring.host=org.osgi.test.cases.framework.resolver.tb1)"
+				+ "(test=aName)" 
+				+ ")");
 
 		final boolean[] called = new boolean[] {false, false, false, false};
 		final AssertionFailedError[] errors = new AssertionFailedError[5];
 		registerHook(new ResolverHookFactory() {
-			public ResolverHook begin(Collection triggers) {
+			public ResolverHook begin(Collection<BundleRevision> triggers) {
 				return new ResolverHook() {
-					public void filterSingletonCollisions(Capability arg0, Collection arg1) {
+					public void filterSingletonCollisions(BundleCapability arg0, Collection<BundleCapability> arg1) {
 					}
-					public void filterResolvable(Collection arg0) {
+					public void filterResolvable(Collection<BundleRevision> arg0) {
 					}
-					public void filterMatches(BundleRevision arg0, Collection arg1) {
-						for (Iterator capabilities = arg1.iterator(); capabilities.hasNext();) {
-							Capability capability = (Capability) capabilities.next();
-							if (!testCapabilities.matchCase(new UnmodifiableDictionary(capability.getAttributes())))
+					public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
+						for (Iterator<BundleCapability> capabilities = arg1.iterator(); capabilities.hasNext();) {
+							BundleCapability capability = capabilities.next();
+							if (!testCapabilities.matches(capability.getAttributes()))
 								break;
 							synchronized (called) {
 								int index = 4;
-								if (arg0.getBundle() == tb2)
+								if (arg0.getRevision().getBundle() == tb2)
 									index = 0;
-								else if (arg0.getBundle() == tb3)
+								else if (arg0.getRevision().getBundle() == tb3)
 									index = 1;
-								else if (arg0.getBundle() == tb4)
+								else if (arg0.getRevision().getBundle() == tb4)
 									index = 2;
-								else if (arg0.getBundle() == tb5)
+								else if (arg0.getRevision().getBundle() == tb5)
 									index = 3;
 								try {
 									if (index == 4)
-										fail("Wrong bundle as requirer: " + arg0.getBundle());
+										fail("Wrong bundle as requirer: " + arg0.getRevision().getBundle());
 									called[index] = true;
 									assertEquals("Wrong number of capabilities", 1, arg1.size());
-									assertEquals("Wrong provider of capability", tb1v110, capability.getProviderRevision().getBundle());
+									assertEquals("Wrong provider of capability", tb1v110, capability.getRevision().getBundle());
 									break;
 								} catch (AssertionFailedError e) {
 									errors[index] = e;
@@ -849,7 +987,7 @@ public class ResolverHookTests extends OSGiTestCase {
 
 	class TestNestedResolve implements ResolverHookFactory, ResolverHook {
 		private AssertionFailedError error = null;
-		public ResolverHook begin(Collection triggers) {
+		public ResolverHook begin(Collection<BundleRevision> triggers) {
 			doTest();
 			return this;
 		}
@@ -878,14 +1016,14 @@ public class ResolverHookTests extends OSGiTestCase {
 		public void end() {
 			doTest();
 		}
-		public void filterMatches(BundleRevision arg0, Collection arg1) {
+		public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 			doTest();
 		}
-		public void filterResolvable(Collection arg0) {
+		public void filterResolvable(Collection<BundleRevision> arg0) {
 			doTest();
 		}
-		public void filterSingletonCollisions(Capability arg0,
-				Collection arg1) {
+		public void filterSingletonCollisions(BundleCapability arg0,
+				Collection<BundleCapability> arg1) {
 			doTest();
 		}
 		public AssertionFailedError getError() {
@@ -897,7 +1035,7 @@ public class ResolverHookTests extends OSGiTestCase {
 	public void testNestedResolveOperations() {
 		// ensure no resolution while we setup the tests
 		PreventResolution preventHook = new PreventResolution();
-		ServiceRegistration preventReg = registerHook(preventHook, 0);
+		ServiceRegistration<ResolverHookFactory> preventReg = registerHook(preventHook, 0);
 		Bundle tb6v100 = install("resolver.tb6.v100.jar");
 		Bundle tb6v200 = install("resolver.tb6.v200.jar");
 		Bundle tb1 = install("resolver.tb1.v100.jar");
@@ -915,17 +1053,17 @@ public class ResolverHookTests extends OSGiTestCase {
 
 	class TestAddRemoveHook implements ResolverHookFactory, ResolverHook {
 		private boolean called = false;
-		private final ServiceRegistration beginHookToUnregister;
+		private final ServiceRegistration<ResolverHookFactory> beginHookToUnregister;
 		private final ResolverHookFactory hookToRegister;
-		private final ServiceRegistration filterHookToUnregister;
+		private final ServiceRegistration<ResolverHookFactory> filterHookToUnregister;
 		
-		public TestAddRemoveHook(ServiceRegistration hookToUnregister,
-				ServiceRegistration filterHookToUnregister, ResolverHookFactory hookToRegister) {
+		public TestAddRemoveHook(ServiceRegistration<ResolverHookFactory> hookToUnregister,
+				ServiceRegistration<ResolverHookFactory> filterHookToUnregister, ResolverHookFactory hookToRegister) {
 			this.beginHookToUnregister = hookToUnregister;
 			this.hookToRegister = hookToRegister;
 			this.filterHookToUnregister = filterHookToUnregister;
 		}
-		public ResolverHook begin(Collection triggers) {
+		public ResolverHook begin(Collection<BundleRevision> triggers) {
 			if (called)
 				return this;
 			called = true;
@@ -935,13 +1073,13 @@ public class ResolverHookTests extends OSGiTestCase {
 		}
 		public void end() {
 		}
-		public void filterMatches(BundleRevision arg0, Collection arg1) {
+		public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 		}
-		public void filterResolvable(Collection arg0) {
+		public void filterResolvable(Collection<BundleRevision> arg0) {
 			filterHookToUnregister.unregister();
 		}
-		public void filterSingletonCollisions(Capability arg0,
-				Collection arg1) {
+		public void filterSingletonCollisions(BundleCapability arg0,
+				Collection<BundleCapability> arg1) {
 			
 		}
 	}
@@ -949,27 +1087,27 @@ public class ResolverHookTests extends OSGiTestCase {
 	public void testAddRemoveHooks() {
 		// ensure no resolution while we setup the tests
 		PreventResolution preventHook = new PreventResolution();
-		ServiceRegistration preventReg = registerHook(preventHook, 0);
-		Collection bundles = new ArrayList();
+		ServiceRegistration<ResolverHookFactory> preventReg = registerHook(preventHook, 0);
+		Collection<Bundle> bundles = new ArrayList<Bundle>();
 		bundles.add(install("resolver.tb1.v100.jar"));
 		bundles.add(install("resolver.tb2.jar"));
 		bundles.add(install("resolver.tb6.v100.jar"));
 		bundles.add(install("resolver.tb6.v200.jar"));
-		LinkedList callOrderBegin = new LinkedList();
-		LinkedList callOrderEnd = new LinkedList();
+		LinkedList<Long> callOrderBegin = new LinkedList<Long>();
+		LinkedList<Long> callOrderEnd = new LinkedList<Long>();
 		TestResolverHook hook1 = new TestResolverHook(new Long(1), null, callOrderBegin, callOrderEnd);
 		TestResolverHook hook2 = new TestResolverHook(new Long(2), null, callOrderBegin, callOrderEnd);
-		final TestResolverHook hook3 = new TestResolverHook(new Long(3), null, callOrderBegin, callOrderEnd);
+		TestResolverHook hook3 = new TestResolverHook(new Long(3), null, callOrderBegin, callOrderEnd);
 		TestResolverHook hook4 = new TestResolverHook(new Long(4), null, callOrderBegin, callOrderEnd);
 		registerHook(hook1, -1);
-		final ServiceRegistration hook2Reg = registerHook(hook2, -2);
-		final ServiceRegistration hook4Reg = registerHook(hook4, -2);
+		ServiceRegistration<ResolverHookFactory> hook2Reg = registerHook(hook2, -2);
+		ServiceRegistration<ResolverHookFactory> hook4Reg = registerHook(hook4, -2);
 		registerHook(new TestAddRemoveHook(hook2Reg, hook4Reg, hook3), 0);
 
 		// OK now allow resolution for the test
 		preventReg.unregister();
 		// start a resolve process
-		frameworkWiring.resolveBundles(bundles);
+		assertFalse(frameworkWiring.resolveBundles(bundles));
 
 		// we expect hook2 to never get called because it is unregistered by hook1.begin before we call hook2.begin
 		// we expect hook3 to never get called because it is registered after the resolve process has already started
@@ -977,31 +1115,30 @@ public class ResolverHookTests extends OSGiTestCase {
 		assertEquals("Wrong hook.begin called first", hook1.getID(), callOrderBegin.removeFirst());
 		assertEquals("Wrong hook.begin called second", hook4.getID(), callOrderBegin.removeFirst());
 
-		// we expect to never call hook4.end because it got unregistered by hook1 in filterResolvable
-		assertEquals("Wrong number of end called", 1, callOrderEnd.size());
-		assertEquals("Wrong hook.end called first", hook1.getID(), callOrderEnd.removeFirst());
+		// we expect to never call end because hook4 got unregistered by hook1 in filterResolvable which results in an error
+		assertEquals("Wrong number of end called", 0, callOrderEnd.size());
 	}
 
 	static class TestResolverHook implements ResolverHookFactory {
 		private int beginCalls = 0;
 		int endCalls = 0;
 		AssertionFailedError error = null;
-		private final Set allTriggers = new HashSet();
+		private final Set<BundleRevision> allTriggers = new HashSet<BundleRevision>();
 		private final RuntimeException throwException;
-		private final List callOrderBegin;
-		private final List callOrderEnd;
+		private final List<Long> callOrderBegin;
+		private final List<Long> callOrderEnd;
 		private final Long id;
-		private final Collection unresolvable;
+		private final Collection<Bundle> unresolvable;
 		private final boolean factoryNull;
 		private final RuntimeException factoryThrow;
 
-		public TestResolverHook(Long id, RuntimeException throwException, List callOrderBegin, List callOrderEnd) {
+		public TestResolverHook(Long id, RuntimeException throwException, List<Long> callOrderBegin, List<Long> callOrderEnd) {
 			this(id, throwException, callOrderBegin, callOrderEnd, null);
 		}
-		public TestResolverHook(Long id, RuntimeException throwException, List callOrderBegin, List callOrderEnd, Collection unresolvable) {
+		public TestResolverHook(Long id, RuntimeException throwException, List<Long> callOrderBegin, List<Long> callOrderEnd, Collection<Bundle> unresolvable) {
 			this(id, throwException, callOrderBegin, callOrderEnd, unresolvable, false, null);
 		}
-		public TestResolverHook(Long id, RuntimeException throwException, List callOrderBegin, List callOrderEnd, Collection unresolvable, boolean factoryNull, RuntimeException factoryThrow) {
+		public TestResolverHook(Long id, RuntimeException throwException, List<Long> callOrderBegin, List<Long> callOrderEnd, Collection<Bundle> unresolvable, boolean factoryNull, RuntimeException factoryThrow) {
 			this.id = id;
 			this.throwException = throwException;
 			this.callOrderBegin = callOrderBegin;
@@ -1010,7 +1147,7 @@ public class ResolverHookTests extends OSGiTestCase {
 			this.factoryNull = factoryNull;
 			this.factoryThrow = factoryThrow;
 		}
-		public ResolverHook begin(Collection triggers) {
+		public ResolverHook begin(Collection<BundleRevision> triggers) {
 			beginCalls++;
 			allTriggers.addAll(triggers);
 			callOrderBegin.add(id);
@@ -1037,10 +1174,9 @@ public class ResolverHookTests extends OSGiTestCase {
 					if (error != null)
 						error = e;
 				}
-				throwException();
 			}
 	
-			public void filterMatches(BundleRevision arg0, Collection arg1) {
+			public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 				try {
 					assertEquals("Begin was not called.", 1, beginCalls - endCalls);
 				} catch (AssertionFailedError e) {
@@ -1050,14 +1186,14 @@ public class ResolverHookTests extends OSGiTestCase {
 				throwException();
 			}
 	
-			public void filterResolvable(Collection arg0) {
+			public void filterResolvable(Collection<BundleRevision> arg0) {
 				try {
 					assertEquals("Begin was not called.", 1, beginCalls - endCalls);
 					if (unresolvable != null)
-						for(Iterator resolvable = arg0.iterator(); resolvable.hasNext();) {
-							BundleRevision revision = (BundleRevision) resolvable.next();
+						for(Iterator<BundleRevision> resolvable = arg0.iterator(); resolvable.hasNext();) {
+							BundleRevision revision = resolvable.next();
 							if (unresolvable.contains(revision.getBundle())) {
-								arg0.remove(revision);
+								resolvable.remove();
 								try {
 									arg0.add(revision);
 									fail("Expected failure on add.");
@@ -1065,7 +1201,8 @@ public class ResolverHookTests extends OSGiTestCase {
 									//expected 
 								}
 								try {
-									arg0.addAll(Arrays.asList(new Object[]{revision}));
+									List<BundleRevision> testAdd = Arrays.asList(revision);
+									arg0.addAll(testAdd);
 									fail("Expected failure on addAll.");
 								} catch (UnsupportedOperationException e) {
 									// expected
@@ -1079,7 +1216,7 @@ public class ResolverHookTests extends OSGiTestCase {
 				throwException();
 			}
 	
-			public void filterSingletonCollisions(Capability arg0, Collection arg1) {
+			public void filterSingletonCollisions(BundleCapability arg0, Collection<BundleCapability> arg1) {
 				try {
 					assertEquals("Begin was not called.", 1, beginCalls - endCalls);
 				} catch (AssertionFailedError e) {
@@ -1117,46 +1254,46 @@ public class ResolverHookTests extends OSGiTestCase {
 		public Long getID() {
 			return id;
 		}
-		public Set getAllTriggers() {
+		public Set<BundleRevision> getAllTriggers() {
 			return allTriggers;
 		}
 	}
 
 	static class PreventResolution implements ResolverHookFactory, ResolverHook {
-		public ResolverHook begin(Collection triggers) {
+		public ResolverHook begin(Collection<BundleRevision> triggers) {
 			return this;
 		}
 		public void end() {
 		}
-		public void filterMatches(BundleRevision arg0, Collection arg1) {
+		public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 		}
-		public void filterResolvable(Collection arg0) {
+		public void filterResolvable(Collection<BundleRevision> arg0) {
 			arg0.clear();  // never allow a bundle to resolve
 		}
-		public void filterSingletonCollisions(Capability arg0,
-				Collection arg1) {
+		public void filterSingletonCollisions(BundleCapability arg0,
+				Collection<BundleCapability> arg1) {
 		}
 	}
 
 	static class TestFilterResolvable implements ResolverHookFactory, ResolverHook {
-		private final Collection/*<Bundle>*/ unresolvable;
-		public TestFilterResolvable(Collection unresolvable) {
+		private final Collection<Bundle> unresolvable;
+		public TestFilterResolvable(Collection<Bundle> unresolvable) {
 			this.unresolvable = unresolvable;
 		}
-		public ResolverHook begin(Collection triggers) {
+		public ResolverHook begin(Collection<BundleRevision> triggers) {
 			return this;
 		}
 		public void end() {
 		}
-		public void filterMatches(BundleRevision arg0, Collection arg1) {
+		public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 		}
-		public void filterResolvable(Collection arg0) {
-			for(Iterator revisions = arg0.iterator(); revisions.hasNext();) {
-				if (unresolvable.contains(((BundleRevision) revisions.next()).getBundle()))
+		public void filterResolvable(Collection<BundleRevision> arg0) {
+			for(Iterator<BundleRevision> revisions = arg0.iterator(); revisions.hasNext();) {
+				if (unresolvable.contains(revisions.next().getBundle()))
 					revisions.remove();				
 			}
 		}
-		public void filterSingletonCollisions(Capability arg0, Collection arg1) {
+		public void filterSingletonCollisions(BundleCapability arg0, Collection<BundleCapability> arg1) {
 		}
 	}
 
@@ -1167,16 +1304,16 @@ public class ResolverHookTests extends OSGiTestCase {
 		public TestFilterCapabilityHook(Filter filter) {
 			this.filter = filter;
 		}
-		public ResolverHook begin(Collection triggers) {
+		public ResolverHook begin(Collection<BundleRevision> triggers) {
 			return this;
 		}
 		public void end() {
 		}
 
-		public void filterMatches(BundleRevision arg0, Collection arg1) {
-			for (Iterator capabilities = arg1.iterator(); capabilities.hasNext();) {
-				Capability capability = (Capability) capabilities.next();
-				if (!filter.matchCase(new UnmodifiableDictionary(capability.getAttributes())))
+		public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
+			for (Iterator<BundleCapability> capabilities = arg1.iterator(); capabilities.hasNext();) {
+				BundleCapability capability = capabilities.next();
+				if (!filter.matches(capability.getAttributes()))
 					continue;
 				capabilities.remove();
 				try {
@@ -1187,7 +1324,8 @@ public class ResolverHookTests extends OSGiTestCase {
 						//expected 
 					}
 					try {
-						arg1.addAll(Arrays.asList(new Object[]{capability}));
+						List<BundleCapability> testAdd = Arrays.asList(capability);
+						arg1.addAll(testAdd);
 						fail("Expected failure on addAll.");
 					} catch (UnsupportedOperationException e) {
 						// expected
@@ -1199,10 +1337,10 @@ public class ResolverHookTests extends OSGiTestCase {
 			}
 		}
 
-		public void filterResolvable(Collection arg0) {
+		public void filterResolvable(Collection<BundleRevision> arg0) {
 		}
-		public void filterSingletonCollisions(Capability arg0,
-				Collection arg1) {
+		public void filterSingletonCollisions(BundleCapability arg0,
+				Collection<BundleCapability> arg1) {
 		}
 
 		public AssertionFailedError getError() {
@@ -1211,34 +1349,34 @@ public class ResolverHookTests extends OSGiTestCase {
 	}
 
 	static class TestFilterSingletonCollisions implements ResolverHookFactory, ResolverHook {
-		private final Map collisions;
+		private final Map<Bundle, List<Bundle>> collisions;
 		private AssertionFailedError error = null;
 
-		public TestFilterSingletonCollisions(Map collisions) {
+		public TestFilterSingletonCollisions(Map<Bundle, List<Bundle>> collisions) {
 			this.collisions = collisions;
 		}
 
-		public ResolverHook begin(Collection triggers) {
+		public ResolverHook begin(Collection<BundleRevision> triggers) {
 			return this;
 		}
 
 		public void end() {
 		}
 
-		public void filterMatches(BundleRevision arg0, Collection arg1) {
+		public void filterMatches(BundleRequirement arg0, Collection<BundleCapability> arg1) {
 		}
 
-		public void filterResolvable(Collection arg0) {
+		public void filterResolvable(Collection<BundleRevision> arg0) {
 		}
 
-		public void filterSingletonCollisions(Capability arg0, Collection arg1) {
-			Collection issolatedFromBundle = (Collection) collisions.get(arg0.getProviderRevision().getBundle());
+		public void filterSingletonCollisions(BundleCapability arg0, Collection<BundleCapability> arg1) {
+			List<Bundle> issolatedFromBundle = collisions.get(arg0.getRevision().getBundle());
 			if (issolatedFromBundle == null)
 				return;
 			try {
-				for (Iterator iCollisions = arg1.iterator(); iCollisions.hasNext();) {
-					Capability collision = (Capability) iCollisions.next();
-					if (issolatedFromBundle.contains(collision.getProviderRevision().getBundle())) {
+				for (Iterator<BundleCapability> iCollisions = arg1.iterator(); iCollisions.hasNext();) {
+					BundleCapability collision = iCollisions.next();
+					if (issolatedFromBundle.contains(collision.getRevision().getBundle())) {
 						iCollisions.remove();
 						try {
 							arg1.add(collision);
@@ -1247,7 +1385,8 @@ public class ResolverHookTests extends OSGiTestCase {
 							//expected 
 						}
 						try {
-							arg1.addAll(Arrays.asList(new Object[]{collision}));
+							Collection<BundleCapability> addTest = Arrays.asList(collision);
+							arg1.addAll(addTest);
 							fail("Expected failure on addAll.");
 						} catch (UnsupportedOperationException e) {
 							// expected
@@ -1261,34 +1400,6 @@ public class ResolverHookTests extends OSGiTestCase {
 		}
 		public AssertionFailedError getError() {
 			return error;
-		}
-	}
-
-	static class UnmodifiableDictionary extends Dictionary {
-		private final Map	wrapped;
-		UnmodifiableDictionary(Map wrapped) {
-			this.wrapped = wrapped;
-		}
-		public Enumeration elements() {
-			return Collections.enumeration(wrapped.values());
-		}
-		public Object get(Object key) {
-			return wrapped.get(key);
-		}
-		public boolean isEmpty() {
-			return wrapped.isEmpty();
-		}
-		public Enumeration keys() {
-			return Collections.enumeration(wrapped.keySet());
-		}
-		public Object put(Object key, Object value) {
-			throw new UnsupportedOperationException();
-		}
-		public Object remove(Object key) {
-			throw new UnsupportedOperationException();
-		}
-		public int size() {
-			return wrapped.size();
 		}
 	}
 }

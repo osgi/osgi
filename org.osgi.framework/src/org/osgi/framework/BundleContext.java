@@ -41,17 +41,18 @@ import java.util.Dictionary;
  * </ul>
  * 
  * <p>
- * A {@code BundleContext} object will be created and provided to the bundle
- * associated with this context when it is started using the
- * {@link BundleActivator#start} method. The same {@code BundleContext} object
- * will be passed to the bundle associated with this context when it is stopped
- * using the {@link BundleActivator#stop} method. A {@code BundleContext} object
- * is generally for the private use of its associated bundle and is not meant to
- * be shared with other bundles in the OSGi environment.
+ * A {@code BundleContext} object will be created for a bundle when the bundle
+ * is started. The {@code Bundle} object associated with a {@code BundleContext}
+ * object is called the <em>context bundle</em>.
  * 
  * <p>
- * The {@code Bundle} object associated with a {@code BundleContext} object is
- * called the <em>context bundle</em>.
+ * The {@code BundleContext} object will be passed to the
+ * {@link BundleActivator#start} method during activation of the context bundle.
+ * The same {@code BundleContext} object will be passed to the
+ * {@link BundleActivator#stop} method when the context bundle is stopped. A
+ * {@code BundleContext} object is generally for the private use of its
+ * associated bundle and is not meant to be shared with other bundles in the
+ * OSGi environment.
  * 
  * <p>
  * The {@code BundleContext} object is only valid during the execution of its
@@ -62,8 +63,10 @@ import java.util.Dictionary;
  * object must never be reused after its context bundle is stopped.
  * 
  * <p>
- * The Framework is the only entity that can create {@code BundleContext}
- * objects and they are only valid within the Framework that created them.
+ * Two {@code BundleContext} objects are equal if they both refer to the same
+ * execution context of a bundle. The Framework is the only entity that can
+ * create {@code BundleContext} objects and they are only valid within the
+ * Framework that created them.
  * 
  * <p>
  * A {@link Bundle} can be {@link Bundle#adapt(Class) adapted} to its
@@ -162,8 +165,11 @@ public interface BundleContext extends BundleReference {
 	 *        stream must always be closed when this method completes, even if
 	 *        an exception is thrown.
 	 * @return The {@code Bundle} object of the installed bundle.
-	 * @throws BundleException If the input stream cannot be read or the
-	 *         installation failed.
+	 * @throws BundleException If the installation failed. BundleException types
+	 *         thrown by this method include: {@link BundleException#READ_ERROR}
+	 *         , {@link BundleException#DUPLICATE_BUNDLE_ERROR},
+	 *         {@link BundleException#MANIFEST_ERROR}, and
+	 *         {@link BundleException#REJECTED_BY_HOOK}.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[installed bundle,LIFECYCLE]}, and the Java
 	 *         Runtime Environment supports permissions.
@@ -182,7 +188,11 @@ public interface BundleContext extends BundleReference {
 	 * 
 	 * @param location The location identifier of the bundle to install.
 	 * @return The {@code Bundle} object of the installed bundle.
-	 * @throws BundleException If the installation failed.
+	 * @throws BundleException If the installation failed. BundleException types
+	 *         thrown by this method include: {@link BundleException#READ_ERROR}
+	 *         , {@link BundleException#DUPLICATE_BUNDLE_ERROR},
+	 *         {@link BundleException#MANIFEST_ERROR}, and
+	 *         {@link BundleException#REJECTED_BY_HOOK}.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[installed bundle,LIFECYCLE]}, and the Java
 	 *         Runtime Environment supports permissions.
@@ -726,23 +736,23 @@ public interface BundleContext extends BundleReference {
 	 * The following steps are required to get the service object:
 	 * <ol>
 	 * <li>If the service has been unregistered, {@code null} is returned.
-	 * <li>The context bundle's use count for this service is incremented by
-	 * one.
-	 * <li>If the context bundle's use count for the service is currently one
+	 * <li>If the context bundle's use count for the service is currently zero
 	 * and the service was registered with an object implementing the
 	 * {@code ServiceFactory} interface, the
 	 * {@link ServiceFactory#getService(Bundle, ServiceRegistration)} method is
-	 * called to create a service object for the context bundle. This service
-	 * object is cached by the Framework. While the context bundle's use count
-	 * for the service is greater than zero, subsequent calls to get the
-	 * services's service object for the context bundle will return the cached
-	 * service object. <br>
-	 * If the service object returned by the {@code ServiceFactory} object is
-	 * not an {@code instanceof} all the classes named when the service was
-	 * registered or the {@code ServiceFactory} object throws an exception,
-	 * {@code null} is returned and a Framework event of type
-	 * {@link FrameworkEvent#ERROR} containing a {@link ServiceException}
-	 * describing the error is fired.
+	 * called to create a service object for the context bundle. If the service
+	 * object returned by the {@code ServiceFactory} object is {@code null}, not
+	 * an {@code instanceof} all the classes named when the service was
+	 * registered or the {@code ServiceFactory} object throws an exception or
+	 * will be recursively called for the context bundle, {@code null} is
+	 * returned and a Framework event of type {@link FrameworkEvent#ERROR}
+	 * containing a {@link ServiceException} describing the error is fired. <br>
+	 * This service object is cached by the Framework. While the context
+	 * bundle's use count for the service is greater than zero, subsequent calls
+	 * to get the services's service object for the context bundle will return
+	 * the cached service object.
+	 * <li>The context bundle's use count for this service is incremented by
+	 * one.
 	 * <li>The service object for the service is returned.
 	 * </ol>
 	 * 

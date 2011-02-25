@@ -1,5 +1,5 @@
 /*
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -62,7 +62,7 @@ public class TestDmtDataExceptions extends DmtTestControl {
     public void testDmtDataExceptions001() {
         try {       
             log("#testDmtDataExceptions001");
-            new DmtData(null,DmtData.FORMAT_DATE);
+            new DmtData((String)null,DmtData.FORMAT_DATE);
             failException("", NullPointerException.class);
         } catch (NullPointerException e) {
             pass("Asserts that NullPointerException is thrown if a date is constructed and value is null");
@@ -79,7 +79,7 @@ public class TestDmtDataExceptions extends DmtTestControl {
     public void testDmtDataExceptions002() {
         try {       
             log("#testDmtDataExceptions002");
-            new DmtData(null,DmtData.FORMAT_TIME);
+            new DmtData((String)null,DmtData.FORMAT_TIME);
             failException("", NullPointerException.class);
         } catch (NullPointerException e) {
             pass("Asserts that NullPointerException is thrown if a date is constructed and value is null");

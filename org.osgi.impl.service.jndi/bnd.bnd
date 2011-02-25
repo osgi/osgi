@@ -1,3 +1,6 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Bundle-Version				= 4.2.0.${project.build}
 Bundle-Activator			= org.osgi.impl.service.jndi.Activator
 Bundle-Description			= OSGi JNDI Reference Implementation by Oracle Corporation.

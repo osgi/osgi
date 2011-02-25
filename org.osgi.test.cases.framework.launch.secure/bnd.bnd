@@ -1,7 +1,10 @@
-Bundle-Version						: 4.2.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Bundle-Description					: Framework test cases.
 
-Private-Package						= org.osgi.test.support.*, \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.junit
 	
 Include-Resource = \
@@ -19,8 +22,8 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
 	
+-runframework = none
 
 -runproperties = ${runproperties}, \
 	${p}.trust.repositories=${build}/keystore, \
-	noframework=true, \
 	${p}.storageroot=${target-dir}/${p}.testStorageRoot 

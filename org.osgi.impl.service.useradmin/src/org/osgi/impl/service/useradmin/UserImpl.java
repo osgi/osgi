@@ -1,21 +1,19 @@
-package org.osgi.impl.service.useradmin;
-
 /*
- * $Id$
- *
  * OSGi UserAdmin Reference Implementation.
- *
- * OSGi Confidential.
  *
  * (c) Copyright Gatespace AB 2000-2001.
  *
  * This source code is owned by Gatespace AB (www.gatespace.com), and is 
  * being distributed to OSGi MEMBERS as MEMBER LICENSED MATERIALS under
  * the terms of section 3.2 of the OSGi MEMBER AGREEMENT.
- *
  */
-import java.util.*;
-import org.osgi.service.useradmin.*;
+package org.osgi.impl.service.useradmin;
+
+import java.util.Arrays;
+import java.util.Dictionary;
+
+import org.osgi.service.useradmin.Role;
+import org.osgi.service.useradmin.User;
 
 /**
  * {@link org.osgi.service.useradmin.User}implementation.

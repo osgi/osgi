@@ -1,13 +1,15 @@
-Bundle-Version: 4.2.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Export-Package						= ${p}.*
 Bundle-RequiredExecutionEnvironment = J2SE-1.4
 Bundle-Vendor: IBM
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
-Bundle-Copyright: ${copyright}
 
-Private-Package						= org.osgi.test.support.*
+
+Conditional-Package					= org.osgi.test.support.*
 
 Include-Resource					= \
 	www/blueprint_version_two.jar=blueprint_version_two.jar, \
@@ -396,7 +398,7 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm;  version=latest, \
 	org.osgi.impl.service.event; version=latest, \

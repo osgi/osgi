@@ -1,0 +1,67 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit
+
+-buildpath							= \
+	org.osgi.test.support; 	version=project, \
+    org.osgi.service.coordinator;           version=project , \
+    osgi.core;                              version=4.2     , \
+    osgi.cmpn;                              version=4.2     , \
+	ee.minimum;								version=1.2.1		, \
+	${junit}
+
+Test-Cases							= ${testcases}
+
+-runbundles						= \
+	osgi.cmpn; version=latest, \
+    org.osgi.impl.service.coordinator; version=latest, \
+    org.osgi.impl.service.log; version=latest, \
+	org.osgi.impl.service.cm; version=latest, \
+	org.osgi.impl.service.component; version=latest
+
+-runproperties = ${runsecureproperties}
+
+Include-Resource = \
+	{OSGI-INF/permissions.perm = perms/god.perm},\
+	tb1.jar,\
+	tb2.jar,\
+	tb3.jar,\
+	tb4.jar,\
+	tb5.jar,\
+	tb6.jar,\
+	tb7.jar,\
+	tb8.jar,\
+	tb9.jar,\
+	tb10.jar,\
+	tb11.jar,\
+	tb12.jar,\
+	tb13.jar,\
+	tb14.jar,\
+	tb15.jar,\
+	tb16.jar,\
+	tb17.jar,\
+	tb18.jar,\
+	tb19.jar,\
+	tb20.jar,\
+	tb21.jar,\
+	tb22.jar,\
+	tb23.jar,\
+	tb24.jar,\
+	tb25.jar,\
+	tb26.jar,\
+	tb27.jar,\
+	tb28.jar,\
+	tb29.jar,\
+	tb30.jar,\
+	tb31.jar,\
+	tb32.jar,\
+	tb33.jar,\
+	tb34.jar,\
+	tb35.jar,\
+	tb36.jar
+
+Export-Package = org.osgi.test.cases.coordinator.secure
+

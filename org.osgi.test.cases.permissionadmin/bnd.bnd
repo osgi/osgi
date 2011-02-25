@@ -1,13 +1,12 @@
-Bundle-SymbolicName: ${p}
-Bundle-Version: 4.2.0.${project.build}
-Bundle-Vendor: OSGi Alliance
-Bundle-DocURL: http://www.osgi.org/
-Bundle-ContactAddress: info@mail.osgi.org
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Bundle-Category: osgi,test
 Export-Package: ${p}.junit
 
-Private-Package						= ${p}.junit, \
-    org.osgi.test.support.*
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit
 
 
 -buildpath							= \

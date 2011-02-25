@@ -1,7 +1,10 @@
-Bundle-Version						: 4.2.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Bundle-Description					: Secure Framework test cases.
 
-Private-Package						= org.osgi.test.support.*, \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.junit.*
 	
 Export-Package						= \
@@ -43,8 +46,24 @@ Include-Resource = \
 	permissions.registerModify.jar, \
 	permissions.registerPlural.jar, \
 	permissions.setPermission.jar, \
+	resolver.tb1.jar, \
+	resolver.tb2.jar, \
+	resolver.tb5.jar, \
 	syncbundlelistener.tb1a.jar, \
-	syncbundlelistener.tb1b.jar
+	syncbundlelistener.tb1b.jar, \
+	weaving.tb1.jar,\
+	wiring.tb1.jar,\
+	wiring.tb2.jar,\
+	wiring.tb3.jar,\
+	wiring.tb4.jar,\
+	wiring.tb5.jar,\
+	wiring.tb6.jar,\
+	wiring.tb7.jar,\
+	wiring.tb8.jar,\
+	wiring.tb9.jar,\
+	wiring.tb10.jar,\
+	wiring.tb11.jar,\
+	wiring.tb12.jar
 	
 Test-Cases							= ${testcases}
 

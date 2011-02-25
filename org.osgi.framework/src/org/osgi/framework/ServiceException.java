@@ -68,6 +68,13 @@ public class ServiceException extends RuntimeException {
 	 * An error occurred invoking a remote service.
 	 */
 	public static final int REMOTE 				= 5;
+	/**
+	 * The service factory resulted in a recursive call to itself for the
+	 * requesting bundle.
+	 * 
+	 * @since 1.6
+	 */
+	public static final int	FACTORY_RECURSION	= 6;
 
 	/**
 	 * Creates a {@code ServiceException} with the specified message and

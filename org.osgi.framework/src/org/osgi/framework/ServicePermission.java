@@ -599,7 +599,7 @@ public final class ServicePermission extends BasicPermission {
 		return properties = new Properties(props, service);
 	}
 	
-	private static class Properties extends AbstractMap<String, Object> {
+	static private final class Properties extends AbstractMap<String, Object> {
 		private final Map<String, Object>	properties;
 		private final ServiceReference< ? >	service;
 		private transient volatile Set<Map.Entry<String, Object>>	entries;
@@ -642,7 +642,7 @@ public final class ServicePermission extends BasicPermission {
 			return entries = Collections.unmodifiableSet(all);
 		}
 		
-		private static class Entry implements Map.Entry<String, Object> {
+		static private final class Entry implements Map.Entry<String, Object> {
 			private final String	k;
 			private final Object	v;
 

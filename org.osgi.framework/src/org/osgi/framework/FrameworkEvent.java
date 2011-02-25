@@ -18,6 +18,9 @@ package org.osgi.framework;
 
 import java.util.EventObject;
 
+import org.osgi.framework.startlevel.FrameworkStartLevel;
+import org.osgi.framework.wiring.FrameworkWiring;
+
 /**
  * A general event from the Framework.
  * 
@@ -61,7 +64,7 @@ public class FrameworkEvent extends EventObject {
 	 * has reached the initial start level. The source of this event is the
 	 * System Bundle.
 	 * 
-	 * @see "The Start Level Service"
+	 * @see "The Start Level Specification"
 	 */
 	public final static int	STARTED							= 0x00000001;
 
@@ -74,20 +77,21 @@ public class FrameworkEvent extends EventObject {
 	public final static int	ERROR							= 0x00000002;
 
 	/**
-	 * A PackageAdmin.refreshPackage operation has completed.
+	 * A FrameworkWiring.refreshBundles operation has completed.
 	 * 
 	 * <p>
-	 * This event is fired when the Framework has completed the refresh packages
-	 * operation initiated by a call to the PackageAdmin.refreshPackages method.
-	 * The source of this event is the System Bundle.
+	 * This event is fired when the Framework has completed the refresh bundles
+	 * operation initiated by a call to the FrameworkWiring.refreshBundles
+	 * method. The source of this event is the System Bundle.
 	 * 
 	 * @since 1.2
-	 * @see "{@code PackageAdmin.refreshPackages}"
+	 * @see FrameworkWiring#refreshBundles(java.util.Collection,
+	 *      FrameworkListener...)
 	 */
 	public final static int	PACKAGES_REFRESHED				= 0x00000004;
 
 	/**
-	 * A StartLevel.setStartLevel operation has completed.
+	 * A FrameworkStartLevel.setStartLevel operation has completed.
 	 * 
 	 * <p>
 	 * This event is fired when the Framework has completed changing the active
@@ -95,7 +99,7 @@ public class FrameworkEvent extends EventObject {
 	 * The source of this event is the System Bundle.
 	 * 
 	 * @since 1.2
-	 * @see "The Start Level Service"
+	 * @see FrameworkStartLevel#setStartLevel(int, FrameworkListener...)
 	 */
 	public final static int	STARTLEVEL_CHANGED				= 0x00000008;
 

@@ -1,7 +1,5 @@
 /*
- * $Id$
- * 
- * Copyright (c) OSGi Alliance (2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2007, 2010). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -31,7 +29,7 @@ import java.util.Comparator;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleListener;
 
-public class BundleEventCollector extends EventCollector implements
+public class BundleEventCollector extends EventCollector<BundleEvent> implements
 		BundleListener {
 	private final int	mask;
 
@@ -44,11 +42,9 @@ public class BundleEventCollector extends EventCollector implements
 			addEvent(event);
 	}
 
-	public Comparator getComparator() {
-		return new Comparator() {
-			public int compare(Object o1, Object o2) {
-				BundleEvent event1 = (BundleEvent) o1;
-				BundleEvent event2 = (BundleEvent) o2;
+	public Comparator<BundleEvent> getComparator() {
+		return new Comparator<BundleEvent>() {
+			public int compare(BundleEvent event1, BundleEvent event2) {
 
 				long result = event1.getBundle().getBundleId()
 						- event2.getBundle().getBundleId();

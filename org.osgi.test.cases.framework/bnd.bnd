@@ -1,7 +1,10 @@
-Bundle-Version						: 4.2.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
+
 Bundle-Description					: Framework test cases.
 
-Private-Package						= org.osgi.test.support.*, \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.junit.*
 	
 Export-Package						= \
@@ -9,8 +12,6 @@ Export-Package						= \
 	${p}.dynpkgimport.exported, \
 	${p}.lifecycle.servicereferencegetter
 	
-Import-Package	= org.osgi.framework.hooks.bundle; resolution:=optional, org.osgi.framework.hooks.resolver; resolution:=optional, org.osgi.framework.startlevel;resolution:=optional, *
-
 Bundle-ClassPath: .,div.tb6.jar
 
 Include-Resource = \
@@ -150,6 +151,8 @@ Include-Resource = \
 	div.tb24a.jar, \
 	div.tb24b.jar, \
 	div.tb24c.jar, \
+	div.tb25.resolved.jar, \
+	div.tb25.unresolved.jar, \
 	dynpkgimport.tb0.jar, \
 	dynpkgimport.tb1.jar, \
 	dynpkgimport.tb2.jar, \
@@ -232,12 +235,28 @@ Include-Resource = \
 	resolver.tb10.v140.jar, \
 	resolver.tb11.jar, \
 	resolver.tb12.jar, \
+	resolver.tb13.client1.jar, \
+	resolver.tb13.client2.jar, \
+	resolver.tb13.client3.jar, \
+	resolver.tb13.client4.jar, \
+	resolver.tb13.frag1.jar, \
+	resolver.tb13.frag2.jar, \
+	resolver.tb13.frag3.jar, \
+	resolver.tb13.frag4.jar, \
+	resolver.tb13a.jar, \
+	resolver.tb13b.jar, \
+	resolver.tb14.jar, \
 	startlevel.tb1.jar, \
 	startlevel.tb2.jar, \
 	startlevel.tb3.jar, \
 	startlevel.tb4.jar, \
 	startlevel.tb5.jar, \
 	syncbundlelistener.tb3.jar, \
+	weaving.testClasses.jar, \
+	weaving.testAlternativeImport.jar, \
+	weaving.testImport_1.0.0.jar, \
+	weaving.testImport_1.1.0.jar, \
+	weaving.testImport_1.6.0.jar, \
 	wiring.base.jar, \
 	wiring.exporter.jar, \
 	wiring.exporter.frag.jar, \
@@ -246,20 +265,27 @@ Include-Resource = \
 	wiring.importer.frag.jar, \
 	wiring.requirer.jar, \
 	wiring.requirer.frag.jar, \
-	wiring.reexport.jar
+	wiring.reexport.jar,\
+	wiring.tb1.jar,\
+	wiring.tb2.jar,\
+	wiring.tb3.jar,\
+	wiring.tb4.jar,\
+	wiring.tb5.jar
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
 	org.osgi.framework;						version=project	, \
 	osgi.core;								version=4.2	, \
 	osgi.cmpn;								version=4.0	, \
-	ee.minimum; 							version=1.2, \
+	ee.minimum; 							version=1.2.1, \
+	org.apache.servicemix.bundles.bcel;     version=5.2 , \
 	${junit}
 
 Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.framework, org.osgi.framework.hooks.service
+-signaturetest                      = org.osgi.framework, org.osgi.framework.hooks.service, org.osgi.framework.hooks.weaving
 
--runbundles							= \
+-runbundles						= \
+	org.apache.servicemix.bundles.bcel;         version=5.2 
 
 -runproperties = ${runproperties}, \
 	org.osgi.framework.executionenvironment = "div/tb7a,OSGi/Minimum-1.0,OSGi/Minimum-1.1,OSGi/Minimum-1.2,JRE-1.1,J2SE-1.2,J2SE-1.3,J2SE-1.4,J2SE-1.5", \

@@ -20,7 +20,7 @@ package org.osgi.service.metatype;
  * Service or Managed Service Factory as well as registered as a service. When
  * registered as a service, it must be registered with a
  * {@link #METATYPE_FACTORY_PID} or {@link #METATYPE_PID} service property (or
- * both). Any PID mentioned in eithe of these factories must be a valid argument
+ * both). Any PID mentioned in either of these factories must be a valid argument
  * to the {@link #getObjectClassDefinition(String, String)} method.
  * 
  * @version $Id$
@@ -31,6 +31,8 @@ public interface MetaTypeProvider {
 	 * Service property to signal that this service has
 	 * {@link ObjectClassDefinition} objects for the given PIDs. The type of
 	 * this service property is {@code String+}.
+	 * 
+	 * @since 1.2
 	 */
 	String	METATYPE_PID			= "metatype.pid";
 
@@ -38,6 +40,8 @@ public interface MetaTypeProvider {
 	 * Service property to signal that this service has
 	 * {@link ObjectClassDefinition} objects for the given factory PIDs. The
 	 * type of this service property is {@code String+}.
+	 * 
+	 * @since 1.2
 	 */
 	String	METATYPE_FACTORY_PID	= "metatype.factory.pid";
 

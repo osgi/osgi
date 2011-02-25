@@ -1,10 +1,12 @@
-Bundle-Version: 4.2.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Export-Package						= \
 	${p}.provider, \
 	${p}.provider.ct
 
-Private-Package 					= org.osgi.test.support.* , \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.*
 	
 Import-Package 						= \
@@ -12,7 +14,7 @@ Import-Package 						= \
 
 
 Include-Resource 					= \
-	OSGI-INF/permissions.perm = perms/permissions.jndi.perm , \
+	{OSGI-INF/permissions.perm = perms/permissions.jndi.perm} , \
 	builderBundle.jar , \
 	factoryBundle.jar , \
 	inaccessibleBundleContext.jar
@@ -26,7 +28,7 @@ Test-Cases							= ${testcases}
 	${junit}
 	
 -runbundles = \
-	osgi.enterprise; version=${enterprise.published.version};strategy=lowest		, \
+	osgi.enterprise; version=latest		, \
 	org.osgi.impl.service.jndi; version=project
 
 -runproperties = ${runsecureproperties}, \

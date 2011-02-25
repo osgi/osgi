@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +50,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		invalidAdminPermission("*", "   resourceme   ");
 		invalidAdminPermission("*", "   startlevelme     ");
 		invalidAdminPermission("*", "   contex");
+		invalidAdminPermission("*", "   weav");
 
 		invalidAdminPermission("()", "*");
 		invalidAdminPermission((Bundle) null, "*");
@@ -243,17 +244,18 @@ public class AdminPermissionTests extends PermissionTestCase {
 	}
 	
 	public void testActionImplications() {
-		AdminPermission classx = new AdminPermission("*", "class");
-		AdminPermission execute = new AdminPermission("*", "execute");
+		AdminPermission classx = new AdminPermission("*", "CLASS");
+		AdminPermission execute = new AdminPermission("*", "EXECUTE");
 		AdminPermission extensionLifecycle = new AdminPermission("*",
-				"extensionLifecycle");
-		AdminPermission lifecycle = new AdminPermission("*", "lifecycle");
-		AdminPermission listener = new AdminPermission("*", "listener");
-		AdminPermission metadata = new AdminPermission("*", "metadata");
-		AdminPermission resolve = new AdminPermission("*", "resolve");
-		AdminPermission resource = new AdminPermission("*", "resource");
-		AdminPermission startlevel = new AdminPermission("*", "startlevel");
-		AdminPermission context = new AdminPermission("*", "context");
+				"EXTENSIONLIFECYCLE");
+		AdminPermission lifecycle = new AdminPermission("*", "LIFECYCLE");
+		AdminPermission listener = new AdminPermission("*", "LISTENER");
+		AdminPermission metadata = new AdminPermission("*", "METADATA");
+		AdminPermission resolve = new AdminPermission("*", "RESOLVE");
+		AdminPermission resource = new AdminPermission("*", "RESOURCE");
+		AdminPermission startlevel = new AdminPermission("*", "STARTLEVEL");
+		AdminPermission context = new AdminPermission("*", "CONTEXT");
+		AdminPermission weave = new AdminPermission("*", "WEAVE");
 
 		assertEquals("class,resolve", classx.getActions());
 		assertEquals("execute,resolve", execute.getActions());
@@ -265,6 +267,25 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertEquals("resolve,resource", resource.getActions());
 		assertEquals("startlevel", startlevel.getActions());
 		assertEquals("context", context.getActions());
+		assertEquals("weave", weave.getActions());
+
+		classx = new AdminPermission(classx.getName(), classx.getActions());
+		execute = new AdminPermission(execute.getName(), execute.getActions());
+		extensionLifecycle = new AdminPermission(extensionLifecycle.getName(),
+				extensionLifecycle.getActions());
+		lifecycle = new AdminPermission(lifecycle.getName(),
+				lifecycle.getActions());
+		listener = new AdminPermission(listener.getName(),
+				listener.getActions());
+		metadata = new AdminPermission(metadata.getName(),
+				metadata.getActions());
+		resolve = new AdminPermission(resolve.getName(), resolve.getActions());
+		resource = new AdminPermission(resource.getName(),
+				resource.getActions());
+		startlevel = new AdminPermission(startlevel.getName(),
+				startlevel.getActions());
+		context = new AdminPermission(context.getName(), context.getActions());
+		weave = new AdminPermission(weave.getName(), weave.getActions());
 
 		assertImplies(classx, classx);
 		assertNotImplies(classx, execute);
@@ -276,6 +297,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertNotImplies(classx, resource);
 		assertNotImplies(classx, startlevel);
 		assertNotImplies(classx, context);
+		assertNotImplies(classx, weave);
 
 		assertNotImplies(execute, classx);
 		assertImplies(execute, execute);
@@ -287,6 +309,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertNotImplies(execute, resource);
 		assertNotImplies(execute, startlevel);
 		assertNotImplies(execute, context);
+		assertNotImplies(execute, weave);
 		
 		assertNotImplies(extensionLifecycle, classx);
 		assertNotImplies(extensionLifecycle, execute);
@@ -298,6 +321,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertNotImplies(extensionLifecycle, resource);
 		assertNotImplies(extensionLifecycle, startlevel);
 		assertNotImplies(extensionLifecycle, context);
+		assertNotImplies(extensionLifecycle, weave);
 		
 		assertNotImplies(lifecycle, classx);
 		assertNotImplies(lifecycle, execute);
@@ -309,6 +333,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertNotImplies(lifecycle, resource);
 		assertNotImplies(lifecycle, startlevel);
 		assertNotImplies(lifecycle, context);
+		assertNotImplies(lifecycle, weave);
 		
 		assertNotImplies(listener, classx);
 		assertNotImplies(listener, execute);
@@ -320,6 +345,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertNotImplies(listener, resource);
 		assertNotImplies(listener, startlevel);
 		assertNotImplies(listener, context);
+		assertNotImplies(listener, weave);
 		
 		assertNotImplies(metadata, classx);
 		assertNotImplies(metadata, execute);
@@ -331,6 +357,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertNotImplies(metadata, resource);
 		assertNotImplies(metadata, startlevel);
 		assertNotImplies(metadata, context);
+		assertNotImplies(metadata, weave);
 		
 		assertNotImplies(resolve, classx);
 		assertNotImplies(resolve, execute);
@@ -342,6 +369,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertNotImplies(resolve, resource);
 		assertNotImplies(resolve, startlevel);
 		assertNotImplies(resolve, context);
+		assertNotImplies(resolve, weave);
 		
 		assertNotImplies(resource, classx);
 		assertNotImplies(resource, execute);
@@ -353,6 +381,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertImplies(resource, resource);
 		assertNotImplies(resource, startlevel);
 		assertNotImplies(resource, context);
+		assertNotImplies(resource, weave);
 		
 		assertNotImplies(startlevel, classx);
 		assertNotImplies(startlevel, execute);
@@ -364,6 +393,7 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertNotImplies(startlevel, resource);
 		assertImplies(startlevel, startlevel);
 		assertNotImplies(startlevel, context);
+		assertNotImplies(startlevel, weave);
 		
 		assertNotImplies(context, classx);
 		assertNotImplies(context, execute);
@@ -375,6 +405,19 @@ public class AdminPermissionTests extends PermissionTestCase {
 		assertNotImplies(context, resource);
 		assertNotImplies(context, startlevel);
 		assertImplies(context, context);
+		assertNotImplies(context, weave);
+
+		assertNotImplies(weave, classx);
+		assertNotImplies(weave, execute);
+		assertNotImplies(weave, extensionLifecycle);
+		assertNotImplies(weave, lifecycle);
+		assertNotImplies(weave, listener);
+		assertNotImplies(weave, metadata);
+		assertNotImplies(weave, resolve);
+		assertNotImplies(weave, resource);
+		assertNotImplies(weave, startlevel);
+		assertNotImplies(weave, context);
+		assertImplies(weave, weave);
 		
 		PermissionCollection pc = context.newPermissionCollection();
 		AdminPermission ap = new AdminPermission("(id=2)", "metadata");

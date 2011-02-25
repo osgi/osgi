@@ -1,5 +1,5 @@
-javac.source 			= 1.6
-javac.target 			= 1.6
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
 
 -nouses = true
 Bundle-Description					: Contains the Java SE 1.6 execution environment stubbed classes and sources

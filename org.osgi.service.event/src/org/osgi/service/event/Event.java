@@ -240,7 +240,7 @@ public class Event {
 	/**
 	 * Dictionary to use for Filter matching.
 	 */
-	private static class FilterProperties extends
+	static private final class FilterProperties extends
 			Dictionary<String, Object> {
 		private final String			topic;
 		private final EventProperties	properties;

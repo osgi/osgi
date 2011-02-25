@@ -11,11 +11,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
@@ -25,6 +28,7 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.test.cases.framework.div.tb6.BundleClass;
+import org.osgi.test.cases.framework.resolver.tb1.Test;
 import org.osgi.test.support.FrameworkEventCollector;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -139,6 +143,7 @@ public class DivTests extends DefaultTestBundleControl {
 		try {
 			String originalLocation = tb.getLocation();
 			long originalLastModified = tb.getLastModified();
+			Thread.sleep(100);
 			tb.update();
 			assertEquals("bundle location changed after update.",
 					originalLocation, tb.getLocation());
@@ -599,6 +604,94 @@ public class DivTests extends DefaultTestBundleControl {
 		}
 	}
 
+	public void testBundleGetResourcesResolved() {
+		doTestBundleGetResources(true);
+	}
+
+	public void testBundleGetResourcesUnresolved() {
+		doTestBundleGetResources(false);
+	}
+	
+	private void doTestBundleGetResources(boolean resolved) {
+		Bundle tb25 = null;
+		try {
+			tb25 = install(resolved ? "div.tb25.resolved.jar" : "div.tb25.unresolved.jar");
+		} catch (Exception e) {
+			fail("Unexpected error installing test bundle.", e);
+		}
+		try {
+			// sanity check for the root resources
+			URL rootEntry = tb25.getEntry("resources/root.txt");
+			assertNotNull("root.txt not found", rootEntry);
+			assertEquals("Wrong resource", "root.txt", getValue(rootEntry));
+			rootEntry = tb25.getEntry("resources/all.txt");
+			assertEquals("Wrong resource", "root.all.txt", getValue(rootEntry));
+			assertNotNull("root.all.txt not found", rootEntry);
+			// Bundle-ClassPath of div.tb25 does not specify '.'
+			// the root resources must not be found.
+			URL resource = tb25.getResource("resources/root.txt");
+			assertNull("Found unexpected resource.", resource);
+		
+			// 'a' resources must be found first for duplicate resources
+			resource = tb25.getResource("resources/all.txt");
+			assertNotNull("Did not find resource.", resource);
+			assertEquals("Wrong resource", "a.all.txt", getValue(resource));
+	
+			// test non shadowed resources
+			resource = tb25.getResource("resources/a.txt");
+			assertNotNull("Did not find resource.", resource);
+			resource = tb25.getResource("resources/b.txt");
+			assertNotNull("Did not find resource.", resource);
+	
+			// test get resources for shadowed resource
+			// again the root resource must not be found
+			Enumeration<URL> resources = null;
+			try {
+				resources = tb25.getResources("resources/all.txt");
+			} catch (IOException e) {
+				fail("Unexpected io exception.", e);
+			}
+			assertNotNull("Did not find resources.", resources);
+			// there are only two resources from 'a' and 'b' in that order.
+			try {
+				resource = resources.nextElement();
+				assertNotNull("Did not find resource.", resource);
+				assertEquals("Wrong resource", "a.all.txt", getValue(resource));
+				resource = resources.nextElement();
+				assertNotNull("Did not find resource.", resource);
+				assertEquals("Wrong resource", "b.all.txt", getValue(resource));
+				assertFalse("Expecting no more resources.", resources.hasMoreElements());
+			} catch (NoSuchElementException e) {
+				fail("Wrong number of elements.", e);
+			}
+			// after all the getResource calls the bundle must be RESOLVED or INSTALLED depending on resolved param
+			assertEquals("Wrong state for bundle.", resolved ? Bundle.RESOLVED : Bundle.INSTALLED, tb25.getState());
+		} finally {
+			try {
+				tb25.uninstall();
+			} catch (BundleException e) {
+				// ignore
+			}
+		}
+	}
+
+	private String getValue(URL url) {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(url.openStream()));
+			return reader.readLine();
+		} catch (IOException e) {
+			return null;
+		} finally {
+			if (reader != null)
+				try {
+					reader.close();
+				} catch (IOException e) {
+					// ignore
+				}
+		}
+	}
+
 	public void testBundleGetResources() throws Exception {
 		Bundle bundle = getContext().installBundle(
 				getWebServer() + "div.tb10.jar");
@@ -774,7 +867,7 @@ public class DivTests extends DefaultTestBundleControl {
 
 			Object service = getContext().getService(sr);
 			ClassLoader classLoader = (ClassLoader) service.getClass()
-					.getMethod("getClassLoader", null).invoke(service, null);
+					.getMethod("getClassLoader", (Class[]) null).invoke(service, (Object[]) null);
 			assertEquals(
 					"Expecting the ClassLoader of the class and the bundle to be the same",
 					clazz.getClassLoader(), classLoader);

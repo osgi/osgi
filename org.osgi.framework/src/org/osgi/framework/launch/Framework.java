@@ -51,8 +51,9 @@ public interface Framework extends Bundle {
 	 * <li>Have event handling enabled.</li>
 	 * <li>Have reified Bundle objects for all installed bundles.</li>
 	 * <li>Have registered any framework services. For example,
-	 * {@code PackageAdmin}, {@code ConditionalPermissionAdmin},
-	 * {@code StartLevel}.</li>
+	 * {@code ConditionalPermissionAdmin}.</li>
+	 * <li>Be {@link #adapt(Class) adaptable} to the OSGi defined types to which
+	 * a system bundle can be adapted.</li>
 	 * </ul>
 	 * 
 	 * <p>
@@ -66,8 +67,8 @@ public interface Framework extends Bundle {
 	 * @throws BundleException If this Framework could not be initialized.
 	 * @throws SecurityException If the Java Runtime Environment supports
 	 *         permissions and the caller does not have the appropriate
-	 *         {@code AdminPermission[this,EXECUTE]} or if there is a
-	 *         security manager already installed and the
+	 *         {@code AdminPermission[this,EXECUTE]} or if there is a security
+	 *         manager already installed and the
 	 *         {@link Constants#FRAMEWORK_SECURITY} configuration property is
 	 *         set.
 	 * 
@@ -103,7 +104,7 @@ public interface Framework extends Bundle {
 	 *         STOPPED_BOOTCLASSPATH_MODIFIED} - This Framework has been stopped
 	 *         and a bootclasspath extension bundle has been installed or
 	 *         updated. The VM must be restarted in order for the changed boot
-	 *         class path to take affect. </li>
+	 *         class path to take effect. </li>
 	 * 
 	 *         <li>{@link FrameworkEvent#ERROR ERROR} - The Framework
 	 *         encountered an error while shutting down or an error has occurred
@@ -132,12 +133,10 @@ public interface Framework extends Bundle {
 	 * <li>All installed bundles must be started in accordance with each
 	 * bundle's persistent <i>autostart setting</i>. This means some bundles
 	 * will not be started, some will be started with <i>eager activation</i>
-	 * and some will be started with their <i>declared activation</i> policy. If
-	 * this Framework implements the optional <i>Start Level Service
-	 * Specification</i>, then the start level of this Framework is moved to the
-	 * start level specified by the
-	 * {@link Constants#FRAMEWORK_BEGINNING_STARTLEVEL beginning start level}
-	 * framework property, as described in the <i>Start Level Service
+	 * and some will be started with their <i>declared activation</i> policy.
+	 * The start level of this Framework is moved to the start level specified
+	 * by the {@link Constants#FRAMEWORK_BEGINNING_STARTLEVEL beginning start
+	 * level} framework property, as described in the <i>Start Level
 	 * Specification</i>. If this framework property is not specified, then the
 	 * start level of this Framework is moved to start level one (1). Any
 	 * exceptions that occur during bundle starting must be wrapped in a
@@ -151,7 +150,7 @@ public interface Framework extends Bundle {
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
-	 * @see "Start Level Service Specification"
+	 * @see "Start Level Specification"
 	 */
 	void start() throws BundleException;
 
@@ -180,12 +179,11 @@ public interface Framework extends Bundle {
 	 * <ol>
 	 * <li>This Framework's state is set to {@link #STOPPING}.</li>
 	 * <li>All installed bundles must be stopped without changing each bundle's
-	 * persistent <i>autostart setting</i>. If this Framework implements the
-	 * optional <i>Start Level Service Specification</i>, then the start level
-	 * of this Framework is moved to start level zero (0), as described in the
-	 * <i>Start Level Service Specification</i>. Any exceptions that occur
-	 * during bundle stopping must be wrapped in a {@link BundleException} and
-	 * then published as a framework event of type {@link FrameworkEvent#ERROR}</li>
+	 * persistent <i>autostart setting</i>. The start level of this Framework is
+	 * moved to start level zero (0), as described in the <i>Start Level
+	 * Specification</i>. Any exceptions that occur during bundle stopping must
+	 * be wrapped in a {@link BundleException} and then published as a framework
+	 * event of type {@link FrameworkEvent#ERROR}</li>
 	 * <li>Unregister all services registered by this Framework.</li>
 	 * <li>Event handling is disabled.</li>
 	 * <li>This Framework's state is set to {@link #RESOLVED}.</li>
@@ -203,7 +201,7 @@ public interface Framework extends Bundle {
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code AdminPermission[this,EXECUTE]}, and the Java Runtime
 	 *         Environment supports permissions.
-	 * @see "Start Level Service Specification"
+	 * @see "Start Level Specification"
 	 */
 	void stop() throws BundleException;
 
@@ -332,15 +330,34 @@ public interface Framework extends Bundle {
 	URL getEntry(String path);
 
 	/**
-	 * Returns {@code null} as a framework implementation does not have a
-	 * proper bundle from which to return entries.
+	 * Returns {@code null} as a framework implementation does not have a proper
+	 * bundle from which to return entries.
 	 * 
 	 * @param path Ignored.
 	 * @param filePattern Ignored.
 	 * @param recurse Ignored.
-	 * @return {@code null} as a framework implementation does not have a
-	 *         proper bundle from which to return entries.
+	 * @return {@code null} as a framework implementation does not have a proper
+	 *         bundle from which to return entries.
 	 */
 	Enumeration<URL> findEntries(String path, String filePattern,
 			boolean recurse);
+
+	/**
+	 * Adapt this Framework to the specified type.
+	 * 
+	 * <p>
+	 * Adapting this Framework to the specified type may require certain checks,
+	 * including security checks, to succeed. If a check does not succeed, then
+	 * this Framework cannot be adapted and {@code null} is returned. If this
+	 * Framework is not {@link #init() initialized}, then {@code null} is
+	 * returned if the specified type is one of the OSGi defined types to which
+	 * a system bundle can be adapted.
+	 * 
+	 * @param <A> The type to which this Framework is to be adapted.
+	 * @param type Class object for the type to which this Framework is to be
+	 *        adapted.
+	 * @return The object, of the specified type, to which this Framework has
+	 *         been adapted or {@code null} if this Framework cannot be adapted
+	 */
+	<A> A adapt(Class<A> type);
 }

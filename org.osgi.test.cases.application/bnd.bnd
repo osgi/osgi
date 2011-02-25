@@ -1,7 +1,10 @@
-Bundle-Version						: 4.0.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Bundle-Description					: A test case for the ??.
 
-Private-Package						= org.osgi.test.support.*, \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.tbc.*
 Export-Package						= \
 	${p}.tbc.*
@@ -28,7 +31,7 @@ Test-Cases							= ${testcases}
 # org.osgi.vendor.application classes from org.osgi.impl.service.application.
 -runbundles							= \
 	org.osgi.impl.service.application; version=project, \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.bundle.midletcontainer; version=project, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \

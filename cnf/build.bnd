@@ -69,32 +69,26 @@ project.build			= ${tstamp;yyyyMMddHHmm}
 copyright = Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 copyright.html = Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 
+# deprecated -versionpolicy             = ${range;[==,+)}
+# default version policies
+#   -provider-policy =  ${range;[==,=+)}
+#   -consumer-policy =  ${range;[==,+)}
+
 osgi.release				= 4
 osgi.version				= 4.3
--versionpolicy				= "[${version;==;${@}},${version;+;${@}})"
 
-osgi.build.version			= ${osgi.version}.0.${project.build}
-
-core.published.version		= 4.2.0
-core.build.version			= ${version;====;${osgi.build.version}}
-
-cmpn.published.version		= 4.2.0
-cmpn.build.version			= ${version;====;${osgi.build.version}}
-
-mobile.published.version	= 4.0.0
-mobile.build.version		= ${version;====;${osgi.build.version}}
-
-enterprise.published.version = 4.2.0
-enterprise.build.version	= ${version;====;${osgi.build.version}}
-
-# Never released
-proposed.build.version		= ${version;====;${osgi.build.version}}
-
+build.version				= ${osgi.version}.0.${project.build}
+core.build.version			= 4.4.0.${project.build}
+cmpn.build.version			= ${build.version}
+mobile.build.version		= ${build.version}
+enterprise.build.version	= ${build.version}
+proposed.build.version		= ${build.version}
 
 # Documentation
 Bundle-Copyright       	= ${copyright}
 Bundle-Vendor			= OSGi Alliance
--removeheaders			= Include-Resource, Private-Package
+Bundle-Version			= ${build.version}
+-removeheaders			= Include-Resource, Private-Package, Conditional-Package
 
 junit.package			= junit.framework;version=3.8
 junit					= com.springsource.junit;version=3.8;export="${junit.package}"
@@ -103,7 +97,7 @@ junit					= com.springsource.junit;version=3.8;export="${junit.package}"
 	org.osgi.impl.framework;		version=latest, \
 	${junit}
 
-# Use the following for 4.3 framework RI development	
+# Use the following for framework RI development	
 #-runpath							= \
 #	org.eclipse.osgi;		version=snapshot, \
 #	${junit}

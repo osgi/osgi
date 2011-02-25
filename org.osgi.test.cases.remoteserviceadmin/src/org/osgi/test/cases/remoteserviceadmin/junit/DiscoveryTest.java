@@ -97,7 +97,10 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		//make sure that the server framework System Bundle exports the interfaces
 		String systemPackagesXtra = System.getProperty(SYSTEM_PACKAGES_EXTRA);
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
-        configuration.put("osgi.console", "" + (Integer.getInteger("osgi.console", 1111).intValue() + 1));
+		int console = Integer.getInteger("osgi.console", 0);
+		if (console != 0) {
+			configuration.put("osgi.console", "" + console + 1);
+		}
 		return configuration;
 	}
 	

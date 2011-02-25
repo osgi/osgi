@@ -1,11 +1,5 @@
-package org.osgi.impl.service.useradmin;
-
 /*
- * $Id$
- *
  * OSGi UserAdmin Reference Implementation.
- *
- * OSGi Confidential.
  *
  * (c) Copyright Gatespace AB 2000-2001.
  *
@@ -16,7 +10,10 @@ package org.osgi.impl.service.useradmin;
  * Convenient and safe access to the log service.
  *
  */
-import org.osgi.framework.*;
+package org.osgi.impl.service.useradmin;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 

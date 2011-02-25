@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -133,7 +133,7 @@ public final class CapabilityPermission extends BasicPermission {
 	 * <li>location - The location of the bundle providing the capability.</li>
 	 * <li>id - The bundle ID of the bundle providing the capability.</li>
 	 * <li>name - The symbolic name of the bundle providing the capability.</li>
-	 * <li>capability.namespace - The namespace of the required capability.</li>
+	 * <li>capability.namespace - The name space of the required capability.</li>
 	 * </ul>
 	 * Since the above attribute names may conflict with attribute names of a
 	 * capability, you can prefix an attribute name with '@' in the filter
@@ -146,9 +146,9 @@ public final class CapabilityPermission extends BasicPermission {
 	 * {@code require} permission allows the owner of this permission to require
 	 * a capability matching the attributes. The {@code provide} permission
 	 * allows the bundle to provide a capability in the specified capability
-	 * namespace.
+	 * name space.
 	 * 
-	 * @param name The capability namespace or a filter over the attributes.
+	 * @param name The capability name space or a filter over the attributes.
 	 * @param actions {@code require},{@code provide} (canonical order)
 	 * @throws IllegalArgumentException If the specified name is a filter
 	 *         expression and either the specified action is not {@code require}
@@ -170,7 +170,7 @@ public final class CapabilityPermission extends BasicPermission {
 	 * constructor cannot be added to a {@code CapabilityPermission} permission
 	 * collection.
 	 * 
-	 * @param namespace The requested capability namespace.
+	 * @param namespace The requested capability name space.
 	 * @param attributes The requested capability attributes.
 	 * @param providingBundle The bundle providing the requested capability.
 	 * @param actions The action {@code require}.
@@ -538,7 +538,7 @@ public final class CapabilityPermission extends BasicPermission {
 		return properties = new Properties(props, attributes);
 	}
 
-	private static class Properties extends AbstractMap<String, Object> {
+	static private final class Properties extends AbstractMap<String, Object> {
 		private final Map<String, Object>							properties;
 		private final Map<String, Object>							attributes;
 		private transient volatile Set<Map.Entry<String, Object>>	entries;

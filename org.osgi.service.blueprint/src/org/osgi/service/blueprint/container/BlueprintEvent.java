@@ -227,7 +227,8 @@ public class BlueprintEvent {
 		this.timestamp = System.currentTimeMillis();
 		this.bundle = bundle;
 		this.extenderBundle = extenderBundle;
-		this.dependencies = dependencies;
+		this.dependencies = dependencies == null ? null
+				: (String[]) dependencies.clone();;
 		this.cause = cause;
 		this.replay = false;
 		if (bundle == null) {

@@ -1,3 +1,6 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Bundle-Version					= 2.0.0.${project.build}
 Bundle-Activator				= ${p}.Activator
 Import-Service					= org.osgi.service.log.LogService

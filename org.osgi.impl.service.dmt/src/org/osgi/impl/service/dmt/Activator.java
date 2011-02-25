@@ -27,18 +27,18 @@ import org.osgi.impl.service.dmt.plugins.LogPluginActivator;
  */
 public class Activator implements BundleActivator {
 	DmtAdminActivator dmtAdminActivator = new DmtAdminActivator();
-	LogPluginActivator logPluginActivator = new LogPluginActivator();
-	ConfigPluginActivator configurationPluginActivator = new ConfigPluginActivator();
+//	LogPluginActivator logPluginActivator = new LogPluginActivator();
+//	ConfigPluginActivator configurationPluginActivator = new ConfigPluginActivator();
 	
 	public void start(BundleContext context) throws Exception {
 		dmtAdminActivator.start(context);
-		logPluginActivator.start(context);
-		configurationPluginActivator.start(context);
+//		logPluginActivator.start(context);
+//		configurationPluginActivator.start(context);
 	}
 
 	public void stop(BundleContext context) throws Exception {
-		configurationPluginActivator.stop(context);
-		logPluginActivator.stop(context);
+//		configurationPluginActivator.stop(context);
+//		logPluginActivator.stop(context);
 		dmtAdminActivator.stop(context);
 	}
 }

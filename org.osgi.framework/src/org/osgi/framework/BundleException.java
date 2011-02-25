@@ -51,7 +51,8 @@ public class BundleException extends Exception {
 	 */
 	public static final int	UNSPECIFIED				= 0;
 	/**
-	 * The operation was unsupported.
+	 * The operation was unsupported. This type can be used anywhere a 
+	 * BundleException can be thrown.
 	 * 
 	 * @since 1.5
 	 */
@@ -119,6 +120,21 @@ public class BundleException extends Exception {
 	 * @since 1.5
 	 */
 	public static final int	START_TRANSIENT_ERROR	= 10;
+
+	/**
+	 * The framework received an error while reading the input stream for a
+	 * bundle.
+	 * 
+	 * @since 1.6
+	 */
+	public static final int	READ_ERROR				= 11;
+
+	/**
+	 * A framework hook rejected the operation.
+	 * 
+	 * @since 1.6
+	 */
+	public static final int	REJECTED_BY_HOOK		= 12;
 
 	/**
 	 * Creates a {@code BundleException} with the specified message and

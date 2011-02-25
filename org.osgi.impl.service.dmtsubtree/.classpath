@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/cnf/repo/ee.j2se/ee.j2se-1.4.0.jar"/>
+	<classpathentry kind="lib" path="/cnf/repo/osgi.cmpn/osgi.cmpn-4.0.1.jar"/>
+	<classpathentry kind="lib" path="/cnf/repo/osgi.core/osgi.core-4.0.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

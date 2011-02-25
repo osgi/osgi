@@ -1,5 +1,5 @@
-javac.source 			= 1.5
-javac.target 			= jsr14
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
 
 -nouses = true
 Bundle-Description					: Contains the OSGi minimum execution environment stubbed classes and sources

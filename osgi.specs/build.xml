@@ -14,7 +14,7 @@
 			<sourcepath>
 				<dirset dir="${project.workspace}">
 					<include name="org.osgi.*/src" />
-					<include name="info.dmtree.*/src"/>
+					<include name="info.dmtree*/src"/>
 				</dirset>
 			</sourcepath>
 			<classpath>

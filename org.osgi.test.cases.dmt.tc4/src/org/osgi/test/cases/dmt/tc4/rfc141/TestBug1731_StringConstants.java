@@ -1,0 +1,66 @@
+package org.osgi.test.cases.dmt.tc4.rfc141;
+
+import info.dmtree.spi.DataPlugin;
+import info.dmtree.spi.DmtConstants;
+import info.dmtree.spi.ExecPlugin;
+import info.dmtree.spi.MountPlugin;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+import org.osgi.test.support.OSGiTestCase;
+
+public class TestBug1731_StringConstants extends OSGiTestCase{
+	
+	protected void setUp() throws Exception {
+		super.setUp();
+		System.out.println("setting up");
+	}
+
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		System.out.println( "tearing down");
+	}
+	
+	/**
+	 * tests existence of specified constants for String literals in info.dmtree.spi.DataPlugin
+	 */
+	public void testDataPluginConstants() throws Exception {
+		assertConstant("dataRootURIs", "DATA_ROOT_URIS", DataPlugin.class );
+	}
+	
+	/**
+	 * tests existence of specified constants for String literals in info.dmtree.spi.ExecPlugin
+	 */
+	public void testExecPluginConstants() throws Exception {
+		assertConstant( "execRootURIs", "EXEC_ROOT_URIS", ExecPlugin.class);
+	}
+	
+	/**
+	 * tests existence of specified constants for String literals in info.dmtree.spi.MountPlugin
+	 */
+	public void testMountPluginConstants() throws Exception {
+		assertConstant( "mountPoints", "MOUNT_POINTS", MountPlugin.class );
+	}
+
+	/**
+	 * tests existence of specified constants for String literals in info.dmtree.spi.DMTConstants
+	 */
+	public void testDMTConstants() throws Exception {
+		assertConstant( "org.osgi/1.0/ListSubtree", "DDF_LIST_SUBTREE", DmtConstants.class );
+		assertConstant( "org.osgi/1.0/ScaffoldNode", "DDF_SCAFFOLD", DmtConstants.class );
+
+		assertConstant( "info/dmtree/DmtEvent/ADDED", "EVENT_TOPIC_ADDED", DmtConstants.class );
+		assertConstant( "info/dmtree/DmtEvent/DELETED", "EVENT_TOPIC_DELETED", DmtConstants.class );
+		assertConstant( "info/dmtree/DmtEvent/REPLACED", "EVENT_TOPIC_REPLACED", DmtConstants.class );
+		assertConstant( "info/dmtree/DmtEvent/RENAMED", "EVENT_TOPIC_RENAMED", DmtConstants.class );
+		assertConstant( "info/dmtree/DmtEvent/COPIED", "EVENT_TOPIC_COPIED", DmtConstants.class );
+		
+		assertConstant( "session.id", "EVENT_PROPERTY_SESSION_ID", DmtConstants.class );
+		assertConstant( "nodes", "EVENT_PROPERTY_NODES", DmtConstants.class );
+		assertConstant( "newnodes", "EVENT_PROPERTY_NEW_NODES", DmtConstants.class );
+		assertConstant( "list.nodes", "EVENT_PROPERTY_LIST_NODES", DmtConstants.class );
+		assertConstant( "list.upcoming.event", "EVENT_PROPERTY_LIST_UPCOMING_EVENT", DmtConstants.class );
+		
+	}
+}

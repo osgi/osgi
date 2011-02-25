@@ -1,7 +1,10 @@
-Bundle-Description: Tests the Measurement classes
-Bundle-Version: 4.2.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Private-Package						= org.osgi.test.support.*, \
+Bundle-Description: Tests the Measurement classes
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.junit.*
 	
 Test-Cases							= ${testcases}
@@ -15,7 +18,7 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles						= \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest
+	osgi.cmpn; version=latest
 
 
 -runproperties = ${runproperties}

@@ -1,7 +1,5 @@
 /*
- * $Id$
- * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -26,13 +24,23 @@
  */
 package org.osgi.test.cases.metatype.junit;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.cm.ManagedService;
+import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.service.metatype.AttributeDefinition;
 import org.osgi.service.metatype.MetaTypeInformation;
+import org.osgi.service.metatype.MetaTypeProvider;
 import org.osgi.service.metatype.MetaTypeService;
 import org.osgi.service.metatype.ObjectClassDefinition;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -315,6 +323,10 @@ public class TestControl extends DefaultTestBundleControl {
 		// Get other object for tests
 		ocd = mti.getObjectClassDefinition("com.acme.bar", "du");
 		attributes = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
+		
+		// Make sure the implementation provides all of the attribute definitions 
+		// specified within the metadata XML (testfile.xml - ocd2).
+		assertEquals("Missing one or more attribute definitions", 10, attributes.length);
 
 		// Execute attribute type tests
 		count = 0;
@@ -390,6 +402,14 @@ public class TestControl extends DefaultTestBundleControl {
 														AttributeDefinition.STRING,
 														attributes[i].getType());
 											}
+											else
+												if (attributes[i].getID().equals("password")) {
+													count++;
+													assertEquals(
+															"A password attribute must be of type AttributeDefinition.PASSWORD",
+															AttributeDefinition.PASSWORD,
+															attributes[i].getType());
+												}
 		}
 
 		assertEquals("All types must be tested", attributes.length, count);
@@ -428,6 +448,326 @@ public class TestControl extends DefaultTestBundleControl {
 		tb2.stop();
 		tb2.uninstall();
 	}
+	
+	/**
+	 * Tests a MetaTypeService when a bundle has provided its own implementation
+	 * of a MetaTypeProvider that is registered as a service and is neither a 
+	 * ManagedService nor ManagedServiceFactory. METATYPE_PID (String) only.
+	 * 
+	 * @spec MetaTypeService.getMetaTypeInformation(Bundle)
+	 * @spec MetaTypeInformation.getPids()
+	 * @spec MetaTypeInformation.getFactoryPids()
+	 */
+	public void testBundleMetaTypeProvider1() throws Exception {
+		BundleContext bundleContext = getContext();
+		Dictionary properties = new Hashtable();
+		String servicePid = "testBundleMetaTypeProvider1";
+		properties.put(
+				Constants.SERVICE_PID, 
+				servicePid);
+		String metatypePid = "testBundleMetaTypeProvider1.1";
+		properties.put(
+				MetaTypeProvider.METATYPE_PID, 
+				metatypePid);
+		ServiceRegistration serviceRegistration = bundleContext.registerService(
+				MetaTypeProvider.class.getName(), 
+				new MetaTypeProvider() {
+					public ObjectClassDefinition getObjectClassDefinition(
+							String id, String locale) {
+						return null;
+					}
+
+					public String[] getLocales() {
+						return null;
+					}
+				}, 
+				properties);
+		MetaTypeInformation mti = mts.getMetaTypeInformation(bundleContext.getBundle());
+		assertNotNull("The returned MetaTypeInformation was null", mti);
+		assertTrue("The pids returned by MetaTypeInformation did not match the METATYPE_PID property",
+				isArrayEquals(new String[]{metatypePid}, mti.getPids()));
+		assertTrue("The factory pid array returned by MetaTypeInformation was not null or an empty array",
+				mti.getFactoryPids() == null || mti.getFactoryPids().length == 0);
+		serviceRegistration.unregister();
+	}
+	
+	/**
+	 * Tests a MetaTypeService when a bundle has provided its own implementation
+	 * of a MetaTypeProvider that is registered as a service and is neither a 
+	 * ManagedService nor ManagedServiceFactory. METATYPE_FACTORY_PID 
+	 * (Collection<String>) only.
+	 * 
+	 * @spec MetaTypeService.getMetaTypeInformation(Bundle)
+	 * @spec MetaTypeInformation.getPids()
+	 * @spec MetaTypeInformation.getFactoryPids()
+	 */
+	public void testBundleMetaTypeProvider2() throws Exception {
+		BundleContext bundleContext = getContext();
+		Dictionary properties = new Hashtable();
+		String servicePid = "testBundleMetaTypeProvider2";
+		properties.put(
+				Constants.SERVICE_PID, 
+				servicePid);
+		Collection metatypeFactoryPids = new ArrayList();
+		metatypeFactoryPids.add("testBundleMetaTypeProvider2.1");
+		metatypeFactoryPids.add("testBundleMetaTypeProvider2.2");
+		metatypeFactoryPids.add("testBundleMetaTypeProvider2.3");
+		properties.put(
+				MetaTypeProvider.METATYPE_FACTORY_PID, 
+				metatypeFactoryPids);
+		ServiceRegistration serviceRegistration = bundleContext.registerService(
+				MetaTypeProvider.class.getName(), 
+				new MetaTypeProvider() {
+					public ObjectClassDefinition getObjectClassDefinition(
+							String id, String locale) {
+						return null;
+					}
+
+					public String[] getLocales() {
+						return null;
+					}
+				}, 
+				properties);
+		MetaTypeInformation mti = mts.getMetaTypeInformation(bundleContext.getBundle());
+		assertNotNull("The returned MetaTypeInformation was null", mti);
+		assertTrue("The factory pids returned by MetaTypeInformation did not match the METATYPE_FACTORY_PID property",
+				isArrayEquals(metatypeFactoryPids.toArray(new String[metatypeFactoryPids.size()]), mti.getFactoryPids()));
+		assertTrue("The pid array returned by MetaTypeInformation was not null or an empty array",
+				mti.getPids() == null || mti.getPids().length == 0);
+		serviceRegistration.unregister();
+	}
+	
+	/**
+	 * Tests a MetaTypeService when a bundle has provided its own implementation
+	 * of a MetaTypeProvider that is registered as a service and is neither a 
+	 * ManagedService nor ManagedServiceFactory. METATYPE_PID (String[]) and
+	 * METATYPE_FACTORY_PID (Collection<String>).
+	 * 
+	 * @spec MetaTypeService.getMetaTypeInformation(Bundle)
+	 * @spec MetaTypeInformation.getPids()
+	 * @spec MetaTypeInformation.getFactoryPids()
+	 */
+	public void testBundleMetaTypeProvider3() throws Exception {
+		BundleContext bundleContext = getContext();
+		Dictionary properties = new Hashtable();
+		String servicePid = "testBundleMetaTypeProvider3";
+		properties.put(
+				Constants.SERVICE_PID, 
+				servicePid);
+		String[] metatypePids = new String[] {
+				"testBundleMetaTypeProvider3.1",
+				"testBundleMetaTypeProvider3.2"
+		};
+		Collection metatypeFactoryPids = new ArrayList();
+		metatypeFactoryPids.add("testBundleMetaTypeProvider3.3");
+		metatypeFactoryPids.add("testBundleMetaTypeProvider3.4");
+		properties.put(
+				MetaTypeProvider.METATYPE_PID, 
+				metatypePids);
+		properties.put(
+				MetaTypeProvider.METATYPE_FACTORY_PID, 
+				metatypeFactoryPids);
+		ServiceRegistration serviceRegistration = bundleContext.registerService(
+				MetaTypeProvider.class.getName(), 
+				new MetaTypeProvider() {
+					public ObjectClassDefinition getObjectClassDefinition(
+							String id, String locale) {
+						return null;
+					}
+
+					public String[] getLocales() {
+						return null;
+					}
+				}, 
+				properties);
+		MetaTypeInformation mti = mts.getMetaTypeInformation(bundleContext.getBundle());
+		assertNotNull("The returned MetaTypeInformation was null", mti);
+		assertTrue("The pids returned by MetaTypeInformation did not match the METATYPE_PID property",
+				isArrayEquals(metatypePids, mti.getPids()));
+		assertTrue("The factory pids returned by MetaTypeInformation did not match the METATYPE_FACTORY_PID property",
+				isArrayEquals(metatypeFactoryPids.toArray(new String[metatypeFactoryPids.size()]), mti.getFactoryPids()));
+		serviceRegistration.unregister();
+	}
+	
+	/**
+	 * Tests a MetaTypeService when a bundle has provided its own implementation
+	 * of a MetaTypeProvider that is registered as a service and also as a 
+	 * ManagedService. SERVICE_PID (String), METATYPE_PID (Collection<String>) 
+	 * and METATYPE_FACTORY_PID (String[]).
+	 * 
+	 * @spec MetaTypeService.getMetaTypeInformation(Bundle)
+	 * @spec MetaTypeInformation.getPids()
+	 * @spec MetaTypeInformation.getFactoryPids()
+	 */
+	public void testBundleMetaTypeProvider4() throws Exception {
+		BundleContext bundleContext = getContext();
+		Dictionary properties = new Hashtable();
+		String servicePid = "testBundleMetaTypeProvider4";
+		Collection metatypePids = new ArrayList();
+		metatypePids.add("testBundleMetaTypeProvider4.1");
+		metatypePids.add("testBundleMetaTypeProvider4.2");
+		metatypePids.add("testBundleMetaTypeProvider4.3");
+		String[] metatypeFactoryPids = new String[] {
+				"testBundleMetaTypeProvider4.5",
+				"testBundleMetaTypeProvider4.6"
+		};
+		properties.put(
+				Constants.SERVICE_PID, 
+				servicePid);
+		properties.put(
+				MetaTypeProvider.METATYPE_PID, 
+				metatypePids);
+		properties.put(
+				MetaTypeProvider.METATYPE_FACTORY_PID, 
+				metatypeFactoryPids);
+		ManagedServiceMetaTypeProvider service = new ManagedServiceMetaTypeProvider();
+		ServiceRegistration serviceRegistration = bundleContext.registerService(
+				new String[] {
+						ManagedService.class.getName(),
+						MetaTypeProvider.class.getName()}, 
+				service, 
+				properties);
+		MetaTypeInformation mti = mts.getMetaTypeInformation(bundleContext.getBundle());
+		assertNotNull("The returned MetaTypeInformation was null", mti);
+		Collection pids = new ArrayList(metatypePids);
+		pids.add(servicePid);
+		assertTrue("The pids returned by MetaTypeInformation did not match the SERVICE_PID and METATYPE_PID properties",
+				isArrayEquals(pids.toArray(new String[pids.size()]), mti.getPids()));
+		assertTrue("The factory pids returned by MetaTypeInformation did not match the METATYPE_FACTORY_PID property",
+				isArrayEquals(metatypeFactoryPids, mti.getFactoryPids()));
+		serviceRegistration.unregister();
+	}
+	
+	/**
+	 * Tests a MetaTypeService when a bundle has provided its own implementation
+	 * of a MetaTypeProvider that is registered as a service and also as a 
+	 * ManagedServiceFactory. SERVICE_PID (Collection<String>), METATYPE_PID 
+	 * (Collection<String>) and METATYPE_FACTORY_PID (String).
+	 * 
+	 * @spec MetaTypeService.getMetaTypeInformation(Bundle)
+	 * @spec MetaTypeInformation.getPids()
+	 * @spec MetaTypeInformation.getFactoryPids()
+	 */
+	public void testBundleMetaTypeProvider5() throws Exception {
+		BundleContext bundleContext = getContext();
+		Dictionary properties = new Hashtable();
+		Collection servicePids = new ArrayList();
+		servicePids.add("testBundleMetaTypeProvider5.1");
+		servicePids.add("testBundleMetaTypeProvider5.2");
+		Collection metatypePids = new ArrayList();
+		metatypePids.add("testBundleMetaTypeProvider5.3");
+		metatypePids.add("testBundleMetaTypeProvider5.4");
+		metatypePids.add("testBundleMetaTypeProvider5.5");
+		String metatypeFactoryPid = "testBundleMetaTypeProvider5.6";
+		properties.put(
+				Constants.SERVICE_PID, 
+				servicePids);
+		properties.put(
+				MetaTypeProvider.METATYPE_PID, 
+				metatypePids);
+		properties.put(
+				MetaTypeProvider.METATYPE_FACTORY_PID, 
+				metatypeFactoryPid);
+		ManagedServiceFactoryMetaTypeProvider service = new ManagedServiceFactoryMetaTypeProvider();
+		ServiceRegistration serviceRegistration = bundleContext.registerService(
+				new String[] {
+						ManagedServiceFactory.class.getName(),
+						MetaTypeProvider.class.getName()}, 
+				service, 
+				properties);
+		MetaTypeInformation mti = mts.getMetaTypeInformation(bundleContext.getBundle());
+		assertNotNull("The returned MetaTypeInformation was null", mti);
+		assertTrue("The pids returned by MetaTypeInformation did not match the METATYPE_PID property",
+				isArrayEquals(metatypePids.toArray(new String[metatypePids.size()]), mti.getPids()));
+		Collection factoryPids = new ArrayList(servicePids);
+		factoryPids.add(metatypeFactoryPid);
+		assertTrue("The factory pids returned by MetaTypeInformation did not match the METATYPE_FACTORY_PID property",
+				isArrayEquals(factoryPids.toArray(new String[factoryPids.size()]), mti.getFactoryPids()));
+		serviceRegistration.unregister();
+	}
+	
+	/**
+	 * Tests a MetaTypeService when a bundle has registered more than one
+	 * MetaTypeProvider service, none of which are also registered as a
+	 * ManagedService or ManagedServiceFactory.
+	 * 
+	 * @spec MetaTypeService.getMetaTypeInformation(Bundle)
+	 * @spec MetaTypeInformation.getPids()
+	 * @spec MetaTypeInformation.getFactoryPids()
+	 */
+	public void testBundleMetaTypeProvider6() throws Exception {
+		BundleContext bundleContext = getContext();
+		Dictionary properties = new Hashtable();
+		String servicePid = "testBundleMetaTypeProvider6";
+		properties.put(
+				Constants.SERVICE_PID, 
+				servicePid);
+		Collection metatype1pids = new ArrayList();
+		metatype1pids.add("testBundleMetaTypeProvider6.1");
+		metatype1pids.add("testBundleMetaTypeProvider6.2");
+		Collection metatype1factoryPids = new ArrayList();
+		metatype1factoryPids.add("testBundleMetaTypeProvider6.3");
+		metatype1factoryPids.add("testBundleMetaTypeProvider6.4");
+		metatype1factoryPids.add("testBundleMetaTypeProvider6.5");
+		properties.put(
+				MetaTypeProvider.METATYPE_PID, 
+				metatype1pids);
+		properties.put(
+				MetaTypeProvider.METATYPE_FACTORY_PID, 
+				metatype1factoryPids);
+		ServiceRegistration serviceRegistration1 = bundleContext.registerService(
+				MetaTypeProvider.class.getName(), 
+				new MetaTypeProvider() {
+					public ObjectClassDefinition getObjectClassDefinition(
+							String id, String locale) {
+						return null;
+					}
+
+					public String[] getLocales() {
+						return null;
+					}
+				}, 
+				properties);
+		Collection metatype2pids = new ArrayList();
+		metatype2pids.add("testBundleMetaTypeProvider6.6");
+		metatype2pids.add("testBundleMetaTypeProvider6.7");
+		metatype2pids.add("testBundleMetaTypeProvider6.8");
+		Collection metatype2factoryPids = new ArrayList();
+		metatype2factoryPids.add("testBundleMetaTypeProvider6.9");
+		metatype2factoryPids.add("testBundleMetaTypeProvider6.10");
+		properties = new Hashtable();
+		properties.put(
+				MetaTypeProvider.METATYPE_PID, 
+				metatype2pids);
+		properties.put(
+				MetaTypeProvider.METATYPE_FACTORY_PID, 
+				metatype2factoryPids);
+		ServiceRegistration serviceRegistration2 = bundleContext.registerService(
+				MetaTypeProvider.class.getName(), 
+				new MetaTypeProvider() {
+					public ObjectClassDefinition getObjectClassDefinition(
+							String id, String locale) {
+						return null;
+					}
+
+					public String[] getLocales() {
+						return null;
+					}
+				}, 
+				properties);
+		MetaTypeInformation mti = mts.getMetaTypeInformation(bundleContext.getBundle());
+		assertNotNull("The returned MetaTypeInformation was null", mti);
+		Collection pids = new ArrayList(metatype1pids);
+		pids.addAll(metatype2pids);
+		assertTrue("The pids returned by MetaTypeInformation did not match the METATYPE_PID properties from both MetaTypeProviders",
+				isArrayEquals(pids.toArray(new String[pids.size()]), mti.getPids()));
+		Collection factoryPids = new ArrayList(metatype1factoryPids);
+		factoryPids.addAll(metatype2factoryPids);
+		assertTrue("The factory pids returned by MetaTypeInformation did not match the METATYPE_FACTORY_PID properties from both MetaTypeProviders",
+				isArrayEquals(factoryPids.toArray(new String[factoryPids.size()]), mti.getFactoryPids()));
+		serviceRegistration2.unregister();
+		serviceRegistration1.unregister();
+	}
 
 	/**
 	 * Compare two arrays in an elements order independent manner.
@@ -455,5 +795,43 @@ public class TestControl extends DefaultTestBundleControl {
 		return result;
 	}
 
+	private static class ManagedServiceMetaTypeProvider implements ManagedService, MetaTypeProvider {
+		public ObjectClassDefinition getObjectClassDefinition(String id,
+				String locale) {
+			return null;
+		}
+
+		public String[] getLocales() {
+			return null;
+		}
+
+		public void updated(Dictionary properties)
+				throws ConfigurationException {
+			// noop
+		}
+	}
 	
+	private static class ManagedServiceFactoryMetaTypeProvider implements ManagedServiceFactory, MetaTypeProvider {
+		public ObjectClassDefinition getObjectClassDefinition(String id,
+				String locale) {
+			return null;
+		}
+
+		public String[] getLocales() {
+			return null;
+		}
+
+		public String getName() {
+			return null;
+		}
+
+		public void updated(String pid, Dictionary properties)
+				throws ConfigurationException {
+			// noop
+		}
+
+		public void deleted(String pid) {
+			// noop
+		}
+	}
 }

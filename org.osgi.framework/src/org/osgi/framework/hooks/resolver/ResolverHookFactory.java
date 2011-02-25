@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,6 +75,14 @@ public interface ResolverHookFactory {
 	 *   <li>For each bundle remaining in the dependency closure collection get the current bundle revision
 	 *   and add it to the collection of triggers.</li> 
 	 * </ul>
+	 * <p>
+	 * As described above, a resolve process is typically initiated as a result of calling API that causes the 
+	 * framework to attempt to resolve one or more bundles.  
+	 * The framework is free to start a resolve process at any time for reasons other than calls to framework API.
+	 * For example, a resolve process may be used by the framework for diagnostic purposes and result in no
+	 * bundles actually becoming resolved at the end of the process.
+	 * Resolver hook implementations must be prepared for resolve processes that are initiated for other reasons
+	 * besides calls to framework API.
 	 * @param triggers an unmodifiable collection of bundles which triggered the resolve process.
 	 * This collection may be empty if the collection of trigger bundles cannot be
 	 * determined.

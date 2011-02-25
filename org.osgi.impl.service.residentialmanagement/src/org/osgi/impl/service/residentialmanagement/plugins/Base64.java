@@ -1,14 +1,8 @@
 /*
- * @(#)Base64.java	1.3 01/07/18
- * $Id$
- *
- 
- * 
  * (C) Copyright 1996-2001 Sun Microsystems, Inc. 
  * 
  * This source code is licensed to OSGi as MEMBER LICENSED MATERIALS 
  * under the terms of Section 3.2 of the OSGi MEMBER AGREEMENT.
- * 
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 

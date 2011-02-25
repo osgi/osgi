@@ -28,11 +28,19 @@ public class Test {
 		if (test == null)
 			return null;
 
+		BufferedReader reader = null;
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(test.openStream()));
+			reader = new BufferedReader(new InputStreamReader(test.openStream()));
 			return reader.readLine();
 		} catch (IOException e) {
 			return null;
+		} finally {
+			if (reader != null)
+				try {
+					reader.close();
+				} catch (IOException e) {
+					// ignore
+				}
 		}
 	}
 }

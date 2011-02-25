@@ -1,5 +1,5 @@
 /*
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -36,8 +36,10 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin;
 
+
 import info.dmtree.spi.DataPlugin;
 import info.dmtree.spi.ExecPlugin;
+import info.dmtree.spi.MountPlugin;
 
 import java.util.Hashtable;
 
@@ -109,7 +111,7 @@ public class TestExecPluginActivator implements BundleActivator {
 		Hashtable props = new Hashtable();
 		props.put("dataRootURIs", new String[] { ROOT });
 		props.put("execRootURIs", new String[] { ROOT });
-		String[] ifs = new String[] { DataPlugin.class.getName(),ExecPlugin.class.getName() };
+		String[] ifs = new String[] { DataPlugin.class.getName(),ExecPlugin.class.getName(), MountPlugin.class.getName() };
 		servReg = bc.registerService(ifs, testExecPlugin, props);
 		System.out.println("TestDataPlugin activated.");
 	}

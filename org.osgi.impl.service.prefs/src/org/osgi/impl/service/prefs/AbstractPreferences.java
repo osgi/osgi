@@ -1,9 +1,4 @@
 /*
- * @(#)AbstractPreferences.java	1.4 01/07/18
- * $Id$
- *
- 
- * 
  * (C) Copyright 1996-2001 Sun Microsystems, Inc. 
  * Copyright (c) IBM Corporation (2004)
  * 

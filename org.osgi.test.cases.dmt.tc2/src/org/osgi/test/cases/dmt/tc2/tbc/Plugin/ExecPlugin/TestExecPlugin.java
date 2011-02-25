@@ -1,5 +1,5 @@
 /*
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -50,7 +50,7 @@ import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
  * DmtSession calls to a subtree handled by Plugin.
  * 
  */
-public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalDataSession {
+public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalDataSession, MountPlugin {
 
 	private DmtTestControl tbc;
 	
@@ -262,6 +262,30 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 
 	public static String[] getNewInteriorNodeName() {
 		return newInteriorNodeName;
+	}
+
+
+	public void setMountPoints(MountPoint[] mountPoints) {
+		System.out.println( "setMountPoints invoked with mountPoints:" );
+		for (int i = 0; i < mountPoints.length; i++) {
+			System.out.println( Uri.toUri(mountPoints[i].getMountPath()) );
+		}
+	}
+
+
+	public void mountPointsAdded(MountPoint[] mountPoints) {
+		System.out.println( "mountPointsAdded invoked with mountPoints:" );
+		for (int i = 0; i < mountPoints.length; i++) {
+			System.out.println( Uri.toUri(mountPoints[i].getMountPath()) );
+		}
+	}
+
+
+	public void mountPointsRemoved(MountPoint[] mountPoints) {
+		System.out.println( "mountPointsRemoved invoked with mountPoints:" );
+		for (int i = 0; i < mountPoints.length; i++) {
+			System.out.println( Uri.toUri(mountPoints[i].getMountPath()) );
+		}
 	}
     
 }

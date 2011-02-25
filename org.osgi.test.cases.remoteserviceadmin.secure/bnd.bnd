@@ -1,17 +1,17 @@
-javac.source            = 1.5
-javac.target            = jsr14
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Bundle-Version						: 1.0.0.${project.build}
 Bundle-Description					: Remote Service Admin secure test cases.
 Bundle-Vendor: TIBCO Software Inc.
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
-Bundle-Copyright: ${copyright}
+
 
 Export-Package 					= ${p}.common;version=1.0.0
 	
-Private-Package						= org.osgi.test.support.*, \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.*
 	
 Bundle-Category: osgi,test
@@ -35,21 +35,23 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.enterprise; version=${enterprise.published.version};strategy=lowest	, \
+	osgi.enterprise; version=latest	, \
 	org.osgi.impl.service.remoteserviceadmin;  version=latest, \
 	org.osgi.impl.bundle.remoteserviceadmin.discovery;  version=latest, \
 	org.osgi.impl.bundle.remoteserviceadmin.discovery.config;  version=latest, \
 	org.osgi.impl.service.log;				version=latest
 
+-runvm = -Xmx512m, -XX:MaxPermSize=350m
+
 -runproperties = ${runsecureproperties}, \
-	osgi.console=1111, \
 	osgi.support.multipleHosts=true, \
 	rsa.ct.timeout=300000,\
 	rsa.ct.timeout.factor=3,\
 	${p}.system.packages.extra="${junit.package}", \
-	${p}.bundles="${uniq;${repo;osgi.enterprise;${enterprise.published.version};lowest},${repo;org.osgi.impl.service.log},${repo;org.osgi.impl.service.remoteserviceadmin},${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}}", \
+	${p}.bundles="${uniq;${repo;osgi.enterprise},${repo;org.osgi.impl.service.log},${repo;org.osgi.impl.service.remoteserviceadmin},${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}}", \
 	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.port", \
 	service.exported.configs=org.apache.cxf.ws, \
 	org.apache.cxf.ws.port=@@FREE_PORT@@
+#	osgi.console=1111, \
 	
 	

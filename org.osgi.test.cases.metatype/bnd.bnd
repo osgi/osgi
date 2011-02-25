@@ -1,12 +1,16 @@
-Bundle-Description: Test Bundle for Metatype Service tests
-Bundle-Version: 4.2.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Private-Package						= org.osgi.test.support.*, \
+Bundle-Description: Test Bundle for Metatype Service tests
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.junit.*
 	
 Include-Resource					= \
 	tb1.jar, \
-	tb2.jar
+	tb2.jar, \
+	tb3.jar
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.metatype
@@ -20,7 +24,7 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.metatype; version=latest
 	

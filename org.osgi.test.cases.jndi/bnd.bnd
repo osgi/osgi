@@ -1,6 +1,8 @@
-Bundle-Version: 4.2.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Private-Package 					= org.osgi.test.support.* , \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.*
 	
 Export-Package						= \
@@ -41,7 +43,7 @@ Test-Cases							= ${testcases}
 	${junit}
 	
 -runbundles = \
-	osgi.enterprise; version=${enterprise.published.version};strategy=lowest		, \
+	osgi.enterprise; version=latest		, \
 	org.osgi.impl.service.jndi; version=project
 
 -runproperties = ${runproperties}, \

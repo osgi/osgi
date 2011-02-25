@@ -194,8 +194,8 @@ public class Base64Encoder extends OutputStream {
      * @return the encoded form of the unencoded string
      */
     public static byte[] encode(byte[] bytes) {
-        ByteArrayOutputStream out =
-                new ByteArrayOutputStream((int) (bytes.length * 137 / 100));
+		ByteArrayOutputStream out = new ByteArrayOutputStream(
+				(bytes.length * 137 / 100));
         Base64Encoder encodedOut = new Base64Encoder(out);
 
         try {

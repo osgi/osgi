@@ -1,0 +1,5 @@
+String absPath = "./InternetGatewayDevice/HelloWorld";
+
+int pos = absPath.lastIndexOf( "/" );
+String multipleParent = absPath.substring( 0, pos );
+System.out.println( "multipleParent is: " + multipleParent );

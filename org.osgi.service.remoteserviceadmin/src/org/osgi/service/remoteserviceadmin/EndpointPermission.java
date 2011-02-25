@@ -592,8 +592,7 @@ final class EndpointPermissionCollection extends PermissionCollection {
 		synchronized (this) {
 			/* select the bucket for the permission */
 			Map<String, EndpointPermission> pc = permissions;
-			final EndpointPermission existing = (EndpointPermission) pc
-					.get(name);
+			final EndpointPermission existing = pc.get(name);
 
 			if (existing != null) {
 				final int oldMask = existing.action_mask;

@@ -8,6 +8,7 @@ import com.sun.javadoc.*;
 public class XmlDoclet extends Doclet {
 	PrintWriter	pw;
 	String		currentPackage;
+	String		currentClass;
 
 	public static boolean start(RootDoc doc) {
 		try {
@@ -50,6 +51,7 @@ public class XmlDoclet extends Doclet {
 		Hashtable<String, String> ht = new Hashtable<String, String>();
 		for (int i = 0; i < all.length; i++) {
 			ClassDoc c = all[i];
+			currentClass = c.name();
 			PackageDoc imports[] = c.importedPackages();
 			for (int j = 0; j < imports.length; j++) {
 				PackageDoc p = imports[j];
@@ -63,8 +65,7 @@ public class XmlDoclet extends Doclet {
 		for (Enumeration<String> e = ht.keys(); e.hasMoreElements();) {
 			String key = e.nextElement();
 			String version = ht.get(key);
-			pw.println("<import name='" + key
-					+ "'/>");
+			pw.println("<import name='" + key + "'/>");
 		}
 		ClassDoc classes[] = pack.allClasses();
 		for (int c = 0; classes != null && c < classes.length; c++)
@@ -447,7 +448,7 @@ public class XmlDoclet extends Doclet {
 	}
 
 	String html(String text) {
-		HtmlCleaner cleaner = new HtmlCleaner(text);
+		HtmlCleaner cleaner = new HtmlCleaner(currentPackage+"."+currentClass, text);
 		return cleaner.clean();
 	}
 
@@ -455,7 +456,7 @@ public class XmlDoclet extends Doclet {
 		if (tag.kind().equals("Text")) {
 			sb.append(tag.text());
 		}
-		else
+		else {
 			if (tag instanceof ParamTag)
 				printParamTag(sb, (ParamTag) tag);
 			else
@@ -464,20 +465,28 @@ public class XmlDoclet extends Doclet {
 				else
 					if (tag instanceof SeeTag)
 						printSee(sb, (SeeTag) tag);
-					else
-						sb.append("<" + tag.kind().substring(1) + ">"
-								+ html(toString(tag.inlineTags())) + "</"
-								+ tag.kind().substring(1) + ">");
+					else {
+						if (tag.kind().equals("@literal")) {
+							sb.append(escape(toString(tag.inlineTags())));
+						}
+						else {
+							sb.append("<" + tag.kind().substring(1) + ">"
+									+ html(toString(tag.inlineTags())) + "</"
+									+ tag.kind().substring(1) + ">");
+						}
+					}
+		}
 	}
 
 	String simplify(String name) {
 		if (name.startsWith("java.") || name.startsWith("org.osgi.")
 				|| name.startsWith(currentPackage)) {
 			int n;
-			if ( name.endsWith("...")) {
-				n= name.lastIndexOf('.', name.length()-4);
-			} else
-				n= name.lastIndexOf('.');
+			if (name.endsWith("...")) {
+				n = name.lastIndexOf('.', name.length() - 4);
+			}
+			else
+				n = name.lastIndexOf('.');
 			name = name.substring(n + 1);
 		}
 		return name;
@@ -492,14 +501,14 @@ public class XmlDoclet extends Doclet {
 			switch (signature.charAt(i)) {
 				case '<' :
 					parts.add(signature.substring(begin, i));
-					i = skip(signature, i + 1);
-					begin=i+1;
+					i = skipGenericParameters(signature, i + 1);
+					begin = i + 1;
 					break;
 
 				case ' ' :
-					begin = i+1;
+					begin = i + 1;
 					break;
-					
+
 				case ',' :
 					if (begin < i) {
 						parts.add(signature.substring(begin, i));
@@ -527,12 +536,13 @@ public class XmlDoclet extends Doclet {
 		return sb.toString();
 	}
 
-	int skip(String s, int n) {
+	int skipGenericParameters(String s, int n) {
 		while (n < s.length() && s.charAt(n) != '>') {
-			if (s.charAt(n)=='<' ) 
-				n = skip(s, n + 1);
-			else
-				n++;
+			if (s.charAt(n) == '<') {
+				n = skipGenericParameters(s, n + 1);
+				// n -> closing '>', so next incr. is necessary
+			}
+			n++;
 		}
 		return n;
 	}

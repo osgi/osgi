@@ -18,9 +18,17 @@
 
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.*;
 
-import java.util.*;
+
+import info.dmtree.Acl;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtIllegalStateException;
+import info.dmtree.MetaNode;
+
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.osgi.service.permissionadmin.PermissionInfo;
 

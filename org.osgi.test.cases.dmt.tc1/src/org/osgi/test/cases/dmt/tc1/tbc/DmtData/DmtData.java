@@ -1,5 +1,5 @@
 /*
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -454,7 +454,7 @@ public class DmtData extends DmtTestControl {
 	public void testDmtData015() {
 		try {		
 			log("#testDmtData015");
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(null,info.dmtree.DmtData.FORMAT_STRING);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData((String) null,info.dmtree.DmtData.FORMAT_STRING);
 			assertEquals("Asserting DmtData.FORMAT_STRING",
 					info.dmtree.DmtData.FORMAT_STRING, data.getFormat());
 			
@@ -479,7 +479,7 @@ public class DmtData extends DmtTestControl {
 	public void testDmtData016() {
 		try {		
 			log("#testDmtData016");
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(null,info.dmtree.DmtData.FORMAT_XML);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData((String)null,info.dmtree.DmtData.FORMAT_XML);
 			assertEquals("Asserting DmtData.FORMAT_XML",
 					info.dmtree.DmtData.FORMAT_XML, data.getFormat());
 			
