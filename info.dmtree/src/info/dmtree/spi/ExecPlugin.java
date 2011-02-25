@@ -33,7 +33,9 @@ public interface ExecPlugin {
 
 	/**
 	 * The string to be used as key for the “execRootURIs” property when an
-	 * ExecPlugin is registered
+	 * ExecPlugin is registered.
+	 * 
+	 * @since 1.1
 	 */
 	static final String	EXEC_ROOT_URIS	= "execRootURIs";
 

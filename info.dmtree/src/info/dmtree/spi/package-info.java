@@ -15,7 +15,7 @@
  */
 
 /**
- * Device Management Tree SPI Package Version 1.0.
+ * Device Management Tree SPI Package Version 1.1.
  * 
  * <p>
  * This package contains the interface classes that compose the Device Management 
@@ -31,11 +31,11 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: info.dmtree.spi; version="[1.0,2.0)"}
+ * {@code  Import-Package: info.dmtree.spi; version="[1.1,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: info.dmtree.spi; version="[1.0,1.1)"}
+ * {@code  Import-Package: info.dmtree.spi; version="[1.1,1.2)"}
  * 
  * @version $Id$
  */

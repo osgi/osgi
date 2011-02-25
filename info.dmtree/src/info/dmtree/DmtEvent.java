@@ -95,6 +95,8 @@ public interface DmtEvent {
 	 * Events of this type are delivered synchronously in order to give the
 	 * receiver the chance to react accordingly before the destructive operation
 	 * takes place.
+	 * 
+	 * @since 1.1
 	 */
 	int	DESTRUCTIVE_OPERATION	= 0x80;
 
@@ -167,6 +169,7 @@ public interface DmtEvent {
 	 * 
 	 * @return the array of property names
 	 * @see #getProperty
+	 * @since 1.1
 	 */
 	String[] getPropertyNames();
 
@@ -177,6 +180,7 @@ public interface DmtEvent {
 	 * @return the requested property value or null, if the key is not contained
 	 *         in the properties
 	 * @see #getPropertyNames
+	 * @since 1.1
 	 */
 	Object getProperty(String key);
 }

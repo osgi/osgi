@@ -52,7 +52,9 @@ public interface DataPlugin {
 
 	/**
 	 * The string to be used as key for the “dataRootURIs” property when an
-	 * DataPlugin is registered
+	 * DataPlugin is registered.
+	 * 
+	 * @since 1.1
 	 */
 	static final String	DATA_ROOT_URIS	= "dataRootURIs";
 

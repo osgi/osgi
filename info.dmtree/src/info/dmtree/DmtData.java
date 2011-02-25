@@ -125,33 +125,45 @@ public final class DmtData {
 	/**
 	 * The node holds a long value. The {@link #getFormatName()} method can be
 	 * used to get the actual format name.
+	 * 
+	 * @since 1.1
 	 */
 	public static final int			FORMAT_LONG				= 0x2000;
 
 	/**
 	 * The node holds an unsigned long value.
+	 * 
+	 * @since 1.1
 	 */
 	public static final int			FORMAT_UNSIGNED_LONG	= 0x4000;
 
 	/**
 	 * The node holds a String object that is interpreted as a dateTime type
 	 * defined in ISO 8601.
+	 * 
+	 * @since 1.1
 	 */
 	public static final int			FORMAT_DATETIME			= 0x8000;
 
 	/**
 	 * The node holds an unsigned int value.
+	 * 
+	 * @since 1.1
 	 */
 	public static final int			FORMAT_UNSIGNED_INTEGER	= 0x10000;
 
 	/**
 	 * The node holds a string value that represents a DMT node URI.
+	 * 
+	 * @since 1.1
 	 */
 	public static final int			FORMAT_NODE_URI			= 0x20000;
 
 	/**
 	 * The node holds an hex binary value. The value of the node corresponds to
 	 * the Java {@code byte[]} type.
+	 * 
+	 * @since 1.1
 	 */
 	public static final int			FORMAT_HEXBINARY		= 0x40000;
 
@@ -192,11 +204,15 @@ public final class DmtData {
 
 	/**
 	 * Constant instance representing a boolean {@code true} value.
+	 * 
+	 * @since 1.1
 	 */
 	public static final DmtData		TRUE_VALUE				= new DmtData(true);
 
 	/**
 	 * Constant instance representing a boolean {@code false} value.
+	 * 
+	 * @since 1.1
 	 */
 	public static final DmtData		FALSE_VALUE				= new DmtData(false);
 
@@ -411,6 +427,7 @@ public final class DmtData {
 	 * value.
 	 * 
 	 * @param lng the long value to set
+	 * @since 1.1
 	 */
 	public DmtData(long lng) {
 		format = FORMAT_LONG;
@@ -515,6 +532,7 @@ public final class DmtData {
 	 * @throws IllegalArgumentException if format is not one of the allowed
 	 *         formats
 	 * @throws NullPointerException if {@code bytes} is {@code null}
+	 * @since 1.1
 	 */
 	public DmtData(byte[] bytes, int format) {
 		if (bytes == null)
@@ -661,6 +679,7 @@ public final class DmtData {
 	 * 
 	 * @return the time value
 	 * @throws DmtIllegalStateException if the format of the node is not time
+	 * @since 1.1
 	 */
 	public String getDateTime() {
 		if (format == FORMAT_DATETIME)
@@ -701,6 +720,7 @@ public final class DmtData {
 	 * 
 	 * @return the unsigned integer value
 	 * @throws DmtIllegalStateException if the format of the node is not integer
+	 * @since 1.1
 	 */
 	public String getUnsignedInteger() {
 		if (format == FORMAT_UNSIGNED_INTEGER)
@@ -715,6 +735,7 @@ public final class DmtData {
 	 * 
 	 * @return the long value
 	 * @throws DmtIllegalStateException if the format of the node is not long
+	 * @since 1.1
 	 */
 	public long getLong() {
 		if (format == FORMAT_LONG)
@@ -730,6 +751,7 @@ public final class DmtData {
 	 * 
 	 * @return the unsigned long value
 	 * @throws DmtIllegalStateException if the format of the node is not long
+	 * @since 1.1
 	 */
 	public String getUnsignedLong() {
 		if (format == FORMAT_UNSIGNED_LONG)
@@ -789,6 +811,7 @@ public final class DmtData {
 	 * @return the hex binary value
 	 * @throws DmtIllegalStateException if the format of the node is not hex
 	 *         binary
+	 * @since 1.1
 	 */
 	public byte[] getHexBinary() {
 		if (format == FORMAT_HEXBINARY) {
@@ -881,6 +904,7 @@ public final class DmtData {
 	 * @return the data value in node uri format
 	 * @throws DmtIllegalStateException if the format of the node is not node
 	 *         uri
+	 * @since 1.1
 	 */
 	public String getNodeUri() {
 		if (format == FORMAT_NODE_URI)

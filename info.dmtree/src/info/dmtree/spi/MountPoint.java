@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package info.dmtree.spi;
 
 import java.util.Dictionary;
@@ -8,13 +24,15 @@ import java.util.Dictionary;
  * It provides functionalites to get the absolute mounted uri and a shortcut
  * method to post events via the DmtAdmin.
  * 
+ * @version $Id$
+ * @since 1.1
  */
 public interface MountPoint {
 
 	/**
-	 * Provides the absolute mount path of this <code>MountPoint</code>
+	 * Provides the absolute mount path of this {@code MountPoint}
 	 * 
-	 * @return the absolute mount path of this <code>MountPoint</code>
+	 * @return the absolute mount path of this {@code MountPoint}
 	 */
 	String[] getMountPath();
 
@@ -29,22 +47,22 @@ public interface MountPoint {
 	 * @param topic
 	 *            the topic of the event to send. Valid values are:
 	 *            <ul>
-	 *            <li><code>info/dmtree/DmtEvent/ADDED</code> if the change was
+	 *            <li>{@code info/dmtree/DmtEvent/ADDED} if the change was
 	 *            caused by a rename action
 	 *            <p>
-	 *            <li><code> info/dmtree/DmtEvent/DELETED</code> if the change
+	 *            <li>{@code  info/dmtree/DmtEvent/DELETED} if the change
 	 *            was caused by a copy action
 	 *            <p>
-	 *            <li><code> info/dmtree/DmtEvent/REPLACED</code> if the change
+	 *            <li>{@code  info/dmtree/DmtEvent/REPLACED} if the change
 	 *            was caused by a copy action
 	 *            </ul>
 	 * @param relativeURIs
-	 *            an array of affected node <code>URI</code>'s. All
-	 *            <code>URI</code>'s specified here are relative to the current
-	 *            <code>MountPoint</code>'s mountPath. The value of this
+	 *            an array of affected node {@code URI}'s. All
+	 *            {@code URI}'s specified here are relative to the current
+	 *            {@code MountPoint}'s mountPath. The value of this
 	 *            parameter determines the value of the event property
 	 *            <codes>EVENT_PROPERTY_NODES</codes>. An empty array or
-	 *            <code>null</code> is permitted. In both cases the value of the
+	 *            {@code null} is permitted. In both cases the value of the
 	 *            events <codes>EVENT_PROPERTY_NODES</codes> property will be
 	 *            set to an empty array.
 	 * 
@@ -53,7 +71,7 @@ public interface MountPoint {
 	 *            to the Event that is going to be send by the DMTAdmin. If the
 	 *            properties contain a key <codes>EVENT_PROPERTY_NODES</codes>,
 	 *            then the value of this property is ignored and will be
-	 *            overwritten by <code>relativeURIs</code>.
+	 *            overwritten by {@code relativeURIs}.
 	 * @throws NullPointerException
 	 *             if the topic is null
 	 * @throws IllegalArgumentException
@@ -73,27 +91,27 @@ public interface MountPoint {
 	 * @param topic
 	 *            the topic of the event to send. Valid values are:
 	 *            <ul>
-	 *            <li><code>info/dmtree/DmtEvent/RENAMED</code> if the change
+	 *            <li>{@code info/dmtree/DmtEvent/RENAMED} if the change
 	 *            was caused by a rename action
 	 *            <p>
-	 *            <li><code> info/dmtree/DmtEvent/COPIED</code> if the change
+	 *            <li>{@code  info/dmtree/DmtEvent/COPIED} if the change
 	 *            was caused by a copy action
 	 *            </ul>
 	 * @param relativeURIs
-	 *            an array of affected node <code>URI</code>'s.
+	 *            an array of affected node {@code URI}'s.
 	 *            <p>
-	 *            All <code>URI</code>'s specified here are relative to the
-	 *            current <code>MountPoint</code>'s mountPath. The value of this
+	 *            All {@code URI}'s specified here are relative to the
+	 *            current {@code MountPoint}'s mountPath. The value of this
 	 *            parameter determines the value of the event property
 	 *            <codes>EVENT_PROPERTY_NODES</codes>. An empty array or
-	 *            <code>null</code> is permitted. In both cases the value of the
+	 *            {@code null} is permitted. In both cases the value of the
 	 *            events <codes>EVENT_PROPERTY_NODES</codes> property will be
 	 *            set to an empty array.
 	 * @param newRelativeURIs
-	 *            an array of affected node <code>URI</code>'s.The value of this
+	 *            an array of affected node {@code URI}'s.The value of this
 	 *            parameter determines the value of the event property
 	 *            <codes>EVENT_PROPERTY_NEW_NODES</codes>. An empty array or
-	 *            <code>null</code> is permitted. In both cases the value of the
+	 *            {@code null} is permitted. In both cases the value of the
 	 *            events <codes>EVENT_PROPERTY_NEW_NODES</codes> property will
 	 *            be set to an empty array.
 	 * @param properties
@@ -103,7 +121,7 @@ public interface MountPoint {
 	 *            <codes>EVENT_PROPERTY_NODES</codes> or
 	 *            <codes>EVENT_PROPERTY_NEW_NODES</codes>, then the values of
 	 *            these properties are ignored and will be overwritten by
-	 *            <code>relativeURIs</code> and <code>newRelativeURIs</code>.
+	 *            {@code relativeURIs} and {@code newRelativeURIs}.
 	 * @throws NullPointerException
 	 *             if the topic is null
 	 * @throws IllegalArgumentException
@@ -122,18 +140,18 @@ public interface MountPoint {
 	 * @param topic
 	 *            the topic of the event to send. Valid values are:
 	 *            <ul>
-	 *            <li><code>info/dmtree/DmtEvent/DESTRUCTIVE_OPERATION</code> if
+	 *            <li>{@code info/dmtree/DmtEvent/DESTRUCTIVE_OPERATION} if
 	 *            the notification is about a destructive operation that causes
 	 *            a potential change of the system state
 	 *            <p>
 	 *            </ul>
 	 * @param relativeURIs
-	 *            an array of affected node <code>URI</code>'s. All
-	 *            <code>URI</code>'s specified here are relative to the current
-	 *            <code>MountPoint</code>'s mountPath. The value of this
+	 *            an array of affected node {@code URI}'s. All
+	 *            {@code URI}'s specified here are relative to the current
+	 *            {@code MountPoint}'s mountPath. The value of this
 	 *            parameter determines the value of the event property
 	 *            <codes>EVENT_PROPERTY_NODES</codes>. An empty array or
-	 *            <code>null</code> is permitted. In both cases the value of the
+	 *            {@code null} is permitted. In both cases the value of the
 	 *            events <codes>EVENT_PROPERTY_NODES</codes> property will be
 	 *            set to an empty array.
 	 * @param properties
@@ -141,7 +159,7 @@ public interface MountPoint {
 	 *            to the Event that is going to be send by the DMTAdmin. If the
 	 *            properties contain a key <codes>EVENT_PROPERTY_NODES</codes>,
 	 *            then the value of this property is ignored and will be
-	 *            overwritten by <code>relativeURIs</code>.
+	 *            overwritten by {@code relativeURIs}.
 	 * @throws NullPointerException
 	 *             if the topic is null
 	 * @throws IllegalArgumentException

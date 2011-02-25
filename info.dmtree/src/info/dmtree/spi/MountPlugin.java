@@ -1,8 +1,24 @@
+/*
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package info.dmtree.spi;
 
 /**
- * This interface can be optionally implemented by a <code>DataPlugin</code> or
- * <code>ExecPlugin</code> in order to get information about its absolute mount
+ * This interface can be optionally implemented by a {@code DataPlugin} or
+ * {@code ExecPlugin} in order to get information about its absolute mount
  * points in the overall DMT.
  * <p>
  * This is especially interesting, if the plugin is mapped to the tree as part
@@ -10,6 +26,8 @@ package info.dmtree.spi;
  * determined by the DmtAdmin after the registration of the plugin and therefore
  * unknown to the plugin in advance.
  * 
+ * @version $Id$
+ * @since 1.1
  */
 public interface MountPlugin {
 
@@ -20,7 +38,7 @@ public interface MountPlugin {
 	static final String MOUNT_POINTS = "mountPoints";
 
 	/**
-	 * Provides the <code>MountPoint</code> objects describing the path where
+	 * Provides the {@code MountPoint} objects describing the path where
 	 * the plugin is mapped to the overall DMT.
 	 * 
 	 * @param mountPoints
@@ -29,15 +47,15 @@ public interface MountPlugin {
 	void mountPointsAdded(MountPoint[] mountPoints);
 
 	/**
-	 * Informs the plugin that the provided <code>MountPoint</code> objects have
+	 * Informs the plugin that the provided {@code MountPoint} objects have
 	 * been removed from the mapping.
 	 * <p>
-	 * NOTE: attempts to invoke the <code>postEvent</code> or
-	 * <code>sendEvent</code> on the provided <code>MountPoint</code> will be
+	 * NOTE: attempts to invoke the {@code postEvent} or
+	 * {@code sendEvent} on the provided {@code MountPoint} will be
 	 * ignored.
 	 * 
 	 * @param mountPoints
-	 *            array of <code>MountPoint</code> objects that have been
+	 *            array of {@code MountPoint} objects that have been
 	 *            removed from the mapping
 	 */
 	void mountPointsRemoved(MountPoint[] mountPoints);
