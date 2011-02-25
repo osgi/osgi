@@ -1,9 +1,11 @@
-Bundle-Version: 4.2.0.${project.build}
-Bundle-Description: Dmt Test Case 003
-Private-Package						= ${p}.*, \
-	org.osgi.test.support.*
-	
-Include-Resource: tb1.jar=DMTTest_Bundles-1.0.0.jar
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Bundle-Version: 4.3.0.${project.build}
+Bundle-Description: Dmt Test Case 004
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						= ${p}.*	
+Include-Resource: tb1.jar=resources/DMTTest_Bundles-1.0.0.jar
 
 Test-Cases							= ${testcases}
 
@@ -16,7 +18,7 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=4.3;strategy=lowest, \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.event; version=latest, \
@@ -27,3 +29,4 @@ Test-Cases							= ${testcases}
 	org.osgi.dmtree.max.segment.name.length=33, \
 	org.osgi.dmtree.max.uri.length=129, \
 	org.osgi.dmtree.max.uri.segments=21
+
