@@ -76,6 +76,8 @@ public class NoBlockParticipantNotifyTest extends OSGiTestCase {
 		thread1.setDaemon(true);
 		thread1.start();
 		thread1.join(5000);
+		if (thread2.get().isAlive())
+			thread2.get().join(5000);
 		assertNotBlocked(thread2.get(), thread1);
 	}
 	
@@ -106,6 +108,8 @@ public class NoBlockParticipantNotifyTest extends OSGiTestCase {
 		thread1.setDaemon(true);
 		thread1.start();
 		thread1.join(5000);
+		if (thread2.get().isAlive())
+			thread2.get().join(5000);
 		assertNotBlocked(thread2.get(), thread1);
 	}
 	
@@ -136,6 +140,8 @@ public class NoBlockParticipantNotifyTest extends OSGiTestCase {
 		thread1.setDaemon(true);
 		thread1.start();
 		thread1.join(5000);
+		if (thread2.get().isAlive())
+			thread2.get().join(5000);
 		assertNotBlocked(thread2.get(), thread1);
 	}
 	
