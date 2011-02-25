@@ -11,13 +11,10 @@ Import-Service					= \
 	org.osgi.service.log.LogService, \
 	org.osgi.service.cm.ConfigurationAdmin
 
-Bundle-RequiredExecutionEnvironment = J2SE-1.4
+Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
 Export-Package 					= ${p}.export,info.dmtree.*;-split-package:=first
-Private-Package					= ${p}.*
-
-javac.source					= 1.5
-javac.target					= jsr14
+Private-Package					= ${p}, ${p}.plugins
 
 -buildpath						= \
     info.dmtree;				version=project, \
