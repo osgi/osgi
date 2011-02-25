@@ -11,11 +11,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
@@ -25,6 +28,7 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.test.cases.framework.div.tb6.BundleClass;
+import org.osgi.test.cases.framework.resolver.tb1.Test;
 import org.osgi.test.support.FrameworkEventCollector;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -139,6 +143,7 @@ public class DivTests extends DefaultTestBundleControl {
 		try {
 			String originalLocation = tb.getLocation();
 			long originalLastModified = tb.getLastModified();
+			Thread.sleep(100);
 			tb.update();
 			assertEquals("bundle location changed after update.",
 					originalLocation, tb.getLocation());
@@ -599,6 +604,94 @@ public class DivTests extends DefaultTestBundleControl {
 		}
 	}
 
+	public void testBundleGetResourcesResolved() {
+		doTestBundleGetResources(true);
+	}
+
+	public void testBundleGetResourcesUnresolved() {
+		doTestBundleGetResources(false);
+	}
+	
+	private void doTestBundleGetResources(boolean resolved) {
+		Bundle tb25 = null;
+		try {
+			tb25 = install(resolved ? "div.tb25.resolved.jar" : "div.tb25.unresolved.jar");
+		} catch (Exception e) {
+			fail("Unexpected error installing test bundle.", e);
+		}
+		try {
+			// sanity check for the root resources
+			URL rootEntry = tb25.getEntry("resources/root.txt");
+			assertNotNull("root.txt not found", rootEntry);
+			assertEquals("Wrong resource", "root.txt", getValue(rootEntry));
+			rootEntry = tb25.getEntry("resources/all.txt");
+			assertEquals("Wrong resource", "root.all.txt", getValue(rootEntry));
+			assertNotNull("root.all.txt not found", rootEntry);
+			// Bundle-ClassPath of div.tb25 does not specify '.'
+			// the root resources must not be found.
+			URL resource = tb25.getResource("resources/root.txt");
+			assertNull("Found unexpected resource.", resource);
+		
+			// 'a' resources must be found first for duplicate resources
+			resource = tb25.getResource("resources/all.txt");
+			assertNotNull("Did not find resource.", resource);
+			assertEquals("Wrong resource", "a.all.txt", getValue(resource));
+	
+			// test non shadowed resources
+			resource = tb25.getResource("resources/a.txt");
+			assertNotNull("Did not find resource.", resource);
+			resource = tb25.getResource("resources/b.txt");
+			assertNotNull("Did not find resource.", resource);
+	
+			// test get resources for shadowed resource
+			// again the root resource must not be found
+			Enumeration<URL> resources = null;
+			try {
+				resources = tb25.getResources("resources/all.txt");
+			} catch (IOException e) {
+				fail("Unexpected io exception.", e);
+			}
+			assertNotNull("Did not find resources.", resources);
+			// there are only two resources from 'a' and 'b' in that order.
+			try {
+				resource = resources.nextElement();
+				assertNotNull("Did not find resource.", resource);
+				assertEquals("Wrong resource", "a.all.txt", getValue(resource));
+				resource = resources.nextElement();
+				assertNotNull("Did not find resource.", resource);
+				assertEquals("Wrong resource", "b.all.txt", getValue(resource));
+				assertFalse("Expecting no more resources.", resources.hasMoreElements());
+			} catch (NoSuchElementException e) {
+				fail("Wrong number of elements.", e);
+			}
+			// after all the getResource calls the bundle must be RESOLVED or INSTALLED depending on resolved param
+			assertEquals("Wrong state for bundle.", resolved ? Bundle.RESOLVED : Bundle.INSTALLED, tb25.getState());
+		} finally {
+			try {
+				tb25.uninstall();
+			} catch (BundleException e) {
+				// ignore
+			}
+		}
+	}
+
+	private String getValue(URL url) {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(url.openStream()));
+			return reader.readLine();
+		} catch (IOException e) {
+			return null;
+		} finally {
+			if (reader != null)
+				try {
+					reader.close();
+				} catch (IOException e) {
+					// ignore
+				}
+		}
+	}
+
 	public void testBundleGetResources() throws Exception {
 		Bundle bundle = getContext().installBundle(
 				getWebServer() + "div.tb10.jar");
@@ -774,7 +867,7 @@ public class DivTests extends DefaultTestBundleControl {
 
 			Object service = getContext().getService(sr);
 			ClassLoader classLoader = (ClassLoader) service.getClass()
-					.getMethod("getClassLoader", null).invoke(service, null);
+					.getMethod("getClassLoader", (Class[]) null).invoke(service, (Object[]) null);
 			assertEquals(
 					"Expecting the ClassLoader of the class and the bundle to be the same",
 					clazz.getClassLoader(), classLoader);
@@ -859,324 +952,6 @@ public class DivTests extends DefaultTestBundleControl {
 			tb24b.uninstall();
 			tb24a.uninstall();
 		}
-	}
-
-	/**
-	 * Test the Version constructor with legal parameters
-	 * 
-	 * @spec Version.<init>(int,int,int)
-	 */
-	public void testVersionConstructors() {
-		new Version(0, 0, 0);
-
-		new Version(0, 0, 0, "a");
-
-		/**
-		 * Test the Version constructor with legal parameters
-		 * 
-		 * @spec Version.<init>(int,int,int)
-		 */
-
-		new Version("0.0.0");
-
-		/**
-		 * Test the Version constructor with illegal parameters
-		 * 
-		 * @spec Version.<init>(int,int,int)
-		 */
-		try {
-			new Version(-1, -1, -1);
-			fail("Version created with illegal constructors");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		/**
-		 * Test the Version constructor with legal parameters
-		 * 
-		 * @spec Version.<init>(int,int,int)
-		 */
-		try {
-			new Version(null);
-			fail("Version created with illegal constructors");
-		}
-		catch (Exception ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		/**
-		 * Test the Version constructor with legal parameters
-		 * 
-		 * @spec Version.<init>(int,int,int)
-		 */
-		try {
-			new Version("");
-			fail("Version created with illegal constructors");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-	}
-
-	public void testVersionEquals() {
-		Version version1;
-		Version version2;
-
-		version1 = new Version(0, 0, 0);
-		version2 = new Version(0, 0, 0);
-
-		assertEquals("Testing the method equals() with the same versions",
-				version1, version2);
-
-		/**
-		 * Test the method equals() with the same versions
-		 * 
-		 * @spec Version.equals(Object)
-		 */
-
-		version1 = new Version(0, 0, 0, "a");
-		version2 = new Version(0, 0, 0, "a");
-
-		assertEquals("Testing the method equals() with the same versions",
-				version1, version2);
-
-		/**
-		 * Test the method equals() with different versions
-		 * 
-		 * @spec Version.equals(Object)
-		 */
-
-		version1 = new Version(0, 0, 0);
-		version2 = new Version(1, 0, 0);
-
-		if (version1.equals(version2)) {
-			fail("Testing the method equals() with different versions");
-		}
-
-		/**
-		 * Test the method equals() with different versions
-		 * 
-		 * @spec Version.equals(Object)
-		 */
-
-		version1 = new Version(0, 0, 0);
-		version2 = new Version(0, 1, 0);
-
-		if (version1.equals(version2)) {
-			fail("Testing the method equals() with different versions");
-		}
-
-		/**
-		 * Test the method equals() with different versions
-		 * 
-		 * @spec Version.equals(Object)
-		 */
-
-		version1 = new Version(0, 0, 0);
-		version2 = new Version(0, 0, 1);
-
-		if (version1.equals(version2)) {
-			fail("Testing the method equals() with different versions");
-		}
-
-		/**
-		 * Test the method equals() with different versions
-		 * 
-		 * @spec Version.equals(Object)
-		 */
-
-		version1 = new Version(0, 0, 0, "a");
-		version2 = new Version(0, 0, 0, "b");
-
-		if (version1.equals(version2)) {
-			fail("Testing the method equals() with different versions");
-		}
-
-		/**
-		 * Test the method equals() with different versions
-		 * 
-		 * @spec Version.equals(Object)
-		 */
-
-		version1 = new Version(0, 0, 0, "a");
-		version2 = new Version(1, 1, 1, "b");
-
-		if (version1.equals(version2)) {
-			fail("Testing the method equals() with different versions");
-		}
-	}
-
-	/**
-	 * Test the method hashCode() when the equals() returns true
-	 * 
-	 * @spec Version.hashCode();
-	 */
-	public void testVersionHashCode() throws Exception {
-		Version version1;
-		Version version2;
-
-		version1 = new Version(0, 0, 0);
-		version2 = new Version(0, 0, 0);
-
-		assertEquals(
-				"The method hashCode() has different return values when the method equals() returns true for two Version instances",
-				version1.hashCode(), version2.hashCode());
-		version1 = new Version(0, 0, 0);
-		version2 = new Version(1, 0, 0);
-
-		if (version1.hashCode() == version2.hashCode()) {
-			fail("The method hashCode() has the same return value when the method equals() returns false for two Version instances");
-		}
-	}
-
-	public void testVersionGetMajor() {
-		Version version;
-
-		version = new Version(1, 2, 3);
-
-		assertEquals(
-				"Testing the method getMajor() using the constructor Version(int,int,int)",
-				1, version.getMajor());
-
-		version = new Version("1.2.3");
-
-		assertEquals(
-				"Testing the method getMajor() using the constructor Version(String)",
-				1, version.getMajor());
-	}
-
-	public void testVersionGetMinor() {
-		Version version;
-
-		version = new Version(1, 2, 3);
-
-		assertEquals(
-				"Testing the method getMinor() using the constructor Version(int,int,int)",
-				2, version.getMinor());
-
-		version = new Version("1.2.3");
-
-		assertEquals(
-				"Testing the method getMinor() using the constructor Version(String)",
-				2, version.getMinor());
-	}
-
-	public void testVersionGetMicro() {
-		Version version;
-
-		version = new Version(1, 2, 3);
-
-		assertEquals(
-				"Testing the method getMicro() using the constructor Version(int,int,int)",
-				3, version.getMicro());
-
-		version = new Version("1.2.3");
-
-		assertEquals(
-				"Testing the method getMicro() using the constructor Version(String)",
-				3, version.getMicro());
-	}
-
-	/**
-	 * Test the method getQualifier() using the constructor
-	 * Version(int,int,int,String)
-	 * 
-	 * @spec Version.getQualifier()
-	 */
-	public void testVersionGetQualifier() throws Exception {
-		Version version;
-
-		version = new Version(1, 1, 1, "a");
-
-		assertEquals(
-				"Testing the method getQualifier() using the constructor Version(int,int,int,String)",
-				"a", version.getQualifier());
-
-		version = new Version("1.1.1.a");
-
-		assertEquals(
-				"Testing the method getQualifier using the constructor Version(String)",
-				"a", version.getQualifier());
-	}
-
-	public void testVersionCompareTo() {
-		/**
-		 * Test the method compareTo() with first version number less than
-		 * second version number
-		 * 
-		 * @spec Version.compareTo(Version);
-		 */
-		Version version1;
-		Version version2;
-
-		version1 = new Version(1, 1, 1);
-		version2 = new Version(2, 1, 1);
-
-		if (version1.compareTo(version2) >= 0) {
-			fail("Testing the method compareTo() with first version number less than second version number");
-		}
-
-		/**
-		 * Test the method compareTo() with first version number greater than
-		 * second version number
-		 * 
-		 * @spec Version.compareTo(Version);
-		 */
-
-		version1 = new Version(2, 1, 1);
-		version2 = new Version(1, 1, 1);
-
-		if (version1.compareTo(version2) <= 0) {
-			fail("Testing the method compareTo() with first version number greater than second version number");
-		}
-
-		/**
-		 * Test the method compareTo() with same version numbers
-		 * 
-		 * @spec Version.compareTo(Version);
-		 */
-
-		version1 = new Version(1, 1, 1);
-		version2 = new Version(1, 1, 1);
-
-		if (version1.compareTo(version2) != 0) {
-			fail("Testing the method compareTo() with same version numbers");
-		}
-
-		/**
-		 * Test the method compareTo() with an incorrect object
-		 * 
-		 * @spec Version.compareTo(Version);
-		 */
-		String incorrect;
-		Version version;
-
-		incorrect = "";
-		version = new Version(1, 1, 1);
-
-		try {
-			version.compareTo(incorrect);
-			fail("Testing the method compareTo() with an incorrect object");
-		}
-		catch (ClassCastException ex) {
-			// This is an expected exception and can be ignored
-		}
-	}
-
-	public void testVersionInstanceOf() {
-		Object version;
-
-		version = new Version(1, 1, 1);
-
-		assertTrue(
-				"The class Version does not implements Comparable interface",
-				version instanceof Comparable);
-	}
-
-	public void testVersionConstantsValues() {
-		assertEquals("emptyVersion not equal to 0.0.0", new Version(0, 0, 0),
-				Version.emptyVersion);
 	}
 
 	private String reportProcessorOS() {

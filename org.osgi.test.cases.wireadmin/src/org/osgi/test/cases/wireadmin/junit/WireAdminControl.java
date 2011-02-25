@@ -811,25 +811,27 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	/**
 	 * Tests wire flow control
 	 */
-	public void testValueFiltering() throws Exception {
-		String delimiter = "------------------------------------------------------------";
+	private final String	delimiter	= "------------------------------------------------------------";
+
+	public void testValueFilteringCurrentPrevious() throws Exception {
+		final String producerPid = "filter.test.producer.pid." + getName();
+		final String consumerPid = "filter.test.conusmer.pid." + getName();
 		String filter = "(" + WireConstants.WIREVALUE_CURRENT + "=5)";
 		// create wire
 		log("create wire for the test");
 		Hashtable h = new Hashtable();
 		h.put("org.osgi.test.wireadmin.property", "42");
 		h.put(WireConstants.WIREADMIN_FILTER, filter);
-		Wire localWire = helper.createWire(wa, "filter.test.producer.pid",
-				"filter.test.conusmer.pid", h);
+		Wire localWire = helper.createWire(wa, producerPid, consumerPid, h);
 		// register producer
 		log("register test producer");
 		FilteredProducerImpl fpi = new FilteredProducerImpl();
-		helper.registerProducer(fpi, "filter.test.producer.pid",
+		helper.registerProducer(fpi, producerPid,
 				new Class[] {Integer.class}, null);
 		// register consumer
 		log("register test consumer");
 		FilteredConsumerImpl fci = new FilteredConsumerImpl();
-		helper.registerConsumer(fci, "filter.test.conusmer.pid",
+		helper.registerConsumer(fci, consumerPid,
 				new Class[] {Integer.class}, null);
 		// wait until filtered producer's method consumersConnected is called
 		// with the test wire
@@ -849,7 +851,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		log("Current value test - notifying producer. Will send integers [0..9]");
 		log("Filter is " + filter);
 		log("Consumer should receive values [5]");
-		fpi.updateWire(1, false);
+		fpi.updateWire(1);
 		int counter = 0;
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 1)) {
 			Thread.sleep(50);
@@ -867,7 +869,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		log("Previous value test - notifying producer. Will send integers [0..9]");
 		log("Filter is " + filter);
 		log("Consumer should receive values [0]");
-		fpi.updateWire(1, false);
+		fpi.updateWire(1);
 		counter = 0;
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 1)) {
 			Thread.sleep(50);
@@ -876,26 +878,64 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		assertEquals("incorrect values received", Arrays
 				.asList(new Integer[] {new Integer(0)}), values);
 		log(delimiter);
+	}
+
+	public void testValueFilteringDeltaAbsolute() throws Exception {
+		final String producerPid = "filter.test.producer.pid." + getName();
+		final String consumerPid = "filter.test.conusmer.pid." + getName();
 		// delta absolute test
 		// last received value was 0 so we should receive:
 		// 4 - absolute delta 4
 		// 8 - absolute delta 8
-		filter = "(" + WireConstants.WIREVALUE_DELTA_ABSOLUTE + ">=3)";
+		String filter = "(" + WireConstants.WIREVALUE_DELTA_ABSOLUTE + ">=3)";
+		// create wire
+		log("create wire for the test");
+		Hashtable h = new Hashtable();
+		h.put("org.osgi.test.wireadmin.property", "42");
 		h.put(WireConstants.WIREADMIN_FILTER, filter);
-		helper.updateWire(wa, localWire, h);
+		Wire localWire = helper.createWire(wa, producerPid, consumerPid, h);
+		// register producer
+		log("register test producer");
+		FilteredProducerImpl fpi = new FilteredProducerImpl();
+		helper.registerProducer(fpi, producerPid,
+				new Class[] {Integer.class}, null);
+		// register consumer
+		log("register test consumer");
+		FilteredConsumerImpl fci = new FilteredConsumerImpl();
+		helper.registerConsumer(fci, consumerPid,
+				new Class[] {Integer.class}, null);
+		// wait until filtered producer's method consumersConnected is called
+		// with the test wire
+		int i = 0;
+		while ((fpi.getWire() == null) && (i++ < 500)) {
+			try {
+				Thread.sleep(20);
+			}
+			catch (InterruptedException e) {
+				// ignored
+			}
+		}
+		if (fpi.getWire() == null) {
+			fail("producer not connected (wire is null)");
+		}
 		// delta absolute and delta relative tests need the delta increased to 2
 		log("Value delta absolute test - notifying producer. Will send integers [0, 2, 4, 6, 8]");
 		log("Filter is " + filter);
 		log("Consumer should receive values [4, 8]");
-		fpi.updateWire(2, false);
-		counter = 0;
+		fpi.updateWire(2);
+		int counter = 0;
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 2)) {
 			Thread.sleep(50);
 		}
-		values = fci.resetValuesReceived();
+		List values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays.asList(new Integer[] {
 				new Integer(4), new Integer(8)}), values);
 		log(delimiter);
+	}
+
+	public void testValueFilteringDeltaRelative() throws Exception {
+		final String producerPid = "filter.test.producer.pid." + getName();
+		final String consumerPid = "filter.test.conusmer.pid." + getName();
 		// delta relative test
 		// last received value was 8 so we should receive
 		/* !!! last received value changes dinamicly during that test !!! */
@@ -903,69 +943,163 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		// 2 - relative delta 1
 		// 4 - relative delta 0.5
 		// 8 - relative delta 0.5
-		filter = "(" + WireConstants.WIREVALUE_DELTA_RELATIVE + ">=0.4)";
+		String filter = "(" + WireConstants.WIREVALUE_DELTA_RELATIVE + ">=0.4)";
+		// create wire
+		log("create wire for the test");
+		Hashtable h = new Hashtable();
+		h.put("org.osgi.test.wireadmin.property", "42");
 		h.put(WireConstants.WIREADMIN_FILTER, filter);
-		helper.updateWire(wa, localWire, h);
+		Wire localWire = helper.createWire(wa, producerPid, consumerPid, h);
+		// register producer
+		log("register test producer");
+		FilteredProducerImpl fpi = new FilteredProducerImpl();
+		helper.registerProducer(fpi, producerPid,
+				new Class[] {Integer.class}, null);
+		// register consumer
+		log("register test consumer");
+		FilteredConsumerImpl fci = new FilteredConsumerImpl();
+		helper.registerConsumer(fci, consumerPid,
+				new Class[] {Integer.class}, null);
+		// wait until filtered producer's method consumersConnected is called
+		// with the test wire
+		int i = 0;
+		while ((fpi.getWire() == null) && (i++ < 500)) {
+			try {
+				Thread.sleep(20);
+			}
+			catch (InterruptedException e) {
+				// ignored
+			}
+		}
+		if (fpi.getWire() == null) {
+			fail("producer not connected (wire is null)");
+		}
 		log("Value delta relative test - notifying producer. Will send integers [0, 2, 4, 6, 8]");
 		log("Filter is " + filter);
 		log("Consumer should receive values [0, 2, 4, 8]");
-		fpi.updateWire(2, false);
-		counter = 0;
+		fpi.updateWire(2);
+		int counter = 0;
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 4)) {
 			Thread.sleep(50);
 		}
-		values = fci.resetValuesReceived();
+		List values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays
 				.asList(new Integer[] {new Integer(0), new Integer(2),
 						new Integer(4), new Integer(8)}), values);
 		log(delimiter);
+	}
+
+	public void testValueFilteringElapsed() throws Exception {
+		final String producerPid = "filter.test.producer.pid." + getName();
+		final String consumerPid = "filter.test.conusmer.pid." + getName();
 		// time elapsed test
 		// 4 should be received since it is the first one that has waited so
 		// long
-		filter = "(" + WireConstants.WIREVALUE_ELAPSED + ">=500)";
-		h.put(WireConstants.WIREADMIN_FILTER, filter);
-		helper.updateWire(wa, localWire, h);
-		Thread.sleep(550); // ensure the time is elapsed
-		log("Time elapsed test - notifying producer. Will send integers [0, 2, 4, 6, 8]");
-		log("Filter is " + filter);
-		log("Consumer should receive values [0, 4, 6, 8]");
-		// make the producer wait before sending updates
-		fpi.updateWire(2, true);
-		counter = 0;
-		while ((counter++ < 500) && (fci.numberValuesReceived() < 4)) { // timeout
-			// increased
-			// to
-			// 25
-			// seconds
+		String filter = "(" + WireConstants.WIREVALUE_ELAPSED + ">=1000)";
+		// create wire
+		log("create wire for the test");
+		Hashtable h = new Hashtable();
+		h.put("org.osgi.test.wireadmin.property", "42");
+		Wire localWire = helper.createWire(wa, producerPid, consumerPid, h);
+		// register producer
+		log("register test producer");
+		FilteredProducerImpl fpi = new FilteredProducerImpl();
+		helper.registerProducer(fpi, producerPid,
+				new Class[] {Integer.class}, null);
+		// register consumer
+		log("register test consumer");
+		FilteredConsumerImpl fci = new FilteredConsumerImpl();
+		helper.registerConsumer(fci, consumerPid,
+				new Class[] {Integer.class}, null);
+		// wait until filtered producer's method consumersConnected is called
+		// with the test wire
+		int i = 0;
+		while ((fpi.getWire() == null) && (i++ < 500)) {
+			try {
+				Thread.sleep(20);
+			}
+			catch (InterruptedException e) {
+				// ignored
+			}
+		}
+		if (fpi.getWire() == null) {
+			fail("producer not connected (wire is null)");
+		}
+		fpi.updateWire(2);
+		int counter = 0;
+		while ((counter++ < 100) && (fci.numberValuesReceived() < 5)) {
 			Thread.sleep(50);
 		}
-		values = fci.resetValuesReceived();
-		assertEquals("incorrect values received", Arrays
-				.asList(new Integer[] {new Integer(0), new Integer(4),
-						new Integer(6), new Integer(8)}), values);
-		log(delimiter);
-		// disable filtering test
-		log("update the producer properties - add WIREADMIN_PRODUCER_FILTERS property");
-		Map p_h = new HashMap();
-		p_h.put(WireConstants.WIREADMIN_PRODUCER_FILTERS, new Object());
-		helper.modifyProducer("filter.test.producer.pid", p_h);
-		filter = "(" + WireConstants.WIREVALUE_CURRENT + ">=5)";
+		fci.resetValuesReceived(); // clear values
 		h.put(WireConstants.WIREADMIN_FILTER, filter);
 		helper.updateWire(wa, localWire, h);
-		log("Filtering disabled test - notifying producer. Will send integers [0, 3, 6, 9]");
+		log("Time elapsed test - notifying producer. Will send integers [0, 2, 4, 6, 8]");
 		log("Filter is " + filter);
-		log("Consumer should receive values [0, 3, 6, 9]");
-		fpi.updateWire(3, false);
+		log("Consumer should receive values [2, 4, 6, 8]");
+		// make the producer wait between sending updates
+		fpi.updateWireDelayed(2, 1200);
 		counter = 0;
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 4)) {
 			Thread.sleep(50);
 		}
-		values = fci.resetValuesReceived();
+		List values = fci.resetValuesReceived();
+		assertEquals("incorrect values received",
+				Arrays.asList(new Integer[] {new Integer(2), new Integer(4),
+						new Integer(6), new Integer(8)}), values);
+		log(delimiter);
+	}
+
+	public void testValueFilteringDisabled() throws Exception {
+		final String producerPid = "filter.test.producer.pid." + getName();
+		final String consumerPid = "filter.test.conusmer.pid." + getName();
+		String filter = "(" + WireConstants.WIREVALUE_CURRENT + ">=5)";
+		// create wire
+		log("create wire for the test");
+		Hashtable h = new Hashtable();
+		h.put("org.osgi.test.wireadmin.property", "42");
+		h.put(WireConstants.WIREADMIN_FILTER, filter);
+		Wire localWire = helper.createWire(wa, producerPid, consumerPid, h);
+		// register producer
+		log("register test producer");
+		FilteredProducerImpl fpi = new FilteredProducerImpl();
+		Map p_h = new HashMap();
+		p_h.put(WireConstants.WIREADMIN_PRODUCER_FILTERS, new Object());
+		helper.registerProducer(fpi, producerPid, new Class[] {Integer.class},
+				p_h);
+		// register consumer
+		log("register test consumer");
+		FilteredConsumerImpl fci = new FilteredConsumerImpl();
+		helper.registerConsumer(fci, consumerPid,
+				new Class[] {Integer.class}, null);
+		// wait until filtered producer's method consumersConnected is called
+		// with the test wire
+		int i = 0;
+		while ((fpi.getWire() == null) && (i++ < 500)) {
+			try {
+				Thread.sleep(20);
+			}
+			catch (InterruptedException e) {
+				// ignored
+			}
+		}
+		if (fpi.getWire() == null) {
+			fail("producer not connected (wire is null)");
+		}
+		// disable filtering test
+		log("update the producer properties - add WIREADMIN_PRODUCER_FILTERS property");
+		log("Filtering disabled test - notifying producer. Will send integers [0, 3, 6, 9]");
+		log("Filter is " + filter);
+		log("Consumer should receive values [0, 3, 6, 9]");
+		fpi.updateWire(3);
+		int counter = 0;
+		while ((counter++ < 100) && (fci.numberValuesReceived() < 4)) {
+			Thread.sleep(50);
+		}
+		List values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays
 				.asList(new Integer[] {new Integer(0), new Integer(3),
 						new Integer(6), new Integer(9)}), values);
 		log(delimiter);
-		log("Finished");
 	}
 
 	/**

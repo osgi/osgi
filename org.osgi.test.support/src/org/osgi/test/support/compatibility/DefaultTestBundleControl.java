@@ -24,8 +24,8 @@ import org.osgi.test.support.OSGiTestCase;
  */
 public abstract class DefaultTestBundleControl extends OSGiTestCase {
 
-	private final Map		serviceRegistry	= new HashMap();
-	private final Map		fetchedServices	= new HashMap();
+	private final Map<Object, ServiceRegistration< ? >>	serviceRegistry	= new HashMap<Object, ServiceRegistration< ? >>();
+	private final Map<Object, ServiceReference< ? >>	fetchedServices	= new HashMap<Object, ServiceReference< ? >>();
 	private volatile String	webServer;
 
 	/**
@@ -83,7 +83,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	}
 
 	public static void failException(String message,
-			Class expectedExceptionClass) {
+			Class< ? > expectedExceptionClass) {
 		fail(message + " expected:[" + expectedExceptionClass.getName()
 				+ "] and got nothing");
 	}
@@ -112,7 +112,8 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	 * @param want the exception that is specified to be thrown
 	 * @param got the exception that was thrown
 	 */
-	public static void assertException(String message, Class want, Throwable got) {
+	public static void assertException(String message, Class<? extends Throwable> want,
+			Throwable got) {
 		String formatted = "";
 
 		if (message != null) {
@@ -130,7 +131,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	 * AssertionFailedError is thrown.
 	 */
 	public static void assertEqualProperties(String message,
-			Dictionary expected, Dictionary actual) {
+			Dictionary< ? , ? > expected, Dictionary< ? , ? > actual) {
 		if (expected == actual) {
 			passEquals(message, expected, actual);
 			return;
@@ -146,7 +147,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 			return;
 		}
 
-		Enumeration e = expected.keys();
+		Enumeration< ? > e = expected.keys();
 		while (e.hasMoreElements()) {
 			Object key = e.nextElement();
 			Object expectedValue = expected.get(key);
@@ -175,8 +176,8 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	 * object types are arrays.
 	 * 
 	 */
-	private static boolean objectEquals(Comparator comparator, Object expected,
-			Object actual) {
+	private static <T> boolean objectEquals(Comparator<T> comparator,
+			T expected, T actual) {
 		if (expected == actual) {
 			return true;
 		}
@@ -190,16 +191,17 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 		}
 
 		if (expected instanceof List && actual instanceof List)
-			return objectEquals(comparator, (List) expected, (List) actual);
+			return listEquals(comparator, (List<T>) expected, (List<T>) actual);
 
 		if (expected instanceof Dictionary && actual instanceof Dictionary)
-			return objectEquals(comparator, (Dictionary) expected,
-					(Dictionary) actual);
+			return dictionaryEquals(comparator,
+					(Dictionary<Object, T>) expected,
+					(Dictionary<Object, T>) actual);
 
 		try {
-			Class clazz = expected.getClass();
+			Class<?> clazz = expected.getClass();
 			if (clazz.isArray()) {
-				Class type = clazz.getComponentType();
+				Class<?> type = clazz.getComponentType();
 
 				if (type.isPrimitive()) {
 					if (type.equals(Integer.TYPE)) {
@@ -245,8 +247,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 																	(boolean[]) actual);
 												}
 				}
-				else /* non-primitive array object */
-				{
+				else { /* non-primitive array object */
 					return Arrays
 							.equals((Object[]) expected, (Object[]) actual);
 				}
@@ -269,8 +270,8 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 		return false;
 	}
 
-	private static boolean objectEquals(Comparator comparator, List expected,
-			List actual) {
+	private static <T> boolean listEquals(Comparator<T> comparator,
+			List<T> expected, List<T> actual) {
 		if (expected.size() != actual.size())
 			return false;
 
@@ -282,17 +283,17 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 		return result;
 	}
 
-	private static boolean objectEquals(Comparator comparator,
-			Dictionary expected, Dictionary actual) {
+	private static <K, V> boolean dictionaryEquals(Comparator<V> comparator,
+			Dictionary<K, V> expected, Dictionary<K, V> actual) {
 		if (expected.size() != actual.size())
 			return false;
 
 		boolean result = true;
 
-		for (Enumeration e = expected.keys(); result && e.hasMoreElements();) {
-			Object key = e.nextElement();
-			Object expectedValue = expected.get(key);
-			Object actualValue = actual.get(key);
+		for (Enumeration<K> e = expected.keys(); result && e.hasMoreElements();) {
+			K key = e.nextElement();
+			V expectedValue = expected.get(key);
+			V actualValue = actual.get(key);
 			result = objectEquals(comparator, expectedValue, actualValue);
 		}
 		return result;
@@ -310,13 +311,14 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 				+ actual + "]");
 	}
 
-	public boolean serviceAvailable(Class clazz) {
+	public boolean serviceAvailable(Class< ? > clazz) {
 		return getContext().getServiceReference(clazz.getName()) != null;
 	}
 
 	public void registerService(String clazz, Object service,
-			Dictionary properties) throws Exception {
-		ServiceRegistration sr = getContext().registerService(clazz, service,
+			Dictionary<String, ? > properties) throws Exception {
+		ServiceRegistration< ? > sr = getContext().registerService(clazz,
+				service,
 				properties);
 		synchronized (serviceRegistry) {
 			serviceRegistry.put(service, sr);
@@ -324,9 +326,9 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	}
 
 	public void unregisterService(Object service) {
-		ServiceRegistration sr;
+		ServiceRegistration< ? > sr;
 		synchronized (serviceRegistry) {
-			sr = (ServiceRegistration) serviceRegistry.remove(service);
+			sr = serviceRegistry.remove(service);
 		}
 		if (sr == null) {
 			fail("trying to unregister a service which is not currently registered");
@@ -335,9 +337,9 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	}
 
 	public void unregisterAllServices() {
-		ServiceRegistration[] srs;
+		ServiceRegistration< ? >[] srs;
 		synchronized (serviceRegistry) {
-			srs = (ServiceRegistration[]) serviceRegistry.values().toArray(
+			srs = serviceRegistry.values().toArray(
 					new ServiceRegistration[serviceRegistry.size()]);
 			serviceRegistry.clear();
 		}
@@ -358,7 +360,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	 * @throws NullPointerException if the service couldn't be retrieved from
 	 *         the framework.
 	 */
-	public Object getService(Class clazz) {
+	public Object getService(Class< ? > clazz) {
 		try {
 			return getService(clazz, null);
 		}
@@ -370,16 +372,16 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 
 	/**
      */
-	public Object getService(Class clazz, String filter)
+	public Object getService(Class< ? > clazz, String filter)
 			throws InvalidSyntaxException {
-		ServiceReference[] refs = getContext().getServiceReferences(
+		ServiceReference< ? >[] refs = getContext().getServiceReferences(
 				clazz.getName(), filter);
 
 		if (refs == null) {
 			fail("Can't get service reference for " + clazz.getName() + filter);
 		}
 
-		ServiceReference chosenRef = pickServiceReference(refs);
+		ServiceReference< ? > chosenRef = pickServiceReference(refs);
 
 		Object service = getContext().getService(chosenRef);
 
@@ -395,10 +397,10 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 		return service;
 	}
 
-	public ServiceReference getServiceReference(Object service) {
-		ServiceReference ref;
+	public ServiceReference< ? > getServiceReference(Object service) {
+		ServiceReference< ? > ref;
 		synchronized (fetchedServices) {
-			ref = (ServiceReference) fetchedServices.get(service);
+			ref = fetchedServices.get(service);
 		}
 
 		if (ref == null) {
@@ -409,9 +411,9 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	}
 
 	public void ungetService(Object service) {
-		ServiceReference ref;
+		ServiceReference< ? > ref;
 		synchronized (fetchedServices) {
-			ref = (ServiceReference) fetchedServices.remove(service);
+			ref = fetchedServices.remove(service);
 		}
 
 		if (ref == null) {
@@ -422,9 +424,9 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	}
 
 	public void ungetAllServices() {
-		ServiceReference[] refs;
+		ServiceReference< ? >[] refs;
 		synchronized (fetchedServices) {
-			refs = (ServiceReference[]) fetchedServices.values().toArray(
+			refs = fetchedServices.values().toArray(
 					new ServiceReference[fetchedServices.size()]);
 			fetchedServices.clear();
 		}
@@ -440,11 +442,12 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	 * BundleContext.getServiceReference() (highest ranking, lowest service ID
 	 * if the ranking is a tie)
 	 */
-	private static ServiceReference pickServiceReference(ServiceReference[] refs) {
-		ServiceReference highest = refs[0];
+	private static ServiceReference< ? > pickServiceReference(
+			ServiceReference< ? >[] refs) {
+		ServiceReference< ? > highest = refs[0];
 
 		for (int i = 1; i < refs.length; i++) {
-			ServiceReference challenger = refs[i];
+			ServiceReference< ? > challenger = refs[i];
 
 			if (ranking(highest) < ranking(challenger)) {
 				highest = challenger;
@@ -466,7 +469,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	 * @param s The service reference
 	 * @return Ranking value of service, default value is zero
 	 */
-	private static int ranking(ServiceReference s) {
+	private static int ranking(ServiceReference< ? > s) {
 		Object v = s.getProperty(Constants.SERVICE_RANKING);
 
 		if (v != null && v instanceof Integer) {
@@ -477,7 +480,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 		}
 	}
 
-	private static long serviceid(ServiceReference s) {
+	private static long serviceid(ServiceReference< ? > s) {
 		Long sid = (Long) s.getProperty(Constants.SERVICE_ID);
 
 		return sid.longValue();

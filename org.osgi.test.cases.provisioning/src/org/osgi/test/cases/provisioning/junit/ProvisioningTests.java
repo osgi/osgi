@@ -1,8 +1,5 @@
 /*
- * $Id$
- *
- * Copyright (c) OSGi Alliance (2000-2001).
- * All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -177,7 +174,9 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 
 		byte r [] = collect( in, 0 );
 		if ( debug ) {
-			FileOutputStream tout = new FileOutputStream( "target-test.zip");
+			FileOutputStream tout = new FileOutputStream("generated"
+					+ File.separator
+					+ "org.osgi.test.cases.provisioning.target-test.zip");
 			tout.write( r );
 			tout.close();
 		}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,23 +25,23 @@ import java.io.InputStream;
  */
 public interface ObjectClassDefinition {
 	/**
-	 * Argument for <code>getAttributeDefinitions(int)</code>.
+	 * Argument for {@code getAttributeDefinitions(int)}.
 	 * <p>
-	 * <code>REQUIRED</code> indicates that only the required definitions are
+	 * {@code REQUIRED} indicates that only the required definitions are
 	 * returned. The value is 1.
 	 */
 	public static final int	REQUIRED	= 1;
 	/**
-	 * Argument for <code>getAttributeDefinitions(int)</code>.
+	 * Argument for {@code getAttributeDefinitions(int)}.
 	 * <p>
-	 * <code>OPTIONAL</code> indicates that only the optional definitions are
+	 * {@code OPTIONAL} indicates that only the optional definitions are
 	 * returned. The value is 2.
 	 */
 	public static final int	OPTIONAL	= 2;
 	/**
-	 * Argument for <code>getAttributeDefinitions(int)</code>.
+	 * Argument for {@code getAttributeDefinitions(int)}.
 	 * <p>
-	 * <code>ALL</code> indicates that all the definitions are returned. The value
+	 * {@code ALL} indicates that all the definitions are returned. The value
 	 * is -1.
 	 */
 	public static final int	ALL			= 0xFFFFFFFF;
@@ -59,7 +59,7 @@ public interface ObjectClassDefinition {
 	 * Return the id of this object class.
 	 * 
 	 * <p>
-	 * <code>ObjectDefintion</code> objects share a global namespace in the
+	 * {@code ObjectDefintion} objects share a global namespace in the
 	 * registry. They share this aspect with LDAP/X.500 attributes. In these
 	 * standards the OSI Object Identifier (OID) is used to uniquely identify
 	 * object classes. If such an OID exists, (which can be requested at several
@@ -89,21 +89,21 @@ public interface ObjectClassDefinition {
 	 * 
 	 * <p>
 	 * Return a set of attributes. The filter parameter can distinguish between
-	 * <code>ALL</code>,<code>REQUIRED</code> or the <code>OPTIONAL</code>
+	 * {@code ALL},{@code REQUIRED} or the {@code OPTIONAL}
 	 * attributes.
 	 * 
-	 * @param filter <code>ALL</code>,<code>REQUIRED</code>,<code>OPTIONAL</code>
-	 * @return An array of attribute definitions or <code>null</code> if no
+	 * @param filter {@code ALL},{@code REQUIRED},{@code OPTIONAL}
+	 * @return An array of attribute definitions or {@code null} if no
 	 *         attributes are selected
 	 */
 	public AttributeDefinition[] getAttributeDefinitions(int filter);
 
 	/**
-	 * Return an <code>InputStream</code> object that can be used to create an
+	 * Return an {@code InputStream} object that can be used to create an
 	 * icon from.
 	 * 
 	 * <p>
-	 * Indicate the size and return an <code>InputStream</code> object containing
+	 * Indicate the size and return an {@code InputStream} object containing
 	 * an icon. The returned icon maybe larger or smaller than the indicated
 	 * size.
 	 * 
@@ -112,8 +112,8 @@ public interface ObjectClassDefinition {
 	 * 
 	 * @param size Requested size of an icon, e.g. a 16x16 pixels icon then size =
 	 *        16
-	 * @return An InputStream representing an icon or <code>null</code>
-	 * @throws IOException If the <code>InputStream</code> cannot be returned.
+	 * @return An InputStream representing an icon or {@code null}
+	 * @throws IOException If the {@code InputStream} cannot be returned.
 	 */
 	public InputStream getIcon(int size) throws IOException;
 }

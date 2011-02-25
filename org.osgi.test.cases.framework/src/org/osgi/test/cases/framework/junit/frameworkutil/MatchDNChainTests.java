@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,36 +29,30 @@ public class MatchDNChainTests extends TestCase {
 		String dn1 = "cn=Bugs Bunny, o=ACME, c=US";
 		String dn2 = "ou = Carrots, cn=Daffy Duck, o=ACME, c=US";
 		String dn3 = "street = 9C\\, Avenue St. Drézéry, o=ACME, c=FR";
-		String dn4 = "*, o=ACME, c=US";
 		List chain = new ArrayList();
 		chain.add(dn2);
 		chain.add(dn1);
 
 		assertMatchDNChain(dn1, dn1);
-		assertMatchDNChain(dn4, dn4);
 
 		assertMatchDNChain("*", dn1);
 		assertMatchDNChain("*", dn2);
 		assertMatchDNChain("*", dn3);
-		assertMatchDNChain("*", dn4);
 		assertNotMatchDNChain("*", chain);
 
 		assertMatchDNChain("-", dn1);
 		assertMatchDNChain("-", dn2);
 		assertMatchDNChain("-", dn3);
-		assertMatchDNChain("-", dn4);
 		assertMatchDNChain("-", chain);
 
 		assertMatchDNChain("*, c=US", dn1);
 		assertMatchDNChain("*, c=US", dn2);
 		assertNotMatchDNChain("*, c=US", dn3);
-		assertMatchDNChain("*, c=US", dn4);
 		assertMatchDNChain("*, o=ACME, c=US; *, c=US", chain);
 
 		assertMatchDNChain("*, o=ACME, c=US", dn1);
 		assertMatchDNChain("*, o=ACME, c=US", dn2);
 		assertNotMatchDNChain("*, o=ACME, c=US", dn3);
-		assertMatchDNChain("*, o=ACME, c=US", dn4);
 		assertMatchDNChain("*, o=ACME, c=US; *, o=ACME, c=US", chain);
 		assertMatchDNChain("*; *, o=ACME, c=US", chain);
 		assertMatchDNChain("-; *, o=ACME, c=US", chain);
@@ -66,13 +60,11 @@ public class MatchDNChainTests extends TestCase {
 		assertMatchDNChain("*, o=*, c=US", dn1);
 		assertMatchDNChain("*, o=*, c=US", dn2);
 		assertNotMatchDNChain("*, o=*, c=US", dn3);
-		assertMatchDNChain("*, o=*, c=US", dn4);
 		assertMatchDNChain("*, o=*, c=US; *, o=ACME, c=US", chain);
 
 		assertMatchDNChain("*, o=ACME, c=*", dn1);
 		assertMatchDNChain("*, o=ACME, c=*", dn2);
 		assertMatchDNChain("*, o=ACME, c=*", dn3);
-		assertMatchDNChain("*, o=ACME, c=*", dn4);
 		assertMatchDNChain("*, o=ACME, c=*; *, o=ACME, c=US", chain);
 		assertMatchDNChain("*; *, o=ACME, c=*", chain);
 		assertMatchDNChain("-; *, o=ACME, c=*", chain);
@@ -80,7 +72,6 @@ public class MatchDNChainTests extends TestCase {
 		assertNotMatchDNChain("o=ACME, c=US", dn1);
 		assertNotMatchDNChain("o=ACME, c=US", dn2);
 		assertNotMatchDNChain("o=ACME, c=US", dn3);
-		assertNotMatchDNChain("o=ACME, c=US", dn4);
 	}
 
 	public void testEscape() {
@@ -112,9 +103,13 @@ public class MatchDNChainTests extends TestCase {
 		assertInvalidMatch(pattern, "");
 		assertInvalidMatch(pattern, "*bob");
 		assertInvalidMatch(pattern, ";`´$.,@");
-		assertInvalidMatch(pattern, "*, c=US\\");
-		assertInvalidMatch(pattern, "*, c=\"US");
-		assertInvalidMatch(pattern, "*, cn=Bugs Bunny, o=ACME,");
+		assertInvalidMatch(pattern, "c=US\\");
+		assertInvalidMatch(pattern, "c=\"US");
+		assertInvalidMatch(pattern, "cn=Bugs Bunny, o=ACME,");
+		assertInvalidMatch(pattern, "*, o=ACME, c=US");
+		assertInvalidMatch(pattern, "-, o=ACME, c=US");
+		assertInvalidMatch(pattern, "*");
+		assertInvalidMatch(pattern, "-");
 
 		List bad = new ArrayList();
 		bad.add(Boolean.TRUE);

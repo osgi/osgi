@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.osgi.framework.hooks.service;
 
 import java.util.Collection;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 
 /**
@@ -28,6 +29,7 @@ import org.osgi.framework.ServiceEvent;
  * (register, modify, and unregister service) operations.
  * 
  * @ThreadSafe
+ * @deprecated As of 1.1. Replaced by {@link EventListenerHook}.
  * @version $Id$
  */
 
@@ -38,17 +40,15 @@ public interface EventHook {
 	 * This method can filter the bundles which receive the event.
 	 * 
 	 * @param event The service event to be delivered.
-	 * @param contexts A <code>Collection</code> of Bundle Contexts for bundles
-	 *        which have listeners to which the specified event will be
-	 *        delivered. The implementation of this method may remove bundle
-	 *        contexts from the collection to prevent the event from being
-	 *        delivered to the associated bundles. The collection supports all
-	 *        the optional <code>Collection</code> operations except
-	 *        <code>add</code> and <code>addAll</code>. Attempting to add to the
-	 *        collection will result in an
-	 *        <code>UnsupportedOperationException</code>. The collection is not
-	 *        synchronized.
+	 * @param contexts A collection of Bundle Contexts for bundles which have
+	 *        listeners to which the specified event will be delivered. The
+	 *        implementation of this method may remove bundle contexts from the
+	 *        collection to prevent the event from being delivered to the
+	 *        associated bundles. The collection supports all the optional
+	 *        {@code Collection} operations except {@code add} and
+	 *        {@code addAll}. Attempting to add to the collection will
+	 *        result in an {@code UnsupportedOperationException}. The
+	 *        collection is not synchronized.
 	 */
-	void event(ServiceEvent event,
-			Collection/* <BundleContext> */contexts);
+	void event(ServiceEvent event, Collection<BundleContext> contexts);
 }

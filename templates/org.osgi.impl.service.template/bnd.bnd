@@ -1,4 +1,7 @@
-Bundle-Version				= 4.2.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
+
+Bundle-Version				= 1.0.0.${project.build}
 Bundle-Activator			= org.osgi.impl.service.template.Activator
 Bundle-Description			= Template for a Reference Implementation.
 

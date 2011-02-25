@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package org.osgi.service.condpermadmin;
 
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -83,16 +82,13 @@ public class BundleSignerCondition {
 			throw new IllegalArgumentException("Illegal number of args: "
 					+ args.length);
 
-		Map/* <X509Certificate, List<X509Certificate>> */signers = bundle
+		Map<X509Certificate, List<X509Certificate>> signers = bundle
 				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
 		boolean match = false;
-		for (Iterator iSigners = signers.values().iterator(); iSigners
-				.hasNext();) {
-			List/* <X509Certificate> */signerCerts = (List) iSigners.next();
-			List/* <String> */dnChain = new ArrayList(signerCerts.size());
-			for (Iterator iCerts = signerCerts.iterator(); iCerts.hasNext();) {
-				dnChain.add(((X509Certificate) iCerts.next()).getSubjectDN()
-						.getName());
+		for (List<X509Certificate> signerCerts : signers.values()) {
+			List<String> dnChain = new ArrayList<String>(signerCerts.size());
+			for (X509Certificate signer : signerCerts) {
+				dnChain.add(signer.getSubjectDN().getName());
 			}
 			if (FrameworkUtil.matchDistinguishedNameChain(args[0], dnChain)) {
 				match = true;

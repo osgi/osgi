@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ public class NamespaceException extends Exception {
     static final long serialVersionUID = 7235606031147877747L;
     
 	/**
-	 * Construct a <code>NamespaceException</code> object with a detail message.
+	 * Construct a {@code NamespaceException} object with a detail message.
 	 * 
 	 * @param message the detail message
 	 */
@@ -35,7 +35,7 @@ public class NamespaceException extends Exception {
 	}
 
 	/**
-	 * Construct a <code>NamespaceException</code> object with a detail message
+	 * Construct a {@code NamespaceException} object with a detail message
 	 * and a nested exception.
 	 * 
 	 * @param message The detail message.
@@ -50,20 +50,20 @@ public class NamespaceException extends Exception {
 	 * 
 	 * <p>
 	 * This method predates the general purpose exception chaining mechanism.
-	 * The <code>getCause()</code> method is now the preferred means of
+	 * The {@code getCause()} method is now the preferred means of
 	 * obtaining this information.
 	 * 
-	 * @return The result of calling <code>getCause()</code>.
+	 * @return The result of calling {@code getCause()}.
 	 */
 	public Throwable getException() {
 		return getCause();
 	}
 	
 	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
+	 * Returns the cause of this exception or {@code null} if no cause was
 	 * set.
 	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause was
+	 * @return The cause of this exception or {@code null} if no cause was
 	 *         set.
 	 * @since 1.2
 	 */

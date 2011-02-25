@@ -1,7 +1,5 @@
 /*
- * $Id$
- * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -27,6 +25,7 @@
 
 package org.osgi.test.cases.event.service;
 
+import java.util.Dictionary;
 import java.util.Vector;
 
 import org.osgi.service.event.Event;
@@ -43,9 +42,17 @@ public interface TBCService {
 	 * interested.
 	 * 
 	 * @param topics the array with event topics
-	 * @param intents the array with event intents
+	 * @param delivery the array with event delivery qualities
 	 */
-	public void setProperties(String[] topics, String[] intents);
+	public void setProperties(String[] topics, String[] delivery);
+	
+	/**
+	 * Sets the service properties.
+	 * 
+	 * @param properties The service properties to register.
+	 * @see org.osgi.service.event.EventConstants#EVENT_TOPIC
+	 */
+	public void setProperties(Dictionary properties);
   
   /**
    * Returns the array with all set event topics in which the event handler is interested.

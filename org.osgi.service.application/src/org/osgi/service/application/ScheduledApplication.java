@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,10 @@ import java.util.Map;
  * specified event is fired a new instance must be launched. Note that launching
  * operation may fail because e.g. the application is locked.
  * <p>
- * Each <code>ScheduledApplication</code> instance has an identifier which is
+ * Each {@code ScheduledApplication} instance has an identifier which is
  * unique within the scope of the application being scheduled.
  * <p>
- * <code>ScheduledApplication</code> instances are registered as services. The
+ * {@code ScheduledApplication} instances are registered as services. The
  * {@link #APPLICATION_PID} service property contains the PID of the application
  * being scheduled, the {@link #SCHEDULE_ID} service property contains the
  * schedule identifier.

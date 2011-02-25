@@ -1,0 +1,7 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.wiring.requirer.frag
+Bundle-SymbolicName: ${p}.wiring.requirer.frag
+Bundle-Version: 1.0
+Fragment-Host: ${p}.wiring.requirer
+
+Include-Resource: resources/wiring/fragment/

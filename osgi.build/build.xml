@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="project" default="publish">
+	<target name="deploy" depends="master.deploy,javadoc,japitools,japicompat">
+	</target>
+
+	<target name="init" depends="master.init">
+		<mkdir dir="${target}/japi"/>
+	</target>
+
+	<target name="javadoc" depends="init">
+		<delete dir="${target}/javadoc"/>
+		<echo>
+			Project output: ${project.output}
+			Sourcepath    : ${project.allsourcepath}
+			Destdir       : ${target}/javadoc
+		    Packages      : ${javadoc.packages}
+			Bootcp        : ${repo.javase}, ${repo.foundation}
+			Classpath     : ${repo.servlet}, ${repo.jpa}, ${repo.jaxp}
+		</echo>
+        <javadoc 
+			access="protected" 
+			windowtitle="OSGi Service Platform Release ${osgi.release} Version ${osgi.version}"
+			author="false" 
+			classpath="${project.output}"
+			sourcepath="${project.allsourcepath}"
+			destdir="${target}/javadoc" 
+			nodeprecated="false" 
+			nodeprecatedlist="false" 
+			noindex="false" 
+			nonavbar="false" 
+			notree="false" 
+			packagenames="${javadoc.packages}" 
+			source="1.5" 
+			splitindex="true" 
+			use="true"
+			version="false"
+			encoding="UTF-8"
+			docencoding="UTF-8"
+			charset="UTF-8">
+		    <bootclasspath>
+      			<pathelement location="${repo.javase}"/>
+      			<pathelement location="${repo.foundation}"/>
+    		</bootclasspath>
+		    <classpath>
+				<pathelement location="${repo.servlet}" />
+				<pathelement location="${repo.jpa}" />
+				<pathelement location="${repo.jaxp}" />
+    		</classpath>
+			<tag name="Immutable" scope="types" description="Immutable"/>
+			<tag name="ThreadSafe" scope="types" description="ThreadSafe"/>
+			<tag name="NotThreadSafe" scope="types" description="NotThreadSafe"/>
+			<tag name="GuardedBy" scope="methods,fields" description="Guarded By:"/>
+			<tag name="noimplement" scope="types" description="Consumers of this API must not implement this interface"/>
+			<header><![CDATA[<b>OSGi&trade; Service Platform</b><br/><font  size=-1>Release ${osgi.release} Version ${osgi.version}</font>]]></header>
+			<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 1.0</a></font>]]></bottom>
+			<doctitle><![CDATA[OSGi&trade; Service Platform Release ${osgi.release} Version ${osgi.version}]]></doctitle>
+		</javadoc>
+		<copy file="${project.workspace}/osgi.companion/legal/OSGiSpecificationLicense-v10.html"
+		    tofile="${target}/javadoc/LICENSE.html"
+	    	verbose="${verbose}"
+	      	preservelastmodified="true" />
+		<zip destfile="${target}/javadoc.zip" basedir="${target}/javadoc"></zip>
+    </target>
+	
+	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.mobile,japitools.enterprise,japitools.proposed,japitools.minimum,japitools.foundation">
+	</target>
+
+	<macrodef name="japitools">
+		<attribute name="name"/>
+		<element name="japitools-args" implicit="true" optional="true" />
+		<sequential>
+			<echo>@{name} ${project.workspace}/@{name}/${target-dir}/@{name}.jar</echo>
+			<java classname="net.wuffies.japi.Japize">
+				<classpath path="${licensed}/japitools/share/java/japitools.jar" />
+				<arg value="unzip" />
+				<arg value="as" />
+				<arg value="${target}/japi/@{name}-latest.japi" />
+				<arg value="packages" />
+				<arg value="${project.workspace}/@{name}/${target-dir}/@{name}.jar" />
+				<japitools-args />
+				<arg line="${japi.@{name}}" />
+			</java>
+		</sequential>
+	</macrodef>
+	
+	<target name="japitools.core" depends="init">
+		<japitools name="osgi.core">
+			<arg value="${repo.javase}" />
+		</japitools>
+	</target>
+
+	<target name="japitools.cmpn" depends="init">
+		<japitools name="osgi.cmpn">
+			<arg value="${repo.javase}" />
+			<arg value="${repo.foundation}" />
+			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
+			<arg value="${repo.servlet}" />
+			<arg value="${repo.jaxp}" />
+		</japitools>
+	</target>
+
+	<target name="japitools.mobile" depends="init">
+		<japitools name="osgi.mobile">
+			<arg value="${repo.javase}" />
+			<arg value="${repo.foundation}" />
+			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
+			<arg value="${repo.jaxp}" />
+		</japitools>
+	</target>
+
+	<target name="japitools.enterprise" depends="init">
+		<japitools name="osgi.enterprise">
+			<arg value="${repo.javase}" />
+			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
+			<arg value="${repo.servlet}" />
+			<arg value="${repo.jpa}" />
+			<arg value="${repo.jaxp}" />
+		</japitools>
+	</target>
+
+	<target name="japitools.proposed" depends="init">
+		<japitools name="osgi.proposed">
+			<arg value="${repo.javase}" />
+			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
+			<arg value="${repo.jaxp}" />
+		</japitools>
+	</target>
+
+	<target name="japitools.minimum" depends="init">
+		<japitools name="ee.minimum" />
+	</target>
+
+	<target name="japitools.foundation" depends="init">
+		<japitools name="ee.foundation" />
+	</target>
+
+	<target name="japicompat" depends="japicompat.core,japicompat.cmpn,japicompat.mobile,japicompat.enterprise,japicompat.minimum,japicompat.foundation,japicompat.eecompare">
+	</target>
+	
+	<macrodef name="japicompat">
+		<attribute name="name"/>
+		<attribute name="options" default="-h -v" />
+		<sequential>
+			<echo>@{name}</echo>
+			<exec executable="perl" failifexecutionfails="false">
+				<arg value="${licensed}/japitools/bin/japicompat" />
+				<arg line="@{options}" />
+				<arg value="-o" />
+				<arg value="${target}/japi/@{name}-japicompat.html" />
+				<arg value="${build}/japi-published/@{name}-published.japi" />
+				<arg value="${target}/japi/@{name}-latest.japi" />
+			</exec>
+			<exec executable="perl" failifexecutionfails="false">
+				<arg value="${licensed}/japitools/bin/japicompat" />
+				<arg line="@{options}" />
+				<arg value="-o" />
+				<arg value="${target}/japi/@{name}-changed-japicompat.html" />
+				<arg value="${target}/japi/@{name}-latest.japi" />
+				<arg value="${build}/japi-published/@{name}-published.japi" />
+			</exec>
+		</sequential>
+	</macrodef>
+
+	<target name="japicompat.core" depends="init">
+		<japicompat name="osgi.core" />
+	</target>
+
+	<target name="japicompat.cmpn" depends="init">
+		<japicompat name="osgi.cmpn" />
+	</target>
+
+	<target name="japicompat.mobile" depends="init">
+		<japicompat name="osgi.mobile" />
+	</target>
+
+	<target name="japicompat.enterprise" depends="init">
+		<japicompat name="osgi.enterprise" />
+	</target>
+
+	<target name="japicompat.minimum" depends="init">
+		<japicompat name="ee.minimum" options="-h" />
+	</target>
+
+	<target name="japicompat.foundation" depends="init">
+		<japicompat name="ee.foundation" options="-h" />
+	</target>
+
+	<target name="japicompat.eecompare" depends="init">
+		<echo>ee compare</echo>
+		<exec executable="perl" failifexecutionfails="false">
+			<arg value="${licensed}/japitools/bin/japicompat" />
+			<arg value="-h" />
+			<arg value="-o" />
+			<arg value="${target}/japi/ee.minimum2foundation-japicompat.html" />
+			<arg value="${target}/japi/ee.minimum-latest.japi" />
+			<arg value="${target}/japi/ee.foundation-latest.japi" />
+		</exec>
+	</target>
+
+	<target name="echo" depends="master.echo">
+		<echo>core.specs:             ${core.specs}</echo>
+		<echo>cmpn.specs:             ${cmpn.specs}</echo>
+		<echo>mobile.specs:           ${mobile.specs}</echo>
+		<echo>enterprise.specs:       ${enterprise.specs}</echo>
+		<echo>proposed.specs:         ${proposed.specs}</echo>
+	</target>
+
+	<import file="../cnf/build.xml" />
+</project>

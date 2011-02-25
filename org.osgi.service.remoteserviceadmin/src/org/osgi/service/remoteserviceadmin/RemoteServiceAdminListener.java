@@ -22,9 +22,9 @@ package org.osgi.service.remoteserviceadmin;
  * 
  * <p>
  * If the Java Runtime Environment supports permissions, then filtering is done.
- * <code>RemoteServiceAdminEvent</code> objects are only delivered to the
+ * {@code RemoteServiceAdminEvent} objects are only delivered to the
  * listener if the bundle which defines the listener object's class has the
- * appropriate <code>EndpointPermission[endpoint,READ]</code> for the endpoint
+ * appropriate {@code EndpointPermission[endpoint,READ]} for the endpoint
  * referenced by the event.
  * 
  * 

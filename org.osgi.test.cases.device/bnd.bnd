@@ -1,7 +1,9 @@
-Bundle-Version: 4.2.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Export-Package: 		${p}.tbc;-split-package:=first
-Private-Package						= ${p}.tbc.*, \
-	org.osgi.test.support.*
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						= ${p}.tbc.*
 
 Include-Resource					= \
 	dev0.jar, \
@@ -30,7 +32,7 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.device.manager;  version=project
 

@@ -1,0 +1,16 @@
+Bundle-Version: 4.2.0
+
+Bundle-SymbolicName: $(p).tb18
+
+Private-Package	: $(p).tb18
+
+Include-Resource = {OSGI-INF/permissions.perm = perms/initiate.perm}
+
+Import-Package = \
+	junit.framework,\
+	org.osgi.framework,\
+	org.osgi.service.coordinator,\
+	org.osgi.test.cases.coordinator.secure
+
+Bundle-Activator = $(p).tb18.Activator
+

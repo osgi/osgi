@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.osgi.service.condpermadmin;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
@@ -68,8 +69,9 @@ public class BundleLocationCondition {
 		String[] args = info.getArgs();
 		if (args.length != 1 && args.length != 2)
 			throw new IllegalArgumentException("Illegal number of args: " + args.length);
-		String bundleLocation = (String) AccessController.doPrivileged(new PrivilegedAction() {
-					public Object run() {
+		String bundleLocation = AccessController
+				.doPrivileged(new PrivilegedAction<String>() {
+					public String run() {
 						return bundle.getLocation();
 					}
 				});
@@ -82,7 +84,7 @@ public class BundleLocationCondition {
 			// this should never happen, but just in case
 			throw new RuntimeException("Invalid filter: " + e.getFilter(), e);
 		}
-		Hashtable matchProps = new Hashtable(2);
+		Dictionary<String, String> matchProps = new Hashtable<String, String>(2);
 		matchProps.put("location", bundleLocation);
 		boolean negate = (args.length == 2) ? "!".equals(args[1]) : false;
 		return (negate ^ filter.match(matchProps)) ? Condition.TRUE

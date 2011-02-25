@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import java.util.List;
  * enabled.
  * 
  * <p>
- * This is specified by the <code>service</code> element.
+ * This is specified by the {@code service} element.
  * 
  * @ThreadSafe
  * @version $Id$
@@ -64,7 +64,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	/**
 	 * Return the Metadata for the component to be exported as a service.
 	 * 
-	 * This is specified inline or via the <code>ref</code> attribute of the
+	 * This is specified inline or via the {@code ref} attribute of the
 	 * service.
 	 * 
 	 * @return The Metadata for the component to be exported as a service.
@@ -75,12 +75,12 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * Return the type names of the interfaces that the service should be
 	 * advertised as supporting.
 	 * 
-	 * This is specified in the <code>interface</code> attribute or child
-	 * <code>interfaces</code> element of the service.
+	 * This is specified in the {@code interface} attribute or child
+	 * {@code interfaces} element of the service.
 	 * 
-	 * @return An immutable List of <code>String</code> for the type names of
+	 * @return An immutable List of {@code String} for the type names of
 	 *         the interfaces that the service should be advertised as
-	 *         supporting. The List is empty if using <code>auto-export</code>
+	 *         supporting. The List is empty if using {@code auto-export}
 	 *         or no interface names are specified for the service.
 	 */
 	List<String> getInterfaces();
@@ -88,7 +88,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	/**
 	 * Return the auto-export mode for the service.
 	 * 
-	 * This is specified by the <code>auto-export</code> attribute of the
+	 * This is specified by the {@code auto-export} attribute of the
 	 * service.
 	 * 
 	 * @return The auto-export mode for the service.
@@ -102,7 +102,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	/**
 	 * Return the user declared properties to be advertised with the service.
 	 * 
-	 * This is specified by the <code>service-properties</code> element of the
+	 * This is specified by the {@code service-properties} element of the
 	 * service.
 	 * 
 	 * @return An immutable List of {@link MapEntry} objects for the user
@@ -114,9 +114,9 @@ public interface ServiceMetadata extends ComponentMetadata {
 	/**
 	 * Return the ranking value to use when advertising the service. If the
 	 * ranking value is zero, the service must be registered without a
-	 * <code>service.ranking</code> service property.
+	 * {@code service.ranking} service property.
 	 * 
-	 * This is specified by the <code>ranking</code> attribute of the service.
+	 * This is specified by the {@code ranking} attribute of the service.
 	 * 
 	 * @return The ranking value to use when advertising the service.
 	 */
@@ -126,7 +126,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * Return the registration listeners to be notified when the service is
 	 * registered and unregistered with the framework.
 	 * 
-	 * This is specified by the <code>registration-listener</code> elements of
+	 * This is specified by the {@code registration-listener} elements of
 	 * the service.
 	 * 
 	 * @return An immutable Collection of {@link RegistrationListener} objects

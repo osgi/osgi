@@ -1,9 +1,11 @@
-Bundle-Version						: 4.0.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Bundle-Description					: Policy Test Case.
 Bundle-DocUrl                       : http://www.osgi.org/testcases/4/test.cases.template
 
+Conditional-Package					= org.osgi.test.support.*
 Export-Package						= \
-    org.osgi.test.support.*        , \
 	${p}.tbc.*
 
 Include-Resource					= \
@@ -22,7 +24,7 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.event;        version=latest, \
 	org.osgi.impl.service.component; version=latest, \
 	org.osgi.impl.service.policy;     version=project, \

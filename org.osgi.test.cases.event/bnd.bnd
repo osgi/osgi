@@ -1,7 +1,10 @@
-Bundle-Version						: 3.1.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Bundle-Description					: A test case for the event generic mechanism implementation.
 
-Private-Package						= org.osgi.test.support.*, \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.junit
 Export-Package						= \
 	${p}.service
@@ -22,7 +25,7 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.event; version=latest, \
 	org.osgi.impl.service.log; version=latest
 	

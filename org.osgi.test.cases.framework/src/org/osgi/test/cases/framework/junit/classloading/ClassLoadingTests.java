@@ -1,7 +1,5 @@
 /*
- * $Id$
- * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -39,6 +37,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.wiring.Wiring;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -48,17 +47,9 @@ import org.osgi.util.tracker.ServiceTracker;
  * @version $Id$
  */
 public class ClassLoadingTests extends DefaultTestBundleControl {
-	private PackageAdmin	padmin;
 	
 	protected void tearDown() {
-		if ( padmin == null ) {
-			ServiceReference ref = getContext().getServiceReference( PackageAdmin.class.getName());
-			if ( ref == null )
-				return;
-			
-			padmin = (PackageAdmin) getContext().getService(ref);
-		}
-		padmin.refreshPackages(null);
+		Wiring.synchronousRefreshBundles(getContext(), null);
 	}
 
 	// Service Registry --------------------------
@@ -412,10 +403,10 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 							"org.osgi.test.cases.framework.classloading.exports.listener.ServiceListenerTester");
 			service = getContext().getService(serviceReference);
 			method = service.getClass().getMethod("getServiceEventDelivered",
-					null);
+					(Class[]) null);
 			assertNull(
 					"Checking if an event is delivered for a bundle which imports a non-assignable service interface",
-					method.invoke(service, null));
+					method.invoke(service, (Object[]) null));
 
 			getContext().ungetService(serviceReference);
 
@@ -479,10 +470,10 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 							"org.osgi.test.cases.framework.classloading.exports.listener.ServiceListenerTester");
 			service = getContext().getService(serviceReference);
 			method = service.getClass().getMethod("getServiceEventDelivered",
-					null);
+					(Class[]) null);
 			assertNotNull(
 					"Checking if an event is delivered for a bundle which imports an assignable service interface",
-					method.invoke(service, null));
+					method.invoke(service, (Object[]) null));
 
 			getContext().ungetService(serviceReference);
 
@@ -553,10 +544,10 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 							"org.osgi.test.cases.framework.classloading.exports.listener.AllServiceListenerTester");
 			service = getContext().getService(serviceReference);
 			method = service.getClass().getMethod("getServiceEventDelivered",
-					null);
+					(Class[]) null);
 			assertNotNull(
 					"Checking if an event is delivered for a bundle which imports a assignable service interface",
-					method.invoke(service, null));
+					method.invoke(service, (Object[]) null));
 
 			getContext().ungetService(serviceReference);
 
@@ -578,10 +569,10 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 							"org.osgi.test.cases.framework.classloading.exports.listener.AllServiceListenerTester");
 			service = getContext().getService(serviceReference);
 			method = service.getClass().getMethod("getServiceEventDelivered",
-					null);
+					(Class[]) null);
 			assertNotNull(
 					"Checking if an event is delivered for a bundle which imports a non-assignable service interface",
-					method.invoke(service, null));
+					method.invoke(service, (Object[]) null));
 
 			getContext().ungetService(serviceReference);
 

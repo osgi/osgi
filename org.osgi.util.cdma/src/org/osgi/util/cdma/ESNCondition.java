@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2007, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2007, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,14 +60,14 @@ public class ESNCondition {
 	 *        return a String array with one value, the ESN string. The ESN is 8
 	 *        hexadecimal digits (32 bits) without hyphens. Limited pattern
 	 *        matching is allowed: the string is 0 to 7 digits, followed by an
-	 *        asterisk(<code>*</code>).
+	 *        asterisk({@code *}).
 	 * @return A Condition object that indicates whether the specified ESN
 	 *         number matches that of the device. If the number ends with an
-	 *         asterisk ( <code>*</code>), then the beginning of the ESN is
+	 *         asterisk ( {@code *}), then the beginning of the ESN is
 	 *         compared to the pattern.
 	 * @throws IllegalArgumentException If the ESN is not a string of 8
 	 *         hexadecimal digits, or 0 to 7 hexadecimal digits with an
-	 *         <code>*</code> at the end.
+	 *         {@code *} at the end.
 	 */
 	public static Condition getCondition(Bundle bundle,
 			ConditionInfo conditionInfo) {

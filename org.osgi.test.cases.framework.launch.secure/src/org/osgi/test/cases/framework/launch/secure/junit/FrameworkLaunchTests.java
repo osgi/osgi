@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,13 +98,9 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	private String getStorageAreaRoot() {
-		BundleContext context = getBundleContextWithoutFail();
-		if (context == null) {
-			String storageroot = System.getProperty(STORAGEROOT);
-			assertNotNull("Must set property: " + STORAGEROOT, storageroot);
-			return storageroot;
-		}
-		return context.getDataFile("storageroot").getAbsolutePath();
+		String storageroot = System.getProperty(STORAGEROOT);
+		assertNotNull("Must set property: " + STORAGEROOT, storageroot);
+		return storageroot;
 	}
 
 	private Class loadFrameworkClass(String className)

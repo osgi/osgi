@@ -1,5 +1,7 @@
-Bundle-Version						= 4.1.1.${project.build}
-Private-Package						= org.osgi.test.support.*
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Conditional-Package					= org.osgi.test.support.*
 Export-Package						= ${p}.tbc.*	
 Bundle-Category						= osgi,test
 Include-Resource					= \
@@ -59,7 +61,7 @@ Include-Resource					= \
 Test-Cases							= ${testcases}
 
 -runbundles							= \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.deploymentadmin; 			version=project, \
 	org.osgi.impl.service.log; 						version=latest,\
 	org.osgi.impl.service.event;  					version=latest, \

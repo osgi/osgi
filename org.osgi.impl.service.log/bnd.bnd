@@ -1,3 +1,6 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Bundle-Activator: 		org.osgi.impl.service.log.Log
 Export-Package: 		org.osgi.service.log;-split-package:=first
 Private-Package: 		${p}.*

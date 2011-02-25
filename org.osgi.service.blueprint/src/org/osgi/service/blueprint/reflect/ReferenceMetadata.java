@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ package org.osgi.service.blueprint.reflect;
  * service registry.
  * 
  * <p>
- * This is specified by the <code>reference</code> element.
+ * This is specified by the {@code reference} element.
  * 
  * @ThreadSafe
  * @version $Id$
@@ -31,7 +31,7 @@ public interface ReferenceMetadata extends Target, ServiceReferenceMetadata {
 	 * Return the timeout for service invocations when a backing service is is
 	 * unavailable.
 	 * 
-	 * This is specified by the <code>timeout</code> attribute of the reference.
+	 * This is specified by the {@code timeout} attribute of the reference.
 	 * 
 	 * @return The timeout, in milliseconds, for service invocations when a
 	 *         backing service is is unavailable.

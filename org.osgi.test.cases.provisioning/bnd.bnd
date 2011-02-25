@@ -1,12 +1,16 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 -make                   =  \
   (*).(jar);                             type=bnd;  recipe="bnd/$1.bnd", \
   (*).(ipa);                             type=bnd;  recipe="ipa/$1.bnd"
 
-Bundle-Version: 4.2.0.${project.build}
+
 Bundle-Activator: ${p}.junit.Activator
 Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
-Private-Package						= org.osgi.test.support.*, \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.junit
 
 Include-Resource: \
@@ -47,7 +51,7 @@ Include-Resource: \
 	${junit}
 
 -runbundles						= \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
 	org.osgi.impl.service.http; version=latest, \

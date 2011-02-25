@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
 
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
  */
 package info.dmtree;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -29,75 +28,74 @@ import java.util.Hashtable;
  * An immutable data structure representing the contents of a leaf or interior
  * node. This structure represents only the value and the format property of the
  * node, all other properties (like MIME type) can be set and read using the
- * <code>DmtSession</code> interface.
+ * {@code DmtSession} interface.
  * <p>
  * Different constructors are available to create nodes with different formats.
- * Nodes of <code>null</code> format can be created using the static
+ * Nodes of {@code null} format can be created using the static
  * {@link #NULL_VALUE} constant instance of this class.
  * <p>
  * {@link #FORMAT_RAW_BINARY} and {@link #FORMAT_RAW_STRING} enable the support
  * of future data formats. When using these formats, the actual format name is
- * specified as a <code>String</code>. The application is responsible for the
- * proper encoding of the data according to the specified format.
+ * specified as a {@code String}. The application is responsible for the proper
+ * encoding of the data according to the specified format.
  * 
  * @version $Id$
  */
 public final class DmtData {
 
 	/**
-	 * The node holds an OMA DM <code>int</code> value.
+	 * The node holds an OMA DM {@code int} value.
 	 */
-	public static final int FORMAT_INTEGER = 0x0001;
+	public static final int			FORMAT_INTEGER			= 0x0001;
 
 	/**
-	 * The node holds an OMA DM <code>float</code> value.
+	 * The node holds an OMA DM {@code float} value.
 	 */
-	public static final int FORMAT_FLOAT = 0x0002;
+	public static final int			FORMAT_FLOAT			= 0x0002;
 
 	/**
-	 * The node holds an OMA DM <code>chr</code> value.
+	 * The node holds an OMA DM {@code chr} value.
 	 */
-	public static final int FORMAT_STRING = 0x0004;
+	public static final int			FORMAT_STRING			= 0x0004;
 
 	/**
-	 * The node holds an OMA DM <code>bool</code> value.
+	 * The node holds an OMA DM {@code bool} value.
 	 */
-	public static final int FORMAT_BOOLEAN = 0x0008;
+	public static final int			FORMAT_BOOLEAN			= 0x0008;
 
 	/**
-	 * The node holds an OMA DM <code>date</code> value.
+	 * The node holds an OMA DM {@code date} value.
 	 */
-	public static final int FORMAT_DATE = 0x0010;
+	public static final int			FORMAT_DATE				= 0x0010;
 
 	/**
-	 * The node holds an OMA DM <code>time</code> value.
+	 * The node holds an OMA DM {@code time} value.
 	 */
-	public static final int FORMAT_TIME = 0x0020;
+	public static final int			FORMAT_TIME				= 0x0020;
 
 	/**
-	 * The node holds an OMA DM <code>bin</code> value. The value of the node
-	 * corresponds to the Java <code>byte[]</code> type.
+	 * The node holds an OMA DM {@code bin} value. The value of the node
+	 * corresponds to the Java {@code byte[]} type.
 	 */
-	public static final int FORMAT_BINARY = 0x0040;
+	public static final int			FORMAT_BINARY			= 0x0040;
 
 	/**
-	 * The node holds an OMA DM <code>b64</code> value. Like
-	 * {@link #FORMAT_BINARY}, this format is also represented by the Java
-	 * <code>byte[]</code> type, the difference is only in the corresponding OMA
-	 * DM format.
+	 * The node holds an OMA DM {@code b64} value. Like {@link #FORMAT_BINARY},
+	 * this format is also represented by the Java {@code byte[]} type, the
+	 * difference is only in the corresponding OMA DM format.
 	 */
-	public static final int FORMAT_BASE64 = 0x0080;
+	public static final int			FORMAT_BASE64			= 0x0080;
 
 	/**
-	 * The node holds an OMA DM <code>xml</code> value.
+	 * The node holds an OMA DM {@code xml} value.
 	 */
-	public static final int FORMAT_XML = 0x0100;
+	public static final int			FORMAT_XML				= 0x0100;
 
 	/**
-	 * The node holds an OMA DM <code>null</code> value. This corresponds to the
-	 * Java <code>null</code> type.
+	 * The node holds an OMA DM {@code null} value. This corresponds to the Java
+	 * {@code null} type.
 	 */
-	public static final int FORMAT_NULL = 0x0200;
+	public static final int			FORMAT_NULL				= 0x0200;
 
 	/**
 	 * Format specifier of an internal node. An interior node can hold a Java
@@ -107,60 +105,64 @@ public final class DmtData {
 	 * further used as a return value of the {@link MetaNode#getFormat} method
 	 * for interior nodes.
 	 */
-	public static final int FORMAT_NODE = 0x0400;
+	public static final int			FORMAT_NODE				= 0x0400;
 
 	/**
-	 * The node holds raw protocol data encoded as <code>String</code>. The
+	 * The node holds raw protocol data encoded as {@code String}. The
 	 * {@link #getFormatName()} method can be used to get the actual format
 	 * name.
 	 */
-	public static final int FORMAT_RAW_STRING = 0x0800;
+	public static final int			FORMAT_RAW_STRING		= 0x0800;
 
 	/**
 	 * The node holds raw protocol data encoded in binary format. The
 	 * {@link #getFormatName()} method can be used to get the actual format
 	 * name.
 	 */
-	public static final int FORMAT_RAW_BINARY = 0x1000;
+	public static final int			FORMAT_RAW_BINARY		= 0x1000;
 
 	// ******** new formats from RFC0141 ************
 	/**
 	 * The node holds a long value. The {@link #getFormatName()} method can be
 	 * used to get the actual format name.
 	 */
-	public static final int FORMAT_LONG = 0x2000;
+	public static final int			FORMAT_LONG				= 0x2000;
 
 	/**
 	 * The node holds an unsigned long value.
 	 */
-	public static final int FORMAT_UNSIGNED_LONG = 0x4000;
+	public static final int			FORMAT_UNSIGNED_LONG	= 0x4000;
 
 	/**
 	 * The node holds a String object that is interpreted as a dateTime type
 	 * defined in ISO 8601.
 	 */
-	public static final int FORMAT_DATETIME = 0x8000;
+	public static final int			FORMAT_DATETIME			= 0x8000;
 
 	/**
 	 * The node holds an unsigned int value.
 	 */
-	public static final int FORMAT_UNSIGNED_INTEGER = 0x10000;
+	public static final int			FORMAT_UNSIGNED_INTEGER	= 0x10000;
 
 	/**
 	 * The node holds a string value that represents a DMT node URI.
 	 */
-	public static final int FORMAT_NODE_URI = 0x20000;
+	public static final int			FORMAT_NODE_URI			= 0x20000;
 
 	/**
 	 * The node holds an hex binary value. The value of the node corresponds to
-	 * the Java <code>byte[]</code> type.
+	 * the Java {@code byte[]} type.
 	 */
-	public static final int FORMAT_HEXBINARY = 0x40000;
+	public static final int			FORMAT_HEXBINARY		= 0x40000;
 
-	private static final Hashtable FORMAT_NAMES = new Hashtable();
-	
-	private static final BigInteger BD_MAX_ULONG = new BigInteger("" + Long.MAX_VALUE).multiply( new BigInteger( "2" ) );
-	
+	private static final Hashtable	FORMAT_NAMES			= new Hashtable();
+
+	private static final BigInteger	BD_MAX_ULONG			= new BigInteger(
+																	""
+																			+ Long.MAX_VALUE)
+																	.multiply(new BigInteger(
+																			"2"));
+
 	static {
 		FORMAT_NAMES.put(new Integer(FORMAT_BASE64), "b64");
 		FORMAT_NAMES.put(new Integer(FORMAT_BINARY), "bin");
@@ -183,41 +185,41 @@ public final class DmtData {
 	}
 
 	/**
-	 * Constant instance representing a leaf node of <code>null</code> format.
+	 * Constant instance representing a leaf node of {@code null} format.
 	 */
-	public static final DmtData NULL_VALUE = new DmtData();
+	public static final DmtData		NULL_VALUE				= new DmtData();
 	// FORMAT_NAMES must be initialized by the time the constr. is called
 
 	/**
-	 * Constant instance representing a boolean <code>true</code> value.
+	 * Constant instance representing a boolean {@code true} value.
 	 */
-	public static final DmtData TRUE_VALUE = new DmtData(true);
+	public static final DmtData		TRUE_VALUE				= new DmtData(true);
 
 	/**
-	 * Constant instance representing a boolean <code>false</code> value.
+	 * Constant instance representing a boolean {@code false} value.
 	 */
-	public static final DmtData FALSE_VALUE = new DmtData(false);
+	public static final DmtData		FALSE_VALUE				= new DmtData(false);
 
-	private final String str;
+	private final String			str;
 
-	private final int integer;
+	private final int				integer;
 
-	private final float flt;
+	private final float				flt;
 
-	private final boolean bool;
+	private final boolean			bool;
 
-	private final byte[] bytes;
+	private final byte[]			bytes;
 
-	private final int format;
+	private final int				format;
 
-	private final String formatName;
+	private final String			formatName;
 
-	private final Object complex;
+	private final Object			complex;
 
-	private final long lng;
+	private final long				lng;
 
 	/**
-	 * Create a <code>DmtData</code> instance of <code>null</code> format. This
+	 * Create a {@code DmtData} instance of {@code null} format. This
 	 * constructor is private and used only to create the public
 	 * {@link #NULL_VALUE} constant.
 	 */
@@ -236,11 +238,10 @@ public final class DmtData {
 	}
 
 	/**
-	 * Create a <code>DmtData</code> instance of <code>chr</code> format with
-	 * the given string value. The <code>null</code> string argument is valid.
+	 * Create a {@code DmtData} instance of {@code chr} format with the given
+	 * string value. The {@code null} string argument is valid.
 	 * 
-	 * @param str
-	 *            the string value to set
+	 * @param str the string value to set
 	 */
 	public DmtData(String str) {
 		format = FORMAT_STRING;
@@ -257,18 +258,17 @@ public final class DmtData {
 	}
 
 	/**
-	 * Create a <code>DmtData</code> instance of <code>node</code> format with
-	 * the given object value. The value represents complex data associated with
-	 * an interior node.
+	 * Create a {@code DmtData} instance of {@code node} format with the given
+	 * object value. The value represents complex data associated with an
+	 * interior node.
 	 * <p>
 	 * Certain interior nodes can support access to their subtrees through such
 	 * complex values, making it simpler to retrieve or update all leaf nodes in
 	 * a subtree.
 	 * <p>
-	 * The given value must be a non-<code>null</code> immutable object.
+	 * The given value must be a non-{@code null} immutable object.
 	 * 
-	 * @param complex
-	 *            the complex data object to set
+	 * @param complex the complex data object to set
 	 */
 	public DmtData(Object complex) {
 		if (complex == null)
@@ -288,9 +288,9 @@ public final class DmtData {
 	}
 
 	/**
-	 * Create a <code>DmtData</code> instance of the specified format and set
-	 * its value based on the given string. Only the following string-based
-	 * formats can be created using this constructor:
+	 * Create a {@code DmtData} instance of the specified format and set its
+	 * value based on the given string. Only the following string-based formats
+	 * can be created using this constructor:
 	 * <ul>
 	 * <li>{@link #FORMAT_STRING} - value can be any string
 	 * <li>{@link #FORMAT_XML} - value must contain an XML fragment (the
@@ -313,48 +313,45 @@ public final class DmtData {
 	 * <li>{@link #FORMAT_NODE_URI} - value must contain a string that holds a
 	 * reference to a node
 	 * </ul>
-	 * * The <code>null</code> string argument is only valid if the format is
-	 * string or XML.
+	 * * The {@code null} string argument is only valid if the format is string
+	 * or XML.
 	 * 
-	 * @param value
-	 *            the string, XML, date, time, datetime, unsignedInt,
-	 *            unsignedLong or node-uri value to set
-	 * @param format
-	 *            the format of the <code>DmtData</code> instance to be created,
-	 *            must be one of the formats specified above
-	 * @throws IllegalArgumentException
-	 *             if <code>format</code> is not one of the allowed formats, or
-	 *             <code>value</code> is not a valid string for the given format
-	 * @throws NullPointerException
-	 *             if a string, XML, date, time, datetime, unsignedInt,
-	 *             unsignedLong or node-uri is constructed and
-	 *             <code>value</code> is <code>null</code>
+	 * @param value the string, XML, date, time, datetime, unsignedInt,
+	 *        unsignedLong or node-uri value to set
+	 * @param format the format of the {@code DmtData} instance to be created,
+	 *        must be one of the formats specified above
+	 * @throws IllegalArgumentException if {@code format} is not one of the
+	 *         allowed formats, or {@code value} is not a valid string for the
+	 *         given format
+	 * @throws NullPointerException if a string, XML, date, time, datetime,
+	 *         unsignedInt, unsignedLong or node-uri is constructed and
+	 *         {@code value} is {@code null}
 	 */
 	public DmtData(String value, int format) {
 
 		switch (format) {
-		case FORMAT_DATE:
-			checkDateFormat(value);
-			break;
-		case FORMAT_TIME:
-			checkTimeFormat(value);
-			break;
-		case FORMAT_DATETIME:
-			checkDateTimeFormat(value);
-			break;
-		case FORMAT_UNSIGNED_LONG:
-			checkUnsignedLong(value);
-			break;
-		case FORMAT_UNSIGNED_INTEGER:
-			checkUnsignedInt(value);
-			break;
-		case FORMAT_STRING:
-		case FORMAT_NODE_URI:
-		case FORMAT_XML:
-			break; // nothing to do, all string values are accepted
-		default:
-			throw new IllegalArgumentException(
-					"Invalid format in string constructor: " + format);
+			case FORMAT_DATE :
+				checkDateFormat(value);
+				break;
+			case FORMAT_TIME :
+				checkTimeFormat(value);
+				break;
+			case FORMAT_DATETIME :
+				checkDateTimeFormat(value);
+				break;
+			case FORMAT_UNSIGNED_LONG :
+				checkUnsignedLong(value);
+				break;
+			case FORMAT_UNSIGNED_INTEGER :
+				checkUnsignedInt(value);
+				break;
+			case FORMAT_STRING :
+			case FORMAT_NODE_URI :
+			case FORMAT_XML :
+				break; // nothing to do, all string values are accepted
+			default :
+				throw new IllegalArgumentException(
+						"Invalid format in string constructor: " + format);
 		}
 		this.format = format;
 		this.formatName = getFormatName(format);
@@ -370,11 +367,10 @@ public final class DmtData {
 	}
 
 	/**
-	 * Create a <code>DmtData</code> instance of <code>int</code> format and set
-	 * its value.
+	 * Create a {@code DmtData} instance of {@code int} format and set its
+	 * value.
 	 * 
-	 * @param integer
-	 *            the integer value to set
+	 * @param integer the integer value to set
 	 */
 	public DmtData(int integer) {
 		format = FORMAT_INTEGER;
@@ -391,11 +387,10 @@ public final class DmtData {
 	}
 
 	/**
-	 * Create a <code>DmtData</code> instance of <code>float</code> format and
-	 * set its value.
+	 * Create a {@code DmtData} instance of {@code float} format and set its
+	 * value.
 	 * 
-	 * @param flt
-	 *            the float value to set
+	 * @param flt the float value to set
 	 */
 	public DmtData(float flt) {
 		format = FORMAT_FLOAT;
@@ -412,11 +407,10 @@ public final class DmtData {
 	}
 
 	/**
-	 * Create a <code>DmtData</code> instance of <code>long</code> format and
-	 * set its value.
+	 * Create a {@code DmtData} instance of {@code long} format and set its
+	 * value.
 	 * 
-	 * @param lng
-	 *            the long value to set
+	 * @param lng the long value to set
 	 */
 	public DmtData(long lng) {
 		format = FORMAT_LONG;
@@ -433,11 +427,10 @@ public final class DmtData {
 	}
 
 	/**
-	 * Create a <code>DmtData</code> instance of <code>bool</code> format and
-	 * set its value.
+	 * Create a {@code DmtData} instance of {@code bool} format and set its
+	 * value.
 	 * 
-	 * @param bool
-	 *            the boolean value to set
+	 * @param bool the boolean value to set
 	 */
 	public DmtData(boolean bool) {
 		format = FORMAT_BOOLEAN;
@@ -454,13 +447,11 @@ public final class DmtData {
 	}
 
 	/**
-	 * Create a <code>DmtData</code> instance of <code>bin</code> format and set
-	 * its value.
+	 * Create a {@code DmtData} instance of {@code bin} format and set its
+	 * value.
 	 * 
-	 * @param bytes
-	 *            the byte array to set, must not be <code>null</code>
-	 * @throws NullPointerException
-	 *             if <code>bytes</code> is <code>null</code>
+	 * @param bytes the byte array to set, must not be {@code null}
+	 * @throws NullPointerException if {@code bytes} is {@code null}
 	 */
 	public DmtData(byte[] bytes) {
 		if (bytes == null)
@@ -480,18 +471,14 @@ public final class DmtData {
 	}
 
 	/**
-	 * Create a <code>DmtData</code> instance of <code>bin</code> or
-	 * <code>b64</code> format and set its value. The chosen format is specified
-	 * by the <code>base64</code> parameter.
+	 * Create a {@code DmtData} instance of {@code bin} or {@code b64} format
+	 * and set its value. The chosen format is specified by the {@code base64}
+	 * parameter.
 	 * 
-	 * @param bytes
-	 *            the byte array to set, must not be <code>null</code>
-	 * @param base64
-	 *            if <code>true</code>, the new instance will have
-	 *            <code>b64</code> format, if <code>false</code>, it will have
-	 *            <code>bin</code> format
-	 * @throws NullPointerException
-	 *             if <code>bytes</code> is <code>null</code>
+	 * @param bytes the byte array to set, must not be {@code null}
+	 * @param base64 if {@code true}, the new instance will have {@code b64}
+	 *        format, if {@code false}, it will have {@code bin} format
+	 * @throws NullPointerException if {@code bytes} is {@code null}
 	 */
 	public DmtData(byte[] bytes, boolean base64) {
 		if (bytes == null)
@@ -511,9 +498,9 @@ public final class DmtData {
 	}
 
 	/**
-	 * Create a <code>DmtData</code> instance of the specified format and set
-	 * its value based on the given <code>byte[]</code>. Only the following
-	 * <code>byte[]</code> based formats can be created using this constructor:
+	 * Create a {@code DmtData} instance of the specified format and set its
+	 * value based on the given {@code byte[]}. Only the following
+	 * {@code byte[]} based formats can be created using this constructor:
 	 * 
 	 * <ul>
 	 * <li>{@link #FORMAT_BINARY}
@@ -522,28 +509,25 @@ public final class DmtData {
 	 * </ul>
 	 * 
 	 * 
-	 * @param bytes
-	 *            the byte array to set, must not be <code>null</code>
-	 * @param format
-	 *            the format of the DmtData instance to be created, must be one
-	 *            of the formats specified above
-	 * @throws IllegalArgumentException
-	 *             if format is not one of the allowed formats
-	 * @throws NullPointerException
-	 *             if <code>bytes</code> is <code>null</code>
+	 * @param bytes the byte array to set, must not be {@code null}
+	 * @param format the format of the DmtData instance to be created, must be
+	 *        one of the formats specified above
+	 * @throws IllegalArgumentException if format is not one of the allowed
+	 *         formats
+	 * @throws NullPointerException if {@code bytes} is {@code null}
 	 */
 	public DmtData(byte[] bytes, int format) {
 		if (bytes == null)
 			throw new NullPointerException("Binary data argument is null.");
 
 		switch (format) {
-		case FORMAT_BINARY:
-		case FORMAT_BASE64:
-		case FORMAT_HEXBINARY:
-			break;
-		default:
-			throw new IllegalArgumentException(
-					"Invalid format in byte[] constructor: " + format);
+			case FORMAT_BINARY :
+			case FORMAT_BASE64 :
+			case FORMAT_HEXBINARY :
+				break;
+			default :
+				throw new IllegalArgumentException(
+						"Invalid format in byte[] constructor: " + format);
 		}
 
 		this.format = format;
@@ -560,19 +544,16 @@ public final class DmtData {
 	}
 
 	/**
-	 * Create a <code>DmtData</code> instance in {@link #FORMAT_RAW_STRING}
-	 * format. The data is provided encoded as a <code>String</code>. The actual
-	 * data format is specified in <code>formatName</code>. The encoding used in
-	 * <code>data</code> must conform to this format.
+	 * Create a {@code DmtData} instance in {@link #FORMAT_RAW_STRING} format.
+	 * The data is provided encoded as a {@code String}. The actual data format
+	 * is specified in {@code formatName}. The encoding used in {@code data}
+	 * must conform to this format.
 	 * 
-	 * @param formatName
-	 *            the name of the format, must not be <code>null</code>
-	 * @param data
-	 *            the data encoded according to the specified format, must not
-	 *            be <code>null</code>
-	 * @throws NullPointerException
-	 *             if <code>formatName</code> or <code>data</code> is
-	 *             <code>null</code>
+	 * @param formatName the name of the format, must not be {@code null}
+	 * @param data the data encoded according to the specified format, must not
+	 *        be {@code null}
+	 * @throws NullPointerException if {@code formatName} or {@code data} is
+	 *         {@code null}
 	 */
 	public DmtData(String formatName, String data) {
 		if (formatName == null)
@@ -594,19 +575,16 @@ public final class DmtData {
 	}
 
 	/**
-	 * Create a <code>DmtData</code> instance in {@link #FORMAT_RAW_BINARY}
-	 * format. The data is provided encoded as binary. The actual data format is
-	 * specified in <code>formatName</code>. The encoding used in
-	 * <code>data</code> must conform to this format.
+	 * Create a {@code DmtData} instance in {@link #FORMAT_RAW_BINARY} format.
+	 * The data is provided encoded as binary. The actual data format is
+	 * specified in {@code formatName}. The encoding used in {@code data} must
+	 * conform to this format.
 	 * 
-	 * @param formatName
-	 *            the name of the format, must not be <code>null</code>
-	 * @param data
-	 *            the data encoded according to the specified format, must not
-	 *            be <code>null</code>
-	 * @throws NullPointerException
-	 *             if <code>formatName</code> or <code>data</code> is
-	 *             <code>null</code>
+	 * @param formatName the name of the format, must not be {@code null}
+	 * @param data the data encoded according to the specified format, must not
+	 *        be {@code null}
+	 * @throws NullPointerException if {@code formatName} or {@code data} is
+	 *         {@code null}
 	 */
 	public DmtData(String formatName, byte[] data) {
 		if (formatName == null)
@@ -616,7 +594,7 @@ public final class DmtData {
 
 		format = FORMAT_RAW_BINARY;
 		this.formatName = formatName;
-		this.bytes = (byte[]) data.clone();
+		this.bytes = data.clone();
 
 		this.str = null;
 		this.integer = 0;
@@ -628,11 +606,10 @@ public final class DmtData {
 	}
 
 	/**
-	 * Gets the value of a node with string (<code>chr</code>) format.
+	 * Gets the value of a node with string ({@code chr}) format.
 	 * 
 	 * @return the string value
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not string
+	 * @throws DmtIllegalStateException if the format of the node is not string
 	 */
 	public String getString() {
 		if (format == FORMAT_STRING)
@@ -647,8 +624,7 @@ public final class DmtData {
 	 * complete representation, basic format (pattern <tt>CCYYMMDD</tt>).
 	 * 
 	 * @return the date value
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not date
+	 * @throws DmtIllegalStateException if the format of the node is not date
 	 */
 	public String getDate() {
 		if (format == FORMAT_DATE)
@@ -666,8 +642,7 @@ public final class DmtData {
 	 * <tt>hhmmssZ</tt>).
 	 * 
 	 * @return the time value
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not time
+	 * @throws DmtIllegalStateException if the format of the node is not time
 	 */
 	public String getTime() {
 		if (format == FORMAT_TIME)
@@ -686,8 +661,7 @@ public final class DmtData {
 	 * <tt>CCYYMMDDThhmmssZ</tt>).
 	 * 
 	 * @return the time value
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not time
+	 * @throws DmtIllegalStateException if the format of the node is not time
 	 */
 	public String getDateTime() {
 		if (format == FORMAT_DATETIME)
@@ -697,11 +671,11 @@ public final class DmtData {
 	}
 
 	/**
-	 * Gets the value of a node with <code>xml</code> format.
+	 * Gets the value of a node with {@code xml} format.
 	 * 
 	 * @return the XML value
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not <code>xml</code>
+	 * @throws DmtIllegalStateException if the format of the node is not
+	 *         {@code xml}
 	 */
 	public String getXml() {
 		if (format == FORMAT_XML)
@@ -711,11 +685,10 @@ public final class DmtData {
 	}
 
 	/**
-	 * Gets the value of a node with integer (<code>int</code>) format.
+	 * Gets the value of a node with integer ({@code int}) format.
 	 * 
 	 * @return the integer value
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not integer
+	 * @throws DmtIllegalStateException if the format of the node is not integer
 	 */
 	public int getInt() {
 		if (format == FORMAT_INTEGER)
@@ -728,8 +701,7 @@ public final class DmtData {
 	 * Gets the value of a node with unsigned integer format.
 	 * 
 	 * @return the unsigned integer value
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not integer
+	 * @throws DmtIllegalStateException if the format of the node is not integer
 	 */
 	public String getUnsignedInteger() {
 		if (format == FORMAT_UNSIGNED_INTEGER)
@@ -743,8 +715,7 @@ public final class DmtData {
 	 * Gets the value of a node with long format.
 	 * 
 	 * @return the long value
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not long
+	 * @throws DmtIllegalStateException if the format of the node is not long
 	 */
 	public long getLong() {
 		if (format == FORMAT_LONG)
@@ -759,8 +730,7 @@ public final class DmtData {
 	 * maximum possible unsigned value.
 	 * 
 	 * @return the unsigned long value
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not long
+	 * @throws DmtIllegalStateException if the format of the node is not long
 	 */
 	public String getUnsignedLong() {
 		if (format == FORMAT_UNSIGNED_LONG)
@@ -770,11 +740,11 @@ public final class DmtData {
 	}
 
 	/**
-	 * Gets the value of a node with <code>float</code> format.
+	 * Gets the value of a node with {@code float} format.
 	 * 
 	 * @return the float value
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not <code>float</code>
+	 * @throws DmtIllegalStateException if the format of the node is not
+	 *         {@code float}
 	 */
 	public float getFloat() {
 		if (format == FORMAT_FLOAT)
@@ -784,11 +754,10 @@ public final class DmtData {
 	}
 
 	/**
-	 * Gets the value of a node with boolean (<code>bool</code>) format.
+	 * Gets the value of a node with boolean ({@code bool}) format.
 	 * 
 	 * @return the boolean value
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not boolean
+	 * @throws DmtIllegalStateException if the format of the node is not boolean
 	 */
 	public boolean getBoolean() {
 		if (format == FORMAT_BOOLEAN)
@@ -798,11 +767,10 @@ public final class DmtData {
 	}
 
 	/**
-	 * Gets the value of a node with binary (<code>bin</code>) format.
+	 * Gets the value of a node with binary ({@code bin}) format.
 	 * 
 	 * @return the binary value
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not binary
+	 * @throws DmtIllegalStateException if the format of the node is not binary
 	 */
 	public byte[] getBinary() {
 		if (format == FORMAT_BINARY) {
@@ -820,8 +788,8 @@ public final class DmtData {
 	 * Gets the value of a node with hex binary format.
 	 * 
 	 * @return the hex binary value
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not hex binary
+	 * @throws DmtIllegalStateException if the format of the node is not hex
+	 *         binary
 	 */
 	public byte[] getHexBinary() {
 		if (format == FORMAT_HEXBINARY) {
@@ -841,24 +809,24 @@ public final class DmtData {
 	 * format.
 	 * 
 	 * @return the data value in raw binary format
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not raw binary
+	 * @throws DmtIllegalStateException if the format of the node is not raw
+	 *         binary
 	 */
 	public byte[] getRawBinary() {
 		if (format == FORMAT_RAW_BINARY)
-			return (byte[]) bytes.clone();
+			return bytes.clone();
 
 		throw new DmtIllegalStateException(
 				"DmtData value is not in raw binary format.");
 	}
 
 	/**
-	 * Gets the value of a node in raw <code>String</code> (
+	 * Gets the value of a node in raw {@code String} (
 	 * {@link #FORMAT_RAW_STRING}) format.
 	 * 
-	 * @return the data value in raw <code>String</code> format
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not raw <code>String</code>
+	 * @return the data value in raw {@code String} format
+	 * @throws DmtIllegalStateException if the format of the node is not raw
+	 *         {@code String}
 	 */
 	public String getRawString() {
 		if (format == FORMAT_RAW_STRING)
@@ -869,11 +837,11 @@ public final class DmtData {
 	}
 
 	/**
-	 * Gets the value of a node with base 64 (<code>b64</code>) format.
+	 * Gets the value of a node with base 64 ({@code b64}) format.
 	 * 
 	 * @return the binary value
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not base 64.
+	 * @throws DmtIllegalStateException if the format of the node is not base
+	 *         64.
 	 */
 	public byte[] getBase64() {
 		if (format == FORMAT_BASE64) {
@@ -889,7 +857,7 @@ public final class DmtData {
 	}
 
 	/**
-	 * Gets the complex data associated with an interior node (<code>node</code>
+	 * Gets the complex data associated with an interior node ({@code node}
 	 * format).
 	 * <p>
 	 * Certain interior nodes can support access to their subtrees through
@@ -897,8 +865,8 @@ public final class DmtData {
 	 * the subtree.
 	 * 
 	 * @return the data object associated with an interior node
-	 * @throws DmtIllegalStateException
-	 *             if the format of the data is not <code>node</code>
+	 * @throws DmtIllegalStateException if the format of the data is not
+	 *         {@code node}
 	 */
 	public Object getNode() {
 		if (format == FORMAT_NODE)
@@ -912,8 +880,8 @@ public final class DmtData {
 	 * Gets the value of a node uri ({@link #FORMAT_NODE_URI}) format.
 	 * 
 	 * @return the data value in node uri format
-	 * @throws DmtIllegalStateException
-	 *             if the format of the node is not node uri
+	 * @throws DmtIllegalStateException if the format of the node is not node
+	 *         uri
 	 */
 	public String getNodeUri() {
 		if (format == FORMAT_NODE_URI)
@@ -935,12 +903,12 @@ public final class DmtData {
 	}
 
 	/**
-	 * Returns the format of this <code>DmtData</code> as <code>String</code>.
-	 * For the predefined data formats this is the OMA DM defined name of the
-	 * format. For {@link #FORMAT_RAW_STRING} and {@link #FORMAT_RAW_BINARY}
-	 * this is the format specified when the object was created.
+	 * Returns the format of this {@code DmtData} as {@code String}. For the
+	 * predefined data formats this is the OMA DM defined name of the format.
+	 * For {@link #FORMAT_RAW_STRING} and {@link #FORMAT_RAW_BINARY} this is the
+	 * format specified when the object was created.
 	 * 
-	 * @return the format name as <code>String</code>
+	 * @return the format name as {@code String}
 	 */
 	public String getFormatName() {
 		return formatName;
@@ -953,7 +921,7 @@ public final class DmtData {
 	 * <li>{@link #FORMAT_STRING}, {@link #FORMAT_XML}, {@link #FORMAT_BINARY},
 	 * {@link #FORMAT_BASE64}, {@link #FORMAT_RAW_STRING}, and
 	 * {@link #FORMAT_RAW_BINARY}: the length of the stored data, or 0 if the
-	 * data is <code>null</code>
+	 * data is {@code null}
 	 * <li>{@link #FORMAT_INTEGER} and {@link #FORMAT_FLOAT}: 4
 	 * <li>{@link #FORMAT_DATE} and {@link #FORMAT_TIME}: the length of the date
 	 * or time in its string representation
@@ -966,40 +934,40 @@ public final class DmtData {
 	 */
 	public int getSize() {
 		switch (format) {
-		case FORMAT_STRING:
-		case FORMAT_XML:
-		case FORMAT_DATE:
-		case FORMAT_TIME:
-		case FORMAT_DATETIME:
-		case FORMAT_RAW_STRING:
-		case FORMAT_UNSIGNED_INTEGER:
-		case FORMAT_UNSIGNED_LONG:
-		case FORMAT_NODE_URI:
-			return str == null ? 0 : str.length();
-		case FORMAT_BINARY:
-		case FORMAT_BASE64:
-		case FORMAT_RAW_BINARY:
-		case FORMAT_HEXBINARY:
-			return bytes.length;
-		case FORMAT_INTEGER:
-		case FORMAT_FLOAT:
-			return 4;
-		case FORMAT_BOOLEAN:
-			return 1;
-		case FORMAT_NODE:
-			return -1;
-		case FORMAT_LONG:
-			return 8;
-		case FORMAT_NULL:
-			return 0;
+			case FORMAT_STRING :
+			case FORMAT_XML :
+			case FORMAT_DATE :
+			case FORMAT_TIME :
+			case FORMAT_DATETIME :
+			case FORMAT_RAW_STRING :
+			case FORMAT_UNSIGNED_INTEGER :
+			case FORMAT_UNSIGNED_LONG :
+			case FORMAT_NODE_URI :
+				return str == null ? 0 : str.length();
+			case FORMAT_BINARY :
+			case FORMAT_BASE64 :
+			case FORMAT_RAW_BINARY :
+			case FORMAT_HEXBINARY :
+				return bytes.length;
+			case FORMAT_INTEGER :
+			case FORMAT_FLOAT :
+				return 4;
+			case FORMAT_BOOLEAN :
+				return 1;
+			case FORMAT_NODE :
+				return -1;
+			case FORMAT_LONG :
+				return 8;
+			case FORMAT_NULL :
+				return 0;
 		}
 
 		return 0; // never reached
 	}
 
 	/**
-	 * Gets the string representation of the <code>DmtData</code>. This method
-	 * works for all formats.
+	 * Gets the string representation of the {@code DmtData}. This method works
+	 * for all formats.
 	 * <p>
 	 * For string format data - including {@link #FORMAT_RAW_STRING} - the
 	 * string value itself is returned, while for XML, date, time, integer,
@@ -1007,59 +975,58 @@ public final class DmtData {
 	 * formats the string form of the value is returned. Binary - including
 	 * {@link #FORMAT_RAW_BINARY} - base64 and hexBinary data is represented by
 	 * two-digit hexadecimal numbers for each byte separated by spaces. The
-	 * {@link #NULL_VALUE} data has the string form of " <code>null</code>".
-	 * Data of string or XML format containing the Java <code>null</code> value
-	 * is represented by an empty string.
+	 * {@link #NULL_VALUE} data has the string form of " {@code null}". Data of
+	 * string or XML format containing the Java {@code null} value is
+	 * represented by an empty string.
 	 * 
-	 * @return the string representation of this <code>DmtData</code> instance
+	 * @return the string representation of this {@code DmtData} instance
 	 */
 	public String toString() {
 		switch (format) {
-		case FORMAT_STRING:
-		case FORMAT_XML:
-		case FORMAT_DATE:
-		case FORMAT_TIME:
-		case FORMAT_DATETIME:
-		case FORMAT_RAW_STRING:
-		case FORMAT_NODE_URI:
-		case FORMAT_UNSIGNED_INTEGER:
-		case FORMAT_UNSIGNED_LONG:
-			return str == null ? "" : str;
-		case FORMAT_INTEGER:
-			return String.valueOf(integer);
-		case FORMAT_LONG:
-			return String.valueOf(lng);
-		case FORMAT_FLOAT:
-			return String.valueOf(flt);
-		case FORMAT_BOOLEAN:
-			return String.valueOf(bool);
-		case FORMAT_BINARY:
-		case FORMAT_BASE64:
-		case FORMAT_RAW_BINARY:
-		case FORMAT_HEXBINARY:
-			return getHexDump(bytes);
-		case FORMAT_NODE:
-			return complex.toString();
-		case FORMAT_NULL:
-			return "null";
+			case FORMAT_STRING :
+			case FORMAT_XML :
+			case FORMAT_DATE :
+			case FORMAT_TIME :
+			case FORMAT_DATETIME :
+			case FORMAT_RAW_STRING :
+			case FORMAT_NODE_URI :
+			case FORMAT_UNSIGNED_INTEGER :
+			case FORMAT_UNSIGNED_LONG :
+				return str == null ? "" : str;
+			case FORMAT_INTEGER :
+				return String.valueOf(integer);
+			case FORMAT_LONG :
+				return String.valueOf(lng);
+			case FORMAT_FLOAT :
+				return String.valueOf(flt);
+			case FORMAT_BOOLEAN :
+				return String.valueOf(bool);
+			case FORMAT_BINARY :
+			case FORMAT_BASE64 :
+			case FORMAT_RAW_BINARY :
+			case FORMAT_HEXBINARY :
+				return getHexDump(bytes);
+			case FORMAT_NODE :
+				return complex.toString();
+			case FORMAT_NULL :
+				return "null";
 		}
 
 		return null; // never reached
 	}
 
 	/**
-	 * Compares the specified object with this <code>DmtData</code> instance.
-	 * Two <code>DmtData</code> objects are considered equal if their format is
-	 * the same, and their data (selected by the format) is equal.
+	 * Compares the specified object with this {@code DmtData} instance. Two
+	 * {@code DmtData} objects are considered equal if their format is the same,
+	 * and their data (selected by the format) is equal.
 	 * <p>
 	 * In case of {@link #FORMAT_RAW_BINARY} and {@link #FORMAT_RAW_STRING} the
 	 * textual name of the data format - as returned by {@link #getFormatName()}
 	 * - must be equal as well.
 	 * 
-	 * @param obj
-	 *            the object to compare with this <code>DmtData</code>
-	 * @return true if the argument represents the same <code>DmtData</code> as
-	 *         this object
+	 * @param obj the object to compare with this {@code DmtData}
+	 * @return true if the argument represents the same {@code DmtData} as this
+	 *         object
 	 */
 	public boolean equals(Object obj) {
 		if (!(obj instanceof DmtData))
@@ -1071,78 +1038,79 @@ public final class DmtData {
 			return false;
 
 		switch (format) {
-		case FORMAT_STRING:
-		case FORMAT_XML:
-		case FORMAT_DATE:
-		case FORMAT_TIME:
-		case FORMAT_UNSIGNED_INTEGER:
-		case FORMAT_UNSIGNED_LONG:
-		case FORMAT_DATETIME:
-		case FORMAT_NODE_URI:
-			return str == null ? other.str == null : str.equals(other.str);
-		case FORMAT_INTEGER:
-			return integer == other.integer;
-		case FORMAT_LONG:
-			return lng == other.lng;
-		case FORMAT_FLOAT:
-			return flt == other.flt;
-		case FORMAT_BOOLEAN:
-			return bool == other.bool;
-		case FORMAT_BINARY:
-		case FORMAT_BASE64:
-		case FORMAT_HEXBINARY:
-			return Arrays.equals(bytes, other.bytes);
-		case FORMAT_NODE:
-			return complex.equals(other.complex);
-		case FORMAT_NULL:
-			return true;
-		case FORMAT_RAW_BINARY:
-			return formatName.equals(other.formatName)
-					&& Arrays.equals(bytes, other.bytes);
-		case FORMAT_RAW_STRING:
-			// in this case str cannot be null
-			return formatName.equals(other.formatName) && str.equals(other.str);
+			case FORMAT_STRING :
+			case FORMAT_XML :
+			case FORMAT_DATE :
+			case FORMAT_TIME :
+			case FORMAT_UNSIGNED_INTEGER :
+			case FORMAT_UNSIGNED_LONG :
+			case FORMAT_DATETIME :
+			case FORMAT_NODE_URI :
+				return str == null ? other.str == null : str.equals(other.str);
+			case FORMAT_INTEGER :
+				return integer == other.integer;
+			case FORMAT_LONG :
+				return lng == other.lng;
+			case FORMAT_FLOAT :
+				return flt == other.flt;
+			case FORMAT_BOOLEAN :
+				return bool == other.bool;
+			case FORMAT_BINARY :
+			case FORMAT_BASE64 :
+			case FORMAT_HEXBINARY :
+				return Arrays.equals(bytes, other.bytes);
+			case FORMAT_NODE :
+				return complex.equals(other.complex);
+			case FORMAT_NULL :
+				return true;
+			case FORMAT_RAW_BINARY :
+				return formatName.equals(other.formatName)
+						&& Arrays.equals(bytes, other.bytes);
+			case FORMAT_RAW_STRING :
+				// in this case str cannot be null
+				return formatName.equals(other.formatName)
+						&& str.equals(other.str);
 		}
 
 		return false; // never reached
 	}
 
 	/**
-	 * Returns the hash code value for this <code>DmtData</code> instance. The
-	 * hash code is calculated based on the data (selected by the format) of
-	 * this object.
+	 * Returns the hash code value for this {@code DmtData} instance. The hash
+	 * code is calculated based on the data (selected by the format) of this
+	 * object.
 	 * 
 	 * @return the hash code value for this object
 	 */
 	public int hashCode() {
 		switch (format) {
-		case FORMAT_STRING:
-		case FORMAT_XML:
-		case FORMAT_DATE:
-		case FORMAT_TIME:
-		case FORMAT_DATETIME:
-		case FORMAT_UNSIGNED_INTEGER:
-		case FORMAT_UNSIGNED_LONG:
-		case FORMAT_NODE_URI:
-		case FORMAT_RAW_STRING:
-			return str == null ? 0 : str.hashCode();
-		case FORMAT_INTEGER:
-			return new Integer(integer).hashCode();
-		case FORMAT_LONG:
-			return new Long(lng).hashCode();
-		case FORMAT_FLOAT:
-			return new Float(flt).hashCode();
-		case FORMAT_BOOLEAN:
-			return new Boolean(bool).hashCode();
-		case FORMAT_BINARY:
-		case FORMAT_BASE64:
-		case FORMAT_RAW_BINARY:
-		case FORMAT_HEXBINARY:
-			return new String(bytes).hashCode();
-		case FORMAT_NODE:
-			return complex.hashCode();
-		case FORMAT_NULL:
-			return 0;
+			case FORMAT_STRING :
+			case FORMAT_XML :
+			case FORMAT_DATE :
+			case FORMAT_TIME :
+			case FORMAT_DATETIME :
+			case FORMAT_UNSIGNED_INTEGER :
+			case FORMAT_UNSIGNED_LONG :
+			case FORMAT_NODE_URI :
+			case FORMAT_RAW_STRING :
+				return str == null ? 0 : str.hashCode();
+			case FORMAT_INTEGER :
+				return new Integer(integer).hashCode();
+			case FORMAT_LONG :
+				return new Long(lng).hashCode();
+			case FORMAT_FLOAT :
+				return new Float(flt).hashCode();
+			case FORMAT_BOOLEAN :
+				return new Boolean(bool).hashCode();
+			case FORMAT_BINARY :
+			case FORMAT_BASE64 :
+			case FORMAT_RAW_BINARY :
+			case FORMAT_HEXBINARY :
+				return new String(bytes).hashCode();
+			case FORMAT_NODE :
+				return complex.hashCode();
+			case FORMAT_NULL :
+				return 0;
 		}
 
 		return 0; // never reached
@@ -1222,11 +1190,12 @@ public final class DmtData {
 				throw new IllegalArgumentException(
 						"The unsigned long string contains invalid characters.");
 		}
-		
+
 		BigInteger bd = new BigInteger(value);
-		if ( bd.compareTo(new BigInteger("0")) < 0 || bd.compareTo(BD_MAX_ULONG) > 0 )
+		if (bd.compareTo(new BigInteger("0")) < 0
+				|| bd.compareTo(BD_MAX_ULONG) > 0)
 			throw new IllegalArgumentException("The unsigned long string "
-			+ value + " is out of range.");
+					+ value + " is out of range.");
 	}
 
 	private static void checkUnsignedInt(String value) {
@@ -1239,9 +1208,9 @@ public final class DmtData {
 				throw new IllegalArgumentException(
 						"The unsigned int string contains invalid characters.");
 		}
-		long val = new Long( value ).longValue();
+		long val = new Long(value).longValue();
 		long maxInt = 2l * Integer.MAX_VALUE;
-		if (val < 0 || val > maxInt ) {
+		if (val < 0 || val > maxInt) {
 			throw new IllegalArgumentException("The unsigned long string "
 					+ value + " is out of range.");
 		}
@@ -1253,7 +1222,8 @@ public final class DmtData {
 		int number;
 		try {
 			number = Integer.parseInt(part);
-		} catch (NumberFormatException e) {
+		}
+		catch (NumberFormatException e) {
 			throw new IllegalArgumentException(name + " string '" + value
 					+ "' contains a non-numeric part.");
 		}
@@ -1265,7 +1235,7 @@ public final class DmtData {
 	}
 
 	// character array of hexadecimal digits, used for printing binary data
-	private static char[] hex = "0123456789ABCDEF".toCharArray();
+	private static char[]	hex	= "0123456789ABCDEF".toCharArray();
 
 	// generates a hexadecimal dump of the given binary data
 	private static String getHexDump(byte[] bytes) {

@@ -1,0 +1,7 @@
+Bundle-Name:                             ${p}.wiring.tb10
+Bundle-SymbolicName:                     ${p}.wiring.tb10
+Bundle-Version:                          4
+Private-Package:                         ${p}.wiring.tb10
+Bundle-Activator:                        ${p}.wiring.tb10.Activator
+
+Include-Resource: {OSGI-INF/permissions.perm=perms/wiring.none.perm}

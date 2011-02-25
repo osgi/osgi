@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +27,14 @@ import info.dmtree.notification.AlertItem;
  * <p>
  * The properties of the service registration should specify a list of
  * destinations (principals) where the service is capable of sending alerts.
- * This can be done by providing a <code>String</code> array of principal names
- * in the <code>principals</code> registration property. If this property is not
+ * This can be done by providing a {@code String} array of principal names
+ * in the {@code principals} registration property. If this property is not
  * registered, the service will be treated as the default sender. The default
  * alert sender is only used when a more specific alert sender cannot be found.
  * <p>
- * The <code>principals</code> registration property is used when the
+ * The {@code principals} registration property is used when the
  * {@link info.dmtree.notification.NotificationService#sendNotification} method
- * is called, to find the proper <code>RemoteAlertSender</code> for the given
+ * is called, to find the proper {@code RemoteAlertSender} for the given
  * destination. If the caller does not specify a principal, the alert is only
  * sent if the Notification Sender finds a default alert sender, or if the
  * choice is unambiguous for some other reason (for example if only one alert
@@ -50,15 +50,15 @@ public interface RemoteAlertSender {
      * command, a correlation identifier can be specified to provide the
      * association between the execute and the alert.
      * <p>
-     * The <code>principal</code> parameter specifies which server the alert
-     * should be sent to. This parameter can be <code>null</code> if the
+     * The {@code principal} parameter specifies which server the alert
+     * should be sent to. This parameter can be {@code null} if the
      * client does not know the name of the destination. The alert should still
      * be delivered if possible; for example if the alert sender is only
      * connected to one destination.
      * <p>
      * Any exception thrown on this method will be propagated to the original
-     * sender of the event, wrapped in a <code>DmtException</code> with the
-     * code <code>REMOTE_ERROR</code>.
+     * sender of the event, wrapped in a {@code DmtException} with the
+     * code {@code REMOTE_ERROR}.
      * <p>
      * Since sending the alert and receiving acknowledgment for it is
      * potentially a very time-consuming operation, alerts are sent
@@ -69,12 +69,12 @@ public interface RemoteAlertSender {
      * it.
      * 
      * @param principal the name identifying the server where the alert should
-     *        be sent, can be <code>null</code>
+     *        be sent, can be {@code null}
      * @param code the alert code, can be 0 if not needed
      * @param correlator the correlation identifier of an associated EXEC
-     *        command, or <code>null</code> if there is no associated EXEC
+     *        command, or {@code null} if there is no associated EXEC
      * @param items the data of the alert items carried in this alert, can be
-     *        empty or <code>null</code> if no alert items are needed
+     *        empty or {@code null} if no alert items are needed
      * @throws Exception if the alert can not be sent to the server
      */
     void sendAlert(String principal, int code, String correlator,

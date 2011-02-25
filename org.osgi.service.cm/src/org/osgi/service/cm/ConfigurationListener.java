@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,24 @@
 package org.osgi.service.cm;
 
 /**
- * Listener for Configuration Events. When a <code>ConfigurationEvent</code>
+ * Listener for Configuration Events. When a {@code ConfigurationEvent}
  * is fired, it is asynchronously delivered to a
- * <code>ConfigurationListener</code>.
+ * {@code ConfigurationListener}.
  * 
  * <p>
- * <code>ConfigurationListener</code> objects are registered with the
+ * {@code ConfigurationListener} objects are registered with the
  * Framework service registry and are notified with a
- * <code>ConfigurationEvent</code> object when an event is fired.
+ * {@code ConfigurationEvent} object when an event is fired.
  * <p>
- * <code>ConfigurationListener</code> objects can inspect the received
- * <code>ConfigurationEvent</code> object to determine its type, the pid of
- * the <code>Configuration</code> object with which it is associated, and the
+ * {@code ConfigurationListener} objects can inspect the received
+ * {@code ConfigurationEvent} object to determine its type, the pid of
+ * the {@code Configuration} object with which it is associated, and the
  * Configuration Admin service that fired the event.
  * 
  * <p>
  * Security Considerations. Bundles wishing to monitor configuration events will
- * require <code>ServicePermission[ConfigurationListener,REGISTER]</code> to
- * register a <code>ConfigurationListener</code> service.
+ * require {@code ServicePermission[ConfigurationListener,REGISTER]} to
+ * register a {@code ConfigurationListener} service.
  * 
  * @version $Id$
  * @since 1.2
@@ -42,7 +42,7 @@ public interface ConfigurationListener {
 	/**
 	 * Receives notification of a Configuration that has changed.
 	 * 
-	 * @param event The <code>ConfigurationEvent</code>.
+	 * @param event The {@code ConfigurationEvent}.
 	 */
 	public void configurationEvent(ConfigurationEvent event);
 }

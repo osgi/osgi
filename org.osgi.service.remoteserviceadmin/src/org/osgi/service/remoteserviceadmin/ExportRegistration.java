@@ -28,9 +28,10 @@ import org.osgi.framework.ServiceReference;
  * {@link RemoteServiceAdmin#exportService(ServiceReference,Map)} method.
  * 
  * When this Export Registration has been closed, all methods must return
- * <code>null</code>.
+ * {@code null}.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface ExportRegistration {
@@ -46,7 +47,7 @@ public interface ExportRegistration {
 	/**
 	 * Delete the local endpoint and disconnect any remote distribution
 	 * providers. After this method returns, all methods must return
-	 * <code>null</code>.
+	 * {@code null}.
 	 * 
 	 * This method has no effect when this registration has already been closed
 	 * or is being closed.
@@ -58,13 +59,13 @@ public interface ExportRegistration {
 	 * 
 	 * If the Remote Service Admin for some reasons is unable to properly
 	 * initialize this registration, then it must return an exception from this
-	 * method. If no error occurred, this method must return <code>null</code>.
+	 * method. If no error occurred, this method must return {@code null}.
 	 * 
 	 * The error must be set before this Export Registration is returned.
 	 * Asynchronously occurring errors must be reported to the log.
 	 * 
 	 * @return The exception that occurred during the initialization of this
-	 *         registration or <code>null</code> if no exception occurred.
+	 *         registration or {@code null} if no exception occurred.
 	 */
 	Throwable getException();
 }

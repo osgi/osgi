@@ -1,7 +1,5 @@
 /*
- * $Header$
- * 
- * Copyright (c) OSGi Alliance (2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,6 +74,11 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 		mBeanServer = (MBeanServer) getContext().getService(reference);
 		assertNotNull(mBeanServer);
 
+		// The following delay makes the test case run consistently.
+		// I expect that the MBean server was not happy being deleted
+		// and created all the time. This gives it time to settle.
+		// pkriens.
+		Thread.sleep(2000);
 	}
 	
 	/*

@@ -22,16 +22,17 @@ import org.osgi.framework.ServiceReference;
  * An Export Reference associates a service with a local endpoint.
  * 
  * The Export Reference can be used to reference an exported service. When the
- * service is no longer exported, all methods must return <code>null</code>.
+ * service is no longer exported, all methods must return {@code null}.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface ExportReference {
 	/**
 	 * Return the service being exported.
 	 * 
-	 * @return The service being exported. Must be <code>null</code> when the
+	 * @return The service being exported. Must be {@code null} when the
 	 *         service is no longer exported.
 	 */
 	ServiceReference getExportedService();
@@ -40,7 +41,7 @@ public interface ExportReference {
 	 * Return the Endpoint Description for the local endpoint.
 	 * 
 	 * @return The Endpoint Description for the local endpoint. Must be
-	 *         <code>null</code> when the service is no longer exported.
+	 *         {@code null} when the service is no longer exported.
 	 */
 	EndpointDescription getExportedEndpoint();
 }

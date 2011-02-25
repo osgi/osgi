@@ -1,7 +1,5 @@
 /*
- * $Id$
- * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -27,6 +25,8 @@
 
 package org.osgi.test.cases.event.tb1;
 
+import java.util.Collection;
+import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -79,8 +79,7 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    * Sets the array with event topics in which the event handler is interested.
    * @see org.osgi.test.cases.event.service.TBCService#setTopics(java.lang.String[])
    */
-	public void setProperties(String[] topics, String[] intents) {
-	  this.topics = topics;
+	public void setProperties(String[] topics, String[] delivery) {
 	  Hashtable ht = new Hashtable();
 	  if (topics.length == 1) {
 		  ht.put(EventConstants.EVENT_TOPIC, topics[0]);
@@ -88,20 +87,45 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
 	  else {
 		  ht.put(EventConstants.EVENT_TOPIC, topics);
 	  }
-		if (intents != null) {
-			if (intents.length == 1) {
-				ht.put(EventConstants.EVENT_INTENTS, intents[0]);
+		if (delivery != null) {
+			if (delivery.length == 1) {
+				ht.put(EventConstants.EVENT_DELIVERY, delivery[0]);
 			}
 			else {
-				ht.put(EventConstants.EVENT_INTENTS, intents);
+				ht.put(EventConstants.EVENT_DELIVERY, delivery);
 			}
 		}
-	  if (serviceReg == null) {
-		  serviceReg = context.registerService(EventHandler.class.getName(), this, ht);
-	  } else {
-		  serviceReg.setProperties(ht);
-	  }
+		setProperties(ht);
   }
+	
+	/**
+	 * Sets the service properties. Note that if the EventConstants.EVENT_TOPIC 
+	 * property is missing or contains a value whose type is other than String, 
+	 * String[], or Collection<String>, then the getTopics() method will return
+	 * null.
+	 * 
+	 * @param properties The service properties to register.
+	 * @see org.osgi.service.event.EventConstants#EVENT_TOPIC
+	 * @see org.osgi.test.cases.event.service.TBCService#setProperties(Dictionary)
+	 */
+	public void setProperties(Dictionary properties) {
+		Object topics = properties.get(EventConstants.EVENT_TOPIC);
+		if (topics instanceof String)
+			this.topics = new String[]{(String)topics};
+		else if (topics instanceof String[])
+			this.topics = (String[])topics;
+		else if (topics instanceof Collection/*<String>*/) {
+			Collection/*<String>*/ collection = (Collection/*<String>*/)topics;
+			this.topics = (String[])collection.toArray(new String[collection.size()]);
+		}
+		else
+			this.topics = null;
+		if (serviceReg == null) {
+			serviceReg = context.registerService(EventHandler.class.getName(), this, properties);
+		} else {
+			serviceReg.setProperties(properties);
+		}
+	}
   
   /**
    * Returns the array with all set event topics in which the event handler is interested.

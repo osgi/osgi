@@ -1,8 +1,5 @@
 /*
- * $Id$
- *
- * Copyright (c) OSGi Alliance (2000-2001).
- * All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -44,10 +41,10 @@ import java.lang.reflect.Method;
 
 public class MethodCall {
 	private final String			name;
-	private final Class[]			paramClasses;
+	private final Class< ? >[]			paramClasses;
 	private final Object[]			paramObjects;
 
-	private static final Class[]	NO_CLASSES	= new Class[0];
+	private static final Class< ? >[]	NO_CLASSES	= new Class[0];
 	private static final Object[]	NO_OBJECTS	= new Object[0];
 
 	/**
@@ -68,7 +65,7 @@ public class MethodCall {
 	 * @param paramClass the type of the paramater
 	 * @param paramObject the parameter
 	 */
-	public MethodCall(String name, Class paramClass, Object paramObject) {
+	public MethodCall(String name, Class< ? > paramClass, Object paramObject) {
 		this.name = name;
 		this.paramClasses = new Class[] {paramClass};
 		this.paramObjects = new Object[] {paramObject};
@@ -81,7 +78,8 @@ public class MethodCall {
 	 * @param paramClasses an array containing the parameter types.
 	 * @param paramObjects an array containing the parameters
 	 */
-	public MethodCall(String name, Class[] paramClasses, Object[] paramObjects) {
+	public MethodCall(String name, Class< ? >[] paramClasses,
+			Object[] paramObjects) {
 		this.name = name;
 		this.paramClasses = paramClasses;
 		this.paramObjects = paramObjects;

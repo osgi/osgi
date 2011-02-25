@@ -4,6 +4,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.upnp.UPnPDevice;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -14,47 +16,79 @@ import org.osgi.util.tracker.ServiceTracker;
  * 
  */
 public class ServicesListener extends ServiceTracker {
+	private final Semaphore	waiter;
+	private final int		desiredCount;
 	private UPnPDevice	last;
-	private int			count;
+	private int				size;
 
-	public ServicesListener(BundleContext bc) throws InvalidSyntaxException {
+	public ServicesListener(BundleContext bc, int count)
+			throws InvalidSyntaxException {
 		super(
 				bc,
 				bc
 						.createFilter("(&(objectclass=org.osgi.service.upnp.UPnPDevice)(UPnP.device.manufacturer=ProSyst))"),
 				null);
+		waiter = new Semaphore();
+		desiredCount = count;
+		size = 0;
+	}
+
+	public void open() {
+		super.open();
+		synchronized (this) {
+			size = super.size();
+		}
+	}
+
+	public void open(boolean trackAllServices) {
+		super.open(trackAllServices);
+		synchronized (this) {
+			size = super.size();
+		}
+	}
+
+	public void close() {
+		super.close();
+		synchronized (this) {
+			size = super.size();
+		}
+	}
+
+	public synchronized int size() {
+		return size;
 	}
 
 	public Object addingService(ServiceReference ref) {
 		UPnPDevice device = (UPnPDevice) super.addingService(ref);
 
+		DefaultTestBundleControl.log("adding UPnP Device " + device);
 		synchronized (this) {
-			count++;
+			size++;
 			last = device;
-			notifyAll();
+			if (size != desiredCount) {
+				return device;
+			}
 		}
+		DefaultTestBundleControl.log(desiredCount
+				+ " UPnP Devices arrived, signaling waiter");
+		waiter.signal();
 		return device;
 	}
 
 	public void removedService(ServiceReference reference, Object service) {
-		synchronized (this) {
-			count--;
-		}
+		DefaultTestBundleControl.log("removing UPnP Device " + service);
 		super.removedService(reference, service);
+		synchronized (this) {
+			size--;
+		}
 	}
 
 	public synchronized UPnPDevice getUPnPDevice() {
 		return last;
 	}
 
-	public synchronized void waitFor(int i) {
-		while (count < i) {
-			try {
-				wait();
-			}
-			catch (InterruptedException e) {
-				// ignored
-			}
-		}
+	public void waitFor(long timeout) throws InterruptedException {
+		DefaultTestBundleControl.log("waiting for UPnP Devices " + timeout);
+		waiter.waitForSignal(timeout);
 	}
 }

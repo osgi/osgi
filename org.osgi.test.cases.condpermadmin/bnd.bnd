@@ -1,4 +1,6 @@
-Bundle-Version						: 4.2.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
 Bundle-Description: Conditional Permission Admin Test R42
 Bundle-Vendor: OSGi Alliance
 Bundle-DocURL: http://www.osgi.org/
@@ -7,8 +9,8 @@ Bundle-Category: osgi,test
 Export-Package: ${p}.junit
 DynamicImport-Package: ${p}.testcond
 
-Private-Package						= \
-	org.osgi.test.support.*, \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.junit, \
 	${p}
 

@@ -1,14 +1,27 @@
 package org.osgi.impl.service.upnp.cp;
 
-import java.util.*;
 import java.net.InetAddress;
-import org.osgi.service.upnp.*;
-import org.osgi.framework.*;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.upnp.cp.control.ControlImpl;
+import org.osgi.impl.service.upnp.cp.description.Description;
+import org.osgi.impl.service.upnp.cp.description.Document;
+import org.osgi.impl.service.upnp.cp.description.RootDevice;
+import org.osgi.impl.service.upnp.cp.event.EventServiceImpl;
+import org.osgi.impl.service.upnp.cp.event.GenaServer;
+import org.osgi.impl.service.upnp.cp.event.SubscriptionAlive;
+import org.osgi.impl.service.upnp.cp.event.SubscriptionRenew;
 import org.osgi.impl.service.upnp.cp.ssdp.SSDPComponent;
-import org.osgi.impl.service.upnp.cp.description.*;
-import org.osgi.impl.service.upnp.cp.util.*;
-import org.osgi.impl.service.upnp.cp.control.*;
-import org.osgi.impl.service.upnp.cp.event.*;
+import org.osgi.impl.service.upnp.cp.util.Control;
+import org.osgi.impl.service.upnp.cp.util.EventService;
+import org.osgi.impl.service.upnp.cp.util.UPnPController;
+import org.osgi.impl.service.upnp.cp.util.UPnPDeviceListener;
+import org.osgi.service.upnp.UPnPDevice;
 
 public class UPnPControllerImpl implements UPnPController {
 	private String				IP;
@@ -29,12 +42,17 @@ public class UPnPControllerImpl implements UPnPController {
 		this.bc = bc;
 		devices = new Hashtable(10);
 		deviceListeners = new Vector(10, 10);
+		IP = System.getProperty("org.osgi.service.http.hostname");
 		try {
-			InetAddress inet = InetAddress.getLocalHost();
-			IP = inet.getHostAddress();
+			if (IP == null) {
+				IP = InetAddress.getLocalHost().getHostAddress();
+			}
+			else {
+				IP = InetAddress.getByName(IP).getHostAddress();
+			}
 		}
-		catch (Exception e) {
-			System.out.println(e.getMessage());
+		catch (UnknownHostException e) {
+			IP = "127.0.0.1";
 		}
 		//Control starting
 		control = new ControlImpl(this);

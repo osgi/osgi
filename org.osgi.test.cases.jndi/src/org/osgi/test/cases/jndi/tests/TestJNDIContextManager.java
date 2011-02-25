@@ -19,6 +19,7 @@ package org.osgi.test.cases.jndi.tests;
 
 import java.util.Hashtable;
 
+import javax.naming.spi.InitialContextFactory;
 import javax.naming.Context;
 import javax.naming.OperationNotSupportedException;
 import javax.naming.directory.Attributes;
@@ -573,7 +574,7 @@ public class TestJNDIContextManager extends DefaultTestBundleControl {
 		try {
 			ctx = ctxManager.newInitialContext();
 			assertNotNull("The context should not be null", ctx);
-			CTInitialContextFactory ctf = (CTInitialContextFactory) ctx.lookup("osgi:service/org.osgi.test.cases.jndi.provider.CTInitialContextFactory");
+			InitialContextFactory ctf = (InitialContextFactory) ctx.lookup("osgi:service/javax.naming.spi.InitialContextFactory");
 			// Let's grab a context instance and check the environment
 			Hashtable ctxEnv = ctf.getInitialContext(null).getEnvironment();
 			if (!ctxEnv.containsKey("test1")) {

@@ -337,9 +337,14 @@ public final class UPnPConstants {
 				.intValue();
 		UPnPMCPort = Integer.getInteger(DUPnPMCPort, 1900).intValue();
 		V_MC_HOST = ("239.255.255.250:" + UPnPMCPort).intern();
-		String localHost;
+		String localHost = System.getProperty("org.osgi.service.http.hostname");
 		try {
-			localHost = InetAddress.getLocalHost().getHostAddress();
+			if (localHost == null) {
+				localHost = InetAddress.getLocalHost().getHostAddress();
+			}
+			else {
+				localHost = InetAddress.getByName(localHost).getHostAddress();
+			}
 		}
 		catch (UnknownHostException e) {
 			localHost = "127.0.0.1";

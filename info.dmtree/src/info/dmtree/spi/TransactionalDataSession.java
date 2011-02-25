@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,25 +36,25 @@ public interface TransactionalDataSession extends ReadWriteDataSession {
      * happen due to some multi-node semantic constraints defined by a specific
      * implementation. For example, node A can be required to always have
      * children A/B, A/C and A/D. If this condition is broken when
-     * <code>commit()</code> is executed, the method will fail, and throw a
-     * <code>METADATA_MISMATCH</code> exception.
+     * {@code commit()} is executed, the method will fail, and throw a
+     * {@code METADATA_MISMATCH} exception.
      * <p>
      * In many cases the tree is not the only way to manage a given part of the
      * system. It may happen that while modifying some nodes in an atomic
      * session, the underlying settings are modified parallelly outside the
      * scope of the DMT. If this is detected during commit, an exception with
-     * the code <code>CONCURRENT_ACCESS</code> is thrown.
+     * the code {@code CONCURRENT_ACCESS} is thrown.
      * 
      * @throws DmtException with the following possible error codes
      *         <ul>
-     *         <li><code>METADATA_MISMATCH</code> if the operation failed
+     *         <li>{@code METADATA_MISMATCH} if the operation failed
      *         because of meta-data restrictions
-     *         <li><code>CONCURRENT_ACCESS</code> if it is detected that some
+     *         <li>{@code CONCURRENT_ACCESS} if it is detected that some
      *         modification has been made outside the scope of the DMT to the
      *         nodes affected in the session's operations
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -68,7 +68,7 @@ public interface TransactionalDataSession extends ReadWriteDataSession {
      * the creation of this object that starts the session, and all subsequent
      * {@link #commit} and {@link #rollback} calls.
      * 
-     * @throws DmtException with the error code <code>ROLLBACK_FAILED</code>
+     * @throws DmtException with the error code {@code ROLLBACK_FAILED}
      *         in case the rollback did not succeed
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation

@@ -1,7 +1,10 @@
-Bundle-Version						: 4.2.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
+
 Bundle-Description					: Framework test cases.
 
-Private-Package						= org.osgi.test.support.*, \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.junit.*
 	
 Export-Package						= \
@@ -9,8 +12,6 @@ Export-Package						= \
 	${p}.dynpkgimport.exported, \
 	${p}.lifecycle.servicereferencegetter
 	
-Import-Package	= org.osgi.framework, org.osgi.framework.launch, org.osgi.framework.hooks.service, *
-
 Bundle-ClassPath: .,div.tb6.jar
 
 Include-Resource = \
@@ -150,11 +151,17 @@ Include-Resource = \
 	div.tb24a.jar, \
 	div.tb24b.jar, \
 	div.tb24c.jar, \
+	div.tb25.resolved.jar, \
+	div.tb25.unresolved.jar, \
 	dynpkgimport.tb0.jar, \
 	dynpkgimport.tb1.jar, \
 	dynpkgimport.tb2.jar, \
 	dynpkgimport.tb3.jar, \
 	dynpkgimport.tlx.jar, \
+	hooks.tb1.jar, \
+	hooks.tb2.jar, \
+	hooks.tb3.jar, \
+	hooks.tb4.jar, \
 	filter.tb1.jar, \
 	fragments.tb1a.jar, \
 	fragments.tb1b.jar, \
@@ -180,7 +187,8 @@ Include-Resource = \
 	fragments.tb8b.jar, \
 	fragments.tb8c.jar, \
 	fragments.tb8d.jar, \
-	fragments.tb20.jar, \
+	fragments.tb20a.jar, \
+	fragments.tb20b.jar, \
 	fragments.tb4.jar, \
 	fragments.tb5.jar, \
 	fragments.tb6.jar, \
@@ -203,24 +211,86 @@ Include-Resource = \
 	lifecycle.tb9.jar, \
 	resources.tb1.jar, \
 	resources.tb2.jar, \
-	syncbundlelistener.tb3.jar
-	
+	resolver.tb1.v100.jar, \
+	resolver.tb1.v110.jar, \
+	resolver.tb1.v120.jar, \
+	resolver.tb1.v130.jar, \
+	resolver.tb2.jar, \
+	resolver.tb2.specific.jar, \
+	resolver.tb3.jar, \
+	resolver.tb3.specific.jar, \
+	resolver.tb4.jar, \
+	resolver.tb5.jar, \
+	resolver.tb6.v100.jar, \
+	resolver.tb6.v200.jar, \
+	resolver.tb6.v300.jar, \
+	resolver.tb6.v400.jar, \
+	resolver.tb7.jar, \
+	resolver.tb8.jar, \
+	resolver.tb9.jar, \
+	resolver.tb10.v100.jar, \
+	resolver.tb10.v110.jar, \
+	resolver.tb10.v120.jar, \
+	resolver.tb10.v130.jar, \
+	resolver.tb10.v140.jar, \
+	resolver.tb11.jar, \
+	resolver.tb12.jar, \
+	resolver.tb13.client1.jar, \
+	resolver.tb13.client2.jar, \
+	resolver.tb13.client3.jar, \
+	resolver.tb13.client4.jar, \
+	resolver.tb13.frag1.jar, \
+	resolver.tb13.frag2.jar, \
+	resolver.tb13.frag3.jar, \
+	resolver.tb13.frag4.jar, \
+	resolver.tb13a.jar, \
+	resolver.tb13b.jar, \
+	resolver.tb14.jar, \
+	startlevel.tb1.jar, \
+	startlevel.tb2.jar, \
+	startlevel.tb3.jar, \
+	startlevel.tb4.jar, \
+	startlevel.tb5.jar, \
+	syncbundlelistener.tb3.jar, \
+	weaving.testClasses.jar, \
+	weaving.testAlternativeImport.jar, \
+	weaving.testImport_1.0.0.jar, \
+	weaving.testImport_1.1.0.jar, \
+	weaving.testImport_1.6.0.jar, \
+	wiring.base.jar, \
+	wiring.exporter.jar, \
+	wiring.exporter.frag.jar, \
+	wiring.exporter.v2.jar, \
+	wiring.importer.jar, \
+	wiring.importer.frag.jar, \
+	wiring.requirer.jar, \
+	wiring.requirer.frag.jar, \
+	wiring.reexport.jar,\
+	wiring.tb1.jar,\
+	wiring.tb2.jar,\
+	wiring.tb3.jar,\
+	wiring.tb4.jar,\
+	wiring.tb5.jar
+
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
 	org.osgi.framework;						version=project	, \
 	osgi.core;								version=4.2	, \
 	osgi.cmpn;								version=4.0	, \
-	ee.minimum; 							version=1.2, \
+	ee.minimum; 							version=1.2.1, \
+	org.apache.servicemix.bundles.bcel;     version=5.2 , \
 	${junit}
 
 Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.framework, org.osgi.framework.hooks.service
+-signaturetest                      = org.osgi.framework, org.osgi.framework.hooks.service, org.osgi.framework.hooks.weaving
 
--runbundles							= \
+-runbundles						= \
+	org.apache.servicemix.bundles.bcel;         version=5.2 
 
 -runproperties = ${runproperties}, \
 	org.osgi.framework.executionenvironment = "div/tb7a,OSGi/Minimum-1.0,OSGi/Minimum-1.1,OSGi/Minimum-1.2,JRE-1.1,J2SE-1.2,J2SE-1.3,J2SE-1.4,J2SE-1.5", \
 	${p}.div.tb12=abc, \
 	${p}.div.tb15=abc, \
-	${p}.div.tb16=xyz
-	
+	${p}.div.tb16=xyz, \
+	org.osgi.framework.system.capabilities.extra = "osgi.ee; osgi.ee=\"testOSGiEE\""
+

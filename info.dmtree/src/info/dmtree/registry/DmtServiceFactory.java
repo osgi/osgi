@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ public final class DmtServiceFactory {
     private DmtServiceFactory() {}
     
     /**
-     * This method is used to obtain access to <code>DmtAdmin</code>, which
+     * This method is used to obtain access to {@code DmtAdmin}, which
      * enables applications to manipulate the Device Management Tree.
      * 
      * @return a DmtAdmin service object
@@ -67,7 +67,7 @@ public final class DmtServiceFactory {
     }
 
     /**
-     * This method is used to obtain access to <code>NotificationService</code>,
+     * This method is used to obtain access to {@code NotificationService},
      * which enables applications to send asynchronous notifications to
      * management servers.
      * 

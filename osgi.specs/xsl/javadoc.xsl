@@ -36,7 +36,7 @@
 		</h1>
 		<em class="REMARK"><xsl:value-of select="."/>
 		</em>
-		<xsl:message>Formatting error in <xsl:value-of select="."/></xsl:message>
+		<xsl:message>Formatting error in <xsl:value-of select="@file"/>#<xsl:value-of select='@line'/>: <xsl:value-of select="@msg"/></xsl:message>
 	</xsl:template>
 	
 	<xsl:template match="class" mode="index">
@@ -252,6 +252,14 @@
 				<xsl:if test="NotThreadSafe">
 					Not Thread-safe<xsl:text> </xsl:text>
 				</xsl:if>
+			</p>
+		</xsl:if>
+		<xsl:if test="noimplement">
+			<p class="parameter">
+				<tab/>
+				<em class="key">No Implement</em>
+				<tab/>
+				Consumers of this API must not implement this interface<xsl:text> </xsl:text>
 			</p>
 		</xsl:if>
 	</xsl:template>

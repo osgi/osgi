@@ -1,6 +1,9 @@
--nope							= true
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
+
+-nobundles							= true
 nodeploy						= true
 
 -buildpath = \
-	org.osgi.framework;			version=project, \
-	ee.minimum;					version=1.0
+	ee.minimum;					version=1.0, \
+	osgi.core;					version=4.2

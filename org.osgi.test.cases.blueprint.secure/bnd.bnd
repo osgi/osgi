@@ -1,13 +1,16 @@
-Bundle-Version: 4.2.0.${project.build}
-Export-Package						= ${p}.*
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Export-Package						= ${p}.*, \
+	org.osgi.test.cases.blueprint.*
 Bundle-RequiredExecutionEnvironment = J2SE-1.4
 Bundle-Vendor: IBM
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
-Bundle-Copyright: ${copyright}
 
-Private-Package						= org.osgi.test.support.*
+
+Conditional-Package					= org.osgi.test.support.*
 
 Include-Resource					= \
 	www/blueprint_denied.jar=blueprint_denied.jar , \
@@ -28,6 +31,7 @@ Include-Resource					= \
 	www/ServiceOne_import.jar=ServiceOne_import.jar, \
 	www/ServiceOne_import_denied.jar=ServiceOne_import_denied.jar
 
+testcases = ${classes;named;${p}.*;extends;junit.framework.TestCase;concrete}
 Test-Cases							= ${testcases}
 
 -buildpath							= \
@@ -39,11 +43,10 @@ Test-Cases							= ${testcases}
     ${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm;  version=latest, \
 	org.osgi.impl.service.event; version=latest, \
- 	org.osgi.test.cases.blueprint;  version=project, \
     org.osgi.impl.service.blueprint; version=latest
 
 -runproperties = ${runsecureproperties}

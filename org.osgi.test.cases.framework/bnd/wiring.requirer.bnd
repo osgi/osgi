@@ -1,0 +1,7 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.wiring.requirer
+Bundle-SymbolicName: ${p}.wiring.requirer
+Bundle-Version: 1.0
+Require-Bundle: ${p}.wiring.exporter
+
+Include-Resource: resources/wiring/local/

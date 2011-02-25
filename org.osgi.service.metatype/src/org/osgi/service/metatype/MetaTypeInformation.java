@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import org.osgi.framework.Bundle;
  * A MetaType Information object is created by the MetaTypeService to return
  * meta type information for a specific bundle.
  * 
+ * @noimplement
  * @version $Id$
  * @since 1.1
  */

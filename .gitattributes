@@ -60,3 +60,6 @@ Makefile crlf=input
 *.otp binary
 *.ots binary
 *.ott binary
+*.key binary
+*.numbers binary
+*.pages binary

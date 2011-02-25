@@ -1,7 +1,11 @@
 package org.osgi.impl.service.upnp.cd.event;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.upnp.cd.control.ControlImpl;
 
@@ -88,12 +92,18 @@ public class GenaServer extends Thread {
 	public void shutdown() throws IOException {
 		done = true;
 		if (done) {
-			String hostname;
+			String hostname = System
+					.getProperty("org.osgi.service.http.hostname");
 			try {
-				hostname = InetAddress.getLocalHost().getHostName();
+				if (hostname == null) {
+					hostname = InetAddress.getLocalHost().getHostAddress();
+				}
+				else {
+					hostname = InetAddress.getByName(hostname).getHostAddress();
+				}
 			}
 			catch (UnknownHostException e) {
-				hostname = "";
+				hostname = "127.0.0.1";
 			}
 			client = new Socket(hostname, getServerPort());
 			if (client != null) {
@@ -128,10 +138,25 @@ public class GenaServer extends Thread {
 	// used to get the server port.If server socket is not null, returns the
 	// port else returns -1
 	public String getServerIP() {
+		if (serverSock == null) {
+			return "-1";
+		}
 		try {
-			return (serverSock != null) ? InetAddress.getLocalHost()
-					.getHostAddress()
-					+ ":" + serverSock.getLocalPort() : "-1";
+			String hostname = System
+					.getProperty("org.osgi.service.http.hostname");
+			try {
+				if (hostname == null) {
+					hostname = InetAddress.getLocalHost().getHostAddress();
+				}
+				else {
+					hostname = InetAddress.getByName(hostname).getHostAddress();
+				}
+			}
+			catch (UnknownHostException e) {
+				hostname = "127.0.0.1";
+			}
+
+			return hostname + ":" + serverSock.getLocalPort();
 		}
 		catch (Exception e) {
 			return null;

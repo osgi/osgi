@@ -31,6 +31,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  */
 public class UPnPControl extends DefaultTestBundleControl {
+	private final int			desiredCount	= 3;
 	private HttpService			http;
 	private TestStarter			start;
 	private ServicesListener	listener;
@@ -38,20 +39,28 @@ public class UPnPControl extends DefaultTestBundleControl {
 	protected void setUp() throws Exception {
 		log("Prepare for UPnP Test Case");
 		http = (HttpService) getService(HttpService.class);
-		// UPnPConstants.HTTP_PORT = ((Integer)
-		// httpRef.getProperty("openPort")).intValue();
 		log("Register Service Listener to listen for service changes");
-		listener = new ServicesListener(getContext());
+		listener = new ServicesListener(getContext(), desiredCount);
 		listener.open();
 		log("Start the UPnP Test Starter");
 		start = new TestStarter(http);
-		listener.waitFor(3);
+		listener.waitFor(OSGiTestCaseProperties.getTimeout()
+				* OSGiTestCaseProperties.getScaling());
+		if (listener.size() < desiredCount) {
+			listener.close();
+			start.stop();
+			ungetService(http);
+			fail("timed out waiting for " + desiredCount + " UPnP devices");
+		}
+		log("Prepared for UPnP Test Case");
 	}
 
 	protected void tearDown() throws Exception {
+		log("Tear down UPnP Test Case");
 		listener.close();
 		start.stop();
 		ungetService(http);
+		log("Torn down UPnP Test Case");
 	}
 
 	// ==========================================TEST

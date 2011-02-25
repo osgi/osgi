@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.test.support.OSGiTestCase;
 
 
@@ -98,6 +101,7 @@ public class GetEntryResourceTests extends OSGiTestCase {
 		assertFindEntries(testBundle, "resources", "*.xml", false, 1 * factor);
 		assertFindEntries(testBundle, "resources", "data*.xml", false, 1 * factor);
 		assertFindEntries(testBundle, "resources", "data.txt", false, 1 * factor);
+		assertFindEntries(testBundle, "", "data.txt", true, 1 * factor);
 		assertFindEntries(testBundle, "resources", "data*", true, 10 * factor);
 		assertFindEntries(testBundle, "resources", "*d*ta*.*", true, 10 * factor);
 		assertFindEntries(testBundle, "resources", "doesNotExist", true, 0 * factor);
@@ -136,8 +140,12 @@ public class GetEntryResourceTests extends OSGiTestCase {
 		assertEquals("Unexpected number of entries", expected.length, numFound);
 	}
 
-	private void assertFindEntries(Bundle bundle, String string, String wildCard, boolean recurse, int expectedNum) {
-		Enumeration entries = bundle.findEntries("resources", wildCard, recurse);
+	private void assertFindEntries(Bundle bundle, String path, String wildCard, boolean recurse, int expectedNum) {
+		assertBundleFindEntries(bundle, path, wildCard, recurse, expectedNum);
+		assertWiringFindEntries(bundle, path, wildCard, recurse, expectedNum);
+	}
+	private void assertBundleFindEntries(Bundle bundle, String path, String wildCard, boolean recurse, int expectedNum) {
+		Enumeration entries = bundle.findEntries(path, wildCard, recurse);
 		if (expectedNum > 0)
 			assertNotNull(entries);
 		else {
@@ -148,6 +156,20 @@ public class GetEntryResourceTests extends OSGiTestCase {
 		int numFound = 0;
 		while (entries.hasMoreElements()) {
 			assertURL((URL) entries.nextElement());
+			numFound++;
+		}
+		assertEquals("Unexpected number of entries", expectedNum, numFound);
+	}
+
+	private void assertWiringFindEntries(Bundle bundle, String path, String wildCard, boolean recurse, int expectedNum) {
+		BundleWiring wiring = (BundleWiring) bundle.adapt(BundleWiring.class);
+		List entries = wiring.findEntries(path, wildCard, recurse ? BundleWiring.FINDENTRIES_RECURSE : 0);
+		assertNotNull("Entries should not be null.", entries);
+
+		Iterator iEntries = entries.iterator();
+		int numFound = 0;
+		while (iEntries.hasNext()) {
+			assertURL((URL) iEntries.next());
 			numFound++;
 		}
 		assertEquals("Unexpected number of entries", expectedNum, numFound);

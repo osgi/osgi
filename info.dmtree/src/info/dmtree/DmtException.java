@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.util.Vector;
 
 /**
  * Checked exception received when a DMT operation fails. Beside the exception
- * message, a <code>DmtException</code> always contains an error code (one of
+ * message, a {@code DmtException} always contains an error code (one of
  * the constants specified in this class), and may optionally contain the URI of
  * the related node, and information about the cause of the exception.
  * <p>
@@ -30,19 +30,19 @@ import java.util.Vector;
  * different range, starting from 1.
  * <p>
  * The cause of the exception (if specified) can either be a single
- * <code>Throwable</code> instance, or a list of such instances if several
+ * {@code Throwable} instance, or a list of such instances if several
  * problems occurred during the execution of a method. An example for the latter
- * is the <code>close</code> method of <code>DmtSession</code> that tries to
+ * is the {@code close} method of {@code DmtSession} that tries to
  * close multiple plugins, and has to report the exceptions of all failures.
  * <p>
- * Each constructor has two variants, one accepts a <code>String</code> node
- * URI, the other accepts a <code>String[]</code> node path. The former is used
+ * Each constructor has two variants, one accepts a {@code String} node
+ * URI, the other accepts a {@code String[]} node path. The former is used
  * by the DmtAdmin implementation, the latter by the plugins, who receive the
  * node URI as an array of segment names. The constructors are otherwise
  * identical.
  * <p>
  * Getter methods are provided to retrieve the values of the additional
- * parameters, and the <code>printStackTrace(PrintWriter)</code> method is
+ * parameters, and the {@code printStackTrace(PrintWriter)} method is
  * extended to print the stack trace of all causing throwables as well.
  * 
  * @version $Id$
@@ -137,8 +137,8 @@ public class DmtException extends Exception {
     /**
      * The requested node creation operation failed because the target already
      * exists. This can occur if the node is created directly (with one of the
-     * <code>create...</code> methods), or indirectly (during a
-     * <code>copy</code> operation).
+     * {@code create...} methods), or indirectly (during a
+     * {@code copy} operation).
      * <p>
      * This error code corresponds to the OMA DM response status code 418
      * &quot;Already exists&quot;.
@@ -207,7 +207,7 @@ public class DmtException extends Exception {
     /**
      * Operation failed because of meta data restrictions. This covers any
      * attempted deviation from the parameters defined by the
-     * <code>MetaNode</code> objects of the affected nodes, for example in the
+     * {@code MetaNode} objects of the affected nodes, for example in the
      * following situations:
      * <ul>
      * <li>creating, deleting or renaming a permanent node, or modifying its
@@ -215,7 +215,7 @@ public class DmtException extends Exception {
      * <li>creating an interior node where the meta-node defines it as a leaf,
      * or vice versa
      * <li>any operation on a node which does not have the required access type
-     * (e.g. executing a node that lacks the <code>MetaNode.CMD_EXECUTE</code>
+     * (e.g. executing a node that lacks the {@code MetaNode.CMD_EXECUTE}
      * access type)
      * <li>any node creation or deletion that would violate the cardinality
      * constraints
@@ -225,7 +225,7 @@ public class DmtException extends Exception {
      * </ul>
      * <p>
      * This error code can also be used to indicate any other meta data
-     * violation, even if it cannot be described by the <code>MetaNode</code>
+     * violation, even if it cannot be described by the {@code MetaNode}
      * class. For example, detecting a multi-node constraint violation while
      * committing an atomic session should result in this error.
      * <p>
@@ -237,15 +237,15 @@ public class DmtException extends Exception {
 
     /**
      * The requested command failed because the target URI or node name is
-     * <code>null</code> or syntactically invalid. This covers the following
+     * {@code null} or syntactically invalid. This covers the following
      * cases:
      * <ul>
      * <li>the URI or node name ends with the '\' or '/' character
      * <li>the URI is an empty string (only invalid if the method does not 
      * accept relative URIs)
-     * <li>the URI contains the segment &quot;<code>.</code>&quot; at a position
+     * <li>the URI contains the segment &quot;{@code .}&quot; at a position
      * other than the beginning of the URI
-     * <li>the node name is &quot;<code>..</code>&quot; or the URI contains such
+     * <li>the node name is &quot;{@code ..}&quot; or the URI contains such
      * a segment
      * <li>the node name is an empty string or the URI contains an empty segment
      * <li>the node name contains an unescaped '/' character
@@ -321,7 +321,7 @@ public class DmtException extends Exception {
 
     /**
      * The URI of the node on which the failed DMT operation was issued, or
-     * <code>null</code> if the operation was not associated with a node.
+     * {@code null} if the operation was not associated with a node.
      */
     private final String uri;
 
@@ -332,13 +332,13 @@ public class DmtException extends Exception {
     private final int code;
 
 	/**
-	 * The message associated with the exception, or <code>null</code> if there
+	 * The message associated with the exception, or {@code null} if there
 	 * is no error message.
 	 */
 	private final String		message;
 
 	/**
-	 * The list of originating exceptions, or empty list or <code>null</code> if
+	 * The list of originating exceptions, or empty list or {@code null} if
 	 * there are no originating exceptions.
 	 */
     private final Throwable[] causes;
@@ -353,15 +353,15 @@ public class DmtException extends Exception {
     // ----- Constructors -----//
 
     /**
-     * Create an instance of the exception. The <code>uri</code> and
-     * <code>message</code> parameters are optional. No originating exception
+     * Create an instance of the exception. The {@code uri} and
+     * {@code message} parameters are optional. No originating exception
      * is specified.
      * 
      * @param uri the node on which the failed DMT operation was issued, or
-     *        <code>null</code> if the operation is not associated with a node
+     *        {@code null} if the operation is not associated with a node
      * @param code the error code of the failure
      * @param message the message associated with the exception, or
-     *        <code>null</code> if there is no error message
+     *        {@code null} if there is no error message
      */
     public DmtException(String uri, int code, String message) {
         this(uri, code, message, new Throwable[0], false);
@@ -369,15 +369,15 @@ public class DmtException extends Exception {
 
     /**
      * Create an instance of the exception, specifying the cause exception. The
-     * <code>uri</code>, <code>message</code> and <code>cause</code>
+     * {@code uri}, {@code message} and {@code cause}
      * parameters are optional.
      * 
      * @param uri the node on which the failed DMT operation was issued, or
-     *        <code>null</code> if the operation is not associated with a node
+     *        {@code null} if the operation is not associated with a node
      * @param code the error code of the failure
      * @param message the message associated with the exception, or
-     *        <code>null</code> if there is no error message
-     * @param cause the originating exception, or <code>null</code> if there
+     *        {@code null} if there is no error message
+     * @param cause the originating exception, or {@code null} if there
      *        is no originating exception
      */
     public DmtException(String uri, int code, String message, Throwable cause) {
@@ -390,7 +390,7 @@ public class DmtException extends Exception {
      * exceptions and whether the exception is a fatal one. This constructor is
      * meant to be used by plugins wishing to indicate that a serious error
      * occurred which should invalidate the ongoing atomic session. The
-     * <code>uri</code>, <code>message</code> and <code>causes</code>
+     * {@code uri}, {@code message} and {@code causes}
      * parameters are optional.
      * <p>
      * If a fatal exception is thrown, no further business methods will be
@@ -399,12 +399,12 @@ public class DmtException extends Exception {
      * exception was thrown during commit.
      * 
      * @param uri the node on which the failed DMT operation was issued, or
-     *        <code>null</code> if the operation is not associated with a node
+     *        {@code null} if the operation is not associated with a node
      * @param code the error code of the failure
      * @param message the message associated with the exception, or
-     *        <code>null</code> if there is no error message
+     *        {@code null} if there is no error message
      * @param causes the list of originating exceptions, or empty list or
-     *        <code>null</code> if there are no originating exceptions
+     *        {@code null} if there are no originating exceptions
      * @param fatal whether the exception is fatal
      */
     public DmtException(String uri, int code, String message, Vector causes,
@@ -430,11 +430,11 @@ public class DmtException extends Exception {
      * the path was given as a URI string.
      * 
      * @param path the path of the node on which the failed DMT operation was
-     *        issued, or <code>null</code> if the operation is not associated
+     *        issued, or {@code null} if the operation is not associated
      *        with a node
      * @param code the error code of the failure
      * @param message the message associated with the exception, or
-     *        <code>null</code> if there is no error message
+     *        {@code null} if there is no error message
      * @see #DmtException(String, int, String)
      */
     public DmtException(String[] path, int code, String message) {
@@ -447,12 +447,12 @@ public class DmtException extends Exception {
      * behaves in exactly the same way as if the path was given as a URI string.
      * 
      * @param path the path of the node on which the failed DMT operation was
-     *        issued, or <code>null</code> if the operation is not associated
+     *        issued, or {@code null} if the operation is not associated
      *        with a node
      * @param code the error code of the failure
      * @param message the message associated with the exception, or
-     *        <code>null</code> if there is no error message
-     * @param cause the originating exception, or <code>null</code> if there
+     *        {@code null} if there is no error message
+     * @param cause the originating exception, or {@code null} if there
      *        is no originating exception
      * @see #DmtException(String, int, String, Throwable)
      */
@@ -467,13 +467,13 @@ public class DmtException extends Exception {
      * if the path was given as a URI string.
      * 
      * @param path the path of the node on which the failed DMT operation was
-     *        issued, or <code>null</code> if the operation is not associated
+     *        issued, or {@code null} if the operation is not associated
      *        with a node
      * @param code the error code of the failure
      * @param message the message associated with the exception, or
-     *        <code>null</code> if there is no error message
+     *        {@code null} if there is no error message
      * @param causes the list of originating exceptions, or empty list or
-     *        <code>null</code> if there are no originating exceptions
+     *        {@code null} if there are no originating exceptions
      * @param fatal whether the exception is fatal
      * @see #DmtException(String, int, String, Vector, boolean)
      */
@@ -486,10 +486,10 @@ public class DmtException extends Exception {
 
     /**
      * Get the node on which the failed DMT operation was issued. Some
-     * operations like <code>DmtSession.close()</code> don't require an URI,
-     * in this case this method returns <code>null</code>.
+     * operations like {@code DmtSession.close()} don't require an URI,
+     * in this case this method returns {@code null}.
      * 
-     * @return the URI of the node, or <code>null</code>
+     * @return the URI of the node, or {@code null}
      */
     public String getURI() {
         return uri;
@@ -509,7 +509,7 @@ public class DmtException extends Exception {
      * Get the message associated with this exception. The returned string also
      * contains the associated URI (if any) and the exception code. The
      * resulting message has the following format (parts in square brackets are
-     * only included if the field inside them is not <code>null</code>):
+     * only included if the field inside them is not {@code null}):
      * 
      * <pre>
      *  &lt;exception_code&gt;[: '&lt;uri&gt;'][: &lt;error_message&gt;]
@@ -528,12 +528,12 @@ public class DmtException extends Exception {
     }
 
     /**
-     * Get the cause of this exception. Returns non-<code>null</code>, if
+     * Get the cause of this exception. Returns non-{@code null}, if
      * this exception is caused by one or more other exceptions (like a
-     * <code>NullPointerException</code> in a DmtPlugin). If there are more
+     * {@code NullPointerException} in a DmtPlugin). If there are more
      * than one cause exceptions, the first one is returned.
      * 
-     * @return the cause of this exception, or <code>null</code> if no cause
+     * @return the cause of this exception, or {@code null} if no cause
      *         was given
      */
     public Throwable getCause() {
@@ -565,7 +565,7 @@ public class DmtException extends Exception {
      * causes that were specified for this exception are also printed, together
      * with their backtraces.
      * 
-     * @param s <code>PrintStream</code> to use for output
+     * @param s {@code PrintStream} to use for output
      */
     public void printStackTrace(PrintStream s) {
         super.printStackTrace(s);

@@ -21,7 +21,7 @@ import java.util.List;
  * Metadata for a Map based value.
  * 
  * <p>
- * This is specified by the <code>map</code> element.
+ * This is specified by the {@code map} element.
  * 
  * @ThreadSafe
  * @version $Id$
@@ -30,9 +30,9 @@ public interface MapMetadata extends NonNullMetadata {
 	/**
 	 * Return the name of the type of the map keys.
 	 * 
-	 * This is specified by the <code>key-type</code> attribute of the map.
+	 * This is specified by the {@code key-type} attribute of the map.
 	 * 
-	 * @return The name of the type of the map keys, or <code>null</code> if
+	 * @return The name of the type of the map keys, or {@code null} if
 	 *         none is specified.
 	 */
 	String getKeyType();
@@ -40,9 +40,9 @@ public interface MapMetadata extends NonNullMetadata {
 	/**
 	 * Return the name of the type of the map values.
 	 * 
-	 * This is specified by the <code>value-type</code> attribute of the map.
+	 * This is specified by the {@code value-type} attribute of the map.
 	 * 
-	 * @return The name of the type of the map values, or <code>null</code> if
+	 * @return The name of the type of the map values, or {@code null} if
 	 *         none is specified.
 	 */
 	String getValueType();

@@ -1,9 +1,5 @@
 /*
- * $Id$
- *
  * OSGi EventQueue for UserAdmin adapted from LogService.
- *
-
  *
  * (C) Copyright IBM Corporation 2000-2001.
  *

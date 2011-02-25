@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ public class MockFactory {
 	private MockFactory() {
 		/* non-instantiable */
 	}
-	
+
 	/**
 	 * Return a mocked object for the specified interface. The mocked object
 	 * will delegate method calls on the specified interface to the specified
@@ -53,42 +53,41 @@ public class MockFactory {
 	 * @return A mocked which implements the specified interface and delegates
 	 *         method calls to the specified delegate object.
 	 */
-	public static Object newMock(final Class interfce, final Object delegate) {
-		ClassLoader proxyLoader = ((delegate == null) ? MockFactory.class
+	public static <T> T newMock(final Class<T> interfce, final Object delegate) {
+		final ClassLoader proxyLoader = ((delegate == null) ? MockFactory.class
 				: delegate.getClass()).getClassLoader();
-		return Proxy.newProxyInstance(proxyLoader, new Class[] {interfce},
-				new InvocationHandler() {
-					final Class	delegateClass	= (delegate == null) ? null
+		final InvocationHandler handler = new InvocationHandler() {
+			final Class< ? >	delegateClass	= (delegate == null) ? null
 														: delegate.getClass();
-
-					public Object invoke(Object proxy, Method method,
-							Object[] args) throws Throwable {
-						if (delegate == null) {
-							throw new UnsupportedOperationException();
-						}
-						Method delegateMethod;
-						try {
-							delegateMethod = delegateClass.getMethod(method
-									.getName(), method.getParameterTypes());
-						}
-						catch (NoSuchMethodException e) {
-							throw new UnsupportedOperationException();
-						}
-						delegateMethod.setAccessible(true);
-						try {
-							return delegateMethod.invoke(delegate, args);
-						}
-						catch (IllegalAccessException e) {
-							throw e;
-						}
-						catch (InvocationTargetException e) {
-							Throwable cause = e.getCause();
-							if (cause == null) {
-								cause = e;
-							}
-							throw cause;
-						}
+			public Object invoke(Object proxy, Method method, Object[] args)
+					throws Throwable {
+				if (delegate == null) {
+					throw new UnsupportedOperationException("null delegate");
+				}
+				Method delegateMethod;
+				try {
+					delegateMethod = delegateClass.getMethod(method.getName(),
+							method.getParameterTypes());
+				}
+				catch (NoSuchMethodException e) {
+					UnsupportedOperationException uoe = new UnsupportedOperationException();
+					uoe.initCause(e);
+					throw uoe;
+				}
+				delegateMethod.setAccessible(true);
+				try {
+					return delegateMethod.invoke(delegate, args);
+				}
+				catch (InvocationTargetException e) {
+					Throwable cause = e.getCause();
+					if (cause == null) {
+						cause = e;
 					}
-				});
+					throw cause;
+				}
+			}
+		};
+		return (T) Proxy.newProxyInstance(proxyLoader, new Class[] {interfce},
+				handler);
 	}
 }

@@ -1,13 +1,26 @@
 package org.osgi.impl.service.upnp.cd.ssdp;
 
-import java.util.*;
-import java.io.*;
-import java.net.*;
-import org.osgi.util.tracker.*;
-import org.osgi.service.http.*;
-import javax.servlet.http.*;
-import org.osgi.framework.*;
-import org.osgi.service.upnp.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.http.HttpContext;
+import org.osgi.service.http.HttpService;
+import org.osgi.service.upnp.UPnPDevice;
+import org.osgi.service.upnp.UPnPIcon;
+import org.osgi.service.upnp.UPnPService;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 // This class used for listening UPnPDevice registration and unregiration. It 
 // maintains the all databses related to exporting devices and gives serviceinformation all 
@@ -181,13 +194,13 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 
 	// This methods returns URL.
 	URL getURL(String name, String source, InputStream in) {
-		storeDir = new File("cdresources");
+		storeDir = bc.getDataFile("cdresources");
 		if (!storeDir.exists()) {
 			storeDir.mkdir();
 		}
 		if (source != null) {
 			String fname = "cdresources/" + changeXMLFileName(name);
-			File resXmlFile = new File(fname);
+			File resXmlFile = bc.getDataFile(fname);
 			try {
 				FileOutputStream xmlOut = new FileOutputStream(resXmlFile);
 				xmlOut.write(source.getBytes());
@@ -206,7 +219,7 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 					int resBytes = in.read(bytes, 0, nofBytes);
 					if (resBytes == nofBytes) {
 						String fname = "cdresources/" + name;
-						File icon = new File(fname);
+						File icon = bc.getDataFile(fname);
 						FileOutputStream iconOut = new FileOutputStream(icon);
 						iconOut.write(bytes);
 						iconOut.close();

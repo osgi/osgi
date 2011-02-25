@@ -1,6 +1,5 @@
 proposed.specs = \
 	 org.osgi.multiplexer, \
-	 org.osgi.service.composite, \
 	 org.osgi.service.obr
 
 proposed.packages = ${replace;$(proposed.specs);^.*$;$0.*}

@@ -205,7 +205,7 @@ public interface ServiceStateMBean {
 	 * @param serviceId the identifier of the service
 	 * @return the table of properties. These include the standard mandatory
 	 *         service.id and objectClass properties as defined in the
-	 *         <code>org.osgi.framework.Constants</code> interface
+	 *         {@code org.osgi.framework.Constants} interface
 	 * @throws IOException if the operation fails
 	 * @throws IllegalArgumentException if the service indicated does not exist
 	 */

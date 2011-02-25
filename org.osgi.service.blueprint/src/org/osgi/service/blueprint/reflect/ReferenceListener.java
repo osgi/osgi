@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ public interface ReferenceListener {
 	 * Return the Metadata for the component that will receive bind and unbind
 	 * events.
 	 * 
-	 * This is specified by the <code>ref</code> attribute or via an inlined
+	 * This is specified by the {@code ref} attribute or via an inlined
 	 * component.
 	 * 
 	 * @return The Metadata for the component that will receive bind and unbind
@@ -40,7 +40,7 @@ public interface ReferenceListener {
 	 * Return the name of the bind method. The bind method will be invoked when
 	 * a matching service is bound to the reference.
 	 * 
-	 * This is specified by the <code>bind-method</code> attribute of the
+	 * This is specified by the {@code bind-method} attribute of the
 	 * reference listener.
 	 * 
 	 * @return The name of the bind method.
@@ -51,7 +51,7 @@ public interface ReferenceListener {
 	 * Return the name of the unbind method. The unbind method will be invoked
 	 * when a matching service is unbound from the reference.
 	 * 
-	 * This is specified by the <code>unbind-method</code> attribute of the
+	 * This is specified by the {@code unbind-method} attribute of the
 	 * reference listener.
 	 * 
 	 * @return The name of the unbind method.

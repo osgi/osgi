@@ -1,0 +1,16 @@
+Bundle-Version: 4.2.0
+
+Bundle-SymbolicName: $(p).tb32
+
+Private-Package	: $(p).tb32
+
+Include-Resource = {OSGI-INF/permissions.perm = perms/admin.perm}
+
+Import-Package = \
+	junit.framework,\
+	org.osgi.framework,\
+	org.osgi.service.coordinator,\
+	org.osgi.test.cases.coordinator.secure
+
+Bundle-Activator = $(p).tb32.Activator
+

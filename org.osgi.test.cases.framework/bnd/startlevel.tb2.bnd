@@ -1,0 +1,5 @@
+Bundle-Version: 4.2.0
+Bundle-SymbolicName: $(p).startlevel.tb2
+Bundle-Activator: $(p).startlevel.tb2.Activator
+
+Private-Package	: $(p).startlevel.tb2

@@ -1,7 +1,5 @@
 /*
- * $Id$
- * 
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -1377,6 +1375,32 @@ public class TestControl extends DefaultTestBundleControl implements
 		}
 		else {
 			trace("boot classpath extension bundles not supported");
+		}
+	}
+
+	/**
+	 * If a bundle is updated from a host to a fragment, after update, the
+	 * bundle must not be active.
+	 */
+	public void testHostBecomesFragment() throws Exception {
+		// Install host bundle
+		Bundle tb20a = getContext().installBundle(
+				getWebServer() + "fragments.tb20a.jar");
+		try {
+			// Try starting host
+			tb20a.start();
+			assertTrue("tb20a failed to start for start().",
+					(tb20a.getState() & Bundle.ACTIVE) != 0);
+			// Update to a fragment bundle
+			InputStream tb20b = getContext().getBundle()
+					.getResource("fragments.tb20b.jar").openStream();
+			tb20a.update(tb20b);
+			// make sure not active
+			assertTrue("tb20a updated to fragment started!",
+					(tb20a.getState() & Bundle.ACTIVE) == 0);
+		}
+		finally {
+			tb20a.uninstall();
 		}
 	}
 }

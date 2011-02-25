@@ -1,5 +1,5 @@
-javac.source=1.5
-javac.target=1.5
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Activator: 		${p}.Activator
 Export-Package: 		org.osgi.jmx.*

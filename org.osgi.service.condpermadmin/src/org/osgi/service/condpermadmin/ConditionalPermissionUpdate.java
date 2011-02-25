@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import java.util.List;
  * commit will fail and this object should be discarded.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  * @since 1.1
  */
@@ -43,14 +44,14 @@ public interface ConditionalPermissionUpdate {
 	 * The list returned by this method is ordered and the most significant
 	 * table entry is the first entry in the list.
 	 * 
-	 * @return A <code>List</code> of the {@link ConditionalPermissionInfo}s
+	 * @return A {@code List} of the {@link ConditionalPermissionInfo}s
 	 *         which represent the Conditional Permissions maintained by this
 	 *         update. Modifications to this list will not affect the
 	 *         Conditional Permission Table until successfully committed. The
 	 *         list may be empty if the Conditional Permission Table was empty
 	 *         when this update was created.
 	 */
-	List /* <ConditionalPermissionInfo> */getConditionalPermissionInfos();
+	List<ConditionalPermissionInfo> getConditionalPermissionInfos();
 
 	/**
 	 * Commit this update. If no changes have been made to the Conditional
@@ -60,25 +61,25 @@ public interface ConditionalPermissionUpdate {
 	 * object.
 	 * <p>
 	 * If any of the {@link ConditionalPermissionInfo}s in the update list has
-	 * <code>null</code> as a name it will be replaced with a new
+	 * {@code null} as a name it will be replaced with a new
 	 * {@link ConditionalPermissionInfo} object that has a generated name which
 	 * is unique within the list.
 	 * <p>
 	 * No two entries in this update's Conditional Permissions may have the same
 	 * name. Other consistency checks may also be performed. If this update's
 	 * Conditional Permissions are determined to be inconsistent in some way
-	 * then an <code>IllegalStateException</code> will be thrown.
+	 * then an {@code IllegalStateException} will be thrown.
 	 * <p>
-	 * This method returns <code>false</code> if the commit did not occur
+	 * This method returns {@code false} if the commit did not occur
 	 * because the Conditional Permission Table has been modified since the
 	 * creation of this update.
 	 * 
-	 * @return <code>true</code> if the commit was successful.
-	 *         <code>false</code> if the commit did not occur because the
+	 * @return {@code true} if the commit was successful.
+	 *         {@code false} if the commit did not occur because the
 	 *         Conditional Permission Table has been modified since the creation
 	 *         of this update.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AllPermission</code>.
+	 *         {@code AllPermission}.
 	 * @throws IllegalStateException If this update's Conditional Permissions
 	 *         are not valid or inconsistent. For example, this update has two
 	 *         Conditional Permissions in it with the same name.

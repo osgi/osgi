@@ -1,11 +1,10 @@
-javac.source 			= 1.5
-javac.target 			= 1.5
-
-Bundle-Version: 4.2.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Import-Package: org.osgi.jmx, *
-Private-Package						= ${p}.junit.*, \
-	org.osgi.test.support.*
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit.*
 	
 Include-Resource					= \
 	tb1.jar	,\
@@ -19,7 +18,7 @@ Include-Resource					= \
 	${junit}	
 
 -runbundles						= \
-	osgi.enterprise; version=${enterprise.published.version};strategy=lowest		, \
+	osgi.enterprise; version=latest		, \
 	org.osgi.impl.bundle.jmx; version=project, \
 	org.osgi.impl.service.useradmin; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
@@ -39,7 +38,7 @@ Test-Cases							= ${testcases}
 			org.osgi.jmx.service.useradmin
 			
 -runproperties = ${runproperties}, \
-	osgi.console=1111, \
 	osgi.support.multipleHosts=true	, \
 	${p}.system.packages.extra="${junit.package}", \
-	${p}.bundles="${uniq;${repo;osgi.enterprise;${enterprise.published.version};lowest},${repo;org.osgi.impl.bundle.jmx}}"		
+	${p}.bundles="${uniq;${repo;osgi.enterprise},${repo;org.osgi.impl.bundle.jmx}}"		
+#	osgi.console=1111, \

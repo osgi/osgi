@@ -79,7 +79,7 @@ public interface ConfigurationAdminMBean {
 	 * Delete the configurations matching the filter specification.
 	 * 
 	 * @param filter the string representation of the
-	 *        <code>org.osgi.framework.Filter</code>
+	 *        {@code org.osgi.framework.Filter}
 	 * @throws IOException if the operation failed
 	 * @throws IllegalArgumentException if the filter is invalid
 	 */
@@ -146,7 +146,7 @@ public interface ConfigurationAdminMBean {
 	 * this service
 	 * 
 	 * @param filter the string representation of the
-	 *        <code>org.osgi.framework.Filter</code>
+	 *        {@code org.osgi.framework.Filter}
 	 * @return the list of configuration PID/Location pairs
 	 * @throws IOException if the operation failed
 	 * @throws IllegalArgumentException if the filter is invalid

@@ -1,3 +1,6 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
+
 Bundle-Version					= 1.0.1.${project.build}
 Private-Package 				= ${p}
 Service-Component				= OSGI-INF/services.xml

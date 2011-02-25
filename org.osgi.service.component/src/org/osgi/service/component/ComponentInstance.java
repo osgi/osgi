@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ package org.osgi.service.component;
  * created when the component configuration is activated again.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface ComponentInstance {
@@ -39,7 +40,7 @@ public interface ComponentInstance {
 	/**
 	 * Returns the component instance of the activated component configuration.
 	 * 
-	 * @return The component instance or <code>null</code> if the component
+	 * @return The component instance or {@code null} if the component
 	 *         configuration has been deactivated.
 	 */
 	public Object getInstance();

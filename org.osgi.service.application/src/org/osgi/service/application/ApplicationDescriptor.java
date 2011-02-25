@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -118,14 +118,14 @@ public abstract class ApplicationDescriptor {
 
 
 	/**
-	 * Constructs the <code>ApplicationDescriptor</code>.
+	 * Constructs the {@code ApplicationDescriptor}.
 	 *
 	 * @param applicationId
 	 *            The identifier of the application. Its value is also available
-	 *            as the <code>service.pid</code> service property of this 
-	 *            <code>ApplicationDescriptor</code> service. This parameter must not
-	 *            be <code>null</code>.
-	 * @throws NullPointerException if the specified <code>applicationId</code> is null.
+	 *            as the {@code service.pid} service property of this 
+	 *            {@code ApplicationDescriptor} service. This parameter must not
+	 *            be {@code null}.
+	 * @throws NullPointerException if the specified {@code applicationId} is null.
 	 */
 	protected  ApplicationDescriptor(String applicationId) {
 		if(null == applicationId ) {
@@ -156,21 +156,21 @@ public abstract class ApplicationDescriptor {
 	}
 
 	/**
-	 * This method verifies whether the specified <code>pattern</code>
+	 * This method verifies whether the specified {@code pattern}
 	 * matches the Distinguished Names of any of the certificate chains
 	 * used to authenticate this application.
 	 * <P>
-	 * The <code>pattern</code> must adhere to the 
+	 * The {@code pattern} must adhere to the 
 	 * syntax defined in {@link org.osgi.service.application.ApplicationAdminPermission}
 	 * for signer attributes. 
 	 * <p>
 	 * This method is used by {@link ApplicationAdminPermission#implies(java.security.Permission)} method
-	 * to match target <code>ApplicationDescriptor</code> and filter. 
+	 * to match target {@code ApplicationDescriptor} and filter. 
 	 * 
 	 * @param pattern a pattern for a chain of Distinguished Names. It must not be null.
-	 * @return <code>true</code> if the specified pattern matches at least
+	 * @return {@code true} if the specified pattern matches at least
 	 *   one of the certificate chains used to authenticate this application 
-	 * @throws NullPointerException if the specified <code>pattern</code> is null.
+	 * @throws NullPointerException if the specified {@code pattern} is null.
      * @throws IllegalStateException if the application descriptor was
      *   unregistered
 	 */	
@@ -179,10 +179,10 @@ public abstract class ApplicationDescriptor {
 	/**
 	 * Returns the properties of the application descriptor as key-value pairs.
 	 * The return value contains the locale aware and unaware properties as
-	 * well. The returned <code>Map</code> will include the service
-	 * properties of this <code>ApplicationDescriptor</code> as well.
+	 * well. The returned {@code Map} will include the service
+	 * properties of this {@code ApplicationDescriptor} as well.
 	 * <p>
-	 * This method will call the <code>getPropertiesSpecific</code> method
+	 * This method will call the {@code getPropertiesSpecific} method
 	 * to enable the container implementation to insert application model and/or
 	 * container implementation specific properties.
 	 * <P>
@@ -197,7 +197,7 @@ public abstract class ApplicationDescriptor {
 	 * @param locale
 	 *            the locale string, it may be null, the value null means the
 	 *            default locale. If the provided locale is the empty String 
-	 *            (<code>""</code>)then raw (non-localized) values are returned.
+	 *            ({@code ""})then raw (non-localized) values are returned.
 	 * 
 	 * @return copy of the service properties of this application descriptor service,
 	 *         according to the specified locale. If locale is null then the
@@ -232,22 +232,22 @@ public abstract class ApplicationDescriptor {
 	 * method. 
 	 * 
 	 * Localizable properties must be returned localized if the provided
-	 * <code>locale</code> argument is not the empty String. The value
-	 * <code>null</code> indicates to use the default locale, for other
+	 * {@code locale} argument is not the empty String. The value
+	 * {@code null} indicates to use the default locale, for other
 	 * values the specified locale should be used.
 	 *  
 	 * The returned {@link java.util.Map} must contain the standard OSGi service 
 	 * properties as well
 	 * (e.g. service.id, service.vendor etc.) and specialized application
 	 * descriptors may offer further service properties. 
-	 * The returned <code>Map</code>
+	 * The returned {@code Map}
 	 * contains a snapshot of the properties. It will not reflect further changes in the
 	 * property values nor will the update of the Map change the corresponding
 	 * service property.
 
 	 * @param locale the locale to be used for localizing the properties.
-	 * If <code>null</code> the default locale should be used. If it is
-	 * the empty String (<code>""</code>) then raw (non-localized) values
+	 * If {@code null} the default locale should be used. If it is
+	 * the empty String ({@code ""}) then raw (non-localized) values
 	 * should be returned.
 	 * 
 	 * @return the application model specific and/or container implementation
@@ -259,63 +259,59 @@ public abstract class ApplicationDescriptor {
 	protected abstract Map getPropertiesSpecific(String locale);
 
 	/**
-	 * Launches a new instance of an application. The <code>args</code> parameter specifies
-	 * the startup parameters for the instance to be launched, it may be null.
+	 * Launches a new instance of an application. The {@code args} parameter
+	 * specifies the startup parameters for the instance to be launched, it may
+	 * be null.
 	 * <p>
 	 * The following steps are made:
 	 * <UL>
 	 * <LI>Check for the appropriate permission.
-	 * <LI>Check the locking state of the application. If locked then throw
-	 *     an {@link ApplicationException} with the reason code 
-	 *     {@link ApplicationException#APPLICATION_LOCKED}.
-	 * <LI>Calls the <code>launchSpecific()</code> method to create and start an application
-	 * instance.
-	 * <LI>Returns the <code>ApplicationHandle</code> returned by the 
+	 * <LI>Check the locking state of the application. If locked then throw an
+	 * {@link ApplicationException} with the reason code
+	 * {@link ApplicationException#APPLICATION_LOCKED}.
+	 * <LI>Calls the {@code launchSpecific()} method to create and start an
+	 * application instance.
+	 * <LI>Returns the {@code ApplicationHandle} returned by the
 	 * launchSpecific()
 	 * </UL>
 	 * The caller has to have ApplicationAdminPermission(applicationPID,
 	 * "launch") in order to be able to perform this operation.
 	 * <P>
-	 * The <code>Map</code> argument of the launch method contains startup 
-	 * arguments for the
-	 * application. The keys used in the Map must be non-null, non-empty <code>String<code>
-	 * objects. They can be standard or application
-	 * specific. OSGi defines the <code>org.osgi.triggeringevent</code>
-	 * key to be used to
-	 * pass the triggering event to a scheduled application, however
-	 * in the future it is possible that other well-known keys will be defined.
-	 * To avoid unwanted clashes of keys, the following rules should be applied:
+	 * The {@code Map} argument of the launch method contains startup arguments
+	 * for the application. The keys used in the Map must be non-null, non-empty
+	 * {@code String} objects. They can be standard or application specific.
+	 * OSGi defines the {@code org.osgi.triggeringevent} key to be used to pass
+	 * the triggering event to a scheduled application, however in the future it
+	 * is possible that other well-known keys will be defined. To avoid unwanted
+	 * clashes of keys, the following rules should be applied:
 	 * <ul>
-	 *   <li>The keys starting with the dash (-) character are application
-	 *       specific, no well-known meaning should be associated with them.</li>
-	 *   <li>Well-known keys should follow the reverse domain name based naming.
-	 *       In particular, the keys standardized in OSGi should start with
-	 *       <code>org.osgi.</code>.</li>
+	 * <li>The keys starting with the dash (-) character are application
+	 * specific, no well-known meaning should be associated with them.</li>
+	 * <li>Well-known keys should follow the reverse domain name based naming.
+	 * In particular, the keys standardized in OSGi should start with
+	 * {@code org.osgi.}.</li>
 	 * </ul>
 	 * <P>
-	 * The method is synchronous, it return only when the application instance was
-	 * successfully started or the attempt to start it failed.
+	 * The method is synchronous, it return only when the application instance
+	 * was successfully started or the attempt to start it failed.
 	 * <P>
-	 * This method never returns <code>null</code>. If launching an application fails,
-	 * the appropriate exception is thrown.
+	 * This method never returns {@code null}. If launching an application
+	 * fails, the appropriate exception is thrown.
 	 * 
-	 * @param arguments
-	 *            Arguments for the newly launched application, may be null
+	 * @param arguments Arguments for the newly launched application, may be
+	 *        null
 	 * 
-	 * @return the registered ApplicationHandle, which represents the newly 
-	 *         launched application instance. Never returns <code>null</code>.
+	 * @return the registered ApplicationHandle, which represents the newly
+	 *         launched application instance. Never returns {@code null}.
 	 * 
-	 * @throws SecurityException
-	 *             if the caller doesn't have "lifecycle"
-	 *             ApplicationAdminPermission for the application.
-	 * @throws ApplicationException
-	 *             if starting the application failed
-	 * @throws IllegalStateException
-	 *             if the application descriptor is unregistered
-	 * @throws IllegalArgumentException 
-	 *             if the specified <code>Map</code> contains invalid keys
-	 *             (null objects, empty <code>String</code> or a key that is not
-	 *              <code>String</code>)
+	 * @throws SecurityException if the caller doesn't have "lifecycle"
+	 *         ApplicationAdminPermission for the application.
+	 * @throws ApplicationException if starting the application failed
+	 * @throws IllegalStateException if the application descriptor is
+	 *         unregistered
+	 * @throws IllegalArgumentException if the specified {@code Map} contains
+	 *         invalid keys (null objects, empty {@code String} or a key that is
+	 *         not {@code String})
 	 */
 	public final ApplicationHandle launch(Map arguments)
 			throws ApplicationException {
@@ -349,7 +345,7 @@ public abstract class ApplicationDescriptor {
 	 * The method is synchronous, it return only when the application instance was
 	 * successfully started or the attempt to start it failed.
 	 * <P>
-	 * This method must not return <code>null</code>. If launching the application
+	 * This method must not return {@code null}. If launching the application
 	 * failed, and exception must be thrown.
 	 * 
 	 * @param arguments
@@ -387,65 +383,58 @@ public abstract class ApplicationDescriptor {
 	 * {@link ScheduledApplication} service in Service Registry, representing
 	 * the created schedule.
 	 * <p>
-	 * The <code>Map</code> argument of the  method contains startup 
-	 * arguments for the application. The keys used in the Map must be non-null, 
-	 * non-empty <code>String<code> objects. The argument values must be
-     * of primitive types, wrapper classes of primitive types, <code>String</code>
-     * or arrays or collections of these.
-     * <p>
-     * The created schedules have a unique identifier within the scope of this
-     * <code>ApplicationDescriptor</code>. This identifier can be specified
-     * in the <code>scheduleId</code> argument. If this argument is <code>null</code>,
-     * the identifier is automatically generated.
-     * 
-	 * @param scheduleId 
-	 *             the identifier of the created schedule. It can be <code>null</code>,
-     *             in this case the identifier is automatically generated.
-	 * @param arguments
-	 *            the startup arguments for the scheduled application, may be
-	 *            null
-	 * @param topic
-	 *            specifies the topic of the triggering event, it may contain a
-	 *            trailing asterisk as wildcard, the empty string is treated as
-	 *            "*", must not be null
-	 * @param eventFilter
-	 *            specifies and LDAP filter to filter on the properties of the
-	 *            triggering event, may be null
-	 * @param recurring
-	 *            if the recurring parameter is false then the application will
-	 *            be launched only once, when the event firstly occurs. If the
-	 *            parameter is true then scheduling will take place for every
-	 *            event occurrence; i.e. it is a recurring schedule
+	 * The {@code Map} argument of the method contains startup arguments for the
+	 * application. The keys used in the Map must be non-null, non-empty
+	 * {@code String} objects. The argument values must be of primitive types,
+	 * wrapper classes of primitive types, {@code String} or arrays or
+	 * collections of these.
+	 * <p>
+	 * The created schedules have a unique identifier within the scope of this
+	 * {@code ApplicationDescriptor}. This identifier can be specified in the
+	 * {@code scheduleId} argument. If this argument is {@code null}, the
+	 * identifier is automatically generated.
+	 * 
+	 * @param scheduleId the identifier of the created schedule. It can be
+	 *        {@code null}, in this case the identifier is automatically
+	 *        generated.
+	 * @param arguments the startup arguments for the scheduled application, may
+	 *        be null
+	 * @param topic specifies the topic of the triggering event, it may contain
+	 *        a trailing asterisk as wildcard, the empty string is treated as
+	 *        "*", must not be null
+	 * @param eventFilter specifies and LDAP filter to filter on the properties
+	 *        of the triggering event, may be null
+	 * @param recurring if the recurring parameter is false then the application
+	 *        will be launched only once, when the event firstly occurs. If the
+	 *        parameter is true then scheduling will take place for every event
+	 *        occurrence; i.e. it is a recurring schedule
 	 * 
 	 * @return the registered scheduled application service
 	 * 
-	 * @throws NullPointerException
-	 *             if the topic is <code>null</code>
-	 * @throws InvalidSyntaxException 
-	 * 			   if the specified <code>eventFilter</code> is not syntactically correct
-	 * @throws ApplicationException
-     *              if the schedule couldn't be created. The possible error
-     *              codes are 
-     *              <ul>
-     *               <li> {@link ApplicationException#APPLICATION_DUPLICATE_SCHEDULE_ID}
-     *                 if the specified <code>scheduleId</code> is already used
-     *                 for this <code>ApplicationDescriptor</code>
-     *               <li> {@link ApplicationException#APPLICATION_SCHEDULING_FAILED}
-     *                 if the scheduling failed due to some internal reason
-     *                 (e.g. persistent storage error).
-     *               <li> {@link ApplicationException#APPLICATION_INVALID_STARTUP_ARGUMENT}
-     *                 if the specified startup argument doesn't satisfy the 
-	 *                 type or value constraints of startup arguments.
-     *              </ul>
-	 * @throws SecurityException
-	 *             if the caller doesn't have "schedule"
-	 *             ApplicationAdminPermission for the application.
-	 * @throws IllegalStateException
-	 *             if the application descriptor is unregistered
-	 * @throws IllegalArgumentException
-	 *             if the specified <code>Map</code> contains invalid keys
-	 *             (null objects, empty <code>String</code> or a key that is not
-	 *              <code>String</code>)
+	 * @throws NullPointerException if the topic is {@code null}
+	 * @throws InvalidSyntaxException if the specified {@code eventFilter} is
+	 *         not syntactically correct
+	 * @throws ApplicationException if the schedule couldn't be created. The
+	 *         possible error codes are
+	 *         <ul>
+	 *         <li>
+	 *         {@link ApplicationException#APPLICATION_DUPLICATE_SCHEDULE_ID} if
+	 *         the specified {@code scheduleId} is already used for this
+	 *         {@code ApplicationDescriptor} <li>
+	 *         {@link ApplicationException#APPLICATION_SCHEDULING_FAILED} if the
+	 *         scheduling failed due to some internal reason (e.g. persistent
+	 *         storage error). <li>
+	 *         {@link ApplicationException#APPLICATION_INVALID_STARTUP_ARGUMENT}
+	 *         if the specified startup argument doesn't satisfy the type or
+	 *         value constraints of startup arguments.
+	 *         </ul>
+	 * @throws SecurityException if the caller doesn't have "schedule"
+	 *         ApplicationAdminPermission for the application.
+	 * @throws IllegalStateException if the application descriptor is
+	 *         unregistered
+	 * @throws IllegalArgumentException if the specified {@code Map} contains
+	 *         invalid keys (null objects, empty {@code String} or a key that is
+	 *         not {@code String})
 	 */
 	public final ScheduledApplication schedule(String scheduleId, Map arguments, String topic,
 			String eventFilter, boolean recurring) throws InvalidSyntaxException, 
@@ -485,7 +474,7 @@ public abstract class ApplicationDescriptor {
 	/**
 	 * This method is used to notify the container implementation that the
 	 * corresponding application has been locked and it should update the
-	 * <code>application.locked</code> service property accordingly.
+	 * {@code application.locked} service property accordingly.
      * @throws IllegalStateException
      *             if the application descriptor is unregistered
 	 */
@@ -514,7 +503,7 @@ public abstract class ApplicationDescriptor {
 	/**
 	 * This method is used to notify the container implementation that the
 	 * corresponding application has been unlocked and it should update the
-	 * <code>application.locked</code> service property accordingly.
+	 * {@code application.locked} service property accordingly.
 
 	 * @throws IllegalStateException
 	 *             if the application descriptor is unregistered

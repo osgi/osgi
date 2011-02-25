@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,24 +27,24 @@ public interface Converter {
 	 * Return if this converter is able to convert the specified object to the
 	 * specified type.
 	 * 
-	 * @param sourceObject The source object <code>s</code> to convert.
-	 * @param targetType The target type <code>T</code>.
+	 * @param sourceObject The source object {@code s} to convert.
+	 * @param targetType The target type {@code T}.
 	 * 
-	 * @return <code>true</code> if the conversion is possible,
-	 *         <code>false</code> otherwise.
+	 * @return {@code true} if the conversion is possible,
+	 *         {@code false} otherwise.
 	 */
 	boolean canConvert(Object sourceObject, ReifiedType targetType);
 
 	/**
 	 * Convert the specified object to an instance of the specified type.
 	 * 
-	 * @param sourceObject The source object <code>s</code> to convert.
-	 * @param targetType The target type <code>T</code>.
+	 * @param sourceObject The source object {@code s} to convert.
+	 * @param targetType The target type {@code T}.
 	 * @return An instance with a type that is assignable from targetType's raw
 	 *         class
 	 * @throws Exception If the conversion cannot succeed. This exception should
 	 *         not be thrown when the {@link #canConvert canConvert} method has
-	 *         returned <code>true</code>.
+	 *         returned {@code true}.
 	 */
 	Object convert(Object sourceObject, ReifiedType targetType)
 			throws Exception;

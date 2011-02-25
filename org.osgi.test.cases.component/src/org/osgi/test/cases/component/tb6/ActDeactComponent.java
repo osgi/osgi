@@ -16,6 +16,7 @@
 package org.osgi.test.cases.component.tb6;
 
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
@@ -26,7 +27,7 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.test.cases.component.service.ComponentContextExposer;
 
 public class ActDeactComponent implements ComponentContextExposer {
-  private Dictionary properties;
+	private Dictionary			properties;
   private ComponentContext ctxt;
   private static final int ACTIVATE_CC = 1 << 0;
   private static final int DEACTIVATE_CC = 1 << 1;
@@ -45,7 +46,13 @@ public class ActDeactComponent implements ComponentContextExposer {
 
   protected void activate(ComponentContext ctxt) {
     this.ctxt = ctxt;
-    properties = ctxt.getProperties();
+		properties = new Properties();
+		Dictionary props = ctxt.getProperties();
+		Enumeration en = props.keys();
+		while (en.hasMoreElements()) {
+			Object key = en.nextElement();
+			properties.put(key, props.get(key));
+		}
     setDataBits(ACTIVATE_CC);
   }
 
@@ -65,7 +72,13 @@ public class ActDeactComponent implements ComponentContextExposer {
 
   protected void actCc(ComponentContext ctxt) {
     this.ctxt = ctxt;
-    properties = ctxt.getProperties();
+		properties = new Properties();
+		Dictionary props = ctxt.getProperties();
+		Enumeration en = props.keys();
+		while (en.hasMoreElements()) {
+			Object key = en.nextElement();
+			properties.put(key, props.get(key));
+		}
     setDataBits(ACT_CC);
   }
 
@@ -97,9 +110,15 @@ public class ActDeactComponent implements ComponentContextExposer {
     setDataBits(DEACT_MAP);
   }
 
-  protected void actCcBcMap(ComponentContext ctxt, BundleContext bc, Map props) {
+	protected void actCcBcMap(ComponentContext ctxt, BundleContext bc, Map map) {
     this.ctxt = ctxt;
-    properties = ctxt.getProperties();
+		properties = new Properties();
+		Dictionary props = ctxt.getProperties();
+		Enumeration en = props.keys();
+		while (en.hasMoreElements()) {
+			Object key = en.nextElement();
+			properties.put(key, props.get(key));
+		}
     setDataBits(ACT_CC_BC_MAP);
   }
 

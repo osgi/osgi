@@ -1,7 +1,10 @@
 package org.osgi.impl.service.upnp.cp.event;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Dictionary;
 
 public class GenaServer extends Thread {
@@ -69,12 +72,18 @@ public class GenaServer extends Thread {
 	public void shutdown() throws IOException {
 		done = true;
 		if (done) {
-			String hostname;
+			String hostname = System
+					.getProperty("org.osgi.service.http.hostname");
 			try {
-				hostname = InetAddress.getLocalHost().getHostName();
+				if (hostname == null) {
+					hostname = InetAddress.getLocalHost().getHostAddress();
+				}
+				else {
+					hostname = InetAddress.getByName(hostname).getHostAddress();
+				}
 			}
 			catch (UnknownHostException e) {
-				hostname = "";
+				hostname = "127.0.0.1";
 			}
 			client = new Socket(hostname, getServerPort());
 			if (client != null) {

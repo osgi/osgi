@@ -1,10 +1,15 @@
 package org.osgi.impl.service.upnp.cd;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Hashtable;
-import org.osgi.framework.*;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.upnp.cd.control.ControlImpl;
-import org.osgi.impl.service.upnp.cd.event.*;
+import org.osgi.impl.service.upnp.cd.event.EventRegistry;
+import org.osgi.impl.service.upnp.cd.event.GenaServer;
+import org.osgi.impl.service.upnp.cd.event.SubscriptionAlive;
 import org.osgi.impl.service.upnp.cd.ssdp.SSDPComponent;
 
 public class UPnPController implements BundleActivator {
@@ -20,14 +25,18 @@ public class UPnPController implements BundleActivator {
 	public void start(BundleContext bc) throws Exception {
 		//System.out.println("UPnP : starting CD exporter");
 		this.bc = bc;
-		String IP = null;
+		devexp = "2100";
+		String IP = System.getProperty("org.osgi.service.http.hostname");
 		try {
-			devexp = "2100";
-			InetAddress inet = InetAddress.getLocalHost();
-			IP = inet.getHostAddress();
+			if (IP == null) {
+				IP = InetAddress.getLocalHost().getHostAddress();
+			}
+			else {
+				IP = InetAddress.getByName(IP).getHostAddress();
+			}
 		}
-		catch (Exception e) {
-			System.out.println(e.getMessage());
+		catch (UnknownHostException e) {
+			IP = "127.0.0.1";
 		}
 		//Control starting
 		control = new ControlImpl();

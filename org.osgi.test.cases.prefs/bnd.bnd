@@ -1,7 +1,10 @@
-Bundle-Description: Test Bundle for Preference Service tests
-Bundle-Version: 4.2.0.${project.build}
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Private-Package						= org.osgi.test.support.*, \
+Bundle-Description: Test Bundle for Preference Service tests
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
 	${p}.junit.*
 	
 Test-Cases							= ${testcases}
@@ -15,7 +18,7 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=${cmpn.published.version};strategy=lowest, \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.prefs; version=project
 
 -runproperties = ${runproperties}

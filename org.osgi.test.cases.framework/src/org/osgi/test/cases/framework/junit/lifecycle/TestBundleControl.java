@@ -170,8 +170,8 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 		// until ...
 		if ((be.getType() & (BundleEvent.RESOLVED | BundleEvent.UNRESOLVED)) != 0)
 			return;
-		System.out.println("In " + _eventQueue.size() + " event : "
-				+ event(be.getType()));
+		// System.out.println("In " + _eventQueue.size() + " event : "
+		// + event(be.getType()));
 		_eventQueue.add(be);
 		notify();
 	}
@@ -190,15 +190,16 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 		getContext().addBundleListener(this);
 		getContext().addServiceListener(this);
 		Bundle tb = installBundle("lifecycle.tb5.jar", false);
-		syncBundle("Get install event", BundleEvent.INSTALLED);
+		syncBundle("Get install event", BundleEvent.INSTALLED, getContext()
+				.getBundle());
 		tb.start();
 		syncService("EventTest", ServiceEvent.REGISTERED);
-		syncBundle("Get started event", BundleEvent.STARTED);
+		syncBundle("Get started event", BundleEvent.STARTED, tb);
 		tb.stop();
 		syncService("EventTest", ServiceEvent.UNREGISTERING);
-		syncBundle("Get stopped event", BundleEvent.STOPPED);
+		syncBundle("Get stopped event", BundleEvent.STOPPED, tb);
 		tb.uninstall();
-		syncBundle("Get uninstalled event", BundleEvent.UNINSTALLED);
+		syncBundle("Get uninstalled event", BundleEvent.UNINSTALLED, tb);
 		getContext().removeBundleListener(this);
 		getContext().removeServiceListener(this);
 		final boolean[] called = new boolean[] {false};
@@ -270,23 +271,24 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 		long Id;
 		getContext().addBundleListener(this);
 		tb = installBundle("lifecycle.tb6a.jar", false);
-		syncBundle("Test update, get installed ", BundleEvent.INSTALLED);
+		syncBundle("Test update, get installed ", BundleEvent.INSTALLED,
+				getContext().getBundle());
 		tb.start();
-		syncBundle("Test update, get started ", BundleEvent.STARTED);
+		syncBundle("Test update, get started ", BundleEvent.STARTED, tb);
 		Id = tb.getBundleId();
 		URL url = getContext().getBundle().getEntry("lifecycle.tb6b.jar");
 		assertNotNull("url is null", url);
 		InputStream in = url.openStream();
 		tb.update(in);
 		syncBundle("Test update expect stopped before update",
-				BundleEvent.STOPPED);
-		syncBundle("Test update, now get updated ", BundleEvent.UPDATED);
-		syncBundle("Test update, start again", BundleEvent.STARTED);
+				BundleEvent.STOPPED, tb);
+		syncBundle("Test update, now get updated ", BundleEvent.UPDATED, tb);
+		syncBundle("Test update, start again", BundleEvent.STARTED, tb);
 		assertEquals("Wrong bundle id", Id, tb.getBundleId());
 		tb.stop();
-		syncBundle("Test update get stopped", BundleEvent.STOPPED);
+		syncBundle("Test update get stopped", BundleEvent.STOPPED, tb);
 		tb.uninstall();
-		syncBundle("Test update, get uninstalled ", BundleEvent.UNINSTALLED);
+		syncBundle("Test update, get uninstalled ", BundleEvent.UNINSTALLED, tb);
 		getContext().removeBundleListener(this);
 	}
 
@@ -373,19 +375,19 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 		assertEquals("Wrong service", test, service);
 	}
 
-	private synchronized void syncBundle(String test, int event) {
+	private synchronized void syncBundle(String test, int event, Bundle origin) {
 		try {
 			if (_eventQueue.size() == 0) {
 				System.out.println("Waiting for event");
 				wait(10000);
 			}
-			if (_eventQueue.size() == 0)
+			if (_eventQueue.size() == 0) {
 				fail(test + ": Time out on event receive " + event(event));
-			else {
-				BundleEvent be = (BundleEvent) _eventQueue.remove(0);
-				assertEquals(test + ": invalid event", event(event), event(be
-						.getType()));
 			}
+			BundleEvent be = (BundleEvent) _eventQueue.remove(0);
+			assertEquals(test + ": invalid event", event(event),
+					event(be.getType()));
+			assertSame("wrong origin", origin, be.getOrigin());
 		}
 		catch (InterruptedException x) {/* cannot happen */
 		}

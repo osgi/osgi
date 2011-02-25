@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,8 +42,8 @@ public final class Framework {
      * application instance must return the same context object
      * 
      * @param applicationInstance is the activator object of an application instance
-     * @throws java.lang.NullPointerException If <code>applicationInstance</code>
-     *     is <code>null</code>      
+     * @throws java.lang.NullPointerException If {@code applicationInstance}
+     *     is {@code null}      
      * @throws java.lang.IllegalArgumentException if  called with an object that is not 
      *     the activator object of an application.
      * @return the {@link ApplicationContext} of the specified application instance.

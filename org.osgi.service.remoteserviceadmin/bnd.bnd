@@ -1,9 +1,10 @@
-javac.source            = 1.5
-javac.target            = jsr14
--nope							= true
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
+
+-nobundles							= true
 nodeploy						= true
 
 -buildpath = \
 	ee.minimum;						version=1.2.1, \
-	osgi.core;						version=4.2
+	osgi.core;						version=4.3
 	

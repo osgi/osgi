@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -72,11 +76,9 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 
 	private String getFrameworkFactoryClassName() throws IOException {
-		BundleContext context = getBundleContextWithoutFail();
-        URL factoryService = context == null ? this.getClass().getResource(FRAMEWORK_FACTORY) : context.getBundle(0).getEntry(FRAMEWORK_FACTORY);
+        URL factoryService = getClass().getResource(FRAMEWORK_FACTORY);
 		assertNotNull("Could not locate: " + FRAMEWORK_FACTORY, factoryService);
 		return getClassName(factoryService);
-
 	}
 
 	private String getClassName(URL factoryService) throws IOException {
@@ -105,29 +107,14 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	private String getStorageAreaRoot() {
-		BundleContext context = getBundleContextWithoutFail();
-		if (context == null) {
 			String storageroot = System.getProperty(STORAGEROOT);
 			assertNotNull("Must set property: " + STORAGEROOT, storageroot);
 			return storageroot;
-		}
-		return context.getDataFile("storageroot").getAbsolutePath();
 	}
 
 	private Class loadFrameworkClass(String className)
 			throws ClassNotFoundException {
-		BundleContext context = getBundleContextWithoutFail();
-        return context == null ? Class.forName(className) : getContext().getBundle(0).loadClass(className);
-	}
-
-	private BundleContext getBundleContextWithoutFail() {
-		try {
-			if ("true".equals(System.getProperty("noframework")))
-				return null;
-			return getContext();
-		} catch (Throwable t) {
-			return null; // don't fail
-		}
+        return getClass().getClassLoader().loadClass(className);
 	}
 
 	private FrameworkFactory getFrameworkFactory() {
@@ -190,16 +177,19 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	private Bundle installBundle(Framework framework, String bundle) throws BundleException, IOException {
+		return installBundle(framework, bundle, bundle);
+	}
+
+	private Bundle installBundle(Framework framework, String bundle, String location) throws BundleException, IOException {
 		BundleContext fwkContext = framework.getBundleContext();
 		assertNotNull("Framework context is null", fwkContext);
 		URL input = getBundleInput(bundle);
 		assertNotNull("Cannot find resource: " + bundle, input);
-		return fwkContext.installBundle(bundle, input.openStream());
+		return fwkContext.installBundle(location, input.openStream());
 	}
 
 	private URL getBundleInput(String bundle) {
-		BundleContext context = getBundleContextWithoutFail();
-		return context == null ? this.getClass().getResource(bundle) : context.getBundle().getEntry(bundle);
+		return getClass().getResource(bundle);
 	}
 
 
@@ -415,19 +405,23 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	public void testStorageArea() throws BundleException, IOException {
-		String testBundleLocation = "/launch.tb1.jar";
+		String testBundleLocation = "/launch.tb4.jar";
 		// install a bundle into a framework
 		Framework framework = createFramework(getConfiguration(getName()));
 		initFramework(framework);
-		long id = installBundle(framework, testBundleLocation).getBundleId();
+		Bundle testBundle = installBundle(framework, testBundleLocation);
+		long id = testBundle.getBundleId();
+		testBundle.start();
 		stopFramework(framework);
 
-		// create another framework with same storage area; make sure bundle is still installed
+		// create another framework with same storage area; make sure bundle is still installed and active
 		framework = createFramework(getConfiguration(getName(), false));
 		initFramework(framework);
-		Bundle testBundle = framework.getBundleContext().getBundle(id);
+		testBundle = framework.getBundleContext().getBundle(id);
 		assertNotNull("Missing installed bundle", testBundle);
 		assertEquals("Wrong bundle", testBundleLocation, testBundle.getLocation());
+		startFramework(framework);
+		assertEquals("Wrong state for test bundle.", Bundle.ACTIVE, testBundle.getState());
 		stopFramework(framework);
 
 		// create another framework with same storage area using clean ONFIRSTINIT; make sure bundle is not there
@@ -438,7 +432,9 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		Bundle[] bundles = framework.getBundleContext().getBundles();
 		assertNotNull("No bundles", bundles);
 		assertEquals("Wrong number of bundles", 1, bundles.length);
-		id = installBundle(framework, testBundleLocation).getBundleId();
+		testBundle = installBundle(framework, testBundleLocation);
+		id = testBundle.getBundleId();
+		testBundle.start();
 		stopFramework(framework);
 		
 		// test that second init does not clean
@@ -446,6 +442,15 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		testBundle = framework.getBundleContext().getBundle(id);
 		assertNotNull("Missing installed bundle", testBundle);
 		assertEquals("Wrong bundle", testBundleLocation, testBundle.getLocation());
+		startFramework(framework);
+		assertEquals("Wrong state for test bundle.", Bundle.ACTIVE, testBundle.getState());
+
+		// update the framework and make sure the bundle is still installed and active
+		updateFramework(framework);
+		testBundle = framework.getBundleContext().getBundle(id);
+		assertNotNull("Missing installed bundle", testBundle);
+		assertEquals("Wrong bundle", testBundleLocation, testBundle.getLocation());
+		assertEquals("Wrong state for test bundle.", Bundle.ACTIVE, testBundle.getState());
 		stopFramework(framework);
 	}
 
@@ -606,5 +611,121 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		testBundle.start();
 		stopFramework(framework);
 		assertTrue("File does not exist: " + testOutputFile.getAbsolutePath(), testOutputFile.exists());
+	}
+
+	public void testMultipBSNVersion() throws IOException, BundleException{
+		// explicitly set bsnversion to multiple
+		Map configurationMulti = getConfiguration(getName() + ".multiple");
+		configurationMulti.put(Constants.FRAMEWORK_BSNVERSION, Constants.FRAMEWORK_BSNVERSION_MULTIPLE);
+		Framework frameworkMultiBSN = createFramework(configurationMulti);
+		startFramework(frameworkMultiBSN);
+
+		installBundle(frameworkMultiBSN, "/launch.tb4.jar", "launch.tb4.a");
+		installBundle(frameworkMultiBSN, "/launch.tb4.jar", "launch.tb4.b");
+		stopFramework(frameworkMultiBSN);
+
+		// don't set to anything; test default is single
+		Map configurationSingle1 = getConfiguration(getName() + ".single1");
+		Framework frameworkSingleBSN1 = createFramework(configurationSingle1);
+		startFramework(frameworkSingleBSN1);
+		installBundle(frameworkSingleBSN1, "/launch.tb4.jar", "launch.tb4.a");
+		try {
+			installBundle(frameworkSingleBSN1, "/launch.tb4.jar", "launch.tb4.b");
+			fail("Should fail installing duplicate bundle.");
+		} catch (BundleException e) {
+			assertEquals("Wrong exception type.", BundleException.DUPLICATE_BUNDLE_ERROR, e.getType());
+			// expected
+		}
+
+		// explicitly set bsnversion to single
+		Map configurationSingle2 = getConfiguration(getName() + ".single2");
+		configurationSingle2.put(Constants.FRAMEWORK_BSNVERSION, Constants.FRAMEWORK_BSNVERSION_SINGLE);
+		Framework frameworkSingleBSN2 = createFramework(configurationSingle2);
+		startFramework(frameworkSingleBSN2);
+		installBundle(frameworkSingleBSN2, "/launch.tb4.jar", "launch.tb4.a");
+		try {
+			installBundle(frameworkSingleBSN2, "/launch.tb4.jar", "launch.tb4.b");
+			fail("Should fail installing duplicate bundle.");
+		} catch (BundleException e) {
+			assertEquals("Wrong exception type.", BundleException.DUPLICATE_BUNDLE_ERROR, e.getType());
+			// expected
+		}
+	}
+
+	public void testUUID() {
+		// Test UUID values
+		Map config1 = getConfiguration(getName() + ".1");
+		Framework framework1 = createFramework(config1);
+		// get the UUID after first init
+		initFramework(framework1);
+		String uuid = framework1.getBundleContext().getProperty(Constants.FRAMEWORK_UUID);
+		verifyUUID(uuid);
+		stopFramework(framework1);
+		// Keep a set of previously used uuids
+		Set uuids = new HashSet();
+		uuids.add(uuid);
+		// Now try to re-init and start the framework and each init/shutdown cycle gives a unique uuid
+		for (int i = 0; i < 20; i++) {
+			initFramework(framework1);
+			String uuid1 = framework1.getBundleContext().getProperty(Constants.FRAMEWORK_UUID);
+			verifyUUID(uuid1);
+			assertFalse("Duplicate UUID", uuids.contains(uuid1));
+			uuids.add(uuid1);
+			startFramework(framework1);
+			// after start the uuid should be the same as after init
+			String uuid2 = framework1.getBundleContext().getProperty(Constants.FRAMEWORK_UUID);
+			verifyUUID(uuid2);
+			assertEquals("UUID changed after start", uuid1, uuid2);
+			stopFramework(framework1);
+		}
+	}
+
+	private void verifyUUID(String uuid) {
+		assertNotNull("Null uuid.", uuid);
+		StringTokenizer st = new StringTokenizer(uuid, "-");
+		String[] uuidSections = new String[5];
+		// All UUIDs must have 5 sections
+		for (int i = 0; i < uuidSections.length; i++) {
+			try {
+				uuidSections[i] = "0x" + st.nextToken();
+			} catch (NoSuchElementException e) {
+				fail("Wrong number of uuid sections: " + uuid, e);
+			}
+		}
+		// make sure there is not an extra section.
+		try {
+			st.nextToken();
+			fail("Too many sections in uuid: " + uuid);
+		} catch (NoSuchElementException e) {
+			// expected
+		}
+		// now verify each section of the UUID can be decoded as a hex string and is the correct size
+		for (int i = 0; i < uuidSections.length; i++) {
+			int limit = 0;
+			switch (i) {
+				case 0: {
+					limit = 10; // "0x" + 4*<hexOctet> == 10 len
+					break;
+				}
+				case 1:
+				case 2:
+				case 3:{
+					limit = 6; // "0x" + 2*<hexOctet> == 6 len
+					break;
+				}
+				case 4:{
+					limit = 14; // "0x" + 6*<hexOctet> == 14 len
+					break;
+				}
+				default:
+					break;
+			}
+			assertTrue("UUISection is too big: " + uuidSections[i], uuidSections[i].length() <= limit); 
+			try {
+				Long.decode(uuidSections[i]);
+			} catch (NumberFormatException e) {
+				fail("Invalid section: " + uuidSections[i], e);
+			}
+		}
 	}
 }

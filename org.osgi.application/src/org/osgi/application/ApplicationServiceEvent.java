@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,11 @@ import org.osgi.framework.ServiceReference;
 /**
  * An event from the Framework describing a service lifecycle change.
  * <p>
- * <code>ApplicationServiceEvent</code> objects are delivered to a
- * <code>ApplicationServiceListener</code> objects when a change occurs in this service's
- * lifecycle. The delivery of an <code>ApplicationServiceEvent</code> is 
+ * {@code ApplicationServiceEvent} objects are delivered to a
+ * {@code ApplicationServiceListener} objects when a change occurs in this service's
+ * lifecycle. The delivery of an {@code ApplicationServiceEvent} is 
  * always triggered by a {@link org.osgi.framework.ServiceEvent}.
- * <code>ApplicationServiceEvent</code> extends the content of <code>ServiceEvent</code>
+ * {@code ApplicationServiceEvent} extends the content of {@code ServiceEvent}
  * with the service object the event is referring to as applications has no means to
  * find the corresponding service object for a {@link org.osgi.framework.ServiceReference}.
  * A type code is used to identify the event type for future
@@ -50,13 +50,13 @@ public class ApplicationServiceEvent extends ServiceEvent {
 	 * 
 	 * @param type The event type. Available type codes are defines in 
 	 *        {@link org.osgi.framework.ServiceEvent}
-	 * @param reference A <code>ServiceReference</code> object to the service
-	 *        that had a lifecycle change. This reference will be used as the <code>source</code>
+	 * @param reference A {@code ServiceReference} object to the service
+	 *        that had a lifecycle change. This reference will be used as the {@code source}
 	 *        in the {@link java.util.EventObject} baseclass, therefore, it must not be
 	 *        null.
 	 * @param serviceObject The service object bound to this application instance. It can
-	 *    be <code>null</code> if this application is not bound to this service yet.
-	 * @throws IllegalArgumentException if the specified <code>reference</code> is null. 
+	 *    be {@code null} if this application is not bound to this service yet.
+	 * @throws IllegalArgumentException if the specified {@code reference} is null. 
 	 */
 	public ApplicationServiceEvent(int type, ServiceReference reference, Object serviceObject) {
 		super(type, reference);
@@ -67,11 +67,11 @@ public class ApplicationServiceEvent extends ServiceEvent {
 	 * This method returns the service object of this service bound to the listener
 	 * application instance. A service object becomes bound to the application when it
 	 * first obtains a service object reference to that service by calling the
-	 * <code>ApplicationContext.locateService</code> or <code>locateServices</code>
+	 * {@code ApplicationContext.locateService} or {@code locateServices}
 	 * methods. If the application is not bound to the service yet, this method returns
-	 * <code>null</code>.
+	 * {@code null}.
 	 * 
-	 * @return the service object bound to the listener application or <code>null</code>
+	 * @return the service object bound to the listener application or {@code null}
 	 *   if it isn't bound to this service yet.
 	 */
 	public Object getServiceObject() {

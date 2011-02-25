@@ -5,6 +5,7 @@ Private-Package:                         org.osgi.test.support.*, \
 Import-Package:                          ${p}.common;version="[2.0.0,3)",\
  junit.framework;version="[3.8,4)",\
  org.osgi.framework;version="[1.5,2)",\
+ org.osgi.framework.wiring;version="[1.0,2)",\
  org.osgi.util.tracker;version="[1.4,2)"
 Bundle-Activator: 						 ${p}.tb5.Activator
 RSA-Version:                             2.0.0

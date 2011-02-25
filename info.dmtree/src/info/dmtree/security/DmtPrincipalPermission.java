@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import java.util.Iterator;
  * management server. Only protocol adapters communicating with management
  * servers should be granted this permission.
  * <p>
- * <code>DmtPrincipalPermission</code> has a target string which controls the
+ * {@code DmtPrincipalPermission} has a target string which controls the
  * name of the principal on whose behalf the protocol adapter can act. A
  * wildcard is allowed at the end of the target string, to allow using any
  * principal name with the given prefix. The &quot;*&quot; target means the
@@ -46,13 +46,13 @@ public class DmtPrincipalPermission extends Permission {
     private final String principal;
 
     /**
-     * Creates a new <code>DmtPrincipalPermission</code> object with its name
+     * Creates a new {@code DmtPrincipalPermission} object with its name
      * set to the target string. Name must be non-null and non-empty.
      * 
-     * @param target the name of the principal, can end with <code>*</code> to
+     * @param target the name of the principal, can end with {@code *} to
      *        match any principal with the given prefix
-     * @throws NullPointerException if <code>name</code> is <code>null</code>
-     * @throws IllegalArgumentException if <code>name</code> is empty
+     * @throws NullPointerException if {@code name} is {@code null}
+     * @throws IllegalArgumentException if {@code name} is empty
      */
     public DmtPrincipalPermission(String target) {
         super(target);
@@ -73,18 +73,18 @@ public class DmtPrincipalPermission extends Permission {
     }
 
     /**
-     * Creates a new <code>DmtPrincipalPermission</code> object using the
+     * Creates a new {@code DmtPrincipalPermission} object using the
      * 'canonical' two argument constructor. In this version this class does not
      * define any actions, the second argument of this constructor must be "*"
      * so that this class can later be extended in a backward compatible way.
      * 
-     * @param target the name of the principal, can end with <code>*</code> to
+     * @param target the name of the principal, can end with {@code *} to
      *        match any principal with the given prefix
      * @param actions no actions defined, must be "*" for forward compatibility
-     * @throws NullPointerException if <code>name</code> or
-     *         <code>actions</code> is <code>null</code>
-     * @throws IllegalArgumentException if <code>name</code> is empty or
-     *         <code>actions</code> is not "*"
+     * @throws NullPointerException if {@code name} or
+     *         {@code actions} is {@code null}
+     * @throws IllegalArgumentException if {@code name} is empty or
+     *         {@code actions} is not "*"
      */
     public DmtPrincipalPermission(String target, String actions) {
         this(target);
@@ -104,7 +104,7 @@ public class DmtPrincipalPermission extends Permission {
      * same target string.
      * 
      * @param obj the object to compare to this DmtPrincipalPermission instance
-     * @return <code>true</code> if the parameter represents the same
+     * @return {@code true} if the parameter represents the same
      *         permissions as this instance
      */
     public boolean equals(Object obj) {
@@ -120,7 +120,7 @@ public class DmtPrincipalPermission extends Permission {
     }
 
     /**
-     * Returns the action list (always <code>*</code> in the current version).
+     * Returns the action list (always {@code *} in the current version).
      * 
      * @return the action string &quot;*&quot;
      */
@@ -255,7 +255,7 @@ final class DmtPrincipalPermissionCollection extends PermissionCollection {
 
     /**
      * Returns an enumeration of all the DmtPrincipalPermission objects in the
-     * container. The returned value cannot be <code>null</code>.
+     * container. The returned value cannot be {@code null}.
      * 
      * @return an enumeration of all the DmtPrincipalPermission objects
      */

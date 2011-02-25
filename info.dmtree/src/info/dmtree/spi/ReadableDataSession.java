@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,11 @@ import java.util.Date;
  * <p>
  * Since the {@link ReadWriteDataSession} and {@link TransactionalDataSession}
  * interfaces inherit from this interface, some of the method descriptions do
- * not apply for an instance that is only a <code>ReadableDataSession</code>.
+ * not apply for an instance that is only a {@code ReadableDataSession}.
  * For example, the {@link #close} method description also contains information
  * about its behaviour when invoked as part of a transactional session.
  * <p>
- * The <code>nodePath</code> parameters appearing in this interface always
+ * The {@code nodePath} parameters appearing in this interface always
  * contain an array of path segments identifying a node in the subtree of this
  * plugin. This parameter contains an absolute path, so the first segment is
  * always &quot;.&quot;. Special characters appear escaped in the segments.
@@ -43,7 +43,7 @@ import java.util.Date;
  * before delegating the call to a plugin. Therefore plugins can take certain
  * circumstances for granted: that the path is valid and is within the subtree
  * of the plugin and the session, the command can be applied to the given node
- * (e.g. the target of <code>getChildNodeNames</code> is an interior node), etc.
+ * (e.g. the target of {@code getChildNodeNames} is an interior node), etc.
  * All errors described by the error codes {@link DmtException#INVALID_URI},
  * {@link DmtException#URI_TOO_LONG}, {@link DmtException#PERMISSION_DENIED},
  * {@link DmtException#COMMAND_NOT_ALLOWED} and
@@ -57,7 +57,7 @@ import java.util.Date;
  * indicate such discrepancies.
  * <p>
  * The DmtAdmin also ensures that the targeted nodes exist before calling the
- * plugin (except, of course, before the <code>isNodeUri</code> call). However,
+ * plugin (except, of course, before the {@code isNodeUri} call). However,
  * some small amount of time elapses between the check and the call, so in case
  * of plugins where the node structure can change independantly from the DMT,
  * the target node might disappear in that time. For example, a whole subtree
@@ -84,11 +84,11 @@ public interface ReadableDataSession {
      * @param nodePath the absolute path of the node that has changed
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a non-existing node
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      */
@@ -107,11 +107,11 @@ public interface ReadableDataSession {
      * This method should not perform any data manipulation, only cleanup
      * operations. In non-atomic read-write sessions the data manipulation
      * should be done instantly during each tree operation, while in atomic
-     * sessions the <code>DmtAdmin</code> always calls
+     * sessions the {@code DmtAdmin} always calls
      * {@link TransactionalDataSession#commit} automatically before the session
      * is actually closed.
      * 
-     * @throws DmtException with the error code <code>COMMAND_FAILED</code> if
+     * @throws DmtException with the error code {@code COMMAND_FAILED} if
      *         the plugin failed to close for any reason
      */
     void close() throws DmtException;
@@ -120,7 +120,7 @@ public interface ReadableDataSession {
      * Get the list of children names of a node. The returned array contains the
      * names - not the URIs - of the immediate children nodes of the given node.
      * The returned child names must be mangled ({@link info.dmtree.Uri#mangle(String)}).
-     * The returned array may contain <code>null</code> entries, but these are
+     * The returned array may contain {@code null} entries, but these are
      * removed by the DmtAdmin before returning it to the client.
      * 
      * @param nodePath the absolute path of the node
@@ -128,13 +128,13 @@ public interface ReadableDataSession {
      *         array if the node has no children
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a non-existing node
-     *         <li><code>METADATA_MISMATCH</code> if the information could
+     *         <li>{@code METADATA_MISMATCH} if the information could
      *         not be retrieved because of meta-data restrictions
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -153,29 +153,29 @@ public interface ReadableDataSession {
      * specific to the plugin returned by this method is complemented by meta
      * data from the DmtAdmin before returning it to the client. If there are
      * differences in the meta data elements known by the plugin and the
-     * <code>DmtAdmin</code> then the plugin specific elements take
+     * {@code DmtAdmin} then the plugin specific elements take
      * precedence.
      * <p>
      * Note, that a node does not have to exist for having meta-data associated
      * with it. This method may provide meta-data for any node that can possibly
      * exist in the tree (any node defined by the Management Object provided by
-     * the plugin). For nodes that are not defined, a <code>DmtException</code>
-     * may be thrown with the <code>NODE_NOT_FOUND</code> error code. To allow
+     * the plugin). For nodes that are not defined, a {@code DmtException}
+     * may be thrown with the {@code NODE_NOT_FOUND} error code. To allow
      * easier implementation of plugins that do not provide meta-data, it is
-     * allowed to return <code>null</code> for any node, regardless of whether
+     * allowed to return {@code null} for any node, regardless of whether
      * it is defined or not.
      * 
      * @param nodePath the absolute path of the node
      * @return a MetaNode which describes meta data information, can be
-     *         <code>null</code> if there is no meta data available for the
+     *         {@code null} if there is no meta data available for the
      *         given node
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri}
      *         points to a node that is not defined in the tree (see above)
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -193,15 +193,15 @@ public interface ReadableDataSession {
      * @return the size of the data in the node
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a non-existing node
-     *         <li><code>METADATA_MISMATCH</code> if the information could
+     *         <li>{@code METADATA_MISMATCH} if the information could
      *         not be retrieved because of meta-data restrictions
-     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the Size property is
+     *         <li>{@code FEATURE_NOT_SUPPORTED} if the Size property is
      *         not supported by the plugin
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -217,15 +217,15 @@ public interface ReadableDataSession {
      * @return the timestamp of the last modification
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a non-existing node
-     *         <li><code>METADATA_MISMATCH</code> if the information could
+     *         <li>{@code METADATA_MISMATCH} if the information could
      *         not be retrieved because of meta-data restrictions
-     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the Timestamp
+     *         <li>{@code FEATURE_NOT_SUPPORTED} if the Timestamp
      *         property is not supported by the plugin
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -237,19 +237,19 @@ public interface ReadableDataSession {
      * Get the title of a node. There might be no title property set for a node.
      * 
      * @param nodePath the absolute path of the node
-     * @return the title of the node, or <code>null</code> if the node has no
+     * @return the title of the node, or {@code null} if the node has no
      *         title
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a non-existing node
-     *         <li><code>METADATA_MISMATCH</code> if the information could
+     *         <li>{@code METADATA_MISMATCH} if the information could
      *         not be retrieved because of meta-data restrictions
-     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the Title property
+     *         <li>{@code FEATURE_NOT_SUPPORTED} if the Title property
      *         is not supported by the plugin
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -260,20 +260,20 @@ public interface ReadableDataSession {
     /**
      * Get the type of a node. The type of leaf node is the MIME type of the
      * data it contains. The type of an interior node is a URI identifying a DDF
-     * document; a <code>null</code> type means that there is no DDF document
+     * document; a {@code null} type means that there is no DDF document
      * overriding the tree structure defined by the ancestors.
      * 
      * @param nodePath the absolute path of the node
-     * @return the type of the node, can be <code>null</code>
+     * @return the type of the node, can be {@code null}
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a non-existing node
-     *         <li><code>METADATA_MISMATCH</code> if the information could
+     *         <li>{@code METADATA_MISMATCH} if the information could
      *         not be retrieved because of meta-data restrictions
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -296,13 +296,13 @@ public interface ReadableDataSession {
      * @return true if the given node is a leaf node
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a non-existing node
-     *         <li><code>METADATA_MISMATCH</code> if the information could
+     *         <li>{@code METADATA_MISMATCH} if the information could
      *         not be retrieved because of meta-data restrictions
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -314,18 +314,18 @@ public interface ReadableDataSession {
      * Get the data contained in a leaf or interior node.
      * 
      * @param nodePath the absolute path of the node to retrieve
-     * @return the data of the leaf node, must not be <code>null</code>
+     * @return the data of the leaf node, must not be {@code null}
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a non-existing node
-     *         <li><code>METADATA_MISMATCH</code> if the information could
+     *         <li>{@code METADATA_MISMATCH} if the information could
      *         not be retrieved because of meta-data restrictions
-     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the specified node is
+     *         <li>{@code FEATURE_NOT_SUPPORTED} if the specified node is
      *         an interior node and does not support Java object values
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
@@ -343,15 +343,15 @@ public interface ReadableDataSession {
      * @return the version of the node
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
      *         points to a non-existing node
-     *         <li><code>METADATA_MISMATCH</code> if the information could
+     *         <li>{@code METADATA_MISMATCH} if the information could
      *         not be retrieved because of meta-data restrictions
-     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the Version property
+     *         <li>{@code FEATURE_NOT_SUPPORTED} if the Version property
      *         is not supported by the plugin
-     *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
+     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
+     *         <li>{@code COMMAND_FAILED} if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
