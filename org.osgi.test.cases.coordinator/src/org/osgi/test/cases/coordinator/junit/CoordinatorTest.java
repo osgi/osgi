@@ -225,6 +225,8 @@ public abstract class CoordinatorTest extends OSGiTestCase {
 		// local stack.
 		while (coordinator.peek() != null && coordinator.peek() != peeked)
 			coordinator.pop();
+		coordinator = null;
 		getContext().ungetService(coordinatorReference);
+		coordinatorReference = null;
 	}
 }
