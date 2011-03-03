@@ -279,8 +279,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 		BundleContext context = getContext();
 
 		// Ensure no outstanding references
-		ServiceReference ref = context.getServiceReference(Coordinator.class
-				.getName());
+		ServiceReference<Coordinator> ref = context.getServiceReference(Coordinator.class);
 		while (context.ungetService(ref));
 
 		// Get another Bundle Context
@@ -292,8 +291,8 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 		while (context.ungetService(ref));
 
 		// Get the different Coordinators
-		Coordinator cUs = (Coordinator) context.getService(ref);
-		Coordinator cThem = (Coordinator) otherContext.getService(ref);
+		Coordinator cUs = context.getService(ref);
+		Coordinator cThem = otherContext.getService(ref);
 		assertTrue(
 				"Because they're registered with a service factory they must differ",
 				cUs != cThem);

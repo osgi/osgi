@@ -34,7 +34,7 @@ import org.osgi.test.support.OSGiTestCase;
  */
 public class CoordNameBSNFormatTest extends OSGiTestCase {
 	Coordinator coordinator;
-	private ServiceReference coordinatorReference;
+	private ServiceReference<Coordinator> coordinatorReference;
 	
 	/**
 	 * Coordinator.begin() should throw an IllegalArgumentException if a
@@ -64,8 +64,8 @@ public class CoordNameBSNFormatTest extends OSGiTestCase {
 	}
 	
 	protected void setUp() throws Exception {
-		coordinatorReference = getContext().getServiceReference(Coordinator.class.getName());
-		coordinator = (Coordinator)getContext().getService(coordinatorReference);
+		coordinatorReference = getContext().getServiceReference(Coordinator.class);
+		coordinator = getContext().getService(coordinatorReference);
 	}
 	
 	protected void tearDown() throws Exception {
