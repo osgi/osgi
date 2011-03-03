@@ -30,7 +30,7 @@ import org.osgi.test.support.OSGiTestCase;
  */
 public class CoordinatorSecureTests extends OSGiTestCase {
 	private Coordinator coordinator;
-	private ServiceReference coordinatorReference;
+	private ServiceReference<Coordinator>	coordinatorReference;
 	
 	/**
 	 * Coordination.addParticipant(Participant) should throw a SecurityException
@@ -331,19 +331,19 @@ public class CoordinatorSecureTests extends OSGiTestCase {
 		Bundle b = install("tb12.jar");
 		Coordination c1 = coordinator.create("com.acme.1", 0);
 		Coordination c2 = null;
-		ServiceRegistration c1sr = null;
-		ServiceRegistration c2sr = null;
-		ServiceReference sr = null;
+		ServiceRegistration<Coordination> c1sr = null;
+		ServiceRegistration<Coordination> c2sr = null;
+		ServiceReference<TestClassResult> sr = null;
 		try {
 			c2 = coordinator.create("com.ibm.2", 0);
 			assertEquals("The coordination was not the expected one.", c1, coordinator.getCoordination(c1.getId()));
 			assertEquals("The coordination was not the expected one.", c2, coordinator.getCoordination(c2.getId()));
-			c1sr = bc.registerService(Coordination.class.getName(), c1, null);
-			c2sr = bc.registerService(Coordination.class.getName(), c2, null);
+			c1sr = bc.registerService(Coordination.class, c1, null);
+			c2sr = bc.registerService(Coordination.class, c2, null);
 			b.start();
-			sr = bc.getServiceReference(TestClassResult.class.getName());
+			sr = bc.getServiceReference(TestClassResult.class);
 			assertNotNull("The test bundle did not register a result.", sr);
-			TestClassResult tr = (TestClassResult)bc.getService(sr);
+			TestClassResult tr = bc.getService(sr);
 			assertTrue("The coordinator should only return coordinations for which the caller has permissions.", tr.succeeded());
 		}
 		finally {
@@ -366,14 +366,14 @@ public class CoordinatorSecureTests extends OSGiTestCase {
 		Bundle b = install("tb11.jar");
 		Coordination c1 = coordinator.create("com.acme.1", 0);
 		Coordination c2 = null;
-		ServiceReference sr = null;
+		ServiceReference<TestClassResult> sr = null;
 		try {
 			c2 = coordinator.create("com.ibm.2", 0);
 			assertEquals("The coordinator did not return the correct number of coordinations.", 2, coordinator.getCoordinations().size());
 			b.start();
-			sr = bc.getServiceReference(TestClassResult.class.getName());
+			sr = bc.getServiceReference(TestClassResult.class);
 			assertNotNull("The test bundle did not register a result.", sr);
-			TestClassResult tr = (TestClassResult)bc.getService(sr);
+			TestClassResult tr = bc.getService(sr);
 			assertTrue("The coordinator should only return coordinations for which the caller has permissions.", tr.succeeded());
 		}
 		finally {
@@ -404,8 +404,8 @@ public class CoordinatorSecureTests extends OSGiTestCase {
 	
 	protected void setUp() throws Exception {
 		BundleContext bc = getContext();
-		coordinatorReference = bc.getServiceReference(Coordinator.class.getName());
-		coordinator = (Coordinator)bc.getService(coordinatorReference);
+		coordinatorReference = bc.getServiceReference(Coordinator.class);
+		coordinator = bc.getService(coordinatorReference);
 	}
 	
 	protected void tearDown() throws Exception {
@@ -455,12 +455,12 @@ public class CoordinatorSecureTests extends OSGiTestCase {
 	private void execute(String bundle, boolean hasPermission) throws Exception {
 		Bundle b = install(bundle);
 		BundleContext bc = getContext();
-		ServiceReference sr = null;
+		ServiceReference<TestClassResult> sr = null;
 		try {
 			b.start();
-			sr = bc.getServiceReference(TestClassResult.class.getName());
+			sr = bc.getServiceReference(TestClassResult.class);
 			assertNotNull("The test bundle did not register a result.", sr);
-			TestClassResult tr = (TestClassResult)bc.getService(sr);
+			TestClassResult tr = bc.getService(sr);
 			bc.ungetService(sr);
 			b.uninstall();
 			if (hasPermission)
@@ -496,7 +496,8 @@ public class CoordinatorSecureTests extends OSGiTestCase {
 	private void executeWithDirectCoordination(String bundle, boolean hasPermission, long timeout) throws Exception {
 		Coordination c = coordinator.create("c", timeout);
 		BundleContext bc = getContext();
-		ServiceRegistration sr = bc.registerService(Coordination.class.getName(), c, null);
+		ServiceRegistration<Coordination> sr = bc.registerService(
+				Coordination.class, c, null);
 		try {
 			executeWithCoordination(bundle, hasPermission, timeout, c);
 		}
@@ -511,7 +512,7 @@ public class CoordinatorSecureTests extends OSGiTestCase {
 		executeWithCoordination(bundle, hasPermission, timeout, c);
 	}
 	
-	private void ungetQuietly(ServiceReference sr) {
+	private void ungetQuietly(ServiceReference<TestClassResult> sr) {
 		if (sr == null) return;
 		try {
 			getContext().ungetService(sr);
@@ -531,7 +532,7 @@ public class CoordinatorSecureTests extends OSGiTestCase {
 		}
 	}
 	
-	private void unregisterQuietly(ServiceRegistration sr) {
+	private void unregisterQuietly(ServiceRegistration<Coordination> sr) {
 		if (sr == null) return;
 		try {
 			sr.unregister();
