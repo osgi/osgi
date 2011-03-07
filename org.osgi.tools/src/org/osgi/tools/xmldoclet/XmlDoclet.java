@@ -2,10 +2,12 @@ package org.osgi.tools.xmldoclet;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 
 import com.sun.javadoc.*;
 
 public class XmlDoclet extends Doclet {
+	Pattern	SECURITY_PATTERN	= Pattern.compile("(\\w+)\\[(.+),(\\w+)\\](.*)");
 	PrintWriter	pw;
 	String		currentPackage;
 	String		currentClass;
@@ -448,7 +450,8 @@ public class XmlDoclet extends Doclet {
 	}
 
 	String html(String text) {
-		HtmlCleaner cleaner = new HtmlCleaner(currentPackage+"."+currentClass, text);
+		HtmlCleaner cleaner = new HtmlCleaner(currentPackage + "."
+				+ currentClass, text);
 		return cleaner.clean();
 	}
 
@@ -469,11 +472,46 @@ public class XmlDoclet extends Doclet {
 						if (tag.kind().equals("@literal")) {
 							sb.append(escape(toString(tag.inlineTags())));
 						}
-						else {
-							sb.append("<" + tag.kind().substring(1) + ">"
-									+ html(toString(tag.inlineTags())) + "</"
-									+ tag.kind().substring(1) + ">");
-						}
+						else
+							if (tag.kind().equals("@value")) {
+								FieldDoc field = (FieldDoc) tag.holder();
+								sb.append( escape(field.constantValue().toString() ));
+							}
+							else
+								if (tag.kind().equals("@security")) {
+									StringBuffer sb2 = new StringBuffer();
+									print( sb2, tag.inlineTags());
+									for ( int i =0; i<sb2.length(); i++)
+										if ( sb2.charAt(i) == '\n' || sb2.charAt(i) =='\r')
+											sb2.setCharAt(i, ' ');
+									String s = sb2.toString();
+									
+									Matcher m = SECURITY_PATTERN.matcher(s);
+									if ( m.matches() ) {
+										String permission = m.group(1);
+										String resource = m.group(2);
+										String actions = m.group(3);
+										String remainder = m.group(4);
+										
+										sb.append("\n<security name='");
+										sb.append(escape(permission));
+										sb.append("' resource='");
+										sb.append(escape(resource));
+										sb.append("' actions='");
+										sb.append(escape(actions));
+										sb.append("'>");
+										sb.append(remainder);
+										sb.append("</security>");
+									} else
+										throw new IllegalArgumentException("@security tag invalid: '" + s + "', matching pattern is " + SECURITY_PATTERN + " " + m);
+								}
+								else {
+									sb.append("<" + tag.kind().substring(1)
+											+ ">"
+											+ html(toString(tag.inlineTags()))
+											+ "</" + tag.kind().substring(1)
+											+ ">");
+								}
 					}
 		}
 	}

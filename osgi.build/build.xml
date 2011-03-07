@@ -50,6 +50,7 @@
 			<tag name="ThreadSafe" scope="types" description="ThreadSafe"/>
 			<tag name="NotThreadSafe" scope="types" description="NotThreadSafe"/>
 			<tag name="GuardedBy" scope="methods,fields" description="Guarded By:"/>
+			<tag name="security" scope="methods" description="Required Permissions"/>
 			<tag name="noimplement" scope="types" description="Consumers of this API must not implement this interface"/>
 			<header><![CDATA[<b>OSGi&trade; Service Platform</b><br/><font  size=-1>Release ${osgi.release} Version ${osgi.version}</font>]]></header>
 			<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 1.0</a></font>]]></bottom>
@@ -147,7 +148,7 @@
 				<arg line="@{options}" />
 				<arg value="-o" />
 				<arg value="${target}/japi/@{name}-japicompat.html" />
-				<arg value="${build}/japi-published/@{name}-published.japi" />
+				<arg value="${project.dir}/japi-published/@{name}-published.japi" />
 				<arg value="${target}/japi/@{name}-latest.japi" />
 			</exec>
 			<exec executable="perl" failifexecutionfails="false">
@@ -156,7 +157,7 @@
 				<arg value="-o" />
 				<arg value="${target}/japi/@{name}-changed-japicompat.html" />
 				<arg value="${target}/japi/@{name}-latest.japi" />
-				<arg value="${build}/japi-published/@{name}-published.japi" />
+				<arg value="${project.dir}/japi-published/@{name}-published.japi" />
 			</exec>
 		</sequential>
 	</macrodef>
