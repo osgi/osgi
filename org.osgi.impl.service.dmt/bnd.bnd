@@ -2,8 +2,8 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Vendor					= Nokia
-Bundle-Version					= 1.0.0.${project.build}
-Bundle-Activator				= $(p).Activator
+Bundle-Version					= 1.1.0.${project.build}
+Bundle-Activator				= ${p}.Activator
 Export-Service					= \
 	info.dmtree.DmtAdmin, \
 	info.dmtree.notification.NotificationService
@@ -13,8 +13,8 @@ Import-Service					= \
 
 Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
-Export-Package 					= ${p}.export,info.dmtree.*;-split-package:=first
-Private-Package					= ${p}, ${p}.plugins
+Export-Package 					= ${p}.export;provide:=true,info.dmtree.*;-split-package:=first
+Private-Package					= ${p}.*
 
 -buildpath						= \
     info.dmtree;				version=project, \
