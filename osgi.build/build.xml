@@ -62,7 +62,7 @@
 		<zip destfile="${target}/javadoc.zip" basedir="${target}/javadoc"></zip>
     </target>
 	
-	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.mobile,japitools.enterprise,japitools.proposed,japitools.minimum,japitools.foundation">
+	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.mobile,japitools.enterprise,japitools.residential,japitools.proposed,japitools.minimum,japitools.foundation">
 	</target>
 
 	<macrodef name="japitools">
@@ -118,6 +118,16 @@
 		</japitools>
 	</target>
 
+	<target name="japitools.residential" depends="init">
+		<japitools name="osgi.residential">
+			<arg value="${repo.javase}" />
+			<arg value="${repo.foundation}" />
+			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
+			<arg value="${repo.servlet}" />
+			<arg value="${repo.jaxp}" />
+		</japitools>
+	</target>
+
 	<target name="japitools.proposed" depends="init">
 		<japitools name="osgi.proposed">
 			<arg value="${repo.javase}" />
@@ -134,7 +144,7 @@
 		<japitools name="ee.foundation" />
 	</target>
 
-	<target name="japicompat" depends="japicompat.core,japicompat.cmpn,japicompat.mobile,japicompat.enterprise,japicompat.minimum,japicompat.foundation,japicompat.eecompare">
+	<target name="japicompat" depends="japicompat.core,japicompat.cmpn,japicompat.mobile,japicompat.enterprise,japicompat.residential,japicompat.minimum,japicompat.foundation,japicompat.eecompare">
 	</target>
 	
 	<macrodef name="japicompat">
@@ -175,6 +185,10 @@
 
 	<target name="japicompat.enterprise" depends="init">
 		<japicompat name="osgi.enterprise" />
+	</target>
+
+	<target name="japicompat.residential" depends="init">
+		<japicompat name="osgi.residential" />
 	</target>
 
 	<target name="japicompat.minimum" depends="init">

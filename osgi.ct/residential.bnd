@@ -1,0 +1,15 @@
+Bundle-Description				: \
+	OSGi Service Platform Release ${version;=;${residential.build.version}} Version ${version;==;${residential.build.version}}, \
+	Residential Test Case Bundles.
+
+Bundle-Version					: ${residential.build.version}
+Include-Resource				: \
+  	\
+    ${replace;${uniq;\
+    ${jar.residential.tests} \
+    };.+;jar/=$0},\
+    \
+    NOTICE=legal/NOTICE.txt, \
+    {about.html=legal/about.html}
+ 	
+-pack: ${build.residential.tests}

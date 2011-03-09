@@ -82,6 +82,7 @@ core.build.version			= 4.4.0.${project.build}
 cmpn.build.version			= ${build.version}
 mobile.build.version		= ${build.version}
 enterprise.build.version	= ${build.version}
+residential.build.version	= ${build.version}
 proposed.build.version		= ${build.version}
 
 # Documentation

@@ -14,6 +14,7 @@ nodeploy						=true
     osgi.cmpn, \
     osgi.mobile, \
     osgi.enterprise, \
+    osgi.residential, \
     osgi.proposed
 
 
