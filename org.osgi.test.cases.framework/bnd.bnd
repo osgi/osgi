@@ -282,7 +282,14 @@ Include-Resource = \
 	${junit}
 
 Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.framework, org.osgi.framework.hooks.service, org.osgi.framework.hooks.weaving
+-signaturetest                      = \
+    org.osgi.framework, \
+    org.osgi.framework.hooks.bundle, \
+    org.osgi.framework.hooks.resolver, \
+    org.osgi.framework.hooks.service, \
+    org.osgi.framework.hooks.weaving, \
+    org.osgi.framework.startlevel, \
+    org.osgi.framework.wiring
 
 -runbundles						= \
 	org.apache.servicemix.bundles.bcel;         version=5.2 
