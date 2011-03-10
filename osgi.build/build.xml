@@ -157,7 +157,7 @@
 				<arg value="-o" />
 				<arg value="${target}/japi/@{name}-changed-japicompat.html" />
 				<arg value="${target}/japi/@{name}-latest.japi" />
-				<arg value="${bulid}/japi-published/@{name}-published.japi" />
+				<arg value="${build}/japi-published/@{name}-published.japi" />
 			</exec>
 		</sequential>
 	</macrodef>
