@@ -29,6 +29,9 @@ public class SignatureTest implements AnalyzerPlugin {
                         
                         for (Map.Entry<String, Resource> r : contents.entrySet()) {
                             String path = r.getKey();
+							if (path.endsWith("package-info.class")) {
+								continue;
+							}
                             if (path.endsWith(".class")) {
                                 path = path.substring(0, path.length() - 6);
                                 analyzer.getJar().putResource(
