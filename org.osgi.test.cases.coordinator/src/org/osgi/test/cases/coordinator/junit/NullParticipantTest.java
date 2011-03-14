@@ -21,7 +21,7 @@ import org.osgi.service.coordinator.Coordination;
  * A coordination must throw a NullPointerException if the participant to be
  * added is null.
  */
-public class NPENullParticipantTest extends CoordinatorTest {
+public class NullParticipantTest extends CoordinatorTest {
 	/**
 	 * The basic test.
 	 */
@@ -29,9 +29,9 @@ public class NPENullParticipantTest extends CoordinatorTest {
 		Coordination c = coordinator.create("c", 0);
 		try {
 			c.addParticipant(null);
-			fail("An NPE was not thrown in response to a null participant.");
+			fail("A runtime exception was not thrown in response to a null participant.");
 		}
-		catch (NullPointerException e) {
+		catch (RuntimeException e) {
 			// Okay.
 		}
 	}

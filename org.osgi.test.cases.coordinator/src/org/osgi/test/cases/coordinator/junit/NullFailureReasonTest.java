@@ -24,7 +24,7 @@ import org.osgi.test.support.OSGiTestCase;
  * A NullPointerException must be thrown if the reason specified for a 
  * coordination's failure is null.
  */
-public class NPENullFailureReasonTest extends OSGiTestCase {
+public class NullFailureReasonTest extends OSGiTestCase {
 	private Coordinator coordinator;
 	private ServiceReference<Coordinator> coordinatorReference;
 	
@@ -32,32 +32,32 @@ public class NPENullFailureReasonTest extends OSGiTestCase {
 	 * Coordination.fail(Throwable)
 	 */
 	public void testCoordinationFail() {
-		NullPointerException npe = null;
+		RuntimeException npe = null;
 		Coordination c = coordinator.create("c", 0);
 		try {
 			c.fail(null);
 		}
-		catch (NullPointerException e) {
+		catch (RuntimeException e) {
 			npe = e;
 		}
 		c.end();
-		assertNullPointerException(npe);
+		assertRuntimeException(npe);
 	}
 	
 	/**
 	 * Coordinator.fail(Throwable)
 	 */
 	public void testCoordinatorFail() {
-		NullPointerException npe = null;
+		RuntimeException npe = null;
 		Coordination c = coordinator.begin("c", 0);
 		try {
 			coordinator.fail(null);
 		}
-		catch (NullPointerException e) {
+		catch (RuntimeException e) {
 			npe = e;
 		}
 		c.end();
-		assertNullPointerException(npe);
+		assertRuntimeException(npe);
 	}
 	
 	protected void setUp() throws Exception {
@@ -69,7 +69,7 @@ public class NPENullFailureReasonTest extends OSGiTestCase {
 		getContext().ungetService(coordinatorReference);
 	}
 	
-	private void assertNullPointerException(NullPointerException e) {
-		assertNotNull("An NPE must be thrown if the reason for failure is null", e);
+	private void assertRuntimeException(RuntimeException e) {
+		assertNotNull("An runtime exception must be thrown if the reason for failure is null", e);
 	}
 }
