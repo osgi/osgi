@@ -58,6 +58,24 @@ package info.dmtree;
  * @version $Id$
  */
 public interface DmtAdmin {
+	/**
+	 * This system property can be used to specify the DMT session creation
+	 * timeout in milliseconds.
+	 * 
+	 * If this value is not given, then an implementation specific default value
+	 * will be used.
+	 */
+	public static final String SESSION_CREATION_TIMEOUT = "org.osgi.dmtree.session.creation.timeout";
+
+	/**
+	 * This system property can be used to specify the DMT session inactivity
+	 * timeout in milliseconds.
+	 * 
+	 * If this value is not given, then an implementation specific default value
+	 * will be used.
+	 */
+
+	public static final String SESSION_INACTIVE_TIMEOUT = "org.osgi.dmtree.session.inactive.timeout";
     /**
      * Opens a {@code DmtSession} for local usage on a given subtree of
      * the DMT with non transactional write lock. This call is equivalent to the
@@ -279,4 +297,24 @@ public interface DmtAdmin {
      *         {@code null}
      */
     void removeEventListener(DmtEventListener listener);
+
+	/**
+	 * Returns the value for the session creation timeout in
+	 * milliseconds. The returned value reflects the value that has been set via
+	 * the corresponding system property <code>SESSION_CREATION_TIMEOUT</code>
+	 * or the implementation specific default value.
+	 * 
+	 * @return the active value of the session creation timeout in milliseconds
+	 */
+	long getSessionCreationTimeout();
+
+	/**
+	 * Returns the value for the session inactivity timeout in
+	 * milliseconds. The returned value reflects the value that has been set via
+	 * the corresponding system property <code>SESSION_INACTIVE_TIMEOUT</code>
+	 * or the implementation specific default value.
+	 * 
+	 * @return the active value of the session creation timeout in milliseconds
+	 */
+	long getSessionInactivityTimeout();
 }

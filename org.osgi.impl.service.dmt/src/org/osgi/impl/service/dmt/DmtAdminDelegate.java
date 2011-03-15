@@ -196,4 +196,19 @@ public class DmtAdminDelegate implements DmtAdmin {
             this.root = root;
         }
     }
+
+	/**
+	 * @return the configured timeout for a session creation in milliseconds.
+	 */
+	public long getSessionCreationTimeout() {
+		return dmtAdmin.getSessionCreationTimeout();
+	}
+
+	/**
+	 * @return the configured timeout for an invalid session in milliseconds.
+	 */
+	public long getSessionInactivityTimeout() {
+		return dmtAdmin.getSessionInactivityTimeout();
+	}
+	
 }

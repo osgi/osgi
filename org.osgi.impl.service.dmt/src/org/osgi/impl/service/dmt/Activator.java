@@ -19,8 +19,6 @@ package org.osgi.impl.service.dmt;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.impl.service.dmt.plugins.ConfigPluginActivator;
-import org.osgi.impl.service.dmt.plugins.LogPluginActivator;
 
 /**
  * Merges Dmt Admin, Log Plugin and Configuration Plugin activators.
