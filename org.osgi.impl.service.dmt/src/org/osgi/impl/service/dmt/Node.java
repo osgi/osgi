@@ -120,21 +120,34 @@ public class Node {
         
         if (uri.length() == 0) // empty relative URI
             return new Node(uri);
-        
+
         StringBuffer sb = new StringBuffer();
         int len = uri.length();
         int start = 0;
+        int numSegments = 0;
         for(int i = 0; i < len; i++) {
             if(uri.charAt(i) == '/' && (i == 0 || uri.charAt(i-1) != '\\')) {
                 if(i == len-1) // last character cannot be an unescaped '/'
                     throw new DmtException(uri, DmtException.INVALID_URI,
                             "The URI string ends with the '/' character.");
                 appendName(sb, uri, start, i);
+                numSegments++;
                 start = i+1;
             }
         }
         
         appendName(sb, uri, start, len);
+        numSegments++;
+        
+        // uri to long ?
+        if ( sb.length() > Uri.getMaxUriLength() )
+            throw new DmtException(uri, DmtException.URI_TOO_LONG,
+                    "The length of the URI exceeds the maximum limit of " + Uri.getMaxUriLength() + " characters.");
+        
+        // to many segments ?
+        if ( numSegments > Uri.getMaxUriSegments() )
+            throw new DmtException(uri, DmtException.URI_TOO_LONG,
+                    "The URI exceeds the maximum limit of " + Uri.getMaxUriSegments() + " segments.");
         
         return new Node(sb.toString());
     }
