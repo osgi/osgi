@@ -53,7 +53,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -90,8 +89,8 @@ public class DmtSessionImpl implements DmtSession {
 	}
 	
     private final AccessControlContext securityContext;
-    private final DmtAdminCore         dmtAdmin;
     private final Context              context;
+    final DmtAdminCore         		   dmtAdmin;
 
     private final String principal;
     private final Node   subtreeNode;
@@ -370,11 +369,12 @@ public class DmtSessionImpl implements DmtSession {
     // same as execute/3 but can be called internally, because it is not wrapped
     private void internalExecute(String nodeUri, final String correlator,
             final String data) throws DmtException {
-    	// TODO: Bundlefest simplification
+
+    	// session must be writable
         checkWriteSession("execute");
-        // not allowing to execute non-existent nodes, all Management Objects
-        // defined in the spec have data plugins backing them
+
 		final Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
+        
         checkOperation(node, Acl.EXEC, MetaNode.CMD_EXECUTE);
         
         Plugin dispatcherPlugin = context.getPluginDispatcher().getExecPluginFor(node.getPath());
@@ -403,33 +403,43 @@ public class DmtSessionImpl implements DmtSession {
     private boolean isPureStructuralNode( String uri ) throws DmtException {
     	return isPureStructuralNode( makeAbsoluteUri(uri) );
     }
+    
     /**
+     * checks if the given path is 
+     * 
      * checks if the given path points to a node that is just implicitely defined by the mountpoint 
      * of a DataPlugin
      * @param path
      * @return
      */
     private boolean isPureStructuralNode( Node nodePath ) {
-        // we have to merge the node-names from the plugin with the defined mountpoints  
+
+    	// can't be a structural node if the path does not exist at all (as a Segment)
+		if ( context.getPluginDispatcher().findSegment(nodePath.getPath()) == null )
+			return false;
+    	
+		// if it is directly matched in the responsible plugins dataRootURI, then it can't be a structural node
 		Plugin plugin = context.getPluginDispatcher().getDataPluginFor(nodePath.getPath());
-		for( Segment segment : (List<Segment>) plugin.getOwns() )
-			// directly matched in plugins dataRootURI, i.e. no structural node
+		for( Segment segment : (List<Segment>) plugin.getOwns() ) {
 			if ( nodePath.getUri().equals( segment.getUri().toString() ))
 				return false;
-		
-		if ( plugin.getMountPoints().contains(nodePath.getUri()))
-			// direct match in the mountPoints, but no directly matching plugin found before, i.e. a structural node
-			return true;
-		
-		for( String mountPoint : (Set<String>) plugin.getMountPoints() ) {
-			// check for scaffold node
-			if ( mountPoint.startsWith( nodePath.getUri() ))
-				return true;
 		}
+		
+//		// direct match in the mountPoints, but no directly matching plugin found before, i.e. a structural node
+//		if ( plugin.getMountPoints().contains(nodePath.getUri()) )
+//			return true;
+//		
+//		// nodePath is a scaffold of the responsible plugins mountPoint(s)
+//		for( String mountPoint : (Set<String>) plugin.getMountPoints() ) {
+//			if ( mountPoint.startsWith( nodePath.getUri() ))
+//				return true;
+//		}
 		
 		// if root plugin is responsible and nodepath is below root, then nodePath must be a scaffold node
 		if ( plugin.isRoot() && ! nodePath.isRoot() )
 			return true;
+		
+		// if all other checks failed, then it's not a structural node
 		return false;
     }
 
@@ -1066,7 +1076,7 @@ public class DmtSessionImpl implements DmtSession {
 		checkWriteSession();
         if ( isPureStructuralNode(nodeUri)) {
             Node node = makeAbsoluteUri(nodeUri);
-	        throw new DmtException(node.getPath(), DmtException.PERMISSION_DENIED,
+	        throw new DmtException(node.getPath(), DmtException.COMMAND_NOT_ALLOWED,
 					"copy actions are not allowed for node: "
 							+ node.getPath());
         }
