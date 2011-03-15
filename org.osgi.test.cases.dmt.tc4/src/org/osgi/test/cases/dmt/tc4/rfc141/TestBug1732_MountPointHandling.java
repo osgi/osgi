@@ -408,6 +408,7 @@ public class TestBug1732_MountPointHandling extends
 		props.put(MountPlugin.MOUNT_POINTS, mountPoints);
 
 		registerService(DataPlugin.class.getName(), mountingPlugin, props);
+		Thread.sleep(500);
 		return mountingPlugin;
 	}
 
