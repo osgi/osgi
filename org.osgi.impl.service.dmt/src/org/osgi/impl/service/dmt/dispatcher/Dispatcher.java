@@ -5,9 +5,7 @@ import info.dmtree.spi.DataPlugin;
 import info.dmtree.spi.ExecPlugin;
 import info.dmtree.spi.MountPlugin;
 
-import java.security.Provider.Service;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,21 +35,23 @@ public class Dispatcher extends ServiceTracker {
 	public Object addingService(ServiceReference ref) {
 		try {
 			Plugin p = null;
-			Collection<String> dataRootURIs = toCollection(ref.getProperty(DataPlugin.DATA_ROOT_URIS));
-			Collection<String> execRootURIs = toCollection(ref.getProperty(ExecPlugin.EXEC_ROOT_URIS));
+			Collection<String> dataRootURIs = Util.toCollection(ref.getProperty(DataPlugin.DATA_ROOT_URIS));
+			Collection<String> execRootURIs = Util.toCollection(ref.getProperty(ExecPlugin.EXEC_ROOT_URIS));
 			if ( dataRootURIs != null ) {
 				p = new Plugin( ref, dataPluginRoot, eaTracker, context );
 				p.init( dataRootURIs, idManager);
-				System.out.println( ">>>>>>>>>> plugin added: " + p.getOwns());
+				System.out.println( ">>>>>>>>>> data plugin added: " + p.getOwns());
 				dumpSegments(dataPluginRoot);
 				if ( p!= null && p.getOwns() != null )
-					mapPotentialDependingDataPlugins(ref, true);
+					mapPotentialDependingPlugins(ref, true);
 			}
 			if ( execRootURIs != null ) {
 				p = new Plugin( ref, execPluginRoot, eaTracker, context );
 				p.init(execRootURIs, idManager);
+				System.out.println( ">>>>>>>>>> exec plugin added: " + p.getOwns());
+				dumpSegments(execPluginRoot);
 				if ( p!= null && p.getOwns() != null )
-					mapPotentialDependingDataPlugins(ref, false);
+					mapPotentialDependingPlugins(ref, false);
 			}
 			return p;
 		} catch (Exception e) {
@@ -64,23 +64,27 @@ public class Dispatcher extends ServiceTracker {
 	 * checks whether there are un-mapped plugins that can be mapped to any of the newly mapped mountPoints
 	 * @param ref
 	 */
-	private synchronized void mapPotentialDependingDataPlugins( ServiceReference ref, boolean forDataPlugin) throws InvalidSyntaxException {
-		Collection<String> mountPoints = toCollection(ref.getProperty(MountPlugin.MOUNT_POINTS));
+	private synchronized void mapPotentialDependingPlugins( ServiceReference ref, boolean forDataPlugin) throws InvalidSyntaxException {
+		Collection<String> mountPoints = Util.toCollection(ref.getProperty(MountPlugin.MOUNT_POINTS));
+		Collection<String> dataRootUris = Util.toCollection(ref.getProperty(DataPlugin.DATA_ROOT_URIS));
+		Collection<String> execRootUris = Util.toCollection(ref.getProperty(ExecPlugin.EXEC_ROOT_URIS));
 		if ( mountPoints == null || mountPoints.size() == 0 )
 			return;
+
 		List<ServiceReference> mappedRefs = null;
-		String filterName = DataPlugin.DATA_ROOT_URIS;
-		if ( forDataPlugin ) 
+		String filterPrefix = null;
+		if ( forDataPlugin ) {
 			mappedRefs = getMappedPluginReferences(dataPluginRoot);
+			filterPrefix = DataPlugin.DATA_ROOT_URIS + "=" + dataRootUris.iterator().next() + "/";
+		}
 		else {
 			mappedRefs = getMappedPluginReferences(execPluginRoot);
-			filterName = ExecPlugin.EXEC_ROOT_URIS;
+			filterPrefix = ExecPlugin.EXEC_ROOT_URIS + "=" + execRootUris.iterator().next() + "/";
 		}
 		
-		String rootUri = ((String[]) ref.getProperty(filterName))[0];
 		for (String mountPoint : mountPoints) {
 			// find plugins that are registered for this dataRootUri
-			String filter = "(" + filterName + "=" + rootUri + "/" + mountPoint + ")";
+			String filter = "(" + filterPrefix + mountPoint + ")";
 			ServiceReference[] refs = context.getServiceReferences(DataPlugin.class.getName(), filter);
 
 			for (int i = 0; refs != null && i < refs.length; i++) {
@@ -99,25 +103,27 @@ public class Dispatcher extends ServiceTracker {
 		try {
 			// close/unmap this plugin and all dependend plugins, i.e. all plugins which's MountingPlugin was unregistered
 			// also invokes the callback on the MountPlugin interface, if possible
-			System.out.println( ">>>>>>>>>> plugin removed: " + ((Plugin)service).getOwns());
+			boolean isDataPlugin = ref.getProperty(DataPlugin.DATA_ROOT_URIS) != null ;
+			boolean isExecPlugin = ref.getProperty(ExecPlugin.EXEC_ROOT_URIS) != null;
+
+			String type = "dataPlugin";
+			if ( isExecPlugin )
+				type+= "/execPlugin";
+			System.out.println( ">>>>>>>>>> " + type + " removed: " + ((Plugin)service).getOwns());
+//			System.out.println( "dump vorher: ");
+//			dumpSegments(root);
 			((Plugin) service).close();
+			
+			System.out.println( "dump dataPlugins: ");
 			dumpSegments(dataPluginRoot);
+			System.out.println( "dump execPlugins: ");
+			dumpSegments(execPluginRoot);
 				
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private Collection<String> toCollection(Object property) {
-		if (property instanceof String)
-			return Arrays.asList((String) property);
-
-		if (property instanceof String[])
-			return Arrays.asList((String[]) property);
-
-		return null;
-	}
-
 	private List<ServiceReference> getMappedPluginReferences( Segment segment ) {
 		List<ServiceReference> mappedRefs = new ArrayList<ServiceReference>();
 		if ( segment.getPlugin() != null ) 

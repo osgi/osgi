@@ -5,7 +5,6 @@ import info.dmtree.DmtException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Segment {
 
 	final Segment parent;
@@ -28,18 +27,39 @@ public class Segment {
 	}
 
 	/**
-	 * iterates the parents up until it finds one with a plugin assigned
-	 * up this way all segments are released and removed from the parents children list 
+	 * iterates the parents up until it finds one with a plugin assigned up this
+	 * way all segments are released and removed from the parents children list
+	 * 
 	 * @param child
 	 * @throws DmtException
 	 */
-	synchronized void release( Segment child ) throws DmtException {
-		if ( child != null )
+	synchronized void release(Segment child) throws DmtException {
+		if (child != null)
 			getChildren().remove(child);
 		else
 			plugin = null;
-		if ( parent != null && plugin == null )
-			parent.release( this );
+		// remove current node only from parent, if:
+		// - not top-level
+		// - there is no plugin mapped directly to this segment
+		// - there are no descendant segments with assigned plugins
+		if (parent != null && plugin == null && ! hasDescendantPlugins())
+			parent.release(this);
+	}
+
+	/**
+	 * checks whether there are other segments with mapped plugins below the
+	 * current segment
+	 * 
+	 * @return
+	 */
+	private boolean hasDescendantPlugins() {
+		List<Segment> descendants = new ArrayList<Segment>();
+		getDescendants(descendants);
+		for (Segment descendant : descendants) {
+			if (descendant.plugin != null)
+				return true;
+		}
+		return false;
 	}
 
 	protected Segment getSegmentFor(String[] path, int i, boolean add) {
@@ -49,13 +69,13 @@ public class Segment {
 		String name = path[i];
 		for (Segment child : children) {
 			if (child.name.equals(name))
-				return child.getSegmentFor(path, i + 1, add );
+				return child.getSegmentFor(path, i + 1, add);
 		}
-		if ( !add )
+		if (!add)
 			return null;
 		Segment child = new Segment(this, name);
 		// SD: don't add mount points "#"
-		if ( ! "#".equals(name ))
+		if (!"#".equals(name))
 			children.add(child);
 		return child.getSegmentFor(path, i + 1, add);
 	}
@@ -72,7 +92,7 @@ public class Segment {
 	}
 
 	Plugin getPlugin() {
-//		if (plugin == null)
+		// if (plugin == null)
 		if (plugin != null)
 			return plugin;
 
@@ -98,8 +118,7 @@ public class Segment {
 	}
 
 	String[] getPath(int n) {
-		String[] path = parent == null ? new String[n] : parent
-				.getPath(n + 1);
+		String[] path = parent == null ? new String[n] : parent.getPath(n + 1);
 		path[path.length - n] = name;
 		return path;
 	}
@@ -112,18 +131,17 @@ public class Segment {
 	}
 
 	public StringBuffer getUri() {
-		StringBuffer sb = parent == null ? new StringBuffer() : parent
-				.getUri();
+		StringBuffer sb = parent == null ? new StringBuffer() : parent.getUri();
 		if (parent != null)
 			sb.append("/");
 		sb.append(name);
 		return sb;
 	}
-	
+
 	public List<Segment> getChildren() {
 		return children;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
