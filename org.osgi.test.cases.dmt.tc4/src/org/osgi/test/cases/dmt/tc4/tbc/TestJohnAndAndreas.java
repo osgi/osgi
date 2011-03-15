@@ -13,7 +13,10 @@ import org.osgi.test.cases.dmt.tc4.tb1.Activator;
 import org.osgi.test.support.OSGiTestCase;
 
 /**
- * tests simple mapping cases
+ * This class is obsolete - the testcases are set inactive.
+ * 
+ * It was originally created during the bundlefest 2010 in Girona to 
+ * have a very basic initial client for the fresh changes in dmt-admin.
  * 
  * @author steffen
  *
@@ -57,8 +60,12 @@ public class TestJohnAndAndreas extends OSGiTestCase {
 			}
 		}
 	}
-
-	public void testAndreasBeforeJohn() throws Exception {
+	
+	public void testWriteInfoMessage() throws Exception {
+		System.out.println( "This test case is obsolete and has been deactivated." );
+	}
+	
+	public void _testAndreasBeforeJohn() throws Exception {
 		System.out.println("Hello");
 		
 		System.out.println( "initially the tree is empty");
@@ -83,7 +90,7 @@ public class TestJohnAndAndreas extends OSGiTestCase {
 		listTree();
 	}
 
-	public void testJohnBeforeAndreas() throws Exception {
+	public void _testJohnBeforeAndreas() throws Exception {
 		System.out.println("Hello");
 		
 		System.out.println( "initially the tree is empty");
