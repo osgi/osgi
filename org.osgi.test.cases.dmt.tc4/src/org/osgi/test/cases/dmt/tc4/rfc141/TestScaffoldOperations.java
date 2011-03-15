@@ -82,7 +82,6 @@ public class TestScaffoldOperations extends ScaffoldNodeHelper {
 	 * @throws Exception
 	 */
 	private void getNodeTimeStampOperation( DmtSession session, String uri ) throws Exception {
-		session.getNodeTimestamp(uri);
 		try {
 			session.getNodeTimestamp(uri);
 			fail( "The DmtAdmin must throw a DmtException of type COMMAND_NOT_ALLOWED for getNodeSize() on Scaffold nodes." );
