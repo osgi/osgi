@@ -561,7 +561,8 @@ class SessionWrapper extends DmtSessionImpl {
         // stops previous timer, if any (there shouldn't be one)
         stopTimer(); 
         invalidateTask = new InvalidateTask();
-        timer.schedule(invalidateTask, DmtAdminCore.IDLE_TIMEOUT);
+//        timer.schedule(invalidateTask, DmtAdminCore.IDLE_TIMEOUT);
+        timer.schedule(invalidateTask, dmtAdmin.getSessionInactivityTimeout() );
     }
     
     private synchronized void removeTimer() {
