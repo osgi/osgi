@@ -64,6 +64,8 @@ public interface DmtAdmin {
 	 * 
 	 * If this value is not given, then an implementation specific default value
 	 * will be used.
+	 * 
+	 * @since 1.1
 	 */
 	public static final String SESSION_CREATION_TIMEOUT = "org.osgi.dmtree.session.creation.timeout";
 
@@ -73,9 +75,11 @@ public interface DmtAdmin {
 	 * 
 	 * If this value is not given, then an implementation specific default value
 	 * will be used.
+	 * 
+	 * @since 1.1
 	 */
-
 	public static final String SESSION_INACTIVE_TIMEOUT = "org.osgi.dmtree.session.inactive.timeout";
+	
     /**
      * Opens a {@code DmtSession} for local usage on a given subtree of
      * the DMT with non transactional write lock. This call is equivalent to the
@@ -304,6 +308,7 @@ public interface DmtAdmin {
 	 * the corresponding system property <code>SESSION_CREATION_TIMEOUT</code>
 	 * or the implementation specific default value.
 	 * 
+	 * @since 1.1
 	 * @return the active value of the session creation timeout in milliseconds
 	 */
 	long getSessionCreationTimeout();
@@ -314,6 +319,7 @@ public interface DmtAdmin {
 	 * the corresponding system property <code>SESSION_INACTIVE_TIMEOUT</code>
 	 * or the implementation specific default value.
 	 * 
+	 * @since 1.1
 	 * @return the active value of the session creation timeout in milliseconds
 	 */
 	long getSessionInactivityTimeout();
