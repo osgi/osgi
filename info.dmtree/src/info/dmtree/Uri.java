@@ -55,6 +55,35 @@ import java.util.List;
 public final class Uri {
 
 	/**
+	 * This constant stands for a string identifying the root of the DmTree (".").
+	 * 
+	 * @since 1.1
+	 */
+	public static final String ROOT_NODE = ".";
+
+	/**
+	 * This constant stands for a char identifying the root of the DmTree ('.').
+	 * 
+	 * @since 1.1
+	 */
+	public static final char ROOT_NODE_CHAR = '.';
+	
+	/**
+	 * This constant stands for a string identifying the path separator in the DmTree ("/").
+	 * 
+	 * @since 1.1
+	 */
+	public static final String PATH_SEPARATOR = "/";
+	
+	/**
+	 * This constant stands for a char identifying the path separator in the DmTree ('/').
+	 * 
+	 * @since 1.1
+	 */
+	public static final char PATH_SEPARATOR_CHAR = '/';
+	
+	
+	/**
 	 * This property specifies the maximum allowed length of a URI segment. The
 	 * corresponding string literal is
 	 * "org.osgi.dmtree.max.segment.name.length". The configured value can be
