@@ -17,7 +17,7 @@
 package org.osgi.service.component.annotations;
 
 /**
- * Cardinality Policy for the {@link Reference} annotation.
+ * Cardinality for the {@link Reference} annotation.
  * 
  * <p>
  * Specifies if the reference is optional and if the component implementation

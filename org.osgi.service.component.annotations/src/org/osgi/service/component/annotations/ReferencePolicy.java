@@ -17,7 +17,7 @@
 package org.osgi.service.component.annotations;
 
 /**
- * Reference Policy for the {@link Reference} annotation.
+ * Policy for the {@link Reference} annotation.
  * 
  * @version $Id$
  */
