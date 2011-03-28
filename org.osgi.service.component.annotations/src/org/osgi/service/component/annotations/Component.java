@@ -54,12 +54,17 @@ public @interface Component {
 	 * 
 	 * <p>
 	 * If not specified, the provided service types for this Component is all
-	 * directly implemented interfaces of the class being annotated.
+	 * <em>directly</em> implemented interfaces of the class being annotated. If
+	 * no service should be provided, or a subset of the implemented interfaces
+	 * then explicitly set this field with <code>provide={}</code> or the proper
+	 * subset.
 	 * 
 	 * TODO What if you don't want the component to register a service? We need
 	 * some way to say that. We should probably define unspecified to mean no
 	 * service and the special value of "*" to mean all directly implemented
-	 * interfaces.
+	 * interfaces. You cannot do this because it is a class field so '*' is
+	 * impossible. It is better to keep it as it is now because the default
+	 * works very well and with provide={} you can go anal.
 	 * 
 	 * @see "The interface attribute of the provide element of a Component Description."
 	 */
@@ -113,7 +118,8 @@ public @interface Component {
 	 * 
 	 * TODO The default value should be false if factory or service is set and
 	 * true otherwise. But we can tell the difference between false being
-	 * specified and nothing specified!
+	 * specified and nothing specified! I think this is the behavior that bnd
+	 * implements. Notice that we have build time defaults and runtime defaults.
 	 * 
 	 * @see "The immediate attribute of the component element of a Component Description."
 	 */
@@ -123,11 +129,13 @@ public @interface Component {
 	 * Controls whether component configurations must be satisfied depending on
 	 * the presence of a corresponding Configuration object in the OSGi
 	 * Configuration Admin service. A corresponding configuration is a
-	 * Configuration object where the PID is the name of the component.
+	 * Configuration object where the PID equals the name of the component.
 	 * 
 	 * <p>
 	 * If not specified, the {@link ConfigurationPolicy#OPTIONAL OPTIONAL}
-	 * configuration policy is used.
+	 * configuration policy is used. TODO maybe we should make the default here
+	 * REQUIRED, it is a much better default and we do not have a backward
+	 * compatibility issue here.
 	 * 
 	 * @see "The configuration-policy attribute of the component element of a Component Description."
 	 */
@@ -148,6 +156,8 @@ public @interface Component {
 	 * TODO We need to allow escaping for | and \n since we should also allow
 	 * multi valued String and Character properties. An alternate would be to
 	 * allow a property to be specified multiple times.
+	 * Escaping - well, if this is needed you can always go to XML
+	 * Specifying multiple times - interesting idea
 	 * 
 	 * @see "The property element of a Component Description."
 	 */
@@ -169,6 +179,11 @@ public @interface Component {
 	 * TODO How does this affect the generated component description? I think we
 	 * need to leave this out unless also do the metatype annotations. There
 	 * should be a separate annotation for this.
+	 * Nope, because I need to know the name of the component ... It becomes very
+	 * awkward if we leave this out because we need then to specify the name of the
+	 * component in the new annotation with a string because this annotation can change
+	 * it from the type's name. I think we should include the metatype right away,
+	 * they are more or less a direct mapping of the existing metatype. 
 	 */
 	Class< ? > designate() default Object.class;
 
@@ -176,6 +191,7 @@ public @interface Component {
 	 * TODO How does this affect the generated component description? I think we
 	 * need to leave this out unless also do the metatype annotations. There
 	 * should be a separate annotation for this.
+	 * See previous
 	 */
 	Class< ? > designateFactory() default Object.class;
 }

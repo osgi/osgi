@@ -124,6 +124,7 @@ public @interface Reference {
 	 * Otherwise, {@code un} is prefixed to the annotated method name to derive
 	 * the unbind method name.
 	 * 
+	 * TODO maybe we need to allow denying an unbind method.
 	 * @see "The unbind attribute of the reference element of a Component Description."
 	 */
 	String unbind() default "";
@@ -131,6 +132,12 @@ public @interface Reference {
 	/**
 	 * TODO What is this? I don't see how this relates to a component
 	 * description.
+	 * It is just much more convenient than optional/multiple/policy.
+	 * '*' optional/multiple dynamic
+	 * '+' mandatory/multiple/dynamic
+	 * '?' optional/single/static
+	 * '~' mandatory/single/static
+	 * I.e. a shortcut.
 	 */
 	char type() default 0;
 }
