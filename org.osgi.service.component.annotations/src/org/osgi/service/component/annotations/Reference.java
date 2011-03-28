@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Reference {
 	/**
-	 * Name of this reference.
+	 * The name of this reference.
 	 * 
 	 * <p>
 	 * If not specified, the name of this reference is based upon the name of
@@ -64,37 +64,18 @@ public @interface Reference {
 	Class< ? > service() default Object.class;
 
 	/**
-	 * Declare whether the reference is optional.
+	 * The cardinality of the reference.
 	 * 
 	 * <p>
-	 * An optional reference has a cardinality of {@code 0..1} or {@code 0..n}.
-	 * A non-optional reference has a cardinality of {@code 1..1} or
-	 * {@code 1..n}.
-	 * 
-	 * <p>
-	 * If not specified, the reference is not optional.
+	 * If not specified, the reference has a
+	 * {@link ReferenceCardinality#MANDATORY 1..1} cardinality.
 	 * 
 	 * @see "The cardinality attribute of the reference element of a Component Description."
 	 */
-	boolean optional() default false;
+	ReferenceCardinality cardinality() default ReferenceCardinality.MANDATORY;
 
 	/**
-	 * Declare whether the reference can handle multiple services.
-	 * 
-	 * <p>
-	 * A reference that supports multiple services has a cardinality of
-	 * {@code 0..n} or {@code 1..n}. A reference that only supports a single
-	 * service has a cardinality of {@code 0..1} or {@code 1..1}.
-	 * 
-	 * <p>
-	 * If not specified, the reference only supports a single service.
-	 * 
-	 * @see "The cardinality attribute of the reference element of a Component Description."
-	 */
-	boolean multiple() default false;
-
-	/**
-	 * Declares the policy for the reference.
+	 * The policy for the reference.
 	 * 
 	 * <p>
 	 * If not specified, the {@link ReferencePolicy#STATIC STATIC} reference
@@ -105,15 +86,17 @@ public @interface Reference {
 	ReferencePolicy policy() default ReferencePolicy.STATIC;
 
 	/**
-	 * Declares the target filter for the reference.
+	 * The target filter for the reference.
 	 * 
 	 * @see "The target attribute of the reference element of a Component Description."
 	 */
 	String target() default "";
 
 	/**
-	 * Declares the name of the unbind method which pairs with the annotated
-	 * bind method.
+	 * The name of the unbind method which pairs with the annotated bind method.
+	 * 
+	 * <p>
+	 * To declare no unbind method, the value {@code "-"} must be used.
 	 * 
 	 * <p>
 	 * If not specified, the name of the unbind method is derived from the name
@@ -124,20 +107,7 @@ public @interface Reference {
 	 * Otherwise, {@code un} is prefixed to the annotated method name to derive
 	 * the unbind method name.
 	 * 
-	 * TODO maybe we need to allow denying an unbind method.
 	 * @see "The unbind attribute of the reference element of a Component Description."
 	 */
 	String unbind() default "";
-
-	/**
-	 * TODO What is this? I don't see how this relates to a component
-	 * description.
-	 * It is just much more convenient than optional/multiple/policy.
-	 * '*' optional/multiple dynamic
-	 * '+' mandatory/multiple/dynamic
-	 * '?' optional/single/static
-	 * '~' mandatory/single/static
-	 * I.e. a shortcut.
-	 */
-	char type() default 0;
 }

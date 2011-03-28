@@ -25,3 +25,4 @@
  */
 
 package org.osgi.service.component.annotations;
+
