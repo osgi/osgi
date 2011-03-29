@@ -16,7 +16,7 @@ class HexBinary {
 			//XXX:Ikuo: Do we need to change the code in this method ?
 			bytes[n++] = (byte) ((nibble(high) << 4) + nibble(low));
 		}
-		return null;
+		return bytes;
 	}
 
 	private static int nibble(char low) {
