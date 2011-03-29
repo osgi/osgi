@@ -1,0 +1,23 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Bundle-Description					: TR-069 util test cases.
+	
+Conditional-Package					= org.osgi.test.support.*
+
+Private-Package						= ${p}, ${p}.helper
+	
+Test-Cases							= ${testcases}
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+    org.osgi.util.tr069;                    version=latest , \
+    info.dmtree;                            version=project , \
+    osgi.core;                              version=project , \
+    ee.minimum;                             version=project , \
+	${junit}
+
+-runbundles							= \
+	osgi.cmpn;                              version=project , \
+	org.osgi.test.support;                  version=project , \
+	org.osgi.util.tr069;                    version=latest
