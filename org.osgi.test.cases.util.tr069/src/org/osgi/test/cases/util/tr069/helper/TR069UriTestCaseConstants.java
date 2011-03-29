@@ -120,6 +120,10 @@ public abstract class TR069UriTestCaseConstants {
 	public static final String		TR069_PATH_STARTING_HYPHEN		= '-' + TR069_PATH_FULL;
 
 	/** Test string constant with value {@value}. */
+	public static final String		TR069_PATH_STARTING_POINT		= POINT_STRING
+																			+ TR069_PATH_FULL;
+
+	/** Test string constant with value {@value}. */
 	public static final String		DMT_URI_FULL					= Uri.toUri(new String[] {
 			POINT_STRING, DEVICE, SERVICES							});
 	/** Test string constant with value {@value}. */

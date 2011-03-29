@@ -67,6 +67,11 @@ public final class TR069UriFailTestCase extends OSGiTestCase {
 		assertFalse(
 				"The hyphen must not be allowed as a first character in the path name!",
 				TR069URI.isValidTR069Path(TR069UriTestCaseConstants.TR069_PATH_STARTING_HYPHEN));
+
+		// check the hyphen as a first symbol - it is not allowed
+		assertFalse(
+				"The point must not be allowed as a first character in the path name!",
+				TR069URI.isValidTR069Path(TR069UriTestCaseConstants.TR069_PATH_STARTING_POINT));
 	}
 
 	/** Tests the invalid starting characters in the TR-069 path name. */
