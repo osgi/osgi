@@ -127,5 +127,6 @@ build.residential.tests = \
     org.osgi.test.cases.position, \
     org.osgi.test.cases.tracker, \
     org.osgi.test.cases.upnp, \
-    org.osgi.test.cases.xml
+    org.osgi.test.cases.xml, \
+    org.osgi.test.cases.util.tr069
 
