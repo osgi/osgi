@@ -114,7 +114,7 @@
 			<any namespace="##any" processContents="lax" minOccurs="0"
 				maxOccurs="unbounded" />
 		</sequence>
-		<attribute name="pid" type="string" use="required" />
+		<attribute name="pid" type="string" use="optional" />
 		<attribute name="factoryPid" type="string" use="optional" />
 		<attribute name="bundle" type="string" use="optional" />
 		<attribute name="optional" type="boolean" default="false"
