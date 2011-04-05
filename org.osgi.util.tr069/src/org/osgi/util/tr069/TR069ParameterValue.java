@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) OSGi Alliance (2007, 2011). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.osgi.util.tr069;
 
 import info.dmtree.DmtData;
@@ -12,6 +28,8 @@ import java.util.StringTokenizer;
  * Class which contains value and data type for TR-069, and static methods of
  * utilities.
  * 
+ * @author Ikuo YAMASAKI, NTT Corporation
+ * 
  */
 public class TR069ParameterValue {
 	/**
@@ -19,79 +37,76 @@ public class TR069ParameterValue {
 	 * 
 	 * The value of TR069_TYPE_INT is "int".
 	 */
-	public final static String TR069_TYPE_INT = "int";
+	public final static String	TR069_TYPE_INT				= "int";
 
 	/**
 	 * Constant representing the TR-069 unsinged integer type.
 	 * 
 	 * The value of TR069_TYPE_UNSIGNED_INT is "unsignedInt".
 	 */
-	public final static String TR069_TYPE_UNSIGNED_INT = "unsignedInt";
+	public final static String	TR069_TYPE_UNSIGNED_INT		= "unsignedInt";
 
 	/**
 	 * Constant representing the TR-069 long type.
 	 * 
 	 * The value of TR069_TYPE_LONG is "long".
 	 */
-	public final static String TR069_TYPE_LONG = "long";
+	public final static String	TR069_TYPE_LONG				= "long";
 
 	/**
 	 * Constant representing the TR-069 unsigned long type.
 	 * 
 	 * The value of TR069_TYPE_UNSIGNED_LONG is "unsignedLong".
 	 */
-	public final static String TR069_TYPE_UNSIGNED_LONG = "unsignedLong";
+	public final static String	TR069_TYPE_UNSIGNED_LONG	= "unsignedLong";
 
 	/**
 	 * Constant representing the TR-069 string type.
 	 * 
 	 * The value of TR069_TYPE_STRING is "string".
 	 */
-	public final static String TR069_TYPE_STRING = "string";
+	public final static String	TR069_TYPE_STRING			= "string";
 
 	/**
 	 * Constant representing the TR-069 boolean type.
 	 * 
 	 * The value of TR069_TYPE_BOOLEAN is "boolean".
 	 */
-	public final static String TR069_TYPE_BOOLEAN = "boolean";
+	public final static String	TR069_TYPE_BOOLEAN			= "boolean";
 
 	/**
 	 * Constant representing the TR-069 base64 type.
 	 * 
 	 * The value of TR069_TYPE_BASE64 is "base64".
 	 */
-	public final static String TR069_TYPE_BASE64 = "base64";
+	public final static String	TR069_TYPE_BASE64			= "base64";
 
 	/**
 	 * Constant representing the TR-069 hex binary type.
 	 * 
 	 * The value of TR069_TYPE_HEXBINARY is "hexBinary".
 	 */
-	public final static String TR069_TYPE_HEXBINARY = "hexBinary";
+	public final static String	TR069_TYPE_HEXBINARY		= "hexBinary";
 
 	/**
 	 * Constant representing the TR-069 date time type.
 	 * 
 	 * The value of TR069_TYPE_DATETIME is "dateTime".
 	 */
-	public final static String TR069_TYPE_DATETIME = "dateTime";
+	public final static String	TR069_TYPE_DATETIME			= "dateTime";
 
-	private static boolean debug = true;
-	private final String value;
-	private final String type;
+	private static boolean		debug						= true;
+	private final String		value;
+	private final String		type;
 
 	/**
 	 * Constructor of TR-069 Parameter Value.
 	 * 
-	 * @param value
-	 *            value to be used. It can be either lexical or canonical
-	 *            representation as defined by XML Schema.
-	 * @param type
-	 *            data type defined in TR-069.
-	 * @throws IllegalArgumentException
-	 *             if value is {@code null} or empty, if type is {@code null},
-	 *             if type is not any of defined types.
+	 * @param value value to be used. It can be either lexical or canonical
+	 *        representation as defined by XML Schema.
+	 * @param type data type defined in TR-069.
+	 * @throws IllegalArgumentException if value is {@code null} or empty, if
+	 *         type is {@code null}, if type is not any of defined types.
 	 */
 	public TR069ParameterValue(String value, String type)
 			throws IllegalArgumentException {
@@ -340,29 +355,24 @@ public class TR069ParameterValue {
 	 * <li>IllegalArgumentException will be thrown.</li>
 	 * </ol>
 	 * 
-	 * @param value
-	 *            value to be set to the specified node uri. It must not be null
-	 *            and can be lexical representation as defined by XML Schema.
-	 * @param tr069Type
-	 *            TR069 data type. It must not be null or empty.
-	 * @param valueCharsetName
-	 *            character set to be used for the value. If null, a platform
-	 *            default character set will be used. The character set is used
-	 *            for getting byte array from the specified value.
-	 * @param nodeUri
-	 *            URI of the leaf node in DMT. It must be valid absolute DMT
-	 *            URI.
-	 * @param metaNode
-	 *            Meta node of the specified node uri. It must not be null.
+	 * @param value value to be set to the specified node uri. It must not be
+	 *        null and can be lexical representation as defined by XML Schema.
+	 * @param tr069Type TR069 data type. It must not be null or empty.
+	 * @param valueCharsetName character set to be used for the value. If null,
+	 *        a platform default character set will be used. The character set
+	 *        is used for getting byte array from the specified value.
+	 * @param nodeUri URI of the leaf node in DMT. It must be valid absolute DMT
+	 *        URI.
+	 * @param metaNode Meta node of the specified node uri. It must not be null.
 	 * 
 	 * @return Converted DmtData. It must not be null.
-	 * @throws TR069MappingException
-	 *             if converting DmtData is failed for some reasons.
-	 * @throws java.io.UnsupportedEncodingException
-	 *             if the specified character set name is not supported.
-	 * @throws java.lang.IllegalArgumetException
-	 *             if value is null, if tr069Type is either null or empty, if
-	 *             nodeUri is invalid absolute DMT URI, or if metaNode is null.
+	 * @throws TR069MappingException if converting DmtData is failed for some
+	 *         reasons.
+	 * @throws java.io.UnsupportedEncodingException if the specified character
+	 *         set name is not supported.
+	 * @throws java.lang.IllegalArgumetException if value is null, if tr069Type
+	 *         is either null or empty, if nodeUri is invalid absolute DMT URI,
+	 *         or if metaNode is null.
 	 */
 	public static DmtData getDmtData(String value, String tr069Type,
 			String valueCharsetName, String nodeUri, MetaNode metaNode)
@@ -378,199 +388,273 @@ public class TR069ParameterValue {
 			if ((format & DmtData.FORMAT_BASE64) != 0) {
 				byte[] bytes = Base64.base64ToByteArray(value);
 				data = new DmtData(bytes, true);
-			} else if ((format & DmtData.FORMAT_RAW_BINARY) != 0) {
-				String[] formatNames = metaNode.getRawFormatNames();
-				if (formatNames.length > 0) {
-					byte[] bytes = value.getBytes(valueCharsetName);
-					data = new DmtData(formatNames[0], bytes);
-				} else {
-					errorInSetParameterValues("Despite of TR069 dataType="
-							+ tr069Type
-							+ " and FORMAT_RAW_BINARY, no RawFormatNames.");
+			}
+			else
+				if ((format & DmtData.FORMAT_RAW_BINARY) != 0) {
+					String[] formatNames = metaNode.getRawFormatNames();
+					if (formatNames.length > 0) {
+						byte[] bytes = value.getBytes(valueCharsetName);
+						data = new DmtData(formatNames[0], bytes);
+					}
+					else {
+						errorInSetParameterValues("Despite of TR069 dataType="
+								+ tr069Type
+								+ " and FORMAT_RAW_BINARY, no RawFormatNames.");
+					}
 				}
-			} else
-				errorInSetParameterValues("Despite of TR069 dataType="
-						+ tr069Type
-						+ ", FORMAT is neither FORMAT_BASE64 nor FORMAT_RAW_BINARY.");
-		} else if (tr069Type.equals(TR069_TYPE_BOOLEAN)) {
-			if ((format & DmtData.FORMAT_BOOLEAN) != 0) {
-				if ("0".equals(value))
-					data = DmtData.FALSE_VALUE;
-				else if ("1".equals(value))
-					data = DmtData.TRUE_VALUE;
 				else
 					errorInSetParameterValues("Despite of TR069 dataType="
-							+ tr069Type + "and FORMAT_BOOLEAN, value(=" + value
-							+ ") is neither \"0\" nor \"1\".");
-			} else
-				errorInSetParameterValues("Despite of TR069 dataType="
-						+ tr069Type + ", FORMAT is not FORMAT_BOOLEAN.");
-		} else if (tr069Type.equals(TR069_TYPE_INT)) {
-			if ((format & DmtData.FORMAT_INTEGER) != 0) {
-				try {
-					int valueInt = Integer.parseInt(value);
-					data = new DmtData(valueInt);
-				} catch (Exception e) {
-					errorInSetParameterValues("Despite of TR069 dataType="
-							+ tr069Type + "and FORMAT_INTEGER, value(=" + value
-							+ ") cannot be parsed. " + e);
-				}
-			} else
-				errorInSetParameterValues("Despite of TR069 dataType="
-						+ tr069Type + ", FORMAT is not FORMAT_INTEGER.");
-		} else if (tr069Type.equals(TR069_TYPE_STRING)) {
-			StringBuffer sb = new StringBuffer();
-			if ((value == null || value.length() == 0)
-					&& (format & DmtData.FORMAT_NULL) != 0) {
-				data = DmtData.NULL_VALUE;
-			}
-			if (data == null && (format & DmtData.FORMAT_FLOAT) != 0) {
-				try {
-					float valueFloat = Float.parseFloat(value);
-					data = new DmtData(valueFloat);
-				} catch (Exception e) {
-					sb.append("\n");
-					sb.append("Although the format of the node supports FORMAT_FLOAT, Fail to construct DmtData. "
-							+ e.toString());
-				}
-			}
-			if (data == null && (format & DmtData.FORMAT_DATE) != 0) {
-				try {
-					data = new DmtData(value, DmtData.FORMAT_DATE);
-				} catch (Exception e) {
-					sb.append("\n");
-					sb.append("Although the format of the node supports FORMAT_DATE, Fail to construct DmtData. "
-							+ e.toString());
-				}
-			}
-			if (data == null && (format & DmtData.FORMAT_TIME) != 0) {
-				try {
-					data = new DmtData(value, DmtData.FORMAT_TIME);
-				} catch (Exception e) {
-					sb.append("\n");
-					sb.append("Although the format of the node supports FORMAT_TIME, Fail to construct DmtData. "
-							+ e.toString());
-				}
-			}
-			if (data == null && (format & DmtData.FORMAT_NODE_URI) != 0) {
-				String valueUri = value;
-				int position = nodeUri.lastIndexOf(Uri.PATH_SEPARATOR);
-				final String tmp = Uri.ROOT_NODE + Uri.PATH_SEPARATOR;
-				if (value.startsWith(tmp)) {
-					valueUri = nodeUri.substring(0, position)
-							+ value.substring(tmp.length());
-				}
-				try {
-					data = new DmtData(valueUri, DmtData.FORMAT_NODE_URI);
-				} catch (Exception e) {
-					sb.append("\n");
-					sb.append("Although the format of the node supports FORMAT_NODE_URI, Fail to construct DmtData. "
-							+ e.toString());
-				}
-			}
-			if (data == null && (format & DmtData.FORMAT_RAW_STRING) != 0) {
-				try {
-					String[] names = metaNode.getRawFormatNames();
-					if (names.length > 0 && names[0] != null
-							&& (names[0].length() != 0)) {
-						data = new DmtData(names[0], value);
-					}
-				} catch (Exception e) {
-					sb.append("\n");
-					sb.append("Although the format of the node supports FORMAT_RAW_STRING, Fail to construct DmtData. "
-							+ e.toString());
-				}
-			}
-			if (data == null && (format & DmtData.FORMAT_STRING) != 0) {
-				data = new DmtData(value);
-			}
-			if (data == null && (format & DmtData.FORMAT_XML) != 0) {
-				data = new DmtData(value, DmtData.FORMAT_XML);
-			}
-			if (data == null)
-				errorInSetParameterValues("Despite of TR069 dataType="
-						+ tr069Type
-						+ ", proper FORMAT is not supported by the node. "
-						+ sb.toString());
-		} else if (tr069Type.equals(TR069_TYPE_UNSIGNED_INT)) {
-			if ((format & DmtData.FORMAT_UNSIGNED_INTEGER) != 0) {
-				try {
-					data = new DmtData(value, DmtData.FORMAT_UNSIGNED_INTEGER);
-				} catch (Exception e) {
-					errorInSetParameterValues("Despite of TR069 dataType="
 							+ tr069Type
-							+ "and FORMAT_UNSIGNED_INTEGER, value(=" + value
-							+ ") is not in appropriate format." + e);
-				}
-			} else
-				errorInSetParameterValues("Despite of TR069 dataType="
-						+ tr069Type
-						+ ", FORMAT is not FORMAT_UNSIGNED_INTEGER.");
-		} else if (tr069Type.equals(TR069_TYPE_LONG)) {
-			if ((format & DmtData.FORMAT_LONG) != 0) {
-				try {
-					long valueLong = Long.parseLong(value);
-					data = new DmtData(valueLong);
-				} catch (Exception e) {
-					errorInSetParameterValues("Despite of TR069 dataType="
-							+ tr069Type + "and FORMAT_LONG, value(=" + value
-							+ ") cannot be parsed. " + e);
-				}
-			} else
-				errorInSetParameterValues("Despite of TR069 dataType="
-						+ tr069Type + ", FORMAT is not FORMAT_LONG.");
-		} else if (tr069Type.equals(TR069_TYPE_UNSIGNED_LONG)) {
-			if ((format & DmtData.FORMAT_UNSIGNED_LONG) != 0) {
-				try {
-					data = new DmtData(value, DmtData.FORMAT_UNSIGNED_LONG);
-				} catch (Exception e) {
-					errorInSetParameterValues("Despite of TR069 dataType="
-							+ tr069Type + "and FORMAT_UNSIGNED_LONG, value(="
-							+ value + ") is not in appropriate format." + e);
-				}
-			} else
-				errorInSetParameterValues("Despite of TR069 dataType="
-						+ tr069Type
-						+ ", FORMAT is not FORMAT_UNSIGNED_INTEGER.");
-		} else if (tr069Type.equals(TR069_TYPE_DATETIME)) {
-			if ((format & DmtData.FORMAT_DATETIME) != 0) {
-				try {
-					data = new DmtData(value, DmtData.FORMAT_DATETIME);
-				} catch (Exception e) {
-					errorInSetParameterValues("Despite of TR069 dataType="
-							+ tr069Type + "and FORMAT_DATETIME, value(="
-							+ value + ") is not in appropriate format." + e);
-				}
-			} else
-				errorInSetParameterValues("Despite of TR069 dataType="
-						+ tr069Type + ", FORMAT is not FORMAT_DATETIME.");
-		} else if (tr069Type.equals(TR069_TYPE_HEXBINARY)) {
-			StringBuffer sb = new StringBuffer();
-			if (data == null && (format & DmtData.FORMAT_HEXBINARY) != 0) {
-				try {
-					byte[] bytes = HexBinary.hexBinaryToByteArray(value);
-					data = new DmtData(bytes, DmtData.FORMAT_HEXBINARY);
-				} catch (Exception e) {
-					sb.append("\n");
-					sb.append("Although the format of the node supports FORMAT_HEXBINARY, Fail to construct DmtData. "
-							+ e.toString());
-				}
-			}
-			if (data == null && (format & DmtData.FORMAT_BINARY) != 0) {
-				try {
-					byte[] bytes = value.getBytes(valueCharsetName);
-					data = new DmtData(bytes, DmtData.FORMAT_BINARY);
-				} catch (Exception e) {
-					sb.append("\n");
-					sb.append("Although the format of the node supports FORMAT_HEXBINARY, Fail to construct DmtData. "
-							+ e.toString());
-				}
-			}
-			if (data == null)
-				errorInSetParameterValues("Despite of TR069 dataType="
-						+ tr069Type
-						+ ", proper FORMAT is not supported by the node." + sb);
+							+ ", FORMAT is neither FORMAT_BASE64 nor FORMAT_RAW_BINARY.");
 		}
+		else
+			if (tr069Type.equals(TR069_TYPE_BOOLEAN)) {
+				if ((format & DmtData.FORMAT_BOOLEAN) != 0) {
+					if ("0".equals(value))
+						data = DmtData.FALSE_VALUE;
+					else
+						if ("1".equals(value))
+							data = DmtData.TRUE_VALUE;
+						else
+							errorInSetParameterValues("Despite of TR069 dataType="
+									+ tr069Type
+									+ "and FORMAT_BOOLEAN, value(="
+									+ value + ") is neither \"0\" nor \"1\".");
+				}
+				else
+					errorInSetParameterValues("Despite of TR069 dataType="
+							+ tr069Type + ", FORMAT is not FORMAT_BOOLEAN.");
+			}
+			else
+				if (tr069Type.equals(TR069_TYPE_INT)) {
+					if ((format & DmtData.FORMAT_INTEGER) != 0) {
+						try {
+							int valueInt = Integer.parseInt(value);
+							data = new DmtData(valueInt);
+						}
+						catch (Exception e) {
+							errorInSetParameterValues("Despite of TR069 dataType="
+									+ tr069Type
+									+ "and FORMAT_INTEGER, value(="
+									+ value + ") cannot be parsed. " + e);
+						}
+					}
+					else
+						errorInSetParameterValues("Despite of TR069 dataType="
+								+ tr069Type + ", FORMAT is not FORMAT_INTEGER.");
+				}
+				else
+					if (tr069Type.equals(TR069_TYPE_STRING)) {
+						StringBuffer sb = new StringBuffer();
+						if ((value == null || value.length() == 0)
+								&& (format & DmtData.FORMAT_NULL) != 0) {
+							data = DmtData.NULL_VALUE;
+						}
+						if (data == null
+								&& (format & DmtData.FORMAT_FLOAT) != 0) {
+							try {
+								float valueFloat = Float.parseFloat(value);
+								data = new DmtData(valueFloat);
+							}
+							catch (Exception e) {
+								sb.append("\n");
+								sb.append("Although the format of the node supports FORMAT_FLOAT, Fail to construct DmtData. "
+										+ e.toString());
+							}
+						}
+						if (data == null && (format & DmtData.FORMAT_DATE) != 0) {
+							try {
+								data = new DmtData(value, DmtData.FORMAT_DATE);
+							}
+							catch (Exception e) {
+								sb.append("\n");
+								sb.append("Although the format of the node supports FORMAT_DATE, Fail to construct DmtData. "
+										+ e.toString());
+							}
+						}
+						if (data == null && (format & DmtData.FORMAT_TIME) != 0) {
+							try {
+								data = new DmtData(value, DmtData.FORMAT_TIME);
+							}
+							catch (Exception e) {
+								sb.append("\n");
+								sb.append("Although the format of the node supports FORMAT_TIME, Fail to construct DmtData. "
+										+ e.toString());
+							}
+						}
+						if (data == null
+								&& (format & DmtData.FORMAT_NODE_URI) != 0) {
+							String valueUri = value;
+							int position = nodeUri
+									.lastIndexOf(Uri.PATH_SEPARATOR);
+							final String tmp = Uri.ROOT_NODE
+									+ Uri.PATH_SEPARATOR;
+							if (value.startsWith(tmp)) {
+								valueUri = nodeUri.substring(0, position)
+										+ value.substring(tmp.length());
+							}
+							try {
+								data = new DmtData(valueUri,
+										DmtData.FORMAT_NODE_URI);
+							}
+							catch (Exception e) {
+								sb.append("\n");
+								sb.append("Although the format of the node supports FORMAT_NODE_URI, Fail to construct DmtData. "
+										+ e.toString());
+							}
+						}
+						if (data == null
+								&& (format & DmtData.FORMAT_RAW_STRING) != 0) {
+							try {
+								String[] names = metaNode.getRawFormatNames();
+								if (names.length > 0 && names[0] != null
+										&& (names[0].length() != 0)) {
+									data = new DmtData(names[0], value);
+								}
+							}
+							catch (Exception e) {
+								sb.append("\n");
+								sb.append("Although the format of the node supports FORMAT_RAW_STRING, Fail to construct DmtData. "
+										+ e.toString());
+							}
+						}
+						if (data == null
+								&& (format & DmtData.FORMAT_STRING) != 0) {
+							data = new DmtData(value);
+						}
+						if (data == null && (format & DmtData.FORMAT_XML) != 0) {
+							data = new DmtData(value, DmtData.FORMAT_XML);
+						}
+						if (data == null)
+							errorInSetParameterValues("Despite of TR069 dataType="
+									+ tr069Type
+									+ ", proper FORMAT is not supported by the node. "
+									+ sb.toString());
+					}
+					else
+						if (tr069Type.equals(TR069_TYPE_UNSIGNED_INT)) {
+							if ((format & DmtData.FORMAT_UNSIGNED_INTEGER) != 0) {
+								try {
+									data = new DmtData(value,
+											DmtData.FORMAT_UNSIGNED_INTEGER);
+								}
+								catch (Exception e) {
+									errorInSetParameterValues("Despite of TR069 dataType="
+											+ tr069Type
+											+ "and FORMAT_UNSIGNED_INTEGER, value(="
+											+ value
+											+ ") is not in appropriate format."
+											+ e);
+								}
+							}
+							else
+								errorInSetParameterValues("Despite of TR069 dataType="
+										+ tr069Type
+										+ ", FORMAT is not FORMAT_UNSIGNED_INTEGER.");
+						}
+						else
+							if (tr069Type.equals(TR069_TYPE_LONG)) {
+								if ((format & DmtData.FORMAT_LONG) != 0) {
+									try {
+										long valueLong = Long.parseLong(value);
+										data = new DmtData(valueLong);
+									}
+									catch (Exception e) {
+										errorInSetParameterValues("Despite of TR069 dataType="
+												+ tr069Type
+												+ "and FORMAT_LONG, value(="
+												+ value
+												+ ") cannot be parsed. " + e);
+									}
+								}
+								else
+									errorInSetParameterValues("Despite of TR069 dataType="
+											+ tr069Type
+											+ ", FORMAT is not FORMAT_LONG.");
+							}
+							else
+								if (tr069Type.equals(TR069_TYPE_UNSIGNED_LONG)) {
+									if ((format & DmtData.FORMAT_UNSIGNED_LONG) != 0) {
+										try {
+											data = new DmtData(
+													value,
+													DmtData.FORMAT_UNSIGNED_LONG);
+										}
+										catch (Exception e) {
+											errorInSetParameterValues("Despite of TR069 dataType="
+													+ tr069Type
+													+ "and FORMAT_UNSIGNED_LONG, value(="
+													+ value
+													+ ") is not in appropriate format."
+													+ e);
+										}
+									}
+									else
+										errorInSetParameterValues("Despite of TR069 dataType="
+												+ tr069Type
+												+ ", FORMAT is not FORMAT_UNSIGNED_INTEGER.");
+								}
+								else
+									if (tr069Type.equals(TR069_TYPE_DATETIME)) {
+										if ((format & DmtData.FORMAT_DATETIME) != 0) {
+											try {
+												data = new DmtData(value,
+														DmtData.FORMAT_DATETIME);
+											}
+											catch (Exception e) {
+												errorInSetParameterValues("Despite of TR069 dataType="
+														+ tr069Type
+														+ "and FORMAT_DATETIME, value(="
+														+ value
+														+ ") is not in appropriate format."
+														+ e);
+											}
+										}
+										else
+											errorInSetParameterValues("Despite of TR069 dataType="
+													+ tr069Type
+													+ ", FORMAT is not FORMAT_DATETIME.");
+									}
+									else
+										if (tr069Type
+												.equals(TR069_TYPE_HEXBINARY)) {
+											StringBuffer sb = new StringBuffer();
+											if (data == null
+													&& (format & DmtData.FORMAT_HEXBINARY) != 0) {
+												try {
+													byte[] bytes = HexBinary
+															.hexBinaryToByteArray(value);
+													data = new DmtData(
+															bytes,
+															DmtData.FORMAT_HEXBINARY);
+												}
+												catch (Exception e) {
+													sb.append("\n");
+													sb.append("Although the format of the node supports FORMAT_HEXBINARY, Fail to construct DmtData. "
+															+ e.toString());
+												}
+											}
+											if (data == null
+													&& (format & DmtData.FORMAT_BINARY) != 0) {
+												try {
+													byte[] bytes = value
+															.getBytes(valueCharsetName);
+													data = new DmtData(
+															bytes,
+															DmtData.FORMAT_BINARY);
+												}
+												catch (Exception e) {
+													sb.append("\n");
+													sb.append("Although the format of the node supports FORMAT_HEXBINARY, Fail to construct DmtData. "
+															+ e.toString());
+												}
+											}
+											if (data == null)
+												errorInSetParameterValues("Despite of TR069 dataType="
+														+ tr069Type
+														+ ", proper FORMAT is not supported by the node."
+														+ sb);
+										}
 
 		return data;
 	}
@@ -582,25 +666,30 @@ public class TR069ParameterValue {
 	 * @param tr069Type
 	 * @param nodeUri
 	 * @param metaNode
-	 * @throws IllegalArgumentException
-	 *             if value is null, if tr069Type is either null or empty, if
-	 *             nodeUri is invalid absolute DMT URI, or if metaNode is null.
+	 * @throws IllegalArgumentException if value is null, if tr069Type is either
+	 *         null or empty, if nodeUri is invalid absolute DMT URI, or if
+	 *         metaNode is null.
 	 */
 	private static void checkArguments(String value, String tr069Type,
 			String nodeUri, MetaNode metaNode) throws IllegalArgumentException {
 		String errmsg = null;
 		if (value == null)
 			errmsg = "value must not be null:" + value;
-		else if (tr069Type == null)
-			errmsg = "tr069Type must not be null:" + tr069Type;
-		else if (tr069Type.length() == 0)
-			errmsg = "tr069Type must not be empty:" + tr069Type;
-		else if (!Uri.isValidUri(nodeUri))
-			errmsg = "nodeUri must be valid URI:" + nodeUri;
-		else if (!Uri.isAbsoluteUri(nodeUri))
-			errmsg = "nodeUri must be absolute URI:" + nodeUri;
-		else if (metaNode == null)
-			errmsg = "metaNode must not be null.";
+		else
+			if (tr069Type == null)
+				errmsg = "tr069Type must not be null:" + tr069Type;
+			else
+				if (tr069Type.length() == 0)
+					errmsg = "tr069Type must not be empty:" + tr069Type;
+				else
+					if (!Uri.isValidUri(nodeUri))
+						errmsg = "nodeUri must be valid URI:" + nodeUri;
+					else
+						if (!Uri.isAbsoluteUri(nodeUri))
+							errmsg = "nodeUri must be absolute URI:" + nodeUri;
+						else
+							if (metaNode == null)
+								errmsg = "metaNode must not be null.";
 		if (errmsg != null)
 			throw new IllegalArgumentException(errmsg);
 	}
@@ -624,35 +713,29 @@ public class TR069ParameterValue {
 	 * will have the converted DmtData for each item.
 	 * 
 	 * 
-	 * @param value
-	 *            value to be set to the specified interior node. It must not be
-	 *            null and can be lexical representation as defined by XML
-	 *            Schema.
-	 * @param tr069Type
-	 *            TR069 data type. It must not be null or empty.
-	 * @param valueCharsetName
-	 *            character set to be used for the value. If null, a platform
-	 *            default character set will be used. The character set is used
-	 *            for getting byte array from the specified value.
-	 * @param nodeUri
-	 *            URI of the interior node in DMT. It must be valid absolute DMT
-	 *            URI. *
-	 * @param metaNode
-	 *            Meta node of the child leaf node of the specified node uri. It
-	 *            must not be null. Returns: array of DmtData to be used for
-	 *            DmtSession#setNodeValue() against the child nodes of the
-	 *            specified node uri. It can be empty array but cannot be null.
+	 * @param value value to be set to the specified interior node. It must not
+	 *        be null and can be lexical representation as defined by XML
+	 *        Schema.
+	 * @param tr069Type TR069 data type. It must not be null or empty.
+	 * @param valueCharsetName character set to be used for the value. If null,
+	 *        a platform default character set will be used. The character set
+	 *        is used for getting byte array from the specified value.
+	 * @param nodeUri URI of the interior node in DMT. It must be valid absolute
+	 *        DMT URI. *
+	 * @param metaNode Meta node of the child leaf node of the specified node
+	 *        uri. It must not be null. Returns: array of DmtData to be used for
+	 *        DmtSession#setNodeValue() against the child nodes of the specified
+	 *        node uri. It can be empty array but cannot be null.
 	 * @return Converted array of DmtData. It can be empty array but must not be
 	 *         null.
-	 * @throws TR069MappingException
-	 *             if convertionng DmtData is failed for some reasons.
-	 * @throws java.io.UnsupportedEncodingException
-	 *             if the specified character set name is not supported.
-	 * @throws java.lang.IllegalArgumetException
-	 *             if value is {@code null}, if value contains empty element in
-	 *             the comma-separated list, if tr069Type is either {@code null}
-	 *             or empty, if nodeUri is invalid absolute DMT URI, or if
-	 *             metaNode is {@code null}.
+	 * @throws TR069MappingException if convertionng DmtData is failed for some
+	 *         reasons.
+	 * @throws java.io.UnsupportedEncodingException if the specified character
+	 *         set name is not supported.
+	 * @throws java.lang.IllegalArgumetException if value is {@code null}, if
+	 *         value contains empty element in the comma-separated list, if
+	 *         tr069Type is either {@code null} or empty, if nodeUri is invalid
+	 *         absolute DMT URI, or if metaNode is {@code null}.
 	 * 
 	 */
 	public static DmtData[] getDmtDataForList(String value, String tr069Type,
@@ -701,8 +784,7 @@ public class TR069ParameterValue {
 	 * This method does not check whether the all items of the specified array
 	 * have the same format.
 	 * 
-	 * @param data
-	 *            array of DmtData retrieved from DMT.
+	 * @param data array of DmtData retrieved from DMT.
 	 * @return Converted TR-069 value for list subtree.
 	 */
 	public static TR069ParameterValue getTR069ParameterValueForList(
@@ -853,54 +935,54 @@ public class TR069ParameterValue {
 	 * TR069ParameterValue.TR069_TYPE_STRING and the value, and return it.</li>
 	 * </ol>
 	 * 
-	 * @param data
-	 *            DmtData retrieved from DMT.
+	 * @param data DmtData retrieved from DMT.
 	 * @return Converted TR069 value.
 	 */
 	public static TR069ParameterValue getTR069ParameterValue(DmtData data) {
 		int format = data.getFormat();
 		String value = null;
 		switch (format) {
-		case DmtData.FORMAT_BASE64:
-			value = Base64.byteArrayToBase64(data.getBase64());
-			return new TR069ParameterValue(value, TR069_TYPE_BASE64);
-		case DmtData.FORMAT_BINARY:
-			value = getHexDumpWithoutSpace(data.getBinary());
-			return new TR069ParameterValue(value, TR069_TYPE_HEXBINARY);
-		case DmtData.FORMAT_BOOLEAN:
-			value = (data.getBoolean() ? "1" : "0");
-			return new TR069ParameterValue(value, TR069_TYPE_BOOLEAN);
-		case DmtData.FORMAT_DATE:
-		case DmtData.FORMAT_FLOAT:
-		case DmtData.FORMAT_NULL:
-		case DmtData.FORMAT_RAW_STRING:
-		case DmtData.FORMAT_STRING:
-		case DmtData.FORMAT_TIME:
-		case DmtData.FORMAT_XML:
-			return new TR069ParameterValue(data.toString(), TR069_TYPE_STRING);
-		case DmtData.FORMAT_INTEGER:
-			return new TR069ParameterValue(data.toString(), TR069_TYPE_INT);
-		case DmtData.FORMAT_NODE:
-			throw new IllegalArgumentException("The format is FORMAT_NODE.");
-		case DmtData.FORMAT_RAW_BINARY:
-			value = Base64.byteArrayToBase64(data.getRawBinary());
-			return new TR069ParameterValue(value, TR069_TYPE_BASE64);
-		case DmtData.FORMAT_UNSIGNED_INTEGER:
-			return new TR069ParameterValue(data.toString(),
-					TR069_TYPE_UNSIGNED_INT);
-		case DmtData.FORMAT_LONG:
-			return new TR069ParameterValue(data.toString(), TR069_TYPE_LONG);
-		case DmtData.FORMAT_UNSIGNED_LONG:
-			return new TR069ParameterValue(data.toString(),
-					TR069_TYPE_UNSIGNED_LONG);
-		case DmtData.FORMAT_HEXBINARY:
-			value = getHexDumpWithoutSpace(data.getHexBinary());
-			return new TR069ParameterValue(value, TR069_TYPE_HEXBINARY);
-		case DmtData.FORMAT_NODE_URI:
-			value = TR069URI.getTR069Path(data.toString());
-			return new TR069ParameterValue(value, TR069_TYPE_STRING);
-		default:
-			break;
+			case DmtData.FORMAT_BASE64 :
+				value = Base64.byteArrayToBase64(data.getBase64());
+				return new TR069ParameterValue(value, TR069_TYPE_BASE64);
+			case DmtData.FORMAT_BINARY :
+				value = getHexDumpWithoutSpace(data.getBinary());
+				return new TR069ParameterValue(value, TR069_TYPE_HEXBINARY);
+			case DmtData.FORMAT_BOOLEAN :
+				value = (data.getBoolean() ? "1" : "0");
+				return new TR069ParameterValue(value, TR069_TYPE_BOOLEAN);
+			case DmtData.FORMAT_DATE :
+			case DmtData.FORMAT_FLOAT :
+			case DmtData.FORMAT_NULL :
+			case DmtData.FORMAT_RAW_STRING :
+			case DmtData.FORMAT_STRING :
+			case DmtData.FORMAT_TIME :
+			case DmtData.FORMAT_XML :
+				return new TR069ParameterValue(data.toString(),
+						TR069_TYPE_STRING);
+			case DmtData.FORMAT_INTEGER :
+				return new TR069ParameterValue(data.toString(), TR069_TYPE_INT);
+			case DmtData.FORMAT_NODE :
+				throw new IllegalArgumentException("The format is FORMAT_NODE.");
+			case DmtData.FORMAT_RAW_BINARY :
+				value = Base64.byteArrayToBase64(data.getRawBinary());
+				return new TR069ParameterValue(value, TR069_TYPE_BASE64);
+			case DmtData.FORMAT_UNSIGNED_INTEGER :
+				return new TR069ParameterValue(data.toString(),
+						TR069_TYPE_UNSIGNED_INT);
+			case DmtData.FORMAT_LONG :
+				return new TR069ParameterValue(data.toString(), TR069_TYPE_LONG);
+			case DmtData.FORMAT_UNSIGNED_LONG :
+				return new TR069ParameterValue(data.toString(),
+						TR069_TYPE_UNSIGNED_LONG);
+			case DmtData.FORMAT_HEXBINARY :
+				value = getHexDumpWithoutSpace(data.getHexBinary());
+				return new TR069ParameterValue(value, TR069_TYPE_HEXBINARY);
+			case DmtData.FORMAT_NODE_URI :
+				value = TR069URI.getTR069Path(data.toString());
+				return new TR069ParameterValue(value, TR069_TYPE_STRING);
+			default :
+				break;
 		}
 
 		return null;
@@ -917,12 +999,10 @@ public class TR069ParameterValue {
 	 * Replace all specified char into the specified String in the specified
 	 * target.
 	 * 
-	 * @param msg
-	 *            original message string
-	 * @param ch
-	 *            character, which is replaced by the specified replacement.
-	 * @param replacement
-	 *            String, which will replace the specified target character.
+	 * @param msg original message string
+	 * @param ch character, which is replaced by the specified replacement.
+	 * @param replacement String, which will replace the specified target
+	 *        character.
 	 * @return resulting String
 	 */
 	private static String replaceString(String message, char ch,
@@ -957,12 +1037,10 @@ public class TR069ParameterValue {
 	 * Replace all specified String into the specified char in the specified
 	 * target.
 	 * 
-	 * @param msg
-	 *            original message string
-	 * @param target
-	 *            string, which is replaced by the specified replacement.
-	 * @param replacement
-	 *            character, which will replace the specified target string.
+	 * @param msg original message string
+	 * @param target string, which is replaced by the specified replacement.
+	 * @param replacement character, which will replace the specified target
+	 *        string.
 	 * @return resulting String
 	 */
 	private static String replaceString(String message, String target,
@@ -1001,7 +1079,7 @@ public class TR069ParameterValue {
 	}
 
 	// character array of hexadecimal digits, used for printing binary data
-	private static char[] hex = "0123456789ABCDEF".toCharArray();
+	private static char[]	hex	= "0123456789ABCDEF".toCharArray();
 
 	// generates a hexadecimal dump of the given binary data
 	private static String getHexDumpWithoutSpace(byte[] bytes) {
