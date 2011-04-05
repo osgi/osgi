@@ -64,8 +64,8 @@ public interface ExecPlugin {
 	 * @param data the parameter of the execute operation, can be {@code null}
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
-	 *         <li>{@code NODE_NOT_FOUND} if the node does not exist and the
-	 *         plugin does not allow executing unexisting nodes <li>
+	 *         <li>{@code NODE_NOT_FOUND} if the node does not exist
+	 *         <li>
 	 *         {@code  METADATA_MISMATCH} if the command failed because of
 	 *         meta-data restrictions <li>{@code DATA_STORE_FAILURE} if an error
 	 *         occurred while accessing the data store <li>
