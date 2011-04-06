@@ -45,5 +45,5 @@ public enum ReferenceCardinality {
 	 * The reference is mandatory and multiple. That is, the reference has a
 	 * cardinality of {@code 1..n}.
 	 */
-	ATLEASTONE; // 1..n
+	AT_LEAST_ONE; // 1..n
 }
