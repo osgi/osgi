@@ -5,18 +5,10 @@ import java.io.InputStream;
 import java.util.Map;
 
 import org.osgi.framework.Version;
-import org.osgi.service.coordinator.Coordination;
 
 /*
  * TODO 
- * (1) Should the install, start, stop, uninstall, and update methods take a
- * Subsystem as a parameter or is there a one to one relationship between
- * Resource and Subsystem (i.e. the Subsystem would be passed as a constructor
- * argument)?
- * (2) Should these methods also be able to throw an exception if something
- * goes wrong during the "prepare" phase (i.e. before deciding whether or not
- * to participate in the coordination)?
- * (3) fill in missing Javadoc comments.
+ * (1) fill in missing Javadoc comments.
  */
 
 /**
@@ -36,7 +28,6 @@ public interface Resource {
 	 * @return The attributes associated with the resource.
 	 */
 	public Map<String, String> getAttributes();
-	
 	/**
 	 * Gets the location of the resource.
 	 * <p>
@@ -45,31 +36,21 @@ public interface Resource {
 	 * @return The location of the resource.
 	 */
 	public String getLocation();
-	
 	/**
 	 * Gets the namespace of the resource.
 	 * @return The namespace of the resource.
 	 */
 	public String getNamespace();
-	
 	/**
 	 * Gets the symbolic name of the resource.
 	 * @return The symbolic name of the resource.
 	 */
 	public String getSymbolicName();
-	
 	/**
 	 * Gets the version of the resource.
 	 * @return The version of the resource.
 	 */
 	public Version getVersion();
-	
-	/**
-	 * 
-	 * @param coordination
-	 */
-	public void install(Coordination coordination);
-	
 	/**
 	 * Opens the resource for reading.
 	 * @return The <code>InputStream</code> from which the resource can be read.
@@ -77,28 +58,4 @@ public interface Resource {
 	 *         reading.
 	 */
 	public InputStream open() throws IOException;
-	
-	/**
-	 * 
-	 * @param coordination
-	 */
-	public void start(Coordination coordination);
-	
-	/**
-	 * 
-	 * @param coordination
-	 */
-	public void stop(Coordination coordination);
-	
-	/**
-	 * 
-	 * @param coordination
-	 */
-	public void uninstall(Coordination coordination);
-	
-	/**
-	 * 
-	 * @param coordination
-	 */
-	public void update(Coordination coordination);
 }

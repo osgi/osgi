@@ -7,6 +7,17 @@ import java.util.Map;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 
+/*
+ * TODO
+ * (1) How will the root subsystem handle install, start, stop, update, and
+ * uninstall?
+ * (2) ResourceProcesser will accept Coordination again. No chaining. Processor
+ * is responsible for failing the coordination or throwing exception from ended
+ * or failed.
+ * (3) Remove coordination from Resource.
+ * (4) Do we need to return Resources and Bundles? Just Resources? What?
+ */
+
 /**
  * A representation of a subsystem in the framework. A subsystem is a 
  * collection of bundles and/or other resource. A subsystem has isolation 
@@ -249,7 +260,6 @@ public interface Subsystem {
 	 * 		<li>This subsystem and any persistent storage area provided for this 
 	 *          subsystem by the Framework are removed.</li>
 	 * </ol>
-	 * @param subsystem The subsystem to uninstall.
 	 * @throws SubsystemException If the uninstall failed.
 	 * @throws IllegalStateException If the subsystem is already in the 
 	 *         UNISTALLED state.
@@ -257,17 +267,16 @@ public interface Subsystem {
 	 *         AdminPermission[this,LIFECYCLE] and the Java Runtime Environment 
 	 *         supports permissions.
 	 */
-	public void uninstall(Subsystem subsystem) throws SubsystemException;
+	public void uninstall() throws SubsystemException;
 	/**
 	 * Update the given subsystem.
 	 * <p/>
 	 * This method performs the same function as calling update(Subsystem, 
 	 * InputStream) with the specified subsystem and a null InputStream.
-	 * @param subsystem The subsystem to be updated.
 	 * @throws SubsystemException If the subsystem could not be updated for any
 	 *         reason.
 	 */
-	public void update(Subsystem subsystem) throws SubsystemException;
+	public void update() throws SubsystemException;
 	/**
 	 * Update the given subsystem from an InputStream.
 	 * <p/>
@@ -278,10 +287,9 @@ public interface Subsystem {
 	 * <p/>
 	 * TODO: expand on this description. For example, we need details on how 
 	 * update works for individual resources. We could follow the 
-	 * deploymentadmin approach and uninstall bundes that are removed and 
+	 * deploymentadmin approach and uninstall bundles that are removed and 
 	 * install new ones. This would happen if we had a different (updated) 
 	 * deployment calculated for the same version of the application.
-	 * @param subsystem The subsystem to be updated.
 	 * @param content The InputStream from which to update the subsystem or null 
 	 *        if the Subsystem-UpdateLocation or original location are to be 
 	 *        used.
@@ -293,5 +301,5 @@ public interface Subsystem {
 	 *         and the updated subsystem and the Java Runtime Environment 
 	 *         supports permissions.
 	 */
-	public void update(Subsystem subsystem, InputStream content) throws SubsystemException;
+	public void update(InputStream content) throws SubsystemException;
 }
