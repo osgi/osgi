@@ -18,9 +18,6 @@ package org.osgi.util.tr069;
 
 import info.dmtree.Uri;
 
-import java.io.UnsupportedEncodingException;
-import java.util.StringTokenizer;
-
 /**
  * Utility class for translating between DMT URI and TR-069 Path.
  * 
@@ -37,19 +34,14 @@ public class TR069URI {
 	 * TR-069.
 	 * 
 	 * The specified TR-069 path must be valid absolute TR-069 path. This method
-	 * will not check it. If the specified path ends with period Åg.Åh, it means a
-	 * partial path. In that case, the conversion will be done after the last
-	 * period is removed.
+	 * does not check it. If not, the result will be unpredictable. If the
+	 * specified path ends with period, it means a partial path. In that case,
+	 * the conversion will be done after the last period is removed.
 	 * 
 	 * @param tr069Path absolute TR-069 path
 	 * @return URI in DMT, corresponding to the specified TR-069 path.
-	 * @throws IllegalArgumentException tr069Path is null.
 	 */
-	public static final String getDmtUri(final String tr069Path)
-			throws IllegalArgumentException {
-		if (tr069Path == null)
-			throw new IllegalArgumentException("tr069Path must not be null.");
-
+	public static final String getDmtUri(final String tr069Path) {
 		String result = tr069Path;
 		if (result.endsWith(Uri.ROOT_NODE))
 			result = result.substring(0, result.length() - 1);
@@ -62,52 +54,46 @@ public class TR069URI {
 	/**
 	 * Get the TR069 path corresponding to the specified URI in DMT.
 	 * 
-	 * The specified URI should be valid absolute URI. This method does not
-	 * validate it.
+	 * The specified uri should be valid absolute URI. This method does not
+	 * validate it. If the uri contains period "." except the beginning,
+	 * IllegalArgumentException is thrown.
 	 * 
 	 * @param uri URI in DMT.
-	 * @return path in TR-069, corresponding to the specified URI.
-	 * @throws java.lang.IllegalArgumetException if uri is null
+	 * @return absolute path in TR-069, corresponding to the specified URI.
+	 * @throws IllegalArgumentException if the uri contains period "." except
+	 *         the beginning.
 	 */
 	public static final String getTR069Path(final String uri) {
-		if (uri == null)
-			throw new IllegalArgumentException("uri must not be null.");
 		if (uri.equals(Uri.ROOT_NODE))
 			return "";
+		if (uri.substring(1).indexOf(Uri.ROOT_NODE) != -1)
+			throw new IllegalArgumentException(
+					"uri contains period \".\" except the beginning:" + uri);
 		String ret = uri.substring((Uri.ROOT_NODE + Uri.PATH_SEPARATOR)
 				.length());
 		return ret.replace(Uri.ROOT_NODE_CHAR, Uri.PATH_SEPARATOR_CHAR);
 	}
 
 	/**
-	 * Get the TR-069 absolute path corresponding to the specified TR-069 base
-	 * path and the specified TR-069 path.
+	 * Get the TR-069 Absolute path.
 	 * 
-	 * tr069BasePath and tr069Path must be valid TR-069 path. This method does
-	 * not check it. This method does the following procedure.
+	 * tr069BasePath must be valid absolute TR-069 path and tr069Path must be
+	 * TR-069 path. This method will not check those. If those, the result is
+	 * unpredictable. tr069BasePath is not valid absolute TR-069, or tr069Path
+	 * is not valid TR-069, or tr069Path is empty,.and it must not be empty
 	 * <ol type="1">
 	 * <li>
-	 * If tr069Path is absolute, tr069Path is returned.
-	 * <li>Checks whether tr069BasePath is absolute and is under the Root or
-	 * Service Object.
-	 * <ol type="a">
-	 * <li>
-	 * If not, {@link IllegalArgumentException} is thrown.</li>
+	 * If tr069Path is absolute, tr069Path is returned.</li>
+	 * <li>Otherwise, if tr069BasePath is empty String,
+	 * {@link IllegalArgumentException} is thrown.</li>
 	 * <li>Otherwise an absolute path is formed using tr069BasePath and
 	 * tr069Path and returned.</li>
 	 * </ol>
-	 * </li>
 	 * 
-	 * </ol>
-	 * 
-	 * @param tr069BasePath TR-069 base path.t must be valid TR-069 path.
-	 * @param tr069Path TR-069 path. It must be valid TR-069 path.
-	 * 
+	 * @param tr069BasePath TR-069 base path
+	 * @param tr069Path TR-069 path
 	 * @return absolute path in TR-069.
-	 * @throws java.lang.IllegalArgumetException If tr069Path is {@code null} or
-	 *         empty. If tr069BasePath is {@code null} or empty. If
-	 *         tr069BasePath is not absolute nor under the Root or Service
-	 *         Object.
+	 * @throws java.lang.IllegalArgumetException If tr069BasePath is empty.
 	 */
 	public static final String getTR069AbsolutePath(final String tr069BasePath,
 			String tr069Path) throws IllegalArgumentException {
@@ -139,6 +125,14 @@ public class TR069URI {
 			int position = tmp.indexOf(".");
 			if (position == -1)
 				return device + tr069Path;
+			tmp = tmp.substring(position + 1);
+			position = tmp.indexOf(".");
+			if (position == -1) {
+				return device + tr069Path;
+			}
+			if (position == tmp.length())
+				return device + tr069Path;
+
 			try {
 				String id = tmp.substring(0, position);
 				Integer.parseInt(id);
@@ -171,20 +165,20 @@ public class TR069URI {
 		// }
 		//
 
-		String target = "Device.Services";
+		String target = "Device.Services.Hoge.a";
 		System.out.println("target=[" + target + "]");
-		// String target2 = ".hoge1.hoge2";
-		// System.out.println("target2=[" + target2 + "]");
-		// String retGetTR069AbsPath = getTR069AbsolutePath(target, target2);
-		// System.out.println("retGetTR069AbsPath=[" + retGetTR069AbsPath +
-		// "]");
+		String target2 = ".A.B";
+		System.out.println("target2=[" + target2 + "]");
+		String retGetTR069AbsPath = getTR069AbsolutePath(target, target2);
+		System.out.println("retGetTR069AbsPath=[" + retGetTR069AbsPath + "]");
 
-		boolean retIsValidTR069Path = isValidTR069Path(target);
-		System.out.println("retIsValidTR069Path=[" + retIsValidTR069Path + "]");
+		// boolean retIsValidTR069Path = isValidTR069Path(target);
+		// System.out.println("retIsValidTR069Path=[" + retIsValidTR069Path +
+		// "]");
 		// boolean retIsAbsTR069Path = isAbsoluteTR069Path(target);
 		// System.out.println("retIsAbsTR069Path=[" + retIsAbsTR069Path + "]");
-		String retGetDmtUri = getDmtUri(target);
-		System.out.println("retGetDmtUri=[" + retGetDmtUri + "]");
+		// String retGetDmtUri = getDmtUri(target);
+		// System.out.println("retGetDmtUri=[" + retGetDmtUri + "]");
 		//
 
 		// boolean retIsValidUri = Uri.isValidUri(target);
@@ -198,20 +192,21 @@ public class TR069URI {
 	/**
 	 * Checks whether the specified path is an absolute TR-069 path.
 	 * 
-	 * This method only check whether the specified path starts with ".". This
-	 * method does not check whether the specified path is valid TR-069 path.
+	 * This method does not check whether the specified path is valid TR-069
+	 * path. If tr069Path is not valid TR-069, the result will be unpredictable.
+	 * If the specified path starts with ".", return true. Otherwise return
+	 * false.
 	 * 
 	 * @param uri the TR-069 path to be checked, must contain a valid TR-069
 	 *        path
 	 * @return whether the specified path is absolute
-	 * @throws IllegalArgumentException if the specified path is {@code null}.
 	 */
 	public static boolean isAbsoluteTR069Path(final String tr069Path) {
 		// if (!isValidTR069Path(tr069Path))
 		// throw new IllegalArgumentException("tr069Path must be valid: "
 		// + tr069Path);
-		if (tr069Path == null)
-			throw new IllegalArgumentException("tr069Path must not be null.");
+		// if (tr069Path == null)
+		// throw new IllegalArgumentException("tr069Path must not be null.");
 		if (tr069Path.startsWith(Uri.ROOT_NODE))
 			return false;
 		return true;
@@ -227,6 +222,10 @@ public class TR069URI {
 	 * <li>The path can be either absolute or relative.
 	 * <li>The path can end with ".".
 	 * <li>The path can be empty.
+	 * <li>The each name in the path cannot be empty. E.g "Device.Services..Foo"
+	 * is NG.
+	 * <li>The name of any grandchild nodes of "Device.Services" must be integer
+	 * [1.. Integer.MAX_VALUE-1].
 	 * </ul>
 	 * </ul>
 	 * 

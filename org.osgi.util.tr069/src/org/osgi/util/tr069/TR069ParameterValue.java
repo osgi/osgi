@@ -578,6 +578,9 @@ public class TR069ParameterValue {
 		}
 		if (tr069Type.equals(TR069_TYPE_DATETIME)) {
 			if ((format & DmtData.FORMAT_DATETIME) != 0) {
+				// TODO: Needs to handle all kinds of TR-069 datatime format
+				// (converting them to DmtData).
+				// https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1938#c8
 				try {
 					data = new DmtData(value, DmtData.FORMAT_DATETIME);
 				}
