@@ -374,8 +374,9 @@ public class TR069ParameterValue {
 	 *         is either null or empty, if nodeUri is invalid absolute DMT URI,
 	 *         or if metaNode is null.
 	 */
-	public static DmtData getDmtData(String value, String tr069Type,
-			String valueCharsetName, String nodeUri, MetaNode metaNode)
+	public static DmtData getDmtData(final String value,
+			final String tr069Type, final String valueCharsetName,
+			final String nodeUri, final MetaNode metaNode)
 			throws TR069MappingException, IllegalArgumentException,
 			UnsupportedEncodingException {
 
@@ -578,11 +579,10 @@ public class TR069ParameterValue {
 		}
 		if (tr069Type.equals(TR069_TYPE_DATETIME)) {
 			if ((format & DmtData.FORMAT_DATETIME) != 0) {
-				// TODO: Needs to handle all kinds of TR-069 datatime format
-				// (converting them to DmtData).
+				String target = getDmtDataCompatibleValue(value);
 				// https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1938#c8
 				try {
-					data = new DmtData(value, DmtData.FORMAT_DATETIME);
+					data = new DmtData(target, DmtData.FORMAT_DATETIME);
 				}
 				catch (Exception e) {
 					errorInSetParameterValues("Despite of TR069 dataType="
@@ -626,6 +626,40 @@ public class TR069ParameterValue {
 		}
 
 		return data;
+	}
+
+	// public static void main(String[] args) {
+	//
+	// String target = "-Device-Services-Hoge-a";
+	// System.out.println("target=[" + target + "]");
+	// String ret = getDmtDataCompatibleValue(target);
+	// System.out.println("ret=[" + ret + "]");
+	// }
+
+	/**
+	 * Convert the specified value to the String which is compatible to
+	 * DmtData.FORMAT_DATE.
+	 * 
+	 * Just remove hyphens '-'.
+	 * 
+	 * @param value String to be converted
+	 * @return converted String
+	 */
+	private static String getDmtDataCompatibleValue(String value) {
+		StringBuffer sb = new StringBuffer(value.length());
+		int position = -1;
+		int beginIndex = 0;
+		while (true) {
+			position = value.indexOf('-');
+			if (position == -1) {
+				sb.append(value);
+				break;
+			}
+			if (position != 0)
+				sb.append(value.substring(beginIndex, position));
+			value = value.substring(position + 1);
+		}
+		return sb.toString();
 	}
 
 	/**
