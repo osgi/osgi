@@ -9,6 +9,7 @@ import org.osgi.framework.Version;
 /*
  * TODO 
  * (1) fill in missing Javadoc comments.
+ * (2) Don't like open(). Implies there needs to be a close() as well. Maybe getContent()?
  */
 
 /**
@@ -20,6 +21,14 @@ import org.osgi.framework.Version;
  * @noimplement
  */
 public interface Resource {
+	public static enum State {
+		ACTIVE,
+		INSTALLED,
+		RESOLVED,
+		STARTING,
+		STOPPING,
+		UNINSTALLED
+	}
 	/**
 	 * Gets the attributes associated to this resource.These attributes may 
 	 * contain information ResourceProcessors. For example, a WAR resource 
@@ -41,6 +50,7 @@ public interface Resource {
 	 * @return The namespace of the resource.
 	 */
 	public String getNamespace();
+	public State getState();
 	/**
 	 * Gets the symbolic name of the resource.
 	 * @return The symbolic name of the resource.
@@ -58,4 +68,5 @@ public interface Resource {
 	 *         reading.
 	 */
 	public InputStream open() throws IOException;
+	public void setState(State state);
 }

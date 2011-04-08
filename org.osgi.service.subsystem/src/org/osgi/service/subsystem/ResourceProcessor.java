@@ -1,6 +1,10 @@
 package org.osgi.service.subsystem;
 
-import org.osgi.service.coordinator.Coordination;
+/*
+ * TODO
+ * Perhaps pass a collection of resource contexts? There could be more than one 
+ * resource of the same type. Coordinations span multiple resources anyway.
+ */
 
 /**
  * A ResourceProcessor processes resources from a specific namespace or 
@@ -36,7 +40,7 @@ public interface ResourceProcessor {
 	 *         coordination, for example, the resource namespace does not match 
 	 *         the namespace of the resource processor.
 	 */
-	public void install(Subsystem subsystem, Resource resource, Coordination coordination) throws SubsystemException;
+	public void install(ResourceContext resourceContext) throws SubsystemException;
 	
 	/**
 	 * Process a resource during the starting phase of a Subsystem. The 
@@ -54,7 +58,7 @@ public interface ResourceProcessor {
 	 *         coordination, for example, the resource namespace does not match 
 	 *         the namespace of the resource processor.
 	 */
-	public void start(Subsystem subsystem, Resource resource, Coordination coordination) throws SubsystemException;
+	public void start(ResourceContext resourceContext) throws SubsystemException;
 	
 	/**
 	 * Process a resource during the stopping phase of a Subsystem. The 
@@ -72,7 +76,7 @@ public interface ResourceProcessor {
 	 *         coordination, for example, the resource namespace does not match 
 	 *         the namespace of the resource processor.
 	 */
-	public void stop(Subsystem subsystem, Resource resource, Coordination coordination) throws SubsystemException;
+	public void stop(ResourceContext resourceContext) throws SubsystemException;
 	
 	/**
 	 * Process a resource during the uninstalling phase of a Subsystem. The 
@@ -90,7 +94,7 @@ public interface ResourceProcessor {
 	 *         coordination, for example, the resource namespace does not match 
 	 *         the namespace of the resource processor.
 	 */
-	public void uninstall(Subsystem subsystem, Resource resource, Coordination coordination) throws SubsystemException;
+	public void uninstall(ResourceContext resourceContext) throws SubsystemException;
 	
 	/**
 	 * Process a resource during the updating phase of a Subsystem. The 
@@ -108,5 +112,5 @@ public interface ResourceProcessor {
 	 *         coordination, for example, the resource namespace does not match 
 	 *         the namespace of the resource processor.
 	 */
-	public void update(Subsystem subsystem, Resource resource, Coordination coordination) throws SubsystemException;
+	public void update(ResourceContext resourceContext) throws SubsystemException;
 }
