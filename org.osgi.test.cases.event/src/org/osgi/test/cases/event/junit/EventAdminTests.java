@@ -85,9 +85,11 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		uninstallBundle(tb1);
 		tb2.stop();
 		uninstallBundle(tb2);
-		PermissionAdmin permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
-		permissionAdmin.setPermissions(tb1.getLocation(), null);
-		permissionAdmin.setPermissions(tb2.getLocation(), null);
+		if (System.getSecurityManager() != null) {
+			PermissionAdmin permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
+			permissionAdmin.setPermissions(tb1.getLocation(), null);
+			permissionAdmin.setPermissions(tb2.getLocation(), null);
+		}
 		ungetAllServices();
 	}
 
@@ -120,7 +122,8 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		trackerProvider2.close();
 
 		Bundle system = getContext().getBundle(0);
-		assertBundle(PermissionAdmin.class.getName(), system);
+		if (System.getSecurityManager() != null)
+			assertBundle(PermissionAdmin.class.getName(), system);
 
 		ServiceReference[] eventAdminSRs = getContext().getServiceReferences(
 				EventAdmin.class.getName(), null);
@@ -137,6 +140,8 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * thrown if they are not.
 	 */
 	public void testSetPermissions() {// TB4
+		// If security is not enabled, there is nothing to test.
+		if (System.getSecurityManager() == null) return;
 		PermissionAdmin permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
 
 		PermissionInfo regInfo = new PermissionInfo(ServicePermission.class
