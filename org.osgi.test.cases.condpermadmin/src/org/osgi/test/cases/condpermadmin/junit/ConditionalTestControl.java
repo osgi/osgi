@@ -435,7 +435,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       new AdminPermission[]{},               //allowed
       new AdminPermission[]{permission, allPermissions}, //not allowed
       new String[] {"TestCondition_6", "TestCondition_7"},
-      null);
+      new String[] {"TestCondition_6", "TestCondition_7", "TestCondition_6", "TestCondition_7"});
 
     //Don't check 2nd because 1st is not satisfied
     utility.testPermissions(

@@ -6,15 +6,15 @@ import java.security.Permission;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import junit.framework.AssertionFailedError;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
-
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
-
-import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.condpermadmin.testcond.TestCondition;
 
 
@@ -288,7 +288,7 @@ public class ConditionalUtility {
 		String[] satisfOrder) {
 	try {
 		testEqualArrays(order1, satisfOrder);
-	} catch (RuntimeException e) {
+	} catch (AssertionFailedError e) {
 		if (order2 == null) 
 			throw e;
 		testEqualArrays(order2, satisfOrder);
