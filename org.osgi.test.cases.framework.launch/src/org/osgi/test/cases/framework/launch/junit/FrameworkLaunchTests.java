@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -36,10 +37,13 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
-import org.osgi.service.packageadmin.ExportedPackage;
-import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.framework.wiring.BundleWire;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.startlevel.StartLevel;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.wiring.Wiring;
 
 public class FrameworkLaunchTests extends OSGiTestCase {
 	private static final String STORAGEROOT = "org.osgi.test.cases.framework.launch.storageroot";
@@ -300,14 +304,19 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 	}
 
-	private void checkImporter(ExportedPackage ep, Bundle testBundle) {
+	private void checkImporter(BundleCapability ep, Bundle testBundle) {
 		if (ep == null)
 			return;
-		Bundle[] importers = ep.getImportingBundles();
-		assertNotNull("null importers", importers);
-		for (int i = 0; i < importers.length; i++) {
-			if (importers[i] == testBundle)
-				return;
+		BundleWiring wiring = ep.getRevision().getWiring();
+		assertNotNull("exported package is not wired", wiring);
+		List<BundleWire> wires = wiring
+				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+		for (BundleWire wire : wires) {
+			if (ep.equals(wire.getCapability())) {
+				if (testBundle.equals(wire.getRequirerWiring().getBundle())) {
+					return;
+				}
+			}
 		}
 		fail("Bundle is not an importer of the package: " + ep);
 	}
@@ -462,16 +471,17 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		Framework framework = createFramework(configuration);
 
 		startFramework(framework);
-		ExportedPackage ep1 = null, ep2 = null;
-		PackageAdmin pa = (PackageAdmin) getService(framework, PACKAGE_ADMIN);
-		if (pa != null) {
-			ep1 = pa.getExportedPackage(pkg1);
-			assertNotNull("pkg1 is null", ep1);
-			assertEquals("Wrong Exporter", 0, ep1.getExportingBundle().getBundleId());
-			ep2 = pa.getExportedPackage(pkg2);
-			assertNotNull("pkg2 is null", ep2);
-			assertEquals("Wrong Exporter", 0, ep2.getExportingBundle().getBundleId());
-		}
+		BundleCapability ep1 = Wiring.getExportedPackage(
+				framework.getBundleContext(), pkg1);
+		BundleCapability ep2 = Wiring.getExportedPackage(
+				framework.getBundleContext(), pkg2);
+
+		assertNotNull("pkg1 is null", ep1);
+		assertEquals("Wrong Exporter", 0, ep1.getRevision().getBundle()
+				.getBundleId());
+		assertNotNull("pkg2 is null", ep2);
+		assertEquals("Wrong Exporter", 0, ep2.getRevision().getBundle()
+				.getBundleId());
 		Bundle testBundle = installBundle(framework, "/launch.tb1.jar");
 		try {
 			testBundle.start();

@@ -43,6 +43,7 @@ import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.service.startlevel.StartLevel;
 import org.osgi.test.cases.permissionadmin.junit.PermissionSignatureTBCService;
+import org.osgi.test.support.wiring.Wiring;
 
 /**
  * A bundle that registers a PermissionSignatureTBCService and does a privileged
@@ -196,13 +197,32 @@ public class Activator implements BundleActivator,
 
 	// from PackageAdmin service
 	public void callPackageAdmin_refreshPackages(Bundle[] bundles) {
-		log("###PackageAdmin.refreshPackages(" + toString(bundles) + ")");
-		packageAdmin.refreshPackages(bundles);
+		if (packageAdmin != null) {
+			log("###PackageAdmin.refreshPackages(" + toString(bundles) + ")");
+			packageAdmin.refreshPackages(bundles);
+		}
+		else {
+			log("###No PackageAdmin service");
+		}
 	}
 
 	public boolean callPackageAdmin_resolveBundles(Bundle[] bundles) {
-		log("###PackageAdmin.resolveBundles(" + toString(bundles) + ")");
-		return packageAdmin.resolveBundles(bundles);
+		if (packageAdmin != null) {
+			log("###PackageAdmin.resolveBundles(" + toString(bundles) + ")");
+			return packageAdmin.resolveBundles(bundles);
+		}
+		else {
+			log("###No PackageAdmin service");
+			return true;
+		}
+	}
+
+	public void callFrameworkWiring_refreshBundles(Bundle... bundles) {
+		Wiring.synchronousRefreshBundles(bc, bundles);
+	}
+
+	public boolean callFrameworkWiring_resolveBundles(Bundle... bundles) {
+		return Wiring.resolveBundles(bc, bundles);
 	}
 
 	public static void log(String message) {

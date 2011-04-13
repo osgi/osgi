@@ -468,6 +468,40 @@ public class PermissionSignatureUtility {
 				SecurityException.class);
 	}
 
+	public Object allowed_FrameworkWiring_refreshBundles(String message,
+			Bundle... bundles) throws Exception {
+		return control.allowed_call(
+				"call FrameworkWiring.refreshBundles(Bundle...) " + message,
+				"callFrameworkWiring_refreshBundles",
+				new Class[] {Bundle[].class}, new Object[] {bundles});
+	}
+
+	public boolean not_allowed_FrameworkWiring_refreshBundles(String message,
+			Bundle... bundles) throws Exception {
+		return control.not_allowed_call(
+				"call FrameworkWiring.refreshBundles(Bundle...) " + message,
+				"callFrameworkWiring_refreshBundles",
+				new Class[] {Bundle[].class}, new Object[] {bundles},
+				SecurityException.class);
+	}
+
+	public Object allowed_FrameworkWiring_resolveBundles(String message,
+			Bundle... bundles) throws Exception {
+		return control.allowed_call(
+				"call FrameworkWiring.resolveBundles(Bundle[]) " + message,
+				"callFrameworkWiring_resolveBundles",
+				new Class[] {Bundle[].class}, new Object[] {bundles});
+	}
+
+	public boolean not_allowed_FrameworkWiring_resolveBundles(String message,
+			Bundle... bundles) throws Exception {
+		return control.not_allowed_call(
+				"call FrameworkWiring.resolveBundles(Bundle[]) " + message,
+				"callFrameworkWiring_resolveBundles",
+				new Class[] {Bundle[].class}, new Object[] {bundles},
+				SecurityException.class);
+	}
+
 	public Object allowed_ConfigurationAdmin_getConfiguration(String message,
 			String pid) throws Exception {
 		return control.allowed_call(

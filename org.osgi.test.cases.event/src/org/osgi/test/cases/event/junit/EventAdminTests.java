@@ -99,7 +99,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * It is checked if there is exactly one EventAdmin registered service.
 	 * 
 	 * Verify that the System bundle exists and exports the system services:
-	 * PackageAdmin, PermissionAdmin.
+	 * PermissionAdmin.
 	 * 
 	 * @specification org.osgi.framework
 	 * @specificationSection system.bundle

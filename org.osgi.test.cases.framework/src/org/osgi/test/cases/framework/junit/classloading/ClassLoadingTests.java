@@ -35,7 +35,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.wiring.Wiring;
 import org.osgi.util.tracker.ServiceTracker;
@@ -49,7 +48,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class ClassLoadingTests extends DefaultTestBundleControl {
 	
 	protected void tearDown() {
-		Wiring.synchronousRefreshBundles(getContext(), null);
+		Wiring.synchronousRefreshBundles(getContext());
 	}
 
 	// Service Registry --------------------------
@@ -1250,9 +1249,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 				getWebServer() + "classloading.tb11e.jar");
 
 		try {
-			PackageAdmin packageAdmin = (PackageAdmin) getService(PackageAdmin.class);
-			packageAdmin.resolveBundles(new Bundle[] {tb11b, tb11c, tb11d, tb11e});
-			ungetService(packageAdmin);
+			Wiring.resolveBundles(getContext(), tb11b, tb11c, tb11d, tb11e);
 			if ((tb11b.getState() & Bundle.RESOLVED) != 0)
 				tb11b.start();
 			if ((tb11c.getState() & Bundle.RESOLVED) != 0)
@@ -1946,7 +1943,6 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	public void testPackageImport003() throws Exception {
 		Bundle tb1;
 		Bundle tb15d;
-		PackageAdmin packageAdmin;
 
 		// Try to install when the imported package is not available
 		tb15d = getContext().installBundle(
@@ -1964,8 +1960,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 			// Now, install a bundle with the imported package
 			tb1 = installBundle("classloading.tb1.jar");
 
-			packageAdmin = (PackageAdmin) getService(PackageAdmin.class);
-			packageAdmin.refreshPackages(new Bundle[] { tb15d });
+			Wiring.synchronousRefreshBundles(getContext(), tb15d);
 			
 			try {
 				Thread.sleep(5000);
@@ -1982,7 +1977,6 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 				fail("The package must be available after resolve the bundle");
 			}
 			finally {
-				ungetService(packageAdmin);
 				tb1.uninstall();
 			}
 		}

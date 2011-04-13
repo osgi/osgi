@@ -105,4 +105,9 @@ public interface PermissionSignatureTBCService {
 
 	public boolean callPackageAdmin_resolveBundles(Bundle[] bundles);
 
+	// from FrameworkWiring
+	public void callFrameworkWiring_refreshBundles(Bundle... bundles);
+	
+	public boolean callFrameworkWiring_resolveBundles(Bundle... bundles);
+	
 }
