@@ -2,8 +2,9 @@ package org.osgi.service.subsystem;
 
 /*
  * TODO
- * Perhaps pass a collection of resource contexts? There could be more than one 
+ * (1) Perhaps pass a collection of resource contexts? There could be more than one 
  * resource of the same type. Coordinations span multiple resources anyway.
+ * (2) Can this be merged with ResourceProcessor in OBR?
  */
 
 /**
@@ -25,92 +26,19 @@ package org.osgi.service.subsystem;
  */
 public interface ResourceProcessor {
 	/**
-	 * Process a resource during the installing phase of a Subsystem. The 
-	 * resource processor must register as a Participant with the provided and 
-	 * should process the resource according to the notifications given to the 
-	 * Participant. For example, if the resource processor participant is told 
-	 * the Coordination failed, then the resource processor should not install 
-	 * the resource, or should undo any installation processing that has 
-	 * already been performed. If the resource processor is unable to undo a 
-	 * partial installation, then it must throw an exception back to the 
-	 * Coordinator service from the Particpant.failed method.
-	 * @param subsystem The subsystem to which the resource belongs.
-	 * @param resource The resource to be installed.
-	 * @throws SubsystemException If a problem is detected with the resource or 
-	 *         coordination, for example, the resource namespace does not match 
-	 *         the namespace of the resource processor.
+	 * Process a resource according to the provided operation. The type of
+	 * processing to perform is defined by the type of ResourceOperation. The 
+	 * resource processor must register as a Participant with the provided 
+	 * Coordination and should process the resource according to the 
+	 * notifications given to the Participant. For example, if the resource 
+	 * processor participant is told the Coordination failed, then the resource 
+	 * processor should not perform the operation at all or should undo any 
+	 * processing that has already been performed. If the resource processor is 
+	 * unable to undo previous work, then it must throw an exception back to 
+	 * the Coordinator service from the Participant.failed method. Must call
+	 * ResourceOperation.completed in Participant.ended.
+	 * @param operation
+	 * @throws SubsystemException
 	 */
-	public void install(ResourceContext resourceContext) throws SubsystemException;
-	
-	/**
-	 * Process a resource during the starting phase of a Subsystem. The 
-	 * resource processor must register as a Participant with the provided and 
-	 * should process the resource according to the notifications given to the 
-	 * Participant. For example, if the resource processor participant is told 
-	 * the Coordination failed, then the resource processor should not start 
-	 * the resource, or should undo any start processing that has already been 
-	 * performed. If the resource processor is unable to undo a partial start, 
-	 * then it must throw an exception back to the Coordinator service from the 
-	 * Particpant.failed method.
-	 * @param subsystem The subsystem to which the resource belongs.
-	 * @param resource The resource to be started.
-	 * @throws SubsystemException If a problem is detected with the resource or 
-	 *         coordination, for example, the resource namespace does not match 
-	 *         the namespace of the resource processor.
-	 */
-	public void start(ResourceContext resourceContext) throws SubsystemException;
-	
-	/**
-	 * Process a resource during the stopping phase of a Subsystem. The 
-	 * resource processor must register as a Participant with the provided and 
-	 * should process the resource according to the notifications given to the 
-	 * Participant. For example, if the resource processor participant is told 
-	 * the Coordination failed, then the resource processor should not stop the 
-	 * resource, or should undo any stop processing that has already been 
-	 * performed. If the resource processor is unable to undo a partial stop, 
-	 * then it must throw an exception back to the Coordinator service from the 
-	 * Particpant.failed method.
-	 * @param subsystem The subsystem to which the resource belongs.
-	 * @param resource The resource to be stopped.
-	 * @throws SubsystemException If a problem is detected with the resource or 
-	 *         coordination, for example, the resource namespace does not match 
-	 *         the namespace of the resource processor.
-	 */
-	public void stop(ResourceContext resourceContext) throws SubsystemException;
-	
-	/**
-	 * Process a resource during the uninstalling phase of a Subsystem. The 
-	 * resource processor must register as a Participant with the provided and 
-	 * should process the resource according to the notifications given to the 
-	 * Participant. For example, if the resource processor participant is told 
-	 * the Coordination failed, then the resource processor should not 
-	 * uninstall the resource, or should undo any uninstallation processing 
-	 * that has already been performed. If the resource processor is unable to 
-	 * undo a partial uninstallation, then it must throw an exception back to 
-	 * the Coordinator service from the Particpant.failed method.
-	 * @param subsystem The subsystem to which the resource belongs.
-	 * @param resource The resource to be uninstalled.
-	 * @throws SubsystemException If a problem is detected with the resource or 
-	 *         coordination, for example, the resource namespace does not match 
-	 *         the namespace of the resource processor.
-	 */
-	public void uninstall(ResourceContext resourceContext) throws SubsystemException;
-	
-	/**
-	 * Process a resource during the updating phase of a Subsystem. The 
-	 * resource processor must register as a Participant with the provided and 
-	 * should process the resource according to the notifications given to the 
-	 * Participant. For example, if the resource processor participant is told 
-	 * the Coordination failed, then the resource processor should not update 
-	 * the resource, or should undo any update processing that has already been 
-	 * performed. If the resource processor is unable to undo a partial update, 
-	 * then it must throw an exception back to the Coordinator service from the 
-	 * Particpant.failed method.
-	 * @param subsystem The subsystem to which the resource belongs.
-	 * @param resource The resource to be updated.
-	 * @throws SubsystemException If a problem is detected with the resource or 
-	 *         coordination, for example, the resource namespace does not match 
-	 *         the namespace of the resource processor.
-	 */
-	public void update(ResourceContext resourceContext) throws SubsystemException;
+	public void process(ResourceOperation operation) throws SubsystemException;
 }
