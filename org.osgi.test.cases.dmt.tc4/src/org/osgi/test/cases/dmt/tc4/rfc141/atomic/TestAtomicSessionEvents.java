@@ -948,7 +948,7 @@ public class TestAtomicSessionEvents extends
 		session.commit();
 		Thread.sleep(sleepDelay);
 
-		assertEquals(this.events.size(), 1);
+		assertEquals( 1, this.events.size());
 		
 		Event event = (Event) this.events.get(0);
 		assertEquals(DmtConstants.EVENT_TOPIC_ADDED, event.getTopic());

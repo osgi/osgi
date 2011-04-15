@@ -1382,6 +1382,7 @@ public class DmtSessionImpl implements DmtSession {
 				getReadWriteDataSession(newNode).copy(node.getPath(),
 						newNode.getPath(), recursive);
 				assignNewNodePermissions(newNode, newParentNode);
+
 			} catch (DmtException e) {
 				// fall back to generic algorithm if plugin doesn't support copy
 				if (e.getCode() != DmtException.FEATURE_NOT_SUPPORTED)
@@ -1392,23 +1393,18 @@ public class DmtSessionImpl implements DmtSession {
 				copyNoCheck(node, newNode, recursive);
 			}
 		} else
-			copyNoCheck(node, newNode, recursive); // does not trigger events
+			copyNoCheck(node, newNode, recursive); 
 
 		Acl acl = getEffectiveNodeAclNoCheck(node);
 		Acl newAcl = getEffectiveNodeAclNoCheck(newNode);
 		Acl mergedAcl = mergeAcls(acl, newAcl);
-//		if ( lockMode == DmtSession.LOCK_TYPE_ATOMIC ) {
-//			// if a node is copied that did not exist, when the session was opened,
-//			// then this node must be signalled as ADDED when the session is committed 
-//			if ( getInitialNodeStates().contains(node) )
-//				enqueueEvent(DmtEvent.COPIED, node, newNode, mergedAcl);
-//			else
-//				enqueueEvent(DmtEvent.ADDED, newNode, null, mergedAcl);
-//		}
-//		else 
-		if ( lockMode == DmtSession.LOCK_TYPE_ATOMIC && 
-				! (eventStore.isEventNode(node, DmtEvent.ADDED ) || eventStore.isNewEventNode(node, DmtEvent.COPIED)))
+		if ( lockMode == DmtSession.LOCK_TYPE_ATOMIC ) { 
+			 if ( !(eventStore.isEventNode(node, DmtEvent.ADDED ) || eventStore.isNewEventNode(node, DmtEvent.COPIED)))
+				enqueueEvent(DmtEvent.COPIED, node, newNode, mergedAcl);
+		}
+		else 
 			enqueueEvent(DmtEvent.COPIED, node, newNode, mergedAcl);
+			
 	}
 
 	public synchronized void renameNode(String nodeUri, String newNodeName)
@@ -1604,8 +1600,6 @@ public class DmtSessionImpl implements DmtSession {
 		else
 			commonCreateInteriorNode(newNode, type, false, false);
 
-		// if this is an atomic session then we keep the hashCode of the old value, 
-		// in order to determine the correct event sequence afterwards
 		if ( this.lockMode == LOCK_TYPE_ATOMIC ) {
 			// if a node is copied, that was not existing at the beginning of the session,
 			// (i.e. is the result of a previous ADDED or COPIED operation)
