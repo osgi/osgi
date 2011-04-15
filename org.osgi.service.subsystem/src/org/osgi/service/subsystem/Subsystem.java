@@ -16,6 +16,7 @@ import org.osgi.framework.Version;
  * or failed.
  * (3) Remove coordination from Resource.
  * (4) Do we need to return Resources and Bundles? Just Resources? What?
+ * (5) Add description of root subsystem. List unsupported operations.
  */
 
 /**
