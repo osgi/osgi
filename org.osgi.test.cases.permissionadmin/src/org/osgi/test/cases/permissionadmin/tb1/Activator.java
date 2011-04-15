@@ -27,6 +27,8 @@ package org.osgi.test.cases.permissionadmin.tb1;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -42,11 +44,10 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
-import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.service.startlevel.StartLevel;
 import org.osgi.test.cases.permissionadmin.junit.PermissionSignatureTBCService;
+import org.osgi.test.support.OSGiTestCase;
 import org.osgi.test.support.wiring.Wiring;
 
 /**
@@ -60,19 +61,19 @@ public class Activator implements BundleActivator,
 		PermissionSignatureTBCService, SynchronousBundleListener {
 
 	private BundleContext	bc;
-	private StartLevel		startLevel;
+	private Object			startLevel;
 	private PermissionAdmin	permissionAdmin;
-	private PackageAdmin	packageAdmin;
+	private Object			packageAdmin;
 
 	public void start(BundleContext context) throws Exception {
 		this.bc = context;
 		context.registerService(PermissionSignatureTBCService.class.getName(),
 				this, null);
 
-		startLevel = (StartLevel) getService(StartLevel.class.getName());
+		startLevel = getService("org.osgi.service.startlevel.StartLevel");
 		permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class
 				.getName());
-		packageAdmin = (PackageAdmin) getService(PackageAdmin.class.getName());
+		packageAdmin = getService("org.osgi.service.packageadmin.PackageAdmin");
 	}
 
 	public void stop(BundleContext context) throws Exception {
@@ -170,27 +171,94 @@ public class Activator implements BundleActivator,
 		if (startLevel == null) {
 			Assert.fail("No StartLevel service");
 		}
-		int l = level.intValue();
-		log("###StartLevel.setBundleStartLevel(" + bundle + "," + l + ")");
-		startLevel.setBundleStartLevel(bundle, l);
+		log("###StartLevel.setBundleStartLevel(" + bundle + "," + level + ")");
+		Method setBundleStartLevel = null;
+		try {
+			setBundleStartLevel = startLevel.getClass().getMethod(
+					"setBundleStartLevel", Bundle.class, Integer.TYPE);
+		}
+		catch (NoSuchMethodException e) {
+			OSGiTestCase.fail("missing method", e);
+		}
+		try {
+			setBundleStartLevel.invoke(startLevel, bundle, level);
+		}
+		catch (InvocationTargetException e) {
+			Throwable cause = e.getCause();
+			if (cause instanceof RuntimeException) {
+				throw (RuntimeException) cause;
+			}
+			if (cause == null) {
+				cause = e;
+			}
+			OSGiTestCase.fail("method exception", cause);
+		}
+		catch (IllegalAccessException e) {
+			OSGiTestCase.fail("method access exception", e);
+		}
+
 	}
 
 	public void callStartLevel_setStartLevel(Integer level) {
 		if (startLevel == null) {
 			Assert.fail("No StartLevel service");
 		}
-		int l = level.intValue();
-		log("###StartLevel.setStartLevel(" + l + ")");
-		startLevel.setStartLevel(l);
+		log("###StartLevel.setStartLevel(" + level + ")");
+		Method setStartLevel = null;
+		try {
+			setStartLevel = startLevel.getClass().getMethod("setStartLevel",
+					Integer.TYPE);
+		}
+		catch (NoSuchMethodException e) {
+			OSGiTestCase.fail("missing method", e);
+		}
+		try {
+			setStartLevel.invoke(startLevel, level);
+		}
+		catch (InvocationTargetException e) {
+			Throwable cause = e.getCause();
+			if (cause instanceof RuntimeException) {
+				throw (RuntimeException) cause;
+			}
+			if (cause == null) {
+				cause = e;
+			}
+			OSGiTestCase.fail("method exception", cause);
+		}
+		catch (IllegalAccessException e) {
+			OSGiTestCase.fail("method access exception", e);
+		}
 	}
 
 	public void callStartLevel_setInitialBundleStartLevel(Integer level) {
 		if (startLevel == null) {
 			Assert.fail("No StartLevel service");
 		}
-		int l = level.intValue();
-		log("###StartLevel.setInitialBundleStartLevel(" + l + ")");
-		startLevel.setInitialBundleStartLevel(l);
+		log("###StartLevel.setInitialBundleStartLevel(" + level + ")");
+		Method setInitialBundleStartLevel = null;
+		try {
+			setInitialBundleStartLevel = startLevel.getClass().getMethod(
+					"setInitialBundleStartLevel", Integer.TYPE);
+		}
+		catch (NoSuchMethodException e) {
+			OSGiTestCase.fail("missing method", e);
+		}
+		try {
+			setInitialBundleStartLevel.invoke(startLevel, level);
+		}
+		catch (InvocationTargetException e) {
+			Throwable cause = e.getCause();
+			if (cause instanceof RuntimeException) {
+				throw (RuntimeException) cause;
+			}
+			if (cause == null) {
+				cause = e;
+			}
+			OSGiTestCase.fail("method exception", cause);
+		}
+		catch (IllegalAccessException e) {
+			OSGiTestCase.fail("method access exception", e);
+		}
 	}
 
 	public void callBundleStartLevel_setStartLevel(Bundle bundle, Integer level) {
@@ -237,7 +305,30 @@ public class Activator implements BundleActivator,
 			Assert.fail("No PackageAdmin service");
 		}
 		log("###PackageAdmin.refreshPackages(" + toString(bundles) + ")");
-		packageAdmin.refreshPackages(bundles);
+		Method refreshPackages = null;
+		try {
+			refreshPackages = packageAdmin.getClass().getMethod(
+					"refreshPackages", Bundle[].class);
+		}
+		catch (NoSuchMethodException e) {
+			OSGiTestCase.fail("missing method", e);
+		}
+		try {
+			refreshPackages.invoke(packageAdmin, (Object) bundles);
+		}
+		catch (InvocationTargetException e) {
+			Throwable cause = e.getCause();
+			if (cause instanceof RuntimeException) {
+				throw (RuntimeException) cause;
+			}
+			if (cause == null) {
+				cause = e;
+			}
+			OSGiTestCase.fail("method exception", cause);
+		}
+		catch (IllegalAccessException e) {
+			OSGiTestCase.fail("method access exception", e);
+		}
 	}
 
 	public boolean callPackageAdmin_resolveBundles(Bundle[] bundles) {
@@ -245,7 +336,33 @@ public class Activator implements BundleActivator,
 			Assert.fail("No PackageAdmin service");
 		}
 		log("###PackageAdmin.resolveBundles(" + toString(bundles) + ")");
-		return packageAdmin.resolveBundles(bundles);
+		Method resolveBundles = null;
+		try {
+			resolveBundles = packageAdmin.getClass().getMethod(
+					"resolveBundles", Bundle[].class);
+		}
+		catch (NoSuchMethodException e) {
+			OSGiTestCase.fail("missing method", e);
+		}
+		try {
+			Boolean result = (Boolean) resolveBundles.invoke(packageAdmin,
+					(Object) bundles);
+			return result.booleanValue();
+		}
+		catch (InvocationTargetException e) {
+			Throwable cause = e.getCause();
+			if (cause instanceof RuntimeException) {
+				throw (RuntimeException) cause;
+			}
+			if (cause == null) {
+				cause = e;
+			}
+			OSGiTestCase.fail("method exception", cause);
+		}
+		catch (IllegalAccessException e) {
+			OSGiTestCase.fail("method access exception", e);
+		}
+		return false;
 	}
 
 	public void callFrameworkWiring_refreshBundles(Bundle... bundles) {

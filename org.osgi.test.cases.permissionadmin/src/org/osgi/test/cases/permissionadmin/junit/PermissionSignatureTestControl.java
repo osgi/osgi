@@ -33,10 +33,8 @@ import org.osgi.framework.AdaptPermission;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
-import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.service.startlevel.StartLevel;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.compatibility.MethodCall;
 
@@ -120,8 +118,8 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 				FrameworkStartLevel.class);
 		startLevel = fsl.getStartLevel();
 		initialBundleStartLevel = fsl.getInitialBundleStartLevel();
-		checkStartLevelService = serviceAvailable(StartLevel.class);
-		checkPackageAdminService = serviceAvailable(PackageAdmin.class);
+		checkStartLevelService = serviceAvailable("org.osgi.service.startlevel.StartLevel");
+		checkPackageAdminService = serviceAvailable("org.osgi.service.packageadmin.PackageAdmin");
 
 		utility = new PermissionSignatureUtility(this, tbc);
 
@@ -1262,4 +1260,9 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	private String getInstallBundleLocation(String bundleName) {
 		return getWebServer() + bundleName;
 	}
+
+	private boolean serviceAvailable(String clazz) {
+		return getContext().getServiceReference(clazz) != null;
+	}
+
 }
