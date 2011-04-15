@@ -31,6 +31,8 @@ import java.net.URL;
 import java.util.Dictionary;
 import java.util.Enumeration;
 
+import junit.framework.Assert;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -38,6 +40,8 @@ import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.SynchronousBundleListener;
+import org.osgi.framework.startlevel.BundleStartLevel;
+import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -163,21 +167,53 @@ public class Activator implements BundleActivator,
 
 	// from StartLevel service
 	public void callStartLevel_setBundleStartLevel(Bundle bundle, Integer level) {
+		if (startLevel == null) {
+			Assert.fail("No StartLevel service");
+		}
 		int l = level.intValue();
 		log("###StartLevel.setBundleStartLevel(" + bundle + "," + l + ")");
 		startLevel.setBundleStartLevel(bundle, l);
 	}
 
 	public void callStartLevel_setStartLevel(Integer level) {
+		if (startLevel == null) {
+			Assert.fail("No StartLevel service");
+		}
 		int l = level.intValue();
 		log("###StartLevel.setStartLevel(" + l + ")");
 		startLevel.setStartLevel(l);
 	}
 
 	public void callStartLevel_setInitialBundleStartLevel(Integer level) {
+		if (startLevel == null) {
+			Assert.fail("No StartLevel service");
+		}
 		int l = level.intValue();
 		log("###StartLevel.setInitialBundleStartLevel(" + l + ")");
 		startLevel.setInitialBundleStartLevel(l);
+	}
+
+	public void callBundleStartLevel_setStartLevel(Bundle bundle, Integer level) {
+		int l = level.intValue();
+		log("###BundleStartLevel.setStartLevel(" + bundle + "," + l + ")");
+		BundleStartLevel bsl = bundle.adapt(BundleStartLevel.class);
+		bsl.setStartLevel(l);
+	}
+
+	public void callFrameworkStartLevel_setStartLevel(Integer level) {
+		int l = level.intValue();
+		log("###FrameworkStartLevel.setStartLevel(" + l + ")");
+		Bundle systemBundle = bc.getBundle(0);
+		FrameworkStartLevel fsl = systemBundle.adapt(FrameworkStartLevel.class);
+		fsl.setStartLevel(l);
+	}
+
+	public void callFrameworkStartLevel_setInitialBundleStartLevel(Integer level) {
+		int l = level.intValue();
+		log("###FrameworkStartLevel.setInitialBundleStartLevel(" + l + ")");
+		Bundle systemBundle = bc.getBundle(0);
+		FrameworkStartLevel fsl = systemBundle.adapt(FrameworkStartLevel.class);
+		fsl.setInitialBundleStartLevel(l);
 	}
 
 	// from PermisssionAdmin service
@@ -197,31 +233,28 @@ public class Activator implements BundleActivator,
 
 	// from PackageAdmin service
 	public void callPackageAdmin_refreshPackages(Bundle[] bundles) {
-		if (packageAdmin != null) {
-			log("###PackageAdmin.refreshPackages(" + toString(bundles) + ")");
-			packageAdmin.refreshPackages(bundles);
+		if (packageAdmin == null) {
+			Assert.fail("No PackageAdmin service");
 		}
-		else {
-			log("###No PackageAdmin service");
-		}
+		log("###PackageAdmin.refreshPackages(" + toString(bundles) + ")");
+		packageAdmin.refreshPackages(bundles);
 	}
 
 	public boolean callPackageAdmin_resolveBundles(Bundle[] bundles) {
-		if (packageAdmin != null) {
-			log("###PackageAdmin.resolveBundles(" + toString(bundles) + ")");
-			return packageAdmin.resolveBundles(bundles);
+		if (packageAdmin == null) {
+			Assert.fail("No PackageAdmin service");
 		}
-		else {
-			log("###No PackageAdmin service");
-			return true;
-		}
+		log("###PackageAdmin.resolveBundles(" + toString(bundles) + ")");
+		return packageAdmin.resolveBundles(bundles);
 	}
 
 	public void callFrameworkWiring_refreshBundles(Bundle... bundles) {
+		log("###FrameworkWiring.refreshBundles(" + toString(bundles) + ")");
 		Wiring.synchronousRefreshBundles(bc, bundles);
 	}
 
 	public boolean callFrameworkWiring_resolveBundles(Bundle... bundles) {
+		log("###FrameworkWiring.resolveBundles(" + toString(bundles) + ")");
 		return Wiring.resolveBundles(bc, bundles);
 	}
 

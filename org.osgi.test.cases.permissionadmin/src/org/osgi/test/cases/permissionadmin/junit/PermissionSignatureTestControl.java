@@ -32,6 +32,8 @@ import java.util.Vector;
 import org.osgi.framework.AdaptPermission;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.startlevel.FrameworkStartLevel;
+import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.service.startlevel.StartLevel;
@@ -70,13 +72,14 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 
 	private int								startLevel				= 10;
 	private int								initialBundleStartLevel	= 10;
-	private boolean							checkStartLevel			= false;
+	private boolean							checkStartLevelService	= false;
+	private boolean							checkPackageAdminService	= false;
 
 	private String							extensionBundleName;
 	private static PermissionInfo			adapt					= new PermissionInfo(
 																			AdaptPermission.class
 																					.getName(),
-																			"(id=0)",
+																			"*",
 																			"adapt");
 	private static PermissionInfo			property				= new PermissionInfo(
 																			PropertyPermission.class
@@ -113,13 +116,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 				.getString("extensionBundle.name");
 
 		tbc = (PermissionSignatureTBCService) getService(PermissionSignatureTBCService.class);
-		StartLevel startLevelService = (StartLevel) getService(StartLevel.class);
-		if (startLevelService != null) {
-			startLevel = startLevelService.getStartLevel();
-			initialBundleStartLevel = startLevelService
-					.getInitialBundleStartLevel();
-			checkStartLevel = true;
-		}
+		FrameworkStartLevel fsl = getContext().getBundle(0).adapt(
+				FrameworkStartLevel.class);
+		startLevel = fsl.getStartLevel();
+		initialBundleStartLevel = fsl.getInitialBundleStartLevel();
+		checkStartLevelService = serviceAvailable(StartLevel.class);
+		checkPackageAdminService = serviceAvailable(PackageAdmin.class);
 
 		utility = new PermissionSignatureUtility(this, tbc);
 
@@ -167,7 +169,13 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 				entryName);
 		utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle,
 				entryPath);
-		if (checkStartLevel) {
+		utility.not_allowed_BundleStartLevel_setStartLevel(message,
+				testSignatureBundle, startLevel);
+		utility.not_allowed_FrameworkStartLevel_setStartLevel(message,
+				startLevel);
+		utility.not_allowed_FrameworkStartLevel_setInitialBundleStartLevel(
+				message, initialBundleStartLevel);
+		if (checkStartLevelService) {
 			utility.not_allowed_StartLevel_setBundleStartLevel(message,
 					testSignatureBundle, startLevel);
 			utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
@@ -186,10 +194,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 				testSignatureBundle);
 		utility.not_allowed_BundleContext_removeBundleListener(message,
 				testSignatureBundle);
-		utility.not_allowed_PackageAdmin_refreshPackages(message,
-				new Bundle[] {testSignatureBundle});
-		utility.not_allowed_PackageAdmin_resolveBundles(message,
-				new Bundle[] {testSignatureBundle});
+		if (checkPackageAdminService) {
+			utility.not_allowed_PackageAdmin_refreshPackages(message,
+					new Bundle[] {testSignatureBundle});
+			utility.not_allowed_PackageAdmin_resolveBundles(message,
+					new Bundle[] {testSignatureBundle});
+		}
 		utility.not_allowed_FrameworkWiring_refreshBundles(message,
 				testSignatureBundle);
 		utility.not_allowed_FrameworkWiring_resolveBundles(message,
@@ -227,7 +237,14 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 						entryName);
 		utility.allowed_Bundle_getEntryPaths(message, testSignatureBundle,
 				entryPath);
-		if (checkStartLevel) {
+		utility.not_allowed_BundleStartLevel_setStartLevel(message,
+				testSignatureBundle, startLevel);
+		utility.not_allowed_FrameworkStartLevel_setStartLevel(message,
+				startLevel);
+		utility.not_allowed_FrameworkStartLevel_setInitialBundleStartLevel(
+				message,
+				initialBundleStartLevel);
+		if (checkStartLevelService) {
 			utility.allowed_StartLevel_setStartLevel(message, startLevel);
 			utility.allowed_StartLevel_setInitialBundleStartLevel(message,
 					initialBundleStartLevel);
@@ -250,10 +267,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 						.getName(), "*", "*")});
 		utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
 				permissionAdmin.getDefaultPermissions());
-		utility.allowed_PackageAdmin_resolveBundles(message,
-				new Bundle[] {testSignatureBundle});
-		utility.allowed_PackageAdmin_refreshPackages(message,
-				new Bundle[] {testSignatureBundle});
+		if (checkPackageAdminService) {
+			utility.allowed_PackageAdmin_resolveBundles(message,
+					new Bundle[] {testSignatureBundle});
+			utility.allowed_PackageAdmin_refreshPackages(message,
+					new Bundle[] {testSignatureBundle});
+		}
 		utility.not_allowed_FrameworkWiring_refreshBundles(message,
 				testSignatureBundle);
 		utility.not_allowed_FrameworkWiring_resolveBundles(message,
@@ -283,7 +302,13 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 		utility.allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
 		utility.allowed_Bundle_getEntryPaths(message, testSignatureBundle,
 				entryPath);
-		if (checkStartLevel) {
+		utility.allowed_BundleStartLevel_setStartLevel(message,
+				testSignatureBundle, startLevel);
+		utility.allowed_FrameworkStartLevel_setStartLevel(message,
+				startLevel);
+		utility.allowed_FrameworkStartLevel_setInitialBundleStartLevel(
+				message, initialBundleStartLevel);
+		if (checkStartLevelService) {
 			utility.allowed_StartLevel_setStartLevel(message, startLevel);
 			utility.allowed_StartLevel_setInitialBundleStartLevel(message,
 					initialBundleStartLevel);
@@ -307,10 +332,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 						.getName(), "*", "*")});
 		utility.not_allowed_PermissionAdmin_setDefaultPermissions(message,
 				permissionAdmin.getDefaultPermissions());
-		utility.allowed_PackageAdmin_resolveBundles(message,
-				new Bundle[] {testSignatureBundle});
-		utility.allowed_PackageAdmin_refreshPackages(message,
-				new Bundle[] {testSignatureBundle});
+		if (checkPackageAdminService) {
+			utility.allowed_PackageAdmin_resolveBundles(message,
+					new Bundle[] {testSignatureBundle});
+			utility.allowed_PackageAdmin_refreshPackages(message,
+					new Bundle[] {testSignatureBundle});
+		}
 		utility.allowed_FrameworkWiring_refreshBundles(message,
 				testSignatureBundle);
 		utility.allowed_FrameworkWiring_resolveBundles(message,
@@ -354,7 +381,13 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			utility.not_allowed_Bundle_getEntryPaths(message,
 					testSignatureBundle, entryPath);
 
-			if (checkStartLevel) {
+			utility.not_allowed_BundleStartLevel_setStartLevel(message,
+					testSignatureBundle, startLevel);
+			utility.not_allowed_FrameworkStartLevel_setStartLevel(message,
+					startLevel);
+			utility.not_allowed_FrameworkStartLevel_setInitialBundleStartLevel(
+					message, initialBundleStartLevel);
+			if (checkStartLevelService) {
 				utility.not_allowed_StartLevel_setBundleStartLevel(message,
 						testSignatureBundle, startLevel);
 				utility.not_allowed_StartLevel_setStartLevel(message,
@@ -374,10 +407,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 					testSignatureBundle);
 			utility.not_allowed_BundleContext_removeBundleListener(message,
 					testSignatureBundle);
-			utility.not_allowed_PackageAdmin_refreshPackages(message,
-					new Bundle[] {testSignatureBundle});
-			utility.not_allowed_PackageAdmin_resolveBundles(message,
-					new Bundle[] {testSignatureBundle});
+			if (checkPackageAdminService) {
+				utility.not_allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+				utility.not_allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+			}
 			utility.not_allowed_FrameworkWiring_refreshBundles(message,
 					testSignatureBundle);
 			utility.not_allowed_FrameworkWiring_resolveBundles(message,
@@ -425,7 +460,13 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 					.not_allowed_Bundle_getLocation(message,
 							testSignatureBundle);
 
-			if (checkStartLevel) {
+			utility.not_allowed_BundleStartLevel_setStartLevel(message,
+					testSignatureBundle, startLevel);
+			utility.not_allowed_FrameworkStartLevel_setStartLevel(message,
+					startLevel);
+			utility.not_allowed_FrameworkStartLevel_setInitialBundleStartLevel(
+					message, initialBundleStartLevel);
+			if (checkStartLevelService) {
 				utility.not_allowed_StartLevel_setBundleStartLevel(message,
 						testSignatureBundle, startLevel);
 				utility.not_allowed_StartLevel_setStartLevel(message,
@@ -455,20 +496,24 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			// note that in R4.2 a change was made to make resource imply
 			// resolve
 			if (i == 0) {
-				utility.allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-				utility.allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
+				if (checkPackageAdminService) {
+					utility.allowed_PackageAdmin_resolveBundles(message,
+							new Bundle[] {testSignatureBundle});
+					utility.allowed_PackageAdmin_refreshPackages(message,
+							new Bundle[] {testSignatureBundle});
+				}
 				utility.allowed_FrameworkWiring_refreshBundles(message,
 						testSignatureBundle);
 				utility.allowed_FrameworkWiring_resolveBundles(message,
 						testSignatureBundle);
 			}
 			else {
-				utility.not_allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-				utility.not_allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
+				if (checkPackageAdminService) {
+					utility.not_allowed_PackageAdmin_resolveBundles(message,
+							new Bundle[] {testSignatureBundle});
+					utility.not_allowed_PackageAdmin_refreshPackages(message,
+							new Bundle[] {testSignatureBundle});
+				}
 				utility.not_allowed_FrameworkWiring_refreshBundles(message,
 						testSignatureBundle);
 				utility.not_allowed_FrameworkWiring_resolveBundles(message,
@@ -516,7 +561,13 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 					entryName);
 			utility.not_allowed_Bundle_getEntryPaths(message,
 					testSignatureBundle, entryPath);
-			if (checkStartLevel) {
+			utility.not_allowed_BundleStartLevel_setStartLevel(message,
+					testSignatureBundle, startLevel);
+			utility.not_allowed_FrameworkStartLevel_setStartLevel(message,
+					startLevel);
+			utility.not_allowed_FrameworkStartLevel_setInitialBundleStartLevel(
+					message, initialBundleStartLevel);
+			if (checkStartLevelService) {
 				utility.not_allowed_StartLevel_setBundleStartLevel(message,
 						testSignatureBundle, startLevel);
 				utility.not_allowed_StartLevel_setStartLevel(message,
@@ -544,20 +595,24 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			// note that in R4.2 a change was made to make class imply
 			// resolve
 			if (i == 0) {
-				utility.allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-				utility.allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
+				if (checkPackageAdminService) {
+					utility.allowed_PackageAdmin_resolveBundles(message,
+							new Bundle[] {testSignatureBundle});
+					utility.allowed_PackageAdmin_refreshPackages(message,
+							new Bundle[] {testSignatureBundle});
+				}
 				utility.allowed_FrameworkWiring_refreshBundles(message,
 						testSignatureBundle);
 				utility.allowed_FrameworkWiring_resolveBundles(message,
 						testSignatureBundle);
 			}
 			else {
-				utility.not_allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-				utility.not_allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
+				if (checkPackageAdminService) {
+					utility.not_allowed_PackageAdmin_resolveBundles(message,
+							new Bundle[] {testSignatureBundle});
+					utility.not_allowed_PackageAdmin_refreshPackages(message,
+							new Bundle[] {testSignatureBundle});
+				}
 				utility.not_allowed_FrameworkWiring_refreshBundles(message,
 						testSignatureBundle);
 				utility.not_allowed_FrameworkWiring_resolveBundles(message,
@@ -604,7 +659,13 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 					entryName);
 			utility.not_allowed_Bundle_getEntryPaths(message,
 					testSignatureBundle, entryPath);
-			if (checkStartLevel) {
+			utility.not_allowed_BundleStartLevel_setStartLevel(message,
+					testSignatureBundle, startLevel);
+			utility.not_allowed_FrameworkStartLevel_setStartLevel(message,
+					startLevel);
+			utility.not_allowed_FrameworkStartLevel_setInitialBundleStartLevel(
+					message, initialBundleStartLevel);
+			if (checkStartLevelService) {
 				utility.not_allowed_StartLevel_setBundleStartLevel(message,
 						testSignatureBundle, startLevel);
 				utility.not_allowed_StartLevel_setStartLevel(message,
@@ -620,10 +681,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 					testSignatureBundle);
 			utility.not_allowed_BundleContext_removeBundleListener(message,
 					testSignatureBundle);
-			utility.not_allowed_PackageAdmin_refreshPackages(message,
-					new Bundle[] {testSignatureBundle});
-			utility.not_allowed_PackageAdmin_resolveBundles(message,
-					new Bundle[] {testSignatureBundle});
+			if (checkPackageAdminService) {
+				utility.not_allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+				utility.not_allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+			}
 			utility.not_allowed_FrameworkWiring_refreshBundles(message,
 					testSignatureBundle);
 			utility.not_allowed_FrameworkWiring_resolveBundles(message,
@@ -686,7 +749,13 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			utility.not_allowed_Bundle_getEntryPaths(message, extensionBundle,
 					extensionEntryPath);
 
-			if (checkStartLevel) {
+			utility.not_allowed_BundleStartLevel_setStartLevel(message,
+					extensionBundle, startLevel);
+			utility.not_allowed_FrameworkStartLevel_setStartLevel(message,
+					startLevel);
+			utility.not_allowed_FrameworkStartLevel_setInitialBundleStartLevel(
+					message, initialBundleStartLevel);
+			if (checkStartLevelService) {
 				utility.not_allowed_StartLevel_setBundleStartLevel(message,
 						extensionBundle, startLevel);
 				utility.not_allowed_StartLevel_setStartLevel(message,
@@ -704,10 +773,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 					testSignatureBundle);
 			utility.not_allowed_BundleContext_removeBundleListener(message,
 					testSignatureBundle);
-			utility.not_allowed_PackageAdmin_refreshPackages(message,
-					new Bundle[] {testSignatureBundle});
-			utility.not_allowed_PackageAdmin_resolveBundles(message,
-					new Bundle[] {testSignatureBundle});
+			if (checkPackageAdminService) {
+				utility.not_allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+				utility.not_allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+			}
 			utility.not_allowed_FrameworkWiring_refreshBundles(message,
 					testSignatureBundle);
 			utility.not_allowed_FrameworkWiring_resolveBundles(message,
@@ -763,7 +834,15 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 					entryName);
 			utility.not_allowed_Bundle_getEntryPaths(message,
 					testSignatureBundle, entryPath);
-			if (checkStartLevel) {
+			utility.allowed_BundleStartLevel_setStartLevel(message,
+					testSignatureBundle, startLevel);
+			utility.not_allowed_FrameworkStartLevel_setStartLevel(message,
+					startLevel);
+			utility.not_allowed_FrameworkStartLevel_setInitialBundleStartLevel(
+					message, initialBundleStartLevel);
+			if (checkStartLevelService) {
+				utility.allowed_StartLevel_setBundleStartLevel(message,
+						testSignatureBundle, startLevel);
 				utility.not_allowed_StartLevel_setStartLevel(message,
 						startLevel);
 				utility.not_allowed_StartLevel_setInitialBundleStartLevel(
@@ -789,20 +868,24 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			// note that in R4.2 a change was made to make execute imply
 			// resolve
 			if (i == 0) {
-				utility.allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-				utility.allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
+				if (checkPackageAdminService) {
+					utility.allowed_PackageAdmin_resolveBundles(message,
+							new Bundle[] {testSignatureBundle});
+					utility.allowed_PackageAdmin_refreshPackages(message,
+							new Bundle[] {testSignatureBundle});
+				}
 				utility.allowed_FrameworkWiring_refreshBundles(message,
 						testSignatureBundle);
 				utility.allowed_FrameworkWiring_resolveBundles(message,
 						testSignatureBundle);
 			}
 			else {
-				utility.not_allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-				utility.not_allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
+				if (checkPackageAdminService) {
+					utility.not_allowed_PackageAdmin_resolveBundles(message,
+							new Bundle[] {testSignatureBundle});
+					utility.not_allowed_PackageAdmin_refreshPackages(message,
+							new Bundle[] {testSignatureBundle});
+				}
 				utility.not_allowed_FrameworkWiring_refreshBundles(message,
 						testSignatureBundle);
 				utility.not_allowed_FrameworkWiring_resolveBundles(message,
@@ -853,7 +936,13 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 					entryName);
 			utility.not_allowed_Bundle_getEntryPaths(message,
 					testSignatureBundle, entryPath);
-			if (checkStartLevel) {
+			utility.not_allowed_BundleStartLevel_setStartLevel(message,
+					testSignatureBundle, startLevel);
+			utility.not_allowed_FrameworkStartLevel_setStartLevel(message,
+					startLevel);
+			utility.not_allowed_FrameworkStartLevel_setInitialBundleStartLevel(
+					message, initialBundleStartLevel);
+			if (checkStartLevelService) {
 				utility.not_allowed_StartLevel_setBundleStartLevel(message,
 						testSignatureBundle, startLevel);
 				utility.not_allowed_StartLevel_setStartLevel(message,
@@ -869,10 +958,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			utility.not_allowed_Bundle_update_by_InputStream(message,
 					testSignatureBundle, getInputStream(signatureBundleName));
 			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-			utility.not_allowed_PackageAdmin_refreshPackages(message,
-					new Bundle[] {testSignatureBundle});
-			utility.not_allowed_PackageAdmin_resolveBundles(message,
-					new Bundle[] {testSignatureBundle});
+			if (checkPackageAdminService) {
+				utility.not_allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+				utility.not_allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+			}
 			utility.not_allowed_FrameworkWiring_refreshBundles(message,
 					testSignatureBundle);
 			utility.not_allowed_FrameworkWiring_resolveBundles(message,
@@ -929,7 +1020,13 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 					entryName);
 			utility.not_allowed_Bundle_getEntryPaths(message,
 					testSignatureBundle, entryPath);
-			if (checkStartLevel) {
+			utility.not_allowed_BundleStartLevel_setStartLevel(message,
+					testSignatureBundle, startLevel);
+			utility.not_allowed_FrameworkStartLevel_setStartLevel(message,
+					startLevel);
+			utility.not_allowed_FrameworkStartLevel_setInitialBundleStartLevel(
+					message, initialBundleStartLevel);
+			if (checkStartLevelService) {
 				utility.not_allowed_StartLevel_setBundleStartLevel(message,
 						testSignatureBundle, startLevel);
 				utility.not_allowed_StartLevel_setStartLevel(message,
@@ -953,20 +1050,24 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 					permissionAdmin.getDefaultPermissions());
 
 			if (i == 0) {
-				utility.allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-				utility.allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
+				if (checkPackageAdminService) {
+					utility.allowed_PackageAdmin_resolveBundles(message,
+							new Bundle[] {testSignatureBundle});
+					utility.allowed_PackageAdmin_refreshPackages(message,
+							new Bundle[] {testSignatureBundle});
+				}
 				utility.allowed_FrameworkWiring_refreshBundles(message,
 						testSignatureBundle);
 				utility.allowed_FrameworkWiring_resolveBundles(message,
 						testSignatureBundle);
 			}
 			else {
-				utility.not_allowed_PackageAdmin_resolveBundles(message,
-						new Bundle[] {testSignatureBundle});
-				utility.not_allowed_PackageAdmin_refreshPackages(message,
-						new Bundle[] {testSignatureBundle});
+				if (checkPackageAdminService) {
+					utility.not_allowed_PackageAdmin_resolveBundles(message,
+							new Bundle[] {testSignatureBundle});
+					utility.not_allowed_PackageAdmin_refreshPackages(message,
+							new Bundle[] {testSignatureBundle});
+				}
 				utility.not_allowed_FrameworkWiring_refreshBundles(message,
 						testSignatureBundle);
 				utility.not_allowed_FrameworkWiring_resolveBundles(message,
@@ -986,7 +1087,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	 * The bundle is specified either by bundle id or by filter string.
 	 */
 	public void testAdminPermissionStartlevel() throws Throwable {
-		if (!checkStartLevel) {
+		if (!checkStartLevelService) {
 			return; // this method shall not be excecuted - no StartLevel
 			// service detected
 		}
@@ -1003,16 +1104,35 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 					new PermissionInfo[] {info, adapt, property});
 			printPermissions(testBundleLocation);
 
+			utility.not_allowed_BundleStartLevel_setStartLevel(message,
+					testSignatureBundle, startLevel);
+			if (checkStartLevelService) {
+				utility.not_allowed_StartLevel_setBundleStartLevel(message,
+						testSignatureBundle, startLevel);
+			}
 			if (i < 2) {
-				utility.allowed_StartLevel_setStartLevel(message, startLevel);
-				utility.allowed_StartLevel_setInitialBundleStartLevel(message,
-						initialBundleStartLevel);
+				utility.allowed_FrameworkStartLevel_setStartLevel(message,
+						startLevel);
+				utility.allowed_FrameworkStartLevel_setInitialBundleStartLevel(
+						message, initialBundleStartLevel);
+				if (checkStartLevelService) {
+					utility.allowed_StartLevel_setStartLevel(message,
+							startLevel);
+					utility.allowed_StartLevel_setInitialBundleStartLevel(
+							message, initialBundleStartLevel);
+				}
 			}
 			else {
-				utility.not_allowed_StartLevel_setStartLevel(message,
+				utility.not_allowed_FrameworkStartLevel_setStartLevel(message,
 						startLevel);
-				utility.not_allowed_StartLevel_setInitialBundleStartLevel(
+				utility.not_allowed_FrameworkStartLevel_setInitialBundleStartLevel(
 						message, initialBundleStartLevel);
+				if (checkStartLevelService) {
+					utility.not_allowed_StartLevel_setStartLevel(message,
+							startLevel);
+					utility.not_allowed_StartLevel_setInitialBundleStartLevel(
+							message, initialBundleStartLevel);
+				}
 			}
 
 			utility.not_allowed_BundleContext_addBundleListener(message,
@@ -1033,10 +1153,6 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 					entryName);
 			utility.not_allowed_Bundle_getEntryPaths(message,
 					testSignatureBundle, entryPath);
-			if (checkStartLevel) {
-				utility.not_allowed_StartLevel_setBundleStartLevel(message,
-						testSignatureBundle, startLevel);
-			}
 			utility.not_allowed_Bundle_loadClass(message, testSignatureBundle,
 					className);
 			utility.not_allowed_Bundle_stop(message, testSignatureBundle);
@@ -1045,10 +1161,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			utility.not_allowed_Bundle_update_by_InputStream(message,
 					testSignatureBundle, getInputStream(signatureBundleName));
 			utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
-			utility.not_allowed_PackageAdmin_refreshPackages(message,
-					new Bundle[] {testSignatureBundle});
-			utility.not_allowed_PackageAdmin_resolveBundles(message,
-					new Bundle[] {testSignatureBundle});
+			if (checkPackageAdminService) {
+				utility.not_allowed_PackageAdmin_refreshPackages(message,
+						new Bundle[] {testSignatureBundle});
+				utility.not_allowed_PackageAdmin_resolveBundles(message,
+						new Bundle[] {testSignatureBundle});
+			}
 			utility.not_allowed_FrameworkWiring_refreshBundles(message,
 					testSignatureBundle);
 			utility.not_allowed_FrameworkWiring_resolveBundles(message,

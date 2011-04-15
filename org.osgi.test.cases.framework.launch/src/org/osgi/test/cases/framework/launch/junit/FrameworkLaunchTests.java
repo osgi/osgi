@@ -37,11 +37,12 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
+import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
-import org.osgi.service.startlevel.StartLevel;
+import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.test.support.wiring.Wiring;
 
@@ -380,12 +381,10 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		configuration.put(Constants.FRAMEWORK_BEGINNING_STARTLEVEL, "25");
 		Framework framework = createFramework(configuration);
 		startFramework(framework);
-		StartLevel sl = (StartLevel) getService(framework, STARTLEVEL);
-		if (sl == null) {
-			stopFramework(framework);
-			return; // cannot test without start level
-		}
-		assertEquals("Wrong start level after start", 25, sl.getStartLevel());
+		FrameworkStartLevel fsl = framework.getBundleContext().getBundle()
+				.adapt(FrameworkStartLevel.class);
+		assertNotNull(fsl);
+		assertEquals("Wrong start level after start", 25, fsl.getStartLevel());
 		stopFramework(framework);
 	}
 
@@ -410,6 +409,22 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 			assertNotNull("PermissionAdmin", getService(framework, PERMISSION_ADMIN));
 		if (hasCondPermAdmin)
 			assertNotNull("ConditionalPermissionAdmin", getService(framework, CONDPERM_ADMIN));
+		stopFramework(framework);
+	}
+
+	public void testAdaptations() {
+		Framework framework = createFramework(getConfiguration(getName()));
+		startFramework(framework);
+		Bundle systemBundle = framework.getBundleContext().getBundle();
+		assertNotNull(systemBundle.adapt(FrameworkStartLevel.class));
+		assertNotNull(systemBundle.adapt(FrameworkWiring.class));
+		stopFramework(framework);
+		// check that the available adaptations are available when framework is
+		// initialized
+		initFramework(framework);
+		systemBundle = framework.getBundleContext().getBundle();
+		assertNotNull(systemBundle.adapt(FrameworkStartLevel.class));
+		assertNotNull(systemBundle.adapt(FrameworkWiring.class));
 		stopFramework(framework);
 	}
 

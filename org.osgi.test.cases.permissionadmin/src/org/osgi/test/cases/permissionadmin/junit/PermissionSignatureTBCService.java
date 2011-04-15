@@ -110,4 +110,13 @@ public interface PermissionSignatureTBCService {
 	
 	public boolean callFrameworkWiring_resolveBundles(Bundle... bundles);
 	
+	// from BundleStartLevel
+	public void callBundleStartLevel_setStartLevel(Bundle bundle,
+			Integer startlevel);
+
+	// from FrameworkStartLevel
+	public void callFrameworkStartLevel_setStartLevel(Integer startlevel);
+
+	public void callFrameworkStartLevel_setInitialBundleStartLevel(
+			Integer startlevel);
 }

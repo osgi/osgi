@@ -398,6 +398,62 @@ public class PermissionSignatureUtility {
 						startlevel)}, SecurityException.class);
 	}
 
+	public Object allowed_BundleStartLevel_setStartLevel(String message,
+			Bundle bundle, int startlevel) throws Exception {
+		return control.allowed_call(
+				"call BundleStartLevel.setStartLevel(Bundle, int) " + message,
+				"callBundleStartLevel_setStartLevel", new Class[] {
+						Bundle.class, Integer.class}, new Object[] {bundle,
+						new Integer(startlevel)});
+	}
+
+	public boolean not_allowed_BundleStartLevel_setStartLevel(String message,
+			Bundle bundle, int startlevel) throws Exception {
+		return control.not_allowed_call(
+				"call BundleStartLevel.setStartLevel(Bundle, int) " + message,
+				"callBundleStartLevel_setStartLevel", new Class[] {
+						Bundle.class, Integer.class}, new Object[] {bundle,
+						new Integer(startlevel)}, SecurityException.class);
+	}
+
+	public Object allowed_FrameworkStartLevel_setStartLevel(String message,
+			int startlevel) throws Exception {
+		return control.allowed_call(
+				"call FrameworkStartLevel.setStartLevel(int) " + message,
+				"callFrameworkStartLevel_setStartLevel",
+				new Class[] {Integer.class}, new Object[] {new Integer(
+						startlevel)});
+	}
+
+	public boolean not_allowed_FrameworkStartLevel_setStartLevel(
+			String message, int startlevel) throws Exception {
+		return control.not_allowed_call(
+				"call FrameworkStartLevel.setStartLevel(int) " + message,
+				"callFrameworkStartLevel_setStartLevel",
+				new Class[] {Integer.class}, new Object[] {new Integer(
+						startlevel)}, SecurityException.class);
+	}
+
+	public Object allowed_FrameworkStartLevel_setInitialBundleStartLevel(
+			String message, int startlevel) throws Exception {
+		return control.allowed_call(
+				"call FrameworkStartLevel.setInitialBundleStartLevel(int) "
+						+ message,
+				"callFrameworkStartLevel_setInitialBundleStartLevel",
+				new Class[] {Integer.class}, new Object[] {new Integer(
+						startlevel)});
+	}
+
+	public boolean not_allowed_FrameworkStartLevel_setInitialBundleStartLevel(
+			String message, int startlevel) throws Exception {
+		return control.not_allowed_call(
+				"call FrameworkStartLevel.setInitialBundleStartLevel(int) "
+						+ message,
+				"callFrameworkStartLevel_setInitialBundleStartLevel",
+				new Class[] {Integer.class}, new Object[] {new Integer(
+						startlevel)}, SecurityException.class);
+	}
+
 	public Object allowed_PermissionAdmin_setPermissions(String message,
 			String location, PermissionInfo[] permissions) throws Exception {
 		return control.allowed_call(
