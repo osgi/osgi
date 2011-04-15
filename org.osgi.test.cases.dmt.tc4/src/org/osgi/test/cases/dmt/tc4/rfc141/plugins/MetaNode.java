@@ -4,7 +4,11 @@ import info.dmtree.DmtData;
 
 public class MetaNode implements info.dmtree.MetaNode {
 
-	private boolean leaf;
+	// according to bug-fix 1948, this extension-property must not be neccessary anymore
+//    private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 
+//        "org.osgi.impl.service.dmt.interior-node-value-support";
+
+    private boolean leaf;
 	private int scope;
 	private int format;
 	private int[] operations = {};
@@ -96,14 +100,20 @@ public class MetaNode implements info.dmtree.MetaNode {
 		return false;
 	}
 
-	public String[] getExtensionPropertyKeys() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	// this stuff seems necessary (for any obscure reasons) to make the OSGi-ref-impl-DMTAdmin avoid NullPointerExceptions
+    public String[] getExtensionPropertyKeys() {
+    	return null;
+//        return new String[] { INTERIOR_NODE_VALUE_SUPPORT_PROPERTY };
+    }
 
-	public Object getExtensionProperty(String key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Object getExtensionProperty(String key) {
+//        if(key.equals(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
+//            return new Boolean(true);
+//        
+//        throw new IllegalArgumentException("Only the '" + 
+//                INTERIOR_NODE_VALUE_SUPPORT_PROPERTY + 
+//                "' extension property is supported by this plugin.");
+    	return null;
+    }
 
 }

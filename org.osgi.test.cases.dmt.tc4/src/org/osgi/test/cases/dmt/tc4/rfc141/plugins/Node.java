@@ -5,16 +5,18 @@ import java.util.TreeSet;
 
 public class Node implements Comparable {
 	
-	private String title;
+	private String name;
 	private String value;
 	private MetaNode metaNode;
+	private String title;
 	
+
 	private Node parent;
 	private TreeSet children;
 
-	public Node( Node parent, String title, String value ) {
+	public Node( Node parent, String name, String value ) {
 		this.parent = parent;
-		this.title = title;
+		this.name = name;
 		this.value = value;
 		if ( parent != null ) {
 			parent.addChild(this);
@@ -26,7 +28,7 @@ public class Node implements Comparable {
 	}
 	
 	private String getPath() {
-		String path = title;
+		String path = name;
 		if ( parent != null )
 			path = parent.getPath() + "/" + path;
 		return path;
@@ -37,7 +39,7 @@ public class Node implements Comparable {
 		Node node = null;
 		while ( iterator.hasNext() ) {
 			Node n = (Node) iterator.next();
-			if ( name.equals( n.getTitle() ))
+			if ( name.equals( n.getName() ))
 				node = n;
 		}
 		return node;
@@ -46,13 +48,17 @@ public class Node implements Comparable {
 	void addChild( Node node ) {
 		getChildren().add(node);
 	}
+
+	void removeChild( Node node ) {
+		getChildren().remove(node);
+	}
 	
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getValue() {
@@ -104,4 +110,13 @@ public class Node implements Comparable {
 			return -1; 
 		return this.getURI().compareTo(((Node)o).getURI());
 	}
+	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 }

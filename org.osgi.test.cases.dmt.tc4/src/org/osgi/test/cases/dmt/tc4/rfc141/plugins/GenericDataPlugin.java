@@ -15,6 +15,7 @@ import info.dmtree.spi.TransactionalDataSession;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Vector;
 
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
@@ -100,35 +101,47 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 
 	public void copy(String[] nodePath, String[] newNodePath, boolean recursive)
 			throws DmtException {
+//		Node node = findNode(pluginRoot, nodePath);
+		throw new DmtException(Uri.toUri(nodePath), DmtException.FEATURE_NOT_SUPPORTED, "This plugin does not support copy operations.");
 	}
 
 	public void createInteriorNode(String[] nodePath, String type)
 			throws DmtException {
-		// TODO Auto-generated method stub
-
+		// find parent node
+		String[] parentUri = new String[ nodePath.length - 1 ];
+		for (int i = 0; i < parentUri.length; i++)
+			parentUri[i] = nodePath[i];
+		Node parent = findNode(pluginRoot, parentUri);
+		if ( parent != null )
+			new Node(parent, nodePath[nodePath.length - 1], null );
 	}
 
 	public void createLeafNode(String[] nodePath, DmtData value, String mimeType)
 			throws DmtException {
-		// TODO Auto-generated method stub
-
+		// find parent node
+		String[] parentUri = new String[ nodePath.length - 1 ];
+		for (int i = 0; i < parentUri.length; i++)
+			parentUri[i] = nodePath[i];
+		Node parent = findNode(pluginRoot, parentUri);
+		if ( parent != null )
+			new Node(parent, nodePath[nodePath.length - 1], "" + value );
 	}
 
 	public void deleteNode(String[] nodePath) throws DmtException {
-		// TODO Auto-generated method stub
-
+		Node n = findNode(pluginRoot, nodePath );
+		n.getParent().removeChild(n);
 	}
 
 	public void renameNode(String[] nodePath, String newName)
 			throws DmtException {
-		// TODO Auto-generated method stub
-
+		Node n = findNode(pluginRoot, nodePath );
+		n.setName(newName);
 	}
 
 	public void setNodeTitle(String[] nodePath, String title)
 			throws DmtException {
-		// TODO Auto-generated method stub
-
+		Node n = findNode(pluginRoot, nodePath );
+		n.setTitle(title);
 	}
 
 	public void setNodeType(String[] nodePath, String type) throws DmtException {
@@ -154,8 +167,14 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 	}
 
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
-		// TODO Auto-generated method stub
-		return null;
+		Node n = findNode(pluginRoot, nodePath);
+		Vector children = new Vector();
+		if ( n != null ) {
+			Iterator i = n.getChildren().iterator();
+			while (i.hasNext())
+				children.add( ((Node)i.next()).getName());
+		}
+		return (String[]) children.toArray( new String[n.getChildren().size()] );
 	}
 
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
@@ -190,14 +209,15 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 		return findNode(pluginRoot, uri) != null;
 	}
 
+	// it is a leaf node, if it has a value and no children
 	public boolean isLeafNode(String[] nodePath) throws DmtException {
 		Node n = findNode(pluginRoot, nodePath);
-		return n != null ? n.getChildren().size() == 0 : false;
+		return n != null && n.getValue() != null && n.getChildren().size() == 0;
 	}
 
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
-		// TODO Auto-generated method stub
-		return null;
+		Node n = findNode(pluginRoot, nodePath);
+		return (n != null ? new DmtData(n.getValue()) : null);
 	}
 
 	public int getNodeVersion(String[] nodePath) throws DmtException {
