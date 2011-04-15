@@ -110,11 +110,11 @@ public class TestBug1732_MountPluginEventing extends
 		assertNotNull(event);
 		assertEquals(topic, event.getTopic() );
 		
-		// check that give props are there (if they have non-conflicting names)
+		// check that given props are there (if they have non-conflicting names)
 		assertEquals( "testValue1", event.getProperty("testKey1"));
 		assertEquals( "testValue2", event.getProperty("testKey2"));
 		
-		// check that protected properties are not overwritten
+		// check that protected properties where not overwritten
 		String[] eventNodes = (String[]) event.getProperty(DmtConstants.EVENT_PROPERTY_NODES);
 		assertEquals(Arrays.asList(new String[] {"./A/X", "./A/Y"}), Arrays.asList( eventNodes ));
 		
