@@ -94,7 +94,7 @@ public class TestBug1732_MountPointHandling extends
 	 */
 	public void testExecPluginCallback() throws Exception {
 
-		assertCallbackInvocation( false );
+		assertCallbackInvocation( true );
 	}
 
 	
@@ -105,12 +105,16 @@ public class TestBug1732_MountPointHandling extends
 
 		Dictionary props = new Hashtable();
 		String[] uris = new String[] {mountRoot, "./XY" };
-		if ( asExecPlugin )
-			props.put(DataPlugin.DATA_ROOT_URIS, uris);
-		else 
+		String[] classes = null; 
+		if ( asExecPlugin ) {
 			props.put(ExecPlugin.EXEC_ROOT_URIS, uris);
+			classes = new String[] {ExecPlugin.class.getName(), MountPlugin.class.getName()}; 
+		}
+		else {
+			props.put(DataPlugin.DATA_ROOT_URIS, uris);
+			classes = new String[] {DataPlugin.class.getName(), MountPlugin.class.getName()}; 
+		}
 
-		String[] classes = new String[] {DataPlugin.class.getName(), MountPlugin.class.getName()}; 
 		ServiceRegistration reg = getContext().registerService(classes, plugin, props);
 
 		assertNotNull(plugin.lastAddedMountPoints);
