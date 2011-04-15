@@ -40,16 +40,16 @@ public class Dispatcher extends ServiceTracker {
 			if ( dataRootURIs != null ) {
 				p = new Plugin( ref, dataPluginRoot, eaTracker, context );
 				p.init( dataRootURIs, idManager);
-				System.out.println( ">>>>>>>>>> data plugin added: " + p.getOwns());
-				dumpSegments(dataPluginRoot);
+//				System.out.println( ">>>>>>>>>> data plugin added: " + p.getOwns());
+//				dumpSegments(dataPluginRoot);
 				if ( p!= null && p.getOwns() != null )
 					mapPotentialDependingPlugins(ref, true);
 			}
 			if ( execRootURIs != null ) {
 				p = new Plugin( ref, execPluginRoot, eaTracker, context );
 				p.init(execRootURIs, idManager);
-				System.out.println( ">>>>>>>>>> exec plugin added: " + p.getOwns());
-				dumpSegments(execPluginRoot);
+//				System.out.println( ">>>>>>>>>> exec plugin added: " + p.getOwns());
+//				dumpSegments(execPluginRoot);
 				if ( p!= null && p.getOwns() != null )
 					mapPotentialDependingPlugins(ref, false);
 			}
@@ -109,15 +109,14 @@ public class Dispatcher extends ServiceTracker {
 			String type = "dataPlugin";
 			if ( isExecPlugin )
 				type+= "/execPlugin";
-			System.out.println( ">>>>>>>>>> " + type + " removed: " + ((Plugin)service).getOwns());
-//			System.out.println( "dump vorher: ");
+//			System.out.println( ">>>>>>>>>> " + type + " removed: " + ((Plugin)service).getOwns());
 //			dumpSegments(root);
 			((Plugin) service).close();
 			
-			System.out.println( "dump dataPlugins: ");
-			dumpSegments(dataPluginRoot);
-			System.out.println( "dump execPlugins: ");
-			dumpSegments(execPluginRoot);
+//			System.out.println( "dump dataPlugins: ");
+//			dumpSegments(dataPluginRoot);
+//			System.out.println( "dump execPlugins: ");
+//			dumpSegments(execPluginRoot);
 				
 		} catch (InterruptedException e) {
 			e.printStackTrace();
