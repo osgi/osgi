@@ -72,7 +72,6 @@ public class TestBug1658_PermanentNode extends DefaultTestBundleControl{
 		String newValue = "B_value";
 		
 		session = dmtAdmin.getSession( uri, DmtSession.LOCK_TYPE_EXCLUSIVE);
-		assertEquals("B", session.getNodeTitle(uri));
 		
 		DmtData dmtData = new DmtData( newValue );
 		session.setNodeValue(uri, dmtData );
@@ -83,7 +82,7 @@ public class TestBug1658_PermanentNode extends DefaultTestBundleControl{
 
 	private void preparePlugin( boolean withMetadata ) throws Exception {
 		String mountRoot = "./A";
-		Node n2 = new Node(null, "A", "node A");
+		Node n2 = new Node(null, "A", null);
 		Node n3 = new Node(n2, "B", "node B");
 		dataPlugin = new GenericDataPlugin("P1", mountRoot, n2 );
 		
