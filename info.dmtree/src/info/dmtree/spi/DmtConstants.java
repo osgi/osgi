@@ -38,6 +38,11 @@ public class DmtConstants {
 	public static final String	DDF_SCAFFOLD						= "org.osgi/1.0/ScaffoldNode";
 
 	/**
+	 * A string defining a DDF URI, indicating that the node is a transient node.
+	 */
+	public static final String	DDF_TRANSIENT						= "org.osgi/1.0/TransientNode";
+
+	/**
 	 * A string defining the topic for the event that is sent for added nodes.
 	 * <p>
 	 * The value of this field is “info/dmtree/DmtEvent/ADDED”.
