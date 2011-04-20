@@ -138,8 +138,9 @@ public final class DmtData {
 	public static final int			FORMAT_UNSIGNED_LONG	= 0x4000;
 
 	/**
-	 * The node holds a String object that is interpreted as a dateTime type
-	 * defined in ISO 8601.
+	 * The node holds a String object that is interpreted as a dateTime type defined
+	 * in ISO 8601. The supported interpretation pattern is CCYYMMDDThhmmss or 
+	 * CCYYMMDDThhmmssZ.
 	 * 
 	 * @since 1.1
 	 */
