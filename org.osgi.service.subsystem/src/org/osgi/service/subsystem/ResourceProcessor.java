@@ -40,5 +40,5 @@ public interface ResourceProcessor {
 	 * @param operation
 	 * @throws SubsystemException
 	 */
-	public void process(ResourceOperation operation) throws SubsystemException;
+	public void process(ResourceOperation<?> operation) throws SubsystemException;
 }

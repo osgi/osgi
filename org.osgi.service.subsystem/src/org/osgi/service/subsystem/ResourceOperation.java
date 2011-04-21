@@ -1,5 +1,6 @@
 package org.osgi.service.subsystem;
 
+import org.osgi.framework.model.Resource;
 import org.osgi.service.coordinator.Coordination;
 
 /**
@@ -9,7 +10,7 @@ import org.osgi.service.coordinator.Coordination;
  *@ThreadSafe
  *@noimplement
  */
-public interface ResourceOperation {
+public interface ResourceOperation<C> {
 	/**
 	 * The type of operation to perform on the resource.
 	 */
@@ -19,9 +20,21 @@ public interface ResourceOperation {
 		 */
 		INSTALL,
 		/**
+		 * Start the resource.
+		 */
+		START,
+		/**
+		 * Stop the resource.
+		 */
+		STOP,
+		/**
 		 * Uninstall the resource.
 		 */
-		UNINSTALL
+		UNINSTALL,
+		/**
+		 * Update the resource.
+		 */
+		UPDATE
 	}
 	/**
 	 * Called by the resource processor once the operation has successfully and 
@@ -45,13 +58,13 @@ public interface ResourceOperation {
 	 * A resource operation is associated with a particular resource.
 	 * @return The resource on which this operation must be performed.
 	 */
-	public Resource getResource();
+	public Resource<?, ?> getResource();
 	/**
 	 * A resource operation is performed on a resource belonging to a
-	 * particular subsystem.
-	 * @return The subsystem of which the resource is a part.
+	 * particular context.
+	 * @return The context of which the resource is a part.
 	 */
-	public Subsystem getSubsystem();
+	public C getContext();
 	/**
 	 * A resource operation is associated with a type that defines the
 	 * processing required on the resource.
