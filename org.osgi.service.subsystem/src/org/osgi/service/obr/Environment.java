@@ -1,0 +1,78 @@
+/*
+ * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.osgi.service.obr;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import org.osgi.framework.wiring.BundleRevision;
+
+/**
+ * An environment provides options and constraints to the potential solution of
+ * a {@link Resolver#resolve(Environment, PotentialRequirement...)} operation.
+ * 
+ * <p>
+ * Environments provide {@link PotentialCapability PotentialCapabilities}
+ * options that the Resolver can use to satisfy {@link PotentialRequirement
+ * PotentialRequirements} via the
+ * {@link #findProviders(PotentialRequirement...)} method.
+ * 
+ * <p>
+ * Environments also constrain solutions via the {@link #getWiring()} method. A
+ * wiring consists of a map of existing {@link PotentialRevision revisions} to
+ * {@link PotentialWire wires}.
+ *   
+ * <p>
+ * An environment may be used to provide capabilities via local
+ * {@link BundleRevision BundleRevisions} and/or remote {@link Repository
+ * Repositories}.
+ * 
+ * <p>
+ * A resolver may call the {@link #findProviders(PotentialRequirement...)} and
+ * {@link #getWiring()} method any number of times during a resolve using any
+ * thread. Environments may also be shared between several resolvers. As such
+ * implementors should ensure that this class is properly synchronized.
+ */
+public interface Environment {
+  /**
+   * Find any capabilities that can potentially provide a match to the supplied
+   * requirements.
+   * 
+   * <p>
+   * A resolver should use the iteration order or the returned capability
+   * collection to infer preference in the case where multiple capabilities
+   * match a requirement. Capabilities at the start of the iteration are implied
+   * to be preferred over capabilities at the end.
+   * 
+   * @param requirements
+   *          the requirements that a resolver is attempting to satisfy
+   * 
+   * @return an immutable collection of capabilities that match the supplied
+   *         requirements
+   */
+  Collection<PotentialCapability> findProviders(
+      PotentialRequirement... requirements);
+
+  /**
+   * An immutable map of wires between revisions. Multiple calls to
+   * this method for the same environment object must result in the same
+   * set of wires. TODO coordination?
+   * 
+   * @return the wires already defined in this environment
+   */
+  Map<PotentialRevision, List<PotentialWire>> getWiring();
+}
