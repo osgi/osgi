@@ -1,6 +1,5 @@
-package org.osgi.service.subsystem;
+package org.osgi.framework.model;
 
-import org.osgi.framework.model.Resource;
 import org.osgi.service.coordinator.Coordination;
 
 /**

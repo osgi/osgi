@@ -1,4 +1,6 @@
-package org.osgi.service.subsystem;
+package org.osgi.framework.model;
+
+import org.osgi.service.subsystem.SubsystemException;
 
 /*
  * TODO
