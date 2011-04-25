@@ -40,11 +40,6 @@ public interface Resource<C extends Capability, R extends Requirement> extends R
 	 */
 	public String getNamespace();
 	/**
-	 * Gets the symbolic name of the resource.
-	 * @return The symbolic name of the resource.
-	 */
-	public String getSymbolicName();
-	/**
 	 * Opens the resource for reading.
 	 * @return The <code>InputStream</code> from which the resource can be read.
 	 * @throws IOException If it is not possible to open the resource for 
