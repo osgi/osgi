@@ -117,6 +117,17 @@ public class DmtException extends Exception {
     public static final int FEATURE_NOT_SUPPORTED = 406;
     
     /**
+     * The requested operation failed because a specific limit was exceeded, e.g. 
+     * if a requested resource exceeds a size limit.
+     * <p>
+     * This error code corresponds to the OMA DM response status code 413
+     * &quot;Request entity too large&quot;.
+	 * 
+	 * @since 1.1
+     */
+    public static final int LIMIT_EXCEEDED = 413;
+
+    /**
      * The requested command failed because the target URI or one of its
      * segments is too long for what the recipient is able or willing to
      * process, or the target URI contains too many segments. The length and
@@ -316,16 +327,6 @@ public class DmtException extends Exception {
      * &quot;Command Failed&quot; when transferring over OMA DM.
      */
     public static final int SESSION_CREATION_TIMEOUT = 7;
-
-    /**
-     * The requested operation failed because a specific limit was exceeded, e.g. 
-     * if a requested resource exceeds a size limit.
-     * <p>
-     * This error code does not correspond to any OMA DM response status code.
-     * It should be translated to the code 500 &quot;Command Failed&quot; when
-     * transferring over OMA DM.
-     */
-    public static final int LIMIT_EXCEEDED = 8;
 
     // ----- Content fields -----//
 

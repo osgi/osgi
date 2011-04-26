@@ -83,6 +83,11 @@ public final class DmtData {
 	 * The node holds an OMA DM {@code b64} value. Like {@link #FORMAT_BINARY},
 	 * this format is also represented by the Java {@code byte[]} type, the
 	 * difference is only in the corresponding OMA DM format.
+	 * 
+	 * This format does not affect the internal storage format of the data 
+	 * as {@code byte[]}. 
+	 * It is intented as a hint for the external representation of this data.
+	 * Protocol Adapters can use this hint for their further processing.
 	 */
 	public static final int			FORMAT_BASE64			= 0x0080;
 
@@ -138,8 +143,9 @@ public final class DmtData {
 	public static final int			FORMAT_UNSIGNED_LONG	= 0x4000;
 
 	/**
-	 * The node holds a String object that is interpreted as a dateTime type
-	 * defined in ISO 8601.
+	 * The node holds a String object that is interpreted as a dateTime type defined
+	 * in ISO 8601. The supported interpretation pattern is CCYYMMDDThhmmss or 
+	 * CCYYMMDDThhmmssZ.
 	 * 
 	 * @since 1.1
 	 */
@@ -162,6 +168,11 @@ public final class DmtData {
 	/**
 	 * The node holds an hex binary value. The value of the node corresponds to
 	 * the Java {@code byte[]} type.
+	 * 
+	 * This format does not affect the internal storage format of the data 
+	 * as {@code byte[]}. 
+	 * It is intented as a hint for the external representation of this data.
+	 * Protocol Adapters can use this hint for their further processing.
 	 * 
 	 * @since 1.1
 	 */
