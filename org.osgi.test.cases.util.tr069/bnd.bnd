@@ -7,17 +7,17 @@ Conditional-Package					= org.osgi.test.support.*
 
 Private-Package						= ${p}, ${p}.helper
 	
-Test-Cases							= ${testcases}
-
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
-    org.osgi.util.tr069;                    version=latest , \
+    org.osgi.util.tr069;                    version=project , \
     info.dmtree;                            version=project , \
-    osgi.core;                              version=project , \
-    ee.minimum;                             version=project , \
+    osgi.core;                              version=4.3 , \
+    ee.minimum;                             version=1.2 , \
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn;                              version=project , \
-	org.osgi.test.support;                  version=project , \
-	org.osgi.util.tr069;                    version=latest
+	osgi.residential;                       version=latest
+
+Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.util.tr069
+	
