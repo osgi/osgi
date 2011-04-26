@@ -38,6 +38,10 @@ public interface UPnPAction {
 	 * standard service, action names must begin with {@code X_}.</li>
 	 * </ul>
 	 * 
+	 * <p>
+	 * This method must continue to return the action name after the UPnP action
+	 * has been removed from the network.
+	 * 
 	 * @return Name of action, must not contain a hyphen character or a hash
 	 *         character
 	 */
@@ -49,6 +53,10 @@ public interface UPnPAction {
 	 * One of the output arguments can be flagged as a designated return
 	 * argument.
 	 * 
+	 * <p>
+	 * This method must continue to return the action return argument name after
+	 * the UPnP action has been removed from the network.
+	 * 
 	 * @return The name of the designated return argument or {@code null} if
 	 *         none is marked.
 	 */
@@ -59,6 +67,10 @@ public interface UPnPAction {
 	 * <p>
 	 * Each action may have zero or more input arguments.
 	 * 
+	 * <p>
+	 * This method must continue to return the action input argument names after
+	 * the UPnP action has been removed from the network.
+	 * 
 	 * @return Array of input argument names or {@code null} if no input
 	 *         arguments.
 	 * 
@@ -68,6 +80,10 @@ public interface UPnPAction {
 
 	/**
 	 * List all output arguments for this action.
+	 * 
+	 * <p>
+	 * This method must continue to return the action output argument names
+	 * after the UPnP action has been removed from the network.
 	 * 
 	 * @return Array of output argument names or {@code null} if there are no
 	 *         output arguments.
@@ -83,8 +99,11 @@ public interface UPnPAction {
 	 * in UPnP actions.
 	 * 
 	 * @param argumentName The name of the UPnP action argument.
-	 * @return State variable associated with the named argument or
-	 *         {@code null} if there is no such argument.
+	 * @return State variable associated with the named argument or {@code null}
+	 *         if there is no such argument.
+	 * 
+	 * @throws IllegalStateException if the UPnP action has been removed from
+	 *         the network.
 	 * 
 	 * @see UPnPStateVariable
 	 */
@@ -94,26 +113,28 @@ public interface UPnPAction {
 	 * Invokes the action.
 	 * 
 	 * The input and output arguments are both passed as {@code Dictionary}
-	 * objects. Each entry in the {@code Dictionary} object has a
-	 * {@code String} object as key representing the argument name and the
-	 * value is the argument itself. The class of an argument value must be
-	 * assignable from the class of the associated UPnP state variable.
+	 * objects. Each entry in the {@code Dictionary} object has a {@code String}
+	 * object as key representing the argument name and the value is the
+	 * argument itself. The class of an argument value must be assignable from
+	 * the class of the associated UPnP state variable.
 	 * 
-	 * The input argument {@code Dictionary} object must contain exactly
-	 * those arguments listed by {@code getInputArguments} method. The output
-	 * argument {@code Dictionary} object will contain exactly those
-	 * arguments listed by {@code getOutputArguments} method.
-	 *
-	 * @param args A {@code Dictionary} of arguments. Must contain the correct set and
-	 * type of arguments for this action. May be {@code null} if no
-	 * input arguments exist.
-	 *
-	 * @return A {@code Dictionary} with the output arguments.
-	 *         {@code null} if the action has no output arguments.
-	 *
-	 * @throws UPnPException  A UPnP error has occured.
+	 * The input argument {@code Dictionary} object must contain exactly those
+	 * arguments listed by {@code getInputArguments} method. The output argument
+	 * {@code Dictionary} object will contain exactly those arguments listed by
+	 * {@code getOutputArguments} method.
+	 * 
+	 * @param args A {@code Dictionary} of arguments. Must contain the correct
+	 *        set and type of arguments for this action. May be {@code null} if
+	 *        no input arguments exist.
+	 * 
+	 * @return A {@code Dictionary} with the output arguments. {@code null} if
+	 *         the action has no output arguments.
+	 * 
+	 * @throws UPnPException A UPnP error has occurred.
+	 * @throws IllegalStateException if the UPnP action has been removed from
+	 *         the network.
 	 * @throws Exception The execution fails for some reason.
-	 *
+	 * 
 	 * @see UPnPStateVariable
 	 */
 	Dictionary invoke(Dictionary args) throws Exception;

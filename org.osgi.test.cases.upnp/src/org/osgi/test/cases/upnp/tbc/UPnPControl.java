@@ -19,6 +19,7 @@ import org.osgi.service.upnp.UPnPDevice;
 import org.osgi.service.upnp.UPnPEventListener;
 import org.osgi.service.upnp.UPnPIcon;
 import org.osgi.service.upnp.UPnPService;
+import org.osgi.service.upnp.UPnPStateVariable;
 import org.osgi.test.cases.upnp.tbc.device.discovery.ServicesListener;
 import org.osgi.test.cases.upnp.tbc.export.UPnPExportedDevice;
 import org.osgi.test.cases.upnp.tbc.parser.XMLParser;
@@ -26,10 +27,6 @@ import org.osgi.test.cases.upnp.tbc.parser.XMLTag;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
-/**
- * 
- * 
- */
 public class UPnPControl extends DefaultTestBundleControl {
 	private final int			desiredCount	= 3;
 	private HttpService			http;
@@ -38,28 +35,13 @@ public class UPnPControl extends DefaultTestBundleControl {
 
 	protected void setUp() throws Exception {
 		log("Prepare for UPnP Test Case");
-		http = (HttpService) getService(HttpService.class);
-		log("Register Service Listener to listen for service changes");
-		listener = new ServicesListener(getContext(), desiredCount);
-		listener.open();
-		log("Start the UPnP Test Starter");
-		start = new TestStarter(http);
-		listener.waitFor(OSGiTestCaseProperties.getTimeout()
-				* OSGiTestCaseProperties.getScaling());
-		if (listener.size() < desiredCount) {
-			listener.close();
-			start.stop();
-			ungetService(http);
-			fail("timed out waiting for " + desiredCount + " UPnP devices");
-		}
+		prepareTestStart();
 		log("Prepared for UPnP Test Case");
 	}
 
 	protected void tearDown() throws Exception {
 		log("Tear down UPnP Test Case");
-		listener.close();
-		start.stop();
-		ungetService(http);
+		finalizeTestEnd();
 		log("Torn down UPnP Test Case");
 	}
 
@@ -509,6 +491,105 @@ public class UPnPControl extends DefaultTestBundleControl {
 		}
 	}
 
+	public void testRemovedExport() throws Exception {
+		UPnPDevice upnpDevice = listener.getUPnPDevice();
+		assertNotNull("UPnP device is NULL!", upnpDevice);
+		UPnPService upnpService = upnpDevice.getService(UPnPConstants.SCONT_ID);
+		assertNotNull("UPnP service is missing: " + UPnPConstants.SCONT_ID,
+				upnpService);
+		UPnPIcon[] upnpDeviceIcons = upnpDevice.getIcons(null);
+		assertNotNull("No UPnP device icons!", upnpDeviceIcons);
+		UPnPAction upnpAction = upnpService.getAction(UPnPConstants.ACT_PF);
+		assertNotNull("UPnP action is missing: " + UPnPConstants.ACT_PF
+				+ " for service: " + UPnPConstants.SCONT_ID, upnpAction);
+		UPnPStateVariable upnpStateVariable = upnpAction
+				.getStateVariable(UPnPConstants.N_IN_OUT);
+		assertNotNull("UPnP state variable is missing for argument: "
+				+ UPnPConstants.N_IN_OUT, upnpStateVariable);
+		finalizeTestEnd();
+
+		assertNotNull("The UPnP device description is missing!",
+				upnpDevice.getDescriptions(null));
+		try {
+			upnpDevice.getIcons(null);
+			fail("The UPnP device icons must not be accessible for a disconnected device!");
+		}
+		catch (IllegalStateException ise) {/* expected exception, go ahead */
+		}
+		try {
+			upnpDevice.getServices();
+			fail("The UPnP device services must not be accessible for a disconnected device!");
+		}
+		catch (IllegalStateException ise) {/* expected exception, go ahead */
+		}
+		try {
+			upnpDevice.getService(UPnPConstants.SEV_ID);
+			fail("The UPnP device service must not be accessible for a disconnected device!");
+		}
+		catch (IllegalStateException ise) {/* expected exception, go ahead */
+		}
+
+		assertNotNull("The UPnP service identifier is missing!",
+				upnpService.getId());
+		assertNotNull("The UPnP service type is missing!",
+				upnpService.getType());
+		assertNotNull("The UPnP service version is missing!",
+				upnpService.getVersion());
+		try {
+			upnpService.getActions();
+			fail("The UPnP service actions must not be accessible for a disconnected device!");
+		}
+		catch (IllegalStateException ise) {/* expected exception, go ahead */
+		}
+		try {
+			upnpService.getAction(UPnPConstants.ACT_PF);
+			fail("The UPnP service actions must not be accessible for a disconnected device!");
+		}
+		catch (IllegalStateException ise) {/* expected exception, go ahead */
+		}
+		try {
+			upnpService.getStateVariables();
+			fail("The UPnP state variables must not be accessible for a disconnected device!");
+		}
+		catch (IllegalStateException ise) {/* expected exception, go ahead */
+		}
+
+		assertNotNull("The UPnP action name is missing!", upnpAction.getName());
+		assertNotNull("The UPnP action input argument names are missing!",
+				upnpAction.getInputArgumentNames());
+		assertNotNull("The UPnP action output argument names are missing!",
+				upnpAction.getOutputArgumentNames());
+		assertNull("The UPnP action return argument name must be NULL!",
+				upnpAction.getReturnArgumentName());
+		try {
+			upnpAction.getStateVariable(UPnPConstants.N_IN_OUT);
+			fail("The UPnP state variables must not be accessible for a disconnected device!");
+		}
+		catch (IllegalStateException ise) {/* expected exception, go ahead */
+		}
+
+		assertNull(
+				"The UPnP state variable allowed values must be accessible!",
+				upnpStateVariable.getAllowedValues());
+		assertNull("The UPnP state variable default value must be accessible!",
+				upnpStateVariable.getDefaultValue());
+		assertNotNull("The UPnP state variable java type must be accessible!",
+				upnpStateVariable.getJavaDataType());
+		assertNull("The UPnP state variable maximum must be accessible!",
+				upnpStateVariable.getMaximum());
+		assertNull("The UPnP state variable minimum must be accessible!",
+				upnpStateVariable.getMinimum());
+		assertEquals("The UPnP state variable name is not correct!",
+				UPnPConstants.N_OUT, upnpStateVariable.getName());
+		assertNull("The UPnP state variable step must be accessible!",
+				upnpStateVariable.getStep());
+		assertFalse(
+				"The UPnP state variable event notification must be accessible!",
+				upnpStateVariable.sendsEvents());
+
+		prepareTestStart();
+	}
+	
 	private byte[] readFully(InputStream is) throws IOException {
 		byte[] buff = new byte[1024];
 		int size = is.read(buff);
@@ -747,6 +828,29 @@ public class UPnPControl extends DefaultTestBundleControl {
 		return names;
 	}
 
+	private void prepareTestStart() throws Exception {
+		http = (HttpService) getService(HttpService.class);
+		log("Register Service Listener to listen for service changes");
+		listener = new ServicesListener(getContext(), desiredCount);
+		listener.open();
+		log("Start the UPnP Test Starter");
+		start = new TestStarter(http);
+		listener.waitFor(OSGiTestCaseProperties.getTimeout()
+				* OSGiTestCaseProperties.getScaling());
+		if (listener.size() < desiredCount) {
+			listener.close();
+			start.stop();
+			ungetService(http);
+			fail("timed out waiting for " + desiredCount + " UPnP devices");
+		}
+	}
+
+	private void finalizeTestEnd() throws Exception {
+		listener.close();
+		start.stop();
+		ungetService(http);
+	}
+	
 	private void eventExportTest() {
 		// try {
 		// log("Starting event test of Export");

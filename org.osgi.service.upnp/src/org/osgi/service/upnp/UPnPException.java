@@ -141,7 +141,7 @@ public class UPnPException extends Exception {
 	/**
 	 * Prints the exception stack trace to the specified print stream.
 	 * 
-	 * @param s the print stream used for output.
+	 * @param ps the print stream used for output.
 	 * 
 	 * @since 1.2
 	 * 
@@ -165,7 +165,7 @@ public class UPnPException extends Exception {
 	/**
 	 * Prints the exception stack trace to the specified print writer.
 	 * 
-	 * @param s the print writer used for output.
+	 * @param pw the print writer used for output.
 	 * 
 	 * @since 1.2
 	 * 

@@ -74,8 +74,8 @@ public interface UPnPDevice {
 	 */
 	String	DEVICE_CATEGORY								= "UPnP";
 	/**
-	 * The {@code UPnP.export} service property is a hint that marks a device
-	 * to be picked up and exported by the UPnP Service. Imported devices do not
+	 * The {@code UPnP.export} service property is a hint that marks a device to
+	 * be picked up and exported by the UPnP Service. Imported devices do not
 	 * have this property set. The registered property requires no value.
 	 * <p>
 	 * The UPNP_EXPORT string is "UPnP.export".
@@ -84,16 +84,16 @@ public interface UPnPDevice {
 	/**
 	 * Property key for the Unique Device Name (UDN) property. It is the unique
 	 * identifier of an instance of a {@code UPnPDevice}. The value of the
-	 * property is a {@code String} object of the Device UDN. Value of the
-	 * key is "UPnP.device.UDN". This property must be set.
+	 * property is a {@code String} object of the Device UDN. Value of the key
+	 * is "UPnP.device.UDN". This property must be set.
 	 */
 	String	UDN											= "UPnP.device.UDN";
 	/**
 	 * Property key for the Unique Device ID property. This property is an alias
-	 * to {@code UPnPDevice.UDN}. It is merely provided for reasons of
-	 * symmetry with the {@code UPnPService.ID} property. The value of the
-	 * property is a {@code String} object of the Device UDN. The value of
-	 * the key is "UPnP.device.UDN".
+	 * to {@code UPnPDevice.UDN}. It is merely provided for reasons of symmetry
+	 * with the {@code UPnPService.ID} property. The value of the property is a
+	 * {@code String} object of the Device UDN. The value of the key is
+	 * "UPnP.device.UDN".
 	 */
 	String	ID											= UDN;
 	/**
@@ -161,14 +161,14 @@ public interface UPnPDevice {
 	 */
 	String	MANUFACTURER_URL							= "UPnP.device.manufacturerURL";
 	/**
-	 * Optional (but recommended) property key for a {@code String} object
-	 * with a long description of the device for the end user. The value is
+	 * Optional (but recommended) property key for a {@code String} object with
+	 * a long description of the device for the end user. The value is
 	 * "UPnP.device.modelDescription".
 	 */
 	String	MODEL_DESCRIPTION							= "UPnP.device.modelDescription";
 	/**
-	 * Optional (but recommended) property key for a {@code String} class
-	 * typed property holding the model number of the device. Value is
+	 * Optional (but recommended) property key for a {@code String} class typed
+	 * property holding the model number of the device. Value is
 	 * "UPnP.device.modelNumber".
 	 */
 	String	MODEL_NUMBER								= "UPnP.device.modelNumber";
@@ -206,8 +206,8 @@ public interface UPnPDevice {
 	 * embedded devices.
 	 * <p>
 	 * The value is an array of UDNs for each of the device's children (
-	 * {@code String[]}). The array contains UDNs for the immediate
-	 * descendants only.
+	 * {@code String[]}). The array contains UDNs for the immediate descendants
+	 * only.
 	 * </p>
 	 * <p>
 	 * If an embedded device in turn contains embedded devices, the latter are
@@ -228,14 +228,19 @@ public interface UPnPDevice {
 	 * 
 	 * @param serviceId The service id
 	 * @return The requested service or null if not found.
+	 * 
+	 * @throws IllegalStateException if the UPnP device has been removed from
+	 *         the network.
 	 */
 	UPnPService getService(String serviceId);
 
 	/**
 	 * Lists all services provided by this device.
 	 * 
-	 * @return Array of services or {@code null} if no services are
-	 *         available.
+	 * @return Array of services or {@code null} if no services are available.
+	 * 
+	 * @throws IllegalStateException if the UPnP device has been removed from
+	 *         the network.
 	 */
 	UPnPService[] getServices();
 
@@ -247,10 +252,13 @@ public interface UPnPDevice {
 	 * 
 	 * @param locale A language tag as defined by RFC 1766 and maintained by ISO
 	 *        639. Examples include "{@code de}", "{@code en}" or "
-	 *        {@code en-US}". The default locale of the device is specified
-	 *        by passing a {@code null} argument.
+	 *        {@code en-US}". The default locale of the device is specified by
+	 *        passing a {@code null} argument.
 	 * 
 	 * @return Array of icons or null if no icons are available.
+	 * 
+	 * @throws IllegalStateException if the UPnP device has been removed from
+	 *         the network.
 	 */
 	UPnPIcon[] getIcons(String locale);
 
@@ -267,14 +275,16 @@ public interface UPnPDevice {
 	 * <b>not </b> substitute missing properties with their default locale
 	 * versions.
 	 * <p>
+	 * This method must continue to return the properties after the UPnP device
+	 * has been removed from the network.
 	 * 
 	 * @param locale A language tag as defined by RFC 1766 and maintained by ISO
 	 *        639. Examples include "{@code de}", "{@code en}" or "
-	 *        {@code en-US}". The default locale of the device is specified
-	 *        by passing a {@code null} argument.
+	 *        {@code en-US}". The default locale of the device is specified by
+	 *        passing a {@code null} argument.
 	 * @return Dictionary mapping property name Strings to property value
 	 *         Strings
-	 *  
+	 * 
 	 */
 	Dictionary getDescriptions(String locale);
 }

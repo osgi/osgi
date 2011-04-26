@@ -6,11 +6,9 @@ import org.osgi.impl.service.upnp.cp.util.Converter;
 import org.osgi.service.upnp.*;
 
 public class UPnPActionImpl implements UPnPAction {
-	private Action			action;
 	private UPnPBaseDriver	basedriver;
 	private UPnPServiceImpl	upnpservice;
 	private String			name;
-	private String			returnarg;
 	private String[]		inputargs;
 	private String[]		outputargs;
 	private String			host;
@@ -31,7 +29,6 @@ public class UPnPActionImpl implements UPnPAction {
 	// This constructor creates the UPnPAction object with the given parameters.
 	UPnPActionImpl(Action action, UPnPBaseDriver basedriver,
 			UPnPServiceImpl upnpservice) {
-		this.action = action;
 		this.basedriver = basedriver;
 		this.upnpservice = upnpservice;
 		this.host = upnpservice.host;
@@ -142,12 +139,21 @@ public class UPnPActionImpl implements UPnPAction {
 
 	// This method invokes the action.
 	public Dictionary invoke(Dictionary dict) throws Exception {
+		UPnPBaseDriver baseDriverLocal = this.basedriver;
+		if (null == baseDriverLocal) {
+			throw new IllegalStateException(
+					"UPnP device has been removed from the network.");
+		}
 		Converter convert = new Converter();
 		Hashtable stat_dt = getReturnSVDataType();
 		Hashtable Input_dict = getInputSVDataType();
 		Dictionary inparms = convert.java2upnp(dict, Input_dict);
-		Dictionary outparms = basedriver.control.sendControlRequest(controlurl,
+		Dictionary outparms = baseDriverLocal.control.sendControlRequest(controlurl,
 				host, servicetype, name, inparms, true);
 		return convert.upnp2java(outparms, stat_dt);
+	}
+	
+	/* package-private */void release() {
+		this.basedriver = null;
 	}
 }
