@@ -27,7 +27,8 @@ import info.dmtree.Uri;
 public class TR069URI {
 
 	private TR069URI() {
-	};
+		// private constructor
+	}
 
 	/**
 	 * Get the URI in DMT corresponding to the specified absolute path in
@@ -93,7 +94,7 @@ public class TR069URI {
 	 * @param tr069BasePath TR-069 base path
 	 * @param tr069Path TR-069 path
 	 * @return absolute path in TR-069.
-	 * @throws java.lang.IllegalArgumetException If tr069BasePath is empty.
+	 * @throws IllegalArgumentException If tr069BasePath is empty.
 	 */
 	public static final String getTR069AbsolutePath(final String tr069BasePath,
 			String tr069Path) throws IllegalArgumentException {
@@ -148,47 +149,6 @@ public class TR069URI {
 			return device + tr069Path;
 	}
 
-	public static void main(String[] args) {
-
-		// try {
-		// TR069ParameterValue.getDmtDataForList("1,,3", "int", null,
-		// "./Device/Services", null);
-		// } catch (IllegalArgumentException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// } catch (UnsupportedEncodingException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// } catch (TR069MappingException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		//
-
-		String target = "Device.Services.Hoge.a";
-		System.out.println("target=[" + target + "]");
-		String target2 = ".A.B";
-		System.out.println("target2=[" + target2 + "]");
-		String retGetTR069AbsPath = getTR069AbsolutePath(target, target2);
-		System.out.println("retGetTR069AbsPath=[" + retGetTR069AbsPath + "]");
-
-		// boolean retIsValidTR069Path = isValidTR069Path(target);
-		// System.out.println("retIsValidTR069Path=[" + retIsValidTR069Path +
-		// "]");
-		// boolean retIsAbsTR069Path = isAbsoluteTR069Path(target);
-		// System.out.println("retIsAbsTR069Path=[" + retIsAbsTR069Path + "]");
-		// String retGetDmtUri = getDmtUri(target);
-		// System.out.println("retGetDmtUri=[" + retGetDmtUri + "]");
-		//
-
-		// boolean retIsValidUri = Uri.isValidUri(target);
-		// System.out.println("retIsValidUri=[" + retIsValidUri + "]");
-		// boolean retIsAbsUri = Uri.isAbsoluteUri(target);
-		// System.out.println("retIsAbsUri=[" + retIsAbsUri + "]");
-		// String retGetTR069Path = getTR069Path(target);
-		// System.out.println("retGetTR069Path=[" + retGetTR069Path + "]");
-	}
-
 	/**
 	 * Checks whether the specified path is an absolute TR-069 path.
 	 * 
@@ -197,8 +157,8 @@ public class TR069URI {
 	 * If the specified path starts with ".", return true. Otherwise return
 	 * false.
 	 * 
-	 * @param uri the TR-069 path to be checked, must contain a valid TR-069
-	 *        path
+	 * @param tr069Path the TR-069 path to be checked, must contain a valid
+	 *        TR-069 path
 	 * @return whether the specified path is absolute
 	 */
 	public static boolean isAbsoluteTR069Path(final String tr069Path) {

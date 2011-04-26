@@ -40,7 +40,7 @@ public class TR069ParameterValue {
 	public final static String	TR069_TYPE_INT				= "int";
 
 	/**
-	 * Constant representing the TR-069 unsinged integer type.
+	 * Constant representing the TR-069 unsigned integer type.
 	 * 
 	 * The value of TR069_TYPE_UNSIGNED_INT is "unsignedInt".
 	 */
@@ -172,8 +172,8 @@ public class TR069ParameterValue {
 	 * <ol type="1">
 	 * <li>If the metaNode supports FORMAT _BOOLEAN,
 	 * <ol type="a">
-	 * <li>if the value equals Åg0Åh or ÅgfalseÅh, return DmtData.FALSE_VALUE.</li>
-	 * <li>if the value equals Åg1Åh or ÅgtrueÅh, return DmtData.TRUE_VALUE.</li>
+	 * <li>if the value equals "0" or "false", return DmtData.FALSE_VALUE.</li>
+	 * <li>if the value equals "1" or "true", return DmtData.TRUE_VALUE.</li>
 	 * <li>Otherwise, IllegalArgumentException will be thrown.</li>
 	 * </ol>
 	 * </li>
@@ -247,7 +247,7 @@ public class TR069ParameterValue {
 	 * go to Step 2.
 	 * <ol type="a">
 	 * <li>The specified value will be converted into base64 byte array and
-	 * create a new DmtData by DmtData(byte[], boolean) with ÅgtrueÅh as the
+	 * create a new DmtData by DmtData(byte[], boolean) with "true" as the
 	 * second argument.</li>
 	 * </ol>
 	 * </li>
@@ -370,9 +370,9 @@ public class TR069ParameterValue {
 	 *         reasons.
 	 * @throws java.io.UnsupportedEncodingException if the specified character
 	 *         set name is not supported.
-	 * @throws java.lang.IllegalArgumetException if value is null, if tr069Type
-	 *         is either null or empty, if nodeUri is invalid absolute DMT URI,
-	 *         or if metaNode is null.
+	 * @throws IllegalArgumentException if value is null, if tr069Type is either
+	 *         null or empty, if nodeUri is invalid absolute DMT URI, or if
+	 *         metaNode is null.
 	 */
 	public static DmtData getDmtData(final String value,
 			final String tr069Type, final String valueCharsetName,
@@ -707,7 +707,7 @@ public class TR069ParameterValue {
 	 * Convert the TR-069 value to a DmtData array for a list subtree.
 	 * <p>
 	 * The node specified by the node uri must be interior node which has the
-	 * node type of {@value info.dmtree.spi.DMTConstants#DDF_LIST_SUBTREE}.
+	 * node type of {@value info.dmtree.spi.DmtConstants#DDF_LIST_SUBTREE}.
 	 * <p>
 	 * The value must be parsed by using a separator of comma. The each item
 	 * parsed must be unescaped as specified in TR-106 and unescaped item will
@@ -731,14 +731,14 @@ public class TR069ParameterValue {
 	 *        node uri. It can be empty array but cannot be null.
 	 * @return Converted array of DmtData. It can be empty array but must not be
 	 *         null.
-	 * @throws TR069MappingException if convertionng DmtData is failed for some
+	 * @throws TR069MappingException if converting DmtData is failed for some
 	 *         reasons.
 	 * @throws java.io.UnsupportedEncodingException if the specified character
 	 *         set name is not supported.
-	 * @throws java.lang.IllegalArgumetException if value is {@code null}, if
-	 *         value contains empty element in the comma-separated list, if
-	 *         tr069Type is either {@code null} or empty, if nodeUri is invalid
-	 *         absolute DMT URI, or if metaNode is {@code null}.
+	 * @throws IllegalArgumentException if value is {@code null}, if value
+	 *         contains empty element in the comma-separated list, if tr069Type
+	 *         is either {@code null} or empty, if nodeUri is invalid absolute
+	 *         DMT URI, or if metaNode is {@code null}.
 	 * 
 	 */
 	public static DmtData[] getDmtDataForList(String value, String tr069Type,
@@ -780,7 +780,7 @@ public class TR069ParameterValue {
 	 * </li>
 	 * <li>Creating the comma-separated list by concatenating the retrieved
 	 * values in the order of the appearance of the array.</li>
-	 * <li>Construct new TR069ParameterValue with ÅgstringÅh and the created
+	 * <li>Construct new TR069ParameterValue with "string" and the created
 	 * comma-separated list, and return it.</li>
 	 * </ol>
 	 * <p>
@@ -839,8 +839,8 @@ public class TR069ParameterValue {
 	 * <li>In case that the format of the data is FORMAT_BOOLEAN,
 	 * <ol type="a">
 	 * <li>If DmtData.getBoolean() returns Boolean.TRUE or the DmtData equals
-	 * DmtData.TRUE_VALUE, the value will be Åg1Åh. Otherwise the value will be
-	 * Åg0Åh.</li>
+	 * DmtData.TRUE_VALUE, the value will be "1". Otherwise the value will be
+	 * "0".</li>
 	 * <li>Construct new TR069ParameterValue with
 	 * TR069ParameterValue.TR069_TYPE_BOOLEAN and the value, and return it.</li>
 	 * </ol>

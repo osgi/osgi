@@ -1,17 +1,11 @@
-Bundle-Version: 0.1.0.${project.build}
-Bundle-Description: TR069 Util
-Bundle-Vendor: OSGi Alliance
-Bundle-DocURL: http://www.osgi.org/
-Bundle-ContactAddress: info@mail.osgi.org
-Bundle-Category: osgi
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
+
+-nobundles							= true
+nodeploy						= true
 
 -buildpath			= \
+	info.dmtree;				version=project, \
 	osgi.core;					version=4.2		, \
-	osgi.cmpn;					version=4.2		, \
-	ee.foundation;				version=1.1	
+	ee.minimum;					version=1.2.1	
 	
-Export-Package = \
-	org.osgi.util.tr069;version=0.1.0
-
--buildpath							= \
-	info.dmtree;			version=project
