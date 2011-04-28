@@ -24,14 +24,17 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.model.resource.Capability;
+import org.osgi.model.resource.Requirement;
+import org.osgi.model.resource.Resource;
 
 /**
- * Represents a repository that contains {@link PotentialRevision
- * PotentialRevisions}.
+ * Represents a repository that contains {@link Resource
+ * resources}.
  * 
  * <p>
  * Repositories may be registered as services and may be used as inputs to an
- * {@link Environment#findProviders(PotentialRequirement...)} operation.
+ * {@link Environment#findProviders(Requirement...)} operation.
  * 
  * <p>
  * Repositories registered as services may be filtered using standard service
@@ -48,8 +51,8 @@ import org.osgi.framework.InvalidSyntaxException;
 public interface Repository {
 
   /**
-   * Discover any revisions that specify
-   * {@link PotentialRevision#getAttributes() attributes} that match the given
+   * Discover any resources that specify
+   * {@link Resource#getAttributes() attributes} that match the given
    * filter.
    * 
    * @param filterExpr
@@ -59,7 +62,7 @@ public interface Repository {
    * @throws IllegalArgumentException
    *           If the filter expression is invalid.
    */
-  Iterator<PotentialRevision> discoverRevisions(String filterExpr)
+  Iterator<Resource<Capability, Requirement>> discoverResources(String filterExpr)
       throws InvalidSyntaxException;
 
   /**
@@ -74,7 +77,7 @@ public interface Repository {
    * 
    * @return
    */
-  PotentialRevision getRevision(String namespace, String symbolicName,
+  Resource<Capability, Requirement> getResource(String namespace, String symbolicName,
       String version);
 
   /**
@@ -84,8 +87,8 @@ public interface Repository {
    * @param requirements
    * @return
    */
-  Collection<PotentialCapability> findProviders(
-      PotentialRequirement... requirements);
+  Collection<Capability> findProviders(
+      Requirement... requirements);
 
   /**
    * A counter to indicate the state of the repository, clients can use this to

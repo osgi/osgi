@@ -18,44 +18,44 @@ package org.osgi.service.obr;
 import java.util.Collections;
 import java.util.List;
 
+import org.osgi.model.resource.Capability;
+import org.osgi.model.resource.Requirement;
+import org.osgi.model.resource.Resource;
+
 /**
  * TODO
  *
  */
 public interface RepositoryDelta {
-  /**
-   * TODO
-   */
-  final RepositoryDelta EMPTY = new RepositoryDelta() {
-    
-    public List<PotentialRevision> getRemovedResources() {
-      return Collections.emptyList();
-    }
-    
-    public List<PotentialRevision> getChangedResources() {
-      return Collections.emptyList();
-    }
-    
-    public List<PotentialRevision> getAddedResources() {
-      return Collections.emptyList();
-    }
-  };
-  
+	final RepositoryDelta EMPTY = new RepositoryDelta() {
+		
+		public List<Resource<Capability, Requirement>> getRemovedResources() {
+			return Collections.emptyList();
+		}
+		
+		public List<Resource<Capability, Requirement>> getChangedResources() {
+			return Collections.emptyList();
+		}
+		
+		public List<Resource<Capability, Requirement>> getAddedResources() {
+			return Collections.emptyList();
+		}
+	};
   /**
    * TODO 
    * @return
    */
-  public List<PotentialRevision> getAddedResources();
+  public List<Resource<Capability, Requirement>> getAddedResources();
 
   /**
    * TODO 
    * @return
    */
-  public List<PotentialRevision> getChangedResources();
+  public List<Resource<Capability, Requirement>> getChangedResources();
 
   /**
    * TODO 
    * @return
    */
-  public List<PotentialRevision> getRemovedResources();
+  public List<Resource<Capability, Requirement>> getRemovedResources();
 }

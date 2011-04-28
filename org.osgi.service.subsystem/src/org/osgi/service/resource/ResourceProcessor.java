@@ -1,4 +1,4 @@
-package org.osgi.framework.model;
+package org.osgi.service.resource;
 
 import org.osgi.service.subsystem.SubsystemException;
 
@@ -42,5 +42,5 @@ public interface ResourceProcessor {
 	 * @param operation
 	 * @throws SubsystemException
 	 */
-	public void process(ResourceOperation<?> operation) throws SubsystemException;
+	public void process(ResourceOperation operation) throws SubsystemException;
 }

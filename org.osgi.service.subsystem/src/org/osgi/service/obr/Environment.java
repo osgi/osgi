@@ -20,6 +20,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.model.resource.Capability;
+import org.osgi.model.resource.Requirement;
+import org.osgi.model.resource.Resource;
+import org.osgi.model.resource.Wire;
 
 /**
  * An environment provides options and constraints to the potential solution of
@@ -47,7 +51,7 @@ import org.osgi.framework.wiring.BundleRevision;
  * thread. Environments may also be shared between several resolvers. As such
  * implementors should ensure that this class is properly synchronized.
  */
-public interface Environment {
+public interface Environment<C extends Capability, R extends Requirement> {
   /**
    * Find any capabilities that can potentially provide a match to the supplied
    * requirements.
@@ -64,8 +68,8 @@ public interface Environment {
    * @return an immutable collection of capabilities that match the supplied
    *         requirements
    */
-  Collection<PotentialCapability> findProviders(
-      PotentialRequirement... requirements);
+  Collection<C> findProviders(
+      R... requirements);
 
   /**
    * An immutable map of wires between revisions. Multiple calls to
@@ -74,5 +78,5 @@ public interface Environment {
    * 
    * @return the wires already defined in this environment
    */
-  Map<PotentialRevision, List<PotentialWire>> getWiring();
+  Map<Resource<C, R>, List<Wire<C, R>>> getWiring();
 }

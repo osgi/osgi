@@ -1,5 +1,8 @@
-package org.osgi.framework.model;
+package org.osgi.service.resource;
 
+import java.util.Map;
+
+import org.osgi.model.resource.Resource;
 import org.osgi.service.coordinator.Coordination;
 
 /**
@@ -9,7 +12,7 @@ import org.osgi.service.coordinator.Coordination;
  *@ThreadSafe
  *@noimplement
  */
-public interface ResourceOperation<C> {
+public interface ResourceOperation {
 	/**
 	 * The type of operation to perform on the resource.
 	 */
@@ -53,17 +56,18 @@ public interface ResourceOperation<C> {
 	 *         participate.
 	 */
 	public Coordination getCoordination();
+
 	/**
 	 * A resource operation is associated with a particular resource.
 	 * @return The resource on which this operation must be performed.
 	 */
 	public Resource<?, ?> getResource();
+
 	/**
-	 * A resource operation is performed on a resource belonging to a
-	 * particular context.
-	 * @return The context of which the resource is a part.
+	 * 
+	 * @return
 	 */
-	public C getContext();
+	public Map<String, Object> getContext();
 	/**
 	 * A resource operation is associated with a type that defines the
 	 * processing required on the resource.

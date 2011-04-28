@@ -23,6 +23,11 @@ package org.osgi.service.obr;
 import java.util.List;
 import java.util.Map;
 
+import org.osgi.model.resource.Capability;
+import org.osgi.model.resource.Requirement;
+import org.osgi.model.resource.Resource;
+import org.osgi.model.resource.Wire;
+
 /**
  * A resolver is a service interface that can be used to find resolutions for specified
  * {@link PotentialRequirement PotentialRequirements} based on a supplied {@link Environment}.
@@ -51,6 +56,6 @@ public interface Resolver {
    * @throws IllegalArgumentException
    * @throws NullPointerException 
    */
-  Map<PotentialRevision, List<PotentialWire>> resolve(Environment environment, PotentialRequirement...requirements) 
+  <C extends Capability, R extends Requirement> Map<Resource<C, R>, List<Wire<C, R>>> resolve(Environment<C, R> environment, Requirement...requirements) 
   throws ResolutionException, IllegalArgumentException, NullPointerException;
 }

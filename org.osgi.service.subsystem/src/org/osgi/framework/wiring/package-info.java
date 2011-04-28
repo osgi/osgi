@@ -15,17 +15,17 @@
  */
 
 /**
- * Framework Model Package Version 1.0.
+ * Framework Wiring Package Version 1.0.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. For example:
  * 
  * <pre>
- * Import-Package: org.osgi.framework.model; version=&quot;[1.0,2.0)&quot;
+ * Import-Package: org.osgi.framework.wiring; version=&quot;[1.0,2.0)&quot;
  * </pre>
  * 
  * @version $Id$
  */
-package org.osgi.framework.model;
+package org.osgi.framework.wiring;
 

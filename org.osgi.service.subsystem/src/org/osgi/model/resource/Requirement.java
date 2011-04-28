@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.model;
+package org.osgi.model.resource;
 
 import java.util.Map;
 
 /**
- * A requirement that has been declared from a {@link Revision}
+ * A requirement that has been declared from a {@link Resource}
  * .
  * @ThreadSafe
  * @version $Id$
@@ -49,16 +49,9 @@ public interface Requirement {
   Map<String, Object> getAttributes();
 
   /**
-   * Returns the revision declaring this requirement.
+   * Returns the resource declaring this requirement.
    * 
-   * @return The revision declaring this requirement.
+   * @return The resource declaring this requirement.
    */
-  // TODO there doesn't seem to be any way to make this return friendly for a
-  // user.
-  //
-  // Returning ? is bad as it means users need to declare lists of type <? extends Capability>
-  //
-  // However it cannot be assumed that Revision<Capability, Requirement> is correct as
-  // the revision will contain sub types
-  Revision<? extends Capability, ? extends Requirement> getRevision();
+  Resource<? extends Capability, ? extends Requirement> getResource();
 }

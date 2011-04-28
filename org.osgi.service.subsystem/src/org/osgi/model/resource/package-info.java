@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,29 +14,18 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.model;
-
 /**
- * A wire connecting a {@link Capability} to a {@link Requirement}.
+ * Model Resource Package Version 1.0.
  * 
- * @param <R> TODO
- * @param <C> TODO
- *
- * @ThreadSafe
+ * <p>
+ * Bundles wishing to use this package must list the package in the
+ * Import-Package header of the bundle's manifest. For example:
+ * 
+ * <pre>
+ * Import-Package: org.osgi.model.resource; version=&quot;[1.0,2.0)&quot;
+ * </pre>
+ * 
  * @version $Id$
  */
-public interface Wire<C extends Capability, R extends Requirement> {
-	/**
-	 * Returns the {@link Capability} for this wire.
-	 * 
-	 * @return The {@link Capability} for this wire.
-	 */
-	C getCapability();
+package org.osgi.model.resource;
 
-	/**
-	 * Return the {@link Requirement} for this wire.
-	 * 
-	 * @return The {@link Requirement} for this wire.
-	 */
-	R getRequirement();
-}

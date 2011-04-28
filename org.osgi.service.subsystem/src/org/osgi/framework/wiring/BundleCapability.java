@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.model;
+package org.osgi.framework.wiring;
 
 import java.util.Map;
 
+import org.osgi.model.resource.Capability;
+
 /**
- * A capability that has been declared from a {@link Revision}.
+ * A capability that has been declared from a {@link BundleRevision bundle
+ * revision}.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
-public interface Capability {
-  
+public interface BundleCapability extends Capability{
 	/**
 	 * Returns the name space of this capability.
 	 * 
@@ -52,13 +55,11 @@ public interface Capability {
 	Map<String, Object> getAttributes();
 
 	/**
-	 * The revision that declares this capability.
+	 * Returns the bundle revision declaring this capability.
 	 * 
-	 * @return the revision
+	 * @return The bundle revision declaring this capability.
 	 */
-  // TODO there doesn't seem to be any way to make this return friendly for a user
-	// returning ? is bad as it means users need to declare lists of type <? extends GenericCapability>
-  // It cannot be assumed that GenericRevision<C, R> is correct as the revision may contain sub types
-  // needs some sort of <? super self> type reference? But self types are not supported in java language
-  Revision<? extends Capability,? extends Requirement> getRevision();
+	BundleRevision getRevision();
+
+	BundleRevision getResource();
 }
