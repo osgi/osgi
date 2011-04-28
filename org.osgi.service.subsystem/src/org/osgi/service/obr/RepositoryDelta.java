@@ -18,8 +18,6 @@ package org.osgi.service.obr;
 import java.util.Collections;
 import java.util.List;
 
-import org.osgi.model.resource.Capability;
-import org.osgi.model.resource.Requirement;
 import org.osgi.model.resource.Resource;
 
 /**
@@ -29,15 +27,15 @@ import org.osgi.model.resource.Resource;
 public interface RepositoryDelta {
 	final RepositoryDelta EMPTY = new RepositoryDelta() {
 		
-		public List<Resource<Capability, Requirement>> getRemovedResources() {
+		public List<Resource> getRemovedResources() {
 			return Collections.emptyList();
 		}
 		
-		public List<Resource<Capability, Requirement>> getChangedResources() {
+		public List<Resource> getChangedResources() {
 			return Collections.emptyList();
 		}
 		
-		public List<Resource<Capability, Requirement>> getAddedResources() {
+		public List<Resource> getAddedResources() {
 			return Collections.emptyList();
 		}
 	};
@@ -45,17 +43,17 @@ public interface RepositoryDelta {
    * TODO 
    * @return
    */
-  public List<Resource<Capability, Requirement>> getAddedResources();
+  public List<Resource> getAddedResources();
 
   /**
    * TODO 
    * @return
    */
-  public List<Resource<Capability, Requirement>> getChangedResources();
+  public List<Resource> getChangedResources();
 
   /**
    * TODO 
    * @return
    */
-  public List<Resource<Capability, Requirement>> getRemovedResources();
+  public List<Resource> getRemovedResources();
 }

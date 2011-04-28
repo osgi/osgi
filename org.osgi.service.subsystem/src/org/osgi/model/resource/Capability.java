@@ -56,5 +56,5 @@ public interface  Capability {
 	 * 
 	 * @return the resource
 	 */
-	Resource<? extends Capability, ? extends Requirement> getResource();
+	Resource getResource();
 }

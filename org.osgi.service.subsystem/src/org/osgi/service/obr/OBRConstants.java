@@ -15,12 +15,9 @@
  */
 package org.osgi.service.obr;
 
+import org.osgi.model.resource.Resource;
+
 public interface OBRConstants {
-	  /**
-	   * Namespace for OSGi bundle revisions
-	   */
-	  final String BUNDLE_NAMESPACE = "osgi.bundle";
-	  
 	  /**
 	   * Checksum attribute of a revision
 	   */
@@ -53,24 +50,6 @@ public interface OBRConstants {
 	  final String LICENSE_URL_ATTRIBUTE = "license";
 
 	  /**
-	   * If present this must match the value returned from {@link #getLocation()}
-	   * TODO mandatory?
-	   */
-	  final String LOCATION_ATTRIBUTE = "location";
-
-	  /**
-	   * Identifies the type of revision that this represents.
-	   * TODO mandatory? 
-	   */
-	  final String NAMESPACE_ATTRIBUTE = "namespace";
-
-	  /**
-	   * If present this must match the value returned from {@link #getSymbolicName()}
-	   * TODO mandatory
-	   */
-	  final String SYMBOLIC_NAME_ATTRIBUTE = "symbolicName";
-
-	  /**
 	   * TODO
 	   */
 	  final String SCM_URL_ATTRIBUTE = "scm";
@@ -82,17 +61,11 @@ public interface OBRConstants {
 	  final String SIZE_ATTRIBUTE = "size";
 
 	  /**
-	   * If present this must match the value returned from {@link #getVersion() getVersion().toString()}
-	   * TODO mandatory?
-	   */
-	  final String VERSION_ATTRIBUTE = "version";
-
-	  /**
 	   * All attributes defined in this interface
 	   */
 	  final String[] ATTRIBUTES = { CHECKSUM_ATTRIBUTE,
 	      CHECKSUM_ALGO_ATTRIBUTE, COPYRIGHT_ATTRIBUTE, DESCRIPTION_ATTRIBUTE,
-	      DOCUMENTATION_URL_ATTRIBUTE, LICENSE_URL_ATTRIBUTE, LOCATION_ATTRIBUTE,
-	      SYMBOLIC_NAME_ATTRIBUTE, NAMESPACE_ATTRIBUTE, SCM_URL_ATTRIBUTE, SIZE_ATTRIBUTE,
-	      VERSION_ATTRIBUTE };
+	      DOCUMENTATION_URL_ATTRIBUTE, LICENSE_URL_ATTRIBUTE, Resource.LOCATION_ATTRIBUTE,
+	      Resource.SYMBOLIC_NAME_ATTRIBUTE, Resource.NAMESPACE_ATTRIBUTE, SCM_URL_ATTRIBUTE, SIZE_ATTRIBUTE,
+	      Resource.VERSION_ATTRIBUTE };
 }

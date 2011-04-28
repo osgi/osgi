@@ -51,7 +51,7 @@ import org.osgi.model.resource.Wire;
  * thread. Environments may also be shared between several resolvers. As such
  * implementors should ensure that this class is properly synchronized.
  */
-public interface Environment<C extends Capability, R extends Requirement> {
+public interface Environment {
   /**
    * Find any capabilities that can potentially provide a match to the supplied
    * requirements.
@@ -68,8 +68,8 @@ public interface Environment<C extends Capability, R extends Requirement> {
    * @return an immutable collection of capabilities that match the supplied
    *         requirements
    */
-  Collection<C> findProviders(
-      R... requirements);
+  Collection<Capability> findProviders(
+      Requirement... requirements);
 
   /**
    * An immutable map of wires between revisions. Multiple calls to
@@ -78,5 +78,5 @@ public interface Environment<C extends Capability, R extends Requirement> {
    * 
    * @return the wires already defined in this environment
    */
-  Map<Resource<C, R>, List<Wire<C, R>>> getWiring();
+  Map<Resource, List<Wire<Capability, Requirement>>> getWiring();
 }

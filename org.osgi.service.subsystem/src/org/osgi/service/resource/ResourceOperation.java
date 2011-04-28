@@ -61,7 +61,7 @@ public interface ResourceOperation {
 	 * A resource operation is associated with a particular resource.
 	 * @return The resource on which this operation must be performed.
 	 */
-	public Resource<?, ?> getResource();
+	public Resource getResource();
 
 	/**
 	 * 

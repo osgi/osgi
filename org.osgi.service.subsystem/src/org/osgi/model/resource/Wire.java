@@ -40,9 +40,6 @@ public interface Wire<C extends Capability, R extends Requirement> {
 	 */
 	R getRequirement();
 
-	/**
-	 * @return
-	 */
-	Resource<C, R> getProvider();
-	Resource<C, R> getRequirer();
+	Resource getProvider();
+	Resource getRequirer();
 }

@@ -62,7 +62,7 @@ public interface Repository {
    * @throws IllegalArgumentException
    *           If the filter expression is invalid.
    */
-  Iterator<Resource<Capability, Requirement>> discoverResources(String filterExpr)
+  Iterator<Resource> discoverResources(String filterExpr)
       throws InvalidSyntaxException;
 
   /**
@@ -77,7 +77,7 @@ public interface Repository {
    * 
    * @return
    */
-  Resource<Capability, Requirement> getResource(String namespace, String symbolicName,
+  Resource getResource(String namespace, String symbolicName,
       String version);
 
   /**

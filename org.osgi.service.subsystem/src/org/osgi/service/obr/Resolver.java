@@ -30,7 +30,7 @@ import org.osgi.model.resource.Wire;
 
 /**
  * A resolver is a service interface that can be used to find resolutions for specified
- * {@link PotentialRequirement PotentialRequirements} based on a supplied {@link Environment}.
+ * {@link Requirement requirements} based on a supplied {@link Environment}.
  * 
  * @version $Id$
  */
@@ -56,6 +56,6 @@ public interface Resolver {
    * @throws IllegalArgumentException
    * @throws NullPointerException 
    */
-  <C extends Capability, R extends Requirement> Map<Resource<C, R>, List<Wire<C, R>>> resolve(Environment<C, R> environment, Requirement...requirements) 
+  Map<Resource, List<Wire<Capability, Requirement>>> resolve(Environment environment, Requirement...requirements) 
   throws ResolutionException, IllegalArgumentException, NullPointerException;
 }

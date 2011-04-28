@@ -50,7 +50,7 @@ import org.osgi.model.resource.Resource;
  * @noimplement
  * @version $Id$
  */
-public interface BundleRevision extends BundleReference, Resource<BundleCapability, BundleRequirement> {
+public interface BundleRevision extends BundleReference, Resource {
 	/**
 	 * Returns the symbolic name for this bundle revision.
 	 * 
