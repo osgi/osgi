@@ -581,6 +581,75 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
   /**
    * Tests the case when multiple bundles are on the call stack and all
    * combinations of the tuples should be evaluated.
+   * 
+   * The resulting policy table is:
+   * ALLOW {
+   *         [BundleLocationCondition "tb1"]
+   *         (PackagePermission "*" "import,export")
+   *         (ServicePermission "*" "get,register")
+   * } "1"
+   * ALLOW {
+   *         [BundleLocationCondition "tb2"]
+   *         (PackagePermission "*" "import,export")
+   *         (ServicePermission "*" "get,register")
+   * } "2"
+   * ALLOW {
+   *         [BundleLocationCondition "tb3"]
+   *         (PackagePermission "*" "import,export")
+   *         (ServicePermission "*" "get,register")
+   * } "3"
+   * ALLOW {
+   *         [BundleLocationCondition "tb1"]
+   *         [TestCondition 102 immediate satisfied   mutable   tb1]
+   *         [TestCondition 104 postponed unsatisfied mutable   tb1]
+   *         (AdminPermission P "*" "lifecycle")
+   *         (AdminPermission Q "*" "execute")
+   * } "4"
+   * ALLOW {
+   *         [BundleLocationCondition "tb1"]
+   *         [TestCondition 103 immediate satisfied   mutable   tb1]
+   *         (AdminPermission P "*" "lifecycle")
+   *         (AdminPermission R "*" "resolve")
+   * } "5"
+   * ALLOW {
+   *         [BundleLocationCondition "tb1"]
+   *         [TestCondition 100 immediate satisfied   immutable tb1]
+   *         (AdminPermission S "*" "startlevel")
+   * } "6"
+   * ALLOW {
+   *         [BundleLocationCondition "tb2"]
+   *         [TestCondition 102 immediate satisfied   mutable   tb2]
+   *         [TestCondition 104 postponed unsatisfied mutable   tb2]
+   *         [TestCondition 105 postponed satisfied   mutable   tb2]
+   *         (AdminPermission P "*" "lifecycle")
+   *         (AdminPermission R "*" "resolve")
+   * } "7"
+   * ALLOW {
+   *         [BundleLocationCondition "tb2"]
+   *         [TestCondition 105 postponed satisfied   mutable   tb2]
+   *         (AdminPermission P "*" "lifecycle")
+   *         (AdminPermission R "*" "resolve")
+   * } "8"
+   * ALLOW {
+   *         [BundleLocationCondition "tb2"]
+   *         [TestCondition 100 immediate satisfied   immutable tb2]
+   *         (AdminPermission Q "*" "execute")
+   * } "9"
+   * ALLOW {
+   *         [BundleLocationCondition "tb3"]
+   *         [TestCondition 100 immediate satisfied   immutable tb3]
+   *         (AdminPermission Q "*" "execute")
+   * } "10"
+   * ALLOW {
+   *         [BundleLocationCondition "tb3"]
+   *         [TestCondition 101 immediate unsatisfied mutable   tb3]
+   *         (AdminPermission P "*" "lifecycle")
+   * } "11"
+   * ALLOW {
+   *         [BundleLocationCondition "tb3"]
+   *         [TestCondition 105 postponed satisfied   mutable   tb3]
+   *         (AdminPermission P "*" "lifecycle")
+   * } "12"
    */
   public void testMultipleBundlesOnStack() {//TC10
     try {
@@ -616,47 +685,48 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { domBundleLocation });
     rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { cInfo },
         new Permission[] { pp, sp }));
+    
+    // i=immediate, p=postponed / s=satisfied, u=unsatisfied / i=immutable, m=mutable
+    ConditionInfo isi100;
+    ConditionInfo ium101;
+    ConditionInfo ism102;
+    ConditionInfo ism103;
+    ConditionInfo pum104;
+    ConditionInfo psm105;
 
-    ConditionInfo ic  = utility.createTestCInfo(false, true, false, "TestCondition_100", testBundle.getBundleId()); // not postponed, satisfied, immutable
-    ConditionInfo ic0 = utility.createTestCInfo(false, false, true, "TestCondition_101", testBundle.getBundleId()); // not postponed, not satisfied, mutable
-    ConditionInfo ic1 = utility.createTestCInfo(false, true,  true, "TestCondition_102", testBundle.getBundleId()); // not postponed, satisfied, mutable
-    ConditionInfo ic2 = utility.createTestCInfo(false, true,  true, "TestCondition_103", testBundle.getBundleId()); // not postponed, satisfied, mutable
-    ConditionInfo pc1 = utility.createTestCInfo(true,  false, true, "TestCondition_104", testBundle.getBundleId()); // postponed, not satisfied, mutable
-    ConditionInfo pc2 = utility.createTestCInfo(true,  true,  true, "TestCondition_105", testBundle.getBundleId()); // postponed, satisfied, mutable
+    isi100 = utility.createTestCInfo(false, true, false, "TestCondition_100", testBundle.getBundleId()); // not postponed, satisfied, immutable
+    ism102 = utility.createTestCInfo(false, true,  true, "TestCondition_102", testBundle.getBundleId()); // not postponed, satisfied, mutable
+    ism103 = utility.createTestCInfo(false, true,  true, "TestCondition_103", testBundle.getBundleId()); // not postponed, satisfied, mutable
+    pum104 = utility.createTestCInfo(true,  false, true, "TestCondition_104", testBundle.getBundleId()); // postponed, not satisfied, mutable
 
-    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcA, ic1, pc1 },
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcA, ism102, pum104 },
         new Permission[] { permissionP, permissionQ }));
-    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcA, ic2 },
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcA, ism103 },
         new Permission[] { permissionP, permissionR }));
-    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcA, ic },
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcA, isi100 },
         new Permission[] { permissionS }));
 
-    ic  = utility.createTestCInfo(false, true, false, "TestCondition_100", permBundle.getBundleId()); // not postponed, satisfied, immutable
-    ic0 = utility.createTestCInfo(false, false, true, "TestCondition_101", permBundle.getBundleId()); // not postponed, not satisfied, mutable
-    ic1 = utility.createTestCInfo(false, true,  true, "TestCondition_102", permBundle.getBundleId()); // not postponed, satisfied, mutable
-    ic2 = utility.createTestCInfo(false, true,  true, "TestCondition_103", permBundle.getBundleId()); // not postponed, satisfied, mutable
-    pc1 = utility.createTestCInfo(true,  false, true, "TestCondition_104", permBundle.getBundleId()); // postponed, not satisfied, mutable
-    pc2 = utility.createTestCInfo(true,  true,  true, "TestCondition_105", permBundle.getBundleId()); // postponed, satisfied, mutable
+    isi100 = utility.createTestCInfo(false, true, false, "TestCondition_100", permBundle.getBundleId()); // not postponed, satisfied, immutable
+    ism102 = utility.createTestCInfo(false, true,  true, "TestCondition_102", permBundle.getBundleId()); // not postponed, satisfied, mutable
+    pum104 = utility.createTestCInfo(true,  false, true, "TestCondition_104", permBundle.getBundleId()); // postponed, not satisfied, mutable
+    psm105 = utility.createTestCInfo(true,  true,  true, "TestCondition_105", permBundle.getBundleId()); // postponed, satisfied, mutable
 
-    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcB, ic1, pc1, pc2 },
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcB, ism102, pum104, psm105 },
         new Permission[] { permissionP, permissionR }));
-    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcB, pc2 },
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcB, psm105 },
         new Permission[] { permissionP, permissionR }));
-    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcB, ic },
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcB, isi100 },
         new Permission[] { permissionQ }));
 
-    ic  = utility.createTestCInfo(false, true, false, "TestCondition_100", domBundle.getBundleId()); // not postponed, satisfied, immutable
-    ic0 = utility.createTestCInfo(false, false, true, "TestCondition_101", domBundle.getBundleId()); // not postponed, not satisfied, mutable
-    ic1 = utility.createTestCInfo(false, true,  true, "TestCondition_102", domBundle.getBundleId()); // not postponed, satisfied, mutable
-    ic2 = utility.createTestCInfo(false, true,  true, "TestCondition_103", domBundle.getBundleId()); // not postponed, satisfied, mutable
-    pc1 = utility.createTestCInfo(true,  false, true, "TestCondition_104", domBundle.getBundleId()); // postponed, not satisfied, mutable
-    pc2 = utility.createTestCInfo(true,  true,  true, "TestCondition_105", domBundle.getBundleId()); // postponed, satisfied, mutable
+    isi100 = utility.createTestCInfo(false, true, false, "TestCondition_100", domBundle.getBundleId()); // not postponed, satisfied, immutable
+    ium101 = utility.createTestCInfo(false, false, true, "TestCondition_101", domBundle.getBundleId()); // not postponed, not satisfied, mutable
+    psm105 = utility.createTestCInfo(true,  true,  true, "TestCondition_105", domBundle.getBundleId()); // postponed, satisfied, mutable
 
-    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcC, ic },
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcC, isi100 },
         new Permission[] { permissionQ }));
-    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcC, ic0 },
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcC, ium101 },
         new Permission[] { permissionP }));
-    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcC, pc2 },
+    rows.add(utility.createConditionalPermissionInfo(new ConditionInfo[] { blcC, psm105 },
         new Permission[] { permissionP }));
 
     assertTrue("CPA update failed", update.commit());
@@ -666,6 +736,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
       tbc.checkStack(permissionP);
       pass(message);
     } catch (Throwable e) {
+    	e.printStackTrace();
       fail(message + " but " + e.getClass().getName() + " was thrown");
     }
 
