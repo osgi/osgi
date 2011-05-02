@@ -625,7 +625,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		Map configuration = getConfiguration(getName());
 		String osName = System.getProperty("os.name");
 		if (osName.toLowerCase().indexOf("windows") >= 0)
-			configuration.put(Constants.FRAMEWORK_EXECPERMISSION, "copy ${abspath} " + testOutputFile.getAbsolutePath());
+			configuration.put(Constants.FRAMEWORK_EXECPERMISSION, "cmd.exe /c copy ${abspath} " + testOutputFile.getAbsolutePath());
 		else
 			configuration.put(Constants.FRAMEWORK_EXECPERMISSION, "cp ${abspath} " + testOutputFile.getAbsolutePath());
 		configuration.put(Constants.FRAMEWORK_LIBRARY_EXTENSIONS, "1,test");
