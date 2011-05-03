@@ -20,6 +20,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.AccessController;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,74 +107,6 @@ public final class Uri {
 	 */
 	private static final String	MAX_URI_SEGMENTS		= "org.osgi.dmtree.max.uri.segments";
 
-	/*
-	 * NOTE: An implementor may also choose to replace this class in their
-	 * distribution with a class that directly interfaces with the info.dmtree
-	 * implementation. This replacement class MUST NOT alter the
-	 * public/protected signature of this class.
-	 */
-
-	/*
-	 * This class will load the class named by the
-	 * org.osgi.vendor.dmtree.DigestDelegate property. This class will call the
-	 * public static byte[] digest(byte[]) method on that class.
-	 */
-
-	private static class ImplHolder implements PrivilegedAction {
-		// the name of the system property containing the digest delegate class
-		// name
-		private static final String	DIGEST_DELEGATE_PROPERTY	= "org.osgi.vendor.dmtree.DigestDelegate";
-
-		// the Method where message digest requests can be delegated
-		static final Method			digestMethod;
-
-		static {
-			digestMethod = (Method) AccessController
-					.doPrivileged(new ImplHolder());
-		}
-
-		private ImplHolder() {
-		}
-
-		public Object run() {
-			String className = System.getProperty(DIGEST_DELEGATE_PROPERTY);
-			if (className == null) {
-				throw new NoClassDefFoundError("Digest "
-						+ "delegate class property '"
-						+ DIGEST_DELEGATE_PROPERTY + "' must be set to a "
-						+ "class which implements a "
-						+ "public static byte[] digest(byte[]) method.");
-			}
-
-			Class delegateClass;
-			try {
-				delegateClass = Class.forName(className);
-			}
-			catch (ClassNotFoundException e) {
-				throw new NoClassDefFoundError(e.toString());
-			}
-
-			Method result;
-			try {
-				result = delegateClass.getMethod("digest",
-						new Class[] {byte[].class});
-			}
-			catch (NoSuchMethodException e) {
-				throw new NoSuchMethodError(e.toString());
-			}
-			if (!Modifier.isStatic(result.getModifiers())) {
-				throw new NoSuchMethodError("digest method must be static");
-			}
-
-			return result;
-		}
-	}
-
-	// // the name of the system property containing the URI segment length
-	// limit
-	// private static final String SEGMENT_LENGTH_LIMIT_PROPERTY =
-	// "org.osgi.impl.service.dmt.uri.limits.segmentlength";
-
 	// the smallest valid value for the URI segment length limit
 	private static final int	MINIMAL_SEGMENT_LENGTH_LIMIT		= 32;
 
@@ -190,24 +124,6 @@ public final class Uri {
 
 	// contains the maximum number of uris segments
 	private static int			maxURISegments						= -1;
-
-	// static {
-	// segmentLengthLimit = ((Integer) AccessController
-	// .doPrivileged(new PrivilegedAction() {
-	// public Object run() {
-	// String limitString = System.getProperty(SEGMENT_LENGTH_LIMIT_PROPERTY);
-	// int limit = MINIMAL_SEGMENT_LENGTH_LIMIT; // min. used as default
-	//
-	// try {
-	// int limitInt = Integer.parseInt(limitString);
-	// if(limitInt >= MINIMAL_SEGMENT_LENGTH_LIMIT)
-	// limit = limitInt;
-	// } catch(NumberFormatException e) {}
-	//
-	// return new Integer(limit);
-	// }
-	// })).intValue();
-	// }
 
 	// base64 encoding table, modified for use in node name mangling
 	private static final char	BASE_64_TABLE[]						= {'A',
@@ -650,15 +566,21 @@ public final class Uri {
 	}
 
 	private static String getHash(String from) {
-		byte[] byteStream;
+		byte[] bytes;
 		try {
-			byteStream = from.getBytes("UTF-8");
+			bytes = from.getBytes("UTF-8");
 		}
 		catch (UnsupportedEncodingException e) {
 			// There's no way UTF-8 encoding is not implemented...
 			throw new IllegalStateException("there's no UTF-8 encoder here!");
 		}
-		byte[] digest = digestMessage(byteStream);
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("SHA");
+		} catch (NoSuchAlgorithmException e) {
+			throw new IllegalStateException("Can't get an instance of a SHA MessageDigest provider!");
+		}
+		byte[] digest = md.digest(bytes);
 
 		// very dumb base64 encoder code. There is no need for multiple lines
 		// or trailing '='-s....
@@ -682,24 +604,4 @@ public final class Uri {
 		return sb.toString();
 	}
 
-	private static byte[] digestMessage(byte[] byteStream) {
-		try {
-			try {
-				return (byte[]) ImplHolder.digestMethod.invoke(null,
-						new Object[] {byteStream});
-			}
-			catch (InvocationTargetException e) {
-				throw e.getTargetException();
-			}
-		}
-		catch (Error e) {
-			throw e;
-		}
-		catch (RuntimeException e) {
-			throw e;
-		}
-		catch (Throwable e) {
-			throw new RuntimeException(e.toString());
-		}
-	}
 }
