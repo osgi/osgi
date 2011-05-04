@@ -22,6 +22,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
+import org.osgi.model.resource.Resource;
 
 /**
  * Bundle Revision. When a bundle is installed and each time a bundle is
@@ -49,7 +50,7 @@ import org.osgi.framework.Version;
  * @noimplement
  * @version $Id$
  */
-public interface BundleRevision extends BundleReference {
+public interface BundleRevision extends BundleReference, Resource {
 	/**
 	 * Returns the symbolic name for this bundle revision.
 	 * 

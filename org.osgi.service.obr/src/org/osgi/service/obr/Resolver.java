@@ -20,37 +20,42 @@
 
 package org.osgi.service.obr;
 
+import java.util.List;
+import java.util.Map;
+
+import org.osgi.model.resource.Capability;
+import org.osgi.model.resource.Requirement;
+import org.osgi.model.resource.Resource;
+import org.osgi.model.resource.Wire;
+
 /**
- * 
- * TODO Add Javadoc comment for this type.
+ * A resolver is a service interface that can be used to find resolutions for specified
+ * {@link Requirement requirements} based on a supplied {@link Environment}.
  * 
  * @version $Id$
- * @deprecated This is proposed API. As a result, this API may never be
- *             published or the final API may change substantially by the time
- *             of final publication. You are cautioned against relying upon this
- *             API.
  */
 public interface Resolver {
-
-	void add(Resource resource);
-
-	Requirement[] getUnsatisfiedRequirements();
-
-	Resource[] getOptionalResources();
-
-	Requirement[] getReason(Resource resource);
-	Resource [] getResources(Requirement requirement);
-
-	Resource[] getRequiredResources();
-
-	Resource[] getAddedResources();
-
-	boolean resolve();
-
-	/**
-	 * Needs more description ... Should return some state so you can see what went wrong
-	 * 
-	 * @param start
-	 */
-	void deploy(boolean start);
+  /**
+   * Attempt to resolve the requirements based on the specified environment and return
+   * any new revisions or wires to the caller.
+   * 
+   * For a given resolve call an environment should return a consistent set of
+   * capabilities and wires. The simplest mechanism of achieving this is by
+   * creating an immutable snapshot of the environment state and passing this to the
+   * resolve method.
+   * 
+   * <p>TODO mention about delta characteristics
+   * 
+   * @param environment
+   *          the environment into which to resolve the requirements
+   *          
+   * @param requirements 
+   * @return a resolution
+   * 
+   * @throws ResolutionException
+   * @throws IllegalArgumentException
+   * @throws NullPointerException 
+   */
+  Map<Resource, List<Wire<Capability, Requirement>>> resolve(Environment environment, Requirement...requirements) 
+  throws ResolutionException, IllegalArgumentException, NullPointerException;
 }

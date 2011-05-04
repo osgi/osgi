@@ -18,6 +18,8 @@ package org.osgi.framework.wiring;
 
 import java.util.Map;
 
+import org.osgi.model.resource.Requirement;
+
 /**
  * A requirement that has been declared from a {@link BundleRevision bundle
  * revision}.
@@ -26,7 +28,7 @@ import java.util.Map;
  * @noimplement
  * @version $Id$
  */
-public interface BundleRequirement {
+public interface BundleRequirement extends Requirement{
 	/**
 	 * Returns the name space of this requirement.
 	 * 
@@ -58,6 +60,8 @@ public interface BundleRequirement {
 	 * @return The bundle revision declaring this requirement.
 	 */
 	BundleRevision getRevision();
+
+	BundleRevision getResource();
 
 	/**
 	 * Returns whether the specified capability matches this requirement.

@@ -1,7 +1,5 @@
 package org.osgi.service.resource;
 
-import org.osgi.service.subsystem.SubsystemException;
-
 /*
  * TODO
  * (1) Perhaps pass a collection of resource contexts? There could be more than one 
@@ -40,7 +38,7 @@ public interface ResourceProcessor {
 	 * the Coordinator service from the Participant.failed method. Must call
 	 * ResourceOperation.completed in Participant.ended.
 	 * @param operation
-	 * @throws SubsystemException
+	 * @throws Exception
 	 */
-	public void process(ResourceOperation operation) throws SubsystemException;
+	public void process(ResourceOperation operation) throws Exception;
 }

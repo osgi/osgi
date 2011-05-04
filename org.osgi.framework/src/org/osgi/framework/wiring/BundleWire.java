@@ -16,6 +16,8 @@
 
 package org.osgi.framework.wiring;
 
+import org.osgi.model.resource.Wire;
+
 /**
  * A wire connecting a {@link BundleCapability} to a {@link BundleRequirement}.
  * 
@@ -23,7 +25,7 @@ package org.osgi.framework.wiring;
  * @noimplement
  * @version $Id$
  */
-public interface BundleWire {
+public interface BundleWire extends Wire<BundleCapability, BundleRequirement>{
 	/**
 	 * Returns the {@link BundleCapability} for this wire.
 	 * 
@@ -69,4 +71,7 @@ public interface BundleWire {
 	 *         returned.
 	 */
 	BundleWiring getRequirerWiring();
+
+	BundleRevision getProvider();
+	BundleRevision getRequirer();
 }
