@@ -46,7 +46,9 @@ public class TestBug1732_MountPointHandling extends
 	 */
 	public void testMountingPluginFirst() throws Exception {
 
+		// register plugin for ./A with mountpoint ./A/B
 		GenericDataPlugin mountingPlugin = prepareMountingPlugin(new String[] { "B" }, false);
+		// register plugin for ./A/B with no mountPoints
 		GenericDataPlugin mountedPlugin = prepareMountedPlugin1(false);
 		
 
@@ -67,7 +69,10 @@ public class TestBug1732_MountPointHandling extends
 	 */
 	public void testMountedPluginFirst() throws Exception {
 
+		// register plugin for ./A/B with no mountPoints
+		// should work, because there is no other plugin mounted above at this time
 		GenericDataPlugin mountedPlugin = prepareMountedPlugin1(false);
+		// register plugin for ./A with mountpoint ./A/B
 		GenericDataPlugin mountingPlugin = prepareMountingPlugin(new String[] { "B" }, false);
 		
 		// ensure that the mounted plugin has been mapped and serves the right
@@ -170,106 +175,109 @@ public class TestBug1732_MountPointHandling extends
 		}
 	}
 
+// THIS testcase has become obsolete with bug-decision 1898!
+// THERE must be no re-mapping of plugins, if conditions change.
+// Mapping must only at registration time. If it fails, the plugin must be ignored.
 	
-	/**
-	 * tests how plugins are mapped/un-mapped dynamicall, when their mapping conditions appear/disappear
-	 */
-	public void testDataPluginDependencies() throws Exception {
+//	/**
+//	 * tests how plugins are mapped/un-mapped dynamically, when their mapping conditions appear/disappear
+//	 */
+//	public void testDataPluginDependencies() throws Exception {
+//
+//		GenericDataPlugin mountingPlugin = prepareMountingPlugin(new String[] { "B", "C/D/E" }, false);
+//		GenericDataPlugin mountedPlugin1 = prepareMountedPlugin1(false);
+//		GenericDataPlugin mountedPlugin2 = prepareMountedPlugin2(false);
+//		
+//
+//		assertPluginSessions(mountedPlugin1.getRootUri(), mountedPlugin1, mountingPlugin);
+//		assertPluginSessions(mountingPlugin.getRootUri(), mountingPlugin, mountedPlugin1);
+//		assertPluginSessions(mountedPlugin2.getRootUri(), mountedPlugin2, mountedPlugin1 );
+//		
+//		// test that the mounted plugins "fall down", when the mounting plugin disappears
+//		unregisterService(mountingPlugin);
+//
+//		assertMountedPluginUnmapped(mountedPlugin1.getRootUri());
+//		assertMountedPluginUnmapped(mountedPlugin2.getRootUri());
+//
+//		// re-register the MountingPlugin --> both mountedPlugins should be re-mapped
+//		mountingPlugin = prepareMountingPlugin(new String[] { "B", "C/D/E" }, false);
+//
+//		assertMountedPluginRemapped(mountedPlugin1.getRootUri());
+//		assertMountedPluginRemapped(mountedPlugin2.getRootUri());
+//	}
 
-		GenericDataPlugin mountingPlugin = prepareMountingPlugin(new String[] { "B", "C/D/E" }, false);
-		GenericDataPlugin mountedPlugin1 = prepareMountedPlugin1(false);
-		GenericDataPlugin mountedPlugin2 = prepareMountedPlugin2(false);
-		
+//	private void assertMountedPluginRemapped(String uri) throws DmtException {
+//		try {
+//			session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_SHARED);
+//			pass( "The unmapped MountedPlugin was correctly mapped when it's MountingPlugin appeared");
+//		} catch (DmtException e) {
+//			fail( "The unmapped MountedPlugin was not mapped when it's mountPoint appeared");
+//		}
+//		finally {
+//			closeSession();
+//		}
+//	}
+//
+//	private void assertMountedPluginUnmapped(String uri) throws DmtException {
+//		try {
+//			session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_SHARED);
+//			fail( "The MountedPlugin must be unmapped when it's mountPoint disappears");
+//		} catch (DmtException e) {
+//			pass( "The MountedPlugin was correctly unmapped when it's MountingPlugin has disappeared");
+//		}
+//		finally {
+//			closeSession();
+//		}
+//	}
 
-		assertPluginSessions(mountedPlugin1.getRootUri(), mountedPlugin1, mountingPlugin);
-		assertPluginSessions(mountingPlugin.getRootUri(), mountingPlugin, mountedPlugin1);
-		assertPluginSessions(mountedPlugin2.getRootUri(), mountedPlugin2, mountedPlugin1 );
-		
-		// test that the mounted plugins "fall down", when the mounting plugin disappears
-		unregisterService(mountingPlugin);
-
-		assertMountedPluginUnmapped(mountedPlugin1.getRootUri());
-		assertMountedPluginUnmapped(mountedPlugin2.getRootUri());
-
-		// re-register the MountingPlugin --> both mountedPlugins should be re-mapped
-		mountingPlugin = prepareMountingPlugin(new String[] { "B", "C/D/E" }, false);
-
-		assertMountedPluginRemapped(mountedPlugin1.getRootUri());
-		assertMountedPluginRemapped(mountedPlugin2.getRootUri());
-	}
-
-	private void assertMountedPluginRemapped(String uri) throws DmtException {
-		try {
-			session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_SHARED);
-			pass( "The unmapped MountedPlugin was correctly mapped when it's MountingPlugin appeared");
-		} catch (DmtException e) {
-			fail( "The unmapped MountedPlugin was not mapped when it's mountPoint appeared");
-		}
-		finally {
-			closeSession();
-		}
-	}
-
-	private void assertMountedPluginUnmapped(String uri) throws DmtException {
-		try {
-			session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_SHARED);
-			fail( "The MountedPlugin must be unmapped when it's mountPoint disappears");
-		} catch (DmtException e) {
-			pass( "The MountedPlugin was correctly unmapped when it's MountingPlugin has disappeared");
-		}
-		finally {
-			closeSession();
-		}
-	}
-
-	/**
-	 * tests how plugins are mapped/un-mapped dynamicall, when their mapping conditions appear/disappear
-	 */
-	public void testExecPluginDependencies() throws Exception {
-
-		GenericDataPlugin dataPlugin = prepareDataPluginForExecTests();
-		GenericDataPlugin mountedPlugin1 = prepareMountedPlugin1(true);
-		GenericDataPlugin mountedPlugin2 = prepareMountedPlugin2(true);
-
-		// open session on root of DataPlugin 
-		session = dmtAdmin.getSession(dataPlugin.getRootUri(), DmtSession.LOCK_TYPE_EXCLUSIVE);
-		assertExecPluginIsMapped(session, mountedPlugin1.getRootUri() );
-		assertExecPluginIsMapped(session, mountedPlugin2.getRootUri() );
-
-		closeSession();
-		// test that the mounted plugins "fall down", when the mounting plugin disappears
-		unregisterService(dataPlugin);
-
-		assertExecPluginIsNotMapped(session, mountedPlugin1.getRootUri());
-		assertExecPluginIsNotMapped(session, mountedPlugin2.getRootUri());
-
-		// re-register the MountingPlugin --> both mountedPlugins should be re-mapped
-		dataPlugin = prepareDataPluginForExecTests();
-		// open session on root of DataPlugin 
-		session = dmtAdmin.getSession(dataPlugin.getRootUri(), DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-		assertExecPluginIsMapped(session, mountedPlugin1.getRootUri());
-		assertExecPluginIsMapped(session, mountedPlugin2.getRootUri());
-	}
-
-	private void assertExecPluginIsMapped(DmtSession session, String uri) throws DmtException {
-		try {
-			session.execute(uri, null);
-			pass( "The ExecPlugin is correctly mapped to: " + uri );
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail( "The ExecPlugin was expected to be mounted at: " + uri );
-		}
-	}
-
-	private void assertExecPluginIsNotMapped(DmtSession session, String uri) throws DmtException {
-		try {
-			session.execute(uri, null);
-			fail( "The ExecPlugin was expected to be unmapped.");
-		} catch (Exception e) {
-			pass( "The ExecPlugin is correctly not mapped");
-		}
-	}
+//	/**
+//	 * tests how plugins are mapped/un-mapped dynamically, when their mapping conditions appear/disappear
+//	 */
+//	public void testExecPluginDependencies() throws Exception {
+//
+//		GenericDataPlugin dataPlugin = prepareDataPluginForExecTests();
+//		GenericDataPlugin mountedPlugin1 = prepareMountedPlugin1(true);
+//		GenericDataPlugin mountedPlugin2 = prepareMountedPlugin2(true);
+//
+//		// open session on root of DataPlugin 
+//		session = dmtAdmin.getSession(dataPlugin.getRootUri(), DmtSession.LOCK_TYPE_EXCLUSIVE);
+//		assertExecPluginIsMapped(session, mountedPlugin1.getRootUri() );
+//		assertExecPluginIsMapped(session, mountedPlugin2.getRootUri() );
+//
+//		closeSession();
+//		// test that the mounted plugins "fall down", when the mounting plugin disappears
+//		unregisterService(dataPlugin);
+//
+//		assertExecPluginIsNotMapped(session, mountedPlugin1.getRootUri());
+//		assertExecPluginIsNotMapped(session, mountedPlugin2.getRootUri());
+//
+//		// re-register the MountingPlugin --> both mountedPlugins should be re-mapped
+//		dataPlugin = prepareDataPluginForExecTests();
+//		// open session on root of DataPlugin 
+//		session = dmtAdmin.getSession(dataPlugin.getRootUri(), DmtSession.LOCK_TYPE_EXCLUSIVE);
+//
+//		assertExecPluginIsMapped(session, mountedPlugin1.getRootUri());
+//		assertExecPluginIsMapped(session, mountedPlugin2.getRootUri());
+//	}
+//
+//	private void assertExecPluginIsMapped(DmtSession session, String uri) throws DmtException {
+//		try {
+//			session.execute(uri, null);
+//			pass( "The ExecPlugin is correctly mapped to: " + uri );
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			fail( "The ExecPlugin was expected to be mounted at: " + uri );
+//		}
+//	}
+//
+//	private void assertExecPluginIsNotMapped(DmtSession session, String uri) throws DmtException {
+//		try {
+//			session.execute(uri, null);
+//			fail( "The ExecPlugin was expected to be unmapped.");
+//		} catch (Exception e) {
+//			pass( "The ExecPlugin is correctly not mapped");
+//		}
+//	}
 
 	private void closeSession() throws DmtException {
 		if ( session != null && DmtSession.STATE_OPEN == session.getState())
@@ -386,8 +394,8 @@ public class TestBug1732_MountPointHandling extends
 	
 	
 	/**
-	 * a Plugin that mounts at "./A" and defines a mount point "B", so that it
-	 * should accept a mounted plugin at uri "./A/B"
+	 * a Plugin that mounts at "./A" and defines the given array of mount points,
+	 * so that it should accept mounted plugins at these points
 	 * 
 	 * @throws Exception
 	 */
