@@ -72,6 +72,13 @@ public interface BundleWire extends Wire<BundleCapability, BundleRequirement>{
 	 */
 	BundleWiring getRequirerWiring();
 
+	/**
+	 * {@inheritDoc}
+	 */
 	BundleRevision getProvider();
+
+	/**
+	 * {@inheritDoc}
+	 */
 	BundleRevision getRequirer();
 }

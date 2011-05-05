@@ -40,6 +40,21 @@ public interface Wire<C extends Capability, R extends Requirement> {
 	 */
 	R getRequirement();
 
+	/**
+	 * Return the providing {@link Resource resource} of the {@link #getCapability() capability}.
+	 * <p>
+	 * The resource returned may differ from the resource referenced by the {@link #getCapability()
+	 * capability}.
+	 * @return the providing {@link Resource resource}.
+	 */
 	Resource getProvider();
+
+	/**
+	 * Return the requiring {@link Resource resource} of the {@link #getRequirement() requirement}.
+	 * <p>
+	 * The resource returned my differ from the resource referenced by the {@link #getRequirement()
+	 * requirement}
+	 * @return the requiring {@link Resource resource}.
+	 */
 	Resource getRequirer();
 }
