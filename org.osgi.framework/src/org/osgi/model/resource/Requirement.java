@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRevision;
 
 /**
  * A requirement that has been declared from a {@link Resource} .
@@ -36,7 +37,18 @@ public interface Requirement {
 	String getNamespace();
 
 	/**
-	 * Returns the directives of this requirement.
+	 * Returns the directives of this requirement. Only the following list of
+	 * directives are allowed in the returned {@link Map map} of directives:
+	 * <ul>
+	 * <li> {@link Resource#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
+	 * <li> {@link Resource#REQUIREMENT_FILTER_DIRECTIVE filter}
+	 * <li> {@link Resource#REQUIREMENT_RESOLUTION_DIRECTIVE resolution}
+	 * <li> {@link Resource#REQUIREMENT_VISIBILITY_DIRECTIVE visibility} - can
+	 * only be present for the {@link BundleRevision#BUNDLE_NAMESPACE
+	 * osgi.wiring.bundle} name space.
+	 * </ul>
+	 * No other directives will be present in the returned map.
+	 * OSGi Alliance reserves the right to extend the set of directives.
 	 * 
 	 * @return An unmodifiable map of directive names to directive values for
 	 *         this requirement, or an empty map if this requirement has no
