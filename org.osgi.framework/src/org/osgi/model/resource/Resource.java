@@ -92,8 +92,7 @@ public interface Resource {
 
 	/**
 	 * A capability {@link Capability#getDirectives() directive} used to specify
-	 * the comma separated list of packages a capability uses. The default value
-	 * is {@link Constants#EFFECTIVE_RESOLVE resolve}.
+	 * the comma separated list of packages a capability uses.
 	 */
 	final String CAPABILITY_USES_DIRECTIVE = Constants.USES_DIRECTIVE;
 
