@@ -16,6 +16,7 @@
 package org.osgi.service.obr;
 
 import org.osgi.model.resource.Resource;
+import org.osgi.model.resource.ResourceConstants;
 
 public interface OBRConstants {
 	  /**
@@ -65,7 +66,7 @@ public interface OBRConstants {
 	   */
 	  final String[] ATTRIBUTES = { CHECKSUM_ATTRIBUTE,
 	      CHECKSUM_ALGO_ATTRIBUTE, COPYRIGHT_ATTRIBUTE, DESCRIPTION_ATTRIBUTE,
-	      DOCUMENTATION_URL_ATTRIBUTE, LICENSE_URL_ATTRIBUTE, Resource.RESOURCE_CONTENT_ATTRIBUTE,
-	      Resource.RESOURCE_SYMBOLIC_NAME_ATTRIBUTE, Resource.RESOURCE_NAMESPACE_ATTRIBUTE, SCM_URL_ATTRIBUTE, SIZE_ATTRIBUTE,
-	      Resource.RESOURCE_VERSION_ATTRIBUTE };
+	      DOCUMENTATION_URL_ATTRIBUTE, LICENSE_URL_ATTRIBUTE, ResourceConstants.RESOURCE_CONTENT_ATTRIBUTE,
+	      ResourceConstants.RESOURCE_SYMBOLIC_NAME_ATTRIBUTE, ResourceConstants.RESOURCE_NAMESPACE_ATTRIBUTE, SCM_URL_ATTRIBUTE, SIZE_ATTRIBUTE,
+	      ResourceConstants.RESOURCE_VERSION_ATTRIBUTE };
 }

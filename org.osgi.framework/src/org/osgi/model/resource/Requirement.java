@@ -40,10 +40,10 @@ public interface Requirement {
 	 * Returns the directives of this requirement. Only the following list of
 	 * directives are allowed in the returned {@link Map map} of directives:
 	 * <ul>
-	 * <li> {@link Resource#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
-	 * <li> {@link Resource#REQUIREMENT_FILTER_DIRECTIVE filter}
-	 * <li> {@link Resource#REQUIREMENT_RESOLUTION_DIRECTIVE resolution}
-	 * <li> {@link Resource#REQUIREMENT_VISIBILITY_DIRECTIVE visibility} - can
+	 * <li> {@link ResourceConstants#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
+	 * <li> {@link ResourceConstants#REQUIREMENT_FILTER_DIRECTIVE filter}
+	 * <li> {@link ResourceConstants#REQUIREMENT_RESOLUTION_DIRECTIVE resolution}
+	 * <li> {@link ResourceConstants#REQUIREMENT_VISIBILITY_DIRECTIVE visibility} - can
 	 * only be present for the {@link BundleRevision#BUNDLE_NAMESPACE
 	 * osgi.wiring.bundle} name space.
 	 * </ul>
@@ -86,5 +86,6 @@ public interface Requirement {
 	 *         {@link BundleCapability#getAttributes() attributes of the
 	 *         specified capability}; {@code false} otherwise.
 	 */
+	// TODO much debate on the placement and need for this method.
 	boolean matches(Capability capability);
 }
