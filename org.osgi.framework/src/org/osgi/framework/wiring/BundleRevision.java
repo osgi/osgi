@@ -23,6 +23,7 @@ import org.osgi.framework.BundleReference;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 import org.osgi.model.resource.Resource;
+import org.osgi.model.resource.ResourceConstants;
 
 /**
  * Bundle Revision. When a bundle is installed and each time a bundle is
@@ -138,7 +139,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * package wires required by a bundle wiring may change as the bundle wiring
 	 * may dynamically import additional packages.
 	 */
-	String	PACKAGE_NAMESPACE	= "osgi.wiring.package";
+	String	PACKAGE_NAMESPACE	= ResourceConstants.WIRING_PACKAGE_NAMESPACE;
 
 	/**
 	 * Name space for bundle capabilities and requirements.
@@ -176,7 +177,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * {@link Constants#BUNDLE_MANIFESTVERSION Bundle-ManifestVersion}
 	 * {@literal <} 2) must not provide a bundle capability.
 	 */
-	String	BUNDLE_NAMESPACE	= "osgi.wiring.bundle";
+	String	BUNDLE_NAMESPACE	= ResourceConstants.WIRING_BUNDLE_NAMESPACE;
 
 	/**
 	 * Name space for host capabilities and requirements.
@@ -217,7 +218,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * {@link Constants#BUNDLE_MANIFESTVERSION Bundle-ManifestVersion}
 	 * {@literal <} 2) must not provide a host capability.
 	 */
-	String	HOST_NAMESPACE		= "osgi.wiring.host";
+	String	HOST_NAMESPACE		= ResourceConstants.WIRING_HOST_NAMESPACE;
 
 	/**
 	 * Returns the special types of this bundle revision. The bundle revision
