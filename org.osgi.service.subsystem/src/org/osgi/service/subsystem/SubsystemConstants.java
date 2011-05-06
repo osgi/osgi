@@ -19,8 +19,8 @@ package org.osgi.service.subsystem;
 public interface SubsystemConstants {
 	/**
 	 * The subsystem lifecycle event types that can be produced by a subsystem. 
-	 * See ? and SubsystemAdmin for details on the circumstances under which 
-	 * these events are fired.
+	 * See ? and Subsystem for details on the circumstances under which these 
+	 * events are fired.
 	 */
 	public static enum EventType {
 		/**

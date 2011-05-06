@@ -17,10 +17,10 @@ package org.osgi.service.subsystem.a;
  * osgi.resource.namespace. The type of this property is a String+.
  * <p>
  * A resource processor performs the operation corresponding to those provided 
- * by SubsystemAdmin and Subsystem that affect a subsystem's lifecycle (e.g. 
- * install and start). For example, SubsystemAdmin.install() would delegate to 
- * on a resource processor if there were any resources to install for the 
- * namespace that the resource processor supported.
+ * by Subsystem that affect a subsystem's lifecycle (e.g. install and start). 
+ * For example, Subsystem.install() would delegate to a resource processor if 
+ * there were any resources to install for the namespace that the resource 
+ * processor supported.
  * 
  * @ThreadSafe
  */

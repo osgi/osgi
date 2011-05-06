@@ -1,7 +1,7 @@
 package org.osgi.service.subsystem;
 
 /**
- * Exception thrown by SubsystemAdmin or Subsystem when a problem occurs.
+ * Exception thrown by Subsystem when a problem occurs.
  */
 public class SubsystemException extends RuntimeException {
 	private static final long	serialVersionUID	= 1L;

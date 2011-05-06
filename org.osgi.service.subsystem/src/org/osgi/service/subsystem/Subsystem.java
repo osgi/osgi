@@ -108,17 +108,16 @@ public interface Subsystem {
 	public Map<String, String> getHeaders(String locale);
 	/**
 	 * The location identifier used to install this subsystem through 
-	 * SubsystemAdmin.install. This identifier does not change while this 
-	 * subsystem remains installed, even after SubsystemAdmin.update. This 
-	 * location identifier is used in SubsystemAdmin.update if no other update 
-	 * source is specified. 
+	 * Subsystem.install. This identifier does not change while this subsystem 
+	 * remains installed, even after Subsystem.update. This location identifier 
+	 * is used in Subsystem.update if no other update source is specified. 
 	 * @return The string representation of the subsystem's location identifier.
 	 */
 	public String getLocation();
 	/**
-	 * Gets the parent Subsystem that scopes this subsystem admin instance.
-	 * @return The Subsystem that scopes this subsystem admin or null if there 
-	 * is no parent subsystem (e.g. if the outer scope is the framework).
+	 * Gets the parent Subsystem that scopes this subsystem instance.
+	 * @return The Subsystem that scopes this subsystem or null if there is no 
+	 *         parent subsystem (e.g. if the outer scope is the framework).
 	 */
 	public Subsystem getParent();
 	/**
