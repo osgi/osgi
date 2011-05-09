@@ -18,7 +18,7 @@ package org.osgi.service.obr;
 import java.util.Collections;
 import java.util.List;
 
-import org.osgi.model.resource.Resource;
+import org.osgi.framework.wiring.Resource;
 
 /**
  * TODO

@@ -15,8 +15,7 @@
  */
 package org.osgi.service.obr;
 
-import org.osgi.model.resource.Resource;
-import org.osgi.model.resource.ResourceConstants;
+import org.osgi.framework.wiring.ResourceConstants;
 
 public interface OBRConstants {
 	  /**

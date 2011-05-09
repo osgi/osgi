@@ -1,11 +1,8 @@
-package org.osgi.model.resource;
+package org.osgi.framework.wiring;
 
 import java.util.List;
 import java.util.Map;
 
-import org.osgi.framework.wiring.BundleCapability;
-import org.osgi.framework.wiring.BundleRequirement;
-import org.osgi.framework.wiring.BundleWiring;
 
 /**
  * A resource is the representation of a uniquely identified and typed data.

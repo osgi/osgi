@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.model.resource;
+package org.osgi.framework.wiring;
 
 /**
  * A wire connecting a {@link Capability} to a {@link Requirement}.

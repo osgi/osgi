@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package org.osgi.model.resource;
+package org.osgi.framework.wiring;
 
 import java.util.Map;
 
 import org.osgi.framework.Constants;
-import org.osgi.framework.wiring.BundleCapability;
-import org.osgi.framework.wiring.BundleRevision;
 
 /**
  * A requirement that has been declared from a {@link Resource} .
@@ -44,7 +42,7 @@ public interface Requirement {
 	 * <li> {@link ResourceConstants#REQUIREMENT_FILTER_DIRECTIVE filter}
 	 * <li> {@link ResourceConstants#REQUIREMENT_RESOLUTION_DIRECTIVE resolution}
 	 * <li> {@link ResourceConstants#REQUIREMENT_VISIBILITY_DIRECTIVE visibility} - can
-	 * only be present for the {@link BundleRevision#BUNDLE_NAMESPACE
+	 * only be present for the {@link ResourceConstants#WIRING_BUNDLE_NAMESPACE
 	 * osgi.wiring.bundle} name space.
 	 * </ul>
 	 * No other directives will be present in the returned map.

@@ -24,9 +24,9 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.model.resource.Capability;
-import org.osgi.model.resource.Requirement;
-import org.osgi.model.resource.Resource;
+import org.osgi.framework.wiring.Capability;
+import org.osgi.framework.wiring.Requirement;
+import org.osgi.framework.wiring.Resource;
 
 /**
  * Represents a repository that contains {@link Resource

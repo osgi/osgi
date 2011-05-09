@@ -22,8 +22,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
-import org.osgi.model.resource.Resource;
-import org.osgi.model.resource.ResourceConstants;
 
 /**
  * Bundle Revision. When a bundle is installed and each time a bundle is

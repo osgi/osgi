@@ -18,7 +18,6 @@ package org.osgi.framework.wiring;
 
 import java.util.Map;
 
-import org.osgi.model.resource.Requirement;
 
 /**
  * A requirement that has been declared from a {@link BundleRevision bundle

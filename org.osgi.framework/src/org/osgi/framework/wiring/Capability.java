@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package org.osgi.model.resource;
+package org.osgi.framework.wiring;
 
 import java.util.Map;
-
-import org.osgi.framework.wiring.BundleRevision;
 
 /**
  * A capability that has been declared from a {@link Resource}.
@@ -41,16 +39,19 @@ public interface Capability {
 	 * <ul>
 	 * <li> {@link ResourceConstants#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
 	 * <li> {@link ResourceConstants#CAPABILITY_USES_DIRECTIVE uses}
-	 * <li> {@link ResourceConstants#CAPABILITY_MANDATORY_DIRECTIVE mandatory} - can only be present
-	 * for the {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle} and
-	 * {@link BundleRevision#PACKAGE_NAMESPACE osgi.wiring.package} name
-	 * spaces.
-	 * <li> {@link ResourceConstants#CAPABILITY_EXCLUDE_DIRECTIVE exclude} - can only be present
-	 * for the {@link BundleRevision#PACKAGE_NAMESPACE osgi.wiring.package} name
-	 * space.
-	 * <li> {@link ResourceConstants#CAPABILITY_INCLUDE_DIRECTIVE include} - can only be present
-	 * for the {@link BundleRevision#PACKAGE_NAMESPACE osgi.wiring.package} name
-	 * space.
+	 * <li> {@link ResourceConstants#CAPABILITY_MANDATORY_DIRECTIVE mandatory} -
+	 * can only be present for the
+	 * {@link ResourceConstants#WIRING_BUNDLE_NAMESPACE osgi.wiring.bundle} and
+	 * {@link ResourceConstants#WIRING_PACKAGE_NAMESPACE osgi.wiring.package}
+	 * name spaces.
+	 * <li> {@link ResourceConstants#CAPABILITY_EXCLUDE_DIRECTIVE exclude} - can
+	 * only be present for the
+	 * {@link ResourceConstants#WIRING_PACKAGE_NAMESPACE osgi.wiring.package}
+	 * name space.
+	 * <li> {@link ResourceConstants#CAPABILITY_INCLUDE_DIRECTIVE include} - can
+	 * only be present for the
+	 * {@link ResourceConstants#WIRING_PACKAGE_NAMESPACE osgi.wiring.package}
+	 * name space.
 	 * </ul>
 	 * No other directives will be present in the returned map. OSGi Alliance
 	 * reserves the right to extend the set of directives.

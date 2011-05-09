@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.model.resource;
+package org.osgi.framework.wiring;
 
+import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 
 /**
@@ -36,15 +37,15 @@ public final class ResourceConstants {
 	 * <ul>
 	 * <li>The
 	 * <q>osgi.wiring.package</q> attribute contains the name of the package.
-	 * <li>The {@link #VERSION_ATTRIBUTE version} attribute contains the the
-	 * {@link Version} of the package if one is specified or
+	 * <li>The {@link Constants#VERSION_ATTRIBUTE version} attribute contains
+	 * the the {@link Version} of the package if one is specified or
 	 * {@link Version#emptyVersion} if not specified.
-	 * <li>The {@link #BUNDLE_SYMBOLICNAME_ATTRIBUTE bundle-symbolic-name}
-	 * attribute contains the symbolic name of the resource providing the
-	 * package if one is specified.
-	 * <li>The {@link #BUNDLE_VERSION_ATTRIBUTE bundle-version} attribute
-	 * contains the {@link Version} of resource providing the package if one is
-	 * specified or {@link Version#emptyVersion} if not specified.
+	 * <li>The {@link Constants#BUNDLE_SYMBOLICNAME_ATTRIBUTE
+	 * bundle-symbolic-name} attribute contains the symbolic name of the
+	 * resource providing the package if one is specified.
+	 * <li>The {@link Constants#BUNDLE_VERSION_ATTRIBUTE bundle-version}
+	 * attribute contains the {@link Version} of resource providing the package
+	 * if one is specified or {@link Version#emptyVersion} if not specified.
 	 * <li>All other attributes are of type {@link String} and are used as
 	 * arbitrary matching attributes for the capability.
 	 * </ul>
@@ -65,9 +66,9 @@ public final class ResourceConstants {
 	 * <li>The
 	 * <q>osgi.wiring.bundle</q> attribute contains the symbolic name of the
 	 * bundle.
-	 * <li>The {@link #BUNDLE_VERSION_ATTRIBUTE bundle-version} attribute
-	 * contains the {@link Version} of the bundle if one is specified or
-	 * {@link Version#emptyVersion} if not specified.
+	 * <li>The {@link Constants#BUNDLE_VERSION_ATTRIBUTE bundle-version}
+	 * attribute contains the {@link Version} of the bundle if one is specified
+	 * or {@link Version#emptyVersion} if not specified.
 	 * <li>All other attributes are of type {@link String} and are used as
 	 * arbitrary matching attributes for the capability.
 	 * </ul>
@@ -93,9 +94,9 @@ public final class ResourceConstants {
 	 * <li>The
 	 * <q>osgi.wiring.host</q> attribute contains the symbolic name of the
 	 * bundle.
-	 * <li>The {@link #BUNDLE_VERSION_ATTRIBUTE bundle-version} attribute
-	 * contains the {@link Version} of the bundle if one is specified or
-	 * {@link Version#emptyVersion} if not specified.
+	 * <li>The {@link Constants#BUNDLE_VERSION_ATTRIBUTE bundle-version}
+	 * attribute contains the {@link Version} of the bundle if one is specified
+	 * or {@link Version#emptyVersion} if not specified.
 	 * <li>All other attributes are of type {@link String} and are used as
 	 * arbitrary matching attributes for the capability.
 	 * </ul>
@@ -112,10 +113,6 @@ public final class ResourceConstants {
 	 * capability.
 	 */
 	public static final String WIRING_HOST_NAMESPACE = "osgi.wiring.host";
-
-	public static final String VERSION_ATTRIBUTE = "version";
-	public static final String BUNDLE_SYMBOLICNAME_ATTRIBUTE = "bundle-symbolic-name";
-	public static final String BUNDLE_VERSION_ATTRIBUTE = "bundle-version";
 
 	/**
 	 * The {@link #RESOURCE_NAMESPACE_ATTRIBUTE name space} for OSGi bundle
@@ -140,7 +137,7 @@ public final class ResourceConstants {
 	 * A resource {@link Resource#getAttributes() attribute} used to specify the
 	 * resource version.
 	 */
-	public final static String RESOURCE_VERSION_ATTRIBUTE = VERSION_ATTRIBUTE;
+	public final static String RESOURCE_VERSION_ATTRIBUTE = Constants.VERSION_ATTRIBUTE;
 
 	/**
 	 * A resource {@link Resource#getAttributes() attribute} used to specify the
@@ -153,7 +150,7 @@ public final class ResourceConstants {
 	 * specify a capability filter. This filter is used to match against a
 	 * capability's {@link Capability#getAttributes() attributes}.
 	 */
-	public final static String REQUIREMENT_FILTER_DIRECTIVE = "filter";
+	public final static String REQUIREMENT_FILTER_DIRECTIVE = Constants.FILTER_DIRECTIVE;
 
 	/**
 	 * A requirement {@link Requirement#getDirectives() directive} used to
@@ -163,9 +160,28 @@ public final class ResourceConstants {
 	 * @see #REQUIREMENT_RESOLUTION_MANDATORY mandatory
 	 * @see #REQUIREMENT_RESOLUTION_OPTIONAL optional
 	 */
-	public final static String REQUIREMENT_RESOLUTION_DIRECTIVE = "resolution";
-	public final static String REQUIREMENT_RESOLUTION_MANDATORY = "mandatory";
-	public final static String REQUIREMENT_RESOLUTION_OPTIONAL = "optional";
+	public final static String REQUIREMENT_RESOLUTION_DIRECTIVE = Constants.RESOLUTION_DIRECTIVE;
+	/**
+	 * A directive value identifying a mandatory
+	 * {@link Resource#getRequirements(String) requirement} resolution type. A
+	 * mandatory resolution type indicates that the requirement must be resolved
+	 * when the {@link Resource resource} is resolved. If such requirement
+	 * cannot be resolved, the resource fails to resolve.
+	 * 
+	 * @see #REQUIREMENT_RESOLUTION_DIRECTIVE
+	 */
+	public final static String REQUIREMENT_RESOLUTION_MANDATORY = Constants.RESOLUTION_MANDATORY;
+
+	/**
+	 * A directive value identifying an optional
+	 * {@link Resource#getRequirements(String) requirement} resolution type. An
+	 * optional resolution type indicates that the requirement is optional and
+	 * the {@link Resource resource} may be resolved without requirement being
+	 * resolved.
+	 * 
+	 * @see #REQUIREMENT_RESOLUTION_DIRECTIVE
+	 */
+	public final static String REQUIREMENT_RESOLUTION_OPTIONAL = Constants.RESOLUTION_OPTIONAL;
 
 	/**
 	 * A requirement {@link Requirement#getDirectives() directive} used to
@@ -175,9 +191,30 @@ public final class ResourceConstants {
 	 * @see #EFFECTIVE_RESOLVE resolve
 	 * @see #EFFECTIVE_ACTIVE active
 	 */
-	public final static String REQUIREMENT_EFFECTIVE_DIRECTIVE = "effective";
-	public final static String EFFECTIVE_RESOLVE = "resolve";
-	public final static String EFFECTIVE_ACTIVE = "active";
+	public final static String REQUIREMENT_EFFECTIVE_DIRECTIVE = Constants.EFFECTIVE_DIRECTIVE;
+
+	/**
+	 * A directive value identifying a {@link #CAPABILITY_EFFECTIVE_DIRECTIVE
+	 * capability} or {@link #REQUIREMENT_EFFECTIVE_DIRECTIVE requirement} that
+	 * is effective at resolve time. Capabilities and requirements with an
+	 * effective time of resolve are the only capabilities which are processed
+	 * while resolving a resource.
+	 * 
+	 * @see #REQUIREMENT_EFFECTIVE_DIRECTIVE
+	 * @see #CAPABILITY_EFFECTIVE_DIRECTIVE
+	 */
+	public final static String EFFECTIVE_RESOLVE = Constants.EFFECTIVE_RESOLVE;
+
+	/**
+	 * A directive value identifying a {@link #CAPABILITY_EFFECTIVE_DIRECTIVE
+	 * capability} or {@link #REQUIREMENT_EFFECTIVE_DIRECTIVE requirement} that
+	 * is effective at active time. Capabilities and requirements with an
+	 * effective time of active are ignored while resolving a resource.
+	 * 
+	 * @see #REQUIREMENT_EFFECTIVE_DIRECTIVE
+	 * @see #CAPABILITY_EFFECTIVE_DIRECTIVE
+	 */
+	public final static String EFFECTIVE_ACTIVE = Constants.EFFECTIVE_ACTIVE;
 
 	/**
 	 * A requirement {@link Requirement#getDirectives() directive} used to
@@ -189,15 +226,36 @@ public final class ResourceConstants {
 	 * @see #REQUIREMENT_VISIBILITY_PRIVATE private
 	 * @see #REQUIREMENT_VISIBILITY_REEXPORT reexport
 	 */
-	public final static String REQUIREMENT_VISIBILITY_DIRECTIVE = "visibility";
-	public final static String REQUIREMENT_VISIBILITY_PRIVATE = "private";
-	public final static String REQUIREMENT_VISIBILITY_REEXPORT = "reexport";
+	public final static String REQUIREMENT_VISIBILITY_DIRECTIVE = Constants.VISIBILITY_DIRECTIVE;
+
+	/**
+	 * A directive value identifying a private
+	 * {@link #REQUIREMENT_VISIBILITY_DIRECTIVE visibility} type. A private
+	 * visibility type indicates that any {@link #WIRING_PACKAGE_NAMESPACE
+	 * packages} that are exported by the required
+	 * {@link #WIRING_BUNDLE_NAMESPACE bundle} are not made visible on the
+	 * export signature of the requiring {@link #WIRING_BUNDLE_NAMESPACE bundle}
+	 * .
+	 * 
+	 * @see #REQUIREMENT_VISIBILITY_DIRECTIVE
+	 */
+	public final static String REQUIREMENT_VISIBILITY_PRIVATE = Constants.VISIBILITY_PRIVATE;
+
+	/**
+	 * A directive value identifying a reexport
+	 * {@link #REQUIREMENT_VISIBILITY_DIRECTIVE visibility} type. A reexport
+	 * visibility type indicates any {@link #WIRING_PACKAGE_NAMESPACE packages}
+	 * that are exported by the required {@link #WIRING_BUNDLE_NAMESPACE bundle}
+	 * are re-exported by the requiring {@link #WIRING_BUNDLE_NAMESPACE bundle}.
+	 */
+	public final static String REQUIREMENT_VISIBILITY_REEXPORT = Constants.VISIBILITY_REEXPORT;
 
 	/**
 	 * A capability {@link Capability#getDirectives() directive} used to specify
-	 * the comma separated list of packages a capability uses.
+	 * the comma separated list of {@link #WIRING_PACKAGE_NAMESPACE package}
+	 * names a capability uses.
 	 */
-	public final static String CAPABILITY_USES_DIRECTIVE = "uses";
+	public final static String CAPABILITY_USES_DIRECTIVE = Constants.USES_DIRECTIVE;
 
 	/**
 	 * A capability {@link Capability#getDirectives() directive} used to specify
@@ -207,7 +265,7 @@ public final class ResourceConstants {
 	 * @see #EFFECTIVE_RESOLVE resolve
 	 * @see #EFFECTIVE_ACTIVE active
 	 */
-	public final static String CAPABILITY_EFFECTIVE_DIRECTIVE = REQUIREMENT_EFFECTIVE_DIRECTIVE;
+	public final static String CAPABILITY_EFFECTIVE_DIRECTIVE = Constants.EFFECTIVE_DIRECTIVE;
 
 	/**
 	 * A capability {@link Capability#getDirectives() directive} used to specify

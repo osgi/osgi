@@ -19,34 +19,34 @@ package org.osgi.service.obr;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import org.osgi.framework.wiring.BundleRevision;
-import org.osgi.model.resource.Capability;
-import org.osgi.model.resource.Requirement;
-import org.osgi.model.resource.Resource;
-import org.osgi.model.resource.Wire;
+
+import org.osgi.framework.wiring.Capability;
+import org.osgi.framework.wiring.Requirement;
+import org.osgi.framework.wiring.Resource;
+import org.osgi.framework.wiring.Wire;
 
 /**
  * An environment provides options and constraints to the potential solution of
- * a {@link Resolver#resolve(Environment, PotentialRequirement...)} operation.
+ * a {@link Resolver#resolve(Environment, Requirement...)} operation.
  * 
  * <p>
- * Environments provide {@link PotentialCapability PotentialCapabilities}
- * options that the Resolver can use to satisfy {@link PotentialRequirement
- * PotentialRequirements} via the
- * {@link #findProviders(PotentialRequirement...)} method.
+ * Environments provide {@link Capability capabilities}
+ * options that the Resolver can use to satisfy {@link Requirement
+ * requirements} via the
+ * {@link #findProviders(Requirement...)} method.
  * 
  * <p>
  * Environments also constrain solutions via the {@link #getWiring()} method. A
- * wiring consists of a map of existing {@link PotentialRevision revisions} to
- * {@link PotentialWire wires}.
+ * wiring consists of a map of existing {@link Resource resources} to
+ * {@link Wire wires}.
  *   
  * <p>
  * An environment may be used to provide capabilities via local
- * {@link BundleRevision BundleRevisions} and/or remote {@link Repository
- * Repositories}.
+ * {@link Resource resources} and/or remote {@link Repository
+ * repositories}.
  * 
  * <p>
- * A resolver may call the {@link #findProviders(PotentialRequirement...)} and
+ * A resolver may call the {@link #findProviders(Requirement...)} and
  * {@link #getWiring()} method any number of times during a resolve using any
  * thread. Environments may also be shared between several resolvers. As such
  * implementors should ensure that this class is properly synchronized.

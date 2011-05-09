@@ -23,10 +23,10 @@ package org.osgi.service.obr;
 import java.util.List;
 import java.util.Map;
 
-import org.osgi.model.resource.Capability;
-import org.osgi.model.resource.Requirement;
-import org.osgi.model.resource.Resource;
-import org.osgi.model.resource.Wire;
+import org.osgi.framework.wiring.Capability;
+import org.osgi.framework.wiring.Requirement;
+import org.osgi.framework.wiring.Resource;
+import org.osgi.framework.wiring.Wire;
 
 /**
  * A resolver is a service interface that can be used to find resolutions for specified
