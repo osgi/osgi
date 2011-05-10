@@ -56,6 +56,6 @@ public interface Resolver {
    * @throws IllegalArgumentException
    * @throws NullPointerException 
    */
-  Map<Resource, List<Wire<Capability, Requirement>>> resolve(Environment environment, Requirement...requirements) 
+  Map<Resource, List<Wire>> resolve(Environment environment, Requirement...requirements) 
   throws ResolutionException, IllegalArgumentException, NullPointerException;
 }

@@ -78,5 +78,5 @@ public interface Environment {
    * 
    * @return the wires already defined in this environment
    */
-  Map<Resource, List<Wire<Capability, Requirement>>> getWiring();
+  Map<Resource, List<Wire>> getWiring();
 }

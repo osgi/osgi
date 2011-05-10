@@ -2,7 +2,7 @@ package org.osgi.service.resource;
 
 import java.util.Map;
 
-import org.osgi.model.resource.Resource;
+import org.osgi.framework.wiring.Resource;
 import org.osgi.service.coordinator.Coordination;
 
 /**
