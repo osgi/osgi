@@ -19,26 +19,23 @@ package org.osgi.framework.wiring;
 /**
  * A wire connecting a {@link Capability} to a {@link Requirement}.
  * 
- * @param <R> TODO
- * @param <C> TODO
- *
  * @ThreadSafe
  * @version $Id$
  */
-public interface Wire<C extends Capability, R extends Requirement> {
+public interface Wire {
 	/**
 	 * Returns the {@link Capability} for this wire.
 	 * 
 	 * @return The {@link Capability} for this wire.
 	 */
-	C getCapability();
+	Capability getCapability();
 
 	/**
 	 * Return the {@link Requirement} for this wire.
 	 * 
 	 * @return The {@link Requirement} for this wire.
 	 */
-	R getRequirement();
+	Requirement getRequirement();
 
 	/**
 	 * Return the providing {@link Resource resource} of the {@link #getCapability() capability}.

@@ -24,7 +24,7 @@ package org.osgi.framework.wiring;
  * @noimplement
  * @version $Id$
  */
-public interface BundleWire extends Wire<BundleCapability, BundleRequirement>{
+public interface BundleWire extends Wire {
 	/**
 	 * Returns the {@link BundleCapability} for this wire.
 	 * 
