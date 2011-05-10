@@ -48,18 +48,7 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.MessagesConstants;
  * <code>DeploymentCustomizerPermission.implies<code> method, 
  * according to MEG specification.
  */
-public class Implies {
-	
-	private DeploymentTestControl tbc;
-
-	public Implies(DeploymentTestControl tbc) {
-		this.tbc = tbc;
-	}
-	
-	public void run() {
-		testImplies001();
-		testImplies002();
-	}
+public class Implies extends DeploymentTestControl {
 	
 	/**
 	 * Asserts that a <code>DeploymentCustomizerPermission</code> object implies other
@@ -68,7 +57,7 @@ public class Implies {
 	 * @spec DeploymentCustomizerPermission.implies(Permission)
 	 */
 	public void testImplies001() {
-		tbc.log("#testImplies001");
+		log("#testImplies001");
 		try {
 			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					DeploymentConstants.BUNDLE_NAME_FILTER,
@@ -78,10 +67,10 @@ public class Implies {
 					DeploymentConstants.BUNDLE_NAME_FILTER,
 					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 			
-			tbc.assertTrue("Implies when both target and action are equal",
+			assertTrue("Implies when both target and action are equal",
 					deployPermission.implies(deployPermission2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
+			fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
 		}
@@ -94,7 +83,7 @@ public class Implies {
 	 * @spec DeploymentCustomizerPermission.implies(Permission)
 	 */
 	public void testImplies002() {
-		tbc.log("#testImplies002");
+		log("#testImplies002");
 		try {
 			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					"(name=bundle.tb1)",
@@ -104,10 +93,10 @@ public class Implies {
 					"(name=bundle.tb2)",
 					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 			
-			tbc.assertTrue("Implies when target filters are different",
+			assertTrue("Implies when target filters are different",
 					!deployPermission.implies(deployPermission2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
+			fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
 		}
