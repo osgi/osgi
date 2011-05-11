@@ -19,9 +19,12 @@ package org.osgi.util.tr069;
  * Static methods for translating Base64 encoded strings to byte arrays and
  * vice-versa.
  * 
- * @version $Revision$
+ * @version $Id$
  */
 class Base64 {
+
+	private Base64() { // private constructor
+	}
 	/**
 	 * Translates the specified byte array into a Base64 string as per
 	 * Preferences.put(byte[]).

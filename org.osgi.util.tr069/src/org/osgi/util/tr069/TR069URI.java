@@ -21,8 +21,7 @@ import info.dmtree.Uri;
 /**
  * Utility class for translating between DMT URI and TR-069 Path.
  * 
- * @author Ikuo YAMASAKI, NTT Corporation
- * 
+ * @version $Id$
  */
 public class TR069URI {
 
@@ -148,54 +147,6 @@ public class TR069URI {
 			return device + tr069Path;
 	}
 
-//	public static void main(String[] args) {
-//
-//		// try {
-//		// TR069ParameterValue.getDmtDataForList("1,,3", "int", null,
-//		// "./Device/Services", null);
-//		// } catch (IllegalArgumentException e) {
-//		// // TODO Auto-generated catch block
-//		// e.printStackTrace();
-//		// } catch (UnsupportedEncodingException e) {
-//		// // TODO Auto-generated catch block
-//		// e.printStackTrace();
-//		// } catch (TR069MappingException e) {
-//		// // TODO Auto-generated catch block
-//		// e.printStackTrace();
-//		// }
-//		//
-//
-//		float f = (float) 0.0045;
-//		System.out.println("f=[" + f + "]");
-//
-//		f = Float.parseFloat("-0");
-//		// f= Float.parseFloat("-1.4E10");
-//		System.out.println("f2=[" + f + "]");
-//
-//		String target = "./Device/";
-//		System.out.println("target=[" + target + "]");
-//		// String target2 = ".A.B";
-//		// System.out.println("target2=[" + target2 + "]");
-//		// String retGetTR069AbsPath = getTR069AbsolutePath(target, target2);
-//		// System.out.println("retGetTR069AbsPath=[" + retGetTR069AbsPath +
-//		// "]");
-//
-//		boolean retIsValidTR069Path = isValidTR069Path(target);
-//		System.out.println("retIsValidTR069Path=[" + retIsValidTR069Path + "]");
-//		boolean retIsAbsTR069Path = isAbsoluteTR069Path(target);
-//		System.out.println("retIsAbsTR069Path=[" + retIsAbsTR069Path + "]");
-//		String retGetDmtUri = getDmtUri(target);
-//		System.out.println("retGetDmtUri=[" + retGetDmtUri + "]");
-//
-//		boolean retIsValidUri = Uri.isValidUri(target);
-//		System.out.println("retIsValidUri=[" + retIsValidUri + "]");
-//		boolean retIsAbsUri = Uri.isAbsoluteUri(target);
-//		System.out.println("retIsAbsUri=[" + retIsAbsUri + "]");
-//		String retGetTR069Path = getTR069Path(target);
-//		System.out.println("retGetTR069Path=[" + retGetTR069Path + "]");
-//
-//	}
-
 	/**
 	 * Checks whether the specified path is an absolute TR-069 path.
 	 * 
@@ -208,11 +159,6 @@ public class TR069URI {
 	 * @return whether the specified path is absolute
 	 */
 	public static boolean isAbsoluteTR069Path(final String tr069Path) {
-		// if (!isValidTR069Path(tr069Path))
-		// throw new IllegalArgumentException("tr069Path must be valid: "
-		// + tr069Path);
-		// if (tr069Path == null)
-		// throw new IllegalArgumentException("tr069Path must not be null.");
 		if (tr069Path.startsWith(Uri.ROOT_NODE))
 			return false;
 		return true;
