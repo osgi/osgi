@@ -1,10 +1,10 @@
 package org.osgi.test.cases.dmt.tc4.rfc141;
 
+import info.dmtree.DmtConstants;
 import info.dmtree.DmtData;
 import info.dmtree.DmtSession;
 import info.dmtree.MetaNode;
 import info.dmtree.spi.DataPlugin;
-import info.dmtree.spi.DmtConstants;
 
 import java.util.Dictionary;
 import java.util.Hashtable;

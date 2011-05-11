@@ -1,12 +1,9 @@
 package org.osgi.test.cases.dmt.tc4.rfc141;
 
+import info.dmtree.DmtConstants;
 import info.dmtree.spi.DataPlugin;
-import info.dmtree.spi.DmtConstants;
 import info.dmtree.spi.ExecPlugin;
 import info.dmtree.spi.MountPlugin;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 import org.osgi.test.support.OSGiTestCase;
 

@@ -2,11 +2,11 @@ package org.osgi.test.cases.dmt.tc4.rfc141.atomic;
 
 import info.dmtree.Acl;
 import info.dmtree.DmtAdmin;
+import info.dmtree.DmtConstants;
 import info.dmtree.DmtData;
 import info.dmtree.DmtException;
 import info.dmtree.DmtSession;
 import info.dmtree.spi.DataPlugin;
-import info.dmtree.spi.DmtConstants;
 
 import java.util.Arrays;
 import java.util.Dictionary;
@@ -17,7 +17,6 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.GenericDataPlugin;
-import org.osgi.test.cases.dmt.tc4.rfc141.plugins.MetaNode;
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.Node;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
