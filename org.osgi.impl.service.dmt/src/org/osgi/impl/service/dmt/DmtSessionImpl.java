@@ -19,6 +19,7 @@
 package org.osgi.impl.service.dmt;
 
 import info.dmtree.Acl;
+import info.dmtree.DmtConstants;
 import info.dmtree.DmtData;
 import info.dmtree.DmtEvent;
 import info.dmtree.DmtException;
@@ -29,7 +30,6 @@ import info.dmtree.Uri;
 import info.dmtree.security.DmtPermission;
 import info.dmtree.security.DmtPrincipalPermission;
 import info.dmtree.spi.DataPlugin;
-import info.dmtree.spi.DmtConstants;
 import info.dmtree.spi.ExecPlugin;
 import info.dmtree.spi.ReadWriteDataSession;
 import info.dmtree.spi.ReadableDataSession;
@@ -47,7 +47,6 @@ import java.security.PrivilegedExceptionAction;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;

@@ -1,7 +1,7 @@
 package org.osgi.impl.service.dmt.dispatcher;
 
+import info.dmtree.DmtConstants;
 import info.dmtree.Uri;
-import info.dmtree.spi.DmtConstants;
 import info.dmtree.spi.MountPoint;
 
 import java.util.ArrayList;

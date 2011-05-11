@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package info.dmtree.spi;
+package info.dmtree;
 
 /**
  * TODO Add Javadoc comment for this type.
