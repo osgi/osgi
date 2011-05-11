@@ -172,10 +172,10 @@ public class TR069ParameterValue {
 	 * <p>
 	 * Case A: the tr069Type equals TR069ParameterValue.TR069_TYPE_BOOLEAN.
 	 * <ol type="1">
-	 * <li>If the metaNode supports FORMAT _BOOLEAN,
+	 * <li>If the metaNode supports FORMAT_BOOLEAN,
 	 * <ol type="a">
-	 * <li>if the value equals �g0�h or �gfalse�h, return DmtData.FALSE_VALUE.</li>
-	 * <li>if the value equals �g1�h or �gtrue�h, return DmtData.TRUE_VALUE.</li>
+	 * <li>if the value equals "0" or "false", return DmtData.FALSE_VALUE.</li>
+	 * <li>if the value equals "1" or "true", return DmtData.TRUE_VALUE.</li>
 	 * <li>Otherwise, IllegalArgumentException will be thrown.</li>
 	 * </ol>
 	 * </li>
@@ -249,8 +249,8 @@ public class TR069ParameterValue {
 	 * go to Step 2.
 	 * <ol type="a">
 	 * <li>The specified value will be converted into base64 byte array and
-	 * create a new DmtData by DmtData(byte[], boolean) with �gtrue�h as the
-	 * second argument.</li>
+	 * create a new DmtData by DmtData(byte[], boolean) with
+	 * {@value Boolean#TRUE} as the second argument.</li>
 	 * </ol>
 	 * </li>
 	 * <li>If the metaNode supports FORMAT_RAW_BINARY, go to Step 2.a.,
@@ -772,7 +772,7 @@ public class TR069ParameterValue {
 	 *        a platform default character set will be used. The character set
 	 *        is used for getting byte array from the specified value.
 	 * @param nodeUri URI of the interior node in DMT. It must be valid absolute
-	 *        DMT URI. *
+	 *        DMT URI.
 	 * @param metaNode Meta node of the child leaf node of the specified node
 	 *        uri. It must not be null. Returns: array of DmtData to be used for
 	 *        DmtSession#setNodeValue() against the child nodes of the specified
@@ -820,7 +820,7 @@ public class TR069ParameterValue {
 	 * <li>For each item of the specified array, the following will be done:
 	 * <ol type="a">
 	 * <li>Convert the DmtData object to a TR069ParameterValue according to the
-	 * rules in . gtTR069ParameterValue(DmtData).</li>
+	 * rules in {@link this#getTR069ParameterValue(DmtData)}.</li>
 	 * 
 	 * <li>Retrieve the value as String from the converted TR069ParameterValue.</li>
 	 * <li>Escaping must be done as specified by TR-106.</li>
@@ -828,8 +828,8 @@ public class TR069ParameterValue {
 	 * </li>
 	 * <li>Creating the comma-separated list by concatenating the retrieved
 	 * values in the order of the appearance of the array.</li>
-	 * <li>Construct new TR069ParameterValue with �gstring�h and the created
-	 * comma-separated list, and return it.</li>
+	 * <li>Construct new TR069ParameterValue with the created comma-separated
+	 * list and TR069ParameterValue.TR069_TYPE_STRING, and return it.</li>
 	 * </ol>
 	 * <p>
 	 * This method does not check whether the all items of the specified array
@@ -862,8 +862,8 @@ public class TR069ParameterValue {
 	 * <ol type="a">
 	 * <li>The byte array returned by DmtData.getBase64() will be converted into
 	 * base64. The result of the conversion will be used as the value.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_BASE64 and the value, and return it.</li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_BASE64, and return it.</li>
 	 * </ol>
 	 * </li>
 	 * <li>In case that the format of the data is FORMAT_BINARY,
@@ -871,8 +871,8 @@ public class TR069ParameterValue {
 	 * <li>The byte array returned by DmtData.getBinary() will be converted into
 	 * hexBinary in canonical representation as defined in XML Schema. The
 	 * result of the conversion will be used as the value.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_HEXBINARY and the value, and return it.</li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_HEXBINARY, and return it.</li>
 	 * </ol>
 	 * </li>
 	 * <li>In case that the format of the data is FORMAT_HEXBINARY,
@@ -880,68 +880,68 @@ public class TR069ParameterValue {
 	 * <li>The byte array returned by DmtData.getHexBinary() will be converted
 	 * into hexBinary in canonical representation as defined in XML Schema. The
 	 * result of the conversion will be used as the value.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_HEXBINARY and the value, and return it.</li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_HEXBINARY, and return it.</li>
 	 * </ol>
 	 * </li>
 	 * <li>In case that the format of the data is FORMAT_BOOLEAN,
 	 * <ol type="a">
 	 * <li>If DmtData.getBoolean() returns Boolean.TRUE or the DmtData equals
-	 * DmtData.TRUE_VALUE, the value will be �g1�h. Otherwise the value will be
-	 * �g0�h.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_BOOLEAN and the value, and return it.</li>
+	 * DmtData.TRUE_VALUE, the value will be "1". Otherwise the value will be
+	 * "0".</li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_BOOLEAN, and return it.</li>
 	 * </ol>
 	 * </li>
 	 * <li>In case that the format of the data is FORMAT_DATE,
 	 * <ol type="a">
 	 * <li>DmtData.toString() or DmtData.getDate() will be used as the value.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_STRING and the value, and return it.</li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_STRING, and return it.</li>
 	 * </ol>
 	 * </li>
 	 * <li>In case that the format of the data is any of FORMAT_FLOAT,
 	 * FORMAT_INTEGER, FORMAT_LONG, and FORMAT_NULL,
 	 * <ol type="a">
 	 * <li>DmtData.toString() will be used as the value.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_STRING and the value, and return it.</li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_STRING, and return it.</li>
 	 * </ol>
 	 * </li>
 	 * <li>In case that the format of the data is FORMAT_STRING.
 	 * <ol type="a">
 	 * <li>DmtData.toString() or DmtData.getString() will be used as the value.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_STRING and the value, and return it.</li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_STRING, and return it.</li>
 	 * </ol>
 	 * </li>
 	 * <li>In case that the format of the data is FORMAT_RAW_STRING,
 	 * <ol type="a">
 	 * <li>DmtData.toString() or DmtData.getRawString() will be used as the
 	 * value.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_STRING and the value, and return it.</li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_STRING, and return it.</li>
 	 * </ol>
 	 * </li>
 	 * <li>In case that the format of the data is FORMAT_INTEGER,
 	 * <ol type="a">
 	 * <li>DmtData.toString() will be used as the value.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_INT and the value, and return it.</li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_INT, and return it.</li>
 	 * </ol>
 	 * </li>
 	 * <li>In case that the format of the data is FORMAT_LONG,
 	 * <ol type="a">
 	 * <li>DmtData.toString() will be used as the value.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_LONG and the value and return it.</li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_LONG, and return it.</li>
 	 * </ol>
 	 * </li>
 	 * <li>In case that the format of the data is FORMAT_TIME,
 	 * <ol type="a">
 	 * <li>DmtData.toString() or DmtData.geetTime() will be used as the value.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_STRING and the value and return it.</li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_STRING, and return it.</li>
 	 * </ol>
 	 * </li>
 	 * <li>In case that the format of the data is FORMAT_XML,
@@ -955,26 +955,24 @@ public class TR069ParameterValue {
 	 * <ol type="a">
 	 * <li>DmtData.toString() or DmtData.getUnsignedInteger() will be used as
 	 * the value.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_UNSIGNED_INT and the value, and return it.
-	 * </li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_UNSIGNED_INT, and return it.</li>
 	 * </ol>
 	 * </li>
 	 * <li>In case that the format of the data is FORMAT_UNSIGNED_LONG,
 	 * <ol type="a">
 	 * <li>DmtData.toString() or DmtData.getUnsignedLong() will be used as the
 	 * value.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_UNSIGNED_LONG and the value and return it.
-	 * </li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_UNSIGNED_LONG,and return it.</li>
 	 * </ol>
 	 * </li>
 	 * <li>In case that the format of the data is FORMAT_DATETIME,
 	 * <ol type="a">
 	 * <li>DmtData.toString() or DmtData.getDateTime() will be used as the
 	 * value.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_DATETIME and the value, and return it.</li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_DATETIME, and return it.</li>
 	 * </ol>
 	 * </li>
 	 * <li>In case that the format of the data is FORMAT_NODE_URI,
@@ -982,8 +980,8 @@ public class TR069ParameterValue {
 	 * <li>The returned String by DmtData.toString() or DmtData.getNodeUri()
 	 * will be translated into TR-069Path. The result of the translation will be
 	 * used as value.</li>
-	 * <li>Construct new TR069ParameterValue with
-	 * TR069ParameterValue.TR069_TYPE_STRING and the value, and return it.</li>
+	 * <li>Construct new TR069ParameterValue with the value and
+	 * TR069ParameterValue.TR069_TYPE_STRING, and return it.</li>
 	 * </ol>
 	 * 
 	 * @param data DmtData retrieved from DMT.
