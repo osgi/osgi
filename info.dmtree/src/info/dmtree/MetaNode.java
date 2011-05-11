@@ -225,7 +225,9 @@ public interface MetaNode {
      * be consistent with this method.
      * 
      * @return the allowed maximum, or {@code Double.MAX_VALUE} if there
-     *         is no upper limit defined or the node's format is not numeric
+     *         is no upper limit defined or the node's format is not one of the
+     *         numeric formats integer, float, long, unsigned_integer or 
+     *         unsigned_long
      */
     double getMax();
 
@@ -236,8 +238,8 @@ public interface MetaNode {
      * formats: integer, float, long, unsigned_long or unsigned_integer
      * format. The returned limit has {@code double} type, as this can be
      * used to denote both integer and float limits with full precision. The
-     * actual minimum should be the smallest integer or float number that is
-     * larger than the returned value.
+     * actual minimum should be the smallest integer, float or long value that is
+     * equal or larger than the returned value.
      * <p>
      * The information returned by this method is not checked by DmtAdmin, it
      * is only for external use, for example in user interfaces. DmtAdmin only
@@ -245,8 +247,9 @@ public interface MetaNode {
      * be consistent with this method.
      * 
      * @return the allowed minimum, or {@code Double.MIN_VALUE} if there
-     *         is no lower limit defined or the node's format is not integer or
-     *         float
+     *         is no lower limit defined or the node's format is not one of the
+     *         numeric formats integer, float, long, unsigned_integer or 
+     *         unsigned_long
      */
     double getMin();
 
