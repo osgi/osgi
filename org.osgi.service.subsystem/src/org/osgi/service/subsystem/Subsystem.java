@@ -4,8 +4,8 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
+import org.osgi.service.subsystem.a.Resource;
 
 /*
  * TODO
@@ -80,12 +80,17 @@ public interface Subsystem {
 	 * @return The Subsystems managed by this service.
 	 */
 	public Collection<Subsystem> getChildren();
+	
 	/**
-	 * Gets the content bundles of this subsystem.
-	 * @return The content of this subsystem.
+	 * Returns a snapshot of all {@code Resources} currently constituting this 
+	 * {@link Subsystem}. If this {@code Subsystem} has no {@code Resources}, 
+	 * the {@link Collection} will be empty.
+	 * 
+	 * @return A snapshot of all {@code Resources} currently constituting this
+	 *         {@code Subsystem}.
 	 */
-	// TODO Should constituents actually be resources instead of bundles?
-	public Collection<Bundle> getConstituents();
+	public Collection<Resource> getResources();
+	
 	/**
 	 * Gets the headers used to define this subsystem. The headers will be 
 	 * localized using the locale returned by java.util.Locale.getDefault. This 
