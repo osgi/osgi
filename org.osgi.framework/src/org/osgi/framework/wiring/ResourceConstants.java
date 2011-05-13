@@ -249,6 +249,29 @@ public final class ResourceConstants {
 	 * are re-exported by the requiring {@link #WIRING_BUNDLE_NAMESPACE bundle}.
 	 */
 	public final static String REQUIREMENT_VISIBILITY_REEXPORT = Constants.VISIBILITY_REEXPORT;
+	
+	/**
+	 * A requirement {@link Requirement#getDirectives() directive} used to
+	 * specify the cardinality for a requirement. The default value is
+	 * {@link #REQUIREMENT_SINGULAR_CARDINALITY singular}.
+	 * 
+	 * @see #REQUIREMENT_MULTIPLE_CARDINALITY multiple
+	 * @see #REQUIREMENT_SINGULAR_CARDINALITY singular
+	 */
+	public final static String REQUIREMENT_CARDINALITY_DIRECTIVE = "cardinality";
+	  
+	/**
+	 * A directive value identifying a multiple
+	 * {@link #REQUIREMENT_CARDINALITY_DIRECTIVE cardinality} type.
+	 */
+	public final static String REQUIREMENT_MULTIPLE_CARDINALITY = "multiple";
+	  
+	/**
+	 * A directive value identifying a singular
+	 * {@link #REQUIREMENT_CARDINALITY_DIRECTIVE cardinality} type.
+	 */
+	public final static String REQUIREMENT_SINGULAR_CARDINALITY = "singular";
+
 
 	/**
 	 * A capability {@link Capability#getDirectives() directive} used to specify
@@ -291,5 +314,5 @@ public final class ResourceConstants {
 	 * exported. This directive must only be used for capabilities with the
 	 * {@link #WIRING_PACKAGE_NAMESPACE package} name space.
 	 */
-	public final static String CAPABILITY_EXCLUDE_DIRECTIVE = "exclude";
+	public final static String CAPABILITY_EXCLUDE_DIRECTIVE = "exclude";	
 }
