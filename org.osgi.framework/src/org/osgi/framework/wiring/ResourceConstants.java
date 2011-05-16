@@ -140,12 +140,6 @@ public final class ResourceConstants {
 	public final static String RESOURCE_VERSION_ATTRIBUTE = Constants.VERSION_ATTRIBUTE;
 
 	/**
-	 * A resource {@link Resource#getAttributes() attribute} used to specify the
-	 * resource name space.
-	 */
-	public final static String RESOURCE_NAMESPACE_ATTRIBUTE = "namespace";
-
-	/**
 	 * A requirement {@link Requirement#getDirectives() directive} used to
 	 * specify a capability filter. This filter is used to match against a
 	 * capability's {@link Capability#getAttributes() attributes}.

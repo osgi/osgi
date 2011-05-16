@@ -51,5 +51,12 @@ public interface Resource {
 	 * @return The attributes associated with the resource.
 	 */
 	public Map<String, Object> getAttributes();
-
+	
+	/**
+	 * Returns the namespace associated with this resource.
+	 * 
+	 * @return The namespace associated with this resource.
+	 * @see ResourceConstants#RESOURCE_BUNDLE_NAMESPACE
+	 */
+	public String getNamespace();
 }
