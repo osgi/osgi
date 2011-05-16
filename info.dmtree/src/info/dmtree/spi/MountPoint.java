@@ -61,15 +61,15 @@ public interface MountPoint {
 	 *            {@code URI}'s specified here are relative to the current
 	 *            {@code MountPoint}'s mountPath. The value of this
 	 *            parameter determines the value of the event property
-	 *            <code>EVENT_PROPERTY_NODES</code>. An empty array or
+	 *            {@code EVENT_PROPERTY_NODES}. An empty array or
 	 *            {@code null} is permitted. In both cases the value of the
-	 *            events <code>EVENT_PROPERTY_NODES</code> property will be
+	 *            events {@code EVENT_PROPERTY_NODES} property will be
 	 *            set to an empty array.
 	 * 
 	 * @param properties
 	 *            an optional parameter that can be provided to add properties
 	 *            to the Event that is going to be send by the DMTAdmin. If the
-	 *            properties contain a key <code>EVENT_PROPERTY_NODES</code>,
+	 *            properties contain a key {@code EVENT_PROPERTY_NODES},
 	 *            then the value of this property is ignored and will be
 	 *            overwritten by {@code relativeURIs}.
 	 * @throws NullPointerException
@@ -103,23 +103,23 @@ public interface MountPoint {
 	 *            All {@code URI}'s specified here are relative to the
 	 *            current {@code MountPoint}'s mountPath. The value of this
 	 *            parameter determines the value of the event property
-	 *            <code>EVENT_PROPERTY_NODES</code>. An empty array or
+	 *            {@code EVENT_PROPERTY_NODES}. An empty array or
 	 *            {@code null} is permitted. In both cases the value of the
-	 *            events <code>EVENT_PROPERTY_NODES</code> property will be
+	 *            events {@code EVENT_PROPERTY_NODES} property will be
 	 *            set to an empty array.
 	 * @param newRelativeURIs
 	 *            an array of affected node {@code URI}'s.The value of this
 	 *            parameter determines the value of the event property
-	 *            <code>EVENT_PROPERTY_NEW_NODES</code>. An empty array or
+	 *            {@code EVENT_PROPERTY_NEW_NODES}. An empty array or
 	 *            {@code null} is permitted. In both cases the value of the
-	 *            events <code>EVENT_PROPERTY_NEW_NODES</code> property will
+	 *            events {@code EVENT_PROPERTY_NEW_NODES} property will
 	 *            be set to an empty array.
 	 * @param properties
 	 *            an optional parameter that can be provided to add properties
 	 *            to the Event that is going to be send by the DMTAdmin. If the
 	 *            properties contain the keys
-	 *            <code>EVENT_PROPERTY_NODES</code> or
-	 *            <code>EVENT_PROPERTY_NEW_NODES</code>, then the values of
+	 *            {@code EVENT_PROPERTY_NODES} or
+	 *            {@code EVENT_PROPERTY_NEW_NODES}, then the values of
 	 *            these properties are ignored and will be overwritten by
 	 *            {@code relativeURIs} and {@code newRelativeURIs}.
 	 * @throws NullPointerException
@@ -150,14 +150,14 @@ public interface MountPoint {
 	 *            {@code URI}'s specified here are relative to the current
 	 *            {@code MountPoint}'s mountPath. The value of this
 	 *            parameter determines the value of the event property
-	 *            <code>EVENT_PROPERTY_NODES</code>. An empty array or
+	 *            {@code EVENT_PROPERTY_NODES}. An empty array or
 	 *            {@code null} is permitted. In both cases the value of the
-	 *            events <code>EVENT_PROPERTY_NODES</code> property will be
+	 *            events {@code EVENT_PROPERTY_NODES} property will be
 	 *            set to an empty array.
 	 * @param properties
 	 *            an optional parameter that can be provided to add properties
 	 *            to the Event that is going to be send by the DMTAdmin. If the
-	 *            properties contain a key <code>EVENT_PROPERTY_NODES</code>,
+	 *            properties contain a key {@code EVENT_PROPERTY_NODES},
 	 *            then the value of this property is ignored and will be
 	 *            overwritten by {@code relativeURIs}.
 	 * @throws NullPointerException

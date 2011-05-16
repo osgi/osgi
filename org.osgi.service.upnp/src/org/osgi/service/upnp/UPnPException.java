@@ -64,13 +64,13 @@ public class UPnPException extends Exception {
 	private final int			errorCode;
 
 	/**
-	 * The throwable that caused this UPnP exception. <code>null</code>
+	 * The throwable that caused this UPnP exception. {@code null}
 	 * indicates that the throwable cause is unknown.
 	 */
 	private Throwable			errorCause;
 
 	/**
-	 * This constructor creates a <code>UPnPException</code> on the specified
+	 * This constructor creates a {@code UPnPException} on the specified
 	 * error code and error description.
 	 * 
 	 * @param errorCode error code which defined by UPnP Device Architecture
@@ -82,14 +82,14 @@ public class UPnPException extends Exception {
 	}
 
 	/**
-	 * This constructor creates a <code>UPnPException</code> on the specified
+	 * This constructor creates a {@code UPnPException} on the specified
 	 * error code, error description and error cause.
 	 * 
 	 * @param errorCode error code which defined by UPnP Device Architecture
 	 *        V1.0.
 	 * @param errorDescription error description which explain the type of the
 	 *        problem.
-	 * @param errorCause cause of that <code>UPnPException</code>.
+	 * @param errorCause cause of that {@code UPnPException}.
 	 * 
 	 * @since 1.2
 	 */
@@ -113,10 +113,10 @@ public class UPnPException extends Exception {
 	}
 
 	/**
-	 * Returns the error cause of that throwable. <code>null</code> value
+	 * Returns the error cause of that throwable. {@code null} value
 	 * indicates that the cause throwable is unknown.
 	 * 
-	 * @return The cause of that exception or <code>null</code> if the throwable
+	 * @return The cause of that exception or {@code null} if the throwable
 	 *         cause is unknown.
 	 * 
 	 * @since 1.2
