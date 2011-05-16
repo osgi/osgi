@@ -52,10 +52,9 @@ Export-Package =\
 	org.osgi.impl.service.event; 			version=latest, \
     org.osgi.impl.bundle.webcontainer; version=latest
 	
-#	osgi.resolverMode=strict, \
--runproperties = report=true, \
-	osgi.compatibility.bootdelegation=false, \
-	osgi.support.multipleHosts=true, \
+#	osgi.resolverMode=development is needed because the Tomcat bundle reaches into Equinox internal types
+-runproperties = ${runproperties}, \
+	osgi.resolverMode=development, \
 	org.osgi.service.webcontainer.hostname=127.0.0.1, \
 	org.osgi.service.webcontainer.http.port=8080
 

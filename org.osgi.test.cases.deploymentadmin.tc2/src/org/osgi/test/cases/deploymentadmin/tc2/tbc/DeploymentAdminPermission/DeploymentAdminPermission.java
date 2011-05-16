@@ -53,42 +53,31 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.MessagesConstants;
  * This test class validates the implementation of <code>DeploymentAdminPermission</code> constructor, 
  * according to MEG specification.
  */
-public class DeploymentAdminPermission {
-	private DeploymentTestControl tbc;
-
-	public DeploymentAdminPermission(DeploymentTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testDeploymentAdminPermission001();
-		testDeploymentAdminPermission002();
-		testDeploymentAdminPermission003();
-		testDeploymentAdminPermission004();
-		testDeploymentAdminPermission005();
-		testDeploymentAdminPermission006();
-		testDeploymentAdminPermission007();
-        testDeploymentAdminPermission008();
-        testDeploymentAdminPermission009();
-	}
-
+public class DeploymentAdminPermission extends DeploymentTestControl {
 	/**
 	 * This method asserts if the target and the actions are correctly set on DeploymentAdminPermission.
 	 * 
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
 	public void testDeploymentAdminPermission001() {
-		tbc.log("#testDeploymentAdminPermission001");
+		log("#testDeploymentAdminPermission001");
 		try {
 			org.osgi.service.deploymentadmin.DeploymentAdminPermission dpAdmPerm = new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
 					org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 
-			tbc.assertEquals("DeploymentAdminPermission target was correctly set ", DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, dpAdmPerm.getName());
-			tbc.assertEquals("DeploymentAdminPermission action was correctly set", org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL, dpAdmPerm.getActions());
+			assertEquals("DeploymentAdminPermission target was correctly set ",
+					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
+					dpAdmPerm.getName());
+			assertEquals(
+					"DeploymentAdminPermission action was correctly set",
+					org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL,
+					dpAdmPerm.getActions());
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		}
 	}
 	
@@ -98,7 +87,7 @@ public class DeploymentAdminPermission {
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String) 
 	 */
 	public void testDeploymentAdminPermission002() {
-		tbc.log("#testDeploymentAdminPermission002");
+		log("#testDeploymentAdminPermission002");
 		try {
 			String actions = org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL
 					+ ","
@@ -127,9 +116,12 @@ public class DeploymentAdminPermission {
 			
 			}
 			
-			tbc.assertTrue("Asserts that the correct action list is returned",isInstall && isList && isUninstall && !errorFound);
+			assertTrue("Asserts that the correct action list is returned",
+					isInstall && isList && isUninstall && !errorFound);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		}
 	}
 	
@@ -139,17 +131,18 @@ public class DeploymentAdminPermission {
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
 	public void testDeploymentAdminPermission003() {
-		tbc.log("#testDeploymentAdminPermission003");
+		log("#testDeploymentAdminPermission003");
 		try {
 			 new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
 					null, org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 			
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-//			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+			// pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
 //					new String[] { IllegalArgumentException.class.getName() }));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
 		}
@@ -161,17 +154,18 @@ public class DeploymentAdminPermission {
  	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
 	public void testDeploymentAdminPermission004() {
-		tbc.log("#testDeploymentAdminPermission004");
+		log("#testDeploymentAdminPermission004");
 		try {
 			new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, null);
 			
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-//			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+			// pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
 //					new String[] { IllegalArgumentException.class.getName() }));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
 					IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
 		}
@@ -184,18 +178,18 @@ public class DeploymentAdminPermission {
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
 	public void testDeploymentAdminPermission005() {
-		tbc.log("#testDeploymentAdminPermission005");
+		log("#testDeploymentAdminPermission005");
 		try {
 			String invalidAction = "invalid";
 			new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, invalidAction);
 			
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException  e) {
-//			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+			// pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
 //					new String[] { IllegalArgumentException.class.getName() }));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
+			fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException .class.getName(),
 							e.getClass().getName() }));
@@ -208,17 +202,18 @@ public class DeploymentAdminPermission {
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
 	public void testDeploymentAdminPermission006() {
-		tbc.log("#testDeploymentAdminPermission006");
+		log("#testDeploymentAdminPermission006");
 		try {
 			new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
 					DeploymentConstants.INVALID_DEPLOYMENT_PACKAGE_NAME, org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 			
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException  e) {
-//			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+			// pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
 //					new String[] { IllegalArgumentException.class.getName() }));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
 		}
@@ -230,16 +225,17 @@ public class DeploymentAdminPermission {
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
 	public void testDeploymentAdminPermission007() {
-		tbc.log("#testDeploymentAdminPermission007");
+		log("#testDeploymentAdminPermission007");
 		try {
 			new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
 					"(name=)", org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-//			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+			// pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
 //					new String[] { IllegalArgumentException.class.getName() }));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
 		}
@@ -252,16 +248,17 @@ public class DeploymentAdminPermission {
      * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
      */
     public void testDeploymentAdminPermission008() {
-        tbc.log("#testDeploymentAdminPermission008");
+		log("#testDeploymentAdminPermission008");
         try {
             new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
                     DeploymentConstants.DEPLOYMENT_PACKAGE_NAME4, org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
-            tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
         } catch (IllegalArgumentException e) {
-//            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+			// pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
 //                    new String[] { IllegalArgumentException.class.getName() }));
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
                             IllegalArgumentException.class.getName(),
                             e.getClass().getName() }));
         }
@@ -274,16 +271,17 @@ public class DeploymentAdminPermission {
      * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
      */
     public void testDeploymentAdminPermission009() {
-        tbc.log("#testDeploymentAdminPermission009");
+		log("#testDeploymentAdminPermission009");
         try {
             new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
                     DeploymentConstants.DEPLOYMENT_PACKAGE_NAME5, org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
-            tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
         } catch (IllegalArgumentException e) {
-//            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+			// pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
 //                    new String[] { IllegalArgumentException.class.getName() }));
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
                             IllegalArgumentException.class.getName(),
                             e.getClass().getName() }));
         }

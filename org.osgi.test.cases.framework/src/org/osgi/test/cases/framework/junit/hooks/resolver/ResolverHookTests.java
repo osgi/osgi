@@ -909,6 +909,41 @@ public class ResolverHookTests extends OSGiTestCase {
 		assertEquals("Wrong state of bundle tb6v200", Bundle.RESOLVED, tb6v200.getState());
 		assertEquals("Wrong state of bundle tb6v300", Bundle.RESOLVED, tb6v300.getState());
 		assertEquals("Wrong state of bundle tb6v400", Bundle.RESOLVED, tb6v400.getState());
+
+		allIsolatedReg.unregister();
+		try {
+			tb6v300.uninstall();
+			tb6v400.uninstall();
+		} catch (BundleException e) {
+			fail("Failed to uninstall bundle", e);
+		}
+		// prevent resolution again
+		preventReg = registerHook(preventHook, 0);
+		refreshBundles(bundles);
+
+		// isolate version 2 from 1; but not 1 from 2
+		Map<Bundle, List<Bundle>> isolate1From2 = new HashMap<Bundle, List<Bundle>>();
+		isolate1From2.put(tb6v200, Arrays.asList(new Bundle[] {tb6v100}));
+		TestFilterSingletonCollisions isolate1From2Hook = new TestFilterSingletonCollisions(isolate1From2);
+		ServiceRegistration<ResolverHookFactory> isolate1From2Reg = registerHook(isolate1From2Hook, 0);
+
+		// Filter version 2; this is to force version 1 to resolve
+		TestFilterResolvable resolveOneSingletons = new TestFilterResolvable(Arrays.asList(tb6v200));
+		ServiceRegistration<ResolverHookFactory> resolveOneReg = registerHook(resolveOneSingletons, 0);
+
+		// allow resolution again
+		preventReg.unregister();
+		// resolve version 1
+		assertTrue("Should be able to resolve the bundle", frameworkWiring.resolveBundles(Arrays.asList(tb6v100)));
+
+		// allow version 2 to resolve again
+		resolveOneReg.unregister();
+
+		assertFalse("Should not be able to resolve the bundle", frameworkWiring.resolveBundles(Arrays.asList(tb6v200)));
+		assertEquals("Wrong state of bundle tb6v100", Bundle.RESOLVED, tb6v100.getState());
+		assertEquals("Wrong state of bundle tb6v200", Bundle.INSTALLED, tb6v200.getState());
+
+		isolate1From2Reg.unregister();
 	}
 
 	public void testFilterMatchesCandidates() {

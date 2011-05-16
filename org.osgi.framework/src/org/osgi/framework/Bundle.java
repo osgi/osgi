@@ -1059,7 +1059,7 @@ public interface Bundle extends Comparable<Bundle> {
 	 * 
 	 * <p>
 	 * The time value is the number of milliseconds since January 1, 1970,
-	 * 00:00:00 GMT.
+	 * 00:00:00 UTC.
 	 * 
 	 * @return The time when this bundle was last modified.
 	 * @since 1.3

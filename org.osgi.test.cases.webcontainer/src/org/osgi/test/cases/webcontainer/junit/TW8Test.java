@@ -15,7 +15,7 @@
  */
 package org.osgi.test.cases.webcontainer.junit;
 
-import java.util.Enumeration;
+import java.util.List;
 import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
@@ -27,6 +27,7 @@ import org.osgi.service.log.LogService;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
+import org.osgi.test.support.log.LogEntryCollector;
 
 /**
  * @version $Rev$ $Date$
@@ -35,13 +36,15 @@ import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
  *          and the web.xml is provided by fragment instead
  */
 public class TW8Test extends WebContainerTestBundleControl {
-    LogReaderService logReaderService;
+	private ServiceReference	logReaderServiceReference;
+	private LogReaderService	logReaderService;
+	private LogEntryCollector	logEntryCollector;
     private static final String TW8_SYMBOLIC_NAME = "org.osgi.test.cases.webcontainer.tw8";
 
     private Bundle fragmentBundle;
     
     @Override
-    public void setUp() throws Exception {
+	public void setUp() throws Exception {
         super.setUp();
         super.prepare("/tw8");
 
@@ -60,10 +63,12 @@ public class TW8Test extends WebContainerTestBundleControl {
         // start the war file
         this.b.start();
         
-        ServiceReference logReaderServiceReference = getContext()
+		logReaderServiceReference = getContext()
                 .getServiceReference(LogReaderService.class.getName());
-        this.logReaderService = (LogReaderService) getContext().getService(
+		logReaderService = (LogReaderService) getContext().getService(
                 logReaderServiceReference);
+		logEntryCollector = new LogEntryCollector();
+		logReaderService.addLogListener(logEntryCollector);
         
         // make sure we don't run tests until the servletcontext is registered with service registry
         boolean register = super.checkServiceRegistered(this.warContextPath);
@@ -71,6 +76,8 @@ public class TW8Test extends WebContainerTestBundleControl {
     }
 
     public void tearDown() throws Exception {
+		getContext().ungetService(logReaderServiceReference);
+		logEntryCollector.clear();
         uninstallBundle(fragmentBundle);
         super.tearDown();
     }
@@ -98,12 +105,11 @@ public class TW8Test extends WebContainerTestBundleControl {
         assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG) > 0);
         assertEquals(-1, response.indexOf("null"));
 
-        Enumeration e = logReaderService.getLog();
+		List<LogEntry> logEntries = logEntryCollector.getEntries();
         
         // let's check all the logs in case there is some other code writes to the log
         boolean checked = false;
-        while (e.hasMoreElements()) {
-            LogEntry logentry = (LogEntry) e.nextElement();
+		for (LogEntry logentry : logEntries) {
             String message = logentry.getMessage();
             log("get log message: " + message);
 
@@ -133,11 +139,11 @@ public class TW8Test extends WebContainerTestBundleControl {
         assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG2) > 0);
         assertEquals(-1, response.indexOf("null"));
 
-        Enumeration e = logReaderService.getLog();
+		List<LogEntry> logEntries = logEntryCollector.getEntries();
+
         // let's check all the logs in case there is some other code writes to the log
         boolean checked = false;
-        while (e.hasMoreElements()) {
-            LogEntry logentry = (LogEntry) e.nextElement();
+		for (LogEntry logentry : logEntries) {
             String message = logentry.getMessage();
             log("get log message: " + message);
             if (message.equals(ConstantsUtil.TESTLOGMSG2)) {
@@ -167,11 +173,11 @@ public class TW8Test extends WebContainerTestBundleControl {
         assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG3) > 0);
         assertEquals(-1, response.indexOf("null"));
 
-        Enumeration e = logReaderService.getLog();
+		List<LogEntry> logEntries = logEntryCollector.getEntries();
+
         // let's check all the logs in case there is some other code writes to the log
         boolean checked = false;
-        while (e.hasMoreElements()) {
-            LogEntry logentry = (LogEntry) e.nextElement();
+		for (LogEntry logentry : logEntries) {
             String message = logentry.getMessage();
             log("get log message: " + message);
             if (message.equals(ConstantsUtil.TESTLOGMSG3)) {
@@ -200,11 +206,11 @@ public class TW8Test extends WebContainerTestBundleControl {
         assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG4) > 0);
         assertEquals(-1, response.indexOf("null"));
 
-        Enumeration e = logReaderService.getLog();
+		List<LogEntry> logEntries = logEntryCollector.getEntries();
+
         // let's check all the logs in case there is some other code writes to the log
         boolean checked = false;
-        while (e.hasMoreElements()) {
-            LogEntry logentry = (LogEntry) e.nextElement();
+		for (LogEntry logentry : logEntries) {
             String message = logentry.getMessage();
             log("get log message: " + message);
             if (message.equals(ConstantsUtil.TESTLOGMSG4)) {

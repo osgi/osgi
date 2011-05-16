@@ -36,35 +36,27 @@
  */
 package org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentAdminPermission;
 
-import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
 
 /**
  * This Test Class Validates the constants according to MEG specification.
  */
-public class DeploymentAdminPermissionConstants {
-	private DeploymentTestControl tbc;
-
-	public DeploymentAdminPermissionConstants(DeploymentTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testConstants001();
-	}
-
+public class DeploymentAdminPermissionConstants extends DeploymentTestControl {
 	/**
 	 * Tests all constants values according to constants fields values.
 	 * 
 	 * @spec 114.14.3 
 	 */
 	public void testConstants001() {
-		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting ACTION_INSTALL value", "install", DeploymentAdminPermission.INSTALL);
-		tbc.assertEquals("Asserting ACTION_CANCEL value", "cancel", DeploymentAdminPermission.CANCEL);
-		tbc.assertEquals("Asserting ACTION_LIST value", "list", DeploymentAdminPermission.LIST);
-		tbc.assertEquals("Asserting ACTION_UNINSTALL value", "uninstall", DeploymentAdminPermission.UNINSTALL);
-		tbc.assertEquals("Asserting ACTION_UNINSTALL_FORCEFUL value", "uninstall_forced", DeploymentAdminPermission.UNINSTALL_FORCED);
+		log("#testConstants001");
+		assertConstant("install", "INSTALL", DeploymentAdminPermission.class);
+		assertConstant("cancel", "CANCEL", DeploymentAdminPermission.class);
+		assertConstant("list", "LIST", DeploymentAdminPermission.class);
+		assertConstant("uninstall", "UNINSTALL",
+				DeploymentAdminPermission.class);
+		assertConstant("uninstall_forced", "UNINSTALL_FORCED",
+				DeploymentAdminPermission.class);
 	}
 
 }
