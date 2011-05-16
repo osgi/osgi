@@ -52,9 +52,9 @@ Export-Package =\
 	org.osgi.impl.service.event; 			version=latest, \
     org.osgi.impl.bundle.webcontainer; version=latest
 	
-#	osgi.resolverMode=development is needed because the Tomcat bundle reaches into Equinox internal types
+# osgi.resolverMode=strict cannot be used because the Tomcat bundle optionally imports Equinox internal types
 -runproperties = ${runproperties}, \
-	osgi.resolverMode=development, \
+	osgi.resolverMode=x-internal, \
 	org.osgi.service.webcontainer.hostname=127.0.0.1, \
 	org.osgi.service.webcontainer.http.port=8080
 
