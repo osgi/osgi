@@ -36,6 +36,19 @@ import org.osgi.util.tr069.TR069ParameterValue;
 public final class TR069ParameterValueFailTestCase extends OSGiTestCase {
 
 	/**
+	 * Tests {@link TR069ParameterValue} structure with different invalid
+	 * values.
+	 */
+	public void testTR069ParameterValueStructureFail() {
+		checkTR069ParameterValueStructureFail(null, null);
+		checkTR069ParameterValueStructureFail("anyValue", null);
+		checkTR069ParameterValueStructureFail(null, "anyType");
+		checkTR069ParameterValueStructureFail("anyValue", "anyType");
+		checkTR069ParameterValueStructureFail(null,
+				TR069ParameterValue.TR069_TYPE_STRING);
+	}
+
+	/**
 	 * Tests the transformation of invalid Dmt data instances like
 	 * <code>null</code>, complex object etc.
 	 */
@@ -180,6 +193,32 @@ public final class TR069ParameterValueFailTestCase extends OSGiTestCase {
 			// go ahead, it's ok
 		}
 
+		// check null raw format names
+		try {
+			MetaNode rawStringMetaNode = new TestMetaNode(
+					DmtData.FORMAT_RAW_STRING);
+			if (isList) {
+				TR069ParameterValue.getDmtDataForList(
+						TR069UriTestCaseConstants.TR069_VALUE_BIN_STRING,
+						TR069ParameterValue.TR069_TYPE_STRING,
+						TR069UriTestCaseConstants.CHARSET_UTF8,
+						TR069UriTestCaseConstants.DMT_URI_FULL,
+						rawStringMetaNode);
+			}
+			else {
+				TR069ParameterValue.getDmtData(
+						TR069UriTestCaseConstants.TR069_VALUE_BIN_STRING,
+						TR069ParameterValue.TR069_TYPE_STRING,
+						TR069UriTestCaseConstants.CHARSET_UTF8,
+						TR069UriTestCaseConstants.DMT_URI_FULL,
+						rawStringMetaNode);
+			}
+			fail("DMT raw string data cannot be constructed with null raw format names!");
+		}
+		catch (TR069MappingException me) {
+			// go ahead, it's ok
+		}
+
 		// check invalid integer string
 		try {
 			metaNode = new TestMetaNode(DmtData.FORMAT_INTEGER);
@@ -244,6 +283,18 @@ public final class TR069ParameterValueFailTestCase extends OSGiTestCase {
 		}
 		catch (TR069MappingException me) {
 			// go ahead, it's ok
+		}
+	}
+
+	private static void checkTR069ParameterValueStructureFail(String value,
+			String type) {
+		try {
+			new TR069ParameterValue(value, type);
+			fail("IllegalArgumentException is expected for value: " + value
+					+ "; type: " + type);
+		}
+		catch (IllegalArgumentException ise) {
+			// nothing to do, it's expected
 		}
 	}
 
