@@ -36,23 +36,38 @@ public interface Requirement {
 
 	/**
 	 * Returns the directives of this requirement. Only the following list of
-	 * directives are allowed in the returned {@link Map map} of directives:
+	 * directives have semantic meaning in the returned {@link Map map} of
+	 * directives:
 	 * <ul>
 	 * <li> {@link ResourceConstants#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
 	 * <li> {@link ResourceConstants#REQUIREMENT_FILTER_DIRECTIVE filter}
+	 * <li> {@link ResourceConstants#REQUIREMENT_CARDINALITY_DIRECTIVE
+	 * cardinality}
 	 * <li> {@link ResourceConstants#REQUIREMENT_RESOLUTION_DIRECTIVE resolution}
-	 * <li> {@link ResourceConstants#REQUIREMENT_VISIBILITY_DIRECTIVE visibility} - can
-	 * only be present for the {@link ResourceConstants#WIRING_BUNDLE_NAMESPACE
-	 * osgi.wiring.bundle} name space.
+	 * <li> {@link ResourceConstants#REQUIREMENT_VISIBILITY_DIRECTIVE visibility}
+	 * - only recognized for the
+	 * {@link ResourceConstants#WIRING_BUNDLE_NAMESPACE osgi.wiring.bundle} name
+	 * space.
 	 * </ul>
-	 * No other directives will be present in the returned map.
-	 * OSGi Alliance reserves the right to extend the set of directives.
+	 * All other directive are considered extra user defined information that
+	 * has no semantic meaning. OSGi Alliance reserves the right to extend the
+	 * set of directives which have semantic meaning.
 	 * 
 	 * @return An unmodifiable map of directive names to directive values for
 	 *         this requirement, or an empty map if this requirement has no
 	 *         directives.
 	 */
 	Map<String, String> getDirectives();
+
+	/**
+	 * Returns the attributes of this requirement. Requirement attributes have
+	 * no semantic meaning and are considered extra user defined information.
+	 * 
+	 * @return An unmodifiable map of attribute names to attribute values for
+	 *         this requirement, or an empty map if this requirement has no
+	 *         attributes.
+	 */
+	Map<String, Object> getAttributes();
 
 	/**
 	 * Returns the resource declaring this requirement.

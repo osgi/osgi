@@ -247,10 +247,10 @@ public final class ResourceConstants {
 	/**
 	 * A requirement {@link Requirement#getDirectives() directive} used to
 	 * specify the cardinality for a requirement. The default value is
-	 * {@link #REQUIREMENT_SINGULAR_CARDINALITY singular}.
+	 * {@link #REQUIREMENT_CARDINALITY_SINGULAR singular}.
 	 * 
-	 * @see #REQUIREMENT_MULTIPLE_CARDINALITY multiple
-	 * @see #REQUIREMENT_SINGULAR_CARDINALITY singular
+	 * @see #REQUIREMENT_CARDINALITY_MULTIPLE multiple
+	 * @see #REQUIREMENT_CARDINALITY_SINGULAR singular
 	 */
 	public final static String REQUIREMENT_CARDINALITY_DIRECTIVE = "cardinality";
 	  
@@ -258,13 +258,13 @@ public final class ResourceConstants {
 	 * A directive value identifying a multiple
 	 * {@link #REQUIREMENT_CARDINALITY_DIRECTIVE cardinality} type.
 	 */
-	public final static String REQUIREMENT_MULTIPLE_CARDINALITY = "multiple";
+	public final static String REQUIREMENT_CARDINALITY_MULTIPLE = "multiple";
 	  
 	/**
 	 * A directive value identifying a singular
 	 * {@link #REQUIREMENT_CARDINALITY_DIRECTIVE cardinality} type.
 	 */
-	public final static String REQUIREMENT_SINGULAR_CARDINALITY = "singular";
+	public final static String REQUIREMENT_CARDINALITY_SINGULAR = "singular";
 
 
 	/**

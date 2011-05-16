@@ -50,7 +50,6 @@ public interface BundleRequirement extends Requirement{
 	 * @return An unmodifiable map of attribute names to attribute values for
 	 *         this requirement, or an empty map if this requirement has no
 	 *         attributes.
-	 * @deprecated attributes have no meaning for requirements.
 	 */
 	Map<String, Object> getAttributes();
 

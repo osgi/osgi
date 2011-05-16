@@ -35,26 +35,28 @@ public interface Capability {
 
 	/**
 	 * Returns the directives of this capability. Only the following list of
-	 * directives are allowed in the returned {@link Map map} of directives:
+	 * directives have semantic meaning in the returned {@link Map map} of
+	 * directives:
 	 * <ul>
 	 * <li> {@link ResourceConstants#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
 	 * <li> {@link ResourceConstants#CAPABILITY_USES_DIRECTIVE uses}
 	 * <li> {@link ResourceConstants#CAPABILITY_MANDATORY_DIRECTIVE mandatory} -
-	 * can only be present for the
+	 * only recognized for the
 	 * {@link ResourceConstants#WIRING_BUNDLE_NAMESPACE osgi.wiring.bundle} and
 	 * {@link ResourceConstants#WIRING_PACKAGE_NAMESPACE osgi.wiring.package}
 	 * name spaces.
-	 * <li> {@link ResourceConstants#CAPABILITY_EXCLUDE_DIRECTIVE exclude} - can
-	 * only be present for the
+	 * <li> {@link ResourceConstants#CAPABILITY_EXCLUDE_DIRECTIVE exclude} -
+	 * only recognized for the
 	 * {@link ResourceConstants#WIRING_PACKAGE_NAMESPACE osgi.wiring.package}
 	 * name space.
-	 * <li> {@link ResourceConstants#CAPABILITY_INCLUDE_DIRECTIVE include} - can
-	 * only be present for the
+	 * <li> {@link ResourceConstants#CAPABILITY_INCLUDE_DIRECTIVE include} -
+	 * only recognized for the
 	 * {@link ResourceConstants#WIRING_PACKAGE_NAMESPACE osgi.wiring.package}
 	 * name space.
 	 * </ul>
-	 * No other directives will be present in the returned map. OSGi Alliance
-	 * reserves the right to extend the set of directives.
+	 * All other directive are considered extra user defined information that
+	 * has no semantic meaning. OSGi Alliance reserves the right to extend the
+	 * set of directives which have semantic meaning.
 	 * 
 	 * @return An unmodifiable map of directive names to directive values for
 	 *         this capability, or an empty map if this capability has no
