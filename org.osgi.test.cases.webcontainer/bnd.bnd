@@ -56,6 +56,8 @@ Export-Package =\
 -runproperties = ${runproperties}, \
 	osgi.resolverMode=x-internal, \
 	org.osgi.service.webcontainer.hostname=127.0.0.1, \
-	org.osgi.service.webcontainer.http.port=8080
+	org.osgi.service.webcontainer.http.port=8080, \
+	org.osgi.test.testcase.timeout=10000, \
+	org.osgi.test.testcase.scaling=1
 
 Test-Cases						= ${testcases}

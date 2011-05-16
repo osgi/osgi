@@ -17,7 +17,6 @@ package org.osgi.test.cases.webcontainer.junit;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -29,6 +28,7 @@ import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventConstants;
 import org.osgi.test.cases.webcontainer.util.EventFactory;
 import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
+import org.osgi.test.support.OSGiTestCaseProperties;
 
 /**
  * @version $Rev$ $Date$
@@ -98,7 +98,7 @@ public class EventTest extends WebContainerTestBundleControl {
         Event eventCurrent = null;
         while(eventCurrent == null && count < WAITCOUNT) {
             eventCurrent = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw1", "org/osgi/service/web/DEPLOYED");
-            Thread.sleep(1000);
+			Thread.sleep(1000 * OSGiTestCaseProperties.getScaling());
             count++;
         }
 
@@ -154,7 +154,7 @@ public class EventTest extends WebContainerTestBundleControl {
         count = 0;
         while(eventCurrent == null && count < WAITCOUNT) {
         	eventCurrent = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw1", "org/osgi/service/web/UNDEPLOYED");
-            Thread.sleep(1000);
+			Thread.sleep(1000 * OSGiTestCaseProperties.getScaling());
             count++;
         }
         eventPrevious = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw1", "org/osgi/service/web/UNDEPLOYING");
@@ -199,7 +199,7 @@ public class EventTest extends WebContainerTestBundleControl {
             count = 0;
             while(eventCurrent == null && count < WAITCOUNT) {
                 eventCurrent = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw4", "org/osgi/service/web/FAILED");
-                Thread.sleep(1000);
+				Thread.sleep(1000 * OSGiTestCaseProperties.getScaling());
                 count++;
             }
             eventPrevious = EventFactory.getEvent("org.osgi.test.cases.webcontainer.tw4", "org/osgi/service/web/DEPLOYING");
