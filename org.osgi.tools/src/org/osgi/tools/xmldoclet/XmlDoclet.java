@@ -5,12 +5,16 @@ import java.util.*;
 import java.util.regex.*;
 
 import com.sun.javadoc.*;
+import com.sun.tools.doclets.internal.toolkit.taglets.*;
+import com.sun.tools.doclets.internal.toolkit.util.*;
 
 public class XmlDoclet extends Doclet {
-	Pattern	SECURITY_PATTERN	= Pattern.compile("(\\w+)\\[(.+),(\\w+)\\](.*)");
+	Pattern		SECURITY_PATTERN	= Pattern
+											.compile("(\\w+)\\[(.+),(\\w+)\\](.*)");
 	PrintWriter	pw;
 	String		currentPackage;
 	String		currentClass;
+	RootDoc		root;
 
 	public static boolean start(RootDoc doc) {
 		try {
@@ -29,6 +33,7 @@ public class XmlDoclet extends Doclet {
 	}
 
 	public void startx(RootDoc doc) throws Exception {
+		this.root = doc;
 		FileOutputStream out = new FileOutputStream("javadoc.xml");
 		pw = new PrintWriter(new OutputStreamWriter(out, "utf-8"));
 
@@ -474,25 +479,33 @@ public class XmlDoclet extends Doclet {
 						}
 						else
 							if (tag.kind().equals("@value")) {
-								FieldDoc field = (FieldDoc) tag.holder();
-								sb.append( escape(field.constantValue().toString() ));
+								FieldDoc field = getReferredField(tag);
+								if ( field != null) {
+									sb.append("<code class='value'>");
+									sb.append(escape(field.constantValue()
+											.toString()));
+									sb.append("</code>");
+								}
+								else
+									root.printError("No value for " + tag.text());
 							}
 							else
 								if (tag.kind().equals("@security")) {
 									StringBuffer sb2 = new StringBuffer();
-									print( sb2, tag.inlineTags());
-									for ( int i =0; i<sb2.length(); i++)
-										if ( sb2.charAt(i) == '\n' || sb2.charAt(i) =='\r')
+									print(sb2, tag.inlineTags());
+									for (int i = 0; i < sb2.length(); i++)
+										if (sb2.charAt(i) == '\n'
+												|| sb2.charAt(i) == '\r')
 											sb2.setCharAt(i, ' ');
 									String s = sb2.toString();
-									
+
 									Matcher m = SECURITY_PATTERN.matcher(s);
-									if ( m.matches() ) {
+									if (m.matches()) {
 										String permission = m.group(1);
 										String resource = m.group(2);
 										String actions = m.group(3);
 										String remainder = m.group(4);
-										
+
 										sb.append("\n<security name='");
 										sb.append(escape(permission));
 										sb.append("' resource='");
@@ -502,8 +515,14 @@ public class XmlDoclet extends Doclet {
 										sb.append("'>");
 										sb.append(remainder);
 										sb.append("</security>");
-									} else
-										throw new IllegalArgumentException("@security tag invalid: '" + s + "', matching pattern is " + SECURITY_PATTERN + " " + m);
+									}
+									else
+										throw new IllegalArgumentException(
+												"@security tag invalid: '"
+														+ s
+														+ "', matching pattern is "
+														+ SECURITY_PATTERN
+														+ " " + m);
 								}
 								else {
 									sb.append("<" + tag.kind().substring(1)
@@ -514,6 +533,49 @@ public class XmlDoclet extends Doclet {
 								}
 					}
 		}
+	}
+
+	/**
+	 * Find a reference to a field.
+	 */
+	static Pattern	MEMBER_REFERENCE	= Pattern.compile("\\s*((.+)#)?(.+)\\s*");
+
+	private FieldDoc getReferredField(Tag value) {
+		Doc holder = value.holder();
+
+		Matcher m = MEMBER_REFERENCE.matcher(value.text());
+		if (m.matches()) {
+			// either ref or class#ref
+			String clazz = m.group(2);
+			String member = m.group(3);
+			ClassDoc parent;
+			if ( holder instanceof ClassDoc)
+				parent = (ClassDoc) holder;
+			else
+				parent = ((MemberDoc)holder).containingClass();				
+
+			if ( clazz != null ) {
+				ClassDoc found =parent.findClass(clazz);				
+				if ( found == null) {
+					root.printError("Referred field value in " + parent.name() + " " + clazz + " not found");
+					return null;
+				}
+				parent = found;
+			}
+
+			for (FieldDoc field : parent.fields()) {
+				if (field.name().equals(member))
+					return field;
+			}
+			return null;
+		} else {
+			// No reference
+			if ( holder instanceof FieldDoc )
+				return (FieldDoc) holder;
+			
+		}
+		root.printError("Referred field value in " + holder + " " + value.text());
+		return null;
 	}
 
 	String simplify(String name) {
