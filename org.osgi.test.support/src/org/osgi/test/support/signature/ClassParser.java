@@ -64,6 +64,7 @@ public class ClassParser {
 		doFields(cb);
 		doMethods(cb);
 		
+		cb.doMembersDone();
 		doAttributes(cb);
 		
 		cb.doEnd();
@@ -157,6 +158,11 @@ public class ClassParser {
 					exceptions[k] = getClassName();
 				}
 				map.put(attributeName, exceptions);
+			}
+			else if (attributeName.equals("Signature")) {
+				int signature_index = in.readUnsignedShort();
+				String signature = constPool[signature_index].getUtf8();
+				cb.doSignature(signature);
 			}
 			else {
 				in.skip(attributeLength);
