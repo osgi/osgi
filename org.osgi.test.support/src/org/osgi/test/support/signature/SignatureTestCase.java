@@ -21,30 +21,37 @@ package org.osgi.test.support.signature;
  * and less fields, methods, end constructors that are visible.
  */
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.net.*;
-import java.util.*;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
-import org.osgi.framework.*;
-import org.osgi.test.support.*;
+import org.osgi.framework.Bundle;
+import org.osgi.test.support.OSGiTestCase;
 
 /**
  * 
  * @version $Id$
  */
-public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
-	final Set<Object>				members	= new HashSet<Object>();
-	Class< ? >						clazz;
-	Map<String, Method>				methods;
-	Map<String, Constructor< ? >>	constructors;
-	Map<String, Field>				fields;
-	Set<String>						found;
-	Set<String>						missing;
-	Object							lastMember;
+public abstract class SignatureTestCase extends OSGiTestCase implements
+		ParserCallback {
+	private Class< ? >						clazz;
+	private Map<String, Method>				methods;
+	private Map<String, Constructor< ? >>	constructors;
+	private Map<String, Field>				fields;
+	private Set<String>						found;
+	private Set<String>						missing;
 
 
-	public void testSignature() throws Exception {
+	public void testSignatures() throws Exception {
 		Bundle bundle = getContext().getBundle();
 		String path = "OSGI-INF/signature";
 		found = new HashSet<String>();
@@ -116,8 +123,6 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 
 			try {
 				clazz = Class.forName(className);
-				members.add(clazz);
-
 				if (clazz.getClassLoader() == getClass().getClassLoader()) {
 					// We have gotten our own package
 					missing.add(name);
@@ -149,7 +154,7 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 		return false;
 	}
 
-	Map<String, Field> getFields(Class< ? > c) {
+	private Map<String, Field> getFields(Class< ? > c) {
 		Map<String, Field> result = new HashMap<String, Field>();
 		while (c != null) {
 			Field[] f = c.getDeclaredFields();
@@ -168,7 +173,7 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 		return result;
 	}
 
-	Map<String, Method> getMethods(Class< ? > c) {
+	private Map<String, Method> getMethods(Class< ? > c) {
 		Map<String, Method> result = new HashMap<String, Method>();
 		while (c != null) {
 			Method[] m = c.getDeclaredMethods();
@@ -187,7 +192,7 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 		return result;
 	}
 
-	Map<String, Constructor< ? >> getConstructors(Class< ? > c) {
+	private Map<String, Constructor< ? >> getConstructors(Class< ? > c) {
 		Map<String, Constructor< ? >> result = new HashMap<String, Constructor< ? >>();
 		Constructor< ? >[] m = c.getDeclaredConstructors();
 		for (int i = 0, l = m.length; i < l; i++) {
@@ -207,7 +212,7 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 		return result;
 	}
 
-	void log(String string) {
+	public static void log(String string) {
 		System.out.println(string);
 	}
 
@@ -220,13 +225,10 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 				+ desiredDescriptor);
 
 		Field f = fields.remove(name);
-		lastMember = f;
-
 		if (f == null) {
 			// Field not found!
 			fail("Could not find field: " + getClassName(clazz) + "." + name);
 		}
-		members.add(f);
 
 		int cMods = f.getModifiers();
 		checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED
@@ -264,36 +266,23 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 			checkConstructor(access, name, desc, exceptions);
 		else
 			checkMethod(access, name, desc, exceptions);
-
 	}
 
 	public void doEnd() {
 		/**
 		 * We removed the check to see if there is too much
 		 */
-
-//		if (signatures != null) {
-//			// check if we had members that had signatures
-//			for (Object member : members) {
-//				String signature = signatures.getSignature(member);
-//				if (signature.indexOf('<') >= 0)
-//					fail("A construct under test has a generic signature that was not found in the specification "
-//							+ signature);
-//			}
-//		}
 	}
 
-	void checkConstructor(int access, String name, String desiredDescriptor,
-			String[] exceptions) {
+	private void checkConstructor(int access, String name,
+			String desiredDescriptor, String[] exceptions) {
 		String key = desiredDescriptor;
 		Constructor< ? > m = constructors.remove(key);
-		lastMember = m;
 		if (m == null) {
 			// Method not found!
 			fail("Could not find constructor: " + getClassName(clazz) + "."
 					+ name + " " + desiredDescriptor);
 		}
-		members.add(m);
 
 		int cMods = m.getModifiers();
 		checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED
@@ -301,7 +290,8 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 		checkExceptions(exceptions, m.getExceptionTypes());
 	}
 
-	void checkExceptions(String[] exceptions, Class< ? >[] exceptionTypes) {
+	private void checkExceptions(String[] exceptions,
+			Class< ? >[] exceptionTypes) {
 		if (exceptions == null
 				&& (exceptionTypes == null || exceptionTypes.length == 0))
 			return;
@@ -316,7 +306,7 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 			fail("Missing declared exceptions: " + set);
 	}
 
-	protected void checkInterfaces(Class< ? > c, String[] interfaces) {
+	private void checkInterfaces(Class< ? > c, String[] interfaces) {
 		Class< ? > implemented[] = c.getInterfaces();
 		outer: for (int i = 0; i < interfaces.length; i++) {
 			String ifname = interfaces[i].replace('/', '.');
@@ -330,39 +320,35 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 			fail("Missing interface, class " + getClassName(c) + " misses "
 					+ ifname);
 		}
-
 	}
 
-	protected void checkMethod(int access, String name,
-			String desiredDescriptor, String[] exceptions) {
+	private void checkMethod(int access, String name, String desiredDescriptor,
+			String[] exceptions) {
 		String key = name + desiredDescriptor;
 		Method m = methods.remove(key);
-		lastMember = m;
 		if (m == null) {
 			// Method not found!
 			fail("Could not find method: " + getClassName(clazz) + "." + name);
 		}
-		members.add(m);
 		int cMods = m.getModifiers();
 		checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED
 				| ACC_STATIC | ACC_FINAL | ACC_ABSTRACT);
 		checkExceptions(exceptions, m.getExceptionTypes());
-
 	}
 
-	protected void checkModifiers(int access, int cMods, int mask) {
+	private void checkModifiers(int access, int cMods, int mask) {
 		access &= mask;
 		cMods &= mask;
 		assertEquals("Relevant access modifiers", access, cMods);
 	}
 
-	protected void checkSuperClass(Class< ? > c, String superClassName) {
+	private void checkSuperClass(Class< ? > c, String superClassName) {
 		Class< ? > superClass = c.getSuperclass();
 		if (superClass != null)
 			assertEquals("Super class", superClassName, superClass.getName());
 	}
 
-	void createTypeDescriptor(StringBuffer sb, Class< ? > type) {
+	private void createTypeDescriptor(StringBuffer sb, Class< ? > type) {
 		if (type.isArray()) {
 			sb.append("[");
 			createTypeDescriptor(sb, type.getComponentType());
@@ -408,19 +394,19 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 		}
 	}
 
-	String getClassName(Class< ? > c) {
+	private String getClassName(Class< ? > c) {
 		if (c.isArray())
 			return getClassName(c.getComponentType()) + "[]";
 		return c.getName();
 	}
 
-	void getDescriptor(StringBuffer sb, Class< ? >[] parameters) {
+	private void getDescriptor(StringBuffer sb, Class< ? >[] parameters) {
 		for (int i = 0; i < parameters.length; i++) {
 			createTypeDescriptor(sb, parameters[i]);
 		}
 	}
 
-	String getMethodDescriptor(Method method) {
+	private String getMethodDescriptor(Method method) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("(");
 		getDescriptor(sb, method.getParameterTypes());
@@ -429,43 +415,7 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 		return sb.toString();
 	}
 
-	boolean isVisible(int access) {
+	private boolean isVisible(int access) {
 		return (access & (ACC_PUBLIC | ACC_PROTECTED)) != 0;
-	}
-
-	/**
-	 * Check the current signature. If no signature was set, we ignore this
-	 * check. This means we always pass on environments that do not have the
-	 * generic methods, i.e. pre 1.5.
-	 * @throws Exception 
-	 */
-	public void doSignature(String signature) throws Exception {
-//		if (lastMember == null)
-//			return;
-//
-//		members.remove(lastMember);
-//		if (!signatures.hasGenerics())
-//			return;
-//
-//		log("# " + signature + " " + lastMember);
-//
-//		String underTest = signatures.normalize(signatures
-//				.getSignature(lastMember));
-//		if (underTest.indexOf('<') >= 0) {
-//			String specification = signatures.normalize(signature);
-//			assertEquals(specification, underTest);
-//		}
-	}
-
-	/**
-	 * Once the members are done the following attribute will be about the
-	 * class. We calculated the class signature in the first step so now we must
-	 * set the checked signature to the class signature so that
-	 * {@link #doSignature(String)} will check the appropriate signature. A bit
-	 * convoluted but then who cares.
-	 */
-
-	public void doMembersDone() {
-		lastMember = clazz;
 	}
 }

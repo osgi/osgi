@@ -72,14 +72,6 @@ public interface ParserCallback {
 			Object constant);
 
 	/**
-	 * Callback for a detected signature on the previous element.
-	 * 
-	 * @param signature
-	 * @throws Exception 
-	 */
-	void doSignature(String signature) throws Exception;
-
-	/**
 	 * Called for attributes that are not recognized.
 	 * 
 	 * The return value will be stored in the attributes map.
@@ -91,17 +83,8 @@ public interface ParserCallback {
 	Object doAttribute(String name, byte[] data);
 
 	/**
-	 * Indicate that we had all members so the following attributes will be
-	 * about the class.
-	 */
-	void doMembersDone();
-
-	/**
 	 * Called after last bit read
 	 *
 	 */
 	void doEnd();
-
-
-	
 }
