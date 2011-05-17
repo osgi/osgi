@@ -51,8 +51,9 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 	 */
 	static {
 		try {
-			signatures = 
-				(ISignatures) SignatureTestCase.class.getClassLoader().loadClass("org.osgi.test.support.generic.Signatures").newInstance();
+			signatures = (ISignatures) SignatureTestCase.class.getClassLoader()
+					.loadClass("org.osgi.test.support.generic.Signatures")
+					.newInstance();
 		}
 		catch (Throwable t) {
 			// Ignore
@@ -287,13 +288,15 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 		 * We removed the check to see if there is too much
 		 */
 
-		// check if we had members that had signatures
-		for (Object member : members) {
-			String signature = signatures.getSignature(member);
-			if (signature.indexOf('<') >= 0)
-				fail("A construct under test has a generic signature that was not found in the specification "
-						+ signature);
-		}
+//		if (signatures != null) {
+//			// check if we had members that had signatures
+//			for (Object member : members) {
+//				String signature = signatures.getSignature(member);
+//				if (signature.indexOf('<') >= 0)
+//					fail("A construct under test has a generic signature that was not found in the specification "
+//							+ signature);
+//			}
+//		}
 	}
 
 	void checkConstructor(int access, String name, String desiredDescriptor,
@@ -460,8 +463,8 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 			return;
 
 		log("# " + signature + " " + lastMember);
-		
-		String  underTest = signatures.normalize(signatures
+
+		String underTest = signatures.normalize(signatures
 				.getSignature(lastMember));
 		if (underTest.indexOf('<') >= 0) {
 			String specification = signatures.normalize(signature);
