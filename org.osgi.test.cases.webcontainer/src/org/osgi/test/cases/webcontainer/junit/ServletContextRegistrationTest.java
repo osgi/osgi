@@ -27,6 +27,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
+import org.osgi.test.support.OSGiTestCaseProperties;
 
 /**
  * @version $Rev$ $Date$
@@ -114,7 +115,8 @@ public class ServletContextRegistrationTest extends
                 }
             }
             // let's wait some time for the bundle to be uninstalled fully
-            Thread.sleep(10000);
+			Thread.sleep(OSGiTestCaseProperties.getTimeout()
+					* OSGiTestCaseProperties.getScaling());
         }
 
 	}
@@ -137,7 +139,8 @@ public class ServletContextRegistrationTest extends
                 }
             }
             // let's wait some time for the bundle to be uninstalled fully
-            Thread.sleep(10000);
+			Thread.sleep(OSGiTestCaseProperties.getTimeout()
+					* OSGiTestCaseProperties.getScaling());
         }
     }
 
