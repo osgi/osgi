@@ -19,6 +19,8 @@ package org.osgi.test.support.signature.generic;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.osgi.test.support.signature.*;
+
 /**
  * This class is compiled against 1.5 or later to provide access to the generic
  * signatures. It can convert a Class, Field, Method or constructor to a generic
@@ -28,7 +30,7 @@ import java.util.*;
  * 
  * @version $Id$
  */
-public class Signatures {
+public class Signatures implements ISignatures {
 
 	/**
 	 * Helper class to track an index in a string.
