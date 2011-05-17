@@ -75,8 +75,9 @@ public interface ParserCallback {
 	 * Callback for a detected signature on the previous element.
 	 * 
 	 * @param signature
+	 * @throws Exception 
 	 */
-	void doSignature(String signature);
+	void doSignature(String signature) throws Exception;
 
 	/**
 	 * Called for attributes that are not recognized.

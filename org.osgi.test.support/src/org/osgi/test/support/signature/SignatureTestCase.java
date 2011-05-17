@@ -41,26 +41,10 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 	Map<String, Field>				fields;
 	Set<String>						found;
 	Set<String>						missing;
-	static ISignatures				signatures;
 	Object							lastMember;
 
-	/**
-	 * Attempt to set the signatures. This will fail on pre 1.5 VMs because it
-	 * is compiled for Java 5. This is ok, won't do signature testing in that
-	 * case.
-	 */
-	static {
-		try {
-			signatures = (ISignatures) SignatureTestCase.class.getClassLoader()
-					.loadClass("org.osgi.test.support.generic.Signatures")
-					.newInstance();
-		}
-		catch (Throwable t) {
-			// Ignore
-		}
-	}
 
-	public void testSignature() {
+	public void testSignature() throws Exception {
 		Bundle bundle = getContext().getBundle();
 		String path = "OSGI-INF/signature";
 		found = new HashSet<String>();
@@ -453,23 +437,24 @@ public class SignatureTestCase extends OSGiTestCase implements ParserCallback {
 	 * Check the current signature. If no signature was set, we ignore this
 	 * check. This means we always pass on environments that do not have the
 	 * generic methods, i.e. pre 1.5.
+	 * @throws Exception 
 	 */
-	public void doSignature(String signature) {
-		if (lastMember == null)
-			return;
-
-		members.remove(lastMember);
-		if (signatures == null)
-			return;
-
-		log("# " + signature + " " + lastMember);
-
-		String underTest = signatures.normalize(signatures
-				.getSignature(lastMember));
-		if (underTest.indexOf('<') >= 0) {
-			String specification = signatures.normalize(signature);
-			assertEquals(specification, underTest);
-		}
+	public void doSignature(String signature) throws Exception {
+//		if (lastMember == null)
+//			return;
+//
+//		members.remove(lastMember);
+//		if (!signatures.hasGenerics())
+//			return;
+//
+//		log("# " + signature + " " + lastMember);
+//
+//		String underTest = signatures.normalize(signatures
+//				.getSignature(lastMember));
+//		if (underTest.indexOf('<') >= 0) {
+//			String specification = signatures.normalize(signature);
+//			assertEquals(specification, underTest);
+//		}
 	}
 
 	/**
