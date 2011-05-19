@@ -816,6 +816,7 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 	public void testBadDynamicImportString() throws Exception {
 		setupImportChoices();
 		ConfigurableWeavingHook hook = new ConfigurableWeavingHook();
+		// Note the missing quote for the version attribute
 		hook.addImport(IMPORT_TEST_CLASS_PKG + ";version=(1.0,1.5)\"");
 		hook.setChangeTo(IMPORT_TEST_CLASS_NAME);
 		ServiceRegistration<WeavingHook> reg = null;
@@ -824,7 +825,7 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 			weavingClasses.loadClass(DYNAMIC_IMPORT_TEST_CLASS_NAME);
 			fail("Should not get here!");
 		} catch (ClassFormatError cfe) {
-			if(!!!(cfe.getCause() instanceof IllegalArgumentException))
+			if(!(cfe.getCause() instanceof IllegalArgumentException))
 				fail("The class load should generate an IllegalArgumentException due " +
 						"to the bad dynamic import string " + cfe.getMessage());
 		} finally {
