@@ -324,9 +324,8 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 			clazz.newInstance().toString();
 			fail("Should fail to load the Bundle class");
 		} catch (RuntimeException cnfe) {
-			assertEquals("Wrong exception", 
-					"java.lang.ClassNotFoundException: org.osgi.framework.Bundle", 
-					cnfe.getCause().toString());
+			assertTrue("Wrong exception: " + cnfe.getCause().getClass(),
+				(cnfe.getCause() instanceof ClassNotFoundException)); 
 		} finally {
 			if (reg != null)
 				reg.unregister();
