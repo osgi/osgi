@@ -27,8 +27,11 @@ import java.util.List;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
@@ -831,6 +834,17 @@ public class BundleWiringTests extends OSGiTestCase {
 		assertEquals("Wrong capability", capability, wire.getCapability());
 		assertEquals("Wrong requirement", requirement, wire.getRequirement());
 		assertTrue("Requirement does not match capability", wire.getRequirement().matches(wire.getCapability()));
+		String filterDirective = wire.getRequirement().getDirectives().get(Constants.FILTER_DIRECTIVE);
+		if (wire.getRequirement().getNamespace().startsWith("osgi.wiring.")) {
+			assertTrue("An osgi.wiring.* requirement has non-empty attribute map.", wire.getRequirement().getAttributes().isEmpty());
+			assertNotNull("Null filter directive is not allowed for osgi.wiring.* name spaces.", filterDirective);
+			try {
+				Filter filter = FrameworkUtil.createFilter(filterDirective);
+				assertTrue("Filter directive does not match capability attributes: " + filterDirective, filter.matches(wire.getCapability().getAttributes()));
+			} catch (InvalidSyntaxException e) {
+				fail("Failed to create filter: " + filterDirective, e);
+			}
+		}
 	}
 
 	public void testGetRevisions() {
