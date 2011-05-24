@@ -16,73 +16,11 @@ package org.osgi.service.subsystem;
  * 		<li>Attributes used in the above headers</li>
  * </ol>
  */
-public interface SubsystemConstants {
-	/**
-	 * The subsystem lifecycle event types that can be produced by a subsystem. 
-	 * See ? and Subsystem for details on the circumstances under which these 
-	 * events are fired.
-	 */
-	public static enum EventType {
-		/**
-		 * Event type used to indicate that the operations was cancelled (e.g. 
-		 * an install was cancelled).
-		 */
-		CANCELED,
-		/**
-		 * Event type used to indicate that a subsystem operation is being 
-		 * cancelled.
-		 */
-		CANCELING,
-		/**
-		 * Event type used to indicate that the operation failed (e.g. an 
-		 * exception was thrown during installation).
-		 */
-		FAILED,
-		/**
-		 * Event type used to indicate a subsystem has been installed.
-		 */
-		INSTALLED,
-		/**
-		 * Event type used to indicate a subsystem is installing.
-		 */
-		INSTALLING,
-		/**
-		 * Event type used to indicate a subsystem has been resolved.
-		 */
-		RESOLVED,
-		/**
-		 * Event type used to indicate a subsystem is resolving.
-		 */
-		RESOLVING,
-		/**
-		 * Event type used to indicate a subsystem has been started.
-		 */
-		STARTED,
-		/**
-		 * Event type used to indicate a subsystem is starting.
-		 */
-		STARTING,
-		/**
-		 * Event type used to indicate a subsystem has been stopped.
-		 */
-		STOPPED,
-		/**
-		 * Event type used to indicate a subsystem is stopping.
-		 */
-		STOPPING,
-		/**
-		 * Event type used to indicate a subsystem has been uninstalled.
-		 */
-		UNINSTALLED,
-		/**
-		 * Event type used to indicate a subsystem has been updated.
-		 */
-		UPDATED,
-		/**
-		 * Event type used to indicate a subsystem is updating.
-		 */
-		UPDATING
+public class SubsystemConstants {
+	private SubsystemConstants() {
+		throw new AssertionError("This class is not designed to be instantiated");
 	}
+	
 	/**
 	 * The list of application contents identified by a symbolic name and 
 	 * version.
@@ -316,7 +254,73 @@ public interface SubsystemConstants {
 	public static final String SUBSYSTEM_DIRECTIVE = "";
 	
 	// Event related constants.
-	
+
+	/**
+	 * The subsystem lifecycle event types that can be produced by a subsystem. 
+	 * See ? and Subsystem for details on the circumstances under which these 
+	 * events are fired.
+	 */
+	public static enum EventType {
+		/**
+		 * Event type used to indicate that the operations was cancelled (e.g. 
+		 * an install was cancelled).
+		 */
+		CANCELED,
+		/**
+		 * Event type used to indicate that a subsystem operation is being 
+		 * cancelled.
+		 */
+		CANCELING,
+		/**
+		 * Event type used to indicate that the operation failed (e.g. an 
+		 * exception was thrown during installation).
+		 */
+		FAILED,
+		/**
+		 * Event type used to indicate a subsystem has been installed.
+		 */
+		INSTALLED,
+		/**
+		 * Event type used to indicate a subsystem is installing.
+		 */
+		INSTALLING,
+		/**
+		 * Event type used to indicate a subsystem has been resolved.
+		 */
+		RESOLVED,
+		/**
+		 * Event type used to indicate a subsystem is resolving.
+		 */
+		RESOLVING,
+		/**
+		 * Event type used to indicate a subsystem has been started.
+		 */
+		STARTED,
+		/**
+		 * Event type used to indicate a subsystem is starting.
+		 */
+		STARTING,
+		/**
+		 * Event type used to indicate a subsystem has been stopped.
+		 */
+		STOPPED,
+		/**
+		 * Event type used to indicate a subsystem is stopping.
+		 */
+		STOPPING,
+		/**
+		 * Event type used to indicate a subsystem has been uninstalled.
+		 */
+		UNINSTALLED,
+		/**
+		 * Event type used to indicate a subsystem has been updated.
+		 */
+		UPDATED,
+		/**
+		 * Event type used to indicate a subsystem is updating.
+		 */
+		UPDATING
+	}
 	/**
 	 * Key for the event property that holds the subsystem id.
 	 */
@@ -325,6 +329,10 @@ public interface SubsystemConstants {
 	 * Key for the event property that holds the subsystem location.
 	 */
 	public static final String SUBSYSTEM_LOCATION = "subsystem.location";
+	/**
+	 * Key for the event property that holds the subsystem state.
+	 */
+	public static final String SUBYSTEM_STATE = "subsystem.state";
 	/**
 	 * Key for the event property that holds the subsystem symbolic name.
 	 */
@@ -336,9 +344,9 @@ public interface SubsystemConstants {
 	/**
 	 * The topic for subsystem event admin events.
 	 */
-	public static final String TOPIC = "org/osgi/service/Subsystem";
+	public static final String TOPIC = "org/osgi/service/Subsystem/";
 	/**
 	 * The topic for subsystem internal event admin events.
 	 */
-	public static final String TOPIC_INTERNALS = "org/osgi/service/SubsystemInternals";
+	public static final String TOPIC_INTERNALS = "org/osgi/service/SubsystemInternals/";
 }
