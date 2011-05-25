@@ -16,12 +16,9 @@
 
 package org.osgi.test.cases.framework.junit.wiring;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import junit.framework.AssertionFailedError;
 
@@ -29,34 +26,9 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
-import org.osgi.framework.wiring.FrameworkWiring;
-import org.osgi.test.support.OSGiTestCase;
 import org.osgi.test.support.wiring.Wiring;
 
-public class FrameworkWiringTests extends OSGiTestCase {
-	private final List<Bundle> bundles = new ArrayList<Bundle>();
-	FrameworkWiring frameworkWiring;
-	
-	
-	public Bundle install(String bundle) {
-		Bundle result = null;
-		try {
-			result = super.install(bundle);
-		} catch (BundleException e) {
-			fail("failed to install bundle: " + bundle, e);
-		} catch (IOException e) {
-			fail("failed to install bundle: " + bundle, e);
-		}
-		if (!bundles.contains(result))
-			bundles.add(result);
-		return result;
-	}
-
-	protected void setUp() throws Exception {
-		bundles.clear();
-		frameworkWiring = (FrameworkWiring) getContext().getBundle(0).adapt(FrameworkWiring.class);
-	}
-
+public class FrameworkWiringTests extends WiringTest {
 	protected void tearDown() throws Exception {
 		for (Iterator<Bundle> iBundles = bundles.iterator(); iBundles.hasNext();)
 			try {
@@ -69,8 +41,6 @@ public class FrameworkWiringTests extends OSGiTestCase {
 		Wiring.synchronousRefreshBundles(getContext(), bundles);
 		bundles.clear();
 	}
-
-
 
 	public void testRefreshListeners() {
 		Bundle tb1 = install("resolver.tb1.v110.jar");
