@@ -17,13 +17,12 @@
  */
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.Acl;
-import info.dmtree.DmtEvent;
-
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Vector;
+
+import info.dmtree.Acl;
+import info.dmtree.DmtEvent;
 
 /*
  * Stores all parameters of a DMT event, together with the ACLs of the affected
@@ -103,21 +102,6 @@ public class DmtEventCore {
         return false;
     }
     
-    boolean isNode( Node node ) {
-    	return (nodes != null && nodes.contains(node));
-    }
-    
-    boolean isNewNode( Node node ) {
-    	return (newNodes != null && newNodes.contains(node));
-    }
-
-    Node getNodeByNewNode( Node newNode ) {
-    	int i = newNodes.indexOf(newNode);
-		if ( newNodes != null && nodes != null && i != -1 )
-			return (Node)nodes.get(i);
-    	return null;
-    }
-
     void addNode(Node node, Node newNode, Acl acl) {
         if((nodes == null) != (node == null))
             throw new IllegalArgumentException("Node parameter must be null " +
@@ -128,80 +112,14 @@ public class DmtEventCore {
             throw new IllegalArgumentException("New node parameter must be " +
                     "null if and only if event type is not RENAMED or COPIED.");
         
-        if ( type == DmtEvent.RENAMED ) {
-        	// Has the node been renamed already in this transaction?
-        	int i = newNodes.indexOf(node);
-        	if ( i != -1 ) {
-        		// just update newnode of the existing entry and return
-        		newNodes.set(i, newNode);
-            	// if after several renames the newnode is the same as the old one, then remove both
-            	if ( newNode.equals(nodes.get(i))) {
-            		nodes.remove(newNode);
-            		newNodes.remove(newNode);
-            	}
-        		return;
-        	}
-        }
-
         if(node != null) {
             nodes.add(node);
             acls.add(acl);
         }
         
-        if(newNode != null) {
+        if(newNode != null)
             newNodes.add(newNode);
-        }
     }
-    
-
-    /**
-     * removes given node from nodes list and also the corresponding node from the newNodes 
-     * @param node
-     */
-    void removeNode( Node node ) {
-    	int i = -1;
-    	if (nodes != null && (i= nodes.indexOf(node)) != -1 ) {
-    		nodes.remove(i);
-    		if ( newNodes != null )
-    			newNodes.remove(i);
-    		if ( acls != null )
-    			acls.remove(i);
-    	}
-    }
-    
-    /**
-     * removes given node from newNodes list and also the corresponding node from the nodes 
-     * @param node
-     */
-    void removeNewNode( Node newNode ) {
-    	int i = -1;
-    	if (newNodes != null && (i= newNodes.indexOf(newNode)) != -1 ) {
-    		newNodes.remove(i);
-    		if ( nodes != null )
-    			nodes.remove(i);
-    		if ( acls != null )
-    			acls.remove(i);
-    	}
-    }
-
-    void removeNodes( List nodesToRemove ) {
-    	if ( nodesToRemove == null )
-    		return;
-    	ListIterator i = nodesToRemove.listIterator();
-    	while (i.hasNext())
-    		// remove node from nodes, newnodes and acls
-			removeNode((Node) i.next());
-    }
-    
-    void removeNewNodes( List nodesToRemove ) {
-    	if ( nodesToRemove == null )
-    		return;
-    	ListIterator i = nodesToRemove.listIterator();
-    	while (i.hasNext())
-    		// remove node from nodes, newnodes and acls
-			removeNewNode((Node) i.next());
-    }
-    
     
     void excludeRoot(Node root) {
         if(nodes == null)

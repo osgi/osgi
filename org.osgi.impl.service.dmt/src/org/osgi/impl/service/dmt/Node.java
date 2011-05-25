@@ -18,14 +18,13 @@
 
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.DmtException;
-import info.dmtree.Uri;
+import info.dmtree.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 // OPTIMIZE implement operations to work on either path or URI, depending on which is available.
-public class Node implements Comparable {
+public class Node {
     /* 
      * Permitted characters in a segment of a relative URI (RFC 2396):
      * - letters and digits: a-z, A-Z, 0-9
@@ -39,7 +38,6 @@ public class Node implements Comparable {
      */
     
     static final Node ROOT_NODE = new Node(".");
-    
     
     /**
      * Checks the node name and returns the canonical form.
@@ -258,7 +256,6 @@ public class Node implements Comparable {
         return isAncestorOf(other, false);
     }
     
-
     // precondition: both nodes are absolute
     boolean isAncestorOf(Node other, boolean strict) {
         String[] otherPath = other.getPath();
@@ -394,10 +391,4 @@ public class Node implements Comparable {
             }
 		}
     }
-
-	public int compareTo(Object other) {
-        if(!(other instanceof Node))
-            return 1;
-        return getUri().compareTo(((Node) other).getUri());
-	}
 }
