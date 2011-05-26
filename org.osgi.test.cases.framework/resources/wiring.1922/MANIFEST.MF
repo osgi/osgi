@@ -1,0 +1,14 @@
+Manifest-Version: 1
+Bundle-ManifestVersion: 2
+Bundle-Name: org.osgi.test.cases.framework.wiring.1922
+Bundle-SymbolicName: org.osgi.test.cases.framework.wiring.1922;foo=bar
+Bundle-Version: 1.0
+Import-Package: org.osgi.test.cases.framework.wiring.tb1a;version="1.0";
+ bundle-symbolic-name="org.osgi.test.cases.framework.wiring.1922.frag";b
+ undle-version="1.0";foo=bar;resolution:=optional;foo:=bar
+Require-Bundle: org.osgi.test.cases.framework;bundle-version
+ =1.0;foo=bar;visibility:=reexport;resolution:=optional;filter:=(x=y);fo
+ o:=bar
+Require-Capability: org.osgi.test.cases.framework.wiring;foo=bar;filter:
+ =(foo=bar);foo:=bar
+
