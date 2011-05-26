@@ -54,13 +54,16 @@ public class Bug1922Test extends WiringTest {
 	public void testOsgiWiringRequirementFilter() {
 		String filter = bundleRequirement.getDirectives().get(Constants.FILTER_DIRECTIVE);
 		Map<String,Object> attributes = new HashMap<String,Object>();
+		attributes.put(BundleRevision.BUNDLE_NAMESPACE, "org.osgi.test.cases.framework");
 		attributes.put("bundle-version", new Version("1.0"));
 		attributes.put("foo", "bar");
 		attributes.put("x", "x");
 		assertFilter(filter, attributes);
 		filter = hostRequirement.getDirectives().get(Constants.FILTER_DIRECTIVE);
+		attributes.put(BundleRevision.HOST_NAMESPACE, "org.osgi.test.cases.framework.wiring.1922");
 		assertFilter(filter, attributes);
 		filter = packageRequirement.getDirectives().get(Constants.FILTER_DIRECTIVE);
+		attributes.put(BundleRevision.PACKAGE_NAMESPACE, "org.osgi.test.cases.framework.wiring.tb1a");
 		attributes.put("version", new Version("1.0"));
 		attributes.put("bundle-symbolic-name", "org.osgi.test.cases.framework.wiring.1922.frag");
 		assertFilter(filter, attributes);
@@ -81,8 +84,7 @@ public class Bug1922Test extends WiringTest {
 		assertDirective("foo", "bar", bundleRequirement);
 		assertDirective("foo", "bar", hostRequirement);
 		assertDirective("resolution", "optional", packageRequirement);
-		// TODO This can;t be tested until Bug 2028 has been fixed.
-//		assertDirective("foo", "bar", packageRequirement);
+		assertDirective("foo", "bar", packageRequirement);
 	}
 	
 	protected void setUp() throws Exception {

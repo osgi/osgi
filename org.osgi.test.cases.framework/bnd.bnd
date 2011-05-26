@@ -14,6 +14,9 @@ Export-Package						= \
 	
 Bundle-ClassPath: .,div.tb6.jar
 
+Bundle-SymbolicName: ${p};\
+	foo=bar
+
 Include-Resource = \
 	activationpolicy.tbchain1.jar, \
 	activationpolicy.tbchain2.jar, \

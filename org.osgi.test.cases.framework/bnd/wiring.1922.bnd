@@ -1,25 +1,3 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.wiring.1922
-Bundle-SymbolicName: ${p}.wiring.1922;\
- foo=bar
-Bundle-Version: 1.0
-Import-Package: ${p}.wiring.tb1a;\
- version=1.0;\
- bundle-symbolic-name=${p}.wiring.1922.frag;\
- bundle-version=1.0;\
- foo=bar;\
- resolution:=optional;\
- filter:=(x=y);\
- foo:=bar
-Require-Bundle: ${p}.wiring.1922;\
- bundle-version=1.0;\
- foo=bar;\
- visibility:=reexport;\
- resolution:=optional;\
- filter:=(x=y);\
- foo:=bar
-Require-Capability: ${p}.wiring;\
- foo=bar;\
- filter:=(foo=bar);\
- foo:=bar
+-nomanifest
+Include-Resource: {META-INF/MANIFEST.MF = resources/wiring.1922/MANIFEST.MF}
 
