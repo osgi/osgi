@@ -7,8 +7,10 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.Version;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
 
@@ -19,7 +21,8 @@ import org.osgi.framework.wiring.BundleRevision;
  * <li>Attributes declared on {@link Constants#REQUIRE_CAPABILITY} must be 
  *     visible in {@link BundleRequirement#getAttributes()}.</li>
  * <li>Attributes declared on requirements within the osgi.wiring.* namespace
- *     must not be visible in {@link BundleRequirement#getAttributes()}.</li>
+ *     must not be visible in {@link BundleRequirement#getAttributes()}. The
+ *     attributes map must be empty.</li>
  * <li>Attributes declared on requirements within the osgi.wiring.* namespace
  *     must be used to generate a {@link Constants#FILTER_DIRECTIVE} visible in
  *     {@link BundleRequirement#getDirectives()}. Any existing {@link
@@ -35,12 +38,11 @@ public class Bug1922Test extends WiringTest {
 	private BundleRequirement bundleRequirement;
 	private BundleRequirement hostRequirement;
 	private BundleRequirement packageRequirement;
-	private BundleRequirement requirement;
+	private BundleRequirement requirement1;
+	private BundleRequirement requirement2;
 	
 	public void testRequireCapabilityRequirementAttributes() {
-		Map<String, Object> attributes = new HashMap<String, Object>();
-		attributes.put("foo", "bar");
-		assertEquals("Requirement attributes must match Require-Capability header", attributes, requirement.getAttributes());
+		assertAttribute("foo", "bar", requirement1);
 	}
 	
 	public void testOsgiWiringRequirementAttributes() {
@@ -51,26 +53,26 @@ public class Bug1922Test extends WiringTest {
 	
 	public void testOsgiWiringRequirementFilter() {
 		String filter = bundleRequirement.getDirectives().get(Constants.FILTER_DIRECTIVE);
-		assertFilter(filter);
-		assertFalse("Declared filters in osgi.wiring.* namespace must be overwritten", filter.equals("(foo=bar)"));
-		assertAttributeInFilter("foo=bar", filter);
-		assertAttributeInFilter("bundle-version", filter);
+		Map<String,Object> attributes = new HashMap<String,Object>();
+		attributes.put("bundle-version", new Version("1.0"));
+		attributes.put("foo", "bar");
+		attributes.put("x", "x");
+		assertFilter(filter, attributes);
 		filter = hostRequirement.getDirectives().get(Constants.FILTER_DIRECTIVE);
-		assertFilter(filter);
-		assertAttributeInFilter("foo=bar", filter);
-		assertAttributeInFilter("bundle-version", filter);
+		assertFilter(filter, attributes);
 		filter = packageRequirement.getDirectives().get(Constants.FILTER_DIRECTIVE);
-		assertFilter(filter);
-		assertAttributeInFilter("version", filter);
-		assertAttributeInFilter("specification-version", filter);
-		assertAttributeInFilter("bundle-symbolic-name=org.osgi.test.cases.framework.wiring.1922.frag", filter);
-		assertAttributeInFilter("bundle-version", filter);
-		assertAttributeInFilter("foo=bar", filter);
+		attributes.put("version", new Version("1.0"));
+		attributes.put("bundle-symbolic-name", "org.osgi.test.cases.framework.wiring.1922.frag");
+		assertFilter(filter, attributes);
 	}
 	
 	public void testRequireCapabilityRequirementDirectives() {
-		assertDirective(Constants.FILTER_DIRECTIVE, "(foo=bar)", requirement);
-		assertDirective("foo", "bar", requirement);
+		String filter = requirement1.getDirectives().get(Constants.FILTER_DIRECTIVE);
+		Map<String,Object> attributes = new HashMap<String,Object>();
+		attributes.put("foo", "bar");
+		assertFilter(filter, attributes);
+		assertDirective("foo", "bar", requirement1);
+		assertDirective(Constants.FILTER_DIRECTIVE, null, requirement2);
 	}
 	
 	public void testOsgiWiringRequirementDirectives() {
@@ -79,7 +81,8 @@ public class Bug1922Test extends WiringTest {
 		assertDirective("foo", "bar", bundleRequirement);
 		assertDirective("foo", "bar", hostRequirement);
 		assertDirective("resolution", "optional", packageRequirement);
-		assertDirective("foo", "bar", packageRequirement);
+		// TODO This can;t be tested until Bug 2028 has been fixed.
+//		assertDirective("foo", "bar", packageRequirement);
 	}
 	
 	protected void setUp() throws Exception {
@@ -96,15 +99,18 @@ public class Bug1922Test extends WiringTest {
 		packageRequirement = requirements.get(0);
 		requirements = revision.getDeclaredRequirements("org.osgi.test.cases.framework.wiring");
 		assertEquals("One Require-Capability requirement should exist", 1, requirements.size());
-		requirement = requirements.get(0);
+		requirement1 = requirements.get(0);
 		revision = tb1Frag.adapt(BundleRevision.class);
 		requirements = revision.getDeclaredRequirements(BundleRevision.HOST_NAMESPACE);
 		assertEquals("One Fragment-Host requirement should exist", 1, requirements.size());
 		hostRequirement = requirements.get(0);
+		requirements = revision.getDeclaredRequirements("org.osgi.test.cases.framework.wiring");
+		assertEquals("One Require-Capability requirement should exist", 1, requirements.size());
+		requirement2 = requirements.get(0);
 	}
 	
-	private void assertAttributeInFilter(String attribute, String filter) {
-		assertTrue("Missing attribute in filter", filter.indexOf(attribute) != -1);
+	private void assertAttribute(String name, String value, BundleRequirement requirement) {
+		assertEquals("Missing attribute or wrong value", value, requirement.getAttributes().get(name));
 	}
 	
 	private void assertDirective(String name, String value, BundleRequirement requirement) {
@@ -115,10 +121,10 @@ public class Bug1922Test extends WiringTest {
 		assertEquals("Requirement attributes must be empty for osgi.wiring.* namespace", 0, attributes.size());
 	}
 	
-	private void assertFilter(String filter) {
-		assertNotNull("Requirements in the osgi.wiring.* namespace must have a filter directive generated from the attributes", filter);
+	private void assertFilter(String filterStr, Map<String,Object> attributes) {
 		try {
-			FrameworkUtil.createFilter(filter);
+			Filter filter = FrameworkUtil.createFilter(filterStr);
+			assertTrue("The generated filter must match the attributes", filter.matches(attributes));
 		}
 		catch (InvalidSyntaxException e) {
 			fail("The generated filter string must be valid", e);
