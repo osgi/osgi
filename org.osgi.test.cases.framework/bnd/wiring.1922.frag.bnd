@@ -7,11 +7,4 @@ Fragment-Host: ${p}.wiring.1922;\
  foo=bar;\
  filter:=(x=y);\
  foo:=bar
-Export-Package: ${p}.wiring.tb1a;\
- version=1.0;\
- foo=bar
-Provide-Capability: ${p}.wiring;\
- foo=bar
-Require-Capability: ${p}.wiring;\
- foo=bar
 
