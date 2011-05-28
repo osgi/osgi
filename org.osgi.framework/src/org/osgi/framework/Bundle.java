@@ -139,9 +139,9 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <p>
 	 * A bundle is in the {@code STARTING} state when its {@link #start(int)
 	 * start} method is active. A bundle must be in this state when the bundle's
-	 * {@link BundleActivator#start} is called. If the {@code
-	 * BundleActivator.start} method completes without exception, then the
-	 * bundle has successfully started and must move to the {@code ACTIVE}
+	 * {@link BundleActivator#start(BundleContext)} is called. If the
+	 * {@code BundleActivator.start} method completes without exception, then
+	 * the bundle has successfully started and must move to the {@code ACTIVE}
 	 * state.
 	 * <p>
 	 * If the bundle has a {@link Constants#ACTIVATION_LAZY lazy activation
@@ -158,9 +158,9 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <p>
 	 * A bundle is in the {@code STOPPING} state when its {@link #stop(int)
 	 * stop} method is active. A bundle must be in this state when the bundle's
-	 * {@link BundleActivator#stop} method is called. When the {@code
-	 * BundleActivator.stop} method completes the bundle is stopped and must
-	 * move to the {@code RESOLVED} state.
+	 * {@link BundleActivator#stop(BundleContext)} method is called. When the
+	 * {@code BundleActivator.stop} method completes the bundle is stopped and
+	 * must move to the {@code RESOLVED} state.
 	 * <p>
 	 * The value of {@code STOPPING} is 0x00000010.
 	 */
@@ -312,8 +312,8 @@ public interface Bundle extends Comparable<Bundle> {
 	 * 
 	 * <li>A bundle event of type {@link BundleEvent#STARTING} is fired.
 	 * 
-	 * <li>The {@link BundleActivator#start} method of this bundle's
-	 * {@code BundleActivator}, if one is specified, is called. If the
+	 * <li>The {@link BundleActivator#start(BundleContext)} method of this
+	 * bundle's {@code BundleActivator}, if one is specified, is called. If the
 	 * {@code BundleActivator} is invalid or throws an exception then:
 	 * <ul>
 	 * <li>This bundle's state is set to {@code STOPPING}.
@@ -425,11 +425,11 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <li>A bundle event of type {@link BundleEvent#STOPPING} is fired.
 	 * 
 	 * <li>If this bundle's state was {@code ACTIVE} prior to setting the state
-	 * to {@code STOPPING}, the {@link BundleActivator#stop} method of this
-	 * bundle's {@code BundleActivator}, if one is specified, is called. If that
-	 * method throws an exception, this method must continue to stop this bundle
-	 * and a {@code BundleException} must be thrown after completion of the
-	 * remaining steps.
+	 * to {@code STOPPING}, the {@link BundleActivator#stop(BundleContext)}
+	 * method of this bundle's {@code BundleActivator}, if one is specified, is
+	 * called. If that method throws an exception, this method must continue to
+	 * stop this bundle and a {@code BundleException} must be thrown after
+	 * completion of the remaining steps.
 	 * 
 	 * <li>Any services registered by this bundle must be unregistered.
 	 * <li>Any services used by this bundle must be released.
@@ -857,12 +857,12 @@ public interface Bundle extends Comparable<Bundle> {
 	 *        for a description of the format of a resource name.
 	 * @return A URL to the named resource, or {@code null} if the resource
 	 *         could not be found or if this bundle is a fragment bundle or if
-	 *         the caller does not have the appropriate {@code
-	 *         AdminPermission[this,RESOURCE]}, and the Java Runtime Environment
-	 *         supports permissions.
+	 *         the caller does not have the appropriate
+	 *         {@code AdminPermission[this,RESOURCE]}, and the Java Runtime
+	 *         Environment supports permissions.
 	 * @throws IllegalStateException If this bundle has been uninstalled.
-	 * @see #getEntry
-	 * @see #findEntries
+	 * @see #getEntry(String)
+	 * @see #findEntries(String, String, boolean)
 	 * @since 1.1
 	 */
 	URL getResource(String name);

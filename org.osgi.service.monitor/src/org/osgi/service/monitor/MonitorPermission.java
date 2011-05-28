@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,16 +24,15 @@ import java.util.StringTokenizer;
  * Indicates the callers authority to publish, read or reset
  * {@code StatusVariable}s, to switch event sending on or off or to start
  * monitoring jobs. The target of the permission is the identifier of the
- * {@code StatusVariable}, the action can be {@code read},
- * {@code publish}, {@code reset}, {@code startjob},
- * {@code switchevents}, or the combination of these separated by commas.
- * Action names are interpreted case-insensitively, but the canonical action
- * string returned by {@link #getActions} uses the forms defined by the action
- * constants.
+ * {@code StatusVariable}, the action can be {@code read}, {@code publish},
+ * {@code reset}, {@code startjob}, {@code switchevents}, or the combination of
+ * these separated by commas. Action names are interpreted case-insensitively,
+ * but the canonical action string returned by {@link #getActions()} uses the
+ * forms defined by the action constants.
  * <p>
- * If the wildcard {@code *} appears in the actions field, all legal
- * monitoring commands are allowed on the designated target(s) by the owner of
- * the permission.
+ * If the wildcard {@code *} appears in the actions field, all legal monitoring
+ * commands are allowed on the designated target(s) by the owner of the
+ * permission.
  * 
  * @version $Id$
  */

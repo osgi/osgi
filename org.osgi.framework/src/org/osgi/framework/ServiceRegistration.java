@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,35 +80,33 @@ public interface ServiceRegistration<S> {
 	public void setProperties(Dictionary<String, ? > properties);
 
 	/**
-	 * Unregisters a service. Remove a {@code ServiceRegistration} object
-	 * from the Framework service registry. All {@code ServiceReference}
-	 * objects associated with this {@code ServiceRegistration} object
-	 * can no longer be used to interact with the service once unregistration is
-	 * complete.
+	 * Unregisters a service. Remove a {@code ServiceRegistration} object from
+	 * the Framework service registry. All {@code ServiceReference} objects
+	 * associated with this {@code ServiceRegistration} object can no longer be
+	 * used to interact with the service once unregistration is complete.
 	 * 
 	 * <p>
 	 * The following steps are required to unregister a service:
 	 * <ol>
-	 * <li>The service is removed from the Framework service registry so that
-	 * it can no longer be obtained.
+	 * <li>The service is removed from the Framework service registry so that it
+	 * can no longer be obtained.
 	 * <li>A service event of type {@link ServiceEvent#UNREGISTERING} is fired
 	 * so that bundles using this service can release their use of the service.
 	 * Once delivery of the service event is complete, the
-	 * {@code ServiceReference} objects for the service may no longer be
-	 * used to get a service object for the service.
+	 * {@code ServiceReference} objects for the service may no longer be used to
+	 * get a service object for the service.
 	 * <li>For each bundle whose use count for this service is greater than
 	 * zero: <br>
 	 * The bundle's use count for this service is set to zero. <br>
 	 * If the service was registered with a {@link ServiceFactory} object, the
-	 * {@code ServiceFactory.ungetService} method is called to release
-	 * the service object for the bundle.
+	 * {@code ServiceFactory.ungetService} method is called to release the
+	 * service object for the bundle.
 	 * </ol>
 	 * 
-	 * @throws IllegalStateException If this
-	 *         {@code ServiceRegistration} object has already been
-	 *         unregistered.
-	 * @see BundleContext#ungetService
-	 * @see ServiceFactory#ungetService
+	 * @throws IllegalStateException If this {@code ServiceRegistration} object
+	 *         has already been unregistered.
+	 * @see BundleContext#ungetService(ServiceReference)
+	 * @see ServiceFactory#ungetService(Bundle, ServiceRegistration, Object)
 	 */
 	public void unregister();
 }

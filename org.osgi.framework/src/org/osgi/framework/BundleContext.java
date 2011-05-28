@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,11 @@ import java.util.Dictionary;
  * 
  * <p>
  * The {@code BundleContext} object will be passed to the
- * {@link BundleActivator#start} method during activation of the context bundle.
- * The same {@code BundleContext} object will be passed to the
- * {@link BundleActivator#stop} method when the context bundle is stopped. A
- * {@code BundleContext} object is generally for the private use of its
- * associated bundle and is not meant to be shared with other bundles in the
+ * {@link BundleActivator#start(BundleContext)} method during activation of the
+ * context bundle. The same {@code BundleContext} object will be passed to the
+ * {@link BundleActivator#stop(BundleContext)} method when the context bundle is
+ * stopped. A {@code BundleContext} object is generally for the private use of
+ * its associated bundle and is not meant to be shared with other bundles in the
  * OSGi environment.
  * 
  * <p>
@@ -374,8 +374,11 @@ public interface BundleContext extends BundleReference {
 	 * {@code ServiceRegistration} object is for the private use of the bundle
 	 * registering the service and should not be shared with other bundles. The
 	 * registering bundle is defined to be the context bundle. Other bundles can
-	 * locate the service by using either the {@link #getServiceReferences} or
-	 * {@link #getServiceReference} method.
+	 * locate the service by using one of the
+	 * {@link #getServiceReferences(Class, String)},
+	 * {@link #getServiceReferences(String, String)},
+	 * {@link #getServiceReference(Class)} or
+	 * {@link #getServiceReference(String)} methods.
 	 * 
 	 * <p>
 	 * A bundle can register a service object that implements the
@@ -413,9 +416,9 @@ public interface BundleContext extends BundleReference {
 	 *        {@link Constants} for a list of standard service property keys.
 	 *        Changes should not be made to this object after calling this
 	 *        method. To update the service's properties the
-	 *        {@link ServiceRegistration#setProperties} method must be called.
-	 *        The set of properties may be {@code null} if the service has no
-	 *        properties.
+	 *        {@link ServiceRegistration#setProperties(Dictionary)} method must
+	 *        be called. The set of properties may be {@code null} if the
+	 *        service has no properties.
 	 * @return A {@code ServiceRegistration} object for use by the bundle
 	 *         registering the service to update the service's properties or to
 	 *         unregister the service.
@@ -807,7 +810,7 @@ public interface BundleContext extends BundleReference {
 	 * @throws IllegalArgumentException If the specified
 	 *         {@code ServiceReference} was not created by the same framework
 	 *         instance as this {@code BundleContext}.
-	 * @see #getService
+	 * @see #getService(ServiceReference)
 	 * @see ServiceFactory
 	 */
 	boolean ungetService(ServiceReference< ? > reference);

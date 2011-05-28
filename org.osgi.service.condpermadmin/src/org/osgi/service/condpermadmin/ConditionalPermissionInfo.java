@@ -75,7 +75,9 @@ public interface ConditionalPermissionInfo {
 	 * this method can no longer be committed.
 	 * 
 	 * @throws UnsupportedOperationException If this object was created by
-	 *         {@link ConditionalPermissionAdmin#newConditionalPermissionInfo}
+	 *         {@link ConditionalPermissionAdmin#newConditionalPermissionInfo(String)}
+	 *         or
+	 *         {@link ConditionalPermissionAdmin#newConditionalPermissionInfo(String, ConditionInfo[] , PermissionInfo[] , String)}
 	 *         or obtained from a {@link ConditionalPermissionUpdate}. This
 	 *         method only functions if this object was obtained from one of the
 	 *         {@link ConditionalPermissionAdmin} methods deprecated in version

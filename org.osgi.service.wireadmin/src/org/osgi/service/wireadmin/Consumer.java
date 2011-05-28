@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,14 @@ package org.osgi.service.wireadmin;
  * {@link Producer} services.
  * 
  * <p>
- * Service objects registered under the {@code Consumer} interface are
- * expected to consume values from a Producer service via a {@code Wire}
- * object. A Consumer service may poll the Producer service by calling the
- * {@link Wire#poll} method. The Consumer service will also receive an updated
- * value when called at it's {@link #updated} method. The Producer service
- * should have coerced the value to be an instance of one of the types specified
- * by the {@link Wire#getFlavors} method, or one of their subclasses.
+ * Service objects registered under the {@code Consumer} interface are expected
+ * to consume values from a Producer service via a {@code Wire} object. A
+ * Consumer service may poll the Producer service by calling the
+ * {@link Wire#poll()} method. The Consumer service will also receive an updated
+ * value when called at it's {@link #updated(Wire, Object)} method. The Producer
+ * service should have coerced the value to be an instance of one of the types
+ * specified by the {@link Wire#getFlavors()} method, or one of their
+ * subclasses.
  * 
  * <p>
  * Consumer service objects must register with a {@code service.pid} and a
@@ -35,17 +36,16 @@ package org.osgi.service.wireadmin;
  * {@code service.description} property.
  * 
  * <p>
- * If an {@code Exception} is thrown by any of the {@code Consumer}
- * methods, a {@code WireAdminEvent} of type
- * {@link WireAdminEvent#CONSUMER_EXCEPTION} is broadcast by the Wire Admin
- * service.
+ * If an {@code Exception} is thrown by any of the {@code Consumer} methods, a
+ * {@code WireAdminEvent} of type {@link WireAdminEvent#CONSUMER_EXCEPTION} is
+ * broadcast by the Wire Admin service.
  * 
  * <p>
  * Security Considerations - Data consuming bundles will require
- * {@code ServicePermission[Consumer,REGISTER]}. In general, only the Wire
- * Admin service bundle should have this permission. Thus only the Wire Admin
- * service may directly call a Consumer service. Care must be taken in the
- * sharing of {@code Wire} objects with other bundles.
+ * {@code ServicePermission[Consumer,REGISTER]}. In general, only the Wire Admin
+ * service bundle should have this permission. Thus only the Wire Admin service
+ * may directly call a Consumer service. Care must be taken in the sharing of
+ * {@code Wire} objects with other bundles.
  * <p>
  * Consumer services must be registered with their scope when they can receive
  * different types of objects from the Producer service. The Consumer service
@@ -61,19 +61,19 @@ public interface Consumer {
 	 * <p>
 	 * Note: This method may be called by a {@code Wire} object prior to this
 	 * object being notified that it is connected to that {@code Wire} object
-	 * (via the {@link #producersConnected} method).
+	 * (via the {@link #producersConnected(Wire[])} method).
 	 * <p>
-	 * When the Consumer service can receive {@code Envelope} objects, it
-	 * must have registered all scope names together with the service object,
-	 * and each of those names must be permitted by the bundle's
-	 * {@code WirePermission}. If an {@code Envelope} object is delivered
-	 * with the {@code updated} method, then the Consumer service should
-	 * assume that the security check has been performed.
+	 * When the Consumer service can receive {@code Envelope} objects, it must
+	 * have registered all scope names together with the service object, and
+	 * each of those names must be permitted by the bundle's
+	 * {@code WirePermission}. If an {@code Envelope} object is delivered with
+	 * the {@code updated} method, then the Consumer service should assume that
+	 * the security check has been performed.
 	 * 
 	 * @param wire The {@code Wire} object which is delivering the updated
 	 *        value.
 	 * @param value The updated value. The value should be an instance of one of
-	 *        the types specified by the {@link Wire#getFlavors} method.
+	 *        the types specified by the {@link Wire#getFlavors()} method.
 	 */
 	public void updated(Wire wire, Object value);
 

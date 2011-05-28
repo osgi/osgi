@@ -1277,8 +1277,8 @@ public interface Constants {
 	 * 
 	 * <p>
 	 * By convention, every bundle has its own unique name space, starting with
-	 * the bundle's identifier (see {@link Bundle#getBundleId}) and followed by
-	 * a dot (.). A bundle may use this as the prefix of the persistent
+	 * the bundle's identifier (see {@link Bundle#getBundleId()}) and followed
+	 * by a dot (.). A bundle may use this as the prefix of the persistent
 	 * identifiers for the services it registers.
 	 */
 	String	SERVICE_PID								= "service.pid";
@@ -1293,9 +1293,10 @@ public interface Constants {
 	 * 
 	 * <p>
 	 * The service ranking is used by the Framework to determine the <i>natural
-	 * order</i> of services, see {@link ServiceReference#compareTo}, and the
-	 * <i>default</i> service to be returned from a call to the
-	 * {@link BundleContext#getServiceReference} method.
+	 * order</i> of services, see {@link ServiceReference#compareTo(Object)},
+	 * and the <i>default</i> service to be returned from a call to the
+	 * {@link BundleContext#getServiceReference(Class)} or
+	 * {@link BundleContext#getServiceReference(String)} method.
 	 * 
 	 * <p>
 	 * The default ranking is zero (0). A service with a ranking of
