@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -127,104 +127,100 @@ public interface DmtSession {
      */
     String getRootUri();
 
-    /**
-     * Commits a series of DMT operations issued in the current atomic session
-     * since the last transaction boundary. Transaction boundaries are the
-     * creation of this object that starts the session, and all subsequent
-     * {@link #commit} and {@link #rollback} calls.
-     * <p>
-     * This method can fail even if all operations were successful. This can
-     * happen due to some multi-node semantic constraints defined by a specific
-     * implementation. For example, node A can be required to always have
-     * children A/B, A/C and A/D. If this condition is broken when
-     * {@code commit()} is executed, the method will fail, and throw a
-     * {@code METADATA_MISMATCH} exception.
-     * <p>
-     * An error situation can arise due to the lack of a two phase commit
-     * mechanism in the underlying plugins. As an example, if plugin A has
-     * committed successfully but plugin B failed, the whole session must fail,
-     * but there is no way to undo the commit performed by A. To provide
-     * predictable behaviour, the commit operation should continue with the
-     * remaining plugins even after detecting a failure. All exceptions received
-     * from failed commits are aggregated into one
-     * {@code TRANSACTION_ERROR} exception thrown by this method.
-     * <p>
-     * In many cases the tree is not the only way to manage a given part of the
-     * system. It may happen that while modifying some nodes in an atomic
-     * session, the underlying settings are modified in parallel outside the
-     * scope of the DMT. If this is detected during commit, an exception with
-     * the code {@code CONCURRENT_ACCESS} is thrown.
-     * 
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code METADATA_MISMATCH} if the operation failed
-     *         because of meta-data restrictions
-     *         <li>{@code CONCURRENT_ACCESS} if it is detected that some
-     *         modification has been made outside the scope of the DMT to the
-     *         nodes affected in the session's operations
-     *         <li>{@code TRANSACTION_ERROR} if an error occurred during
-     *         the commit of any of the underlying plugins
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws DmtIllegalStateException if the session was not opened using the
-     *         {@code LOCK_TYPE_ATOMIC} lock type, or if the session is
-     *         already closed or invalidated
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation
-     */
+	/**
+	 * Commits a series of DMT operations issued in the current atomic session
+	 * since the last transaction boundary. Transaction boundaries are the
+	 * creation of this object that starts the session, and all subsequent
+	 * {@link #commit()} and {@link #rollback()} calls.
+	 * <p>
+	 * This method can fail even if all operations were successful. This can
+	 * happen due to some multi-node semantic constraints defined by a specific
+	 * implementation. For example, node A can be required to always have
+	 * children A/B, A/C and A/D. If this condition is broken when
+	 * {@code commit()} is executed, the method will fail, and throw a
+	 * {@code METADATA_MISMATCH} exception.
+	 * <p>
+	 * An error situation can arise due to the lack of a two phase commit
+	 * mechanism in the underlying plugins. As an example, if plugin A has
+	 * committed successfully but plugin B failed, the whole session must fail,
+	 * but there is no way to undo the commit performed by A. To provide
+	 * predictable behaviour, the commit operation should continue with the
+	 * remaining plugins even after detecting a failure. All exceptions received
+	 * from failed commits are aggregated into one {@code TRANSACTION_ERROR}
+	 * exception thrown by this method.
+	 * <p>
+	 * In many cases the tree is not the only way to manage a given part of the
+	 * system. It may happen that while modifying some nodes in an atomic
+	 * session, the underlying settings are modified in parallel outside the
+	 * scope of the DMT. If this is detected during commit, an exception with
+	 * the code {@code CONCURRENT_ACCESS} is thrown.
+	 * 
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code METADATA_MISMATCH} if the operation failed because of
+	 *         meta-data restrictions <li>{@code CONCURRENT_ACCESS} if it is
+	 *         detected that some modification has been made outside the scope
+	 *         of the DMT to the nodes affected in the session's operations <li>
+	 *         {@code TRANSACTION_ERROR} if an error occurred during the commit
+	 *         of any of the underlying plugins <li>{@code DATA_STORE_FAILURE}
+	 *         if an error occurred while accessing the data store <li>
+	 *         {@code COMMAND_FAILED} if some unspecified error is encountered
+	 *         while attempting to complete the command
+	 *         </ul>
+	 * @throws DmtIllegalStateException if the session was not opened using the
+	 *         {@code LOCK_TYPE_ATOMIC} lock type, or if the session is already
+	 *         closed or invalidated
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation
+	 */
     void commit() throws DmtException;
 
-    /**
-     * Rolls back a series of DMT operations issued in the current atomic
-     * session since the last transaction boundary. Transaction boundaries are
-     * the creation of this object that starts the session, and all subsequent
-     * {@link #commit} and {@link #rollback} calls.
-     * 
-     * @throws DmtException with the error code {@code ROLLBACK_FAILED}
-     *         in case the rollback did not succeed
-     * @throws DmtIllegalStateException if the session was not opened using the
-     *         {@code LOCK_TYPE_ATOMIC} lock type, or if the session is
-     *         already closed or invalidated
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation
-     */
+	/**
+	 * Rolls back a series of DMT operations issued in the current atomic
+	 * session since the last transaction boundary. Transaction boundaries are
+	 * the creation of this object that starts the session, and all subsequent
+	 * {@link #commit()} and {@link #rollback()} calls.
+	 * 
+	 * @throws DmtException with the error code {@code ROLLBACK_FAILED} in case
+	 *         the rollback did not succeed
+	 * @throws DmtIllegalStateException if the session was not opened using the
+	 *         {@code LOCK_TYPE_ATOMIC} lock type, or if the session is already
+	 *         closed or invalidated
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation
+	 */
     void rollback() throws DmtException;
 
-    /**
-     * Closes a session. If the session was opened with atomic lock mode, the
-     * {@code DmtSession} must first persist the changes made to the DMT
-     * by calling {@code commit()} on all (transactional) plugins
-     * participating in the session. See the documentation of the
-     * {@link #commit} method for details and possible errors during this
-     * operation.
-     * <p>
-     * The state of the session changes to {@code DmtSession.STATE_CLOSED}
-     * if the close operation completed successfully, otherwise it becomes
-     * {@code DmtSession.STATE_INVALID}.
-     * 
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code METADATA_MISMATCH} in case of atomic sessions,
-     *         if the commit operation failed because of meta-data restrictions
-     *         <li>{@code CONCURRENT_ACCESS} in case of atomic sessions,
-     *         if the commit operation failed because of some modification
-     *         outside the scope of the DMT to the nodes affected in the session
-     *         <li>{@code TRANSACTION_ERROR} in case of atomic sessions,
-     *         if an underlying plugin failed to commit
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if an underlying plugin failed
-     *         to close, or if some unspecified error is encountered while
-     *         attempting to complete the command
-     *         </ul>
-     * @throws DmtIllegalStateException if the session is already closed or
-     *         invalidated
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation
-     */
+	/**
+	 * Closes a session. If the session was opened with atomic lock mode, the
+	 * {@code DmtSession} must first persist the changes made to the DMT by
+	 * calling {@code commit()} on all (transactional) plugins participating in
+	 * the session. See the documentation of the {@link #commit()} method for
+	 * details and possible errors during this operation.
+	 * <p>
+	 * The state of the session changes to {@code DmtSession.STATE_CLOSED} if
+	 * the close operation completed successfully, otherwise it becomes
+	 * {@code DmtSession.STATE_INVALID}.
+	 * 
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code METADATA_MISMATCH} in case of atomic sessions, if the
+	 *         commit operation failed because of meta-data restrictions <li>
+	 *         {@code CONCURRENT_ACCESS} in case of atomic sessions, if the
+	 *         commit operation failed because of some modification outside the
+	 *         scope of the DMT to the nodes affected in the session <li>
+	 *         {@code TRANSACTION_ERROR} in case of atomic sessions, if an
+	 *         underlying plugin failed to commit <li>{@code DATA_STORE_FAILURE}
+	 *         if an error occurred while accessing the data store <li>
+	 *         {@code COMMAND_FAILED} if an underlying plugin failed to close,
+	 *         or if some unspecified error is encountered while attempting to
+	 *         complete the command
+	 *         </ul>
+	 * @throws DmtIllegalStateException if the session is already closed or
+	 *         invalidated
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation
+	 */
     void close() throws DmtException;
 
     /**
@@ -326,80 +322,78 @@ public interface DmtSession {
     void execute(String nodeUri, String correlator, String data)
             throws DmtException;
 
-    /**
-     * Get the Access Control List associated with a given node. The returned
-     * {@code Acl} object does not take inheritance into account, it
-     * gives the ACL specifically given to the node.
-     * 
-     * @param nodeUri the URI of the node
-     * @return the Access Control List belonging to the node or
-     *         {@code null} if none defined
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code URI_TOO_LONG} if {@code nodeUri} or a
-     *         segment of it is too long, or if it has too many segments
-     *         <li>{@code INVALID_URI} if {@code nodeUri} is
-     *         {@code null} or syntactically invalid
-     *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri}
-     *         points to a non-existing node
-     *         <li>{@code PERMISSION_DENIED} if the session is
-     *         associated with a principal and the ACL of the node does not
-     *         allow the {@code Get} operation for the associated
-     *         principal
-     *         <li>{@code METADATA_MISMATCH} if node information cannot
-     *         be retrieved according to the meta-data (the node does not have
-     *         {@code MetaNode.CMD_GET} access type)
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if the URI is not within the
-     *         current session's subtree, or if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws DmtIllegalStateException if the session is already closed or
-     *         invalidated
-     * @throws SecurityException in case of local sessions, if the caller does
-     *         not have {@code DmtPermission} for the node with the Get
-     *         action present
-     * @see #getEffectiveNodeAcl
-     */
+	/**
+	 * Get the Access Control List associated with a given node. The returned
+	 * {@code Acl} object does not take inheritance into account, it gives the
+	 * ACL specifically given to the node.
+	 * 
+	 * @param nodeUri the URI of the node
+	 * @return the Access Control List belonging to the node or {@code null} if
+	 *         none defined
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of it is
+	 *         too long, or if it has too many segments
+	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
+	 *         syntactically invalid
+	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         non-existing node
+	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
+	 *         principal and the ACL of the node does not allow the {@code Get}
+	 *         operation for the associated principal
+	 *         <li>{@code METADATA_MISMATCH} if node information cannot be
+	 *         retrieved according to the meta-data (the node does not have
+	 *         {@code MetaNode.CMD_GET} access type)
+	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store
+	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
+	 *         session's subtree, or if some unspecified error is encountered
+	 *         while attempting to complete the command
+	 *         </ul>
+	 * @throws DmtIllegalStateException if the session is already closed or
+	 *         invalidated
+	 * @throws SecurityException in case of local sessions, if the caller does
+	 *         not have {@code DmtPermission} for the node with the Get action
+	 *         present
+	 * @see #getEffectiveNodeAcl(String)
+	 */
     Acl getNodeAcl(String nodeUri) throws DmtException;
 
-    /**
-     * Gives the Access Control List in effect for a given node. The returned
-     * {@code Acl} takes inheritance into account, that is if there is no
-     * ACL defined for the node, it will be derived from the closest ancestor
-     * having an ACL defined.
-     * 
-     * @param nodeUri the URI of the node
-     * @return the Access Control List belonging to the node
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code URI_TOO_LONG} if {@code nodeUri} or a
-     *         segment of it is too long, or if it has too many segments
-     *         <li>{@code INVALID_URI} if {@code nodeUri} is
-     *         {@code null} or syntactically invalid
-     *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri}
-     *         points to a non-existing node
-     *         <li>{@code PERMISSION_DENIED} if the session is
-     *         associated with a principal and the ACL of the node does not
-     *         allow the {@code Get} operation for the associated
-     *         principal
-     *         <li>{@code METADATA_MISMATCH} if node information cannot
-     *         be retrieved according to the meta-data (the node does not have
-     *         {@code MetaNode.CMD_GET} access type)
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if the URI is not within the
-     *         current session's subtree, or if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws DmtIllegalStateException if the session is already closed or
-     *         invalidated
-     * @throws SecurityException in case of local sessions, if the caller does
-     *         not have {@code DmtPermission} for the node with the Get
-     *         action present
-     * @see #getNodeAcl
-     */
+	/**
+	 * Gives the Access Control List in effect for a given node. The returned
+	 * {@code Acl} takes inheritance into account, that is if there is no ACL
+	 * defined for the node, it will be derived from the closest ancestor having
+	 * an ACL defined.
+	 * 
+	 * @param nodeUri the URI of the node
+	 * @return the Access Control List belonging to the node
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of it is
+	 *         too long, or if it has too many segments
+	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
+	 *         syntactically invalid
+	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         non-existing node
+	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
+	 *         principal and the ACL of the node does not allow the {@code Get}
+	 *         operation for the associated principal
+	 *         <li>{@code METADATA_MISMATCH} if node information cannot be
+	 *         retrieved according to the meta-data (the node does not have
+	 *         {@code MetaNode.CMD_GET} access type)
+	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store
+	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
+	 *         session's subtree, or if some unspecified error is encountered
+	 *         while attempting to complete the command
+	 *         </ul>
+	 * @throws DmtIllegalStateException if the session is already closed or
+	 *         invalidated
+	 * @throws SecurityException in case of local sessions, if the caller does
+	 *         not have {@code DmtPermission} for the node with the Get action
+	 *         present
+	 * @see #getNodeAcl(String)
+	 */
     Acl getEffectiveNodeAcl(String nodeUri) throws DmtException;
 
     /**
@@ -984,52 +978,51 @@ public interface DmtSession {
      */
     void renameNode(String nodeUri, String newName) throws DmtException;
 
-    /**
-     * Set the value of a leaf or interior node to its default.  The default
-     * can be defined by the node's {@code MetaNode}. The method throws a 
-     * {@code METADATA_MISMATCH} exception if the node does not have a 
-     * default value.
-     * 
-     * @param nodeUri the URI of the node
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code URI_TOO_LONG} if {@code nodeUri} or a
-     *         segment of it is too long, or if it has too many segments
-     *         <li>{@code INVALID_URI} if {@code nodeUri} is
-     *         {@code null} or syntactically invalid
-     *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri}
-     *         points to a non-existing node
-     *         <li>{@code PERMISSION_DENIED} if the session is
-     *         associated with a principal and the ACL of the node does not
-     *         allow the {@code Replace} operation for the associated
-     *         principal
-     *         <li>{@code COMMAND_NOT_ALLOWED} in non-atomic sessions if 
-     *         the underlying plugin is read-only or does not support non-atomic
-     *         writing 
-     *         <li>{@code METADATA_MISMATCH} if the node is permanent or
-     *         cannot be modified according to the meta-data (does not have the
-     *         {@code MetaNode.CMD_REPLACE} access type), or if there is
-     *         no default value defined for this node
-     *         <li>{@code FEATURE_NOT_SUPPORTED} if the specified node is
-     *         an interior node and does not support Java object values
-     *         <li>{@code TRANSACTION_ERROR} in an atomic session if the
-     *         underlying plugin is read-only or does not support atomic writing
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if the URI is not within the
-     *         current session's subtree, or if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws DmtIllegalStateException if the session was opened using the
-     *         {@code LOCK_TYPE_SHARED} lock type, or if the session is
-     *         already closed or invalidated
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation, or,
-     *         in case of local sessions, if the caller does not have
-     *         {@code DmtPermission} for the node with the Replace action
-     *         present
-     * @see #setNodeValue
-     */
+	/**
+	 * Set the value of a leaf or interior node to its default. The default can
+	 * be defined by the node's {@code MetaNode}. The method throws a
+	 * {@code METADATA_MISMATCH} exception if the node does not have a default
+	 * value.
+	 * 
+	 * @param nodeUri the URI of the node
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of it is
+	 *         too long, or if it has too many segments
+	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
+	 *         syntactically invalid
+	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         non-existing node
+	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
+	 *         principal and the ACL of the node does not allow the
+	 *         {@code Replace} operation for the associated principal
+	 *         <li>{@code COMMAND_NOT_ALLOWED} in non-atomic sessions if the
+	 *         underlying plugin is read-only or does not support non-atomic
+	 *         writing
+	 *         <li>{@code METADATA_MISMATCH} if the node is permanent or cannot
+	 *         be modified according to the meta-data (does not have the
+	 *         {@code MetaNode.CMD_REPLACE} access type), or if there is no
+	 *         default value defined for this node
+	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the specified node is an
+	 *         interior node and does not support Java object values
+	 *         <li>{@code TRANSACTION_ERROR} in an atomic session if the
+	 *         underlying plugin is read-only or does not support atomic writing
+	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store
+	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
+	 *         session's subtree, or if some unspecified error is encountered
+	 *         while attempting to complete the command
+	 *         </ul>
+	 * @throws DmtIllegalStateException if the session was opened using the
+	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
+	 *         closed or invalidated
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation, or,
+	 *         in case of local sessions, if the caller does not have
+	 *         {@code DmtPermission} for the node with the Replace action
+	 *         present
+	 * @see #setNodeValue(String, DmtData)
+	 */
     void setDefaultNodeValue(String nodeUri) throws DmtException;
 
     /**
@@ -1301,49 +1294,46 @@ public interface DmtSession {
      */
     MetaNode getMetaNode(String nodeUri) throws DmtException;
 
-    /**
-     * Get the size of the data in a leaf node. The returned value depends on
-     * the format of the data in the node, see the description of the
-     * {@link DmtData#getSize()} method for the definition of node size for each
-     * format.
-     * 
-     * @param nodeUri the URI of the leaf node
-     * @return the size of the data in the node
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code URI_TOO_LONG} if {@code nodeUri} or a
-     *         segment of it is too long, or if it has too many segments
-     *         <li>{@code INVALID_URI} if {@code nodeUri} is
-     *         {@code null} or syntactically invalid
-     *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri}
-     *         points to a non-existing node
-     *         <li>{@code PERMISSION_DENIED} if the session is
-     *         associated with a principal and the ACL of the node does not
-     *         allow the {@code Get} operation for the associated
-     *         principal
-     *         <li>{@code COMMAND_NOT_ALLOWED} if the specified node is
-     *         not a leaf node
-     *         <li>{@code METADATA_MISMATCH} if node information cannot
-     *         be retrieved according to the meta-data (it does not have
-     *         {@code MetaNode.CMD_GET} access type)
-     *         <li>{@code FEATURE_NOT_SUPPORTED} if the Size property is
-     *         not supported by the DmtAdmin implementation or the underlying
-     *         plugin
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if the URI is not within the
-     *         current session's subtree, or if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws DmtIllegalStateException if the session is already closed or
-     *         invalidated
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation, or,
-     *         in case of local sessions, if the caller does not have
-     *         {@code DmtPermission} for the node with the Get action
-     *         present
-     * @see DmtData#getSize
-     */
+	/**
+	 * Get the size of the data in a leaf node. The returned value depends on
+	 * the format of the data in the node, see the description of the
+	 * {@link DmtData#getSize()} method for the definition of node size for each
+	 * format.
+	 * 
+	 * @param nodeUri the URI of the leaf node
+	 * @return the size of the data in the node
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of it is
+	 *         too long, or if it has too many segments
+	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
+	 *         syntactically invalid
+	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         non-existing node
+	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
+	 *         principal and the ACL of the node does not allow the {@code Get}
+	 *         operation for the associated principal
+	 *         <li>{@code COMMAND_NOT_ALLOWED} if the specified node is not a
+	 *         leaf node
+	 *         <li>{@code METADATA_MISMATCH} if node information cannot be
+	 *         retrieved according to the meta-data (it does not have
+	 *         {@code MetaNode.CMD_GET} access type)
+	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the Size property is not
+	 *         supported by the DmtAdmin implementation or the underlying plugin
+	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store
+	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
+	 *         session's subtree, or if some unspecified error is encountered
+	 *         while attempting to complete the command
+	 *         </ul>
+	 * @throws DmtIllegalStateException if the session is already closed or
+	 *         invalidated
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation, or,
+	 *         in case of local sessions, if the caller does not have
+	 *         {@code DmtPermission} for the node with the Get action present
+	 * @see DmtData#getSize()
+	 */
     int getNodeSize(String nodeUri) throws DmtException;
 
     /**

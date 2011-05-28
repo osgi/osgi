@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,40 +26,38 @@ import info.dmtree.DmtException;
  */
 public interface TransactionalDataSession extends ReadWriteDataSession {
 
-    /**
-     * Commits a series of DMT operations issued in the current atomic session
-     * since the last transaction boundary. Transaction boundaries are the
-     * creation of this object that starts the session, and all subsequent
-     * {@link #commit} and {@link #rollback} calls.
-     * <p>
-     * This method can fail even if all operations were successful. This can
-     * happen due to some multi-node semantic constraints defined by a specific
-     * implementation. For example, node A can be required to always have
-     * children A/B, A/C and A/D. If this condition is broken when
-     * {@code commit()} is executed, the method will fail, and throw a
-     * {@code METADATA_MISMATCH} exception.
-     * <p>
-     * In many cases the tree is not the only way to manage a given part of the
-     * system. It may happen that while modifying some nodes in an atomic
-     * session, the underlying settings are modified parallelly outside the
-     * scope of the DMT. If this is detected during commit, an exception with
-     * the code {@code CONCURRENT_ACCESS} is thrown.
-     * 
-     * @throws DmtException with the following possible error codes
-     *         <ul>
-     *         <li>{@code METADATA_MISMATCH} if the operation failed
-     *         because of meta-data restrictions
-     *         <li>{@code CONCURRENT_ACCESS} if it is detected that some
-     *         modification has been made outside the scope of the DMT to the
-     *         nodes affected in the session's operations
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation
-     */
+	/**
+	 * Commits a series of DMT operations issued in the current atomic session
+	 * since the last transaction boundary. Transaction boundaries are the
+	 * creation of this object that starts the session, and all subsequent
+	 * {@link #commit()} and {@link #rollback()} calls.
+	 * <p>
+	 * This method can fail even if all operations were successful. This can
+	 * happen due to some multi-node semantic constraints defined by a specific
+	 * implementation. For example, node A can be required to always have
+	 * children A/B, A/C and A/D. If this condition is broken when
+	 * {@code commit()} is executed, the method will fail, and throw a
+	 * {@code METADATA_MISMATCH} exception.
+	 * <p>
+	 * In many cases the tree is not the only way to manage a given part of the
+	 * system. It may happen that while modifying some nodes in an atomic
+	 * session, the underlying settings are modified parallelly outside the
+	 * scope of the DMT. If this is detected during commit, an exception with
+	 * the code {@code CONCURRENT_ACCESS} is thrown.
+	 * 
+	 * @throws DmtException with the following possible error codes
+	 *         <ul>
+	 *         <li>{@code METADATA_MISMATCH} if the operation failed because of
+	 *         meta-data restrictions <li>{@code CONCURRENT_ACCESS} if it is
+	 *         detected that some modification has been made outside the scope
+	 *         of the DMT to the nodes affected in the session's operations <li>
+	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
+	 *         the data store <li>{@code COMMAND_FAILED} if some unspecified
+	 *         error is encountered while attempting to complete the command
+	 *         </ul>
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation
+	 */
     void commit() throws DmtException;
 
     /**

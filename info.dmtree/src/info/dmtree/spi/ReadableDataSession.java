@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +27,14 @@ import java.util.Date;
  * <p>
  * Since the {@link ReadWriteDataSession} and {@link TransactionalDataSession}
  * interfaces inherit from this interface, some of the method descriptions do
- * not apply for an instance that is only a {@code ReadableDataSession}.
- * For example, the {@link #close} method description also contains information
+ * not apply for an instance that is only a {@code ReadableDataSession}. For
+ * example, the {@link #close()} method description also contains information
  * about its behaviour when invoked as part of a transactional session.
  * <p>
- * The {@code nodePath} parameters appearing in this interface always
- * contain an array of path segments identifying a node in the subtree of this
- * plugin. This parameter contains an absolute path, so the first segment is
- * always &quot;.&quot;. Special characters appear escaped in the segments.
+ * The {@code nodePath} parameters appearing in this interface always contain an
+ * array of path segments identifying a node in the subtree of this plugin. This
+ * parameter contains an absolute path, so the first segment is always
+ * &quot;.&quot;. Special characters appear escaped in the segments.
  * <p>
  * <strong>Error handling</strong>
  * <p>
@@ -43,8 +43,8 @@ import java.util.Date;
  * before delegating the call to a plugin. Therefore plugins can take certain
  * circumstances for granted: that the path is valid and is within the subtree
  * of the plugin and the session, the command can be applied to the given node
- * (e.g. the target of {@code getChildNodeNames} is an interior node), etc.
- * All errors described by the error codes {@link DmtException#INVALID_URI},
+ * (e.g. the target of {@code getChildNodeNames} is an interior node), etc. All
+ * errors described by the error codes {@link DmtException#INVALID_URI},
  * {@link DmtException#URI_TOO_LONG}, {@link DmtException#PERMISSION_DENIED},
  * {@link DmtException#COMMAND_NOT_ALLOWED} and
  * {@link DmtException#TRANSACTION_ERROR} are fully filtered out before control
@@ -57,13 +57,13 @@ import java.util.Date;
  * indicate such discrepancies.
  * <p>
  * The DmtAdmin also ensures that the targeted nodes exist before calling the
- * plugin (except, of course, before the {@code isNodeUri} call). However,
- * some small amount of time elapses between the check and the call, so in case
- * of plugins where the node structure can change independantly from the DMT,
- * the target node might disappear in that time. For example, a whole subtree
- * can disappear when a Monitorable application is unregistered, which might
- * happen in the middle of a DMT session accessing it. Plugins managing such
- * nodes always need to check whether they still exist and throw
+ * plugin (except, of course, before the {@code isNodeUri} call). However, some
+ * small amount of time elapses between the check and the call, so in case of
+ * plugins where the node structure can change independantly from the DMT, the
+ * target node might disappear in that time. For example, a whole subtree can
+ * disappear when a Monitorable application is unregistered, which might happen
+ * in the middle of a DMT session accessing it. Plugins managing such nodes
+ * always need to check whether they still exist and throw
  * {@link DmtException#NODE_NOT_FOUND} as necessary, but for more static
  * subtrees there is no need for the plugin to use this error code.
  * <p>
@@ -94,26 +94,26 @@ public interface ReadableDataSession {
      */
     void nodeChanged(String[] nodePath) throws DmtException;
 
-    /**
-     * Closes a session. This method is always called when the session ends for
-     * any reason: if the session is closed, if a fatal error occurs in any
-     * method, or if any error occurs during commit or rollback. In case the
-     * session was invalidated due to an exception during commit or rollback, it
-     * is guaranteed that no methods are called on the plugin until it is
-     * closed. In case the session was invalidated due to a fatal exception in
-     * one of the tree manipulation methods, only the rollback method is called
-     * before this (and only in atomic sessions).
-     * <p>
-     * This method should not perform any data manipulation, only cleanup
-     * operations. In non-atomic read-write sessions the data manipulation
-     * should be done instantly during each tree operation, while in atomic
-     * sessions the {@code DmtAdmin} always calls
-     * {@link TransactionalDataSession#commit} automatically before the session
-     * is actually closed.
-     * 
-     * @throws DmtException with the error code {@code COMMAND_FAILED} if
-     *         the plugin failed to close for any reason
-     */
+	/**
+	 * Closes a session. This method is always called when the session ends for
+	 * any reason: if the session is closed, if a fatal error occurs in any
+	 * method, or if any error occurs during commit or rollback. In case the
+	 * session was invalidated due to an exception during commit or rollback, it
+	 * is guaranteed that no methods are called on the plugin until it is
+	 * closed. In case the session was invalidated due to a fatal exception in
+	 * one of the tree manipulation methods, only the rollback method is called
+	 * before this (and only in atomic sessions).
+	 * <p>
+	 * This method should not perform any data manipulation, only cleanup
+	 * operations. In non-atomic read-write sessions the data manipulation
+	 * should be done instantly during each tree operation, while in atomic
+	 * sessions the {@code DmtAdmin} always calls
+	 * {@link TransactionalDataSession#commit()} automatically before the
+	 * session is actually closed.
+	 * 
+	 * @throws DmtException with the error code {@code COMMAND_FAILED} if the
+	 *         plugin failed to close for any reason
+	 */
     void close() throws DmtException;
 
     /**
@@ -183,31 +183,31 @@ public interface ReadableDataSession {
      */
     MetaNode getMetaNode(String[] nodePath) throws DmtException;
 
-    /**
-     * Get the size of the data in a leaf node. The value to return depends on
-     * the format of the data in the node, see the description of the
-     * {@link DmtData#getSize()} method for the definition of node size for each
-     * format.
-     * 
-     * @param nodePath the absolute path of the leaf node
-     * @return the size of the data in the node
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
-     *         points to a non-existing node
-     *         <li>{@code METADATA_MISMATCH} if the information could
-     *         not be retrieved because of meta-data restrictions
-     *         <li>{@code FEATURE_NOT_SUPPORTED} if the Size property is
-     *         not supported by the plugin
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation
-     * @see DmtData#getSize
-     */
+	/**
+	 * Get the size of the data in a leaf node. The value to return depends on
+	 * the format of the data in the node, see the description of the
+	 * {@link DmtData#getSize()} method for the definition of node size for each
+	 * format.
+	 * 
+	 * @param nodePath the absolute path of the leaf node
+	 * @return the size of the data in the node
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
+	 *         non-existing node
+	 *         <li>{@code METADATA_MISMATCH} if the information could not be
+	 *         retrieved because of meta-data restrictions
+	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the Size property is not
+	 *         supported by the plugin
+	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store
+	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
+	 *         encountered while attempting to complete the command
+	 *         </ul>
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation
+	 * @see DmtData#getSize()
+	 */
     int getNodeSize(String[] nodePath) throws DmtException;
 
     /**

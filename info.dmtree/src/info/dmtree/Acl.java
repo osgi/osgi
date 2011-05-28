@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -284,13 +284,13 @@ public final class Acl {
         return toString().equals(other.toString());
     }
 
-    /**
-     * Returns the hash code for this ACL instance. If two {@code Acl}
-     * instances are equal according to the {@link #equals} method, then calling
-     * this method on each of them must produce the same integer result.
-     * 
-     * @return hash code for this ACL
-     */
+	/**
+	 * Returns the hash code for this ACL instance. If two {@code Acl} instances
+	 * are equal according to the {@link #equals(Object)} method, then calling
+	 * this method on each of them must produce the same integer result.
+	 * 
+	 * @return hash code for this ACL
+	 */
 	public int hashCode() {
         // Using the hash code of the canonical string representation, because
         // the principalPermissions set is not canonical (see above).
