@@ -97,8 +97,11 @@ public class TR069ParameterValue {
 	 */
 	public final static String	TR069_TYPE_DATETIME			= "dateTime";
 
+	private static final Object	TR069_TYPE_FLOAT			= null;
+
 	private static boolean		debug						= true;
 	private final String		value;
+	private final String		canonicalValue;
 	private final String		type;
 
 	/**
@@ -114,8 +117,6 @@ public class TR069ParameterValue {
 			throws IllegalArgumentException {
 		if (value == null)
 			throw new IllegalArgumentException("value must not be null");
-		if (value.length() == 0)
-			throw new IllegalArgumentException("value must not be empty");
 		if (type == null)
 			throw new IllegalArgumentException("type must not be null");
 		if ((!type.equals(TR069_TYPE_INT))
@@ -129,16 +130,154 @@ public class TR069ParameterValue {
 				&& (!type.equals(TR069_TYPE_DATETIME)))
 			throw new IllegalArgumentException(
 					"type must be one of the defined ones. type=" + type);
-		// TODO lexical/representative presentation.
-		if (type.equals(TR069_TYPE_BASE64))
-			if ((!value.equals("1")) && (!value.equals("0"))) {
+		if (value.length() == 0)
+			if (!type.equals(TR069_TYPE_STRING))
+				throw new IllegalArgumentException("value must not be empty");
+
+		// Check lexical/representative presentation.
+		if (type.equals(TR069_TYPE_BOOLEAN))
+			if ((!value.equals("1"))
+					&& (!value.equals("0") && (!value.equals("true")) && (!value
+							.equals("falses")))) {
 				throw new IllegalArgumentException(
-						"Although type is TR069_TYPE_BASE64, invalid value="
+						"Although type is TR069_TYPE_BOOLEAN, invalid value="
 								+ value);
 			}
 
+		if (type.equals(TR069_TYPE_INT))
+			try {
+				this.canonicalValue = Integer
+						.toString(getIntFromLexicalString(value));
+			}
+			catch (NumberFormatException nfe) {
+				throw new IllegalArgumentException(
+						"Although type is TR069_TYPE_INT, invalid value="
+								+ value);
+			}
+		else
+			if (type.equals(TR069_TYPE_UNSIGNED_INT))
+				try {
+					this.canonicalValue = getUnsignedIntStringFromLexicalString(value);
+				}
+				catch (NumberFormatException nfe) {
+					throw new IllegalArgumentException(
+							"Although type is TR069_TYPE_UNSIGNED_INT, invalid value="
+									+ value);
+				}
+			else
+				if (type.equals(TR069_TYPE_LONG))
+					try {
+						this.canonicalValue = Long
+								.toString(getLongFromLexicalString(value));
+					}
+					catch (NumberFormatException nfe) {
+						throw new IllegalArgumentException(
+								"Although type is TR069_TYPE_LONG, invalid value="
+										+ value);
+					}
+
+				else
+					if (type.equals(TR069_TYPE_UNSIGNED_LONG))
+						try {
+							this.canonicalValue = getUnsignedLongStringFromLexicalString(value);
+						}
+						catch (NumberFormatException nfe) {
+							throw new IllegalArgumentException(
+									"Although type is TR069_TYPE_UNSIGNED_LONG, invalid value="
+											+ value);
+						}
+
+					else
+						if (type.equals(TR069_TYPE_FLOAT))
+							try {
+								this.canonicalValue = Float
+										.toString(getFloatFromLexicalString(value));
+							}
+							catch (NumberFormatException nfe) {
+								throw new IllegalArgumentException(
+										"Although type is TR069_TYPE_FLOATs, invalid value="
+												+ value);
+							}
+						else
+							if (type.equals(TR069_TYPE_BASE64))
+								//  XXX what to do ?
+								this.canonicalValue = value;
+							else
+								if (type.equals(TR069_TYPE_HEXBINARY))
+									try {
+										this.canonicalValue = getHexBinaryStringFromLexicalString(value);
+									}
+									catch (IllegalArgumentException iae) {
+										throw new IllegalArgumentException(
+												"Although type is TR069_TYPE_HEXBINARY, invalid value="
+														+ value);
+									}
+								else
+									if (type.equals(TR069_TYPE_DATETIME)) {
+										try {
+											this.canonicalValue = getDateTimeSringFromLexicalString(value);
+										}
+										catch (IllegalArgumentException iae) {
+											throw new IllegalArgumentException(
+													"Although type is TR069_TYPE_DATETIME, invalid value="
+															+ value);
+										}
+									}
+									else
+										throw new IllegalStateException(
+												"Unexpected situation occured.");
+
 		this.value = value;
 		this.type = type;
+	}
+
+	private String getDateTimeSringFromLexicalString(String value) {
+		// TODO format check and get canonical representation ?
+		
+		
+		return value;
+	}
+
+	private static String getHexBinaryStringFromLexicalString(String value)
+			throws IllegalArgumentException {
+
+		char[] ret = new char[value.length()];
+		for (int i = 0; i < value.length(); i++) {
+			char ch = value.charAt(i);
+			switch (ch) {
+				case 'a' :
+				case 'b' :
+				case 'c' :
+				case 'd' :
+				case 'e' :
+				case 'f' :
+					ret[i] = Character.toUpperCase(ch);
+					break;
+				case '0' :
+				case '1' :
+				case '2' :
+				case '3' :
+				case '4' :
+				case '5' :
+				case '6' :
+				case '7' :
+				case '8' :
+				case '9' :
+				case 'A' :
+				case 'B' :
+				case 'C' :
+				case 'D' :
+				case 'E' :
+				case 'F' :
+					ret[i] = ch;
+					break;
+				default :
+					throw new IllegalArgumentException(
+							"value is not compatible to hexBinary format. value=["
+									+ value + "]");
+			}
+		}
+		return String.valueOf(ret);
 	}
 
 	/**
@@ -151,8 +290,7 @@ public class TR069ParameterValue {
 	 * @return value
 	 */
 	public String getValue() {
-		// TODO canonical representation.
-		return this.value;
+		return this.canonicalValue;
 	}
 
 	/**
@@ -415,13 +553,15 @@ public class TR069ParameterValue {
 			if ((format & DmtData.FORMAT_BOOLEAN) != 0) {
 				if ("0".equals(value) || "false".equals(value))
 					data = DmtData.FALSE_VALUE;
-				if ("1".equals(value) || "true".equals(value))
-					data = DmtData.TRUE_VALUE;
 				else
-					throw new TR069MappingException(
-							"Despite of TR069 dataType=" + tr069Type
-									+ "and FORMAT_BOOLEAN, value(=" + value
-									+ ") is neither \"0\" nor \"1\".");
+					if ("1".equals(value) || "true".equals(value))
+						data = DmtData.TRUE_VALUE;
+					else
+						throw new TR069MappingException(
+								"Despite of TR069 dataType=" + tr069Type
+										+ " and FORMAT_BOOLEAN, value(="
+										+ value
+										+ ") is neither \"0\" nor \"1\".");
 				return data;
 			}
 			throw new TR069MappingException("Despite of TR069 dataType="
@@ -1030,11 +1170,25 @@ public class TR069ParameterValue {
 			case DmtData.FORMAT_NODE_URI :
 				value = TR069URI.getTR069Path(data.toString());
 				return new TR069ParameterValue(value, TR069_TYPE_STRING);
+			case DmtData.FORMAT_DATETIME :
+				value = getHyphenedDateTime(data.getDateTime());
+				return new TR069ParameterValue(value, TR069_TYPE_DATETIME);
 			default :
 				break;
 		}
 
 		return null;
+	}
+
+	private static String getHyphenedDateTime(String dateTime) {
+		String ret = dateTime.substring(0, 4);
+		ret += "-";
+		ret += dateTime.substring(4, 6);
+		ret += "-";
+		ret += dateTime.substring(6, 8);
+		ret += "-";
+		ret += dateTime.substring(10);
+		return ret;
 	}
 
 	private static String escapeEncode(String target) {

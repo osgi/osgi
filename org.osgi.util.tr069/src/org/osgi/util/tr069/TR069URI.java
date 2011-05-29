@@ -71,7 +71,8 @@ public class TR069URI {
 					"uri contains period \".\" except the beginning:" + uri);
 		String ret = uri.substring((Uri.ROOT_NODE + Uri.PATH_SEPARATOR)
 				.length());
-		return ret.replace(Uri.ROOT_NODE_CHAR, Uri.PATH_SEPARATOR_CHAR);
+		return ret.replace(Uri.PATH_SEPARATOR_CHAR, Uri.ROOT_NODE_CHAR);
+		//return ret.replace(Uri.ROOT_NODE_CHAR, Uri.PATH_SEPARATOR_CHAR);
 	}
 
 	/**
@@ -148,53 +149,53 @@ public class TR069URI {
 			return device + tr069Path;
 	}
 
-//	public static void main(String[] args) {
-//
-//		// try {
-//		// TR069ParameterValue.getDmtDataForList("1,,3", "int", null,
-//		// "./Device/Services", null);
-//		// } catch (IllegalArgumentException e) {
-//		// // TODO Auto-generated catch block
-//		// e.printStackTrace();
-//		// } catch (UnsupportedEncodingException e) {
-//		// // TODO Auto-generated catch block
-//		// e.printStackTrace();
-//		// } catch (TR069MappingException e) {
-//		// // TODO Auto-generated catch block
-//		// e.printStackTrace();
-//		// }
-//		//
-//
-//		float f = (float) 0.0045;
-//		System.out.println("f=[" + f + "]");
-//
-//		f = Float.parseFloat("-0");
-//		// f= Float.parseFloat("-1.4E10");
-//		System.out.println("f2=[" + f + "]");
-//
-//		String target = "./Device/";
-//		System.out.println("target=[" + target + "]");
-//		// String target2 = ".A.B";
-//		// System.out.println("target2=[" + target2 + "]");
-//		// String retGetTR069AbsPath = getTR069AbsolutePath(target, target2);
-//		// System.out.println("retGetTR069AbsPath=[" + retGetTR069AbsPath +
-//		// "]");
-//
-//		boolean retIsValidTR069Path = isValidTR069Path(target);
-//		System.out.println("retIsValidTR069Path=[" + retIsValidTR069Path + "]");
-//		boolean retIsAbsTR069Path = isAbsoluteTR069Path(target);
-//		System.out.println("retIsAbsTR069Path=[" + retIsAbsTR069Path + "]");
-//		String retGetDmtUri = getDmtUri(target);
-//		System.out.println("retGetDmtUri=[" + retGetDmtUri + "]");
-//
-//		boolean retIsValidUri = Uri.isValidUri(target);
-//		System.out.println("retIsValidUri=[" + retIsValidUri + "]");
-//		boolean retIsAbsUri = Uri.isAbsoluteUri(target);
-//		System.out.println("retIsAbsUri=[" + retIsAbsUri + "]");
-//		String retGetTR069Path = getTR069Path(target);
-//		System.out.println("retGetTR069Path=[" + retGetTR069Path + "]");
-//
-//	}
+	public static void main(String[] args) {
+
+		// try {
+		// TR069ParameterValue.getDmtDataForList("1,,3", "int", null,
+		// "./Device/Services", null);
+		// } catch (IllegalArgumentException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// } catch (UnsupportedEncodingException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// } catch (TR069MappingException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		//
+
+		float f = (float) 0.0045;
+		System.out.println("f=[" + f + "]");
+
+		f = Float.parseFloat("-0");
+		// f= Float.parseFloat("-1.4E10");
+		System.out.println("f2=[" + f + "]");
+
+		String target = "./Device/Services";
+		System.out.println("target=[" + target + "]");
+		// String target2 = ".A.B";
+		// System.out.println("target2=[" + target2 + "]");
+		// String retGetTR069AbsPath = getTR069AbsolutePath(target, target2);
+		// System.out.println("retGetTR069AbsPath=[" + retGetTR069AbsPath +
+		// "]");
+
+		boolean retIsValidTR069Path = isValidTR069Path(target);
+		System.out.println("retIsValidTR069Path=[" + retIsValidTR069Path + "]");
+		boolean retIsAbsTR069Path = isAbsoluteTR069Path(target);
+		System.out.println("retIsAbsTR069Path=[" + retIsAbsTR069Path + "]");
+		String retGetDmtUri = getDmtUri(target);
+		System.out.println("retGetDmtUri=[" + retGetDmtUri + "]");
+
+		boolean retIsValidUri = Uri.isValidUri(target);
+		System.out.println("retIsValidUri=[" + retIsValidUri + "]");
+		boolean retIsAbsUri = Uri.isAbsoluteUri(target);
+		System.out.println("retIsAbsUri=[" + retIsAbsUri + "]");
+		String retGetTR069Path = getTR069Path(target);
+		System.out.println("retGetTR069Path=[" + retGetTR069Path + "]");
+
+	}
 
 	/**
 	 * Checks whether the specified path is an absolute TR-069 path.
