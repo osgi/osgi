@@ -148,7 +148,7 @@ public class TR069URI {
 			return device + tr069Path;
 	}
 
-<<<<<<< HEAD
+
 	public static void main(String[] args) {
 
 		// try {
@@ -166,12 +166,12 @@ public class TR069URI {
 		// }
 		//
 
-		float f = (float) 0.0045;
-		System.out.println("f=[" + f + "]");
-
-		f = Float.parseFloat("-0");
-		// f= Float.parseFloat("-1.4E10");
-		System.out.println("f2=[" + f + "]");
+//		float f = (float) 0.0045;
+//		System.out.println("f=[" + f + "]");
+//
+//		f = Float.parseFloat("-0");
+//		// f= Float.parseFloat("-1.4E10");
+//		System.out.println("f2=[" + f + "]");
 
 		String target = "./Device/Services";
 		System.out.println("target=[" + target + "]");
@@ -197,8 +197,7 @@ public class TR069URI {
 
 	}
 
-=======
->>>>>>> 61b72c4e6cbe6ac2f86c80f2643e6ccad951429e
+
 	/**
 	 * Checks whether the specified path is an absolute TR-069 path.
 	 * 
