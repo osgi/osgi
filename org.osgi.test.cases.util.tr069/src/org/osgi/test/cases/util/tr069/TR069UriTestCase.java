@@ -41,6 +41,24 @@ public final class TR069UriTestCase extends OSGiTestCase {
 						+ TR069UriTestCaseConstants.TR069_PATH_EXT,
 				TR069URI.isValidTR069Path(TR069UriTestCaseConstants.TR069_PATH_EXT));
 
+		// Check the the extension instance
+		assertTrue(
+				"The TR-069 path must be valid: "
+						+ TR069UriTestCaseConstants.TR069_PATH_EXT_INSTANCE,
+				TR069URI.isValidTR069Path(TR069UriTestCaseConstants.TR069_PATH_EXT_INSTANCE));
+
+		// Validate OSGi specific extension as root
+		assertTrue(
+				"The TR-069 path must be valid: "
+						+ TR069UriTestCaseConstants.TR069_PATH_OSGI_EXT,
+				TR069URI.isValidTR069Path(TR069UriTestCaseConstants.TR069_PATH_OSGI_EXT));
+
+		// Validate foo service
+		assertTrue(
+				"The TR-069 path must be valid: "
+						+ TR069UriTestCaseConstants.TR069_PATH_FOO,
+				TR069URI.isValidTR069Path(TR069UriTestCaseConstants.TR069_PATH_FOO));
+
 		// Validate partial path
 		assertTrue(
 				"The TR-069 path must be valid: "
@@ -62,6 +80,63 @@ public final class TR069UriTestCase extends OSGiTestCase {
 		assertTrue(
 				"The underscore is valid starting character in the TR-069 path name.",
 				TR069URI.isValidTR069Path(TR069UriTestCaseConstants.TR069_PATH_STARTING_UNDERSCORE));
+
+		// Uncomment after the fix of: 1954
+		// // the point must be valid path
+		// assertTrue(
+		// "A point is valid TR-069 path!",
+		// TR069URI.isValidTR069Path(TR069UriTestCaseConstants.POINT_STRING
+		// + TR069UriTestCaseConstants.POINT_STRING));
+
+		// check the point as a first symbol
+		assertTrue(
+				"The point must be allowed as a first character in the path name!",
+				TR069URI.isValidTR069Path(TR069UriTestCaseConstants.TR069_PATH_STARTING_POINT));
+	}
+
+	/** Test the validation of absolute TR-069 paths. */
+	public void testAbsTR069PathValidation() {
+		// Validate full TR-069 path.
+		assertTrue(
+				"The TR-069 path must be absolute: "
+						+ TR069UriTestCaseConstants.TR069_PATH_FULL,
+				TR069URI.isAbsoluteTR069Path(TR069UriTestCaseConstants.TR069_PATH_FULL));
+
+		// Validate the OSGi extension.
+		assertTrue(
+				"The TR-069 path must be absolute: "
+						+ TR069UriTestCaseConstants.TR069_PATH_EXT,
+				TR069URI.isAbsoluteTR069Path(TR069UriTestCaseConstants.TR069_PATH_EXT));
+
+		// Validate OSGi specific extension as root
+		assertTrue(
+				"The TR-069 path must be absolute: "
+						+ TR069UriTestCaseConstants.TR069_PATH_OSGI_EXT,
+				TR069URI.isAbsoluteTR069Path(TR069UriTestCaseConstants.TR069_PATH_OSGI_EXT));
+
+		// Validate the partial path.
+		assertTrue(
+				"The TR-069 path must be absolute: "
+						+ TR069UriTestCaseConstants.TR069_PATH_PARTIAL,
+				TR069URI.isAbsoluteTR069Path(TR069UriTestCaseConstants.TR069_PATH_PARTIAL));
+
+		// Validate the instance path.
+		assertTrue(
+				"The TR-069 path must be absolute: "
+						+ TR069UriTestCaseConstants.TR069_PATH_INSTANCE,
+				TR069URI.isAbsoluteTR069Path(TR069UriTestCaseConstants.TR069_PATH_INSTANCE));
+
+		// Check the empty string.
+		assertTrue(
+				"The empty string must be absolute TR-069 path."
+						+ TR069UriTestCaseConstants.EMPTY_STRING,
+				TR069URI.isAbsoluteTR069Path(TR069UriTestCaseConstants.EMPTY_STRING));
+
+		// Check the path, which starts with underscore.
+		assertTrue(
+				"The TR-069 path must be absolute: "
+						+ TR069UriTestCaseConstants.TR069_PATH_STARTING_UNDERSCORE,
+				TR069URI.isAbsoluteTR069Path(TR069UriTestCaseConstants.TR069_PATH_STARTING_UNDERSCORE));
 	}
 
 	/** Tests all valid characters. */
@@ -74,25 +149,24 @@ public final class TR069UriTestCase extends OSGiTestCase {
 	/** Tests the transformation from DMT Uri to TR-069 path. */
 	public void testDMTUriToTR069Path() {
 		// Check full TR-069 path
-		checkDMTUriToTR069Path(TR069UriTestCaseConstants.DMT_URI_FULL,
-				TR069UriTestCaseConstants.TR069_PATH_FULL);
+		// // TODO: uncomment after the fix of: 1997
+		// checkDMTUriToTR069Path(TR069UriTestCaseConstants.DMT_URI_FULL,
+		// TR069UriTestCaseConstants.TR069_PATH_FULL);
+		//
+		// // Check OSGi specific extension
+		// checkDMTUriToTR069Path(TR069UriTestCaseConstants.DMT_URI_EXT,
+		// TR069UriTestCaseConstants.TR069_PATH_EXT);
+		//
+		// // Check DMT Uri with an instance number
+		// checkDMTUriToTR069Path(TR069UriTestCaseConstants.DMT_URI_INSTANCE,
+		// TR069UriTestCaseConstants.TR069_PATH_INSTANCE);
 
-		// Check OSGi specific extension
-		checkDMTUriToTR069Path(TR069UriTestCaseConstants.DMT_URI_EXT,
-				TR069UriTestCaseConstants.TR069_PATH_EXT);
-
-		// Check DMT Uri with an instance number
-		checkDMTUriToTR069Path(TR069UriTestCaseConstants.DMT_URI_INSTANCE,
-				TR069UriTestCaseConstants.TR069_PATH_INSTANCE);
-
-		// https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1935
-		// [PA Utility Classes] the empty string is valid TR-069 path
 		// Check DMT root
-		// checkDMTUriToTR069Path(TR069UriTestCaseConstants.POINT_STRING,
-		// TR069UriTestCaseConstants.EMPTY_STRING);
+		checkDMTUriToTR069Path(TR069UriTestCaseConstants.POINT_STRING,
+				TR069UriTestCaseConstants.EMPTY_STRING);
 	}
 
-	/** Tests the transformation fro TR-069 path to DMT Uri. */
+	/** Tests the transformation from TR-069 path to DMT Uri. */
 	public void testTR069PathToDMTUri() {
 		// Check full TR-069 path
 		checkTR069PathToDMTUri(TR069UriTestCaseConstants.DMT_URI_FULL,
@@ -102,23 +176,66 @@ public final class TR069UriTestCase extends OSGiTestCase {
 		checkTR069PathToDMTUri(TR069UriTestCaseConstants.DMT_URI_EXT,
 				TR069UriTestCaseConstants.TR069_PATH_EXT);
 
-		// https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1934
-		// [PA Utility Classes] partial TR-069 paths are not correctly converted
-		// // Convert partial TR-069 path to DMT Uri
-		// dmtUri = TR069URI
-		// .getDmtUri(TR069UriTestCaseConstants.TR069_PATH_PARTIAL);
-		// assertEquals("The partial TR-069 path is not correctly converted!",
-		// TR069UriTestCaseConstants.DMT_URI_FULL, dmtUri);
+		// Convert partial TR-069 path to DMT Uri
+		checkTR069PathToDMTUri(TR069UriTestCaseConstants.DMT_URI_FULL,
+				TR069UriTestCaseConstants.TR069_PATH_PARTIAL);
 
 		// Check DMT Uri with an instance number
 		checkTR069PathToDMTUri(TR069UriTestCaseConstants.DMT_URI_INSTANCE,
 				TR069UriTestCaseConstants.TR069_PATH_INSTANCE);
 
-		// https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1935
-		// [PA Utility Classes] the empty string is valid TR-069 path
-		// // Check DMT root
-		// checkTR069PathToDMTUri(TR069UriTestCaseConstants.POINT_STRING,
-		// TR069UriTestCaseConstants.EMPTY_STRING);
+		// Check DMT root
+		checkTR069PathToDMTUri(TR069UriTestCaseConstants.POINT_STRING,
+				TR069UriTestCaseConstants.EMPTY_STRING);
+	}
+
+	/** Tests the build of the TR-069 absolute path. */
+	public void testAbsoluteTR069Path() {
+		assertEquals("The TR-069 absolute path is not correct!",
+				TR069UriTestCaseConstants.TR069_PATH_FULL,
+				TR069URI.getTR069AbsolutePath(
+						TR069UriTestCaseConstants.TR069_PATH_FULL,
+						TR069UriTestCaseConstants.TR069_PATH_FULL));
+
+		// TODO: uncomment after the fix of: 1954
+		// assertEquals("The TR-069 absolute path is not correct!",
+		// TR069UriTestCaseConstants.TR069_PATH_FULL,
+		// TR069URI.getTR069AbsolutePath(
+		// TR069UriTestCaseConstants.TR069_PATH_FULL,
+		// TR069UriTestCaseConstants.TR069_PATH_PARTIAL));
+
+		assertEquals("The TR-069 absolute path is not correct!",
+				TR069UriTestCaseConstants.TR069_PATH_DEVICE_ABS_PATH,
+				TR069URI.getTR069AbsolutePath(
+						TR069UriTestCaseConstants.TR069_PATH_FULL,
+						TR069UriTestCaseConstants.TR069_PATH_STARTING_POINT));
+
+		assertEquals("The TR-069 absolute path is not correct!",
+				TR069UriTestCaseConstants.TR069_PATH_DEVICE_ABS_PATH,
+				TR069URI.getTR069AbsolutePath(
+						TR069UriTestCaseConstants.TR069_PATH_PARTIAL,
+						TR069UriTestCaseConstants.TR069_PATH_STARTING_POINT));
+
+		assertEquals("The TR-069 absolute path is not correct!",
+				TR069UriTestCaseConstants.TR069_PATH_DEVICE_ABS_PATH,
+				TR069URI.getTR069AbsolutePath(
+						TR069UriTestCaseConstants.TR069_PATH_FOO,
+						TR069UriTestCaseConstants.TR069_PATH_STARTING_POINT));
+
+		// TODO: uncomment after the fix of: 1954
+		// assertEquals("The TR-069 absolute path is not correct!",
+		// TR069UriTestCaseConstants.TR069_PATH_OSGi_EXT_ABS_PATH,
+		// TR069URI.getTR069AbsolutePath(
+		// TR069UriTestCaseConstants.TR069_PATH_EXT_INSTANCE,
+		// TR069UriTestCaseConstants.TR069_PATH_STARTING_POINT));
+
+		// TODO: uncomment after the fix of: 1954
+		// assertEquals(
+		// "The TR-069 absolute path is not correct!",
+		// TR069UriTestCaseConstants.TR069_PATH_OSGi_EXT_ABS_PATH,
+		// TR069URI.getTR069AbsolutePath(
+		// TR069UriTestCaseConstants.TR069_PATH_EXT_INSTANCE_PARTIAL,
+		// TR069UriTestCaseConstants.TR069_PATH_STARTING_POINT));
 	}
 
 	private void checkDMTUriToTR069Path(String dmtUri, String tr069Path) {

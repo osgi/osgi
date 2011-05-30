@@ -106,16 +106,17 @@ public class DmtEvent implements TestInterface {
 			synchronized (tbc) {
 				tbc.wait(DmtConstants.WAITING_TIME);
 			}
-			tbc.assertEquals("Asserts that the number of events are correct",5,eventListener.getCount());
-			tbc.assertTrue("Asserts that the order of the sent events is the expected.",eventListener.isOrdered());
+			// RFC-141: There is no pre-defined number and order of events anymore (see https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1794)
+//			tbc.assertEquals("Asserts that the number of events are correct",5,eventListener.getCount());
+//			tbc.assertTrue("Asserts that the order of the sent events is the expected.",eventListener.isOrdered());
 			
 			
-			info.dmtree.DmtEvent[] dmtEvents = eventListener.getDmtEvents();
-			assertEvent(dmtEvents[0], session,info.dmtree.DmtEvent.ADDED,new String[] { TestExecPluginActivator.INEXISTENT_NODE},null);
-			assertEvent(dmtEvents[1], session,info.dmtree.DmtEvent.DELETED,new String[] { TestExecPluginActivator.INTERIOR_NODE},null);
-			assertEvent(dmtEvents[2], session,info.dmtree.DmtEvent.REPLACED,new String[] { TestExecPluginActivator.LEAF_NODE},null);
-			assertEvent(dmtEvents[3], session,info.dmtree.DmtEvent.RENAMED,new String[] { TestExecPluginActivator.INTERIOR_NODE},new String[] { TestExecPluginActivator.RENAMED_NODE} );
-			assertEvent(dmtEvents[4], session,info.dmtree.DmtEvent.COPIED,new String[] { TestExecPluginActivator.INTERIOR_NODE},new String[] { TestExecPluginActivator.INEXISTENT_NODE } );
+//			info.dmtree.DmtEvent[] dmtEvents = eventListener.getDmtEvents();
+//			assertEvent(dmtEvents[0], session,info.dmtree.DmtEvent.ADDED,new String[] { TestExecPluginActivator.INEXISTENT_NODE},null);
+//			assertEvent(dmtEvents[1], session,info.dmtree.DmtEvent.DELETED,new String[] { TestExecPluginActivator.INTERIOR_NODE},null);
+//			assertEvent(dmtEvents[2], session,info.dmtree.DmtEvent.REPLACED,new String[] { TestExecPluginActivator.LEAF_NODE},null);
+//			assertEvent(dmtEvents[3], session,info.dmtree.DmtEvent.RENAMED,new String[] { TestExecPluginActivator.INTERIOR_NODE},new String[] { TestExecPluginActivator.RENAMED_NODE} );
+//			assertEvent(dmtEvents[4], session,info.dmtree.DmtEvent.COPIED,new String[] { TestExecPluginActivator.INTERIOR_NODE},new String[] { TestExecPluginActivator.INEXISTENT_NODE } );
 			
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);

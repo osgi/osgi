@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +27,14 @@ import info.dmtree.notification.AlertItem;
  * <p>
  * The properties of the service registration should specify a list of
  * destinations (principals) where the service is capable of sending alerts.
- * This can be done by providing a {@code String} array of principal names
- * in the {@code principals} registration property. If this property is not
+ * This can be done by providing a {@code String} array of principal names in
+ * the {@code principals} registration property. If this property is not
  * registered, the service will be treated as the default sender. The default
  * alert sender is only used when a more specific alert sender cannot be found.
  * <p>
  * The {@code principals} registration property is used when the
- * {@link info.dmtree.notification.NotificationService#sendNotification} method
- * is called, to find the proper {@code RemoteAlertSender} for the given
+ * {@link info.dmtree.notification.NotificationService#sendNotification(String, int, String, AlertItem[])}
+ * method is called, to find the proper {@code RemoteAlertSender} for the given
  * destination. If the caller does not specify a principal, the alert is only
  * sent if the Notification Sender finds a default alert sender, or if the
  * choice is unambiguous for some other reason (for example if only one alert

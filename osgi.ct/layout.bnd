@@ -110,9 +110,6 @@ jar.residential.tests =
 build.residential.tests = \
     org.osgi.test.cases.cm, \
     org.osgi.test.cases.component, \
-    org.osgi.test.cases.deploymentadmin.mo, \
-    org.osgi.test.cases.deploymentadmin.tc1, \
-    org.osgi.test.cases.deploymentadmin.tc2, \
     org.osgi.test.cases.device, \
     org.osgi.test.cases.dmt.tc1, \
     org.osgi.test.cases.dmt.tc2, \
@@ -120,13 +117,12 @@ build.residential.tests = \
     org.osgi.test.cases.dmt.tc4, \
     org.osgi.test.cases.event, \
     org.osgi.test.cases.http, \
-    org.osgi.test.cases.io, \
     org.osgi.test.cases.log, \
-    org.osgi.test.cases.measurement, \
     org.osgi.test.cases.metatype, \
-    org.osgi.test.cases.position, \
+    org.osgi.test.cases.provisioning, \
     org.osgi.test.cases.tracker, \
     org.osgi.test.cases.upnp, \
-    org.osgi.test.cases.xml, \
-    org.osgi.test.cases.util.tr069
+    org.osgi.test.cases.useradmin, \
+    org.osgi.test.cases.util.tr069, \
+    org.osgi.test.cases.xml
 

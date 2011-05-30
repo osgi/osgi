@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,14 +128,14 @@ public class DmtPrincipalPermission extends Permission {
         return "*";
     }
 
-    /**
-     * Returns the hash code for this permission object. If two
-     * DmtPrincipalPermission objects are equal according to the {@link #equals}
-     * method, then calling this method on each of the two
-     * DmtPrincipalPermission objects must produce the same integer result.
-     * 
-     * @return hash code for this permission object
-     */
+	/**
+	 * Returns the hash code for this permission object. If two
+	 * DmtPrincipalPermission objects are equal according to the
+	 * {@link #equals(Object)} method, then calling this method on each of the
+	 * two DmtPrincipalPermission objects must produce the same integer result.
+	 * 
+	 * @return hash code for this permission object
+	 */
     public int hashCode() {
         return new Boolean(isPrefix).hashCode() ^ principal.hashCode();
     }

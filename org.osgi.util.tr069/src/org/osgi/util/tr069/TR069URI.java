@@ -21,8 +21,7 @@ import info.dmtree.Uri;
 /**
  * Utility class for translating between DMT URI and TR-069 Path.
  * 
- * @author Ikuo YAMASAKI, NTT Corporation
- * 
+ * @version $Id$
  */
 public class TR069URI {
 
@@ -149,6 +148,7 @@ public class TR069URI {
 			return device + tr069Path;
 	}
 
+<<<<<<< HEAD
 	public static void main(String[] args) {
 
 		// try {
@@ -197,6 +197,8 @@ public class TR069URI {
 
 	}
 
+=======
+>>>>>>> 61b72c4e6cbe6ac2f86c80f2643e6ccad951429e
 	/**
 	 * Checks whether the specified path is an absolute TR-069 path.
 	 * 
@@ -209,11 +211,6 @@ public class TR069URI {
 	 * @return whether the specified path is absolute
 	 */
 	public static boolean isAbsoluteTR069Path(final String tr069Path) {
-		// if (!isValidTR069Path(tr069Path))
-		// throw new IllegalArgumentException("tr069Path must be valid: "
-		// + tr069Path);
-		// if (tr069Path == null)
-		// throw new IllegalArgumentException("tr069Path must not be null.");
 		if (tr069Path.startsWith(Uri.ROOT_NODE))
 			return false;
 		return true;

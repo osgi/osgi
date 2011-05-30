@@ -24,13 +24,11 @@ import info.dmtree.Uri;
 import java.io.UnsupportedEncodingException;
 import java.util.StringTokenizer;
 
-/******************************/
 /**
  * Class which contains value and data type for TR-069, and static methods of
  * utilities.
  * 
- * @author Ikuo YAMASAKI, NTT Corporation
- * 
+ * @version $Id$
  */
 public class TR069ParameterValue {
 	/**
@@ -774,19 +772,8 @@ public class TR069ParameterValue {
 				"TR069 dataType is not one of the defined ones:" + tr069Type);
 	}
 
-	// public static void main(String[] args) {
-	//
-	// String target = "-Device-Services-Hoge-a";
-	// System.out.println("target=[" + target + "]");
-	// String ret = getDmtDataCompatibleValue(target);
-	// System.out.println("ret=[" + ret + "]");
-	// }
-
 	private static float getFloatFromLexicalString(String value)
 			throws NumberFormatException {
-		// if ("0".endsWith(value) || "-0".endsWith(value))
-		// return 0;
-		// "0", "-0", "NaN", "-NaN" are supported by Float.parseFloat(String).
 		if ("INF".endsWith(value) || "-INF".endsWith(value))
 			throw new NumberFormatException("INF and -INF");
 
@@ -960,7 +947,7 @@ public class TR069ParameterValue {
 	 * <li>For each item of the specified array, the following will be done:
 	 * <ol type="a">
 	 * <li>Convert the DmtData object to a TR069ParameterValue according to the
-	 * rules in {@link this#getTR069ParameterValue(DmtData)}.</li>
+	 * rules in {@link #getTR069ParameterValue(DmtData)}.</li>
 	 * 
 	 * <li>Retrieve the value as String from the converted TR069ParameterValue.</li>
 	 * <li>Escaping must be done as specified by TR-106.</li>
@@ -1193,7 +1180,6 @@ public class TR069ParameterValue {
 
 	private static String escapeEncode(String target) {
 		String encoded1 = replaceString(target, '%', "%25");
-		// System.out.println("encoded1\t:" + encoded1);
 		String encoded2 = replaceString(encoded1, ',', "%2C");
 		return encoded2;
 	}
@@ -1301,10 +1287,8 @@ public class TR069ParameterValue {
 		buf.append(hex[(b & 0xF0) >> 4]).append(hex[b & 0x0F]);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
+	/**
+	 * TODO Need Javadoc comment
 	 */
 	public boolean equals(Object object) {
 		if (!(object instanceof TR069ParameterValue))
@@ -1320,10 +1304,8 @@ public class TR069ParameterValue {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * TODO Need Javadoc comment
 	 */
 	public int hashCode() {
 		return type.hashCode() + value.hashCode();

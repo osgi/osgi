@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,28 +29,29 @@ package info.dmtree;
  * <p>
  * Most methods in this interface receive no input, just return information
  * about some aspect of the node. However, there are two methods that behave
- * differently, {@link #isValidName} and {@link #isValidValue}. These validation
- * methods are given a potential node name or value (respectively), and can
- * decide whether it is valid for the given node. Passing the validation methods
- * is a necessary condition for a name or value to be used, but it is not
- * necessarily sufficient: the plugin may carry out more thorough (more
- * expensive) checks when the node is actually created or set.
+ * differently, {@link #isValidName(String)} and {@link #isValidValue(DmtData)}.
+ * These validation methods are given a potential node name or value
+ * (respectively), and can decide whether it is valid for the given node.
+ * Passing the validation methods is a necessary condition for a name or value
+ * to be used, but it is not necessarily sufficient: the plugin may carry out
+ * more thorough (more expensive) checks when the node is actually created or
+ * set.
  * <p>
  * If a {@code MetaNode} is available for a node, the DmtAdmin must use the
  * information provided by it to filter out invalid requests on that node.
  * However, not all methods on this interface are actually used for this
- * purpose, as many of them (e.g. {@link #getFormat} or {@link #getValidNames})
- * can be substituted with the validating methods. For example,
- * {@link #isValidValue} can be expected to check the format, minimum, maximum,
- * etc. of a given value, making it unnecessary for the DmtAdmin to call
- * {@link #getFormat()}, {@link #getMin()}, {@link #getMax()} etc. separately.
- * It is indicated in the description of each method if the DmtAdmin does not
- * enforce the constraints defined by it - such methods are only for external
- * use, for example in user interfaces.
+ * purpose, as many of them (e.g. {@link #getFormat()} or
+ * {@link #getValidNames()}) can be substituted with the validating methods. For
+ * example, {@link #isValidValue(DmtData)} can be expected to check the format,
+ * minimum, maximum, etc. of a given value, making it unnecessary for the
+ * DmtAdmin to call {@link #getFormat()}, {@link #getMin()}, {@link #getMax()}
+ * etc. separately. It is indicated in the description of each method if the
+ * DmtAdmin does not enforce the constraints defined by it - such methods are
+ * only for external use, for example in user interfaces.
  * <p>
- * Most of the methods of this class return {@code null} if a certain piece
- * of meta information is not defined for the node or providing this information
- * is not supported. Methods of this class do not throw exceptions.
+ * Most of the methods of this class return {@code null} if a certain piece of
+ * meta information is not defined for the node or providing this information is
+ * not supported. Methods of this class do not throw exceptions.
  * 
  * @version $Id$
  */
@@ -93,19 +94,19 @@ public interface MetaNode {
      */
     int CMD_GET = 4;
 
-    /**
-     * Constant for representing a permanent node in the tree. This must be
-     * returned by {@link #getScope} if the node cannot be added, deleted or
-     * modified in any way through tree operations. Permanent nodes cannot have
-     * non-permanent nodes as parents.
-     */
+	/**
+	 * Constant for representing a permanent node in the tree. This must be
+	 * returned by {@link #getScope()} if the node cannot be added, deleted or
+	 * modified in any way through tree operations. Permanent nodes cannot have
+	 * non-permanent nodes as parents.
+	 */
     int PERMANENT = 0;
 
-    /**
-     * Constant for representing a dynamic node in the tree. This must be
-     * returned by {@link #getScope} for all nodes that are not permanent and
-     * are not created automatically by the management object.
-     */
+	/**
+	 * Constant for representing a dynamic node in the tree. This must be
+	 * returned by {@link #getScope()} for all nodes that are not permanent and
+	 * are not created automatically by the management object.
+	 */
     int DYNAMIC = 1;
 
     /**
@@ -209,155 +210,156 @@ public interface MetaNode {
      */
     String[] getMimeTypes();
 
-    /**
-     * Get the maximum allowed value associated with a node of numeric format.
-     * If no meta-data is provided for a node, there is no upper limit to its
-     * value. This method is only meaningful if the node has one of the numeric
-     * formats: integer, float, long, unsigned_long or unsigned_integer.
-     * format. The returned limit has {@code double} type, as this can be
-     * used to denote all numeric limits with full precision. The actual 
-     * maximum should be the largest integer, float or long number that does
-     * not exceed the returned value.
-     * <p>
-     * The information returned by this method is not checked by DmtAdmin, it
-     * is only for external use, for example in user interfaces. DmtAdmin only
-     * calls {@link #isValidValue} for checking the value, its behaviour should
-     * be consistent with this method.
-     * 
-     * @return the allowed maximum, or {@code Double.MAX_VALUE} if there
-     *         is no upper limit defined or the node's format is not numeric
-     */
+	/**
+	 * Get the maximum allowed value associated with a node of numeric format.
+	 * If no meta-data is provided for a node, there is no upper limit to its
+	 * value. This method is only meaningful if the node has one of the numeric
+	 * formats: integer, float, long, unsigned_long or unsigned_integer. format.
+	 * The returned limit has {@code double} type, as this can be used to denote
+	 * all numeric limits with full precision. The actual maximum should be the
+	 * largest integer, float or long number that does not exceed the returned
+	 * value.
+	 * <p>
+	 * The information returned by this method is not checked by DmtAdmin, it is
+	 * only for external use, for example in user interfaces. DmtAdmin only
+	 * calls {@link #isValidValue(DmtData)} for checking the value, its behavior
+	 * should be consistent with this method.
+	 * 
+	 * @return the allowed maximum, or {@code Double.MAX_VALUE} if there is no
+	 *         upper limit defined or the node's format is not one of the
+	 *         numeric formats integer, float, long, unsigned_integer or
+	 *         unsigned_long
+	 */
     double getMax();
 
-    /**
-     * Get the minimum allowed value associated with a node of numeric format.
-     * If no meta-data is provided for a node, there is no lower limit to its
-     * value. This method is only meaningful if the node has one of the numeric
-     * formats: integer, float, long, unsigned_long or unsigned_integer
-     * format. The returned limit has {@code double} type, as this can be
-     * used to denote both integer and float limits with full precision. The
-     * actual minimum should be the smallest integer or float number that is
-     * larger than the returned value.
-     * <p>
-     * The information returned by this method is not checked by DmtAdmin, it
-     * is only for external use, for example in user interfaces. DmtAdmin only
-     * calls {@link #isValidValue} for checking the value, its behaviour should
-     * be consistent with this method.
-     * 
-     * @return the allowed minimum, or {@code Double.MIN_VALUE} if there
-     *         is no lower limit defined or the node's format is not integer or
-     *         float
-     */
+	/**
+	 * Get the minimum allowed value associated with a node of numeric format.
+	 * If no meta-data is provided for a node, there is no lower limit to its
+	 * value. This method is only meaningful if the node has one of the numeric
+	 * formats: integer, float, long, unsigned_long or unsigned_integer format.
+	 * The returned limit has {@code double} type, as this can be used to denote
+	 * both integer and float limits with full precision. The actual minimum
+	 * should be the smallest integer, float or long value that is equal or
+	 * larger than the returned value.
+	 * <p>
+	 * The information returned by this method is not checked by DmtAdmin, it is
+	 * only for external use, for example in user interfaces. DmtAdmin only
+	 * calls {@link #isValidValue(DmtData)} for checking the value, its behavior
+	 * should be consistent with this method.
+	 * 
+	 * @return the allowed minimum, or {@code Double.MIN_VALUE} if there is no
+	 *         lower limit defined or the node's format is not one of the
+	 *         numeric formats integer, float, long, unsigned_integer or
+	 *         unsigned_long
+	 */
     double getMin();
 
-    /**
-     * Return an array of DmtData objects if valid values are defined for the
-     * node, or {@code null} otherwise. If no meta-data is provided for a
-     * node, all values are considered valid.
-     * <p>
-     * The information returned by this method is not checked by DmtAdmin, it
-     * is only for external use, for example in user interfaces. DmtAdmin only
-     * calls {@link #isValidValue} for checking the value, its behaviour should
-     * be consistent with this method.
-     * 
-     * @return the valid values for this node, or {@code null} if not
-     *         defined
-     */
+	/**
+	 * Return an array of DmtData objects if valid values are defined for the
+	 * node, or {@code null} otherwise. If no meta-data is provided for a node,
+	 * all values are considered valid.
+	 * <p>
+	 * The information returned by this method is not checked by DmtAdmin, it is
+	 * only for external use, for example in user interfaces. DmtAdmin only
+	 * calls {@link #isValidValue(DmtData)} for checking the value, its behavior
+	 * should be consistent with this method.
+	 * 
+	 * @return the valid values for this node, or {@code null} if not defined
+	 */
     DmtData[] getValidValues();
 
-    /**
-     * Get the node's format, expressed in terms of type constants defined in
-     * {@link DmtData}. If there are multiple formats allowed for the node then
-     * the format constants are OR-ed. Interior nodes must have
-     * {@link DmtData#FORMAT_NODE} format, and this code must not be returned
-     * for leaf nodes. If no meta-data is provided for a node, all applicable
-     * formats are considered valid (with the above constraints regarding
-     * interior and leaf nodes).
-     * <p>
-     * Note that the 'format' term is a legacy from OMA DM, it is more customary
-     * to think of this as 'type'.
-     * <p>
-     * The formats returned by this method are not checked by DmtAdmin, they
-     * are only for external use, for example in user interfaces. DmtAdmin only
-     * calls {@link #isValidValue} for checking the value, its behaviour should
-     * be consistent with this method.
-     * 
-     * @return the allowed format(s) of the node
-     */
+	/**
+	 * Get the node's format, expressed in terms of type constants defined in
+	 * {@link DmtData}. If there are multiple formats allowed for the node then
+	 * the format constants are OR-ed. Interior nodes must have
+	 * {@link DmtData#FORMAT_NODE} format, and this code must not be returned
+	 * for leaf nodes. If no meta-data is provided for a node, all applicable
+	 * formats are considered valid (with the above constraints regarding
+	 * interior and leaf nodes).
+	 * <p>
+	 * Note that the 'format' term is a legacy from OMA DM, it is more customary
+	 * to think of this as 'type'.
+	 * <p>
+	 * The formats returned by this method are not checked by DmtAdmin, they are
+	 * only for external use, for example in user interfaces. DmtAdmin only
+	 * calls {@link #isValidValue(DmtData)} for checking the value, its behavior
+	 * should be consistent with this method.
+	 * 
+	 * @return the allowed format(s) of the node
+	 */
     int getFormat();
-    
-    /**
-     * Get the format names for any raw formats supported by the node.  This
-     * method is only meaningful if the list of supported formats returned by
-     * {@link #getFormat()} contains {@link DmtData#FORMAT_RAW_STRING} or
-     * {@link DmtData#FORMAT_RAW_BINARY}: it specifies precisely which raw
-     * format(s) are actually supported.  If the node cannot contain data in one
-     * of the raw types, this method must return {@code null}.
-     * <p>
-     * The format names returned by this method are not checked by DmtAdmin,
-     * they are only for external use, for example in user interfaces. DmtAdmin
-     * only calls {@link #isValidValue} for checking the value, its behaviour
-     * should be consistent with this method.
-     * 
-     * @return the allowed format name(s) of raw data stored by the node, or
-     *         {@code null} if raw formats are not supported
-     */
+
+	/**
+	 * Get the format names for any raw formats supported by the node. This
+	 * method is only meaningful if the list of supported formats returned by
+	 * {@link #getFormat()} contains {@link DmtData#FORMAT_RAW_STRING} or
+	 * {@link DmtData#FORMAT_RAW_BINARY}: it specifies precisely which raw
+	 * format(s) are actually supported. If the node cannot contain data in one
+	 * of the raw types, this method must return {@code null}.
+	 * <p>
+	 * The format names returned by this method are not checked by DmtAdmin,
+	 * they are only for external use, for example in user interfaces. DmtAdmin
+	 * only calls {@link #isValidValue(DmtData)} for checking the value, its
+	 * behavior should be consistent with this method.
+	 * 
+	 * @return the allowed format name(s) of raw data stored by the node, or
+	 *         {@code null} if raw formats are not supported
+	 */
     String[] getRawFormatNames();
 
-    /**
-     * Checks whether the given value is valid for this node. This method can be
-     * used to ensure that the value has the correct format and range, that it
-     * is well formed, etc. This method should be consistent with the
-     * constraints defined by the {@link #getFormat}, {@link #getValidValues},
-     * {@link #getMin} and {@link #getMax} methods (if applicable), as the Dmt
-     * Admin only calls this method for value validation.
-     * <p>
-     * This method may return {@code true} even if not all aspects of the
-     * value have been checked, expensive operations (for example those that
-     * require external resources) need not be performed here. The actual value
-     * setting method may still indicate that the value is invalid.
-     * 
-     * @param value the value to check for validity
-     * @return {@code false} if the specified value is found to be
-     *         invalid for the node described by this meta-node,
-     *         {@code true} otherwise
-     */
+	/**
+	 * Checks whether the given value is valid for this node. This method can be
+	 * used to ensure that the value has the correct format and range, that it
+	 * is well formed, etc. This method should be consistent with the
+	 * constraints defined by the {@link #getFormat()},
+	 * {@link #getValidValues()}, {@link #getMin()} and {@link #getMax()}
+	 * methods (if applicable), as the Dmt Admin only calls this method for
+	 * value validation.
+	 * <p>
+	 * This method may return {@code true} even if not all aspects of the value
+	 * have been checked, expensive operations (for example those that require
+	 * external resources) need not be performed here. The actual value setting
+	 * method may still indicate that the value is invalid.
+	 * 
+	 * @param value the value to check for validity
+	 * @return {@code false} if the specified value is found to be invalid for
+	 *         the node described by this meta-node, {@code true} otherwise
+	 */
     boolean isValidValue(DmtData value);
 
-    /**
-     * Return an array of Strings if valid names are defined for the node, or
-     * {@code null} if no valid name list is defined or if this piece of
-     * meta info is not supported. If no meta-data is provided for a node, all
-     * names are considered valid.
-     * <p>
-     * The information returned by this method is not checked by DmtAdmin, it
-     * is only for external use, for example in user interfaces. DmtAdmin only
-     * calls {@link #isValidName} for checking the name, its behaviour should be
-     * consistent with this method.
-     * 
-     * @return the valid values for this node name, or {@code null} if
-     *         not defined
-     */
+	/**
+	 * Return an array of Strings if valid names are defined for the node, or
+	 * {@code null} if no valid name list is defined or if this piece of meta
+	 * info is not supported. If no meta-data is provided for a node, all names
+	 * are considered valid.
+	 * <p>
+	 * The information returned by this method is not checked by DmtAdmin, it is
+	 * only for external use, for example in user interfaces. DmtAdmin only
+	 * calls {@link #isValidName(String)} for checking the name, its behavior
+	 * should be consistent with this method.
+	 * 
+	 * @return the valid values for this node name, or {@code null} if not
+	 *         defined
+	 */
     String[] getValidNames();
 
-    /**
-     * Checks whether the given name is a valid name for this node. This method
-     * can be used for example to ensure that the node name is always one of a
-     * predefined set of valid names, or that it matches a specific pattern.
-     * This method should be consistent with the values returned by
-     * {@link #getValidNames} (if any), the DmtAdmin only calls this method for
-     * name validation.
-     * <p>
-     * This method may return {@code true} even if not all aspects of the
-     * name have been checked, expensive operations (for example those that
-     * require external resources) need not be performed here. The actual node
-     * creation may still indicate that the node name is invalid.
-     * 
-     * @param name the node name to check for validity
-     * @return {@code false} if the specified name is found to be invalid
-     *         for the node described by this meta-node, {@code true}
-     *         otherwise
-     */
+	/**
+	 * Checks whether the given name is a valid name for this node. This method
+	 * can be used for example to ensure that the node name is always one of a
+	 * predefined set of valid names, or that it matches a specific pattern.
+	 * This method should be consistent with the values returned by
+	 * {@link #getValidNames()} (if any), the DmtAdmin only calls this method
+	 * for name validation.
+	 * <p>
+	 * This method may return {@code true} even if not all aspects of the name
+	 * have been checked, expensive operations (for example those that require
+	 * external resources) need not be performed here. The actual node creation
+	 * may still indicate that the node name is invalid.
+	 * 
+	 * @param name the node name to check for validity
+	 * @return {@code false} if the specified name is found to be invalid for
+	 *         the node described by this meta-node, {@code true} otherwise
+	 */
     boolean isValidName(String name);
 
     /**

@@ -107,7 +107,7 @@ public final class DmtData {
 	 * object as value (see {@link DmtData#DmtData(Object)} and
 	 * {@link DmtData#getNode()}). This value can be used by Java programs that
 	 * know a specific URI understands the associated Java type. This type is
-	 * further used as a return value of the {@link MetaNode#getFormat} method
+	 * further used as a return value of the {@link MetaNode#getFormat()} method
 	 * for interior nodes.
 	 */
 	public static final int			FORMAT_NODE				= 0x0400;

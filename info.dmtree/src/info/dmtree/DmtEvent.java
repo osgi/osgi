@@ -138,7 +138,7 @@ public interface DmtEvent {
 	 * empty array. All returned URIs are absolute.
 	 * 
 	 * @return the array of affected nodes
-	 * @see #getNewNodes
+	 * @see #getNewNodes()
 	 */
 	String[] getNodes();
 
@@ -148,9 +148,9 @@ public interface DmtEvent {
 	 * this method returns {@code null}.
 	 * <p>
 	 * The array returned by this method runs parallel to the array returned by
-	 * {@link #getNodes}, the elements in the two arrays contain the source and
-	 * destination URIs for the renamed or copied nodes in the same order. All
-	 * returned URIs are absolute.
+	 * {@link #getNodes()}, the elements in the two arrays contain the source
+	 * and destination URIs for the renamed or copied nodes in the same order.
+	 * All returned URIs are absolute.
 	 * <p>
 	 * This method returns only those nodes where the caller has the GET
 	 * permission for the source or destination node of the operation.
@@ -165,10 +165,10 @@ public interface DmtEvent {
 	 * event.
 	 * <p>
 	 * The returned names can be used as key value in subsequent calls to
-	 * {@link #getProperty}.
+	 * {@link #getProperty(String)}.
 	 * 
 	 * @return the array of property names
-	 * @see #getProperty
+	 * @see #getProperty(String)
 	 * @since 1.1
 	 */
 	String[] getPropertyNames();
@@ -179,7 +179,7 @@ public interface DmtEvent {
 	 * @param key the name of the requested property
 	 * @return the requested property value or null, if the key is not contained
 	 *         in the properties
-	 * @see #getPropertyNames
+	 * @see #getPropertyNames()
 	 * @since 1.1
 	 */
 	Object getProperty(String key);

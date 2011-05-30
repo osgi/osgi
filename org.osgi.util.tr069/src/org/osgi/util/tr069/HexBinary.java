@@ -16,9 +16,17 @@
 
 package org.osgi.util.tr069;
 
+/**
+ * Static methods for translating HexBinary encoded strings to byte arrays and
+ * vice-versa.
+ * 
+ * @version $Id$
+ */
 class HexBinary {
+	private HexBinary() { // private constructor
+	}
+
 	static byte[] hexBinaryToByteArray(String value) {
-		// Peter implemented it at BundleFest, June 2010.
 		byte[] bytes = new byte[value.length() / 2];
 		if (bytes.length * 2 != value.length())
 			throw new IllegalArgumentException(
@@ -36,7 +44,6 @@ class HexBinary {
 	}
 
 	private static int nibble(char low) {
-		// Peter implemented it at BundleFest, June 2010.
 		low = Character.toUpperCase(low);
 		int v = low - '0';
 		if (v < 0)
@@ -49,10 +56,6 @@ class HexBinary {
 	}
 
 	static String byteArrayToHexBinary(byte[] bytes) {
-		// XXX please implement it !
-		// XXX:Evgeni: It is implemented in
-		// info.dmtree.DmtData.getHexDump(byte[])
-		// XXX:Ikuo: thanks.
 		return getHexDump(bytes);
 	}
 

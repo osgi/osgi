@@ -2,16 +2,14 @@ residential.specs = \
 	 info.dmtree, \
 	 org.osgi.service.cm, \
 	 org.osgi.service.component, \
-	 org.osgi.service.deploymentadmin, \
 	 org.osgi.service.device, \
 	 org.osgi.service.event, \
 	 org.osgi.service.http, \
-	 org.osgi.service.io, \
 	 org.osgi.service.log, \
 	 org.osgi.service.metatype, \
+     org.osgi.service.provisioning, \
 	 org.osgi.service.upnp, \
-	 org.osgi.util.measurement, \
-	 org.osgi.util.position, \
+	 org.osgi.service.useradmin, \
 	 org.osgi.util.tracker, \
 	 org.osgi.util.tr069, \
 	 org.osgi.util.xml

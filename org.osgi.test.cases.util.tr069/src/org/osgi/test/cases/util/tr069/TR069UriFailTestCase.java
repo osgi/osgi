@@ -38,25 +38,30 @@ public final class TR069UriFailTestCase extends OSGiTestCase {
 		assertFalse("The white spaces are not valid TR-069 path!",
 				TR069URI.isValidTR069Path("        "));
 
-		// check the point
-		assertFalse(
-				"The point is not valid TR-069 path!",
-				TR069URI.isValidTR069Path(TR069UriTestCaseConstants.POINT_STRING));
+		// TODO: uncomment after the fix of: 1954
+		// // check foo parameter
+		// assertFalse("The TR-069 path is valid: "
+		// + TR069UriTestCaseConstants.FOO,
+		// TR069URI.isValidTR069Path(TR069UriTestCaseConstants.FOO));
 
-		// check a few points
-		assertFalse(
-				"A few points are not valid TR-069 path!",
-				TR069URI.isValidTR069Path(TR069UriTestCaseConstants.POINT_STRING
-						+ TR069UriTestCaseConstants.POINT_STRING));
-
-		// https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1936
-		// [PA Utility Classes] Device..Services TR-069 path is processed as
-		// valid
-		// // check a few points placed in the middle
+		// TODO: uncomment after the fix of: 1954
+		// // check foo instance number
 		// assertFalse(
 		// "The TR-069 path is not valid: "
-		// + TR069UriTestCaseConstants.TR069_PATH_MIDDLE_POINTS,
-		// TR069URI.isValidTR069Path(TR069UriTestCaseConstants.TR069_PATH_MIDDLE_POINTS));
+		// + TR069UriTestCaseConstants.TR069_PATH_EXT_INSTANCE_FOO,
+		// TR069URI.isValidTR069Path(TR069UriTestCaseConstants.TR069_PATH_EXT_INSTANCE_FOO));
+
+		// check a few points placed in the middle
+		assertFalse(
+				"The TR-069 path is not valid: "
+						+ TR069UriTestCaseConstants.TR069_PATH_MIDDLE_POINTS,
+				TR069URI.isValidTR069Path(TR069UriTestCaseConstants.TR069_PATH_MIDDLE_POINTS));
+
+		// check a few end points
+		assertFalse(
+				"The TR-069 path is not valid: "
+						+ TR069UriTestCaseConstants.TR069_PATH_END_POINTS,
+				TR069URI.isValidTR069Path(TR069UriTestCaseConstants.TR069_PATH_END_POINTS));
 
 		// check the digit as a first symbol - it is not allowed
 		assertFalse(
@@ -67,11 +72,18 @@ public final class TR069UriFailTestCase extends OSGiTestCase {
 		assertFalse(
 				"The hyphen must not be allowed as a first character in the path name!",
 				TR069URI.isValidTR069Path(TR069UriTestCaseConstants.TR069_PATH_STARTING_HYPHEN));
+	}
 
-		// check the hyphen as a first symbol - it is not allowed
+	public void testIncorrectAbsTR069PathValidation() {
+		// Check the relative path.
 		assertFalse(
-				"The point must not be allowed as a first character in the path name!",
-				TR069URI.isValidTR069Path(TR069UriTestCaseConstants.TR069_PATH_STARTING_POINT));
+				"The TR-069 path should not be absolute: ",
+				TR069URI.isAbsoluteTR069Path(TR069UriTestCaseConstants.TR069_PATH_STARTING_POINT));
+
+		// Check the point
+		assertFalse(
+				"The point should not be absolute!",
+				TR069URI.isAbsoluteTR069Path(TR069UriTestCaseConstants.POINT_STRING));
 	}
 
 	/** Tests the invalid starting characters in the TR-069 path name. */

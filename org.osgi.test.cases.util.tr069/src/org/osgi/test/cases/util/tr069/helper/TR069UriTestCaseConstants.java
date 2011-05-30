@@ -30,15 +30,15 @@ public abstract class TR069UriTestCaseConstants {
 		/* prevent the inheritance */
 	}
 
-	// TODO: remove after:
-	// https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1866#c4
-	// The node uri path separator and tree root can be defined as constants
-	private static final String		DMT_PATH_SEPARATOR				= "/";
-
-	private static final String		TR069_PATH_OSGI_EXT				= "X_OSGI-ORG_OSGiSpecificName";
-
-	private static final String		DEVICE							= "Device";
 	private static final String		SERVICES						= "Services";
+
+	/** Test string constant with value {@value}. */
+	public static final String		DEVICE							= "Device";
+
+	/** Test string constant with value {@value}. */
+	public static final String		TR069_PATH_OSGI_EXT				= "X_OSGI-ORG_OSGiSpecificName";
+	/** Test string constant with value {@value}. */
+	public static final String		FOO								= "Foo";
 
 	/** Test instance number integer constant. The constant value is {@value}. */
 	public static final int			TR069_INSTANCE_NUMBER			= 101;
@@ -63,16 +63,11 @@ public abstract class TR069UriTestCaseConstants {
 	 */
 	public static final String		TR069_VALUE_BASE64_STRING		= "eW91";
 
-	// TODO: remove spaces after the fix of
-	// https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1946
-	// [PA Utility Classes] getTR069ParameterValue uses hex dump instead of hex
-	// sequence
 	/**
 	 * Test string constant with value {@value}. It represents
 	 * {@link #TR069_VALUE_BIN_STRING} in hex format.
 	 */
 	public static final String		TR069_VALUE_HEX_STRING			= "796F75";
-	public static final String		TR069_VALUE_HEX_DUMP_STRING		= "79 6F 75";
 
 	/** Test string constant with value {@value}. */
 	public static final String		TR069_VALUE_DATE				= "20110115";
@@ -96,6 +91,8 @@ public abstract class TR069UriTestCaseConstants {
 
 	/** Test string constant with value {@value}. */
 	public static final String		TR069_PATH_MIDDLE_POINTS		= "Device..Services";
+	/** Test string constant with value {@value}. */
+	public static final String		TR069_PATH_END_POINTS			= "Device.Services..";
 
 	/** Test string constant with value {@value}. */
 	public static final String		TR069_PATH_FULL					= DEVICE
@@ -107,6 +104,22 @@ public abstract class TR069UriTestCaseConstants {
 	/** Test string constant with value {@value}. */
 	public static final String		TR069_PATH_EXT					= TR069_PATH_PARTIAL
 																			+ TR069_PATH_OSGI_EXT;
+	/** Test string constant with value {@value}. */
+	public static final String		TR069_PATH_EXT_INSTANCE			= TR069_PATH_EXT
+																			+ POINT_STRING
+																			+ TR069_INSTANCE_NUMBER;
+	/** Test string constant with value {@value}. */
+	public static final String		TR069_PATH_EXT_INSTANCE_PARTIAL	= TR069_PATH_EXT_INSTANCE
+																			+ POINT_STRING;
+
+	/** Test string constant with value {@value}. */
+	public static final String		TR069_PATH_EXT_INSTANCE_FOO		= TR069_PATH_EXT
+																			+ POINT_STRING
+																			+ FOO;
+	/** Test string constant with value {@value}. */
+	public static final String		TR069_PATH_FOO					= TR069_PATH_PARTIAL
+																			+ FOO;
+
 	/** Test string constant with value {@value}. */
 	public static final String		TR069_PATH_INSTANCE				= TR069_PATH_PARTIAL
 																			+ TR069_INSTANCE_NUMBER;
@@ -122,17 +135,23 @@ public abstract class TR069UriTestCaseConstants {
 	/** Test string constant with value {@value}. */
 	public static final String		TR069_PATH_STARTING_POINT		= POINT_STRING
 																			+ TR069_PATH_FULL;
+	/** Test string constant with value {@value}. */
+	public static final String		TR069_PATH_DEVICE_ABS_PATH		= DEVICE
+																			+ TR069_PATH_STARTING_POINT;
+	/** Test string constant with value {@value}. */
+	public static final String		TR069_PATH_OSGi_EXT_ABS_PATH	= TR069_PATH_EXT_INSTANCE
+																			+ TR069_PATH_STARTING_POINT;
 
 	/** Test string constant with value {@value}. */
 	public static final String		DMT_URI_FULL					= Uri.toUri(new String[] {
-			POINT_STRING, DEVICE, SERVICES							});
+			Uri.ROOT_NODE, DEVICE, SERVICES							});
 	/** Test string constant with value {@value}. */
 	public static final String		DMT_URI_INSTANCE				= DMT_URI_FULL
-																			+ DMT_PATH_SEPARATOR
+																			+ Uri.PATH_SEPARATOR_CHAR
 																			+ TR069_INSTANCE_NUMBER;
 	/** Test string constant with value {@value}. */
 	public static final String		DMT_URI_EXT						= DMT_URI_FULL
-																			+ DMT_PATH_SEPARATOR
+																			+ Uri.PATH_SEPARATOR_CHAR
 																			+ TR069_PATH_OSGI_EXT;
 	/** An array of integer DmtData instances. */
 	public static final DmtData[]	DMT_DATA_ARRAY_INT				= new DmtData[] {

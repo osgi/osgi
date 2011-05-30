@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,13 +48,13 @@ import java.util.StringTokenizer;
  * 
  * This means that owner of this permission has Get access on every child node
  * of ./OSGi/bundles. The asterix does not necessarily have to follow a '/'
- * character. For example the {@code &quot;./OSGi/a*&quot;} target matches
- * the {@code ./OSGi/applications} subtree.
+ * character. For example the {@code &quot;./OSGi/a*&quot;} target matches the
+ * {@code ./OSGi/applications} subtree.
  * <p>
  * If wildcard is present in the actions field, all legal OMA DM commands are
  * allowed on the designated nodes(s) by the owner of the permission. Action
  * names are interpreted case-insensitively, but the canonical action string
- * returned by {@link #getActions} uses the forms defined by the action
+ * returned by {@link #getActions()} uses the forms defined by the action
  * constants.
  * 
  * @version $Id$
@@ -118,36 +118,34 @@ public class DmtPermission extends Permission {
     // the canonical action string (redundant)
     private final String actions;
 
-    /**
-     * Creates a new DmtPermission object for the specified DMT URI with the
-     * specified actions. The given URI can be:
-     * <ul>
-     * <li> {@code "*"}, which matches all valid
-     * (see {@link Uri#isValidUri}) absolute URIs;
-     * <li> the prefix of an absolute URI followed by the {@code *} 
-     * character (for example {@code "./OSGi/L*"}), which matches all valid
-     * absolute URIs beginning with the given prefix;
-     * <li> a valid absolute URI, which matches itself.
-     * </ul>
-     * <p>
-     * Since the {@code *} character is itself a valid URI character, it 
-     * can appear as the last character of a valid absolute URI. To distinguish
-     * this case from using {@code *} as a wildcard, the {@code *} 
-     * character at the end of the URI must be escaped with the {@code \} 
-     * charater. For example the URI {@code "./a*"} matches 
-     * {@code "./a"}, {@code "./aa"}, {@code "./a/b"} etc. while
-     * {@code "./a\*"} matches {@code "./a*"} only.
-     * <p>
-     * The actions string must either be "*" to allow all actions, or it must
-     * contain a non-empty subset of the valid actions, defined as constants in
-     * this class.
-     * 
-     * @param dmtUri URI of the management object (or subtree)
-     * @param actions OMA DM actions allowed
-     * @throws NullPointerException if any of the parameters are
-     *         {@code null}
-     * @throws IllegalArgumentException if any of the parameters are invalid
-     */
+	/**
+	 * Creates a new DmtPermission object for the specified DMT URI with the
+	 * specified actions. The given URI can be:
+	 * <ul>
+	 * <li> {@code "*"}, which matches all valid (see
+	 * {@link Uri#isValidUri(String)}) absolute URIs;
+	 * <li>the prefix of an absolute URI followed by the {@code *} character
+	 * (for example {@code "./OSGi/L*"}), which matches all valid absolute URIs
+	 * beginning with the given prefix;
+	 * <li>a valid absolute URI, which matches itself.
+	 * </ul>
+	 * <p>
+	 * Since the {@code *} character is itself a valid URI character, it can
+	 * appear as the last character of a valid absolute URI. To distinguish this
+	 * case from using {@code *} as a wildcard, the {@code *} character at the
+	 * end of the URI must be escaped with the {@code \} charater. For example
+	 * the URI {@code "./a*"} matches {@code "./a"}, {@code "./aa"},
+	 * {@code "./a/b"} etc. while {@code "./a\*"} matches {@code "./a*"} only.
+	 * <p>
+	 * The actions string must either be "*" to allow all actions, or it must
+	 * contain a non-empty subset of the valid actions, defined as constants in
+	 * this class.
+	 * 
+	 * @param dmtUri URI of the management object (or subtree)
+	 * @param actions OMA DM actions allowed
+	 * @throws NullPointerException if any of the parameters are {@code null}
+	 * @throws IllegalArgumentException if any of the parameters are invalid
+	 */
     public DmtPermission(String dmtUri, String actions) {
         super(dmtUri);
         mask = getMask(actions);
@@ -237,14 +235,14 @@ public class DmtPermission extends Permission {
         return actions;
     }
 
-    /**
-     * Returns the hash code for this permission object. If two DmtPermission
-     * objects are equal according to the {@link #equals} method, then calling
-     * this method on each of the two DmtPermission objects must produce the
-     * same integer result.
-     * 
-     * @return hash code for this permission object
-     */
+	/**
+	 * Returns the hash code for this permission object. If two DmtPermission
+	 * objects are equal according to the {@link #equals(Object)} method, then
+	 * calling this method on each of the two DmtPermission objects must produce
+	 * the same integer result.
+	 * 
+	 * @return hash code for this permission object
+	 */
     public int hashCode() {
         return new Integer(mask).hashCode()
                 ^ new Boolean(prefixPath).hashCode() ^ path.hashCode();

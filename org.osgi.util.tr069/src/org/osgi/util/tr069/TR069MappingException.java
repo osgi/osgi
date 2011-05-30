@@ -19,7 +19,7 @@ package org.osgi.util.tr069;
 /**
  * Exception which will be thrown if some trouble occurs for mapping.
  * 
- * @author Ikuo YAMASAKI, NTT Corporation
+ * @version $Id$
  */
 public class TR069MappingException extends Exception {
 

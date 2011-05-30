@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -295,24 +295,24 @@ public class DmtException extends Exception {
      */
     public static final int ALERT_NOT_ROUTED = 5;
 
-    /**
-     * A transaction-related error occurred in an atomic session. This error is
-     * caused by one of the following situations:
-     * <ul>
-     * <li>an updating method within an atomic session can not be executed
-     * because the underlying plugin is read-only or does not support atomic
-     * writing</li>
-     * <li>a commit operation at the end of an atomic session failed because
-     * one of the underlying plugins failed to close</li>
-     * </ul>
-     * The latter case may leave the tree in an inconsistent state due to the
-     * lack of a two-phase commit system, see {@link DmtSession#commit} for
-     * details.
-     * <p>
-     * This error code does not correspond to any OMA DM response status code.
-     * It should be translated to the code 500 &quot;Command Failed&quot; when
-     * transferring over OMA DM.
-     */
+	/**
+	 * A transaction-related error occurred in an atomic session. This error is
+	 * caused by one of the following situations:
+	 * <ul>
+	 * <li>an updating method within an atomic session can not be executed
+	 * because the underlying plugin is read-only or does not support atomic
+	 * writing</li>
+	 * <li>a commit operation at the end of an atomic session failed because one
+	 * of the underlying plugins failed to close</li>
+	 * </ul>
+	 * The latter case may leave the tree in an inconsistent state due to the
+	 * lack of a two-phase commit system, see {@link DmtSession#commit()} for
+	 * details.
+	 * <p>
+	 * This error code does not correspond to any OMA DM response status code.
+	 * It should be translated to the code 500 &quot;Command Failed&quot; when
+	 * transferring over OMA DM.
+	 */
     public static final int TRANSACTION_ERROR = 6;
 
     /**

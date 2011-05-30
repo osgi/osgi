@@ -305,7 +305,7 @@ public interface DmtAdmin {
 	/**
 	 * Returns the value for the session creation timeout in
 	 * milliseconds. The returned value reflects the value that has been set via
-	 * the corresponding system property <code>SESSION_CREATION_TIMEOUT</code>
+	 * the corresponding system property {@code SESSION_CREATION_TIMEOUT}
 	 * or the implementation specific default value.
 	 * 
 	 * @since 1.1
@@ -316,7 +316,7 @@ public interface DmtAdmin {
 	/**
 	 * Returns the value for the session inactivity timeout in
 	 * milliseconds. The returned value reflects the value that has been set via
-	 * the corresponding system property <code>SESSION_INACTIVE_TIMEOUT</code>
+	 * the corresponding system property {@code SESSION_INACTIVE_TIMEOUT}
 	 * or the implementation specific default value.
 	 * 
 	 * @since 1.1
