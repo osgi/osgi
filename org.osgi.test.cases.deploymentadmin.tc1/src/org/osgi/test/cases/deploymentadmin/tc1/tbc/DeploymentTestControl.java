@@ -77,7 +77,6 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.BundleInfo.GetSymbolicName;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.BundleInfo.GetVersion;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.Event.BundleListenerImpl;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.Event.DeploymentEventHandlerActivator;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.Event.DeploymentEventHandlerImpl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
@@ -101,7 +100,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	private HashMap packages = new HashMap();
     
     private DeploymentEventHandlerImpl deploymentEventHandler;
-    DeploymentEventHandlerActivator deploymentEventHandlerActivator;
     
 	/**
 	 * <remove>Prepare for each run. It is important that a test run is properly
@@ -169,8 +167,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
             getContext().addBundleListener(bundleListener);
             
             deploymentEventHandler = new DeploymentEventHandlerImpl(this);
-            deploymentEventHandlerActivator = new DeploymentEventHandlerActivator(deploymentEventHandler);
-            deploymentEventHandlerActivator.start(getContext());
+            deploymentEventHandler.register();
 		} catch (Exception e) {
         	e.printStackTrace();
 			fail("Failed starting Handles and Listeners");
@@ -180,7 +177,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	private void uninstallHandlersAndListeners() {
 		try {
             getContext().removeBundleListener(bundleListener);
-            deploymentEventHandlerActivator.stop(getContext());
+            deploymentEventHandler.unregister();
 		} catch (Exception e) {
         	e.printStackTrace();
 			fail("Failed starting Handles and Listeners");
@@ -733,8 +730,8 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	public void setDeploymentAdminPermission(String name, String perm) {
         PermissionInfo[] info = new PermissionInfo[] {
             new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
-                // to find the Deployment Admin
-                new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
+                // to find the Deployment Admin and to register event handler
+                new PermissionInfo(ServicePermission.class.getName(), "*", "GET, REGISTER"),
                 // to load files that are passed to the Deployment Admin
                 new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"),
                 // to access deployment admin
@@ -823,7 +820,4 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
         return (sr!=null)? getContext().getService(sr[0]):null;
     }
     
-    public DeploymentEventHandlerActivator getEventHandlerActivator() {
-    	return deploymentEventHandlerActivator;
-    }
 }
