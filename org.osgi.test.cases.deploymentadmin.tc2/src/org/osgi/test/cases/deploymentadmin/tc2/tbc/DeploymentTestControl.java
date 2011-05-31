@@ -43,6 +43,7 @@
 
 package org.osgi.test.cases.deploymentadmin.tc2.tbc;
 
+import java.io.FilePermission;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -50,8 +51,11 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Vector;
 
+import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.PackagePermission;
+import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.ManagedServiceFactory;
@@ -59,6 +63,7 @@ import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -418,6 +423,23 @@ public abstract class DeploymentTestControl extends DefaultTestBundleControl {
 		}
 	}
 
+	/**
+	 * Sets a PermissionInfo for a resource processor bundle
+	 * @param location
+	 * @param filter
+	 */
+	public void setResourceProcessorPermissions(String location, String filter) {
+		PermissionInfo info[] = {
+				new PermissionInfo(DeploymentCustomizerPermission.class.getName(), filter,
+						DeploymentCustomizerPermission.PRIVATEAREA),
+				new PermissionInfo(ServicePermission.class.getName(), "*",ServicePermission.GET + ","
+								+ ServicePermission.REGISTER),
+				new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
+				new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
+				new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"), };
+		
+		setPermissionInfo(location, info);
+	}
 
 	/**
 	 * Set the a PermissionInfo for a bundle location for the caller

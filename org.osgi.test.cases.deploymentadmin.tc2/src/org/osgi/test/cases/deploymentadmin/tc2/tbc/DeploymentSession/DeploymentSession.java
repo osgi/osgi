@@ -613,9 +613,9 @@ public class DeploymentSession extends DeploymentTestControl {
      * 
      * @spec 114.12 Threading
      */
-	public synchronized void testDeploymentSession012() {
+	public void testDeploymentSession012() {
 		log("#testDeploymentSession012");
-		fail("hangs; needs to be debugged");
+		
 	        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
 	            + DeploymentConstants.PID_RESOURCE_PROCESSOR4, "(name=*)");
 	        SessionWorker workerSimpleDP = null,workerBlockDP = null;
@@ -682,9 +682,9 @@ public class DeploymentSession extends DeploymentTestControl {
      * @spec 114.12 Threading
      */
 	 
-	public synchronized void testDeploymentSession013() {
+	public void testDeploymentSession013() {
 		log("#testDeploymentSession013");
-		fail("hangs; needs to be debugged");
+		
 	        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
 	            + DeploymentConstants.PID_RESOURCE_PROCESSOR4, "(name=*)");
 	        
@@ -750,24 +750,6 @@ public class DeploymentSession extends DeploymentTestControl {
         
 		return (sr != null) ? getContext().getService(sr[0]) : null;
         
-	}
-	
-	/**
-	 * Sets a PermissionInfo for a resource processor bundle
-	 * @param location
-	 * @param name filter
-	 */
-	private void setResourceProcessorPermissions(String location, String filter) {
-		PermissionInfo info[] = {
-				new PermissionInfo(DeploymentCustomizerPermission.class.getName(), filter,
-						DeploymentCustomizerPermission.PRIVATEAREA),
-				new PermissionInfo(ServicePermission.class.getName(), "*",ServicePermission.GET + ","
-								+ ServicePermission.REGISTER),
-				new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
-				new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
-				new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"), };
-		
-		setPermissionInfo(location, info);
 	}
 	
 	

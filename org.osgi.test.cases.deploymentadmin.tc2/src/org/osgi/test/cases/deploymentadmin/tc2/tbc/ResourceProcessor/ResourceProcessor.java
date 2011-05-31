@@ -415,9 +415,13 @@ public class ResourceProcessor extends DeploymentTestControl {
     public void testResourceProcessor007() {
 		log("#testResourceProcessor007");
         
+		setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
+				+ DeploymentConstants.PID_RESOURCE_PROCESSOR1, "(name=*)");
+		
         DeploymentPackage dp1 = null, dp2 = null;
 		TestingDeploymentPackage testDP1 = getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_CUSTOMIZER);
 		TestingDeploymentPackage testDP2 = getTestingDeploymentPackage(DeploymentConstants.RP_FROM_OTHER_DP);
+		
         try {
 			dp1 = installDeploymentPackage(getWebServer()
 					+ testDP1.getFilename());
