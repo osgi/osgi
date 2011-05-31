@@ -1,5 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000-2009).
+ * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -45,16 +46,21 @@ import info.dmtree.spi.ReadableDataSession;
  */
 public class PackageStateReadOnlySession implements ReadableDataSession {
 
+	private static final String PACKAGESTATE = "PackageState";
 	private static final String NAME = "Name";
 	private static final String VERSION = "Version";
 	private static final String REMOVALPENDING = "RemovalPending";
 	private static final String EXPORTINGBUNDLE = "ExportingBundle";
 	private static final String IMPORTINGBUNDLES = "ImportingBundles";
+	private static final String LIST_MIME_TYPE = "org.osgi/1.0/ListSubtree";
+	private static final String NODE_TYPE = "org.osgi/1.0/PackageStateManagementObject";
 
 	private PackageAdmin packageAdmin;
-	private Hashtable /* <String <id>, ExportedPackage exportPackage> */exportPackageObjTable = new Hashtable();
+	private Hashtable exportPackageObjTable = new Hashtable();
 	private Hashtable exportPackageTable = new Hashtable();
-	private int lastId = 0;
+	private Hashtable importingBundlesTable = new Hashtable();
+
+	private int lastId = 1;
 
 	PackageStateReadOnlySession(PackageStatePlugin plugin, BundleContext context) {
 		ServiceReference ref = context.getServiceReference(PackageAdmin.class
@@ -63,7 +69,7 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 	}
 
 	public void nodeChanged(String[] nodePath) throws DmtException {
-		// do nothing - the version and timestamp properties are not supported
+		// do nothing - the version and time stamp properties are not supported
 	}
 
 	public void close() throws DmtException {
@@ -75,7 +81,13 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 		refreshExportPackageTable();
 
 		if (path.length == 1) {
+			if(exportPackageObjTable.isEmpty()){
+				String[] children = new String[1];
+				children[0] = "";
+				return children;
+			}
 			String[] children = new String[exportPackageObjTable.size()];
+			System.out.println("[DEBUG@PSMO]"+exportPackageObjTable.size());
 			int i = 0;
 			for (Enumeration keys = exportPackageObjTable.keys(); keys
 					.hasMoreElements(); i++) {
@@ -93,6 +105,20 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 			children[4] = IMPORTINGBUNDLES;
 			return children;
 		}
+		if (path.length == 3 && path[2].equals(IMPORTINGBUNDLES)) {
+			if(importingBundlesTable.isEmpty()){
+				String[] children = new String[0];
+				//children[0] = "";
+				return children;
+			}
+			Hashtable importingBundlesT = (Hashtable)importingBundlesTable.get(path[1]);
+			String[] children = new String[importingBundlesT.size()];
+			int i = 0;
+			for (Enumeration enu = importingBundlesT.keys();enu.hasMoreElements();i++) {
+				children[i] = (String)enu.nextElement();
+			}
+			return children;
+		}
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 				"No such node defined in the packageState tree.");
 	}
@@ -103,35 +129,21 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 
 		if (path.length == 1) // ./OSGi/<instance_id>/PackageState
 			return new PackageStateMetaNode("PackageState root node.",
-					MetaNode.PERMANENT, !PackageStateMetaNode.CAN_ADD,
+					MetaNode.PERMANENT, 
+					!PackageStateMetaNode.CAN_ADD,
 					!PackageStateMetaNode.CAN_DELETE,
 					!PackageStateMetaNode.ALLOW_ZERO,
 					!PackageStateMetaNode.ALLOW_INFINITE);
 
-		if (path.length == 2) // ./OSGi/<instance_id>/PackageState/...
+		if (path.length == 2) // ./OSGi/<instance_id>/PackageState/<id>
 			return new PackageStateMetaNode("Exported Package <id> subtree",
-					MetaNode.AUTOMATIC, !PackageStateMetaNode.CAN_ADD,
+					MetaNode.AUTOMATIC, 
+					!PackageStateMetaNode.CAN_ADD,
 					!PackageStateMetaNode.CAN_DELETE,
 					PackageStateMetaNode.ALLOW_ZERO,
 					!PackageStateMetaNode.ALLOW_INFINITE);
 
 		if (path.length == 3) { // ./OSGi/<instance_id>/PackageState/<id>/...
-			if (path[2].equals(EXPORTINGBUNDLE))
-				return new PackageStateMetaNode("ID of ExportingBundles.",
-						!PackageStateMetaNode.CAN_DELETE,
-						!PackageStateMetaNode.CAN_REPLACE,
-						!PackageStateMetaNode.ALLOW_ZERO,
-						!PackageStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
-
-			if (path[2].equals(IMPORTINGBUNDLES))
-				return new PackageStateMetaNode("ID of ImportingBundles.",
-						!PackageStateMetaNode.CAN_DELETE,
-						!PackageStateMetaNode.CAN_REPLACE,
-						!PackageStateMetaNode.ALLOW_ZERO,
-						!PackageStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
-
 			if (path[2].equals(NAME))
 				return new PackageStateMetaNode(
 						"Name of the exported package.",
@@ -139,7 +151,7 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 						!PackageStateMetaNode.CAN_REPLACE,
 						!PackageStateMetaNode.ALLOW_ZERO,
 						!PackageStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						DmtData.FORMAT_STRING, null, null);
 
 			if (path[2].equals(VERSION))
 				return new PackageStateMetaNode(
@@ -148,7 +160,7 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 						!PackageStateMetaNode.CAN_REPLACE,
 						!PackageStateMetaNode.ALLOW_ZERO,
 						!PackageStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						DmtData.FORMAT_STRING, null, null);
 
 			if (path[2].equals(REMOVALPENDING))
 				return new PackageStateMetaNode(
@@ -157,9 +169,35 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 						!PackageStateMetaNode.CAN_REPLACE,
 						!PackageStateMetaNode.ALLOW_ZERO,
 						!PackageStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_BOOLEAN, null);
-		}
+						DmtData.FORMAT_BOOLEAN, null, null);
+			
+			if (path[2].equals(EXPORTINGBUNDLE))
+				return new PackageStateMetaNode("Id of ExportingBundles.",
+						!PackageStateMetaNode.CAN_DELETE,
+						!PackageStateMetaNode.CAN_REPLACE,
+						!PackageStateMetaNode.ALLOW_ZERO,
+						!PackageStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_LONG, null, null);
 
+			if (path[2].equals(IMPORTINGBUNDLES))
+				return new PackageStateMetaNode("ID of ImportingBundles.",
+						MetaNode.AUTOMATIC, 
+						!PackageStateMetaNode.CAN_ADD,
+						!PackageStateMetaNode.CAN_DELETE,
+						!PackageStateMetaNode.ALLOW_ZERO,
+						!PackageStateMetaNode.ALLOW_INFINITE);
+		}
+		
+		if (path.length == 4) { // ./OSGi/<instance_id>/PackageState/<id>/Importing Bundle/<Bundle_id>
+			if (path[2].equals(IMPORTINGBUNDLES))
+				return new PackageStateMetaNode(
+						"The BundleID of the ImportingBundles.",
+						!PackageStateMetaNode.CAN_DELETE,
+						!PackageStateMetaNode.CAN_REPLACE,
+						PackageStateMetaNode.ALLOW_ZERO,
+						!PackageStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_LONG, null, null);
+		}
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 				"No such node defined in the packageState tree.");
 	}
@@ -171,24 +209,33 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 
 	public int getNodeVersion(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
-				"Version property is not supported.");
+				"Version property is not supported in the packageState tree..");
 	}
 
 	public Date getNodeTimestamp(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
-				"Timestamp property is not supported.");
+				"Timestamp property is not supported in the packageState tree..");
 	}
 
 	public String getNodeTitle(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
-				"Title property is not supported.");
+				"Title property is not supported in the packageState tree..");
 	}
 
 	public String getNodeType(String[] nodePath) throws DmtException {
+		String[] path = shapedPath(nodePath);
 		refreshExportPackageTable();
+
+		if (path.length == 1) {
+			return NODE_TYPE;
+		}
+		if (path.length == 3 && path[2].equals(IMPORTINGBUNDLES)) {
+			return LIST_MIME_TYPE;
+		}
+		
 		if (isLeafNode(nodePath))
 			return PackageStateMetaNode.LEAF_MIME_TYPE;
-
+		
 		return PackageStateMetaNode.PACKAGESTATE_MO_TYPE;
 	}
 
@@ -196,12 +243,11 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 		String[] path = shapedPath(nodePath);
 		refreshExportPackageTable();
 
-		if (path.length == 1)
+		if (path.length == 1 && path[0].equals(PACKAGESTATE))
 			return true;
 
 		if (path.length == 2) {
-			if (Integer.valueOf(path[1]).intValue() < exportPackageObjTable
-					.size())
+			if (Integer.valueOf(path[1]).intValue() <= exportPackageObjTable.size())
 				return true;
 		}
 
@@ -211,6 +257,15 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 					|| path[2].equals(EXPORTINGBUNDLE)
 					|| path[2].equals(IMPORTINGBUNDLES))
 				return true;
+		}
+		if (path.length == 4 && path[2].equals(IMPORTINGBUNDLES)){
+			Hashtable importingBundlesT = (Hashtable)importingBundlesTable.get(path[1]);
+			int i = 0;
+			for (Enumeration enu = importingBundlesT.keys();enu.hasMoreElements();i++) {
+				String n = (String)enu.nextElement();
+				if (path[3].equals(n))
+					return true;
+			}
 		}
 		return false;
 	}
@@ -225,10 +280,12 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 		if (path.length == 3) {
 			if (path[2].equals(NAME) || path[2].equals(VERSION)
 					|| path[2].equals(REMOVALPENDING)
-					|| path[2].equals(EXPORTINGBUNDLE)
-					|| path[2].equals(IMPORTINGBUNDLES))
+					|| path[2].equals(EXPORTINGBUNDLE))
 				return true;
 		}
+		if (path.length == 4 && path[2].equals(IMPORTINGBUNDLES))
+			return true;
+		
 		return false;
 	}
 
@@ -255,24 +312,17 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 				return new DmtData(exportedPackage.isRemovalPending());
 
 			if (path[2].equals(EXPORTINGBUNDLE)) {
-				return new DmtData(Long.toString(exportedPackage
-						.getExportingBundle().getBundleId()));
-			}
-
-			if (path[2].equals(IMPORTINGBUNDLES)) {
-				Bundle[] importingBundles = exportedPackage
-						.getImportingBundles();
-				if(importingBundles.length==0)
-					return new DmtData("");
-				StringBuffer sb = new StringBuffer();
-				for (int i = 0; i < importingBundles.length; i++) {
-					sb.append(Long.toString(importingBundles[i].getBundleId()));
-					sb.append(",");
-				}
-				StringBuffer result = sb.deleteCharAt(sb.length() - 1);
-				return new DmtData(result.toString());
+				return new DmtData(exportedPackage.getExportingBundle().getBundleId());
 			}
 		}
+
+		if (path.length == 4 && path[2].equals(IMPORTINGBUNDLES)){
+			Hashtable importingBundlesT = (Hashtable)importingBundlesTable.get(path[1]);
+			Long lBundleId = (Long)importingBundlesT.get(path[3]);
+			long bundleId = lBundleId.longValue();
+			return new DmtData(bundleId);
+			}
+
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 				"The specified key does not exist in the packageState object.");
 	}
@@ -288,40 +338,12 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 		System.arraycopy(nodePath, srcPos, newPath, destPos, length);
 		return newPath;
 	}
-
-	private Hashtable manageExportPackages() {
-		Bundle bundle = null;
-		ExportedPackage[] exportPackages = packageAdmin
-				.getExportedPackages(bundle);
-		Hashtable ept = new Hashtable();
-		for (int i = 0; i < exportPackages.length; i++) {
-			String exportedPkg = exportPackages[i].getName() + ":"
-					+ exportPackages[i].getVersion().toString();
-			ept.put(exportedPkg, Integer.toString(i));
-			this.exportPackageObjTable.put(Integer.toString(i),
-					exportPackages[i]);
-		}
-		return ept;
-	}
-
-	private Hashtable manageExportPackages2() {
-		Bundle bundle = null;
-		ExportedPackage[] exportPackages = packageAdmin
-				.getExportedPackages(bundle);
-		Hashtable ept = new Hashtable();
-		for (int i = 0; i < exportPackages.length; i++) {
-			String exportedPkg = exportPackages[i].getName() + ":"
-					+ exportPackages[i].getVersion().toString();
-			ept.put(exportedPkg, Integer.toString(i));
-		}
-		return ept;
-	}
-
-	public void refreshExportPackageTable() {
+	
+	private void refreshExportPackageTable() {
 		if (exportPackageTable.size() == 0) {
 			exportPackageTable = manageExportPackages();
 			Bundle bundle = null;
-			lastId = packageAdmin.getExportedPackages(bundle).length - 1;
+			lastId = packageAdmin.getExportedPackages(bundle).length;
 		}
 		Bundle bundle = null;
 		ExportedPackage[] exportPackages = packageAdmin
@@ -332,11 +354,11 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 			if (!exportPackageTable.containsKey(exportedPkg)) {
 				lastId++;
 				exportPackageTable.put(exportedPkg, Integer.toString(lastId));
-				this.exportPackageObjTable.put(Integer.toString(lastId),
+				exportPackageObjTable.put(Integer.toString(lastId),
 						exportPackages[i]);
 			}
 		}
-		Hashtable exportPackageTableComparison = manageExportPackages2();
+		Hashtable exportPackageTableComparison = manageExportPackagesComparison();
 		for (Enumeration keys = exportPackageTable.keys(); keys
 				.hasMoreElements();) {
 			String key = (String) keys.nextElement();
@@ -346,5 +368,47 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 				exportPackageTable.remove(key);
 			}
 		}
+		managedImportingBundles();
+	}
+	
+	private void managedImportingBundles(){
+		for(Enumeration enu = exportPackageObjTable.keys();enu.hasMoreElements();){
+			String id = (String)enu.nextElement();
+			ExportedPackage exportedPackage = (ExportedPackage) exportPackageObjTable.get(id);
+			Bundle[] importingBundles = exportedPackage.getImportingBundles();
+			Hashtable importingBundlesT = new Hashtable();
+			for (int i = 0; i < importingBundles.length; i++) {
+				importingBundlesT.put(Integer.toString(i+1), new Long(importingBundles[i].getBundleId()));
+			}
+			importingBundlesTable.put(id, importingBundlesT);
+		}
+	}
+
+	private Hashtable manageExportPackages() {
+		Bundle bundle = null;
+		ExportedPackage[] exportPackages = packageAdmin
+				.getExportedPackages(bundle);
+		Hashtable ept = new Hashtable();
+		for (int i = 0; i < exportPackages.length; i++) {
+			String exportedPkg = exportPackages[i].getName() + ":"
+					+ exportPackages[i].getVersion().toString();
+			ept.put(exportedPkg, Integer.toString(i+1));
+			exportPackageObjTable.put(Integer.toString(i+1),
+					exportPackages[i]);
+		}
+		return ept;
+	}
+
+	private Hashtable manageExportPackagesComparison() {
+		Bundle bundle = null;
+		ExportedPackage[] exportPackages = packageAdmin
+				.getExportedPackages(bundle);
+		Hashtable ept = new Hashtable();
+		for (int i = 0; i < exportPackages.length; i++) {
+			String exportedPkg = exportPackages[i].getName() + ":"
+					+ exportPackages[i].getVersion().toString();
+			ept.put(exportedPkg, Integer.toString(i+1));
+		}
+		return ept;
 	}
 }

@@ -1,5 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000-2009).
+ * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -28,7 +29,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Hashtable;
-import java.util.StringTokenizer;
 
 import info.dmtree.DmtAdmin;
 import info.dmtree.DmtData;
@@ -66,7 +66,7 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 	protected static final String TESTPACKAGE6_VERSION = "1.1.0";
 	protected static final String FRAMEWORKPACKAGE = "org.osgi.framework";
 	protected static final String SYSTEMPACKAGE = "org.osgi.test.cases.residentialmanagement.syspkg";
-	protected static final int SLEEP_TIME = 3000;
+	protected static final int SLEEP_TIME = 1000;
 
 	private BundleContext context;
 	private DmtAdmin dmtAdmin;
@@ -97,7 +97,9 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 				DmtSession.LOCK_TYPE_SHARED);
 	}
 
-	protected void tearDown() throws BundleException, InterruptedException {
+	protected void tearDown() throws BundleException, InterruptedException, DmtException{
+		if(session != null)
+			session.close();
 		checkFlag = false;
 		packageRP = false;
 		childName = null;
@@ -114,7 +116,13 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		Thread.sleep(SLEEP_TIME);
 	}
 
-	public void testPackageStateNodeArchitecuture() throws DmtException {
+	
+	/**
+	 * Test of checking PackageState MO node structure.
+	 * 
+	 */
+	public void testPackageStateNodeArchitecuture(){
+		try{
 		// 1st descendants
 		ids = session.getChildNodeNames(PLUGIN_ROOT_URI);
 		assertNotNull("This object should not be null.", ids);
@@ -143,18 +151,55 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 					expected.size());
 
 		}
+		// 3rd descendants
+		for (int i = 0; i < ids.length; i++) {
+			children = session.getChildNodeNames(PLUGIN_ROOT_URI + "/" + ids[i]
+					+ "/" + IMPORTINGBUNDLES);
+			String pkgName = session.getNodeValue(
+					PLUGIN_ROOT_URI + "/" + ids[i] + "/" + NAME).toString();
+			String pkgVer = session.getNodeValue(
+					PLUGIN_ROOT_URI + "/" + ids[i] + "/" + VERSION).toString();
+			ExportedPackage[] exportedPackage = pkgAdmin
+					.getExportedPackages(pkgName);
+			long expBundleId = session.getNodeValue(
+					PLUGIN_ROOT_URI + "/" + ids[i] + "/" + EXPORTINGBUNDLE).getLong();
+			String expBundleIdStr = Long.toString(expBundleId);
+			Bundle[] importingBundles = null;
+			for (int j = 0; j < exportedPackage.length; j++) {
+				if (exportedPackage[j].getVersion().toString().equals(pkgVer)
+						&& Long.toString(
+								exportedPackage[j].getExportingBundle()
+										.getBundleId()).equals(expBundleIdStr)) {
+					importingBundles = exportedPackage[j].getImportingBundles();
+				}
+			}
+			assertEquals("Node number is incorrect.", importingBundles.length,
+					children.length);
+		}
 		session.close();
+		session = null;
+		}catch (DmtException de){
+			de.printStackTrace();
+			fail();
+		}
 	}
 
-	public void testPackageStateNodeCreation() throws DmtException,
-			BundleException, IOException, InterruptedException {
+	/**
+	 * Test of node creation.
+	 * precondition  : "testBundle1" is not installed.
+	 * postcondition : This MO must create subtree which is described 
+	 *                 the exported package by testBundle1 after installation of testBundle1 .
+	 * 
+	 */
+	public void testPackageStateNodeCreation() {
+		try{
 		ids = session.getChildNodeNames(PLUGIN_ROOT_URI);
 		assertNotNull("This object should not be null.", ids);
 		for (int i = 0; i < ids.length; i++) {
 			childName = session.getNodeValue(
-					PLUGIN_ROOT_URI + "/" + i + "/" + NAME).toString();
+					PLUGIN_ROOT_URI + "/" + ids[i] + "/" + NAME).toString();
 			childVer = session.getNodeValue(
-					PLUGIN_ROOT_URI + "/" + i + "/" + VERSION).toString();
+					PLUGIN_ROOT_URI + "/" + ids[i] + "/" + VERSION).toString();
 			if (childName.equals(TESTPACKAGENAME)
 					&& childVer.equals(TESTPACKAGE1_VERSION)) {
 				fail("Test package1 must not exist.");
@@ -165,9 +210,9 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		assertNotNull("This object should not be null.", ids);
 		for (int i = 0; i < ids.length; i++) {
 			childName = session.getNodeValue(
-					PLUGIN_ROOT_URI + "/" + i + "/" + NAME).toString();
+					PLUGIN_ROOT_URI + "/" + ids[i] + "/" + NAME).toString();
 			childVer = session.getNodeValue(
-					PLUGIN_ROOT_URI + "/" + i + "/" + VERSION).toString();
+					PLUGIN_ROOT_URI + "/" + ids[i] + "/" + VERSION).toString();
 			if (childName.equals(TESTPACKAGENAME)
 					&& childVer.equals(TESTPACKAGE1_VERSION)) {
 				checkFlag = true;
@@ -176,10 +221,28 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		}
 		assertTrue(checkFlag);
 		session.close();
+		session = null;
+		}catch (DmtException de){
+			de.printStackTrace();
+			fail();
+		}catch (IOException ie){
+			ie.printStackTrace();
+			fail();
+		}catch (BundleException be){
+			be.printStackTrace();
+			fail();
+		}
 	}
 
-	public void testPackageStateNodeDelete1() throws DmtException,
-			BundleException, IOException, InterruptedException {
+	/**
+	 * 
+	 * Test of node deletion.
+	 * precondition  : "testBundle1" is installed at first.
+	 * postcondition : This MO must delete subtree which is described the exported
+	 *                 package by testBundle1 after testBundle1 is uninstalled.
+	 */
+	public void testPackageStateNodeDelete1() {
+		try{
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
 		testBundle1.uninstall();
 		ids = session.getChildNodeNames(PLUGIN_ROOT_URI);
@@ -195,10 +258,30 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 			}
 		}
 		session.close();
+		session = null;
+		}catch (DmtException de){
+			de.printStackTrace();
+			fail();
+		}catch (IOException ie){
+			ie.printStackTrace();
+			fail();
+		}catch (BundleException be){
+			be.printStackTrace();
+			fail();
+		}
 	}
 
-	public void testPackageStateNodeDelete2() throws DmtException,
-			BundleException, IOException {
+	/**
+	 * 
+	 * Test of node deletion.
+	 * precondition  : "testBundle1" and "testBundle2" are installed at first.
+	 * postcondition : After testBundle1 is uninstalled this MO must NOT delete 
+	 *                 subtree which is described the exported package by testBundle1 
+	 *                 without calling refreshPackages().
+	 *                 
+	 */
+	public void testPackageStateNodeDelete2(){
+		try{
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
 		testBundle2 = installAndStartBundle(TESTBUNDLELOCATION2);
 		testBundle1.uninstall();
@@ -217,10 +300,29 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		}
 		assertTrue(checkFlag);
 		session.close();
+		session = null;
+	}catch (DmtException de){
+		de.printStackTrace();
+		fail();
+	}catch (IOException ie){
+		ie.printStackTrace();
+		fail();
+	}catch (BundleException be){
+		be.printStackTrace();
+		fail();
+	}
 	}
 
-	public void testPackageStateNodeDelete3() throws DmtException,
-			BundleException, IOException, InterruptedException {
+	/**
+	 * 
+	 * Test of node deletion.
+	 * precondition  : "testBundle1" and "testBundle2" are installed at first.
+	 * postcondition : After testBundle1 is uninstalled, this MO must delete 
+	 *                 subtree which is described the exported package by testBundle1.
+	 * 
+	 */
+	public void testPackageStateNodeDelete3() {
+		try{
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
 		testBundle2 = installAndStartBundle(TESTBUNDLELOCATION2);
 		testBundle1.uninstall();
@@ -239,28 +341,66 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 			}
 		}
 		session.close();
+		session = null;
+	}catch (DmtException de){
+		de.printStackTrace();
+		fail();
+	}catch (IOException ie){
+		ie.printStackTrace();
+		fail();
+	}catch (BundleException be){
+		be.printStackTrace();
+		fail();
+	}catch (InterruptedException ine){
+		ine.printStackTrace();
+		fail();
+	}
 	}
 
-	public void testPackageStateNodeAccess() throws DmtException {
+	/**
+	 * Test of access to node.
+	 * 
+	 * 	 
+	 */
+	public void testPackageStateNodeAccess() throws DmtException, BundleException, IOException{
+		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
+		testBundle2 = installAndStartBundle(TESTBUNDLELOCATION2);
+		ids = session.getChildNodeNames(PLUGIN_ROOT_URI);
+		assertNotNull("This object should not be null.", ids);
+		for (int i = 0; i < ids.length; i++) {
+			String packageName = session.getNodeValue(
+					PLUGIN_ROOT_URI + "/" + ids[i] + "/" + NAME).getString();
+			if (packageName.equals(TESTPACKAGENAME)) {
+				targetIdNumber = ids[i];
+				break;
+			}
+		}
+		
+		
 		// ReadOnlyNode
 		try {
-			DmtData data = session.getNodeValue(PLUGIN_ROOT_URI + "/0/" + NAME);
+			DmtData data = session.getNodeValue(PLUGIN_ROOT_URI + "/" + targetIdNumber + "/" + NAME);
 			data.getString();
 
-			data = session.getNodeValue(PLUGIN_ROOT_URI + "/0/" + VERSION);
+			data = session.getNodeValue(PLUGIN_ROOT_URI + "/" + targetIdNumber + "/" + VERSION);
 			data.getString();
 
-			data = session.getNodeValue(PLUGIN_ROOT_URI + "/0/"
+			data = session.getNodeValue(PLUGIN_ROOT_URI + "/" + targetIdNumber + "/"
 					+ REMOVALPENDING);
 			data.getBoolean();
 
-			data = session.getNodeValue(PLUGIN_ROOT_URI + "/0/"
+			data = session.getNodeValue(PLUGIN_ROOT_URI + "/" + targetIdNumber + "/"
 					+ EXPORTINGBUNDLE);
-			data.getString();
+			data.getLong();
 
-			data = session.getNodeValue(PLUGIN_ROOT_URI + "/0/"
-					+ IMPORTINGBUNDLES);
-			data.getString();
+			String[] importBundlesChildren = session
+					.getChildNodeNames(PLUGIN_ROOT_URI + "/" + targetIdNumber + "/"
+							+ IMPORTINGBUNDLES);
+			for (int j = 0; j < importBundlesChildren.length; j++) {
+				data = session.getNodeValue(PLUGIN_ROOT_URI + "/" + targetIdNumber + "/"
+						+ IMPORTINGBUNDLES + "/" + importBundlesChildren[j]);
+				data.getLong();
+			}
 
 		} catch (DmtIllegalStateException e) {
 			fail("Leaf node contains illegal format values.");
@@ -268,13 +408,14 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 			fail("Can not get a leaf node's value.");
 		}
 		session.close();
+		session = null;
 
 		// Write operation must be fail.
 		session = dmtAdmin.getSession(PLUGIN_ROOT_URI,
 				DmtSession.LOCK_TYPE_ATOMIC);
 
 		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/0/" + NAME, new DmtData(
+			session.setNodeValue(PLUGIN_ROOT_URI + "/" + targetIdNumber + "/" + NAME, new DmtData(
 					"test"));
 		} catch (DmtException e) {
 			checkFlag = true;
@@ -283,7 +424,7 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		checkFlag = false;
 
 		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/0/" + VERSION,
+			session.setNodeValue(PLUGIN_ROOT_URI + "/" + targetIdNumber + "/" + VERSION,
 					new DmtData("1.1.1"));
 		} catch (DmtException e) {
 			checkFlag = true;
@@ -292,7 +433,7 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		checkFlag = false;
 
 		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/0/" + REMOVALPENDING,
+			session.setNodeValue(PLUGIN_ROOT_URI + "/" + targetIdNumber + "/" + REMOVALPENDING,
 					new DmtData(1));
 		} catch (DmtException e) {
 			checkFlag = true;
@@ -301,8 +442,8 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		checkFlag = false;
 
 		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/0/" + EXPORTINGBUNDLE,
-					new DmtData("1"));
+			session.setNodeValue(PLUGIN_ROOT_URI + "/" + targetIdNumber + "/" + EXPORTINGBUNDLE,
+					new DmtData(1));
 		} catch (DmtException e) {
 			checkFlag = true;
 		}
@@ -310,17 +451,28 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		checkFlag = false;
 
 		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/0/" + IMPORTINGBUNDLES,
-					new DmtData("2,3,4"));
+			String[] importBundlesChildren = session
+					.getChildNodeNames(PLUGIN_ROOT_URI + "/" + targetIdNumber + "/"
+							+ IMPORTINGBUNDLES);
+			if (importBundlesChildren.length != 0)
+				for (int j = 0; j < importBundlesChildren.length; j++) {
+					session.setNodeValue(PLUGIN_ROOT_URI + "/" + targetIdNumber + "/"
+							+ IMPORTINGBUNDLES + "/" + importBundlesChildren[j], new DmtData(5));
+				}
+
 		} catch (DmtException e) {
 			checkFlag = true;
 		}
 		assertTrue("This leaf node must be read-only:", checkFlag);
 		checkFlag = false;
-
 		session.close();
+		session = null;
 	}
 
+	/**
+	 * Check of node creation of exported package by framework.
+	 *                 
+	 */
 	public void testPackageStateExportedByFrameworkNode() throws DmtException,
 			BundleException, IOException {
 		// Id and Name node check
@@ -362,33 +514,37 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		}
 
 		// ExportingBundle node check
-		String exBundleId = session.getNodeValue(
+		long exBundleId = session.getNodeValue(
 				PLUGIN_ROOT_URI + "/" + targetIdNumber + "/" + EXPORTINGBUNDLE)
-				.getString();
-		if (!exBundleId.equals("0")) {
+				.getLong();
+		if (exBundleId!=0) {
 			fail("This exporting bundle is system bundle(id=0).");
 		}
 
 		// ImportingBundles node check
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
-		String imBundleIds = session
-				.getNodeValue(
-						PLUGIN_ROOT_URI + "/" + targetIdNumber + "/"
-								+ IMPORTINGBUNDLES).getString();
-		String[] imBundleIdsArray = processCommaSeparatedValue(imBundleIds);
-		assertNotNull("This object should not be null.", imBundleIdsArray);
-		for (int i = 0; i < imBundleIdsArray.length; i++) {
-			if (imBundleIdsArray[i].equals(Long.toString(testBundle1
-					.getBundleId()))) {
+		String[] children = session.getChildNodeNames(PLUGIN_ROOT_URI + "/"
+				+ targetIdNumber + "/" + IMPORTINGBUNDLES);
+		assertFalse("This object should not be zero.", children.length == 0);
+		for (int i = 0; i < children.length; i++) {
+			long importingBundleId = session.getNodeValue(
+					PLUGIN_ROOT_URI + "/" + targetIdNumber + "/"
+							+ IMPORTINGBUNDLES + "/" + children[i]).getLong();
+			if (importingBundleId == testBundle1.getBundleId()) {
 				checkFlag = true;
 				break;
 			}
 		}
 		assertTrue(checkFlag);
 		session.close();
+		session = null;
 	}
 
-	public void testPackageStateExportedBySystemPackagekNode()
+	/**
+	 * Check of node creation of SystemPackage.
+	 *                 
+	 */
+	public void testPackageStateExportedBySystemPackageNode()
 			throws DmtException, BundleException, IOException {
 		// Id and Name node check
 		ids = session.getChildNodeNames(PLUGIN_ROOT_URI);
@@ -429,34 +585,37 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		}
 
 		// ExportingBundle node check
-		String exBundleId = session.getNodeValue(
+		long exBundleId = session.getNodeValue(
 				PLUGIN_ROOT_URI + "/" + targetIdNumber + "/" + EXPORTINGBUNDLE)
-				.getString();
-		if (!exBundleId.equals("0")) {
+				.getLong();
+		if (exBundleId!=0) {
 			fail("This exporting bundle is system bundle(id=0).");
 		}
 
 		// ImportingBundles node check
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
 		testBundle2 = installAndStartBundle(TESTBUNDLELOCATION2);
-		String imBundleIds = session
-				.getNodeValue(
-						PLUGIN_ROOT_URI + "/" + targetIdNumber + "/"
-								+ IMPORTINGBUNDLES).getString();
-		String[] imBundleIdsArray = processCommaSeparatedValue(imBundleIds);
-		assertNotNull("This object should not be null.", imBundleIdsArray);
-		for (int i = 0; i < imBundleIdsArray.length; i++) {
-			if (imBundleIdsArray[i].equals(Long.toString(testBundle2
-					.getBundleId()))) {
+		String[] children = session.getChildNodeNames(PLUGIN_ROOT_URI + "/"
+				+ targetIdNumber + "/" + IMPORTINGBUNDLES);
+		assertFalse("This object should not be zero.", children.length == 0);
+		for (int i = 0; i < children.length; i++) {
+			long importingBundleId = session.getNodeValue(
+					PLUGIN_ROOT_URI + "/" + targetIdNumber + "/"
+							+ IMPORTINGBUNDLES + "/" + children[i]).getLong();
+			if (importingBundleId == testBundle2.getBundleId()) {
 				checkFlag = true;
 				break;
 			}
 		}
 		assertTrue(checkFlag);
 		session.close();
-
+		session = null;
 	}
 
+	/**
+	 * Check of node creation of exported package by bundles.
+	 *                 
+	 */
 	public void testPackageStateExportedByBundleNode() throws DmtException,
 			BundleException, IOException {
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
@@ -498,32 +657,39 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		assertFalse(packageRP);
 
 		// ExportingBundle node check
-		String exBundleId = session.getNodeValue(
+		long exBundleId = session.getNodeValue(
 				PLUGIN_ROOT_URI + "/" + targetIdNumber + "/" + EXPORTINGBUNDLE)
-				.getString();
-		assertTrue(exBundleId.equals(Long.toString(testBundle1.getBundleId())));
+				.getLong();
+		assertTrue(exBundleId == testBundle1.getBundleId());
 
 		// ImportingBundles node check
-		String currentImBundleId = Long.toString(testBundle2.getBundleId());
-
-		String imBundleIds = session
-				.getNodeValue(
-						PLUGIN_ROOT_URI + "/" + targetIdNumber + "/"
-								+ IMPORTINGBUNDLES).getString();
-		String[] imBundleIdsArray = processCommaSeparatedValue(imBundleIds);
-		assertNotNull("This object should not be null.", imBundleIdsArray);
-		for (int i = 0; i < imBundleIdsArray.length; i++) {
-			if (imBundleIdsArray[i].equals(currentImBundleId)) {
+		long currentImBundleId = testBundle2.getBundleId();
+		String[] children = session.getChildNodeNames(PLUGIN_ROOT_URI + "/"
+				+ targetIdNumber + "/" + IMPORTINGBUNDLES);
+		assertFalse("This object should not be zero.", children.length == 0);
+		for (int i = 0; i < children.length; i++) {
+			long importingBundleId = session.getNodeValue(
+					PLUGIN_ROOT_URI + "/" + targetIdNumber + "/"
+							+ IMPORTINGBUNDLES + "/" + children[i]).getLong();
+			if (importingBundleId == currentImBundleId) {
 				checkFlag = true;
 				break;
 			}
 		}
 		assertTrue(checkFlag);
 		session.close();
-
+		session = null;
 	}
 
-	public void testPackageStateNodeUpdate1() throws DmtException,
+	/**
+	 * Test of bundle update.
+	 * precondition  : "testBundle1" and "testBundle2" are installed at first.
+	 * postcondition : After testBundle1 is updated to testBundle6 which exports higher 
+	 *                 version package, this MO must keep subtree which is described 
+	 *                 the exported package by previous testBundle1 without calling refreshPackages().
+	 *             
+	 */
+	public void testPackageStateNodeUpdate() throws DmtException,
 			BundleException, IOException {
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
 		testBundle2 = installAndStartBundle(TESTBUNDLELOCATION2);
@@ -543,64 +709,10 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		}
 		assertTrue(checkFlag);
 		session.close();
+		session = null;
 	}
-
-	//FW�������ĂȂ��̂ŁCTC����O���D
-	public void suspendedTestPackageStateNodeUpdate2() throws DmtException,
-			BundleException, IOException, InterruptedException {
-		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
-		testBundle2 = installAndStartBundle(TESTBUNDLELOCATION2);
-		
-		System.out.println("First----------------------------------------------------------------");
-		
-		ExportedPackage[] exportedPackage1 = pkgAdmin.getExportedPackages(testBundle1);
-		for(int i=0 ;i<exportedPackage1.length;i++){
-			System.out.println("###Bundle1 : "+exportedPackage1[i].getVersion().toString());
-		}
-		this.updateBundle(TESTBUNDLELOCATION6, testBundle1);
-		
-		System.out.println("Second----------------------------------------------------------------");
-		
-		exportedPackage1 = pkgAdmin.getExportedPackages(testBundle1);
-		for(int i=0 ;i<exportedPackage1.length;i++){
-			System.out.println("###Bundle1 : "+exportedPackage1[i].getVersion().toString());
-		}
-		
-		System.out.println("Third----------------------------------------------------------------");
-		
-		pkgAdmin.refreshPackages(null);
-		Thread.sleep(SLEEP_TIME);
-		
-		System.out.println("###Bundle1SymbolicName : "+testBundle1.getSymbolicName());
-
-		exportedPackage1 = pkgAdmin.getExportedPackages(testBundle1);
-		for(int i=0 ;i<exportedPackage1.length;i++){
-			System.out.println("###Bundle1 : "+exportedPackage1[i].getVersion().toString());
-		}
-		System.out.println("End of checking----------------------------------------------------------------");
-		
-		ids = session.getChildNodeNames(PLUGIN_ROOT_URI);
-		assertNotNull("This object should not be null.", ids);
-		for (int i = 0; i < ids.length; i++) {
-			childName = session.getNodeValue(
-					PLUGIN_ROOT_URI + "/" + ids[i] + "/" + NAME).toString();
-			childVer = session.getNodeValue(
-					PLUGIN_ROOT_URI + "/" + ids[i] + "/" + VERSION).toString();
-			System.out.println("##Name##"+childName);
-			System.out.println("##Ver##"+childVer);
-			
-			if (childName.equals(TESTPACKAGENAME)
-					&& childVer.equals(TESTPACKAGE1_VERSION)) {
-				assertTrue(false);
-			} else if (childName.equals(TESTPACKAGENAME)
-					&& childVer.equals(TESTPACKAGE6_VERSION)) {
-				checkFlag = true;
-				break;
-			}
-		}
-		assertTrue(checkFlag);
-		session.close();
-	}
+	
+	// ----- Utilities -----//
 
 	private Bundle installAndStartBundle(String location) throws IOException,
 			BundleException {
@@ -619,16 +731,4 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		bundle.update(is);
 		is.close();
 	}
-
-	private String[] processCommaSeparatedValue(String value) {
-		StringTokenizer st = new StringTokenizer(value, ",");
-		String[] arrayValue = new String[st.countTokens()];
-		for (int i = 0; st.hasMoreTokens(); i++) {
-			arrayValue[i] = st.nextToken();
-		}
-		if (arrayValue.length == 0)
-			return null;
-		return arrayValue;
-	}
-
 }

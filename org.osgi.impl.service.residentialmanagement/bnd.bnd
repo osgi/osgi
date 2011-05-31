@@ -8,7 +8,8 @@ Private-Package		= ${p}.*
 
 -buildpath			= \
 	osgi.core;					version=4.2		, \
-	osgi.cmpn;					version=4.2		, \
-	ee.foundation;				version=1.1	
+	osgi.cmpn;					version=project		, \
+	ee.foundation;				version=1.1	    , \
+	info.dmtree;				version=project
 
 	
