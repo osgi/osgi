@@ -175,7 +175,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 						!BundleStateMetaNode.ALLOW_INFINITE);
 			
 			if (path[2].equals(HOST))
-				return new ServiceStateMetaNode("bundle_id of Host Bundle",
+				return new BundleResourcesMetaNode("bundle_id of Host Bundle",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
@@ -183,7 +183,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 						DmtData.FORMAT_STRING, null);
 
 			if (path[2].equals(FRAGMENTS))
-				return new ServiceStateMetaNode(
+				return new BundleResourcesMetaNode(
 						"bundle_id of Fragments Bundle",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
@@ -192,7 +192,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 						DmtData.FORMAT_STRING, null);
 
 			if (path[2].equals(REQUIRED))
-				return new ServiceStateMetaNode("bundle_id of Required Bundle",
+				return new BundleResourcesMetaNode("bundle_id of Required Bundle",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
@@ -200,7 +200,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 						DmtData.FORMAT_STRING, null);
 
 			if (path[2].equals(REQUIRING))
-				return new ServiceStateMetaNode(
+				return new BundleResourcesMetaNode(
 						"bundle_id of Requiring Bundle",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
@@ -217,7 +217,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 						!BundleStateMetaNode.ALLOW_INFINITE);
 
 			if (path[2].equals(SYMBOLICNAME))
-				return new ServiceStateMetaNode(
+				return new BundleResourcesMetaNode(
 						"The SymbolicName of the bundle.",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
@@ -226,7 +226,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 						DmtData.FORMAT_STRING, null);
 
 			if (path[2].equals(VERSION))
-				return new ServiceStateMetaNode("The Version of the bundle.",
+				return new BundleResourcesMetaNode("The Version of the bundle.",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
@@ -234,7 +234,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 						DmtData.FORMAT_STRING, null);
 
 			if (path[2].equals(BUNDLETYPE))
-				return new ServiceStateMetaNode("The type of the bundle.",
+				return new BundleResourcesMetaNode("The type of the bundle.",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
@@ -242,7 +242,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 						DmtData.FORMAT_INTEGER, null);
 
 			if (path[2].equals(MANIFEST))
-				return new ServiceStateMetaNode("The Manifest of the bundle.",
+				return new BundleResourcesMetaNode("The Manifest of the bundle.",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
@@ -250,7 +250,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 						DmtData.FORMAT_STRING, null);
 			
 			if (path[2].equals(TRUSTEDSIGNERCERTIFICATIONS))
-				return new ServiceStateMetaNode("A trusted signer of the Bundle",
+				return new BundleResourcesMetaNode("A trusted signer of the Bundle",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
@@ -258,7 +258,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 						DmtData.FORMAT_STRING, null);
 			
 			if (path[2].equals(NONTRUSTEDSIGNERCERTIFICATIONS))
-				return new ServiceStateMetaNode("A non trasted signer of the Bundle",
+				return new BundleResourcesMetaNode("A non trasted signer of the Bundle",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
@@ -268,7 +268,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 
 		if (path.length == 4) { // ./OSGi/<instance_id>/BundleState/<bundle_id>/.../...
 			if (path[3].equals(LOCATION))
-				return new ServiceStateMetaNode("Bundle Location",
+				return new BundleResourcesMetaNode("Bundle Location",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
@@ -276,7 +276,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 						DmtData.FORMAT_STRING, null);
 
 			if (path[3].equals(STATE))
-				return new ServiceStateMetaNode("The state of the bundle.",
+				return new BundleResourcesMetaNode("The state of the bundle.",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
@@ -284,7 +284,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 						DmtData.FORMAT_INTEGER, null);
 
 			if (path[3].equals(STARTLEVEL))
-				return new ServiceStateMetaNode(
+				return new BundleResourcesMetaNode(
 						"The StartLevel of the bundle.",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
@@ -293,7 +293,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 						DmtData.FORMAT_INTEGER, null);
 
 			if (path[3].equals(PERSISTENTLYSTARTED))
-				return new ServiceStateMetaNode("PersistentlyStarted",
+				return new BundleResourcesMetaNode("PersistentlyStarted",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
@@ -301,7 +301,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 						DmtData.FORMAT_BOOLEAN, null);
 
 			if (path[3].equals(LASTMODIFIED))
-				return new ServiceStateMetaNode("The date of last modified.",
+				return new BundleResourcesMetaNode("The date of last modified.",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,

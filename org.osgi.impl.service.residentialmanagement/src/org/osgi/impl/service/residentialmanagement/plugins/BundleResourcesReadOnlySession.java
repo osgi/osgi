@@ -128,7 +128,7 @@ public class BundleResourcesReadOnlySession implements ReadableDataSession {
 							!BundleResourcesMetaNode.ALLOW_ZERO,
 							!BundleResourcesMetaNode.ALLOW_INFINITE);
 				if (isLeafNode(nodePath))
-					return new ServiceStateMetaNode(
+					return new BundleResourcesMetaNode(
 							"The SymbolicName of the bundle.",
 							!BundleResourcesMetaNode.CAN_DELETE,
 							!BundleResourcesMetaNode.CAN_REPLACE,

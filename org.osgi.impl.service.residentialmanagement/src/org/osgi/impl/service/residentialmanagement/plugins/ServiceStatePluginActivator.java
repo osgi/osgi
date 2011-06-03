@@ -35,8 +35,6 @@ import info.dmtree.spi.DataPlugin;
  */
 public class ServiceStatePluginActivator implements BundleActivator {
 	static final String INSTANCE_ID = "1";
-	static final String[] PLUGIN_ROOT_PATH = 
-        new String[] { ".", "OSGi", INSTANCE_ID, "ServiceState" };
     static final String PLUGIN_ROOT_URI = "./OSGi/" + INSTANCE_ID + "/ServiceState";
    
 	public void start(BundleContext bc) throws BundleException {

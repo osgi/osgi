@@ -10,6 +10,7 @@ Private-Package		= ${p}.*
 	osgi.core;					version=4.2		, \
 	osgi.cmpn;					version=project		, \
 	ee.foundation;				version=1.1	    , \
-	info.dmtree;				version=project
+	info.dmtree;				version=project	, \
+	org.osgi.util.tracker;		version=project
 
 	
