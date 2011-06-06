@@ -1,5 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000-2009).
+ * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -64,6 +65,7 @@ public class BundleStateMetaNode implements MetaNode {
 	private int			formats					= DmtData.FORMAT_NULL;
 	private String[]	mimeTypes				= null;
     
+	//TODO
 	// Leaf node in BundleStatePlugin
 	// First element in validValues (if any) is the default value.
 	BundleStateMetaNode(String description, boolean canDelete, 
@@ -84,6 +86,7 @@ public class BundleStateMetaNode implements MetaNode {
 
 	}
 
+	//TODO
 	// Interior node in BundleStatePlugin
 	BundleStateMetaNode(String description, int scope, boolean canAdd, 
 			boolean canDelete, boolean allowZero, boolean allowInfinite) {

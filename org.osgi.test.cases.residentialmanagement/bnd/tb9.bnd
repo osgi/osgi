@@ -13,5 +13,5 @@ Include-Resource: \
  		TestDir/TestFile2.txt = bnd/TestFile2.txt,\
  		TestDir/TestFile3.txt = bnd/TestFile3.txt
  		
--signaturetest = org.osgi.service.component
+-sign: test
  

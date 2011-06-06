@@ -27,14 +27,17 @@ package org.osgi.test.cases.residentialmanagement;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.security.Principal;
+import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable; //import java.util.Map;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import info.dmtree.DmtAdmin;
 import info.dmtree.DmtData;
@@ -56,23 +59,25 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 	static final String INSTANCE_ID = "1";
 	static final String PLUGIN_ROOT_URI = "./OSGi/1/BundleState";
 
+	protected static final String ID = "ID";
 	protected static final String SYMBOLICNAME = "SymbolicName";
 	protected static final String VERSION = "Version";
 	protected static final String BUNDLETYPE = "BundleType";
 	protected static final String MANIFEST = "Manifest";
+	protected static final String LOCATION = "Location";
 	protected static final String STATUS = "Status";
-	protected static final String HOST = "Host";
+	protected static final String HOSTS = "Hosts";
 	protected static final String FRAGMENTS = "Fragments";
 	protected static final String REQUIRED = "Required";
 	protected static final String REQUIRING = "Requiring";
-	protected static final String BUNDLESTATEEXT = "BundleStateExt";
-	protected static final String LOCATION = "Location";
-	protected static final String STARTLEVEL = "StartLevel";
+	protected static final String TRUSTEDSIGNERCERTIFICATION = "TrustedSignerCertificate";
+	protected static final String NONTRUSTEDSIGNERCERTIFICATION = "NonTrustedSignerCertificate";
 	protected static final String STATE = "State";
+	protected static final String STARTLEVEL = "StartLevel";
 	protected static final String PERSISTENTLYSTARTED = "PersistentlyStarted";
+	protected static final String ACTIVATIONPOLICYUSED = "ActivationPolicyUsed";
 	protected static final String LASTMODIFIED = "LastModified";
-	private static final String TRUSTEDSIGNERCERTIFICATIONS = "TrustedSignerCertifications";
-	private static final String NONTRUSTEDSIGNERCERTIFICATIONS = "NonTrustedSignerCertifications";
+	protected static final String CERTIFICATECHAIN = "CertificateChain";
 
 	protected static final String TESTBUNDLELOCATION1 = "org.osgi.test.cases.residentialmanagement.tb1.jar";
 	protected static final String TESTBUNDLELOCATION2 = "org.osgi.test.cases.residentialmanagement.tb7.jar";
@@ -130,9 +135,14 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		session.close();
 		dmtAdmin = null;
 		checkFlag = false;
-
 	}
 
+	/**
+	 * 
+	 * Test of checking BundleState MO node structure.
+	 * 
+	 * @throws DmtException
+	 */
 	public void testBundleStateNodeArchitecture() throws DmtException {
 		// 1st descendants
 		String[] children;
@@ -140,7 +150,7 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		Bundle[] bundles = context.getBundles();
 		assertNotNull("This object should not be null.", bundles);
 		for (int i = 0; i < bundles.length; i++) {
-			long bundleId = bundles[i].getBundleId();
+			long bundleId = bundles[i].getBundleId() + 1;
 			String bundleIdStr = Long.toString(bundleId);
 			bundleIdTable.put(bundleIdStr, "");
 		}
@@ -156,18 +166,19 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		// 2nd descendants
 		Hashtable expectedSecond = new Hashtable();
 		for (int i = 0; i < bundleIds.length; i++) {
+			expectedSecond.put(ID, "");
 			expectedSecond.put(SYMBOLICNAME, "");
 			expectedSecond.put(VERSION, "");
 			expectedSecond.put(BUNDLETYPE, "");
 			expectedSecond.put(MANIFEST, "");
+			expectedSecond.put(LOCATION, "");
 			expectedSecond.put(STATUS, "");
-			expectedSecond.put(HOST, "");
+			expectedSecond.put(HOSTS, "");
 			expectedSecond.put(FRAGMENTS, "");
 			expectedSecond.put(REQUIRED, "");
 			expectedSecond.put(REQUIRING, "");
-			expectedSecond.put(BUNDLESTATEEXT, "");
-			expectedSecond.put(TRUSTEDSIGNERCERTIFICATIONS, "");
-			expectedSecond.put(NONTRUSTEDSIGNERCERTIFICATIONS, "");
+			expectedSecond.put(TRUSTEDSIGNERCERTIFICATION, "");
+			expectedSecond.put(NONTRUSTEDSIGNERCERTIFICATION, "");
 			children = session.getChildNodeNames(PLUGIN_ROOT_URI + "/"
 					+ bundleIds[i]);
 			assertFalse("These objects must exist.", children.equals(""));
@@ -183,10 +194,10 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		// 3rd descendants in case of STATUS
 		Hashtable expectedState = new Hashtable();
 		for (int i = 0; i < bundleIds.length; i++) {
-			expectedState.put(LOCATION, "");
 			expectedState.put(STATE, "");
 			expectedState.put(STARTLEVEL, "");
 			expectedState.put(PERSISTENTLYSTARTED, "");
+			expectedState.put(ACTIVATIONPOLICYUSED, "");
 			expectedState.put(LASTMODIFIED, "");
 			children = session.getChildNodeNames(PLUGIN_ROOT_URI + "/"
 					+ bundleIds[i] + "/" + STATUS);
@@ -199,142 +210,144 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 					expectedState.size());
 		}
 		expectedState = null;
+
+		// 3rd descendants in case of children of Hosts
 	}
 
+	/**
+	 * 
+	 * To check deletion of ../BundleState/<id> subtree after the Bundle is
+	 * uninstalled.
+	 * 
+	 * precondition : "testBundle1" is installed. Therefore, ../BundleState/<id>
+	 * subtree must exist. postcondition : "testBundle1" is uninstalled. Then,
+	 * the ../BundleState/<id> subtree must be deleted.
+	 * 
+	 * @throws DmtException
+	 * @throws BundleException
+	 * @throws IOException
+	 */
 	public void testBundleStateNodePermanency() throws DmtException,
 			BundleException, IOException {
+		boolean flag = false;
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
-		long bundleId = testBundle1.getBundleId();
 		String symbolicName = session.getNodeValue(
-				PLUGIN_ROOT_URI + "/" + bundleId + "/" + SYMBOLICNAME)
-				.getString();
+				PLUGIN_ROOT_URI + "/"
+						+ Long.toString(testBundle1.getBundleId() + 1) + "/"
+						+ SYMBOLICNAME).getString();
 		assertEquals("This value must be " + TESTBUNDLESYMBOLICNAME1 + ".",
 				symbolicName, TESTBUNDLESYMBOLICNAME1);
 		testBundle1.uninstall();
-		String symbolicNameAfter = session.getNodeValue(
-				PLUGIN_ROOT_URI + "/" + bundleId + "/" + SYMBOLICNAME)
-				.getString();
-		assertEquals("This value must be " + TESTBUNDLESYMBOLICNAME1 + ".",
-				symbolicNameAfter, TESTBUNDLESYMBOLICNAME1);
+		try {
+			session.getNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle1.getBundleId() + 1)
+							+ "/" + SYMBOLICNAME).getString();
+		} catch (DmtException de) {
+			flag = true;
+		}
+		assertTrue(flag);
 	}
 
+	/**
+	 * 
+	 * Test of access to node.
+	 * 
+	 * @throws DmtException
+	 * @throws BundleException
+	 * @throws IOException
+	 */
 	public void testBundleStateNodeAccess() throws DmtException,
 			BundleException, IOException {
 		// Check ReadOnly Node
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
+		DmtData id = session.getNodeValue(PLUGIN_ROOT_URI + "/"
+				+ Long.toString(testBundle1.getBundleId() + 1) + "/" + ID);
+		try {
+			id.getLong();
+		} catch (DmtIllegalStateException dise) {
+			fail("This value must be Long.");
+		}
 		DmtData symbolicName = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + SYMBOLICNAME);
+				+ Long.toString(testBundle1.getBundleId() + 1) + "/"
+				+ SYMBOLICNAME);
 		try {
 			symbolicName.getString();
 		} catch (DmtIllegalStateException dise) {
 			fail("This value must be String.");
 		}
 		DmtData version = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + VERSION);
+				+ Long.toString(testBundle1.getBundleId() + 1) + "/" + VERSION);
 		try {
 			version.getString();
 		} catch (DmtIllegalStateException dise) {
 			fail("This value must be String.");
 		}
 		DmtData bundleType = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + BUNDLETYPE);
+				+ Long.toString(testBundle1.getBundleId() + 1) + "/"
+				+ BUNDLETYPE);
 		try {
 			bundleType.getInt();
 		} catch (DmtIllegalStateException dise) {
 			fail("This value must be Integer.");
 		}
-		DmtData manifest = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + MANIFEST);
+		DmtData manifest = session
+				.getNodeValue(PLUGIN_ROOT_URI + "/"
+						+ Long.toString(testBundle1.getBundleId() + 1) + "/"
+						+ MANIFEST);
 		try {
 			manifest.getString();
 		} catch (DmtIllegalStateException dise) {
 			fail("This value must be String.");
 		}
-		DmtData location = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + STATUS + "/" + LOCATION);
+		DmtData location = session
+				.getNodeValue(PLUGIN_ROOT_URI + "/"
+						+ Long.toString(testBundle1.getBundleId() + 1) + "/"
+						+ LOCATION);
 		try {
 			location.getString();
 		} catch (DmtIllegalStateException dise) {
 			fail("This value must be String.");
 		}
 		DmtData state = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + STATUS + "/" + STATE);
+				+ Long.toString(testBundle1.getBundleId() + 1) + "/" + STATUS
+				+ "/" + STATE);
 		try {
 			state.getInt();
 		} catch (DmtIllegalStateException dise) {
 			fail("This value must be Integer.");
 		}
 		DmtData starteLevel = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + STATUS + "/" + STARTLEVEL);
+				+ Long.toString(testBundle1.getBundleId() + 1) + "/" + STATUS
+				+ "/" + STARTLEVEL);
 		try {
 			starteLevel.getInt();
 		} catch (DmtIllegalStateException dise) {
 			fail("This value must be Integer.");
 		}
 		DmtData persistentlyStarted = session.getNodeValue(PLUGIN_ROOT_URI
-				+ "/" + testBundle1.getBundleId() + "/" + STATUS + "/"
-				+ PERSISTENTLYSTARTED);
+				+ "/" + Long.toString(testBundle1.getBundleId() + 1) + "/"
+				+ STATUS + "/" + PERSISTENTLYSTARTED);
 		try {
 			persistentlyStarted.getBoolean();
 		} catch (DmtIllegalStateException dise) {
 			fail("This value must be boolean.");
 		}
-		DmtData lastModified = session
-				.getNodeValue(PLUGIN_ROOT_URI + "/" + testBundle1.getBundleId()
-						+ "/" + STATUS + "/" + LASTMODIFIED);
+		DmtData lastModified = session.getNodeValue(PLUGIN_ROOT_URI + "/"
+				+ Long.toString(testBundle1.getBundleId() + 1) + "/" + STATUS
+				+ "/" + LASTMODIFIED);
 		try {
-			lastModified.getDate();
+			lastModified.getDateTime();
 		} catch (DmtIllegalStateException dise) {
 			fail("This value must be Date.");
 		}
-
-		DmtData host = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + HOST);
+		DmtData activationPolicyUsed = session.getNodeValue(PLUGIN_ROOT_URI
+				+ "/" + Long.toString(testBundle1.getBundleId() + 1) + "/"
+				+ STATUS + "/" + ACTIVATIONPOLICYUSED);
 		try {
-			host.getString();
+			activationPolicyUsed.getBoolean();
 		} catch (DmtIllegalStateException dise) {
-			fail("This value must be String.");
-		}
-
-		DmtData fragments = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + FRAGMENTS);
-		try {
-			fragments.getString();
-		} catch (DmtIllegalStateException dise) {
-			fail("This value must be String.");
-		}
-
-		DmtData required = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + REQUIRED);
-		try {
-			required.getString();
-		} catch (DmtIllegalStateException dise) {
-			fail("This value must be String.");
-		}
-
-		DmtData requiring = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + REQUIRING);
-		try {
-			requiring.getString();
-		} catch (DmtIllegalStateException dise) {
-			fail("This value must be String.");
-		}
-
-		DmtData trustedSignerCertifications = session
-				.getNodeValue(PLUGIN_ROOT_URI + "/" + testBundle1.getBundleId()
-						+ "/" + TRUSTEDSIGNERCERTIFICATIONS);
-		try {
-			trustedSignerCertifications.getString();
-		} catch (DmtIllegalStateException dise) {
-			fail("This value must be String.");
-		}
-		DmtData nonTrustedSignerCertifications = session
-				.getNodeValue(PLUGIN_ROOT_URI + "/" + testBundle1.getBundleId()
-						+ "/" + NONTRUSTEDSIGNERCERTIFICATIONS);
-		try {
-			nonTrustedSignerCertifications.getString();
-		} catch (DmtIllegalStateException dise) {
-			fail("This value must be String.");
+			fail("This value must be boolean.");
 		}
 
 		// Write operation must be fail.
@@ -342,18 +355,30 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		session = dmtAdmin.getSession(PLUGIN_ROOT_URI,
 				DmtSession.LOCK_TYPE_ATOMIC);
 		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/"
-					+ testBundle1.getBundleId() + "/" + SYMBOLICNAME,
-					new DmtData("test"));
+			session.setNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle1.getBundleId() + 1)
+							+ "/" + ID, new DmtData(1));
 		} catch (DmtException e) {
 			checkFlag = true;
 		}
 		assertTrue("This leaf node must be read-only:", checkFlag);
 		checkFlag = false;
 		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/"
-					+ testBundle1.getBundleId() + "/" + VERSION, new DmtData(
-					"test"));
+			session.setNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle1.getBundleId() + 1)
+							+ "/" + SYMBOLICNAME, new DmtData("test"));
+		} catch (DmtException e) {
+			checkFlag = true;
+		}
+		assertTrue("This leaf node must be read-only:", checkFlag);
+		checkFlag = false;
+		try {
+			session.setNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle1.getBundleId() + 1)
+							+ "/" + VERSION, new DmtData("test"));
 		} catch (DmtException e) {
 			checkFlag = true;
 		}
@@ -361,20 +386,10 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		checkFlag = false;
 		try {
 			int i = 1;
-			session.setNodeValue(PLUGIN_ROOT_URI + "/"
-					+ testBundle1.getBundleId() + "/" + BUNDLETYPE,
-					new DmtData(i));
-		} catch (DmtIllegalStateException dise) {
-			checkFlag = true;
-		} catch (DmtException de) {
-			checkFlag = true;
-		}
-		assertTrue("This leaf node must be read-only:", checkFlag);
-		checkFlag = false;
-		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/"
-					+ testBundle1.getBundleId() + "/" + MANIFEST, new DmtData(
-					"test"));
+			session.setNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle1.getBundleId() + 1)
+							+ "/" + BUNDLETYPE, new DmtData(i));
 		} catch (DmtIllegalStateException dise) {
 			checkFlag = true;
 		} catch (DmtException de) {
@@ -384,8 +399,9 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		checkFlag = false;
 		try {
 			session.setNodeValue(
-					PLUGIN_ROOT_URI + "/" + testBundle1.getBundleId() + "/"
-							+ STATUS + "/" + LOCATION, new DmtData("test"));
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle1.getBundleId() + 1)
+							+ "/" + MANIFEST, new DmtData("test"));
 		} catch (DmtIllegalStateException dise) {
 			checkFlag = true;
 		} catch (DmtException de) {
@@ -394,9 +410,10 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		assertTrue("This leaf node must be read-only:", checkFlag);
 		checkFlag = false;
 		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/"
-					+ testBundle1.getBundleId() + "/" + STATUS + "/" + STATE,
-					new DmtData(1));
+			session.setNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle1.getBundleId() + 1)
+							+ "/" + LOCATION, new DmtData("test"));
 		} catch (DmtIllegalStateException dise) {
 			checkFlag = true;
 		} catch (DmtException de) {
@@ -405,9 +422,10 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		assertTrue("This leaf node must be read-only:", checkFlag);
 		checkFlag = false;
 		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/"
-					+ testBundle1.getBundleId() + "/" + STATUS + "/"
-					+ STARTLEVEL, new DmtData(1));
+			session.setNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle1.getBundleId() + 1)
+							+ "/" + STATUS + "/" + STATE, new DmtData(1));
 		} catch (DmtIllegalStateException dise) {
 			checkFlag = true;
 		} catch (DmtException de) {
@@ -416,9 +434,10 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		assertTrue("This leaf node must be read-only:", checkFlag);
 		checkFlag = false;
 		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/"
-					+ testBundle1.getBundleId() + "/" + STATUS + "/"
-					+ PERSISTENTLYSTARTED, new DmtData(true));
+			session.setNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle1.getBundleId() + 1)
+							+ "/" + STATUS + "/" + STARTLEVEL, new DmtData(1));
 		} catch (DmtIllegalStateException dise) {
 			checkFlag = true;
 		} catch (DmtException de) {
@@ -427,9 +446,11 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		assertTrue("This leaf node must be read-only:", checkFlag);
 		checkFlag = false;
 		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/"
-					+ testBundle1.getBundleId() + "/" + STATUS + "/"
-					+ LASTMODIFIED, new DmtData(1));
+			session.setNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle1.getBundleId() + 1)
+							+ "/" + STATUS + "/" + PERSISTENTLYSTARTED,
+					new DmtData(true));
 		} catch (DmtIllegalStateException dise) {
 			checkFlag = true;
 		} catch (DmtException de) {
@@ -438,9 +459,10 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		assertTrue("This leaf node must be read-only:", checkFlag);
 		checkFlag = false;
 		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/"
-					+ testBundle1.getBundleId() + "/" + HOST, new DmtData(
-					"test"));
+			session.setNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle1.getBundleId() + 1)
+							+ "/" + STATUS + "/" + LASTMODIFIED, new DmtData(1));
 		} catch (DmtIllegalStateException dise) {
 			checkFlag = true;
 		} catch (DmtException de) {
@@ -449,9 +471,11 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		assertTrue("This leaf node must be read-only:", checkFlag);
 		checkFlag = false;
 		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/"
-					+ testBundle1.getBundleId() + "/" + FRAGMENTS, new DmtData(
-					"test"));
+			session.setNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle1.getBundleId() + 1)
+							+ "/" + STATUS + "/" + ACTIVATIONPOLICYUSED,
+					new DmtData(true));
 		} catch (DmtIllegalStateException dise) {
 			checkFlag = true;
 		} catch (DmtException de) {
@@ -459,57 +483,23 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		}
 		assertTrue("This leaf node must be read-only:", checkFlag);
 		checkFlag = false;
-		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/"
-					+ testBundle1.getBundleId() + "/" + REQUIRED, new DmtData(
-					"test"));
-		} catch (DmtIllegalStateException dise) {
-			checkFlag = true;
-		} catch (DmtException de) {
-			checkFlag = true;
-		}
-		assertTrue("This leaf node must be read-only:", checkFlag);
-		checkFlag = false;
-		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/"
-					+ testBundle1.getBundleId() + "/" + REQUIRING, new DmtData(
-					"test"));
-		} catch (DmtIllegalStateException dise) {
-			checkFlag = true;
-		} catch (DmtException de) {
-			checkFlag = true;
-		}
-		assertTrue("This leaf node must be read-only:", checkFlag);
-		checkFlag = false;
-		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/"
-					+ testBundle1.getBundleId() + "/"
-					+ TRUSTEDSIGNERCERTIFICATIONS, new DmtData("test"));
-		} catch (DmtIllegalStateException dise) {
-			checkFlag = true;
-		} catch (DmtException de) {
-			checkFlag = true;
-		}
-		assertTrue("This leaf node must be read-only:", checkFlag);
-		checkFlag = false;
-		try {
-			session.setNodeValue(PLUGIN_ROOT_URI + "/"
-					+ testBundle1.getBundleId() + "/"
-					+ NONTRUSTEDSIGNERCERTIFICATIONS, new DmtData("test"));
-		} catch (DmtIllegalStateException dise) {
-			checkFlag = true;
-		} catch (DmtException de) {
-			checkFlag = true;
-		}
-		assertTrue("This leaf node must be read-only:", checkFlag);
 		testBundle1.uninstall();
 	}
 
+	/**
+	 * 
+	 * To check the SymbolicName LeafNode value.
+	 * 
+	 * @throws DmtException
+	 * @throws BundleException
+	 * @throws IOException
+	 */
 	public void testBundleStateCheckSymbolicName() throws DmtException,
 			BundleException, IOException {
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
 		DmtData symbolicName = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + SYMBOLICNAME);
+				+ Long.toString(testBundle1.getBundleId() + 1) + "/"
+				+ SYMBOLICNAME);
 		try {
 			symbolicName.getString();
 		} catch (DmtIllegalStateException dise) {
@@ -520,55 +510,96 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		testBundle1.uninstall();
 	}
 
+	/**
+	 * 
+	 * To check the Version LeafNode value.
+	 * 
+	 * @throws DmtException
+	 * @throws BundleException
+	 * @throws IOException
+	 */
 	public void testBundleStateCheckVersion() throws DmtException,
 			BundleException, IOException {
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
 		String versionFromFW = testBundle1.getVersion().toString();
 		DmtData version = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + VERSION);
+				+ Long.toString(testBundle1.getBundleId() + 1) + "/" + VERSION);
 		try {
 			version.getString();
 		} catch (DmtIllegalStateException dise) {
 			fail("This value must be String.");
 		}
-		assertEquals("This value must be " + versionFromFW + ".", version
-				.getString(), versionFromFW);
+		assertEquals("This value must be " + versionFromFW + ".",
+				version.getString(), versionFromFW);
 		testBundle1.uninstall();
 	}
 
+	/**
+	 * 
+	 * To check the BundleType LeafNode value.
+	 * 
+	 * @throws DmtException
+	 * @throws BundleException
+	 * @throws IOException
+	 */
 	public void testBundleStateCheckBundleType() throws DmtException,
 			BundleException, IOException {
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
 		int bundleTypeFromFW = packageAdmin.getBundleType(testBundle1);
 		DmtData bundleType = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + BUNDLETYPE);
+				+ Long.toString(testBundle1.getBundleId() + 1) + "/"
+				+ BUNDLETYPE);
 		try {
 			bundleType.getInt();
 		} catch (DmtIllegalStateException dise) {
 			fail("This value must be Integer.");
 		}
-		assertEquals("This value must be " + bundleTypeFromFW + ".", bundleType
-				.getInt(), bundleTypeFromFW);
+		assertEquals("This value must be " + bundleTypeFromFW + ".",
+				bundleType.getInt(), bundleTypeFromFW);
 		testBundle1.uninstall();
 	}
 
-	public void testBundleStateCheckStatus() throws DmtException,
+	/**
+	 * 
+	 * To check the Location LeafNode value.
+	 * 
+	 * @throws DmtException
+	 * @throws BundleException
+	 * @throws IOException
+	 */
+	public void testBundleStateCheckLocation() throws DmtException,
 			BundleException, IOException {
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
 		String locationFromFW = testBundle1.getLocation();
-		DmtData location = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + STATUS + "/" + LOCATION);
+		DmtData location = session
+				.getNodeValue(PLUGIN_ROOT_URI + "/"
+						+ Long.toString(testBundle1.getBundleId() + 1) + "/"
+						+ LOCATION);
 		try {
 			location.getString();
 		} catch (DmtIllegalStateException dise) {
 			fail("This value must be String.");
 		}
-		assertEquals("This value must be " + locationFromFW + ".", location
-				.getString(), locationFromFW);
+		assertEquals("This value must be " + locationFromFW + ".",
+				location.getString(), locationFromFW);
+		testBundle1.uninstall();
+	}
 
+	/**
+	 * 
+	 * To check LeafNodes value in State subtree.
+	 * 
+	 * @throws DmtException
+	 * @throws BundleException
+	 * @throws IOException
+	 */
+	public void testBundleStateCheckStatus() throws DmtException,
+			BundleException, IOException {
+		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
 		int stateFromFW = testBundle1.getState();
 		DmtData state = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + STATUS + "/" + STATE);
+				+ Long.toString(testBundle1.getBundleId() + 1) + "/" + STATUS
+				+ "/" + STATE);
 		try {
 			state.getInt();
 		} catch (DmtIllegalStateException dise) {
@@ -579,7 +610,8 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 
 		int startLevelFromFW = startLevel.getBundleStartLevel(testBundle1);
 		DmtData starteLevel = session.getNodeValue(PLUGIN_ROOT_URI + "/"
-				+ testBundle1.getBundleId() + "/" + STATUS + "/" + STARTLEVEL);
+				+ Long.toString(testBundle1.getBundleId() + 1) + "/" + STATUS
+				+ "/" + STARTLEVEL);
 		try {
 			starteLevel.getInt();
 		} catch (DmtIllegalStateException dise) {
@@ -591,8 +623,8 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		boolean persistentlyStartedFromFW = startLevel
 				.isBundlePersistentlyStarted(testBundle1);
 		DmtData persistentlyStarted = session.getNodeValue(PLUGIN_ROOT_URI
-				+ "/" + testBundle1.getBundleId() + "/" + STATUS + "/"
-				+ PERSISTENTLYSTARTED);
+				+ "/" + Long.toString(testBundle1.getBundleId() + 1) + "/"
+				+ STATUS + "/" + PERSISTENTLYSTARTED);
 		try {
 			persistentlyStarted.getBoolean();
 		} catch (DmtIllegalStateException dise) {
@@ -601,27 +633,31 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		assertEquals("This value must be " + persistentlyStartedFromFW + ".",
 				persistentlyStarted.getBoolean(), persistentlyStartedFromFW);
 
-		DmtData lastModified = session
-				.getNodeValue(PLUGIN_ROOT_URI + "/" + testBundle1.getBundleId()
-						+ "/" + STATUS + "/" + LASTMODIFIED);
+		DmtData lastModified = session.getNodeValue(PLUGIN_ROOT_URI + "/"
+				+ Long.toString(testBundle1.getBundleId() + 1) + "/" + STATUS
+				+ "/" + LASTMODIFIED);
 		try {
-			lastModified.getDate();
+			lastModified.getDateTime();
 		} catch (DmtIllegalStateException dise) {
 			fail("This value must be Date.");
 		}
 		Date d = new Date(testBundle1.getLastModified());
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy");
-		int i = Integer.parseInt(sdf1.format(d).substring(0, 2)) + 1;
-		String CC = Integer.toString(i);
-		SimpleDateFormat sdf2 = new SimpleDateFormat("yyMMdd");
-		String lastModifiedFromFW = CC + sdf2.format(d);
-
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'hhmmss");
+		String lastModifiedFromFW = sdf.format(d);
 		assertEquals("This value must be " + lastModifiedFromFW + ".",
-				lastModified.getDate(), lastModifiedFromFW);
+				lastModified.getDateTime(), lastModifiedFromFW);
 
 		testBundle1.uninstall();
 	}
 
+	/**
+	 * 
+	 * To check the Manifest LeafNode value.
+	 * 
+	 * @throws DmtException
+	 * @throws BundleException
+	 * @throws IOException
+	 */
 	public void testBundleStateManifest() throws DmtException, BundleException,
 			IOException {
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
@@ -634,13 +670,26 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		}
 		String manifestFormBundle = sb.toString();
 		String manifestFromPrugin = session.getNodeValue(
-				PLUGIN_ROOT_URI + "/" + testBundle1.getBundleId() + "/"
+				PLUGIN_ROOT_URI + "/"
+						+ Long.toString(testBundle1.getBundleId() + 1) + "/"
 						+ MANIFEST).getString();
 
 		assertEquals("Both of manifest must be equal.", manifestFormBundle,
 				manifestFromPrugin);
 	}
 
+	/**
+	 * 
+	 * To check the Hosts and Fragments.
+	 * 
+	 * [testBundle1] This bundle hosts testBundle2.
+	 * 
+	 * [testBundle2] This bundle is fragment bundle of testBundle1.
+	 * 
+	 * @throws DmtException
+	 * @throws BundleException
+	 * @throws IOException
+	 */
 	public void testBundleStateCheckHostAndFragments() throws DmtException,
 			BundleException, IOException {
 		testBundle2 = bundleInstall(TESTBUNDLELOCATION2);
@@ -652,13 +701,15 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 			String hostBundleId = Long.toString(hostBundle[i].getBundleId());
 			checkTable.put(hostBundleId, "");
 		}
-		String hostFromDataPlugIn = session.getNodeValue(
-				PLUGIN_ROOT_URI + "/" + testBundle2.getBundleId() + "/" + HOST)
-				.getString();
-		assertFalse("These objects must exist.", hostFromDataPlugIn.equals(""));
-		String[] hostFromDataPlugInArray = processCommaSeparatedValue(hostFromDataPlugIn);
-		for (int j = 0; j < hostFromDataPlugInArray.length; j++) {
-			checkTable.remove(hostFromDataPlugInArray[j]);
+		String[] hostLeafNode = session.getChildNodeNames(PLUGIN_ROOT_URI + "/"
+				+ Long.toString(testBundle2.getBundleId() + 1) + "/" + HOSTS);
+		assertFalse("These objects must exist.", hostLeafNode.length == 0);
+		for (int i = 0; i < hostLeafNode.length; i++) {
+			long hostFromDataPlugIn = session.getNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle2.getBundleId() + 1)
+							+ "/" + HOSTS + "/" + hostLeafNode[i]).getLong();
+			checkTable.remove(Long.toString(hostFromDataPlugIn));
 		}
 		assertEquals(0, checkTable.size());
 
@@ -669,19 +720,34 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 					.getBundleId());
 			checkTable.put(fragmentBundleId, "");
 		}
-		String fragmentsFromDataPlugIn = session.getNodeValue(
-				PLUGIN_ROOT_URI + "/" + testBundle1.getBundleId() + "/"
-						+ FRAGMENTS).getString();
-		assertFalse("These objects must exist.", fragmentsFromDataPlugIn
-				.equals(""));
-		String[] fragmentsFromDataPlugInArray = processCommaSeparatedValue(fragmentsFromDataPlugIn);
-		for (int j = 0; j < fragmentsFromDataPlugInArray.length; j++) {
-			checkTable.remove(fragmentsFromDataPlugInArray[j]);
+		String[] fragmentLeafNode = session.getChildNodeNames(PLUGIN_ROOT_URI
+				+ "/" + Long.toString(testBundle1.getBundleId() + 1) + "/"
+				+ FRAGMENTS);
+		assertFalse("These objects must exist.", fragmentLeafNode.length == 0);
+		for (int i = 0; i < fragmentLeafNode.length; i++) {
+			long fragmentFromDataPlugIn = session.getNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle1.getBundleId() + 1)
+							+ "/" + FRAGMENTS + "/" + fragmentLeafNode[i])
+					.getLong();
+			checkTable.remove(Long.toString(fragmentFromDataPlugIn));
 		}
 		assertEquals(0, checkTable.size());
 		checkTable = null;
 	}
 
+	/**
+	 * 
+	 * To check the Hosts and Fragments.
+	 * 
+	 * [testBundle1] This bundle is required by testBundle3.
+	 * 
+	 * [testBundle3] This bundle is requiring testBundle1.
+	 * 
+	 * @throws DmtException
+	 * @throws BundleException
+	 * @throws IOException
+	 */
 	public void testBundleStateCheckRequiredAndRequiring() throws DmtException,
 			BundleException, IOException {
 		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
@@ -701,16 +767,18 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 				checkTable.put(requiredBundleId, "");
 			}
 		}
-		String requiredFromDataPlugIn = session.getNodeValue(
-				PLUGIN_ROOT_URI + "/" + testBundle1.getBundleId() + "/"
-						+ REQUIRED).getString();
-		assertFalse("These objects must exist.", requiredFromDataPlugIn
-				.equals(""));
-		String[] requiredFromDataPlugInArray = processCommaSeparatedValue(requiredFromDataPlugIn);
-		for (int j = 0; j < requiredFromDataPlugInArray.length; j++) {
-			checkTable.remove(requiredFromDataPlugInArray[j]);
+		String[] requiredLeafNode = session.getChildNodeNames(PLUGIN_ROOT_URI
+				+ "/" + Long.toString(testBundle1.getBundleId() + 1) + "/"
+				+ REQUIRED);
+		assertFalse("These objects must exist.", requiredLeafNode.length == 0);
+		for (int i = 0; i < requiredLeafNode.length; i++) {
+			long requiredFromDataPlugIn = session.getNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle1.getBundleId() + 1)
+							+ "/" + REQUIRED + "/" + requiredLeafNode[i])
+					.getLong();
+			checkTable.remove(Long.toString(requiredFromDataPlugIn));
 		}
-
 		assertEquals(0, checkTable.size());
 		// requiring
 		for (int i = 0; i < requiredBundle.length; i++) {
@@ -718,14 +786,17 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 					.getBundle().getBundleId());
 			checkTable.put(requiredBundleId, "");
 		}
-		String requiringFromDataPlugIn = session.getNodeValue(
-				PLUGIN_ROOT_URI + "/" + testBundle3.getBundleId() + "/"
-						+ REQUIRING).getString();
-		assertFalse("These objects must exist.", requiringFromDataPlugIn
-				.equals(""));
-		String[] requiringFromDataPlugInArray = processCommaSeparatedValue(requiringFromDataPlugIn);
-		for (int j = 0; j < requiringFromDataPlugInArray.length; j++) {
-			if (checkTable.containsKey(requiringFromDataPlugInArray[j])) {
+		String[] requiringLeafNode = session.getChildNodeNames(PLUGIN_ROOT_URI
+				+ "/" + Long.toString(testBundle3.getBundleId() + 1) + "/"
+				+ REQUIRING);
+		assertFalse("These objects must exist.", requiringLeafNode.length == 0);
+		for (int i = 0; i < requiringLeafNode.length; i++) {
+			long requiringFromDataPlugIn = session.getNodeValue(
+					PLUGIN_ROOT_URI + "/"
+							+ Long.toString(testBundle3.getBundleId() + 1)
+							+ "/" + REQUIRING + "/" + requiringLeafNode[i])
+					.getLong();
+			if (checkTable.containsKey(Long.toString(requiringFromDataPlugIn))) {
 				checkFlag = true;
 				break;
 			}
@@ -734,77 +805,110 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		checkTable = null;
 	}
 
-	// NonTrustedSignerCertifications
+	/**
+	 * 
+	 * Test of NonTrustedSignerCertifications subtree
+	 * 
+	 * @throws DmtException
+	 * @throws BundleException
+	 * @throws IOException
+	 */
 	public void testBundleStateCheckSigner1() throws DmtException,
 			BundleException, IOException {
 		testBundle4 = installAndStartBundle(TESTBUNDLELOCATION4);
-		Hashtable signersCheckTable = new Hashtable();
 		Map signersTrusted = testBundle4
 				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
-		Map signersAll = testBundle4.getSignerCertificates(Bundle.SIGNERS_ALL);
-		Iterator iTrust = signersTrusted.keySet().iterator();
-		while (iTrust.hasNext()) {
-			signersAll.remove(iTrust.next());
+		Map signersNonTrusted = testBundle4
+				.getSignerCertificates(Bundle.SIGNERS_ALL);
+		Iterator itPre = signersTrusted.keySet().iterator();
+		for (int i = 0; itPre.hasNext(); i++) {
+			signersNonTrusted.remove(itPre.next());
 		}
-		Iterator iAll = signersAll.keySet().iterator();
-		while (iAll.hasNext()) {
-			String signer = (String) iAll.next();
-			signersCheckTable.put(signersAll.get(signer), "");
-		}
-		String nonTrustedSignerCertificatons = session.getNodeValue(
-				PLUGIN_ROOT_URI + "/" + testBundle4.getBundleId() + "/"
-						+ NONTRUSTEDSIGNERCERTIFICATIONS).getString();
-		StringTokenizer st = new StringTokenizer(nonTrustedSignerCertificatons,
-				">,<");
-		String[] arrayValue = new String[st.countTokens()];
-		for (int i = 0; st.hasMoreTokens(); i++) {
-			String value = st.nextToken();
-			if (value.startsWith("<")) {
-				value = value.substring(1);
+		List certList = new ArrayList();
+		List nList = new ArrayList();
+		Iterator it = signersNonTrusted.keySet().iterator();
+		for (int i = 0; it.hasNext(); i++) {
+			X509Certificate cert = (X509Certificate) it.next();
+			List certificateChane = (List) signersNonTrusted.get(cert);
+			Iterator itCert = certificateChane.iterator();
+			for (int j = 0; itCert.hasNext(); j++) {
+				X509Certificate certs = (X509Certificate) itCert.next();
+				Principal pri = certs.getIssuerDN();
+				String name = pri.getName();
+				nList.add(name);
 			}
-			if (value.endsWith(">")) {
-				value = value.substring(0, value.length() - 1);
+			certList.add(Integer.toString(i));
+		}
+		String[] id = session.getChildNodeNames(PLUGIN_ROOT_URI + "/"
+				+ Long.toString(testBundle4.getBundleId() + 1) + "/"
+				+ NONTRUSTEDSIGNERCERTIFICATION);
+		assertEquals(certList.size(), id.length);
+		for (int i = 0; i < id.length; i++) {
+			String[] certs = session.getChildNodeNames(PLUGIN_ROOT_URI + "/"
+					+ Long.toString(testBundle4.getBundleId() + 1) + "/"
+					+ NONTRUSTEDSIGNERCERTIFICATION + "/" + id[i] + "/"
+					+ CERTIFICATECHAIN);
+			for (int j = 0; j < certs.length; j++) {
+				String cert = session.getNodeValue(
+						PLUGIN_ROOT_URI + "/"
+								+ Long.toString(testBundle4.getBundleId() + 1)
+								+ "/" + NONTRUSTEDSIGNERCERTIFICATION + "/"
+								+ id[i] + "/" + CERTIFICATECHAIN + "/"
+								+ certs[j]).getString();
+				nList.remove(cert);
 			}
-			arrayValue[i] = value;
 		}
-		for (int j = 0; j < arrayValue.length; j++) {
-			signersCheckTable.remove(arrayValue[j]);
-		}
-		assertEquals(signersCheckTable.size(), 0);
+		assertEquals(nList.size(), 0);
 	}
 
-	// TrustedSignerCertifications
+	/**
+	 * 
+	 * Test of TrustedSignerCertificate subtree
+	 * 
+	 * @throws DmtException
+	 * @throws BundleException
+	 * @throws IOException
+	 */
 	public void testBundleStateCheckSigner2() throws DmtException,
 			BundleException, IOException {
 		testBundle4 = installAndStartBundle(TESTBUNDLELOCATION4);
-		Hashtable signersCheckTable = new Hashtable();
 		Map signersTrusted = testBundle4
 				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
-		Iterator iTrust = signersTrusted.keySet().iterator();
-		while (iTrust.hasNext()) {
-			String signer = (String) iTrust.next();
-			signersCheckTable.put(signersTrusted.get(signer), "");
-		}
-		String trustedSignerCertificatons = session.getNodeValue(
-				PLUGIN_ROOT_URI + "/" + testBundle4.getBundleId() + "/"
-						+ TRUSTEDSIGNERCERTIFICATIONS).getString();
-		StringTokenizer st = new StringTokenizer(trustedSignerCertificatons,
-				">,<");
-		String[] arrayValue = new String[st.countTokens()];
-		for (int i = 0; st.hasMoreTokens(); i++) {
-			String value = st.nextToken();
-			if (value.startsWith("<")) {
-				value = value.substring(1);
+		List certList = new ArrayList();
+		List nList = new ArrayList();
+		Iterator it = signersTrusted.keySet().iterator();
+		for (int i = 0; it.hasNext(); i++) {
+			X509Certificate cert = (X509Certificate) it.next();
+			List certificateChane = (List) signersTrusted.get(cert);
+			Iterator itCert = certificateChane.iterator();
+			for (int j = 0; itCert.hasNext(); j++) {
+				X509Certificate certs = (X509Certificate) itCert.next();
+				Principal pri = certs.getIssuerDN();
+				String name = pri.getName();
+				nList.add(name);
 			}
-			if (value.endsWith(">")) {
-				value = value.substring(0, value.length() - 1);
+			certList.add(Integer.toString(i));
+		}
+		String[] id = session.getChildNodeNames(PLUGIN_ROOT_URI + "/"
+				+ Long.toString(testBundle4.getBundleId() + 1) + "/"
+				+ TRUSTEDSIGNERCERTIFICATION);
+		assertEquals(certList.size(), id.length);
+		for (int i = 0; i < id.length; i++) {
+			String[] certs = session.getChildNodeNames(PLUGIN_ROOT_URI + "/"
+					+ Long.toString(testBundle4.getBundleId() + 1) + "/"
+					+ TRUSTEDSIGNERCERTIFICATION + "/" + id[i] + "/"
+					+ CERTIFICATECHAIN);
+			for (int j = 0; j < certs.length; j++) {
+				String cert = session.getNodeValue(
+						PLUGIN_ROOT_URI + "/"
+								+ Long.toString(testBundle4.getBundleId() + 1)
+								+ "/" + TRUSTEDSIGNERCERTIFICATION + "/"
+								+ id[i] + "/" + CERTIFICATECHAIN + "/"
+								+ certs[j]).getString();
+				nList.remove(cert);
 			}
-			arrayValue[i] = value;
 		}
-		for (int j = 0; j < arrayValue.length; j++) {
-			signersCheckTable.remove(arrayValue[j]);
-		}
-		assertEquals(signersCheckTable.size(), 0);
+		assertEquals(nList.size(), 0);
 	}
 
 	// -----Utilities-----
@@ -825,14 +929,5 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		Bundle bundle = context.installBundle(location, is);
 		is.close();
 		return bundle;
-	}
-
-	private String[] processCommaSeparatedValue(String value) {
-		StringTokenizer st = new StringTokenizer(value, ",");
-		String[] arrayValue = new String[st.countTokens()];
-		for (int i = 0; st.hasMoreTokens(); i++) {
-			arrayValue[i] = st.nextToken();
-		}
-		return arrayValue;
 	}
 }

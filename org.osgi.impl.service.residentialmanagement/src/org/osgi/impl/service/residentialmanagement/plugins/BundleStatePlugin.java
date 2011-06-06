@@ -38,6 +38,7 @@ public class BundleStatePlugin implements DataPlugin {
        
     BundleStatePlugin(BundleContext context) {
     	readonly = new BundleStateReadOnlySession(this, context);
+    	context.addBundleListener(readonly);
     }
     
     public ReadableDataSession openReadOnlySession(String[] sessionRoot,
