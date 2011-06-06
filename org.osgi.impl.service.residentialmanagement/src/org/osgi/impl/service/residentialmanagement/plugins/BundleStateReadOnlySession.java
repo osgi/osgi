@@ -291,7 +291,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_LONG, null);
+						DmtData.FORMAT_LONG, null, null);
 
 			if (path[2].equals(STATUS))
 				return new BundleStateMetaNode("Status subtree.",
@@ -335,7 +335,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						DmtData.FORMAT_STRING, null, null);
 
 			if (path[2].equals(VERSION))
 				return new BundleStateMetaNode("The Version of the bundle.",
@@ -343,7 +343,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						DmtData.FORMAT_STRING, null, null);
 
 			if (path[2].equals(BUNDLETYPE))
 				return new BundleStateMetaNode("The type of the bundle.",
@@ -351,7 +351,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						DmtData.FORMAT_STRING, null, null);
 
 			if (path[2].equals(MANIFEST))
 				return new BundleStateMetaNode("The Manifest of the bundle.",
@@ -359,7 +359,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						DmtData.FORMAT_STRING, null, null);
 
 			if (path[2].equals(LOCATION))
 				return new BundleStateMetaNode("Bundle Location",
@@ -367,7 +367,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						DmtData.FORMAT_STRING, null, null);
 
 			if (path[2].equals(TRUSTEDSIGNERCERTIFICATE))
 				return new BundleStateMetaNode(
@@ -394,7 +394,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_INTEGER, null);
+						DmtData.FORMAT_INTEGER, null, null);
 
 			if (path[3].equals(STARTLEVEL))
 				return new BundleStateMetaNode("The StartLevel of the bundle.",
@@ -402,7 +402,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_INTEGER, null);
+						DmtData.FORMAT_INTEGER, null, null);
 
 			if (path[3].equals(PERSISTENTLYSTARTED))
 				return new BundleStateMetaNode("PersistentlyStarted",
@@ -410,7 +410,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_BOOLEAN, null);
+						DmtData.FORMAT_BOOLEAN, null, null);
 
 			if (path[3].equals(LASTMODIFIED))
 				return new BundleStateMetaNode("The date of last modified.",
@@ -418,7 +418,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_DATE, null);
+						DmtData.FORMAT_DATE, null, null);
 
 			if (path[3].equals(ACTIVATIONPOLICYUSED))
 				return new BundleStateMetaNode("The date of last modified.",
@@ -426,7 +426,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_DATE, null);
+						DmtData.FORMAT_DATE, null, null);
 
 			if (path[2].equals(HOSTS))
 				return new BundleStateMetaNode("bundle_id of Host Bundle",
@@ -434,7 +434,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_LONG, null);
+						DmtData.FORMAT_LONG, null, null);
 
 			if (path[2].equals(FRAGMENTS))
 				return new BundleStateMetaNode("bundle_id of Fragments Bundle",
@@ -442,7 +442,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_LONG, null);
+						DmtData.FORMAT_LONG, null, null);
 
 			if (path[2].equals(REQUIRED))
 				return new BundleStateMetaNode("bundle_id of Required Bundle",
@@ -450,7 +450,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_LONG, null);
+						DmtData.FORMAT_LONG, null, null);
 
 			if (path[2].equals(REQUIRING))
 				return new BundleStateMetaNode("bundle_id of Requiring Bundle",
@@ -458,7 +458,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_LONG, null);
+						DmtData.FORMAT_LONG, null, null);
 
 			if (path[2].equals(TRUSTEDSIGNERCERTIFICATE))
 				return new BundleStateMetaNode(
@@ -501,7 +501,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						DmtData.FORMAT_STRING, null, null);
 		}
 
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,

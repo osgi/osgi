@@ -65,19 +65,21 @@ public class BundleStateMetaNode implements MetaNode {
 	private int			formats					= DmtData.FORMAT_NULL;
 	private String[]	mimeTypes				= null;
     
-	//TODO
 	// Leaf node in BundleStatePlugin
 	// First element in validValues (if any) is the default value.
 	BundleStateMetaNode(String description, boolean canDelete, 
 			boolean canReplace, boolean allowZero, boolean allowInfinite,
-			int formats, DmtData[] validValues) {
+			int formats, String[] mimeType, DmtData[] validValues) {
 		leaf = true;
 		
         this.canAdd = false;
 		this.canDelete = canDelete;
 		this.canReplace = canReplace;
 		this.scope = AUTOMATIC;
-		this.mimeTypes = new String[] { LEAF_MIME_TYPE };
+		if(mimeType != null)
+			this.mimeTypes = mimeType;
+		else
+			this.mimeTypes = new String[] { LEAF_MIME_TYPE };
 		this.zeroOccurrenceAllowed = allowZero;
 		this.maxOccurrence = allowInfinite ? Integer.MAX_VALUE /* int */ : 1;
 		this.formats = formats;
@@ -86,7 +88,6 @@ public class BundleStateMetaNode implements MetaNode {
 
 	}
 
-	//TODO
 	// Interior node in BundleStatePlugin
 	BundleStateMetaNode(String description, int scope, boolean canAdd, 
 			boolean canDelete, boolean allowZero, boolean allowInfinite) {
