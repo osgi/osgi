@@ -30,6 +30,77 @@ import org.osgi.framework.Version;
  */
 public final class ResourceConstants {
 
+	private ResourceConstants() {
+		// keep others from creating objects of this type.
+	}
+
+	/**
+	 * Name space for the identity capability.  Each {@link Resource resource} 
+	 * should provide an identity capability that can be used to identify the
+	 * resource.
+	 * 
+	 * For identity capability attributes the following applies:
+	 * <ul>
+	 * <li>The
+	 * <q>osgi.identity</q> attribute contains the symbolic name of the
+	 * resource.
+	 * <li>The {@link #IDENTITY_VERSION_ATTRIBUTE version} attribute contains
+	 * the {@link Version} of the resource.
+	 * <li>The {@link #IDENTITY_TYPE_ATTRIBUTE type} attribute contains the
+	 * resource type.
+	 * </ul>
+	 * <p>
+	 * A resource with a symbolic name provides exactly one <sup>&#8224;</sup> identity
+	 * {@link Resource#getCapabilities(String) capability}.
+	 * <p>
+	 * &#8224; A resource with no symbolic name must not provide an identity
+	 * capability.
+	 */
+	public static final String IDENTITY_NAMESPACE = "osgi.identity";
+
+	/**
+	 * An {@link #IDENTITY_NAMESPACE identity} capability attribute identifying the
+	 * {@link Version version} of the resource.  This attribute must be set to a value of
+	 * type {@link Version}.  If the resource has no version then the value 
+	 * {@link Version#emptyVersion 0.0.0} must be used for the attribute.
+	 */
+	public static final String IDENTITY_VERSION_ATTRIBUTE = Constants.VERSION_ATTRIBUTE;
+
+	/**
+	 * An {@link #IDENTITY_NAMESPACE identity} capability attribute identifying the
+	 * resource type.  This attribute must be set to a value of type {@link String}.
+	 * if the resource has no type then the value 
+	 * {@link ResourceConstants#IDENTITY_TYPE_UNKNOWN unknown} must be used for the
+	 * attribute.
+	 */
+	public static final String IDENTITY_TYPE_ATTRIBUTE = "type";
+
+	/**
+	 * An {@link #IDENTITY_NAMESPACE identity} capability {@link #IDENTITY_TYPE_ATTRIBUTE type}
+	 * attribute value identifying the resource type as an OSGi bundle.
+	 */
+	public static final String IDENTITY_TYPE_BUNDLE = "osgi.bundle";
+
+	/**
+	 * An {@link #IDENTITY_NAMESPACE identity} capability {@link #IDENTITY_TYPE_ATTRIBUTE type}
+	 * attribute value identifying the resource type as an OSGi fragment.
+	 */
+	public static final String IDENTITY_TYPE_FRAGMENT = "osgi.fragment";
+
+	/**
+	 * An {@link #IDENTITY_NAMESPACE identity} capability {@link #IDENTITY_TYPE_ATTRIBUTE type}
+	 * attribute value identifying the resource type as unknown.
+	 */
+	public static final String IDENTITY_TYPE_UNKNOWN = "unknown";
+
+	/**
+	 * An {@link #IDENTITY_NAMESPACE identity} capability {@link Requirement#getDirectives() directive}
+	 * identifying if the resource is a singleton.  A {@link String} value of &quot;true&quot; indicates
+	 * the resource is a singleton; any other value or <code>null</code> indicates the resource is not a 
+	 * singleton.
+	 */
+	public static final String IDENTITY_SINGLETON_DIRECTIVE = Constants.SINGLETON_DIRECTIVE;
+
 	/**
 	 * Name space for package capabilities and requirements.
 	 * 
@@ -73,10 +144,13 @@ public final class ResourceConstants {
 	 * arbitrary matching attributes for the capability.
 	 * </ul>
 	 * <p>
-	 * A non-fragment resource with the {@link #RESOURCE_BUNDLE_NAMESPACE
-	 * osgi.bundle} name space provides exactly one <sup>&#8224;</sup> bundle
+	 * A non-fragment resource with the {@link #IDENTITY_TYPE_BUNDLE
+	 * osgi.bundle} type {@link #IDENTITY_TYPE_ATTRIBUTE identity} provides 
+	 * exactly one <sup>&#8224;</sup> bundle
 	 * {@link Resource#getCapabilities(String) capability} (that is, the bundle
-	 * can be required by another bundle). A fragment resource must not declare
+	 * can be required by another bundle). A fragment resource with the 
+	 * {@link #IDENTITY_TYPE_FRAGMENT osgi.fragment} type 
+	 * {@link #IDENTITY_TYPE_ATTRIBUTE identity} must not declare
 	 * a bundle capability. A resource requires zero or more bundle
 	 * {@link Resource#getRequirements(String) requirements} (that is, required
 	 * bundles).
@@ -102,10 +176,14 @@ public final class ResourceConstants {
 	 * </ul>
 	 * <p>
 	 * <p>
-	 * A non-fragment resource with the {@link #RESOURCE_BUNDLE_NAMESPACE
-	 * osgi.bundle} name space provides zero or one <sup>&#8224;</sup> host
-	 * {@link Resource#getCapabilities(String) capabilities} zero or
-	 * one<sup>&#8224;</sup> host capability. A fragment resource must
+	 * A non-fragment resource with the with the {@link #IDENTITY_TYPE_BUNDLE
+	 * osgi.bundle} type {@link #IDENTITY_TYPE_ATTRIBUTE identity} provides 
+	 * zero or one <sup>&#8224;</sup> host
+	 * {@link Resource#getCapabilities(String) capabilities}. 
+	 * A fragment resource with the 
+	 * {@link #IDENTITY_TYPE_FRAGMENT osgi.fragment} type 
+	 * {@link #IDENTITY_TYPE_ATTRIBUTE identity} must not declare
+	 * a host capability and must 
 	 * {@link Resource#getRequirements(String) declare} exactly one host
 	 * requirement.
 	 * <p>
@@ -113,31 +191,6 @@ public final class ResourceConstants {
 	 * capability.
 	 */
 	public static final String WIRING_HOST_NAMESPACE = "osgi.wiring.host";
-
-	/**
-	 * The {@link #RESOURCE_NAMESPACE_ATTRIBUTE name space} for OSGi bundle
-	 * resources
-	 */
-	public final static String RESOURCE_BUNDLE_NAMESPACE = "osgi.bundle";
-
-	/**
-	 * A resource {@link Resource#getAttributes() attribute} used to specify the
-	 * content of a resource. Typically this specifies a URI which can be used
-	 * to locate the content of the resource.
-	 */
-	public final static String RESOURCE_CONTENT_ATTRIBUTE = "content";
-
-	/**
-	 * A resource {@link Resource#getAttributes() attribute} used to specify the
-	 * resource symbolic name.
-	 */
-	public final static String RESOURCE_SYMBOLIC_NAME_ATTRIBUTE = "symbolic-name";
-
-	/**
-	 * A resource {@link Resource#getAttributes() attribute} used to specify the
-	 * resource version.
-	 */
-	public final static String RESOURCE_VERSION_ATTRIBUTE = Constants.VERSION_ATTRIBUTE;
 
 	/**
 	 * A requirement {@link Requirement#getDirectives() directive} used to
