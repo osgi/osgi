@@ -61,8 +61,8 @@ public class ServiceStatePluginTestCase extends DefaultTestBundleControl {
 	protected static final String TYPE = "Type";
 	protected static final String CARDINALITY = "Cardinality";
 	protected static final String KEY = "Key";
-	protected static final String SCALAR = "scalar";
-	protected static final String ARRAY = "array";
+	protected static final String SCALAR = "SCALAR";
+	protected static final String ARRAY = "ARRAY";
 	protected static final String TESTBUNDLELOCATION3 = "org.osgi.test.cases.residentialmanagement.tb3.jar";
 	protected static final String TESTBUNDLELOCATION4 = "org.osgi.test.cases.residentialmanagement.tb4.jar";
 	protected static final String TESTBUNDLELOCATION5 = "org.osgi.test.cases.residentialmanagement.tb5.jar";
