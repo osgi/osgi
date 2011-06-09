@@ -276,8 +276,6 @@ public class ResolverHookTests extends OSGiTestCase {
 		assertEquals("Wrong hook.begin called first", hook1.getID(), beginOrder.removeFirst());
 		assertEquals("Wrong hook.begin called second", hook4.getID(), beginOrder.removeFirst());
 
-		assertEquals("Wrong number of end called", 0, endOrder.size());
-
 		if (hook1.getError() != null)
 			throw hook1.getError();
 		if (hook2.getError() != null)
