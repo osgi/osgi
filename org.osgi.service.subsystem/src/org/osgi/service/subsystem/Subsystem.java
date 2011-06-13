@@ -111,7 +111,7 @@ public interface Subsystem {
 	 * @return A snapshot of all {@code Resources} currently constituting this
 	 *         {@code Subsystem}.
 	 */
-	public Collection<Resource> getResources();
+	public Collection<Resource> getConstituents();
 	
 	/**
 	 * Gets the headers used to define this subsystem. The headers will be 
