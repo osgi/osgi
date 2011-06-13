@@ -45,7 +45,7 @@
 			<element name="AD" type="metatype:Tad" minOccurs="1"
 				maxOccurs="unbounded" />
 			<element name="Icon" type="metatype:Ticon" minOccurs="0"
-				maxOccurs="1" />
+				maxOccurs="unbounded" />
 			<!-- It is non-deterministic, per W3C XML Schema 1.0: http://www.w3.org/TR/xmlschema-1/#cos-nonambig
 				to use namespace="##any" below. -->
 			<any namespace="##other" processContents="lax" minOccurs="0"
