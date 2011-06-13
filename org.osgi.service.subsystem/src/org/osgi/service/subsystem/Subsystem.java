@@ -87,6 +87,15 @@ public interface Subsystem {
 	}
 	
 	/**
+	 * Cancels the currently executing asynchronous life-cycle operation, if
+	 * any.
+	 * @throws SubsystemException - If this subsystem is not in one of the
+	 *         transitional states or the currently executing operation cannot
+	 *         be cancelled for any reason.
+	 */
+	public void cancel() throws SubsystemException;
+	
+	/**
 	 * Gets the subsystems managed by this service. This only includes the 
 	 * top-level Subsystems installed in the Framework, CoompositeBundle or 
 	 * Subsystem from which this service has been retrieved.
