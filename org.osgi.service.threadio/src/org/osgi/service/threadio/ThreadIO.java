@@ -56,11 +56,11 @@ public interface ThreadIO {
 	 * provides such a model:
 	 * 
 	 * <pre>
-	 *   threadio.pushStreams(in, out, err);
+	 *   Entry e  = threadio.push(in, out, err);
 	 *   try {
 	 *       ... do real work
 	 *   } finally {
-	 *      threadio.pop();
+	 *      e.pop();
 	 *   }
 	 * </pre>
 	 * 
