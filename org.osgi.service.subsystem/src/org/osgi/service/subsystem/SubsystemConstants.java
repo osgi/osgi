@@ -262,64 +262,68 @@ public class SubsystemConstants {
 	 */
 	public static enum EventType {
 		/**
-		 * Event type used to indicate that the operations was cancelled (e.g. 
-		 * an install was cancelled).
+		 * Event type used to indicate a subsystem is installing.
 		 */
-		CANCELED,
+		INSTALLING,
+		/**
+		 * Event type used to indicate a subsystem has been installed.
+		 */
+		INSTALLED,
+		/**
+		 * Event type used to indicate a subsystem is resolving.
+		 */
+		RESOLVING,
+		/**
+		 * Event type used to indicate a subsystem has been resolved.
+		 */
+		RESOLVED,
+		/**
+		 * Event type used to indicate a subsystem is starting.
+		 */
+		STARTING,
+		/**
+		 * Event type used to indicate a subsystem has been started.
+		 */
+		STARTED,
+		/**
+		 * Event type used to indicate a subsystem is stopping.
+		 */
+		STOPPING,
+		/**
+		 * Event type used to indicate a subsystem has been stopped.
+		 */
+		STOPPED,
+		/**
+		 * Event type used to indicate a subsystem is updating.
+		 */
+		UPDATING,
+		/**
+		 * Event type used to indicate a subsystem has been updated.
+		 */
+		UPDATED,
+		/**
+		 * Event type used to indicate a subsystem is uninstalling.
+		 */
+		UNINSTALLING,
+		/**
+		 * Event type used to indicate a subsystem has been uninstalled.
+		 */
+		UNINSTALLED,
 		/**
 		 * Event type used to indicate that a subsystem operation is being 
 		 * cancelled.
 		 */
 		CANCELING,
 		/**
+		 * Event type used to indicate that the operations was cancelled (e.g. 
+		 * an install was cancelled).
+		 */
+		CANCELED,
+		/**
 		 * Event type used to indicate that the operation failed (e.g. an 
 		 * exception was thrown during installation).
 		 */
-		FAILED,
-		/**
-		 * Event type used to indicate a subsystem has been installed.
-		 */
-		INSTALLED,
-		/**
-		 * Event type used to indicate a subsystem is installing.
-		 */
-		INSTALLING,
-		/**
-		 * Event type used to indicate a subsystem has been resolved.
-		 */
-		RESOLVED,
-		/**
-		 * Event type used to indicate a subsystem is resolving.
-		 */
-		RESOLVING,
-		/**
-		 * Event type used to indicate a subsystem has been started.
-		 */
-		STARTED,
-		/**
-		 * Event type used to indicate a subsystem is starting.
-		 */
-		STARTING,
-		/**
-		 * Event type used to indicate a subsystem has been stopped.
-		 */
-		STOPPED,
-		/**
-		 * Event type used to indicate a subsystem is stopping.
-		 */
-		STOPPING,
-		/**
-		 * Event type used to indicate a subsystem has been uninstalled.
-		 */
-		UNINSTALLED,
-		/**
-		 * Event type used to indicate a subsystem has been updated.
-		 */
-		UPDATED,
-		/**
-		 * Event type used to indicate a subsystem is updating.
-		 */
-		UPDATING
+		FAILED
 	}
 	/**
 	 * Key for the event property that holds the subsystem id.
