@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.osgi.framework.Version;
-import org.osgi.service.subsystem.a.Resource;
+import org.osgi.framework.wiring.Resource;
 
 /*
  * TODO
