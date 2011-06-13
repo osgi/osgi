@@ -41,19 +41,21 @@ public interface Subsystem {
 	 */
 	public static enum State {
 		/**
-		 * A subsystem is in the ACTIVE state when it has reached the beginning 
-		 * start-level (for starting it's contents), and all its persistently 
-		 * started content bundles that are resolved and have had their 
-		 * start-levels met have completed, or failed, their activator start 
-		 * method.
+		 * A subsystem is in the INSTALLING state when it is initially created.
 		 */
-		ACTIVE,
+		INSTALLING,
 		/**
-		 * A subsystem is in the INSTALLED state when it is initially created.
+		 * A subsystem is in the INSTALLED state when all resources are
+		 * successfully installed.
 		 */
 		INSTALLED,
 		/**
-		 *  A subsystem in the RESOLVED is allowed to have its content bundles 
+		 *  A subsystem in the RESOLVING is allowed to have its content bundles 
+		 * resolved.
+		 */
+		RESOLVING,
+		/**
+		 *  A subsystem is in the RESOLVED state when all resources are 
 		 * resolved.
 		 */
 		RESOLVED,
@@ -63,16 +65,27 @@ public interface Subsystem {
 		 */
 		STARTING,
 		/**
+		 * A subsystem is in the ACTIVE state when it has reached the beginning 
+		 * start-level (for starting it's contents), and all its persistently 
+		 * started content bundles that are resolved and have had their 
+		 * start-levels met have completed, or failed, their activator start 
+		 * method.
+		 */
+		ACTIVE,
+		/**
 		 *  A subsystem in the STOPPING state is in the process of taking its 
 		 * its active start level to zero, stopping all the content bundles.
 		 */
 		STOPPING,
+		UPDATING,
+		UNINSTALLING,
 		/**
 		 * A subsystem is in the UNINSTALLED state when all its content bundles 
 		 * and uninstalled and its system bundle context is invalidated.
 		 */
 		UNINSTALLED
 	}
+	
 	/**
 	 * Gets the subsystems managed by this service. This only includes the 
 	 * top-level Subsystems installed in the Framework, CoompositeBundle or 
@@ -101,6 +114,7 @@ public interface Subsystem {
 	 *         permissions.
 	 */
 	public Map<String, String> getHeaders();
+	
 	/**
 	 * Gets the headers used to define this subsystem.
 	 * @param locale The locale name to be used to localize the headers. If the 
@@ -111,6 +125,7 @@ public interface Subsystem {
 	 *         specified locale. 
 	 */
 	public Map<String, String> getHeaders(String locale);
+	
 	/**
 	 * The location identifier used to install this subsystem through 
 	 * Subsystem.install. This identifier does not change while this subsystem 
@@ -119,33 +134,39 @@ public interface Subsystem {
 	 * @return The string representation of the subsystem's location identifier.
 	 */
 	public String getLocation();
+	
 	/**
 	 * Gets the parent Subsystem that scopes this subsystem instance.
 	 * @return The Subsystem that scopes this subsystem or null if there is no 
 	 *         parent subsystem (e.g. if the outer scope is the framework).
 	 */
 	public Subsystem getParent();
+	
 	/**
 	 * Gets the state of the subsystem.
 	 * @return The state of the subsystem.
 	 */
 	public State getState();
+	
 	/**
 	 * Gets the identifier of the subsystem. Subsystem identifiers are assigned 
 	 * when the subsystem is installed and are unique within the framework. 
 	 * @return The identifier of the subsystem.
 	 */
 	public long getSubsystemId();
+	
 	/**
 	 * Gets the symbolic name of this subsystem.
 	 * @return The symbolic name of this subsystem.
 	 */
 	public String getSymbolicName();
+	
 	/**
 	 * Gets the version of this subsystem.
 	 * @return The version of this subsystem.
 	 */
 	public Version getVersion();
+	
 	/**
 	 * Install a new subsystem from the specified location identifier.
 	 * <p>
@@ -161,6 +182,7 @@ public interface Subsystem {
 	 *         Runtime Environment supports permissions.
 	 */
 	public Subsystem install(String location) throws SubsystemException;
+	
 	/**
 	 * Install a new subsystem from the specified InputStream object.
 	 * <p/>
@@ -216,6 +238,7 @@ public interface Subsystem {
 	 *         Runtime Environment supports permissions.
 	 */
 	public Subsystem install(String location, InputStream content) throws SubsystemException;
+	
 	/**
 	 * Starts the subsystem. The subsystem is started according to the rules 
 	 * defined for Bundles and the content bundles are enabled for activation. 
@@ -226,6 +249,7 @@ public interface Subsystem {
 	 *         permissions.
 	 */
 	public void start() throws SubsystemException;
+	
 	/**
 	 * Stops the subsystem. The subsystem is stopped according to the rules 
 	 * defined for Bundles and the content bundles are disabled for activation 
@@ -238,6 +262,7 @@ public interface Subsystem {
 	 *         permissions.
 	 */
 	public void stop() throws SubsystemException;
+	
 	/**
 	 * Uninstall the given subsystem.
 	 * <p/>
@@ -273,6 +298,7 @@ public interface Subsystem {
 	 *         supports permissions.
 	 */
 	public void uninstall() throws SubsystemException;
+	
 	/**
 	 * Update the given subsystem.
 	 * <p/>
@@ -282,6 +308,7 @@ public interface Subsystem {
 	 *         reason.
 	 */
 	public void update() throws SubsystemException;
+	
 	/**
 	 * Update the given subsystem from an InputStream.
 	 * <p/>
