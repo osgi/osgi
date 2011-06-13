@@ -23,20 +23,20 @@ package org.osgi.service.converter;
  * service registry, as well as providing a number of basic type conversions.
  * When called, an Aggregate Converter must use the
  * {@link Converter#OSGI_CONVERTER_TYPE} property of the Converter services to
- * determine which service to use. Finding the right converter must follow the
+ * determine which service to use. 
+ * 
+ * Finding the right converter must follow the
  * following rules:
  * 
  * The goal of the type conversion is to convert a source object {@code s} with
  * type {@code S} to a target type {@code T<P1..Pn>}. The Aggregator Converter
  * must attempt to find the first Converter service (in service.ranking order)
- * that can perform this conversion (as defined by the
- * {@link #canConvert(Object, ReifiedType)} method. This service must then be
- * used to do the conversion.
+ * that successfully performs this conversion.
  * 
  * If no capable Converter service can be found, the Aggregator Converter
  * service must provide a number of basic conversions as described in the
  * specification. These conversions handle arrays, collections, and many
- * built-in types.
+ * built-in types, see the specification.
  * 
  * An Aggregate Formatter must not register with a
  * {@link Converter#OSGI_CONVERTER_TYPE} service property.

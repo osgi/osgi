@@ -22,17 +22,16 @@ import java.util.*;
  * A Command Session holds the executable state of a script engine as well as a
  * {@link Terminal} that is connected to that session.
  * 
- * A Command Session is not thread safe and should not be used from different
- * threads at the same time.
- * 
  * @NotThreadSafe
  * @version $Id$
+ * 
+ * @ProviderType
  */
 public interface CommandSession {
 	/**
 	 * Execute a program in this session.
 	 * 
-	 * @param commandline A Command line according to the TSH syntax.
+	 * @param commandline A Command line according to the script syntax.
 	 * @return the result of the execution
 	 * @throws ParsingException If the text contained a syntax error
 	 * @throws Exception if something fails
@@ -46,45 +45,47 @@ public interface CommandSession {
 	void close();
 
 	/**
-	 * Return the input stream that is the first of the pipeline. This stream is
+	 * Return the Terminal associated with this session. The terminal is
 	 * sometimes necessary to communicate directly to the end user. For example,
 	 * a "less" or "more" command needs direct input from the keyboard to
 	 * control the paging.
 	 * 
-	 * @return InputStream used closest to the user or (@code null} if input is
-	 *         from a file.
+	 * @return Terminal used closest to the user, never {@code null}.
 	 */
 	Terminal getTerminal();
 
 	/**
-	 * Return the map used to store the session variables.
+	 * Return the modifiable Map used to store the local session variables.
 	 * 
-	 * The returned map can be modified to add/remove new variables.
+	 * The returned Map can be modified to add/remove new variables, these
+	 * changes are visible to the scripts running in this session.
 	 * 
 	 * @return the map with all the variables
 	 */
 	Map<String, Object> getSessionVariables();
 
 	/**
-	 * Return the map used to store the global variables.
+	 * Return the Map used to maintain the global variables.
 	 * 
-	 * The returned map can be modified to add/remove new variables.
+	 * The returned map can be modified to add/remove new variables, it is
+	 * thread safe.
 	 * 
-	 * @return the map with all the variables
+	 * @return the Map with all the global variables
+	 * 
+	 * @ThreadSafe
 	 */
 	Map<String, Object> getGlobalVariables();
 
 	/**
-	 * Return the current list of scopes. A scope represents a command and its
-	 * sub-commands. The purpose of this information is to simplify command
-	 * completion and providing extensive help about commands. If an
-	 * implementation supports annotations it can use the annotations to provide
-	 * extra information.
+	 * Return the current list of Meta Scope objects. A scope represents a set
+	 * of commands under a common name. The purpose of this information is to
+	 * simplify command completion and providing extensive help about commands.
+	 * If an implementation supports annotations it can use the annotations to
+	 * provide extra information.
 	 * 
-	 * @return A unmodifiable collection of {@link MetaScope} objects.
+	 * @return A unmodifiable collection of {@link Meta.Scope} objects.
 	 */
-
-	Collection<MetaScope> getMetaScopes();
+	Collection<Meta.Scope> getMetaScopes();
 
 	/**
 	 * Resolve a local name to a URI to the current working directory. If the
@@ -92,9 +93,8 @@ public interface CommandSession {
 	 * 
 	 * @param path A relative or absolute URI
 	 * @return a URI that is the original when it was absolute and resolved
-	 *         against the $cwd variable if relative.
+	 *         against the $CWD variable if relative.
 	 */
-
 	URI resolve(String path);
 
 }

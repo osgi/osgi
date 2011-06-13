@@ -1,0 +1,18 @@
+
+Private-Package: ${p}.*
+
+-buildpath = \
+    org.osgi.service.converter; version=project, \
+    org.osgi.service.converter.generic; version=project, \
+    osgi.core;                  version=4.2, \
+	ee.j2se;                    version=1.5
+
+javac.source            = 1.5
+javac.target            = 1.5
+
+-runbundles                     = \
+    osgi.cmpn; version=latest, \
+    org.osgi.impl.service.converter; version=latest, \
+    org.osgi.impl.service.log; version=latest, \
+    org.osgi.impl.service.cm; version=latest, \
+    org.osgi.impl.service.component; version=latest

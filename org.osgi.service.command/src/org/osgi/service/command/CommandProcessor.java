@@ -15,23 +15,22 @@
  */
 package org.osgi.service.command;
 
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.security.spec.*;
+import java.io.*;
 
 /**
- * A Command Processor is a service that is registered by a TSH script engine
- * that can execute commands.
+ * A Command Processor is a service that that can execute a script language.
  * 
  * A Command Processor is a factory for Command Session objects. The Command
  * Session maintains execution state and holds the console and keyboard streams.
  * A Command Processor must track any services that are registered with the
  * {@link #COMMAND_SCOPE} and {@link #COMMAND_FUNCTION} properties. The
  * functions listed in the {@link #COMMAND_FUNCTION} property must be made
- * available as functions in the TSH script language.
+ * available as functions in the script language.
  * 
  * @ThreadSafe
  * @version $Id$
+ * 
+ * @ProviderType
  */
 public interface CommandProcessor {
 	/**
@@ -43,18 +42,28 @@ public interface CommandProcessor {
 
 	/**
 	 * A {@code String+} of function names that may be called for this command
-	 * provider. A name may end with a *, this will then be calculated from all
-	 * declared public methods in this service.
+	 * provider. A name may end with a *, this wildcard will then be calculated
+	 * from all public methods in this service.
 	 * 
-	 * TODO verify the * is true?
+	 * If this property is absent but the {@link #COMMAND_SCOPE} is present then
+	 * all methods in the service object are used as command.
 	 * 
 	 */
 	String	COMMAND_FUNCTION	= "osgi.command.function";
 
 	/**
-	 * A description of the command scope.
+	 * A description of the command scope. This information is available through
+	 * the {@link Meta.Scope#description()} method. If this property is not
+	 * set, it can come from the Description annotation or resources.
 	 */
 	String	COMMAND_DESCRIPTION	= "osgi.command.description";
+
+	/**
+	 * A summary of the command scope. This information is available through the
+	 * {@link Meta.Scope#summary()} method. If this property is not set,
+	 * it can come from the Description annotation or resources.
+	 */
+	String	COMMAND_SUMARY		= "osgi.command.summary";
 
 	/**
 	 * Create a new command session associated with IO streams.
@@ -71,7 +80,7 @@ public interface CommandProcessor {
 	 *        returns end of file.
 	 * @param out The stream used for System.out, must not be {@code null}
 	 * @param err The stream used for System.err, must not be {@code null}
-	 * @param encoding The character encoding to use
+	 * @param encoding The character encoding to use, or {@code null} for the default
 	 * @return A new session.
 	 */
 	CommandSession createSession(InputStream in, PrintStream out,

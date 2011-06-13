@@ -29,11 +29,10 @@ import java.util.List;
  *       for ( Object o : collection ) block.execute( Arrays.asList(o));
  * </pre>
  * 
- * Though the majority of application is when functions are closures, functions
- * can also be used as a target type for conversion.
- * 
  * @ThreadSafe
  * @version $Id$
+ * 
+ * @ConsumerType
  */
 public interface Function {
 	/**
