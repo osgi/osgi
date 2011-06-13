@@ -40,6 +40,8 @@ import java.io.*;
  * {@link #getWidth()} characters. For cursor positioning, the screen is assumed
  * to be starting at 0,0 and increases its position from left to right and from
  * top to bottom. Positioning outside the screen bounds is undefined.
+ * 
+ * @ConsumerType
  */
 public interface Terminal {
 	/**
@@ -158,113 +160,113 @@ public interface Terminal {
 	public static class Attribute {
 		private String	name;
 
-		private Attribute(String name) {
+		Attribute(String name) {
 			this.name = name;
 		}
 
 		public String toString() {
 			return name;
 		}
-
-		/**
-		 * Underline the text.
-		 */
-		public Attribute	UNDERLINE		= new Attribute("UNDERLINE");
-		/**
-		 * Bolden the text.
-		 */
-		public Attribute	BOLD			= new Attribute("BOLD");
-		/**
-		 * Reverse the text.
-		 */
-		public Attribute	REVERSED		= new Attribute("REVERSED");
-		
-		/**
-		 * Default foreground color.
-		 */
-		public Attribute	FORE_DEFAULT		= new Attribute("FORE_DEFAULT");
-		
-		/**
-		 * No Color, transparent.
-		 */
-		public Attribute	FORE_NONE		= new Attribute("FORE_NONE");
-		/**
-		 * Black
-		 */
-		public Attribute	FORE_BLACK		= new Attribute("FORE_BLACK");
-		/**
-		 * Green
-		 */
-		public Attribute	FORE_GREEN		= new Attribute("FORE_GREEN");
-		/**
-		 * Yellow
-		 */
-		public Attribute	FORE_YELLOW		= new Attribute("FORE_YELLOW");
-
-		/**
-		 * Magenta
-		 */
-		public Attribute	FORE_MAGENTA	= new Attribute("FORE_MAGENTA");
-
-		/**
-		 * Cyan
-		 */
-		public Attribute	FORE_CYAN		= new Attribute("FORE_CYAN");
-		/**
-		 * Blue
-		 */
-		public Attribute	FORE_BLUE		= new Attribute("FORE_BLUE");
-		/**
-		 * Red
-		 */
-		public Attribute	FORE_RED		= new Attribute("FORE_RED");
-		/**
-		 * White
-		 */
-		public Attribute	FORE_WHITE		= new Attribute("FORE_WHITE");
-		/**
-		 * Default background color.
-		 */
-		public Attribute	BACK_DEFAULT		= new Attribute("BACK_DEFAULT");
-		/**
-		 * No Color, transparent.
-		 */
-		public Attribute	BACK_NONE		= new Attribute("BACK_NONE");
-		/**
-		 * Black
-		 */
-		public Attribute	BACK_BLACK		= new Attribute("BACK_BLACK");
-		/**
-		 * Green
-		 */
-		public Attribute	BACK_GREEN		= new Attribute("BACK_GREEN");
-		/**
-		 * Yellow
-		 */
-		public Attribute	BACK_YELLOW		= new Attribute("BACK_YELLOW");
-
-		/**
-		 * Magenta
-		 */
-		public Attribute	BACK_MAGENTA	= new Attribute("BACK_MAGENTA");
-
-		/**
-		 * Cyan
-		 */
-		public Attribute	BACK_CYAN		= new Attribute("BACK_CYAN");
-		/**
-		 * Blue
-		 */
-		public Attribute	BACK_BLUE		= new Attribute("BACK_BLUE");
-		/**
-		 * Red
-		 */
-		public Attribute	BACK_RED		= new Attribute("BACK_RED");
-		/**
-		 * White
-		 */
-		public Attribute	BACK_WHITE		= new Attribute("BACK_WHITE");
 	}
+
+	/**
+	 * Underline the text.
+	 */
+	public Attribute	UNDERLINE		= new Attribute("UNDERLINE");
+	/**
+	 * Bolden the text.
+	 */
+	public Attribute	BOLD			= new Attribute("BOLD");
+	/**
+	 * Reverse the text.
+	 */
+	public Attribute	REVERSED		= new Attribute("REVERSED");
+
+	/**
+	 * Default foreground color.
+	 */
+	public Attribute	FORE_DEFAULT	= new Attribute("FORE_DEFAULT");
+
+	/**
+	 * No Color, transparent.
+	 */
+	public Attribute	FORE_NONE		= new Attribute("FORE_NONE");
+	/**
+	 * Black
+	 */
+	public Attribute	FORE_BLACK		= new Attribute("FORE_BLACK");
+	/**
+	 * Green
+	 */
+	public Attribute	FORE_GREEN		= new Attribute("FORE_GREEN");
+	/**
+	 * Yellow
+	 */
+	public Attribute	FORE_YELLOW		= new Attribute("FORE_YELLOW");
+
+	/**
+	 * Magenta
+	 */
+	public Attribute	FORE_MAGENTA	= new Attribute("FORE_MAGENTA");
+
+	/**
+	 * Cyan
+	 */
+	public Attribute	FORE_CYAN		= new Attribute("FORE_CYAN");
+	/**
+	 * Blue
+	 */
+	public Attribute	FORE_BLUE		= new Attribute("FORE_BLUE");
+	/**
+	 * Red
+	 */
+	public Attribute	FORE_RED		= new Attribute("FORE_RED");
+	/**
+	 * White
+	 */
+	public Attribute	FORE_WHITE		= new Attribute("FORE_WHITE");
+	/**
+	 * Default background color.
+	 */
+	public Attribute	BACK_DEFAULT	= new Attribute("BACK_DEFAULT");
+	/**
+	 * No Color, transparent.
+	 */
+	public Attribute	BACK_NONE		= new Attribute("BACK_NONE");
+	/**
+	 * Black
+	 */
+	public Attribute	BACK_BLACK		= new Attribute("BACK_BLACK");
+	/**
+	 * Green
+	 */
+	public Attribute	BACK_GREEN		= new Attribute("BACK_GREEN");
+	/**
+	 * Yellow
+	 */
+	public Attribute	BACK_YELLOW		= new Attribute("BACK_YELLOW");
+
+	/**
+	 * Magenta
+	 */
+	public Attribute	BACK_MAGENTA	= new Attribute("BACK_MAGENTA");
+
+	/**
+	 * Cyan
+	 */
+	public Attribute	BACK_CYAN		= new Attribute("BACK_CYAN");
+	/**
+	 * Blue
+	 */
+	public Attribute	BACK_BLUE		= new Attribute("BACK_BLUE");
+	/**
+	 * Red
+	 */
+	public Attribute	BACK_RED		= new Attribute("BACK_RED");
+	/**
+	 * White
+	 */
+	public Attribute	BACK_WHITE		= new Attribute("BACK_WHITE");
 
 	/**
 	 * Get a character from the input. Characters less than 0x10000 are Unicode
@@ -401,8 +403,8 @@ public interface Terminal {
 	boolean position(int x, int y) throws IllegalArgumentException, Exception;
 
 	/**
-	 * Position the cursor x position on the screen. Is the same as position(x,y),
-	 * where y represents the current line on the screen.
+	 * Position the cursor x position on the screen. Is the same as
+	 * position(x,y), where y represents the current line on the screen.
 	 * 
 	 * @param x The x position, must be from 0-width
 	 * @return {@code true} if the position could be set, otherwise {@code
@@ -485,7 +487,6 @@ public interface Terminal {
 	/**
 	 * Answer the capabilities of this terminal. The following capabilities can
 	 * be returned:
-	 * 
 	 * 
 	 * @return the bitmap of capabilities
 	 */

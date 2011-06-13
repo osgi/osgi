@@ -37,7 +37,7 @@ package org.osgi.service.converter;
  * class space as the target type.
  * 
  * 
- * @ConsumerInterface
+ * @ConsumerType
  * @version $Id$
  */
 public interface Converter {
@@ -47,20 +47,6 @@ public interface Converter {
 	 * string, or an array/collection of strings.
 	 */
 	String	OSGI_CONVERTER_TYPE	= "osgi.converter.type";
-
-	/**
-	 * Return if this converter is able to convert the specified object to the
-	 * specified target type.
-	 * 
-	 * @param <T> The raw type
-	 * 
-	 * @param sourceObject The source object {@code s} to convert.
-	 * @param targetType The target type {@code T}.
-	 * 
-	 * @return {@code true} if the conversion is possible,
-	 *         {@code false} otherwise.
-	 */
-	<T> boolean canConvert(Object sourceObject, ReifiedType<T> targetType);
 
 	/**
 	 * Convert an object to the desired type.

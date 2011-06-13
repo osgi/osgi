@@ -21,8 +21,7 @@ build.cmpn.impls = \
 	org.osgi.impl.service.prefs , \
 	org.osgi.impl.service.upnp.cp , \
 	org.osgi.impl.service.upnp.cd , \
-	org.osgi.impl.service.useradmin , \
-	org.osgi.impl.service.wireadmin 
+	org.osgi.impl.service.useradmin 
 
 jar.cmpn.impls = \
 	${repo;osgi.cmpn}, \
@@ -33,7 +32,8 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.coordinator}, \
 	${repo;org.osgi.impl.service.event}, \
 	${repo;org.osgi.impl.service.metatype}, \
-	${repo;org.osgi.impl.service.provisioning}
+	${repo;org.osgi.impl.service.provisioning}, \
+	${repo;org.osgi.impl.service.wireadmin}
 
 build.mobile.impls = \
   	org.osgi.impl.bundle.autoconf , \

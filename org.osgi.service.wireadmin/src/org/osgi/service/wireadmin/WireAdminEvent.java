@@ -23,11 +23,10 @@ import org.osgi.framework.ServiceReference;
  * <p>
  * {@code WireAdminEvent} objects are delivered to all registered
  * {@code WireAdminListener} service objects which specify an interest in the
- * {@code WireAdminEvent} type. Events must be delivered in chronological
- * order with respect to each listener. For example, a {@code WireAdminEvent}
- * of type {@link #WIRE_CONNECTED} must be delivered before a
- * {@code WireAdminEvent} of type {@link #WIRE_DISCONNECTED} for a particular
- * {@code Wire} object.
+ * {@code WireAdminEvent} type. Events must be delivered in chronological order
+ * with respect to each listener. For example, a {@code WireAdminEvent} of type
+ * {@link #WIRE_CONNECTED} must be delivered before a {@code WireAdminEvent} of
+ * type {@link #WIRE_DISCONNECTED} for a particular {@code Wire} object.
  * 
  * <p>
  * A type code is used to identify the type of event. The following event types
@@ -48,33 +47,33 @@ import org.osgi.framework.ServiceReference;
  * Event type values must be unique and disjoint bit values. Event types must be
  * defined as a bit in a 32 bit integer and can thus be bitwise OR'ed together.
  * <p>
- * Security Considerations. {@code WireAdminEvent} objects contain
- * {@code Wire} objects. Care must be taken in the sharing of {@code Wire}
- * objects with other bundles.
+ * Security Considerations. {@code WireAdminEvent} objects contain {@code Wire}
+ * objects. Care must be taken in the sharing of {@code Wire} objects with other
+ * bundles.
  * 
  * @see WireAdminListener
- * 
+ * @Immutable
  * @version $Id$
  */
 public class WireAdminEvent {
 	/**
 	 * The WireAdmin service which created this event.
 	 */
-	private ServiceReference	reference;
+	private final ServiceReference	reference;
 	/**
 	 * The {@code Wire} object associated with this event.
 	 */
-	private Wire				wire;
+	private final Wire				wire;
 	/**
 	 * Type of this event.
 	 * 
 	 * @see #getType()
 	 */
-	private int					type;
+	private final int				type;
 	/**
 	 * Exception associates with this the event.
 	 */
-	private Throwable			throwable;
+	private final Throwable			throwable;
 	/**
 	 * A Producer service method has thrown an exception.
 	 * 

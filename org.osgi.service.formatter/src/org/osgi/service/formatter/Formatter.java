@@ -103,9 +103,11 @@ public interface Formatter {
 	 *         {@code null}. The return is a CharSequence because this is
 	 *         usually more efficient.
 	 * @throws Exception If something fails during the formatting
+	 * 
+	 * ### Should we make this with a StringBuilder arg?
 	 */
 
-	CharSequence format(Object target, int level, Locale... locales)
+	String format(Object target, int level, Locale... locales)
 			throws Exception;
 
 }

@@ -36,6 +36,9 @@ import java.io.PrintStream;
  * @version $Id$
  */
 public interface ThreadIO {
+	/**
+	 *
+	 */
 	interface Entry {
 		void close();
 	}
@@ -72,8 +75,8 @@ public interface ThreadIO {
 	 *        used. If {@code null} then ignore.
 	 * @param err PrintStream to use for the current thread when System.err is
 	 *        used. If {@code null} then ignore.
-	 * @return 
+	 * @return and entry that can be used to close/pop the push for life cycle control.
 	 */
-	Entry pushStreams(InputStream in, PrintStream out, PrintStream err);
+	Entry push(InputStream in, PrintStream out, PrintStream err);
 
 }
