@@ -263,34 +263,40 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 	/**
 	 * Tests the metadata of the PackageState nodes.
 	 * This ensures that only read-operations are allowed on the nodes and that the scope and format is correct.   
+	 * @throws BundleException 
+	 * @throws IOException 
 	 * 
 	 */
-	public void testPackageStateMetaData() {
+	public void testPackageStateMetaData() throws IOException, BundleException {
 		try {
+			// install and start a bundle that imports the shared package
+			testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
+			assertNotNull(testBundle1);
+
 			ids = session.getChildNodeNames(PLUGIN_ROOT_URI);
-			assertNotNull(ids);
-			assertTrue(ids.length > 0 );
+			assertNotNull("This object should not be null.", ids);
+			// retrieve the id of the shared package and use it for the tests
+			for (int i = 0; i < ids.length; i++) {
+				String packageName = session.getNodeValue(
+						PLUGIN_ROOT_URI + "/" + ids[i] + "/" + NAME).getString();
+				if (packageName.equals(TESTPACKAGENAME)) {
+					targetIdNumber = ids[i];
+					break;
+				}
+			}
 			
 			String uri = PLUGIN_ROOT_URI;
-			assertMetaData( session.getMetaNode(uri), false, MetaNode.PERMANENT, uri);
-			uri = PLUGIN_ROOT_URI + "/" + ids[0];
-			assertMetaData( session.getMetaNode(uri), false, MetaNode.AUTOMATIC, uri);
-			uri = PLUGIN_ROOT_URI + "/" + ids[0] + "/" + NAME;
-			assertMetaData( session.getMetaNode(uri), true, MetaNode.AUTOMATIC, uri, DmtData.FORMAT_STRING );
-			uri = PLUGIN_ROOT_URI + "/" + ids[0] + "/" + VERSION;
-			assertMetaData( session.getMetaNode(uri), true, MetaNode.AUTOMATIC, uri, DmtData.FORMAT_STRING);
-			uri = PLUGIN_ROOT_URI + "/" + ids[0] + "/" + REMOVALPENDING;
-			assertMetaData( session.getMetaNode(uri), true, MetaNode.AUTOMATIC, uri, DmtData.FORMAT_BOOLEAN);
-			uri = PLUGIN_ROOT_URI + "/" + ids[0] + "/" + EXPORTINGBUNDLE;
-			assertMetaData( session.getMetaNode(uri), true, MetaNode.AUTOMATIC, uri, DmtData.FORMAT_LONG);
-			uri = PLUGIN_ROOT_URI + "/" + ids[0] + "/" + IMPORTINGBUNDLES;
-			assertMetaData( session.getMetaNode(uri), false, MetaNode.AUTOMATIC, uri);
-			uri = PLUGIN_ROOT_URI + "/" + ids[0] + "/" + IMPORTINGBUNDLES + "/0";
-			if ( session.isNodeUri(uri) )
-				assertMetaData( session.getMetaNode(uri), true, MetaNode.AUTOMATIC, uri, DmtData.FORMAT_LONG);
-			uri = PLUGIN_ROOT_URI + "/" + ids[0] + "/" + "Ext";
-			if ( session.isNodeUri(uri) )
-				assertMetaData( session.getMetaNode(uri), false, MetaNode.AUTOMATIC, uri);
+			assertMetaData( uri, MetaNode.PERMANENT);
+			assertMetaData( uri += "/" + targetIdNumber, MetaNode.AUTOMATIC);
+			assertMetaData( uri +  "/" + NAME, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING );
+			assertMetaData( uri +  "/" + VERSION, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING );
+			assertMetaData( uri +  "/" + REMOVALPENDING, MetaNode.AUTOMATIC, DmtData.FORMAT_BOOLEAN );
+			assertMetaData( uri +  "/" + EXPORTINGBUNDLE, MetaNode.AUTOMATIC, DmtData.FORMAT_LONG );
+			assertMetaData( uri +  "/" + IMPORTINGBUNDLES, MetaNode.AUTOMATIC );
+			assertMetaData( uri +  "/" + NAME, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING );
+			assertMetaData( uri +  "/" + EXPORTINGBUNDLE, MetaNode.AUTOMATIC, DmtData.FORMAT_LONG );
+			assertMetaData( uri += "/" + IMPORTINGBUNDLES, MetaNode.AUTOMATIC );
+			assertMetaData( uri + "/0", MetaNode.AUTOMATIC, DmtData.FORMAT_LONG );
 
 			session.close();
 			session = null;
@@ -300,13 +306,13 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		}
 	}
 	
-	private void assertMetaData( MetaNode metaNode, boolean isLeaf, int scope, String uri ) {
-		assertMetaData(metaNode, isLeaf, scope, uri, -1);
+	private void assertMetaData( String uri , int scope ) throws DmtException {
+		assertMetaData(uri, scope, -1);
 	}
 
-	private void assertMetaData( MetaNode metaNode, boolean isLeaf, int scope, String uri, int format ) {
+	private void assertMetaData( String uri, int scope, int format ) throws DmtException {
+		MetaNode metaNode = session.getMetaNode(uri);
 		assertNotNull(metaNode);
-		assertEquals( "This node must be interior node!", isLeaf, metaNode.isLeaf() );
 		
 		assertEquals( "This node must support the GET operation: " + uri, true, metaNode.can( MetaNode.CMD_GET ) );
 		assertEquals( "This node must not support the ADD operation: " + uri, false, metaNode.can( MetaNode.CMD_ADD ) );
@@ -314,7 +320,7 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 		assertEquals( "This node must not support the EXECUTE operation: " + uri, false, metaNode.can( MetaNode.CMD_EXECUTE ) );
 		assertEquals( "This node must not support the REPLACE operation: " + uri, false, metaNode.can( MetaNode.CMD_REPLACE ) );
 		assertEquals( "This node has a wrong scope : " + uri, scope, metaNode.getScope() );
-		if ( isLeaf && format != -1 ) 
+		if ( format != -1 ) 
 			assertEquals( "This node has a wrong format: ", format, metaNode.getFormat() );
 	}
 	

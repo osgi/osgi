@@ -25,16 +25,18 @@
  */
 package org.osgi.test.cases.residentialmanagement;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Hashtable;
-
 import info.dmtree.DmtAdmin;
+import info.dmtree.DmtConstants;
 import info.dmtree.DmtData;
 import info.dmtree.DmtException;
 import info.dmtree.DmtIllegalStateException;
 import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -53,6 +55,8 @@ public class ServiceStatePluginTestCase extends DefaultTestBundleControl {
 
 	static final String INSTANCE_ID = "1";
 	static final String PLUGIN_ROOT_URI = "./OSGi/1/ServiceState";
+	
+	static final String SERVICE_STATE_NODE_TYPE = "org.osgi/1.0/ServiceStateManagementObject";
 
 	protected static final String PROPERTY = "Property";
 	protected static final String REGISTERINGBUNDLE = "RegisteringBundle";
@@ -252,6 +256,117 @@ public class ServiceStatePluginTestCase extends DefaultTestBundleControl {
 		}
 	}
 
+	/**
+	 * Tests the specified node types.
+	 *  
+	 */
+	public void testServiceStateNodeTypes() throws BundleException, IOException {
+		try {
+			assertEquals("The PackageState node must be of type: " + SERVICE_STATE_NODE_TYPE,
+					SERVICE_STATE_NODE_TYPE,
+					session.getNodeType(PLUGIN_ROOT_URI));
+
+			ids = session.getChildNodeNames(PLUGIN_ROOT_URI);
+			assertNotNull(ids);
+			assertTrue(ids.length > 0 );
+
+			for (int i = 0; i < ids.length; i++) {
+				assertEquals("The ID node must be of type DDF_LIST_SUBTREE",
+						DmtConstants.DDF_LIST_SUBTREE,
+						session.getNodeType(PLUGIN_ROOT_URI + "/" + ids[i] + "/" + USINGBUNDLES));
+
+				String uri = PLUGIN_ROOT_URI + "/" + ids[i] + "/" + PROPERTY;
+				System.out.println( "Property node type = " + session.getNodeType(uri));
+				String[] propIDs = session.getChildNodeNames(uri);
+				boolean hasServicePID = false;
+				for (int j = 0; propIDs != null && j < propIDs.length; j++) {
+					
+					assertEquals("The Property Values node must be of type DDF_LIST_SUBTREE",
+							DmtConstants.DDF_LIST_SUBTREE,
+							session.getNodeType(uri + "/" + propIDs[j] + "/" + VALUES ));
+
+					if ( Constants.SERVICE_PID.equals( session.getNodeValue(uri + "/" + propIDs[j] + "/" + KEY )))
+						hasServicePID = true;
+				}
+				// the type of the ID can either be node or transient_node, depending 
+				// on the existence of the service property SERVICE_PID 
+				if ( ! hasServicePID )
+					assertEquals("The ID node must be of type DDF_TRANSIENT for services without a SERVICE_PID property",
+							DmtConstants.DDF_TRANSIENT,
+							session.getNodeType(PLUGIN_ROOT_URI + "/" + ids[i]));
+
+			}
+		} catch (DmtException de) {
+			de.printStackTrace();
+			fail();
+		}
+	}
+
+	/**
+	 * Test that the service ids are greater than 0;
+	 * 
+	 */
+	public void testServiceStateIDsNotZero() {
+		try {
+			ids = session.getChildNodeNames(PLUGIN_ROOT_URI);
+			for (int i = 0; i < ids.length; i++)
+				assertTrue("The service-id must be greater than 0",
+						Long.parseLong(ids[i]) > 0);
+		} catch (DmtException de) {
+			de.printStackTrace();
+			fail();
+		}
+	}
+	
+	/**
+	 * Tests the metadata of the ServiceState nodes.
+	 * This ensures that only read-operations are allowed on the nodes and that the scope and format is correct.   
+	 * @throws BundleException 
+	 * @throws IOException 
+	 * 
+	 */
+	public void testServiceStateMetaData() throws IOException, BundleException {
+		try {
+			// install and start a bundle that registers a service with properties
+			testBundle3 = installAndStartBundle(TESTBUNDLELOCATION3);
+			String serviceID = getServiceId(TEST_INTERFACE_NAME3);
+			assertNotNull(serviceID);
+			
+			String uri = PLUGIN_ROOT_URI;
+			assertMetaData( uri, MetaNode.PERMANENT);
+			assertMetaData( uri += "/" + serviceID, MetaNode.AUTOMATIC);
+			assertMetaData( uri += "/" + PROPERTY, MetaNode.AUTOMATIC);
+			assertMetaData( uri += "/0" , MetaNode.AUTOMATIC);
+			assertMetaData( uri +  "/" + KEY, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+			assertMetaData( uri +  "/" + TYPE, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+			assertMetaData( uri +  "/" + CARDINALITY, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+			assertMetaData( uri +  "/" + VALUES, MetaNode.AUTOMATIC);
+
+		} catch (DmtException de) {
+			de.printStackTrace();
+			fail("unexpeced DmtException: " + de.getMessage());
+		}
+	}
+
+	private void assertMetaData( String uri, int scope ) throws DmtException {
+		assertMetaData(uri, scope, -1);
+	}
+
+	private void assertMetaData( String uri, int scope, int format ) throws DmtException {
+		MetaNode metaNode = session.getMetaNode(uri);
+		assertNotNull(metaNode);
+		
+		assertEquals( "This node must support the GET operation: " + uri, true, metaNode.can( MetaNode.CMD_GET ) );
+		assertEquals( "This node must not support the ADD operation: " + uri, false, metaNode.can( MetaNode.CMD_ADD ) );
+		assertEquals( "This node must not support the DELETE operation: " + uri, false, metaNode.can( MetaNode.CMD_DELETE ) );
+		assertEquals( "This node must not support the EXECUTE operation: " + uri, false, metaNode.can( MetaNode.CMD_EXECUTE ) );
+		assertEquals( "This node must not support the REPLACE operation: " + uri, false, metaNode.can( MetaNode.CMD_REPLACE ) );
+		assertEquals( "This node has a wrong scope : " + uri, scope, metaNode.getScope() );
+		if ( format != -1 ) 
+			assertEquals( "This node has a wrong format: ", format, metaNode.getFormat() );
+	}
+
+	
 	/**
 	 * 
 	 * [testBundle3]
