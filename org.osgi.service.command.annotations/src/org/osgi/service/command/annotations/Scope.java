@@ -18,7 +18,7 @@ package org.osgi.service.command.annotations;
 import java.lang.annotation.*;
 
 /**
- * Indicates that this 
+ * Indicates that this object is a command with the given scope.
  * @version $Id$
  */
 
@@ -31,7 +31,7 @@ public @interface Scope {
 	 * 
 	 * @return the scope name
 	 */
-	String scope();
+	String value();
 	
 	/**
 	 * Automatically use all public methods as commands.
@@ -39,18 +39,5 @@ public @interface Scope {
 	 * @return true if this scope should be analyzed for commands.
 	 */
 	boolean auto() default false;
-	
-	/**
-	 * The descriptive text.
-	 * 
-	 * @return the descriptive text
-	 */
-	String description();
-	
-	/**
-	 * 
-	 * @return the summary or null
-	 */
-	String summary() default "";
 	
 }

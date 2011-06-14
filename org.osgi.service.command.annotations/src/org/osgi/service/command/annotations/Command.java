@@ -18,27 +18,14 @@ package org.osgi.service.command.annotations;
 import java.lang.annotation.*;
 
 /**
- * Indicates that this 
+ * Indicates that this method is a command.
+ * 
  * @version $Id$
  */
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target( {ElementType.METHOD})
 public @interface Command {
-	
-	/**
-	 * The descriptive text.
-	 * 
-	 * @return the descriptive text
-	 */
-	String description();
-	
-	/**
-	 * 
-	 * @return the summary or null
-	 */
-	String summary() default "";
-	
 	/**
 	 * Ensure the result is never printed.
 	 */

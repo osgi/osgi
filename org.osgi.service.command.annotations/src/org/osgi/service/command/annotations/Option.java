@@ -82,11 +82,4 @@ public @interface Option {
 
 	boolean repeat() default false;
 	
-	/**
-	 * The descriptive text.
-	 * 
-	 * @return the descriptive text
-	 */
-	String description();	
-	
 }

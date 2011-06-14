@@ -80,11 +80,4 @@ public @interface Flag {
 	 **/
 	String absent() default NOT_SET;
 	
-	/**
-	 * The descriptive text.
-	 * 
-	 * @return the descriptive text
-	 */
-	String description();	
-	
 }

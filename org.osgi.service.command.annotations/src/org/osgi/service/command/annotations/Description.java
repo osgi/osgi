@@ -30,7 +30,7 @@ import java.lang.annotation.*;
  * 
  *     public void print( 
  *     	 @Description("Output file")
- *       @Parameter(name="-o", ifAbsent="tmp.out")
+ *       @Option(alias="-o")
  *       File output )
  *   }
  * </pre>
@@ -47,4 +47,11 @@ public @interface Description {
 	 * @return the descriptive text
 	 */
 	String value();	
+	
+	/**
+	 * The summary.
+	 * @return the summary text
+	 */
+	String summary() default "";
+	
 }
