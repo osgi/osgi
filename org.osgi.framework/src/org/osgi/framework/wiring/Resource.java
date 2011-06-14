@@ -1,7 +1,6 @@
 package org.osgi.framework.wiring;
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
