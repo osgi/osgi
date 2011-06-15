@@ -731,12 +731,13 @@ public class ResolverHookTests extends OSGiTestCase {
 		TestFilterCapabilityHook hook1 = new TestFilterCapabilityHook(filterCapabilities1);
 		ServiceRegistration<ResolverHookFactory> reg = registerHook(hook1, 0);
 
-		Bundle tb1v110 = install("resolver.tb1.v110.jar");
-		Bundle tb1v100 = install("resolver.tb1.v100.jar");
-		assertTrue("Could not resolve tb1 bundles", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb1v100, tb1v110})));
-
-		System.setProperty(tb1v100.getSymbolicName(), "v110");
+		// must prevent all resolution to avoid testing for dynamic attachment of fragments
+		PreventResolution preventHook = new PreventResolution();
+		ServiceRegistration<ResolverHookFactory> preventReg = registerHook(preventHook, 0);
+		install("resolver.tb1.v110.jar");
+		install("resolver.tb1.v100.jar");
 		Bundle tb4 = install("resolver.tb4.jar");
+		preventReg.unregister();
 		assertFalse("Should not be able to resolve fragment tb4", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[]{tb4})));
 		if (hook1.getError() != null)
 			throw hook1.getError();
@@ -746,6 +747,12 @@ public class ResolverHookTests extends OSGiTestCase {
 		reg.unregister();
 		TestFilterCapabilityHook hook2 = new TestFilterCapabilityHook(filterCapabilities2);
 		registerHook(hook2, 0);
+
+		// refresh all bundles to get both hosts and fragment back to installed state
+		preventReg = registerHook(preventHook, 0);
+		refreshBundles(bundles);
+		preventReg.unregister();
+
 		assertTrue("Should resolve fragment tb4", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[]{tb4})));
 		if (hook2.getError() != null)
 			throw hook2.getError();
