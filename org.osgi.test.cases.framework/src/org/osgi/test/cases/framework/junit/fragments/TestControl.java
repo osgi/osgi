@@ -689,6 +689,7 @@ public class TestControl extends DefaultTestBundleControl implements
 			tb7c.stop();
 			tb7c.uninstall();
 			tb7e.uninstall();
+			tb7h.uninstall();
 		}
 
 	}
