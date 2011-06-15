@@ -44,6 +44,7 @@ import info.dmtree.DmtData;
 import info.dmtree.DmtException;
 import info.dmtree.DmtIllegalStateException;
 import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -213,6 +214,113 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 
 		// 3rd descendants in case of children of Hosts
 	}
+	
+	/**
+	 * Tests the metadata of the BundleState nodes.
+	 * This ensures that only read-operations are allowed on the nodes and that the scope and format is correct.   
+	 * @throws BundleException 
+	 * @throws IOException 
+	 * 
+	 */
+	public void testBundleStateMetaData() throws IOException, BundleException {
+		try {
+			// install a fragment bundle
+			testBundle2 = bundleInstall(TESTBUNDLELOCATION2);
+			// install hosting bundle 
+			testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
+
+			assertMetaData( PLUGIN_ROOT_URI, MetaNode.PERMANENT);
+			String[] bundleIds = session.getChildNodeNames(PLUGIN_ROOT_URI);
+			for (int i = 0; i < bundleIds.length; i++) {
+				String uri = PLUGIN_ROOT_URI + "/" + bundleIds[i] + "/";
+				assertMetaData( uri + ID, MetaNode.AUTOMATIC, DmtData.FORMAT_LONG);
+				assertMetaData( uri + SYMBOLICNAME, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uri + VERSION, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uri + BUNDLETYPE, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uri + MANIFEST, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uri + LOCATION, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uri + STATUS, MetaNode.AUTOMATIC);
+				
+				String uriStatus = uri + STATUS + "/"; 
+				assertMetaData( uriStatus + STATE, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uriStatus + STARTLEVEL, MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
+				assertMetaData( uriStatus + PERSISTENTLYSTARTED, MetaNode.AUTOMATIC, DmtData.FORMAT_BOOLEAN);
+				assertMetaData( uriStatus + ACTIVATIONPOLICYUSED, MetaNode.AUTOMATIC, DmtData.FORMAT_BOOLEAN);
+				assertMetaData( uriStatus + LASTMODIFIED, MetaNode.AUTOMATIC, DmtData.FORMAT_DATETIME);
+				
+				String uriHosts = uri + HOSTS; 
+				assertMetaData( uriHosts, MetaNode.AUTOMATIC);
+				String[] children = session.getChildNodeNames(uriHosts);
+				for (int j = 0; j < children.length; j++) 
+					assertMetaData( uriHosts + "/" + children[j], MetaNode.AUTOMATIC, DmtData.FORMAT_LONG);
+				
+				String uriFragments = uri + FRAGMENTS; 
+				assertMetaData( uriFragments, MetaNode.AUTOMATIC);
+				children = session.getChildNodeNames(uriFragments);
+				for (int j = 0; j < children.length; j++)
+					assertMetaData( uriFragments + "/" + children[j], MetaNode.AUTOMATIC, DmtData.FORMAT_LONG);
+				
+				String uriRequired = uri + REQUIRED; 
+				assertMetaData( uriRequired, MetaNode.AUTOMATIC);
+				children = session.getChildNodeNames(uriRequired);
+				for (int j = 0; j < children.length; j++)
+					assertMetaData( uriRequired + "/" + children[j], MetaNode.AUTOMATIC, DmtData.FORMAT_LONG);
+
+				String uriRequiring = uri + REQUIRING; 
+				assertMetaData( uriRequiring, MetaNode.AUTOMATIC);
+				children = session.getChildNodeNames(uriRequiring);
+				for (int j = 0; j < children.length; j++)
+					assertMetaData( uriRequiring + "/" + children[j], MetaNode.AUTOMATIC, DmtData.FORMAT_LONG);
+
+				String uriTrusted = uri + TRUSTEDSIGNERCERTIFICATION; 
+				assertMetaData( uriTrusted, MetaNode.AUTOMATIC);
+				children = session.getChildNodeNames(uriTrusted);
+				for (int j = 0; j < children.length; j++) {
+					String uriChain = uriTrusted + "/" + children[j]; 
+					assertMetaData( uriChain, MetaNode.AUTOMATIC);
+					assertMetaData( uriChain += "/" + CERTIFICATECHAIN, MetaNode.AUTOMATIC);
+					String[] chains = session.getChildNodeNames(uriChain);
+					for (int k = 0; k < chains.length; k++)
+						assertMetaData( uriChain + "/" + chains[k], MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				}
+
+				String uriNonTrusted = uri + NONTRUSTEDSIGNERCERTIFICATION; 
+				assertMetaData( uriNonTrusted, MetaNode.AUTOMATIC);
+				children = session.getChildNodeNames(uriNonTrusted);
+				for (int j = 0; j < children.length; j++) {
+					String uriChain = uriNonTrusted + "/" + children[j]; 
+					assertMetaData( uriChain, MetaNode.AUTOMATIC);
+					assertMetaData( uriChain += "/" + CERTIFICATECHAIN, MetaNode.AUTOMATIC);
+					String[] chains = session.getChildNodeNames(uriChain);
+					for (int k = 0; k < chains.length; k++)
+						assertMetaData( uriChain + "/" + chains[k], MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				}
+			}
+
+		} catch (DmtException de) {
+			de.printStackTrace();
+			fail("unexpeced DmtException: " + de.getMessage());
+		}
+	}
+
+	private void assertMetaData( String uri, int scope ) throws DmtException {
+		assertMetaData(uri, scope, -1);
+	}
+
+	private void assertMetaData( String uri, int scope, int format ) throws DmtException {
+		MetaNode metaNode = session.getMetaNode(uri);
+		assertNotNull(metaNode);
+		
+		assertEquals( "This node must support the GET operation: " + uri, true, metaNode.can( MetaNode.CMD_GET ) );
+		assertEquals( "This node must not support the ADD operation: " + uri, false, metaNode.can( MetaNode.CMD_ADD ) );
+		assertEquals( "This node must not support the DELETE operation: " + uri, false, metaNode.can( MetaNode.CMD_DELETE ) );
+		assertEquals( "This node must not support the EXECUTE operation: " + uri, false, metaNode.can( MetaNode.CMD_EXECUTE ) );
+		assertEquals( "This node must not support the REPLACE operation: " + uri, false, metaNode.can( MetaNode.CMD_REPLACE ) );
+		assertEquals( "This node has a wrong scope : " + uri, scope, metaNode.getScope() );
+		if ( format != -1 ) 
+			assertEquals( "Node " + uri + " has a wrong format: ", format, metaNode.getFormat() );
+	}
+
 
 	/**
 	 * 
