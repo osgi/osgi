@@ -329,19 +329,42 @@ public class ServiceStatePluginTestCase extends DefaultTestBundleControl {
 		try {
 			// install and start a bundle that registers a service with properties
 			testBundle3 = installAndStartBundle(TESTBUNDLELOCATION3);
-			String serviceID = getServiceId(TEST_INTERFACE_NAME3);
-			assertNotNull(serviceID);
-			
+			ids = session.getChildNodeNames(PLUGIN_ROOT_URI);
 			String uri = PLUGIN_ROOT_URI;
 			assertMetaData( uri, MetaNode.PERMANENT);
-			assertMetaData( uri += "/" + serviceID, MetaNode.AUTOMATIC);
-			assertMetaData( uri += "/" + PROPERTY, MetaNode.AUTOMATIC);
-			assertMetaData( uri += "/0" , MetaNode.AUTOMATIC);
-			assertMetaData( uri +  "/" + KEY, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
-			assertMetaData( uri +  "/" + TYPE, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
-			assertMetaData( uri +  "/" + CARDINALITY, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
-			assertMetaData( uri +  "/" + VALUES, MetaNode.AUTOMATIC);
+			for (int i = 0; i < ids.length; i++) {
+				uri = PLUGIN_ROOT_URI + "/" + ids[i];
+				assertMetaData( uri, MetaNode.AUTOMATIC);
+				assertMetaData( uri + "/" + REGISTERINGBUNDLE, MetaNode.AUTOMATIC, DmtData.FORMAT_LONG);
 
+				String uriUsingBundles = uri + "/" + USINGBUNDLES; 
+				assertMetaData( uriUsingBundles, MetaNode.AUTOMATIC);
+				String[] usingBundles = session.getChildNodeNames(uriUsingBundles);
+				for (int j = 0; j < usingBundles.length; j++)
+					assertMetaData( uriUsingBundles + "/" + usingBundles[j], MetaNode.AUTOMATIC, DmtData.FORMAT_LONG);
+
+				if ( session.isNodeUri(uri + "/Ext")) 
+					assertMetaData( uri + "/Ext", MetaNode.AUTOMATIC);
+				
+				assertMetaData( uri += "/" + PROPERTY, MetaNode.AUTOMATIC);
+				String[] props = session.getChildNodeNames(uri);
+				for (int j = 0; j < props.length; j++) {
+					String uriProp = uri + "/" + props[j];
+					assertMetaData( uriProp , MetaNode.AUTOMATIC);
+					assertMetaData( uriProp +  "/" + KEY, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+					assertMetaData( uriProp +  "/" + TYPE, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+					assertMetaData( uriProp +  "/" + CARDINALITY, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+					assertMetaData( uriProp +  "/" + VALUES, MetaNode.AUTOMATIC);
+					String[] values = session.getChildNodeNames(uriProp + "/" + VALUES);
+					for (int k = 0; k < values.length; k++) {
+						assertMetaData(uriProp + "/" + VALUES + "/" + values[k], MetaNode.AUTOMATIC );
+						// TODO: check the node format against the property TYPE 
+					}
+					if ( session.isNodeUri(uriProp + "/Ext")) 
+						assertMetaData( uriProp + "/Ext", MetaNode.AUTOMATIC);
+				}
+			}
+			
 		} catch (DmtException de) {
 			de.printStackTrace();
 			fail("unexpeced DmtException: " + de.getMessage());

@@ -274,29 +274,24 @@ public class PackageStatePluginTestCase extends DefaultTestBundleControl {
 			assertNotNull(testBundle1);
 
 			ids = session.getChildNodeNames(PLUGIN_ROOT_URI);
-			assertNotNull("This object should not be null.", ids);
-			// retrieve the id of the shared package and use it for the tests
-			for (int i = 0; i < ids.length; i++) {
-				String packageName = session.getNodeValue(
-						PLUGIN_ROOT_URI + "/" + ids[i] + "/" + NAME).getString();
-				if (packageName.equals(TESTPACKAGENAME)) {
-					targetIdNumber = ids[i];
-					break;
-				}
-			}
-			
 			String uri = PLUGIN_ROOT_URI;
 			assertMetaData( uri, MetaNode.PERMANENT);
-			assertMetaData( uri += "/" + targetIdNumber, MetaNode.AUTOMATIC);
-			assertMetaData( uri +  "/" + NAME, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING );
-			assertMetaData( uri +  "/" + VERSION, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING );
-			assertMetaData( uri +  "/" + REMOVALPENDING, MetaNode.AUTOMATIC, DmtData.FORMAT_BOOLEAN );
-			assertMetaData( uri +  "/" + EXPORTINGBUNDLE, MetaNode.AUTOMATIC, DmtData.FORMAT_LONG );
-			assertMetaData( uri +  "/" + IMPORTINGBUNDLES, MetaNode.AUTOMATIC );
-			assertMetaData( uri +  "/" + NAME, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING );
-			assertMetaData( uri +  "/" + EXPORTINGBUNDLE, MetaNode.AUTOMATIC, DmtData.FORMAT_LONG );
-			assertMetaData( uri += "/" + IMPORTINGBUNDLES, MetaNode.AUTOMATIC );
-			assertMetaData( uri + "/0", MetaNode.AUTOMATIC, DmtData.FORMAT_LONG );
+
+			for (int i = 0; i < ids.length; i++) {
+				uri = PLUGIN_ROOT_URI + "/" + ids[i];
+				assertMetaData( uri, MetaNode.AUTOMATIC);
+				assertMetaData( uri +  "/" + NAME, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING );
+				assertMetaData( uri +  "/" + VERSION, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING );
+				assertMetaData( uri +  "/" + REMOVALPENDING, MetaNode.AUTOMATIC, DmtData.FORMAT_BOOLEAN );
+				assertMetaData( uri +  "/" + EXPORTINGBUNDLE, MetaNode.AUTOMATIC, DmtData.FORMAT_LONG );
+				if ( session.isNodeUri(uri + "/Ext")) 
+					assertMetaData( uri + "/Ext", MetaNode.AUTOMATIC);
+
+				assertMetaData( uri +=  "/" + IMPORTINGBUNDLES, MetaNode.AUTOMATIC );
+				String[] bundles = session.getChildNodeNames(uri);
+				for (int j = 0; j < bundles.length; j++)
+					assertMetaData( uri + "/" + bundles[j], MetaNode.AUTOMATIC, DmtData.FORMAT_LONG );
+			}
 
 			session.close();
 			session = null;
