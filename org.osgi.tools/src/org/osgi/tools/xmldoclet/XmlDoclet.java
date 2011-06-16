@@ -483,7 +483,7 @@ public class XmlDoclet extends Doclet {
 								if ( field != null) {
 									sb.append("<code class='value'>");
 									sb.append(escape(field.constantValue()
-											.toString()));
+											+""));
 									sb.append("</code>");
 								}
 								else

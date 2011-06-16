@@ -11,6 +11,7 @@ import aQute.bnd.build.Project;
 import aQute.bnd.build.ProjectBuilder;
 import aQute.bnd.build.Workspace;
 import aQute.bnd.service.AnalyzerPlugin;
+import aQute.bnd.service.RepositoryPlugin.Strategy;
 import aQute.lib.osgi.Analyzer;
 import aQute.lib.osgi.Constants;
 import aQute.lib.osgi.EmbeddedResource;
@@ -89,7 +90,7 @@ public class Packaging implements AnalyzerPlugin {
 		// Include bnd so it is fully self contained, except for the
 		// java runtime.
 		Container c = pb.getProject().getBundle("biz.aQute.bnd", "latest",
-				Constants.STRATEGY_HIGHEST, null);
+				Strategy.HIGHEST, null);
 
 		File f = c.getFile();
 		if (f != null)
@@ -97,8 +98,8 @@ public class Packaging implements AnalyzerPlugin {
 		else
 			analyzer.error("Cannot find bnd's jar file in a repository ");
 
-		List<Container> extra = pb.getProject().getBundles(
-				Constants.STRATEGY_HIGHEST, "com.springsource.junit");
+		List<Container> extra = pb.getProject().getBundles(Strategy.HIGHEST,
+				"com.springsource.junit");
 		flatten(analyzer, null, jar, extra, true, filesToPath);
 
 		StringBuilder script = new StringBuilder();
