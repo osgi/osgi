@@ -69,7 +69,7 @@ public interface Repository {
    * @throws IllegalArgumentException
    *           If the filter expression is invalid.
    */
-  Collection<Content> findContents(String filterExpr);
+  Collection<Content> findContents(String filterExpr) throws InvalidSyntaxException;
   
   /**
    * Lookup the content based on the supplied resource.
