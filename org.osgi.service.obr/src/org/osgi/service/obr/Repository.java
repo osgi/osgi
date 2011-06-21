@@ -70,6 +70,14 @@ public interface Repository {
    *           If the filter expression is invalid.
    */
   Collection<Content> findContents(String filterExpr);
+  
+  /**
+   * Lookup the content based on the supplied resource.
+   * 
+   * @param resource - The resource whose content is desired.
+   * @return The content for the supplied resource.
+   */
+  Content getContent(Resource resource);
 
   /**
    * A counter to indicate the state of the repository, clients can use this to
