@@ -21,7 +21,6 @@
 package org.osgi.service.obr;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.wiring.Capability;
@@ -49,37 +48,6 @@ import org.osgi.framework.wiring.Resource;
  * @version $Id$
  */
 public interface Repository {
-
-  /**
-   * Discover any resources that specify
-   * {@link Resource#getAttributes() attributes} that match the given
-   * filter.
-   * 
-   * @param filterExpr
-   *          A standard OSGi filter
-   * @return List of resources matching the filters.
-   * @throws InvalidSyntaxException
-   * @throws IllegalArgumentException
-   *           If the filter expression is invalid.
-   */
-  Iterator<Resource> discoverResources(String filterExpr)
-      throws InvalidSyntaxException;
-
-  /**
-   * Lookup a revision based on a supplied namespace, name and version.
-   * 
-   * TODO should we allow wild cards/ranges for version? What are semantics if
-   * version is open - highest, lowest, repository specific?
-   * 
-   * @param namespace
-   * @param symbolicName
-   * @param version
-   * 
-   * @return
-   */
-  Resource getResource(String namespace, String symbolicName,
-      String version);
-
   /**
    * Find any capabilities from revisions contained in this repository that can
    * potentially satisfy the supplied requirements.
@@ -89,6 +57,19 @@ public interface Repository {
    */
   Collection<Capability> findProviders(
       Requirement... requirements);
+  
+  /**
+   * Discover any contents that specify {@link Content#getAttributes() 
+   * attributes} that match the given filter.
+   * 
+   * @param filterExpr
+   *          A standard OSGi filter
+   * @return List of contents matching the filter.
+   * @throws InvalidSyntaxException
+   * @throws IllegalArgumentException
+   *           If the filter expression is invalid.
+   */
+  Collection<Content> findContents(String filterExpr);
 
   /**
    * A counter to indicate the state of the repository, clients can use this to
