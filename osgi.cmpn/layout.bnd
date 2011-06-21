@@ -3,9 +3,6 @@ cmpn.specs = \
 	 org.osgi.application, \
 	 org.osgi.service.application, \
 	 org.osgi.service.blueprint, \
-         org.osgi.service.command, \
-         org.osgi.service.converter, \
-         org.osgi.service.formatter, \
 	 org.osgi.service.cm, \
 	 org.osgi.service.component, \
 	 org.osgi.service.coordinator, \
@@ -19,7 +16,6 @@ cmpn.specs = \
 	 org.osgi.service.monitor, \
 	 org.osgi.service.prefs, \
      org.osgi.service.provisioning, \
-         org.osgi.service.threadio, \
 	 org.osgi.service.upnp, \
 	 org.osgi.service.useradmin, \
 	 org.osgi.service.wireadmin, \
