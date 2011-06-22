@@ -36,8 +36,8 @@ public final class ResourceConstants {
 
 	/**
 	 * Name space for the identity capability.  Each {@link Resource resource} 
-	 * should provide an identity capability that can be used to identify the
-	 * resource.
+	 * provides exactly one<sup>&#8224;</sup> identity capability that can be 
+	 * used to identify the resource.
 	 * 
 	 * For identity capability attributes the following applies:
 	 * <ul>
@@ -50,8 +50,15 @@ public final class ResourceConstants {
 	 * resource type.
 	 * </ul>
 	 * <p>
-	 * A resource with a symbolic name provides exactly one <sup>&#8224;</sup> identity
+	 * A resource with a symbolic name 
+	 * {@link Resource#getCapabilities(String) provides} exactly one 
+	 * <sup>&#8224;</sup> identity
 	 * {@link Resource#getCapabilities(String) capability}.
+	 * <p>
+	 * For a {@link BundleRevision revision} with a symbolic name the 
+	 * {@link BundleWiring wiring} for the revision
+	 * {@link BundleWiring#getCapabilities(String) provides} exactly
+	 * one<sup>&#8224;</sup> identity capability. 
 	 * <p>
 	 * &#8224; A resource with no symbolic name must not provide an identity
 	 * capability.
