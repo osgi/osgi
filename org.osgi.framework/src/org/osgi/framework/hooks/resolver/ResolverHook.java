@@ -23,6 +23,7 @@ import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.FrameworkWiring;
+import org.osgi.framework.wiring.ResourceConstants;
 
 /**
  * OSGi Framework Resolver Hook instances are obtained from the OSGi
@@ -51,62 +52,71 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * must be thrown to the caller of the API which triggered the resolve process.
  * In cases where the the caller is not available a framework event of type
  * error should be fired.</li>
+ * 
  * <li>For each registered hook factory call the
  * {@link ResolverHookFactory#begin(Collection)} method to inform the hooks
  * about a resolve process beginning and to obtain a Resolver Hook instance that
  * will be used for the duration of the resolve process.</li>
+ * 
  * <li>Determine the collection of unresolved bundle revisions that may be
  * considered for resolution during the current resolution process and place
- * each of the bundle revisions in a shrinkable collection {@code R}. For each
+ * each of the bundle revisions in a shrinkable collection {@code Resolvable}. For each
  * resolver hook call the {@link #filterResolvable(Collection)} method with the
- * shrinkable collection {@code R}.</li>
- * <li>The shrinkable collection {@code R} now contains all the unresolved
+ * shrinkable collection {@code Resolvable}.</li>
+ * <li>The shrinkable collection {@code Resolvable} now contains all the unresolved
  * bundle revisions that may end up as resolved at the end of the current
  * resolve process. Any other bundle revisions that got removed from the
- * shrinkable collection {@code R} must not end up as resolved at the end of the
+ * shrinkable collection {@code Resolvable} must not end up as resolved at the end of the
  * current resolve process.</li>
  * <li>For each bundle revision {@code B} left in the shrinkable collection
- * {@code R} that represents a singleton bundle do the following:<br/>
+ * {@code Resolvable} and any bundle revision {@code B} which is currently resolved
+ * that represents a singleton bundle do the following:
+ * <p/>
  * Determine the collection of available capabilities that have a name space of
- * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle}, are singletons,
+ * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity}, are singletons,
  * and have the same symbolic name as the singleton bundle revision {@code B}
  * and place each of the matching capabilities into a shrinkable collection
- * {@code S}.
- * 
- * Remove the {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle}
+ * {@code Collisions}.
+ * <p/>
+ * Remove the {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity}
  * capability provided by bundle revision {@code B} from shrinkable collection
- * {@code S}. A singleton bundle cannot collide with itself.
- * 
+ * {@code Collisions}. A singleton bundle cannot collide with itself.
+ * <p/>
  * For each resolver hook call the
  * {@link #filterSingletonCollisions(BundleCapability, Collection)} with the
- * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle} capability
- * provided by bundle revision {@code B} and the shrinkable collection {@code S}
- * 
- * The shrinkable collection {@code S} now contains all singleton
- * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle} capabilities that
- * can influence the ability of bundle revision {@code B} to resolve.</li>
+ * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity} capability
+ * provided by bundle revision {@code B} and the shrinkable collection {@code Collisions}
+ * <p/>
+ * The shrinkable collection {@code Collisions} now contains all singleton
+ * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity} capabilities that
+ * can influence the ability of bundle revision {@code B} to resolve.
+ * <p/>
+ * If the bundle revision {@code B} is already resolved then any resolvable 
+ * bundle revision contained in the collection {@code Collisions} is not 
+ * allowed to resolve.
+ * </li>
  * <li>During a resolve process a framework is free to attempt to resolve any or
- * all bundles contained in shrinkable collection {@code R}. For each bundle
- * revision {@code B} left in the shrinkable collection {@code R} which the
+ * all bundles contained in shrinkable collection {@code Resolvable}. For each bundle
+ * revision {@code B} left in the shrinkable collection {@code Resolvable} which the
  * framework attempts to resolve the following steps must be followed:
  * <p/>
- * For each requirement {@code T} specified by bundle revision {@code B}
+ * For each requirement {@code R} specified by bundle revision {@code B}
  * determine the collection of capabilities that satisfy (or match) the
  * requirement and place each matching capability into a shrinkable collection
- * {@code C}. A capability is considered to match a particular requirement if
+ * {@code Candidates}. A capability is considered to match a particular requirement if
  * its attributes satisfy a specified requirement and the requirer bundle has
  * permission to access the capability.
  * 
  * <p/>
  * For each resolver hook call the
  * {@link #filterMatches(BundleRequirement, Collection)} with the requirement
- * {@code T} and the shrinkable collection {@code C}.
+ * {@code R} and the shrinkable collection {@code Candidates}.
  * 
  * <p/>
- * The shrinkable collection {@code C} now contains all the capabilities that
- * may be used to satisfy the requirement {@code T}. Any other capabilities that
- * got removed from the shrinkable collection {@code C} must not be used to
- * satisfy requirement {@code T}.</li>
+ * The shrinkable collection {@code Candidates} now contains all the capabilities that
+ * may be used to satisfy the requirement {@code R}. Any other capabilities that
+ * got removed from the shrinkable collection {@code Candidates} must not be used to
+ * satisfy requirement {@code R}.</li>
  * <li>For each resolver hook call the {@link #end()} method to inform the hooks
  * about a resolve process ending.</li>
  * </ol>
@@ -149,16 +159,17 @@ public interface ResolverHook {
 	 * candidates must all use the same name space.
 	 * <p>
 	 * Currently only capabilities with the name space of
-	 * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle} can be
-	 * singletons. In that case all the collision candidates have the name space
-	 * of {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle}, are
-	 * singletons, and have the same symbolic name as the specified singleton
-	 * capability.
+	 * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle} and
+	 * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity} can be
+	 * singletons. The collision candidates will all have the same name space,
+	 * be singletons, and have the same symbolic name as the specified 
+	 * singleton capability.
 	 * <p>
 	 * In the future, capabilities in other name spaces may support the
 	 * singleton concept. Hook implementations should be prepared to receive
 	 * calls to this method for capabilities in name spaces other than
-	 * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle}.
+	 * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle} or
+	 * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity}.
 	 * <p>
 	 * This method can filter the list of collision candidates by removing
 	 * potential collisions. Removing a collision candidate will allow the
