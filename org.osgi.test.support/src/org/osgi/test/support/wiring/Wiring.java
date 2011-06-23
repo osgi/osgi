@@ -23,27 +23,46 @@ import static org.osgi.test.support.OSGiTestCase.fail;
 import static org.osgi.test.support.OSGiTestCaseProperties.getScaling;
 import static org.osgi.test.support.OSGiTestCaseProperties.getTimeout;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.Version;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.framework.wiring.BundleWire;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.framework.wiring.FrameworkWiring;
 
 public class Wiring {
 	/**
 	 * Refreshes the collection of bundle synchronously.
 	 * 
+	 * @param context A bundle context to use to obtain the system bundle.
 	 * @param bundles The bundles to be refreshed, or {@code null} to refresh
 	 *        the removal pending bundles.
 	 */
+	public static void synchronousRefreshBundles(BundleContext context,
+			Bundle... bundles) {
+		synchronousRefreshBundles(context, asCollection(bundles));
+	}
+
 	public static void synchronousRefreshBundles(BundleContext context,
 			Collection<Bundle> bundles) {
 		FrameworkWiring fwkWiring = context.getBundle(0).adapt(
 				FrameworkWiring.class);
 		assertNotNull("Framework wiring is null.", fwkWiring);
-		final boolean[] done = new boolean[] {false};
+		final boolean[] done = new boolean[1];
+		synchronized (done) {
+			done[0] = false;
+		}
 		FrameworkListener listener = new FrameworkListener() {
 			public void frameworkEvent(FrameworkEvent event) {
 				if (event.getType() == FrameworkEvent.PACKAGES_REFRESHED) {
@@ -55,17 +74,120 @@ public class Wiring {
 			}
 		};
 		fwkWiring.refreshBundles(bundles, listener);
+		final long endTime = System.currentTimeMillis() + getTimeout()
+				* getScaling();
 		synchronized (done) {
-			if (!done[0])
+			while (!done[0]) {
 				try {
-					done.wait(getTimeout() * getScaling());
+					done.wait(endTime - System.currentTimeMillis());
 				}
 				catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 					fail("Unexepected interruption.", e);
 				}
-			if (!done[0])
-				fail("Timed out waiting for refresh bundles to finish.");
+				if (!done[0] && (System.currentTimeMillis() > endTime)) {
+					fail("Timed out waiting for refresh bundles to finish.");
+				}
+			}
 		}
+	}
+
+	/**
+	 * Resolves the collection of bundle synchronously.
+	 * 
+	 * @param context A bundle context to use to obtain the system bundle.
+	 * @param bundles The bundles to resolve or {@code null} to resolve all
+	 *        unresolved bundles installed in the Framework.
+	 */
+	public static boolean resolveBundles(BundleContext context,
+			Bundle... bundles) {
+		return resolveBundles(context, asCollection(bundles));
+	}
+
+	public static boolean resolveBundles(BundleContext context,
+			Collection<Bundle> bundles) {
+		FrameworkWiring fwkWiring = context.getBundle(0).adapt(
+				FrameworkWiring.class);
+		assertNotNull("Framework wiring is null.", fwkWiring);
+		return fwkWiring.resolveBundles(bundles);
+	}
+
+	private static <T> Collection<T> asCollection(T... items) {
+		if ((items == null) || (items.length == 0)) {
+			return null;
+		}
+		return Arrays.asList(items);
+	}
+
+	public static List<BundleCapability> getExportedPackages(
+			BundleContext context, String name) {
+		List<BundleCapability> result = new ArrayList<BundleCapability>();
+		Bundle[] bundles = context.getBundles();
+		for (Bundle bundle : bundles) {
+			BundleWiring wiring = bundle.adapt(BundleWiring.class);
+			List<BundleCapability> exportedPackages = wiring
+					.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+			for (BundleCapability exportedPackage : exportedPackages) {
+				if (name.equals(exportedPackage.getAttributes().get(
+						BundleRevision.PACKAGE_NAMESPACE))) {
+					result.add(exportedPackage);
+				}
+			}
+		}
+		return result;
+	}
+
+	public static BundleCapability getExportedPackage(
+			BundleContext context, String name) {
+		BundleCapability result = null;
+		Version resultVersion = null;
+		Bundle[] bundles = context.getBundles();
+		for (Bundle bundle : bundles) {
+			BundleWiring wiring = bundle.adapt(BundleWiring.class);
+			List<BundleCapability> exportedPackages = wiring
+			.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+			for (BundleCapability exportedPackage : exportedPackages) {
+				if (name.equals(exportedPackage.getAttributes().get(
+						BundleRevision.PACKAGE_NAMESPACE))) {
+					if (result == null) {
+						result = exportedPackage;
+						resultVersion = getVersion(
+								exportedPackage.getAttributes(),
+								Constants.VERSION_ATTRIBUTE);
+					} else {
+						Version version = getVersion(
+								exportedPackage.getAttributes(),
+								Constants.VERSION_ATTRIBUTE);
+						if (version.compareTo(resultVersion) > 1) {
+							result = exportedPackage;
+							resultVersion = version;
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	private static Version getVersion(Map<String, Object> attributes, String key) {
+		return (Version) attributes.get(key);
+	}
+
+	public static List<BundleRevision> getHosts(BundleContext context,
+			BundleRevision fragment) {
+		List<BundleRevision> result = new ArrayList<BundleRevision>();
+		if ((fragment.getTypes() & BundleRevision.TYPE_FRAGMENT) == 0) {
+			return result;
+		}
+		BundleWiring wiring = fragment.getWiring();
+		if (wiring == null) {
+			return result;
+		}
+		List<BundleWire> wires = wiring
+				.getRequiredWires(BundleRevision.HOST_NAMESPACE);
+		for (BundleWire wire : wires) {
+			result.add(wire.getProviderWiring().getRevision());
+		}
+		return result;
 	}
 }

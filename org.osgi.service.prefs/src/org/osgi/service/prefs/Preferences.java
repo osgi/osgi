@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -166,11 +166,11 @@ public interface Preferences {
 	public void clear() throws BackingStoreException;
 
 	/**
-	 * Associates a {@code String} object representing the specified
-	 * {@code int} value with the specified {@code key} in this node. The
-	 * associated string is the one that would be returned if the {@code int}
-	 * value were passed to {@code Integer.toString(int)}. This method is
-	 * intended for use in conjunction with {@link #getInt} method.
+	 * Associates a {@code String} object representing the specified {@code int}
+	 * value with the specified {@code key} in this node. The associated string
+	 * is the one that would be returned if the {@code int} value were passed to
+	 * {@code Integer.toString(int)}. This method is intended for use in
+	 * conjunction with {@link #getInt(String, int)} method.
 	 * 
 	 * <p>
 	 * Implementor's note: it is <i>not </i> necessary that the property value
@@ -178,8 +178,8 @@ public interface Preferences {
 	 * backing store supports integer values, it is not unreasonable to use
 	 * them. This implementation detail is not visible through the
 	 * {@code Preferences} API, which allows the value to be read as an
-	 * {@code int} (with {@code getInt} or a {@code String} (with
-	 * {@code get}) type.
+	 * {@code int} (with {@code getInt} or a {@code String} (with {@code get})
+	 * type.
 	 * 
 	 * @param key key with which the string form of value is to be associated.
 	 * @param value {@code value} whose string form is to be associated with
@@ -192,26 +192,26 @@ public interface Preferences {
 	public void putInt(String key, int value);
 
 	/**
-	 * Returns the {@code int} value represented by the {@code String}
-	 * object associated with the specified {@code key} in this node. The
+	 * Returns the {@code int} value represented by the {@code String} object
+	 * associated with the specified {@code key} in this node. The
 	 * {@code String} object is converted to an {@code int} as by
-	 * {@code Integer.parseInt(String)}. Returns the specified default if
-	 * there is no value associated with the {@code key}, the backing store
-	 * is inaccessible, or if {@code Integer.parseInt(String)} would throw a
+	 * {@code Integer.parseInt(String)}. Returns the specified default if there
+	 * is no value associated with the {@code key}, the backing store is
+	 * inaccessible, or if {@code Integer.parseInt(String)} would throw a
 	 * {@code NumberFormatException} if the associated {@code value} were
 	 * passed. This method is intended for use in conjunction with the
-	 * {@link #putInt} method.
+	 * {@link #putInt(String, int)} method.
 	 * 
-	 * @param key key whose associated value is to be returned as an
-	 *        {@code int}.
+	 * @param key key whose associated value is to be returned as an {@code int}
+	 *        .
 	 * @param def the value to be returned in the event that this node has no
-	 *        value associated with {@code key} or the associated value
-	 *        cannot be interpreted as an {@code int} or the backing store is
+	 *        value associated with {@code key} or the associated value cannot
+	 *        be interpreted as an {@code int} or the backing store is
 	 *        inaccessible.
-	 * @return the {@code int} value represented by the {@code String}
-	 *         object associated with {@code key} in this node, or
-	 *         {@code def} if the associated value does not exist or cannot
-	 *         be interpreted as an {@code int} type.
+	 * @return the {@code int} value represented by the {@code String} object
+	 *         associated with {@code key} in this node, or {@code def} if the
+	 *         associated value does not exist or cannot be interpreted as an
+	 *         {@code int} type.
 	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
@@ -223,22 +223,21 @@ public interface Preferences {
 	/**
 	 * Associates a {@code String} object representing the specified
 	 * {@code long} value with the specified {@code key} in this node. The
-	 * associated {@code String} object is the one that would be returned if
-	 * the {@code long} value were passed to {@code Long.toString(long)}.
-	 * This method is intended for use in conjunction with the {@link #getLong}
-	 * method.
+	 * associated {@code String} object is the one that would be returned if the
+	 * {@code long} value were passed to {@code Long.toString(long)}. This
+	 * method is intended for use in conjunction with the
+	 * {@link #getLong(String, long)} method.
 	 * 
 	 * <p>
-	 * Implementor's note: it is <i>not </i> necessary that the {@code value}
-	 * be represented by a {@code String} type in the backing store. If the
-	 * backing store supports {@code long} values, it is not unreasonable to
-	 * use them. This implementation detail is not visible through the {@code 
-	 * Preferences} API, which allows the value to be read as a
-	 * {@code long} (with {@code getLong} or a {@code String} (with
-	 * {@code get}) type.
+	 * Implementor's note: it is <i>not </i> necessary that the {@code value} be
+	 * represented by a {@code String} type in the backing store. If the backing
+	 * store supports {@code long} values, it is not unreasonable to use them.
+	 * This implementation detail is not visible through the {@code  Preferences}
+	 * API, which allows the value to be read as a {@code long} (with
+	 * {@code getLong} or a {@code String} (with {@code get}) type.
 	 * 
-	 * @param key {@code key} with which the string form of {@code value}
-	 *        is to be associated.
+	 * @param key {@code key} with which the string form of {@code value} is to
+	 *        be associated.
 	 * @param value {@code value} whose string form is to be associated with
 	 *        {@code key}.
 	 * @throws NullPointerException if {@code key} is {@code null}.
@@ -249,26 +248,26 @@ public interface Preferences {
 	public void putLong(String key, long value);
 
 	/**
-	 * Returns the {@code long} value represented by the {@code String}
-	 * object associated with the specified {@code key} in this node. The
+	 * Returns the {@code long} value represented by the {@code String} object
+	 * associated with the specified {@code key} in this node. The
 	 * {@code String} object is converted to a {@code long} as by
-	 * {@code Long.parseLong(String)}. Returns the specified default if
-	 * there is no value associated with the {@code key}, the backing store
-	 * is inaccessible, or if {@code Long.parseLong(String)} would throw a
+	 * {@code Long.parseLong(String)}. Returns the specified default if there is
+	 * no value associated with the {@code key}, the backing store is
+	 * inaccessible, or if {@code Long.parseLong(String)} would throw a
 	 * {@code NumberFormatException} if the associated {@code value} were
 	 * passed. This method is intended for use in conjunction with the
-	 * {@link #putLong} method.
+	 * {@link #putLong(String, long)} method.
 	 * 
 	 * @param key {@code key} whose associated value is to be returned as a
 	 *        {@code long} value.
 	 * @param def the value to be returned in the event that this node has no
-	 *        value associated with {@code key} or the associated value
-	 *        cannot be interpreted as a {@code long} type or the backing
-	 *        store is inaccessible.
-	 * @return the {@code long} value represented by the {@code String}
-	 *         object associated with {@code key} in this node, or
-	 *         {@code def} if the associated value does not exist or cannot
-	 *         be interpreted as a {@code long} type.
+	 *        value associated with {@code key} or the associated value cannot
+	 *        be interpreted as a {@code long} type or the backing store is
+	 *        inaccessible.
+	 * @return the {@code long} value represented by the {@code String} object
+	 *         associated with {@code key} in this node, or {@code def} if the
+	 *         associated value does not exist or cannot be interpreted as a
+	 *         {@code long} type.
 	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
@@ -279,24 +278,24 @@ public interface Preferences {
 
 	/**
 	 * Associates a {@code String} object representing the specified
-	 * {@code boolean} value with the specified key in this node. The
-	 * associated string is "true" if the value is {@code true}, and "false"
-	 * if it is {@code false}. This method is intended for use in
-	 * conjunction with the {@link #getBoolean} method.
+	 * {@code boolean} value with the specified key in this node. The associated
+	 * string is "true" if the value is {@code true}, and "false" if it is
+	 * {@code false}. This method is intended for use in conjunction with the
+	 * {@link #getBoolean(String, boolean)} method.
 	 * 
 	 * <p>
 	 * Implementor's note: it is <i>not </i> necessary that the value be
 	 * represented by a string in the backing store. If the backing store
-	 * supports {@code boolean} values, it is not unreasonable to use them.
-	 * This implementation detail is not visible through the {@code Preferences
-	 * } API, which allows the value to be read as a {@code boolean}
-	 * (with {@code getBoolean}) or a {@code String} (with {@code get})
-	 * type.
+	 * supports {@code boolean} values, it is not unreasonable to use them. This
+	 * implementation detail is not visible through the {@code Preferences
+	 * } API, which
+	 * allows the value to be read as a {@code boolean} (with {@code getBoolean}
+	 * ) or a {@code String} (with {@code get}) type.
 	 * 
 	 * @param key {@code key} with which the string form of value is to be
 	 *        associated.
-	 * @param value value whose string form is to be associated with
-	 *        {@code key}.
+	 * @param value value whose string form is to be associated with {@code key}
+	 *        .
 	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
@@ -309,9 +308,9 @@ public interface Preferences {
 	 * Returns the {@code boolean} value represented by the {@code String}
 	 * object associated with the specified {@code key} in this node. Valid
 	 * strings are "true", which represents {@code true}, and "false", which
-	 * represents {@code false}. Case is ignored, so, for example, "TRUE"
-	 * and "False" are also valid. This method is intended for use in
-	 * conjunction with the {@link #putBoolean} method.
+	 * represents {@code false}. Case is ignored, so, for example, "TRUE" and
+	 * "False" are also valid. This method is intended for use in conjunction
+	 * with the {@link #putBoolean(String, boolean)} method.
 	 * 
 	 * <p>
 	 * Returns the specified default if there is no value associated with the
@@ -321,13 +320,13 @@ public interface Preferences {
 	 * @param key {@code key} whose associated value is to be returned as a
 	 *        {@code boolean}.
 	 * @param def the value to be returned in the event that this node has no
-	 *        value associated with {@code key} or the associated value
-	 *        cannot be interpreted as a {@code boolean} or the backing store
-	 *        is inaccessible.
+	 *        value associated with {@code key} or the associated value cannot
+	 *        be interpreted as a {@code boolean} or the backing store is
+	 *        inaccessible.
 	 * @return the {@code boolean} value represented by the {@code String}
-	 *         object associated with {@code key} in this node, or
-	 *         {@code null} if the associated value does not exist or cannot
-	 *         be interpreted as a {@code boolean}.
+	 *         object associated with {@code key} in this node, or {@code null}
+	 *         if the associated value does not exist or cannot be interpreted
+	 *         as a {@code boolean}.
 	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
@@ -338,24 +337,25 @@ public interface Preferences {
 
 	/**
 	 * Associates a {@code String} object representing the specified
-	 * {@code float} value with the specified {@code key} in this node.
-	 * The associated {@code String} object is the one that would be returned
-	 * if the {@code float} value were passed to
-	 * {@code Float.toString(float)}. This method is intended for use in
-	 * conjunction with the {@link #getFloat} method.
+	 * {@code float} value with the specified {@code key} in this node. The
+	 * associated {@code String} object is the one that would be returned if the
+	 * {@code float} value were passed to {@code Float.toString(float)}. This
+	 * method is intended for use in conjunction with the
+	 * {@link #getFloat(String, float)} method.
 	 * 
 	 * <p>
 	 * Implementor's note: it is <i>not </i> necessary that the value be
 	 * represented by a string in the backing store. If the backing store
-	 * supports {@code float} values, it is not unreasonable to use them.
-	 * This implementation detail is not visible through the {@code Preferences
-	 * } API, which allows the value to be read as a {@code float} (with
-	 * {@code getFloat}) or a {@code String} (with {@code get}) type.
+	 * supports {@code float} values, it is not unreasonable to use them. This
+	 * implementation detail is not visible through the {@code Preferences
+	 * } API, which
+	 * allows the value to be read as a {@code float} (with {@code getFloat}) or
+	 * a {@code String} (with {@code get}) type.
 	 * 
 	 * @param key {@code key} with which the string form of value is to be
 	 *        associated.
-	 * @param value value whose string form is to be associated with
-	 *        {@code key}.
+	 * @param value value whose string form is to be associated with {@code key}
+	 *        .
 	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
@@ -364,26 +364,25 @@ public interface Preferences {
 	public void putFloat(String key, float value);
 
 	/**
-	 * Returns the float {@code value} represented by the {@code String}
-	 * object associated with the specified {@code key} in this node. The
+	 * Returns the float {@code value} represented by the {@code String} object
+	 * associated with the specified {@code key} in this node. The
 	 * {@code String} object is converted to a {@code float} value as by
-	 * {@code Float.parseFloat(String)}. Returns the specified default if
-	 * there is no value associated with the {@code key}, the backing store
-	 * is inaccessible, or if {@code Float.parseFloat(String)} would throw a
-	 * {@code NumberFormatException} if the associated value were passed.
-	 * This method is intended for use in conjunction with the {@link #putFloat}
-	 * method.
+	 * {@code Float.parseFloat(String)}. Returns the specified default if there
+	 * is no value associated with the {@code key}, the backing store is
+	 * inaccessible, or if {@code Float.parseFloat(String)} would throw a
+	 * {@code NumberFormatException} if the associated value were passed. This
+	 * method is intended for use in conjunction with the
+	 * {@link #putFloat(String, float)} method.
 	 * 
 	 * @param key {@code key} whose associated value is to be returned as a
 	 *        {@code float} value.
 	 * @param def the value to be returned in the event that this node has no
-	 *        value associated with {@code key} or the associated value
-	 *        cannot be interpreted as a {@code float} type or the backing
-	 *        store is inaccessible.
-	 * @return the {@code float} value represented by the string associated
-	 *         with {@code key} in this node, or {@code def} if the
-	 *         associated value does not exist or cannot be interpreted as a
-	 *         {@code float} type.
+	 *        value associated with {@code key} or the associated value cannot
+	 *        be interpreted as a {@code float} type or the backing store is
+	 *        inaccessible.
+	 * @return the {@code float} value represented by the string associated with
+	 *         {@code key} in this node, or {@code def} if the associated value
+	 *         does not exist or cannot be interpreted as a {@code float} type.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
 	 * @throws NullPointerException if {@code key} is {@code null}.
@@ -394,25 +393,25 @@ public interface Preferences {
 
 	/**
 	 * Associates a {@code String} object representing the specified
-	 * {@code double} value with the specified {@code key} in this node.
-	 * The associated {@code String} object is the one that would be returned
-	 * if the {@code double} value were passed to
-	 * {@code Double.toString(double)}. This method is intended for use in
-	 * conjunction with the {@link #getDouble} method
+	 * {@code double} value with the specified {@code key} in this node. The
+	 * associated {@code String} object is the one that would be returned if the
+	 * {@code double} value were passed to {@code Double.toString(double)}. This
+	 * method is intended for use in conjunction with the
+	 * {@link #getDouble(String, double)} method
 	 * 
 	 * <p>
 	 * Implementor's note: it is <i>not </i> necessary that the value be
 	 * represented by a string in the backing store. If the backing store
-	 * supports {@code double} values, it is not unreasonable to use them.
-	 * This implementation detail is not visible through the {@code Preferences
-	 * } API, which allows the value to be read as a {@code double} (with
-	 * {@code getDouble}) or a {@code String} (with {@code get})
-	 * type.
+	 * supports {@code double} values, it is not unreasonable to use them. This
+	 * implementation detail is not visible through the {@code Preferences
+	 * } API, which
+	 * allows the value to be read as a {@code double} (with {@code getDouble})
+	 * or a {@code String} (with {@code get}) type.
 	 * 
 	 * @param key {@code key} with which the string form of value is to be
 	 *        associated.
-	 * @param value value whose string form is to be associated with
-	 *        {@code key}.
+	 * @param value value whose string form is to be associated with {@code key}
+	 *        .
 	 * @throws NullPointerException if {@code key} is {@code null}.
 	 * @throws IllegalStateException if this node (or an ancestor) has been
 	 *         removed with the {@link #removeNode()} method.
@@ -458,19 +457,19 @@ public interface Preferences {
 	 * with one minor change: the string will consist solely of characters from
 	 * the <i>Base64 Alphabet </i>; it will not contain any newline characters.
 	 * This method is intended for use in conjunction with the
-	 * {@link #getByteArray} method.
+	 * {@link #getByteArray(String, byte[])} method.
 	 * 
 	 * <p>
 	 * Implementor's note: it is <i>not </i> necessary that the value be
-	 * represented by a {@code String} type in the backing store. If the
-	 * backing store supports {@code byte[]} values, it is not unreasonable
-	 * to use them. This implementation detail is not visible through the {@code 
-	 * Preferences} API, which allows the value to be read as an a
-	 * {@code byte[]} object (with {@code getByteArray}) or a
-	 * {@code String} object (with {@code get}).
+	 * represented by a {@code String} type in the backing store. If the backing
+	 * store supports {@code byte[]} values, it is not unreasonable to use them.
+	 * This implementation detail is not visible through the {@code  Preferences}
+	 * API, which allows the value to be read as an a {@code byte[]} object
+	 * (with {@code getByteArray}) or a {@code String} object (with {@code get}
+	 * ).
 	 * 
-	 * @param key {@code key} with which the string form of {@code value}
-	 *        is to be associated.
+	 * @param key {@code key} with which the string form of {@code value} is to
+	 *        be associated.
 	 * @param value {@code value} whose string form is to be associated with
 	 *        {@code key}.
 	 * @throws NullPointerException if {@code key} or {@code value} is
@@ -483,14 +482,14 @@ public interface Preferences {
 	public void putByteArray(String key, byte[] value);
 
 	/**
-	 * Returns the {@code byte[]} value represented by the {@code String}
-	 * object associated with the specified {@code key} in this node. Valid
-	 * {@code String} objects are <i>Base64 </i> encoded binary data, as
-	 * defined in <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045 </a>,
-	 * Section 6.8, with one minor change: the string must consist solely of
-	 * characters from the <i>Base64 Alphabet </i>; no newline characters or
-	 * extraneous characters are permitted. This method is intended for use in
-	 * conjunction with the {@link #putByteArray} method.
+	 * Returns the {@code byte[]} value represented by the {@code String} object
+	 * associated with the specified {@code key} in this node. Valid
+	 * {@code String} objects are <i>Base64 </i> encoded binary data, as defined
+	 * in <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045 </a>, Section
+	 * 6.8, with one minor change: the string must consist solely of characters
+	 * from the <i>Base64 Alphabet </i>; no newline characters or extraneous
+	 * characters are permitted. This method is intended for use in conjunction
+	 * with the {@link #putByteArray(String, byte[])} method.
 	 * 
 	 * <p>
 	 * Returns the specified default if there is no value associated with the
@@ -500,13 +499,13 @@ public interface Preferences {
 	 * @param key {@code key} whose associated value is to be returned as a
 	 *        {@code byte[]} object.
 	 * @param def the value to be returned in the event that this node has no
-	 *        value associated with {@code key} or the associated value
-	 *        cannot be interpreted as a {@code byte[]} type, or the backing
-	 *        store is inaccessible.
-	 * @return the {@code byte[]} value represented by the {@code String}
-	 *         object associated with {@code key} in this node, or
-	 *         {@code def} if the associated value does not exist or cannot
-	 *         be interpreted as a {@code byte[]}.
+	 *        value associated with {@code key} or the associated value cannot
+	 *        be interpreted as a {@code byte[]} type, or the backing store is
+	 *        inaccessible.
+	 * @return the {@code byte[]} value represented by the {@code String} object
+	 *         associated with {@code key} in this node, or {@code def} if the
+	 *         associated value does not exist or cannot be interpreted as a
+	 *         {@code byte[]}.
 	 * @throws NullPointerException if {@code key} is {@code null}. (A
 	 *         {@code null} value for {@code def} <i>is </i> permitted.)
 	 * @throws IllegalStateException if this node (or an ancestor) has been

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ public class ServiceEvent extends EventObject {
 	 * This event is synchronously delivered <strong>after</strong> the service
 	 * properties have been modified.
 	 * 
-	 * @see ServiceRegistration#setProperties
+	 * @see ServiceRegistration#setProperties(Dictionary)
 	 */
 	public final static int			MODIFIED			= 0x00000002;
 
@@ -75,14 +75,14 @@ public class ServiceEvent extends EventObject {
 	 * has completed unregistering.
 	 * 
 	 * <p>
-	 * If a bundle is using a service that is {@code UNREGISTERING}, the
-	 * bundle should release its use of the service when it receives this event.
-	 * If the bundle does not release its use of the service when it receives
-	 * this event, the Framework will automatically release the bundle's use of
-	 * the service while completing the service unregistration operation.
+	 * If a bundle is using a service that is {@code UNREGISTERING}, the bundle
+	 * should release its use of the service when it receives this event. If the
+	 * bundle does not release its use of the service when it receives this
+	 * event, the Framework will automatically release the bundle's use of the
+	 * service while completing the service unregistration operation.
 	 * 
-	 * @see ServiceRegistration#unregister
-	 * @see BundleContext#ungetService
+	 * @see ServiceRegistration#unregister()
+	 * @see BundleContext#ungetService(ServiceReference)
 	 */
 	public final static int			UNREGISTERING		= 0x00000004;
 
@@ -92,11 +92,11 @@ public class ServiceEvent extends EventObject {
 	 * <p>
 	 * This event is synchronously delivered <strong>after</strong> the service
 	 * properties have been modified. This event is only delivered to listeners
-	 * which were added with a non-{@code null} filter where the filter
-	 * matched the service properties prior to the modification but the filter
-	 * does not match the modified service properties.
+	 * which were added with a non-{@code null} filter where the filter matched
+	 * the service properties prior to the modification but the filter does not
+	 * match the modified service properties.
 	 * 
-	 * @see ServiceRegistration#setProperties
+	 * @see ServiceRegistration#setProperties(Dictionary)
 	 * @since 1.5
 	 */
 	public final static int			MODIFIED_ENDMATCH	= 0x00000008;

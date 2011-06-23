@@ -43,14 +43,15 @@ import org.osgi.test.support.OSGiTestCase;
  */
 public abstract class SignatureTestCase extends OSGiTestCase implements
 		ParserCallback {
-	private Class< ? >					clazz;
-	private Map<String, Method>			methods;
+	private Class< ? >						clazz;
+	private Map<String, Method>				methods;
 	private Map<String, Constructor< ? >>	constructors;
-	private Map<String, Field>			fields;
+	private Map<String, Field>				fields;
 	private Set<String>						found;
 	private Set<String>						missing;
 
-	public void testSignature() {
+
+	public void testSignatures() throws Exception {
 		Bundle bundle = getContext().getBundle();
 		String path = "OSGI-INF/signature";
 		found = new HashSet<String>();
@@ -64,9 +65,13 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 			if (!url.toString().endsWith("/")) {
 				try {
 					InputStream in = url.openStream();
-					ClassParser rdr = new ClassParser(in);
-					rdr.go(this);
-					in.close();
+					try {
+						ClassParser rdr = new ClassParser(in);
+						rdr.go(this);
+					}
+					finally {
+						in.close();
+					}
 				}
 				catch (Exception ioe) {
 					fail("Unexpected exception", ioe);
@@ -74,7 +79,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 			}
 		}
 		if (found.isEmpty()) {
-			log("#Package is not present: " + path);
+			log("Package is not present: " + path);
 			return;
 		}
 		if (!missing.isEmpty())
@@ -207,7 +212,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		return result;
 	}
 
-	private void log(String string) {
+	public static void log(String string) {
 		System.out.println(string);
 	}
 

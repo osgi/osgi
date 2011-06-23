@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,32 +55,30 @@ public interface WireConstants {
 	 */
 	public final static String	WIREADMIN_CONSUMER_COMPOSITE	= "wireadmin.consumer.composite";
 	/**
-	 * Service registration property key (named
-	 * {@code wireadmin.producer.scope}) specifying a list of names that may
-	 * be used to define the scope of this {@code Wire} object. A Producer
-	 * service should set this service property when it can produce more than
-	 * one kind of value. This property is only used during registration,
-	 * modifying the property must not have any effect of the {@code Wire}
-	 * object's scope. Each name in the given list mist have
-	 * {@code WirePermission[name,PRODUCE]} or else is ignored. The type of
-	 * this service registration property must be {@code String[]}.
+	 * Service registration property key (named {@code wireadmin.producer.scope}
+	 * ) specifying a list of names that may be used to define the scope of this
+	 * {@code Wire} object. A Producer service should set this service property
+	 * when it can produce more than one kind of value. This property is only
+	 * used during registration, modifying the property must not have any effect
+	 * of the {@code Wire} object's scope. Each name in the given list mist have
+	 * {@code WirePermission[name,PRODUCE]} or else is ignored. The type of this
+	 * service registration property must be {@code String[]}.
 	 * 
-	 * @see Wire#getScope
+	 * @see Wire#getScope()
 	 * @see #WIREADMIN_CONSUMER_SCOPE
 	 */
 	public final static String	WIREADMIN_PRODUCER_SCOPE		= "wireadmin.producer.scope";
 	/**
-	 * Service registration property key (named
-	 * {@code wireadmin.consumer.scope}) specifying a list of names that may
-	 * be used to define the scope of this {@code Wire} object. A
-	 * {@code Consumer} service should set this service property when it can
-	 * produce more than one kind of value. This property is only used during
-	 * registration, modifying the property must not have any effect of the
-	 * {@code Wire} object's scope. Each name in the given list mist have
-	 * {@code WirePermission[name,CONSUME]} or else is ignored. The type of this
-	 * service registration property must be {@code String[]}.
+	 * Service registration property key (named {@code wireadmin.consumer.scope}
+	 * ) specifying a list of names that may be used to define the scope of this
+	 * {@code Wire} object. A {@code Consumer} service should set this service
+	 * property when it can produce more than one kind of value. This property
+	 * is only used during registration, modifying the property must not have
+	 * any effect of the {@code Wire} object's scope. Each name in the given
+	 * list mist have {@code WirePermission[name,CONSUME]} or else is ignored.
+	 * The type of this service registration property must be {@code String[]}.
 	 * 
-	 * @see Wire#getScope
+	 * @see Wire#getScope()
 	 * @see #WIREADMIN_PRODUCER_SCOPE
 	 */
 	public final static String	WIREADMIN_CONSUMER_SCOPE		= "wireadmin.consumer.scope";

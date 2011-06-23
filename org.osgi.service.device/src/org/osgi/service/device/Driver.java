@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ import org.osgi.framework.ServiceReference;
  * A {@code Driver} service object must be registered by each Driver bundle
  * wishing to attach to Device services provided by other drivers. For each
  * newly discovered {@link Device} object, the device manager enters a bidding
- * phase. The {@code Driver} object whose {@link #match} method bids the
- * highest for a particular {@code Device} object will be instructed by the
- * device manager to attach to the {@code Device} object.
+ * phase. The {@code Driver} object whose {@link #match(ServiceReference)}
+ * method bids the highest for a particular {@code Device} object will be
+ * instructed by the device manager to attach to the {@code Device} object.
  * 
  * @version $Id$
  * @see Device

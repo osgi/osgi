@@ -189,7 +189,6 @@ public interface Coordinator {
 	 * @return {@code false} if there was no current Coordination, otherwise
 	 *         returns the result from calling
 	 *         {@link Coordination#fail(Throwable)} on the current Coordination.
-	 * @throws NullPointerException If cause is {@code null}.
 	 * @throws SecurityException If the caller does not have
 	 *         {@code CoordinationPermission[PARTICIPATE]} for the current
 	 *         Coordination.
@@ -217,7 +216,6 @@ public interface Coordinator {
 	 *         with the current Coordination. This exception should normally not
 	 *         be caught by the caller but allowed to be caught by the initiator
 	 *         of this Coordination.
-	 * @throws NullPointerException If participant is {@code null}.
 	 * @throws SecurityException If the caller does not have
 	 *         {@code CoordinationPermission[PARTICIPATE]} for the current
 	 *         Coordination.

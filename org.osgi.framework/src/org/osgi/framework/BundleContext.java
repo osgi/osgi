@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,11 @@ import java.util.Dictionary;
  * 
  * <p>
  * The {@code BundleContext} object will be passed to the
- * {@link BundleActivator#start} method during activation of the context bundle.
- * The same {@code BundleContext} object will be passed to the
- * {@link BundleActivator#stop} method when the context bundle is stopped. A
- * {@code BundleContext} object is generally for the private use of its
- * associated bundle and is not meant to be shared with other bundles in the
+ * {@link BundleActivator#start(BundleContext)} method during activation of the
+ * context bundle. The same {@code BundleContext} object will be passed to the
+ * {@link BundleActivator#stop(BundleContext)} method when the context bundle is
+ * stopped. A {@code BundleContext} object is generally for the private use of
+ * its associated bundle and is not meant to be shared with other bundles in the
  * OSGi environment.
  * 
  * <p>
@@ -374,8 +374,11 @@ public interface BundleContext extends BundleReference {
 	 * {@code ServiceRegistration} object is for the private use of the bundle
 	 * registering the service and should not be shared with other bundles. The
 	 * registering bundle is defined to be the context bundle. Other bundles can
-	 * locate the service by using either the {@link #getServiceReferences} or
-	 * {@link #getServiceReference} method.
+	 * locate the service by using one of the
+	 * {@link #getServiceReferences(Class, String)},
+	 * {@link #getServiceReferences(String, String)},
+	 * {@link #getServiceReference(Class)} or
+	 * {@link #getServiceReference(String)} methods.
 	 * 
 	 * <p>
 	 * A bundle can register a service object that implements the
@@ -413,9 +416,9 @@ public interface BundleContext extends BundleReference {
 	 *        {@link Constants} for a list of standard service property keys.
 	 *        Changes should not be made to this object after calling this
 	 *        method. To update the service's properties the
-	 *        {@link ServiceRegistration#setProperties} method must be called.
-	 *        The set of properties may be {@code null} if the service has no
-	 *        properties.
+	 *        {@link ServiceRegistration#setProperties(Dictionary)} method must
+	 *        be called. The set of properties may be {@code null} if the
+	 *        service has no properties.
 	 * @return A {@code ServiceRegistration} object for use by the bundle
 	 *         registering the service to update the service's properties or to
 	 *         unregister the service.
@@ -463,25 +466,22 @@ public interface BundleContext extends BundleReference {
 
 	/**
 	 * Registers the specified service object with the specified properties
-	 * under the specified class name with the Framework.
+	 * under the name of the specified class with the Framework.
 	 * 
 	 * <p>
 	 * This method is otherwise identical to
-	 * {@link #registerService(String[], Object, Dictionary)} and is provided as
-	 * a convenience when {@code service} will only be registered under a single
-	 * class name. Note that even in this case the value of the service's
-	 * {@link Constants#OBJECTCLASS} property will be an array of string, rather
-	 * than just a single string.
+	 * {@link #registerService(String, Object, Dictionary)} and is provided to
+	 * return a type safe {@code ServiceRegistration}.
 	 * 
 	 * @param <S> Type of Service.
-	 * @param clazz The class name under which the service can be located.
+	 * @param clazz The class under whose name the service can be located.
 	 * @param service The service object or a {@code ServiceFactory} object.
 	 * @param properties The properties for this service.
 	 * @return A {@code ServiceRegistration} object for use by the bundle
 	 *         registering the service to update the service's properties or to
 	 *         unregister the service.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
-	 * @see #registerService(String[], Object, Dictionary)
+	 * @see #registerService(String, Object, Dictionary)
 	 * @since 1.6
 	 */
 	<S> ServiceRegistration<S> registerService(Class<S> clazz, S service,
@@ -627,7 +627,7 @@ public interface BundleContext extends BundleReference {
 
 	/**
 	 * Returns a {@code ServiceReference} object for a service that implements
-	 * and was registered under the specified class.
+	 * and was registered under the name of the specified class.
 	 * 
 	 * <p>
 	 * The returned {@code ServiceReference} object is valid at the time of the
@@ -648,9 +648,10 @@ public interface BundleContext extends BundleReference {
 	 * service that was registered first is returned.
 	 * 
 	 * @param <S> Type of Service.
-	 * @param clazz The class name with which the service was registered.
+	 * @param clazz The class under whose name the service was registered. Must
+	 *        not be {@code null}.
 	 * @return A {@code ServiceReference} object, or {@code null} if no services
-	 *         are registered which implement the named class.
+	 *         are registered which implement the specified class.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see #getServiceReferences(Class, String)
 	 * @since 1.6
@@ -660,10 +661,10 @@ public interface BundleContext extends BundleReference {
 	/**
 	 * Returns a collection of {@code ServiceReference} objects. The returned
 	 * collection of {@code ServiceReference} objects contains services that
-	 * were registered under the specified class, match the specified filter
-	 * expression, and the packages for the class names under which the services
-	 * were registered match the context bundle's packages as defined in
-	 * {@link ServiceReference#isAssignableTo(Bundle, String)}.
+	 * were registered under the name of the specified class, match the
+	 * specified filter expression, and the packages for the class names under
+	 * which the services were registered match the context bundle's packages as
+	 * defined in {@link ServiceReference#isAssignableTo(Bundle, String)}.
 	 * 
 	 * <p>
 	 * The collection is valid at the time of the call to this method. However
@@ -684,11 +685,10 @@ public interface BundleContext extends BundleReference {
 	 * The result is a collection of {@code ServiceReference} objects for all
 	 * services that meet all of the following conditions:
 	 * <ul>
-	 * <li>If the specified class name, {@code clazz}, is not {@code null}, the
-	 * service must have been registered with the specified class name. The
-	 * complete list of class names with which a service was registered is
-	 * available from the service's {@link Constants#OBJECTCLASS objectClass}
-	 * property.
+	 * <li>The service must have been registered with the name of the specified
+	 * class. The complete list of class names with which a service was
+	 * registered is available from the service's {@link Constants#OBJECTCLASS
+	 * objectClass} property.
 	 * <li>If the specified {@code filter} is not {@code null}, the filter
 	 * expression must match the service.
 	 * <li>If the Java Runtime Environment supports permissions, the caller must
@@ -701,7 +701,7 @@ public interface BundleContext extends BundleReference {
 	 * </ul>
 	 * 
 	 * @param <S> Type of Service
-	 * @param clazz The class name with which the service was registered. Must
+	 * @param clazz The class under whose name the service was registered. Must
 	 *        not be {@code null}.
 	 * @param filter The filter expression or {@code null} for all services.
 	 * @return A collection of {@code ServiceReference} objects. May be empty if
@@ -810,7 +810,7 @@ public interface BundleContext extends BundleReference {
 	 * @throws IllegalArgumentException If the specified
 	 *         {@code ServiceReference} was not created by the same framework
 	 *         instance as this {@code BundleContext}.
-	 * @see #getService
+	 * @see #getService(ServiceReference)
 	 * @see ServiceFactory
 	 */
 	boolean ungetService(ServiceReference< ? > reference);

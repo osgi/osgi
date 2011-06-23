@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MetaData 
+		xmlns="http://www.org.osgi/xmlns/metatype/v1.2.0" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="http://www.org.osgi/xmlns/metatype/v1.2.0 metatype.xsd">
+	<OCD id="1" name="1">
+		<AD id="string1" type="String"/>
+	</OCD>
+	<Designate factoryPid="com.acme.factory.1">
+		<Object ocdref="1"/>
+	</Designate>
+	<Designate pid="com.acme.singleton.1">
+		<Object ocdref="1"/>
+	</Designate>
+	<Designate pid="com.acme.factory.2" factoryPid="com.acme.factory.2">
+		<Object ocdref="1"/>
+	</Designate>
+	<Designate pid="com.acme.singleton.3" factoryPid="com.acme.factory.3">
+		<Object ocdref="1"/>
+	</Designate>
+	<Designate pid="" factoryPid="com.acme.factory.4">
+		<Object ocdref="1"/>
+	</Designate>
+</MetaData>

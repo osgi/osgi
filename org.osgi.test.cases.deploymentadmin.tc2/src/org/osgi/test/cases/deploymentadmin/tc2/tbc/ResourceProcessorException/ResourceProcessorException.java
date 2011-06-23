@@ -47,18 +47,7 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.MessagesConstants;
  * <code>getCode, getMessage, getCause</code>. According to MEG reference
  * documentation.
  */
-public class ResourceProcessorException {
-    
-    private DeploymentTestControl tbc;
-    
-    public ResourceProcessorException(DeploymentTestControl tbc) {
-        this.tbc = tbc;
-    }
-    
-    public void run() {
-        testResourceProcessorException001();
-        testResourceProcessorException002();
-    }
+public class ResourceProcessorException extends DeploymentTestControl {
     
     /**
      * Tests ResourceProcessorException constructor that receives two parameters
@@ -66,18 +55,23 @@ public class ResourceProcessorException {
      * @spec ResourceProcessorException.ResourceProcessorException(int, String) 
      */
     public void testResourceProcessorException001() {
-        tbc.log("#testResourceProcessorException001");
+		log("#testResourceProcessorException001");
         try {
             org.osgi.service.deploymentadmin.spi.ResourceProcessorException e = new org.osgi.service.deploymentadmin.spi.ResourceProcessorException(
                 org.osgi.service.deploymentadmin.spi.ResourceProcessorException.CODE_PREPARE, DeploymentConstants.EXCEPTION_MESSAGE);
             
-            tbc.assertEquals("The code of the exception was correctly set",
+			assertEquals(
+					"The code of the exception was correctly set",
                 org.osgi.service.deploymentadmin.spi.ResourceProcessorException.CODE_PREPARE, e.getCode());
-            tbc.assertEquals("The message of the exception is correctly set", DeploymentConstants.EXCEPTION_MESSAGE, e.getMessage());
-            tbc.assertNull("The cause of the exception is correctly set to null", e.getCause());
+			assertEquals("The message of the exception is correctly set",
+					DeploymentConstants.EXCEPTION_MESSAGE, e.getMessage());
+			assertNull("The cause of the exception is correctly set to null",
+					e.getCause());
             
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
         }
     }
     
@@ -87,19 +81,24 @@ public class ResourceProcessorException {
      * @spec ResourceProcessorException.ResourceProcessorException(int, String, Throwable) 
      */
     public void testResourceProcessorException002() {
-        tbc.log("#testResourceProcessorException002");
+		log("#testResourceProcessorException002");
         try {
             Exception ex = new Exception("test");
             org.osgi.service.deploymentadmin.spi.ResourceProcessorException e = new org.osgi.service.deploymentadmin.spi.ResourceProcessorException(
                 org.osgi.service.deploymentadmin.spi.ResourceProcessorException.CODE_PREPARE, DeploymentConstants.EXCEPTION_MESSAGE, ex);
             
-            tbc.assertEquals("The code of the exception was correctly set",
+			assertEquals(
+					"The code of the exception was correctly set",
                 org.osgi.service.deploymentadmin.spi.ResourceProcessorException.CODE_PREPARE, e.getCode());
-            tbc.assertEquals("The message of the exception is correctly set", DeploymentConstants.EXCEPTION_MESSAGE, e.getMessage());
-            tbc.assertEquals("The cause of the exception is correctly set", ex, e.getCause());
+			assertEquals("The message of the exception is correctly set",
+					DeploymentConstants.EXCEPTION_MESSAGE, e.getMessage());
+			assertEquals("The cause of the exception is correctly set", ex,
+					e.getCause());
             
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
         }
     }
 }

@@ -13,7 +13,7 @@ Include-Resource					= \
 -buildpath							= ee.j2se; version=1.5, \
 	org.osgi.test.support;			version=project, \
 	org.osgi.jmx;					version=project	, \
-	osgi.core;						version=4.2		, \
+	osgi.core;						version=4.3		, \
 	osgi.enterprise;				version=4.2		, \
 	${junit}	
 
@@ -38,7 +38,6 @@ Test-Cases							= ${testcases}
 			org.osgi.jmx.service.useradmin
 			
 -runproperties = ${runproperties}, \
-	osgi.support.multipleHosts=true	, \
 	${p}.system.packages.extra="${junit.package}", \
 	${p}.bundles="${uniq;${repo;osgi.enterprise},${repo;org.osgi.impl.bundle.jmx}}"		
 #	osgi.console=1111, \

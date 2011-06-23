@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package org.osgi.service.device;
 
+import org.osgi.framework.ServiceReference;
+
 /**
  * <p>
  * Interface for identifying device services.
@@ -23,14 +25,13 @@ package org.osgi.service.device;
  * A service must implement this interface or use the
  * {@link Constants#DEVICE_CATEGORY} registration property to indicate that it
  * is a device. Any services implementing this interface or registered with the
- * {@code DEVICE_CATEGORY} property will be discovered by the device
- * manager.
+ * {@code DEVICE_CATEGORY} property will be discovered by the device manager.
  * 
  * <p>
  * Device services implementing this interface give the device manager the
  * opportunity to indicate to the device that no drivers were found that could
  * (further) refine it. In this case, the device manager calls the
- * {@link #noDriverFound} method on the {@code Device} object.
+ * {@link #noDriverFound()} method on the {@code Device} object.
  * 
  * <p>
  * Specialized device implementations will extend this interface by adding
@@ -42,8 +43,9 @@ package org.osgi.service.device;
  */
 public interface Device {
 	/**
-	 * Return value from {@link Driver#match} indicating that the driver cannot
-	 * refine the device presented to it by the device manager.
+	 * Return value from {@link Driver#match(ServiceReference)} indicating that
+	 * the driver cannot refine the device presented to it by the device
+	 * manager.
 	 * 
 	 * The value is zero.
 	 */

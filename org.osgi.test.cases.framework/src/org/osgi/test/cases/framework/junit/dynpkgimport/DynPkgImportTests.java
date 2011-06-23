@@ -30,24 +30,20 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.framework.dynpkgimport.exported.TestService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.wiring.Wiring;
 
 public class DynPkgImportTests extends DefaultTestBundleControl implements
 		FrameworkListener {
-	private PackageAdmin	pa	= null;
 
 	protected void setUp() throws Exception {
-		pa = (PackageAdmin) getService(PackageAdmin.class);
 		getContext().addFrameworkListener(this);
 	}
 
 	protected void tearDown() throws Exception {
 		getContext().removeFrameworkListener(this);
-		pa.refreshPackages(null);
-		ungetService(pa);
-		Thread.sleep(2000);
+		Wiring.synchronousRefreshBundles(getContext());
 	}
 
 	public void testInitial() throws Exception {
@@ -172,8 +168,7 @@ public class DynPkgImportTests extends DefaultTestBundleControl implements
 		tlx.start();
 		tlx.stop();
 		tlx.uninstall();
-		pa.refreshPackages(null);
-		Thread.sleep(2000);
+		Wiring.synchronousRefreshBundles(getContext());
 		Bundle tb2 = getContext().installBundle(
 				getWebServer() + "dynpkgimport.tb2.jar");
 		tb2.start();
@@ -197,9 +192,8 @@ public class DynPkgImportTests extends DefaultTestBundleControl implements
 		}
 //		System.out.println("ts class " + ts.getClass());
 //		System.out.println("tlx state" + tlx.getState());
-//		ServiceReference ref = getContext().getServiceReference(PackageAdmin.class.getName());
-//		PackageAdmin admin = (PackageAdmin) getContext().getService(ref);
-//		ExportedPackage ep = admin.getExportedPackage("org.osgi.test.cases.framework.dynpkgimport.tlx");
+		// Write some wiring API code to see what bundle exports:
+		// "org.osgi.test.cases.framework.dynpkgimport.tlx");
 //		System.out.println("tlx pack " + ep.getExportingBundle().getLocation());
 		fail("got no NoClassDefFoundError");
 	}

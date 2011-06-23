@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 package org.osgi.service.useradmin;
 
 /**
- * The {@code Authorization} interface encapsulates an authorization context
- * on which bundles can base authorization decisions, where appropriate.
+ * The {@code Authorization} interface encapsulates an authorization context on
+ * which bundles can base authorization decisions, where appropriate.
  * <p>
  * Bundles associate the privilege to access restricted resources or operations
  * with roles. Before granting access to a restricted resource or operation, a
@@ -25,28 +25,27 @@ package org.osgi.service.useradmin;
  * the required role, by calling its {@code hasRole} method.
  * <p>
  * Authorization contexts are instantiated by calling the
- * {@link UserAdmin#getAuthorization} method.
+ * {@link UserAdmin#getAuthorization(User)} method.
  * 
  * <p>
  * <i>Trusting Authorization objects </i>
  * <p>
  * There are no restrictions regarding the creation of {@code Authorization}
- * objects. Hence, a service must only accept {@code Authorization} objects
- * from bundles that has been authorized to use the service using code based (or
- * Java 2) permissions.
+ * objects. Hence, a service must only accept {@code Authorization} objects from
+ * bundles that has been authorized to use the service using code based (or Java
+ * 2) permissions.
  * 
  * <p>
  * In some cases it is useful to use {@code ServicePermission} to do the code
  * based access control. A service basing user access control on
- * {@code Authorization} objects passed to it, will then require that a
- * calling bundle has the {@code ServicePermission} to get the service in
- * question. This is the most convenient way. The OSGi environment will do the
- * code based permission check when the calling bundle attempts to get the
- * service from the service registry.
+ * {@code Authorization} objects passed to it, will then require that a calling
+ * bundle has the {@code ServicePermission} to get the service in question. This
+ * is the most convenient way. The OSGi environment will do the code based
+ * permission check when the calling bundle attempts to get the service from the
+ * service registry.
  * <p>
  * Example: A servlet using a service on a user's behalf. The bundle with the
- * servlet must be given the {@code ServicePermission} to get the Http
- * Service.
+ * servlet must be given the {@code ServicePermission} to get the Http Service.
  * <p>
  * However, in some cases the code based permission checks need to be more
  * fine-grained. A service might allow all bundles to get it, but require
@@ -55,8 +54,8 @@ package org.osgi.service.useradmin;
  * Example: A servlet using a service on a user's behalf, where some service
  * functionality is open to anyone, and some is restricted by code based
  * permissions. When a restricted method is called (e.g., one handing over an
- * {@code Authorization} object), the service explicitly checks that the
- * calling bundle has permission to make the call.
+ * {@code Authorization} object), the service explicitly checks that the calling
+ * bundle has permission to make the call.
  * 
  * @noimplement
  * @version $Id$

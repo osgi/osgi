@@ -38,8 +38,8 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.wiring.Wiring;
 
 /**
  * Test cases for testing fragment bundles and extension bundles.
@@ -318,11 +318,10 @@ public class TestControl extends DefaultTestBundleControl implements
 		// Install fragment bundle
 		Bundle tb3d = getContext().installBundle(
 				getWebServer() + "fragments.tb3d.jar");
-		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
 
 		// Try recovering resource from host that is in classpath of fragment
 		try {
-			pa.resolveBundles(new Bundle[] {tb3d});
+			Wiring.resolveBundles(getContext(), tb3d);
 			tb3a.start();
 			tb3c.start();
 			Class a = tb3a
@@ -341,7 +340,6 @@ public class TestControl extends DefaultTestBundleControl implements
 			tb3a.stop();
 			tb3a.uninstall();
 			tb3d.uninstall();
-			ungetService(pa);
 		}
 	}
 
@@ -362,8 +360,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		// Install fragment bundle
 		Bundle tb3d = getContext().installBundle(
 				getWebServer() + "fragments.tb3d.jar");
-		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
-		pa.resolveBundles(new Bundle[] {tb3d});
+		Wiring.resolveBundles(getContext(), tb3d);
 
 		// Try recovering resource from host that is in classpath of fragment
 		try {
@@ -377,7 +374,6 @@ public class TestControl extends DefaultTestBundleControl implements
 			tb3e.stop();
 			tb3e.uninstall();
 			tb3d.uninstall();
-			ungetService(pa);
 		}
 	}
 
@@ -399,8 +395,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		// Install fragment bundle, host already resolved
 		Bundle tb3d = getContext().installBundle(
 				getWebServer() + "fragments.tb3d.jar");
-		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
-		pa.resolveBundles(new Bundle[] {tb3d});
+		Wiring.resolveBundles(getContext(), tb3d);
 
 		// Try recovering resource from host that is in classpath of fragment
 		try {
@@ -414,7 +409,6 @@ public class TestControl extends DefaultTestBundleControl implements
 			tb3f.stop();
 			tb3f.uninstall();
 			tb3d.uninstall();
-			ungetService(pa);
 		}
 	}
 
@@ -437,8 +431,7 @@ public class TestControl extends DefaultTestBundleControl implements
 				getWebServer() + "fragments.tb3f.jar");
 		tb3f.start();
 
-		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
-		pa.resolveBundles(new Bundle[] {tb3d});
+		Wiring.resolveBundles(getContext(), tb3d);
 
 		// Try recovering resource from host that is in classpath of fragment
 		try {
@@ -452,7 +445,6 @@ public class TestControl extends DefaultTestBundleControl implements
 			tb3f.stop();
 			tb3f.uninstall();
 			tb3d.uninstall();
-			ungetService(pa);
 		}
 	}
 
@@ -478,8 +470,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		// Install fragment bundle, host is already ACTIVE
 		Bundle tb1e = getContext().installBundle(
 				getWebServer() + "fragments.tb1e.jar");
-		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
-		pa.resolveBundles(new Bundle[] {tb1e});
+		Wiring.resolveBundles(getContext(), tb1e);
 
 		// Verify that fragment bundle is still in INSTALLED state
 		try {
@@ -490,7 +481,6 @@ public class TestControl extends DefaultTestBundleControl implements
 			tb1a.stop();
 			tb1a.uninstall();
 			tb1e.uninstall();
-			ungetService(pa);
 		}
 	}
 
@@ -515,8 +505,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		// Install fragment bundle, host is already ACTIVE
 		Bundle tb1f = getContext().installBundle(
 				getWebServer() + "fragments.tb1f.jar");
-		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
-		pa.resolveBundles(new Bundle[] {tb1f});
+		Wiring.resolveBundles(getContext(), tb1f);
 
 		// Verify that fragment bundle is still in INSTALLED state
 		try {
@@ -528,7 +517,6 @@ public class TestControl extends DefaultTestBundleControl implements
 			tb1a.uninstall();
 			tb1b.uninstall();
 			tb1f.uninstall();
-			ungetService(pa);
 		}
 	}
 
@@ -538,8 +526,8 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * content of the updated fragment must not be allowed to attach to the host
 	 * bundle until the Framework is restarted or the host bundle is refreshed.
 	 * 
-	 * When a set of bundles are refreshed using the PackageAdmin API then each
-	 * bundle in the set must have an UNRESOLVED BundleEvent published.
+	 * When a set of bundles are refreshed using the Wiring API then each bundle
+	 * in the set must have an UNRESOLVED BundleEvent published.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
@@ -557,8 +545,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		Bundle tb1g = getContext().installBundle(
 				getWebServer() + "fragments.tb1g.jar");
 
-		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
-		pa.resolveBundles(new Bundle[] {tb1g});
+		Wiring.resolveBundles(getContext(), tb1g);
 		// Start the host bundle
 		tb1a.start();
 
@@ -583,8 +570,7 @@ public class TestControl extends DefaultTestBundleControl implements
 			}
 
 			// Refresh the host bundle
-			pa.refreshPackages(new Bundle[] {tb1a});
-			Thread.sleep(5000); // asynchronous call, wait some time
+			Wiring.synchronousRefreshBundles(getContext(), new Bundle[] {tb1a});
 
 			// Verify if UNRESOLVED event was published for each bundle
 			if (!hasEventOccurred(tb1a, BundleEvent.class,
@@ -608,7 +594,6 @@ public class TestControl extends DefaultTestBundleControl implements
 			tb1a.stop();
 			tb1a.uninstall();
 			tb1g.uninstall();
-			ungetService(pa);
 			getContext().removeBundleListener(this);
 			purgeEvents();
 		}
@@ -704,6 +689,7 @@ public class TestControl extends DefaultTestBundleControl implements
 			tb7c.stop();
 			tb7c.uninstall();
 			tb7e.uninstall();
+			tb7h.uninstall();
 		}
 
 	}
@@ -786,7 +772,6 @@ public class TestControl extends DefaultTestBundleControl implements
 
 		// Start the host bundle
 		tb1a.start();
-		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
 
 		try {
 			// Verify bundle events were published by the framework
@@ -830,7 +815,7 @@ public class TestControl extends DefaultTestBundleControl implements
 					Bundle.UNINSTALLED, tb1b.getState());
 
 			// Refresh host bundle
-			pa.refreshPackages(new Bundle[] {tb1a});
+			Wiring.synchronousRefreshBundles(getContext(), tb1a);
 			Thread.sleep(2000); // wait a while
 
 			// Verify resource from tb1b is not accessible
@@ -847,7 +832,6 @@ public class TestControl extends DefaultTestBundleControl implements
 			tb1g.uninstall();
 			getContext().removeBundleListener(this);
 			purgeEvents();
-			ungetService(pa);
 		}
 	}
 

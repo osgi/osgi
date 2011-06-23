@@ -27,80 +27,17 @@ import java.util.List;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.Filter;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleRevisions;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
-import org.osgi.framework.wiring.FrameworkWiring;
-import org.osgi.test.support.OSGiTestCase;
 
-public class BundleWiringTests extends OSGiTestCase {
-	private final List<Bundle> bundles = new ArrayList<Bundle>();
-	FrameworkWiring frameworkWiring;
-	
-	
-	public Bundle install(String bundle) {
-		Bundle result = null;
-		try {
-			result = super.install(bundle);
-		} catch (BundleException e) {
-			fail("failed to install bundle: " + bundle, e);
-		} catch (IOException e) {
-			fail("failed to install bundle: " + bundle, e);
-		}
-		if (!bundles.contains(result))
-			bundles.add(result);
-		return result;
-	}
-
-	protected void setUp() throws Exception {
-		bundles.clear();
-		frameworkWiring = (FrameworkWiring) getContext().getBundle(0).adapt(FrameworkWiring.class);
-	}
-
-	protected void tearDown() throws Exception {
-		for (Iterator<Bundle> iBundles = bundles.iterator(); iBundles.hasNext();)
-			try {
-				iBundles.next().uninstall();
-			} catch (BundleException e) {
-				// nothing
-			} catch (IllegalStateException e) {
-				// happens if the test uninstalls the bundle itself
-			}
-		refreshBundles(bundles);
-		bundles.clear();
-	}
-
-	private void refreshBundles(List<Bundle> bundles) {
-		final boolean[] done = new boolean[] {false};
-		FrameworkListener listener = new FrameworkListener() {
-			public void frameworkEvent(FrameworkEvent event) {
-				synchronized (done) {
-					if (event.getType() == FrameworkEvent.PACKAGES_REFRESHED) {
-						done[0] = true;
-						done.notify();
-					}
-				}
-			}
-		};
-		frameworkWiring.refreshBundles(bundles, new FrameworkListener[] {listener});
-		synchronized (done) {
-			if (!done[0])
-				try {
-					done.wait(5000);
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-					fail("Unexepected interruption.", e);
-				}
-			if (!done[0])
-				fail("Timed out waiting for refresh bundles to finish.");
-		}
-	}
-
+public class BundleWiringTests extends WiringTest {
 	public void testGetRevision() {
 		Bundle tb1 = install("resolver.tb1.v110.jar");
 		Bundle tb2 = install("resolver.tb2.jar");
@@ -831,6 +768,17 @@ public class BundleWiringTests extends OSGiTestCase {
 		assertEquals("Wrong capability", capability, wire.getCapability());
 		assertEquals("Wrong requirement", requirement, wire.getRequirement());
 		assertTrue("Requirement does not match capability", wire.getRequirement().matches(wire.getCapability()));
+		String filterDirective = wire.getRequirement().getDirectives().get(Constants.FILTER_DIRECTIVE);
+		if (wire.getRequirement().getNamespace().startsWith("osgi.wiring.")) {
+			assertTrue("An osgi.wiring.* requirement has non-empty attribute map.", wire.getRequirement().getAttributes().isEmpty());
+			assertNotNull("Null filter directive is not allowed for osgi.wiring.* name spaces.", filterDirective);
+			try {
+				Filter filter = FrameworkUtil.createFilter(filterDirective);
+				assertTrue("Filter directive does not match capability attributes: " + filterDirective, filter.matches(wire.getCapability().getAttributes()));
+			} catch (InvalidSyntaxException e) {
+				fail("Failed to create filter: " + filterDirective, e);
+			}
+		}
 	}
 
 	public void testGetRevisions() {
@@ -1078,7 +1026,7 @@ public class BundleWiringTests extends OSGiTestCase {
 		BundleWiring requirerWiring = (BundleWiring) requirer.adapt(BundleWiring.class);
 
 		// test that empty lists are returned when no resources are found
-		Collection empty = exporterWiring.listResources("", "*.notfound",
+		Collection<String> empty = exporterWiring.listResources("", "*.notfound",
 				BundleWiring.LISTRESOURCES_RECURSE);
 		assertNotNull("Should return empty list", empty);
 		assertEquals("Should have 0 resources", 0, empty.size());
@@ -1090,7 +1038,7 @@ public class BundleWiringTests extends OSGiTestCase {
 		assertEquals("Should have 0 resources", 0, empty.size());
 
 		// test exporter resources
-		Collection rootResources = exporterWiring.listResources("/root",
+		Collection<String> rootResources = exporterWiring.listResources("/root",
 				"*.txt", 0);
 		assertEquals("Wrong number of resources", 1, rootResources.size());
 		assertEquals("Wrong resource", "root/root.export.txt", rootResources
@@ -1098,7 +1046,7 @@ public class BundleWiringTests extends OSGiTestCase {
 		checkResources(exporterWiring.getClassLoader(), rootResources);
 
 		// note that root.B package has been substituted
-		List expected = Arrays.asList(new String[] {
+		List<String> expected = Arrays.asList(new String[] {
 				   "root/A/a/a.export.txt", 
 				   "root/A/b/b.export.txt", 
 				  "root/A/A.export.txt",
@@ -1498,15 +1446,15 @@ public class BundleWiringTests extends OSGiTestCase {
 		assertEquals("Wrong host attached", tb13b, tb13Frag4RequiredWires.get(0).getProviderWiring().getBundle());
 	}
 
-	private void assertResourcesEquals(String message, Collection expected, Collection actual) {
+	private void assertResourcesEquals(String message, Collection<?> expected, Collection<?> actual) {
 		if (expected.size() != actual.size())
 			fail(message + ": Collections are not the same size: " + expected + ":  " + actual);
 		assertTrue(message + ": Colections do not contain the same content: " + expected + ":  " + actual, actual.containsAll(expected));
 	}
 
-	private void checkResources(ClassLoader cl, Collection resources) {
-		for(Iterator iResources = resources.iterator(); iResources.hasNext();) {
-			String path = (String) iResources.next();
+	private void checkResources(ClassLoader cl, Collection<String> resources) {
+		for(Iterator<String> iResources = resources.iterator(); iResources.hasNext();) {
+			String path = iResources.next();
 			URL resource = cl.getResource(path);
 			assertNotNull("Could not find resource: " + path, resource);
 		}

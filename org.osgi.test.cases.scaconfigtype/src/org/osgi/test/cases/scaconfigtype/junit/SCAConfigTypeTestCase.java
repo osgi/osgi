@@ -39,8 +39,9 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
-import org.osgi.service.packageadmin.ExportedPackage;
-import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.test.cases.scaconfigtype.common.A;
 import org.osgi.test.cases.scaconfigtype.common.B;
 import org.osgi.test.cases.scaconfigtype.common.SCAConfigConstants;
@@ -626,20 +627,22 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
      * @throws Exception
      */
     private void verifyFramework(Framework f) throws Exception {
-        ServiceReference sr = f.getBundleContext().getServiceReference(PackageAdmin.class.getName());
-        assertNotNull("Framework is not supplying PackageAdmin service", sr);
+		BundleWiring wiring = f.getBundleContext().getBundle()
+				.adapt(BundleWiring.class);
+		assertNotNull(
+				"Framework is not supplying a BundleWiring for the system bundle",
+				wiring);
+		List<BundleCapability> exportedPkgs = wiring
+				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
 
-        PackageAdmin pkgAdmin = (PackageAdmin)f.getBundleContext().getService(sr);
-        ExportedPackage[] exportedPkgs = pkgAdmin.getExportedPackages(f.getBundleContext().getBundle());
-        assertNotNull(exportedPkgs);
-        f.getBundleContext().ungetService(sr);
-
-        boolean found = false;
-        for (int i = 0; i < exportedPkgs.length && !found; i++) {
-            found = ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON.equals(exportedPkgs[i].getName());
-        }
-        assertTrue("Framework System Bundle is not exporting package " + ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON,
-                   found);
-        f.getBundleContext().ungetService(sr);
+		for (BundleCapability exportedPkg : exportedPkgs) {
+			String name = (String) exportedPkg.getAttributes().get(
+					BundleRevision.PACKAGE_NAMESPACE);
+			if (name.equals(ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON)) {
+				return;
+			}
+		}
+		fail("Framework System Bundle is not exporting package "
+				+ ORG_OSGI_TEST_CASES_SCACONFIGTYPE_COMMON);
     }
 }

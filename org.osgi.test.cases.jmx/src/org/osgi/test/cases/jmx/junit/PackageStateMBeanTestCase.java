@@ -2,24 +2,21 @@ package org.osgi.test.cases.jmx.junit;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.management.RuntimeMBeanException;
 import javax.management.openmbean.CompositeData;
-import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.TabularData;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.jmx.framework.PackageStateMBean;
-import org.osgi.service.packageadmin.ExportedPackage;
-import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.test.support.wiring.Wiring;
 
 public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 
 	private PackageStateMBean pMBean;
-	private PackageAdmin pAdmin;
 	private static final String EXPORTED_PACKAGE = "org.osgi.test.cases.jmx.tb2.api";
 	private Bundle testBundle1;
 	private Bundle testBundle2;
@@ -37,26 +34,21 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 				.waitForRegistering(createObjectName(PackageStateMBean.OBJECTNAME));
 		pMBean = getMBeanFromServer(PackageStateMBean.OBJECTNAME,
 				PackageStateMBean.class);
-		pAdmin = (PackageAdmin) getContext().getService(
-				getContext().getServiceReference(PackageAdmin.class.getName()));
+		assertNotNull(pMBean);
 	}
 
 	public void testGetExportingBundle() throws IOException {
-		assertNotNull(pMBean);
-		assertNotNull(pAdmin);
-
 		String bundleVersion = (String) testBundle1.getHeaders().get(
 				"Bundle-Version");
 
 		long[] mBeanBundleIds = pMBean.getExportingBundles(EXPORTED_PACKAGE,
 				bundleVersion);
-		ExportedPackage[] exportedPackages = pAdmin
-				.getExportedPackages(EXPORTED_PACKAGE);
-
+		List<BundleCapability> exportedPackages = Wiring.getExportedPackages(
+				getContext(), EXPORTED_PACKAGE);
 		boolean found = false;
-		for (ExportedPackage exportPack : exportedPackages) {
+		for (BundleCapability exportPack : exportedPackages) {
 			for (long id : mBeanBundleIds) {
-				if (exportPack.getExportingBundle().getBundleId() == id) {
+				if (exportPack.getRevision().getBundle().getBundleId() == id) {
 					found = true;
 					break;
 				}
@@ -72,9 +64,6 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 	}
 
 	public void testGetImportingBundles() throws IOException {
-		assertNotNull(pMBean);
-		assertNotNull(pAdmin);
-
 		String bundleVersion = (String) testBundle2.getHeaders().get(
 				"Bundle-Version");
 		long[] bundleIds = pMBean.getImportingBundles(EXPORTED_PACKAGE,
@@ -93,8 +82,6 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 	}
 
 	public void testGetPackages() throws IOException {
-		assertNotNull(pMBean);
-		assertNotNull(pAdmin);
 		TabularData data = pMBean.listPackages();
 		assertTabularDataStructure(data, "PACKAGES_TYPE", new String [] {"Name", "Version", "ExportingBundles"}, 
 											 new String[] {"Name", "Version", "ExportingBundles", "ImportingBundles", "RemovalPending"});
@@ -118,8 +105,6 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 	}
 
 	public void testIsRemovalPending() throws IOException {
-		assertNotNull(pMBean);
-		assertNotNull(pAdmin);
 		String bundleVersion = (String) testBundle2.getHeaders().get(
 				"Bundle-Version");
 
@@ -139,8 +124,6 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 		/*
 		 * Bug report for this method is https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1605
 		 */
-		assertNotNull(pMBean);
-		
 		//test listPackages method
 		try {
 			pMBean.listPackages();			

@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -36,10 +37,14 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
-import org.osgi.service.packageadmin.ExportedPackage;
-import org.osgi.service.packageadmin.PackageAdmin;
-import org.osgi.service.startlevel.StartLevel;
+import org.osgi.framework.startlevel.FrameworkStartLevel;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.framework.wiring.BundleWire;
+import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.wiring.Wiring;
 
 public class FrameworkLaunchTests extends OSGiTestCase {
 	private static final String STORAGEROOT = "org.osgi.test.cases.framework.launch.storageroot";
@@ -300,14 +305,19 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 	}
 
-	private void checkImporter(ExportedPackage ep, Bundle testBundle) {
+	private void checkImporter(BundleCapability ep, Bundle testBundle) {
 		if (ep == null)
 			return;
-		Bundle[] importers = ep.getImportingBundles();
-		assertNotNull("null importers", importers);
-		for (int i = 0; i < importers.length; i++) {
-			if (importers[i] == testBundle)
-				return;
+		BundleWiring wiring = ep.getRevision().getWiring();
+		assertNotNull("exported package is not wired", wiring);
+		List<BundleWire> wires = wiring
+				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+		for (BundleWire wire : wires) {
+			if (ep.equals(wire.getCapability())) {
+				if (testBundle.equals(wire.getRequirerWiring().getBundle())) {
+					return;
+				}
+			}
 		}
 		fail("Bundle is not an importer of the package: " + ep);
 	}
@@ -371,12 +381,10 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		configuration.put(Constants.FRAMEWORK_BEGINNING_STARTLEVEL, "25");
 		Framework framework = createFramework(configuration);
 		startFramework(framework);
-		StartLevel sl = (StartLevel) getService(framework, STARTLEVEL);
-		if (sl == null) {
-			stopFramework(framework);
-			return; // cannot test without start level
-		}
-		assertEquals("Wrong start level after start", 25, sl.getStartLevel());
+		FrameworkStartLevel fsl = framework.getBundleContext().getBundle()
+				.adapt(FrameworkStartLevel.class);
+		assertNotNull(fsl);
+		assertEquals("Wrong start level after start", 25, fsl.getStartLevel());
 		stopFramework(framework);
 	}
 
@@ -401,6 +409,22 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 			assertNotNull("PermissionAdmin", getService(framework, PERMISSION_ADMIN));
 		if (hasCondPermAdmin)
 			assertNotNull("ConditionalPermissionAdmin", getService(framework, CONDPERM_ADMIN));
+		stopFramework(framework);
+	}
+
+	public void testAdaptations() {
+		Framework framework = createFramework(getConfiguration(getName()));
+		startFramework(framework);
+		Bundle systemBundle = framework.getBundleContext().getBundle();
+		assertNotNull(systemBundle.adapt(FrameworkStartLevel.class));
+		assertNotNull(systemBundle.adapt(FrameworkWiring.class));
+		stopFramework(framework);
+		// check that the available adaptations are available when framework is
+		// initialized
+		initFramework(framework);
+		systemBundle = framework.getBundleContext().getBundle();
+		assertNotNull(systemBundle.adapt(FrameworkStartLevel.class));
+		assertNotNull(systemBundle.adapt(FrameworkWiring.class));
 		stopFramework(framework);
 	}
 
@@ -462,16 +486,17 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		Framework framework = createFramework(configuration);
 
 		startFramework(framework);
-		ExportedPackage ep1 = null, ep2 = null;
-		PackageAdmin pa = (PackageAdmin) getService(framework, PACKAGE_ADMIN);
-		if (pa != null) {
-			ep1 = pa.getExportedPackage(pkg1);
-			assertNotNull("pkg1 is null", ep1);
-			assertEquals("Wrong Exporter", 0, ep1.getExportingBundle().getBundleId());
-			ep2 = pa.getExportedPackage(pkg2);
-			assertNotNull("pkg2 is null", ep2);
-			assertEquals("Wrong Exporter", 0, ep2.getExportingBundle().getBundleId());
-		}
+		BundleCapability ep1 = Wiring.getExportedPackage(
+				framework.getBundleContext(), pkg1);
+		BundleCapability ep2 = Wiring.getExportedPackage(
+				framework.getBundleContext(), pkg2);
+
+		assertNotNull("pkg1 is null", ep1);
+		assertEquals("Wrong Exporter", 0, ep1.getRevision().getBundle()
+				.getBundleId());
+		assertNotNull("pkg2 is null", ep2);
+		assertEquals("Wrong Exporter", 0, ep2.getRevision().getBundle()
+				.getBundleId());
 		Bundle testBundle = installBundle(framework, "/launch.tb1.jar");
 		try {
 			testBundle.start();
@@ -600,7 +625,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		Map configuration = getConfiguration(getName());
 		String osName = System.getProperty("os.name");
 		if (osName.toLowerCase().indexOf("windows") >= 0)
-			configuration.put(Constants.FRAMEWORK_EXECPERMISSION, "copy ${abspath} " + testOutputFile.getAbsolutePath());
+			configuration.put(Constants.FRAMEWORK_EXECPERMISSION, "cmd.exe /c copy ${abspath} " + testOutputFile.getAbsolutePath());
 		else
 			configuration.put(Constants.FRAMEWORK_EXECPERMISSION, "cp ${abspath} " + testOutputFile.getAbsolutePath());
 		configuration.put(Constants.FRAMEWORK_LIBRARY_EXTENSIONS, "1,test");

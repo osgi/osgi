@@ -30,7 +30,6 @@ import junit.framework.AssertionFailedError;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.CoordinationException;
@@ -39,7 +38,6 @@ import org.osgi.service.coordinator.Participant;
 import org.osgi.test.support.concurrent.AtomicInteger;
 import org.osgi.test.support.concurrent.AtomicReference;
 import org.osgi.test.support.concurrent.Semaphore;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Basic Coordinator test case.
@@ -52,7 +50,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 */
 
 	public void testOverallTimeout() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
@@ -121,7 +119,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception
 	 */
 	public void testVariables() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
@@ -161,7 +159,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 */
 
 	public void testStack() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
@@ -236,7 +234,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception
 	 */
 	public void testTerminatedInCallbacks() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
@@ -279,8 +277,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 		BundleContext context = getContext();
 
 		// Ensure no outstanding references
-		ServiceReference ref = context.getServiceReference(Coordinator.class
-				.getName());
+		ServiceReference<Coordinator> ref = context.getServiceReference(Coordinator.class);
 		while (context.ungetService(ref));
 
 		// Get another Bundle Context
@@ -292,8 +289,8 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 		while (context.ungetService(ref));
 
 		// Get the different Coordinators
-		Coordinator cUs = (Coordinator) context.getService(ref);
-		Coordinator cThem = (Coordinator) otherContext.getService(ref);
+		Coordinator cUs = context.getService(ref);
+		Coordinator cThem = otherContext.getService(ref);
 		assertTrue(
 				"Because they're registered with a service factory they must differ",
 				cUs != cThem);
@@ -344,7 +341,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception 
 	 */
 	public void testTableTimeout() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
@@ -368,7 +365,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 */
 
 	public void testTableFail() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
@@ -399,7 +396,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception 
 	 */
 	public void testTableAddParticipant() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
@@ -499,7 +496,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 */
 
 	public void testTableEnd() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
@@ -551,7 +548,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception 
 	 */
 	public void testPassAsArgument() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
@@ -599,7 +596,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception 
 	 */
 	public void testFailInfo() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
@@ -629,7 +626,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception 
 	 */
 	public void testId() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
@@ -672,7 +669,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 */
 
 	public void testFailCoordinationFromNoninitiatingThread() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
@@ -723,7 +720,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 */
 
 	public void testEnumerateCoordinations() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		clear(c);
 
@@ -784,7 +781,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 */
 
 	public void testPartiallyEnded() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		TestParticipant tp1 = new TestParticipant();
 		TestParticipant tp2 = new TestParticipant() {
@@ -825,7 +822,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception 
 	 */
 	public void testNestingOk() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		TestParticipant tp1 = new TestParticipant();
 		TestParticipant tp2 = new TestParticipant();
@@ -884,7 +881,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception 
 	 */
 	public void testNestingInnerFails() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		TestParticipant tp1 = new TestParticipant();
 		TestParticipant tp2 = new TestParticipant();
@@ -967,7 +964,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception
 	 */
 	public void testPreventBlocking() throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 
 		final TestParticipant tp1 = new TestParticipant();
@@ -1012,7 +1009,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	public void testNoParticipationOnTwoCoordinationsInTheSameThread()
 			throws Exception {
-		final Coordinator c = (Coordinator) getService(Coordinator.class);
+		final Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 
 		final TestParticipant tp1 = new TestParticipant();
@@ -1087,7 +1084,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception 
 	 */
 	public void testEnumerateParticipants() throws Exception {
-		Coordinator c = (Coordinator) getService(Coordinator.class);
+		Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 
 		TestParticipant tp1 = new TestParticipant();
@@ -1146,18 +1143,18 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	Exception	failure	= new Exception("failed");
 
 	class FailingParticipant extends TestParticipant {
-		Coordinator	coordinator;
+		private final Coordinator	c;
 
 		FailingParticipant() throws Exception {
-			coordinator = (Coordinator) getService(Coordinator.class);
+			c = coordinator;
 		}
 
 		public void doWork() {
-			coordinator.addParticipant(this);
-			coordinator.fail(failure);
+			c.addParticipant(this);
+			c.fail(failure);
 		}
 
-		public void ended(Coordination c) throws Exception {
+		public void ended(Coordination cc) throws Exception {
 			throw new AssertionFailedError("I did fail this coordination!!");
 		}
 
@@ -1167,7 +1164,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception
 	 */
 	public void testParticipantFailure() throws Exception {
-		Coordinator c = (Coordinator) getService(Coordinator.class);
+		Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		FailingParticipant tp1 = new FailingParticipant();
 
@@ -1208,7 +1205,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception 
 	 */
 	public void testControlOutcome() throws Exception {
-		Coordinator c = (Coordinator) getService(Coordinator.class);
+		Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		TestParticipant tp1 = new TestParticipant();
 
@@ -1249,7 +1246,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 */
 
 	public void testCollaboration() throws Exception {
-		Coordinator c = (Coordinator) getService(Coordinator.class);
+		Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		TestParticipant tp1 = new TestParticipant();
 		TestParticipant tp2 = new TestParticipant();
@@ -1296,7 +1293,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception
 	 */
 	public void testTimeout() throws Exception {
-		Coordinator c = (Coordinator) getService(Coordinator.class);
+		Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		TestParticipant tp = new TestParticipant();
 		Coordination cc = c.create("test1", 100); // timeout after 100 ms
@@ -1333,7 +1330,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * @throws Exception
 	 */
 	public void testBasic() throws Exception {
-		Coordinator c = (Coordinator) getService(Coordinator.class);
+		Coordinator c = coordinator;
 		assertNotNull("Expect the service to be there", c);
 		TestParticipant tp = new TestParticipant();
 		Coordination cc = c.create("test1", 0);
@@ -1354,23 +1351,11 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 		assertEquals("Failed must be 0", 0, tp.failed.get());
 	}
 
-	Object getService(Class< ? > c) throws InterruptedException {
-		BundleContext context = FrameworkUtil.getBundle(
-				CoordinatorBasicTests.class).getBundleContext();
-		ServiceTracker t = new ServiceTracker(context, c.getName(), null) {
-			public Object addingService(ServiceReference ref) {
-				Object o = super.addingService(ref);
-				return o;
-			}
-		};
-		t.open();
-		return t.waitForService(1000);
-	}
 }
 
 class TestParticipant implements Participant {
-	AtomicInteger	ended	= new AtomicInteger(0);
-	AtomicInteger	failed	= new AtomicInteger(0);
+	final AtomicInteger	ended	= new AtomicInteger(0);
+	final AtomicInteger	failed	= new AtomicInteger(0);
 
 	public void failed(Coordination c) throws Exception {
 		failed.incrementAndGet();

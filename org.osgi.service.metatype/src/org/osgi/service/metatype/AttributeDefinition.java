@@ -29,95 +29,95 @@ public interface AttributeDefinition {
 	 * The {@code STRING} (1) type.
 	 * 
 	 * <p>
-	 * Attributes of this type should be stored as {@code String}, {@code
-	 * Vector} with {@code String} or {@code String[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code String},
+	 * {@code Vector} with {@code String} or {@code String[]} objects, depending
+	 * on the {@code getCardinality()} value.
 	 */
-	int	STRING		= 1;
+	int STRING = 1;
 	/**
 	 * The {@code LONG} (2) type.
 	 * 
 	 * Attributes of this type should be stored as {@code Long}, {@code Vector}
-	 * with {@code Long} or {@code long[]} objects, depending on the {@code
-	 * getCardinality()} value.
+	 * with {@code Long} or {@code long[]} objects, depending on the
+	 * {@code getCardinality()} value.
 	 */
-	int	LONG		= 2;
+	int LONG = 2;
 	/**
 	 * The {@code INTEGER} (3) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Integer}, {@code
-	 * Vector} with {@code Integer} or {@code int[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code Integer},
+	 * {@code Vector} with {@code Integer} or {@code int[]} objects, depending
+	 * on the {@code getCardinality()} value.
 	 */
-	int	INTEGER		= 3;
+	int INTEGER = 3;
 	/**
 	 * The {@code SHORT} (4) type.
 	 * 
 	 * Attributes of this type should be stored as {@code Short}, {@code Vector}
-	 * with {@code Short} or {@code short[]} objects, depending on the {@code
-	 * getCardinality()} value.
+	 * with {@code Short} or {@code short[]} objects, depending on the
+	 * {@code getCardinality()} value.
 	 */
-	int	SHORT		= 4;
+	int SHORT = 4;
 	/**
 	 * The {@code CHARACTER} (5) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Character}, {@code
-	 * Vector} with {@code Character} or {@code char[]} objects, depending on
-	 * the {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code Character},
+	 * {@code Vector} with {@code Character} or {@code char[]} objects,
+	 * depending on the {@code getCardinality()} value.
 	 */
-	int	CHARACTER	= 5;
+	int CHARACTER = 5;
 	/**
 	 * The {@code BYTE} (6) type.
 	 * 
 	 * Attributes of this type should be stored as {@code Byte}, {@code Vector}
-	 * with {@code Byte} or {@code byte[]} objects, depending on the {@code
-	 * getCardinality()} value.
+	 * with {@code Byte} or {@code byte[]} objects, depending on the
+	 * {@code getCardinality()} value.
 	 */
-	int	BYTE		= 6;
+	int BYTE = 6;
 	/**
 	 * The {@code DOUBLE} (7) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Double}, {@code
-	 * Vector} with {@code Double} or {@code double[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * Attributes of this type should be stored as {@code Double},
+	 * {@code Vector} with {@code Double} or {@code double[]} objects, depending
+	 * on the {@code getCardinality()} value.
 	 */
-	int	DOUBLE		= 7;
+	int DOUBLE = 7;
 	/**
 	 * The {@code FLOAT} (8) type.
 	 * 
 	 * Attributes of this type should be stored as {@code Float}, {@code Vector}
-	 * with {@code Float} or {@code float[]} objects, depending on the {@code
-	 * getCardinality()} value.
+	 * with {@code Float} or {@code float[]} objects, depending on the
+	 * {@code getCardinality()} value.
 	 */
-	int	FLOAT		= 8;
+	int FLOAT = 8;
 	/**
 	 * The {@code BIGINTEGER} (9) type.
 	 * 
-	 * Attributes of this type should be stored as {@code BigInteger}, {@code
-	 * Vector} with {@code BigInteger} or {@code BigInteger[]} objects,
+	 * Attributes of this type should be stored as {@code BigInteger},
+	 * {@code Vector} with {@code BigInteger} or {@code BigInteger[]} objects,
 	 * depending on the {@code getCardinality()} value.
 	 * 
 	 * @deprecated As of 1.1.
 	 */
-	int	BIGINTEGER	= 9;
+	int BIGINTEGER = 9;
 	/**
 	 * The {@code BIGDECIMAL} (10) type.
 	 * 
-	 * Attributes of this type should be stored as {@code BigDecimal}, {@code
-	 * Vector} with {@code BigDecimal} or {@code BigDecimal[]} objects depending
-	 * on {@code getCardinality()}.
+	 * Attributes of this type should be stored as {@code BigDecimal},
+	 * {@code Vector} with {@code BigDecimal} or {@code BigDecimal[]} objects
+	 * depending on {@code getCardinality()}.
 	 * 
 	 * @deprecated As of 1.1.
 	 */
-	int	BIGDECIMAL	= 10;
+	int BIGDECIMAL = 10;
 	/**
 	 * The {@code BOOLEAN} (11) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Boolean}, {@code
-	 * Vector} with {@code Boolean} or {@code boolean[]} objects depending on
-	 * {@code getCardinality()}.
+	 * Attributes of this type should be stored as {@code Boolean},
+	 * {@code Vector} with {@code Boolean} or {@code boolean[]} objects
+	 * depending on {@code getCardinality()}.
 	 */
-	int	BOOLEAN		= 11;
+	int BOOLEAN = 11;
 
 	/**
 	 * The {@code PASSWORD} (12) type.
@@ -130,7 +130,7 @@ public interface AttributeDefinition {
 	 * 
 	 * @since 1.2
 	 */
-	int	PASSWORD	= 12;
+	int PASSWORD = 12;
 
 	/**
 	 * Get the name of the attribute. This name may be localized.
@@ -194,8 +194,8 @@ public interface AttributeDefinition {
 	 * 
 	 * <p>
 	 * Defined in the following constants which map to the appropriate Java
-	 * type. {@code STRING},{@code LONG},{@code INTEGER}, {@code CHAR},{@code
-	 * BYTE},{@code DOUBLE},{@code FLOAT}, {@code BOOLEAN}.
+	 * type. {@code STRING},{@code LONG},{@code INTEGER}, {@code CHAR},
+	 * {@code BYTE},{@code DOUBLE},{@code FLOAT}, {@code BOOLEAN}.
 	 * 
 	 * @return The type for this attribute.
 	 */
@@ -215,8 +215,8 @@ public interface AttributeDefinition {
 	 * 
 	 * <p>
 	 * This list must be in the same sequence as {@code getOptionLabels()}. I.e.
-	 * for each index i in {@code getOptionValues}, i in {@code
-	 * getOptionLabels()} should be the label.
+	 * for each index i in {@code getOptionValues}, i in
+	 * {@code getOptionLabels()} should be the label.
 	 * 
 	 * <p>
 	 * For example, if an attribute can have the value male, female, unknown,
@@ -240,8 +240,8 @@ public interface AttributeDefinition {
 	 * available.
 	 * <p>
 	 * This list must be in the same sequence as the {@code getOptionValues()}
-	 * method. I.e. for each index i in {@code getOptionLabels}, i in {@code
-	 * getOptionValues()} should be the associated value.
+	 * method. I.e. for each index i in {@code getOptionLabels}, i in
+	 * {@code getOptionValues()} should be the associated value.
 	 * 
 	 * <p>
 	 * For example, if an attribute can have the value male, female, unknown,
@@ -265,7 +265,20 @@ public interface AttributeDefinition {
 	 *  "..."          A localized description of why the value is wrong
 	 * </pre>
 	 * 
-	 * @param value The value before turning it into the basic data type
+	 * If the cardinality of this attribute is multi-valued then this string
+	 * must be interpreted as a comma delimited string. The complete value must
+	 * be trimmed from white space as well as spaces around commas. Commas (','
+	 * \u002C) and spaces (' ' ) and back-slashes ('\' \u005C) can be escaped
+	 * with another back-slash. Escaped spaces must not be trimmed. For example:
+	 * 
+	 * <pre>
+	 * value="  a\,b,b\,c,\ c\\,d   " =>	[ "a,b", "b,c", " c\", "d" ]
+	 * </pre>
+	 * 
+	 * @param value
+	 *            The value before turning it into the basic data type. If the
+	 *            cardinality indicates a multi valued attribute then the given
+	 *            string must be escap
 	 * @return {@code null}, "", or another string
 	 */
 	String validate(String value);

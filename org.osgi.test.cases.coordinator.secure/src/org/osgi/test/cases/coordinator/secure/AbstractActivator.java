@@ -44,16 +44,16 @@ public abstract class AbstractActivator implements BundleActivator {
 	 */
 	protected Coordinator coordinator;
 	
-	private ServiceReference coordinationRef;
-	private ServiceReference coordinatorRef;
-	private ServiceRegistration resultsRegistration;
+	private ServiceReference<Coordination>			coordinationRef;
+	private ServiceReference<Coordinator>			coordinatorRef;
+	private ServiceRegistration<TestClassResult>	resultsRegistration;
 	
 	public void start(BundleContext bc) throws Exception {
-		coordinationRef = bc.getServiceReference(Coordination.class.getName());
+		coordinationRef = bc.getServiceReference(Coordination.class);
 		if (coordinationRef != null)
-			coordination = (Coordination)bc.getService(coordinationRef);
-		coordinatorRef = bc.getServiceReference(Coordinator.class.getName());
-		coordinator = (Coordinator)bc.getService(coordinatorRef);
+			coordination = bc.getService(coordinationRef);
+		coordinatorRef = bc.getServiceReference(Coordinator.class);
+		coordinator = bc.getService(coordinatorRef);
 		SecurityException result = null;
 		try {
 			doStart();
@@ -62,7 +62,8 @@ public abstract class AbstractActivator implements BundleActivator {
 			result = e;
 		}
 		boolean succeeded = hasPermission() ? result == null : result != null;
-		resultsRegistration = bc.registerService(TestClassResult.class.getName(), new TestClassResultImpl(succeeded), null);
+		resultsRegistration = bc.registerService(TestClassResult.class,
+				new TestClassResultImpl(succeeded), null);
 	}
 
 	public void stop(BundleContext bc) throws Exception {

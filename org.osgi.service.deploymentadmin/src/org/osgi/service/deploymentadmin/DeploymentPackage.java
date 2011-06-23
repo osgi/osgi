@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,10 +111,10 @@ public interface DeploymentPackage {
 	 * <li>{@link #uninstallForced()}</li>
 	 * </ul>
 	 * 
-	 * @return {@code true} if the deployment package is stale.
-	 *         {@code false} otherwise
-	 * @see #uninstall
-	 * @see #uninstallForced
+	 * @return {@code true} if the deployment package is stale. {@code false}
+	 *         otherwise
+	 * @see #uninstall()
+	 * @see #uninstallForced()
 	 */
 	boolean isStale();
 
@@ -321,22 +321,18 @@ public interface DeploymentPackage {
 	 * 
 	 * The method forces removal of the Deployment Package from the repository
 	 * maintained by the Deployment Admin service. This method follows the same
-	 * steps as {@link #uninstall}. However, any errors or the absence of
+	 * steps as {@link #uninstall()}. However, any errors or the absence of
 	 * Resource Processor services are ignored, they must not cause a roll back.
 	 * These errors should be logged.
 	 * 
 	 * @return true if the operation was successful
-	 * @throws DeploymentException
-	 *             only {@link DeploymentException#CODE_TIMEOUT} and
-	 *             {@link DeploymentException#CODE_CANCELLED} can be thrown. For
-	 *             detailed error code description see
-	 *             {@link DeploymentException}.
-	 * @throws SecurityException
-	 *             if the caller doesn't have the appropriate
-	 *             {@link DeploymentAdminPermission}("&lt;filter&gt;",
-	 *             "uninstall_forced") permission.
-	 * @throws IllegalStateException
-	 *             if the package is stale
+	 * @throws DeploymentException only {@link DeploymentException#CODE_TIMEOUT}
+	 *         and {@link DeploymentException#CODE_CANCELLED} can be thrown. For
+	 *         detailed error code description see {@link DeploymentException}.
+	 * @throws SecurityException if the caller doesn't have the appropriate
+	 *         {@link DeploymentAdminPermission}("&lt;filter&gt;",
+	 *         "uninstall_forced") permission.
+	 * @throws IllegalStateException if the package is stale
 	 */
 	boolean uninstallForced() throws DeploymentException;
 

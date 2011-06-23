@@ -41,10 +41,10 @@
 
 package org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentAdminPermission;
 
+import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.MessagesConstants;
-import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -53,21 +53,7 @@ import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
  * according to MEG specification.
  */
 
-public class Equals {
-	private DeploymentTestControl tbc;
-	
-	public Equals(DeploymentTestControl tbc) {
-		this.tbc = tbc;
-	}
-	
-	public void run() {
-		testEquals001();
-		testEquals002();
-		testEquals003();
-		testEquals004();
-		testEquals005();
-	}
-
+public class Equals extends DeploymentTestControl {
 	/**
 	 * This method asserts that a DeploymentAdminPermission object is equal to another when 
 	 * its parameters are equals.
@@ -75,13 +61,17 @@ public class Equals {
 	 * @spec DeploymentAdminPermission.equals(Object)
 	 */
 	public void testEquals001() {
-		tbc.log("#testEquals001");
+		log("#testEquals001");
 		try {
 		DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 		DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
-		tbc.assertTrue("Both DeploymentAdminPermission objects are equal when both target and action are equals",deployPermission.equals(deployPermission2));
+			assertTrue(
+					"Both DeploymentAdminPermission objects are equal when both target and action are equals",
+					deployPermission.equals(deployPermission2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		}
 	}
 
@@ -92,13 +82,17 @@ public class Equals {
 	 * @spec DeploymentAdminPermission.equals(Object)
 	 */
 	public void testEquals002() {
-		tbc.log("#testEquals002");
+		log("#testEquals002");
 		try {
 		DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 		DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,org.osgi.service.deploymentadmin.DeploymentAdminPermission.CANCEL);
-		tbc.assertTrue("Both DeploymentAdminPermission are different when the action is different",!deployPermission.equals(deployPermission2));
+			assertTrue(
+					"Both DeploymentAdminPermission are different when the action is different",
+					!deployPermission.equals(deployPermission2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		}
 	}
 	
@@ -109,13 +103,17 @@ public class Equals {
 	 * @spec DeploymentAdminPermission.equals(Object)
 	 */
 	public void testEquals003() {
-		tbc.log("#testEquals003");
+		log("#testEquals003");
 		try {
 		DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 		DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_DIFFERENT_SIGNATURE,org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
-		tbc.assertTrue("Both DeploymentAdminPermission are different when the signer filter is different",!deployPermission.equals(deployPermission2));
+			assertTrue(
+					"Both DeploymentAdminPermission are different when the signer filter is different",
+					!deployPermission.equals(deployPermission2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		}
 	}
 	
@@ -126,13 +124,17 @@ public class Equals {
 	 * @spec DeploymentAdminPermission.equals(Object)
 	 */
 	public void testEquals004() {
-		tbc.log("#testEquals004");
+		log("#testEquals004");
 		try {
 		DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,DeploymentAdminPermission.INSTALL+","+DeploymentAdminPermission.CANCEL);
 		DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,DeploymentAdminPermission.CANCEL+","+DeploymentAdminPermission.INSTALL);
-		tbc.assertTrue("Both DeploymentAdminPermission are equal when they have the same action in different orders",deployPermission.equals(deployPermission2));
+			assertTrue(
+					"Both DeploymentAdminPermission are equal when they have the same action in different orders",
+					deployPermission.equals(deployPermission2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		}
 	}
 	
@@ -142,13 +144,16 @@ public class Equals {
 	 * @spec DeploymentAdminPermission.equals(Object)
 	 */
 	public void testEquals005() {
-		tbc.log("#testEquals005");
+		log("#testEquals005");
 		try {
 		DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,DeploymentAdminPermission.INSTALL+","+DeploymentAdminPermission.CANCEL);
 		DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,DeploymentAdminPermission.INSTALL);
-		tbc.assertTrue("Both DeploymentAdminPermission are different",!deployPermission.equals(deployPermission2));
+			assertTrue("Both DeploymentAdminPermission are different",
+					!deployPermission.equals(deployPermission2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		}
 	}
 }
