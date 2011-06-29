@@ -49,13 +49,11 @@ public class FrameworkPluginActivator implements BundleActivator {
 		props.put("dataRootURIs", new String[] { PLUGIN_ROOT_URI });
 		String[] ifs = new String[] {DataPlugin.class.getName()};
 		servReg = bc.registerService(ifs, frameworkPlugin, props);
-		
 		Util.log("Framework plugin activated successfully.");
 	}
 
 	public void stop(BundleContext bc) throws BundleException {
 		servReg.unregister();
-		
 		Util.log("Framework plugin stopped successfully.");
 	}
 }

@@ -52,9 +52,9 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 	private static final String VALUES = "Values";
 	private static final String TYPE = "Type";
 	private static final String CARDINALITY = "Cardinality";
-	private static final String SCALAR = "scalar";
-	private static final String ARRAY = "array";
-	private static final String COLLECTION = "collection";
+	private static final String SCALAR = "SCALAR";
+	private static final String ARRAY = "ARRAY";
+	private static final String COLLECTION = "COLLECTION";
 	private static final String LIST_MIME_TYPE = "org.osgi/1.0/ListSubtree";
 	private static final String NODE_TYPE = "org.osgi/1.0/ServiceStateManagementObject";
 

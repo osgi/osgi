@@ -943,10 +943,6 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 			for (int i = 0; i < hostBundles.length; i++) {
 				list.put(Integer.toString(i + 1),
 						new Long(hostBundles[i].getBundleId()));
-				// System.out.println("#####PutHostBundleList targetB  : "+targetBundle);
-				// System.out.println("#####PutHostBundleList <id>  : "+Integer.parseInt(id));
-				// System.out.println("#####PutHostBundleList hostId: "+hostBundles[i].getBundleId());
-				// System.out.println("#####PutHostBundleList  BSN  : "+hostBundles[i].getSymbolicName());
 			}
 			hostBundleList.put(id, list);
 		} else if (targetBundle == null) {
