@@ -40,6 +40,8 @@ import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.service.startlevel.StartLevel;
+
+import info.dmtree.DmtConstants;
 import info.dmtree.DmtData;
 import info.dmtree.DmtException;
 import info.dmtree.MetaNode;
@@ -88,6 +90,7 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 	protected static final String BUNDLECONTROLOPERATIONRESULT = "OperationResult";
 	
 	protected static final String NODE_TYPE = "org.osgi/1.0/FrameworkManagementObject";
+	protected static final String TRANSIENT_NODE_TYPE = DmtConstants.DDF_TRANSIENT;
 
 	protected FrameworkPlugin plugin;
 	protected BundleContext context;
@@ -524,6 +527,10 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 		String[] path = shapedPath(nodePath);
 		if (path.length == 1)
 			return NODE_TYPE;
+		if (path.length == 3 && path[1].equals(INSTALLBUNDLE))
+			return TRANSIENT_NODE_TYPE;
+		if (path.length == 4 && path[2].equals(EVENT))
+			return TRANSIENT_NODE_TYPE;
 		if (isLeafNode(nodePath))
 			return FrameworkMetaNode.LEAF_MIME_TYPE;
 		return FrameworkMetaNode.FRAMEWORK_MO_TYPE;

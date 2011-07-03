@@ -25,6 +25,7 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
+import info.dmtree.DmtConstants;
 import info.dmtree.DmtData;
 import info.dmtree.DmtException;
 import info.dmtree.MetaNode;
@@ -71,7 +72,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 	private static final String NONTRUSTEDSIGNERCERTIFICATE = "NonTrustedSignerCertificate";
 	private static final String CERTIFICATECHAIN = "CertificateChain";
 
-	private static final String LIST_MIME_TYPE = "org.osgi/1.0/ListSubtree";
+	private static final String LIST_MIME_TYPE = DmtConstants.DDF_LIST_SUBTREE;
 	private static final String NODE_TYPE = "org.osgi/1.0/BundleStateManagementObject";
 
 	private BundleContext context;
@@ -161,7 +162,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 			}
 			if (path[2].equals(HOSTS)) {
 				Hashtable table = (Hashtable) hostBundleList.get(path[1]);
-				if (table.size() == 0)
+				if (table == null)
 					return new String[0];
 				String[] children = new String[table.size()];
 				int i = 0;
@@ -172,7 +173,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 			}
 			if (path[2].equals(FRAGMENTS)) {
 				Hashtable table = (Hashtable) fragmentsBundleList.get(path[1]);
-				if (table.size() == 0)
+				if (table == null)
 					return new String[0];
 				String[] children = new String[table.size()];
 				int i = 0;
@@ -183,7 +184,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 			}
 			if (path[2].equals(REQUIRED)) {
 				Hashtable table = (Hashtable) requiredBundleList.get(path[1]);
-				if (table.size() == 0)
+				if (table == null)
 					return new String[0];
 				String[] children = new String[table.size()];
 				int i = 0;
@@ -194,8 +195,8 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 			}
 			if (path[2].equals(REQUIRING)) {
 				Hashtable table = (Hashtable) requiringBundleList.get(path[1]);
-				if (table.size() == 0)
-					return new String[0];
+				if (table == null)
+					return new String[0];					
 				String[] children = new String[table.size()];
 				int i = 0;
 				for (Enumeration enu = table.keys(); enu.hasMoreElements(); i++) {
@@ -206,7 +207,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 			if (path[2].equals(TRUSTEDSIGNERCERTIFICATE)) {
 				Hashtable table = (Hashtable) trustedSignerCertificateList
 						.get(path[1]);
-				if (table.size() == 0)
+				if (table == null)
 					return new String[0];
 				String[] children = new String[table.size()];
 				int i = 0;
@@ -218,7 +219,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 			if (path[2].equals(NONTRUSTEDSIGNERCERTIFICATE)) {
 				Hashtable table = (Hashtable) nonTrustedSignerCertificateList
 						.get(path[1]);
-				if (table.size() == 0)
+				if (table == null)
 					return new String[0];
 				String[] children = new String[table.size()];
 				int i = 0;
@@ -394,7 +395,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_INTEGER, null, null);
+						DmtData.FORMAT_STRING, null, null);
 
 			if (path[3].equals(STARTLEVEL))
 				return new BundleStateMetaNode("The StartLevel of the bundle.",
@@ -418,7 +419,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_DATE, null, null);
+						DmtData.FORMAT_DATETIME, null, null);
 
 			if (path[3].equals(ACTIVATIONPOLICYUSED))
 				return new BundleStateMetaNode("The date of last modified.",
@@ -426,7 +427,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_DATE, null, null);
+						DmtData.FORMAT_BOOLEAN, null, null);
 
 			if (path[2].equals(HOSTS))
 				return new BundleStateMetaNode("bundle_id of Host Bundle",
@@ -808,7 +809,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 			}
 			if (path[2].equals(HOSTS)) {
 				Hashtable table = (Hashtable) hostBundleList.get(path[1]);
-				if (table.size() == 0)
+				if (table == null)
 					throw new DmtException(nodePath,
 							DmtException.NODE_NOT_FOUND,
 							"No such node in the current BundleState tree.");
@@ -819,7 +820,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 			}
 			if (path[2].equals(FRAGMENTS)) {
 				Hashtable table = (Hashtable) fragmentsBundleList.get(path[1]);
-				if (table.size() == 0)
+				if (table == null)
 					throw new DmtException(nodePath,
 							DmtException.NODE_NOT_FOUND,
 							"No such node in the current BundleState tree.");
@@ -829,7 +830,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 			}
 			if (path[2].equals(REQUIRED)) {
 				Hashtable table = (Hashtable) requiredBundleList.get(path[1]);
-				if (table.size() == 0)
+				if (table == null)
 					throw new DmtException(nodePath,
 							DmtException.NODE_NOT_FOUND,
 							"No such node in the current BundleState tree.");
@@ -839,7 +840,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 			}
 			if (path[2].equals(REQUIRING)) {
 				Hashtable table = (Hashtable) requiringBundleList.get(path[1]);
-				if (table.size() == 0)
+				if (table == null)
 					throw new DmtException(nodePath,
 							DmtException.NODE_NOT_FOUND,
 							"No such node in the current BundleState tree.");

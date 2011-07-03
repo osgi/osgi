@@ -38,6 +38,7 @@ import org.osgi.service.packageadmin.ExportedPackage;
 import info.dmtree.DmtData;
 import info.dmtree.DmtException;
 import info.dmtree.MetaNode;
+import info.dmtree.DmtConstants;
 import info.dmtree.spi.ReadableDataSession;
 
 /**
@@ -52,8 +53,9 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 	private static final String REMOVALPENDING = "RemovalPending";
 	private static final String EXPORTINGBUNDLE = "ExportingBundle";
 	private static final String IMPORTINGBUNDLES = "ImportingBundles";
-	private static final String LIST_MIME_TYPE = "org.osgi/1.0/ListSubtree";
+	private static final String LIST_MIME_TYPE = DmtConstants.DDF_LIST_SUBTREE;
 	private static final String NODE_TYPE = "org.osgi/1.0/PackageStateManagementObject";
+	private static final String TRANSIENT_NODE_TYPE = DmtConstants.DDF_TRANSIENT;
 
 	private PackageAdmin packageAdmin;
 	private Hashtable exportPackageObjTable = new Hashtable();
@@ -228,6 +230,9 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 
 		if (path.length == 1) {
 			return NODE_TYPE;
+		}
+		if (path.length == 2) {
+			return TRANSIENT_NODE_TYPE;
 		}
 		if (path.length == 3 && path[2].equals(IMPORTINGBUNDLES)) {
 			return LIST_MIME_TYPE;
