@@ -15,6 +15,8 @@ import java.util.List;
  * method?)
  * 
  * @ThreadSafe
+ * @Immutable
+ *  
  * @version $Id$
  */
 public interface Resource {

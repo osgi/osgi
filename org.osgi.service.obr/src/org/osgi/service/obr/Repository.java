@@ -20,16 +20,15 @@
 
 package org.osgi.service.obr;
 
+import java.net.URL;
 import java.util.Collection;
 
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.wiring.Capability;
 import org.osgi.framework.wiring.Requirement;
 import org.osgi.framework.wiring.Resource;
 
 /**
- * Represents a repository that contains {@link Resource
- * resources}.
+ * Represents a repository that contains {@link Resource resources}.
  * 
  * <p>
  * Repositories may be registered as services and may be used as inputs to an
@@ -39,12 +38,7 @@ import org.osgi.framework.wiring.Resource;
  * Repositories registered as services may be filtered using standard service
  * properties.
  * 
- * <p>
- * Repositories that can be modified externally should monitor the OSGi registry
- * for {@link RepositoryListener RepositoryListeners} and fire
- * {@link RepositoryChangeEvent RepositoryChangeEvents} to inform listeners of
- * any changes so they can take appropriate actions.
- * 
+ * @ThreadSafe
  * @version $Id$
  */
 public interface Repository {
@@ -52,52 +46,28 @@ public interface Repository {
    * Find any capabilities from revisions contained in this repository that can
    * potentially satisfy the supplied requirements.
    * 
-   * @param requirements
-   * @return
-   */
-  Collection<Capability> findProviders(
-      Requirement... requirements);
-  
-  /**
-   * Discover any contents that specify {@link Content#getAttributes() 
-   * attributes} that match the given filter.
+   * @param requirements The requirements that should be matched or empty list if
+   * all capabilities should be matched.
    * 
-   * @param filterExpr
-   *          A standard OSGi filter
-   * @return List of contents matching the filter.
-   * @throws InvalidSyntaxException
-   * @throws IllegalArgumentException
-   *           If the filter expression is invalid.
+   * @return A collection capabilities that match any of the supplied requirements
+   *  
+   * @throws NullPointerException if any of the requirements are null
    */
-  Collection<Content> findContents(String filterExpr) throws InvalidSyntaxException;
-  
-  /**
-   * Lookup the content based on the supplied resource.
-   * 
-   * @param resource - The resource whose content is desired.
-   * @return The content for the supplied resource.
-   */
-  Content getContent(Resource resource);
+  Collection<Capability> findProviders(Requirement... requirements) throws NullPointerException;
 
   /**
-   * A counter to indicate the state of the repository, clients can use this to
-   * check if there have been any changes to the revisions contained in this
-   * repository.
+   * Lookup the URL where the supplied resource may be accessed, if any.
    * 
    * <p>
-   * A repository implementation that supports external modifications should
-   * return a different increment.
+   * Successive calls to this method do not have to return the same value this
+   * allows for mirroring behaviors to be built into a repository.
    * 
-   * @return
+   * @param resource
+   *          - The resource whose content is desired.
+   * @return The URL for the supplied resource or null if this resource has no
+   *         binary content or is not accessible for any reason
+   *         
+   * @throws NullPointerException if the resource is null 
    */
-  long getIncrement();
-
-  /**
-   * Provides a mechanism to query the changes that have occurred to this
-   * repository since the specified increment.
-   * 
-   * @param sinceIncrement
-   * @return
-   */
-  RepositoryDelta getDelta(long sinceIncrement);
+  URL getContent(Resource resource) throws NullPointerException;
 }

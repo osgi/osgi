@@ -30,26 +30,32 @@ import org.osgi.framework.wiring.Wire;
  * a {@link Resolver#resolve(Environment, Requirement...)} operation.
  * 
  * <p>
- * Environments provide {@link Capability capabilities}
- * options that the Resolver can use to satisfy {@link Requirement
- * requirements} via the
- * {@link #findProviders(Requirement...)} method.
+ * Environments:
+ * <ul>
+ * <li>Provide {@link Capability capabilities} options that the Resolver can use
+ * to satisfy {@link Requirement requirements} via the
+ * {@link #findProviders(Requirement...)} method</li>
+ * 
+ * <li>Constrain solutions via the {@link #getWiring()} method. A wiring
+ * consists of a map of existing {@link Resource resources} to {@link Wire
+ * wires}.
+ * 
+ * <li>Filter transitive requirements that are brought in as part of a resolve
+ * operation via the {@link #getEffectiveFilter()}.
+ * </ul>
  * 
  * <p>
- * Environments also constrain solutions via the {@link #getWiring()} method. A
- * wiring consists of a map of existing {@link Resource resources} to
- * {@link Wire wires}.
- *   
- * <p>
- * An environment may be used to provide capabilities via local
- * {@link Resource resources} and/or remote {@link Repository
- * repositories}.
+ * An environment may be used to provide capabilities via local {@link Resource
+ * resources} and/or remote {@link Repository repositories}.
  * 
  * <p>
- * A resolver may call the {@link #findProviders(Requirement...)} and
- * {@link #getWiring()} method any number of times during a resolve using any
- * thread. Environments may also be shared between several resolvers. As such
- * implementors should ensure that this class is properly synchronized.
+ * A resolver may call the {@link #findProviders(Requirement...)},
+ * {@link #getEffectiveFilter()} and {@link #getWiring()} method any number of
+ * times during a resolve using any thread. Environments may also be shared
+ * between several resolvers. As such implementors should ensure that this class
+ * is properly synchronized.
+ * 
+ * @ThreadSafe
  */
 public interface Environment {
   /**
@@ -68,13 +74,22 @@ public interface Environment {
    * @return an immutable collection of capabilities that match the supplied
    *         requirements
    */
-  Collection<Capability> findProviders(
-      Requirement... requirements);
+  Collection<Capability> findProviders(Requirement... requirements);
 
   /**
-   * An immutable map of wires between revisions. Multiple calls to
-   * this method for the same environment object must result in the same
-   * set of wires. TODO coordination?
+   * A filter that can be applied to the requirement effective directive value
+   * to check if a given requirement should be wired in a given resolve
+   * operation.
+   * 
+   * @return An LDAP filter string or null if all requirements should be
+   *         considered effective
+   */
+  String getEffectiveFilter();
+
+  /**
+   * An immutable map of wires between revisions. Multiple calls to this method
+   * for the same environment object must result in the same set of wires. TODO
+   * coordination?
    * 
    * @return the wires already defined in this environment
    */

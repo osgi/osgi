@@ -19,39 +19,57 @@ package org.osgi.service.obr;
 /**
  * Indicates failure to resolve a set of requirements.
  * 
- * Resolver implementations may subclass this class to provide extra
- * state information about the reason for the resolution failure.
+ * Resolver implementations may subclass this class to provide extra state
+ * information about the reason for the resolution failure.
+ * 
+ * @ThreadSafe
+ * @Immutable
  */
 public class ResolutionException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 
   /**
-   * TODO document
+   * Creates an exception of type {@code ResolutionException}.
+   * 
+   * <p>
+   * This method creates an {@code ResolutionException} object with the
+   * specified message and cause.
    * 
    * @param message
+   *          The message.
    * @param cause
+   *          The cause of this exception.
    */
   public ResolutionException(String message, Throwable cause) {
     super(message, cause);
   }
 
   /**
-   * TODO document
+   * Creates an exception of type {@code ResolutionException}.
+   * 
+   * <p>
+   * This method creates an {@code ResolutionException} object with the
+   * specified message.
    * 
    * @param message
+   *          The message.
    */
   public ResolutionException(String message) {
     super(message);
   }
 
   /**
-   * TODO document
+   * Creates an exception of type {@code ResolutionException}.
+   * 
+   * <p>
+   * This method creates an {@code ResolutionException} object with the
+   * specified cause.
    * 
    * @param cause
+   *          The cause of this exception.
    */
   public ResolutionException(Throwable cause) {
     super(cause);
   }
-
 }
