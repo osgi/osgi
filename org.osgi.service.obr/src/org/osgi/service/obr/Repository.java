@@ -43,7 +43,7 @@ import org.osgi.framework.wiring.Resource;
  */
 public interface Repository {
   /**
-   * Find any capabilities from revisions contained in this repository that can
+   * Find any capabilities from resources contained in this repository that can
    * potentially satisfy the supplied requirements.
    * 
    * @param requirements The requirements that should be matched or empty list if
