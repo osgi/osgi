@@ -88,8 +88,7 @@ public interface Environment {
 
   /**
    * An immutable map of wires between revisions. Multiple calls to this method
-   * for the same environment object must result in the same set of wires. TODO
-   * coordination?
+   * for the same environment object must result in the same set of wires.
    * 
    * @return the wires already defined in this environment
    */

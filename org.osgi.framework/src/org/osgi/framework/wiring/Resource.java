@@ -8,12 +8,6 @@ import java.util.List;
  * 
  * A resources can be wired together via capabilities and requirements.
  * 
- * TODO decide on identity characteristics of a revision. Given in OSGi multiple
- * bundles can be installed with same bsn/version this cannot be used as a key.
- * 
- * What then is identity of a resource? Object identity? URI (needs getter
- * method?)
- * 
  * @ThreadSafe
  * @Immutable
  *  
