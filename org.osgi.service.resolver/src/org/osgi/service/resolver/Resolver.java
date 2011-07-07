@@ -18,7 +18,7 @@
 // between bundle repositories. There is currently no commitment to 
 // turn this draft into an official specification.  
 
-package org.osgi.service.obr;
+package org.osgi.service.resolver;
 
 import java.util.List;
 import java.util.Map;

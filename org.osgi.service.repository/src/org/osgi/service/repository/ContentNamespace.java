@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.service.obr;
+package org.osgi.service.repository;
 
 /**
  * Constants for use in the "osgi.content" namespace. This namespace is used to

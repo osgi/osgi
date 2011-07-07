@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.obr;
+package org.osgi.service.resolver;
 
 /**
  * Indicates failure to resolve a set of requirements.

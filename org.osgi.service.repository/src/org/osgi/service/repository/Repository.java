@@ -18,7 +18,7 @@
 // between bundle repositories. There is currently no commitment to 
 // turn this draft into an official specification.  
 
-package org.osgi.service.obr;
+package org.osgi.service.repository;
 
 import java.net.URL;
 import java.util.Collection;
