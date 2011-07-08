@@ -32,25 +32,25 @@ import org.osgi.framework.wiring.Wire;
  * <p>
  * Environments:
  * <ul>
- * <li>Provide {@link Capability capabilities} options that the Resolver can use
+ * <li>Provide {@link Capability capabilities} that the Resolver can use
  * to satisfy {@link Requirement requirements} via the
- * {@link #findProviders(Requirement...)} method</li>
+ * {@link #findProviders(Requirement)} method</li>
  * 
  * <li>Constrain solutions via the {@link #getWiring()} method. A wiring
  * consists of a map of existing {@link Resource resources} to {@link Wire
  * wires}.
  * 
  * <li>Filter transitive requirements that are brought in as part of a resolve
- * operation via the {@link #getEffectiveFilter()}.
+ * operation via the {@link #isEffective(Requirement)}.
  * </ul>
  * 
  * <p>
  * An environment may be used to provide capabilities via local {@link Resource
- * resources} and/or remote {@link Repository repositories}.
+ * resources} and/or remote {@link org.osgi.service.repository.Repository repositories}.
  * 
  * <p>
- * A resolver may call the {@link #findProviders(Requirement...)},
- * {@link #getEffectiveFilter()} and {@link #getWiring()} method any number of
+ * A resolver may call the {@link #findProviders(Requirement)},
+ * {@link #isEffective(Requirement)} and {@link #getWiring()} method any number of
  * times during a resolve using any thread. Environments may also be shared
  * between several resolvers. As such implementors should ensure that this class
  * is properly synchronized.
@@ -60,7 +60,7 @@ import org.osgi.framework.wiring.Wire;
 public interface Environment {
   /**
    * Find any capabilities that can potentially provide a match to the supplied
-   * requirements.
+   * requirement.
    * 
    * <p>
    * A resolver should use the iteration order or the returned capability
@@ -68,23 +68,33 @@ public interface Environment {
    * match a requirement. Capabilities at the start of the iteration are implied
    * to be preferred over capabilities at the end.
    * 
-   * @param requirements
-   *          the requirements that a resolver is attempting to satisfy
+   * @param requirement
+   *          the requirement that a resolver is attempting to satisfy
    * 
-   * @return an immutable collection of capabilities that match the supplied
-   *         requirements
+   * @return an collection of capabilities that match the supplied
+   *         requirement
+   *         
+   * @throws NullPointerException if the requirement is null 
    */
-  Collection<Capability> findProviders(Requirement... requirements);
+  Collection<Capability> findProviders(Requirement requirement) throws NullPointerException;
 
   /**
-   * A filter that can be applied to the requirement effective directive value
-   * to check if a given requirement should be wired in a given resolve
-   * operation.
+   * Test if a given requirement should be wired in a given resolve
+   * operation. If this method returns false then the resolver should ignore
+   * this requirement during this resolve operation.
    * 
-   * @return An LDAP filter string or null if all requirements should be
-   *         considered effective
+   * <p>
+   * The primary use case for this is to test the <code>effective</code> directive
+   * on the requirement, though implementations are free to use this for any other
+   * purposes. 
+   * 
+   * @param requirement the Requirement to test 
+   * 
+   * @return true if the requirement should be considered as part of this resolve operation
+   * 
+   * @throws NullPointerException if requirement is null
    */
-  String getEffectiveFilter();
+  boolean isEffective(Requirement requirement) throws NullPointerException;
 
   /**
    * An immutable map of wires between revisions. Multiple calls to this method

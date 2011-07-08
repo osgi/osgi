@@ -32,7 +32,7 @@ import org.osgi.framework.wiring.Resource;
  * 
  * <p>
  * Repositories may be registered as services and may be used as inputs to an
- * {@link Environment#findProviders(Requirement...)} operation.
+ * {@link org.osgi.service.resolver.Environment#findProviders(Requirement)} operation.
  * 
  * <p>
  * Repositories registered as services may be filtered using standard service
@@ -44,16 +44,15 @@ import org.osgi.framework.wiring.Resource;
 public interface Repository {
   /**
    * Find any capabilities from resources contained in this repository that can
-   * potentially satisfy the supplied requirements.
+   * potentially satisfy the supplied requirement.
    * 
-   * @param requirements The requirements that should be matched or empty list if
-   * all capabilities should be matched.
+   * @param requirement The requirement that should be matched
    * 
-   * @return A collection capabilities that match any of the supplied requirements
+   * @return A collection of capabilities that match the supplied requirement
    *  
-   * @throws NullPointerException if any of the requirements are null
+   * @throws NullPointerException if the requirement is null
    */
-  Collection<Capability> findProviders(Requirement... requirements) throws NullPointerException;
+  Collection<Capability> findProviders(Requirement requirement) throws NullPointerException;
 
   /**
    * Lookup the URL where the supplied resource may be accessed, if any.
