@@ -14,21 +14,23 @@ import java.util.List;
  * @version $Id$
  */
 public interface Resource {
-  /**
-   * The identity capability of this resource. All resources have an identity capability
-   * defined with the following attributes:
-   * 
-   * <pre>capability osgi.identity {
-   *  osgi.identity=&lt;name&gt;
-   *  version=&lt;version&gt;
-   *  type=&lt;type&gt;
-   *}</pre>
-   *
-   * <p>
-   * This method is a convenience and is equivalent to calling <code>getCapabilities(ResourceConstants.IDENTITY_NAMESPACE).get(0)</code>
-   * 
-   * @return the Capability of this resource in the <code>osgi.identity</code> namespace 
-   */
+	/**
+	 * The {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity} capability
+	 * of this resource. This method is a convenience and is equivalent to
+	 * calling:
+	 * 
+	 * <pre>
+	 * <code>getCapabilities(ResourceConstants.IDENTITY_NAMESPACE).get(0);</code>
+	 * </pre>
+	 * 
+	 * &#8224; A resource with no symbolic name must not provide an identity
+	 * capability.
+	 * 
+	 * @return the Capability of this resource in the
+	 *         {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity} name
+	 *         space or <code>null</code> if this resource has no
+	 *         identity<sup>&#8224;</sup>.
+	 */
   Capability getIdentity();
   
 	/**
