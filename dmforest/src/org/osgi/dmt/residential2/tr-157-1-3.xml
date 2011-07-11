@@ -1,0 +1,1146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Component Objects for CWMP
+    
+    Notice:
+    
+    The Broadband Forum is a non-profit corporation organized to create
+    guidelines for broadband network system development and deployment.
+    This Broadband Forum Document has been approved by members of the
+    Forum. This Broadband Forum Document is not binding on the Broadband
+    Forum, any of its members, or any developer or service provider.
+    This Broadband Forum Document is subject to change, but only with
+    approval of members of the Forum.  This Document is copyrighted by
+    the Broadband Forum, and all rights are reserved.  Portions of this
+    Document may be copyrighted by Broadband Forum members.
+    
+    This Broadband Forum Document is provided AS IS, WITH ALL FAULTS.
+    ANY PERSON HOLDING A COPYRIGHT IN THIS BROADBAND FORUM DOCUMENT,
+    OR ANY PORTION THEREOF, DISCLAIMS TO THE FULLEST EXTENT PERMITTED
+    BY LAW ANY REPRESENTATION OR WARRANTY, EXPRESS OR IMPLIED,
+    INCLUDING, BUT NOT LIMITED TO, ANY WARRANTY: 
+    
+    (a) OF ACCURACY, COMPLETENESS, MERCHANTABILITY, FITNESS FOR A
+        PARTICULAR PURPOSE, NON-INFRINGEMENT, OR TITLE;
+    (b) THAT THE CONTENTS OF THIS BROADBAND FORUM DOCUMENT ARE SUITABLE
+        FOR ANY PURPOSE, EVEN IF THAT PURPOSE IS KNOWN TO THE COPYRIGHT
+        HOLDER;
+    (c) THAT THE IMPLEMENTATION OF THE CONTENTS OF THE DOCUMENT WILL NOT
+        INFRINGE ANY THIRD PARTY PATENTS, COPYRIGHTS, TRADEMARKS OR
+        OTHER RIGHTS.
+    
+    By using this Broadband Forum Document, users acknowledge that
+    implementation may require licenses to patents.  The Broadband Forum
+    encourages but does not require its members to identify such
+    patents.  For a list of declarations made by Broadband Forum member
+    companies, please see http://www.broadband-forum.org.  No assurance
+    is given that licenses to patents necessary to implement this
+    Document will be available for license at all or on reasonable and
+    non-discriminatory terms.
+    
+    ANY PERSON HOLDING A COPYRIGHT IN THIS BROADBAND FORUM DOCUMENT, OR
+    ANY PORTION THEREOF, DISCLAIMS TO THE FULLEST EXTENT PERMITTED BY
+    LAW (A) ANY LIABILITY (INCLUDING DIRECT, INDIRECT, SPECIAL, OR
+    CONSEQUENTIAL DAMAGES UNDER ANY LEGAL THEORY) ARISING FROM OR
+    RELATED TO THE USE OF OR RELIANCE UPON THIS DOCUMENT; AND (B) ANY
+    OBLIGATION TO UPDATE OR CORRECT THIS DOCUMENT.
+    
+    Broadband Forum Documents may be copied, downloaded, stored on a
+    server or otherwise re-distributed in their entirety only, and may
+    not be modified without the advance written permission of the
+    Broadband Forum.
+    
+    The text of this notice must be included in all copies of this
+    Broadband Forum Document.
+    
+    Summary:
+    This document defines objects for use in CWMP managed devices.  The objects
+    may exist at the top level of a hierarchy, or in some cases within an 
+    existing object.  The objects are intended for use in all CWMP Root 
+    objects. The objects define varying functionality, diagnostics, etc. that 
+    are agnostic to the type of device.
+    
+    Version History:
+    * March 2009: tr-157-1-0-0.xml, corresponds to TR-157 Issue 1, Section 4 
+       (Data Model Definition) and Section 5 (Profile Definition).
+    * September 2009: tr-157-1-1-0.xml, corresponds to TR-157 Issue 1 
+       Amendment 1, Section 4 (Data Model Definition) and Section 5 (Profile 
+       Definition).
+    * May 2010: tr-157-1-2-0.xml, corresponds to TR-157 Issue 1 Amendment 2.
+    * November 2010: tr-157-1-3-0.xml, corresponds to TR-157 Issue 1 Amendment 3.
+    
+-->
+<dm:document xmlns:dm="urn:broadband-forum-org:cwmp:datamodel-1-3" xmlns:dmr="urn:broadband-forum-org:cwmp:datamodel-report-0-1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:broadband-forum-org:cwmp:datamodel-1-3 cwmp-datamodel-1-3.xsd                                  urn:broadband-forum-org:cwmp:datamodel-report-0-1 cwmp-datamodel-report.xsd" spec="urn:broadband-forum-org:tr-157-1-3-0">
+    <description>TR-157 Amendment 3</description>
+
+    <import file="tr-157-1-2.xml" spec="urn:broadband-forum-org:tr-157-1-2">
+        <component name="DI_MemoryStatus"/>
+        <component name="DI_ProcessStatus"/>
+        <component name="_DI_TemperatureStatus" ref="DI_TemperatureStatus"/>
+        <component name="DI_NetworkProperties"/>
+        <component name="DI_SupportedDataModel"/>
+        <component name="MS_AutonomousTransferCompletePolicy"/>
+        <component name="UI_RemoteAccess"/>
+        <component name="UI_LocalDisplay"/>
+        <component name="User"/>
+        <component name="UPnP"/>
+        <component name="DLNACapabilities"/>
+        <component name="SmartCardReader"/>
+        <component name="SelfTestDiag"/>
+        <component name="_NSLookupDiag" ref="NSLookupDiag"/>
+        <component name="_SimpleFirewall" ref="SimpleFirewall"/>
+        <component name="USBHosts"/>
+        <component name="USBHosts_Device2"/>
+        <component name="PeriodicStatistics"/>
+        <component name="DownloadAvailability"/>
+        
+        <model name="Device:1.6"/>
+        <model name="InternetGatewayDevice:1.7"/>
+    </import>
+    
+    <import file="tr-181-1-0.xml" spec="urn:broadband-forum-org:tr-181-1-0">
+        <component name="_DeviceInfo" ref="DeviceInfo"/>
+    </import>
+    
+    
+    <bibliography>
+        <reference id="TR-069a3">
+            <name>TR-069 Amendment 3</name>
+            <title>CPE WAN Management Protocol</title>
+            <organization>BBF</organization>
+            <category>TR</category>
+            <date>December 2010</date>
+        </reference>
+        <reference id="TR-106a4">
+            <name>TR-106 Amendment 4</name>
+            <title>Data Model Template for TR-069 Enabled Devices</title>
+            <organization>Broadband Forum</organization>
+            <date>March 2010</date>
+            <hyperlink>http://www.broadband-forum.org/technical/download/TR-106_Amendment-4.pdf</hyperlink>
+        </reference>
+        <reference id="TR-157a3">
+            <name>TR-157 Amendment 3</name>
+            <title>Componnent Objects for CWMP</title>
+            <organization>Broadband Forum</organization>
+            <date>December 2010</date>
+            <hyperlink>http://www.broadband-forum.org/technical/download/TR-106_Amendment-4.pdf</hyperlink>
+        </reference>
+        <reference id="RFC4122">
+            <name>RFC 4122</name>
+            <title>A Universally Unique IDentifier (UUID) URN Namespace</title>
+            <organization>IETF</organization>
+            <date>July 2005</date>
+            <hyperlink>http://www.ietf.org/rfc/rfc4122.txt</hyperlink>
+        </reference>
+        <reference id="ICSA-Baseline">
+            <name>ICSA Baseline Modular Firewall Certification Criteria</name>
+            <title>Baseline module - version 4.1</title>
+            <organization>ICSA Labs</organization>
+            <date>August 2008</date>
+            <hyperlink>http://www.icsalabs.com/sites/default/files/baseline.pdf</hyperlink>
+        </reference>
+        <reference id="ICSA-Residential">
+            <name>ICSA Residential Modular Firewall Certification Criteria</name>
+            <title>Required Services Security Policy - Residential Category module - version 4.1</title>
+            <organization>ICSA Labs</organization>
+            <date>August 2008</date>
+            <hyperlink>http://www.icsalabs.com/sites/default/files/residential.pdf</hyperlink>
+        </reference>
+    </bibliography>
+
+
+    <!-- Update the DeviceInfo Component for the Device:1 data model to deprecate EnabledOptions -->
+    <component name="DeviceInfoDiffs">
+        <object base="DeviceInfo." access="readOnly" minEntries="1" maxEntries="1">
+            <parameter base="EnabledOptions" access="readOnly" status="deprecated">
+                <description action="replace">
+                    This parameter is DEPRECATED because the "voucher mechanism", as defined in <bibref ref="TR-069a3" anchor="Annex C"/> is deprecated in favor of the "Software Module Management mechanism" as described in <bibref ref="TR-157a3" anchor="Appendix II"/>.
+                    <list/> The OptionName of each is identical to the OptionName element of the OptionStruct described in <bibref ref="TR-069a3" />.  Only those options are listed whose State indicates the option is enabled.
+                </description>
+            </parameter>
+        </object>
+    </component>
+    
+    <component name="DeviceInfo">
+        <component ref="_DeviceInfo"/>
+        <component ref="DeviceInfoDiffs"/>
+    </component>
+    
+    
+    <!-- Update the DI_TemperatureStatus Component -->
+    <component name="DI_TemperatureStatusDiffs">
+        <object base="DeviceInfo.TemperatureStatus.TemperatureSensor.{i}." access="readOnly" minEntries="0" maxEntries="unbounded">
+            <parameter base="LowAlarmValue" access="readWrite">
+                <description action="append">
+                    A change to this value will cause <param|LowAlarmTime/> to be reset.
+                </description>
+            </parameter>
+            <parameter base="HighAlarmValue" access="readWrite">
+                <description action="append">
+                    A change to this value will cause <param|HighAlarmTime/> to be reset.
+                </description>
+            </parameter>
+            <parameter name="PollingInterval" access="readWrite">
+                <description>
+                    The interval, measured in <units/>, in which the device polls this <object/>.
+                    If the value is 0 then the device selects its own polling interval.
+                    If the value is greater than 0 then the device MUST use this value as the polling interval.
+                </description>
+                <syntax>
+                    <unsignedInt>
+                        <units value="seconds"/>
+                    </unsignedInt>
+                </syntax>
+            </parameter>
+        </object>
+        
+        <profile name="TempStatusAdv:2" base="TempStatusAdv:1">
+            <object ref="DeviceInfo.TemperatureStatus.TemperatureSensor.{i}." requirement="present">
+                <parameter ref="PollingInterval" requirement="readWrite"/>
+            </object>
+        </profile>
+    </component>
+    
+    <component name="DI_TemperatureStatus">
+        <component ref="_DI_TemperatureStatus"/>
+        <component ref="DI_TemperatureStatusDiffs"/>
+    </component>
+    
+    
+    <!-- Update the SimpleFirewall Component for Description changes -->
+    <component name="SimpleFirewallDiffs">
+        <object base="Firewall." access="readOnly" minEntries="1" maxEntries="1">
+            <parameter base="Config" access="readWrite">
+                <syntax>
+                    <string>
+                        <enumeration value="High">
+                            <description action="replace">The firewall implements the "Traffic Denied Inbound" and "Minimally Permit Common Services Outbound" components of the ICSA residential certification's Required Services Security Policy <bibref ref="ICSA-Residential" />.  If DoS and vulnerability protections are implemented <bibref ref="ICSA-Baseline" />, these are enabled.</description>
+                        </enumeration>
+                        <enumeration value="Low">
+                            <description action="replace">All Outbound traffic and pinhole-defined Inbound traffic is allowed.  If DoS and vulnerability protections are implemented <bibref ref="ICSA-Baseline" />, these are enabled.</description>
+                        </enumeration>
+                        <enumeration value="Off">
+                            <description action="replace">All Inbound and Outbound traffic is allowed, and the CPE is only protected by NAT settings (if supported and enabled).  If DoS and vulnerability protections are implemented <bibref ref="ICSA-Baseline" />, these are disabled.</description>
+                        </enumeration>
+                    </string>
+                </syntax>
+            </parameter>
+        </object>
+    </component>
+    
+    <component name="SimpleFirewall">
+        <component ref="_SimpleFirewall"/>
+        <component ref="SimpleFirewallDiffs"/>
+    </component>
+    
+    
+    <!-- Update the NSLookupDiag Component for a small Description change -->
+    <component name="NSLookupDiagDiffs">
+        <object base="NSLookupDiagnostics.Result.{i}." access="readOnly" numEntriesParameter="ResultNumberOfEntries" minEntries="0" maxEntries="unbounded" dmr:noUniqueKeys="true">
+            <parameter base="Status" access="readOnly" activeNotify="canDeny">
+                <description action="replace">
+                    Result Parameter to represent whether the NS Lookup was successful or not.  
+                    Errors for individual Result instances do not get bubbled up to <param|#.DiagnosticsState/>.  
+                    A failure on a specific attempt does not mean that the overall test failed, but a failure on all attempts means that <param|#.DiagnosticsState/> SHOULD be <enum|Error_Other|#.DiagnosticsState/>.
+                </description>
+            </parameter>
+        </object>
+    </component>
+    
+    <component name="NSLookupDiag">
+        <component ref="_NSLookupDiag"/>
+        <component ref="NSLookupDiagDiffs"/>
+    </component>
+    
+    
+    <!-- New Components -->
+    <component name="DI_Processors">
+        <object base="DeviceInfo." access="readOnly" minEntries="1" maxEntries="1">
+            <parameter name="ProcessorNumberOfEntries" access="readOnly">
+                <description><numentries/></description>
+                <syntax><unsignedInt/></syntax>
+            </parameter>
+        </object>
+        
+        <object name="DeviceInfo.Processor.{i}." access="readOnly" minEntries="0" maxEntries="unbounded" numEntriesParameter="ProcessorNumberOfEntries" dmr:noUniqueKeys="true">
+            <description>Each table entry represents a hardware or virtual processor that resides on this device.</description>
+            
+            <parameter name="Architecture" access="readOnly">
+                <description>
+                    The architecture of the processor on the underlying hardware. <enum/> 
+                    For processor architectures not included in this list, the vendor MAY include vendor-specific values, which MUST use the format defined in <bibref ref="TR-106a4" anchor="Section 3.3"/>.
+                </description>
+                <syntax>
+                    <string>
+                        <enumeration value="arm"/>
+                        <enumeration value="i386"/>
+                        <enumeration value="m68010"/>
+                        <enumeration value="m68k"/>
+                        <enumeration value="mipseb">
+                            <description>big-endian</description>
+                        </enumeration>
+                        <enumeration value="mipsel">
+                            <description>little-endian</description>
+                        </enumeration>
+                        <enumeration value="powerpc"/>
+                        <enumeration value="sh3eb">
+                            <description>big-endian</description>
+                        </enumeration>
+                        <enumeration value="sh3el">
+                            <description>little-endian</description>
+                        </enumeration>
+                        <enumeration value="x86_64"/>
+                    </string>
+                </syntax>
+            </parameter>
+        </object>
+        
+        <profile name="Processors:1">
+            <object ref="DeviceInfo.Processor.{i}." requirement="present">
+                <parameter ref="Architecture" requirement="readOnly"/>
+            </object>
+        </profile>
+    </component>
+    
+    <component name="DI_VendorLogFiles">
+        <object base="DeviceInfo." access="readOnly" minEntries="1" maxEntries="1">
+            <parameter name="VendorLogFileNumberOfEntries" access="readOnly">
+                <description><numentries/></description>
+                <syntax><unsignedInt/></syntax>
+            </parameter>
+        </object>
+        
+        <object name="DeviceInfo.VendorLogFile.{i}." access="readOnly" minEntries="0" maxEntries="unbounded" numEntriesParameter="VendorLogFileNumberOfEntries">
+            <description>
+                Each table entry represents a Vendor Log File. 
+                This table of log files is informational only and does not allow the ACS to operate on these files in any way. 
+            </description>
+            <uniqueKey functional="false">
+                <parameter ref="Alias"/>
+            </uniqueKey>
+            <uniqueKey functional="false">
+                <parameter ref="Name"/>
+            </uniqueKey>
+            
+            <parameter name="Alias" access="readWrite">
+                <description>
+                    A non-volatile handle used to reference this instance.  <param/> provides a mechanism for an ACS to label this instance for future reference.  
+                    An initial unique value MUST be assigned when the CPE creates an instance of this <object/>.
+                </description>
+                <syntax><string><size maxLength="64"/></string></syntax>
+            </parameter>
+            <parameter name="Name" access="readOnly">
+                <description>
+                    Name of the log file.
+                    Typically this will be the full file system path, but provided that it is guaranteed to be unique across current and future log files, it MAY be a shorter name derived from the file system path, or be derived via another mechanism.
+                </description>
+                <syntax><string><size maxLength="64"/></string></syntax>
+            </parameter>
+            <parameter name="MaximumSize" access="readOnly">
+                <description>The maximum size of the log file in <units/>.  If the device doesn’t know the maximum file size then <param/> will be 0.</description>
+                <syntax>
+                    <unsignedInt>
+                        <units value="bytes"/>
+                    </unsignedInt>
+                </syntax>
+            </parameter>
+            <parameter name="Persistent" access="readOnly">
+                <description>
+                    When <true/>, the log file contents are preserved across a device reboot.
+                    When <false/>, the log file contents will be purged when the device is rebooted.
+                </description>
+                <syntax><boolean/></syntax>
+            </parameter>
+        </object>
+        
+        <profile name="VendorLogFiles:1">
+            <object ref="DeviceInfo.VendorLogFile.{i}." requirement="present">
+                <parameter ref="Name" requirement="readOnly"/>
+                <parameter ref="MaximumSize" requirement="readOnly"/>
+                <parameter ref="Persistent" requirement="readOnly"/>
+            </object>
+        </profile>
+    </component>
+    
+    <component name="MS_DUStateChangeCompletePolicy">
+        <object base="ManagementServer." access="readOnly" minEntries="1" maxEntries="1"/>
+        
+        <object name="ManagementServer.DUStateChangeComplPolicy." access="readOnly" minEntries="1" maxEntries="1">
+            <description>
+                This object allows configuration of CPE policy for notification of "12 AUTONOMOUS DU STATE CHANGE COMPLETE" events defined in <bibref ref="TR-069a3" />.  
+                The CPE policy determines the conditions under which the CPE notifies the ACS of the completion of Deployment Unit state changes that were not specifically requested via CWMP.
+            </description>
+            
+            <parameter name="Enable" access="readWrite">
+                <description>Enables/Disables CPE notification of "12 AUTONOMOUS DU STATE CHANGE COMPLETE" events to the ACS.</description>
+                <syntax><boolean/></syntax>
+            </parameter>
+            <parameter name="OperationTypeFilter" access="readWrite">
+                <description>
+                    Indicates the Deployment Unit operations that MUST be included when the CPE notifies the ACS of "12 AUTONOMOUS DU STATE CHANGE COMPLETE" events.  
+                    Operation types not indicated by this list MUST NOT be included when the CPE notifies the ACS.  <empty/> is essentially the same as setting <param|Enable/> to <false/>.
+                </description>
+                <syntax>
+                    <list/>
+                    <string>
+                        <enumeration value="Install"/>
+                        <enumeration value="Update"/>
+                        <enumeration value="Uninstall"/>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="ResultTypeFilter" access="readWrite">
+                <description>
+                    Indicates the Deployment Unit state change results that MUST be included when the CPE notifies the ACS of "12 AUTONOMOUS DU STATE CHANGE COMPLETE" events.  State change results omitted from this filter MUST NOT be included when the CPE notifies the ACS.
+                </description>
+                <syntax>
+                    <string>
+                        <enumeration value="Success">
+                            <description>The autonomous state change completed successfully; i.e., the FaultCode was zero</description>
+                        </enumeration>
+                        <enumeration value="Failure">
+                            <description>The autonomous state change did not complete successfully; i.e., the FaultCode was non-zero</description>
+                        </enumeration>
+                        <enumeration value="Both">
+                            <description>All result types independent of Success or Failure</description>
+                        </enumeration>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="FaultCodeFilter" access="readWrite">
+                <description>
+                    Indicates the Deployment Unit state change fault codes that MUST be included when the CPE notifies the ACS of "12 AUTONOMOUS DU STATE CHANGE COMPLETE" events.  State change fault codes omitted from this filter MUST NOT be included when the CPE notifies the ACS.
+                    This filter has no effect on the notification of a successful autonomous state change. This filter only applies when <param|ResultTypeFilter/> is set to either <enum|Failure|ResultTypeFilter/> or <enum|Both|ResultTypeFilter/>.  <empty/> means that failed autonomous state changes will not be sent to the ACS. 
+                </description>
+                <syntax>
+                    <list/>
+                    <string>
+                        <enumeration value="9001"/>
+                        <enumeration value="9003"/>
+                        <enumeration value="9012"/>
+                        <enumeration value="9013"/>
+                        <enumeration value="9015"/>
+                        <enumeration value="9016"/>
+                        <enumeration value="9017"/>
+                        <enumeration value="9018"/>
+                        <enumeration value="9022"/>
+                        <enumeration value="9023"/>
+                        <enumeration value="9024"/>
+                        <enumeration value="9025"/>
+                        <enumeration value="9026"/>
+                        <enumeration value="9027"/>
+                        <enumeration value="9028"/>
+                        <enumeration value="9029"/>
+                        <enumeration value="9030"/>
+                        <enumeration value="9031"/>
+                        <enumeration value="9032"/>
+                    </string>
+                </syntax>
+            </parameter>
+        </object>
+        
+        <profile name="DUStateChngComplPolicy:1">
+            <object ref="ManagementServer.DUStateChangeComplPolicy." requirement="present">
+                <parameter ref="Enable" requirement="readWrite"/>
+                <parameter ref="OperationTypeFilter" requirement="readWrite"/>
+                <parameter ref="ResultTypeFilter" requirement="readWrite"/>
+            </object>
+        </profile>
+    </component>
+    
+    <component name="SoftwareModules">
+        <object name="SoftwareModules." access="readOnly" minEntries="1" maxEntries="1">
+            <description>Top level object for dynamically managed software applications.</description>
+            
+            <parameter name="ExecEnvNumberOfEntries" access="readOnly">
+                <description><numentries/></description>
+                <syntax><unsignedInt/></syntax>
+            </parameter>
+            <parameter name="DeploymentUnitNumberOfEntries" access="readOnly">
+                <description><numentries/></description>
+                <syntax><unsignedInt/></syntax>
+            </parameter>
+            <parameter name="ExecutionUnitNumberOfEntries" access="readOnly">
+                <description><numentries/></description>
+                <syntax><unsignedInt/></syntax>
+            </parameter>
+        </object>
+        
+        <object name="SoftwareModules.ExecEnv.{i}." access="readOnly" minEntries="0" maxEntries="unbounded" numEntriesParameter="ExecEnvNumberOfEntries">
+            <description>The Execution Environments that are available on the device, along with their properties and configurable settings.</description>
+            <uniqueKey functional="false">
+                <parameter ref="Alias"/>
+            </uniqueKey>
+            <uniqueKey functional="false">
+                <parameter ref="Name"/>
+            </uniqueKey>
+            
+            
+            <parameter name="Enable" access="readWrite">
+                <description>
+                    Indicates whether or not this <object/> is enabled.
+                    Disabling an enabled Execution Environment stops it, while enabling a disabled Execution Environment starts it.  
+                    When an Execution Environment is disabled, Deployment Units installed to that Execution Environment will be unaffected, but any Execution Units currently running on that Execution Environment will automatically transition to {{enum|Idle|#.ExecutionUnit.{i}.Status}}.
+                    If a ChangeDUState is attempted on a <object|#.DeploymentUnit/> that is to be applied against a disabled <object/>, that ChangeDUState operation fails and the associated DUStateChangeComplete RPC will contain a FaultStruct for that operation.
+                    If a SetParameterValues is attempted against the {{param|#.ExecutionUnit.{i}.RequestedState}} for an <object|#.ExecutionUnit/> that is associated with a disabled <object/> a CWMP Fault will be issued in response.
+                    Disabling an Execution Environment could place the device in a non-manageable state.  For example, if the operating system itself was modeled as an <object/> and the ACS disabled it, the CWMP management agent might be terminated leaving the device unmanageable.
+                </description>
+                <syntax><boolean/></syntax>
+            </parameter>
+            <parameter name="Status" access="readOnly">
+                <description>Indicates the status of this <object/>.</description>
+                <syntax>
+                    <string>
+                        <enumeration value="Up"/>
+                        <enumeration value="Error" optional="true"/>
+                        <enumeration value="Disabled"/>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="Reset" access="readWrite">
+                <description>
+                    Setting this parameter to <true/> causes this <object/> to revert back to the state it was in when the device last issued a "0 BOOTSTRAP" Inform event.  The following requirements dictate what MUST happen for the reset to be complete:
+                    # All Deployment Units that were installed after the last "0 BOOTSTRAP" Inform event MUST be removed
+                    # All persistent storage, configuration files, and log files that were associated with the removed Deployment Units MUST be removed
+                    # Any Deployment Unit that is still installed against the Execution Environment MUST be restored to the version present when the last "0 BOOTSTRAP" Inform event was issued
+                    # Any Deployment Unit that was present when the last "0 BOOTSTRAP" Inform event was issued, but was subsequently uninstalled and is now not present, MUST be installed with the version that was present when the last "0 BOOTSTRAP" Inform event was issued
+                    # The Execution Environment MUST be restored to the version and configuration present when the last "0 BOOTSTRAP" Inform event was issued
+                    # The Execution Environment MUST be restarted after all other restoration requirements have been met
+                </description>
+                <syntax command="true">
+                    <boolean/>
+                </syntax>
+            </parameter>
+            <parameter name="Alias" access="readWrite">
+                <description>
+                    A non-volatile handle used to reference this instance.  <param/> provides a mechanism for an ACS to label this instance for future reference.  
+                    An initial unique value MUST be assigned when the CPE creates an instance of this <object/>.
+                </description>
+                <syntax><string><size maxLength="64"/></string></syntax>
+            </parameter>
+            <parameter name="Name" access="readOnly">
+                <description>A Name provided by the CPE that adequately distinguishes this <object/> from all other <object/> instances.</description>
+                <syntax><string><size maxLength="32"/></string></syntax>
+            </parameter>
+            <parameter name="Type" access="readOnly">
+                <description>
+                    Indicates the complete type and specification version of this <object/>. 
+                </description>
+                <syntax><string><size maxLength="64"/></string></syntax>
+            </parameter>
+            <parameter name="InitialRunLevel" access="readWrite">
+                <description>
+                    The run level that this <object/> will be in upon startup (whether that is caused by a CPE Boot or the Execution Environment starting).
+                    Run levels dictate which Execution Units will be started.  Execution Units will be started if <param|CurrentRunLevel/> is greater than or equal to {{param|#.ExecutionUnit.{i}.RunLevel}} and {{param|#.ExecutionUnit.{i}.AutoStart}} is <true/>.
+                    If the value of <param|CurrentRunLevel/> is -1, then the value of this parameter is irrelevant when read and setting its value has no impact on the Run Level of this <object/>. 
+                </description>
+                <syntax>
+                    <unsignedInt>
+                        <range maxInclusive="65535"/>
+                    </unsignedInt>
+                </syntax>
+            </parameter>
+            <parameter name="RequestedRunLevel" access="readWrite">
+                <description>
+                    Provides a mechanism to remotely manipulate the run level of this <object/>, meaning that altering this parameter's value will change the value of the <param|CurrentRunLevel/>.
+                    Run levels dictate which Execution Units will be started.  Execution Units will be started if <param|CurrentRunLevel/> is greater than or equal to {{param|#.ExecutionUnit.{i}.RunLevel}} and {{param|#.ExecutionUnit.{i}.AutoStart}} is <true/>.
+                    Setting this value when <param|CurrentRunLevel/> is -1 has no impact to the Run Level of this <object/>. 
+                </description>
+                <syntax command="true">
+                    <int>
+                        <range minInclusive="-1" maxInclusive="65535"/>
+                    </int>
+                </syntax>
+            </parameter>
+            <parameter name="CurrentRunLevel" access="readOnly">
+                <description>
+                    The run level that this <object/> is currently operating in.  This value is altered by changing the <param|RequestedRunLevel/> parameter.
+                    Upon startup (whether that is caused by a CPE Boot or the Execution Environment starting) <param/> will be equal to <param|InitialRunLevel/>, unless Run Levels are not supported by this <object/> in which case <param/> will be -1.
+                    Run levels dictate which Execution Units will be started.  Execution Units will be started if <param/> is greater than or equal to {{param|#.ExecutionUnit.{i}.RunLevel}} and {{param|#.ExecutionUnit.{i}.AutoStart}} is <true/>.
+                    If <param/> is -1 then Run Levels are not supported by this <object/> and setting <param|InitialRunLevel/> or <param|RequestedRunLevel/> will not impact the Run Level of this <object/>.
+                </description>
+                <syntax>
+                    <int>
+                        <range minInclusive="-1" maxInclusive="65535"/>
+                    </int>
+                </syntax>
+            </parameter>
+            <parameter name="Vendor" access="readOnly">
+                <description>The vendor that produced this <object/>.</description>
+                <syntax><string><size maxLength="128"/></string></syntax>
+            </parameter>
+            <parameter name="Version" access="readOnly">
+                <description>The Version of this <object/> as specified by the Vendor that implemented this <object/>, not the version of the specification.</description>
+                <syntax><string><size maxLength="32"/></string></syntax>
+            </parameter>
+            <parameter name="ParentExecEnv" access="readOnly">
+                <description>
+                    Represents the parent <object/> of this <object/>.  
+                    If this value is <empty/> then this is the Primary Execution Environment.
+                </description>
+                <syntax>
+                    <string>
+                        <pathRef targetParent="#.ExecEnv." refType="strong" targetType="row"/>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="AllocatedDiskSpace" access="readOnly">
+                <description>The amount of disk space measured in <units/> allocated to this <object/>.  A value of -1 MUST be used for <object/> instances where this parameter is not applicable.</description>
+                <syntax>
+                    <int>
+                        <units value="kilobytes"/>
+                        <range minInclusive="-1"/>
+                    </int>
+                </syntax>
+            </parameter>
+            <parameter name="AvailableDiskSpace" access="readOnly" activeNotify="canDeny">
+                <description>The amount of disk space measured in <units/> currently available to this <object/>.  This value changes as the <object|#.ExecutionUnit/> instances associated with this <object/> consumes disk space.  A value of -1 MUST be used for <object/> instances where this parameter is not applicable.</description>
+                <syntax>
+                    <int>
+                        <units value="kilobytes"/>
+                        <range minInclusive="-1"/>
+                    </int>
+                </syntax>
+            </parameter>
+            <parameter name="AllocatedMemory" access="readOnly">
+                <description>The amount of physical RAM measured in <units/> allocated to this <object/>.  A value of -1 MUST be used for <object/> instances where this parameter is not applicable.</description>
+                <syntax>
+                    <int>
+                        <units value="kilobytes"/>
+                        <range minInclusive="-1"/>
+                    </int>
+                </syntax>
+            </parameter>
+            <parameter name="AvailableMemory" access="readOnly" activeNotify="canDeny">
+                <description>The amount of physical RAM measured in <units/> currently available to this <object/>.  This value changes as the <object|#.ExecutionUnit/> instances associated with this <object/> are started/stopped and consume the physical RAM.  A value of -1 MUST be used for <object/> instances where this parameter is not applicable.</description>
+                <syntax>
+                    <int>
+                        <units value="kilobytes"/>
+                        <range minInclusive="-1"/>
+                    </int>
+                </syntax>
+            </parameter>
+            <parameter name="ActiveExecutionUnits" access="readOnly" activeNotify="canDeny">
+                <description>Represents the <object|#.ExecutionUnit/> instances currently running on this <object/>.  This parameter only contains <object|#.ExecutionUnit/> instances that currently have a {{param|#.ExecutionUnit.{i}.Status}} of {{enum|Active|#.ExecutionUnit.{i}.Status}}.</description>
+                <syntax>
+                    <list/>
+                    <string>
+                        <pathRef targetParent="#.ExecutionUnit." refType="strong" targetType="row"/>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="ProcessorRefList" access="readOnly">
+                <description>Represents the processors that this <object/> has available to it.</description>
+                <syntax>
+                    <list/>
+                    <string>
+                        <pathRef targetParent=".DeviceInfo.Processor." refType="strong" targetType="row"/>
+                    </string>
+                </syntax>
+            </parameter>
+        </object>
+        
+        <object name="SoftwareModules.DeploymentUnit.{i}." access="readOnly" minEntries="0" maxEntries="unbounded" numEntriesParameter="DeploymentUnitNumberOfEntries">
+            <description>
+                This table serves as the Deployment Unit inventory and contains status information about each Deployment Unit.
+                A new instance of this table gets created during the installation of a Software Module.
+            </description>
+            <uniqueKey functional="true">
+                <parameter ref="UUID"/>
+                <parameter ref="Version"/>
+                <parameter ref="ExecutionEnvRef"/>
+            </uniqueKey>
+            <uniqueKey functional="false">
+                <parameter ref="Alias"/>
+            </uniqueKey>
+            
+            
+            <parameter name="UUID" access="readOnly">
+                <description>
+                    A Universally Unique Identifier either provided by the ACS, or generated by the CPE, at the time of Deployment Unit Installation.  The format of this value is defined by <bibref ref="RFC4122" /> Version 3 (Name-Based) and <bibref ref="TR-069a3" anchor="Annex H"/>.
+                    This value MUST NOT be altered when the <object/> is updated.
+                </description>
+                <syntax><string><size maxLength="36"/></string></syntax>
+            </parameter>
+            <parameter name="DUID" access="readOnly">
+                <description>Deployment Unit Identifier chosen by the targeted <object|#.ExecEnv/>.  The format of this value is Execution Environment specific.</description>
+                <syntax><string><size maxLength="64"/></string></syntax>
+            </parameter>
+            <parameter name="Alias" access="readWrite">
+                <description>
+                    A non-volatile handle used to reference this instance.  <param/> provides a mechanism for an ACS to label this instance for future reference.  
+                    An initial unique value MUST be assigned when the CPE creates an instance of this <object/>.
+                </description>
+                <syntax><string><size maxLength="64"/></string></syntax>
+            </parameter>
+            <parameter name="Name" access="readOnly">
+                <description>
+                    Indicates the Name of this <object/>, which is chosen by the author of the Deployment Unit.
+                    The value of this parameter is used in the generation of the <param|UUID/> based on the rules defined in <bibref ref="TR-069a3" anchor="Annex H"/>.
+                </description>
+                <syntax><string><size maxLength="64"/></string></syntax>
+            </parameter>
+            <parameter name="Status" access="readOnly" activeNotify="canDeny">
+                <description>Indicates the status of this <object/>.</description>
+                <syntax>
+                    <string>
+                        <enumeration value="Installing">
+                            <description>This instance is in the process of being Installed and SHOULD transition to the <enum|Installed/> state.</description>
+                        </enumeration>
+                        <enumeration value="Installed">
+                            <description>This instance has been successfully Installed.  The <param|Resolved/> flag SHOULD also be referenced for dependency resolution.</description>
+                        </enumeration>
+                        <enumeration value="Updating">
+                            <description>This instance is in the process of being Updated and SHOULD transition to the <enum|Installed/> state.</description>
+                        </enumeration>
+                        <enumeration value="Uninstalling">
+                            <description>This instance is in the process of being Uninstalled and SHOULD transition to the <enum|Uninstalled/> state.</description>
+                        </enumeration>
+                        <enumeration value="Uninstalled">
+                            <description>This instance has been successfully Uninstalled.  This status will typically not be seen within a <object/> instance.</description>
+                        </enumeration>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="Resolved" access="readOnly">
+                <description>Indicates whether or not this <object/> has resolved all of its dependencies.</description>
+                <syntax><boolean/></syntax>
+            </parameter>
+            <parameter name="URL" access="readOnly">
+                <description>Contains the URL used by the most recent ChangeDUState RPC to either Install or Update this <object/>.</description>
+                <syntax><string><size maxLength="1024"/></string></syntax>
+            </parameter>
+            <parameter name="Description" access="readOnly">
+                <description>Textual description of this <object/>. The format of this value is Execution Environment specific.</description>
+                <syntax><string><size maxLength="256"/></string></syntax>
+            </parameter>
+            <parameter name="Vendor" access="readOnly">
+                <description>
+                    The author of this <object/> formatted as a domain name.
+                    The value of this parameter is used in the generation of the <param|UUID/> based on the rules defined in <bibref ref="TR-069a3" anchor="Annex H"/>.
+                </description>
+                <syntax><string><size maxLength="128"/></string></syntax>
+            </parameter>
+            <parameter name="Version" access="readOnly">
+                <description>Version of this <object/>.  The format of this value is Execution Environment specific.</description>
+                <syntax><string><size maxLength="32"/></string></syntax>
+            </parameter>
+            <parameter name="VendorLogList" access="readOnly">
+                <description>
+                    Represents the vendor log files that have come into existence because of this <object/>.  This does not include any vendor log files that have come into existence because of <object|#.ExecutionUnit/> instances that are contained within this <object/>.
+                    When this <object/> is uninstalled the vendor log files referenced here SHOULD be removed from the CPE.
+                    Not all <object/> instances will actually have a corresponding vendor log file, in which case the value of this parameter will be <empty/>.
+                </description>
+                <syntax>
+                    <list/>
+                    <string>
+                        <pathRef targetParent=".DeviceInfo.VendorLogFile." refType="strong" targetType="row"/>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="VendorConfigList" access="readOnly">
+                <description>
+                    Represents the vendor config files that have come into existence because of this <object/>.  This does not include any vendor config files that have come into existence because of <object|#.ExecutionUnit/> instances that are contained within this <object/>.
+                    When this <object/> is uninstalled the vendor config files referenced here SHOULD be removed from the CPE.
+                    Not all <object/> instances will actually have a corresponding vendor config file, in which case the value of this parameter will be <empty/>.
+                </description>
+                <syntax>
+                    <list/>
+                    <string>
+                        <pathRef targetParent=".DeviceInfo.VendorConfigFile." refType="strong" targetType="row"/>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="ExecutionUnitList" access="readOnly">
+                <description>Represents the <object|#.ExecutionUnit/> instances that are associated with this <object/> instance.</description>
+                <syntax>
+                    <list/>
+                    <string>
+                        <pathRef targetParent="#.ExecutionUnit." refType="strong" targetType="row"/>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="ExecutionEnvRef" access="readOnly">
+                <description>Represents the <object|#.ExecEnv/> instance where this <object/> instance is installed.</description>
+                <syntax>
+                    <string>
+                        <pathRef targetParent="#.ExecEnv." refType="strong" targetType="row"/>
+                    </string>
+                </syntax>
+            </parameter>
+        </object>
+        
+        <object name="SoftwareModules.ExecutionUnit.{i}." access="readOnly" minEntries="0" maxEntries="unbounded" numEntriesParameter="ExecutionUnitNumberOfEntries">
+            <description>
+                This table serves as the Execution Unit inventory and contains both status information about each Execution Unit as well as configurable parameters for each Execution Unit.
+                Each <object|#.DeploymentUnit/> that is installed can have zero or more Execution Units.  
+                Once a Deployment Unit is installed it populates this table with its contained Execution Units.  
+                When the Deployment Unit (that caused this <object/> to come into existence) is updated, this instance MAY be removed and new instances MAY come into existence.  While the Deployment Unit (that caused this <object/> to come into existence) is being updated, all <object/> instances associated with the Deployment Unit will be stopped until the update is complete at which time they will be restored to the state that they were in before the update started.
+                When the Deployment Unit (that caused this <object/> to come into existence) is uninstalled, this instance is removed.
+                Each <object/> MAY also contain a set of vendor specific parameters displaying status and maintaining configuration that reside under the <object|Extensions/> object. 
+            </description>
+            <uniqueKey functional="true">
+                <parameter ref="EUID"/>
+            </uniqueKey>
+            <uniqueKey functional="false">
+                <parameter ref="Alias"/>
+            </uniqueKey>
+            
+            
+            <parameter name="EUID" access="readOnly">
+                <description>
+                    Execution Unit Identifier chosen by the <object|#.ExecEnv/> during installation of the associated <object|#.DeploymentUnit/>.
+                    The format of this value is Execution Environment specific, but it MUST be unique across <object|#.ExecEnv/> instances.  Thus, it is recommended that this be a combination of the {{param|#.ExecEnv.{i}.Name}} and an Execution Environment local unique value.
+                </description>
+                <syntax><string><size maxLength="64"/></string></syntax>
+            </parameter>
+            <parameter name="Alias" access="readWrite">
+                <description>
+                    A non-volatile handle used to reference this instance.  <param/> provides a mechanism for an ACS to label this instance for future reference.  
+                    An initial unique value MUST be assigned when the CPE creates an instance of this <object/>.
+                </description>
+                <syntax><string><size maxLength="64"/></string></syntax>
+            </parameter>
+            <parameter name="Name" access="readOnly">
+                <description>The name of this <object/> as it pertains to its associated <object|#.DeploymentUnit/>, which SHOULD be unique across all <object/> instances contained within its associated <object|#.DeploymentUnit/>.</description>
+                <syntax><string><size maxLength="32"/></string></syntax>
+            </parameter>
+            <parameter name="ExecEnvLabel" access="readOnly">
+                <description>The name of this <object/> as provided by the <object|#.ExecEnv/>, which SHOULD be unique across all <object/> instances contained within a specific <object|#.ExecEnv/>.</description>
+                <syntax><string><size maxLength="64"/></string></syntax>
+            </parameter>
+            <parameter name="Status" access="readOnly" activeNotify="forceDefaultEnabled">
+                <description>
+                    Indicates the status of this <object/>.
+                </description>
+                <syntax>
+                    <string>
+                        <enumeration value="Idle">
+                            <description>This instance is in an Idle state and not running.</description>
+                        </enumeration>
+                        <enumeration value="Starting">
+                            <description>This instance is in the process of Starting and SHOULD transition to the <enum|Active/> state.</description>
+                        </enumeration>
+                        <enumeration value="Active">
+                            <description>This instance is currently running.</description>
+                        </enumeration>
+                        <enumeration value="Stopping">
+                            <description>This instance is in the process of Stopping and SHOULD transition to the <enum|Idle/> state.</description>
+                        </enumeration>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="RequestedState" access="readWrite">
+                <description>
+                    Indicates the state transition that the ACS is requesting for this <object/>.  <enum/>
+                    If this <object/> is associated with an Execution Environment that is disabled and an attempt is made to alter this value, then a CWMP Fault MUST be generated.
+                </description>
+                <syntax command="true">
+                    <string>
+                        <enumeration value="Idle">
+                            <description>If this <object/> is currently in <enum|Starting|Status/> or <enum|Active|Status/> the CPE will attempt to Stop the Execution Unit; otherwise this requested state is ignored.</description>
+                        </enumeration>
+                        <enumeration value="Active">
+                            <description>If this <object/> is currently in <enum|Idle|Status/> the CPE will attempt to Start the Execution Unit.  If this <object/> is in <enum|Stopping|Status/> the request is rejected and a fault raised.  Otherwise this requested state is ignored.</description>
+                        </enumeration>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="ExecutionFaultCode" access="readOnly">
+                <description>
+                    If while running or transitioning between states this <object/> identifies a fault this parameter embodies the problem.  The value of <enum|NoFault/> MUST be used when everything is working as intended. <enum/>
+                    For fault codes not included in this list, the vendor MAY include vendor-specific values, which MUST use the format defined in <bibref ref="TR-106a4" anchor="Section 3.3"/>.
+                </description>
+                <syntax>
+                    <string>
+                        <enumeration value="NoFault"/>
+                        <enumeration value="FailureOnStart"/>
+                        <enumeration value="FailureOnAutoStart"/>
+                        <enumeration value="FailureOnStop"/>
+                        <enumeration value="FailureWhileActive"/>
+                        <enumeration value="DependencyFailure"/>
+                        <enumeration value="UnStartable"/>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="ExecutionFaultMessage" access="readOnly">
+                <description>
+                    If while running or transitioning between states this <object/> identifies a fault this parameter provides a more detailed explanation of the problem.
+                    If <param|ExecutionFaultCode/> has the value of <enum|NoFault|ExecutionFaultCode/> then the value of this parameter MUST <empty/> and ignored by the ACS. 
+                </description>
+                <syntax><string><size maxLength="256"/></string></syntax>
+            </parameter>
+            <parameter name="AutoStart" access="readWrite">
+                <description>
+                   If <true/> and the <param|RunLevel/> verification is also met, then this <object/> will be automatically started by the device after its <object|#.ExecEnv/> is either rebooted or restarted.
+                   If <false/> this <object/> will not be started after its <object|#.ExecEnv/> is either rebooted or restarted until it is explicitly commanded to do so by either the ACS or another Execution Unit.
+                </description>
+                <syntax><boolean/></syntax>
+            </parameter>
+            <parameter name="RunLevel" access="readWrite">
+                <description>
+                    Determines when this <object/> will be started.
+                    If <param|AutoStart/> is <true/> and {{param|#.ExecEnv.{i}.CurrentRunLevel}} is greater than or equal to <param/>, then this <object/> will be started.
+                    If the value of {{param|#.ExecEnv.{i}.CurrentRunLevel}} is -1, then the associated <object|#.ExecEnv./> doesn't support Run Levels, thus the value of this parameter is irrelevant when read and setting its value has no impact to the Run Level of this <object/>. 
+                </description>
+                <syntax>
+                    <unsignedInt>
+                        <range maxInclusive="65535"/>
+                    </unsignedInt>
+                </syntax>
+            </parameter>
+            <parameter name="Vendor" access="readOnly">
+                <description>Vendor of this <object/>.</description>
+                <syntax><string><size maxLength="128"/></string></syntax>
+            </parameter>
+            <parameter name="Version" access="readOnly">
+                <description>Version of the <object/>.  The format of this value is Execution Environment specific.</description>
+                <syntax><string><size maxLength="32"/></string></syntax>
+            </parameter>
+            <parameter name="Description" access="readOnly">
+                <description>Textual description of this <object/>. The format of this value is Execution Environment specific.</description>
+                <syntax><string><size maxLength="256"/></string></syntax>
+            </parameter>
+            <parameter name="DiskSpaceInUse" access="readOnly" activeNotify="canDeny">
+                <description>The amount of disk space measured in <units/> currently being used by this <object/>.  A value of -1 MUST be used for <object/> instances where this parameter is not applicable.</description>
+                <syntax>
+                    <int>
+                        <units value="kilobytes"/>
+                        <range minInclusive="-1"/>
+                    </int>
+                </syntax>
+            </parameter>
+            <parameter name="MemoryInUse" access="readOnly" activeNotify="canDeny">
+                <description>The amount of physical RAM measured in <units/> currently being used by this <object/>.  A value of -1 MUST be used for <object/> instances where this parameter is not applicable.</description>
+                <syntax>
+                    <int>
+                        <units value="kilobytes"/>
+                        <range minInclusive="-1"/>
+                    </int>
+                </syntax>
+            </parameter>
+            <parameter name="References" access="readOnly">
+                <description>
+                    Represents the instances of multi-instanced objects that are directly controlled by, and have come into existence because of, this <object/>.  See <bibref ref="TR-157a3" anchor="Appendix II.3.2"/> for more description and some examples.
+                    NOTE: All other objects and parameters (i.e. not multi-instanced objects) that this <object/> has caused to come into existence can be discovered via the {{object|.DeviceInfo.SupportedDataModel.{i}.}} table. 
+                </description>
+                <syntax>
+                    <list/>
+                    <string>
+                        <pathRef refType="strong" targetType="row"/>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="AssociatedProcessList" access="readOnly">
+                <description>
+                    Represents the system processes that are active in the system because of this <object/>.  
+                    If <param|Status/> is not <enum|Active|Status/> it is expected that this list will be <empty/>.  Some <object/> instances MIGHT NOT have any system processes irrespective of the value of <param|Status/>.
+                </description>
+                <syntax>
+                    <list/>
+                    <string>
+                        <pathRef targetParent=".DeviceInfo.ProcessStatus.Process." refType="strong" targetType="row"/>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="VendorLogList" access="readOnly">
+                <description>
+                    Represents the vendor log files that have come into existence because of this <object/>.  
+                    When the <object|#.DeploymentUnit/> (that caused this <object/> to come into existence) is uninstalled the vendor log files referenced here SHOULD be removed from the CPE.
+                    Not all <object/> instances will actually have a corresponding vendor log file, in which case the value of this parameter will be <empty/>.
+                </description>
+                <syntax>
+                    <list/>
+                    <string>
+                        <pathRef targetParent=".DeviceInfo.VendorLogFile." refType="strong" targetType="row"/>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="VendorConfigList" access="readOnly">
+                <description>
+                    Represents the vendor config files that have come into existence because of this <object/>.  
+                    When the <object|#.DeploymentUnit/> (that caused this <object/> to come into existence) is uninstalled the vendor config files referenced here SHOULD be removed from the CPE.
+                    Not all <object/> instances will actually have a corresponding vendor config file, in which case the value of this parameter will be <empty/>.
+                </description>
+                <syntax>
+                    <list/>
+                    <string>
+                        <pathRef targetParent=".DeviceInfo.VendorConfigFile." refType="strong" targetType="row"/>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="SupportedDataModelList" access="readOnly">
+                <description>Represents the CWMP-DT schema instances that have been introduced to this device because of the existence of this <object/>.</description>
+                <syntax>
+                    <list/>
+                    <string>
+                        <pathRef targetParent=".DeviceInfo.SupportedDataModel." refType="strong" targetType="row"/>
+                    </string>
+                </syntax>
+            </parameter>
+            <parameter name="ExecutionEnvRef" access="readOnly">
+                <description>Represents the <object|#.ExecEnv/> that this <object/> is associated with.</description>
+                <syntax>
+                    <string>
+                        <pathRef targetParent="#.ExecEnv." refType="strong" targetType="row"/>
+                    </string>
+                </syntax>
+            </parameter>
+        </object>
+        
+        <object name="SoftwareModules.ExecutionUnit.{i}.Extensions." access="readOnly" minEntries="1" maxEntries="1">
+            <description>
+                This object proposes a general location for vendor extensions specific to this Execution Unit, which allows multiple Execution Units to expose parameters without the concern of conflicting parameter names.  These vendor extensions are related to displaying status and maintaining configuration for this Execution Unit.
+                It is also possible for the Execution Unit to expose status and configuration parameters within Service objects or as embedded objects and parameters directly within the root data model, in which case the combination of <param|#.References/> and <param|#.SupportedDataModelList/> will be used to determine their locations.
+                See <bibref ref="TR-157a3" anchor="Appendix II.3.2"/> for more description and some examples.
+            </description>
+        </object>
+        
+        <profile name="SM_ExecEnvs:1">
+            <object ref="SoftwareModules." requirement="present">
+                <parameter ref="ExecEnvNumberOfEntries" requirement="readOnly"/>
+            </object>
+            
+            <object ref="SoftwareModules.ExecEnv.{i}." requirement="present">
+                <parameter ref="Enable" requirement="readWrite"/>
+                <parameter ref="Status" requirement="readOnly"/>
+                <parameter ref="Name" requirement="readOnly"/>
+                <parameter ref="Type" requirement="readOnly"/>
+                <parameter ref="Vendor" requirement="readOnly"/>
+                <parameter ref="Version" requirement="readOnly"/>
+                <parameter ref="AllocatedDiskSpace" requirement="readOnly"/>
+                <parameter ref="AvailableDiskSpace" requirement="readOnly"/>
+                <parameter ref="AllocatedMemory" requirement="readOnly"/>
+                <parameter ref="AvailableMemory" requirement="readOnly"/>
+                <parameter ref="ActiveExecutionUnits" requirement="readOnly"/>
+            </object>
+        </profile>
+        
+        <profile name="SM_DeployAndExecUnits:1">
+            <object ref="SoftwareModules." requirement="present">
+                <parameter ref="DeploymentUnitNumberOfEntries" requirement="readOnly"/>
+                <parameter ref="ExecutionUnitNumberOfEntries" requirement="readOnly"/>
+            </object>
+            
+            <object ref="SoftwareModules.DeploymentUnit.{i}." requirement="present">
+                <parameter ref="UUID" requirement="readOnly"/>
+                <parameter ref="DUID" requirement="readOnly"/>
+                <parameter ref="Name" requirement="readOnly"/>
+                <parameter ref="Status" requirement="readOnly"/>
+                <parameter ref="Resolved" requirement="readOnly"/>
+                <parameter ref="URL" requirement="readOnly"/>
+                <parameter ref="Description" requirement="readOnly"/>
+                <parameter ref="Vendor" requirement="readOnly"/>
+                <parameter ref="Version" requirement="readOnly"/>
+                <parameter ref="VendorLogList" requirement="readOnly"/>
+                <parameter ref="VendorConfigList" requirement="readOnly"/>
+                <parameter ref="ExecutionUnitList" requirement="readOnly"/>
+                <parameter ref="ExecutionEnvRef" requirement="readOnly"/>
+            </object>
+            
+            <object ref="SoftwareModules.ExecutionUnit.{i}." requirement="present">
+                <parameter ref="EUID" requirement="readOnly"/>
+                <parameter ref="Name" requirement="readOnly"/>
+                <parameter ref="ExecEnvLabel" requirement="readOnly"/>
+                <parameter ref="Status" requirement="readOnly"/>
+                <parameter ref="RequestedState" requirement="readWrite"/>
+                <parameter ref="ExecutionFaultCode" requirement="readOnly"/>
+                <parameter ref="ExecutionFaultMessage" requirement="readOnly"/>
+                <parameter ref="Vendor" requirement="readOnly"/>
+                <parameter ref="Version" requirement="readOnly"/>
+                <parameter ref="Description" requirement="readOnly"/>
+                <parameter ref="References" requirement="readOnly"/>
+                <parameter ref="AssociatedProcessList" requirement="readOnly"/>
+                <parameter ref="VendorLogList" requirement="readOnly"/>
+                <parameter ref="VendorConfigList" requirement="readOnly"/>
+                <parameter ref="SupportedDataModelList" requirement="readOnly"/>
+                <parameter ref="ExecutionEnvRef" requirement="readOnly"/>
+            </object>
+        
+            <object ref="SoftwareModules.ExecutionUnit.{i}.Extensions." requirement="present">
+            </object>
+        </profile>
+        
+        <profile name="SM_Baseline:1">
+            <object ref="SoftwareModules." requirement="present">
+                <parameter ref="ExecEnvNumberOfEntries" requirement="readOnly"/>
+                <parameter ref="DeploymentUnitNumberOfEntries" requirement="readOnly"/>
+                <parameter ref="ExecutionUnitNumberOfEntries" requirement="readOnly"/>
+            </object>
+            
+            <object ref="SoftwareModules.ExecEnv.{i}." requirement="present">
+                <parameter ref="Enable" requirement="readWrite"/>
+                <parameter ref="Status" requirement="readOnly"/>
+                <parameter ref="Name" requirement="readOnly"/>
+                <parameter ref="Type" requirement="readOnly"/>
+                <parameter ref="Vendor" requirement="readOnly"/>
+                <parameter ref="Version" requirement="readOnly"/>
+                <parameter ref="ActiveExecutionUnits" requirement="readOnly"/>
+            </object>
+            
+            <object ref="SoftwareModules.DeploymentUnit.{i}." requirement="present">
+                <parameter ref="UUID" requirement="readOnly"/>
+                <parameter ref="DUID" requirement="readOnly"/>
+                <parameter ref="Name" requirement="readOnly"/>
+                <parameter ref="Status" requirement="readOnly"/>
+                <parameter ref="Resolved" requirement="readOnly"/>
+                <parameter ref="URL" requirement="readOnly"/>
+                <parameter ref="Vendor" requirement="readOnly"/>
+                <parameter ref="Version" requirement="readOnly"/>
+                <parameter ref="ExecutionUnitList" requirement="readOnly"/>
+                <parameter ref="ExecutionEnvRef" requirement="readOnly"/>
+            </object>
+            
+            <object ref="SoftwareModules.ExecutionUnit.{i}." requirement="present">
+                <parameter ref="EUID" requirement="readOnly"/>
+                <parameter ref="Name" requirement="readOnly"/>
+                <parameter ref="ExecEnvLabel" requirement="readOnly"/>
+                <parameter ref="Status" requirement="readOnly"/>
+                <parameter ref="RequestedState" requirement="readWrite"/>
+                <parameter ref="ExecutionFaultCode" requirement="readOnly"/>
+                <parameter ref="ExecutionFaultMessage" requirement="readOnly"/>
+                <parameter ref="Vendor" requirement="readOnly"/>
+                <parameter ref="Version" requirement="readOnly"/>
+                <parameter ref="References" requirement="readOnly"/>
+                <parameter ref="SupportedDataModelList" requirement="readOnly"/>
+            </object>
+            
+            <object ref="SoftwareModules.ExecutionUnit.{i}.Extensions." requirement="present">
+            </object>
+        </profile>
+    </component>
+    
+    
+    <model name="Device:1.7" base="Device:1.6">
+        <component path="Device." ref="DeviceInfoDiffs"/>
+        <component path="Device." ref="DI_TemperatureStatusDiffs"/>
+        <component path="Device." ref="SimpleFirewallDiffs"/>
+        <component path="Device." ref="NSLookupDiagDiffs"/>
+        
+        <component path="Device." ref="DI_Processors"/>
+        <component path="Device." ref="DI_VendorLogFiles"/>
+        <component path="Device." ref="MS_DUStateChangeCompletePolicy"/>
+        <component path="Device." ref="SoftwareModules"/>
+    </model>
+
+    <model name="InternetGatewayDevice:1.8" base="InternetGatewayDevice:1.7">
+        <object base="InternetGatewayDevice.DeviceInfo." access="readOnly" minEntries="1" maxEntries="1">
+            <parameter base="EnabledOptions" access="readOnly" status="deprecated">
+                <description action="replace">
+                    This parameter is DEPRECATED because the "voucher mechanism", as defined in <bibref ref="TR-069a3" anchor="Annex C"/> is deprecated in favor of the "Software Module Management mechanism" as described in <bibref ref="TR-157a3" anchor="Appendix II"/>.
+                    <list/>  The OptionName of each Option that is currently enabled in the CPE.  The OptionName of each is identical to the OptionName element of the OptionStruct described in <bibref ref="TR-069a3" />.  Only those options are listed whose State indicates the option is enabled.
+                </description>
+            </parameter>
+        </object>
+        
+        <component path="InternetGatewayDevice." ref="DI_TemperatureStatusDiffs"/>
+        <component path="InternetGatewayDevice." ref="SimpleFirewallDiffs"/>
+        <component path="InternetGatewayDevice." ref="NSLookupDiagDiffs"/>
+        
+        <component path="InternetGatewayDevice." ref="DI_Processors"/>
+        <component path="InternetGatewayDevice." ref="DI_VendorLogFiles"/>
+        <component path="InternetGatewayDevice." ref="MS_DUStateChangeCompletePolicy"/>
+        <component path="InternetGatewayDevice." ref="SoftwareModules"/>
+    </model>
+    
+</dm:document>
