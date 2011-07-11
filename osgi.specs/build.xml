@@ -15,6 +15,7 @@
 				<dirset dir="${project.workspace}">
 					<include name="org.osgi.*/src" />
 					<include name="info.dmtree*/src"/>
+                                        <include name="dmforest/src"/>
 				</dirset>
 			</sourcepath>
 			<classpath>
@@ -25,6 +26,10 @@
 
 		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
 			<arg line="javadoc.xml xsl/javadoc.xsl" />
+		</java>
+
+		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
+			<arg line="javadoc.xml xsl/ddf.xsl" />
 		</java>
 
 		<foreach delimiter=" ," target="-html2mif" param="item" inheritAll="true">
