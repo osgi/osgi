@@ -88,20 +88,17 @@ public interface Requirement {
 	 * <li>The filter specified by the {@link Constants#FILTER_DIRECTIVE filter}
 	 * directive of this requirement matches the
 	 * {@link Capability#getAttributes() attributes of the specified capability}.
-	 * <li>The {@link #getDirectives() requirement directives} and the
-	 * {@link Capability#getDirectives() capability directives} that apply to
-	 * the name space are satisfied.
+	 * <li>The standard capability {@link Capability#getDirectives() directives} 
+	 * that influence matching and that apply to the name space are satisfied.  
+	 * See the capability {@link ResourceConstants#CAPABILITY_MANDATORY_DIRECTIVE 
+	 * mandatory} directive.
 	 * </ul>
 	 * 
 	 * 
 	 * @param capability
 	 *            The capability to match to this requirement.
 	 * @return {@code true} if the specified capability matches this this
-	 *         requirement. {@link #getNamespace() name space} as this
-	 *         requirement and the filter for this requirement matches the
-	 *         {@link BundleCapability#getAttributes() attributes of the
-	 *         specified capability}; {@code false} otherwise.
+	 *         requirement; {@code false} otherwise.
 	 */
-	// TODO much debate on the placement and need for this method.
 	boolean matches(Capability capability);
 }

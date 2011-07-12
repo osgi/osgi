@@ -350,7 +350,8 @@ public final class ResourceConstants {
 	 * in the {@link #REQUIREMENT_FILTER_DIRECTIVE filter} of a requirement in
 	 * order for the capability to match the requirement. This directive must
 	 * only be used for capabilities with the {@link #WIRING_PACKAGE_NAMESPACE
-	 * package} name space.
+	 * package}, {@link #WIRING_BUNDLE_NAMESPACE bundle}, or
+	 * {@link #WIRING_HOST_NAMESPACE host} name space.
 	 */
 	public final static String CAPABILITY_MANDATORY_DIRECTIVE = "mandatory";
 
