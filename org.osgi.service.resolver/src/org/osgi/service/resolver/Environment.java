@@ -59,8 +59,8 @@ import org.osgi.framework.wiring.Wire;
  */
 public interface Environment {
   /**
-   * Find any capabilities that can potentially provide a match to the supplied
-   * requirement.
+   * Find any capabilities that {@link Requirement#matches(Capability) match} 
+   * the supplied requirement.
    * 
    * <p>
    * A resolver should use the iteration order or the returned capability

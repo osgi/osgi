@@ -43,8 +43,8 @@ import org.osgi.framework.wiring.Resource;
  */
 public interface Repository {
   /**
-   * Find any capabilities from resources contained in this repository that can
-   * potentially satisfy the supplied requirement.
+   * Find any capabilities that {@link Requirement#matches(Capability) match} 
+   * the supplied requirement.
    * 
    * @param requirement The requirement that should be matched
    * 
