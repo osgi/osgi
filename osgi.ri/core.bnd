@@ -1,8 +1,8 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${core.build.version}} Version ${version;==;${core.build.version}}, \
+	OSGi Service Platform Release ${version;=;${core.ri.version}} Version ${version;==;${core.ri.version}}, \
 	Core Reference Implementation.
 
-Bundle-Version					: ${core.build.version}
+Bundle-Version					: ${core.ri.version}
 
 Include-Resource				: \
 	  	\

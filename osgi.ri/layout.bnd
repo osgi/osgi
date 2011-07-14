@@ -1,3 +1,9 @@
+core.ri.version			= ${build.version}
+cmpn.ri.version			= ${build.version}
+mobile.ri.version		= ${build.version}
+enterprise.ri.version	= ${build.version}
+proposed.ri.version		= ${build.version}
+
 build.impls                 = ${uniq; ${build.cmpn.impls}, ${build.mobile.impls}, ${build.enterprise.impls}}
 
 jar.core.impls = \

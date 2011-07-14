@@ -1,3 +1,9 @@
+core.ct.version			= ${build.version}
+cmpn.ct.version			= ${build.version}
+mobile.ct.version		= ${build.version}
+enterprise.ct.version	= ${build.version}
+proposed.ct.version		= ${build.version}
+
 build.tests                 = ${uniq; ${build.core.tests}, ${build.cmpn.tests}, ${build.mobile.tests}, ${build.enterprise.tests}}
 
 jar.core.tests = \
