@@ -15,25 +15,6 @@ import java.util.List;
  */
 public interface Resource {
 	/**
-	 * The {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity} capability
-	 * of this resource. This method is a convenience and is equivalent to
-	 * calling:
-	 * 
-	 * <pre>
-	 * <code>getCapabilities(ResourceConstants.IDENTITY_NAMESPACE).get(0);</code>
-	 * </pre>
-	 * 
-	 * &#8224; A resource with no symbolic name must not provide an identity
-	 * capability.
-	 * 
-	 * @return the Capability of this resource in the
-	 *         {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity} name
-	 *         space or <code>null</code> if this resource has no
-	 *         identity<sup>&#8224;</sup>.
-	 */
-  Capability getIdentity();
-  
-	/**
 	 * Returns the capabilities declared by this resource.
 	 * 
 	 * @param namespace
