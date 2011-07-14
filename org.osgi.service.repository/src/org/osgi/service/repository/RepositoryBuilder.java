@@ -26,8 +26,29 @@ import java.net.URL;
  * A repository builder service interface to allow third party code to simply build
  * repositories by pointing at a URL location.
  * 
- * OBR implementations should provide an implementation of this interface that parses
- * the OBR XML schema.
+ * <p>
+ * A trivial implementation of this interface can attempt to build a repository based on
+ * a file system directory:
+ * 
+ * <pre>public Repository build(URL location) throws IOException {
+ *  Repository built = null;
+ *  
+ *  if ("file".equals(location.getProtocol())) {
+ *    try {
+ *      File file = new File(location.toURI());
+ *      
+ *      if (file.isDirectory()) {
+ *        List&lt;Resource&gt; resources = scanResources(file);          
+ *        built = new RepositoryImpl(resources);
+ *      }
+ *    } catch (URISyntaxException e) {
+ *      // can't be a file repo
+ *    }      
+ *  }
+ *  
+ *  return built;
+ *}</pre>
+ * 
  * 
  * @ThreadSafe
  */
