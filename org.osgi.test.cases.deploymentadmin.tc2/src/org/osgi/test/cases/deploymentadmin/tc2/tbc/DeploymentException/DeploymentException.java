@@ -48,19 +48,7 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.MessagesConstants;
  * <code>DeploymentException<code>, and the get methods: <code>getCode, getMessage, getCause<code>. 
  * According to MEG reference documentation.
  */
-public class DeploymentException {
-	private DeploymentTestControl tbc;
-
-	public DeploymentException(DeploymentTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testDeploymentException001();
-		testDeploymentException002();
-		testDeploymentException003();
-	}
-	
+public class DeploymentException extends DeploymentTestControl {
 	/**
 	 * This test case asserts that when using DeploymentException( int code )
 	 * constructor, the code is correctly set, and cause exception and message
@@ -69,18 +57,23 @@ public class DeploymentException {
 	 * @spec DeploymentException.DeploymentException(int)
 	 */
 	public void testDeploymentException001() {
-		tbc.log("#testDeploymentException001");
+		log("#testDeploymentException001");
 		try {
 			org.osgi.service.deploymentadmin.DeploymentException e = new org.osgi.service.deploymentadmin.DeploymentException(
 					org.osgi.service.deploymentadmin.DeploymentException.CODE_BAD_HEADER);
 			
-			tbc.assertEquals("The code of the exception was correctly set",
+			assertEquals(
+					"The code of the exception was correctly set",
 							org.osgi.service.deploymentadmin.DeploymentException.CODE_BAD_HEADER,e.getCode());
-			tbc.assertNull("The cause of the exception is correctly set to null", e.getCause());
-			tbc.assertNull("The message of the exception is correctly set to null", e.getMessage());
+			assertNull("The cause of the exception is correctly set to null",
+					e.getCause());
+			assertNull("The message of the exception is correctly set to null",
+					e.getMessage());
 			
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		}
 	}	
 	
@@ -92,14 +85,21 @@ public class DeploymentException {
 	 * @spec DeploymentException.DeploymentException(int, String)
 	 */
 	public void testDeploymentException002() {
-		tbc.log("#testDeploymentException002");		
+		log("#testDeploymentException002");
 		try {
 			org.osgi.service.deploymentadmin.DeploymentException e = new org.osgi.service.deploymentadmin.DeploymentException(org.osgi.service.deploymentadmin.DeploymentException.CODE_BAD_HEADER, DeploymentConstants.EXCEPTION_MESSAGE);
-			tbc.assertEquals("The code of the exception was correctly set", org.osgi.service.deploymentadmin.DeploymentException.CODE_BAD_HEADER, e.getCode());
-			tbc.assertEquals("The message of the exception was correctly set", DeploymentConstants.EXCEPTION_MESSAGE, e.getMessage());
-			tbc.assertNull("The cause of the exception was correctly set to null", e.getCause());
+			assertEquals(
+					"The code of the exception was correctly set",
+					org.osgi.service.deploymentadmin.DeploymentException.CODE_BAD_HEADER,
+					e.getCode());
+			assertEquals("The message of the exception was correctly set",
+					DeploymentConstants.EXCEPTION_MESSAGE, e.getMessage());
+			assertNull("The cause of the exception was correctly set to null",
+					e.getCause());
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		}
 	}	
 	
@@ -111,15 +111,22 @@ public class DeploymentException {
 	 * @spec DeploymentException.DeploymentException(int, String, Throwable)
 	 */
 	public void testDeploymentException003() {
-		tbc.log("#testDeploymentException003");
+		log("#testDeploymentException003");
 		try {
 			Exception ex = new Exception("");
 			org.osgi.service.deploymentadmin.DeploymentException e = new org.osgi.service.deploymentadmin.DeploymentException(org.osgi.service.deploymentadmin.DeploymentException.CODE_BAD_HEADER, DeploymentConstants.EXCEPTION_MESSAGE, ex);
-			tbc.assertEquals("The code of the exception was correctly set", org.osgi.service.deploymentadmin.DeploymentException.CODE_BAD_HEADER, e.getCode());
-			tbc.assertEquals("The message of the exception was correctly set", DeploymentConstants.EXCEPTION_MESSAGE, e.getMessage());
-			tbc.assertEquals("The cause of the exception was correctly set", ex, e.getCause());
+			assertEquals(
+					"The code of the exception was correctly set",
+					org.osgi.service.deploymentadmin.DeploymentException.CODE_BAD_HEADER,
+					e.getCode());
+			assertEquals("The message of the exception was correctly set",
+					DeploymentConstants.EXCEPTION_MESSAGE, e.getMessage());
+			assertEquals("The cause of the exception was correctly set", ex,
+					e.getCause());
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		}
 	}	
 }

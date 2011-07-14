@@ -1,8 +1,8 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${residential.build.version}} Version ${version;==;${residential.build.version}}, \
+	OSGi Service Platform Release ${version;=;${residential.ct.version}} Version ${version;==;${residential.ct.version}}, \
 	Residential Test Case Bundles.
 
-Bundle-Version					: ${residential.build.version}
+Bundle-Version					: ${residential.ct.version}
 Include-Resource				: \
   	\
     ${replace;${uniq;\

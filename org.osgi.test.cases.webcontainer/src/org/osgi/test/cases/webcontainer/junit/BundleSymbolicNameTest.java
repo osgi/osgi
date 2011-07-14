@@ -24,6 +24,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.test.cases.webcontainer.util.ManifestHeadersTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
+import org.osgi.test.support.OSGiTestCaseProperties;
 
 /**
  * @version $Rev$ $Date$
@@ -234,7 +235,8 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
                 }
             }
             // let's wait some time for the bundle to be uninstalled fully
-            Thread.sleep(10000);
+			Thread.sleep(OSGiTestCaseProperties.getTimeout()
+					* OSGiTestCaseProperties.getScaling());
         }
     }
 }

@@ -1,8 +1,8 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${cmpn.build.version}} Version ${version;==;${cmpn.build.version}}, \
+	OSGi Service Platform Release ${version;=;${cmpn.ri.version}} Version ${version;==;${cmpn.ri.version}}, \
 	Compendium Reference Implementations.
 
-Bundle-Version					: ${cmpn.build.version}
+Bundle-Version					: ${cmpn.ri.version}
 
 Include-Resource				: \
 		\

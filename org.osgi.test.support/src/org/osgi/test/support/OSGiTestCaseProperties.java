@@ -22,24 +22,32 @@ public class OSGiTestCaseProperties {
 		// empty
 	}
 
-	private static final int	timeout;
+	private static final long	timeout;
 	private static final int	scaling; 
 	
 	static {
-		String timoutStr = System.getProperty("org.osgi.test.testcase.timeout",
-				"60000");
-		String scalingStr = System.getProperty(
-				"org.osgi.test.testcase.scaling", "1");
-		int t;
+		String timoutStr;
+		String scalingStr;
+		try {
+			timoutStr = System.getProperty("org.osgi.test.testcase.timeout",
+					"60000");
+			scalingStr = System.getProperty("org.osgi.test.testcase.scaling",
+					"1");
+		}
+		catch (SecurityException e) {
+			timoutStr = "60000";
+			scalingStr = "1";
+		}
+		long t;
 		int s;
 		try {
-			t = Integer.parseInt(timoutStr);
+			t = Long.parseLong(timoutStr);
 			if (t < 0) {
 				t = 0;
 			}
 		}
 		catch (Exception e) {
-			t = 60000;
+			t = 60000l;
 		}
 
 		try {
@@ -56,7 +64,7 @@ public class OSGiTestCaseProperties {
 
 	}
 
-	public static int getTimeout() {
+	public static long getTimeout() {
 		return timeout;
 	}
 

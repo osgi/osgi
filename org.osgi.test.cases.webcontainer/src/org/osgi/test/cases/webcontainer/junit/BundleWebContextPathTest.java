@@ -15,10 +15,6 @@
  */
 package org.osgi.test.cases.webcontainer.junit;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +23,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.test.cases.webcontainer.util.ManifestHeadersTestBundleControl;
+import org.osgi.test.support.OSGiTestCaseProperties;
 
 /**
  * @version $Rev$ $Date$
@@ -307,7 +304,8 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
             // previously installed b2 should get started now after b is uninstalled
             // as the particular web-contextpath is avail now
             super.checkServiceRegistered(WEBCONTEXTPATH4);
-            Thread.sleep(5000);
+			Thread.sleep(OSGiTestCaseProperties.getTimeout()
+					* OSGiTestCaseProperties.getScaling());
             response = super.getResponse(WEBCONTEXTPATH4);
             super.checkTW4HomeResponse(response);
     
@@ -363,7 +361,8 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
             }
             
             // let's wait some time for the bundle to be uninstalled fully
-            Thread.sleep(10000);
+			Thread.sleep(OSGiTestCaseProperties.getTimeout()
+					* OSGiTestCaseProperties.getScaling());
         }
     }
 
@@ -386,7 +385,8 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
                 }
             }
             // let's wait some time for the bundle to be uninstalled fully
-            Thread.sleep(10000);
+			Thread.sleep(OSGiTestCaseProperties.getTimeout()
+					* OSGiTestCaseProperties.getScaling());
         }
     }
     
@@ -410,7 +410,8 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
 
             for (int i = 0; i < 9; i++) {
                 bundles[i].stop();
-                Thread.sleep(5000);
+				Thread.sleep(OSGiTestCaseProperties.getTimeout()
+						* OSGiTestCaseProperties.getScaling());
                 options = createOptions(WEBCONTEXTPATH1);
                 options.put(Constants.BUNDLE_SYMBOLICNAME, "tw1_" + (i + 1) + "_test war");
                 super.generalHeadersQuickTest(options, "tw1.war", true, bundles[i+1]);

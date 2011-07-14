@@ -49,19 +49,8 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.MessagesConstants;
  * <code>DeploymentCustomizerPermission.equals<code> method, 
  * according to MEG specification.
  */
-public class Equals {
+public class Equals extends DeploymentTestControl {
 
-	private DeploymentTestControl tbc;
-
-	public Equals(DeploymentTestControl tbc) {
-		this.tbc = tbc;
-	}
-	
-	public void run() {
-		testEquals001();
-		testEquals002();
-	}
-	
 	/**
 	 * Checks two <code>DeploymentCustomizerPermission</code> objects are
 	 * equal when their target filters are equal, and their actions are the
@@ -70,7 +59,7 @@ public class Equals {
 	 * @spec DeploymentCustomizerPermission.equals(Object)
 	 */
 	public void testEquals001() {
-		tbc.log("#testEquals001");
+		log("#testEquals001");
 		try {
 			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					DeploymentConstants.BUNDLE_NAME_FILTER,
@@ -80,11 +69,11 @@ public class Equals {
 					DeploymentConstants.BUNDLE_NAME_FILTER,
 					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 
-			tbc.assertTrue(
+			assertTrue(
 							"Both DeploymentCustomizerPermission objects are equal when both target and action are equals",
 							deployPermission.equals(deployPermission2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
+			fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
 		}
@@ -97,7 +86,7 @@ public class Equals {
 	 * @spec DeploymentCustomizerPermission.equals(Object)
 	 */
 	public void testEquals002() {
-		tbc.log("#testEquals002");
+		log("#testEquals002");
 		try {
 			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					"(name=bundle.tb1)",
@@ -107,11 +96,11 @@ public class Equals {
 					"(name=bundle.tb2)",
 					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 
-			tbc.assertTrue(
+			assertTrue(
 							"Both DeploymentCustomizerPermission objects are different when their targets are different",
 							!deployPermission.equals(deployPermission2));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
+			fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
 		}

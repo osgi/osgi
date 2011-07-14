@@ -1,0 +1,10 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.wiring.1922.frag
+Bundle-SymbolicName: ${p}.wiring.1922.frag
+Bundle-Version: 1.0
+Fragment-Host: ${p}.wiring.1922;\
+ bundle-version=1.0;\
+ foo=bar;\
+ filter:=(x=y);\
+ foo:=bar
+

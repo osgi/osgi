@@ -28,9 +28,10 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.jmx.framework.FrameworkMBean;
-import org.osgi.service.packageadmin.ExportedPackage;
-import org.osgi.service.packageadmin.PackageAdmin;
 
 public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
@@ -483,26 +484,29 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 //		assertFalse("child framework must have a different UUID",
 //				getContext().getProperty("org.osgi.framework.uuid").equals(f.getBundleContext().getProperty("org.osgi.framework.uuid")));
 		
-		ServiceReference sr = f.getBundleContext().getServiceReference(PackageAdmin.class.getName());
-		assertNotNull("Framework is not supplying PackageAdmin service", sr);
-		
-		PackageAdmin pkgAdmin = (PackageAdmin) f.getBundleContext().getService(sr);
-		ExportedPackage[] exportedPkgs = pkgAdmin.getExportedPackages(f.getBundleContext().getBundle());
-		assertNotNull(exportedPkgs);
-		f.getBundleContext().ungetService(sr);
-		
-		String pkgXtras = f.getBundleContext().getProperty(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA);
+		BundleWiring wiring = f.getBundleContext().getBundle()
+				.adapt(BundleWiring.class);
+		assertNotNull(
+				"Framework is not supplying a BundleWiring for the system bundle",
+				wiring);
+		List<BundleCapability> exportedPkgs = wiring
+				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+
+		String pkgXtras = f.getBundleContext().getProperty(
+				Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA);
 		if (pkgXtras == null) {
 			System.out.println("pkgXtras is null");
 			return;
 		}
 		List<String> pkgList = splitString(pkgXtras, ",");
-		
-		for (int i=0;i<exportedPkgs.length;i++) {
-			String name = exportedPkgs[i].getName();
+
+		for (BundleCapability exportedPkg : exportedPkgs) {
+			String name = (String) exportedPkg.getAttributes().get(
+					BundleRevision.PACKAGE_NAMESPACE);
 			pkgList.remove(name);
 		}
-		assertTrue("Framework does not export some packages " + pkgList, pkgList.isEmpty());
+		assertTrue("Framework does not export some packages " + pkgList,
+				pkgList.isEmpty());
 	}
 
 	private List<String> splitString(String string, String delim) {

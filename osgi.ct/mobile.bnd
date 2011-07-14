@@ -1,8 +1,8 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${mobile.build.version}} Version ${version;==;${mobile.build.version}}, \
+	OSGi Service Platform Release ${version;=;${mobile.ct.version}} Version ${version;==;${mobile.ct.version}}, \
 	Mobile Test Case Bundles.
 
-Bundle-Version					: ${mobile.build.version}
+Bundle-Version					: ${mobile.ct.version}
 Include-Resource				: \
   	\
     ${replace;${uniq;\

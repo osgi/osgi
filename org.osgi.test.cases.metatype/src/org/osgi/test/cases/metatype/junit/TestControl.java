@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -189,7 +189,7 @@ public class TestControl extends DefaultTestBundleControl {
 				.getAttributeDefinitions(ObjectClassDefinition.REQUIRED).length);
 		assertEquals("ObjectClassDefinition.getAttributeDefinitions()", 4, ocd
 				.getAttributeDefinitions(ObjectClassDefinition.ALL).length);
-		assertNull("ObjectClassDefinition.getIcon()", ocd.getIcon(32));
+		assertNotNull("ObjectClassDefinition.getIcon()", ocd.getIcon(32));
 		assertNotNull("ObjectClassDefinition.getIcon()", ocd.getIcon(16));
 
 		// Test the methods with Dutch locale
@@ -205,7 +205,7 @@ public class TestControl extends DefaultTestBundleControl {
 				.getAttributeDefinitions(ObjectClassDefinition.REQUIRED).length);
 		assertEquals("ObjectClassDefinition.getAttributeDefinitions()", 4, ocd
 				.getAttributeDefinitions(ObjectClassDefinition.ALL).length);
-		assertNull("ObjectClassDefinition.getIcon()", ocd.getIcon(32));
+		assertNotNull("ObjectClassDefinition.getIcon()", ocd.getIcon(32));
 		assertNotNull("ObjectClassDefinition.getIcon()", ocd.getIcon(16));
 
 		// Test the methods with Dutch (du_NL) locale
@@ -221,7 +221,7 @@ public class TestControl extends DefaultTestBundleControl {
 				.getAttributeDefinitions(ObjectClassDefinition.REQUIRED).length);
 		assertEquals("ObjectClassDefinition.getAttributeDefinitions()", 4, ocd
 				.getAttributeDefinitions(ObjectClassDefinition.ALL).length);
-		assertNull("ObjectClassDefinition.getIcon()", ocd.getIcon(32));
+		assertNotNull("ObjectClassDefinition.getIcon()", ocd.getIcon(32));
 		assertNotNull("ObjectClassDefinition.getIcon()", ocd.getIcon(16));
 	}
 

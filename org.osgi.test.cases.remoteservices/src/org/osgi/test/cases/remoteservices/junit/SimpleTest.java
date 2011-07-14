@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -31,8 +32,9 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.launch.Framework;
-import org.osgi.service.packageadmin.ExportedPackage;
-import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.test.cases.remoteservices.common.A;
 import org.osgi.test.cases.remoteservices.common.B;
 import org.osgi.test.cases.remoteservices.common.C;
@@ -277,18 +279,22 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	 */
 	private void verifyFramework() throws Exception {
 		Framework f = getFramework();
-		ServiceReference sr = f.getBundleContext().getServiceReference(PackageAdmin.class.getName());
-		assertNotNull("Framework is not supplying PackageAdmin service", sr);
-		
-		PackageAdmin pkgAdmin = (PackageAdmin) f.getBundleContext().getService(sr);
-		ExportedPackage[] exportedPkgs = pkgAdmin.getExportedPackages(f.getBundleContext().getBundle());
-		assertNotNull(exportedPkgs);
-		f.getBundleContext().ungetService(sr);
-		
-		boolean found = false; 
-		for (int i=0;i<exportedPkgs.length && !found;i++) {
-			found = ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON.equals(exportedPkgs[i].getName());
+		BundleWiring wiring = f.getBundleContext().getBundle()
+				.adapt(BundleWiring.class);
+		assertNotNull(
+				"Framework is not supplying a BundleWiring for the system bundle",
+				wiring);
+		List<BundleCapability> exportedPkgs = wiring
+				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+
+		for (BundleCapability exportedPkg : exportedPkgs) {
+			String name = (String) exportedPkg.getAttributes().get(
+					BundleRevision.PACKAGE_NAMESPACE);
+			if (name.equals(ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON)) {
+				return;
+			}
 		}
-		assertTrue("Framework System Bundle is not exporting package " + ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON, found);
+		fail("Framework System Bundle is not exporting package "
+				+ ORG_OSGI_TEST_CASES_REMOTESERVICES_COMMON);
 	}
 }

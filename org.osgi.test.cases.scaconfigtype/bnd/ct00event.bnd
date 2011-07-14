@@ -1,8 +1,7 @@
 Bundle-Name:                             ${p}.ct00event
 Bundle-Version:                          1.0
+Conditional-Package					= org.osgi.test.support.*
 Private-Package:                         ${p}.junit.ct00event.*, \
-                                         ${p}.common.*, \
-                                         org.osgi.test.support, \
-                                         org.osgi.test.support.compatibility
+                                         ${p}.common.*
 Bundle-Activator:                        ${p}.junit.ct00event.Activator
 Import-Package = junit.framework;version="3.8.0",*

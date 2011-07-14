@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -26,7 +26,6 @@ package org.osgi.test.cases.cm.junit;
 
 // import java.math.*;
 import java.io.IOException;
-import java.security.AllPermission;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
@@ -102,9 +101,13 @@ public class CMControl extends DefaultTestBundleControl {
 		// listConfigurations can return these configurations
 		list = new ArrayList(5);
 
-		permAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
-		setAllPermissionBundle = getContext().installBundle(
-				getWebServer() + "setallpermission.jar");
+		if (System.getSecurityManager() != null) {
+			permAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
+			setAllPermissionBundle = getContext().installBundle(
+					getWebServer() + "setallpermission.jar");
+		}
+		else
+			permissionFlag = true;
 
 	}
 
@@ -114,7 +117,8 @@ public class CMControl extends DefaultTestBundleControl {
 			this.setAllPermissionBundle.uninstall();
 			this.setAllPermissionBundle = null;
 		}
-		ungetService(permAdmin);
+		if (permAdmin != null)
+			ungetService(permAdmin);
 		list = null;
 
 		cleanCM();
@@ -123,6 +127,7 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	private void resetPermissions() throws BundleException {
+		if (permAdmin == null) return;
 		try {
 			if (this.setAllPermissionBundle == null)
 				this.setAllPermissionBundle = getContext().installBundle(
@@ -138,22 +143,8 @@ public class CMControl extends DefaultTestBundleControl {
 		this.printoutPermissions();
 	}
 
-	private void setAllpermission(String bundleLocation) {
-		ServiceReference ref = getContext().getServiceReference(
-				PermissionAdmin.class.getName());
-		if (ref == null) {
-			System.out.println("Fail to get ServiceReference of "
-					+ PermissionAdmin.class.getName());
-			return;
-		}
-		permAdmin = (PermissionAdmin) getContext().getService(ref);
-		PermissionInfo[] pisAllPerm = new PermissionInfo[1];
-		pisAllPerm[0] = new PermissionInfo("(" + AllPermission.class.getName()
-				+ ")");
-		permAdmin.setPermissions(bundleLocation, pisAllPerm);
-	}
-
 	private void printoutPermissions() {
+		if (permAdmin == null) return;
 		String[] locations = this.permAdmin.getLocations();
 		if (locations != null)
 			for (int i = 0; i < locations.length; i++) {
@@ -177,6 +168,7 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	private void setBundlePermission(Bundle b, List list) {
+		if (permAdmin == null) return;
 		PermissionInfo[] pis = new PermissionInfo[list.size()];
 		pis = (PermissionInfo[]) list.toArray(pis);
 		permAdmin.setPermissions(b.getLocation(), pis);
@@ -272,13 +264,17 @@ public class CMControl extends DefaultTestBundleControl {
 		String message = "try to get location without appropriate ConfigurationPermission.";
 		try {
 			conf.getBundleLocation();
-			/* A SecurityException should have been thrown */
-			failException(message, SecurityException.class);
+			/* A SecurityException should have been thrown if security is enabled */
+			if (System.getSecurityManager() != null)
+				failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
 			/* Check that we got the correct exception */
 			assertException(message, SecurityException.class, e);
+			/* A SecurityException should not have been thrown if security is not enabled */
+			if (System.getSecurityManager() == null)
+				fail("Security is not enabled", e);
 		}
 
 		/* Get the configuration again (should be exactly the same) */
@@ -294,13 +290,17 @@ public class CMControl extends DefaultTestBundleControl {
 		message = "try to set location without appropriate ConfigurationPermission.";
 		try {
 			conf.setBundleLocation(neverlandLocation);
-			/* A SecurityException should have been thrown */
-			failException(message, SecurityException.class);
+			/* A SecurityException should have been thrown if security is enabled */
+			if (System.getSecurityManager() != null)
+				failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
 			/* Check that we got the correct exception */
 			assertException(message, SecurityException.class, e);
+			/* A SecurityException should not have been thrown if security is not enabled */
+			if (System.getSecurityManager() == null)
+				fail("Security is not enabled", e);
 		}
 
 		this.setAppropriatePermission();
@@ -315,13 +315,17 @@ public class CMControl extends DefaultTestBundleControl {
 		message = "try to get configuration whose location is different from the caller bundle without appropriate ConfigurationPermission.";
 		try {
 			conf = cm.getConfiguration(pid);
-			/* A SecurityException should have been thrown */
-			failException(message, SecurityException.class);
+			/* A SecurityException should have been thrown if security is enabled */
+			if (System.getSecurityManager() != null)
+				failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
 			/* Check that we got the correct exception */
 			assertException(message, SecurityException.class, e);
+			/* A SecurityException should not have been thrown if security is not enabled */
+			if (System.getSecurityManager() == null)
+				fail("Security is not enabled", e);
 		}
 
 		/* Clean up */
@@ -357,13 +361,17 @@ public class CMControl extends DefaultTestBundleControl {
 		String message = "try to get configuration without appropriate ConfigurationPermission.";
 		try {
 			conf = cm.getConfiguration(pid1, thisLocation);
-			/* A SecurityException should have been thrown */
-			failException(message, SecurityException.class);
+			/* A SecurityException should have been thrown if security is enabled */
+			if (System.getSecurityManager() != null)
+				failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
 			/* Check that we got the correct exception */
 			assertException(message, SecurityException.class, e);
+			/* A SecurityException should not have been thrown if security is not enabled */
+			if (System.getSecurityManager() == null)
+				fail("Security is not enabled", e);
 		}
 
 		this.setAppropriatePermission();
@@ -382,13 +390,17 @@ public class CMControl extends DefaultTestBundleControl {
 		message = "try to get configuration without appropriate ConfigurationPermission.";
 		try {
 			conf = cm.getConfiguration(pid1, neverlandLocation);
-			/* A SecurityException should have been thrown */
-			failException(message, SecurityException.class);
+			/* A SecurityException should have been thrown if security is enabled */
+			if (System.getSecurityManager() != null)
+				failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
 			/* Check that we got the correct exception */
 			assertException(message, SecurityException.class, e);
+			/* A SecurityException should not have been thrown if security is not enabled */
+			if (System.getSecurityManager() == null)
+				fail("Security is not enabled", e);
 		}
 
 		this.setAppropriatePermission();
@@ -409,13 +421,17 @@ public class CMControl extends DefaultTestBundleControl {
 		message = "try to get configuration without appropriate ConfigurationPermission.";
 		try {
 			conf = cm.getConfiguration(pid2, neverlandLocation);
-			/* A SecurityException should have been thrown */
-			failException(message, SecurityException.class);
+			/* A SecurityException should have been thrown if security is enabled */
+			if (System.getSecurityManager() != null)
+				failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
 			/* Check that we got the correct exception */
 			assertException(message, SecurityException.class, e);
+			/* A SecurityException should not have been thrown if security is not enabled */
+			if (System.getSecurityManager() == null)
+				fail("Security is not enabled", e);
 		}
 
 		this.setAppropriatePermission();
@@ -434,13 +450,17 @@ public class CMControl extends DefaultTestBundleControl {
 		message = "try to get configuration without appropriate ConfigurationPermission.";
 		try {
 			conf = cm.getConfiguration(pid3, null);
-			/* A SecurityException should have been thrown */
-			failException(message, SecurityException.class);
+			/* A SecurityException should have been thrown if security is enabled */
+			if (System.getSecurityManager() != null)
+				failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
 			/* Check that we got the correct exception */
 			assertException(message, SecurityException.class, e);
+			/* A SecurityException should not have been thrown if security is not enabled */
+			if (System.getSecurityManager() == null)
+				fail("Security is not enabled", e);
 		}
 
 		this.setAppropriatePermission();
@@ -476,13 +496,17 @@ public class CMControl extends DefaultTestBundleControl {
 		String message = "try to get configuration without appropriate ConfigurationPermission.";
 		try {
 			conf = cm.getConfiguration(bundlePid, null);
-			/* A SecurityException should have been thrown */
-			failException(message, SecurityException.class);
+			/* A SecurityException should have been thrown if security is enabled */
+			if (System.getSecurityManager() != null)
+				failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
 			/* Check that we got the correct exception */
 			assertException(message, SecurityException.class, e);
+			/* A SecurityException should not have been thrown if security is not enabled */
+			if (System.getSecurityManager() == null)
+				fail("Security is not enabled", e);
 		}
 
 		this.setAppropriatePermission();
@@ -509,13 +533,17 @@ public class CMControl extends DefaultTestBundleControl {
 		message = "try to get location without appropriate ConfigurationPermission.";
 		try {
 			conf.getBundleLocation();
-			/* A SecurityException should have been thrown */
-			failException(message, SecurityException.class);
+			/* A SecurityException should have been thrown if security is enabled */
+			if (System.getSecurityManager() != null)
+				failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
 			/* Check that we got the correct exception */
 			assertException(message, SecurityException.class, e);
+			/* A SecurityException should not have been thrown if security is not enabled */
+			if (System.getSecurityManager() == null)
+				fail("Security is not enabled", e);
 		}
 
 		message = "try to get configuration with null location without appropriate ConfigurationPermission.";
@@ -538,13 +566,17 @@ public class CMControl extends DefaultTestBundleControl {
 		message = "try to set location to null without appropriate ConfigurationPermission.";
 		try {
 			conf.setBundleLocation(null);
-			/* A SecurityException should have been thrown */
-			failException(message, SecurityException.class);
+			/* A SecurityException should have been thrown if security is enabled */
+			if (System.getSecurityManager() != null)
+				failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
 			/* Check that we got the correct exception */
 			assertException(message, SecurityException.class, e);
+			/* A SecurityException should not have been thrown if security is not enabled */
+			if (System.getSecurityManager() == null)
+				fail("Security is not enabled", e);
 		}
 		this.setInappropriatePermission();
 		this.setAppropriatePermission();
@@ -556,23 +588,31 @@ public class CMControl extends DefaultTestBundleControl {
 		message = "try to set location to null without appropriate ConfigurationPermission.";
 		try {
 			conf.setBundleLocation(thisLocation);
-			/* A SecurityException should have been thrown */
-			failException(message, SecurityException.class);
+			/* A SecurityException should have been thrown if security is enabled */
+			if (System.getSecurityManager() != null)
+				failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
 			/* Check that we got the correct exception */
 			assertException(message, SecurityException.class, e);
+			/* A SecurityException should not have been thrown if security is not enabled */
+			if (System.getSecurityManager() == null)
+				fail("Security is not enabled", e);
 		}
 		try {
 			conf.setBundleLocation(neverlandLocation);
-			/* A SecurityException should have been thrown */
-			failException(message, SecurityException.class);
+			/* A SecurityException should have been thrown if security is enabled */
+			if (System.getSecurityManager() != null)
+				failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
 			/* Check that we got the correct exception */
 			assertException(message, SecurityException.class, e);
+			/* A SecurityException should not have been thrown if security is not enabled */
+			if (System.getSecurityManager() == null)
+				fail("Security is not enabled", e);
 		}
 		conf.delete();
 	}
@@ -1092,6 +1132,7 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	private void setInappropriatePermission() throws BundleException {
+		if (permAdmin == null) return;
 		this.resetPermissions();
 		list.clear();
 		add(list, PropertyPermission.class.getName(), "*", "READ,WRITE");
@@ -1104,6 +1145,7 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	private void setAppropriatePermission() throws BundleException {
+		if (permAdmin == null) return;
 		this.resetPermissions();
 		list.clear();
 		add(list, PropertyPermission.class.getName(), "*", "READ,WRITE");
@@ -1270,9 +1312,17 @@ public class CMControl extends DefaultTestBundleControl {
 			this.setInappropriatePermission();
 			confs = cm.listConfigurations("(service.pid=" + Util.createPid()
 					+ "*)");
-			/* Returned list must contain all of updateConfigs2. */
-			checkIfAllUpdatedConfigs2isListed(confs, updatedConfigs2,
-					updatedConfigs3, null);
+			if (System.getSecurityManager() != null)
+				/* Returned list must contain all of updateConfigs2. */
+				checkIfAllUpdatedConfigs2isListed(confs, updatedConfigs2,
+						updatedConfigs3, null);
+			else
+				/*
+				 * Returned list must contain all of updateConfigs2, updateConfigs3
+				 * and otherConf.
+				 */
+				checkIfAllUpdatedConfigs2and3isListed(confs, updatedConfigs2,
+						updatedConfigs3, otherConf);
 
 			/* Appropriate Permission */
 			this.setAppropriatePermission();
@@ -1287,16 +1337,24 @@ public class CMControl extends DefaultTestBundleControl {
 			/* Inappropriate Permission */
 			this.setInappropriatePermission();
 			confs = cm.listConfigurations(null);
-			/* Returned list must contain all of updateConfigs2 and otherConf. */
-			checkIfAllUpdatedConfigs2isListed(confs, updatedConfigs2,
-					updatedConfigs3, otherConf);
+			if (System.getSecurityManager() != null)
+				/* Returned list must contain all of updateConfigs2 and otherConf. */
+				checkIfAllUpdatedConfigs2isListed(confs, updatedConfigs2,
+						updatedConfigs3, otherConf);
+			else
+				/*
+				 * Returned list must contain all of updateConfigs2, updateConfigs3
+				 * and otherConf.
+				 */
+				checkIfAllUpdatedConfigs2and3isListed(confs, updatedConfigs2,
+						updatedConfigs3, otherConf);
 
 			/* if the filter string is in valid */
-			/* must fail because of inappropriate Permission. */
+			/* must fail because of invalid filter. */
 			String message = "try to list configurations by invalid filter string.";
 			try {
 				cm.listConfigurations("(service.pid=" + Util.createPid() + "*");
-				/* A SecurityException should have been thrown */
+				/* A InvalidSyntaxException should have been thrown */
 				failException(message, InvalidSyntaxException.class);
 			} catch (AssertionFailedError e) {
 				throw e;
@@ -2567,13 +2625,17 @@ public class CMControl extends DefaultTestBundleControl {
 				String message = "try to create factory configuration without appropriate ConfigurationPermission.";
 				try {
 					conf = cm.createFactoryConfiguration(factorypid, location);
-					/* A SecurityException should have been thrown */
-					failException(message, SecurityException.class);
+					/* A SecurityException should have been thrown if security is enabled */
+					if (System.getSecurityManager() != null)
+						failException(message, SecurityException.class);
 				} catch (AssertionFailedError e) {
 					throw e;
 				} catch (Throwable e) {
 					/* Check that we got the correct exception */
 					assertException(message, SecurityException.class, e);
+					/* A SecurityException should not have been thrown if security is not enabled */
+					if (System.getSecurityManager() == null)
+						fail("Security is not enabled", e);
 				}
 				continue;
 			} else {
@@ -2941,10 +3003,15 @@ public class CMControl extends DefaultTestBundleControl {
 		String message = "registering config listener without permission";
 		try {
 			tb.start();
-			failException(message, BundleException.class);
+			/* A BundleException should have been thrown if security is enabled */
+			if (System.getSecurityManager() != null)
+				failException(message, BundleException.class);
 		} catch (BundleException e) {
 			/* Check that we got the correct exception */
 			assertException(message, BundleException.class, e);
+			/* A BundleException should not have been thrown if security is not enabled */
+			if (System.getSecurityManager() == null)
+				fail("Security is not enabled", e);
 		} finally {
 			tb.uninstall();
 		}

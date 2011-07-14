@@ -1,8 +1,8 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${mobile.build.version}} Version ${version;==;${mobile.build.version}}, \
+	OSGi Service Platform Release ${version;=;${mobile.ri.version}} Version ${version;==;${mobile.ri.version}}, \
 	Mobile Reference Implementations.
 
-Bundle-Version					: ${mobile.build.version}
+Bundle-Version					: ${mobile.ri.version}
 
 Include-Resource				: \
 		\

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@ import org.osgi.framework.InvalidSyntaxException;
  * <p>
  * The main purpose of this interface is to store bundle configuration data
  * persistently. This information is represented in {@code Configuration}
- * objects. The actual configuration data is a {@code Dictionary} of
- * properties inside a {@code Configuration} object.
+ * objects. The actual configuration data is a {@code Dictionary} of properties
+ * inside a {@code Configuration} object.
  * 
  * <p>
  * There are two principally different ways to manage configurations. First
@@ -36,8 +36,8 @@ import org.osgi.framework.InvalidSyntaxException;
  * 
  * <p>
  * Next, there is the concept of a factory where the Configuration Admin service
- * will maintain 0 or more {@code Configuration} objects for a Managed
- * Service Factory that is registered with the Framework.
+ * will maintain 0 or more {@code Configuration} objects for a Managed Service
+ * Factory that is registered with the Framework.
  * 
  * <p>
  * The first concept is intended for configuration data about "things/services"
@@ -57,19 +57,19 @@ import org.osgi.framework.InvalidSyntaxException;
  * checks its persistent storage for a configuration object whose
  * {@code service.pid} property matches the PID service property (
  * {@code service.pid}) of the Managed Service. If found, it calls
- * {@link ManagedService#updated} method with the new properties. The
- * implementation of a Configuration Admin service must run these call-backs
+ * {@link ManagedService#updated(Dictionary)} method with the new properties.
+ * The implementation of a Configuration Admin service must run these call-backs
  * asynchronously to allow proper synchronization.
  * 
  * <p>
  * When the Configuration Admin service detects a Managed Service Factory
  * registration, it checks its storage for configuration objects whose
- * {@code service.factoryPid} property matches the PID service property of
- * the Managed Service Factory. For each such {@code Configuration}
- * objects, it calls the {@code ManagedServiceFactory.updated} method
- * asynchronously with the new properties. The calls to the {@code updated}
- * method of a {@code ManagedServiceFactory} must be executed sequentially
- * and not overlap in time.
+ * {@code service.factoryPid} property matches the PID service property of the
+ * Managed Service Factory. For each such {@code Configuration} objects, it
+ * calls the {@code ManagedServiceFactory.updated} method asynchronously with
+ * the new properties. The calls to the {@code updated} method of a
+ * {@code ManagedServiceFactory} must be executed sequentially and not overlap
+ * in time.
  * 
  * <p>
  * In general, bundles having permission to use the Configuration Admin service
@@ -82,15 +82,14 @@ import org.osgi.framework.InvalidSyntaxException;
  * location. In this case, if a matching Managed Service or Managed Service
  * Factory is registered by a bundle with a different location, then the
  * Configuration Admin service must not do the normal callback, and it should
- * log an error. In the case where a {@code Configuration} object is not
- * bound, its location field is {@code null}, the Configuration Admin
- * service will bind it to the location of the bundle that registers the first
- * Managed Service or Managed Service Factory that has a corresponding PID
- * property. When a {@code Configuration} object is bound to a bundle
- * location in this manner, the Configuration Admin service must detect if the
- * bundle corresponding to the location is uninstalled. If this occurs, the
- * {@code Configuration} object is unbound, that is its location field is
- * set back to {@code null}.
+ * log an error. In the case where a {@code Configuration} object is not bound,
+ * its location field is {@code null}, the Configuration Admin service will bind
+ * it to the location of the bundle that registers the first Managed Service or
+ * Managed Service Factory that has a corresponding PID property. When a
+ * {@code Configuration} object is bound to a bundle location in this manner,
+ * the Configuration Admin service must detect if the bundle corresponding to
+ * the location is uninstalled. If this occurs, the {@code Configuration} object
+ * is unbound, that is its location field is set back to {@code null}.
  * 
  * <p>
  * The method descriptions of this class refer to a concept of "the calling

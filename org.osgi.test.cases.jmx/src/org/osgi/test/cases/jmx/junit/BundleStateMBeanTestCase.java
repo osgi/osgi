@@ -3,6 +3,7 @@ package org.osgi.test.cases.jmx.junit;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.management.RuntimeMBeanException;
 import javax.management.openmbean.CompositeData;
@@ -11,15 +12,16 @@ import javax.management.openmbean.TabularData;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.jmx.framework.BundleStateMBean;
 import org.osgi.jmx.framework.PackageStateMBean;
-import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.test.support.wiring.Wiring;
+
 
 public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 	private Bundle testBundle1;
 	private Bundle testBundle2;
 	private BundleStateMBean bsMBean;
-	private PackageAdmin packageAdmin;
 	private BundleContext bundleContext;
 	
 	private static String expectedInterface = "org.osgi.test.cases.jmx.tb2.api.HelloSayer";
@@ -38,8 +40,6 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 		bsMBean = getMBeanFromServer(BundleStateMBean.OBJECTNAME,
 				BundleStateMBean.class);	
 		bundleContext = super.getContext();
-		packageAdmin = (PackageAdmin) bundleContext.getService(bundleContext.getServiceReference(PackageAdmin.class.getName()));
-		
 	}
 	
 	public void testGetDependencies() throws IOException {
@@ -425,9 +425,15 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 		while (iter.hasNext()) {
 			CompositeData item = (CompositeData) iter.next();
 			long tempBundleId = ((Long) item.get("Identifier")).longValue();
-			if (packageAdmin.getHosts(bundleContext.getBundle(tempBundleId)) != null) {
-				assertNotNull(bsMBean.getHosts(tempBundleId));
-				assertTrue("wrong hosts info returned for bundle with id" + tempBundleId, bsMBean.getHosts(tempBundleId).length == packageAdmin.getHosts(bundleContext.getBundle(tempBundleId)).length);
+			BundleRevision fragment = bundleContext.getBundle(tempBundleId)
+					.adapt(BundleRevision.class);
+			List<BundleRevision> hosts = Wiring.getHosts(bundleContext,
+					fragment);
+			if (!hosts.isEmpty()) {
+				long[] hostIds = bsMBean.getHosts(tempBundleId);
+				assertNotNull(hostIds);
+				assertEquals("wrong hosts info returned for bundle with id"
+						+ tempBundleId, hosts.size(), hostIds.length);
 			}
 		}			
 	}

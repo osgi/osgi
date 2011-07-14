@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,16 +49,16 @@ public interface MonitoringJob {
      */
     public void stop();
 
-    /**
-     * Returns the identifier of the principal who initiated the job. This is
-     * set at the time when
-     * {@link MonitorAdmin#startJob MonitorAdmin.startJob()} method is called.
-     * This string holds the ServerID if the operation was initiated from a
-     * remote manager, or an arbitrary ID of the initiator entity in the local
-     * case (used for addressing notification events).
-     * 
-     * @return the ID of the initiator, cannot be {@code null}
-     */
+	/**
+	 * Returns the identifier of the principal who initiated the job. This is
+	 * set at the time when {@link MonitorAdmin#startJob(String, String[], int)
+	 * MonitorAdmin.startJob} method is called. This string holds the ServerID
+	 * if the operation was initiated from a remote manager, or an arbitrary ID
+	 * of the initiator entity in the local case (used for addressing
+	 * notification events).
+	 * 
+	 * @return the ID of the initiator, cannot be {@code null}
+	 */
     public String getInitiator();
 
     /**
@@ -87,19 +87,18 @@ public interface MonitoringJob {
      */
     public int getSchedule();
 
-    /**
-     * Returns the number of times {@code MonitorAdmin} will query the
-     * {@code StatusVariable}s (for time based jobs), or the number of
-     * changes of a {@code StatusVariable} between notifications (for
-     * change based jobs). Time based jobs with non-zero report count will take
-     * {@code getReportCount()}*{@code getSchedule()} time to
-     * finish. Time based jobs with 0 report count and change based jobs do not
-     * stop automatically, but all jobs can be stopped with the {@link #stop}
-     * method.
-     * 
-     * @return the number of measurements to be taken, or the number of changes
-     *         between notifications
-     */
+	/**
+	 * Returns the number of times {@code MonitorAdmin} will query the
+	 * {@code StatusVariable}s (for time based jobs), or the number of changes
+	 * of a {@code StatusVariable} between notifications (for change based
+	 * jobs). Time based jobs with non-zero report count will take
+	 * {@code getReportCount()}*{@code getSchedule()} time to finish. Time based
+	 * jobs with 0 report count and change based jobs do not stop automatically,
+	 * but all jobs can be stopped with the {@link #stop()} method.
+	 * 
+	 * @return the number of measurements to be taken, or the number of changes
+	 *         between notifications
+	 */
     public int getReportCount();
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,99 +27,124 @@ import java.security.PrivilegedAction;
 import org.osgi.framework.Bundle;
 
 /**
- * DeploymentAdminPermission controls access to the Deployment Admin service.<p>
+ * DeploymentAdminPermission controls access to the Deployment Admin service.
+ * <p>
  * 
- * The permission uses a filter string formatted similarly to the {@link org.osgi.framework.Filter}. 
- * The filter determines the target of the permission. The {@code DeploymentAdminPermission} uses the 
- * {@code name} and the {@code signer} filter attributes only. The value of the {@code signer} 
- * attribute is matched against the signer chain (represented with its semicolon separated Distinguished Name chain) 
- * of the Deployment Package, and the value of the {@code name} attribute is matched against the value of the 
- * "DeploymentPackage-Name" manifest header of the Deployment Package. Example: 
+ * The permission uses a filter string formatted similarly to the
+ * {@link org.osgi.framework.Filter}. The filter determines the target of the
+ * permission. The {@code DeploymentAdminPermission} uses the {@code name} and
+ * the {@code signer} filter attributes only. The value of the {@code signer}
+ * attribute is matched against the signer chain (represented with its semicolon
+ * separated Distinguished Name chain) of the Deployment Package, and the value
+ * of the {@code name} attribute is matched against the value of the
+ * "DeploymentPackage-Name" manifest header of the Deployment Package. Example:
  * 
  * <ul>
- * 		<li>(signer=cn = Bugs Bunny, o = ACME, c = US)</li>
- * 		<li>(name=org.osgi.ExampleApp)</li>
+ * <li>(signer=cn = Bugs Bunny, o = ACME, c = US)</li>
+ * <li>(name=org.osgi.ExampleApp)</li>
  * </ul>
  * 
- * Wildcards also can be used:<p>
+ * Wildcards also can be used:
+ * <p>
  * 
  * <pre>
- * (signer=cn=*,o=ACME,c=*)  
+ * (signer=cn=*,o=ACME,c=*)
  * </pre>
+ * 
  * "cn" and "c" may have an arbitrary value
  * 
  * <pre>
- * (signer=*, o=ACME, c=US)  
+ * (signer=*, o=ACME, c=US)
  * </pre>
+ * 
  * Only the value of "o" and "c" are significant
  * 
  * <pre>
  * (signer=* ; ou=S &amp; V, o=Tweety Inc., c=US)
  * </pre>
- * The first element of the certificate chain is 
- * not important, only the second (the 
- * Distinguished Name of the root certificate)
+ * 
+ * The first element of the certificate chain is not important, only the second
+ * (the Distinguished Name of the root certificate)
  * 
  * <pre>
  * (signer=- ; *, o=Tweety Inc., c=US)
  * </pre>
- * The same as the previous but '-' represents 
- * zero or more certificates, whereas the asterisk 
- * only represents a single certificate
+ * 
+ * The same as the previous but '-' represents zero or more certificates,
+ * whereas the asterisk only represents a single certificate
  * 
  * <pre>
- * (name=*)                  
+ * (name=*)
  * </pre>
+ * 
  * The name of the Deployment Package doesn't matter
  * 
  * <pre>
- * (name=org.osgi.*)         
+ * (name=org.osgi.*)
  * </pre>
+ * 
  * The name has to begin with "org.osgi."
  * 
- * <p>The following actions are allowed:<p>
+ * <p>
+ * The following actions are allowed:
+ * <p>
  * 
  * <b>list</b>
  * <p>
- * A holder of this permission can access the inventory information of the deployment
- * packages selected by the &lt;filter&gt; string. The filter selects the deployment packages
- * on which the holder of the permission can acquire detailed inventory information.
- * See {@link DeploymentAdmin#getDeploymentPackage(Bundle)}, 
+ * A holder of this permission can access the inventory information of the
+ * deployment packages selected by the &lt;filter&gt; string. The filter selects
+ * the deployment packages on which the holder of the permission can acquire
+ * detailed inventory information. See
+ * {@link DeploymentAdmin#getDeploymentPackage(Bundle)},
  * {@link DeploymentAdmin#getDeploymentPackage(String)} and
- * {@link DeploymentAdmin#listDeploymentPackages}.<p>
+ * {@link DeploymentAdmin#listDeploymentPackages}.
+ * <p>
  * 
- * <b>install</b><p>
+ * <b>install</b>
+ * <p>
  * 
- * A holder of this permission can install/update deployment packages if the deployment
- * package satisfies the &lt;filter&gt; string. See {@link DeploymentAdmin#installDeploymentPackage}.<p>
+ * A holder of this permission can install/update deployment packages if the
+ * deployment package satisfies the &lt;filter&gt; string. See
+ * {@link DeploymentAdmin#installDeploymentPackage}.
+ * <p>
  * 
- * <b>uninstall</b><p>
+ * <b>uninstall</b>
+ * <p>
  * 
- * A holder of this permission can uninstall deployment packages if the deployment
- * package satisfies the &lt;filter&gt; string. See {@link DeploymentPackage#uninstall}.<p>
+ * A holder of this permission can uninstall deployment packages if the
+ * deployment package satisfies the &lt;filter&gt; string. See
+ * {@link DeploymentPackage#uninstall()}.
+ * <p>
  * 
- * <b>uninstall_forced</b><p>
+ * <b>uninstall_forced</b>
+ * <p>
  * 
- * A holder of this permission can forcefully uninstall deployment packages if the deployment
- * package satisfies the &lt;filter&gt; string. See {@link DeploymentPackage#uninstallForced}.<p>
+ * A holder of this permission can forcefully uninstall deployment packages if
+ * the deployment package satisfies the &lt;filter&gt; string. See
+ * {@link DeploymentPackage#uninstallForced()}.
+ * <p>
  * 
- * <b>cancel</b><p>
+ * <b>cancel</b>
+ * <p>
  * 
- * A holder of this permission can cancel an active deployment action. This action being
- * canceled could correspond to the install, update or uninstall of a deployment package
- * that satisfies the &lt;filter&gt; string. See {@link DeploymentAdmin#cancel}<p>
+ * A holder of this permission can cancel an active deployment action. This
+ * action being canceled could correspond to the install, update or uninstall of
+ * a deployment package that satisfies the &lt;filter&gt; string. See
+ * {@link DeploymentAdmin#cancel()}
+ * <p>
  * 
- * <b>metadata</b><p>
+ * <b>metadata</b>
+ * <p>
  * 
- * A holder of this permission is able to retrieve metadata information about a Deployment 
- * Package (e.g. is able to ask its manifest headers). 
- * See {@link org.osgi.service.deploymentadmin.DeploymentPackage#getBundle(String)},
+ * A holder of this permission is able to retrieve metadata information about a
+ * Deployment Package (e.g. is able to ask its manifest headers). See
+ * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getBundle(String)},
  * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getBundleInfos()},
- * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getHeader(String)}, 
+ * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getHeader(String)},
  * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getResourceHeader(String, String)},
- * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getResourceProcessor(String)}, 
- * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getResources()}<p>
- *
+ * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getResourceProcessor(String)}, {@link org.osgi.service.deploymentadmin.DeploymentPackage#getResources()}
+ * <p>
+ * 
  * The actions string is converted to lower case before processing.
  */
 public final class DeploymentAdminPermission extends Permission {
@@ -158,12 +183,13 @@ public final class DeploymentAdminPermission extends Permission {
      * @see DeploymentPackage#uninstallForced()
      */
     public static final String UNINSTALL_FORCED   = "uninstall_forced";
-    
-    /**
-     * Constant String to the "cancel" action.<p>
-     * 
-     * @see DeploymentAdmin#cancel
-     */
+
+	/**
+	 * Constant String to the "cancel" action.
+	 * <p>
+	 * 
+	 * @see DeploymentAdmin#cancel()
+	 */
     public static final String CANCEL             = "cancel";
     
     /**

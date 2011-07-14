@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 package org.osgi.service.wireadmin;
 
 /**
- * {@code BasicEnvelope} is an implementation of the {@link Envelope}
- * interface
+ * {@code BasicEnvelope} is an implementation of the {@link Envelope} interface
  * 
+ * @Immutable
  * @version $Id$
  */
 public class BasicEnvelope implements Envelope {
-	Object	value;
-	Object	identification;
-	String	scope;
+	private final Object	value;
+	private final Object	identification;
+	private final String	scope;
 
 	/**
 	 * Constructor.

@@ -36,24 +36,14 @@
  */
 package org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentException;
 
-import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
 import org.osgi.service.deploymentadmin.DeploymentException;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
 
 /**
  * This Test Class Validates the DeploymentException Constants values according
  * to MEG reference documentation.
  */
-public class DeploymentExceptionConstants {
-	private DeploymentTestControl tbc;
-
-	public DeploymentExceptionConstants(DeploymentTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testConstants001();
-	}
-
+public class DeploymentExceptionConstants extends DeploymentTestControl {
 	/**
 	 * This test case validates the DeploymentException codes (constants
 	 * specified in DeploymentException) of the checked exception received when
@@ -62,24 +52,40 @@ public class DeploymentExceptionConstants {
 	 * @spec 114.14.5
 	 */
 	public void testConstants001() {
-		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting CODE_BAD_HEADER value", 452, DeploymentException.CODE_BAD_HEADER);
-		tbc.assertEquals("Asserting CODE_BUNDLE_NAME_ERROR value", 457, DeploymentException.CODE_BUNDLE_NAME_ERROR);
-		tbc.assertEquals("Asserting CODE_BUNDLE_SHARING_VIOLATION value", 460, DeploymentException.CODE_BUNDLE_SHARING_VIOLATION);
-        tbc.assertEquals("Asserting CODE_CANCELLED value", 401, DeploymentException.CODE_CANCELLED);
-        tbc.assertEquals("Asserting CODE_COMMIT_ERROR value", 462, DeploymentException.CODE_COMMIT_ERROR);
-        tbc.assertEquals("Asserting CODE_FOREIGN_CUSTOMIZER value", 458, DeploymentException.CODE_FOREIGN_CUSTOMIZER);
-		tbc.assertEquals("Asserting CODE_MISSING_BUNDLE value", 454, DeploymentException.CODE_MISSING_BUNDLE);
-		tbc.assertEquals("Asserting CODE_MISSING_FIXPACK_TARGET value", 453, DeploymentException.CODE_MISSING_FIXPACK_TARGET);
-		tbc.assertEquals("Asserting CODE_MISSING_HEADER value", 451, DeploymentException.CODE_MISSING_HEADER);
-		tbc.assertEquals("Asserting CODE_MISSING_RESOURCE value", 455, DeploymentException.CODE_MISSING_RESOURCE);		
-		tbc.assertEquals("Asserting CODE_NOT_A_JAR value", 404, DeploymentException.CODE_NOT_A_JAR);
-		tbc.assertEquals("Asserting CODE_ORDER_ERROR value", 450, DeploymentException.CODE_ORDER_ERROR);
-		tbc.assertEquals("Asserting CODE_OTHER_ERROR value", 463, DeploymentException.CODE_OTHER_ERROR);
-        tbc.assertEquals("Asserting CODE_PROCESSOR_NOT_FOUND value", 464, DeploymentException.CODE_PROCESSOR_NOT_FOUND);
-		tbc.assertEquals("Asserting CODE_RESOURCE_SHARING_VIOLATION value", 461, DeploymentException.CODE_RESOURCE_SHARING_VIOLATION);
-		tbc.assertEquals("Asserting CODE_SIGNING_ERROR value", 456, DeploymentException.CODE_SIGNING_ERROR);
-		tbc.assertEquals("Asserting CODE_TIMEOUT value", 465, DeploymentException.CODE_TIMEOUT);
+		assertConstant(new Integer(452), "CODE_BAD_HEADER",
+				DeploymentException.class);
+		assertConstant(new Integer(457), "CODE_BUNDLE_NAME_ERROR",
+				DeploymentException.class);
+		assertConstant(new Integer(460), "CODE_BUNDLE_SHARING_VIOLATION",
+				DeploymentException.class);
+		assertConstant(new Integer(401), "CODE_CANCELLED",
+				DeploymentException.class);
+		assertConstant(new Integer(462), "CODE_COMMIT_ERROR",
+				DeploymentException.class);
+		assertConstant(new Integer(458), "CODE_FOREIGN_CUSTOMIZER",
+				DeploymentException.class);
+		assertConstant(new Integer(454), "CODE_MISSING_BUNDLE",
+				DeploymentException.class);
+		assertConstant(new Integer(453), "CODE_MISSING_FIXPACK_TARGET",
+				DeploymentException.class);
+		assertConstant(new Integer(451), "CODE_MISSING_HEADER",
+				DeploymentException.class);
+		assertConstant(new Integer(455), "CODE_MISSING_RESOURCE",
+				DeploymentException.class);
+		assertConstant(new Integer(404), "CODE_NOT_A_JAR",
+				DeploymentException.class);
+		assertConstant(new Integer(450), "CODE_ORDER_ERROR",
+				DeploymentException.class);
+		assertConstant(new Integer(463), "CODE_OTHER_ERROR",
+				DeploymentException.class);
+		assertConstant(new Integer(464), "CODE_PROCESSOR_NOT_FOUND",
+				DeploymentException.class);
+		assertConstant(new Integer(461), "CODE_RESOURCE_SHARING_VIOLATION",
+				DeploymentException.class);
+		assertConstant(new Integer(456), "CODE_SIGNING_ERROR",
+				DeploymentException.class);
+		assertConstant(new Integer(465), "CODE_TIMEOUT",
+				DeploymentException.class);
 	}
 
 }
