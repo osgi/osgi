@@ -233,12 +233,9 @@ public interface ConfigurationAdmin {
 	 * {@link org.osgi.framework.Filter} class. The filter can test any
 	 * configuration properties including the following:
 	 * <ul>
-	 * <li>{@code service.pid}-{@code String}- the PID under which
-	 * this is registered</li>
-	 * <li>{@code service.factoryPid}-{@code String}- the factory if
-	 * applicable</li>
-	 * <li>{@code service.bundleLocation}-{@code String}- the bundle
-	 * location</li>
+	 * <li>{@code service.pid} - the persistent identity</li>
+	 * <li>{@code service.factoryPid} - the factory PID, if applicable</li>
+	 * <li>{@code service.bundleLocation} - the bundle location</li>
 	 * </ul>
 	 * The filter can also be {@code null}, meaning that all
 	 * {@code Configuration} objects should be returned.
