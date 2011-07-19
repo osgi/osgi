@@ -100,13 +100,13 @@ public final class Acl {
     // ----- Public constructors -----//
 
     /**
-     * Create an instance of the ACL from its canonic string representation.
-     * 
-     * @param acl The string representation of the ACL as defined in OMA DM. If
-     *        {@code null} or empty then it represents an empty list of
-     *        principals with no permissions.
-     * @throws IllegalArgumentException if acl is not a valid OMA DM ACL string
-     */
+	 * Create an instance of the ACL from its canonical string representation.
+	 * 
+	 * @param acl The string representation of the ACL as defined in OMA DM. If
+	 *        {@code null} or empty then it represents an empty list of
+	 *        principals with no permissions.
+	 * @throws IllegalArgumentException if acl is not a valid OMA DM ACL string
+	 */
     public Acl(String acl) {
         if (acl == null || acl.equals("")) { // empty permission set
             principalPermissions = new TreeMap();
@@ -297,16 +297,6 @@ public final class Acl {
         return toString().hashCode();
     }
 
-	/**
-	 * Use {@link #hashCode()} instead.
-	 * 
-	 * @return Result of {@link #hashCode()}
-	 * @deprecated Use correct method {@link #hashCode()};
-	 */
-	public int hashcode() {
-		return hashCode();
-	}
-
     /**
      * Create a new {@code Acl} instance from this {@code Acl} with 
      * the given permission added for the given principal. The already existing
@@ -443,12 +433,12 @@ public final class Acl {
     }
 
     /**
-     * Give the canonic string representation of this ACL. The operations are in
-     * the following order: {Add, Delete, Exec, Get, Replace}, principal names
-     * are sorted alphabetically.
-     * 
-     * @return The string representation as defined in OMA DM.
-     */
+	 * Give the canonical string representation of this ACL. The operations are
+	 * in the following order: {Add, Delete, Exec, Get, Replace}, principal
+	 * names are sorted alphabetically.
+	 * 
+	 * @return The string representation as defined in OMA DM.
+	 */
     public synchronized String toString() {
         String acl = null;
         for (int i = 0; i < PERMISSION_CODES.length; i++)

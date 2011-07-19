@@ -123,7 +123,7 @@ public class DmtException extends Exception {
      * This error code corresponds to the OMA DM response status code 413
      * &quot;Request entity too large&quot;.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
      */
     public static final int LIMIT_EXCEEDED = 413;
 
@@ -316,16 +316,16 @@ public class DmtException extends Exception {
     public static final int TRANSACTION_ERROR = 6;
 
     /**
-     * Creation of a session timed out because of another ongoing session. The
-     * length of time while the DmtAdmin waits for the blocking session(s) to
-     * finish is implementation dependant.
-     * <p>
-     * This error code does not correspond to any OMA DM response status code.
-     * OMA has several status codes related to timeout, but these are meant to
-     * be used when a request times out, not if a session can not be
-     * established. This error code should be translated to the code 500
-     * &quot;Command Failed&quot; when transferring over OMA DM.
-     */
+	 * Creation of a session timed out because of another ongoing session. The
+	 * length of time while the DmtAdmin waits for the blocking session(s) to
+	 * finish is implementation dependent.
+	 * <p>
+	 * This error code does not correspond to any OMA DM response status code.
+	 * OMA has several status codes related to timeout, but these are meant to
+	 * be used when a request times out, not if a session can not be
+	 * established. This error code should be translated to the code 500
+	 * &quot;Command Failed&quot; when transferring over OMA DM.
+	 */
     public static final int SESSION_CREATION_TIMEOUT = 7;
 
     // ----- Content fields -----//
@@ -558,7 +558,7 @@ public class DmtException extends Exception {
      * @return the list of causes of this exception
      */
     public Throwable[] getCauses() {
-        return (Throwable[]) causes.clone();
+		return causes.clone();
     }
 
     /**

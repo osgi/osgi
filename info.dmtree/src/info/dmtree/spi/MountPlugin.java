@@ -27,7 +27,7 @@ package info.dmtree.spi;
  * unknown to the plugin in advance.
  * 
  * @version $Id$
- * @since 1.1
+ * @since 2.0
  */
 public interface MountPlugin {
 
@@ -35,7 +35,7 @@ public interface MountPlugin {
 	 * The string to be used as key for the mount points property when a
 	 * DataPlugin or ExecPlugin is registered with mount points.
 	 */
-	static final String MOUNT_POINTS = "mountPoints";
+	String	MOUNT_POINTS	= "mountPoints";
 
 	/**
 	 * Provides the {@code MountPoint} objects describing the path where

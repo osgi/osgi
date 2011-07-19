@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 package info.dmtree;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.security.AccessController;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -59,28 +56,28 @@ public final class Uri {
 	/**
 	 * This constant stands for a string identifying the root of the DmTree (".").
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public static final String ROOT_NODE = ".";
 
 	/**
 	 * This constant stands for a char identifying the root of the DmTree ('.').
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public static final char ROOT_NODE_CHAR = '.';
 	
 	/**
 	 * This constant stands for a string identifying the path separator in the DmTree ("/").
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public static final String PATH_SEPARATOR = "/";
 	
 	/**
 	 * This constant stands for a char identifying the path separator in the DmTree ('/').
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public static final char PATH_SEPARATOR_CHAR = '/';
 	
@@ -234,7 +231,7 @@ public final class Uri {
 	/**
 	 * This method returns the length of a URI segment. The length of the URI
 	 * segment is defined as the number of bytes in the unescaped, UTF-8 encoded
-	 * represenation of the segment.
+	 * representation of the segment.
 	 * <p>
 	 * The method verifies that the URI segment is well-formed.
 	 * 
@@ -283,9 +280,10 @@ public final class Uri {
 	}
 
 	/**
-	 * Split the specified URI along the path separator '/' charaters and return
-	 * an array of URI segments. Special characters in the returned segments are
-	 * escaped. The returned array may be empty if the specifed URI was empty.
+	 * Split the specified URI along the path separator '/' characters and
+	 * return an array of URI segments. Special characters in the returned
+	 * segments are escaped. The returned array may be empty if the specified
+	 * URI was empty.
 	 * 
 	 * @param uri the URI to be split, must not be {@code null}
 	 * @return an array of URI segments created by splitting the specified URI
@@ -361,6 +359,7 @@ public final class Uri {
 									limit = limitInt;
 							}
 							catch (NumberFormatException e) {
+								// ignore
 							}
 
 							return new Integer(limit);
@@ -373,7 +372,7 @@ public final class Uri {
 	/**
 	 * Returns the maximum allowed length of a URI. The value is implementation
 	 * specific. The length of the URI is defined as the number of bytes in the
-	 * unescaped, UTF-8 encoded represenation of the URI.
+	 * unescaped, UTF-8 encoded representation of the URI.
 	 * <p>
 	 * The return value of {@code Integer.MAX_VALUE} indicates that there is no
 	 * upper limit on the length of URIs.
@@ -397,6 +396,7 @@ public final class Uri {
 									limit = limitInt;
 							}
 							catch (NumberFormatException e) {
+								// ignore
 							}
 
 							return new Integer(limit);
@@ -409,7 +409,7 @@ public final class Uri {
 	/**
 	 * Returns the maximum allowed length of a URI segment. The value is
 	 * implementation specific. The length of the URI segment is defined as the
-	 * number of bytes in the unescaped, UTF-8 encoded represenation of the
+	 * number of bytes in the unescaped, UTF-8 encoded representation of the
 	 * segment.
 	 * <p>
 	 * The return value of {@code Integer.MAX_VALUE} indicates that there is no
@@ -436,6 +436,7 @@ public final class Uri {
 									limit = limitInt;
 							}
 							catch (NumberFormatException e) {
+								// ignore
 							}
 
 							return new Integer(limit);

@@ -54,9 +54,9 @@ public interface DataPlugin {
 	 * The string to be used as key for the “dataRootURIs” property when an
 	 * DataPlugin is registered.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
-	static final String	DATA_ROOT_URIS	= "dataRootURIs";
+	String	DATA_ROOT_URIS	= "dataRootURIs";
 
 	/**
 	 * This method is called to signal the start of a read-only session when the
