@@ -18,7 +18,8 @@ package info.dmtree;
 
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An immutable data structure representing the contents of a leaf or interior
@@ -175,14 +176,14 @@ public final class DmtData {
 	 */
 	public static final int			FORMAT_HEXBINARY		= 0x40000;
 
-	private static final Hashtable	FORMAT_NAMES			= new Hashtable();
-
 	private static final BigInteger	BD_MAX_ULONG			= new BigInteger(
 																	""
 																			+ Long.MAX_VALUE)
 																	.multiply(new BigInteger(
 																			"2"));
 
+	// FORMAT_NAMES must be initialized before any constructor is called.
+	private static final Map		FORMAT_NAMES			= new HashMap();
 	static {
 		FORMAT_NAMES.put(new Integer(FORMAT_BASE64), "b64");
 		FORMAT_NAMES.put(new Integer(FORMAT_BINARY), "bin");
@@ -208,7 +209,6 @@ public final class DmtData {
 	 * Constant instance representing a leaf node of {@code null} format.
 	 */
 	public static final DmtData		NULL_VALUE				= new DmtData();
-	// FORMAT_NAMES must be initialized by the time the constr. is called
 
 	/**
 	 * Constant instance representing a boolean {@code true} value.
