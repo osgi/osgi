@@ -17,7 +17,7 @@
 package info.dmtree;
 
 /**
- * TODO Add Javadoc comment for this type.
+ * Defines standard names for {@code DmtAdmin}.
  * 
  * @version $Id$
  * @since 1.1
