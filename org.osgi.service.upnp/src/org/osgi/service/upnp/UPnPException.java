@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 package org.osgi.service.upnp;
 
-import java.io.PrintStream;
-import java.io.PrintWriter;
 
 /**
  * There are several defined error situations describing UPnP problems while a
@@ -55,8 +53,6 @@ public class UPnPException extends Exception {
 	 */
 	public final static int		DEVICE_INTERNAL_ERROR	= 501;
 
-	private static final String	CAUSED_BY				= "Caused by: ";
-
 	/**
 	 * Key for an error information that is an int type variable and that is
 	 * used to identify occurred errors.
@@ -64,21 +60,17 @@ public class UPnPException extends Exception {
 	private final int			errorCode;
 
 	/**
-	 * The throwable that caused this UPnP exception. {@code null}
-	 * indicates that the throwable cause is unknown.
-	 */
-	private Throwable			errorCause;
-
-	/**
-	 * This constructor creates a {@code UPnPException} on the specified
-	 * error code and error description.
+	 * This constructor creates a {@code UPnPException} on the specified error
+	 * code and error description.
 	 * 
 	 * @param errorCode error code which defined by UPnP Device Architecture
 	 *        V1.0.
-	 * @param errorDesc error description which explain the type of problem.
+	 * @param errorDescription error description which explain the type of
+	 *        problem.
 	 */
-	public UPnPException(int errorCode, String errorDesc) {
-		this(errorCode, errorDesc, null);
+	public UPnPException(int errorCode, String errorDescription) {
+		super(errorDescription);
+		this.errorCode = errorCode;
 	}
 
 	/**
@@ -95,9 +87,8 @@ public class UPnPException extends Exception {
 	 */
 	public UPnPException(int errorCode, String errorDescription,
 			Throwable errorCause) {
-		super(errorDescription);
+		super(errorDescription, errorCause);
 		this.errorCode = errorCode;
-		this.errorCause = errorCause;
 	}
 
 	/**
@@ -109,81 +100,7 @@ public class UPnPException extends Exception {
 	 * @since 1.2
 	 */
 	public int getUPnPErrorCode() {
-		return getUPnPError_Code();
-	}
-
-	/**
-	 * Returns the error cause of that throwable. {@code null} value
-	 * indicates that the cause throwable is unknown.
-	 * 
-	 * @return The cause of that exception or {@code null} if the throwable
-	 *         cause is unknown.
-	 * 
-	 * @since 1.2
-	 */
-	public Throwable getCause() {
-		synchronized (this) {
-			return errorCause;
-		}
-	}
-
-	/**
-	 * Prints the exception stack trace to the "standard" error output stream.
-	 * 
-	 * @since 1.2
-	 * 
-	 * @see java.lang.Throwable#printStackTrace()
-	 */
-	public void printStackTrace() {
-		this.printStackTrace(System.err);
-	}
-
-	/**
-	 * Prints the exception stack trace to the specified print stream.
-	 * 
-	 * @param ps the print stream used for output.
-	 * 
-	 * @since 1.2
-	 * 
-	 * @see java.lang.Throwable#printStackTrace(java.io.PrintStream)
-	 */
-	public void printStackTrace(PrintStream ps) {
-		synchronized (this) {
-			Throwable errorCauseLocal = errorCause;
-			errorCause = null; // prevent duplicated messages
-			synchronized (ps) {
-				super.printStackTrace(ps);
-				errorCause = errorCauseLocal; // restore the error cause
-				if (null != errorCause) {
-					ps.print(CAUSED_BY);
-					errorCause.printStackTrace(ps);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Prints the exception stack trace to the specified print writer.
-	 * 
-	 * @param pw the print writer used for output.
-	 * 
-	 * @since 1.2
-	 * 
-	 * @see java.lang.Throwable#printStackTrace(java.io.PrintWriter)
-	 */
-	public void printStackTrace(PrintWriter pw) {
-		synchronized (this) {
-			Throwable errorCauseLocal = errorCause;
-			errorCause = null; // prevent duplicated messages
-			synchronized (pw) {
-				super.printStackTrace(pw);
-				errorCause = errorCauseLocal; // restore the error cause
-				if (null != errorCause) {
-					pw.print(CAUSED_BY);
-					errorCause.printStackTrace(pw);
-				}
-			}
-		}
+		return errorCode;
 	}
 
 	/**
@@ -194,6 +111,6 @@ public class UPnPException extends Exception {
 	 * @deprecated As of version 1.2, replaced by {@link #getUPnPErrorCode()}
 	 */
 	public int getUPnPError_Code() {
-		return errorCode;
+		return getUPnPErrorCode();
 	}
 }
