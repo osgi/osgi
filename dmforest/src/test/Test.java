@@ -6,7 +6,7 @@ import java.util.*;
 
 import org.osgi.dmt.ddf.*;
 import org.osgi.dmt.ddf.Scope.SCOPE;
-import org.osgi.dmt.residential3.*;
+import org.osgi.dmt.residential.*;
 
 public class Test {
 

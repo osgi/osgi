@@ -37,6 +37,8 @@ import org.osgi.dmt.ddf.*;
  * prepared script. The Log node can delete the [id] after an
  * implementation-defined time that should allow ample time for reading the
  * results.
+ * 
+ * @remark Shouldn't we use the Filter node and get rid of the filtering here?
  */
 
 public interface Log {
