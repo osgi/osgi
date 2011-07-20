@@ -286,6 +286,11 @@ public class XML2MIF extends DefaultHandler {
 		}
 		if ( elname.equals("CellContent")) {
 			cellContent = false;
+			if ( auto ) {
+				auto = false;
+				out.println("> # AUTO in cell");
+			}
+				
 		}
 		if ( elname.equals("OpenPara") ) {
 			return;
