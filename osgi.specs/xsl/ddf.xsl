@@ -7,9 +7,11 @@
 
 	<xsl:template match="package">
 		<xsl:if test="org.osgi.dmt.ddf.DDF">
-			<xsl:message>Processing DDF package</xsl:message>
-			<xsl:document href="xml/{@name}-ddf.xml" method="xml" indent="yes"
-				encoding="UTF-8">
+			<xsl:message>
+				Processing DDF package
+			</xsl:message>
+			<xsl:document href="xml/{@name}-ddf.xml" method="xml"
+				indent="yes" encoding="UTF-8">
 				<html>
 					<head>
 						<title>
@@ -24,15 +26,16 @@
 							<a name="package:{@fqn}" />
 						</h1>
 						<xsl:apply-templates select=".//formattingerror" />
-						
-						<xsl:apply-templates select=".//remark"/>
-						
-						<xsl:apply-templates select="description" mode="html" />
+
+						<xsl:apply-templates select=".//remark" />
+
+						<xsl:apply-templates select="description"
+							mode="html" />
 						<xsl:variable name="classes" select="class[not(skip)]" />
 						<xsl:call-template name="descriptors">
 							<xsl:with-param name="target" select="." />
 						</xsl:call-template>
-						<xsl:apply-templates select="remark"/>
+						<xsl:apply-templates select="remark" />
 						<xsl:apply-templates select="$classes">
 							<xsl:sort select="@name" />
 						</xsl:apply-templates>
@@ -92,76 +95,107 @@
 				<h2 class="Heading2">
 					<xsl:value-of select="@name" />
 				</h2>
-				<xsl:apply-templates select="remark"/>
-						
+				<xsl:apply-templates select="remark" />
+
 				<xsl:apply-templates select="description" mode="html" />
 				<xsl:call-template name="descriptors">
 					<xsl:with-param name="target" select="." />
 				</xsl:call-template>
-				<xsl:apply-templates select=".//ddf"/>
-				<xsl:if test="field">
-					<xsl:apply-templates select="field[not(skip)]">
-						<xsl:sort select="@name" />
-					</xsl:apply-templates>
-				</xsl:if>
-				<xsl:if test="method[not(@isConstructor)]">
-					<xsl:apply-templates select="method[not(@isConstructor) and not(skip)]">
-						<xsl:sort select="@name" />
-					</xsl:apply-templates>
-				</xsl:if>
+
+
+				<table class="Classes" title="Node Type Description for {@name}">
+					<tr>
+						<th width="1">
+							<p class="TableSubHead">Name</p>
+						</th>
+						<th width="0.6">
+							<p class="TableSubHead">Act</p>
+						</th>
+						<th width="1.5">
+							<p class="TableSubHead">Type</p>
+						</th>
+						<th width="0.5">
+							<p class="TableSubHead">Card</p>
+						</th>
+						<th width="0.2">
+							<p class="TableSubHead">S</p>
+						</th>
+						<th width="2.5">
+							<p class="TableSubHead">Description</p>
+						</th>
+					</tr>
+					<xsl:apply-templates name="method" />
+				</table>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 
+
+
+
+
 	<xsl:template match="method">
-		<h6 class='anchor'>
-			<a name="{@name}" />
-			<a index="{parent::node()/@name}:{@name}" />
-			<a index="{@name}" />
-			<xsl:value-of select="@name" />
-		</h6>
-		<h3 class="Heading3">
-			<xsl:value-of
-				select="@name" />
-		</h3>
-		<xsl:apply-templates select="remark"/>
-		<xsl:if test="normalize-space(description)">
-			<p class="description">
-				<tab />
-			</p>
-			<xsl:apply-templates select="description" mode="html" />
-		</xsl:if>
-		<xsl:apply-templates select="ddf"/>
-		<xsl:call-template name="descriptors">
-			<xsl:with-param name="target" select="." />
-		</xsl:call-template>
-	</xsl:template>
-
-
-	<xsl:template match="ddf">
 		<!-- ddf name='name' indent='' add='false' get='true' replace='false' delete='false' 
-		 longTypeName='java.lang.String' shortTypeName='string' cardinality='1' scope='P' interior='false' mime=''/
-		-->
-		<p class="ddf">
-			<code><xsl:value-of select="@indent"/></code>
-			<xsl:value-of select="@name"/>
-			<tab/>
-			<xsl:value-of select="saxon:if(@add='true','A','_')"/>
-			<xsl:value-of select="saxon:if(@delete='true','D','_')"/>
-			<xsl:value-of select="saxon:if(@get='true','G','_')"/>
-			<xsl:value-of select="saxon:if(@replace='true','R','_')"/>
-			<tab/>
-			<a href="#{@longTypeName}">
-				<xsl:value-of select="@shortTypeName" />
-			</a>
-			<tab/>
-			<xsl:value-of select="@cardinality"/>				
-			<tab/>
-			<xsl:value-of select="@scope"/>
-			<tab/>
-			<xsl:value-of select="@mime"/>
-		</p>
+			longTypeName='java.lang.String' shortTypeName='string' cardinality='1' scope='P' 
+			interior='false' mime=''/ -->
+		<xsl:variable name="description" select="description" />
+		<xsl:variable name="count" select="count(ddf)" />
+
+		<xsl:for-each select="ddf">
+			<tr>
+				<td>
+					<p>
+						<code>
+							<xsl:value-of select="@indent" />
+							<xsl:value-of select="@name" />
+						</code>
+					</p>
+				</td>
+				<td>
+					<code>
+						<xsl:if test="@add='true'">
+							Add
+						</xsl:if>
+						<xsl:if test="@delete='true'">
+							Del
+						</xsl:if>
+						<xsl:if test="@get='true'">
+							Get
+						</xsl:if>
+						<xsl:if test="@replace='true'">
+							Set
+						</xsl:if>
+					</code>
+				</td>
+				<td>
+					<code>
+						<xsl:value-of select="@shortTypeName" />
+					</code>
+				</td>
+				<td>
+					<code>
+						<xsl:value-of select="@cardinality" />
+					</code>
+				</td>
+				<td>
+					<code>
+						<xsl:value-of select="@scope" />
+					</code>
+				</td>
+				<xsl:if test="position()=1">
+					<td>
+						<xsl:attribute name="rowspan"><xsl:value-of
+							select="$count" /></xsl:attribute>
+						<p>
+							<xsl:apply-templates select="$description"
+								mode="html" />
+						</p>
+					</td>
+				</xsl:if>
+			</tr>
+		</xsl:for-each>
 	</xsl:template>
+
 
 
 	<xsl:template name="descriptors">
@@ -273,11 +307,12 @@
 	<xsl:template match="/">
 		<xsl:apply-templates select="//package" />
 	</xsl:template>
-	
-	
+
+
 	<xsl:template match="remark">
 		<p class="REMARK">
-		### <xsl:value-of select="."/>
+			###
+			<xsl:value-of select="." />
 		</p>
 	</xsl:template>
 </xsl:stylesheet>
