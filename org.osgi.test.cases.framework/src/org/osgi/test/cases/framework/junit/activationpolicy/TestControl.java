@@ -272,7 +272,7 @@ public class TestControl extends DefaultTestBundleControl {
             //   * LAZY_ACTIVATION, STARTING, STARTED, STOPPING, STOPPED events or
             //   * LAZY_ACTIVATION, STOPPING, STOPPED events
 			// The difference comes from whether the framework treats the trigger as a one-time trigger or not.
-			actualEvents = resultsListener.getResults(5);
+			actualEvents = resultsListener.getResults(4);
             // This is the case if the trigger is a one-time event.
             if (actualEvents.length == 4)
             {

@@ -26,7 +26,6 @@
 package org.osgi.test.support.signature;
 
 import java.io.DataInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,10 +46,10 @@ public class ClassParser {
 	 * Parse a class file.
 	 * 
 	 * @param cb Callback class
-	 * @throws IOException when we run into an io error.
+	 * @throws Exception when we run into an io error.
 	 */
 	
-	public void go(ParserCallback cb) throws IOException {
+	public void go(ParserCallback cb) throws Exception {
 		magic = in.readInt();
 		check(magic == 0xCAFEBABE, "Invalid magic");
 		minorVersion = in.readUnsignedShort();
@@ -69,7 +68,7 @@ public class ClassParser {
 		cb.doEnd();
 	}
 
-	private boolean doClass(ParserCallback cb) throws IOException {
+	private boolean doClass(ParserCallback cb) throws Exception {
 		int accessFlags = in.readUnsignedShort();
 		String thisClass = getClassName();
 		String superClass = getClassName();
@@ -81,7 +80,7 @@ public class ClassParser {
 		return cb.doClass(accessFlags, thisClass, superClass, interfaces);
 	}
 
-	private void doMethods(ParserCallback cb) throws IOException {
+	private void doMethods(ParserCallback cb) throws Exception {
 		int methodsCount = in.readUnsignedShort();
 		for (int i = 0; i < methodsCount; i++) {
 			int access = in.readUnsignedShort();
@@ -94,7 +93,7 @@ public class ClassParser {
 		}
 	}
 
-	private void doFields(ParserCallback cb) throws IOException {
+	private void doFields(ParserCallback cb) throws Exception {
 		int fieldsCount = in.readUnsignedShort();
 		for (int i = 0; i < fieldsCount; i++) {
 			int access = in.readUnsignedShort();
@@ -106,7 +105,7 @@ public class ClassParser {
 		}
 	}
 
-	private void readConstantPool() throws IOException {
+	private void readConstantPool() throws Exception {
 		constPoolCount = in.readUnsignedShort();
 		constPool = new PoolEntry[constPoolCount];
 		for (int i = 1; i < constPoolCount; i++) {
@@ -123,21 +122,21 @@ public class ClassParser {
 			throw new IllegalArgumentException(msg);
 	}
 
-	private String getClassName() throws IOException {
+	private String getClassName() throws Exception {
 		int n = in.readUnsignedShort();
 		return constPool[n].getClassName();
 	}
 
-	private String getUtf8() throws IOException {
+	private String getUtf8() throws Exception {
 		return constPool[in.readUnsignedShort()].getUtf8();
 	}
 
-	private Object getValue() throws IOException {
+	private Object getValue() throws Exception {
 		return constPool[in.readUnsignedShort()].getValue();
 	}
 
 	private Map<String, Object> doAttributes(ParserCallback cb)
-			throws IOException {
+			throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 		int attributesCount = in.readUnsignedShort();
 		for (int j = 0; j < attributesCount; j++) {

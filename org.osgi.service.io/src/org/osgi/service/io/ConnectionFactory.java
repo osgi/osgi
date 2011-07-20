@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,13 @@ import javax.microedition.io.Connection;
  * Service to create {@code javax.microedition.io.Connection} objects which
  * implement the scheme named by {@code IO_SCHEME}.
  * 
- * When a {@code ConnectorService.open} method is called, the implementation
- * of the Connector Service will examine the specified name for a scheme. The
+ * When a {@code ConnectorService.open} method is called, the implementation of
+ * the Connector Service will examine the specified name for a scheme. The
  * Connector Service will then look for a Connection Factory service which is
  * registered with the service property {@code IO_SCHEME} which matches the
- * scheme. The {@link #createConnection} method of the selected Connection
- * Factory will then be called to create the actual {@code Connection}
- * object.
+ * scheme. The {@link #createConnection(String, int, boolean)} method of the
+ * selected Connection Factory will then be called to create the actual
+ * {@code Connection} object.
  * 
  * @version $Id$
  */

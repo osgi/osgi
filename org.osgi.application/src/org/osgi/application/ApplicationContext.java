@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,20 +23,20 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 
 /**
- * {@code ApplicationContext} is the access point for an OSGi-aware
- * application to the features of the OSGi Service Platform. Each application
- * instance will have its own {@code ApplicationContext} instance, which
- * will not be reused after destroying the corresponding application instance.
+ * {@code ApplicationContext} is the access point for an OSGi-aware application
+ * to the features of the OSGi Service Platform. Each application instance will
+ * have its own {@code ApplicationContext} instance, which will not be reused
+ * after destroying the corresponding application instance.
  * <p>
- * Application instances can obtain their {@code ApplicationContext} using
- * the {@link Framework#getApplicationContext} method.
+ * Application instances can obtain their {@code ApplicationContext} using the
+ * {@link Framework#getApplicationContext(Object)} method.
  * <p>
  * The lifecycle of an {@code ApplicationContext} instance is bound to the
  * lifecycle of the corresponding application instance. The
- * {@code ApplicationContext} becomes available when the application is
- * started and it is invalidated when the application instance is stopped (i.e.
- * the "stop" method of the application activator object returned). All method
- * calls (except {@link #getApplicationId()} and {@link #getInstanceId()}) to an
+ * {@code ApplicationContext} becomes available when the application is started
+ * and it is invalidated when the application instance is stopped (i.e. the
+ * "stop" method of the application activator object returned). All method calls
+ * (except {@link #getApplicationId()} and {@link #getInstanceId()}) to an
  * invalidated context object result an {@code IllegalStateException}.
  * 
  * @see org.osgi.application.Framework
@@ -178,22 +178,22 @@ public interface ApplicationContext {
      *             If this context application instance has stopped.
      */
     public Object[] locateServices(String referenceName);
-    
-    /**
-     * Returns the startup parameters specified when calling the 
-     * {@link org.osgi.service.application.ApplicationDescriptor#launch}
-     * method.
-     * <p>
-     * Startup arguments can be specified as name, value pairs. The name
-     * must be of type {@link java.lang.String}, which must not be
-     * {@code null} or empty {@link java.lang.String} ({@code ""}), 
-     * the value can be any object including {@code null}.
-     * 
-     * @return a {@link java.util.Map} containing the startup arguments. 
-     *     It can be {@code null}.
-     * @throws java.lang.IllegalStateException
-     *             If this context application instance has stopped.
-     */
+
+	/**
+	 * Returns the startup parameters specified when calling the
+	 * {@code org.osgi.service.application.ApplicationDescriptor#launch(Map)}
+	 * method.
+	 * <p>
+	 * Startup arguments can be specified as name, value pairs. The name must be
+	 * of type {@link java.lang.String}, which must not be {@code null} or empty
+	 * {@link java.lang.String} ({@code ""}), the value can be any object
+	 * including {@code null}.
+	 * 
+	 * @return a {@link java.util.Map} containing the startup arguments. It can
+	 *         be {@code null}.
+	 * @throws java.lang.IllegalStateException If this context application
+	 *         instance has stopped.
+	 */
     public Map getStartupParameters();
     
     /**
@@ -216,43 +216,45 @@ public interface ApplicationContext {
      */
     public Map getServiceProperties(Object serviceObject);
 
-    
-    /**
+	/**
 	 * Registers the specified service object with the specified properties
 	 * under the specified class names into the Framework. A
 	 * {@link org.osgi.framework.ServiceRegistration} object is returned. The
-	 * {@link org.osgi.framework.ServiceRegistration} object is for the private use of the
-	 * application registering the service and should not be shared with other
-	 * applications. The registering application is defined to be the context application.
-	 * Bundles can locate the service by using either the
-	 * {@link org.osgi.framework.BundleContext#getServiceReferences} or 
-	 * {@link org.osgi.framework.BundleContext#getServiceReference} method. Other applications
-	 * can locate this service by using {@link #locateService(String)} or {@link #locateServices(String)}
-	 * method, if they declared their dependence on the registered service.
+	 * {@link org.osgi.framework.ServiceRegistration} object is for the private
+	 * use of the application registering the service and should not be shared
+	 * with other applications. The registering application is defined to be the
+	 * context application. Bundles can locate the service by using either the
+	 * {@link org.osgi.framework.BundleContext#getServiceReferences(String, String)}
+	 * or {@link org.osgi.framework.BundleContext#getServiceReference(String)}
+	 * method. Other applications can locate this service by using
+	 * {@link #locateService(String)} or {@link #locateServices(String)} method,
+	 * if they declared their dependence on the registered service.
 	 * 
 	 * <p>
 	 * An application can register a service object that implements the
-	 * {@link org.osgi.framework.ServiceFactory} interface to have more flexibility in providing
-	 * service objects to other applications or bundles.
+	 * {@link org.osgi.framework.ServiceFactory} interface to have more
+	 * flexibility in providing service objects to other applications or
+	 * bundles.
 	 * 
 	 * <p>
 	 * The following steps are required to register a service:
 	 * <ol>
-	 * <li>If {@code service} is not a {@code ServiceFactory},
-	 * an {@code IllegalArgumentException} is thrown if
-	 * {@code service} is not an {@code instanceof} all the
-	 * classes named.
+	 * <li>If {@code service} is not a {@code ServiceFactory}, an
+	 * {@code IllegalArgumentException} is thrown if {@code service} is not an
+	 * {@code instanceof} all the classes named.
 	 * <li>The Framework adds these service properties to the specified
-	 * {@code Dictionary} (which may be {@code null}): a property
-	 * named {@link org.osgi.framework.Constants#SERVICE_ID} identifying the registration number of
-	 * the service and a property named {@link org.osgi.framework.Constants#OBJECTCLASS} containing
-	 * all the specified classes. If any of these properties have already been
-	 * specified by the registering bundle, their values will be overwritten by
-	 * the Framework.
-	 * <li>The service is added to the Framework service registry and may now
-	 * be used by others.
-	 * <li>A service event of type {@link org.osgi.framework.ServiceEvent#REGISTERED} is
-	 * fired. This event triggers the corresponding {@link ApplicationServiceEvent} to be 
+	 * {@code Dictionary} (which may be {@code null}): a property named
+	 * {@link org.osgi.framework.Constants#SERVICE_ID} identifying the
+	 * registration number of the service and a property named
+	 * {@link org.osgi.framework.Constants#OBJECTCLASS} containing all the
+	 * specified classes. If any of these properties have already been specified
+	 * by the registering bundle, their values will be overwritten by the
+	 * Framework.
+	 * <li>The service is added to the Framework service registry and may now be
+	 * used by others.
+	 * <li>A service event of type
+	 * {@link org.osgi.framework.ServiceEvent#REGISTERED} is fired. This event
+	 * triggers the corresponding {@link ApplicationServiceEvent} to be
 	 * delivered to the applications that registered the appropriate listener.
 	 * <li>A {@code ServiceRegistration} object for this registration is
 	 * returned.
@@ -260,44 +262,43 @@ public interface ApplicationContext {
 	 * 
 	 * @param clazzes The class names under which the service can be located.
 	 *        The class names in this array will be stored in the service's
-	 *        properties under the key {@link org.osgi.framework.Constants#OBJECTCLASS}.
-     *        This parameter must not be {@code null}.
-	 * @param service The service object or a {@code ServiceFactory}
-	 *        object.
+	 *        properties under the key
+	 *        {@link org.osgi.framework.Constants#OBJECTCLASS}. This parameter
+	 *        must not be {@code null}.
+	 * @param service The service object or a {@code ServiceFactory} object.
 	 * @param properties The properties for this service. The keys in the
 	 *        properties object must all be {@code String} objects. See
-	 *        {@link org.osgi.framework.Constants} for a list of standard service property keys.
-	 *        Changes should not be made to this object after calling this
-	 *        method. To update the service's properties the
-	 *        {@link org.osgi.framework.ServiceRegistration#setProperties} method must be called.
-	 *        The set of properties may be {@code null} if the service
-	 *        has no properties.
+	 *        {@link org.osgi.framework.Constants} for a list of standard
+	 *        service property keys. Changes should not be made to this object
+	 *        after calling this method. To update the service's properties the
+	 *        {@link org.osgi.framework.ServiceRegistration#setProperties(Dictionary)}
+	 *        method must be called. The set of properties may be {@code null}
+	 *        if the service has no properties.
 	 * 
-	 * @return A {@link org.osgi.framework.ServiceRegistration} object for use by the application
-	 *         registering the service to update the service's properties or to
-	 *         unregister the service.
+	 * @return A {@link org.osgi.framework.ServiceRegistration} object for use
+	 *         by the application registering the service to update the
+	 *         service's properties or to unregister the service.
 	 * 
 	 * @throws java.lang.IllegalArgumentException If one of the following is
 	 *         true:
 	 *         <ul>
-	 *         <li>{@code service} is {@code null}.
-	 *         <li>{@code service} is not a {@code ServiceFactory}
-	 *         object and is not an instance of all the named classes in
-	 *         {@code clazzes}.
-	 *         <li>{@code properties} contains case variants of the same
-	 *         key name.
+	 *         <li>{@code service} is {@code null}. <li>{@code service} is not a
+	 *         {@code ServiceFactory} object and is not an instance of all the
+	 *         named classes in {@code clazzes}. <li>{@code properties} contains
+	 *         case variants of the same key name.
 	 *         </ul>
 	 * @throws NullPointerException if {@code clazzes} is {@code null}
-     * 
+	 * 
 	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         {@code ServicePermission} to register the service for all
-	 *         the named classes and the Java Runtime Environment supports
+	 *         {@code ServicePermission} to register the service for all the
+	 *         named classes and the Java Runtime Environment supports
 	 *         permissions.
 	 * 
 	 * @throws java.lang.IllegalStateException If this ApplicationContext is no
 	 *         longer valid.
 	 * 
-	 * @see org.osgi.framework.BundleContext#registerService(java.lang.String[], java.lang.Object, java.util.Dictionary)
+	 * @see org.osgi.framework.BundleContext#registerService(java.lang.String[],
+	 *      java.lang.Object, java.util.Dictionary)
 	 * @see org.osgi.framework.ServiceRegistration
 	 * @see org.osgi.framework.ServiceFactory
 	 */

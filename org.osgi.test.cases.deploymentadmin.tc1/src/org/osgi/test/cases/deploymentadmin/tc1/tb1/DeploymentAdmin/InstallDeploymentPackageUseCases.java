@@ -136,7 +136,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(dp);
-			deploymentEventHandler.reset();
 		}
 	}
 	
@@ -172,8 +171,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
 							.getClass().getName()}), e);
-		} finally {
-			deploymentEventHandler.reset();
 		}
 	}
 	
@@ -211,7 +208,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 							.getClass().getName()}), e);
 		} finally {
 			tbc.uninstall(dp);
-			deploymentEventHandler.reset();
 		}
 	}
 	
@@ -248,8 +244,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
 							.getClass().getName()}), e);
-		} finally {
-			deploymentEventHandler.reset();
 		}
 	}	
 
@@ -498,7 +492,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 							.getClass().getName()}), e);
         } finally {
             tbc.uninstall(dp);
-            deploymentEventHandler.reset();
         }
     }
     
@@ -552,7 +545,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 							.getClass().getName()}), e);
         } finally {
             tbc.uninstall(dp);
-            deploymentEventHandler.reset();
         }
     }
     
@@ -643,7 +635,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 //				e.printStackTrace();
 //			}
 			tbc.uninstall(dp);
-			deploymentEventHandler.reset();
 		}
 	}
 
@@ -767,7 +758,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			} else if (newDPInstalled) {
 				tbc.uninstall(newDP);
 			}
-			deploymentEventHandler.reset();
 		}
 	}
     /**

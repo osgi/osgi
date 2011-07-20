@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2007, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,28 @@
 
 package org.osgi.util.tr069;
 
+import static info.dmtree.DmtData.FALSE_VALUE;
+import static info.dmtree.DmtData.FORMAT_BASE64;
+import static info.dmtree.DmtData.FORMAT_BINARY;
+import static info.dmtree.DmtData.FORMAT_BOOLEAN;
+import static info.dmtree.DmtData.FORMAT_DATE;
+import static info.dmtree.DmtData.FORMAT_DATETIME;
+import static info.dmtree.DmtData.FORMAT_FLOAT;
+import static info.dmtree.DmtData.FORMAT_HEXBINARY;
+import static info.dmtree.DmtData.FORMAT_INTEGER;
+import static info.dmtree.DmtData.FORMAT_LONG;
+import static info.dmtree.DmtData.FORMAT_NODE;
+import static info.dmtree.DmtData.FORMAT_NODE_URI;
+import static info.dmtree.DmtData.FORMAT_NULL;
+import static info.dmtree.DmtData.FORMAT_RAW_BINARY;
+import static info.dmtree.DmtData.FORMAT_RAW_STRING;
+import static info.dmtree.DmtData.FORMAT_STRING;
+import static info.dmtree.DmtData.FORMAT_TIME;
+import static info.dmtree.DmtData.FORMAT_UNSIGNED_INTEGER;
+import static info.dmtree.DmtData.FORMAT_UNSIGNED_LONG;
+import static info.dmtree.DmtData.FORMAT_XML;
+import static info.dmtree.DmtData.NULL_VALUE;
+import static info.dmtree.DmtData.TRUE_VALUE;
 import info.dmtree.DmtConstants;
 import info.dmtree.DmtData;
 import info.dmtree.MetaNode;
@@ -28,76 +50,56 @@ import java.util.StringTokenizer;
  * Class which contains value and data type for TR-069, and static methods of
  * utilities.
  * 
+ * @Immutable
  * @version $Id$
  */
 public class TR069ParameterValue {
 	/**
 	 * 
 	 * Constant representing the TR-069 integer type.
-	 * 
-	 * The value of TR069_TYPE_INT is "int".
 	 */
 	public final static String	TR069_TYPE_INT				= "int";
 
 	/**
 	 * Constant representing the TR-069 unsigned integer type.
-	 * 
-	 * The value of TR069_TYPE_UNSIGNED_INT is "unsignedInt".
 	 */
 	public final static String	TR069_TYPE_UNSIGNED_INT		= "unsignedInt";
 
 	/**
 	 * Constant representing the TR-069 long type.
-	 * 
-	 * The value of TR069_TYPE_LONG is "long".
 	 */
 	public final static String	TR069_TYPE_LONG				= "long";
 
 	/**
 	 * Constant representing the TR-069 unsigned long type.
-	 * 
-	 * The value of TR069_TYPE_UNSIGNED_LONG is "unsignedLong".
 	 */
 	public final static String	TR069_TYPE_UNSIGNED_LONG	= "unsignedLong";
 
 	/**
 	 * Constant representing the TR-069 string type.
-	 * 
-	 * The value of TR069_TYPE_STRING is "string".
 	 */
 	public final static String	TR069_TYPE_STRING			= "string";
 
 	/**
 	 * Constant representing the TR-069 boolean type.
-	 * 
-	 * The value of TR069_TYPE_BOOLEAN is "boolean".
 	 */
 	public final static String	TR069_TYPE_BOOLEAN			= "boolean";
 
 	/**
 	 * Constant representing the TR-069 base64 type.
-	 * 
-	 * The value of TR069_TYPE_BASE64 is "base64".
 	 */
 	public final static String	TR069_TYPE_BASE64			= "base64";
 
 	/**
 	 * Constant representing the TR-069 hex binary type.
-	 * 
-	 * The value of TR069_TYPE_HEXBINARY is "hexBinary".
 	 */
 	public final static String	TR069_TYPE_HEXBINARY		= "hexBinary";
 
 	/**
 	 * Constant representing the TR-069 date time type.
-	 * 
-	 * The value of TR069_TYPE_DATETIME is "dateTime".
 	 */
 	public final static String	TR069_TYPE_DATETIME			= "dateTime";
 
-	private static final Object	TR069_TYPE_FLOAT			= null;
-
-	private static boolean		debug						= true;
 	private final String		value;
 	private final String		canonicalValue;
 	private final String		type;
@@ -186,54 +188,42 @@ public class TR069ParameterValue {
 						}
 
 					else
-						if (type.equals(TR069_TYPE_FLOAT))
-							try {
-								this.canonicalValue = Float
-										.toString(getFloatFromLexicalString(value));
-							}
-							catch (NumberFormatException nfe) {
-								throw new IllegalArgumentException(
-										"Although type is TR069_TYPE_FLOATs, invalid value="
-												+ value);
-							}
+						if (type.equals(TR069_TYPE_BASE64))
+							// XXX what to do ?
+							this.canonicalValue = value;
 						else
-							if (type.equals(TR069_TYPE_BASE64))
-								//  XXX what to do ?
-								this.canonicalValue = value;
+							if (type.equals(TR069_TYPE_HEXBINARY))
+								try {
+									this.canonicalValue = getHexBinaryStringFromLexicalString(value);
+								}
+								catch (IllegalArgumentException iae) {
+									throw new IllegalArgumentException(
+											"Although type is TR069_TYPE_HEXBINARY, invalid value="
+													+ value);
+								}
 							else
-								if (type.equals(TR069_TYPE_HEXBINARY))
+								if (type.equals(TR069_TYPE_DATETIME)) {
 									try {
-										this.canonicalValue = getHexBinaryStringFromLexicalString(value);
+										this.canonicalValue = getDateTimeSringFromLexicalString(value);
 									}
 									catch (IllegalArgumentException iae) {
 										throw new IllegalArgumentException(
-												"Although type is TR069_TYPE_HEXBINARY, invalid value="
+												"Although type is TR069_TYPE_DATETIME, invalid value="
 														+ value);
 									}
+								}
 								else
-									if (type.equals(TR069_TYPE_DATETIME)) {
-										try {
-											this.canonicalValue = getDateTimeSringFromLexicalString(value);
-										}
-										catch (IllegalArgumentException iae) {
-											throw new IllegalArgumentException(
-													"Although type is TR069_TYPE_DATETIME, invalid value="
-															+ value);
-										}
-									}
-									else
-										throw new IllegalStateException(
-												"Unexpected situation occured.");
+									throw new IllegalStateException(
+											"Unexpected situation occured.");
 
 		this.value = value;
 		this.type = type;
 	}
 
-	private String getDateTimeSringFromLexicalString(String value) {
+	private String getDateTimeSringFromLexicalString(String string) {
 		// TODO format check and get canonical representation ?
-		
-		
-		return value;
+
+		return string;
 	}
 
 	private static String getHexBinaryStringFromLexicalString(String value)
@@ -308,10 +298,12 @@ public class TR069ParameterValue {
 	 * <p>
 	 * Case A: the tr069Type equals TR069ParameterValue.TR069_TYPE_BOOLEAN.
 	 * <ol type="1">
-	 * <li>If the metaNode supports FORMAT_BOOLEAN,
+	 * <li>If the metaNode supports {@link DmtData#FORMAT_BOOLEAN},
 	 * <ol type="a">
-	 * <li>if the value equals "0" or "false", return DmtData.FALSE_VALUE.</li>
-	 * <li>if the value equals "1" or "true", return DmtData.TRUE_VALUE.</li>
+	 * <li>if the value equals "0" or "false", return
+	 * {@link DmtData#FALSE_VALUE}.</li>
+	 * <li>if the value equals "1" or "true", return {@link DmtData#TRUE_VALUE}.
+	 * </li>
 	 * <li>Otherwise, IllegalArgumentException will be thrown.</li>
 	 * </ol>
 	 * </li>
@@ -320,7 +312,7 @@ public class TR069ParameterValue {
 	 * <p>
 	 * Case B: the tr069Type equals TR069ParameterValue.TR069_TYPE_INT.
 	 * <ol type="1">
-	 * <li>If the metaNode supports FORMAT_INTEGER,
+	 * <li>If the metaNode supports {@link DmtData#FORMAT_INTEGER},
 	 * <ol type="a">
 	 * <li>if the value can be interpreted as an integer, create a new DmtData
 	 * by DmtData(int) with the interpreted integer and return it.</li>
@@ -333,10 +325,11 @@ public class TR069ParameterValue {
 	 * <p>
 	 * Case C: the tr069Type equals TR069ParameterValue.TR069_TYPE_UNSIGNED_INT.
 	 * <ol type="1">
-	 * <li>If the metaNode supports FORMAT_UNSIGNED_INTEGER,
+	 * <li>If the metaNode supports {@link DmtData#FORMAT_UNSIGNED_INTEGER},
 	 * <ol type="a">
 	 * <li>Create a new DmtData by DmtData(String, int) with the of
-	 * FORMAT_UNSIGNED_INTEGER If succeeded, the DmtData will be returned.</li>
+	 * {@link DmtData#FORMAT_UNSIGNED_INTEGER} If succeeded, the DmtData will be
+	 * returned.</li>
 	 * <li>Otherwise, IllegalArgumentException will be thrown.</li>
 	 * </ol>
 	 * </li>
@@ -346,10 +339,11 @@ public class TR069ParameterValue {
 	 * Case D: the tr069Type equals
 	 * TR069ParameterValue.TR069_TYPE_UNSIGNED_LONG.
 	 * <ol type="1">
-	 * <li>If the metaNode supports FORMAT_UNSIGNED_LONG,
+	 * <li>If the metaNode supports {@link DmtData#FORMAT_UNSIGNED_LONG},
 	 * <ol type="a">
 	 * <li>Create a new DmtData by DmtData(String, int) with the of
-	 * FORMAT_UNSIGNED_LONG. If succeeded, the DmtData will be returned.</li>
+	 * {@link DmtData#FORMAT_UNSIGNED_LONG}. If succeeded, the DmtData will be
+	 * returned.</li>
 	 * <li>Otherwise, IllegalArgumentException will be thrown.</li>
 	 * </ol>
 	 * </li>
@@ -358,10 +352,10 @@ public class TR069ParameterValue {
 	 * <p>
 	 * Case E: the tr069Type equals TR069ParameterValue.TR069_TYPE_LONG.
 	 * <ol type="1">
-	 * <li>If the metaNode supports FORMAT_LONG,
+	 * <li>If the metaNode supports {@link DmtData#FORMAT_LONG},
 	 * <ol type="a">
-	 * <li>Create a new DmtData by DmtData(String, int) with the of FORMAT_LONG.
-	 * If succeeded, the DmtData will be returned.</li>
+	 * <li>Create a new DmtData by DmtData(String, int) with the of
+	 * {@link DmtData#FORMAT_LONG}. If succeeded, the DmtData will be returned.</li>
 	 * <li>Otherwise, IllegalArgumentException will be thrown.</li>
 	 * </ol>
 	 * <li>Otherwise, TR069MappingException will be thrown.</li>
@@ -369,10 +363,11 @@ public class TR069ParameterValue {
 	 * <p>
 	 * Case F: the tr069Type equals TR069ParameterValue.TR069_TYPE_DATETIME.
 	 * <ol type="1">
-	 * <li>If the metaNode supports FORMAT_DATETIME,
+	 * <li>If the metaNode supports {@link DmtData#FORMAT_DATETIME},
 	 * <ol type="a">
 	 * <li>Create a new DmtData by DmtData(String, int) with the of
-	 * FORMAT_DATETIME. If succeeded, the DmtData will be returned.</li>
+	 * {@link DmtData#FORMAT_DATETIME}. If succeeded, the DmtData will be
+	 * returned.</li>
 	 * <li>Otherwise, IllegalArgumentException will be thrown.</li>
 	 * </ol>
 	 * </li>
@@ -381,16 +376,16 @@ public class TR069ParameterValue {
 	 * <p>
 	 * Case G: the tr069Type equals TR069ParameterValue.TR069_TYPE_BASE64.
 	 * <ol type="1">
-	 * <li>If the metaNode supports FORMAT_BASE64, go to Step 1.a., otherwise,
-	 * go to Step 2.
+	 * <li>If the metaNode supports {@link DmtData#FORMAT_BASE64}, go to Step
+	 * 1.a., otherwise, go to Step 2.
 	 * <ol type="a">
 	 * <li>The specified value will be converted into base64 byte array and
 	 * create a new DmtData by DmtData(byte[], boolean) with
 	 * {@value Boolean#TRUE} as the second argument.</li>
 	 * </ol>
 	 * </li>
-	 * <li>If the metaNode supports FORMAT_RAW_BINARY, go to Step 2.a.,
-	 * otherwise, go to Step 3.
+	 * <li>If the metaNode supports {@link DmtData#FORMAT_RAW_BINARY}, go to
+	 * Step 2.a., otherwise, go to Step 3.
 	 * <ol type="a">
 	 * <li>The array of raw format names is retrieved by
 	 * MetaNode.getRawFormatNames().</li>
@@ -408,66 +403,66 @@ public class TR069ParameterValue {
 	 * <p>
 	 * Case H: the tr069Type equals TR069ParameterValue.TR069_TYPE_HEXBINARY.
 	 * <ol type="1">
-	 * <li>If the metaNode supports FORMAT_HEX_BINARYT, go to Step 1.a.,
-	 * otherwise, go to Step 2.
+	 * <li>If the metaNode supports {@link DmtData#FORMAT_HEXBINARY}, go to Step
+	 * 1.a., otherwise, go to Step 2.
 	 * <ol type="a">
 	 * <li>The specified value will be converted into hexBinary byte array.</li>
 	 * <li>A new DmtData will be created by DmtData(byte[], int) with
-	 * FORMAT_HEX_BINARY as the second argument and be returned.</li>
+	 * {@link DmtData#FORMAT_HEXBINARY} as the second argument and be returned.</li>
 	 * </ol>
 	 * </li>
-	 * <li>If the metaNode supports FORMAT_BINARY, go to Step 2.a., otherwise,
-	 * IllegalArgumentException will be thrown.The value will be encoded into a
-	 * sequence of bytes using the character set specified. If the encoding
-	 * fails, go to Step3. Otherwise, then a new DmtData will be created by
-	 * DmtData(byte[], int) with FORMAT_BINARY as the second argument and be
-	 * returned.</li>
+	 * <li>If the metaNode supports {@link DmtData#FORMAT_BINARY}, go to Step
+	 * 2.a., otherwise, IllegalArgumentException will be thrown.The value will
+	 * be encoded into a sequence of bytes using the character set specified. If
+	 * the encoding fails, go to Step3. Otherwise, then a new DmtData will be
+	 * created by DmtData(byte[], int) with {@link DmtData#FORMAT_BINARY} as the
+	 * second argument and be returned.</li>
 	 * <li>TR069MappingException will be thrown.</li>
 	 * </ol>
 	 * <p>
 	 * Case I: the tr069Type equals TR069ParameterValue.TR069_TYPE_STRING.
 	 * <ol type="1">
-	 * <li>If the node supports FORMAT_NULL, go to Step 1.a., otherwise, go to
-	 * Step 2.
+	 * <li>If the node supports {@link DmtData#FORMAT_NULL}, go to Step 1.a.,
+	 * otherwise, go to Step 2.
 	 * <ol type="a">
-	 * <li>If the value is empty String, then return DmtData.NULL_VALUE.
+	 * <li>If the value is empty String, then return {@link DmtData#NULL_VALUE}.
 	 * Otherwise go to Step 2.</li>
 	 * </ol>
 	 * </li>
-	 * <li>If the node supports FORMAT_FLOAT, go to Step 2.a., otherwise, go to
-	 * Step 3.
+	 * <li>If the node supports {@link DmtData#FORMAT_FLOAT}, go to Step 2.a.,
+	 * otherwise, go to Step 3.
 	 * <ol type="a">
-	 * <li>If the parsing the value as float succeeds, then FORMAT_FLOAT is
-	 * chosen. Otherwise go to Step 3.</li>
+	 * <li>If the parsing the value as float succeeds, then
+	 * {@link DmtData#FORMAT_FLOAT} is chosen. Otherwise go to Step 3.</li>
 	 * </ol>
 	 * </li>
-	 * <li>If the node supports FORMAT_DATE, go to Step 3.a., otherwise, go to
-	 * Step 4.
+	 * <li>If the node supports {@link DmtData#FORMAT_DATE}, go to Step 3.a.,
+	 * otherwise, go to Step 4.
 	 * <ol type="a">
-	 * <li>If the constructing DmtData(String, int) with FORMAT_DATE as the
-	 * first argument succeeds, then the DmtData will be returned. Otherwise go
-	 * to Step 4.</li>
+	 * <li>If the constructing DmtData(String, int) with
+	 * {@link DmtData#FORMAT_DATE} as the first argument succeeds, then the
+	 * DmtData will be returned. Otherwise go to Step 4.</li>
 	 * </ol>
 	 * </li>
-	 * <li>If the node supports FORMAT_TIME, go to Step 4.a., otherwise, go to
-	 * Step 5.
+	 * <li>If the node supports {@link DmtData#FORMAT_TIME}, go to Step 4.a.,
+	 * otherwise, go to Step 5.
 	 * <ol type="a">
-	 * <li>If the constructing DmtData(String, int) with FORMAT_TIME as the
-	 * first argument succeeds, then the DmtData will be returned. Otherwise go
-	 * to Step 5.</li>
+	 * <li>If the constructing DmtData(String, int) with
+	 * {@link DmtData#FORMAT_TIME} as the first argument succeeds, then the
+	 * DmtData will be returned. Otherwise go to Step 5.</li>
 	 * </ol>
 	 * </li>
-	 * <li>If the node supports FORMAT_NODE_URI, go to Step 5.a., otherwise, go
-	 * to Step 6.
+	 * <li>If the node supports {@link DmtData#FORMAT_NODE_URI}, go to Step
+	 * 5.a., otherwise, go to Step 6.
 	 * <ol type="a">
 	 * <li>Translate the value to absolute URI, if the value is relative path.
 	 * The specified nodeUri is used for the translation.</li>
-	 * <li>If the constructing DmtData(String, FORMAT_NODE_URI) succeeds, then
-	 * the DmtData will be returned. Otherwise go to Step 6.</li>
+	 * <li>If the constructing DmtData(String, {@link DmtData#FORMAT_NODE_URI})
+	 * succeeds, then the DmtData will be returned. Otherwise go to Step 6.</li>
 	 * </ol>
 	 * </li>
-	 * <li>If the node supports FORMAT_RAW_STRING, go to Step 6.a., otherwise,
-	 * go to Step 7.
+	 * <li>If the node supports {@link DmtData#FORMAT_RAW_STRING}, go to Step
+	 * 6.a., otherwise, go to Step 7.
 	 * 
 	 * <ol type="a">
 	 * <li>The TR-069 Protocol Adapter gets array of raw format names by
@@ -479,14 +474,15 @@ public class TR069ParameterValue {
 	 * returned.</li>
 	 * </ol>
 	 * </li>
-	 * <li>If the node supports FORMAT_STRING, go to Step 7.a., otherwise, go to
-	 * Step 8. a. The DmtData is created by DmtData(String). Then the DmtData
-	 * will be returned.</li>
-	 * <li>If the node supports FORMAT_XML, go to Step 8.a., otherwise, go to
-	 * Step 9.
+	 * <li>If the node supports {@link DmtData#FORMAT_STRING}, go to Step 7.a.,
+	 * otherwise, go to Step 8. a. The DmtData is created by DmtData(String).
+	 * Then the DmtData will be returned.</li>
+	 * <li>If the node supports {@link DmtData#FORMAT_XML}, go to Step 8.a.,
+	 * otherwise, go to Step 9.
 	 * <ol type="a">
-	 * <li>The DmtData is constructed by DmtData(String, int) with FORMAT_XML as
-	 * the first argument. Then the DmtData will be returned.</li>
+	 * <li>The DmtData is constructed by DmtData(String, int) with
+	 * {@link DmtData#FORMAT_XML} as the first argument. Then the DmtData will
+	 * be returned.</li>
 	 * </ol>
 	 * </li>
 	 * <li>IllegalArgumentException will be thrown.</li>
@@ -521,12 +517,12 @@ public class TR069ParameterValue {
 		final int format = metaNode.getFormat();
 		DmtData data = null;
 		if (tr069Type.equals(TR069_TYPE_BASE64)) {
-			if ((format & DmtData.FORMAT_BASE64) != 0) {
+			if ((format & FORMAT_BASE64) != 0) {
 				byte[] bytes = Base64.base64ToByteArray(value);
 				data = new DmtData(bytes, true);
 			}
 			else {
-				if ((format & DmtData.FORMAT_RAW_BINARY) != 0) {
+				if ((format & FORMAT_RAW_BINARY) != 0) {
 					String[] formatNames = metaNode.getRawFormatNames();
 					if (formatNames != null && formatNames.length > 0) {
 						byte[] bytes = value.getBytes(valueCharsetName);
@@ -548,12 +544,12 @@ public class TR069ParameterValue {
 			return data;
 		}
 		if (tr069Type.equals(TR069_TYPE_BOOLEAN)) {
-			if ((format & DmtData.FORMAT_BOOLEAN) != 0) {
+			if ((format & FORMAT_BOOLEAN) != 0) {
 				if ("0".equals(value) || "false".equals(value))
-					data = DmtData.FALSE_VALUE;
+					data = FALSE_VALUE;
 				else
 					if ("1".equals(value) || "true".equals(value))
-						data = DmtData.TRUE_VALUE;
+						data = TRUE_VALUE;
 					else
 						throw new TR069MappingException(
 								"Despite of TR069 dataType=" + tr069Type
@@ -567,7 +563,7 @@ public class TR069ParameterValue {
 
 		}
 		if (tr069Type.equals(TR069_TYPE_INT)) {
-			if ((format & DmtData.FORMAT_INTEGER) != 0) {
+			if ((format & FORMAT_INTEGER) != 0) {
 				try {
 					int valueInt = getIntFromLexicalString(value);
 					data = new DmtData(valueInt);
@@ -576,7 +572,7 @@ public class TR069ParameterValue {
 					throw new TR069MappingException(
 							"Despite of TR069 dataType=" + tr069Type
 									+ "and FORMAT_INTEGER, value(=" + value
-									+ ") cannot be parsed. " + e);
+									+ ") cannot be parsed.", e);
 				}
 				return data;
 			}
@@ -585,10 +581,10 @@ public class TR069ParameterValue {
 		}
 		if (tr069Type.equals(TR069_TYPE_STRING)) {
 			StringBuffer sb = new StringBuffer();
-			if (value.length() == 0 && (format & DmtData.FORMAT_NULL) != 0) {
-				return DmtData.NULL_VALUE;
+			if (value.length() == 0 && (format & FORMAT_NULL) != 0) {
+				return NULL_VALUE;
 			}
-			if ((format & DmtData.FORMAT_FLOAT) != 0) {
+			if ((format & FORMAT_FLOAT) != 0) {
 				try {
 					float valueFloat = getFloatFromLexicalString(value);
 					data = new DmtData(valueFloat);
@@ -600,9 +596,9 @@ public class TR069ParameterValue {
 							+ e.toString());
 				}
 			}
-			if ((format & DmtData.FORMAT_DATE) != 0) {
+			if ((format & FORMAT_DATE) != 0) {
 				try {
-					data = new DmtData(value, DmtData.FORMAT_DATE);
+					data = new DmtData(value, FORMAT_DATE);
 					return data;
 				}
 				catch (Exception e) {
@@ -611,9 +607,9 @@ public class TR069ParameterValue {
 							+ e.toString());
 				}
 			}
-			if ((format & DmtData.FORMAT_TIME) != 0) {
+			if ((format & FORMAT_TIME) != 0) {
 				try {
-					data = new DmtData(value, DmtData.FORMAT_TIME);
+					data = new DmtData(value, FORMAT_TIME);
 					return data;
 				}
 				catch (Exception e) {
@@ -622,12 +618,12 @@ public class TR069ParameterValue {
 							+ e.toString());
 				}
 			}
-			if ((format & DmtData.FORMAT_NODE_URI) != 0) {
+			if ((format & FORMAT_NODE_URI) != 0) {
 				try {
 					String valueUri = TR069URI.getDmtUri(TR069URI
 							.getTR069AbsolutePath(
 									TR069URI.getTR069Path(nodeUri), value));
-					data = new DmtData(valueUri, DmtData.FORMAT_NODE_URI);
+					data = new DmtData(valueUri, FORMAT_NODE_URI);
 					return data;
 				}
 				catch (Exception e) {
@@ -636,7 +632,7 @@ public class TR069ParameterValue {
 							+ e.toString());
 				}
 			}
-			if ((format & DmtData.FORMAT_RAW_STRING) != 0) {
+			if ((format & FORMAT_RAW_STRING) != 0) {
 				try {
 					String[] names = metaNode.getRawFormatNames();
 					if (names != null && names.length > 0 && names[0] != null
@@ -651,12 +647,12 @@ public class TR069ParameterValue {
 							+ e.toString());
 				}
 			}
-			if ((format & DmtData.FORMAT_STRING) != 0) {
+			if ((format & FORMAT_STRING) != 0) {
 				data = new DmtData(value);
 				return data;
 			}
-			if ((format & DmtData.FORMAT_XML) != 0) {
-				data = new DmtData(value, DmtData.FORMAT_XML);
+			if ((format & FORMAT_XML) != 0) {
+				data = new DmtData(value, FORMAT_XML);
 				return data;
 			}
 			throw new TR069MappingException("Despite of TR069 dataType="
@@ -665,26 +661,26 @@ public class TR069ParameterValue {
 					+ sb.toString());
 		}
 		if (tr069Type.equals(TR069_TYPE_UNSIGNED_INT)) {
-			if ((format & DmtData.FORMAT_UNSIGNED_INTEGER) != 0) {
+			if ((format & FORMAT_UNSIGNED_INTEGER) != 0) {
 				try {
 					data = new DmtData(
 							getUnsignedIntStringFromLexicalString(value),
-							DmtData.FORMAT_UNSIGNED_INTEGER);
+							FORMAT_UNSIGNED_INTEGER);
 					return data;
 				}
 				catch (Exception e) {
 					throw new TR069MappingException(
 							"Despite of TR069 dataType=" + tr069Type
 									+ "and FORMAT_UNSIGNED_INTEGER, value(="
-									+ value + ") is not in appropriate format."
-									+ e);
+									+ value + ") is not in appropriate format.",
+							e);
 				}
 			}
 			throw new TR069MappingException("Despite of TR069 dataType="
 					+ tr069Type + ", FORMAT is not FORMAT_UNSIGNED_INTEGER.");
 		}
 		if (tr069Type.equals(TR069_TYPE_LONG)) {
-			if ((format & DmtData.FORMAT_LONG) != 0) {
+			if ((format & FORMAT_LONG) != 0) {
 				try {
 					long valueLong = getLongFromLexicalString(value);
 					data = new DmtData(valueLong);
@@ -694,44 +690,44 @@ public class TR069ParameterValue {
 					throw new TR069MappingException(
 							"Despite of TR069 dataType=" + tr069Type
 									+ "and FORMAT_LONG, value(=" + value
-									+ ") cannot be parsed. " + e);
+									+ ") cannot be parsed.", e);
 				}
 			}
 			throw new TR069MappingException("Despite of TR069 dataType="
 					+ tr069Type + ", FORMAT is not FORMAT_LONG.");
 		}
 		if (tr069Type.equals(TR069_TYPE_UNSIGNED_LONG)) {
-			if ((format & DmtData.FORMAT_UNSIGNED_LONG) != 0) {
+			if ((format & FORMAT_UNSIGNED_LONG) != 0) {
 				try {
 					data = new DmtData(
 							getUnsignedLongStringFromLexicalString(value),
-							DmtData.FORMAT_UNSIGNED_LONG);
+							FORMAT_UNSIGNED_LONG);
 					return data;
 				}
 				catch (Exception e) {
 					throw new TR069MappingException(
 							"Despite of TR069 dataType=" + tr069Type
 									+ "and FORMAT_UNSIGNED_LONG, value(="
-									+ value + ") is not in appropriate format."
-									+ e);
+									+ value + ") is not in appropriate format.",
+							e);
 				}
 			}
 			throw new TR069MappingException("Despite of TR069 dataType="
 					+ tr069Type + ", FORMAT is not FORMAT_UNSIGNED_INTEGER.");
 		}
 		if (tr069Type.equals(TR069_TYPE_DATETIME)) {
-			if ((format & DmtData.FORMAT_DATETIME) != 0) {
+			if ((format & FORMAT_DATETIME) != 0) {
 				try {
 					String target = getDmtDataCompatibleValue(value);
 					// https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1938#c8
-					data = new DmtData(target, DmtData.FORMAT_DATETIME);
+					data = new DmtData(target, FORMAT_DATETIME);
 					return data;
 				}
 				catch (Exception e) {
 					throw new TR069MappingException(
 							"Despite of TR069 dataType=" + tr069Type
 									+ "and FORMAT_DATETIME, value(=" + value
-									+ ") is not in appropriate format." + e);
+									+ ") is not in appropriate format.", e);
 				}
 			}
 			throw new TR069MappingException("Despite of TR069 dataType="
@@ -739,10 +735,10 @@ public class TR069ParameterValue {
 		}
 		if (tr069Type.equals(TR069_TYPE_HEXBINARY)) {
 			StringBuffer sb = new StringBuffer();
-			if ((format & DmtData.FORMAT_HEXBINARY) != 0) {
+			if ((format & FORMAT_HEXBINARY) != 0) {
 				try {
 					byte[] bytes = HexBinary.hexBinaryToByteArray(value);
-					data = new DmtData(bytes, DmtData.FORMAT_HEXBINARY);
+					data = new DmtData(bytes, FORMAT_HEXBINARY);
 					return data;
 				}
 				catch (Exception e) {
@@ -751,10 +747,10 @@ public class TR069ParameterValue {
 							+ e.toString());
 				}
 			}
-			if ((format & DmtData.FORMAT_BINARY) != 0) {
+			if ((format & FORMAT_BINARY) != 0) {
 				try {
 					byte[] bytes = value.getBytes(valueCharsetName);
-					data = new DmtData(bytes, DmtData.FORMAT_BINARY);
+					data = new DmtData(bytes, FORMAT_BINARY);
 					return data;
 				}
 				catch (Exception e) {
@@ -819,7 +815,7 @@ public class TR069ParameterValue {
 
 	/**
 	 * Convert the specified value to the String which is compatible to
-	 * DmtData.FORMAT_DATE.
+	 * {@link DmtData#FORMAT_DATE}.
 	 * 
 	 * Just remove hyphens '-'.
 	 * 
@@ -985,128 +981,140 @@ public class TR069ParameterValue {
 	 * Convert the DmtData to a TR069 value.
 	 * 
 	 * <ol type="1">
-	 * <li>In case that the format of the data is FORMAT_BASE64,
+	 * <li>In case that the format of the data is {@link DmtData#FORMAT_BASE64},
 	 * <ol type="a">
-	 * <li>The byte array returned by DmtData.getBase64() will be converted into
-	 * base64. The result of the conversion will be used as the value.</li>
+	 * <li>The byte array returned by {@link DmtData#getBase64()} will be
+	 * converted into base64. The result of the conversion will be used as the
+	 * value.</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_BASE64, and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is FORMAT_BINARY,
+	 * <li>In case that the format of the data is {@link DmtData#FORMAT_BINARY},
 	 * <ol type="a">
-	 * <li>The byte array returned by DmtData.getBinary() will be converted into
-	 * hexBinary in canonical representation as defined in XML Schema. The
-	 * result of the conversion will be used as the value.</li>
+	 * <li>The byte array returned by {@link DmtData#getBinary()} will be
+	 * converted into hexBinary in canonical representation as defined in XML
+	 * Schema. The result of the conversion will be used as the value.</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_HEXBINARY, and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is FORMAT_HEXBINARY,
+	 * <li>In case that the format of the data is
+	 * {@link DmtData#FORMAT_HEXBINARY},
 	 * <ol type="a">
-	 * <li>The byte array returned by DmtData.getHexBinary() will be converted
-	 * into hexBinary in canonical representation as defined in XML Schema. The
-	 * result of the conversion will be used as the value.</li>
+	 * <li>The byte array returned by {@link DmtData#getHexBinary()} will be
+	 * converted into hexBinary in canonical representation as defined in XML
+	 * Schema. The result of the conversion will be used as the value.</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_HEXBINARY, and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is FORMAT_BOOLEAN,
+	 * <li>In case that the format of the data is {@link DmtData#FORMAT_BOOLEAN},
 	 * <ol type="a">
-	 * <li>If DmtData.getBoolean() returns Boolean.TRUE or the DmtData equals
-	 * DmtData.TRUE_VALUE, the value will be "1". Otherwise the value will be
-	 * "0".</li>
+	 * <li>If {@link DmtData#getBoolean()} returns Boolean.TRUE or the DmtData
+	 * equals {@link DmtData#TRUE_VALUE}, the value will be "1". Otherwise the
+	 * value will be "0".</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_BOOLEAN, and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is FORMAT_DATE,
+	 * <li>In case that the format of the data is {@link DmtData#FORMAT_DATE},
 	 * <ol type="a">
-	 * <li>DmtData.toString() or DmtData.getDate() will be used as the value.</li>
+	 * <li>{@link DmtData#toString()} or {@link DmtData#getDate()} will be used
+	 * as the value.</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_STRING, and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is any of FORMAT_FLOAT,
-	 * FORMAT_INTEGER, FORMAT_LONG, and FORMAT_NULL,
+	 * <li>In case that the format of the data is any of
+	 * {@link DmtData#FORMAT_FLOAT}, {@link DmtData#FORMAT_INTEGER},
+	 * {@link DmtData#FORMAT_LONG}, and {@link DmtData#FORMAT_NULL},
 	 * <ol type="a">
-	 * <li>DmtData.toString() will be used as the value.</li>
+	 * <li>{@link DmtData#toString()} will be used as the value.</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_STRING, and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is FORMAT_STRING.
+	 * <li>In case that the format of the data is {@link DmtData#FORMAT_STRING}.
 	 * <ol type="a">
-	 * <li>DmtData.toString() or DmtData.getString() will be used as the value.</li>
+	 * <li>{@link DmtData#toString()} or {@link DmtData#getString()} will be
+	 * used as the value.</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_STRING, and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is FORMAT_RAW_STRING,
+	 * <li>In case that the format of the data is
+	 * {@link DmtData#FORMAT_RAW_STRING},
 	 * <ol type="a">
-	 * <li>DmtData.toString() or DmtData.getRawString() will be used as the
-	 * value.</li>
+	 * <li>{@link DmtData#toString()} or {@link DmtData#getRawString()} will be
+	 * used as the value.</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_STRING, and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is FORMAT_INTEGER,
+	 * <li>In case that the format of the data is {@link DmtData#FORMAT_INTEGER},
 	 * <ol type="a">
-	 * <li>DmtData.toString() will be used as the value.</li>
+	 * <li>{@link DmtData#toString()} will be used as the value.</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_INT, and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is FORMAT_LONG,
+	 * <li>In case that the format of the data is {@link DmtData#FORMAT_LONG},
 	 * <ol type="a">
-	 * <li>DmtData.toString() will be used as the value.</li>
+	 * <li>{@link DmtData#toString()} will be used as the value.</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_LONG, and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is FORMAT_TIME,
+	 * <li>In case that the format of the data is {@link DmtData#FORMAT_TIME},
 	 * <ol type="a">
-	 * <li>DmtData.toString() or DmtData.geetTime() will be used as the value.</li>
+	 * <li>{@link DmtData#toString()} or {@link DmtData#getTime()} will be used
+	 * as the value.</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_STRING, and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is FORMAT_XML,
+	 * <li>In case that the format of the data is {@link DmtData#FORMAT_XML},
 	 * <ol type="a">
-	 * <li>DmtData.toString() or DmtData.getXml() will be used as the value.</li>
+	 * <li>{@link DmtData#toString()} or {@link DmtData#getXml()} will be used
+	 * as the value.</li>
 	 * <li>Construct new TR069ParameterValue with
 	 * TR069ParameterValue.TR069_TYPE_STRING and the value and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is FORMAT_UNSIGNED_INTEGER,
+	 * <li>In case that the format of the data is
+	 * {@link DmtData#FORMAT_UNSIGNED_INTEGER},
 	 * <ol type="a">
-	 * <li>DmtData.toString() or DmtData.getUnsignedInteger() will be used as
-	 * the value.</li>
+	 * <li>{@link DmtData#toString()} or {@link DmtData#getUnsignedInteger()}
+	 * will be used as the value.</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_UNSIGNED_INT, and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is FORMAT_UNSIGNED_LONG,
+	 * <li>In case that the format of the data is
+	 * {@link DmtData#FORMAT_UNSIGNED_LONG},
 	 * <ol type="a">
-	 * <li>DmtData.toString() or DmtData.getUnsignedLong() will be used as the
-	 * value.</li>
+	 * <li>{@link DmtData#toString()} or {@link DmtData#getUnsignedLong()} will
+	 * be used as the value.</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_UNSIGNED_LONG,and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is FORMAT_DATETIME,
+	 * <li>In case that the format of the data is
+	 * {@link DmtData#FORMAT_DATETIME},
 	 * <ol type="a">
-	 * <li>DmtData.toString() or DmtData.getDateTime() will be used as the
-	 * value.</li>
+	 * <li>{@link DmtData#toString()} or {@link DmtData#getDateTime()} will be
+	 * used as the value.</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_DATETIME, and return it.</li>
 	 * </ol>
 	 * </li>
-	 * <li>In case that the format of the data is FORMAT_NODE_URI,
+	 * <li>In case that the format of the data is
+	 * {@link DmtData#FORMAT_NODE_URI},
 	 * <ol type="a">
-	 * <li>The returned String by DmtData.toString() or DmtData.getNodeUri()
-	 * will be translated into TR-069Path. The result of the translation will be
-	 * used as value.</li>
+	 * <li>The returned String by {@link DmtData#toString()} or
+	 * {@link DmtData#getNodeUri()} will be translated into TR-069Path. The
+	 * result of the translation will be used as value.</li>
 	 * <li>Construct new TR069ParameterValue with the value and
 	 * TR069ParameterValue.TR069_TYPE_STRING, and return it.</li>
 	 * </ol>
@@ -1118,46 +1126,46 @@ public class TR069ParameterValue {
 		int format = data.getFormat();
 		String value = null;
 		switch (format) {
-			case DmtData.FORMAT_BASE64 :
+			case FORMAT_BASE64 :
 				value = Base64.byteArrayToBase64(data.getBase64());
 				return new TR069ParameterValue(value, TR069_TYPE_BASE64);
-			case DmtData.FORMAT_BINARY :
+			case FORMAT_BINARY :
 				value = getHexDumpWithoutSpace(data.getBinary());
 				return new TR069ParameterValue(value, TR069_TYPE_HEXBINARY);
-			case DmtData.FORMAT_BOOLEAN :
+			case FORMAT_BOOLEAN :
 				value = (data.getBoolean() ? "1" : "0");
 				return new TR069ParameterValue(value, TR069_TYPE_BOOLEAN);
-			case DmtData.FORMAT_DATE :
-			case DmtData.FORMAT_FLOAT :
-			case DmtData.FORMAT_NULL :
-			case DmtData.FORMAT_RAW_STRING :
-			case DmtData.FORMAT_STRING :
-			case DmtData.FORMAT_TIME :
-			case DmtData.FORMAT_XML :
+			case FORMAT_DATE :
+			case FORMAT_FLOAT :
+			case FORMAT_NULL :
+			case FORMAT_RAW_STRING :
+			case FORMAT_STRING :
+			case FORMAT_TIME :
+			case FORMAT_XML :
 				return new TR069ParameterValue(data.toString(),
 						TR069_TYPE_STRING);
-			case DmtData.FORMAT_INTEGER :
+			case FORMAT_INTEGER :
 				return new TR069ParameterValue(data.toString(), TR069_TYPE_INT);
-			case DmtData.FORMAT_NODE :
+			case FORMAT_NODE :
 				throw new IllegalArgumentException("The format is FORMAT_NODE.");
-			case DmtData.FORMAT_RAW_BINARY :
+			case FORMAT_RAW_BINARY :
 				value = Base64.byteArrayToBase64(data.getRawBinary());
 				return new TR069ParameterValue(value, TR069_TYPE_BASE64);
-			case DmtData.FORMAT_UNSIGNED_INTEGER :
+			case FORMAT_UNSIGNED_INTEGER :
 				return new TR069ParameterValue(data.toString(),
 						TR069_TYPE_UNSIGNED_INT);
-			case DmtData.FORMAT_LONG :
+			case FORMAT_LONG :
 				return new TR069ParameterValue(data.toString(), TR069_TYPE_LONG);
-			case DmtData.FORMAT_UNSIGNED_LONG :
+			case FORMAT_UNSIGNED_LONG :
 				return new TR069ParameterValue(data.toString(),
 						TR069_TYPE_UNSIGNED_LONG);
-			case DmtData.FORMAT_HEXBINARY :
+			case FORMAT_HEXBINARY :
 				value = getHexDumpWithoutSpace(data.getHexBinary());
 				return new TR069ParameterValue(value, TR069_TYPE_HEXBINARY);
-			case DmtData.FORMAT_NODE_URI :
+			case FORMAT_NODE_URI :
 				value = TR069URI.getTR069Path(data.toString());
 				return new TR069ParameterValue(value, TR069_TYPE_STRING);
-			case DmtData.FORMAT_DATETIME :
+			case FORMAT_DATETIME :
 				value = getHyphenedDateTime(data.getDateTime());
 				return new TR069ParameterValue(value, TR069_TYPE_DATETIME);
 			default :
@@ -1234,9 +1242,6 @@ public class TR069ParameterValue {
 	 */
 	private static String replaceString(String message, String target,
 			char replacement) {
-		if (debug)
-			System.out.println("message:" + message + "\t,target:" + target
-					+ "\t,replacement=" + replacement);
 		if (null == message) {
 			return null;
 		}
@@ -1262,8 +1267,6 @@ public class TR069ParameterValue {
 			result.append(messageChars, nextToInsert, messageChars.length
 					- nextToInsert);
 		}
-		if (debug)
-			System.out.println("result\t:" + result.toString());
 		return result.toString();
 	}
 
@@ -1310,5 +1313,4 @@ public class TR069ParameterValue {
 	public int hashCode() {
 		return type.hashCode() + value.hashCode();
 	}
-
 }

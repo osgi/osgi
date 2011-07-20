@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,26 +26,26 @@ import java.util.Dictionary;
  * {@code BundleContext.getServiceReference} and
  * {@code BundleContext.getServiceReferences} methods.
  * <p>
- * A {@code ServiceReference} object may be shared between bundles and can
- * be used to examine the properties of the service and to get the service
- * object.
+ * A {@code ServiceReference} object may be shared between bundles and can be
+ * used to examine the properties of the service and to get the service object.
  * <p>
  * Every service registered in the Framework has a unique
  * {@code ServiceRegistration} object and may have multiple, distinct
- * {@code ServiceReference} objects referring to it.
- * {@code ServiceReference} objects associated with a
- * {@code ServiceRegistration} object have the same {@code hashCode}
- * and are considered equal (more specifically, their {@code equals()}
- * method will return {@code true} when compared).
+ * {@code ServiceReference} objects referring to it. {@code ServiceReference}
+ * objects associated with a {@code ServiceRegistration} object have the same
+ * {@code hashCode} and are considered equal (more specifically, their
+ * {@code equals()} method will return {@code true} when compared).
  * <p>
  * If the same service object is registered multiple times,
  * {@code ServiceReference} objects associated with different
  * {@code ServiceRegistration} objects are not equal.
  * 
  * @param <S> Type of Service.
- * @see BundleContext#getServiceReference
- * @see BundleContext#getServiceReferences
- * @see BundleContext#getService
+ * @see BundleContext#getServiceReference(Class)
+ * @see BundleContext#getServiceReference(String)
+ * @see BundleContext#getServiceReferences(Class, String)
+ * @see BundleContext#getServiceReferences(String, String)
+ * @see BundleContext#getService(ServiceReference)
  * @ThreadSafe
  * @noimplement
  * @version $Id$
@@ -73,22 +73,21 @@ public interface ServiceReference<S> extends Comparable<Object> {
 	public Object getProperty(String key);
 
 	/**
-	 * Returns an array of the keys in the properties {@code Dictionary}
-	 * object of the service referenced by this {@code ServiceReference}
-	 * object.
+	 * Returns an array of the keys in the properties {@code Dictionary} object
+	 * of the service referenced by this {@code ServiceReference} object.
 	 * 
 	 * <p>
 	 * This method will continue to return the keys after the service has been
 	 * unregistered. This is so references to unregistered services (for
-	 * example, {@code ServiceReference} objects stored in the log) can
-	 * still be interrogated.
+	 * example, {@code ServiceReference} objects stored in the log) can still be
+	 * interrogated.
 	 * 
 	 * <p>
 	 * This method is <i>case-preserving </i>; this means that every key in the
 	 * returned array must have the same case as the corresponding key in the
 	 * properties {@code Dictionary} that was passed to the
 	 * {@link BundleContext#registerService(String[],Object,Dictionary)} or
-	 * {@link ServiceRegistration#setProperties} methods.
+	 * {@link ServiceRegistration#setProperties(Dictionary)} methods.
 	 * 
 	 * @return An array of property keys.
 	 */

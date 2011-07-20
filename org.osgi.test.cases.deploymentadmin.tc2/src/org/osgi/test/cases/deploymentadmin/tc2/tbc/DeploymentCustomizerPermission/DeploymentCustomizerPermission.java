@@ -48,22 +48,7 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.MessagesConstants;
  * <code>DeploymentCustomizerPermission</code> constructor, according to MEG
  * specification.
  */
-public class DeploymentCustomizerPermission {
-	
-	private DeploymentTestControl tbc;
-
-	public DeploymentCustomizerPermission(DeploymentTestControl tbc) {
-		this.tbc = tbc;
-	}
-	
-	public void run() {
-		testDeploymentCustomizerPermission001();
-		testDeploymentCustomizerPermission002();
-		testDeploymentCustomizerPermission003();
-		testDeploymentCustomizerPermission004();
-		testDeploymentCustomizerPermission005();
-		testDeploymentCustomizerPermission006();
-	}
+public class DeploymentCustomizerPermission extends DeploymentTestControl {
 	
 	/**
 	 * Asserts that a <code>DeploymentCustomizerPermission</code> object for the given name and action
@@ -72,23 +57,23 @@ public class DeploymentCustomizerPermission {
 	 * @spec DeploymentCustomizerPermission.DeploymentCustomizerPermission(String, String)
 	 */
 	public void testDeploymentCustomizerPermission001() {
-		tbc.log("#testDeploymentCustomizerPermission001");
+		log("#testDeploymentCustomizerPermission001");
 		try {
 			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission dpCustPerm = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					DeploymentConstants.BUNDLE_NAME_FILTER,
 					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 
-			tbc.assertEquals(
+			assertEquals(
 					"DeploymentCustomizerPermission for a given name was correctly created ",
 					DeploymentConstants.BUNDLE_NAME_FILTER, dpCustPerm.getName());
 			
-			tbc.assertEquals(
+			assertEquals(
 							"DeploymentCustomizerPermission for a given action was correctly created",
 							org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA,
 							dpCustPerm.getActions());
 
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
+			fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		}
 	}
@@ -101,18 +86,19 @@ public class DeploymentCustomizerPermission {
 	 * @spec DeploymentCustomizerPermission.DeploymentCustomizerPermission(String, String)
 	 */
 	public void testDeploymentCustomizerPermission002() {
-		tbc.log("#testDeploymentCustomizerPermission002");
+		log("#testDeploymentCustomizerPermission002");
 		try {
 			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					DeploymentConstants.BUNDLE_NAME_WRONG_FILTER,
 					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 			
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
-//			tbc.pass("IllegalArgumentException correctly thrown, when passing an invalid filter name.");
+			// pass("IllegalArgumentException correctly thrown, when passing an invalid filter name.");
 		}catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
+			fail(MessagesConstants
+					.getMessage(
 					MessagesConstants.EXCEPTION_THROWN,
 					new String[] { "IllegalArgumentException",e.getClass().getName() }));
 		}
@@ -125,17 +111,18 @@ public class DeploymentCustomizerPermission {
 	 * @spec DeploymentCustomizerPermission.DeploymentCustomizerPermission(String, String)
 	 */
 	public void testDeploymentCustomizerPermission003() {
-		tbc.log("#testDeploymentCustomizerPermission003");
+		log("#testDeploymentCustomizerPermission003");
 		try {
 			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					DeploymentConstants.BUNDLE_NAME_FILTER, "install");
 			
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
-//			tbc.pass("IllegalArgumentException correctly thrown, when the list of actions contains unknown operations.");
+			// pass("IllegalArgumentException correctly thrown, when the list of actions contains unknown operations.");
 		}catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
+			fail(MessagesConstants
+					.getMessage(
 					MessagesConstants.EXCEPTION_THROWN,
 					new String[] { "IllegalArgumentException",e.getClass().getName() }));
 		}
@@ -148,17 +135,18 @@ public class DeploymentCustomizerPermission {
 	 * @spec DeploymentCustomizerPermission.DeploymentCustomizerPermission(String, String)
 	 */
 	public void testDeploymentCustomizerPermission004() {
-		tbc.log("#testDeploymentCustomizerPermission004");
+		log("#testDeploymentCustomizerPermission004");
 		try {
 			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					null, org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 			
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
-//			tbc.pass("IllegalArgumentException correctly thrown, when Symbolic name of the target bundle is null.");
+			// pass("IllegalArgumentException correctly thrown, when Symbolic name of the target bundle is null.");
 		}catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
+			fail(MessagesConstants
+					.getMessage(
 					MessagesConstants.EXCEPTION_THROWN,
 					new String[] { "IllegalArgumentException",e.getClass().getName() }));
 		}
@@ -171,17 +159,18 @@ public class DeploymentCustomizerPermission {
 	 * @spec DeploymentCustomizerPermission.DeploymentCustomizerPermission(String, String)
 	 */
 	public void testDeploymentCustomizerPermission005() {
-		tbc.log("#testDeploymentCustomizerPermission005");
+		log("#testDeploymentCustomizerPermission005");
 		try {
 			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					DeploymentConstants.BUNDLE_NAME_FILTER, null);
 			
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
-//			tbc.pass("IllegalArgumentException correctly thrown, when the Action string is null.");
+			// pass("IllegalArgumentException correctly thrown, when the Action string is null.");
 		}catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
+			fail(MessagesConstants
+					.getMessage(
 					MessagesConstants.EXCEPTION_THROWN,
 					new String[] { "IllegalArgumentException",e.getClass().getName() }));
 		}
@@ -192,17 +181,18 @@ public class DeploymentCustomizerPermission {
 	 * @spec DeploymentCustomizerPermission.DeploymentCustomizerPermission(String, String)
 	 */
 	public void testDeploymentCustomizerPermission006() {
-		tbc.log("#testDeploymentCustomizerPermission006");
+		log("#testDeploymentCustomizerPermission006");
 		try {
 			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					"(name=)", org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 			
-			tbc.failException("#", IllegalArgumentException.class);
+			failException("#", IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
-//			tbc.pass("IllegalArgumentException correctly thrown, when the list of actions contains unknown operations.");
+			// pass("IllegalArgumentException correctly thrown, when the list of actions contains unknown operations.");
 		}catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
+			fail(MessagesConstants
+					.getMessage(
 					MessagesConstants.EXCEPTION_THROWN,
 					new String[] { "IllegalArgumentException",e.getClass().getName() }));
 		}

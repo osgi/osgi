@@ -96,7 +96,7 @@ public interface DmtEvent {
 	 * receiver the chance to react accordingly before the destructive operation
 	 * takes place.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	int	DESTRUCTIVE_OPERATION	= 0x80;
 
@@ -169,7 +169,7 @@ public interface DmtEvent {
 	 * 
 	 * @return the array of property names
 	 * @see #getProperty(String)
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	String[] getPropertyNames();
 
@@ -180,7 +180,7 @@ public interface DmtEvent {
 	 * @return the requested property value or null, if the key is not contained
 	 *         in the properties
 	 * @see #getPropertyNames()
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	Object getProperty(String key);
 }

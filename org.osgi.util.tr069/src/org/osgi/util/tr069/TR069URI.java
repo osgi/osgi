@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2007, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import info.dmtree.Uri;
 public class TR069URI {
 
 	private TR069URI() {// no constructor
-	};
+	}
 
 	/**
 	 * Get the URI in DMT corresponding to the specified absolute path in
@@ -71,7 +71,6 @@ public class TR069URI {
 		String ret = uri.substring((Uri.ROOT_NODE + Uri.PATH_SEPARATOR)
 				.length());
 		return ret.replace(Uri.PATH_SEPARATOR_CHAR, Uri.ROOT_NODE_CHAR);
-		//return ret.replace(Uri.ROOT_NODE_CHAR, Uri.PATH_SEPARATOR_CHAR);
 	}
 
 	/**
@@ -148,7 +147,6 @@ public class TR069URI {
 			return device + tr069Path;
 	}
 
-
 	/**
 	 * Checks whether the specified path is an absolute TR-069 path.
 	 * 
@@ -156,8 +154,9 @@ public class TR069URI {
 	 * path. If tr069Path is not valid TR-069, the result will be unpredictable.
 	 * If the specified path starts with ".", return true. Otherwise return
 	 * false.
-	 * @param tr069Path the TR-069 path to be checked, must contain a valid TR-069
-	 *        path
+	 * 
+	 * @param tr069Path the TR-069 path to be checked, must contain a valid
+	 *        TR-069 path
 	 * @return whether the specified path is absolute
 	 */
 	public static boolean isAbsoluteTR069Path(final String tr069Path) {
@@ -280,12 +279,7 @@ public class TR069URI {
 			0x212B, 0x2180, 0x2182, 0x3041, 0x3094, 0x30A1, 0x30FA, 0x3105,
 			0x312C, 0xAC00, 0xD7A3					};
 	private static final int[]	baseCharNoRange		= new int[] {0x0386,
-			0x038C, 0x03DA, 0x03DC, 0x03DE,
-			0x03E0,
-			0x06D5,
-			0x09B2,
-			0x0559,
-			// 0x093D | 0x0A8D, 0x0ABD, 0x0AE0, 0x0B3D, 0x0A5E | 0x0CDE, 0x0E30,
+			0x038C, 0x03DA, 0x03DC, 0x03DE, 0x03E0, 0x06D5, 0x09B2, 0x0559,
 			0x093D, 0x0A8D, 0x0ABD, 0x0AE0, 0x0B3D, 0x0A5E, 0x0CDE, 0x0E30,
 			0x0EB0, 0x0E8A, 0x0E8D, 0x0B9C, 0x0EA5, 0x0EA7, 0x0E84, 0x0EBD,
 			0x1100, 0x1109, 0x113C, 0x113E, 0x1140, 0x114C, 0x114E, 0x1150,

@@ -40,10 +40,12 @@ import java.util.List;
 import java.util.Map;
 
 import info.dmtree.DmtAdmin;
+import info.dmtree.DmtConstants;
 import info.dmtree.DmtData;
 import info.dmtree.DmtException;
 import info.dmtree.DmtIllegalStateException;
 import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -83,6 +85,7 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 	protected static final String TESTBUNDLELOCATION2 = "org.osgi.test.cases.residentialmanagement.tb7.jar";
 	protected static final String TESTBUNDLELOCATION3 = "org.osgi.test.cases.residentialmanagement.tb8.jar";
 	protected static final String TESTBUNDLELOCATION4 = "org.osgi.test.cases.residentialmanagement.tb9.jar";
+	protected static final String TESTBUNDLELOCATION5 = "org.osgi.test.cases.residentialmanagement.tbnontrusted.jar";
 	protected static final String TESTBUNDLESYMBOLICNAME1 = "org.osgi.test.cases.residentialmanagement.tb1.jar";
 
 	private DmtAdmin dmtAdmin;
@@ -212,6 +215,240 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		expectedState = null;
 
 		// 3rd descendants in case of children of Hosts
+	}
+	
+	/**
+	 * Tests the specified node types.
+	 * @throws DmtException 
+	 * @throws BundleException 
+	 * @throws IOException 
+	 *  
+	 */
+	public void testBundleStateNodeTypes() throws DmtException, IOException, BundleException {
+		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION4);
+		testBundle2 = installAndStartBundle(TESTBUNDLELOCATION5);
+
+		assertEquals("The BundleState node must be of type: org.osgi/1.0/BundleStateManagementObject",
+				"org.osgi/1.0/BundleStateManagementObject",
+				session.getNodeType(PLUGIN_ROOT_URI));
+
+		String[] ids = session.getChildNodeNames(PLUGIN_ROOT_URI);
+		assertNotNull(ids);
+		for (int i = 0; i < ids.length; i++) {
+			String uri = PLUGIN_ROOT_URI + "/" + ids[i];
+			assertEquals("The 'HOSTS' node must be of type DDF_LIST_SUBTREE",
+					DmtConstants.DDF_LIST_SUBTREE,
+					session.getNodeType( uri + "/" + HOSTS));
+			
+			assertEquals("The 'FRAGMENTS' node must be of type DDF_LIST_SUBTREE",
+					DmtConstants.DDF_LIST_SUBTREE,
+					session.getNodeType( uri + "/" + FRAGMENTS));
+
+			assertEquals("The 'REQUIRED' node must be of type DDF_LIST_SUBTREE",
+					DmtConstants.DDF_LIST_SUBTREE,
+					session.getNodeType( uri + "/" + REQUIRED));
+
+			assertEquals("The 'REQUIRING' node must be of type DDF_LIST_SUBTREE",
+					DmtConstants.DDF_LIST_SUBTREE,
+					session.getNodeType( uri + "/" + REQUIRING));
+			
+			String uriTrusted = uri + "/" + TRUSTEDSIGNERCERTIFICATION; // this node must exist
+			log( "checking uri: " + uri );
+			String[] trustedSigners = session.getChildNodeNames(uriTrusted);
+			for (int j = 0; j < trustedSigners.length; j++) {
+				log( "*** testing trustedSigner: " + j);
+				assertEquals("The 'CertificateChain' node must be of type DDF_LIST_SUBTREE",
+						DmtConstants.DDF_LIST_SUBTREE,
+						session.getNodeType( uriTrusted + "/" + trustedSigners[j] + "/" + CERTIFICATECHAIN));
+			}
+
+			String uriNonTrusted = uri + "/" + NONTRUSTEDSIGNERCERTIFICATION; // this node must exist
+			String[] nonTrustedSigners = session.getChildNodeNames(uriNonTrusted);
+			for (int j = 0; j < nonTrustedSigners.length; j++) { 					
+				log( "*** testing nonTrustedSigner: " + j);
+				assertEquals("The 'CertificateChain' node must be of type DDF_LIST_SUBTREE",
+						DmtConstants.DDF_LIST_SUBTREE,
+						session.getNodeType( uriNonTrusted + "/" + nonTrustedSigners[j] + "/" + CERTIFICATECHAIN));
+			}
+		}
+	}
+
+	/**
+	 * Tests the metadata of the BundleState nodes.
+	 * This ensures that only read-operations are allowed on the nodes and that the scope and format is correct.   
+	 * @throws BundleException 
+	 * @throws IOException 
+	 * 
+	 */
+	public void testBundleStateMetaData() throws IOException, BundleException {
+		try {
+			// install a fragment bundle
+			testBundle2 = bundleInstall(TESTBUNDLELOCATION2);
+			// install hosting bundle 
+			testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
+			// install a trusted-signed bundle 
+			testBundle3 = installAndStartBundle(TESTBUNDLELOCATION4);
+			// install a non-trusted-signed bundle 
+			testBundle4 = installAndStartBundle(TESTBUNDLELOCATION5);
+
+			assertMetaData( PLUGIN_ROOT_URI, MetaNode.PERMANENT);
+			String[] bundleIds = session.getChildNodeNames(PLUGIN_ROOT_URI);
+			for (int i = 0; i < bundleIds.length; i++) {
+				String uri = PLUGIN_ROOT_URI + "/" + bundleIds[i] + "/";
+				assertMetaData( uri + ID, MetaNode.AUTOMATIC, DmtData.FORMAT_LONG);
+				assertMetaData( uri + SYMBOLICNAME, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uri + VERSION, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uri + BUNDLETYPE, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uri + MANIFEST, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uri + LOCATION, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uri + STATUS, MetaNode.AUTOMATIC);
+				
+				String uriStatus = uri + STATUS + "/"; 
+				assertMetaData( uriStatus + STATE, MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uriStatus + STARTLEVEL, MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
+				assertMetaData( uriStatus + PERSISTENTLYSTARTED, MetaNode.AUTOMATIC, DmtData.FORMAT_BOOLEAN);
+				assertMetaData( uriStatus + ACTIVATIONPOLICYUSED, MetaNode.AUTOMATIC, DmtData.FORMAT_BOOLEAN);
+				assertMetaData( uriStatus + LASTMODIFIED, MetaNode.AUTOMATIC, DmtData.FORMAT_DATETIME);
+				
+				String uriHosts = uri + HOSTS; 
+				assertMetaData( uriHosts, MetaNode.AUTOMATIC);
+				String[] children = session.getChildNodeNames(uriHosts);
+				for (int j = 0; j < children.length; j++) 
+					assertMetaData( uriHosts + "/" + children[j], MetaNode.AUTOMATIC, DmtData.FORMAT_LONG);
+				
+				String uriFragments = uri + FRAGMENTS; 
+				assertMetaData( uriFragments, MetaNode.AUTOMATIC);
+				children = session.getChildNodeNames(uriFragments);
+				for (int j = 0; j < children.length; j++)
+					assertMetaData( uriFragments + "/" + children[j], MetaNode.AUTOMATIC, DmtData.FORMAT_LONG);
+				
+				String uriRequired = uri + REQUIRED; 
+				assertMetaData( uriRequired, MetaNode.AUTOMATIC);
+				children = session.getChildNodeNames(uriRequired);
+				for (int j = 0; j < children.length; j++)
+					assertMetaData( uriRequired + "/" + children[j], MetaNode.AUTOMATIC, DmtData.FORMAT_LONG);
+
+				String uriRequiring = uri + REQUIRING; 
+				assertMetaData( uriRequiring, MetaNode.AUTOMATIC);
+				children = session.getChildNodeNames(uriRequiring);
+				for (int j = 0; j < children.length; j++)
+					assertMetaData( uriRequiring + "/" + children[j], MetaNode.AUTOMATIC, DmtData.FORMAT_LONG);
+
+				String uriTrusted = uri + TRUSTEDSIGNERCERTIFICATION; 
+				assertMetaData( uriTrusted, MetaNode.AUTOMATIC);
+				children = session.getChildNodeNames(uriTrusted);
+				for (int j = 0; j < children.length; j++) {
+					String uriChain = uriTrusted + "/" + children[j]; 
+					assertMetaData( uriChain, MetaNode.AUTOMATIC);
+					assertMetaData( uriChain += "/" + CERTIFICATECHAIN, MetaNode.AUTOMATIC);
+					String[] chains = session.getChildNodeNames(uriChain);
+					for (int k = 0; k < chains.length; k++)
+						assertMetaData( uriChain + "/" + chains[k], MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				}
+
+				String uriNonTrusted = uri + NONTRUSTEDSIGNERCERTIFICATION; 
+				assertMetaData( uriNonTrusted, MetaNode.AUTOMATIC);
+				children = session.getChildNodeNames(uriNonTrusted);
+				for (int j = 0; j < children.length; j++) {
+					String uriChain = uriNonTrusted + "/" + children[j]; 
+					assertMetaData( uriChain, MetaNode.AUTOMATIC);
+					assertMetaData( uriChain += "/" + CERTIFICATECHAIN, MetaNode.AUTOMATIC);
+					String[] chains = session.getChildNodeNames(uriChain);
+					for (int k = 0; k < chains.length; k++)
+						assertMetaData( uriChain + "/" + chains[k], MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				}
+			}
+
+		} catch (DmtException de) {
+			de.printStackTrace();
+			fail("unexpeced DmtException: " + de.getMessage());
+		}
+	}
+
+	private void assertMetaData( String uri, int scope ) throws DmtException {
+		assertMetaData(uri, scope, -1);
+	}
+
+	private void assertMetaData( String uri, int scope, int format ) throws DmtException {
+		MetaNode metaNode = session.getMetaNode(uri);
+		assertNotNull(metaNode);
+		
+		assertEquals( "This node must support the GET operation: " + uri, true, metaNode.can( MetaNode.CMD_GET ) );
+		assertEquals( "This node must not support the ADD operation: " + uri, false, metaNode.can( MetaNode.CMD_ADD ) );
+		assertEquals( "This node must not support the DELETE operation: " + uri, false, metaNode.can( MetaNode.CMD_DELETE ) );
+		assertEquals( "This node must not support the EXECUTE operation: " + uri, false, metaNode.can( MetaNode.CMD_EXECUTE ) );
+		assertEquals( "This node must not support the REPLACE operation: " + uri, false, metaNode.can( MetaNode.CMD_REPLACE ) );
+		assertEquals( "This node has a wrong scope : " + uri, scope, metaNode.getScope() );
+		if ( format != -1 ) 
+			assertEquals( "Node " + uri + " has a wrong format: ", format, metaNode.getFormat() );
+	}
+
+	/**
+	 * Test that the bundle ids are greater than 0;
+	 * @throws BundleException 
+	 * @throws IOException 
+	 * 
+	 */
+	public void testBundleStateIDsNotZero() throws IOException, BundleException {
+		try {
+			// install a fragment bundle
+			testBundle2 = bundleInstall(TESTBUNDLELOCATION2);
+			// install hosting bundle 
+			testBundle1 = installAndStartBundle(TESTBUNDLELOCATION1);
+			// install a trusted-signed bundle 
+			testBundle3 = installAndStartBundle(TESTBUNDLELOCATION4);
+			// install a non-trusted-signed bundle 
+			testBundle4 = installAndStartBundle(TESTBUNDLELOCATION5);
+
+			String[] ids = session.getChildNodeNames(PLUGIN_ROOT_URI);
+			for (int i = 0; i < ids.length; i++) {
+				assertTrue("The bundle-id must be greater than 0",
+						Long.parseLong(ids[i]) > 0);
+				String uri = PLUGIN_ROOT_URI + "/" + ids[i] + "/";
+				String[] children = session.getChildNodeNames(uri + HOSTS);
+				for (int j = 0; j < children.length; j++)
+					assertTrue("The HOSTS-id must be greater than 0",
+							Long.parseLong(children[j]) > 0);
+
+				children = session.getChildNodeNames(uri + FRAGMENTS);
+				for (int j = 0; j < children.length; j++)
+					assertTrue("The FRAGMENTS-id must be greater than 0",
+							Long.parseLong(children[j]) > 0);
+
+				children = session.getChildNodeNames(uri + REQUIRED);
+				for (int j = 0; j < children.length; j++)
+					assertTrue("The REQUIRED-id must be greater than 0",
+							Long.parseLong(children[j]) > 0);
+
+				children = session.getChildNodeNames(uri + REQUIRING);
+				for (int j = 0; j < children.length; j++)
+					assertTrue("The REQUIRING-id must be greater than 0",
+							Long.parseLong(children[j]) > 0);
+
+				children = session.getChildNodeNames(uri + TRUSTEDSIGNERCERTIFICATION);
+				for (int j = 0; j < children.length; j++) {
+					assertTrue("The TrustedSignerCertificate-id must be greater than 0",
+							Long.parseLong(children[j]) > 0);
+					String[] children2 = session.getChildNodeNames(uri + TRUSTEDSIGNERCERTIFICATION);
+					for (int k = 0; k < children2.length; k++)
+						assertTrue("The CertificateChain-id must be greater than 0",
+								Long.parseLong(children[k]) > 0);
+				}
+
+				children = session.getChildNodeNames(uri + NONTRUSTEDSIGNERCERTIFICATION);
+				for (int j = 0; j < children.length; j++) {
+					assertTrue("The NonTrustedSignerCertificate-id must be greater than 0",
+							Long.parseLong(children[j]) > 0);
+					String[] children2 = session.getChildNodeNames(uri + NONTRUSTEDSIGNERCERTIFICATION);
+					for (int k = 0; k < children2.length; k++)
+						assertTrue("The CertificateChain-id must be greater than 0",
+								Long.parseLong(children[k]) > 0);
+				}
+			}
+		} catch (DmtException de) {
+			de.printStackTrace();
+			fail();
+		}
 	}
 
 	/**
@@ -815,11 +1052,13 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 	 */
 	public void testBundleStateCheckSigner1() throws DmtException,
 			BundleException, IOException {
-		testBundle4 = installAndStartBundle(TESTBUNDLELOCATION4);
-		Map signersTrusted = testBundle4
+		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION5);
+		Map signersTrusted = testBundle1
 				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
-		Map signersNonTrusted = testBundle4
+
+		Map signersNonTrusted = testBundle1
 				.getSignerCertificates(Bundle.SIGNERS_ALL);
+		
 		Iterator itPre = signersTrusted.keySet().iterator();
 		for (int i = 0; itPre.hasNext(); i++) {
 			signersNonTrusted.remove(itPre.next());
@@ -839,19 +1078,23 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 			}
 			certList.add(Integer.toString(i));
 		}
+		
+		// SD: added this assertion to ensure that this test makes some sense at all
+		assertTrue(certList.size() > 0 );
+		
 		String[] id = session.getChildNodeNames(PLUGIN_ROOT_URI + "/"
-				+ Long.toString(testBundle4.getBundleId() + 1) + "/"
+				+ Long.toString(testBundle1.getBundleId() + 1) + "/"
 				+ NONTRUSTEDSIGNERCERTIFICATION);
 		assertEquals(certList.size(), id.length);
 		for (int i = 0; i < id.length; i++) {
 			String[] certs = session.getChildNodeNames(PLUGIN_ROOT_URI + "/"
-					+ Long.toString(testBundle4.getBundleId() + 1) + "/"
+					+ Long.toString(testBundle1.getBundleId() + 1) + "/"
 					+ NONTRUSTEDSIGNERCERTIFICATION + "/" + id[i] + "/"
 					+ CERTIFICATECHAIN);
 			for (int j = 0; j < certs.length; j++) {
 				String cert = session.getNodeValue(
 						PLUGIN_ROOT_URI + "/"
-								+ Long.toString(testBundle4.getBundleId() + 1)
+								+ Long.toString(testBundle1.getBundleId() + 1)
 								+ "/" + NONTRUSTEDSIGNERCERTIFICATION + "/"
 								+ id[i] + "/" + CERTIFICATECHAIN + "/"
 								+ certs[j]).getString();
@@ -871,6 +1114,7 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 	 */
 	public void testBundleStateCheckSigner2() throws DmtException,
 			BundleException, IOException {
+		testBundle1 = installAndStartBundle(TESTBUNDLELOCATION5);
 		testBundle4 = installAndStartBundle(TESTBUNDLELOCATION4);
 		Map signersTrusted = testBundle4
 				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
@@ -889,6 +1133,10 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 			}
 			certList.add(Integer.toString(i));
 		}
+		
+		// SD: added this assertion to ensure that this test makes some sense at all
+		assertTrue(certList.size() > 0);
+		
 		String[] id = session.getChildNodeNames(PLUGIN_ROOT_URI + "/"
 				+ Long.toString(testBundle4.getBundleId() + 1) + "/"
 				+ TRUSTEDSIGNERCERTIFICATION);

@@ -31,10 +31,13 @@ import java.io.InputStream;
 import java.util.*;
 import java.net.*;
 
+import org.osgi.framework.launch.Framework;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.BundleException;
+import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.startlevel.StartLevel;
 /**
  * 
@@ -47,25 +50,24 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 
 	FrameworkReadWriteSession(FrameworkPlugin plugin, BundleContext context, FrameworkReadOnlySession session){
 		super(plugin, context);
-		
 		this.installbundle = session.installbundle;
-		
 		operations = new Vector();
 	}
 
 	public void commit() throws DmtException {
-		// Value Setting
+		
 		Iterator i = operations.iterator();
 		while (i.hasNext()) {
 			Operation operation = (Operation) i.next();
-
 			try {
 				if (operation.getOperation() == Operation.ADD_OBJECT) {
 					String[] nodepath = operation.getObjectname();
 					Node newbundle = new Node(nodepath[nodepath.length - 1],
 							new Node[] {
 									new Node(LOCATION, null, new DmtData("")),
-									new Node(URL, null, new DmtData("")) });
+									new Node(URL, null, new DmtData("")),
+									new Node(INSTALLBUNDLEOPTION, null, new DmtData("NO START")),
+									new Node(INSTALLBUNDLEOPERATIONRESULT, null, new DmtData(""))});
 					installbundle.addNode(newbundle);
 				} else if (operation.getOperation() == Operation.DELETE_OBJECT) {
 					Node[] children = installbundle.getChildren();
@@ -78,19 +80,29 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 					}
 				} else if (operation.getOperation() == Operation.SET_VALUE) {
 					String[] nodepath = operation.getObjectname();
-
+					
 					if (nodepath[nodepath.length - 1]
+									.equals(REFRESHPACKAGES)) {
+						refreshPackagesFlag = operation.getData().getBoolean();
+						if(refreshPackagesFlag){
+							ServiceReference ref = context
+							.getServiceReference(PackageAdmin.class.getName());
+							PackageAdmin pa = (PackageAdmin)context.getService(ref);
+							pa.refreshPackages(null);
+						}
+					} else if (nodepath[nodepath.length - 1]
+											.equals(CATCHEVENTS)) {
+						eventFlag = operation.getData().getBoolean();
+					} else if (nodepath[nodepath.length - 1]
 							.equals(REQUESTEDSTARTLEVEL)) {
-						RequestedStartLevel = operation.getData().getInt();
-
+						requestedStartLevel = operation.getData().getInt();
 						try {
 							ServiceReference ref = context
 									.getServiceReference(org.osgi.service.startlevel.StartLevel.class
 											.getName());
 							StartLevel sl = (StartLevel) context
 									.getService(ref);
-
-							sl.setStartLevel(RequestedStartLevel);
+							sl.setStartLevel(requestedStartLevel);
 							context.ungetService(ref);
 						} catch (NullPointerException e) {
 							throw new DmtException(operation.getObjectname(),
@@ -115,13 +127,17 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 									"The StartLevel service is not available.");
 						}
 					} else if (nodepath[nodepath.length - 1].equals(RESTART)) {
-						System.exit(0);
+						Framework framework = (Framework)context.getBundle(0);
+
+						framework.update();
 					} else if (nodepath[nodepath.length - 1].equals(SHUTDOWN)) {
 						System.exit(0);
 					} else if (nodepath[nodepath.length - 1].equals(UPDATE)) {
-						System.exit(0);
+						Framework framework = (Framework)context.getBundle(0);
+						framework.update();
 					} else if (nodepath[nodepath.length - 1].equals(LOCATION)
-							|| nodepath[nodepath.length - 1].equals(URL)) {
+							|| nodepath[nodepath.length - 1].equals(URL)
+							|| nodepath[nodepath.length - 1].equals(INSTALLBUNDLEOPTION)) {
 						try {
 							installbundle.findNode(
 									new String[] {
@@ -135,154 +151,214 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						}
 						
 					} else if (nodepath[nodepath.length - 1].equals(BUNDLESTARTLEVEL)) {
-						BundelControlValue bcv = (BundelControlValue)bundlesTable.get(nodepath[2]);
+						BundelControlSubTree bcst = (BundelControlSubTree)bundlesTable.get(nodepath[2]);
 						try {
 							ServiceReference ref = context
 									.getServiceReference(org.osgi.service.startlevel.StartLevel.class
 											.getName());
 							StartLevel sl = (StartLevel) context
 									.getService(ref);
-
-							sl.setBundleStartLevel(bcv.bundle, operation.getData().getInt());
+							sl.setBundleStartLevel(bcst.getBundle(), operation.getData().getInt());
 							context.ungetService(ref);
 						} catch (NullPointerException e) {
 							throw new DmtException(operation.getObjectname(),
 									DmtException.DATA_STORE_FAILURE,
 									"The StartLevel service is not available.");
 						}
-					} else if (nodepath[nodepath.length - 1].equals(BUNDLEUPDATE)) {
-						BundelControlValue bcv = (BundelControlValue)bundlesTable.get(nodepath[2]);
-						String bundleUpdate = operation.getData().getString();
-						try{
-							if(bcv.flag==true){
-								URL url = context.getBundle().getResource(bundleUpdate);
-								InputStream is = url.openStream();
-								bcv.bundle.update(is);
-								is.close();
-								bcv.setFlag(false);
-								bcv.setOperationResult("Success");
-							}
-						}catch(IOException ie){
-							bcv.setOperationResult("Fail");
-							throw new DmtException(operation.getObjectname(),
-									DmtException.DATA_STORE_FAILURE,
-									"Budnle Update failed.");
-						}catch(BundleException be){
-							bcv.setOperationResult("Fail");
-							throw new DmtException(operation.getObjectname(),
-									DmtException.DATA_STORE_FAILURE,
-									"Budnle Update failed.");
+					} else if (nodepath[nodepath.length - 1].equals(BUNDLECONTROLREFRESHPACKAGES)) {
+						BundelControlSubTree bcst = (BundelControlSubTree)bundlesTable.get(nodepath[2]);
+						boolean refresh = operation.getData().getBoolean();
+						if(refresh){
+							ServiceReference ref = context
+							.getServiceReference(PackageAdmin.class.getName());
+							PackageAdmin pa = (PackageAdmin)context.getService(ref);
+							Bundle[] bundle = new Bundle[]{bcst.getBundle()};
+							pa.refreshPackages(bundle);
 						}
-						bcv.setBundleUpdate(bundleUpdate);
-						
-					} else if (nodepath[nodepath.length - 1].equals(OPTION)) {
-						BundelControlValue bcv = (BundelControlValue)bundlesTable.get(nodepath[2]);
-						bcv.setOption(operation.getData().getInt());
-						
-					} else if (nodepath[nodepath.length - 1].equals(DESIREDSTATE)) {
-						BundelControlValue bcv = (BundelControlValue)bundlesTable.get(nodepath[2]);
-						int desiredState = operation.getData().getInt();
-						if(bcv.flag==true){
+						bcst.setRefreshPackages(refresh);
+					} else if (nodepath[nodepath.length - 1].equals(OPERATION)) {
+						BundelControlSubTree bcst = (BundelControlSubTree)bundlesTable.get(nodepath[2]);
+						String bclOperation = operation.getData().getString();
+						String bclOption = null;
+						Iterator ibc = operations.iterator();
+						while (ibc.hasNext()) {
+							Operation operationBcl = (Operation) ibc.next();
+							String[] nodepathbcl = operationBcl.getObjectname();
+							if (nodepathbcl[nodepathbcl.length - 1].equals(BUNDLECONTROLOPTION)){
+								bclOption = operationBcl.getData().getString();
+								break;
+							}
+						}
+						if(bclOperation.equals("")){
+						}else if(bclOperation.equals("START")){
 							try{
-								URL url = context.getBundle().getResource(bcv.bundleUpdateTmp);
-								InputStream is = url.openStream();
-								bcv.bundle.update(is);
-								is.close();
-								bcv.setFlag(false);
-								bcv.setOperationResult("Success");
-							}catch(IOException ie){
-								bcv.setOperationResult("Fail");
-								throw new DmtException(operation.getObjectname(),
-										DmtException.DATA_STORE_FAILURE,
-										"Budnle Update failed.");
+								if(bclOption==null){
+									bcst.getBundle().start();
+								}else if(bclOption!=null){
+									if(bclOption.equals("NO OPTION"))
+										bcst.getBundle().start();
+									else if(bclOption.equals("TRANSIENT"))
+										bcst.getBundle().start(Bundle.START_TRANSIENT);
+									else if(bclOption.equals("START ACTIVATION POLICY"))
+										bcst.getBundle().start(Bundle.START_ACTIVATION_POLICY);
+									else if(bclOption.equals("START ACTIVATION POLICY AND TRANSIENT"))
+										bcst.getBundle().start(Bundle.START_ACTIVATION_POLICY|Bundle.START_TRANSIENT);
+								}
 							}catch(BundleException be){
-								bcv.setOperationResult("Fail");
+								bcst.setOperationResult(be.getMessage());
 								throw new DmtException(operation.getObjectname(),
-										DmtException.DATA_STORE_FAILURE,
-										"Budnle Update failed.");
+										DmtException.COMMAND_FAILED,
+										"The required operation failed.");
+							}
+						}else if(bclOperation.equals("STOP")){
+							try{
+								if(bclOption==null){
+									bcst.getBundle().stop();
+								}else if(bclOption!=null){
+									if(bclOption.equals("NO OPTION"))
+										bcst.getBundle().stop();
+									else if(bclOption.equals("TRANSIENT"))
+										bcst.getBundle().stop(Bundle.STOP_TRANSIENT);
+								}
+							}catch(BundleException be){
+								bcst.setOperationResult(be.getMessage());
+								throw new DmtException(operation.getObjectname(),
+										DmtException.COMMAND_FAILED,
+										"The required operation failed.");
+							}
+						}else if(bclOperation.equals("UNINSTALL")){
+							try{
+								bcst.getBundle().uninstall();
+								bcst.setOperationResult("SUCCESS");
+							}catch(BundleException be){
+								bcst.setOperationResult(be.getMessage());
+								throw new DmtException(operation.getObjectname(),
+										DmtException.COMMAND_FAILED,
+										"The required operation failed.");
+							}
+						}else if(bclOperation.equals("RESOLVE")){
+							try{
+								ServiceReference ref = context
+								.getServiceReference(PackageAdmin.class.getName());
+								PackageAdmin pa = (PackageAdmin)context.getService(ref);
+								Bundle[] bundle = new Bundle[]{bcst.getBundle()};
+								pa.resolveBundles(bundle);
+							}catch (Exception e){
+								bcst.setOperationResult(e.getMessage());
+								throw new DmtException(operation.getObjectname(),
+										DmtException.COMMAND_FAILED,
+										"The required operation failed.");
+							}
+						}else if(bclOperation.equals("UPDATE")){
+							try{
+								if(bclOption==null){
+									bcst.getBundle().update();
+								}else if(bclOption!=null){
+									if(bclOption.equals("NO OPTION"))
+										bcst.getBundle().update();
+									else{
+										try{
+											URL url = new URL(bclOption);
+											InputStream is = url.openStream();
+											bcst.getBundle().update(is);
+											is.close();
+										}catch (MalformedURLException mue){
+											bcst.getBundle().update();
+										}
+									}
+								}
+							}catch (Exception e){
+								bcst.setOperationResult(e.getMessage());
+								throw new DmtException(operation.getObjectname(),
+										DmtException.COMMAND_FAILED,
+										"The required operation failed.");
 							}
 						}
-						try{
-							if(desiredState==Bundle.UNINSTALLED){
-								bcv.bundle.uninstall();
-								bcv.setOperationResult("Success");
-								bcv.setDesiredState(desiredState);
-							}else if(desiredState==Bundle.RESOLVED){
-								if(bcv.optionTmp==1){
-									bcv.bundle.stop(1);
-									bcv.setOperationResult("Success");
-									bcv.setDesiredState(desiredState);
-								}else{
-									bcv.bundle.stop(0);
-									bcv.setOperationResult("Success");
-									bcv.setDesiredState(desiredState);
-								}
-							}else if(desiredState==Bundle.ACTIVE){
-								bcv.bundle.start(bcv.optionTmp);
-								bcv.setOperationResult("Success");
-								bcv.setDesiredState(desiredState);							
-							}else{
-								throw new DmtException(operation.getObjectname(),
-										DmtException.FEATURE_NOT_SUPPORTED,
-										"The value is illegal value.");
-							}							
-						}catch(BundleException be){
-							bcv.setOperationResult("Fail");
-							throw new DmtException(operation.getObjectname(),
-									DmtException.DATA_STORE_FAILURE,
-									"The required operation failed.");
-						}
-					} 
+						bcst.setOperation(bclOperation);
+						if(bclOption!=null)
+							bcst.setOption(bclOption);
+					} else if (nodepath[nodepath.length - 1].equals(BUNDLECONTROLOPTION)) {
+						//Nothing to do.
+					}
 				}
 			} catch (RuntimeException e) {
 				throw new DmtException(operation.getObjectname(),
 						DmtException.COMMAND_FAILED,
 						"The operation encountered problems.");
+			} catch (BundleException e) {
+				throw new DmtException(operation.getObjectname(),
+						DmtException.COMMAND_FAILED,
+						"The operation encountered problems.");
 			}
 		}
-
+		
 		// Bundle Install
 		Node[] children = installbundle.getChildren();
 		for (int x = 0; x < children.length; x++) {
-			if(children[x].findNode(new String[] { ERROR }) != null){
-				
-			} else if (!children[x].findNode(new String[] { URL }).getData().getString().equals("")
+			if (!children[x].findNode(new String[] { URL }).getData().getString().equals("")
 					& !children[x].findNode(new String[] { LOCATION }).getData().getString().equals("")) {
-				String url = children[x].findNode(new String[] { URL })
-						.getData().getString();
-				String loc = children[x].findNode(new String[] { LOCATION })
-						.getData().getString();
-
+				String url = children[x].findNode(new String[] { URL }).getData().getString();
+				String loc = children[x].findNode(new String[] { LOCATION }).getData().getString();
+				String opt = children[x].findNode(new String[] { INSTALLBUNDLEOPTION }).getData().getString();
 				try {
-					context.installBundle(loc, new URL(url).openConnection()
-							.getInputStream());
+					Bundle bundle = context.installBundle(loc, new URL(url).openConnection().getInputStream());
+					if(opt.equals("NO START OPTION"))
+						bundle.start();
+					else if(opt.equals("START TRANSIENT"))
+						bundle.start(Bundle.START_TRANSIENT);
+					else if(opt.equals("START ACTIVATION POLICY"))
+						bundle.start(Bundle.START_ACTIVATION_POLICY);
+					else if(opt.equals("START ACTIVATION POLICY AND TRANSIENT"))
+						bundle.start(Bundle.START_ACTIVATION_POLICY|Bundle.START_TRANSIENT);
+					else if(opt.equals("RESOLVE")){
+						ServiceReference ref = context.getServiceReference(PackageAdmin.class.getName());
+						PackageAdmin pa = (PackageAdmin)context.getService(ref);
+						Bundle[] bundles = new Bundle[]{bundle};
+						pa.resolveBundles(bundles);
+					}
+					Node operationResult = new Node(INSTALLBUNDLEOPERATIONRESULT, null, new DmtData("SUCCESS"));
+					children[x].addNode(operationResult);
 					installbundle.deleteNode(children[x]);
 				} catch (BundleException be) {
-					Node error = new Node(ERROR, null, new DmtData(be.toString()));
-					children[x].addNode(error);
+					Node operationResult = new Node(INSTALLBUNDLEOPERATIONRESULT, null, new DmtData(be.toString()));
+					children[x].addNode(operationResult);
 				} catch (IOException ie) {
-					Node error = new Node(ERROR, null, new DmtData(ie.toString()));
-					children[x].addNode(error);
+					Node operationResult = new Node(INSTALLBUNDLEOPERATIONRESULT, null, new DmtData(ie.toString()));
+					children[x].addNode(operationResult);
 				}
 			} else if (children[x].findNode(new String[] { URL }).getData().getString().equals("")
 					& !children[x].findNode(new String[] { LOCATION }).getData().getString().equals("")) {
-				String loc = children[x].findNode(new String[] { LOCATION })
-						.getData().getString();
-
+				String loc = children[x].findNode(new String[] { LOCATION }).getData().getString();
+				String opt = children[x].findNode(new String[] { INSTALLBUNDLEOPTION }).getData().getString();
 				try {
-					context.installBundle(loc);
+					Bundle bundle = context.installBundle(loc);
+					if(opt.equals("NO START OPTION"))
+						bundle.start();
+					else if(opt.equals("START TRANSIENT"))
+						bundle.start(Bundle.START_TRANSIENT);
+					else if(opt.equals("START ACTIVATION POLICY"))
+						bundle.start(Bundle.START_ACTIVATION_POLICY);
+					else if(opt.equals("START ACTIVATION POLICY AND TRANSIENT"))
+						bundle.start(Bundle.START_ACTIVATION_POLICY|Bundle.START_TRANSIENT);
+					else if(opt.equals("RESOLVE")){
+						ServiceReference ref = context.getServiceReference(PackageAdmin.class.getName());
+						PackageAdmin pa = (PackageAdmin)context.getService(ref);
+						Bundle[] bundles = new Bundle[]{bundle};
+						pa.resolveBundles(bundles);
+					}
+					Node operationResult = new Node(INSTALLBUNDLEOPERATIONRESULT, null, new DmtData("SUCCESS"));
+					children[x].addNode(operationResult);
 					installbundle.deleteNode(children[x]);
 				} catch (BundleException be) {
-					Node error = new Node(ERROR, null, new DmtData(be.toString()));
-					children[x].addNode(error);
+					Node operationResult = new Node(INSTALLBUNDLEOPERATIONRESULT, null, new DmtData(be.toString()));
+					children[x].addNode(operationResult);
 				}
 			} else {
-				Node error = new Node(ERROR, null, new DmtData(
+				Node operationResult = new Node(INSTALLBUNDLEOPERATIONRESULT, null, new DmtData(
 						"There is no available bundle location."));
-				children[x].addNode(error);
+				children[x].addNode(operationResult);
 			}
 		}
-
 		operations = new Vector();
 	}
 
@@ -297,16 +373,14 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 					"Cannot set type property of interior nodes.");
 
 		String[] path = shapedPath(nodePath);
-
 		if (path.length == 3) {
 			Node[] ids = installbundle.getChildren();
 			for (int i = 0; i < ids.length; i++) {
-				if (path[1].equals(ids[i].getName()))
+				if (path[2].equals(ids[i].getName()))
 					throw new DmtException(nodePath,
 							DmtException.NODE_ALREADY_EXISTS,
 							"A given node already exists in the framework subtree.");
 			}
-
 			operations.add(new Operation(Operation.ADD_OBJECT, path));
 			return;
 		}
@@ -326,67 +400,65 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			throws DmtException {
 		String[] path = shapedPath(nodePath);
 
-		if (path.length <= 2)
+		if (path.length < 2)
 			throw new DmtException(nodePath,
 					DmtException.FEATURE_NOT_SUPPORTED,
 					"The given path indicates an interior node.");
 
-		if (path.length == 3) {
-			if (path[2].equals(REQUESTEDSTARTLEVEL)
-					|| path[2].equals(INITIALBUNDLESTARTLEVEL)) {
+		if (path.length == 2) {
+			if (path[1].equals(REFRESHPACKAGES)) {
 				operations.add(new Operation(Operation.SET_VALUE, path, data));
 				return;
 			}
-
-			if (path[2].equals(RESTART) || path[2].equals(SHUTDOWN)
+		}
+		
+		if (path.length == 3) {
+			if (path[2].equals(REQUESTEDSTARTLEVEL)
+					|| path[2].equals(INITIALBUNDLESTARTLEVEL)
+					|| path[2].equals(CATCHEVENTS)
+					|| path[2].equals(RESTART) 
+					|| path[2].equals(SHUTDOWN)
 					|| path[2].equals(UPDATE)) {
 				operations.add(new Operation(Operation.SET_VALUE, path, data));
 				return;
 			}
-
 			throw new DmtException(nodePath, DmtException.METADATA_MISMATCH,
 					"The specified node can not be set the value.");
 		}
 
 		if (path.length == 4 && path[1].equals(INSTALLBUNDLE)) {
-			if (path[3].equals(ERROR))
+			if (path[3].equals(INSTALLBUNDLEOPERATIONRESULT))
 				throw new DmtException(nodePath,
 						DmtException.METADATA_MISMATCH,
 						"The specified node can not be set the value.");
 
-			if (path[3].equals(LOCATION) || path[3].equals(URL)) {
+			if (path[3].equals(LOCATION) 
+					|| path[3].equals(URL)
+					|| path[3].equals(INSTALLBUNDLEOPTION)) {
 				operations.add(new Operation(Operation.SET_VALUE, path, data));
 				return;
 			}
 		}
 		if (path.length == 4 && path[1].equals(BUNDLECONTROL)) {
-			operations.add(new Operation(Operation.SET_VALUE, path, data));
+			if (path[3].equals(BUNDLESTARTLEVEL)
+					|| path[3].equals(BUNDLECONTROLREFRESHPACKAGES))
+				operations.add(new Operation(Operation.SET_VALUE, path, data));
 		}
 		
 		if (path.length == 5) {
-			if (path[4].equals(DESIREDSTATE)){
-				operations.add(new Operation(Operation.SET_VALUE, path, data));
-			}
-			if (path[4].equals(BUNDLEUPDATE)){
-				BundelControlValue bcv = (BundelControlValue)bundlesTable.get(path[2]);
-				bcv.setFlag(true);
-				bcv.setBundleUpdateTmp(data.getString());
-				operations.add(new Operation(Operation.SET_VALUE, path, data));
-			}
-			if (path[4].equals(OPTION)){
-				BundelControlValue bcv = (BundelControlValue)bundlesTable.get(path[2]);
-				bcv.setOptionTmp(data.getInt());
-				operations.add(new Operation(Operation.SET_VALUE, path, data));
-			}
-			if (path[4].equals(OPERATIONRESULT))
+			if (path[4].equals(BUNDLECONTROLOPERATIONRESULT))
 				throw new DmtException(nodePath,
 						DmtException.METADATA_MISMATCH,
 						"The specified node can not be set the value.");
+			if (path[4].equals(OPERATION)
+					|| path[4].equals(BUNDLECONTROLOPTION)){
+				operations.add(new Operation(Operation.SET_VALUE, path, data));
+			}
+			throw new DmtException(nodePath, DmtException.METADATA_MISMATCH,
+			"The specified node can not be set the value.");
 		}
-
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 				"The specified node does not exist in the framework object.");
-
 	}
 
 	public void deleteNode(String[] nodePath) throws DmtException {
@@ -443,42 +515,41 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		String[] path = shapedPath(nodePath);
 
 		if (path.length == 1) {
-			String[] children = new String[5];
+			String[] children = new String[6];
 			children[0] = STARTLEVEL;
 			children[1] = INSTALLBUNDLE;
 			children[2] = FRAMEWORKLIFECYCLE;
 			children[3] = BUNDLECONTROL;
-			children[4] = EXT;
-
+			children[4] = REFRESHPACKAGES;
+			children[5] = FRAMEWORKEVENT;
 			return children;
 		}
 
 		if (path.length == 2) {
 			if (path[1].equals(STARTLEVEL)) {
-				String[] children = new String[3];
+				String[] children = new String[4];
 				children[0] = REQUESTEDSTARTLEVEL;
 				children[1] = ACTIVESTARTLEVEL;
 				children[2] = INITIALBUNDLESTARTLEVEL;
-
+				children[3] = BEGINNINGSTARTLEVEL;
 				return children;
 			}
 
 			if (path[1].equals(INSTALLBUNDLE)) {
 				Node tmptree = installbundle.copy();
-
 				Iterator i = operations.iterator();
 				while (i.hasNext()) {
 					Operation operation = (Operation) i.next();
-
 					try {
 						if (operation.getOperation() == Operation.ADD_OBJECT) {
 							String[] nodepath = operation.getObjectname();
 							Node newbundle = new Node(
 									nodepath[nodepath.length - 1],
 									new Node[] {
-											new Node(LOCATION, null,
-													new DmtData("")),
-											new Node(URL, null, new DmtData("")) });
+											new Node(LOCATION, null, new DmtData("")),
+											new Node(URL, null, new DmtData("")),
+											new Node(INSTALLBUNDLEOPTION, null, new DmtData("NO START")),
+											new Node(INSTALLBUNDLEOPERATIONRESULT, null, new DmtData(""))});
 							tmptree.addNode(newbundle);
 						} else if (operation.getOperation() == Operation.DELETE_OBJECT) {
 							Node[] children = tmptree.getChildren();
@@ -494,10 +565,8 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 
 					}
 				}
-
 				Node[] ids = tmptree.getChildren();
 				String[] children = new String[ids.length];
-
 				for (int x = 0; x < ids.length; x++) {
 					children[x] = ids[x].getName();
 				}
@@ -514,9 +583,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			
 			if (path[1].equals(BUNDLECONTROL)) {
 				if (bundlesTable.size() == 0) {
-					String[] children = new String[1];
-					children[0] = "";
-					return children;
+					return new String[0];
 				}
 				String[] children = new String[bundlesTable.size()];
 				int i = 0;
@@ -526,47 +593,92 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				}
 				return children;
 			}
+			
+			if (path[1].equals(FRAMEWORKEVENT)) {
+				String[] children = new String[2];
+				children[0] = EVENT;
+				children[1] = CATCHEVENTS;
+				return children;
+			}
+			
 		}
 
 		if (path.length == 3 && path[1].equals(INSTALLBUNDLE)) {
-			String[] children = new String[2];
+			String[] children = new String[4];
 			children[0] = LOCATION;
 			children[1] = URL;
+			children[2] = INSTALLBUNDLEOPTION;
+			children[3] = INSTALLBUNDLEOPERATIONRESULT;
 
 			return children;
 		}
 		
 		if (path.length == 3 && path[1].equals(BUNDLECONTROL)) {
-			String[] children = new String[2];
+			String[] children = new String[3];
 			children[0] = BUNDLESTARTLEVEL;
-			children[1] = BUNDLELIFECYCLE;
+			children[1] = LIFECYCLE;
+			children[2] = BUNDLECONTROLREFRESHPACKAGES;
 			return children;
 		}
 		
-		if (path.length == 4) {
-			String[] children = new String[4];
-			children[0] = DESIREDSTATE;
-			children[1] = BUNDLEUPDATE;
-			children[2] = OPTION;
-			children[3] = OPERATIONRESULT;
+		if (path.length == 3 && path[1].equals(FRAMEWORKEVENT)) {
+			if (eventTable.size() == 0) {
+				return new String[0];
+			}
+			String[] children = new String[eventTable.size()];
+			int i = 0;
+			for (Enumeration keys = eventTable.keys(); keys
+					.hasMoreElements(); i++) {
+				children[i] = (String) keys.nextElement();
+			}
 			return children;
 		}
-
+		
+		if (path.length == 4 && path[1].equals(BUNDLECONTROL)) {
+			String[] children = new String[3];
+			children[0] = OPERATION;
+			children[1] = BUNDLECONTROLOPTION;
+			children[2] = BUNDLECONTROLOPERATIONRESULT;
+			return children;
+		}
+		
+		if (path.length == 4 && path[1].equals(FRAMEWORKEVENT)) {
+			String[] children = new String[3];
+			children[0] = THROWABLE;
+			children[1] = TYPE;
+			children[2] = BUNDLEID;
+			return children;
+		}
+		
 		// other case
-		String[] children = new String[1];
-		children[0] = "";
-
-		return children;
+		return new String[0];
 
 	}
 
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 
-		if (path.length <= 2)
+		if (path.length < 2)
 			throw new DmtException(nodePath,
 					DmtException.FEATURE_NOT_SUPPORTED,
 					"The given path indicates an interior node.");
+		
+		if (path.length == 2) {
+			if (path[1].equals(REFRESHPACKAGES)) {
+				Iterator i = operations.iterator();
+				while (i.hasNext()) {
+					Operation operation = (Operation) i.next();
+					if (operation.getOperation() == Operation.SET_VALUE) {
+						String[] nodepath = operation.getObjectname();
+						if (nodepath[nodepath.length - 1]
+								.equals(REFRESHPACKAGES)) {
+							return operation.getData();
+						}
+					}
+				}
+				return new DmtData(refreshPackagesFlag);
+			}
+		}
 
 		if (path.length == 3) {
 			if (path[2].equals(REQUESTEDSTARTLEVEL)) {
@@ -583,9 +695,8 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						}
 					}
 				}
-				return new DmtData(RequestedStartLevel);
+				return new DmtData(requestedStartLevel);
 			}
-
 			if (path[2].equals(ACTIVESTARTLEVEL)) {
 				try {
 					ServiceReference ref = context
@@ -603,17 +714,25 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 							"The StartLevel service is not available.");
 				}
 			}
-
 			if (path[2].equals(INITIALBUNDLESTARTLEVEL)) {
+				Iterator i = operations.iterator();
+				while (i.hasNext()) {
+					Operation operation = (Operation) i.next();
+					if (operation.getOperation() == Operation.SET_VALUE) {
+						String[] nodepath = operation.getObjectname();
+						if (nodepath[nodepath.length - 1]
+								.equals(INITIALBUNDLESTARTLEVEL)) {
+							return operation.getData();
+						}
+					}
+				}				
 				try {
 					ServiceReference ref = context
 							.getServiceReference(org.osgi.service.startlevel.StartLevel.class
 									.getName());
 					StartLevel sl = (StartLevel) context.getService(ref);
-
 					int initialsl = sl.getInitialBundleStartLevel();
 					context.ungetService(ref);
-
 					return new DmtData(initialsl);
 				} catch (NullPointerException e) {
 					throw new DmtException(nodePath,
@@ -621,7 +740,33 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 							"The StartLevel service is not available.");
 				}
 			}
+			if (path[2].equals(BEGINNINGSTARTLEVEL)) {
+				ServiceReference ref = context
+				.getServiceReference(org.osgi.service.startlevel.StartLevel.class
+						.getName());
+				if(ref==null)
+					return new DmtData(-1);
+				if(ref!=null){
+					Properties prop = System.getProperties();
+					String bsl = prop.getProperty(Constants.FRAMEWORK_BEGINNING_STARTLEVEL, "1");
+					return new DmtData(Integer.parseInt(bsl));
+				}
+			}
+			if (path[2].equals(CATCHEVENTS)) {
+				Iterator i = operations.iterator();
+				while (i.hasNext()) {
+					Operation operation = (Operation) i.next();
+					if (operation.getOperation() == Operation.SET_VALUE) {
+						String[] nodepath = operation.getObjectname();
 
+						if (nodepath[nodepath.length - 1]
+								.equals(CATCHEVENTS)) {
+							return operation.getData();
+						}
+					}
+				}
+				return new DmtData(eventFlag);
+			}
 			if (path[2].equals(RESTART))
 				return new DmtData(false);
 			if (path[2].equals(SHUTDOWN))
@@ -629,22 +774,21 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			if (path[2].equals(UPDATE))
 				return new DmtData(false);
 		}
-
+		
 		if (path.length == 4 && path[1].equals(INSTALLBUNDLE)) {
 			Node tmptree = installbundle.copy();
-
 			Iterator i = operations.iterator();
 			while (i.hasNext()) {
 				Operation operation = (Operation) i.next();
-
 				try {
 					if (operation.getOperation() == Operation.ADD_OBJECT) {
 						String[] nodepath = operation.getObjectname();
 						Node newbundle = new Node(
 								nodepath[nodepath.length - 1], new Node[] {
-										new Node(LOCATION, null,
-												new DmtData("")),
-										new Node(URL, null, new DmtData("")) });
+										new Node(LOCATION, null, new DmtData("")),
+										new Node(URL, null, new DmtData("")),
+										new Node(INSTALLBUNDLEOPTION, null, new DmtData("NO START")),
+										new Node(INSTALLBUNDLEOPERATIONRESULT, null, new DmtData(""))});
 						tmptree.addNode(newbundle);
 					} else if (operation.getOperation() == Operation.DELETE_OBJECT) {
 						Node[] children = tmptree.getChildren();
@@ -659,7 +803,8 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						String[] nodepath = operation.getObjectname();
 
 						if (nodepath[nodepath.length - 1].equals(LOCATION)
-								|| nodepath[nodepath.length - 1].equals(URL)) {
+								|| nodepath[nodepath.length - 1].equals(URL)
+								|| nodepath[nodepath.length - 1].equals(INSTALLBUNDLEOPTION)) {
 							try {
 								tmptree
 										.findNode(
@@ -677,10 +822,8 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						}
 					}
 				} catch (Exception e) {
-
 				}
 			}
-
 			Node[] ids = tmptree.getChildren();
 			for (int z = 0; z < ids.length; z++) {
 				if (path[2].equals(ids[z].getName())) {
@@ -692,76 +835,75 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 					break;
 				}
 			}
-			
-			if (path.length == 4 && path[1].equals(BUNDLECONTROL)) {
-				Bundle targetBundle = (Bundle) bundlesTable.get(path[2]);
-				ServiceReference ref = context
-				.getServiceReference(org.osgi.service.startlevel.StartLevel.class.getName());
-				StartLevel sl = (StartLevel) context.getService(ref);
-				int bundleStartLevel = sl.getBundleStartLevel(targetBundle);
-				context.ungetService(ref);
-				return new DmtData(bundleStartLevel);
+		}
+		
+		if (path.length == 4 && path[1].equals(BUNDLECONTROL)) {
+			if (path[3].equals(BUNDLESTARTLEVEL)) {
+				Iterator i = operations.iterator();
+				while (i.hasNext()) {
+					Operation operation = (Operation) i.next();
+					if (operation.getOperation() == Operation.SET_VALUE) {
+						String[] nodepath = operation.getObjectname();
+						if (nodepath[nodepath.length - 1]
+								.equals(BUNDLESTARTLEVEL)) {
+							return operation.getData();
+						}
+					}
+				}
+				BundelControlSubTree bcst = (BundelControlSubTree)bundlesTable.get(path[2]);
+				return new DmtData(bcst.getBundleStartLevel());
 			}
-			
-			if (path.length == 5) {
-				BundelControlValue bcv = (BundelControlValue)bundlesTable.get(path[2]);
-				if (path[4].equals(DESIREDSTATE)) {
-					Iterator iDesire = operations.iterator();
-					while (iDesire.hasNext()) {
-						Operation operation = (Operation) iDesire.next();
-						if (operation.getOperation() == Operation.SET_VALUE) {
-							String[] nodepath = operation.getObjectname();
-							if (nodepath[nodepath.length - 1]
-									.equals(DESIREDSTATE)) {
-								return operation.getData();
-							}
+			if (path[3].equals(BUNDLECONTROLREFRESHPACKAGES)) {
+				Iterator i = operations.iterator();
+				while (i.hasNext()) {
+					Operation operation = (Operation) i.next();
+					if (operation.getOperation() == Operation.SET_VALUE) {
+						String[] nodepath = operation.getObjectname();
+						if (nodepath[nodepath.length - 1]
+								.equals(BUNDLECONTROLREFRESHPACKAGES)) {
+							return operation.getData();
 						}
 					}
-					return new DmtData(bcv.desiredState);
 				}
-				if (path[4].equals(BUNDLEUPDATE)) {
-					Iterator iBundleUpdate = operations.iterator();
-					while (iBundleUpdate.hasNext()) {
-						Operation operation = (Operation) iBundleUpdate.next();
-						if (operation.getOperation() == Operation.SET_VALUE) {
-							String[] nodepath = operation.getObjectname();
-							if (nodepath[nodepath.length - 1]
-									.equals(BUNDLEUPDATE)) {
-								return operation.getData();
-							}
+				BundelControlSubTree bcst = (BundelControlSubTree)bundlesTable.get(path[2]);
+				return new DmtData(bcst.getRefreshPackages());
+			}
+		}
+		
+		if (path.length == 5) {
+			if (path[4].equals(OPERATION)) {
+				Iterator i = operations.iterator();
+				while (i.hasNext()) {
+					Operation operation = (Operation) i.next();
+					if (operation.getOperation() == Operation.SET_VALUE) {
+						String[] nodepath = operation.getObjectname();
+						if (nodepath[nodepath.length - 1]
+								.equals(OPERATION)) {
+							return operation.getData();
 						}
 					}
-					
-					return new DmtData(bcv.bundleUpdate);
 				}
-				if (path[4].equals(OPTION)) {
-					Iterator iOption = operations.iterator();
-					while (iOption.hasNext()) {
-						Operation operation = (Operation) iOption.next();
-						if (operation.getOperation() == Operation.SET_VALUE) {
-							String[] nodepath = operation.getObjectname();
-							if (nodepath[nodepath.length - 1]
-									.equals(OPTION)) {
-								return operation.getData();
-							}
+				BundelControlSubTree bcst = (BundelControlSubTree)bundlesTable.get(path[2]);
+				return new DmtData(bcst.getOperation());
+			}
+			if (path[4].equals(BUNDLECONTROLOPTION)) {
+				Iterator i = operations.iterator();
+				while (i.hasNext()) {
+					Operation operation = (Operation) i.next();
+					if (operation.getOperation() == Operation.SET_VALUE) {
+						String[] nodepath = operation.getObjectname();
+						if (nodepath[nodepath.length - 1]
+								.equals(BUNDLECONTROLOPTION)) {
+							return operation.getData();
 						}
 					}
-					return new DmtData(bcv.option);
 				}
-				if (path[4].equals(OPERATIONRESULT)) {
-					Iterator iOperationResult = operations.iterator();
-					while (iOperationResult.hasNext()) {
-						Operation operation = (Operation) iOperationResult.next();
-						if (operation.getOperation() == Operation.SET_VALUE) {
-							String[] nodepath = operation.getObjectname();
-							if (nodepath[nodepath.length - 1]
-									.equals(OPERATIONRESULT)) {
-								return operation.getData();
-							}
-						}
-					}
-					return new DmtData(bcv.operationResult);
-				}
+				BundelControlSubTree bcst = (BundelControlSubTree)bundlesTable.get(path[2]);
+				return new DmtData(bcst.getOption());
+			}
+			if (path[4].equals(BUNDLECONTROLOPERATIONRESULT)) {
+				BundelControlSubTree bcst = (BundelControlSubTree)bundlesTable.get(path[2]);
+				return new DmtData(bcst.getOperationResult());
 			}
 		}
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
@@ -775,9 +917,12 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			return true;
 
 		if (path.length == 2) {
-			if (path[1].equals(STARTLEVEL) || path[1].equals(INSTALLBUNDLE)
+			if (path[1].equals(STARTLEVEL) 
+					|| path[1].equals(FRAMEWORKEVENT)
+					|| path[1].equals(REFRESHPACKAGES)
+					|| path[1].equals(INSTALLBUNDLE)
 					|| path[1].equals(FRAMEWORKLIFECYCLE)
-					|| path[1].equals(BUNDLECONTROL) || path[1].equals(EXT))
+					|| path[1].equals(BUNDLECONTROL))
 				return true;
 		}
 
@@ -785,62 +930,88 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			if (path[2].equals(REQUESTEDSTARTLEVEL)
 					|| path[2].equals(ACTIVESTARTLEVEL)
 					|| path[2].equals(INITIALBUNDLESTARTLEVEL)
-					|| path[2].equals(RESTART) || path[2].equals(SHUTDOWN)
-					|| path[2].equals(UPDATE))
+					|| path[2].equals(BEGINNINGSTARTLEVEL)
+					|| path[2].equals(RESTART)
+					|| path[2].equals(SHUTDOWN)
+					|| path[2].equals(UPDATE)
+					|| path[2].equals(EVENT)
+					|| path[2].equals(CATCHEVENTS))
 				return true;
-			if (bundlesTable.get(path[1]) != null)
-				return true;
+			
+			if (path[1].equals(BUNDLECONTROL))
+				if (bundlesTable.get(path[1]) != null)
+					return true;
 
-			Node tmptree = installbundle.copy();
+			if (path[1].equals(INSTALLBUNDLE)){
+				Node tmptree = installbundle.copy();
+				Iterator i = operations.iterator();
+				while (i.hasNext()) {
+					Operation operation = (Operation) i.next();
 
-			Iterator i = operations.iterator();
-			while (i.hasNext()) {
-				Operation operation = (Operation) i.next();
-
-				try {
-					if (operation.getOperation() == Operation.ADD_OBJECT) {
-						String[] nodepath = operation.getObjectname();
-						Node newbundle = new Node(
-								nodepath[nodepath.length - 1], new Node[] {
-										new Node(LOCATION, null,
-												new DmtData("")),
-										new Node(URL, null, new DmtData("")) });
-						tmptree.addNode(newbundle);
-					} else if (operation.getOperation() == Operation.DELETE_OBJECT) {
-						Node[] children = tmptree.getChildren();
-						String[] nodepath = operation.getObjectname();
-						for (int x = 0; x < children.length; x++) {
-							if (nodepath[1].equals(children[x].getName())) {
-								tmptree.deleteNode(children[x]);
-								break;
+					try {
+						if (operation.getOperation() == Operation.ADD_OBJECT) {
+							String[] nodepath = operation.getObjectname();
+							Node newbundle = new Node(
+									nodepath[nodepath.length - 1], new Node[] {
+											new Node(LOCATION, null, new DmtData("")),
+											new Node(URL, null, new DmtData("")),
+											new Node(INSTALLBUNDLEOPTION, null, new DmtData("NO START")),
+											new Node(INSTALLBUNDLEOPERATIONRESULT, null, new DmtData(""))});
+							tmptree.addNode(newbundle);
+						} else if (operation.getOperation() == Operation.DELETE_OBJECT) {
+							Node[] children = tmptree.getChildren();
+							String[] nodepath = operation.getObjectname();
+							for (int x = 0; x < children.length; x++) {
+								if (nodepath[1].equals(children[x].getName())) {
+									tmptree.deleteNode(children[x]);
+									break;
+								}
 							}
 						}
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
+				if (tmptree.findNode(new String[] { path[2] }) != null)
+					return true;
 			}
-
-			tmptree.findNode(new String[] { path[2] });
-			if (tmptree.findNode(new String[] { path[2] }) != null)
-				return true;
 		}
 
 		if (path.length == 4) {
-			if (path[3].equals(LOCATION) || path[3].equals(URL)
-					|| path[3].equals(ERROR)
-					|| path[3].equals(BUNDLESTARTLEVEL)
-					|| path[3].equals(BUNDLELIFECYCLE))
-				return true;
+			if (path[1].equals(BUNDLECONTROL))
+				if (bundlesTable.get(path[2]) != null)
+					if (path[3].equals(BUNDLESTARTLEVEL)
+							|| path[3].equals(BUNDLECONTROLREFRESHPACKAGES)
+							|| path[3].equals(LIFECYCLE))
+						return true;
+			
+			if (path[1].equals(INSTALLBUNDLE))
+					if (path[3].equals(LOCATION) 
+							|| path[3].equals(URL)
+							|| path[3].equals(INSTALLBUNDLEOPTION)
+							|| path[3].equals(INSTALLBUNDLEOPERATIONRESULT))
+						return true;
+
+			if (path[1].equals(FRAMEWORKEVENT))
+				if (eventTable.get(path[3]) != null)
+					return true;
 		}
 
 		if (path.length == 5) {
-			if (path[4].equals(DESIREDSTATE) || path[4].equals(BUNDLEUPDATE)
-					|| path[4].equals(OPTION)
-					|| path[4].equals(OPERATIONRESULT))
-				return true;
+			if (path[1].equals(BUNDLECONTROL))
+				if (bundlesTable.get(path[2]) != null)
+					if (path[4].equals(OPERATION) 
+							|| path[4].equals(BUNDLECONTROLOPTION)
+							|| path[4].equals(BUNDLECONTROLOPERATIONRESULT))
+						return true;
+			
+			if (path[1].equals(FRAMEWORKEVENT))
+				if (eventTable.get(path[3]) != null)
+					if (path[4].equals(THROWABLE)
+							|| path[4].equals(TYPE)
+							|| path[4].equals(BUNDLEID))
+						return true;
 		}
-
 		return false;
 	}
 

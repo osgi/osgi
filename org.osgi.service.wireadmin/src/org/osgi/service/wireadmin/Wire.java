@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,36 +21,36 @@ import java.util.Dictionary;
  * A connection between a Producer service and a Consumer service.
  * 
  * <p>
- * A {@code Wire} object connects a Producer service to a Consumer service.
- * Both the Producer and Consumer services are identified by their unique
+ * A {@code Wire} object connects a Producer service to a Consumer service. Both
+ * the Producer and Consumer services are identified by their unique
  * {@code service.pid} values. The Producer and Consumer services may
- * communicate with each other via {@code Wire} objects that connect them.
- * The Producer service may send updated values to the Consumer service by
- * calling the {@link #update} method. The Consumer service may request an
- * updated value from the Producer service by calling the {@link #poll} method.
+ * communicate with each other via {@code Wire} objects that connect them. The
+ * Producer service may send updated values to the Consumer service by calling
+ * the {@link #update(Object)} method. The Consumer service may request an
+ * updated value from the Producer service by calling the {@link #poll()}
+ * method.
  * 
  * <p>
  * A Producer service and a Consumer service may be connected through multiple
  * {@code Wire} objects.
  * 
  * <p>
- * Security Considerations. {@code Wire} objects are available to Producer
- * and Consumer services connected to a given {@code Wire} object and to
- * bundles which can access the {@code WireAdmin} service. A bundle must have
- * {@code ServicePermission[WireAdmin,GET]} to get the {@code WireAdmin}
- * service to access all {@code Wire} objects. A bundle registering a
- * Producer service or a Consumer service must have the appropriate
- * {@code ServicePermission[Consumer|Producer,REGISTER]} to register the
- * service and will be passed {@code Wire} objects when the service object's
- * {@code consumersConnected} or {@code producersConnected} method is
- * called.
+ * Security Considerations. {@code Wire} objects are available to Producer and
+ * Consumer services connected to a given {@code Wire} object and to bundles
+ * which can access the {@code WireAdmin} service. A bundle must have
+ * {@code ServicePermission[WireAdmin,GET]} to get the {@code WireAdmin} service
+ * to access all {@code Wire} objects. A bundle registering a Producer service
+ * or a Consumer service must have the appropriate
+ * {@code ServicePermission[Consumer|Producer,REGISTER]} to register the service
+ * and will be passed {@code Wire} objects when the service object's
+ * {@code consumersConnected} or {@code producersConnected} method is called.
  * 
  * <p>
  * Scope. Each Wire object can have a scope set with the {@code setScope}
  * method. This method should be called by a Consumer service when it assumes a
  * Producer service that is composite (supports multiple information items). The
- * names in the scope must be verified by the {@code Wire} object before it
- * is used in communication. The semantics of the names depend on the Producer
+ * names in the scope must be verified by the {@code Wire} object before it is
+ * used in communication. The semantics of the names depend on the Producer
  * service and must not be interpreted by the Wire Admin service.
  * 
  * @noimplement
@@ -64,8 +64,8 @@ public interface Wire {
 	 * A connected {@code Wire} must always be disconnected before becoming
 	 * invalid.
 	 * 
-	 * @return {@code false} if this {@code Wire} object is invalid
-	 *         because it has been deleted via {@link WireAdmin#deleteWire};
+	 * @return {@code false} if this {@code Wire} object is invalid because it
+	 *         has been deleted via {@link WireAdmin#deleteWire(Wire)};
 	 *         {@code true} otherwise.
 	 */
 	public boolean isValid();
@@ -129,30 +129,30 @@ public interface Wire {
 	 * <p>
 	 * If the properties of this {@code Wire} object contain a
 	 * {@link WireConstants#WIREADMIN_FILTER} property, then filtering is
-	 * performed. If the Producer service connected to this {@code Wire}
-	 * object was registered with the service property
+	 * performed. If the Producer service connected to this {@code Wire} object
+	 * was registered with the service property
 	 * {@link WireConstants#WIREADMIN_PRODUCER_FILTERS}, the Producer service
 	 * will perform the filtering according to the rules specified for the
-	 * filter. Otherwise, this {@code Wire} object will perform the filtering
-	 * of the value.
+	 * filter. Otherwise, this {@code Wire} object will perform the filtering of
+	 * the value.
 	 * <p>
 	 * If no filtering is done, or the filter indicates the updated value should
-	 * be delivered to the Consumer service, then this {@code Wire} object
-	 * must call the {@link Consumer#updated} method with the updated value. If
-	 * this {@code Wire} object is not connected, then the Consumer service
-	 * must not be called and the value is ignored.
+	 * be delivered to the Consumer service, then this {@code Wire} object must
+	 * call the {@link Consumer#updated(Wire, Object)} method with the updated
+	 * value. If this {@code Wire} object is not connected, then the Consumer
+	 * service must not be called and the value is ignored.
 	 * <p>
 	 * If the value is an {@code Envelope} object, and the scope name is not
 	 * permitted, then the {@code Wire} object must ignore this call and not
 	 * transfer the object to the Consumer service.
 	 * 
 	 * <p>
-	 * A {@code WireAdminEvent} of type {@link WireAdminEvent#WIRE_TRACE}
-	 * must be broadcast by the Wire Admin service after the Consumer service
-	 * has been successfully called.
+	 * A {@code WireAdminEvent} of type {@link WireAdminEvent#WIRE_TRACE} must
+	 * be broadcast by the Wire Admin service after the Consumer service has
+	 * been successfully called.
 	 * 
 	 * @param value The updated value. The value should be an instance of one of
-	 *        the types returned by {@link #getFlavors}.
+	 *        the types returned by {@link #getFlavors()}.
 	 * @see WireConstants#WIREADMIN_FILTER
 	 */
 	public void update(Object value);
@@ -163,30 +163,31 @@ public interface Wire {
 	 * <p>
 	 * This methods is normally called by the Consumer service to request an
 	 * updated value from the Producer service connected to this {@code Wire}
-	 * object. This {@code Wire} object will call the {@link Producer#polled}
-	 * method to obtain an updated value. If this {@code Wire} object is not
-	 * connected, then the Producer service must not be called.
+	 * object. This {@code Wire} object will call the
+	 * {@link Producer#polled(Wire)} method to obtain an updated value. If this
+	 * {@code Wire} object is not connected, then the Producer service must not
+	 * be called.
 	 * <p>
 	 * 
-	 * If this {@code Wire} object has a scope, then this method must return
-	 * an array of {@code Envelope} objects. The objects returned must match
-	 * the scope of this object. The {@code Wire} object must remove all
+	 * If this {@code Wire} object has a scope, then this method must return an
+	 * array of {@code Envelope} objects. The objects returned must match the
+	 * scope of this object. The {@code Wire} object must remove all
 	 * {@code Envelope} objects with a scope name that is not in the
-	 * {@code Wire} object's scope. Thus, the list of objects returned must
-	 * only contain {@code Envelope} objects with a permitted scope name. If
-	 * the array becomes empty, {@code null} must be returned.
+	 * {@code Wire} object's scope. Thus, the list of objects returned must only
+	 * contain {@code Envelope} objects with a permitted scope name. If the
+	 * array becomes empty, {@code null} must be returned.
 	 * 
 	 * <p>
-	 * A {@code WireAdminEvent} of type {@link WireAdminEvent#WIRE_TRACE}
-	 * must be broadcast by the Wire Admin service after the Producer service
-	 * has been successfully called.
+	 * A {@code WireAdminEvent} of type {@link WireAdminEvent#WIRE_TRACE} must
+	 * be broadcast by the Wire Admin service after the Producer service has
+	 * been successfully called.
 	 * 
 	 * @return A value whose type should be one of the types returned by
-	 *         {@link #getFlavors},{@code Envelope[]}, or {@code null}
-	 *         if the {@code Wire} object is not connected, the Producer
-	 *         service threw an exception, or the Producer service returned a
-	 *         value which is not an instance of one of the types returned by
-	 *         {@link #getFlavors}.
+	 *         {@link #getFlavors()},{@code Envelope[]}, or {@code null} if the
+	 *         {@code Wire} object is not connected, the Producer service threw
+	 *         an exception, or the Producer service returned a value which is
+	 *         not an instance of one of the types returned by
+	 *         {@link #getFlavors()}.
 	 */
 	public Object poll();
 
@@ -195,17 +196,17 @@ public interface Wire {
 	 * 
 	 * <p>
 	 * The returned value is the most recent, valid value passed to the
-	 * {@link #update} method or returned by the {@link #poll} method of this
-	 * object. If filtering is performed by this {@code Wire} object, this
-	 * methods returns the last value provided by the Producer service. This
-	 * value may be an {@code Envelope[]} when the Producer service uses
+	 * {@link #update(Object)} method or returned by the {@link #poll()} method
+	 * of this object. If filtering is performed by this {@code Wire} object,
+	 * this methods returns the last value provided by the Producer service.
+	 * This value may be an {@code Envelope[]} when the Producer service uses
 	 * scoping. If the return value is an Envelope object (or array), it must be
 	 * verified that the Consumer service has the proper WirePermission to see
 	 * it.
 	 * 
 	 * @return The last value passed though this {@code Wire} object or
-	 *         {@code null} if no valid values have been passed or the
-	 *         Consumer service has no permission.
+	 *         {@code null} if no valid values have been passed or the Consumer
+	 *         service has no permission.
 	 */
 	public Object getLastValue();
 

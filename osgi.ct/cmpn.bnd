@@ -1,8 +1,8 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${cmpn.build.version}} Version ${version;==;${cmpn.build.version}}, \
+	OSGi Service Platform Release ${version;=;${cmpn.ct.version}} Version ${version;==;${cmpn.ct.version}}, \
 	Compendium Test Case Bundles.
 
-Bundle-Version					: ${cmpn.build.version}
+Bundle-Version					: ${cmpn.ct.version}
 Include-Resource				: \
   	\
     ${replace;${uniq;\

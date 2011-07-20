@@ -41,4 +41,5 @@ Include-Resource	= \
 	org.osgi.test.cases.residentialmanagement.tb6.jar=tb6.jar ,\
 	org.osgi.test.cases.residentialmanagement.tb7.jar=tb7.jar ,\
 	org.osgi.test.cases.residentialmanagement.tb8.jar=tb8.jar ,\
-	org.osgi.test.cases.residentialmanagement.tb9.jar=tb9.jar
+	org.osgi.test.cases.residentialmanagement.tb9.jar=tb9.jar ,\
+	org.osgi.test.cases.residentialmanagement.tbnontrusted.jar=bnd/NonTrustedBundle.jar

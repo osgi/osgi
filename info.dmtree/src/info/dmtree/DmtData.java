@@ -18,12 +18,9 @@ package info.dmtree;
 
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
-// Possible enhancements to this class:
-// * new constructors and get/set methods for b64, to access the encoded value
-// * new constructors and get/set methods for date/time, for more convenient 
-//   Java access
 /**
  * An immutable data structure representing the contents of a leaf or interior
  * node. This structure represents only the value and the format property of the
@@ -39,6 +36,7 @@ import java.util.Hashtable;
  * specified as a {@code String}. The application is responsible for the proper
  * encoding of the data according to the specified format.
  * 
+ * @Immutable
  * @version $Id$
  */
 public final class DmtData {
@@ -84,10 +82,10 @@ public final class DmtData {
 	 * this format is also represented by the Java {@code byte[]} type, the
 	 * difference is only in the corresponding OMA DM format.
 	 * 
-	 * This format does not affect the internal storage format of the data 
-	 * as {@code byte[]}. 
-	 * It is intented as a hint for the external representation of this data.
-	 * Protocol Adapters can use this hint for their further processing.
+	 * This format does not affect the internal storage format of the data as
+	 * {@code byte[]}. It is intended as a hint for the external representation
+	 * of this data. Protocol Adapters can use this hint for their further
+	 * processing.
 	 */
 	public static final int			FORMAT_BASE64			= 0x0080;
 
@@ -131,14 +129,14 @@ public final class DmtData {
 	 * The node holds a long value. The {@link #getFormatName()} method can be
 	 * used to get the actual format name.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public static final int			FORMAT_LONG				= 0x2000;
 
 	/**
 	 * The node holds an unsigned long value.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public static final int			FORMAT_UNSIGNED_LONG	= 0x4000;
 
@@ -147,21 +145,21 @@ public final class DmtData {
 	 * in ISO 8601. The supported interpretation pattern is CCYYMMDDThhmmss or 
 	 * CCYYMMDDThhmmssZ.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public static final int			FORMAT_DATETIME			= 0x8000;
 
 	/**
 	 * The node holds an unsigned int value.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public static final int			FORMAT_UNSIGNED_INTEGER	= 0x10000;
 
 	/**
 	 * The node holds a string value that represents a DMT node URI.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public static final int			FORMAT_NODE_URI			= 0x20000;
 
@@ -169,16 +167,14 @@ public final class DmtData {
 	 * The node holds an hex binary value. The value of the node corresponds to
 	 * the Java {@code byte[]} type.
 	 * 
-	 * This format does not affect the internal storage format of the data 
-	 * as {@code byte[]}. 
-	 * It is intented as a hint for the external representation of this data.
-	 * Protocol Adapters can use this hint for their further processing.
+	 * This format does not affect the internal storage format of the data as
+	 * {@code byte[]}. It is intended as a hint for the external representation
+	 * of this data. Protocol Adapters can use this hint for their further
+	 * processing.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public static final int			FORMAT_HEXBINARY		= 0x40000;
-
-	private static final Hashtable	FORMAT_NAMES			= new Hashtable();
 
 	private static final BigInteger	BD_MAX_ULONG			= new BigInteger(
 																	""
@@ -186,6 +182,8 @@ public final class DmtData {
 																	.multiply(new BigInteger(
 																			"2"));
 
+	// FORMAT_NAMES must be initialized before any constructor is called.
+	private static final Map		FORMAT_NAMES			= new HashMap();
 	static {
 		FORMAT_NAMES.put(new Integer(FORMAT_BASE64), "b64");
 		FORMAT_NAMES.put(new Integer(FORMAT_BINARY), "bin");
@@ -211,19 +209,18 @@ public final class DmtData {
 	 * Constant instance representing a leaf node of {@code null} format.
 	 */
 	public static final DmtData		NULL_VALUE				= new DmtData();
-	// FORMAT_NAMES must be initialized by the time the constr. is called
 
 	/**
 	 * Constant instance representing a boolean {@code true} value.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public static final DmtData		TRUE_VALUE				= new DmtData(true);
 
 	/**
 	 * Constant instance representing a boolean {@code false} value.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public static final DmtData		FALSE_VALUE				= new DmtData(false);
 
@@ -322,14 +319,13 @@ public final class DmtData {
 	 * <li>{@link #FORMAT_STRING} - value can be any string
 	 * <li>{@link #FORMAT_XML} - value must contain an XML fragment (the
 	 * validity is not checked by this constructor)
-	 * <li>{@link #FORMAT_DATE} - value must be parseable to an ISO 8601
-	 * calendar date in complete representation, basic format (pattern
-	 * {@code CCYYMMDD})
-	 * <li>{@link #FORMAT_TIME} - value must be parseable to an ISO 8601 time of
+	 * <li>{@link #FORMAT_DATE} - value must be parsable to an ISO 8601 calendar
+	 * date in complete representation, basic format (pattern {@code CCYYMMDD})
+	 * <li>{@link #FORMAT_TIME} - value must be parsable to an ISO 8601 time of
 	 * day in either local time, complete representation, basic format (pattern
 	 * {@code hhmmss}) or Coordinated Universal Time, basic format (pattern
 	 * {@code hhmmssZ})
-	 * <li>{@link #FORMAT_DATETIME} - value must be parseable to an ISO 8601
+	 * <li>{@link #FORMAT_DATETIME} - value must be parsable to an ISO 8601
 	 * definition of a calendar date-time in complete representation, basic
 	 * format (pattern {@code CCYYMMDDThhmmss}) or Coordinated Universal Time,
 	 * basic format (pattern {@code CCYYMMDDThhmmssZ})
@@ -438,7 +434,7 @@ public final class DmtData {
 	 * value.
 	 * 
 	 * @param lng the long value to set
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public DmtData(long lng) {
 		format = FORMAT_LONG;
@@ -543,7 +539,7 @@ public final class DmtData {
 	 * @throws IllegalArgumentException if format is not one of the allowed
 	 *         formats
 	 * @throws NullPointerException if {@code bytes} is {@code null}
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public DmtData(byte[] bytes, int format) {
 		if (bytes == null)
@@ -693,7 +689,7 @@ public final class DmtData {
 	 * 
 	 * @return the time value
 	 * @throws DmtIllegalStateException if the format of the node is not time
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public String getDateTime() {
 		if (format == FORMAT_DATETIME)
@@ -734,7 +730,7 @@ public final class DmtData {
 	 * 
 	 * @return the unsigned integer value
 	 * @throws DmtIllegalStateException if the format of the node is not integer
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public String getUnsignedInteger() {
 		if (format == FORMAT_UNSIGNED_INTEGER)
@@ -749,7 +745,7 @@ public final class DmtData {
 	 * 
 	 * @return the long value
 	 * @throws DmtIllegalStateException if the format of the node is not long
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public long getLong() {
 		if (format == FORMAT_LONG)
@@ -765,7 +761,7 @@ public final class DmtData {
 	 * 
 	 * @return the unsigned long value
 	 * @throws DmtIllegalStateException if the format of the node is not long
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public String getUnsignedLong() {
 		if (format == FORMAT_UNSIGNED_LONG)
@@ -825,7 +821,7 @@ public final class DmtData {
 	 * @return the hex binary value
 	 * @throws DmtIllegalStateException if the format of the node is not hex
 	 *         binary
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public byte[] getHexBinary() {
 		if (format == FORMAT_HEXBINARY) {
@@ -919,7 +915,7 @@ public final class DmtData {
 	 * @return the data value in node uri format
 	 * @throws DmtIllegalStateException if the format of the node is not node
 	 *         uri
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public String getNodeUri() {
 		if (format == FORMAT_NODE_URI)

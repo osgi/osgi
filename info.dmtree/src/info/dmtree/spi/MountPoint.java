@@ -21,12 +21,12 @@ import java.util.Dictionary;
 /**
  * This interface can be implemented to represent a single mount point.
  * <p>
- * It provides functionalites to get the absolute mounted uri and a shortcut
- * method to post events via the DmtAdmin.
+ * It provides function to get the absolute mounted uri and a shortcut method to
+ * post events via the DmtAdmin.
  * 
  * @remark Use map instead of dictionary
  * @version $Id$
- * @since 1.1
+ * @since 2.0
  */
 public interface MountPoint {
 

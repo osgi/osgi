@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@ public interface DmtAdmin {
 	 * If this value is not given, then an implementation specific default value
 	 * will be used.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public static final String SESSION_CREATION_TIMEOUT = "org.osgi.dmtree.session.creation.timeout";
 
@@ -76,7 +76,7 @@ public interface DmtAdmin {
 	 * If this value is not given, then an implementation specific default value
 	 * will be used.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	public static final String SESSION_INACTIVE_TIMEOUT = "org.osgi.dmtree.session.inactive.timeout";
 	
@@ -303,24 +303,25 @@ public interface DmtAdmin {
     void removeEventListener(DmtEventListener listener);
 
 	/**
-	 * Returns the value for the session creation timeout in
-	 * milliseconds. The returned value reflects the value that has been set via
-	 * the corresponding system property {@code SESSION_CREATION_TIMEOUT}
-	 * or the implementation specific default value.
+	 * Returns the value for the session creation timeout in milliseconds. The
+	 * returned value reflects the value that has been set via the corresponding
+	 * system property {@link #SESSION_CREATION_TIMEOUT} or the implementation
+	 * specific default value.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 * @return the active value of the session creation timeout in milliseconds
 	 */
 	long getSessionCreationTimeout();
 
 	/**
-	 * Returns the value for the session inactivity timeout in
-	 * milliseconds. The returned value reflects the value that has been set via
-	 * the corresponding system property {@code SESSION_INACTIVE_TIMEOUT}
-	 * or the implementation specific default value.
+	 * Returns the value for the session inactivity timeout in milliseconds. The
+	 * returned value reflects the value that has been set via the corresponding
+	 * system property {@link #SESSION_INACTIVE_TIMEOUT} or the implementation
+	 * specific default value.
 	 * 
-	 * @since 1.1
-	 * @return the active value of the session creation timeout in milliseconds
+	 * @since 2.0
+	 * @return the active value of the session inactivity timeout in
+	 *         milliseconds
 	 */
 	long getSessionInactivityTimeout();
 }

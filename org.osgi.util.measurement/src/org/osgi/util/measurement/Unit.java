@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -357,7 +357,7 @@ public class Unit {
 	 * 
 	 * @throws RuntimeException if both {@code Unit} s are special
 	 * 
-	 * @see Unit#isSpecial
+	 * @see Unit#isSpecial()
 	 */
 	Unit mul(Unit that) {
 		if (this.isSpecial() && that.isSpecial()) {
@@ -368,17 +368,16 @@ public class Unit {
 	}
 
 	/**
-	 * Returns a new {@code Unit} that is the division of this {@code Unit}
-	 * and the {@code Unit} specified
+	 * Returns a new {@code Unit} that is the division of this {@code Unit} and
+	 * the {@code Unit} specified
 	 * 
-	 * @param that the {@code Unit} that this {@code Unit} will be divided
-	 *        with
-	 * @return a new {@code Unit} that is the division of this {@code Unit}
-	 *         and the {@code Unit} specified
+	 * @param that the {@code Unit} that this {@code Unit} will be divided with
+	 * @return a new {@code Unit} that is the division of this {@code Unit} and
+	 *         the {@code Unit} specified
 	 * 
 	 * @throws RuntimeException if both {@code Unit} s are special
 	 * 
-	 * @see Unit#isSpecial
+	 * @see Unit#isSpecial()
 	 */
 	Unit div(Unit that) {
 		if (this.isSpecial() && that.isSpecial()) {

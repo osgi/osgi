@@ -49,6 +49,7 @@ public class UnwindStackTest extends CoordinatorTest {
 		static Coordination[] coords;
 		
 		public Participator() {
+			// empty
 		}
 
 		public void ended(Coordination coordination) throws Exception {
@@ -70,6 +71,7 @@ public class UnwindStackTest extends CoordinatorTest {
 		static Exception e = new IllegalArgumentException();
 		
 		public BadParticipator() {
+			// empty
 		}
 
 		public void ended(Coordination coordination) throws Exception {

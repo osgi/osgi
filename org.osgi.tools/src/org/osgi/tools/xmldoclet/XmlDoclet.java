@@ -5,9 +5,6 @@ import java.util.*;
 import java.util.regex.*;
 
 import com.sun.javadoc.*;
-import com.sun.javadoc.AnnotationDesc.ElementValuePair;
-import com.sun.tools.doclets.internal.toolkit.taglets.*;
-import com.sun.tools.doclets.internal.toolkit.util.*;
 
 public class XmlDoclet extends Doclet {
 	Pattern SECURITY_PATTERN = Pattern.compile("(\\w+)\\[(.+),(\\w+)\\](.*)");

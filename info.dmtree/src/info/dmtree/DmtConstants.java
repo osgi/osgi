@@ -17,10 +17,10 @@
 package info.dmtree;
 
 /**
- * TODO Add Javadoc comment for this type.
+ * Defines standard names for {@code DmtAdmin}.
  * 
  * @version $Id$
- * @since 1.1
+ * @since 2.0
  */
 public class DmtConstants {
 

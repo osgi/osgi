@@ -25,6 +25,7 @@
 
 package org.osgi.test.cases.jmx.tb2;
 
+import java.util.Dictionary;
 import java.util.Properties;
 
 import org.osgi.framework.BundleActivator;
@@ -54,14 +55,17 @@ public class Activator implements BundleActivator {
 		props.setProperty("test_key", "test_value");
 		props.setProperty(Constants.SERVICE_PID, context.getBundle().getBundleId() + ".1");
 		
-		configRegistration = context.registerService(ManagedService.class.getName(), cfg, props);
+		configRegistration = context.registerService(
+				ManagedService.class.getName(), cfg, (Dictionary) props);
 		
 		//register as Managed Service Factory		
 		Properties propsFactory = new Properties();
 		propsFactory.setProperty("test_key", "test_value");
 		propsFactory.setProperty(Constants.SERVICE_PID, context.getBundle().getBundleId() + ".factory");
 
-		configFactoryRegistration = context.registerService(ManagedServiceFactory.class.getName(), cfg, propsFactory);
+		configFactoryRegistration = context.registerService(
+				ManagedServiceFactory.class.getName(), cfg,
+				(Dictionary) propsFactory);
 		
 		helloRegistration = context.registerService(HelloSayer.class.getCanonicalName(), new HelloSayerImpl(), null);
 	}

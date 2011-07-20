@@ -39,6 +39,8 @@ class FrameworkPlugin implements DataPlugin {
     FrameworkPlugin(BundleContext context) {
     	readonly = new FrameworkReadOnlySession(this, context);
     	readwrite = new FrameworkReadWriteSession(this, context, readonly);
+    	context.addBundleListener(readonly);
+    	context.addFrameworkListener(readonly);
     }
     
     public ReadableDataSession openReadOnlySession(String[] sessionRoot,

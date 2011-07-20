@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ package org.osgi.util.measurement;
  * 
  * <p>
  * Note: This class has a natural ordering that is inconsistent with equals. See
- * {@link #compareTo}.
+ * {@link #compareTo(Object)}.
  * 
  * @Immutable
  * @version $Id$
@@ -460,12 +460,12 @@ public class Measurement implements Comparable {
 
 	/**
 	 * Returns whether the specified object is equal to this object. Two
-	 * {@code Measurement} objects are equal if they have same value, error
-	 * and {@code Unit}.
+	 * {@code Measurement} objects are equal if they have same value, error and
+	 * {@code Unit}.
 	 * 
 	 * <p>
 	 * Note: This class has a natural ordering that is inconsistent with equals.
-	 * See {@link #compareTo}.
+	 * See {@link #compareTo(Object)}.
 	 * 
 	 * @param obj The object to compare with this object.
 	 * @return {@code true} if this object is equal to the specified object;

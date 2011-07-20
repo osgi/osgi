@@ -46,7 +46,7 @@ import org.osgi.test.support.concurrent.Semaphore;
  */
 public class NoBlockParticipantNotifyTest extends OSGiTestCase {
 	Coordinator coordinator;
-	private ServiceReference coordinatorReference;
+	private ServiceReference<Coordinator> coordinatorReference;
 	
 	/**
 	 * Coordinator.fail(Throwable) followed by Coordination.fail(Throwable).
@@ -76,6 +76,7 @@ public class NoBlockParticipantNotifyTest extends OSGiTestCase {
 		thread1.setDaemon(true);
 		thread1.start();
 		thread1.join(5000);
+		thread2.get().join(5000);
 		assertNotBlocked(thread2.get(), thread1);
 	}
 	
@@ -106,6 +107,7 @@ public class NoBlockParticipantNotifyTest extends OSGiTestCase {
 		thread1.setDaemon(true);
 		thread1.start();
 		thread1.join(5000);
+		thread2.get().join(5000);
 		assertNotBlocked(thread2.get(), thread1);
 	}
 	
@@ -136,12 +138,13 @@ public class NoBlockParticipantNotifyTest extends OSGiTestCase {
 		thread1.setDaemon(true);
 		thread1.start();
 		thread1.join(5000);
+		thread2.get().join(5000);
 		assertNotBlocked(thread2.get(), thread1);
 	}
 	
 	protected void setUp() throws Exception {
-		coordinatorReference = getContext().getServiceReference(Coordinator.class.getName());
-		coordinator = (Coordinator)getContext().getService(coordinatorReference);
+		coordinatorReference = getContext().getServiceReference(Coordinator.class);
+		coordinator = getContext().getService(coordinatorReference);
 	}
 	
 	protected void tearDown() throws Exception {

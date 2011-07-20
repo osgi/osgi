@@ -1,3 +1,10 @@
+core.ct.version			= ${build.version}
+cmpn.ct.version			= ${build.version}
+mobile.ct.version		= ${build.version}
+enterprise.ct.version	= ${build.version}
+residential.ct.version	= ${build.version}
+proposed.ct.version		= ${build.version}
+
 build.tests                 = ${uniq; ${build.core.tests}, ${build.cmpn.tests}, ${build.mobile.tests}, ${build.enterprise.tests}, ${build.residential.tests}}
 
 jar.core.tests = \
@@ -8,10 +15,8 @@ build.core.tests = \
     org.osgi.test.cases.framework.secure, \
     org.osgi.test.cases.framework.launch, \
     org.osgi.test.cases.framework.launch.secure, \
-    org.osgi.test.cases.packageadmin, \
     org.osgi.test.cases.condpermadmin, \
     org.osgi.test.cases.permissionadmin, \
-    org.osgi.test.cases.startlevel, \
     org.osgi.test.cases.url
 
 jar.cmpn.tests =

@@ -15,7 +15,7 @@
  */
 package org.osgi.test.cases.webcontainer.junit;
 
-import java.util.Enumeration;
+import java.util.List;
 import java.util.jar.Manifest;
 
 import org.osgi.framework.Constants;
@@ -26,6 +26,7 @@ import org.osgi.service.log.LogService;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
+import org.osgi.test.support.log.LogEntryCollector;
 
 /**
  * @version $Rev$ $Date$
@@ -34,7 +35,9 @@ import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
  *          OSGi log service.
  */
 public class AccessBundleContextTest extends WebContainerTestBundleControl {
-    LogReaderService logReaderService;
+	private ServiceReference	logReaderServiceReference;
+	private LogReaderService	logReaderService;
+	private LogEntryCollector	logEntryCollector;
     private static final String TW5_SYMBOLIC_NAME = "tw5-accessbundle-test";
 
     @Override
@@ -52,15 +55,23 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         }
         this.b = installBundle(loc, true);
 
-        ServiceReference logReaderServiceReference = getContext()
+		logReaderServiceReference = getContext()
                 .getServiceReference(LogReaderService.class.getName());
-        this.logReaderService = (LogReaderService) getContext().getService(
+		logReaderService = (LogReaderService) getContext().getService(
                 logReaderServiceReference);
+		logEntryCollector = new LogEntryCollector();
+		logReaderService.addLogListener(logEntryCollector);
         
         // make sure we don't run tests until the servletcontext is registered with service registry
         boolean register = super.checkServiceRegistered(this.warContextPath);
         assertTrue("the ServletContext should be registered", register);
     }
+
+	public void tearDown() throws Exception {
+		getContext().ungetService(logReaderServiceReference);
+		logEntryCollector.clear();
+		super.tearDown();
+	}
 
     /*
      * set deployOptions to null to rely on the web container service to
@@ -94,13 +105,12 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG) > 0);
         assertEquals(-1, response.indexOf("null"));
 
-        Enumeration e = logReaderService.getLog();
+		List<LogEntry> logEntries = logEntryCollector.getEntries();
         
         // let's check all the logs in case there is some other code writes to the log
         boolean checked = false;
-        while (e.hasMoreElements()) {
-            LogEntry logentry = (LogEntry) e.nextElement();
-            String message = logentry.getMessage();
+		for (LogEntry logentry : logEntries) {
+			String message = logentry.getMessage();
             log("get log message: " + message);
 
             if (message.equals(ConstantsUtil.TESTLOGMSG)) {
@@ -129,11 +139,11 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG2) > 0);
         assertEquals(-1, response.indexOf("null"));
 
-        Enumeration e = logReaderService.getLog();
+		List<LogEntry> logEntries = logEntryCollector.getEntries();
+
         // let's check all the logs in case there is some other code writes to the log
         boolean checked = false;
-        while (e.hasMoreElements()) {
-            LogEntry logentry = (LogEntry) e.nextElement();
+		for (LogEntry logentry : logEntries) {
             String message = logentry.getMessage();
             log("get log message: " + message);
             if (message.equals(ConstantsUtil.TESTLOGMSG2)) {
@@ -163,12 +173,12 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG3) > 0);
         assertEquals(-1, response.indexOf("null"));
 
-        Enumeration e = logReaderService.getLog();
+		List<LogEntry> logEntries = logEntryCollector.getEntries();
+
         // let's check all the logs in case there is some other code writes to the log
         boolean checked = false;
-        while (e.hasMoreElements()) {
-            LogEntry logentry = (LogEntry) e.nextElement();
-            String message = logentry.getMessage();
+		for (LogEntry logentry : logEntries) {
+			String message = logentry.getMessage();
             log("get log message: " + message);
             if (message.equals(ConstantsUtil.TESTLOGMSG3)) {
                 assertEquals(TW5_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
@@ -196,11 +206,11 @@ public class AccessBundleContextTest extends WebContainerTestBundleControl {
         assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG4) > 0);
         assertEquals(-1, response.indexOf("null"));
 
-        Enumeration e = logReaderService.getLog();
+		List<LogEntry> logEntries = logEntryCollector.getEntries();
+
         // let's check all the logs in case there is some other code writes to the log
         boolean checked = false;
-        while (e.hasMoreElements()) {
-            LogEntry logentry = (LogEntry) e.nextElement();
+		for (LogEntry logentry : logEntries) {
             String message = logentry.getMessage();
             log("get log message: " + message);
             if (message.equals(ConstantsUtil.TESTLOGMSG4)) {

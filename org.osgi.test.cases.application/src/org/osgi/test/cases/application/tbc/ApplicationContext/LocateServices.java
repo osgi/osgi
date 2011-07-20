@@ -81,8 +81,14 @@ public class LocateServices {
                         
             Object[] log = appContext.locateServices(ApplicationConstants.XML_LOG);
             
-            tbc.assertEquals("Asserting if the returned array has only one element.", 1, log.length);
-            tbc.assertTrue("Asserting if the first element is an instance of LogService.", (log[0] instanceof org.osgi.service.log.LogService));                       
+			tbc.assertTrue(
+					"Asserting if the returned array has at least one element.",
+					log.length >= 1);
+			for (int i = 0; i < log.length; i++) {
+				tbc.assertTrue(
+						"Asserting if the element is an instance of LogService.",
+						(log[i] instanceof org.osgi.service.log.LogService));
+			}
         } catch (Exception e) {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
                 + e.getClass().getName());

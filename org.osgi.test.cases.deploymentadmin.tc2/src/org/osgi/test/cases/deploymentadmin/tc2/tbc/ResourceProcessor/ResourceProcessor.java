@@ -53,25 +53,8 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingSessionResourcePr
  * 
  * This class tests methods of a ResourceProcessor, according to MEG specification.
  */
-public class ResourceProcessor {
+public class ResourceProcessor extends DeploymentTestControl {
 	
-	private DeploymentTestControl tbc;
-	
-	public ResourceProcessor(DeploymentTestControl tbc) {
-		this.tbc = tbc;
-	}
-	
-	public void run() {
-		testResourceProcessor001();
-		testResourceProcessor002();
-		testResourceProcessor003();
-		testResourceProcessor004();
-		testResourceProcessor005();
-		testResourceProcessor006();
-        testResourceProcessor007();
-        testResourceProcessor008();
-	}
-
 		
 	
     /**
@@ -81,30 +64,47 @@ public class ResourceProcessor {
 	 * @spec 114.10 Resource Processors
 	 */
 	public void testResourceProcessor001()  {
-		tbc.log("#testResourceProcessor001");
+		log("#testResourceProcessor001");
 		DeploymentPackage dpResourceProcessor = null;
 		DeploymentPackage dpInstallResource = null;
 		try {
-			TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
-			dpResourceProcessor = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource Processor"}),dpResourceProcessor);
+			TestingDeploymentPackage testRP = getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
+			dpResourceProcessor = installDeploymentPackage(getWebServer()
+					+ testRP.getFilename());
+			assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] {"Resource Processor"}), dpResourceProcessor);
 			
-			TestingDeploymentPackage testDPInstall = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_INSTALL_DP);
+			TestingDeploymentPackage testDPInstall = getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_INSTALL_DP);
 			TestingResource testResource = testDPInstall.getResources()[0];
-			dpInstallResource = tbc.installDeploymentPackage(tbc.getWebServer() + testDPInstall.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Deployment package that installs a resource"}),dpResourceProcessor);
+			dpInstallResource = installDeploymentPackage(getWebServer()
+					+ testDPInstall.getFilename());
+			assertNotNull(
+					MessagesConstants
+							.getMessage(
+									MessagesConstants.ASSERT_NOT_NULL,
+									new String[] {"Deployment package that installs a resource"}),
+					dpResourceProcessor);
 			
 			ServiceReference reference = dpInstallResource.getResourceProcessor(testResource.getName());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource processor reference"}),reference);
+			assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] {"Resource processor reference"}), reference);
 
-			TestingResourceProcessor resourceProcessor = (TestingResourceProcessor)tbc.getContext().getService(reference);
+			TestingResourceProcessor resourceProcessor = (TestingResourceProcessor) getContext()
+					.getService(reference);
 			
-			tbc.assertTrue("Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it is installing",resourceProcessor.isInstallUpdateOrdered());
+			assertTrue(
+					"Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it is installing",
+					resourceProcessor.isInstallUpdateOrdered());
 		} catch (Exception e) {
 			e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		} finally {
-			tbc.uninstall(new DeploymentPackage[] { dpInstallResource,dpResourceProcessor });
+			uninstall(new DeploymentPackage[] {dpInstallResource,
+					dpResourceProcessor});
 		}
 	}
 	
@@ -115,37 +115,54 @@ public class ResourceProcessor {
 	 * @spec 114.10 Resource Processors			
 	 */
 	public void testResourceProcessor002() {
-		tbc.log("#testResourceProcessor002");
+		log("#testResourceProcessor002");
 		TestingResourceProcessor resourceProcessor = null;
 		DeploymentPackage dpResourceProcessor = null;
 		DeploymentPackage dpInstallResource = null;
 		DeploymentPackage dpUpdateResource = null;
 		try {
-			TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
-			dpResourceProcessor = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource Processor"}),dpResourceProcessor);
+			TestingDeploymentPackage testRP = getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
+			dpResourceProcessor = installDeploymentPackage(getWebServer()
+					+ testRP.getFilename());
+			assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] {"Resource Processor"}), dpResourceProcessor);
 			
-			TestingDeploymentPackage testDPInstall = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_INSTALL_DP);
+			TestingDeploymentPackage testDPInstall = getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_INSTALL_DP);
 			TestingResource testResource = testDPInstall.getResources()[0];
-			dpInstallResource = tbc.installDeploymentPackage(tbc.getWebServer() + testDPInstall.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Deployment package that installs a resource"}),dpResourceProcessor);
+			dpInstallResource = installDeploymentPackage(getWebServer()
+					+ testDPInstall.getFilename());
+			assertNotNull(
+					MessagesConstants
+							.getMessage(
+									MessagesConstants.ASSERT_NOT_NULL,
+									new String[] {"Deployment package that installs a resource"}),
+					dpResourceProcessor);
 			
 			ServiceReference reference = dpInstallResource.getResourceProcessor(testResource.getName());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource processor reference"}),reference);
+			assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] {"Resource processor reference"}), reference);
 
-			resourceProcessor = (TestingResourceProcessor)tbc.getContext().getService(reference);
+			resourceProcessor = (TestingResourceProcessor) getContext()
+					.getService(reference);
 			
 			resourceProcessor.setSimulateExceptionAtPrepare(true);
 			resourceProcessor.resetCount();
-			TestingDeploymentPackage testDPUpdate = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_UPDATE_DP);			
-			dpUpdateResource = tbc.installDeploymentPackage(tbc.getWebServer() + testDPUpdate.getFilename());
-			tbc.failException("#",DeploymentException.class);
+			TestingDeploymentPackage testDPUpdate = getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_UPDATE_DP);
+			dpUpdateResource = installDeploymentPackage(getWebServer()
+					+ testDPUpdate.getFilename());
+			failException("#", DeploymentException.class);
 		} catch (DeploymentException e) {
-			tbc.assertTrue("Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it throws an exception in the prepare() method",resourceProcessor.exceptionAtPrepareOrdered());
-			tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_COMMIT_ERROR, e.getCode());
+			assertTrue(
+					"Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it throws an exception in the prepare() method",
+					resourceProcessor.exceptionAtPrepareOrdered());
+			assertEquals("The code of the DeploymentException is ",
+					DeploymentException.CODE_COMMIT_ERROR, e.getCode());
 		} finally {
 			resourceProcessor.setSimulateExceptionAtPrepare(false);
-			tbc.uninstall(new DeploymentPackage[] { dpUpdateResource,dpInstallResource,dpResourceProcessor });
+			uninstall(new DeploymentPackage[] {dpUpdateResource,
+					dpInstallResource, dpResourceProcessor});
 		}
 	}
 
@@ -156,36 +173,59 @@ public class ResourceProcessor {
 	 * @spec 114.10 Resource Processors
 	 */
 	public void testResourceProcessor003() {
-		tbc.log("#testResourceProcessor003");
+		log("#testResourceProcessor003");
 		TestingDeploymentPackage testRP;
 		DeploymentPackage dpResourceProcessor = null;
 		DeploymentPackage dpInstallResource = null;
 		DeploymentPackage dpUpdateResource = null;
 		try {
-			testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
-			dpResourceProcessor = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource Processor"}),dpResourceProcessor);
+			testRP = getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
+			dpResourceProcessor = installDeploymentPackage(getWebServer()
+					+ testRP.getFilename());
+			assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] {"Resource Processor"}), dpResourceProcessor);
 			
-			TestingDeploymentPackage testDPInstall = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_INSTALL_DP);
+			TestingDeploymentPackage testDPInstall = getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_INSTALL_DP);
 			TestingResource testResource = testDPInstall.getResources()[0];
-			dpInstallResource = tbc.installDeploymentPackage(tbc.getWebServer() + testDPInstall.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Deployment package that installs a resource"}),dpResourceProcessor);
+			dpInstallResource = installDeploymentPackage(getWebServer()
+					+ testDPInstall.getFilename());
+			assertNotNull(
+					MessagesConstants
+							.getMessage(
+									MessagesConstants.ASSERT_NOT_NULL,
+									new String[] {"Deployment package that installs a resource"}),
+					dpResourceProcessor);
 			
 			ServiceReference reference = dpInstallResource.getResourceProcessor(testResource.getName());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource processor reference"}),reference);
+			assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] {"Resource processor reference"}), reference);
 
-			TestingResourceProcessor resourceProcessor = (TestingResourceProcessor)tbc.getContext().getService(reference);
+			TestingResourceProcessor resourceProcessor = (TestingResourceProcessor) getContext()
+					.getService(reference);
 			
 			resourceProcessor.resetCount();
-			TestingDeploymentPackage testDPUpdate = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_UPDATE_DP);
-			dpUpdateResource = tbc.installDeploymentPackage(tbc.getWebServer() + testDPUpdate.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Deployment package that updates a resource"}),dpUpdateResource);
+			TestingDeploymentPackage testDPUpdate = getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_UPDATE_DP);
+			dpUpdateResource = installDeploymentPackage(getWebServer()
+					+ testDPUpdate.getFilename());
+			assertNotNull(
+					MessagesConstants
+							.getMessage(
+									MessagesConstants.ASSERT_NOT_NULL,
+									new String[] {"Deployment package that updates a resource"}),
+					dpUpdateResource);
 			
-			tbc.assertTrue("Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it is updating",resourceProcessor.isInstallUpdateOrdered());
+			assertTrue(
+					"Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it is updating",
+					resourceProcessor.isInstallUpdateOrdered());
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		} finally {
-			tbc.uninstall(new DeploymentPackage[] { dpUpdateResource,dpInstallResource,dpResourceProcessor });
+			uninstall(new DeploymentPackage[] {dpUpdateResource,
+					dpInstallResource, dpResourceProcessor});
 		
 		}
 	}
@@ -200,36 +240,54 @@ public class ResourceProcessor {
      * @spec 114.10 Resource Processors
      */
 	public void testResourceProcessor004() {
-		tbc.log("#testResourceProcessor004");
+		log("#testResourceProcessor004");
 		TestingResourceProcessor resourceProcessor = null;
 		TestingDeploymentPackage testRP;
 		DeploymentPackage dpResourceProcessor = null;
 		DeploymentPackage dpInstallResource = null;
 		DeploymentPackage dpUninstallResource = null;
 		try {
-			testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
-			dpResourceProcessor = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource Processor"}),dpResourceProcessor);
+			testRP = getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
+			dpResourceProcessor = installDeploymentPackage(getWebServer()
+					+ testRP.getFilename());
+			assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] {"Resource Processor"}), dpResourceProcessor);
 			
-			TestingDeploymentPackage testDPInstall = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_INSTALL_DP);
+			TestingDeploymentPackage testDPInstall = getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_INSTALL_DP);
 			TestingResource testResource = testDPInstall.getResources()[0];
-			dpInstallResource = tbc.installDeploymentPackage(tbc.getWebServer() + testDPInstall.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Deployment package that installs a resource"}),dpResourceProcessor);
+			dpInstallResource = installDeploymentPackage(getWebServer()
+					+ testDPInstall.getFilename());
+			assertNotNull(
+					MessagesConstants
+							.getMessage(
+									MessagesConstants.ASSERT_NOT_NULL,
+									new String[] {"Deployment package that installs a resource"}),
+					dpResourceProcessor);
 			
 			ServiceReference reference = dpInstallResource.getResourceProcessor(testResource.getName());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource processor reference"}),reference);
+			assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] {"Resource processor reference"}), reference);
 
-			resourceProcessor = (TestingResourceProcessor)tbc.getContext().getService(reference);
+			resourceProcessor = (TestingResourceProcessor) getContext()
+					.getService(reference);
 			
 			resourceProcessor.resetCount();
-			TestingDeploymentPackage testDPUninstall = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_UNINSTALL_DP);
-			dpUninstallResource = tbc.installDeploymentPackage(tbc.getWebServer() + testDPUninstall.getFilename());
-			tbc.assertTrue("Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it is uninstalling",resourceProcessor.isUninstallResourceOrdered());
+			TestingDeploymentPackage testDPUninstall = getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_UNINSTALL_DP);
+			dpUninstallResource = installDeploymentPackage(getWebServer()
+					+ testDPUninstall.getFilename());
+			assertTrue(
+					"Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it is uninstalling",
+					resourceProcessor.isUninstallResourceOrdered());
 			
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));			
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		} finally {
-			tbc.uninstall(new DeploymentPackage[] { dpUninstallResource,dpInstallResource,dpResourceProcessor });
+			uninstall(new DeploymentPackage[] {dpUninstallResource,
+					dpInstallResource, dpResourceProcessor});
 		}
 	}
 	
@@ -241,36 +299,54 @@ public class ResourceProcessor {
      * @spec 114.10 Resource Processors
      */
 	public void testResourceProcessor005() {
-		tbc.log("#testResourceProcessor005");
+		log("#testResourceProcessor005");
 		TestingResourceProcessor resourceProcessor = null;
 		DeploymentPackage dpResourceProcessor = null;
 		DeploymentPackage dpInstallResource = null;
 		DeploymentPackage dpUninstallResource = null;
 		try {
-			TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
-			dpResourceProcessor = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource Processor"}),dpResourceProcessor);
+			TestingDeploymentPackage testRP = getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
+			dpResourceProcessor = installDeploymentPackage(getWebServer()
+					+ testRP.getFilename());
+			assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] {"Resource Processor"}), dpResourceProcessor);
 			
-			TestingDeploymentPackage testDPInstall = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_INSTALL_DP);
+			TestingDeploymentPackage testDPInstall = getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_INSTALL_DP);
 			TestingResource testResource = testDPInstall.getResources()[0];
-			dpInstallResource = tbc.installDeploymentPackage(tbc.getWebServer() + testDPInstall.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Deployment package that installs a resource"}),dpResourceProcessor);
+			dpInstallResource = installDeploymentPackage(getWebServer()
+					+ testDPInstall.getFilename());
+			assertNotNull(
+					MessagesConstants
+							.getMessage(
+									MessagesConstants.ASSERT_NOT_NULL,
+									new String[] {"Deployment package that installs a resource"}),
+					dpResourceProcessor);
 			
 			ServiceReference reference = dpInstallResource.getResourceProcessor(testResource.getName());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource processor reference"}),reference);
+			assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] {"Resource processor reference"}), reference);
 			
-			resourceProcessor = (TestingResourceProcessor)tbc.getContext().getService(reference);
+			resourceProcessor = (TestingResourceProcessor) getContext()
+					.getService(reference);
 			
 			resourceProcessor.setSimulateExceptionAtDropped(true);
 			resourceProcessor.resetCount();
-			TestingDeploymentPackage testDPUninstall = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_UNINSTALL_DP);
-			dpUninstallResource = tbc.installDeploymentPackage(tbc.getWebServer() + testDPUninstall.getFilename());
-			tbc.assertTrue("Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it throws an exception in the dropped() method. It also ensures that no exception is thrown even if the resource does not exist.",resourceProcessor.exceptionAtDroppedOrdered());
+			TestingDeploymentPackage testDPUninstall = getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_UNINSTALL_DP);
+			dpUninstallResource = installDeploymentPackage(getWebServer()
+					+ testDPUninstall.getFilename());
+			assertTrue(
+					"Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it throws an exception in the dropped() method. It also ensures that no exception is thrown even if the resource does not exist.",
+					resourceProcessor.exceptionAtDroppedOrdered());
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		} finally {
 			resourceProcessor.setSimulateExceptionAtDropped(false);	
-			tbc.uninstall(new DeploymentPackage[] { dpUninstallResource,dpInstallResource,dpResourceProcessor });
+			uninstall(new DeploymentPackage[] {dpUninstallResource,
+					dpInstallResource, dpResourceProcessor});
 		}
 	}
     
@@ -282,33 +358,50 @@ public class ResourceProcessor {
      * @spec 114.10 Resource Processors
      */
 	public void testResourceProcessor006() {
-		tbc.log("#testResourceProcessor006");
+		log("#testResourceProcessor006");
 		TestingDeploymentPackage testRP;
 		DeploymentPackage dpResourceProcessor = null;
 		DeploymentPackage dpInstallResource = null;
 		try {
-			testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
-			dpResourceProcessor = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource Processor"}),dpResourceProcessor);
+			testRP = getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
+			dpResourceProcessor = installDeploymentPackage(getWebServer()
+					+ testRP.getFilename());
+			assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] {"Resource Processor"}), dpResourceProcessor);
 			
-			TestingDeploymentPackage testDPInstall = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_INSTALL_DP);
+			TestingDeploymentPackage testDPInstall = getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_INSTALL_DP);
 			TestingResource testResource = testDPInstall.getResources()[0];
-			dpInstallResource = tbc.installDeploymentPackage(tbc.getWebServer() + testDPInstall.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Deployment package that installs a resource"}),dpResourceProcessor);
+			dpInstallResource = installDeploymentPackage(getWebServer()
+					+ testDPInstall.getFilename());
+			assertNotNull(
+					MessagesConstants
+							.getMessage(
+									MessagesConstants.ASSERT_NOT_NULL,
+									new String[] {"Deployment package that installs a resource"}),
+					dpResourceProcessor);
 			
 			ServiceReference reference = dpInstallResource.getResourceProcessor(testResource.getName());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource processor reference"}),reference);
+			assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] {"Resource processor reference"}), reference);
 
-			TestingResourceProcessor resourceProcessor = (TestingResourceProcessor)tbc.getContext().getService(reference);
+			TestingResourceProcessor resourceProcessor = (TestingResourceProcessor) getContext()
+					.getService(reference);
 			
 			resourceProcessor.resetCount();
 			dpInstallResource.uninstall();
-			tbc.assertTrue("Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it is uninstalling",resourceProcessor.isUninstallOrdered());
+			assertTrue(
+					"Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it is uninstalling",
+					resourceProcessor.isUninstallOrdered());
 			
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
 		} finally {
-			tbc.uninstall(new DeploymentPackage[] { dpInstallResource,dpResourceProcessor });
+			uninstall(new DeploymentPackage[] {dpInstallResource,
+					dpResourceProcessor});
 		}
 	}
     
@@ -320,23 +413,33 @@ public class ResourceProcessor {
      * @spec 114.5 Customizer
      */
     public void testResourceProcessor007() {
-        tbc.log("#testResourceProcessor007");
+		log("#testResourceProcessor007");
         
+		setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
+				+ DeploymentConstants.PID_RESOURCE_PROCESSOR1, "(name=*)");
+		
         DeploymentPackage dp1 = null, dp2 = null;
-        TestingDeploymentPackage testDP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_CUSTOMIZER);
-        TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_FROM_OTHER_DP);
+		TestingDeploymentPackage testDP1 = getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_CUSTOMIZER);
+		TestingDeploymentPackage testDP2 = getTestingDeploymentPackage(DeploymentConstants.RP_FROM_OTHER_DP);
+		
         try {
-            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP1.getFilename());
-            tbc.assertNotNull("Deployment Package 1 installed", dp1);
-            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
-            tbc.failException("#", DeploymentException.class);
+			dp1 = installDeploymentPackage(getWebServer()
+					+ testDP1.getFilename());
+			assertNotNull("Deployment Package 1 installed", dp1);
+			dp2 = installDeploymentPackage(getWebServer()
+					+ testDP2.getFilename());
+			failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
         	e.printStackTrace();
-            tbc.assertEquals("DeploymentException.CODE_FOREIGN_CUSTOMIZER correctly thrown", DeploymentException.CODE_FOREIGN_CUSTOMIZER, e.getCode());
+			assertEquals(
+					"DeploymentException.CODE_FOREIGN_CUSTOMIZER correctly thrown",
+					DeploymentException.CODE_FOREIGN_CUSTOMIZER, e.getCode());
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}));
         } finally {
-            tbc.uninstall(new DeploymentPackage[]{dp1, dp2});
+			uninstall(new DeploymentPackage[] {dp1, dp2});
         }
     }
     
@@ -347,33 +450,42 @@ public class ResourceProcessor {
      * @spec 114.8 Installing a Deployment Package
      */
     public void testResourceProcessor008() {
-        tbc.log("#testResourceProcessor008");
+		log("#testResourceProcessor008");
         DeploymentPackage dp = null, rp=null;
         TestingSessionResourceProcessor tsrp = null;
         TestingDeploymentPackage testDP = null;
-        TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_RP3);
+		TestingDeploymentPackage testRP = getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_RP3);
             
         try {
-        	rp = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
+			rp = installDeploymentPackage(getWebServer() + testRP.getFilename());
         	
-        	ServiceReference[] sr = tbc.getContext().getServiceReferences(org.osgi.service.deploymentadmin.spi.ResourceProcessor.class.getName(), "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+        	ServiceReference[] sr = getContext()
+					.getServiceReferences(
+							org.osgi.service.deploymentadmin.spi.ResourceProcessor.class
+									.getName(),
+							"(service.pid="
+									+ DeploymentConstants.PID_RESOURCE_PROCESSOR3
+									+ ")");
         	
-            tsrp = (TestingSessionResourceProcessor) tbc.getContext().getService(sr[0]);
+            tsrp = (TestingSessionResourceProcessor) getContext().getService(
+					sr[0]);
             
             tsrp.setException(TestingSessionResourceProcessor.PROCESS);
 
-            testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_RP3);
-            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-            tbc.failException("", DeploymentException.class);
+			testDP = getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_RP3);
+			dp = installDeploymentPackage(getWebServer() + testDP.getFilename());
+			failException("", DeploymentException.class);
         } catch (DeploymentException e) {
-        	tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_RESOURCE_SHARING_VIOLATION, e.getCode());
+			assertEquals("The code of the DeploymentException is ",
+					DeploymentException.CODE_RESOURCE_SHARING_VIOLATION,
+					e.getCode());
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
+			fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
             if (tsrp != null)
                 tsrp.reset();
-            tbc.uninstall(new DeploymentPackage[]{rp, dp});
+			uninstall(new DeploymentPackage[] {rp, dp});
         }
     }
 }

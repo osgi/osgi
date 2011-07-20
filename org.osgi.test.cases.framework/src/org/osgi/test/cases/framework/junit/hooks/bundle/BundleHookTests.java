@@ -1066,6 +1066,12 @@ public class BundleHookTests extends OSGiTestCase {
 			// unregister hook and services
 			if (regHook1 != null)
 				regHook1.unregister();
+			if (testBundle != null)
+				try {
+					testBundle.uninstall();
+				} catch (BundleException e) {
+					// nothing
+				}
 		}
 	}
 

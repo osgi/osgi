@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2007, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ package org.osgi.util.tr069;
  * @version $Id$
  */
 public class TR069MappingException extends Exception {
+	private static final long	serialVersionUID	= 3712320696439886391L;
 
 	/**
 	 * Construct an exception.
@@ -33,8 +34,12 @@ public class TR069MappingException extends Exception {
 	}
 
 	/**
+	 * Construct an exception with a cause.
 	 * 
+	 * @param string error message.
+	 * @param cause cause of the exception
 	 */
-	private static final long	serialVersionUID	= 3712320696439886391L;
-
+	public TR069MappingException(String string, Throwable cause) {
+		super(string, cause);
+	}
 }

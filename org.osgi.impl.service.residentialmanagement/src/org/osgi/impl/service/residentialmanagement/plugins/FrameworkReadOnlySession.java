@@ -1,5 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000-2009).
+ * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -26,14 +27,21 @@ package org.osgi.impl.service.residentialmanagement.plugins;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Properties;
 import java.util.Vector;
 import java.util.Date;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.service.startlevel.StartLevel;
+
+import info.dmtree.DmtConstants;
 import info.dmtree.DmtData;
 import info.dmtree.DmtException;
 import info.dmtree.MetaNode;
@@ -43,40 +51,61 @@ import info.dmtree.spi.ReadableDataSession;
  * 
  * @author Koya MORI NTT Corporation, Shigekuni KONDO
  */
-class FrameworkReadOnlySession implements ReadableDataSession {
-
+class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundleListener, FrameworkListener {
+	
 	protected static final String ID = "id";
 	protected static final String STARTLEVEL = "StartLevel";
 	protected static final String INSTALLBUNDLE = "InstallBundle";
 	protected static final String FRAMEWORKLIFECYCLE = "FrameworkLifecycle";
 	protected static final String BUNDLECONTROL = "BundleControl";
-	protected static final String EXT = "Ext";
+	protected static final String FRAMEWORKEVENT = "FrameworkEvent";
+	protected static final String REFRESHPACKAGES = "RefreshPackages";
+	
+	protected static final String EVENT = "Event";
+	protected static final String CATCHEVENTS = "CatchEvents";
+	protected static final String THROWABLE = "Throwable";
+	protected static final String TYPE = "Type";
+	protected static final String BUNDLEID = "BundleId";
+
 	protected static final String REQUESTEDSTARTLEVEL = "RequestedStartLevel";
 	protected static final String ACTIVESTARTLEVEL = "ActiveStartLevel";
 	protected static final String INITIALBUNDLESTARTLEVEL = "InitialBundleStartLevel";
+	protected static final String BEGINNINGSTARTLEVEL = "BeginningStartLevel";
+	
 	protected static final String LOCATION = "Location";
 	protected static final String URL = "URL";
-	protected static final String ERROR = "Error";
+	protected static final String INSTALLBUNDLEOPTION = "Option";
+	protected static final String INSTALLBUNDLEOPERATIONRESULT = "OperationResult";
+	
 	protected static final String RESTART = "Restart";
 	protected static final String SHUTDOWN = "Shutdown";
 	protected static final String UPDATE = "Update";
+	
+	protected static final String LIFECYCLE = "Lifecycle";
 	protected static final String BUNDLESTARTLEVEL = "BundleStartLevl";
-	protected static final String BUNDLELIFECYCLE = "BundleLifecycle";
-	protected static final String DESIREDSTATE = "DesiredState";
-	protected static final String BUNDLEUPDATE = "BundleUpdate";
-	protected static final String OPTION = "Option";
-	protected static final String OPERATIONRESULT = "OperationResult";
+	protected static final String BUNDLECONTROLREFRESHPACKAGES = "RefreshPackages";
+	
+	protected static final String OPERATION = "Operation";
+	protected static final String BUNDLECONTROLOPTION = "Option";
+	protected static final String BUNDLECONTROLOPERATIONRESULT = "OperationResult";
+	
+	protected static final String NODE_TYPE = "org.osgi/1.0/FrameworkManagementObject";
+	protected static final String TRANSIENT_NODE_TYPE = DmtConstants.DDF_TRANSIENT;
 
 	protected FrameworkPlugin plugin;
 	protected BundleContext context;
 	protected Hashtable bundlesTable = new Hashtable();
-	protected int RequestedStartLevel = 0;
+	protected Hashtable eventTable = new Hashtable();
+	protected int requestedStartLevel = 0;
 	protected Node installbundle;
+	protected boolean managedFlag = false;
+	protected long eventId = 1;
+	protected boolean eventFlag = false;
+	protected boolean refreshPackagesFlag = false;
 
 	FrameworkReadOnlySession(FrameworkPlugin plugin, BundleContext context) {
 		this.plugin = plugin;
 		this.context = context;
-
 		installbundle = new Node("InstallBundle", null);
 	}
 
@@ -92,23 +121,23 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 		String[] path = shapedPath(nodePath);
 
 		if (path.length == 1) {
-			String[] children = new String[5];
+			String[] children = new String[6];
 			children[0] = STARTLEVEL;
 			children[1] = INSTALLBUNDLE;
 			children[2] = FRAMEWORKLIFECYCLE;
 			children[3] = BUNDLECONTROL;
-			children[4] = EXT;
-
+			children[4] = REFRESHPACKAGES;
+			children[5] = FRAMEWORKEVENT;
 			return children;
 		}
 
 		if (path.length == 2) {
 			if (path[1].equals(STARTLEVEL)) {
-				String[] children = new String[3];
+				String[] children = new String[4];
 				children[0] = REQUESTEDSTARTLEVEL;
 				children[1] = ACTIVESTARTLEVEL;
 				children[2] = INITIALBUNDLESTARTLEVEL;
-
+				children[3] = BEGINNINGSTARTLEVEL;
 				return children;
 			}
 
@@ -131,17 +160,21 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 			}
 
 			if (path[1].equals(BUNDLECONTROL)) {
-				if (bundlesTable.size() == 0) {
-					String[] children = new String[1];
-					children[0] = "";
-					return children;
-				}
+				if (bundlesTable.size() == 0)
+					return new String[0];
 				String[] children = new String[bundlesTable.size()];
 				int i = 0;
 				for (Enumeration keys = bundlesTable.keys(); keys
 						.hasMoreElements(); i++) {
 					children[i] = (String) keys.nextElement();
 				}
+				return children;
+			}
+			
+			if (path[1].equals(FRAMEWORKEVENT)) {
+				String[] children = new String[2];
+				children[0] = EVENT;
+				children[1] = CATCHEVENTS;
 				return children;
 			}
 
@@ -163,32 +196,45 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 		}
 
 		if (path.length == 3 && path[1].equals(BUNDLECONTROL)) {
-			if (bundlesTable.size() == 0) {
-				String[] children = new String[1];
-				children[0] = "";
-				return children;
-			}
-			String[] children = new String[2];
+			String[] children = new String[3];
 			children[0] = BUNDLESTARTLEVEL;
-			children[1] = BUNDLELIFECYCLE;
+			children[1] = LIFECYCLE;
+			children[2] = BUNDLECONTROLREFRESHPACKAGES;
+			return children;
+		}
+		
+		if (path.length == 3 && path[1].equals(FRAMEWORKEVENT)) {
+			if (eventTable.size() == 0)
+				return new String[0];
+			String[] children = new String[eventTable.size()];
+			int i = 0;
+			for (Enumeration keys = eventTable.keys(); keys
+					.hasMoreElements(); i++) {
+				children[i] = (String) keys.nextElement();
+			}
 			return children;
 		}
 
-		if (path.length == 4) {
-			String[] children = new String[4];
-			children[0] = DESIREDSTATE;
-			children[1] = BUNDLEUPDATE;
-			children[2] = OPTION;
-			children[3] = OPERATIONRESULT;
+		if (path.length == 4 && path[1].equals(BUNDLECONTROL)) {
+			String[] children = new String[3];
+			children[0] = OPERATION;
+			children[1] = BUNDLECONTROLOPTION;
+			children[2] = BUNDLECONTROLOPERATIONRESULT;
+			return children;
+		}
+		
+		if (path.length == 4 && path[1].equals(FRAMEWORKEVENT)) {
+			String[] children = new String[3];
+			children[0] = THROWABLE;
+			children[1] = TYPE;
+			children[2] = BUNDLEID;
 			return children;
 		}
 
 		// other case
 		String[] children = new String[0];
-		// children[0] = "";
-
+		
 		return children;
-
 	}
 
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
@@ -229,13 +275,22 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 						!FrameworkMetaNode.CAN_DELETE,
 						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE);
-
-			if (path[1].equals(EXT))
-				return new FrameworkMetaNode("Extension subtree.",
+			
+			if (path[1].equals(FRAMEWORKEVENT))
+				return new FrameworkMetaNode("Event subtree.",
 						MetaNode.AUTOMATIC, !FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
 						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE);
+			
+			if (path[1].equals(REFRESHPACKAGES))
+				return new FrameworkMetaNode(
+						"A leaf node can be used to refresh packages.",
+						!FrameworkMetaNode.CAN_DELETE,
+						FrameworkMetaNode.CAN_REPLACE,
+						!FrameworkMetaNode.ALLOW_ZERO,
+						!FrameworkMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_BOOLEAN, null);
 		}
 
 		if (path.length == 3) {
@@ -262,6 +317,15 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 						"The initial bundle start level of the framework.",
 						!FrameworkMetaNode.CAN_DELETE,
 						FrameworkMetaNode.CAN_REPLACE,
+						!FrameworkMetaNode.ALLOW_ZERO,
+						!FrameworkMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_INTEGER, null);
+			
+			if (path[2].equals(BEGINNINGSTARTLEVEL))
+				return new FrameworkMetaNode(
+						"The initial bundle start level of the framework.",
+						!FrameworkMetaNode.CAN_DELETE,
+						!FrameworkMetaNode.CAN_REPLACE,
 						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_INTEGER, null);
@@ -292,6 +356,15 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_BOOLEAN, null);
+			
+			if (path[2].equals(CATCHEVENTS))
+				return new FrameworkMetaNode(
+						"To use for activation of catch events of framework .",
+						!FrameworkMetaNode.CAN_DELETE,
+						FrameworkMetaNode.CAN_REPLACE,
+						!FrameworkMetaNode.ALLOW_ZERO,
+						!FrameworkMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_BOOLEAN, null);
 
 			if (path[1].equals(BUNDLECONTROL))
 				return new FrameworkMetaNode("<bundle_id> subtree.",
@@ -301,10 +374,12 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 						!FrameworkMetaNode.ALLOW_INFINITE);
 
 			// ./OSGi/Framework/InstallBundle/<id>
-			return new FrameworkMetaNode("Update command of the framework.",
-					MetaNode.DYNAMIC, FrameworkMetaNode.CAN_ADD,
-					FrameworkMetaNode.CAN_DELETE, FrameworkMetaNode.ALLOW_ZERO,
-					FrameworkMetaNode.ALLOW_INFINITE);
+			if (path[1].equals(INSTALLBUNDLE))
+				return new FrameworkMetaNode("The id of the instaled bundle.",
+						MetaNode.DYNAMIC, FrameworkMetaNode.CAN_ADD,
+						FrameworkMetaNode.CAN_DELETE, 
+						FrameworkMetaNode.ALLOW_ZERO,
+						FrameworkMetaNode.ALLOW_INFINITE);
 		}
 
 		if (path.length == 4) { // ./OSGi/Framework/InstallBundle/<id>...
@@ -325,13 +400,22 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
-
-			if (path[3].equals(ERROR))
+			
+			if (path[3].equals(INSTALLBUNDLEOPTION))
 				return new FrameworkMetaNode(
-						"Errors of the install operation.",
+						"Bundle start option.",
+						!FrameworkMetaNode.CAN_DELETE,
+						FrameworkMetaNode.CAN_REPLACE,
+						!FrameworkMetaNode.ALLOW_ZERO,
+						!FrameworkMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_STRING, null);
+
+			if (path[3].equals(INSTALLBUNDLEOPERATIONRESULT))
+				return new FrameworkMetaNode(
+						"The status of the last executed operation.",
 						!FrameworkMetaNode.CAN_DELETE,
 						!FrameworkMetaNode.CAN_REPLACE,
-						FrameworkMetaNode.ALLOW_ZERO,
+						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
@@ -342,46 +426,78 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 						FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
-
-			if (path[3].equals(BUNDLELIFECYCLE))
+			
+			if (path[3].equals(BUNDLECONTROLREFRESHPACKAGES))
+				return new FrameworkMetaNode(
+						"A leaf node can be used to refresh bundle packages.",
+						!FrameworkMetaNode.CAN_DELETE,
+						FrameworkMetaNode.CAN_REPLACE,
+						!FrameworkMetaNode.ALLOW_ZERO,
+						!FrameworkMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_BOOLEAN, null);
+			
+			if (path[3].equals(LIFECYCLE))
 				return new FrameworkMetaNode("BundleLifecycle sub-tree.",
+						MetaNode.AUTOMATIC, !FrameworkMetaNode.CAN_ADD,
+						!FrameworkMetaNode.CAN_DELETE,
+						!FrameworkMetaNode.ALLOW_ZERO,
+						!FrameworkMetaNode.ALLOW_INFINITE);
+			
+			if (path[2].equals(EVENT))
+				return new FrameworkMetaNode("The id of the event.",
 						MetaNode.AUTOMATIC, !FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
 						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE);
 		}
 		if (path.length == 5) {
-			if (path[4].equals(DESIREDSTATE))
-				return new FrameworkMetaNode("DesiredState node.",
+			if (path[4].equals(OPERATION))
+				return new FrameworkMetaNode("Operation node.",
 						!FrameworkMetaNode.CAN_DELETE,
-						!FrameworkMetaNode.CAN_REPLACE,
-						FrameworkMetaNode.ALLOW_ZERO,
-						!FrameworkMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_INTEGER, null);
-
-			if (path[4].equals(BUNDLEUPDATE))
-				return new FrameworkMetaNode("BundleUpdate node.",
-						!FrameworkMetaNode.CAN_DELETE,
-						!FrameworkMetaNode.CAN_REPLACE,
-						FrameworkMetaNode.ALLOW_ZERO,
+						FrameworkMetaNode.CAN_REPLACE,
+						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[4].equals(OPTION))
+			if (path[4].equals(BUNDLECONTROLOPTION))
 				return new FrameworkMetaNode("Option node.",
 						!FrameworkMetaNode.CAN_DELETE,
-						!FrameworkMetaNode.CAN_REPLACE,
-						FrameworkMetaNode.ALLOW_ZERO,
+						FrameworkMetaNode.CAN_REPLACE,
+						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_INTEGER, null);
+						DmtData.FORMAT_STRING, null);
 
-			if (path[4].equals(OPERATIONRESULT))
+			if (path[4].equals(BUNDLECONTROLOPERATIONRESULT))
 				return new FrameworkMetaNode("BundleOperationResult node.",
 						!FrameworkMetaNode.CAN_DELETE,
 						!FrameworkMetaNode.CAN_REPLACE,
-						FrameworkMetaNode.ALLOW_ZERO,
+						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
+			
+			if (path[4].equals(THROWABLE))
+				return new FrameworkMetaNode("Thrownable node.",
+						!FrameworkMetaNode.CAN_DELETE,
+						!FrameworkMetaNode.CAN_REPLACE,
+						!FrameworkMetaNode.ALLOW_ZERO,
+						!FrameworkMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_STRING, null);
+
+			if (path[4].equals(TYPE))
+				return new FrameworkMetaNode("Event type node.",
+						!FrameworkMetaNode.CAN_DELETE,
+						!FrameworkMetaNode.CAN_REPLACE,
+						!FrameworkMetaNode.ALLOW_ZERO,
+						!FrameworkMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_STRING, null);
+
+			if (path[4].equals(BUNDLEID))
+				return new FrameworkMetaNode("Bundle id associated whith the event node.",
+						!FrameworkMetaNode.CAN_DELETE,
+						!FrameworkMetaNode.CAN_REPLACE,
+						!FrameworkMetaNode.ALLOW_ZERO,
+						!FrameworkMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_LONG, null);
 		}
 
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
@@ -408,9 +524,15 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 	}
 
 	public String getNodeType(String[] nodePath) throws DmtException {
+		String[] path = shapedPath(nodePath);
+		if (path.length == 1)
+			return NODE_TYPE;
+		if (path.length == 3 && path[1].equals(INSTALLBUNDLE))
+			return TRANSIENT_NODE_TYPE;
+		if (path.length == 4 && path[2].equals(EVENT))
+			return TRANSIENT_NODE_TYPE;
 		if (isLeafNode(nodePath))
 			return FrameworkMetaNode.LEAF_MIME_TYPE;
-
 		return FrameworkMetaNode.FRAMEWORK_MO_TYPE;
 	}
 
@@ -421,9 +543,12 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 			return true;
 
 		if (path.length == 2) {
-			if (path[1].equals(STARTLEVEL) || path[1].equals(INSTALLBUNDLE)
+			if (path[1].equals(STARTLEVEL) 
+					|| path[1].equals(FRAMEWORKEVENT)
+					|| path[1].equals(REFRESHPACKAGES)
+					|| path[1].equals(INSTALLBUNDLE)
 					|| path[1].equals(FRAMEWORKLIFECYCLE)
-					|| path[1].equals(BUNDLECONTROL) || path[1].equals(EXT))
+					|| path[1].equals(BUNDLECONTROL))
 				return true;
 		}
 
@@ -431,79 +556,117 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 			if (path[2].equals(REQUESTEDSTARTLEVEL)
 					|| path[2].equals(ACTIVESTARTLEVEL)
 					|| path[2].equals(INITIALBUNDLESTARTLEVEL)
-					|| path[2].equals(RESTART) || path[2].equals(SHUTDOWN)
-					|| path[2].equals(UPDATE))
+					|| path[2].equals(BEGINNINGSTARTLEVEL)
+					|| path[2].equals(RESTART)
+					|| path[2].equals(SHUTDOWN)
+					|| path[2].equals(UPDATE)
+					|| path[2].equals(EVENT)
+					|| path[2].equals(CATCHEVENTS))
 				return true;
 
 			if (installbundle.findNode(new String[] { path[2] }) != null)
 				return true;
 
-			if (bundlesTable.get(path[1]) != null)
+			if (bundlesTable.get(path[2]) != null)
 				return true;
 		}
 
-		if (path.length == 4) {
-			if (path[3].equals(LOCATION) || path[3].equals(URL)
-					|| path[3].equals(ERROR)
-					|| path[3].equals(BUNDLESTARTLEVEL)
-					|| path[3].equals(BUNDLELIFECYCLE))
+		if (path.length == 4 && path[1].equals(INSTALLBUNDLE))
+			if (installbundle.findNode(new String[] { path[2] }) != null)
+				if (path[3].equals(LOCATION) 
+						|| path[3].equals(URL)
+						|| path[3].equals(INSTALLBUNDLEOPTION)
+						|| path[3].equals(INSTALLBUNDLEOPERATIONRESULT))
+					return true;
+		
+		if (path.length == 4 && path[1].equals(BUNDLECONTROL))
+			if (bundlesTable.get(path[2]) != null)
+				if (path[3].equals(BUNDLESTARTLEVEL)
+						|| path[3].equals(BUNDLECONTROLREFRESHPACKAGES)
+						|| path[3].equals(LIFECYCLE))
+					return true;
+			
+		if (path.length == 4 && path[1].equals(FRAMEWORKEVENT))
+			if (eventTable.get(path[3]) != null)
+				return true;
+		
+		if (path.length == 5 && path[1].equals(BUNDLECONTROL))
+			if (bundlesTable.get(path[2]) != null)
+				if (path[4].equals(OPERATION) 
+						|| path[4].equals(BUNDLECONTROLOPTION)
+						|| path[4].equals(BUNDLECONTROLOPTION)
+						|| path[4].equals(BUNDLECONTROLOPERATIONRESULT))
+					return true;
+		
+		if (path.length == 5 && path[1].equals(FRAMEWORKEVENT)) {
+			if (path[4].equals(THROWABLE)
+					|| path[4].equals(TYPE)
+					|| path[4].equals(BUNDLEID))
 				return true;
 		}
-
-		if (path.length == 5) {
-			if (path[4].equals(DESIREDSTATE) || path[4].equals(BUNDLEUPDATE)
-					|| path[4].equals(OPTION)
-					|| path[4].equals(OPERATIONRESULT))
-				return true;
-		}
-
 		return false;
 	}
 
 	public boolean isLeafNode(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
-
-		if (path.length <= 2)
+		if (path.length == 1)
 			return false;
+		
+		if (path.length == 2){
+			if (path[1].equals(REFRESHPACKAGES))
+				return true;
+		}			
 
 		if (path.length == 3) {
 			if (path[2].equals(REQUESTEDSTARTLEVEL)
 					|| path[2].equals(ACTIVESTARTLEVEL)
 					|| path[2].equals(INITIALBUNDLESTARTLEVEL)
-					|| path[2].equals(RESTART) || path[2].equals(SHUTDOWN)
-					|| path[2].equals(UPDATE))
+					|| path[2].equals(BEGINNINGSTARTLEVEL)
+					|| path[2].equals(RESTART) 
+					|| path[2].equals(SHUTDOWN)
+					|| path[2].equals(UPDATE)
+					|| path[2].equals(CATCHEVENTS))
 				return true;
 		}
 
 		if (path.length == 4) {
-			if (path[3].equals(LOCATION) || path[3].equals(URL)
+			if (path[3].equals(LOCATION) 
+					|| path[3].equals(URL)
+					|| path[3].equals(INSTALLBUNDLEOPTION)
+					|| path[3].equals(INSTALLBUNDLEOPERATIONRESULT)
 					|| path[3].equals(BUNDLESTARTLEVEL)
-					|| path[3].equals(ERROR))
+					|| path[3].equals(BUNDLECONTROLREFRESHPACKAGES))
 				return true;
 		}
 
 		if (path.length == 5) {
-			if (path[4].equals(DESIREDSTATE) || path[4].equals(BUNDLEUPDATE)
-					|| path[4].equals(OPTION)
-					|| path[4].equals(OPERATIONRESULT))
+			if (path[4].equals(OPERATION) 
+					|| path[4].equals(BUNDLECONTROLOPTION)
+					|| path[4].equals(BUNDLECONTROLOPTION)
+					|| path[4].equals(BUNDLECONTROLOPERATIONRESULT)
+					|| path[4].equals(THROWABLE)
+					|| path[4].equals(TYPE)
+					|| path[4].equals(BUNDLEID))
 				return true;
 		}
-
 		return false;
 	}
-
 
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 
-		if (path.length <= 2)
+		if (path.length == 1)
 			throw new DmtException(nodePath,
 					DmtException.FEATURE_NOT_SUPPORTED,
 					"The given path indicates an interior node.");
+		
+		if (path.length == 2)
+			if (path[1].equals(REFRESHPACKAGES))
+				return new DmtData(false);
 
 		if (path.length == 3) {
 			if (path[2].equals(REQUESTEDSTARTLEVEL))
-				return new DmtData(RequestedStartLevel);
+				return new DmtData(requestedStartLevel);
 
 			if (path[2].equals(ACTIVESTARTLEVEL)) {
 				try {
@@ -529,10 +692,8 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 							.getServiceReference(org.osgi.service.startlevel.StartLevel.class
 									.getName());
 					StartLevel sl = (StartLevel) context.getService(ref);
-
 					int initialsl = sl.getInitialBundleStartLevel();
 					context.ungetService(ref);
-
 					return new DmtData(initialsl);
 				} catch (NullPointerException e) {
 					throw new DmtException(nodePath,
@@ -541,6 +702,22 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 				}
 			}
 
+			if (path[2].equals(BEGINNINGSTARTLEVEL)) {
+				ServiceReference ref = context
+				.getServiceReference(org.osgi.service.startlevel.StartLevel.class
+						.getName());
+				if(ref==null)
+					return new DmtData(-1);
+				if(ref!=null){
+					Properties prop = System.getProperties();
+					String bsl = prop.getProperty(Constants.FRAMEWORK_BEGINNING_STARTLEVEL, "1");
+					return new DmtData(Integer.parseInt(bsl));
+				}
+			}
+
+			if (path[2].equals(CATCHEVENTS))
+				return new DmtData(eventFlag);
+			
 			if (path[2].equals(RESTART))
 				return new DmtData(false);
 			if (path[2].equals(SHUTDOWN))
@@ -548,7 +725,7 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 			if (path[2].equals(UPDATE))
 				return new DmtData(false);
 		}
-
+		
 		if (path.length == 4 && path[1].equals(INSTALLBUNDLE)) {
 			Node[] ids = installbundle.getChildren();
 			for (int i = 0; i < ids.length; i++) {
@@ -564,29 +741,44 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 		}
 
 		if (path.length == 4 && path[1].equals(BUNDLECONTROL)) {
-			BundelControlValue bcv = (BundelControlValue)bundlesTable.get(path[2]);
-			Bundle targetBundle = bcv.bundle;
-			ServiceReference ref = context
-			.getServiceReference(org.osgi.service.startlevel.StartLevel.class.getName());
-			StartLevel sl = (StartLevel) context.getService(ref);
-			int bundleStartLevel = sl.getBundleStartLevel(targetBundle);
-			context.ungetService(ref);
-			return new DmtData(bundleStartLevel);
+			if(path[3].equals(BUNDLESTARTLEVEL)){
+				BundelControlSubTree bcst = (BundelControlSubTree)bundlesTable.get(path[2]);
+				Bundle targetBundle = bcst.getBundle();
+				ServiceReference ref = context
+				.getServiceReference(org.osgi.service.startlevel.StartLevel.class.getName());
+				StartLevel sl = (StartLevel) context.getService(ref);
+				int bundleStartLevel = sl.getBundleStartLevel(targetBundle);
+				context.ungetService(ref);
+				return new DmtData(bundleStartLevel);
+			}
+			if(path[3].equals(BUNDLECONTROLREFRESHPACKAGES)){
+				BundelControlSubTree bcst = (BundelControlSubTree)bundlesTable.get(path[2]);
+				return new DmtData(bcst.getRefreshPackages());
+			}			
 		}
 		
 		if (path.length == 5) {
-			BundelControlValue bcv = (BundelControlValue)bundlesTable.get(path[2]);
-			if (path[4].equals(DESIREDSTATE))
-				return new DmtData(bcv.desiredState);
-			if (path[4].equals(BUNDLEUPDATE))
-				return new DmtData(bcv.bundleUpdate);
-			if (path[4].equals(OPTION))
-				return new DmtData(bcv.option);
-			if (path[4].equals(OPERATIONRESULT))
-				return new DmtData(bcv.operationResult);
+			if(path[3].equals(LIFECYCLE)){
+				BundelControlSubTree bcst = (BundelControlSubTree)bundlesTable.get(path[2]);
+				if (path[4].equals(OPERATION))
+					return new DmtData(bcst.getOperation());
+				if (path[4].equals(BUNDLECONTROLOPTION))
+					return new DmtData(bcst.getOption());
+				if (path[4].equals(BUNDLECONTROLOPERATIONRESULT))
+					return new DmtData(bcst.getOperationResult());
+			}
+			if(path[2].equals(EVENT)){
+				EventSubTree est = (EventSubTree)eventTable.get(path[3]);
+				if (path[4].equals(THROWABLE))
+					return new DmtData(est.getThrowable());
+				if (path[4].equals(BUNDLEID))
+					return new DmtData(est.getBundleId());
+				if (path[4].equals(TYPE))
+					return new DmtData(est.getType());
+			}
 		}
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-				"The specified key does not exist in the framework object.");
+				"The specified leaf node does not exist in the framework object.");
 	}
 
 	// ----- Utilities -----//
@@ -596,42 +788,123 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 		for (int i = 0; i < nodePath.length - 3; i++) {
 			newPath[i] = nodePath[i + 3];
 		}
-
 		return newPath;
 	}
-
-	private Hashtable manageBundles() throws InvalidSyntaxException {
-		Bundle[] bundles = context.getBundles();
-		Hashtable bundlesTable = new Hashtable();
-		for (int i = 0; i < bundles.length; i++) {
-			long bundleIdLong = bundles[i].getBundleId();
-			String bundleId = Long.toString(bundleIdLong);
-			BundelControlValue bcv = new BundelControlValue(bundles[i],0,0,null,null,false);
-			bundlesTable.put(bundleId, bcv);
-		}
-		return bundlesTable;
-	}
-
-	public void refreshBundlesTable() throws InvalidSyntaxException {
-		if (bundlesTable.size() == 0) {
-			bundlesTable = manageBundles();
-		}
-		Bundle[] bundles = context.getBundles();
-		for (int i = 0; i < bundles.length; i++) {
-			long bundleIdLong = bundles[i].getBundleId();
-			String bundleId = Long.toString(bundleIdLong);
-			if (!bundlesTable.containsKey(bundleId)) {
-				BundelControlValue bcv = new BundelControlValue(bundles[i],0,0,null,null,false);
-				this.bundlesTable.put(bundleId, bcv);
+	
+	public void bundleChanged(BundleEvent event) {
+		if (!this.managedFlag) {
+			Bundle[] bundles = context.getBundles();
+			for (int i = 0; i < bundles.length; i++) {
+				String id = Long.toString(bundles[i].getBundleId() + 1);
+				BundelControlSubTree bcst = new BundelControlSubTree(bundles[i]);
+				this.bundlesTable.put(id, bcst);
 			}
+			this.managedFlag = true;
+			return;
 		}
-		
+		Bundle bundle = event.getBundle();
+		if (event.getType() == BundleEvent.INSTALLED
+				|| event.getType() == BundleEvent.RESOLVED) {
+			BundelControlSubTree bcst = new BundelControlSubTree(bundle);
+			this.bundlesTable.put(Long.toString(bundle.getBundleId() + 1), bcst);
+		} else if (event.getType() == BundleEvent.UNINSTALLED) {
+			String id = Long.toString(bundle.getBundleId() + 1);
+			this.bundlesTable.remove(id);
+		}
+
 	}
 
+	public void frameworkEvent(FrameworkEvent event){
+		if(eventFlag){
+			String throwable=null;
+			Throwable th = event.getThrowable();
+			if(th==null){
+				throwable = "";
+			}else if(th!=null){
+				throwable = th.getMessage();
+			}
+			String type;
+			int iType = event.getType();
+			if(iType==FrameworkEvent.STARTED)
+				type="STARTED";
+			else if(iType==FrameworkEvent.ERROR)
+				type="ERROR";
+			else if(iType==FrameworkEvent.PACKAGES_REFRESHED)
+				type="PACKAGES_REFRESHED";
+			else if(iType==FrameworkEvent.STARTLEVEL_CHANGED)
+				type="STARTLEVEL_CHANGED";
+			else if(iType==FrameworkEvent.WARNING)
+				type="WARNING";
+			else if(iType==FrameworkEvent.INFO)
+				type="INFO";
+			else if(iType==FrameworkEvent.STOPPED)
+				type="STOPPED";
+			else if(iType==FrameworkEvent.STOPPED_UPDATE)
+				type="STOPPED_UPDATE";
+			else if(iType==FrameworkEvent.STOPPED_BOOTCLASSPATH_MODIFIED)
+				type="STOPPED_BOOTCLASSPATH_MODIFIED";
+			else if(iType==FrameworkEvent.WAIT_TIMEDOUT)
+				type="WAIT_TIMEDOUT";
+			else
+				type = "";
+			long bundleId = event.getBundle().getBundleId();
+			EventSubTree eventSubTree = new EventSubTree(throwable,type,bundleId);
+			eventTable.put(Long.toString(eventId), eventSubTree);
+			eventId++;
+		}
+	}
+	
 	// ----- InstallBundle subtree -----//
+	protected class BundelControlSubTree{
+		
+		private Bundle bundle = null;
+		private boolean refreshPackages = false;
+		private int bundleStartLevel = 0;
+		private String operation = "";
+		private String option = "NO OPTION";
+		private String operationResult = "";
+		
+		BundelControlSubTree(Bundle bundle){
+			this.bundle = bundle;
+		}
+		protected Bundle getBundle(){
+			return this.bundle;	
+		}
+		protected boolean getRefreshPackages(){
+			return this.refreshPackages;	
+		}
+		protected int getBundleStartLevel(){
+			return this.bundleStartLevel;
+		}
+		protected String getOperation(){
+			return this.operation;	
+		}
+		protected String getOption(){
+			return this.option;
+		}
+		protected String getOperationResult(){
+			return this.operationResult;	
+		}		
+		protected void setRefreshPackages(boolean refreshPackages){
+			this.refreshPackages = refreshPackages;	
+		}
+		protected void setBundleStartLevel(int bundleStartLevel){
+			this.bundleStartLevel = bundleStartLevel;
+		}
+		protected void setOperation(String operation){
+			this.operation = operation;	
+		}
+		protected void setOption(String option){
+			this.option = option;
+		}
+		protected void setOperationResult(String operationResult){
+			this.operationResult = operationResult;	
+		}
+	}
+	
+/*	protected class BundelControlValue{
 
-	protected class BundelControlValue{
-		int desiredState;
+		String operation;
 		String bundleUpdate;
 		String bundleUpdateTmp;
 		int option;
@@ -640,9 +913,10 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 		Bundle bundle;
 		boolean flag;
 		
-		BundelControlValue(Bundle bundle, int desiredState, int option, String bundleUpdate, String operationResult, boolean flag){
+		BundelControlValue(Bundle bundle, String operation, int option, 
+				String bundleUpdate, String operationResult, boolean flag){
 			this.bundleUpdate=bundleUpdate;
-			this.desiredState=desiredState;
+			this.operation=operation;
 			this.operationResult=operationResult;
 			this.option=option;
 			this.bundle=bundle;
@@ -650,8 +924,8 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 			this.bundleUpdateTmp = bundleUpdate;
 			this.optionTmp=option;
 		}
-		void setDesiredState(int desiredState){
-			this.desiredState = desiredState;	
+		void setOperation(String operation){
+			this.operation=operation;	
 		}
 		void setBundleUpdate(String bundleUpdate){
 			this.bundleUpdate = bundleUpdate;	
@@ -671,6 +945,29 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 		void setOptionTmp(int optionTmp){
 			this.optionTmp = optionTmp;
 		}
+	}
+*/
+
+	protected class EventSubTree{
+		
+		private String throwable = null;
+		private String type = null;
+		private long bundleId = 0;
+		
+		EventSubTree(String throwable, String type, long bundleId){
+			this.throwable = throwable;
+			this.type = type;
+			this.bundleId = bundleId;
+		}		
+		protected String getThrowable(){
+			return throwable;
+		}		
+		protected String getType(){
+			return type;
+		}		
+		protected long getBundleId(){
+			return bundleId;
+		}		
 	}
 	
 	protected class Node {
@@ -780,4 +1077,5 @@ class FrameworkReadOnlySession implements ReadableDataSession {
 			return null;
 		}
 	}
+
 }
