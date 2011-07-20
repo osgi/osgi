@@ -652,6 +652,9 @@ public final class DmtData {
 	 * formatted according to the ISO 8601 definition of a calendar date in
 	 * complete representation, basic format (pattern {@code CCYYMMDD}).
 	 * 
+	 * @remark the pattern is way too simplistic. 
+	 * @remark I think the reference is not ISO 8601 but http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#dateTime
+	 * @remark Why does this not return Date?
 	 * @return the date value
 	 * @throws DmtIllegalStateException if the format of the node is not date
 	 */
@@ -912,6 +915,7 @@ public final class DmtData {
 	/**
 	 * Gets the value of a node uri ({@link #FORMAT_NODE_URI}) format.
 	 * 
+	 * @remark Why do we not use URI type?
 	 * @return the data value in node uri format
 	 * @throws DmtIllegalStateException if the format of the node is not node
 	 *         uri

@@ -15,16 +15,9 @@
  */
 package info.dmtree;
 
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.security.AccessController;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivilegedAction;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.security.*;
+import java.util.*;
 
 /**
  * This class contains static utility methods to manipulate DMT URIs.
@@ -141,6 +134,7 @@ public final class Uri {
 	 * A private constructor to suppress the default public constructor.
 	 */
 	private Uri() {
+		//
 	}
 
 	/**
@@ -361,6 +355,7 @@ public final class Uri {
 									limit = limitInt;
 							}
 							catch (NumberFormatException e) {
+								//
 							}
 
 							return new Integer(limit);
@@ -397,6 +392,7 @@ public final class Uri {
 									limit = limitInt;
 							}
 							catch (NumberFormatException e) {
+								//
 							}
 
 							return new Integer(limit);
@@ -436,6 +432,7 @@ public final class Uri {
 									limit = limitInt;
 							}
 							catch (NumberFormatException e) {
+								//
 							}
 
 							return new Integer(limit);
