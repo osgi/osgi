@@ -84,7 +84,8 @@ public class RemoveEventListener implements TestInterface {
 	private void testRemoveEventListener001() {
 		try {
 			tbc.log("#testRemoveEventListener001");
-			tbc.getDmtAdmin().removeEventListener(null);
+			// Does not compile anymore
+			// tbc.getDmtAdmin().removeEventListener(null);
 			tbc.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
@@ -107,19 +108,22 @@ public class RemoveEventListener implements TestInterface {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
 			DmtEventListenerImpl event = new DmtEventListenerImpl();
-			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
-					TestExecPluginActivator.ROOT,event);
+			// Does not compile anymore
 			
-			tbc.getDmtAdmin().removeEventListener(event);
-			
-			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE);
-			
-			synchronized (tbc) {
-				tbc.wait(DmtConstants.WAITING_TIME);
-			}
-			
-			tbc.assertEquals("Asserts that the listener does not receive change notifications after DmtAdmin.removeEventListener() is called",0,event.getCount());
-			
+//			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
+//					TestExecPluginActivator.ROOT,event);
+//			
+//			tbc.getDmtAdmin().removeEventListener(event);
+//			
+//			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE);
+//			
+//			synchronized (tbc) {
+//				tbc.wait(DmtConstants.WAITING_TIME);
+//			}
+//			
+//			tbc.assertEquals("Asserts that the listener does not receive change notifications after DmtAdmin.removeEventListener() is called",0,event.getCount());
+
+			tbc.fail("API changed - pkriens");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {

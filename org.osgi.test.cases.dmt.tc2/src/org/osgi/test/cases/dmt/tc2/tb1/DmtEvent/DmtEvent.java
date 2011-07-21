@@ -92,10 +92,10 @@ public class DmtEvent implements TestInterface {
             synchronized (tbc) {
                 tbc.wait(DmtConstants.WAITING_TIME);
             }
+// Fix ... - pkriens
+//			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
+//					TestExecPluginActivator.ROOT,eventListener);
 
-			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
-					TestExecPluginActivator.ROOT,eventListener);
-			
 			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE);
 			session.setNodeValue(TestExecPluginActivator.LEAF_NODE,new DmtData("B"));
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,TestExecPluginActivator.INEXISTENT_NODE,true);
@@ -121,7 +121,8 @@ public class DmtEvent implements TestInterface {
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
-			tbc.getDmtAdmin().removeEventListener(eventListener);
+			// Fix ... - pkriens
+//			tbc.getDmtAdmin().removeEventListener(eventListener);
 			tbc.closeSession(session);
 			//wait for the close session event to be processed, otherwise it would interfere with the next test
             synchronized (tbc) {
@@ -177,9 +178,10 @@ public class DmtEvent implements TestInterface {
 		DmtEventListenerImpl eventListener = new DmtEventListenerImpl();
 		try {
 			tbc.log("#testDmtEvent002");
-			
-			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
-					TestExecPluginActivator.INTERIOR_NODE,eventListener);
+			// Fix ... - pkriens
+
+//			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
+//					TestExecPluginActivator.INTERIOR_NODE,eventListener);
 			
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_ATOMIC);
 			session.close();
@@ -195,7 +197,9 @@ public class DmtEvent implements TestInterface {
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
-			tbc.getDmtAdmin().removeEventListener(eventListener);
+			// Fix ... - pkriens
+
+//			tbc.getDmtAdmin().removeEventListener(eventListener);
 			tbc.closeSession(session);
 		}
 	
@@ -218,9 +222,9 @@ public class DmtEvent implements TestInterface {
             synchronized (tbc) {
                 tbc.wait(DmtConstants.WAITING_TIME);
             }
-
-			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
-					TestExecPluginActivator.ROOT,eventLisneter);
+         // Fix ... - pkriens
+//			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
+//					TestExecPluginActivator.ROOT,eventLisneter);
 			
 			session.setNodeValue(TestExecPluginActivator.LEAF_NODE,new DmtData("B"));
 			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE);
@@ -239,7 +243,8 @@ public class DmtEvent implements TestInterface {
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
-			tbc.getDmtAdmin().removeEventListener(eventLisneter);
+			// Fix ... - pkriens
+//			tbc.getDmtAdmin().removeEventListener(eventLisneter);
 			tbc.closeSession(session);
 		}
 	

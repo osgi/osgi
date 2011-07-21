@@ -1,20 +1,12 @@
 package org.osgi.impl.service.dmt.dispatcher;
 
-import info.dmtree.DmtException;
-import info.dmtree.Uri;
-import info.dmtree.spi.MountPlugin;
-import info.dmtree.spi.MountPoint;
+import info.dmtree.*;
+import info.dmtree.spi.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.framework.*;
+import org.osgi.util.tracker.*;
 
 public class Plugin {
 
@@ -60,7 +52,7 @@ public class Plugin {
 
 			// mountPoints are only allowed for plugins with just 1 dataRootURI
 			// they are treated as relative pathes
-			Collection<String> mps = Util.toCollection(reference.getProperty(MountPlugin.MOUNT_POINTS));
+			Collection<String> mps = Util.toCollection(reference.getProperty(DataPlugin.MOUNT_POINTS));
 			if (mps != null && ! mps.isEmpty() ) {
 				if (uris.size() > 1) {
 					error("mountPoints are not allowed for plugins with more than one dataRootURI "	+ this);

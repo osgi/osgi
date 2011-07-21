@@ -351,7 +351,7 @@ public class TestBug1732_MountPointHandling extends
 		GenericDataPlugin dataPlugin = new GenericDataPlugin("DataPluginForExecTests", dataPluginRoot, n);
 		Dictionary props = new Hashtable();
 		props.put(DataPlugin.DATA_ROOT_URIS, new String[] { dataPluginRoot });
-		props.put(MountPlugin.MOUNT_POINTS, new String[] {"B", "C/D/E"});
+		props.put(DataPlugin.MOUNT_POINTS, new String[] {"B", "C/D/E"});
 		registerService(DataPlugin.class.getName(), dataPlugin, props);
 		
 		return dataPlugin;
@@ -417,7 +417,7 @@ public class TestBug1732_MountPointHandling extends
 			props.put(ExecPlugin.EXEC_ROOT_URIS, uris);
 		else 
 			props.put(DataPlugin.DATA_ROOT_URIS, uris);
-		props.put(MountPlugin.MOUNT_POINTS, mountPoints);
+		props.put(DataPlugin.MOUNT_POINTS, mountPoints);
 
 		registerService(DataPlugin.class.getName(), mountingPlugin, props);
 		Thread.sleep(500);
