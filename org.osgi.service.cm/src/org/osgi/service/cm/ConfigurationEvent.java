@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ public class ConfigurationEvent {
 	/**
 	 * Type of this event.
 	 * 
-	 * @see #getType()
+	 * @see #getType
 	 */
 	private final int				type;
 	/**
@@ -101,9 +101,9 @@ public class ConfigurationEvent {
 	 * Constructs a {@code ConfigurationEvent} object from the given
 	 * {@code ServiceReference} object, event type, and pids.
 	 * 
-	 * @param reference The {@code ServiceReference} object of the Configuration
-	 *        Admin service that created this event.
-	 * @param type The event type. See {@link #getType()}.
+	 * @param reference The {@code ServiceReference} object of the
+	 *        Configuration Admin service that created this event.
+	 * @param type The event type. See {@link #getType}.
 	 * @param factoryPid The factory pid of the associated configuration if the
 	 *        target of the configuration is a ManagedServiceFactory. Otherwise
 	 *        {@code null} if the target of the configuration is a

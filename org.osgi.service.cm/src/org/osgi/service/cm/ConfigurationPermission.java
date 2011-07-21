@@ -23,9 +23,8 @@ import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
 /**
- * Indicates a bundle's authority to configure bundles.
- * 
- * This permission has only a single action: CONFIGURE.
+ * Indicates a bundle's authority to configure bundles, be updated by
+ * configuration admin, read the configurations, and act as a plugin.
  * 
  * @ThreadSafe
  * @version $Id$
@@ -35,15 +34,31 @@ import java.util.NoSuchElementException;
 public final class ConfigurationPermission extends BasicPermission {
 	static final long			serialVersionUID	= 5716868734811965383L;
 	/**
-	 * The action string {@code configure}.
+	 * Provides permission to create new configurations for other bundles as
+	 * well as manipulate them. The action string {@value #CONFIGURE}.
 	 */
 	public final static String	CONFIGURE			= "configure";
 
 	/**
+	 * The permission to be updated, that is, act as a Managed Service or
+	 * Managed Service Factory.The action string {@value #UPDATED}.
+	 */
+	public final static String	UPDATED				= "updated";
+
+	/**
 	 * Create a new ConfigurationPermission.
 	 * 
-	 * @param name Name must be &quot;*&quot;.
-	 * @param actions {@code configure} (canonical order).
+	 * The resource name of this permission is the location string. Wildcards
+	 * are allowed to implement a grouping concept.
+	 * 
+	 * <p>
+	 * For checking the permission a {@code null} may be passed as the resource
+	 * name. This requires permission for the string "*".
+	 * 
+	 * @param name Location string, wildcard characters ('*') is allowed as in
+	 *        Filter substring matching. name may be {@code null} for .
+	 * @param actions Comma separated list of {@link #CONFIGURE},
+	 *        {@link #UPDATED}.
 	 */
 
 	public ConfigurationPermission(String name, String actions) {
@@ -52,19 +67,19 @@ public final class ConfigurationPermission extends BasicPermission {
 			throw new IllegalArgumentException("name must be *");
 		}
 		actions = actions.trim();
-		if (actions.equalsIgnoreCase(CONFIGURE)||actions.equals("*"))
+		if (actions.equalsIgnoreCase(CONFIGURE) || actions.equals("*"))
 			return;
-		
+
 		throw new IllegalArgumentException("actions must be " + CONFIGURE);
 	}
 
 	/**
-	 * Determines if a {@code ConfigurationPermission} object "implies"
-	 * the specified permission.
+	 * Determines if a {@code ConfigurationPermission} object "implies" the
+	 * specified permission.
 	 * 
 	 * @param p The target permission to check.
-	 * @return {@code true} if the specified permission is implied by
-	 *         this object; {@code false} otherwise.
+	 * @return {@code true} if the specified permission is implied by this
+	 *         object; {@code false} otherwise.
 	 */
 
 	public boolean implies(Permission p) {
@@ -72,15 +87,13 @@ public final class ConfigurationPermission extends BasicPermission {
 	}
 
 	/**
-	 * Determines the equality of two {@code ConfigurationPermission}
-	 * objects.
+	 * Determines the equality of two {@code ConfigurationPermission} objects.
 	 * <p>
 	 * Two {@code ConfigurationPermission} objects are equal.
 	 * 
 	 * @param obj The object being compared for equality with this object.
 	 * @return {@code true} if {@code obj} is equivalent to this
-	 *         {@code ConfigurationPermission}; {@code false}
-	 *         otherwise.
+	 *         {@code ConfigurationPermission}; {@code false} otherwise.
 	 */
 	public boolean equals(Object obj) {
 		return obj instanceof ConfigurationPermission;
@@ -103,8 +116,8 @@ public final class ConfigurationPermission extends BasicPermission {
 	 * {@code ConfigurationPermission} actions.
 	 * 
 	 * <p>
-	 * Always returns present {@code ConfigurationPermission} actions in
-	 * the following order: {@code CONFIGURE}
+	 * Always returns present {@code ConfigurationPermission} actions in the
+	 * following order: {@code CONFIGURE}
 	 * 
 	 * @return Canonical string representation of the
 	 *         {@code ConfigurationPermission} actions.
@@ -114,8 +127,8 @@ public final class ConfigurationPermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns a new {@code PermissionCollection} object suitable for
-	 * storing {@code ConfigurationPermission}s.
+	 * Returns a new {@code PermissionCollection} object suitable for storing
+	 * {@code ConfigurationPermission}s.
 	 * 
 	 * @return A new {@code PermissionCollection} object.
 	 */
@@ -132,7 +145,7 @@ public final class ConfigurationPermission extends BasicPermission {
  * @see java.security.PermissionCollection
  */
 final class ConfigurationPermissionCollection extends PermissionCollection {
-	static final long	serialVersionUID	= -6917638867081695839L;
+	static final long			serialVersionUID	= -6917638867081695839L;
 	/**
 	 * True if collection is non-empty.
 	 * 
@@ -150,8 +163,8 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 
 	/**
 	 * Adds the specified permission to the
-	 * {@code ConfigurationPermissionCollection}. The key for the hash is
-	 * the interface name of the service.
+	 * {@code ConfigurationPermissionCollection}. The key for the hash is the
+	 * interface name of the service.
 	 * 
 	 * @param permission The {@code Permission} object to add.
 	 * 
@@ -198,7 +211,7 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	public Enumeration elements() {
 		final boolean nonEmpty = hasElement;
 		return new Enumeration() {
-			private boolean	more = nonEmpty;
+			private boolean	more	= nonEmpty;
 
 			public boolean hasMoreElements() {
 				return more;
