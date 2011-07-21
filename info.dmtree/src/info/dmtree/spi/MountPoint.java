@@ -131,41 +131,4 @@ public interface MountPoint {
 	void postEvent(String topic, String[] relativeURIs,
 			String[] newRelativeURIs, Dictionary properties);
 
-	/**
-	 * Sends an event via the DmtAdmin to notify listeners synchronously about a
-	 * potentially destructive operation.
-	 * <p>
-	 * This method distributes Events synchronously to the EventAdmin as well as
-	 * to matching local SynchronousDmtEventListeners (not to DmtEventListeners)
-	 * 
-	 * @param topic
-	 *            the topic of the event to send. Valid values are:
-	 *            <ul>
-	 *            <li>{@code info/dmtree/DmtEvent/DESTRUCTIVE_OPERATION} if
-	 *            the notification is about a destructive operation that causes
-	 *            a potential change of the system state
-	 *            <p>
-	 *            </ul>
-	 * @param relativeURIs
-	 *            an array of affected node {@code URI}'s. All
-	 *            {@code URI}'s specified here are relative to the current
-	 *            {@code MountPoint}'s mountPath. The value of this
-	 *            parameter determines the value of the event property
-	 *            {@code EVENT_PROPERTY_NODES}. An empty array or
-	 *            {@code null} is permitted. In both cases the value of the
-	 *            events {@code EVENT_PROPERTY_NODES} property will be
-	 *            set to an empty array.
-	 * @param properties
-	 *            an optional parameter that can be provided to add properties
-	 *            to the Event that is going to be send by the DMTAdmin. If the
-	 *            properties contain a key {@code EVENT_PROPERTY_NODES},
-	 *            then the value of this property is ignored and will be
-	 *            overwritten by {@code relativeURIs}.
-	 * @throws NullPointerException
-	 *             if the topic is null
-	 * @throws IllegalArgumentException
-	 *             if the topic has not the defined value
-	 */
-	void sendEvent(String topic, String[] relativeURIs, Dictionary properties);
-
 }

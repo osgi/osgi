@@ -30,6 +30,12 @@ import info.dmtree.DmtSession;
  * @version $Id$
  */
 public interface ExecPlugin {
+	/**
+	 * The string to be used as key for the mount points property when an
+	 * Exec Plugin is registered with mount points.
+	 */
+	String	MOUNT_POINTS	= "mountPoints";
+
 
 	/**
 	 * The string to be used as key for the “execRootURIs” property when an

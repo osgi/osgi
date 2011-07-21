@@ -18,9 +18,9 @@ package info.dmtree;
 /**
  * Event class storing the details of a change in the tree. {@code DmtEvent} is
  * used by {@code DmtAdmin} to notify registered {@link DmtEventListener
- * EventListeners} about important changes. Events are generated after every
- * successful DMT change, and also when sessions are opened or closed. If a
- * {@link DmtSession} is opened in atomic mode, DMT events are only sent when
+ * EventListeners} services about important changes. Events are generated after
+ * every successful DMT change, and also when sessions are opened or closed. If
+ * a {@link DmtSession} is opened in atomic mode, DMT events are only sent when
  * the session is committed, when the changes are actually performed.
  * <p>
  * An event is generated for each group of nodes added, deleted, replaced,
@@ -29,22 +29,10 @@ package info.dmtree;
  * <p>
  * The {@code type} of the event describes the change that triggered the event
  * delivery. Each event carries the unique identifier of the session in which
- * the described change happened. The events describing changes in the DMT carry
- * the list of affected nodes. In case of {@link #COPIED} or {@link #RENAMED}
- * events, the event carries the list of new nodes as well.
- * <p>
- * When a {@code DmtEvent} is delivered to a listener, the event contains only
- * those node URIs that the listener has access to. This access control decision
- * is based on the principal specified when the listener was registered:
- * <ul>
- * <li>If the listener was registered specifying an explicit principal, using
- * the {@link DmtAdmin#addEventListener(String, int, String, DmtEventListener)}
- * method, then the target node ACLs should be checked for providing GET access
- * to the specified principal;
- * <li>When the listener was registered without an explicit principal then the
- * listener needs GET {@link info.dmtree.security.DmtPermission} for the
- * corresponding node.
- * </ul>
+ * the described change happened or -1 when the change originated outside a
+ * session. The events describing changes in the DMT carry the list of affected
+ * nodes. In case of {@link #COPIED} or {@link #RENAMED} events, the event
+ * carries the list of new nodes as well.
  * 
  * @version $Id$
  */
@@ -53,39 +41,39 @@ public interface DmtEvent {
 	/**
 	 * Event type indicating nodes that were added.
 	 */
-	int	ADDED					= 0x01;
+	int ADDED = 0x01;
 
 	/**
 	 * Event type indicating nodes that were copied.
 	 */
-	int	COPIED					= 0x02;
+	int COPIED = 0x02;
 
 	/**
 	 * Event type indicating nodes that were deleted.
 	 */
-	int	DELETED					= 0x04;
+	int DELETED = 0x04;
 
 	/**
 	 * Event type indicating nodes that were renamed.
 	 */
-	int	RENAMED					= 0x08;
+	int RENAMED = 0x08;
 
 	/**
 	 * Event type indicating nodes that were replaced.
 	 */
-	int	REPLACED				= 0x10;
+	int REPLACED = 0x10;
 
 	/**
 	 * Event type indicating that a new session was opened.
 	 */
-	int	SESSION_OPENED			= 0x20;
+	int SESSION_OPENED = 0x20;
 
 	/**
 	 * Event type indicating that a session was closed. This type of event is
 	 * sent when the session is closed by the client or becomes inactive for any
 	 * other reason (session timeout, fatal errors in business methods, etc.).
 	 */
-	int	SESSION_CLOSED			= 0x40;
+	int SESSION_CLOSED = 0x40;
 
 	/**
 	 * Event type indicating that a destructive operation is going to be
@@ -98,7 +86,7 @@ public interface DmtEvent {
 	 * 
 	 * @since 2.0
 	 */
-	int	DESTRUCTIVE_OPERATION	= 0x80;
+	int DESTRUCTIVE_OPERATION = 0x80;
 
 	/**
 	 * This method returns the type of this event.
@@ -111,18 +99,13 @@ public interface DmtEvent {
 	 * This method returns the identifier of the session in which this event
 	 * took place. The ID is guaranteed to be unique on a machine.
 	 * <p>
-	 * For events that are result of an internal change inside of a
-	 * {@code DataPlugin} (not in the scope of any session), no sessionId is
-	 * defined. An invocation of this method on such events will therefore throw
-	 * an UnsupportedOperationException.
+	 * For events that do not result from a session, the session id is -1.
 	 * <p>
 	 * The availability of a session.id can also be check by using
 	 * {@code getProperty()} with "session.id" as key.
 	 * 
-	 * @return the unique identifier of the session that triggered the event
-	 * @throws UnsupportedOperationException in case that no session id is
-	 *         available. This indicates that the {@code DmtEvent} was not a
-	 *         result of a {@code DmtSession}.
+	 * @return the unique identifier of the session that triggered the event or
+	 *         -1 if there is no session associated
 	 */
 	int getSessionId();
 
@@ -176,7 +159,8 @@ public interface DmtEvent {
 	/**
 	 * This method can be used to get the value of a single event property.
 	 * 
-	 * @param key the name of the requested property
+	 * @param key
+	 *            the name of the requested property
 	 * @return the requested property value or null, if the key is not contained
 	 *         in the properties
 	 * @see #getPropertyNames()

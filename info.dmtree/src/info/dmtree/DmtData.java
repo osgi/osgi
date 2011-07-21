@@ -201,7 +201,7 @@ public final class DmtData {
 		FORMAT_NAMES.put(new Integer(FORMAT_UNSIGNED_LONG), "ulong");
 		FORMAT_NAMES.put(new Integer(FORMAT_UNSIGNED_INTEGER), "uint");
 		FORMAT_NAMES.put(new Integer(FORMAT_DATETIME), "datetime");
-		FORMAT_NAMES.put(new Integer(FORMAT_NODE_URI), "nodeuri");
+		FORMAT_NAMES.put(new Integer(FORMAT_NODE_URI), "node_uri");
 		FORMAT_NAMES.put(new Integer(FORMAT_HEXBINARY), "hexbin");
 	}
 

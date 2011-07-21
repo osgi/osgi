@@ -51,6 +51,13 @@ import info.dmtree.DmtSession;
 public interface DataPlugin {
 
 	/**
+	 * The string to be used as key for the mount points property when a
+	 * DataPlugin is registered with mount points.
+	 */
+	String	MOUNT_POINTS	= "mountPoints";
+
+
+	/**
 	 * The string to be used as key for the “dataRootURIs” property when an
 	 * DataPlugin is registered.
 	 * 

@@ -25,18 +25,15 @@ package info.dmtree.spi;
  * of a list. In such a case the id for this particular data plugin is
  * determined by the DmtAdmin after the registration of the plugin and therefore
  * unknown to the plugin in advance.
+ * <p>
+ * This is not a service interface, the Data or Exec Plugin does not also
+ * have to register this interface as a service, the Dmt Admin should
+ * use an {@code instanceof} to detect that a Plugin is a Mount Plugin.
  * 
  * @version $Id$
  * @since 2.0
  */
 public interface MountPlugin {
-
-	/**
-	 * The string to be used as key for the mount points property when a
-	 * DataPlugin or ExecPlugin is registered with mount points.
-	 */
-	String	MOUNT_POINTS	= "mountPoints";
-
 	/**
 	 * Provides the {@code MountPoint} objects describing the path where
 	 * the plugin is mapped to the overall DMT.
