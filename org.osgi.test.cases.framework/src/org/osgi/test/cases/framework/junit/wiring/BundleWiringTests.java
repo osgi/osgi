@@ -589,7 +589,7 @@ public class BundleWiringTests extends WiringTest {
 				tb3Wiring.getRevision());
 	}
 	
-	private void checkRequirementsTb4(BundleWiring tb4Wiring, boolean only1Host) {
+	private void checkRequirementsTb4(BundleWiring tb4Wiring) {
 		assertEquals("Wrong number of requirements", 1, tb4Wiring.getRequirements(null).size());
 		checkRequirements(
 				tb4Wiring.getRequirements(BundleRevision.BUNDLE_NAMESPACE), 
@@ -597,25 +597,12 @@ public class BundleWiringTests extends WiringTest {
 				BundleRevision.BUNDLE_NAMESPACE, 
 				0, 
 				tb4Wiring.getRevision());
-		List<BundleRequirement> hostReqs = tb4Wiring.getRequirements(BundleRevision.HOST_NAMESPACE);
-		if (hostReqs.size() == 2 && !only1Host) {
-			// only allow 2 hosts in this case
-			checkRequirements(
-					hostReqs,
-					tb4Wiring.getRequirements(null),
-					BundleRevision.HOST_NAMESPACE,
-					2,
-					tb4Wiring.getRevision());
-		} else {
-			// if not 2 then it must be only one
-			checkRequirements(
-					hostReqs,
-					tb4Wiring.getRequirements(null),
-					BundleRevision.HOST_NAMESPACE,
-					1,
-					tb4Wiring.getRevision());
-		}
-
+		checkRequirements(
+				tb4Wiring.getRequirements(BundleRevision.HOST_NAMESPACE), 
+				tb4Wiring.getRequirements(null), 
+				BundleRevision.HOST_NAMESPACE, 
+				1, 
+				tb4Wiring.getRevision());
 		checkRequirements(
 				tb4Wiring.getRequirements(BundleRevision.PACKAGE_NAMESPACE), 
 				tb4Wiring.getRequirements(null), 
@@ -679,10 +666,7 @@ public class BundleWiringTests extends WiringTest {
 		checkRequirementsTb1v110(tb1Wiring);
 		checkRequirementsTb2(tb2Wiring);
 		checkRequirementsTb3(tb3Wiring);
-		// if the host is current then we only allow the fragment to be attached to
-		// a single host.  Otherwise we are in the update case and the fragment
-		// could be attached to 1 or at most 2 hosts.
-		checkRequirementsTb4(tb4.adapt(BundleWiring.class), tb1Wiring.isCurrent());
+		checkRequirementsTb4(tb4.adapt(BundleWiring.class));
 		checkRequirementsTb5(tb5Wiring);
 		checkRequirementsTb14(tb14Wiring);
 		
