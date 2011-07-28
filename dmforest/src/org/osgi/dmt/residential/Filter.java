@@ -109,26 +109,27 @@ import org.osgi.dmt.ddf.*;
  * of the node in the set {@code N} or an interior node with the MIME type
  * {@link DmtConstants#DDF_LIST_SUBTREE} with leaf nodes as children, i.e. a
  * <em>list</em>. A list must be treated in the filter as a multi valued
- * property, any of its values satisfy an assertion on that attribute. 
+ * property, any of its values satisfy an assertion on that attribute.
  * <p>
- * If the attribute name contains an unescaped slash then the leaf
- * node must be ignored.
+ * If the attribute name contains an unescaped slash then the leaf node must be
+ * ignored.
  * <p>
  * 
  * 
- * Each of these leaf nodes and lists can be used in the LDAP Filter as a value. The
- * comparison must be done with the type used in the Dmt Data object of the compared
- * node. That is, if the Dmt Admin data is a number, then the comparison rules
- * of the number must be used. That is, the attributes given to the filter
- * must be converted to the Java object that represents their type.
+ * Each of these leaf nodes and lists can be used in the LDAP Filter as a
+ * key/value pair. The comparison must be done with the type used in the Dmt
+ * Data object of the compared node. That is, if the Dmt Admin data is a number,
+ * then the comparison rules of the number must be used. That is, the attributes
+ * given to the filter must be converted to the Java object that represents
+ * their type.
  * <p>
  * The set {@code N} must therefore consists only of nodes where the Filter
  * matches.
  * <p>
- * For example, if the Filter is {@code (Severity>=2)} for the
- * previous example then the {@link #Result()} and {@link #ResultUriList()} must
- * only contain the Log result nodes that match the given filter. That is, only
- * the LogResult nodes that have a severity of more than 2.
+ * For example, if the Filter is {@code (Severity>=2)} for the previous example
+ * then the {@link #Result()} and {@link #ResultUriList()} must only contain the
+ * Log result nodes that match the given filter. That is, only the LogResult
+ * nodes that have a severity of more than 2.
  * <p>
  * It is allowed to change the {@link #Target()} or the Filter node after the
  * results are read. In that case, the {@link #Result()} and
@@ -138,14 +139,18 @@ import org.osgi.dmt.ddf.*;
  * The initial value of {@link #Target()} is the empty string, which indicates
  * no target.
  * <p>
- * The search must take place with the same session as the session used to create 
- * the Filter child node; this maintains any security scope that is in effect.  
- *  
+ * The search must take place with the same session as the session used to open
+ * the {@link #Result} or {@link #ResultUriList} child nodes; this maintains any
+ * security scope that is in effect.
+ * 
  * @remark Modified this to use standard filter comparison rules.
  * 
  * @remark list nodes are not clearly defined. I assumed they're treated as a
  *         string but they could also be treated as multi valued properties.
  *         Maybe it is better to change it to this?
+ * @remark - Evgeni: It's very problematic, because PA doesn't know about that.
+ *         So, it will open the session to the Filters MO root. That means the
+ *         search is not possible.
  */
 
 public interface Filter {
@@ -156,8 +161,8 @@ public interface Filter {
 	 * place of a single node name in the URI, a minus sign stands for any
 	 * number of consecutive node names. The default value of this node is the
 	 * empty string, which indicates that no nodes must be selected. Changing
-	 * this value has no effect until the {@link #Result()} or
-	 * {@link #ResultUriList()} is read to get {@code N}.
+	 * this value must clear the result. If the {@link #Result()} or
+	 * {@link #ResultUriList()} is read to get {@code N} then a new search should be executed.
 	 * <p>
 	 * A URI must always end in '/' to indicate that the target can only select
 	 * interior nodes.
@@ -177,6 +182,10 @@ public interface Filter {
 	 * the nodes in set {@code N}. The name of these child nodes is the name of
 	 * the attribute matched in the filter.
 	 * <p>
+	 * The nodes can be removed by the Filter implementation after a timeout
+	 * defined by the implementation.
+	 * 
+	 * @remark how big a timeout?
 	 * 
 	 * @return A mutable Filter node.
 	 */
@@ -214,4 +223,11 @@ public interface Filter {
 	@NodeType(DmtConstants.DDF_LIST_SUBTREE)
 	LIST<URI> ResultUriList();
 
+	/**
+	 * Instance Id to allow addressing by Instance Id.
+	 * 
+	 * @return The InstanceId
+	 */
+
+	int InstanceId();
 }

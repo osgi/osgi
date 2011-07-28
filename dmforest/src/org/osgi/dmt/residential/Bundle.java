@@ -7,7 +7,9 @@ import java.util.*;
 import org.osgi.dmt.ddf.*;
 
 /**
- * The Bundle node type. The type for these bundles
+ * The Bundle node type. This is the management node for a Bundle. It provides
+ * access to the life cycle control of the bundle as well to its metadata,
+ * resources, and wiring.
  */
 public interface Bundle {
 	/**
@@ -18,15 +20,15 @@ public interface Bundle {
 	/**
 	 * The URL to download the archive from for this bundle.
 	 * 
-	 * By default this is the last URL used to download the JAR for this bundle.
+	 * By default this is the last URL used to download the JAR if it is known, otherwise it is the empty string.
 	 * In an atomic session this URL can be replaced to a new URL, which will
-	 * trigger an update of this bundle during commit.
+	 * trigger an update of this bundle during commit. If this value is set it
+	 * must be a valid JAR from which a URL can be downloaded unless it is the system bundle.
 	 * 
 	 * <p>
-	 * If the URL of Bundle 0 (The system bundle) is replaced then a Dmt
-	 * Exception must be thrown.
+	 * If the URL of Bundle 0 (The system bundle) is replaced to any value then the framework will restart.
 	 * 
-	 * @return The last used URL
+	 * @return The last used URL or empty string if not known
 	 */
 
 	Mutable<String> URL();
@@ -90,8 +92,7 @@ public interface Bundle {
 
 	/**
 	 * The Bundle's version as defined by the Bundle {@code getVersion()}
-	 * method. If this result is {@code null} then the value of this node must
-	 * be the empty string.
+	 * method.
 	 * 
 	 * @return The Version node
 	 */
@@ -99,7 +100,8 @@ public interface Bundle {
 	String Version();
 
 	/**
-	 * A list of the types of the bundle. Currently on a single type is provided:
+	 * A list of the types of the bundle. Currently on a single type is
+	 * provided:
 	 * <ul>
 	 * <li>{@link #FRAGMENT}</li>
 	 * </ul>
@@ -117,7 +119,6 @@ public interface Bundle {
 	@Scope(A)
 	MAP<String, String> Headers();
 
-
 	/**
 	 * The Bundle's Location as defined by the Bundle {@code getLocation()}
 	 * method.
@@ -126,7 +127,7 @@ public interface Bundle {
 	 * installed. This location should be a unique name for a bundle chosen by
 	 * the management system. The Bundle Location is immutable for the Bundle's
 	 * life (it is not changed when the Bundle is updated). The Bundle Location
-	 * is also part of the URI to this node.
+	 * is also part of the URI to this node if not mangled.
 	 * 
 	 * @return The Bundle's location
 	 */
@@ -244,6 +245,8 @@ public interface Bundle {
 	 * has no attributes and a single {@code filter} directive that matches the
 	 * service id property.
 	 * 
+	 * @remark add description in spec about the services namespace (if wires make it ...)
+	 * 
 	 * @return The Wires node.
 	 */
 	MAP<String, LIST<Wire>> Wires();
@@ -254,17 +257,9 @@ public interface Bundle {
 	 * parameter.
 	 * 
 	 * @return All signers of the bundle
+	 * @remark Evgeni wants to have one method with
 	 */
-	LIST<Certificate> AllSigners();
-
-	/**
-	 * Return all signers of the bundle. See the Bundle
-	 * {@code getSignerCertificates()} method with the {@code SIGNERS_TRUSTED}
-	 * parameter.
-	 * 
-	 * @return Trusted signers of the bundle
-	 */
-	LIST<Certificate> TrustedSigners();
+	LIST<Certificate> Signers();
 
 	/**
 	 * An optional node providing access to the entries in the Bundle's JAR.
@@ -288,13 +283,16 @@ public interface Bundle {
 
 	/**
 	 * An Entry describes an entry in the Bundle, it combines the Path of an
-	 * entry with the content.
+	 * entry with the content. Only entries that have content will be returned, that is,
+	 * empty directories are not returned.
 	 */
 	public interface Entry {
 		/**
 		 * The path in the Bundle archive to the entry.
 		 * 
 		 * @return The path to the entry in the archive.
+		 * 
+		 * @remark Evgeni thinks the fact that we return full path names generates too much data
 		 */
 		String Path();
 
@@ -304,12 +302,26 @@ public interface Bundle {
 		 * @return The binary content.
 		 */
 		byte[] Content();
+		
+		/**
+		 * Instance Id to allow addressing by Instance Id.
+		 * @return The InstanceId
+		 */
+		
+		int InstanceId();
 	}
 
 	/**
 	 * Place holder for the Signers DN names.
 	 */
 	interface Certificate {
+		/**
+		 * Return if this Certificate is trusted.
+		 * 
+		 * @return If this is a trusted certificate.
+		 */
+		boolean IsTrusted();
+
 		/**
 		 * A list of signer DNs of the certificates in the chain.
 		 * 
@@ -319,6 +331,13 @@ public interface Bundle {
 		 */
 		@Scope(A)
 		LIST<String> CertificateChain();
+		
+		/**
+		 * Instance Id to allow addressing by Instance Id.
+		 * @return The InstanceId
+		 */
+		
+		int InstanceId();
 	}
 
 }

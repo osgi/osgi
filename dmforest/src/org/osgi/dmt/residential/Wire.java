@@ -4,7 +4,7 @@ import org.osgi.dmt.ddf.*;
 
 /**
  * A Wire is a link between two bundles where the semantics of this link is
- * defined by the used name space. 
+ * defined by the used name space.
  */
 public interface Wire {
 	/**
@@ -16,17 +16,20 @@ public interface Wire {
 	 * <li>osgi.residential.service - Defined in this specification</li>
 	 * <li>* - Generic name spaces</li>
 	 * </ul>
-	 * The osgi.residential.service name space is not defined by the OSGi Core as
-	 * it is not part of the module layer. The name space has the following
+	 * The osgi.residential.service name space is not defined by the OSGi Core
+	 * as it is not part of the module layer. The name space has the following
 	 * layout:
 	 * <ul>
-	 * <li>Requirement - A filter on the service.id service property. No attributes are defined</li>
-	 * <li>Capability - All service properties as attributes. No defined directives.</li>
+	 * <li>Requirement - A filter on the service.id service property. No
+	 * attributes are defined</li>
+	 * <li>Capability - All service properties as attributes. No defined
+	 * directives.</li>
 	 * <li>Requirer - The bundle that has gotten the service</li>
 	 * <li>Provider - The bundle that has registered the service</li>
 	 * </ul>
-	 * There is a wire for each registration-get pair. That is, if a service is registered
-	 * by A and gotten by B and C then there are two wires: {@code B->A} and {@code C->A}.
+	 * There is a wire for each registration-get pair. That is, if a service is
+	 * registered by A and gotten by B and C then there are two wires:
+	 * {@code B->A} and {@code C->A}.
 	 * 
 	 * @return The name space for this wire.
 	 */
@@ -61,6 +64,14 @@ public interface Wire {
 	String Provider();
 
 	/**
+	 * Instance Id to allow addressing by Instance Id.
+	 * 
+	 * @return The InstanceId
+	 */
+
+	int InstanceId();
+
+	/**
 	 * Describes a Requirement.
 	 */
 	public interface Requirement {
@@ -70,7 +81,7 @@ public interface Wire {
 		 * @return The Filter string for this requirement
 		 */
 		String Filter();
-		
+
 		/**
 		 * The Directives for this requirement. These directives must contain
 		 * the filter: directive as described by the Core.
@@ -78,12 +89,21 @@ public interface Wire {
 		 * @return The Directives for this requirement.
 		 */
 		MAP<String, String> Directives();
+
 		/**
 		 * The Attributes for this requirement.
 		 * 
 		 * @return The Attributes for this requirement.
 		 */
 		MAP<String, String> Attributes();
+
+		/**
+		 * Instance Id to allow addressing by Instance Id.
+		 * 
+		 * @return The InstanceId
+		 */
+
+		int InstanceId();
 	}
 
 	/**
@@ -91,16 +111,25 @@ public interface Wire {
 	 */
 	public interface Capability {
 		/**
-		 * The Directives for this requirement. 
+		 * The Directives for this requirement.
 		 * 
 		 * @return The Directives for this capability.
 		 */
 		MAP<String, String> Directives();
+
 		/**
 		 * The Attributes for this capability.
 		 * 
 		 * @return The Attributes for this requirement.
 		 */
 		MAP<String, String> Attributes();
+
+		/**
+		 * Instance Id to allow addressing by Instance Id.
+		 * 
+		 * @return The InstanceId
+		 */
+
+		int InstanceId();
 	}
 }
