@@ -41,9 +41,9 @@ public final class ConfigurationPermission extends BasicPermission {
 
 	/**
 	 * The permission to be updated, that is, act as a Managed Service or
-	 * Managed Service Factory.The action string {@value #UPDATED}.
+	 * Managed Service Factory.The action string {@value #TARGET}.
 	 */
-	public final static String	UPDATED				= "updated";
+	public final static String	TARGET				= "target";
 
 	/**
 	 * Create a new ConfigurationPermission.
@@ -55,10 +55,17 @@ public final class ConfigurationPermission extends BasicPermission {
 	 * For checking the permission a {@code null} may be passed as the resource
 	 * name. This requires permission for the string "*".
 	 * 
-	 * @param name Location string, wildcard characters ('*') is allowed as in
-	 *        Filter substring matching. name may be {@code null} for .
-	 * @param actions Comma separated list of {@link #CONFIGURE},
-	 *        {@link #UPDATED}.
+	 * @param name
+	 *            Location string, wildcard characters ('*') is allowed as in
+	 *            Filter substring matching. name may be {@code null} for .
+	 * 
+	 * @remark masaki nakano: It was not clear to me when a null is passed as the resource
+	 *         name. Should the null be interpreted as "*"? In other words,
+	 *         should ConfigurationPermission#getName() return "*" if a null is
+	 *         passed?
+	 * 
+	 * @param actions
+	 *            Comma separated list of {@link #CONFIGURE}, {@link #TARGET}.
 	 */
 
 	public ConfigurationPermission(String name, String actions) {

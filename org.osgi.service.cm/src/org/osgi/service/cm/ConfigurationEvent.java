@@ -78,6 +78,21 @@ public class ConfigurationEvent {
 	 * The value of {@code CM_DELETED} is 2.
 	 */
 	public static final int			CM_DELETED	= 2;
+	
+	/**
+	 * A {@code Configuration} has changed its location.
+	 * 
+	 * <p>
+	 * This {@code ConfigurationEvent} type that indicates that a
+	 * {@code Configuration} object has changed its location.
+	 * 
+	 * An event is fired when a call to {@link Configuration#setBundleLocation(String)}
+	 * successfully changes the location.
+	 * 
+	 * <p>
+	 * The value of {@code CM_DELETED} is 2.
+	 */
+	public static final int			CM_LOCATION_CHANGED	= 3;
 	/**
 	 * Type of this event.
 	 * 

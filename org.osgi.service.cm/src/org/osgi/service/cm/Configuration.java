@@ -39,8 +39,8 @@ import java.util.Dictionary;
  * {@code String} objects as keys. However, case must be preserved from the last
  * set key/value.
  * <p>
- * A configuration can be <i>bound </i> to a specific bundle or to a group of
- * bundles using the <em>location</em> In its simplest form the location is the
+ * A configuration can be <i>bound</i> to a specific bundle or to a group of
+ * bundles using the <em>location</em>. In its simplest form the location is the
  * location of the target bundle that registered a Managed Service or a Managed
  * Service Factory. However, if the location starts with {@code ?} then the
  * location indicates multiple delivery. In such a case the configuration must
@@ -49,13 +49,13 @@ import java.util.Dictionary;
  * If security is on, the Configuration Permission can be used to restrict the
  * targets that receive updates. First, the configurer is required to have a
  * Configuration Permission where the resource name matches the location,
- * including the {@code ?} prefix, except when the configurer configures
- * itself. Second, the Configuration Admin must only update a target when the
+ * including the {@code ?} prefix, except when the configurer configures itself.
+ * Second, the Configuration Admin must only update a target when the
  * configuration location matches the location of the target's bundle or the
- * target bundle has a Configuration Permission with the action UPDATE and a
- * resource name that matches the configuration location. The matching of the
- * resource name to the location is done using the Filter's wildcard substring
- * matching rules.
+ * target bundle has a Configuration Permission with the action
+ * {@link ConfigurationPermission#TARGET} and a resource name that matches the
+ * configuration location. The matching of the resource name to the location is
+ * done using the Filter's wildcard substring matching rules.
  * 
  * Bundles can always create, manipulate, and be updated from configurations
  * that have a location that matches their location.
@@ -78,7 +78,8 @@ public interface Configuration {
 	 * Get the PID for this {@code Configuration} object.
 	 * 
 	 * @return the PID for this {@code Configuration} object.
-	 * @throws IllegalStateException if this configuration has been deleted
+	 * @throws IllegalStateException
+	 *             if this configuration has been deleted
 	 */
 	public String getPid();
 
@@ -98,7 +99,8 @@ public interface Configuration {
 	 *         These properties must not contain the "service.bundleLocation"
 	 *         property. The value of this property may be obtained from the
 	 *         {@code getBundleLocation} method.
-	 * @throws IllegalStateException if this configuration has been deleted
+	 * @throws IllegalStateException
+	 *             if this configuration has been deleted
 	 */
 	public Dictionary getProperties();
 
@@ -123,12 +125,16 @@ public interface Configuration {
 	 * Also initiates an asynchronous call to all {@code ConfigurationListener}s
 	 * with a {@code ConfigurationEvent.CM_UPDATED} event.
 	 * 
-	 * @param properties the new set of properties for this configuration
-	 * @throws IOException if update cannot be made persistent
-	 * @throws IllegalArgumentException if the {@code Dictionary} object
-	 *         contains invalid configuration types or contains case variants of
-	 *         the same key name.
-	 * @throws IllegalStateException if this configuration has been deleted
+	 * @param properties
+	 *            the new set of properties for this configuration
+	 * @throws IOException
+	 *             if update cannot be made persistent
+	 * @throws IllegalArgumentException
+	 *             if the {@code Dictionary} object contains invalid
+	 *             configuration types or contains case variants of the same key
+	 *             name.
+	 * @throws IllegalStateException
+	 *             if this configuration has been deleted
 	 */
 	public void update(Dictionary properties) throws IOException;
 
@@ -146,8 +152,10 @@ public interface Configuration {
 	 * Also initiates an asynchronous call to all {@code ConfigurationListener}s
 	 * with a {@code ConfigurationEvent.CM_DELETED} event.
 	 * 
-	 * @throws IOException If delete fails
-	 * @throws IllegalStateException if this configuration has been deleted
+	 * @throws IOException
+	 *             If delete fails
+	 * @throws IllegalStateException
+	 *             if this configuration has been deleted
 	 */
 	public void delete() throws IOException;
 
@@ -156,7 +164,8 @@ public interface Configuration {
 	 * Service Factory, else return {@code null}.
 	 * 
 	 * @return factory PID or {@code null}
-	 * @throws IllegalStateException if this configuration has been deleted
+	 * @throws IllegalStateException
+	 *             if this configuration has been deleted
 	 */
 	public String getFactoryPid();
 
@@ -173,9 +182,10 @@ public interface Configuration {
 	 * Factory via its {@code ConfigurationPlugin} object.
 	 * 
 	 * @see ConfigurationPlugin
-	 * @throws IOException if update cannot access the properties in persistent
-	 *         storage
-	 * @throws IllegalStateException if this configuration has been deleted
+	 * @throws IOException
+	 *             if update cannot access the properties in persistent storage
+	 * @throws IllegalStateException
+	 *             if this configuration has been deleted
 	 */
 	public void update() throws IOException;
 
@@ -191,17 +201,20 @@ public interface Configuration {
 	 * 
 	 * <p>
 	 * If the location starts with {@code ?} then all targets registered with
-	 * the given PID must be updated. 
+	 * the given PID must be updated.
 	 * 
 	 * <p>
-	 * If the location is changed the existing targets must be informed. If they 
-	 * can no longer see the configuration the configuration must be deleted or 
+	 * If the location is changed the existing targets must be informed. If they
+	 * can no longer see the configuration the configuration must be deleted or
 	 * updated with {@code null}. If the configuration becomes visible then they
 	 * must be updated.
 	 * 
-	 * @param location a location (can have wildcards) or {@code null}
-	 * @throws IllegalStateException If this configuration has been deleted.
-	 * @throws SecurityException when the required permissions are not available
+	 * @param location
+	 *            a location (can have wildcards) or {@code null}
+	 * @throws IllegalStateException
+	 *             If this configuration has been deleted.
+	 * @throws SecurityException
+	 *             when the required permissions are not available
 	 * @security ConfigurationPermission[c.location,CONFIGURE]
 	 * @security ConfigurationPermission[location,CONFIGURE]
 	 */
@@ -212,13 +225,14 @@ public interface Configuration {
 	 * 
 	 * Returns the bundle location or group to which this configuration is
 	 * bound, or {@code null} if it is not yet bound to a bundle location or
-	 * group. If the location starts with {@code ?} then the configuration
-	 * is delivered to all targets and not restricted to a single bundle.
+	 * group. If the location starts with {@code ?} then the configuration is
+	 * delivered to all targets and not restricted to a single bundle.
 	 * 
 	 * @return location to which this configuration is bound, or {@code null}.
-	 * @throws IllegalStateException If this {@code Configuration} object has
-	 *         been deleted.
-	 * @throws SecurityException when the required permission is not available
+	 * @throws IllegalStateException
+	 *             If this {@code Configuration} object has been deleted.
+	 * @throws SecurityException
+	 *             when the required permission is not available
 	 * @security ConfigurationPermission[this.location,CONFIGURE]
 	 */
 	public String getBundleLocation();
@@ -228,7 +242,8 @@ public interface Configuration {
 	 * 
 	 * Two Configuration objects are equal when their PIDs are equal.
 	 * 
-	 * @param other {@code Configuration} object to compare against
+	 * @param other
+	 *            {@code Configuration} object to compare against
 	 * @return {@code true} if equal, {@code false} if not a
 	 *         {@code Configuration} object or one with a different PID.
 	 */

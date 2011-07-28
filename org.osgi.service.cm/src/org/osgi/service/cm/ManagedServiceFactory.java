@@ -152,7 +152,7 @@ public interface ManagedServiceFactory {
 	 *        Configuration.getBundleLocation} method.
 	 * @throws ConfigurationException when the configuration properties are
 	 *         invalid.
-	 * @security ConfigurationPermission[c.location,UPDATED] Required by the
+	 * @security ConfigurationPermission[c.location,TARGET] Required by the
 	 *           bundle that registered this service
 	 */
 	public void updated(String pid, Dictionary properties)

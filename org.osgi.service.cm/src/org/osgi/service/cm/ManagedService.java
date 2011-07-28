@@ -143,7 +143,7 @@ public interface ManagedService {
 	 *        property. The value of this property may be obtained from the
 	 *        {@code Configuration.getBundleLocation} method.
 	 * @throws ConfigurationException when the update fails
-	 * @security ConfigurationPermission[c.location,UPDATED] Required by the bundle that registered this service
+	 * @security ConfigurationPermission[c.location,TARGET] Required by the bundle that registered this service
 	 */
 	public void updated(Dictionary properties) throws ConfigurationException;
 }

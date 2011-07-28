@@ -93,7 +93,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * <p>
  * If the location starts with {@code ?} then it must be delivered to all
  * targets registered with the given PID. If security is on, the target bundle
- * must have Configuration Permission[location,UPDATED], where location matches
+ * must have Configuration Permission[location,TARGET], where location matches
  * given the configuration location with wildcards as in the Filter substring
  * match. The security must be verified using the
  * {@link org.osgi.framework.Bundle#hasPermission} method.
@@ -257,7 +257,7 @@ public interface ConfigurationAdmin {
 	 * When there is no security on then all configurations can be returned. If
 	 * security is on, the caller must have ConfigurationPermission[location,
 	 * {@link ConfigurationPermission#CONFIGURE}] or
-	 * ConfigurationPermission[location,{@link ConfigurationPermission#UPDATED}
+	 * ConfigurationPermission[location,{@link ConfigurationPermission#TARGET}
 	 * ].
 	 * 
 	 * <p>
