@@ -265,7 +265,7 @@ public final class TR069ParameterValueFailTestCase extends OSGiTestCase {
 
 		// check invalid hex
 		try {
-			metaNode = new TestMetaNode(DmtData.FORMAT_HEXBINARY);
+			metaNode = new TestMetaNode(DmtData.FORMAT_HEX_BINARY);
 			String value = "-1-1-1";
 			if (isList) {
 				TR069ParameterValue.getDmtDataForList(value,

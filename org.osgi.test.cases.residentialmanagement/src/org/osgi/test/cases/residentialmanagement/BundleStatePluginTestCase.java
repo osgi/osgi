@@ -308,7 +308,7 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 				assertMetaData( uriStatus + STARTLEVEL, MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
 				assertMetaData( uriStatus + PERSISTENTLYSTARTED, MetaNode.AUTOMATIC, DmtData.FORMAT_BOOLEAN);
 				assertMetaData( uriStatus + ACTIVATIONPOLICYUSED, MetaNode.AUTOMATIC, DmtData.FORMAT_BOOLEAN);
-				assertMetaData( uriStatus + LASTMODIFIED, MetaNode.AUTOMATIC, DmtData.FORMAT_DATETIME);
+				assertMetaData( uriStatus + LASTMODIFIED, MetaNode.AUTOMATIC, DmtData.FORMAT_DATE_TIME);
 				
 				String uriHosts = uri + HOSTS; 
 				assertMetaData( uriHosts, MetaNode.AUTOMATIC);

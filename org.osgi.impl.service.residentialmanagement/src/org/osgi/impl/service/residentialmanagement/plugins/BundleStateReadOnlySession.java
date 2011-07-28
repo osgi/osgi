@@ -419,7 +419,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 						!BundleStateMetaNode.CAN_REPLACE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_DATETIME, null, null);
+						DmtData.FORMAT_DATE_TIME, null, null);
 
 			if (path[3].equals(ACTIVATIONPOLICYUSED))
 				return new BundleStateMetaNode("The date of last modified.",
@@ -804,7 +804,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 					SimpleDateFormat sdf = new SimpleDateFormat(
 							"yyyyMMdd'T'hhmmss");
 					String returnDate = sdf.format(d);
-					return new DmtData(returnDate, DmtData.FORMAT_DATETIME);
+					return new DmtData(returnDate, DmtData.FORMAT_DATE_TIME);
 				}
 			}
 			if (path[2].equals(HOSTS)) {

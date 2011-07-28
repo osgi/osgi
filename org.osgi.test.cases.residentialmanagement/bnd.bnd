@@ -7,10 +7,10 @@ Private-Package						=  \
 
 -buildpath			= \
 	osgi.core;						version=4.2		, \
-	osgi.cmpn;						version=project		, \
 	ee.foundation									, \
 	org.osgi.test.support;      version=project 	, \
 	info.dmtree;				version=project		, \
+	osgi.cmpn;						version=project		, \
 	${junit}
 
 -runbundles			= \

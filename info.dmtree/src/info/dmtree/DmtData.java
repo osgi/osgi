@@ -147,7 +147,7 @@ public final class DmtData {
 	 * 
 	 * @since 2.0
 	 */
-	public static final int			FORMAT_DATETIME			= 0x8000;
+	public static final int			FORMAT_DATE_TIME			= 0x8000;
 
 	/**
 	 * The node holds an unsigned int value.
@@ -174,7 +174,7 @@ public final class DmtData {
 	 * 
 	 * @since 2.0
 	 */
-	public static final int			FORMAT_HEXBINARY		= 0x40000;
+	public static final int			FORMAT_HEX_BINARY		= 0x40000;
 
 	private static final BigInteger	BD_MAX_ULONG			= new BigInteger(
 																	""
@@ -200,9 +200,9 @@ public final class DmtData {
 		FORMAT_NAMES.put(new Integer(FORMAT_LONG), "long");
 		FORMAT_NAMES.put(new Integer(FORMAT_UNSIGNED_LONG), "ulong");
 		FORMAT_NAMES.put(new Integer(FORMAT_UNSIGNED_INTEGER), "uint");
-		FORMAT_NAMES.put(new Integer(FORMAT_DATETIME), "datetime");
+		FORMAT_NAMES.put(new Integer(FORMAT_DATE_TIME), "datetime");
 		FORMAT_NAMES.put(new Integer(FORMAT_NODE_URI), "node_uri");
-		FORMAT_NAMES.put(new Integer(FORMAT_HEXBINARY), "hexbin");
+		FORMAT_NAMES.put(new Integer(FORMAT_HEX_BINARY), "hexbin");
 	}
 
 	/**
@@ -325,7 +325,7 @@ public final class DmtData {
 	 * day in either local time, complete representation, basic format (pattern
 	 * {@code hhmmss}) or Coordinated Universal Time, basic format (pattern
 	 * {@code hhmmssZ})
-	 * <li>{@link #FORMAT_DATETIME} - value must be parsable to an ISO 8601
+	 * <li>{@link #FORMAT_DATE_TIME} - value must be parsable to an ISO 8601
 	 * definition of a calendar date-time in complete representation, basic
 	 * format (pattern {@code CCYYMMDDThhmmss}) or Coordinated Universal Time,
 	 * basic format (pattern {@code CCYYMMDDThhmmssZ})
@@ -359,7 +359,7 @@ public final class DmtData {
 			case FORMAT_TIME :
 				checkTimeFormat(value);
 				break;
-			case FORMAT_DATETIME :
+			case FORMAT_DATE_TIME :
 				checkDateTimeFormat(value);
 				break;
 			case FORMAT_UNSIGNED_LONG :
@@ -529,7 +529,7 @@ public final class DmtData {
 	 * <ul>
 	 * <li>{@link #FORMAT_BINARY}
 	 * <li>{@link #FORMAT_BASE64}
-	 * <li>{@link #FORMAT_HEXBINARY}
+	 * <li>{@link #FORMAT_HEX_BINARY}
 	 * </ul>
 	 * 
 	 * 
@@ -548,7 +548,7 @@ public final class DmtData {
 		switch (format) {
 			case FORMAT_BINARY :
 			case FORMAT_BASE64 :
-			case FORMAT_HEXBINARY :
+			case FORMAT_HEX_BINARY :
 				break;
 			default :
 				throw new IllegalArgumentException(
@@ -692,7 +692,7 @@ public final class DmtData {
 	 * @since 2.0
 	 */
 	public String getDateTime() {
-		if (format == FORMAT_DATETIME)
+		if (format == FORMAT_DATE_TIME)
 			return str;
 
 		throw new DmtIllegalStateException("DmtData value is not DateTime.");
@@ -824,7 +824,7 @@ public final class DmtData {
 	 * @since 2.0
 	 */
 	public byte[] getHexBinary() {
-		if (format == FORMAT_HEXBINARY) {
+		if (format == FORMAT_HEX_BINARY) {
 			byte[] bytesCopy = new byte[bytes.length];
 			for (int i = 0; i < bytes.length; i++)
 				bytesCopy[i] = bytes[i];
@@ -972,7 +972,7 @@ public final class DmtData {
 			case FORMAT_XML :
 			case FORMAT_DATE :
 			case FORMAT_TIME :
-			case FORMAT_DATETIME :
+			case FORMAT_DATE_TIME :
 			case FORMAT_RAW_STRING :
 			case FORMAT_UNSIGNED_INTEGER :
 			case FORMAT_UNSIGNED_LONG :
@@ -981,7 +981,7 @@ public final class DmtData {
 			case FORMAT_BINARY :
 			case FORMAT_BASE64 :
 			case FORMAT_RAW_BINARY :
-			case FORMAT_HEXBINARY :
+			case FORMAT_HEX_BINARY :
 				return bytes.length;
 			case FORMAT_INTEGER :
 			case FORMAT_FLOAT :
@@ -1021,7 +1021,7 @@ public final class DmtData {
 			case FORMAT_XML :
 			case FORMAT_DATE :
 			case FORMAT_TIME :
-			case FORMAT_DATETIME :
+			case FORMAT_DATE_TIME :
 			case FORMAT_RAW_STRING :
 			case FORMAT_NODE_URI :
 			case FORMAT_UNSIGNED_INTEGER :
@@ -1038,7 +1038,7 @@ public final class DmtData {
 			case FORMAT_BINARY :
 			case FORMAT_BASE64 :
 			case FORMAT_RAW_BINARY :
-			case FORMAT_HEXBINARY :
+			case FORMAT_HEX_BINARY :
 				return getHexDump(bytes);
 			case FORMAT_NODE :
 				return complex.toString();
@@ -1078,7 +1078,7 @@ public final class DmtData {
 			case FORMAT_TIME :
 			case FORMAT_UNSIGNED_INTEGER :
 			case FORMAT_UNSIGNED_LONG :
-			case FORMAT_DATETIME :
+			case FORMAT_DATE_TIME :
 			case FORMAT_NODE_URI :
 				return str == null ? other.str == null : str.equals(other.str);
 			case FORMAT_INTEGER :
@@ -1091,7 +1091,7 @@ public final class DmtData {
 				return bool == other.bool;
 			case FORMAT_BINARY :
 			case FORMAT_BASE64 :
-			case FORMAT_HEXBINARY :
+			case FORMAT_HEX_BINARY :
 				return Arrays.equals(bytes, other.bytes);
 			case FORMAT_NODE :
 				return complex.equals(other.complex);
@@ -1122,7 +1122,7 @@ public final class DmtData {
 			case FORMAT_XML :
 			case FORMAT_DATE :
 			case FORMAT_TIME :
-			case FORMAT_DATETIME :
+			case FORMAT_DATE_TIME :
 			case FORMAT_UNSIGNED_INTEGER :
 			case FORMAT_UNSIGNED_LONG :
 			case FORMAT_NODE_URI :
@@ -1139,7 +1139,7 @@ public final class DmtData {
 			case FORMAT_BINARY :
 			case FORMAT_BASE64 :
 			case FORMAT_RAW_BINARY :
-			case FORMAT_HEXBINARY :
+			case FORMAT_HEX_BINARY :
 				return new String(bytes).hashCode();
 			case FORMAT_NODE :
 				return complex.hashCode();

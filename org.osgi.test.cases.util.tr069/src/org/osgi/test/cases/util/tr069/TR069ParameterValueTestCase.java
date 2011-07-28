@@ -174,9 +174,9 @@ public final class TR069ParameterValueTestCase extends OSGiTestCase {
 			UnsupportedEncodingException, TR069MappingException {
 		DmtData expectedDmtData = new DmtData(
 				TR069UriTestCaseConstants.TR069_VALUE_DATE_TIME,
-				DmtData.FORMAT_DATETIME);
+				DmtData.FORMAT_DATE_TIME);
 
-		MetaNode dateTimeMetaNode = new TestMetaNode(DmtData.FORMAT_DATETIME);
+		MetaNode dateTimeMetaNode = new TestMetaNode(DmtData.FORMAT_DATE_TIME);
 
 		checkSimpleDmtData(expectedDmtData,
 				TR069ParameterValue.TR069_TYPE_DATETIME,
@@ -219,10 +219,10 @@ public final class TR069ParameterValueTestCase extends OSGiTestCase {
 	public void testTR069HexType() throws IllegalArgumentException,
 			UnsupportedEncodingException, TR069MappingException {
 		// Meta node is hex binary
-		MetaNode testMetaNode = new TestMetaNode(DmtData.FORMAT_HEXBINARY);
+		MetaNode testMetaNode = new TestMetaNode(DmtData.FORMAT_HEX_BINARY);
 		DmtData expectedDmtData = new DmtData(
 				TR069UriTestCaseConstants.TR069_VALUE_BIN_STRING.getBytes(),
-				DmtData.FORMAT_HEXBINARY);
+				DmtData.FORMAT_HEX_BINARY);
 		checkSimpleDmtData(expectedDmtData,
 				TR069ParameterValue.TR069_TYPE_HEXBINARY,
 				TR069UriTestCaseConstants.TR069_VALUE_HEX_STRING,
@@ -522,7 +522,7 @@ public final class TR069ParameterValueTestCase extends OSGiTestCase {
 	public void testDmtHexFormat() {
 		DmtData dmtData = new DmtData(
 				TR069UriTestCaseConstants.TR069_VALUE_BIN_STRING.getBytes(),
-				DmtData.FORMAT_HEXBINARY);
+				DmtData.FORMAT_HEX_BINARY);
 		TR069ParameterValue expectedValue = new TR069ParameterValue(
 				TR069UriTestCaseConstants.TR069_VALUE_HEX_STRING,
 				TR069ParameterValue.TR069_TYPE_HEXBINARY);

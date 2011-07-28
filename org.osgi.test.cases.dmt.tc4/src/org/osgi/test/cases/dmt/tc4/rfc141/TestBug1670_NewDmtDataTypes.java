@@ -28,10 +28,10 @@ public class TestBug1670_NewDmtDataTypes extends OSGiTestCase{
 	public void testNewFormatConstants() throws Exception {
 		checkIntConstant(DmtData.class, "FORMAT_LONG", 0x2000 );
 		checkIntConstant(DmtData.class, "FORMAT_UNSIGNED_LONG",0x4000  );
-		checkIntConstant(DmtData.class, "FORMAT_DATETIME", 0x8000 );
+		checkIntConstant(DmtData.class, "FORMAT_DATE_TIME", 0x8000 );
 		checkIntConstant(DmtData.class, "FORMAT_UNSIGNED_INTEGER", 0x10000 );
 		checkIntConstant(DmtData.class, "FORMAT_NODE_URI", 0x20000 );
-		checkIntConstant(DmtData.class, "FORMAT_HEXBINARY", 0x40000 );
+		checkIntConstant(DmtData.class, "FORMAT_HEX_BINARY", 0x40000 );
 	}
 	
 	/**
@@ -149,33 +149,33 @@ public class TestBug1670_NewDmtDataTypes extends OSGiTestCase{
 		DmtData data = null;
 		String dt = "20100101";
 		try {
-			data = new DmtData( dt, DmtData.FORMAT_DATETIME );
-			fail( "DmtData must not accept date-only values for FORMAT_DATETIME" );
+			data = new DmtData( dt, DmtData.FORMAT_DATE_TIME );
+			fail( "DmtData must not accept date-only values for FORMAT_DATE_TIME" );
 		} catch (IllegalArgumentException e) {}
 
 		dt = "161601";
 		try {
-			data = new DmtData( dt, DmtData.FORMAT_DATETIME );
-			fail( "DmtData must not accept time-only values for FORMAT_DATETIME" );
+			data = new DmtData( dt, DmtData.FORMAT_DATE_TIME );
+			fail( "DmtData must not accept time-only values for FORMAT_DATE_TIME" );
 		} catch (IllegalArgumentException e) {}
 		
 		dt = "any string";
 		try {
-			data = new DmtData( dt, DmtData.FORMAT_DATETIME );
-			fail( "DmtData must not accept invalid formatted values for FORMAT_DATETIME" );
+			data = new DmtData( dt, DmtData.FORMAT_DATE_TIME );
+			fail( "DmtData must not accept invalid formatted values for FORMAT_DATE_TIME" );
 		} catch (IllegalArgumentException e) {}
 		
 		dt = "20100101T102030";
 		try {
-			data = new DmtData( dt, DmtData.FORMAT_DATETIME );
+			data = new DmtData( dt, DmtData.FORMAT_DATE_TIME );
 		} catch (IllegalArgumentException e) {
-			fail( "DmtData must not accept valid values like '" + dt + "' for FORMAT_DATETIME" );
+			fail( "DmtData must not accept valid values like '" + dt + "' for FORMAT_DATE_TIME" );
 		}
 		dt = "20100101T102030Z";
 		try {
-			data = new DmtData( dt, DmtData.FORMAT_DATETIME );
+			data = new DmtData( dt, DmtData.FORMAT_DATE_TIME );
 		} catch (IllegalArgumentException e) {
-			fail( "DmtData must not accept valid values like '" + dt + "' for FORMAT_DATETIME" );
+			fail( "DmtData must not accept valid values like '" + dt + "' for FORMAT_DATE_TIME" );
 		}
 		try {
 			// just testing with the new formats
@@ -185,20 +185,20 @@ public class TestBug1670_NewDmtDataTypes extends OSGiTestCase{
 			data.getHexBinary();
 			data.getNodeUri();
 			// ...
-			fail( "must not be able to retrieve any format other than FORMAT_DATETIME");
+			fail( "must not be able to retrieve any format other than FORMAT_DATE_TIME");
 		} catch (DmtIllegalStateException e) {}
-		assertEquals(DmtData.FORMAT_DATETIME, data.getFormat() );
+		assertEquals(DmtData.FORMAT_DATE_TIME, data.getFormat() );
 		String dt2 = data.getDateTime();
 		assertEquals( "initial and returned value are not the same", dt, dt2 );
 	}
 	
 	
 	/**
-	 * performs several checks with an DmtData instance of FORMAT_HEXBINARY
+	 * performs several checks with an DmtData instance of FORMAT_HEX_BINARY
 	 */
 	public void testFormatHexBinary() throws Exception {
 		byte[] bytes = "a hexbinary test string".getBytes();
-		DmtData data = new DmtData( bytes, DmtData.FORMAT_HEXBINARY );
+		DmtData data = new DmtData( bytes, DmtData.FORMAT_HEX_BINARY );
 		try {
 			// just testing with the new formats
 			data.getLong();
@@ -207,9 +207,9 @@ public class TestBug1670_NewDmtDataTypes extends OSGiTestCase{
 			data.getDateTime();
 			data.getNodeUri();
 			// ...
-			fail( "must not be able to retrieve any format other than FORMAT_HEXBINARY");
+			fail( "must not be able to retrieve any format other than FORMAT_HEX_BINARY");
 		} catch (DmtIllegalStateException e) {}
-		assertEquals(DmtData.FORMAT_HEXBINARY, data.getFormat() );
+		assertEquals(DmtData.FORMAT_HEX_BINARY, data.getFormat() );
 		byte[] bytes2 = data.getHexBinary();
 		for (int i = 0; i < bytes2.length; i++) {
 			assertEquals( "initial and returned bytes are not the same", bytes[i], bytes2[i] );

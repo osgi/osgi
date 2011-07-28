@@ -16,35 +16,11 @@
 
 package org.osgi.util.tr069;
 
-import static info.dmtree.DmtData.FALSE_VALUE;
-import static info.dmtree.DmtData.FORMAT_BASE64;
-import static info.dmtree.DmtData.FORMAT_BINARY;
-import static info.dmtree.DmtData.FORMAT_BOOLEAN;
-import static info.dmtree.DmtData.FORMAT_DATE;
-import static info.dmtree.DmtData.FORMAT_DATETIME;
-import static info.dmtree.DmtData.FORMAT_FLOAT;
-import static info.dmtree.DmtData.FORMAT_HEXBINARY;
-import static info.dmtree.DmtData.FORMAT_INTEGER;
-import static info.dmtree.DmtData.FORMAT_LONG;
-import static info.dmtree.DmtData.FORMAT_NODE;
-import static info.dmtree.DmtData.FORMAT_NODE_URI;
-import static info.dmtree.DmtData.FORMAT_NULL;
-import static info.dmtree.DmtData.FORMAT_RAW_BINARY;
-import static info.dmtree.DmtData.FORMAT_RAW_STRING;
-import static info.dmtree.DmtData.FORMAT_STRING;
-import static info.dmtree.DmtData.FORMAT_TIME;
-import static info.dmtree.DmtData.FORMAT_UNSIGNED_INTEGER;
-import static info.dmtree.DmtData.FORMAT_UNSIGNED_LONG;
-import static info.dmtree.DmtData.FORMAT_XML;
-import static info.dmtree.DmtData.NULL_VALUE;
-import static info.dmtree.DmtData.TRUE_VALUE;
-import info.dmtree.DmtConstants;
-import info.dmtree.DmtData;
-import info.dmtree.MetaNode;
-import info.dmtree.Uri;
+import static info.dmtree.DmtData.*;
+import info.dmtree.*;
 
-import java.io.UnsupportedEncodingException;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 /**
  * Class which contains value and data type for TR-069, and static methods of
@@ -716,11 +692,11 @@ public class TR069ParameterValue {
 					+ tr069Type + ", FORMAT is not FORMAT_UNSIGNED_INTEGER.");
 		}
 		if (tr069Type.equals(TR069_TYPE_DATETIME)) {
-			if ((format & FORMAT_DATETIME) != 0) {
+			if ((format & FORMAT_DATE_TIME) != 0) {
 				try {
 					String target = getDmtDataCompatibleValue(value);
 					// https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1938#c8
-					data = new DmtData(target, FORMAT_DATETIME);
+					data = new DmtData(target, FORMAT_DATE_TIME);
 					return data;
 				}
 				catch (Exception e) {
@@ -735,10 +711,10 @@ public class TR069ParameterValue {
 		}
 		if (tr069Type.equals(TR069_TYPE_HEXBINARY)) {
 			StringBuffer sb = new StringBuffer();
-			if ((format & FORMAT_HEXBINARY) != 0) {
+			if ((format & FORMAT_HEX_BINARY) != 0) {
 				try {
 					byte[] bytes = HexBinary.hexBinaryToByteArray(value);
-					data = new DmtData(bytes, FORMAT_HEXBINARY);
+					data = new DmtData(bytes, FORMAT_HEX_BINARY);
 					return data;
 				}
 				catch (Exception e) {
@@ -1159,13 +1135,13 @@ public class TR069ParameterValue {
 			case FORMAT_UNSIGNED_LONG :
 				return new TR069ParameterValue(data.toString(),
 						TR069_TYPE_UNSIGNED_LONG);
-			case FORMAT_HEXBINARY :
+			case FORMAT_HEX_BINARY :
 				value = getHexDumpWithoutSpace(data.getHexBinary());
 				return new TR069ParameterValue(value, TR069_TYPE_HEXBINARY);
 			case FORMAT_NODE_URI :
 				value = TR069URI.getTR069Path(data.toString());
 				return new TR069ParameterValue(value, TR069_TYPE_STRING);
-			case FORMAT_DATETIME :
+			case FORMAT_DATE_TIME :
 				value = getHyphenedDateTime(data.getDateTime());
 				return new TR069ParameterValue(value, TR069_TYPE_DATETIME);
 			default :
