@@ -6,7 +6,8 @@ package org.osgi.dmt.ddf;
  * @param <K> The key type, must be convertable to/from a string
  * @param <V> The value type
  */
-public interface MutableMAP<K, V> extends AddableMAP<K,V> {
-	void delete(K key);
+public interface AddableMAP<K, V> extends MAP<K,V> {
+	V add();
+	V put(K key);
 }
 

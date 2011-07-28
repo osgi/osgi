@@ -74,6 +74,9 @@ public class Test {
 				if (instanceOf(type, MutableMAP.class)) {
 					add = true;
 					delete = true;
+				}else
+				if (instanceOf(type, MutableMAP.class)) {
+					add = true;
 				}
 
 				multiple = true;

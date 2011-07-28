@@ -31,7 +31,7 @@ public class DDFNode {
 	static Pattern DDF_MUTABLE = Pattern
 			.compile("org.osgi.dmt.ddf.Mutable<\\s*(.*)\\s*>");
 	static Pattern DDF_MAP = Pattern
-			.compile("org.osgi.dmt.ddf.(Mutable)?MAP<\\s*(.+)\\s*,\\s*(.+)\\s*>");
+			.compile("org.osgi.dmt.ddf.(Mutable|Addable)?MAP<\\s*(.+)\\s*,\\s*(.+)\\s*>");
 	static Pattern DDF_LIST = Pattern
 			.compile("org.osgi.dmt.ddf.(Mutable)?LIST<\\s*(.+)\\s*>");
 
@@ -99,10 +99,10 @@ public class DDFNode {
 			typeName = m.group(3);
 			String keyTypeName = m.group(2);
 
-			DDFNode child = new DDFNode(this, "[id:" + shorten(keyTypeName) + "]",
+			DDFNode child = new DDFNode(this, "[" + shorten(keyTypeName) + "]",
 					typeName);
 			child.add = m.group(1) != null;
-			child.delete = m.group(1) != null;
+			child.delete = m.group(1) != null && m.group(1).equals("Mutable");
 			child.scope = "A";
 			child.cardinality = "0..*";
 			children.add(child);
@@ -135,7 +135,7 @@ public class DDFNode {
 				interior, //
 				mime == null ? "NODE" : mime);
 		for (DDFNode child : children) {
-			child.print(pw, indent + " +");
+			child.print(pw, indent + "  ");
 		}
 	}
 

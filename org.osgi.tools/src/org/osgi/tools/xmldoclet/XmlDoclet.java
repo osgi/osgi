@@ -603,7 +603,7 @@ public class XmlDoclet extends Doclet {
 	/**
 	 * Find a reference to a field.
 	 */
-	static Pattern MEMBER_REFERENCE = Pattern.compile("\\s*((.+)#)?(.+)\\s*");
+	static Pattern MEMBER_REFERENCE = Pattern.compile("\\s*(.+)?#(.+)\\s*");
 
 	private FieldDoc getReferredField(Tag value) {
 		Doc holder = value.holder();
@@ -611,8 +611,8 @@ public class XmlDoclet extends Doclet {
 		Matcher m = MEMBER_REFERENCE.matcher(value.text());
 		if (m.matches()) {
 			// either ref or class#ref
-			String clazz = m.group(2);
-			String member = m.group(3);
+			String clazz = m.group(1);
+			String member = m.group(2);
 			ClassDoc parent;
 			if (holder instanceof ClassDoc)
 				parent = (ClassDoc) holder;

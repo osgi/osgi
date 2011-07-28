@@ -33,6 +33,12 @@ public class Sample<T, K extends Serializable> implements Collection<String> {
 	public List<Map<T, K>>	list;
 
 	/**
+	 * The permission to be updated, that is, act as a Managed Service or
+	 * Managed Service Factory.The action string {@value #UPDATED}.
+	 */
+	public final static String	UPDATED				= "updated";
+
+	/**
 	 * 
 	 * @param <X> an X
 	 * @param a an a
