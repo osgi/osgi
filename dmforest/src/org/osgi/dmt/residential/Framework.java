@@ -35,7 +35,6 @@ import org.osgi.dmt.ddf.*;
  * actions should be undone and the system state must be restored to the
  * snapshot.
  * 
- * @remark verify removal of Restart
  */
 
 public interface Framework {

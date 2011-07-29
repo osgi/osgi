@@ -143,11 +143,11 @@ import org.osgi.dmt.ddf.*;
  * the {@link #Result} or {@link #ResultUriList} child nodes; this maintains any
  * security scope that is in effect.
  * 
- * @remark Modified this to use standard filter comparison rules.
+ * @remark Modified this to use standard filter comparison rules. How does substring matching work?
  * 
  * @remark list nodes are not clearly defined. I assumed they're treated as a
  *         string but they could also be treated as multi valued properties.
- *         Maybe it is better to change it to this?
+ *         Maybe it is better to change it to this? OK.
  * @remark - Evgeni: It's very problematic, because PA doesn't know about that.
  *         So, it will open the session to the Filters MO root. That means the
  *         search is not possible.

@@ -135,7 +135,7 @@ public class DDFNode {
 				interior, //
 				mime == null ? "NODE" : mime);
 		for (DDFNode child : children) {
-			child.print(pw, indent + "  ");
+			child.print(pw, indent + "\u00A0\u00A0");
 		}
 	}
 
