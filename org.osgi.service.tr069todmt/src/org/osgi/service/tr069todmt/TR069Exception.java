@@ -1,0 +1,115 @@
+/*
+ * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.osgi.service.tr069todmt;
+
+/**
+ * This exception is defined in terms of applicable TR-069 fault codes. The
+ * TR-069 specification defines the fault codes that can occur in different
+ * situations.
+ * 
+ */
+public class TR069Exception extends RuntimeException {
+	private static final long serialVersionUID = 1L;
+	final String message;
+	final int faultCode;
+
+	/**
+	 * 9000 Method not supported
+	 */
+	final public static int METHOD_NOT_SUPPORTED = 9000;
+
+	/**
+	 * 9001 Request denied (no reason specified
+	 */
+	final public static int REQUEST_DENIED = 9001;
+
+	/**
+	 * 9002 Internal error
+	 */
+	final public static int INTERNAL_ERROR = 9002;
+
+	/**
+	 * 9003 Invalid Arguments
+	 */
+	final public static int INVALID_ARGUMENTS = 9003;
+
+	/**
+	 * 9004 Resources exceeded (when used in association with
+	 * SetParameterValues, this MUST NOT be used to indicate parameters in
+	 * error)
+	 */
+	final public static int RESOURCES_EXCEEDED = 9004;
+
+	/**
+	 * 9005 Invalid parameter name (associated with Set/GetParameterValues,
+	 * GetParameterNames, Set/GetParameterAttributes, AddObject, and
+	 * DeleteObject)
+	 */
+	final public static int INVALID_PARAMETER_NAME = 9005;
+
+	/**
+	 * 9006 Invalid parameter type (associated with SetParameterValues)
+	 */
+	final public static int INVALID_PARAMETER_TYPE = 9006;
+
+	/**
+	 * 9007 Invalid parameter value (associated with SetParameterValues)
+	 */
+	final public static int INVALID_PARAMETER_VALUE = 9007;
+
+	/**
+	 * 9008 Attempt to set a non-writable parameter (associated with
+	 * SetParameterValues)
+	 */
+	final public static int NON_WRITABLE_PARAMETER = 9008;
+
+	/**
+	 * 9009 Notification request rejected (associated with
+	 * SetParameterAttributes method).
+	 */
+	final public static int NOTIFICATION_REJECTED = 9009;
+
+	/**
+	 * A default constructor when only a message is known. This will generate a
+	 * {@link #INTERNAL_ERROR} fault.
+	 * 
+	 * @param message The message
+	 */
+	public TR069Exception(String message) {
+		this(message, 9002);
+	}
+
+	/**
+	 * A Constructor with a message and a fault code.
+	 * 
+	 * @param message The message
+	 * @param faultCode The TR-069 defined fault code
+	 */
+	public TR069Exception(String message, int faultCode) {
+		this.message = message;
+		this.faultCode = faultCode;
+	}
+
+	/**
+	 * Answer the associated TR-069 fault code.
+	 * 
+	 * @return Answer the associated TR-069 fault code.
+	 */
+	public int getFaultCode() {
+		return faultCode;
+	}
+}
