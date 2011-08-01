@@ -296,7 +296,16 @@ public class BundleWiringTests extends WiringTest {
 		checkBundleWiring(new Bundle[] {tb1}, new BundleWiring[] {updatedWiring});
 		List<BundleWire> updatedWires = updatedWiring.getProvidedWires(null);
 		assertNotNull("Requirers is null", updatedWires);
-		assertEquals("Wrong number of requirers", 0, updatedWires.size());
+		// May have zero wires or one fragment wire
+		if (updatedWires.size() == 1) {
+			assertEquals("Wrong wire capability namespace",
+					BundleRevision.HOST_NAMESPACE, updatedWires.get(0)
+							.getCapability().getNamespace());
+			assertEquals("Wrong requirer", tb4Wiring.getRevision(),
+					updatedWires.get(0).getRequirement().getRevision());
+		} else {
+			assertEquals("Wrong number of requirers", 0, updatedWires.size());
+		}
 
 		assertTrue("Wiring is not in use for: " + tb1, tb1Wiring.isInUse());
 		assertFalse("Wiring is current for: " + tb1, tb1Wiring.isCurrent());

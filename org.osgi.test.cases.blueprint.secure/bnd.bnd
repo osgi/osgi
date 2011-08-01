@@ -31,7 +31,7 @@ Include-Resource					= \
 	www/ServiceOne_import.jar=ServiceOne_import.jar, \
 	www/ServiceOne_import_denied.jar=ServiceOne_import_denied.jar
 
-testcases = ${classes;named;${p}.*;extends;junit.framework.TestCase;concrete}
+testcases = ${sort;${classes;named;${p}.*;extends;junit.framework.TestCase;concrete}}
 Test-Cases							= ${testcases}
 
 -buildpath							= \

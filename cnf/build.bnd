@@ -119,6 +119,6 @@ runsecureproperties = ${runproperties}, \
 
 -runproperties = ${runproperties}
 
-testcases = ${classes;extending;junit.framework.TestCase|*DefaultTestBundleControl;concrete}
+testcases = ${sort;${classes;extending;junit.framework.TestCase;concrete}}
 
 
