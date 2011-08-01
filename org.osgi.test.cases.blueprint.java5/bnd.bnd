@@ -26,7 +26,7 @@ Include-Resource					= \
 	www/reference_list_service_import.jar=reference_list_service_import.jar , \
 	www/pattern_injection.jar=pattern_injection.jar
 
-testcases = ${classes;named;${p}.*;extends;junit.framework.TestCase;concrete}
+testcases = ${sort;${classes;named;${p}.*;extends;junit.framework.TestCase;concrete}}
 Test-Cases							= ${testcases}
 
 -buildpath							= ee.j2se; version=1.5, \
