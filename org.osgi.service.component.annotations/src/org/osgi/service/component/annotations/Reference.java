@@ -45,8 +45,7 @@ public @interface Reference {
 	 * <p>
 	 * If not specified, the name of this reference is based upon the name of
 	 * the method being annotated. If the method name begins with {@code set} or
-	 * {@code add}, that is removed and the first character is folded to lower
-	 * case.
+	 * {@code add}, that is removed.
 	 * 
 	 * @see "The name attribute of the reference element of a Component Description."
 	 */
