@@ -18,8 +18,8 @@
  * Service Component Annotations Package Version 1.0.
  * 
  * <p>
- * This package is not used at runtime. It is used by tools to generate
- * Component Descriptions from the annotations made by programmers.
+ * This package is not used at runtime. Annotated classes are processed by
+ * tools to generate Component Descriptions which are used at runtime.
  * 
  * @version $Id$
  */
