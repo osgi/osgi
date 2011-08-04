@@ -15,8 +15,13 @@
  */
 package org.osgi.test.cases.framework.junit.version;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import junit.framework.TestCase;
 
+import org.osgi.framework.Filter;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 
@@ -866,6 +871,224 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", range.includes(version3));
 		assertTrue("not included", range.includes(version4));
 		assertTrue("not included", range.includes(Version.emptyVersion));
+
+	}
+
+	public void testFilterString() throws Exception {
+		Version version11 = new Version(2, 3, 4);
+		Version version12 = new Version(2, 3, 4, null, false);
+		Version version21 = new Version(5, 6, 7);
+		Version version22 = new Version(5, 6, 7, null, false);
+		Version version3 = new Version(3, 4, 5);
+		Version version4 = new Version(Integer.MAX_VALUE, Integer.MAX_VALUE,
+				Integer.MAX_VALUE);
+		VersionRange range;
+
+		range = new VersionRange('[', version11, version22, ']');
+		assertTrue("not included", includesByFilter(range, version11));
+		assertFalse("included", includesByFilter(range, version12));
+		assertFalse("included", includesByFilter(range, version21));
+		assertTrue("not included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertFalse("included", includesByFilter(range, version4));
+
+		range = new VersionRange('[', version11, version22, ')');
+		assertTrue("not included", includesByFilter(range, version11));
+		assertFalse("included", includesByFilter(range, version12));
+		assertFalse("included", includesByFilter(range, version21));
+		assertFalse("included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertFalse("included", includesByFilter(range, version4));
+
+		range = new VersionRange('(', version11, version22, ']');
+		assertFalse("included", includesByFilter(range, version11));
+		assertFalse("included", includesByFilter(range, version12));
+		assertFalse("included", includesByFilter(range, version21));
+		assertTrue("not included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertFalse("included", includesByFilter(range, version4));
+
+		range = new VersionRange('(', version11, version22, ')');
+		assertFalse("included", includesByFilter(range, version11));
+		assertFalse("included", includesByFilter(range, version12));
+		assertFalse("included", includesByFilter(range, version21));
+		assertFalse("included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertFalse("included", includesByFilter(range, version4));
+
+		range = new VersionRange("[2.3.4,5.6.7)");
+		assertTrue("not included", includesByFilter(range, version11));
+		assertTrue("not included", includesByFilter(range, version12));
+		assertFalse("included", includesByFilter(range, version21));
+		assertFalse("included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertFalse("included", includesByFilter(range, version4));
+
+		range = new VersionRange("[2.3.4,5.6.7]");
+		assertTrue("not included", includesByFilter(range, version11));
+		assertTrue("not included", includesByFilter(range, version12));
+		assertTrue("not included", includesByFilter(range, version21));
+		assertTrue("not included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertFalse("included", includesByFilter(range, version4));
+
+		range = new VersionRange("(2.3.4,5.6.7]");
+		assertFalse("included", includesByFilter(range, version11));
+		assertFalse("included", includesByFilter(range, version12));
+		assertTrue("not included", includesByFilter(range, version21));
+		assertTrue("not included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertFalse("included", includesByFilter(range, version4));
+
+		range = new VersionRange("(2.3.4,5.6.7)");
+		assertFalse("included", includesByFilter(range, version11));
+		assertFalse("included", includesByFilter(range, version12));
+		assertFalse("included", includesByFilter(range, version21));
+		assertFalse("included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertFalse("included", includesByFilter(range, version4));
+
+		range = new VersionRange("[2.3.4.,5.6.7.)");
+		assertTrue("not included", includesByFilter(range, version11));
+		assertFalse("included", includesByFilter(range, version12));
+		assertFalse("included", includesByFilter(range, version21));
+		assertTrue("not included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertFalse("included", includesByFilter(range, version4));
+
+		range = new VersionRange("(2.3.4-,5.6.7-]");
+		assertTrue("not included", includesByFilter(range, version11));
+		assertFalse("included", includesByFilter(range, version12));
+		assertFalse("included", includesByFilter(range, version21));
+		assertTrue("not included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertFalse("included", includesByFilter(range, version4));
+
+		range = new VersionRange('[', version11, null, ')');
+		assertTrue("not included", includesByFilter(range, version11));
+		assertFalse("included", includesByFilter(range, version12));
+		assertTrue("not included", includesByFilter(range, version21));
+		assertTrue("not included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertTrue("not included", includesByFilter(range, version4));
+
+		range = new VersionRange('(', version12, null, ')');
+		assertTrue("not included", includesByFilter(range, version11));
+		assertFalse("included", includesByFilter(range, version12));
+		assertTrue("not included", includesByFilter(range, version21));
+		assertTrue("not included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertTrue("not included", includesByFilter(range, version4));
+
+		range = new VersionRange('[', version12, null, ')');
+		assertTrue("not included", includesByFilter(range, version11));
+		assertTrue("not included", includesByFilter(range, version12));
+		assertTrue("not included", includesByFilter(range, version21));
+		assertTrue("not included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertTrue("not included", includesByFilter(range, version4));
+
+		range = new VersionRange("2.3.4");
+		assertTrue("not included", includesByFilter(range, version11));
+		assertFalse("included", includesByFilter(range, version12));
+		assertTrue("not included", includesByFilter(range, version21));
+		assertTrue("not included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertTrue("not included", includesByFilter(range, version4));
+
+		range = new VersionRange('[', Version.emptyVersion, null, ')');
+		assertTrue("not included", includesByFilter(range, version11));
+		assertTrue("not included", includesByFilter(range, version12));
+		assertTrue("not included", includesByFilter(range, version21));
+		assertTrue("not included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertTrue("not included", includesByFilter(range, version4));
+		assertTrue("not included",
+				includesByFilter(range, Version.emptyVersion));
+
+	}
+
+	private boolean includesByFilter(VersionRange range, Version version)
+			throws Exception {
+		String attributeName = getName();
+		String filterString = range.toFilterString(attributeName);
+		// System.out.println(range + " => " + filterString);
+		Filter filter = FrameworkUtil.createFilter(filterString);
+		Map<String, Version> map = new HashMap<String, Version>();
+		map.put(attributeName, version);
+		return filter.matches(map);
+	}
+
+	public void testFilterStringBadArguments() {
+		VersionRange range;
+
+		range = new VersionRange('[', Version.emptyVersion,
+				Version.emptyVersion, ']');
+
+		// Bad characters '=', '>', '<', '~', '(' or ')'
+		try {
+			range.toFilterString(null);
+			fail("filter string created with illegal arguments");
+		}
+		catch (RuntimeException ex) {
+			// This is an expected exception and may be ignored
+		}
+
+		try {
+			range.toFilterString("");
+			fail("filter string created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+
+		try {
+			range.toFilterString("b~d");
+			fail("filter string created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+
+		try {
+			range.toFilterString("ba)");
+			fail("filter string created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+
+		try {
+			range.toFilterString("(ad");
+			fail("filter string created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+
+		try {
+			range.toFilterString("b=d");
+			fail("filter string created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+
+		try {
+			range.toFilterString("<ad");
+			fail("filter string created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+
+		try {
+			range.toFilterString("ba>");
+			fail("filter string created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
 
 	}
 }

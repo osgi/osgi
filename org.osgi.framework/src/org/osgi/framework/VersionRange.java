@@ -344,4 +344,67 @@ public class VersionRange {
 				&& (rightClosed == other.rightClosed)
 				&& left.equals(other.left) && right.equals(other.right);
 	}
+
+	/**
+	 * Return a filter string for this version range using the specified
+	 * attribute name.
+	 * 
+	 * @param attributeName The attribute name to use in the returned filter
+	 *        string.
+	 * @return A filter string for this version range using the specified
+	 *         attribute name.
+	 * @throws IllegalArgumentException If the specified attribute name is not a
+	 *         valid attribute name.
+	 */
+	public String toFilterString(String attributeName) {
+		if (attributeName.length() == 0) {
+			throw new IllegalArgumentException("invalid attributeName: "
+					+ attributeName);
+		}
+		for (char ch : attributeName.toCharArray()) {
+			if ((ch == '=') || (ch == '>') || (ch == '<') || (ch == '~')
+					|| (ch == '(') || (ch == ')')) {
+				throw new IllegalArgumentException("invalid attributeName: "
+						+ attributeName);
+			}
+		}
+
+		StringBuffer result = new StringBuffer(128);
+		if (right != null) {
+			result.append("(&");
+		}
+		if (leftClosed) {
+			result.append('(');
+			result.append(attributeName);
+			result.append(">=");
+			left.appendTo(result);
+			result.append(')');
+		}
+		else {
+			result.append("(!(");
+			result.append(attributeName);
+			result.append("<=");
+			left.appendTo(result);
+			result.append("))");
+		}
+		if (right != null) {
+			if (rightClosed) {
+				result.append('(');
+				result.append(attributeName);
+				result.append("<=");
+				right.appendTo(result);
+				result.append(')');
+			}
+			else {
+				result.append("(!(");
+				result.append(attributeName);
+				result.append(">=");
+				right.appendTo(result);
+				result.append("))");
+			}
+			result.append(')');
+		}
+
+		return result.toString();
+	}
 }
