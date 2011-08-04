@@ -28,7 +28,7 @@ public class VersionTests extends TestCase {
 	 * 
 	 * @spec Version.<init>(int,int,int)
 	 */
-	public void testVersionConstructors() {
+	public void testConstructors() {
 		/**
 		 * Test the Version constructor with legal parameters
 		 * 
@@ -67,7 +67,7 @@ public class VersionTests extends TestCase {
 
 	}
 
-	public void testBadVersionConstructors() {
+	public void testConstructorsBadArguments() {
 		/**
 		 * Test the Version constructor with illegal parameters
 		 * 
@@ -150,7 +150,7 @@ public class VersionTests extends TestCase {
 
 	}
 
-	public void testVersionEquals() {
+	public void testEquals() {
 		Version version1;
 		Version version2;
 
@@ -299,7 +299,7 @@ public class VersionTests extends TestCase {
 	 * 
 	 * @spec Version.hashCode();
 	 */
-	public void testVersionHashCode() throws Exception {
+	public void testHashCode() throws Exception {
 		Version version1;
 		Version version2;
 
@@ -325,7 +325,7 @@ public class VersionTests extends TestCase {
 				version1.hashCode() == version2.hashCode());
 	}
 
-	public void testVersionGetMajor() {
+	public void testGetMajor() {
 		Version version;
 
 		version = new Version(1, 2, 3);
@@ -341,7 +341,7 @@ public class VersionTests extends TestCase {
 				1, version.getMajor());
 	}
 
-	public void testVersionGetMinor() {
+	public void testGetMinor() {
 		Version version;
 
 		version = new Version(1, 2, 3);
@@ -357,7 +357,7 @@ public class VersionTests extends TestCase {
 				2, version.getMinor());
 	}
 
-	public void testVersionGetMicro() {
+	public void testGetMicro() {
 		Version version;
 
 		version = new Version(1, 2, 3);
@@ -391,7 +391,7 @@ public class VersionTests extends TestCase {
 	 * 
 	 * @spec Version.getQualifier()
 	 */
-	public void testVersionGetQualifier() throws Exception {
+	public void testGetQualifier() throws Exception {
 		Version version;
 
 		version = new Version(1, 1, 1, "a");
@@ -444,7 +444,7 @@ public class VersionTests extends TestCase {
 	 * 
 	 * @spec Version.getQualifier()
 	 */
-	public void testVersionIsReleaseVersion() throws Exception {
+	public void testIsReleaseVersion() throws Exception {
 		Version version;
 
 		version = new Version(1, 1, 1, "a");
@@ -515,7 +515,7 @@ public class VersionTests extends TestCase {
 
 	}
 
-	public void testVersionCompareTo() {
+	public void testCompareTo() {
 		/**
 		 * Test the method compareTo() with first version number less than
 		 * second version number
@@ -655,7 +655,7 @@ public class VersionTests extends TestCase {
 		}
 	}
 
-	public void testVersionConstantsValues() {
+	public void testConstantsValues() {
 		assertEquals("emptyVersion not equal to 0.0.0", new Version(0, 0, 0),
 				Version.emptyVersion);
 		assertEquals("emptyVersion has different hashCode than 0.0.0",
@@ -669,7 +669,7 @@ public class VersionTests extends TestCase {
 				Version.emptyVersion);
 	}
 
-	public void testVersionToString() {
+	public void testToString() {
 		Version version;
 
 		version = new Version(1, 2, 3);

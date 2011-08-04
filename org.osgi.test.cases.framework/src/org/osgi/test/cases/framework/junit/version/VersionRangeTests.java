@@ -24,7 +24,7 @@ import org.osgi.framework.VersionRange;
  * Tests for the VersionRange class.
  */
 public class VersionRangeTests extends TestCase {
-	public void testVersionRangeConstructors() {
+	public void testConstructors() {
 		Version version1 = new Version(1, 2, 3);
 		Version version2 = new Version(2, 0, 0);
 		new VersionRange('[', version1, version2, ')');
@@ -47,7 +47,7 @@ public class VersionRangeTests extends TestCase {
 		new VersionRange(" 1.2.3 ");
 	}
 
-	public void testBadVersionRangeConstructors() {
+	public void testConstructorsBadArguments() {
 		Version version1 = new Version(1, 2, 3);
 		Version version2 = new Version(2, 0, 0);
 		try {
@@ -235,7 +235,7 @@ public class VersionRangeTests extends TestCase {
 
 	}
 
-	public void testVersionRangeEquals() {
+	public void testEquals() {
 		Version version1 = new Version(1, 2, 3);
 		Version version2 = new Version(2, 4, 6);
 		VersionRange range1;
@@ -306,7 +306,7 @@ public class VersionRangeTests extends TestCase {
 
 	}
 
-	public void testVersionRangeHashCode() throws Exception {
+	public void testHashCode() throws Exception {
 		Version version1 = new Version(1, 2, 3);
 		Version version2 = new Version(2, 4, 6);
 		VersionRange range1;
@@ -350,7 +350,7 @@ public class VersionRangeTests extends TestCase {
 
 	}
 
-	public void testVersionRangeGetLeftType() {
+	public void testGetLeftType() {
 		Version version11 = new Version(2, 3, 4);
 		Version version21 = new Version(5, 6, 7);
 		VersionRange range;
@@ -393,7 +393,7 @@ public class VersionRangeTests extends TestCase {
 
 	}
 
-	public void testVersionRangeGetLeft() {
+	public void testGetLeft() {
 		Version version11 = new Version(2, 3, 4);
 		Version version21 = new Version(5, 6, 7);
 		Version version12 = new Version(2, 3, 4, null, false);
@@ -476,7 +476,7 @@ public class VersionRangeTests extends TestCase {
 		assertEquals("Wrong version", version12, range.getLeft());
 	}
 
-	public void testVersionRangeGetRight() {
+	public void testGetRight() {
 		Version version11 = new Version(2, 3, 4);
 		Version version21 = new Version(5, 6, 7);
 		Version version12 = new Version(2, 3, 4, null, false);
@@ -559,7 +559,7 @@ public class VersionRangeTests extends TestCase {
 		assertEquals("Wrong version", null, range.getRight());
 	}
 
-	public void testVersionRangeGetRightType() throws Exception {
+	public void testGetRightType() throws Exception {
 		Version version11 = new Version(2, 3, 4);
 		Version version21 = new Version(5, 6, 7);
 		VersionRange range;
@@ -606,7 +606,7 @@ public class VersionRangeTests extends TestCase {
 
 	}
 
-	public void testVersionRangeIsEmpty() {
+	public void testIsEmpty() {
 		Version version1 = new Version(1, 0, 0);
 		Version version2 = new Version(2, 0, 0);
 		VersionRange range;
@@ -633,7 +633,7 @@ public class VersionRangeTests extends TestCase {
 		assertFalse("range is not empty", range.isEmpty());
 	}
 
-	public void testVersionRangeToString() {
+	public void testToString() {
 		Version version11 = new Version(2, 3, 4);
 		Version version21 = new Version(5, 6, 7);
 		Version version12 = new Version(2, 3, 4, null, false);
@@ -736,7 +736,7 @@ public class VersionRangeTests extends TestCase {
 		assertEquals("Wrong toString result", "2.3.4-", range.toString());
 	}
 
-	public void testVersionRangeIncludes() {
+	public void testIncludes() {
 		Version version11 = new Version(2, 3, 4);
 		Version version12 = new Version(2, 3, 4, null, false);
 		Version version21 = new Version(5, 6, 7);
