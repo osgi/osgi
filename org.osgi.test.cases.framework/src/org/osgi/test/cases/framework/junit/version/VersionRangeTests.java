@@ -872,6 +872,13 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", range.includes(version4));
 		assertTrue("not included", range.includes(Version.emptyVersion));
 
+		try {
+			range.includes(null);
+			fail("filter string created with illegal arguments");
+		}
+		catch (RuntimeException ex) {
+			// This is an expected exception and may be ignored
+		}
 	}
 
 	public void testFilterString() throws Exception {
