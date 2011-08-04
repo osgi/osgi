@@ -247,6 +247,12 @@ public class VersionRange {
 		return isEmpty0();
 	}
 
+	/**
+	 * Internal isEmpty behavior.
+	 * 
+	 * @return {@code true} if this version range is empty; {@code false}
+	 *         otherwise.
+	 */
 	private boolean isEmpty0() {
 		if (right == null) { // infinity
 			return false;
@@ -262,7 +268,7 @@ public class VersionRange {
 	 * Returns the string representation of this version range.
 	 * 
 	 * <p>
-	 * The format of the version range string will be version string if the
+	 * The format of the version range string will be a version string if the
 	 * right end point is infinity ({@code null}) or an interval string.
 	 * 
 	 * @return The string representation of this version range.
@@ -279,15 +285,9 @@ public class VersionRange {
 		StringBuffer result = new StringBuffer(leftVersion.length()
 				+ rightVerion.length() + 5);
 		result.append(leftClosed ? LEFT_CLOSED : LEFT_OPEN);
-		result.append(leftVersion);
-		if (left.isReleaseVersion() && (left.getQualifier().length() == 0)) {
-			result.append('.');
-		}
+		left.appendTo(result);
 		result.append(ENDPOINT_DELIMITER);
-		result.append(rightVerion);
-		if (right.isReleaseVersion() && (right.getQualifier().length() == 0)) {
-			result.append('.');
-		}
+		right.appendTo(result);
 		result.append(rightClosed ? RIGHT_CLOSED : RIGHT_OPEN);
 		return versionRangeString = result.toString();
 	}

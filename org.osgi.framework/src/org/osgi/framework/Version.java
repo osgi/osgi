@@ -366,6 +366,15 @@ public class Version implements Comparable<Version> {
 	 * @return The string representation of this version identifier.
 	 */
 	public String toString() {
+		return toString0();
+	}
+
+	/**
+	 * Internal toString behavior
+	 * 
+	 * @return The string representation of this version identifier.
+	 */
+	private String toString0() {
 		if (versionString != null) {
 			return versionString;
 		}
@@ -387,6 +396,20 @@ public class Version implements Comparable<Version> {
 			result.append(qualifier);
 		}
 		return versionString = result.toString();
+	}
+
+	/**
+	 * Package private method to append the version string to the specified
+	 * string buffer. The version string includes a trailing dot for empty
+	 * release qualifiers.
+	 * 
+	 * @param buf The string buffer to receive the version string.
+	 */
+	void appendTo(StringBuffer buf) {
+		buf.append(toString0());
+		if (release && (qualifier.length() == 0)) {
+			buf.append(DOT_SEPARATOR);
+		}
 	}
 
 	/**
