@@ -192,7 +192,8 @@ public class VersionRange {
 	/**
 	 * Returns the right endpoint of this version range.
 	 * 
-	 * @return The right endpoint.
+	 * @return The right endpoint. May be {@code null} which indicates the right
+	 *         endpoint is infinity.
 	 */
 	public Version getRight() {
 		return right;
