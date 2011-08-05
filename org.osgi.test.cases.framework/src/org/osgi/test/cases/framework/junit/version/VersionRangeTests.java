@@ -1098,4 +1098,123 @@ public class VersionRangeTests extends TestCase {
 		}
 
 	}
+
+	public void testIntersection() {
+		Version version11 = new Version(2, 3, 4);
+		Version version12 = new Version(2, 3, 4, null, false);
+		Version version21 = new Version(5, 6, 7);
+		Version version22 = new Version(5, 6, 7, null, false);
+		Version version3 = new Version(3, 4, 5);
+		VersionRange range1;
+		VersionRange range2;
+		VersionRange range3;
+		VersionRange expected;
+
+		range1 = new VersionRange('[', version11, version22, ']');
+		expected = range1;
+		assertEquals("wrong intersection", expected,
+				range1.intersection((VersionRange[]) null));
+
+		range1 = new VersionRange('[', version11, version22, ']');
+		expected = range1;
+		assertEquals("wrong intersection", expected, range1.intersection());
+
+		range1 = new VersionRange('[', version11, version22, ']');
+		range2 = range1;
+		expected = range1;
+		assertEquals("wrong intersection", expected,
+				range1.intersection(range2));
+		assertEquals("wrong intersection", expected,
+				range2.intersection(range1));
+
+		range1 = new VersionRange('[', version11, version22, ')');
+		range2 = range1;
+		expected = range1;
+		assertEquals("wrong intersection", expected,
+				range1.intersection(range2));
+		assertEquals("wrong intersection", expected,
+				range2.intersection(range1));
+
+		range1 = new VersionRange('(', version11, version22, ']');
+		range2 = range1;
+		expected = range1;
+		assertEquals("wrong intersection", expected,
+				range1.intersection(range2));
+		assertEquals("wrong intersection", expected,
+				range2.intersection(range1));
+
+		range1 = new VersionRange('(', version11, version22, ')');
+		range2 = range1;
+		expected = range1;
+		assertEquals("wrong intersection", expected,
+				range1.intersection(range2));
+		assertEquals("wrong intersection", expected,
+				range2.intersection(range1));
+
+		range1 = new VersionRange('[', version11, version22, ']');
+		range2 = new VersionRange('[', version11, version22, ')');
+		expected = range2;
+		assertEquals("wrong intersection", expected,
+				range1.intersection(range2));
+		assertEquals("wrong intersection", expected,
+				range2.intersection(range1));
+
+		range1 = new VersionRange('[', version11, version22, ']');
+		range2 = new VersionRange('(', version11, version22, ']');
+		expected = range2;
+		assertEquals("wrong intersection", expected,
+				range1.intersection(range2));
+		assertEquals("wrong intersection", expected,
+				range2.intersection(range1));
+
+		range1 = new VersionRange('[', version11, version22, ']');
+		range2 = new VersionRange('(', version11, version22, ')');
+		expected = range2;
+		assertEquals("wrong intersection", expected,
+				range1.intersection(range2));
+		assertEquals("wrong intersection", expected,
+				range2.intersection(range1));
+
+		range1 = new VersionRange('[', version11, version22, ']');
+		range2 = new VersionRange('[', version12, version21, ']');
+		expected = range1;
+		assertEquals("wrong intersection", expected,
+				range1.intersection(range2));
+		assertEquals("wrong intersection", expected,
+				range2.intersection(range1));
+
+		range1 = new VersionRange('[', version12, version22, ']');
+		range2 = new VersionRange('[', version11, version21, ']');
+		expected = new VersionRange('[', version11, version22, ']');
+		assertEquals("wrong intersection", expected,
+				range1.intersection(range2));
+		assertEquals("wrong intersection", expected,
+				range2.intersection(range1));
+
+		range1 = new VersionRange('[', version12, version22, ')');
+		range2 = new VersionRange('[', version11, null, ')');
+		expected = new VersionRange('[', version11, version22, ')');
+		assertEquals("wrong intersection", expected,
+				range1.intersection(range2));
+		assertEquals("wrong intersection", expected,
+				range2.intersection(range1));
+
+		range1 = new VersionRange('[', version22, version12, ')');
+		range2 = new VersionRange('[', version11, null, ')');
+		assertTrue("range is not empty", range1.isEmpty());
+		assertTrue("range is not empty", range1.intersection(range2).isEmpty());
+		assertTrue("range is not empty", range2.intersection(range1).isEmpty());
+
+		range1 = new VersionRange('[', version12, version22, ')');
+		range2 = new VersionRange('[', version11, version21, ')');
+		range3 = new VersionRange('(', version12, version3, ']');
+		expected = new VersionRange('[', version11, version3, ']');
+		assertEquals("wrong intersection", expected,
+				range1.intersection(range2, range3));
+		assertEquals("wrong intersection", expected,
+				range2.intersection(range1, range3));
+		assertEquals("wrong intersection", expected,
+				range3.intersection(range1, range2));
+
+	}
 }

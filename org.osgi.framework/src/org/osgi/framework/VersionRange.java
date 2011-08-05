@@ -237,6 +237,62 @@ public class VersionRange {
 	}
 
 	/**
+	 * Returns the intersection of this version range with the specified version
+	 * ranges.
+	 * 
+	 * @param ranges The version ranges to intersect with this version range.
+	 * @return A version range representing the intersection of this version
+	 *         range and the specified version ranges. If no version ranges are
+	 *         specified, then this version range is returned.
+	 */
+	public VersionRange intersection(VersionRange... ranges) {
+		if ((ranges == null) || (ranges.length == 0)) {
+			return this;
+		}
+
+		// prime with data from this version range
+		boolean closedLeft = leftClosed;
+		boolean closedRight = rightClosed;
+		Version endpointLeft = left;
+		Version endpointRight = right;
+
+		for (VersionRange range : ranges) {
+			int comparison = endpointLeft.compareTo(range.left);
+			if (comparison == 0) {
+				closedLeft = closedLeft && range.leftClosed;
+			}
+			else {
+				if (comparison < 0) { // move endpointLeft to the right
+					endpointLeft = range.left;
+					closedLeft = range.leftClosed;
+				}
+			}
+			if (range.right != null) {
+				if (endpointRight == null) {
+					endpointRight = range.right;
+					closedRight = range.rightClosed;
+				}
+				else {
+					comparison = endpointRight.compareTo(range.right);
+					if (comparison == 0) {
+						closedRight = closedRight && range.rightClosed;
+					}
+					else {
+						if (comparison > 0) { // move endpointRight to the left
+							endpointRight = range.right;
+							closedRight = range.rightClosed;
+						}
+					}
+				}
+			}
+		}
+
+		return new VersionRange(closedLeft ? LEFT_CLOSED : LEFT_OPEN,
+				endpointLeft, endpointRight, closedRight ? RIGHT_CLOSED
+						: RIGHT_OPEN);
+	}
+
+	/**
 	 * Returns whether this version range is empty. A version range is empty if
 	 * the set of versions defined by the interval is empty.
 	 * 
