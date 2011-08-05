@@ -38,18 +38,26 @@ import java.util.StringTokenizer;
 public class VersionRange {
 	/**
 	 * The left endpoint is open and is excluded from the range.
+	 * <p>
+	 * The value of {@code LEFT_OPEN} is {@code '('}.
 	 */
 	public static final char	LEFT_OPEN				= '(';
 	/**
 	 * The left endpoint is closed and is included in the range.
+	 * <p>
+	 * The value of {@code LEFT_CLOSED} is {@code '['}.
 	 */
 	public static final char	LEFT_CLOSED				= '[';
 	/**
 	 * The right endpoint is open and is excluded from the range.
+	 * <p>
+	 * The value of {@code RIGHT_OPEN} is {@code ')'}.
 	 */
 	public static final char	RIGHT_OPEN				= ')';
 	/**
 	 * The right endpoint is closed and is included in the range.
+	 * <p>
+	 * The value of {@code RIGHT_CLOSED} is {@code ']'}.
 	 */
 	public static final char	RIGHT_CLOSED			= ']';
 
@@ -78,7 +86,7 @@ public class VersionRange {
 	 *        .
 	 * @param leftEndpoint Left endpoint of range. Must not be {@code null}.
 	 * @param rightEndpoint Right endpoint of range. May be {@code null} to
-	 *        indicate the right endpoint is infinity.
+	 *        indicate the right endpoint is <i>Infinity</i>.
 	 * @param rightType Must be either {@link #RIGHT_CLOSED} or
 	 *        {@link #RIGHT_OPEN}.
 	 * @throws IllegalArgumentException If the arguments are invalid.
@@ -111,14 +119,14 @@ public class VersionRange {
 	 * <pre>
 	 * range ::= interval | atleast 
 	 * interval ::= ( '[' | '(' ) left ',' right ( ']' | ')' ) 
-	 * atleast ::= version 
 	 * left ::= version 
 	 * right ::= version
+	 * atleast ::= version
 	 * </pre>
 	 * 
 	 * @param range String representation of the version range. The versions in
-	 *        the range must be no whitespace but other whitespace in the range
-	 *        string is ignored.
+	 *        the range must contain no whitespace. Other whitespace in the
+	 *        range string is ignored.
 	 * @throws IllegalArgumentException If {@code range} is improperly
 	 *         formatted.
 	 */
@@ -144,8 +152,8 @@ public class VersionRange {
 				}
 				leftClosed = true;
 				rightClosed = false;
-				this.left = Version.parseVersion(token);
-				this.right = null;
+				left = Version.parseVersion(token);
+				right = null;
 				return;
 			}
 			String version = st.nextToken(ENDPOINT_DELIMITER);
@@ -193,7 +201,7 @@ public class VersionRange {
 	 * Returns the right endpoint of this version range.
 	 * 
 	 * @return The right endpoint. May be {@code null} which indicates the right
-	 *         endpoint is infinity.
+	 *         endpoint is <i>Infinity</i>.
 	 */
 	public Version getRight() {
 		return right;
@@ -325,7 +333,7 @@ public class VersionRange {
 	 * 
 	 * <p>
 	 * The format of the version range string will be a version string if the
-	 * right end point is infinity ({@code null}) or an interval string.
+	 * right end point is <i>Infinity</i> ({@code null}) or an interval string.
 	 * 
 	 * @return The string representation of this version range.
 	 */
@@ -402,7 +410,7 @@ public class VersionRange {
 	}
 
 	/**
-	 * Return a filter string for this version range using the specified
+	 * Returns the filter string for this version range using the specified
 	 * attribute name.
 	 * 
 	 * @param attributeName The attribute name to use in the returned filter
@@ -411,6 +419,8 @@ public class VersionRange {
 	 *         attribute name.
 	 * @throws IllegalArgumentException If the specified attribute name is not a
 	 *         valid attribute name.
+	 * 
+	 * @see "Core Specification, Filters, for a description of the filter string syntax."
 	 */
 	public String toFilterString(String attributeName) {
 		if (attributeName.length() == 0) {
