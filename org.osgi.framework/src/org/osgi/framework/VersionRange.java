@@ -65,6 +65,7 @@ public class VersionRange {
 	private final Version		left;
 	private final Version		right;
 	private final boolean		rightClosed;
+	private final boolean		empty;
 
 	private transient String	versionRangeString /* default to null */;
 	private transient int		hash /* default to 0 */;
@@ -108,6 +109,7 @@ public class VersionRange {
 		rightClosed = rightType == RIGHT_CLOSED;
 		left = leftEndpoint;
 		right = rightEndpoint;
+		empty = isEmpty0();
 	}
 
 	/**
@@ -154,6 +156,7 @@ public class VersionRange {
 				rightClosed = false;
 				left = Version.parseVersion(token);
 				right = null;
+				empty = false;
 				return;
 			}
 			String version = st.nextToken(ENDPOINT_DELIMITER);
@@ -186,6 +189,7 @@ public class VersionRange {
 		rightClosed = closedRight;
 		left = endpointLeft;
 		right = endpointRight;
+		empty = isEmpty0();
 	}
 
 	/**
@@ -308,7 +312,7 @@ public class VersionRange {
 	 *         otherwise.
 	 */
 	public boolean isEmpty() {
-		return isEmpty0();
+		return empty;
 	}
 
 	/**
@@ -365,7 +369,7 @@ public class VersionRange {
 		if (hash != 0) {
 			return hash;
 		}
-		if (isEmpty0()) {
+		if (empty) {
 			return hash = 31;
 		}
 		int h = 31 + (leftClosed ? 7 : 5);
@@ -397,7 +401,7 @@ public class VersionRange {
 			return false;
 		}
 		VersionRange other = (VersionRange) object;
-		if (isEmpty0() && other.isEmpty0()) {
+		if (empty && other.empty) {
 			return true;
 		}
 		if (right == null) {
