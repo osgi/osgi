@@ -239,6 +239,9 @@ public class VersionRange {
 	 *         range; {@code false} otherwise.
 	 */
 	public boolean includes(Version version) {
+		if (empty) {
+			return false;
+		}
 		if (left.compareTo(version) >= (leftClosed ? 1 : 0)) {
 			return false;
 		}
@@ -261,7 +264,6 @@ public class VersionRange {
 		if ((ranges == null) || (ranges.length == 0)) {
 			return this;
 		}
-
 		// prime with data from this version range
 		boolean closedLeft = leftClosed;
 		boolean closedRight = rightClosed;
