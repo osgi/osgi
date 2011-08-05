@@ -1216,5 +1216,12 @@ public class VersionRangeTests extends TestCase {
 		assertEquals("wrong intersection", expected,
 				range3.intersection(range1, range2));
 
+		range1 = new VersionRange('[', version12, version11, ']');
+		range2 = new VersionRange('[', version22, version21, ']');
+		assertFalse("range is empty", range1.isEmpty());
+		assertFalse("range is empty", range2.isEmpty());
+		assertTrue("range is not empty", range1.intersection(range2).isEmpty());
+		assertTrue("range is not empty", range2.intersection(range1).isEmpty());
+
 	}
 }
