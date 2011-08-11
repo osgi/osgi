@@ -10,6 +10,9 @@ import org.osgi.dmt.ddf.*;
  * The Bundle node type. This is the management node for a Bundle. It provides
  * access to the life cycle control of the bundle as well to its metadata,
  * resources, and wiring.
+ * 
+ * 
+ * @remark set that anything that is not yet defined for a new bundle must throw an error
  */
 public interface Bundle {
 	/**
@@ -20,13 +23,16 @@ public interface Bundle {
 	/**
 	 * The URL to download the archive from for this bundle.
 	 * 
-	 * By default this is the last URL used to download the JAR if it is known, otherwise it is the empty string.
-	 * In an atomic session this URL can be replaced to a new URL, which will
-	 * trigger an update of this bundle during commit. If this value is set it
-	 * must be a valid JAR from which a URL can be downloaded unless it is the system bundle.
+	 * By default this is the last URL used to download the JAR if it is known,
+	 * otherwise it is the empty string. In an atomic session this URL can be
+	 * replaced to a new URL, which will trigger an update of this bundle during
+	 * commit. If this value is set it must be a valid JAR from which a URL can
+	 * be downloaded unless it is the system bundle. If the value is not set, ot
+	 * must be reset, it must be an empty string.
 	 * 
 	 * <p>
-	 * If the URL of Bundle 0 (The system bundle) is replaced to any value then the framework will restart.
+	 * If the URL of Bundle 0 (The system bundle) is replaced to any value then
+	 * the framework will restart.
 	 * 
 	 * @return The last used URL or empty string if not known
 	 */
@@ -40,8 +46,9 @@ public interface Bundle {
 	 * the framework is started and its {@link #StartLevel()} is met.
 	 * <p>
 	 * If the AutoStart node is set to {@code true} and the bundle is not
-	 * started then it will automatically be started. If the AutoStart node is
-	 * set to {@code false} then the bundle must not be automatically stopped.
+	 * started then it will automatically be started if the start level permits
+	 * it. If the AutoStart node is set to {@code false} then the bundle must
+	 * not be stopped immediately.
 	 * <p>
 	 * If the AutoStart value of the System Bundle is changed then the operation
 	 * must be ignored.
@@ -155,7 +162,7 @@ public interface Bundle {
 	 */
 	String STOPPING = "STOPPING";
 	/**
-	 * The Bundle {@code STOPPING} state.
+	 * The Bundle {@code UNINSTALLED} state.
 	 */
 	String UNINSTALLED = "UNINSTALLED";
 
@@ -171,6 +178,8 @@ public interface Bundle {
 	 * <li>{@link #UNINSTALLED} - When the Bundle is not yet installed</li>
 	 * </ul>
 	 * 
+	 * 
+	 * @remark explain better the uninstalled state
 	 * @return The current State
 	 */
 	@Scope(A)
@@ -191,13 +200,17 @@ public interface Bundle {
 	 * new higher start level can activate a bundle.</li>
 	 * <li>{@link #UNINSTALLED} - Uninstall the bundle</li>
 	 * </ul> {@link #STARTING} and {@link #STOPPING} are invalid values for this
-	 * node.
+	 * node. Any other values are an error.
 	 * <p>
+	 *
 	 * If the {@link #AutoStart()} node is @{code true} then the bundle must be
 	 * persistently started, otherwise it must be transiently started. If the
 	 * {@link #StartLevel()} is not met then the commit must fail if
 	 * {@link #AutoStart()} is {@code false} as a Bundle cannot be transiently
 	 * started when the start level is not met.
+	 * 
+	 * <p>
+	 * The default value of this node is the current state.
 	 * 
 	 * @return The RequestedState node.
 	 */
@@ -245,7 +258,10 @@ public interface Bundle {
 	 * has no attributes and a single {@code filter} directive that matches the
 	 * service id property.
 	 * 
-	 * @remark add description in spec about the services namespace (if wires make it ...)
+	 * @remark add description in spec about the services namespace (if wires
+	 *         make it ...)
+	 *         
+	 *            Framework/System Bundle/Wires/osgi.wiring.package/34/NameSpace == osgi.wiring.package
 	 * 
 	 * @return The Wires node.
 	 */
@@ -283,8 +299,8 @@ public interface Bundle {
 
 	/**
 	 * An Entry describes an entry in the Bundle, it combines the Path of an
-	 * entry with the content. Only entries that have content will be returned, that is,
-	 * empty directories are not returned.
+	 * entry with the content. Only entries that have content will be returned,
+	 * that is, empty directories are not returned.
 	 */
 	public interface Entry {
 		/**
@@ -292,7 +308,8 @@ public interface Bundle {
 		 * 
 		 * @return The path to the entry in the archive.
 		 * 
-		 * @remark Evgeni thinks the fact that we return full path names generates too much data
+		 * @remark Evgeni thinks the fact that we return full path names
+		 *         generates too much data
 		 */
 		String Path();
 
@@ -302,12 +319,13 @@ public interface Bundle {
 		 * @return The binary content.
 		 */
 		byte[] Content();
-		
+
 		/**
 		 * Instance Id to allow addressing by Instance Id.
+		 * 
 		 * @return The InstanceId
 		 */
-		
+
 		int InstanceId();
 	}
 
@@ -331,12 +349,13 @@ public interface Bundle {
 		 */
 		@Scope(A)
 		LIST<String> CertificateChain();
-		
+
 		/**
 		 * Instance Id to allow addressing by Instance Id.
+		 * 
 		 * @return The InstanceId
 		 */
-		
+
 		int InstanceId();
 	}
 

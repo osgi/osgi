@@ -17,22 +17,20 @@ public interface $ {
 	 * scheme to avoid conflicts or an atomic sessions must be used to claim
 	 * exclusiveness.
 	 * <p>
-	 * Filter nodes are persistent, it is the responsibility of the management
-	 * system to clean them up.
+	 * Filter nodes are not persistent, they must be removed after a suitable timeout that should at least be 1 hour.
 	 * 
 	 * @remark Or should the nodes be emptied when the framework restarts? Seems
 	 *         safer
 	 * 
 	 * @return The Filters Node
 	 */
-	Opt<MutableMAP<String, Filter>> Filters();
+	Opt<MutableMAP<String, Filter>> Filter();
 
 	/**
 	 * The Framework node used to manage the local framework.
 	 * 
 	 * @return Framework node
 	 */
-	@NodeType("org.osgi/1.0/Framework")
 	Framework Framework();
 
 	/**
@@ -44,6 +42,6 @@ public interface $ {
 	 * @return The value for the optional Log node
 	 */
 
-	Opt<Log> Log();
+	Opt<MutableMAP<String, Log>> Log();
 
 }

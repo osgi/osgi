@@ -35,6 +35,8 @@ import org.osgi.dmt.ddf.*;
  * actions should be undone and the system state must be restored to the
  * snapshot.
  * 
+ * 
+ * @remark be very explicit about what happens after commit
  */
 
 public interface Framework {
@@ -65,8 +67,7 @@ public interface Framework {
 	 * used when the location can run into the limits of node names.
 	 * <p>
 	 * The Bundles node will be automatically filled from the installed bundles,
-	 * representing the actual state. Deleting a child node must uninstall that
-	 * bundle during commit.
+	 * representing the actual state. 
 	 * <p>
 	 * New bundles can be installed by creating a new node with a given
 	 * location. At commit, this bundle will be installed from their

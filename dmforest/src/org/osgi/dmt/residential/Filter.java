@@ -1,7 +1,7 @@
 package org.osgi.dmt.residential;
 
 import static org.osgi.dmt.ddf.Scope.SCOPE.*;
-import info.dmtree.*;
+import org.osgi.service.dmt.*;
 
 import java.net.*;
 
@@ -21,29 +21,30 @@ import org.osgi.dmt.ddf.*;
  * <p>
  * 
  * The Filter node can specify the {@link #Target()} node. The {@link #Target()}
- * is a URI relative to the <em>current session</em>, potentially with wild
- * cards. If a {@link #Target()} selects nodes that descend the $/Filters node
- * then those nodes must be ignored in the search.
+ * is an absolute URI, potentially with wild cards. If a {@link #Target()}
+ * selects nodes that descend the $/Filters node then those nodes must be
+ * ignored in the search.
  * 
  * <p>
  * There are two different wild cards:
  * <ul>
- * <li><em>Asterisk </em> — (\u002A '*') Specifies a wild card for one interior
+ * <li><em>Asterisk </em> — (\\u002A '*') Specifies a wild card for one interior
  * node name only. That is {@code A/*} matches {@code A/B}, {@code A/C}, but not
  * {@code A/X/Y}. The asterisk wild card can be used anywhere in the URI like
  * <code>A/*</code><code>/C</code>. Partial matches are not supported, that is a
  * URI like <code>A/xyz*</code> is not supported.</li>
- * <li><em>Minus sign ('-')</em> — Specifies a wild for any number of descendant
- * nodes. This is {@code A/-} matches {@code A/B}, {@code A/C}, but also
- * {@code A/X/Y/Z}. Partial matches are not supported, that is a URI like
+ * <li><em>Minus sign ('-' \\u002A)</em> — Specifies a wild for any number of
+ * descendant nodes. This is {@code A/-} matches {@code A/B}, {@code A/C}, but
+ * also {@code A/X/Y/Z}. Partial matches are not supported, that is a URI like
  * {@code A/xyz-} is not supported. The - wild card must not be used at the end
  * of the URI</li>
  * <p>
  * The {@link #Target()} node selects a set of nodes {@code N} that can be
  * viewed as a list of URIs or as a virtual sub-tree. The {@link #Result()} node
- * is the virtual sub-tree and the {@link #ResultUriList()} is a LIST of URIs.
- * The actual selection of the nodes must be postponed until either of these
- * nodes (or or one of their sub-nodes) is accessed for the first time.
+ * is the virtual sub-tree (beginning at the session base) and the
+ * {@link #ResultUriList()} is a LIST of session relative URIs. The actual
+ * selection of the nodes must be postponed until either of these nodes (or one
+ * of their sub-nodes) is accessed for the first time.
  * <p>
  * The {@link #Result()} node is on the same level as the parent of the Filters
  * node. However, its descendants occur only in this tree when selected by the
@@ -115,7 +116,6 @@ import org.osgi.dmt.ddf.*;
  * ignored.
  * <p>
  * 
- * 
  * Each of these leaf nodes and lists can be used in the LDAP Filter as a
  * key/value pair. The comparison must be done with the type used in the Dmt
  * Data object of the compared node. That is, if the Dmt Admin data is a number,
@@ -143,14 +143,9 @@ import org.osgi.dmt.ddf.*;
  * the {@link #Result} or {@link #ResultUriList} child nodes; this maintains any
  * security scope that is in effect.
  * 
- * @remark Modified this to use standard filter comparison rules. How does substring matching work?
+ * @remark Modified this to use standard filter comparison rules. How does
+ *         substring matching work?
  * 
- * @remark list nodes are not clearly defined. I assumed they're treated as a
- *         string but they could also be treated as multi valued properties.
- *         Maybe it is better to change it to this? OK.
- * @remark - Evgeni: It's very problematic, because PA doesn't know about that.
- *         So, it will open the session to the Filters MO root. That means the
- *         search is not possible.
  */
 
 public interface Filter {
@@ -162,7 +157,8 @@ public interface Filter {
 	 * number of consecutive node names. The default value of this node is the
 	 * empty string, which indicates that no nodes must be selected. Changing
 	 * this value must clear the result. If the {@link #Result()} or
-	 * {@link #ResultUriList()} is read to get {@code N} then a new search should be executed.
+	 * {@link #ResultUriList()} is read to get {@code N} then a new search
+	 * should be executed.
 	 * <p>
 	 * A URI must always end in '/' to indicate that the target can only select
 	 * interior nodes.
@@ -194,18 +190,15 @@ public interface Filter {
 	Mutable<String> Filter();
 
 	/**
-	 * The Result tree is a virtual tree of all nodes that were selected by the
+	 * The Result tree is a virtual read-only tree of all nodes that were selected by the
 	 * {@link #Target()} and matched the Filter, that is, all nodes in set
 	 * {@code N}. The {@link #Target()} contains a relative URI (with optional
 	 * wildcards) from the parent of the Filters node. The {@link #Result()}
 	 * node acts as the parent of this same relative path for each node in
 	 * {@code N}.
 	 * <p>
-	 * The {@link #Result()} node is initially childless, when the first time it
-	 * is accessed (or its sibling {@link #ResultUriList()}) it will be
-	 * populated. Any change to {@link #Target()} or Filter will clear this list
-	 * and will then be re-populated once the {@link #Result()} or
-	 * {@link #ResultUriList()} is accessed.
+	 * The {@link #Result()} node is a snapshot taken the first time it is
+	 * accessed after a change in the {@link #Filter()} and/or the {@link #Target()}.
 	 * 
 	 * @return The root of the result tree
 	 */
@@ -215,12 +208,15 @@ public interface Filter {
 	/**
 	 * A list of URIs of nodes in the Device Management Tree from the node
 	 * selected by the {@link #Target()} that match the Filter node. All URIs
-	 * are relative to the parent node of the (the Filters) node.
+	 * are relative to current session.
+	 * 
+	 * The {@link #Result()} node is a snapshot taken the first time it is
+	 * accessed after a change in the {@link #Filter()} and/or the {@link #Target()}.
 	 * 
 	 * @return List of URIs
 	 */
 	@Scope(A)
-	@NodeType(DmtConstants.DDF_LIST_SUBTREE)
+	@NodeType(DmtConstants.DDF_LIST)
 	LIST<URI> ResultUriList();
 
 	/**

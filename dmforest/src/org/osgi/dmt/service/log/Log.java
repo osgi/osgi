@@ -86,7 +86,7 @@ public interface Log {
 	 * The maximum number of log records to be included in the search result.
 	 * The default value for this node is zero, which means no limit.
 	 * 
-	 * @return The Mutable for the MaxRecords node.
+	 * @return The MaxRecords node.
 	 */
 	@Scope(A)
 	Mutable<Integer> MaxRecords();

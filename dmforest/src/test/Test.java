@@ -64,7 +64,7 @@ public class Test {
 				child.cardinality = "0..*";
 				children.add(child);
 				dmtType = "LIST";
-				if ( child.isPrimitive()) {
+				if (child.isPrimitive()) {
 					mime = "org.osgi/1.0/LIST";
 				}
 				return;
@@ -74,8 +74,7 @@ public class Test {
 				if (instanceOf(type, MutableMAP.class)) {
 					add = true;
 					delete = true;
-				}else
-				if (instanceOf(type, MutableMAP.class)) {
+				} else if (instanceOf(type, AddableMAP.class)) {
 					add = true;
 				}
 
@@ -87,14 +86,14 @@ public class Test {
 						.toLowerCase();
 				type = p.getActualTypeArguments()[1];
 				get = true;
-				XNode child = new XNode(this, "["+ keyTypeName + "]", type);
+				XNode child = new XNode(this, "[" + keyTypeName + "]", type);
 				child.scope = SCOPE.A;
 				child.add = add;
 				child.delete = delete;
 				child.cardinality = "0..*";
 				children.add(child);
 				dmtType = "MAP ";
-				if ( child.isPrimitive()) {
+				if (child.isPrimitive()) {
 					mime = "org.osgi/1.0/MAP";
 				}
 				return;
@@ -121,7 +120,7 @@ public class Test {
 				try {
 					c = (Class<?>) type;
 				} catch (Exception e) {
-					System.out.println( type);
+					System.out.println(type);
 					return;
 				}
 			}
