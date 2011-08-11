@@ -103,6 +103,7 @@
 				</xsl:call-template>
 
 
+				<xsl:apply-templates name="field" />
 				<table class="Classes" title="Node Type Description for {@name}">
 					<tr>
 						<th width="1">
@@ -135,15 +136,25 @@
 
 
 	<xsl:template match="method">
+	
 		<!-- ddf name='name' indent='' add='false' get='true' replace='false' delete='false' 
 			longTypeName='java.lang.String' shortTypeName='string' cardinality='1' scope='P' 
 			interior='false' mime=''/ -->
 		<xsl:variable name="description" select="description" />
 		<xsl:variable name="count" select="count(ddf)" />
+		<xsl:variable name="anchor">
+			<h6 class='anchor'>
+				<a name="{@qn}" />
+				<a index="{parent::node()/@name}:{@name}" />
+				<a index="{@name}" />
+				<xsl:value-of select="@name" />
+			</h6>
+		</xsl:variable>
 
 		<xsl:for-each select="ddf">
 			<tr>
 				<td>
+				    <xsl:copy-of select="$anchor"/>
 					<p>
 						<code>
 							<xsl:value-of select="@indent" />
@@ -284,7 +295,7 @@
 		</h6>
 		<h3 class="Heading3">
 			<xsl:value-of
-				select="concat(@modifiers,' ',@typeName,@dimension,' ', @name)" />
+				select="@name" />
 			<xsl:if test="@constantValue">
 				=
 				<xsl:value-of select="@constantValue" />
