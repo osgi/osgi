@@ -16,6 +16,8 @@
 
 package org.osgi.service.tr069todmt;
 
+import org.osgi.service.dmt.*;
+
 /**
  * This exception is defined in terms of applicable TR-069 fault codes. The
  * TR-069 specification defines the fault codes that can occur in different
@@ -26,6 +28,8 @@ public class TR069Exception extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	final String message;
 	final int faultCode;
+	final DmtException dmtException;
+	
 
 	/**
 	 * 9000 Method not supported
@@ -90,7 +94,7 @@ public class TR069Exception extends RuntimeException {
 	 * @param message The message
 	 */
 	public TR069Exception(String message) {
-		this(message, 9002);
+		this(message, 9002, null);
 	}
 
 	/**
@@ -98,10 +102,36 @@ public class TR069Exception extends RuntimeException {
 	 * 
 	 * @param message The message
 	 * @param faultCode The TR-069 defined fault code
+	 * @param e 
 	 */
-	public TR069Exception(String message, int faultCode) {
+	public TR069Exception(String message, int faultCode, DmtException e) {
 		this.message = message;
 		this.faultCode = faultCode;
+		this.dmtException = e;
+	}
+
+	/**
+	 * Create a TR069Exception from a Dmt Exception.
+	 * 
+	 * @param e The Dmt Exception
+	 */
+	public TR069Exception(DmtException e) {
+		this.message = e.getMessage();
+		this.faultCode = getFaultCode(e);
+		this.dmtException = e;
+	}
+
+	private int getFaultCode(DmtException e) {
+		switch(e.getCode()) {
+		case DmtException.FEATURE_NOT_SUPPORTED: 
+		case DmtException.COMMAND_NOT_ALLOWED: 
+			return REQUEST_DENIED;
+			
+		case DmtException.INVALID_URI:
+			
+		default:
+				return INTERNAL_ERROR; // Internal error
+		}
 	}
 
 	/**
@@ -111,5 +141,12 @@ public class TR069Exception extends RuntimeException {
 	 */
 	public int getFaultCode() {
 		return faultCode;
+	}
+	
+	/**
+	 * @return the corresponding Dmt Exception
+	 */
+	public DmtException getDmtException() {
+		return dmtException;
 	}
 }

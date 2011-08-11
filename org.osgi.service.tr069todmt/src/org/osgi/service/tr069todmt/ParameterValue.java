@@ -29,7 +29,8 @@ public interface ParameterValue {
 	String getName();
 
 	/**
-	 * This is the value the parameter.
+	 * This is the value the parameter. The returned value must be in canonical
+	 * representation defined by TR069.
 	 * 
 	 * @return The value of the parameter
 	 */
@@ -40,9 +41,9 @@ public interface ParameterValue {
 	 * {@link TR069Adapter#TR069_UNSIGNED_INT},{@link TR069Adapter#TR069_LONG},
 	 * {@link TR069Adapter#TR069_UNSIGNED_LONG},
 	 * {@link TR069Adapter#TR069_STRING}, {@link TR069Adapter#TR069_DATETIME},
-	 * {@link TR069Adapter#TR069_BASE64}, {@link TR069Adapter#TR069_HEXBINARY}. This
-	 * method is not part of the {@code ParameterValueStruct} but is necessary to encode
-	 * the type in the XML.
+	 * {@link TR069Adapter#TR069_BASE64}, {@link TR069Adapter#TR069_HEXBINARY}.
+	 * This method is not part of the {@code ParameterValueStruct} but is
+	 * necessary to encode the type in the XML.
 	 * 
 	 * @return The parameter type
 	 */

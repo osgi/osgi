@@ -1,10 +1,9 @@
 package org.osgi.service.tr069todmt;
 
-import info.dmtree.*;
 
 /**
  * Maps to the TR-069 {@code ParameterInfoStruct} that is returned from the
- * {@link TR069Adapter#getParameterNames(DmtSession,String)} method.
+ * {@link TR069Adapter#getParameterNames(String)} method.
  */
 public interface ParameterInfo {
 
@@ -23,5 +22,12 @@ public interface ParameterInfo {
 	 * @return If this code is writeable
 	 */
 	boolean isWriteable();
+	
+	/**
+	 * Returns true of this is a leaf node and false if this is an interior node.
+	 * 
+	 * @return {@code true} for a leaf node, {@code false} otherwise
+	 */
+	boolean isLeaf();
 
 }

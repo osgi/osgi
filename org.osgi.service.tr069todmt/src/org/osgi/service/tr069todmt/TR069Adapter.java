@@ -16,7 +16,7 @@
 
 package org.osgi.service.tr069todmt;
 
-import info.dmtree.*;
+import java.util.*;
 
 /**
  * A TR-069 Adapter is an assistant to a TR-069 Protocol Adapter developer. The
@@ -24,20 +24,23 @@ import info.dmtree.*;
  * to a Device Management Tree managed by Dmt Admin. The adapter manages the
  * conversions from the TR-069 Object Names to a node in the DMT and vice versa.
  * <p>
- * The Adapter uses a Dmt Session from the caller, the adapter is therefore
- * state less. The adapter does not implement the exact RPCs but only provides
- * the basic functions to set, get, add, delete, and get the (parameter) names
- * of an object. A TR-069 developer must still parse the XML, handle the
- * relative and absolute path issues, open a Dmt Session etc.
+ * The Adapter uses a Dmt Session from the caller, which is given when the
+ * adapter is created. The adapter does not implement the exact RPCs but only
+ * provides the basic functions to set, get, add, delete, and get the
+ * (parameter) names of an object. A TR-069 developer must still parse the XML,
+ * handle the relative and absolute path issues, open a Dmt Session etc.
  * <p>
- * Each call receives a Dmt Session. The adapter assumes that each parameter or
- * object name is relative to this root.
+ * The adapter assumes that each parameter or object name is relative to this
+ * root.
  * <p>
  * This adapter must convert the TR-069 Names to Dmt Admin URIs. This conversion
  * must take into account the {@code LIST} and {@code MAP} concepts defined in
  * the specifications. These concepts define the use of an {@code InstanceId}
  * node that must be used by the adapter to provide a TR-069 table view on the
  * {@code LIST} and {@code MAP} nodes.
+ * 
+ * @remark Move sessions into the object (create a factory)
+ * @remark Use absolute paths instead of relative paths
  */
 public interface TR069Adapter {
 
@@ -153,13 +156,21 @@ public interface TR069Adapter {
 	 * SetParameterValues RPC. This method must convert the parameter Name to a
 	 * URI and replace the DMT node at that place. It must follow the type
 	 * conversions as described in the specification.
+	 * <p>
+	 * The adapter must attempt to create any missing nodes along the way, creating
+	 * parent nodes on demand.
+	 * <p>
+	 * If the value of a an Alias node is set then the parent node must be
+	 * renamed. For example, if the value of {@code M/X/Alias} is set to
+	 * {@code Y} then the node will have a URI of {@code M/Y/Alias}. The value
+	 * must not be escaped as the adapter will escape it.
 	 * 
-	 * @param session
-	 *            The Dmt Session to use
 	 * @param fullParameterName
 	 *            A parameter name, must not be partial (end in dot).
 	 * @param value
-	 *            A trimmed string value that has the given type
+	 *            A trimmed string value that has the given type. The value can
+	 *            be in either canonical or lexical representation by TR069.
+	 * 
 	 * @param type
 	 *            The type of the parameter ({@link #TR069_INT},
 	 *            {@link #TR069_UNSIGNED_INT},{@link #TR069_LONG},
@@ -168,10 +179,9 @@ public interface TR069Adapter {
 	 *            {@link #TR069_HEXBINARY})
 	 * @throws TR069Exception
 	 *             if the value cannot be set
-	 * @throws DmtException 
 	 */
-	void setParameterValue(DmtSession session, String fullParameterName,
-			String value, int type) throws TR069Exception, DmtException;
+	void setParameterValue(String fullParameterName, String value, int type)
+			throws TR069Exception;
 
 	/**
 	 * Getting a Parameter. This method should be used to implement
@@ -182,95 +192,110 @@ public interface TR069Adapter {
 	 * If the ACS requests the values for partial names then it is the
 	 * responsibility of the caller to expand the node with GetParameterNames
 	 * and then call this method for each parameter.
+	 * <p>
 	 * 
-	 * @param session
-	 *            The Dmt Session to use
+	 * <p>
+	 * If the value of a the {@code Alias} node is requested then the name of
+	 * the parent node must be returned. For example, if the URI is
+	 * {@code M/X/Alias} then the returned value must be {@code X}.
+	 * 
 	 * @param fullParameterName
 	 *            A parameter name, must not be partial (end in dot).
 	 * @return The name, value, and type triad of the requested parameter as
 	 *         defined by the TR-069 {@code ParameterValueStruct}.
 	 * @throws TR069Exception
-	 * @throws DmtException 
 	 */
-	ParameterValue getParameterValue(DmtSession session,
-			String fullParameterName) throws TR069Exception, DmtException;
+	ParameterValue getParameterValue(String fullParameterName)
+			throws TR069Exception;
 
 	/**
 	 * Getting the names of the parameters for the node addressed by path. This
 	 * method should be used to implement the GetParameterNames RPC. It must
 	 * return the children of the addressed node.
 	 * <p>
+	 * If the child nodes have an InstanceId node then the returned names must
+	 * be the set of InstanceId values.
+	 * <p>
+	 * If the parent node is a MAP, then the returned names must include the
+	 * synthetic name {@code Alias}, this node can be used to get the real name
+	 * of the node as well as rename the node.
+	 * <p>
 	 * Partial paths and the nextLevel boolean must be handled by the caller.
 	 * 
-	 * @param session
-	 *            The Dmt Session to use
 	 * @param fullParameterName
-	 *            A parameter name, must not be partial (end in dot).
-	 * @return The name of the parameter and the write status as defined by the
+	 *            A parameter name, must not be partial and it must end with full stop.
+	 * @return The full name of the parameter and the write status as defined by the
 	 *         TR-069 {@code ParameterInfoStruct}.
 	 * @throws TR069Exception
-	 * @throws DmtException 
 	 */
-	ParameterInfo getParameterNames(DmtSession session, String fullParameterName)
-			throws TR069Exception, DmtException;
+	Collection getParameterNames(String fullParameterName)
+			throws TR069Exception;
 
 	/**
 	 * Add a new node to the Dmt Admin as defined by the AddObject RPC.
 	 * 
-	 * @param session
-	 *            The Dmt Session to use
+	 * The objectName must map to either a LIST or MAP node as no other nodes
+	 * can accept new children. The adapter must calculate a unique id for the
+	 * new node name that follows the TR-069 names for instance ids. If the new
+	 * node has an InstanceId node, then this name must be returned, otherwise
+	 * the calculated name must be returned.
+	 * 
 	 * @param objectName
 	 *            The path name of the collection of objects for which a new
 	 *            instance is to be created. The path name MUST end with a “.”
-	 *            (dot) after the last node in the hierarchical name of the
-	 *            object.
-	 * @return The name of the new node
+	 *            (full stop) after the last node in the hierarchical name of
+	 *            the object.
+	 * @return The name of the new node, either the new nodes InstanceId node's
+	 *         value or the node name.
 	 * @throws TR069Exception
-	 * @throws DmtException 
 	 */
-	String addObject(DmtSession session, String objectName)
-			throws TR069Exception, DmtException;
+	String addObject(String objectName) throws TR069Exception;
 
 	/**
-	 * @param session
-	 *            The Dmt Session to use
+	 * Delete an object.
+	 * 
 	 * @param objectName
-	 *            The path name of the collection of objects for which a new
-	 *            instance is to be created. The path name MUST end with a “.”
-	 *            (dot) after the last node in the hierarchical name of the
-	 *            object.
+	 *            The path name of the object to be deleted. The path name MUST
+	 *            end with a “.” (dot) after the last node in the hierarchical
+	 *            name of the object.
 	 * @throws TR069Exception
-	 * @throws DmtException 
 	 */
-	void deleteObject(DmtSession session, String objectName)
-			throws TR069Exception, DmtException;
+	void deleteObject(String objectName) throws TR069Exception;
 
 	/**
 	 * Convert a relative Dmt Admin URI to a TR-069 Name (Parameter or Object)
 	 * that can be used to address the node.
 	 * 
-	 * @param session
-	 *            The Dmt Session to use
+	 * ### RELATIVE TO THE SESSION ROOT
+	 * 
 	 * @param uri
 	 *            A relative URI from the start of the session
 	 * @return A relative path
 	 * @throws TR069Exception
-	 * @throws DmtException 
+	 * 
+	 * @remark Needed without session?
 	 */
-	String toName(DmtSession session, String uri) throws TR069Exception, DmtException;
+	String toName(String uri) throws TR069Exception;
 
 	/**
 	 * Convert an absolute TR-069 complete Name (Object or Name) to a relative
-	 * Dmt Admin URI.
+	 * Dmt Admin URI. The conversion must traverse the tree and can only convert
+	 * a name that has nodes present in the DMT. The given name must be escaped
+	 * using the TR-069 escaping and will be unescaped. The returned URI is
+	 * properly escaped for Dmt Admin. The conversion must include the use of
+	 * the {@code InstanceId} nodes to address MAPs and LISTs.
 	 * 
-	 * @param session
-	 *            The Dmt Session to use
 	 * @param name
 	 *            A TR-069 Object or Parameter Name
+	 * @param create If true, create missing nodes when they reside under a MAP
 	 * @return A relative Dmt Admin URI
 	 * @throws TR069Exception
-	 * @throws DmtException 
 	 */
-	String toURI(DmtSession session, String name) throws TR069Exception, DmtException;
+	String toURI(String name, boolean create) throws TR069Exception;
+
+	/**
+	 * Close this adapter. This will not close the corresponding session.
+	 */
+	void close();
 
 }
