@@ -33,11 +33,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.startlevel.StartLevel;
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtSession;
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtIllegalStateException;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtIllegalStateException;
 /**
  * 
  * @author Koya MORI, Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation

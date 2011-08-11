@@ -39,13 +39,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtConstants;
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtIllegalStateException;
-import info.dmtree.DmtSession;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtConstants;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtIllegalStateException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -237,19 +237,19 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 		for (int i = 0; i < ids.length; i++) {
 			String uri = PLUGIN_ROOT_URI + "/" + ids[i];
 			assertEquals("The 'HOSTS' node must be of type DDF_LIST_SUBTREE",
-					DmtConstants.DDF_LIST_SUBTREE,
+					DmtConstants.DDF_LIST,
 					session.getNodeType( uri + "/" + HOSTS));
 			
 			assertEquals("The 'FRAGMENTS' node must be of type DDF_LIST_SUBTREE",
-					DmtConstants.DDF_LIST_SUBTREE,
+					DmtConstants.DDF_LIST,
 					session.getNodeType( uri + "/" + FRAGMENTS));
 
 			assertEquals("The 'REQUIRED' node must be of type DDF_LIST_SUBTREE",
-					DmtConstants.DDF_LIST_SUBTREE,
+					DmtConstants.DDF_LIST,
 					session.getNodeType( uri + "/" + REQUIRED));
 
 			assertEquals("The 'REQUIRING' node must be of type DDF_LIST_SUBTREE",
-					DmtConstants.DDF_LIST_SUBTREE,
+					DmtConstants.DDF_LIST,
 					session.getNodeType( uri + "/" + REQUIRING));
 			
 			String uriTrusted = uri + "/" + TRUSTEDSIGNERCERTIFICATION; // this node must exist
@@ -258,7 +258,7 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 			for (int j = 0; j < trustedSigners.length; j++) {
 				log( "*** testing trustedSigner: " + j);
 				assertEquals("The 'CertificateChain' node must be of type DDF_LIST_SUBTREE",
-						DmtConstants.DDF_LIST_SUBTREE,
+						DmtConstants.DDF_LIST,
 						session.getNodeType( uriTrusted + "/" + trustedSigners[j] + "/" + CERTIFICATECHAIN));
 			}
 
@@ -267,7 +267,7 @@ public class BundleStatePluginTestCase extends DefaultTestBundleControl {
 			for (int j = 0; j < nonTrustedSigners.length; j++) { 					
 				log( "*** testing nonTrustedSigner: " + j);
 				assertEquals("The 'CertificateChain' node must be of type DDF_LIST_SUBTREE",
-						DmtConstants.DDF_LIST_SUBTREE,
+						DmtConstants.DDF_LIST,
 						session.getNodeType( uriNonTrusted + "/" + nonTrustedSigners[j] + "/" + CERTIFICATECHAIN));
 			}
 		}

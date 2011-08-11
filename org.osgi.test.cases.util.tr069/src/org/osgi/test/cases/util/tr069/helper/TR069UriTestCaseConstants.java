@@ -16,8 +16,8 @@
 
 package org.osgi.test.cases.util.tr069.helper;
 
-import info.dmtree.DmtData;
-import info.dmtree.Uri;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.Uri;
 
 /**
  * A container class for the test constants.

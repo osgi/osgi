@@ -1,5 +1,5 @@
 residential.specs = \
-	 info.dmtree, \
+	 org.osgi.service.dmt, \
 	 org.osgi.service.cm, \
 	 org.osgi.service.component, \
 	 org.osgi.service.device, \
@@ -11,10 +11,10 @@ residential.specs = \
 	 org.osgi.service.upnp, \
 	 org.osgi.service.useradmin, \
 	 org.osgi.util.tracker, \
-	 org.osgi.util.tr069, \
+	 org.osgi.service.tr069todmt, \
 	 org.osgi.util.xml
 
-residential.packages = ${replace;$(residential.specs);^.*$;$0.*}, org.osgi.dmt.ddf,org.osgi.dmt.residential, org.osgi.dmt.service.log
+residential.packages = ${replace;$(residential.specs);^.*$;$0.*}, org.osgi.dmt.ddf,org.osgi.dmt.residential, org.osgi.dmt.service.log, org.osgi.service.tr069todmt
 
 residential.legal = ${project.workspace}/osgi.companion/legal
 

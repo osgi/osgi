@@ -1,5 +1,6 @@
+#	 info.dmtree, \
+
 mobile.specs = \
-	 info.dmtree, \
 	 org.osgi.application, \
 	 org.osgi.service.application, \
 	 org.osgi.service.cm, \

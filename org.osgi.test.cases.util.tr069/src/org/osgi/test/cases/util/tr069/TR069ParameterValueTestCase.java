@@ -18,8 +18,8 @@ package org.osgi.test.cases.util.tr069;
 
 import java.io.UnsupportedEncodingException;
 
-import info.dmtree.DmtData;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.MetaNode;
 
 import org.osgi.test.cases.util.tr069.helper.TestMetaNode;
 import org.osgi.test.cases.util.tr069.helper.TR069UriTestCaseConstants;

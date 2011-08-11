@@ -8,8 +8,8 @@ Private-Package						=  \
 -buildpath			= \
 	osgi.core;						version=4.2		, \
 	ee.foundation									, \
-	org.osgi.test.support;      version=project 	, \
-	info.dmtree;				version=project		, \
+	org.osgi.test.support;      	version=project 	, \
+	org.osgi.service.dmt;			version=project		, \
 	osgi.cmpn;						version=project		, \
 	${junit}
 

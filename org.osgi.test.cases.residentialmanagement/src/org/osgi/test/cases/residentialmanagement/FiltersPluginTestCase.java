@@ -29,10 +29,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Hashtable;
 
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
