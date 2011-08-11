@@ -17,7 +17,7 @@ Export-Package 					= ${p}.export,provide:=true,info.dmtree.*;-split-package:=fi
 Private-Package					= ${p}, ${p}.plugins,${p}.dispatcher
 
 -buildpath						= \
-    info.dmtree;				version=project, \
+    org.osgi.service.dmt;		version=project, \
 	ee.j2se;					version=1.5, \
 	osgi.core;					version=4.0.1, \
 	osgi.cmpn;					version=4.0.1

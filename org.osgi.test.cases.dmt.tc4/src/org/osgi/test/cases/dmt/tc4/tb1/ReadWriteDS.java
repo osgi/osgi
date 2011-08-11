@@ -1,9 +1,9 @@
 package org.osgi.test.cases.dmt.tc4.tb1;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.MetaNode;
-import info.dmtree.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
 
 import java.util.Date;
 

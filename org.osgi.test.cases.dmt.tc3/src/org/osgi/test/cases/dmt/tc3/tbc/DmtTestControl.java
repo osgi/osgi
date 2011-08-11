@@ -46,10 +46,10 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc;
 
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.Uri;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.Uri;
 
 import org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin.ConfigPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;

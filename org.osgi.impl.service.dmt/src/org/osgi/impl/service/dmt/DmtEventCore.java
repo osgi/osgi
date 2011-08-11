@@ -21,8 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import info.dmtree.Acl;
-import info.dmtree.DmtEvent;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtEvent;
 
 /*
  * Stores all parameters of a DMT event, together with the ACLs of the affected

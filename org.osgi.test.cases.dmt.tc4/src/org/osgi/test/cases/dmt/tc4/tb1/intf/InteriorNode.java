@@ -1,7 +1,7 @@
 package org.osgi.test.cases.dmt.tc4.tb1.intf;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
 
 public abstract class InteriorNode extends Node {
 	public boolean isLeaf() {

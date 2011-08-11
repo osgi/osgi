@@ -24,8 +24,8 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
-import info.dmtree.*;
-import info.dmtree.spi.TransactionalDataSession;
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;

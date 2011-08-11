@@ -49,11 +49,11 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc;
 
-import info.dmtree.Acl;
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.Uri;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.Uri;
 
 import java.security.AccessController;
 import java.security.MessageDigest;

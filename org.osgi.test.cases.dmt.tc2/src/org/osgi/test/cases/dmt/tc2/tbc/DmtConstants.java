@@ -37,12 +37,12 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc;
 
-import info.dmtree.DmtEvent;
-import info.dmtree.security.DmtPermission;
+import org.osgi.service.dmt.DmtEvent;
+import org.osgi.service.dmt.security.DmtPermission;
 
 public class DmtConstants {
 
-	public static final String OSGi_ROOT = System.getProperty("info.dmtree.osgi.root");
+	public static final String OSGi_ROOT = System.getProperty("org.osgi.service.dmt.osgi.root");
 
 	public static final String OSGi_LOG = OSGi_ROOT + "/Log";
 	
@@ -154,37 +154,37 @@ public class DmtConstants {
      */
     public static String getDmtExceptionCodeText(int code) {
         switch(code) {
-        case info.dmtree.DmtException.NODE_NOT_FOUND:           
+        case org.osgi.service.dmt.DmtException.NODE_NOT_FOUND:           
         	return "NODE_NOT_FOUND";
-        case info.dmtree.DmtException.COMMAND_NOT_ALLOWED:      
+        case org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED:      
         	return "COMMAND_NOT_ALLOWED";
-        case info.dmtree.DmtException.FEATURE_NOT_SUPPORTED:    
+        case org.osgi.service.dmt.DmtException.FEATURE_NOT_SUPPORTED:    
         	return "FEATURE_NOT_SUPPORTED";
-        case info.dmtree.DmtException.URI_TOO_LONG:             
+        case org.osgi.service.dmt.DmtException.URI_TOO_LONG:             
         	return "URI_TOO_LONG";
-        case info.dmtree.DmtException.NODE_ALREADY_EXISTS:      
+        case org.osgi.service.dmt.DmtException.NODE_ALREADY_EXISTS:      
         	return "NODE_ALREADY_EXISTS";
-        case info.dmtree.DmtException.PERMISSION_DENIED:        
+        case org.osgi.service.dmt.DmtException.PERMISSION_DENIED:        
         	return "PERMISSION_DENIED";
-        case info.dmtree.DmtException.COMMAND_FAILED:           
+        case org.osgi.service.dmt.DmtException.COMMAND_FAILED:           
         	return "COMMAND_FAILED";
-        case info.dmtree.DmtException.DATA_STORE_FAILURE:       
+        case org.osgi.service.dmt.DmtException.DATA_STORE_FAILURE:       
         	return "DATA_STORE_FAILURE";
-        case info.dmtree.DmtException.ROLLBACK_FAILED:          
+        case org.osgi.service.dmt.DmtException.ROLLBACK_FAILED:          
         	return "ROLLBACK_FAILED";
-        case info.dmtree.DmtException.REMOTE_ERROR:             
+        case org.osgi.service.dmt.DmtException.REMOTE_ERROR:             
         	return "REMOTE_ERROR";
-        case info.dmtree.DmtException.METADATA_MISMATCH:        
+        case org.osgi.service.dmt.DmtException.METADATA_MISMATCH:        
         	return "METADATA_MISMATCH";
-        case info.dmtree.DmtException.INVALID_URI:             
+        case org.osgi.service.dmt.DmtException.INVALID_URI:             
         	return "INVALID_URI";
-        case info.dmtree.DmtException.CONCURRENT_ACCESS:       
+        case org.osgi.service.dmt.DmtException.CONCURRENT_ACCESS:       
         	return "CONCURRENT_ACCESS";
-        case info.dmtree.DmtException.ALERT_NOT_ROUTED:         
+        case org.osgi.service.dmt.DmtException.ALERT_NOT_ROUTED:         
         	return "ALERT_NOT_ROUTED";
-        case info.dmtree.DmtException.TRANSACTION_ERROR:        
+        case org.osgi.service.dmt.DmtException.TRANSACTION_ERROR:        
         	return "TRANSACTION_ERROR";
-        case info.dmtree.DmtException.SESSION_CREATION_TIMEOUT: 
+        case org.osgi.service.dmt.DmtException.SESSION_CREATION_TIMEOUT: 
         	return "SESSION_CREATION_TIMEOUT";
         }
         return null;

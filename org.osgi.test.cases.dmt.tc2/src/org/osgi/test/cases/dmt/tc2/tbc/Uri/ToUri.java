@@ -36,7 +36,7 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc.Uri;
 
-import info.dmtree.Uri;
+import org.osgi.service.dmt.Uri;
 
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 

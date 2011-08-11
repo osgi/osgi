@@ -1,8 +1,8 @@
 package org.osgi.test.cases.dmt.tc4.tbc;
 
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;

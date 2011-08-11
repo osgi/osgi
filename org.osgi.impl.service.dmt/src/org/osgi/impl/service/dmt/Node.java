@@ -18,7 +18,7 @@
 
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.*;
+import org.osgi.service.dmt.*;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -37,7 +37,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtData;
 
-import info.dmtree.DmtData;
+import org.osgi.service.dmt.DmtData;
 
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
@@ -69,7 +69,7 @@ public class Equals extends DmtTestControl {
 											+ ") and value are equal",
 									baseData, DmtConstants.getDmtData(j));
 							//Obviously format null cannot have a different value 
-							if (i!=info.dmtree.DmtData.FORMAT_NULL) {
+							if (i!=org.osgi.service.dmt.DmtData.FORMAT_NULL) {
 							    DmtData variantDataDifferentValue = DmtConstants.getDmtData(j,true);
 								assertTrue(
 										"Asserts that two DmtData with the same format ("

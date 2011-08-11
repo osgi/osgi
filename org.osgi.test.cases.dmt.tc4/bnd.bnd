@@ -9,7 +9,7 @@ Include-Resource: tb1.jar=resources/DMTTest_Bundles-1.0.0.jar
 Test-Cases							= ${testcases}
 
 -buildpath							= \
-	info.dmtree;							version=project, \
+	org.osgi.service.dmt;					version=project, \
     org.osgi.test.support;                  version=project , \
 	osgi.core;								version=4.2	, \
 	osgi.cmpn;								version=4.2	, \

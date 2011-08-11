@@ -26,12 +26,12 @@ package org.osgi.impl.service.residentialmanagement.plugins;
 
 import org.osgi.framework.BundleContext;
 
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.spi.DataPlugin;
-import info.dmtree.spi.ReadWriteDataSession;
-import info.dmtree.spi.ReadableDataSession;
-import info.dmtree.spi.TransactionalDataSession;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.spi.ReadableDataSession;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 /**
  * 
  * @author Koya MORI NTT Corporation, Shigekuni KONDO

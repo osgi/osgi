@@ -17,9 +17,9 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc.LogPlugin;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtIllegalStateException;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtIllegalStateException;
+import org.osgi.service.dmt.MetaNode;
 
 import java.util.List;
 

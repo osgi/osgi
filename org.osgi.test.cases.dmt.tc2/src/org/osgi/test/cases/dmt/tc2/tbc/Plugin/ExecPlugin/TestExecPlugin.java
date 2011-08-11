@@ -36,8 +36,8 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin;
 
-import info.dmtree.*;
-import info.dmtree.spi.*;
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.spi.*;
 
 import java.util.Date;
 

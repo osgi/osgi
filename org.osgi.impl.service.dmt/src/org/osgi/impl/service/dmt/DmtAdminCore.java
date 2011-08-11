@@ -17,9 +17,9 @@
  */
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;

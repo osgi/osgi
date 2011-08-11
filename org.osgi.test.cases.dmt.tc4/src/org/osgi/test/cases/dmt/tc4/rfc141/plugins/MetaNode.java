@@ -1,8 +1,8 @@
 package org.osgi.test.cases.dmt.tc4.rfc141.plugins;
 
-import info.dmtree.DmtData;
+import org.osgi.service.dmt.DmtData;
 
-public class MetaNode implements info.dmtree.MetaNode {
+public class MetaNode implements org.osgi.service.dmt.MetaNode {
 
 	// according to bug-fix 1948, this extension-property must not be neccessary anymore
 //    private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 

@@ -1,9 +1,9 @@
 package org.osgi.test.cases.dmt.tc4.rfc141;
 
-import info.dmtree.DmtConstants;
-import info.dmtree.spi.DataPlugin;
-import info.dmtree.spi.ExecPlugin;
-import info.dmtree.spi.MountPlugin;
+import org.osgi.service.dmt.DmtConstants;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ExecPlugin;
+import org.osgi.service.dmt.spi.MountPlugin;
 
 import org.osgi.test.support.OSGiTestCase;
 
@@ -20,28 +20,28 @@ public class TestBug1731_StringConstants extends OSGiTestCase{
 	}
 	
 	/**
-	 * tests existence of specified constants for String literals in info.dmtree.spi.DataPlugin
+	 * tests existence of specified constants for String literals in org.osgi.service.dmt.spi.DataPlugin
 	 */
 	public void testDataPluginConstants() throws Exception {
 		assertConstant("dataRootURIs", "DATA_ROOT_URIS", DataPlugin.class );
 	}
 	
 	/**
-	 * tests existence of specified constants for String literals in info.dmtree.spi.ExecPlugin
+	 * tests existence of specified constants for String literals in org.osgi.service.dmt.spi.ExecPlugin
 	 */
 	public void testExecPluginConstants() throws Exception {
 		assertConstant( "execRootURIs", "EXEC_ROOT_URIS", ExecPlugin.class);
 	}
 	
 	/**
-	 * tests existence of specified constants for String literals in info.dmtree.spi.MountPlugin
+	 * tests existence of specified constants for String literals in org.osgi.service.dmt.spi.MountPlugin
 	 */
 	public void testMountPluginConstants() throws Exception {
 		assertConstant( "mountPoints", "MOUNT_POINTS", MountPlugin.class );
 	}
 
 	/**
-	 * tests existence of specified constants for String literals in info.dmtree.spi.DMTConstants
+	 * tests existence of specified constants for String literals in org.osgi.service.dmt.spi.DMTConstants
 	 */
 	public void testDMTConstants() throws Exception {
 		assertConstant( "org.osgi/1.0/ListSubtree", "DDF_LIST_SUBTREE", DmtConstants.class );

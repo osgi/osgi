@@ -1,8 +1,8 @@
 package org.osgi.test.cases.dmt.tc4.rfc141;
 
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtSession;
-import info.dmtree.spi.DataPlugin;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.spi.DataPlugin;
 
 import java.util.Dictionary;
 import java.util.Hashtable;

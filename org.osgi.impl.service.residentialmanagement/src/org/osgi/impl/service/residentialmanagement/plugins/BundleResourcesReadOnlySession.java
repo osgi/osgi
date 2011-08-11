@@ -35,10 +35,10 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.MetaNode;
-import info.dmtree.spi.ReadableDataSession;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.spi.ReadableDataSession;
 /**
  * 
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation

@@ -1,6 +1,6 @@
 package org.osgi.test.cases.dmt.tc4.tb1;
 
-import info.dmtree.spi.DataPlugin;
+import org.osgi.service.dmt.spi.DataPlugin;
 
 import java.util.Hashtable;
 

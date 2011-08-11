@@ -17,9 +17,9 @@
  */
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.Acl;
-import info.dmtree.DmtEvent;
-import info.dmtree.security.DmtPermission;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtEvent;
+import org.osgi.service.dmt.security.DmtPermission;
 
 import java.util.Iterator;
 import java.util.List;

@@ -36,7 +36,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtPermission;
 
-import info.dmtree.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPermission;
 
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
@@ -57,8 +57,8 @@ public class Equals extends DmtTestControl {
 			log("#testEquals001");
 			assertTrue(
 					"Asserting that two objects initialized with the same dmtUri and actions are equal", 
-					new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
-					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)));
+					new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
+					.equals(new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)));
 		} catch (Exception e) { 
 			failUnexpectedException(e);
 		}
@@ -74,8 +74,8 @@ public class Equals extends DmtTestControl {
 			log("#testEquals002");
 			assertTrue(
 					"Asserting that two objects initialized with the same dmtUri but different actions are different", 
-					!new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
-					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.DIFFERENT_ACTIONS)));
+					!new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
+					.equals(new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.DIFFERENT_ACTIONS)));
 		} catch (Exception e) { 
 			failUnexpectedException(e);
 		}
@@ -91,8 +91,8 @@ public class Equals extends DmtTestControl {
 			log("#testEquals003");
 			assertTrue(
 					"Asserting that two objects initialized with the same actions but different dmtUri are different", 
-					!new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
-					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_CONFIGURATION,DmtConstants.ACTIONS)));
+					!new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
+					.equals(new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_CONFIGURATION,DmtConstants.ACTIONS)));
 		} catch (Exception e) { 
 			failUnexpectedException(e);
 		}
@@ -110,8 +110,8 @@ public class Equals extends DmtTestControl {
 			String actionsDifferentOrder = DmtPermission.DELETE + "," +DmtPermission.EXEC+"," +DmtPermission.ADD;
 			assertTrue(
 					"Asserting that two objects initialized with the same dmtUri and actions are equal", 
-					new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,actions)
-					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,actionsDifferentOrder)));
+					new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,actions)
+					.equals(new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,actionsDifferentOrder)));
 		} catch (Exception e) { 
 			failUnexpectedException(e);
 		}
@@ -127,8 +127,8 @@ public class Equals extends DmtTestControl {
 			log("#testEquals005");
 			assertTrue(
 					"Asserts that the \"*\" action mask is considered equal to a mask containing all actions.", 
-					new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,"*")
-					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ALL_ACTIONS)));
+					new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,"*")
+					.equals(new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ALL_ACTIONS)));
 		} catch (Exception e) { 
 			failUnexpectedException(e);
 		}

@@ -38,10 +38,10 @@ package org.osgi.test.cases.dmt.tc2.tbc.Constraints;
 
 import java.lang.reflect.Modifier;
 
-import info.dmtree.Acl;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.security.DmtPrincipalPermission;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -87,7 +87,7 @@ public class AclConstraints {
 		try {
 			tbc.log("#testAclConstraints001");
 			
-            new info.dmtree.Acl("Add=test&Exec=test &Get=*");
+            new org.osgi.service.dmt.Acl("Add=test&Exec=test &Get=*");
 			
             tbc.failException("",IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -137,7 +137,7 @@ public class AclConstraints {
 			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			try {
-				session.setNodeAcl(".",new info.dmtree.Acl("Add=*&Get=*&Replace=*"));
+				session.setNodeAcl(".",new org.osgi.service.dmt.Acl("Add=*&Get=*&Replace=*"));
 			} catch (Exception e) {
 				tbc.failUnexpectedException(e);
 			} finally {
@@ -157,14 +157,14 @@ public class AclConstraints {
 			tbc.log("#testAclConstraints004");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			String expectedRootAcl = "Add=*&Exec=*&Replace=*";
-			session.setNodeAcl(".",new info.dmtree.Acl(expectedRootAcl));
+			session.setNodeAcl(".",new org.osgi.service.dmt.Acl(expectedRootAcl));
 			String rootAcl = session.getNodeAcl(".").toString();
 			tbc.assertEquals("Asserts that the root's ACL can be changed.",expectedRootAcl,rootAcl);
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
 			try {
-				session.setNodeAcl(".",new info.dmtree.Acl("Add=*&Get=*&Replace=*"));
+				session.setNodeAcl(".",new org.osgi.service.dmt.Acl("Add=*&Get=*&Replace=*"));
 			} catch (Exception e) {
 				tbc.failUnexpectedException(e);
 			} finally {
@@ -188,7 +188,7 @@ public class AclConstraints {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			session.setNodeAcl(TestExecPluginActivator.INTERIOR_NODE,
-					new info.dmtree.Acl("Replace=*"));
+					new org.osgi.service.dmt.Acl("Replace=*"));
 
 			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
 
@@ -217,7 +217,7 @@ public class AclConstraints {
 
 			String expectedRootAcl = "Add=*";
 			session.setNodeAcl(TestExecPluginActivator.INTERIOR_NODE,
-					new info.dmtree.Acl(expectedRootAcl));
+					new org.osgi.service.dmt.Acl(expectedRootAcl));
 
 			session.renameNode(TestExecPluginActivator.INTERIOR_NODE,TestExecPluginActivator.RENAMED_NODE_NAME);
 			TestExecPlugin.setAllUriIsExistent(true);
@@ -249,7 +249,7 @@ public class AclConstraints {
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.REPLACE );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.setNodeAcl(TestExecPluginActivator.LEAF_NODE,new info.dmtree.Acl("Get=*"));
+			session.setNodeAcl(TestExecPluginActivator.LEAF_NODE,new org.osgi.service.dmt.Acl("Get=*"));
 			
 			tbc.pass("If a principal has Replace access to a node, the principal is permitted to change the ACL of all its child nodes");
 			
@@ -276,7 +276,7 @@ public class AclConstraints {
 
             tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
             session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestExecPluginActivator.LEAF_NODE,DmtSession.LOCK_TYPE_EXCLUSIVE);
-            session.setNodeAcl(TestExecPluginActivator.LEAF_NODE,new info.dmtree.Acl("Get=*"));
+            session.setNodeAcl(TestExecPluginActivator.LEAF_NODE,new org.osgi.service.dmt.Acl("Get=*"));
 			tbc.failException("",DmtException.class);
 		} catch (DmtException e) {	
 			tbc.assertEquals("Asserts that Replace access on a leaf node does not allow changing the ACL property itself.",
@@ -305,7 +305,7 @@ public class AclConstraints {
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
             session.setNodeAcl(TestExecPluginActivator.INTERIOR_NODE,
-                    new info.dmtree.Acl("Replace=*"));
+                    new org.osgi.service.dmt.Acl("Replace=*"));
 
             session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
 

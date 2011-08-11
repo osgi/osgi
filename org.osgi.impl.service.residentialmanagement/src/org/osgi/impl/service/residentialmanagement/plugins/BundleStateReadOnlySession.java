@@ -25,11 +25,11 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
-import info.dmtree.DmtConstants;
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.MetaNode;
-import info.dmtree.spi.ReadableDataSession;
+import org.osgi.service.dmt.DmtConstants;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.spi.ReadableDataSession;
 import java.util.*;
 import java.security.Principal;
 import java.security.cert.X509Certificate;
@@ -72,7 +72,7 @@ public class BundleStateReadOnlySession implements ReadableDataSession,
 	private static final String NONTRUSTEDSIGNERCERTIFICATE = "NonTrustedSignerCertificate";
 	private static final String CERTIFICATECHAIN = "CertificateChain";
 
-	private static final String LIST_MIME_TYPE = DmtConstants.DDF_LIST_SUBTREE;
+	private static final String LIST_MIME_TYPE = DmtConstants.DDF_LIST;
 	private static final String NODE_TYPE = "org.osgi/1.0/BundleStateManagementObject";
 
 	private BundleContext context;

@@ -17,7 +17,7 @@
  */
 package org.osgi.test.cases.dmt.tc2.tbc.Plugin.LogPlugin;
 
-import info.dmtree.*;
+import org.osgi.service.dmt.*;
 
 import java.util.List;
 

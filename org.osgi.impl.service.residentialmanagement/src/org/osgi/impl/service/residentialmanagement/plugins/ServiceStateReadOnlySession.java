@@ -34,11 +34,11 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Filter;
 import org.osgi.util.tracker.ServiceTracker;
 
-import info.dmtree.DmtConstants;
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.MetaNode;
-import info.dmtree.spi.ReadableDataSession;
+import org.osgi.service.dmt.DmtConstants;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.spi.ReadableDataSession;
 
 /**
  * 
@@ -57,9 +57,7 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 	private static final String SCALAR = "SCALAR";
 	private static final String ARRAY = "ARRAY";
 	private static final String COLLECTION = "COLLECTION";
-	private static final String LIST_MIME_TYPE = DmtConstants.DDF_LIST_SUBTREE;
 	private static final String NODE_TYPE = "org.osgi/1.0/ServiceStateManagementObject";
-	private static final String TRANSIENT_NODE_TYPE = DmtConstants.DDF_TRANSIENT;
 
 	private Hashtable serviceRefTable = new Hashtable();/*
 														 * <String <service_id>,
@@ -321,16 +319,18 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 		String[] path = shapedPath(nodePath);
 		if (path.length == 1)
 			return NODE_TYPE;
-		if (path.length == 2)
-			return TRANSIENT_NODE_TYPE;
-		if (path.length == 3 && path[2].equals(USINGBUNDLES))
-			return LIST_MIME_TYPE;
-		if (path.length == 4 && path[3].equals(PROPERTY))
-			return TRANSIENT_NODE_TYPE;
-		if (path.length == 5 && path[4].equals(VALUES))
-			return LIST_MIME_TYPE;
-		if (isLeafNode(nodePath))
-			return ServiceStateMetaNode.LEAF_MIME_TYPE;
+		
+// TODO check commented out
+//		if (path.length == 2)
+//			return TRANSIENT_NODE_TYPE;
+//		if (path.length == 3 && path[2].equals(USINGBUNDLES))
+//			return LIST_MIME_TYPE;
+//		if (path.length == 4 && path[3].equals(PROPERTY))
+//			return TRANSIENT_NODE_TYPE;
+//		if (path.length == 5 && path[4].equals(VALUES))
+//			return LIST_MIME_TYPE;
+//		if (isLeafNode(nodePath))
+//			return ServiceStateMetaNode.LEAF_MIME_TYPE;
 		return ServiceStateMetaNode.SERVICESTATE_MO_TYPE;
 	}
 

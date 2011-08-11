@@ -1,6 +1,6 @@
 package org.osgi.impl.service.dmt.dispatcher;
 
-import info.dmtree.DmtException;
+import org.osgi.service.dmt.DmtException;
 
 import java.util.ArrayList;
 import java.util.List;

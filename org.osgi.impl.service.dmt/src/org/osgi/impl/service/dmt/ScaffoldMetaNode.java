@@ -17,8 +17,8 @@
  */
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.DmtData;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.MetaNode;
 
 public class ScaffoldMetaNode implements MetaNode {
     private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 

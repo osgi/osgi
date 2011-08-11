@@ -35,11 +35,11 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.packageadmin.ExportedPackage;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.MetaNode;
-import info.dmtree.DmtConstants;
-import info.dmtree.spi.ReadableDataSession;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.DmtConstants;
+import org.osgi.service.dmt.spi.ReadableDataSession;
 
 /**
  * 
@@ -53,9 +53,8 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 	private static final String REMOVALPENDING = "RemovalPending";
 	private static final String EXPORTINGBUNDLE = "ExportingBundle";
 	private static final String IMPORTINGBUNDLES = "ImportingBundles";
-	private static final String LIST_MIME_TYPE = DmtConstants.DDF_LIST_SUBTREE;
+	private static final String LIST_MIME_TYPE = DmtConstants.DDF_LIST;
 	private static final String NODE_TYPE = "org.osgi/1.0/PackageStateManagementObject";
-	private static final String TRANSIENT_NODE_TYPE = DmtConstants.DDF_TRANSIENT;
 
 	private PackageAdmin packageAdmin;
 	private Hashtable exportPackageObjTable = new Hashtable();
@@ -232,7 +231,7 @@ public class PackageStateReadOnlySession implements ReadableDataSession {
 			return NODE_TYPE;
 		}
 		if (path.length == 2) {
-			return TRANSIENT_NODE_TYPE;
+			return null; //TODO rmeoved TRANSIENT_NODE_TYPE;
 		}
 		if (path.length == 3 && path[2].equals(IMPORTINGBUNDLES)) {
 			return LIST_MIME_TYPE;

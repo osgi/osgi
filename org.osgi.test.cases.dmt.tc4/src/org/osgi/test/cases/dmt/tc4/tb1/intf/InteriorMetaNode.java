@@ -1,6 +1,6 @@
 package org.osgi.test.cases.dmt.tc4.tb1.intf;
 
-import info.dmtree.DmtData;
+import org.osgi.service.dmt.DmtData;
 
 public abstract class InteriorMetaNode extends BaseMetaNode {
 	public DmtData getDefault() {

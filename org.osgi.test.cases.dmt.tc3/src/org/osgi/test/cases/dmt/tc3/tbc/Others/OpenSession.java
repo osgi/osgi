@@ -36,7 +36,7 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.Others;
 
-import info.dmtree.DmtSession;
+import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;

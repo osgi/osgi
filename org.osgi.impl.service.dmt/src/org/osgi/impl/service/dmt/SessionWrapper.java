@@ -20,11 +20,11 @@ package org.osgi.impl.service.dmt;
 
 
 
-import info.dmtree.Acl;
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtIllegalStateException;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtIllegalStateException;
+import org.osgi.service.dmt.MetaNode;
 
 import java.util.Date;
 import java.util.Timer;

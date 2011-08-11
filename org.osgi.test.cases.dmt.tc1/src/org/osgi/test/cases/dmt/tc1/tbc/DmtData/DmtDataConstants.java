@@ -35,7 +35,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtData;
 
-import info.dmtree.DmtData;
+import org.osgi.service.dmt.DmtData;
 
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 

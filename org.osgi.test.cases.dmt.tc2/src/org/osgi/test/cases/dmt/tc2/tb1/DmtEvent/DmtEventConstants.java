@@ -36,7 +36,7 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtEvent;
 
-import info.dmtree.DmtEvent;
+import org.osgi.service.dmt.DmtEvent;
 
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;

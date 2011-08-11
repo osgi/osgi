@@ -18,7 +18,7 @@
 
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.spi.DataPlugin;
+import org.osgi.service.dmt.spi.DataPlugin;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -78,8 +78,8 @@ public class Context {
     synchronized Dispatcher getPluginDispatcher() {
         if(dispatcher == null) { // create plugin tracker if it DNE yet
             try {
-	            String filter = "(|(objectClass=info.dmtree.spi.DataPlugin)" +
-	            					"(objectClass=info.dmtree.spi.ExecPlugin))";
+	            String filter = "(|(objectClass=org.osgi.service.dmt.spi.DataPlugin)" +
+	            					"(objectClass=org.osgi.service.dmt.spi.ExecPlugin))";
 	            dispatcher = new Dispatcher(this.bc, bc.createFilter(filter));
             } catch (InvalidSyntaxException e) {
                 // cannot happen

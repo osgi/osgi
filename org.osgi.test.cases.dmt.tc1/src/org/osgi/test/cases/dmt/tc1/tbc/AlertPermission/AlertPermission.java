@@ -53,7 +53,7 @@ public class AlertPermission extends DmtTestControl {
 	public void testAlertPermission001() {
 		try {		
 			log("#testAlertPermission001");
-			new info.dmtree.security.AlertPermission(null);
+			new org.osgi.service.dmt.security.AlertPermission(null);
             failException("", NullPointerException.class);
 		} catch(NullPointerException e) {
 			pass(e.getClass().getName() + " correctly thrown");
@@ -70,7 +70,7 @@ public class AlertPermission extends DmtTestControl {
 	public void testAlertPermission002() {
 		try {		
 			log("#testAlertPermission002");
-			new info.dmtree.security.AlertPermission("");
+			new org.osgi.service.dmt.security.AlertPermission("");
             failException("", IllegalArgumentException.class);
 		} catch(IllegalArgumentException e) {
 			pass(e.getClass().getName() + " correctly thrown");
@@ -89,7 +89,7 @@ public class AlertPermission extends DmtTestControl {
 	public void testAlertPermission003() {
 		try {		
 			log("#testAlertPermission003");
-			new info.dmtree.security.AlertPermission(null,"*");
+			new org.osgi.service.dmt.security.AlertPermission(null,"*");
             failException("", NullPointerException.class);
 		} catch(NullPointerException e) {
 			pass(e.getClass().getName() + " correctly thrown");
@@ -106,7 +106,7 @@ public class AlertPermission extends DmtTestControl {
 	public void testAlertPermission004() {
 		try {		
 			log("#testAlertPermission004");
-			new info.dmtree.security.AlertPermission("","*");
+			new org.osgi.service.dmt.security.AlertPermission("","*");
             failException("", IllegalArgumentException.class);
 		} catch(IllegalArgumentException e) {
 			pass(e.getClass().getName() + " correctly thrown");
@@ -123,7 +123,7 @@ public class AlertPermission extends DmtTestControl {
 	public void testAlertPermission005() {
 		try {		
 			log("#testAlertPermission005");
-			new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER,"");
+			new org.osgi.service.dmt.security.AlertPermission(DmtConstants.REMOTE_SERVER,"");
             failException("", IllegalArgumentException.class);
 		} catch(IllegalArgumentException e) {
 			pass(e.getClass().getName() + " correctly thrown");
@@ -140,7 +140,7 @@ public class AlertPermission extends DmtTestControl {
 	public void testAlertPermission006() {
 		try {		
 			log("#testAlertPermission006");
-			info.dmtree.security.AlertPermission permission = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER);
+			org.osgi.service.dmt.security.AlertPermission permission = new org.osgi.service.dmt.security.AlertPermission(DmtConstants.REMOTE_SERVER);
 			assertEquals("Asserts that getActions returns '*'", "*", permission
 					.getActions());
 		} catch (Exception e) {
@@ -156,7 +156,7 @@ public class AlertPermission extends DmtTestControl {
 	public void testAlertPermission007() {
 		try {		
 			log("#testAlertPermission007");
-			info.dmtree.security.AlertPermission permission = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER,"*");
+			org.osgi.service.dmt.security.AlertPermission permission = new org.osgi.service.dmt.security.AlertPermission(DmtConstants.REMOTE_SERVER,"*");
 			assertEquals("Asserts that getActions returns '*'", "*", permission
 					.getActions());
 		} catch (Exception e) {
@@ -172,7 +172,7 @@ public class AlertPermission extends DmtTestControl {
 	public void testAlertPermission008() {
 		try {		
 			log("#testAlertPermission008");
-			new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER + "*");
+			new org.osgi.service.dmt.security.AlertPermission(DmtConstants.REMOTE_SERVER + "*");
 			pass("The target can end with '*'");
 		} catch (Exception e) {
 			failUnexpectedException(e);	
@@ -187,7 +187,7 @@ public class AlertPermission extends DmtTestControl {
 	public void testAlertPermission009() {
 		try {		
 			log("#testAlertPermission009");
-			new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER + "*","*");
+			new org.osgi.service.dmt.security.AlertPermission(DmtConstants.REMOTE_SERVER + "*","*");
 			pass("The target can end with '*'");
 		} catch (Exception e) {
 			failUnexpectedException(e);	

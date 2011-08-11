@@ -1,18 +1,11 @@
 package org.osgi.impl.service.dmt.dispatcher;
 
-import info.dmtree.DmtConstants;
-import info.dmtree.Uri;
-import info.dmtree.spi.MountPoint;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.List;
-
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventAdmin;
-import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.spi.*;
+import org.osgi.service.event.*;
+import org.osgi.util.tracker.*;
 
 public class MountPointImpl implements MountPoint {
 	

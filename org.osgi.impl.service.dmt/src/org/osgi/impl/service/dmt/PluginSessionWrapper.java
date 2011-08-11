@@ -18,13 +18,13 @@
 
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.MetaNode;
-import info.dmtree.spi.ReadWriteDataSession;
-import info.dmtree.spi.ReadableDataSession;
-import info.dmtree.spi.TransactionalDataSession;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.spi.ReadableDataSession;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 
 import java.security.AccessControlContext;
 import java.security.AccessController;

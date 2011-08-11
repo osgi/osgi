@@ -24,9 +24,9 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
-import info.dmtree.DmtSession;
-import info.dmtree.DmtException;
-import info.dmtree.spi.*;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.spi.*;
 import org.osgi.framework.BundleContext;
 /**
  * 

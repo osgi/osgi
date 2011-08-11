@@ -1,7 +1,7 @@
 package org.osgi.impl.service.dmt.dispatcher;
 
-import info.dmtree.*;
-import info.dmtree.spi.*;
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.spi.*;
 
 import java.util.*;
 

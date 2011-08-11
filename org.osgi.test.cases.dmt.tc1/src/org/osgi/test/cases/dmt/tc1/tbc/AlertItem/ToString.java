@@ -35,7 +35,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.AlertItem;
 
-import info.dmtree.DmtData;
+import org.osgi.service.dmt.DmtData;
 
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
@@ -55,7 +55,7 @@ public class ToString extends DmtTestControl {
 			log("#testToString001");
 			String mark = "mark";
 			DmtData data = new DmtData("test");
-			info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,mark,data);
+			org.osgi.service.dmt.notification.AlertItem alert = new org.osgi.service.dmt.notification.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,mark,data);
 			assertEquals("Asserts that the expected string is returned",
 					"AlertItem(" + alert.getSource() + ", " + alert.getType()
 							+ ", " + alert.getMark() + ", " + alert.getData()
@@ -73,7 +73,7 @@ public class ToString extends DmtTestControl {
 	public void testToString002() {
 		try {		
 			log("#testToString002");
-			info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem((String)null,null,null,null);
+			org.osgi.service.dmt.notification.AlertItem alert = new org.osgi.service.dmt.notification.AlertItem((String)null,null,null,null);
 			assertEquals("Asserts that the expected string is returned",
 					"AlertItem(null, null, null, null)", alert.toString());
 		} catch(Exception e) {

@@ -1,6 +1,6 @@
 package org.osgi.test.cases.dmt.tc4.rfc141;
 
-import info.dmtree.DmtAdmin;
+import org.osgi.service.dmt.DmtAdmin;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
@@ -49,7 +49,7 @@ public class TestBug1657_CMDependency extends OSGiTestCase{
 	
 	
 	/**
-	 * tests existence of specified constants for data formats in info.dmtree.DmtData
+	 * tests existence of specified constants for data formats in org.osgi.service.dmt.DmtData
 	 */
 	public void testDmtAdminStartWithoutCM() throws Exception {
 		dmtAdminBundle.start();

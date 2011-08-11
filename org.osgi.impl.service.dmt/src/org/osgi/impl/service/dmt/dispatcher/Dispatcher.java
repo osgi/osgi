@@ -1,8 +1,8 @@
 package org.osgi.impl.service.dmt.dispatcher;
 
 
-import info.dmtree.spi.DataPlugin;
-import info.dmtree.spi.ExecPlugin;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ExecPlugin;
 
 import java.util.ArrayList;
 import java.util.Collection;

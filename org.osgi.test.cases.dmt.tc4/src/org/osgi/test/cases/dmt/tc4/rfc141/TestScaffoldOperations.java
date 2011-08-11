@@ -1,11 +1,11 @@
 package org.osgi.test.cases.dmt.tc4.rfc141;
 
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
 
 /**
- * Scaffold nodes must support all operations of info.dmtree.spi.ReadableDataSession.
+ * Scaffold nodes must support all operations of org.osgi.service.dmt.spi.ReadableDataSession.
  * 
  * @author steffen
  *

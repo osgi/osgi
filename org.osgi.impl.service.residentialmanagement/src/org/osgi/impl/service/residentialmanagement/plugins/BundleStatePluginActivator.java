@@ -24,7 +24,7 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
-import info.dmtree.spi.DataPlugin;
+import org.osgi.service.dmt.spi.DataPlugin;
 
 import java.util.Hashtable;
 

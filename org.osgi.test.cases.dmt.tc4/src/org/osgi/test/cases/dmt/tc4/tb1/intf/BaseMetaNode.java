@@ -1,7 +1,7 @@
 package org.osgi.test.cases.dmt.tc4.tb1.intf;
 
-import info.dmtree.DmtData;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.MetaNode;
 
 public abstract class BaseMetaNode implements MetaNode {
 	private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 

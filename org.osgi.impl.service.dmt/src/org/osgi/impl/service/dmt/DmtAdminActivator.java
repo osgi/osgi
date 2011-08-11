@@ -17,10 +17,11 @@
  */
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.DmtAdmin;
+import org.osgi.service.dmt.DmtAdmin;
 
-import info.dmtree.notification.NotificationService;
-import info.dmtree.registry.DmtServiceFactory;
+// TODO removed the factory reference, not sure what happens
+
+import org.osgi.service.dmt.notification.NotificationService;
 
 import java.lang.reflect.Field;
 import java.security.AllPermission;
@@ -39,7 +40,7 @@ public class DmtAdminActivator implements BundleActivator {
     // do not change this, it is not handled dynamically in the plugins
     static final String DMT_ROOT = "./OSGi";
     
-    static final String DMT_ROOT_PROPERTY = "info.dmtree.osgi.root";
+    static final String DMT_ROOT_PROPERTY = "org.osgi.service.dmt.osgi.root";
     
     static final String DMT_PERMISSION_ADMIN_SERVICE_PID = 
         "org.osgi.impl.service.dmt.perms";
@@ -59,12 +60,12 @@ public class DmtAdminActivator implements BundleActivator {
 		try {
             System.setProperty(DMT_ROOT_PROPERTY, DMT_ROOT);
             
-            // DmtAdmin service must be a singleton (as mandated by the spec),
-            // otherwise the context field settings/removals could get mixed up 
-            factoryContext = DmtServiceFactory.class.getDeclaredField("context");
-            factoryContext.setAccessible(true);
-            factoryContext.set(null, bc);
-            referenceDmtServiceFactory();
+//            // DmtAdmin service must be a singleton (as mandated by the spec),
+//            // otherwise the context field settings/removals could get mixed up 
+//            factoryContext = DmtServiceFactory.class.getDeclaredField("context");
+//            factoryContext.setAccessible(true);
+//            factoryContext.set(null, bc);
+//            referenceDmtServiceFactory();
 
             context = new Context(bc);
             
@@ -130,12 +131,4 @@ public class DmtAdminActivator implements BundleActivator {
         context.close();
 	}
     
-    // This dummy method is used to force btool to include the 
-    // info.dmtree.registry package in the imports in the manifest. 
-    // This package would otherwise not be imported, as only the 
-    // DmtServiceFactory.class field is used from the whole package,
-    // and that is not easily detected before Java 1.4.
-    private DmtServiceFactory referenceDmtServiceFactory() {
-        return null;
-    }
 }

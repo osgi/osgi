@@ -1,17 +1,17 @@
 package org.osgi.test.cases.dmt.tc4.rfc141.plugins;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.MetaNode;
-import info.dmtree.Uri;
-import info.dmtree.spi.DataPlugin;
-import info.dmtree.spi.ExecPlugin;
-import info.dmtree.spi.MountPlugin;
-import info.dmtree.spi.MountPoint;
-import info.dmtree.spi.ReadWriteDataSession;
-import info.dmtree.spi.ReadableDataSession;
-import info.dmtree.spi.TransactionalDataSession;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.Uri;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ExecPlugin;
+import org.osgi.service.dmt.spi.MountPlugin;
+import org.osgi.service.dmt.spi.MountPoint;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.spi.ReadableDataSession;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 
 import java.util.Date;
 import java.util.Iterator;

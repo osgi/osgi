@@ -18,7 +18,7 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin;
 
-import info.dmtree.DmtException;
+import org.osgi.service.dmt.DmtException;
 
 /**
  * Thrown by different components of the confiugration plugin implementation,

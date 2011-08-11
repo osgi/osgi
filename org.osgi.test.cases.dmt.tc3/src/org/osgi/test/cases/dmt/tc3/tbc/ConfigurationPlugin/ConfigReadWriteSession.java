@@ -18,9 +18,9 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.spi.TransactionalDataSession;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 
 import java.io.IOException;
 import java.util.ArrayList;

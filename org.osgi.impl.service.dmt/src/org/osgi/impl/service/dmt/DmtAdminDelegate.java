@@ -17,9 +17,9 @@
  */
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.*;
-import info.dmtree.security.DmtPermission;
-import info.dmtree.security.DmtPrincipalPermission;
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;

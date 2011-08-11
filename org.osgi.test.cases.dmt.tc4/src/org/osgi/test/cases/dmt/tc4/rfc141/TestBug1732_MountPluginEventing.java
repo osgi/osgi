@@ -1,11 +1,11 @@
 package org.osgi.test.cases.dmt.tc4.rfc141;
 
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtConstants;
-import info.dmtree.DmtSession;
-import info.dmtree.spi.DataPlugin;
-import info.dmtree.spi.MountPlugin;
-import info.dmtree.spi.MountPoint;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtConstants;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.MountPlugin;
+import org.osgi.service.dmt.spi.MountPoint;
 
 import java.util.Arrays;
 import java.util.Dictionary;

@@ -17,21 +17,21 @@
  */
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.Acl;
-import info.dmtree.DmtConstants;
-import info.dmtree.DmtData;
-import info.dmtree.DmtEvent;
-import info.dmtree.DmtException;
-import info.dmtree.DmtIllegalStateException;
-import info.dmtree.DmtSession;
-import info.dmtree.MetaNode;
-import info.dmtree.Uri;
-import info.dmtree.security.DmtPermission;
-import info.dmtree.security.DmtPrincipalPermission;
-import info.dmtree.spi.DataPlugin;
-import info.dmtree.spi.ExecPlugin;
-import info.dmtree.spi.ReadWriteDataSession;
-import info.dmtree.spi.ReadableDataSession;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtConstants;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtEvent;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtIllegalStateException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.Uri;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ExecPlugin;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.spi.ReadableDataSession;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;

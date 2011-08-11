@@ -35,7 +35,7 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc.Others;
 
-import info.dmtree.*;
+import org.osgi.service.dmt.*;
 
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;

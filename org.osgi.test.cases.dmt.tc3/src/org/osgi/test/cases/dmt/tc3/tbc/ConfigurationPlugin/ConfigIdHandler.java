@@ -17,7 +17,7 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin;
 
-import info.dmtree.Uri;
+import org.osgi.service.dmt.Uri;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

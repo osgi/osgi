@@ -6,7 +6,7 @@ nodeploy						= true
 
 -buildpath = \
 	org.osgi.service.tr069todmt;version=project, \
-	info.dmtree;version=project, \
+	org.osgi.service.dmt;version=project, \
 	biz.aQute.bnd; version=1.40, \
 	osgi.cmpn;					version=4.1, \
 	osgi.core;					version=4.1

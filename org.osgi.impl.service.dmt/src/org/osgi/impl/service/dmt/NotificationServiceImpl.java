@@ -21,11 +21,11 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 
-import info.dmtree.DmtException;
-import info.dmtree.notification.AlertItem;
-import info.dmtree.notification.NotificationService;
-import info.dmtree.notification.spi.RemoteAlertSender;
-import info.dmtree.security.AlertPermission;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.notification.AlertItem;
+import org.osgi.service.dmt.notification.NotificationService;
+import org.osgi.service.dmt.notification.spi.RemoteAlertSender;
+import org.osgi.service.dmt.security.AlertPermission;
 
 public class NotificationServiceImpl implements NotificationService {
     private Context context;

@@ -1,1 +1,1 @@
--buildpath: info.dmtree; version=project
+-buildpath: org.osgi.service.dmt; version=project

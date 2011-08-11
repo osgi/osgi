@@ -35,8 +35,8 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtData;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtIllegalStateException;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtIllegalStateException;
 
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
@@ -237,15 +237,15 @@ public class TestDmtDataExceptions extends DmtTestControl {
 			log("#testDmtDataExceptions010");
 			
 			int[] invalidStringFormats =  new int[] {
-					info.dmtree.DmtData.FORMAT_BASE64,
-					info.dmtree.DmtData.FORMAT_BINARY,
-					info.dmtree.DmtData.FORMAT_BOOLEAN,
-					info.dmtree.DmtData.FORMAT_FLOAT,
-					info.dmtree.DmtData.FORMAT_INTEGER,
-					info.dmtree.DmtData.FORMAT_NODE,
-					info.dmtree.DmtData.FORMAT_NULL,
-					info.dmtree.DmtData.FORMAT_RAW_BINARY,
-					info.dmtree.DmtData.FORMAT_RAW_STRING,
+					org.osgi.service.dmt.DmtData.FORMAT_BASE64,
+					org.osgi.service.dmt.DmtData.FORMAT_BINARY,
+					org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN,
+					org.osgi.service.dmt.DmtData.FORMAT_FLOAT,
+					org.osgi.service.dmt.DmtData.FORMAT_INTEGER,
+					org.osgi.service.dmt.DmtData.FORMAT_NODE,
+					org.osgi.service.dmt.DmtData.FORMAT_NULL,
+					org.osgi.service.dmt.DmtData.FORMAT_RAW_BINARY,
+					org.osgi.service.dmt.DmtData.FORMAT_RAW_STRING,
 					};
 			
 			for (int i=0; i<invalidStringFormats.length; i++) {
@@ -404,48 +404,48 @@ public class TestDmtDataExceptions extends DmtTestControl {
 	private boolean invalidFormatThrowsException(String value, int format) {
 		boolean threw = false;
 		try {
-			new info.dmtree.DmtData(value,format);
+			new org.osgi.service.dmt.DmtData(value,format);
 		} catch (IllegalArgumentException e) {
 			threw = true;
 		}
 
 		return threw;
 	}
-	private boolean invalidGetThrowsException(info.dmtree.DmtData data, int format) {
+	private boolean invalidGetThrowsException(org.osgi.service.dmt.DmtData data, int format) {
 		boolean threw = false;
 		try {
 			switch (format) {
-			case info.dmtree.DmtData.FORMAT_BASE64:
+			case org.osgi.service.dmt.DmtData.FORMAT_BASE64:
 				data.getBase64();
 				break;
-			case info.dmtree.DmtData.FORMAT_BINARY:
+			case org.osgi.service.dmt.DmtData.FORMAT_BINARY:
 				data.getBinary();
 				break;
-			case info.dmtree.DmtData.FORMAT_BOOLEAN:
+			case org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN:
 				data.getBoolean();
 				break;
-			case info.dmtree.DmtData.FORMAT_DATE:
+			case org.osgi.service.dmt.DmtData.FORMAT_DATE:
 				data.getDate();
 				break;
-			case info.dmtree.DmtData.FORMAT_FLOAT:
+			case org.osgi.service.dmt.DmtData.FORMAT_FLOAT:
 				data.getFloat();
 				break;
-			case info.dmtree.DmtData.FORMAT_INTEGER:
+			case org.osgi.service.dmt.DmtData.FORMAT_INTEGER:
 				data.getInt();
 				break;
-			case info.dmtree.DmtData.FORMAT_STRING:
+			case org.osgi.service.dmt.DmtData.FORMAT_STRING:
 				data.getString();
 				break;
-			case info.dmtree.DmtData.FORMAT_TIME:
+			case org.osgi.service.dmt.DmtData.FORMAT_TIME:
 				data.getTime();
 				break;
-			case info.dmtree.DmtData.FORMAT_XML:
+			case org.osgi.service.dmt.DmtData.FORMAT_XML:
 				data.getXml();
 				break;
-			case info.dmtree.DmtData.FORMAT_RAW_BINARY:
+			case org.osgi.service.dmt.DmtData.FORMAT_RAW_BINARY:
 				data.getRawBinary();
 				break;				
-			case info.dmtree.DmtData.FORMAT_RAW_STRING:
+			case org.osgi.service.dmt.DmtData.FORMAT_RAW_STRING:
 				data.getRawString();
 				break;								
 			}

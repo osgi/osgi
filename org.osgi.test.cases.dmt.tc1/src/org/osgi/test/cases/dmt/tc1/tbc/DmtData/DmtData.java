@@ -57,9 +57,9 @@ public class DmtData extends DmtTestControl {
 			log("#testDmtData001");
 			byte[] value = new byte[] { 1, 10, 127 };
 			String expectedValue= "01 0A 7F";
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,true);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value,true);
 			assertEquals("Asserting DmtData.FORMAT_BASE64",
-					info.dmtree.DmtData.FORMAT_BASE64, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_BASE64, data.getFormat());
 			
 			assertTrue("Asserting the value", Arrays.equals(value, data
 					.getBase64()));
@@ -91,9 +91,9 @@ public class DmtData extends DmtTestControl {
 			log("#testDmtData002");
 			byte[] value = new byte[] { 3, 55, 100 };
 			String expectedValue= "03 37 64";
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value);
 			assertEquals("Asserting DmtData.FORMAT_BINARY",
-					info.dmtree.DmtData.FORMAT_BINARY, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_BINARY, data.getFormat());
 			
 			assertTrue("Asserting the value", Arrays.equals(value, data
 					.getBinary()));
@@ -124,9 +124,9 @@ public class DmtData extends DmtTestControl {
 		try {		
 			log("#testDmtData003");
 			boolean value = false;
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value);
 			assertEquals("Asserting DmtData.FORMAT_BOOLEAN",
-					info.dmtree.DmtData.FORMAT_BOOLEAN, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN, data.getFormat());
 			
 			assertEquals("Asserting the value", value, data.getBoolean());
 			assertEquals("Asserting the size", 1, data.getSize());
@@ -151,9 +151,9 @@ public class DmtData extends DmtTestControl {
 		try {		
 			log("#testDmtData004");
 			String value = "20051001";
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_DATE);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value,org.osgi.service.dmt.DmtData.FORMAT_DATE);
 			assertEquals("Asserting DmtData.FORMAT_DATE",
-					info.dmtree.DmtData.FORMAT_DATE, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_DATE, data.getFormat());
 			
 			assertEquals("Asserting the value", value, data.getDate());
 			
@@ -181,9 +181,9 @@ public class DmtData extends DmtTestControl {
 		try {		
 			log("#testDmtData005");
 			float value = 2.4F;
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value);
 			assertEquals("Asserting DmtData.FORMAT_FLOAT",
-					info.dmtree.DmtData.FORMAT_FLOAT, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_FLOAT, data.getFormat());
 			
 			assertTrue("Asserting the value", value == data.getFloat());
 			
@@ -208,9 +208,9 @@ public class DmtData extends DmtTestControl {
 		try {		
 			log("#testDmtData006");
 			int value = 2;
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value);
 			assertEquals("Asserting DmtData.FORMAT_INTEGER",
-					info.dmtree.DmtData.FORMAT_INTEGER, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_INTEGER, data.getFormat());
 			
 			assertEquals("Asserting the value", value, data.getInt());
 			
@@ -234,9 +234,9 @@ public class DmtData extends DmtTestControl {
 	public void testDmtData007() {
 		try {		
 			log("#testDmtData007");
-			info.dmtree.DmtData data  = info.dmtree.DmtData.NULL_VALUE;
+			org.osgi.service.dmt.DmtData data  = org.osgi.service.dmt.DmtData.NULL_VALUE;
 			assertEquals("Asserting DmtData.FORMAT_NULL",
-					info.dmtree.DmtData.FORMAT_NULL, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_NULL, data.getFormat());
 			
 			assertEquals("Asserting the size", 0, data.getSize());
 			
@@ -260,9 +260,9 @@ public class DmtData extends DmtTestControl {
 		try {		
 			log("#testDmtData008");
 			String value = "TestString";
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value);
 			assertEquals("Asserting DmtData.FORMAT_STRING",
-					info.dmtree.DmtData.FORMAT_STRING, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_STRING, data.getFormat());
 			
 			assertEquals("Asserting the value", value, data.getString());
 			
@@ -288,9 +288,9 @@ public class DmtData extends DmtTestControl {
 		try {		
 			log("#testDmtData009");
 			String value = "120000";
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_TIME);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value,org.osgi.service.dmt.DmtData.FORMAT_TIME);
 			assertEquals("Asserting DmtData.FORMAT_TIME",
-					info.dmtree.DmtData.FORMAT_TIME, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_TIME, data.getFormat());
 			
 			assertEquals("Asserting the value", value, data.getTime());
 			
@@ -316,9 +316,9 @@ public class DmtData extends DmtTestControl {
 		try {		
 			log("#testDmtData010");
 			String value = "120000Z";
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_TIME);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value,org.osgi.service.dmt.DmtData.FORMAT_TIME);
 			assertEquals("Asserting DmtData.FORMAT_TIME",
-					info.dmtree.DmtData.FORMAT_TIME, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_TIME, data.getFormat());
 			
 			assertEquals("Asserting the value", value, data.getTime());
 			
@@ -341,9 +341,9 @@ public class DmtData extends DmtTestControl {
 		try {		
 			log("#testDmtData011");
 			String value = "testXml";
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_XML);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value,org.osgi.service.dmt.DmtData.FORMAT_XML);
 			assertEquals("Asserting DmtData.FORMAT_XML",
-					info.dmtree.DmtData.FORMAT_XML, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_XML, data.getFormat());
 			
 			assertEquals("Asserting the value", value, data.getXml());
 			
@@ -371,9 +371,9 @@ public class DmtData extends DmtTestControl {
 			log("#testDmtData012");
 			String value = "TestString2";
 			
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_STRING);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value,org.osgi.service.dmt.DmtData.FORMAT_STRING);
 			assertEquals("Asserting DmtData.FORMAT_STRING",
-					info.dmtree.DmtData.FORMAT_STRING, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_STRING, data.getFormat());
 			
 			assertEquals("Asserting the value", value, data.getString());
 			
@@ -399,9 +399,9 @@ public class DmtData extends DmtTestControl {
             log("#testDmtData013");
             byte[] value = new byte[] { 1, 10, 127 };
             String expectedValue= "01 0A 7F";
-            info.dmtree.DmtData data  = new info.dmtree.DmtData(value,false);
+            org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value,false);
             assertEquals("Asserting DmtData.FORMAT_BINARY",
-                    info.dmtree.DmtData.FORMAT_BINARY, data.getFormat());
+                    org.osgi.service.dmt.DmtData.FORMAT_BINARY, data.getFormat());
             
             assertTrue("Asserting the value", Arrays.equals(value, data
 					.getBinary()));
@@ -429,9 +429,9 @@ public class DmtData extends DmtTestControl {
 	public void testDmtData014() {
 		try {		
 			log("#testDmtData014");
-			info.dmtree.DmtData data  = new info.dmtree.DmtData((String)null);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData((String)null);
 			assertEquals("Asserting DmtData.FORMAT_STRING",
-					info.dmtree.DmtData.FORMAT_STRING, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_STRING, data.getFormat());
 			
 			assertNull("Asserting the value", data.getString());
 
@@ -454,9 +454,9 @@ public class DmtData extends DmtTestControl {
 	public void testDmtData015() {
 		try {		
 			log("#testDmtData015");
-			info.dmtree.DmtData data  = new info.dmtree.DmtData((String) null,info.dmtree.DmtData.FORMAT_STRING);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData((String) null,org.osgi.service.dmt.DmtData.FORMAT_STRING);
 			assertEquals("Asserting DmtData.FORMAT_STRING",
-					info.dmtree.DmtData.FORMAT_STRING, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_STRING, data.getFormat());
 			
 			assertNull("Asserting the value", data.getString());
 
@@ -479,9 +479,9 @@ public class DmtData extends DmtTestControl {
 	public void testDmtData016() {
 		try {		
 			log("#testDmtData016");
-			info.dmtree.DmtData data  = new info.dmtree.DmtData((String)null,info.dmtree.DmtData.FORMAT_XML);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData((String)null,org.osgi.service.dmt.DmtData.FORMAT_XML);
 			assertEquals("Asserting DmtData.FORMAT_XML",
-					info.dmtree.DmtData.FORMAT_XML, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_XML, data.getFormat());
 			
 			assertNull("Asserting the value", data.getXml());
 
@@ -506,9 +506,9 @@ public class DmtData extends DmtTestControl {
 			log("#testDmtData017");
 			String format = "format";
 			String value = "data";
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(format,value);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(format,value);
 			assertEquals("Asserting DmtData.FORMAT_RAW_STRING",
-					info.dmtree.DmtData.FORMAT_RAW_STRING, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_RAW_STRING, data.getFormat());
 			
 			assertEquals("Asserting the value", value, data.getRawString());
 			
@@ -531,9 +531,9 @@ public class DmtData extends DmtTestControl {
 			log("#testDmtData018");
 			String format = "format";
 			byte[] value = new byte[] {1};
-			info.dmtree.DmtData data  = new info.dmtree.DmtData(format,value);
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(format,value);
 			assertEquals("Asserting DmtData.FORMAT_RAW_BINARY",
-					info.dmtree.DmtData.FORMAT_RAW_BINARY, data.getFormat());
+					org.osgi.service.dmt.DmtData.FORMAT_RAW_BINARY, data.getFormat());
 			
 			assertTrue("Asserting the value", Arrays.equals(value, data
 					.getRawBinary()));
