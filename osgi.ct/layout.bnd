@@ -128,6 +128,5 @@ build.residential.tests = \
     org.osgi.test.cases.tracker, \
     org.osgi.test.cases.upnp, \
     org.osgi.test.cases.useradmin, \
-    org.osgi.test.cases.util.tr069, \
     org.osgi.test.cases.xml
 
