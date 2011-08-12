@@ -307,40 +307,4 @@ public interface Subsystem {
 	 *         supports permissions.
 	 */
 	public void uninstall() throws SubsystemException;
-	
-	/**
-	 * Update the given subsystem.
-	 * <p/>
-	 * This method performs the same function as calling update(Subsystem, 
-	 * InputStream) with the specified subsystem and a null InputStream.
-	 * @throws SubsystemException If the subsystem could not be updated for any
-	 *         reason.
-	 */
-	public void update() throws SubsystemException;
-	
-	/**
-	 * Update the given subsystem from an InputStream.
-	 * <p/>
-	 * If the specified InputStream is null, the InputStream must be created 
-	 * from the subsystem's Subsystem-UpdateLocation Manifest header if present, 
-	 * or this subsystem's location provided when the subsystem was originally 
-	 * installed.
-	 * <p/>
-	 * TODO: expand on this description. For example, we need details on how 
-	 * update works for individual resources. We could follow the 
-	 * deploymentadmin approach and uninstall bundles that are removed and 
-	 * install new ones. This would happen if we had a different (updated) 
-	 * deployment calculated for the same version of the application.
-	 * @param content The InputStream from which to update the subsystem or null 
-	 *        if the Subsystem-UpdateLocation or original location are to be 
-	 *        used.
-	 * @throws SubsystemException
-	 * @throws IllegalStateException If the subsystem is in the UNINSTALLED 
-	 *         state.
-	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         AdminPermission[this,LIFECYCLE] for both the current subsystem 
-	 *         and the updated subsystem and the Java Runtime Environment 
-	 *         supports permissions.
-	 */
-	public void update(InputStream content) throws SubsystemException;
 }
