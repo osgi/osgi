@@ -36,7 +36,9 @@ package org.osgi.service.dmt.spi;
 public interface MountPlugin {
 	/**
 	 * Provides the {@code MountPoint} describing the path where the plugin is
-	 * mapped in the overall DMT.
+	 * mapped in the overall DMT. The given mountPoint is withdrawn with the
+	 * {@link #mountPointRemoved(MountPoint)} method. Corresponding mount points
+	 * must compare equal and have an appropriate hash code.
 	 * 
 	 * @param mountPoint
 	 *            the newly mapped mount point
@@ -45,7 +47,9 @@ public interface MountPlugin {
 
 	/**
 	 * Informs the plugin that the provided {@code MountPoint} objects have been
-	 * removed from the mapping.
+	 * removed from the mapping. The given mountPoint is withdrawn method. Mount
+	 * points must compare equal and have an appropriate hash code with the
+	 * given Mount Point in {@link #mountPointAdded(MountPoint)}.
 	 * <p>
 	 * NOTE: attempts to invoke the {@code postEvent} method on the provided
 	 * {@code MountPoint} must be ignored.

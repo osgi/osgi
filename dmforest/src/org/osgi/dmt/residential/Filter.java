@@ -109,7 +109,7 @@ import org.osgi.dmt.ddf.*;
  * </ul>
  * The attribute name in the LDAP filter can only reference a direct leaf node
  * of the node in the set {@code N} or an interior node with the MIME type
- * {@link DmtConstants#DDF_LIST_SUBTREE} with leaf nodes as children, i.e. a
+ * {@link DmtConstants#DDF_LIST} with leaf nodes as children, i.e. a
  * <em>list</em>. A list must be treated in the filter as a multi valued
  * property, any of its values satisfy an assertion on that attribute.
  * <p>
@@ -196,7 +196,7 @@ public interface Filter {
 	 * {@code N}.
 	 * <p>
 	 * The {@link #Result()} node is a snapshot taken the first time it is
-	 * accessed after a change in the {@link #Filter()} and/or the {@link #Target()}.
+	 * accessed after a change in the {@code Filter} and/or the {@code Target} nodes.
 	 * 
 	 * @return The root of the result tree
 	 */
@@ -209,7 +209,7 @@ public interface Filter {
 	 * are relative to current session.
 	 * 
 	 * The {@link #Result()} node is a snapshot taken the first time it is
-	 * accessed after a change in the {@link #Filter()} and/or the {@link #Target()}.
+	 * accessed after a change in the {@code Filter} and/or the {@code Target} nodes.
 	 * 
 	 * @return List of URIs
 	 */
