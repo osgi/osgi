@@ -38,15 +38,15 @@
 package org.osgi.test.cases.deploymentadmin.mo.tbc;
 
 
-import info.dmtree.Acl;
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.Uri;
-import info.dmtree.notification.AlertItem;
-import info.dmtree.security.DmtPermission;
-import info.dmtree.security.DmtPrincipalPermission;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.Uri;
+import org.osgi.service.dmt.notification.AlertItem;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 
 import java.io.File;
 import java.io.FileOutputStream;

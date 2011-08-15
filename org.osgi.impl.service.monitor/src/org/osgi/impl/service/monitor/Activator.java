@@ -19,8 +19,8 @@ package org.osgi.impl.service.monitor;
 
 import java.util.Hashtable;
 import org.osgi.framework.*;
-import info.dmtree.notification.NotificationService;
-import info.dmtree.spi.DataPlugin;
+import org.osgi.service.dmt.notification.NotificationService;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.monitor.MonitorAdmin;
 import org.osgi.service.monitor.MonitorListener;

@@ -34,9 +34,9 @@
 
 package org.osgi.test.cases.deploymentadmin.mo.tbc.Areas;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtSession;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
 
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoConstants;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoTestControl;

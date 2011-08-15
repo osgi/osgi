@@ -23,7 +23,7 @@ Test-Cases							= ${testcases}
     org.osgi.test.support;                  version=project , \
     org.osgi.service.monitor;               version=project , \
 	osgi.core;								version=4.0.1	, \
-	osgi.mobile;							version=4.0	, \
+	osgi.cmpn;								version=4.3	, \
 	ee.foundation;                          version=1.1     , \
 	${junit}
 

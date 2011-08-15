@@ -25,7 +25,7 @@
 
 package org.osgi.impl.service.application;
 
-import info.dmtree.*;
+import org.osgi.service.dmt.*;
 import java.util.*;
 
 public class ApplicationPluginBaseNode implements MetaNode {

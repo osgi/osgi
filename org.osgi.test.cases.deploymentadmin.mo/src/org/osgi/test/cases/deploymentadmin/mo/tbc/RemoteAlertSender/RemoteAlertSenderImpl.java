@@ -39,8 +39,8 @@
  */
 package org.osgi.test.cases.deploymentadmin.mo.tbc.RemoteAlertSender;
 
-import info.dmtree.notification.AlertItem;
-import info.dmtree.notification.spi.RemoteAlertSender;
+import org.osgi.service.dmt.notification.AlertItem;
+import org.osgi.service.dmt.notification.spi.RemoteAlertSender;
 
 import java.util.Hashtable;
 
