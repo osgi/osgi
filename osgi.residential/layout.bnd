@@ -14,7 +14,7 @@ residential.specs = \
 	 org.osgi.service.tr069todmt, \
 	 org.osgi.util.xml
 
-residential.packages = ${replace;$(residential.specs);^.*$;$0.*}, org.osgi.dmt.ddf,org.osgi.dmt.residential, org.osgi.dmt.service.log, org.osgi.service.tr069todmt
+residential.packages = ${replace;$(residential.specs);^.*$;$0.*}
 
 residential.legal = ${project.workspace}/osgi.companion/legal
 
