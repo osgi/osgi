@@ -47,38 +47,38 @@ public class DmtConstants {
 	/**
 	 * A string defining the topic for the event that is sent for added nodes.
 	 * <p>
-	 * The value of this field is “info/dmtree/DmtEvent/ADDED”.
+	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/ADDED”.
 	 */
-	public static final String EVENT_TOPIC_ADDED = "info/dmtree/DmtEvent/ADDED";
+	public static final String EVENT_TOPIC_ADDED = "org/osgi/service/dmtree/DmtEvent/ADDED";
 
 	/**
 	 * A string defining the topic for the event that is sent for deleted nodes.
 	 * <p>
-	 * The value of this field is “info/dmtree/DmtEvent/DELETED”.
+	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/DELETED”.
 	 */
-	public static final String EVENT_TOPIC_DELETED = "info/dmtree/DmtEvent/DELETED";
+	public static final String EVENT_TOPIC_DELETED = "org/osgi/service/dmtree/DmtEvent/DELETED";
 
 	/**
 	 * A string defining the topic for the event that is sent for replaced
 	 * nodes.
 	 * <p>
-	 * The value of this field is “info/dmtree/DmtEvent/REPLACED”.
+	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/REPLACED”.
 	 */
-	public static final String EVENT_TOPIC_REPLACED = "info/dmtree/DmtEvent/REPLACED";
+	public static final String EVENT_TOPIC_REPLACED = "org/osgi/service/dmtree/DmtEvent/REPLACED";
 
 	/**
 	 * A string defining the topic for the event that is sent for renamed nodes.
 	 * <p>
-	 * The value of this field is “info/dmtree/DmtEvent/RENAMED”.
+	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/RENAMED”.
 	 */
-	public static final String EVENT_TOPIC_RENAMED = "info/dmtree/DmtEvent/RENAMED";
+	public static final String EVENT_TOPIC_RENAMED = "org/osgi/service/dmtree/DmtEvent/RENAMED";
 
 	/**
 	 * A string defining the topic for the event that is sent for copied nodes.
 	 * <p>
-	 * The value of this field is “info/dmtree/DmtEvent/COPIED”.
+	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/COPIED”.
 	 */
-	public static final String EVENT_TOPIC_COPIED = "info/dmtree/DmtEvent/COPIED";
+	public static final String EVENT_TOPIC_COPIED = "org/osgi/service/dmtree/DmtEvent/COPIED";
 
 
 	/**
