@@ -26,34 +26,33 @@ package org.osgi.service.dmt.spi;
  * determined by the DmtAdmin after the registration of the plugin and therefore
  * unknown to the plugin in advance.
  * <p>
- * This is not a service interface, the Data or Exec Plugin does not also
- * have to register this interface as a service, the Dmt Admin should
- * use an {@code instanceof} to detect that a Plugin is a Mount Plugin.
+ * This is not a service interface, the Data or Exec Plugin does not also have
+ * to register this interface as a service, the Dmt Admin should use an
+ * {@code instanceof} to detect that a Plugin is also a Mount Plugin.
  * 
  * @version $Id$
  * @since 2.0
  */
 public interface MountPlugin {
 	/**
-	 * Provides the {@code MountPoint} objects describing the path where
-	 * the plugin is mapped to the overall DMT.
+	 * Provides the {@code MountPoint} describing the path where the plugin is
+	 * mapped in the overall DMT.
 	 * 
-	 * @param mountPoints
-	 *            the newly mapped mount points
+	 * @param mountPoint
+	 *            the newly mapped mount point
 	 */
-	void mountPointsAdded(MountPoint[] mountPoints);
+	void mountPointAdded(MountPoint mountPoint);
 
 	/**
-	 * Informs the plugin that the provided {@code MountPoint} objects have
-	 * been removed from the mapping.
+	 * Informs the plugin that the provided {@code MountPoint} objects have been
+	 * removed from the mapping.
 	 * <p>
-	 * NOTE: attempts to invoke the {@code postEvent} or
-	 * {@code sendEvent} on the provided {@code MountPoint} will be
-	 * ignored.
+	 * NOTE: attempts to invoke the {@code postEvent} method on the provided
+	 * {@code MountPoint} must be ignored.
 	 * 
-	 * @param mountPoints
-	 *            array of {@code MountPoint} objects that have been
-	 *            removed from the mapping
+	 * @param mountPoint
+	 *            The unmapped mount point array of {@code MountPoint} objects
+	 *            that have been removed from the mapping
 	 */
-	void mountPointsRemoved(MountPoint[] mountPoints);
+	void mountPointRemoved(MountPoint mountPoint);
 }

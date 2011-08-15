@@ -42,21 +42,21 @@ public interface MountPoint {
 	 * subtree.
 	 * <p>
 	 * This method distributes Events asynchronously to the EventAdmin as well
-	 * as to matching local DmtEventListeners (except
-	 * SynchronousDmtEventListeners).
+	 * as to matching local DmtEventListeners.
 	 * 
 	 * @param topic
 	 *            the topic of the event to send. Valid values are:
 	 *            <ul>
-	 *            <li>{@code info/dmtree/DmtEvent/ADDED} if the change was
+	 *            <li>{@code org/osgi/service/dmtree/DmtEvent/ADDED} if the change was
 	 *            caused by a rename action
 	 *            <p>
-	 *            <li>{@code  info/dmtree/DmtEvent/DELETED} if the change
+	 *            <li>{@code org/osgi/service/info/dmtree/DmtEvent/DELETED} if the change
 	 *            was caused by a copy action
 	 *            <p>
-	 *            <li>{@code  info/dmtree/DmtEvent/REPLACED} if the change
+	 *            <li>{@code org/osgi/service/info/dmtree/DmtEvent/REPLACED} if the change
 	 *            was caused by a copy action
 	 *            </ul>
+	 *            Must not be {@code null}.
 	 * @param relativeURIs
 	 *            an array of affected node {@code URI}'s. All
 	 *            {@code URI}'s specified here are relative to the current
@@ -73,8 +73,6 @@ public interface MountPoint {
 	 *            properties contain a key {@code EVENT_PROPERTY_NODES},
 	 *            then the value of this property is ignored and will be
 	 *            overwritten by {@code relativeURIs}.
-	 * @throws NullPointerException
-	 *             if the topic is null
 	 * @throws IllegalArgumentException
 	 *             if the topic has not one of the defined values
 	 * 
@@ -86,18 +84,18 @@ public interface MountPoint {
 	 * subtree.
 	 * <p>
 	 * This method distributes Events asynchronously to the EventAdmin as well
-	 * as to matching local DmtEventListeners (except
-	 * SynchronousDmtEventListeners).
+	 * as to matching local DmtEventListeners.
 	 * 
 	 * @param topic
 	 *            the topic of the event to send. Valid values are:
 	 *            <ul>
-	 *            <li>{@code info/dmtree/DmtEvent/RENAMED} if the change
+	 *            <li>{@codeorg/osgi/service/info/dmtree/DmtEvent/RENAMED} if the change
 	 *            was caused by a rename action
 	 *            <p>
-	 *            <li>{@code  info/dmtree/DmtEvent/COPIED} if the change
+	 *            <li>{@code org/osgi/service/info/dmtree/DmtEvent/COPIED} if the change
 	 *            was caused by a copy action
 	 *            </ul>
+	 *            Must not be {@code null}.
 	 * @param relativeURIs
 	 *            an array of affected node {@code URI}'s.
 	 *            <p>
@@ -123,8 +121,6 @@ public interface MountPoint {
 	 *            {@code EVENT_PROPERTY_NEW_NODES}, then the values of
 	 *            these properties are ignored and will be overwritten by
 	 *            {@code relativeURIs} and {@code newRelativeURIs}.
-	 * @throws NullPointerException
-	 *             if the topic is null
 	 * @throws IllegalArgumentException
 	 *             if the topic has not one of the defined values
 	 */

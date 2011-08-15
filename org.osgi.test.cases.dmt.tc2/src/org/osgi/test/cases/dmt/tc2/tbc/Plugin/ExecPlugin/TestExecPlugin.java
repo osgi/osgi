@@ -273,19 +273,15 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 	}
 
 
-	public void mountPointsAdded(MountPoint[] mountPoints) {
+	public void mountPointAdded(MountPoint mountPoint) {
 		System.out.println( "mountPointsAdded invoked with mountPoints:" );
-		for (int i = 0; i < mountPoints.length; i++) {
-			System.out.println( Uri.toUri(mountPoints[i].getMountPath()) );
-		}
+			System.out.println( Uri.toUri(mountPoint.getMountPath()) );
 	}
 
 
-	public void mountPointsRemoved(MountPoint[] mountPoints) {
+	public void mountPointRemoved(MountPoint mountPoint) {
 		System.out.println( "mountPointsRemoved invoked with mountPoints:" );
-		for (int i = 0; i < mountPoints.length; i++) {
-			System.out.println( Uri.toUri(mountPoints[i].getMountPath()) );
-		}
+			System.out.println( Uri.toUri(mountPoint.getMountPath()) );
 	}
     
 }

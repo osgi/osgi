@@ -259,12 +259,16 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 	}
 
 	
-	public void mountPointsAdded(MountPoint[] mountPoints) {
-		this.lastAddedMountPoints = mountPoints;
+	
+	//TODO moved to single mount point
+	
+	public void mountPointAdded(MountPoint mountPoints) {
+		this.lastAddedMountPoints = new MountPoint[]{mountPoints};
 	}
 
-	public void mountPointsRemoved(MountPoint[] mountPoints) {
-		this.lastRemovedMountPoints = mountPoints;
+	//TODO moved to single mount point
+	public void mountPointRemoved(MountPoint mountPoints) {
+		this.lastRemovedMountPoints = new MountPoint[]{mountPoints};
 	}
 
 	public void handleEvent(Event event) {

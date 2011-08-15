@@ -305,15 +305,12 @@ public class Plugin {
 		if (mp == null || mountedPathes == null)
 			return;
 		try {
-			List<MountPoint> mps = new ArrayList<MountPoint>();
 			for (String[] path : mountedPathes) {
-				mps.add(new MountPointImpl(path, eaTracker));
+				if (added)
+					mp.mountPointAdded(new MountPointImpl(path, eaTracker));
+				else
+					mp.mountPointRemoved(new MountPointImpl(path, eaTracker));
 			}
-			if (added)
-				mp.mountPointsAdded(mps.toArray(new MountPoint[mountedPathes.size()]));
-			else
-				mp.mountPointsRemoved(mps.toArray(new MountPoint[mountedPathes
-						.size()]));
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
