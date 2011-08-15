@@ -46,40 +46,41 @@ public class DmtConstants {
 
 	/**
 	 * A string defining the topic for the event that is sent for added nodes.
-	 * <p>
-	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/ADDED”.
 	 */
-	public static final String EVENT_TOPIC_ADDED = "org/osgi/service/dmtree/DmtEvent/ADDED";
+	public static final String EVENT_TOPIC_ADDED = "org/osgi/service/dmt/DmtEvent/ADDED";
 
 	/**
 	 * A string defining the topic for the event that is sent for deleted nodes.
-	 * <p>
-	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/DELETED”.
 	 */
-	public static final String EVENT_TOPIC_DELETED = "org/osgi/service/dmtree/DmtEvent/DELETED";
+	public static final String EVENT_TOPIC_DELETED = "org/osgi/service/dmt/DmtEvent/DELETED";
 
 	/**
 	 * A string defining the topic for the event that is sent for replaced
 	 * nodes.
-	 * <p>
-	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/REPLACED”.
 	 */
-	public static final String EVENT_TOPIC_REPLACED = "org/osgi/service/dmtree/DmtEvent/REPLACED";
+	public static final String EVENT_TOPIC_REPLACED = "org/osgi/service/dmt/DmtEvent/REPLACED";
 
 	/**
 	 * A string defining the topic for the event that is sent for renamed nodes.
-	 * <p>
-	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/RENAMED”.
 	 */
-	public static final String EVENT_TOPIC_RENAMED = "org/osgi/service/dmtree/DmtEvent/RENAMED";
+	public static final String EVENT_TOPIC_RENAMED = "org/osgi/service/dmt/DmtEvent/RENAMED";
 
 	/**
 	 * A string defining the topic for the event that is sent for copied nodes.
-	 * <p>
-	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/COPIED”.
 	 */
-	public static final String EVENT_TOPIC_COPIED = "org/osgi/service/dmtree/DmtEvent/COPIED";
+	public static final String EVENT_TOPIC_COPIED = "org/osgi/service/dmt/DmtEvent/COPIED";
 
+	/**
+	 * A string defining the topic for the event that is sent for a newly opened
+	 * session.
+	 */
+	public static final String	EVENT_TOPIC_SESSION_OPENED			= "org/osgi/service/dmt/DmtEvent/SESSION_OPENED";
+
+	/**
+	 * A string defining the topic for the event that is sent for a closed
+	 * session.
+	 */
+	public static final String	EVENT_TOPIC_SESSION_CLOSED			= "org/osgi/service/dmt/DmtEvent/SESSION_CLOSED";
 
 	/**
 	 * A string defining the property key for the “session.id” property in node

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtEvent;
 
 /*
@@ -141,19 +142,19 @@ public class DmtEventCore {
     String getTopic() {
         switch(type) {
         case DmtEvent.ADDED:
-            return "info/dmtree/DmtEvent/ADDED";
+				return DmtConstants.EVENT_TOPIC_ADDED;
         case DmtEvent.DELETED:
-            return "info/dmtree/DmtEvent/DELETED";
+				return DmtConstants.EVENT_TOPIC_DELETED;
         case DmtEvent.REPLACED:
-            return "info/dmtree/DmtEvent/REPLACED";
+				return DmtConstants.EVENT_TOPIC_REPLACED;
         case DmtEvent.RENAMED:
-            return "info/dmtree/DmtEvent/RENAMED";
+				return DmtConstants.EVENT_TOPIC_RENAMED;
         case DmtEvent.COPIED:
-            return "info/dmtree/DmtEvent/COPIED";
+				return DmtConstants.EVENT_TOPIC_COPIED;
         case DmtEvent.SESSION_OPENED:
-            return "info/dmtree/DmtEvent/SESSION_OPENED";
+				return DmtConstants.EVENT_TOPIC_SESSION_OPENED;
         case DmtEvent.SESSION_CLOSED:
-            return "info/dmtree/DmtEvent/SESSION_CLOSED";
+				return DmtConstants.EVENT_TOPIC_SESSION_CLOSED;
         }
         
         // never reached
