@@ -50,6 +50,7 @@ public interface Framework {
 	 * 
 	 * @return A Start Level node.
 	 */
+	@Scope(A)
 	Mutable<Integer> StartLevel();
 
 	/**
@@ -58,6 +59,7 @@ public interface Framework {
 	 * 
 	 * @return A Mutable for the initial bundle start level.
 	 */
+	@Scope(A)
 	Mutable<Integer> InitialBundleStartLevel();
 
 	/**
@@ -85,6 +87,7 @@ public interface Framework {
 	 * 
 	 * @return The Bundles node
 	 */
+	@Scope(A)
 	AddableMAP<String, Bundle> Bundles();
 
 	/**

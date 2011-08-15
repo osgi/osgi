@@ -58,7 +58,7 @@ public class Test {
 				type = p.getActualTypeArguments()[0];
 				get = true;
 				XNode child = new XNode(this, "[list]", type);
-				child.scope = SCOPE.A;
+				child.scope = SCOPE.D;
 				child.add = add;
 				child.delete = delete;
 				child.cardinality = "0..*";
@@ -87,7 +87,7 @@ public class Test {
 				type = p.getActualTypeArguments()[1];
 				get = true;
 				XNode child = new XNode(this, "[" + keyTypeName + "]", type);
-				child.scope = SCOPE.A;
+				child.scope = SCOPE.D;
 				child.add = add;
 				child.delete = delete;
 				child.cardinality = "0..*";

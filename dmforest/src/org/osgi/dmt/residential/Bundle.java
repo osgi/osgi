@@ -36,7 +36,7 @@ public interface Bundle {
 	 * 
 	 * @return The last used URL or empty string if not known
 	 */
-
+	@Scope(A)
 	Mutable<String> URL();
 
 	/**
@@ -59,6 +59,7 @@ public interface Bundle {
 	 * 
 	 * @return The AutoStart value
 	 */
+	@Scope(A)
 	Mutable<Boolean> AutoStart();
 
 	/**
@@ -69,6 +70,7 @@ public interface Bundle {
 	 * 
 	 * @return The FaultType value
 	 */
+	@Scope(A)
 	int FaultType();
 
 	/**
@@ -77,6 +79,7 @@ public interface Bundle {
 	 * 
 	 * @return The FaultMessage node
 	 */
+	@Scope(A)
 	String FaultMessage();
 
 	/**
@@ -214,6 +217,7 @@ public interface Bundle {
 	 * 
 	 * @return The RequestedState node.
 	 */
+	@Scope(A)
 	Mutable<String> RequestedState();
 
 	/**
@@ -265,6 +269,7 @@ public interface Bundle {
 	 * 
 	 * @return The Wires node.
 	 */
+	@Scope(A)
 	MAP<String, LIST<Wire>> Wires();
 
 	/**
@@ -275,6 +280,7 @@ public interface Bundle {
 	 * @return All signers of the bundle
 	 * @remark Evgeni wants to have one method with
 	 */
+	@Scope(A)
 	LIST<Certificate> Signers();
 
 	/**
@@ -285,6 +291,7 @@ public interface Bundle {
 	 * 
 	 * @return The Entries node
 	 */
+	@Scope(A)
 	Opt<LIST<Entry>> Entries();
 
 	/**
@@ -295,6 +302,7 @@ public interface Bundle {
 	 * 
 	 * @return The instance id.
 	 */
+	@Scope(A)
 	int InstanceId();
 
 	/**
@@ -311,6 +319,7 @@ public interface Bundle {
 		 * @remark Evgeni thinks the fact that we return full path names
 		 *         generates too much data
 		 */
+		@Scope(A)
 		String Path();
 
 		/**
@@ -318,6 +327,7 @@ public interface Bundle {
 		 * 
 		 * @return The binary content.
 		 */
+		@Scope(A)
 		byte[] Content();
 
 		/**
@@ -326,6 +336,7 @@ public interface Bundle {
 		 * @return The InstanceId
 		 */
 
+		@Scope(A)
 		int InstanceId();
 	}
 
@@ -338,6 +349,7 @@ public interface Bundle {
 		 * 
 		 * @return If this is a trusted certificate.
 		 */
+		@Scope(A)
 		boolean IsTrusted();
 
 		/**
@@ -356,6 +368,7 @@ public interface Bundle {
 		 * @return The InstanceId
 		 */
 
+		@Scope(A)
 		int InstanceId();
 	}
 

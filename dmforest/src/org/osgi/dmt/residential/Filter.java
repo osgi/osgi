@@ -1,6 +1,7 @@
 package org.osgi.dmt.residential;
 
 import static org.osgi.dmt.ddf.Scope.SCOPE.*;
+
 import org.osgi.service.dmt.*;
 
 import java.net.*;
@@ -143,9 +144,6 @@ import org.osgi.dmt.ddf.*;
  * the {@link #Result} or {@link #ResultUriList} child nodes; this maintains any
  * security scope that is in effect.
  * 
- * @remark Modified this to use standard filter comparison rules. How does
- *         substring matching work?
- * 
  */
 
 public interface Filter {
@@ -181,7 +179,7 @@ public interface Filter {
 	 * The nodes can be removed by the Filter implementation after a timeout
 	 * defined by the implementation.
 	 * 
-	 * @remark how big a timeout?
+	 * changk how big a timeout?
 	 * 
 	 * @return A mutable Filter node.
 	 */
@@ -224,6 +222,6 @@ public interface Filter {
 	 * 
 	 * @return The InstanceId
 	 */
-
+	@Scope(A)
 	int InstanceId();
 }

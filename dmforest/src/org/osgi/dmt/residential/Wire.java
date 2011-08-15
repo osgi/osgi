@@ -1,5 +1,7 @@
 package org.osgi.dmt.residential;
 
+import static org.osgi.dmt.ddf.Scope.SCOPE.*;
+
 import org.osgi.dmt.ddf.*;
 
 /**
@@ -33,6 +35,7 @@ public interface Wire {
 	 * 
 	 * @return The name space for this wire.
 	 */
+	@Scope(A)
 	String NameSpace();
 
 	/**
@@ -40,6 +43,7 @@ public interface Wire {
 	 * 
 	 * @return The requirement that caused this wire.
 	 */
+	@Scope(A)
 	Requirement Requirement();
 
 	/**
@@ -47,6 +51,7 @@ public interface Wire {
 	 * 
 	 * @return The capability that satisfied the requirement for this wire.
 	 */
+	@Scope(A)
 	Capability Capability();
 
 	/**
@@ -54,6 +59,7 @@ public interface Wire {
 	 * 
 	 * @return The requirer's location
 	 */
+	@Scope(A)
 	String Requirer();
 
 	/**
@@ -61,6 +67,7 @@ public interface Wire {
 	 * 
 	 * @return The provider's location
 	 */
+	@Scope(A)
 	String Provider();
 
 	/**
@@ -69,6 +76,7 @@ public interface Wire {
 	 * @return The InstanceId
 	 */
 
+	@Scope(A)
 	int InstanceId();
 
 	/**
@@ -80,6 +88,7 @@ public interface Wire {
 		 * 
 		 * @return The Filter string for this requirement
 		 */
+		@Scope(A)
 		String Filter();
 
 		/**
@@ -88,6 +97,7 @@ public interface Wire {
 		 * 
 		 * @return The Directives for this requirement.
 		 */
+		@Scope(A)
 		MAP<String, String> Directives();
 
 		/**
@@ -95,6 +105,7 @@ public interface Wire {
 		 * 
 		 * @return The Attributes for this requirement.
 		 */
+		@Scope(A)
 		MAP<String, String> Attributes();
 
 		/**
@@ -103,6 +114,7 @@ public interface Wire {
 		 * @return The InstanceId
 		 */
 
+		@Scope(A)
 		int InstanceId();
 	}
 
@@ -115,6 +127,7 @@ public interface Wire {
 		 * 
 		 * @return The Directives for this capability.
 		 */
+		@Scope(A)
 		MAP<String, String> Directives();
 
 		/**
@@ -122,6 +135,7 @@ public interface Wire {
 		 * 
 		 * @return The Attributes for this requirement.
 		 */
+		@Scope(A)
 		MAP<String, String> Attributes();
 
 		/**
@@ -130,6 +144,7 @@ public interface Wire {
 		 * @return The InstanceId
 		 */
 
+		@Scope(A)
 		int InstanceId();
 	}
 }
