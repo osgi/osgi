@@ -63,7 +63,7 @@
 		<zip destfile="${target}/javadoc.zip" basedir="${target}/javadoc"></zip>
     </target>
 	
-	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.mobile,japitools.enterprise,japitools.proposed,japitools.minimum,japitools.foundation">
+	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.enterprise,japitools.proposed,japitools.minimum,japitools.foundation">
 	</target>
 
 	<macrodef name="japitools">
@@ -100,15 +100,6 @@
 		</japitools>
 	</target>
 
-	<target name="japitools.mobile" depends="init">
-		<japitools name="osgi.mobile">
-			<arg value="${repo.javase}" />
-			<arg value="${repo.foundation}" />
-			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
-			<arg value="${repo.jaxp}" />
-		</japitools>
-	</target>
-
 	<target name="japitools.enterprise" depends="init">
 		<japitools name="osgi.enterprise">
 			<arg value="${repo.javase}" />
@@ -135,7 +126,7 @@
 		<japitools name="ee.foundation" />
 	</target>
 
-	<target name="japicompat" depends="japicompat.core,japicompat.cmpn,japicompat.mobile,japicompat.enterprise,japicompat.minimum,japicompat.foundation,japicompat.eecompare">
+	<target name="japicompat" depends="japicompat.core,japicompat.cmpn,japicompat.enterprise,japicompat.minimum,japicompat.foundation,japicompat.eecompare">
 	</target>
 	
 	<macrodef name="japicompat">
@@ -170,10 +161,6 @@
 		<japicompat name="osgi.cmpn" />
 	</target>
 
-	<target name="japicompat.mobile" depends="init">
-		<japicompat name="osgi.mobile" />
-	</target>
-
 	<target name="japicompat.enterprise" depends="init">
 		<japicompat name="osgi.enterprise" />
 	</target>
@@ -201,7 +188,6 @@
 	<target name="echo" depends="master.echo">
 		<echo>core.specs:             ${core.specs}</echo>
 		<echo>cmpn.specs:             ${cmpn.specs}</echo>
-		<echo>mobile.specs:           ${mobile.specs}</echo>
 		<echo>enterprise.specs:       ${enterprise.specs}</echo>
 		<echo>proposed.specs:         ${proposed.specs}</echo>
 	</target>

@@ -12,7 +12,6 @@ nodeploy						=true
     ee.foundation, \
     osgi.core, \
     osgi.cmpn, \
-    osgi.mobile, \
     osgi.enterprise, \
     osgi.proposed
 
