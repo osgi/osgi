@@ -67,7 +67,7 @@ public interface DmtAdmin {
 	 * 
 	 * @since 2.0
 	 */
-	public static final String SESSION_CREATION_TIMEOUT = "org.osgi.dmtree.session.creation.timeout";
+	public static final String	SESSION_CREATION_TIMEOUT	= "org.osgi.service.dmt.session.creation.timeout";
 
 	/**
 	 * This system property can be used to specify the DMT session inactivity
@@ -78,7 +78,7 @@ public interface DmtAdmin {
 	 * 
 	 * @since 2.0
 	 */
-	public static final String SESSION_INACTIVE_TIMEOUT = "org.osgi.dmtree.session.inactive.timeout";
+	public static final String	SESSION_INACTIVE_TIMEOUT	= "org.osgi.service.dmt.session.inactive.timeout";
 	
     /**
      * Opens a {@code DmtSession} for local usage on a given subtree of

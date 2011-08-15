@@ -15,9 +15,13 @@
  */
 package org.osgi.service.dmt;
 
-import java.io.*;
-import java.security.*;
-import java.util.*;
+import java.io.UnsupportedEncodingException;
+import java.security.AccessController;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivilegedAction;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class contains static utility methods to manipulate DMT URIs.
@@ -83,24 +87,26 @@ public final class Uri {
 	/**
 	 * This property specifies the maximum allowed length of a URI segment. The
 	 * corresponding string literal is
-	 * "org.osgi.dmtree.max.segment.name.length". The configured value can be
-	 * requested at runtime via Uri.getMaxSegmentNameLength().
+	 * "org.osgi.service.dmt.max.segment.name.length". The configured value can
+	 * be requested at runtime via Uri.getMaxSegmentNameLength().
 	 */
-	private static final String MAX_SEGMENT_NAME_LENGTH = "org.osgi.dmtree.max.segment.name.length";
+	private static final String	MAX_SEGMENT_NAME_LENGTH				= "org.osgi.service.dmt.max.segment.name.length";
 
 	/**
 	 * This property specifies the maximum allowed length of a URI. The
-	 * corresponding string literal is "org.osgi.dmtree.max.uri.length". The
-	 * configured value can be requested at runtime via Uri.getMaxUriLength().
+	 * corresponding string literal is "org.osgi.service.dmt.max.uri.length".
+	 * The configured value can be requested at runtime via
+	 * Uri.getMaxUriLength().
 	 */
-	private static final String MAX_URI_LENGTH = "org.osgi.dmtree.max.uri.length";
+	private static final String	MAX_URI_LENGTH						= "org.osgi.service.dmt.max.uri.length";
 
 	/**
 	 * This property specifies the maximum allowed number of Uri segments. The
-	 * corresponding string literal is "org.osgi.dmtree.max.uri.segments". The
-	 * configured value can be requested at runtime via Uri.getMaxUriSegments().
+	 * corresponding string literal is "org.osgi.service.dmt.max.uri.segments".
+	 * The configured value can be requested at runtime via
+	 * Uri.getMaxUriSegments().
 	 */
-	private static final String MAX_URI_SEGMENTS = "org.osgi.dmtree.max.uri.segments";
+	private static final String	MAX_URI_SEGMENTS					= "org.osgi.service.dmt.max.uri.segments";
 
 	// the smallest valid value for the URI segment length limit
 	private static final int MINIMAL_SEGMENT_LENGTH_LIMIT = 32;
