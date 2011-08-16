@@ -19,6 +19,8 @@ import org.osgi.framework.wiring.BundleRevision;
  * This test implements the conclusions of CPEG Bug 1922.
  * <p/>
  * <ul>
+ * <li>Attributes declared on {@link Constants#REQUIRE_CAPABILITY} must be 
+ *     visible in {@link BundleRequirement#getAttributes()}.</li>
  * <li>Attributes declared on requirements within the osgi.wiring.* namespace
  *     must not be visible in {@link BundleRequirement#getAttributes()}. The
  *     attributes map must be empty.</li>
@@ -40,6 +42,13 @@ public class Bug1922Test extends WiringTest {
 	private BundleRequirement packageRequirement;
 	private BundleRequirement requirement1;
 	private BundleRequirement requirement2;
+	
+	public void testRequireCapabilityRequirementAttributes() {
+		assertAttribute("foo", "bar", requirement1);
+		assertAttribute("bar", "foo", requirement1);
+		assertAttribute("foo", "bar", requirement2);
+		assertAttribute("bar", "foo", requirement2);
+	}
 	
 	public void testOsgiWiringHostCapabilityAttributes() {
 		assertAttribute("foo", "bar", hostCapability);
@@ -77,6 +86,7 @@ public class Bug1922Test extends WiringTest {
 		attributes.put("bar", "foo");
 		assertFilter(filter, attributes);
 		assertDirective("resolution", "optional", requirement1);
+		assertDirective("foo", "bar", requirement1);
 		assertDirective(Constants.FILTER_DIRECTIVE, null, requirement2);
 		assertDirective("resolution", "optional", requirement2);
 	}
@@ -84,7 +94,10 @@ public class Bug1922Test extends WiringTest {
 	public void testOsgiWiringRequirementDirectives() {
 		assertDirective("visibility", "reexport", bundleRequirement);
 		assertDirective("resolution", "optional", bundleRequirement);
+		assertDirective("foo", "bar", bundleRequirement);
+		assertDirective("foo", "bar", hostRequirement);
 		assertDirective("resolution", "optional", packageRequirement);
+		assertDirective("foo", "bar", packageRequirement);
 	}
 	
 	protected void setUp() throws Exception {
@@ -116,6 +129,10 @@ public class Bug1922Test extends WiringTest {
 	
 	private void assertAttribute(String name, String value, BundleCapability capability) {
 		assertEquals("Missing attribute or wrong value", value, capability.getAttributes().get(name));
+	}
+	
+	private void assertAttribute(String name, String value, BundleRequirement requirement) {
+		assertEquals("Missing attribute or wrong value", value, requirement.getAttributes().get(name));
 	}
 	
 	private void assertDirective(String name, String value, BundleRequirement requirement) {
