@@ -874,7 +874,7 @@ public class VersionRangeTests extends TestCase {
 
 		try {
 			range.includes(null);
-			fail("filter string created with illegal arguments");
+			fail("includes called with illegal argument");
 		}
 		catch (RuntimeException ex) {
 			// This is an expected exception and may be ignored
