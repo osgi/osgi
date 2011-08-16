@@ -84,6 +84,12 @@ mobile.build.version		= ${build.version}
 enterprise.build.version	= ${build.version}
 proposed.build.version		= ${build.version}
 
+core.companion.jar			= ${repo;osgi.core;${osgi.version};lowest}
+cmpn.companion.jar			= ${repo;osgi.cmpn;${osgi.version};lowest}
+mobile.companion.jar		= ${repo;osgi.mobile;${osgi.version};lowest}
+enterprise.companion.jar	= ${repo;osgi.enterprise;${osgi.version};lowest}
+proposed.companion.jar		= ${repo;osgi.proposed;${osgi.version};lowest}
+
 # Documentation
 Bundle-Copyright       	= ${copyright}
 Bundle-Vendor			= OSGi Alliance
@@ -111,6 +117,6 @@ runsecureproperties = ${runproperties}, \
 
 -runproperties = ${runproperties}
 
-testcases = ${classes;extending;junit.framework.TestCase|*DefaultTestBundleControl;concrete}
+testcases = ${sort;${classes;extending;junit.framework.TestCase;concrete}}
 
 

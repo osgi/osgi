@@ -1,8 +1,8 @@
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${enterprise.build.version}} Version ${version;==;${enterprise.build.version}}, \
+	OSGi Service Platform Release ${version;=;${enterprise.ct.version}} Version ${version;==;${enterprise.ct.version}}, \
 	Enterprise Test Case Bundles.
 
-Bundle-Version					: ${enterprise.build.version}
+Bundle-Version					: ${enterprise.ct.version}
 Include-Resource				: \
   	\
     ${replace;${uniq;\

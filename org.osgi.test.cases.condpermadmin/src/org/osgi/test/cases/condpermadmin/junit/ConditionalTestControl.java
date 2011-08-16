@@ -752,15 +752,45 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     	};
     	utility.testEqualArrays(order, satisfOrder);
     } catch (AssertionFailedError e) {
-    	// The following order assumes a bundle stack ordering of tb1/tb2/tb3 (IBM 5, IBM 6).
-    	String[] order = new String[] {
-    			"TestCondition_102", "TestCondition_103", // immediate for tb1
-    			"TestCondition_102", "TestCondition_100", // immediate for tb2; postponed 104 and 105
-    			"TestCondition_100", "TestCondition_101", // immediate for tb3; postponed 105
-    			"TestCondition_104", // postponed for tb2; only evaluated 104 because it is not satisfied
-    	        "TestCondition_105" // postponed for tb3
-    	};
-    	utility.testEqualArrays(order, satisfOrder);
+    	try {
+	    	// The following order assumes a bundle stack ordering of tb1/tb2/tb3 (IBM 5, IBM 6).
+	    	String[] order = new String[] {
+	    			"TestCondition_102", "TestCondition_103", // immediate for tb1
+	    			"TestCondition_102", "TestCondition_100", // immediate for tb2; postponed 104 and 105
+	    			"TestCondition_100", "TestCondition_101", // immediate for tb3; postponed 105
+	    			"TestCondition_104", // postponed for tb2; only evaluated 104 because it is not satisfied
+	    	        "TestCondition_105" // postponed for tb3
+	    	};
+	    	utility.testEqualArrays(order, satisfOrder);
+    	}
+    	catch (AssertionFailedError e2) {
+    		try {
+    			// The following order assumes a bundle stack ordering of tb3/tb2/tb1 (Oracle 6, IBM 4.2).
+    			// It also takes into account the optimization of caching the results of immediate, immutable, 
+    			// and satisfied conditions when the bundle protection domain is created (i.e. before the actual permission check).
+    	    	String[] order = new String[] {
+    	    			"TestCondition_100", "TestCondition_100",
+    	    			"TestCondition_100", "TestCondition_101",
+    	    			"TestCondition_102", "TestCondition_102",
+    	    			"TestCondition_103", "TestCondition_105",
+    	    			"TestCondition_104",
+    	    	};
+    	    	utility.testEqualArrays(order, satisfOrder);
+        	}
+        	catch (AssertionFailedError e3) {
+        		// The following order assumes a bundle stack ordering of tb1/tb2/tb3 (IBM 5, IBM 6).
+        		// It also takes into account the optimization of caching the results of immediate, immutable, 
+    			// and satisfied conditions when the bundle protection domain is created (i.e. before the actual permission check).
+        		String[] order = new String[] {
+    	    			"TestCondition_100", "TestCondition_100",
+    	    			"TestCondition_100", "TestCondition_102",
+    	    			"TestCondition_103", "TestCondition_102",
+    	    			"TestCondition_101", "TestCondition_104",
+    	    			"TestCondition_105",
+    	    	};
+    	    	utility.testEqualArrays(order, satisfOrder);
+        	}
+    	}
     }
 //    catch (AssertionFailedError e) {
 //      // added for J9 

@@ -1,7 +1,13 @@
+core.ri.version			= ${build.version}
+cmpn.ri.version			= ${build.version}
+mobile.ri.version		= ${build.version}
+enterprise.ri.version	= ${build.version}
+proposed.ri.version		= ${build.version}
+
 build.impls                 = ${uniq; ${build.cmpn.impls}, ${build.mobile.impls}, ${build.enterprise.impls}}
 
 jar.core.impls = \
-	${repo;osgi.core}, \
+	${core.companion.jar}, \
 	${repo;org.osgi.impl.framework}
 
 build.cmpn.impls = \
@@ -24,7 +30,7 @@ build.cmpn.impls = \
 	org.osgi.impl.service.useradmin 
 
 jar.cmpn.impls = \
-	${repo;osgi.cmpn}, \
+	${cmpn.companion.jar}, \
 	${repo;org.osgi.impl.bundle.servlet;2.1}, \
 	${repo;org.osgi.impl.service.blueprint}, \
 	${repo;org.osgi.impl.service.cm}, \
@@ -49,8 +55,8 @@ build.mobile.impls = \
   	org.osgi.impl.service.prefs
   	
 jar.mobile.impls = \
-	${repo;osgi.mobile}, \
-	${repo;osgi.cmpn}, \
+	${mobile.companion.jar}, \
+	${cmpn.companion.jar}, \
 	${repo;org.osgi.impl.bundle.servlet;2.1}, \
 	${repo;org.osgi.impl.service.cm}, \
 	${repo;org.osgi.impl.service.component}, \
@@ -70,8 +76,8 @@ build.enterprise.impls = \
 	org.osgi.impl.service.useradmin
 	
 jar.enterprise.impls = \
-	${repo;osgi.enterprise}, \
-	${repo;osgi.cmpn}, \
+	${enterprise.companion.jar}, \
+	${cmpn.companion.jar}, \
 	${repo;org.osgi.impl.bundle.derby}, \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery}, \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}, \
