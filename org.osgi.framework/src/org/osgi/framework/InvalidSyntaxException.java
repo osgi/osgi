@@ -50,7 +50,7 @@ public class InvalidSyntaxException extends Exception {
 	 * @param filter The invalid filter string.
 	 */
 	public InvalidSyntaxException(String msg, String filter) {
-		super(msg);
+		super(message(msg, filter));
 		this.filter = filter;
 	}
 
@@ -68,8 +68,18 @@ public class InvalidSyntaxException extends Exception {
 	 * @since 1.3
 	 */
 	public InvalidSyntaxException(String msg, String filter, Throwable cause) {
-		super(msg, cause);
+		super(message(msg, filter), cause);
 		this.filter = filter;
+	}
+
+	/**
+	 * Return message string for super constructor.
+	 */
+	private static String message(String msg, String filter) {
+		if ((msg == null) || (filter == null) || msg.indexOf(filter) >= 0) {
+			return msg;
+		}
+		return msg + ": " + filter;
 	}
 
 	/**
