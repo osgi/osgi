@@ -58,27 +58,6 @@ package org.osgi.service.dmt;
  * @version $Id$
  */
 public interface DmtAdmin {
-	/**
-	 * This system property can be used to specify the DMT session creation
-	 * timeout in milliseconds.
-	 * 
-	 * If this value is not given, then an implementation specific default value
-	 * will be used.
-	 * 
-	 * @since 2.0
-	 */
-	public static final String	SESSION_CREATION_TIMEOUT	= "org.osgi.service.dmt.session.creation.timeout";
-
-	/**
-	 * This system property can be used to specify the DMT session inactivity
-	 * timeout in milliseconds.
-	 * 
-	 * If this value is not given, then an implementation specific default value
-	 * will be used.
-	 * 
-	 * @since 2.0
-	 */
-	public static final String	SESSION_INACTIVE_TIMEOUT	= "org.osgi.service.dmt.session.inactive.timeout";
 	
     /**
      * Opens a {@code DmtSession} for local usage on a given subtree of
@@ -217,27 +196,4 @@ public interface DmtAdmin {
     DmtSession getSession(String principal, String subtreeUri, int lockMode)
             throws DmtException;
 
-
-	/**
-	 * Returns the value for the session creation timeout in milliseconds. The
-	 * returned value reflects the value that has been set via the corresponding
-	 * system property {@link #SESSION_CREATION_TIMEOUT} or the implementation
-	 * specific default value.
-	 * 
-	 * @since 2.0
-	 * @return the active value of the session creation timeout in milliseconds
-	 */
-	long getSessionCreationTimeout();
-
-	/**
-	 * Returns the value for the session inactivity timeout in milliseconds. The
-	 * returned value reflects the value that has been set via the corresponding
-	 * system property {@link #SESSION_INACTIVE_TIMEOUT} or the implementation
-	 * specific default value.
-	 * 
-	 * @since 2.0
-	 * @return the active value of the session inactivity timeout in
-	 *         milliseconds
-	 */
-	long getSessionInactivityTimeout();
 }

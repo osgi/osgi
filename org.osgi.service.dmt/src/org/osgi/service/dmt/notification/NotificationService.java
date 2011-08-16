@@ -19,8 +19,8 @@ import org.osgi.service.dmt.*;
 
 /**
  * NotificationService enables sending aynchronous notifications to a management
- * server. The implementation of {@code NotificationService} should
- * register itself in the OSGi service registry as a service.
+ * server. The implementation of {@code NotificationService} should register
+ * itself in the OSGi service registry as a service.
  * 
  * @version $Id$
  */
@@ -61,36 +61,42 @@ public interface NotificationService {
 	 * principal name is not known), the target of the {@code AlertPermission}
 	 * must be &quot;*&quot;.
 	 * <p>
-	 * When this method is called with all its parameters {@code null} or 0
-	 * (except {@code principal}), it should send a protocol specific default
+	 * When this method is called with null correlator, null or empty AlertItem
+	 * array, and a 0 code as values, it should send a protocol specific default
 	 * notification to initiate a management session. For example, in case of
 	 * OMA DM this is alert 1201 "Client Initiated Session". The
 	 * {@code principal} parameter can be used to determine the recipient of the
 	 * session initiation request.
 	 * 
-	 * @param principal the principal name which is the recipient of this
-	 *        notification, can be {@code null}
-	 * @param code the alert code, can be 0 if not needed
-	 * @param correlator optional field that contains the correlation identifier
-	 *        of an associated exec command, can be {@code null} if not needed
-	 * @param items the data of the alert items carried in this alert, can be
-	 *        {@code null} or empty if not needed
-	 * @throws DmtException with the following possible error codes:
-	 *         <ul>
-	 *         <li>{@code UNAUTHORIZED} when the remote server rejected the
-	 *         request due to insufficient authorization <li>
-	 *         {@code ALERT_NOT_ROUTED} when the alert can not be routed to the
-	 *         given principal <li>{@code REMOTE_ERROR} in case of communication
-	 *         problems between the device and the destination <li>
-	 *         {@code COMMAND_FAILED} for unspecified errors encountered while
-	 *         attempting to complete the command <li>
-	 *         {@code FEATURE_NOT_SUPPORTED} if the underlying management
-	 *         protocol doesn't support asynchronous notifications
-	 *         </ul>
-	 * @throws SecurityException if the caller does not have the required
-	 *         {@code AlertPermission} with a target matching the
-	 *         {@code principal} parameter, as described above
+	 * @param principal
+	 *            the principal name which is the recipient of this
+	 *            notification, can be {@code null}
+	 * @param code
+	 *            the alert code, can be 0 if not needed
+	 * @param correlator
+	 *            optional field that contains the correlation identifier of an
+	 *            associated exec command, can be {@code null} if not needed
+	 * @param items
+	 *            the data of the alert items carried in this alert, can be
+	 *            {@code null} or empty if not needed
+	 * @throws DmtException
+	 *             with the following possible error codes:
+	 *             <ul>
+	 *             <li>{@code UNAUTHORIZED} when the remote server rejected the
+	 *             request due to insufficient authorization <li>
+	 *             {@code ALERT_NOT_ROUTED} when the alert can not be routed to
+	 *             the given principal <li>{@code REMOTE_ERROR} in case of
+	 *             communication problems between the device and the destination
+	 *             <li> {@code COMMAND_FAILED} for unspecified errors
+	 *             encountered while attempting to complete the command <li>
+	 *             {@code FEATURE_NOT_SUPPORTED} if the underlying management
+	 *             protocol doesn't support asynchronous notifications
+	 *             </ul>
+	 * @throws SecurityException
+	 *             if the caller does not have the required
+	 *             {@code AlertPermission} with a target matching the
+	 *             {@code principal} parameter, as described above
 	 */
-    void sendNotification(String principal, int code, String correlator,
-            AlertItem[] items) throws DmtException;
+	void sendNotification(String principal, int code, String correlator,
+			AlertItem[] items) throws DmtException;
 }

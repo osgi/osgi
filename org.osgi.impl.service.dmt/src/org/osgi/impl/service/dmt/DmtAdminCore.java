@@ -17,19 +17,13 @@
  */
 package org.osgi.impl.service.dmt;
 
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
+import java.security.*;
+import java.util.*;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-
-import org.osgi.impl.service.dmt.export.DmtPrincipalPermissionAdmin;
-import org.osgi.service.log.LogService;
-import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.impl.service.dmt.export.*;
+import org.osgi.service.dmt.*;
+import org.osgi.service.log.*;
+import org.osgi.service.permissionadmin.*;
 
 public class DmtAdminCore {
 
@@ -43,6 +37,9 @@ public class DmtAdminCore {
 	
 	private static final long MINIMUM_OPEN_TIMEOUT = 10000;
 	private static final long MINIMUM_IDLE_TIMEOUT = 30000;
+	// TODO removed properties and made constants
+	protected static final String SESSION_INACTIVE_TIMEOUT = "60000";
+	protected static final String SESSION_CREATION_TIMEOUT = "10000";
 	private static long sessionOpenTimeout = -1;
 	private static long sessionIdleTimeout = -1;
     
@@ -155,8 +152,7 @@ public class DmtAdminCore {
 			sessionOpenTimeout = ((Long) AccessController
 					.doPrivileged(new PrivilegedAction() {
 						public Object run() {
-							String limitString = System
-									.getProperty(DmtAdmin.SESSION_CREATION_TIMEOUT);
+							String limitString = SESSION_CREATION_TIMEOUT;
 							long limit = MINIMUM_OPEN_TIMEOUT; // min.
 																			// used
 																			// as
@@ -183,7 +179,7 @@ public class DmtAdminCore {
 					.doPrivileged(new PrivilegedAction() {
 						public Object run() {
 							String limitString = System
-									.getProperty(DmtAdmin.SESSION_INACTIVE_TIMEOUT);
+									.getProperty(SESSION_INACTIVE_TIMEOUT);
 							long limit = MINIMUM_IDLE_TIMEOUT; // min.
 																			// used
 																			// as

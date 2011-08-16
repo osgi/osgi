@@ -258,7 +258,6 @@ public class DmtException extends Exception {
      * other than the beginning of the URI
      * <li>the node name is &quot;{@code ..}&quot; or the URI contains such
      * a segment
-     * <li>the node name is an empty string or the URI contains an empty segment
      * <li>the node name contains an unescaped '/' character
      * </ul>
      * <p>

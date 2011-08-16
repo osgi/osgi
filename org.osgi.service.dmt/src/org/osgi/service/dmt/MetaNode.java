@@ -214,7 +214,7 @@ public interface MetaNode {
 	 * Get the maximum allowed value associated with a node of numeric format.
 	 * If no meta-data is provided for a node, there is no upper limit to its
 	 * value. This method is only meaningful if the node has one of the numeric
-	 * formats: integer, float, long, unsigned_long or unsigned_integer. format.
+	 * formats: integer, float, or long. format.
 	 * The returned limit has {@code double} type, as this can be used to denote
 	 * all numeric limits with full precision. The actual maximum should be the
 	 * largest integer, float or long number that does not exceed the returned
@@ -227,8 +227,7 @@ public interface MetaNode {
 	 * 
 	 * @return the allowed maximum, or {@code Double.MAX_VALUE} if there is no
 	 *         upper limit defined or the node's format is not one of the
-	 *         numeric formats integer, float, long, unsigned_integer or
-	 *         unsigned_long
+	 *         numeric formats integer, float, or long
 	 */
     double getMax();
 
@@ -236,7 +235,7 @@ public interface MetaNode {
 	 * Get the minimum allowed value associated with a node of numeric format.
 	 * If no meta-data is provided for a node, there is no lower limit to its
 	 * value. This method is only meaningful if the node has one of the numeric
-	 * formats: integer, float, long, unsigned_long or unsigned_integer format.
+	 * formats: integer, float, or long format.
 	 * The returned limit has {@code double} type, as this can be used to denote
 	 * both integer and float limits with full precision. The actual minimum
 	 * should be the smallest integer, float or long value that is equal or
@@ -249,8 +248,7 @@ public interface MetaNode {
 	 * 
 	 * @return the allowed minimum, or {@code Double.MIN_VALUE} if there is no
 	 *         lower limit defined or the node's format is not one of the
-	 *         numeric formats integer, float, long, unsigned_integer or
-	 *         unsigned_long
+	 *         numeric formats integer, float, or long
 	 */
     double getMin();
 

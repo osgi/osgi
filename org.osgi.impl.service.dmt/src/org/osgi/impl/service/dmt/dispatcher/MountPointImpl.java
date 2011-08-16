@@ -19,7 +19,6 @@ public class MountPointImpl implements MountPoint {
 		STANDARD_PROPS.add( DmtConstants.EVENT_PROPERTY_NEW_NODES );
 		STANDARD_PROPS.add( DmtConstants.EVENT_PROPERTY_SESSION_ID );
 		STANDARD_PROPS.add( DmtConstants.EVENT_PROPERTY_LIST_NODES );
-		STANDARD_PROPS.add( DmtConstants.EVENT_PROPERTY_LIST_UPCOMING_EVENT );
 	}
 	
 	public MountPointImpl( String[] path, ServiceTracker eaTracker ) {

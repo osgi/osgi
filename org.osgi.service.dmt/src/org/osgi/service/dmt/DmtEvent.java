@@ -76,19 +76,6 @@ public interface DmtEvent {
 	int SESSION_CLOSED = 0x40;
 
 	/**
-	 * Event type indicating that a destructive operation is going to be
-	 * performed by a plugin. This can be any action that causes a change in
-	 * system bundles state (like restart, shutdown etc.).
-	 * <p>
-	 * Events of this type are delivered synchronously in order to give the
-	 * receiver the chance to react accordingly before the destructive operation
-	 * takes place.
-	 * 
-	 * @since 2.0
-	 */
-	int DESTRUCTIVE_OPERATION = 0x80;
-
-	/**
 	 * This method returns the type of this event.
 	 * 
 	 * @return the type of this event.
