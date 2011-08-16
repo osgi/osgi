@@ -242,7 +242,34 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 
 		if (constant != null) {
 			try {
-				assertEquals("Constant value:", constant, f.get(null));
+				Object value = f.get(null);
+				// need to handle that boolean, byte, short, char and int
+				// are placed in an Integer constant.
+				switch (desiredDescriptor.charAt(0)) {
+					case 'Z' : // boolean
+						assertEquals("Constant value:",
+								((Integer) constant).intValue() != 0,
+								((Boolean) value).booleanValue());
+						break;
+					case 'B' : // byte
+						assertEquals("Constant value:",
+								((Integer) constant).byteValue(),
+								((Byte) value).byteValue());
+						break;
+					case 'C' : // char
+						assertEquals("Constant value:",
+								(char) ((Integer) constant).intValue(),
+								((Character) value).charValue());
+						break;
+					case 'S' : // short
+						assertEquals("Constant value:",
+								((Integer) constant).shortValue(),
+								((Short) value).shortValue());
+						break;
+					default :
+						assertEquals("Constant value:", constant, value);
+						break;
+				}
 			}
 			// These can probably be ignored
 			catch (IllegalArgumentException e) {
