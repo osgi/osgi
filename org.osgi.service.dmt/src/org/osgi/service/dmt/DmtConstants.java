@@ -31,82 +31,72 @@ public class DmtConstants {
 	/**
 	 * A string defining a DDF URI, indicating that the node is a LIST node.
 	 */
-	public static final String DDF_LIST = "org.osgi.dmt.LIST";
+	public static final String DDF_LIST = "org.osgi/1.0/LIST";
 
 	/**
 	 * A string defining a DDF URI, indicating that the node is a SCAFFOLD node.
 	 */
-	public static final String DDF_SCAFFOLD = "org.osgi.dmt.SCAFFOLD";
+	public static final String DDF_SCAFFOLD = "org.osgi/1.0/SCAFFOLD";
 
 	/**
 	 * A string defining a DDF URI, indicating that the node is a MAP node
 	 * node.
 	 */
-	public static final String DDF_MAP = "org.osgi.dmt.MAP";
+	public static final String DDF_MAP = "org.osgi/1.0/MAP";
 
 	/**
 	 * A string defining the topic for the event that is sent for added nodes.
-	 * <p>
-	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/ADDED”.
 	 */
 	public static final String EVENT_TOPIC_ADDED = "org/osgi/service/dmtree/DmtEvent/ADDED";
 
 	/**
 	 * A string defining the topic for the event that is sent for deleted nodes.
-	 * <p>
-	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/DELETED”.
 	 */
 	public static final String EVENT_TOPIC_DELETED = "org/osgi/service/dmtree/DmtEvent/DELETED";
 
 	/**
 	 * A string defining the topic for the event that is sent for replaced
 	 * nodes.
-	 * <p>
-	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/REPLACED”.
 	 */
 	public static final String EVENT_TOPIC_REPLACED = "org/osgi/service/dmtree/DmtEvent/REPLACED";
 
 	/**
 	 * A string defining the topic for the event that is sent for renamed nodes.
-	 * <p>
-	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/RENAMED”.
 	 */
 	public static final String EVENT_TOPIC_RENAMED = "org/osgi/service/dmtree/DmtEvent/RENAMED";
 
 	/**
 	 * A string defining the topic for the event that is sent for copied nodes.
-	 * <p>
-	 * The value of this field is “org/osgi/service/dmtree/DmtEvent/COPIED”.
 	 */
 	public static final String EVENT_TOPIC_COPIED = "org/osgi/service/dmtree/DmtEvent/COPIED";
 
 
 	/**
-	 * A string defining the property key for the “session.id” property in node
+	 * A string defining the property key for the {@code session.id} property in node
 	 * related events.
 	 */
 	public static final String EVENT_PROPERTY_SESSION_ID = "session.id";
 
 	/**
-	 * A string defining the property key for the “nodes” property in node
+	 * A string defining the property key for the @{code nodes} property in node
 	 * related events.
 	 */
 	public static final String EVENT_PROPERTY_NODES = "nodes";
 
 	/**
-	 * A string defining the property key for the “newnodes” property in node
+	 * A string defining the property key for the {@code newnodes} property in node
 	 * related events.
 	 */
 	public static final String EVENT_PROPERTY_NEW_NODES = "newnodes";
 
 	/**
-	 * A string defining the property key for the “list.nodes” property in node
+	 * A string defining the property key for the {@code list.nodes} property in node
 	 * related events.
 	 */
 	public static final String EVENT_PROPERTY_LIST_NODES = "list.nodes";
 
 	/**
-	 * A string defining the property key for the “list.upcoming.event” property
+	 * A string defining the property key for the {@code list.upcoming.event} property
 	 * in node related events.
 	 */
 	public static final String EVENT_PROPERTY_LIST_UPCOMING_EVENT = "list.upcoming.event";
