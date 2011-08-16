@@ -92,7 +92,7 @@ public class DAConstants {
     	} else {
     		ICON_STORAGE_ROOT = val;
     	}
-    	String prop = "info.dmtree.osgi.root";
+    	String prop = "org.osgi.service.dmt.osgi.root";
     	val = System.getProperty(prop);
     	if (null == val)
     		throw new RuntimeException(prop + " system property is not defined.");

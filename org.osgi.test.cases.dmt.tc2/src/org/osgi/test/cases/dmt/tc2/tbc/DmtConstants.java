@@ -71,19 +71,19 @@ public class DmtConstants {
 	public static final String DDF = "http://www.openmobilealliance.org/tech/DTD/OMA-SyncML-DMDDF-V1_2_0.dtd";
 	
 	//Events constants
-	public static final String ADDED = "info/dmtree/DmtEvent/ADDED";
+	public static final String	ADDED				= "org/osgi/service/dmt/DmtEvent/ADDED";
 
-	public static final String DELETED = "info/dmtree/DmtEvent/DELETED";
+	public static final String	DELETED				= "org/osgi/service/dmt/DmtEvent/DELETED";
 
-	public static final String REPLACED = "info/dmtree/DmtEvent/REPLACED";
+	public static final String	REPLACED			= "org/osgi/service/dmt/DmtEvent/REPLACED";
 
-	public static final String RENAMED = "info/dmtree/DmtEvent/RENAMED";
+	public static final String	RENAMED				= "org/osgi/service/dmt/DmtEvent/RENAMED";
 
-	public static final String COPIED = "info/dmtree/DmtEvent/COPIED";
+	public static final String	COPIED				= "org/osgi/service/dmt/DmtEvent/COPIED";
 
-	public static final String SESSION_OPENED = "info/dmtree/DmtEvent/SESSION_OPENED";
+	public static final String	SESSION_OPENED		= "org/osgi/service/dmt/DmtEvent/SESSION_OPENED";
 	
-	public static final String SESSION_CLOSED = "info/dmtree/DmtEvent/SESSION_CLOSED";
+	public static final String	SESSION_CLOSED		= "org/osgi/service/dmt/DmtEvent/SESSION_CLOSED";
 
 	public static final String SESSION_ID = "session.id";
 

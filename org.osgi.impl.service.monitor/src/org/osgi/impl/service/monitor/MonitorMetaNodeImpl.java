@@ -18,8 +18,8 @@
 package org.osgi.impl.service.monitor;
 
 import java.util.Arrays;
-import info.dmtree.MetaNode;
-import info.dmtree.DmtData;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.DmtData;
 
 public class MonitorMetaNodeImpl implements MetaNode
 {

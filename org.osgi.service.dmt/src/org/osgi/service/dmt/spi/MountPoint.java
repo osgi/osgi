@@ -44,36 +44,34 @@ public interface MountPoint {
 	 * This method distributes Events asynchronously to the EventAdmin as well
 	 * as to matching local DmtEventListeners.
 	 * 
-	 * @param topic
-	 *            the topic of the event to send. Valid values are:
-	 *            <ul>
-	 *            <li>{@code org/osgi/service/dmtree/DmtEvent/ADDED} if the
-	 *            change was caused by a rename action
-	 *            <p>
-	 *            <li>{@code org/osgi/service/info/dmtree/DmtEvent/DELETED} if
-	 *            the change was caused by a copy action
-	 *            <p>
-	 *            <li>{@code org/osgi/service/info/dmtree/DmtEvent/REPLACED} if
-	 *            the change was caused by a copy action
-	 *            </ul>
-	 *            Must not be {@code null}.
-	 * @param relativeURIs
-	 *            an array of affected node {@code URI}'s. All {@code URI}'s
-	 *            specified here are relative to the current {@code MountPoint}
-	 *            's mountPath. The value of this parameter determines the value
-	 *            of the event property {@code EVENT_PROPERTY_NODES}. An empty
-	 *            array or {@code null} is permitted. In both cases the value of
-	 *            the events {@code EVENT_PROPERTY_NODES} property will be set
-	 *            to an empty array.
+	 * @param topic the topic of the event to send. Valid values are:
+	 *        <ul>
+	 *        <li>{@code org/osgi/service/dmt/DmtEvent/ADDED} if the change
+	 *        was caused by a rename action
+	 *        <p>
+	 *        <li>{@code org/osgi/service/dmt/DmtEvent/DELETED} if the change
+	 *        was caused by a copy action
+	 *        <p>
+	 *        <li>{@code org/osgi/service/dmt/DmtEvent/REPLACED} if the
+	 *        change was caused by a copy action
+	 *        </ul>
+	 *        Must not be {@code null}.
+	 * @param relativeURIs an array of affected node {@code URI}'s. All
+	 *        {@code URI}'s specified here are relative to the current
+	 *        {@code MountPoint}'s mountPath. The value of this parameter
+	 *        determines the value of the event property
+	 *        {@code EVENT_PROPERTY_NODES}. An empty array or {@code null} is
+	 *        permitted. In both cases the value of the events
+	 *        {@code EVENT_PROPERTY_NODES} property will be set to an empty
+	 *        array.
 	 * 
-	 * @param properties
-	 *            an optional parameter that can be provided to add properties
-	 *            to the Event that is going to be send by the DMTAdmin. If the
-	 *            properties contain a key {@code EVENT_PROPERTY_NODES}, then
-	 *            the value of this property is ignored and will be overwritten
-	 *            by {@code relativeURIs}.
-	 * @throws IllegalArgumentException
-	 *             if the topic has not one of the defined values
+	 * @param properties an optional parameter that can be provided to add
+	 *        properties to the Event that is going to be send by the DMTAdmin.
+	 *        If the properties contain a key {@code EVENT_PROPERTY_NODES}, then
+	 *        the value of this property is ignored and will be overwritten by
+	 *        {@code relativeURIs}.
+	 * @throws IllegalArgumentException if the topic has not one of the defined
+	 *         values
 	 * 
 	 */
 	void postEvent(String topic, String[] relativeURIs, Dictionary properties);
@@ -85,42 +83,38 @@ public interface MountPoint {
 	 * This method distributes Events asynchronously to the EventAdmin as well
 	 * as to matching local DmtEventListeners.
 	 * 
-	 * @param topic
-	 *            the topic of the event to send. Valid values are:
-	 *            <ul>
-	 *            <li>{@code org/osgi/service/info/dmtree/DmtEvent/RENAMED} if
-	 *            the change was caused by a rename action
-	 *            <p>
-	 *            <li>{@code org/osgi/service/info/dmtree/DmtEvent/COPIED} if
-	 *            the change was caused by a copy action
-	 *            </ul>
-	 *            Must not be {@code null}.
-	 * @param relativeURIs
-	 *            an array of affected node {@code URI}'s.
-	 *            <p>
-	 *            All {@code URI}'s specified here are relative to the current
-	 *            {@code MountPoint}'s mountPath. The value of this parameter
-	 *            determines the value of the event property
-	 *            {@code EVENT_PROPERTY_NODES}. An empty array or {@code null}
-	 *            is permitted. In both cases the value of the events
-	 *            {@code EVENT_PROPERTY_NODES} property will be set to an empty
-	 *            array.
-	 * @param newRelativeURIs
-	 *            an array of affected node {@code URI}'s.The value of this
-	 *            parameter determines the value of the event property
-	 *            {@code EVENT_PROPERTY_NEW_NODES}. An empty array or
-	 *            {@code null} is permitted. In both cases the value of the
-	 *            events {@code EVENT_PROPERTY_NEW_NODES} property will be set
-	 *            to an empty array.
-	 * @param properties
-	 *            an optional parameter that can be provided to add properties
-	 *            to the Event that is going to be send by the DMTAdmin. If the
-	 *            properties contain the keys {@code EVENT_PROPERTY_NODES} or
-	 *            {@code EVENT_PROPERTY_NEW_NODES}, then the values of these
-	 *            properties are ignored and will be overwritten by
-	 *            {@code relativeURIs} and {@code newRelativeURIs}.
-	 * @throws IllegalArgumentException
-	 *             if the topic has not one of the defined values
+	 * @param topic the topic of the event to send. Valid values are:
+	 *        <ul>
+	 *        <li>{@code org/osgi/service/dmt/DmtEvent/RENAMED} if the change
+	 *        was caused by a rename action
+	 *        <p>
+	 *        <li>{@code org/osgi/service/dmt/DmtEvent/COPIED} if the change
+	 *        was caused by a copy action
+	 *        </ul>
+	 *        Must not be {@code null}.
+	 * @param relativeURIs an array of affected node {@code URI}'s.
+	 *        <p>
+	 *        All {@code URI}'s specified here are relative to the current
+	 *        {@code MountPoint}'s mountPath. The value of this parameter
+	 *        determines the value of the event property
+	 *        {@code EVENT_PROPERTY_NODES}. An empty array or {@code null} is
+	 *        permitted. In both cases the value of the events
+	 *        {@code EVENT_PROPERTY_NODES} property will be set to an empty
+	 *        array.
+	 * @param newRelativeURIs an array of affected node {@code URI}'s.The value
+	 *        of this parameter determines the value of the event property
+	 *        {@code EVENT_PROPERTY_NEW_NODES}. An empty array or {@code null}
+	 *        is permitted. In both cases the value of the events
+	 *        {@code EVENT_PROPERTY_NEW_NODES} property will be set to an empty
+	 *        array.
+	 * @param properties an optional parameter that can be provided to add
+	 *        properties to the Event that is going to be send by the DMTAdmin.
+	 *        If the properties contain the keys {@code EVENT_PROPERTY_NODES} or
+	 *        {@code EVENT_PROPERTY_NEW_NODES}, then the values of these
+	 *        properties are ignored and will be overwritten by
+	 *        {@code relativeURIs} and {@code newRelativeURIs}.
+	 * @throws IllegalArgumentException if the topic has not one of the defined
+	 *         values
 	 */
 	void postEvent(String topic, String[] relativeURIs,
 			String[] newRelativeURIs, Dictionary properties);

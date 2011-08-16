@@ -4,7 +4,6 @@ import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.service.dmt.spi.MountPlugin;
-
 import org.osgi.test.support.OSGiTestCase;
 
 public class TestBug1731_StringConstants extends OSGiTestCase{
@@ -47,11 +46,20 @@ public class TestBug1731_StringConstants extends OSGiTestCase{
 		assertConstant( "org.osgi/1.0/ListSubtree", "DDF_LIST_SUBTREE", DmtConstants.class );
 		assertConstant( "org.osgi/1.0/ScaffoldNode", "DDF_SCAFFOLD", DmtConstants.class );
 
-		assertConstant( "info/dmtree/DmtEvent/ADDED", "EVENT_TOPIC_ADDED", DmtConstants.class );
-		assertConstant( "info/dmtree/DmtEvent/DELETED", "EVENT_TOPIC_DELETED", DmtConstants.class );
-		assertConstant( "info/dmtree/DmtEvent/REPLACED", "EVENT_TOPIC_REPLACED", DmtConstants.class );
-		assertConstant( "info/dmtree/DmtEvent/RENAMED", "EVENT_TOPIC_RENAMED", DmtConstants.class );
-		assertConstant( "info/dmtree/DmtEvent/COPIED", "EVENT_TOPIC_COPIED", DmtConstants.class );
+		assertConstant("org/osgi/service/dmt/DmtEvent/ADDED",
+				"EVENT_TOPIC_ADDED", DmtConstants.class);
+		assertConstant("org/osgi/service/dmt/DmtEvent/DELETED",
+				"EVENT_TOPIC_DELETED", DmtConstants.class);
+		assertConstant("org/osgi/service/dmt/DmtEvent/REPLACED",
+				"EVENT_TOPIC_REPLACED", DmtConstants.class);
+		assertConstant("org/osgi/service/dmt/DmtEvent/RENAMED",
+				"EVENT_TOPIC_RENAMED", DmtConstants.class);
+		assertConstant("org/osgi/service/dmt/DmtEvent/COPIED",
+				"EVENT_TOPIC_COPIED", DmtConstants.class);
+		assertConstant("org/osgi/service/dmt/DmtEvent/SESSION_OPENED",
+				"EVENT_TOPIC_SESSION_OPENED", DmtConstants.class);
+		assertConstant("org/osgi/service/dmt/DmtEvent/SESSION_CLOSED",
+				"EVENT_TOPIC_SESSION_CLOSED", DmtConstants.class);
 		
 		assertConstant( "session.id", "EVENT_PROPERTY_SESSION_ID", DmtConstants.class );
 		assertConstant( "nodes", "EVENT_PROPERTY_NODES", DmtConstants.class );

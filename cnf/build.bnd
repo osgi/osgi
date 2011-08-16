@@ -80,14 +80,12 @@ osgi.version				= 4.3
 build.version				= ${osgi.version}.0.${project.build}
 core.build.version			= 4.4.0.${project.build}
 cmpn.build.version			= ${build.version}
-mobile.build.version		= ${build.version}
 enterprise.build.version	= ${build.version}
 residential.build.version	= ${build.version}
 proposed.build.version		= ${build.version}
 
 core.companion.jar			= ${repo;osgi.core;${osgi.version};lowest}
 cmpn.companion.jar			= ${repo;osgi.cmpn;${osgi.version};lowest}
-mobile.companion.jar		= ${repo;osgi.mobile;${osgi.version};lowest}
 enterprise.companion.jar	= ${repo;osgi.enterprise;${osgi.version};lowest}
 residential.companion.jar	= ${repo;osgi.residential;${osgi.version};lowest}
 proposed.companion.jar		= ${repo;osgi.proposed;${osgi.version};lowest}

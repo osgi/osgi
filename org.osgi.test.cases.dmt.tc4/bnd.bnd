@@ -25,7 +25,7 @@ Test-Cases							= ${testcases}
 
 -runproperties = ${runsecureproperties}, \
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
-	org.osgi.dmtree.max.segment.name.length=33, \
-	org.osgi.dmtree.max.uri.length=129, \
-	org.osgi.dmtree.max.uri.segments=21
+	org.osgi.service.dmt.max.segment.name.length=33, \
+	org.osgi.service.dmt.max.uri.length=129, \
+	org.osgi.service.dmt.max.uri.segments=21
 

@@ -24,7 +24,7 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-import info.dmtree.notification.NotificationService;
+import org.osgi.service.dmt.notification.NotificationService;
 
 import java.io.IOException;
 import java.security.AccessController;

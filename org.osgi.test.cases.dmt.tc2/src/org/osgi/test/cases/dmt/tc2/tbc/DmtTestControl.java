@@ -49,12 +49,6 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc;
 
-import org.osgi.service.dmt.Acl;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.Uri;
-
 import java.security.AccessController;
 import java.security.MessageDigest;
 import java.security.PrivilegedAction;
@@ -66,6 +60,11 @@ import org.osgi.framework.AdminPermission;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.Uri;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -216,7 +215,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	public void setPermissions(PermissionInfo[] permissions) {
 		PermissionInfo[] defaults = new PermissionInfo[] {
 				new PermissionInfo(TopicPermission.class.getName(),
-						"info/dmtree/DmtEvent/*", TopicPermission.PUBLISH + ","
+						"org/osgi/service/dmt/DmtEvent/*",
+						TopicPermission.PUBLISH + ","
 								+ TopicPermission.SUBSCRIBE),
 				new PermissionInfo(PackagePermission.class.getName(), "*",
 						"EXPORT, IMPORT"),

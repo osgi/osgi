@@ -17,10 +17,6 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-import info.dmtree.notification.NotificationService;
-import info.dmtree.spi.DataPlugin;
-import info.dmtree.spi.ExecPlugin;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -39,6 +35,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import org.osgi.framework.Bundle;
@@ -54,6 +51,9 @@ import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.dmt.notification.NotificationService;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
@@ -570,7 +570,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
      * Convenience method to send events
      */
     private Event sendInstallEvent(DeploymentPackageImpl dp) {
-    	final Hashtable ht = new Hashtable();
+		final Map ht = new Hashtable();
     	ht.put(DAConstants.EVENTPROP_DPNAME, dp.getName());
     	String displayName = dp.getDisplayName();
     	if (displayName != null) {
@@ -595,7 +595,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
      * Convenience method to send events
      */
     private Event sendUninstallEvent(DeploymentPackageImpl dp) {
-    	final Hashtable ht = new Hashtable();
+		final Map ht = new Hashtable();
     	ht.put(DAConstants.EVENTPROP_DPNAME, dp.getName());
     	String displayName = dp.getDisplayName();
     	if (displayName != null) {
@@ -620,7 +620,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private void sendCompleteEvent(DeploymentPackageImpl dp, Event startEvent, boolean succ) {
     	if (null == startEvent)
     		return;
-        final Hashtable ht = new Hashtable();
+		final Map ht = new Hashtable();
         ht.put(DAConstants.EVENTPROP_DPNAME, startEvent.getProperty(DAConstants.EVENTPROP_DPNAME));
         if (startEvent.getProperty(DAConstants.EVENTPROP_DP_READABLE_NAME) != null) {
         	ht.put(DAConstants.EVENTPROP_DP_READABLE_NAME, startEvent.getProperty(DAConstants.EVENTPROP_DP_READABLE_NAME));

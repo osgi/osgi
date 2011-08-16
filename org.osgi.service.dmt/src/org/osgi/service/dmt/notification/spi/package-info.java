@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * Device Management Tree Notification SPI Package Version 1.0.
+ * Device Management Tree Notification SPI Package Version 2.0.
  * 
  * <p>
  * This package contains the SPI (Service Provider Interface) of the Notification
@@ -33,11 +33,11 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.dmt.notification.spi; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.service.dmt.notification.spi; version="[2.0,3.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.dmt.notification.spi; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.service.dmt.notification.spi; version="[2.0,2.1)"}
  * 
  * @version $Id$
  */

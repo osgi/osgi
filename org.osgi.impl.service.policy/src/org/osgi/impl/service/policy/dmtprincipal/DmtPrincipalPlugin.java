@@ -17,9 +17,9 @@
  */
 package org.osgi.impl.service.policy.dmtprincipal;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.MetaNode;
 
 import java.io.IOException;
 import java.security.*;
