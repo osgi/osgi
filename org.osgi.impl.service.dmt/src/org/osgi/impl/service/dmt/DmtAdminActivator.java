@@ -117,7 +117,8 @@ public class DmtAdminActivator implements BundleActivator {
         
 	    // unsetting our context from the private variable in DmtServiceFactory
         try {
-            factoryContext.set(null, null);
+        	if ( factoryContext != null )
+        		factoryContext.set(null, null);
         } catch(IllegalAccessException e) {
             System.out.println("Exception:" + e.getMessage());
             throw new BundleException("Failure in stop() method.", e);
