@@ -138,13 +138,14 @@ public interface WovenClass {
 	public ProtectionDomain getProtectionDomain();
 
 	/**
-	 * Returns the class associated with this woven class. When loading a class
-	 * for the first time this method will return {@code null} until weaving is
-	 * {@link #isWeavingComplete() complete}. Once weaving is complete, this
-	 * method will return the class object.
+	 * Returns the class defined by this woven class. During weaving, this
+	 * method will return {@code null}. Once weaving is
+	 * {@link #isWeavingComplete() complete}, this method will return the class
+	 * object if this woven class was used to define the class.
 	 * 
 	 * @return The class associated with this woven class, or {@code null} if
-	 *         weaving is not complete or the class definition failed.
+	 *         weaving is not complete, the class definition failed or this
+	 *         woven class was not used to define the class.
 	 */
 	public Class< ? > getDefinedClass();
 

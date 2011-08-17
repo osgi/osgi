@@ -416,7 +416,7 @@ public class BundleWiringTests extends WiringTest {
 	}
 	
 	private void checkCapabilitiesTb1v110(BundleWiring tb1Wiring, Bundle tb4) {
-		assertEquals("Wrong number of capabilities", 8, tb1Wiring.getCapabilities(null).size());
+		assertEquals("Wrong number of capabilities", 9, tb1Wiring.getCapabilities(null).size());
 		checkCapabilities(
 				tb1Wiring.getCapabilities(BundleRevision.BUNDLE_NAMESPACE), 
 				tb1Wiring.getCapabilities(null), 
@@ -462,7 +462,7 @@ public class BundleWiringTests extends WiringTest {
 	}
 	
 	private void checkCapabilitiesTb2(BundleWiring tb2Wiring) {
-		assertEquals("Wrong number of capabilities", 1, tb2Wiring.getCapabilities(null).size());
+		assertEquals("Wrong number of capabilities", 2, tb2Wiring.getCapabilities(null).size());
 		checkCapabilities(
 				tb2Wiring.getCapabilities(BundleRevision.BUNDLE_NAMESPACE), 
 				tb2Wiring.getCapabilities(null), 
@@ -484,7 +484,7 @@ public class BundleWiringTests extends WiringTest {
 	}
 	
 	private void checkCapabilitiesTb3(BundleWiring tb3Wiring) {
-		assertEquals("Wrong number of capabilities", 2, tb3Wiring.getCapabilities(null).size());
+		assertEquals("Wrong number of capabilities", 3, tb3Wiring.getCapabilities(null).size());
 		checkCapabilities(
 				tb3Wiring.getCapabilities(BundleRevision.BUNDLE_NAMESPACE), 
 				tb3Wiring.getCapabilities(null), 
@@ -506,11 +506,11 @@ public class BundleWiringTests extends WiringTest {
 	}
 	
 	private void checkCapabilitiesTb4(BundleWiring tb4Wiring) {
-		assertEquals("Wrong number of capabilities", 0, tb4Wiring.getCapabilities(null).size());
+		assertEquals("Wrong number of capabilities", 1, tb4Wiring.getCapabilities(null).size());
 	}
 	
 	private void checkCapabilitiesTb5(BundleWiring tb5Wiring) {
-		assertEquals("Wrong number of capabilities", 2, tb5Wiring.getCapabilities(null).size());
+		assertEquals("Wrong number of capabilities", 3, tb5Wiring.getCapabilities(null).size());
 		checkCapabilities(
 				tb5Wiring.getCapabilities(BundleRevision.BUNDLE_NAMESPACE), 
 				tb5Wiring.getCapabilities(null), 
@@ -532,7 +532,7 @@ public class BundleWiringTests extends WiringTest {
 	}
 	
 	private void checkCapabilitiesTb14(BundleWiring tb14Wiring) {
-		assertEquals("Wrong number of capabilities", 2, tb14Wiring.getCapabilities(null).size());
+		assertEquals("Wrong number of capabilities", 3, tb14Wiring.getCapabilities(null).size());
 		checkCapabilities(
 				tb14Wiring.getCapabilities(BundleRevision.BUNDLE_NAMESPACE), 
 				tb14Wiring.getCapabilities(null), 
