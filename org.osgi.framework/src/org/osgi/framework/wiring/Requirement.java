@@ -23,9 +23,8 @@ import org.osgi.framework.Constants;
 /**
  * A requirement that has been declared from a {@link Resource} .
  * 
+ * @since 1.1
  * @ThreadSafe
- * @Immutable
- * 
  * @version $Id$
  */
 public interface Requirement {

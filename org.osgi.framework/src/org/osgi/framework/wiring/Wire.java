@@ -19,8 +19,8 @@ package org.osgi.framework.wiring;
 /**
  * A wire connecting a {@link Capability} to a {@link Requirement}.
  * 
+ * @since 1.1
  * @ThreadSafe
- * @Immutable
  * @version $Id$
  */
 public interface Wire {

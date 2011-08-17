@@ -26,6 +26,8 @@ import org.osgi.framework.Version;
  * The values associated with these keys are of type {@code String}, unless
  * otherwise indicated.
  * 
+ * @since 1.1
+ * @Immutable
  * @version $Id$
  */
 public final class ResourceConstants {

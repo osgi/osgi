@@ -8,9 +8,8 @@ import java.util.List;
  * 
  * A resources can be wired together via capabilities and requirements.
  * 
+ * @since 1.1
  * @ThreadSafe
- * @Immutable
- *  
  * @version $Id$
  */
 public interface Resource {
