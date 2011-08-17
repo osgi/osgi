@@ -16,9 +16,6 @@
 
 package org.osgi.framework.wiring;
 
-import java.util.Map;
-
-
 /**
  * A capability that has been declared from a {@link BundleRevision bundle
  * revision}.
@@ -27,31 +24,7 @@ import java.util.Map;
  * @noimplement
  * @version $Id$
  */
-public interface BundleCapability extends Capability{
-	/**
-	 * Returns the name space of this capability.
-	 * 
-	 * @return The name space of this capability.
-	 */
-	String getNamespace();
-
-	/**
-	 * Returns the directives of this capability.
-	 * 
-	 * @return An unmodifiable map of directive names to directive values for
-	 *         this capability, or an empty map if this capability has no
-	 *         directives.
-	 */
-	Map<String, String> getDirectives();
-
-	/**
-	 * Returns the attributes of this capability.
-	 * 
-	 * @return An unmodifiable map of attribute names to attribute values for
-	 *         this capability, or an empty map if this capability has no
-	 *         attributes.
-	 */
-	Map<String, Object> getAttributes();
+public interface BundleCapability extends Capability {
 
 	/**
 	 * Returns the bundle revision declaring this capability.

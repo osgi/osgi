@@ -16,9 +16,6 @@
 
 package org.osgi.framework.wiring;
 
-import java.util.Map;
-
-
 /**
  * A requirement that has been declared from a {@link BundleRevision bundle
  * revision}.
@@ -27,32 +24,7 @@ import java.util.Map;
  * @noimplement
  * @version $Id$
  */
-public interface BundleRequirement extends Requirement{
-	/**
-	 * Returns the name space of this requirement.
-	 * 
-	 * @return The name space of this requirement.
-	 */
-	String getNamespace();
-
-	/**
-	 * Returns the directives of this requirement.
-	 * 
-	 * @return An unmodifiable map of directive names to directive values for
-	 *         this requirement, or an empty map if this requirement has no
-	 *         directives.
-	 */
-	Map<String, String> getDirectives();
-
-	/**
-	 * Returns the attributes of this requirement.
-	 * 
-	 * @return An unmodifiable map of attribute names to attribute values for
-	 *         this requirement, or an empty map if this requirement has no
-	 *         attributes.
-	 */
-	Map<String, Object> getAttributes();
-
+public interface BundleRequirement extends Requirement {
 	/**
 	 * Returns the bundle revision declaring this requirement.
 	 * 
