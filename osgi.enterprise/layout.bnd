@@ -7,6 +7,9 @@ enterprise.specs = \
 	 org.osgi.service.http, \
      org.osgi.service.provisioning, \
      org.osgi.service.remoteserviceadmin, \
+     org.osgi.service.repository, \
+     org.osgi.service.resolver, \
+     org.osgi.service.subsystem, \
 	 org.osgi.service.jdbc, \
 	 org.osgi.service.jndi, \
 	 org.osgi.service.jpa, \
