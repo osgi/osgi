@@ -78,7 +78,6 @@ import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActiv
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.IsAbsoluteUri;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.IsValidUri;
-import org.osgi.test.cases.dmt.tc2.tbc.Uri.Mangle;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.ToPath;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.ToUri;
 import org.osgi.test.support.Base64Encoder;
@@ -475,7 +474,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 
 	public void testUriMangle() {
-		new Mangle(this).run();
+		log("#Test of URI mangling was disabled because Uri.mangle() has been removed in DmtAdmin spec. 2.0 !!!");
+//		new Mangle(this).run();
 	}
 
 	public void testUriToUri() {
@@ -567,8 +567,11 @@ public class DmtTestControl extends DefaultTestBundleControl {
 			StringBuffer nodeNameBuffer = new StringBuffer();
 			if (nodeUri.length > 0) {
 				for (int i = 0; i < nodeUri.length; i++) {
-					nodeNameBuffer = nodeNameBuffer.append(Uri
-							.mangle(nodeUri[i])
+					// Uri.mangle() has been removed in DmtAdmin spec 2.0
+					// TestCase needs update
+//					nodeNameBuffer = nodeNameBuffer.append(Uri
+//							.mangle(nodeUri[i])
+					nodeNameBuffer = nodeNameBuffer.append(nodeUri[i]
 							+ "/");
 				}
 				nodeName = nodeNameBuffer.substring(0,

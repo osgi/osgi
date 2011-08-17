@@ -102,7 +102,10 @@ class ConfigIdHandler {
             if(pid.equals(entry.getValue()))
                 return (String) entry.getKey(); 
         }
-        return Uri.mangle(pid);
+		// Uri.mangle has been removed in DmtAdmin spec 2.0
+		// TestCase needs update
+//        return Uri.mangle(pid);
+        return pid;
     }
     
     void removeMapping(String nodeName) throws IOException {
@@ -143,6 +146,9 @@ class ConfigIdHandler {
 
     
     static boolean matchingId(String nodeName, String pid) {
-        return Uri.mangle(pid).equals(nodeName);
+		// Uri.mangle has been removed in DmtAdmin spec 2.0
+		// TestCase needs update
+//        return Uri.mangle(pid).equals(nodeName);
+        return pid.equals(nodeName);
     }
 }
