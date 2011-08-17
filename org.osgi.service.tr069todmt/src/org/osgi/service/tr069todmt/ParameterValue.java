@@ -37,11 +37,11 @@ public interface ParameterValue {
 	public String getValue();
 
 	/**
-	 * The type of the parameter. One of {@link TR069Adapter#TR069_INT},
-	 * {@link TR069Adapter#TR069_UNSIGNED_INT},{@link TR069Adapter#TR069_LONG},
-	 * {@link TR069Adapter#TR069_UNSIGNED_LONG},
-	 * {@link TR069Adapter#TR069_STRING}, {@link TR069Adapter#TR069_DATETIME},
-	 * {@link TR069Adapter#TR069_BASE64}, {@link TR069Adapter#TR069_HEXBINARY}.
+	 * The type of the parameter. One of {@link TR069Connector#TR069_INT},
+	 * {@link TR069Connector#TR069_UNSIGNED_INT},{@link TR069Connector#TR069_LONG},
+	 * {@link TR069Connector#TR069_UNSIGNED_LONG},
+	 * {@link TR069Connector#TR069_STRING}, {@link TR069Connector#TR069_DATETIME},
+	 * {@link TR069Connector#TR069_BASE64}, {@link TR069Connector#TR069_HEXBINARY}.
 	 * This method is not part of the {@code ParameterValueStruct} but is
 	 * necessary to encode the type in the XML.
 	 * 

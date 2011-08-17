@@ -3,7 +3,7 @@ package org.osgi.service.tr069todmt;
 
 /**
  * Maps to the TR-069 {@code ParameterInfoStruct} that is returned from the
- * {@link TR069Adapter#getParameterNames(String)} method.
+ * {@link TR069Connector#getParameterNames(String)} method.
  */
 public interface ParameterInfo {
 

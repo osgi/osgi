@@ -23,14 +23,14 @@ import org.osgi.service.dmt.*;
  */
 public interface TR069Factory {
 	/**
-	 * Create a TR069 Adapter based on the given session .
+	 * Create a TR069 connector based on the given session .
 	 * 
 	 * @param session
 	 *            The session to use for the adaption. This session must not be
-	 *            closed before the TR069 Adapter is closed.
-	 * @return A new TR069Adapter bound to the given session
+	 *            closed before the TR069 connector is closed.
+	 * @return A new TR069 Connector bound to the given session
 	 */
 
-	TR069Adapter create(DmtSession session);
+	TR069Connector create(DmtSession session);
 	
 }
