@@ -19,7 +19,7 @@ package org.osgi.service.tr069todmt;
 import org.osgi.service.dmt.*;
 
 /**
- * A service that can create TR069 Adapters
+ * A service that can create TR069 Connector
  */
 public interface TR069Factory {
 	/**
