@@ -59,6 +59,4 @@ public interface BundleCapability extends Capability{
 	 * @return The bundle revision declaring this capability.
 	 */
 	BundleRevision getRevision();
-
-	BundleRevision getResource();
 }

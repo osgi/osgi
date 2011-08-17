@@ -61,11 +61,6 @@ public interface BundleRequirement extends Requirement{
 	BundleRevision getRevision();
 
 	/**
-	 * {@inheritDoc}
-	 */
-	BundleRevision getResource();
-
-	/**
 	 * Returns whether the specified capability matches this requirement.
 	 * 
 	 * @param capability The capability to match to this requirement.

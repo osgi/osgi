@@ -70,14 +70,4 @@ public interface BundleWire extends Wire {
 	 *         returned.
 	 */
 	BundleWiring getRequirerWiring();
-
-	/**
-	 * {@inheritDoc}
-	 */
-	BundleRevision getProvider();
-
-	/**
-	 * {@inheritDoc}
-	 */
-	BundleRevision getRequirer();
 }
