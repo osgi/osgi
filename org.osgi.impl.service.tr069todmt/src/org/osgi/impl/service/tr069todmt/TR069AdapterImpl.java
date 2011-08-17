@@ -15,7 +15,7 @@ import aQute.bnd.annotation.component.*;
  * 
  */
 @Component
-public class TR069AdapterImpl implements TR069Adapter {
+public class TR069AdapterImpl implements TR069Connector {
 	static final Pattern FULL_PARAMETER_NAME = Pattern
 			.compile("([\\p{L}_][-\\p{L}\\p{Digit}\\p{CombiningDiacriticalMarks}_]*(\\.\\d+)?)*");
 	static final Pattern HEXBINARY = Pattern
