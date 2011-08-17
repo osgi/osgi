@@ -28,8 +28,10 @@ import java.util.Date;
  * node of the session. The empty string as relative URI means the root URI the
  * session was opened with. All segments of a URI must be within the segment
  * length limit of the implementation, and the special characters '/' and '\'
- * must be escaped (preceded by a '\'). Any string can be converted to a valid
- * URI segment using the {@link Uri#mangle(String)} method.
+ * must be escaped (preceded by a '\'). 
+ * <p>
+ * See the {@link Uri#encode(String)} method for support on escaping invalid 
+ * characters in a URI.
  * <p>
  * If the URI specified does not correspond to a legitimate node in the tree an
  * exception is thrown. The only exception is the {@link #isNodeUri(String)}
@@ -1234,9 +1236,8 @@ public interface DmtSession {
 	/**
 	 * Get the list of children names of a node. The returned array contains the
 	 * names - not the URIs - of the immediate children nodes of the given node.
-	 * The returned child names are mangled ({@link Uri#mangle(String)}). The
-	 * elements are in no particular order. The returned array must not contain
-	 * {@code null} entries.
+	 * The elements are in no particular order. The returned array must not 
+	 * contain {@code null} entries.
 	 * 
 	 * @param nodeUri
 	 *            the URI of the node

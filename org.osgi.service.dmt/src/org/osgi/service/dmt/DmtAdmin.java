@@ -34,8 +34,10 @@ package org.osgi.service.dmt;
  * The methods for opening a session take a node URI (the session root) as a
  * parameter. All segments of the given URI must be within the segment length
  * limit of the implementation, and the special characters '/' and '\' must be
- * escaped (preceded by a '\'). Any string can be converted to a valid URI
- * segment using the {@link Uri#mangle(String)} method.
+ * escaped (preceded by a '\'). 
+ * <p>
+ * See the {@link Uri#encode(String)} method for support on escaping invalid 
+ * characters in a URI.
  * <p>
  * It is possible to specify a lock mode when opening the session (see lock type
  * constants in {@link DmtSession}). This determines whether the session can run

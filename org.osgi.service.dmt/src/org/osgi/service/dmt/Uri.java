@@ -145,50 +145,50 @@ public final class Uri {
 		//
 	}
 
-	/**
-	 * Returns a node name that is valid for the tree operation methods, based
-	 * on the given node name. This transformation is not idempotent, so it must
-	 * not be called with a parameter that is the result of a previous
-	 * {@code mangle} method call.
-	 * <p>
-	 * Node name mangling is needed in the following cases:
-	 * <ul>
-	 * <li>if the name contains '/' or '\' characters
-	 * <li>if the length of the name exceeds the limit defined by the
-	 * implementation
-	 * </ul>
-	 * <p>
-	 * A node name that does not suffer from either of these problems is
-	 * guaranteed to remain unchanged by this method. Therefore the client may
-	 * skip the mangling if the node name is known to be valid (though it is
-	 * always safe to call this method).
-	 * <p>
-	 * The method returns the normalized {@code nodeName} as described below.
-	 * Invalid node names are normalized in different ways, depending on the
-	 * cause. If the length of the name does not exceed the limit, but the name
-	 * contains '/' or '\' characters, then these are simply escaped by
-	 * inserting an additional '\' before each occurrence. If the length of the
-	 * name does exceed the limit, the following mechanism is used to normalize
-	 * it:
-	 * <ul>
-	 * <li>the SHA 1 digest of the name is calculated
-	 * <li>the digest is encoded with the base 64 algorithm
-	 * <li>all '/' characters in the encoded digest are replaced with '_'
-	 * <li>trailing '=' signs are removed
-	 * </ul>
-	 * 
-	 * @param nodeName
-	 *            the node name to be mangled (if necessary), must not be
-	 *            {@code null} or empty
-	 * @return the normalized node name that is valid for tree operations
-	 * @throws NullPointerException
-	 *             if {@code nodeName} is {@code null}
-	 * @throws IllegalArgumentException
-	 *             if {@code nodeName} is empty
-	 */
-	public static String mangle(String nodeName) {
-		return mangle(nodeName, getMaxSegmentNameLength());
-	}
+//	/**
+//	 * Returns a node name that is valid for the tree operation methods, based
+//	 * on the given node name. This transformation is not idempotent, so it must
+//	 * not be called with a parameter that is the result of a previous
+//	 * {@code mangle} method call.
+//	 * <p>
+//	 * Node name mangling is needed in the following cases:
+//	 * <ul>
+//	 * <li>if the name contains '/' or '\' characters
+//	 * <li>if the length of the name exceeds the limit defined by the
+//	 * implementation
+//	 * </ul>
+//	 * <p>
+//	 * A node name that does not suffer from either of these problems is
+//	 * guaranteed to remain unchanged by this method. Therefore the client may
+//	 * skip the mangling if the node name is known to be valid (though it is
+//	 * always safe to call this method).
+//	 * <p>
+//	 * The method returns the normalized {@code nodeName} as described below.
+//	 * Invalid node names are normalized in different ways, depending on the
+//	 * cause. If the length of the name does not exceed the limit, but the name
+//	 * contains '/' or '\' characters, then these are simply escaped by
+//	 * inserting an additional '\' before each occurrence. If the length of the
+//	 * name does exceed the limit, the following mechanism is used to normalize
+//	 * it:
+//	 * <ul>
+//	 * <li>the SHA 1 digest of the name is calculated
+//	 * <li>the digest is encoded with the base 64 algorithm
+//	 * <li>all '/' characters in the encoded digest are replaced with '_'
+//	 * <li>trailing '=' signs are removed
+//	 * </ul>
+//	 * 
+//	 * @param nodeName
+//	 *            the node name to be mangled (if necessary), must not be
+//	 *            {@code null} or empty
+//	 * @return the normalized node name that is valid for tree operations
+//	 * @throws NullPointerException
+//	 *             if {@code nodeName} is {@code null}
+//	 * @throws IllegalArgumentException
+//	 *             if {@code nodeName} is empty
+//	 */
+//	public static String mangle(String nodeName) {
+//		return mangle(nodeName, getMaxSegmentNameLength());
+//	}
 
 	/**
 	 * Construct a URI from the specified URI segments. The segments must
@@ -599,29 +599,29 @@ public final class Uri {
 
 	// Non-public fields and methods
 
-	// package private method for testing purposes
-	static String mangle(String nodeName, int limit) {
-		if (nodeName == null)
-			throw new NullPointerException(
-					"The 'nodeName' parameter must not be null.");
-
-		if (nodeName.equals(""))
-			throw new IllegalArgumentException(
-					"The 'nodeName' parameter must not be empty.");
-
-		if (nodeName.length() > limit)
-			// create node name hash
-			return getHash(nodeName);
-
-		// escape any '/' and '\' characters in the node name
-		StringBuffer nameBuffer = new StringBuffer(nodeName);
-		for (int i = 0; i < nameBuffer.length(); i++)
-			// 'i' can increase in loop
-			if (nameBuffer.charAt(i) == '\\' || nameBuffer.charAt(i) == '/')
-				nameBuffer.insert(i++, '\\');
-
-		return nameBuffer.toString();
-	}
+//	// package private method for testing purposes
+//	static String mangle(String nodeName, int limit) {
+//		if (nodeName == null)
+//			throw new NullPointerException(
+//					"The 'nodeName' parameter must not be null.");
+//
+//		if (nodeName.equals(""))
+//			throw new IllegalArgumentException(
+//					"The 'nodeName' parameter must not be empty.");
+//
+//		if (nodeName.length() > limit)
+//			// create node name hash
+//			return getHash(nodeName);
+//
+//		// escape any '/' and '\' characters in the node name
+//		StringBuffer nameBuffer = new StringBuffer(nodeName);
+//		for (int i = 0; i < nameBuffer.length(); i++)
+//			// 'i' can increase in loop
+//			if (nameBuffer.charAt(i) == '\\' || nameBuffer.charAt(i) == '/')
+//				nameBuffer.insert(i++, '\\');
+//
+//		return nameBuffer.toString();
+//	}
 
 	private static String getHash(String from) {
 		byte[] bytes;

@@ -118,7 +118,6 @@ public interface ReadableDataSession {
     /**
      * Get the list of children names of a node. The returned array contains the
      * names - not the URIs - of the immediate children nodes of the given node.
-     * The returned child names must be mangled ({@link org.osgi.service.dmt.Uri#mangle(String)}).
      * The returned array may contain {@code null} entries, but these are
      * removed by the DmtAdmin before returning it to the client.
      * 
