@@ -16,6 +16,8 @@
 
 package org.osgi.framework.wiring;
 
+import java.util.Map;
+
 import org.osgi.framework.resource.Requirement;
 
 /**
@@ -45,4 +47,19 @@ public interface BundleRequirement extends Requirement {
 	 *         specified capability}; {@code false} otherwise.
 	 */
 	boolean matches(BundleCapability capability);
+
+	/**
+	 * {@inheritDoc}
+	 */
+	String getNamespace();
+
+	/**
+	 * {@inheritDoc}
+	 */
+	Map<String, String> getDirectives();
+
+	/**
+	 * {@inheritDoc}
+	 */
+	Map<String, Object> getAttributes();
 }

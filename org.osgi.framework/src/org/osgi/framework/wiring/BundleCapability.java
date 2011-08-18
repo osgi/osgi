@@ -16,6 +16,8 @@
 
 package org.osgi.framework.wiring;
 
+import java.util.Map;
+
 import org.osgi.framework.resource.Capability;
 
 /**
@@ -34,4 +36,19 @@ public interface BundleCapability extends Capability {
 	 * @return The bundle revision declaring this capability.
 	 */
 	BundleRevision getRevision();
+
+	/**
+	 * {@inheritDoc}
+	 */
+	String getNamespace();
+
+	/**
+	 * {@inheritDoc}
+	 */
+	Map<String, String> getDirectives();
+
+	/**
+	 * {@inheritDoc}
+	 */
+	Map<String, Object> getAttributes();
 }
