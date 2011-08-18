@@ -32,22 +32,25 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PropertyPermission;
 
+import org.osgi.framework.AdaptPermission;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.packageadmin.ExportedPackage;
-import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.framework.wiring.BundleWire;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.framework.secure.permissions.util.PermissionsFilterException;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.wiring.Wiring;
 
 /**
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
@@ -65,7 +68,6 @@ public class FilteredTestControl extends OSGiTestCase {
 	private static final String	SP									= "org.osgi.framework.ServicePermission";
 	private static final String	PP									= "org.osgi.framework.PackagePermission";
 	private PermissionAdmin		permAdmin;
-	private PackageAdmin		pkgAdmin;
 
 	/**
 	 * Prior to each test, flag is set to false. If the target exception is
@@ -111,7 +113,6 @@ public class FilteredTestControl extends OSGiTestCase {
 		this.flagRegisterEvent = false;
 		this.flagUnregisterEvent = false;
 		permAdmin = this.getPermissionAdmin();
-		pkgAdmin = this.getPackageAdmin();
 		this.resetBundles(false);
 		this.setAllpermission(RESET_PERMISSION_BUNDLE_LOCATION);
 		setPermBundle = this.installBundle(RESET_PERMISSION_BUNDLE_LOCATION);
@@ -174,7 +175,7 @@ public class FilteredTestControl extends OSGiTestCase {
 		}
 
 		if (refreshAndResolve)
-			this.refreshPackagesAndResolveBundles(null);
+			this.refreshAndResolveBundles();
 	}
 
 	/*
@@ -918,10 +919,11 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1 + ")(name="
 				+ this.registerModifyBundle.getSymbolicName() + "))", "GET");
 		// add(list, SP, PermissionAdmin.class.getName(), "get");
-		// add(list, SP, PackageAdmin.class.getName(), "get");
 		this.setBundlePermission(getContext().getBundle(), list);
 		this.startBundleAndCheckSecurityException(this.registerModifyBundle);
 		assertFalse("Fail to register service. It MUST succeed.", exceptionFlag);
@@ -943,6 +945,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1
 				+ ")(name=something.else))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
@@ -964,6 +968,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1
 				+ ")(segment=providerA))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
@@ -985,6 +991,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1
 				+ ")(vendor=ACME))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
@@ -1038,6 +1046,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, S_NAME_UTIL_ISERVICE1, "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
 
@@ -1052,6 +1062,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "something.else", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
 
@@ -1067,6 +1079,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1
 				+ ")(vendor=NTT))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
@@ -1082,6 +1096,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1
 				+ ")(vendor=something.else))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
@@ -1098,6 +1114,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1 + ")(name="
 				+ this.registerPluralBundle.getSymbolicName() + "))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
@@ -1113,6 +1131,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1
 				+ ")(name=something.else))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
@@ -1129,6 +1149,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(name=" + this.registerPluralBundle.getSymbolicName()
 				+ ")", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
@@ -1144,6 +1166,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(name=something.else)", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
 
@@ -1161,6 +1185,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, S_NAME_UTIL_ISERVICE1, "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
 		ServiceReference[] ref = getBundle.getServicesInUse();
@@ -1176,6 +1202,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "something.else", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
 		ServiceReference[] ref = getBundle.getServicesInUse();
@@ -1193,6 +1221,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1
 				+ ")(vendor=NTT))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
@@ -1209,6 +1239,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1
 				+ ")(vendor=something.else))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
@@ -1227,6 +1259,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1 + ")(name="
 				+ this.registerPluralBundle.getSymbolicName() + "))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
@@ -1243,6 +1277,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(&(objectClass=" + S_NAME_UTIL_ISERVICE1 + ")(name="
 				+ "something.else" + "))", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
@@ -1261,6 +1297,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(location=" + this.registerPluralBundle.getLocation()
 				+ ")", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
@@ -1277,6 +1315,8 @@ public class FilteredTestControl extends OSGiTestCase {
 		add(list, PP, P_NAME_UTIL, "IMPORT, exportonly");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		add(list, AdminPermission.class.getName(), "*", "*");
+		add(list, AdaptPermission.class.getName(), "*", "adapt");
+		add(list, PropertyPermission.class.getName(), "org.osgi.test.*", "read");
 		add(list, SP, "(location=" + "something.else" + ")", "GET");
 		this.setBundlePermission(getContext().getBundle(), list);
 		ServiceReference[] ref = getBundle.getServicesInUse();
@@ -1323,35 +1363,25 @@ public class FilteredTestControl extends OSGiTestCase {
 	}
 
 	private void checkExport1Succeed() {
-		refreshPackagesAndResolveBundles(new Bundle[] {exportBundle1});
+		refreshAndResolveBundles(exportBundle1);
 		if (exportBundle1.getState() != Bundle.RESOLVED)
 			fail("Fail to export package. It MUST succeed.");
 
-		printoutAllPkgs();
-		ExportedPackage[] pkgs = pkgAdmin
-				.getExportedPackages(this.exportBundle1);
-		if (pkgs == null || pkgs.length != 1
-				|| !pkgs[0].getName().equals(P_NAME_SHARED)) {
-			fail("Fail to export package. It MUST succeed.");
-		}
+		BundleWiring wiring = exportBundle1.adapt(BundleWiring.class);
+		List<BundleCapability> pkgs = wiring
+				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		assertNotNull("no list returned", pkgs);
+		assertEquals("list does not have 1 entry", 1, pkgs.size());
+		assertEquals("Fail to export package", P_NAME_SHARED, pkgs.get(0)
+				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
 
-		Bundle[] importers = pkgs[0].getImportingBundles();
-		if (importers == null || importers.length != 0)
-			fail("There MUST be no importers.");
-	}
-
-	private void printoutAllPkgs() {
-		Bundle b = null;
-		ExportedPackage[] pkgsAll = pkgAdmin.getExportedPackages(b);
-		for (int i = 0; i < pkgsAll.length; i++) {
-			if (pkgsAll[i].getName().startsWith("org.osgi.test")) {
-				System.out.println(pkgsAll[i]);
-				System.out.println("Exporter="
-						+ pkgsAll[i].getExportingBundle());
-				Bundle[] importers = pkgsAll[0].getImportingBundles();
-				for (int j = 0; j < importers.length; j++) {
-					System.out.println("Importer[" + j + "]=" + importers[j]);
-				}
+		List<BundleWire> wires = wiring
+				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+		for (BundleWire wire : wires) {
+			String name = (String) wire.getCapability().getAttributes()
+					.get(BundleRevision.PACKAGE_NAMESPACE);
+			if (name.equals(P_NAME_SHARED)) {
+				fail("There MUST be no importers.");
 			}
 		}
 	}
@@ -1375,13 +1405,15 @@ public class FilteredTestControl extends OSGiTestCase {
 	}
 
 	private void checkExport1Fail() {
-		refreshPackagesAndResolveBundles(new Bundle[] {exportBundle1});
+		refreshAndResolveBundles(exportBundle1);
 		if (exportBundle1.getState() != Bundle.RESOLVED)
 			fail("Fail to export package. It MUST succeed.");
-		ExportedPackage[] pkgs = pkgAdmin
-				.getExportedPackages(this.exportBundle1);
-		if (pkgs != null)
-			fail("Succeed in exporting package. It MUST fail.");
+
+		BundleWiring wiring = exportBundle1.adapt(BundleWiring.class);
+		List<BundleCapability> pkgs = wiring
+				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		assertNotNull("no list returned", pkgs);
+		assertEquals("list not empty", 0, pkgs.size());
 	}
 
 	public void testExportPackage7_3_1() throws Exception {
@@ -1498,26 +1530,44 @@ public class FilteredTestControl extends OSGiTestCase {
 				+ this.exportBundle2.getSymbolicName() + "))", "import");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		this.setBundlePermission(this.exportBundle1, list);
-		refreshPackagesAndResolveBundles(new Bundle[] {exportBundle1,
-				exportBundle2});
+		refreshAndResolveBundles(exportBundle1, exportBundle2);
 
-		ExportedPackage[] pkgs3 = pkgAdmin
-				.getExportedPackages(this.exportBundle1);
-		ExportedPackage[] pkgs4 = pkgAdmin
-				.getExportedPackages(this.exportBundle2);
-		if (pkgs3 == null || pkgs3.length != 1
-				|| !pkgs3[0].getName().equals(P_NAME_SHARED)) {
-			fail("Fail to export package. It MUST succeed.");
-		}
-		if (pkgs3[0].getImportingBundles().length != 0)
-			fail("It MUST not be imported.");
+		BundleWiring wiring3 = exportBundle1.adapt(BundleWiring.class);
+		List<BundleCapability> pkgs3 = wiring3
+				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		assertNotNull("no list returned", pkgs3);
+		assertEquals("list does not have 1 entry", 1, pkgs3.size());
+		assertEquals("Fail to export package", P_NAME_SHARED, pkgs3.get(0)
+				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
 
-		if (pkgs4 == null || pkgs4.length != 1
-				|| !pkgs4[0].getName().equals(P_NAME_SHARED)) {
-			fail("Fail to export package. It MUST succeed.");
+		List<BundleWire> wires3 = wiring3
+				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+		for (BundleWire wire : wires3) {
+			String name = (String) wire.getCapability().getAttributes()
+					.get(BundleRevision.PACKAGE_NAMESPACE);
+			if (name.equals(P_NAME_SHARED)) {
+				fail("It MUST not be imported.");
+			}
 		}
-		if (pkgs4[0].getImportingBundles().length != 0)
-			fail("It MUST not be imported.");
+
+		BundleWiring wiring4 = exportBundle2.adapt(BundleWiring.class);
+		List<BundleCapability> pkgs4 = wiring4
+				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		assertNotNull("no list returned", pkgs4);
+		assertEquals("list does not have 1 entry", 1, pkgs4.size());
+		assertEquals("Fail to export package", P_NAME_SHARED, pkgs4.get(0)
+				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+
+		List<BundleWire> wires4 = wiring4
+				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+		for (BundleWire wire : wires4) {
+			String name = (String) wire.getCapability().getAttributes()
+					.get(BundleRevision.PACKAGE_NAMESPACE);
+			if (name.equals(P_NAME_SHARED)) {
+				fail("It MUST not be imported.");
+			}
+		}
+
 		if (this.exportBundle1.getState() == Bundle.RESOLVED)
 			return;
 		fail("Fail to export package. It MUST succeed.");
@@ -1533,83 +1583,68 @@ public class FilteredTestControl extends OSGiTestCase {
 				+ this.exportBundle2.getSymbolicName() + "))", "import");
 		add(list, PP, "org.osgi.framework", "IMPORT");
 		this.setBundlePermission(this.exportBundle1, list);
-		refreshPackagesAndResolveBundles(new Bundle[] {exportBundle1,
-				exportBundle2});
-		ExportedPackage[] pkgs3 = pkgAdmin
-				.getExportedPackages(this.exportBundle1);
-		ExportedPackage[] pkgs4 = pkgAdmin
-				.getExportedPackages(this.exportBundle2);
-		if (pkgs3 != null)
-			fail("Succeed in exporting package. It MUST fail.");
+		refreshAndResolveBundles(exportBundle1, exportBundle2);
+		BundleWiring wiring3 = exportBundle1.adapt(BundleWiring.class);
+		List<BundleCapability> pkgs3 = wiring3
+				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		assertNotNull("no list returned", pkgs3);
+		assertEquals("list not empty", 0, pkgs3.size());
 
-		if (pkgs4 == null || pkgs4.length != 1
-				|| !pkgs4[0].getName().equals(P_NAME_SHARED)) {
-			fail("Fail to export package. It MUST succeed.");
+		BundleWiring wiring4 = exportBundle2.adapt(BundleWiring.class);
+		List<BundleCapability> pkgs4 = wiring4
+				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		assertNotNull("no list returned", pkgs4);
+		assertEquals("list does not have 1 entry", 1, pkgs4.size());
+		assertEquals("Fail to export package", P_NAME_SHARED, pkgs4.get(0)
+				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+
+		List<BundleWire> wires4 = wiring4
+				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+		for (BundleWire wire : wires4) {
+			String name = (String) wire.getCapability().getAttributes()
+					.get(BundleRevision.PACKAGE_NAMESPACE);
+			if (name.equals(P_NAME_SHARED)) {
+				if (exportBundle1.equals(wire.getRequirerWiring().getBundle())) {
+					return;
+				}
+			}
 		}
-		Bundle[] importers4 = pkgs4[0].getImportingBundles();
-		if (importers4 != null && importers4.length == 1
-				&& importers4[0].equals(this.exportBundle1))
-			return;
-		fail("Fail to export package. It MUST succeed.");
-
+		fail("package not imported.");
 	}
 
 	private void checkExport1Export2Succeed() {
-		refreshPackagesAndResolveBundles(new Bundle[] {exportBundle1,
-				exportBundle2});
+		refreshAndResolveBundles(exportBundle1, exportBundle2);
 
 		if (this.exportBundle1.getState() != Bundle.RESOLVED)
 			fail("Fail to resolve exportBundle1");
 		if (this.exportBundle2.getState() != Bundle.RESOLVED)
 			fail("Fail to resolve exportBundle2");
 
-		ExportedPackage[] pkgs2 = pkgAdmin
-				.getExportedPackages(this.exportBundle2);
+		BundleWiring wiring = exportBundle2.adapt(BundleWiring.class);
+		List<BundleCapability> pkgs2 = wiring
+				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		assertNotNull("no list returned", pkgs2);
+		assertEquals("list does not have 1 entry", 1, pkgs2.size());
+		assertEquals("Fail to export package", P_NAME_SHARED, pkgs2.get(0)
+				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
 
-		if (pkgs2 == null || pkgs2.length != 1
-				|| !pkgs2[0].getName().equals(P_NAME_SHARED)) {
-			fail("Fail to export package. It MUST succeed.");
+		List<BundleWire> wires = wiring
+				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+		for (BundleWire wire : wires) {
+			String name = (String) wire.getCapability().getAttributes()
+					.get(BundleRevision.PACKAGE_NAMESPACE);
+			if (name.equals(P_NAME_SHARED)) {
+				if (exportBundle1.equals(wire.getRequirerWiring().getBundle())) {
+					return;
+				}
+			}
 		}
-		Bundle[] importers2 = pkgs2[0].getImportingBundles();
-		if (importers2 != null && importers2.length == 1
-				&& importers2[0].equals(this.exportBundle1))
-			return;
-		fail("Fail to export package. It MUST succeed.");
+		fail("package not imported.");
 	}
 
-    private void refreshPackagesAndResolveBundles(Bundle[] bundles) {
-        RefreshGate refreshGate = new RefreshGate();
-        getContext().addFrameworkListener(refreshGate);
-        pkgAdmin.refreshPackages(bundles);
-        refreshGate.run();
-        getContext().removeFrameworkListener(refreshGate);
-        pkgAdmin.resolveBundles(bundles);
-    }
-
-	static final class RefreshGate implements FrameworkListener, Runnable {
-		private volatile boolean	refreshed	= false;
-
-        public void frameworkEvent(FrameworkEvent event) {
-            if (event.getType() ==  FrameworkEvent.PACKAGES_REFRESHED) {
-                synchronized (this) {
-                    refreshed = true;
-                    notifyAll();
-                }
-            }
-        }
-
-        public void run() {
-            synchronized (this) {
-                while (!refreshed) {
-                    try {
-                        wait();
-                    } catch (InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                        return;
-                    }
-                }
-            }
-        }
+	private void refreshAndResolveBundles(Bundle... bundles) {
+		Wiring.synchronousRefreshBundles(getContext(), bundles);
+		Wiring.resolveBundles(getContext(), bundles);
     }
 
 	private void printoutHeader(Bundle bundle) {
@@ -1711,25 +1746,29 @@ public class FilteredTestControl extends OSGiTestCase {
 	}
 
 	private void checkExport1SucceedImport1Succeed() {
-		refreshPackagesAndResolveBundles(new Bundle[] {exportBundle1,
-				importBundle1});
+		refreshAndResolveBundles(exportBundle1, importBundle1);
 		this.printoutHeader(exportBundle1);
 		this.printoutHeader(importBundle1);
 
 		if (importBundle1.getState() != Bundle.RESOLVED)
 			fail("Fail to import package. It MUST succeed.");
-		ExportedPackage[] pkgs = pkgAdmin
-				.getExportedPackages(this.exportBundle1);
-		if (pkgs == null || pkgs.length != 1
-				|| !pkgs[0].getName().equals(P_NAME_SHARED)) {
-			fail("Fail to export package. It MUST succeed.");
-		}
 
-		Bundle[] importers = pkgs[0].getImportingBundles();
+		BundleWiring wiring = exportBundle1.adapt(BundleWiring.class);
+		List<BundleCapability> pkgs = wiring
+				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		assertNotNull("no list returned", pkgs);
+		assertEquals("list does not have 1 entry", 1, pkgs.size());
+		assertEquals("Fail to export package", P_NAME_SHARED, pkgs.get(0)
+				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+
+		List<BundleWire> wires = wiring
+				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
 		boolean flag = false;
-		if (importers != null) {
-			for (int i = 0; i < importers.length; i++) {
-				if (importers[0].equals(this.importBundle1)) {
+		for (BundleWire wire : wires) {
+			String name = (String) wire.getCapability().getAttributes()
+					.get(BundleRevision.PACKAGE_NAMESPACE);
+			if (name.equals(P_NAME_SHARED)) {
+				if (importBundle1.equals(wire.getRequirerWiring().getBundle())) {
 					flag = true;
 					break;
 				}
@@ -1781,27 +1820,32 @@ public class FilteredTestControl extends OSGiTestCase {
 	}
 
 	private void checkExport1SucceedImport1Fail() {
-		refreshPackagesAndResolveBundles(new Bundle[] {exportBundle1,
-				importBundle1});
+		refreshAndResolveBundles(exportBundle1, importBundle1);
 		if (importBundle1.getState() != Bundle.INSTALLED)
 			fail("Succeed in importing package. It MUST fail.");
-		ExportedPackage[] pkgs = pkgAdmin
-				.getExportedPackages(this.exportBundle1);
-		if (pkgs == null || pkgs.length != 1
-				|| !pkgs[0].getName().equals(P_NAME_SHARED)) {
-			fail("Fail to export package. It MUST succeed.");
-		}
 
-		Bundle[] importers = pkgs[0].getImportingBundles();
+		BundleWiring wiring = exportBundle1.adapt(BundleWiring.class);
+		List<BundleCapability> pkgs = wiring
+				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		assertNotNull("no list returned", pkgs);
+		assertEquals("list does not have 1 entry", 1, pkgs.size());
+		assertEquals("Fail to export package", P_NAME_SHARED, pkgs.get(0)
+				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+
+		List<BundleWire> wires = wiring
+				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
 		boolean flag = false;
-		if (importers != null) {
-			for (int i = 0; i < importers.length; i++) {
-				if (importers[0].equals(this.importBundle1)) {
+		for (BundleWire wire : wires) {
+			String name = (String) wire.getCapability().getAttributes()
+					.get(BundleRevision.PACKAGE_NAMESPACE);
+			if (name.equals(P_NAME_SHARED)) {
+				if (importBundle1.equals(wire.getRequirerWiring().getBundle())) {
 					flag = true;
 					break;
 				}
 			}
 		}
+
 		if (flag)
 			fail("Succeed in importing package. It MUST fail.");
 	}
@@ -1939,21 +1983,33 @@ public class FilteredTestControl extends OSGiTestCase {
 	}
 
 	private void checkExport1SucceedImport2Fail() {
-		refreshPackagesAndResolveBundles(new Bundle[] {exportBundle1,
-				importBundle2});
+		refreshAndResolveBundles(exportBundle1, importBundle2);
 
 		if (importBundle2.getState() != Bundle.INSTALLED)
 			fail("It must be INSTALLED(" + Bundle.INSTALLED + "). state="
 					+ importBundle2.getState());
-		ExportedPackage[] pkgs = pkgAdmin
-				.getExportedPackages(this.exportBundle1);
-		if (pkgs == null || pkgs.length != 1
-				|| !pkgs[0].getName().equals(P_NAME_SHARED)) {
-			fail("Fail to export package. It MUST succeed.");
+
+		BundleWiring wiring = exportBundle1.adapt(BundleWiring.class);
+		List<BundleCapability> pkgs = wiring
+				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+		assertNotNull("no list returned", pkgs);
+		assertEquals("list does not have 1 entry", 1, pkgs.size());
+		assertEquals("Fail to export package", P_NAME_SHARED, pkgs.get(0)
+				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+
+		List<BundleWire> wires = wiring
+				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+		boolean flag = false;
+		for (BundleWire wire : wires) {
+			String name = (String) wire.getCapability().getAttributes()
+					.get(BundleRevision.PACKAGE_NAMESPACE);
+			if (name.equals(P_NAME_SHARED)) {
+				flag = true;
+				break;
+			}
 		}
 
-		Bundle[] importers = pkgs[0].getImportingBundles();
-		if (importers.length != 0)
+		if (flag)
 			fail("There MUST be no bundle who imports the package.");
 	}
 
@@ -2106,18 +2162,6 @@ public class FilteredTestControl extends OSGiTestCase {
 		catch (BundleException be) {
 			this.checkIfExIsPermissionsFilterException(be);
 		}
-	}
-
-	private PackageAdmin getPackageAdmin() {
-		ServiceReference ref = getContext().getServiceReference(
-				PackageAdmin.class
-				.getName());
-		if (ref == null)
-			throw new IllegalStateException("Fail to get ServiceReference of "
-					+ PackageAdmin.class.getName());
-
-		PackageAdmin packageAdmin = (PackageAdmin) getContext().getService(ref);
-		return packageAdmin;
 	}
 
 	private PermissionAdmin getPermissionAdmin() {

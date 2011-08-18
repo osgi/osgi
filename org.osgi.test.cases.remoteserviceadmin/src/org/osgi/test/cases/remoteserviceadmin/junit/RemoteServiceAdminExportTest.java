@@ -68,7 +68,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	/**
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#setUp()
 	 */
-	protected void setUp() throws Exception {
+    protected void setUp() throws Exception {
 		super.setUp();
 		
 		timeout = Long.getLong("rsa.ct.timeout", 300000L);
@@ -78,7 +78,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	/**
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#tearDown()
 	 */
-	protected void tearDown() throws Exception {
+    protected void tearDown() throws Exception {
 		super.tearDown();
 		ungetAllServices();
 	}
@@ -321,10 +321,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			case RemoteServiceAdminEvent.EXPORT_ERROR:
 				exportFailed = true;
 				assertNotNull(event.getException());
-				try {
-					event.getExportReference();
-					fail("IllegalStateException expected");
-				} catch (IllegalStateException ie) {}
+                assertNotNull("122.7: event must contain the ExportReference", event.getExportReference());
 				break;
 			default:
 				fail("wrong event type");
@@ -543,7 +540,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 					assertNotNull(ed.getConfigurationTypes());
 					assertNotNull(ed.getIntents());
 					
-					assertTrue("ExportReference does not show up in exported reference list of RSA service", exportrefs.contains(er));
+                    assertTrue("ExportReference does not show up in exported reference list of RSA service", exportrefs.contains(ref));
 				}
 				
 				for (Iterator<ExportRegistration> it = exportRegistrations2.iterator(); it.hasNext();) {
@@ -555,7 +552,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 					assertEquals(registration.getReference(), ref.getExportedService());
 					assertTrue(endpoints.contains(ref.getExportedEndpoint()));
 					
-					assertTrue("ExportReference does not show up in exported reference list of RSA service", exportrefs.contains(er));
+                    assertTrue("ExportReference does not show up in exported reference list of RSA service", exportrefs.contains(ref));
 				}
 				
 								
@@ -680,10 +677,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			case RemoteServiceAdminEvent.EXPORT_ERROR:
 				exportFailed = true;
 				assertNotNull(event.getException());
-				try {
-					event.getExportReference();
-					fail("IllegalStateException expected");
-				} catch (IllegalStateException ie) {}
+                assertNotNull("122.7: the event must contain the ExportReference", event.getExportReference());
 				break;
 			default:
 				fail("wrong event type");
@@ -814,11 +808,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				assertNotNull(exportReference.getExportedEndpoint());
 				break;
 			case RemoteServiceAdminEvent.EXPORT_ERROR:
-				assertNotNull(event.getException());
-				try {
-					event.getExportReference();
-					fail("IllegalStateException expected");
-				} catch (IllegalStateException ie) {}
+                assertNotNull(event.getException());
+                assertNotNull("122.7: the event must have the ExportReference", event.getExportReference());
 				return;
 			default:
 				fail("wrong event type");
@@ -1125,8 +1116,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 *
 	 */
 	class TestRemoteServiceAdminListener implements RemoteServiceAdminListener {
-		private LinkedList<RemoteServiceAdminEvent> eventlist = new LinkedList<RemoteServiceAdminEvent>();
-		private Semaphore sem = new Semaphore(0);
+		private final LinkedList<RemoteServiceAdminEvent> eventlist = new LinkedList<RemoteServiceAdminEvent>();
+		private final Semaphore sem = new Semaphore(0);
 
 		/**
 		 * @see org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener#remoteAdminEvent(org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent)
@@ -1156,8 +1147,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	}
 	
 	class TestEventHandler implements EventHandler {
-		private LinkedList<Event> eventlist = new LinkedList<Event>();
-		private Semaphore sem = new Semaphore(0);
+		private final LinkedList<Event> eventlist = new LinkedList<Event>();
+		private final Semaphore sem = new Semaphore(0);
 
 
 		/**

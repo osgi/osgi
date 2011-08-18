@@ -37,10 +37,14 @@
 
 package org.osgi.test.cases.deploymentadmin.tc1.tbc.Event;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Vector;
+
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
+import org.osgi.test.support.OSGiTestCase;
 
 /**
  * @author Andre Assad
@@ -150,9 +154,10 @@ public class DeploymentEventHandlerImpl implements EventHandler {
 		this.handlingComplete = handlingComplete;
 	}
 	/**
-	 * Reset the condition varibles
+	 * Resets the event handler.
 	 */
 	public void reset() {
+		unregister();
 		this.handlingComplete = false;
 		this.handlingUninstall = false;
 		this.install = false;
@@ -161,7 +166,34 @@ public class DeploymentEventHandlerImpl implements EventHandler {
 		this.event = null;
 		this.verifying = false;
         this.events = new Vector();
+        register();
 	}
+	
+	/**
+	 * Registers the event handler as an OSGi service.
+	 */
+	public void register() {
+		String[] topics = { DeploymentEventHandlerImpl.TOPIC_INSTALL,
+				DeploymentEventHandlerImpl.TOPIC_UNINSTALL,
+				DeploymentEventHandlerImpl.TOPIC_COMPLETE };
+		Dictionary regProps = new Hashtable(1, 1F);
+		regProps.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, topics);
+
+		try {
+			this.tbc.registerService(
+					EventHandler.class.getName(), this, regProps);
+		} catch (Exception e) {
+			OSGiTestCase.fail("An unexpected exception while preparing event handler!", e);
+		}
+	}
+	
+	/**
+	 * Unregisters the event handler as an OSGi service.
+	 */
+	public void unregister() {
+		this.tbc.unregisterService(this);
+	}
+	
 	/**
 	 * @return Returns the handlingUninstall.
 	 */

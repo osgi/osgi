@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +19,18 @@ package org.osgi.framework;
 import java.util.EventListener;
 
 /**
- * A {@code FrameworkEvent} listener. {@code FrameworkListener} is
- * a listener interface that may be implemented by a bundle developer. When a
+ * A {@code FrameworkEvent} listener. {@code FrameworkListener} is a listener
+ * interface that may be implemented by a bundle developer. When a
  * {@code FrameworkEvent} is fired, it is asynchronously delivered to a
- * {@code FrameworkListener}. The Framework delivers
- * {@code FrameworkEvent} objects to a {@code FrameworkListener}
- * in order and must not concurrently call a {@code FrameworkListener}.
+ * {@code FrameworkListener}. The Framework delivers {@code FrameworkEvent}
+ * objects to a {@code FrameworkListener} in order and must not concurrently
+ * call a {@code FrameworkListener}.
  * 
  * <p>
- * A {@code FrameworkListener} object is registered with the Framework
- * using the {@link BundleContext#addFrameworkListener} method.
- * {@code FrameworkListener} objects are called with a
- * {@code FrameworkEvent} objects when the Framework starts and when
- * asynchronous errors occur.
+ * A {@code FrameworkListener} object is registered with the Framework using the
+ * {@link BundleContext#addFrameworkListener(FrameworkListener)} method.
+ * {@code FrameworkListener} objects are called with a {@code FrameworkEvent}
+ * objects when the Framework starts and when asynchronous errors occur.
  * 
  * @see FrameworkEvent
  * @NotThreadSafe

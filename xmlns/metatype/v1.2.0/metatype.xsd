@@ -3,7 +3,7 @@
 	/*
 	* $Id$
 	* 
-	* Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+	* Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
 	* 
 	* Licensed under the Apache License, Version 2.0 (the "License");
 	* you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@
 			<element name="AD" type="metatype:Tad" minOccurs="1"
 				maxOccurs="unbounded" />
 			<element name="Icon" type="metatype:Ticon" minOccurs="0"
-				maxOccurs="1" />
+				maxOccurs="unbounded" />
 			<!-- It is non-deterministic, per W3C XML Schema 1.0: http://www.w3.org/TR/xmlschema-1/#cos-nonambig
 				to use namespace="##any" below. -->
 			<any namespace="##other" processContents="lax" minOccurs="0"
@@ -114,7 +114,7 @@
 			<any namespace="##any" processContents="lax" minOccurs="0"
 				maxOccurs="unbounded" />
 		</sequence>
-		<attribute name="pid" type="string" use="required" />
+		<attribute name="pid" type="string" use="optional" />
 		<attribute name="factoryPid" type="string" use="optional" />
 		<attribute name="bundle" type="string" use="optional" />
 		<attribute name="optional" type="boolean" default="false"

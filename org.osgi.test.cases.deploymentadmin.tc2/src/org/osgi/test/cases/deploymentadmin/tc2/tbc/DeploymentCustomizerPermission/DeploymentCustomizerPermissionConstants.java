@@ -36,8 +36,8 @@
  */
 package org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentCustomizerPermission;
 
-import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
 import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
 
 /**
  * @author Andre Assad
@@ -45,17 +45,8 @@ import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
  * This Test Class Validates the constants of
  * <code>DeploymentCustomizerPermission</code> according to MEG specification.
  */
-public class DeploymentCustomizerPermissionConstants {
-
-	private DeploymentTestControl tbc;
-
-	public DeploymentCustomizerPermissionConstants(DeploymentTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testConstants001();
-	}
+public class DeploymentCustomizerPermissionConstants extends
+		DeploymentTestControl {
 
 	/**
 	 * Validates the values of the specified constants.
@@ -63,7 +54,7 @@ public class DeploymentCustomizerPermissionConstants {
 	 * @spec 114.14.4
 	 */
 	public void testConstants001() {
-		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting ACTION_PRIVATEAREA value", "privatearea", DeploymentCustomizerPermission.PRIVATEAREA);
+		assertConstant("privatearea", "PRIVATEAREA",
+				DeploymentCustomizerPermission.class);
 	}
 }

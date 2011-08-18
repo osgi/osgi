@@ -17,8 +17,8 @@ import org.osgi.service.wireadmin.WireAdminListener;
 public class TestWireAdminListener implements WireAdminListener {
 	private final WireAdminControl	wac;
 	private final boolean	dummy;
-	private List			valuesReceived	= new ArrayList();
-	private boolean			called			= false;
+	private final List				valuesReceived	= new ArrayList();
+	private boolean					called			= false;
 
 	public TestWireAdminListener(WireAdminControl wac, boolean dummy) {
 		this.wac = wac;
@@ -99,16 +99,28 @@ public class TestWireAdminListener implements WireAdminListener {
 		}
 	}
 
-	synchronized void waitForCall(long timeout) throws InterruptedException {
-		if (called) {
-			return;
+	synchronized void waitForCall(final long timeout) {
+		final long endTime = timeout + System.currentTimeMillis();
+		while (!called) {
+			final long waitTime = endTime - System.currentTimeMillis();
+			if (waitTime <= 0) {
+				break;
+			}
+			try {
+				WireAdminControl.log("WireAdminListener waiting for call: "
+						+ waitTime);
+				wait(waitTime);
+			}
+			catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				WireAdminControl.fail("Unexepected interruption.", e);
+			}
 		}
-		wait(timeout);
 	}
 
 	synchronized List resetValuesReceived() {
-		List result = valuesReceived;
-		valuesReceived = new ArrayList();
+		List result = new ArrayList(valuesReceived);
+		valuesReceived.clear();
 		called = false;
 		return result;
 	}

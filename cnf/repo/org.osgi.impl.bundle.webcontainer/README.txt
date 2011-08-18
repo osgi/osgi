@@ -11,3 +11,5 @@ behind a BundleFileResolver interface to simplify the process of supporting othe
 Instances of this interface are constructed using the BundleFileResolverFactory which dynamically detects
 whether the BundleHost class is available and, if not, falls back to a default, non-framework specific
 BundleFileResolver implementation which returns a null File.
+
+So osgi.resolverMode=development must be set in -runproperties for Equinox.

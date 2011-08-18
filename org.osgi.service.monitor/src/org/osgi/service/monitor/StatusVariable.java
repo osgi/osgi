@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -200,16 +200,16 @@ public final class StatusVariable {
         return type;
     }
 
-    /**
-     * Returns the timestamp associated with the {@code StatusVariable}.
-     * The timestamp is stored when the {@code StatusVariable} instance is
-     * created, generally during the {@link Monitorable#getStatusVariable} 
-     * method call.
-     * 
-     * @return the time when the {@code StatusVariable} value was
-     *         queried, cannot be {@code null}
-     * 
-     */
+	/**
+	 * Returns the timestamp associated with the {@code StatusVariable}. The
+	 * timestamp is stored when the {@code StatusVariable} instance is created,
+	 * generally during the {@link Monitorable#getStatusVariable(String)} method
+	 * call.
+	 * 
+	 * @return the time when the {@code StatusVariable} value was queried,
+	 *         cannot be {@code null}
+	 * 
+	 */
     public Date getTimeStamp() {
         return timeStamp;
     }

@@ -48,14 +48,12 @@ Export-Package =\
 	org.osgi.impl.service.event; 			version=latest, \
     org.osgi.impl.bundle.webcontainer; version=latest
 	
-#	osgi.resolverMode=strict, \
--runproperties = report=true, \
-	osgi.compatibility.bootdelegation=false, \
-	osgi.support.multipleHosts=true, \
+# osgi.resolverMode=strict cannot be used because the Tomcat bundle optionally imports Equinox internal types
+-runproperties = ${runproperties}, \
+	osgi.resolverMode=x-internal, \
 	org.osgi.service.webcontainer.hostname=127.0.0.1, \
 	org.osgi.service.webcontainer.http.port=8080
 
-testcases = ${classes;extending;junit.framework.TestCase|*WebContainerOptionalTestBundleControl|*ManifestHeadersTestBundleControl;concrete}
 Test-Cases						= ${testcases}
 
 	

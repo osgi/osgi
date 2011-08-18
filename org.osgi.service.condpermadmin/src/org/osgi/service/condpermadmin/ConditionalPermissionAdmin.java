@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ public interface ConditionalPermissionAdmin {
 	 *             instead.
 	 */
 	ConditionalPermissionInfo addConditionalPermissionInfo(
-			ConditionInfo conditions[], PermissionInfo permissions[]);
+			ConditionInfo[] conditions, PermissionInfo[] permissions);
 
 	/**
 	 * Set or create a Conditional Permission Info with a specified name in the
@@ -99,7 +99,7 @@ public interface ConditionalPermissionAdmin {
 	 *             instead.
 	 */
 	ConditionalPermissionInfo setConditionalPermissionInfo(String name,
-			ConditionInfo conditions[], PermissionInfo permissions[]);
+			ConditionInfo[] conditions, PermissionInfo[] permissions);
 
 	/**
 	 * Returns the Conditional Permission Infos from the Conditional Permission
@@ -202,34 +202,32 @@ public interface ConditionalPermissionAdmin {
 	 * @since 1.1
 	 */
 	ConditionalPermissionInfo newConditionalPermissionInfo(String name,
-			ConditionInfo conditions[], PermissionInfo permissions[],
+			ConditionInfo[] conditions, PermissionInfo[] permissions,
 			String access);
 
 	/**
 	 * Creates a new {@code ConditionalPermissionInfo} from the specified
-	 * encoded {@code ConditionalPermissionInfo} string suitable for
-	 * insertion into a {@link ConditionalPermissionUpdate}. The
-	 * {@code delete} method on {@code ConditionalPermissionInfo}
-	 * objects created with this method must throw
-	 * UnsupportedOperationException.
+	 * encoded {@code ConditionalPermissionInfo} string suitable for insertion
+	 * into a {@link ConditionalPermissionUpdate}. The {@code delete} method on
+	 * {@code ConditionalPermissionInfo} objects created with this method must
+	 * throw UnsupportedOperationException.
 	 * 
 	 * @param encodedConditionalPermissionInfo The encoded
 	 *        {@code ConditionalPermissionInfo}. White space in the encoded
-	 *        {@code ConditionalPermissionInfo} is ignored. The access
-	 *        decision value in the encoded
-	 *        {@code ConditionalPermissionInfo} must be evaluated case
-	 *        insensitively. If the encoded
-	 *        {@code ConditionalPermissionInfo} does not contain the
-	 *        optional name, {@code null} must be used for the name and a
-	 *        unique name will be generated when the returned
-	 *        {@code ConditionalPermissionInfo} is committed in an update
-	 *        to the Conditional Permission Table.
-	 * @return A {@code ConditionalPermissionInfo} object suitable for
-	 *         insertion into a {@link ConditionalPermissionUpdate}.
+	 *        {@code ConditionalPermissionInfo} is ignored. The access decision
+	 *        value in the encoded {@code ConditionalPermissionInfo} must be
+	 *        evaluated case insensitively. If the encoded
+	 *        {@code ConditionalPermissionInfo} does not contain the optional
+	 *        name, {@code null} must be used for the name and a unique name
+	 *        will be generated when the returned
+	 *        {@code ConditionalPermissionInfo} is committed in an update to the
+	 *        Conditional Permission Table.
+	 * @return A {@code ConditionalPermissionInfo} object suitable for insertion
+	 *         into a {@link ConditionalPermissionUpdate}.
 	 * @throws IllegalArgumentException If the specified
 	 *         {@code encodedConditionalPermissionInfo} is not properly
 	 *         formatted.
-	 * @see ConditionalPermissionInfo#getEncoded
+	 * @see ConditionalPermissionInfo#getEncoded()
 	 * @since 1.1
 	 */
 	ConditionalPermissionInfo newConditionalPermissionInfo(

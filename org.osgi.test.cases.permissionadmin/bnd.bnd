@@ -12,8 +12,8 @@ Private-Package						=  \
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.permissionadmin;       version=project , \
-	osgi.core;								version=4.2		, \
-	ee.minimum;								version=1.2		, \
+	osgi.core;								version=4.3		, \
+	ee.minimum;								version=1.2.1	, \
 	${junit}
 
 -runbundles						= 

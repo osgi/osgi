@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,7 +77,8 @@ public class InvalidSyntaxException extends Exception {
 	 * {@code InvalidSyntaxException} object.
 	 * 
 	 * @return The invalid filter string.
-	 * @see BundleContext#getServiceReferences
+	 * @see BundleContext#getServiceReferences(Class, String)
+	 * @see BundleContext#getServiceReferences(String, String)
 	 * @see BundleContext#addServiceListener(ServiceListener,String)
 	 */
 	public String getFilter() {

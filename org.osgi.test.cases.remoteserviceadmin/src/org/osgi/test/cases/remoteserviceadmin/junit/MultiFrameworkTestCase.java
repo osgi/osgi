@@ -37,11 +37,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
-import org.osgi.service.packageadmin.ExportedPackage;
-import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -319,19 +319,20 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 //		assertFalse("child framework must have a different UUID",
 //				getContext().getProperty("org.osgi.framework.uuid").equals(f.getBundleContext().getProperty("org.osgi.framework.uuid")));
 		
-		ServiceReference sr = f.getBundleContext().getServiceReference(PackageAdmin.class.getName());
-		assertNotNull("Framework is not supplying PackageAdmin service", sr);
-		
-		PackageAdmin pkgAdmin = (PackageAdmin) f.getBundleContext().getService(sr);
-		ExportedPackage[] exportedPkgs = pkgAdmin.getExportedPackages(f.getBundleContext().getBundle());
-		assertNotNull(exportedPkgs);
-		f.getBundleContext().ungetService(sr);
+		BundleWiring wiring = f.getBundleContext().getBundle()
+				.adapt(BundleWiring.class);
+		assertNotNull(
+				"Framework is not supplying a BundleWiring for the system bundle",
+				wiring);
+		List<BundleCapability> exportedPkgs = wiring
+				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
 		
 		String pkgXtras = f.getBundleContext().getProperty(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA);
 		List<String> pkgList = splitString(pkgXtras, ",");
 		
-		for (int i=0;i<exportedPkgs.length;i++) {
-			String name = exportedPkgs[i].getName();
+		for (BundleCapability exportedPkg : exportedPkgs) {
+			String name = (String) exportedPkg.getAttributes().get(
+					BundleRevision.PACKAGE_NAMESPACE);
 			pkgList.remove(name);
 		}
 		assertTrue("Framework does not export some packages " + pkgList, pkgList.isEmpty());

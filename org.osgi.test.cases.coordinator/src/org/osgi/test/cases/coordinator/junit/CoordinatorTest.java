@@ -17,7 +17,7 @@ public abstract class CoordinatorTest extends OSGiTestCase {
 	/**
 	 * The Coordinator service reference.
 	 */
-	protected ServiceReference coordinatorReference;
+	protected ServiceReference<Coordinator> coordinatorReference;
 	
 	private Coordination peeked;
 	
@@ -215,8 +215,8 @@ public abstract class CoordinatorTest extends OSGiTestCase {
 	}
 	
 	protected void setUp() throws Exception {
-		coordinatorReference = getContext().getServiceReference(Coordinator.class.getName());
-		coordinator = (Coordinator)getContext().getService(coordinatorReference);
+		coordinatorReference = getContext().getServiceReference(Coordinator.class);
+		coordinator = getContext().getService(coordinatorReference);
 		peeked = coordinator.peek();
 	}
 	
@@ -225,6 +225,8 @@ public abstract class CoordinatorTest extends OSGiTestCase {
 		// local stack.
 		while (coordinator.peek() != null && coordinator.peek() != peeked)
 			coordinator.pop();
+		coordinator = null;
 		getContext().ungetService(coordinatorReference);
+		coordinatorReference = null;
 	}
 }

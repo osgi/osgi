@@ -41,13 +41,15 @@ import org.osgi.test.cases.coordinator.secure.TestClassResultImpl;
  * with com.ibm.*.
  */
 public class Activator implements BundleActivator {
-	private ServiceRegistration resultsRegistration;
+	private ServiceRegistration<TestClassResult>	resultsRegistration;
 	
 	public void start(BundleContext bc) throws Exception {
-		ServiceReference sr = bc.getServiceReference(Coordinator.class.getName());
-		Coordinator c = (Coordinator)bc.getService(sr);
+		ServiceReference<Coordinator> sr = bc
+				.getServiceReference(Coordinator.class);
+		Coordinator c = bc.getService(sr);
 		Collection<Coordination> cs = c.getCoordinations();
-		resultsRegistration = bc.registerService(TestClassResult.class.getName(), new TestClassResultImpl(cs.size() == 1), null);
+		resultsRegistration = bc.registerService(TestClassResult.class,
+				new TestClassResultImpl(cs.size() == 1), null);
 		bc.ungetService(sr);
 	}
 

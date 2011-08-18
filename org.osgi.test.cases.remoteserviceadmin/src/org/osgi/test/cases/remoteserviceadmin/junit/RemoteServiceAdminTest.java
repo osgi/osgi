@@ -182,9 +182,9 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			assertEquals("myvalue", sref.getProperty("myprop"));
 			assertTrue(((List)sref.getProperty("mylist")).size() == 2);
 			assertTrue(((Set)sref.getProperty("myset")).size() == 2);
-			assertEquals((float)3.1415f, sref.getProperty("myfloat"));
-			assertEquals((double)-3.1415d, sref.getProperty("mydouble"));
-			assertEquals((char)'t', sref.getProperty("mychar"));
+			assertEquals(3.1415f, sref.getProperty("myfloat"));
+			assertEquals(-3.1415d, sref.getProperty("mydouble"));
+			assertEquals('t', sref.getProperty("mychar"));
 			assertNull(sref.getProperty(".do_not_forward"));
 			assertEquals("<myxml>test</myxml>", sref.getProperty("myxml"));
 
@@ -238,18 +238,19 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			assertNotNull("no Event received", event);
 			assertEquals(0, eventHandler.getEventCount());
 
-			assertEquals(sref.getBundle(), event.getProperty("bundle"));
-			assertEquals(sref.getBundle().getSymbolicName(), event.getProperty("bundle.symbolicname"));
-			rsaevent = (RemoteServiceAdminEvent) event.getProperty("event");
-			assertNotNull(rsaevent);
-			assertEquals(sref.getBundle().getBundleId(), event.getProperty("bundle.id"));
-			assertEquals(sref.getBundle().getVersion(), event.getProperty("bundle.version"));
+            assertEquals("122.7: bundle has to refer to RSA bundle", rsaRef.getBundle(), event.getProperty("bundle"));
+            assertEquals("122.7: bundle.symbolicname has to refer to RSA bundle SymbolicName", rsaRef.getBundle().getSymbolicName(),
+                    event.getProperty("bundle.symbolicname"));
+            assertEquals("122.7: bundle.id has to refer to RSA bundle id", rsaRef.getBundle().getBundleId(), event.getProperty("bundle.id"));
+            assertEquals("122.7: bundle.version has to refer to RSA bundle version", rsaRef.getBundle().getVersion(),
+                    event.getProperty("bundle.version"));
+            rsaevent = (RemoteServiceAdminEvent) event.getProperty("event");
+            assertNotNull(rsaevent);
 			assertNotNull(event.getProperty("timestamp"));
 
 			// check event type
 			String topic = event.getTopic();
 			assertEquals("org/osgi/service/remoteserviceadmin/IMPORT_REGISTRATION", topic);
-			assertEquals(importedED, event.getProperty("import.registration"));
 			assertNull("cause in event", event.getProperty("cause"));
 			assertEquals(RemoteServiceAdminEvent.IMPORT_REGISTRATION, rsaevent.getType());
 
@@ -554,8 +555,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	 *
 	 */
 	class TestRemoteServiceAdminListener implements RemoteServiceAdminListener {
-		private LinkedList<RemoteServiceAdminEvent> eventlist = new LinkedList<RemoteServiceAdminEvent>();
-		private Semaphore sem = new Semaphore(0);
+		private final LinkedList<RemoteServiceAdminEvent> eventlist = new LinkedList<RemoteServiceAdminEvent>();
+		private final Semaphore sem = new Semaphore(0);
 
 		/**
 		 * @see org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener#remoteAdminEvent(org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent)
@@ -585,8 +586,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	}
 	
 	class TestEventHandler implements EventHandler {
-		private LinkedList<Event> eventlist = new LinkedList<Event>();
-		private Semaphore sem = new Semaphore(0);
+		private final LinkedList<Event> eventlist = new LinkedList<Event>();
+		private final Semaphore sem = new Semaphore(0);
 
 
 		/**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,19 +37,19 @@ public interface ConditionalPermissionUpdate {
 	 * method will be replace the Conditional Permission Table if commit is
 	 * called and is successful.
 	 * <p>
-	 * The {@link ConditionalPermissionInfo#delete delete} method of the
+	 * The {@link ConditionalPermissionInfo#delete() delete} method of the
 	 * ConditionalPermissionInfos in the list must throw
 	 * UnsupportedOperationException.
 	 * <p>
 	 * The list returned by this method is ordered and the most significant
 	 * table entry is the first entry in the list.
 	 * 
-	 * @return A {@code List} of the {@link ConditionalPermissionInfo}s
-	 *         which represent the Conditional Permissions maintained by this
-	 *         update. Modifications to this list will not affect the
-	 *         Conditional Permission Table until successfully committed. The
-	 *         list may be empty if the Conditional Permission Table was empty
-	 *         when this update was created.
+	 * @return A {@code List} of the {@link ConditionalPermissionInfo}s which
+	 *         represent the Conditional Permissions maintained by this update.
+	 *         Modifications to this list will not affect the Conditional
+	 *         Permission Table until successfully committed. The list may be
+	 *         empty if the Conditional Permission Table was empty when this
+	 *         update was created.
 	 */
 	List<ConditionalPermissionInfo> getConditionalPermissionInfos();
 

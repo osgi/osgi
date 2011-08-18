@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,13 +76,13 @@ public class PermissionInfo {
 	}
 
 	/**
-	 * Constructs a {@code PermissionInfo} object from the specified
-	 * encoded {@code PermissionInfo} string. White space in the encoded
+	 * Constructs a {@code PermissionInfo} object from the specified encoded
+	 * {@code PermissionInfo} string. White space in the encoded
 	 * {@code PermissionInfo} string is ignored.
 	 * 
 	 * 
 	 * @param encodedPermission The encoded {@code PermissionInfo}.
-	 * @see #getEncoded
+	 * @see #getEncoded()
 	 * @throws IllegalArgumentException If the specified
 	 *         {@code encodedPermission} is not properly formatted.
 	 */

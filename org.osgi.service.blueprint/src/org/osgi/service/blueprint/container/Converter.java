@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,8 +43,8 @@ public interface Converter {
 	 * @return An instance with a type that is assignable from targetType's raw
 	 *         class
 	 * @throws Exception If the conversion cannot succeed. This exception should
-	 *         not be thrown when the {@link #canConvert canConvert} method has
-	 *         returned {@code true}.
+	 *         not be thrown when the {@link #canConvert(Object, ReifiedType)
+	 *         canConvert} method has returned {@code true}.
 	 */
 	Object convert(Object sourceObject, ReifiedType targetType)
 			throws Exception;

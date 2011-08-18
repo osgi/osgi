@@ -26,9 +26,8 @@ package org.osgi.test.cases.framework.secure.junit.classloading;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.wiring.Wiring;
 
 /**
  * This class contains tests related with the framework class loading policies.
@@ -37,17 +36,9 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @version $Id$
  */
 public class ClassLoadingTests extends DefaultTestBundleControl {
-	private PackageAdmin	padmin;
 	
 	protected void tearDown() {
-		if ( padmin == null ) {
-			ServiceReference ref = getContext().getServiceReference( PackageAdmin.class.getName());
-			if ( ref == null )
-				return;
-			
-			padmin = (PackageAdmin) getContext().getService(ref);
-		}
-		padmin.refreshPackages(null);
+		Wiring.synchronousRefreshBundles(getContext());
 	}
 
 	// Service Registry --------------------------

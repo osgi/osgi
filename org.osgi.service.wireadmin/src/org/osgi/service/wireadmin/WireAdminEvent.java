@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,10 @@ import org.osgi.framework.ServiceReference;
  * <p>
  * {@code WireAdminEvent} objects are delivered to all registered
  * {@code WireAdminListener} service objects which specify an interest in the
- * {@code WireAdminEvent} type. Events must be delivered in chronological
- * order with respect to each listener. For example, a {@code WireAdminEvent}
- * of type {@link #WIRE_CONNECTED} must be delivered before a
- * {@code WireAdminEvent} of type {@link #WIRE_DISCONNECTED} for a particular
- * {@code Wire} object.
+ * {@code WireAdminEvent} type. Events must be delivered in chronological order
+ * with respect to each listener. For example, a {@code WireAdminEvent} of type
+ * {@link #WIRE_CONNECTED} must be delivered before a {@code WireAdminEvent} of
+ * type {@link #WIRE_DISCONNECTED} for a particular {@code Wire} object.
  * 
  * <p>
  * A type code is used to identify the type of event. The following event types
@@ -48,40 +47,40 @@ import org.osgi.framework.ServiceReference;
  * Event type values must be unique and disjoint bit values. Event types must be
  * defined as a bit in a 32 bit integer and can thus be bitwise OR'ed together.
  * <p>
- * Security Considerations. {@code WireAdminEvent} objects contain
- * {@code Wire} objects. Care must be taken in the sharing of {@code Wire}
- * objects with other bundles.
+ * Security Considerations. {@code WireAdminEvent} objects contain {@code Wire}
+ * objects. Care must be taken in the sharing of {@code Wire} objects with other
+ * bundles.
  * 
  * @see WireAdminListener
- * 
+ * @Immutable
  * @version $Id$
  */
 public class WireAdminEvent {
 	/**
 	 * The WireAdmin service which created this event.
 	 */
-	private ServiceReference	reference;
+	private final ServiceReference	reference;
 	/**
 	 * The {@code Wire} object associated with this event.
 	 */
-	private Wire				wire;
+	private final Wire				wire;
 	/**
 	 * Type of this event.
 	 * 
-	 * @see #getType
+	 * @see #getType()
 	 */
-	private int					type;
+	private final int				type;
 	/**
 	 * Exception associates with this the event.
 	 */
-	private Throwable			throwable;
+	private final Throwable			throwable;
 	/**
 	 * A Producer service method has thrown an exception.
 	 * 
 	 * <p>
-	 * This {@code WireAdminEvent} type indicates that a Producer service
-	 * method has thrown an exception. The {@link WireAdminEvent#getThrowable}
-	 * method will return the exception that the Producer service method raised.
+	 * This {@code WireAdminEvent} type indicates that a Producer service method
+	 * has thrown an exception. The {@link WireAdminEvent#getThrowable()} method
+	 * will return the exception that the Producer service method raised.
 	 * 
 	 * <p>
 	 * The value of {@code PRODUCER_EXCEPTION} is 0x00000001.
@@ -91,9 +90,9 @@ public class WireAdminEvent {
 	 * A Consumer service method has thrown an exception.
 	 * 
 	 * <p>
-	 * This {@code WireAdminEvent} type indicates that a Consumer service
-	 * method has thrown an exception. The {@link WireAdminEvent#getThrowable}
-	 * method will return the exception that the Consumer service method raised.
+	 * This {@code WireAdminEvent} type indicates that a Consumer service method
+	 * has thrown an exception. The {@link WireAdminEvent#getThrowable()} method
+	 * will return the exception that the Consumer service method raised.
 	 * 
 	 * <p>
 	 * The value of {@code CONSUMER_EXCEPTION} is 0x00000002.
@@ -103,12 +102,13 @@ public class WireAdminEvent {
 	 * A {@code Wire} has been created.
 	 * 
 	 * <p>
-	 * This {@code WireAdminEvent} type that indicates that a new
-	 * {@code Wire} object has been created.
+	 * This {@code WireAdminEvent} type that indicates that a new {@code Wire}
+	 * object has been created.
 	 * 
-	 * An event is broadcast when {@link WireAdmin#createWire} is called. The
-	 * {@link WireAdminEvent#getWire} method will return the {@code Wire}
-	 * object that has just been created.
+	 * An event is broadcast when
+	 * {@link WireAdmin#createWire(String, String, java.util.Dictionary)} is
+	 * called. The {@link WireAdminEvent#getWire()} method will return the
+	 * {@code Wire} object that has just been created.
 	 * 
 	 * <p>
 	 * The value of {@code WIRE_CREATED} is 0x00000004.
@@ -121,8 +121,9 @@ public class WireAdminEvent {
 	 * This {@code WireAdminEvent} type that indicates that an existing
 	 * {@code Wire} object has been updated with new properties.
 	 * 
-	 * An event is broadcast when {@link WireAdmin#updateWire} is called with a
-	 * valid wire. The {@link WireAdminEvent#getWire} method will return the
+	 * An event is broadcast when
+	 * {@link WireAdmin#updateWire(Wire, java.util.Dictionary)} is called with a
+	 * valid wire. The {@link WireAdminEvent#getWire()} method will return the
 	 * {@code Wire} object that has just been updated.
 	 * 
 	 * <p>
@@ -133,12 +134,12 @@ public class WireAdminEvent {
 	 * A {@code Wire} has been deleted.
 	 * 
 	 * <p>
-	 * This {@code WireAdminEvent} type that indicates that an existing wire
-	 * has been deleted.
+	 * This {@code WireAdminEvent} type that indicates that an existing wire has
+	 * been deleted.
 	 * 
-	 * An event is broadcast when {@link WireAdmin#deleteWire} is called with a
-	 * valid wire. {@link WireAdminEvent#getWire} will return the {@code Wire}
-	 * object that has just been deleted.
+	 * An event is broadcast when {@link WireAdmin#deleteWire(Wire)} is called
+	 * with a valid wire. {@link WireAdminEvent#getWire()} will return the
+	 * {@code Wire} object that has just been deleted.
 	 * 
 	 * <p>
 	 * The value of {@code WIRE_DELETED} is 0x00000010.
@@ -149,11 +150,11 @@ public class WireAdminEvent {
 	 * {@code Wire} object has become connected.
 	 * 
 	 * The Consumer object and the Producer object that are associated with the
-	 * {@code Wire} object have both been registered and the {@code Wire}
-	 * object is connected. See {@link Wire#isConnected} for a description of
-	 * the connected state. This event may come before the
-	 * {@code producersConnected} and {@code consumersConnected} method
-	 * have returned or called to allow synchronous delivery of the events. Both
+	 * {@code Wire} object have both been registered and the {@code Wire} object
+	 * is connected. See {@link Wire#isConnected()} for a description of the
+	 * connected state. This event may come before the
+	 * {@code producersConnected} and {@code consumersConnected} method have
+	 * returned or called to allow synchronous delivery of the events. Both
 	 * methods can cause other {@code WireAdminEvent} s to take place and
 	 * requiring this event to be send before these methods are returned would
 	 * mandate asynchronous delivery.
@@ -179,12 +180,12 @@ public class WireAdminEvent {
 	 * transferred over the {@code Wire} object.
 	 * 
 	 * This event is sent after the Consumer service has been notified by
-	 * calling the {@link Consumer#updated} method or the Consumer service
-	 * requested a new value with the {@link Wire#poll} method. This is an
-	 * advisory event meaning that when this event is received, another update
-	 * may already have occurred and this the {@link Wire#getLastValue} method
-	 * returns a newer value then the value that was communicated for this
-	 * event.
+	 * calling the {@link Consumer#updated(Wire, Object)} method or the Consumer
+	 * service requested a new value with the {@link Wire#poll()} method. This
+	 * is an advisory event meaning that when this event is received, another
+	 * update may already have occurred and this the {@link Wire#getLastValue()}
+	 * method returns a newer value then the value that was communicated for
+	 * this event.
 	 * 
 	 * <p>
 	 * The value of {@code WIRE_TRACE} is 0x00000080.
@@ -193,12 +194,12 @@ public class WireAdminEvent {
 
 	/**
 	 * Constructs a {@code WireAdminEvent} object from the given
-	 * {@code ServiceReference} object, event type, {@code Wire} object
-	 * and exception.
+	 * {@code ServiceReference} object, event type, {@code Wire} object and
+	 * exception.
 	 * 
 	 * @param reference The {@code ServiceReference} object of the Wire Admin
 	 *        service that created this event.
-	 * @param type The event type. See {@link #getType}.
+	 * @param type The event type. See {@link #getType()}.
 	 * @param wire The {@code Wire} object associated with this event.
 	 * @param exception An exception associated with this event. This may be
 	 *        {@code null} if no exception is associated with this event.

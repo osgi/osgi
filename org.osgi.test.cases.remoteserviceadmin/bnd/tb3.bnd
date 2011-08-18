@@ -1,8 +1,8 @@
 Bundle-Name:                             ${p}.tb3
 Bundle-SymbolicName:                     ${p}.tb3
 Bundle-Version:                          1.0
-Private-Package:                         org.osgi.test.support.*, \
- ${p}.tb3.*, \
+Conditional-Package					= org.osgi.test.support.*
+Private-Package:                         ${p}.tb3.*, \
  ${p}.common 
 Export-Package:                          ${p}.common;version="1.0.0"
 Bundle-Activator:                        ${p}.tb3.Activator

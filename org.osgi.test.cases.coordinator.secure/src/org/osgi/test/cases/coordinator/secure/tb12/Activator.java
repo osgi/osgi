@@ -25,6 +25,8 @@
 
 package org.osgi.test.cases.coordinator.secure.tb12;
 
+import java.util.Collection;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -39,16 +41,18 @@ import org.osgi.test.cases.coordinator.secure.TestClassResultImpl;
  * with com.ibm.*.
  */
 public class Activator implements BundleActivator {
-	private ServiceRegistration resultsRegistration;
+	private ServiceRegistration<TestClassResult>	resultsRegistration;
 	
 	public void start(BundleContext bc) throws Exception {
-		ServiceReference sr = bc.getServiceReference(Coordinator.class.getName());
-		Coordinator c = (Coordinator)bc.getService(sr);
+		ServiceReference<Coordinator> sr = bc
+				.getServiceReference(Coordinator.class);
+		Coordinator c = bc.getService(sr);
 		boolean result = false;
-		ServiceReference[] srs = bc.getServiceReferences(Coordination.class.getName(), null);
-		if (srs != null && srs.length == 2) {
-			for (ServiceReference csr : srs) {
-				Coordination co = (Coordination)bc.getService(csr);
+		Collection<ServiceReference<Coordination>> srs = bc
+				.getServiceReferences(Coordination.class, null);
+		if (srs.size() == 2) {
+			for (ServiceReference<Coordination> csr : srs) {
+				Coordination co = bc.getService(csr);
 				bc.ungetService(csr);
 				if (co.getName().startsWith("com.ibm")) {
 					result = c.getCoordination(co.getId()) != null;
@@ -62,7 +66,8 @@ public class Activator implements BundleActivator {
 				}
 			}
 		}
-		resultsRegistration = bc.registerService(TestClassResult.class.getName(), new TestClassResultImpl(result), null);
+		resultsRegistration = bc.registerService(TestClassResult.class,
+				new TestClassResultImpl(result), null);
 		bc.ungetService(sr);
 	}
 

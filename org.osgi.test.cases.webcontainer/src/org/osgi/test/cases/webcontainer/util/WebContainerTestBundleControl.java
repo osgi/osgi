@@ -21,9 +21,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
@@ -34,6 +34,7 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.webcontainer.util.validate.Validator;
+import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -475,7 +476,8 @@ public abstract class WebContainerTestBundleControl extends
 	    ServiceTracker st = new ServiceTracker(getContext(), filter, null);
 	    st.open();
 	    
-	    Object obj = st.waitForService(10000);
+		Object obj = st.waitForService(OSGiTestCaseProperties.getTimeout()
+				* OSGiTestCaseProperties.getScaling());
 	    if (obj != null) {
 	    	toReturn = true;
 	    }
