@@ -16,6 +16,8 @@
 
 package org.osgi.framework.wiring;
 
+import org.osgi.framework.resource.Requirement;
+
 /**
  * A requirement that has been declared from a {@link BundleRevision bundle
  * revision}.

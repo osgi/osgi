@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.wiring;
+package org.osgi.framework.resource;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.framework.wiring.BundleWiring;
 
 /**
  * Defines standard names for the attributes, directives and name spaces for
@@ -27,7 +29,6 @@ import org.osgi.framework.Version;
  * The values associated with these keys are of type {@code String}, unless
  * otherwise indicated.
  * 
- * @since 1.1
  * @Immutable
  * @version $Id$
  */

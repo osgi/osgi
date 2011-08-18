@@ -23,9 +23,9 @@ package org.osgi.service.repository;
 import java.net.URL;
 import java.util.Collection;
 
-import org.osgi.framework.wiring.Capability;
-import org.osgi.framework.wiring.Requirement;
-import org.osgi.framework.wiring.Resource;
+import org.osgi.framework.resource.Capability;
+import org.osgi.framework.resource.Requirement;
+import org.osgi.framework.resource.Resource;
 
 /**
  * Represents a repository that contains {@link Resource resources}.

@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.wiring;
+package org.osgi.framework.resource;
 
 import java.util.Map;
 
 /**
  * A capability that has been declared from a {@link Resource}.
  * 
- * @since 1.1
  * @ThreadSafe
  * @version $Id$
  */

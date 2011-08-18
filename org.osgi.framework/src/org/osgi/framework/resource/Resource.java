@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.wiring;
+package org.osgi.framework.resource;
 
 import java.util.List;
 
@@ -24,7 +24,6 @@ import java.util.List;
  * 
  * A resources can be wired together via capabilities and requirements.
  * 
- * @since 1.1
  * @ThreadSafe
  * @version $Id$
  */

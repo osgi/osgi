@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.wiring;
+package org.osgi.framework.resource;
 
 /**
  * A wire connecting a {@link Capability} to a {@link Requirement}.
  * 
- * @since 1.1
  * @ThreadSafe
  * @version $Id$
  */

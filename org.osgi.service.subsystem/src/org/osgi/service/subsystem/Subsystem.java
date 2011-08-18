@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.osgi.framework.Version;
-import org.osgi.framework.wiring.Resource;
+import org.osgi.framework.resource.Resource;
 
 /*
  * TODO

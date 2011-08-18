@@ -16,6 +16,8 @@
 
 package org.osgi.framework.wiring;
 
+import org.osgi.framework.resource.Wire;
+
 
 /**
  * A wire connecting a {@link BundleCapability} to a {@link BundleRequirement}.

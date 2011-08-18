@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
+import org.osgi.framework.resource.ResourceConstants;
 
 /**
  * A wiring for a bundle. Each time a bundle is resolved, a new bundle wiring
