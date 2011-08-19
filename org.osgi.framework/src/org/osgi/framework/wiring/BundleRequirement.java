@@ -33,8 +33,7 @@ public interface BundleRequirement extends Requirement {
 	 * Returns the bundle revision declaring this requirement.
 	 * 
 	 * <p>
-	 * This method is equivalent to calling {@link Requirement#getResource} and
-	 * the following should always be true req.getRevision == req.getResource().
+	 * This method returns the same object as {@link #getResource()}.
 	 * 
 	 * @return The bundle revision declaring this requirement.
 	 */
