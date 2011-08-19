@@ -22,8 +22,6 @@ repo.servlet = ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}
 repo.jaxp = ${repo;com.icl.saxon}
 repo.jpa = ${repo;org.eclipse.persistence.jpa_spec}
 
-javadoc.packages		 	= ${uniq; ${core.packages}, ${cmpn.packages}, ${enterprise.packages}, ${residential.packages}}
-
 ees 						= \
  ee.minimum, \
  ee.foundation
