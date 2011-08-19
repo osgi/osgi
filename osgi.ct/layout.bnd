@@ -15,7 +15,8 @@ build.core.tests = \
     org.osgi.test.cases.framework.launch.secure, \
     org.osgi.test.cases.condpermadmin, \
     org.osgi.test.cases.permissionadmin, \
-    org.osgi.test.cases.url
+    org.osgi.test.cases.url, \
+    org.osgi.test.cases.tracker
 
 jar.cmpn.tests =
 
@@ -48,7 +49,6 @@ build.cmpn.tests = \
     org.osgi.test.cases.policy, \
     org.osgi.test.cases.position, \
     org.osgi.test.cases.prefs, \
-    org.osgi.test.cases.tracker, \
     org.osgi.test.cases.upnp, \
     org.osgi.test.cases.useradmin, \
     org.osgi.test.cases.wireadmin, \
@@ -76,7 +76,6 @@ build.enterprise.tests = \
     org.osgi.test.cases.remoteserviceadmin.secure, \
     org.osgi.test.cases.remoteservices, \
     org.osgi.test.cases.scaconfigtype, \
-    org.osgi.test.cases.tracker, \
 	org.osgi.test.cases.transaction, \
     org.osgi.test.cases.useradmin, \
     org.osgi.test.cases.webcontainer, \

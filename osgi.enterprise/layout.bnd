@@ -16,7 +16,6 @@ enterprise.specs = \
 	 org.osgi.service.log, \
 	 org.osgi.service.metatype, \
 	 org.osgi.service.useradmin, \
-	 org.osgi.util.tracker, \
 	 org.osgi.util.xml
 
 enterprise.packages = ${replace;$(enterprise.specs);^.*$;$0.*}

@@ -14,7 +14,7 @@ Export-Package						= ${p}.service
 	${junit}
 	
 -runbundles							= \
-	osgi.cmpn; version=latest
+	osgi.core; version=latest
 
 -runproperties						= ${runproperties}
 
