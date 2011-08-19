@@ -70,10 +70,9 @@ public interface Requirement {
 	Map<String, Object> getAttributes();
 
 	/**
-	 * Returns the resource declaring this requirement. If there is no resource
-	 * declaring this requirement, {@code null} is returned.
+	 * Returns the resource declaring this requirement.
 	 * 
-	 * @return The resource declaring this requirement, if any.
+	 * @return The resource declaring this requirement.
 	 */
 	Resource getResource();
 
