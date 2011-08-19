@@ -74,9 +74,9 @@ public interface Capability {
 	Map<String, Object> getAttributes();
 
 	/**
-	 * The resource that declares this capability.
+	 * Returns the resource declaring this capability.
 	 * 
-	 * @return the resource
+	 * @return The resource declaring this capability.
 	 */
 	Resource getResource();
 }
