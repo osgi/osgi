@@ -32,6 +32,10 @@ public interface BundleCapability extends Capability {
 
 	/**
 	 * Returns the bundle revision declaring this capability.
+	 *
+         * <p>
+         * This method is equivalent to calling {@link Capability#getResource} and
+         * the following should always be true cap.getRevision == cap.getResource().
 	 * 
 	 * @return The bundle revision declaring this capability.
 	 */
