@@ -11,8 +11,6 @@ import org.osgi.dmt.ddf.*;
  * access to the life cycle control of the bundle as well to its metadata,
  * resources, and wiring.
  * 
- * 
- * @remark set that anything that is not yet defined for a new bundle must throw an error
  */
 public interface Bundle {
 	/**
@@ -26,9 +24,9 @@ public interface Bundle {
 	 * By default this is the last URL used to download the JAR if it is known,
 	 * otherwise it is the empty string. In an atomic session this URL can be
 	 * replaced to a new URL, which will trigger an update of this bundle during
-	 * commit. If this value is set it must be a valid JAR from which a URL can
-	 * be downloaded unless it is the system bundle. If the value is not set, ot
-	 * must be reset, it must be an empty string.
+	 * commit. If this value is set it must point to a valid JAR from which a
+	 * URL can be downloaded, unless it is the system bundle. If the value is
+	 * not set it must be an empty string.
 	 * 
 	 * <p>
 	 * If the URL of Bundle 0 (The system bundle) is replaced to any value then
@@ -45,17 +43,15 @@ public interface Bundle {
 	 * If the AutoStart node is {@code true} then this bundle is started when
 	 * the framework is started and its {@link #StartLevel()} is met.
 	 * <p>
-	 * If the AutoStart node is set to {@code true} and the bundle is not
-	 * started then it will automatically be started if the start level permits
-	 * it. If the AutoStart node is set to {@code false} then the bundle must
-	 * not be stopped immediately.
+	 * If the {@code AutoStart} node is set to {@code true} and the bundle is
+	 * not started then it will automatically be started if the start level
+	 * permits it. If the {@code AutoStart} node is set to {@code false} then
+	 * the bundle must not be stopped immediately.
 	 * <p>
-	 * If the AutoStart value of the System Bundle is changed then the operation
-	 * must be ignored.
+	 * If the {@code AutoStart} value of the System Bundle is changed then the
+	 * operation must be ignored.
 	 * <p>
 	 * The default value for this node is {@code true}
-	 * <p>
-	 * Setting the AutoStart flag on the System Bundle must have no effect.
 	 * 
 	 * @return The AutoStart value
 	 */
@@ -66,7 +62,7 @@ public interface Bundle {
 	 * The BundleException type associated with a failure on this bundle, -1 if
 	 * no fault is associated with this bundle. If there was no Bundle Exception
 	 * associated with the failure the code must be 0 (UNSPECIFIED). The
-	 * {@link #FaultMessage()} provides human readable message.
+	 * {@link #FaultMessage()} provides a human readable message.
 	 * 
 	 * @return The FaultType value
 	 */
@@ -74,8 +70,8 @@ public interface Bundle {
 	int FaultType();
 
 	/**
-	 * A human readable message detailing an error situation or empty if no
-	 * fault is associated with this bundle.
+	 * A human readable message detailing an error situation or an empty string
+	 * if no fault is associated with this bundle.
 	 * 
 	 * @return The FaultMessage node
 	 */
@@ -83,12 +79,13 @@ public interface Bundle {
 	String FaultMessage();
 
 	/**
-	 * The id Bundle as defined by the {@code getBundleId()} method.
+	 * The Bundle Id as defined by the {@code getBundleId()} method.
 	 * 
+	 * If there is no installed Bundle yet, then this node is not present.
 	 * @return The BundleId node
 	 */
 	@Scope(A)
-	long BundleId();
+	Opt<Long> BundleId();
 
 	/**
 	 * The Bundle Symbolic Name as defined by the Bundle
@@ -98,16 +95,18 @@ public interface Bundle {
 	 * @return The SymbolicName node
 	 */
 	@Scope(A)
-	String SymbolicName();
+	Opt<String> SymbolicName();
 
 	/**
 	 * The Bundle's version as defined by the Bundle {@code getVersion()}
 	 * method.
 	 * 
+	 * If there is no installed Bundle yet, then this node is not present.
+	 * 
 	 * @return The Version node
 	 */
 	@Scope(A)
-	String Version();
+	Opt<String> Version();
 
 	/**
 	 * A list of the types of the bundle. Currently on a single type is
@@ -116,18 +115,22 @@ public interface Bundle {
 	 * <li>{@link #FRAGMENT}</li>
 	 * </ul>
 	 * 
+	 * If there is no installed Bundle yet, then this node is not present.
+	 * 
 	 * @return The BundleType node
 	 */
 	@Scope(A)
-	LIST<String> BundleType();
+	Opt<LIST<String>> BundleType();
 
 	/**
 	 * The Bundle {@code getHeaders()} method.
 	 * 
+	 * If there is no installed Bundle yet, then this node is not present.
+	 * 
 	 * @return The Bundle's manifest headers
 	 */
 	@Scope(A)
-	MAP<String, String> Headers();
+	Opt<MAP<String, String>> Headers();
 
 	/**
 	 * The Bundle's Location as defined by the Bundle {@code getLocation()}
@@ -137,7 +140,7 @@ public interface Bundle {
 	 * installed. This location should be a unique name for a bundle chosen by
 	 * the management system. The Bundle Location is immutable for the Bundle's
 	 * life (it is not changed when the Bundle is updated). The Bundle Location
-	 * is also part of the URI to this node if not mangled.
+	 * is also part of the URI to this node.
 	 * 
 	 * @return The Bundle's location
 	 */
@@ -164,6 +167,7 @@ public interface Bundle {
 	 * The Bundle {@code STOPPING} state.
 	 */
 	String STOPPING = "STOPPING";
+
 	/**
 	 * The Bundle {@code UNINSTALLED} state.
 	 */
@@ -178,15 +182,13 @@ public interface Bundle {
 	 * <li>{@link #STARTING}</li>
 	 * <li>{@link #ACTIVE}</li>
 	 * <li>{@link #STOPPING}</li>
-	 * <li>{@link #UNINSTALLED} - When the Bundle is not yet installed</li>
 	 * </ul>
+	 * If there is no installed Bundle yet, then this node is not present.
 	 * 
-	 * 
-	 * @remark explain better the uninstalled state
 	 * @return The current State
 	 */
 	@Scope(A)
-	String State();
+	Opt<String> State();
 
 	/**
 	 * Is the requested state the manager wants the bundle to be in. Can be:
@@ -205,7 +207,7 @@ public interface Bundle {
 	 * </ul> {@link #STARTING} and {@link #STOPPING} are invalid values for this
 	 * node. Any other values are an error.
 	 * <p>
-	 *
+	 * 
 	 * If the {@link #AutoStart()} node is @{code true} then the bundle must be
 	 * persistently started, otherwise it must be transiently started. If the
 	 * {@link #StartLevel()} is not met then the commit must fail if
@@ -235,11 +237,13 @@ public interface Bundle {
 	 * The Last Modified time of this bundle as defined by the Bundle
 	 * getLastModified() method. See the Bundle {@code getlastModified()}
 	 * method.
+	 * <p>
+	 * If there is no installed Bundle yet then this node is not present.
 	 * 
 	 * @return The value of the LastModified node.
 	 */
 	@Scope(A)
-	Date LastModified();
+	Opt<Date> LastModified();
 
 	/**
 	 * A MAP of name space -> to Wire. A Wire is a relation between to bundles
@@ -261,33 +265,33 @@ public interface Bundle {
 	 * name space holds all the registered service properties. The requirement
 	 * has no attributes and a single {@code filter} directive that matches the
 	 * service id property.
-	 * 
-	 * @remark add description in spec about the services namespace (if wires
-	 *         make it ...)
-	 *         
-	 *            Framework/System Bundle/Wires/osgi.wiring.package/34/NameSpace == osgi.wiring.package
+	 * <p>
+	 * If there is no installed Bundle yet then this node is not present.
 	 * 
 	 * @return The Wires node.
 	 */
 	@Scope(A)
-	MAP<String, LIST<Wire>> Wires();
+	Opt<MAP<String, LIST<Wire>>> Wires();
 
 	/**
 	 * Return all signers of the bundle. See the Bundle
 	 * {@code getSignerCertificates()} method with the {@code SIGNERS_ALL}
 	 * parameter.
+	 * <p>
+	 * If there is no installed Bundle yet then this node is not present.
 	 * 
 	 * @return All signers of the bundle
-	 * @remark Evgeni wants to have one method with
 	 */
 	@Scope(A)
-	LIST<Certificate> Signers();
+	Opt<LIST<Certificate>> Signers();
 
 	/**
 	 * An optional node providing access to the entries in the Bundle's JAR.
 	 * This list must be created from the Bundle {@code getEntryPaths()} method
 	 * called with an empty String. For each found entry, an Entry object must
 	 * be made available.
+	 * <p>
+	 * If there is no installed Bundle yet then this node is not present.
 	 * 
 	 * @return The Entries node
 	 */
@@ -306,18 +310,15 @@ public interface Bundle {
 	int InstanceId();
 
 	/**
-	 * An Entry describes an entry in the Bundle, it combines the Path of an
+	 * An Entry describes an entry in the Bundle, it combines the path of an
 	 * entry with the content. Only entries that have content will be returned,
-	 * that is, empty directories are not returned.
+	 * that is, empty directories in the Bundle's archive are not returned.
 	 */
 	public interface Entry {
 		/**
 		 * The path in the Bundle archive to the entry.
 		 * 
 		 * @return The path to the entry in the archive.
-		 * 
-		 * @remark Evgeni thinks the fact that we return full path names
-		 *         generates too much data
 		 */
 		@Scope(A)
 		String Path();
@@ -354,8 +355,6 @@ public interface Bundle {
 
 		/**
 		 * A list of signer DNs of the certificates in the chain.
-		 * 
-		 * @remark Should this not be a LIST?
 		 * 
 		 * @return List of DNs
 		 */

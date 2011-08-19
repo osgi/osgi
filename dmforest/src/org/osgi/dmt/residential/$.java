@@ -5,7 +5,7 @@ import org.osgi.dmt.residential.Filter;
 import org.osgi.dmt.service.log.*;
 
 /**
- * The $ describes the root node for OSGi management. The path to this node is
+ * The $ describes the root node for OSGi Residential Management. The path to this node is
  * defined in the system property: {@code org.osgi.residential.root}.
  */
 public interface $ {
@@ -17,12 +17,12 @@ public interface $ {
 	 * scheme to avoid conflicts or an atomic sessions must be used to claim
 	 * exclusiveness.
 	 * <p>
-	 * Filter nodes are not persistent, they must be removed after a suitable timeout that should at least be 1 hour.
+	 * Filter nodes are persistent but an implementation can remove the node 
+	 * after a suitable timeout that should at least be 1 hour.
+	 * <p>
+	 * If this functionality is not supported on this device then the node is not present.
 	 * 
-	 * @remark Or should the nodes be emptied when the framework restarts? Seems
-	 *         safer
-	 * 
-	 * @return The Filters Node
+	 * @return The Filter Node
 	 */
 	Opt<MutableMAP<String, Filter>> Filter();
 
@@ -35,6 +35,8 @@ public interface $ {
 
 	/**
 	 * Access to the optional Log.
+	 * <p>
+	 * If this functionality is not supported on this device then the node is not present.
 	 * 
 	 * @return The value for the optional Log node
 	 */

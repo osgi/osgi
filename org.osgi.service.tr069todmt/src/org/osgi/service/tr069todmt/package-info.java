@@ -15,7 +15,7 @@
  */
 
 /**
- * TR-069 To DMT Conversion.
+ * This packages contains the TR-069 To DMT Conversion Service.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the
@@ -25,6 +25,10 @@
  * Example import for consumers using the API in this package:
  * <p>
  * {@code  Import-Package: org.osgi.service.tr069todmt; version="[1.0,2.0)"}
+ * <p>
+ * Example import for providers of the API in this package:
+ * <p>
+ * {@code  Import-Package: org.osgi.service.tr069todmt; version="[1.0,1.1)"}
  * 
  * @version $Id$
  */

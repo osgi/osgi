@@ -19,24 +19,27 @@ package org.osgi.service.tr069todmt;
 import java.util.*;
 
 /**
- * A TR-069 Connector is an assistant to a TR-069 Protocol Adapter developer. The
- * connector manages the low level details of converting the different TR-069 RPCs
- * to a Device Management Tree managed by Dmt Admin. The connector manages the
- * conversions from the TR-069 Object Names to a node in the DMT and vice versa.
+ * A TR-069 Connector is an assistant to a TR-069 Protocol Adapter developer.
+ * The connector manages the low level details of converting the different
+ * TR-069 RPCs to a Device Management Tree managed by Dmt Admin. The connector
+ * manages the conversions from the TR-069 Object Names to a node in the DMT and
+ * vice versa.
  * <p>
  * The connector uses a Dmt Session from the caller, which is given when the
- * connector is created. The connector does not implement the exact RPCs but only
- * provides the basic functions to set, get, add, delete, and get the
- * (parameter) names of an object. A TR-069 developer must still parse the XML,
- * handle the relative and absolute path issues, open a Dmt Session etc.
+ * connector is created. The connector does not implement the exact RPCs but
+ * only provides the basic functions to set and get the parameters of an object
+ * as well as adding and deleting objects in a table. A TR-069 developer must
+ * still parse the XML, handle the relative and absolute path issues, open a Dmt
+ * Session etc.
  * <p>
- * The connector assumes that each parameter or object name is relative to this
- * root.
+ * The connector assumes that each parameter or object path is relative to the
+ * root of the Dmt Session.
  * <p>
- * This connector must convert the TR-069 Names to Dmt Admin URIs. This conversion
- * must take into account the {@code LIST} and {@code MAP} concepts defined in
- * the specifications. These concepts define the use of an {@code InstanceId}
- * node that must be used by the connector to provide a TR-069 table view on the
+ * This connector must convert the TR-069 paths to Dmt Admin URIs. This
+ * conversion must take into account the {@code LIST} and {@code MAP} concepts
+ * defined in the specifications as well as the *NumberOfEntries concepts and
+ * alias addressing. These concepts define the use of an {@code InstanceId} node
+ * that must be used by the connector to provide a TR-069 table view on the
  * {@code LIST} and {@code MAP} nodes.
  * 
  * @remark Move sessions into the object (create a factory)
@@ -157,16 +160,18 @@ public interface TR069Connector {
 	 * URI and replace the DMT node at that place. It must follow the type
 	 * conversions as described in the specification.
 	 * <p>
-	 * The connector must attempt to create any missing nodes along the way, creating
-	 * parent nodes on demand.
+	 * The connector must attempt to create any missing nodes along the way,
+	 * creating parent nodes on demand.
 	 * <p>
 	 * If the value of a an Alias node is set then the parent node must be
 	 * renamed. For example, if the value of {@code M/X/Alias} is set to
 	 * {@code Y} then the node will have a URI of {@code M/Y/Alias}. The value
 	 * must not be escaped as the connector will escape it.
+	 * <p>
+	 * This method requires an atomic Dmt Session.
 	 * 
-	 * @param fullParameterName
-	 *            A parameter name, must not be partial (end in dot).
+	 * @param parameterPath
+	 *            A path to a parameter name, must not be partial (end in dot).
 	 * @param value
 	 *            A trimmed string value that has the given type. The value can
 	 *            be in either canonical or lexical representation by TR069.
@@ -177,124 +182,215 @@ public interface TR069Connector {
 	 *            {@link #TR069_UNSIGNED_LONG},{@link #TR069_STRING},
 	 *            {@link #TR069_DATETIME},{@link #TR069_BASE64},
 	 *            {@link #TR069_HEXBINARY})
+	 * 
+	 * @remark can we auto-create the nodes?
 	 * @throws TR069Exception
-	 *             if the value cannot be set
+	 *             The following fault codes are defined for this method: 9001,
+	 *             9002, 9003, 9004, 9005, 9006, 9007, 9008.
+	 *             <ul>
+	 *             <li> 9001 {@link TR069Exception#REQUEST_DENIED} </li> <li>
+	 *             9002 {@link TR069Exception#INTERNAL_ERROR} </li><li> 9003
+	 *             {@link TR069Exception#INVALID_ARGUMENTS} </li><li> 9004
+	 *             {@link TR069Exception#RESOURCES_EXCEEDED} </li><li> 9005
+	 *             {@link TR069Exception#INVALID_PARAMETER_NAME} </li><li> 9006
+	 *             {@link TR069Exception#INVALID_PARAMETER_TYPE} </li><li> 9007
+	 *             {@link TR069Exception#INVALID_PARAMETER_VALUE} </li><li> 9008
+	 *             {@link TR069Exception#NON_WRITABLE_PARAMETER}</li>
+	 *             </ul>
 	 */
-	void setParameterValue(String fullParameterName, String value, int type)
+	void setParameterValue(String parameterPath, String value, int type)
 			throws TR069Exception;
 
 	/**
-	 * Getting a Parameter. This method should be used to implement
-	 * GetParameterValues RPC. This method must convert the Name to the
-	 * appropriate node and convert the value to a TR-069 type as specified in
-	 * the specification.
+	 * Getting a parameter value. This method should be used to implement
+	 * GetParameterValues RPC. If the {@code parameterPath}. This method does
+	 * <b>not</b> handle retrieving multiple values as the corresponding RPC can
+	 * request with an object or table path, this method only accepts a
+	 * parameter path. Retrieving multiple values can be achieved with the
+	 * {@link #getParameterNames(String, boolean)}. This method can expand a
+	 * partial path and since the returned Parameter Info also provides access
+	 * to the Parameter Value.
 	 * <p>
-	 * If the ACS requests the values for partial names then it is the
-	 * responsibility of the caller to expand the node with GetParameterNames
-	 * and then call this method for each parameter.
+	 * If the parameterPath ends in NumberOfEntries then the method must
+	 * synthesize the value. The parameterPath then has a pattern like
+	 * {@code (object-path)(table-name)NumberOfEntries}. The returned value must
+	 * be an {@link #TR069_UNSIGNED_INT} that contains the number of child nodes
+	 * in the table {@code (object-path)(table-name)}. For example, if
+	 * {@code A.B.CNumberOfEntries} is requested the return value must be the
+	 * number of child nodes under {@code A/B/C}.
+	 * <p>
+	 * If the value of a an {@code Alias} node is requested then the name of the
+	 * parent node must be returned. For example, if the path is
+	 * {@code M.X.Alias} then the returned value must be {@code X}.
 	 * <p>
 	 * 
-	 * <p>
-	 * If the value of a the {@code Alias} node is requested then the name of
-	 * the parent node must be returned. For example, if the URI is
-	 * {@code M/X/Alias} then the returned value must be {@code X}.
-	 * 
-	 * @param fullParameterName
-	 *            A parameter name, must not be partial (end in dot).
+	 * @param parameterPath
+	 *            A parameter path or a partial path
 	 * @return The name, value, and type triad of the requested parameter as
 	 *         defined by the TR-069 {@code ParameterValueStruct}.
 	 * @throws TR069Exception
+	 *             The following fault codes are defined for this method: 9001,
+	 *             9002, 9003, 9004, 9005.
+	 *             <ul>
+	 *             <li> 9001 {@link TR069Exception#REQUEST_DENIED} <li> 9002
+	 *             {@link TR069Exception#INTERNAL_ERROR} <li> 9003
+	 *             {@link TR069Exception#INVALID_ARGUMENTS} <li> 9004
+	 *             {@link TR069Exception#RESOURCES_EXCEEDED} <li> 9005
+	 *             {@link TR069Exception#INVALID_PARAMETER_NAME}
+	 *             </ul>
 	 */
-	ParameterValue getParameterValue(String fullParameterName)
+	ParameterValue getParameterValue(String parameterPath)
 			throws TR069Exception;
 
 	/**
-	 * Getting the names of the parameters for the node addressed by path. This
-	 * method should be used to implement the GetParameterNames RPC. It must
-	 * return the children of the addressed node.
+	 * Getting the {@link ParameterInfo} objects addressed by path. This method
+	 * is intended to be used to implement the GetParameterNames RPC.
 	 * <p>
-	 * If the child nodes have an InstanceId node then the returned names must
-	 * be the set of InstanceId values.
+	 * This method must traverse the sub-tree addressed by the path and return
+	 * the paths to all the objects, tables, and parameters in that tree. If the
+	 * nextLevel argument is {@code true} then only the children object, table,
+	 * and parameter information must be returned.
 	 * <p>
-	 * If the parent node is a MAP, then the returned names must include the
-	 * synthetic name {@code Alias}, this node can be used to get the real name
-	 * of the node as well as rename the node.
+	 * The returned {@link ParameterInfo} objects must be usable to discover the
+	 * sub-tree.
 	 * <p>
-	 * Partial paths and the nextLevel boolean must be handled by the caller.
+	 * If the child nodes have an {@code InstanceId} node then the returned
+	 * names must include the {@code InstanceId} values instead of the node
+	 * names.
+	 * <p>
+	 * If the parent node is a {@code MAP}, then the synthetic {@code Alias}
+	 * parameter must be included.
+	 * <p>
+	 * Any {@code MAP} and {@code LIST} node must include a
+	 * {@link ParameterInfo} for the corresponding {@code *NumberOfEntries}
+	 * parameter.
 	 * 
-	 * @param fullParameterName
-	 *            A parameter name, must not be partial and it must end with full stop.
-	 * @return The full name of the parameter and the write status as defined by the
+	 * @param objectOrTablePath
+	 *            A path to an object or table that is the root of a sub-tree .
+	 * @param nextLevel
+	 *            If {@code true} consider only the children of the object or
+	 *            table addressed by {@code path}, otherwise include the whole
+	 *            sub-tree, including the addressed object or table.
+	 * @return A collection of {@link ParameterInfo} objects representing the
+	 *         resulting child parameter, objects, and tables as defined by the
 	 *         TR-069 {@code ParameterInfoStruct}.
 	 * @throws TR069Exception
+	 *             If the fault is caused by an invalid ParameterPath value, the
+	 *             Invalid Parameter Name fault code (9005) MUST be used instead
+	 *             of the more general Invalid Arguments fault code (9003). A
+	 *             ParameterPath value must be considered invalid if it is not
+	 *             an empty string and does not exactly match a parameter or
+	 *             object name currently present in the data model. If
+	 *             {@code nextLevel} is {@code true} and
+	 *             {@code objectOrTablePath} is a parameter path rather than an
+	 *             object/table path, the method must return a fault response
+	 *             with the Invalid Arguments fault code (9003). if the value
+	 *             cannot be get for some reason. This method can generate the
+	 *             following fault codes:
+	 *             <ul>
+	 *             <li> 9001 {@link TR069Exception#REQUEST_DENIED} </li> <li>
+	 *             9002 {@link TR069Exception#INTERNAL_ERROR} </li> <li> 9003
+	 *             {@link TR069Exception#INVALID_ARGUMENTS} </li> <li> 9005
+	 *             {@link TR069Exception#INVALID_PARAMETER_NAME}</li>
+	 *             </ul>
 	 */
-	Collection getParameterNames(String fullParameterName)
-			throws TR069Exception;
+	Collection<ParameterInfo> getParameterNames(String objectOrTablePath,
+			boolean nextLevel) throws TR069Exception;
 
 	/**
 	 * Add a new node to the Dmt Admin as defined by the AddObject RPC.
 	 * 
-	 * The objectName must map to either a LIST or MAP node as no other nodes
-	 * can accept new children. The connector must calculate a unique id for the
-	 * new node name that follows the TR-069 names for instance ids. If the new
-	 * node has an InstanceId node, then this name must be returned, otherwise
-	 * the calculated name must be returned.
+	 * The path must map to either a LIST or MAP node as no other nodes can
+	 * accept new children. If the path ends in an alias ({@code [ ALIAS ]}) and
+	 * the table path points to a MAP node then a new node must be created under
+	 * the MAP with the alias as the node name. Otherwise an Instance Id must be
+	 * created.
+	 * <p>
+	 * For this, the Connector must calculate a unique instance id for the new
+	 * node name that follows the TR-069 rules for instance ids. This id must be
+	 * used to name the new node. If the new node has an automatic
+	 * {@code InstanceId} node then the node name must be renamed to the given
+	 * {@code InstanceId} value.
+	 * <p>
+	 * This method must return the name of the newly created node.
+	 * <p>
+	 * This method requires an atomic Dmt Session.
 	 * 
-	 * @param objectName
-	 *            The path name of the collection of objects for which a new
-	 *            instance is to be created. The path name MUST end with a “.”
-	 *            (full stop) after the last node in the hierarchical name of
-	 *            the object.
-	 * @return The name of the new node, either the new nodes InstanceId node's
-	 *         value or the node name.
+	 * @param path
+	 *            A table path with an optional alias at the end
+	 * @return The name of the new node.
 	 * @throws TR069Exception
+	 *             The following fault codes are defined for this method: 9001,
+	 *             9002, 9003, 9004, 9005. If an AddObject request would result
+	 *             in exceeding the maximum number of such objects supported by
+	 *             the CPE, the CPE MUST return a fault response with the
+	 *             Resources Exceeded (9004) fault code.
 	 */
-	String addObject(String objectName) throws TR069Exception;
+	String addObject(String path) throws TR069Exception;
 
 	/**
-	 * Delete an object.
+	 * Delete an object from a table.
 	 * 
-	 * @param objectName
-	 *            The path name of the object to be deleted. The path name MUST
-	 *            end with a “.” (dot) after the last node in the hierarchical
-	 *            name of the object.
+	 * @param objectPath
+	 *            The path to an object in a table to be deleted.
 	 * @throws TR069Exception
+	 *             The following fault codes are defined for this method: 9001,
+	 *             9002, 9003, 9005. If the fault is caused by an invalid
+	 *             objectPath value, the Invalid Parameter Name fault code
+	 *             (9005) must be used instead of the more general Invalid
+	 *             Arguments fault code (9003). The objectPath value must be
+	 *             considered invalid if it does not exactly match the name of a
+	 *             a table instance currently present in the CPE’s data model.
 	 */
-	void deleteObject(String objectName) throws TR069Exception;
+	void deleteObject(String objectPath) throws TR069Exception;
 
 	/**
-	 * Convert a relative Dmt Admin URI to a TR-069 Name (Parameter or Object)
-	 * that can be used to address the node.
-	 * 
-	 * ### RELATIVE TO THE SESSION ROOT
+	 * Convert a Dmt Session relative Dmt Admin URI to a valid TR-069 path,
+	 * either a table, object, or parameter path depending on the structure of
+	 * the DMT. The translation takes into account the special meaning
+	 * {@code LIST}, {@code MAP} , {@code Alias}, and {@code InstanceId} nodes.
 	 * 
 	 * @param uri
-	 *            A relative URI from the start of the session
-	 * @return A relative path
+	 *            A Dmt Session relative URI
+	 * @return An object, table, or parameter path
 	 * @throws TR069Exception
+	 *             If there is an error
 	 * 
 	 * @remark Needed without session?
 	 */
-	String toName(String uri) throws TR069Exception;
+	String toPath(String uri) throws TR069Exception;
 
 	/**
-	 * Convert an absolute TR-069 complete Name (Object or Name) to a relative
-	 * Dmt Admin URI. The conversion must traverse the tree and can only convert
-	 * a name that has nodes present in the DMT. The given name must be escaped
-	 * using the TR-069 escaping and will be unescaped. The returned URI is
-	 * properly escaped for Dmt Admin. The conversion must include the use of
-	 * the {@code InstanceId} nodes to address MAPs and LISTs.
+	 * Convert a TR-069 path to a Dmt Session relative Dmt Admin URI. The
+	 * translation takes into account the special meaning {@code LIST},
+	 * {@code MAP}, {@code InstanceId} node semantics into account.
+	 * <p>
+	 * The synthetic {@code Alias} {@code *NumberOfEntries} cannot be mapped and
+	 * must throw an {@link TR069Exception#INVALID_PARAMETER_NAME}.
+	 * <p>
+	 * The returned path is properly escaped for TR-069.
+	 * <p>
+	 * The mapping from the path to a URI requires support from the meta data in
+	 * the DMT, it is not possible to use lexical mapping. The translation takes
+	 * into account the semantics of the MAP and LIST nodes. If at a certain
+	 * point a node under a {@code MAP} node does not exist then the Connector
+	 * can create it if the {@code create} flag is set to {@code true}.
+	 * Otherwise a non-existent node will terminate the mapping.
 	 * 
 	 * @param name
-	 *            A TR-069 Object or Parameter Name
-	 * @param create If true, create missing nodes when they reside under a MAP
+	 *            A TR-069 path
+	 * @param create
+	 *            If {@code true}, create missing nodes when they reside under a
+	 *            MAP or LIST
 	 * @return A relative Dmt Admin URI
 	 * @throws TR069Exception
+	 *             If there is an error
 	 */
 	String toURI(String name, boolean create) throws TR069Exception;
 
 	/**
-	 * Close this connector. This will not close the corresponding session.
+	 * Close this connector. This will <b>not</b> close the corresponding
+	 * session.
 	 */
 	void close();
 

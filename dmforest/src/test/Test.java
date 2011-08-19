@@ -64,9 +64,7 @@ public class Test {
 				child.cardinality = "0..*";
 				children.add(child);
 				dmtType = "LIST";
-				if (child.isPrimitive()) {
-					mime = "org.osgi/1.0/LIST";
-				}
+				mime = "org.osgi/1.0/LIST";
 				return;
 			} else if (instanceOf(type, MAP.class)) {
 				boolean add = false;
@@ -93,9 +91,7 @@ public class Test {
 				child.cardinality = "0..*";
 				children.add(child);
 				dmtType = "MAP ";
-				if (child.isPrimitive()) {
-					mime = "org.osgi/1.0/MAP";
-				}
+				mime = "org.osgi/1.0/MAP";
 				return;
 			} else {
 
@@ -135,7 +131,7 @@ public class Test {
 			} else if (c == float.class || c == Float.class) {
 				dmtType = "float";
 			} else if (c == Date.class) {
-				dmtType = "date_time";
+				dmtType = "dateTime";
 			} else if (c == URI.class) {
 				dmtType = "node_uri";
 			} else if (c == String.class) {
@@ -143,7 +139,7 @@ public class Test {
 			} else if (c == base64.class) {
 				dmtType = "base64";
 			} else if (c == byte[].class) {
-				dmtType = "bin";
+				dmtType = "binary";
 			} else {
 				primitive = false;
 				dmtType = "Node";

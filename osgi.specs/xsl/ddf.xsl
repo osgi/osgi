@@ -86,15 +86,15 @@
 				<!-- Skipping this class because it has the @skip tag -->
 			</xsl:when>
 			<xsl:otherwise>
+				<h2 class="Heading2">
+					<xsl:value-of select="@name" />
+				</h2>
 				<h6 class='anchor'>
 					<a name="{@qn}" />
 					<a index="{@name}" />
 					<a index="ddf:{@name}" />
 					<xsl:value-of select="@name" />
 				</h6>
-				<h2 class="Heading2">
-					<xsl:value-of select="@name" />
-				</h2>
 				<xsl:apply-templates select="remark" />
 
 				<xsl:apply-templates select="description" mode="html" />
@@ -103,7 +103,8 @@
 				</xsl:call-template>
 
 
-				<xsl:apply-templates name="field" />
+				<xsl:apply-templates select="field" />
+				
 				<table class="Classes" title="Node Type Description for {@name}">
 					<tr>
 						<th width="1">
@@ -125,7 +126,7 @@
 							<p class="TableSubHead">Description</p>
 						</th>
 					</tr>
-					<xsl:apply-templates name="method" />
+					<xsl:apply-templates select="method" />
 				</table>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -136,7 +137,6 @@
 
 
 	<xsl:template match="method">
-	
 		<!-- ddf name='name' indent='' add='false' get='true' replace='false' delete='false' 
 			longTypeName='java.lang.String' shortTypeName='string' cardinality='1' scope='P' 
 			interior='false' mime=''/ -->

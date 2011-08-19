@@ -111,6 +111,16 @@ public class TR069Exception extends RuntimeException {
 	}
 
 	/**
+	 * A Constructor with a message and a fault code.
+	 * 
+	 * @param message The message
+	 * @param faultCode The TR-069 defined fault code
+	 */
+	public TR069Exception(String message, int faultCode) {
+		this(message,faultCode,null);
+	}
+
+	/**
 	 * Create a TR069Exception from a Dmt Exception.
 	 * 
 	 * @param e The Dmt Exception

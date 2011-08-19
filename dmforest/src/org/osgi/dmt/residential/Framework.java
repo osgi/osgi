@@ -5,7 +5,7 @@ import static org.osgi.dmt.ddf.Scope.SCOPE.*;
 import org.osgi.dmt.ddf.*;
 
 /**
- * Framework node that represents the information about the Framework itself.
+ * The Framework node represents the information about the Framework itself.
  * 
  * The Framework node allows manipulation of the OSGi framework, start level,
  * framework life cycle, and bundle life cycle.
@@ -14,10 +14,10 @@ import org.osgi.dmt.ddf.*;
  * changes to the framework must occur during the commit.
  * <p>
  * The Framework node allows the manager to install (create a new child node in
- * {@link #Bundles()}, to uninstall change the state of the bundle (see
- * {@link Bundle#RequestedState()}, update the bundle {@link Bundle#URL()}, and
- * update the framework. The implementation must execute these actions in the
- * following order during the commit of the session:
+ * {@link #Bundle()}, to uninstall change the state of the bundle (see
+ * {@link Bundle#RequestedState()}, update the bundle (see {@link Bundle#URL()}
+ * ), and update the framework. The implementation must execute these actions in
+ * the following order during the commit of the session:
  * <ol>
  * <li>Create a snapshot of the current installed bundles and their state.</li>
  * <li>Uninstall all the to be uninstalled bundles (bundles whose RequestedState
@@ -34,16 +34,13 @@ import org.osgi.dmt.ddf.*;
  * If any of the above steps runs in an error (except the restart) than the
  * actions should be undone and the system state must be restored to the
  * snapshot.
- * 
- * 
- * @remark be very explicit about what happens after commit
+ * <p>
+ * If the System Bundle was updated (its {@link Bundle#URL()} node was modified,
+ * then after the commit has returned successfully, the OSGi Framework must be
+ * restarted.
  */
 
 public interface Framework {
-	/**
-	 * 
-	 */
-
 	/**
 	 * The StartLevel manages the Framework's current Start Level. Maps to the
 	 * Bundle Start Level {@code set/getStartLevel()} methods.
@@ -57,7 +54,7 @@ public interface Framework {
 	 * Configures the initial bundle start level, maps to the the
 	 * FrameworkStartLevel {@code set/getInitialBundleStartLevel()} method.
 	 * 
-	 * @return A Mutable for the initial bundle start level.
+	 * @return the Initial bundle start level node.
 	 */
 	@Scope(A)
 	Mutable<Integer> InitialBundleStartLevel();
@@ -65,11 +62,10 @@ public interface Framework {
 	/**
 	 * The MAP of location -> Bundle. Each Bundle is uniquely identified by its
 	 * location. The location is a string that must be unique for each bundle
-	 * and can be chosen by the management system. The mangled form should be
-	 * used when the location can run into the limits of node names.
+	 * and can be chosen by the management system.
 	 * <p>
 	 * The Bundles node will be automatically filled from the installed bundles,
-	 * representing the actual state. 
+	 * representing the actual state.
 	 * <p>
 	 * New bundles can be installed by creating a new node with a given
 	 * location. At commit, this bundle will be installed from their
@@ -80,15 +76,15 @@ public interface Framework {
 	 * uninstalled and most operations on this node have special meaning.
 	 * <p>
 	 * It is strongly recommended to use a logical name for the location of a
-	 * bundle, for example reverse domain names.
+	 * bundle, for example reverse domain names or a UUID.
 	 * <p>
 	 * To uninstall a bundle, set the {@link Bundle#RequestedState} to
-	 * {@code UNINSTALLED}, the nodes in {@link #Bundles} cannot be deleted.
+	 * {@code UNINSTALLED}, the nodes in {@link #Bundle} cannot be deleted.
 	 * 
 	 * @return The Bundles node
 	 */
 	@Scope(A)
-	AddableMAP<String, Bundle> Bundles();
+	AddableMAP<String, Bundle> Bundle();
 
 	/**
 	 * The Framework Properties.
@@ -105,10 +101,6 @@ public interface Framework {
 	 * <li>Properties in the residential specification</li>
 	 * <li>Other known properties</li>
 	 * </ul>
-	 * The names must only be enumerated as child names when a value is present.
-	 * <p>
-	 * It must be possible to access a property that is present in the framework
-	 * but not know to the handler.
 	 * 
 	 * @return The Framework's properties.
 	 */

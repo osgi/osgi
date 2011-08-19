@@ -5,20 +5,21 @@ import static org.osgi.dmt.ddf.Scope.SCOPE.*;
 import org.osgi.dmt.ddf.*;
 
 /**
- * Represents access to the Log service. 
- *  */
+ * Provides access to the Log Entries of the Log Service.
+ */
 
 public interface Log {
 
 	/**
-	 * All data related to log search requests is stored as a LIST the {@link #LogResult()}
-	 * node. The {@link #LogResult()} node will return an implementation dependent number 
-	 * of log records. 
-	 * <p>
-	 * It is possible to filter this list with the {@code Filter} node.
+	 * A potentially long list of Log Entries. The length of this list is
+	 * implementation dependent. The order of the list is most recent event at
+	 * index 0 and later events with higher consecutive indexes.
 	 * 
-	 * @return The root node for the Log results
+	 * No new entries must be added to the log when there is an open exclusive
+	 * or atomic session.
+	 * 
+	 * @return LIST of Log Entry nodes.
 	 */
 	@Scope(A)
-	LIST<LogResult> LogResult();
+	LIST<LogEntry> LogEntries();
 }

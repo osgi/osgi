@@ -6,7 +6,8 @@ import org.osgi.dmt.ddf.*;
 
 /**
  * A Wire is a link between two bundles where the semantics of this link is
- * defined by the used name space.
+ * defined by the used name space. This is closely modeled after the Wiring
+ * API in the Core Framework.
  */
 public interface Wire {
 	/**

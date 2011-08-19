@@ -10,11 +10,10 @@
 		<delete>
 			<fileset dir="xml" includes="*.xml" />
 		</delete>
-		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="../org.osgi.tools/${bin}" encoding="utf-8" packagenames="${javadoc.packages}">
+		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="../org.osgi.tools/${bin}" encoding="utf-8" packagenames="${javadoc.packages},org.osgi.dmt.*">
 			<sourcepath>
 				<dirset dir="${project.workspace}">
 					<include name="org.osgi.*/src" />
-					<include name="info.dmtree*/src"/>
                                         <include name="dmforest/src"/>
 				</dirset>
 			</sourcepath>
