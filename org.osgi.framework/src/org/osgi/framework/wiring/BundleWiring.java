@@ -78,22 +78,31 @@ public interface BundleWiring extends BundleReference {
 	 * Returns the capabilities provided by this bundle wiring.
 	 * 
 	 * <p>
+	 * Only capabilities considered by the resolver are returned. For example,
+	 * capabilities with
+	 * {@link ResourceConstants#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
+	 * directive not equal to {@link ResourceConstants#EFFECTIVE_RESOLVE
+	 * resolve} are not returned.
+	 * 
+	 * <p>
 	 * A capability may not be required by any bundle wiring and thus there may
 	 * be no {@link #getProvidedWires(String) wires} for the capability.
 	 * 
 	 * <p>
 	 * A bundle wiring for a non-fragment revision provides a subset of the
 	 * declared capabilities from the bundle revision and all attached fragment
-	 * revisions<sup>&#8224;</sup>. Not all declared capabilities may be provided since some may
-	 * be discarded. For example, if a package is declared to be exported and
-	 * import, only one is selected and the other is discarded.
+	 * revisions<sup>&#8224;</sup>. Not all declared capabilities may be
+	 * provided since some may be discarded. For example, if a package is
+	 * declared to be exported and import, only one is selected and the other is
+	 * discarded.
 	 * <p>
-	 * A bundle wiring for a fragment revision with a symbolic name must 
-	 * provide exactly one {@link ResourceConstants#IDENTITY_NAMESPACE identity} capability.
+	 * A bundle wiring for a fragment revision with a symbolic name must provide
+	 * exactly one {@link ResourceConstants#IDENTITY_NAMESPACE identity}
+	 * capability.
 	 * <p>
-	 * &#8224; The {@link ResourceConstants#IDENTITY_NAMESPACE identity} capability
-	 * provided by attached fragment revisions must not be included in the capabilities of the 
-	 * host bundle wiring.
+	 * &#8224; The {@link ResourceConstants#IDENTITY_NAMESPACE identity}
+	 * capability provided by attached fragment revisions must not be included
+	 * in the capabilities of the host bundle wiring.
 	 * 
 	 * @param namespace The name space of the capabilities to return or
 	 *        {@code null} to return the capabilities from all name spaces.
@@ -103,14 +112,21 @@ public interface BundleWiring extends BundleReference {
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
 	 *         given name space, the list contains the wires in the order the
 	 *         capabilities were specified in the manifests of the
-	 *         {@link #getRevision() bundle revision} and the attached fragments<sup>&#8224;</sup>
-	 *         of this bundle wiring. There is no ordering defined between
-	 *         capabilities in different name spaces.
+	 *         {@link #getRevision() bundle revision} and the attached
+	 *         fragments<sup>&#8224;</sup> of this bundle wiring. There is no
+	 *         ordering defined between capabilities in different name spaces.
 	 */
 	List<BundleCapability> getCapabilities(String namespace);
 
 	/**
 	 * Returns the requirements of this bundle wiring.
+	 * 
+	 * <p>
+	 * Only requirements considered by the resolver are returned. For example,
+	 * requirements with
+	 * {@link ResourceConstants#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
+	 * directive not equal to {@link ResourceConstants#EFFECTIVE_RESOLVE
+	 * resolve} are not returned.
 	 * 
 	 * <p>
 	 * A bundle wiring for a non-fragment revision has a subset of the declared
