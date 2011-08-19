@@ -15,11 +15,11 @@
  */
 package org.osgi.service.repository;
 
+import org.osgi.framework.resource.Requirement;
+
 /**
  * Constants for use in the "osgi.content" namespace. This namespace is used to
- * locate content via the
- * {@link Repository#findProviders(org.osgi.framework.wiring.Requirement...)}
- * method.
+ * locate content via the {@link Repository#findProviders(Requirement)} method.
  */
 public interface ContentNamespace {
   /**

@@ -26,13 +26,14 @@ import java.util.Collection;
 import org.osgi.framework.resource.Capability;
 import org.osgi.framework.resource.Requirement;
 import org.osgi.framework.resource.Resource;
+import org.osgi.service.resolver.Environment;
 
 /**
  * Represents a repository that contains {@link Resource resources}.
  * 
  * <p>
  * Repositories may be registered as services and may be used as inputs to an
- * {@link org.osgi.service.resolver.Environment#findProviders(Requirement)} operation.
+ * {@link Environment#findProviders(Requirement)} operation.
  * 
  * <p>
  * Repositories registered as services may be filtered using standard service
