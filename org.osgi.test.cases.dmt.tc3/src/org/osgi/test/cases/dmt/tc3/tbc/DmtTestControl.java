@@ -492,7 +492,10 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		String nodeName = "";
 		if (nodeUri.length > 0) {
 			for (int i = 0; i < nodeUri.length; i++) {
-				nodeNameBuffer = nodeNameBuffer.append(Uri.mangle(nodeUri[i])
+				// Uri.mangle() has been removed in DmtAdmin spec 2.0
+				// TestCase needs update
+//				nodeNameBuffer = nodeNameBuffer.append(Uri.mangle(nodeUri[i])
+				nodeNameBuffer = nodeNameBuffer.append(nodeUri[i]
 						+ "/");
 			}
 			nodeName = nodeNameBuffer.substring(0, nodeNameBuffer.length() - 1);

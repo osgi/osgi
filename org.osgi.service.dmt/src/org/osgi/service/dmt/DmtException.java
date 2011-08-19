@@ -135,8 +135,9 @@ public class DmtException extends Exception {
      * can be found in the Non Functional Requirements section of the OSGi
      * specification.
      * <p>
-     * The {@link Uri#mangle(String)} method provides support for ensuring that
-     * a URI segment conforms to the length limits set by the implementation.
+     * The methods {@link Uri#getMaxSegmentNameLength()}, 
+     * {@link Uri#getMaxUriLength()} and {@link Uri#getMaxUriSegments()} can
+     * be used to request the implementation specific limits.
      * <p>
      * This error code corresponds to the OMA DM response status code 414
      * &quot;URI too long&quot;.
@@ -261,7 +262,7 @@ public class DmtException extends Exception {
      * <li>the node name contains an unescaped '/' character
      * </ul>
      * <p>
-     * See the {@link Uri#mangle(String)} method for support on escaping invalid
+     * See the {@link Uri#encode(String)} method for support on escaping invalid
      * characters in a URI.
      * <p>
      * This code is only used if the URI or node name does not match any of the

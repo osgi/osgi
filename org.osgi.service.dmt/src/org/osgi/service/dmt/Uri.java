@@ -480,6 +480,7 @@ public final class Uri {
 	 * 
 	 * @param nodeName the node name to be encoded
 	 * @return the encoded node name
+	 * @since 2.0
 	 */
 
 	public static String encode(String nodeName) {
@@ -506,6 +507,7 @@ public final class Uri {
 	 * 
 	 * @param nodeName the node name to be decoded
 	 * @return the decoded node name
+	 * @since 2.0
 	 */
 
 	public static String decode(String nodeName) {
