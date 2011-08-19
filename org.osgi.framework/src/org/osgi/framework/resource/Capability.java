@@ -34,29 +34,28 @@ public interface Capability {
 	String getNamespace();
 
 	/**
-	 * Returns the directives of this capability. Only the following list of
-	 * directives have semantic meaning in the returned {@link Map map} of
-	 * directives:
+	 * Returns the directives of this capability.
+	 * 
+	 * <p>
+	 * Only the following list of directives have specified semantics:
 	 * <ul>
 	 * <li> {@link ResourceConstants#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
 	 * <li> {@link ResourceConstants#CAPABILITY_USES_DIRECTIVE uses}
 	 * <li> {@link ResourceConstants#CAPABILITY_MANDATORY_DIRECTIVE mandatory} -
-	 * only recognized for the
-	 * {@link ResourceConstants#WIRING_BUNDLE_NAMESPACE osgi.wiring.bundle} and
+	 * only recognized for the {@link ResourceConstants#WIRING_BUNDLE_NAMESPACE
+	 * osgi.wiring.bundle} and
 	 * {@link ResourceConstants#WIRING_PACKAGE_NAMESPACE osgi.wiring.package}
 	 * name spaces.
-	 * <li> {@link ResourceConstants#CAPABILITY_EXCLUDE_DIRECTIVE exclude} -
-	 * only recognized for the
-	 * {@link ResourceConstants#WIRING_PACKAGE_NAMESPACE osgi.wiring.package}
-	 * name space.
-	 * <li> {@link ResourceConstants#CAPABILITY_INCLUDE_DIRECTIVE include} -
-	 * only recognized for the
-	 * {@link ResourceConstants#WIRING_PACKAGE_NAMESPACE osgi.wiring.package}
-	 * name space.
+	 * <li> {@link ResourceConstants#CAPABILITY_EXCLUDE_DIRECTIVE exclude} - only
+	 * recognized for the {@link ResourceConstants#WIRING_PACKAGE_NAMESPACE
+	 * osgi.wiring.package} name space.
+	 * <li> {@link ResourceConstants#CAPABILITY_INCLUDE_DIRECTIVE include} - only
+	 * recognized for the {@link ResourceConstants#WIRING_PACKAGE_NAMESPACE
+	 * osgi.wiring.package} name space.
 	 * </ul>
-	 * All other directive are considered extra user defined information that
-	 * has no semantic meaning. OSGi Alliance reserves the right to extend the
-	 * set of directives which have semantic meaning.
+	 * All other directives have no specified semantics and are considered extra
+	 * user defined information. The OSGi Alliance reserves the right to extend
+	 * the set of directives which have specified semantics.
 	 * 
 	 * @return An unmodifiable map of directive names to directive values for
 	 *         this capability, or an empty map if this capability has no

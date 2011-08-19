@@ -35,9 +35,10 @@ public interface Requirement {
 	String getNamespace();
 
 	/**
-	 * Returns the directives of this requirement. Only the following list of
-	 * directives have semantic meaning in the returned {@link Map map} of
-	 * directives:
+	 * Returns the directives of this requirement.
+	 * 
+	 * <p>
+	 * Only the following list of directives have specified semantics:
 	 * <ul>
 	 * <li> {@link ResourceConstants#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
 	 * <li> {@link ResourceConstants#REQUIREMENT_FILTER_DIRECTIVE filter}
@@ -49,9 +50,9 @@ public interface Requirement {
 	 * {@link ResourceConstants#WIRING_BUNDLE_NAMESPACE osgi.wiring.bundle} name
 	 * space.
 	 * </ul>
-	 * All other directive are considered extra user defined information that
-	 * has no semantic meaning. OSGi Alliance reserves the right to extend the
-	 * set of directives which have semantic meaning.
+	 * All other directives have no specified semantics and are considered extra
+	 * user defined information. The OSGi Alliance reserves the right to extend
+	 * the set of directives which have specified semantics.
 	 * 
 	 * @return An unmodifiable map of directive names to directive values for
 	 *         this requirement, or an empty map if this requirement has no
@@ -60,8 +61,11 @@ public interface Requirement {
 	Map<String, String> getDirectives();
 
 	/**
-	 * Returns the attributes of this requirement. Requirement attributes have
-	 * no semantic meaning and are considered extra user defined information.
+	 * Returns the attributes of this requirement.
+	 * 
+	 * <p>
+	 * Requirement attributes have no specified semantics and are considered
+	 * extra user defined information.
 	 * 
 	 * @return An unmodifiable map of attribute names to attribute values for
 	 *         this requirement, or an empty map if this requirement has no
@@ -77,23 +81,24 @@ public interface Requirement {
 	Resource getResource();
 
 	/**
-	 * Returns whether the specified capability matches this requirement. A
-	 * capability matches this requirement when all of the following are true:
+	 * Returns whether the specified capability matches this requirement.
+	 * 
+	 * <p>
+	 * A capability matches this requirement when all of the following are true:
 	 * <ul>
 	 * <li>The specified capability has the same {@link #getNamespace() name
 	 * space} as this requirement.
 	 * <li>The filter specified by the {@link Constants#FILTER_DIRECTIVE filter}
 	 * directive of this requirement matches the
 	 * {@link Capability#getAttributes() attributes of the specified capability}.
-	 * <li>The standard capability {@link Capability#getDirectives() directives} 
-	 * that influence matching and that apply to the name space are satisfied.  
-	 * See the capability {@link ResourceConstants#CAPABILITY_MANDATORY_DIRECTIVE 
-	 * mandatory} directive.
+	 * <li>The standard capability {@link Capability#getDirectives() directives}
+	 * that influence matching and that apply to the name space are satisfied.
+	 * See the capability
+	 * {@link ResourceConstants#CAPABILITY_MANDATORY_DIRECTIVE mandatory}
+	 * directive.
 	 * </ul>
 	 * 
-	 * 
-	 * @param capability
-	 *            The capability to match to this requirement.
+	 * @param capability The capability to match to this requirement.
 	 * @return {@code true} if the specified capability matches this this
 	 *         requirement; {@code false} otherwise.
 	 */
