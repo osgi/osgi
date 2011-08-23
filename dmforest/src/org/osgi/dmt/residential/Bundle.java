@@ -31,6 +31,10 @@ public interface Bundle {
 	 * <p>
 	 * If the URL of Bundle 0 (The system bundle) is replaced to any value then
 	 * the framework will restart.
+	 * <p>
+	 * If both a the URL node has been set the bundle must be updated before any
+	 * of the other aspects are handled like {@link #RequestedState()} and
+	 * {@link #StartLevel()}.
 	 * 
 	 * @return The last used URL or empty string if not known
 	 */
@@ -80,8 +84,9 @@ public interface Bundle {
 
 	/**
 	 * The Bundle Id as defined by the {@code getBundleId()} method.
-	 * 
+	 * <p>
 	 * If there is no installed Bundle yet, then this node is not present.
+	 * 
 	 * @return The BundleId node
 	 */
 	@Scope(A)
@@ -91,6 +96,8 @@ public interface Bundle {
 	 * The Bundle Symbolic Name as defined by the Bundle
 	 * {@code getSymbolicName()} method. If this result is {@code null} then the
 	 * value of this node must be the empty string.
+	 * <p>
+	 * If there is no installed Bundle yet, then this node is not present.
 	 * 
 	 * @return The SymbolicName node
 	 */
@@ -101,6 +108,7 @@ public interface Bundle {
 	 * The Bundle's version as defined by the Bundle {@code getVersion()}
 	 * method.
 	 * 
+	 * <p>
 	 * If there is no installed Bundle yet, then this node is not present.
 	 * 
 	 * @return The Version node
@@ -109,12 +117,12 @@ public interface Bundle {
 	Opt<String> Version();
 
 	/**
-	 * A list of the types of the bundle. Currently on a single type is
+	 * A list of the types of the bundle. Currently only a single type is
 	 * provided:
 	 * <ul>
 	 * <li>{@link #FRAGMENT}</li>
 	 * </ul>
-	 * 
+	 * <p>
 	 * If there is no installed Bundle yet, then this node is not present.
 	 * 
 	 * @return The BundleType node
@@ -124,7 +132,7 @@ public interface Bundle {
 
 	/**
 	 * The Bundle {@code getHeaders()} method.
-	 * 
+	 * <p>
 	 * If there is no installed Bundle yet, then this node is not present.
 	 * 
 	 * @return The Bundle's manifest headers
@@ -192,20 +200,18 @@ public interface Bundle {
 
 	/**
 	 * Is the requested state the manager wants the bundle to be in. Can be:
+	 * <p>
 	 * <ul>
-	 * <li>{@link #INSTALLED} - Ensure the bundle is stopped. The actual state
-	 * can be {@link #INSTALLED} or {@link #RESOLVED}</li>
-	 * <li>{@link #RESOLVED} - Ensure the bundle is stopped but attempt to
-	 * resolve. The actual state can be {@link #INSTALLED} and {@link #RESOLVED}
-	 * </li>
-	 * <li>{@link #ACTIVE} - Ensure the bundle is started. The actual state can
-	 * be {@link #INSTALLED}, {@link #RESOLVED}, {@link #STARTING} and
-	 * {@link #ACTIVE} depending on start level and faults. The Bundle can
-	 * transition to another state if the environment changes, for example, a
-	 * new higher start level can activate a bundle.</li>
-	 * <li>{@link #UNINSTALLED} - Uninstall the bundle</li>
-	 * </ul> {@link #STARTING} and {@link #STOPPING} are invalid values for this
-	 * node. Any other values are an error.
+	 * <li>{@link #INSTALLED} - Ensure the bundle is stopped and refreshed.</li>
+	 * <li>{@link #RESOLVED} - Ensure the bundle is resolved.</li>
+	 * <li>{@link #ACTIVE} - Ensure the bundle is started.</li>
+	 * <li>{@link #UNINSTALLED} - Uninstall the bundle.</li>
+	 * </ul>
+	 * The Requested State is a request. The management agent must attempt to
+	 * achieve the desired state but there is a no guarantee that this state is
+	 * achievable. For example,a Framework can resolve a bundle at any time or
+	 * the active start level can prevent a bundle from running. Any errors must
+	 * be reported on {@link #FaultType()} and {@link #FaultMessage()}.
 	 * <p>
 	 * 
 	 * If the {@link #AutoStart()} node is @{code true} then the bundle must be
@@ -215,7 +221,11 @@ public interface Bundle {
 	 * started when the start level is not met.
 	 * 
 	 * <p>
-	 * The default value of this node is the current state.
+	 * If both a the {@link #URL()} node has been set as well as the
+	 * RequestedState node then this must result in an update after which the
+	 * bundle should go to the RequestedState.
+	 * <p>
+	 * The default value of this node is the empty string.
 	 * 
 	 * @return The RequestedState node.
 	 */
@@ -227,6 +237,9 @@ public interface Bundle {
 	 * interface {@code getStartLevel()} method. Changing the StartLevel can
 	 * change the Bundle State as a bundle can become eligible for starting or
 	 * stopping.
+	 * <p>
+	 * If the {@link #URL()} node is set then a bundle must be updated before
+	 * the start level is set,
 	 * 
 	 * @return The Bundle Start Level node value
 	 */

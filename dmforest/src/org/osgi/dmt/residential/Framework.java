@@ -16,19 +16,26 @@ import org.osgi.dmt.ddf.*;
  * The Framework node allows the manager to install (create a new child node in
  * {@link #Bundle()}, to uninstall change the state of the bundle (see
  * {@link Bundle#RequestedState()}, update the bundle (see {@link Bundle#URL()}
- * ), and update the framework. The implementation must execute these actions in
- * the following order during the commit of the session:
+ * ), start/stop bundles, and update the framework. The implementation must
+ * execute these actions in the following order during the commit of the
+ * session:
  * <ol>
  * <li>Create a snapshot of the current installed bundles and their state.</li>
+ * <li>stop all bundles that will be uinstalled and updated</li>
  * <li>Uninstall all the to be uninstalled bundles (bundles whose RequestedState
  * is {@link Bundle#UNINSTALLED} or where the corresponding node was deleted)</li>
  * <li>Update all bundles that have a modified {@link Bundle#URL()} with this
- * URL using the Bundle {@code update(InputStream)} method.</li>
- * <li>Install any new bundles from their {@link Bundle#URL()}.</li>
+ * URL using the Bundle {@code update(InputStream)} method in the order that the
+ * order that the URLs were last set.</li>
+ * <li>Install any new bundles from their {@link Bundle#URL()} in the order that
+ * the order that the URLs were last set.</li>
  * <li>Refresh all bundles that were updated and installed</li>
- * <li>Ensure that any Bundles that have the {@link Bundle#AutoStart()} flag set
- * to {@code true} are started persistently. Transiently started bundles that
- * were stopped in this process are not restarted</li>
+ * <li>Ensure that all the bundles have their correct start level</li>
+ * <li>If the {@link Bundle#RequestedState()} was set, follow this state.
+ * Otherwise ensure that any Bundles that have the {@link Bundle#AutoStart()}
+ * flag set to {@code true} are started persistently. Transiently started
+ * bundles that were stopped in this process are not restarted. The bundle id
+ * order must be used.</li>
  * <li>Return from the commit without error.</li>
  * </ol>
  * If any of the above steps runs in an error (except the restart) than the
