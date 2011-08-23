@@ -24,8 +24,8 @@ import org.osgi.framework.ServiceReference;
  * 
  * <p>
  * {@code ConfigurationEvent} objects are delivered to all registered
- * {@code ConfigurationListener} service objects. ConfigurationEvents
- * must be asynchronously delivered in chronological order with respect to each
+ * {@code ConfigurationListener} service objects. ConfigurationEvents must be
+ * asynchronously delivered in chronological order with respect to each
  * listener.
  * 
  * <p>
@@ -38,14 +38,14 @@ import org.osgi.framework.ServiceReference;
  * Additional event types may be defined in the future.
  * 
  * <p>
- * Security Considerations. {@code ConfigurationEvent} objects do not
- * provide {@code Configuration} objects, so no sensitive configuration
- * information is available from the event. If the listener wants to locate the
+ * Security Considerations. {@code ConfigurationEvent} objects do not provide
+ * {@code Configuration} objects, so no sensitive configuration information is
+ * available from the event. If the listener wants to locate the
  * {@code Configuration} object for the specified pid, it must use
  * {@code ConfigurationAdmin}.
  * 
  * @see ConfigurationListener
- * 
+ * @Immutable
  * @version $Id$
  * @since 1.2
  */
@@ -59,9 +59,6 @@ public class ConfigurationEvent {
 	 * 
 	 * An event is fired when a call to {@link Configuration#update(Dictionary)}
 	 * successfully changes a configuration.
-	 * 
-	 * <p>
-	 * The value of {@code CM_UPDATED} is 1.
 	 */
 	public static final int			CM_UPDATED	= 1;
 	/**
@@ -73,9 +70,6 @@ public class ConfigurationEvent {
 	 * 
 	 * An event is fired when a call to {@link Configuration#delete()}
 	 * successfully deletes a configuration.
-	 * 
-	 * <p>
-	 * The value of {@code CM_DELETED} is 2.
 	 */
 	public static final int			CM_DELETED	= 2;
 	
@@ -86,11 +80,10 @@ public class ConfigurationEvent {
 	 * This {@code ConfigurationEvent} type that indicates that a
 	 * {@code Configuration} object has changed its location.
 	 * 
-	 * An event is fired when a call to {@link Configuration#setBundleLocation(String)}
-	 * successfully changes the location.
+	 * An event is fired when a call to
+	 * {@link Configuration#setBundleLocation(String)} successfully changes the
+	 * location.
 	 * 
-	 * <p>
-	 * The value of {@code CM_DELETED} is 2.
 	 */
 	public static final int			CM_LOCATION_CHANGED	= 3;
 	/**
@@ -162,8 +155,9 @@ public class ConfigurationEvent {
 	 * <p>
 	 * The type values are:
 	 * <ul>
-	 * <li>{@link #CM_UPDATED}
-	 * <li>{@link #CM_DELETED}
+	 * <li>{@link #CM_UPDATED}</li>
+	 * <li>{@link #CM_DELETED}</li>
+	 * <li>{@link #CM_LOCATION_CHANGED}</li>
 	 * </ul>
 	 * 
 	 * @return The type of this event.
