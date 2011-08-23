@@ -84,6 +84,7 @@ public class ConfigurationEvent {
 	 * {@link Configuration#setBundleLocation(String)} successfully changes the
 	 * location.
 	 * 
+	 * @since 1.4
 	 */
 	public static final int			CM_LOCATION_CHANGED	= 3;
 	/**

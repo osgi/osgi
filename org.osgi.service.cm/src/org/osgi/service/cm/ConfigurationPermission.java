@@ -42,6 +42,8 @@ public final class ConfigurationPermission extends BasicPermission {
 	/**
 	 * The permission to be updated, that is, act as a Managed Service or
 	 * Managed Service Factory.The action string {@value #TARGET}.
+	 * 
+	 * @since 1.4
 	 */
 	public final static String	TARGET				= "target";
 
