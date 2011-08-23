@@ -19,12 +19,12 @@ public interface ParameterInfo {
 	 * {@code false}. A parameter is writeable if the SetParamaterValue with the
 	 * given name would be successful if an appropriate value was given.
 	 * 
-	 * @return If this code is writeable
+	 * @return If this parameter is writeable
 	 */
 	boolean isWriteable();
 
 	/**
-	 * Returns {@code true} of this is a paramete, if it returns {@code false}
+	 * Returns {@code true} of this is a parameter, if it returns {@code false}
 	 * it is an object or table.
 	 * 
 	 * @return {@code true} for a parameter, {@code false} otherwise

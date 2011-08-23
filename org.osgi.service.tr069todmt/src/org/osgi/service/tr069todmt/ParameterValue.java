@@ -22,15 +22,16 @@ package org.osgi.service.tr069todmt;
 public interface ParameterValue {
 
 	/**
-	 * This is the name of a Parameter.
+	 * This is the path of a Parameter. In TR-069 this is called the Parameter
+	 * Name.
 	 * 
-	 * @return The name of the Parameter
+	 * @return The path of the parameter
 	 */
-	String getName();
+	String getPath();
 
 	/**
-	 * This is the value the parameter. The returned value must be in canonical
-	 * representation defined by TR069.
+	 * This is the value of the parameter. The returned value must be in canonical
+	 * representation defined by TR-069.
 	 * 
 	 * @return The value of the parameter
 	 */
@@ -38,12 +39,15 @@ public interface ParameterValue {
 
 	/**
 	 * The type of the parameter. One of {@link TR069Connector#TR069_INT},
-	 * {@link TR069Connector#TR069_UNSIGNED_INT},{@link TR069Connector#TR069_LONG},
+	 * {@link TR069Connector#TR069_UNSIGNED_INT},
+	 * {@link TR069Connector#TR069_LONG},
 	 * {@link TR069Connector#TR069_UNSIGNED_LONG},
-	 * {@link TR069Connector#TR069_STRING}, {@link TR069Connector#TR069_DATETIME},
-	 * {@link TR069Connector#TR069_BASE64}, {@link TR069Connector#TR069_HEXBINARY}.
-	 * This method is not part of the {@code ParameterValueStruct} but is
-	 * necessary to encode the type in the XML.
+	 * {@link TR069Connector#TR069_STRING},
+	 * {@link TR069Connector#TR069_DATETIME},
+	 * {@link TR069Connector#TR069_BASE64},
+	 * {@link TR069Connector#TR069_HEXBINARY}. This method is not part of the
+	 * {@code ParameterValueStruct} but is necessary to encode the type in the
+	 * XML.
 	 * 
 	 * @return The parameter type
 	 */

@@ -25,6 +25,11 @@ public interface TR069Factory {
 
 	/**
 	 * Create a TR069 connector based on the given session .
+	 * <p>
+	 * The session must be an atomic session when objects are added and/or
+	 * parameters are going to be set. Due to the lazy creation nature
+	 * of the TR069 Connector it is possible that a node must be created
+	 * in a read-only method after a node has been added.
 	 * 
 	 * @param session
 	 *            The session to use for the adaption. This session must not be
@@ -34,7 +39,5 @@ public interface TR069Factory {
 	 */
 
 	TR069Connector create(DmtSession session);
-	
-	
 
 }
