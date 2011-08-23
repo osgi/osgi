@@ -71,7 +71,7 @@ public interface Bundle {
 	 * @return The FaultType value
 	 */
 	@Scope(A)
-	int FaultType();
+	Opt<Integer> FaultType();
 
 	/**
 	 * A human readable message detailing an error situation or an empty string
@@ -80,7 +80,7 @@ public interface Bundle {
 	 * @return The FaultMessage node
 	 */
 	@Scope(A)
-	String FaultMessage();
+	Opt<String> FaultMessage();
 
 	/**
 	 * The Bundle Id as defined by the {@code getBundleId()} method.
