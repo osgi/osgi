@@ -29,8 +29,8 @@ import java.util.Dictionary;
  * <p>
  * If the Configuration Admin service has a {@code Configuration} object
  * corresponding to this PID, it will callback the {@code updated()} method of
- * the {@code ManagedService} object, passing the properties of that {@code
- * Configuration} object.
+ * the {@code ManagedService} object, passing the properties of that
+ * {@code Configuration} object.
  * 
  * <p>
  * If it has no such {@code Configuration} object, then it calls back with a
@@ -81,7 +81,7 @@ import java.util.Dictionary;
  *  
  *     public synchronized void updated(
  *       Dictionary configuration  ) {
- *       if ( configuration ==  null )
+ *       if ( configuration == null )
  *         registration.setProperties( getDefaults() );
  *       else {
  *         setSpeed( configuration.get(&quot;baud&quot;) );
@@ -113,37 +113,40 @@ public interface ManagedService {
 	 * 
 	 * <p>
 	 * When the implementation of {@code updated(Dictionary)} detects any kind
-	 * of error in the configuration properties, it should create a new {@code
-	 * ConfigurationException} which describes the problem. This can allow a
-	 * management system to provide useful information to a human administrator.
+	 * of error in the configuration properties, it should create a new
+	 * {@code ConfigurationException} which describes the problem. This can
+	 * allow a management system to provide useful information to a human
+	 * administrator.
 	 * 
 	 * <p>
 	 * If this method throws any other {@code Exception}, the Configuration
 	 * Admin service must catch it and should log it.
 	 * <p>
-	 * The Configuration Admin service must call this method asynchronously
-	 * with the method that initiated the callback. This implies that implementors of Managed
-	 * Service can be assured that the callback will not take place during
-	 * registration when they execute the registration in a synchronized method.
+	 * The Configuration Admin service must call this method asynchronously with
+	 * the method that initiated the callback. This implies that implementors of
+	 * Managed Service can be assured that the callback will not take place
+	 * during registration when they execute the registration in a synchronized
+	 * method.
 	 * 
 	 * <p>
-	 * If the the location allows multiple managed services to be called back for 
-	 * a single configuration then the callbacks must occur in service ranking 
-	 * order. Changes in the location must be reflected by deleting the configuration
-	 * if the configuration is no longer visible and updating when it becomes
-	 * visible.
+	 * If the the location allows multiple managed services to be called back
+	 * for a single configuration then the callbacks must occur in service
+	 * ranking order. Changes in the location must be reflected by deleting the
+	 * configuration if the configuration is no longer visible and updating when
+	 * it becomes visible.
 	 * 
 	 * <p>
-	 * If no configuration exists for the corresponding PID, or the bundle has no
-	 * access to this service, then the bundle must be called back with a {@code null}
-	 * to signal that CM is active but there is no data.
+	 * If no configuration exists for the corresponding PID, or the bundle has
+	 * no access to the configuration, then the bundle must be called back with
+	 * a {@code null} to signal that CM is active but there is no data.
 	 * 
 	 * @param properties A copy of the Configuration properties, or {@code null}
 	 *        . This argument must not contain the "service.bundleLocation"
 	 *        property. The value of this property may be obtained from the
 	 *        {@code Configuration.getBundleLocation} method.
 	 * @throws ConfigurationException when the update fails
-	 * @security ConfigurationPermission[c.location,TARGET] Required by the bundle that registered this service
+	 * @security ConfigurationPermission[c.location,TARGET] Required by the
+	 *           bundle that registered this service
 	 */
 	public void updated(Dictionary<String, ? > properties)
 			throws ConfigurationException;

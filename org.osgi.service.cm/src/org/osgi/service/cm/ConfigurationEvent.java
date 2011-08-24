@@ -32,8 +32,9 @@ import org.osgi.framework.ServiceReference;
  * A type code is used to identify the type of event. The following event types
  * are defined:
  * <ul>
- * <li>{@link #CM_UPDATED}
- * <li>{@link #CM_DELETED}
+ * <li>{@link #CM_UPDATED}</li>
+ * <li>{@link #CM_DELETED}</li>
+ * <li>{@link #CM_LOCATION_CHANGED}</li>
  * </ul>
  * Additional event types may be defined in the future.
  * 
@@ -74,11 +75,11 @@ public class ConfigurationEvent {
 	public static final int			CM_DELETED	= 2;
 	
 	/**
-	 * A {@code Configuration} has changed its location.
+	 * The location of a {@code Configuration} has been changed.
 	 * 
 	 * <p>
-	 * This {@code ConfigurationEvent} type that indicates that a
-	 * {@code Configuration} object has changed its location.
+	 * This {@code ConfigurationEvent} type that indicates that the location of
+	 * a {@code Configuration} object has been changed.
 	 * 
 	 * An event is fired when a call to
 	 * {@link Configuration#setBundleLocation(String)} successfully changes the
@@ -90,7 +91,7 @@ public class ConfigurationEvent {
 	/**
 	 * Type of this event.
 	 * 
-	 * @see #getType
+	 * @see #getType()
 	 */
 	private final int				type;
 	/**
@@ -110,9 +111,9 @@ public class ConfigurationEvent {
 	 * Constructs a {@code ConfigurationEvent} object from the given
 	 * {@code ServiceReference} object, event type, and pids.
 	 * 
-	 * @param reference The {@code ServiceReference} object of the
-	 *        Configuration Admin service that created this event.
-	 * @param type The event type. See {@link #getType}.
+	 * @param reference The {@code ServiceReference} object of the Configuration
+	 *        Admin service that created this event.
+	 * @param type The event type. See {@link #getType()}.
 	 * @param factoryPid The factory pid of the associated configuration if the
 	 *        target of the configuration is a ManagedServiceFactory. Otherwise
 	 *        {@code null} if the target of the configuration is a

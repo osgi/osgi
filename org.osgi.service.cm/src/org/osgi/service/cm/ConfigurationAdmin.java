@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.osgi.service.cm;
 import java.io.IOException;
 import java.util.Dictionary;
 
+import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 
 /**
@@ -57,8 +58,8 @@ import org.osgi.framework.InvalidSyntaxException;
  * checks its persistent storage for a configuration object whose
  * {@code service.pid} property matches the PID service property (
  * {@code service.pid}) of the Managed Service. If found, it calls
- * {@link ManagedService#updated} method with the new properties. The
- * implementation of a Configuration Admin service must run these call-backs
+ * {@link ManagedService#updated(Dictionary)} method with the new properties.
+ * The implementation of a Configuration Admin service must run these call-backs
  * asynchronously to allow proper synchronization.
  * 
  * <p>
@@ -75,33 +76,36 @@ import org.osgi.framework.InvalidSyntaxException;
  * In general, bundles having permission to use the Configuration Admin service
  * can only access and modify their own configuration information. Accessing or
  * modifying the configuration of other bundles requires
- * {@code ConfigurationPermission[group,CONFIGURE]}, where group is a group name
- * or the location of a bundle.
+ * {@code ConfigurationPermission[location,CONFIGURE]}, where location is the
+ * configuration location.
  * 
  * <p>
- * {@code Configuration} objects can be <i>bound </i> to a specified bundle
- * location or to a group. If a location is not set, it will be learned the
- * first time a target is registered. If the location is learned this way, the
- * Configuration Admin service must detect if the bundle corresponding to the
- * location is uninstalled. If this occurs, the {@code Configuration} object
- * must be unbound, that is its location field is set back to {@code null}.
+ * {@code Configuration} objects can be <i>bound</i> to a specified bundle
+ * location or to a region (configuration location starts with {@code ?}). If a
+ * location is not set, it will be learned the first time a target is
+ * registered. If the location is learned this way, the Configuration Admin
+ * service must detect if the bundle corresponding to the location is
+ * uninstalled. If this occurs, the {@code Configuration} object must be
+ * unbound, that is its location field is set back to {@code null}.
  * 
  * <p>
  * If target's bundle location matches the configuration location it is always
  * updated.
  * 
  * <p>
- * If the location starts with {@code ?} then it must be delivered to all
- * targets registered with the given PID. If security is on, the target bundle
- * must have Configuration Permission[location,TARGET], where location matches
- * given the configuration location with wildcards as in the Filter substring
- * match. The security must be verified using the
- * {@link org.osgi.framework.Bundle#hasPermission} method.
+ * If the configuration location starts with {@code ?}, that is, the location is
+ * a region, then the configuration must be delivered to all targets registered
+ * with the given PID. If security is on, the target bundle must have
+ * Configuration Permission[location,TARGET], where location matches given the
+ * configuration location with wildcards as in the Filter substring match. The
+ * security must be verified using the
+ * {@link org.osgi.framework.Bundle#hasPermission(Object)} method on the target
+ * bundle.
  * 
  * <p>
  * If a target cannot be updated because the location does not match or it has
  * no permission and security is active then the Configuration Admin service
- * must not do the normal callback, and should log an error.
+ * must not do the normal callback.
  * 
  * <p>
  * The method descriptions of this class refer to a concept of "the calling
@@ -218,7 +222,7 @@ public interface ConfigurationAdmin {
 	 * @security ConfigurationPermission[location,CONFIGURE] if location is not
 	 *           {@code null}
 	 * @security ConfigurationPermission[c.location,CONFIGURE] if the returned
-	 *           configuration {@code c} already existed
+	 *           configuration {@code c} already exists
 	 */
 	public Configuration getConfiguration(String pid, String location)
 			throws IOException;
@@ -240,7 +244,7 @@ public interface ConfigurationAdmin {
 	 * @throws IOException if access to persistent storage fails.
 	 * @throws SecurityException when the required permission is not available
 	 * @security ConfigurationPermission[c.location,CONFIGURE] If the
-	 *           configuration {@code c} already existed.
+	 *           configuration {@code c} already exists
 	 */
 	public Configuration getConfiguration(String pid) throws IOException;
 
@@ -255,15 +259,13 @@ public interface ConfigurationAdmin {
 	 * 
 	 * <p>
 	 * When there is no security on then all configurations can be returned. If
-	 * security is on, the caller must have ConfigurationPermission[location,
-	 * {@link ConfigurationPermission#CONFIGURE}] or
-	 * ConfigurationPermission[location,{@link ConfigurationPermission#TARGET}
-	 * ].
+	 * security is on, the caller must have
+	 * ConfigurationPermission[location,CONFIGURE].
 	 * 
 	 * <p>
-	 * The syntax of the filter string is as defined in the
-	 * {@link org.osgi.framework.Filter} class. The filter can test any
-	 * configuration properties including the following:
+	 * The syntax of the filter string is as defined in the {@link Filter}
+	 * class. The filter can test any configuration properties including the
+	 * following:
 	 * <ul>
 	 * <li>{@code service.pid} - the persistent identity</li>
 	 * <li>{@code service.factoryPid} - the factory PID, if applicable</li>
