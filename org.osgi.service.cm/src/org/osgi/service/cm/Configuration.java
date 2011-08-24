@@ -102,7 +102,7 @@ public interface Configuration {
 	 * @throws IllegalStateException
 	 *             if this configuration has been deleted
 	 */
-	public Dictionary getProperties();
+	public Dictionary<String, Object> getProperties();
 
 	/**
 	 * Update the properties of this {@code Configuration} object.
@@ -136,7 +136,7 @@ public interface Configuration {
 	 * @throws IllegalStateException
 	 *             if this configuration has been deleted
 	 */
-	public void update(Dictionary properties) throws IOException;
+	public void update(Dictionary<String, ? > properties) throws IOException;
 
 	/**
 	 * Delete this {@code Configuration} object.

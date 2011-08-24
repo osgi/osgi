@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,7 +104,7 @@ public class ConfigurationEvent {
 	/**
 	 * The ConfigurationAdmin service which created this event.
 	 */
-	private final ServiceReference	reference;
+	private final ServiceReference<ConfigurationAdmin>	reference;
 
 	/**
 	 * Constructs a {@code ConfigurationEvent} object from the given
@@ -119,7 +119,8 @@ public class ConfigurationEvent {
 	 *        ManagedService.
 	 * @param pid The pid of the associated configuration.
 	 */
-	public ConfigurationEvent(ServiceReference reference, int type,
+	public ConfigurationEvent(ServiceReference<ConfigurationAdmin> reference,
+			int type,
 			String factoryPid, String pid) {
 		this.reference = reference;
 		this.type = type;
@@ -174,7 +175,7 @@ public class ConfigurationEvent {
 	 * @return The {@code ServiceReference} object for the Configuration
 	 *         Admin service that created this event.
 	 */
-	public ServiceReference getReference() {
+	public ServiceReference<ConfigurationAdmin> getReference() {
 		return reference;
 	}
 }

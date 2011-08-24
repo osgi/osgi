@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -125,6 +125,6 @@ public interface ConfigurationPlugin {
 	 *        property may be obtained from the
 	 *        {@code Configuration.getBundleLocation} method.
 	 */
-	public void modifyConfiguration(ServiceReference reference,
-			Dictionary properties);
+	public void modifyConfiguration(ServiceReference< ? > reference,
+			Dictionary<String, Object> properties);
 }

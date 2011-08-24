@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -155,7 +155,7 @@ public interface ManagedServiceFactory {
 	 * @security ConfigurationPermission[c.location,TARGET] Required by the
 	 *           bundle that registered this service
 	 */
-	public void updated(String pid, Dictionary properties)
+	public void updated(String pid, Dictionary<String, ? > properties)
 			throws ConfigurationException;
 
 	/**
