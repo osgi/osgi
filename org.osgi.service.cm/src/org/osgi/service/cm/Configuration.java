@@ -18,6 +18,8 @@ package org.osgi.service.cm;
 import java.io.IOException;
 import java.util.Dictionary;
 
+import org.osgi.framework.Filter;
+
 /**
  * The configuration information for a {@code ManagedService} or
  * {@code ManagedServiceFactory} object.
@@ -47,18 +49,16 @@ import java.util.Dictionary;
  * be delivered to all targets.
  * 
  * If security is on, the Configuration Permission can be used to restrict the
- * targets that receive updates. First, the configurer is required to have a
- * Configuration Permission where the resource name matches the location,
- * including the {@code ?} prefix, except when the configurer configures itself.
- * Second, the Configuration Admin must only update a target when the
- * configuration location matches the location of the target's bundle or the
- * target bundle has a Configuration Permission with the action
- * {@link ConfigurationPermission#TARGET} and a resource name that matches the
- * configuration location. The matching of the resource name to the location is
- * done using the Filter's wildcard substring matching rules.
+ * targets that receive updates. The Configuration Admin must only update a
+ * target when the configuration location matches the location of the target's
+ * bundle or the target bundle has a Configuration Permission with the action
+ * {@link ConfigurationPermission#TARGET} and a name that matches the
+ * configuration location. The name in the permission may contain wildcards (
+ * {@code '*'} to match the location using the same substring matching rules as
+ * {@link Filter}.
  * 
  * Bundles can always create, manipulate, and be updated from configurations
- * that have a location that matches their location.
+ * that have a location that matches their bundle location.
  * 
  * <p>
  * If a configuration's location is {@code null}, it is not yet bound to a
@@ -78,8 +78,7 @@ public interface Configuration {
 	 * Get the PID for this {@code Configuration} object.
 	 * 
 	 * @return the PID for this {@code Configuration} object.
-	 * @throws IllegalStateException
-	 *             if this configuration has been deleted
+	 * @throws IllegalStateException if this configuration has been deleted
 	 */
 	public String getPid();
 
@@ -98,11 +97,10 @@ public interface Configuration {
 	 * @return A private copy of the properties for the caller or {@code null}.
 	 *         These properties must not contain the "service.bundleLocation"
 	 *         property. The value of this property may be obtained from the
-	 *         {@code getBundleLocation} method.
-	 * @throws IllegalStateException
-	 *             if this configuration has been deleted
+	 *         {@link #getBundleLocation()} method.
+	 * @throws IllegalStateException If this configuration has been deleted.
 	 */
-	public Dictionary getProperties();
+	public Dictionary<String, Object> getProperties();
 
 	/**
 	 * Update the properties of this {@code Configuration} object.
@@ -122,40 +120,34 @@ public interface Configuration {
 	 * callback is delayed until aforementioned registration occurs.
 	 * 
 	 * <p>
-	 * Also initiates an asynchronous call to all {@code ConfigurationListener}s
-	 * with a {@code ConfigurationEvent.CM_UPDATED} event.
+	 * Also initiates an asynchronous call to all {@link ConfigurationListener}s
+	 * with a {@link ConfigurationEvent#CM_UPDATED} event.
 	 * 
-	 * @param properties
-	 *            the new set of properties for this configuration
-	 * @throws IOException
-	 *             if update cannot be made persistent
-	 * @throws IllegalArgumentException
-	 *             if the {@code Dictionary} object contains invalid
-	 *             configuration types or contains case variants of the same key
-	 *             name.
-	 * @throws IllegalStateException
-	 *             if this configuration has been deleted
+	 * @param properties the new set of properties for this configuration
+	 * @throws IOException if update cannot be made persistent
+	 * @throws IllegalArgumentException if the {@code Dictionary} object
+	 *         contains invalid configuration types or contains case variants of
+	 *         the same key name.
+	 * @throws IllegalStateException If this configuration has been deleted.
 	 */
-	public void update(Dictionary properties) throws IOException;
+	public void update(Dictionary<String, ? > properties) throws IOException;
 
 	/**
 	 * Delete this {@code Configuration} object.
 	 * 
 	 * Removes this configuration object from the persistent store. Notify
 	 * asynchronously the corresponding Managed Service or Managed Service
-	 * Factory. A {@code ManagedService} object is notified by a call to its
+	 * Factory. A {@link ManagedService} object is notified by a call to its
 	 * {@code updated} method with a {@code null} properties argument. A
-	 * {@code ManagedServiceFactory} object is notified by a call to its
+	 * {@link ManagedServiceFactory} object is notified by a call to its
 	 * {@code deleted} method.
 	 * 
 	 * <p>
-	 * Also initiates an asynchronous call to all {@code ConfigurationListener}s
-	 * with a {@code ConfigurationEvent.CM_DELETED} event.
+	 * Also initiates an asynchronous call to all {@link ConfigurationListener}s
+	 * with a {@link ConfigurationEvent#CM_DELETED} event.
 	 * 
-	 * @throws IOException
-	 *             If delete fails
-	 * @throws IllegalStateException
-	 *             if this configuration has been deleted
+	 * @throws IOException If delete fails.
+	 * @throws IllegalStateException If this configuration has been deleted.
 	 */
 	public void delete() throws IOException;
 
@@ -164,8 +156,7 @@ public interface Configuration {
 	 * Service Factory, else return {@code null}.
 	 * 
 	 * @return factory PID or {@code null}
-	 * @throws IllegalStateException
-	 *             if this configuration has been deleted
+	 * @throws IllegalStateException If this configuration has been deleted.
 	 */
 	public String getFactoryPid();
 
@@ -182,10 +173,9 @@ public interface Configuration {
 	 * Factory via its {@code ConfigurationPlugin} object.
 	 * 
 	 * @see ConfigurationPlugin
-	 * @throws IOException
-	 *             if update cannot access the properties in persistent storage
-	 * @throws IllegalStateException
-	 *             if this configuration has been deleted
+	 * @throws IOException if update cannot access the properties in persistent
+	 *         storage
+	 * @throws IllegalStateException If this configuration has been deleted.
 	 */
 	public void update() throws IOException;
 
@@ -204,18 +194,19 @@ public interface Configuration {
 	 * the given PID must be updated.
 	 * 
 	 * <p>
-	 * If the location is changed the existing targets must be informed. If they
-	 * can no longer see the configuration the configuration must be deleted or
-	 * updated with {@code null}. If the configuration becomes visible then they
-	 * must be updated.
+	 * If the location is changed then existing targets must be informed. If
+	 * they can no longer see this configuration, the configuration must be
+	 * deleted or updated with {@code null}. If this configuration becomes
+	 * visible then they must be updated with this configuration.
 	 * 
-	 * @param location
-	 *            a location (can have wildcards) or {@code null}
-	 * @throws IllegalStateException
-	 *             If this configuration has been deleted.
-	 * @throws SecurityException
-	 *             when the required permissions are not available
-	 * @security ConfigurationPermission[c.location,CONFIGURE]
+	 * <p>
+	 * Also initiates an asynchronous call to all {@link ConfigurationListener}s
+	 * with a {@link ConfigurationEvent#CM_LOCATION_CHANGED} event.
+	 * 
+	 * @param location a location (can have wildcards) or {@code null}
+	 * @throws IllegalStateException If this configuration has been deleted.
+	 * @throws SecurityException when the required permissions are not available
+	 * @security ConfigurationPermission[this.location,CONFIGURE]
 	 * @security ConfigurationPermission[location,CONFIGURE]
 	 */
 	public void setBundleLocation(String location);
@@ -229,10 +220,8 @@ public interface Configuration {
 	 * delivered to all targets and not restricted to a single bundle.
 	 * 
 	 * @return location to which this configuration is bound, or {@code null}.
-	 * @throws IllegalStateException
-	 *             If this {@code Configuration} object has been deleted.
-	 * @throws SecurityException
-	 *             when the required permission is not available
+	 * @throws IllegalStateException If this configuration has been deleted.
+	 * @throws SecurityException when the required permission is not available
 	 * @security ConfigurationPermission[this.location,CONFIGURE]
 	 */
 	public String getBundleLocation();
@@ -242,8 +231,7 @@ public interface Configuration {
 	 * 
 	 * Two Configuration objects are equal when their PIDs are equal.
 	 * 
-	 * @param other
-	 *            {@code Configuration} object to compare against
+	 * @param other {@code Configuration} object to compare against
 	 * @return {@code true} if equal, {@code false} if not a
 	 *         {@code Configuration} object or one with a different PID.
 	 */
