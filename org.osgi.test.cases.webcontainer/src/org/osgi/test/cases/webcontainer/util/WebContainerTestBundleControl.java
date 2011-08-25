@@ -16,8 +16,10 @@
 package org.osgi.test.cases.webcontainer.util;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -392,28 +394,39 @@ public abstract class WebContainerTestBundleControl extends
             }
         }
         
-        if (symbolicName != null) {
-            query += "&" + symbolicNameParam + "=" + symbolicName;
+		if (symbolicName != null) {
+			query += "&" + encode(symbolicNameParam) + "="
+					+ encode(symbolicName);
+		}
+		if (version != null) {
+			query += "&" + encode(versionParam) + "=" + encode(version);
+		}
+		if (manifestVersion != null) {
+			query += "&" + encode(manifestVersionParam) + "="
+					+ encode(manifestVersion);
+		}
+		if (importPackage != null) {
+			query += "&" + encode(importPackageParam) + "="
+					+ encode(getStringValue(importPackage));
         }
-        if (version != null) {
-            query += "&" + versionParam + "=" + version;
-        }
-        if (manifestVersion != null) {
-            query += "&" + manifestVersionParam + "=" + manifestVersion;
-        }
-        if (importPackage != null) {
-            query += "&" + importPackageParam + "="
-                    + getStringValue(importPackage);
-        }
-        if (contextPath != null) {
-            query += "&" + contextPathParam + "=" + contextPath;
+		if (contextPath != null) {
+			query += "&" + encode(contextPathParam) + "=" + encode(contextPath);
         }
         if (query != null && query.startsWith("&")) {
             query = query.substring(1);
         }
-        return query;
+
+		return query;
     }
 
+	private String encode(String queryPart) {
+		try {
+			return URLEncoder.encode(queryPart, "utf-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
     private String getStringValue(String[] a) {
         String value = "";
         for (int i = 0; i < a.length; i++) {
