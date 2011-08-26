@@ -50,13 +50,6 @@ package org.osgi.service.dmt;
  * Object specification and implementation for the supported update modes. If
  * Management Object definition permits, implementations are encouraged to
  * support both update modes.
- * <p>
- * This interface also contains methods for manipulating the set of
- * {@code DmtEventListener} objects that are called when the structure or
- * content of the tree is changed. These methods are not needed in an OSGi
- * environment, clients should register listeners through the Event Admin
- * service.
- * 
  * @version $Id$
  */
 public interface DmtAdmin {

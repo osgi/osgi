@@ -57,168 +57,156 @@ package org.osgi.service.dmt;
  */
 public interface MetaNode {
 
-    /**
-     * Constant for the ADD access type. If {@link #can(int)} returns
-     * {@code true} for this operation, this node can potentially be
-     * added to its parent. Nodes with {@link #PERMANENT} or {@link #AUTOMATIC}
-     * scope typically do not have this access type.
-     */
-    int CMD_ADD = 0;
-
-    /**
-     * Constant for the DELETE access type. If {@link #can(int)} returns
-     * {@code true} for this operation, the node can potentially be
-     * deleted.
-     */
-    int CMD_DELETE = 1;
-
-    /**
-     * Constant for the EXECUTE access type. If {@link #can(int)} returns
-     * {@code true} for this operation, the node can potentially be
-     * executed.
-     */
-    int CMD_EXECUTE = 2;
-
-    /**
-     * Constant for the REPLACE access type. If {@link #can(int)} returns
-     * {@code true} for this operation, the value and other properties of
-     * the node can potentially be modified.
-     */
-    int CMD_REPLACE = 3;
-
-    /**
-     * Constant for the GET access type. If {@link #can(int)} returns
-     * {@code true} for this operation, the value, the list of child nodes
-     * (in case of interior nodes) and the properties of the node can
-     * potentially be retrieved.
-     */
-    int CMD_GET = 4;
+	/**
+	 * Constant for the ADD access type. If {@link #can(int)} returns
+	 * {@code true} for this operation, this node can potentially be added to
+	 * its parent. Nodes with {@link #PERMANENT} or {@link #AUTOMATIC} scope
+	 * typically do not have this access type.
+	 */
+	int	CMD_ADD		= 0;
 
 	/**
-	 * Constant for representing a permanent node in the tree. This must be
-	 * returned by {@link #getScope()} if the node cannot be added, deleted or
-	 * modified in any way through tree operations. Permanent nodes cannot have
-	 * non-permanent nodes as parents.
+	 * Constant for the DELETE access type. If {@link #can(int)} returns
+	 * {@code true} for this operation, the node can potentially be deleted.
 	 */
-    int PERMANENT = 0;
+	int	CMD_DELETE	= 1;
+
+	/**
+	 * Constant for the EXECUTE access type. If {@link #can(int)} returns
+	 * {@code true} for this operation, the node can potentially be executed.
+	 */
+	int	CMD_EXECUTE	= 2;
+
+	/**
+	 * Constant for the REPLACE access type. If {@link #can(int)} returns
+	 * {@code true} for this operation, the value and other properties of the
+	 * node can potentially be modified.
+	 */
+	int	CMD_REPLACE	= 3;
+
+	/**
+	 * Constant for the GET access type. If {@link #can(int)} returns
+	 * {@code true} for this operation, the value, the list of child nodes (in
+	 * case of interior nodes) and the properties of the node can potentially be
+	 * retrieved.
+	 */
+	int	CMD_GET		= 4;
+
+	/**
+	 * Constant for representing a {@code PERMANENT} node in the tree. This must
+	 * be returned by {@link #getScope()} if the node cannot be added, deleted
+	 * or modified in any way through tree operations. {@code PERMANENT} nodes
+	 * in general map to the roots of Plugins.
+	 */
+	int	PERMANENT	= 0;
 
 	/**
 	 * Constant for representing a dynamic node in the tree. This must be
-	 * returned by {@link #getScope()} for all nodes that are not permanent and
-	 * are not created automatically by the management object.
+	 * returned by {@link #getScope()}. Dynamic nodes can be added and deleted.
 	 */
-    int DYNAMIC = 1;
+	int	DYNAMIC		= 1;
 
-    /**
-     * Constant for representing an automatic node in the tree. This must be
-     * returned by {@link #getScope()} for all nodes that are created
-     * automatically by the management object. Automatic nodes represent a
-     * special case of dynamic nodes, so this scope should be mapped to
-     * {@link #DYNAMIC} when used in an OMA DM context.
-     * <p>
-     * An automatic node is usually created instantly when its parent is
-     * created, but it is also valid if it only appears later, triggered by some
-     * other condition. The exact behaviour must be defined by the Management
-     * Object.
-     */
-    int AUTOMATIC = 2;
+	/**
+	 * Constant for representing an automatic node in the tree. This must be
+	 * returned by {@link #getScope()}. {@code AUTOMATIC} nodes are part of the
+	 * life cycle of their parent node, they usually describe
+	 * attributes/properties of the parent.
+	 */
+	int	AUTOMATIC	= 2;
 
-    /**
-     * Check whether the given operation is valid for this node. If no meta-data
-     * is provided for a node, all operations are valid.
-     * 
-     * @param operation One of the {@code MetaNode.CMD_...} constants.
-     * @return {@code false} if the operation is not valid for this node
-     *         or the operation code is not one of the allowed constants
-     */
-    boolean can(int operation);
+	/**
+	 * Check whether the given operation is valid for this node. If no meta-data
+	 * is provided for a node, all operations are valid.
+	 * 
+	 * @param operation One of the {@code MetaNode.CMD_...} constants.
+	 * @return {@code false} if the operation is not valid for this node or the
+	 *         operation code is not one of the allowed constants
+	 */
+	boolean can(int operation);
 
-    /**
-     * Check whether the node is a leaf node or an internal one.
-     * 
-     * @return {@code true} if the node is a leaf node
-     */
-    boolean isLeaf();
+	/**
+	 * Check whether the node is a leaf node or an internal one.
+	 * 
+	 * @return {@code true} if the node is a leaf node
+	 */
+	boolean isLeaf();
 
-    /**
-     * Return the scope of the node. Valid values are
-     * {@link #PERMANENT MetaNode.PERMANENT}, {@link #DYNAMIC MetaNode.DYNAMIC}
-     * and {@link #AUTOMATIC MetaNode.AUTOMATIC}. Note that a permanent node is
-     * not the same as a node where the DELETE operation is not allowed.
-     * Permanent nodes never can be deleted, whereas a non-deletable node can
-     * disappear in a recursive DELETE operation issued on one of its parents.
-     * If no meta-data is provided for a node, it can be assumed to be a dynamic
-     * node.
-     * 
-     * @return {@link #PERMANENT} for permanent nodes, {@link #AUTOMATIC} for
-     *         nodes that are automatically created, and {@link #DYNAMIC}
-     *         otherwise
-     */
-    int getScope();
+	/**
+	 * Return the scope of the node. Valid values are {@link #PERMANENT
+	 * MetaNode.PERMANENT}, {@link #DYNAMIC MetaNode.DYNAMIC} and
+	 * {@link #AUTOMATIC MetaNode.AUTOMATIC}. Note that a permanent node is not
+	 * the same as a node where the DELETE operation is not allowed. Permanent
+	 * nodes never can be deleted, whereas a non-deletable node can disappear in
+	 * a recursive DELETE operation issued on one of its parents. If no
+	 * meta-data is provided for a node, it can be assumed to be a dynamic node.
+	 * 
+	 * @return {@link #PERMANENT} for permanent nodes, {@link #AUTOMATIC} for
+	 *         nodes that are automatically created, and {@link #DYNAMIC}
+	 *         otherwise
+	 */
+	int getScope();
 
-    /**
-     * Get the explanation string associated with this node. Can be
-     * {@code null} if no description is provided for this node.
-     * 
-     * @return node description string or {@code null} for no description
-     */
-    String getDescription();
+	/**
+	 * Get the explanation string associated with this node. Can be {@code null}
+	 * if no description is provided for this node.
+	 * 
+	 * @return node description string or {@code null} for no description
+	 */
+	String getDescription();
 
-    /**
-     * Get the number of maximum occurrences of this type of nodes on the same
-     * level in the DMT. Returns {@code Integer.MAX_VALUE} if there is no
-     * upper limit. Note that if the occurrence is greater than 1 then this node
-     * can not have siblings with different metadata. In other words, if
-     * different types of nodes coexist on the same level, their occurrence can
-     * not be greater than 1. If no meta-data is provided for a node, there is
-     * no upper limit on the number of occurrences.
-     * 
-     * @return The maximum allowed occurrence of this node type
-     */
-    int getMaxOccurrence();
+	/**
+	 * Get the number of maximum occurrences of this type of nodes on the same
+	 * level in the DMT. Returns {@code Integer.MAX_VALUE} if there is no upper
+	 * limit. Note that if the occurrence is greater than 1 then this node can
+	 * not have siblings with different metadata. In other words, if different
+	 * types of nodes coexist on the same level, their occurrence can not be
+	 * greater than 1. If no meta-data is provided for a node, there is no upper
+	 * limit on the number of occurrences.
+	 * 
+	 * @return The maximum allowed occurrence of this node type
+	 */
+	int getMaxOccurrence();
 
-    /**
-     * Check whether zero occurrence of this node is valid. If no meta-data is
-     * returned for a node, zero occurrences are allowed.
-     * 
-     * @return {@code true} if zero occurrence of this node is valid
-     */
-    boolean isZeroOccurrenceAllowed();
+	/**
+	 * Check whether zero occurrence of this node is valid. If no meta-data is
+	 * returned for a node, zero occurrences are allowed.
+	 * 
+	 * @return {@code true} if zero occurrence of this node is valid
+	 */
+	boolean isZeroOccurrenceAllowed();
 
-    /**
-     * Get the default value of this node if any.
-     * 
-     * @return The default value or {@code null} if not defined
-     */
-    DmtData getDefault();
+	/**
+	 * Get the default value of this node if any.
+	 * 
+	 * @return The default value or {@code null} if not defined
+	 */
+	DmtData getDefault();
 
-    /**
-     * Get the list of MIME types this node can hold. The first element of the
-     * returned list must be the default MIME type.
-     * <p>
-     * All MIME types are considered valid if no meta-data is provided for a
-     * node or if {@code null} is returned by this method. In this case
-     * the default MIME type cannot be retrieved from the meta-data, but the
-     * node may still have a default. This hidden default (if it exists) can be
-     * utilized by passing {@code null} as the type parameter of
-     * {@link DmtSession#setNodeType(String, String)} or
-     * {@link DmtSession#createLeafNode(String, DmtData, String)}.
-     * 
-     * @return the list of allowed MIME types for this node, starting with the
-     *         default MIME type, or {@code null} if all types are
-     *         allowed
-     */
-    String[] getMimeTypes();
+	/**
+	 * Get the list of MIME types this node can hold. The first element of the
+	 * returned list must be the default MIME type.
+	 * <p>
+	 * All MIME types are considered valid if no meta-data is provided for a
+	 * node or if {@code null} is returned by this method. In this case the
+	 * default MIME type cannot be retrieved from the meta-data, but the node
+	 * may still have a default. This hidden default (if it exists) can be
+	 * utilized by passing {@code null} as the type parameter of
+	 * {@link DmtSession#setNodeType(String, String)} or
+	 * {@link DmtSession#createLeafNode(String, DmtData, String)}.
+	 * 
+	 * @return the list of allowed MIME types for this node, starting with the
+	 *         default MIME type, or {@code null} if all types are allowed
+	 */
+	String[] getMimeTypes();
 
 	/**
 	 * Get the maximum allowed value associated with a node of numeric format.
 	 * If no meta-data is provided for a node, there is no upper limit to its
 	 * value. This method is only meaningful if the node has one of the numeric
-	 * formats: integer, float, or long. format.
-	 * The returned limit has {@code double} type, as this can be used to denote
-	 * all numeric limits with full precision. The actual maximum should be the
-	 * largest integer, float or long number that does not exceed the returned
-	 * value.
+	 * formats: integer, float, or long. format. The returned limit has
+	 * {@code double} type, as this can be used to denote all numeric limits
+	 * with full precision. The actual maximum should be the largest integer,
+	 * float or long number that does not exceed the returned value.
 	 * <p>
 	 * The information returned by this method is not checked by DmtAdmin, it is
 	 * only for external use, for example in user interfaces. DmtAdmin only
@@ -229,17 +217,17 @@ public interface MetaNode {
 	 *         upper limit defined or the node's format is not one of the
 	 *         numeric formats integer, float, or long
 	 */
-    double getMax();
+	double getMax();
 
 	/**
 	 * Get the minimum allowed value associated with a node of numeric format.
 	 * If no meta-data is provided for a node, there is no lower limit to its
 	 * value. This method is only meaningful if the node has one of the numeric
-	 * formats: integer, float, or long format.
-	 * The returned limit has {@code double} type, as this can be used to denote
-	 * both integer and float limits with full precision. The actual minimum
-	 * should be the smallest integer, float or long value that is equal or
-	 * larger than the returned value.
+	 * formats: integer, float, or long format. The returned limit has
+	 * {@code double} type, as this can be used to denote both integer and float
+	 * limits with full precision. The actual minimum should be the smallest
+	 * integer, float or long value that is equal or larger than the returned
+	 * value.
 	 * <p>
 	 * The information returned by this method is not checked by DmtAdmin, it is
 	 * only for external use, for example in user interfaces. DmtAdmin only
@@ -250,7 +238,7 @@ public interface MetaNode {
 	 *         lower limit defined or the node's format is not one of the
 	 *         numeric formats integer, float, or long
 	 */
-    double getMin();
+	double getMin();
 
 	/**
 	 * Return an array of DmtData objects if valid values are defined for the
@@ -264,7 +252,7 @@ public interface MetaNode {
 	 * 
 	 * @return the valid values for this node, or {@code null} if not defined
 	 */
-    DmtData[] getValidValues();
+	DmtData[] getValidValues();
 
 	/**
 	 * Get the node's format, expressed in terms of type constants defined in
@@ -285,7 +273,7 @@ public interface MetaNode {
 	 * 
 	 * @return the allowed format(s) of the node
 	 */
-    int getFormat();
+	int getFormat();
 
 	/**
 	 * Get the format names for any raw formats supported by the node. This
@@ -303,7 +291,7 @@ public interface MetaNode {
 	 * @return the allowed format name(s) of raw data stored by the node, or
 	 *         {@code null} if raw formats are not supported
 	 */
-    String[] getRawFormatNames();
+	String[] getRawFormatNames();
 
 	/**
 	 * Checks whether the given value is valid for this node. This method can be
@@ -323,7 +311,7 @@ public interface MetaNode {
 	 * @return {@code false} if the specified value is found to be invalid for
 	 *         the node described by this meta-node, {@code true} otherwise
 	 */
-    boolean isValidValue(DmtData value);
+	boolean isValidValue(DmtData value);
 
 	/**
 	 * Return an array of Strings if valid names are defined for the node, or
@@ -339,7 +327,7 @@ public interface MetaNode {
 	 * @return the valid values for this node name, or {@code null} if not
 	 *         defined
 	 */
-    String[] getValidNames();
+	String[] getValidNames();
 
 	/**
 	 * Checks whether the given name is a valid name for this node. This method
@@ -358,27 +346,26 @@ public interface MetaNode {
 	 * @return {@code false} if the specified name is found to be invalid for
 	 *         the node described by this meta-node, {@code true} otherwise
 	 */
-    boolean isValidName(String name);
+	boolean isValidName(String name);
 
-    /**
-     * Returns the list of extension property keys, if the provider of this
-     * {@code MetaNode} provides proprietary extensions to node meta
-     * data. The method returns {@code null} if the node doesn't provide
-     * such extensions.
-     * 
-     * @return the array of supported extension property keys
-     */
-    String[] getExtensionPropertyKeys();
+	/**
+	 * Returns the list of extension property keys, if the provider of this
+	 * {@code MetaNode} provides proprietary extensions to node meta data. The
+	 * method returns {@code null} if the node doesn't provide such extensions.
+	 * 
+	 * @return the array of supported extension property keys
+	 */
+	String[] getExtensionPropertyKeys();
 
-    /**
-     * Returns the value for the specified extension property key. This method
-     * only works if the provider of this {@code MetaNode} provides
-     * proprietary extensions to node meta data.
-     * 
-     * @param key the key for the extension property
-     * @return the value of the requested property, cannot be {@code null}
-     * @throws IllegalArgumentException if the specified key is not supported by
-     *         this {@code MetaNode}
-     */
-    Object getExtensionProperty(String key);
+	/**
+	 * Returns the value for the specified extension property key. This method
+	 * only works if the provider of this {@code MetaNode} provides proprietary
+	 * extensions to node meta data.
+	 * 
+	 * @param key the key for the extension property
+	 * @return the value of the requested property, cannot be {@code null}
+	 * @throws IllegalArgumentException if the specified key is not supported by
+	 *         this {@code MetaNode}
+	 */
+	Object getExtensionProperty(String key);
 }

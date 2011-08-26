@@ -85,6 +85,7 @@ public class DDFNode {
 			child.add = m.group(1) != null;
 			child.delete = m.group(1) != null;
 			child.cardinality = "0..*";
+			child.scope = "D";
 			children.add(child);
 			return;
 		}
@@ -103,7 +104,7 @@ public class DDFNode {
 					typeName);
 			child.add = m.group(1) != null;
 			child.delete = m.group(1) != null && m.group(1).equals("Mutable");
-			child.scope = "A";
+			child.scope = "D";
 			child.cardinality = "0..*";
 			children.add(child);
 			return;

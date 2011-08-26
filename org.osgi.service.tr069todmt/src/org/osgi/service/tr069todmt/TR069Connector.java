@@ -43,126 +43,133 @@ import java.util.*;
  * TR-069 table view on the {@code LIST} and {@code MAP} nodes.
  * <p>
  * 
+ * @remark Ikuo disagrees with relativity
  */
 public interface TR069Connector {
 
 	/**
 	 * The MIME type prefix.
 	 */
-	final static String PREFIX = "application/x-tr-069-";
+	final static String			PREFIX						= "application/x-tr-069-";
 
 	/**
 	 * Constant representing the default or unknown type. If this type is used a
 	 * default conversion will take place
 	 */
-	public final static String TR069_MIME_DEFAULT = PREFIX + "default";
+	public final static String	TR069_MIME_DEFAULT			= PREFIX
+																	+ "default";
 
 	/**
 	 * Constant representing the TR-069 integer type.
 	 */
-	public final static String TR069_MIME_INT = PREFIX + "int";
+	public final static String	TR069_MIME_INT				= PREFIX + "int";
 
 	/**
 	 * Constant representing the TR-069 unsigned integer type.
 	 */
-	public final static String TR069_MIME_UNSIGNED_INT = PREFIX + "unsignedInt";
+	public final static String	TR069_MIME_UNSIGNED_INT		= PREFIX
+																	+ "unsignedInt";
 
 	/**
 	 * Constant representing the TR-069 long type.
 	 */
-	public final static String TR069_MIME_LONG = PREFIX + "long";
+	public final static String	TR069_MIME_LONG				= PREFIX + "long";
 
 	/**
 	 * Constant representing the TR-069 unsigned long type.
 	 */
-	public final static String TR069_MIME_UNSIGNED_LONG = PREFIX
-			+ "unsignedLong";
+	public final static String	TR069_MIME_UNSIGNED_LONG	= PREFIX
+																	+ "unsignedLong";
 
 	/**
 	 * Constant representing the TR-069 string type.
 	 */
-	public final static String TR069_MIME_STRING = PREFIX + "string";
+	public final static String	TR069_MIME_STRING			= PREFIX + "string";
 
 	/**
 	 * Constant representing the TR-069 string list type.
 	 */
-	public final static String TR069_MIME_STRING_LIST = PREFIX + "string-list";
+	public final static String	TR069_MIME_STRING_LIST		= PREFIX
+																	+ "string-list";
 
 	/**
 	 * Constant representing the TR-069 boolean type.
 	 */
-	public final static String TR069_MIME_BOOLEAN = PREFIX + "boolean";
+	public final static String	TR069_MIME_BOOLEAN			= PREFIX
+																	+ "boolean";
 
 	/**
 	 * Constant representing the TR-069 base64 type.
 	 */
-	public final static String TR069_MIME_BASE64 = PREFIX + "base64";
+	public final static String	TR069_MIME_BASE64			= PREFIX + "base64";
 
 	/**
 	 * Constant representing the TR-069 hex binary type.
 	 */
-	public final static String TR069_MIME_HEXBINARY = PREFIX + "hexBinary";
+	public final static String	TR069_MIME_HEXBINARY		= PREFIX
+																	+ "hexBinary";
 
 	/**
 	 * Constant representing the TR-069 date time type.
 	 */
-	public final static String TR069_MIME_DATETIME = PREFIX + "dateTime";
+	public final static String	TR069_MIME_DATETIME			= PREFIX
+																	+ "dateTime";
 
 	/**
 	 * Constant representing the TR-069 date time type.
 	 */
-	public final static String TR069_MIME_EAGER = PREFIX + "eager";
+	public final static String	TR069_MIME_EAGER			= PREFIX + "eager";
 
 	/**
 	 * Constant representing the default or unknown type. If this type is used a
 	 * default conversion will take place
 	 */
-	public final static int TR069_DEFAULT = 0;
+	public final static int		TR069_DEFAULT				= 0;
 
 	/**
 	 * Constant representing the TR-069 integer type.
 	 */
-	public final static int TR069_INT = 1;
+	public final static int		TR069_INT					= 1;
 
 	/**
 	 * Constant representing the TR-069 unsigned integer type.
 	 */
-	public final static int TR069_UNSIGNED_INT = 2;
+	public final static int		TR069_UNSIGNED_INT			= 2;
 
 	/**
 	 * Constant representing the TR-069 long type.
 	 */
-	public final static int TR069_LONG = 4;
+	public final static int		TR069_LONG					= 4;
 
 	/**
 	 * Constant representing the TR-069 unsigned long type.
 	 */
-	public final static int TR069_UNSIGNED_LONG = 8;
+	public final static int		TR069_UNSIGNED_LONG			= 8;
 
 	/**
 	 * Constant representing the TR-069 string type.
 	 */
-	public final static int TR069_STRING = 16;
+	public final static int		TR069_STRING				= 16;
 
 	/**
 	 * Constant representing the TR-069 boolean type.
 	 */
-	public final static int TR069_BOOLEAN = 32;
+	public final static int		TR069_BOOLEAN				= 32;
 
 	/**
 	 * Constant representing the TR-069 base64 type.
 	 */
-	public final static int TR069_BASE64 = 64;
+	public final static int		TR069_BASE64				= 64;
 
 	/**
 	 * Constant representing the TR-069 hex binary type.
 	 */
-	public final static int TR069_HEXBINARY = 128;
+	public final static int		TR069_HEXBINARY				= 128;
 
 	/**
 	 * Constant representing the TR-069 date time type.
 	 */
-	public final static int TR069_DATETIME = 256;
+	public final static int		TR069_DATETIME				= 256;
 
 	/**
 	 * Setting a parameter. This method should be used to provide the
@@ -177,36 +184,30 @@ public interface TR069Connector {
 	 * renamed. For example, if the value of {@code M/X/Alias} is set to
 	 * {@code Y} then the node will have a URI of {@code M/Y/Alias}. The value
 	 * must not be escaped as the connector will escape it.
-	 * <p>
-	 * This method requires an atomic Dmt Session.
 	 * 
-	 * @param parameterPath
-	 *            The parameter path
-	 * @param value
-	 *            A trimmed string value that has the given type. The value can
-	 *            be in either canonical or lexical representation by TR069.
+	 * @param parameterPath The parameter path
+	 * @param value A trimmed string value that has the given type. The value
+	 *        can be in either canonical or lexical representation by TR069.
 	 * 
-	 * @param type
-	 *            The type of the parameter ({@link #TR069_INT},
-	 *            {@link #TR069_UNSIGNED_INT},{@link #TR069_LONG},
-	 *            {@link #TR069_UNSIGNED_LONG},{@link #TR069_STRING},
-	 *            {@link #TR069_DATETIME},{@link #TR069_BASE64},
-	 *            {@link #TR069_HEXBINARY})
+	 * @param type The type of the parameter ({@link #TR069_INT},
+	 *        {@link #TR069_UNSIGNED_INT},{@link #TR069_LONG},
+	 *        {@link #TR069_UNSIGNED_LONG},{@link #TR069_STRING},
+	 *        {@link #TR069_DATETIME},{@link #TR069_BASE64},
+	 *        {@link #TR069_HEXBINARY})
 	 * 
 	 * @remark can we auto-create the nodes?
-	 * @throws TR069Exception
-	 *             The following fault codes are defined for this method: 9001,
-	 *             9002, 9003, 9004, 9005, 9006, 9007, 9008.
-	 *             <ul>
-	 *             <li> 9001 {@link TR069Exception#REQUEST_DENIED} </li> <li>
-	 *             9002 {@link TR069Exception#INTERNAL_ERROR} </li><li> 9003
-	 *             {@link TR069Exception#INVALID_ARGUMENTS} </li><li> 9004
-	 *             {@link TR069Exception#RESOURCES_EXCEEDED} </li><li> 9005
-	 *             {@link TR069Exception#INVALID_PARAMETER_NAME} </li><li> 9006
-	 *             {@link TR069Exception#INVALID_PARAMETER_TYPE} </li><li> 9007
-	 *             {@link TR069Exception#INVALID_PARAMETER_VALUE} </li><li> 9008
-	 *             {@link TR069Exception#NON_WRITABLE_PARAMETER}</li>
-	 *             </ul>
+	 * @throws TR069Exception The following fault codes are defined for this
+	 *         method: 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008.
+	 *         <ul>
+	 *         <li> 9001 {@link TR069Exception#REQUEST_DENIED} </li> <li> 9002
+	 *         {@link TR069Exception#INTERNAL_ERROR} </li><li> 9003
+	 *         {@link TR069Exception#INVALID_ARGUMENTS} </li><li> 9004
+	 *         {@link TR069Exception#RESOURCES_EXCEEDED} </li><li> 9005
+	 *         {@link TR069Exception#INVALID_PARAMETER_NAME} </li><li> 9006
+	 *         {@link TR069Exception#INVALID_PARAMETER_TYPE} </li><li> 9007
+	 *         {@link TR069Exception#INVALID_PARAMETER_VALUE} </li><li> 9008
+	 *         {@link TR069Exception#NON_WRITABLE_PARAMETER}</li>
+	 *         </ul>
 	 */
 	void setParameterValue(String parameterPath, String value, int type)
 			throws TR069Exception;
@@ -217,18 +218,15 @@ public interface TR069Connector {
 	 * multiple values as the corresponding RPC can request with an object or
 	 * table path, this method only accepts a parameter path. Retrieving
 	 * multiple values can be achieved with the
-	 * {@link #getParameterNames(String, boolean)}. This method can expand a
-	 * partial path and since the returned Parameter Info also provides access
-	 * to the Parameter Value it is a more convenient way to retrieve a a
-	 * partial path.
+	 * {@link #getParameterNames(String, boolean)}.
 	 * <p>
-	 * If the parameterPath ends in {@code NumberOfEntries} then the method must
-	 * synthesize the value. The parameterPath then has a pattern like
-	 * {@code (object-path)(table-name)NumberOfEntries}. The returned value must
-	 * be an {@link #TR069_UNSIGNED_INT} that contains the number of child nodes
-	 * in the table {@code (object-path)(table-name)}. For example, if
-	 * {@code A.B.CNumberOfEntries} is requested the return value must be the
-	 * number of child nodes under {@code A/B/C}.
+	 * If the {@code parameterPath} ends in {@code NumberOfEntries} then the
+	 * method must synthesize the value. The {@code parameterPath} then has a
+	 * pattern like {@code (object-path)(table-name)NumberOfEntries}. The
+	 * returned value must be an {@link #TR069_UNSIGNED_INT} that contains the
+	 * number of child nodes in the table {@code (object-path)(table-name)}. For
+	 * example, if {@code A.B.CNumberOfEntries} is requested the return value
+	 * must be the number of child nodes under {@code A/B/C}.
 	 * <p>
 	 * If the value of a an {@code Alias} node is requested then the name of the
 	 * parent node must be returned. For example, if the path is
@@ -237,20 +235,19 @@ public interface TR069Connector {
 	 * The connector must attempt to create any missing nodes along the way,
 	 * creating parent nodes on demand.
 	 * 
-	 * @param parameterPath
-	 *            A parameter path or a partial path
+	 * @param parameterPath A parameter path (must refer to a valid parameter,
+	 *        not an object or table).
 	 * @return The name, value, and type triad of the requested parameter as
 	 *         defined by the TR-069 {@code ParameterValueStruct}.
-	 * @throws TR069Exception
-	 *             The following fault codes are defined for this method: 9001,
-	 *             9002, 9003, 9004, 9005.
-	 *             <ul>
-	 *             <li> 9001 {@link TR069Exception#REQUEST_DENIED} <li> 9002
-	 *             {@link TR069Exception#INTERNAL_ERROR} <li> 9003
-	 *             {@link TR069Exception#INVALID_ARGUMENTS} <li> 9004
-	 *             {@link TR069Exception#RESOURCES_EXCEEDED} <li> 9005
-	 *             {@link TR069Exception#INVALID_PARAMETER_NAME}
-	 *             </ul>
+	 * @throws TR069Exception The following fault codes are defined for this
+	 *         method: 9001, 9002, 9003, 9004, 9005.
+	 *         <ul>
+	 *         <li> 9001 {@link TR069Exception#REQUEST_DENIED} <li> 9002
+	 *         {@link TR069Exception#INTERNAL_ERROR} <li> 9003
+	 *         {@link TR069Exception#INVALID_ARGUMENTS} <li> 9004
+	 *         {@link TR069Exception#RESOURCES_EXCEEDED} <li> 9005
+	 *         {@link TR069Exception#INVALID_PARAMETER_NAME}
+	 *         </ul>
 	 */
 	ParameterValue getParameterValue(String parameterPath)
 			throws TR069Exception;
@@ -260,7 +257,8 @@ public interface TR069Connector {
 	 * is intended to be used to implement the GetParameterNames RPC.
 	 * <p>
 	 * The connector must attempt to create any missing nodes that are needed
-	 * for the {@code objectOrTablePath}.
+	 * for the {@code objectOrTablePath} by using the
+	 * {@link #toURI(String, boolean)} method with {@code true}.
 	 * <p>
 	 * This method must traverse the sub-tree addressed by the path and return
 	 * the paths to all the objects, tables, and parameters in that tree. If the
@@ -281,34 +279,30 @@ public interface TR069Connector {
 	 * {@link ParameterInfo} for the corresponding {@code NumberOfEntries}
 	 * parameter.
 	 * 
-	 * @param objectOrTablePath
-	 *            A path to an object or table that is the root of a sub-tree .
-	 * @param nextLevel
-	 *            If {@code true} consider only the children of the object or
-	 *            table addressed by {@code path}, otherwise include the whole
-	 *            sub-tree, including the addressed object or table.
+	 * @param objectOrTablePath A path to an object or table.
+	 * @param nextLevel If {@code true} consider only the children of the object
+	 *        or table addressed by {@code path}, otherwise include the whole
+	 *        sub-tree, including the addressed object or table.
 	 * @return A collection of {@link ParameterInfo} objects representing the
 	 *         resulting child parameter, objects, and tables as defined by the
 	 *         TR-069 {@code ParameterInfoStruct}.
-	 * @throws TR069Exception
-	 *             If the fault is caused by an invalid ParameterPath value, the
-	 *             Invalid Parameter Name fault code (9005) MUST be used instead
-	 *             of the more general Invalid Arguments fault code (9003). A
-	 *             ParameterPath value must be considered invalid if it is not
-	 *             an empty string and does not exactly match a parameter or
-	 *             object name currently present in the data model. If
-	 *             {@code nextLevel} is {@code true} and
-	 *             {@code objectOrTablePath} is a parameter path rather than an
-	 *             object/table path, the method must return a fault response
-	 *             with the Invalid Arguments fault code (9003). if the value
-	 *             cannot be gotten for some reason. This method can generate
-	 *             the following fault codes:
-	 *             <ul>
-	 *             <li> 9001 {@link TR069Exception#REQUEST_DENIED} </li> <li>
-	 *             9002 {@link TR069Exception#INTERNAL_ERROR} </li> <li> 9003
-	 *             {@link TR069Exception#INVALID_ARGUMENTS} </li> <li> 9005
-	 *             {@link TR069Exception#INVALID_PARAMETER_NAME}</li>
-	 *             </ul>
+	 * @throws TR069Exception If the fault is caused by an invalid ParameterPath
+	 *         value, the Invalid Parameter Name fault code (9005) MUST be used
+	 *         instead of the more general Invalid Arguments fault code (9003).
+	 *         A ParameterPath value must be considered invalid if it is not an
+	 *         empty string and does not exactly match a parameter or object
+	 *         name currently present in the data model. If {@code nextLevel} is
+	 *         {@code true} and {@code objectOrTablePath} is a parameter path
+	 *         rather than an object/table path, the method must return a fault
+	 *         response with the Invalid Arguments fault code (9003). If the
+	 *         value cannot be gotten for some reason, this method can generate
+	 *         the following fault codes::
+	 *         <ul>
+	 *         <li> 9001 {@link TR069Exception#REQUEST_DENIED} </li> <li> 9002
+	 *         {@link TR069Exception#INTERNAL_ERROR} </li> <li> 9003
+	 *         {@link TR069Exception#INVALID_ARGUMENTS} </li> <li> 9005
+	 *         {@link TR069Exception#INVALID_PARAMETER_NAME}</li>
+	 *         </ul>
 	 */
 	Collection<ParameterInfo> getParameterNames(String objectOrTablePath,
 			boolean nextLevel) throws TR069Exception;
@@ -324,38 +318,36 @@ public interface TR069Connector {
 	 * Connector must calculate a unique instance id for the new node name that
 	 * follows the TR-069 rules for instance ids. That is, this id must not be
 	 * reused and must not be in use.
+	 * 
+	 * @remark add persistence
 	 * <p>
 	 * If the {@code LIST} or {@code MAP} node has a Meta Node with a MIME type
 	 * application/x-tr-069-eager then the node must be immediately created.
-	 * Otherwise no new node must be created, this will happen when the node is
-	 * accessed.
+	 * Otherwise no new node must be created, this node must be created when the
+	 * node is accessed in a subsequent RPC.
 	 * <p>
 	 * The alias name or instance id must be returned as identifier for the ACS.
 	 * 
-	 * @param path
-	 *            A table path with an optional alias at the end
+	 * @param path A table path with an optional alias at the end
 	 * @return The name of the new node.
-	 * @throws TR069Exception
-	 *             The following fault codes are defined for this method: 9001,
-	 *             9002, 9003, 9004, 9005. If an AddObject request would result
-	 *             in exceeding the maximum number of such objects supported by
-	 *             the CPE, the CPE MUST return a fault response with the
-	 *             Resources Exceeded (9004) fault code.
+	 * @throws TR069Exception The following fault codes are defined for this
+	 *         method: 9001, 9002, 9003, 9004, 9005. If an AddObject request
+	 *         would result in exceeding the maximum number of such objects
+	 *         supported by the CPE, the CPE MUST return a fault response with
+	 *         the Resources Exceeded (9004) fault code.
 	 */
 	String addObject(String path) throws TR069Exception;
 
 	/**
 	 * Delete an object from a table. A missing node must be ignored.
 	 * 
-	 * @param objectPath
-	 *            The path to an object in a table to be deleted.
-	 * @throws TR069Exception
-	 *             The following fault codes are defined for this method: 9001,
-	 *             9002, 9003, 9005. If the fault is caused by an invalid
-	 *             objectPath value, the Invalid Parameter Name fault code
-	 *             (9005) must be used instead of the more general Invalid
-	 *             Arguments fault code (9003). A missing node for
-	 *             {@code objectPath} must be ignored.
+	 * @param objectPath The path to an object in a table to be deleted.
+	 * @throws TR069Exception The following fault codes are defined for this
+	 *         method: 9001, 9002, 9003, 9005. If the fault is caused by an
+	 *         invalid objectPath value, the Invalid Parameter Name fault code
+	 *         (9005) must be used instead of the more general Invalid Arguments
+	 *         fault code (9003). A missing node for {@code objectPath} must be
+	 *         ignored.
 	 */
 	void deleteObject(String objectPath) throws TR069Exception;
 
@@ -365,11 +357,9 @@ public interface TR069Connector {
 	 * the DMT. The translation takes into account the special meaning
 	 * {@code LIST}, {@code MAP} , {@code Alias}, and {@code InstanceId} nodes.
 	 * 
-	 * @param uri
-	 *            A Dmt Session relative URI
+	 * @param uri A Dmt Session relative URI
 	 * @return An object, table, or parameter path
-	 * @throws TR069Exception
-	 *             If there is an error
+	 * @throws TR069Exception If there is an error
 	 */
 	String toPath(String uri) throws TR069Exception;
 
@@ -384,20 +374,18 @@ public interface TR069Connector {
 	 * The returned path is properly escaped for TR-069.
 	 * <p>
 	 * The mapping from the path to a URI requires support from the meta data in
-	 * the DMT, it is not possible to use lexical mapping. The translation takes
-	 * into account the semantics of the MAP and LIST nodes. If at a certain
-	 * point a node under a {@code MAP} node does not exist then the Connector
-	 * can create it if the {@code create} flag is set to {@code true}.
-	 * Otherwise a non-existent node will terminate the mapping.
+	 * the DMT, it is not possible to use a mapping solely based on string
+	 * replacements. The translation takes into account the semantics of the MAP
+	 * and LIST nodes. If at a certain point a node under a {@code MAP} node
+	 * does not exist then the Connector can create it if the {@code create}
+	 * flag is set to {@code true}. Otherwise a non-existent node will terminate
+	 * the mapping.
 	 * 
-	 * @param name
-	 *            A TR-069 path
-	 * @param create
-	 *            If {@code true}, create missing nodes when they reside under a
-	 *            MAP or LIST
+	 * @param name A TR-069 path
+	 * @param create If {@code true}, create missing nodes when they reside
+	 *        under a MAP or LIST
 	 * @return A relative Dmt Admin URI
-	 * @throws TR069Exception
-	 *             If there is an error
+	 * @throws TR069Exception If there is an error
 	 */
 	String toURI(String name, boolean create) throws TR069Exception;
 

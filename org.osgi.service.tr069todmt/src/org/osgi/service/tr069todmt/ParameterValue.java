@@ -30,8 +30,8 @@ public interface ParameterValue {
 	String getPath();
 
 	/**
-	 * This is the value of the parameter. The returned value must be in canonical
-	 * representation defined by TR-069.
+	 * This is the value of the parameter. The returned value must be in a
+	 * representation defined by the TR-069 protocol.
 	 * 
 	 * @return The value of the parameter
 	 */

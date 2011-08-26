@@ -23,10 +23,6 @@ package org.osgi.service.dmt;
  * a {@link DmtSession} is opened in atomic mode, DMT events are only sent when
  * the session is committed, when the changes are actually performed.
  * <p>
- * An event is generated for each group of nodes added, deleted, replaced,
- * renamed or copied, in this order. Events are also generated when sessions are
- * opened and closed.
- * <p>
  * The {@code type} of the event describes the change that triggered the event
  * delivery. Each event carries the unique identifier of the session in which
  * the described change happened or -1 when the change originated outside a
