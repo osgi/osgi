@@ -200,11 +200,6 @@ public class Node implements ParameterInfo, ParameterValue {
 		return sb.toString();
 	}
 
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public boolean isWriteable() {
