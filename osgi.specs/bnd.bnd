@@ -17,3 +17,6 @@ minimum-latest.jar  	= ${repo;ee.minimum;[${minimum-latest},${minimum-latest}]}
 minimum-previous.jar	= ${repo;ee.minimum;[${minimum-previous},${minimum-previous}]}
 foundation-latest.jar 	= ${repo;ee.foundation;[${foundation-latest},${foundation-latest}]}
 foundation-previous.jar = ${repo;ee.foundation;[${foundation-previous},${foundation-previous}]}
+
+javadoc.packages = ${uniq; ${core.packages}, ${cmpn.packages}, ${enterprise.packages}, ${residential.packages}}
+
