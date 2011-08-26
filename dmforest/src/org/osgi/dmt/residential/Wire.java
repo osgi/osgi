@@ -16,10 +16,11 @@ public interface Wire {
 	 * <li>osgi.wiring.bundle - Defined in the OSGi Core</li>
 	 * <li>osgi.wiring.package - Defined in the OSGi Core</li>
 	 * <li>osgi.wiring.host - Defined in the OSGi Core</li>
-	 * <li>osgi.residential.service - Defined in this specification</li>
+	 * <li>osgi.wiring.rmt.service - Defined in this specification</li>
 	 * <li>* - Generic name spaces</li>
 	 * </ul>
-	 * The osgi.residential.service name space is not defined by the OSGi Core
+	 * <p>
+	 * The osgi.wiring.rmt.service name space is not defined by the OSGi Core
 	 * as it is not part of the module layer. The name space has the following
 	 * layout:
 	 * <ul>
@@ -30,6 +31,7 @@ public interface Wire {
 	 * <li>Requirer - The bundle that has gotten the service</li>
 	 * <li>Provider - The bundle that has registered the service</li>
 	 * </ul>
+	 * <p>
 	 * There is a wire for each registration-get pair. That is, if a service is
 	 * registered by A and gotten by B and C then there are two wires:
 	 * {@code B->A} and {@code C->A}.
@@ -99,7 +101,7 @@ public interface Wire {
 		 * @return The Directives for this requirement.
 		 */
 		@Scope(A)
-		MAP<String, String> Directives();
+		MAP<String, String> Directive();
 
 		/**
 		 * The Attributes for this requirement.
@@ -107,16 +109,7 @@ public interface Wire {
 		 * @return The Attributes for this requirement.
 		 */
 		@Scope(A)
-		MAP<String, String> Attributes();
-
-		/**
-		 * Instance Id to allow addressing by Instance Id.
-		 * 
-		 * @return The InstanceId
-		 */
-
-		@Scope(A)
-		int InstanceId();
+		MAP<String, String> Attribute();
 	}
 
 	/**
@@ -129,7 +122,7 @@ public interface Wire {
 		 * @return The Directives for this capability.
 		 */
 		@Scope(A)
-		MAP<String, String> Directives();
+		MAP<String, String> Directive();
 
 		/**
 		 * The Attributes for this capability.
@@ -137,15 +130,7 @@ public interface Wire {
 		 * @return The Attributes for this requirement.
 		 */
 		@Scope(A)
-		MAP<String, String> Attributes();
+		MAP<String, String> Attribute();
 
-		/**
-		 * Instance Id to allow addressing by Instance Id.
-		 * 
-		 * @return The InstanceId
-		 */
-
-		@Scope(A)
-		int InstanceId();
 	}
 }
