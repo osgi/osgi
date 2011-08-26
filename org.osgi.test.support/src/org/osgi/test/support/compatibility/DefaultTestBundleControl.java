@@ -60,6 +60,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	protected void tearDown() throws Exception {
 		clearState(); // call old version of tearDown if it has been
 		// implemented.
+		super.tearDown();
 	}
 
 	/**
@@ -360,7 +361,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	 * @throws NullPointerException if the service couldn't be retrieved from
 	 *         the framework.
 	 */
-	public Object getService(Class< ? > clazz) {
+	public <S> S getService(Class< S > clazz) {
 		try {
 			return getService(clazz, null);
 		}
@@ -372,18 +373,18 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 
 	/**
      */
-	public Object getService(Class< ? > clazz, String filter)
+	public <S> S getService(Class< S > clazz, String filter)
 			throws InvalidSyntaxException {
-		ServiceReference< ? >[] refs = getContext().getServiceReferences(
+		ServiceReference< S >[] refs = (ServiceReference<S>[]) getContext().getServiceReferences(
 				clazz.getName(), filter);
 
 		if (refs == null) {
 			fail("Can't get service reference for " + clazz.getName() + filter);
 		}
 
-		ServiceReference< ? > chosenRef = pickServiceReference(refs);
+		ServiceReference< S > chosenRef = pickServiceReference(refs);
 
-		Object service = getContext().getService(chosenRef);
+		S service = getContext().getService(chosenRef);
 
 		if (service == null) {
 			fail("Can't get service for " + clazz.getName() + filter);
@@ -442,12 +443,12 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	 * BundleContext.getServiceReference() (highest ranking, lowest service ID
 	 * if the ranking is a tie)
 	 */
-	private static ServiceReference< ? > pickServiceReference(
-			ServiceReference< ? >[] refs) {
-		ServiceReference< ? > highest = refs[0];
+	private static <S> ServiceReference< S > pickServiceReference(
+			ServiceReference<S >[] refs) {
+		ServiceReference< S > highest = refs[0];
 
 		for (int i = 1; i < refs.length; i++) {
-			ServiceReference< ? > challenger = refs[i];
+			ServiceReference<S > challenger = refs[i];
 
 			if (ranking(highest) < ranking(challenger)) {
 				highest = challenger;
