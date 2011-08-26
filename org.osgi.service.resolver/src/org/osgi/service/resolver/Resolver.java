@@ -20,70 +20,90 @@
 
 package org.osgi.service.resolver;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.osgi.framework.resource.Requirement;
-import org.osgi.framework.resource.Resource;
-import org.osgi.framework.resource.Wire;
+import org.osgi.framework.wiring.Resource;
+import org.osgi.framework.wiring.Wire;
 
 /**
  * A resolver is a service interface that can be used to find resolutions for
- * specified {@link Requirement requirements} based on a supplied
- * {@link Environment}.
+ * specified {@link Resource resources} based on a supplied {@link Environment}.
  * 
  * @ThreadSafe
  * @version $Id$
  */
 public interface Resolver {
   /**
-   * Attempt to resolve the requirements based on the specified environment and
-   * return any new revisions or wires to the caller.
+   * Attempt to resolve the resources based on the specified environment and
+   * return any new resources and wires to the caller.
    * 
+   * <p>
+   * The resolver considers two groups of resources:
+   * <ul>
+   * <li>Mandatory - any resource in the mandatory group must be resolved, a
+   * failure to satisfy any mandatory requirement for these resources will
+   * result in a {@link ResolutionException}</li>
+   * <li>Optional - any resource in the optional group may be resolved, a
+   * failure to satisfy a mandatory requirement for a resource in this group
+   * will not fail the overall resolution but no resources or wires will be
+   * returned for this resource.</li>
+   * </ul>
+   * 
+   * <h3>Delta</h3>
    * <p>
    * The resolve method returns the delta between the start state defined by
    * {@link Environment#getWiring()} and the end resolved state, i.e. only new
    * resources and wires are included. To get the complete resolution the caller
    * can merge the start state and the delta using something like the following:
    * 
-   * <pre>Map&lt;Resource, List&lt;Wire&gt;&gt; delta = resolver.resolve(env, requirement);
-Map&lt;Resource, List&lt;Wire&gt;&gt; wiring = env.getWiring();
-      
-for(Map.Entry&lt;Resource, List&lt;Wire&gt;&gt; e : delta.entrySet()) {
-  Resource res = e.getKey();
-  List&lt;Wire&gt; newWires = e.getValue();
-  
-  List&lt;Wire&gt; currentWires = wiring.get(res);
-  if (currentWires != null) {
-    newWires.addAll(currentWires);
-  }
-  
-  wiring.put(res, newWires);
-}</pre>
+   * <pre>
+   * Map&lt;Resource, List&lt;Wire&gt;&gt; delta = resolver.resolve(env, resources, null);
+   * Map&lt;Resource, List&lt;Wire&gt;&gt; wiring = env.getWiring();
+   * 
+   * for (Map.Entry&lt;Resource, List&lt;Wire&gt;&gt; e : delta.entrySet()) {
+   *   Resource res = e.getKey();
+   *   List&lt;Wire&gt; newWires = e.getValue();
+   * 
+   *   List&lt;Wire&gt; currentWires = wiring.get(res);
+   *   if (currentWires != null) {
+   *     newWires.addAll(currentWires);
+   *   }
+   * 
+   *   wiring.put(res, newWires);
+   * }
+   * </pre>
    * 
    * <h3>Consistency</h3>
    * <p>
-   * For a given resolve call an environment should return a consistent set of
-   * capabilities and wires. The simplest mechanism of achieving this is by
-   * creating an immutable snapshot of the environment state and passing this to
-   * the resolve method.
+   * For a given resolve operation the parameters to the resolve method should be
+   * considered immutable. This means that resources should have constant
+   * capabilities and requirements and an environment should return a consistent
+   * set of capabilities, wires and effective requirements.
    * 
    * <p>
-   * If {@link Requirement#getResource} returns null then the
-   * requirement can be wired to any matching capability regardless of the
-   * "uses" constraint directive from the capability. This is because there is
-   * no Resource available to do a class space consistency check against.
+   * The behavior of the resolver is not defined if resources or the environment
+   * supply inconsistent information.
    * 
    * @param environment
    *          the environment into which to resolve the requirements
+   * @param mandatoryResources
+   *          The resources that must be resolved during this resolution step or
+   *          null if no resources must be resolved
+   * @param optionalResources
+   *          Any resources which the resolver should attempt to resolve but
+   *          that will not cause an exception if resolution is impossible or
+   *          null if no resources are optional.
    * 
-   * @param requirements The requirements that the resolver must satisfy
    * @return the new resources and wires required to satisfy the requirements
    * 
-   * @throws ResolutionException if the resolution cannot be satisified for any reason
-   * @throws NullPointerException if environment or any of the requirements are null
+   * @throws ResolutionException
+   *           if the resolution cannot be satisfied for any reason
+   * @throws NullPointerException
+   *           if environment is null
    */
   Map<Resource, List<Wire>> resolve(Environment environment,
-      Requirement... requirements) throws ResolutionException,
-      NullPointerException;  
+      Collection<Resource> mandatoryResources,
+      Collection<Resource> optionalResources) throws ResolutionException;
 }
