@@ -16,10 +16,10 @@ import org.osgi.dmt.ddf.*;
  * Searching is done by treating an interior node as a map where its leaf nodes
  * are attributes for a filter expression. That is, an interior node matches
  * when a filter matches on its children. The matching nodes' URIs are gathered
- * under a {@link #ResultUriList()} node and as a virtual sub-tree under the
- * {@link #Result()} node.
+ * under a {@link #ResultUriList() ResultUriList} node and as a virtual sub-tree under the
+ * {@link #Result() Result} node.
  * <p>
- * The Filter node can specify the {@link #Target()} node. The {@link #Target()}
+ * The Filter node can specify the {@link #Target() Target} node. The {@link #Target() Target}
  * is an absolute URI ending in a slash, potentially with wild cards. Only nodes
  * that match the target node are included in the result.
  * <p>
@@ -38,10 +38,10 @@ import org.osgi.dmt.ddf.*;
  * used at the last segment of a URI</li>
  * </ul>
  * <p>
- * The {@link #Target()} node selects a set of nodes {@code N} that can be
- * viewed as a list of URIs or as a virtual sub-tree. The {@link #Result()} node
+ * The {@link #Target() Target} node selects a set of nodes {@code N} that can be
+ * viewed as a list of URIs or as a virtual sub-tree. The {@link #Result() Target} node
  * is the virtual sub-tree (beginning at the session base) and the
- * {@link #ResultUriList()} is a LIST of session relative URIs. The actual
+ * {@link #ResultUriList() ResultUriList} is a LIST of session relative URIs. The actual
  * selection of the nodes must be postponed until either of these nodes (or one
  * of their sub-nodes) is accessed for the first time. Either nodes represent a
  * read-only snapshot that is valid until the end of the session.
@@ -49,7 +49,7 @@ import org.osgi.dmt.ddf.*;
  * It is possible to further refine the selection by specifying the Filter node.
  * The Filter node is an LDAP filter expression or a simple wild card ('*')
  * which selects all the nodes. As the wild card is the default, all nodes
- * selected by the {@link #Target()} are selected by default.
+ * selected by the {@link #Target() Target} are selected by default.
  * <p>
  * The Filter must be applied to each of the nodes selected by target in the set
  * {@code N}. By definition, these nodes are <em>interior nodes only</em>. LDAP
@@ -77,12 +77,12 @@ import org.osgi.dmt.ddf.*;
  * The set {@code N} must therefore consists only of nodes where the Filter
  * matches.
  * <p>
- * It is allowed to change the {@link #Target()} or the Filter node after the
- * results are read. In that case, the {@link #Result()} and
- * {@link #ResultUriList()} must be cleared instantaneously and the search
+ * It is allowed to change the {@link #Target() Target} or the Filter node after the
+ * results are read. In that case, the {@link #Result() Result} and
+ * {@link #ResultUriList() ResultUriList} must be cleared instantaneously and the search
  * redone once either result node is read.
  * <p>
- * The initial value of {@link #Target()} is the empty string, which indicates
+ * The initial value of {@link #Target() Target} is the empty string, which indicates
  * no target.
  */
 
@@ -95,7 +95,7 @@ public interface Filter {
 	 * for any number of consecutive node names. The default value of this node
 	 * is the empty string, which indicates that no nodes must be selected.
 	 * Changing this value must clear any existing results. If the
-	 * {@link #Result()} or {@link #ResultUriList()} is read to get {@code N}
+	 * {@link #Result()} or {@link #ResultUriList() ResultUriList} is read to get {@code N}
 	 * then a new search must be executed.
 	 * <p>
 	 * A URI must always end in '/' to indicate that the target can only select
@@ -108,7 +108,7 @@ public interface Filter {
 
 	/**
 	 * An optional filter expression that filters nodes in the set {@code N}
-	 * selected by {@link #Target()}. The filter expression is an LDAP filter or
+	 * selected by {@link #Target() Target}. The filter expression is an LDAP filter or
 	 * an asterisk ('*'). An asterisk is the default value and matches any node
 	 * in set {@code N}. If an LDAP expression is set in the Filter node then
 	 * the set {@code N} must only contain nodes that match the given filter.
@@ -127,7 +127,7 @@ public interface Filter {
 
 	/**
 	 * Limits the number of results to the given number. If this node is not set
-	 * there is no limit.
+	 * there is no limit. The default value is not set, thus no limit.
 	 * 
 	 * @return Limit
 	 */
@@ -137,13 +137,13 @@ public interface Filter {
 
 	/**
 	 * The Result tree is a virtual read-only tree of all nodes that were
-	 * selected by the {@link #Target()} and matched the Filter, that is, all
-	 * nodes in set {@code N}. The {@link #Target()} contains a relative URI
+	 * selected by the {@link #Target() Target} and matched the Filter, that is, all
+	 * nodes in set {@code N}. The {@link #Target() Target} contains a relative URI
 	 * (with optional wildcards) from the parent of the Filters node. The
-	 * {@link #Result()} node acts as the parent of this same relative path for
+	 * {@link #Result() Result} node acts as the parent of this same relative path for
 	 * each node in {@code N}.
 	 * <p>
-	 * The {@link #Result()} node is a snapshot taken the first time it is
+	 * The {@link #Result() Result} node is a snapshot taken the first time it is
 	 * accessed after a change in the {@code Filter} and/or the {@code Target}
 	 * nodes.
 	 * 
@@ -154,10 +154,10 @@ public interface Filter {
 
 	/**
 	 * A list of URIs of nodes in the Device Management Tree from the node
-	 * selected by the {@link #Target()} that match the Filter node. All URIs
+	 * selected by the {@link #Target() Target} that match the Filter node. All URIs
 	 * are relative to current session.
 	 * 
-	 * The {@link #Result()} node is a snapshot taken the first time it is
+	 * The {@link #Result() Result} node is a snapshot taken the first time it is
 	 * accessed after a change in the {@code Filter} and/or the {@code Target}
 	 * nodes.
 	 * 

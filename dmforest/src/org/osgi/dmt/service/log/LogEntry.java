@@ -29,6 +29,7 @@ public interface LogEntry {
 	 * <li>LOG_INFO 3</li>
 	 * <li>LOG_DEBUG 4</li>
 	 * </ul>
+	 * <p>
 	 * Other values are possible because the Log Service allows custom levels.
 	 * 
 	 * @return The log entry's severity.

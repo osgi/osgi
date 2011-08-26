@@ -1,12 +1,12 @@
 package org.osgi.dmt.residential;
 
 import org.osgi.dmt.ddf.*;
-import org.osgi.dmt.residential.Filter;
 import org.osgi.dmt.service.log.*;
+import static org.osgi.dmt.ddf.Scope.SCOPE.*;
 
 /**
  * The $ describes the root node for OSGi Residential Management. The path to this node is
- * defined in the system property: {@code org.osgi.residential.root}.
+ * defined in the system property: {@code org.osgi.dmt.residential}.
  */
 public interface $ {
 	/**
@@ -24,6 +24,7 @@ public interface $ {
 	 * 
 	 * @return The Filter Node
 	 */
+	@Scope(P)
 	Opt<MutableMAP<String, Filter>> Filter();
 
 	/**
@@ -31,6 +32,7 @@ public interface $ {
 	 * 
 	 * @return Framework node
 	 */
+	@Scope(P)
 	Framework Framework();
 
 	/**
@@ -41,6 +43,7 @@ public interface $ {
 	 * @return The value for the optional Log node
 	 */
 
+	@Scope(P)
 	Opt<Log> Log();
 
 }

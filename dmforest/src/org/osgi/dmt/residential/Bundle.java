@@ -16,25 +16,24 @@ public interface Bundle {
 	/**
 	 * The type returned for a fragment bundle.
 	 */
-	String FRAGMENT = "FRAGMENT";
+	String	FRAGMENT	= "FRAGMENT";
 
 	/**
 	 * The URL to download the archive from for this bundle.
 	 * 
-	 * By default this is the last URL used to download the JAR if it is known,
-	 * otherwise it is the empty string. In an atomic session this URL can be
+	 * By default this is the empty string. In an atomic session this URL can be
 	 * replaced to a new URL, which will trigger an update of this bundle during
 	 * commit. If this value is set it must point to a valid JAR from which a
-	 * URL can be downloaded, unless it is the system bundle. If the value is
-	 * not set it must be an empty string.
+	 * URL can be downloaded, unless it is the system bundle. If it is the empty
+	 * string no action must be taken except when it is the system bundle.
 	 * 
 	 * <p>
-	 * If the URL of Bundle 0 (The system bundle) is replaced to any value then
-	 * the framework will restart.
+	 * If the URL of Bundle 0 (The system bundle) is replaced to any value,
+	 * including the empty string, then the framework will restart.
 	 * <p>
 	 * If both a the URL node has been set the bundle must be updated before any
-	 * of the other aspects are handled like {@link #RequestedState()} and
-	 * {@link #StartLevel()}.
+	 * of the other aspects are handled like {@link #RequestedState() RequestedState} and
+	 * {@link #StartLevel() StartLevel}.
 	 * 
 	 * @return The last used URL or empty string if not known
 	 */
@@ -45,7 +44,7 @@ public interface Bundle {
 	 * Indicates if this Bundle must be started when the Framework is started.
 	 * <p>
 	 * If the AutoStart node is {@code true} then this bundle is started when
-	 * the framework is started and its {@link #StartLevel()} is met.
+	 * the framework is started and its {@link #StartLevel() StartLevel} is met.
 	 * <p>
 	 * If the {@code AutoStart} node is set to {@code true} and the bundle is
 	 * not started then it will automatically be started if the start level
@@ -66,7 +65,7 @@ public interface Bundle {
 	 * The BundleException type associated with a failure on this bundle, -1 if
 	 * no fault is associated with this bundle. If there was no Bundle Exception
 	 * associated with the failure the code must be 0 (UNSPECIFIED). The
-	 * {@link #FaultMessage()} provides a human readable message.
+	 * {@link #FaultMessage() FaultMessage} provides a human readable message.
 	 * 
 	 * @return The FaultType value
 	 */
@@ -158,28 +157,28 @@ public interface Bundle {
 	/**
 	 * The Bundle {@code INSTALLED} state.
 	 */
-	String INSTALLED = "INSTALLED";
+	String	INSTALLED	= "INSTALLED";
 	/**
 	 * The Bundle {@code RESOLVED} state.
 	 */
-	String RESOLVED = "RESOLVED";
+	String	RESOLVED	= "RESOLVED";
 	/**
 	 * The Bundle {@code STARTING} state.
 	 */
-	String STARTING = "STARTING";
+	String	STARTING	= "STARTING";
 	/**
 	 * The Bundle {@code ACTIVE} state.
 	 */
-	String ACTIVE = "ACTIVE";
+	String	ACTIVE		= "ACTIVE";
 	/**
 	 * The Bundle {@code STOPPING} state.
 	 */
-	String STOPPING = "STOPPING";
+	String	STOPPING	= "STOPPING";
 
 	/**
 	 * The Bundle {@code UNINSTALLED} state.
 	 */
-	String UNINSTALLED = "UNINSTALLED";
+	String	UNINSTALLED	= "UNINSTALLED";
 
 	/**
 	 * Return the state of the current Bundle. The values can be:
@@ -191,6 +190,7 @@ public interface Bundle {
 	 * <li>{@link #ACTIVE}</li>
 	 * <li>{@link #STOPPING}</li>
 	 * </ul>
+	 * <p>
 	 * If there is no installed Bundle yet, then this node is not present.
 	 * 
 	 * @return The current State
@@ -207,21 +207,21 @@ public interface Bundle {
 	 * <li>{@link #ACTIVE} - Ensure the bundle is started.</li>
 	 * <li>{@link #UNINSTALLED} - Uninstall the bundle.</li>
 	 * </ul>
+	 * <p>
 	 * The Requested State is a request. The management agent must attempt to
 	 * achieve the desired state but there is a no guarantee that this state is
 	 * achievable. For example,a Framework can resolve a bundle at any time or
 	 * the active start level can prevent a bundle from running. Any errors must
-	 * be reported on {@link #FaultType()} and {@link #FaultMessage()}.
+	 * be reported on {@link #FaultType() FaultType} and {@link #FaultMessage() FaultMessage}.
 	 * <p>
 	 * 
-	 * If the {@link #AutoStart()} node is @{code true} then the bundle must be
+	 * If the {@link #AutoStart() AutoStart} node is {@code true} then the bundle must be
 	 * persistently started, otherwise it must be transiently started. If the
-	 * {@link #StartLevel()} is not met then the commit must fail if
-	 * {@link #AutoStart()} is {@code false} as a Bundle cannot be transiently
+	 * {@link #StartLevel() StartLevel} is not met then the commit must fail if
+	 * {@link #AutoStart() AutoStart} is {@code false} as a Bundle cannot be transiently
 	 * started when the start level is not met.
-	 * 
 	 * <p>
-	 * If both a the {@link #URL()} node has been set as well as the
+	 * If both a the {@link #URL() URL} node has been set as well as the
 	 * RequestedState node then this must result in an update after which the
 	 * bundle should go to the RequestedState.
 	 * <p>
@@ -238,7 +238,7 @@ public interface Bundle {
 	 * change the Bundle State as a bundle can become eligible for starting or
 	 * stopping.
 	 * <p>
-	 * If the {@link #URL()} node is set then a bundle must be updated before
+	 * If the {@link #URL() URL} node is set then a bundle must be updated before
 	 * the start level is set,
 	 * 
 	 * @return The Bundle Start Level node value
@@ -268,6 +268,7 @@ public interface Bundle {
 	 * <li>{@code osgi.wiring.package}</li>
 	 * <li>{@code osgi.wiring.host}</li>
 	 * <ul>
+	 * <p>
 	 * As the Core specification allows custom name spaces this list can be more
 	 * extensive.
 	 * <p>
