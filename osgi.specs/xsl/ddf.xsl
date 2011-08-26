@@ -154,13 +154,13 @@
 		<xsl:for-each select="ddf">
 			<tr>
 				<td>
-				    <xsl:copy-of select="$anchor"/>
 					<p>
 						<code>
 							<xsl:value-of select="@indent" />
 							<xsl:value-of select="@name" />
 						</code>
 					</p>
+				    <xsl:copy-of select="$anchor"/>
 				</td>
 				<td>
 					<code>
