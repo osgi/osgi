@@ -9,7 +9,7 @@ import org.osgi.service.tr069todmt.*;
 import aQute.bnd.annotation.component.*;
 
 @Component(servicefactory=true)
-public class TR069FactoryImpl implements TR069Factory {
+public class TR069FactoryImpl implements TR069ConnectorFactory {
 
 	long id;
 	File file;
@@ -19,7 +19,6 @@ public class TR069FactoryImpl implements TR069Factory {
 		this.file=context.getDataFile("ids");
 	}
 	
-	@Override
 	public TR069Connector create(DmtSession session) {
 		return new TR069ConnectorImpl(this,session);
 	}
