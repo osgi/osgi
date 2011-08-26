@@ -21,19 +21,20 @@ import org.osgi.service.dmt.*;
 /**
  * A service that can create TR069 Connector
  */
-public interface TR069Factory {
+public interface TR069ConnectorFactory {
 
 	/**
 	 * Create a TR069 connector based on the given session .
 	 * <p>
 	 * The session must be an atomic session when objects are added and/or
-	 * parameters are going to be set. Due to the lazy creation nature
-	 * of the TR069 Connector it is possible that a node must be created
-	 * in a read-only method after a node has been added.
+	 * parameters are going to be set, otherwise it can be a read only or
+	 * exclusive session. Due to the lazy creation nature of the TR069 Connector
+	 * it is possible that a node must be created in a read method after a
+	 * node has been added, it is therefore necessary to always provide an atomic
+	 * session when an ACS session requires modifying parameters.
 	 * 
-	 * @param session
-	 *            The session to use for the adaption. This session must not be
-	 *            closed before the TR069 connector is closed.
+	 * @param session The session to use for the adaption. This session must not
+	 *        be closed before the TR069 Connector is closed.
 	 * @param options
 	 * @return A new TR069 Connector bound to the given session
 	 */
