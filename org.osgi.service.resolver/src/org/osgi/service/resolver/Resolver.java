@@ -24,8 +24,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.osgi.framework.wiring.Resource;
-import org.osgi.framework.wiring.Wire;
+import org.osgi.framework.resource.Resource;
+import org.osgi.framework.resource.Wire;
 
 /**
  * A resolver is a service interface that can be used to find resolutions for
