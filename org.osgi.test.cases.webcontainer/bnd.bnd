@@ -42,12 +42,12 @@ Export-Package =\
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;			version=latest, \
     org.apache.geronimo.specs.geronimo-annotation_1.0_spec; version=latest, \
 	osgi.core;									version=4.2, \
-	osgi.enterprise; 							version=4.2, \
+	osgi.cmpn; 							version=4.2, \
 	org.osgi.test.support;						version=project, \
 	${junit}
 	
 -runbundles						= \
-	osgi.enterprise; version=latest, \
+	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; 			version=latest, \
 	org.osgi.impl.service.event; 			version=latest, \
     org.osgi.impl.bundle.webcontainer; version=latest

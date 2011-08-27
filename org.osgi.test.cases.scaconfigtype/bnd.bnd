@@ -32,12 +32,12 @@ Include-Resource					= \
 	${junit}
 
 -runbundles							= \
-	osgi.enterprise; version=latest
+	osgi.cmpn; version=latest
 	
 -runproperties = ${runproperties}, \
         ${p}.required.ports="9000,50000", \
         ${p}.system.packages.extra="${junit.package}", \
-        ${p}.bundles="${uniq;${repo;org.osgi.impl.service.event},${repo;org.osgi.impl.bundle.sca},${enterprise.companion.jar},${repo;org.osgi.impl.service.log}}", \
+        ${p}.bundles="${uniq;${repo;org.osgi.impl.service.event},${repo;org.osgi.impl.bundle.sca},${cmpn.companion.jar},${repo;org.osgi.impl.service.log}}", \
         ${p}.serverconfig="service.exported.configs,org.osgi.sca.domain.registry", \
         service.exported.configs=org.osgi.sca, \
         org.osgi.sca.domain.registry="tribes://224.0.0.100:50000?receiverPort=9001&receiverAutoBind=2&receiverAddress=localhost&bind=localhost" 
