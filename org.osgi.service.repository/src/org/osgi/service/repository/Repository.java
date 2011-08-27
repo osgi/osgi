@@ -53,7 +53,7 @@ public interface Repository {
    *  
    * @throws NullPointerException if the requirement is null
    */
-  Collection<Capability> findProviders(Requirement requirement) throws NullPointerException;
+  Collection<Capability> findProviders(Requirement requirement);
 
   /**
    * Lookup the URL where the supplied resource may be accessed, if any.
@@ -69,5 +69,5 @@ public interface Repository {
    *         
    * @throws NullPointerException if the resource is null 
    */
-  URL getContent(Resource resource) throws NullPointerException;
+  URL getContent(Resource resource);
 }

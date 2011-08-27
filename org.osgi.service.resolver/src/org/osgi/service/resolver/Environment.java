@@ -76,7 +76,7 @@ public interface Environment {
    *         
    * @throws NullPointerException if the requirement is null 
    */
-  Collection<Capability> findProviders(Requirement requirement) throws NullPointerException;
+  Collection<Capability> findProviders(Requirement requirement);
 
   /**
    * Test if a given requirement should be wired in a given resolve
@@ -94,7 +94,7 @@ public interface Environment {
    * 
    * @throws NullPointerException if requirement is null
    */
-  boolean isEffective(Requirement requirement) throws NullPointerException;
+  boolean isEffective(Requirement requirement);
 
   /**
    * An immutable map of wires between revisions. Multiple calls to this method
