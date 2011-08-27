@@ -43,7 +43,6 @@ Test-Cases							= ${testcases}
 	${junit}
 	
 -runbundles = \
-	osgi.enterprise; version=latest		, \
 	org.osgi.impl.service.jndi; version=project
 
 -runproperties = ${runproperties}, \

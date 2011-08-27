@@ -24,7 +24,6 @@ Import-Package = \
 	${junit}
 
 -runbundles						= \
-	osgi.enterprise; version=latest, \
 	org.osgi.impl.bundle.transaction; version=project
 	
 -runproperties					= ${runproperties}, \

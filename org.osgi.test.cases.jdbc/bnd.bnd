@@ -13,7 +13,6 @@ Private-Package						=  \
 	${junit}
 
 -runbundles						= \
-	osgi.enterprise; version=latest		, \
 	org.osgi.impl.service.jdbc; version=project, \
 	org.osgi.impl.bundle.derby; version=latest
 
