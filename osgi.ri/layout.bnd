@@ -12,14 +12,18 @@ jar.core.impls = \
 build.cmpn.impls = \
 	org.osgi.impl.bundle.autoconf, \
 	org.osgi.impl.bundle.jaxp, \
+	org.osgi.impl.bundle.jmx, \
   	org.osgi.impl.bundle.midletcontainer, \
 	org.osgi.impl.bundle.rsh, \
+	org.osgi.impl.bundle.transaction, \
 	org.osgi.impl.service.application, \
 	org.osgi.impl.service.deploymentadmin , \
 	org.osgi.impl.service.device.manager , \
 	org.osgi.impl.service.dmt , \
 	org.osgi.impl.service.http , \
 	org.osgi.impl.service.io , \
+	org.osgi.impl.service.jdbc, \
+	org.osgi.impl.service.jndi, \
 	org.osgi.impl.service.log , \
 	org.osgi.impl.service.monitor , \
 	org.osgi.impl.service.policy , \
@@ -30,14 +34,21 @@ build.cmpn.impls = \
 
 jar.cmpn.impls = \
 	${cmpn.companion.jar}, \
+	${repo;org.osgi.impl.bundle.derby}, \
+	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery}, \
+	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}, \
+	${repo;org.osgi.impl.bundle.sca}, \
 	${repo;org.osgi.impl.bundle.servlet;2.1}, \
+	${repo;org.osgi.impl.bundle.webcontainer}, \
 	${repo;org.osgi.impl.service.blueprint}, \
 	${repo;org.osgi.impl.service.cm}, \
 	${repo;org.osgi.impl.service.component}, \
 	${repo;org.osgi.impl.service.coordinator}, \
 	${repo;org.osgi.impl.service.event}, \
+	${repo;org.osgi.impl.service.jpa}, \
 	${repo;org.osgi.impl.service.metatype}, \
 	${repo;org.osgi.impl.service.provisioning}, \
+	${repo;org.osgi.impl.service.remoteserviceadmin}, \
 	${repo;org.osgi.impl.service.wireadmin}
 
 build.enterprise.impls = \
