@@ -15,21 +15,12 @@
  */
 package org.osgi.service.subsystem;
 
-/*
- * TODO
- * There are disparities within the ODT between Field Summary and Field Detail.
- * This interface is currently combines Field Summary and Field Detail.
- */
+import org.osgi.framework.Constants;
+import org.osgi.framework.Version;
+import org.osgi.framework.resource.ResourceConstants;
 
 /**
- * Defines the constants used by subsystems. These fall into four categories: 
- * <ol>
- * 		<li>Headers for the applications subsystem type.</li>
- * 		<li>Headers for the composite bundle subsystem type. Where appropriate, 
- *          these header values are identical to those for a bundle.</li> 
- * 		<li>Headers for the library subsystem type.</li>
- * 		<li>Attributes used in the above headers</li>
- * </ol>
+ * Defines the constants used by subsystems.
  */
 public class SubsystemConstants {
 	private SubsystemConstants() {
@@ -37,245 +28,56 @@ public class SubsystemConstants {
 	}
 	
 	/**
-	 * The list of application contents identified by a symbolic name and 
-	 * version.
+	 * Manifest header identifying the resources to be deployed.
 	 */
-	public static final String APPLICATION_CONTENT = "";
+	public static final String DEPLOYED_CONTENT = "Deployed-Content";
+
 	/**
-	 * Human readable description.
+	 * Manifest header attribute identifying the deployed version.
 	 */
-	public static final String APPLICATION_DESCRIPTION = "";
+	public static final String DEPLOYED_VERSION_ATTRIBUTE = "deployed-version";
+
 	/**
-	 * Name of the resource to use for localized headers.
+	 * Key for the event property that holds the subsystem id.
 	 */
-	public static final String APPLICATION_LOCALIZATION = "";
-	/**
-	 * The subsystem manifest version header must be present and equals to 1.0 
-	 * for this version of applications. 
-	 */
-	public static final String APPLICATION_MANIFESTVERSION = "";
-	/**
-	 * Human readable application name.
-	 */
-	public static final String APPLICATION_NAME = "";
-	/**
-	 * Descriptions of resources contained within the application archive which 
-	 * cannot be determine reflectively. 
-	 */
-	public static final String APPLICATION_RESOURCES = "";
-	/**
-	 * Symbolic name for the application. Must be present.
-	 */
-	public static final String APPLICATION_SYMBOLICNAME = "";
-	/**
-	 * Location to use when updating the application.
-	 */
-	public static final String APPLICATION_UPDATELOCATION = "";
-	/**
-	 * Version of the application. If not present, the default value is 0.0.0.
-	 */
-	public static final String APPLICATION_VERSION = "";
-	/**
-	 * The human readable composite bundle description (re-using the bundle 
-	 * header). 
-	 */
-	public static final String BUNDLE_DESCRIPTION = "";
-	/**
-	 * The packages to be exported by the composite bundle for use outside the 
-	 * composite bundle (re-using the bundle header). The packages declarations 
-	 * must match a package provide by a bundle listed in the composite bundle 
-	 * content. 
-	 */
-	public static final String BUNDLE_EXPORTPACKAGE = "";
-	/**
-	 * The packages to be imported into the composite bundle for use by the 
-	 * composite bundle contents (re-using the bundle header). 
-	 */
-	public static final String BUNDLE_IMPORTPACKAGE = "";
-	/**
-	 * Name of the resource to use for localized headers (re-using the bundle 
-	 * header). 
-	 */
-	public static final String BUNDLE_LOCALIZATION = "";
-	/**
-	 * The human readable composite bundle name (re-using the bundle header). 
-	 */
-	public static final String BUNDLE_NAME = "";
-	/**
-	 * A list of Bundles the composite bundle requires (re-using the bundle 
-	 * header). These bundles are made available to satisfy Require-Bundle 
-	 * statements for the composite bundle content bundles. 
-	 */
-	public static final String BUNDLE_REQUIREBUNDLE = "";
-	/**
-	 * Symbolic name for the composite bundle (re-using the bundle header). 
-	 * Must be present. 
-	 */
-	public static final String BUNDLE_SYMBOLICNAME = "";
-	/**
-	 * Location to use when updating the composite bundle (re-using the bundle 
-	 * header). 
-	 */
-	public static final String BUNDLE_UPDATELOCATION = "";
-	/**
-	 * Version of the composite bundle (re-using the bundle header). If not 
-	 * present, the default value is 0.0.0. 
-	 */
-	public static final String BUNDLE_VERSION = "";
-	/**
-	 * The list of composite bundle contents identified by a symbolic name and 
-	 * version.
-	 */
-	public static final String COMPOSITEBUNDLE_CONTENT = "";
-	/**
-	 * A list of service filters used to identify the services provided by 
-	 * bundles inside the composite bundle that can be exported outside the 
-	 * composite bundle. 
-	 */
-	public static final String COMPOSITEBUNDLE_EXPORTSERVICE = "";
-	/**
-	 * A list of service filters used to identify services that this composite 
-	 * bundle requires. 
-	 */
-	public static final String COMPOSITEBUNDLE_IMPORTSERVICE = "";
-	/**
-	 * The composite bundle manifest version header must be present and equal 
-	 * to 1.0 for this version of composite bundles. 
-	 */
-	public static final String COMPOSITEBUNDLE_MANIFESTVERSION = "";
-	/**
-	 * Descriptions of resources contained within the composite bundle archive 
-	 * which cannot be determine reflectively. 
-	 */
-	public static final String COMPOSITEBUNDLE_RESOURCES = "";
-	/**
-	 * 
-	 */
-	public static final String FEATURE_CONTENT = "Feature-Content";
-	/**
-	 * 
-	 */
-	public static final String FEATURE_DESCRIPTION = "Feature-Description";
-	/**
-	 * 
-	 */
-	public static final String FEATURE_MANIFESTVERSION = "Feature-ManifestVersion";
-	/**
-	 * 
-	 */
-	public static final String FEATURE_NAME = "Feature-Name";
-	/**
-	 * 
-	 */
-	public static final String FEATURE_SYMBOLICNAME = "Feature-SymbolicName";
-	/**
-	 * 
-	 */
-	public static final String FEATURE_VERSION = "Feature-Version";
-	/**
-	 * The list of library contents identified by a symbolic name and version.
-	 */
-	public static final String LIBRARY_CONTENT = "";
-	/**
-	 * Human readable library description.
-	 */
-	public static final String LIBRARY_DESCRIPTION = "";
-	/**
-	 * Name of the resource to use for localized headers.
-	 */
-	public static final String LIBRARY_LOCALIZATION = "";
-	/**
-	 * The subsystem manifest version header must be present and equals to 1.0 
-	 * for this version of applications.
-	 */
-	public static final String LIBRARY_MANIFESTVERSION = "";
-	/**
-	 * Human readable library name.
-	 */
-	public static final String LIBRARY_NAME = "";
-	/**
-	 * Descriptions of resources contained within the library archive which 
-	 * cannot be determine reflectively. 
-	 */
-	public static final String LIBRARY_RESOURCES = "";
-	/**
-	 * Symbolic name for the application. Must be present.
-	 */
-	public static final String LIBRARY_SYMBOLICNAME = "";
-	/**
-	 * Location to use when updating the library.
-	 */
-	public static final String LIBRARY_UPDATELOCATION = "";
-	/**
-	 * Version of the application. If not present, the default value is 0.0.0.
-	 */
-	public static final String LIBRARY_VERSION = "";
-	/**
-	 * Service property to be set on ResourceProcessor services to indicate 
-	 * which namespaces of resource it can process.
-	 */
-	public static final String OSGI_RESOURCE_NAMESPACE = "";
-	/**
-	 * Attribute to indicate the location of a resource.
-	 */
-	public static final String RESOURCE_LOCATION_ATTRIBUTE = "";
-	/**
-	 * Attribute to indicate the namespace of a resource.
-	 */
-	public static final String RESOURCE_NAMESPACE_ATTRIBUTE = "osgi.resource.namespace";
-	/**
-	 * Identify resources that are bundles (this is the default type).
-	 */
-	public static final String RESOURCE_NAMESPACE_BUNDLE = "";
-	/**
-	 * Identify resources that are subsystems.
-	 */
-	public static final String RESOURCE_NAMESPACE_SUBSYSTEM = "";
-	/**
-	 * Attribute to indicate a bundle needs to be started, defaults to true.
-	 */
-	public static final String RESOURCE_START_ATTRIBUTE = "";
-	/**
-	 * Attribute to indicate the start level that must be associated to a 
-	 * constituent bundle or subsystem.
-	 */
-	public static final String RESOURCE_START_LEVEL_ATTRIBUTE = "";
-	/**
-	 * Attribute to indicate the type on a resource.
-	 */
-	public static final String RESOURCE_TYPE_ATTRIBUTE = "";
-	/**
-	 * Identify resources that are bundles (this is the default type).
-	 */
-	public static final String RESOURCE_TYPE_BUNDLE = "";
-	/**
-	 * Identify resources that are subsystems.
-	 */
-	public static final String RESOURCE_TYPE_SUBSYSTEM = "";
-	/**
-	 * Attribute to indicate a bundle needs to be forced updated, even if the 
-	 * version is the same, defaults to false
-	 */
-	public static final String RESOURCE_UPDATE_ATTRIBUTE = "";
-	/**
-	 * Service property to be set on ResourceProcessor services to indicate 
-	 * which types of resource it can process. 
-	 */
-	public static final String SERVICE_RESOURCE_TYPE = "";
-	/**
-	 * Directive on the manifest header of a composite indicating the composite 
-	 * is managed as a subsystem. 
-	 */
-	public static final String SUBSYSTEM_DIRECTIVE = "";
+	public static final String EVENT_SUBSYSTEM_ID = "subsystem.id";
 	
-	// Event related constants.
+	/**
+	 * Key for the event property that holds the subsystem location.
+	 */
+	public static final String EVENT_SUBSYSTEM_LOCATION = "subsystem.location";
+	
+	/**
+	 * Key for the event property that holds the subsystem state.
+	 */
+	public static final String EVENT_SUBYSTEM_STATE = "subsystem.state";
+	
+	/**
+	 * Key for the event property that holds the subsystem symbolic name.
+	 */
+	public static final String EVENT_SUBSYSTEM_SYMBOLICNAME = "subsystem.symbolicname";
+	
+	/**
+	 * Key for the event property that holds the subsystem version.
+	 */
+	public static final String EVENT_SUBSYSTEM_VERSION = "subsystem.version";
+	
+	/**
+	 * The topic for subsystem event admin events.
+	 */
+	public static final String EVENT_TOPIC = "org/osgi/service/Subsystem/";
+	
+	/**
+	 * The topic for subsystem internal event admin events.
+	 */
+	public static final String EVENT_TOPIC_INTERNALS = "org/osgi/service/SubsystemInternals/";
 
 	/**
 	 * The subsystem lifecycle event types that can be produced by a subsystem. 
 	 * See ? and Subsystem for details on the circumstances under which these 
 	 * events are fired.
 	 */
-	public static enum EventType {
+	public static enum EVENT_TYPE {
 		/**
 		 * Event type used to indicate a subsystem is installing.
 		 */
@@ -340,32 +142,149 @@ public class SubsystemConstants {
 		 */
 		FAILED
 	}
+	
 	/**
-	 * Key for the event property that holds the subsystem id.
+	 * Manifest header identifying packages offered for export.
+	 * 
+	 * @see Constants#EXPORT_PACKAGE
 	 */
-	public static final String SUBSYSTEM_ID = "subsystem.id";
+	public static final String EXPORT_PACKAGE = Constants.EXPORT_PACKAGE;
+	
 	/**
-	 * Key for the event property that holds the subsystem location.
+	 * Manifest header attribute identifying the resource type. The default 
+	 * value is {@link #IDENTITY_TYPE_BUNDLE}.
+	 * 
+	 * @see ResourceConstants#IDENTITY_TYPE_ATTRIBUTE
 	 */
-	public static final String SUBSYSTEM_LOCATION = "subsystem.location";
+	public static final String IDENTITY_TYPE_ATTRIBUTE = ResourceConstants.IDENTITY_TYPE_ATTRIBUTE;
+
 	/**
-	 * Key for the event property that holds the subsystem state.
+	 * Manifest header attribute value identifying a bundle resource type.
+	 * 
+	 * @see ResourceConstants#IDENTITY_TYPE_BUNDLE
 	 */
-	public static final String SUBYSTEM_STATE = "subsystem.state";
+	public static final String IDENTITY_TYPE_BUNDLE = ResourceConstants.IDENTITY_TYPE_BUNDLE;
+
 	/**
-	 * Key for the event property that holds the subsystem symbolic name.
+	 * Manifest header attribute value identifying a subsystem resource type.
 	 */
-	public static final String SUBSYSTEM_SYMBOLICNAME = "subsystem.symbolicname";
+	public static final String IDENTITY_TYPE_SUBSYSTEM = "osgi.subsystem";
+
 	/**
-	 * Key for the event property that holds the subsystem version.
+	 * Manifest header identifying packages required for import.
+	 * 
+	 * @see Constants#IMPORT_PACKAGE
 	 */
-	public static final String SUBSYSTEM_VERSION = "subsystem.version";
+	public static final String IMPORT_PACKAGE = Constants.IMPORT_PACKAGE;
+	
 	/**
-	 * The topic for subsystem event admin events.
+	 * Manifest header used to express a preference for particular resources to
+	 * satisfy implicit package dependencies.
 	 */
-	public static final String TOPIC = "org/osgi/service/Subsystem/";
+	public static final String PREFERRED_PROVIDER = "Preferred-Provider";
+
 	/**
-	 * The topic for subsystem internal event admin events.
+	 * Manifest header identifying the resources to be deployed to satisfy the 
+	 * transitive dependencies of a subsystem.
 	 */
-	public static final String TOPIC_INTERNALS = "org/osgi/service/SubsystemInternals/";
+	public static final String PROVISION_RESOURCE = "Provision-Resource";
+
+	/**
+	 * Manifest header identifying symbolic names of required bundles. 
+	 */
+	public static final String REQUIRE_BUNDLE = Constants.REQUIRE_BUNDLE;
+
+	/**
+	 * Manifest header directive identifying the resolution type. The default 
+	 * value is {@link #RESOLUTION_MANDATORY}.
+	 * 
+	 * @see Constants#RESOLUTION_DIRECTIVE
+	 */
+	public static final String RESOLUTION_DIRECTIVE = Constants.RESOLUTION_DIRECTIVE;
+	
+	/**
+	 * Manifest header directive value identifying a mandatory resolution type.
+	 * 
+	 * @see Constants#RESOLUTION_MANDATORY
+	 */
+	public static final String RESOLUTION_MANDATORY = Constants.RESOLUTION_MANDATORY;
+	
+	/**
+	 * Manifest header directive value identifying an optional resolution type.
+	 * 
+	 * @see Constants#RESOLUTION_OPTIONAL
+	 */
+	public static final String RESOLUTION_OPTIONAL = Constants.RESOLUTION_OPTIONAL;
+	
+	/**
+	 * Manifest header directive identifying the start level.
+	 */
+	public static final String START_LEVEL_DIRECTIVE = "start-level";
+	
+	/**
+	 * The list of subsystem contents identified by a symbolic name and version.
+	 */
+	public static final String SUBSYSTEM_CONTENT = "Subsystem-Content";
+	
+	/**
+	 * Human readable description.
+	 */
+	public static final String SUBSYSTEM_DESCRIPTION = "Subsystem-Description";
+	
+	/**
+	 * Manifest header identifying services offered for export.
+	 */
+	public static final String SUBSYSTEM_EXPORTSERVICE = "Subsystem-ExportService";
+	
+	/**
+	 * Manifest header identifying services required for import.
+	 */
+	public static final String SUBSYSTEM_IMPORTSERVICE = "Subsystem-ImportService";
+	
+	/**
+	 * The subsystem manifest version header must be present and equals to 1.0 
+	 * for this version of applications. 
+	 */
+	public static final String SUBSYSTEM_MANIFESTVERSION = "Subsystem-ManifestVersion";
+	
+	/**
+	 * Human readable application name.
+	 */
+	public static final String SUBSYSTEM_NAME = "Subsystem-Name";
+	
+	/**
+	 * Symbolic name for the application. Must be present.
+	 */
+	public static final String SUBSYSTEM_SYMBOLICNAME = "Subsystem-SymbolicName";
+	
+	/**
+	 * Manifest header identifying the subsystem type.
+	 */
+	public static final String SUBSYSTEM_TYPE = "Subsystem-Type";
+	
+	/**
+	 * Manifest header value identifying an application subsystem.
+	 */
+	public static final String SUBSYSTEM_TYPE_APPLICATION = "osgi.application";
+	
+	/**
+	 * Manifest header value identifying a composite subsystem.
+	 */
+	public static final String SUBSYSTEM_TYPE_COMPOSITE = "osgi.composite";
+	
+	/**
+	 * Manifest header value identifying a feature subsystem.
+	 */
+	public static final String SUBSYSTEM_TYPE_FEATURE = "osgi.feature";
+	
+	/**
+	 * Version of the application. If not present, the default value is 0.0.0.
+	 */
+	public static final String SUBSYSTEM_VERSION = "Subsystem-Version";
+	
+	/**
+	 * Manifest header attribute indicating a version or version range. The 
+	 * default value is {@link Version#emptyVersion}.
+	 */
+	public static final String VERSION_ATTRIBUTE = Constants.VERSION_ATTRIBUTE;
 }
