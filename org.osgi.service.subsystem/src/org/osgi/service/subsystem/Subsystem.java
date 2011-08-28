@@ -22,18 +22,6 @@ import java.util.Map;
 import org.osgi.framework.Version;
 import org.osgi.framework.resource.Resource;
 
-/*
- * TODO
- * (1) How will the root subsystem handle install, start, stop, update, and
- * uninstall?
- * (2) ResourceProcesser will accept Coordination again. No chaining. Processor
- * is responsible for failing the coordination or throwing exception from ended
- * or failed.
- * (3) Remove coordination from Resource.
- * (4) Do we need to return Resources and Bundles? Just Resources? What?
- * (5) Add description of root subsystem. List unsupported operations.
- */
-
 /**
  * A representation of a subsystem in the framework. A subsystem is a 
  * collection of bundles and/or other resource. A subsystem has isolation 
@@ -254,28 +242,32 @@ public interface Subsystem {
 	 * The following steps are required to install a subsystem:
 	 * <ol>
 	 * 		<li>If there is an existing subsystem containing the same location 
-	 *          identifier as the Subsystem to be installed, then a Future is 
-	 *          returned that has the existing subsystem immediately available 
-	 *          as its result.</li>
-	 * 		<li>If there is already an install in progress for a subsystem with 
-	 *          the same location identifier, then the Future returned is the 
-	 *          same as the Future returned for the first install and a new 
-	 *          install is not started.</li>
-	 * 		<li>If this is a new install, then a new Future is returned with 
-	 *          the installation process following the remaining step.</li>
+	 *          identifier as the subsystem to be installed, then the existing
+	 *          subsystem is returned.</li>
+	 * 		<li>If this is a new install, then a new Subsystem is created with 
+	 *          its id set to the next available value (ascending order).</li>
+	 * 		<li>The subsystem's state is set to INSTALLING and if EventAdmin is 
+	 *          available, an event of type INSTALLING is fired.</li>
+	 *      <li>The following installation steps are then started and performed 
+	 *          asynchronously and the new subsystem is returned to the caller.</li>
 	 * 		<li>The subsystem content is read from the input stream.</li>
-	 * 		<li>Isolation is set up while the install is in progress, such that 
-	 *          none of the content can be resolved with bundles outside the 
-	 *          subsystem.</li>
-	 * 		<li>The resources are into the framework through the use of 
-	 *          ResourceProcessors.</li>
-	 * 		<li>Isolation is configured appropriate for the subsystem such that 
-	 *          the content can be resolved with bundles outside the subsystem.</li>
-	 * 		<li>The subsystem's state is set to INSTALLED.</li>
-	 * 		<li>The subsystem event of type INSTALLED is fired.</li>
-	 * 		<li>The subsystem content is started.</li>
-	 * 		<li>The subsystem object for the newly installed subsystem is made 
-	 *          available from the Future.</li>
+	 * 		<li>If the subsystem requires isolation (i.e. is an application or 
+	 *          a composite), then isolation is set up while the install is in 
+	 *          progress, such that none of the content bundles can be resolved.
+	 *          This isolation is not changed until the subsystem is explicitly 
+	 *          requested to resolve (i.e. as a result of a Subsystem.start() 
+	 *          operation).</li>
+	 * 		<li>If the subsystem does not include a deployment manifest, then 
+	 *          the subsystem runtime must calculate one.</li>
+	 * 		<li>The resources identified in the deployment manifest are 
+	 *          installed into the framework.  All content resources are 
+	 *          installed into the Subsystem, whereas transitive dependencies 
+	 *          are installed into an ancestor subsystem. If any resources fail 
+	 *          to install, then the entire installation is failed. Transitive 
+	 *          resources are free to resolve and start independent of the 
+	 *          subsystem they were installed for.</li>
+	 * 		<li>The subsystem's state is set to INSTALLED and if EventAdmin is 
+	 *          available an INSTALLED event is fired.</li>
 	 * </ol>
 	 * @param location The location identifier of the subsystem to be installed.
 	 * @param content The InputStream from where the subsystem is to be 
@@ -320,11 +312,9 @@ public interface Subsystem {
 	 * This method causes the Framework to notify other bundles and subsystems 
 	 * that this subsystem is being uninstalled, and then puts this subsystem 
 	 * into the UNINSTALLED state. The Framework must remove any resources 
-	 * related to this subsystem that it is able to remove. It does so using the 
-	 * appropriate ResourceProcessor.uninstall(Subsystem, Resource, 
-	 * Coordination) for the resource namespace. If this subsystem has exported 
-	 * any packages, the Framework must continue to make these packages 
-	 * available to their importing bundles or subsystems until the 
+	 * related to this subsystem that it is able to remove. If this subsystem 
+	 * has exported any packages, the Framework must continue to make these 
+	 * packages available to their importing bundles or subsystems until the 
 	 * org.osgi.service.packageadmin.PackageAdmin.refreshPackages(
 	 * org.osgi.framework.Bundle[]) method has been called or the Framework is 
 	 * relaunched. The following steps are required to uninstall a subsystem:
