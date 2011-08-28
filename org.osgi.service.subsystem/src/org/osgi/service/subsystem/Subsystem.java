@@ -114,7 +114,11 @@ public interface Subsystem {
 	 * Gets the subsystems managed by this service. This only includes the 
 	 * top-level Subsystems installed in the Framework, CoompositeBundle or 
 	 * Subsystem from which this service has been retrieved.
+	 * 
 	 * @return The Subsystems managed by this service.
+	 * @throws IllegalStateException If the subsystem is in the {@link 
+	 *         State#INSTALLING state} or transitioned to the {@link 
+	 *         State#UNINSTALLED state} due to a failed installation.
 	 */
 	public Collection<Subsystem> getChildren();
 	
@@ -125,28 +129,39 @@ public interface Subsystem {
 	 * 
 	 * @return A snapshot of all {@code Resources} currently constituting this
 	 *         {@code Subsystem}.
+	 * @throws IllegalStateException If the subsystem is in the {@link 
+	 *         State#INSTALLING state} or transitioned to the {@link 
+	 *         State#UNINSTALLED state} due to a failed installation.
 	 */
 	public Collection<Resource> getConstituents();
 	
 	/**
 	 * Gets the headers used to define this subsystem. The headers will be 
 	 * localized using the locale returned by java.util.Locale.getDefault. This 
-	 * is equivalent to calling getHeaders(null). 
+	 * is equivalent to calling getHeaders(null).
+	 * 
 	 * @return The headers used to define this subsystem.
 	 * @throws SecurityException If the caller does not have the appropriate 
 	 *         AdminPermission[this,METADATA] and the runtime supports 
 	 *         permissions.
+	 * @throws IllegalStateException If the subsystem is in the {@link 
+	 *         State#INSTALLING state} or transitioned to the {@link 
+	 *         State#UNINSTALLED state} due to a failed installation.
 	 */
 	public Map<String, String> getHeaders();
 	
 	/**
 	 * Gets the headers used to define this subsystem.
+	 * 
 	 * @param locale The locale name to be used to localize the headers. If the 
 	 *        locale is null then the locale returned by 
 	 *        java.util.Locale.getDefault is used. If the value is the empty 
 	 *        string then the returned headers are returned unlocalized. 
 	 * @return the headers used to define this subsystem, localized to the 
-	 *         specified locale. 
+	 *         specified locale.
+	 * @throws IllegalStateException If the subsystem is in the {@link 
+	 *         State#INSTALLING state} or transitioned to the {@link 
+	 *         State#UNINSTALLED state} due to a failed installation.
 	 */
 	public Map<String, String> getHeaders(String locale);
 	
@@ -161,8 +176,12 @@ public interface Subsystem {
 	
 	/**
 	 * Gets the parent Subsystem that scopes this subsystem instance.
+	 * 
 	 * @return The Subsystem that scopes this subsystem or null if there is no 
 	 *         parent subsystem (e.g. if the outer scope is the framework).
+	 * @throws IllegalStateException If the subsystem is in the {@link 
+	 *         State#INSTALLING state} or transitioned to the {@link 
+	 *         State#UNINSTALLED state} due to a failed installation.
 	 */
 	public Subsystem getParent();
 	
@@ -181,13 +200,21 @@ public interface Subsystem {
 	
 	/**
 	 * Gets the symbolic name of this subsystem.
+	 * 
 	 * @return The symbolic name of this subsystem.
+	 * @throws IllegalStateException If the subsystem is in the {@link 
+	 *         State#INSTALLING state} or transitioned to the {@link 
+	 *         State#UNINSTALLED state} due to a failed installation.
 	 */
 	public String getSymbolicName();
 	
 	/**
 	 * Gets the version of this subsystem.
+	 * 
 	 * @return The version of this subsystem.
+	 * @throws IllegalStateException If the subsystem is in the {@link 
+	 *         State#INSTALLING state} or transitioned to the {@link 
+	 *         State#UNINSTALLED state} due to a failed installation.
 	 */
 	public Version getVersion();
 	
