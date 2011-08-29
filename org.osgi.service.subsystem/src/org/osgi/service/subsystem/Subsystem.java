@@ -105,8 +105,9 @@ public interface Subsystem {
 	 * 
 	 * @return The Subsystems managed by this service.
 	 * @throws IllegalStateException If the subsystem is in the {@link 
-	 *         State#INSTALLING state} or transitioned to the {@link 
-	 *         State#UNINSTALLED state} due to a failed installation.
+	 *         State#INSTALLING installing state} or transitioned to the {@link 
+	 *         State#UNINSTALLED uninstalled state} due to a failed 
+	 *         installation.
 	 */
 	public Collection<Subsystem> getChildren();
 	
@@ -118,8 +119,9 @@ public interface Subsystem {
 	 * @return A snapshot of all {@code Resources} currently constituting this
 	 *         {@code Subsystem}.
 	 * @throws IllegalStateException If the subsystem is in the {@link 
-	 *         State#INSTALLING state} or transitioned to the {@link 
-	 *         State#UNINSTALLED state} due to a failed installation.
+	 *         State#INSTALLING installing state} or transitioned to the {@link 
+	 *         State#UNINSTALLED uninstalled state} due to a failed 
+	 *         installation.
 	 */
 	public Collection<Resource> getConstituents();
 	
@@ -133,8 +135,9 @@ public interface Subsystem {
 	 *         AdminPermission[this,METADATA] and the runtime supports 
 	 *         permissions.
 	 * @throws IllegalStateException If the subsystem is in the {@link 
-	 *         State#INSTALLING state} or transitioned to the {@link 
-	 *         State#UNINSTALLED state} due to a failed installation.
+	 *         State#INSTALLING installing state} or transitioned to the {@link 
+	 *         State#UNINSTALLED uninstalled state} due to a failed 
+	 *         installation.
 	 */
 	public Map<String, String> getHeaders();
 	
@@ -148,8 +151,9 @@ public interface Subsystem {
 	 * @return the headers used to define this subsystem, localized to the 
 	 *         specified locale.
 	 * @throws IllegalStateException If the subsystem is in the {@link 
-	 *         State#INSTALLING state} or transitioned to the {@link 
-	 *         State#UNINSTALLED state} due to a failed installation.
+	 *         State#INSTALLING installing state} or transitioned to the {@link 
+	 *         State#UNINSTALLED uninstalled state} due to a failed 
+	 *         installation.
 	 */
 	public Map<String, String> getHeaders(String locale);
 	
@@ -168,8 +172,9 @@ public interface Subsystem {
 	 * @return The Subsystem that scopes this subsystem or null if there is no 
 	 *         parent subsystem (e.g. if the outer scope is the framework).
 	 * @throws IllegalStateException If the subsystem is in the {@link 
-	 *         State#INSTALLING state} or transitioned to the {@link 
-	 *         State#UNINSTALLED state} due to a failed installation.
+	 *         State#INSTALLING installing state} or transitioned to the {@link 
+	 *         State#UNINSTALLED uninstalled state} due to a failed 
+	 *         installation.
 	 */
 	public Subsystem getParent();
 	
@@ -191,8 +196,9 @@ public interface Subsystem {
 	 * 
 	 * @return The symbolic name of this subsystem.
 	 * @throws IllegalStateException If the subsystem is in the {@link 
-	 *         State#INSTALLING state} or transitioned to the {@link 
-	 *         State#UNINSTALLED state} due to a failed installation.
+	 *         State#INSTALLING installing state} or transitioned to the {@link 
+	 *         State#UNINSTALLED uninstalled state} due to a failed 
+	 *         installation.
 	 */
 	public String getSymbolicName();
 	
@@ -201,8 +207,9 @@ public interface Subsystem {
 	 * 
 	 * @return The version of this subsystem.
 	 * @throws IllegalStateException If the subsystem is in the {@link 
-	 *         State#INSTALLING state} or transitioned to the {@link 
-	 *         State#UNINSTALLED state} due to a failed installation.
+	 *         State#INSTALLING installing state} or transitioned to the {@link 
+	 *         State#UNINSTALLED uninstalled state} due to a failed 
+	 *         installation.
 	 */
 	public Version getVersion();
 	
