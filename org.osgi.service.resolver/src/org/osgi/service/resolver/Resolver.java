@@ -103,7 +103,8 @@ public interface Resolver {
    * @throws NullPointerException
    *           if environment is null
    */
-  Map<Resource, List<Wire>> resolve(Environment environment,
-      Collection<Resource> mandatoryResources,
-      Collection<Resource> optionalResources) throws ResolutionException;
+	Map<Resource, List<Wire>> resolve(Environment environment,
+			Collection<? extends Resource> mandatoryResources,
+			Collection<? extends Resource> optionalResources)
+			throws ResolutionException;
 }
