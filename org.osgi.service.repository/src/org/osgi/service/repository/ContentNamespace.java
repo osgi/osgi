@@ -21,7 +21,7 @@ import org.osgi.framework.resource.Requirement;
  * Constants for use in the "osgi.content" namespace. This namespace is used to
  * locate content via the {@link Repository#findProviders(Requirement)} method.
  */
-public interface ContentNamespace {
+public final class ContentNamespace {
   /**
    * Namespace of the content capability
    */
