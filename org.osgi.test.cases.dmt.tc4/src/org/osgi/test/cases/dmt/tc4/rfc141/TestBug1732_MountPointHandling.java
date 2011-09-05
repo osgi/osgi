@@ -122,12 +122,15 @@ public class TestBug1732_MountPointHandling extends
 
 		ServiceRegistration reg = getContext().registerService(classes, plugin, props);
 
-		assertNotNull(plugin.lastAddedMountPoints);
-		assertEquals(2, plugin.lastAddedMountPoints.length);
-		checkMountPointInArray(mountRoot, plugin.lastAddedMountPoints );
-		checkMountPointInArray("./XY", plugin.lastAddedMountPoints );
-		
-		reg.unregister();
+		try {
+			assertNotNull(plugin.lastAddedMountPoints);
+			assertEquals(2, plugin.lastAddedMountPoints.length);
+			checkMountPointInArray(mountRoot, plugin.lastAddedMountPoints );
+			checkMountPointInArray("./XY", plugin.lastAddedMountPoints );
+		} catch (Exception e) {	}
+		finally {
+			reg.unregister();
+		}
 	
 		assertNotNull(plugin.lastRemovedMountPoints);
 		assertEquals(2, plugin.lastRemovedMountPoints.length);
