@@ -121,4 +121,21 @@ public abstract class OSGiTestCase extends TestCase {
 		return getContext().installBundle(bundle, entry.openStream());
 	}
 
+	/**
+	 * Sleep for the requested amount of milliseconds.
+	 * 
+	 * @param millis
+	 */
+	public static void sleep(long millis) {
+		final long endTime = System.currentTimeMillis() + millis;
+		while (System.currentTimeMillis() < endTime) {
+			try {
+				Thread.sleep(endTime - System.currentTimeMillis());
+			}
+			catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				fail("Unexepected interruption.", e);
+			}
+		}
+	}
 }
