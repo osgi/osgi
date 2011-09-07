@@ -26,9 +26,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.Version;
 import org.osgi.test.cases.framework.div.tb6.BundleClass;
-import org.osgi.test.cases.framework.resolver.tb1.Test;
 import org.osgi.test.support.FrameworkEventCollector;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -143,7 +141,7 @@ public class DivTests extends DefaultTestBundleControl {
 		try {
 			String originalLocation = tb.getLocation();
 			long originalLastModified = tb.getLastModified();
-			Thread.sleep(100);
+			sleep(250);
 			tb.update();
 			assertEquals("bundle location changed after update.",
 					originalLocation, tb.getLocation());
