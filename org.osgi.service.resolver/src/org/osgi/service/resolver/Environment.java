@@ -27,7 +27,7 @@ import org.osgi.framework.resource.Wire;
 
 /**
  * An environment provides options and constraints to the potential solution of
- * a {@link Resolver#resolve(Environment, Requirement...)} operation.
+ * a {@link Resolver#resolve(Environment, Collection, Collection)} operation.
  * 
  * <p>
  * Environments:
