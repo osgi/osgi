@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -23,10 +23,12 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.support.compatibility;
+package org.osgi.test.support.reflect;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import junit.framework.Assert;
 
 /**
  * This class represents a method call.
@@ -40,75 +42,71 @@ import java.lang.reflect.Method;
  */
 
 public class MethodCall {
-	private final String			name;
-	private final Class< ? >[]			paramClasses;
-	private final Object[]			paramObjects;
-
-	private static final Class< ? >[]	NO_CLASSES	= new Class[0];
-	private static final Object[]	NO_OBJECTS	= new Object[0];
-
-	/**
-	 * Construct a new MethodCall with no parameters
-	 * 
-	 * @param name the name of the method
-	 */
-	public MethodCall(String name) {
-		this.name = name;
-		this.paramClasses = NO_CLASSES;
-		this.paramObjects = NO_OBJECTS;
-	}
-
-	/**
-	 * Constructs a new MethodCall with one parameter.
-	 * 
-	 * @param name the name of the method
-	 * @param paramClass the type of the paramater
-	 * @param paramObject the parameter
-	 */
-	public MethodCall(String name, Class< ? > paramClass, Object paramObject) {
-		this.name = name;
-		this.paramClasses = new Class[] {paramClass};
-		this.paramObjects = new Object[] {paramObject};
-	}
+	private final String		methodInterface;
+	private final String		methodName;
+	private final Class< ? >[]	parameters;
 
 	/**
 	 * Constructs a new MethodCall with more than one parameter.
 	 * 
 	 * @param name the name of the method
-	 * @param paramClasses an array containing the parameter types.
-	 * @param paramObjects an array containing the parameters
+	 * @param parameters an array containing the parameter types.
 	 */
-	public MethodCall(String name, Class< ? >[] paramClasses,
-			Object[] paramObjects) {
-		this.name = name;
-		this.paramClasses = paramClasses;
-		this.paramObjects = paramObjects;
+	public MethodCall(String methodInterface, String methodName,
+			Class< ? >... parameters) {
+		this.methodInterface = methodInterface;
+		this.methodName = methodName;
+		this.parameters = parameters;
 	}
 
 	/**
 	 * Returns the name of the method.
 	 */
 	public String getName() {
-		return name;
+		if (methodInterface == null) {
+			return methodName;
+		}
+		return methodInterface + "." + methodName;
 	}
 
 	/**
-	 * Invokes the method with the specified parameters.
+	 * Invokes the method with the specified arguments.
 	 * 
 	 * @param o the object to invoke the method on
+	 * @param arguments an array containing the arguments
 	 * @return whatever the method returns (see
 	 *         java.lang.reflect.Method.invoke() for details)
 	 * @throws Throwable rethrows anything that was thrown by the reflective
 	 *         invoke call. < b>Note!</b> <code>InvocationTargetException</code>
 	 *         is unwrapped and the "real" Exception is rethrown!
 	 */
-	public Object invoke(Object o) throws Throwable {
-		Method m = o.getClass().getDeclaredMethod(name, paramClasses);
+	public Object invoke(Object o, Object... arguments) throws Throwable {
+		Class< ? > methodSource = o.getClass();
+		if (methodInterface != null) {
+			interfaceSearch: while (methodSource != null) {
+				for (Class< ? > interf : methodSource.getInterfaces()) {
+					if (methodInterface.equals(interf.getName())) {
+						methodSource = interf;
+						break interfaceSearch;
+					}
+				}
+				methodSource = methodSource.getSuperclass();
+			}
+			if (methodSource == null) {
+				Assert.fail("Interface " + methodInterface
+						+ " not found on target object.");
+			}
+		}
+		Method m = methodSource.getMethod(methodName, parameters);
 		try {
-			return m.invoke(o, paramObjects);
+			return m.invoke(o, arguments);
 		}
 		catch (InvocationTargetException e) {
-			throw e.getTargetException();
+			Throwable cause = e.getCause();
+			if (cause == null) {
+				cause = e;
+			}
+			throw cause;
 		}
 	}
 }
