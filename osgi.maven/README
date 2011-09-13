@@ -1,0 +1,4 @@
+This directory is made to hold the maven upload scripts. The current makefile is not working but a 
+similar file is currently used by Peter Kriens to upload.
+
+
