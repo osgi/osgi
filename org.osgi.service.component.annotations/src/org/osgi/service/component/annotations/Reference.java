@@ -109,4 +109,16 @@ public @interface Reference {
 	 * @see "The unbind attribute of the reference element of a Component Description."
 	 */
 	String unbind() default "";
+
+	/**
+	 * The name of the updated method which is associated with the annotated
+	 * bind method.
+	 * 
+	 * <p>
+	 * If not specified, then no updated method is associated with the annotated
+	 * bind method.
+	 * 
+	 * @see "The updated attribute of the reference element of a Component Description."
+	 */
+	String updated() default "";
 }

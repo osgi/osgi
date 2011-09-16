@@ -168,6 +168,7 @@
 		<attribute name="target" type="string" use="optional" />
 		<attribute name="bind" type="token" use="optional" />
 		<attribute name="unbind" type="token" use="optional" />
+		<attribute name="updated" type="token" use="optional" />
 		<anyAttribute />
 	</complexType>
 	<simpleType name="Tjava-types">
