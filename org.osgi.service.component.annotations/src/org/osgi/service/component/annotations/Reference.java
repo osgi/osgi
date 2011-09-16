@@ -44,8 +44,8 @@ public @interface Reference {
 	 * 
 	 * <p>
 	 * If not specified, the name of this reference is based upon the name of
-	 * the method being annotated. If the method name begins with {@code set} or
-	 * {@code add}, that is removed.
+	 * the method being annotated. If the method name begins with {@code bind},
+	 * {@code set} or {@code add}, that is removed.
 	 * 
 	 * @see "The name attribute of the reference element of a Component Description."
 	 */
@@ -92,7 +92,8 @@ public @interface Reference {
 	String target() default "";
 
 	/**
-	 * The name of the unbind method which pairs with the annotated bind method.
+	 * The name of the unbind method which is associated with the annotated bind
+	 * method.
 	 * 
 	 * <p>
 	 * To declare no unbind method, the value {@code "-"} must be used.
@@ -100,11 +101,10 @@ public @interface Reference {
 	 * <p>
 	 * If not specified, the name of the unbind method is derived from the name
 	 * of the annotated bind method. If the annotated method name begins with
-	 * {@code set}, that is replaced with {@code unset} to derive the unbind
-	 * method name. If the annotated method name begins with {@code add}, that
-	 * is replaced with {@code remove} to derive the unbind method name.
-	 * Otherwise, {@code un} is prefixed to the annotated method name to derive
-	 * the unbind method name.
+	 * {@code bind}, {@code set} or {@code add}, that is replaced with
+	 * {@code unbind}, {@code unset} or {@code remove}, respectively, to derive
+	 * the unbind method name. Otherwise, {@code un} is prefixed to the
+	 * annotated method name to derive the unbind method name.
 	 * 
 	 * @see "The unbind attribute of the reference element of a Component Description."
 	 */
