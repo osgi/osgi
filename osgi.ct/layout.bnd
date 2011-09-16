@@ -25,7 +25,6 @@ build.cmpn.tests = \
     org.osgi.test.cases.blueprint, \
     org.osgi.test.cases.blueprint.java5, \
     org.osgi.test.cases.blueprint.secure, \
-    org.osgi.test.cases.cdma, \
     org.osgi.test.cases.cm, \
     org.osgi.test.cases.coordinator, \
     org.osgi.test.cases.coordinator.secure, \
@@ -38,7 +37,6 @@ build.cmpn.tests = \
     org.osgi.test.cases.dmt.tc2, \
     org.osgi.test.cases.dmt.tc3, \
     org.osgi.test.cases.event, \
-    org.osgi.test.cases.gsm, \
     org.osgi.test.cases.http, \
     org.osgi.test.cases.io, \
     org.osgi.test.cases.log, \
