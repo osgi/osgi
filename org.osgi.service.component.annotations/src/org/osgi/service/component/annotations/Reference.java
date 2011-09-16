@@ -85,6 +85,17 @@ public @interface Reference {
 	ReferencePolicy policy() default ReferencePolicy.STATIC;
 
 	/**
+	 * The policy option for the reference.
+	 * 
+	 * <p>
+	 * If not specified, the {@link ReferencePolicyOption#RELUCTANT RELUCTANT}
+	 * reference policy option is used.
+	 * 
+	 * @see "The policy-option attribute of the reference element of a Component Description."
+	 */
+	ReferencePolicyOption policyOption() default ReferencePolicyOption.RELUCTANT;
+
+	/**
 	 * The target filter for the reference.
 	 * 
 	 * @see "The target attribute of the reference element of a Component Description."

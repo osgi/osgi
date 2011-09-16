@@ -165,6 +165,8 @@
 			default="1..1" use="optional" />
 		<attribute name="policy" type="scr:Tpolicy" default="static"
 			use="optional" />
+		<attribute name="policy-option" type="scr:Tpolicy-option" 
+			default="reluctant" use="optional" />
 		<attribute name="target" type="string" use="optional" />
 		<attribute name="bind" type="token" use="optional" />
 		<attribute name="unbind" type="token" use="optional" />
@@ -196,6 +198,12 @@
 		<restriction base="string">
 			<enumeration value="static" />
 			<enumeration value="dynamic" />
+		</restriction>
+	</simpleType>
+	<simpleType name="Tpolicy-option">
+		<restriction base="string">
+			<enumeration value="reluctant" />
+			<enumeration value="greedy" />
 		</restriction>
 	</simpleType>
 	<simpleType name="Tconfiguration-policy">
