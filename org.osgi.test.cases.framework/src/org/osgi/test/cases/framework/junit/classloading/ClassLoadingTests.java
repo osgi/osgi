@@ -589,6 +589,108 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	}
 
 	/**
+	 * Some bundles may wish to listen to all service events regardless of what
+	 * version of a package they are wired to. A new type of ServiceListener is
+	 * added (AllServiceListener) to allow a bundle to listen to all service
+	 * events. When an AllServiceLisetener is used the framework does not do
+	 * class checks on the ServiceReference for the ServiceEvent before
+	 * delivering it to the AllServiceListener.
+	 *
+	 * This test uses an AllServiceListener which is also an
+	 * UnfilteredServiceListener. The listener is added with a filter that can
+	 * never match (!(objectClass=*)).
+	 *
+	 * @spec AllServiceListener.serviceChanged(ServiceEvent)
+	 * @throws Exception if there is any problem or an assert fails
+	 */
+	public void testUnfilteredAllServiceListener001() throws Exception {
+		Bundle tb1;
+		Bundle tb1a;
+		Bundle tb2;
+		Bundle tb2a;
+		Bundle tb5;
+		Bundle tb5d;
+		Method method;
+		Object service;
+		ServiceReference serviceReference;
+
+		tb1 = installBundle("classloading.tb1.jar");
+		tb1.start();
+		tb1a = installBundle("classloading.tb1a.jar");
+		tb2 = installBundle("classloading.tb2.jar");
+		tb2.start();
+		tb2a = installBundle("classloading.tb2a.jar");
+		tb5 = installBundle("classloading.tb5.jar");
+		tb5.start();
+
+		tb5d = installBundle("classloading.tb5d.jar");
+		try {
+			tb5d.start();
+
+			// This bundle install a service which is assignable to the imported
+			// interface
+			tb1a.start();
+			tb1a.stop();
+
+			try {
+				Thread.sleep(1000);
+			}
+			catch (InterruptedException ex) {
+				// Ignore this exception
+			}
+
+			// Check if the some event is delivered
+			serviceReference = getContext()
+					.getServiceReference(
+							"org.osgi.test.cases.framework.classloading.exports.listener.AllServiceListenerTester");
+			service = getContext().getService(serviceReference);
+			method = service.getClass().getMethod("getServiceEventDelivered",
+					(Class[]) null);
+			assertNotNull(
+					"Checking if an event is delivered for a bundle which imports a assignable service interface",
+					method.invoke(service, (Object[]) null));
+
+			getContext().ungetService(serviceReference);
+
+			// This bundle install a service which is not assignable to the
+			// imported interface
+			tb2a.start();
+			tb2a.stop();
+
+			try {
+				Thread.sleep(1000);
+			}
+			catch (InterruptedException ex) {
+				// Ignore this exception
+			}
+
+			// Check if the some event is delivered
+			serviceReference = getContext()
+					.getServiceReference(
+							"org.osgi.test.cases.framework.classloading.exports.listener.AllServiceListenerTester");
+			service = getContext().getService(serviceReference);
+			method = service.getClass().getMethod("getServiceEventDelivered",
+					(Class[]) null);
+			assertNotNull(
+					"Checking if an event is delivered for a bundle which imports a non-assignable service interface",
+					method.invoke(service, (Object[]) null));
+
+			getContext().ungetService(serviceReference);
+
+			tb5d.stop();
+		}
+		finally {
+			tb5d.uninstall();
+
+			tb5.uninstall();
+			tb2a.uninstall();
+			tb2.uninstall();
+			tb1a.uninstall();
+			tb1.uninstall();
+		}
+	}
+
+	/**
 	 * Similarly, a new type of SeviceTracker is added (AllServiceTracker). The
 	 * AllServiceTracker allows a bundle to track all services regardless of
 	 * what version of a package they are wired to. The AllServiceTracker is

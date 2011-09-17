@@ -43,6 +43,7 @@ Include-Resource = \
 	classloading.tb5a.jar, \
 	classloading.tb5b.jar, \
 	classloading.tb5c.jar, \
+	classloading.tb5d.jar, \
 	classloading.tb7a.jar, \
 	classloading.tb7b.jar, \
 	classloading.tb7c.jar, \
