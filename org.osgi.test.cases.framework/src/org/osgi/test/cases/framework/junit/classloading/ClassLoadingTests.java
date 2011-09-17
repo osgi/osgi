@@ -1,13 +1,13 @@
 /*
  * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
- * 
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -18,7 +18,7 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
+ *
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
@@ -41,12 +41,12 @@ import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * This class contains tests related with the framework class loading policies.
- * 
+ *
  * @author left
  * @version $Id$
  */
 public class ClassLoadingTests extends DefaultTestBundleControl {
-	
+
 	protected void tearDown() {
 		Wiring.synchronousRefreshBundles(getContext());
 	}
@@ -56,10 +56,10 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * BundleContext.getServiceReference returns the highest ranked service that
 	 * BundleContext.getServiceReferences returns.
-	 * 
+	 *
 	 * This test case will check the behavior of method getServiceReference()
 	 * when more than one service is installed.
-	 * 
+	 *
 	 * @spec BundleContext.getServiceReference(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -106,10 +106,10 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * If getServiceReferences returns no service references, then
 	 * getServiceReference returns null.
-	 * 
+	 *
 	 * This test case will check the behavior of method getServiceReference()
 	 * without any installed services.
-	 * 
+	 *
 	 * @spec BundleContext.getServiceReference(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -143,13 +143,13 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * String)) to allow a bundle to get all ServiceReference objects.
 	 * getAllServiceReferences returns all the ServiceReference objects without
 	 * performing any class tests.
-	 * 
+	 *
 	 * The test bundle will importing the version 3.0.0 of the interface
 	 * SomeService and check the behavior of method getServiceReferences() when
 	 * two services using the interface version 1.0.0 are installed. The method
 	 * getAllServiceReferences() must returns all services independent of the
 	 * interface wired to the test bundle.
-	 * 
+	 *
 	 * @spec BundleContext.getAllServiceReferences(String, String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -202,7 +202,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * This test case will check the behavior of method isAssignableTo() when
 	 * the wired package of the getter bundle (the bundle requesting the
 	 * service) is the same of the registrant bundle.
-	 * 
+	 *
 	 * @spec ServiceReference.isAssignableTo(Bundle, String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -245,7 +245,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * This test case will check the behavior of method isAssignableTo() when
 	 * the wired package of the getter bundle (the bundle requesting the
 	 * service) is not the same of the registrant bundle.
-	 * 
+	 *
 	 * @spec ServiceReference.isAssignableTo(Bundle, String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -296,7 +296,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * attempting to find the interface. A find should be satisfied with the
 	 * version of the service interface imported by the module attempting to
 	 * find the interface.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -357,9 +357,9 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * Service events must only be delivered to event listeners which can
 	 * validly cast the event.
-	 * 
+	 *
 	 * Tests the case which the event cannot be delivered.
-	 * 
+	 *
 	 * @spec ServiceListener.serviceChanged(ServiceEvent)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -427,9 +427,9 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * Service events must only be delivered to event listeners which can
 	 * validly cast the event.
-	 * 
+	 *
 	 * Tests the case which the event must be delivered.
-	 * 
+	 *
 	 * @spec ServiceListener.serviceChanged(ServiceEvent)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -496,7 +496,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * events. When an AllServiceLisetener is used the framework does not do
 	 * class checks on the ServiceReference for the ServiceEvent before
 	 * delivering it to the AllServiceListener.
-	 * 
+	 *
 	 * @spec AllServiceListener.serviceChanged(ServiceEvent)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -696,7 +696,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * what version of a package they are wired to. The AllServiceTracker is
 	 * identical in function to the ServiceTracker API except it will register
 	 * an AllServiceListener to track ServiceReference objects for a bundle.
-	 * 
+	 *
 	 * @spec ServiceTracker.open(boolean)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -739,7 +739,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * that a bundle must not declare imports or exports for java.* packages;
 	 * doing so is considered an error and any such bundle should fail to
 	 * install.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -773,7 +773,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * All other packages accessible via the system class path must be hidden
 	 * from executing bundles.
-	 * 
+	 *
 	 * @ Bundle.start()
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -823,16 +823,16 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * When an R4 bundle's class loader attempts to load a class or find a
 	 * resource, the search must be performed in a specified order.
-	 * 
+	 *
 	 * If the class or resource is in a java.* package, the request is delegated
 	 * to the parent class loader; otherwise the search continues with the next
 	 * step. If the request is delegated to the parent class loader and the
 	 * class or resource is not found, then the search terminates and the
 	 * request fails.
-	 * 
+	 *
 	 * If the class or resource is a package included in the boot delegation
 	 * list, the request is delegated to the parent classloader.
-	 * 
+	 *
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -890,13 +890,13 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * continues with the next step. If the request is delegated to an exporting
 	 * class loader and the class or resource is not found, then the search
 	 * terminates and the request fails.
-	 * 
+	 *
 	 * If the requested class or resource is in a package imported by this
 	 * module, the request is delegated to the exporting module's class loader.
 	 * If the class or resource is not found, then the search terminates and the
 	 * request has failed. The search terminates in this case since imported
 	 * classes are not treated as split.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -960,13 +960,13 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * to the class loaders of the other bundles, in the order in which they are
 	 * specified in this bundle's manifest. If the class or resource is not
 	 * found, then the search continues with the next step.
-	 * 
+	 *
 	 * The bundle's own internal class path is searched. If the class or
 	 * resource is not found, then the search continues with the next step
 	 * unless the requested class or resource is in a package that is imported
 	 * from one or more other bundles using Require-Bundle, in which case the
 	 * search terminates and the request fails.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1029,7 +1029,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 
 	/**
 	 * Teste if the bundle's own internal class path is searched.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1081,7 +1081,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * the exporting bundle's class loader. If the request is delegated to an
 	 * exporting class loader and the class or resource is not found, then the
 	 * search terminates and the request fails.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1132,12 +1132,12 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * framework must modify its behavior slightly for R3 or lower bundles. For
 	 * such legacy bundles, the following class/resource search order is
 	 * acceptable:
-	 * 
+	 *
 	 * Delegate the request to the parent class loader and if the class or
 	 * resource is found, return this result. If the class or resource is in a
 	 * java.* package and it was not found by the parent class loader, then the
 	 * request fails.
-	 * 
+	 *
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1179,7 +1179,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * class loader and the class or resource is not found, then the search
 	 * terminates and the request fails since imported packages are not treated
 	 * as split.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1224,7 +1224,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * The bundle's own internal class path is searched. If the class or
 	 * resource is not found, then the search terminates and the request fails.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1256,7 +1256,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * may be a one-many relationship between the bundle object and the modules
 	 * created for the bundle. However, a bundle archive will not create more
 	 * than one module unless it is modified.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @spec Bundle.update(InputStream)
 	 * @throws Exception if there is any problem or an assert fails
@@ -1303,7 +1303,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 
 	/**
 	 * Version 2 bundle manifests must specify the bundle symbolic name.
-	 * 
+	 *
 	 * @spec BundleContext.start(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1327,11 +1327,11 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * the framework. When multiple versions of a singleton bundle with the same
 	 * symbolic name are installed, the framework implementation must select at
 	 * most one of the singleton bundles to resolve.
-	 * 
+	 *
 	 * Only bundles specified as singleton bundles are treated as such. In
 	 * particular, singleton bundles do not affect the resolution of non-
 	 * singleton bundles with the same symbolic name.
-	 * 
+	 *
 	 * @spec Bundle.start()
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1384,7 +1384,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * If an attempt is made to install a bundle which has the same bundle
 	 * symbolic name and bundle version as an already installed bundle, then a
 	 * BundleException must be thrown and the install must fail
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1417,7 +1417,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * syntax permits a list of packages, separated by semicolons, to be
 	 * specified before the parameters. The same package may be exported more
 	 * than once with different parameters.
-	 * 
+	 *
 	 * @spec Bundle.start()
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1444,16 +1444,16 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 
 	/**
 	 * Tests the attribute uses.
-	 * 
+	 *
 	 * uses - a string specifying a list of packages upon which the package(s)
 	 * being exported depend. The default is that the list is empty which means
 	 * the package(s) being exported do not depend on any other packages.
-	 * 
+	 *
 	 * If an import is resolved to a module which exports the same package more
 	 * than once, the first export statement which matches the import is
 	 * selected and only the dependencies specified (via "uses") for that export
 	 * statement apply to the importer.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if there is any problem or an assert fails
@@ -1525,7 +1525,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * Packages in the list which are neither exported nor imported by the
 	 * current module are ignored and do not create dependencies.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1633,12 +1633,12 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 
 	/**
 	 * Test the attributes uses.
-	 * 
+	 *
 	 * uses - The framework forms the transitive closure of the dependency
 	 * relationship. For example, if a bundle exports package p, q, and r and
 	 * declares that P uses Q and Q uses R, then the framework will behave as if
 	 * the bundle also declared that P uses R.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if there is any problem or an assert fails
@@ -1710,11 +1710,11 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * Tests the attribute mandatory when the bundle import does matches the
 	 * required attributes.
-	 * 
+	 *
 	 * mandatory - a string with no default value. The list specifies names of
 	 * matching attributes which must be specified by matching Import-Package
 	 * statements.
-	 * 
+	 *
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1747,11 +1747,11 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * Tests the attribute mandatory when the bundle import does not matches the
 	 * required attributes.
-	 * 
+	 *
 	 * mandatory - a string with no default value. The list specifies names of
 	 * matching attributes which must be specified by matching Import-Package
 	 * statements.
-	 * 
+	 *
 	 * @spec Bundle.start()
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1781,22 +1781,22 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 
 	/**
 	 * Tests the attributes include and exclude.
-	 * 
+	 *
 	 * include/exclude - a list of classes of the specified packages which must
 	 * be allowed to be exported in the case of include or prevented from being
 	 * exported in the case of exclude. This acts as a class load time filter
 	 * and does not affect module resolution in any way.
-	 * 
+	 *
 	 * Filtering works as follows. The name of a class being loaded is checked
 	 * against the include list and the exclude list. If it matches an entry in
 	 * the include list but does not match any entry in the exclude list, then
 	 * loading proceeds normally. In all other cases, loading fails and a
 	 * ClassNotFound exception is thrown. Note that the ordering of includes and
 	 * excludes is not significant.
-	 * 
+	 *
 	 * Note that the syntax permits zero or more wildcards to occur at arbitrary
 	 * positions.
-	 * 
+	 *
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1835,16 +1835,16 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 
 	/**
 	 * Tests the attributes version and specification-version.
-	 * 
+	 *
 	 * version - the version of the named packages with syntax. The default
 	 * value is "0.0.0".
-	 * 
+	 *
 	 * specification-version - this is a deprecated synonym for the version
 	 * attribute with the sole exception that, if both specification- version
 	 * and version are specified (for the same package(s)), they must have
 	 * identical values. If both are specified but with different values, the
 	 * bundle fails to install.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1876,15 +1876,15 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 
 	/**
 	 * Test the attributes bundle-symbolic-name and bundle-version.
-	 * 
+	 *
 	 * bundle-symbolic-name - the bundle symbolic name of the exporting bundle
 	 * is implicitly associated with the export statement. The export statement
 	 * must not specify an explicit bundle symbolic name.
-	 * 
+	 *
 	 * bundle-version - the bundle version of the exporting bundle is implicitly
 	 * associated with the export statement. The export statement must not
 	 * specify an explicit bundle version.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -1909,7 +1909,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * If multiple packages need to be imported with identical parameters, the
 	 * syntax permits a list of packages, separated by semicolons, to be
 	 * specified before the parameters.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if there is any problem or an assert fails
@@ -1966,15 +1966,15 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 
 	/**
 	 * Test the attribute resolution with value mandatory.
-	 * 
+	 *
 	 * resolution - a string taking one of the values "mandatory" or "optional".
 	 * The default value is "mandatory".
-	 * 
+	 *
 	 * "mandatory" indicates that the import must be resolved when the importing
 	 * module is resolved. If such an import cannot be resolved and the
 	 * importing module does not also export the specified packages, the module
 	 * fails to resolve.
-	 * 
+	 *
 	 * @spec Bundle.start()
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -2033,12 +2033,12 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 
 	/**
 	 * Test the attibute resolution with value "optional".
-	 * 
+	 *
 	 * "optional" indicates that the import is optional and the importing module
 	 * may be resolved without the import being resolved. If the import is not
 	 * resolved when the module is resolved, the import may not be resolved
 	 * before the module is re-resolved.
-	 * 
+	 *
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -2063,7 +2063,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 			tb1 = installBundle("classloading.tb1.jar");
 
 			Wiring.synchronousRefreshBundles(getContext(), tb15d);
-			
+
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException ex) {
@@ -2090,16 +2090,16 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 
 	/**
 	 * Tests the attributes version and specification-version.
-	 * 
+	 *
 	 * version - a version range to select the (re-)exporter's implementation
 	 * version. The default value is "0.0.0".
-	 * 
+	 *
 	 * specification-version - this is a deprecated synonym for the version
 	 * attribute with the sole exception that, if both specification- version
 	 * and version are specified (for the same package(s)), they must have
 	 * identical values. If both are specified but with different values, the
 	 * bundle fails to install.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -2141,13 +2141,13 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 
 	/**
 	 * Tests the attributes bundle-symbolic-name and bundle-version.
-	 * 
+	 *
 	 * bundle-symbolic-name - the bundle symbolic name of the (re-)exporting
 	 * bundle.
-	 * 
+	 *
 	 * bundle-version - a version range to select the bundle version of the
 	 * (re-)exporting bundle. The default value is "0.0.0".
-	 * 
+	 *
 	 * @spec Bundle.start()
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -2176,7 +2176,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * A module which imports a given package more than once is in error and
 	 * fails to resolve.
-	 * 
+	 *
 	 * @spec Bundle.start()
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -2210,7 +2210,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * If an import matches exports in more than one module, the module with
 	 * lowest bundle identifier is selected.
-	 * 
+	 *
 	 * @spec Bundle.getBundleId()
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -2260,7 +2260,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * Dynamic imports are matched to exports (to form package wirings) during
 	 * class loading and do not affect module resolution.
-	 * 
+	 *
 	 * @spec Bundle.start()
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -2286,16 +2286,16 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * Packages may be named explicitly or by using wild-carded expressions such
 	 * as "org.foo.*" and "*".
-	 * 
+	 *
 	 * If multiple packages need to be dynamically imported with identical
 	 * parameters, the syntax permits a list of packages, separated by
 	 * semicolons, to be specified before the parameters.
-	 * 
+	 *
 	 * Test the attribute bundle-version.
-	 * 
+	 *
 	 * bundle-version - a version range to select the bundle version of the (re-
 	 * )exporting bundle. The default value is "0.0.0".
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if there is any problem or an assert fails
@@ -2338,10 +2338,10 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * The order is particularly important when wildcarded package names are
 	 * used as the order will then determine the order in which matching occurs. *
 	 * Test the attribute bundle-symbolic-name.
-	 * 
+	 *
 	 * bundle-symbolic-name - the bundle symbolic name of the (re-)exporting
 	 * bundle.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -2383,7 +2383,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 
 	/**
 	 * Dynamic imports may not be used when the package is exported.
-	 * 
+	 *
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -2423,16 +2423,16 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 
 	/**
 	 * Test the attributes version and specification-version.
-	 * 
+	 *
 	 * version - a version range to select the exporter's implementation
 	 * version. The default value is "0.0.0".
-	 * 
+	 *
 	 * specification-version - this is a deprecated synonym for the version
 	 * attribute with the sole exception that, if both specification- version
 	 * and version are specified (for the same package(s)), they must have
 	 * identical values. If both are specified but with different values, the
 	 * bundle fails to install.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if there is any problem or an assert fails
@@ -2487,7 +2487,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * corresponding DynamicImport-Package statement, unless one or more of
 	 * those attributes are exported as required (using the "mandatory"
 	 * directive).
-	 * 
+	 *
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -2525,7 +2525,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * corresponding DynamicImport-Package statement, unless one or more of
 	 * those attributes are exported as required (using the "mandatory"
 	 * directive).
-	 * 
+	 *
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -2564,12 +2564,12 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * package and the bundles are searched in the order in which they were
 	 * specified after which the requiring bundle is searched for any additional
 	 * classes of the package.
-	 * 
+	 *
 	 * Tests that multiple bundles may export the same package. Bundles which
 	 * export the same package that are involved in a require bundle cycle can
 	 * lead to lookup cycles when searching for classes and resources from the
 	 * package.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if any failure occurs or any assert fails
 	 */
@@ -2614,7 +2614,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * When searching for classes in a required bundle, the framework should
 	 * only search the packages (re- ) exported by the required bundle. Any
 	 * other packages contained in the required bundle must not be searched.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if any failure occurs or any assert fails
 	 */
@@ -2642,7 +2642,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * Test visibility directive with value of "private" which indicates that
 	 * any packages that are exported by the required bundle are not made
 	 * visible on the export signature of the requiring bundle.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if any failure occurs or any assert fails
 	 */
@@ -2679,7 +2679,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * bundle is resolved, the requiring bundle is not affected if the required
 	 * bundle may subsequently be resolved until such time as the requiring
 	 * bundle is re-resolved.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if any failure occurs or any assert fails
 	 */
@@ -2711,7 +2711,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * Test bundle-version attribute allows a version-range to select the bundle
 	 * version of the required bundle.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if any failure occurs or any assert fails
 	 */
@@ -2748,7 +2748,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * Package takes priority over Require-Bundle and packages which are
 	 * exported by a required bundle and imported via Import-Package are not
 	 * treated as split
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if any failure occurs or any assert fails
 	 */
@@ -2787,7 +2787,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * once, the first export statement is used and only the dependencies
 	 * specified (via "uses") for that export statement apply to the requiring
 	 * bundle.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @spec Bundle.loadClass(String)
 	 * @throws Exception if any failure occurs or any assert fails
@@ -2866,7 +2866,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * any packages that are exported by the required bundle are re-exported by
 	 * the requiring bundle. Any arbitrary matching attributes with which they
 	 * were exported by the required bundle are deleted.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception If any exception occurs or an assert fails
 	 */
@@ -2912,12 +2912,12 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * re-export the same package that are involved in a require bundle cycle
 	 * can lead to lookup cycles when searching for classes and resources from
 	 * the package.
-	 * 
+	 *
 	 * Tests that the re-export statement does not inherit matching attributes
 	 * or the "mandatoryness" of matching attributes. If these are not specified
 	 * on the re-export statement, they are either unspecified or take default
 	 * values where defaults are defined.
-	 * 
+	 *
 	 * @spec Bundle.getResource(String)
 	 * @throws Exception if any failure occurs or any assert fails
 	 */
@@ -2957,7 +2957,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * Test that any duplicate attribute or duplicate directive causes a R4
 	 * bundle to fail to install.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -2976,7 +2976,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	/**
 	 * Test that mutiple imports of a given package causes a R4 bundle to fail
 	 * to install.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -2996,7 +2996,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * Test that any syntactic error (e.g. improperly formatted version or
 	 * bundle symbolic name, unrecognized directive, unrecognized directive
 	 * value, etc.) causes a R4 bundle to fail to install.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
@@ -3024,7 +3024,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 	 * Import-Package p;specification-version=1;version=2 would fail to install,
 	 * but: Import-Package p;specification-version=1, q;version=2 would not be
 	 * an error.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @throws Exception if there is any problem or an assert fails
 	 */
