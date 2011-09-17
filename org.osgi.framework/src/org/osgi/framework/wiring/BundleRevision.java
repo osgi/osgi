@@ -16,7 +16,6 @@
 
 package org.osgi.framework.wiring;
 
-import java.security.AccessControlContext;
 import java.util.List;
 
 import org.osgi.framework.Bundle;
@@ -255,14 +254,4 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * @see BundleWiring#getRevision()
 	 */
 	BundleWiring getWiring();
-
-	/**
-	 * Returns the access control context for this bundle.
-	 * 
-	 * @return The access control context for this bundle. If the Java Runtime
-	 *         Environment does not support permissions, the returned access
-	 *         control context has no protection domain.
-	 * @since 1.1
-	 */
-	AccessControlContext getAccessControlContext();
 }
