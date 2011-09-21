@@ -133,6 +133,14 @@ public class ResolverHookTests extends OSGiTestCase {
 		return reg;
 	}
 
+	private void setTestProperty(String propName, String propValue) {
+		Dictionary<String, String> props = new Hashtable<String, String>();
+		props.put(propName, propValue);
+		ServiceRegistration< ? > reg = getContext().registerService(
+				Object.class, new Object(), props);
+		registrations.add(reg);
+	}
+
 	private Filter createFilter(String filter) {
 		try {
 			return getContext().createFilter(filter);
@@ -417,7 +425,6 @@ public class ResolverHookTests extends OSGiTestCase {
 		testHook.clear();
 
 		// test dynamic import
-		System.getProperties().remove(tb1v100.getSymbolicName());
 		try {
 			tb7.start();
 		} catch (BundleException e) {
@@ -606,7 +613,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		Bundle tb1v100 = install("resolver.tb1.v100.jar");
 		assertTrue("Could not resolve tb1 bundles", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb1v100, tb1v110})));
 
-		System.setProperty(tb1v100.getSymbolicName(), "v110");
+		setTestProperty(tb1v100.getSymbolicName(), "v110");
 		Bundle tb2 = install("resolver.tb2.jar");
 		try {
 			tb2.start();
@@ -649,7 +656,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		Bundle tb1v100 = install("resolver.tb1.v100.jar");
 		assertTrue("Could not resolve tb1 bundles", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb1v100, tb1v110})));
 
-		System.setProperty(tb1v100.getSymbolicName(), "v110");
+		setTestProperty(tb1v100.getSymbolicName(), "v110");
 		Bundle tb7 = install("resolver.tb7.jar");
 		try {
 			tb7.start();
@@ -692,7 +699,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		Bundle tb1v100 = install("resolver.tb1.v100.jar");
 		assertTrue("Could not resolve tb1 bundles", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb1v100, tb1v110})));
 
-		System.setProperty(tb1v100.getSymbolicName(), "v110");
+		setTestProperty(tb1v100.getSymbolicName(), "v110");
 		Bundle tb3 = install("resolver.tb3.jar");
 		try {
 			tb3.start();
@@ -777,7 +784,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		Bundle tb1v100 = install("resolver.tb1.v100.jar");
 		assertTrue("Could not resolve tb1 bundles", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb1v100, tb1v110})));
 
-		System.setProperty(tb1v100.getSymbolicName(), "v110");
+		setTestProperty(tb1v100.getSymbolicName(), "v110");
 		Bundle tb5 = install("resolver.tb5.jar");
 		assertFalse("Should not be able to resolve bundle tb5", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[]{tb5})));
 		if (hook1.getError() != null)

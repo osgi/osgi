@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,13 +17,18 @@ package org.osgi.test.cases.framework.resolver.tb2;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.framework.resolver.tb1.Test;
 
 public class Activator implements BundleActivator {
 
 	public void start(BundleContext context) throws Exception {
-		String expectedValue = System.getProperty(Test.TEST_KEY);
 		String testValue = new Test().getValue();
+		ServiceReference< ? >[] refs = context.getServiceReferences(
+				(String) null, "(" + Test.TEST_KEY + "=*)");
+		if (refs == null)
+			return; // not testing package package version
+		String expectedValue = (String) refs[0].getProperty(Test.TEST_KEY);
 		if (expectedValue == null)
 			return; // not testing package package version
 		if (!testValue.equals(expectedValue))
