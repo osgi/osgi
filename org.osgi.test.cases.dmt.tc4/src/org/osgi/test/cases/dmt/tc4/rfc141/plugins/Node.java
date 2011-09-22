@@ -97,10 +97,10 @@ public class Node implements Comparable {
 	}
 
 	public static void main(String[] args ) {
-		Node n1 = new Node(null, ".", "root" );
-		Node n2 = new Node(n1, "A", "node A");
+//		Node n1 = new Node(null, ".", "root" );
+		Node n2 = new Node(null, "A", "node A");
 		Node n3 = new Node(n2, "B", "node B");
-		System.out.println( n1.getPath() );
+//		System.out.println( n1.getPath() );
 		System.out.println( n2.getPath() );
 		System.out.println( n3.getPath() );
 	}

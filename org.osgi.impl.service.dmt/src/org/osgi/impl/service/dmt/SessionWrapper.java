@@ -20,16 +20,16 @@ package org.osgi.impl.service.dmt;
 
 
 
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.osgi.framework.Bundle;
 import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtIllegalStateException;
 import org.osgi.service.dmt.MetaNode;
-
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 class SessionWrapper extends DmtSessionImpl {
@@ -38,8 +38,8 @@ class SessionWrapper extends DmtSessionImpl {
 
     SessionWrapper(String principal, String subtreeUri, int lockMode,
             PermissionInfo[] permissions, Context context,
-            DmtAdminCore dmtAdmin) throws DmtException {
-        super(principal, subtreeUri, lockMode, permissions, context, dmtAdmin);
+            DmtAdminCore dmtAdmin, Bundle initiatingBundle) throws DmtException {
+        super(principal, subtreeUri, lockMode, permissions, context, dmtAdmin, initiatingBundle);
         
         timer = new Timer(true);
         invalidateTask = null;
@@ -56,14 +56,23 @@ class SessionWrapper extends DmtSessionImpl {
     
     // convenience method for fatal errors in normal DMT access methods
     private void invalidateSession() {
-        invalidateSession(true, false);
+        invalidateSession(true, false, null);
+    }
+    
+    private void invalidateSession(Exception fatalException) {
+        invalidateSession(true, false, fatalException);
+    }
+    
+    protected void invalidateSession(boolean rollback, 
+            boolean timeout) {
+    	invalidateSession(rollback, timeout, null);
     }
     
     protected synchronized void invalidateSession(boolean rollback, 
-            boolean timeout) {
+            boolean timeout, Exception fatalException) {
         // timer is stopped for good if the session is invalidated
         removeTimer(); 
-        super.invalidateSession(rollback, timeout);
+        super.invalidateSession(rollback, timeout, fatalException);
     }
     
     public void close() throws DmtException {
@@ -81,7 +90,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.execute(nodeUri, data);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -98,7 +107,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.execute(nodeUri, correlator, data);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -114,7 +123,7 @@ class SessionWrapper extends DmtSessionImpl {
             return super.getNodeAcl(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -130,7 +139,7 @@ class SessionWrapper extends DmtSessionImpl {
             return super.getEffectiveNodeAcl(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -146,7 +155,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.setNodeAcl(nodeUri, acl);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -198,7 +207,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.setNodeTitle(nodeUri, title);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -214,7 +223,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.setNodeValue(nodeUri, data);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -230,7 +239,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.setDefaultNodeValue(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -246,7 +255,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.setNodeType(nodeUri, type);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -262,7 +271,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.deleteNode(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -278,7 +287,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.createInteriorNode(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -295,7 +304,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.createInteriorNode(nodeUri, type);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -311,7 +320,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.createLeafNode(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -328,7 +337,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.createLeafNode(nodeUri, value);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -345,7 +354,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.createLeafNode(nodeUri, value, mimeType);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -362,7 +371,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.copy(nodeUri, newNodeUri, recursive);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -378,7 +387,7 @@ class SessionWrapper extends DmtSessionImpl {
             super.renameNode(nodeUri, newName);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -406,7 +415,7 @@ class SessionWrapper extends DmtSessionImpl {
             return super.isLeafNode(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -422,7 +431,7 @@ class SessionWrapper extends DmtSessionImpl {
             return super.getNodeValue(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -438,7 +447,7 @@ class SessionWrapper extends DmtSessionImpl {
             return super.getNodeTitle(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -454,7 +463,7 @@ class SessionWrapper extends DmtSessionImpl {
             return super.getNodeType(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -470,7 +479,7 @@ class SessionWrapper extends DmtSessionImpl {
             return super.getNodeVersion(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -486,7 +495,7 @@ class SessionWrapper extends DmtSessionImpl {
             return super.getNodeTimestamp(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -502,7 +511,7 @@ class SessionWrapper extends DmtSessionImpl {
             return super.getNodeSize(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -518,7 +527,7 @@ class SessionWrapper extends DmtSessionImpl {
             return super.getChildNodeNames(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();
@@ -534,7 +543,7 @@ class SessionWrapper extends DmtSessionImpl {
             return super.getMetaNode(nodeUri);
         } catch(DmtException e) {
             if(e.isFatal())
-                invalidateSession();
+                invalidateSession(e);
             throw e;
         } catch(PluginUnregisteredException e) {
             invalidateSession();

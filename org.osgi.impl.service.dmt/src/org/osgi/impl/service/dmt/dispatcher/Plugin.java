@@ -1,18 +1,33 @@
 package org.osgi.impl.service.dmt.dispatcher;
 
-import org.osgi.service.dmt.*;
-import org.osgi.service.dmt.spi.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import java.util.*;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.Uri;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.MountPlugin;
+import org.osgi.util.tracker.ServiceTracker;
 
-import org.osgi.framework.*;
-import org.osgi.util.tracker.*;
-
+/**
+ * A plugin represents a Data- or ExecPlugin with its occupied segments in the tree.
+ * @author steffen
+ *
+ */
 public class Plugin {
 
-	// SD: removed final
-	List<Segment> owns = new ArrayList<Segment>();
-	Set<String> mountPoints = new HashSet<String>();
+	private static final boolean ADDED = true;
+	private static final boolean REMOVED = false;
+	
+	List<Segment> owns;
+	Set<String> mountPoints;
 
 	final ServiceReference reference;
 	final Segment root;
@@ -27,27 +42,15 @@ public class Plugin {
 		this.eaTracker = eaTracker;
 		this.context = context;
 	}
-
+	
 	/**
-	 * performs following checks:
-	 * 1. is the number of registered uri == 1, if mountPoints are given
-	 * 2. are the requested nodes free and "backed up" by mountPoints of an ancestral plugin
-	 * 3. do all descendant plugins match one of the own mountPoints, or would a descendant plugin
-	 *    potentially be hidden/overlapped
-	 * <p>
-	 * In all of the above cases the whole plugin is ignored and no mapping will happen at all,
-	 * even if some uris have passed the checks.
+	 * checks for number of uris, if mountPoints are given and initializes local mountPoint var
+	 * if check was OK
 	 * @param uris
-	 * @param idManager
 	 * @throws Exception
 	 */
-	void init(Collection<String> uris, IDManager idManager) throws Exception {
-		root.lock();
+	boolean init(Collection<String> uris) throws Exception {
 		try {
-			String pid = (String) reference.getProperty(Constants.SERVICE_PID);
-
-			List<Segment> candidates = new ArrayList<Segment>();
-
 			assert uris != null;
 
 			// mountPoints are only allowed for plugins with just 1 dataRootURI
@@ -56,33 +59,38 @@ public class Plugin {
 			if (mps != null && ! mps.isEmpty() ) {
 				if (uris.size() > 1) {
 					error("mountPoints are not allowed for plugins with more than one dataRootURI "	+ this);
-					return;
+					return false;
 				} 
 				String prefix = uris.iterator().next() + "/";
 				for ( String mountPoint : mps )
-					mountPoints.add(prefix + mountPoint );
+					getMountPoints().add(prefix + mountPoint );
 			}
 
-			// Try to find the segments we need and check
-			// they do not violate any constraints
-			for (String uri : uris) {
-				Segment s = getValidatedSegment(uri, idManager, pid);
-				if ( s != null )
-					candidates.add(s);
-				else 
-					return;
-			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return true;
+	}
 
-			// We only get here when all is ok ...
-			// So grab the segments
-			for (Segment candidate : candidates) {
-				candidate.plugin = this;
-				// System.out.println( " assigning plugin to candidate segment "
-				// + candidate.getUri());
-			}
-			this.owns = candidates;
+	/**
+	 * try to add the given uri to the mapping of this plugin
+	 * @param rootUri
+	 */
+	void mapUri( String uri, IDManager idManager ) throws Exception {
+		root.lock();
+		try {
+			assert uri != null;
 
-			notifyAddedMappings(this.owns);
+			String pid = (String) reference.getProperty(Constants.SERVICE_PID);
+
+			// find required segment and check it does not violate any constraints
+			Segment s = getValidatedSegment(uri, idManager, pid);
+			if ( s == null )
+				return;
+			
+			s.plugin = this;
+			getOwns().add( s );
+			invokeMountPointsCallback(Arrays.asList(s), ADDED);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -90,9 +98,10 @@ public class Plugin {
 			root.unlock();
 		}
 	}
+	
 
 	/**
-	 * checks if the node is free and the ancestral plugin has a mountpoint
+	 * checks if the node is free and the parent plugin has a mountpoint
 	 * defined that matches our desired position
 	 * 
 	 * @param uri the uri to check (either dataRootURI or execRootURI)
@@ -100,45 +109,11 @@ public class Plugin {
 	 * @param pid the optional pid, that is used to make id mapping persistent
 	 * @return the validated Segment if all checks are OK or null, if check where not OK
 	 */
-	private Segment getValidatedSegment_(String uri, IDManager idManager, String pid) {
-		String path[] = Uri.toPath(uri);
-		Segment s = getSegment(path, root);
-		Plugin owner = s.getPlugin();
-
-		// Verify that we have a free node or the ancestral
-		// plugin has a mount point that matches our desired
-		// position
-		if (owner == null || owner.isRoot()	|| owner.hasMountPoint(s.getUri().toString())) {
-
-			// TODO: replace the "#" with a unique id
-			int id = -1;
-			if (uri.endsWith("#")) {
-				id = idManager.getIndex(uri, pid);
-
-				String newUri = uri.replaceAll("#", "" + id);
-				s.plugin = null;
-				s = getSegment(Uri.toPath(newUri), root);
-			}
-			// SD: makes mountpoint checks easier later on, because it still
-			// holds the version with the '#'
-			s.mountedOn = uri;
-			// if we reached this point then the segment is OK
-			return s;
-		}
-//		try {
-//			s.release(null);
-//		} catch (DmtException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		return null;
-	}
-
 	private Segment getValidatedSegment(String uri, IDManager idManager, String pid) throws DmtException {
 
 		String checkedUri = uri;
 		if ( uri.endsWith("#")) {
-			int id = idManager.getIndex(uri, pid);
+			int id = idManager.getIndex(uri, pid, reference.getBundle().getBundleId() );
 			checkedUri = uri.replaceAll("#", "" + id);
 		}
 		// add this segment temporarily
@@ -147,7 +122,6 @@ public class Plugin {
 		// remembering the original uri (with '#') makes mountpoint checks easier 
 		s.mountedOn = uri;
 
-		boolean error = false;
 		if (owner == null || owner.isRoot() || owner.hasMountPoint(uri)) {
 			// Verify that we do not have mounted descendants that
 			// are not mountpoints
@@ -155,16 +129,15 @@ public class Plugin {
 			if ( overlappedDescendant != null ) {
 				error("plugin overlaps: " + overlappedDescendant.getUri()
 						+ " " + overlappedDescendant.plugin);
-				error = true;
+				s.release(null);
+				return null;
 			}
 		}
 		else {
-			error("plugin registers under occupied root uri: " + uri + " " + this);
-			error = true;
+			error("plugin registers under occupied root uri: " + uri + " --> ignoring this plugin");
+			return null;
 		}
-		if ( error )
-			s.release(null);
-		return error ? null : s;
+		return s;
 	}
 	
 	
@@ -192,14 +165,8 @@ public class Plugin {
 	}
 
 	
-//	public boolean addRootUri(String uri) {
-//		boolean success = false;
-//
-//		return success;
-//	}
-
 	public boolean isRoot() {
-		for (Segment segment : owns) {
+		for (Segment segment : getOwns()) {
 			if (".".equals(segment.getUri().toString()))
 				return true;
 		}
@@ -207,13 +174,13 @@ public class Plugin {
 	}
 
 	boolean hasMountPoint(String path) {
-		return mountPoints.contains(path);
+		return getMountPoints().contains(path);
 	}
 
 	/**
-	 * closes a Plugin. This includes: - invoke close also on all other Plugins
-	 * that are currently mapped to one of this plugins mount points - invokes
-	 * release on all of the owned Segments
+	 * Closes the whole Plugin and releases all occupied segments. 
+	 * It also releases the mapping for child plugins, that are currently mounted on one of 
+	 * the own mountpoints.
 	 * 
 	 */
 	void close() throws InterruptedException {
@@ -221,31 +188,46 @@ public class Plugin {
 		try {
 			// MUST also close all Plugins that are currently mapped to one of
 			// "my" mount points
-			for (String mountPoint : mountPoints) {
+			for (String mountPoint : getMountPoints()) {
 				String[] mpPath = Uri.toPath(mountPoint);
 				Segment mpSegment = getSegment(mpPath, root);
-				if (mpSegment != null && mpSegment.plugin != null)
-					// remember all pathes for plugins that have been mapped on
-					// this plugins mount points
-					mpSegment.plugin.close();
-			}
-			List<String[]> pathes = new ArrayList<String[]>();
-			for (Segment segment : owns) {
-				pathes.add(segment.getPath());
-				try {
-					// System.out.println( "releasing segment: " +
-					// segment.getUri() );
-					segment.release(null);
-				} catch (DmtException e) {
-					e.printStackTrace();
+				if (mpSegment != null && mpSegment.plugin != null) {
+					// plugins with more than one owned segments can't have mountpoints
+					if (mpSegment.plugin.getOwns().size() > 1)
+						// --> sufficient to just release the segment
+						mpSegment.plugin.releaseSegment(mpSegment);
+					else
+						// close and handle dependend plugins 
+						mpSegment.plugin.close();
 				}
 			}
-			invokeMountPointsCallback(getMountPlugin(), pathes, false);
+			for (Segment segment : getOwns())
+				segment.release(null);
 			
-			owns.clear();
-			mountPoints.clear();
-		} finally {
+			invokeMountPointsCallback(getOwns(), REMOVED);
+			getOwns().clear();
+			getMountPoints().clear();
+		} catch ( Throwable e ) {
+			e.printStackTrace();
+		}
+		finally {
 			root.unlock();
+		}
+	}
+	
+	/**
+	 * Removes a single mapping (i.e. for one dataRootURI) of the plugin and 
+	 * releases the occupied segments.
+	 * 
+	 * @param segment .. the segment to be released
+	 */
+	void releaseSegment(Segment segment){
+		owns.remove(segment);
+		try {
+			segment.release(null);
+			invokeMountPointsCallback(Arrays.asList(segment), REMOVED);
+		} catch (DmtException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -262,11 +244,20 @@ public class Plugin {
 	}
 
 	public Set<String> getMountPoints() {
+		if (mountPoints == null)
+			mountPoints = new HashSet<String>();
 		return mountPoints;
+	}
+	
+	public void addMountPoint(String mountPoint ) {
+		getMountPoints().add(mountPoint);
 	}
 
 	public List<Segment> getOwns() {
-		return (List<Segment>) owns;
+		if (owns == null)
+			owns = new ArrayList<Segment>();
+
+		return owns;
 	}
 
 	public ServiceReference getReference() {
@@ -277,44 +268,24 @@ public class Plugin {
 		System.err.println("# " + string);
 	}
 
-	private MountPlugin getMountPlugin() {
-		MountPlugin mp = null;
-		Collection<String> classes = Util.toCollection(this.reference.getProperty(Constants.OBJECTCLASS));
-		if ( classes.contains(MountPlugin.class.getName())) {
-			try {
-				mp = (MountPlugin) context.getService(this.reference);
-			} catch (ClassCastException e) {
-			}
-		}
 
-		return mp;
-	}
-
-
-
-	private void notifyAddedMappings(List<Segment> segments) {
-		List<String[]> pathes = new ArrayList<String[]>();
-		for (Segment segment : segments) {
-			pathes.add(segment.getPath());
-		}
-		invokeMountPointsCallback(getMountPlugin(), pathes, true);
-	}
-
-	private void invokeMountPointsCallback(MountPlugin mp,
-			List<String[]> mountedPathes, boolean added) {
-		if (mp == null || mountedPathes == null)
-			return;
+	private void invokeMountPointsCallback(	List<Segment> segments, boolean added) {
+		Object o = context.getService(this.reference);
+		MountPlugin mp = o instanceof MountPlugin ? (MountPlugin) o : null;
+		
 		try {
-			for (String[] path : mountedPathes) {
-				if (added)
-					mp.mountPointAdded(new MountPointImpl(path, eaTracker));
-				else
-					mp.mountPointRemoved(new MountPointImpl(path, eaTracker));
-			}
+			if ( mp != null )
+				for (Segment segment : segments) {
+					if (added)
+						mp.mountPointAdded(new MountPointImpl(segment.getPath(), reference.getBundle()));
+					else
+						mp.mountPointRemoved(new MountPointImpl(segment.getPath(), reference.getBundle()));
+				}
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
+		finally {
+			context.ungetService(reference);
+		}
 	}
-
-	
 }

@@ -44,6 +44,7 @@ public class DmtAdminActivator implements BundleActivator {
     
     static final String DMT_PERMISSION_ADMIN_SERVICE_PID = 
         "org.osgi.impl.service.dmt.perms";
+    private static Context context;
     
     private ServiceRegistration	notificationReg;
     private ServiceRegistration adminFactoryReg;
@@ -52,7 +53,6 @@ public class DmtAdminActivator implements BundleActivator {
     private Field factoryContext;
     private DmtAdminFactory dmtAdminFactory;
     
-    private Context context;
 
 	public void start(BundleContext bc) throws BundleException {
         System.out.println("Dmt Admin activation started.");
@@ -132,4 +132,7 @@ public class DmtAdminActivator implements BundleActivator {
         context.close();
 	}
     
+	public static Context getContext() {
+		return context;
+	}
 }

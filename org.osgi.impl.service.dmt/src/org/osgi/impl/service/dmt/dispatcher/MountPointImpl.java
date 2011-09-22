@@ -1,30 +1,46 @@
 package org.osgi.impl.service.dmt.dispatcher;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Properties;
 
-import org.osgi.service.dmt.*;
-import org.osgi.service.dmt.spi.*;
-import org.osgi.service.event.*;
-import org.osgi.util.tracker.*;
+import org.osgi.framework.Bundle;
+import org.osgi.impl.service.dmt.DmtAdminActivator;
+import org.osgi.impl.service.dmt.EventDispatcher;
+import org.osgi.service.dmt.DmtConstants;
+import org.osgi.service.dmt.Uri;
+import org.osgi.service.dmt.spi.MountPoint;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
+import org.osgi.util.tracker.ServiceTracker;
 
+/**
+ * @author steffen
+ *
+ */
 public class MountPointImpl implements MountPoint {
 	
 	private static final List<String> STANDARD_PROPS = new ArrayList<String>();
 	private String[] path;
 	private String uri;
-	private ServiceTracker eaTracker; 
+	private Bundle pluginBundle;
+	private EventDispatcher eventDispatcher;
 
 	static {
 		STANDARD_PROPS.add( DmtConstants.EVENT_PROPERTY_NODES );
 		STANDARD_PROPS.add( DmtConstants.EVENT_PROPERTY_NEW_NODES );
 		STANDARD_PROPS.add( DmtConstants.EVENT_PROPERTY_SESSION_ID );
-		STANDARD_PROPS.add( DmtConstants.EVENT_PROPERTY_LIST_NODES );
 	}
 	
-	public MountPointImpl( String[] path, ServiceTracker eaTracker ) {
+	public MountPointImpl( String[] path, Bundle pluginBundle ) {
 		this.path = path;
 		this.uri = Uri.toUri(path);
-		this.eaTracker = eaTracker;
+		this.pluginBundle = pluginBundle;
+		// individual eventDispatcher for this MountPoint
+		this.eventDispatcher = new EventDispatcher(DmtAdminActivator.getContext(), -1, pluginBundle);
 	}
 
 	public String[] getMountPath() {
@@ -40,14 +56,7 @@ public class MountPointImpl implements MountPoint {
 	public void postEvent(String topic, String[] relativeNodes,
 			String[] newRelativeNodes, Dictionary properties) {
 
-		EventAdmin ea = (EventAdmin) eaTracker.getService();
-		if ( ea == null ) {
-			System.err.println( "MountPoint: no EventAdmin found --> can't post Events on behalf of the Plugin");
-			return;
-		}
-		
-		Hashtable props = new Hashtable<String, String[]>();
-		
+		Properties props = new Properties();
 		if ( properties != null ) {
 			Enumeration keys = properties.keys();
 			while (keys.hasMoreElements()) {
@@ -61,10 +70,11 @@ public class MountPointImpl implements MountPoint {
 			props.put("nodes", addPrefix(uri, relativeNodes) );
 		if ( newRelativeNodes != null )
 			props.put("newnodes", addPrefix(uri, newRelativeNodes) );
-		
-		Event e = new Event(topic, props);
-		ea.postEvent(e);
+
+		// post this event via normal dispatching (local and EA)
+		this.eventDispatcher.dispatchPluginInternalEvent(topic, props);
 	}
+
 	
 	private String[] addPrefix( String prefix, String[] uris ) {
 		String[] newUris = new String[uris.length];
@@ -74,10 +84,15 @@ public class MountPointImpl implements MountPoint {
 		return newUris;
 	}
 
-	public void sendEvent(String topic, String[] relativeURIs,
-			Dictionary properties) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("method not yet implemented");
+
+	public int hashCode() {
+		return this.uri.hashCode();
+	}
+	
+	public boolean equals( Object obj ) {
+		if ( obj == null ) return false;
+		if ( ! (obj instanceof MountPoint )) return false;
+		return this.hashCode() == obj.hashCode();
 	}
 
 }

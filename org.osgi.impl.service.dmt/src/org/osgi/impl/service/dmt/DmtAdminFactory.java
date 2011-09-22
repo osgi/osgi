@@ -49,7 +49,7 @@ public class DmtAdminFactory implements ServiceFactory {
     }
 
     public Object getService(Bundle bundle, ServiceRegistration registration) {
-        DmtAdminDelegate delegate = new DmtAdminDelegate(dmtAdmin, context);
+        DmtAdminDelegate delegate = new DmtAdminDelegate(dmtAdmin, context, bundle);
         delegates.add(delegate);
         return delegate;
     }
@@ -72,7 +72,7 @@ public class DmtAdminFactory implements ServiceFactory {
             running = true;
             
             while(running) {
-                DmtEventCore event = EventStore.getNextLocalEvent(10000);
+                DmtEventCore event = EventDispatcher.getNextLocalEvent(10000);
                 if(event != null) {
                     Iterator i = delegates.iterator();
                     while (i.hasNext()) {

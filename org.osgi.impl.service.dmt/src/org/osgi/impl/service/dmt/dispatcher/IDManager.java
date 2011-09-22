@@ -34,28 +34,30 @@ public class IDManager {
 	class ID {
 		int index;
 		String pid;
-		public ID( String pid, int index ) {
+		long bundleID = -1;
+		public ID( String pid, long bundleID, int index ) {
 			this.pid = pid;
+			this.bundleID = bundleID;
 			this.index = index;
 		}
 		public String toString() {
-			return " pid: " + pid + "  id: " + index;
+			return " pid: " + pid + "  bunldeID: " + bundleID + "  id: " + index;
 		}
 	}
 	
 	/**
-	 * helper class for maintaining the list of ID's for a given uri
+	 * helper class for maintaining a list of ID's
 	 * @author steffen
 	 *
 	 */
 	class IDList {
 		Vector<ID> ids = new Vector<ID>();
 		
-		ID getId( String pid ) {
-			if ( pid == null )
+		ID getId( String pid, long bundleID ) {
+			if ( pid == null || bundleID == -1 )
 				return null;
 			for ( ID id : ids ) {
-				if ( pid.equals(id.pid))
+				if ( pid.equals(id.pid) && bundleID == id.bundleID )
 					return id;
 			}
 			return null;
@@ -63,7 +65,7 @@ public class IDManager {
 		
 		// gets the first free id in this list
 		int getFreeId() {
-			for (int i = 0; i < Integer.MAX_VALUE; i++) {
+			for (int i = 1; i < Integer.MAX_VALUE; i++) {
 				boolean used = false;
 				for ( ID id : ids )
 					if ( id.index == i ) {
@@ -105,18 +107,19 @@ public class IDManager {
 	 * returns the ID for the given uri and pid
 	 * @param uri ... must not be null
 	 * @param pid ... can be null
+	 * @param bundleID ... must be given if pid is != null
 	 * @return
 	 */
-	private ID getID( String uri, String pid ) {
+	private ID getID( String uri, String pid, long bundleID ) {
 		IDList ids = getIDList(uri);
 		// if pid is given, then look for this special ID
 		ID id = null;
-		if ( pid != null ) {
-			id = ids.getId(pid);
-		}
+		if ( pid != null && bundleID != -1 )
+			id = ids.getId(pid, bundleID);
+
 		if ( id == null ) {
 			int i = ids.getFreeId();
-			id = new ID(pid, i);
+			id = new ID(pid, bundleID, i);
 			ids.add(id);
 			// make persistent, only if pid is provided
 			if ( pid != null )
@@ -143,12 +146,13 @@ public class IDManager {
 	 * returns the unique index for the given uri and pid
 	 * @param uri ... the uri for which the id is required
 	 * @param pid ... the service.pid of the DataPlugin, can be null
+	 * @param bundleID ... the id of the bundle that registered the DataPlugin, must be given if pid is present
 	 * @return the index, which is either newly generated or taken from already known mapping (persistency)
 	 */
-	public int getIndex( String uri, String pid ) {
+	public int getIndex( String uri, String pid, long bundleID ) {
 		if ( uri == null )
 			return -1;
-		return getID(uri, pid).index;
+		return getID(uri, pid, bundleID).index;
 	}
 	
 	/**
@@ -162,7 +166,8 @@ public class IDManager {
 				if ( getConfiguration(uri, id) == null) {
 					Dictionary<String, String> props = new Hashtable<String, String>();
 					props.put("uri", uri);
-					props.put("service.pid", id.pid);
+					props.put("plugin.pid", id.pid);
+					props.put("bundle.id", "" + id.bundleID);
 					props.put("index", "" + id.index);
 		
 					Configuration config = ca.createFactoryConfiguration(_PID);
@@ -186,7 +191,8 @@ public class IDManager {
 				filter.append( "(&" );
 				filter.append( "(" + ConfigurationAdmin.SERVICE_FACTORYPID + "=" + _PID + ")");
 				filter.append( "(uri=" + uri + ")");
-				filter.append( "(service.pid=" + id.pid + ")");
+				filter.append( "(plugin.pid=" + id.pid + ")");
+				filter.append( "(bundle.id=" + id.bundleID + ")");
 				filter.append( "(index=" + id.index + ")");
 				filter.append( ")" );
 				
@@ -225,13 +231,15 @@ public class IDManager {
 					String uri = (String) configs[i].getProperties().get( "uri" );
 					String pid = (String) configs[i].getProperties().get( "service.pid" );
 					int index = -1;
+					int bundleID = -1;
 					try {
 						index = Integer.parseInt((String) configs[i].getProperties().get( "index" ));
+						bundleID = Integer.parseInt((String) configs[i].getProperties().get( "bundle.id" ));
 					} catch (NumberFormatException e) {
 						System.err.println( "NumberformatException in persistent index for: " + uri);
 					}
 					if ( index > -1 ) {
-						getIDList(uri).add( new ID(pid, index));
+						getIDList(uri).add( new ID(pid, bundleID, index));
 					}
 						
 				}

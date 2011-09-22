@@ -20,6 +20,7 @@ package org.osgi.impl.service.dmt;
 import java.security.*;
 import java.util.*;
 
+import org.osgi.framework.Bundle;
 import org.osgi.impl.service.dmt.export.*;
 import org.osgi.service.dmt.*;
 import org.osgi.service.log.*;
@@ -27,17 +28,8 @@ import org.osgi.service.permissionadmin.*;
 
 public class DmtAdminCore {
 
-	// session initiation timeout after 10 seconds, to make testing easier 
-//    public static final long OPEN_TIMEOUT = 10000;
-    
-    // session idle timeout: session is invalidated after 5 minutes inactivity
-    //public static final long IDLE_TIMEOUT = 300000;
-    // half-minute idle timeout for demonstration purposes 
-//    public static final long IDLE_TIMEOUT = 30000;
-	
 	private static final long MINIMUM_OPEN_TIMEOUT = 10000;
 	private static final long MINIMUM_IDLE_TIMEOUT = 30000;
-	// TODO removed properties and made constants
 	protected static final String SESSION_INACTIVE_TIMEOUT = "60000";
 	protected static final String SESSION_CREATION_TIMEOUT = "10000";
 	private static long sessionOpenTimeout = -1;
@@ -58,17 +50,18 @@ public class DmtAdminCore {
 		openSessions = new Vector();
 	}
 
-	public DmtSession getSession(String subtreeUri) throws DmtException {
-		return getSession(null, subtreeUri, DmtSession.LOCK_TYPE_EXCLUSIVE);
+	public DmtSession getSession(String subtreeUri, Bundle initiatingBundle) throws DmtException {
+		return getSession(null, subtreeUri, DmtSession.LOCK_TYPE_EXCLUSIVE, initiatingBundle);
 	}
 
-	public DmtSession getSession(String subtreeUri, int lockMode)
+	public DmtSession getSession(String subtreeUri, int lockMode, Bundle initiatingBundle)
 			throws DmtException {
-		return getSession(null, subtreeUri, lockMode);
+		return getSession(null, subtreeUri, lockMode, initiatingBundle);
 	}
 
 	public synchronized DmtSession getSession(String principal,
-            String subtreeUri, int lockMode) throws DmtException {
+            String subtreeUri, int lockMode, Bundle initiatingBundle) throws DmtException {
+		
         checkLockMode(lockMode);
         
         PermissionInfo[] permissions = null;
@@ -80,7 +73,7 @@ public class DmtAdminCore {
             subtreeUri = ".";
         
 		SessionWrapper session = new SessionWrapper(principal, subtreeUri,
-                lockMode, permissions, context, this);
+                lockMode, permissions, context, this, initiatingBundle);
                 
         // passing the normalized variant of the subtreeUri parameter
 		waitUntilNoConflictingSessions(session.getRootNode(), lockMode);

@@ -17,25 +17,54 @@
  */
 package org.osgi.impl.service.dmt;
 
-import java.util.Iterator;
+import java.util.Dictionary;
 import java.util.List;
+import java.util.Properties;
 import java.util.Vector;
 
 import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtEvent;
 
-/*
+/**
  * Stores all parameters of a DMT event, together with the ACLs of the affected
  * nodes at the time of the operation that triggered the event.
  */
 public class DmtEventCore {
     private int type;
     private int sessionId;
-    private List nodes;
-    private List newNodes;
-    private List acls;
+    private List<Node> nodes;
+    private List<Node> newNodes;
+    private List<Acl> acls;
+    private Properties props;
 
+    static int getType(String topic) {
+    	if (DmtConstants.EVENT_TOPIC_ADDED.equals(topic))
+    		return DmtEvent.ADDED;
+    	if (DmtConstants.EVENT_TOPIC_DELETED.equals(topic))
+    		return DmtEvent.DELETED;
+    	if (DmtConstants.EVENT_TOPIC_REPLACED.equals(topic))
+    		return DmtEvent.REPLACED;
+    	if (DmtConstants.EVENT_TOPIC_RENAMED.equals(topic))
+    		return DmtEvent.RENAMED;
+    	if (DmtConstants.EVENT_TOPIC_COPIED.equals(topic))
+    		return DmtEvent.COPIED;
+    	if (DmtConstants.EVENT_TOPIC_SESSION_OPENED.equals(topic))
+    		return DmtEvent.SESSION_OPENED;
+    	if (DmtConstants.EVENT_TOPIC_SESSION_CLOSED.equals(topic))
+    		return DmtEvent.SESSION_CLOSED;
+    	return -1;
+    }
+
+    DmtEventCore(String topic, int sessionId ){
+    	this( getType(topic), sessionId);
+    }
+    
+    DmtEventCore(String topic, int sessionId, Properties initialProps ) {
+    	this( getType(topic), sessionId);
+    	this.props = initialProps;
+    }
+    
     DmtEventCore(int type, int sessionId) {
         checkType(type);
         
@@ -43,15 +72,15 @@ public class DmtEventCore {
         this.sessionId = sessionId;
         
         if(type != DmtEvent.SESSION_OPENED && type != DmtEvent.SESSION_CLOSED) {
-            nodes = new Vector();
-            acls = new Vector();
+            nodes = new Vector<Node>();
+            acls = new Vector<Acl>();
         } else {
             nodes = null;
             acls = null;
         }
         
         if(type == DmtEvent.COPIED || type == DmtEvent.RENAMED)
-            newNodes = new Vector();
+            newNodes = new Vector<Node>();
         else
             newNodes = null;
     }
@@ -70,15 +99,15 @@ public class DmtEventCore {
         return sessionId;
     }
     
-    List getNodes() {
+    List<Node> getNodes() {
         return nodes;
     }
     
-    List getNewNodes() {
+    List<Node> getNewNodes() {
         return newNodes;
     }
     
-    List getAcls() {
+    List<Acl> getAcls() {
         return acls;
     }
 
@@ -92,14 +121,11 @@ public class DmtEventCore {
         return false;
     }
     
-    private boolean listContainsNodeUnderRoot(Node root, List nodeList) {
-        Iterator i = nodeList.iterator();
-        while (i.hasNext()) {
-            Node node = (Node) i.next();
+    private boolean listContainsNodeUnderRoot(Node root, List<Node> nodeList) {
+    	for( Node node : nodeList )
             if(root.isAncestorOf(node))
                 return true;
-        }
-        
+    	
         return false;
     }
     
@@ -130,8 +156,8 @@ public class DmtEventCore {
         // cannot use iterator because if there is any match, items have to be
         // removed from multiple lists
         for(int k = 0; k < nodes.size(); k++)
-            if((newNodes != null && root.isAncestorOf((Node)newNodes.get(k))) ||
-                    root.isAncestorOf((Node)nodes.get(k))) {
+            if((newNodes != null && root.isAncestorOf(newNodes.get(k))) ||
+                    root.isAncestorOf(nodes.get(k))) {
                 nodes.remove(k);
                 acls.remove(k);
                 if(newNodes != null)
@@ -161,6 +187,7 @@ public class DmtEventCore {
         throw new IllegalArgumentException("Unknown event type.");
     }
     
+    
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("DmtEventCore(");
@@ -179,5 +206,23 @@ public class DmtEventCore {
                 type != DmtEvent.COPIED && type != DmtEvent.SESSION_OPENED && 
                 type != DmtEvent.SESSION_CLOSED)
             throw new IllegalArgumentException("Unknown event type");
+    }
+    
+    Properties getProperties() {
+    	if (props == null)
+			props = new Properties();
+		return props;
+    }
+    
+    void addProperty( String key, Object value ) {
+    	getProperties().put(key, value);
+    }
+    
+    String[] getPropertyNames() {
+    	return getProperties().keySet().toArray(new String[getProperties().size()]);
+    }
+    
+    Object getProperty( String key ) {
+    	return getProperties().get(key);
     }
 }
