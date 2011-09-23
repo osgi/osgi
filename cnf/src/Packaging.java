@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -65,6 +66,7 @@ public class Packaging implements AnalyzerPlugin {
 		Collection<Container> runpath = us.getRunpath();
 
 		StringBuilder sb = new StringBuilder();
+		addNotice(sb);
 		sb.append("# Workspace information\n");
 		sb.append(Constants.RUNPATH);
 		sb.append(" = ");
@@ -115,7 +117,7 @@ public class Packaging implements AnalyzerPlugin {
 	/**
 	 * Store a project in a JAR so that we can later unzip this project and have
 	 * all information.
-	 * 
+	 *
 	 * @param jar
 	 * @param project
 	 * @throws Exception
@@ -132,6 +134,7 @@ public class Packaging implements AnalyzerPlugin {
 		String runframework = project.getProperty(Constants.RUNFRAMEWORK);
 		String runvm = project.getProperty(Constants.RUNVM);
 		StringBuilder sb = new StringBuilder();
+		addNotice(sb);
 
 		/**
 		 * Add all sub bundles to the -runbundles so they are installed
@@ -146,9 +149,9 @@ public class Packaging implements AnalyzerPlugin {
 			Container c = new Container(sub);
 			runbundles.add(c);
 		}
-		
+
 		sb.append("# bnd pack for project " + project + "\n");
-		sb.append("# " + new Date() + "\n");
+		sb.append("# ").append(new Date()).append("\n");
 		sb.append("-include= ~shared.inc\n");
 		sb.append("\n");
 		sb.append("-target = ");
@@ -234,7 +237,7 @@ public class Packaging implements AnalyzerPlugin {
 					path = "jar/" + f.getName();
 					if ( path.endsWith(".jar")) {
 						if (include)
-						jar.putResource( path, new FileResource(f));						
+						jar.putResource( path, new FileResource(f));
 						filesToPath.put(f.getAbsolutePath(), path);
 					}
 					else {
@@ -381,5 +384,24 @@ public class Packaging implements AnalyzerPlugin {
 		finally {
 			s.close();
 		}
+	}
+
+	private void addNotice(StringBuilder sb) {
+		sb.append("# Copyright (c) OSGi Alliance (")
+				.append(Calendar.getInstance().get(Calendar.YEAR))
+				.append("). All Rights Reserved.\n");
+		sb.append("#\n");
+		sb.append("# Licensed under the Apache License, Version 2.0 (the \"License\");\n");
+		sb.append("# you may not use this file except in compliance with the License.\n");
+		sb.append("# You may obtain a copy of the License at\n");
+		sb.append("#\n");
+		sb.append("#      http://www.apache.org/licenses/LICENSE-2.0\n");
+		sb.append("#\n");
+		sb.append("# Unless required by applicable law or agreed to in writing, software\n");
+		sb.append("# distributed under the License is distributed on an \"AS IS\" BASIS,\n");
+		sb.append("# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n");
+		sb.append("# See the License for the specific language governing permissions and\n");
+		sb.append("# limitations under the License.\n");
+		sb.append("\n");
 	}
 }
