@@ -299,6 +299,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 			assertEquals("Expecting 1 signer", 1, trustedSigners.size());
 		else
 			assertEquals("Expecting 0 signers", 0, trustedSigners.size());
+		stopFramework(framework);
 	}
 
 	static class AllPolicy extends Policy {
