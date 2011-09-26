@@ -380,10 +380,11 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		Map configuration = getConfiguration(getName());
 		configuration.put(Constants.FRAMEWORK_BEGINNING_STARTLEVEL, "25");
 		Framework framework = createFramework(configuration);
-		startFramework(framework);
+		initFramework(framework);
 		FrameworkStartLevel fsl = framework.getBundleContext().getBundle()
 				.adapt(FrameworkStartLevel.class);
 		assertNotNull(fsl);
+		startFramework(framework);
 		assertEquals("Wrong start level after start", 25, fsl.getStartLevel());
 		stopFramework(framework);
 	}
