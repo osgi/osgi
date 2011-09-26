@@ -29,4 +29,5 @@ Test-Cases							= ${testcases}
 -runframework = none
 
 -runproperties = ${runproperties}, \
-	${p}.storageroot=${target-dir}/${p}.testStorageRoot 
+	${p}.storageroot=${target-dir}/${p}.testStorageRoot, \
+	${p}.bundles=

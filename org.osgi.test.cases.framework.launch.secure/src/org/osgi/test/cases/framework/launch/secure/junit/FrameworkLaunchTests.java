@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2009, 2011). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -28,7 +28,10 @@ import java.security.Policy;
 import java.security.ProtectionDomain;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.osgi.framework.Bundle;
@@ -48,7 +51,8 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	private String frameworkFactoryClassName;
 	private String rootStorageArea;
 	private FrameworkFactory frameworkFactory;
-	
+	private List<String>		rootBundles			= new LinkedList<String>();
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		frameworkFactoryClassName = getFrameworkFactoryClassName();
@@ -61,6 +65,15 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		assertFalse("Root storage area is not a directory: " + rootFile.getPath(), rootFile.exists() && !rootFile.isDirectory());
 		if (!rootFile.isDirectory())
 			assertTrue("Could not create root directory: " + rootFile.getPath(), rootFile.mkdirs());
+
+		StringTokenizer st = new StringTokenizer(System.getProperty(
+				"org.osgi.test.cases.framework.launch.secure.bundles", ""), ",");
+		rootBundles.clear();
+		while (st.hasMoreTokens()) {
+			String bundle = st.nextToken();
+			assertNotNull(bundle);
+			rootBundles.add(bundle);
+		}
 	}
 
 
@@ -166,7 +179,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		assertEquals("Wrong state for newly constructed framework", Bundle.INSTALLED, framework.getState());
 		return framework;
 	}
-	
+
 	private Map getConfiguration(String testName) {
 		return getConfiguration(testName, true);
 	}
@@ -193,6 +206,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 
 	private void initFramework(Framework framework) {
+		boolean unintialized = (framework.getState() & (Framework.INSTALLED | Framework.RESOLVED)) != 0;
 		try {
 			framework.init();
 			assertNotNull("BundleContext is null after init", framework.getBundleContext());
@@ -200,16 +214,23 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		catch (BundleException e) {
 			fail("Unexpected BundleException initializing", e);
 		}
+		if (unintialized) {
+			installRootBundles(framework);
+		}
 		assertEquals("Wrong framework state after init", Bundle.STARTING, framework.getState());
 	}
 
 	private void startFramework(Framework framework) {
+		boolean unintialized = (framework.getState() & (Framework.INSTALLED | Framework.RESOLVED)) != 0;
 		try {
 			framework.start();
 			assertNotNull("BundleContext is null after start", framework.getBundleContext());
 		}
 		catch (BundleException e) {
 			fail("Unexpected BundleException initializing", e);
+		}
+		if (unintialized) {
+			installRootBundles(framework);
 		}
 		assertEquals("Wrong framework state after init", Bundle.ACTIVE, framework.getState());
 
@@ -230,10 +251,40 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		catch (InterruptedException e) {
 			fail("Unexpected InterruptedException waiting for stop", e);
 		}
-		// if the framework was not STARTING STOPPING or ACTIVE then we assume the waitForStop returned immediately with a FrameworkEvent.STOPPED 
+		// if the framework was not STARTING STOPPING or ACTIVE then we assume the waitForStop returned immediately with a FrameworkEvent.STOPPED
 		// and does not change the state of the framework
 		int expectedState = (previousState & (Bundle.STARTING | Bundle.ACTIVE | Bundle.STOPPING)) != 0 ? Bundle.RESOLVED : previousState;
 		assertEquals("Wrong framework state after init", expectedState, framework.getState());
+	}
+	private void installRootBundles(Framework framework) {
+		List<Bundle> bundles = new LinkedList<Bundle>();
+
+		BundleContext fwkContext = framework.getBundleContext();
+		assertNotNull("Framework context is null", fwkContext);
+		for (String bundle : rootBundles) {
+			try {
+				Bundle b = fwkContext.installBundle("file:" + bundle);
+				assertNotNull("Cannot install bundle: " + bundle, b);
+				System.out.println("installed bundle " + b.getSymbolicName()
+						+ " " + b.getVersion());
+				bundles.add(b);
+			}
+			catch (BundleException e) {
+				fail("Unexpected BundleException installing root ", e);
+			}
+		}
+
+		for (Bundle b : bundles) {
+			if (b.getHeaders().get(Constants.FRAGMENT_HOST) == null) {
+				try {
+					b.start();
+				}
+				catch (BundleException e) {
+					fail("Unexpected BundleException starting root ", e);
+				}
+				System.out.println("started bundle " + b.getSymbolicName());
+			}
+		}
 	}
 
 	public void testSecurity() {

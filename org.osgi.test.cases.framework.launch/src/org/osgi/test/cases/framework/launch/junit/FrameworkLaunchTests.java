@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2009, 2011). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -57,6 +58,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	private String frameworkFactoryClassName;
 	private String rootStorageArea;
 	private FrameworkFactory frameworkFactory;
+	private List<String>		rootBundles			= new LinkedList<String>();
 
 	private static class BootClassLoader extends ClassLoader {
 		protected BootClassLoader() {
@@ -77,6 +79,15 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		assertFalse("Root storage area is not a directory: " + rootFile.getPath(), rootFile.exists() && !rootFile.isDirectory());
 		if (!rootFile.isDirectory())
 			assertTrue("Could not create root directory: " + rootFile.getPath(), rootFile.mkdirs());
+
+		StringTokenizer st = new StringTokenizer(System.getProperty(
+				"org.osgi.test.cases.framework.launch.bundles", ""), ",");
+		rootBundles.clear();
+		while (st.hasMoreTokens()) {
+			String bundle = st.nextToken();
+			assertNotNull(bundle);
+			rootBundles.add(bundle);
+		}
 	}
 
 
@@ -169,7 +180,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		assertEquals("Wrong state for newly constructed framework", Bundle.INSTALLED, framework.getState());
 		return framework;
 	}
-	
+
 	private Map getConfiguration(String testName) {
 		return getConfiguration(testName, true);
 	}
@@ -199,6 +210,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 
 	private void initFramework(Framework framework) {
+		boolean unintialized = (framework.getState() & (Framework.INSTALLED | Framework.RESOLVED)) != 0;
 		try {
 			framework.init();
 			assertNotNull("BundleContext is null after init", framework.getBundleContext());
@@ -206,16 +218,23 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		catch (BundleException e) {
 			fail("Unexpected BundleException initializing", e);
 		}
+		if (unintialized) {
+			installRootBundles(framework);
+		}
 		assertEquals("Wrong framework state after init", Bundle.STARTING, framework.getState());
 	}
 
 	private void startFramework(Framework framework) {
+		boolean unintialized = (framework.getState() & (Framework.INSTALLED | Framework.RESOLVED)) != 0;
 		try {
 			framework.start();
 			assertNotNull("BundleContext is null after start", framework.getBundleContext());
 		}
 		catch (BundleException e) {
 			fail("Unexpected BundleException initializing", e);
+		}
+		if (unintialized) {
+			installRootBundles(framework);
 		}
 		assertEquals("Wrong framework state after init", Bundle.ACTIVE, framework.getState());
 
@@ -236,7 +255,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		catch (InterruptedException e) {
 			fail("Unexpected InterruptedException waiting for stop", e);
 		}
-		// if the framework was not STARTING STOPPING or ACTIVE then we assume the waitForStop returned immediately with a FrameworkEvent.STOPPED 
+		// if the framework was not STARTING STOPPING or ACTIVE then we assume the waitForStop returned immediately with a FrameworkEvent.STOPPED
 		// and does not change the state of the framework
 		int expectedState = (previousState & (Bundle.STARTING | Bundle.ACTIVE | Bundle.STOPPING)) != 0 ? Bundle.RESOLVED : previousState;
 		assertEquals("Wrong framework state after init", expectedState, framework.getState());
@@ -267,9 +286,9 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		assertNotNull("Wait for stop event is null", result[0]); //$NON-NLS-1$
 
 		// if the framework was not STARTING or ACTIVE then we assume the waitForStop returned immediately with a FrameworkEvent.STOPPED
-		int expectedFrameworkEvent = (previousState & (Bundle.STARTING | Bundle.ACTIVE)) != 0 ? FrameworkEvent.STOPPED_UPDATE : FrameworkEvent.STOPPED; 
+		int expectedFrameworkEvent = (previousState & (Bundle.STARTING | Bundle.ACTIVE)) != 0 ? FrameworkEvent.STOPPED_UPDATE : FrameworkEvent.STOPPED;
 		assertEquals("Wait for stop event type is wrong", expectedFrameworkEvent, result[0].getType()); //$NON-NLS-1$
-			
+
 		// hack; not sure how to listen for when a framework is done starting back up.
 		for (int i = 0; i < 20; i++) {
 			if (framework.getState() != previousState) {
@@ -303,6 +322,38 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 			}
 		}, "test waitForStop thread"); //$NON-NLS-1$
 
+	}
+
+	private void installRootBundles(Framework framework) {
+		List<Bundle> bundles = new LinkedList<Bundle>();
+
+		BundleContext fwkContext = framework.getBundleContext();
+		assertNotNull("Framework context is null", fwkContext);
+		for (String bundle : rootBundles) {
+			try {
+				Bundle b = fwkContext.installBundle("file:" + bundle);
+				assertNotNull("Cannot install bundle: " + bundle, b);
+				System.out.println("installed bundle " + b.getSymbolicName()
+						+ " " + b.getVersion());
+				bundles.add(b);
+			}
+			catch (BundleException e) {
+				e.printStackTrace();
+				fail("Unexpected BundleException installing root ", e);
+			}
+		}
+
+		for (Bundle b : bundles) {
+			if (b.getHeaders().get(Constants.FRAGMENT_HOST) == null) {
+				try {
+					b.start();
+				}
+				catch (BundleException e) {
+					fail("Unexpected BundleException starting root ", e);
+				}
+				System.out.println("started bundle " + b.getSymbolicName());
+			}
+		}
 	}
 
 	private void checkImporter(BundleCapability ep, Bundle testBundle) {
@@ -461,7 +512,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		id = testBundle.getBundleId();
 		testBundle.start();
 		stopFramework(framework);
-		
+
 		// test that second init does not clean
 		initFramework(framework);
 		testBundle = framework.getBundleContext().getBundle(id);
@@ -746,7 +797,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 				default:
 					break;
 			}
-			assertTrue("UUISection is too big: " + uuidSections[i], uuidSections[i].length() <= limit); 
+			assertTrue("UUISection is too big: " + uuidSections[i], uuidSections[i].length() <= limit);
 			try {
 				Long.decode(uuidSections[i]);
 			} catch (NumberFormatException e) {
