@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,14 +22,14 @@ import java.util.StringTokenizer;
 /**
  * Version range. A version range is an interval describing a set of
  * {@link Version versions}.
- * 
+ *
  * <p>
  * A range has a left (lower) endpoint and a right (upper) endpoint. Each
  * endpoint can be open (excluded from the set) or closed (included in the set).
- * 
+ *
  * <p>
  * {@code VersionRange} objects are immutable.
- * 
+ *
  * @since 1.7
  * @Immutable
  * @version $Id$
@@ -82,7 +82,7 @@ public class VersionRange {
 
 	/**
 	 * Creates a version range from the specified versions.
-	 * 
+	 *
 	 * @param leftType Must be either {@link #LEFT_CLOSED} or {@link #LEFT_OPEN}
 	 *        .
 	 * @param leftEndpoint Left endpoint of range. Must not be {@code null}.
@@ -95,15 +95,15 @@ public class VersionRange {
 	public VersionRange(char leftType, Version leftEndpoint,
 			Version rightEndpoint, char rightType) {
 		if ((leftType != LEFT_CLOSED) && (leftType != LEFT_OPEN)) {
-			throw new IllegalArgumentException(
-					"The leftType argument is invalid.");
+			throw new IllegalArgumentException("invalid leftType \""
+					+ leftType + "\"");
 		}
 		if ((rightType != RIGHT_OPEN) && (rightType != RIGHT_CLOSED)) {
-			throw new IllegalArgumentException(
-					"The rightType argument is invalid.");
+			throw new IllegalArgumentException("invalid rightType \""
+					+ rightType + "\"");
 		}
 		if (leftEndpoint == null) {
-			throw new IllegalArgumentException("The left argument is null.");
+			throw new IllegalArgumentException("null leftEndpoint argument");
 		}
 		leftClosed = leftType == LEFT_CLOSED;
 		rightClosed = rightType == RIGHT_CLOSED;
@@ -114,18 +114,18 @@ public class VersionRange {
 
 	/**
 	 * Creates a version range from the specified string.
-	 * 
+	 *
 	 * <p>
 	 * Version range string grammar:
-	 * 
+	 *
 	 * <pre>
-	 * range ::= interval | atleast 
-	 * interval ::= ( '[' | '(' ) left ',' right ( ']' | ')' ) 
-	 * left ::= version 
+	 * range ::= interval | atleast
+	 * interval ::= ( '[' | '(' ) left ',' right ( ']' | ')' )
+	 * left ::= version
 	 * right ::= version
 	 * atleast ::= version
 	 * </pre>
-	 * 
+	 *
 	 * @param range String representation of the version range. The versions in
 	 *        the range must contain no whitespace. Other whitespace in the
 	 *        range string is ignored.
@@ -149,38 +149,39 @@ public class VersionRange {
 			if (!closedLeft && !LEFT_OPEN_DELIMITER.equals(token)) {
 				// first token is not a delimiter, so it must be "atleast"
 				if (st.hasMoreTokens()) { // there must be no more tokens
-					throw new IllegalArgumentException("invalid format: "
-							+ range);
+					throw new IllegalArgumentException("invalid range \""
+							+ range + "\": invalid format");
 				}
 				leftClosed = true;
 				rightClosed = false;
-				left = Version.parseVersion(token);
+				left = parseVersion(token, true, range);
 				right = null;
 				empty = false;
 				return;
 			}
 			String version = st.nextToken(ENDPOINT_DELIMITER);
-			endpointLeft = Version.parseVersion(version, !closedLeft);
+			endpointLeft = parseVersion(version, !closedLeft, range);
 			token = st.nextToken(); // consume comma
 			version = st.nextToken(RIGHT_DELIMITERS);
 			token = st.nextToken(); // right delim
 			closedRight = RIGHT_CLOSED_DELIMITER.equals(token);
 			if (!closedRight && !RIGHT_OPEN_DELIMITER.equals(token)) {
-				throw new IllegalArgumentException("invalid format: " + range);
+				throw new IllegalArgumentException("invalid range \"" + range
+						+ "\": invalid format");
 			}
-			endpointRight = Version.parseVersion(version, closedRight);
+			endpointRight = parseVersion(version, closedRight, range);
 
 			if (st.hasMoreTokens()) { // any more tokens have to be whitespace
 				token = st.nextToken("").trim();
 				if (token.length() != 0) { // trailing whitespace
-					throw new IllegalArgumentException("invalid format: "
-							+ range);
+					throw new IllegalArgumentException("invalid range \""
+							+ range + "\": invalid format");
 				}
 			}
 		}
 		catch (NoSuchElementException e) {
 			IllegalArgumentException iae = new IllegalArgumentException(
-					"invalid format: " + range);
+					"invalid range \"" + range + "\": invalid format");
 			iae.initCause(e);
 			throw iae;
 		}
@@ -193,8 +194,29 @@ public class VersionRange {
 	}
 
 	/**
+	 * Parse version component into a Version.
+	 *
+	 * @param version version component string
+	 * @param rel version is a release version
+	 * @param range Complete range string for exception message, if any
+	 * @return Version
+	 */
+	private static Version parseVersion(String version, boolean rel,
+			String range) {
+		try {
+			return Version.parseVersion(version, rel);
+		}
+		catch (IllegalArgumentException e) {
+			IllegalArgumentException iae = new IllegalArgumentException(
+					"invalid range \"" + range + "\": " + e.getMessage());
+			iae.initCause(e);
+			throw iae;
+		}
+	}
+
+	/**
 	 * Returns the left endpoint of this version range.
-	 * 
+	 *
 	 * @return The left endpoint.
 	 */
 	public Version getLeft() {
@@ -203,7 +225,7 @@ public class VersionRange {
 
 	/**
 	 * Returns the right endpoint of this version range.
-	 * 
+	 *
 	 * @return The right endpoint. May be {@code null} which indicates the right
 	 *         endpoint is <i>Infinity</i>.
 	 */
@@ -213,7 +235,7 @@ public class VersionRange {
 
 	/**
 	 * Returns the type of the left endpoint of this version range.
-	 * 
+	 *
 	 * @return {@link #LEFT_CLOSED} if the left endpoint is closed or
 	 *         {@link #LEFT_OPEN} if the left endpoint is open.
 	 */
@@ -223,7 +245,7 @@ public class VersionRange {
 
 	/**
 	 * Returns the type of the right endpoint of this version range.
-	 * 
+	 *
 	 * @return {@link #RIGHT_CLOSED} if the right endpoint is closed or
 	 *         {@link #RIGHT_OPEN} if the right endpoint is open.
 	 */
@@ -233,7 +255,7 @@ public class VersionRange {
 
 	/**
 	 * Returns whether this version range includes the specified version.
-	 * 
+	 *
 	 * @param version The version to test for inclusion in this version range.
 	 * @return {@code true} if the specified version is included in this version
 	 *         range; {@code false} otherwise.
@@ -254,7 +276,7 @@ public class VersionRange {
 	/**
 	 * Returns the intersection of this version range with the specified version
 	 * ranges.
-	 * 
+	 *
 	 * @param ranges The version ranges to intersect with this version range.
 	 * @return A version range representing the intersection of this version
 	 *         range and the specified version ranges. If no version ranges are
@@ -309,7 +331,7 @@ public class VersionRange {
 	/**
 	 * Returns whether this version range is empty. A version range is empty if
 	 * the set of versions defined by the interval is empty.
-	 * 
+	 *
 	 * @return {@code true} if this version range is empty; {@code false}
 	 *         otherwise.
 	 */
@@ -319,7 +341,7 @@ public class VersionRange {
 
 	/**
 	 * Internal isEmpty behavior.
-	 * 
+	 *
 	 * @return {@code true} if this version range is empty; {@code false}
 	 *         otherwise.
 	 */
@@ -336,11 +358,11 @@ public class VersionRange {
 
 	/**
 	 * Returns the string representation of this version range.
-	 * 
+	 *
 	 * <p>
 	 * The format of the version range string will be a version string if the
 	 * right end point is <i>Infinity</i> ({@code null}) or an interval string.
-	 * 
+	 *
 	 * @return The string representation of this version range.
 	 */
 	public String toString() {
@@ -364,7 +386,7 @@ public class VersionRange {
 
 	/**
 	 * Returns a hash code value for the object.
-	 * 
+	 *
 	 * @return An integer which is a hash code value for this object.
 	 */
 	public int hashCode() {
@@ -385,12 +407,12 @@ public class VersionRange {
 
 	/**
 	 * Compares this {@code VersionRange} object to another object.
-	 * 
+	 *
 	 * <p>
 	 * A version range is considered to be <b>equal to </b> another version
 	 * range if both the endpoints and their types are equal or if both version
 	 * ranges are {@link #isEmpty() empty}.
-	 * 
+	 *
 	 * @param object The {@code VersionRange} object to be compared.
 	 * @return {@code true} if {@code object} is a {@code VersionRange} and is
 	 *         equal to this object; {@code false} otherwise.
@@ -418,26 +440,26 @@ public class VersionRange {
 	/**
 	 * Returns the filter string for this version range using the specified
 	 * attribute name.
-	 * 
+	 *
 	 * @param attributeName The attribute name to use in the returned filter
 	 *        string.
 	 * @return A filter string for this version range using the specified
 	 *         attribute name.
 	 * @throws IllegalArgumentException If the specified attribute name is not a
 	 *         valid attribute name.
-	 * 
+	 *
 	 * @see "Core Specification, Filters, for a description of the filter string syntax."
 	 */
 	public String toFilterString(String attributeName) {
 		if (attributeName.length() == 0) {
-			throw new IllegalArgumentException("invalid attributeName: "
-					+ attributeName);
+			throw new IllegalArgumentException("invalid attributeName \""
+					+ attributeName + "\"");
 		}
 		for (char ch : attributeName.toCharArray()) {
 			if ((ch == '=') || (ch == '>') || (ch == '<') || (ch == '~')
 					|| (ch == '(') || (ch == ')')) {
-				throw new IllegalArgumentException("invalid attributeName: "
-						+ attributeName);
+				throw new IllegalArgumentException("invalid attributeName \""
+						+ attributeName + "\"");
 			}
 		}
 
