@@ -26,13 +26,15 @@ import java.security.Permission;
 import java.security.PermissionCollection;
 import java.security.Policy;
 import java.security.ProtectionDomain;
+import java.security.cert.X509Certificate;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -116,10 +118,12 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		return storageroot;
 	}
 
-	private Class loadFrameworkClass(String className)
+	private Class<FrameworkFactory> loadFrameworkFactoryClass(String className)
 			throws ClassNotFoundException {
 		BundleContext context = getBundleContextWithoutFail();
-		return context == null ? Class.forName(className) : getContext().getBundle(0).loadClass(className);
+		return (Class<FrameworkFactory>) (context == null ? Class
+				.forName(className) : getContext().getBundle(0).loadClass(
+				className));
 	}
 
 	private BundleContext getBundleContextWithoutFail() {
@@ -134,8 +138,8 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 	private FrameworkFactory getFrameworkFactory() {
 		try {
-			Class clazz = loadFrameworkClass(frameworkFactoryClassName);
-			return (FrameworkFactory) clazz.newInstance();
+			Class<FrameworkFactory> clazz = loadFrameworkFactoryClass(frameworkFactoryClassName);
+			return clazz.newInstance();
 		} catch (Exception e) {
 			fail("Failed to get the framework constructor", e);
 		}
@@ -168,7 +172,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		return (true);
 	}
 
-	private Framework createFramework(Map configuration) {
+	private Framework createFramework(Map<String, String> configuration) {
 		Framework framework = null;
 		try {
 			framework = frameworkFactory.newFramework(configuration);
@@ -180,12 +184,12 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		return framework;
 	}
 
-	private Map getConfiguration(String testName) {
+	private Map<String, String> getConfiguration(String testName) {
 		return getConfiguration(testName, true);
 	}
 
-	private Map getConfiguration(String testName, boolean delete) {
-		Map configuration = new HashMap();
+	private Map<String, String> getConfiguration(String testName, boolean delete) {
+		Map<String, String> configuration = new HashMap<String, String>();
 		if (testName != null)
 			configuration.put(Constants.FRAMEWORK_STORAGE, getStorageArea(testName, delete).getAbsolutePath());
 		return configuration;
@@ -296,7 +300,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		Policy previous = Policy.getPolicy();
 		Policy.setPolicy(new AllPolicy());
 		try {
-			Map configuration = getConfiguration(getName());
+			Map<String, String> configuration = getConfiguration(getName());
 			configuration.put(Constants.FRAMEWORK_SECURITY, "osgi");
 			Framework framework = createFramework(configuration);
 			initFramework(framework);
@@ -329,13 +333,15 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		String testRepo = context != null ? context.getProperty(TEST_TRUST_REPO) : System.getProperty(TEST_TRUST_REPO);
 		if (testRepo == null)
 			fail("Must set property to test: \"" + TEST_TRUST_REPO + "\"");
-		Map configuration = getConfiguration(getName());
+		Map<String, String> configuration = getConfiguration(getName());
 		doTestTrustRepository(configuration, null, false);
 		doTestTrustRepository(configuration, testRepo, true);
 	}
 
 
-	private void doTestTrustRepository(Map configuration, String testRepo, boolean trusted) throws BundleException, IOException {
+	private void doTestTrustRepository(Map<String, String> configuration,
+			String testRepo, boolean trusted) throws BundleException,
+			IOException {
 		if (testRepo != null)
 			configuration.put(Constants.FRAMEWORK_TRUST_REPOSITORIES, testRepo);
 		else
@@ -343,9 +349,11 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		Framework framework = createFramework(configuration);
 		startFramework(framework);
 		Bundle testBundle = installBundle(framework, "/launch.secure.tb1.jar");
-		Map signers = testBundle.getSignerCertificates(Bundle.SIGNERS_ALL);
+		Map<X509Certificate, List<X509Certificate>> signers = testBundle
+				.getSignerCertificates(Bundle.SIGNERS_ALL);
 		assertEquals("Expecting 1 signer", 1, signers.size());
-		Map trustedSigners = testBundle.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+		Map<X509Certificate, List<X509Certificate>> trustedSigners = testBundle
+				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
 		if (trusted)
 			assertEquals("Expecting 1 signer", 1, trustedSigners.size());
 		else
@@ -373,22 +381,24 @@ public class FrameworkLaunchTests extends OSGiTestCase {
         }
 
         public void refresh() {
+			// empty
         }
     }
 
     static class AllPermissionCollection extends PermissionCollection {
         private static final long serialVersionUID = 1L;
-        private static Vector     list             = new Vector();
 
         {
             setReadOnly();
         }
 
         public void add(Permission permission) {
+			// empty
         }
 
-        public Enumeration elements() {
-            return list.elements();
+		public Enumeration<Permission> elements() {
+			return Collections
+					.enumeration((Collection<Permission>) Collections.EMPTY_LIST);
         }
 
         public boolean implies(Permission permission) {
