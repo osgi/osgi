@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,13 +25,13 @@ import org.osgi.framework.Version;
 public class VersionTests extends TestCase {
 	/**
 	 * Test the Version constructor with legal parameters
-	 * 
+	 *
 	 * @spec Version.<init>(int,int,int)
 	 */
 	public void testConstructors() {
 		/**
 		 * Test the Version constructor with legal parameters
-		 * 
+		 *
 		 * @spec Version.<init>(int,int,int)
 		 */
 		new Version(0, 0, 0);
@@ -70,7 +70,7 @@ public class VersionTests extends TestCase {
 	public void testConstructorsBadArguments() {
 		/**
 		 * Test the Version constructor with illegal parameters
-		 * 
+		 *
 		 * @spec Version.<init>(int,int,int)
 		 */
 		try {
@@ -119,6 +119,27 @@ public class VersionTests extends TestCase {
 		}
 
 		try {
+			new Version("-1.2.3");
+			fail("Version created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+		try {
+			new Version("1.-2.3");
+			fail("Version created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+		try {
+			new Version("1.2.-3");
+			fail("Version created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+		try {
 			new Version("1.2.3.4.5");
 			fail("Version created with illegal qualifier");
 		}
@@ -147,6 +168,42 @@ public class VersionTests extends TestCase {
 		catch (IllegalArgumentException ex) {
 			// This is an expected exception and may be ignored
 		}
+		try {
+			new Version("a.2.3");
+			fail("Version created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+		try {
+			new Version("1.b.3");
+			fail("Version created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+		try {
+			new Version("1.2.c");
+			fail("Version created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+
+		try {
+			new Version("1.");
+			fail("Version created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
+		try {
+			new Version("1.2.");
+			fail("Version created with illegal arguments");
+		}
+		catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
 
 	}
 
@@ -162,7 +219,7 @@ public class VersionTests extends TestCase {
 
 		/**
 		 * Test the method equals() with the same versions
-		 * 
+		 *
 		 * @spec Version.equals(Object)
 		 */
 
@@ -188,7 +245,7 @@ public class VersionTests extends TestCase {
 
 		/**
 		 * Test the method equals() with different versions
-		 * 
+		 *
 		 * @spec Version.equals(Object)
 		 */
 
@@ -210,7 +267,7 @@ public class VersionTests extends TestCase {
 
 		/**
 		 * Test the method equals() with different versions
-		 * 
+		 *
 		 * @spec Version.equals(Object)
 		 */
 
@@ -224,7 +281,7 @@ public class VersionTests extends TestCase {
 
 		/**
 		 * Test the method equals() with different versions
-		 * 
+		 *
 		 * @spec Version.equals(Object)
 		 */
 
@@ -238,7 +295,7 @@ public class VersionTests extends TestCase {
 
 		/**
 		 * Test the method equals() with different versions
-		 * 
+		 *
 		 * @spec Version.equals(Object)
 		 */
 
@@ -252,7 +309,7 @@ public class VersionTests extends TestCase {
 
 		/**
 		 * Test the method equals() with different versions
-		 * 
+		 *
 		 * @spec Version.equals(Object)
 		 */
 
@@ -296,7 +353,7 @@ public class VersionTests extends TestCase {
 
 	/**
 	 * Test the method hashCode() when the equals() returns true
-	 * 
+	 *
 	 * @spec Version.hashCode();
 	 */
 	public void testHashCode() throws Exception {
@@ -388,7 +445,7 @@ public class VersionTests extends TestCase {
 	/**
 	 * Test the method getQualifier() using the constructor
 	 * Version(int,int,int,String)
-	 * 
+	 *
 	 * @spec Version.getQualifier()
 	 */
 	public void testGetQualifier() throws Exception {
@@ -441,7 +498,7 @@ public class VersionTests extends TestCase {
 	/**
 	 * Test the method getQualifier() using the constructor
 	 * Version(int,int,int,String)
-	 * 
+	 *
 	 * @spec Version.getQualifier()
 	 */
 	public void testIsReleaseVersion() throws Exception {
@@ -519,7 +576,7 @@ public class VersionTests extends TestCase {
 		/**
 		 * Test the method compareTo() with first version number less than
 		 * second version number
-		 * 
+		 *
 		 * @spec Version.compareTo(Version);
 		 */
 		Version version1;
@@ -538,7 +595,7 @@ public class VersionTests extends TestCase {
 		/**
 		 * Test the method compareTo() with first version number greater than
 		 * second version number
-		 * 
+		 *
 		 * @spec Version.compareTo(Version);
 		 */
 
@@ -554,7 +611,7 @@ public class VersionTests extends TestCase {
 
 		/**
 		 * Test the method compareTo() with same version numbers
-		 * 
+		 *
 		 * @spec Version.compareTo(Version);
 		 */
 
@@ -640,7 +697,7 @@ public class VersionTests extends TestCase {
 
 		/**
 		 * Test the method compareTo() with an incorrect object
-		 * 
+		 *
 		 * @spec Version.compareTo(Version);
 		 */
 		Object incorrect = "";

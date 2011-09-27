@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -21,7 +21,7 @@ import java.util.StringTokenizer;
 
 /**
  * Version identifier for capabilities such as bundles and packages.
- * 
+ *
  * <p>
  * Version identifiers have four components.
  * <ol>
@@ -31,7 +31,7 @@ import java.util.StringTokenizer;
  * <li>Qualifier. A text string. See {@code Version(String)} for the format of
  * the qualifier string.</li>
  * </ol>
- * 
+ *
  * <p>
  * Versions can also be identified as release versions or pre-release versions.
  * Given the same numerical components, the qualifiers of all pre-release
@@ -39,10 +39,10 @@ import java.util.StringTokenizer;
  * format, {@code String}, of a version, release versions use {@code "."} to
  * separate the numerical components from the qualifier and pre-release versions
  * use {@code "-"} to separate the numerical components from the qualifier.
- * 
+ *
  * <p>
  * {@code Version} objects are immutable.
- * 
+ *
  * @since 1.3
  * @Immutable
  * @version $Id$
@@ -70,11 +70,11 @@ public class Version implements Comparable<Version> {
 	/**
 	 * Creates a release version identifier from the specified numerical
 	 * components.
-	 * 
+	 *
 	 * <p>
 	 * The qualifier is set to the empty string and the version is a release
 	 * version.
-	 * 
+	 *
 	 * @param major Major component of the version identifier.
 	 * @param minor Minor component of the version identifier.
 	 * @param micro Micro component of the version identifier.
@@ -87,10 +87,10 @@ public class Version implements Comparable<Version> {
 
 	/**
 	 * Creates a release version identifier from the specified components.
-	 * 
+	 *
 	 * <p>
 	 * The version is a release version.
-	 * 
+	 *
 	 * @param major Major component of the version identifier.
 	 * @param minor Minor component of the version identifier.
 	 * @param micro Micro component of the version identifier.
@@ -106,7 +106,7 @@ public class Version implements Comparable<Version> {
 
 	/**
 	 * Creates a version identifier from the specified components.
-	 * 
+	 *
 	 * @param major Major component of the version identifier.
 	 * @param minor Minor component of the version identifier.
 	 * @param micro Micro component of the version identifier.
@@ -135,10 +135,10 @@ public class Version implements Comparable<Version> {
 
 	/**
 	 * Creates a version identifier from the specified string.
-	 * 
+	 *
 	 * <p>
 	 * Version string grammar:
-	 * 
+	 *
 	 * <pre>
 	 * version ::= major('.'minor('.'micro(('.'|'-')qualifier)?)?)?
 	 * major ::= digit+
@@ -148,7 +148,7 @@ public class Version implements Comparable<Version> {
 	 * digit ::= [0..9]
 	 * alpha ::= [a..zA..Z]
 	 * </pre>
-	 * 
+	 *
 	 * @param version String representation of the version identifier. There
 	 *        must be no whitespace in the argument.
 	 * @throws IllegalArgumentException If {@code version} is improperly
@@ -161,7 +161,7 @@ public class Version implements Comparable<Version> {
 	/**
 	 * Creates a version identifier from the specified string and specified
 	 * default for release version.
-	 * 
+	 *
 	 * @param version String representation of the version identifier. There
 	 *        must be no whitespace in the argument.
 	 * @param rel {@code true} if the parsed version should default to a release
@@ -180,15 +180,15 @@ public class Version implements Comparable<Version> {
 		try {
 			StringTokenizer st = new StringTokenizer(version, DOT_SEPARATOR,
 					true);
-			maj = Integer.parseInt(st.nextToken());
+			maj = parseInt(st.nextToken(), version);
 
 			if (st.hasMoreTokens()) { // minor
 				st.nextToken(); // consume delimiter
-				min = Integer.parseInt(st.nextToken());
+				min = parseInt(st.nextToken(), version);
 
 				if (st.hasMoreTokens()) { // micro
 					st.nextToken(); // consume delimiter
-					mic = Integer.parseInt(st.nextToken(QUALIFIER_SEPARATORS));
+					mic = parseInt(st.nextToken(QUALIFIER_SEPARATORS), version);
 
 					if (st.hasMoreTokens()) { // qualifier separator
 						rel = DOT_SEPARATOR.equals(st.nextToken());
@@ -197,7 +197,8 @@ public class Version implements Comparable<Version> {
 
 							if (st.hasMoreTokens()) { // fail safe
 								throw new IllegalArgumentException(
-										"invalid format: " + version);
+										"invalid version \"" + version
+												+ "\": invalid format");
 							}
 						}
 					}
@@ -206,7 +207,7 @@ public class Version implements Comparable<Version> {
 		}
 		catch (NoSuchElementException e) {
 			IllegalArgumentException iae = new IllegalArgumentException(
-					"invalid format: " + version);
+					"invalid version \"" + version + "\": invalid format");
 			iae.initCause(e);
 			throw iae;
 		}
@@ -220,20 +221,43 @@ public class Version implements Comparable<Version> {
 	}
 
 	/**
+	 * Parse numeric component into an int.
+	 *
+	 * @param value Numeric component
+	 * @param version Complete version string for exception message, if any
+	 * @return int value of numeric component
+	 */
+	private static int parseInt(String value, String version) {
+		try {
+			return Integer.parseInt(value);
+		}
+		catch (NumberFormatException e) {
+			IllegalArgumentException iae = new IllegalArgumentException(
+					"invalid version \"" + version + "\": non-numeric \""
+							+ value + "\"");
+			iae.initCause(e);
+			throw iae;
+		}
+	}
+
+	/**
 	 * Called by the Version constructors to validate the version components.
-	 * 
+	 *
 	 * @throws IllegalArgumentException If the numerical components are negative
 	 *         or the qualifier string is invalid.
 	 */
 	private void validate() {
 		if (major < 0) {
-			throw new IllegalArgumentException("negative major");
+			throw new IllegalArgumentException("invalid version \""
+					+ toString0() + "\": negative number \"" + major + "\"");
 		}
 		if (minor < 0) {
-			throw new IllegalArgumentException("negative minor");
+			throw new IllegalArgumentException("invalid version \""
+					+ toString0() + "\": negative number \"" + minor + "\"");
 		}
 		if (micro < 0) {
-			throw new IllegalArgumentException("negative micro");
+			throw new IllegalArgumentException("invalid version \""
+					+ toString0() + "\": negative number \"" + micro + "\"");
 		}
 		for (char ch : qualifier.toCharArray()) {
 			if (('A' <= ch) && (ch <= 'Z')) {
@@ -248,17 +272,18 @@ public class Version implements Comparable<Version> {
 			if ((ch == '_') || (ch == '-')) {
 				continue;
 			}
-			throw new IllegalArgumentException("invalid qualifier: "
-					+ qualifier);
+			throw new IllegalArgumentException("invalid version \""
+					+ toString0() + "\": invalid qualifier \"" + qualifier
+					+ "\"");
 		}
 	}
 
 	/**
 	 * Parses a version identifier from the specified string.
-	 * 
+	 *
 	 * <p>
 	 * See {@code Version(String)} for the format of the version string.
-	 * 
+	 *
 	 * @param version String representation of the version identifier. Leading
 	 *        and trailing whitespace will be ignored.
 	 * @return A {@code Version} object representing the version identifier. If
@@ -274,12 +299,12 @@ public class Version implements Comparable<Version> {
 	/**
 	 * Parses a version identifier from the specified string and specified
 	 * default for release version.
-	 * 
+	 *
 	 * <p>
 	 * This method is used by {@link VersionRange} when parsing versions since
 	 * the default for a release version varies depending upon left or right and
 	 * open or closed endpoint.
-	 * 
+	 *
 	 * @param version String representation of the version identifier. Leading
 	 *        and trailing whitespace will be ignored.
 	 * @param rel {@code true} if the parsed version should default to a release
@@ -307,7 +332,7 @@ public class Version implements Comparable<Version> {
 
 	/**
 	 * Returns the major component of this version identifier.
-	 * 
+	 *
 	 * @return The major component.
 	 */
 	public int getMajor() {
@@ -316,7 +341,7 @@ public class Version implements Comparable<Version> {
 
 	/**
 	 * Returns the minor component of this version identifier.
-	 * 
+	 *
 	 * @return The minor component.
 	 */
 	public int getMinor() {
@@ -325,7 +350,7 @@ public class Version implements Comparable<Version> {
 
 	/**
 	 * Returns the micro component of this version identifier.
-	 * 
+	 *
 	 * @return The micro component.
 	 */
 	public int getMicro() {
@@ -334,7 +359,7 @@ public class Version implements Comparable<Version> {
 
 	/**
 	 * Returns the qualifier component of this version identifier.
-	 * 
+	 *
 	 * @return The qualifier component.
 	 */
 	public String getQualifier() {
@@ -344,7 +369,7 @@ public class Version implements Comparable<Version> {
 	/**
 	 * Returns {@code true} if the version is a release version and
 	 * {@code false} if the version is a pre-release version.
-	 * 
+	 *
 	 * @return {@code true} if the version is a release version and
 	 *         {@code false} if the version is a pre-release version.
 	 * @since 1.7
@@ -355,14 +380,14 @@ public class Version implements Comparable<Version> {
 
 	/**
 	 * Returns the string representation of this version identifier.
-	 * 
+	 *
 	 * <p>
 	 * The format of the version string will be
 	 * {@code major.minor.micro.qualifier} if it is a
 	 * {@link #isReleaseVersion() release version} or
 	 * {@code major.minor.micro-qualifier} if the version is a pre-release
 	 * version.
-	 * 
+	 *
 	 * @return The string representation of this version identifier.
 	 */
 	public String toString() {
@@ -371,7 +396,7 @@ public class Version implements Comparable<Version> {
 
 	/**
 	 * Internal toString behavior
-	 * 
+	 *
 	 * @return The string representation of this version identifier.
 	 */
 	private String toString0() {
@@ -402,7 +427,7 @@ public class Version implements Comparable<Version> {
 	 * Package private method to append the version string to the specified
 	 * string buffer. The version string includes a trailing dot for empty
 	 * release qualifiers.
-	 * 
+	 *
 	 * @param buf The string buffer to receive the version string.
 	 */
 	void appendTo(StringBuffer buf) {
@@ -414,7 +439,7 @@ public class Version implements Comparable<Version> {
 
 	/**
 	 * Returns a hash code value for the object.
-	 * 
+	 *
 	 * @return An integer which is a hash code value for this object.
 	 */
 	public int hashCode() {
@@ -431,13 +456,13 @@ public class Version implements Comparable<Version> {
 
 	/**
 	 * Compares this {@code Version} object to another object.
-	 * 
+	 *
 	 * <p>
 	 * A version is considered to be <b>equal to </b> another version if the
 	 * major, minor and micro components are equal, the qualifier component is
 	 * equal (using {@code String.equals}) and both versions are release or
 	 * pre-release.
-	 * 
+	 *
 	 * @param object The {@code Version} object to be compared.
 	 * @return {@code true} if {@code object} is a {@code Version} and is equal
 	 *         to this object; {@code false} otherwise.
@@ -459,7 +484,7 @@ public class Version implements Comparable<Version> {
 
 	/**
 	 * Compares this {@code Version} object to another {@code Version}.
-	 * 
+	 *
 	 * <p>
 	 * A version is considered to be <b>less than</b> another version if its
 	 * major component is less than the other version's major component, or the
@@ -471,13 +496,13 @@ public class Version implements Comparable<Version> {
 	 * and micro components are equal and both versions are release or
 	 * pre-release and it's qualifier component is less than the other version's
 	 * qualifier component (using {@code String.compareTo}).
-	 * 
+	 *
 	 * <p>
 	 * A version is considered to be <b>equal to</b> another version if the
 	 * major, minor and micro components are equal, both versions are release or
 	 * pre-release and the qualifier components are equal (using
 	 * {@code String.compareTo}).
-	 * 
+	 *
 	 * @param other The {@code Version} object to be compared.
 	 * @return A negative integer, zero, or a positive integer if this version
 	 *         is less than, equal to, or greater than the specified
