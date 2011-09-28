@@ -1,6 +1,6 @@
-bin
-generated
-doc
+/*/bin/
+/*/generated/
+/*/doc/
 .DS_Store
 Thumbs.db
 .metadata
