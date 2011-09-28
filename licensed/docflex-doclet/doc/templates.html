@@ -1,0 +1,1028 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel=stylesheet type="text/css" href="styles.css">
+<title>DocFlex/Doclet - Standard Templates</title>
+</head>
+
+<body>
+
+<h1>
+  Standard Templates
+</h1>
+
+<!-- TABLE OF CONTENTS -->
+<ul>
+  <li><a href="#PlainDoc.tpl">PlainDoc.tpl</a>
+  <li><a href="#FramedDoc.tpl">FramedDoc.tpl</a>
+</ul>
+<!-- END TABLE OF CONTENTS -->
+
+The standard templates (provided within both
+<a href="about.html#full_edition">DocFlex/Javadoc</a> and
+<a href="about.html#docflex-doclet">DocFlex/Doclet</a> editions)
+are subdivided into two categories:
+<ol>
+  <li>
+    The <i>main templates</i>, which are designed to produce the finished documentation
+    and should be specified on the Javadoc <a href="doc.html#template_option">command line</a>
+    or in the <a href="doc.html#generator_dialog">Generator Dialog</a>.
+  </li>
+  <li>
+    The subsidiary templates or <i>subtemplates</i>, which constitute a sort
+    of library and are called from the main templates (as well as from each other)
+    in order to generate fragments or separate files of the whole documentation.
+  </li>
+</ol>
+
+Here, we shall discuss only <i>main</i> templates.
+
+<h3>
+  <a name="PlainDoc.tpl"></a>
+  PlainDoc.tpl
+</h3>
+
+This <i>main</i> template was designed to generated a single-file documentation, which may be
+particularly useful for printing. It is supported by all output formats (HTML, RTF and TXT).
+
+<p>
+All parameters provided by this template can be seen in the following screenshot
+of the Template Parameter Inspector dialog
+(click on a parameter row in the picture to jump directly to the detailed description
+of that parameter):
+
+<blockquote>
+  <img src="images/PlainDoc_param_inspector.png" border="0" usemap="#param_inspector.map">
+  <map name="param_inspector.map">
+    <area shape="rect" coords="6,46,502,70"   href="#param.windowTitle">
+    <area shape="rect" coords="6,71,502,92"   href="#param.docTitle">
+    <area shape="rect" coords="6,93,502,115"  href="#param.include">
+    <area shape="rect" coords="6,117,502,138" href="#param.include.deprecated">
+    <area shape="rect" coords="6,140,502,161" href="#param.include.details">
+    <area shape="rect" coords="6,163,502,184" href="#param.include.details.overview">
+    <area shape="rect" coords="6,186,502,207" href="#param.include.details.packages">
+    <area shape="rect" coords="6,209,502,230" href="#param.include.details.classes">
+    <area shape="rect" coords="6,231,502,252" href="#param.include.details.innerClasses">
+    <area shape="rect" coords="6,254,502,275" href="#param.include.details.members">
+    <area shape="rect" coords="6,277,502,299" href="#param.include.details.initialValues">
+    <area shape="rect" coords="6,301,502,323" href="#param.include.tag">
+    <area shape="rect" coords="6,323,502,345" href="#param.include.tag.version">
+    <area shape="rect" coords="6,347,502,368" href="#param.include.tag.author">
+    <area shape="rect" coords="6,369,502,391" href="#param.include.tag.custom">
+    <area shape="rect" coords="6,392,502,414" href="#param.exclude">
+    <area shape="rect" coords="6,415,502,437" href="#param.exclude.byTags">
+    <area shape="rect" coords="6,438,502,460" href="#param.exclude.byTags.all">
+    <area shape="rect" coords="6,461,502,483" href="#param.exclude.byTags.classes">
+    <area shape="rect" coords="6,484,502,506" href="#param.exclude.byTags.members">
+    <area shape="rect" coords="6,507,502,529" href="#param.exclude.byAnns">
+    <area shape="rect" coords="6,530,502,552" href="#param.exclude.byAnns.all">
+    <area shape="rect" coords="6,553,502,575" href="#param.exclude.byAnns.classes">
+    <area shape="rect" coords="6,576,502,598" href="#param.exclude.byAnns.members">
+    <area shape="rect" coords="6,599,502,621" href="#param.omit">
+    <area shape="rect" coords="6,622,502,644" href="#param.omit.packageQualifiers.for">
+    <area shape="rect" coords="6,645,502,667" href="#param.omit.packageQualifiers.all">
+    <area shape="rect" coords="6,668,502,690" href="#param.omit.inheritedMemberLists.for">
+    <area shape="rect" coords="6,691,502,713" href="#param.omit.inheritedMemberLists.all">
+    <area shape="rect" coords="6,714,502,736" href="#param.fmt">
+    <area shape="rect" coords="6,737,502,759" href="#param.fmt.page.breakBefore.package">
+    <area shape="rect" coords="6,760,502,781" href="#param.fmt.page.breakBefore.class">
+  </map>
+</blockquote>
+
+Below are detailed descriptions of all parameters.
+(You can find those descriptions also directly within the Parameter Inspector dialog.)
+
+<p>
+<table width="100%" border="1" cellspacing="1" cellpadding="4">
+
+<!-- Table Heading -->
+
+<tr>
+  <th><b>Parameter/Grouping</b></th>
+  <th><b>Description</b></th>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <a name="param.windowTitle"></a>
+    Window Title
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>windowTitle</b></code>
+    <p class="mrg80">
+    Specifies the browser window title for the documentation.
+    This is similar to 
+    <code class="nowrap"><a href="http://java.sun.com/javase/6/docs/technotes/tools/windows/javadoc.html#windowtitle" target="_blank">-windowtitle</a></code>
+    option provided by Javadoc 
+    <a href="http://java.sun.com/javase/6/docs/technotes/guides/javadoc/standard-doclet.html" target="_blank">Standard Doclet</a>.
+    In addition, if the selected output format supports pagination (RTF),
+    the same text will appear on the page footers.
+  </td>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <a name="param.docTitle"></a>
+    Documentation Title
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>docTitle</b></code>
+    <p class="mrg80">
+    Specifies the title to be placed at the the top of the documentation overview.
+  </td>
+</tr>
+
+<tr>
+  <th align="left">
+    <a name="param.include"></a>
+    <b><i>Include</i></b>
+  </th>
+  <th>&nbsp;</th>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:8px">
+      <a name="param.include.deprecated"></a>
+      deprecated API
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>include.deprecated</b></code>
+    <p class="mrg80">
+    Controls whether to generate documentation for any deprecated API.
+  </td>
+</tr>
+
+<tr>
+  <th align="left">
+    <p class="mrg0" style="margin-left:8px">
+      <a name="param.include.details"></a>
+      <b><i>Details Of</i></b>
+    </p>
+  </th>
+  <th align="left">
+    <font size="-1">
+    This group of parameters controls how much details are included
+    in the generated documentation. This may be important for printing,
+    since the documentation with all details may occur too big to be printable.
+    </font>
+  </th>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.include.details.overview"></a>
+      overview
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>include.details.overview</b></code>
+    <p class="mrg80">
+    Specifies whether to include the overview summary for the whole documentation.
+  </td>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.include.details.packages"></a>
+      packages
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>include.details.packages</b></code>
+    <p class="mrg80">
+    Specifies whether to include the details of packages.
+    If <code>false</code> (unchecked), only classes separately
+    specified on the Javadoc command line will be documented.
+  </td>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.include.details.classes"></a>
+      classes
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>include.details.classes</b></code>
+    <p class="mrg80">
+    Specifies whether to include details of classes.
+    If <code>false</code> (unchecked), only overview for each package
+    will be generated without the detailed documentation for the
+    contained classes.
+  </td>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.include.details.innerClasses"></a>
+      inner classes
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>include.details.innerClasses</b></code>
+    <p class="mrg80">
+    Specifies whether inner classes should be included into the generation scope.
+    If <code>true</code> (checked), the inner classes contained
+    within those already being documented will also be fully documented.
+    If <code>false</code>, only summaries of the inner classes will be generated.
+  </td>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.include.details.members"></a>
+      members
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>include.details.members</b></code>
+    <p class="mrg80">
+    Specifies whether to include details of class members (i.e. methods and fields).
+    If <code>false</code> (unchecked), only overview for each class will be generated
+    without the details for the class' members.
+  </td>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.include.details.initialValues"></a>
+      initial values
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>include.details.initialValues</b></code>
+    <p class="mrg80">
+    Specify whether the initial values of fields should be shown in the documentation.
+  </td>
+</tr>
+
+<tr>
+  <th align="left">
+    <p class="mrg0" style="margin-left:8px">
+      <a name="param.include.tag"></a>
+      <b><i>Tags</i></b>
+    </p>
+  </th>
+  <th align="left">
+    <font size="-1">
+    This group of parameters controls whether to include in the generated
+    docs the sections associated with some tags.
+    </font>
+  </th>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.include.tag.version"></a>
+      @version
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>include.tag.version</b></code>
+    <p class="mrg80">
+    Include the @version text in the generated docs.
+  </td>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.include.tag.author"></a>
+      @author
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>include.tag.author</b></code>
+    <p class="mrg80">
+    Include the @author text in the generated docs.
+  </td>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.include.tag.custom"></a>
+      Custom tags
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>include.tag.custom</b></code>
+    <p class="mrg80">
+    This parameter duplicates the functionality of the 
+    <code class="nowrap"><a href="http://java.sun.com/javase/6/docs/technotes/tools/windows/javadoc.html#tag" target="_blank">-tag</a></code>
+    option supported by the
+    <a href="http://java.sun.com/javase/6/docs/technotes/guides/javadoc/standard-doclet.html" target="_blank">Standard Doclet</a>.
+    <p class="mrg8">
+    It allows you to include in the generated output the documentation of your custom tags,
+    specify the tag headings as well as their ordering. You will be able also to redefine
+    the headings and ordering of the standard tags (such as @param, @see, @author etc).
+    <p class="mrg8">
+    This parameter accepts multiple (list) value. Each value item specifies how a single tag should be documented.
+
+    <h5>Specifying Single Tag</h5>
+
+    Documenting of a single tag is specified with the following expression:
+    <blockquote class="mrg8">
+      <code><i>tagname</i>:Xaoptcmf:<i>taghead</i></code>
+    </blockquote>
+    The <code><b><i>tagname</i></b> </code>is the name of the tag for which this setting applies. 
+    The <code><b><i>taghead</i></b> </code>is the heading for the tag documentation. 
+    Omitting <code><i>taghead</i></code> causes <code><i>tagname</i></code> to be used as the heading 
+    (unless this is a standard tag). If the tag has no text (specified in the Java comment), 
+    only the heading will appear in the generated output.
+    <p class="mrg8">
+    The <code><b>Xaoptcmf</b></code> part determines the locations in the source code where the tag
+    is to be processed/documented. Each letter specify possible tag locations according to this table:
+    <p class="mrg8"></p>
+    <table border="1" cellspacing="1" cellpadding="3">
+      <tr>
+        <th align="center"><b>Letter</b></td>
+        <th align="center"><b>Meaning / Location</b></td>
+      </tr>
+      <tr valign="top">
+        <td align=center><code>X</code></td>
+        <td>
+          Rather than including the tag, this letter indicates that the tag should be ignored
+          in the specified locations. For example, specifying
+          <blockquote class="mrg8">
+            <code>see:X</code>
+          </blockquote>
+          will suppress documenting of all <code>@see</code> tags. However,
+          <blockquote class="mrg8">
+            <code>see:Xf</code>
+          </blockquote>
+          suppresses <code>@see</code> tags only for fields.
+        </td>
+      </tr>
+      <tr valign="top">
+        <td align=center><code>a</code></td>
+        <td>all locations</td>
+      </tr>
+      <tr valign="top">
+        <td align=center><code>o</code></td>
+        <td>project overview</td>
+      </tr>
+      <tr valign="top">
+        <td align=center><code>p</code></td>
+        <td>packages overviews</td>
+      </tr>
+      <tr valign="top">
+        <td align=center><code>t</code></td>
+        <td>types (that is classes and interfaces)</td>
+      </tr>
+      <tr valign="top">
+        <td align=center><code>c</code></td>
+        <td>constructors</td>
+      </tr>
+      <tr valign="top">
+        <td align=center><code>m</code></td>
+        <td>methods</td>
+      </tr>
+      <tr valign="top">
+        <td align=center><code>f</code></td>
+        <td>fields</td>
+      </tr>
+    </table>
+
+    <p><u>Examples</u>:</p>
+
+    The following parameter value item:
+    <blockquote class="mrg8">
+      <code>threadsafe:a:Can be called safely from multiple threads</code>
+    </blockquote>
+    specifies a custom <code>@threadsafe</code> tag to be documented anywhere it is used with the heading message: 
+    <blockquote class="mrg8">
+      <b>Can be called safely from multiple threads</b>
+    </blockquote>
+    The following value item specifies that <code>@todo</code> tag should be processed 
+    only with constructors, methods and fields: 
+    <blockquote class="mrg8">
+      <code>todo:cmf:To Do:</code>
+    </blockquote>
+    Notice the last colon (:) above is not a separator, but is part of the heading text (as shown below).
+    You would use either tag option for source code that contains the tag @todo, such as: 
+    <blockquote class="mrg8">
+      <code>@todo The documentation for this method needs work.</code>
+    </blockquote>
+    This line would produce output something like: 
+    <blockquote class="mrg8">
+      <b>To Do:</b> 
+      <blockquote class="mrg8">
+        The documentation for this method needs work. 
+      </blockquote>
+    </blockquote>
+
+    <p><u>Use of Colon in Tag Name</u></p>
+
+    A colon can be used in a tag name if it is escaped with a backslash. For this doc comment: 
+    <blockquote class="mrg8">
+<pre class="mrg8">
+/**
+ * @ejb:bean
+ */
+</pre>
+    </blockquote>
+    use the following setting of the parameter value: 
+    <blockquote class="mrg8">
+      <code>ejb\:bean:a:EJB Bean:</code>
+    </blockquote>
+
+    <h5>Specifying Multiple Tags</h5>
+
+    Documenting of different tags should be specified in different items of the whole parameter value.
+    Each value item should define how to document a single tag as described above.
+    The items must be separated with one of the allowed item separator characters 
+    (<code>newline</code> or <code>';'</code>). 
+
+    <p><u>Example</u>:</p>
+
+    <blockquote class="mrg8">
+<pre class="mrg8">
+ejb\:bean:a:EJB Bean:
+todo:cmf:To Do:
+</pre>
+    </blockquote>
+    or the same as a single line:
+    <blockquote>
+      <code>ejb\:bean:a:EJB Bean:;todo:cmf:To Do:</code>
+    </blockquote>
+    The last form can be used to specify both tags on the Javadoc command line:
+
+    <blockquote class="mrg8">
+      <code><b>-p:include.tag.custom</b> "ejb\:bean:a:EJB Bean:;todo:cmf:To Do:"</code>
+    </blockquote>
+
+    (Note: Because the full parameter value here contains spaces, it is enclosed in quotes 
+    in order to make it treated as a single command-line argument.)
+    <p>
+    The same can be also specified with two <code>-p</code> options:
+
+    <blockquote class="mrg8">
+    <code>
+      -p:include.tag.custom "ejb\:bean:a:EJB Bean:"
+      -p:include.tag.custom "todo:cmf:To Do:"
+    </code>
+    </blockquote>
+    Each <code><b>-p</b></code> option adds a separate value item to <code>'include.tag.custom'</code> parameter.
+
+    <p><u>Tag Ordering</u></p>
+
+    The tags will appear in the output documentation in the same order as they are specified 
+    in the value items of this parameter. For instance, in the example above, the documentation
+    of <code>'@ejb:bean'</code> tag will be followed by the documentation of <code>'@todo'</code> tag.
+    <p class="mrg8">
+    Using this parameter, you can also redefine the ordering of the standard tags, for example:
+    <blockquote class="mrg8">
+      <code>version;todo:cmf:To Do:;see</code>
+    </blockquote>
+    This setting says that @version tag should be documented before the custom @todo tag 
+    followed by the documentation of @see tags.
+    <p class="mrg8">
+    Any other standard tags will be documented as usual in a certain some predefined order before 
+    the tags specified in this parameter.
+
+    <h5>Using Escapes</h5>
+
+    Each character that serves as a value item separator can be equally used within the value items 
+    if escaped with a backslash. For example, documenting of the tag:
+    <blockquote class="mrg8">
+      <code>@my;odd;tag</code>
+    </blockquote>
+    can be specified like this:
+    <blockquote class="mrg8">
+      <code>my\;odd\;tag:a:My odd tag:</code>
+    </blockquote>
+
+    If a backslash is not consumed by an escape it will be remained in the text as is.
+    To make sure that a backslash is not part of some escape, you may add another backslash.
+    A sequence of two backslashes (<code>"\\"</code>) is an escape by itself, which represents a single backslash. 
+    This is important because backslashes may be used also in a secondary system of escapes
+    (e.g. to escape <code>':'</code> within the tag name).
+    <p class="mrg8">
+    For example, a string like this:
+    <blockquote class="mrg8">
+      <code>my\;odd\;tag:a:\My Odd Title:\\;ejb\:bean:a:EJB Bean:</code>
+    </blockquote>
+    will be initially processed and broken into two value items:
+    <blockquote class="mrg8">
+<pre class="mrg8">
+my;odd;tag:a:\My Odd Title\
+ejb\:bean:a:EJB Bean:
+</pre>
+    </blockquote>
+    then, processed further to document all <code>'@my;odd;tag'</code> tags with <i>"\My Odd Title\"</i> title 
+    and all <code>'@ejb:bean'</code> tags with <i>"EJB Bean:"</i> title.
+  </td>
+</tr>
+
+<tr align="left">
+  <th>
+    <a name="param.exclude"></a>
+    <b><i>Exclude</i></b>
+  </th>
+  <th>
+    <font size="-1">
+    Specify what should be entirely excluded from the generation scope.
+    </font>
+  </th>
+</tr>
+
+<tr align="left">
+  <th>
+    <p class="mrg0" style="margin-left:8px">
+      <a name="param.exclude.byTags"></a>
+      <b><i>By Tags</i></b>
+    </p>
+  </th>
+  <th>
+    <font size="-1">
+    This group of parameters allows to exclude from the generated documentation classes,
+    fields and methods with specified tags (custom or not).
+    </font>
+  </th>
+</tr>
+
+<tr align="left" valign="top">
+  <td>
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.exclude.byTags.all"></a>
+      classes & members
+    </p>
+  </td>
+  <td>
+    Parameter name:<code> <b>exclude.byTags.all</b></code>
+    <p class="mrg8">
+    Specify tags by which both classes and class members
+    (i.e. fields, constructors and methods) are completely
+     excluded from the generated documentation.
+    <p class="mrg8">
+    A <b>class</b> is excluded when at least one of the conditions is met:
+    <ol class="mrg8">
+      <li>The class has one of the specified tags.</li>
+      <li>This is an inner class and one of its enclosing classes has one of the specified tags.</li>
+    </ol>
+    A class <b>member</b> is excluded according to one of the conditions:
+    <ol class="mrg8">
+      <li>The member has one of the specified tags.</li>
+      <li>The member's class has one of the specified tags.</li>
+      <li>The member's class is an inner class and one of its enclosing classes has one of the specified tags.</li>
+    </ol>
+    Therefore, when a class has one of the tags specified in this parameter, neither that class nor anything defined in it (i.e. members and inner classes) will ever appear in the documentation.
+    <p class="mrg8">
+    The multiple exclude-tag names must be separated with new lines ('\n'), semicolons (';') or colons (':').
+    For example:
+    <blockquote class="mrg80">
+      <code>@exclude<br>@omit</code>
+    </blockquote>
+  </td>
+</tr>
+
+<tr align="left" valign="top">
+  <td>
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.exclude.byTags.classes"></a>
+      classes
+    </p>
+  </td>
+  <td>
+    Parameter name:<code> <b>exclude.byTags.classes</b></code>
+    <p class="mrg8">
+    This parameter allows to hide completely from the generated documentation some
+    intermediate classes of your internal implementation (that for some reasons need to be public),
+    however, preserve documenting of some fields and methods (defined within those classes)
+    which are supposed to be part of an open API.
+    <p class="mrg8">
+    This may be particularly helpful when you will need next time to change your implementation
+    while keeping intact what you have declared in your open API.
+    <p class="mrg8">
+    The tags specified in this parameter are treated as the following.
+    <p class="mrg8">
+    A <b>class</b> will be never mentioned in the documentation when at least one of the conditions is met:
+    <ol class="mrg8">
+      <li>The class has one of the specified tags.</li>
+      <li>This is an inner class and one of its enclosing classes has one of the specified tags.</li>
+    </ol>
+    Each <b>inheritable member</b> of the excluded class that otherwise (without that parameter) would be documented will appear in every direct descendant of that class being documented as if that member has been defined directly there.
+    <p class="mrg8">
+    Overall effect should be that the generated documentation will look as if the excluded classes
+    themselves did never exist at all, however, everything else is in place and correct.
+    <p class="mrg8">
+    The multiple exclude-tag names must be separated with new lines ('\n'), semicolons (';') or colons (':').
+    For example:
+    <blockquote class="mrg80">
+      <code>@exclude<br>@omit</code>
+    </blockquote>
+  </td>
+</tr>
+
+<tr align="left" valign="top">
+  <td>
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.exclude.byTags.members"></a>
+      members
+    </p>
+  </td>
+  <td>
+    Parameter name:<code> <b>exclude.byTags.members</b></code>
+    <p class="mrg8">
+    Specify tags by which only class members (i.e. fields, constructors and methods)
+    are selectively excluded from the generated documentation.
+    <p class="mrg8">
+    A class member, which otherwise (without this parameter) would be documented,
+    is excluded when it has at least one of the specified tags.
+    <p class="mrg8">
+    The multiple exclude-tag names must be separated with new lines ('\n'), semicolons (';') or colons (':').
+    For example:
+    <blockquote class="mrg80">
+      <code>@exclude<br>@omit</code>
+    </blockquote>
+  </td>
+</tr>
+
+<tr align="left">
+  <th>
+    <p class="mrg0" style="margin-left:8px">
+      <a name="param.exclude.byAnns"></a>
+      <b><i>By Annotations</i></b>
+    </p>
+  </th>
+  <th>
+    <font size="-1">
+    This group of parameters provides an alternative way of excluding classes and class members
+    from the generated documentation.
+    </font>
+  </th>
+</tr>
+<tr align="left">
+  <td>
+    &nbsp;
+  </td>
+  <td>
+    As you know, one of the new language features introduced in Java&nbsp;5 is <i>&ldquo;annotations&rdquo;</i>.
+    Annotations are essentially similar to tags. However, unlike tags, they are specified not within
+    Java comments, but directly in Java code. That is, annotations are processed by the Java compiler
+    itself and can be retained in the compiled binary classes (which is impossible with tags).
+    <p class="mrg8">
+    So, similar to <a href="#param.exclude.byTags">tags</a> you can mark some of the classes and members with annotations and, then,
+    filter them out by those annotations from  the generated documentation.
+    <p class="mrg8">
+    But, why would you need to use annotations? Why are tags not enough?
+    <p class="mrg8">
+    Let's suppose, you have a library of some core Java classes for internal use.
+    That library is quite a separate thing. So, you may use it in different projects
+    (or different people are using it).
+    Therefore, you maintain that library in a precompiled binary form as a jar-file.
+    <p class="mrg8">
+    Now, you are developing a project, in which you use that internal library.
+    You want to publish certain classes of that project as an open API to your system.
+    But some of those classes you want to publish are inherited from the classes of your
+    internal library (or implement interfaces from it).
+    The Java API documentation generated by Javadoc would mention those internal classes
+    as superclasses (implemented interfaces) of your API.
+    But you do not want them to be visible in the published documentation (they are internal after all)!
+    How can you do that?
+    <p class="mrg8">
+    Marking your internal classes with tags to be excluded by them will not work,
+    because your tags will not get into the compiled jar-file.
+    <p class="mrg8">
+    Here is where annotations can help! Let's see how you can do it.
+    <p class="mrg8">
+    First, you need to define your annotation type like the following (all names are for example):
+    <blockquote class="mrg8">
+<pre class="mrg8">
+package myprojects.core.util;
+
+public @interface Internal {
+}
+</pre>
+    </blockquote>
+    <p class="mrg8">
+    These lines should be saved as <code>'Internal.java'</code> file located in
+    <code>'myprojects/core/util'</code> package.
+    <p class="mrg8">
+    Note, as with any Java class, the defined annotation type has a <b>fully qualified name</b>,
+    which will be the string: <code>'myprojects.core.util.Internal'</code>.
+    Only the fully qualified name can be used to find annotations of a given type.
+    <p class="mrg8">
+    Now, you can use this annotation type to mark your internal classes. Here is how:
+    <blockquote class="mrg8">
+<pre class="mrg8">
+package myprojects.core.classes;
+...
+<span class="highlight">import myprojects.core.util.Internal;
+
+@Internal</span>
+public class MyIterator {
+...
+}
+</pre>
+    </blockquote>
+    <p class="mrg8">
+    After that, you can exclude all classes marked with that annotation from the generated
+    documentation by specifying the annotation type qualified name
+    <code>'myprojects.core.util.Internal'</code> in the
+    <a href="#param.exclude.byAnns.classes"><code>exclude.byAnns.classes</code></a> parameter.
+    <p class="mrg80">
+    This will equally work both with the classes defined in the Java sources and the binary
+    classes found on the  Javadoc classpath!
+  </td>
+</tr>
+
+<tr align="left" valign="top">
+  <td>
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.exclude.byAnns.all"></a>
+      classes & members
+    </p>
+  </td>
+  <td>
+    Parameter name:<code> <b>exclude.byAnns.all</b></code>
+    <p class="mrg8">
+    Specify annotation types by which both classes and class members
+    (i.e. fields, constructors and methods) are completely excluded
+    from the generated documentation.
+    <p class="mrg8">
+    A <b>class</b> is excluded when at least one of the conditions is met:
+    <ol class="mrg8">
+      <li>The class has an annotation of one of the specified types.</li>
+      <li>This is an inner class and one of its enclosing classes has an annotation of one of the specified types.</li>
+    </ol>
+    A class <b>member</b> is excluded according to one of the conditions:
+    <ol class="mrg8">
+      <li>The member has an annotation of one of the specified types.</li>
+      <li>The member's class has an annotation of one of the specified types.</li>
+      <li>The member's class is an inner class and one of its enclosing classes has an annotation of one of the specified types.</li>
+    </ol>
+    Therefore, when a class has one of the annotations specified in this parameter, neither that class nor anything defined in it (i.e. members and inner classes) will ever appear in the documentation.
+    <p class="mrg8">
+    Each annotation type must be specified with its <b>fully qualified name</b>
+    (e.g. <code>java.lang.Deprecated</code>).
+    Multiple annotation type names must be separated with new lines ('\n'), semicolons (';') or colons (':').
+    For example:
+    <blockquote class="mrg8">
+    <code>
+      my.core.util.Internal<br>
+      my.project.api.Exclude
+    </code>
+    </blockquote>
+    <p class="mrg80">
+    For more details about using annotations, see description of the
+    <a href="#param.exclude.byAnns"><i>Exclude | By Annotations</i></a> parameter group.
+  </td>
+</tr>
+
+<tr align="left" valign="top">
+  <td>
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.exclude.byAnns.classes"></a>
+      classes
+    </p>
+  </td>
+  <td>
+    Parameter name:<code> <b>exclude.byAnns.classes</b></code>
+    <p class="mrg8">
+    This parameter allows to hide completely from the generated documentation some intermediate
+    classes of your internal implementation (that for some reasons need to be public), however,
+    to preserve documenting of some fields and methods (defined within those classes)
+    which are supposed to be part of an open API.
+    <p class="mrg8">
+    This may be particularly helpful when you will need next time to change your implementation
+    while keeping intact what you have declared in your open API.
+    <p class="mrg8">
+    The annotation types specified in this parameter are treated as the following.
+    <p class="mrg8">
+    A <b>class</b> will be never mentioned in the documentation when at least one of the conditions is met:
+    <ol class="mrg8">
+      <li>The class has an annotation of one of the specified types.</li>
+      <li>This is an inner class and one of its enclosing classes has an annotation of one of the specified types.</li>
+    </ol>
+    Each <b>inheritable member</b> of the excluded class that otherwise (without that parameter)
+    would be documented will appear in every direct descendant of that class being documented
+    as if that member has been defined directly there.
+    <p class="mrg8">
+    Overall effect should be that the generated documentation will look as if the excluded classes
+    themselves did never exist at all, however, everything else is in place and correct.
+    <p class="mrg8">
+    Each annotation type must be specified with its <b>fully qualified name</b>
+    (e.g. <code>java.lang.Deprecated</code>).
+    Multiple annotation type names must be separated with new lines ('\n'), semicolons (';') or colons (':').
+    For example:
+    <blockquote class="mrg8">
+    <code>
+      my.core.util.Internal<br>
+      my.project.api.Exclude
+    </code>
+    </blockquote>
+    <p class="mrg80">
+    For more details about using annotations, see description of the
+    <a href="#param.exclude.byAnns"><i>Exclude | By Annotations</i></a> parameter group.
+  </td>
+</tr>
+
+<tr align="left" valign="top">
+  <td>
+    <p class="mrg0" style="margin-left:18px">
+      <a name="param.exclude.byAnns.members"></a>
+      members
+    </p>
+  </td>
+  <td>
+    Parameter name:<code> <b>exclude.byAnns.members</b></code>
+    <p class="mrg8">
+    Specify annotation types by which only class members (i.e. fields, constructors and methods)
+    are selectively excluded from the generated documentation.
+    <p class="mrg8">
+    A class member, which otherwise (without this parameter) would be documented,
+    is excluded when it has an annotation of one of the specified types.
+    <p class="mrg8">
+    Each annotation type must be specified with its <b>fully qualified name</b>
+    (e.g. <code>java.lang.Deprecated</code>).
+    Multiple annotation type names must be separated with new lines ('\n'), semicolons (';') or colons (':').
+    For example:
+    <blockquote class="mrg8">
+    <code>
+      my.core.util.Internal<br>
+      my.project.api.Exclude
+    </code>
+    </blockquote>
+    <p class="mrg80">
+    For more details about using annotations, see description of the
+    <a href="#param.exclude.byAnns"><i>Exclude | By Annotations</i></a> parameter group.
+  </td>
+</tr>
+
+<tr>
+  <th align="left">
+    <a name="param.omit"></a>
+    <b><i>Omit</i></b>
+  </th>
+  <th align="left">
+    <font size="-1">
+    This group of parameters controls which information should not appear in the generated documentation.
+    </font>
+  </th>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:8px">
+      <a name="param.omit.packageQualifiers.for"></a>
+      Package qualifiers started with
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>omit.packageQualifiers.for</b></code>
+    <p class="mrg8">
+    Specify the packages whose qualifying names should be omitted from ahead of class names
+    in parameters, types, referenced classes (like exception lists, implemented interfaces, etc.),
+    @see tags and {@link} tags in comments.
+    <p class="mrg8">
+    The packages to omit are specified as the list of package name prefixes delimited with new
+    lines ('\n'), semicolons (';') or colons (':').
+    For example:
+    <blockquote class="mrg8">
+      <code>java.lang.<br>javax.swing.</code>
+    </blockquote>
+    <p class="mrg80">
+    When a particular fully-qualified name is decided whether
+    to be shortened, the answer will be yes when the full name
+    starts with one of the specified prefixes.
+  </td>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:8px">
+      <a name="param.omit.packageQualifiers.all"></a>
+      All package qualifiers
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>omit.packageQualifiers.all</b></code>
+    <p class="mrg80">
+    If selected, all qualifying package names will be omitted
+    from ahead of class names in parameters, types, referenced
+    classes (like exception lists, implemented interfaces, etc.),
+    @see tags and {@link} tags in comments.
+  </td>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:8px">
+      <a name="param.omit.inheritedMemberLists.for"></a>
+      Inherited member lists for packages
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>omit.inheritedMemberLists.for</b></code>
+    <p class="mrg80">
+    Allows to suppress generation of lists of the inner classes, fields or methods inherited
+    from those classes/interfaces, which belong to the packages specified with this parameter.
+    <p class="mrg80">
+    This parameter may be especially useful to suppress long lists of the class members inherited
+    from the standard Java API classes and, in such a way, to considerably reduce the output documentation.
+    <p class="mrg80">
+    The packages, whose classes/inerfaces should not appear in the "inherited from ..." lists,
+    are specified as the list of the package name prefixes delimited with new lines
+    ('\n'), semicolons (';') or colons (':').
+    <p class="mrg80">
+    For example, the following will exclude lists of the members inherited from most of the standard Java API classes:
+    <blockquote class="mrg80">
+      <code>java.lang.</br>javax.swing.</code>
+    </blockquote>
+  </td>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:8px">
+      <a name="param.omit.inheritedMemberLists.all"></a>
+      All inherited member lists
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>omit.inheritedMemberLists.all</b></code>
+    <p class="mrg80">
+    If selected, no lists of  inherited inner classes, fields or methods will be generated at all.
+  </td>
+</tr>
+
+<tr>
+  <th align="left">
+    <a name="param.fmt"></a>
+    <b><i>Formatting</i></b>
+  </th>
+  <th align="left">
+    <font size="-1">
+    This group of parameters allows to adjust some formatting features
+    of the output documentation specifically controlled by this template.
+    </font>
+  </th>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:8px">
+      <a name="param.fmt.page.breakBefore.package"></a>
+      Start package from new page
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>fmt.page.breakBefore.package</b></code>
+    <p class="mrg80">
+    If <code>true</code> (checked), each package documentation will be started from a new page.
+  </td>
+</tr>
+
+<tr valign="top">
+  <td align="left">
+    <p class="mrg0" style="margin-left:8px">
+      <a name="param.fmt.page.breakBefore.class"></a>
+      Start class from new page
+    </p>
+  </td>
+  <td align="left">
+    Parameter name:<code> <b>fmt.page.breakBefore.class</b></code>
+    <p class="mrg80">
+    If <code>true</code> (checked), each class documentation will be started from a new page.
+  </td>
+</tr>
+
+</table>
+
+<h3>
+  <a name="FramedDoc.tpl"></a>
+  FramedDoc.tpl
+</h3>
+
+This is the second <i>main</i> template. It is designed to generated a framed documentation
+similar to that produced by the
+<a href="http://java.sun.com/j2se/1.4.2/docs/tooldocs/javadoc/standard-doclet.html" target="_blank">Standard Javadoc doclet</a>.
+<p>
+<b>Note:</b> This template is supported only by HTML output format.
+
+
+<p>
+<hr>
+<span class="impr">Copyright&copy; 2003-2008 Filigris Works, Leonid Rudy Softwareprodukte. All rights reserved.<br>
+To contact us, please visit
+<a href="http://www.filigris.com">www.filigris.com</a> or e-mail to: <a href="mailto:contact@filigris.com">contact@filigris.com</a>
+</span>
+</p>
+
+</body>
+
+</html>
