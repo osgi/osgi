@@ -22,7 +22,7 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.residentialmanagement;
+package org.osgi.test.cases.residentialmanagement.old;
 
 import java.io.IOException;
 import java.io.InputStream;

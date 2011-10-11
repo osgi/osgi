@@ -23,7 +23,7 @@
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
-package org.osgi.test.cases.residentialmanagement;
+package org.osgi.test.cases.residentialmanagement.old;
 
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtConstants;
