@@ -14,7 +14,6 @@ Conditional-Package: org.osgi.test.support.*
 	org.osgi.test.support; version=project, \
 	osgi.cmpn;					version=4.1, \
 	osgi.core;					version=4.1, \
-	dmforest;					version=project, \
 	${junit}
 	
 	
