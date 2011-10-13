@@ -21,6 +21,7 @@ import java.io.InputStream;
 /**
  * Description for the data type information of an objectclass.
  * 
+ * @ThreadSafe
  * @version $Id$
  */
 public interface ObjectClassDefinition {
