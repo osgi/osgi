@@ -23,6 +23,7 @@ package org.osgi.service.metatype;
  * both). Any PID mentioned in either of these factories must be a valid argument
  * to the {@link #getObjectClassDefinition(String, String)} method.
  * 
+ * @ThreadSafe
  * @version $Id$
  */
 public interface MetaTypeProvider {
