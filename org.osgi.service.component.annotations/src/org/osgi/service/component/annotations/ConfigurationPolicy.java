@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,13 +18,13 @@ package org.osgi.service.component.annotations;
 
 /**
  * Configuration Policy for the {@link Component} annotation.
- * 
+ *
  * <p>
  * Controls whether component configurations must be satisfied depending on the
  * presence of a corresponding Configuration object in the OSGi Configuration
  * Admin service. A corresponding configuration is a Configuration object where
  * the PID is the name of the component.
- * 
+ *
  * @version $Id$
  */
 public enum ConfigurationPolicy {
@@ -33,15 +33,28 @@ public enum ConfigurationPolicy {
 	 * component to be satisfied even if the corresponding Configuration object
 	 * is not present.
 	 */
-	OPTIONAL,
+	OPTIONAL("optional"),
+
 	/**
 	 * There must be a corresponding Configuration object for the component
 	 * configuration to become satisfied.
 	 */
-	REQUIRE,
+	REQUIRE("require"),
+
 	/**
 	 * Always allow the component configuration to be satisfied and do not use
 	 * the corresponding Configuration object even if it is present.
 	 */
-	IGNORE;
+	IGNORE("ignore");
+
+	private final String	value;
+
+	ConfigurationPolicy(String value) {
+		this.value = value;
+	}
+
+	@Override
+	public String toString() {
+		return value;
+	}
 }

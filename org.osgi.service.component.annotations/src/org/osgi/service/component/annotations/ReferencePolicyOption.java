@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,7 +18,7 @@ package org.osgi.service.component.annotations;
 
 /**
  * Policy option for the {@link Reference} annotation.
- * 
+ *
  * @version $Id$
  */
 public enum ReferencePolicyOption {
@@ -31,7 +31,8 @@ public enum ReferencePolicyOption {
 	 * the new target service. References having the dynamic policy with a
 	 * multiple cardinality will bind the new target service.
 	 */
-	RELUCTANT,
+	RELUCTANT("reluctant"),
+
 	/**
 	 * The greedy policy option is a valid policy option for both
 	 * {@link ReferencePolicy#STATIC static} and {@link ReferencePolicy#DYNAMIC
@@ -39,5 +40,16 @@ public enum ReferencePolicyOption {
 	 * becomes available, references having the greedy policy option will bind
 	 * the new target service.
 	 */
-	GREEDY;
+	GREEDY("greedy");
+
+	private final String	value;
+
+	ReferencePolicyOption(String value) {
+		this.value = value;
+	}
+
+	@Override
+	public String toString() {
+		return value;
+	}
 }

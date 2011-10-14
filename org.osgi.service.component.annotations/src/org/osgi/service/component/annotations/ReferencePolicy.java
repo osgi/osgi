@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,7 +18,7 @@ package org.osgi.service.component.annotations;
 
 /**
  * Policy for the {@link Reference} annotation.
- * 
+ *
  * @version $Id$
  */
 public enum ReferencePolicy {
@@ -31,7 +31,8 @@ public enum ReferencePolicy {
 	 * component configuration must be reactivated and bound to the replacement
 	 * service.
 	 */
-	STATIC,
+	STATIC("static"),
+
 	/**
 	 * The dynamic policy is slightly more complex since the component
 	 * implementation must properly handle changes in the set of bound services.
@@ -41,5 +42,16 @@ public enum ReferencePolicy {
 	 * of changes in the set of bound services by calls to the bind and unbind
 	 * methods.
 	 */
-	DYNAMIC;
+	DYNAMIC("dynamic");
+
+	private final String	value;
+
+	ReferencePolicy(String value) {
+		this.value = value;
+	}
+
+	@Override
+	public String toString() {
+		return value;
+	}
 }
