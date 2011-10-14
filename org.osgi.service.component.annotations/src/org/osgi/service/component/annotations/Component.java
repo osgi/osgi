@@ -124,23 +124,6 @@ public @interface Component {
 	boolean immediate() default false;
 
 	/**
-	 * The configuration policy of this Component.
-	 *
-	 * <p>
-	 * Controls whether component configurations must be satisfied depending on
-	 * the presence of a corresponding Configuration object in the OSGi
-	 * Configuration Admin service. A corresponding configuration is a
-	 * Configuration object where the PID equals the name of the component.
-	 *
-	 * <p>
-	 * If not specified, the {@link ConfigurationPolicy#OPTIONAL OPTIONAL}
-	 * configuration policy is used.
-	 *
-	 * @see "The configuration-policy attribute of the component element of a Component Description."
-	 */
-	ConfigurationPolicy configurationPolicy() default ConfigurationPolicy.OPTIONAL;
-
-	/**
 	 * Properties for this Component.
 	 *
 	 * <p>
@@ -170,21 +153,6 @@ public @interface Component {
 	String[] properties() default {};
 
 	/**
-	 * The configuration PID for the configuration of this Component.
-	 *
-	 * <p>
-	 * Allows the configuration PID for this Component to be different than the
-	 * name of this Component.
-	 *
-	 * <p>
-	 * If not specified, the name of this Component is used as the configuration
-	 * PID of this Component.
-	 *
-	 * @see "The configuration-pid attribute of the component element of a Component Description."
-	 */
-	String configurationPid() default "";
-
-	/**
 	 * The XML name space of the Component Description for this Component.
 	 *
 	 * <p>
@@ -195,4 +163,38 @@ public @interface Component {
 	 * @see "The XML name space specified for a Component Description."
 	 */
 	String xmlns() default "";
+
+	/**
+	 * The configuration policy of this Component.
+	 * 
+	 * <p>
+	 * Controls whether component configurations must be satisfied depending on
+	 * the presence of a corresponding Configuration object in the OSGi
+	 * Configuration Admin service. A corresponding configuration is a
+	 * Configuration object where the PID equals the name of the component.
+	 * 
+	 * <p>
+	 * If not specified, the {@link ConfigurationPolicy#OPTIONAL OPTIONAL}
+	 * configuration policy is used.
+	 * 
+	 * @see "The configuration-policy attribute of the component element of a Component Description."
+	 * @since 1.1
+	 */
+	ConfigurationPolicy configurationPolicy() default ConfigurationPolicy.OPTIONAL;
+
+	/**
+	 * The configuration PID for the configuration of this Component.
+	 * 
+	 * <p>
+	 * Allows the configuration PID for this Component to be different than the
+	 * name of this Component.
+	 * 
+	 * <p>
+	 * If not specified, the name of this Component is used as the configuration
+	 * PID of this Component.
+	 * 
+	 * @see "The configuration-pid attribute of the component element of a Component Description."
+	 * @since 1.2
+	 */
+	String configurationPid() default "";
 }

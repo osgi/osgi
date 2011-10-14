@@ -18,14 +18,15 @@ package org.osgi.service.component.annotations;
 
 /**
  * Configuration Policy for the {@link Component} annotation.
- *
+ * 
  * <p>
  * Controls whether component configurations must be satisfied depending on the
  * presence of a corresponding Configuration object in the OSGi Configuration
  * Admin service. A corresponding configuration is a Configuration object where
  * the PID is the name of the component.
- *
+ * 
  * @version $Id$
+ * @since 1.1
  */
 public enum ConfigurationPolicy {
 	/**

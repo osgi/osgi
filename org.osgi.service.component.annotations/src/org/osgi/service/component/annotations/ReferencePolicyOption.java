@@ -18,8 +18,9 @@ package org.osgi.service.component.annotations;
 
 /**
  * Policy option for the {@link Reference} annotation.
- *
+ * 
  * @version $Id$
+ * @since 1.2
  */
 public enum ReferencePolicyOption {
 	/**

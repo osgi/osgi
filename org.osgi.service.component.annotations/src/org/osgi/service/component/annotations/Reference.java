@@ -24,20 +24,20 @@ import java.lang.annotation.Target;
 /**
  * Identify the annotated method as a {@code bind} method of a Service
  * Component.
- * 
+ *
  * <p>
  * The annotated method is a bind method of the Component.
- * 
+ *
  * <p>
  * This annotation is not processed at runtime by a Service Component Runtime
  * implementation. It must be processed by tools and used to add a Component
  * Description to the bundle.
- * 
+ *
  * <p>
  * In the generated Component Description for a component, the references must
  * be ordered in ascending lexicographical order (using {@code String.compareTo}
  * ) of the reference {@link #name() name}s.
- * 
+ *
  * @see "The reference element of a Component Description."
  * @version $Id$
  */
@@ -90,17 +90,6 @@ public @interface Reference {
 	ReferencePolicy policy() default ReferencePolicy.STATIC;
 
 	/**
-	 * The policy option for the reference.
-	 *
-	 * <p>
-	 * If not specified, the {@link ReferencePolicyOption#RELUCTANT RELUCTANT}
-	 * reference policy option is used.
-	 *
-	 * @see "The policy-option attribute of the reference element of a Component Description."
-	 */
-	ReferencePolicyOption policyOption() default ReferencePolicyOption.RELUCTANT;
-
-	/**
 	 * The target filter for the reference.
 	 *
 	 * @see "The target attribute of the reference element of a Component Description."
@@ -127,14 +116,27 @@ public @interface Reference {
 	String unbind() default "";
 
 	/**
+	 * The policy option for the reference.
+	 * 
+	 * <p>
+	 * If not specified, the {@link ReferencePolicyOption#RELUCTANT RELUCTANT}
+	 * reference policy option is used.
+	 * 
+	 * @see "The policy-option attribute of the reference element of a Component Description."
+	 * @since 1.2
+	 */
+	ReferencePolicyOption policyOption() default ReferencePolicyOption.RELUCTANT;
+
+	/**
 	 * The name of the updated method which is associated with the annotated
 	 * bind method.
-	 *
+	 * 
 	 * <p>
 	 * If not specified, then no updated method is associated with the annotated
 	 * bind method.
-	 *
+	 * 
 	 * @see "The updated attribute of the reference element of a Component Description."
+	 * @since 1.2
 	 */
 	String updated() default "";
 }
