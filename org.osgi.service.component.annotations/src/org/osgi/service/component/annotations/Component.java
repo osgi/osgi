@@ -170,13 +170,28 @@ public @interface Component {
 	String[] properties() default {};
 
 	/**
+	 * The configuration PID for the configuration of this Component.
+	 *
+	 * <p>
+	 * Allows the configuration PID for this Component to be different than the
+	 * name of this Component.
+	 *
+	 * <p>
+	 * If not specified, the name of this Component is used as the configuration
+	 * PID of this Component.
+	 *
+	 * @see "The configuration-pid attribute of the component element of a Component Description."
+	 */
+	String configurationPid() default "";
+
+	/**
 	 * The XML name space of the Component Description for this Component.
-	 * 
+	 *
 	 * <p>
 	 * If not specified, the XML name space of the Component Description for
 	 * this Component should be the lowest Declarative Services XML name space
 	 * which supports all the specification features used by this Component.
-	 * 
+	 *
 	 * @see "The XML name space specified for a Component Description."
 	 */
 	String xmlns() default "";

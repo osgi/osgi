@@ -3,7 +3,7 @@
 	/*
 	* $Id$
 	* 
-	* Copyright (c) OSGi Alliance (2005, 2009). All Rights Reserved.
+	* Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
 	* 
 	* Licensed under the Apache License, Version 2.0 (the "License");
 	* you may not use this file except in compliance with the License.
@@ -91,6 +91,14 @@
 		<attribute name="deactivate" type="token" use="optional"
 			default="deactivate" />
 		<attribute name="modified" type="token" use="optional" />
+		<attribute name="configuration-pid" type="token" use="optional">
+			<annotation>
+				<documentation xml:lang="en">
+					The default value of this attribute is the value of
+					the name attribute of this element.
+				</documentation>
+			</annotation>
+		</attribute>
 		<anyAttribute />
 	</complexType>
 	<complexType name="Timplementation">
