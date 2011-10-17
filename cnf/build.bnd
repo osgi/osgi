@@ -19,6 +19,7 @@ build					= ${workspace}/cnf
 licensed				= ${workspace}/licensed
 repo					= ${build}/repo
 licensed-repo			= ${licensed}/repo
+released-repo			= ${build}/${target-dir}/repo
 project.name            = ${basename;${project}}
 p			            = ${project.name}
 bin.includes			= ${project.name}.jar
@@ -37,10 +38,13 @@ javac.target 			= 1.2
 -sourcepath             = ${project}/src 
 
 -plugin	            	= aQute.lib.deployer.FileRepo; \
-                                location=${repo}, \
+                                location=${repo}; \
+                                readonly=true, \
                           aQute.lib.deployer.FileRepo; \
                                 location=${licensed-repo}; \
                                 readonly=true, \
+                          aQute.lib.deployer.FileRepo; \
+                                location=${released-repo}, \
   						  aQute.bnd.signing.JartoolSigner; \
   						        keystore=${build}/keystore; \
   						        keypass=testtest; \
