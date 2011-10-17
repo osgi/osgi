@@ -49,6 +49,7 @@
 		<property name="top" value="${target}" />
 		
 		<!-- Have to compile the bnd plugins before ... -->		
+		<mkdir dir="${released-repo}" />
         <subant target="compile" inheritAll="false" buildpath="${build}">
             <property name="top" value="${top}" />
         </subant>
@@ -152,9 +153,13 @@
 		<echo>javac.target:           ${javac.target}</echo>
 		<echo>base.modfied:           ${base.modified} (${base.modified.readable})</echo>
 		<echo>target:                 ${target}</echo>
-		<echo>licensed repo:          ${licensed-repo}</echo>
 		<echo>repo:                   ${repo}</echo>
+		<echo>licensed repo:          ${licensed-repo}</echo>
+		<echo>released repo:          ${released-repo}</echo>
 		<echo>nodeploy:               ${nodeploy}</echo>
+		<echo>core.companion:         ${core.companion.jar}</echo>
+		<echo>cmpn.companion:         ${cmpn.companion.jar}</echo>
+		<echo>enterprise.companion:   ${enterprise.companion.jar}</echo>
 	</target>
 
 </project>
