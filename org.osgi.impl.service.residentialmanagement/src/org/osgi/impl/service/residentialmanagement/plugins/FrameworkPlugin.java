@@ -30,7 +30,7 @@ import org.osgi.service.dmt.spi.*;
 import org.osgi.framework.BundleContext;
 /**
  * 
- * @author Koya MORI NTT Corporation
+ * @author Shigekuni Kondo NTT Corporation
  */
 class FrameworkPlugin implements DataPlugin {
     private FrameworkReadOnlySession readonly;
@@ -40,11 +40,11 @@ class FrameworkPlugin implements DataPlugin {
     	readonly = new FrameworkReadOnlySession(this, context);
     	readwrite = new FrameworkReadWriteSession(this, context, readonly);
     	context.addBundleListener(readonly);
-    	context.addFrameworkListener(readonly);
     }
     
     public ReadableDataSession openReadOnlySession(String[] sessionRoot,
             DmtSession session) throws DmtException {
+    	readonly.managedWires();
         return readonly;
     }
 
@@ -55,13 +55,13 @@ class FrameworkPlugin implements DataPlugin {
 
     public TransactionalDataSession openAtomicSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
-        
-        if(sessionRoot.length > 
+    	if(sessionRoot.length > 
                 FrameworkPluginActivator.PLUGIN_ROOT_PATH.length + 1)
             throw new DmtException(sessionRoot, DmtException.COMMAND_FAILED,
                     "Fine-grained locking not supported, session subtree " +
                     "must contain at least one whole configuration table.");
 
+    	readwrite.managedWires();
         return readwrite;
     }
 }

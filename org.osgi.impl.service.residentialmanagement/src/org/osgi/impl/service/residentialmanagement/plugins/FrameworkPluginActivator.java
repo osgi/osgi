@@ -32,14 +32,11 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.spi.DataPlugin;
 /**
  * 
- * @author Koya MORI, NTT Corporation
+ * @author Shigekuni Kondo, NTT Corporation
  */
 public class FrameworkPluginActivator implements BundleActivator {
-	static final String INSTANCE_ID = "1";
-	static final String[] PLUGIN_ROOT_PATH = 
-        new String[] { ".", "OSGi", INSTANCE_ID, "Framework" };
-    static final String PLUGIN_ROOT_URI = "./OSGi/" + INSTANCE_ID + "/Framework";
-    
+	static final String[] PLUGIN_ROOT_PATH = new String[] { ".","Framework" };
+    static final String PLUGIN_ROOT_URI = "./Framework";
     private ServiceRegistration servReg;
     private FrameworkPlugin     frameworkPlugin;
 
@@ -48,7 +45,11 @@ public class FrameworkPluginActivator implements BundleActivator {
 		Hashtable props = new Hashtable();
 		props.put("dataRootURIs", new String[] { PLUGIN_ROOT_URI });
 		String[] ifs = new String[] {DataPlugin.class.getName()};
+		try{
 		servReg = bc.registerService(ifs, frameworkPlugin, props);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		Util.log("Framework plugin activated successfully.");
 	}
 
