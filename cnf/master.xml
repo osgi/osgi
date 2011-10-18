@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	The is master OSGi build file. It is included from projects
+	as is.
+-->
+<project name="master" default="publish">
+
+	<target name="all" depends="publish">
+		<!-- all target is a synonym for publish target -->
+	</target>
+	
+	<!-- 
+	     INIT
+	     The target is a dependent of all other targets.
+	     It's purpose is to set up the environment only once
+	     and avoid it being repeatedly done for each antcall.
+	-->
+
+	<target name="init" unless="initialized">
+		<!-- The following three properties are local to this file to get bootstrapped. 
+		   The actual properties to be used should be project.dir, project.workspace and
+		   project.name. Those properties are set by bnd -->
+		<dirname property="-projectdir" file="${ant.file}" />
+		<dirname property="-workspacedir" file="${-projectdir}" />
+		<basename property="-projectname" file="${-projectdir}" />
+		<echo>Enter project ${-projectname} (${top})</echo>
+		
+		<taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="${-workspacedir}/licensed/repo/biz.aQute.bnd/biz.aQute.bnd-latest.jar" />
+
+		<bndprepare basedir="${-projectdir}" print="false" top="${top}"/>
+		<!-- Now we have the same properties set as bnd 
+		-->
+			
+		<!-- mark init has been run -->
+		<property name="initialized" value="set" />
+	</target>
+
+	<!-- 
+		DEPENDENCIES
+		Build project dependencies. The execution of the dependencies is
+		restricted to 1 level because bnd calculates the dependencies. This
+		is controlled through the top property. If this is set, the method
+		will not execute. This method will set that property and it will set
+		it in the child ant.
+	-->
+	<target name="dependencies" depends="init" if="project.dependson" unless="top">
+		<property name="top" value="${target}" />
+		
+		<!-- Have to compile the bnd plugins before ... -->		
+        <subant target="" inheritAll="false" buildpath="${build}">
+            <property name="top" value="${top}" />
+        </subant>
+		
+		<!-- Now build all dependends in their dependency order -->
+		<subant target="" inheritAll="false" buildpath="${project.dependson}">
+			<property name="top" value="${top}" />
+		</subant>
+	</target>
+
+	<!--
+	     COMPILE
+	     Compile the sources. 
+	-->
+	<target name="compile" depends="dependencies" if="project.sourcepath">
+		<echo>Compile ${project.sourcepath} to ${project.output}</echo>
+		<mkdir dir="${project.output}"/>
+		<javac fork="yes" 
+			executable="${javac}" 
+			srcdir="${project.sourcepath}" 
+			destdir="${project.output}" 
+			classpath="${project.buildpath}" 
+			bootclasspath="${project.bootclasspath}" 
+			deprecation="true" 
+			listfiles="true" 
+			target="${javac.target}" 
+			source="${javac.source}" 
+			debug="${javac.debug}" 
+			includeAntRuntime="no" 
+			verbose="${verbose}" />
+		
+		<!-- 
+		  The eclipse compiler copies resources but the Javac compiler does not
+		  If ${src} == ${bin} then this is not necessary, but unfortunately, now 
+		  it is. 
+		--> 
+		<copy todir="${project.output}" verbose="${verbose}" preservelastmodified="true">
+			<fileset dir="${project.sourcepath}">
+                <exclude name="**/*.java"/>
+                <exclude name="**/*.class"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<!--
+	     Test
+	-->
+	<target name="test" depends="compile">
+		<bnd command="test" exceptions="true" basedir="${project.dir}"/>
+	</target>
+
+	<!-- 
+		JARS
+	-->
+	<target name="jars" depends="compile">
+		<mkdir dir="${target}" />
+		<bndproject basedir="${project.dir}"/>
+	</target>
+
+	<target name="deploy" depends="jars" unless="nodeploy">
+		<bnddeploy>
+			<fileset dir="${target}" includes="${bin.includes}" />
+		</bnddeploy>
+	</target>
+
+	<target name="publish" depends="deploy">
+		<echo>Exit project ${project.name}</echo>
+	</target>
+
+	<!--
+	     CLEAN
+	-->
+	<target name="deepclean" depends="clean" if="project.dependson">
+		<subant target="clean" inheritAll="false" buildpath="${project.dependson}"/>
+		<subant target="clean" inheritAll="false" buildpath="${build}"/>
+	</target>
+
+	<target name="clean" depends="init">
+		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
+			<fileset dir="${project.output}" />
+			<fileset dir="${target}" />
+		</delete>
+	</target>
+
+	<!--
+	     ECHO
+	-->
+	<target name="echo" depends="init">
+		<echo>verbose:                ${verbose}</echo>
+		<echo>project.workspace:      ${project.workspace}</echo>
+		<echo>project.dir:            ${project.dir}</echo>
+		<echo>project.name:           ${project.name}</echo>
+		<echo>project.output:         ${project.output}</echo>
+		<echo>project.sourcepath:     ${project.sourcepath}</echo>
+		<echo>project.allsourcepath:  ${project.allsourcepath}</echo>
+		<echo>project.buildpath:      ${project.buildpath}</echo>
+		<echo>project.testpath:       ${project.testpath}</echo>
+		<echo>project.dependson:      ${project.dependson}</echo>
+		<echo>project.bootclasspath:  ${project.bootclasspath}</echo>
+		<echo>javac:                  ${javac}</echo>
+		<echo>javac.source:           ${javac.source}</echo>
+		<echo>javac.target:           ${javac.target}</echo>
+		<echo>base.modfied:           ${base.modified} (${base.modified.readable})</echo>
+		<echo>target:                 ${target}</echo>
+		<echo>repo:                   ${repo}</echo>
+		<echo>licensed repo:          ${licensed-repo}</echo>
+		<echo>released repo:          ${released-repo}</echo>
+		<echo>nodeploy:               ${nodeploy}</echo>
+		<echo>core.companion:         ${core.companion.jar}</echo>
+		<echo>cmpn.companion:         ${cmpn.companion.jar}</echo>
+		<echo>enterprise.companion:   ${enterprise.companion.jar}</echo>
+	</target>
+
+</project>

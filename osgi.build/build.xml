@@ -212,5 +212,5 @@
 		<echo>proposed.specs:         ${proposed.specs}</echo>
 	</target>
 
-	<import file="../cnf/build.xml" />
+	<import file="../cnf/master.xml" />
 </project>
