@@ -66,6 +66,8 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 			mandatory.remove(children[i]);
 		assertEquals("There are undefined children in the Framework node.", 0,
 				mandatory.size());
+		
+		// TODO check for undefined nodes as well
 
 	}
 
@@ -123,9 +125,9 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 			assertTrue("These objects must exist.", children != null && children.length > 0 );
 			for (int j = 0; j < children.length; j++) {
 				String child = children[j];
-				expected.remove(child);
 				if ( ! expected.contains(child) && ! optional.contains(child) )
 					undefined.add(child);
+				expected.remove(child);
 			}
 
 			assertEquals("Mandatory nodes are missing in Framework.Bundle." + bundleKey, 0,
