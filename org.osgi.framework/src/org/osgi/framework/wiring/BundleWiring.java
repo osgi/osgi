@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -28,7 +28,7 @@ import org.osgi.framework.resource.ResourceConstants;
  * A wiring for a bundle. Each time a bundle is resolved, a new bundle wiring
  * for the bundle is created. A bundle wiring is associated with a bundle
  * revision and represents the dependencies with other bundle wirings.
- * 
+ *
  * <p>
  * The bundle wiring for a bundle is the {@link #isCurrent() current} bundle
  * wiring if it is the most recent bundle wiring for the current bundle
@@ -39,13 +39,13 @@ import org.osgi.framework.resource.ResourceConstants;
  * loader. All bundles with non-current, in use bundle wirings are considered
  * removal pending. Once a bundle wiring is no longer in use, it is considered
  * stale and is discarded by the framework.
- * 
+ *
  * <p>
  * The current bundle wiring for a bundle can be obtained by calling
  * {@link Bundle#adapt(Class) bundle.adapt}(BundleWiring.class). A bundle in the
  * INSTALLED or UNINSTALLED state does not have a current wiring, adapting such
  * a bundle returns {@code null}.
- * 
+ *
  * @ThreadSafe
  * @noimplement
  * @version $Id$
@@ -57,7 +57,7 @@ public interface BundleWiring extends BundleReference {
 	 * most recent bundle wiring for the current bundle revision. All bundles
 	 * with non-current, in use bundle wirings are considered
 	 * {@link FrameworkWiring#getRemovalPendingBundles() removal pending}.
-	 * 
+	 *
 	 * @return {@code true} if this bundle wiring is the current bundle wiring;
 	 *         {@code false} otherwise.
 	 */
@@ -68,7 +68,7 @@ public interface BundleWiring extends BundleReference {
 	 * in use if it is the {@link #isCurrent() current} wiring or if some other
 	 * in use bundle wiring is dependent upon it. Once a bundle wiring is no
 	 * longer in use, it is considered stale and is discarded by the framework.
-	 * 
+	 *
 	 * @return {@code true} if this bundle wiring is in use; {@code false}
 	 *         otherwise.
 	 */
@@ -76,18 +76,18 @@ public interface BundleWiring extends BundleReference {
 
 	/**
 	 * Returns the capabilities provided by this bundle wiring.
-	 * 
+	 *
 	 * <p>
 	 * Only capabilities considered by the resolver are returned. For example,
 	 * capabilities with
 	 * {@link ResourceConstants#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
 	 * directive not equal to {@link ResourceConstants#EFFECTIVE_RESOLVE
 	 * resolve} are not returned.
-	 * 
+	 *
 	 * <p>
 	 * A capability may not be required by any bundle wiring and thus there may
 	 * be no {@link #getProvidedWires(String) wires} for the capability.
-	 * 
+	 *
 	 * <p>
 	 * A bundle wiring for a non-fragment revision provides a subset of the
 	 * declared capabilities from the bundle revision and all attached fragment
@@ -103,7 +103,7 @@ public interface BundleWiring extends BundleReference {
 	 * &#8224; The {@link ResourceConstants#IDENTITY_NAMESPACE identity}
 	 * capability provided by attached fragment revisions must not be included
 	 * in the capabilities of the host bundle wiring.
-	 * 
+	 *
 	 * @param namespace The name space of the capabilities to return or
 	 *        {@code null} to return the capabilities from all name spaces.
 	 * @return A list containing a snapshot of the {@link BundleCapability}s, or
@@ -120,21 +120,21 @@ public interface BundleWiring extends BundleReference {
 
 	/**
 	 * Returns the requirements of this bundle wiring.
-	 * 
+	 *
 	 * <p>
 	 * Only requirements considered by the resolver are returned. For example,
 	 * requirements with
 	 * {@link ResourceConstants#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
 	 * directive not equal to {@link ResourceConstants#EFFECTIVE_RESOLVE
 	 * resolve} are not returned.
-	 * 
+	 *
 	 * <p>
 	 * A bundle wiring for a non-fragment revision has a subset of the declared
 	 * requirements from the bundle revision and all attached fragment
 	 * revisions. Not all declared requirements may be present since some may be
 	 * discarded. For example, if a package is declared to be optionally
 	 * imported and is not actually imported, the requirement must be discarded.
-	 * 
+	 *
 	 * @param namespace The name space of the requirements to return or
 	 *        {@code null} to return the requirements from all name spaces.
 	 * @return A list containing a snapshot of the {@link BundleRequirement}s,
@@ -152,7 +152,7 @@ public interface BundleWiring extends BundleReference {
 	/**
 	 * Returns the {@link BundleWire}s to the provided {@link BundleCapability
 	 * capabilities} of this bundle wiring.
-	 * 
+	 *
 	 * @param namespace The name space of the capabilities for which to return
 	 *        wires or {@code null} to return the wires for the capabilities in
 	 *        all name spaces.
@@ -172,12 +172,12 @@ public interface BundleWiring extends BundleReference {
 	/**
 	 * Returns the {@link BundleWire}s to the {@link BundleRequirement
 	 * requirements} in use by this bundle wiring.
-	 * 
+	 *
 	 * <p>
 	 * This method may return different results if this bundle wiring adds wires
 	 * to more requirements. For example, dynamically importing a package will
 	 * establish a new wire to the dynamically imported package.
-	 * 
+	 *
 	 * @param namespace The name space of the requirements for which to return
 	 *        wires or {@code null} to return the wires for the requirements in
 	 *        all name spaces.
@@ -198,13 +198,13 @@ public interface BundleWiring extends BundleReference {
 	 * Returns the bundle revision for the bundle in this bundle wiring. Since a
 	 * bundle update can change the entries in a bundle, different bundle
 	 * wirings for the same bundle can have different bundle revisions.
-	 * 
+	 *
 	 * <p>
 	 * The bundle object {@link BundleReference#getBundle() referenced} by the
 	 * returned {@code BundleRevision} may return different information than the
 	 * returned {@code BundleRevision} since the returned {@code BundleRevision}
 	 * may refer to an older revision of the bundle.
-	 * 
+	 *
 	 * @return The bundle revision for this bundle wiring.
 	 * @see BundleRevision#getWiring()
 	 */
@@ -214,7 +214,7 @@ public interface BundleWiring extends BundleReference {
 	 * Returns the class loader for this bundle wiring. Since a bundle refresh
 	 * creates a new bundle wiring for a bundle, different bundle wirings for
 	 * the same bundle will have different class loaders.
-	 * 
+	 *
 	 * @return The class loader for this bundle wiring. If this bundle wiring is
 	 *         not {@link #isInUse() in use} or this bundle wiring is for a
 	 *         fragment revision, {@code null} will be returned.
@@ -230,7 +230,7 @@ public interface BundleWiring extends BundleReference {
 	 * loader is not used to search for entries. Only the contents of this
 	 * bundle wiring's bundle revision and its attached fragment revisions are
 	 * searched for the specified entries.
-	 * 
+	 *
 	 * <p>
 	 * This method takes into account that the &quot;contents&quot; of this
 	 * bundle wiring can have attached fragments. This &quot;bundle space&quot;
@@ -240,12 +240,14 @@ public interface BundleWiring extends BundleReference {
 	 * name. This method can either return only entries in the specified path or
 	 * recurse into subdirectories returning entries in the directory tree
 	 * beginning at the specified path.
-	 * 
+	 *
+	 * <p>
+	 * URLs for directory entries must have their path end with &quot;/&quot;.
 	 * <p>
 	 * Note: Jar and zip files are not required to include directory entries.
 	 * URLs to directory entries will not be returned if the bundle contents do
 	 * not contain directory entries.
-	 * 
+	 *
 	 * @param path The path name in which to look. The path is always relative
 	 *        to the root of this bundle wiring and may begin with
 	 *        &quot;/&quot;. A path value of &quot;/&quot; indicates the root of
@@ -277,14 +279,14 @@ public interface BundleWiring extends BundleReference {
 
 	/**
 	 * The find entries operation must recurse into subdirectories.
-	 * 
+	 *
 	 * <p>
 	 * This bit may be set when calling
 	 * {@link #findEntries(String, String, int)} to specify the result must
 	 * include the matching entries from the specified path and its
 	 * subdirectories. If this bit is not set, then the result must only include
 	 * matching entries from the specified path.
-	 * 
+	 *
 	 * @see #findEntries(String, String, int)
 	 */
 	int	FINDENTRIES_RECURSE	= 0x00000001;
@@ -293,7 +295,7 @@ public interface BundleWiring extends BundleReference {
 	 * Returns the names of resources visible to this bundle wiring's
 	 * {@link #getClassLoader() class loader}. The returned names can be used to
 	 * access the resources via this bundle wiring's class loader.
-	 * 
+	 *
 	 * <ul>
 	 * <li>Only the resource names for resources in bundle wirings will be
 	 * returned. The names of resources visible to a bundle wiring's parent
@@ -302,7 +304,7 @@ public interface BundleWiring extends BundleReference {
 	 * <li>Only established wires will be examined for resources. This method
 	 * must not cause new wires for dynamic imports to be established.
 	 * </ul>
-	 * 
+	 *
 	 * @param path The path name in which to look. The path is always relative
 	 *        to the root of this bundle wiring's class loader and may begin
 	 *        with &quot;/&quot;. A path value of &quot;/&quot; indicates the
@@ -332,14 +334,14 @@ public interface BundleWiring extends BundleReference {
 
 	/**
 	 * The list resource names operation must recurse into subdirectories.
-	 * 
+	 *
 	 * <p>
 	 * This bit may be set when calling
 	 * {@link #listResources(String, String, int)} to specify the result must
 	 * include the names of matching resources from the specified path and its
 	 * subdirectories. If this bit is not set, then the result must only include
 	 * names of matching resources from the specified path.
-	 * 
+	 *
 	 * @see #listResources(String, String, int)
 	 */
 	int	LISTRESOURCES_RECURSE	= 0x00000001;
@@ -351,7 +353,7 @@ public interface BundleWiring extends BundleReference {
 	 * revisions. The result must not include resource names for resources in
 	 * {@link BundleRevision#PACKAGE_NAMESPACE package} names which are
 	 * {@link #getRequiredWires(String) imported} by this wiring.
-	 * 
+	 *
 	 * <p>
 	 * This bit may be set when calling
 	 * {@link #listResources(String, String, int)} to specify the result must
@@ -361,7 +363,7 @@ public interface BundleWiring extends BundleReference {
 	 * reachable from this bundle wiring's class loader which may include the
 	 * names of matching resources contained in imported packages and required
 	 * bundles.
-	 * 
+	 *
 	 * @see #listResources(String, String, int)
 	 */
 	int	LISTRESOURCES_LOCAL		= 0x00000002;
