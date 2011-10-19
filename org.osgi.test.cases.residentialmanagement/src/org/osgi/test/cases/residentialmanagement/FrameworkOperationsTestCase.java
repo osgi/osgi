@@ -81,7 +81,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		try {
 			// set a new value for the startlevel
 			session.setNodeValue(FRAMEWORK_ROOT + "/" + STARTLEVEL , new DmtData(initialStartLevel + 1));
-			session.setNodeValue(FRAMEWORK_ROOT + "/" + INITIAL_BUNDLE_STARTLEVEL, new DmtData(initialBundleStartLevel - 1));
+			session.setNodeValue(FRAMEWORK_ROOT + "/" + INITIAL_BUNDLE_STARTLEVEL, new DmtData(initialBundleStartLevel + 1));
 			
 			session.commit();
 			
@@ -164,7 +164,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 	 * @throws Exception 
 	 */
 	public void testBundleStateChanges() throws Exception {
-		Bundle testBundle = install(TESTBUNDLE_EXPORTPACKAGE);
+		Bundle testBundle = installBundle(TESTBUNDLE_EXPORTPACKAGE, false);
 		
 		// ensure that the bundle is in INSTALLED state
 		assertEquals( "testbundle should be in 'INSTALLED' state initially", Bundle.INSTALLED, testBundle.getState() );
