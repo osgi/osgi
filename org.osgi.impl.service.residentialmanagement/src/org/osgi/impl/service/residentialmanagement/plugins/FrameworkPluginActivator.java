@@ -35,12 +35,17 @@ import org.osgi.service.dmt.spi.DataPlugin;
  * @author Shigekuni Kondo, NTT Corporation
  */
 public class FrameworkPluginActivator implements BundleActivator {
-	static final String[] PLUGIN_ROOT_PATH = new String[] { ".","Framework" };
-    static final String PLUGIN_ROOT_URI = "./Framework";
-    private ServiceRegistration servReg;
+	static final String[] PLUGIN_ROOT_PATH = new String[] { ".","RMT","Framework" };
+	static String PLUGIN_ROOT_URI = "./Framework";
+	static final String KEY_OF_RMT_ROOT_URI = "org.osgi.dmt.residential";
+	private ServiceRegistration servReg;
     private FrameworkPlugin     frameworkPlugin;
 
 	public void start(BundleContext bc) throws BundleException {
+		String root = System.getProperty(KEY_OF_RMT_ROOT_URI);
+		if(root!=null){
+			PLUGIN_ROOT_URI = root+"/Framework";
+		}
  		frameworkPlugin = new FrameworkPlugin(bc);
 		Hashtable props = new Hashtable();
 		props.put("dataRootURIs", new String[] { PLUGIN_ROOT_URI });
