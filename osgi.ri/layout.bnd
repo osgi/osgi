@@ -1,9 +1,10 @@
 core.ri.version			= ${build.version}
 cmpn.ri.version			= ${build.version}
 enterprise.ri.version	= ${build.version}
+residential.ri.version	= ${build.version}
 proposed.ri.version		= ${build.version}
 
-build.impls                 = ${uniq; ${build.cmpn.impls}, ${build.enterprise.impls}}
+build.impls                 = ${uniq; ${build.cmpn.impls}, ${build.enterprise.impls}, ${build.residential.impls}}
 
 jar.core.impls = \
 	${core.companion.jar}, \
@@ -79,4 +80,26 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.metatype}, \
 	${repo;org.osgi.impl.service.provisioning}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin}
+
+build.residential.impls = \
+	org.osgi.impl.bundle.rsh, \
+	org.osgi.impl.bundle.jaxp, \
+	org.osgi.impl.service.device.manager, \
+	org.osgi.impl.service.dmt, \
+	org.osgi.impl.service.http, \
+	org.osgi.impl.service.log, \
+	org.osgi.impl.service.tr069todmt, \
+	org.osgi.impl.service.upnp.cp, \
+	org.osgi.impl.service.upnp.cd, \
+	org.osgi.impl.service.useradmin
+
+jar.residential.impls = \
+	${residential.companion.jar}, \
+	${cmpn.companion.jar}, \
+	${repo;org.osgi.impl.bundle.servlet;2.1}, \
+	${repo;org.osgi.impl.service.cm}, \
+	${repo;org.osgi.impl.service.component}, \
+	${repo;org.osgi.impl.service.event}, \
+	${repo;org.osgi.impl.service.metatype}, \
+	${repo;org.osgi.impl.service.provisioning}
 

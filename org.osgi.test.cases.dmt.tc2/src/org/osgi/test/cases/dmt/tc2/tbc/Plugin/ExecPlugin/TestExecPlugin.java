@@ -36,8 +36,8 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin;
 
-import info.dmtree.*;
-import info.dmtree.spi.*;
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.spi.*;
 
 import java.util.Date;
 
@@ -50,7 +50,7 @@ import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
  * DmtSession calls to a subtree handled by Plugin.
  * 
  */
-public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalDataSession {
+public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalDataSession, MountPlugin {
 
 	private DmtTestControl tbc;
 	
@@ -262,6 +262,26 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 
 	public static String[] getNewInteriorNodeName() {
 		return newInteriorNodeName;
+	}
+
+
+	public void setMountPoints(MountPoint[] mountPoints) {
+		System.out.println( "setMountPoints invoked with mountPoints:" );
+		for (int i = 0; i < mountPoints.length; i++) {
+			System.out.println( Uri.toUri(mountPoints[i].getMountPath()) );
+		}
+	}
+
+
+	public void mountPointAdded(MountPoint mountPoint) {
+		System.out.println( "mountPointsAdded invoked with mountPoints:" );
+			System.out.println( Uri.toUri(mountPoint.getMountPath()) );
+	}
+
+
+	public void mountPointRemoved(MountPoint mountPoint) {
+		System.out.println( "mountPointsRemoved invoked with mountPoints:" );
+			System.out.println( Uri.toUri(mountPoint.getMountPath()) );
 	}
     
 }

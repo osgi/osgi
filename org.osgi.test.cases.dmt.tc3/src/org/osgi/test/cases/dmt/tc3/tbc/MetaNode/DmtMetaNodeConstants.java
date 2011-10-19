@@ -36,7 +36,7 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.MetaNode;
 
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.MetaNode;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 
 /**

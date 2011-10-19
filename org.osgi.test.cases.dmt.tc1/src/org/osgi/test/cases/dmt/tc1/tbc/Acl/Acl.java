@@ -67,15 +67,15 @@ public class Acl extends DmtTestControl {
 
 		try {
 			log("#testAcl001");
-			info.dmtree.Acl Acl = null;
-			Acl = new info.dmtree.Acl("Add="
+			org.osgi.service.dmt.Acl Acl = null;
+			Acl = new org.osgi.service.dmt.Acl("Add="
 					+ DmtConstants.PRINCIPAL + "&Delete="
 					+ DmtConstants.PRINCIPAL + "&Get=*");
 			assertEquals(
 					"Asserting that all of the permissions were found",
-					info.dmtree.Acl.ADD
-							| info.dmtree.Acl.DELETE
-							| info.dmtree.Acl.GET, Acl
+					org.osgi.service.dmt.Acl.ADD
+							| org.osgi.service.dmt.Acl.DELETE
+							| org.osgi.service.dmt.Acl.GET, Acl
 							.getPermissions(DmtConstants.PRINCIPAL));
 
 			boolean found = false;
@@ -102,15 +102,15 @@ public class Acl extends DmtTestControl {
 			String[] principals = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
 			int[] perm = {
-					info.dmtree.Acl.GET
-							| info.dmtree.Acl.EXEC,
-					info.dmtree.Acl.ADD
-							| info.dmtree.Acl.REPLACE };
-			info.dmtree.Acl acl = new info.dmtree.Acl(
+					org.osgi.service.dmt.Acl.GET
+							| org.osgi.service.dmt.Acl.EXEC,
+					org.osgi.service.dmt.Acl.ADD
+							| org.osgi.service.dmt.Acl.REPLACE };
+			org.osgi.service.dmt.Acl acl = new org.osgi.service.dmt.Acl(
 					principals, perm);
 			boolean passed = false;
-			if (acl.getPermissions(principals[0]) == (info.dmtree.Acl.GET | info.dmtree.Acl.EXEC)) {
-				if (acl.getPermissions(principals[1]) == (info.dmtree.Acl.ADD | info.dmtree.Acl.REPLACE)) {
+			if (acl.getPermissions(principals[0]) == (org.osgi.service.dmt.Acl.GET | org.osgi.service.dmt.Acl.EXEC)) {
+				if (acl.getPermissions(principals[1]) == (org.osgi.service.dmt.Acl.ADD | org.osgi.service.dmt.Acl.REPLACE)) {
 					passed = true;
 				}
 			}
@@ -146,7 +146,7 @@ public class Acl extends DmtTestControl {
 	public void testAcl003() {
 		try {
 			log("#testAcl003");
-			new info.dmtree.Acl(DmtConstants.INVALID);
+			new org.osgi.service.dmt.Acl(DmtConstants.INVALID);
 			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			pass("Exception correctly thrown");
@@ -166,7 +166,7 @@ public class Acl extends DmtTestControl {
 	public void testAcl004() {
 		try {
 			log("#testAcl004");
-			info.dmtree.Acl Acl = new info.dmtree.Acl(
+			org.osgi.service.dmt.Acl Acl = new org.osgi.service.dmt.Acl(
 					null);
 			String[] principals = Acl.getPrincipals();
 			int permissions = Acl.getPermissions("*");
@@ -192,16 +192,16 @@ public class Acl extends DmtTestControl {
 			log("#testAcl005");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
-			info.dmtree.Acl Acl = null;
-			Acl = new info.dmtree.Acl("Add=" + principal[0]
+			org.osgi.service.dmt.Acl Acl = null;
+			Acl = new org.osgi.service.dmt.Acl("Add=" + principal[0]
 					+ "&Delete=" + principal[1] + "&Get=*");
 			assertEquals("Asserting permissions of " + principal[0],
-					info.dmtree.Acl.ADD
-							| info.dmtree.Acl.GET, Acl
+					org.osgi.service.dmt.Acl.ADD
+							| org.osgi.service.dmt.Acl.GET, Acl
 							.getPermissions(principal[0]));
 			assertEquals("Asserting permissions of " + principal[1],
-					info.dmtree.Acl.DELETE
-							| info.dmtree.Acl.GET, Acl
+					org.osgi.service.dmt.Acl.DELETE
+							| org.osgi.service.dmt.Acl.GET, Acl
 							.getPermissions(principal[1]));
 
 			int found = 0;
@@ -231,7 +231,7 @@ public class Acl extends DmtTestControl {
 		try {
 			log("#testAcl006");
 			
-            new info.dmtree.Acl("Invalid="
+            new org.osgi.service.dmt.Acl("Invalid="
 					+ DmtConstants.PRINCIPAL + "&Install="
 					+ DmtConstants.PRINCIPAL + "&Remove=*");
             
@@ -253,7 +253,7 @@ public class Acl extends DmtTestControl {
 		try {
 			log("#testAcl007");
             
-			new info.dmtree.Acl("Add="+ DmtConstants.INVALID + "&Delete="
+			new org.osgi.service.dmt.Acl("Add="+ DmtConstants.INVALID + "&Delete="
 					+ DmtConstants.INVALID + "&Get=*");
 			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -274,11 +274,11 @@ public class Acl extends DmtTestControl {
 			log("#testAcl008");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
-			int[] perm = { info.dmtree.Acl.GET
-					| info.dmtree.Acl.DELETE
-					| info.dmtree.Acl.ADD };
+			int[] perm = { org.osgi.service.dmt.Acl.GET
+					| org.osgi.service.dmt.Acl.DELETE
+					| org.osgi.service.dmt.Acl.ADD };
 
-			new info.dmtree.Acl(principal, perm);
+			new org.osgi.service.dmt.Acl(principal, perm);
             
 			failException("#", IllegalArgumentException.class);
 
@@ -300,9 +300,9 @@ public class Acl extends DmtTestControl {
 			log("#testAcl009");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
-			int[] perm = { info.dmtree.Acl.GET | 99 };
+			int[] perm = { org.osgi.service.dmt.Acl.GET | 99 };
 			
-            new info.dmtree.Acl(principal, perm);
+            new org.osgi.service.dmt.Acl(principal, perm);
 			
             failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -323,10 +323,10 @@ public class Acl extends DmtTestControl {
 			log("#testAcl010");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.INVALID };
-			int[] perm = { info.dmtree.Acl.GET,
-					info.dmtree.Acl.EXEC };
+			int[] perm = { org.osgi.service.dmt.Acl.GET,
+					org.osgi.service.dmt.Acl.EXEC };
 			
-            new info.dmtree.Acl(principal, perm);
+            new org.osgi.service.dmt.Acl(principal, perm);
 			
             failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -346,17 +346,17 @@ public class Acl extends DmtTestControl {
 			log("#testAcl011");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2, "*" };
-			int[] perm = { info.dmtree.Acl.GET,
-					info.dmtree.Acl.EXEC,
-					info.dmtree.Acl.ADD };
+			int[] perm = { org.osgi.service.dmt.Acl.GET,
+					org.osgi.service.dmt.Acl.EXEC,
+					org.osgi.service.dmt.Acl.ADD };
 
-			info.dmtree.Acl Acl = new info.dmtree.Acl(
+			org.osgi.service.dmt.Acl Acl = new org.osgi.service.dmt.Acl(
 					principal, perm);
 
 			boolean passed = false;
 
-			if (Acl.getPermissions(principal[0]) == (info.dmtree.Acl.GET | info.dmtree.Acl.ADD)) {
-				if (Acl.getPermissions(principal[1]) == (info.dmtree.Acl.EXEC | info.dmtree.Acl.ADD)) {
+			if (Acl.getPermissions(principal[0]) == (org.osgi.service.dmt.Acl.GET | org.osgi.service.dmt.Acl.ADD)) {
+				if (Acl.getPermissions(principal[1]) == (org.osgi.service.dmt.Acl.EXEC | org.osgi.service.dmt.Acl.ADD)) {
 					passed = true;
 				}
 			}
@@ -378,15 +378,15 @@ public class Acl extends DmtTestControl {
 		try {
 			log("#testAcl012");
 			String[] principal = { DmtConstants.PRINCIPAL, "*" };
-			int[] perm = { info.dmtree.Acl.GET,
-					info.dmtree.Acl.ADD };
+			int[] perm = { org.osgi.service.dmt.Acl.GET,
+					org.osgi.service.dmt.Acl.ADD };
 
-			info.dmtree.Acl Acl = new info.dmtree.Acl(
+			org.osgi.service.dmt.Acl Acl = new org.osgi.service.dmt.Acl(
 					principal, perm);
 
 			boolean passed = false;
-			if (Acl.getPermissions(principal[0]) == (info.dmtree.Acl.GET | info.dmtree.Acl.ADD)) {
-				if (Acl.getPermissions(DmtConstants.PRINCIPAL_2) == info.dmtree.Acl.ADD) {
+			if (Acl.getPermissions(principal[0]) == (org.osgi.service.dmt.Acl.GET | org.osgi.service.dmt.Acl.ADD)) {
+				if (Acl.getPermissions(DmtConstants.PRINCIPAL_2) == org.osgi.service.dmt.Acl.ADD) {
 					passed = true;
 				}
 			}
@@ -410,11 +410,11 @@ public class Acl extends DmtTestControl {
 			log("#testAcl013");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2, DmtConstants.PRINCIPAL };
-			int[] perm = { info.dmtree.Acl.GET,
-					info.dmtree.Acl.EXEC,
-					info.dmtree.Acl.ADD };
+			int[] perm = { org.osgi.service.dmt.Acl.GET,
+					org.osgi.service.dmt.Acl.EXEC,
+					org.osgi.service.dmt.Acl.ADD };
 			
-            new info.dmtree.Acl(principal, perm);
+            new org.osgi.service.dmt.Acl(principal, perm);
             
 			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -436,10 +436,10 @@ public class Acl extends DmtTestControl {
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
 			int[] perm = {
-					info.dmtree.Acl.GET
-							| info.dmtree.Acl.EXEC , };
+					org.osgi.service.dmt.Acl.GET
+							| org.osgi.service.dmt.Acl.EXEC , };
 			
-			 info.dmtree.Acl acl = new info.dmtree.Acl(principal, perm);
+			 org.osgi.service.dmt.Acl acl = new org.osgi.service.dmt.Acl(principal, perm);
 			 
 			 acl.getPermissions(principal[1]);
 				failException("#", IllegalArgumentException.class);
@@ -459,12 +459,12 @@ public class Acl extends DmtTestControl {
     public void testAcl015() {
         try {
             log("#testAcl015");
-            info.dmtree.Acl acl = new info.dmtree.Acl("Add=*&Get=" + DmtConstants.PRINCIPAL +"&Replace="+DmtConstants.PRINCIPAL_2);
+            org.osgi.service.dmt.Acl acl = new org.osgi.service.dmt.Acl("Add=*&Get=" + DmtConstants.PRINCIPAL +"&Replace="+DmtConstants.PRINCIPAL_2);
             
             int perm = acl.getPermissions("*");
             assertTrue(
 					"Asserts that getPermissions '*' gets the permissions that are granted globally, to all principals", 
-                perm==info.dmtree.Acl.ADD);
+                perm==org.osgi.service.dmt.Acl.ADD);
 
         } catch (Exception e) {
         	failUnexpectedException(e);
@@ -481,7 +481,7 @@ public class Acl extends DmtTestControl {
 	public void testAcl016() {
 		try {
 			log("#testAcl016");
-			info.dmtree.Acl Acl = new info.dmtree.Acl("");
+			org.osgi.service.dmt.Acl Acl = new org.osgi.service.dmt.Acl("");
 			String[] principals = Acl.getPrincipals();
 			int permissions = Acl.getPermissions("*");
 
@@ -511,7 +511,7 @@ public class Acl extends DmtTestControl {
 			log("#testAcl017");
 			for (int i = 0; i < invalidAclChar.length; i++) {
 				try {
-					new info.dmtree.Acl("Add=prin" + invalidAclChar[i] + "cipal");
+					new org.osgi.service.dmt.Acl("Add=prin" + invalidAclChar[i] + "cipal");
 					failException("", IllegalArgumentException.class);
 				} catch (IllegalArgumentException e) {
 					pass("IllegalArgumentException correctly thrown when creating an Acl "

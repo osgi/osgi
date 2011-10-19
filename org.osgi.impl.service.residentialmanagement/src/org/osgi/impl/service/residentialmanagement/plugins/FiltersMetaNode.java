@@ -25,8 +25,8 @@
 package org.osgi.impl.service.residentialmanagement.plugins;
 
 import java.util.Arrays;
-import info.dmtree.DmtData;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.MetaNode;
 /**
  * 
  * @author Koya MORI NTT Corporation, Shigekuni KONDO

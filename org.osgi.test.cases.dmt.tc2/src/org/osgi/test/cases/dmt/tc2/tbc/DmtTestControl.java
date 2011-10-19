@@ -49,12 +49,6 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc;
 
-import info.dmtree.Acl;
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.Uri;
-
 import java.security.AccessController;
 import java.security.MessageDigest;
 import java.security.PrivilegedAction;
@@ -66,6 +60,11 @@ import org.osgi.framework.AdminPermission;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.Uri;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -74,11 +73,11 @@ import org.osgi.test.cases.dmt.tc2.tbc.Activators.RemoteAlertSenderActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Constraints.AclConstraints;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.tc2.tbc.Plugin.LogPlugin.LogPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.IsAbsoluteUri;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.IsValidUri;
-import org.osgi.test.cases.dmt.tc2.tbc.Uri.Mangle;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.ToPath;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.ToUri;
 import org.osgi.test.support.Base64Encoder;
@@ -92,6 +91,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	private static TestNonAtomicPluginActivator	testNonAtomicPluginActivator;
 
 	private static TestReadOnlyPluginActivator	testReadOnlyPluginActivator;
+
+	private static LogPluginActivator	logPluginActivator;
 
 	private static RemoteAlertSenderActivator	remoteAlertSenderActivator;
 
@@ -201,6 +202,9 @@ public class DmtTestControl extends DefaultTestBundleControl {
 
 			testReadOnlyPluginActivator = new TestReadOnlyPluginActivator(this);
 			testReadOnlyPluginActivator.start(getContext());
+		
+			logPluginActivator = new LogPluginActivator();
+			logPluginActivator.start(getContext());
 		}
 		catch (Exception e) {
 			log("#TestControl: Failed starting plugins");
@@ -210,7 +214,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	public void setPermissions(PermissionInfo[] permissions) {
 		PermissionInfo[] defaults = new PermissionInfo[] {
 				new PermissionInfo(TopicPermission.class.getName(),
-						"info/dmtree/DmtEvent/*", TopicPermission.PUBLISH + ","
+						"org/osgi/service/dmt/DmtEvent/*",
+						TopicPermission.PUBLISH + ","
 								+ TopicPermission.SUBSCRIBE),
 				new PermissionInfo(PackagePermission.class.getName(), "*",
 						"EXPORT, IMPORT"),
@@ -469,7 +474,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 
 	public void testUriMangle() {
-		new Mangle(this).run();
+		log("#Test of URI mangling was disabled because Uri.mangle() has been removed in DmtAdmin spec. 2.0 !!!");
+//		new Mangle(this).run();
 	}
 
 	public void testUriToUri() {
@@ -561,8 +567,11 @@ public class DmtTestControl extends DefaultTestBundleControl {
 			StringBuffer nodeNameBuffer = new StringBuffer();
 			if (nodeUri.length > 0) {
 				for (int i = 0; i < nodeUri.length; i++) {
-					nodeNameBuffer = nodeNameBuffer.append(Uri
-							.mangle(nodeUri[i])
+					// Uri.mangle() has been removed in DmtAdmin spec 2.0
+					// TestCase needs update
+//					nodeNameBuffer = nodeNameBuffer.append(Uri
+//							.mangle(nodeUri[i])
+					nodeNameBuffer = nodeNameBuffer.append(nodeUri[i]
 							+ "/");
 				}
 				nodeName = nodeNameBuffer.substring(0,

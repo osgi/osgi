@@ -13,8 +13,8 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 	private String				id;
 	private String				type;
 	private String				version;
-	private UPnPAction[]		actions;
-	private UPnPStateVariable[]	variables;
+	private UPnPActionImpl[]		actions;
+	private UPnPStateVariableImpl[]	variables;
 	private UPnPBaseDriver		basedriver;
 	private ServiceTracker		stk;
 	private UPnPEventListener	upnplistener;
@@ -59,7 +59,7 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 			}
 			Action[] actionss = serviceinfo.getActions();
 			if (actionss != null) {
-				actions = new UPnPAction[actionss.length];
+				actions = new UPnPActionImpl[actionss.length];
 				for (int i = 0; i < actionss.length; i++) {
 					UPnPActionImpl upnpaction = new UPnPActionImpl(actionss[i],
 							basedriver, this);
@@ -68,7 +68,7 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 			}
 			StateVariable[] vars = serviceinfo.getStateVariables();
 			if (vars != null) {
-				variables = new UPnPStateVariable[vars.length];
+				variables = new UPnPStateVariableImpl[vars.length];
 				for (int j = 0; j < vars.length; j++) {
 					UPnPStateVariableImpl upnpvar = new UPnPStateVariableImpl(
 							vars[j]);
@@ -98,6 +98,7 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 
 	// This method returns the upnp action based on the given name.
 	public UPnPAction getAction(String s) {
+		checkState();
 		if (actions != null) {
 			for (int i = 0; i < actions.length; i++) {
 				if (actions[i].getName().equals(s)) {
@@ -110,16 +111,19 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 
 	// This method returns all the UPnP actions.
 	public UPnPAction[] getActions() {
+		checkState();
 		return actions;
 	}
 
 	// This method returns all the state variables.
 	public UPnPStateVariable[] getStateVariables() {
+		checkState();
 		return variables;
 	}
 
 	//	This method returns the state variable based on the given name.
 	public UPnPStateVariable getStateVariable(String s) {
+		checkState();
 		for (int i = 0; i < variables.length; i++) {
 			if (variables[i].getName().equals(s)) {
 				return variables[i];
@@ -275,4 +279,28 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 	public void closeTracker() {
 		stk.close();
 	}
+	
+	/* package-private */void release() {
+		this.bc = null;
+		this.basedriver = null;
+		releaseActions();
+	}
+
+	private void checkState() {
+		if (null == this.basedriver) {
+			throw new IllegalStateException(
+					"UPnP service device has been removed from the network. Device id: "
+							+ devid + "; service id: " + id);
+		}
+	}
+
+	private void releaseActions() {
+		if (null == this.actions) {
+			return;
+		}
+		for (int i = 0; i < this.actions.length; i++) {
+			this.actions[i].release();
+		}
+	}
+	
 }

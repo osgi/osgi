@@ -39,17 +39,22 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import info.dmtree.*;
-import info.dmtree.security.DmtPermission;
-import info.dmtree.security.DmtPrincipalPermission;
-
 import java.util.Hashtable;
 
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtIllegalStateException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.dmt.tc2.tbc.*;
+import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
+import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
+import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
@@ -509,7 +514,8 @@ public class GetSetNodeValue implements TestInterface {
 			tbc.log("#testGetSetNodeValue018");
 			
 			Hashtable ht = new Hashtable();
-			ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, new String[] {"info/dmtree/DmtEvent/*"});
+			ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC,
+					new String[] {"org/osgi/service/dmt/DmtEvent/*"});
 			ht.put(org.osgi.service.event.EventConstants.EVENT_FILTER, "(nodes="+TestExecPluginActivator.INTERIOR_NODE_WITH_TWO_CHILDREN+ "/*)");
 			events = new EventTest(); 
 			servReg = tbc.getContext().registerService(EventHandler.class.getName(),events, ht);

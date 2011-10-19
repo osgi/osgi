@@ -28,7 +28,7 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import info.dmtree.spi.DataPlugin;
+import org.osgi.service.dmt.spi.DataPlugin;
 /**
  * 
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation

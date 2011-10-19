@@ -36,7 +36,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtPermission;
 
-import info.dmtree.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPermission;
 
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
@@ -54,11 +54,11 @@ public class HashCode extends DmtTestControl {
 	public void testHashCode001() {
 		try {
 			log("#testHashCode001");
-			info.dmtree.security.DmtPermission permission = new info.dmtree.security.DmtPermission(
+			org.osgi.service.dmt.security.DmtPermission permission = new org.osgi.service.dmt.security.DmtPermission(
 					DmtConstants.OSGi_LOG, DmtConstants.ACTIONS);
 			assertEquals(
 							"Asserting that two objects initialized with the same dmtUri and actions have the same hashcode",
-							new info.dmtree.security.DmtPermission(
+							new org.osgi.service.dmt.security.DmtPermission(
 									DmtConstants.OSGi_LOG,
 									DmtConstants.ACTIONS).hashCode(),
 							permission.hashCode());
@@ -80,12 +80,12 @@ public class HashCode extends DmtTestControl {
 					+ "," + DmtPermission.EXEC;
 			String actionsDifferentOrder = DmtPermission.DELETE + ","
 					+ DmtPermission.EXEC + "," + DmtPermission.ADD;
-			info.dmtree.security.DmtPermission permission = new info.dmtree.security.DmtPermission(
+			org.osgi.service.dmt.security.DmtPermission permission = new org.osgi.service.dmt.security.DmtPermission(
 					DmtConstants.OSGi_LOG, actions);
 			assertEquals(
 							"Asserting that two objects initialized with the same dmtUri and actions are equal",
 							permission.hashCode(),
-							(new info.dmtree.security.DmtPermission(
+							(new org.osgi.service.dmt.security.DmtPermission(
 									DmtConstants.OSGi_LOG,
 									actionsDifferentOrder)).hashCode());
 		} catch (Exception e) {

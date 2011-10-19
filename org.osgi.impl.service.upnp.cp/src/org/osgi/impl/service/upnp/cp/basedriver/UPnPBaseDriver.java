@@ -237,6 +237,7 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 						dev.unsubscribe();
 						System.out.println("UNREGISTERING UPnP DEVICE");
 						sreg.unregister();
+						dev.release();
 						servicerefs.remove(uuid);
 						devices.remove(uuid);
 					}

@@ -1,5 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000-2009).
+ * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -24,46 +25,75 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.MetaNode;
-import info.dmtree.spi.ReadableDataSession;
+import org.osgi.service.dmt.DmtConstants;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.spi.ReadableDataSession;
 import java.util.*;
+import java.security.Principal;
+import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.SynchronousBundleListener;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.*;
 import org.osgi.service.startlevel.*;
+
 /**
  * 
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
  */
-public class BundleStateReadOnlySession implements ReadableDataSession {
+public class BundleStateReadOnlySession implements ReadableDataSession,
+		SynchronousBundleListener {
 
-	private static final String STATUS = "Status";
-	private static final String HOST = "Host";
-	private static final String BUNDLESTATEEXT = "BundleStateExt";
-	private static final String FRAGMENTS = "Fragments";
-	private static final String REQUIRED = "Required";
-	private static final String REQUIRING = "Requiring";
+	private static final String ID = "ID";
 	private static final String SYMBOLICNAME = "SymbolicName";
 	private static final String VERSION = "Version";
 	private static final String BUNDLETYPE = "BundleType";
+	private static final String MANIFEST = "Manifest";
 	private static final String LOCATION = "Location";
+
+	private static final String STATUS = "Status";
 	private static final String STATE = "State";
 	private static final String STARTLEVEL = "StartLevel";
 	private static final String PERSISTENTLYSTARTED = "PersistentlyStarted";
+	private static final String ACTIVATIONPOLICYUSED = "ActivationPolicyUsed";
 	private static final String LASTMODIFIED = "LastModified";
-	private static final String MANIFEST = "Manifest";
-	private static final String TRUSTEDSIGNERCERTIFICATIONS = "TrustedSignerCertifications";
-	private static final String NONTRUSTEDSIGNERCERTIFICATIONS = "NonTrustedSignerCertifications";
+
+	private static final String HOSTS = "Hosts";
+	private static final String FRAGMENTS = "Fragments";
+	private static final String REQUIRED = "Required";
+	private static final String REQUIRING = "Requiring";
+	private static final String TRUSTEDSIGNERCERTIFICATE = "TrustedSignerCertificate";
+	private static final String NONTRUSTEDSIGNERCERTIFICATE = "NonTrustedSignerCertificate";
+	private static final String CERTIFICATECHAIN = "CertificateChain";
+
+	private static final String LIST_MIME_TYPE = DmtConstants.DDF_LIST;
+	private static final String NODE_TYPE = "org.osgi/1.0/BundleStateManagementObject";
 
 	private BundleContext context;
-	private Hashtable bundlesTable = new Hashtable();
 	private PackageAdmin packageAdmin;
 	private StartLevel startLevel;
+
+	/* <String bundleID + 1, Bundle bundle> */
+	private Hashtable bundlesTable = new Hashtable();
+	/* <String bundleID + 1, List<Stirng n, Long bundleId>> */
+	private Hashtable hostBundleList = new Hashtable();
+	/* <String bundleID + 1, List<Stirng n, Long bundleId>> */
+	private Hashtable fragmentsBundleList = new Hashtable();
+	/* <String bundleID + 1, List<Stirng n, Long bundleId>> */
+	private Hashtable requiredBundleList = new Hashtable();
+	/* <String bundleID + 1, List<Stirng n, Long bundleId>> */
+	private Hashtable requiringBundleList = new Hashtable();
+	/* <String bundleID + 1, List<Stirng id, List<Stirng n, String DN>>> */
+	private Hashtable trustedSignerCertificateList = new Hashtable();
+	/* <String bundleID + 1, List<Stirng id, List<Stirng n, String DN>>> */
+	private Hashtable nonTrustedSignerCertificateList = new Hashtable();
+	private boolean managedFlag = false;
 
 	BundleStateReadOnlySession(BundleStatePlugin bundleStatePlugin,
 			BundleContext context) {
@@ -74,7 +104,6 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 		ServiceReference slvServiceRef = context
 				.getServiceReference(StartLevel.class.getName());
 		startLevel = (StartLevel) context.getService(slvServiceRef);
-
 	}
 
 	public void nodeChanged(String[] nodePath) throws DmtException {
@@ -87,18 +116,11 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
-		try {
-			refreshBundlesTable();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
 
 		// .../BundleState/
 		if (path.length == 1) {
 			if (bundlesTable.size() == 0) {
-				String[] children = new String[1];
-				children[0] = "";
-				return children;
+				return new String[0];
 			}
 			String[] children = new String[bundlesTable.size()];
 			int i = 0;
@@ -110,19 +132,20 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 
 		// .../BundleState/<bundle_id>/...
 		if (path.length == 2) {
-			String[] children = new String[12];
+			String[] children = new String[13];
 			children[0] = STATUS;
-			children[1] = HOST;
-			children[2] = BUNDLESTATEEXT;
-			children[3] = FRAGMENTS;
-			children[4] = REQUIRED;
-			children[5] = REQUIRING;
-			children[6] = TRUSTEDSIGNERCERTIFICATIONS;
-			children[7] = SYMBOLICNAME;
-			children[8] = VERSION;
-			children[9] = BUNDLETYPE;
-			children[10] = MANIFEST;
-			children[11] = NONTRUSTEDSIGNERCERTIFICATIONS;
+			children[1] = HOSTS;
+			children[2] = FRAGMENTS;
+			children[3] = REQUIRED;
+			children[4] = REQUIRING;
+			children[5] = TRUSTEDSIGNERCERTIFICATE;
+			children[6] = SYMBOLICNAME;
+			children[7] = VERSION;
+			children[8] = BUNDLETYPE;
+			children[9] = MANIFEST;
+			children[10] = NONTRUSTEDSIGNERCERTIFICATE;
+			children[11] = ID;
+			children[12] = LOCATION;
 			return children;
 		}
 
@@ -130,27 +153,123 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 		if (path.length == 3) {
 			if (path[2].equals(STATUS)) {
 				String[] children = new String[5];
-				children[0] = LOCATION;
+				children[0] = ACTIVATIONPOLICYUSED;
 				children[1] = STATE;
 				children[2] = STARTLEVEL;
 				children[3] = PERSISTENTLYSTARTED;
 				children[4] = LASTMODIFIED;
 				return children;
 			}
+			if (path[2].equals(HOSTS)) {
+				Hashtable table = (Hashtable) hostBundleList.get(path[1]);
+				if (table == null)
+					return new String[0];
+				String[] children = new String[table.size()];
+				int i = 0;
+				for (Enumeration enu = table.keys(); enu.hasMoreElements(); i++) {
+					children[i] = (String) enu.nextElement();
+				}
+				return children;
+			}
+			if (path[2].equals(FRAGMENTS)) {
+				Hashtable table = (Hashtable) fragmentsBundleList.get(path[1]);
+				if (table == null)
+					return new String[0];
+				String[] children = new String[table.size()];
+				int i = 0;
+				for (Enumeration enu = table.keys(); enu.hasMoreElements(); i++) {
+					children[i] = (String) enu.nextElement();
+				}
+				return children;
+			}
+			if (path[2].equals(REQUIRED)) {
+				Hashtable table = (Hashtable) requiredBundleList.get(path[1]);
+				if (table == null)
+					return new String[0];
+				String[] children = new String[table.size()];
+				int i = 0;
+				for (Enumeration enu = table.keys(); enu.hasMoreElements(); i++) {
+					children[i] = (String) enu.nextElement();
+				}
+				return children;
+			}
+			if (path[2].equals(REQUIRING)) {
+				Hashtable table = (Hashtable) requiringBundleList.get(path[1]);
+				if (table == null)
+					return new String[0];					
+				String[] children = new String[table.size()];
+				int i = 0;
+				for (Enumeration enu = table.keys(); enu.hasMoreElements(); i++) {
+					children[i] = (String) enu.nextElement();
+				}
+				return children;
+			}
+			if (path[2].equals(TRUSTEDSIGNERCERTIFICATE)) {
+				Hashtable table = (Hashtable) trustedSignerCertificateList
+						.get(path[1]);
+				if (table == null)
+					return new String[0];
+				String[] children = new String[table.size()];
+				int i = 0;
+				for (Enumeration enu = table.keys(); enu.hasMoreElements(); i++) {
+					children[i] = (String) enu.nextElement();
+				}
+				return children;
+			}
+			if (path[2].equals(NONTRUSTEDSIGNERCERTIFICATE)) {
+				Hashtable table = (Hashtable) nonTrustedSignerCertificateList
+						.get(path[1]);
+				if (table == null)
+					return new String[0];
+				String[] children = new String[table.size()];
+				int i = 0;
+				for (Enumeration enu = table.keys(); enu.hasMoreElements(); i++) {
+					children[i] = (String) enu.nextElement();
+				}
+				return children;
+			}
 		}
-		// other case
-		String[] children = new String[1];
-		children[0] = "";
-		return children;
+		if (path.length == 4) {
+			if (path[2].equals(TRUSTEDSIGNERCERTIFICATE)
+					|| path[2].equals(NONTRUSTEDSIGNERCERTIFICATE)) {
+				String[] children = new String[1];
+				children[0] = CERTIFICATECHAIN;
+			}
+		}
+		if (path.length == 5) {
+			if (path[2].equals(TRUSTEDSIGNERCERTIFICATE)) {
+				Hashtable idTable = (Hashtable) trustedSignerCertificateList
+						.get(path[1]);
+				Hashtable nTable = (Hashtable) idTable.get(path[3]);
+				if (nTable.size() == 0)
+					return new String[0];
+				String[] children = new String[nTable.size()];
+				int i = 0;
+				for (Enumeration enu = nTable.keys(); enu.hasMoreElements(); i++) {
+					children[i] = (String) enu.nextElement();
+				}
+				return children;
+			}
+			if (path[2].equals(NONTRUSTEDSIGNERCERTIFICATE)) {
+				Hashtable idTable = (Hashtable) nonTrustedSignerCertificateList
+						.get(path[1]);
+				Hashtable nTable = (Hashtable) idTable.get(path[3]);
+				if (nTable.size() == 0)
+					return new String[0];
+				String[] children = new String[nTable.size()];
+				int i = 0;
+				for (Enumeration enu = nTable.keys(); enu.hasMoreElements(); i++) {
+					children[i] = (String) enu.nextElement();
+				}
+				return children;
+			}
+
+		}
+		return new String[0];
 	}
 
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
-		try {
-			refreshBundlesTable();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
 
 		if (path.length == 1) // ./OSGi/<instance_id>/BundleState
 			return new BundleStateMetaNode("BundleState root node.",
@@ -159,154 +278,231 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 					!BundleStateMetaNode.ALLOW_ZERO,
 					!BundleStateMetaNode.ALLOW_INFINITE);
 
-		if (path.length == 2) // ./OSGi/<instance_id>/BundleState/<bundle_id>
+		if (path.length == 2) // ./OSGi/<instance_id>/BundleState/<id>
 			return new BundleStateMetaNode("<bundle_id> subtree",
 					MetaNode.AUTOMATIC, !BundleStateMetaNode.CAN_ADD,
 					!BundleStateMetaNode.CAN_DELETE,
 					BundleStateMetaNode.ALLOW_ZERO,
 					BundleStateMetaNode.ALLOW_INFINITE);
 
-		if (path.length == 3) { // ./OSGi/<instance_id>/BundleState/<bundle_id>/...
+		if (path.length == 3) { // ./OSGi/<instance_id>/BundleState/<id>/...
+			if (path[2].equals(ID))
+				return new BundleStateMetaNode("The BundleID of the bundle.",
+						!BundleStateMetaNode.CAN_DELETE,
+						!BundleStateMetaNode.CAN_REPLACE,
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_LONG, null, null);
+
 			if (path[2].equals(STATUS))
 				return new BundleStateMetaNode("Status subtree.",
 						MetaNode.AUTOMATIC, !BundleStateMetaNode.CAN_ADD,
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE);
-			
-			if (path[2].equals(HOST))
-				return new ServiceStateMetaNode("bundle_id of Host Bundle",
+
+			if (path[2].equals(HOSTS))
+				return new BundleStateMetaNode("Host Bundle",
+						MetaNode.AUTOMATIC, !BundleStateMetaNode.CAN_ADD,
 						!BundleStateMetaNode.CAN_DELETE,
-						!BundleStateMetaNode.CAN_REPLACE,
-						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE);
 
 			if (path[2].equals(FRAGMENTS))
-				return new ServiceStateMetaNode(
-						"bundle_id of Fragments Bundle",
+				return new BundleStateMetaNode("Fragments Bundle",
+						MetaNode.AUTOMATIC, !BundleStateMetaNode.CAN_ADD,
 						!BundleStateMetaNode.CAN_DELETE,
-						!BundleStateMetaNode.CAN_REPLACE,
-						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE);
 
 			if (path[2].equals(REQUIRED))
-				return new ServiceStateMetaNode("bundle_id of Required Bundle",
+				return new BundleStateMetaNode("Required Bundle",
+						MetaNode.AUTOMATIC, !BundleStateMetaNode.CAN_ADD,
 						!BundleStateMetaNode.CAN_DELETE,
-						!BundleStateMetaNode.CAN_REPLACE,
-						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE);
 
 			if (path[2].equals(REQUIRING))
-				return new ServiceStateMetaNode(
-						"bundle_id of Requiring Bundle",
-						!BundleStateMetaNode.CAN_DELETE,
-						!BundleStateMetaNode.CAN_REPLACE,
-						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
-
-			if (path[2].equals(BUNDLESTATEEXT))
-				return new BundleStateMetaNode(
-						"BundleStatusExtension subtree.", MetaNode.AUTOMATIC,
-						!BundleStateMetaNode.CAN_ADD,
+				return new BundleStateMetaNode("Requiring Bundle",
+						MetaNode.AUTOMATIC, !BundleStateMetaNode.CAN_ADD,
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.ALLOW_ZERO,
 						!BundleStateMetaNode.ALLOW_INFINITE);
 
 			if (path[2].equals(SYMBOLICNAME))
-				return new ServiceStateMetaNode(
+				return new BundleStateMetaNode(
 						"The SymbolicName of the bundle.",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
-						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_STRING, null, null);
 
 			if (path[2].equals(VERSION))
-				return new ServiceStateMetaNode("The Version of the bundle.",
+				return new BundleStateMetaNode("The Version of the bundle.",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
-						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_STRING, null, null);
 
 			if (path[2].equals(BUNDLETYPE))
-				return new ServiceStateMetaNode("The type of the bundle.",
+				return new BundleStateMetaNode("The type of the bundle.",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
-						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_INTEGER, null);
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_STRING, null, null);
 
 			if (path[2].equals(MANIFEST))
-				return new ServiceStateMetaNode("The Manifest of the bundle.",
+				return new BundleStateMetaNode("The Manifest of the bundle.",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
-						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
-			
-			if (path[2].equals(TRUSTEDSIGNERCERTIFICATIONS))
-				return new ServiceStateMetaNode("A trusted signer of the Bundle",
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_STRING, null, null);
+
+			if (path[2].equals(LOCATION))
+				return new BundleStateMetaNode("Bundle Location",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
-						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
-			
-			if (path[2].equals(NONTRUSTEDSIGNERCERTIFICATIONS))
-				return new ServiceStateMetaNode("A non trasted signer of the Bundle",
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_STRING, null, null);
+
+			if (path[2].equals(TRUSTEDSIGNERCERTIFICATE))
+				return new BundleStateMetaNode(
+						"A trusted signer of the Bundle", MetaNode.AUTOMATIC,
+						!BundleStateMetaNode.CAN_ADD,
 						!BundleStateMetaNode.CAN_DELETE,
-						!BundleStateMetaNode.CAN_REPLACE,
-						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE);
+
+			if (path[2].equals(NONTRUSTEDSIGNERCERTIFICATE))
+				return new BundleStateMetaNode(
+						"A non trasted signer of the Bundle",
+						MetaNode.AUTOMATIC, !BundleStateMetaNode.CAN_ADD,
+						!BundleStateMetaNode.CAN_DELETE,
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE);
 		}
 
-		if (path.length == 4) { // ./OSGi/<instance_id>/BundleState/<bundle_id>/.../...
-			if (path[3].equals(LOCATION))
-				return new ServiceStateMetaNode("Bundle Location",
-						!BundleStateMetaNode.CAN_DELETE,
-						!BundleStateMetaNode.CAN_REPLACE,
-						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+		if (path.length == 4) { // ./OSGi/<instance_id>/BundleState/<id>/.../...
 
 			if (path[3].equals(STATE))
-				return new ServiceStateMetaNode("The state of the bundle.",
+				return new BundleStateMetaNode("The state of the bundle.",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
-						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_INTEGER, null);
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_STRING, null, null);
 
 			if (path[3].equals(STARTLEVEL))
-				return new ServiceStateMetaNode(
-						"The StartLevel of the bundle.",
+				return new BundleStateMetaNode("The StartLevel of the bundle.",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
-						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_INTEGER, null);
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_INTEGER, null, null);
 
 			if (path[3].equals(PERSISTENTLYSTARTED))
-				return new ServiceStateMetaNode("PersistentlyStarted",
+				return new BundleStateMetaNode("PersistentlyStarted",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
-						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_BOOLEAN, null);
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_BOOLEAN, null, null);
 
 			if (path[3].equals(LASTMODIFIED))
-				return new ServiceStateMetaNode("The date of last modified.",
+				return new BundleStateMetaNode("The date of last modified.",
+						!BundleStateMetaNode.CAN_DELETE,
+						!BundleStateMetaNode.CAN_REPLACE,
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_DATE_TIME, null, null);
+
+			if (path[3].equals(ACTIVATIONPOLICYUSED))
+				return new BundleStateMetaNode("The date of last modified.",
+						!BundleStateMetaNode.CAN_DELETE,
+						!BundleStateMetaNode.CAN_REPLACE,
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_BOOLEAN, null, null);
+
+			if (path[2].equals(HOSTS))
+				return new BundleStateMetaNode("bundle_id of Host Bundle",
 						!BundleStateMetaNode.CAN_DELETE,
 						!BundleStateMetaNode.CAN_REPLACE,
 						BundleStateMetaNode.ALLOW_ZERO,
-						BundleStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_DATE, null);
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_LONG, null, null);
+
+			if (path[2].equals(FRAGMENTS))
+				return new BundleStateMetaNode("bundle_id of Fragments Bundle",
+						!BundleStateMetaNode.CAN_DELETE,
+						!BundleStateMetaNode.CAN_REPLACE,
+						BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_LONG, null, null);
+
+			if (path[2].equals(REQUIRED))
+				return new BundleStateMetaNode("bundle_id of Required Bundle",
+						!BundleStateMetaNode.CAN_DELETE,
+						!BundleStateMetaNode.CAN_REPLACE,
+						BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_LONG, null, null);
+
+			if (path[2].equals(REQUIRING))
+				return new BundleStateMetaNode("bundle_id of Requiring Bundle",
+						!BundleStateMetaNode.CAN_DELETE,
+						!BundleStateMetaNode.CAN_REPLACE,
+						BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_LONG, null, null);
+
+			if (path[2].equals(TRUSTEDSIGNERCERTIFICATE))
+				return new BundleStateMetaNode(
+						"A trusted signer of the Bundle", MetaNode.AUTOMATIC,
+						!BundleStateMetaNode.CAN_ADD,
+						!BundleStateMetaNode.CAN_DELETE,
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE);
+
+			if (path[2].equals(NONTRUSTEDSIGNERCERTIFICATE))
+				return new BundleStateMetaNode(
+						"A non trasted signer of the Bundle",
+						MetaNode.AUTOMATIC, !BundleStateMetaNode.CAN_ADD,
+						!BundleStateMetaNode.CAN_DELETE,
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE);
+		}
+
+		if (path.length == 5) { // ./OSGi/<instance_id>/BundleState/<id>/.../.../...
+			if (path[2].equals(TRUSTEDSIGNERCERTIFICATE)
+					&& path[4].equals(CERTIFICATECHAIN)
+					|| path[2].equals(NONTRUSTEDSIGNERCERTIFICATE)
+					&& path[4].equals(CERTIFICATECHAIN))
+				return new BundleStateMetaNode("Certificate Chain",
+						MetaNode.AUTOMATIC, !BundleStateMetaNode.CAN_ADD,
+						!BundleStateMetaNode.CAN_DELETE,
+						!BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE);
+		}
+
+		if (path.length == 6) { // ./OSGi/<instance_id>/BundleState/<id>/TrustedSignerCertifications
+								// or
+								// NonTrustedSignerCertifications/<id>/CertificateChain/...
+			if (path[2].equals(TRUSTEDSIGNERCERTIFICATE)
+					&& path[4].equals(CERTIFICATECHAIN)
+					|| path[2].equals(NONTRUSTEDSIGNERCERTIFICATE)
+					&& path[4].equals(CERTIFICATECHAIN))
+				return new BundleStateMetaNode("DN",
+						!BundleStateMetaNode.CAN_DELETE,
+						!BundleStateMetaNode.CAN_REPLACE,
+						BundleStateMetaNode.ALLOW_ZERO,
+						!BundleStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_STRING, null, null);
 		}
 
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
@@ -314,11 +510,6 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 	}
 
 	public int getNodeSize(String[] nodePath) throws DmtException {
-		try {
-			refreshBundlesTable();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
 		return getNodeValue(nodePath).getSize();
 	}
 
@@ -338,11 +529,26 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 	}
 
 	public String getNodeType(String[] nodePath) throws DmtException {
-		try {
-			refreshBundlesTable();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
+		String[] path = shapedPath(nodePath);
+		if (path.length == 1)
+			return NODE_TYPE;
+
+		if (path.length == 3) {
+			if (path[2].equals(FRAGMENTS) || path[2].equals(HOSTS)
+					|| path[2].equals(REQUIRED) || path[2].equals(REQUIRING))
+				;
+			return LIST_MIME_TYPE;
 		}
+
+		if (path.length == 5) {
+			if (path[2].equals(TRUSTEDSIGNERCERTIFICATE)
+					&& path[4].equals(CERTIFICATECHAIN)
+					|| path[2].equals(NONTRUSTEDSIGNERCERTIFICATE)
+					&& path[4].equals(CERTIFICATECHAIN))
+				;
+			return LIST_MIME_TYPE;
+		}
+
 		if (isLeafNode(nodePath))
 			return BundleStateMetaNode.LEAF_MIME_TYPE;
 
@@ -351,11 +557,6 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 
 	public boolean isNodeUri(String[] nodePath) {
 		String[] path = shapedPath(nodePath);
-		try {
-			refreshBundlesTable();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
 
 		if (path.length == 1)
 			return true;
@@ -369,20 +570,18 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 		if (path.length == 3) {
 			Bundle bundle = (Bundle) bundlesTable.get(path[1]);
 			if (bundle != null) {
-
-				if (path[2].equals(STATUS) || path[2].equals(HOST)
-						|| path[2].equals(BUNDLESTATEEXT)
+				if (path[2].equals(STATUS) || path[2].equals(HOSTS)
 						|| path[2].equals(FRAGMENTS)
 						|| path[2].equals(REQUIRED)
 						|| path[2].equals(REQUIRING)
-						|| path[2].equals(TRUSTEDSIGNERCERTIFICATIONS)
-						|| path[2].equals(NONTRUSTEDSIGNERCERTIFICATIONS)
+						|| path[2].equals(TRUSTEDSIGNERCERTIFICATE)
+						|| path[2].equals(NONTRUSTEDSIGNERCERTIFICATE)
 						|| path[2].equals(SYMBOLICNAME)
 						|| path[2].equals(VERSION)
 						|| path[2].equals(BUNDLETYPE)
+						|| path[2].equals(LOCATION) || path[2].equals(ID)
 						|| path[2].equals(MANIFEST))
 					return true;
-
 			}
 		}
 
@@ -390,12 +589,109 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 			Bundle bundle = (Bundle) bundlesTable.get(path[1]);
 			if (bundle != null) {
 				if (path[2].equals(STATUS)) {
-					if (path[3].equals(LOCATION)
+					if (path[3].equals(ACTIVATIONPOLICYUSED)
 							|| path[3].equals(STATE)
 							|| path[3].equals(STARTLEVEL)
 							|| path[3].equals(PERSISTENTLYSTARTED)
 							|| path[3].equals(LASTMODIFIED))
 						return true;
+				}
+				if (path[2].equals(HOSTS)) {
+					Hashtable table = (Hashtable) hostBundleList.get(path[1]);
+					if (table.size() != 0)
+						for (Enumeration enu = table.keys(); enu
+								.hasMoreElements();) {
+							if (path[3].equals((String) enu.nextElement()))
+								return true;
+						}
+				}
+				if (path[2].equals(FRAGMENTS)) {
+					Hashtable table = (Hashtable) fragmentsBundleList
+							.get(path[1]);
+					if (table.size() != 0)
+						for (Enumeration enu = table.keys(); enu
+								.hasMoreElements();) {
+							if (path[3].equals((String) enu.nextElement()))
+								return true;
+						}
+				}
+				if (path[2].equals(REQUIRED)) {
+					Hashtable table = (Hashtable) requiredBundleList
+							.get(path[1]);
+					if (table.size() != 0)
+						for (Enumeration enu = table.keys(); enu
+								.hasMoreElements();) {
+							if (path[3].equals((String) enu.nextElement()))
+								return true;
+						}
+				}
+				if (path[2].equals(REQUIRING)) {
+					Hashtable table = (Hashtable) requiringBundleList
+							.get(path[1]);
+					if (table.size() != 0)
+						for (Enumeration enu = table.keys(); enu
+								.hasMoreElements();) {
+							if (path[3].equals((String) enu.nextElement()))
+								return true;
+						}
+				}
+				if (path[2].equals(TRUSTEDSIGNERCERTIFICATE)) {
+					Hashtable table = (Hashtable) trustedSignerCertificateList
+							.get(path[1]);
+					if (table.size() != 0)
+						for (Enumeration enu = table.keys(); enu
+								.hasMoreElements();) {
+							if (path[3].equals((String) enu.nextElement()))
+								return true;
+						}
+				}
+				if (path[2].equals(NONTRUSTEDSIGNERCERTIFICATE)) {
+					Hashtable table = (Hashtable) nonTrustedSignerCertificateList
+							.get(path[1]);
+					if (table.size() != 0)
+						for (Enumeration enu = table.keys(); enu
+								.hasMoreElements();) {
+							if (path[3].equals((String) enu.nextElement()))
+								return true;
+						}
+				}
+			}
+
+		}
+		if (path.length == 5) {
+			Bundle bundle = (Bundle) bundlesTable.get(path[1]);
+			if (bundle != null) {
+				if (path[2].equals(TRUSTEDSIGNERCERTIFICATE)
+						&& path[4].equals(CERTIFICATECHAIN)
+						|| path[2].equals(NONTRUSTEDSIGNERCERTIFICATE)
+						&& path[4].equals(CERTIFICATECHAIN))
+					return true;
+			}
+		}
+		if (path.length == 6) {
+			Bundle bundle = (Bundle) bundlesTable.get(path[1]);
+			if (bundle != null) {
+				if (path[2].equals(TRUSTEDSIGNERCERTIFICATE)) {
+					Hashtable idTable = (Hashtable) trustedSignerCertificateList
+							.get(path[1]);
+					Hashtable nTable = (Hashtable) idTable.get(path[3]);
+					if (nTable.size() != 0)
+						for (Enumeration enu = nTable.keys(); enu
+								.hasMoreElements();) {
+							if (path[5].equals((String) enu.nextElement()))
+								return true;
+						}
+				}
+				if (path[2].equals(NONTRUSTEDSIGNERCERTIFICATE)) {
+					Hashtable idTable = (Hashtable) nonTrustedSignerCertificateList
+							.get(path[1]);
+					Hashtable nTable = (Hashtable) idTable.get(path[3]);
+					if (nTable.size() != 0)
+						for (Enumeration enu = nTable.keys(); enu
+								.hasMoreElements();) {
+							if (path[5].equals((String) enu.nextElement()))
+								return true;
+						}
 				}
 			}
 		}
@@ -404,54 +700,51 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 
 	public boolean isLeafNode(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
-		try {
-			refreshBundlesTable();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
-
 		if (path.length <= 2)
 			return false;
 
 		if (path.length == 3) {
-			if (path[2].equals(SYMBOLICNAME) 
-					|| path[2].equals(VERSION)
-					|| path[2].equals(BUNDLETYPE) 
-					|| path[2].equals(MANIFEST)
-					|| path[2].equals(HOST)
-					|| path[2].equals(FRAGMENTS)
-					|| path[2].equals(REQUIRED)
-					|| path[2].equals(REQUIRING)
-					|| path[2].equals(TRUSTEDSIGNERCERTIFICATIONS)
-					|| path[2].equals(NONTRUSTEDSIGNERCERTIFICATIONS))
+			if (path[2].equals(SYMBOLICNAME) || path[2].equals(VERSION)
+					|| path[2].equals(BUNDLETYPE) || path[2].equals(LOCATION)
+					|| path[2].equals(ID) || path[2].equals(MANIFEST))
 				return true;
 		}
 
 		if (path.length == 4) {
 			if (path[2].equals(STATUS)) {
-				if (path[3].equals(LOCATION) || path[3].equals(STATE)
-						|| path[3].equals(STARTLEVEL)
+				if (path[3].equals(ACTIVATIONPOLICYUSED)
+						|| path[3].equals(STATE) || path[3].equals(STARTLEVEL)
 						|| path[3].equals(PERSISTENTLYSTARTED)
 						|| path[3].equals(LASTMODIFIED))
 					return true;
 			}
+			if (path[2].equals(FRAGMENTS) || path[2].equals(HOSTS)
+					|| path[2].equals(REQUIRED) || path[2].equals(REQUIRING))
+				return true;
 		}
+		if (path.length == 6) {
+			if (path[2].equals(TRUSTEDSIGNERCERTIFICATE)
+					&& path[4].equals(CERTIFICATECHAIN)
+					|| path[2].equals(NONTRUSTEDSIGNERCERTIFICATE)
+					&& path[4].equals(CERTIFICATECHAIN))
+				return true;
+		}
+
 		return false;
 	}
 
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
-		try {
-			refreshBundlesTable();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
 		if (path.length <= 2)
 			throw new DmtException(nodePath,
 					DmtException.FEATURE_NOT_SUPPORTED,
 					"The given path indicates an interior node.");
 
 		if (path.length == 3) {
+			if (path[2].equals(ID)) {
+				Bundle targetBundle = (Bundle) bundlesTable.get(path[1]);
+				return new DmtData(targetBundle.getBundleId());
+			}
 			if (path[2].equals(SYMBOLICNAME)) {
 				Bundle targetBundle = (Bundle) bundlesTable.get(path[1]);
 				return new DmtData(targetBundle.getSymbolicName());
@@ -476,154 +769,111 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 				}
 				return new DmtData(sb.toString());
 			}
-			if (path[2].equals(HOST)) {
+			if (path[2].equals(LOCATION)) {
 				Bundle targetBundle = (Bundle) bundlesTable.get(path[1]);
-				Bundle[] hostBundles = packageAdmin.getHosts(targetBundle);
-				if (hostBundles == null) {
-					return new DmtData("");
-				}
-				StringBuffer sb = new StringBuffer();
-				for (int i = 0; i < hostBundles.length; i++) {
-					sb.append(Long.toString(hostBundles[i].getBundleId()));
-					sb.append(",");
-				}
-				StringBuffer result = sb.deleteCharAt(sb.length() - 1);
-				return new DmtData(result.toString());
-			}
-			if (path[2].equals(FRAGMENTS)) {
-				Bundle targetBundle = (Bundle) bundlesTable.get(path[1]);
-				Bundle[] fragmentBundles = packageAdmin
-						.getFragments(targetBundle);
-				if (fragmentBundles == null) {
-					return new DmtData("");
-				}
-				StringBuffer sb = new StringBuffer();
-				for (int i = 0; i < fragmentBundles.length; i++) {
-					sb.append(Long.toString(fragmentBundles[i].getBundleId()));
-					sb.append(",");
-				}
-				StringBuffer result = sb.deleteCharAt(sb.length() - 1);
-				return new DmtData(result.toString());
-			}
-			if (path[2].equals(REQUIRED)) {
-				Hashtable list = new Hashtable();
-				Bundle targetBundle = (Bundle) bundlesTable.get(path[1]);
-				RequiredBundle[] requiredBundles = packageAdmin.getRequiredBundles(null);
-				if (requiredBundles == null) {
-					return new DmtData("");
-				}
-				for (int i = 0; i < requiredBundles.length; i++) {
-					Bundle[] requiringBundles = requiredBundles[i]
-							.getRequiringBundles();
-					if (requiringBundles == null)
-						continue;
-					for (int j = 0; j < requiringBundles.length; j++) {
-						if (requiredBundles[i].getBundle().getBundleId()==targetBundle.getBundleId())
-							list.put(Long.toString(requiringBundles[j].getBundleId()), "");
-					}
-				}
-				if(list.size()==0)
-					return new DmtData("");
-				StringBuffer sb = new StringBuffer();
-				for (Enumeration enumeration = list.keys(); enumeration
-						.hasMoreElements();) {
-					sb.append((String)enumeration.nextElement());
-					sb.append(",");
-				}
-				StringBuffer result = sb.deleteCharAt(sb.length() - 1);
-				return new DmtData(result.toString());
-			}
-			if (path[2].equals(REQUIRING)) {
-				Bundle targetBundle = (Bundle) bundlesTable.get(path[1]);//B8
-				RequiredBundle[] requiredBundles = packageAdmin.getRequiredBundles(null);
-				if (requiredBundles == null)
-					return new DmtData("");
-				StringBuffer sb = new StringBuffer();
-				for (int i = 0; i < requiredBundles.length; i++) {
-					Bundle[] requiringBundles = requiredBundles[i].getRequiringBundles();
-					for (int j = 0; j < requiringBundles.length; j++) {
-						if(requiringBundles[j].getBundleId()==targetBundle.getBundleId()){
-							sb.append(Long.toString(requiredBundles[i].getBundle().getBundleId()));
-							sb.append(",");
-						}
-					}
-				}
-				if (sb.length() == 0)
-					return new DmtData("");
-				StringBuffer result = sb.deleteCharAt(sb.length() - 1);
-				return new DmtData(result.toString());
-			}
-			if (path[2].equals(TRUSTEDSIGNERCERTIFICATIONS)) {
-				Bundle targetBundle = (Bundle) bundlesTable.get(path[1]);
-				Map signers = targetBundle.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
-				Iterator it = signers.keySet().iterator();
-				StringBuffer sb = new StringBuffer();
-				sb.append("<");
-				while(it.hasNext()){
-					String signer = (String)it.next();
-					sb.append((String)signers.get(signer));
-					sb.append(">,<");
-				}
-				if(sb.length()==1){
-					StringBuffer result = sb.deleteCharAt(sb.length() - 1);
-					return new DmtData(result.toString());
-				}
-				StringBuffer result = sb.deleteCharAt(sb.length() - 2);
-				return new DmtData(result.toString());
-			}
-			if (path[2].equals(NONTRUSTEDSIGNERCERTIFICATIONS)) {
-				Bundle targetBundle = (Bundle) bundlesTable.get(path[1]);
-				Map signersTrust = targetBundle.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
-				Map signersAll = targetBundle.getSignerCertificates(Bundle.SIGNERS_ALL);
-				Iterator iTrust = signersTrust.keySet().iterator();
-				while(iTrust.hasNext()){
-					signersAll.remove(iTrust.next());
-				}
-				Iterator it = signersAll.keySet().iterator();
-				StringBuffer sb = new StringBuffer();
-				sb.append("<");
-				while(it.hasNext()){
-					String signer = (String)it.next();
-					sb.append((String)signersAll.get(signer));
-					sb.append(">,<");
-				}
-				if(sb.length()==1){
-					StringBuffer result = sb.deleteCharAt(sb.length() - 1);
-					return new DmtData(result.toString());
-				}
-				StringBuffer result = sb.deleteCharAt(sb.length() - 2);
-				return new DmtData(result.toString());
+				return new DmtData(targetBundle.getLocation());
 			}
 		}
 
 		if (path.length == 4) {
 			if (path[2].equals(STATUS)) {
 				Bundle targetBundle = (Bundle) bundlesTable.get(path[1]);
-				if (path[3].equals(LOCATION)) {
-					return new DmtData(targetBundle.getLocation());
+				if (path[3].equals(ACTIVATIONPOLICYUSED)) {
+					Dictionary headers = targetBundle.getHeaders();
+					String ap = (String) headers
+							.get(Constants.BUNDLE_ACTIVATIONPOLICY);
+					if (ap != null && ap.equals("lazy"))
+						return new DmtData(true);
+					else
+						return new DmtData(false);
 				}
 				if (path[3].equals(STATE)) {
 					return new DmtData(targetBundle.getState());
 				}
 				if (path[3].equals(STARTLEVEL)) {
-					return new DmtData(startLevel
-							.getBundleStartLevel(targetBundle));
+					return new DmtData(
+							startLevel.getBundleStartLevel(targetBundle));
 				}
 				if (path[3].equals(PERSISTENTLYSTARTED)) {
-					return new DmtData(startLevel
-							.isBundlePersistentlyStarted(targetBundle));
+					return new DmtData(
+							startLevel
+									.isBundlePersistentlyStarted(targetBundle));
 				}
 				if (path[3].equals(LASTMODIFIED)) {
 					Date d = new Date(targetBundle.getLastModified());
-					SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy");
-					int i = Integer.parseInt(sdf1.format(d).substring(0, 2)) + 1;
-					String CC = Integer.toString(i);
-					SimpleDateFormat sdf2 = new SimpleDateFormat("yyMMdd");
-					String returnDate = CC + sdf2.format(d);
-					return new DmtData(returnDate, DmtData.FORMAT_DATE);
+					SimpleDateFormat sdf = new SimpleDateFormat(
+							"yyyyMMdd'T'hhmmss");
+					String returnDate = sdf.format(d);
+					return new DmtData(returnDate, DmtData.FORMAT_DATE_TIME);
 				}
 			}
+			if (path[2].equals(HOSTS)) {
+				Hashtable table = (Hashtable) hostBundleList.get(path[1]);
+				if (table == null)
+					throw new DmtException(nodePath,
+							DmtException.NODE_NOT_FOUND,
+							"No such node in the current BundleState tree.");
+				Long lValue = (Long) table.get(path[3]);
+				long value = lValue.longValue();
+				return new DmtData(value);
+
+			}
+			if (path[2].equals(FRAGMENTS)) {
+				Hashtable table = (Hashtable) fragmentsBundleList.get(path[1]);
+				if (table == null)
+					throw new DmtException(nodePath,
+							DmtException.NODE_NOT_FOUND,
+							"No such node in the current BundleState tree.");
+				Long lValue = (Long) table.get(path[3]);
+				long value = lValue.longValue();
+				return new DmtData(value);
+			}
+			if (path[2].equals(REQUIRED)) {
+				Hashtable table = (Hashtable) requiredBundleList.get(path[1]);
+				if (table == null)
+					throw new DmtException(nodePath,
+							DmtException.NODE_NOT_FOUND,
+							"No such node in the current BundleState tree.");
+				Long lValue = (Long) table.get(path[3]);
+				long value = lValue.longValue();
+				return new DmtData(value);
+			}
+			if (path[2].equals(REQUIRING)) {
+				Hashtable table = (Hashtable) requiringBundleList.get(path[1]);
+				if (table == null)
+					throw new DmtException(nodePath,
+							DmtException.NODE_NOT_FOUND,
+							"No such node in the current BundleState tree.");
+				Long lValue = (Long) table.get(path[3]);
+				long value = lValue.longValue();
+				return new DmtData(value);
+			}
 		}
+		if (path.length == 6) {
+			if (path[2].equals(TRUSTEDSIGNERCERTIFICATE)) {
+				Hashtable idTable = (Hashtable) trustedSignerCertificateList
+						.get(path[1]);
+				Hashtable nTable = (Hashtable) idTable.get(path[3]);
+				if (nTable.size() == 0)
+					throw new DmtException(nodePath,
+							DmtException.NODE_NOT_FOUND,
+							"No such node in the current BundleState tree.");
+				String value = (String) nTable.get(path[5]);
+				return new DmtData(value);
+			}
+			if (path[2].equals(NONTRUSTEDSIGNERCERTIFICATE)) {
+				Hashtable idTable = (Hashtable) nonTrustedSignerCertificateList
+						.get(path[1]);
+				Hashtable nTable = (Hashtable) idTable.get(path[3]);
+				if (nTable.size() == 0)
+					throw new DmtException(nodePath,
+							DmtException.NODE_NOT_FOUND,
+							"No such node in the current BundleState tree.");
+				String value = (String) nTable.get(path[5]);
+				return new DmtData(value);
+			}
+		}
+
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 				"The specified key does not exist in the BundleState object.");
 	}
@@ -639,28 +889,181 @@ public class BundleStateReadOnlySession implements ReadableDataSession {
 		return newPath;
 	}
 
-	private Hashtable manageBundles() throws InvalidSyntaxException {
-		Bundle[] bundles = context.getBundles();
-		Hashtable bundlesTable = new Hashtable();
-		for (int i = 0; i < bundles.length; i++) {
-			long bundleIdLong = bundles[i].getBundleId();
-			String bundleId = Long.toString(bundleIdLong);
-			bundlesTable.put(bundleId, bundles[i]);
+	public void bundleChanged(BundleEvent event) {
+		if (!this.managedFlag) {
+			Bundle[] bundles = context.getBundles();
+			for (int i = 0; i < bundles.length; i++) {
+				String id = Long.toString(bundles[i].getBundleId() + 1);
+				this.bundlesTable.put(id, bundles[i]);
+				manageHodsBundleList(id);
+				manageFragmentsBundleList(id);
+				manageRequiredBundleList(id);
+				manageRequiringBundleList(id);
+				manageTrustedSignerCertificateList(id);
+				manageNonTrustedSignerCertificateList(id);
+				this.managedFlag = true;
+			}
+			return;
 		}
-		return bundlesTable;
-	}
+		Bundle bundle = event.getBundle();
+		if (event.getType() == BundleEvent.INSTALLED
+				|| event.getType() == BundleEvent.RESOLVED) {
+			this.bundlesTable.put(Long.toString(bundle.getBundleId() + 1),
+					bundle);
+			Enumeration enu = bundlesTable.keys();
+			while (enu.hasMoreElements()) {
+				String id = (String) enu.nextElement();
+				manageHodsBundleList(id);
+				manageFragmentsBundleList(id);
+				manageRequiredBundleList(id);
+				manageRequiringBundleList(id);
+				manageTrustedSignerCertificateList(id);
+				manageNonTrustedSignerCertificateList(id);
+			}
 
-	public void refreshBundlesTable() throws InvalidSyntaxException {
-		if (bundlesTable.size() == 0) {
-			bundlesTable = manageBundles();
-		}
-		Bundle[] bundles = context.getBundles();
-		for (int i = 0; i < bundles.length; i++) {
-			long bundleIdLong = bundles[i].getBundleId();
-			String bundleId = Long.toString(bundleIdLong);
-			if (!bundlesTable.containsKey(bundleId)) {
-				this.bundlesTable.put(bundleId, bundles[i]);
+		} else if (event.getType() == BundleEvent.UNINSTALLED) {
+			String id = Long.toString(bundle.getBundleId() + 1);
+			this.bundlesTable.remove(id);
+			Enumeration enu = bundlesTable.keys();
+			while (enu.hasMoreElements()) {
+				manageHodsBundleList(id);
+				manageFragmentsBundleList(id);
+				manageRequiredBundleList(id);
+				manageRequiringBundleList(id);
+				manageTrustedSignerCertificateList(id);
+				manageNonTrustedSignerCertificateList(id);
 			}
 		}
+	}
+
+	private void manageHodsBundleList(String id) {
+		Hashtable list = new Hashtable();
+		Bundle targetBundle = (Bundle) bundlesTable.get(id);
+		Bundle[] hostBundles = packageAdmin.getHosts(targetBundle);
+		if (hostBundles != null) {
+			for (int i = 0; i < hostBundles.length; i++) {
+				list.put(Integer.toString(i + 1),
+						new Long(hostBundles[i].getBundleId()));
+			}
+			hostBundleList.put(id, list);
+		} else if (targetBundle == null) {
+			hostBundleList.remove(id);
+		}
+	}
+
+	private void manageFragmentsBundleList(String id) {
+		Hashtable list = new Hashtable();
+		Bundle targetBundle = (Bundle) bundlesTable.get(id);
+		Bundle[] fragmentBundles = packageAdmin.getFragments(targetBundle);
+		if (fragmentBundles != null) {
+			for (int i = 0; i < fragmentBundles.length; i++) {
+				list.put(Integer.toString(i + 1),
+						new Long(fragmentBundles[i].getBundleId()));
+			}
+			fragmentsBundleList.put(id, list);
+		} else if (targetBundle == null) {
+			fragmentsBundleList.remove(id);
+		}
+	}
+
+	private void manageRequiredBundleList(String id) {
+		Hashtable list = new Hashtable();
+		Bundle targetBundle = (Bundle) bundlesTable.get(id);
+		RequiredBundle[] requiredBundles = packageAdmin
+				.getRequiredBundles(null);
+		if (requiredBundles != null) {
+			int k = 1;
+			for (int i = 0; i < requiredBundles.length; i++) {
+				Bundle[] requiringBundles = requiredBundles[i]
+						.getRequiringBundles();
+				if (requiringBundles != null) {
+					if (requiredBundles[i].getBundle().getBundleId() == targetBundle
+							.getBundleId()) {
+						for (int j = 0; j < requiringBundles.length; j++) {
+							list.put(Integer.toString(k), new Long(
+									requiringBundles[j].getBundleId()));
+							k++;
+						}
+					}
+				}
+			}
+			requiredBundleList.put(id, list);
+		} else if (targetBundle == null) {
+			requiredBundleList.remove(id);
+		}
+	}
+
+	private void manageRequiringBundleList(String id) {
+		Hashtable list = new Hashtable();
+		Bundle targetBundle = (Bundle) bundlesTable.get(id);
+		RequiredBundle[] requiredBundles = packageAdmin
+				.getRequiredBundles(null);
+		if (requiredBundles != null) {
+			int k = 1;
+			for (int i = 0; i < requiredBundles.length; i++) {
+				Bundle[] requiringBundles = requiredBundles[i]
+						.getRequiringBundles();
+				for (int j = 0; j < requiringBundles.length; j++) {
+					if (requiringBundles[j].getBundleId() == targetBundle
+							.getBundleId()) {
+						list.put(Integer.toString(k), new Long(
+								requiredBundles[i].getBundle().getBundleId()));
+						k++;
+					}
+				}
+			}
+			requiringBundleList.put(id, list);
+		} else if (targetBundle == null) {
+			requiringBundleList.remove(id);
+		}
+	}
+
+	private void manageTrustedSignerCertificateList(String id) {
+		Hashtable certList = new Hashtable();// <<id>, nList>
+		Hashtable nList = new Hashtable();// <<n>, DN>
+		Bundle targetBundle = (Bundle) bundlesTable.get(id);
+		Map signers = targetBundle
+				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+		Iterator it = signers.keySet().iterator();
+		for (int i = 0; it.hasNext(); i++) {
+			X509Certificate cert = (X509Certificate) it.next();
+			List certificateChane = (List) signers.get(cert);
+			Iterator itCert = certificateChane.iterator();
+			for (int j = 0; itCert.hasNext(); j++) {
+				X509Certificate certs = (X509Certificate) itCert.next();
+				Principal pri = certs.getIssuerDN();
+				String name = pri.getName();
+				nList.put(Integer.toString(j + 1), name);
+			}
+			certList.put(Integer.toString(i + 1), nList);
+		}
+		trustedSignerCertificateList.put(id, certList);
+	}
+
+	private void manageNonTrustedSignerCertificateList(String id) {
+		Hashtable certList = new Hashtable();// <<id>, nList>
+		Hashtable nList = new Hashtable();// <<n>, DN>
+		Bundle targetBundle = (Bundle) bundlesTable.get(id);
+		Map signers = targetBundle.getSignerCertificates(Bundle.SIGNERS_ALL);
+		Map signersTrusted = targetBundle
+				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+		Iterator itPre = signersTrusted.keySet().iterator();
+		for (int i = 0; itPre.hasNext(); i++) {
+			signers.remove(itPre.next());
+		}
+		Iterator it = signers.keySet().iterator();
+		for (int i = 0; it.hasNext(); i++) {
+			X509Certificate cert = (X509Certificate) it.next();
+			List certificateChane = (List) signers.get(cert);
+			Iterator itCert = certificateChane.iterator();
+			for (int j = 0; itCert.hasNext(); j++) {
+				X509Certificate certs = (X509Certificate) itCert.next();
+				Principal pri = certs.getIssuerDN();
+				String name = pri.getName();
+				nList.put(Integer.toString(j + 1), name);
+			}
+			certList.put(Integer.toString(i + 1), nList);
+		}
+		nonTrustedSignerCertificateList.put(id, certList);
 	}
 }

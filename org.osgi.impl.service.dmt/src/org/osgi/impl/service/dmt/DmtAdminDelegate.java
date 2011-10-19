@@ -17,9 +17,10 @@
  */
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.*;
-import info.dmtree.security.DmtPermission;
-import info.dmtree.security.DmtPrincipalPermission;
+import org.osgi.framework.Bundle;
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -42,13 +43,15 @@ public class DmtAdminDelegate implements DmtAdmin {
 
     private DmtAdminCore dmtAdmin;
     private Context context;
+    private Bundle initiatingBundle;
     
     private Hashtable listeners;
     private boolean active; 
 
-    DmtAdminDelegate(DmtAdminCore dmtAdmin, Context context) {
+    DmtAdminDelegate(DmtAdminCore dmtAdmin, Context context, Bundle bundle) {
         this.dmtAdmin = dmtAdmin;
         this.context = context;
+        this.initiatingBundle = bundle;
         
         listeners = new Hashtable();
         active = true;
@@ -56,19 +59,19 @@ public class DmtAdminDelegate implements DmtAdmin {
     
     public DmtSession getSession(String subtreeUri) throws DmtException {
         checkState();
-        return dmtAdmin.getSession(subtreeUri);
+        return dmtAdmin.getSession(subtreeUri, initiatingBundle);
     }
 
     public DmtSession getSession(String subtreeUri, int lockMode)
             throws DmtException {
         checkState();
-        return dmtAdmin.getSession(subtreeUri, lockMode);
+        return dmtAdmin.getSession(subtreeUri, lockMode, initiatingBundle);
     }
 
     public DmtSession getSession(String principal, String subtreeUri,
             int lockMode) throws DmtException {
         checkState();
-        return dmtAdmin.getSession(principal, subtreeUri, lockMode);
+        return dmtAdmin.getSession(principal, subtreeUri, lockMode, initiatingBundle);
     }
 
     public void addEventListener(int type, String rootUri, 
@@ -196,4 +199,19 @@ public class DmtAdminDelegate implements DmtAdmin {
             this.root = root;
         }
     }
+
+	/**
+	 * @return the configured timeout for a session creation in milliseconds.
+	 */
+	public long getSessionCreationTimeout() {
+		return dmtAdmin.getSessionCreationTimeout();
+	}
+
+	/**
+	 * @return the configured timeout for an invalid session in milliseconds.
+	 */
+	public long getSessionInactivityTimeout() {
+		return dmtAdmin.getSessionInactivityTimeout();
+	}
+	
 }

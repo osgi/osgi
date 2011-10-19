@@ -24,7 +24,7 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
-import info.dmtree.spi.DataPlugin;
+import org.osgi.service.dmt.spi.DataPlugin;
 
 import java.util.Hashtable;
 
@@ -37,8 +37,6 @@ import org.osgi.framework.BundleException;
  */
 public class BundleStatePluginActivator implements BundleActivator {
 	static final String INSTANCE_ID = "1";
-	static final String[] PLUGIN_ROOT_PATH = 
-        new String[] { ".", "OSGi", INSTANCE_ID, "BundleState"};
     static final String PLUGIN_ROOT_URI = "./OSGi/" + INSTANCE_ID + "/BundleState";
     
     public void start(BundleContext bc) throws BundleException {

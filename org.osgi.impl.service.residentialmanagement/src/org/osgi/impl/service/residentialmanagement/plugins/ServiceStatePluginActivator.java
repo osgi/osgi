@@ -28,15 +28,13 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import info.dmtree.spi.DataPlugin;
+import org.osgi.service.dmt.spi.DataPlugin;
 /**
  * 
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
  */
 public class ServiceStatePluginActivator implements BundleActivator {
 	static final String INSTANCE_ID = "1";
-	static final String[] PLUGIN_ROOT_PATH = 
-        new String[] { ".", "OSGi", INSTANCE_ID, "ServiceState" };
     static final String PLUGIN_ROOT_URI = "./OSGi/" + INSTANCE_ID + "/ServiceState";
    
 	public void start(BundleContext bc) throws BundleException {

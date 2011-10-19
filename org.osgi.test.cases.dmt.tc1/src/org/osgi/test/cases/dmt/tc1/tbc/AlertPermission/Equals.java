@@ -52,8 +52,8 @@ public class Equals extends DmtTestControl {
 	public void testEquals001() {
 		try {		
 			log("#testEquals001");
-			info.dmtree.security.AlertPermission permission = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER);
-			info.dmtree.security.AlertPermission permission2 = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER);
+			org.osgi.service.dmt.security.AlertPermission permission = new org.osgi.service.dmt.security.AlertPermission(DmtConstants.REMOTE_SERVER);
+			org.osgi.service.dmt.security.AlertPermission permission2 = new org.osgi.service.dmt.security.AlertPermission(DmtConstants.REMOTE_SERVER);
 			assertTrue(
 					"Asserts that two AlertPermission instances are equal if they have the same target string",
 					permission.equals(permission2));
@@ -71,8 +71,8 @@ public class Equals extends DmtTestControl {
 	public void testEquals002() {
 		try {		
 			log("#testEquals002");
-			info.dmtree.security.AlertPermission permission = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER);
-			info.dmtree.security.AlertPermission permission2 = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER + "a");
+			org.osgi.service.dmt.security.AlertPermission permission = new org.osgi.service.dmt.security.AlertPermission(DmtConstants.REMOTE_SERVER);
+			org.osgi.service.dmt.security.AlertPermission permission2 = new org.osgi.service.dmt.security.AlertPermission(DmtConstants.REMOTE_SERVER + "a");
 			assertTrue(
 					"Asserts that two AlertPermission instances are different if they have different target strings",
 					!permission.equals(permission2));

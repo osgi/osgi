@@ -41,7 +41,7 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import info.dmtree.spi.DataPlugin;
+import org.osgi.service.dmt.spi.DataPlugin;
 
 public class OverlappingSubtreeDataPluginActivator implements BundleActivator {
 

@@ -29,17 +29,14 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceRegistration;
-import info.dmtree.spi.DataPlugin;
+import org.osgi.service.dmt.spi.DataPlugin;
 /**
  * 
- * @author Koya MORI, NTT Corporation
+ * @author Shigekuni Kondo, NTT Corporation
  */
 public class FrameworkPluginActivator implements BundleActivator {
-	static final String INSTANCE_ID = "1";
-	static final String[] PLUGIN_ROOT_PATH = 
-        new String[] { ".", "OSGi", INSTANCE_ID, "Framework" };
-    static final String PLUGIN_ROOT_URI = "./OSGi/" + INSTANCE_ID + "/Framework";
-    
+	static final String[] PLUGIN_ROOT_PATH = new String[] { ".","Framework" };
+    static final String PLUGIN_ROOT_URI = "./Framework";
     private ServiceRegistration servReg;
     private FrameworkPlugin     frameworkPlugin;
 
@@ -48,14 +45,16 @@ public class FrameworkPluginActivator implements BundleActivator {
 		Hashtable props = new Hashtable();
 		props.put("dataRootURIs", new String[] { PLUGIN_ROOT_URI });
 		String[] ifs = new String[] {DataPlugin.class.getName()};
+		try{
 		servReg = bc.registerService(ifs, frameworkPlugin, props);
-		
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		Util.log("Framework plugin activated successfully.");
 	}
 
 	public void stop(BundleContext bc) throws BundleException {
 		servReg.unregister();
-		
 		Util.log("Framework plugin stopped successfully.");
 	}
 }

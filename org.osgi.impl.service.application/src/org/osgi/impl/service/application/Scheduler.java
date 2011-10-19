@@ -17,14 +17,33 @@
 
 package org.osgi.impl.service.application;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.security.Guard;
 import java.security.GuardedObject;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Vector;
 
-import org.osgi.framework.*;
-import org.osgi.service.application.*;
-import org.osgi.service.event.*;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.application.ApplicationAdminPermission;
+import org.osgi.service.application.ApplicationDescriptor;
+import org.osgi.service.application.ApplicationException;
+import org.osgi.service.application.ScheduledApplication;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
+import org.osgi.service.event.EventConstants;
+import org.osgi.service.event.EventHandler;
+import org.osgi.service.event.TopicPermission;
 import org.osgi.service.log.LogService;
 
 class Defender implements Guard {
@@ -291,7 +310,7 @@ public class Scheduler implements Runnable, EventHandler {
 			
 			Calendar calendar = Calendar.getInstance();
 
-			Hashtable props = new Hashtable();
+			Map props = new Hashtable();
 			props.put( ScheduledApplication.YEAR,			new Integer( calendar.get( Calendar.YEAR ) ) );
 			props.put( ScheduledApplication.MONTH,			new Integer( calendar.get( Calendar.MONTH ) ) );
 			props.put( ScheduledApplication.DAY_OF_MONTH,	new Integer( calendar.get( Calendar.DAY_OF_MONTH ) ) );
@@ -308,7 +327,8 @@ public class Scheduler implements Runnable, EventHandler {
 				EventAdmin eventAdmin = (EventAdmin) bc.getService(serviceRef);
 				if (eventAdmin != null) {
 					try {
-						eventAdmin.sendEvent( new Event( ScheduledApplication.TIMER_TOPIC, props ) );
+						eventAdmin.sendEvent(new Event(
+								ScheduledApplication.TIMER_TOPIC, props));
 					}finally {
 						bc.ungetService(serviceRef);
 					}

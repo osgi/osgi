@@ -18,7 +18,7 @@
 
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.*;
+import org.osgi.service.dmt.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,25 +120,40 @@ public class Node {
         
         if (uri.length() == 0) // empty relative URI
             return new Node(uri);
-        
+
         StringBuffer sb = new StringBuffer();
         int len = uri.length();
         int start = 0;
+        int numSegments = 0;
         for(int i = 0; i < len; i++) {
             if(uri.charAt(i) == '/' && (i == 0 || uri.charAt(i-1) != '\\')) {
                 if(i == len-1) // last character cannot be an unescaped '/'
                     throw new DmtException(uri, DmtException.INVALID_URI,
                             "The URI string ends with the '/' character.");
                 appendName(sb, uri, start, i);
+                numSegments++;
                 start = i+1;
             }
         }
         
         appendName(sb, uri, start, len);
+        numSegments++;
+        
+        // uri to long ?
+        if ( sb.length() > Uri.getMaxUriLength() )
+            throw new DmtException(uri, DmtException.URI_TOO_LONG,
+                    "The length of the URI exceeds the maximum limit of " + Uri.getMaxUriLength() + " characters.");
+        
+        // to many segments ?
+        if ( numSegments > Uri.getMaxUriSegments() )
+            throw new DmtException(uri, DmtException.URI_TOO_LONG,
+                    "The URI exceeds the maximum limit of " + Uri.getMaxUriSegments() + " segments.");
         
         return new Node(sb.toString());
     }
 
+    
+    
     private static void appendName(StringBuffer sb, String uri, 
             int start, int end) throws DmtException {
         String segment = uri.substring(start, end);
@@ -344,5 +359,36 @@ public class Node {
         segments.add(segment.toString());
     
         return (String[]) segments.toArray(new String[segments.size()]);
+    }
+    
+    /*
+     * provides Uri checks against the configured system properties for segment name 
+     * length, uri length and number of segments
+     */
+    public void checkUriAndSegmentLength() throws DmtException {
+
+    	// SD: 25.10.2010 added checks for maximum URI length and number of segments
+    	// check overall uri length
+        if ( getUri().length() > Uri.getMaxUriLength() ){
+            throw new DmtException(getUri(), DmtException.URI_TOO_LONG,
+                    "The URI length exceeds maximum allowed length limit " +
+                    "of " + Uri.getMaxUriLength() + " characters.");
+        }
+        
+        // check number of uri segments
+        if ( getPath().length > Uri.getMaxUriSegments() ) {
+            throw new DmtException(getUri(), DmtException.URI_TOO_LONG,
+                    "The URI length exceeds maximum allowed number " +
+                    "of " + Uri.getMaxUriSegments() + " segments.");
+        }
+        
+        // check length of each uri segment
+        for (String segment : getPath()) {
+            if ( segment.length() > Uri.getMaxSegmentNameLength() ) {
+                throw new DmtException(getUri(), DmtException.URI_TOO_LONG,
+                        "The segment length exceeds maximum segment length limit " +
+                        "of " + Uri.getMaxSegmentNameLength() + " characters.");
+            }
+		}
     }
 }

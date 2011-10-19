@@ -1,5 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000-2009).
+ * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -25,15 +26,19 @@
 package org.osgi.impl.service.residentialmanagement.plugins;
 
 import java.util.*;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.MetaNode;
-import info.dmtree.spi.ReadableDataSession;
+import org.osgi.framework.Filter;
+import org.osgi.util.tracker.ServiceTracker;
+
+import org.osgi.service.dmt.DmtConstants;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.spi.ReadableDataSession;
 
 /**
  * 
@@ -41,33 +46,38 @@ import info.dmtree.spi.ReadableDataSession;
  */
 public class ServiceStateReadOnlySession implements ReadableDataSession {
 
-	private static final String PROPERTIES = "Properties";
+	private static final String SERVICESTATE = "ServiceState";
+	private static final String PROPERTY = "Property";
 	private static final String REGISTERINGBUNDLE = "RegisteringBundle";
-	private static final String USINGBUNDLES = "UsingBundle";
+	private static final String USINGBUNDLES = "UsingBundles";
+	private static final String KEY = "Key";
 	private static final String VALUES = "Values";
 	private static final String TYPE = "Type";
 	private static final String CARDINALITY = "Cardinality";
-	private static final String SCALAR = "scalar";
-	private static final String ARRAY = "array";
-	private static final String VECTOR = "vector";
-	private static final String KEY = "Key";
+	private static final String SCALAR = "SCALAR";
+	private static final String ARRAY = "ARRAY";
+	private static final String COLLECTION = "COLLECTION";
+	private static final String NODE_TYPE = "org.osgi/1.0/ServiceStateManagementObject";
 
-	private BundleContext context;
 	private Hashtable serviceRefTable = new Hashtable();/*
 														 * <String <service_id>,
 														 * ServiceReference
 														 * serviceRef>
 														 */
-	private Hashtable serviceRefTableComparison = new Hashtable();/*
-																 * <String
-																 * <service_id>,
-																 * ServiceReference
-																 * serviceRef>
-																 */
 	private Hashtable keysList = new Hashtable();
+	private Hashtable valuesList = new Hashtable();
+	private Hashtable usingBundlesTable = new Hashtable();
 
 	ServiceStateReadOnlySession(ServiceStatePlugin plugin, BundleContext context) {
-		this.context = context;
+		try {
+			Filter filter = context.createFilter("(" + Constants.OBJECTCLASS
+					+ "=*)");
+			ServiceStateServiceTracker smt = new ServiceStateServiceTracker(
+					context, filter);
+			smt.open();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void nodeChanged(String[] nodePath) throws DmtException {
@@ -80,11 +90,6 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
-		try {
-			refreshServiceReferenceTable();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
 		if (path.length == 1) {
 			String[] children = new String[serviceRefTable.size()];
 			int i = 0;
@@ -98,34 +103,50 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 		if (path.length == 2) {
 			String[] children = new String[3];
 			children[0] = USINGBUNDLES;
-			children[1] = PROPERTIES;
+			children[1] = PROPERTY;
 			children[2] = REGISTERINGBUNDLE;
 			return children;
 		}
 
-		if (path.length == 3) {
+		if (path.length == 3 && path[2].equals(USINGBUNDLES)) {
+			manageUsingBundlesTable();
+			Hashtable table = (Hashtable) usingBundlesTable.get(path[1]);
+			if (table.size() == 0) {
+				return new String[0];
+			}
+			// throw new DmtException(nodePath,
+			// DmtException.NODE_NOT_FOUND,"No such node in the current serviceState tree.");
+			String[] children = new String[table.size()];
+			int i = 0;
+			for (Enumeration enu = table.keys(); enu.hasMoreElements();) {
+				children[i] = (String) enu.nextElement();
+				i++;
+			}
+			return children;
+		}
+
+		if (path.length == 3 && path[2].equals(PROPERTY)) {
 			ServiceReference serviceRef = (ServiceReference) serviceRefTable
 					.get(path[1]);
 			if (serviceRef == null) {
 				throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 						"No such node in the current serviceState tree.");
 			}
-			if (path[2].equals(PROPERTIES)) {
+			if (path[2].equals(PROPERTY)) {
 				Hashtable keyList = (Hashtable) keysList.get(path[1]);
 				String[] keyIds = new String[keyList.size()];
 				Enumeration enu = keyList.keys();
 				for (int i = 0; enu.hasMoreElements(); i++) {
 					keyIds[i] = (String) enu.nextElement();
 				}
-				if (keyIds == null)
-					throw new DmtException(nodePath,
-							DmtException.NODE_NOT_FOUND,
-							"No such node in the current serviceState tree.");
-				return keyIds;
+				if (keyIds != null) {
+					return keyIds;
+				}
+
 			}
 		}
 		if (path.length == 4) {
-			if (path[2].equals(PROPERTIES)) {
+			if (path[2].equals(PROPERTY)) {
 				Hashtable keyList = (Hashtable) keysList.get(path[1]);
 				for (Enumeration enu = keyList.keys(); enu.hasMoreElements();) {
 					if (path[3].equals((String) enu.nextElement())) {
@@ -142,18 +163,28 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 						"No such node in the current serviceState tree.");
 			}
 		}
+
+		if (path.length == 5 && path[4].equals(VALUES)) {
+			Hashtable valueTable = (Hashtable) valuesList.get(path[1]);
+			if (!valueTable.containsKey(path[3])) {
+				throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+						"No such node in the current serviceState tree.");
+			}
+			Hashtable values = (Hashtable) valueTable.get(path[3]);
+			String[] children = new String[values.size()];
+			int i = 0;
+			for (Enumeration enu = values.keys(); enu.hasMoreElements();) {
+				children[i] = (String) enu.nextElement();
+				i++;
+			}
+			return children;
+		}
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 				"No such node in the current serviceState tree.");
 	}
 
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
-		try {
-			refreshServiceReferenceTable();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
-
 		if (path.length == 1) // ./OSGi/<instance_id>/ServiceState
 			return new ServiceStateMetaNode("ServiceState root node.",
 					MetaNode.PERMANENT, !ServiceStateMetaNode.CAN_ADD,
@@ -166,15 +197,15 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 					MetaNode.AUTOMATIC, !ServiceStateMetaNode.CAN_ADD,
 					!ServiceStateMetaNode.CAN_DELETE,
 					ServiceStateMetaNode.ALLOW_ZERO,
-					ServiceStateMetaNode.ALLOW_INFINITE);
+					!ServiceStateMetaNode.ALLOW_INFINITE);
 
 		if (path.length == 3) { // ./OSGi/<instance_id>/ServiceState/<service_id>/...
-			if (path[2].equals(PROPERTIES))
+			if (path[2].equals(PROPERTY))
 				return new ServiceStateMetaNode("Properties subtree.",
 						MetaNode.AUTOMATIC, !ServiceStateMetaNode.CAN_ADD,
 						!ServiceStateMetaNode.CAN_DELETE,
 						!ServiceStateMetaNode.ALLOW_ZERO,
-						ServiceStateMetaNode.ALLOW_INFINITE);
+						!ServiceStateMetaNode.ALLOW_INFINITE);
 
 			if (path[2].equals(REGISTERINGBUNDLE))
 				return new ServiceStateMetaNode(
@@ -183,7 +214,24 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 						!ServiceStateMetaNode.CAN_REPLACE,
 						!ServiceStateMetaNode.ALLOW_ZERO,
 						!ServiceStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						DmtData.FORMAT_LONG, null, null);
+
+			if (path[2].equals(USINGBUNDLES))
+				return new ServiceStateMetaNode("UsingBundles subtree.",
+						MetaNode.AUTOMATIC, !ServiceStateMetaNode.CAN_ADD,
+						!ServiceStateMetaNode.CAN_DELETE,
+						!ServiceStateMetaNode.ALLOW_ZERO,
+						!ServiceStateMetaNode.ALLOW_INFINITE);
+		}
+
+		if (path.length == 4) { // ./OSGi/<instance_id>/ServiceState/<service_id>/.../...
+
+			if (path[2].equals(PROPERTY))
+				return new ServiceStateMetaNode("Property keys subtree.",
+						MetaNode.AUTOMATIC, !ServiceStateMetaNode.CAN_ADD,
+						!ServiceStateMetaNode.CAN_DELETE,
+						ServiceStateMetaNode.ALLOW_ZERO,
+						!ServiceStateMetaNode.ALLOW_INFINITE);
 
 			if (path[2].equals(USINGBUNDLES))
 				return new ServiceStateMetaNode(
@@ -192,66 +240,63 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 						!ServiceStateMetaNode.CAN_REPLACE,
 						ServiceStateMetaNode.ALLOW_ZERO,
 						!ServiceStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						DmtData.FORMAT_LONG, null, null);
+
 		}
 
-		if (path.length == 4) { // ./OSGi/<instance_id>/ServiceState/<service_id>/.../...
-
-			if (path[2].equals(PROPERTIES))
-				return new ServiceStateMetaNode("Property keys subtree.",
-						MetaNode.AUTOMATIC, !ServiceStateMetaNode.CAN_ADD,
-						!ServiceStateMetaNode.CAN_DELETE,
-						ServiceStateMetaNode.ALLOW_ZERO,
-						ServiceStateMetaNode.ALLOW_INFINITE);
-		}
-
-		if (path.length == 5) { // ./OSGi/<instance_id>/ServiceState/<service_id>/Properties/<keys>/...
+		if (path.length == 5) { // ./OSGi/<instance_id>/ServiceState/<service_id>/Properties/<id>/...
 			if (path[4].equals(VALUES))
 				return new ServiceStateMetaNode(
 						"The values of the seervice property.",
+						MetaNode.AUTOMATIC, !ServiceStateMetaNode.CAN_ADD,
 						!ServiceStateMetaNode.CAN_DELETE,
-						!ServiceStateMetaNode.CAN_REPLACE,
-						ServiceStateMetaNode.ALLOW_ZERO,
-						ServiceStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						!ServiceStateMetaNode.ALLOW_ZERO,
+						!ServiceStateMetaNode.ALLOW_INFINITE);
 
 			if (path[4].equals(TYPE))
 				return new ServiceStateMetaNode(
 						"The Type of the value of the seervice property.",
 						!ServiceStateMetaNode.CAN_DELETE,
 						!ServiceStateMetaNode.CAN_REPLACE,
-						ServiceStateMetaNode.ALLOW_ZERO,
-						ServiceStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						!ServiceStateMetaNode.ALLOW_ZERO,
+						!ServiceStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_STRING, null, null);
 
 			if (path[4].equals(CARDINALITY))
 				return new ServiceStateMetaNode(
 						"The Cardinality of the seervice property.",
 						!ServiceStateMetaNode.CAN_DELETE,
 						!ServiceStateMetaNode.CAN_REPLACE,
-						ServiceStateMetaNode.ALLOW_ZERO,
-						ServiceStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						!ServiceStateMetaNode.ALLOW_ZERO,
+						!ServiceStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_STRING, null, null);
 
 			if (path[4].equals(KEY))
 				return new ServiceStateMetaNode(
 						"The key of the seervice property.",
 						!ServiceStateMetaNode.CAN_DELETE,
 						!ServiceStateMetaNode.CAN_REPLACE,
-						ServiceStateMetaNode.ALLOW_ZERO,
-						ServiceStateMetaNode.ALLOW_INFINITE,
-						DmtData.FORMAT_STRING, null);
+						!ServiceStateMetaNode.ALLOW_ZERO,
+						!ServiceStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_STRING, null, null);
 		}
+
+		if (path.length == 6) { // ./OSGi/<instance_id>/ServiceState/<service_id>/Properties/<id>/Values/...
+			if (path[4].equals(VALUES))
+				return new ServiceStateMetaNode(
+						"The values of the seervice property.",
+						!ServiceStateMetaNode.CAN_DELETE,
+						!ServiceStateMetaNode.CAN_REPLACE,
+						ServiceStateMetaNode.ALLOW_ZERO,
+						!ServiceStateMetaNode.ALLOW_INFINITE,
+						DmtData.FORMAT_STRING, null, null);
+		}
+
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 				"No such node defined in the ServiceState tree.");
 	}
 
 	public int getNodeSize(String[] nodePath) throws DmtException {
-		try {
-			refreshServiceReferenceTable();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
 		return getNodeValue(nodePath).getSize();
 	}
 
@@ -271,26 +316,27 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 	}
 
 	public String getNodeType(String[] nodePath) throws DmtException {
-		try {
-			refreshServiceReferenceTable();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
-		if (isLeafNode(nodePath))
-			return ServiceStateMetaNode.LEAF_MIME_TYPE;
-
+		String[] path = shapedPath(nodePath);
+		if (path.length == 1)
+			return NODE_TYPE;
+		
+// TODO check commented out
+//		if (path.length == 2)
+//			return TRANSIENT_NODE_TYPE;
+//		if (path.length == 3 && path[2].equals(USINGBUNDLES))
+//			return LIST_MIME_TYPE;
+//		if (path.length == 4 && path[3].equals(PROPERTY))
+//			return TRANSIENT_NODE_TYPE;
+//		if (path.length == 5 && path[4].equals(VALUES))
+//			return LIST_MIME_TYPE;
+//		if (isLeafNode(nodePath))
+//			return ServiceStateMetaNode.LEAF_MIME_TYPE;
 		return ServiceStateMetaNode.SERVICESTATE_MO_TYPE;
 	}
 
 	public boolean isNodeUri(String[] nodePath) {
 		String[] path = shapedPath(nodePath);
-		try {
-			refreshServiceReferenceTable();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
-
-		if (path.length == 1)
+		if (path.length == 1 && path[0].equals(SERVICESTATE))
 			return true;
 
 		if (path.length == 2) {
@@ -304,7 +350,7 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 			ServiceReference serviceRef = (ServiceReference) serviceRefTable
 					.get(path[1]);
 			if (serviceRef != null) {
-				if (path[2].equals(PROPERTIES)
+				if (path[2].equals(PROPERTY)
 						|| path[2].equals(REGISTERINGBUNDLE)
 						|| path[2].equals(USINGBUNDLES))
 					return true;
@@ -312,7 +358,7 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 		}
 
 		if (path.length == 4) {
-			if (path[2].equals(PROPERTIES)) {
+			if (path[2].equals(PROPERTY)) {
 				Hashtable keyList = (Hashtable) keysList.get(path[1]);
 				for (Enumeration enu = keyList.keys(); enu.hasMoreElements();) {
 					String keyId = (String) enu.nextElement();
@@ -320,10 +366,20 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 						return true;
 				}
 			}
+
+			if (path[2].equals(USINGBUNDLES)) {
+				manageUsingBundlesTable();
+				Hashtable table = (Hashtable) usingBundlesTable.get(path[1]);
+				if (table.size() != 0)
+					for (Enumeration enu = table.keys(); enu.hasMoreElements();) {
+						if (path[3].equals((String) enu.nextElement()))
+							return true;
+					}
+			}
 		}
 
 		if (path.length == 5) {
-			if (path[2].equals(PROPERTIES)) {
+			if (path[2].equals(PROPERTY)) {
 				Hashtable keyList = (Hashtable) keysList.get(path[1]);
 				for (Enumeration enu = keyList.keys(); enu.hasMoreElements();) {
 					String keyId = (String) enu.nextElement();
@@ -335,41 +391,44 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 				}
 			}
 		}
+		if (path.length == 6) {
+			if (path[4].equals(VALUES)) {
+				Hashtable table = (Hashtable) valuesList.get(path[1]);
+				Hashtable values = (Hashtable) table.get(path[3]);
+				if (values.size() != 0)
+					for (Enumeration enu = values.keys(); enu.hasMoreElements();) {
+						if (path[5].equals((String) enu.nextElement()))
+							return true;
+					}
+			}
+		}
 		return false;
 	}
 
 	public boolean isLeafNode(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
-		try {
-			refreshServiceReferenceTable();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
 		if (path.length <= 2)
 			return false;
-		if (path.length == 3) {
-			if (path[2].equals(REGISTERINGBUNDLE)
-					|| path[2].equals(USINGBUNDLES))
-				return true;
-		}
-		if (path.length == 4) {
-			return false;
-		}
-		if (path.length == 5) {
-			if (path[4].equals(TYPE) || path[4].equals(CARDINALITY)
-					|| path[4].equals(KEY) || path[4].equals(VALUES))
-				return true;
-		}
+
+		if (path.length == 3 && (path[2].equals(REGISTERINGBUNDLE)))
+			return true;
+
+		if (path.length == 4 && path[2].equals(USINGBUNDLES))
+			return true;
+
+		if (path.length == 5
+				&& (path[4].equals(TYPE) || path[4].equals(CARDINALITY) || path[4]
+						.equals(KEY)))
+			return true;
+
+		if (path.length == 6 && path[4].equals(VALUES))
+			return true;
+
 		return false;
 	}
 
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
-		try {
-			refreshServiceReferenceTable();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
 		ServiceReference serviceRef = (ServiceReference) serviceRefTable
 				.get(path[1]);
 		if (path.length <= 2)
@@ -381,31 +440,32 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 			if (path[2].equals(REGISTERINGBUNDLE)) {
 				Bundle registerBundle = serviceRef.getBundle();
 				if (registerBundle == null)
-					return new DmtData("");
-				return new DmtData(Long.toString(registerBundle.getBundleId()));
+					return new DmtData(-1);
+				return new DmtData(registerBundle.getBundleId());
 			}
-
-			if (path[2].equals(USINGBUNDLES)) {
-				Bundle[] usingBundles = serviceRef.getUsingBundles();
-				if (usingBundles != null) {
-					StringBuffer sb = new StringBuffer();
-					for (int i = 0; i < usingBundles.length; i++) {
-						sb.append(Long.toString(usingBundles[i].getBundleId()));
-						sb.append(",");
-					}
-					StringBuffer result = sb.deleteCharAt(sb.length() - 1);
-					return new DmtData(result.toString());
-				} else {
-					return new DmtData("");
-				}
-			}
-		}
-
-		if (path.length == 4) {
-			if (path[2].equals(PROPERTIES))
+			if (path[2].equals(USINGBUNDLES))
 				throw new DmtException(nodePath,
 						DmtException.FEATURE_NOT_SUPPORTED,
 						"The given path indicates an interior node.");
+		}
+
+		if (path.length == 4) {
+			if (path[2].equals(PROPERTY))
+				throw new DmtException(nodePath,
+						DmtException.FEATURE_NOT_SUPPORTED,
+						"The given path indicates an interior node.");
+
+			if (path[2].equals(USINGBUNDLES)) {
+				manageUsingBundlesTable();
+				Hashtable table = (Hashtable) usingBundlesTable.get(path[1]);
+				if (table.size() == 0)
+					throw new DmtException(nodePath,
+							DmtException.NODE_NOT_FOUND,
+							"There is no leaf node at the given path.");
+				String usingBundleIdStr = (String) table.get(path[3]);
+				long usingBundleId = Long.parseLong(usingBundleIdStr);
+				return new DmtData(usingBundleId);
+			}
 		}
 
 		if (path.length == 5) {
@@ -419,7 +479,7 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 				} else if (values instanceof String[]) {
 					type = String.class.getName();
 				} else if (values instanceof Long) {
-					type = Integer.TYPE.getName();
+					type = Long.TYPE.getName();
 				} else if (values instanceof Integer) {
 					type = Integer.TYPE.getName();
 				} else {
@@ -438,7 +498,7 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 				if (cl.isArray() && !cl.equals(byte[].class)) {
 					return new DmtData(ARRAY);
 				} else if (values instanceof Vector) {
-					return new DmtData(VECTOR);
+					return new DmtData(COLLECTION);
 				} else if (cl.equals(byte[].class)
 						|| (!cl.equals(Vector.class) && !cl.isArray())) {
 					return new DmtData(SCALAR);
@@ -456,40 +516,38 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 				return new DmtData(key);
 			}
 
+			if (path[4].equals(VALUES))
+				throw new DmtException(nodePath,
+						DmtException.FEATURE_NOT_SUPPORTED,
+						"The given path indicates an interior node.");
+
+			throw new DmtException(nodePath,
+					DmtException.FEATURE_NOT_SUPPORTED,
+					"The given path indicates an interior node.");
+		}
+
+		if (path.length == 6) {
 			if (path[4].equals(VALUES)) {
-				Hashtable keyList = (Hashtable) keysList.get(path[1]);
-				String key = (String) keyList.get(path[3]);
-				Object value = serviceRef.getProperty(key);
-				if (value instanceof String[]) {
-					String[] saValue = (String[]) value;
-					StringBuffer sb = new StringBuffer();
-					for (int i = 0; i < saValue.length; i++) {
-						sb.append(saValue[i]);
-						sb.append(",");
-					}
-					if (sb.length() == 0)
-						return new DmtData("");
-					StringBuffer result = sb.deleteCharAt(sb.length() - 1);
-					return new DmtData(result.toString());
-				}
+				Hashtable valueTable = (Hashtable) valuesList.get(path[1]);
+				Hashtable values = (Hashtable) valueTable.get(path[3]);
+				Object value = values.get(path[5]);
 				if (value instanceof String) {
 					String stValue = value.toString();
 					return new DmtData(stValue);
 				}
 				if (value instanceof Long) {
 					Long loValue = (Long) value;
-					String sValue = loValue.toString();
-					return new DmtData(sValue);
+					return new DmtData(loValue.longValue());
 				}
 				if (value instanceof Integer) {
 					Integer ioValue = (Integer) value;
-					String sValue = ioValue.toString();
-					return new DmtData(sValue);
+					return new DmtData(ioValue.intValue());
+				}
+				if (value instanceof Boolean) {
+					Boolean bValue = (Boolean) value;
+					return new DmtData(bValue.booleanValue());
 				}
 			}
-			throw new DmtException(nodePath,
-					DmtException.FEATURE_NOT_SUPPORTED,
-					"The given path indicates an interior node.");
 		}
 
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
@@ -508,55 +566,83 @@ public class ServiceStateReadOnlySession implements ReadableDataSession {
 		return newPath;
 	}
 
-	private void managePropertiesKey() {
-		keysList = new Hashtable();
+	private void manageProperties() {
 		for (Enumeration enu = serviceRefTable.keys(); enu.hasMoreElements();) {
 			Hashtable keysId = new Hashtable();
+			Hashtable valuesTable = new Hashtable();
 			String serviceId = (String) enu.nextElement();
 			ServiceReference serviceRef = (ServiceReference) serviceRefTable
 					.get(serviceId);
 			String[] keys = (String[]) serviceRef.getPropertyKeys();
 			for (int i = 0; i < keys.length; i++) {
-				keysId.put(Integer.toString(i), keys[i]);
+				keysId.put(Integer.toString(i + 1), keys[i]);
+				Hashtable valuesId = new Hashtable();
+				if (serviceRef.getProperty(keys[i]).getClass().isArray()) {
+					Object[] values = (Object[]) serviceRef
+							.getProperty(keys[i]);
+					for (int j = 0; j < values.length; j++) {
+						valuesId.put(Integer.toString(j + 1), values[j]);
+					}
+				} else {
+					Object value = serviceRef.getProperty(keys[i]);
+					valuesId.put("1", value);
+				}
+				valuesTable.put(Integer.toString(i + 1), valuesId);
+				valuesList.put(serviceId, valuesTable);
 			}
 			keysList.put(serviceId, keysId);
 		}
 	}
 
-	private Hashtable manageServiceReferences() throws InvalidSyntaxException {
-		ServiceReference[] serviceAllRef = context.getAllServiceReferences(
-				null, null);
-		Hashtable serviceRefTable = new Hashtable();
-		for (int i = 0; i < serviceAllRef.length; i++) {
-			Long longServiceId = (Long) serviceAllRef[i]
-					.getProperty(Constants.SERVICE_ID);
-			String serviceId = longServiceId.toString();
-			serviceRefTable.put(serviceId, serviceAllRef[i]);
+	private void manageUsingBundlesTable() {
+		for (Enumeration enu = serviceRefTable.keys(); enu.hasMoreElements();) {
+			Hashtable bundleIdList = new Hashtable();
+			String serviceId = (String) enu.nextElement();
+			ServiceReference serviceRef = (ServiceReference) serviceRefTable
+					.get(serviceId);
+			Bundle[] usingBundles = serviceRef.getUsingBundles();
+			if (usingBundles == null)
+				usingBundlesTable.put(serviceId, bundleIdList);
+			else {
+				for (int i = 0; i < usingBundles.length; i++) {
+					bundleIdList.put(Integer.toString(i + 1),
+							Long.toString(usingBundles[i].getBundleId()));
+				}
+				usingBundlesTable.put(serviceId, bundleIdList);
+			}
 		}
-		return serviceRefTable;
 	}
 
-	public void refreshServiceReferenceTable() throws InvalidSyntaxException {
-		if (serviceRefTable.size() == 0) {
-			serviceRefTable = manageServiceReferences();
+	public class ServiceStateServiceTracker extends ServiceTracker {
+
+		public ServiceStateServiceTracker(BundleContext context, Filter filter) {
+			super(context, filter, null);
 		}
-		ServiceReference[] serviceAllRef = context.getAllServiceReferences(
-				null, null);
-		for (int i = 0; i < serviceAllRef.length; i++) {
-			Long longServiceId = (Long) serviceAllRef[i]
+
+		public Object addingService(ServiceReference reference) {
+			Long lServiceId = (Long) reference
 					.getProperty(Constants.SERVICE_ID);
-			String serviceId = longServiceId.toString();
-			if (!serviceRefTable.containsKey(serviceId)) {
-				this.serviceRefTable.put(serviceId, serviceAllRef[i]);
-			}
+			serviceRefTable.put(lServiceId.toString(), reference);
+			manageUsingBundlesTable();
+			manageProperties();
+			return context.getService(reference);
 		}
-		serviceRefTableComparison = manageServiceReferences();
-		for (Enumeration keys = serviceRefTable.keys(); keys.hasMoreElements();) {
-			String key = (String) keys.nextElement();
-			if (!serviceRefTableComparison.containsKey(key)) {
-				serviceRefTable.remove(key);
-			}
+
+		public void modifiedService(ServiceReference reference, Object service) {
+			Long lServiceId = (Long) reference
+					.getProperty(Constants.SERVICE_ID);
+			manageUsingBundlesTable();
+			manageProperties();
+			serviceRefTable.put(lServiceId.toString(), reference);
 		}
-		managePropertiesKey();
+
+		public void removedService(ServiceReference reference, Object service) {
+			Long lServiceId = (Long) reference
+					.getProperty(Constants.SERVICE_ID);
+			serviceRefTable.remove(lServiceId.toString());
+			manageUsingBundlesTable();
+			manageProperties();
+			context.ungetService(reference);
+		}
 	}
 }

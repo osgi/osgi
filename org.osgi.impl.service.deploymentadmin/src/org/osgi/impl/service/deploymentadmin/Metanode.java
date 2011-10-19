@@ -17,8 +17,8 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-import info.dmtree.DmtData;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.MetaNode;
 
 /**
  * DMT MetaNode implementation

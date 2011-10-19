@@ -1,5 +1,5 @@
 cmpn.specs = \
-	 info.dmtree, \
+	 org.osgi.service.dmt, \
 	 org.osgi.application, \
 	 org.osgi.jmx, \
 	 org.osgi.service.application, \

@@ -36,8 +36,8 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtPermission;
 
-import info.dmtree.security.AlertPermission;
-import info.dmtree.security.DmtPermission;
+import org.osgi.service.dmt.security.AlertPermission;
+import org.osgi.service.dmt.security.DmtPermission;
 
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;

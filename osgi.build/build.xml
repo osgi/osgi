@@ -68,7 +68,7 @@
 		</sequential>
 	</macrodef>
 	
-	<target name="javadoc" depends="javadoc.core,javadoc.cmpn,javadoc.enterprise">
+	<target name="javadoc" depends="javadoc.core,javadoc.cmpn,javadoc.enterprise,javadoc.residential">
 	</target>
 	
 	<target name="javadoc.core" depends="init">
@@ -83,7 +83,11 @@
 		<javadoc.macro name="enterprise" packages="${core.packages},${enterprise.packages}" />
 	</target>
 	
-	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.enterprise,japitools.proposed,japitools.minimum,japitools.foundation">
+	<target name="javadoc.residential" depends="init">
+		<javadoc.macro name="residential" packages="${core.packages},${residential.packages}" />
+	</target>
+	
+	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.enterprise,japitools.residential,japitools.proposed,japitools.minimum,japitools.foundation">
 	</target>
 
 	<macrodef name="japitools">
@@ -130,6 +134,16 @@
 		</japitools>
 	</target>
 
+	<target name="japitools.residential" depends="init">
+		<japitools name="osgi.residential">
+			<arg value="${repo.javase}" />
+			<arg value="${repo.foundation}" />
+			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
+			<arg value="${repo.servlet}" />
+			<arg value="${repo.jaxp}" />
+		</japitools>
+	</target>
+
 	<target name="japitools.proposed" depends="init">
 		<japitools name="osgi.proposed">
 			<arg value="${repo.javase}" />
@@ -146,7 +160,7 @@
 		<japitools name="ee.foundation" />
 	</target>
 
-	<target name="japicompat" depends="japicompat.core,japicompat.cmpn,japicompat.enterprise,japicompat.minimum,japicompat.foundation,japicompat.eecompare">
+	<target name="japicompat" depends="japicompat.core,japicompat.cmpn,japicompat.enterprise,japicompat.residential,japicompat.minimum,japicompat.foundation,japicompat.eecompare">
 	</target>
 	
 	<macrodef name="japicompat">
@@ -185,6 +199,10 @@
 		<japicompat name="osgi.enterprise" />
 	</target>
 
+	<target name="japicompat.residential" depends="init">
+		<japicompat name="osgi.residential" />
+	</target>
+
 	<target name="japicompat.minimum" depends="init">
 		<japicompat name="ee.minimum" options="-h" />
 	</target>
@@ -208,6 +226,7 @@
 	<target name="echo" depends="master.echo">
 		<echo>core.specs:             ${core.specs}</echo>
 		<echo>cmpn.specs:             ${cmpn.specs}</echo>
+		<echo>residential.specs:      ${residential.specs}</echo>
 		<echo>enterprise.specs:       ${enterprise.specs}</echo>
 		<echo>proposed.specs:         ${proposed.specs}</echo>
 	</target>

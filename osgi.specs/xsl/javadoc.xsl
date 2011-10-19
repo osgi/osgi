@@ -48,8 +48,10 @@
 										<xsl:for-each select="security">
 											<p class="Bulleted2">
 												<code><xsl:value-of select="@name" />[<xsl:value-of select="@resource" />,<xsl:value-of select="@actions" />]</code>
-												–
-												<xsl:value-of select="." />
+												<xsl:if test=".">
+													–
+													<xsl:value-of select="." />
+												</xsl:if>
 											</p>
 										</xsl:for-each>
 									</xsl:for-each>

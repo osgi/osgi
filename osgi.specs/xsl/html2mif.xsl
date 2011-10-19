@@ -24,7 +24,14 @@
 			
 			<xsl:for-each select="tr[1]/th">
 				<TblColumnWidth>
-					<xsl:value-of select="@width"/>
+					<xsl:choose>
+						<xsl:when test="@width">
+							<xsl:value-of select="@width"/>
+						</xsl:when>
+						<xsl:otherwise>
+							1
+						</xsl:otherwise>
+					</xsl:choose>						
 				</TblColumnWidth>
 			</xsl:for-each>
 			
@@ -32,7 +39,7 @@
 			<TblTitle>
 				<TblTitleContent>
 					<xsl:call-template name="para">
-						<xsl:with-param name="tag" select="tabletitle"/>
+						<xsl:with-param name="tag" select="'TableTitle'"/>
 						<xsl:with-param name="inside">
 							<dummy>
 								<xsl:value-of select="@title"/>
@@ -82,6 +89,11 @@
 			<xsl:if test="@colspan">
 				<xsl:attribute name="CellColumns">
 					<xsl:value-of select="@colspan"/>
+				</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="@rowspan">
+				<xsl:attribute name="CellRows">
+					<xsl:value-of select="@rowspan"/>
 				</xsl:attribute>
 			</xsl:if>
 			<CellContent>

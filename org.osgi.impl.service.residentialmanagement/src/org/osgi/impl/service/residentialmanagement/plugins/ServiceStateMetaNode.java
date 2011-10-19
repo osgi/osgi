@@ -1,5 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000-2009).
+ * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -25,8 +26,8 @@
 package org.osgi.impl.service.residentialmanagement.plugins;
 
 import java.util.Arrays;
-import info.dmtree.DmtData;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.MetaNode;
 /**
  * 
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
@@ -67,14 +68,17 @@ public class ServiceStateMetaNode implements MetaNode {
 	// First element in validValues (if any) is the default value.
 	ServiceStateMetaNode(String description, boolean canDelete, 
 			boolean canReplace, boolean allowZero, boolean allowInfinite,
-			int formats, DmtData[] validValues) {
+			int formats, String[] mimeType, DmtData[] validValues) {
 		leaf = true;
 		
         this.canAdd = false;
 		this.canDelete = canDelete;
 		this.canReplace = canReplace;
 		this.scope = AUTOMATIC;
-		this.mimeTypes = new String[] { LEAF_MIME_TYPE };
+		if(mimeType != null)
+			this.mimeTypes = mimeType;
+		else
+			this.mimeTypes = new String[] { LEAF_MIME_TYPE };
 		this.zeroOccurrenceAllowed = allowZero;
 		this.maxOccurrence = allowInfinite ? Integer.MAX_VALUE /* inf */ : 1;
 		this.formats = formats;

@@ -1,5 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000-2009).
+ * All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -25,8 +26,8 @@
 package org.osgi.impl.service.residentialmanagement.plugins;
 
 import java.util.Arrays;
-import info.dmtree.DmtData;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.MetaNode;
 /**
  * 
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
@@ -53,7 +54,7 @@ public class PackageStateMetaNode implements MetaNode {
 	private boolean		canReplace              = false;
 	private boolean		canExecute              = false;
 	
-	private boolean		leaf; // there is no meaningful default
+	private boolean		leaf;
 	private int         scope                   = PERMANENT;
 	private String		description				= null;
 	private boolean		zeroOccurrenceAllowed	= false;
@@ -64,22 +65,24 @@ public class PackageStateMetaNode implements MetaNode {
 	private String[]	mimeTypes				= null;
     
 	// Leaf node in PackageStatePlugin
-	// First element in validValues (if any) is the default value.
 	PackageStateMetaNode(String description, boolean canDelete, 
 			boolean canReplace, boolean allowZero, boolean allowInfinite,
-			int formats, DmtData[] validValues) {
-		leaf = true;
+			int formats, String[] mimeType, DmtData[] validValues) {
 		
+		this.leaf = true;		
         this.canAdd = false;
-		this.canDelete = canDelete;
+		this.canDelete = false;
 		this.canReplace = canReplace;
 		this.scope = AUTOMATIC;
-		this.mimeTypes = new String[] { LEAF_MIME_TYPE };
 		this.zeroOccurrenceAllowed = allowZero;
 		this.maxOccurrence = allowInfinite ? Integer.MAX_VALUE : 1;
 		this.formats = formats;
 		this.validValues = validValues;
 		this.defaultData = validValues == null ? null : validValues[0];
+		if(mimeType != null)
+			this.mimeTypes = mimeType;
+		else
+			this.mimeTypes = new String[] { LEAF_MIME_TYPE };
 
 	}
 

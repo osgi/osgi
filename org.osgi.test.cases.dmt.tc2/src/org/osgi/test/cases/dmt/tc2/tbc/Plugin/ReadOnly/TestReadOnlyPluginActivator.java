@@ -41,7 +41,7 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import info.dmtree.spi.DataPlugin;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 
 /**
@@ -54,7 +54,7 @@ public class TestReadOnlyPluginActivator implements BundleActivator {
 	
 	private DmtTestControl tbc;
 
-    public static final String OSGi_ROOT = System.getProperty("info.dmtree.osgi.root");
+    public static final String OSGi_ROOT = System.getProperty("org.osgi.service.dmt.osgi.root");
 
     public static final String ROOT = OSGi_ROOT + "/read_only_plugin";
 	

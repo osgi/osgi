@@ -31,16 +31,12 @@
 
 package org.osgi.test.cases.application.tbc;
 
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtSession;
-import info.dmtree.Uri;
-
 import java.io.FilePermission;
 import java.lang.reflect.ReflectPermission;
 import java.net.SocketPermission;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.Hashtable;
+import java.util.Map;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
@@ -53,6 +49,9 @@ import org.osgi.service.application.ApplicationAdminPermission;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.application.ScheduledApplication;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.Uri;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.TopicPermission;
@@ -468,7 +467,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	public void sendEvent(String topic) {
 		EventAdmin event = (EventAdmin) getContext().getService(
 				getContext().getServiceReference(EventAdmin.class.getName()));
-		event.sendEvent(new Event(topic, new Hashtable()));
+		event.sendEvent(new Event(topic, (Map) null));
 	}
 
 	/**

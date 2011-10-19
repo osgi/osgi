@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000-2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -24,270 +24,457 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
-import info.dmtree.*;
-import info.dmtree.spi.TransactionalDataSession;
+
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
-import java.net.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
 
+import org.osgi.framework.launch.Framework;
+import org.osgi.framework.startlevel.BundleStartLevel;
+import org.osgi.framework.startlevel.FrameworkStartLevel;
+import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.BundleException;
-import org.osgi.service.startlevel.StartLevel;
+
 /**
  * 
- * @author Koya MORI NTT Corporation, Shigekuni KONDO
+ * @author Shigekuni KONDO NTT Corporation
  */
 class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		TransactionalDataSession {
 
-	private Vector operations;
-
+	private Hashtable bundlesTableCopy = null;
+	private Hashtable bundlesTableTmp = null;
+	private Hashtable bundlesTableSnap = null;
+	private Vector operations = null;
+	
+	private Vector uninstallBundles = null;
+	private Vector updateBundles = null;
+	private Vector startBundles = null;
+	private Vector stopBundles = null;
+	private Vector resolveBundles = null;
+	private Vector stopAndRefreshBundles = null;
+	private Vector bundleStartLevelCue = null;
+	private BundleSubTree frameworkBs = null;
+	private Hashtable restoreBundlesForUninstall = null;
+	private Hashtable restoreBundlesForUpdate = null;
+	private Hashtable restoreBundles = null;
+	
 	FrameworkReadWriteSession(FrameworkPlugin plugin, BundleContext context, FrameworkReadOnlySession session){
 		super(plugin, context);
-		
-		this.installbundle = session.installbundle;
-		
+		this.bundlesTable = session.bundlesTable;
 		operations = new Vector();
+		bundlesTableCopy = new Hashtable();
+		bundlesTableTmp = new Hashtable();
+		bundlesTableSnap = new Hashtable();
+		operations = new Vector();
+		uninstallBundles = new Vector();
+		updateBundles = new Vector();
+		startBundles = new Vector();
+		stopBundles = new Vector();
+		resolveBundles = new Vector();
+		stopAndRefreshBundles = new Vector();
+		bundleStartLevelCue = new Vector();
+		restoreBundlesForUninstall = new Hashtable();
+		restoreBundlesForUpdate = new Hashtable();
+		restoreBundles = new Hashtable();
+		frameworkBs = null;
 	}
 
 	public void commit() throws DmtException {
-		// Value Setting
+		this.bundlesTableSnap = (Hashtable) this.bundlesTable.clone();
 		Iterator i = operations.iterator();
 		while (i.hasNext()) {
 			Operation operation = (Operation) i.next();
-
-			try {
+			try{
 				if (operation.getOperation() == Operation.ADD_OBJECT) {
-					String[] nodepath = operation.getObjectname();
-					Node newbundle = new Node(nodepath[nodepath.length - 1],
-							new Node[] {
-									new Node(LOCATION, null, new DmtData("")),
-									new Node(URL, null, new DmtData("")) });
-					installbundle.addNode(newbundle);
-				} else if (operation.getOperation() == Operation.DELETE_OBJECT) {
-					Node[] children = installbundle.getChildren();
-					String[] nodepath = operation.getObjectname();
-					for (int x = 0; x < children.length; x++) {
-						if (nodepath[2].equals(children[x].getName())) {
-							installbundle.deleteNode(children[x]);
-							break;
-						}
+					String[] path = operation.getObjectname();
+					if (path.length == 3 && path[1].equals(BUNDLE)) {
+						BundleSubTree bs = new BundleSubTree(path[2]);
+						this.bundlesTable.put(path[2], bs);
 					}
 				} else if (operation.getOperation() == Operation.SET_VALUE) {
-					String[] nodepath = operation.getObjectname();
-
-					if (nodepath[nodepath.length - 1]
-							.equals(REQUESTEDSTARTLEVEL)) {
-						RequestedStartLevel = operation.getData().getInt();
-
-						try {
-							ServiceReference ref = context
-									.getServiceReference(org.osgi.service.startlevel.StartLevel.class
-											.getName());
-							StartLevel sl = (StartLevel) context
-									.getService(ref);
-
-							sl.setStartLevel(RequestedStartLevel);
-							context.ungetService(ref);
-						} catch (NullPointerException e) {
-							throw new DmtException(operation.getObjectname(),
-									DmtException.DATA_STORE_FAILURE,
-									"The StartLevel service is not available.");
+					String[] nodepath = operation.getObjectname();					
+					if (nodepath[nodepath.length - 1].equals(URL)) {
+						BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(nodepath[nodepath.length - 2]);
+						bs.setURL(operation.getData().getString());
+						if(nodepath[nodepath.length - 2].equals(SYSTEMBUNDLE)){
+							this.frameworkBs = bs;
+						}else{
+							this.updateBundles.add(bs);
 						}
-					} else if (nodepath[nodepath.length - 1]
-							.equals(INITIALBUNDLESTARTLEVEL)) {
-						try {
-							ServiceReference ref = context
-									.getServiceReference(org.osgi.service.startlevel.StartLevel.class
-											.getName());
-							StartLevel sl = (StartLevel) context
-									.getService(ref);
-
-							sl.setInitialBundleStartLevel(operation.getData()
-									.getInt());
-							context.ungetService(ref);
-						} catch (NullPointerException e) {
-							throw new DmtException(operation.getObjectname(),
-									DmtException.DATA_STORE_FAILURE,
-									"The StartLevel service is not available.");
+					} else if (nodepath[nodepath.length - 1].equals(AUTOSTART)) {
+						BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(nodepath[nodepath.length - 2]);
+						bs.setAutoStart(operation.getData().getBoolean());
+					} else if (nodepath[nodepath.length - 1].equals(REQUESTEDSTATE)) {
+						BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(nodepath[nodepath.length - 2]);
+						String requestedState = operation.getData().getString();
+						bs.setRequestedState(requestedState);
+						if(requestedState.equals(ACTIVE)){
+							this.startBundles.add(bs);
+						} else if(requestedState.equals(UNINSTALLED)){
+							this.uninstallBundles.add(bs);
+						} else if(requestedState.equals(RESOLVED)&&bs.getBundleObj().getState()==2){
+							this.resolveBundles.add(bs);
+						} else if(requestedState.equals(RESOLVED)&&bs.getBundleObj().getState()!=2){
+							this.stopBundles.add(bs);
+						} else if(requestedState.equals(INSTALLED)){
+							this.stopAndRefreshBundles.add(bs);
 						}
-					} else if (nodepath[nodepath.length - 1].equals(RESTART)) {
-						System.exit(0);
-					} else if (nodepath[nodepath.length - 1].equals(SHUTDOWN)) {
-						System.exit(0);
-					} else if (nodepath[nodepath.length - 1].equals(UPDATE)) {
-						System.exit(0);
-					} else if (nodepath[nodepath.length - 1].equals(LOCATION)
-							|| nodepath[nodepath.length - 1].equals(URL)) {
-						try {
-							installbundle.findNode(
-									new String[] {
-											nodepath[nodepath.length - 2],
-											nodepath[nodepath.length - 1] })
-									.setData(operation.getData());
-						} catch (NullPointerException e) {
-							throw new DmtException(operation.getObjectname(),
-									DmtException.DATA_STORE_FAILURE,
-									"The given node is not available now.");
-						}
-						
 					} else if (nodepath[nodepath.length - 1].equals(BUNDLESTARTLEVEL)) {
-						BundelControlValue bcv = (BundelControlValue)bundlesTable.get(nodepath[2]);
-						try {
-							ServiceReference ref = context
-									.getServiceReference(org.osgi.service.startlevel.StartLevel.class
-											.getName());
-							StartLevel sl = (StartLevel) context
-									.getService(ref);
-
-							sl.setBundleStartLevel(bcv.bundle, operation.getData().getInt());
-							context.ungetService(ref);
-						} catch (NullPointerException e) {
-							throw new DmtException(operation.getObjectname(),
-									DmtException.DATA_STORE_FAILURE,
-									"The StartLevel service is not available.");
-						}
-					} else if (nodepath[nodepath.length - 1].equals(BUNDLEUPDATE)) {
-						BundelControlValue bcv = (BundelControlValue)bundlesTable.get(nodepath[2]);
-						String bundleUpdate = operation.getData().getString();
-						try{
-							if(bcv.flag==true){
-								URL url = context.getBundle().getResource(bundleUpdate);
-								InputStream is = url.openStream();
-								bcv.bundle.update(is);
-								is.close();
-								bcv.setFlag(false);
-								bcv.setOperationResult("Success");
-							}
-						}catch(IOException ie){
-							bcv.setOperationResult("Fail");
-							throw new DmtException(operation.getObjectname(),
-									DmtException.DATA_STORE_FAILURE,
-									"Budnle Update failed.");
-						}catch(BundleException be){
-							bcv.setOperationResult("Fail");
-							throw new DmtException(operation.getObjectname(),
-									DmtException.DATA_STORE_FAILURE,
-									"Budnle Update failed.");
-						}
-						bcv.setBundleUpdate(bundleUpdate);
-						
-					} else if (nodepath[nodepath.length - 1].equals(OPTION)) {
-						BundelControlValue bcv = (BundelControlValue)bundlesTable.get(nodepath[2]);
-						bcv.setOption(operation.getData().getInt());
-						
-					} else if (nodepath[nodepath.length - 1].equals(DESIREDSTATE)) {
-						BundelControlValue bcv = (BundelControlValue)bundlesTable.get(nodepath[2]);
-						int desiredState = operation.getData().getInt();
-						if(bcv.flag==true){
-							try{
-								URL url = context.getBundle().getResource(bcv.bundleUpdateTmp);
-								InputStream is = url.openStream();
-								bcv.bundle.update(is);
-								is.close();
-								bcv.setFlag(false);
-								bcv.setOperationResult("Success");
-							}catch(IOException ie){
-								bcv.setOperationResult("Fail");
-								throw new DmtException(operation.getObjectname(),
-										DmtException.DATA_STORE_FAILURE,
-										"Budnle Update failed.");
-							}catch(BundleException be){
-								bcv.setOperationResult("Fail");
-								throw new DmtException(operation.getObjectname(),
-										DmtException.DATA_STORE_FAILURE,
-										"Budnle Update failed.");
-							}
-						}
-						try{
-							if(desiredState==Bundle.UNINSTALLED){
-								bcv.bundle.uninstall();
-								bcv.setOperationResult("Success");
-								bcv.setDesiredState(desiredState);
-							}else if(desiredState==Bundle.RESOLVED){
-								if(bcv.optionTmp==1){
-									bcv.bundle.stop(1);
-									bcv.setOperationResult("Success");
-									bcv.setDesiredState(desiredState);
-								}else{
-									bcv.bundle.stop(0);
-									bcv.setOperationResult("Success");
-									bcv.setDesiredState(desiredState);
-								}
-							}else if(desiredState==Bundle.ACTIVE){
-								bcv.bundle.start(bcv.optionTmp);
-								bcv.setOperationResult("Success");
-								bcv.setDesiredState(desiredState);							
-							}else{
-								throw new DmtException(operation.getObjectname(),
-										DmtException.FEATURE_NOT_SUPPORTED,
-										"The value is illegal value.");
-							}							
-						}catch(BundleException be){
-							bcv.setOperationResult("Fail");
-							throw new DmtException(operation.getObjectname(),
-									DmtException.DATA_STORE_FAILURE,
-									"The required operation failed.");
-						}
-					} 
+						BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(nodepath[nodepath.length - 2]);
+						int bundleStartLevel = operation.getData().getInt();
+						bs.setStartLevel(bundleStartLevel);
+						this.bundleStartLevelCue.add(bs);
+					} else if (nodepath[nodepath.length - 1].equals(FRAMEWORKSTARTLEVEL)) {
+						int flameworkStartLevel = operation.getData().getInt();
+						Bundle sysBundle = context.getBundle(0);
+						FrameworkStartLevel fs = (FrameworkStartLevel)sysBundle.adapt(FrameworkStartLevel.class);
+						fs.setStartLevel(flameworkStartLevel, null);
+					} else if (nodepath[nodepath.length - 1].equals(INITIALBUNDLESTARTLEVEL)) {
+						int initialBundleStartlevel = operation.getData().getInt();
+						Bundle sysBundle = context.getBundle(0);
+						FrameworkStartLevel fs = (FrameworkStartLevel)sysBundle.adapt(FrameworkStartLevel.class);
+						fs.setInitialBundleStartLevel(initialBundleStartlevel);
+					}
 				}
-			} catch (RuntimeException e) {
+			} catch (Exception e) {
+				bundlesTable = (Hashtable) this.bundlesTableSnap.clone();
+				rollback();
 				throw new DmtException(operation.getObjectname(),
 						DmtException.COMMAND_FAILED,
 						"The operation encountered problems.");
 			}
 		}
-
-		// Bundle Install
-		Node[] children = installbundle.getChildren();
-		for (int x = 0; x < children.length; x++) {
-			if(children[x].findNode(new String[] { ERROR }) != null){
-				
-			} else if (!children[x].findNode(new String[] { URL }).getData().getString().equals("")
-					& !children[x].findNode(new String[] { LOCATION }).getData().getString().equals("")) {
-				String url = children[x].findNode(new String[] { URL })
-						.getData().getString();
-				String loc = children[x].findNode(new String[] { LOCATION })
-						.getData().getString();
-
-				try {
-					context.installBundle(loc, new URL(url).openConnection()
-							.getInputStream());
-					installbundle.deleteNode(children[x]);
-				} catch (BundleException be) {
-					Node error = new Node(ERROR, null, new DmtData(be.toString()));
-					children[x].addNode(error);
-				} catch (IOException ie) {
-					Node error = new Node(ERROR, null, new DmtData(ie.toString()));
-					children[x].addNode(error);
-				}
-			} else if (children[x].findNode(new String[] { URL }).getData().getString().equals("")
-					& !children[x].findNode(new String[] { LOCATION }).getData().getString().equals("")) {
-				String loc = children[x].findNode(new String[] { LOCATION })
-						.getData().getString();
-
-				try {
-					context.installBundle(loc);
-					installbundle.deleteNode(children[x]);
-				} catch (BundleException be) {
-					Node error = new Node(ERROR, null, new DmtData(be.toString()));
-					children[x].addNode(error);
-				}
-			} else {
-				Node error = new Node(ERROR, null, new DmtData(
-						"There is no available bundle location."));
-				children[x].addNode(error);
+		
+		//Operation of uninstall and update
+		Iterator stopunit = this.uninstallBundles.iterator();
+		while(stopunit.hasNext()){
+			BundleSubTree bs = (BundleSubTree)stopunit.next();
+			try {
+				String location = bs.getLocation();
+				String state = bs.getState();
+				bs.getBundleObj().stop();
+				this.restoreBundles.put(location, state);
+				//this.restoreBundlesForUninstall.put(bs, state);
+			} catch (BundleException e) {
+				bs.setFaultMassage(e.getMessage());
+				bs.setFaultType(e.getType());
+				restore();
 			}
 		}
-
-		operations = new Vector();
+		Iterator stopupit = this.updateBundles.iterator();
+		while(stopupit.hasNext()){
+			BundleSubTree bs = (BundleSubTree)stopupit.next();
+			try {
+				String location = bs.getLocation();
+				String state = bs.getState();
+				bs.getBundleObj().stop();
+				this.restoreBundles.put(location, state);
+			} catch (BundleException e) {
+				bs.setFaultMassage(e.getMessage());
+				bs.setFaultType(e.getType());
+				restore();
+			}
+		}
+		Iterator uninstallit = this.uninstallBundles.iterator();
+		while(uninstallit.hasNext()){
+			BundleSubTree bs = (BundleSubTree)uninstallit.next();
+			try {
+				String location = bs.getLocation();
+				String state = (String)this.restoreBundles.get(location);
+				bs.getBundleObj().uninstall();
+				this.restoreBundlesForUninstall.put(bs, state);
+				this.restoreBundles.remove(location);
+			} catch (BundleException e) {
+				bs.setFaultMassage(e.getMessage());
+				bs.setFaultType(e.getType());
+				restore();
+			}
+		}
+		Iterator updateit = this.updateBundles.iterator();
+		while(updateit.hasNext()){
+			BundleSubTree bs = (BundleSubTree)updateit.next();
+			String urlStr = bs.getURL();
+			URL url;
+			try {
+				String location = bs.getLocation();
+				String state = (String)this.restoreBundles.get(location);
+				url = new URL(urlStr);
+				InputStream is;
+				is = url.openStream();
+				bs.getBundleObj().update(is);
+				this.restoreBundlesForUpdate.put(location, state);
+				this.restoreBundles.remove(location);
+			} catch (MalformedURLException e) {
+				bs.setFaultMassage(e.getMessage());
+				bs.setFaultType(0);
+				restore();
+			} catch (IOException e) {
+				bs.setFaultMassage(e.getMessage());
+				bs.setFaultType(0);
+				restore();
+			} catch (BundleException e) {
+				bs.setFaultMassage(e.getMessage());
+				bs.setFaultType(e.getType());
+				restore();
+			}
+		}
+		
+		//Operation of bundle installation
+		for(Enumeration keys = this.bundlesTableTmp.keys(); keys.hasMoreElements();) {
+			String key = (String)keys.nextElement();
+			BundleSubTree bs = (BundleSubTree)this.bundlesTableTmp.get(key);
+			String urlStr = bs.getURL();
+			try{
+				String location = bs.getLocation();
+				String state = UNINSTALLED;
+				URL url = new URL(urlStr);
+				InputStream is = url.openStream();
+				context.installBundle(key, is);
+				this.restoreBundles.put(location, state);
+			} catch (MalformedURLException e) {
+				bs.setFaultMassage(e.getMessage());
+				bs.setFaultType(0);
+				restore();
+			} catch (IOException e) {
+				bs.setFaultMassage(e.getMessage());
+				bs.setFaultType(0);
+				restore();
+			} catch (BundleException e) {
+				bs.setFaultMassage(e.getMessage());
+				bs.setFaultType(e.getType());
+				restore();
+			}
+		}
+		
+		//refreshing installed bundles and updated bundles
+		Vector bundles = new Vector();
+		Iterator refreshupi = this.updateBundles.iterator();
+		int refreshBundlesNumber = 0;
+		while(refreshupi.hasNext()){
+			BundleSubTree bs = (BundleSubTree)refreshupi.next();
+			bundles.add(bs.getBundleObj());
+			refreshBundlesNumber++;
+		}
+		for(Enumeration keys = this.bundlesTableTmp.keys(); keys.hasMoreElements();) {
+			String key = (String)keys.nextElement();
+			BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(key);
+			bundles.add(bs.getBundleObj());
+			refreshBundlesNumber++;
+		}
+		Bundle sysBundle = context.getBundle(0);
+		FrameworkWiring fw = (FrameworkWiring)sysBundle.adapt(FrameworkWiring.class);
+		fw.refreshBundles(bundles, null);
+		
+		//setting bundle's StartLevel
+		Iterator startLevelit = this.bundleStartLevelCue.iterator();
+		while(startLevelit.hasNext()){
+			BundleSubTree bs = (BundleSubTree)startLevelit.next();
+			int startLevel = bs.getStartLevelTmp();
+			BundleStartLevel sl = (BundleStartLevel)bs.getBundleObj().adapt(BundleStartLevel.class);
+			sl.setStartLevel(startLevel);
+		}
+		
+		//starting bundles
+		Iterator startit = this.startBundles.iterator();
+		while(startit.hasNext()){
+			BundleSubTree bs = (BundleSubTree)startit.next();
+			boolean auto = bs.getAutoStart();
+			try{
+				String location = bs.getLocation();
+				String state = bs.getState();
+				if(auto)
+					bs.getBundleObj().start();
+				else
+					bs.getBundleObj().start(Bundle.START_TRANSIENT);
+				if(this.restoreBundles.get(location)==null)
+					this.restoreBundles.put(location, state);
+			} catch (BundleException e) {
+				bs.setFaultMassage(e.getMessage());
+				bs.setFaultType(e.getType());
+				restore();
+			}
+		}
+		
+		//stopping bundles
+		Iterator stopit = this.stopBundles.iterator();
+		while(stopit.hasNext()){
+			BundleSubTree bs = (BundleSubTree)stopit.next();
+			try {
+				String location = bs.getLocation();
+				String state = bs.getState();
+				bs.getBundleObj().stop();
+				if(this.restoreBundles.get(location)==null)
+					this.restoreBundles.put(location, state);
+			} catch (BundleException e) {
+				bs.setFaultMassage(e.getMessage());
+				bs.setFaultType(e.getType());
+				restore();
+			}
+		}
+		
+		//resolving bundles
+		Iterator resolveit = this.resolveBundles.iterator();
+		Vector resolveBundles = new Vector();
+		while(resolveit.hasNext()){
+			BundleSubTree bs = (BundleSubTree)resolveit.next();
+			String location = bs.getLocation();
+			String state = bs.getState();
+			resolveBundles.add(bs.getBundleObj());
+			if(this.restoreBundles.get(location)==null)
+				this.restoreBundles.put(location, state);
+		}
+		fw.resolveBundles(resolveBundles);
+		
+		//stopping and refreshing bundles
+		Iterator stopandrefit = this.stopAndRefreshBundles.iterator();
+		Vector refreshBundles = new Vector();
+		while(stopandrefit.hasNext()){
+			BundleSubTree bs = (BundleSubTree)stopandrefit.next();
+			try {
+				String location = bs.getLocation();
+				String state = bs.getState();
+				bs.getBundleObj().stop();
+				if(this.restoreBundles.get(location)==null)
+					this.restoreBundles.put(location, state);
+			} catch (BundleException e) {
+				bs.setFaultMassage(e.getMessage());
+				bs.setFaultType(e.getType());
+				restore();
+			}
+			refreshBundles.add(bs.getBundleObj());
+		}
+		fw.refreshBundles(refreshBundles, null);
+		rollback();
+		
+		//framework --> on thread
+		if(frameworkBs!=null){
+			FrameworkUpdateThread fut = new FrameworkUpdateThread();
+			fut.start();
+		}
+	}
+	
+	class FrameworkUpdateThread extends Thread{
+		FrameworkUpdateThread(){
+		}
+		public void run(){
+			try {
+				wait(5000);
+			} catch (InterruptedException e1) {
+			}
+			Framework framework = (Framework)context.getBundle(0);
+			try {
+				framework.update();
+			} catch (BundleException e) {
+				BundleSubTree bs = (BundleSubTree)bundlesTable.get(SYSTEMBUNDLE);
+				bs.setFaultMassage(e.getMessage());
+				bs.setFaultType(e.getType());
+			}
+		}
+	}
+	
+	protected void restore(){
+		Vector refreshBundles = new Vector();
+		Bundle sysBundle = context.getBundle(0);
+		FrameworkWiring fw = (FrameworkWiring)sysBundle.adapt(FrameworkWiring.class);
+		for(Enumeration keys = this.restoreBundlesForUninstall.keys(); keys.hasMoreElements();) {
+			BundleSubTree bs = (BundleSubTree)keys.nextElement();
+			String urlStr = bs.getURL();
+			if(urlStr!=null){
+				try{
+					URL url = new URL(urlStr);
+					InputStream is = url.openStream();
+					Bundle installedBundle = context.installBundle(bs.getLocation(), is);
+					refreshBundles.add(installedBundle);
+					this.restoreBundles.put(bs.getLocation(), this.restoreBundlesForUninstall.get(bs));
+					bs = null;
+				} catch (Exception e){
+				}
+			} else if(urlStr==null){
+				bs = null;
+			}
+		}
+		for(Enumeration keys = this.restoreBundlesForUpdate.keys(); keys.hasMoreElements();) {
+			String location = (String)keys.nextElement();
+			BundleSubTree bs = (BundleSubTree)this.bundlesTableSnap.get(location);
+			String urlStr = bs.getURL();
+			if(urlStr!=null){
+				try{
+					URL url = new URL(urlStr);
+					InputStream is = url.openStream();
+					bs.getBundleObj().update(is);
+					refreshBundles.add(bs.getBundleObj());
+					this.restoreBundles.put(location, this.restoreBundlesForUpdate.get(location));
+					bs = null;
+				} catch (Exception e){
+				}
+			}
+		}
+		fw.refreshBundles(refreshBundles, null);
+		refreshBundles = new Vector();
+		
+		for(Enumeration keys = this.restoreBundles.keys(); keys.hasMoreElements();) {
+			try{
+				String location = (String)keys.nextElement();
+				BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(location);
+				String afterState = bs.getState();
+				String beforeState = (String)this.restoreBundles.get(location);
+				if(afterState.equals(beforeState))
+					continue;
+				if(beforeState.equals(UNINSTALLED)){
+					bs.getBundleObj().uninstall();
+				} else if(beforeState.equals(INSTALLED)){
+					bs.getBundleObj().stop();
+					refreshBundles.add(bs.getBundleObj());
+					fw.refreshBundles(refreshBundles, null);
+				} else if(beforeState.equals(RESOLVED)){
+					if(bs.getState().equals(INSTALLED)){
+						Vector resolveBundles = new Vector();
+						resolveBundles.add(bs.getBundleObj());
+						fw.resolveBundles(resolveBundles);
+					} else {
+						bs.getBundleObj().stop();
+					}
+				} else if(beforeState.equals(ACTIVE)){
+					boolean auto = bs.getAutoStart();
+					if(auto)
+						bs.getBundleObj().start();
+					else
+						bs.getBundleObj().start(Bundle.START_TRANSIENT);
+				}
+			} catch (Exception e){
+			}
+		}
 	}
 
 	public void rollback() throws DmtException {
 		operations = new Vector();
+		bundlesTableCopy = new Hashtable();
+		bundlesTableTmp = new Hashtable();
+		bundlesTableSnap = new Hashtable();
+		operations = new Vector();
+		uninstallBundles = new Vector();
+		updateBundles = new Vector();
+		startBundles = new Vector();
+		stopBundles = new Vector();
+		resolveBundles = new Vector();
+		stopAndRefreshBundles = new Vector();
+		bundleStartLevelCue = new Vector();
+		restoreBundlesForUninstall = new Hashtable();
+		restoreBundlesForUpdate = new Hashtable();
+		restoreBundles = new Hashtable();
+		frameworkBs = null;		
 	}
 
 	public void createInteriorNode(String[] nodePath, String type)
@@ -297,17 +484,16 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 					"Cannot set type property of interior nodes.");
 
 		String[] path = shapedPath(nodePath);
-
-		if (path.length == 3) {
-			Node[] ids = installbundle.getChildren();
-			for (int i = 0; i < ids.length; i++) {
-				if (path[1].equals(ids[i].getName()))
-					throw new DmtException(nodePath,
-							DmtException.NODE_ALREADY_EXISTS,
-							"A given node already exists in the framework subtree.");
-			}
-
+		if (path.length == 3 && path[1].equals(BUNDLE)) {
+			if(bundlesTable.get(path[2])!=null)
+				throw new DmtException(nodePath,
+						DmtException.NODE_ALREADY_EXISTS,
+						"A given node already exists in the framework MO.");
 			operations.add(new Operation(Operation.ADD_OBJECT, path));
+			this.bundlesTableCopy = (Hashtable) bundlesTable.clone();
+			BundleSubTree bs = new BundleSubTree(path[2]);
+			this.bundlesTableCopy.put(path[2], bs);
+			this.bundlesTableTmp.put(path[2], bs);
 			return;
 		}
 
@@ -326,115 +512,72 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			throws DmtException {
 		String[] path = shapedPath(nodePath);
 
-		if (path.length <= 2)
+		if (path.length < 2)
 			throw new DmtException(nodePath,
 					DmtException.FEATURE_NOT_SUPPORTED,
 					"The given path indicates an interior node.");
 
-		if (path.length == 3) {
-			if (path[2].equals(REQUESTEDSTARTLEVEL)
-					|| path[2].equals(INITIALBUNDLESTARTLEVEL)) {
+		if (path.length == 2) {
+			if (path[1].equals(FRAMEWORKSTARTLEVEL)) {
 				operations.add(new Operation(Operation.SET_VALUE, path, data));
 				return;
 			}
-
-			if (path[2].equals(RESTART) || path[2].equals(SHUTDOWN)
-					|| path[2].equals(UPDATE)) {
+			if (path[1].equals(INITIALBUNDLESTARTLEVEL)) {
 				operations.add(new Operation(Operation.SET_VALUE, path, data));
 				return;
 			}
-
+		}
+		
+		if (path.length == 4) {
+			if (path[2].equals(URL)
+					|| path[2].equals(AUTOSTART)
+					|| path[2].equals(REQUESTEDSTATE)
+					|| path[2].equals(BUNDLESTARTLEVEL)) {
+				operations.add(new Operation(Operation.SET_VALUE, path, data));
+				return;
+			}
 			throw new DmtException(nodePath, DmtException.METADATA_MISMATCH,
 					"The specified node can not be set the value.");
 		}
-
-		if (path.length == 4 && path[1].equals(INSTALLBUNDLE)) {
-			if (path[3].equals(ERROR))
-				throw new DmtException(nodePath,
-						DmtException.METADATA_MISMATCH,
-						"The specified node can not be set the value.");
-
-			if (path[3].equals(LOCATION) || path[3].equals(URL)) {
-				operations.add(new Operation(Operation.SET_VALUE, path, data));
-				return;
-			}
-		}
-		if (path.length == 4 && path[1].equals(BUNDLECONTROL)) {
-			operations.add(new Operation(Operation.SET_VALUE, path, data));
-		}
-		
-		if (path.length == 5) {
-			if (path[4].equals(DESIREDSTATE)){
-				operations.add(new Operation(Operation.SET_VALUE, path, data));
-			}
-			if (path[4].equals(BUNDLEUPDATE)){
-				BundelControlValue bcv = (BundelControlValue)bundlesTable.get(path[2]);
-				bcv.setFlag(true);
-				bcv.setBundleUpdateTmp(data.getString());
-				operations.add(new Operation(Operation.SET_VALUE, path, data));
-			}
-			if (path[4].equals(OPTION)){
-				BundelControlValue bcv = (BundelControlValue)bundlesTable.get(path[2]);
-				bcv.setOptionTmp(data.getInt());
-				operations.add(new Operation(Operation.SET_VALUE, path, data));
-			}
-			if (path[4].equals(OPERATIONRESULT))
-				throw new DmtException(nodePath,
-						DmtException.METADATA_MISMATCH,
-						"The specified node can not be set the value.");
-		}
-
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 				"The specified node does not exist in the framework object.");
-
 	}
 
 	public void deleteNode(String[] nodePath) throws DmtException {
-		String[] path = shapedPath(nodePath);
-
-		if (path.length == 3) {
-			if (path[1].equals(INSTALLBUNDLE)) {
-				operations.add(new Operation(Operation.DELETE_OBJECT, path));
-				return;
-			}
-		}
-
-		if (path.length > 3)
-			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-					"The specified node does not exist in the framework object.");
-
+		//NOT supported operation in Framework MO.
 		throw new DmtException(nodePath, DmtException.METADATA_MISMATCH,
 				"The specified node can not be deleted.");
-
 	}
 
 	public void setNodeType(String[] nodePath, String type) throws DmtException {
+		//NOT supported operation in Framework MO.
+		// do nothing, meta-data guarantees that type is "text/plain"
 		if (type == null)
 			return;
-
 		if (!isLeafNode(nodePath))
 			throw new DmtException(nodePath, DmtException.COMMAND_FAILED,
 					"Cannot set type property of interior nodes.");
-
-		// do nothing, meta-data guarantees that type is "text/plain"
 	}
 
 	public void setNodeTitle(String[] nodePath, String title)
 			throws DmtException {
+		//NOT supported operation in Framework MO.
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Title property is not supported.");
 	}
 
 	public void renameNode(String[] nodePath, String newName)
 			throws DmtException {
+		//NOT supported operation in Framework MO.
 		throw new DmtException(nodePath, DmtException.COMMAND_FAILED,
-				"Cannot rename any node in the framework subtree.");
+				"Cannot rename any node in the framework MO.");
 	}
 
 	public void copy(String[] nodePath, String[] newNodePath, boolean recursive)
 			throws DmtException {
+		//NOT supported operation in Framework MO.
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
-				"Cannot copy framework's nodes.");
+				"Cannot copy nodes of Framework MO.");
 	}
 
 	// ----- Overridden methods to provide updated information -----//
@@ -443,329 +586,466 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		String[] path = shapedPath(nodePath);
 
 		if (path.length == 1) {
-			String[] children = new String[5];
-			children[0] = STARTLEVEL;
-			children[1] = INSTALLBUNDLE;
-			children[2] = FRAMEWORKLIFECYCLE;
-			children[3] = BUNDLECONTROL;
-			children[4] = EXT;
-
+			String[] children = new String[4];
+			children[0] = FRAMEWORKSTARTLEVEL;
+			children[1] = INITIALBUNDLESTARTLEVEL;
+			children[2] = BUNDLE;
+			children[3] = PROPERTY;
 			return children;
 		}
 
 		if (path.length == 2) {
-			if (path[1].equals(STARTLEVEL)) {
-				String[] children = new String[3];
-				children[0] = REQUESTEDSTARTLEVEL;
-				children[1] = ACTIVESTARTLEVEL;
-				children[2] = INITIALBUNDLESTARTLEVEL;
-
-				return children;
-			}
-
-			if (path[1].equals(INSTALLBUNDLE)) {
-				Node tmptree = installbundle.copy();
-
-				Iterator i = operations.iterator();
-				while (i.hasNext()) {
-					Operation operation = (Operation) i.next();
-
-					try {
-						if (operation.getOperation() == Operation.ADD_OBJECT) {
-							String[] nodepath = operation.getObjectname();
-							Node newbundle = new Node(
-									nodepath[nodepath.length - 1],
-									new Node[] {
-											new Node(LOCATION, null,
-													new DmtData("")),
-											new Node(URL, null, new DmtData("")) });
-							tmptree.addNode(newbundle);
-						} else if (operation.getOperation() == Operation.DELETE_OBJECT) {
-							Node[] children = tmptree.getChildren();
-							String[] nodepath = operation.getObjectname();
-							for (int x = 0; x < children.length; x++) {
-								if (nodepath[1].equals(children[x].getName())) {
-									tmptree.deleteNode(children[x]);
-									break;
-								}
-							}
-						}
-					} catch (Exception e) {
-
-					}
-				}
-
-				Node[] ids = tmptree.getChildren();
-				String[] children = new String[ids.length];
-
-				for (int x = 0; x < ids.length; x++) {
-					children[x] = ids[x].getName();
-				}
-				return children;
-			}
-
-			if (path[1].equals(FRAMEWORKLIFECYCLE)) {
-				String[] children = new String[3];
-				children[0] = RESTART;
-				children[1] = SHUTDOWN;
-				children[2] = UPDATE;
-				return children;
-			}
-			
-			if (path[1].equals(BUNDLECONTROL)) {
-				if (bundlesTable.size() == 0) {
-					String[] children = new String[1];
-					children[0] = "";
-					return children;
-				}
-				String[] children = new String[bundlesTable.size()];
+			if (path[1].equals(PROPERTY)) {
+				if (properties.size() == 0)
+					return new String[0];
+				String[] children = new String[properties.size()];
 				int i = 0;
-				for (Enumeration keys = bundlesTable.keys(); keys
-						.hasMoreElements(); i++) {
+				for (Enumeration keys = properties.keys(); keys.hasMoreElements(); i++) {
+					children[i] = (String) keys.nextElement();
+				}
+				return children;
+			}
+
+			if (path[1].equals(BUNDLE)) {
+				if (bundlesTableCopy.size() == 0)
+					return new String[0];
+				String[] children = new String[bundlesTableCopy.size()];
+				int i = 0;
+				for (Enumeration keys = bundlesTableCopy.keys(); keys.hasMoreElements(); i++) {
 					children[i] = (String) keys.nextElement();
 				}
 				return children;
 			}
 		}
+		
+		if (path.length == 3 && path[1].equals(BUNDLE)) {
+			if(this.bundlesTableCopy.get(path[2])!=null){
+				BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+				Node node = bs.getLocatonNode();
+				return node.getChildNodeNames();
+			}
+		}
 
-		if (path.length == 3 && path[1].equals(INSTALLBUNDLE)) {
-			String[] children = new String[2];
-			children[0] = LOCATION;
-			children[1] = URL;
-
-			return children;
+		if(path.length == 4){
+			if (path[3].equals(ENTRIES)) {
+				if(this.bundlesTableCopy.get(path[2])!=null){
+					BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+					Vector entries = bs.getEntries();
+					String[] children = new String[entries.size()];
+					for(int i=0;entries.size()<i;i++){
+						children[i] = Integer.toString(i);
+					}
+					return children;
+				}
+			}	
+			if (path[3].equals(SIGNERS)) {
+				if(this.bundlesTableCopy.get(path[2])!=null){
+					BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+					Vector entries = bs.getSigners();
+					String[] children = new String[entries.size()];
+					for(int i=0;entries.size()<i;i++){
+						children[i] = Integer.toString(i);
+					}
+					return children;
+				}
+			}			
+			if (path[3].equals(WIRES)) {
+				if(this.bundlesTableCopy.get(path[2])!=null){
+					BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+					Map wires = bs.getWires();
+					String[] children = new String[wires.size()];
+					Iterator it = wires.keySet().iterator();
+					for(int i=0;it.hasNext();i++){
+						children[i] = (String)it.next();
+					}
+					return children;
+				}
+			}
+		}
+			
+		if(path.length == 5){
+			if (path[3].equals(ENTRIES)) {
+				if(this.bundlesTableCopy.get(path[2])!=null){
+					BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+					Vector entries = bs.getEntries();
+					try{
+						entries.get(Integer.parseInt(path[4]));
+						String[] children = new String[3];
+						children[0] = PATH;
+						children[1] = CONTENT;
+						children[2] = ENTRIESINSTANCEID;
+						return children;
+					}catch(ArrayIndexOutOfBoundsException ae){
+						String[] children = new String[0];
+						return children;
+					}
+				}
+			}			
+			if (path[3].equals(SIGNERS)) {
+				if(this.bundlesTableCopy.get(path[2])!=null){
+					BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+					Vector signers = bs.getSigners();
+					try{
+						signers.get(Integer.parseInt(path[4]));
+						String[] children = new String[3];
+						children[0] = CERTIFICATECHAIN;
+						children[1] = ISTRUSTED;
+						children[2] = SIGNERSINSTANCEID;
+						return children;
+					}catch(ArrayIndexOutOfBoundsException ae){
+						String[] children = new String[0];
+						return children;
+					}
+				}
+			}			
+			if (path[3].equals(WIRES)) {
+				if(this.bundlesTableCopy.get(path[2])!=null){
+					BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+					Map wires = bs.getWires();
+					Vector list = (Vector)wires.get(path[4]);
+					String[] children = new String[list.size()];
+					for(int i=0;i<list.size();i++){
+						children[i] = Integer.toString(i);
+					}
+					return children;
+				}
+			}
 		}
 		
-		if (path.length == 3 && path[1].equals(BUNDLECONTROL)) {
-			String[] children = new String[2];
-			children[0] = BUNDLESTARTLEVEL;
-			children[1] = BUNDLELIFECYCLE;
-			return children;
+		if(path.length == 6){
+			if (path[3].equals(SIGNERS)) {
+				if(this.bundlesTableCopy.get(path[2])!=null){
+					BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+					Vector signers = bs.getSigners();
+					try{
+						SignersSubtree ss = (SignersSubtree)signers.get(Integer.parseInt(path[4]));
+						Vector chainList = ss.getCertifitateChainList();
+						String[] children = new String[chainList.size()];
+						for(int i=0;chainList.size()<i;i++){
+							children[i] = Integer.toString(i);
+						}
+						return children;
+					}catch(ArrayIndexOutOfBoundsException ae){
+						String[] children = new String[0];
+						return children;
+					}
+				}
+			}			
+			if (path[3].equals(WIRES)) {
+				if(this.bundlesTableCopy.get(path[2])!=null){
+					BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+					if(bs.getWires()!=null){
+						Vector vec =(Vector)((Map)bs.getWires()).get(path[4]);
+						if(vec!=null){
+							try{
+								vec.get(Integer.parseInt(path[5]));
+								String[] children = new String[6];
+								children[0] = NAMESPACE;
+								children[1] = PROVIDER;
+								children[2] = REQUIRER;
+								children[3] = WIRESINSTANCEID;
+								children[4] = REQUIREMENT;
+								children[5] = CAPABILITY;
+								return children;
+							}catch(ArrayIndexOutOfBoundsException ae){
+								String[] children = new String[0];
+								return children;
+							}
+						}
+					}
+				}
+			}
 		}
 		
-		if (path.length == 4) {
-			String[] children = new String[4];
-			children[0] = DESIREDSTATE;
-			children[1] = BUNDLEUPDATE;
-			children[2] = OPTION;
-			children[3] = OPERATIONRESULT;
-			return children;
+		if(path.length == 7 && path[3].equals(WIRES)) {
+			if(this.bundlesTableCopy.get(path[2])!=null){
+				BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+				if(bs.getWires()!=null){
+					Vector vec =(Vector)((Map)bs.getWires()).get(path[4]);
+					if(vec!=null){
+						try{
+							vec.get(Integer.parseInt(path[5]));
+							if(path[6].equals(REQUIREMENT)){
+								String[] children = new String[3];
+								children[0] = FILTER;
+								children[1] = REQUIREMENTDIRECTIVE;
+								children[2] = REQUIREMENTATTRIBUTE;
+								return children;
+							}
+							if(path[6].equals(CAPABILITY)){
+								String[] children = new String[2];
+								children[0] = CAPABILITYDIRECTIVE;
+								children[1] = CAPABILITYATTRIBUTE;
+								return children;
+							}
+						}catch(ArrayIndexOutOfBoundsException ae){
+							String[] children = new String[0];
+							return children;
+						}
+					}
+				}
+			}
+		}
+
+		if(path.length == 8 && path[3].equals(WIRES)) {
+			if(this.bundlesTableCopy.get(path[2])!=null){
+				BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+				if(bs.getWires()!=null){
+					Vector vec =(Vector)((Map)bs.getWires()).get(path[4]);
+					if(vec!=null){
+						try{
+							WiresSubtree ws = (WiresSubtree)vec.get(Integer.parseInt(path[5]));
+							if(path[6].equals(REQUIREMENT)&&path[7].equals(REQUIREMENTDIRECTIVE)){
+								Map requirementDerective = ws.getRequirementDirective();
+								String[] children = new String[requirementDerective.size()];
+								Iterator it = requirementDerective.keySet().iterator();
+								for(int i=0;it.hasNext();i++){
+									children[i] = (String)it.next();
+								}
+								return children;
+							}
+							if(path[6].equals(REQUIREMENT)&&path[7].equals(REQUIREMENTATTRIBUTE)){
+								Map requirementAttribute = ws.getRequirementAttribute();
+								String[] children = new String[requirementAttribute.size()];
+								Iterator it = requirementAttribute.keySet().iterator();
+								for(int i=0;it.hasNext();i++){
+									children[i] = (String)it.next();
+								}
+								return children;
+							}
+							if(path[6].equals(CAPABILITY)&&path[7].equals(CAPABILITYDIRECTIVE)){
+								Map capabilityDerective = ws.getCapabilityDirective();
+								String[] children = new String[capabilityDerective.size()];
+								Iterator it = capabilityDerective.keySet().iterator();
+								for(int i=0;it.hasNext();i++){
+									children[i] = (String)it.next();
+								}
+								return children;
+							}
+							if(path[6].equals(CAPABILITY)&&path[7].equals(CAPABILITYATTRIBUTE)){
+								Map capabilityAttribute = ws.getCapabilityAttribute();
+								String[] children = new String[capabilityAttribute.size()];
+								Iterator it = capabilityAttribute.keySet().iterator();
+								for(int i=0;it.hasNext();i++){
+									children[i] = (String)it.next();
+								}
+								return children;
+							}
+						}catch(ArrayIndexOutOfBoundsException ae){
+							String[] children = new String[0];
+							return children;
+						}
+					}
+				}
+			}
 		}
 
 		// other case
-		String[] children = new String[1];
-		children[0] = "";
-
+		String[] children = new String[0];
 		return children;
-
 	}
 
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 
-		if (path.length <= 2)
+		if (path.length == 1)
 			throw new DmtException(nodePath,
 					DmtException.FEATURE_NOT_SUPPORTED,
 					"The given path indicates an interior node.");
+		
+		if (path.length == 2){
+			Bundle sysBundle = context.getBundle(0);
+			FrameworkStartLevel fs = (FrameworkStartLevel)sysBundle.adapt(FrameworkStartLevel.class);
+			if (path[1].equals(FRAMEWORKSTARTLEVEL)){
+				int st = fs.getStartLevel();
+				return new DmtData(st);
+			}
+			if (path[1].equals(INITIALBUNDLESTARTLEVEL)){
+				int ist = fs.getInitialBundleStartLevel();
+				return new DmtData(ist);
+			}
+		}
 
 		if (path.length == 3) {
-			if (path[2].equals(REQUESTEDSTARTLEVEL)) {
-				Iterator i = operations.iterator();
-				while (i.hasNext()) {
-					Operation operation = (Operation) i.next();
-
-					if (operation.getOperation() == Operation.SET_VALUE) {
-						String[] nodepath = operation.getObjectname();
-
-						if (nodepath[nodepath.length - 1]
-								.equals(REQUESTEDSTARTLEVEL)) {
-							return operation.getData();
-						}
-					}
-				}
-				return new DmtData(RequestedStartLevel);
+			if (path[1].equals(PROPERTY)){
+				String value = (String)properties.get(path[2]);
+				return new DmtData(value);
 			}
-
-			if (path[2].equals(ACTIVESTARTLEVEL)) {
-				try {
-					ServiceReference ref = context
-							.getServiceReference(org.osgi.service.startlevel.StartLevel.class
-									.getName());
-					StartLevel sl = (StartLevel) context.getService(ref);
-
-					int activesl = sl.getStartLevel();
-					context.ungetService(ref);
-
-					return new DmtData(activesl);
-				} catch (NullPointerException e) {
-					throw new DmtException(nodePath,
-							DmtException.DATA_STORE_FAILURE,
-							"The StartLevel service is not available.");
-				}
-			}
-
-			if (path[2].equals(INITIALBUNDLESTARTLEVEL)) {
-				try {
-					ServiceReference ref = context
-							.getServiceReference(org.osgi.service.startlevel.StartLevel.class
-									.getName());
-					StartLevel sl = (StartLevel) context.getService(ref);
-
-					int initialsl = sl.getInitialBundleStartLevel();
-					context.ungetService(ref);
-
-					return new DmtData(initialsl);
-				} catch (NullPointerException e) {
-					throw new DmtException(nodePath,
-							DmtException.DATA_STORE_FAILURE,
-							"The StartLevel service is not available.");
-				}
-			}
-
-			if (path[2].equals(RESTART))
-				return new DmtData(false);
-			if (path[2].equals(SHUTDOWN))
-				return new DmtData(false);
-			if (path[2].equals(UPDATE))
-				return new DmtData(false);
 		}
-
-		if (path.length == 4 && path[1].equals(INSTALLBUNDLE)) {
-			Node tmptree = installbundle.copy();
-
-			Iterator i = operations.iterator();
-			while (i.hasNext()) {
-				Operation operation = (Operation) i.next();
-
-				try {
-					if (operation.getOperation() == Operation.ADD_OBJECT) {
-						String[] nodepath = operation.getObjectname();
-						Node newbundle = new Node(
-								nodepath[nodepath.length - 1], new Node[] {
-										new Node(LOCATION, null,
-												new DmtData("")),
-										new Node(URL, null, new DmtData("")) });
-						tmptree.addNode(newbundle);
-					} else if (operation.getOperation() == Operation.DELETE_OBJECT) {
-						Node[] children = tmptree.getChildren();
-						String[] nodepath = operation.getObjectname();
-						for (int x = 0; x < children.length; x++) {
-							if (nodepath[1].equals(children[x].getName())) {
-								tmptree.deleteNode(children[x]);
-								break;
-							}
-						}
-					} else if (operation.getOperation() == Operation.SET_VALUE) {
-						String[] nodepath = operation.getObjectname();
-
-						if (nodepath[nodepath.length - 1].equals(LOCATION)
-								|| nodepath[nodepath.length - 1].equals(URL)) {
-							try {
-								tmptree
-										.findNode(
-												new String[] {
-														nodepath[nodepath.length - 2],
-														nodepath[nodepath.length - 1] })
-										.setData(operation.getData());
-							} catch (NullPointerException e) {
-								e.printStackTrace();
-								throw new DmtException(operation
-										.getObjectname(),
-										DmtException.DATA_STORE_FAILURE,
-										"The given node is not available now.");
-							}
-						}
-					}
-				} catch (Exception e) {
-
-				}
+		
+		if (path.length == 4) {
+			BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+			if(bs!=null&&bs.getLocatonNode().findNode(new String[]{path[3]})!=null){
+				if (path[3].equals(URL))
+					return new DmtData(bs.getURL());
+				if (path[3].equals(AUTOSTART))
+					return new DmtData(bs.getAutoStart());
+				if (path[3].equals(FAULTTYPE))
+					return new DmtData(bs.getFaultType());
+				if (path[3].equals(FAULTMESSAGE))
+					return new DmtData(bs.getFaultMassage());
+				if (path[3].equals(BUNDLEID))
+					return new DmtData(bs.getBundleId());
+				if (path[3].equals(SYMBOLICNAME))
+					return new DmtData(bs.getSymbolicNmae());
+				if (path[3].equals(VERSION))
+					return new DmtData(bs.getVersion());
+				if (path[3].equals(LOCATION))
+					return new DmtData(bs.getLocation());
+				if (path[3].equals(STATE))
+					return new DmtData(bs.getState());
+				if (path[3].equals(REQUESTEDSTATE))
+					return new DmtData(bs.getRequestedState());
+				if (path[3].equals(LASTMODIFIED))
+					return new DmtData(bs.getLastModified());
+				if (path[3].equals(BUNDLESTARTLEVEL))
+					return new DmtData(bs.getStartLevel());
+				if (path[3].equals(BUNDLEINSTANCEID))
+					return new DmtData(bs.getInstanceId());
 			}
-
-			Node[] ids = tmptree.getChildren();
-			for (int z = 0; z < ids.length; z++) {
-				if (path[2].equals(ids[z].getName())) {
-					Node[] leaf = ids[z].getChildren();
-					for (int x = 0; x < leaf.length; x++) {
-						if (path[3].equals(leaf[x].getName()))
-							return leaf[x].getData();
-					}
-					break;
+		}
+		
+		if (path.length == 5){
+			BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+			if(bs!=null&&bs.getLocatonNode().findNode(new String[]{path[3]})!=null){
+				if (path[3].equals(BUNDLETYPE)&&path[4].equals("0")){
+					return new DmtData(bs.getBundleType());
 				}
-			}
-			
-			if (path.length == 4 && path[1].equals(BUNDLECONTROL)) {
-				Bundle targetBundle = (Bundle) bundlesTable.get(path[2]);
-				ServiceReference ref = context
-				.getServiceReference(org.osgi.service.startlevel.StartLevel.class.getName());
-				StartLevel sl = (StartLevel) context.getService(ref);
-				int bundleStartLevel = sl.getBundleStartLevel(targetBundle);
-				context.ungetService(ref);
-				return new DmtData(bundleStartLevel);
-			}
-			
-			if (path.length == 5) {
-				BundelControlValue bcv = (BundelControlValue)bundlesTable.get(path[2]);
-				if (path[4].equals(DESIREDSTATE)) {
-					Iterator iDesire = operations.iterator();
-					while (iDesire.hasNext()) {
-						Operation operation = (Operation) iDesire.next();
-						if (operation.getOperation() == Operation.SET_VALUE) {
-							String[] nodepath = operation.getObjectname();
-							if (nodepath[nodepath.length - 1]
-									.equals(DESIREDSTATE)) {
-								return operation.getData();
-							}
-						}
-					}
-					return new DmtData(bcv.desiredState);
-				}
-				if (path[4].equals(BUNDLEUPDATE)) {
-					Iterator iBundleUpdate = operations.iterator();
-					while (iBundleUpdate.hasNext()) {
-						Operation operation = (Operation) iBundleUpdate.next();
-						if (operation.getOperation() == Operation.SET_VALUE) {
-							String[] nodepath = operation.getObjectname();
-							if (nodepath[nodepath.length - 1]
-									.equals(BUNDLEUPDATE)) {
-								return operation.getData();
-							}
-						}
-					}
-					
-					return new DmtData(bcv.bundleUpdate);
-				}
-				if (path[4].equals(OPTION)) {
-					Iterator iOption = operations.iterator();
-					while (iOption.hasNext()) {
-						Operation operation = (Operation) iOption.next();
-						if (operation.getOperation() == Operation.SET_VALUE) {
-							String[] nodepath = operation.getObjectname();
-							if (nodepath[nodepath.length - 1]
-									.equals(OPTION)) {
-								return operation.getData();
-							}
-						}
-					}
-					return new DmtData(bcv.option);
-				}
-				if (path[4].equals(OPERATIONRESULT)) {
-					Iterator iOperationResult = operations.iterator();
-					while (iOperationResult.hasNext()) {
-						Operation operation = (Operation) iOperationResult.next();
-						if (operation.getOperation() == Operation.SET_VALUE) {
-							String[] nodepath = operation.getObjectname();
-							if (nodepath[nodepath.length - 1]
-									.equals(OPERATIONRESULT)) {
-								return operation.getData();
-							}
-						}
-					}
-					return new DmtData(bcv.operationResult);
+				if (path[3].equals(HEADERS)){
+					Dictionary dic = bs.getHeaders();
+					String value = (String)dic.get(path[4]);
+					if(value!=null)
+						return new DmtData(value);
 				}
 			}
 		}
+		
+		if (path.length == 6){
+			BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+			if(bs!=null&&bs.getLocatonNode().findNode(new String[]{path[3]})!=null){
+				if (path[3].equals(ENTRIES)){
+					Vector vec = (Vector)bs.getEntries();
+					EntrySubtree es = (EntrySubtree)vec.get(Integer.parseInt(path[4]));
+					if(path[5].equals(PATH))
+						return new DmtData(es.getPath());
+					if(path[5].equals(CONTENT))
+						return new DmtData(es.getContent());
+					if(path[5].equals(ENTRIESINSTANCEID))
+						return new DmtData(es.getInstanceId());
+				}
+				if (path[3].equals(SIGNERS)){
+					Vector vec = (Vector)bs.getSigners();
+					SignersSubtree ss = (SignersSubtree)vec.get(Integer.parseInt(path[4]));
+					if(path[5].equals(ISTRUSTED))
+						return new DmtData(ss.isTrusted());
+					if(path[5].equals(SIGNERSINSTANCEID))
+						return new DmtData(ss.getInstanceId());
+				}
+			}
+		}
+		
+		if (path.length == 7){
+			BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+			if(bs!=null&&bs.getLocatonNode().findNode(new String[]{path[3]})!=null){
+				if (path[3].equals(SIGNERS)){
+					Vector vec = (Vector)bs.getSigners();
+					SignersSubtree ss = (SignersSubtree)vec.get(Integer.parseInt(path[4]));
+					if(path[5].equals(CERTIFICATECHAIN)){
+						Vector cvec = (Vector)ss.getCertifitateChainList();
+						String name = (String)cvec.get(Integer.parseInt(path[6]));
+						return new DmtData(name);
+					}
+				}
+				if (path[3].equals(WIRES)){
+					Map wires = bs.getWires();
+					Vector vec= (Vector)wires.get(path[4]);
+					WiresSubtree ws;
+					if(vec!=null){
+						try{
+							ws = (WiresSubtree)vec.get(Integer.parseInt(path[5]));
+						}catch(ArrayIndexOutOfBoundsException ae){
+							throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+							"The specified leaf node does not exist in the framework object.");
+						}
+						if(path[6].equals(NAMESPACE))
+							return new DmtData(ws.getNameSpace());
+						if(path[6].equals(PROVIDER))
+							return new DmtData(ws.getProvider());
+						if(path[6].equals(REQUIRER))
+							return new DmtData(ws.getRequirer());
+						if(path[6].equals(WIRESINSTANCEID))
+							return new DmtData(ws.getInstanceId());
+					}
+				}
+			}
+		}
+		
+		if (path.length == 8){
+			BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+			if(bs!=null&&bs.getLocatonNode().findNode(new String[]{path[3]})!=null){
+				if (path[3].equals(WIRES)){
+					Map wires = bs.getWires();
+					Vector vec= (Vector)wires.get(path[4]);
+					WiresSubtree ws;
+					if(vec!=null){
+						try{
+							ws = (WiresSubtree)vec.get(Integer.parseInt(path[5]));
+						}catch(ArrayIndexOutOfBoundsException ae){
+							throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+							"The specified leaf node does not exist in the framework object.");
+						}
+						if(path[6].equals(REQUIREMENT)&&path[7].equals(FILTER))
+							return new DmtData(ws.getFilter());
+					}
+				}
+			}
+		}
+		
+		if (path.length == 9){
+			BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+			if(bs!=null&&bs.getLocatonNode().findNode(new String[]{path[3]})!=null){
+				if (path[3].equals(WIRES)){
+					Map wires = bs.getWires();
+					Vector vec= (Vector)wires.get(path[4]);
+					WiresSubtree ws;
+					if(vec!=null){
+						try{
+							ws = (WiresSubtree)vec.get(Integer.parseInt(path[5]));
+						}catch(ArrayIndexOutOfBoundsException ae){
+							throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+							"The specified leaf node does not exist in the framework object.");
+						}
+						if(path[7].equals(REQUIREMENT)){
+							if(path[8].equals(REQUIREMENTDIRECTIVE)){
+								Map rd = ws.getRequirementDirective();
+								if(!rd.isEmpty())
+									return new DmtData(rd.get(path[8])); 
+							}
+							if(path[8].equals(REQUIREMENTATTRIBUTE)){
+								Map ra = ws.getRequirementAttribute();
+								if(!ra.isEmpty())
+									return new DmtData(ra.get(path[8])); 
+							}
+						}
+						if(path[7].equals(CAPABILITY)){
+							if(path[8].equals(CAPABILITYDIRECTIVE)){
+								Map cd = ws.getCapabilityDirective();
+								if(!cd.isEmpty())
+									return new DmtData(cd.get(path[8])); 
+							}
+							if(path[8].equals(CAPABILITYATTRIBUTE)){
+								Map ca = ws.getCapabilityAttribute();
+								if(!ca.isEmpty())
+									return new DmtData(ca.get(path[8])); 
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-				"The specified key does not exist in the framework object.");
+				"The specified leaf node does not exist in the framework object.");
 	}
 
 	public boolean isNodeUri(String[] nodePath) {
@@ -775,70 +1055,199 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			return true;
 
 		if (path.length == 2) {
-			if (path[1].equals(STARTLEVEL) || path[1].equals(INSTALLBUNDLE)
-					|| path[1].equals(FRAMEWORKLIFECYCLE)
-					|| path[1].equals(BUNDLECONTROL) || path[1].equals(EXT))
+			if (path[1].equals(FRAMEWORKSTARTLEVEL) 
+					|| path[1].equals(INITIALBUNDLESTARTLEVEL)
+					|| path[1].equals(PROPERTY)
+					|| path[1].equals(BUNDLE))
 				return true;
 		}
 
 		if (path.length == 3) {
-			if (path[2].equals(REQUESTEDSTARTLEVEL)
-					|| path[2].equals(ACTIVESTARTLEVEL)
-					|| path[2].equals(INITIALBUNDLESTARTLEVEL)
-					|| path[2].equals(RESTART) || path[2].equals(SHUTDOWN)
-					|| path[2].equals(UPDATE))
-				return true;
-			if (bundlesTable.get(path[1]) != null)
-				return true;
-
-			Node tmptree = installbundle.copy();
-
-			Iterator i = operations.iterator();
-			while (i.hasNext()) {
-				Operation operation = (Operation) i.next();
-
-				try {
-					if (operation.getOperation() == Operation.ADD_OBJECT) {
-						String[] nodepath = operation.getObjectname();
-						Node newbundle = new Node(
-								nodepath[nodepath.length - 1], new Node[] {
-										new Node(LOCATION, null,
-												new DmtData("")),
-										new Node(URL, null, new DmtData("")) });
-						tmptree.addNode(newbundle);
-					} else if (operation.getOperation() == Operation.DELETE_OBJECT) {
-						Node[] children = tmptree.getChildren();
-						String[] nodepath = operation.getObjectname();
-						for (int x = 0; x < children.length; x++) {
-							if (nodepath[1].equals(children[x].getName())) {
-								tmptree.deleteNode(children[x]);
-								break;
-							}
-						}
+			if(path[1].equals(PROPERTY)){
+				if (properties.get(path[2]) != null)
+					return true;
+			}
+			if(path[1].equals(BUNDLE)){
+				if (bundlesTableCopy.get(path[2]) != null)
+					return true;
+			}
+		}
+		
+		if (path.length == 4 && path[1].equals(BUNDLE)){
+			if(this.bundlesTableCopy.get(path[2])!=null){
+				BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+				Node node = bs.getLocatonNode();
+				if(node.findNode(new String[] {path[3]})!=null)
+					return true;
+			}
+		}
+		
+		if (path.length == 5 && path[1].equals(BUNDLE)){
+			if(this.bundlesTableCopy.get(path[2])!=null){
+				BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+				if(path[3].equals(BUNDLETYPE)){
+					if(bs.getBundleType()!=null)
+						return true;
+				}
+				if(path[3].equals(HEADERS)){
+					Dictionary headers = bs.getHeaders();
+					if(headers.get(path[4])!=null)
+						return true;
+				}
+				if(path[3].equals(ENTRIES)){
+					Vector entries = bs.getEntries();
+					try{
+						entries.get(Integer.parseInt(path[4]));
+						return true;
+					}catch(ArrayIndexOutOfBoundsException ae){
+						return false;
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				}
+				if(path[3].equals(SIGNERS)){
+					Vector entries = bs.getSigners();
+					try{
+						entries.get(Integer.parseInt(path[4]));
+						return true;
+					}catch(ArrayIndexOutOfBoundsException ae){
+						return false;
+					}
+				}
+				if(path[3].equals(WIRES)){
+					Map wires = bs.getWires();
+					if(wires.get(path[4])!=null)
+						return true;
 				}
 			}
-
-			tmptree.findNode(new String[] { path[2] });
-			if (tmptree.findNode(new String[] { path[2] }) != null)
-				return true;
 		}
-
-		if (path.length == 4) {
-			if (path[3].equals(LOCATION) || path[3].equals(URL)
-					|| path[3].equals(ERROR)
-					|| path[3].equals(BUNDLESTARTLEVEL)
-					|| path[3].equals(BUNDLELIFECYCLE))
-				return true;
+		
+		if (path.length == 6 && path[1].equals(BUNDLE)){
+			if(this.bundlesTableCopy.get(path[2])!=null){
+				BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+				if(path[3].equals(ENTRIES)){
+					Vector entries = bs.getEntries();
+					try{
+						entries.get(Integer.parseInt(path[4]));
+						if(path[5].equals(PATH)
+								|| path[5].equals(CONTENT)
+								|| path[5].equals(ENTRIESINSTANCEID))
+							return true;
+					}catch(ArrayIndexOutOfBoundsException ae){
+						return false;
+					}
+				}
+				if(path[3].equals(SIGNERS)){
+					Vector entries = bs.getSigners();
+					try{
+						entries.get(Integer.parseInt(path[4]));
+						if(path[5].equals(ISTRUSTED)
+								|| path[5].equals(SIGNERSINSTANCEID)
+								|| path[5].equals(CERTIFICATECHAIN))
+						return true;
+					}catch(ArrayIndexOutOfBoundsException ae){
+						return false;
+					}
+				}
+				if(path[3].equals(WIRES)){
+					Map wires = bs.getWires();
+					Vector vec= (Vector)wires.get(path[4]);
+					if(vec!=null){
+						try{
+							vec.get(Integer.parseInt(path[5]));
+						}catch(ArrayIndexOutOfBoundsException ae){
+							return false;
+						}						
+						return true;
+					}
+				}
+			}
 		}
-
-		if (path.length == 5) {
-			if (path[4].equals(DESIREDSTATE) || path[4].equals(BUNDLEUPDATE)
-					|| path[4].equals(OPTION)
-					|| path[4].equals(OPERATIONRESULT))
-				return true;
+		
+		if (path.length == 7 && path[1].equals(BUNDLE)){
+			if(this.bundlesTableCopy.get(path[2])!=null){
+				BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+				if(path[3].equals(SIGNERS)){
+					Vector entries = bs.getSigners();
+					try{
+						SignersSubtree ss = (SignersSubtree)entries.get(Integer.parseInt(path[4]));
+						Vector list = ss.getCertifitateChainList();
+						list.get(Integer.parseInt(path[6]));
+						return true;
+					}catch(ArrayIndexOutOfBoundsException ae){
+						return false;
+					}
+				}
+				if(path[3].equals(WIRES)){
+					Map wires = bs.getWires();
+					Vector vec= (Vector)wires.get(path[4]);
+					if(vec!=null){
+						try{
+							vec.get(Integer.parseInt(path[5]));
+						}catch(ArrayIndexOutOfBoundsException ae){
+							return false;
+						}
+						if(path[6].equals(NAMESPACE)
+								|| path[6].equals(REQUIREMENT)
+								|| path[6].equals(PROVIDER)
+								|| path[6].equals(REQUIRER)
+								|| path[6].equals(WIRESINSTANCEID)
+								|| path[6].equals(CAPABILITY))
+						return true;
+					}
+				}
+			}
+		}
+		
+		if (path.length == 8 && path[1].equals(BUNDLE)){
+			BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+			if(path[3].equals(WIRES)){
+				Map wires = bs.getWires();
+				Vector vec= (Vector)wires.get(path[4]);
+				if(vec!=null){
+					try{
+						vec.get(Integer.parseInt(path[5]));
+					}catch(ArrayIndexOutOfBoundsException ae){
+						return false;
+					}
+					if(path[7].equals(FILTER)
+							|| path[7].equals(REQUIREMENTDIRECTIVE)
+							|| path[7].equals(REQUIREMENTATTRIBUTE)
+							|| path[7].equals(CAPABILITYDIRECTIVE)
+							|| path[7].equals(CAPABILITYDIRECTIVE))
+					return true;
+				}
+			}
+		}
+		
+		if (path.length == 9 && path[1].equals(BUNDLE)){
+			BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
+			if(path[3].equals(WIRES)){
+				Map wires = bs.getWires();
+				Vector vec= (Vector)wires.get(path[4]);
+				WiresSubtree ws;
+				if(vec!=null){
+					try{
+						ws = (WiresSubtree)vec.get(Integer.parseInt(path[5]));
+					}catch(ArrayIndexOutOfBoundsException ae){
+						return false;
+					}
+					if(path[6].equals(REQUIREMENT)&&path[7].equals(REQUIREMENTDIRECTIVE)){
+						Map rd = ws.getRequirementDirective();
+						return !rd.isEmpty();							
+					}
+					if(path[6].equals(REQUIREMENT)&&path[7].equals(REQUIREMENTATTRIBUTE)){
+						Map ra = ws.getRequirementAttribute();
+						return !ra.isEmpty();
+					}
+					if(path[6].equals(CAPABILITY)&&path[7].equals(CAPABILITYDIRECTIVE)){
+						Map cd = ws.getCapabilityDirective();
+						return !cd.isEmpty();
+					}
+					if(path[6].equals(CAPABILITY)&&path[7].equals(CAPABILITYDIRECTIVE)){
+						Map ca = ws.getCapabilityAttribute();
+						return !ca.isEmpty();
+					}
+				}
+			}
 		}
 
 		return false;

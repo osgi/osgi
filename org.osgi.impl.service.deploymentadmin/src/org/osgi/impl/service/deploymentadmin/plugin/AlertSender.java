@@ -17,9 +17,9 @@
  */
 package org.osgi.impl.service.deploymentadmin.plugin;
 
-import info.dmtree.DmtData;
-import info.dmtree.notification.AlertItem;
-import info.dmtree.notification.NotificationService;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.notification.AlertItem;
+import org.osgi.service.dmt.notification.NotificationService;
 
 import java.security.AccessControlException;
 

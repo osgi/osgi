@@ -5,24 +5,20 @@ import java.util.*;
 import java.util.regex.*;
 
 import com.sun.javadoc.*;
-import com.sun.tools.doclets.internal.toolkit.taglets.*;
-import com.sun.tools.doclets.internal.toolkit.util.*;
 
 public class XmlDoclet extends Doclet {
-	Pattern		SECURITY_PATTERN	= Pattern
-											.compile("(\\w+)\\[(.+),(\\w+)\\](.*)");
-	PrintWriter	pw;
-	String		currentPackage;
-	String		currentClass;
-	RootDoc		root;
+	Pattern SECURITY_PATTERN = Pattern.compile("(\\w+)\\[(.+),(\\w+)\\](.*)");
+	PrintWriter pw;
+	String currentPackage;
+	String currentClass;
+	RootDoc root;
 
 	public static boolean start(RootDoc doc) {
 		try {
 			XmlDoclet doclet = new XmlDoclet();
 			doclet.startx(doc);
 			return true;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -53,6 +49,8 @@ public class XmlDoclet extends Doclet {
 		currentPackage = pack.name();
 		pw.println("  <package name='" + pack.name() + "' fqn='" + pack.name()
 				+ "' qn='" + pack.name() + "'>");
+		
+		printAnnotations(pack.annotations());
 		printComment(pack);
 		ClassDoc all[] = pack.allClasses();
 		Hashtable<String, String> ht = new Hashtable<String, String>();
@@ -107,6 +105,8 @@ public class XmlDoclet extends Doclet {
 				+ (superclass != null ? "' superclass='" + superclass : "")
 				+ (clazz.isInterface() ? "' interface='yes" : "") + "'>");
 
+		printAnnotations(clazz.annotations());
+
 		// printTypeTags(clazz.typeParamTags());
 
 		printComment(clazz);
@@ -145,11 +145,79 @@ public class XmlDoclet extends Doclet {
 		for (int f = 0; f < fields.length; f++)
 			print(fields[f]);
 
+		boolean doDDF = DDFNode.isDDF(clazz);
+
 		MethodDoc methods[] = clazz.methods();
 		for (int m = 0; m < methods.length; m++)
-			print(methods[m]);
+			print(methods[m], doDDF);
 
 		pw.println("  </class>");
+	}
+
+	/**
+	 * Print the annotations
+	 * 
+	 * @param annotations
+	 */
+	private void printAnnotations(AnnotationDesc[] annotations) {
+		for (AnnotationDesc annotation : annotations) {
+			printAnnotation(annotation);
+		}
+	}
+
+	/**
+	 * Print an annotation.
+	 * 
+	 * @param annotation
+	 */
+	private void printAnnotation(AnnotationDesc annotation) {
+		AnnotationTypeDoc annotationType = annotation.annotationType();
+		pw.print("<" + annotationType.qualifiedName() + ">");
+
+		for (AnnotationDesc.ElementValuePair pair : annotation.elementValues()) {
+			AnnotationTypeElementDoc element = pair.element();
+			pw.print("<" + element.name() + ">");
+			AnnotationValue value = pair.value();
+			Object o = value.value();
+			printAnnotationValue(o);
+			pw.println("</" + element.name() + ">");
+		}
+		pw.println("</" + annotationType.qualifiedName() + ">");
+	}
+
+	// Can be
+	// primitive wrapper
+	// String
+	// TypeDoc (.class)
+	// FieldDoc (enum)
+	// AnnotationDesc (annotation ref)
+	// AnnotationValue[] (assume an array?)
+
+	private void printAnnotationValue(Object o) {
+		Class<?> c = o.getClass();
+		if (c == Boolean.class || c == Byte.class || c == Short.class
+				|| c == Character.class || c == Integer.class
+				|| c == Long.class || c == Float.class || c == Double.class) {
+			pw.print(o);
+		} else if (c == String.class) {
+			pw.print(escape((String) o));
+		} else if (o instanceof ClassDoc) {
+			ClassDoc cd = (ClassDoc) o;
+			pw.print(cd.qualifiedName());
+		} else if (o instanceof FieldDoc) {
+			FieldDoc fd = (FieldDoc) o;
+			pw.print(fd.name());
+		} else if (o instanceof AnnotationDesc) {
+			printAnnotation((AnnotationDesc) o);
+		} else if (o instanceof AnnotationValue[]) {
+			for (AnnotationValue av : (AnnotationValue[]) o) {
+				pw.print("<value>");
+				printAnnotationValue(av.value());
+				pw.print("</value>");
+			}
+		} else
+			System.err.println("Unexpected type in annotation: " + c);
+
 	}
 
 	void print(StringBuilder sb, Type t, int level) {
@@ -188,12 +256,10 @@ public class XmlDoclet extends Doclet {
 			if (extend != null) {
 				del = " extends ";
 				print = extend;
+			} else if (zuper != null) {
+				del = " super ";
+				print = zuper;
 			}
-			else
-				if (zuper != null) {
-					del = " super ";
-					print = zuper;
-				}
 			for (Type x : print) {
 				sb.append(del);
 				print(sb, x, level + 1);
@@ -249,11 +315,16 @@ public class XmlDoclet extends Doclet {
 				+ "' flatSignature='" + escape(flatten(cnst.signature()))
 				+ "' isConstructor='true'>");
 
+		printAnnotations(cnst.annotations());
 		printMember(cnst);
 		pw.println("     </method>");
 	}
+	
+	
+	static Pattern DDF_SCOPE = Pattern.compile("@org.osgi.dmt.ddf.Scope\\(org.osgi.dmt.ddf.Scope.SCOPE.(.+)\\)");
+	static Pattern DDF_NODETYPE = Pattern.compile("@org.osgi.dmt.ddf.NodeType\\(\"(.+)\"\\)");
 
-	void print(MethodDoc cnst) {
+	void print(MethodDoc cnst, boolean doDDF) {
 		String dimension = cnst.returnType().dimension();
 		StringBuilder typeArgs = new StringBuilder();
 		print(typeArgs, cnst.typeParameters(), 0);
@@ -270,7 +341,27 @@ public class XmlDoclet extends Doclet {
 				+ "' signature='" + escape(cnst.signature())
 				+ "' flatSignature='" + escape(flatten(cnst.signature()))
 				+ "'>");
+		printAnnotations(cnst.annotations());
 		printMember(cnst);
+
+		if (doDDF) {
+			DDFNode child = new DDFNode(null, cnst.name(), cnst.returnType()
+					.toString());
+			for (AnnotationDesc ad : cnst.annotations()) {
+				String pattern = ad.toString();
+				Matcher m = DDF_SCOPE.matcher(pattern);
+				if ( m.matches()) {
+					child.scope = m.group(1);
+					continue;
+				}
+				m = DDF_NODETYPE.matcher(pattern);
+				if ( m.matches()) {
+					child.mime = m.group(1);
+					continue;
+				}
+			}
+			child.print(pw, "");
+		}
 		pw.println("     </method>");
 	}
 
@@ -278,8 +369,7 @@ public class XmlDoclet extends Doclet {
 		String constantValueExpression = null;
 		try {
 			constantValueExpression = cnst.constantValueExpression();
-		}
-		catch (Error e) {
+		} catch (Error e) {
 			// Is Java 1.4, so we accept a failure
 		}
 
@@ -301,6 +391,7 @@ public class XmlDoclet extends Doclet {
 				+ escape(cnst.type().qualifiedTypeName())
 				+ (constantValueExpression != null ? "' constantValue='"
 						+ escape(constantValueExpression) : "") + "'>");
+		printAnnotations(cnst.annotations());
 		printComment(cnst);
 		pw.println("     </field>");
 	}
@@ -369,19 +460,14 @@ public class XmlDoclet extends Doclet {
 			}
 			ref = tag.referencedMember().containingClass().name() + "."
 					+ tag.referencedMember().name() + signature;
-		}
-		else
-			if (tag.referencedClass() != null) {
-				file = tag.referencedClass().containingPackage().name();
-				ref = tag.referencedClass().name();
-			}
-			else
-				if (tag.referencedPackage() != null) {
-					file = tag.referencedPackage().name();
-					ref = tag.referencedPackage().name();
-				}
-				else
-					ref = "UNKNOWN REF " + tag;
+		} else if (tag.referencedClass() != null) {
+			file = tag.referencedClass().containingPackage().name();
+			ref = tag.referencedClass().name();
+		} else if (tag.referencedPackage() != null) {
+			file = tag.referencedPackage().name();
+			ref = tag.referencedPackage().name();
+		} else
+			ref = "UNKNOWN REF " + tag;
 
 		if (currentPackage.equals(file))
 			file = "";
@@ -390,21 +476,18 @@ public class XmlDoclet extends Doclet {
 			sb.append("   <a>");
 			sb.append(text.substring(1, text.length() - 1));
 			sb.append("</a>");
+		} else if (text.trim().startsWith("<")) {
+			sb.append(text);
+		} else {
+			sb.append("   <a href='" + file + "#" + ref + "'>");
+			// Check if we use the label (if there is one) or
+			// convert the text part to something readable.
+			if (tag.label().trim().length() > 0)
+				sb.append(tag.label());
+			else
+				sb.append(makeName(text));
+			sb.append("</a>");
 		}
-		else
-			if (text.trim().startsWith("<")) {
-				sb.append(text);
-			}
-			else {
-				sb.append("   <a href='" + file + "#" + ref + "'>");
-				// Check if we use the label (if there is one) or
-				// convert the text part to something readable.
-				if (tag.label().trim().length() > 0)
-					sb.append(tag.label());
-				else
-					sb.append(makeName(text));
-				sb.append("</a>");
-			}
 	}
 
 	String makeName(String name) {
@@ -437,8 +520,7 @@ public class XmlDoclet extends Doclet {
 			pw.println("   <lead>");
 			pw.println(html(text));
 			pw.println("   </lead>");
-		}
-		else
+		} else
 			pw.println("   <lead/>");
 
 		text = toString(doc.inlineTags()).trim();
@@ -446,8 +528,7 @@ public class XmlDoclet extends Doclet {
 			pw.println("   <description>");
 			pw.println(html(text));
 			pw.println("   </description>");
-		}
-		else
+		} else
 			pw.println("   <description/>");
 
 		Tag tags[] = doc.tags();
@@ -463,82 +544,66 @@ public class XmlDoclet extends Doclet {
 	void printX(StringBuffer sb, Tag tag) {
 		if (tag.kind().equals("Text")) {
 			sb.append(tag.text());
-		}
-		else {
+		} else {
 			if (tag instanceof ParamTag)
 				printParamTag(sb, (ParamTag) tag);
-			else
-				if (tag instanceof ThrowsTag)
-					printThrows(sb, (ThrowsTag) tag);
-				else
-					if (tag instanceof SeeTag)
-						printSee(sb, (SeeTag) tag);
-					else {
-						if (tag.kind().equals("@literal")) {
-							sb.append(escape(toString(tag.inlineTags())));
-						}
-						else
-							if (tag.kind().equals("@value")) {
-								FieldDoc field = getReferredField(tag);
-								if ( field != null) {
-									sb.append("<code class='value'>");
-									sb.append(escape(field.constantValue()
-											+""));
-									sb.append("</code>");
-								}
-								else
-									root.printError("No value for " + tag.text());
-							}
-							else
-								if (tag.kind().equals("@security")) {
-									StringBuffer sb2 = new StringBuffer();
-									print(sb2, tag.inlineTags());
-									for (int i = 0; i < sb2.length(); i++)
-										if (sb2.charAt(i) == '\n'
-												|| sb2.charAt(i) == '\r')
-											sb2.setCharAt(i, ' ');
-									String s = sb2.toString();
+			else if (tag instanceof ThrowsTag)
+				printThrows(sb, (ThrowsTag) tag);
+			else if (tag instanceof SeeTag)
+				printSee(sb, (SeeTag) tag);
+			else {
+				if (tag.kind().equals("@literal")) {
+					sb.append(escape(toString(tag.inlineTags())));
+				} else if (tag.kind().equals("@value")) {
+					FieldDoc field = getReferredField(tag);
+					if (field != null) {
+						sb.append("<code class='value'>");
+						sb.append(escape(field.constantValue() + ""));
+						sb.append("</code>");
+					} else
+						root.printError("No value for " + tag.text());
+				} else if (tag.kind().equals("@security")) {
+					StringBuffer sb2 = new StringBuffer();
+					print(sb2, tag.inlineTags());
+					for (int i = 0; i < sb2.length(); i++)
+						if (sb2.charAt(i) == '\n' || sb2.charAt(i) == '\r')
+							sb2.setCharAt(i, ' ');
+					String s = sb2.toString();
 
-									Matcher m = SECURITY_PATTERN.matcher(s);
-									if (m.matches()) {
-										String permission = m.group(1);
-										String resource = m.group(2);
-										String actions = m.group(3);
-										String remainder = m.group(4);
+					Matcher m = SECURITY_PATTERN.matcher(s);
+					if (m.matches()) {
+						String permission = m.group(1);
+						String resource = m.group(2);
+						String actions = m.group(3);
+						String remainder = m.group(4);
 
-										sb.append("\n<security name='");
-										sb.append(escape(permission));
-										sb.append("' resource='");
-										sb.append(escape(resource));
-										sb.append("' actions='");
-										sb.append(escape(actions));
-										sb.append("'>");
-										sb.append(remainder);
-										sb.append("</security>");
-									}
-									else
-										throw new IllegalArgumentException(
-												"@security tag invalid: '"
-														+ s
-														+ "', matching pattern is "
-														+ SECURITY_PATTERN
-														+ " " + m);
-								}
-								else {
-									sb.append("<" + tag.kind().substring(1)
-											+ ">"
-											+ html(toString(tag.inlineTags()))
-											+ "</" + tag.kind().substring(1)
-											+ ">");
-								}
-					}
+						sb.append("\n<security name='");
+						sb.append(escape(permission));
+						sb.append("' resource='");
+						sb.append(escape(resource));
+						sb.append("' actions='");
+						sb.append(escape(actions));
+						sb.append("'>");
+						sb.append(remainder);
+						sb.append("</security>");
+					} else
+						throw new IllegalArgumentException(
+								"@security tag invalid: '" + s
+										+ "', matching pattern is "
+										+ SECURITY_PATTERN + " " + m);
+				} else {
+					sb.append("<" + tag.kind().substring(1) + ">"
+							+ html(toString(tag.inlineTags())) + "</"
+							+ tag.kind().substring(1) + ">");
+				}
+			}
 		}
 	}
 
 	/**
 	 * Find a reference to a field.
 	 */
-	static Pattern	MEMBER_REFERENCE	= Pattern.compile("\\s*((.+)#)?(.+)\\s*");
+	static Pattern MEMBER_REFERENCE = Pattern.compile("\\s*(.+)?#(.+)\\s*");
 
 	private FieldDoc getReferredField(Tag value) {
 		Doc holder = value.holder();
@@ -546,18 +611,19 @@ public class XmlDoclet extends Doclet {
 		Matcher m = MEMBER_REFERENCE.matcher(value.text());
 		if (m.matches()) {
 			// either ref or class#ref
-			String clazz = m.group(2);
-			String member = m.group(3);
+			String clazz = m.group(1);
+			String member = m.group(2);
 			ClassDoc parent;
-			if ( holder instanceof ClassDoc)
+			if (holder instanceof ClassDoc)
 				parent = (ClassDoc) holder;
 			else
-				parent = ((MemberDoc)holder).containingClass();				
+				parent = ((MemberDoc) holder).containingClass();
 
-			if ( clazz != null ) {
-				ClassDoc found =parent.findClass(clazz);				
-				if ( found == null) {
-					root.printError("Referred field value in " + parent.name() + " " + clazz + " not found");
+			if (clazz != null) {
+				ClassDoc found = parent.findClass(clazz);
+				if (found == null) {
+					root.printError("Referred field value in " + parent.name()
+							+ " " + clazz + " not found");
 					return null;
 				}
 				parent = found;
@@ -570,11 +636,12 @@ public class XmlDoclet extends Doclet {
 			return null;
 		} else {
 			// No reference
-			if ( holder instanceof FieldDoc )
+			if (holder instanceof FieldDoc)
 				return (FieldDoc) holder;
-			
+
 		}
-		root.printError("Referred field value in " + holder + " " + value.text());
+		root.printError("Referred field value in " + holder + " "
+				+ value.text());
 		return null;
 	}
 
@@ -584,8 +651,7 @@ public class XmlDoclet extends Doclet {
 			int n;
 			if (name.endsWith("...")) {
 				n = name.lastIndexOf('.', name.length() - 4);
-			}
-			else
+			} else
 				n = name.lastIndexOf('.');
 			name = name.substring(n + 1);
 		}
@@ -599,28 +665,28 @@ public class XmlDoclet extends Doclet {
 		int begin = i;
 		outer: while (i < signature.length()) {
 			switch (signature.charAt(i)) {
-				case '<' :
+			case '<':
+				parts.add(signature.substring(begin, i));
+				i = skipGenericParameters(signature, i + 1);
+				begin = i + 1;
+				break;
+
+			case ' ':
+				begin = i + 1;
+				break;
+
+			case ',':
+				if (begin < i) {
 					parts.add(signature.substring(begin, i));
-					i = skipGenericParameters(signature, i + 1);
-					begin = i + 1;
-					break;
+				}
+				begin = i + 1;
+				break;
 
-				case ' ' :
-					begin = i + 1;
-					break;
-
-				case ',' :
-					if (begin < i) {
-						parts.add(signature.substring(begin, i));
-					}
-					begin = i + 1;
-					break;
-
-				case ')' :
-					if (begin < i) {
-						parts.add(signature.substring(begin, i));
-					}
-					break outer;
+			case ')':
+				if (begin < i) {
+					parts.add(signature.substring(begin, i));
+				}
+				break outer;
 			}
 			i++;
 		}
@@ -652,19 +718,20 @@ public class XmlDoclet extends Doclet {
 		for (int i = 0; i < in.length(); i++) {
 			char c = in.charAt(i);
 			switch (c) {
-				case '&' :
-					sb.append("&amp;");
-					break;
-				case '<' :
-					sb.append("&lt;");
-					break;
-				case '>' :
-					sb.append("&gt;");
-					break;
-				default :
-					sb.append(c);
+			case '&':
+				sb.append("&amp;");
+				break;
+			case '<':
+				sb.append("&lt;");
+				break;
+			case '>':
+				sb.append("&gt;");
+				break;
+			default:
+				sb.append(c);
 			}
 		}
 		return sb.toString();
 	}
+
 }

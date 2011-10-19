@@ -61,7 +61,7 @@ public class DmtPrincipalPermission extends DmtTestControl {
 	public void testDmtPrincipalPermission001() {
 		try {
 			log("#testDmtPrincipalPermission001");
-			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
+			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL);
 			assertEquals(
 							"Asserts that the principal passed as parameter is equal to the returned value",
@@ -82,7 +82,7 @@ public class DmtPrincipalPermission extends DmtTestControl {
 	public void testDmtPrincipalPermission002() {
 		try {
 			log("#testDmtPrincipalPermission002");
-			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
+			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
 					"*");
 			assertEquals(
 							"Asserts that the principal passed as parameter is equal to the returned value.",
@@ -103,7 +103,7 @@ public class DmtPrincipalPermission extends DmtTestControl {
 	public void testDmtPrincipalPermission003() {
 		try {
 			log("#testDmtPrincipalPermission003");
-			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
+			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL, "*");
 			assertEquals(
 							"Asserts that the principal passed as parameter is equal to the returned value",
@@ -125,7 +125,7 @@ public class DmtPrincipalPermission extends DmtTestControl {
 	public void testDmtPrincipalPermission004() {
 		try {
 			log("#testDmtPrincipalPermission004");
-			new info.dmtree.security.DmtPrincipalPermission(null);
+			new org.osgi.service.dmt.security.DmtPrincipalPermission(null);
 			failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
 			pass("NullPointerException correctly thrown");
@@ -142,7 +142,7 @@ public class DmtPrincipalPermission extends DmtTestControl {
 	public void testDmtPrincipalPermission005() {
 		try {
 			log("#testDmtPrincipalPermission005");
-			new info.dmtree.security.DmtPrincipalPermission("");
+			new org.osgi.service.dmt.security.DmtPrincipalPermission("");
 			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			pass("IllegalArgumentException correctly thrown");
@@ -159,7 +159,7 @@ public class DmtPrincipalPermission extends DmtTestControl {
 	public void testDmtPrincipalPermission006() {
 		try {
 			log("#testDmtPrincipalPermission006");
-			new info.dmtree.security.DmtPrincipalPermission(null, "*");
+			new org.osgi.service.dmt.security.DmtPrincipalPermission(null, "*");
 			failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
 			pass("NullPointerException correctly thrown");
@@ -176,7 +176,7 @@ public class DmtPrincipalPermission extends DmtTestControl {
 	public void testDmtPrincipalPermission007() {
 		try {
 			log("#testDmtPrincipalPermission007");
-			new info.dmtree.security.DmtPrincipalPermission("", "*");
+			new org.osgi.service.dmt.security.DmtPrincipalPermission("", "*");
 			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			pass("IllegalArgumentException correctly thrown");
@@ -193,7 +193,7 @@ public class DmtPrincipalPermission extends DmtTestControl {
 	public void testDmtPrincipalPermission008() {
 		try {
 			log("#testDmtPrincipalPermission008");
-			new info.dmtree.security.DmtPrincipalPermission(
+			new org.osgi.service.dmt.security.DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL, null);
 			failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
@@ -211,7 +211,7 @@ public class DmtPrincipalPermission extends DmtTestControl {
 	public void testDmtPrincipalPermission009() {
 		try {
 			log("#testDmtPrincipalPermission009");
-			new info.dmtree.security.DmtPrincipalPermission(
+			new org.osgi.service.dmt.security.DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL, "");
 			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -231,7 +231,7 @@ public class DmtPrincipalPermission extends DmtTestControl {
 		try {
 			log("#testDmtPrincipalPermission010");
 			String principal = "www.cesar*";
-			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
+			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
 					principal);
 			assertEquals(
 							"Asserts that the principal passed as parameter is equal to the returned value",
@@ -253,7 +253,7 @@ public class DmtPrincipalPermission extends DmtTestControl {
 		try {
 			log("#testDmtPrincipalPermission011");
 			String principal = "www.cesar*";
-			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
+			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
 					principal, "*");
 			assertEquals(
 							"Asserts that the principal passed as parameter is equal to the returned value",

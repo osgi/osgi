@@ -17,25 +17,23 @@
  */
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
+import java.security.*;
+import java.util.*;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-
-import org.osgi.impl.service.dmt.export.DmtPrincipalPermissionAdmin;
-import org.osgi.service.log.LogService;
-import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.framework.Bundle;
+import org.osgi.impl.service.dmt.export.*;
+import org.osgi.service.dmt.*;
+import org.osgi.service.log.*;
+import org.osgi.service.permissionadmin.*;
 
 public class DmtAdminCore {
-    // session initiation timeout after 10 seconds, to make testing easier 
-    public static final long OPEN_TIMEOUT = 10000;
-    
-    // session idle timeout: session is invalidated after 5 minutes inactivity
-    //public static final long IDLE_TIMEOUT = 300000;
-    // half-minute idle timeout for demonstration purposes 
-    public static final long IDLE_TIMEOUT = 30000;
+
+	private static final long MINIMUM_OPEN_TIMEOUT = 10000;
+	private static final long MINIMUM_IDLE_TIMEOUT = 30000;
+	protected static final String SESSION_INACTIVE_TIMEOUT = "60000";
+	protected static final String SESSION_CREATION_TIMEOUT = "10000";
+	private static long sessionOpenTimeout = -1;
+	private static long sessionIdleTimeout = -1;
     
     private Context context;
     private DmtPrincipalPermissionAdmin dmtPermissionAdmin;
@@ -52,17 +50,18 @@ public class DmtAdminCore {
 		openSessions = new Vector();
 	}
 
-	public DmtSession getSession(String subtreeUri) throws DmtException {
-		return getSession(null, subtreeUri, DmtSession.LOCK_TYPE_EXCLUSIVE);
+	public DmtSession getSession(String subtreeUri, Bundle initiatingBundle) throws DmtException {
+		return getSession(null, subtreeUri, DmtSession.LOCK_TYPE_EXCLUSIVE, initiatingBundle);
 	}
 
-	public DmtSession getSession(String subtreeUri, int lockMode)
+	public DmtSession getSession(String subtreeUri, int lockMode, Bundle initiatingBundle)
 			throws DmtException {
-		return getSession(null, subtreeUri, lockMode);
+		return getSession(null, subtreeUri, lockMode, initiatingBundle);
 	}
 
 	public synchronized DmtSession getSession(String principal,
-            String subtreeUri, int lockMode) throws DmtException {
+            String subtreeUri, int lockMode, Bundle initiatingBundle) throws DmtException {
+		
         checkLockMode(lockMode);
         
         PermissionInfo[] permissions = null;
@@ -74,7 +73,7 @@ public class DmtAdminCore {
             subtreeUri = ".";
         
 		SessionWrapper session = new SessionWrapper(principal, subtreeUri,
-                lockMode, permissions, context, this);
+                lockMode, permissions, context, this, initiatingBundle);
                 
         // passing the normalized variant of the subtreeUri parameter
 		waitUntilNoConflictingSessions(session.getRootNode(), lockMode);
@@ -99,7 +98,7 @@ public class DmtAdminCore {
     // notifyAll is called.  Some threads may be "starved", i.e. timed out.
     private void waitUntilNoConflictingSessions(Node subtreeNode, int lockMode) 
             throws DmtException {
-        final long timeLimit = System.currentTimeMillis() + OPEN_TIMEOUT;
+        final long timeLimit = System.currentTimeMillis() + getSessionCreationTimeout();
         
         while(conflictsWithOpenSessions(subtreeNode, lockMode)) {
             long timeLeft = timeLimit - System.currentTimeMillis();
@@ -139,4 +138,59 @@ public class DmtAdminCore {
         
         notifyAll(); // wake all waiting sessions, and reevaluate conflicts
     }
+    
+
+	long getSessionCreationTimeout() {
+		if ( sessionOpenTimeout == -1) {
+			sessionOpenTimeout = ((Long) AccessController
+					.doPrivileged(new PrivilegedAction() {
+						public Object run() {
+							String limitString = SESSION_CREATION_TIMEOUT;
+							long limit = MINIMUM_OPEN_TIMEOUT; // min.
+																			// used
+																			// as
+																			// default
+
+							try {
+								long limitLong = Long.parseLong(limitString);
+								if (limitLong >= MINIMUM_OPEN_TIMEOUT)
+									limit = limitLong;
+							}
+							catch (NumberFormatException e) {
+							}
+
+							return new Long(limit);
+						}
+					})).longValue();
+		}
+		return sessionOpenTimeout;
+	}
+
+	long getSessionInactivityTimeout() {
+		if ( sessionIdleTimeout == -1) {
+			sessionIdleTimeout = ((Long) AccessController
+					.doPrivileged(new PrivilegedAction() {
+						public Object run() {
+							String limitString = System
+									.getProperty(SESSION_INACTIVE_TIMEOUT);
+							long limit = MINIMUM_IDLE_TIMEOUT; // min.
+																			// used
+																			// as
+																			// default
+
+							try {
+								long limitLong = Long.parseLong(limitString);
+								if (limitLong >= MINIMUM_IDLE_TIMEOUT)
+									limit = limitLong;
+							}
+							catch (NumberFormatException e) {
+							}
+
+							return new Long(limit);
+						}
+					})).longValue();
+		}
+		return sessionIdleTimeout;
+	}
+
 }
