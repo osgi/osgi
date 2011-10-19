@@ -78,8 +78,8 @@ copyright.html = Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Righ
 #   -provider-policy =  ${range;[==,=+)}
 #   -consumer-policy =  ${range;[==,+)}
 
-osgi.release				= 4
-osgi.version				= 4.4
+osgi.release				= 5
+osgi.version				= 5.0
 
 build.version				= ${osgi.version}.0.${project.build}
 core.build.version			= ${build.version}
