@@ -109,10 +109,10 @@ public final class Uri {
 	private static final String	MAX_URI_SEGMENTS					= "org.osgi.service.dmt.max.uri.segments";
 
 	// the smallest valid value for the URI segment length limit
-	private static final int MINIMAL_SEGMENT_LENGTH_LIMIT = 32;
+	private static final int MINIMAL_SEGMENT_LENGTH_LIMIT = 128;
 
 	// the smallest valid value for the URI length limit
-	private static final int MINIMAL_URI_LENGTH_LIMIT = 128;
+	private static final int MINIMAL_URI_LENGTH_LIMIT = 512;
 
 	// the smallest valid value for the number of Uri segments
 	private static final int MINIMAL_URI_SEGMENT_NUMBER_LIMIT = 20;
