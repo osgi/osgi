@@ -11,6 +11,10 @@
 		<ant dir="osgi.build" />
 	</target>
 
+	<target name="clean">
+		<ant dir="osgi.build" target="deepclean" />
+	</target>
+
 	<target name="runtests"> 
 		<ant dir="osgi.ct" target="runtests" />
 	</target>
