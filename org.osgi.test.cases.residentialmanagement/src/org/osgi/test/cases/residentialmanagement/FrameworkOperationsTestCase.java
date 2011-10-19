@@ -24,8 +24,6 @@
  */
 package org.osgi.test.cases.residentialmanagement;
 
-import java.net.URL;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.service.dmt.DmtData;
@@ -106,7 +104,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 	 */
 	public void testBundleInstallUninstall() throws Exception {
 		final String BUNDLE_LOCATION = "TestBundle";
-		final URL BUNDLE_URL = getContext().getBundle().getEntry(TESTBUNDLE_EXPORTPACKAGE);
+		final String BUNDLE_URL = getContext().getBundle().getEntry(TESTBUNDLE_EXPORTPACKAGE).toString();
 
 		
 		String uri = FRAMEWORK_ROOT + "/" + BUNDLE;
@@ -167,7 +165,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		Bundle testBundle = installBundle(TESTBUNDLE_EXPORTPACKAGE, false);
 		
 		// ensure that the bundle is in INSTALLED state
-		assertEquals( "testbundle should be in 'INSTALLED' state initially", Bundle.INSTALLED, testBundle.getState() );
+		assertFalse( "testbundle should not be in 'ACTIVE' state initially", Bundle.ACTIVE == testBundle.getState() );
 		
 		String uri = FRAMEWORK_ROOT + "/" + BUNDLE;
 		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_ATOMIC);
