@@ -16,7 +16,7 @@ public interface RMTConstants {
 	// children of the Bundle node
 	// Startlevel
 	static final String URL = "URL";
-	static final String AUTOSTART = "Autostart";
+	static final String AUTOSTART = "AutoStart";
 	static final String FAULT_TYPE = "FaultType";
 	static final String FAULT_MESSAGE = "FaultMessage";
 	static final String BUNDLEID = "BundleId";
