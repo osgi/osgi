@@ -289,7 +289,7 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 		String[] children;
 		testBundle1 = installAndStartBundle(TESTBUNDLE_EXPORTPACKAGE);
 		testBundle2 = installAndStartBundle(TESTBUNDLE_IMPORTPACKAGE);
-		testBundle3 = installAndStartBundle(TESTBUNDLE_FRAGMENT);
+		testBundle3 = installBundle(TESTBUNDLE_FRAGMENT, false);
 		testBundle4 = installAndStartBundle(TESTBUNDLE_REQUIRE);
 		
 		try {

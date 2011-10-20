@@ -100,6 +100,25 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		assertEquals( "The MetaData of " + uri + " has a wrong data format.", format, metaNode.getFormat() );
 	}
 	
+	
+	String getBundleStateString( int state ) {
+		switch (state) {
+		case Bundle.ACTIVE:
+			return "ACTIVE";
+		case Bundle.INSTALLED:
+			return "INSTALLED";
+		case Bundle.RESOLVED:
+			return "RESOLVED";
+		case Bundle.STARTING:
+			return "STARTING";
+		case Bundle.STOPPING:
+			return "STOPPING";
+		case Bundle.UNINSTALLED:
+			return "UNINSTALLED";
+		}
+		return null;
+	}
+	
 	/**
 	 * asserts that the metanode reports support for the specified operations
 	 * @param uri ... the uri that the metadata belongs to
@@ -145,5 +164,7 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		assertEquals( "The MetaData of " + uri + " provides wrong value for 'zero occurrence allowed'!", zeroAllowed, metaNode.isZeroOccurrenceAllowed() );
 		assertTrue( "The MetaData of " + uri + " provides wrong value for max occurence.", metaNode.getMaxOccurrence() > 0 && metaNode.getMaxOccurrence() <= max );
 	}
+	
+	
 
 }
