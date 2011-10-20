@@ -72,4 +72,27 @@ public interface BundleWire extends Wire {
 	 *         returned.
 	 */
 	BundleWiring getRequirerWiring();
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This method returns the same value as {@link #getProviderWiring()}.
+	 * {@link BundleWiring#getRevision() getRevision()}.
+	 *
+	 * @since 1.1
+	 */
+	BundleRevision getProvider();
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>
+	 * This method returns the same value as {@link #getRequirerWiring()}.
+	 * {@link BundleWiring#getRevision() getRevision()}.
+	 * 
+	 * @since 1.1
+	 */
+	BundleRevision getRequirer();
+
 }

@@ -31,33 +31,30 @@ public interface Wire {
 	Capability getCapability();
 
 	/**
-	 * Return the {@link Requirement} for this wire.
+	 * Returns the {@link Requirement} for this wire.
 	 *
 	 * @return The {@link Requirement} for this wire.
 	 */
 	Requirement getRequirement();
 
 	/**
-	 * Returns the wiring {@link Wiring#getProvidedResourceWires(String)
-	 * providing} the {@link #getCapability() capability}.
-	 *
+	 * Returns the resource providing the {@link #getCapability() capability}.
 	 * <p>
-	 * The resource referenced by the returned wiring may differ from the
-	 * resource referenced by the {@link #getCapability() capability}.
+	 * The returned resource may differ from the resource referenced by the
+	 * {@link #getCapability() capability}.
 	 *
-	 * @return The wiring providing the capability.
+	 * @return The resource providing the capability.
 	 */
-	Wiring getProviderWiring();
+	Resource getProvider();
 
 	/**
-	 * Returns the wiring who {@link Wiring#getRequiredResourceWires(String)
-	 * requires} the {@link #getCapability() capability}.
-	 *
+	 * Returns the resource who {@link #getRequirement() requires} the
+	 * {@link #getCapability() capability}.
 	 * <p>
-	 * The resource referenced by the returned wiring may differ from the
-	 * resource referenced by the {@link #getRequirement() requirement}.
+	 * The returned resource may differ from the resource referenced by the
+	 * {@link #getRequirement() requirement}.
 	 *
-	 * @return The wiring whose requirement is wired to the capability.
+	 * @return The resource who requires the capability.
 	 */
-	Wiring getRequirerWiring();
+	Resource getRequirer();
 }
