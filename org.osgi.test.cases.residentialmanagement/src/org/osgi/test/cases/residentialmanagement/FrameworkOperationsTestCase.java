@@ -25,6 +25,7 @@
 package org.osgi.test.cases.residentialmanagement;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtSession;
@@ -47,7 +48,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 	 */
 	public void testGetFrameworkStartLevels() throws Exception {
 
-		FrameworkStartLevel fwStartLevel = (FrameworkStartLevel) getContext().getBundle(0).adapt(FrameworkStartLevel.class);
+		FrameworkStartLevel fwStartLevel = getContext().getBundle(0).adapt(FrameworkStartLevel.class);
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
 		int startLevel = session.getNodeValue(FRAMEWORK_ROOT + "/" + STARTLEVEL ).getInt();
 		int initialBundleStartLevel = session.getNodeValue(FRAMEWORK_ROOT + "/" + INITIAL_BUNDLE_STARTLEVEL ).getInt();
@@ -63,7 +64,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 	 */
 	public void testSetFrameworkStartLevels() throws Exception {
 
-		FrameworkStartLevel fwStartLevel = (FrameworkStartLevel) getContext().getBundle(0).adapt(FrameworkStartLevel.class);
+		FrameworkStartLevel fwStartLevel = getContext().getBundle(0).adapt(FrameworkStartLevel.class);
 		int initialStartLevel = fwStartLevel.getStartLevel();
 		int initialBundleStartLevel = fwStartLevel.getInitialBundleStartLevel();
 		
@@ -92,7 +93,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 			assertEquals("The value of the Framework initialBundleStartLevel was not set correctly.", fwStartLevel.getStartLevel(), initialStartLevel - 1);
 		}
 		finally {
-			fwStartLevel.setStartLevel(initialStartLevel, null);
+			fwStartLevel.setStartLevel(initialStartLevel, (FrameworkListener[]) null);
 			fwStartLevel.setInitialBundleStartLevel(initialBundleStartLevel);
 		}
 	}
@@ -174,10 +175,10 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		// get the corresponding bundle entry in the RMT 
 		String bundleBaseUri = null;
 		String[] bundles = session.getChildNodeNames(uri);
-		for (int i = 0; i < bundles.length; i++) {
-			long id = session.getNodeValue(uri + "/" + bundles[i]).getLong();
+		for (String bundle : bundles ) {
+			long id = session.getNodeValue(uri + "/" + bundle).getLong();
 			if ( id == testBundle.getBundleId() )
-				bundleBaseUri = uri + "/" + bundles[i]; 
+				bundleBaseUri = uri + "/" + bundle; 
 		}
 		assertNotNull("Can't find the testBundle in the RMT bundle map!", bundleBaseUri );
 

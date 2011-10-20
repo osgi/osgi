@@ -26,7 +26,6 @@ package org.osgi.test.cases.residentialmanagement;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -51,19 +50,19 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 	 */
 	public void testFrameworkStructure() throws DmtException {
 		String[] children;
-		HashSet mandatory;
+		HashSet<String> mandatory;
 
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
 
 		// 1st descendants
 		children = session.getChildNodeNames(FRAMEWORK_ROOT);
-		mandatory = new HashSet();
+		mandatory = new HashSet<String>();
 		mandatory.add(STARTLEVEL);
 		mandatory.add(INITIAL_BUNDLE_STARTLEVEL );
 		mandatory.add(BUNDLE);
 		mandatory.add(PROPERTY);
-		for (int i = 0; i < children.length; i++)
-			mandatory.remove(children[i]);
+		for (String child : children)
+			mandatory.remove(child);
 		assertEquals("There are undefined children in the Framework node.", 0,
 				mandatory.size());
 		
@@ -73,18 +72,18 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 
 	/**
 	 * asserts that the Bundle subtree has the right structure
-	 * @throws DmtException
+	 * @throws Exception 
 	 */
 	public void testBundleStructure() throws Exception {
 		String[] children;
-		HashSet expected = new HashSet();
-		HashSet optional = new HashSet(); 
+		HashSet<String> expected = new HashSet<String>();
+		HashSet<String> optional = new HashSet<String>(); 
 
 		Bundle[] bundles = getContext().getBundles();
 		assertNotNull("This object should not be null.", bundles);
 		
-		for (int i = 0; i < bundles.length; i++)
-			expected.add(bundles[i].getLocation());
+		for (Bundle bundle : bundles )
+			expected.add(bundle.getLocation());
 
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
 		String[] bundleKeys = session.getChildNodeNames(FRAMEWORK_ROOT + "/" + BUNDLE );
@@ -92,11 +91,11 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 		assertFalse("These objects must exist.", bundleKeys.length == 0);
 		
 		// compare keys of bundle map from context with the one from session
-		for (int j = 0; j < bundleKeys.length; j++)
-			expected.remove(bundleKeys[j]);
+		for (String bundleKey : bundleKeys)
+			expected.remove(bundleKey);
 		assertEquals("Some nodes are missing in the bundle map.", 0, expected.size());
 
-		optional = new HashSet();
+		optional = new HashSet<String>();
 		optional.add(STATE);
 		optional.add(FAULT_TYPE);
 		optional.add(BUNDLEID);
@@ -112,10 +111,9 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 		optional.add(ENTRIES);
 
 		// children of: Framework.Bundle.[i]
-		for (int i = 0; i < bundleKeys.length; i++) {
-			String bundleKey = bundleKeys[i];
-			List undefined = new ArrayList();
-			expected = new HashSet();
+		for (String bundleKey : bundleKeys) {
+			List<String> undefined = new ArrayList<String>();
+			expected = new HashSet<String>();
 			expected.add(STARTLEVEL);
 			expected.add(INSTANCEID);
 			expected.add(URL);
@@ -123,8 +121,7 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 
 			children = session.getChildNodeNames(FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey);
 			assertTrue("These objects must exist.", children != null && children.length > 0 );
-			for (int j = 0; j < children.length; j++) {
-				String child = children[j];
+			for (String child : children) {
 				if ( ! expected.contains(child) && ! optional.contains(child) )
 					undefined.add(child);
 				expected.remove(child);
@@ -149,7 +146,7 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 		testBundle3 = installBundle(TESTBUNDLE_FRAGMENT, false);
 		testBundle4 = installAndStartBundle(TESTBUNDLE_REQUIRE);
 
-		List nameSpaces = new ArrayList();
+		List<String> nameSpaces = new ArrayList<String>();
 		nameSpaces.add(NAMESPACE_BUNLDE);
 		nameSpaces.add(NAMESPACE_HOST);
 		nameSpaces.add(NAMESPACE_PACKAGE);
@@ -159,8 +156,7 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 		String[] bundleKeys = session.getChildNodeNames(FRAMEWORK_ROOT + "/" + BUNDLE );
 		
 		// check that only allowed namespaces are used as children of the Wires node
-		for (int j = 0; j < bundleKeys.length; j++) {
-			String bundleKey = bundleKeys[j];
+		for (String bundleKey : bundleKeys) {
 			String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey + "/" + WIRES;
 			String[] children = session.getChildNodeNames(uri);
 			assertTrue("These objects must exist.", children != null && children.length > 0 );
@@ -171,13 +167,10 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 		
 		// check structure of the individual Wire nodes: 
 		// Framework.Bundle.[i].Wires.NameSpace.xxx. children
-		for (int i = 0; i < bundleKeys.length; i++) {
-			String bundleKey = bundleKeys[i];
+		for (String bundleKey : bundleKeys) {
 			// go through all namespaces
-			Iterator iterator = nameSpaces.iterator();
-			while (iterator.hasNext()) {
-				String nameSpace = (String) iterator.next();
-				Set expected = new HashSet();
+			for ( String nameSpace : nameSpaces ) {
+				Set<String> expected = new HashSet<String>();
 				expected.add(NAMESPACE);
 				expected.add(REQUIREMENT);
 				expected.add(CAPABILITY);
@@ -188,37 +181,35 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 				String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey + "/" + WIRES + "/" + nameSpace;
 				String[] children = session.getChildNodeNames(uri);
 				assertTrue("These objects must exist.", children != null && children.length > 0 );
-				for (int j = 0; j < children.length; j++) 
-					expected.remove(children[j]);
+				for (String child : children) 
+					expected.remove(child);
 
-				assertEquals("Nodes are missing in Framework.Bundle.[i].Wires." +nameSpace+ "/" + children[i], 0,
+				assertEquals("Nodes are missing in Framework/Bundle/[i]/Wires/" +nameSpace, 0,
 						expected.size());
 
 				// check children of Requirement node
-				for (int k = 0; k < children.length; k++) {
-					String child = children[k];
-					Set expected2 = new HashSet();
+				for (String child : children) { 
+					Set<String> expected2 = new HashSet<String>();
 					expected2.add(FILTER);
 					expected2.add(DIRECTIVE);
 					expected2.add(ATTRIBUTE);
 					String[] children2 = session.getChildNodeNames(uri + "/" + child + "/" + REQUIREMENT);
 					assertTrue("These objects must exist.", children2 != null && children2.length > 0 );
-					for (int l = 0; l < children2.length; l++)
-						expected2.remove(children2[l]);
+					for (String child2 : children2) 
+						expected2.remove(child2);
 	
 					assertEquals("Nodes are missing in Framework.Bundle.[i].Wires." + nameSpace +"/"+ child + "/"+REQUIREMENT, 0,
 							expected.size());
 				}
 				// check children of Capability node
-				for (int l = 0; l < children.length; l++) {
-					String child = children[l];
-					Set expected2 = new HashSet();
+				for (String child : children) { 
+					Set<String> expected2 = new HashSet<String>();
 					expected2.add(DIRECTIVE);
 					expected2.add(ATTRIBUTE);
 					String[] children2 = session.getChildNodeNames(uri + "/" + child + "/" + CAPABILITY);
 					assertTrue("These objects must exist.", children2 != null && children2.length > 0 );
-					for (int m = 0; m < children2.length; m++)
-						expected2.remove(children2[m]);
+					for (String child2 : children2) 
+						expected2.remove(child2);
 	
 					assertEquals("Nodes are missing in Framework.Bundle.[i].Wires." + nameSpace +"/"+ child + "/"+CAPABILITY, 0,
 							expected2.size());
@@ -236,25 +227,24 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 		testBundle2 = installAndStartBundle(TESTBUNDLE_NON_TRUSTED);
 
 		String[] children;
-		HashSet expected = new HashSet();
+		HashSet<String> expected = new HashSet<String>();
 		
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
 		String[] bundleKeys = session.getChildNodeNames(FRAMEWORK_ROOT + "/" + BUNDLE );
 		
-		for (int i = 0; i < bundleKeys.length; i++) {
-			String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKeys[i];
-			long bundleID = ((DmtData) session.getNodeValue(uri + "/" + BUNDLEID)).getLong();
+		for (String bundleKey : bundleKeys) {
+			String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey;
+			long bundleID = session.getNodeValue(uri + "/" + BUNDLEID).getLong();
 			if ( bundleID == testBundle1.getBundleId() || bundleID == testBundle2.getBundleId() ) {
 				String[] signers = session.getChildNodeNames( uri  );
-				for (int j = 0; j < signers.length; j++) {
-					String signer = signers[j];
+				for ( String signer : signers ) {
 					children = session.getChildNodeNames(uri + "/" + SIGNERS + "/" + signer );
-					expected = new HashSet();
+					expected = new HashSet<String>();
 					expected.add(INSTANCEID);
 					expected.add(ISTRUSTED);
 					expected.add(CERTIFICATECHAIN);
-					for (int k = 0; k < children.length; k++)
-						expected.remove(children[k]);
+					for (String child : children)
+						expected.remove(child);
 					assertEquals("Nodes are missing in Framework.Bundle.[i].Signers." + signer, 0,
 							expected.size());
 				}
@@ -269,18 +259,17 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 	public void testBundleEntries() throws Exception {
 
 		String[] children;
-		HashSet expected = new HashSet();
+		HashSet<String> expected = new HashSet<String>();
 		
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
 		String[] bundleKeys = session.getChildNodeNames(FRAMEWORK_ROOT + "/" + BUNDLE );
 		
-		for (int i = 0; i < bundleKeys.length; i++) {
-			String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKeys[i] + "/" + ENTRIES;
+		for (String bundleKey : bundleKeys) {
+			String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey + "/" + ENTRIES;
 			String[] entries = session.getChildNodeNames( uri );
-			for (int j = 0; j < entries.length; j++) {
-				String entry = entries[j];
+			for (String entry : entries) {
 				children = session.getChildNodeNames(uri + "/" + entry );
-				expected = new HashSet();
+				expected = new HashSet<String>();
 				expected.add(INSTANCEID);
 				expected.add(PATH);
 				expected.add(CONTENT);
@@ -313,8 +302,8 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 	
 			session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
 			String[] bundleIds = session.getChildNodeNames(FRAMEWORK_ROOT + "/" + BUNDLE);
-			for (int i = 0; i < bundleIds.length; i++) {
-				String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleIds[i];
+			for (String bundleId : bundleIds) {
+				String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleId;
 				assertMetaData( uri, false, "AG__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
 				
 				uri+= "/";
@@ -341,13 +330,11 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 				assertMetaData( uriWires, false,"_G__", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
 				assertEquals( "The nodeType of 'Wires' node must be " + DmtConstants.DDF_MAP, DmtConstants.DDF_MAP, session.getNodeType(uri + WIRES));
 				children = session.getChildNodeNames(uriWires);
-				for (int j = 0; j < children.length; j++) {
-					String namespace = children[j];
-					assertMetaData(uriWires + "/" + namespace, false, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
-					String[] wires = session.getChildNodeNames(uriWires + "/" + namespace);
-					for (int k = 0; k < wires.length; k++) {
-						String wire = wires[k];
-						String uriWire = uriWires + "/" + namespace + "/" + wire; 
+				for (String nameSpace : children) {
+					assertMetaData(uriWires + "/" + nameSpace, false, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
+					String[] wires = session.getChildNodeNames(uriWires + "/" + nameSpace);
+					for (String wire : wires) {
+						String uriWire = uriWires + "/" + nameSpace + "/" + wire; 
 						assertMetaData( uriWire, false, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
 						assertEquals( "The nodeType must be " + DmtConstants.DDF_LIST + " for uri: " + uriWire, DmtConstants.DDF_LIST, session.getNodeType(uriWire));
 						assertMetaData( uriWire + "/" + PROVIDER, true, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
@@ -379,8 +366,7 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 				assertMetaData( uriSigners, false,"_G__", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
 				assertEquals( "The nodeType of 'Signers' node must be " + DmtConstants.DDF_LIST, DmtConstants.DDF_LIST, session.getNodeType(uri + SIGNERS));
 				children = session.getChildNodeNames(uriSigners);
-				for (int j = 0; j < children.length; j++) {
-					String signer = children[j];
+				for (String signer : children) {
 					String uriSigner = uriSigners + "/" + signer;
 					assertMetaData( uriSigner, false, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
 					assertMetaData( uriSigner + "/" + INSTANCEID, true, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
@@ -394,8 +380,7 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 				assertMetaData( uriEntries, false,"_G__", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
 				assertEquals( "The nodeType of 'Entries' node must be " + DmtConstants.DDF_LIST, DmtConstants.DDF_LIST, session.getNodeType(uriEntries));
 				children = session.getChildNodeNames(uriEntries);
-				for (int j = 0; j < children.length; j++) {
-					String entry = children[j];
+				for (String entry : children) {
 					String uriEntry = uriEntries + "/" + entry;
 					assertMetaData( uriEntry, false, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
 					assertMetaData( uriEntry + "/" + INSTANCEID, true, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
