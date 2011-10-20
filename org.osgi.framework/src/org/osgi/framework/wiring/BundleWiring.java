@@ -22,7 +22,11 @@ import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
+import org.osgi.framework.resource.Capability;
+import org.osgi.framework.resource.Requirement;
 import org.osgi.framework.resource.ResourceConstants;
+import org.osgi.framework.resource.Wire;
+import org.osgi.framework.resource.Wiring;
 
 /**
  * A wiring for a bundle. Each time a bundle is resolved, a new bundle wiring
@@ -50,7 +54,7 @@ import org.osgi.framework.resource.ResourceConstants;
  * @noimplement
  * @version $Id$
  */
-public interface BundleWiring extends BundleReference {
+public interface BundleWiring extends BundleReference, Wiring {
 	/**
 	 * Returns {@code true} if this bundle wiring is the current bundle wiring.
 	 * The bundle wiring for a bundle is the current bundle wiring if it is the
@@ -93,8 +97,8 @@ public interface BundleWiring extends BundleReference {
 	 * declared capabilities from the bundle revision and all attached fragment
 	 * revisions<sup>&#8224;</sup>. Not all declared capabilities may be
 	 * provided since some may be discarded. For example, if a package is
-	 * declared to be exported and import, only one is selected and the other is
-	 * discarded.
+	 * declared to be both exported and imported, only one is selected and the
+	 * other is discarded.
 	 * <p>
 	 * A bundle wiring for a fragment revision with a symbolic name must provide
 	 * exactly one {@link ResourceConstants#IDENTITY_NAMESPACE identity}
@@ -367,4 +371,54 @@ public interface BundleWiring extends BundleReference {
 	 * @see #listResources(String, String, int)
 	 */
 	int	LISTRESOURCES_LOCAL		= 0x00000002;
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This method returns the same value as {@link #getCapabilities(String)}.
+	 *
+	 * @since 1.1
+	 */
+	List<Capability> getResourceCapabilities(String namespace);
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This method returns the same value as {@link #getRequirements(String)}.
+	 *
+	 * @since 1.1
+	 */
+	List<Requirement> getResourceRequirements(String namespace);
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This method returns the same value as {@link #getProvidedWires(String)}.
+	 *
+	 * @since 1.1
+	 */
+	List<Wire> getProvidedResourceWires(String namespace);
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This method returns the same value as {@link #getRequiredWires(String)}.
+	 *
+	 * @since 1.1
+	 */
+	List<Wire> getRequiredResourceWires(String namespace);
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This method returns the same value as {@link #getRevision()}.
+	 *
+	 * @since 1.1
+	 */
+	BundleRevision getResource();
 }
