@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,6 +22,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
+import org.osgi.framework.resource.Capability;
+import org.osgi.framework.resource.Requirement;
 import org.osgi.framework.resource.Resource;
 import org.osgi.framework.resource.ResourceConstants;
 
@@ -30,7 +32,7 @@ import org.osgi.framework.resource.ResourceConstants;
  * updated, a new bundle revision of the bundle is created. Since a bundle
  * update can change the entries in a bundle, different bundle wirings for the
  * same bundle can be associated with different bundle revisions.
- * 
+ *
  * <p>
  * For a bundle that has not been uninstalled, the most recent bundle revision
  * is defined to be the current bundle revision. A bundle in the UNINSTALLED
@@ -38,7 +40,7 @@ import org.osgi.framework.resource.ResourceConstants;
  * bundle can be obtained by calling {@link Bundle#adapt(Class) bundle.adapt}
  * (BundleRevision.class). Since a bundle in the UNINSTALLED state does not have
  * a current revision, adapting such a bundle returns {@code null}.
- * 
+ *
  * <p>
  * The framework defines name spaces for {@link #PACKAGE_NAMESPACE package},
  * {@link #BUNDLE_NAMESPACE bundle} and {@link #HOST_NAMESPACE host}
@@ -46,7 +48,7 @@ import org.osgi.framework.resource.ResourceConstants;
  * wiring information by the framework. They must not be used in
  * {@link Constants#PROVIDE_CAPABILITY Provide-Capability} and
  * {@link Constants#REQUIRE_CAPABILITY Require-Capability} manifest headers.
- * 
+ *
  * @ThreadSafe
  * @noimplement
  * @version $Id$
@@ -54,7 +56,7 @@ import org.osgi.framework.resource.ResourceConstants;
 public interface BundleRevision extends BundleReference, Resource {
 	/**
 	 * Returns the symbolic name for this bundle revision.
-	 * 
+	 *
 	 * @return The symbolic name for this bundle revision.
 	 * @see Bundle#getSymbolicName()
 	 */
@@ -62,7 +64,7 @@ public interface BundleRevision extends BundleReference, Resource {
 
 	/**
 	 * Returns the version for this bundle revision.
-	 * 
+	 *
 	 * @return The version for this bundle revision, or
 	 *         {@link Version#emptyVersion} if this bundle revision has no
 	 *         version information.
@@ -72,7 +74,7 @@ public interface BundleRevision extends BundleReference, Resource {
 
 	/**
 	 * Returns the capabilities declared by this bundle revision.
-	 * 
+	 *
 	 * @param namespace The name space of the declared capabilities to return or
 	 *        {@code null} to return the declared capabilities from all name
 	 *        spaces.
@@ -86,7 +88,7 @@ public interface BundleRevision extends BundleReference, Resource {
 
 	/**
 	 * Returns the requirements declared by this bundle revision.
-	 * 
+	 *
 	 * @param namespace The name space of the declared requirements to return or
 	 *        {@code null} to return the declared requirements from all name
 	 *        spaces.
@@ -100,7 +102,7 @@ public interface BundleRevision extends BundleReference, Resource {
 
 	/**
 	 * Name space for package capabilities and requirements.
-	 * 
+	 *
 	 * <p>
 	 * The name of the package is stored in the capability attribute of the same
 	 * name as this name space (osgi.wiring.package). The other
@@ -118,14 +120,14 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * bundle-version} capability attribute must contain the
 	 * {@link BundleRevision#getVersion() version} of the provider if one is
 	 * specified or {@link Version#emptyVersion} if not specified.
-	 * 
+	 *
 	 * <p>
 	 * The package capabilities provided by the system bundle, that is the
 	 * bundle with id zero, must include the package specified by the
 	 * {@link Constants#FRAMEWORK_SYSTEMPACKAGES} and
 	 * {@link Constants#FRAMEWORK_SYSTEMPACKAGES_EXTRA} framework properties as
 	 * well as any other package exported by the framework implementation.
-	 * 
+	 *
 	 * <p>
 	 * A bundle revision {@link BundleRevision#getDeclaredCapabilities(String)
 	 * declares} zero or more package capabilities (this is, exported packages)
@@ -143,7 +145,7 @@ public interface BundleRevision extends BundleReference, Resource {
 
 	/**
 	 * Name space for bundle capabilities and requirements.
-	 * 
+	 *
 	 * <p>
 	 * The bundle symbolic name of the bundle is stored in the capability
 	 * attribute of the same name as this name space (osgi.wiring.bundle).
@@ -156,14 +158,14 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * attribute must contain the {@link Version} of the bundle from the
 	 * {@link Constants#BUNDLE_VERSION Bundle-Version} manifest header if one is
 	 * specified or {@link Version#emptyVersion} if not specified.
-	 * 
+	 *
 	 * <p>
 	 * A non-fragment revision
 	 * {@link BundleRevision#getDeclaredCapabilities(String) declares} exactly
 	 * one<sup>&#8224;</sup> bundle capability (that is, the bundle can be
 	 * required by another bundle). A fragment revision must not declare a
 	 * bundle capability.
-	 * 
+	 *
 	 * <p>
 	 * A bundle wiring for a non-fragment revision
 	 * {@link BundleWiring#getCapabilities(String) provides} exactly
@@ -171,7 +173,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * required by another bundle) and
 	 * {@link BundleWiring#getRequiredWires(String) requires} zero or more
 	 * bundle capabilities (that is, requires other bundles).
-	 * 
+	 *
 	 * <p>
 	 * &#8224; A bundle with no bundle symbolic name (that is, a bundle with
 	 * {@link Constants#BUNDLE_MANIFESTVERSION Bundle-ManifestVersion}
@@ -181,7 +183,7 @@ public interface BundleRevision extends BundleReference, Resource {
 
 	/**
 	 * Name space for host capabilities and requirements.
-	 * 
+	 *
 	 * <p>
 	 * The bundle symbolic name of the bundle is stored in the capability
 	 * attribute of the same name as this name space (osgi.wiring.host).
@@ -194,7 +196,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * attribute must contain the {@link Version} of the bundle from the
 	 * {@link Constants#BUNDLE_VERSION Bundle-Version} manifest header if one is
 	 * specified or {@link Version#emptyVersion} if not specified.
-	 * 
+	 *
 	 * <p>
 	 * A non-fragment revision
 	 * {@link BundleRevision#getDeclaredCapabilities(String) declares} zero or
@@ -203,7 +205,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * attached}. A fragment revision must
 	 * {@link BundleRevision#getDeclaredRequirements(String) declare} exactly
 	 * one host requirement.
-	 * 
+	 *
 	 * <p>
 	 * A bundle wiring for a non-fragment revision
 	 * {@link BundleWiring#getCapabilities(String) provides} zero or
@@ -212,7 +214,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * attached}. A bundle wiring for a fragment revision
 	 * {@link BundleWiring#getRequiredWires(String) requires} a host capability
 	 * for each host to which it is attached.
-	 * 
+	 *
 	 * <p>
 	 * &#8224; A bundle with no bundle symbolic name (that is, a bundle with
 	 * {@link Constants#BUNDLE_MANIFESTVERSION Bundle-ManifestVersion}
@@ -226,14 +228,14 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * <ul>
 	 * <li>{@link #TYPE_FRAGMENT}
 	 * </ul>
-	 * 
+	 *
 	 * A bundle revision may be more than one type at a time. A type code is
 	 * used to identify the bundle revision type for future extendability.
-	 * 
+	 *
 	 * <p>
 	 * If this bundle revision is not one or more of the defined types then 0 is
 	 * returned.
-	 * 
+	 *
 	 * @return The special types of this bundle revision. The type values are
 	 *         ORed together.
 	 */
@@ -241,17 +243,39 @@ public interface BundleRevision extends BundleReference, Resource {
 
 	/**
 	 * Bundle revision type indicating the bundle revision is a fragment.
-	 * 
+	 *
 	 * @see #getTypes()
 	 */
 	int	TYPE_FRAGMENT	= 0x00000001;
 
 	/**
 	 * Returns the bundle wiring which is using this bundle revision.
-	 * 
+	 *
 	 * @return The bundle wiring which is using this bundle revision or
 	 *         {@code null} if no bundle wiring is using this bundle revision.
 	 * @see BundleWiring#getRevision()
 	 */
 	BundleWiring getWiring();
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>
+	 * This method returns the same value as
+	 * {@link #getDeclaredCapabilities(String)}.
+	 * 
+	 * @since 1.1
+	 */
+	List<Capability> getCapabilities(String namespace);
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>
+	 * This method returns the same value as
+	 * {@link #getDeclaredRequirements(String)}.
+	 * 
+	 * @since 1.1
+	 */
+	List<Requirement> getRequirements(String namespace);
 }
