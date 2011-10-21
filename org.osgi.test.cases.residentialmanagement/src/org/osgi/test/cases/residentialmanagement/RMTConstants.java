@@ -2,7 +2,7 @@ package org.osgi.test.cases.residentialmanagement;
 
 public interface RMTConstants {
 
-	static final String RMT_ROOT = "./RMT";
+	static final String RMT_ROOT = System.getProperty("org.osgi.dmt.residential");
 	static final String FRAMEWORK_ROOT = RMT_ROOT + "/Framework";
 	static final String FILTER_ROOT = RMT_ROOT + "/Filter";
 	static final String LOG_ROOT = RMT_ROOT + "/Log";

@@ -131,7 +131,8 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						} else if(requestedState.equals(INSTALLED)){
 							this.stopAndRefreshBundles.add(bs);
 						}
-					} else if (nodepath[nodepath.length - 1].equals(BUNDLESTARTLEVEL)) {
+					} else if (nodepath[nodepath.length - 1].equals(BUNDLESTARTLEVEL)
+							&& nodepath.length==4) {
 						BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(nodepath[nodepath.length - 2]);
 						int bundleStartLevel = operation.getData().getInt();
 						bs.setStartLevel(bundleStartLevel);
@@ -149,6 +150,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 					}
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				bundlesTable = (Hashtable) this.bundlesTableSnap.clone();
 				rollback();
 				throw new DmtException(operation.getObjectname(),
@@ -482,7 +484,6 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		if (type != null)
 			throw new DmtException(nodePath, DmtException.COMMAND_FAILED,
 					"Cannot set type property of interior nodes.");
-
 		String[] path = shapedPath(nodePath);
 		if (path.length == 3 && path[1].equals(BUNDLE)) {
 			if(bundlesTable.get(path[2])!=null)
@@ -511,6 +512,12 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 	public void setNodeValue(String[] nodePath, DmtData data)
 			throws DmtException {
 		String[] path = shapedPath(nodePath);
+		//XXX
+		String pathCheck="";
+		for(int i=0;i<nodePath.length;i++){
+			pathCheck=pathCheck+nodePath[i]+"/";
+		}
+		System.out.println("#####setNodeVal: "+pathCheck);
 
 		if (path.length < 2)
 			throw new DmtException(nodePath,
@@ -529,10 +536,10 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		}
 		
 		if (path.length == 4) {
-			if (path[2].equals(URL)
-					|| path[2].equals(AUTOSTART)
-					|| path[2].equals(REQUESTEDSTATE)
-					|| path[2].equals(BUNDLESTARTLEVEL)) {
+			if (path[3].equals(URL)
+					|| path[3].equals(AUTOSTART)
+					|| path[3].equals(REQUESTEDSTATE)
+					|| path[3].equals(BUNDLESTARTLEVEL)) {
 				operations.add(new Operation(Operation.SET_VALUE, path, data));
 				return;
 			}
@@ -1050,6 +1057,12 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 
 	public boolean isNodeUri(String[] nodePath) {
 		String[] path = shapedPath(nodePath);
+		
+		String pathCheck="";
+		for(int i=0;i<nodePath.length;i++){
+			pathCheck=pathCheck+nodePath[i]+"/";
+		}
+		System.out.println("#####isURI: "+pathCheck);
 
 		if (path.length == 1)
 			return true;
@@ -1077,8 +1090,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			if(this.bundlesTableCopy.get(path[2])!=null){
 				BundleSubTree bs = (BundleSubTree)this.bundlesTableCopy.get(path[2]);
 				Node node = bs.getLocatonNode();
-				if(node.findNode(new String[] {path[3]})!=null)
+				if(node.findNode(new String[] {path[3]})!=null){
 					return true;
+				}
 			}
 		}
 		

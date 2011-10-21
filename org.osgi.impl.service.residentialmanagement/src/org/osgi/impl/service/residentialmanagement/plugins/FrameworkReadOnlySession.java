@@ -80,7 +80,7 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 	protected static final String FAULTTYPE = "FaultType";
 	protected static final String FAULTMESSAGE = "FaultMassage";
 	protected static final String BUNDLEID = "BundleId";
-	protected static final String SYMBOLICNAME = "SymbolicNmae";
+	protected static final String SYMBOLICNAME = "SymbolicName";
 	protected static final String VERSION = "Version";
 	protected static final String BUNDLETYPE = "BundleType";
 	protected static final String HEADERS = "Headers";
@@ -149,7 +149,8 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 	FrameworkReadOnlySession(FrameworkPlugin plugin, BundleContext context) {
 		this.plugin = plugin;
 		this.context = context;
-		properties = System.getProperties();		
+		properties = System.getProperties();
+		
 	}
 
 	public void nodeChanged(String[] nodePath) throws DmtException {
@@ -1244,6 +1245,13 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 
 	public boolean isLeafNode(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
+		//XXX
+		String pathCheck="";
+		for(int i=0;i<nodePath.length;i++){
+			pathCheck=pathCheck+nodePath[i]+"/";
+		}
+		System.out.println("#####isLeaf: "+pathCheck);
+		
 		if (path.length == 1)
 			return false;
 		
@@ -1310,7 +1318,6 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 					|| path[7].equals(CAPABILITYATTRIBUTE))
 				return true;
 		}
-		
 		return false;
 	}
 
@@ -1517,13 +1524,14 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 				"The specified leaf node does not exist in the framework object.");
 	}
 
-	// ----- Utilities -----//
-
+	//TODO:
 	protected String[] shapedPath(String[] nodePath) {
-		String[] newPath = new String[nodePath.length - 1];
-		for (int i = 0; i < nodePath.length - 1; i++) {
-			newPath[i] = nodePath[i + 1];
-		}
+		int size = nodePath.length;
+		int srcPos = 2;
+		int destPos = 0;
+		int length = size - srcPos;
+		String[] newPath = new String[length];
+		System.arraycopy(nodePath, srcPos, newPath, destPos, length);
 		return newPath;
 	}
 	
@@ -1587,6 +1595,8 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 		Vector hostList = new Vector();
 		Vector bundleList = new Vector();
 		Vector serviceList = new Vector();
+		if(bundle==null)
+			System.out.println("manaedWire : NULL");
 		BundleWiring wiring = (BundleWiring)bundle.adapt(BundleWiring.class);
 		
 		List packageRequiredWireList = wiring.getRequiredWires(BundleRevision.PACKAGE_NAMESPACE);
@@ -1631,19 +1641,23 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 				}
 				if(registerBundleLocation.equals(thisBundleLocation)){
 					Bundle[] usingBundle = references[i].getUsingBundles();
-					for(int k=0;k<usingBundle.length;k++){
-						WiresSubtree ws = new WiresSubtree(SERVICE_NAMESPACE,usingBundle[k].getLocation(),
-								thisBundleLocation,id++,directive,attribute,directive,attribute,"");
-						list.add(ws);
+					if(usingBundle!=null){
+						for(int k=0;k<usingBundle.length;k++){
+							WiresSubtree ws = new WiresSubtree(SERVICE_NAMESPACE,usingBundle[k].getLocation(),
+									thisBundleLocation,id++,directive,attribute,directive,attribute,"");
+							list.add(ws);
+						}
 					}
 				} else {
 					Bundle[] usingBundle = references[i].getUsingBundles();
-					for(int k=0;k<usingBundle.length;k++){
-						String usingBundleLocation = usingBundle[k].getLocation();
-						if(usingBundleLocation.equals(thisBundleLocation)){
-							WiresSubtree ws = new WiresSubtree(SERVICE_NAMESPACE,thisBundleLocation,
-									registerBundleLocation,id++,directive,attribute,directive,attribute,"");
-							list.add(ws);
+					if(usingBundle!=null){
+						for(int k=0;k<usingBundle.length;k++){
+							String usingBundleLocation = usingBundle[k].getLocation();
+							if(usingBundleLocation.equals(thisBundleLocation)){
+								WiresSubtree ws = new WiresSubtree(SERVICE_NAMESPACE,thisBundleLocation,
+										registerBundleLocation,id++,directive,attribute,directive,attribute,"");
+								list.add(ws);
+							}
 						}
 					}
 				}
@@ -1964,7 +1978,7 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 		
 		protected Node findNode(String[] path) {
 			for (int i = 0; i < children.size(); i++) {
-				if (((Node) children.get(i)).name.equals(path[0])) {
+				if ((((Node) children.get(i)).getName()).equals(path[0])) {
 					if (path.length == 1) {
 						return (Node) children.get(i);
 					} else {
@@ -1983,14 +1997,12 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 			return name;
 		}
 
-		protected Node addNode(Node add) {
+		protected void addNode(Node add) {
 			children.add(add);
-			return null;
 		}
 
-		protected Node deleteNode(Node del) {
+		protected void deleteNode(Node del) {
 			children.remove(del);
-			return null;
 		}
 
 		protected Node[] getChildren() {
