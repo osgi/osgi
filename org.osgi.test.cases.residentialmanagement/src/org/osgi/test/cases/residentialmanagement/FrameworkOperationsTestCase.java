@@ -24,8 +24,11 @@
  */
 package org.osgi.test.cases.residentialmanagement;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkListener;
@@ -93,7 +96,6 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 			session.commit();
 			
 			// check the new values in a new shared session
-			session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
 			rmtStartLevel = session.getNodeValue(FRAMEWORK_ROOT + "/" + STARTLEVEL ).getInt();
 			rmtInitialBundleStartLevel = session.getNodeValue(FRAMEWORK_ROOT + "/" + INITIAL_BUNDLE_STARTLEVEL ).getInt();
 			
@@ -201,16 +203,33 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 	}
 	
 	/**
-	 * This test asserts that the wiring of the bundles is correctly reflected in the RMT
+	 * This test asserts that the bundle-wiring is correctly reflected in the RMT
+	 * The order of the Wires per bundle in the RMT is not guaranteed to be the same as in a Wiring-Api snapshot 
+	 * and there is common identifier for a wire in RMT and API.
+	 * Therefore the strategy is to loop through the RMT-Wires and to find matches in the API snapshot by doing a subtree comparision.
+	 * The test is successful, if each RMT wire has exactly one matching counterpart in the snapshot. 
 	 */
 	public void testBundleWires() throws Exception {
 
-		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
+		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertNotNull(session);
 		
-		// TODO
-		
+		String uri = FRAMEWORK_ROOT + "/" + BUNDLE;
+		String[] bundleKeys = session.getChildNodeNames(uri);
+		for (String bundleKey : bundleKeys) {
+			String bundleUri = uri + "/" + bundleKey;
+			long id = session.getNodeValue( bundleUri + "/" + BUNDLEID ).getLong();
+
+			String[] nameSpaces = session.getChildNodeNames( bundleUri + "/" + WIRES );
+			for ( String nameSpace : nameSpaces ) {
+				if ( ! "osgi.wiring.rmt.service".equals(nameSpace) )
+					assertStandardNameSpaceTree(nameSpace, id, session, bundleUri + "/" + WIRES + "/" + nameSpace);
+				else 
+					assertServiceNameSpaceTree(nameSpace, id, session, bundleUri + "/" + WIRES + "/" + nameSpace);
+			}
+		}
 	}
+
 	
 	/**
 	 * tests installation and uninstallation of a bundle via RMT
@@ -236,7 +255,6 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		session.commit();
 		
 		// check that the bundle has been installed, there are no faults and the state is active
-		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_ATOMIC);
 		assertEquals( session.getNodeValue(BUNDLE_KEY + "/" + FAULT_TYPE).getInt(), -1);
 		assertEquals( session.getNodeValue(BUNDLE_KEY + "/" + FAULT_MESSAGE).getString(), "");
 		assertEquals( "ACTIVE", session.getNodeValue(BUNDLE_KEY + "/" + STATE).getString());
@@ -249,7 +267,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		// check real installation state
 		testBundle1 = getContext().getBundle(id);
 		assertNotNull("The testBundle was not installed successfully!", testBundle1 );
-		assertEquals( "The testBundle should be in 'RESOLVED' state now.", Bundle.RESOLVED, testBundle1.getState());
+		assertEquals( "The testBundle should be in 'ACTIVE' state now.", Bundle.ACTIVE, testBundle1.getState());
 		
 		// --------- Uninstall a bundle -----------
 		// uninstall bundle via RMT
@@ -257,7 +275,6 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		session.commit();
 		
 		// check that the bundle has been uninstalled and there are no faults 
-		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_ATOMIC);
 		assertEquals( session.getNodeValue(BUNDLE_KEY + "/" + FAULT_TYPE).getInt(), -1);
 		assertEquals( session.getNodeValue(BUNDLE_KEY + "/" + FAULT_MESSAGE).getString(), "");
 		assertEquals( "UNINSTALLED", session.getNodeValue(BUNDLE_KEY + "/" + STATE).getString());
@@ -306,7 +323,6 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		// check real bundle state
 		assertEquals( "testBundle should be in 'RESOLVED' state now.", Bundle.RESOLVED, testBundle.getState());
 
-		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_ATOMIC);
 		// check for Faults in previous commit
 		assertEquals( session.getNodeValue(bundleBaseUri + "/" + FAULT_TYPE).getInt(), -1);
 		assertEquals( session.getNodeValue(bundleBaseUri + "/" + FAULT_MESSAGE).getString(), "");
@@ -320,7 +336,6 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		assertEquals( "testBundle should be in 'ACTIVE' state now.", Bundle.ACTIVE, testBundle.getState());
 		
 		// check bundle state in RMT now and stop it again via RMT
-		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_ATOMIC);
 		// check for Faults in previous commit
 		assertEquals( session.getNodeValue(bundleBaseUri + "/" + FAULT_TYPE).getInt(), -1);
 		assertEquals( session.getNodeValue(bundleBaseUri + "/" + FAULT_MESSAGE).getString(), "");
@@ -335,5 +350,149 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_SHARED);
 		assertEquals( "RESOLVED", session.getNodeValue(bundleBaseUri + "/" + STATE).getString());
 	}
+
+	// ************ Utility 
+	
+	/**
+	 * This method performs a comparision of the wires for a given bundle and namespace.
+	 * @param nameSpace ... the current namespace
+	 * @param bundleId ... the bundle id to get the corresponding bundle for the Wiring-API check
+	 * @param session ... the session to use
+	 * @param nameSpaceUri ... the DMT uri of the bundles wiring namespace subtree
+	 * @throws Exception
+	 */
+	private void assertStandardNameSpaceTree( String nameSpace, long bundleId, DmtSession session, String nameSpaceUri ) throws Exception {
+
+		// first get a snapshot of the wiring for the given bundle 
+		Bundle bundle = getContext().getBundle(bundleId);
+		BundleWiring wiring = bundle.adapt(BundleWiring.class);
+		
+		// create a list that holds all wires (provided and required) for the current bundle 
+		List<BundleWire> allApiWires = new ArrayList<BundleWire>();
+		allApiWires.addAll(wiring.getProvidedWires(nameSpace));
+		allApiWires.addAll(wiring.getRequiredWires(nameSpace));
+
+		// get Wires from RMT
+		String[] wires = session.getChildNodeNames(nameSpaceUri);
+		for (String wire : wires ) {
+			String wireUri = nameSpaceUri + "/" + wire;
+			// check for match
+			int matchIndex = matchWireTree(session, wireUri, nameSpace, allApiWires);
+			if ( matchIndex >= 0 ) {
+				pass("Found match for wire: " + wireUri );
+				// remove matching wire
+				allApiWires.remove(matchIndex);
+			}
+			else 
+				fail("Found no matching wire in the wiring API snapshot for " + wireUri );
+		}
+		
+		assertEquals("Did not find all Wires in RMT that are reported by the Wiring API!", 0, allApiWires.size());
+		
+	}
+	
+	
+	private void assertServiceNameSpaceTree( String nameSpace, long bundleId, DmtSession session, String nameSpaceUri ) throws Exception {
+		// TODO: implement this
+	}
+
+	/**
+	 * This method tries to find a match for the given RMT wire subtree in the list of all wires from the API snapshot.
+	 * @param session ... the session to access the RMT
+	 * @param uri ... the root uri of the wire subtree
+	 * @param nameSpace ... the current namespace
+	 * @param allApiWires ... the list of wires from the API snapshot 
+	 * @return the index of the matching API wire or -1, in case of no match
+	 */
+	private int matchWireTree(DmtSession session, String uri, String nameSpace, List<BundleWire> allApiWires) throws Exception {
+		int index = -1;
+		boolean match = false;
+		for (BundleWire wire : allApiWires) {
+			index++;
+			String provider = wire.getProviderWiring().getBundle().getLocation();
+			String requirer = wire.getRequirerWiring().getBundle().getLocation();
+
+			String rmtProvider = session.getNodeValue(uri + "/" + PROVIDER ).getString();
+			String rmtRequirer = session.getNodeValue(uri + "/" + REQUIRER ).getString();
+			String rmtNameSpace = session.getNodeValue(uri + "/" + NAMESPACE ).getString();
+			
+			if ( ! provider.equals(rmtProvider) )
+				continue;
+			if ( ! requirer.equals(rmtRequirer) )
+				continue;
+			if ( ! nameSpace.equals(rmtNameSpace) )
+				continue;
+
+			// ******* REQUIREMENT part *********
+			BundleRequirement requirement = wire.getRequirement();
+			String reqUri = uri + "/" + REQUIREMENT;
+			// directives
+			Map<String, String> directivesMap = requirement.getDirectives();
+			String[] children = session.getChildNodeNames( reqUri + "/" + DIRECTIVE);
+			Map<String, String> rmtDirectivesMap = new HashMap<String, String>();
+			for (String rmtKey : children)
+				rmtDirectivesMap.put(rmtKey, session.getNodeValue(reqUri + "/" + DIRECTIVE + "/" + rmtKey ).getString());
+			if ( ! directivesMap.equals(rmtDirectivesMap) ) 
+				continue;
+			
+			// attributes
+			Map<String, Object> attributeMap = requirement.getAttributes();
+			children = session.getChildNodeNames(reqUri + "/" + ATTRIBUTE);
+			Map<String, Object> rmtAttributeMap = new HashMap<String, Object>();
+			for (String rmtKey : children)
+				// we must add the object values as String, because they are also Strings in the RMT
+				rmtAttributeMap.put(rmtKey, session.getNodeValue(reqUri + "/" + ATTRIBUTE + "/" + rmtKey ).getString());
+			if ( ! attributeMap.equals(rmtAttributeMap) ) 
+				continue;
+			
+			// FILTER
+			// TODO: ?? Is this the correct source of the filter?
+			// TODO: ?? Must filter still be present in the directive map?
+			String filter = directivesMap.get(FILTER);
+			String rmtFilter = session.getNodeValue(reqUri + "/" + FILTER ).getString();
+			if ( ! filter.equals(rmtFilter) )
+				continue;
+			
+
+			// ******* CAPABILITY part *********
+			BundleCapability capability = wire.getCapability();
+			String capUri = uri + "/" + CAPABILITY;
+			// directives
+			directivesMap = capability.getDirectives();
+			children = session.getChildNodeNames(capUri + "/" + DIRECTIVE);
+			rmtDirectivesMap = new HashMap<String, String>();
+			for (String rmtKey : children)
+				rmtDirectivesMap.put(rmtKey, session.getNodeValue(capUri + "/" + DIRECTIVE + "/" + rmtKey ).getString());
+			if ( ! directivesMap.equals(rmtDirectivesMap) ) 
+				continue;
+			
+			// attributes
+			attributeMap = requirement.getAttributes();
+			children = session.getChildNodeNames(capUri + "/" + ATTRIBUTE);
+			rmtAttributeMap = new HashMap<String, Object>();
+			for (String rmtKey : children)
+				// we must add the object values as String, because they are also Strings in the RMT
+				rmtAttributeMap.put(rmtKey, session.getNodeValue(capUri + "/" + ATTRIBUTE + "/" + rmtKey ).getString());
+			if ( ! attributeMap.equals(rmtAttributeMap) ) 
+				continue;
+
+			// if we reach this point then we have a match
+			match = true;
+			break;
+		}
+		return match ? index : -1;
+	}
+
+	private void dumpTree(DmtSession session, String uri ) throws Exception {
+		System.out.println( uri );
+		if ( session.isLeafNode(uri) )
+			System.out.println( ">>>" + session.getNodeValue(uri));
+		else {
+			String[] children = session.getChildNodeNames(uri);
+			for (String child : children)
+				dumpTree(session, uri + "/" + child );
+		}
+	}
+
 
 }
