@@ -45,6 +45,7 @@ import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
 
 /**
  * 
@@ -101,16 +102,16 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 					String[] path = operation.getObjectname();
 					if (path.length == 3 && path[1].equals(BUNDLE)) {
 						BundleSubTree bs = new BundleSubTree(path[2]);
-						this.bundlesTable.put(path[2], bs);
+						this.bundlesTable.put(Uri.encode(path[2]), bs);
 					}
 				} else if (operation.getOperation() == Operation.SET_VALUE) {
 					String[] nodepath = operation.getObjectname();					
 					if (nodepath[nodepath.length - 1].equals(URL)) {
 						BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(nodepath[nodepath.length - 2]);
 						bs.setURL(operation.getData().getString());
-						if(nodepath[nodepath.length - 2].equals(SYSTEMBUNDLE)){
+						if(nodepath[nodepath.length - 2].equals(Constants.SYSTEM_BUNDLE_LOCATION)){
 							this.frameworkBs = bs;
-						}else{
+						}else if(bs.getCreateFlag()){
 							this.updateBundles.add(bs);
 						}
 					} else if (nodepath[nodepath.length - 1].equals(AUTOSTART)) {
@@ -150,7 +151,6 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
 				bundlesTable = (Hashtable) this.bundlesTableSnap.clone();
 				rollback();
 				throw new DmtException(operation.getObjectname(),
@@ -236,7 +236,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		//Operation of bundle installation
 		for(Enumeration keys = this.bundlesTableTmp.keys(); keys.hasMoreElements();) {
 			String key = (String)keys.nextElement();
-			BundleSubTree bs = (BundleSubTree)this.bundlesTableTmp.get(key);
+			BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(key);
 			String urlStr = bs.getURL();
 			try{
 				String location = bs.getLocation();
@@ -246,14 +246,20 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				context.installBundle(key, is);
 				this.restoreBundles.put(location, state);
 			} catch (MalformedURLException e) {
+				//XXX Debug
+				//e.printStackTrace();
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(0);
 				restore();
 			} catch (IOException e) {
+				//XXX Debug
+				//e.printStackTrace();
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(0);
 				restore();
 			} catch (BundleException e) {
+				//XXX Debug
+				//e.printStackTrace();
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(e.getType());
 				restore();
@@ -379,7 +385,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			try {
 				framework.update();
 			} catch (BundleException e) {
-				BundleSubTree bs = (BundleSubTree)bundlesTable.get(SYSTEMBUNDLE);
+				BundleSubTree bs = (BundleSubTree)bundlesTable.get(Constants.SYSTEM_BUNDLE_LOCATION);
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(e.getType());
 			}
@@ -491,10 +497,11 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						DmtException.NODE_ALREADY_EXISTS,
 						"A given node already exists in the framework MO.");
 			operations.add(new Operation(Operation.ADD_OBJECT, path));
-			this.bundlesTableCopy = (Hashtable) bundlesTable.clone();
+			if(bundlesTableCopy.size()==0)
+				bundlesTableCopy = (Hashtable) bundlesTable.clone();
 			BundleSubTree bs = new BundleSubTree(path[2]);
-			this.bundlesTableCopy.put(path[2], bs);
-			this.bundlesTableTmp.put(path[2], bs);
+			this.bundlesTableCopy.put(Uri.encode(path[2]), bs);
+			this.bundlesTableTmp.put(Uri.encode(path[2]), bs);
 			return;
 		}
 
@@ -512,13 +519,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 	public void setNodeValue(String[] nodePath, DmtData data)
 			throws DmtException {
 		String[] path = shapedPath(nodePath);
-		//XXX
-		String pathCheck="";
-		for(int i=0;i<nodePath.length;i++){
-			pathCheck=pathCheck+nodePath[i]+"/";
-		}
-		System.out.println("#####setNodeVal: "+pathCheck);
-
+		
 		if (path.length < 2)
 			throw new DmtException(nodePath,
 					DmtException.FEATURE_NOT_SUPPORTED,
@@ -590,7 +591,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 	// ----- Overridden methods to provide updated information -----//
 
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
-		String[] path = shapedPath(nodePath);
+		String[] path = shapedPath(nodePath);		
+		if(bundlesTableCopy.size()==0)
+			bundlesTableCopy = (Hashtable) bundlesTable.clone();
 
 		if (path.length == 1) {
 			String[] children = new String[4];
@@ -619,7 +622,8 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				String[] children = new String[bundlesTableCopy.size()];
 				int i = 0;
 				for (Enumeration keys = bundlesTableCopy.keys(); keys.hasMoreElements(); i++) {
-					children[i] = (String) keys.nextElement();
+					//children[i] = Uri.decode((String) keys.nextElement());
+					children[i] = Uri.decode((String) keys.nextElement());
 				}
 				return children;
 			}
@@ -854,6 +858,8 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
+		if(bundlesTableCopy.size()==0)
+			bundlesTableCopy = (Hashtable) bundlesTable.clone();
 
 		if (path.length == 1)
 			throw new DmtException(nodePath,
@@ -1057,12 +1063,8 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 
 	public boolean isNodeUri(String[] nodePath) {
 		String[] path = shapedPath(nodePath);
-		
-		String pathCheck="";
-		for(int i=0;i<nodePath.length;i++){
-			pathCheck=pathCheck+nodePath[i]+"/";
-		}
-		System.out.println("#####isURI: "+pathCheck);
+		if(bundlesTableCopy.size()==0)
+			bundlesTableCopy = (Hashtable) bundlesTable.clone();
 
 		if (path.length == 1)
 			return true;
