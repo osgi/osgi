@@ -54,7 +54,7 @@ import org.osgi.framework.Filter;
  * bundle or the target bundle has a Configuration Permission with the action
  * {@link ConfigurationPermission#TARGET} and a name that matches the
  * configuration location. The name in the permission may contain wildcards (
- * {@code '*'} to match the location using the same substring matching rules as
+ * {@code '*'}) to match the location using the same substring matching rules as
  * {@link Filter}.
  * 
  * Bundles can always create, manipulate, and be updated from configurations

@@ -100,10 +100,4 @@ public class DmtConstants {
 	 */
 	public static final String EVENT_PROPERTY_NEW_NODES = "newnodes";
 
-	/**
-	 * A string defining the property key for the {@code list.nodes} property in node
-	 * related events.
-	 */
-	public static final String EVENT_PROPERTY_LIST_NODES = "list.nodes";
-
 }
