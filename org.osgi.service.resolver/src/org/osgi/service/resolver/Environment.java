@@ -102,5 +102,5 @@ public interface Environment {
 	 *
 	 * @return the wirings already defined in this environment
 	 */
-	Map<Resource, Wiring> getWiring();
+	Map<Resource, Wiring> getWirings();
 }
