@@ -24,30 +24,36 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
-import java.util.Hashtable;
-import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.spi.ReadableDataSession;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 /**
  * 
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
  */
-public class BundleResourcesPluginActivator implements BundleActivator {
-	static final String INSTANCE_ID = "1";
-	static final String[] PLUGIN_ROOT_PATH = new String[] { ".", "OSGi",
-			INSTANCE_ID, "BundleResources" };
-	static final String PLUGIN_ROOT_URI = "./OSGi/" + INSTANCE_ID + "/BundleResources";
+public class LogPlugin implements DataPlugin {
+    private LogReadOnlySession readonly;
+    
+    LogPlugin(BundleContext context) {
+    	readonly = new LogReadOnlySession(this, context);
+    }
+    
+    public ReadableDataSession openReadOnlySession(String[] sessionRoot,
+            DmtSession session) throws DmtException {
+        return readonly;
+    }
 
-	public void start(BundleContext bc) throws BundleException {
-		BundleResourcesPlugin bundlesPlugin = new BundleResourcesPlugin(bc);
-		Hashtable props = new Hashtable();
-		props.put("dataRootURIs", new String[] { PLUGIN_ROOT_URI });
-		String[] ifs = new String[] { DataPlugin.class.getName() };
-		bc.registerService(ifs, bundlesPlugin, props);
-	}
+    public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
+            DmtSession session) throws DmtException {
+        return null; // non-atomic Read Write sessions not supported
+    }
 
-	public void stop(BundleContext bc) throws BundleException {
-	}
-
+    public TransactionalDataSession openAtomicSession(String[] sessionRoot,
+            DmtSession session) throws DmtException {
+    	return null; // Transactional atomic sessions not supported
+    }
 }

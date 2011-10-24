@@ -7,7 +7,7 @@ Private-Package						=  \
 
 -buildpath			= \
 	osgi.core;						version=4.3		, \
-	ee.foundation									, \
+	ee.minimum;						version=1.2.1	, \
 	org.osgi.test.support;      	version=project 	, \
 	org.osgi.service.dmt;			version=project		, \
 	osgi.cmpn;						version=project		, \

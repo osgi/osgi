@@ -26,13 +26,15 @@
 package org.osgi.impl.service.residentialmanagement.plugins;
 
 import java.util.Arrays;
+
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.MetaNode;
+
 /**
  * 
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
  */
-public class PackageStateMetaNode implements MetaNode {
+public class LogMetaNode implements MetaNode {
     static final boolean CAN_ADD        = true;
     static final boolean CAN_DELETE     = true;
     static final boolean CAN_REPLACE    = true;
@@ -41,8 +43,8 @@ public class PackageStateMetaNode implements MetaNode {
     static final boolean IS_INDEX       = true;
     
     static final String  LEAF_MIME_TYPE = "text/plain";
-    static final String  PACKAGESTATE_MO_TYPE = 
-        "org.osgi.service.residential.PackageState.ddf";
+    static final String  LOG_MO_TYPE = 
+        "org.osgi.service.residential.Log.ddf";
 
     
     private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 
@@ -64,8 +66,8 @@ public class PackageStateMetaNode implements MetaNode {
 	private int			formats					= DmtData.FORMAT_NULL;
 	private String[]	mimeTypes				= null;
     
-	// Leaf node in PackageStatePlugin
-	PackageStateMetaNode(String description, boolean canDelete, 
+	// Leaf node in LogPlugin
+	LogMetaNode(String description, boolean canDelete, 
 			boolean canReplace, boolean allowZero, boolean allowInfinite,
 			int formats, String[] mimeType, DmtData[] validValues) {
 		
@@ -86,8 +88,8 @@ public class PackageStateMetaNode implements MetaNode {
 
 	}
 
-	// Interior node in PackageStatePlugin
-	PackageStateMetaNode(String description, int scope, boolean canAdd, 
+	// Interior node in LogPlugin
+	LogMetaNode(String description, int scope, boolean canAdd, 
 			boolean canDelete, boolean allowZero, boolean allowInfinite) {
 		leaf = false;
 
@@ -96,7 +98,7 @@ public class PackageStateMetaNode implements MetaNode {
 		this.scope         = scope;
 		this.description   = description;
 		this.zeroOccurrenceAllowed = allowZero;
-		this.maxOccurrence = allowInfinite ? Integer.MAX_VALUE /* inf */ : 1;
+		this.maxOccurrence = allowInfinite ? Integer.MAX_VALUE : 1;
 		this.formats       = DmtData.FORMAT_NODE;
 	}
 

@@ -1,11 +1,18 @@
 package org.osgi.test.cases.residentialmanagement;
 
+/**
+ * Defines a number of string constants for use in the testclasses implementing this interface.
+ * @author steffen
+ *
+ */
 public interface RMTConstants {
 
 	static final String RMT_ROOT = System.getProperty("org.osgi.dmt.residential");
-	static final String FRAMEWORK_ROOT = RMT_ROOT + "/Framework";
+	static final String FRAMEWORK = "Framework";
+	static final String FRAMEWORK_ROOT = RMT_ROOT + "/" + FRAMEWORK;
 	static final String FILTER_ROOT = RMT_ROOT + "/Filter";
-	static final String LOG_ROOT = RMT_ROOT + "/Log";
+	static final String LOG = "LOG";
+	static final String LOG_ROOT = RMT_ROOT + "/" + LOG;
 	
 	// first level children
 	static final String STARTLEVEL = "StartLevel";
@@ -16,7 +23,7 @@ public interface RMTConstants {
 	// children of the Bundle node
 	// Startlevel
 	static final String URL = "URL";
-	static final String AUTOSTART = "Autostart";
+	static final String AUTOSTART = "AutoStart";
 	static final String FAULT_TYPE = "FaultType";
 	static final String FAULT_MESSAGE = "FaultMessage";
 	static final String BUNDLEID = "BundleId";

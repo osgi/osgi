@@ -33,21 +33,24 @@ import org.osgi.service.dmt.spi.DataPlugin;
  * 
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
  */
-public class PackageStatePluginActivator implements BundleActivator {
-	static final String INSTANCE_ID = "1";
-    static final String PLUGIN_ROOT_URI = "./OSGi/" + INSTANCE_ID + "/PackageState";
+public class LogPluginActivator implements BundleActivator {
+	static String PLUGIN_ROOT_URI = "./Log";
+	static final String KEY_OF_RMT_ROOT_URI = "org.osgi.dmt.residential";
     
-    private PackageStatePlugin packageStatePlugin;
+    private LogPlugin logPlugin;
 
 	public void start(BundleContext bc) throws BundleException {
-		packageStatePlugin = new PackageStatePlugin(bc);
+		String root = System.getProperty(KEY_OF_RMT_ROOT_URI);
+		if(root!=null){
+			PLUGIN_ROOT_URI = root+"/Log";
+		}
+		logPlugin = new LogPlugin(bc);
 		Hashtable props = new Hashtable();
 		props.put("dataRootURIs", new String[] { PLUGIN_ROOT_URI });
 		String[] ifs = new String[] {DataPlugin.class.getName()};
-		bc.registerService(ifs, packageStatePlugin, props);
+		bc.registerService(ifs, logPlugin, props);
 	}
 
 	public void stop(BundleContext bc) throws BundleException {
 	}
-
 }
