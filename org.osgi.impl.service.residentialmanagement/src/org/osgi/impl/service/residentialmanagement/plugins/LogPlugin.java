@@ -24,34 +24,36 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
-import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.spi.ReadableDataSession;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 /**
  * 
- * @author Koya MORI, Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
+ * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
  */
-public class ResidentialPluginActivator implements BundleActivator {
-	private FiltersPluginActivator filters;
-	private FrameworkPluginActivator framework;
-	private LogPluginActivator log;
+public class LogPlugin implements DataPlugin {
+    private LogReadOnlySession readonly;
+    
+    LogPlugin(BundleContext context) {
+    	readonly = new LogReadOnlySession(this, context);
+    }
+    
+    public ReadableDataSession openReadOnlySession(String[] sessionRoot,
+            DmtSession session) throws DmtException {
+        return readonly;
+    }
 
+    public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
+            DmtSession session) throws DmtException {
+        return null; // non-atomic Read Write sessions not supported
+    }
 
-	
-	public void start(BundleContext context) throws Exception {
-		filters = new FiltersPluginActivator();
-		filters.start(context);
-		
-		log = new LogPluginActivator();
-		log.start(context);
-		
-		framework = new FrameworkPluginActivator();
-		framework.start(context);
-	}
-
-	public void stop(BundleContext context) throws Exception {
-		framework.stop(context);
-		log.stop(context);
-		filters.stop(context);
-	}
-
+    public TransactionalDataSession openAtomicSession(String[] sessionRoot,
+            DmtSession session) throws DmtException {
+    	return null; // Transactional atomic sessions not supported
+    }
 }

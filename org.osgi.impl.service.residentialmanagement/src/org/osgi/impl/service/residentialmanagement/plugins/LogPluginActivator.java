@@ -24,34 +24,33 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
+import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.service.dmt.spi.DataPlugin;
 /**
  * 
- * @author Koya MORI, Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
+ * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
  */
-public class ResidentialPluginActivator implements BundleActivator {
-	private FiltersPluginActivator filters;
-	private FrameworkPluginActivator framework;
-	private LogPluginActivator log;
+public class LogPluginActivator implements BundleActivator {
+	static String PLUGIN_ROOT_URI = "./Log";
+	static final String KEY_OF_RMT_ROOT_URI = "org.osgi.dmt.residential";
+    
+    private LogPlugin logPlugin;
 
-
-	
-	public void start(BundleContext context) throws Exception {
-		filters = new FiltersPluginActivator();
-		filters.start(context);
-		
-		log = new LogPluginActivator();
-		log.start(context);
-		
-		framework = new FrameworkPluginActivator();
-		framework.start(context);
+	public void start(BundleContext bc) throws BundleException {
+		String root = System.getProperty(KEY_OF_RMT_ROOT_URI);
+		if(root!=null){
+			PLUGIN_ROOT_URI = root+"/Log";
+		}
+		logPlugin = new LogPlugin(bc);
+		Hashtable props = new Hashtable();
+		props.put("dataRootURIs", new String[] { PLUGIN_ROOT_URI });
+		String[] ifs = new String[] {DataPlugin.class.getName()};
+		bc.registerService(ifs, logPlugin, props);
 	}
 
-	public void stop(BundleContext context) throws Exception {
-		framework.stop(context);
-		log.stop(context);
-		filters.stop(context);
+	public void stop(BundleContext bc) throws BundleException {
 	}
-
 }
