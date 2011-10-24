@@ -96,7 +96,6 @@ public class TestBug1732_MountPluginEventing extends
 		additionalProperties.put( DmtConstants.EVENT_PROPERTY_NODES, "faked nodes" );
 		additionalProperties.put( DmtConstants.EVENT_PROPERTY_NEW_NODES, "faked newnodes" );
 		additionalProperties.put( DmtConstants.EVENT_PROPERTY_SESSION_ID, "faked session.id" );
-		additionalProperties.put( DmtConstants.EVENT_PROPERTY_LIST_NODES, "faked list.nodes" );
 		
 		if ( withNewNodes )
 			mountPoint.postEvent(topic, nodes, newNodes, additionalProperties );
@@ -126,7 +125,6 @@ public class TestBug1732_MountPluginEventing extends
 		
 		// all other standard props must be null
 		assertNull(event.getProperty(DmtConstants.EVENT_PROPERTY_SESSION_ID));
-		assertNull(event.getProperty(DmtConstants.EVENT_PROPERTY_LIST_NODES));
 	}
 	
 	
