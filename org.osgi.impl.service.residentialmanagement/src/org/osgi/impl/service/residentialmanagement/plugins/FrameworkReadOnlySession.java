@@ -1535,7 +1535,8 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 			for (int i = 0; i < bundles.length; i++) {
 				String location = Uri.encode(bundles[i].getLocation());
 				BundleSubTree bs = new BundleSubTree(bundles[i]);
-				if(location.length()>Uri.getMaxSegmentNameLength())
+				// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//				if(location.length()>Uri.getMaxSegmentNameLength())
 					location = Uri.mangle(location);
 				this.bundlesTable.put(location, bs);
 			}
@@ -1550,7 +1551,8 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 			if(this.bundlesTable.get(Uri.encode(bundle.getLocation()))==null){
 				String location = Uri.encode(bundle.getLocation());
 				BundleSubTree bs = new BundleSubTree(bundle);
-				if(location.length()>Uri.getMaxSegmentNameLength())
+				// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//				if(location.length()>Uri.getMaxSegmentNameLength())
 					location = Uri.mangle(location);
 				this.bundlesTable.put(location, bs);
 				return;
@@ -1561,13 +1563,15 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 			}
 		} else if (event.getType() == BundleEvent.RESOLVED) {
 			String location = Uri.encode(bundle.getLocation());
-			if(location.length()>Uri.getMaxSegmentNameLength())
+			// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//			if(location.length()>Uri.getMaxSegmentNameLength())
 				location = Uri.mangle(location);
 			BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(location);
 			bs.createWires();
 		} else if (event.getType() == BundleEvent.UNINSTALLED) {
 			String location = Uri.encode(bundle.getLocation());
-			if(location.length()>Uri.getMaxSegmentNameLength())
+			// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//			if(location.length()>Uri.getMaxSegmentNameLength())
 				location = Uri.mangle(location);
 			this.bundlesTable.remove(location);
 		}

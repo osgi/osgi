@@ -84,47 +84,6 @@ public final class Uri {
 	 */
 	public static final char PATH_SEPARATOR_CHAR = '/';
 
-	/**
-	 * This property specifies the maximum allowed length of a URI segment. The
-	 * corresponding string literal is
-	 * "org.osgi.service.dmt.max.segment.name.length". The configured value can
-	 * be requested at runtime via Uri.getMaxSegmentNameLength().
-	 */
-	private static final String	MAX_SEGMENT_NAME_LENGTH				= "org.osgi.service.dmt.max.segment.name.length";
-
-	/**
-	 * This property specifies the maximum allowed length of a URI. The
-	 * corresponding string literal is "org.osgi.service.dmt.max.uri.length".
-	 * The configured value can be requested at runtime via
-	 * Uri.getMaxUriLength().
-	 */
-	private static final String	MAX_URI_LENGTH						= "org.osgi.service.dmt.max.uri.length";
-
-	/**
-	 * This property specifies the maximum allowed number of Uri segments. The
-	 * corresponding string literal is "org.osgi.service.dmt.max.uri.segments".
-	 * The configured value can be requested at runtime via
-	 * Uri.getMaxUriSegments().
-	 */
-	private static final String	MAX_URI_SEGMENTS					= "org.osgi.service.dmt.max.uri.segments";
-
-	// the smallest valid value for the URI segment length limit
-	private static final int MINIMAL_SEGMENT_LENGTH_LIMIT = 128;
-
-	// the smallest valid value for the URI length limit
-	private static final int MINIMAL_URI_LENGTH_LIMIT = 512;
-
-	// the smallest valid value for the number of Uri segments
-	private static final int MINIMAL_URI_SEGMENT_NUMBER_LIMIT = 20;
-
-	// contains the maximum length of node names
-	private static int segmentLengthLimit = -1;
-
-	// contains the maximum length of node uris
-	private static int maxURILength = -1;
-
-	// contains the maximum number of uris segments
-	private static int maxURISegments = -1;
 
 	// base64 encoding table, modified for use in node name mangling
 	private static final char BASE_64_TABLE[] = { 'A', 'B', 'C', 'D', 'E', 'F',
@@ -154,8 +113,6 @@ public final class Uri {
 	 * Node name mangling is needed in the following cases:
 	 * <ul>
 	 * <li>if the name contains '/' or '\' characters
-	 * <li>if the length of the name exceeds the limit defined by the
-	 * implementation
 	 * </ul>
 	 * <p>
 	 * A node name that does not suffer from either of these problems is
@@ -165,11 +122,10 @@ public final class Uri {
 	 * <p>
 	 * The method returns the normalized {@code nodeName} as described below.
 	 * Invalid node names are normalized in different ways, depending on the
-	 * cause. If the length of the name does not exceed the limit, but the name
-	 * contains '/' or '\' characters, then these are simply escaped by
-	 * inserting an additional '\' before each occurrence. If the length of the
-	 * name does exceed the limit, the following mechanism is used to normalize
-	 * it:
+	 * cause. If the name contains '/' or '\' characters, then these are simply 
+	 * escaped by inserting an additional '\' before each occurrence. If the 
+	 * length of the name does exceed the limit, the following mechanism is 
+	 * used to normalize it:
 	 * <ul>
 	 * <li>the SHA 1 digest of the name is calculated
 	 * <li>the digest is encoded with the base 64 algorithm
@@ -187,7 +143,7 @@ public final class Uri {
 	 *             if {@code nodeName} is empty
 	 */
 	public static String mangle(String nodeName) {
-		return mangle(nodeName, getMaxSegmentNameLength());
+		return mangle(nodeName, 256);
 	}
 
 	/**
@@ -212,28 +168,13 @@ public final class Uri {
 			return "";
 		}
 
-		if (path.length > getMaxUriSegments()) {
-			throw new IllegalArgumentException(
-					"Path contains too many segments.");
-		}
 
 		StringBuffer uri = new StringBuffer();
-		int uriLength = 0;
 		for (int i = 0; i < path.length; ++i) {
-			// getSegmentLength throws exceptions on malformed segments.
-			int segmentLength = getSegmentLength(path[i]);
-			if (segmentLength > getMaxSegmentNameLength()) {
-				throw new IllegalArgumentException("URI segment too long.");
-			}
 			if (i > 0) {
 				uri.append('/');
-				uriLength++;
 			}
-			uriLength += segmentLength;
 			uri.append(path[i]);
-		}
-		if (uriLength > getMaxUriLength()) {
-			throw new IllegalArgumentException("URI too long.");
 		}
 		return uri.toString();
 	}
@@ -339,116 +280,6 @@ public final class Uri {
 		return (String[]) segments.toArray(new String[segments.size()]);
 	}
 
-	/**
-	 * Returns the maximum allowed number of URI segments. The returned value is
-	 * implementation specific.
-	 * <p>
-	 * The return value of {@code Integer.MAX_VALUE} indicates that there is no
-	 * upper limit on the number of URI segments.
-	 * 
-	 * @return maximum number of URI segments supported by the implementation
-	 */
-	public static int getMaxUriSegments() {
-		if (maxURISegments == -1) {
-			maxURISegments = ((Integer) AccessController
-					.doPrivileged(new PrivilegedAction() {
-						public Object run() {
-							String limitString = System
-									.getProperty(MAX_URI_SEGMENTS);
-							int limit = MINIMAL_URI_SEGMENT_NUMBER_LIMIT; // min.
-																			// used
-																			// as
-																			// default
-
-							try {
-								int limitInt = Integer.parseInt(limitString);
-								if (limitInt >= MINIMAL_URI_SEGMENT_NUMBER_LIMIT)
-									limit = limitInt;
-							} catch (NumberFormatException e) {
-								// ignore
-							}
-
-							return new Integer(limit);
-						}
-					})).intValue();
-		}
-		return maxURISegments;
-	}
-
-	/**
-	 * Returns the maximum allowed length of a URI. The value is implementation
-	 * specific. The length of the URI is defined as the number of bytes in the
-	 * unescaped, UTF-8 encoded representation of the URI.
-	 * <p>
-	 * The return value of {@code Integer.MAX_VALUE} indicates that there is no
-	 * upper limit on the length of URIs.
-	 * 
-	 * @return maximum URI length supported by the implementation
-	 */
-	public static int getMaxUriLength() {
-		if (maxURILength == -1) {
-			maxURILength = ((Integer) AccessController
-					.doPrivileged(new PrivilegedAction() {
-						public Object run() {
-							String limitString = System
-									.getProperty(MAX_URI_LENGTH);
-							int limit = MINIMAL_URI_LENGTH_LIMIT; // min. used
-																	// as
-																	// default
-
-							try {
-								int limitInt = Integer.parseInt(limitString);
-								if (limitInt >= MINIMAL_URI_LENGTH_LIMIT)
-									limit = limitInt;
-							} catch (NumberFormatException e) {
-								// ignore
-							}
-
-							return new Integer(limit);
-						}
-					})).intValue();
-		}
-		return maxURILength;
-	}
-
-	/**
-	 * Returns the maximum allowed length of a URI segment. The value is
-	 * implementation specific. The length of the URI segment is defined as the
-	 * number of bytes in the unescaped, UTF-8 encoded representation of the
-	 * segment.
-	 * <p>
-	 * The return value of {@code Integer.MAX_VALUE} indicates that there is no
-	 * upper limit on the length of segment names.
-	 * 
-	 * @return maximum URI segment length supported by the implementation
-	 */
-	public static int getMaxSegmentNameLength() {
-
-		if (segmentLengthLimit == -1) {
-			segmentLengthLimit = ((Integer) AccessController
-					.doPrivileged(new PrivilegedAction() {
-						public Object run() {
-							String limitString = System
-									.getProperty(MAX_SEGMENT_NAME_LENGTH);
-							int limit = MINIMAL_SEGMENT_LENGTH_LIMIT; // min.
-																		// used
-																		// as
-																		// default
-
-							try {
-								int limitInt = Integer.parseInt(limitString);
-								if (limitInt >= MINIMAL_SEGMENT_LENGTH_LIMIT)
-									limit = limitInt;
-							} catch (NumberFormatException e) {
-								// ignore
-							}
-
-							return new Integer(limit);
-						}
-					})).intValue();
-		}
-		return segmentLengthLimit;
-	}
 
 	/**
 	 * Checks whether the specified URI is an absolute URI. An absolute URI
@@ -583,9 +414,6 @@ public final class Uri {
 					return false;
 				}
 
-				if (segmentLength > getMaxSegmentNameLength())
-					return false;
-
 				// the extra byte is for the separator '/' (will be deducted
 				// again for the last segment of the URI)
 				processedUriLength += segmentLength + 1;
@@ -595,8 +423,7 @@ public final class Uri {
 
 		processedUriLength--; // remove the '/' added to the end of the URI
 
-		return segmentNumber <= getMaxUriSegments()
-				&& processedUriLength <= getMaxUriLength();
+		return true;
 	}
 
 	// Non-public fields and methods

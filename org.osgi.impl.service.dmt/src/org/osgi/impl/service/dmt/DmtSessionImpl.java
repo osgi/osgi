@@ -1675,8 +1675,6 @@ public class DmtSessionImpl implements DmtSession {
 
 	// precondition: path must be absolute
 	private void checkNode(Node node, int check) throws DmtException {
-		// 25.10.2010: added for Bug 1746
-		node.checkUriAndSegmentLength();
 
 		boolean shouldExist = (check != SHOULD_NOT_EXIST);
 		if (getReadableDataSession(node).isNodeUri(node.getPath()) != shouldExist)

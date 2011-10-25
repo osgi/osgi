@@ -128,16 +128,8 @@ public class DmtException extends Exception {
     public static final int LIMIT_EXCEEDED = 413;
 
     /**
-     * The requested command failed because the target URI or one of its
-     * segments is too long for what the recipient is able or willing to
-     * process, or the target URI contains too many segments. The length and
-     * segment number limits are implementation dependent, their minimum values
-     * can be found in the Non Functional Requirements section of the OSGi
-     * specification.
-     * <p>
-     * The methods {@link Uri#getMaxSegmentNameLength()}, 
-     * {@link Uri#getMaxUriLength()} and {@link Uri#getMaxUriSegments()} can
-     * be used to request the implementation specific limits.
+     * The requested command failed because the target URI is too long for what 
+     * the recipient is able or willing to process.
      * <p>
      * This error code corresponds to the OMA DM response status code 414
      * &quot;URI too long&quot;.

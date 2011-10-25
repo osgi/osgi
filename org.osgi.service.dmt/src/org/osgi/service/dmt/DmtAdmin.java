@@ -73,10 +73,11 @@ public interface DmtAdmin {
      * @return a {@code DmtSession} object for the requested subtree
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li>{@code URI_TOO_LONG} if {@code subtreeUri} or
-     *         a segment of it is too long, or if it has too many segments
      *         <li>{@code INVALID_URI} if {@code subtreeUri} is
      *         syntactically invalid
+     *         <li>{@code URI_TOO_LONG} if {@code subtreeUri} is longer 
+     *         than accepted by the {@code DmtAdmin} implementation 
+     *         (especially on systems with limited resources)
      *         <li>{@code NODE_NOT_FOUND} if {@code subtreeUri}
      *         specifies a non-existing node
      *         <li>{@code SESSION_CREATION_TIMEOUT} if the operation
@@ -111,10 +112,11 @@ public interface DmtAdmin {
      * @return a {@code DmtSession} object for the requested subtree
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li>{@code URI_TOO_LONG} if {@code subtreeUri} or
-     *         a segment of it is too long, or if it has too many segments
      *         <li>{@code INVALID_URI} if {@code subtreeUri} is
      *         syntactically invalid
+     *         <li>{@code URI_TOO_LONG} if {@code subtreeUri} is longer 
+     *         than accepted by the {@code DmtAdmin} implementation 
+     *         (especially on systems with limited resources)
      *         <li>{@code NODE_NOT_FOUND} if {@code subtreeUri}
      *         specifies a non-existing node
      *         <li>{@code FEATURE_NOT_SUPPORTED} if atomic sessions are
@@ -161,10 +163,11 @@ public interface DmtAdmin {
      * @return a {@code DmtSession} object for the requested subtree
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li>{@code URI_TOO_LONG} if {@code subtreeUri} or
-     *         a segment of it is too long, or if it has too many segments
      *         <li>{@code INVALID_URI} if {@code subtreeUri} is
      *         syntactically invalid
+     *         <li>{@code URI_TOO_LONG} if {@code subtreeUri} is longer 
+     *         than accepted by the {@code DmtAdmin} implementation 
+     *         (especially on systems with limited resources)
      *         <li>{@code NODE_NOT_FOUND} if {@code subtreeUri}
      *         specifies a non-existing node
      *         <li>{@code PERMISSION_DENIED} if {@code principal} is

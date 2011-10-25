@@ -249,10 +249,13 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments <li>
+	 *             <li>
 	 *             {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *             syntactically invalid <li>{@code NODE_NOT_FOUND} if the node
+	 *             syntactically invalid 
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
+	 *             <li>{@code NODE_NOT_FOUND} if the node
 	 *             does not exist and the plugin does not allow executing
 	 *             unexisting nodes <li>{@code PERMISSION_DENIED} if the session
 	 *             is associated with a principal and the ACL of the node does
@@ -303,10 +306,13 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments <li>
+	 *             <li>
 	 *             {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *             syntactically invalid <li>{@code NODE_NOT_FOUND} if the node
+	 *             syntactically invalid 
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
+	 *             <li>{@code NODE_NOT_FOUND} if the node
 	 *             does not exist and the plugin does not allow executing
 	 *             unexisting nodes <li>{@code PERMISSION_DENIED} if the session
 	 *             is associated with a principal and the ACL of the node does
@@ -347,10 +353,11 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments
 	 *             <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
 	 *             syntactically invalid
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
 	 *             <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
 	 *             non-existing node
 	 *             <li>{@code PERMISSION_DENIED} if the session is associated
@@ -387,10 +394,11 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments
 	 *             <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
 	 *             syntactically invalid
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
 	 *             <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
 	 *             non-existing node
 	 *             <li>{@code PERMISSION_DENIED} if the session is associated
@@ -439,10 +447,13 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments <li>
+	 *             <li>
 	 *             {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *             syntactically invalid <li>{@code NODE_NOT_FOUND} if
+	 *             syntactically invalid 
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
+	 *             <li>{@code NODE_NOT_FOUND} if
 	 *             {@code nodeUri} points to a non-existing node <li>
 	 *             {@code PERMISSION_DENIED} if the session is associated with a
 	 *             principal and the ACL of the node or its parent (see above)
@@ -500,11 +511,13 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or
-	 *             {@code newNodeUri} or any segment of them is too long, or if
-	 *             they have too many segments <li>{@code INVALID_URI} if
+	 *             <li>{@code INVALID_URI} if
 	 *             {@code nodeUri} or {@code newNodeUri} is {@code null} or
-	 *             syntactically invalid <li>{@code NODE_NOT_FOUND} if
+	 *             syntactically invalid 
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
+	 *             <li>{@code NODE_NOT_FOUND} if
 	 *             {@code nodeUri} points to a non-existing node, or if
 	 *             {@code newNodeUri} points to a node that cannot exist in the
 	 *             tree according to the meta-data (see
@@ -565,10 +578,13 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments <li>
+	 *             <li>
 	 *             {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *             syntactically invalid <li>{@code NODE_NOT_FOUND} if
+	 *             syntactically invalid 
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
+	 *             <li>{@code NODE_NOT_FOUND} if
 	 *             {@code nodeUri} points to a node that cannot exist in the
 	 *             tree (see above) <li>{@code NODE_ALREADY_EXISTS} if
 	 *             {@code nodeUri} points to a node that already exists <li>
@@ -635,10 +651,13 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments <li>
+	 *             <li>
 	 *             {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *             syntactically invalid <li>{@code NODE_NOT_FOUND} if
+	 *             syntactically invalid 
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
+	 *             <li>{@code NODE_NOT_FOUND} if
 	 *             {@code nodeUri} points to a node that cannot exist in the
 	 *             tree (see above) <li>{@code NODE_ALREADY_EXISTS} if
 	 *             {@code nodeUri} points to a node that already exists <li>
@@ -704,10 +723,13 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments <li>
+	 *             <li>
 	 *             {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *             syntactically invalid <li>{@code NODE_NOT_FOUND} if
+	 *             syntactically invalid 
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
+	 *             <li>{@code NODE_NOT_FOUND} if
 	 *             {@code nodeUri} points to a node that cannot exist in the
 	 *             tree (see above) <li>{@code NODE_ALREADY_EXISTS} if
 	 *             {@code nodeUri} points to a node that already exists <li>
@@ -777,10 +799,13 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments <li>
+	 *             <li>
 	 *             {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *             syntactically invalid <li>{@code NODE_NOT_FOUND} if
+	 *             syntactically invalid 
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
+	 *             <li>{@code NODE_NOT_FOUND} if
 	 *             {@code nodeUri} points to a node that cannot exist in the
 	 *             tree (see above) <li>{@code NODE_ALREADY_EXISTS} if
 	 *             {@code nodeUri} points to a node that already exists <li>
@@ -856,10 +881,13 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments <li>
+	 *             <li>
 	 *             {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *             syntactically invalid <li>{@code NODE_NOT_FOUND} if
+	 *             syntactically invalid 
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
+	 *             <li>{@code NODE_NOT_FOUND} if
 	 *             {@code nodeUri} points to a node that cannot exist in the
 	 *             tree (see above) <li>{@code NODE_ALREADY_EXISTS} if
 	 *             {@code nodeUri} points to a node that already exists <li>
@@ -910,10 +938,13 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments <li>
+	 *             <li>
 	 *             {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *             syntactically invalid <li>{@code NODE_NOT_FOUND} if
+	 *             syntactically invalid 
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
+	 *             <li>{@code NODE_NOT_FOUND} if
 	 *             {@code nodeUri} points to a non-existing node <li>
 	 *             {@code PERMISSION_DENIED} if the session is associated with a
 	 *             principal and the ACL of the node does not allow the
@@ -964,11 +995,13 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, if {@code nodeUri} has too many segments, or
-	 *             if {@code newName} is too long <li>{@code INVALID_URI} if
+	 *             <li>{@code INVALID_URI} if
 	 *             {@code nodeUri} or {@code newName} is {@code null} or
-	 *             syntactically invalid <li>{@code NODE_NOT_FOUND} if
+	 *             syntactically invalid 
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
+	 *             <li>{@code NODE_NOT_FOUND} if
 	 *             {@code nodeUri} points to a non-existing node, or if the new
 	 *             node is not defined in the tree according to the meta-data
 	 *             (see {@link #getMetaNode(String)}) <li>
@@ -1013,10 +1046,11 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments
 	 *             <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
 	 *             syntactically invalid
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
 	 *             <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
 	 *             non-existing node
 	 *             <li>{@code PERMISSION_DENIED} if the session is associated
@@ -1078,10 +1112,12 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments <li>
 	 *             {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *             syntactically invalid <li>{@code NODE_NOT_FOUND} if
+	 *             syntactically invalid 
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
+	 *             <li>{@code NODE_NOT_FOUND} if
 	 *             {@code nodeUri} points to a non-existing node <li>
 	 *             {@code PERMISSION_DENIED} if the session is associated with a
 	 *             principal and the ACL of the node does not allow the
@@ -1127,10 +1163,11 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments
 	 *             <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
 	 *             syntactically invalid
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
 	 *             <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
 	 *             non-existing node
 	 *             <li>{@code PERMISSION_DENIED} if the session is associated
@@ -1194,10 +1231,13 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments <li>
+	 *             <li>
 	 *             {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *             syntactically invalid <li>{@code NODE_NOT_FOUND} if
+	 *             syntactically invalid 
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
+	 *             <li>{@code NODE_NOT_FOUND} if
 	 *             {@code nodeUri} points to a non-existing node <li>
 	 *             {@code PERMISSION_DENIED} if the session is associated with a
 	 *             principal and the ACL of the node does not allow the
@@ -1246,10 +1286,11 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments
 	 *             <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
 	 *             syntactically invalid
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
 	 *             <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
 	 *             non-existing node
 	 *             <li>{@code PERMISSION_DENIED} if the session is associated
@@ -1303,10 +1344,13 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments <li>
+	 *             <li>
 	 *             {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *             syntactically invalid <li>{@code NODE_NOT_FOUND} if
+	 *             syntactically invalid 
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
+	 *             <li>{@code NODE_NOT_FOUND} if
 	 *             {@code nodeUri} points to a node that is not defined in the
 	 *             tree (see above) <li>{@code PERMISSION_DENIED} if the session
 	 *             is associated with a principal and the ACL of the node does
@@ -1340,10 +1384,11 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments
 	 *             <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
 	 *             syntactically invalid
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
 	 *             <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
 	 *             non-existing node
 	 *             <li>{@code PERMISSION_DENIED} if the session is associated
@@ -1384,10 +1429,11 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments
 	 *             <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
 	 *             syntactically invalid
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
 	 *             <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
 	 *             non-existing node
 	 *             <li>{@code PERMISSION_DENIED} if the session is associated
@@ -1425,10 +1471,11 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments
 	 *             <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
 	 *             syntactically invalid
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
 	 *             <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
 	 *             non-existing node
 	 *             <li>{@code PERMISSION_DENIED} if the session is associated
@@ -1469,10 +1516,11 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments
 	 *             <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
 	 *             syntactically invalid
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
 	 *             <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
 	 *             non-existing node
 	 *             <li>{@code PERMISSION_DENIED} if the session is associated
@@ -1509,10 +1557,11 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments
 	 *             <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
 	 *             syntactically invalid
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
 	 *             <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
 	 *             non-existing node
 	 *             <li>{@code PERMISSION_DENIED} if the session is associated
@@ -1553,10 +1602,11 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments
 	 *             <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
 	 *             syntactically invalid
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
 	 *             <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
 	 *             non-existing node
 	 *             <li>{@code PERMISSION_DENIED} if the session is associated
@@ -1594,10 +1644,11 @@ public interface DmtSession {
 	 * @throws DmtException
 	 *             with the following possible error codes:
 	 *             <ul>
-	 *             <li>{@code URI_TOO_LONG} if {@code nodeUri} or a segment of
-	 *             it is too long, or if it has too many segments
 	 *             <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
 	 *             syntactically invalid
+     *			   <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer 
+     *  	       than accepted by the {@code DmtAdmin} implementation 
+     *      	   (especially on systems with limited resources)
 	 *             <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
 	 *             non-existing node
 	 *             <li>{@code PERMISSION_DENIED} if the session is associated

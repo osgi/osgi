@@ -113,16 +113,17 @@ public class DmtTestControl extends DefaultTestBundleControl {
 
 	static {
 		Vector uriTooLong = new Vector();
-		if (Uri.getMaxSegmentNameLength() != Integer.MAX_VALUE) {
-			uriTooLong.add(getSegmentTooLong(TestExecPluginActivator.ROOT));
-		}
-		if (Uri.getMaxUriSegments() != Integer.MAX_VALUE) {
-			uriTooLong
-					.add(getExcedingSegmentsUri(TestExecPluginActivator.ROOT));
-		}
-		if (Uri.getMaxUriLength() != Integer.MAX_VALUE) {
-			uriTooLong.add(getUriTooLong(TestExecPluginActivator.ROOT));
-		}
+		// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//		if (Uri.getMaxSegmentNameLength() != Integer.MAX_VALUE) {
+//			uriTooLong.add(getSegmentTooLong(TestExecPluginActivator.ROOT));
+//		}
+//		if (Uri.getMaxUriSegments() != Integer.MAX_VALUE) {
+//			uriTooLong
+//					.add(getExcedingSegmentsUri(TestExecPluginActivator.ROOT));
+//		}
+//		if (Uri.getMaxUriLength() != Integer.MAX_VALUE) {
+//			uriTooLong.add(getUriTooLong(TestExecPluginActivator.ROOT));
+//		}
 
 		URIS_TOO_LONG = new String[uriTooLong.size()];
 		uriTooLong.copyInto(URIS_TOO_LONG);
@@ -592,7 +593,9 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		int rootPluginSegments = uriTotalSegments(nodeUri);
 		// The segments to be appended are equal to the maximum number of
 		// segments plus one.
-		int totalSegments = Uri.getMaxUriSegments() - rootPluginSegments + 1;
+		// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//		int totalSegments = Uri.getMaxUriSegments() - rootPluginSegments + 1;
+		int totalSegments = 0;
 		// Appends an the specified number of segments
 		return appendSegments(nodeUri, totalSegments);
 	}
@@ -646,7 +649,9 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	 *         long.
 	 */
 	public static String getSegmentTooLong(String nodeUri) {
-		int nodeLength = Uri.getMaxSegmentNameLength() + 1;
+		// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//		int nodeLength = Uri.getMaxSegmentNameLength() + 1;
+		int nodeLength = 256;
 		StringBuffer nodeName = new StringBuffer(nodeLength);
 		for (int i = 0; i < nodeLength; i++) {
 			nodeName.append("a");
@@ -669,7 +674,9 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	 *         returns the root node appended with the exceeding segment
 	 */
 	public static String getUriTooLong(String nodeUri) {
-		int uriLength = Uri.getMaxUriLength() + 1;
+		// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//		int uriLength = Uri.getMaxUriLength() + 1;
+		int uriLength = 256;
 		if (nodeUri == null) {
 			nodeUri = ".";
 		}

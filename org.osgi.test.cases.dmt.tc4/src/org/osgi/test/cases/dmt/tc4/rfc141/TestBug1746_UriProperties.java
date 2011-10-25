@@ -54,9 +54,10 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 	 */
 	public void testPropertyValues() throws Exception {
 		// properties have been set via bnd-file
-		assertEquals(Uri.getMaxSegmentNameLength(), MAX_SEGMENT_LENGTH);
-		assertEquals(Uri.getMaxUriLength(), MAX_URI_LENGTH);
-		assertEquals(Uri.getMaxUriSegments(), MAX_URI_SEGMENTS);
+		// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//		assertEquals(Uri.getMaxSegmentNameLength(), MAX_SEGMENT_LENGTH);
+//		assertEquals(Uri.getMaxUriLength(), MAX_URI_LENGTH);
+//		assertEquals(Uri.getMaxUriSegments(), MAX_URI_SEGMENTS);
 	}
 
 	/**
