@@ -51,6 +51,7 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 	public void testFrameworkStructure() throws DmtException {
 		String[] children;
 		HashSet<String> mandatory;
+		HashSet<String> unknown;
 
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
 
@@ -116,7 +117,7 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 			expected = new HashSet<String>();
 			expected.add(STARTLEVEL);
 			expected.add(INSTANCEID);
-			expected.add(URL);
+			expected.add(URL_STRING);
 			expected.add(AUTOSTART);
 
 			children = session.getChildNodeNames(FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey);
@@ -310,7 +311,7 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 				assertMetaData( uri + STATE, 	  	true, "_G__", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
 				assertMetaData( uri + STARTLEVEL, 	true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
 				assertMetaData( uri + INSTANCEID, 	true, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
-				assertMetaData( uri + URL, 		  	true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uri + URL_STRING, 		  	true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
 				assertMetaData( uri + AUTOSTART,  	true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_BOOLEAN);
 				assertMetaData( uri + FAULT_TYPE, 	true, "_G__", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
 				assertMetaData( uri + FAULT_MESSAGE,true, "_G__", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);

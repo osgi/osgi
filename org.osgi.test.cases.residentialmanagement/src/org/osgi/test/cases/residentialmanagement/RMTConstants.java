@@ -22,7 +22,7 @@ public interface RMTConstants {
 
 	// children of the Bundle node
 	// Startlevel
-	static final String URL = "URL";
+	static final String URL_STRING = "URL";
 	static final String AUTOSTART = "AutoStart";
 	static final String FAULT_TYPE = "FaultType";
 	static final String FAULT_MESSAGE = "FaultMessage";
@@ -75,6 +75,8 @@ public interface RMTConstants {
 	
 	static final String TESTBUNDLE_EXPORTPACKAGE = "org.osgi.test.cases.residentialmanagement.tb1.jar";
 	static final String TESTBUNDLE_IMPORTPACKAGE = "org.osgi.test.cases.residentialmanagement.tb2.jar";
+	static final String TESTBUNDLE_REGISTERING_SERVICES = "org.osgi.test.cases.residentialmanagement.tb3.jar";
+	static final String TESTBUNDLE_USING_SERVICE2 = "org.osgi.test.cases.residentialmanagement.tb5.jar";
 	static final String TESTBUNDLE_FRAGMENT      = "org.osgi.test.cases.residentialmanagement.tb7.jar";
 	static final String TESTBUNDLE_REQUIRE 	   = "org.osgi.test.cases.residentialmanagement.tb8.jar";
 	static final String TESTBUNDLE_TRUSTED 	   = "org.osgi.test.cases.residentialmanagement.tb9.jar";

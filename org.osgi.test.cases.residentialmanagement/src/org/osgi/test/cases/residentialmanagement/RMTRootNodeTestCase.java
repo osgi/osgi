@@ -1,6 +1,5 @@
 package org.osgi.test.cases.residentialmanagement;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 

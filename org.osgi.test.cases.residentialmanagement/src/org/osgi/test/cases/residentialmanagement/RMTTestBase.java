@@ -24,10 +24,10 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 	Bundle testBundle3 = null;
 	Bundle testBundle4 = null;
 
-	private static Set operations;
+	private static Set<String> operations;
 
 	static {
-		operations = new HashSet();
+		operations = new HashSet<String>();
 		operations.add("A");
 		operations.add("G");
 		operations.add("R");
@@ -39,7 +39,7 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 	protected void setUp() throws Exception {
 		super.setUp();
 		System.out.println("setting up");
-		dmtAdmin = (DmtAdmin) getService(DmtAdmin.class);
+		dmtAdmin = getService(DmtAdmin.class);
 	}
 
 	protected void tearDown() throws Exception {
@@ -119,6 +119,17 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		return null;
 	}
 	
+	void dumpTree(DmtSession session, String uri ) throws Exception {
+		System.out.println( uri );
+		if ( session.isLeafNode(uri) )
+			System.out.println( ">>>" + session.getNodeValue(uri));
+		else {
+			String[] children = session.getChildNodeNames(uri);
+			for (String child : children)
+				dumpTree(session, uri + "/" + child );
+		}
+	}
+
 	/**
 	 * asserts that the metanode reports support for the specified operations
 	 * @param uri ... the uri that the metadata belongs to
@@ -166,5 +177,6 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 	}
 	
 	
+
 
 }
