@@ -19,5 +19,5 @@ Private-Package					= ${p}, ${p}.plugins,${p}.dispatcher
 -buildpath						= \
     org.osgi.service.dmt;		version=project, \
 	ee.j2se;					version=1.5, \
-	osgi.core;					version=4.0.1, \
-	osgi.cmpn;					version=4.0.1
+	osgi.core;					version=4.2, \
+	osgi.cmpn;					version=4.2

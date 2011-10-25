@@ -2,9 +2,12 @@ package org.osgi.impl.service.dmt;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.security.cert.X509Certificate;
+import java.util.Dictionary;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.osgi.framework.Bundle;
@@ -55,13 +58,20 @@ public class EventDispatcher {
 	private final int sessionId;
 	private final Context context;
 	private final Bundle initiatingBundle;
-
+	private String[] signers;
+	
 	private LinkedList events;
 
 	public EventDispatcher(Context context, int sessionId, Bundle initiatingBundle) {
 		this.sessionId = sessionId;
 		this.context = context;
 		this.initiatingBundle = initiatingBundle;
+		// create signer array for events only once
+		Map<X509Certificate, List<X509Certificate>> certs = initiatingBundle.getSignerCertificates(Bundle.SIGNERS_ALL);
+		signers = new String[certs.size()];
+		int i = 0;
+		for (X509Certificate cert : certs.keySet() )
+			signers[i] = cert.getIssuerDN().getName();
 
 		events = new LinkedList();
 	}
@@ -141,7 +151,13 @@ public class EventDispatcher {
 		dmtEvent.addProperty("session.id", new Integer(dmtEvent.getSessionId()));
 		dmtEvent.addProperty(EventConstants.EVENT_TOPIC, dmtEvent.getTopic());
 		dmtEvent.addProperty("timestamp", new Long(System.currentTimeMillis()));
-		dmtEvent.addProperty("bundle.id", new Long(initiatingBundle.getBundleId()));
+		
+		// add bundle properties (see also Bug 2106)
+		dmtEvent.addProperty("bundle", initiatingBundle );
+		dmtEvent.addProperty("bundle.signer", signers );
+		dmtEvent.addProperty("bundle.symbolicname", initiatingBundle.getSymbolicName());
+		dmtEvent.addProperty("bundle.version", initiatingBundle.getVersion());
+		dmtEvent.addProperty("bundle.id", initiatingBundle.getBundleId());
 
 		// internal events have their nodes and newNodes already set in the properties
 		if ( ! internal ) {
@@ -179,7 +195,7 @@ public class EventDispatcher {
 		}
 
 		final Event event = new Event(dmtEvent.getTopic(),
-				dmtEvent.getProperties());
+				(Dictionary)dmtEvent.getProperties());
 
 		AccessController.doPrivileged(new PrivilegedAction() {
 			public Object run() {
