@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,10 +16,8 @@
 package org.osgi.service.dmt;
 
 import java.io.UnsupportedEncodingException;
-import java.security.AccessController;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +46,7 @@ import java.util.List;
  * <li>Single Root: The character sequence {@code "./"} must not be used
  * anywhere else but in the beginning of a URI.
  * </ul>
- * 
+ *
  * @version $Id$
  */
 public final class Uri {
@@ -56,14 +54,14 @@ public final class Uri {
 	/**
 	 * This constant stands for a string identifying the root of the DmTree
 	 * (".").
-	 * 
+	 *
 	 * @since 2.0
 	 */
 	public static final String ROOT_NODE = ".";
 
 	/**
 	 * This constant stands for a char identifying the root of the DmTree ('.').
-	 * 
+	 *
 	 * @since 2.0
 	 */
 	public static final char ROOT_NODE_CHAR = '.';
@@ -71,7 +69,7 @@ public final class Uri {
 	/**
 	 * This constant stands for a string identifying the path separator in the
 	 * DmTree ("/").
-	 * 
+	 *
 	 * @since 2.0
 	 */
 	public static final String PATH_SEPARATOR = "/";
@@ -79,7 +77,7 @@ public final class Uri {
 	/**
 	 * This constant stands for a char identifying the path separator in the
 	 * DmTree ('/').
-	 * 
+	 *
 	 * @since 2.0
 	 */
 	public static final char PATH_SEPARATOR_CHAR = '/';
@@ -122,9 +120,9 @@ public final class Uri {
 	 * <p>
 	 * The method returns the normalized {@code nodeName} as described below.
 	 * Invalid node names are normalized in different ways, depending on the
-	 * cause. If the name contains '/' or '\' characters, then these are simply 
-	 * escaped by inserting an additional '\' before each occurrence. If the 
-	 * length of the name does exceed the limit, the following mechanism is 
+	 * cause. If the name contains '/' or '\' characters, then these are simply
+	 * escaped by inserting an additional '\' before each occurrence. If the
+	 * length of the name does exceed the limit, the following mechanism is
 	 * used to normalize it:
 	 * <ul>
 	 * <li>the SHA 1 digest of the name is calculated
@@ -132,7 +130,7 @@ public final class Uri {
 	 * <li>all '/' characters in the encoded digest are replaced with '_'
 	 * <li>trailing '=' signs are removed
 	 * </ul>
-	 * 
+	 *
 	 * @param nodeName
 	 *            the node name to be mangled (if necessary), must not be
 	 *            {@code null} or empty
@@ -152,7 +150,7 @@ public final class Uri {
 	 * <p>
 	 * If the specified path is an empty array then an empty URI ({@code ""}) is
 	 * returned.
-	 * 
+	 *
 	 * @param path
 	 *            a possibly empty array of URI segments, must not be
 	 *            {@code null}
@@ -185,7 +183,7 @@ public final class Uri {
 	 * representation of the segment.
 	 * <p>
 	 * The method verifies that the URI segment is well-formed.
-	 * 
+	 *
 	 * @param segment
 	 *            the URI segment
 	 * @return URI segment length
@@ -234,7 +232,7 @@ public final class Uri {
 	 * return an array of URI segments. Special characters in the returned
 	 * segments are escaped. The returned array may be empty if the specified
 	 * URI was empty.
-	 * 
+	 *
 	 * @param uri
 	 *            the URI to be split, must not be {@code null}
 	 * @return an array of URI segments created by splitting the specified URI
@@ -285,7 +283,7 @@ public final class Uri {
 	 * Checks whether the specified URI is an absolute URI. An absolute URI
 	 * contains the complete path to a node in the DMT starting from the DMT
 	 * root (".").
-	 * 
+	 *
 	 * @param uri
 	 *            the URI to be checked, must not be {@code null} and must
 	 *            contain a valid URI
@@ -308,7 +306,7 @@ public final class Uri {
 	/**
 	 * Encode the node name so that back slash and forward slash are escaped
 	 * with a back slash. This method is the reverse of {@link #decode(String)}.
-	 * 
+	 *
 	 * @param nodeName the node name to be encoded
 	 * @return the encoded node name
 	 * @since 2.0
@@ -335,7 +333,7 @@ public final class Uri {
 	/**
 	 * Decode the node name so that back slash and forward slash are un-escaped
 	 * from a back slash.
-	 * 
+	 *
 	 * @param nodeName the node name to be decoded
 	 * @return the decoded node name
 	 * @since 2.0
@@ -356,23 +354,18 @@ public final class Uri {
 		}
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Checks whether the specified URI is valid. A URI is considered valid if
 	 * it meets the following constraints:
 	 * <ul>
 	 * <li>the URI is not {@code null};
 	 * <li>the URI follows the syntax defined for valid DMT URIs;
-	 * <li>the length of the URI is not more than {@link #getMaxUriLength()};
-	 * <li>the URI doesn't contain more than {@link #getMaxUriSegments()}
-	 * segments;
-	 * <li>the length of each segment of the URI is less than or equal to
-	 * {@link #getMaxSegmentNameLength()}.
 	 * </ul>
 	 * The exact definition of the length of a URI and its segments is given in
 	 * the descriptions of the {@code getMaxUriLength()} and
 	 * {@code getMaxSegmentNameLength()} methods.
-	 * 
+	 *
 	 * @param uri
 	 *            the URI to be validated
 	 * @return whether the specified URI is valid
@@ -387,7 +380,6 @@ public final class Uri {
 		if (uri.charAt(0) == '/' || uri.charAt(paramLen - 1) == '\\')
 			return false;
 
-		int processedUriLength = 0;
 		int segmentNumber = 0;
 
 		// append a '/' to indicate the end of the last segment (the URI in the
@@ -406,22 +398,18 @@ public final class Uri {
 									// position other than the beginning of the
 									// URI
 
-				int segmentLength;
 				try {
 					// also checks that the segment is valid
-					segmentLength = getSegmentLength(segment);
+					getSegmentLength(segment);
 				} catch (IllegalArgumentException e) {
 					return false;
 				}
 
 				// the extra byte is for the separator '/' (will be deducted
 				// again for the last segment of the URI)
-				processedUriLength += segmentLength + 1;
 				start = i + 1;
 			}
 		}
-
-		processedUriLength--; // remove the '/' added to the end of the URI
 
 		return true;
 	}
@@ -492,5 +480,5 @@ public final class Uri {
 	}
 
 
-	
+
 }
