@@ -1,10 +1,18 @@
 package org.osgi.impl.service.tr069todmt;
 
-import java.util.*;
-import java.util.regex.*;
+import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.osgi.service.dmt.*;
-import org.osgi.service.tr069todmt.*;
+import org.osgi.service.dmt.DmtConstants;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.Uri;
+import org.osgi.service.tr069todmt.ParameterInfo;
+import org.osgi.service.tr069todmt.ParameterValue;
+import org.osgi.service.tr069todmt.TR069Exception;
 
 /**
  *
@@ -84,7 +92,7 @@ public class Node implements ParameterInfo, ParameterValue {
 
 	/**
 	 * This is extremely inefficient but it is easy to understand for now.
-	 * 
+	 *
 	 * @return the URI
 	 */
 	public String getUri() {
@@ -103,7 +111,7 @@ public class Node implements ParameterInfo, ParameterValue {
 
 	/**
 	 * This is extremely inefficient but it is easy to understand for now.
-	 * 
+	 *
 	 * @return the Path
 	 */
 	public String getPath() {
@@ -127,7 +135,7 @@ public class Node implements ParameterInfo, ParameterValue {
 	 * @throws DmtException
 	 */
 	public Node getDescendantFromPath(String path, boolean create) throws DmtException {
-		if (path.isEmpty())
+		if (path.length() == 0)
 			return this;
 
 		Matcher matcher = PATH.matcher(path);
@@ -201,30 +209,25 @@ public class Node implements ParameterInfo, ParameterValue {
 	}
 
 
-	@Override
 	public boolean isWriteable() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public boolean isParameter() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public ParameterValue getParameterValue() {
 		return this;
 	}
 
-	@Override
 	public String getValue() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public int getType() {
 		return 0;
 	}
