@@ -517,8 +517,8 @@ public final class Acl {
     }
 
     private static void checkPrincipal(String principal) {
-        if (principal == null)
-            throw new IllegalArgumentException("Principal is null.");
+        if (principal == null || principal.length() == 0 )
+            throw new IllegalArgumentException("Principal is null or empty.");
 
         checkServerId(principal, "Principal name contains illegal character");
     }
