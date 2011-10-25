@@ -19,7 +19,7 @@ import java.util.Dictionary;
 
 /**
  * Represents a UPnP device.
- * 
+ *
  * For each UPnP root and embedded device, an object is registered with the
  * framework under the {@code UPnPDevice} interface.
  * <p>
@@ -34,7 +34,7 @@ import java.util.Dictionary;
  * <p>
  * If an application wants to query for a set of localized property values, it
  * has to use the method {@code UPnPDevice.getDescriptions(String locale)}.
- * 
+ *
  * @version $Id$
  */
 public interface UPnPDevice {
@@ -70,7 +70,7 @@ public interface UPnPDevice {
 	 * Constant for the value of the service property {@code DEVICE_CATEGORY}
 	 * used for all UPnP devices. Value is "UPnP".
 	 * 
-	 * @see "{@code org.osgi.service.device.Constants.DEVICE_CATEGORY}"
+	 * @see "org.osgi.service.device.Constants.DEVICE_CATEGORY"
 	 */
 	String	DEVICE_CATEGORY								= "UPnP";
 	/**
@@ -225,10 +225,10 @@ public interface UPnPDevice {
 
 	/**
 	 * Locates a specific service by its service id.
-	 * 
+	 *
 	 * @param serviceId The service id
 	 * @return The requested service or null if not found.
-	 * 
+	 *
 	 * @throws IllegalStateException if the UPnP device has been removed from
 	 *         the network.
 	 */
@@ -236,9 +236,9 @@ public interface UPnPDevice {
 
 	/**
 	 * Lists all services provided by this device.
-	 * 
+	 *
 	 * @return Array of services or {@code null} if no services are available.
-	 * 
+	 *
 	 * @throws IllegalStateException if the UPnP device has been removed from
 	 *         the network.
 	 */
@@ -246,17 +246,17 @@ public interface UPnPDevice {
 
 	/**
 	 * Lists all icons for this device in a given locale.
-	 * 
+	 *
 	 * The UPnP specification allows a device to present different icons based
 	 * on the client's locale.
-	 * 
+	 *
 	 * @param locale A language tag as defined by RFC 1766 and maintained by ISO
 	 *        639. Examples include "{@code de}", "{@code en}" or "
 	 *        {@code en-US}". The default locale of the device is specified by
 	 *        passing a {@code null} argument.
-	 * 
+	 *
 	 * @return Array of icons or null if no icons are available.
-	 * 
+	 *
 	 * @throws IllegalStateException if the UPnP device has been removed from
 	 *         the network.
 	 */
@@ -264,7 +264,7 @@ public interface UPnPDevice {
 
 	/**
 	 * Get a set of localized UPnP properties.
-	 * 
+	 *
 	 * The UPnP specification allows a device to present different device
 	 * properties based on the client's locale. The properties used to register
 	 * the UPnPDevice service in the OSGi registry are based on the device's
@@ -277,14 +277,14 @@ public interface UPnPDevice {
 	 * <p>
 	 * This method must continue to return the properties after the UPnP device
 	 * has been removed from the network.
-	 * 
+	 *
 	 * @param locale A language tag as defined by RFC 1766 and maintained by ISO
 	 *        639. Examples include "{@code de}", "{@code en}" or "
 	 *        {@code en-US}". The default locale of the device is specified by
 	 *        passing a {@code null} argument.
 	 * @return Dictionary mapping property name Strings to property value
 	 *         Strings
-	 * 
+	 *
 	 */
 	Dictionary getDescriptions(String locale);
 }

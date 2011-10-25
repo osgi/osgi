@@ -25,7 +25,7 @@ import java.util.Hashtable;
 /**
  * Permission to configure and access the {@link Role} objects managed by a User
  * Admin service.
- * 
+ *
  * <p>
  * This class represents access to the {@code Role} objects managed by a
  * User Admin service and their properties and credentials (in the case of
@@ -37,7 +37,7 @@ import java.util.Hashtable;
  * &quot;.&quot;, or by itself, to signify a wildcard match. For example:
  * &quot;org.osgi.security.protocol.*&quot; or &quot;*&quot; is valid, but
  * &quot;*protocol&quot; or &quot;a*b&quot; are not valid.
- * 
+ *
  * <p>
  * The {@code UserAdminPermission} with the reserved name &quot;admin&quot;
  * represents the permission required for creating and removing
@@ -45,15 +45,15 @@ import java.util.Hashtable;
  * removing members in a {@code Group} object. This
  * {@code UserAdminPermission} does not have any actions associated with
  * it.
- * 
+ *
  * <p>
  * The actions to be granted are passed to the constructor in a string
  * containing a list of one or more comma-separated keywords. The possible
  * keywords are: {@code changeProperty},{@code changeCredential}, and
  * {@code getCredential}. Their meaning is defined as follows:
- * 
+ *
  * <pre>
- * 
+ *
  *  action
  *  changeProperty    Permission to change (i.e., add and remove)
  *                    Role object properties whose names start with
@@ -65,56 +65,56 @@ import java.util.Hashtable;
  *                    existence of User object credentials whose names
  *                    start with the name argument specified in the
  *                    constructor.
- * 
+ *
  * </pre>
- * 
+ *
  * The action string is converted to lowercase before processing.
- * 
+ *
  * <p>
  * Following is a PermissionInfo style policy entry which grants a user
  * administration bundle a number of {@code UserAdminPermission} object:
- * 
+ *
  * <pre>
- * 
+ *
  *  (org.osgi.service.useradmin.UserAdminPermission &quot;admin&quot;)
  *  (org.osgi.service.useradmin.UserAdminPermission &quot;com.foo.*&quot; &quot;changeProperty,getCredential,changeCredential&quot;)
  *  (org.osgi.service.useradmin.UserAdminPermission &quot;user.*&quot;, &quot;changeProperty,changeCredential&quot;)
- * 
+ *
  * </pre>
- * 
+ *
  * The first permission statement grants the bundle the permission to perform
  * any User Admin service operations of type "admin", that is, create and remove
  * roles and configure {@code Group} objects.
- * 
+ *
  * <p>
  * The second permission statement grants the bundle the permission to change
  * any properties as well as get and change any credentials whose names start
  * with {@code com.foo.}.
- * 
+ *
  * <p>
  * The third permission statement grants the bundle the permission to change any
  * properties and credentials whose names start with {@code user.}. This
  * means that the bundle is allowed to change, but not retrieve any credentials
  * with the given prefix.
- * 
+ *
  * <p>
  * The following policy entry empowers the Http Service bundle to perform user
  * authentication:
- * 
+ *
  * <pre>
- * 
+ *
  *  grant codeBase &quot;${jars}http.jar&quot; {
  *    permission org.osgi.service.useradmin.UserAdminPermission
  *      &quot;user.password&quot;, &quot;getCredential&quot;;
  *  };
- * 
+ *
  * </pre>
- * 
+ *
  * <p>
  * The permission statement grants the Http Service bundle the permission to
  * validate any password credentials (for authentication purposes), but the
  * bundle is not allowed to change any properties or credentials.
- * 
+ *
  * @ThreadSafe
  * @version $Id$
  */
@@ -151,7 +151,7 @@ public final class UserAdminPermission extends BasicPermission {
 	static final int			ACTION_NONE					= 0;
 	/**
 	 * The actions in canonical form.
-	 * 
+	 *
 	 * @serial
 	 */
 	private volatile String		actions						= null;
@@ -168,10 +168,10 @@ public final class UserAdminPermission extends BasicPermission {
 	 * granted on the specified name. Valid actions are
 	 * {@code changeProperty},{@code changeCredential}, and
 	 * getCredential.
-	 * 
+	 *
 	 * @param name the name of this {@code UserAdminPermission}
 	 * @param actions the action string.
-	 * 
+	 *
 	 * @throws IllegalArgumentException If {@code name} equals
 	 *         &quot;admin&quot; and {@code actions} are specified.
 	 */
@@ -182,7 +182,7 @@ public final class UserAdminPermission extends BasicPermission {
 	/**
 	 * Package private constructor used by
 	 * {@code UserAdminPermissionCollection}.
-	 * 
+	 *
 	 * @param name class name
 	 * @param mask action mask
 	 */
@@ -193,7 +193,7 @@ public final class UserAdminPermission extends BasicPermission {
 
 	/**
 	 * Called by constructors and when deserialized.
-	 * 
+	 *
 	 * @param mask action mask
 	 */
 	private synchronized void setTransients(int mask) {
@@ -215,7 +215,7 @@ public final class UserAdminPermission extends BasicPermission {
 	 * Returns the current action mask.
 	 * <p>
 	 * Used by the UserAdminPermissionCollection class.
-	 * 
+	 *
 	 * @return Current action mask.
 	 */
 	synchronized int getActionsMask() {
@@ -224,7 +224,7 @@ public final class UserAdminPermission extends BasicPermission {
 
 	/**
 	 * Parse action string into action mask.
-	 * 
+	 *
 	 * @param actions Action string.
 	 * @return action mask.
 	 */
@@ -343,9 +343,9 @@ public final class UserAdminPermission extends BasicPermission {
 	 * <li><i>p </i>'s name is implied by this object's name. For example,
 	 * &quot;java.*&quot; implies &quot;java.home&quot;.
 	 * </ul>
-	 * 
+	 *
 	 * @param p the permission to check against.
-	 * 
+	 *
 	 * @return {@code true} if the specified permission is implied by this
 	 *         object; {@code false} otherwise.
 	 */
@@ -368,7 +368,7 @@ public final class UserAdminPermission extends BasicPermission {
 	/**
 	 * Returns the canonical string representation of the actions, separated by
 	 * comma.
-	 * 
+	 *
 	 * @return the canonical string representation of the actions.
 	 */
 	public String getActions() {
@@ -400,7 +400,7 @@ public final class UserAdminPermission extends BasicPermission {
 	/**
 	 * Returns a new {@code PermissionCollection} object for storing
 	 * {@code UserAdminPermission} objects.
-	 * 
+	 *
 	 * @return a new {@code PermissionCollection} object suitable for
 	 *         storing {@code UserAdminPermission} objects.
 	 */
@@ -412,9 +412,9 @@ public final class UserAdminPermission extends BasicPermission {
 	 * Checks two {@code UserAdminPermission} objects for equality. Checks
 	 * that {@code obj} is a {@code UserAdminPermission}, and has the
 	 * same name and actions as this object.
-	 * 
+	 *
 	 * @param obj the object to be compared for equality with this object.
-	 * 
+	 *
 	 * @return {@code true} if {@code obj} is a
 	 *         {@code UserAdminPermission} object, and has the same name
 	 *         and actions as this {@code UserAdminPermission} object.
@@ -435,7 +435,7 @@ public final class UserAdminPermission extends BasicPermission {
 
 	/**
 	 * Returns the hash code value for this object.
-	 * 
+	 *
 	 * @return A hash code value for this object.
 	 */
 	public int hashCode() {
@@ -468,12 +468,12 @@ public final class UserAdminPermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns a string describing this {@code UserAdminPermission} object.
-	 * This string must be in {@code PermissionInfo} encoded format.
-	 * 
+	 * Returns a string describing this {@code UserAdminPermission} object. This
+	 * string must be in {@code PermissionInfo} encoded format.
+	 *
 	 * @return The {@code PermissionInfo} encoded string for this
 	 *         {@code UserAdminPermission} object.
-	 * @see "{@code org.osgi.service.permissionadmin.PermissionInfo.getEncoded}"
+	 * @see "org.osgi.service.permissionadmin.PermissionInfo.getEncoded()"
 	 */
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
@@ -500,14 +500,14 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	static final long		serialVersionUID	= -7222111885230120581L;
 	/**
 	 * Table of permissions.
-	 * 
+	 *
 	 * @serial
 	 * @GuardedBy this
 	 */
 	private final Hashtable	permissions;
 	/**
 	 * Boolean saying if "*" is in the collection.
-	 * 
+	 *
 	 * @serial
 	 * @GuardedBy this
 	 */
@@ -525,9 +525,9 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	 * Adds the given permission to this
 	 * {@code UserAdminPermissionCollection}. The key for the hash is the
 	 * name.
-	 * 
+	 *
 	 * @param permission the {@code Permission} object to add.
-	 * 
+	 *
 	 * @throws IllegalArgumentException If the given permission is not a
 	 *         {@code UserAdminPermission}
 	 * @throws SecurityException If this
@@ -569,9 +569,9 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	/**
 	 * Checks to see if this {@code PermissionCollection} implies the given
 	 * permission.
-	 * 
+	 *
 	 * @param permission the {@code Permission} object to check against
-	 * 
+	 *
 	 * @return true if the given permission is implied by this
 	 *         {@code PermissionCollection}, false otherwise.
 	 */
@@ -633,7 +633,7 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	/**
 	 * Returns an enumeration of all the {@code UserAdminPermission}
 	 * objects in the container.
-	 * 
+	 *
 	 * @return an enumeration of all the {@code UserAdminPermission}
 	 *         objects.
 	 */
