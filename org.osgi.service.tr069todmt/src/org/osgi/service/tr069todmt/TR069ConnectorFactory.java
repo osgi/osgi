@@ -35,7 +35,6 @@ public interface TR069ConnectorFactory {
 	 * 
 	 * @param session The session to use for the adaption. This session must not
 	 *        be closed before the TR069 Connector is closed.
-	 * @param options
 	 * @return A new TR069 Connector bound to the given session
 	 */
 
