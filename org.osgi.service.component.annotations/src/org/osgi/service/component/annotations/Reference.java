@@ -109,8 +109,9 @@ public @interface Reference {
 	 * {@code bind}, {@code set} or {@code add}, that is replaced with
 	 * {@code unbind}, {@code unset} or {@code remove}, respectively, to derive
 	 * the unbind method name. Otherwise, {@code un} is prefixed to the
-	 * annotated method name to derive the unbind method name. The attribute must
-	 * only be automatically set when the method exists in the type.
+	 * annotated method name to derive the unbind method name. The unbind method
+	 * is only set if the component type contains a method with the derived
+	 * name.
 	 *
 	 * @see "The unbind attribute of the reference element of a Component Description."
 	 */
@@ -118,11 +119,11 @@ public @interface Reference {
 
 	/**
 	 * The policy option for the reference.
-	 * 
+	 *
 	 * <p>
 	 * If not specified, the {@link ReferencePolicyOption#RELUCTANT RELUCTANT}
 	 * reference policy option is used.
-	 * 
+	 *
 	 * @see "The policy-option attribute of the reference element of a Component Description."
 	 * @since 1.2
 	 */
@@ -139,10 +140,10 @@ public @interface Reference {
 	 * If not specified, the name of the updated method is derived from the name
 	 * of the annotated bind method. If the annotated method name begins with
 	 * {@code bind}, {@code set} or {@code add}, that is replaced with
-	 * {@code updated}, respectively, to derive
-	 * the updated method name. Otherwise, {@code updated} is prefixed to the
-	 * annotated method name to derive the updated method name. The attribute must
-	 * only be  automatically set when the method exists in the type.
+	 * {@code updated} to derive the updated method name. Otherwise,
+	 * {@code updated} is prefixed to the annotated method name to derive the
+	 * updated method name. The updated method is only set if the component type
+	 * contains a method with the derived name.
 	 * 
 	 * @see "The updated attribute of the reference element of a Component Description."
 	 * @since 1.2
