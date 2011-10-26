@@ -118,12 +118,18 @@
 					<xsl:value-of select="@name" />
 				</h6>
 				<h2 class="Heading2">
-					<xsl:value-of select="@modifiers" />
-					<xsl:text> </xsl:text>
-					<xsl:value-of select="@name" />
-					<xsl:value-of select="@typeParam" />
 					<xsl:choose>
-						<xsl:when test="@interface">
+						<xsl:when test="@kind='ENUM'">
+								enum <xsl:value-of select="@qn" />
+						</xsl:when>
+						<xsl:when test="@kind='ANNOTATION'">
+								@<xsl:value-of select="@qn" />
+						</xsl:when>
+						<xsl:when test="@kind='INTERFACE'">
+							<xsl:value-of select="@modifiers" />
+							<xsl:text> </xsl:text>
+							<xsl:value-of select="@name" />
+							<xsl:value-of select="@typeParam" />
 							<xsl:for-each select="implements[@local]">
 								<xsl:choose>
 									<xsl:when test="position()=1">
@@ -139,6 +145,10 @@
 							</xsl:for-each>
 						</xsl:when>
 						<xsl:otherwise>
+							<xsl:value-of select="@modifiers" />
+							<xsl:text> </xsl:text>
+							<xsl:value-of select="@name" />
+							<xsl:value-of select="@typeParam" />
 							<xsl:if test="@superclass and @superclass!='Object'">
 								<br />
 								<tab />
@@ -175,19 +185,31 @@
 				<xsl:call-template name="descriptors">
 					<xsl:with-param name="target" select="." />
 				</xsl:call-template>
-				<xsl:if test="field">
-					<xsl:apply-templates select="field[not(skip)]">
-						<xsl:sort select="@name" />
-					</xsl:apply-templates>
-				</xsl:if>
-				<xsl:if test="method[@isConstructor]">
-					<xsl:apply-templates select="method[@isConstructor and not(skip)]" />
-				</xsl:if>
-				<xsl:if test="method[not(@isConstructor)]">
-					<xsl:apply-templates select="method[not(@isConstructor) and not(skip)]">
-						<xsl:sort select="@name" />
-					</xsl:apply-templates>
-				</xsl:if>
+				<xsl:choose>
+					<xsl:when test="@kind='ENUM'">
+						<xsl:if test="field">
+							<xsl:apply-templates select="field[not(skip)]" mode="enum"/>
+						</xsl:if>					
+					</xsl:when>
+					<xsl:when test="@kind='ANNOTATION'">
+						<xsl:apply-templates select="method[not(@isConstructor) and not(skip)]" mode="annotation"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:if test="field">
+							<xsl:apply-templates select="field[not(skip)]">
+								<xsl:sort select="@name" />
+							</xsl:apply-templates>
+						</xsl:if>
+						<xsl:if test="method[@isConstructor]">
+							<xsl:apply-templates select="method[@isConstructor and not(skip)]" />
+						</xsl:if>
+						<xsl:if test="method[not(@isConstructor)]">
+							<xsl:apply-templates select="method[not(@isConstructor) and not(skip)]">
+								<xsl:sort select="@name" />
+							</xsl:apply-templates>
+						</xsl:if>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -213,6 +235,24 @@
 				=
 				<xsl:value-of select="value" />
 			</xsl:if>
+		</h3>
+		<xsl:apply-templates select="description" mode="html" />
+		<xsl:call-template name="descriptors">
+			<xsl:with-param name="target" select="." />
+		</xsl:call-template>
+	</xsl:template>
+
+	<xsl:template match="field" mode="enum">
+		<xsl:message>in enum field</xsl:message>
+		<h6 class='anchor'>
+			<a name="{@qn}" />
+			<a index="{parent::node()/@name}:{@name}" />
+			<a index="{@name}" />
+			<xsl:value-of select="@name" />
+		</h6>
+		<h3 class="Heading3">
+			<xsl:value-of
+				select="@name" />
 		</h3>
 		<xsl:apply-templates select="description" mode="html" />
 		<xsl:call-template name="descriptors">
@@ -315,6 +355,39 @@
 	</xsl:template>
 
 
+	<xsl:template match="method" mode="annotation">
+		<h6 class='anchor'>
+			<a name="{@qn}" />
+			<a index="{parent::node()/@name}:{@name}" />
+			<a index="{@name}" />
+			<xsl:value-of select="@name" />
+		</h6>
+		<h3 class="Heading3">
+			<xsl:value-of
+				select="concat(@typeName,@dimension,' ', @name)" />
+			<xsl:if test="@default">
+				default <xsl:value-of select="@default"/>
+			</xsl:if>
+		</h3>
+		<xsl:if test="normalize-space(description)">
+			<p class="description">
+				<tab />
+			</p>
+			<xsl:apply-templates select="description" mode="html" />
+		</xsl:if>
+		<xsl:for-each select="return">
+			<p class="parameter">
+				<tab />
+				<em class="key">Returns</em>
+				<tab />
+				<xsl:apply-templates select="." mode="html" />
+			</p>
+		</xsl:for-each>
+		<xsl:call-template name="descriptors">
+			<xsl:with-param name="target" select="." />
+		</xsl:call-template>
+	</xsl:template>
+	
 	<xsl:template name="descriptors">
 		<xsl:if test="a">
 			<p class="parameter">
@@ -392,6 +465,28 @@
 				Consumers of this API must not implement this interface
 				<xsl:text> </xsl:text>
 			</p>
+		</xsl:if>
+		<xsl:if test="java.lang.annotation.Retention">
+			<p class="parameter">
+				<tab />
+				<em class="key">Retention</em>
+				<tab />
+				<xsl:for-each select="java.lang.annotation.Retention//value[not(./value)]">
+					<xsl:if test="not(position()=1)">, </xsl:if>
+				<code><xsl:value-of select="."/></code>
+				</xsl:for-each>
+			</p>		
+		</xsl:if>
+		<xsl:if test="java.lang.annotation.Target">
+			<p class="parameter">
+				<tab />
+				<em class="key">Target</em>
+				<tab />
+				<xsl:for-each select="java.lang.annotation.Target//value[not(./value)]">
+					<xsl:if test="not(position()=1)">, </xsl:if>
+				<code><xsl:value-of select="."/></code>
+				</xsl:for-each>
+			</p>		
 		</xsl:if>
 	</xsl:template>
 
