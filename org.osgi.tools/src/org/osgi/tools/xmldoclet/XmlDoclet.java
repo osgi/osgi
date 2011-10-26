@@ -378,7 +378,6 @@ public class XmlDoclet extends Doclet {
 											.compile("@org.osgi.dmt.ddf.NodeType\\(\"(.+)\"\\)");
 
 	void print(MethodDoc cnst, boolean doDDF, Object deflt) {
-		System.out.println("In method " + cnst.name());
 		String dimension = cnst.returnType().dimension();
 		StringBuilder typeArgs = new StringBuilder();
 		print(typeArgs, cnst.typeParameters(), 0);

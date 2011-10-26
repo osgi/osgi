@@ -243,7 +243,6 @@
 	</xsl:template>
 
 	<xsl:template match="field" mode="enum">
-		<xsl:message>in enum field</xsl:message>
 		<h6 class='anchor'>
 			<a name="{@qn}" />
 			<a index="{parent::node()/@name}:{@name}" />
