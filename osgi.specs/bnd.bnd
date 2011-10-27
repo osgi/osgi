@@ -1,6 +1,6 @@
 -include : ../osgi.build/bnd.bnd
 
-minimum-latest 			= 1.2.0
+minimum-latest 			= 1.2.1
 minimum-previous		= 1.1.3
 foundation-latest 		= 1.1.0
 foundation-previous		= 1.0.0
