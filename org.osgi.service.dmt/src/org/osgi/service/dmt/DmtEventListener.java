@@ -27,8 +27,6 @@ import org.osgi.service.dmt.security.DmtPermission;
  * Dmt Event Listener services must have permission {@link DmtPermission#GET} for 
  * the nodes in the {@code nodes} and {@code newNodes} property in the Dmt Event.
  * 
- * @remark check security
- * 
  * @version $Id$
  */
 public interface DmtEventListener {

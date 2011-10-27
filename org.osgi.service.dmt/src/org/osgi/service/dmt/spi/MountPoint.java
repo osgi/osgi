@@ -24,7 +24,6 @@ import java.util.Dictionary;
  * It provides function to get the absolute mounted uri and a shortcut method to
  * post events via the DmtAdmin.
  * 
- * @remark Use map instead of dictionary
  * @version $Id$
  * @since 2.0
  */

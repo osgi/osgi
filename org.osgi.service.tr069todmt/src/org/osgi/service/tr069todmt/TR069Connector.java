@@ -195,7 +195,6 @@ public interface TR069Connector {
 	 *        {@link #TR069_DATETIME},{@link #TR069_BASE64},
 	 *        {@link #TR069_HEXBINARY})
 	 * 
-	 * @remark can we auto-create the nodes?
 	 * @throws TR069Exception The following fault codes are defined for this
 	 *         method: 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008.
 	 *         <ul>
@@ -317,9 +316,8 @@ public interface TR069Connector {
 	 * be the alias, however, no new node must be created. Otherwise, the
 	 * Connector must calculate a unique instance id for the new node name that
 	 * follows the TR-069 rules for instance ids. That is, this id must not be
-	 * reused and must not be in use.
+	 * reused and must not be in use. That is, the id must be reserved persistently.
 	 * 
-	 * @remark add persistence
 	 * <p>
 	 * If the {@code LIST} or {@code MAP} node has a Meta Node with a MIME type
 	 * application/x-tr-069-eager then the node must be immediately created.
