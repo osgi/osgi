@@ -39,7 +39,7 @@ public interface Wire {
 	 * @return The name space for this wire.
 	 */
 	@Scope(A)
-	String NameSpace();
+	String Namespace();
 
 	/**
 	 * The Requirement that caused this wire.
