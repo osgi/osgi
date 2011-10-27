@@ -15,7 +15,6 @@
  */
 package org.osgi.service.dmt.spi;
 
-
 import java.util.Date;
 
 import org.osgi.service.dmt.*;
@@ -55,16 +54,11 @@ import org.osgi.service.dmt.*;
  * for itself and use the {@link DmtException#METADATA_MISMATCH} error code to
  * indicate such discrepancies.
  * <p>
- * The DmtAdmin also ensures that the targeted nodes exist before calling the
- * plugin (except, of course, before the {@code isNodeUri} call). However, some
- * small amount of time elapses between the check and the call, so in case of
- * plugins where the node structure can change independantly from the DMT, the
- * target node might disappear in that time. For example, a whole subtree can
- * disappear when a Monitorable application is unregistered, which might happen
- * in the middle of a DMT session accessing it. Plugins managing such nodes
- * always need to check whether they still exist and throw
- * {@link DmtException#NODE_NOT_FOUND} as necessary, but for more static
- * subtrees there is no need for the plugin to use this error code.
+ * The DmtAdmin does not check that the targeted node exists before calling the
+ * plugin. It is the responsibility of the plugin to perform this check and to
+ * throw a {@link DmtException#NODE_NOT_FOUND} if needed. In this case the
+ * DmtAdmin must pass through this exception to the caller of the corresponding
+ * DmtSession method.
  * <p>
  * The plugin can use the remaining error codes as needed. If an error does not
  * fit into any other category, the {@link DmtException#COMMAND_FAILED} code
@@ -73,25 +67,25 @@ import org.osgi.service.dmt.*;
  * @version $Id$
  */
 public interface ReadableDataSession {
-    /**
-     * Notifies the plugin that the given node has changed outside the scope of
-     * the plugin, therefore the Version and Timestamp properties must be
-     * updated (if supported). This method is needed because the ACL property of
-     * a node is managed by the DmtAdmin instead of the plugin. The DmtAdmin
-     * must call this method whenever the ACL property of a node changes.
-     * 
-     * @param nodePath the absolute path of the node that has changed
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
-     *         points to a non-existing node
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     */
-    void nodeChanged(String[] nodePath) throws DmtException;
+	/**
+	 * Notifies the plugin that the given node has changed outside the scope of
+	 * the plugin, therefore the Version and Timestamp properties must be
+	 * updated (if supported). This method is needed because the ACL property of
+	 * a node is managed by the DmtAdmin instead of the plugin. The DmtAdmin
+	 * must call this method whenever the ACL property of a node changes.
+	 * 
+	 * @param nodePath the absolute path of the node that has changed
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
+	 *         non-existing node
+	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store
+	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
+	 *         encountered while attempting to complete the command
+	 *         </ul>
+	 */
+	void nodeChanged(String[] nodePath) throws DmtException;
 
 	/**
 	 * Closes a session. This method is always called when the session ends for
@@ -113,73 +107,71 @@ public interface ReadableDataSession {
 	 * @throws DmtException with the error code {@code COMMAND_FAILED} if the
 	 *         plugin failed to close for any reason
 	 */
-    void close() throws DmtException;
+	void close() throws DmtException;
 
-    /**
-     * Get the list of children names of a node. The returned array contains the
-     * names - not the URIs - of the immediate children nodes of the given node.
-     * The returned array may contain {@code null} entries, but these are
-     * removed by the DmtAdmin before returning it to the client.
-     * 
-     * @param nodePath the absolute path of the node
-     * @return the list of child node names as a string array or an empty string
-     *         array if the node has no children
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
-     *         points to a non-existing node
-     *         <li>{@code METADATA_MISMATCH} if the information could
-     *         not be retrieved because of meta-data restrictions
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation
-     */
-    String[] getChildNodeNames(String[] nodePath) throws DmtException;
+	/**
+	 * Get the list of children names of a node. The returned array contains the
+	 * names - not the URIs - of the immediate children nodes of the given node.
+	 * The returned array may contain {@code null} entries, but these are
+	 * removed by the DmtAdmin before returning it to the client.
+	 * 
+	 * @param nodePath the absolute path of the node
+	 * @return the list of child node names as a string array or an empty string
+	 *         array if the node has no children
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
+	 *         non-existing node
+	 *         <li>{@code METADATA_MISMATCH} if the information could not be
+	 *         retrieved because of meta-data restrictions
+	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store
+	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
+	 *         encountered while attempting to complete the command
+	 *         </ul>
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation
+	 */
+	String[] getChildNodeNames(String[] nodePath) throws DmtException;
 
-    /**
-     * Get the meta data which describes a given node. Meta data can be only
-     * inspected, it can not be changed.
-     * <p>
-     * Meta data support by plugins is an optional feature. It can be used, for
-     * example, when a data plugin is implemented on top of a data store or
-     * another API that has their own metadata, such as a relational database,
-     * in order to avoid metadata duplication and inconsistency. The meta data
-     * specific to the plugin returned by this method is complemented by meta
-     * data from the DmtAdmin before returning it to the client. If there are
-     * differences in the meta data elements known by the plugin and the
-     * {@code DmtAdmin} then the plugin specific elements take
-     * precedence.
-     * <p>
-     * Note, that a node does not have to exist for having meta-data associated
-     * with it. This method may provide meta-data for any node that can possibly
-     * exist in the tree (any node defined by the Management Object provided by
-     * the plugin). For nodes that are not defined, a {@code DmtException}
-     * may be thrown with the {@code NODE_NOT_FOUND} error code. To allow
-     * easier implementation of plugins that do not provide meta-data, it is
-     * allowed to return {@code null} for any node, regardless of whether
-     * it is defined or not.
-     * 
-     * @param nodePath the absolute path of the node
-     * @return a MetaNode which describes meta data information, can be
-     *         {@code null} if there is no meta data available for the
-     *         given node
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri}
-     *         points to a node that is not defined in the tree (see above)
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation
-     */
-    MetaNode getMetaNode(String[] nodePath) throws DmtException;
+	/**
+	 * Get the meta data which describes a given node. Meta data can be only
+	 * inspected, it can not be changed.
+	 * <p>
+	 * Meta data support by plugins is an optional feature. It can be used, for
+	 * example, when a data plugin is implemented on top of a data store or
+	 * another API that has their own metadata, such as a relational database,
+	 * in order to avoid metadata duplication and inconsistency. The meta data
+	 * specific to the plugin returned by this method is complemented by meta
+	 * data from the DmtAdmin before returning it to the client. If there are
+	 * differences in the meta data elements known by the plugin and the
+	 * {@code DmtAdmin} then the plugin specific elements take precedence.
+	 * <p>
+	 * Note, that a node does not have to exist for having meta-data associated
+	 * with it. This method may provide meta-data for any node that can possibly
+	 * exist in the tree (any node defined by the Management Object provided by
+	 * the plugin). For nodes that are not defined, a {@code DmtException} may
+	 * be thrown with the {@code NODE_NOT_FOUND} error code. To allow easier
+	 * implementation of plugins that do not provide meta-data, it is allowed to
+	 * return {@code null} for any node, regardless of whether it is defined or
+	 * not.
+	 * 
+	 * @param nodePath the absolute path of the node
+	 * @return a MetaNode which describes meta data information, can be
+	 *         {@code null} if there is no meta data available for the given
+	 *         node
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a node
+	 *         that is not defined in the tree (see above) <li>
+	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
+	 *         the data store <li>{@code COMMAND_FAILED} if some unspecified
+	 *         error is encountered while attempting to complete the command
+	 *         </ul>
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation
+	 */
+	MetaNode getMetaNode(String[] nodePath) throws DmtException;
 
 	/**
 	 * Get the size of the data in a leaf node. The value to return depends on
@@ -206,154 +198,153 @@ public interface ReadableDataSession {
 	 *         permissions to execute the underlying management operation
 	 * @see DmtData#getSize()
 	 */
-    int getNodeSize(String[] nodePath) throws DmtException;
+	int getNodeSize(String[] nodePath) throws DmtException;
 
-    /**
-     * Get the timestamp when the node was last modified.
-     * 
-     * @param nodePath the absolute path of the node
-     * @return the timestamp of the last modification
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
-     *         points to a non-existing node
-     *         <li>{@code METADATA_MISMATCH} if the information could
-     *         not be retrieved because of meta-data restrictions
-     *         <li>{@code FEATURE_NOT_SUPPORTED} if the Timestamp
-     *         property is not supported by the plugin
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation
-     */
-    Date getNodeTimestamp(String[] nodePath) throws DmtException;
+	/**
+	 * Get the timestamp when the node was last modified.
+	 * 
+	 * @param nodePath the absolute path of the node
+	 * @return the timestamp of the last modification
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
+	 *         non-existing node
+	 *         <li>{@code METADATA_MISMATCH} if the information could not be
+	 *         retrieved because of meta-data restrictions
+	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the Timestamp property is
+	 *         not supported by the plugin
+	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store
+	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
+	 *         encountered while attempting to complete the command
+	 *         </ul>
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation
+	 */
+	Date getNodeTimestamp(String[] nodePath) throws DmtException;
 
-    /**
-     * Get the title of a node. There might be no title property set for a node.
-     * 
-     * @param nodePath the absolute path of the node
-     * @return the title of the node, or {@code null} if the node has no
-     *         title
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
-     *         points to a non-existing node
-     *         <li>{@code METADATA_MISMATCH} if the information could
-     *         not be retrieved because of meta-data restrictions
-     *         <li>{@code FEATURE_NOT_SUPPORTED} if the Title property
-     *         is not supported by the plugin
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation
-     */
-    String getNodeTitle(String[] nodePath) throws DmtException;
+	/**
+	 * Get the title of a node. There might be no title property set for a node.
+	 * 
+	 * @param nodePath the absolute path of the node
+	 * @return the title of the node, or {@code null} if the node has no title
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
+	 *         non-existing node
+	 *         <li>{@code METADATA_MISMATCH} if the information could not be
+	 *         retrieved because of meta-data restrictions
+	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the Title property is not
+	 *         supported by the plugin
+	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store
+	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
+	 *         encountered while attempting to complete the command
+	 *         </ul>
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation
+	 */
+	String getNodeTitle(String[] nodePath) throws DmtException;
 
-    /**
-     * Get the type of a node. The type of leaf node is the MIME type of the
-     * data it contains. The type of an interior node is a URI identifying a DDF
-     * document; a {@code null} type means that there is no DDF document
-     * overriding the tree structure defined by the ancestors.
-     * 
-     * @param nodePath the absolute path of the node
-     * @return the type of the node, can be {@code null}
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
-     *         points to a non-existing node
-     *         <li>{@code METADATA_MISMATCH} if the information could
-     *         not be retrieved because of meta-data restrictions
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation
-     */
-    String getNodeType(String[] nodePath) throws DmtException;
+	/**
+	 * Get the type of a node. The type of leaf node is the MIME type of the
+	 * data it contains. The type of an interior node is a URI identifying a DDF
+	 * document; a {@code null} type means that there is no DDF document
+	 * overriding the tree structure defined by the ancestors.
+	 * 
+	 * @param nodePath the absolute path of the node
+	 * @return the type of the node, can be {@code null}
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
+	 *         non-existing node
+	 *         <li>{@code METADATA_MISMATCH} if the information could not be
+	 *         retrieved because of meta-data restrictions
+	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store
+	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
+	 *         encountered while attempting to complete the command
+	 *         </ul>
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation
+	 */
+	String getNodeType(String[] nodePath) throws DmtException;
 
-    /**
-     * Check whether the specified path corresponds to a valid node in the DMT.
-     * 
-     * @param nodePath the absolute path to check
-     * @return true if the given node exists in the DMT
-     */
-    boolean isNodeUri(String[] nodePath);
+	/**
+	 * Check whether the specified path corresponds to a valid node in the DMT.
+	 * 
+	 * @param nodePath the absolute path to check
+	 * @return true if the given node exists in the DMT
+	 */
+	boolean isNodeUri(String[] nodePath);
 
-    /**
-     * Tells whether a node is a leaf or an interior node of the DMT.
-     * 
-     * @param nodePath the absolute path of the node
-     * @return true if the given node is a leaf node
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
-     *         points to a non-existing node
-     *         <li>{@code METADATA_MISMATCH} if the information could
-     *         not be retrieved because of meta-data restrictions
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation
-     */
-    boolean isLeafNode(String[] nodePath) throws DmtException;
+	/**
+	 * Tells whether a node is a leaf or an interior node of the DMT.
+	 * 
+	 * @param nodePath the absolute path of the node
+	 * @return true if the given node is a leaf node
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
+	 *         non-existing node
+	 *         <li>{@code METADATA_MISMATCH} if the information could not be
+	 *         retrieved because of meta-data restrictions
+	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store
+	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
+	 *         encountered while attempting to complete the command
+	 *         </ul>
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation
+	 */
+	boolean isLeafNode(String[] nodePath) throws DmtException;
 
-    /**
-     * Get the data contained in a leaf or interior node.
-     * 
-     * @param nodePath the absolute path of the node to retrieve
-     * @return the data of the leaf node, must not be {@code null}
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
-     *         points to a non-existing node
-     *         <li>{@code METADATA_MISMATCH} if the information could
-     *         not be retrieved because of meta-data restrictions
-     *         <li>{@code FEATURE_NOT_SUPPORTED} if the specified node is
-     *         an interior node and does not support Java object values
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation
-     */
-    DmtData getNodeValue(String[] nodePath) throws DmtException;
+	/**
+	 * Get the data contained in a leaf or interior node.
+	 * 
+	 * @param nodePath the absolute path of the node to retrieve
+	 * @return the data of the leaf node, must not be {@code null}
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
+	 *         non-existing node
+	 *         <li>{@code METADATA_MISMATCH} if the information could not be
+	 *         retrieved because of meta-data restrictions
+	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the specified node is an
+	 *         interior node and does not support Java object values
+	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store
+	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
+	 *         encountered while attempting to complete the command
+	 *         </ul>
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation
+	 */
+	DmtData getNodeValue(String[] nodePath) throws DmtException;
 
-    /**
-     * Get the version of a node. The version can not be set, it is calculated
-     * automatically by the device. It is incremented modulo 0x10000 at every
-     * modification of the value or any other property of the node, for both
-     * leaf and interior nodes. When a node is created the initial value is 0.
-     * 
-     * @param nodePath the absolute path of the node
-     * @return the version of the node
-     * @throws DmtException with the following possible error codes:
-     *         <ul>
-     *         <li>{@code NODE_NOT_FOUND} if {@code nodePath}
-     *         points to a non-existing node
-     *         <li>{@code METADATA_MISMATCH} if the information could
-     *         not be retrieved because of meta-data restrictions
-     *         <li>{@code FEATURE_NOT_SUPPORTED} if the Version property
-     *         is not supported by the plugin
-     *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-     *         accessing the data store
-     *         <li>{@code COMMAND_FAILED} if some unspecified error is
-     *         encountered while attempting to complete the command
-     *         </ul>
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation
-     */
-    int getNodeVersion(String[] nodePath) throws DmtException;
+	/**
+	 * Get the version of a node. The version can not be set, it is calculated
+	 * automatically by the device. It is incremented modulo 0x10000 at every
+	 * modification of the value or any other property of the node, for both
+	 * leaf and interior nodes. When a node is created the initial value is 0.
+	 * 
+	 * @param nodePath the absolute path of the node
+	 * @return the version of the node
+	 * @throws DmtException with the following possible error codes:
+	 *         <ul>
+	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
+	 *         non-existing node
+	 *         <li>{@code METADATA_MISMATCH} if the information could not be
+	 *         retrieved because of meta-data restrictions
+	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the Version property is not
+	 *         supported by the plugin
+	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store
+	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
+	 *         encountered while attempting to complete the command
+	 *         </ul>
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation
+	 */
+	int getNodeVersion(String[] nodePath) throws DmtException;
 }
