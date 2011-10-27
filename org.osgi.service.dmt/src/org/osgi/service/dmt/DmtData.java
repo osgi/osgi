@@ -205,12 +205,13 @@ public final class DmtData {
 
 	/**
 	 * Create a {@code DmtData} instance of {@code dateTime} format with the
-	 * given Date value. The {@code null} string argument is valid.
+	 * given Date value. The given Date value must be a non-null {@code Date} object.
 	 * 
-	 * @param date the string value to set
+	 * @param date the Date object to set
 	 */
 	public DmtData(Date date) {
-
+		if (date == null)
+			throw new NullPointerException("The date argument is null.");
 		this.format = FORMAT_DATE_TIME;
 		this.value = date;
 	}
@@ -253,20 +254,20 @@ public final class DmtData {
 	 * * The {@code null} string argument is only valid if the format is string
 	 * or XML.
 	 * 
-	 * @param value the string, XML, date, time, or datetime, value to set
+	 * @param value the string, XML, date, or time value to set
 	 * @param format the format of the {@code DmtData} instance to be created,
 	 *        must be one of the formats specified above
 	 * @throws IllegalArgumentException if {@code format} is not one of the
 	 *         allowed formats, or {@code value} is not a valid string for the
 	 *         given format
-	 * @throws NullPointerException if a string, XML, date, time, or datetime is
+	 * @throws NullPointerException if a string, XML, date, or time is
 	 *         constructed and {@code value} is {@code null}
 	 */
 	public DmtData(String value, int format) {
 		this(value, format, null);
 		if ( format == FORMAT_STRING || format == FORMAT_XML || format==FORMAT_DATE || format==FORMAT_TIME)
-			return;
-		
+			    return;
+
 		throw new IllegalArgumentException("Wrong format for DmtData(String,int), format must be one of FORMAT_STRING, FORMAT_XML, FORMAT_DATE, or FORMAT_TIME");
 	}
 
@@ -409,10 +410,9 @@ public final class DmtData {
 	 *         {@code null}
 	 */
 	public DmtData(String formatName, byte[] data) {
-		this(data, FORMAT_RAW_BINARY);
+		this(data, FORMAT_RAW_BINARY, formatName);
 		if (formatName == null)
 			throw new NullPointerException("Format name argument is null.");
-		this.formatName = formatName;
 	}
 
 	/*
@@ -440,6 +440,14 @@ public final class DmtData {
 				break;
 
 			case FORMAT_STRING :
+			case FORMAT_XML :
+				c = String.class;
+				if (value != null) {
+				    break;
+				} else {
+					return;
+				}
+
 			case FORMAT_RAW_STRING :
 				c = String.class;
 				break;
@@ -448,15 +456,14 @@ public final class DmtData {
 				c = Boolean.class;
 				break;
 
-			case FORMAT_DATE_TIME :
-				c = Date.class;
-				break;
-
 			case FORMAT_BINARY :
 			case FORMAT_RAW_BINARY :
 			case FORMAT_BASE64 :
-				c = byte[].class;
-				break;
+				if (value != null) {
+				    c = byte[].class;
+				    break;
+				}
+				throw new NullPointerException("The bytes argument is null.");
 
 			case FORMAT_NULL :
 				if (value != null)
@@ -503,10 +510,6 @@ public final class DmtData {
 	 * formatted according to the ISO 8601 definition of a calendar date in
 	 * complete representation, basic format (pattern {@code CCYYMMDD}).
 	 * 
-	 * @remark the pattern is way too simplistic.
-	 * @remark I think the reference is not ISO 8601 but
-	 *         http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/#dateTime
-	 * @remark Why does this not return Date?
 	 * @return the date value
 	 * @throws DmtIllegalStateException if the format of the node is not date
 	 */
@@ -535,15 +538,9 @@ public final class DmtData {
 	}
 
 	/**
-	 * Gets the value of a node with DateTime format. The returned dateTime
-	 * string is formatted according to the ISO 8601 definition of a calendar
-	 * date-time in complete representation. The exact format depends on the
-	 * value the object was initialized with: either local time, complete
-	 * representation, basic format (pattern {@code CCYYMMDDThhmmss}) or
-	 * Coordinated Universal Time, basic format (pattern
-	 * {@code CCYYMMDDThhmmssZ}).
+	 * Gets the value of a node with {@code dateTime} format. 
 	 * 
-	 * @return the time value
+	 * @return the Date value
 	 * @throws DmtIllegalStateException if the format of the node is not time
 	 * @since 2.0
 	 */
@@ -551,7 +548,7 @@ public final class DmtData {
 		if (format == FORMAT_DATE_TIME)
 			return (Date) value;
 
-		throw new DmtIllegalStateException("DmtData value is not DateTime.");
+		throw new DmtIllegalStateException("DmtData value is not dateTime.");
 	}
 
 	/**
@@ -750,6 +747,7 @@ public final class DmtData {
 	 * {@link #FORMAT_RAW_BINARY}: the length of the stored data, or 0 if the
 	 * data is {@code null}
 	 * <li>{@link #FORMAT_INTEGER} and {@link #FORMAT_FLOAT}: 4
+	 * <li>{@link #FORMAT_LONG} and {@link #FORMAT_DATE_TIME}: 8
 	 * <li>{@link #FORMAT_DATE} and {@link #FORMAT_TIME}: the length of the date
 	 * or time in its string representation
 	 * <li>{@link #FORMAT_BOOLEAN}: 1
@@ -766,7 +764,11 @@ public final class DmtData {
 			case FORMAT_DATE :
 			case FORMAT_TIME :
 			case FORMAT_RAW_STRING :
-				return ((String) value).length();
+				if (value != null) {
+				    return ((String) value).length();
+				} else {
+					return 0;
+				}
 			case FORMAT_BINARY :
 			case FORMAT_BASE64 :
 			case FORMAT_RAW_BINARY :
@@ -800,6 +802,7 @@ public final class DmtData {
 	 * spaces. The {@link #NULL_VALUE} data has the string form of "
 	 * {@code null}". Data of string or XML format containing the Java
 	 * {@code null} value is represented by an empty string.
+	 * DateTime data is formatted as {@code yyyy-MM-dd'T'HH:mm:SS'Z'}).
 	 * 
 	 * @return the string representation of this {@code DmtData} instance
 	 */
@@ -810,7 +813,11 @@ public final class DmtData {
 			case FORMAT_DATE :
 			case FORMAT_TIME :
 			case FORMAT_RAW_STRING :
-				return (String) value;
+				if (value != null) {
+				    return (String) value;
+				} else {
+					return "";
+				}
 
 			case FORMAT_INTEGER :
 			case FORMAT_LONG :
@@ -861,13 +868,30 @@ public final class DmtData {
 		if (format != other.format)
 			return false;
 
+		if (formatName != null) {
+            if (!formatName.equals(other.formatName)) {
+            	return false;
+            }
+		}
+
 		if (value == null)
 			if (other.value == null)
 				return true;
 			else
 				return false;
 
-		return value.equals(other.value);
+		if (value.equals(other.value)) {
+			return true;
+		}
+
+        switch (format) {
+        case FORMAT_BINARY:
+        case FORMAT_BASE64:
+        case FORMAT_RAW_BINARY:
+            return Arrays.equals((byte[]) value, (byte[])other.value);
+        }
+        
+        return false;
 	}
 
 	/**
