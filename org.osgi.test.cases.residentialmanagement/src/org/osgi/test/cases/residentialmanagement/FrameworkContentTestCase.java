@@ -25,10 +25,7 @@
 package org.osgi.test.cases.residentialmanagement;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +39,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
@@ -50,15 +46,11 @@ import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
-import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtSession;
 
 /**
- * This test case checks the possible operations on the Framework subtree
- * This includes 
- * - get and set the Framework-Startlevel
- * - install and uninstall a bundle
- * - change the state of an installed bundle
+ * This test case tests that the Framework properties are correctly reflected in 
+ * the RMT.
  * 
  * @author Steffen Druesedow (Deutsche Telekom Laboratories)
  */

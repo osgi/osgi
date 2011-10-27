@@ -10,15 +10,16 @@ Private-Package						=  \
 	ee.minimum;						version=1.2.1	, \
 	org.osgi.test.support;      	version=project 	, \
 	org.osgi.service.dmt;			version=project		, \
-	osgi.cmpn;						version=project		, \
+	org.osgi.impl.service.residentialmanagement;	version=project, \
+	osgi.cmpn;						version=4.3		, \
 	${junit}
 
 -runbundles			= \
-	org.osgi.impl.service.log;						version=project, \
+	org.osgi.impl.service.log;						version=latest, \
     org.apache.felix.configadmin;					version=latest, \
 	org.osgi.impl.service.dmt;						version=project, \
 	org.osgi.impl.service.residentialmanagement;	version=project, \
-	osgi.cmpn;										version=latest
+	osgi.cmpn;										version=4.3
 	
 -runproperties = report=true, \
 	org.osgi.framework.system.packages=org.osgi.test.cases.residentialmanagement.syspkg;"version=1.0.0" ,\

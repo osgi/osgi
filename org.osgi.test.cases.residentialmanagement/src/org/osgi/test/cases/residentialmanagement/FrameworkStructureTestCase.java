@@ -50,24 +50,27 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 	 */
 	public void testFrameworkStructure() throws DmtException {
 		String[] children;
-		HashSet<String> mandatory;
-		HashSet<String> unknown;
+		HashSet<String> mandatory = new HashSet<String>();
+		HashSet<String> unknown = new HashSet<String>();
 
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
 
 		// 1st descendants
 		children = session.getChildNodeNames(FRAMEWORK_ROOT);
-		mandatory = new HashSet<String>();
 		mandatory.add(STARTLEVEL);
 		mandatory.add(INITIAL_BUNDLE_STARTLEVEL );
 		mandatory.add(BUNDLE);
 		mandatory.add(PROPERTY);
-		for (String child : children)
+		for (String child : children) {
+			if ( ! mandatory.contains(child))
+				unknown.add(child);
 			mandatory.remove(child);
-		assertEquals("There are undefined children in the Framework node.", 0,
+		}
+		assertEquals("There are children missing in the Framework node:" + unknown, 0,
 				mandatory.size());
+		assertEquals("There are unknown children in the Framework node: " + unknown, 0,
+				unknown.size());
 		
-		// TODO check for undefined nodes as well
 
 	}
 

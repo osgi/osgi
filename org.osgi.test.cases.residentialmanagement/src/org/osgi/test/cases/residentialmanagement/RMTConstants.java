@@ -72,6 +72,15 @@ public interface RMTConstants {
 	static final String PATH = "Path";
 	static final String CONTENT = "Content";
 
+	// Log children
+	static final String LOG_ENTRIES = "LogEntries";
+	// LogEntry children
+	static final String TIME = "Time";
+	static final String LEVEL = "Level";
+	static final String MESSAGE = "Message";
+		// Bundle
+	static final String EXCEPTION = "Exception";
+
 	
 	static final String TESTBUNDLE_EXPORTPACKAGE = "org.osgi.test.cases.residentialmanagement.tb1.jar";
 	static final String TESTBUNDLE_IMPORTPACKAGE = "org.osgi.test.cases.residentialmanagement.tb2.jar";
