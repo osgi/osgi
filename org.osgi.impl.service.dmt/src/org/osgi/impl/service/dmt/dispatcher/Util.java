@@ -11,7 +11,14 @@ import java.util.Collection;
  */
 public class Util {
 
-	static Collection<String> toCollection(Object property) {
+	/**
+	 * Takes an Object and returns a Collection of Strings if:
+	 * - Object is of type String[] or
+	 * - Object is of type String
+	 * @param property ... given object
+	 * @return ... Collection of Strings or null, if types don't fit
+	 */
+	public static Collection<String> toCollection(Object property) {
 		if (property instanceof String)
 			return Arrays.asList((String) property);
 

@@ -12,6 +12,12 @@ import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
+/**
+ * This class tracks registration changes (reg/unreg/mod) of 
+ * DataPlugins and ExecPlugins and takes care of their mapping. 
+ * @author steffen
+ *
+ */
 public class Dispatcher extends ServiceTracker {
 
 	private static final int DATA_PLUGINS = 0;
@@ -24,6 +30,11 @@ public class Dispatcher extends ServiceTracker {
 	IDManager idManager;
 	
 
+	/**
+	 * creates a new Dispatcher
+	 * @param context ... the BundleContext
+	 * @param filter ... the filter to be used for the plugin tracker
+	 */
 	public Dispatcher(BundleContext context, Filter filter) {
 		super(context, filter, null);
 		idManager = new IDManager(context);
@@ -99,8 +110,8 @@ public class Dispatcher extends ServiceTracker {
 					mapPendingPlugin(mpUri, pluginType);
 		}
 		
-		System.out.println( ">>>>>>>>>> plugin added: " + p.getOwns());
-		dumpSegments(rootSegment);
+//		System.out.println( ">>>>>>>>>> plugin added: " + p.getOwns());
+//		dumpSegments(rootSegment);
 
 		return p;
 	}
@@ -152,12 +163,12 @@ public class Dispatcher extends ServiceTracker {
 			return;
 		
 		Plugin p = findMappedPlugin(segmentRoot, ref);
-		System.out.println( ">>>>>>>>>> Plugin removed: " + p.getOwns());
+//		System.out.println( ">>>>>>>>>> Plugin removed: " + p.getOwns());
 		p.close();
 		// map pending plugins to the freed uris
 		for (String uri: uris)
 			mapPendingPlugin(uri, pluginType);
-		dumpSegments(segmentRoot);
+//		dumpSegments(segmentRoot);
 	}
 	
 	

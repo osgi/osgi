@@ -13,6 +13,7 @@ import java.util.Properties;
 import org.osgi.framework.Bundle;
 import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtEvent;
+import org.osgi.service.dmt.Uri;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventConstants;
@@ -142,10 +143,6 @@ public class EventDispatcher {
 	}
 
 	private void dispatchEvent(DmtEventCore dmtEvent) {
-		dispatchEvent(dmtEvent, false);
-	}
-
-	private void dispatchEvent(DmtEventCore dmtEvent, boolean internal) {
 		// ensure that mandatory properties are there see spec v2.0 117.11
 		// mandatory life-cycle events are assumed already present in the event
 		dmtEvent.addProperty("session.id", new Integer(dmtEvent.getSessionId()));
@@ -159,18 +156,16 @@ public class EventDispatcher {
 		dmtEvent.addProperty("bundle.version", initiatingBundle.getVersion());
 		dmtEvent.addProperty("bundle.id", initiatingBundle.getBundleId());
 
-		// internal events have their nodes and newNodes already set in the properties
-		if ( ! internal ) {
-			List<Node> nodes = dmtEvent.getNodes();
-			if (nodes != null)
-				dmtEvent.addProperty("nodes",
-						Node.getUriArray(nodes.toArray(new Node[nodes.size()])));
-	
-			List<Node> newNodes = dmtEvent.getNewNodes();
-			if (newNodes != null)
-				dmtEvent.addProperty("newnodes",
-						Node.getUriArray(newNodes.toArray(new Node[nodes.size()])));
-		}
+		// add the nodes and newnodes properties
+		List<Node> nodes = dmtEvent.getNodes();
+		if (nodes != null)
+			dmtEvent.addProperty("nodes",
+					Node.getUriArray(nodes.toArray(new Node[nodes.size()])));
+
+		List<Node> newNodes = dmtEvent.getNewNodes();
+		if (newNodes != null)
+			dmtEvent.addProperty("newnodes",
+					Node.getUriArray(newNodes.toArray(new Node[nodes.size()])));
 
 		// send event to listeners directly registered with DmtAdmin
 		postLocalEvent(dmtEvent);
@@ -209,10 +204,17 @@ public class EventDispatcher {
 	/**
 	 * dispatch events that come from plugin internal changes
 	 * @param topic .. the event topic
-	 * @param properties .. prepared properties, must contain node and newnodes already
+	 * @param nodes 
+	 * @param newNodes 
 	 */
-	public void dispatchPluginInternalEvent(String topic, Properties properties) {
-		dispatchEvent(new DmtEventCore(topic, -1, properties), true);		
+	public void dispatchPluginInternalEvent(String topic, String[] nodes, String[] newNodes) {
+		DmtEventCore dmtEventCore = new DmtEventCore(topic, -1);
+		for (String nodeUri : nodes )
+			dmtEventCore.getNodes().add(new Node(Uri.toPath(nodeUri)));
+		for (String nodeUri : newNodes )
+			dmtEventCore.getNewNodes().add(new Node(Uri.toPath(nodeUri)));
+			
+		dispatchEvent(dmtEventCore);		
 	}
 
 }

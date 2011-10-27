@@ -5,6 +5,17 @@ import org.osgi.service.dmt.DmtException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A Segment represents one node in the dmtree. Segments can have a Plugin 
+ * assigned or not. 
+ * Segments with an assigned Plugins are the roots of the subtree that the plugin 
+ * is responsible for. Segments without an assigned plugin just ensure that the 
+ * whole tree is browsable and are created/removed as needed when plugins are 
+ * mapped/unmapped.
+ * Each Segment knows its parent and children.
+ * @author steffen
+ *
+ */
 public class Segment {
 
 	final Segment parent;

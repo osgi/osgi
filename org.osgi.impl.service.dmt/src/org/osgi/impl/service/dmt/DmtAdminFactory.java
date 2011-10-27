@@ -17,7 +17,6 @@
  */
 package org.osgi.impl.service.dmt;
 
-import java.util.Iterator;
 import java.util.Vector;
 
 import org.osgi.framework.Bundle;
@@ -73,13 +72,9 @@ public class DmtAdminFactory implements ServiceFactory {
             
             while(running) {
                 DmtEventCore event = EventDispatcher.getNextLocalEvent(10000);
-                if(event != null) {
-                    Iterator i = delegates.iterator();
-                    while (i.hasNext()) {
-                        DmtAdminDelegate delegate = (DmtAdminDelegate) i.next();
-                        delegate.dispatchEvent(event);
-                    }
-                }
+                if(event != null)
+                	// events are now dispatched by the dmtAdmin centrally
+                	dmtAdmin.dispatchEvent(event);
             }
         }
         

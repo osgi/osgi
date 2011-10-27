@@ -17,26 +17,30 @@
  */
 package org.osgi.impl.service.dmt;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
+
 import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtEvent;
 import org.osgi.service.dmt.security.DmtPermission;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-
-/*
+/**
  * Wrapper class to DmtEventCore that implements the DmtEvent interface and
  * filters the list of nodes returned to the caller based on either the ACLs of
  * the principal (if given), or the Java permissions of the caller
  */
 public class DmtEventImpl implements DmtEvent {
     private DmtEventCore coreEvent;
-    private String principal;
+    private Collection<String> principals;
+    private String[] nodeUris;
+    private String[] newNodeUris;
 
-    DmtEventImpl(DmtEventCore coreEvent, String principal) {
+    DmtEventImpl(DmtEventCore coreEvent, Collection<String> principals) {
         this.coreEvent = coreEvent;
-        this.principal = principal;
+        this.principals = principals;
     }
     
     public int getType() {
@@ -48,70 +52,75 @@ public class DmtEventImpl implements DmtEvent {
     }
 
     public String[] getNodes() {
-        List nodes = coreEvent.getNodes();
-        if(nodes == null)
-            return null;
-        
-        if(principal != null)
-            return filterNodesByAcls(nodes, coreEvent.getAcls(), principal);
-        
-        return filterNodesByPermissions(nodes);
+    	if ( nodeUris == null ) {
+            List<Node> nodes = coreEvent.getNodes();
+            if ( nodes != null ) {
+	            if(principals != null)
+	                this.nodeUris = filterNodesByAcls(nodes, coreEvent.getAcls(), principals);
+	            else {
+	            	nodeUris = new String[nodes.size()];
+	            	for (int i = 0; i < nodes.size(); i++)
+	    				nodeUris[i] = nodes.get(i).getUri();
+	            }
+            }
+    	}
+        return nodeUris;
     }
     
     public String[] getNewNodes() {
-        List newNodes = coreEvent.getNewNodes();
-        if(newNodes == null)
-            return null;
-        
-        if(principal != null)
-            return filterNodesByAcls(newNodes, coreEvent.getAcls(), principal);
-        
-        return filterNodesByPermissions(newNodes);
+    	if ( newNodeUris == null ) {
+            List<Node> newNodes = coreEvent.getNewNodes();
+            if ( newNodes != null ) {
+	            if(principals != null)
+	                this.newNodeUris = filterNodesByAcls(newNodes, coreEvent.getAcls(), principals);
+	            else {
+	            	newNodeUris = new String[newNodes.size()];
+	            	for (int i = 0; i < newNodes.size(); i++)
+	            		newNodeUris[i] = newNodes.get(i).getUri();
+	            }
+            }
+    	}
+        return newNodeUris;
     }
     
     public String toString() {
-        return "DmtEventImpl(" + principal + ", " + coreEvent + ")";
+        return "DmtEventImpl(" + principals + ", " + coreEvent + ")";
     }
     
-    private static String[] filterNodesByPermissions(List nodes) {
-        SecurityManager sm = System.getSecurityManager();
+    
+    /**
+     * changed for spec 2.0
+     * Now filters against list of principals and adds the uri if at least one is permitted. 
+     * @param nodes
+     * @param acls
+     * @param principals
+     * @return
+     */
+    private static String[] filterNodesByAcls(List<Node> nodes, List<Acl> acls,
+            Collection<String> principals) {
 
-        List filteredNodes = new Vector();
-        Iterator i = nodes.iterator();
-        while (i.hasNext()) {
-            String uri = ((Node) i.next()).getUri();
-            try {
-                sm.checkPermission(new DmtPermission(uri, DmtPermission.GET));
-                filteredNodes.add(uri);
-            } catch(SecurityException e) {
-                // no GET permissions -> not adding URI to the filtered list
-            }
-        }
-        
-        return (String[]) filteredNodes.toArray(new String[] {});
-    }
-    
-    private static String[] filterNodesByAcls(List nodes, List acls,
-            String principal) {
-        
-        List filteredNodes = new Vector();
+    	// for internal events the acl list can be empty
+    	if ( acls == null || acls.size() == 0 )
+    		return nodes.toArray(new String[]{});
+    	
+        Set<String> filteredNodes = new HashSet<String>();
         
         for(int k = 0; k < nodes.size(); k++) {
-            Acl acl = (Acl) acls.get(k);
-            if(acl.isPermitted(principal, Acl.GET))
-                filteredNodes.add(((Node) nodes.get(k)).getUri());
+            Acl acl = acls.get(k);
+            for (String principal : principals) {
+                if(acl.isPermitted(principal, Acl.GET))
+                    filteredNodes.add((nodes.get(k)).getUri());
+			}
         }
         
-        return (String[]) filteredNodes.toArray(new String[] {});
+        return filteredNodes.toArray(new String[] {});
     }
 
 	public String[] getPropertyNames() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("method not yet implemented");
+		return coreEvent.getPropertyNames();
 	}
 
 	public Object getProperty(String key) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("method not yet implemented");
+		return coreEvent.getProperty(key);
 	}
 }

@@ -3,7 +3,6 @@ package org.osgi.impl.service.dmt.dispatcher;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
 
@@ -13,13 +12,14 @@ import org.osgi.impl.service.dmt.EventDispatcher;
 import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.Uri;
 import org.osgi.service.dmt.spi.MountPoint;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventAdmin;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
+ * Implementation of the MountPoint interface.
+ * Instances of this object are created to be passed to plugins that implement
+ * the MountPlugin interface. They provide the plugins with methods to 
+ * post internal events and to figure out their real mounted path in the tree 
+ * (incl. list indexes etc.).   
  * @author steffen
- *
  */
 public class MountPointImpl implements MountPoint {
 	
@@ -35,6 +35,11 @@ public class MountPointImpl implements MountPoint {
 		STANDARD_PROPS.add( DmtConstants.EVENT_PROPERTY_SESSION_ID );
 	}
 	
+	/**
+	 * creates a new MountPointImpl
+	 * @param path ... the absolute mount path of a plugin in the tree
+	 * @param pluginBundle ... the Bundle that has registered the plugin
+	 */
 	public MountPointImpl( String[] path, Bundle pluginBundle ) {
 		this.path = path;
 		this.uri = Uri.toUri(path);
@@ -66,13 +71,11 @@ public class MountPointImpl implements MountPoint {
 			}
 		}
 		
-		if ( relativeNodes != null )
-			props.put("nodes", addPrefix(uri, relativeNodes) );
-		if ( newRelativeNodes != null )
-			props.put("newnodes", addPrefix(uri, newRelativeNodes) );
+		String[] nodes = relativeNodes != null ? addPrefix(uri, relativeNodes) : new String[]{};
+		String[] newNodes = newRelativeNodes != null ? addPrefix(uri, newRelativeNodes) : new String[]{};
 
 		// post this event via normal dispatching (local and EA)
-		this.eventDispatcher.dispatchPluginInternalEvent(topic, props);
+		this.eventDispatcher.dispatchPluginInternalEvent(topic, nodes, newNodes);
 	}
 
 	
