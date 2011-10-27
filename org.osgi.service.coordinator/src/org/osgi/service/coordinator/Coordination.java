@@ -204,21 +204,23 @@ public interface Coordination {
 
 	/**
 	 * Returns the failure cause of this Coordination.
-	 *
+	 * 
 	 * <p>
 	 * If this Coordination has {@link #fail(Throwable) failed}, then this
 	 * method will return the failure cause.
-	 *
+	 * 
 	 * <p>
 	 * If this Coordination timed out, this method will return {@link #TIMEOUT}
 	 * as the failure cause. If this Coordination was active when the bundle
 	 * that created it released the {@link Coordinator} service, this method
-	 * will return {@link #RELEASED} as the failure cause.
-	 *
+	 * will return {@link #RELEASED} as the failure cause. If the Coordination
+	 * was orphaned, this method will return {@link #ORPHANED} as the failure
+	 * cause.
+	 * 
 	 * @return The failure cause of this Coordination or {@code null} if this
 	 *         Coordination has not terminated as a failure.
-	 * @throws SecurityException If the caller does not have {@code
-	 *         CoordinationPermission[INITIATE]} for this Coordination.
+	 * @throws SecurityException If the caller does not have
+	 *         {@code CoordinationPermission[INITIATE]} for this Coordination.
 	 */
 	Throwable getFailure();
 
