@@ -225,7 +225,8 @@ public interface Bundle {
 	 * RequestedState node then this must result in an update after which the
 	 * bundle should go to the RequestedState.
 	 * <p>
-	 * The default value of this node is the empty string.
+	 * The RequestedState must be stored persistently so that it contains the last requested
+	 * state. The initial value of the RequestedState must be {@link #INSTALLED}.
 	 * 
 	 * @return The RequestedState node.
 	 */
