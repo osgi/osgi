@@ -89,7 +89,7 @@ public final class ConfigurationPermission extends BasicPermission {
 	 *        matched to the requested permission using the substring matching
 	 *        rules used by {@link Filter}s.
 	 * @param actions Comma separated list of {@link #CONFIGURE},
-	 *        {@link #TARGET}.
+	 *        {@link #TARGET} (case insensitive).
 	 */
 
 	public ConfigurationPermission(String name, String actions) {
