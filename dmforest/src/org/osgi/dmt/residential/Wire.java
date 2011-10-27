@@ -6,8 +6,8 @@ import org.osgi.dmt.ddf.*;
 
 /**
  * A Wire is a link between two bundles where the semantics of this link is
- * defined by the used name space. This is closely modeled after the Wiring
- * API in the Core Framework.
+ * defined by the used name space. This is closely modeled after the Wiring API
+ * in the Core Framework.
  */
 public interface Wire {
 	/**
@@ -20,12 +20,12 @@ public interface Wire {
 	 * <li>* - Generic name spaces</li>
 	 * </ul>
 	 * <p>
-	 * The osgi.wiring.rmt.service name space is not defined by the OSGi Core
-	 * as it is not part of the module layer. The name space has the following
+	 * The osgi.wiring.rmt.service name space is not defined by the OSGi Core as
+	 * it is not part of the module layer. The name space has the following
 	 * layout:
 	 * <ul>
-	 * <li>Requirement - A filter on the service.id service property. No
-	 * attributes are defined</li>
+	 * <li>Requirement - The filter used by the bundle that got the service or a
+	 * synthesized filter on the service.id service property.</li>
 	 * <li>Capability - All service properties as attributes. No defined
 	 * directives.</li>
 	 * <li>Requirer - The bundle that has gotten the service</li>
