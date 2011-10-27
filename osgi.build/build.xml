@@ -57,10 +57,10 @@
 				<tag name="security" scope="methods" description="Required Permissions"/>
 				<tag name="noimplement" scope="types" description="Consumers of this API must not implement this interface"/>
 				<header><![CDATA[<b>OSGi&trade; Service Platform</b><br/><font  size=-1>Release ${osgi.release} Version ${osgi.version}</font>]]></header>
-				<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 1.0</a></font>]]></bottom>
+				<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 2.0</a></font>]]></bottom>
 				<doctitle><![CDATA[OSGi&trade; Service Platform Release ${osgi.release} Version ${osgi.version}]]></doctitle>
 			</javadoc>
-			<copy file="${project.workspace}/osgi.companion/legal/OSGiSpecificationLicense-v10.html"
+			<copy file="${project.workspace}/osgi.companion/legal/OSGiSpecificationLicense-v20.html"
 			    tofile="${target}/javadoc/@{name}/LICENSE.html"
 		    	verbose="${verbose}"
 		      	preservelastmodified="true" />
