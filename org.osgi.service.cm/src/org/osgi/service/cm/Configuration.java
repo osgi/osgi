@@ -41,7 +41,7 @@ import org.osgi.framework.Filter;
  * {@code String} objects as keys. However, case must be preserved from the last
  * set key/value.
  * <p>
- * A configuration can be <i>bound</i> to a specific bundle or to a group of
+ * A configuration can be <i>bound</i> to a specific bundle or to a region of
  * bundles using the <em>location</em>. In its simplest form the location is the
  * location of the target bundle that registered a Managed Service or a Managed
  * Service Factory. However, if the location starts with {@code ?} then the
@@ -182,12 +182,12 @@ public interface Configuration {
 	/**
 	 * Bind this {@code Configuration} object to the specified location.
 	 * 
-	 * If the bundleLocation parameter is {@code null} then the
-	 * {@code Configuration} object will not be bound to a location. It will be
+	 * If the location parameter is {@code null} then the
+	 * {@code Configuration} object will not be bound to a location/region. It will be
 	 * set to the bundle's location before the first time a Managed
 	 * Service/Managed Service Factory receives this {@code Configuration}
 	 * object via the updated method and before any plugins are called. The
-	 * bundle location will be set persistently.
+	 * bundle location or region will be set persistently.
 	 * 
 	 * <p>
 	 * If the location starts with {@code ?} then all targets registered with
@@ -203,7 +203,7 @@ public interface Configuration {
 	 * Also initiates an asynchronous call to all {@link ConfigurationListener}s
 	 * with a {@link ConfigurationEvent#CM_LOCATION_CHANGED} event.
 	 * 
-	 * @param location a location (can have wildcards) or {@code null}
+	 * @param location a location, region, or {@code null}
 	 * @throws IllegalStateException If this configuration has been deleted.
 	 * @throws SecurityException when the required permissions are not available
 	 * @security ConfigurationPermission[this.location,CONFIGURE]
@@ -214,9 +214,9 @@ public interface Configuration {
 	/**
 	 * Get the bundle location.
 	 * 
-	 * Returns the bundle location or group to which this configuration is
+	 * Returns the bundle location or region to which this configuration is
 	 * bound, or {@code null} if it is not yet bound to a bundle location or
-	 * group. If the location starts with {@code ?} then the configuration is
+	 * region. If the location starts with {@code ?} then the configuration is
 	 * delivered to all targets and not restricted to a single bundle.
 	 * 
 	 * @return location to which this configuration is bound, or {@code null}.
