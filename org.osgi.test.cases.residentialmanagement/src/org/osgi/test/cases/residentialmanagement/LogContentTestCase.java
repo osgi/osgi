@@ -67,8 +67,8 @@ public class LogContentTestCase extends RMTTestBase {
 		Enumeration<LogEntry> logEntries = logReader.getLog();
 		
 		String[] children = session.getChildNodeNames(LOG_ROOT + "/" + LOG_ENTRIES );
-		assertNotNull("These objects must exist.", children);
-		assertFalse("These objects must exist.", children.length == 0);
+		assertNotNull("No LogEntries found.", children);
+		assertFalse("No LogEntries found.", children.length == 0);
 
 		
 		for (String child : children ) {
@@ -94,7 +94,7 @@ public class LogContentTestCase extends RMTTestBase {
 	 * this test checks that no new entries are added to the RMT-Log, if there is an open exclusive session.
 	 * @throws Exception
 	 */
-	public void testLogEntriesInExclusiveSession(int sessionType) throws Exception {
+	public void testLogEntriesInExclusiveSession() throws Exception {
 		assertNoNewEntriesDuringExclusiveSession(DmtSession.LOCK_TYPE_EXCLUSIVE);
 		assertNoNewEntriesDuringExclusiveSession(DmtSession.LOCK_TYPE_ATOMIC);
 	}
@@ -113,8 +113,8 @@ public class LogContentTestCase extends RMTTestBase {
 		session = dmtAdmin.getSession(LOG_ROOT, DmtSession.LOCK_TYPE_SHARED);
 
 		String[] children = session.getChildNodeNames(LOG_ROOT + "/" + LOG_ENTRIES );
-		assertNotNull("These objects must exist.", children);
-		assertFalse("These objects must exist.", children.length == 0);
+		assertNotNull("No LogEntries found.", children);
+		assertFalse("No LogEntries found.", children.length == 0);
 
 		String uri = LOG_ROOT + "/" + children[0] + "/";
 		Date oldTime 			 	= session.getNodeValue(uri + TIME).getDateTime();
@@ -126,8 +126,8 @@ public class LogContentTestCase extends RMTTestBase {
 
 		// read logs again and compare the first entry with the previous first one
 		children = session.getChildNodeNames(LOG_ROOT + "/" + LOG_ENTRIES );
-		assertNotNull("These objects must exist.", children);
-		assertFalse("These objects must exist.", children.length == 0);
+		assertNotNull("No LogEntries found.", children);
+		assertFalse("No LogEntries found.", children.length == 0);
 
 		uri = LOG_ROOT + "/" + children[0] + "/";
 		Date time 			 	= session.getNodeValue(uri + TIME).getDateTime();
@@ -147,8 +147,8 @@ public class LogContentTestCase extends RMTTestBase {
 		session = dmtAdmin.getSession(LOG_ROOT, sessionType);
 
 		String[] children = session.getChildNodeNames(LOG_ROOT + "/" + LOG_ENTRIES );
-		assertNotNull("These objects must exist.", children);
-		assertFalse("These objects must exist.", children.length == 0);
+		assertNotNull("No LogEntries found.", children);
+		assertFalse("No LogEntries found.", children.length == 0);
 
 		String uri = LOG_ROOT + "/" + children[0] + "/";
 		String oldBundleLocation 	= Uri.decode(session.getNodeValue(uri + BUNDLE).getString());
@@ -163,8 +163,8 @@ public class LogContentTestCase extends RMTTestBase {
 
 		// read logs again and compare the first entry with the previous first one
 		children = session.getChildNodeNames(LOG_ROOT + "/" + LOG_ENTRIES );
-		assertNotNull("These objects must exist.", children);
-		assertFalse("These objects must exist.", children.length == 0);
+		assertNotNull("No LogEntries found.", children);
+		assertFalse("No LogEntries found.", children.length == 0);
 
 		uri = LOG_ROOT + "/" + children[0] + "/";
 		String bundleLocation 	= Uri.decode(session.getNodeValue(uri + BUNDLE).getString());

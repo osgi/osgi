@@ -11,7 +11,7 @@ public interface RMTConstants {
 	static final String FRAMEWORK = "Framework";
 	static final String FRAMEWORK_ROOT = RMT_ROOT + "/" + FRAMEWORK;
 	static final String FILTER_ROOT = RMT_ROOT + "/Filter";
-	static final String LOG = "LOG";
+	static final String LOG = "Log";
 	static final String LOG_ROOT = RMT_ROOT + "/" + LOG;
 	
 	// first level children

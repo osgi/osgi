@@ -130,12 +130,12 @@ public class LogStructureTestCase extends RMTTestBase {
 	 */
 	public void testMetaDataAndType() throws Exception {
 		try {
-
+			session = dmtAdmin.getSession(LOG_ROOT, DmtSession.LOCK_TYPE_SHARED);
+			assertNotNull(session);
 			assertMetaData( LOG_ROOT, false, "_G__", "0,1", MetaNode.PERMANENT, DmtData.FORMAT_NODE);
 			assertMetaData( LOG_ROOT + "/" + LOG_ENTRIES, false, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
 			assertEquals( "The nodeType of the Log.LogEntries node must be " + DmtConstants.DDF_LIST, DmtConstants.DDF_LIST, session.getNodeType(LOG_ROOT + "/" + LOG_ENTRIES));
 	
-			session = dmtAdmin.getSession(LOG_ROOT, DmtSession.LOCK_TYPE_EXCLUSIVE);
 			String[] logEntries = session.getChildNodeNames(LOG_ROOT + "/" + LOG_ENTRIES);
 			for (String entry : logEntries) {
 				String uri = LOG_ROOT + "/" + LOG_ENTRIES + "/" + entry;

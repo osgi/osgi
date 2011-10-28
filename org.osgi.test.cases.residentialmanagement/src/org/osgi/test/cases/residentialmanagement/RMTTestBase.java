@@ -92,7 +92,7 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		MetaNode metaNode = session.getMetaNode(uri);
 		assertNotNull("The metadata for " + uri + " must not be null!", metaNode);
 		
-		assertEquals( uri + " must be an interior node", false, metaNode.isLeaf() );
+		assertEquals( uri + " must " + (isLeaf ? "":" not ") + " be a leaf node", isLeaf, metaNode.isLeaf() );
 		assertOperations(uri, metaNode, canStr);
 		assertCardinality(uri, metaNode, cardinality);
 
@@ -138,7 +138,7 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 	 */
 	private void assertOperations( final String uri, final MetaNode metaNode, final String canStr ) {
 		for (int i = 0; i < canStr.length(); i++) {
-			boolean should = operations.contains( canStr.substring(i,1) );
+			boolean should = operations.contains( canStr.substring(i,i+1) );
 			// switch cases are in the order of the encoded actions in canStr ("AGRD")
 			// TODO: what about EXECUTE ?
 			switch (i) {
