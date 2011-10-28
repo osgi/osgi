@@ -78,11 +78,12 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * @param namespace The name space of the declared capabilities to return or
 	 *        {@code null} to return the declared capabilities from all name
 	 *        spaces.
-	 * @return A list containing a snapshot of the declared
-	 *         {@link BundleCapability}s, or an empty list if this bundle
-	 *         revision declares no capabilities in the specified name space.
-	 *         The list contains the declared capabilities in the order they are
-	 *         specified in the manifest.
+	 * @return An unmodifiable list containing the declared
+	 *         {@link BundleCapability}s from the specified name space. The
+	 *         returned list will be empty if this bundle revision declares no
+	 *         capabilities in the specified name space. The list contains the
+	 *         declared capabilities in the order they are specified in the
+	 *         manifest.
 	 */
 	List<BundleCapability> getDeclaredCapabilities(String namespace);
 
@@ -92,11 +93,12 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * @param namespace The name space of the declared requirements to return or
 	 *        {@code null} to return the declared requirements from all name
 	 *        spaces.
-	 * @return A list containing a snapshot of the declared
-	 *         {@link BundleRequirement}s, or an empty list if this bundle
-	 *         revision declares no requirements in the specified name space.
-	 *         The list contains the declared requirements in the order they are
-	 *         specified in the manifest.
+	 * @return An unmodifiable list containing the declared
+	 *         {@link BundleRequirement}s from the specified name space. The
+	 *         returned list will be empty if this bundle revision declares no
+	 *         requirements in the specified name space. The list contains the
+	 *         declared requirements in the order they are specified in the
+	 *         manifest.
 	 */
 	List<BundleRequirement> getDeclaredRequirements(String namespace);
 
@@ -259,22 +261,22 @@ public interface BundleRevision extends BundleReference, Resource {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * <p>
 	 * This method returns the same value as
 	 * {@link #getDeclaredCapabilities(String)}.
-	 * 
+	 *
 	 * @since 1.1
 	 */
 	List<Capability> getCapabilities(String namespace);
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * <p>
 	 * This method returns the same value as
 	 * {@link #getDeclaredRequirements(String)}.
-	 * 
+	 *
 	 * @since 1.1
 	 */
 	List<Requirement> getRequirements(String namespace);
