@@ -35,6 +35,7 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.Uri;
 /**
  * This test case checks for the correct structure and metadata of the Framework tree.
  * It asserts that all mandatory nodes are there and compares the reported metadata and node types with the specified values.
@@ -87,7 +88,7 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 		assertNotNull("This object should not be null.", bundles);
 		
 		for (Bundle bundle : bundles )
-			expected.add(bundle.getLocation());
+			expected.add(Uri.encode(bundle.getLocation()));
 
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
 		String[] bundleKeys = session.getChildNodeNames(FRAMEWORK_ROOT + "/" + BUNDLE );
@@ -102,6 +103,7 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 		optional = new HashSet<String>();
 		optional.add(STATE);
 		optional.add(FAULT_TYPE);
+		optional.add(FAULT_MESSAGE);
 		optional.add(BUNDLEID);
 		optional.add(SYMBOLIC_NAME);
 		optional.add(VERSION);
