@@ -1,5 +1,7 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * $Id$
+ * 
+ * Copyright (c) OSGi Alliance (2005). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -37,13 +39,15 @@ import org.osgi.test.cases.cm.shared.Synchronizer;
  * indefinedly when an expected signal doesn't arrive.
  * 
  * @author Jorge Mascena
+ * @author Ikuo Yamasaki, NTT Corporation
  */
 public class SynchronizerImpl implements Synchronizer {
-	private int				signalCount;
-	private final String	id;
-	private final String	header;
-	private Dictionary		props;
-	private static final boolean	DEBUG	= true;
+	private int signalCount;
+	private int signalDeletedCount;
+	private final String id;
+	private final String header;
+	private Dictionary props;
+	private static final boolean DEBUG = true;
 
 	/**
 	 * Creates a <code>Synchronizer</code> instance with no signals on the
@@ -54,6 +58,7 @@ public class SynchronizerImpl implements Synchronizer {
 	 */
 	public SynchronizerImpl(String id) {
 		signalCount = 0;
+		signalDeletedCount = 0;
 		this.id = id;
 		this.header = "SYNC(" + this.id + ")";
 	}
@@ -76,13 +81,23 @@ public class SynchronizerImpl implements Synchronizer {
 		notifyAll();
 	}
 
+	public synchronized void signalDeleted() {
+		signalDeletedCount++;
+		if (DEBUG)
+			System.out.println(header
+					+ ":signalDeleted() signalDeletedCount is incremented to "
+					+ signalDeletedCount);
+		notifyAll();
+	}
+
 	/**
 	 * Consumes signals from the queue. If no signal is available, waits for
 	 * <code>timemilli</code> milliseconds and then checks again if there's a
 	 * signal to be consumed.
 	 * 
-	 * @param timemilli the time (in millisends) to wait for a signal if none is
-	 *        available.
+	 * @param timemilli
+	 *            the time (in millisends) to wait for a signal if none is
+	 *            available.
 	 * @return <code>true</code> if there was a signal to be consumed.
 	 *         <code>false</code> otherwise.
 	 */
@@ -90,23 +105,40 @@ public class SynchronizerImpl implements Synchronizer {
 		return waitForSignal(timemilli, 1);
 	}
 
+	public synchronized boolean waitForSignal(long timemilli, int compareCount) {
+		return this.waitForSignal(timemilli, compareCount, false);
+	}
+
 	/**
 	 * Consumes some signals from the queue. If the specified compareCount
 	 * signals are received or expire <code>timemilli</code> milliseconds,
 	 * return the flag the signals are consumed.
 	 * 
-	 * @param timemilli the time (in millisends) to wait for a signal if none is
-	 *        available.
-	 * @param compareCount the amount of signals to consume
+	 * @param timemilli
+	 *            the time (in millisends) to wait for a signal if none is
+	 *            available.
+	 * @param compareCount
+	 *            the amount of signals to consume
 	 * @return <code>true</code> if there were signals to be consumed.
 	 *         <code>false</code> otherwise.
 	 */
-	public synchronized boolean waitForSignal(long timemilli, int compareCount) {
+	public synchronized boolean waitForSignal(long timemilli, int compareCount,
+			boolean deleted) {
+		String name = this.getUsedName(deleted);
+		int count = this.getUsedCount(deleted);
+
 		if (DEBUG)
 			System.out.println(header + ":Begin waitForSignal(" + timemilli
-					+ "," + compareCount + "): signalCount=" + signalCount);
+					+ "," + compareCount + "," + deleted + "): " + name + "="
+					+ count);
+
 		final long preTime = System.currentTimeMillis();
-		while (signalCount < compareCount) {
+		while (true) {
+			name = this.getUsedName(deleted);
+			count = this.getUsedCount(deleted);
+
+			if (!(count < compareCount))
+				break;
 			long curTime = System.currentTimeMillis();
 			if (curTime >= preTime + timemilli)
 				break;
@@ -114,32 +146,47 @@ public class SynchronizerImpl implements Synchronizer {
 			try {
 				if (DEBUG)
 					System.out.println(header + ":waitForSignal(" + timemilli
-							+ "," + compareCount + "): signalCount="
-							+ signalCount + ": going to wait...");
+							+ "," + compareCount + "): " + name + "=" + count
+							+ ": going to wait...");
 				wait(period);
 				if (DEBUG)
 					System.out.println(header + ":waitForSignal(" + timemilli
-							+ "," + compareCount + "):signalCount="
-							+ signalCount + ": timeout or notified !!");
-			}
-			catch (InterruptedException e) {
+							+ "," + compareCount + "): " + name + "=" + count
+							+ ": timeout or notified !!");
+			} catch (InterruptedException e) {
 				if (DEBUG)
 					System.out.println(header + ":waitForSignal(" + timemilli
-							+ "," + compareCount + "):signalCount="
-							+ signalCount + ": interrupted!!");
+							+ "," + compareCount + "): " + name + "=" + count
+							+ ": interrupted!!");
 			}
 		}
 		if (DEBUG)
 			System.out.println(header + ":end   waitForSignal(" + timemilli
-					+ "," + compareCount + "): signalCount=" + signalCount);
+					+ "," + compareCount + "): " + name + "=" + count);
 
-		return signalCount >= compareCount;
+		return this.getUsedCount(deleted) >= compareCount;
+	}
+
+	private int getUsedCount(boolean deleted) {
+		if (deleted) {
+			return this.signalDeletedCount;
+		} else {
+			return this.signalCount;
+		}
+	}
+
+	private String getUsedName(boolean deleted) {
+		if (deleted) {
+			return "signalDeletedCount";
+		} else {
+			return "signalCount";
+		}
 	}
 
 	public synchronized void signal(Dictionary p) {
 		this.props = p;
 		if (DEBUG)
-			System.out.println(header + ":signal(" + p + ")");
+			System.out.println(header + ":signal(props=" + p + ")");
 		this.signal();
 	}
 
@@ -154,4 +201,15 @@ public class SynchronizerImpl implements Synchronizer {
 	public synchronized void resetCount() {
 		signalCount = 0;
 	}
+
+	public synchronized int getDeletedCount() {
+		return signalDeletedCount;
+	}
+
+	public void signalDeleted(String pid) {
+		if (DEBUG)
+			System.out.println(header + ":signal(pid=" + pid + ")");
+		this.signalDeleted();
+	}
+
 }
