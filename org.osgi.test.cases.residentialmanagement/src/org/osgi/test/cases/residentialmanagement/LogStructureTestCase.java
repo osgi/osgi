@@ -91,8 +91,8 @@ public class LogStructureTestCase extends RMTTestBase {
 
 		session = dmtAdmin.getSession(LOG_ROOT, DmtSession.LOCK_TYPE_EXCLUSIVE);
 		String[] entries = session.getChildNodeNames(LOG_ROOT + "/" + LOG_ENTRIES );
-		assertNotNull("These objects must exist.", entries);
-		assertFalse("These objects must exist.", entries.length == 0);
+		assertNotNull("No LogEntries found.", entries);
+		assertFalse("No LogEntries found.", entries.length == 0);
 		
 		optional = new HashSet<String>();
 		optional.add(EXCEPTION);

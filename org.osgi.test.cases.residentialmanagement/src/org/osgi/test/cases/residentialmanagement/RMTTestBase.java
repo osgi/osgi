@@ -3,7 +3,10 @@ package org.osgi.test.cases.residentialmanagement;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.osgi.framework.Bundle;
@@ -11,6 +14,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.Uri;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public abstract class RMTTestBase extends DefaultTestBundleControl implements
@@ -131,6 +135,34 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 	}
 
 	/**
+	 * returns the pathes of all file entries in the given bundle recursively
+	 * directory entries are filtered out
+	 * @param bundle
+	 * @return
+	 */
+	Set<String> getBundleEntries( Bundle bundle, boolean encode ) {
+		Set<String> entries = new HashSet<String>();
+		addBundleEntryFolder(entries, bundle, "", encode);
+		return entries;
+	}
+	
+	private void addBundleEntryFolder(Set<String> results, Bundle bundle, String folder, boolean encode ) {
+		Enumeration<String> pathes = bundle.getEntryPaths(folder);
+		while (pathes.hasMoreElements()) {
+			// filter out directories
+			String path = pathes.nextElement();
+			if ( path.endsWith("/"))
+				addBundleEntryFolder(results, bundle, path, encode );
+			else {
+				if ( encode )
+					results.add(Uri.encode(path));
+				else 
+					results.add(path);
+			}
+		}
+	}
+	
+	/**
 	 * asserts that the metanode reports support for the specified operations
 	 * @param uri ... the uri that the metadata belongs to
 	 * @param metanode ... the metanode to be checked
@@ -175,7 +207,7 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		assertEquals( "The MetaData of " + uri + " provides wrong value for 'zero occurrence allowed'!", zeroAllowed, metaNode.isZeroOccurrenceAllowed() );
 		assertTrue( "The MetaData of " + uri + " provides wrong value for max occurence.", metaNode.getMaxOccurrence() > 0 && metaNode.getMaxOccurrence() <= max );
 	}
-	
+
 	
 
 

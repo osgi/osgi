@@ -94,12 +94,12 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			String value = session.getNodeValue(bundleUri + "/" + STATE ).getString();
 			assertEquals("The bundle state doesn't match for bundle: " + id, getBundleStateString(bundle.getState()), value );
 			value = session.getNodeValue(bundleUri + "/" + SYMBOLIC_NAME ).getString();
-			assertEquals("The bundles symbolic name doesn't match for bundle: " + id, bundle.getLocation(), value );
+			assertEquals("The bundles symbolic name doesn't match for bundle: " + id, bundle.getSymbolicName(), value );
 			value = session.getNodeValue(bundleUri + "/" + VERSION ).getString();
-			assertEquals("The bundles version doesn't match for bundle: " + id, bundle.getVersion(), value );
-			value = session.getNodeValue(bundleUri + "/" + STARTLEVEL ).getString();
-			int startLevel = bundle.adapt(BundleStartLevel.class).getStartLevel();
-			assertEquals("The bundles symbolic name doesn't match for bundle: " + id, startLevel, value );
+			assertEquals("The bundles version doesn't match for bundle: " + id, bundle.getVersion().toString(), value );
+			int rmtLevel = session.getNodeValue(bundleUri + "/" + STARTLEVEL ).getInt();
+			int realLevel = bundle.adapt(BundleStartLevel.class).getStartLevel();
+			assertEquals("The bundles symbolic name doesn't match for bundle: " + id, realLevel, rmtLevel );
 			long rmtLastModified = session.getNodeValue(bundleUri + "/" + LAST_MODIFIED ).getDateTime().getTime();
 			assertEquals("The bundles last modification timestamp name doesn't match for bundle: " + id, bundle.getLastModified(), rmtLastModified );
 		}
@@ -266,14 +266,11 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			String bundleUri = uri + "/" + bundleKey;
 			long id = session.getNodeValue( bundleUri + "/" + BUNDLEID ).getLong();
 			Bundle bundle = getContext().getBundle(id);
-			Enumeration<String> pathes = bundle.getEntryPaths("/");
+			// get encoded pathes of all file entries of the bundle
+			Set<String> expectedPathes = getBundleEntries(bundle, true);
 
 			List<String> unknownPathes = new ArrayList<String>();
 			List<String> wrongContent = new ArrayList<String>();
-			// get real pathes as Set
-			Set<String> expectedPathes = new HashSet<String>();
-			while (pathes.hasMoreElements())
-				expectedPathes.add(pathes.nextElement());
 			
 			String[] entries = session.getChildNodeNames(bundleUri + "/" + ENTRIES);
 			for (String path : entries ) {

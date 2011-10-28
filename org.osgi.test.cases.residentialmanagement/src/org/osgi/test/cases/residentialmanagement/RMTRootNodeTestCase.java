@@ -22,7 +22,7 @@ public class RMTRootNodeTestCase extends RMTTestBase {
 	public void testSystemProperty() throws Exception {
 		String root = System.getProperty("org.osgi.dmt.residential"); 
 		assertNotNull( "The system property 'org.osgi.dmt.residential' is not set.", root );
-		assertEquals("The configured root must be an absolute Uri.", Uri.isAbsoluteUri(root));
+		assertTrue("The configured root must be an absolute Uri.", Uri.isAbsoluteUri(root));
 		assertTrue("The configured root uri is invalid.", Uri.isValidUri(root));
 	}
 	

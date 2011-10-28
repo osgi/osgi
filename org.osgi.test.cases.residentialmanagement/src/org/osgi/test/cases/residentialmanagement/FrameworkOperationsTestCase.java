@@ -88,7 +88,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 			rmtInitialBundleStartLevel = session.getNodeValue(FRAMEWORK_ROOT + "/" + INITIAL_BUNDLE_STARTLEVEL ).getInt();
 			
 			assertEquals("The value of the Framework StartLevel was not set correctly.", fwStartLevel.getStartLevel(), initialStartLevel + 1);
-			assertEquals("The value of the Framework initialBundleStartLevel was not set correctly.", fwStartLevel.getStartLevel(), initialStartLevel - 1);
+			assertEquals("The value of the Framework initialBundleStartLevel was not set correctly.", fwStartLevel.getStartLevel(), initialStartLevel + 1);
 		}
 		finally {
 			fwStartLevel.setStartLevel(initialStartLevel, (FrameworkListener[]) null);
@@ -119,10 +119,15 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		session.setNodeValue(BUNDLE_KEY + "/" + REQUESTED_STATE, new DmtData("ACTIVE"));
 
 		session.commit();
+		testBundle1 = getContext().getBundle("TestBundle");
+		assertNotNull("No bundle with this location is installed.", testBundle1);
+		assertEquals( "The testBundle should be in 'ACTIVE' state now.", Bundle.ACTIVE, testBundle1.getState());
 		
 		// check that the bundle has been installed, there are no faults and the state is active
-		assertEquals( session.getNodeValue(BUNDLE_KEY + "/" + FAULT_TYPE).getInt(), -1);
-		assertEquals( session.getNodeValue(BUNDLE_KEY + "/" + FAULT_MESSAGE).getString(), "");
+		// TODO: check FaultType/FaultMessage after discussion about cardinality is finished
+//		assertFalse( "There must be no FaultType after successfull operation.", session.isNodeUri(BUNDLE_KEY + "/" + FAULT_TYPE));
+//		assertFalse( "There must be no FaultMessage after successfull operation.", session.isNodeUri(BUNDLE_KEY + "/" + FAULT_MESSAGE));
+		assertTrue( "There must be a State node after successfull installation.", session.isNodeUri(BUNDLE_KEY + "/" + STATE));
 		assertEquals( "ACTIVE", session.getNodeValue(BUNDLE_KEY + "/" + STATE).getString());
 		assertTrue( "TestBundle must have a bundle id after successfull installation!", session.isNodeUri(BUNDLE_KEY + "/" + BUNDLEID));
 		assertTrue( "TestBundle must have a bundle-version after successfull installation!", session.isNodeUri(BUNDLE_KEY + "/" + VERSION));
@@ -130,10 +135,6 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		
 		long id = session.getNodeValue(BUNDLE_KEY + "/" + BUNDLEID).getLong();
 		
-		// check real installation state
-		testBundle1 = getContext().getBundle(id);
-		assertNotNull("The testBundle was not installed successfully!", testBundle1 );
-		assertEquals( "The testBundle should be in 'ACTIVE' state now.", Bundle.ACTIVE, testBundle1.getState());
 		
 		// --------- Uninstall a bundle -----------
 		// uninstall bundle via RMT
@@ -141,17 +142,12 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		session.commit();
 		
 		// check that the bundle has been uninstalled and there are no faults 
-		assertEquals( session.getNodeValue(BUNDLE_KEY + "/" + FAULT_TYPE).getInt(), -1);
-		assertEquals( session.getNodeValue(BUNDLE_KEY + "/" + FAULT_MESSAGE).getString(), "");
-		assertEquals( "UNINSTALLED", session.getNodeValue(BUNDLE_KEY + "/" + STATE).getString());
-		assertTrue( "TestBundle must not have a bundle id after successfull de-installation!", session.isNodeUri(BUNDLE_KEY + "/" + BUNDLEID));
-		assertTrue( "TestBundle must not have a bundle-version after successfull de-installation!", session.isNodeUri(BUNDLE_KEY + "/" + VERSION));
-		assertTrue( "TestBundle must not have a SymbolicName after successfull de-installation!", session.isNodeUri(BUNDLE_KEY + "/" + SYMBOLIC_NAME));
+		// TODO: check FaultType/FaultMessage after discussion about cardinality is finished
+//		assertFalse( "There must be no FaultType after successfull operation.", session.isNodeUri(BUNDLE_KEY + "/" + FAULT_TYPE));
+//		assertFalse( "There must be no FaultMessage after successfull operation.", session.isNodeUri(BUNDLE_KEY + "/" + FAULT_MESSAGE));
+		assertFalse( "There must be no State node after un-installation.", session.isNodeUri(BUNDLE_KEY + "/" + STATE));
 		
-		session.commit();
 		assertNull("The testBundle was not un-installed successfully!", getContext().getBundle(id) );
-		
-		// testBundle1 will be uninstalled in tearDown
 		
 	}
 	
@@ -161,10 +157,10 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 	 * @throws Exception 
 	 */
 	public void testBundleStateChanges() throws Exception {
-		Bundle testBundle = installBundle(TESTBUNDLE_EXPORTPACKAGE, false);
+		testBundle1 = installBundle(TESTBUNDLE_EXPORTPACKAGE, false);
 		
 		// ensure that the bundle is in INSTALLED state
-		assertFalse( "testbundle should not be in 'ACTIVE' state initially", Bundle.ACTIVE == testBundle.getState() );
+		assertFalse( "testbundle should not be in 'ACTIVE' state initially", Bundle.ACTIVE == testBundle1.getState() );
 		
 		String uri = FRAMEWORK_ROOT + "/" + BUNDLE;
 		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_ATOMIC);
@@ -174,8 +170,8 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		String bundleBaseUri = null;
 		String[] bundles = session.getChildNodeNames(uri);
 		for (String bundle : bundles ) {
-			long id = session.getNodeValue(uri + "/" + bundle).getLong();
-			if ( id == testBundle.getBundleId() )
+			long id = session.getNodeValue(uri + "/" + bundle + "/" + BUNDLEID).getLong();
+			if ( id == testBundle1.getBundleId() )
 				bundleBaseUri = uri + "/" + bundle; 
 		}
 		assertNotNull("Can't find the testBundle in the RMT bundle map!", bundleBaseUri );
@@ -187,7 +183,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		session.commit();
 
 		// check real bundle state
-		assertEquals( "testBundle should be in 'RESOLVED' state now.", Bundle.RESOLVED, testBundle.getState());
+		assertEquals( "testBundle should be in 'RESOLVED' state now.", Bundle.RESOLVED, testBundle1.getState());
 
 		// check for Faults in previous commit
 		assertEquals( session.getNodeValue(bundleBaseUri + "/" + FAULT_TYPE).getInt(), -1);
@@ -199,7 +195,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		session.commit();
 		
 		// check real bundle state
-		assertEquals( "testBundle should be in 'ACTIVE' state now.", Bundle.ACTIVE, testBundle.getState());
+		assertEquals( "testBundle should be in 'ACTIVE' state now.", Bundle.ACTIVE, testBundle1.getState());
 		
 		// check bundle state in RMT now and stop it again via RMT
 		// check for Faults in previous commit
@@ -210,7 +206,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		session.commit();
 		
 		// check real bundle state
-		assertEquals( "testBundle should be in 'RESOLVED' state now.", Bundle.RESOLVED, testBundle.getState());
+		assertEquals( "testBundle should be in 'RESOLVED' state now.", Bundle.RESOLVED, testBundle1.getState());
 
 		// check bundle state in RMT again
 		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_SHARED);

@@ -242,7 +242,7 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 			String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey;
 			long bundleID = session.getNodeValue(uri + "/" + BUNDLEID).getLong();
 			if ( bundleID == testBundle1.getBundleId() || bundleID == testBundle2.getBundleId() ) {
-				String[] signers = session.getChildNodeNames( uri  );
+				String[] signers = session.getChildNodeNames( uri  + "/" + SIGNERS );
 				for ( String signer : signers ) {
 					children = session.getChildNodeNames(uri + "/" + SIGNERS + "/" + signer );
 					expected = new HashSet<String>();
@@ -299,7 +299,8 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 		testBundle4 = installAndStartBundle(TESTBUNDLE_REQUIRE);
 		
 		try {
-
+			session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
+			assertNotNull(session);
 			assertMetaData( FRAMEWORK_ROOT, false, "_G__", "1", MetaNode.PERMANENT, DmtData.FORMAT_NODE);
 			assertMetaData( FRAMEWORK_ROOT + "/" + STARTLEVEL, true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
 			assertMetaData( FRAMEWORK_ROOT + "/" + INITIAL_BUNDLE_STARTLEVEL, true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
