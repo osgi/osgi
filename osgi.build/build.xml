@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish">
+	<property name="tm"><![CDATA[&trade;]]></property>
+
 	<target name="deploy" depends="master.deploy,javadoc,japitools,japicompat">
 	</target>
 
@@ -8,10 +10,11 @@
 	</target>
 
 	<macrodef name="javadoc.macro">
+		<attribute name="title"/>
 		<attribute name="name"/>
 		<attribute name="packages"/>
 		<sequential>
-			<echo>javadoc/@{name}</echo>
+			<echo>javadoc/@{name} @{title}</echo>
 			<delete dir="${target}/javadoc/@{name}"/>
 			<echo>
 				Project output: ${project.output}
@@ -23,7 +26,6 @@
 			</echo>
 	        <javadoc 
 				access="protected" 
-				windowtitle="OSGi Service Platform Release ${osgi.release} Version ${osgi.version}"
 				author="false" 
 				classpath="${project.output}"
 				sourcepath="${project.allsourcepath}"
@@ -40,7 +42,11 @@
 				version="false"
 				encoding="UTF-8"
 				docencoding="UTF-8"
-				charset="UTF-8">
+				charset="UTF-8"
+				windowtitle="OSGi Service Platform Release ${osgi.release} @{title} Specification Version ${osgi.version}">
+				<doctitle><![CDATA[OSGi${tm} Service Platform Release ${osgi.release} @{title} Specification Version ${osgi.version}]]></doctitle>
+				<header><![CDATA[<b>OSGi${tm} Service Platform<br/>@{title} Specification</b><br/><font size=-1>Release ${osgi.release} Version ${osgi.version}</font>]]></header>
+				<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 2.0</a></font>]]></bottom>
 			    <bootclasspath>
 	      			<pathelement location="${repo.javase}"/>
 	      			<pathelement location="${repo.foundation}"/>
@@ -56,9 +62,6 @@
 				<tag name="GuardedBy" scope="methods,fields" description="Guarded By:"/>
 				<tag name="security" scope="methods" description="Required Permissions"/>
 				<tag name="noimplement" scope="types" description="Consumers of this API must not implement this interface"/>
-				<header><![CDATA[<b>OSGi&trade; Service Platform</b><br/><font  size=-1>Release ${osgi.release} Version ${osgi.version}</font>]]></header>
-				<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 2.0</a></font>]]></bottom>
-				<doctitle><![CDATA[OSGi&trade; Service Platform Release ${osgi.release} Version ${osgi.version}]]></doctitle>
 			</javadoc>
 			<copy file="${project.workspace}/osgi.companion/legal/OSGiSpecificationLicense-v20.html"
 			    tofile="${target}/javadoc/@{name}/LICENSE.html"
@@ -72,19 +75,19 @@
 	</target>
 	
 	<target name="javadoc.core" depends="init">
-		<javadoc.macro name="core" packages="${core.packages}" />
+		<javadoc.macro name="core" title="Core" packages="${core.packages}" />
 	</target>
 	
 	<target name="javadoc.cmpn" depends="init">
-		<javadoc.macro name="cmpn" packages="${core.packages},${cmpn.packages}" />
+		<javadoc.macro name="cmpn" title="Compendium" packages="${core.packages},${cmpn.packages}" />
 	</target>
 	
 	<target name="javadoc.enterprise" depends="init">
-		<javadoc.macro name="enterprise" packages="${core.packages},${enterprise.packages}" />
+		<javadoc.macro name="enterprise" title="Enterprise" packages="${core.packages},${enterprise.packages}" />
 	</target>
 	
 	<target name="javadoc.residential" depends="init">
-		<javadoc.macro name="residential" packages="${core.packages},${residential.packages}" />
+		<javadoc.macro name="residential" title="Residential" packages="${core.packages},${residential.packages}" />
 	</target>
 	
 	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.enterprise,japitools.residential,japitools.proposed,japitools.minimum,japitools.foundation">
