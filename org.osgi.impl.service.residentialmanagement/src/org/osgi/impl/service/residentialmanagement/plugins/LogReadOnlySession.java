@@ -62,7 +62,11 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 
 	LogReadOnlySession(LogPlugin plugin, BundleContext context) {
 		this.context = context;
-		try {
+		ServiceReference sr = context.getServiceReference(LogReaderService.class.getName());
+		LogReaderService lr = (LogReaderService)context.getService(sr);
+		lr.addLogListener(this);
+		
+/*		try {
 			Filter filter = context.createFilter("(" + Constants.OBJECTCLASS
 					+ "=" + LogReaderService.class.getName()+")");
 			LogReaderServiceTracker lst = new LogReaderServiceTracker(context, filter);
@@ -70,7 +74,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 		} catch (InvalidSyntaxException e) {
 			e.printStackTrace();
 		}
-	}
+*/	}
 
 	public void nodeChanged(String[] nodePath) throws DmtException {
 		// do nothing - the version and time stamp properties are not supported
