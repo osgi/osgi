@@ -3675,148 +3675,352 @@ public class CMControl extends DefaultTestBundleControl {
 	 * Yushi Kuroda,NTT Corporation adds tests for specification version 1.4
 	 */
 
+	/*
+	 * Yushi Kuroda, Shigekuni KONDO NTT Corporation adds tests for specification version 1.4
+	 */
+	private String locationA = "location.a";
+	private String locationB = "location.b";
+	private String regionA = "?RegionA";
+	private String regionB = "?RegionB";
+
+	public void testGetConfigurationWithLocation_2_01() throws Exception {
+		final String locationOld = null;
+		this.internalGetConfigurationWithLocation_2_02To08(1, locationOld);
+	}
+	
 	public void testGetConfigurationWithLocation_2_02() throws Exception {
-		final String locationOld = thisLocation;
-		final String locationNew = thisLocation;
-		this.internalGetConfigurationWithLocation_2_02(2, locationOld,
-				locationNew);
+		final String locationOld = locationA;
+		this.internalGetConfigurationWithLocation_2_02To08(2, locationOld);
+	}
+	
+	public void testGetConfigurationWithLocation_2_03() throws Exception {
+		final String locationOld = locationA+"*";
+		this.internalGetConfigurationWithLocation_2_02To08(3, locationOld);
+	}
+	
+	public void testGetConfigurationWithLocation_2_04() throws Exception {
+		final String locationOld = locationB;
+		this.internalGetConfigurationWithLocation_2_02To08(4, locationOld);
+	}
+	
+	public void testGetConfigurationWithLocation_2_06() throws Exception {
+		final String locationOld = "?*";
+		this.internalGetConfigurationWithLocation_2_02To08(6, locationOld);
+	}
+	
+	public void testGetConfigurationWithLocation_2_07() throws Exception {
+		final String locationOld = regionA;
+		this.internalGetConfigurationWithLocation_2_02To08(7, locationOld);
+	}
+	
+	public void testGetConfigurationWithLocation_2_08() throws Exception {
+		final String locationOld = regionB;
+		this.internalGetConfigurationWithLocation_2_02To08(8, locationOld);
 	}
 
-	public void internalGetConfigurationWithLocation_2_02(final int minor,
-			final String locationOld, final String locationNew)
+	public void internalGetConfigurationWithLocation_2_02To08(final int minor, final String locationOld)
 			throws BundleException, IOException {
-
-		final String header = "testGetConfigurationWithLocation_2_"
-				+ String.valueOf(minor) + "_";
+		
+		final String header = "testGetConfigurationWithLocation_2_" + String.valueOf(minor) + "_";
 		String testId = null;
 		int micro = 0;
-
+		
 		this.setAppropriatePermission();
 		final String pid1 = Util.createPid("1");
 		Configuration conf = null;
 		Dictionary props = new Hashtable();
-
-		/* Get a brand new configuration */
+		
+		// Get a brand new configuration 
 		conf = cm.getConfiguration(pid1, locationOld);
 		assertEquals("Location", locationOld,
 				this.getBundleLocationForCompare(conf));
 		assertNull("Configuration props MUST be null", conf.getProperties());
 
-		traceTestId(header, ++micro);
+		//micro 2
+		testId = traceTestId(header, ++micro);
 		setCPtoBundle("*", ConfigurationPermission.CONFIGURE, thisBundle);
-		conf = cm.getConfiguration(pid1, locationNew);
+		conf = cm.getConfiguration(pid1, locationOld);
 		assertEquals("Location", locationOld,
 				this.getBundleLocationForCompare(conf));
 		assertNull("Configuration props MUST be null", conf.getProperties());
-
-		traceTestId(header, ++micro);
+		
+		//micro 1
+		testId = traceTestId(header, ++micro);
 		props.put("StringKey", "stringvalue");
 		conf.update(props);
-		conf = cm.getConfiguration(pid1, locationNew);
-		assertEquals("Location", locationOld,
-				this.getBundleLocationForCompare(conf));
-		assertEquals("Check Configuration props", 2, conf.getProperties()
-				.size());
-		assertEquals("Check Configuration props", "stringvalue", conf
-				.getProperties().get("StringKey"));
+		conf = cm.getConfiguration(pid1, locationOld);
+		assertEquals("Location", locationOld,this.getBundleLocationForCompare(conf));
+		assertEquals("Check Configuration props", 2, conf.getProperties().size());
+		assertEquals("Check Configuration props", "stringvalue", conf.getProperties().get("StringKey"));
 		conf.delete();
 
 		resetPermissions();
-		traceTestId(header, ++micro);
 		conf = cm.getConfiguration(pid1, locationOld);
-		assertEquals("Location", locationOld,
-				this.getBundleLocationForCompare(conf));
+		assertEquals("Location", locationOld, this.getBundleLocationForCompare(conf));
 		assertNull("Configuration props MUST be null", conf.getProperties());
 
-		traceTestId(header, ++micro);
-		setCPtoBundle(thisLocation, ConfigurationPermission.CONFIGURE,
-				thisBundle);
-		conf = cm.getConfiguration(pid1, locationNew);
-		assertEquals("Location", locationOld,
-				this.getBundleLocationForCompare(conf));
-		assertNull("Configuration props MUST be null", conf.getProperties());
+		//micro 4
+		testId = traceTestId(header, ++micro);
+		setCPtoBundle(locationA, ConfigurationPermission.CONFIGURE, thisBundle);
+		if(minor==1||minor==2){
+			conf = cm.getConfiguration(pid1, locationOld);
+			assertEquals("Location", locationOld,this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+		}else{
+			assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, locationOld);
+		}
 
-		traceTestId(header, ++micro);
+		//micro 3
+		testId = traceTestId(header, ++micro);
 		conf.update(props);
-		conf = cm.getConfiguration(pid1, locationNew);
-		assertEquals("Location", locationOld,
-				this.getBundleLocationForCompare(conf));
-		assertEquals("Check Configuration props", 2, conf.getProperties()
-				.size());
-		assertEquals("Check Configuration props", "stringvalue", conf
-				.getProperties().get("StringKey"));
+		if(minor==1||minor==2){
+			conf = cm.getConfiguration(pid1, locationOld);
+			assertEquals("Location", locationOld,this.getBundleLocationForCompare(conf));
+			assertEquals("Check Configuration props", 2, conf.getProperties().size());
+			assertEquals("Check Configuration props", "stringvalue", conf.getProperties().get("StringKey"));
+		}else{
+			assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, locationOld);
+		}
 		conf.delete();
 
 		resetPermissions();
 		conf = cm.getConfiguration(pid1, locationOld);
-
-		traceTestId(header, ++micro);
+		
+		//micro 8
+		testId = traceTestId(header, ++micro);
 		setCPtoBundle("?*", ConfigurationPermission.CONFIGURE, thisBundle);
-		assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, locationNew);
+		if(minor==1||minor==6||minor==7||minor==8){
+			conf = cm.getConfiguration(pid1, locationOld);
+			assertEquals("Location", locationOld,this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+		}else{
+			assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, locationOld);
+		}
 
-		traceTestId(header, ++micro);
+		//micro 7
+		testId = traceTestId(header, ++micro);
 		conf.update(props);
-		assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, locationNew);
+		if(minor==1||minor==6||minor==7||minor==8){
+			conf = cm.getConfiguration(pid1, locationOld);
+			assertEquals("Location", locationOld,this.getBundleLocationForCompare(conf));
+			assertEquals("Check Configuration props", 2, conf.getProperties().size());
+			assertEquals("Check Configuration props", "stringvalue", conf.getProperties().get("StringKey"));
+		}else{
+			assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, locationOld);
+		}
 		conf.delete();
-
+		
 		resetPermissions();
 		conf = cm.getConfiguration(pid1, locationOld);
+		
+		//micro 10
+		testId = traceTestId(header, ++micro);
+		setCPtoBundle(regionA, ConfigurationPermission.CONFIGURE, thisBundle);
+		if(minor==1||minor==7){
+			conf = cm.getConfiguration(pid1, locationOld);
+			assertEquals("Location", locationOld,this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+		}else{
+			assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, locationOld);
+		}
 
-		traceTestId(header, ++micro);
-		setCPtoBundle("?RegionA", ConfigurationPermission.CONFIGURE, thisBundle);
-		assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, locationNew);
-
-		traceTestId(header, ++micro);
+		//micro 9
+		testId = traceTestId(header, ++micro);
 		conf.update(props);
-		assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, locationNew);
+		if(minor==1||minor==7){
+			conf = cm.getConfiguration(pid1, locationOld);
+			assertEquals("Location", locationOld,this.getBundleLocationForCompare(conf));
+			assertEquals("Check Configuration props", 2, conf.getProperties().size());
+			assertEquals("Check Configuration props", "stringvalue", conf.getProperties().get("StringKey"));
+		}else{
+			assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, locationOld);
+		}
 		conf.delete();
-
+		
 		resetPermissions();
 		conf = cm.getConfiguration(pid1, locationOld);
-
-		traceTestId(header, ++micro);
+		
+		//micro 12
+		testId = traceTestId(header, ++micro);
 		setCPtoBundle("*", ConfigurationPermission.TARGET, thisBundle);
-		assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, locationNew);
+		if(minor==1){
+			conf = cm.getConfiguration(pid1, locationOld);
+			assertEquals("Location", locationOld,this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+		}else{
+			assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, locationOld);
+		}
 
-		traceTestId(header, ++micro);
+		//micro 11
+		testId = traceTestId(header, ++micro);
 		conf.update(props);
-		assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, locationNew);
+		if(minor==1){
+			conf = cm.getConfiguration(pid1, locationOld);
+			assertEquals("Location", locationOld,this.getBundleLocationForCompare(conf));
+			assertEquals("Check Configuration props", 2, conf.getProperties().size());
+			assertEquals("Check Configuration props", "stringvalue", conf.getProperties().get("StringKey"));
+		}else{
+			assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, locationOld);
+		}
 		conf.delete();
-
+		
 		resetPermissions();
 		conf = cm.getConfiguration(pid1, locationOld);
-
-		traceTestId(header, ++micro);
-		setCPtoBundle("?RegionA", ConfigurationPermission.CONFIGURE, thisBundle);
+		
+		//micro 13
+		testId = traceTestId(header, ++micro);
+		setCPtoBundle(regionA, ConfigurationPermission.CONFIGURE, thisBundle);
 		conf.update(props);
-		assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, "?");
+		if(minor==1||minor==7){
+			//TODO confirm
+			conf = cm.getConfiguration(pid1, "?");
+			assertEquals("Location", locationOld,this.getBundleLocationForCompare(conf));
+			assertEquals("Check Configuration props", 2, conf.getProperties().size());
+			assertEquals("Check Configuration props", "stringvalue", conf.getProperties().get("StringKey"));			
+		}else{
+			assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, "?");
+		}
 		conf.delete();
 
-		resetPermissions();
-		conf = cm.getConfiguration(pid1, locationOld);
-
-		// TODO Need to confirm
-		traceTestId(header, ++micro);
-		// String thisBundleLocation = thisBundle.getLocation();
-		setCPtoBundle(null, null, thisBundle);
-		// setCPtoBundle(thisBundleLocation, ConfigurationPermission.CONFIGURE,
-		// thisBundle);
-		conf = cm.getConfiguration(pid1, thisLocation);
-		assertEquals("Location", thisLocation,
-				this.getBundleLocationForCompare(conf));
-		assertNull("Configuration props MUST be null", conf.getProperties());
-
-		traceTestId(header, ++micro);
-		conf.update(props);
-		conf = cm.getConfiguration(pid1, locationNew);
-		assertEquals("Location", locationOld,
-				this.getBundleLocationForCompare(conf));
-		assertEquals("Check Configuration props", 2, conf.getProperties()
-				.size());
-		assertEquals("Check Configuration props", "stringvalue", conf
-				.getProperties().get("StringKey"));
-		conf.delete();
+		if(minor==2){
+			resetPermissions();
+			conf = cm.getConfiguration(pid1, thisLocation);
+			
+			//micro 16
+			testId = traceTestId(header, ++micro);
+			setCPtoBundle(null, null, thisBundle);
+			conf = cm.getConfiguration(pid1, thisLocation);
+			assertEquals("Location", thisLocation,this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+			
+			//micro 15
+			testId = traceTestId(header, ++micro);
+			conf.update(props);
+			conf = cm.getConfiguration(pid1, thisLocation);
+			assertEquals("Location", thisLocation,this.getBundleLocationForCompare(conf));
+			assertEquals("Check Configuration props", 2, conf.getProperties().size());
+			assertEquals("Check Configuration props", "stringvalue", conf.getProperties().get("StringKey"));
+			conf.delete();
+		}
 	}
+
+	//TODO confirm
+	public void testGetConfigurationWithLocation_2_09() throws Exception {
+		final String locationOld = null;
+		this.internalGetConfigurationWithLocation_2_09To13(9, locationOld);
+	}
+	
+	public void testGetConfigurationWithLocation_2_10() throws Exception {
+		final String locationOld = locationA;
+		this.internalGetConfigurationWithLocation_2_09To13(10, locationOld);
+	}
+	
+	public void testGetConfigurationWithLocation_2_12() throws Exception {
+		final String locationOld = regionA;
+		this.internalGetConfigurationWithLocation_2_09To13(12, locationOld);
+	}
+	
+	public void testGetConfigurationWithLocation_2_13() throws Exception {
+		final String locationOld = regionA+"*";
+		this.internalGetConfigurationWithLocation_2_09To13(13, locationOld);
+	}
+	
+	public void internalGetConfigurationWithLocation_2_09To13(final int minor, final String location)
+	throws BundleException, IOException {
+		final String header = "testGetConfigurationWithLocation_2_" + String.valueOf(minor) + "_";
+		String testId = null;
+		int micro = 0;
+		
+		this.setAppropriatePermission();
+		final String pid1 = Util.createPid("1");
+		Configuration conf = null;
+		
+		//1
+		testId = traceTestId(header, ++micro);
+		setCPtoBundle("*", ConfigurationPermission.CONFIGURE, thisBundle);
+		conf = cm.getConfiguration(pid1, location);
+		assertEquals("Location", location,this.getBundleLocationForCompare(conf));
+		assertNull("Configuration props MUST be null", conf.getProperties());
+		conf.delete();
+		
+		//2
+		testId = traceTestId(header, ++micro);
+		setCPtoBundle(locationA, ConfigurationPermission.CONFIGURE, thisBundle);
+		if(minor==10){
+			conf = cm.getConfiguration(pid1, location);
+			assertEquals("Location", location,this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+			conf.delete();
+		}else{
+			assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, location);
+		}
+
+		//3
+		testId = traceTestId(header, ++micro);
+		setCPtoBundle(locationB, ConfigurationPermission.CONFIGURE, thisBundle);
+		assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, location);
+		
+		//4
+		testId = traceTestId(header, ++micro);
+		setCPtoBundle("?", ConfigurationPermission.CONFIGURE, thisBundle);
+		assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, location);
+		
+		//5
+		testId = traceTestId(header, ++micro);
+		setCPtoBundle("?*", ConfigurationPermission.CONFIGURE, thisBundle);
+		if(minor==12||minor==13){
+			conf = cm.getConfiguration(pid1, location);
+			assertEquals("Location", location,this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+			conf.delete();
+		}else{
+			assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, location);
+		}
+		
+		//6
+		testId = traceTestId(header, ++micro);
+		setCPtoBundle(regionA, ConfigurationPermission.CONFIGURE, thisBundle);
+		if(minor==12){
+			conf = cm.getConfiguration(pid1, location);
+			assertEquals("Location", location,this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+			conf.delete();
+		}else{
+			assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, location);			
+		}
+		
+		//7
+		testId = traceTestId(header, ++micro);
+		setCPtoBundle("*", ConfigurationPermission.TARGET, thisBundle);
+		assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, location);
+		
+		if(minor==10){
+			//thisLocation no permission
+			testId = traceTestId(header, ++micro);
+			setCPtoBundle(null, null, thisBundle);
+			conf = cm.getConfiguration(pid1, thisLocation);
+			assertEquals("Location", thisLocation,this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+			conf.delete();
+			
+			//thisLocation with CONFIGURE
+			testId = traceTestId(header, ++micro);
+			setCPtoBundle(regionA, ConfigurationPermission.CONFIGURE, thisBundle);
+			conf = cm.getConfiguration(pid1, thisLocation);
+			assertEquals("Location", thisLocation,this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+			conf.delete();
+			
+			//thisLocation with TARGET
+			testId = traceTestId(header, ++micro);
+			setCPtoBundle("*", ConfigurationPermission.TARGET, thisBundle);
+			conf = cm.getConfiguration(pid1, thisLocation);
+			assertEquals("Location", thisLocation,this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+			conf.delete();
+		}
+	}
+	
 
 	private void setCPtoBundle(String name, String action, Bundle bundle)
 			throws BundleException {
@@ -3852,25 +4056,51 @@ public class CMControl extends DefaultTestBundleControl {
 				+ ":try to get configuration without appropriate ConfigurationPermission.";
 		try {
 			cm.getConfiguration(pid, location);
-			/* A SecurityException should have been thrown */
+			 //A SecurityException should have been thrown 
 			failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
-			/* Check that we got the correct exception */
+			 //Check that we got the correct exception 
 			assertException(message, SecurityException.class, e);
 		}
 
 	}
 
+	//TODO confirm
+	/*public void testGetConfiguration_3_01() throws Exception {
+		final String locationOld = null;
+		this.internalGetConfiguration_3_01To07(1, locationOld);
+	}*/
+	
+	public void testGetConfiguration_3_02() throws Exception {
+		final String locationOld = locationA;
+		this.internalGetConfiguration_3_01To07(2, locationOld);
+	}
+	
+	public void testGetConfiguration_3_03() throws Exception {
+		final String locationOld = locationA+"*";
+		this.internalGetConfiguration_3_01To07(3, locationOld);
+	}
+	
 	public void testGetConfiguration_3_04() throws Exception {
-		final String locationOld = neverlandLocation;
-		this.internalGetConfiguration_3_04(1, locationOld);
+		final String locationOld = locationB;
+		this.internalGetConfiguration_3_01To07(4, locationOld);
+	}
+	
+	public void testGetConfiguration_3_06() throws Exception {
+		final String locationOld = regionA;
+		this.internalGetConfiguration_3_01To07(6, locationOld);
+	}
+	
+	public void testGetConfiguration_3_07() throws Exception {
+		final String locationOld = regionA+"*";
+		this.internalGetConfiguration_3_01To07(7, locationOld);
 	}
 
-	public void internalGetConfiguration_3_04(int minor, String locationOld)
+	public void internalGetConfiguration_3_01To07(int minor, String locationOld)
 			throws BundleException, IOException {
-		final String header = "testGetConfiguration_3_04_";
+		final String header = "testGetConfiguration_3_" + String.valueOf(minor) + "_";
 		String testId = null;
 		int micro = 0;
 
@@ -3880,248 +4110,418 @@ public class CMControl extends DefaultTestBundleControl {
 
 		this.setAppropriatePermission();
 		conf = cm.getConfiguration(pid1, locationOld);
-		String message = testId
-				+ ":try to get configuration with appropriate ConfigurationPermission.";
-
-		traceTestId(header, ++micro);
+		String message = testId	+ ":try to get configuration with appropriate ConfigurationPermission.";
+		
+		//2
+		testId = traceTestId(header, ++micro);
 		setCPtoBundle("*", ConfigurationPermission.CONFIGURE, thisBundle);
 		conf = cm.getConfiguration(pid1);
-		assertEquals("Location", locationOld,
-				this.getBundleLocationForCompare(conf));
-		assertNull("Configuration props MUST be null", conf.getProperties());
+		assertEquals("Location", locationOld, this.getBundleLocationForCompare(conf));
+		assertNull("Configuration props MUST be null", conf.getProperties());			
 
-		traceTestId(header, ++micro);
+		//1
+		testId = traceTestId(header, ++micro);
 		props.put("StringKey", "stringvalue");
 		conf.update(props);
 		conf = cm.getConfiguration(pid1);
-		assertEquals("Location", locationOld,
-				this.getBundleLocationForCompare(conf));
-		assertEquals("Check Configuration props", 2, conf.getProperties()
-				.size());
+		assertEquals("Location", locationOld, this.getBundleLocationForCompare(conf));
+		assertEquals("Check Configuration props", 2, conf.getProperties().size());
 		conf.delete();
 
 		this.setAppropriatePermission();
 		conf = cm.getConfiguration(pid1, locationOld);
 
-		traceTestId(header, ++micro);
-		setCPtoBundle(thisLocation, ConfigurationPermission.CONFIGURE,
-				thisBundle);
-		assertThrowsSEbyGetConfiguration(pid1, message);
+		//4
+		testId = traceTestId(header, ++micro);
+		setCPtoBundle(locationA, ConfigurationPermission.CONFIGURE, thisBundle);
+		if(minor==1||minor==2){
+			conf = cm.getConfiguration(pid1);
+			assertEquals("Location", locationOld, this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+		}else{
+			assertThrowsSEbyGetConfiguration(pid1, message);
+		}
 
-		traceTestId(header, ++micro);
-		assertThrowsSEbyGetConfiguration(pid1, message);
+		//3
+		testId = traceTestId(header, ++micro);
+		conf.update(props);
+		if(minor==1||minor==2){
+			conf = cm.getConfiguration(pid1);
+			assertEquals("Location", locationOld, this.getBundleLocationForCompare(conf));
+			assertEquals("Check Configuration props", 2, conf.getProperties().size());
+		}else{
+			assertThrowsSEbyGetConfiguration(pid1, message);
+		}
 		conf.delete();
 
 		this.setAppropriatePermission();
 		conf = cm.getConfiguration(pid1, locationOld);
 
-		traceTestId(header, ++micro);
+		//8
+		testId = traceTestId(header, ++micro);
 		setCPtoBundle("?*", ConfigurationPermission.CONFIGURE, thisBundle);
-		assertThrowsSEbyGetConfiguration(pid1, message);
+		if(minor==1||minor==6||minor==7){
+			conf = cm.getConfiguration(pid1);
+			assertEquals("Location", locationOld, this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+		}else{
+			assertThrowsSEbyGetConfiguration(pid1, message);
+		}
 
-		traceTestId(header, ++micro);
+		//7
+		testId = traceTestId(header, ++micro);
 		conf.update(props);
-		assertThrowsSEbyGetConfiguration(pid1, message);
+		if(minor==1||minor==6||minor==7){
+			conf = cm.getConfiguration(pid1);
+			assertEquals("Location", locationOld, this.getBundleLocationForCompare(conf));
+			assertEquals("Check Configuration props", 2, conf.getProperties().size());
+		}else{
+			assertThrowsSEbyGetConfiguration(pid1, message);
+		}
 		conf.delete();
 
 		this.setAppropriatePermission();
 		conf = cm.getConfiguration(pid1, locationOld);
 
-		traceTestId(header, ++micro);
-		setCPtoBundle("?RegionA", ConfigurationPermission.CONFIGURE, thisBundle);
-		assertThrowsSEbyGetConfiguration(pid1, message);
+		//10
+		testId = traceTestId(header, ++micro);
+		setCPtoBundle(regionA, ConfigurationPermission.CONFIGURE, thisBundle);
+		if(minor==1||minor==6){
+			conf = cm.getConfiguration(pid1);
+			assertEquals("Location", locationOld, this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+		}else{
+			assertThrowsSEbyGetConfiguration(pid1, message);
+		}
 
-		traceTestId(header, ++micro);
+		//9
+		testId = traceTestId(header, ++micro);
 		conf.update(props);
-		assertThrowsSEbyGetConfiguration(pid1, message);
+		if(minor==1||minor==6){
+			conf = cm.getConfiguration(pid1);
+			assertEquals("Location", locationOld, this.getBundleLocationForCompare(conf));
+			assertEquals("Check Configuration props", 2, conf.getProperties().size());
+		}else{
+			assertThrowsSEbyGetConfiguration(pid1, message);
+		}
 		conf.delete();
 
 		this.setAppropriatePermission();
 		conf = cm.getConfiguration(pid1, locationOld);
 
-		traceTestId(header, ++micro);
+		//12
+		testId = traceTestId(header, ++micro);
 		setCPtoBundle("*", ConfigurationPermission.TARGET, thisBundle);
-		assertThrowsSEbyGetConfiguration(pid1, message);
+		if(minor==1){
+			conf = cm.getConfiguration(pid1);
+			assertEquals("Location", locationOld, this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+		}else{
+			assertThrowsSEbyGetConfiguration(pid1, message);
+		}
 
-		traceTestId(header, ++micro);
+		//11
+		testId = traceTestId(header, ++micro);
 		conf.update(props);
-		assertThrowsSEbyGetConfiguration(pid1, message);
+		if(minor==1){
+			conf = cm.getConfiguration(pid1);
+			assertEquals("Location", locationOld, this.getBundleLocationForCompare(conf));
+			assertEquals("Check Configuration props", 2, conf.getProperties().size());
+		}else{
+			assertThrowsSEbyGetConfiguration(pid1, message);
+		}
 		conf.delete();
+		
+		if(minor==1){
+			this.setAppropriatePermission();
+			conf = cm.getConfiguration(pid1, locationOld);
+
+			//15
+			testId = traceTestId(header, ++micro);
+			setCPtoBundle(null, null, thisBundle);
+			conf = cm.getConfiguration(pid1);
+			assertEquals("Location", locationOld, this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+			
+			//14
+			testId = traceTestId(header, ++micro);
+			conf.update(props);
+			conf = cm.getConfiguration(pid1);
+			assertEquals("Location", locationOld, this.getBundleLocationForCompare(conf));
+			assertEquals("Check Configuration props", 2, conf.getProperties().size());
+			conf.delete();
+		}
+		
+		if(minor==2){
+			this.setAppropriatePermission();
+			conf = cm.getConfiguration(pid1, thisLocation);
+
+			//15
+			testId = traceTestId(header, ++micro);
+			setCPtoBundle(null, null, thisBundle);
+			conf = cm.getConfiguration(pid1);
+			assertEquals("Location", thisLocation, this.getBundleLocationForCompare(conf));
+			assertNull("Configuration props MUST be null", conf.getProperties());
+			
+			//14
+			testId = traceTestId(header, ++micro);
+			conf.update(props);
+			conf = cm.getConfiguration(pid1);
+			assertEquals("Location", thisLocation, this.getBundleLocationForCompare(conf));
+			assertEquals("Check Configuration props", 2, conf.getProperties().size());
+			conf.delete();
+		}
 	}
 
 	private void assertThrowsSEbyGetConfiguration(final String pid,
 			String message) throws AssertionFailedError {
 		try {
 			cm.getConfiguration(pid);
-			/* A SecurityException should have been thrown */
+			 //A SecurityException should have been thrown 
 			failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
-			/* Check that we got the correct exception */
+			 //Check that we got the correct exception 
 			assertException(message, SecurityException.class, e);
 		}
 	}
 
+	//TODO confirm
+	/*public void testCreateFactoryConfiguration_4_01() throws Exception {
+		String location = null;
+		this.internalCreateFactoryConfigurationWithLocation_4_01To07(1,location);
+	}*/
+	
 	public void testCreateFactoryConfiguration_4_02() throws Exception {
-		String location = thisLocation;
-		String fpid = Util.createPid("factory1");
-		this.internalCreateFactoryConfigurationWithLocation_4_02(location, fpid);
+		String location = locationA;
+		this.internalCreateFactoryConfigurationWithLocation_4_01To07(2,location);
+	}
+	
+	public void testCreateFactoryConfiguration_4_03() throws Exception {
+		String location = locationA + "*";
+		this.internalCreateFactoryConfigurationWithLocation_4_01To07(3,location);
+	}
+	
+	public void testCreateFactoryConfiguration_4_04() throws Exception {
+		String location = locationB;
+		this.internalCreateFactoryConfigurationWithLocation_4_01To07(4,location);
+	}
+	
+	public void testCreateFactoryConfiguration_4_06() throws Exception {
+		String location = regionA;
+		this.internalCreateFactoryConfigurationWithLocation_4_01To07(6,location);
+	}
+	
+	public void testCreateFactoryConfiguration_4_07() throws Exception {
+		String location = regionA + "*";
+		this.internalCreateFactoryConfigurationWithLocation_4_01To07(7,location);
 	}
 
-	public void internalCreateFactoryConfigurationWithLocation_4_02(
-			String location, String fpid) throws BundleException, IOException {
-		final String header = "testCreateFactoryConfigurationWithLocation_4_3_";
+	public void internalCreateFactoryConfigurationWithLocation_4_01To07(int minor,
+			String location) throws BundleException, IOException {
+		final String header = "testCreateFactoryConfigurationWithLocation_4_"
+			+ String.valueOf(minor) + "_";;
 
+		String fpid = Util.createPid("factory1");
 		String testId = null;
 		int micro = 0;
 
 		String message = testId
 				+ ":try to create factory configuration with location with inappropriate ConfigurationPermission.";
 
+		//1
+		testId = traceTestId(header, ++micro);
 		setCPtoBundle("*", ConfigurationPermission.CONFIGURE, thisBundle);
-		traceTestId(header, ++micro);
 		Configuration conf1 = cm.createFactoryConfiguration(fpid, location);
 		Configuration conf2 = cm.createFactoryConfiguration(fpid, location);
-		assertEquals("Check conf fpid.", conf1.getFactoryPid(),
-				conf2.getFactoryPid());
-		assertFalse("Check conf pid does not same.",
-				conf1.getPid().equals(conf2.getPid()));
-		assertEquals("Check conf location.", location,
-				this.getBundleLocationForCompare(conf1));
-		assertEquals("Check conf location.", location,
-				this.getBundleLocationForCompare(conf2));
+		assertEquals("Check conf fpid.", conf1.getFactoryPid(),	conf2.getFactoryPid());
+		assertFalse("Check conf pid does not same.", conf1.getPid().equals(conf2.getPid()));
+		assertEquals("Check conf location.", location, this.getBundleLocationForCompare(conf1));
+		assertEquals("Check conf location.", location, this.getBundleLocationForCompare(conf2));
 
-		traceTestId(header, ++micro);
-		setCPtoBundle(location, "configure", thisBundle);
-		conf1 = cm.createFactoryConfiguration(fpid, location);
-		conf2 = cm.createFactoryConfiguration(fpid, location);
-		assertEquals("Check conf fpid.", conf1.getFactoryPid(),
-				conf2.getFactoryPid());
-		assertFalse("Check conf pid does not same.",
-				conf1.getPid().equals(conf2.getPid()));
-		assertEquals("Check conf location.", location,
-				this.getBundleLocationForCompare(conf1));
-		assertEquals("Check conf location.", location,
-				this.getBundleLocationForCompare(conf2));
+		//2
+		testId = traceTestId(header, ++micro);
+		setCPtoBundle(locationA, ConfigurationPermission.CONFIGURE, thisBundle);
+		if(minor==2){
+			conf1 = cm.createFactoryConfiguration(fpid, location);
+			conf2 = cm.createFactoryConfiguration(fpid, location);
+			assertEquals("Check conf fpid.", conf1.getFactoryPid(),	conf2.getFactoryPid());
+			assertFalse("Check conf pid does not same.", conf1.getPid().equals(conf2.getPid()));
+			assertEquals("Check conf location.", location, this.getBundleLocationForCompare(conf1));
+			assertEquals("Check conf location.", location, this.getBundleLocationForCompare(conf2));
+		}else{
+			this.assertThrowsSEbyCreateFactoryConf(fpid, location, message);
+		}
 
-		traceTestId(header, ++micro);
+		//4
+		testId = traceTestId(header, ++micro);
 		setCPtoBundle("?*", ConfigurationPermission.CONFIGURE, thisBundle);
-		this.assertThrowsSEbyCreateFactoryConf(fpid, location, message);
+		if(minor==6||minor==7){
+			conf1 = cm.createFactoryConfiguration(fpid, location);
+			conf2 = cm.createFactoryConfiguration(fpid, location);
+			assertEquals("Check conf fpid.", conf1.getFactoryPid(),	conf2.getFactoryPid());
+			assertFalse("Check conf pid does not same.", conf1.getPid().equals(conf2.getPid()));
+			assertEquals("Check conf location.", location, this.getBundleLocationForCompare(conf1));
+			assertEquals("Check conf location.", location, this.getBundleLocationForCompare(conf2));
+		}else{
+			this.assertThrowsSEbyCreateFactoryConf(fpid, location, message);
+		}
+		
+		//5
+		testId = traceTestId(header, ++micro);
+		setCPtoBundle(regionA, ConfigurationPermission.CONFIGURE, thisBundle);
+		if(minor==6){
+			conf1 = cm.createFactoryConfiguration(fpid, location);
+			conf2 = cm.createFactoryConfiguration(fpid, location);
+			assertEquals("Check conf fpid.", conf1.getFactoryPid(),	conf2.getFactoryPid());
+			assertFalse("Check conf pid does not same.", conf1.getPid().equals(conf2.getPid()));
+			assertEquals("Check conf location.", location, this.getBundleLocationForCompare(conf1));
+			assertEquals("Check conf location.", location, this.getBundleLocationForCompare(conf2));
+		}else{
+			this.assertThrowsSEbyCreateFactoryConf(fpid, location, message);
+		}
 
-		traceTestId(header, ++micro);
-		setCPtoBundle("?RegionA", ConfigurationPermission.CONFIGURE, thisBundle);
-		this.assertThrowsSEbyCreateFactoryConf(fpid, location, message);
-
-		traceTestId(header, ++micro);
+		//6
+		testId = traceTestId(header, ++micro);
 		setCPtoBundle("*", ConfigurationPermission.TARGET, thisBundle);
 		this.assertThrowsSEbyCreateFactoryConf(fpid, location, message);
+		
+		//7
+		if(minor==6){
+			testId = traceTestId(header, ++micro);
+			setCPtoBundle(regionB, ConfigurationPermission.CONFIGURE, thisBundle);
+			this.assertThrowsSEbyCreateFactoryConf(fpid, location, message);
+		}
 
-		// TODO Need to confirm
-		traceTestId(header, ++micro);
-		this.resetPermissions();
-		String thisBundleLocation = thisBundle.getLocation();
-		setCPtoBundle(null, null, thisBundle);
-		// setCPtoBundle(thisBundleLocation, ConfigurationPermission.CONFIGURE,
-		// thisBundle);
-		conf1 = cm.createFactoryConfiguration(fpid, thisBundleLocation);
-		conf2 = cm.createFactoryConfiguration(fpid, thisBundleLocation);
-		assertEquals("Check conf fpid.", conf1.getFactoryPid(),
-				conf2.getFactoryPid());
-		assertFalse("Check conf pid does not same.",
-				conf1.getPid().equals(conf2.getPid()));
-		assertEquals("Check conf location.", thisBundleLocation,
-				this.getBundleLocationForCompare(conf1));
-		assertEquals("Check conf location.", thisBundleLocation,
-				this.getBundleLocationForCompare(conf2));
-
+		//8
+		if(minor==2){
+			traceTestId(header, ++micro);
+			this.resetPermissions();
+			setCPtoBundle(null, null, thisBundle);
+			conf1 = cm.createFactoryConfiguration(fpid, thisLocation);
+			conf2 = cm.createFactoryConfiguration(fpid, thisLocation);
+			assertEquals("Check conf fpid.", conf1.getFactoryPid(),	conf2.getFactoryPid());
+			assertFalse("Check conf pid does not same.", conf1.getPid().equals(conf2.getPid()));
+			assertEquals("Check conf location.", thisLocation, this.getBundleLocationForCompare(conf1));
+			assertEquals("Check conf location.", thisLocation, this.getBundleLocationForCompare(conf2));			
+		}
 	}
 
 	private void assertThrowsSEbyCreateFactoryConf(final String fPid,
 			final String location, String message) throws AssertionFailedError {
 		try {
 			cm.createFactoryConfiguration(fPid, location);
-			/* A SecurityException should have been thrown */
+			 //A SecurityException should have been thrown 
 			failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
-			/* Check that we got the correct exception */
+			// Check that we got the correct exception 
 			assertException(message, SecurityException.class, e);
 		}
 	}
-
-	public void testListConfigurations_6_02() throws Exception {
-		int minor = 2;
-		String filter = "(service.pid=pid1)";
-		String nameCP = thisLocation;
-		this.internalListConfigurations(minor, filter, nameCP);
+	
+	public void testListConfigurations_6_01() throws Exception {
+		String filter = null;
+		this.internalListConfigurations(1, filter);
 	}
 
-	public void internalListConfigurations(int minor, String filter,
-			String nameCP) throws IOException, InvalidSyntaxException,
-			BundleException {
-		final String header = "testListConfigurations_6_"
-				+ String.valueOf(minor) + "_";
+	public void testListConfigurations_6_02() throws Exception {
+		String filter = "(service.pid=pid1)";
+		this.internalListConfigurations(2, filter);
+	}
+	
+	public void testListConfigurations_6_03() throws Exception {
+		String filter = "(service.bundleLocation=location.a)";
+		this.internalListConfigurations(3, filter);
+	}
+	
+	public void testListConfigurations_6_04() throws Exception {
+		String filter = "(service.bundleLocation=?RegionA)";
+		this.internalListConfigurations(4, filter);
+	}
+	
+	public void testListConfigurations_6_05() throws Exception {
+		String filter = "(&(service.bundleLocation=?RegionA)(service.pid=pid2))";
+		this.internalListConfigurations(5, filter);
+	}
 
+	public void internalListConfigurations(int minor, String filter)
+	throws IOException, InvalidSyntaxException,	BundleException {
+		final String header = "testListConfigurations_6_" + String.valueOf(minor) + "_";
+		int micro = 0;
+		
 		String testId = null;
+		String pid1 = "pid1";
+		String pid2 = "pid2";
+		String pid3 = "pid3";
 		Configuration conf1 = null;
 		Configuration conf2 = null;
 		Configuration conf3 = null;
-		int micro = 0;
+		
+		
 		Dictionary prop = new Hashtable();
-		prop.put("StringKey", "stringvalue");
+		prop.put("StringKey", "Stringvalue");
 
 		String message = testId + ":try listConfigurations ";
-
-		traceTestId(header, ++micro);
 		this.setCPtoBundle("*", ConfigurationPermission.CONFIGURE, thisBundle);
-		conf1 = cm.getConfiguration("pid1", thisLocation);
+		conf1 = cm.getConfiguration(pid1, locationA);
 		conf1.update(prop);
-		conf2 = cm.getConfiguration("pid2", "?RegionA");
+		conf2 = cm.getConfiguration(pid2, regionA);
 		conf2.update(prop);
-		conf3 = cm.getConfiguration("pid3", "?");
+		conf3 = cm.getConfiguration(pid3, "?");
 		conf3.update(prop);
 
-		this.setCPtoBundle(nameCP, ConfigurationPermission.CONFIGURE,
-				thisBundle);
+		testId = traceTestId(header, ++micro);
+		this.setCPtoBundle(locationA, ConfigurationPermission.CONFIGURE, thisBundle);
 		Configuration[] conflist = cm.listConfigurations(filter);
-		assertEquals("number of Configuration Object", 1, conflist.length);
-		assertEquals(message, conflist[0], conf1);
-
-		this.setCPtoBundle("?RegionA", ConfigurationPermission.CONFIGURE,
-				thisBundle);
+		if(minor==4||minor==5){
+			assertNull("Returned list of configuration MUST be null.",conflist);
+		}else{
+			assertEquals("number of Configuration Object", 1, conflist.length);
+			assertEquals(message, conflist[0], conf1);
+		}
+		
+		testId = traceTestId(header, ++micro);
+		this.setCPtoBundle(regionA, ConfigurationPermission.CONFIGURE, thisBundle);
 		conflist = cm.listConfigurations(filter);
-		assertNull("Returned list of configuration MUST be null.", conflist);
+		if(minor==1||minor==4||minor==5){
+			assertEquals("number of Configuration Object", 1, conflist.length);
+			assertEquals(message, conflist[0], conf2);
+		}else{
+			assertNull("Returned list of configuration MUST be null.",conflist);
+		}
 	}
-
+	
 	public void testGetBundleLocation_7_01() throws Exception {
 		String locationOld = null;
 		this.internalGetBundleLocation_7_01to03(1, locationOld);
 	}
-
+	
 	public void testGetBundleLocation_7_02() throws Exception {
 		String locationOld = thisLocation;
 		this.internalGetBundleLocation_7_01to03(2, locationOld);
 	}
-
+	
 	public void testGetBundleLocation_7_03() throws Exception {
-		String locationOld = thisLocation + "*";
+		String locationOld = thisLocation +"*";
 		this.internalGetBundleLocation_7_01to03(3, locationOld);
 	}
+
+
 
 	public void internalGetBundleLocation_7_01to03(final int minor,
 			final String locationOld) throws Exception {
 
-		final String header = "testGetBundleLocation_" + String.valueOf(minor)
-				+ "_";
+		final String header = "testGetBundleLocation_" + String.valueOf(minor) + "_";
 
 		String testId = null;
 		int micro = 0;
 
 		final String pid1 = Util.createPid("1");
 		Configuration conf = null;
-
+		
 		try {
 			this.setAppropriatePermission();
 			conf = cm.getConfiguration(pid1, locationOld);
@@ -4130,28 +4530,26 @@ public class CMControl extends DefaultTestBundleControl {
 			setCPtoBundle("*", ConfigurationPermission.CONFIGURE, thisBundle);
 			String loc = conf.getBundleLocation();
 			assertEquals("Check conf location", locationOld, loc);
-
+			
 			testId = traceTestId(header, ++micro);
-			setCPtoBundle(thisLocation, ConfigurationPermission.CONFIGURE,
-					thisBundle);
-			if (locationOld == thisLocation) {
+			setCPtoBundle(thisLocation, ConfigurationPermission.CONFIGURE, thisBundle);
+			if(locationOld == thisLocation){
 				loc = conf.getBundleLocation();
 				assertEquals("Check conf location", locationOld, loc);
-			} else {
+			}else{
 				this.assertThrowsSEbyGetLocation(conf, testId);
 			}
-
+				
 			testId = traceTestId(header, ++micro);
 			setCPtoBundle("?", ConfigurationPermission.CONFIGURE, thisBundle);
 			this.assertThrowsSEbyGetLocation(conf, testId);
-
+			
 			testId = traceTestId(header, ++micro);
 			setCPtoBundle("?*", ConfigurationPermission.CONFIGURE, thisBundle);
 			this.assertThrowsSEbyGetLocation(conf, testId);
 
 			testId = traceTestId(header, ++micro);
-			setCPtoBundle("?RegionA", ConfigurationPermission.CONFIGURE,
-					thisBundle);
+			setCPtoBundle("?RegionA", ConfigurationPermission.CONFIGURE, thisBundle);
 			this.assertThrowsSEbyGetLocation(conf, testId);
 
 			testId = traceTestId(header, ++micro);
@@ -4159,20 +4557,18 @@ public class CMControl extends DefaultTestBundleControl {
 			this.assertThrowsSEbyGetLocation(conf, testId);
 
 			testId = traceTestId(header, ++micro);
-			setCPtoBundle("*", ConfigurationPermission.CONFIGURE + ","
-					+ ConfigurationPermission.TARGET, thisBundle);
+			setCPtoBundle("*",  ConfigurationPermission.CONFIGURE+","+ConfigurationPermission.TARGET, thisBundle);
 			loc = conf.getBundleLocation();
 			assertEquals("Check conf location", locationOld, loc);
-
-			// TODO Need to confirm
+			
+			//TODO Need to confirm
 			testId = traceTestId(header, ++micro);
 			conf.delete();
 			resetPermissions();
 			String thisBundleLocation = thisBundle.getLocation();
 			conf = cm.getConfiguration(pid1, thisBundleLocation);
 			setCPtoBundle(null, null, thisBundle);
-			// setCPtoBundle(thisBundleLocation,
-			// ConfigurationPermission.CONFIGURE, thisBundle);
+			//setCPtoBundle(thisBundleLocation, ConfigurationPermission.CONFIGURE, thisBundle);
 			loc = conf.getBundleLocation();
 			assertEquals("Check conf location", thisBundleLocation, loc);
 		} finally {
@@ -4181,56 +4577,56 @@ public class CMControl extends DefaultTestBundleControl {
 				conf.delete();
 		}
 	}
-
+	
 	private void assertThrowsSEbyGetLocation(final Configuration conf,
 			String testId) throws AssertionFailedError {
 		String message = testId
 				+ ":try to get bundle location without appropriate ConfigurationPermission.";
 		try {
 			conf.getBundleLocation();
-			/* A SecurityException should have been thrown */
+			 //A SecurityException should have been thrown 
 			failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
-			/* Check that we got the correct exception */
+			// Check that we got the correct exception 
 			assertException(message, SecurityException.class, e);
-		}
+		}		
 	}
-
+	
 	public void testSetBundleLocation_8_01() throws Exception {
 		String locationOld = null;
 		String location = null;
 		int minor = 1;
 		this.internalSetBundleLocation_8_01to05(minor, locationOld, location);
 	}
-
+	
 	public void testSetBundleLocation_8_02() throws Exception {
 		String locationOld = null;
 		String location = thisLocation;
 		int minor = 2;
 		this.internalSetBundleLocation_8_01to05(minor, locationOld, location);
 	}
-
+	
 	public void testSetBundleLocation_8_04() throws Exception {
 		String locationOld = null;
-		String location = "?RegionA";
+		String location = regionA;
 		int minor = 4;
 		this.internalSetBundleLocation_8_01to05(minor, locationOld, location);
 	}
-
+	
 	public void testSetBundleLocation_8_05() throws Exception {
 		String locationOld = null;
 		String location = "?*";
 		int minor = 5;
 		this.internalSetBundleLocation_8_01to05(minor, locationOld, location);
 	}
-
+	
+	
 	public void internalSetBundleLocation_8_01to05(final int minor,
 			final String locationOld, final String location) throws Exception {
 
-		final String header = "testSetBundleLocation_" + String.valueOf(minor)
-				+ "_";
+		final String header = "testSetBundleLocation_" + String.valueOf(minor) + "_";
 
 		String testId = null;
 		int micro = 0;
@@ -4243,17 +4639,16 @@ public class CMControl extends DefaultTestBundleControl {
 		testId = traceTestId(header, ++micro);
 		setCPtoBundle("*", ConfigurationPermission.CONFIGURE, thisBundle);
 		conf.setBundleLocation(location);
-		assertEquals("Check Conf location.", location,
-				this.getBundleLocationForCompare(conf));
+		assertEquals("Check Conf location.", location, this
+				.getBundleLocationForCompare(conf));
 
 		testId = traceTestId(header, ++micro);
 		setCPtoBundle("?*", ConfigurationPermission.CONFIGURE, thisBundle);
-		if (location != null)
-			if (location.startsWith("?")) {
+		if(location!=null)
+			if(location.startsWith("?")){
 				conf.setBundleLocation(location);
-				assertEquals("Check Conf location.", location,
-						this.getBundleLocationForCompare(conf));
-			} else {
+				assertEquals("Check Conf location.", location, this.getBundleLocationForCompare(conf));
+			}else{
 				assertThrowsSEbySetLocation(conf, location, testId);
 			}
 
@@ -4262,23 +4657,24 @@ public class CMControl extends DefaultTestBundleControl {
 		assertThrowsSEbySetLocation(conf, location, testId);
 
 	}
-
+	
 	private void assertThrowsSEbySetLocation(final Configuration conf,
 			final String location, String testId) throws AssertionFailedError {
 		String message = testId
 				+ ":try to set bundle location without appropriate ConfigurationPermission.";
 		try {
 			conf.setBundleLocation(location);
-			/* A SecurityException should have been thrown */
+			// A SecurityException should have been thrown 
 			failException(message, SecurityException.class);
 		} catch (AssertionFailedError e) {
 			throw e;
 		} catch (Throwable e) {
-			/* Check that we got the correct exception */
+			// Check that we got the correct exception 
 			assertException(message, SecurityException.class, e);
 		}
 	}
-
+	
+	
 	/* Ikuo YAMASAKI */
 
 	private int assertCallback(SynchronizerImpl sync, int count) {
