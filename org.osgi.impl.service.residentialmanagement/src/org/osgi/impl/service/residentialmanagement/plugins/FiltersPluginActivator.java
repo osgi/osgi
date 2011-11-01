@@ -35,7 +35,7 @@ import org.osgi.service.dmt.spi.DataPlugin;
  * @author Shigekuni KONDO NTT Corporation
  */
 public class FiltersPluginActivator implements BundleActivator {
-    static String PLUGIN_ROOT_URI = "./Filters";
+    static String PLUGIN_ROOT_URI = "./Filter";
     static final String KEY_OF_RMT_ROOT_URI = "org.osgi.dmt.residential";
     
     private ServiceRegistration servReg;
@@ -44,7 +44,7 @@ public class FiltersPluginActivator implements BundleActivator {
 	public void start(BundleContext bc) throws Exception {
 		String root = System.getProperty(KEY_OF_RMT_ROOT_URI);
 		if(root!=null){
-			PLUGIN_ROOT_URI = root+"/Filters";
+			PLUGIN_ROOT_URI = root+"/Filter";
 		}		
  		filtersPlugin = new FiltersPlugin(bc);
 		Hashtable props = new Hashtable();

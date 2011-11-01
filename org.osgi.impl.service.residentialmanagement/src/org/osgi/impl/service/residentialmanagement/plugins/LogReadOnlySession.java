@@ -25,14 +25,12 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Vector;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.*;
 import org.osgi.service.dmt.DmtConstants;
@@ -56,6 +54,9 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 	protected static final String MESSAGE = "Message";
 	protected static final String EXCEPTION = "Exception";
 	protected static final String LOG_NODE_TYPE = "org.osgi/1.0/LogManagementObject";
+	protected static final String KEY_OF_RMT_ROOT_URI = "org.osgi.dmt.residential";
+	protected int rootLength = 1;
+	
 	protected Vector logEntries = new Vector();
 	protected BundleContext context;
 	
@@ -66,6 +67,12 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 		LogReaderService lr = (LogReaderService)context.getService(sr);
 		lr.addLogListener(this);
 		
+		String root = System.getProperty(KEY_OF_RMT_ROOT_URI);
+		if (root != null) {
+			String[] rootArray = pathToArrayUri(root + "/");
+			rootLength = rootArray.length;
+		}
+		
 /*		try {
 			Filter filter = context.createFilter("(" + Constants.OBJECTCLASS
 					+ "=" + LogReaderService.class.getName()+")");
@@ -74,7 +81,8 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 		} catch (InvalidSyntaxException e) {
 			e.printStackTrace();
 		}
-*/	}
+*/	
+	}
 
 	public void nodeChanged(String[] nodePath) throws DmtException {
 		// do nothing - the version and time stamp properties are not supported
@@ -95,7 +103,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 
 		if (path.length == 2) {
 			String[] children = new String[logEntries.size()];
-			for(int i=0;logEntries.size()<i;i++){
+			for(int i=0;i<logEntries.size();i++){
 				children[i] = Integer.toString(i);
 			}
 			return children;
@@ -140,15 +148,15 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 					!LogMetaNode.ALLOW_INFINITE);
 		
 		if (path.length == 3)
-			return new LogMetaNode("Lost of LogEntry.",
-					MetaNode.AUTOMATIC, 
+			return new LogMetaNode("List of LogEntry.",
+					MetaNode.DYNAMIC, 
 					!LogMetaNode.CAN_ADD,
 					!LogMetaNode.CAN_DELETE,
-					!LogMetaNode.ALLOW_ZERO,
-					!LogMetaNode.ALLOW_INFINITE);
+					LogMetaNode.ALLOW_ZERO,
+					LogMetaNode.ALLOW_INFINITE);
 
 		if (path.length == 4) {
-			if (path[2].equals(BUNDLE))
+			if (path[3].equals(BUNDLE))
 				return new LogMetaNode(
 						"The location of the bundle that originated this log.",
 						!LogMetaNode.CAN_DELETE,
@@ -157,7 +165,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 						!LogMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null, null);
 
-			if (path[2].equals(TIME))
+			if (path[3].equals(TIME))
 				return new LogMetaNode(
 						"Time of Log Entry.",
 						!LogMetaNode.CAN_DELETE,
@@ -166,7 +174,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 						!LogMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_DATE_TIME, null, null);
 			
-			if (path[2].equals(LEVEL))
+			if (path[3].equals(LEVEL))
 				return new LogMetaNode(
 						"The severity od the log entry.",
 						!LogMetaNode.CAN_DELETE,
@@ -175,7 +183,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 						!LogMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_INTEGER, null, null);
 			
-			if (path[2].equals(MESSAGE))
+			if (path[3].equals(MESSAGE))
 				return new LogMetaNode(
 						"Human-readable description of the log.",
 						!LogMetaNode.CAN_DELETE,
@@ -184,7 +192,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 						!LogMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null, null);
 			
-			if (path[2].equals(EXCEPTION))
+			if (path[3].equals(EXCEPTION))
 				return new LogMetaNode(
 						"Human readable information about an exception.",
 						!LogMetaNode.CAN_DELETE,
@@ -292,16 +300,17 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 					DmtException.FEATURE_NOT_SUPPORTED,
 					"The given path indicates an interior node.");
 
-		if (path.length == 3) {
+		if (path.length == 4) {
 			try{
 				LogEntry le = (LogEntry)logEntries.get(Integer.parseInt(path[2]));
 				if(path[3].equals(BUNDLE)){
 					return new DmtData(le.getBundle().getLocation());
 				}
 				if(path[3].equals(TIME)){
-					Date d = new Date(le.getTime());
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'hhmmss");					
-					return new DmtData(sdf.format(d));
+					return new DmtData(new Date(le.getTime()));
+//					Date d = new Date(le.getTime());
+//					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'hhmmss");					
+//					return new DmtData(sdf.format(d));
 				}
 				if(path[3].equals(LEVEL)){
 					return new DmtData(le.getLevel());
@@ -322,15 +331,29 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 	}
 
 	// ----- Utilities -----//
-	//TODO
 	protected String[] shapedPath(String[] nodePath) {
 		int size = nodePath.length;
-		int srcPos = 2;
+		int srcPos = rootLength;
 		int destPos = 0;
 		int length = size - srcPos;
 		String[] newPath = new String[length];
 		System.arraycopy(nodePath, srcPos, newPath, destPos, length);
 		return newPath;
+	}
+	
+	protected String[] pathToArrayUri(String path) {
+		Vector vector = new Vector();
+		while (path.indexOf("/") != -1) {
+			String start_path = path.substring(0, path.indexOf("/"));
+			vector.add(start_path);
+			path = path.substring(path.indexOf("/") + 1, path.length());
+		}
+		String[] arrayPath = new String[vector.size()];
+		int i = 0;
+		for (Iterator it = vector.iterator(); it.hasNext(); i++) {
+			arrayPath[i] = (String) it.next();
+		}
+		return arrayPath;
 	}
 
 	public void logged(LogEntry entry) {

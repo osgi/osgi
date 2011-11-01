@@ -90,6 +90,7 @@ class FrameworkMetaNode implements MetaNode {
 
 		this.canAdd        = canAdd;
 		this.canDelete     = canDelete;
+		this.canReplace = false;
 		this.scope         = scope;
 		this.description   = description;
 		this.zeroOccurrenceAllowed = allowZero;

@@ -27,7 +27,7 @@ package org.osgi.impl.service.residentialmanagement.plugins;
 
 import java.security.Principal;
 import java.security.cert.X509Certificate;
-import java.text.SimpleDateFormat;
+//import java.text.SimpleDateFormat;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -117,7 +117,7 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 	protected static final String CONTENT = "Content";
 	protected static final String ENTRIESINSTANCEID = "InstanceId";
 	
-	protected static final String FRAGMENT = "Fragment";
+	protected static final String FRAGMENT = "FRAGMENT";
 	protected static final String INSTALLED = "INSTALLED";
 	protected static final String RESOLVED = "RESOLVED";
 	protected static final String STARTING = "STARTING";
@@ -126,6 +126,7 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 	protected static final String UNINSTALLED = "UNINSTALLED";
 	protected static final String FRAMEWORK_NODE_TYPE = "org.osgi/1.0/FrameworkManagementObject";
 	protected static final String SERVICE_NAMESPACE = "osgi.wiring.rmt.service";
+	protected static final String KEY_OF_RMT_ROOT_URI = "org.osgi.dmt.residential";
 	
 	protected FrameworkPlugin plugin;
 	protected BundleContext context;
@@ -138,19 +139,17 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 	protected int bundleWiresInstanceId = 1;
 	protected int hostWiresInstanceId = 1;
 	protected int serviceWiresInstanceId = 1;
-	
-	
-	protected Hashtable eventTable = new Hashtable();
-	protected int requestedStartLevel = 0;
-	protected long eventId = 1;
-	protected boolean eventFlag = false;
-	protected boolean refreshPackagesFlag = false;
+	protected int rootLength = 1;
 
 	FrameworkReadOnlySession(FrameworkPlugin plugin, BundleContext context) {
 		this.plugin = plugin;
 		this.context = context;
 		properties = System.getProperties();
-		
+		String root = System.getProperty(KEY_OF_RMT_ROOT_URI);
+		if (root != null) {
+			String[] rootArray = pathToArrayUri(root + "/");
+			rootLength = rootArray.length;
+		}
 	}
 
 	public void nodeChanged(String[] nodePath) throws DmtException {
@@ -206,6 +205,29 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 		}
 
 		if(path.length == 4){
+			if (path[3].equals(BUNDLETYPE)) {
+				if(this.bundlesTable.get(path[2])!=null){
+					BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(path[2]);
+					if(bs.getBundleType()!=null){
+						String[] type = new String[1];
+						type[0] = "0";
+						return type;
+					}else{
+						return new String[0];
+					}
+				}
+			}
+			if (path[3].equals(HEADERS)) {
+				if(this.bundlesTable.get(path[2])!=null){
+					BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(path[2]);
+					Dictionary headers = bs.getHeaders();
+					String[] children = new String[headers.size()];
+					for(int i=0;headers.size()<i;i++){
+						children[i] = Integer.toString(i);
+					}
+					return children;
+				}
+			}
 			if (path[3].equals(ENTRIES)) {
 				if(this.bundlesTable.get(path[2])!=null){
 					BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(path[2]);
@@ -490,8 +512,8 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 						MetaNode.DYNAMIC,
 						FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
-						!FrameworkMetaNode.ALLOW_ZERO,
-						!FrameworkMetaNode.ALLOW_INFINITE);
+						FrameworkMetaNode.ALLOW_ZERO,
+						FrameworkMetaNode.ALLOW_INFINITE);
 		}
 
 		if (path.length == 4) {
@@ -1020,6 +1042,8 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 				return DmtConstants.DDF_LIST;
 		}
 		if (path.length == 6){
+			if(path[3].equals(WIRES))
+				return DmtConstants.DDF_LIST;
 			if(path[5].equals(CERTIFICATECHAIN))
 				return DmtConstants.DDF_LIST;
 		}
@@ -1518,15 +1542,29 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 				"The specified leaf node does not exist in the framework object.");
 	}
 
-	//TODO: Accommodate flexibly
 	protected String[] shapedPath(String[] nodePath) {
 		int size = nodePath.length;
-		int srcPos = 2;
+		int srcPos = rootLength;
 		int destPos = 0;
 		int length = size - srcPos;
 		String[] newPath = new String[length];
 		System.arraycopy(nodePath, srcPos, newPath, destPos, length);
 		return newPath;
+	}
+	
+	protected String[] pathToArrayUri(String path) {
+		Vector vector = new Vector();
+		while (path.indexOf("/") != -1) {
+			String start_path = path.substring(0, path.indexOf("/"));
+			vector.add(start_path);
+			path = path.substring(path.indexOf("/") + 1, path.length());
+		}
+		String[] arrayPath = new String[vector.size()];
+		int i = 0;
+		for (Iterator it = vector.iterator(); it.hasNext(); i++) {
+			arrayPath[i] = (String) it.next();
+		}
+		return arrayPath;
 	}
 	
 	public void bundleChanged(BundleEvent event) {
@@ -1537,7 +1575,7 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 				BundleSubTree bs = new BundleSubTree(bundles[i]);
 				// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
 //				if(location.length()>Uri.getMaxSegmentNameLength())
-					location = Uri.mangle(location);
+//					location = Uri.mangle(location);
 				this.bundlesTable.put(location, bs);
 			}
 			Bundle systemBundle = context.getBundle(0);
@@ -1553,7 +1591,7 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 				BundleSubTree bs = new BundleSubTree(bundle);
 				// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
 //				if(location.length()>Uri.getMaxSegmentNameLength())
-					location = Uri.mangle(location);
+//					location = Uri.mangle(location);
 				this.bundlesTable.put(location, bs);
 				return;
 			}
@@ -1565,14 +1603,14 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 			String location = Uri.encode(bundle.getLocation());
 			// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
 //			if(location.length()>Uri.getMaxSegmentNameLength())
-				location = Uri.mangle(location);
+//				location = Uri.mangle(location);
 			BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(location);
 			bs.createWires();
 		} else if (event.getType() == BundleEvent.UNINSTALLED) {
 			String location = Uri.encode(bundle.getLocation());
 			// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
 //			if(location.length()>Uri.getMaxSegmentNameLength())
-				location = Uri.mangle(location);
+//				location = Uri.mangle(location);
 			this.bundlesTable.remove(location);
 		}
 
@@ -1600,12 +1638,12 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 		Vector serviceList = new Vector();
 		//XXX Debug
 		if(bundle==null)
-			System.out.println("manaedWire : NULL");
+			System.out.println("managedWire : NULL");
 		BundleWiring wiring = (BundleWiring)bundle.adapt(BundleWiring.class);
 		
 		//XXX Debug
 		if(wiring==null)
-			System.out.println("manaedWire : " + bundle.getLocation());
+			System.out.println("managedWire : " + bundle.getLocation());
 		
 		List packageRequiredWireList = wiring.getRequiredWires(BundleRevision.PACKAGE_NAMESPACE);
 		packageList.addAll(createWiresSubtree(packageRequiredWireList,BundleRevision.PACKAGE_NAMESPACE));
@@ -1801,7 +1839,6 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 		BundleSubTree(Bundle bundleObj){
 			this.bundle = bundleObj;
 			this.location = Uri.encode(bundle.getLocation());
-			//this.location = bundle.getLocation();
 			this.createFlag = true;
 			
 			locationNode = new Node(this.location,null,true);
@@ -1938,10 +1975,12 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 		protected String getRequestedState(){
 			return this.requestedState;
 		}
-		protected String getLastModified(){
-			Date d = new Date(this.bundle.getLastModified());
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'hhmmss");
-			return sdf.format(d);
+		protected Date getLastModified(){
+			return new Date(this.bundle.getLastModified());
+			
+			//Date d = new Date(this.bundle.getLastModified());
+			//SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'hhmmss");
+			//return sdf.format(d);
 		}
 		protected int getStartLevel(){
 			BundleStartLevel sl = (BundleStartLevel)this.bundle.adapt(BundleStartLevel.class);
@@ -2091,10 +2130,11 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 		}
 	}
 	
+	//TODO
 	protected Vector managedEntries(Bundle bundle){
 		Vector entries = new Vector();
 		Enumeration enuPath = bundle.getEntryPaths("");
-		for(int i=0;enuPath.hasMoreElements();i++){
+		while(enuPath.hasMoreElements()){
 			String path = (String)enuPath.nextElement();
 			URL url = bundle.getEntry(path);
 			byte[] data = null;
