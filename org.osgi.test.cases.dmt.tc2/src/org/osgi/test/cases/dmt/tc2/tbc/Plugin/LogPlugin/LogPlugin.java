@@ -28,9 +28,10 @@ import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.spi.*;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
+import org.osgi.service.log.LogListener;
 import org.osgi.util.tracker.ServiceTracker;
 
-class LogPlugin implements DataPlugin, TransactionalDataSession {
+class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
 	private static final String FILTER    = "Filter";
 	private static final String EXCLUDE   = "Exclude";
 	private static final String MAXR      = "MaxRecords";
@@ -57,14 +58,31 @@ class LogPlugin implements DataPlugin, TransactionalDataSession {
     // the state of the request table is stored here in atomic sessions 
     private Hashtable           savedRequests;
     
+    private LinkedList			logList = new LinkedList();
+    
 	LogPlugin(BundleContext bc, ServiceTracker logReaderTracker) 
             throws BundleException {
 		this.bc = bc;
 		this.logReaderTracker = logReaderTracker;
         
+        LogReaderService logReader = 
+            (LogReaderService) logReaderTracker.getService();
+        if(logReader == null)
+            throw new MissingResourceException("Log Reader service not found.",
+                    LogReaderService.class.getName(), null);
+
+        logReader.addLogListener(this);
+        
 		requests = new Hashtable();		
 	}
 
+	public void logged(LogEntry entry) {
+		if (logList.size() >= 100) {
+			logList.removeLast();
+		}
+		logList.addFirst(entry);
+	}
+	
 	//----- DataPlugin methods -----//
     
     public ReadableDataSession openReadOnlySession(String[] sessionRoot,
@@ -544,14 +562,16 @@ class LogPlugin implements DataPlugin, TransactionalDataSession {
 					"Cannot parse filter", e);
 		}
         
-        LogReaderService logReader = 
-            (LogReaderService) logReaderTracker.getService();
-        if(logReader == null)
-            throw new MissingResourceException("Log Reader service not found.",
-                    LogReaderService.class.getName(), null);
-        
-		Enumeration e = logReader.getLog();
-		
+// Changed to use LogListener to get logs.
+//        LogReaderService logReader = 
+//            (LogReaderService) logReaderTracker.getService();
+//        if(logReader == null)
+//            throw new MissingResourceException("Log Reader service not found.",
+//                    LogReaderService.class.getName(), null);
+//        
+//		Enumeration e = logReader.getLog();
+		Enumeration e = Collections.enumeration(logList);
+
 		int max = Integer.MAX_VALUE;
 		
 		int logIDCounter = 1;
