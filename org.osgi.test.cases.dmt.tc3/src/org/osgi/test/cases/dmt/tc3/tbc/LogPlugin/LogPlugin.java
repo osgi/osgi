@@ -30,10 +30,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -46,10 +48,11 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
+import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.util.tracker.ServiceTracker;
 
-class LogPlugin implements DataPlugin, TransactionalDataSession {
+class LogPlugin implements DataPlugin, TransactionalDataSession, LogListener {
 	private static final String FILTER    = "Filter";
 	private static final String EXCLUDE   = "Exclude";
 	private static final String MAXR      = "MaxRecords";
@@ -76,12 +79,29 @@ class LogPlugin implements DataPlugin, TransactionalDataSession {
     // the state of the request table is stored here in atomic sessions 
     private Hashtable           savedRequests;
     
+    private LinkedList			logList = new LinkedList();
+
 	LogPlugin(BundleContext bc, ServiceTracker logReaderTracker) 
             throws BundleException {
 		this.bc = bc;
 		this.logReaderTracker = logReaderTracker;
         
+        LogReaderService logReader = 
+            (LogReaderService) logReaderTracker.getService();
+        if(logReader == null)
+            throw new MissingResourceException("Log Reader service not found.",
+                    LogReaderService.class.getName(), null);
+
+        logReader.addLogListener(this);
+        
 		requests = new Hashtable();		
+	}
+
+	public void logged(LogEntry entry) {
+		if (logList.size() >= 100) {
+			logList.removeLast();
+		}
+		logList.addFirst(entry);
 	}
 
 	//----- DataPlugin methods -----//
@@ -563,13 +583,15 @@ class LogPlugin implements DataPlugin, TransactionalDataSession {
 					"Cannot parse filter", e);
 		}
         
-        LogReaderService logReader = 
-            (LogReaderService) logReaderTracker.getService();
-        if(logReader == null)
-            throw new MissingResourceException("Log Reader service not found.",
-                    LogReaderService.class.getName(), null);
-        
-		Enumeration e = logReader.getLog();
+		// Changed to use LogListener to get logs.
+//      LogReaderService logReader = 
+//          (LogReaderService) logReaderTracker.getService();
+//      if(logReader == null)
+//          throw new MissingResourceException("Log Reader service not found.",
+//                  LogReaderService.class.getName(), null);
+//      
+//		Enumeration e = logReader.getLog();
+		Enumeration e = Collections.enumeration(logList);
 		
 		int max = Integer.MAX_VALUE;
 		

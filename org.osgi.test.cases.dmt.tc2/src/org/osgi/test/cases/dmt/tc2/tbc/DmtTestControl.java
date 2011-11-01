@@ -443,13 +443,14 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		testClasses[30].run();
 	}
 
-	public void testDmtAdminAddEventListener() {
-		testClasses[33].run();
-	}
-
-	public void testDmtAdminRemoveEventListener() {
-		testClasses[34].run();
-	}
+// These tests are not valid for DMT Admin 2.0.
+//	public void testDmtAdminAddEventListener() {
+//		testClasses[33].run();
+//	}
+//
+//	public void testDmtAdminRemoveEventListener() {
+//		testClasses[34].run();
+//	}
 
 	// NotificationService
 	public void testNotificationServiceSendNotification() {

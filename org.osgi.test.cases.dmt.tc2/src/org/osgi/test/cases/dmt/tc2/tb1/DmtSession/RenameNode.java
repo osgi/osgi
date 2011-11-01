@@ -69,7 +69,7 @@ public class RenameNode implements TestInterface {
 		testRenameNode003();
 		testRenameNode004();
 		testRenameNode005();
-		testRenameNode006();
+//		testRenameNode006();  This is not valid for DMT Admin 2.0.
 		testRenameNode007();
 		testRenameNode008();
 		testRenameNode009();
@@ -199,7 +199,11 @@ public class RenameNode implements TestInterface {
 		}
 	}
 	
-	/**
+	/* 
+	 * Note: This test is not valid for DMT Admin 2.0 
+	 *       because there is no URI limit any more,
+	 *       so this test is not executed.
+	 * 
 	 * This method asserts that DmtException.URI_TOO_LONG is thrown when  
 	 * the newName is too long 
 	 * 

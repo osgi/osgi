@@ -40,9 +40,12 @@ package org.osgi.test.cases.dmt.tc2.tb1.NotificationService;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.notification.AlertItem;
+import org.osgi.service.dmt.notification.NotificationService;
 import org.osgi.service.dmt.security.AlertPermission;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServicePermission;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -64,6 +67,8 @@ import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator
 public class SendNotification implements TestInterface {
 	private DmtTestControl tbc;
 
+	private NotificationService notificationService;
+	
 	public SendNotification(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
@@ -92,6 +97,16 @@ public class SendNotification implements TestInterface {
 				"*", "*"));
 	}
 
+	private void sendNotification(String principal, int code, String correlator,
+			AlertItem[] items) throws DmtException {
+		if (notificationService == null) {
+			BundleContext bc = tbc.getContext();
+			ServiceReference sr = bc.getServiceReference(NotificationService.class.getName());
+			notificationService = (NotificationService) bc.getService(sr);
+		}
+		notificationService.sendNotification(principal, code, correlator, items);
+	}
+	
 	/**
 	 * It tests if the DmtAdmin.SendNotification really fowards the parameters
 	 * to the RemoteAlertSender. It also tests that only the specified principal
@@ -123,8 +138,7 @@ public class SendNotification implements TestInterface {
 			tbc.setPermissions(new PermissionInfo(AlertPermission.class
 					.getName(), DmtConstants.PRINCIPAL, "*"));
 
-			// TODO commented out
-			// DmtServiceFactory.getNotificationService().sendNotification(DmtConstants.PRINCIPAL,code,correlator,items);
+			sendNotification(DmtConstants.PRINCIPAL,code,correlator,items);
 
 			tbc.assertTrue(
 					"Asserts that the code sent by sendNotification was the expected",
@@ -174,8 +188,7 @@ public class SendNotification implements TestInterface {
 			AlertItem[] items = new AlertItem[] {};
 
 			RemoteAlertSenderImpl.resetAlert();
-			// TODO commented out
-			// DmtServiceFactory.getNotificationService().sendNotification(null,code,correlator,items);
+			sendNotification(null,code,correlator,items);
 
 			tbc.assertNull(
 					"Asserts that if the DmtAdmin is connected to only one protocol adapter, the principal name can be omitted",
@@ -213,8 +226,7 @@ public class SendNotification implements TestInterface {
 			AlertItem[] items = new AlertItem[] { item };
 			int code = 0;
 			RemoteAlertSenderImpl.resetAlert();
-			// TODO commented out
-			// DmtServiceFactory.getNotificationService().sendNotification(DmtConstants.PRINCIPAL,code,null,items);
+			sendNotification(DmtConstants.PRINCIPAL,code,null,items);
 
 			tbc.assertTrue(
 					"Asserts that the code sent by sendNotification was the expected",
@@ -252,8 +264,7 @@ public class SendNotification implements TestInterface {
 			String correlator = "newCorrelator";
 			RemoteAlertSenderImpl.resetAlert();
 
-			// TODO commented out
-			// DmtServiceFactory.getNotificationService().sendNotification(DmtConstants.PRINCIPAL,code,correlator,null);
+			sendNotification(DmtConstants.PRINCIPAL,code,correlator,null);
 
 			tbc.assertTrue(
 					"Asserts that the code sent by sendNotification was the expected",
@@ -285,13 +296,11 @@ public class SendNotification implements TestInterface {
 			tbc.log("#testSendNotification005");
 
 			RemoteAlertSenderImpl.resetAlert();
-			// TODO commented out
-			// DmtServiceFactory.getNotificationService().sendNotification(DmtConstants.PRINCIPAL_3,0,null,null);
+			sendNotification(DmtConstants.PRINCIPAL_3,0,null,null);
 
 			tbc.failException("", DmtException.class);
-			// TODO commented out
-			// } catch (DmtException e) {
-			// tbc.assertEquals("Asserts that DmtException.ALERT_NOT_ROUTED is thrown when the alert can not be routed to the server",DmtException.ALERT_NOT_ROUTED,e.getCode());
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserts that DmtException.ALERT_NOT_ROUTED is thrown when the alert can not be routed to the server",DmtException.ALERT_NOT_ROUTED,e.getCode());
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtException.class, e);
 
@@ -309,17 +318,14 @@ public class SendNotification implements TestInterface {
 			tbc.log("#testSendNotification006");
 
 			RemoteAlertSenderImpl.resetAlert();
-			// TODO commented out
-//			DmtServiceFactory.getNotificationService().sendNotification(
-//					DmtConstants.PRINCIPAL,
-//					RemoteAlertSenderImpl.CODE_EXCEPTION, null, null);
+			sendNotification(DmtConstants.PRINCIPAL,
+					RemoteAlertSenderImpl.CODE_EXCEPTION, null, null);
 
 			tbc.failException("", DmtException.class);
-			// TODO commented out
-//		} catch (DmtException e) {
-//			tbc.assertEquals(
-//					"Asserts that any exception thrown on the RemoteAlertSender is propagated wrapped in a DmtException with the code REMOTE_ERROR",
-//					DmtException.REMOTE_ERROR, e.getCode());
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserts that any exception thrown on the RemoteAlertSender is propagated wrapped in a DmtException with the code REMOTE_ERROR",
+					DmtException.REMOTE_ERROR, e.getCode());
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtException.class, e);
 
@@ -351,9 +357,7 @@ public class SendNotification implements TestInterface {
 
 			int codeExpected = 21;
 
-			// TODO commented out
-//			DmtServiceFactory.getNotificationService().sendNotification(
-//					DmtConstants.PRINCIPAL, codeExpected, null, null);
+			sendNotification(DmtConstants.PRINCIPAL, codeExpected, null, null);
 
 			tbc.assertEquals(
 					"Asserts that if multiple Remote Alert Sender services register for the same service,"
@@ -395,9 +399,7 @@ public class SendNotification implements TestInterface {
 			DefaultRemoteAlertSenderImpl.resetAlert();
 
 			int codeExpected = 11;
-			// TODO commented out
-//			DmtServiceFactory.getNotificationService().sendNotification(null,
-//					codeExpected, null, null);
+			sendNotification(null, codeExpected, null, null);
 
 			tbc.assertEquals(
 					"Asserts that if 'servers' property is not registered, the Remote Alert Sender service is treated as the default sender.",
@@ -426,9 +428,7 @@ public class SendNotification implements TestInterface {
 			tbc.log("#testSendNotification009");
 			tbc.setPermissions(new PermissionInfo[0]);
 
-			// TODO commented out
-//			DmtServiceFactory.getNotificationService().sendNotification(
-//					DmtConstants.PRINCIPAL, 1, "", new AlertItem[0]);
+			sendNotification(DmtConstants.PRINCIPAL, 1, "", new AlertItem[0]);
 			tbc.failException("", SecurityException.class);
 		} catch (SecurityException e) {
 			tbc.pass("SecurityException correctly thrown");
@@ -456,11 +456,12 @@ public class SendNotification implements TestInterface {
 					null, null, null) };
 
 			RemoteAlertSenderImpl.resetAlert();
-			// TODO commented out
-//			tbc.assertEquals(
-//					"Asserts that the RemoteAlertSender can have more than one principal",
-//					DmtConstants.PRINCIPAL_2,
-//					RemoteAlertSenderImpl.serverIdFound);
+			sendNotification(DmtConstants.PRINCIPAL_2,code,correlator,items);
+			
+			tbc.assertEquals(
+					"Asserts that the RemoteAlertSender can have more than one principal",
+					DmtConstants.PRINCIPAL_2,
+					RemoteAlertSenderImpl.serverIdFound);
 			tbc.assertTrue(
 					"Asserts that the code sent by sendNotification was the expected",
 					RemoteAlertSenderImpl.codeFound == code);
@@ -488,9 +489,7 @@ public class SendNotification implements TestInterface {
 			tbc.log("#testSendNotification011");
 			tbc.setPermissions(new PermissionInfo[0]);
 
-			// TODO commented out
-//			DmtServiceFactory.getNotificationService().sendNotification(null,
-//					1, "", new AlertItem[0]);
+			sendNotification(null, 1, "", new AlertItem[0]);
 			tbc.failException("", SecurityException.class);
 		} catch (SecurityException e) {
 			tbc.pass("SecurityException correctly thrown");
@@ -510,14 +509,11 @@ public class SendNotification implements TestInterface {
 	private void testSendNotificationFeatureNotSupported001() {
 		try {
 			tbc.log("#testSendNotificationFeatureNotSupported001");
-			// TODO commented out
-//			DmtServiceFactory.getNotificationService().sendNotification(null,
-//					0, null, null);
+			sendNotification(null, 0, null, null);
 			tbc.failException("", DmtException.class);
-			// TODO commented out
-//		} catch (DmtException e) {
-//			tbc.pass("DmtException.FEATURE_NOT_SUPPORTED correctly thrown because the management "
-//					+ "protocol doesn't support asynchronous notifications");
+		} catch (DmtException e) {
+			tbc.pass("DmtException.FEATURE_NOT_SUPPORTED correctly thrown because the management "
+					+ "protocol doesn't support asynchronous notifications");
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtException.class, e);
 
